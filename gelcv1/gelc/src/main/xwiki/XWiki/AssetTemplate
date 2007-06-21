@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<web>XWiki</web>
+<name>AssetTemplate</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.XWikiGuest</creator>
+<author>XWiki.LudovicDubost</author>
+<customClass></customClass>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<creationDate>1161366769000</creationDate>
+<date>1180333937000</date>
+<contentUpdateDate>1180333937000</contentUpdateDate>
+<version>1.410</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>Removing pre that should not be needed</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<name>tags</name>
+<prettyName>Tags</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>1</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<size>30</size>
+<separator> </separator>
+<cache>0</cache>
+<separators> ,|</separators>
+<values></values>
+<number>1</number>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>XWiki.AssetTemplate</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<object>
+<class>
+<name>XWiki.XWikiComments</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<highlight>
+<name>highlight</name>
+<prettyName>Highlighted Text</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>40</size>
+<rows>2</rows>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<number>2</number>
+<classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+</highlight>
+<comment>
+<name>comment</name>
+<prettyName>Comment</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>40</size>
+<rows>5</rows>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<number>4</number>
+<classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+</comment>
+<date>
+<name>date</name>
+<prettyName>Date</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>20</size>
+<dateFormat>dd/MM/yyyy HH:mm:ss</dateFormat>
+<emptyIsToday>1</emptyIsToday>
+<picker>1</picker>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<number>3</number>
+<classType>com.xpn.xwiki.objects.classes.DateClass</classType>
+</date>
+<author>
+<name>author</name>
+<prettyName>Author</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>30</size>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<number>1</number>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</author>
+<replyto>
+<name>replyto</name>
+<prettyName>Reply To</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>5</size>
+<numberType>integer</numberType>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<number>5</number>
+<classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+</replyto>
+</class>
+<name>XWiki.AssetTemplate</name>
+<number>0</number>
+<className>XWiki.XWikiComments</className>
+<property>
+<comment>This is a test comment</comment>
+</property>
+<property>
+<date>2007-05-18 06:21:55.0</date>
+</property>
+<property>
+<author>XWiki.LudovicDubost</author>
+</property>
+</object>
+<content>#set($isPrint = false)
+#if($request.getParameter("viewer") &amp;&amp; $request.getParameter("viewer").equals("print"))
+#set($isPrint = true)
+#end
+#if($request.getParameter("xpage") &amp;&amp; $request.getParameter("xpage").equals("assetpreview"))
+#set($isPrint = true)
+#end
+&lt;style type="text/css"&gt;
+#if(!$isPrint)
+.asset-contents {
+  width: 600px;
+} 
+.asset-metadatas-block {
+  width: 590px;
+}
+.titlebar {
+  width: 600px;
+}
+#else
+.asset-contents {
+  width: 800px;
+} 
+.titlebar {
+  width: 800px;
+}
+#end
+&lt;/style&gt;
+#set($currDoc = $doc)
+#if(!$isPrint)
+&lt;div class="asset-tabs"&gt;
+&lt;a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=${bcLocal}")"&gt;$msg.get("caption.view")&lt;/a&gt;
+&lt;a class="asset-tab"  href="$currDoc.getURL("view", "bc=${bcLocal}&amp;viewer=comments")"&gt;Comments ($currDoc.comments.size())&lt;/a&gt;
+&lt;/div&gt; ## tabs
+#end
+&lt;div id="wizzard" class="asset-page"&gt;
+#set($obj = $currDoc.getObject("XWiki.AssetClass", true))
+
+#if(!$isPrint)
+&lt;div class="righttext"&gt;
+#displaylinks($currDoc)
+&lt;/div&gt;
+#end
+
+&lt;div class="asset-contents"&gt;
+#if(!$isPrint)
+#displayassetmetadatas($currDoc, $isPrint)
+#else
+#displayassettitlebar($currDoc, $isPrint)
+#end
+&lt;div class="asset-display"&gt;
+## 
+## Uncomment the following block to enable the showAll option
+## 
+## #if($request.viewAll == true)
+##  #set($showAllvar = true)
+## #else
+##  #set($showAllvar = false)
+## #end
+## 
+#set($showAllvar = true)
+## 
+ #displayAssetContent($currDoc true $showAllvar)
+#if(!$isPrint)
+&lt;hr class="my-curriki-solid-hr" &gt;
+&lt;div class="asset-content-footer"&gt;
+&lt;div class="asset-content-footer-bordered"&gt;
+&lt;a href="$currDoc.getURL("view", "bc=${bcLocal}&amp;viewer=comments")"&gt;$msg.get("caption.NComments", [$currDoc.comments.size()])&lt;/a&gt; #sep()
+## &lt;a href="#"&gt;$msg.get("caption.sendToAFriend")&lt;/a&gt; #sep() 
+&lt;a href="$currDoc.getURL("view", "bc=${bcLocal}")"&gt;$msg.get("caption.linkToThePage")&lt;/a&gt; #sep() 
+#displaylinks($currDoc)
+&lt;/div&gt; ##content-footer-bordered
+&lt;/div&gt; ##content-footer
+#end ## if ! print
+&lt;/div&gt; ##display
+&lt;/div&gt; ##contents
+
+&lt;/div&gt;
+
+</content></xwikidoc>

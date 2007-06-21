@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<web>XWiki</web>
+<name>clean assetTemp</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent>XWiki.WebHome</parent>
+<creator>XWiki.jeremi</creator>
+<author>XWiki.jeremi</author>
+<customClass></customClass>
+<contentAuthor>XWiki.jeremi</contentAuthor>
+<creationDate>1164797479000</creationDate>
+<date>1164799132000</date>
+<contentUpdateDate>1169545750000</contentUpdateDate>
+<version>1.8</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<object>
+<class>
+<name>XWiki.XWikiRights</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<groups>
+<name>groups</name>
+<prettyName>Groups</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>0</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<size>5</size>
+<separator> </separator>
+<cache>0</cache>
+<usesList>1</usesList>
+<number>4</number>
+<tooltip></tooltip>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<validationMessage></validationMessage>
+<picker></picker>
+<sort>none</sort>
+<classType>com.xpn.xwiki.objects.classes.GroupsClass</classType>
+</groups>
+<users>
+<name>users</name>
+<prettyName>Users</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>0</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<size>5</size>
+<separator> </separator>
+<cache>0</cache>
+<usesList>0</usesList>
+<number>4</number>
+<tooltip></tooltip>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<validationMessage></validationMessage>
+<picker></picker>
+<sort>none</sort>
+<classType>com.xpn.xwiki.objects.classes.UsersClass</classType>
+</users>
+<levels>
+<name>levels</name>
+<prettyName>Levels</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>0</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<size>3</size>
+<separator> </separator>
+<cache>0</cache>
+<number>4</number>
+<tooltip></tooltip>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<validationMessage></validationMessage>
+<picker></picker>
+<sort>none</sort>
+<classType>com.xpn.xwiki.objects.classes.LevelsClass</classType>
+</levels>
+<allow>
+<name>allow</name>
+<prettyName>Allow/Deny</prettyName>
+<unmodifiable>0</unmodifiable>
+<displayFormType>select</displayFormType>
+<defaultValue>1</defaultValue>
+<displayType>allow</displayType>
+<number>4</number>
+<tooltip></tooltip>
+<customDisplay></customDisplay>
+<validationRegExp></validationRegExp>
+<validationMessage></validationMessage>
+<classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+</allow>
+</class>
+<name>XWiki.clean assetTemp</name>
+<number>0</number>
+<className>XWiki.XWikiRights</className>
+<property>
+<groups>XWiki.AdminGroup,</groups>
+</property>
+<property>
+<users></users>
+</property>
+<property>
+<levels>view,edit,</levels>
+</property>
+<property>
+<allow>1</allow>
+</property>
+</object>
+<content>&lt;%
+  if (request.confirm) {
+  def docs = xwiki.searchDocuments("where doc.web='AssetTemp'");
+
+  def it = docs.iterator();
+  def filedeleted = false;
+  while(it.hasNext()){
+    def tmpdoc = xwiki.getDocument(it.next());
+    def dayms = 86400000;
+    if (dayms &lt; xwiki.getTimeDelta(tmpdoc.date.time)) {
+      xwiki.xWiki.deleteDocument(tmpdoc.getDocument(), context.context);
+      println("* delete " + tmpdoc.fullName + ", the delta in millisecond is (" + xwiki.getTimeDelta(tmpdoc.date.time) + ")"); 
+      filedeleted = true;
+    }
+  }
+  if (filedeleted == false) {
+    println "Good news, Nothing to delete";
+  }
+  }
+  else {
+    println "[confirm&gt;clean assetTemp?confirm=1]";
+  }
+  
+%&gt;</content>
+</xwikidoc>

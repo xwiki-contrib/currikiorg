@@ -1,0 +1,22 @@
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#set($showLeftPanels = "0")
+#set($showRightPanels = "0")
+#set($printss = true)
+#template("htmlheader.vm")
+<div id="printheader" class="layoutsection">
+  <div id="companylogo">
+    <a href="$xwiki.getURL("Main.WebHome", "view")" title="Home">
+#set($logourl = $xwiki.getSkinFile("curriki-logo.png"))
+      <img src="$logourl" alt="Curriki logo"/>
+    </a>
+  </div>
+</div>
+<div id="printcontainer">
+#template("contentview.vm")
+<div class="clearfloats"></div>
+</div>## printcontainer
+
+<script type="text/javascript">
+window.print();
+</script>

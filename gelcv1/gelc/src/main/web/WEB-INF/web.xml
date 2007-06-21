@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <display-name>xwiki</display-name>
+
+    <description>This application is a servlet and a portlet</description>
+
+    <!-- Define context level parameters for XWiki's initialization -->
+    <context-param>
+        <param-name>org.apache.velocity.properties</param-name>
+        <param-value>/WEB-INF/velocity.properties</param-value>
+        <description>Velocity's configuration</description>
+    </context-param>
+
+    <filter>
+            <filter-name>Set Character Encoding</filter-name>
+            <filter-class>com.xpn.xwiki.web.SetCharacterEncodingFilter</filter-class>
+            <init-param>
+                <param-name>encoding</param-name>
+                <param-value>UTF-8</param-value>
+            </init-param>
+   </filter>
+
+      <filter-mapping>
+            <filter-name>Set Character Encoding</filter-name>
+            <url-pattern>/*</url-pattern>
+      </filter-mapping>
+
+   <!-- XWiki's initialization is done in a Servlet Context Listener. This is where we set up
+       everything that should be initialized prior to XWiki servicing requests. For example this
+       is where we initialize Velocity. -->
+   <listener>
+        <listener-class>com.xpn.xwiki.web.InitializationServletContextListener</listener-class>
+   </listener>
+
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+        <init-param>
+            <param-name>application</param-name>
+            <param-value>ApplicationResources</param-value>
+        </init-param>
+        <init-param>
+            <param-name>xwiki</param-name>
+            <param-value>com.xpn.xwiki.XWiki</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <init-param>
+            <param-name>detail</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <init-param>
+            <param-name>validate</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>redirectHome</servlet-name>
+        <servlet-class>com.xpn.xwiki.web.HomePageRedirect</servlet-class>
+    </servlet>
+    
+     <servlet>
+        <servlet-name>xmlrpc</servlet-name>
+        <servlet-class>com.xpn.xwiki.xmlrpc.XWikiXmlRpcServlet</servlet-class>
+        <init-param>
+          <param-name>enabledForExtensions</param-name>
+          <param-value>false</param-value>
+          <description>Sets, whether the servlet supports vendor extensions for XML-RPC.</description>
+        </init-param>
+     </servlet>
+
+    <!-- This is for the GWT support. Currently the GWT Java files are not being built so we need
+         to disable this. In the future, once we have GWT integrated in the build we'll need to
+         re-enable this. -->
+    <servlet>
+        <servlet-name>CurrikiService</servlet-name>
+        <servlet-class>org.curriki.gwt.server.CurrikiServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>/bin/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>/testbin/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>/xwiki/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>xmlrpc</servlet-name>
+        <url-pattern>/xmlrpc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>redirectHome</servlet-name>
+        <url-pattern>/index.redirect</url-pattern>
+    </servlet-mapping>
+
+    <!-- This is for the GWT support. Currently the GWT Java files are not being built so we need
+         to disable this. In the future, once we have GWT integrated in the build we'll need to
+         re-enable this. -->
+    <servlet-mapping>
+        <servlet-name>CurrikiService</servlet-name>
+        <url-pattern>/bin/download/XWiki/GWT/GWT.zip/org.curriki.gwt.Main/CurrikiService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CurrikiService</servlet-name>
+        <url-pattern>/org.curriki.gwt.Main/CurrikiService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CurrikiService</servlet-name>
+        <url-pattern>/gwt/CurrikiService</url-pattern>
+    </servlet-mapping>
+
+    <!--  Content-type mappings -->
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>html</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>xml</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>js</extension>
+        <mime-type>text/javascript</mime-type>
+    </mime-mapping>
+
+    <!-- The Usual Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.redirect</welcome-file>
+    </welcome-file-list>
+
+    <!--
+    <error-page>
+      <error-code>500</error-code>
+      <location>/error.jsp</location>
+    </error-page>
+    -->
+    <error-page>
+      <error-code>404</error-code>
+      <location>/xwiki/bin/view/Main/DocumentDoesNotExist</location>
+    </error-page>
+
+    <!-- Example Application Tag Library Descriptor
+<taglib>
+<taglib-uri>/WEB-INF/app.tld</taglib-uri>
+<taglib-location>/WEB-INF/app.tld</taglib-location>
+</taglib>
+  -->
+
+    <!-- Struts Tag Library Descriptors -->
+    <taglib>
+        <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
+        <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>/WEB-INF/struts-html.tld</taglib-uri>
+        <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
+        <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+    </taglib>
+
+    <resource-ref>
+        <description>DB Connection</description>
+        <res-ref-name>jdbc/XWikiDS</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+    
+    <env-entry>
+        <env-entry-name>XWikiConfig</env-entry-name>
+        <env-entry-value>/WEB-INF/xwiki.cfg</env-entry-value>
+        <env-entry-type>java.lang.String</env-entry-type>
+    </env-entry>
+</web-app>

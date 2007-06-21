@@ -1,0 +1,113 @@
+#if($doc.getObject("XWiki.AssetClass"))
+#if("$!request.xpage"!="commentsinline")
+<div class="asset-tabs">
+<a class="asset-tab" href="$doc.getURL("view", "bc=${bcLocal}")">$msg.get("caption.view")</a>
+<a class="asset-tab-selected"  href="$doc.getURL("view", "bc=${bcLocal}&viewer=comments")">Comments($doc.comments.size())</a>
+</div>
+#end
+<div id="wizzard" class="asset-page">
+#end
+
+#if($context.user=="XWiki.XWikiGuest")
+#set($joinurl = $xwiki.getURL("Main.JoinCurriki"))
+#set($logredir = $doc.getURL("view"))
+#set($loginurl = $xwiki.getURL("XWiki.XWikiLogin", "login", "xredirect=$logredir"))
+$msg.get("comments.accessDenied", [$joinurl, $loginurl])
+#else
+#if("$!request.xpage"!="commentsinline")
+#if($xwiki.hasAccessLevel("comment"))
+<div class="righttext"><a class="buttonred" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+#else
+ $msg.get("asset.commentNotAllowed")
+#end
+#end
+###
+### List document comments
+###
+## #if(!$showcomments)
+## #set($showcomments = $xwiki.getWebPreference("showcomments"))
+## #end
+## #if($showcomments!="no")
+#if($xwiki.getWebPreferenceAsInt("commentsorder",1)==1)
+#set($comments = $doc.getComments())
+#else
+#set($comments = $doc.getComments(false))
+#end ## endif order pref
+#if($comments.size()>0 || $xwiki.hasAccessLevel("comment"))
+## Only show comments area if there are comments or the user has the right to comment
+##
+<div id="commentscontent" class="xwikiintracontent">
+##<h2 class="heading-1">$msg.get("comments")</h2>
+#if($comments.size()>0)
+#set($count=0)
+#foreach($comment in $comments)
+#if($count > 0)    <hr class="my-curriki-hr"/>
+#end ## endif coutnt > 0
+#set($count=$count+1)
+    <div id="xwikicomment_${count}" class="xwikicomment">
+#set($creatorDoc = $xwiki.getDocument($doc.display('author','view',$comment)))
+      <div class="commentavatar">
+#if($creatorDoc.attachmentList.size()==0) 
+ <img src="$xwiki.getSkinFile("noavatar.png")"/>
+#else
+ #foreach ($attach in $creatorDoc.attachmentList)
+  <a href="$creatorDoc.getURL("view")" >
+  <img src="$creatorDoc.getAttachmentURL($attach.filename,"download")" /></a>
+ #end
+#end
+</div>
+      <div class="commentheader"><span class="commentauthor">$!xwiki.getUserName($doc.display('author','view',$comment))</span>#set($date = $doc.display("date","view",$comment))
+#if($date != "") <span class="commentdate">$date</span>#end
+#set($delredir = $doc.getURL("view", "viewer=comments"))
+## #if($hasedit) <span class="commentdelete"><a class="commentremove" href="$doc.getURL("objectremove" , "classname=XWiki.XWikiComments&amp;classid=${comment.number}&amp;xredirect=${delredir}")"
+##    onclick="return confirm('$msg.get("confirmcommentremove")')">$msg.get("removethiscomment")</a></span>#end ## endif hasedit
+      </div>## commentheader
+      <div class="commentcontent">$doc.getRenderedContent($doc.display("comment","view",$comment))      </div>## xwikicomment
+    </div>## commentscontent
+#end  ## end foreach 
+## #else
+## $msg.get("nocomments")
+#end ## endif comments.size > 0
+#if("$!request.xpage"!="commentsinline")
+#if($xwiki.hasAccessLevel("comment"))
+#set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
+#set($comment = $cclass.newObject())
+#set($afteradd = $doc.getURL("view", "bc=${bcLocal}"))
+#set($afteradd = "xredirect=${afteradd}")
+      <form id="commentAddForm" action="$doc.getURL("commentadd", $afteradd)" method="post">
+    <hr class="my-curriki-hr"/>
+
+        <fieldset class="expanded" id="commentform">
+##        <legend onclick="toggleForm(this.form)">$msg.get("addcomment")<span class="expands">...</span></legend>
+        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
+        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment' style="width: 100%;"></textarea></div>
+        <div>
+        #button($msg.get("caption.saveComment"), "red" "submit" "" "")
+        #button($msg.get("cancel"), "grey" "reset" "" "hideForm(this.form);")
+##<input type="submit" value="$msg.get("addcomment")" class="button"/>
+##<input type="reset" value="$msg.get("cancel")" onclick="" class="button"/>
+        </div>
+        </fieldset>
+      </form>
+      <script type="text/javascript">
+//<!--
+document.getElementById("commentform").className = "collapsed";
+//-->
+      </script>
+#end ## endif can comment
+#end ## endif comment view mode only
+</div>
+#end ## endif display anything about comments
+
+#if("$!request.xpage"!="commentsinline")
+#if($xwiki.hasAccessLevel("comment"))
+<div class="righttext"><a class="buttonred" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+#end
+#if($doc.getObject("XWiki.AssetClass"))
+</div> ##asset-page
+#end
+#end
+
+#end ##guest

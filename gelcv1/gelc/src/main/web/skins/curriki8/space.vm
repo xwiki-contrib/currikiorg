@@ -1,0 +1,66 @@
+#macro(parentsBreadcrumb $bcDoc $level)
+ #set($parent = $bcDoc.parent)
+ #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
+  #set($bcLocal = "${parent};${bcLocal}")
+  #set($level = $level + 1)
+  #parentsBreadcrumb($xwiki.getDocument($parent) $level)
+ #else
+  #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='XWiki.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}'")
+  #foreach($bcItem in $xwiki.search($hql, 1, 0))
+   #set($bcLocal = "${bcItem.name};${bcLocal}")
+   #set($level = $level + 1)
+   #parentsBreadcrumb($xwiki.getDocument(${bcItem.name}) $level)
+  #end
+ #end
+#end
+##
+##
+##
+##
+#macro(currikiBreadcrumb $bcParam $bcCurrentDoc)
+ ##Preparation de la liste
+ #set($bcParent = $bcParam)
+ #if($bcParam && $!bcParam != "")
+  #if($bcParam.endsWith($doc.fullName))
+   #set($bcLocal = $bcParam)
+  #else
+   #set($bcLocal = "${bcParam};${doc.fullName}")
+  #end
+ #else
+  #set($bcLocal = $doc.fullName)
+ #end
+ #if(!$bcParam || $!bcParam == "")
+  #parentsBreadcrumb($bcCurrentDoc, 0)
+ #end
+ ##Deroulage de la liste
+ #set($isFirst = true)
+ #set($previousBc = "")
+ #foreach($bcItem in $bcLocal.split(";"))
+  #if($bcItem != "")
+   #if(!$isFirst)
+    &gt; 
+   #end
+   #set($isFirst = false)
+   #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
+   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+    #set($bcDoc = $xwiki.getDocument($request.editArticle))
+   #end
+   #findCurrikiTitle($bcDoc)
+   <a href="$bcDoc.getURL("view", "bc=${previousBc}")">$currikiTitle</a>
+   #set($previousBc = "${previousBc};${bcItem}")
+  #end
+ #end
+#end
+##
+##
+##
+#if($context.getMode()==0) ## Visible only in a page
+<div id="headerspace" class="layoutsection">
+<div class="minwidth"></div>
+<hr/>
+  <div id="breadcrumbs">
+ #currikiBreadcrumb($request.bc $doc)
+  </div>
+<hr/>
+</div>
+#end

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<web>Main</web>
+<name>BrowseSearch</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent>Main.WebHome</parent>
+<creator>XWiki.dward</creator>
+<author>XWiki.dward</author>
+<customClass></customClass>
+<contentAuthor>XWiki.dward</contentAuthor>
+<creationDate>1169585367000</creationDate>
+<date>1180713941000</date>
+<contentUpdateDate>1180713941000</contentUpdateDate>
+<version>1.383</version>
+<title>Browse by Subject</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>Missed )</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<name>tags</name>
+<prettyName>Tags</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>1</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<size>30</size>
+<separator> </separator>
+<cache>0</cache>
+<separators> ,|</separators>
+<values></values>
+<number>1</number>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Main.BrowseSearch</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#set($lucene = $xwiki.getPlugin("lucene"))
+#if(!$lucene)
+ #error("Error loading Lucene search")
+#end
+##
+## start lucene rebuild if requested
+#set($doRebuild = $request.getParameter("rebuild"))
+#if($doRebuild=="yes")
+  #set($documentCount = $lucene.rebuildIndex($xwiki,$context))
+  #if(${documentCount}&gt;=0)
+$msg.get("browseSearch.rebuilding", [$documentCount])
+  #end
+#end
+## end lucene rebuild
+##
+##
+## Get search and area from request
+#set($squery = $!request.brsqry)
+#set($sarea = $!request.area)
+##
+#set($inarea = $!request.area)
+#if ($inarea &amp;&amp; $inarea != "")
+ #set($inarea = $xwiki.getDocument($inarea).title)
+ #set($inarea = ": $inarea")
+#end
+##
+##
+## Set up a few things for the page and searching
+#set($thispage = $xwiki.getURL($doc.fullName))
+##
+#set($wikinames = "xwiki")
+#set($languages = "default,en,de")
+#set($itemsPerPage = "20")  ## NOTE: This must be hardcoded below for pagecount
+#set($firstIndex = $request.getParameter("firstIndex"))
+#if(!$firstIndex)
+ #set($firstIndex = "1")
+#end
+#set($firstIndex = ($xwiki.parseInt($firstIndex)))
+#set($uncat = "Uncategorized")
+#set($nonasset = "Curriki Site Pages")
+#set($members = "Curriki Members")
+#set($allres = "All Resources")
+##
+##
+##
+## Start of macros
+#macro(resultlink $xwiki $web $name)
+ #set($resDoc = $xwiki.getDocument("${web}.${name}"))
+ #if($resDoc.getObject("XWiki.AssetClass"))
+   #set($ok = $resDoc.use("XWiki.AssetClass"))
+   #set($rowTitle = $!resDoc.display("title"))
+   #if($resDoc.attachmentList.size() == 0)
+     #set($mime = "")
+     #set($rowType="currikulum")
+   #else
+     #mimeicon($resDoc.attachmentList.get(0).getFilename())
+     #set($mime = $resDoc.attachmentList.get(0).mimeType)
+     #set($rowType="mime")
+   #end
+   #if($resDoc.getObject("XWiki.ExternalAssetClass"))
+     #set($rowType="URL")
+   #end
+ #else
+   #set($rowTitle = $!resDoc.display("title"))
+   ## Not an asset
+   #set($rowType="curriki-link")
+ #end
+ #if(!$rowTitle || $rowTitle == "")
+   #set($rowTitle="$name")
+ #end
+ #set($rowPubDate=$xwiki.formatDate($result.date, "MMM-dd-yy"))
+ #set($rowContributor=$!xwiki.getLocalUserName($!result.creator))
+ #set($rowTitle = $rowTitle.replaceAll('(^|\s)(\S{20})\S+(\S{15,})($|\s)', '$1$2~$3$4'))
+ #set($rowTitle = $rowTitle.replaceAll('^(.{20}).*', '$1...'))
+&lt;tr&gt;
+&lt;td&gt;
+{pre}&lt;a href="$resDoc.getURL()"&gt;$rowTitle&lt;/a&gt;{/pre}
+&lt;/td&gt;
+&lt;td width="50px" align="center"&gt;
+#if($rowType == "URL")
+{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/HTM.png")" alt="[URL]" title="[URL]"/&gt;{/pre}
+#end
+#if($rowType == "mime")
+#if(!$ext)
+  #set($ext = "Unknown")
+#end
+{pre}&lt;img src="$macro_iconUrl" alt="[$ext]" title="[$ext]"/&gt;{/pre}
+#end
+#if($rowType == "curriki-link")
+{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/Currikulum_Icon.png")" alt="[Curriki Page]" title="[Curriki Page]"/&gt;{/pre}
+#end
+#if($rowType == "currikulum")
+{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/Currikulum_Icon.png")" alt="[Currikulum Item]" title="[Currikulum Item]"/&gt;{/pre}
+#end
+&lt;/td&gt;
+&lt;td align="center"&gt;$rowPubDate&lt;/td&gt;
+&lt;td&gt;$rowContributor&lt;/td&gt;
+&lt;td class="browse-view-button"&gt;
+{pre}&lt;a href="$resDoc.getURL()" title=""&gt;$msg.get("view")&lt;/a&gt;
+#if($context.user!="XWiki.XWikiGuest")&lt;a href="javascript:addExistingResource2('${web}.${name}');"&gt;$msg.get("add")&lt;/a&gt;#end{/pre}
+#end
+&lt;/td&gt;
+&lt;/tr&gt;
+## end macro resultlink
+##
+#macro(dosearch $sq $sa)
+ #set($sitewebs = "(web:(Main OR Blog OR News OR Members OR Board OR Advisory OR Honorary OR Demo OR FeaturedContent))")
+ ##
+ #set($search = "")
+ ##
+#if(!$sa || $sa == "" || $sa == $allres)
+ #set($sa = "(XWiki.AssetClass.fw_items:FW_masterFramework.WebHome)")
+#end
+#if($sa == $nonasset)
+ #set($sa = "$sitewebs")
+#end
+#if($sa == $uncat)
+ #set($sa = "XWiki.AssetClass.fw_items:FW_masterFramework.WebHome")
+ #set($sa = "$sa $uncatqry")
+#end
+#if($sa == $members)
+ #set($sa = "(XWiki.XWikiUsers.active:1)")
+#end
+#if($sa == "ALL")
+ #set($sa = "")
+#end
+#if($sa.startsWith("FW_masterFramework"))
+ #set($sa = "XWiki.AssetClass.fw_items:$sa")
+#end
+ #if($sq)
+  #set($search = $sq)
+ #end
+ #if($search &amp;&amp; $search != "")
+  #set($search = "($search) AND ")
+ #end
+ #set($search = "$search $sa")
+#if($request.debug)
+Searching: $search
+#end
+#set($luceneQuery = "$search AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp")
+#if ($!request.getParameter("debug"))
+Query: $luceneQuery
+#end
+ #set($searchresults = $lucene.getSearchResults($luceneQuery, $wikinames, $languages, $xwiki))
+#end
+## end macro dosearch
+##
+#set($slcolwidth = 2)
+#set($slcol = 0)
+#macro(subjectlink $subject)
+ #set($slcol = $slcol+1)
+ #set($slcol = $slcol%2)
+ #if($slcol==1)
+ &lt;tr class="browse-subject-row"&gt;
+ #end
+#if($subject == $sarea)
+ &lt;td class="browse-subject-cell selected" width="50%"&gt;
+#else
+ &lt;td class="browse-subject-cell" width="50%"&gt;
+#end
+#if($subject &amp;&amp; $subject != "")
+&lt;a href="${thispage}?brsqry=$!{squery}&amp;area=$subject"&gt;
+#else
+&lt;a href="${thispage}?brsqry=$!{squery}"&gt;
+#end
+  #if($subject != $uncat &amp;&amp; $subject != $nonasset &amp;&amp; $subject != $members &amp;&amp; $subject != $allres)
+  ${msg.get($xwiki.getDocument($subject).title)}
+  #else
+  $subject
+  #end
+#if($subject != $members &amp;&amp; $subject != $nonasset)
+  #dosearch($squery $subject)
+($searchresults.totalHitcount)
+#end
+&lt;/a&gt;
+&lt;/td&gt;
+ #if($slcol==0)
+&lt;/tr&gt;
+ #end
+#end
+## end macro subjectlink
+##
+#macro(displaysubjectareas)
+## List of subject areas
+ #set($topsa = "FW_masterFramework.WebHome")
+## TODO: We need to figure out how to do breadcrumbs first
+## #if($sarea &amp;&amp; $sarea != "" &amp;&amp; $sarea != "$uncat")
+##  #set($topsa = "$sarea")
+## #end
+ #set($sql=" , BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.FrameworkItemClass' and doc.parent='$topsa' order by doc.title")
+ #set($list = $xwiki.searchDocuments($sql, 0, 0))
+&lt;table class="browse-subject-table"&gt;
+ #set($rowcount = $list.size() / 2)
+ #set($uncatqry = "")
+ #foreach ($i in [0..${rowcount}])
+  #subjectlink($xwiki.getDocument($list.get($i)).fullName)
+  #set($uncatqry = "$uncatqry -$xwiki.getDocument($list.get($i)).fullName")
+  #set($row = $i+$rowcount+1)
+   #if($row &lt; $list.size())
+    #subjectlink($xwiki.getDocument($list.get($row)).fullName)
+##    #set($uncatqry = "$uncatqry AND NOT XWiki.AssetClass.fw_items:$xwiki.getDocument($list.get($row)).fullName")
+    #set($uncatqry = "$uncatqry -$xwiki.getDocument($list.get($row)).fullName")
+   #end
+ #end
+ #set($uncatqry = "XWiki.AssetClass.fw_items:(FW_masterFramework.WebHome $uncatqry)")
+ #subjectlink("$uncat")
+ #subjectlink("$allres")
+&lt;/table&gt;
+#set($slcol = 0)
+&lt;hr class="browse-subject-table"/&gt;
+&lt;table class="browse-subject-table"&gt;
+ #subjectlink("$nonasset")
+## #subjectlink("$members")
+&lt;/table&gt;
+#end
+## end macro displaysubjectareas
+##
+#macro(showpagination $searchresults)
+#set($pagecount = ${searchresults.totalHitcount} / 20)
+#if(($searchresults.totalHitcount % 20) &gt; 0)
+ #set($pagecount = $pagecount + 1)
+#end
+#set($curpage = ($firstIndex / 20) + 1)
+#set($lastindex = (($pagecount - 1)*20)+1)
+#set($previousIndex = ($firstIndex - 20))
+#set($nextIndex = ($firstIndex + 20))
+#set($lastShown = ($nextIndex - 1))
+&lt;div id="browse-nav-pagination"&gt;
+#if($previousIndex&gt;0)
+&lt;span class="browse-results-page browse-results-page-active"&gt;
+&lt;a href="$thispage?brsqry=$!squery&amp;area=$!request.area&amp;firstIndex=$previousIndex"&gt;$msg.get("Prev")&lt;/a&gt;
+&lt;/span&gt;
+#else
+&lt;span class="browse-results-page browse-results-page-nonactive"&gt;
+$msg.get("Prev")
+&lt;/span&gt;
+#end
+&lt;span class="browse-results-page browse-results-page-nonactive"&gt;
+{pre}|{/pre}
+&lt;/span&gt;
+&lt;span class="browse-results-page"&gt;
+Results $firstIndex - $lastShown of about $searchresults.totalHitcount
+&lt;/span&gt;
+&lt;span class="browse-results-page browse-results-page-nonactive"&gt;
+{pre}|{/pre}
+&lt;/span&gt;
+#if($curpage&lt;$pagecount)
+&lt;span class="browse-results-page browse-results-page-active"&gt;
+&lt;a href="$thispage?brsqry=$!squery&amp;area=$!request.area&amp;firstIndex=$nextIndex"&gt;$msg.get("Next")&lt;/a&gt;
+&lt;/span&gt;
+#else
+&lt;span class="browse-results-page browse-results-page-nonactive"&gt;
+$msg.get("Next")
+&lt;/span&gt;
+#end
+&lt;/div&gt;
+#end ## macro showpagination
+##
+## end macros
+##
+##
+##
+## Start of page displayed
+&lt;h1&gt;$msg.get("browseSearch.bySubject")&lt;/h1&gt;
+&lt;p class="browse-text"&gt;
+$msg.get("browseSearch.info")
+&lt;/p&gt;
+#displaysubjectareas()
+&lt;br /&gt;
+#if ($!request.area || $!request.brsqry)
+## do the search
+#dosearch($squery $sarea)
+#set($results = $searchresults.getResults($firstIndex,$xwiki.parseInt($itemsPerPage)))
+##
+## Results of search/browse
+1 &amp;raquo; $msg.get("caption.results")$!inarea
+
+#if($results.size()&gt;0)
+## #subtitlebar($msg.get("caption.searchResults") "" "" "red")
+## Commented out
+#set($lastIndex= $firstIndex + $results.size())
+## #if($searchresults.totalHitcount==0)
+## {pre} $msg.get("noresult"):{/pre}
+## #else
+## {pre}$msg.get("results") $firstIndex - $lastIndex $msg.get("of") ${searchresults.totalHitcount}:{/pre}
+## #end
+## End of comments
+&lt;div id="browse_results"&gt;
+&lt;table class="browse-results-table" summary="Browse results"&gt;
+&lt;tr class="browse-results-table-header"&gt;
+&lt;th align="center"&gt;Title&lt;/th&gt;
+&lt;th width="50px" align="center"&gt;File Type&lt;/th&gt;
+&lt;th align="center"&gt;Published&amp;nbsp;Date&lt;/th&gt;
+&lt;th align="center"&gt;Contributor&lt;/th&gt;
+&lt;th style="width:80px;" align="center"&gt;Action&lt;/th&gt;
+&lt;/tr&gt;
+#set($list = $xwiki.arrayList)
+#foreach($result in $results)
+## #if($result.web.startsWith("Coll_"))
+## #set($fname = "${result.web}.${result.name}")
+## #if(!$list.contains($fname))
+#resultlink($xwiki ${result.web} ${result.name})
+## #set($ok = $list.add($fname))
+## #end
+## #end
+#end
+&lt;/table&gt;
+&lt;/div&gt;
+#else
+  #info($msg.get("browseSearch.noResult"))
+#end
+#showpagination($searchresults)
+#end</content>
+</xwikidoc>

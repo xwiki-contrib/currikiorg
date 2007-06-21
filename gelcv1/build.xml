@@ -1,0 +1,254 @@
+<project name="gelc" default="release" basedir=".">
+
+    <property file="${user.home}/build.properties" />
+    <property file="build.properties" />
+
+    <property name="xwiki.dir" value="${basedir}/xwiki" />
+    <property name="build.dir" value="${basedir}/build" />
+    <property name="release.dir" value="${basedir}/release" />
+    <property name="xwiki.lib" value="${xwiki.dir}/lib" />
+    <property name="lib.dir" value="${basedir}/lib" />
+    <property name="xwiki.jar" value="${release.dir}/xwiki.jar" />
+
+    <property name="gelcplugins.dir" value="${basedir}/gelcplugins" />
+    <property name="gelcplugins.src.dir" value="${gelcplugins.dir}/src/main/java" />
+    <property name="gelcplugins.res.dir" value="${gelcplugins.dir}/src/main/resources" />
+    <property name="gelcplugins.jar" value="${release.dir}/gelcplugins.jar" />
+
+    <property name="gelc.dir" value="${basedir}/gelc" />
+    <property name="gelc.main.dir" value="${gelc.dir}/src/main" />
+    <property name="gelc.src.dir" value="${gelc.main.dir}/java" />
+    <property name="gelc.web.dir" value="${gelc.main.dir}/web" />
+    <property name="gelc.res.dir" value="${gelc.main.dir}/resources" />
+    <property name="gelc.jar" value="${release.dir}/gelc.jar" />
+
+    <property name="webapp.war" value="xwiki-gelc.war"/>
+
+    <property name="build.dir" value="${basedir}/build/gelc" />
+    <property name="build.test.dir" value="${basedir}/build/gelctest" />
+    <property name="test.reports.dir" value="${build.dir}/test-reports" />
+    <property name="gelcplugins.test.src.dir" value="${gelcplugins.dir}/src/test/java" />
+    <property name="gelcplugins.test.res.dir" value="${gelcplugins.dir}/src/test/resources" />
+    <property name="gelcplugins.test.jar" value="${release.dir}/gelcpluginstest.jar" />
+	
+<!-- groovy setup -->
+
+    <fileset id="libs.groovy.fileset" dir="${xwiki.lib}"
+            includes="groovy-all-1.0-jsr-05.jar" />
+    <fileset id="libs.xwiki.fileset" dir="${xwiki.lib}"
+    		includes="*.jar" />
+    <fileset id="libs.gelc.fileset" dir="${lib.dir}">
+        <include name="*.jar" />
+        <!-- These files are only required during build of gwt -->
+        <exclude name="ant-gwt*.jar" />
+        <exclude name="gwt-dev*.jar" />
+    </fileset>
+
+    <pathconvert pathsep=";" property="libs.gelc" refid="libs.gelc.fileset"/>
+    <pathconvert pathsep=";" property="libs.xwiki" refid="libs.xwiki.fileset"/>
+
+    <path id="libs.groovy">
+        <fileset refid="libs.groovy.fileset" />
+        <fileset dir="${xwiki.lib}">
+          <include name="*.jar"/>
+        </fileset>
+        <fileset refid="libs.gelc.fileset" />
+    </path>
+
+    <taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy">
+        <classpath refid="libs.groovy" />
+        <classpath path="${release.dir}/xwiki.jar" />
+        <classpath path="${build.dir}/web/WEB-INF/classes" />
+    </taskdef>
+
+<!-- end of groovy settings -->
+
+    <path id="gelc.gwt.path">
+        <pathelement location="${gelc.src.dir}" />
+        <pathelement location="${xwiki.dir}/web/gwt/src/main/java" />
+        <fileset refid="libs.gelc.fileset" />
+        <fileset refid="libs.xwiki.fileset" />
+        <fileset dir="${lib.dir}" includes="ant-gwt*.jar gwt-dev*.jar" />
+    </path>
+    <taskdef resource="dk/contix/ant/gwt/ant-gwt.xml" classpathref="gelc.gwt.path" />
+
+    <target name="gelc.gwt" depends="prepare">
+        <gwtcompile destdir="${build.dir}" optimize="true">
+            <fileset dir="${gelc.src.dir}">
+                <include name="**/*.gwt.xml" />
+            </fileset>
+        </gwtcompile>
+        <copy todir="${build.dir}/gwt">
+            <fileset dir="${build.dir}/org.curriki.gwt.Main"
+                     includes="**"
+            />
+        </copy>
+        <delete dir="${build.dir}/org.curriki.gwt.Main" />
+    </target>
+
+    <target name="prepare">
+    	<echo message="${user.home}"/>
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${release.dir}" />
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <mkdir dir="${release.dir}" />
+    </target>
+
+    <target name="exportdb">
+        <groovy src="${tools.dir}/export.groovy"/>
+    </target>
+
+    <target name="importdb">
+        <groovy src="${tools.dir}/import.groovy" />
+    </target>
+
+    <target name="xwiki" depends="prepare">
+        <ant antfile="build.xml" target="webapp"
+		dir="${xwiki.dir}" inheritAll="false">
+            <property name="release.dir" value="${build.dir}" />
+        </ant>
+        <mkdir dir="${build.dir}/web" />
+        <copy todir="${build.dir}/web/" overwrite="true">
+         <fileset dir="${gelc.web.dir}">
+          <exclude name="**/web-*.xml" />
+	 </fileset>
+        </copy>
+        <copy todir="${build.dir}/web/lib/" overwrite="true">
+         <fileset dir="${build.dir}">
+	  <include name="xwiki.jar" />
+         </fileset>
+        </copy>
+        <copy todir="${release.dir}" overwrite="true">
+         <fileset dir="${build.dir}">
+	  <include name="xwiki.jar" />
+         </fileset>
+        </copy>
+    </target>
+
+    <target name="gelcplugins" depends="xwiki">
+	<mkdir dir="${build.dir}/gelcplugins" />
+	<javac srcdir="${gelcplugins.src.dir}"
+	       destdir="${build.dir}/gelcplugins" debug="true"
+			optimize="true" deprecation="true"
+			fork="true">
+                <classpath>
+			<fileset refid="libs.xwiki.fileset" />
+			<fileset refid="libs.gelc.fileset" />
+			<pathelement location="${release.dir}/xwiki.jar" />
+		</classpath>
+		</javac>
+		<jar destfile="${gelcplugins.jar}">
+			<!--  classes -->
+		<fileset dir="${build.dir}/gelcplugins">
+		        <include name="**/*.class"/>
+		    </fileset>
+		    <!-- resources -->
+		    <fileset dir="${gelcplugins.res.dir}">
+		        <include name="**/*"/>
+		    </fileset>
+		</jar>
+    </target>
+
+    <target name="gelc" depends="xwiki, gelcplugins">
+	<mkdir dir="${build.dir}/gelc" />
+	<javac srcdir="${gelc.src.dir}"
+	       destdir="${build.dir}/gelc" debug="true"
+			optimize="true" deprecation="true"
+			fork="true">
+                <classpath>
+			<fileset refid="libs.xwiki.fileset" />
+			<fileset refid="libs.gelc.fileset" />
+			<pathelement location="${release.dir}/xwiki.jar" />
+			<pathelement location="${release.dir}/gelcplugins.jar" />
+		</classpath>
+		</javac>
+		<jar destfile="${gelc.jar}">
+			<!--  classes -->
+		<fileset dir="${build.dir}/gelc">
+		        <include name="**/*.class"/>
+		    </fileset>
+		    <!-- resources -->
+		    <fileset dir="${gelc.res.dir}">
+		        <include name="**/*"/>
+		    </fileset>
+		</jar>
+    </target>
+
+    <target name="gelcpluginstests" depends="gelcplugins">
+        <ant antfile="build.xml" target="tests"
+		dir="${xwiki.dir}" inheritAll="false">
+            <property name="release.dir" value="${build.dir}" />
+        </ant>
+	<mkdir dir="${build.test.dir}" />
+	<javac srcdir="${gelcplugins.test.src.dir}"
+	       destdir="${build.test.dir}" debug="true"
+			optimize="true" deprecation="true"
+			fork="true">
+                <classpath>
+			<fileset refid="libs.xwiki.fileset" />
+			<fileset refid="libs.gelc.fileset" />
+			<pathelement location="${release.dir}/xwiki.jar" />
+			<pathelement location="${release.dir}/gelcplugins.jar" />
+		        <pathelement path="${xwiki.dir}/build/test/" />
+		</classpath>
+		</javac>
+		<jar destfile="${release.dir}/gelcpluginstest.jar">
+			<!--  classes -->
+		<fileset dir="${build.test.dir}">
+		        <include name="**/*.class"/>
+		    </fileset>
+		    <!-- resources -->
+		</jar>
+                <copy todir="${build.test.dir}">
+		    <fileset dir="${gelcplugins.test.res.dir}">
+		        <include name="**/*"/>
+		    </fileset>
+		</copy>
+    </target>
+    <target name="test.client" depends="gelcpluginstests">
+        <mkdir dir="${test.reports.dir}" />
+        <junit printsummary="yes" haltonfailure="no" fork="on" maxmemory="300m">
+
+            <classpath>
+		<fileset refid="libs.xwiki.fileset" />
+		<fileset refid="libs.gelc.fileset" />
+		<pathelement location="${release.dir}/xwiki.jar" />
+		<pathelement location="${release.dir}/gelcplugins.jar" />
+		<pathelement location="${release.dir}/gelcpluginstest.jar" />
+		<pathelement path="${xwiki.dir}/build/test" />
+		<pathelement path="${build.test.dir}" />
+            </classpath>
+            <formatter type="xml" />
+
+            <batchtest todir="${test.reports.dir}">
+                <fileset dir="${gelcplugins.test.src.dir}">
+                   <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="release" depends="xwiki, gelcplugins, gelc, gelc.gwt">
+         <mkdir dir="${release.dir}" />
+         <war destfile="${release.dir}/${webapp.war}" webxml="${build.dir}/web/WEB-INF/web.xml">
+          <fileset dir="${build.dir}/web">
+            <exclude name="**/web*.xml" />
+            <exclude name="**/xwiki-*.cfg" />
+          </fileset>
+          <!-- Copy the GWT code -->
+          <fileset dir="${build.dir}">
+            <include name="gwt/**" />
+          </fileset>
+          <lib dir="${release.dir}">
+            <include name="gelcplugins.jar"/>
+            <include name="gelc.jar"/>
+          </lib>
+          <lib refid="libs.gelc.fileset" />
+        </war>
+	</target>
+    <target name="test" depends="test.client" />
+    <target name="all" depends="release, test" />
+</project>

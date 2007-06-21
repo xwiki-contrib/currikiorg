@@ -1,0 +1,117 @@
+##template("macros.vm")
+#set($leftPanels="Panels.Navigation,Panels.FeaturedMembers")
+#set($leftPanels=$leftPanels.split(","))
+##
+##
+##
+#############################################
+##
+##  GWT settings
+##
+##
+#set($gwtmainpath = "/xwiki/bin/view/GWT/Editor?xpage=plain&")
+#set($gwtsitepath = "/xwiki/gwt")
+##
+##
+## HEADER
+##
+<div id="curriki-header">
+##
+## LOGO
+##
+ <div id="curriki-header-left">
+  <div class="header-inner">
+   <a href="$xwiki.getURL("Main.WebHome", "view")" title="Home"><img src="$xwiki.getSkinFile("curriki-logo.png")" alt="Curriki &ndash; Global Education Learning Community"/></a>
+  </div> ## header-inner
+ </div> ## curriki-header-left
+##
+## User Area
+##
+ <div id="curriki-header-mid">
+#if($isguest)
+  #if($doc.web=='Main')
+   #set($logredir = $xwiki.getURL("Members.WebHome"))
+  #end
+##Login Form
+<div id="curriki-login-area">
+<form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post">
+ <div id="currikiLogin">
+  <input id="loginname" tabindex="1" type="text" name="j_username" value="$msg.get("loginUsername")" onfocus="if (this.value=='$msg.get("loginUsername")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("loginUsername")';}"/>
+  <input id="loginpwd" tabindex="2" type="password" name="j_password" onfocus="if(window.ActiveXObject || this.type == 'password'){this.select();} else {this.type='$msg.get("loginPassword")'; this.value=''; this.focus();}" onblur="if ((!window.ActiveXObject) && this.value==''){this.value='$msg.get("loginPassword")'; this.type='text';}"/>
+  <script type="text/javascript">
+   if(! window.ActiveXObject){
+     pwdInput = document.getElementById('loginpwd');
+     if(pwdInput.value == '') {
+       pwdInput.setAttribute('type', 'text');
+       pwdInput.value = '$msg.get("loginPassword")';
+     }
+   }
+  </script>
+##  <div id="loginbtn-container"><button id="loginbtn" type="submit">&#xBB;</button></div>
+#button($msg.get("headerLoginGo") "blue" "submit" 'loginbtn" tabindex="4' "")
+  <div id="loginextra">
+  <label id="loginremember"><input tabindex="3" type="checkbox" name="j_rememberme" value="true"/> $msg.get("loginRememberme")</label>
+  <a href="$xwiki.getURL("Main.ForgotPassword")" title="" id="loginforgotpassword" style="letter-spacing: -1px;">$msg.get("loginForgot")</a></div>##loginextra
+ </div> ## currikiLogin
+</form>
+</div> ## curriki-login-area
+##Registration
+<div id="curriki-register-link" class="largemessage">
+#set($regurl = $xwiki.getURL("Main.JoinCurriki"))
+  <a href="$regurl" id="loginregister"><span id="bam1">$msg.get("BecomeMember_part1")</span> <span id="bam2">$msg.get("BecomeMember_part2")</span></a>
+</div> ## curriki-register-link
+#else ## logged in
+ #set($userdoc = $xwiki.getDocument($context.user))
+ #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
+<div id="currikiuserarea">
+<p class="welcomemsg">$msg.get("headerWelcome", [$userdoc.name])</p>
+<p><a id="curriki-my" href="$userdoc.getURL("view")">$msg.get("headerMyCurriki")</a>#sep() 
+ #if($hasadmin)
+  <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("admin")</a> #sep()
+ #end
+#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
+  <a class="link-attention" href="$logouturl" id="currikilogout">$msg.get("logout")</a>
+</p>
+</div> ## currikiuserarea
+#end
+</div> ## curriki-header-mid
+##
+## Search Area
+##
+ <div id="curriki-header-right">
+  <div class="header-inner">
+   <p class="curriki-small-infos">$msg.get("headerFindResource")</p>
+   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.BrowseSearch")">
+<div id="curriki-search-field-container">
+    <div id="curriki-search-field" class="curriki-search-a">
+     <input type="hidden" class="hidden" name="area" value=""/>
+#set($brsqry = $request.brsqry)
+#if(!$brsqry || $brsqry == "")
+#set($brsqry = "search")
+#end
+     <input type="text" name="brsqry" id="curriki-searchbox" value="$!brsqry" 
+     onfocus="if (this.value=='search') this.value=''; else this.select()" 
+     onblur="if (this.value=='') this.value='search'"/>
+     <button id="searchbtn" type="submit" name="btn">$msg.get("headerSearchGo")</button>
+    </div> ## curriki-search-field
+</div> ## curriki-search-field-container
+<div id="browse-btn-container">
+<button id="browse-btn" class="browse-button" onclick="if (document.searchform.brsqry.value=='search') {document.searchform.brsqry.value='';};" type="submit">$msg.get("headerBrowse")</button>
+##button("Browse" "red" "submit" "browse-btn" "if (document.searchform.brsqry.value='search') {document.searchform.brsqry.value='';};")
+</div> ## browse-btn-container
+   </form>
+<div id="advsearchlink"><a href="javascript:findPopup2();">$msg.get("AdvancedSearch")</a></div>
+  </div> ## header-inner
+ </div> ## curriki-header-right
+<div class="clearfloats"></div>
+</div> ## curriki-header
+##<script>
+##Rico.Corner.round('browse-btn', {compact:true,color:'transparent',bgColor:'#e3e4f5'});
+##</script>
+#################################################################################
+## End of header
+##
+##
+##
+##
+##

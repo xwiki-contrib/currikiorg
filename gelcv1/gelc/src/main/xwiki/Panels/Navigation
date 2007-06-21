@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<web>Panels</web>
+<name>Navigation</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.martagirdea</creator>
+<author>XWiki.LudovicDubost</author>
+<customClass></customClass>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<creationDate>1171480785000</creationDate>
+<date>1179950565000</date>
+<contentUpdateDate>1179950565000</contentUpdateDate>
+<version>1.114</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>Removed Main.css</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<name>tags</name>
+<prettyName>Tags</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>1</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<size>30</size>
+<separator> </separator>
+<cache>0</cache>
+<separators> ,|</separators>
+<values></values>
+<number>1</number>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Panels.Navigation</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<object>
+<class>
+<name>Panels.PanelClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<type>
+<name>type</name>
+<prettyName>Panel type</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>0</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>0</multiSelect>
+<size>1</size>
+<separator> </separator>
+<cache>0</cache>
+<separators> ,|</separators>
+<values>view|edit</values>
+<number>2</number>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</type>
+<description>
+<name>description</name>
+<prettyName>Description</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>40</size>
+<rows>5</rows>
+<editor>Text</editor>
+<number>3</number>
+<classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+</description>
+<category>
+<name>category</name>
+<prettyName>Category</prettyName>
+<unmodifiable>0</unmodifiable>
+<relationalStorage>0</relationalStorage>
+<displayType>select</displayType>
+<multiSelect>0</multiSelect>
+<size>1</size>
+<separator> </separator>
+<cache>0</cache>
+<separators> ,|</separators>
+<values>Information|Navigation|Tools|Administration|Other</values>
+<number>5</number>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</category>
+<content>
+<name>content</name>
+<prettyName>Content</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>60</size>
+<rows>25</rows>
+<editor>Text</editor>
+<number>4</number>
+<classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+</content>
+<name>
+<name>name</name>
+<prettyName>Name</prettyName>
+<unmodifiable>0</unmodifiable>
+<size>40</size>
+<number>1</number>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</name>
+</class>
+<name>Panels.Navigation</name>
+<number>0</number>
+<className>Panels.PanelClass</className>
+<property>
+<type>view</type>
+</property>
+<property>
+<description>Provides links to the different Curriki areas.</description>
+</property>
+<property>
+<category>Navigation</category>
+</property>
+<property>
+<content>&lt;meta name='gwt:module' content='${gwtsitepath}=org.curriki.gwt.Main'&gt;
+&lt;meta name="gwt:property" content="translation=XWiki.CurrikiCourseEditorTranslation"&gt;
+&lt;link rel="stylesheet" href="/xwiki/bin/view/XWiki/style?xpage=plain" type="text/css" /&gt;
+&lt;link rel="stylesheet" href="/xwiki/yui/treeview/assets/tree.css" type="text/css"&gt;
+&lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"&gt;&lt;/script&gt;
+&lt;script language="javascript" src="/xwiki/gwt2.js"&gt;&lt;/script&gt;
+&lt;iframe id="__gwt_historyFrame" style="width:0;height:0;border:0"&gt;&lt;/iframe&gt;
+&lt;div id="treeviewtemp" style="display: none;"&gt;&lt;/div&gt;
+#beginNavigationPanel()
+##
+##
+##
+#navigationCategory("Browse Resources", "", true, 
+  [
+   ["Featured Resources", "Main.FeaturedContent"], 
+   ["By Subject", "Main.BrowseSearch"]
+  ]
+)
+##
+##
+##
+#if($context.user!="XWiki.XWikiGuest")
+#navigationCategory("Contribute Resources", "", true,
+  [
+   ["Add a Learning Resource", "javascript:addFile2();"],
+   ["Create a Learning Resource", "javascript:addFromTemplate2();"],
+   ["Build a Collection", "javascript:addCollection2();"]
+  ]
+)
+#end
+##
+##
+##
+#navigationCategory("Member Community", "Members.WebHome", true,
+  [
+   ["Featured Members", "Main.FeaturedMembers"],
+   ["Volunteer", "Main.Volunteer"]
+  ]
+)
+##
+##
+##
+#navigationCategory("About Curriki", "Main.About", true,
+  [
+   ["News", "News.WebHome"],
+   ["Board", "Main.Board"],
+   ["Leadership Team", "Main.Leadership"]
+  ]
+)
+##
+##
+##
+#navigationTopLevelEntry("Donate" "Main.Donate")
+##
+##
+##
+#navigationCategory("Partners and Sponsors", "Main.Partners", true,
+  [
+   ["Featured Partners", "Main.FeaturedPartners"]
+]
+)
+##
+##
+##
+#navigationCategory("Help", "", true,
+  [
+   ["FAQs", "Main.FAQ"],
+   ["Contact Us", "Main.Contact"]
+  ]
+)
+##
+##
+##
+#endNavigationPanel()</content>
+</property>
+<property>
+<name>Navigation</name>
+</property>
+</object>
+<content>#includeForm("Panels.PanelSheet")</content>
+</xwikidoc>
