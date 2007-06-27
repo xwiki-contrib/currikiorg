@@ -1,5 +1,5 @@
 /*
- * Copyright 2006, XpertNet SARL, and individual contributors as indicated
+ * Copyright 2006-2007, XpertNet SARL, and individual contributors as indicated
  * by the contributors.txt.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,10 +16,8 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
- *
- * @author jeremi
  */
-package org.gelc.xwiki.plugins.mime;
+package org.curriki.xwiki.plugin.mimetype;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -28,7 +26,6 @@ import com.xpn.xwiki.api.Api;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
-
 
 public class MimeTypePluginAPI  extends Api {
     MimeTypePlugin plugin;
