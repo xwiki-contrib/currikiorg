@@ -47,46 +47,57 @@
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
       <version>1.3.3</version>
-      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
-           WAR -->
       <scope>provided</scope>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR. However an issue in the GWT maven plugin prevents it from working with
+           "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
+           it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
     <dependency>
       <groupId>gwttk</groupId>
       <artifactId>gwttk</artifactId>
       <version>0.2.2</version>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
-           WAR -->
-      <scope>provided</scope>
+           WAR. However an issue in the GWT maven plugin prevents it from working with
+           "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
+           it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
     <dependency>
       <groupId>gwt-widgets</groupId>
       <artifactId>gwt-widgets</artifactId>
       <version>0.1.3</version>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
-           WAR -->
-      <scope>provided</scope>
+           WAR. However an issue in the GWT maven plugin prevents it from working with
+           "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
+           it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
     <dependency>
       <groupId>jpavel</groupId>
       <artifactId>editor</artifactId>
       <version>0.1.2-preview</version>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
-           WAR -->
-      <scope>provided</scope>
+           WAR. However an issue in the GWT maven plugin prevents it from working with
+           "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
+           it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-web-gwt</artifactId>
       <version>1.1-SNAPSHOT</version>
-      <scope>provided</scope>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR. However an issue in the GWT maven plugin prevents it from working with
+           "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
+           it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-web-gwt</artifactId>
       <version>1.1-SNAPSHOT</version>
-      <scope>provided</scope>
       <classifier>sources</classifier>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR. However an issue in the GWT maven plugin prevents it from working with
+           "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
+           it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
@@ -128,10 +139,12 @@
         <artifactId>maven-googlewebtoolkit2-plugin</artifactId>
         <version>1.5.3-SNAPSHOT</version>
         <configuration>
-          <logLevel>ALL</logLevel>
+          <runTarget>org.curriki.gwt/Main.html</runTarget>
           <compileTarget>
-            <value>org.curriki.gwt.Main.gwt.xml</value>
+            <value>com.xpn.xwiki.gwt.api.Api</value>
+            <value>org.curriki.gwt.Main</value>
           </compileTarget>
+          <extraJvmArgs>-Xmx1024m</extraJvmArgs>
         </configuration>
         <executions>
           <execution>
@@ -140,6 +153,13 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <dependentWarExcludes></dependentWarExcludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>
