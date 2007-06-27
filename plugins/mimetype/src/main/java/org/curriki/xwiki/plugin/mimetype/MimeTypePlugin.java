@@ -31,14 +31,13 @@ import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.curriki.xwiki.plugin.metadata.MetaDataFrameworkPlugin;
 
 import java.io.IOException;
 import java.util.*;
 
 public class MimeTypePlugin  extends XWikiDefaultPlugin implements XWikiPluginInterface, MimeTypeConstant {
     private static Log mLogger =
-            LogFactory.getFactory().getInstance(MetaDataFrameworkPlugin.class);
+            LogFactory.getFactory().getInstance(MimeTypePlugin.class);
 
 
     public MimeTypePlugin(String name, String className, XWikiContext context) {

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ *
+ * Copyright 2006-2007, XpertNet SARL, and individual contributors as indicated
+ * by the contributors.txt.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ *
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.curriki</groupId>
+    <artifactId>curriki-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <groupId>org.curriki</groupId>
+  <artifactId>curriki-gwt</artifactId>
+  <packaging>war</packaging>
+  <name>XWiki Products - Curriki - GWT</name>
+  <description>XWiki Products - Curriki - GWT</description>
+  <dependencies>
+    <!-- These 4 GWT libraries are not yet in the Maven2 central repository. For the time being we
+         have uploaded them in our custom Maven repository on http://maven.xwiki.org. -->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>1.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>1.3.3</version>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>gwttk</groupId>
+      <artifactId>gwttk</artifactId>
+      <version>0.2.2</version>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>gwt-widgets</groupId>
+      <artifactId>gwt-widgets</artifactId>
+      <version>0.1.3</version>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jpavel</groupId>
+      <artifactId>editor</artifactId>
+      <version>0.1.2-preview</version>
+      <!-- This JAR is used to generate JS files and shouldn't be included in the server side
+           WAR -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform</groupId>
+      <artifactId>xwiki-web-gwt</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform</groupId>
+      <artifactId>xwiki-web-gwt</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <scope>provided</scope>
+      <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform</groupId>
+      <artifactId>xwiki-core</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <!-- We don't want all the Core libs to be put in WEB-INF/lib as this GWT WAR will be
+           overlayed with the Standard WAR which already contains all the required libs -->
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>gwt-maven</id>
+      <url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/</url>
+    </pluginRepository>
+  </pluginRepositories>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.totsp.gwt</groupId>
+        <artifactId>maven-googlewebtoolkit2-plugin</artifactId>
+        <version>1.5.3-SNAPSHOT</version>
+        <configuration>
+          <logLevel>ALL</logLevel>
+          <compileTarget>
+            <value>org.curriki.gwt.Main.gwt.xml</value>
+          </compileTarget>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+    
