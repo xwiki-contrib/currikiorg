@@ -51,9 +51,9 @@ import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.TreeListItem;
 import org.curriki.gwt.client.widgets.browseasset.AssetItem;
 import org.curriki.gwt.client.widgets.template.TemplateInfo;
-import org.gelc.xwiki.plugins.assets.Asset;
-import org.gelc.xwiki.plugins.mime.MimeType;
-import org.gelc.xwiki.plugins.mime.MimeTypePlugin;
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.mimetype.MimeType;
+import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import java.net.MalformedURLException;
 import java.net.URL;

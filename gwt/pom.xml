@@ -96,6 +96,16 @@
            overlayed with the Standard WAR which already contains all the required libs -->
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-asset</artifactId>
+      <version>${version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-mimetype</artifactId>
+      <version>${version}</version>
+    </dependency>
   </dependencies>
   <pluginRepositories>
     <pluginRepository>
@@ -105,6 +115,14 @@
   </pluginRepositories>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.4</source>
+          <target>1.4</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>com.totsp.gwt</groupId>
         <artifactId>maven-googlewebtoolkit2-plugin</artifactId>
