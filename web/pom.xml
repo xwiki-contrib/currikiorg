@@ -1,0 +1,94 @@
+<!--
+ *
+ * Copyright 2006-2007, XpertNet SARL, and individual contributors as indicated
+ * by the contributors.txt.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ *
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.curriki</groupId>
+    <artifactId>curriki-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>curriki-web</artifactId>
+  <name>XWiki Products - Curriki - Web</name>
+  <!-- We're using a pom packaging type instead of a WAR as we're using the Assembly plugin
+       in order to generate the WAR as a secondary artifact with a classifier name as this is not
+       possible with a primary artifact -->
+  <packaging>pom</packaging>
+  <description>The standard Curriki WAR</description>
+  <dependencies>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform</groupId>
+      <artifactId>xwiki-web-standard</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <type>war</type>
+      <classifier>${xwiki.db}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-gwt</artifactId>
+      <version>${version}</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <!-- Seems there's an issue with version 2.2-beta-1 for the application/ module. It does
+             not properly expand a dependency set. Thus we're forcing the usage of 2.1. We have
+             to use that version for all other modules too as Maven seems to have an issue when
+             using several versions of a plugin in the same build execution. To be removed once
+             the assembly plugin is fixed and released. -->
+        <version>2.1</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assemble/war.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <!-- Run 'mvn org.mortbay.jetty:maven-jetty-plugin:run-war' to generate the WAR and
+             execute it in Jetty. Useful for testing
+             Note: You'll need a database set up and running. If you use the HSQLDB profile
+             the database is looked for in target/database so it's very likely you'll get an
+             empty wiki. -->
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <configuration>
+          <contextPath>/xwiki</contextPath>
+          <webApp>${project.build.directory}/${project.build.finalName}-${xwiki.db}.war</webApp>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
