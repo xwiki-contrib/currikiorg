@@ -162,8 +162,10 @@
         <artifactId>maven-googlewebtoolkit2-plugin</artifactId>
         <version>1.5.3-SNAPSHOT</version>
         <configuration>
+          <logLevel>WARN</logLevel> <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, ALL -->
+          <style>OBF</style> <!-- OBF[USCATED], PRETTY, DETAILED -->
           <runTarget>org.curriki.gwt/Main.html</runTarget>
-          <gwtHome>${java.io.tmpdir}/xwiki/gwt/gwt-mac-1.3.3</gwtHome>
+          <gwtHome>${java.io.tmpdir}/xwiki/gwt/${gwtArtifactId}-1.3.3</gwtHome>
           <compileTarget>
             <value>com.xpn.xwiki.gwt.api.Api</value>
             <value>org.curriki.gwt.Main</value>
@@ -189,7 +191,7 @@
   </build>
   <profiles>
     <profile>
-      <id>mac</id>
+      <id>linux</id>
       <activation>
         <os>
           <name>linux</name>
@@ -235,4 +237,3 @@
     </pluginRepository>
   </pluginRepositories>
 </project>
-    
