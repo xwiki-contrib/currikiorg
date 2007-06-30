@@ -1,3 +1,22 @@
+/**
+ * Copyright 2006-2007,XpertNet SARL,and individual contributors as indicated
+ * by the contributors.txt.
+ *
+ * This is free software;you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation;either version2.1of
+ * the License,or(at your option)any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY;without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software;if not,write to the Free
+ * Software Foundation,Inc.,51 Franklin St,Fifth Floor,Boston,MA
+ * 02110-1301 USA,or see the FSF site:http://www.fsf.org.
+ */
 package org.curriki.gwt;
 
 import org.jmock.Mock;
@@ -18,28 +37,6 @@ import java.util.Vector;
 import java.util.ArrayList;
 import java.io.IOException;
 
-/**
- * Copyright 2006,XpertNet SARL,and individual contributors as indicated
- * by the contributors.txt.
- *
- * This is free software;you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation;either version2.1of
- * the License,or(at your option)any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY;without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software;if not,write to the Free
- * Software Foundation,Inc.,51 Franklin St,Fifth Floor,Boston,MA
- * 02110-1301 USA,or see the FSF site:http://www.fsf.org.
- *
- *@author ldubost
- */
-
 public class CurrikiServiceTest extends org.jmock.cglib.MockObjectTestCase {
 
     private Mock mockXWiki;
@@ -47,8 +44,6 @@ public class CurrikiServiceTest extends org.jmock.cglib.MockObjectTestCase {
     private Mock mockServletResponse;
     private Mock mockEngineContext;
     private Mock mockURLFactoryService;
-
-
 
     public void testGetTemplates() throws XWikiGWTException, ServletException, IOException {
         XWikiContext context = createXWikiContext();
@@ -62,7 +57,6 @@ public class CurrikiServiceTest extends org.jmock.cglib.MockObjectTestCase {
         CurrikiServiceImpl cservice = new CurrikiServiceImpl((XWikiRequest)mockServletRequest.proxy(), (XWikiResponse)mockServletResponse.proxy(), (XWikiEngineContext) mockEngineContext.proxy());
         cservice.getTemplates();
     }
-
 
     public void prepareTemplateTest() {
         this.mockXWiki.stubs().method("getXWikiPreference").will(returnValue(null));
@@ -180,5 +174,4 @@ public class CurrikiServiceTest extends org.jmock.cglib.MockObjectTestCase {
         context.setMode(XWikiContext.MODE_GWT);
         return context;
     }
-
 }
