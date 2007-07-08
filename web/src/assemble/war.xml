@@ -28,12 +28,22 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <dependencySets>
     <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <!-- This shouldn't be required but there's a bug in version 2.2-beta-1 of the Assembly
+           plugin where the artifact name will be used instead of / if outputFileNameMapping is
+           not specified -->
+      <outputFileNameMapping></outputFileNameMapping>
       <includes>
         <include>com.xpn.xwiki.platform:xwiki-web-standard</include>
       </includes>
       <unpack>true</unpack>
     </dependencySet>
     <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <!-- This shouldn't be required but there's a bug in version 2.2-beta-1 of the Assembly
+           plugin where the artifact name will be used instead of / if outputFileNameMapping is
+           not specified -->
+      <outputFileNameMapping></outputFileNameMapping>
       <includes>
         <include>org.curriki:curriki-gwt</include>
       </includes>
@@ -46,4 +56,10 @@
       <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>${basedir}/target/maven-shared-archive-resources/xwiki.cfg</source>
+      <outputDirectory>WEB-INF/</outputDirectory>
+    </file>
+  </files>
 </assembly>
