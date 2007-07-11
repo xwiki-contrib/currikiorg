@@ -1044,6 +1044,12 @@ $status
 $objTxt.text
 #end
 </div>
+#elseif ($asset.getObject("XWiki.VIDITalkAssetClass"))
+ #set($objVT = $asset.getObject("XWiki.VIDITalkAssetClass"))
+ #set($video_id = $objVT.video_id)
+<div class="asset-content-body">
+ #includeForm("GWT.ViditalkPlayback")
+</div>
 #elseif ($asset.getObject("XWiki.CompositeAssetClass") && $objComp != "")
  #if($develop)
  <div class="asset-content-body">
