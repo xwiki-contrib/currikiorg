@@ -22,13 +22,6 @@ import org.curriki.gwt.client.wizard.Wizard;
 
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ldubost
- * Date: 9 mai 2007
- * Time: 22:33:38
- * To change this template use File | Settings | File Templates.
- */
 public class Editor implements WindowResizeListener {
     // Current states
     private String rootAssetPageName = null;

@@ -4,13 +4,6 @@ import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ldubost
- * Date: 11 mai 2007
- * Time: 11:19:53
- * To change this template use File | Settings | File Templates.
- */
 public class TooltipMouseListener implements MouseListener {
     protected PopupPanel popup;
 
