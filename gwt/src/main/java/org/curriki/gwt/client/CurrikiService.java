@@ -44,6 +44,7 @@ public interface CurrikiService extends XWikiService {
     public void finishUpdateMetaData(String assetPage) throws XWikiGWTException;
     public Document updateMetadata(String fullName, boolean fromTemplate) throws XWikiGWTException;
     public Document finalizeAssetCreation(String assetPage, String compositeAssetPage, long position) throws XWikiGWTException;
+    public Document updateViditalk(String fullName, String videoId) throws XWikiGWTException; 
 
     // Collections
     public boolean isDefaultCollectionExists(String space) throws XWikiGWTException;

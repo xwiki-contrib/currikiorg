@@ -1694,5 +1694,32 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             throw getXWikiGWTException(e);
         }
     }
+    
+    public Document updateViditalk(String fullName, String videoId) throws XWikiGWTException {
+        try {
+            XWikiContext context = getXWikiContext();
+
+            XWikiDocument doc = context.getWiki().getDocument(fullName, context);
+            XWikiDocument oldDoc = (XWikiDocument) doc.clone();
+
+            BaseObject assetObj = doc.getObject(Constants.ASSET_CLASS);
+            BaseObject videoObj = doc.getObject(Constants.VIDITALK_CLASS);
+
+            if (videoObj == null){
+                // Create a Viditalk Asset Object
+                doc.createNewObject(Constants.VIDITALK_CLASS, context);
+                videoObj = doc.getObject(Constants.VIDITALK_CLASS);
+            }
+
+            videoObj.setStringValue("video_id", videoId);
+
+            context.getWiki().saveDocument(doc, oldDoc, context.getMessageTool().get("curriki.comment.updatedviditalkid"), context);
+
+            return newDocument(new Document(), doc, true, false, true, false, context);
+        } catch (Exception e) {
+            throw getXWikiGWTException(e);
+        }
+    }
+
 
 }

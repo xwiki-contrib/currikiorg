@@ -41,14 +41,30 @@
     <developerConnection>scm:svn:svn+ssh://svn.forge.objectweb.org/svnroot/xwiki/xwiki-applications/curriki/trunk</developerConnection>
     <url>http://svn.forge.objectweb.org/cgi-bin/viewcvs.cgi/xwiki/xwiki-applications/curriki/trunk</url>
   </scm>
-  <modules>
-    <module>plugins</module>
-    <module>gwt</module>
-    <module>web</module>
-    <module>wiki</module>
-    <module>database</module>
-    <module>distribution</module>
-  </modules>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>plugins</module>
+        <module>gwt</module>
+        <module>web</module>
+        <module>wiki</module>
+        <module>database</module>
+        <module>distribution</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>curriki-nodb</id>
+      <modules>
+        <module>plugins</module>
+        <module>gwt</module>
+        <module>web</module>
+      </modules>
+    </profile>
+  </profiles>
   <build>
     <extensions>
       <extension>

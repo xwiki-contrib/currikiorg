@@ -22,26 +22,26 @@
  */
 package org.curriki.gwt.client.wizard;
 
-import com.google.gwt.user.client.Window;
+import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
-import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
-import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
-import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
-import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
-import org.curriki.gwt.client.widgets.upload.UploadWidget;
 import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.utils.ClickListenerDocument;
-import org.curriki.gwt.client.utils.Loading;
-import org.curriki.gwt.client.utils.Translator;
 import org.curriki.gwt.client.utils.ClickListenerMetadata;
 import org.curriki.gwt.client.utils.CompletionCallback;
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
+import org.curriki.gwt.client.widgets.addfile.URLEntry;
+import org.curriki.gwt.client.widgets.addfile.VidiTalkUpload;
+import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
+import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
+import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
+import org.curriki.gwt.client.widgets.upload.UploadWidget;
 
 public class AddFileWizard implements CompletionCallback
 {
@@ -92,13 +92,18 @@ public class AddFileWizard implements CompletionCallback
                 // We should now have a file or link
                 file.hide();
 
-                if (sender instanceof TextBox){
+                if (sender instanceof URLEntry){
                     // Was a LINK
                     category = Constants.CATEGORY_LINK;
                     newDoc = doc;
                     initMetadata(false);
                 } else if (sender instanceof UploadWidget){
                     // Was a file
+                    newDoc = doc;
+                    initMetadata(false);
+                } else if (sender instanceof VidiTalkUpload){
+                    // Viditalk
+                    category = Constants.CATEGORY_VIDITALK_VIDEO;
                     newDoc = doc;
                     initMetadata(false);
                 }

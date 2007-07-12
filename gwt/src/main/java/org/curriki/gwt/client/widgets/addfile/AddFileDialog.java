@@ -41,8 +41,10 @@ public class AddFileDialog extends ModalDialog {
 
     private RadioButton fComputer;
     private RadioButton fWeb;
+    private RadioButton fVideo;
     private UploadWidget tFile;
-    private TextBox tTarget;
+    private URLEntry tURL;
+    private VidiTalkUpload tVideo;
     private Document doc;
 
     public AddFileDialog(String collectionName, ClickListenerDocument nextCallback, ClickListener cancelCallback) {
@@ -77,40 +79,56 @@ public class AddFileDialog extends ModalDialog {
         HTML sText = new HTML(Main.getTranslation("addfile.select_file_or_link"));
         fComputer = new RadioButton("from", Main.getTranslation("addfile.this_is_a_file_on_my_computer"));
         fWeb = new RadioButton("from", Main.getTranslation("addfile.this_is_a_web_link"));
+        fVideo = new RadioButton("from", Main.getTranslation("addfile.record_a_video"));
 
         tFile = new UploadWidget("", false);
 
-        tTarget = new TextBox();
-        tTarget.setVisibleLength(60);
-        tTarget.setText("http://");
+        tURL = new URLEntry();
+        tURL.setVisibleLength(60);
+        tURL.setText("http://");
 
+        tVideo = new VidiTalkUpload(Main.getTranslation("addfile.next_for_viditalk"));
 
         fComputer.addClickListener(new ClickListener(){
             public void onClick(Widget sender){
-                // Show the tFile box, not the tTarget box
-                tTarget.setVisible(false);
+                // Show the tFile box, not the tURL box
+                tURL.setVisible(false);
                 tFile.setVisible(true);
+                tVideo.setVisible(false);
             }
         });
         fWeb.addClickListener(new ClickListener(){
             public void onClick(Widget sender){
-                // Show the tFile box, not the tTarget box
-                tTarget.setVisible(true);
-                tTarget.setFocus(true);
+                // Show the tFile box, not the tURL box
+                tURL.setVisible(true);
+                tURL.setFocus(true);
                 tFile.setVisible(false);
+                tVideo.setVisible(false);
+            }
+        });
+        fVideo.addClickListener(new ClickListener(){
+            public void onClick(Widget sender){
+                // Show the tFile box, not the tURL box
+                tURL.setVisible(false);
+                tFile.setVisible(false);
+                tVideo.setVisible(true);
             }
         });
 
-        tFile.setVisible(true);
-        tTarget.setVisible(false);
         fComputer.setChecked(true);
+
+        tFile.setVisible(true);
+        tURL.setVisible(false);
+        tVideo.setVisible(false);
 
         chooser.add(sText);
         chooser.add(fComputer);
         chooser.add(fWeb);
+        chooser.add(fVideo);
 
-        chooser.add(tTarget);
+        chooser.add(tURL);
         chooser.add(tFile);
+        chooser.add(tVideo);
 
 
         BasicPanel actions = new BasicPanel();
@@ -128,19 +146,16 @@ public class AddFileDialog extends ModalDialog {
 
         ClickListener nextListener = new ClickListener(){
             public void onClick(Widget sender){
-                int chosen = (fWeb.isChecked()?1:(fComputer.isChecked()?2:0));
+                int chosen = (fWeb.isChecked()?1:(fComputer.isChecked()?2:(fVideo.isChecked()?3:0)));
                 switch (chosen){
                     case 1: // fWeb
-                        String link = tTarget.getText();
-                        if (URLUtils.isValidUrl(link)) {
-                            CurrikiService.App.getInstance().createLinkAsset(collectionName, link, new CurrikiAsyncCallback() {
+                        if (tURL.isValidUrl()) {
+                            CurrikiService.App.getInstance().createLinkAsset(collectionName, tURL.getURL(), new CurrikiAsyncCallback() {
                                 public void onSuccess(Object result) {
                                     super.onSuccess(result);
                                     Document newDoc = (Document) result;
-//                                    category = Constants.CATEGORY_LINK;
-//                                    initMetadata();
                                     nextCallback.setDoc(newDoc);
-                                    nextCallback.onClick(tTarget);
+                                    nextCallback.onClick(tURL);
                                 }
                             });
                         } else {
@@ -160,6 +175,7 @@ public class AddFileDialog extends ModalDialog {
                                 tFile.addFormHandler(new FormHandler() {
                                     public void onSubmit(FormSubmitEvent formSubmitEvent) {
                                         // We don't really need to do anything here
+                                        // Although it might be nice to be able to show an upload-progress bar or such
                                     }
 
                                     public void onSubmitComplete(FormSubmitCompleteEvent event) {
@@ -169,6 +185,19 @@ public class AddFileDialog extends ModalDialog {
                                 });
                                 // 3. We submit the form
                                 tFile.sendFile();
+                            }
+                        });
+                        break;
+                    case 3: // fVideo
+                        // 1. We need a temporary asset
+                        CurrikiService.App.getInstance().createTempSourceAsset(collectionName, new CurrikiAsyncCallback() {
+                            public void onSuccess(Object object) {
+                                super.onSuccess(object);
+                                doc = (Document) object;
+
+                                // 2. We need to load the VIDITalk component (and wait for a return ID somehow)
+                                nextCallback.setDoc(doc);
+                                tVideo.upload(nextCallback, cancelCallback);
                             }
                         });
                         break;

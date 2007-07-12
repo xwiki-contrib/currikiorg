@@ -46,6 +46,8 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
 
     void finalizeAssetCreation(String assetPage, String compositeAssetPage, long position, AsyncCallback async);
 
+    void updateViditalk(String fullName, String videoId, AsyncCallback async); 
+
     // Collections
     void isDefaultCollectionExists(String space, AsyncCallback async);
 
