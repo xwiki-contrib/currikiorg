@@ -4,11 +4,15 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.xpn.xwiki.gwt.api.client.Attachment;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.utils.URLUtils;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 import asquare.gwt.tk.client.ui.BasicPanel;
 
@@ -95,7 +99,77 @@ public class AudioItemDisplay extends AttachementItemDisplay {
         }
     }
 
+    protected void initEditAttachment(){
+        XObject obj = doc.getObject(Constants.VIDITALK_CLASS);
+
+        if (obj != null){
+            // Viditalk Item
+
+            // Load Viditalk capture
+            BasicPanel vPlayer = new BasicPanel();
+            vPlayer.addStyleName("cb-video-viditalk-capture");
+
+            String rnd = (new Integer (Random.nextInt(2000000000))).toString();
+            final String divId = "viditalk_div_"+rnd;
+            vPlayer.setId(divId);
+            HTML msg = new HTML(Main.getTranslation("viditalk.loading_capture"));
+            vPlayer.add(msg);
+
+            panel.add(vPlayer);
+
+            final String siteCode = Main.getTranslation(Constants.VIDITALK_SITECODE_VAR);
+
+            final AudioItemDisplay curr = this;
+
+            // The div isn't actually on the page yet, so we need to try to do the embed later
+            Timer t = new Timer() {
+                public void run() {
+                    if (DOM.getElementById(divId) != null) {
+                        embedCapture(curr, divId, siteCode);
+                    } else {
+                        this.schedule(Random.nextInt(4000)+1000);
+                    }
+                }
+            };
+
+            t.schedule(Random.nextInt(4000)+1000);
+        } else {
+            super.initEditAttachment();
+        }
+    }
+
+    public void vidiTalkUpload(String vId){
+        saveVidiTalkId(vId);
+    }
+
+    public boolean saveVidiTalkId(String vId){
+        XObject obj = doc.getObject(Constants.VIDITALK_CLASS);
+
+        obj.set(Constants.VIDITALK_VIDEO_ID_PROPERTY, vId);
+
+        CurrikiService.App.getInstance().saveObject(obj, new CurrikiAsyncCallback(){
+            public void onFailure(Throwable throwable) {
+                super.onFailure(throwable);
+            }
+
+            public void onSuccess(Object object) {
+                super.onSuccess(object);
+                reloadDocument();
+                status = Constants.VIEW;
+            }
+        });
+        
+        return true;
+    }
+
     public native void embedPlayer(String divId, String siteCode, String vId) /*-{
         $wnd.embedVidiPlayback(divId, siteCode, vId);
+    }-*/;
+
+    public native void embedCapture(AudioItemDisplay x, String divId, String siteCode) /*-{
+        $wnd.embedVidiCapture(divId, siteCode);
+        $wnd.uploadComplete = function(vId){
+            x.@org.curriki.gwt.client.widgets.currikiitem.display.AudioItemDisplay::vidiTalkUpload(Ljava/lang/String;)(vId);
+        }
     }-*/;
 }

@@ -21,33 +21,37 @@
  */
 package org.curriki.gwt.client.wizard;
 
+import asquare.gwt.tk.client.ui.BasicPanel;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
-import org.curriki.gwt.client.*;
+import org.curriki.gwt.client.AssetDocument;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.editor.Editor;
+import org.curriki.gwt.client.pages.EditPage;
+import org.curriki.gwt.client.utils.ClickListenerDocument;
+import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
+import org.curriki.gwt.client.widgets.addfile.URLEntry;
+import org.curriki.gwt.client.widgets.addfile.VidiTalkUpload;
 import org.curriki.gwt.client.widgets.find.FindPanel;
 import org.curriki.gwt.client.widgets.find.ResourceAdder;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
-import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
-import org.curriki.gwt.client.widgets.upload.UploadWidget;
 import org.curriki.gwt.client.widgets.template.ChooseTemplateDialog;
-import org.curriki.gwt.client.pages.EditPage;
-import org.curriki.gwt.client.utils.ClickListenerDocument;
-import asquare.gwt.tk.client.ui.BasicPanel;
+import org.curriki.gwt.client.widgets.upload.UploadWidget;
 
 
 public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdder {
@@ -220,12 +224,18 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
                 addFileDialog.hide();
                 panel.getParent().getParent().getParent().setVisible(true);
 
-                if (sender instanceof TextBox){
+                if (sender instanceof URLEntry){
                     // Was a LINK
+                    category = Constants.CATEGORY_LINK;
                     newDoc = doc;
                     initMetadata(false);
                 } else if (sender instanceof UploadWidget){
                     // Was a file
+                    newDoc = doc;
+                    initMetadata(false);
+                } else if (sender instanceof VidiTalkUpload){
+                    // Was a VIDITalk Video
+                    category = Constants.CATEGORY_VIDITALK_VIDEO;
                     newDoc = doc;
                     initMetadata(false);
                 }
