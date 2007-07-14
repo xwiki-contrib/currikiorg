@@ -95,6 +95,7 @@ public class Constants {
     public static final String VIDITALK_VIDEO_ID_PROPERTY = "video_id";
     public static final String VIDITALK_CAPTURE = "GWT.ViditalkCapture";
     public static final String VIDITALK_PLAYER = "GWT.ViditalkPlayback";
+    public static final String VIDITALK_SITECODE_VAR = "viditalk.sitecode";
 
     public static final String TEMPORARY_ASSET_SPACE = "AssetTemp";
 

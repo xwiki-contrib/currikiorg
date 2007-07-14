@@ -2,6 +2,8 @@ package org.curriki.gwt.client.widgets.currikiitem.display;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.DOM;
 import com.xpn.xwiki.gwt.api.client.Attachment;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
@@ -35,7 +37,7 @@ public class AudioItemDisplay extends AttachementItemDisplay {
 
         if (obj != null){
             // Viditalk Item
-            String vId = obj.getViewProperty(Constants.VIDITALK_VIDEO_ID_PROPERTY);
+            final String vId = obj.getViewProperty(Constants.VIDITALK_VIDEO_ID_PROPERTY);
             if (vId == null || vId.equals("")){
                 // No video id present
                 panel.add(new HTML(doc.getFullName() + Main.getTranslation("asset.asset_corrupted")));
@@ -45,13 +47,27 @@ public class AudioItemDisplay extends AttachementItemDisplay {
                 vPlayer.addStyleName("cb-video-viditalk-player");
 
                 String rnd = (new Integer (Random.nextInt(2000000000))).toString();
-                vPlayer.setId("viditalk_player_div_"+rnd);
+                final String divId = "viditalk_div_"+rnd;
+                vPlayer.setId(divId);
                 HTML msg = new HTML(Main.getTranslation("viditalk.loading_player"));
                 vPlayer.add(msg);
 
                 panel.add(vPlayer);
 
-                embedPlayer(this, vId, rnd);
+                final String siteCode = Main.getTranslation(Constants.VIDITALK_SITECODE_VAR);
+
+                // The div isn't actually on the page yet, so we need to try to do the embed later
+                Timer t = new Timer() {
+                    public void run() {
+                        if (DOM.getElementById(divId) != null) {
+                            embedPlayer(divId, siteCode, vId);
+                        } else {
+                            this.schedule(Random.nextInt(4000)+1000);
+                        }
+                    }
+                };
+
+                t.schedule(Random.nextInt(4000)+1000);
             }
         } else {
             if (doc.getAttachments().size() > 0) {
@@ -79,11 +95,7 @@ public class AudioItemDisplay extends AttachementItemDisplay {
         }
     }
 
-    public native void embedPlayer(AudioItemDisplay x, String vId, String rnd) /*-{
-        $wnd.embedVidiPlayback("viditalk_player_div_"+rnd, x.@org.curriki.gwt.client.widgets.currikiitem.display.AudioItemDisplay::getViditalkSitecode()(), vId);
+    public native void embedPlayer(String divId, String siteCode, String vId) /*-{
+        $wnd.embedVidiPlayback(divId, siteCode, vId);
     }-*/;
-
-    public String getViditalkSitecode() {
-        return Main.getTranslation("viditalk.sitecode");
-    }
 }
