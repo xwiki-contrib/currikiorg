@@ -91,7 +91,10 @@ public class Constants {
     public static final long TEXTASSET_TYPE_TEXT = 0;
     public static final long TEXTASSET_TYPE_HTML = 1;
 
-    public static final String VIDITALK_CLASS = "XWiki.VIDITalkAssetClass"; 
+    public static final String VIDITALK_CLASS = "XWiki.VIDITalkAssetClass";
+    public static final String VIDITALK_VIDEO_ID_PROPERTY = "video_id";
+    public static final String VIDITALK_CAPTURE = "GWT.ViditalkCapture";
+    public static final String VIDITALK_PLAYER = "GWT.ViditalkPlayback";
 
     public static final String TEMPORARY_ASSET_SPACE = "AssetTemp";
 
@@ -158,7 +161,7 @@ public class Constants {
     public static final String DIALOG_THANKYOU_CREATE_COLLECTION = "GWT.ThankYouCreateCollectionDialog";
     public static final String DIALOG_CHOOSE_TEMPLATE = "GWT.ChooseTemplateDialog";
     public static final String DIALOG_PROPOSE_TEMPLATE_DUPLICATION = "GWT.ProposeTemplateDuplicationDialog";
-    public static final String DIALOG_ADD_VIDITALK_VIDEO = "GWT.ViditalkCapture"; 
+    public static final String DIALOG_ADD_VIDITALK_VIDEO = VIDITALK_CAPTURE;
 
     public static final String TEMPLATES_SPACE = "Coll_Templates";
 

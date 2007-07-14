@@ -23,14 +23,14 @@
 package org.curriki.gwt.client.widgets.addfile;
 
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Label;
 import com.xpn.xwiki.gwt.api.client.Document;
-import org.curriki.gwt.client.utils.ClickListenerDocument;
-import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.utils.ClickListenerDocument;
 
-public class VidiTalkUpload extends Label {
+public class VidiTalkUpload extends HTML {
     Document doc;
     VidiTalkUploadDialog dialog;
     VidiTalkUpload videoUpload;
