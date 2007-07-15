@@ -156,6 +156,7 @@ public class AudioItemDisplay extends AttachementItemDisplay {
                 super.onSuccess(object);
                 reloadDocument();
                 status = Constants.VIEW;
+                resetEmbedCapture();
             }
         });
         
@@ -164,6 +165,14 @@ public class AudioItemDisplay extends AttachementItemDisplay {
 
     public native void embedPlayer(String divId, String siteCode, String vId) /*-{
         $wnd.embedVidiPlayback(divId, siteCode, vId);
+    }-*/;
+
+    /* By default VIDITalk will only allow one capture compontent per page,
+     * but we are not reloading the page after closing one, so we trick the component (v1.78) here.
+     */
+    public native void resetEmbedCapture() /*-{
+        $wnd.capture_div = "";
+        $wnd.flashLoaded = false;
     }-*/;
 
     public native void embedCapture(AudioItemDisplay x, String divId, String siteCode) /*-{
