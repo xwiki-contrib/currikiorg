@@ -4,7 +4,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.xpn.xwiki.gwt.api.client.Attachment;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
@@ -12,7 +11,6 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
-import org.curriki.gwt.client.utils.URLUtils;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 import asquare.gwt.tk.client.ui.BasicPanel;
 
@@ -173,6 +171,7 @@ public class AudioItemDisplay extends AttachementItemDisplay {
     public native void resetEmbedCapture() /*-{
         $wnd.capture_div = "";
         $wnd.flashLoaded = false;
+        $wnd.called_once = false;
     }-*/;
 
     public native void embedCapture(AudioItemDisplay x, String divId, String siteCode) /*-{

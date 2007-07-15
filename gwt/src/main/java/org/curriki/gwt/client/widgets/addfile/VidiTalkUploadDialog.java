@@ -24,12 +24,8 @@ package org.curriki.gwt.client.widgets.addfile;
 
 import asquare.gwt.tk.client.ui.ModalDialog;
 import asquare.gwt.tk.client.ui.BasicPanel;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Random;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
 import org.curriki.gwt.client.Main;
 
 public class VidiTalkUploadDialog extends ModalDialog {
@@ -58,7 +54,7 @@ public class VidiTalkUploadDialog extends ModalDialog {
         BasicPanel text = new BasicPanel();
         text.addStyleName("dialog-addfile-text");
         text.addStyleName("dialog-viditalk-capture");
-        
+
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
         text.setId("viditalk_capture_div_"+rnd);
         HTML msg = new HTML(Main.getTranslation("viditalk.loading_capture"));

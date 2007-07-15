@@ -58,6 +58,7 @@ public class VidiTalkUpload extends HTML {
                         super.onSuccess(result);
                         doc = (Document) result;
                         dialog.hide();
+                        resetVidiTalkJS();
                         nextCallback.onClick(videoUpload);
                     }
                 });
@@ -66,10 +67,20 @@ public class VidiTalkUpload extends HTML {
         ClickListener cancel = new ClickListener(){
             public void onClick(Widget sender){
                 dialog.hide();
+                resetVidiTalkJS();
                 cancelCallback.onClick(videoUpload);
             }
         };
 
         dialog = new VidiTalkUploadDialog(next, cancel);
     }
+
+    /* By default VIDITalk will only allow one capture compontent per page,
+     * but we are not reloading the page after closing one, so we trick the component (v1.78) here.
+     */
+    public native void resetVidiTalkJS() /*-{
+        $wnd.capture_div = "";
+        $wnd.flashLoaded = false;
+        $wnd.called_once = false;
+    }-*/;
 }
