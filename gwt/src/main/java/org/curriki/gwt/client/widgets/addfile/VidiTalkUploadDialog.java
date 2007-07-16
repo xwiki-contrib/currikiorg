@@ -24,8 +24,12 @@ package org.curriki.gwt.client.widgets.addfile;
 
 import asquare.gwt.tk.client.ui.ModalDialog;
 import asquare.gwt.tk.client.ui.BasicPanel;
-import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Main;
 
 public class VidiTalkUploadDialog extends ModalDialog {
@@ -56,7 +60,8 @@ public class VidiTalkUploadDialog extends ModalDialog {
         text.addStyleName("dialog-viditalk-capture");
 
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
-        text.setId("viditalk_capture_div_"+rnd);
+        String divId = "viditalk_capture_div"+rnd;
+        text.setId(divId);
         HTML msg = new HTML(Main.getTranslation("viditalk.loading_capture"));
         text.add(msg);
 
@@ -87,14 +92,14 @@ public class VidiTalkUploadDialog extends ModalDialog {
         
         show();
 
-        addJSCallback(this, rnd);
+        addJSCallback(this, divId);
     }
 
-    public native void addJSCallback(VidiTalkUploadDialog x, String rnd) /*-{
+    public native void addJSCallback(VidiTalkUploadDialog x, String vId) /*-{
         $wnd.uploadComplete = function(videoId) {
             x.@org.curriki.gwt.client.widgets.addfile.VidiTalkUploadDialog::setViditalkVideoId(Ljava/lang/String;)(videoId);
         };
-        $wnd.embedVidiCapture("viditalk_capture_div_"+rnd, x.@org.curriki.gwt.client.widgets.addfile.VidiTalkUploadDialog::getViditalkSitecode()());
+        $wnd.embedVidiCapture(vId, x.@org.curriki.gwt.client.widgets.addfile.VidiTalkUploadDialog::getViditalkSitecode()());
     }-*/;
 
     public void setViditalkVideoId(String videoId){

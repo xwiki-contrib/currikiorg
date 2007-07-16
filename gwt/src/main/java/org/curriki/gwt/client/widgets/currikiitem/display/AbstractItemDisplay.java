@@ -28,9 +28,8 @@ import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.AssetDocument;
 import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 
 
@@ -115,6 +114,28 @@ public abstract class AbstractItemDisplay extends Composite {
             String category = (obj==null) ? null : (String) obj.get(Constants.ASSET_CATEGORY_PROPERTY);
             if (category == null)
                 return new AttachementItemDisplay(doc, item);
+
+            // Check specific objects to find displayer
+            if (doc.getObject(Constants.COMPOSITEASSET_CLASS) != null) {
+                return new CollectionItemDisplay(doc, item);
+            }
+            if (doc.getObject(Constants.TEXTASSET_CLASS) != null){
+                return new TextItemDisplay(doc, item);
+            }
+            if (doc.getObject(Constants.EXTERNAL_ASSET_CLASS) != null){
+                return new LinkItemDisplay(doc, item);
+            }
+            if (doc.getObject(Constants.MIMETYPE_PICTURE_CLASS) != null){
+                return new ImageItemDisplay(doc, item);
+            }
+            if (doc.getObject(Constants.VIDITALK_CLASS) != null){ // category == AUDIO at the moment
+                return new VidiTalkItemDisplay(doc, item);
+            }
+            if (doc.getObject(Constants.MIMETYPE_ARCHIVE_CLASS) != null){
+                return new ArchiveItemDisplay(doc, item);
+            }
+
+            // Check category to find displayer
             if (category.equals(Constants.CATEGORY_IMAGE))
                 return new ImageItemDisplay(doc, item);
             if (category.equals(Constants.CATEGORY_AUDIO))
