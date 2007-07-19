@@ -50,7 +50,11 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
             HTML msg = new HTML(Main.getTranslation("viditalk.loading_player"));
             vPlayer.add(msg);
 
+            HTML dLink = new HTML("<a href=\""+Constants.VIDITALK_DOWNLOAD_DIR+vId+".mpg\">"+Main.getTranslation("viditalk.download_msg")+"</a>");
+            dLink.addStyleName("cb-video-viditalk-download-link");
+
             panel.add(vPlayer);
+            panel.add(dLink);
 
             final String siteCode = Main.getTranslation(Constants.VIDITALK_SITECODE_VAR);
 
