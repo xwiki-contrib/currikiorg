@@ -115,11 +115,11 @@ public class AddFileDialog extends ModalDialog {
             }
         });
 
-        fComputer.setChecked(true);
-
         tFile.setVisible(true);
         tURL.setVisible(false);
         tVideo.setVisible(false);
+
+        fComputer.setChecked(true);
 
         chooser.add(sText);
         chooser.add(fComputer);

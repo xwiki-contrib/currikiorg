@@ -68,14 +68,18 @@ public class AddFileWizard implements CompletionCallback
                 if (collections == null || collections.getSelectedItem() == null || collections.getSelectedItem().getPageName() == null || collections.getSelectedItem().getPageName().equals("__NOSELECT__")){
                     Window.alert(Main.getTranslation("addfile.selectcollection"));
                 } else{
-                    collections.hide();
+                    if (collections.isAttached()) {
+                        collections.hide();
+                    }
                     addFile(collections.getSelectedItem().getPageName());
                 }
             }
         };
         ClickListener cancel =  new ClickListener(){
             public void onClick(Widget sender){
-                collections.hide();
+                if (collections.isAttached()) {
+                    collections.hide();
+                }
             }
         };
         collections = new ChooseCollectionDialog(next, cancel);
