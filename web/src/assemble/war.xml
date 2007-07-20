@@ -37,6 +37,13 @@
         <include>com.xpn.xwiki.platform:xwiki-web-standard</include>
       </includes>
       <unpack>true</unpack>
+      <!-- Exclude the xwiki.cfg file in the standard web module since we're generating a new
+           one -->
+      <unpackOptions>
+        <excludes>
+          <exclude>**/xwiki.cfg</exclude>
+        </excludes>
+      </unpackOptions>
     </dependencySet>
     <dependencySet>
       <outputDirectory>/</outputDirectory>
