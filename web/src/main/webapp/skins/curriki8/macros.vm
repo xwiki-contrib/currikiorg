@@ -1138,7 +1138,7 @@ $msg.get("asset.externallink")
 <div style="width:510px; text-align:left;">
 *$msg.get("colls.description")* $!collDoc.description</div></div>
 <a href="$xwiki.getURL($collDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("caption.view")</a> #if($collDoc.hasAccessLevel("edit"))
-#sep() <a href="#gwtEditUrl(${collDoc.fullName})">$msg.get("caption.edit")</a>
+#sep() <a target="_blank" href="#gwtEditUrl(${collDoc.fullName})">$msg.get("caption.edit")</a>
 #end
 #if("XWiki.${shortname}" == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($collDoc.fullName, "delete"))
 #set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${collDoc.fullName}&sourceDoc=${localUrl}"))
