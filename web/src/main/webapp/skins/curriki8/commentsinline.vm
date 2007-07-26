@@ -13,6 +13,9 @@
 #set($logredir = $doc.getURL("view"))
 #set($loginurl = $xwiki.getURL("XWiki.XWikiLogin", "login", "xredirect=$logredir"))
 $msg.get("comments.accessDenied", [$joinurl, $loginurl])
+#if($doc.getObject("XWiki.AssetClass"))
+</div>
+#end
 #else
 #if("$!request.xpage"!="commentsinline")
 #if($xwiki.hasAccessLevel("comment"))
