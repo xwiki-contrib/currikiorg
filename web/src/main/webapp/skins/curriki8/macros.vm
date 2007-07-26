@@ -837,7 +837,7 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
  #set($defaultGif = $closedGif)
 #end
 #findCurrikiTitle($embeddedDoc)
-<div class="righttext"><span id="section${seccounter}title"><div class="lefttext"><img src="$defaultGif"/>&nbsp;<strong class="strong">$currikiTitle</strong></div></span><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div>
+<div class="righttext"><span id="section${seccounter}title"><div class="lefttext" style="width: 438px;"><img src="$defaultGif"/>&nbsp;<strong class="strong">$currikiTitle</strong></div></span><div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div></div>
 <script type="text/javascript">
 function toggleSectionVisibility(seccounter, showhide){
   var seccontent = document.getElementById("section" + seccounter + "content");
@@ -859,7 +859,7 @@ function toggleSectionVisibility(seccounter, showhide){
   }
   return false;
 }
-addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
+addClass(document.getElementById("section${seccounter}title"), "titlebar_left"); 
 var showhide${seccounter} = document.getElementById("section${seccounter}title");
 showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
 showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
