@@ -36,7 +36,7 @@
  #set($isFirst = true)
  #set($previousBc = "")
  #foreach($bcItem in $bcLocal.split(";"))
-  #if($bcItem != "")
+  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
    #if(!$isFirst)
     &gt; 
    #end
