@@ -23,21 +23,34 @@ package org.curriki.gwt.client.widgets.metadata;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.WindowResizeListener;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.DOMUtils;
 import com.xpn.xwiki.gwt.api.client.Document;
-import com.xpn.xwiki.gwt.api.client.XObject;
 import com.xpn.xwiki.gwt.api.client.User;
+import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.editor.Editor;
-import org.curriki.gwt.client.utils.Translator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 
 
 public class MetadataEdit extends Composite implements MouseListener {
@@ -47,6 +60,7 @@ public class MetadataEdit extends Composite implements MouseListener {
     private boolean fullMode;
     private HashMap fieldMap = new HashMap();
     private Label moreInfoLabel = null;
+    private HTML moreInfoText = null;
     private WindowResizeListener resizeListener = null;
     private List mandatoryFields = new ArrayList();
 
@@ -145,12 +159,16 @@ public class MetadataEdit extends Composite implements MouseListener {
 
 
         User user = Main.getSingleton().getUser();
-        boolean forceViewMode = !((user == null || (user != null && (doc.getCreator().equals(user.getFullName()) || user.isAdmin()))));
+        boolean forceViewMode = !(user == null || (doc.getCreator().equals(user.getFullName()) || user.isAdmin()));
         addSectionTitle("right_section", fullMode);
         addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panel, false, fullMode, forceViewMode);
         addEditor(assetObj, "rights", "rights", panel, false, fullMode, forceViewMode);
         addEditor(rightObj, "licenseType2", "license_type", panel, false, fullMode, forceViewMode);
 
+        moreInfoText = new HTML(Main.getTranslation("metadata.more_info_text"));
+        moreInfoText.addStyleName("more-info-text");
+        moreInfoText.setVisible(!fullMode);
+        panel.add(moreInfoText);
 
         if (!fullMode) {
             moreInfoLabel = new Label(Main.getTranslation("metadata.more_info_"+fullMode));
@@ -343,11 +361,11 @@ public class MetadataEdit extends Composite implements MouseListener {
 
     public void submit(){
         String missing = isFormValid();
-        if (missing=="")
+        if (missing.equals(""))
             form.submit();
         else {
             String[] missings = missing.split(",");
-            String text = "";
+            String text;
             if (missings.length==1) {
               text = Main.getTranslation("metadata.field_missing") + ": " + Main.getTranslation("metadata." + missings[0] + "_title");
             } else {
@@ -427,6 +445,7 @@ public class MetadataEdit extends Composite implements MouseListener {
         switchVisibility("licenseType2", fullMode);
         switchVisibility("keywords", fullMode);
         switchVisibility("language", fullMode);
+        moreInfoText.setVisible(!fullMode);
         if (resizeListener != null) {
             //Window.alert("plop");
             resizeListener.onWindowResized(panel.getOffsetHeight(), panel.getOffsetWidth());
