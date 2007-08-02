@@ -44,8 +44,9 @@ public class AddFileDialog extends ModalDialog {
     private RadioButton fVideo;
     private UploadWidget tFile;
     private URLEntry tURL;
-    private VidiTalkUpload tVideo;
+    private VidiTalkUploadComponent tVideo;
     private Document doc;
+    private Button next;
 
     public AddFileDialog(String collectionName, ClickListenerDocument nextCallback, ClickListener cancelCallback) {
         this.nextCallback = nextCallback;
@@ -87,7 +88,9 @@ public class AddFileDialog extends ModalDialog {
         tURL.setVisibleLength(60);
         tURL.setText("http://");
 
-        tVideo = new VidiTalkUpload(Main.getTranslation("addfile.next_for_viditalk"));
+        tVideo = new VidiTalkUploadComponent(collectionName, nextCallback, cancelCallback);
+
+        next = new Button(Main.getTranslation("editor.btt_next"));
 
         fComputer.addClickListener(new ClickListener(){
             public void onClick(Widget sender){
@@ -95,6 +98,7 @@ public class AddFileDialog extends ModalDialog {
                 tURL.setVisible(false);
                 tFile.setVisible(true);
                 tVideo.setVisible(false);
+                next.setVisible(true);
             }
         });
         fWeb.addClickListener(new ClickListener(){
@@ -104,6 +108,7 @@ public class AddFileDialog extends ModalDialog {
                 tURL.setFocus(true);
                 tFile.setVisible(false);
                 tVideo.setVisible(false);
+                next.setVisible(true);
             }
         });
         fVideo.addClickListener(new ClickListener(){
@@ -112,6 +117,7 @@ public class AddFileDialog extends ModalDialog {
                 tURL.setVisible(false);
                 tFile.setVisible(false);
                 tVideo.setVisible(true);
+                next.setVisible(false);
             }
         });
 
@@ -189,25 +195,15 @@ public class AddFileDialog extends ModalDialog {
                         });
                         break;
                     case 3: // fVideo
-                        // 1. We need a temporary asset
-                        CurrikiService.App.getInstance().createTempSourceAsset(collectionName, new CurrikiAsyncCallback() {
-                            public void onSuccess(Object object) {
-                                super.onSuccess(object);
-                                doc = (Document) object;
-
-                                // 2. We need to load the VIDITalk component (and wait for a return ID somehow)
-                                nextCallback.setDoc(doc);
-                                tVideo.upload(nextCallback, cancelCallback);
-                            }
-                        });
-                        break;
+                        break; // We should not be able to get here
                     default: // None
                         Window.alert(Main.getTranslation("addfile.please_make_a_selection"));
                         break;
                 }
             }
         };
-        Button next = new Button(Main.getTranslation("editor.btt_next"), nextListener);
+
+        next.addClickListener(nextListener);
         next.addStyleName("dialog-next");
         next.addStyleName("addfile-dialog-next");
         actions.add(next);

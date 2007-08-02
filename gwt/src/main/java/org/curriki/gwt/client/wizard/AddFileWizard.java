@@ -25,7 +25,13 @@ package org.curriki.gwt.client.wizard;
 import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.Constants;
@@ -37,7 +43,7 @@ import org.curriki.gwt.client.utils.ClickListenerMetadata;
 import org.curriki.gwt.client.utils.CompletionCallback;
 import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
 import org.curriki.gwt.client.widgets.addfile.URLEntry;
-import org.curriki.gwt.client.widgets.addfile.VidiTalkUpload;
+import org.curriki.gwt.client.widgets.addfile.VidiTalkUploadComponent;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
 import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
@@ -105,7 +111,7 @@ public class AddFileWizard implements CompletionCallback
                     // Was a file
                     newDoc = doc;
                     initMetadata(false);
-                } else if (sender instanceof VidiTalkUpload){
+                } else if (sender instanceof VidiTalkUploadComponent){
                     // Viditalk
                     category = Constants.CATEGORY_VIDITALK_VIDEO;
                     newDoc = doc;

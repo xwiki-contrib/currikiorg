@@ -46,7 +46,7 @@ import org.curriki.gwt.client.pages.EditPage;
 import org.curriki.gwt.client.utils.ClickListenerDocument;
 import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
 import org.curriki.gwt.client.widgets.addfile.URLEntry;
-import org.curriki.gwt.client.widgets.addfile.VidiTalkUpload;
+import org.curriki.gwt.client.widgets.addfile.VidiTalkUploadComponent;
 import org.curriki.gwt.client.widgets.find.FindPanel;
 import org.curriki.gwt.client.widgets.find.ResourceAdder;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
@@ -233,7 +233,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
                     // Was a file
                     newDoc = doc;
                     initMetadata(false);
-                } else if (sender instanceof VidiTalkUpload){
+                } else if (sender instanceof VidiTalkUploadComponent){
                     // Was a VIDITalk Video
                     category = Constants.CATEGORY_VIDITALK_VIDEO;
                     newDoc = doc;
