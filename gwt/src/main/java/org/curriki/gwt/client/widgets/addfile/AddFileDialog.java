@@ -60,7 +60,7 @@ public class AddFileDialog extends ModalDialog {
         //addController(new ModalDialog.DragStyleController(this));
         setCaption(Main.getTranslation("addfile.add_a_learning_resource"), false);
         setContentMinWidth(634);
-        setContentMinHeight(380);
+        setContentMinHeight(557);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("dialog-addfile-content");
