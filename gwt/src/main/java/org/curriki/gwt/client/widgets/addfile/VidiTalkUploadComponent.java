@@ -77,7 +77,9 @@ public class VidiTalkUploadComponent extends BasicPanel
         $wnd.uploadComplete = function(videoId) {
             x.@org.curriki.gwt.client.widgets.addfile.VidiTalkUploadComponent::setViditalkVideoId(Ljava/lang/String;)(videoId);
         };
-        $wnd.resetVidiTalkJS();
+        $wnd.capture_div = "";
+        $wnd.flashLoaded = false;
+        $wnd.called_once = false;
         $wnd.embedVidiCapture(divId, siteCode);
     }-*/;
 
