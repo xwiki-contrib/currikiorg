@@ -620,12 +620,20 @@ function addFromTemplate2() {
    window.setTimeout(addFromTemplate2, __gwt_retryWaitMillis);
 }
 
+var findCalled=false;
 function findPopup2() {
+    if(!findCalled){
+        findCalled=true;
+        findPopup3();
+    }
+}
+function findPopup3() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
-   findPopup();
-  else
-   window.setTimeout(findPopup2, __gwt_retryWaitMillis);
+  if (__gwt_moduleControlBlocks.isReady()){
+    findPopup();
+    findCalled=false;
+  } else
+    window.setTimeout(findPopup3, __gwt_retryWaitMillis);
 }
 
 
