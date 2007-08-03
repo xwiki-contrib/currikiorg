@@ -99,8 +99,7 @@ public class Main implements EntryPoint {
                 }
             });
         } else {
-            // SiteAdd init
-            callSiteAddJSAPI(this);
+            callSiteAddJSAPI(singleton);
         }
     }
 
@@ -116,18 +115,28 @@ public class Main implements EntryPoint {
 
     }
 
-    public void checkAnonymous(){
+    public void fetchUser(final Command cmd){
         CurrikiService.App.getInstance().getUser(new CurrikiAsyncCallback(){
             public void onSuccess(Object result) {
                 super.onSuccess(result);
                 user = (User) result;
+                if (cmd != null){
+                    cmd.execute();
+                }
+            }
+        });
+    }
+
+    public void checkAnonymous(){
+        Command loadEditor = new Command(){
+            public void execute(){
                 if (user.getFullName().equals(Constants.USER_XWIKI_GUEST)) {
                     final LoginDialogBox login = new LoginDialogBox();
                     login.init(new AsyncCallback() {
                         public void onFailure(Throwable caught) {
                             login.hide();
                             checkAnonymous();
-                          }
+                        }
 
                         public void onSuccess(Object result) {
                             login.hide();
@@ -136,10 +145,11 @@ public class Main implements EntryPoint {
                     });
                     login.show();
                     return;
-                } 
+                }
                 editor.init();
             }
-        });
+        };
+        fetchUser(loadEditor);
     }
 
     /*
@@ -410,21 +420,26 @@ public class Main implements EntryPoint {
             public void onFailure(Throwable throwable) {
             }
             public void onSuccess(Object object) {
-                Viewer viewer = new Viewer(){
-                    public void displayView(Document asset)
-                    {
-                        changeWindowHref(asset.getViewURL());
+                Command showSearch = new Command(){
+                    public void execute(){
+                        Viewer viewer = new Viewer(){
+                            public void displayView(Document asset)
+                            {
+                                changeWindowHref(asset.getViewURL());
+                            }
+                        };
+
+                        AddExistingResourceWizard addWizard = new AddExistingResourceWizard(collectionName);
+                        addWizard.setCompletionCallback(new Command() {
+                            public void execute(){
+                                reloadWindow();
+                            }
+                        });
+                        findPopup = new FindPanel(addWizard, viewer);
+                        findPopup.show();
                     }
                 };
-
-                AddExistingResourceWizard addWizard = new AddExistingResourceWizard(collectionName);
-                addWizard.setCompletionCallback(new Command() {
-                    public void execute(){
-                        reloadWindow();
-                    }
-                });
-                findPopup = new FindPanel(addWizard, viewer);
-                findPopup.show();
+                fetchUser(showSearch);
             }
         });
     }

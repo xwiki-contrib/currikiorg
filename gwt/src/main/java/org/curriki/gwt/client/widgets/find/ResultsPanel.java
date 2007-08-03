@@ -320,7 +320,7 @@ public class ResultsPanel extends VerticalPanel implements Searchable, Paginatab
         actions.addStyleName("find-result-actions");
 
         // TODO: Inserting "Add" action/listener still needs to be worked out better
-        if (wizard != null){
+        if (wizard != null && (Main.getSingleton().getUser() != null) && !(Main.getSingleton().getUser().getFullName().equals(Constants.USER_XWIKI_GUEST))){
             Button a = new Button(Main.getTranslation("editor.btt_add"), new AddAsset(value.getFullName()));
             actions.add(a);
         }
