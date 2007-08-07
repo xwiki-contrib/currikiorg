@@ -316,11 +316,11 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             createDefaultCollection(space);
         }
 
-        return insertSubAsset(space + "." + Constants.DEFAULT_COLLECTION_PAGE, assetPageName, 0);
+        return insertSubAsset(space + "." + Constants.DEFAULT_COLLECTION_PAGE, assetPageName, -1);
     }
 
     public boolean addCompositeAssetToCollection(String assetPageName, String collectionName) throws XWikiGWTException {
-        return insertSubAsset(collectionName, assetPageName, 0);
+        return insertSubAsset(collectionName, assetPageName, -1);
     }
 
     public AssetItem getCollections() throws XWikiGWTException {
@@ -470,7 +470,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             XWikiContext context = getXWikiContext();
             XWikiDocument compositeAssetDoc = context.getWiki().getDocument(compositeAssetPage, context);
 
-            addSubAsset(compositeAssetDoc, assetPageName, position, context);
+            position = addSubAsset(compositeAssetDoc, assetPageName, position, context);
 
             XWikiDocument assetDoc = context.getWiki().getDocument(assetPageName, context);
             List params = new ArrayList();
