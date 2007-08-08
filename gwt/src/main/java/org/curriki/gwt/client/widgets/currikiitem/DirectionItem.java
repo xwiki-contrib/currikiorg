@@ -61,6 +61,7 @@ public class DirectionItem extends Composite implements CurrikiItem {
         directions.sinkEvents(Event.ONCLICK);
         init();
     }
+
     public void init() {
         bttDelete.addClickListener(new ClickListener(){
             public void onClick(Widget sender) {
@@ -89,6 +90,8 @@ public class DirectionItem extends Composite implements CurrikiItem {
         panel.addStyleName("item-direction");
     }
 
+    public void refreshHeader() {
+    }
 
     public void onBrowserEvent(Event event) {
     }

@@ -185,6 +185,9 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
         }
     }
 
+    public void refreshHeader() {
+        header.refreshHeader();
+    }
 
     public void changeToEditMode() {
         if (!item.getDocument().hasEditRight()) {

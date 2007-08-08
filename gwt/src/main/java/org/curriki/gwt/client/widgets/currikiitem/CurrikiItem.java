@@ -83,4 +83,6 @@ public interface CurrikiItem {
     void init();
 
     void onCommentClick();
+
+    void refreshHeader();
 }

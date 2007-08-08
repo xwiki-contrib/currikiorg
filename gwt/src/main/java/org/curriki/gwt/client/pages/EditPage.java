@@ -96,6 +96,16 @@ public class EditPage extends AbstractPage {
                         item.setSelected(false);
                 }
             }
+        } else {
+            Iterator it = itemsPanel.iterator();
+            Editor editor = Main.getSingleton().getEditor();
+            while(it.hasNext()){
+                Object widget = it.next();
+                if (widget instanceof CurrikiItem){
+                    CurrikiItem item = (CurrikiItem) widget;
+                    item.refreshHeader();
+                }
+            }
         }
     }
 

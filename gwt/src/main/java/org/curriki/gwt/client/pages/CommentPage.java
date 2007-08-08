@@ -72,8 +72,8 @@ public class CommentPage extends AbstractPage {
                             super.onSuccess(result);
                             // A comment has been added we should reload
                             Editor editor = Main.getSingleton().getEditor();
-                            editor.setCurrentAssetInvalid(true);
                             editor.getCurrentAsset().setCommentsNumber(editor.getCurrentAsset().getCommentsNumber()+1);
+                            editor.resetCache();
                             editor.refreshState();
                         }
                     });
