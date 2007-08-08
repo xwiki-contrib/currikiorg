@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.browseasset.AssetTreeItem;
 import org.curriki.gwt.client.widgets.browseasset.BrowseAsset;
@@ -87,14 +88,15 @@ public class MoveAsset extends BrowseAsset {
                 TreeItem parent = item.getParentItem();
                 if (item instanceof InsertHereTreeItem) {
                     int treePos = parent.getChildIndex(item);
-                    long newPosition;
+                    long newPosition = ((InsertHereTreeItem) item).getPosition();
                     // if we have selected the one after the asset
-                    if ((treePos > 1) && (parent.getChild(treePos - 2) instanceof InsertHereTreeItem)){
+                    /* if ((treePos > 1) && (parent.getChild(treePos - 2) instanceof InsertHereTreeItem)){
                         newPosition = ((AssetTreeItem)(parent.getChild(treePos - 1))).getIndex() + 1;
                     }
                     else{
                         newPosition = ((AssetTreeItem)(parent.getChild(treePos + 1))).getIndex();
                     }
+                    */
                     final String newParent = ((AssetTreeItem)parent).getPageName();
                     final boolean isNewParentDifferent = !fromParent.equals(newParent);
                     CurrikiService.App.getInstance().moveAsset(assetName, fromParent, fromPosition, newParent, newPosition, new CurrikiAsyncCallback(){
@@ -143,9 +145,15 @@ public class MoveAsset extends BrowseAsset {
                     for (; i < index; i++){
                         parent.addItem((TreeItem) items.get(i));
                     }
-                    parent.addItem(new InsertHereTreeItem());
-                    parent.addItem((TreeItem) items.get(i));
-                    parent.addItem(new InsertHereTreeItem());
+                    parent.addItem(new InsertHereTreeItem(index));
+                    AssetTreeItem assetTreeItem = (AssetTreeItem) items.get(i);
+                    if (Constants.CATEGORY_COLLECTION.equals(assetTreeItem.getType())) {
+                      assetTreeItem.addItem(new InsertHereTreeItem(assetTreeItem.getChildCount()+1));
+                      assetTreeItem.setState(true);
+                    }
+                    parent.addItem(assetTreeItem);
+
+                    parent.addItem(new InsertHereTreeItem(index+1));
                     for (i++; i < items.size(); i++){
                         parent.addItem((TreeItem) items.get(i));
                     }

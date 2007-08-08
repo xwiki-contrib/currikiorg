@@ -26,10 +26,15 @@ import org.curriki.gwt.client.Main;
 
 public class InsertHereTreeItem extends TreeItem {
 
-    public InsertHereTreeItem(){
+    public InsertHereTreeItem(int newposition){
         super("<b>" + Main.getTranslation("browseasset.insert_here") + "</b>");
         addStyleName("asset-tree-item");
         addStyleName("asset-tree-item-insert-here");
+        setUserObject(new Integer(newposition));
+    }
+
+    public int getPosition() {
+        return ((Integer) getUserObject()).intValue();
     }
 
 
