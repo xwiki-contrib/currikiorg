@@ -22,15 +22,13 @@
  */
 package org.curriki.gwt.client.utils;
 
-import org.curriki.gwt.client.CurrikiService;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.xpn.xwiki.gwt.api.client.Dictionary;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.core.client.GWT;
-import com.xpn.xwiki.gwt.api.client.Dictionary;
+import org.curriki.gwt.client.CurrikiService;
 
 public class Translator {
     private Dictionary dictionary = null;
@@ -69,7 +67,8 @@ public class Translator {
         String oStr = getTranslation(key);
 
         for (int i = 0; i<args.length; i++){
-            oStr = oStr.replaceAll("{"+i+"}", args[i]);
+            // The regex string is formatted to make it work in JavaScript
+            oStr = oStr.replaceAll("\\{"+i+"}", args[i]);
         }
 
         return oStr;

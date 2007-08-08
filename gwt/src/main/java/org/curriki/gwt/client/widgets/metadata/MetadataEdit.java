@@ -134,6 +134,9 @@ public class MetadataEdit extends Composite implements MouseListener {
         XObject rightObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
 
         addEditor(assetObj, "title", "title", true);
+        HTML copyInfo = new HTML(Main.getTranslation("metadata.copy_info_text"));
+        copyInfo.addStyleName("copy-info-text");
+        panel.add(copyInfo);
         addEditor(assetObj, "description", "description", true);
 
 

@@ -25,16 +25,27 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
-import org.curriki.gwt.client.*;
+import org.curriki.gwt.client.AssetDocument;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.editor.Editor;
-import org.curriki.gwt.client.wizard.DuplicateAssetWizard;
-import org.curriki.gwt.client.widgets.currikiitem.display.AbstractItemDisplay;
-import org.curriki.gwt.client.widgets.moveasset.MoveModalBox;
-import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
 import org.curriki.gwt.client.pages.ComponentsPage;
 import org.curriki.gwt.client.pages.EditPage;
+import org.curriki.gwt.client.widgets.currikiitem.display.AbstractItemDisplay;
+import org.curriki.gwt.client.widgets.modaldialogbox.ChoiceDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
+import org.curriki.gwt.client.widgets.moveasset.MoveModalBox;
+import org.curriki.gwt.client.wizard.DuplicateAssetWizard;
 
 
 public class CurrikiItemImpl extends Composite implements CurrikiItem {
@@ -47,6 +58,7 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
     private String parentAsset = null;
 
     private NextCancelDialog proposeTemplateDuplicationDialog;
+    private ChoiceDialog proposeEditDuplicationDialog;
 
     public CurrikiItemImpl(){
         init();
@@ -138,7 +150,14 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
 
     public void onEditClick() {
         AssetDocument doc = item.getDocument();
+        int proposeDialog = 0;
+
         if (doc.isCurrikiTemplate()&&!doc.isParentCurrikiTemplate()) {
+            proposeDialog = Constants.PROPOSE_DUPLICATE_TEMPLATE;
+        } else if (!doc.getCreator().equals(Main.getSingleton().getUser().getFullName())){
+            proposeDialog = Constants.PROPOSE_DUPLICATE_EDIT;
+        }
+        if (proposeDialog == Constants.PROPOSE_DUPLICATE_TEMPLATE){
             // Propose duplicating the template document in place
             proposeDuplicatingTemplate(new AsyncCallback() {
                 public void onFailure(Throwable throwable) {
@@ -180,6 +199,27 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
                     });
                 }
             });
+        } else if (proposeDialog == Constants.PROPOSE_DUPLICATE_EDIT){
+            // Unfortunately the two dialogues ask the quetion in different ways -- this one has 3 options -- so we can't reuse the code
+            // Propose duplicating the resource about to be edited as it belongs to someone else
+            proposeDuplicatingForEdit(doc.getCreator(), new AsyncCallback() {
+                // Cancel was selected -- Don't do anything.
+                public void onFailure(Throwable throwable) {
+                    // Cancel -- so do nothing
+                }
+
+                public void onSuccess(Object object) {
+                    // What was selected?
+                    String result = (String) object;
+                    if (result.equals("Edit")){
+                        if (item.getDocument().hasEditRight()){
+                            changeToEditMode();
+                        }
+                    } else if (result.equals("Copy")){
+                        onDuplClick(true);
+                    }
+                }
+            });
         } else {
             changeToEditMode();
         }
@@ -209,6 +249,40 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
             questionText = "template.propose_duplication_text_noneditable";
 
         proposeTemplateDuplicationDialog = new NextCancelDialog(titleText, questionText, "proposeduplication", cb);
+    }
+
+    private void proposeDuplicatingForEdit(String creator, final AsyncCallback cb) {
+        String stylename = "proposedduplication";
+
+        creator = creator.replaceFirst("XWiki.", "");
+        String titleText = "edit.propose_duplication_title";
+        String questionText = "edit.propose_duplication_text";
+
+        Button next = new Button(Main.getTranslation("edit.propose_continue"), new ClickListener(){
+            public void onClick(Widget widget)
+            {
+                cb.onSuccess("Edit");
+            }
+        });
+        next.addStyleName("dialog-"+stylename+"-continue");
+        Button copy = new Button(Main.getTranslation("edit.propose_copy"), new ClickListener(){
+            public void onClick(Widget widget)
+            {
+                cb.onSuccess("Copy");
+            }
+        });
+        copy.addStyleName("dialog-"+stylename+"-copy");
+        Button cancel = new Button(Main.getTranslation("edit.propose_cancel"), new ClickListener(){
+            public void onClick(Widget widget)
+            {
+                cb.onFailure(null);
+            }
+        });
+        cancel.addStyleName("dialog-"+stylename+"-cancel");
+        Button[] buttons = { next, copy, cancel };
+
+        String[] args = {creator};
+        proposeEditDuplicationDialog = new ChoiceDialog(Main.getTranslation(titleText), Main.getSingleton().getTranslator().getTranslation(questionText, args), buttons, stylename);
     }
 
     public void onSelectClick() {
@@ -301,6 +375,10 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
     }
 
     public void onDuplClick() {
+        onDuplClick(false);
+    }
+
+    public void onDuplClick(boolean markAsCopy) {
         boolean duplicateInPlace = false;
         boolean duplicateToCollection = true;
 
@@ -336,13 +414,17 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
                 }
             });
         } else {
-            proposeDuplicateToCollection();
+            proposeDuplicateToCollection(markAsCopy);
         }
     }
 
     public void proposeDuplicateToCollection() {
+       proposeDuplicateToCollection(false);
+    }
+    
+    public void proposeDuplicateToCollection(boolean markAsCopy) {
             // Let's launch the duplicate asset wizard
-            new DuplicateAssetWizard(getDocumentFullName());
+            new DuplicateAssetWizard(getDocumentFullName(), markAsCopy);
     }
 
     public void onMoveClick() {

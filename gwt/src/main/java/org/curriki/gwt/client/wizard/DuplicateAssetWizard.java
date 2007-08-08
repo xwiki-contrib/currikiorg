@@ -1,19 +1,28 @@
 package org.curriki.gwt.client.wizard;
 
-import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
-import org.curriki.gwt.client.widgets.template.ChooseTemplateDialog;
-import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
-import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
-import org.curriki.gwt.client.*;
-import org.curriki.gwt.client.editor.Editor;
-import org.curriki.gwt.client.utils.Loading;
-import org.curriki.gwt.client.utils.Translator;
-import org.curriki.gwt.client.utils.ClickListenerMetadata;
 import asquare.gwt.tk.client.ui.ModalDialog;
-import com.xpn.xwiki.gwt.api.client.Document;
-import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.xpn.xwiki.gwt.api.client.Document;
+import com.xpn.xwiki.gwt.api.client.XObject;
+import org.curriki.gwt.client.AssetDocument;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.editor.Editor;
+import org.curriki.gwt.client.utils.ClickListenerMetadata;
+import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
+import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
+import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
+import org.curriki.gwt.client.widgets.template.ChooseTemplateDialog;
 
 /** Copyright 2006,XpertNet SARL,and individual contributors as indicated
  * by the contributors.txt.
@@ -44,8 +53,14 @@ public class DuplicateAssetWizard {
     private MetadataEdit meta;
     private Document newDoc;
     private NextCancelDialog confirmDialog;
+    private boolean markAsCopy = false;
 
     public DuplicateAssetWizard(String assetName) {
+        duplicateAsset(assetName);
+    }
+
+    public DuplicateAssetWizard(String assetName, boolean markAsCopy) {
+        this.markAsCopy = markAsCopy;
         duplicateAsset(assetName);
     }
 
@@ -84,6 +99,19 @@ public class DuplicateAssetWizard {
             public void onSuccess(Object result) {
                 super.onSuccess(result);
                 newDoc = (AssetDocument) result;
+
+                if (markAsCopy){
+                    // TODO: There should be a better way to set the property value on the browser side, but it seems to only be able to be set on the server side
+                    XObject assetObj = newDoc.getObject(Constants.ASSET_CLASS);
+                    String editVersion = assetObj.getEditProperty(Constants.ASSET_TITLE_PROPERTY);
+
+                    //Look for ' value="title"' and insert "Copy of" before the title part
+                    int titlePos = editVersion.indexOf("value=");
+                    editVersion = editVersion.substring(0, titlePos+7)+Main.getTranslation("duplicate.copy_of")+" "+editVersion.substring(titlePos+7);
+                    assetObj.setEditProperty(Constants.ASSET_TITLE_PROPERTY, editVersion);
+
+                }
+
                 initMetadataUI();
             }
         });
