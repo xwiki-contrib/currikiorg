@@ -24,6 +24,7 @@ package org.curriki.gwt.client.widgets.currikiitem.display;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextArea;
 import com.jpavel.gwt.wysiwyg.client.Editor;
@@ -38,7 +39,7 @@ import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 import java.util.Map;
 import java.util.HashMap;
 
-public class TextItemDisplay extends AbstractItemDisplay {
+public class TextItemDisplay extends AbstractItemDisplay implements WindowResizeListener {
     final static String TINYMCE_FIELDNAME = "contentfield";
     
     TextArea textarea = null;
@@ -50,6 +51,7 @@ public class TextItemDisplay extends AbstractItemDisplay {
     public TextItemDisplay(Document doc, CurrikiItem item) {
         super(doc, item);
         initDisplay(doc);
+        Window.addWindowResizeListener(this);
     }
 
     public String getType() {
@@ -235,6 +237,14 @@ public class TextItemDisplay extends AbstractItemDisplay {
     public void onDocumentVersionChange() {
         if (status == Constants.VIEW){
             reloadDocument();
+        }
+    }
+
+    public void onWindowResized(int i, int i1) {
+        if (textarea!=null) {
+            String text = getContent();
+            panel.remove(0);
+            initVerbatim(text);
         }
     }
 }
