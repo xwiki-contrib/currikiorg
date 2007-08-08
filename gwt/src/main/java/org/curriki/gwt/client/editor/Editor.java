@@ -99,6 +99,13 @@ public class Editor implements WindowResizeListener {
             currentAssetPageName = rootAssetPageName;
             // Set the start asset
             setCurrentAssetPageName(currentAssetPageName);
+
+            String mode = WindowUtils.getLocation().getParameter("mode");
+            if ("edit".equals(mode)) {
+                setSelectedDocumentName(currentAssetPageName);
+                setSelectedDocumentEditMode(true);
+            }
+
             // Refresh the state
             refreshState();
         }
@@ -189,6 +196,7 @@ public class Editor implements WindowResizeListener {
     public void setSelectedDocumentName(String selectedDocumentName) {
         this.previousSelectedDocumentName = this.selectedDocumentName;                
         this.selectedDocumentName = selectedDocumentName;
+        setSelectedDocumentEditMode(false);
     }
 
 
