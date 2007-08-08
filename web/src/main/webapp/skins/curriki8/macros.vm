@@ -1142,7 +1142,7 @@ $msg.get("asset.externallink")
 #end
 #if("XWiki.${shortname}" == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($collDoc.fullName, "delete"))
 #set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${collDoc.fullName}&sourceDoc=${localUrl}"))
-#sep() <a onclick="return confirm('$deleteMsg')" href="$deleteUrl">$msg.get("caption.delete")</a>
+#sep() <a onclick="this.href='$deleteUrl'; return confirm('$deleteMsg')" href="javascript:void()">$msg.get("caption.delete")</a>
 #end
 </div>
 *$msg.get("colls.last_edited")* $!xwiki.formatDate($collDoc.date, "MM/dd/yy")<br />
