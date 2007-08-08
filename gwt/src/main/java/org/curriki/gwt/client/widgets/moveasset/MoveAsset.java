@@ -149,7 +149,7 @@ public class MoveAsset extends BrowseAsset {
                     AssetTreeItem assetTreeItem = (AssetTreeItem) items.get(i);
                     if (Constants.CATEGORY_COLLECTION.equals(assetTreeItem.getType())) {
                       assetTreeItem.addItem(new InsertHereTreeItem(assetTreeItem.getChildCount()+1));
-                      assetTreeItem.setState(true);
+                      assetTreeItem.getChild(0).setVisible(true);
                     }
                     parent.addItem(assetTreeItem);
 
