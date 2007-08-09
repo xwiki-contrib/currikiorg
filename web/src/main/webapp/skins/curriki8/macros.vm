@@ -37,6 +37,36 @@ $msg.get($prop.name)#end
 #end
 ##
 ##
+##
+##
+##
+#macro(breakLinkText $linkToBreak $size)
+ #if($linkToBreak.length()<=$size)
+$linkToBreak
+ #else
+#set($slashIndex = $linkToBreak.substring(0, $size).lastIndexOf('/'))
+#set($pointIndex = $linkToBreak.substring(0, $size).lastIndexOf('.'))
+#if($pointIndex == $slashIndex)
+#set($nextLink = $linkToBreak)
+#set($nextSize = 10 + $size)
+#breakLinkText($nextLink, $nextSize)
+#else
+#if($pointIndex > $slashIndex)
+ #set($index = 1 + $pointIndex)
+#else
+ #set($index = 1 + $slashIndex)
+#end
+$linkToBreak.substring(0, $index) 
+#set($nextLink = $linkToBreak.substring($index))
+#breakLinkText($nextLink, $size)
+ #end
+#end
+#end
+##
+##
+##
+##
+##
 #macro(getNewsExtract $fromObj $fromDoc $toStr $maxChars)
 #set($toStr = $fromDoc.display("extract", "view", $fromObj))
 #if($toStr=="")
