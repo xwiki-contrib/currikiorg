@@ -152,7 +152,7 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
     }-*/;
 
     public native void embedCapture(VidiTalkItemDisplay x, String divId, String siteCode) /*-{
-        $wnd.embedVidiCapture(divId, siteCode);
+        $wnd.embedVidiCapture(divId, siteCode, null, null, false);
         $wnd.uploadComplete = function(vId){
             x.@org.curriki.gwt.client.widgets.currikiitem.display.VidiTalkItemDisplay::vidiTalkUpload(Ljava/lang/String;)(vId);
         }
