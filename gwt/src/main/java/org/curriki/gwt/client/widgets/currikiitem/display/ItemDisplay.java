@@ -271,7 +271,9 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
             panel.add(caption);        
         
         XObject obj = doc.getObject(Constants.EXTERNAL_ASSET_CLASS);
-        link.setText((String) obj.get(Constants.EXTERNAL_ASSET_LINK_PROPERTY));
+        String text = (String) obj.get(Constants.EXTERNAL_ASSET_LINK_PROPERTY);
+        text = URLUtils.breakLinkText(text, 100);
+        link.setText(text);
 
         if(panel.getWidgetIndex(link) == -1)
             panel.add(link);

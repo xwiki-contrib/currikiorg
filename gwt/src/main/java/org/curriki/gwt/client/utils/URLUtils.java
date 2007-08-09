@@ -28,4 +28,19 @@ public class URLUtils {
             return true;
         return false;
     }
+
+    public static String breakLinkText(String text, int size) {
+        if (text == null || text.length() < size) {
+            return text;
+        }
+        int slashIndex = text.substring(0, size).lastIndexOf('/');
+        int pointIndex = text.substring(0, size).lastIndexOf('.');
+        if (slashIndex == pointIndex) {
+            return breakLinkText(text, size + 10);
+        }
+        int index = (slashIndex>pointIndex?slashIndex:pointIndex);
+        index++;
+        return text.substring(0, index) + " " + breakLinkText(text.substring(index), size);
+    }
+
 }
