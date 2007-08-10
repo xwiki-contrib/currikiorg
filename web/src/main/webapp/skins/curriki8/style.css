@@ -1,3 +1,4 @@
+
 @import "elements.css";
 @import "classes.css";
 @import "xwiki.css"; 
@@ -2196,12 +2197,13 @@ color: #999;
 button {
   cursor: pointer;
 }
-.gwt-ButtonOrange, .collections-dialog-next, .addfile-dialog-next, .metadata-save, .thankyou-dialog-continue, .login-Button, .addresource-dialog-next  {
+.gwt-ButtonOrange, .collections-dialog-next, .addfile-dialog-next, .metadata-save, .thankyou-dialog-continue, .login-Button, .addresource-dialog-next, .tk-ModalDialog-content .dialog-proposedduplication-continue, 
+.tk-ModalDialog-content .dialog-proposedduplication-copy {
   background: #FF7F00;
   color: #FFF;
   border: 1px solid #FF4100;
 }
-.gwt-ButtonGrey, .collections-dialog-cancel, .addfile-dialog-cancel, .dialog-metadata-button-cancel, .menu-add, .move-modal-box .gwt-Button, .find-selector-cancel, .dialog-choosetemplate-cancel, .find-results-table-result .gwt-Button,  .addresource-dialog-cancel {
+.gwt-ButtonGrey, .collections-dialog-cancel, .addfile-dialog-cancel, .dialog-metadata-button-cancel, .menu-add, .move-modal-box .gwt-Button, .find-selector-cancel, .dialog-choosetemplate-cancel, .find-results-table-result .gwt-Button,  .addresource-dialog-cancel, .tk-ModalDialog-content .dialog-proposedduplication-cancel {
   background: #DCDCDC;
   border: 1px solid #A5A5A5; 
   color: #3F3F3F;
@@ -2215,6 +2217,10 @@ button {
 }
 html>body .dialog-duplicate-confirm .gwt-bttCancel {
   margin-right: 15px;
+}
+.tk-ModalDialog-content .dialog-proposedduplication-continue, .tk-ModalDialog-content .dialog-proposedduplication-copy, .tk-ModalDialog-content .dialog-proposedduplication-cancel {
+  float: left;
+  margin-right: 8px;
 }
 .gwt-ButtonNav {
   background: #EBEBEB;
@@ -3110,4 +3116,19 @@ body#mceSpanFonts {
 .find-results-table-title .gwt-Label {
   white-space: nowrap;
   margin: 0 5px;
+}
+div#leftflash{
+width: 340px;
+height: 313px;
+}
+.collections-dialog-bottom td .asset-tree-item table {
+  width: auto;
+}
+.collections-dialog-bottom td .asset-tree-item td {
+  white-space: normal;
+  vertical-align: top;
+  width: 0px;
+}
+.collections-dialog-bottom td .asset-tree-item td span {
+  white-space: normal;
 }
