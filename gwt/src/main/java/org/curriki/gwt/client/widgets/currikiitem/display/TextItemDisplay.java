@@ -58,8 +58,12 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
         return Constants.TYPE_TEXT;
     }
 
-    private native void addMCEControl(Element e) /*-{
+    private native void addMCEControl(Element e, String imagepath, String attachpath) /*-{
+          $wnd.tinyMCE.settings["wiki_images_path"] = imagepath;
+          $wnd.tinyMCE.settings["wiki_attach_path"] = attachpath;
           $wnd.tinyMCE.addMCEControl(e, e.id);
+          // $wnd.tinyMCE.settings["wiki_images_path"] = imagepath;
+          // $wnd.tinyMCE.settings["wiki_attach_path"] = attachpath;
       }-*/;
 
     private native String getContent() /*-{
@@ -81,31 +85,37 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     }
 
     private void initVerbatim(final String text){
+        /*
         if (wysiwyghtml==null) {
             Map params = new HashMap();
             params.put("editor", "content");
+            params.put("page", getDocumentFullName());
             CurrikiService.App.getInstance().getDocumentContent("XWiki.GWTTextArea", true, params, new CurrikiAsyncCallback() {
 
                 public void onSuccess(Object object) {
                     super.onSuccess(object);
                     if (object!=null) {
                         wysiwyghtml = object.toString();
+                        Window.alert(wysiwyghtml);
                         initVerbatim(text);
                     }
                 }
             });
         } else {
-            textarea = new TextArea();
-            textarea.setText((text==null) ? "" : text);
-            // textarea.setHeight("300px");
-            // textarea.setWidth("100%");
-            textarea.setStyleName("text-editor");
-            textarea.setName(TINYMCE_FIELDNAME);
-            panel.add(textarea);
-            textarea.setFocus(true);
-            addMCEControl(textarea.getElement());
-            Main.getSingleton().getEditor().ensureVisibleWidget(textarea);
-        }
+        */
+        textarea = new TextArea();
+        textarea.setText((text==null) ? "" : text);
+        // textarea.setHeight("300px");
+        // textarea.setWidth("100%");
+        textarea.setStyleName("text-editor");
+        textarea.setName(TINYMCE_FIELDNAME);
+        panel.add(textarea);
+        textarea.setFocus(true);
+        String imagepath = "/xwiki/bin/download/" + getDocumentFullName().replace('.', '/') + "/";
+        String attachpath = "/xwiki/bin/view/" + getDocumentFullName().replace('.', '/');
+        addMCEControl(textarea.getElement(), imagepath, attachpath);
+        Main.getSingleton().getEditor().ensureVisibleWidget(textarea);
+        // }
     }
 
     public void initDisplay(Document doc){

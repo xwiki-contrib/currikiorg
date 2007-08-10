@@ -1450,27 +1450,31 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
     protected Document newDocument(Document doc, XWikiDocument xdoc, boolean withObjects, boolean withViewDisplayers,
                              boolean withEditDisplayers, boolean withRenderedContent, XWikiContext context)  throws XWikiGWTException {
-        if(xdoc.getObject(Constants.ASSET_CLASS) != null)
+        XWikiDocument cdoc = context.getDoc();
+        try {
+            context.setDoc(xdoc);        if(xdoc.getObject(Constants.ASSET_CLASS) != null)
             doc = new AssetDocument();
         else if (doc == null)
             doc = new Document();
-        super.newDocument(doc, xdoc, withObjects, withViewDisplayers, withEditDisplayers, withRenderedContent, context);
+            super.newDocument(doc, xdoc, withObjects, withViewDisplayers, withEditDisplayers, withRenderedContent, context);
 
-        BaseObject obj = xdoc.getObject(Constants.ASSET_LICENCE_CLASS);
-        if (obj != null){
-            String licence = obj.getStringValue(Constants.ASSET_LICENCE_TYPE_PROPERTY);
-            boolean licenceProtected = licence.contains("NoDerivatives");
-            ((AssetDocument)doc).setLicenceProtected(licenceProtected);
-            ((AssetDocument)doc).setDuplicatable((context.getUser().equals(doc.getCreator()))||(!licenceProtected));
-            if (doc.getWeb().startsWith("Templates_")||doc.getWeb().equals(Constants.TEMPLATES_SPACE))
-                ((AssetDocument)doc).setCurrikiTemplate(true);
-        }
-        BaseObject cObj = xdoc.getObject(Constants.COMPOSITEASSET_CLASS);
-        if (cObj != null){
-            ((AssetDocument)doc).setComposite(true);
-        }
-        return doc;
-    }
+            BaseObject obj = xdoc.getObject(Constants.ASSET_LICENCE_CLASS);
+            if (obj != null){
+                String licence = obj.getStringValue(Constants.ASSET_LICENCE_TYPE_PROPERTY);
+                boolean licenceProtected = licence.contains("NoDerivatives");
+                ((AssetDocument)doc).setLicenceProtected(licenceProtected);
+                ((AssetDocument)doc).setDuplicatable((context.getUser().equals(doc.getCreator()))||(!licenceProtected));
+                if (doc.getWeb().startsWith("Templates_")||doc.getWeb().equals(Constants.TEMPLATES_SPACE))
+                    ((AssetDocument)doc).setCurrikiTemplate(true);
+            }
+            BaseObject cObj = xdoc.getObject(Constants.COMPOSITEASSET_CLASS);
+            if (cObj != null){
+                ((AssetDocument)doc).setComposite(true);
+            }
+            return doc;
+        } finally {
+            context.setDoc(cdoc);
+        }    }
 
     /* Lucene Searching */
 
