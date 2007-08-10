@@ -167,7 +167,7 @@ public class Constants {
 
     public static final String TEMPLATES_SPACE = "Coll_Templates";
 
-    public static final String TEMPLATE_ABOUT_COLLECTION = "GWT.AboutyourCollection";
+    public static final String TEMPLATE_ABOUT_COLLECTION = "Templates.AboutyourCollection";
 
     public static final int DIALOG_RESOURCE_TYPE_UNKNOWN = 0;
     public static final int DIALOG_RESOURCE_TYPE_EXISTING_RESOURCE = 1;
