@@ -1051,12 +1051,12 @@ $status
 #macro(displaylinks $asset)
  #if($asset.hasAccessLevel("edit"))
   #if($asset.getObject("XWiki.CompositeAssetClass")) 
-   <a href="javascript:addFileToCollection2('$asset.fullName');">$msg.get("caption.addResourceToThisCollection")</a>
+   <a href="javascript:addFileToCollection2('$xwiki.escapeURL($asset.fullName)');">$msg.get("caption.addResourceToThisCollection")</a>
    #sep()
   #end
  #end
  #if(($asset.hasAccessLevel("view"))&&($context.user!="XWiki.XWikiGuest"))
-  <a href="javascript:addExistingResource2('$asset.fullName');">$msg.get("caption.addToCollection")</a>
+  <a href="javascript:addExistingResource2('$xwiki.escapeURL($asset.fullName)');">$msg.get("caption.addToCollection")</a>
   #sep() 
  #end
  #if($asset.hasAccessLevel("view"))
