@@ -214,7 +214,7 @@ public class SimpleMenuPanel extends ComplexPanel implements IndexedPanel {
             itemDiv = DOM.getChild(panelDiv, i);
             Element itemTitle = DOM.getFirstChild(itemDiv);
             int curIndex = DOM.getIntAttribute(itemTitle, "__index");
-            assert (curIndex == i - 1);
+            // assert (curIndex == i - 1);
             DOM.setIntAttribute(itemTitle, "__index", index);
             ++index;
         }

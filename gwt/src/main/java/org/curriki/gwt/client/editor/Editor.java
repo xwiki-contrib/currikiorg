@@ -1,6 +1,7 @@
 package org.curriki.gwt.client.editor;
 
 import asquare.gwt.tk.client.ui.ModalDialog;
+import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.Timer;
@@ -424,6 +425,7 @@ public class Editor implements WindowResizeListener {
         dialog.addController(new SizeDialogController(panel));
         if (wizard != null)
             dialog.add(panel);
+        dialog.removeController(dialog.getController(TabFocusController.class));
     }
 
     public String findParent(String currentAssetPageName) {

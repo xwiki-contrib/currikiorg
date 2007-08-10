@@ -1,6 +1,7 @@
 package org.curriki.gwt.client.wizard;
 
 import asquare.gwt.tk.client.ui.ModalDialog;
+import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -114,6 +115,7 @@ public class AddFromTemplateWizard {
         });
 
         metaPanel = new ModalDialog();
+        metaPanel.removeController(metaPanel.getController(TabFocusController.class));
         metaPanel.addStyleName("dialog-metadata");
         metaPanel.setCaption(Main.getTranslation("template.describethelearningresource"), false);
 

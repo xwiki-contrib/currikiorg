@@ -23,6 +23,7 @@
 package org.curriki.gwt.client.widgets.find;
 
 import asquare.gwt.tk.client.ui.ModalDialog;
+import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,6 +39,7 @@ public class FindPanel extends ModalDialog {
 
     public FindPanel() {
         initPanel();
+        removeController(getController(TabFocusController.class));
     }
 
     public FindPanel(ResourceAdder addAssetWizard) {
