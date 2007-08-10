@@ -1452,10 +1452,11 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                              boolean withEditDisplayers, boolean withRenderedContent, XWikiContext context)  throws XWikiGWTException {
         XWikiDocument cdoc = context.getDoc();
         try {
-            context.setDoc(xdoc);        if(xdoc.getObject(Constants.ASSET_CLASS) != null)
-            doc = new AssetDocument();
-        else if (doc == null)
-            doc = new Document();
+            context.setDoc(xdoc);
+            if(xdoc.getObject(Constants.ASSET_CLASS) != null)
+                doc = new AssetDocument();
+            else if (doc == null)
+                doc = new Document();
             super.newDocument(doc, xdoc, withObjects, withViewDisplayers, withEditDisplayers, withRenderedContent, context);
 
             BaseObject obj = xdoc.getObject(Constants.ASSET_LICENCE_CLASS);
