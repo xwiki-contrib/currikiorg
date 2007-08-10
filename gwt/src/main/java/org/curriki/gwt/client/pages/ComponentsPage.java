@@ -54,17 +54,18 @@ public class ComponentsPage extends Composite implements TabListener {
     }
 
     private void loadPanels(){
-        showAllTabs = "1".equals(Main.getSingleton().getEditor().getParameter("alltabs"));
-
         AbstractPage editPage = new EditPage();
         tabPanel.add(editPage, Main.getTranslation("editor.edit_tab"));
         pages.put("edit", editPage);
 
+        /*
+        // No Preview tab anymore
         if (showAllTabs) {
             AbstractPage previewPage = new PreviewPage();
             tabPanel.add(previewPage, Main.getTranslation("editor.preview_tab"));
             pages.put("preview", previewPage);
         }
+        */
 
         AbstractPage metadataPage = new MetadataPage();
         tabPanel.add(metadataPage, Main.getTranslation("editor.metadata_tab"));
@@ -74,11 +75,10 @@ public class ComponentsPage extends Composite implements TabListener {
         tabPanel.add(commentPage, getCommentTabName());
         pages.put("comment", commentPage);
 
-        if (showAllTabs) {
-            AbstractPage historyPage = new HistoryPage();
-            tabPanel.add(historyPage, Main.getTranslation("editor.history_tab"));
-            pages.put("history", historyPage);
-        }
+        AbstractPage historyPage = new HistoryPage();
+        tabPanel.add(historyPage, Main.getTranslation("editor.history_tab"));
+        pages.put("history", historyPage);
+
         tabPanel.selectTab(Constants.PAGE_EDIT);
         tabPanel.setStyleName("components-tabpanel");
 
