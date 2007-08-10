@@ -22,16 +22,26 @@
  */
 package org.curriki.gwt.client.widgets.addfile;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
 import asquare.gwt.tk.client.ui.BasicPanel;
-import com.google.gwt.user.client.ui.*;
+import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
-import org.curriki.gwt.client.utils.*;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.utils.ClickListenerDocument;
+import org.curriki.gwt.client.utils.XWikiGWTPanelLoader;
 import org.curriki.gwt.client.widgets.upload.UploadWidget;
 
 public class AddFileDialog extends ModalDialog {
@@ -59,8 +69,8 @@ public class AddFileDialog extends ModalDialog {
         addStyleName("dialog-addfile");
         //addController(new ModalDialog.DragStyleController(this));
         setCaption(Main.getTranslation("addfile.add_a_learning_resource"), false);
-        setContentMinWidth(634);
-        setContentMinHeight(557);
+        setContentMinWidth(579);
+        setContentMinHeight(468);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("dialog-addfile-content");
@@ -73,6 +83,10 @@ public class AddFileDialog extends ModalDialog {
         bottom.addStyleName("dialog-addfile-bottom");
         bottom.getColumnFormatter().addStyleName(0, "addfile-dialog-col1");
         bottom.getColumnFormatter().addStyleName(1, "addfile-dialog-col2");
+        bottom.getCellFormatter().addStyleName(0, 0, "addfile-dialog-left-content");
+        bottom.getCellFormatter().addStyleName(0, 1, "addfile-dialog-right-content");
+        bottom.getCellFormatter().addStyleName(1, 0, "addfile-dialog-left-action");
+        bottom.getCellFormatter().addStyleName(1, 1, "addfile-dialog-right-action");
 
 
         VerticalPanel chooser = new VerticalPanel();
@@ -134,7 +148,7 @@ public class AddFileDialog extends ModalDialog {
 
         chooser.add(tURL);
         chooser.add(tFile);
-        chooser.add(tVideo);
+        bottom.setWidget(0, 1, tVideo);
 
 
         BasicPanel actions = new BasicPanel();

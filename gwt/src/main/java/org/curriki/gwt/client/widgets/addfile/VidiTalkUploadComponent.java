@@ -80,7 +80,7 @@ public class VidiTalkUploadComponent extends BasicPanel
         $wnd.capture_div = "";
         $wnd.flashLoaded = false;
         $wnd.called_once = false;
-        $wnd.embedVidiCapture(divId, siteCode);
+        $wnd.embedVidiCapture(divId, siteCode, null, null, false);
     }-*/;
 
     public void setViditalkVideoId(String vidId){
