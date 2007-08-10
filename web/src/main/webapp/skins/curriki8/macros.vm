@@ -814,16 +814,12 @@ $memberdoc.getRenderedContent($content)</div>
 #end
 1 $title
 #set($extract = $!bentrydoc.display("extract","view", $bentryobj)) 
-#if($!extract != "")
-<strong class="strong">$extract</strong>
-
-#end
 <div class="article_content" >
 #set($content = $bentrydoc.display("content", "view", $bentryobj))
-#if(!$displayFully && $content.length()>400)
- #set($i = $content.lastIndexOf(" ",400))
- #set($i = $i + 1)
- #set($content = "${content.substring(0,$i)}")
+#if(!$displayFully)
+ #if($!extract != "")
+  #set($content = $extract)
+ #end
 #end
 $bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
 
