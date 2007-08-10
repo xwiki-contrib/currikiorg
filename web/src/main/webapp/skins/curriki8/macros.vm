@@ -929,11 +929,24 @@ createCookie("Section${seccounter}Hidden", true, "");
 #else
  #set($subjects = "")
  {pre}#set($sitems = $asset.fw_items.split("<br />")){/pre}
+ #set($previousCat = "")
  #foreach($sitem in $sitems)
   #if($sitem.trim().startsWith("Subject Index &gt;"))
    #set($sitem = $sitem.trim().substring(18))
   #end
-  <option>${sitem}</option>
+  #set($gtIndex = $sitem.indexOf("&gt;"))
+  #if($gtIndex != -1)
+   #set($foundCat = $sitem.substring(0, $gtIndex).trim())
+   #if($foundCat != $previousCat)
+    #set($previousCat = $foundCat)
+    <option>$previousCat</option>
+   #end
+   #set($nextIndex = 4 + $gtIndex)
+   <option>&nbsp; &nbsp; $sitem.substring($nextIndex)</option>
+  #else 
+   #set($previousCat = $sitem)
+   <option>$previousCat</option>
+  #end
  #end
 #end
 </select>
