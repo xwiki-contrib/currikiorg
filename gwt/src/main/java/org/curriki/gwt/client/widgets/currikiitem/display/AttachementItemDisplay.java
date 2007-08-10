@@ -89,6 +89,15 @@ public class AttachementItemDisplay extends ItemDisplay {
                 }
             };
 
+            // Create click listener
+            ClickListener downloadClick = new ClickListener() {
+                public void onClick(Widget widget) {
+                    // Let's open a new window
+                    String url = getAttURL() + "?force_download=1";
+                    Window.open(url, "_blank", "");
+                }
+            };
+
             // Create branched icon
             icon = new Image();
             icon.addStyleName("item-download-link");
@@ -98,7 +107,7 @@ public class AttachementItemDisplay extends ItemDisplay {
             if(panel.getWidgetIndex(icon) == -1)
                 panel.add(icon);
 
-            initDisplayAttachmentDownloadZone(attName, openClick);
+            initDisplayAttachmentDownloadZone(attName, openClick, downloadClick);
         }
         else
         {
@@ -121,7 +130,7 @@ public class AttachementItemDisplay extends ItemDisplay {
         panel.add(new HTML(doc.getFullName() + Main.getTranslation("asset.asset_corrupted")));
     }
 
-    protected void initDisplayAttachmentDownloadZone(String attName, ClickListener openClick) {
+    protected void initDisplayAttachmentDownloadZone(String attName, ClickListener openClick, ClickListener downloadClick) {
         // Download Zone with link and button
         HorizontalPanel downloadZone = new HorizontalPanel();
         downloadZone.addStyleName("item-download-zone");
@@ -129,11 +138,10 @@ public class AttachementItemDisplay extends ItemDisplay {
         link.addStyleName("item-download-zone-text");
         link.addClickListener(openClick);
         downloadZone.add(link);
-        Button button = new Button(Main.getTranslation("asset.download"), openClick);
+        Button button = new Button(Main.getTranslation("asset.download"), downloadClick);
         button.addStyleName("gwt-ButtonGrey");
         button.addStyleName("item-download-zone-button");
         downloadZone.add(button);
         panel.add(downloadZone);
     }
 }
-
