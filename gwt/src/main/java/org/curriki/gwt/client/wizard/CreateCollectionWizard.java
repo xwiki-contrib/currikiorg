@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
-import org.curriki.gwt.client.AssetDocument;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
@@ -40,7 +39,6 @@ import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.utils.ClickListenerMetadata;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
-import org.curriki.gwt.client.widgets.template.TemplateCopier;
 
 public class CreateCollectionWizard {
     private String createdPage;
@@ -92,7 +90,7 @@ public class CreateCollectionWizard {
                 Main.getSingleton().finishLoading();
                 metaPanel.hide();
 
-                // We need to move the asset to this collection
+                // We need to move the asset to the root collection
                 CurrikiService.App.getInstance().finalizeAssetCreation(doc.getFullName(), Constants.ROOT_COLLECTION_PAGE, -1,
                         new CurrikiAsyncCallback(){
                             public void onFailure(Throwable caught) {
@@ -103,41 +101,32 @@ public class CreateCollectionWizard {
                             public void onSuccess(Object result) {
                                 super.onSuccess(result);
                                 final Document finalDoc = (Document) result;
-                                // We now have a collection, we need to copy the "About" template to it
+                                // We now have a collection, we need to add the "About" template to it
 
-                                TemplateCopier copier = new TemplateCopier();
-                                copier.copyTemplate(Constants.TEMPLATE_ABOUT_COLLECTION, finalDoc.getFullName(), new CurrikiAsyncCallback() {
-                                    public void onSuccess(Object result){
-                                        super.onSuccess(result);
+                                CurrikiService.App.getInstance().insertSubAsset(finalDoc.getFullName(), Constants.TEMPLATE_ABOUT_COLLECTION, -1,
+                                    new CurrikiAsyncCallback(){
+                                        public void onFailure(Throwable caught) {
+                                            super.onFailure(caught);
+                                            Main.getSingleton().showError(caught);
+                                        }
 
-                                        AssetDocument newDoc = (AssetDocument) result;
+                                        public void onSuccess(Object result) {
+                                            super.onSuccess(result);
 
-                                        CurrikiService.App.getInstance().finalizeAssetCreation(newDoc.getFullName(), finalDoc.getFullName(), -1,
-                                            new CurrikiAsyncCallback(){
-                                                public void onFailure(Throwable caught) {
-                                                    super.onFailure(caught);
-                                                    Main.getSingleton().showError(caught);
+                                            ClickListener cancel =  new ClickListener(){
+                                                public void onClick(Widget sender){
+                                                    thankYouDialog.hide();
+                                                    thankYouDialog = null;
+                                                    String editURL = Main.getTranslation("params.gwturl")+"page="+finalDoc.getFullName()+"&newCollection=1";
+                                                    Window.open(editURL, "_blank", "");
                                                 }
+                                            };
 
-                                                public void onSuccess(Object result) {
-                                                    super.onSuccess(result);
-
-                                                    ClickListener cancel =  new ClickListener(){
-                                                        public void onClick(Widget sender){
-                                                            thankYouDialog.hide();
-                                                            thankYouDialog = null;
-                                                            String editURL = Main.getTranslation("params.gwturl")+"page="+finalDoc.getFullName()+"&newCollection=1";
-                                                            Window.open(editURL, "_blank", "");
-                                                        }
-                                                    };
-
-                                                    thankYouDialog = new ThankYouDialog(Constants.DIALOG_THANKYOU_CREATE_COLLECTION, cancel);
-                                                }
-                                            });
-                                    }
-                                });
+                                            thankYouDialog = new ThankYouDialog(Constants.DIALOG_THANKYOU_CREATE_COLLECTION, cancel);
+                                        }
+                                    });
                             }
-                        });
+                    });
             }
         });
 
