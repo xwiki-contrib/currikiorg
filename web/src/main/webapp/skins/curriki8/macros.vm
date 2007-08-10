@@ -13,7 +13,8 @@
 ##
 #macro(gwtEditUrl $docToEdit)
 #set($m_gwtUrl = $gwtmainpath)
-#set($m_editUrl = "${m_gwtUrl}page=${docToEdit}")
+#set($docToEdit2 = $xwiki.escapeURL($docToEdit))
+#set($m_editUrl = "${m_gwtUrl}page=${docToEdit2}&mode=edit")
 $m_editUrl#end
 ##
 ##
