@@ -155,11 +155,13 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 createRootCollection(space, context);
             }
 
+            /* CURRIKI-816 - No longer create DEFAULT collection when creating another collection
             if (!pageName.equals(Constants.DEFAULT_COLLECTION_PAGE)){
                 if (!isDefaultCollectionExists(space)){
                     createDefaultCollection(space);
                 }
             }
+            */
 
             Document doc;
             if (pageName.equals(Constants.DEFAULT_COLLECTION_PAGE)){
@@ -329,8 +331,23 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             XWikiContext context = getXWikiContext();
             String user = context.getUser();
             String space = "Coll_"+user.replaceFirst("XWiki.", "");
-            if (! isDefaultCollectionExists(space)){
-                createDefaultCollection(space);
+
+            /* CURRIKI-816
+             * No longer create DEFAULT collection automatically if any other collection exists
+             * but create it if one does not exist
+             */
+            XWikiDocument doc = context.getWiki().getDocument(space+"."+Constants.ROOT_COLLECTION_PAGE, context);
+            if (doc == null){
+                if (! isDefaultCollectionExists(space)){
+                    createDefaultCollection(space);
+                }
+            } else {
+                List objs_old = doc.getObjects(Constants.SUBASSET_CLASS);
+                if (objs_old == null || objs_old.size() == 0){
+                    if (! isDefaultCollectionExists(space)){
+                        createDefaultCollection(space);
+                    }
+                }
             }
 
             return getCollectionTreeItem(space+"."+Constants.ROOT_COLLECTION_PAGE);
