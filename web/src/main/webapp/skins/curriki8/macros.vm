@@ -829,9 +829,11 @@ $memberdoc.getRenderedContent($content)</div>
  #end
 #end
 $bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
+<div class="clearfloats"></div>
 
 <a href="$bentrydoc.getURL("view", "bc=$!{bcLocal}")" class="curriki-link">$msg.get("caption.readmore")</a>#end
 </div>
+<div class="clearfloats"></div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!{bcLocal}#end#comments]
 </div>
