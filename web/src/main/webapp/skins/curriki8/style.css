@@ -885,7 +885,6 @@ button{
   background-color: transparent;
   color: #666;
   display: inline;
-  width: 625px;
 }
 #breadcrumbs{
   padding: 2px 0px;
@@ -2386,7 +2385,7 @@ html>body .metadata-edit {
   color: #666699;
   cursor: pointer;
   display: block;
-  width: 140px;
+  width: auto;
   max-width: 140px;
   white-space: normal;
 }
@@ -2396,6 +2395,9 @@ html>body .metadata-edit {
   border: 1px solid #FF4100;
   padding: 0 3px;
   margin: 5px 0;
+}
+.gwt-Tree .asset-tree-item {
+  overflow: hidden;
 }
 .gwt-Tree .asset-tree-item-insert-here .gwt-TreeItem {
   color: #FF4100; 
@@ -2409,7 +2411,6 @@ html>body .metadata-edit {
 .dialog-addfile-bottom td {
   width: 50%;
   text-align: right;
-  vertical-align: top;
 }
 .dialog-addfile-chooser td {
   text-align: left;
@@ -2543,14 +2544,13 @@ div.item-panel {
   width: auto;
   overflow: visible;
 }
-.item-panel .item-header-buttons .edit-btt-comment {
-  border-left: 1px solid #E5E5E5;
-  border-right: 0;
+.item-panel .item-header-buttons .edit-btt-comment, .item-panel .item-header-buttons .edit-btt-save {
+  border: 0;
   padding-right: 0;
 }
 .items-panel .item-composite-panel {
  border: 0;
- padding:0;
+ padding: 0;
 }
 .items-panel .item-composite-panel2 {
   border: 1px solid #ff4204;
@@ -2586,6 +2586,8 @@ div.item-panel {
 }
 .subject-level-table td .ygtvitem {
   width: 340px;
+  z-index: 3000000;
+  display: block;
 }
 .subject-level-table td .ygtvitem .ygtvlabel {
   white-space: nowrap;
@@ -3131,4 +3133,30 @@ height: 313px;
 }
 .collections-dialog-bottom td .asset-tree-item td span {
   white-space: normal;
+}
+.editor-menupanel .asset-tree-item {
+  max-width: 200px;
+}
+.item-panel .item-header-buttons .gwt-Button, .item-panel .item-header-buttons .edit-btt-edit {
+  border-color: #e5e5e5;
+}
+.wiki-table {
+  background-color: #FFF;
+  border-width: 0px !important;
+  border-left: 1px solid #A5A5A5 !important;
+}
+.wiki-table .table-head td, .wiki-table th {
+  background-color: #C5C5C5;
+  border: 1px solid #A5A5A5;
+  border-left-width: 0;
+  padding: 5px 10px;
+  text-align: left;
+  font-size: 14px;
+}
+.wiki-table .table-odd td, .item-panel table.item-panel2 td table td .table-odd td {
+  border: 1px solid #A5A5A5;
+  border-top-width: 0;
+  border-left-width: 0;
+  padding: 5px 10px;
+  font-size: 12px;
 }
