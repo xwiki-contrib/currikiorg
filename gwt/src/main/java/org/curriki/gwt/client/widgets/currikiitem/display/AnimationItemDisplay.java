@@ -1,12 +1,14 @@
 package org.curriki.gwt.client.widgets.currikiitem.display;
 
-import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.Constants;
-
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 import com.xpn.xwiki.gwt.api.client.Attachment;
 import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 
 public class AnimationItemDisplay extends AttachementItemDisplay {
 
@@ -36,21 +38,35 @@ public class AnimationItemDisplay extends AttachementItemDisplay {
 
         if (doc.getAttachments().size() > 0) {
             Attachment att = (Attachment) doc.getAttachments().get(0);
-            String flashUrl = att.getDownloadUrl();
+            final String flashUrl = att.getDownloadUrl();
+            final String flashNum = (new Integer (Random.nextInt(2000000000))).toString();
             String content =
-                    "<center>" +
-                            "<OBJECT CLASSID=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" CODEBASE=\"http://active.macromedia.com/flash5/cabs/swflash.cab#version=5,0,0,0\">" +
-                            "<PARAM NAME=movie VALUE=\"" + flashUrl + "\">" +
-                            "<PARAM NAME=play VALUE=true>" +
-                            "<PARAM NAME=loop VALUE=false>" +
-                            "<PARAM NAME=quality VALUE=low>" +
-                            "<EMBED SRC=\"" + flashUrl + "\" quality=low loop=false TYPE=\"application/x-shockwave-flash\" PLUGINSPAGE=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\">" +
-                            "</EMBED>" +
-                            "</OBJECT>" +
-                            "</center>";
+                "<center>" +
+                "<div id='flashContent"+flashNum+"'>"+Main.getTranslation("mimetype.flashdisplay.flashcontenttext")+"</div>"+
+                "<button id='flashControl"+flashNum+"' class='flash-control-button flash-control-button-play' title='"+Main.getTranslation("mimetype.flashdisplay.play")+"' onclick='playFlash("+flashNum+", this);'>"+Main.getTranslation("mimetype.flashdisplay.play")+"</ button><br />"+
+                "<a href='"+flashUrl+"' class='flash-control-newwindow' target='_blank'>"+Main.getTranslation("mimetype.flashdisplay.newwindow")+"</a>"+
+                "</center>";
             html.setHTML(content);
             panel.add(html);
+
+            // The div isn't actually on the page yet, so we need to try to do the embed later
+            Timer t = new Timer() {
+                public void run() {
+                    if (DOM.getElementById("flashItem"+flashNum) != null) {
+                        embedFlash(flashUrl, flashNum);
+                    } else {
+                        this.schedule(Random.nextInt(4000)+1000);
+                    }
+                }
+            };
+
+            t.schedule(Random.nextInt(4000)+1000);
         }
     }
+
+    public native void embedFlash(String flashURL, String flashNum) /*-{
+        $wnd.displayFlash(flashURL, flashNum);
+        $wnd.initialStopFlashMovie(flashNum);
+    }-*/;
 
 }
