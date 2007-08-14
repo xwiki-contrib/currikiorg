@@ -12,7 +12,7 @@ function getFlashMovieObject(movieName) {
 }
 
 function displayFlash(flashURL, flashNum){
-  var so = new SWFObject(flashURL, "flashItem"+flashNum, "100%", "100%", "6", "#ffffff");
+  var so = new SWFObject(flashURL, "flashItem"+flashNum, "450", "100%", "6", "#ffffff");
   so.addParam("wmode", "transparent");
   so.addParam("play", "false");
   so.addParam("quality", "autohigh");
