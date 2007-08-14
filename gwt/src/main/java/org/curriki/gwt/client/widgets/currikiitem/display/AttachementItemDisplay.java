@@ -93,7 +93,7 @@ public class AttachementItemDisplay extends ItemDisplay {
             ClickListener downloadClick = new ClickListener() {
                 public void onClick(Widget widget) {
                     // Let's open a new window
-                    String url = getAttURL() + "?force_download=1";
+                    String url = getAttURL() + "?force-download=1";
                     Window.open(url, "_blank", "");
                 }
             };
