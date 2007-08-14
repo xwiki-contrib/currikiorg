@@ -43,7 +43,10 @@ public class AnimationItemDisplay extends AttachementItemDisplay {
             String content =
                 "<center>" +
                 "<div id='flashContent"+flashNum+"'>"+Main.getTranslation("mimetype.flashdisplay.flashcontenttext")+"</div>"+
-                "<button id='flashControl"+flashNum+"' class='flash-control-button flash-control-button-play' title='"+Main.getTranslation("mimetype.flashdisplay.play")+"' onclick='playFlash("+flashNum+", this);'>"+Main.getTranslation("mimetype.flashdisplay.play")+"</button><br />"+
+                "<button id='flashControl"+flashNum+"' class='flash-control-button flash-control-button-play' title='"+Main.getTranslation("mimetype.flashdisplay.play")+"' onclick='playFlash("+flashNum+", this);'>"+
+                    Main.getTranslation("mimetype.flashdisplay.play")+
+                "</button>"+
+                "<br />"+
                 "<a href='"+flashUrl+"' class='flash-control-newwindow' target='_blank'>"+Main.getTranslation("mimetype.flashdisplay.newwindow")+"</a>"+
                 "</center>";
             html.setHTML(content);
