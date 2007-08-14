@@ -52,7 +52,7 @@ public class AnimationItemDisplay extends AttachementItemDisplay {
             // The div isn't actually on the page yet, so we need to try to do the embed later
             Timer t = new Timer() {
                 public void run() {
-                    if (DOM.getElementById("flashItem"+flashNum) != null) {
+                    if (DOM.getElementById("flashContent"+flashNum) != null) {
                         embedFlash(flashUrl, flashNum);
                     } else {
                         this.schedule(Random.nextInt(4000)+1000);
