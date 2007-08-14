@@ -251,7 +251,7 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     }
 
     public void onWindowResized(int i, int i1) {
-        if (textarea!=null) {
+        if ((textarea!=null)&&(status != Constants.EDIT)) {
             String text = getContent();
             panel.remove(0);
             initVerbatim(text);
