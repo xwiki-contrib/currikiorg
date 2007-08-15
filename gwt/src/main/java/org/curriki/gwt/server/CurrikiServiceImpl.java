@@ -336,17 +336,13 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
              * No longer create DEFAULT collection automatically if any other collection exists
              * but create it if one does not exist
              */
-            XWikiDocument doc = context.getWiki().getDocument(space+"."+Constants.ROOT_COLLECTION_PAGE, context);
-            if (doc == null){
-                if (! isDefaultCollectionExists(space)){
-                    createDefaultCollection(space);
-                }
+            if (!isRootCollectionExists(space, context)){
+                createDefaultCollection(space);
             } else {
-                List objs_old = doc.getObjects(Constants.SUBASSET_CLASS);
-                if (objs_old == null || objs_old.size() == 0){
-                    if (! isDefaultCollectionExists(space)){
-                        createDefaultCollection(space);
-                    }
+                XWikiDocument doc = context.getWiki().getDocument(space+"."+Constants.ROOT_COLLECTION_PAGE, context);
+                List subAssets = doc.getObjects(Constants.SUBASSET_CLASS);
+                if ((subAssets == null) || (subAssets.size() == 0)){
+                    createDefaultCollection(space);
                 }
             }
 
