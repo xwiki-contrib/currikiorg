@@ -152,19 +152,18 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
 
     public void cancelEditMode() {
         // we remove the previous widget
+        status = Constants.VIEW;
         panel.remove(0);
         CurrikiService.App.getInstance().unlockDocument(doc.getFullName(), new CurrikiAsyncCallback(){
 
             public void onFailure(Throwable throwable) {
                 super.onFailure(throwable);
                 panel.add(viewLabel);
-                status = Constants.VIEW;
             }
 
             public void onSuccess(Object object) {
                 super.onSuccess(object);
                 panel.add(viewLabel);
-                status = Constants.VIEW;
             }
         });        
     }
@@ -251,7 +250,7 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     }
 
     public void onWindowResized(int i, int i1) {
-        if ((textarea!=null)&&(status != Constants.EDIT)) {
+        if ((textarea!=null)&&(status == Constants.EDIT)) {
             String text = getContent();
             panel.remove(0);
             initVerbatim(text);
