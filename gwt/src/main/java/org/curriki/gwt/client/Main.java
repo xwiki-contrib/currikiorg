@@ -465,8 +465,16 @@ public class Main implements EntryPoint {
         return navigator.userAgent.toString();
     }-*/;
 
-    private static boolean isMSIE() {
+    public static boolean isMSIE() {
         return (getUserAgent().indexOf("MSIE")!=-1);
+    }
+
+    public static boolean isGecko() {
+        return (getUserAgent().indexOf("Gecko")!=-1)&&(!isSafari());
+    }
+
+    public static boolean isSafari() {
+        return (getUserAgent().indexOf("AppleWebKit")!=-1);
     }
 
     public static int getAbsoluteTop(ScrollPanel panel) {

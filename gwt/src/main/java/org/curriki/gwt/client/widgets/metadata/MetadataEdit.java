@@ -349,21 +349,35 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }-*/;
 
     public void addScript(Panel panel, String divid, String script) {
-        Element e1 = DOM.createElement("div");
-        DOM.setAttribute(e1, "id", divid);
-        // Let's append the child element to an already visible element
-        // Otherwise it is not found
-        DOM.appendChild(DOM.getElementById("treeviewtemp"), e1);
+        if (!Main.isSafari()) {
+            Element e1 = DOM.createElement("div");
+            DOM.setAttribute(e1, "id", divid);
+            // Let's append the child element to an already visible element
+            // Otherwise it is not found
+            DOM.appendChild(DOM.getElementById("treeviewtemp"), e1);
 
-        Element e = DOM.createElement("script");
-        DOM.setAttribute(e, "language", "JavaScript");
-        DOM.appendChild(panel.getElement(), e);
-        // We need to do it this way because of Internet Explorer
-        setText(e, script);
+            Element e = DOM.createElement("script");
+            DOM.setAttribute(e, "language", "JavaScript");
+            DOM.appendChild(panel.getElement(), e);
+            // We need to do it this way because of Internet Explorer
+            setText(e, script);
 
-        // One generated we can append it to the panel
-        DOM.removeChild(DOM.getElementById("treeviewtemp"), e1);
-        DOM.appendChild(panel.getElement(), e1);
+            // One generated we can append it to the panel
+            DOM.removeChild(DOM.getElementById("treeviewtemp"), e1);
+            DOM.appendChild(panel.getElement(), e1);
+        } else {
+            Element e1 = DOM.createElement("div");
+            DOM.setAttribute(e1, "id", divid);
+            DOM.appendChild(panel.getElement(), e1);
+
+            Element e = DOM.createElement("script");
+            DOM.setAttribute(e, "language", "JavaScript");
+            DOM.appendChild(panel.getElement(), e);
+
+            // We need to do it this way because of Internet Explorer
+            // This also works with Gecko and Safari
+            setText(e, script);
+        }
     }
 
     public void submit(){
