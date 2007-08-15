@@ -25,6 +25,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormHandler;
@@ -32,6 +33,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -53,13 +55,14 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class MetadataEdit extends Composite implements MouseListener {
+public class MetadataEdit extends Composite implements MouseListener, ClickListener
+{
     private VerticalPanel panel;
     private Document doc;
     private FormPanel form = new FormPanel();
     private boolean fullMode;
     private HashMap fieldMap = new HashMap();
-    private Label moreInfoLabel = null;
+    private Hyperlink moreInfoLabel = null;
     private HTML moreInfoText = null;
     private WindowResizeListener resizeListener = null;
     private List mandatoryFields = new ArrayList();
@@ -174,8 +177,9 @@ public class MetadataEdit extends Composite implements MouseListener {
         panel.add(moreInfoText);
 
         if (!fullMode) {
-            moreInfoLabel = new Label(Main.getTranslation("metadata.more_info_"+fullMode));
-            moreInfoLabel.addMouseListener(this);
+            moreInfoLabel = new Hyperlink();
+            moreInfoLabel.setText(Main.getTranslation("metadata.more_info_"+fullMode));
+            moreInfoLabel.addClickListener(this);
             moreInfoLabel.addStyleName("more-info");
             //moreInfoLabel.addStyleName("more-info-"+fullMode);
             panel.add(moreInfoLabel);
@@ -472,6 +476,10 @@ public class MetadataEdit extends Composite implements MouseListener {
     }
 
     public void onMouseUp(Widget sender, int x, int y) {
+        onClick(sender);
+    }
+
+    public void onClick(Widget sender){
         //moreInfoLabel.removeStyleName("more-info-" + fullMode);
         switchMode();
         moreInfoLabel.setText(Main.getTranslation("metadata.more_info_" + fullMode));
