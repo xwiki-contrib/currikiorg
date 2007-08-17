@@ -245,7 +245,6 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 }
             }
 
-
             context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewasset"), context);
 
             return newDocument(new Document(), doc, true, false, true, false, context);

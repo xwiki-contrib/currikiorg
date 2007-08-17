@@ -195,4 +195,5 @@ public class Constants {
     // What type of message do we want when we propose to duplicate a resource
     public static final int PROPOSE_DUPLICATE_TEMPLATE = 1;
     public static final int PROPOSE_DUPLICATE_EDIT = 2;
+    public static final int DEFAULT_NB_VERSIONS = 0;
 }

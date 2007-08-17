@@ -27,10 +27,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.*;
+import org.curriki.gwt.client.utils.WindowUtils;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItemImpl;
 import org.curriki.gwt.client.widgets.currikiitem.display.AbstractItemDisplay;
+import org.curriki.gwt.client.widgets.preview.PreviewDialog;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,14 +56,40 @@ public class EditPage extends AbstractPage {
 
     public EditPage() {
         singleton = this;
-        // panel.setWidth("100%");
-        // itemsPanel.setWidth("100%");
-        itemsPanel.setStyleName("items-panel");
+
+        FlowPanel linkPanel = new FlowPanel();
+        linkPanel.addStyleName("edit-panel-links");
+        Hyperlink viewLink = new Hyperlink();
+        viewLink.addStyleName("edit-panel-link-view");
+        viewLink.addClickListener(new ClickListener() {
+            public void onClick(Widget widget) {
+                Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                String url = currentAsset.getViewURL();
+                Window.open(url, "_blank", "");
+            }
+        });
+        viewLink.setText(Main.getTranslation("editor.view"));
+        linkPanel.add(viewLink);
+        Hyperlink printLink = new Hyperlink();
+        printLink.addStyleName("edit-panel-link-print");
+        printLink.addClickListener(new ClickListener() {
+            public void onClick(Widget widget) {
+                Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                String url = currentAsset.getViewURL() + "?viewer=print&withbuttons=1";
+                Window.open(url, "_blank", "");
+            }
+        });
+        printLink.setText(Main.getTranslation("editor.print"));
+        linkPanel.add(printLink);
+        panel.add(linkPanel);
 
         compositeAssetTitle = new Label();
         compositeAssetTitle.addStyleName("edit-panel-title");
         panel.add(compositeAssetTitle);
+
+        itemsPanel.setStyleName("items-panel");
         panel.add(itemsPanel);
+
         panel.setStyleName("edit-page");
         initWidget(panel);
     }

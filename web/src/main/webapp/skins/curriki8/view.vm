@@ -30,5 +30,14 @@
 </div>
 #end
 </div>## main
+#if(!$request.getParameter("viewer").equals("print"))
 #template("endpage.vm")
+#else
+        </div>## contentcolumn
+      </div>## leftsidecolumns
+    <div class="clearfloats"></div>
+      </div>## contentcontainerinner
+    </div>## contentcontainer
+#template("htmlfooter.vm")
+#end
 #end
