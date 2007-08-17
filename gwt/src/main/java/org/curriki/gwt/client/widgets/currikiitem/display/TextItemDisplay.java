@@ -47,6 +47,7 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     HTML viewLabel;
     String wysiwygtemplate = "XWiki.GWTTextAreaWyswiyg";
     String wysiwyghtml;
+    String tinyMCEId = "";
 
     public TextItemDisplay(Document doc, CurrikiItem item) {
         super(doc, item);
@@ -58,17 +59,17 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
         return Constants.TYPE_TEXT;
     }
 
-    private native void addMCEControl(Element e, String imagepath, String attachpath) /*-{
+    private native String addMCEControl(Element e, String imagepath, String attachpath) /*-{
           $wnd.tinyMCE.settings["wiki_images_path"] = imagepath;
           $wnd.tinyMCE.settings["wiki_attach_path"] = attachpath;
-          $wnd.tinyMCE.addMCEControl(e, e.id);
+          return $wnd.tinyMCE.addMCEControl(e, e.id);
           // $wnd.tinyMCE.settings["wiki_images_path"] = imagepath;
           // $wnd.tinyMCE.settings["wiki_attach_path"] = attachpath;
       }-*/;
 
-    private native String getContent() /*-{
-          return $wnd.tinyMCE.getContent();
-      }-*/;
+    private String getContent() {
+          return getContent(tinyMCEId);
+    };
 
     private native String getContent(String elid) /*-{
           return $wnd.tinyMCE.getContent(elid);
@@ -113,7 +114,7 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
         textarea.setFocus(true);
         String imagepath = "/xwiki/bin/download/" + getDocumentFullName().replace('.', '/') + "/";
         String attachpath = "/xwiki/bin/view/" + getDocumentFullName().replace('.', '/');
-        addMCEControl(textarea.getElement(), imagepath, attachpath);
+        tinyMCEId = addMCEControl(textarea.getElement(), imagepath, attachpath);
         Main.getSingleton().getEditor().ensureVisibleWidget(textarea);
         // }
     }
