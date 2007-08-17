@@ -1137,7 +1137,9 @@ $objTxt.text
      #if($embeddedDoc.getObject("XWiki.CompositeAssetClass"))
       <div class="asset-content-body-composite-composite">
 #findCurrikiTitle($embeddedDoc)
+#if(!$isPrint)
       <div class="righttext"><div class="lefttext"> <a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">*$currikiTitle*</a> </div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div>
+#end
       </div>
      #else
       <div class="asset-content-body-composite-source">
