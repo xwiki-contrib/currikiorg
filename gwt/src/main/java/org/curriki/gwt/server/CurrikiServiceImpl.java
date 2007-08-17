@@ -87,13 +87,27 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             XWikiDocument doc = context.getWiki().getDocument(space, pageName, context);
             if (doc.isNew())
                 return false;
-            List objs = doc.getObjects(Constants.COMPOSITEASSET_CLASS);
-            if (objs != null && objs.size() > 0)
-                return true;
+            if (doc.getObjectNumbers(Constants.COMPOSITEASSET_CLASS) == 0){
+                return false;
+            } else {
+                // Work around a bug XWIKI-1624
+                // TODO: Remove the work-around once XWIKI-1624 is fixed
+                List subAssets = doc.getObjects(Constants.COMPOSITEASSET_CLASS);
+                Iterator i = subAssets.iterator();
+                int count = 0;
+                while (i.hasNext() && count == 0){
+                    if (i.next() != null){
+                        count++;
+                    }
+                }
+                if (count == 0){
+                    return false;
+                }
+            }
+            return true;
         } catch (Exception e) {
             throw getXWikiGWTException(e);
         }
-        return false;
     }
 
     private boolean createDefaultCollection(String space) throws XWikiGWTException {
@@ -275,13 +289,27 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             XWikiDocument doc = context.getWiki().getDocument(space, Constants.ROOT_COLLECTION_PAGE, context);
             if (doc.isNew())
                 return false;
-            List objs = doc.getObjects(Constants.COMPOSITEASSET_CLASS);
-            if (objs != null && objs.size() > 0)
-                return true;
+            if (doc.getObjectNumbers(Constants.COMPOSITEASSET_CLASS) == 0){
+                return false;
+            } else {
+                // Work around a bug XWIKI-1624
+                // TODO: Remove the work-around once XWIKI-1624 is fixed
+                List subAssets = doc.getObjects(Constants.COMPOSITEASSET_CLASS);
+                Iterator i = subAssets.iterator();
+                int count = 0;
+                while (i.hasNext() && count == 0){
+                    if (i.next() != null){
+                        count++;
+                    }
+                }
+                if (count == 0){
+                    return false;
+                }
+            }
+            return true;
         } catch (Exception e) {
             throw getXWikiGWTException(e);
         }
-        return false;
     }
 
     public boolean createRootCollection(String space, XWikiContext context) throws XWikiGWTException {
@@ -340,9 +368,22 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 createDefaultCollection(space);
             } else {
                 XWikiDocument doc = context.getWiki().getDocument(space+"."+Constants.ROOT_COLLECTION_PAGE, context);
-                List subAssets = doc.getObjects(Constants.SUBASSET_CLASS);
-                if ((subAssets == null) || (subAssets.size() == 0)){
+                if (doc.getObjectNumbers(Constants.SUBASSET_CLASS) == 0){
                     createDefaultCollection(space);
+                } else {
+                    // Work around a bug XWIKI-1624
+                    // TODO: Remove the work-around once XWIKI-1624 is fixed
+                    List subAssets = doc.getObjects(Constants.SUBASSET_CLASS);
+                    Iterator i = subAssets.iterator();
+                    int count = 0;
+                    while (i.hasNext() && count == 0){
+                        if (i.next() != null){
+                            count++;
+                        }
+                    }
+                    if (count == 0){
+                        createDefaultCollection(space);
+                    }
                 }
             }
 
