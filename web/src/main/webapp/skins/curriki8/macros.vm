@@ -873,7 +873,10 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
  #set($defaultGif = $closedGif)
 #end
 #findCurrikiTitle($embeddedDoc)
-<div class="righttext"><span id="section${seccounter}title"><div class="lefttext" style="width: 438px;"><img src="$defaultGif"/>&nbsp;<strong class="strong">$currikiTitle</strong></div></span><div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div></div>
+#if(!$isPrint)
+<div class="righttext"><span id="section${seccounter}title"><div class="lefttext" style="width: 438px;"><img src="$defaultGif"/>&nbsp;<strong class="strong">$currikiTitle</strong></div></span>
+<div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div></div>
+#end
 <script type="text/javascript">
 function toggleSectionVisibility(seccounter, showhide){
   var seccontent = document.getElementById("section" + seccounter + "content");
@@ -912,6 +915,9 @@ createCookie("Section${seccounter}Hidden", true, "");
 #macro(displayassettitlebar $asset, $isPrint)
  <div class="asset-metadatas">
  #findCurrikiTitle($asset)
+ #if($request.rev)
+ #set($currikiTitle = "$currikiTitle $msg.version $request.rev")
+ #end
  #titlebar($currikiTitle "" "" "red")
 </div>
 #end
@@ -1102,9 +1108,25 @@ $objTxt.text
 #elseif ($asset.getObject("XWiki.CompositeAssetClass") && $objComp != "")
  #if($develop)
  <div class="asset-content-body">
-  #set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='XWiki.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetPage' and lg.name='order' order by lg.value ")
-  #foreach($assetPage in $xwiki.search($hql))
-   #if($assetPage == "PAGEBREAK")
+#set($objs = $currDoc.getObjects("XWiki.SubAssetClass"))
+#set($assetList = $xwiki.arrayList)
+#foreach($obj in $objs)
+#set($ok = $assetList.add(""))
+#end
+#foreach($obj in $objs)
+#set($ok = $currDoc.use($obj))
+#set($position = $currDoc.getValue("order"))
+#set($assetPage = $currDoc.getValue("assetpage"))
+#if($position >= $assetList.size())
+#set($ok = $assetList.add($assetPage))
+#else
+#set($ok = $assetList.set($position.intValue(), $assetPage))
+#end
+#end
+##set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='XWiki.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetpage' and lg.name='order' order by lg.value ")
+##set($assetList = $xwiki.search($hql))
+  #foreach($assetPage in $assetList)
+   #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
  <hr >
    #else
     #if(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
