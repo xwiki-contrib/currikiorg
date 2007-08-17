@@ -1368,7 +1368,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             String extension = (fileName.lastIndexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase(): null);
 
             MimeTypePlugin mimePlugin = (MimeTypePlugin) context.getWiki().getPlugin(MimeTypePlugin.PLUGIN_NAME, context);
-            MimeType mime = mimePlugin.getCategoryByExtension(extension, context);
+            MimeType mime = (mimePlugin==null) ? null : mimePlugin.getCategoryByExtension(extension, context);
             if (mime != null)
                 category = mime.getCategoryName();
             if (category.equals(Constants.CATEGORY_IMAGE)){
