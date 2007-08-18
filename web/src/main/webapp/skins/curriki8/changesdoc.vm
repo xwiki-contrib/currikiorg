@@ -52,6 +52,29 @@ $msg.get("changes.on") $xwiki.formatDate($newdoc.date)
 #end
 </tr>
 #end
+#foreach($objdiffs in $doc.getObjectDiff($origdoc, $newdoc))
+#foreach($objdiff in $objdiffs)
+#if($objdiff.getClassName().equals("XWiki.AssetClass"))
+#set($hasmetadatachanges = 1)
+#set($propname = $objdiff.getPropName())
+<tr>
+<td>$msg.get("changes.comment.${propname}")</td>
+<td>
+#set($value = $objdiff.getPrevValue().toString())
+#if($value!="choose")
+$value
+#end
+</td>
+<td>
+#set($value = $objdiff.getNewValue().toString())
+#if($value!="choose")
+$value
+#end
+</td>
+</tr>
+#end
+#end
+#end
 #if($hasmetadatachanges==0)
 <tr><td colspan="3">$msg.get("changes.nometadatachanges")</td></tr>
 #end
