@@ -3,6 +3,8 @@ package org.curriki.gwt.client.pages;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.HTTPRequest;
+import com.google.gwt.user.client.ResponseTextHandler;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.VersionInfo;
 import org.curriki.gwt.client.Main;
@@ -201,7 +203,19 @@ public class HistoryPage extends AbstractPage {
                         public void onClick(Widget widget)
                         {
                             // Rollback has been accepted
-                            Window.alert("ready to rollback to version " + version);
+                            Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                            String url = currentAsset.getViewURL().replaceAll("/view/", "/rollback/") + "?rev=" + version + "&confirm=1";
+                            HTTPRequest.asyncGet(url, new ResponseTextHandler() {
+                                public void onCompletion(String string) {
+                                        if (string.toLowerCase().indexOf("exception")!=-1) {
+                                            Window.alert(Main.getTranslation("history.rollback.exception"));
+                                        } else {
+                                            Editor editor = Main.getSingleton().getEditor();
+                                            editor.resetCache();
+                                            editor.refreshState();
+                                        }
+                                }
+                            });
                         }
                     });
                     Button[] buttons = { cancelRollback, confirmRollback };
