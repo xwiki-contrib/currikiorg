@@ -192,7 +192,9 @@ public class HistoryPage extends AbstractPage {
             }
 
             table.setText(row+1, startCol + 2, sdate);
-            table.setText(row+1, startCol + 3, vinfo.getComment());
+            String comment = vinfo.getComment();
+            comment = comment.replaceAll("<a", "<a target=\"_blank\"");
+            table.setHTML(row+1, startCol + 3, comment);
             Button button = new Button();
             button.setText(Main.getTranslation("history.rollback"));
             button.setStyleName("history-rollback-button");
