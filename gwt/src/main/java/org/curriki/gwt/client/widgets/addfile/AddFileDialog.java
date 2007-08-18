@@ -24,6 +24,7 @@ package org.curriki.gwt.client.widgets.addfile;
 
 import asquare.gwt.tk.client.ui.BasicPanel;
 import asquare.gwt.tk.client.ui.ModalDialog;
+import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -59,6 +60,7 @@ public class AddFileDialog extends ModalDialog {
     private Button next;
 
     public AddFileDialog(String collectionName, ClickListenerDocument nextCallback, ClickListener cancelCallback) {
+        removeController(getController(TabFocusController.class));
         this.nextCallback = nextCallback;
         this.cancelCallback = cancelCallback;
         this.collectionName = collectionName;
