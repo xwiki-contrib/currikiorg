@@ -22,6 +22,7 @@
 package org.curriki.gwt.client.wizard;
 
 import asquare.gwt.tk.client.ui.BasicPanel;
+import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -94,13 +95,12 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     UploadWidget upload = null;
 
     private Button bttNext = null;
-    //
+
 
     public AddAssetWizard() {
         initWhatToAdd();
         initWidget(panel);
     }
-
 
     private void getCategory() {
         XObject obj = newDoc.getObject(Constants.ASSET_CLASS);
@@ -128,9 +128,8 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
     public void initMetadataUI() {
         panel.clear();
-
+        showParentDialog();
         setParentCaption(Main.getTranslation("addasset.set_required_metadata"));
-
         MetadataEdit meta = new MetadataEdit(newDoc, false);
         meta.setResizeListener(resizeListener);
 
@@ -216,13 +215,10 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     }
 
     public void initFileOrLink() {
-        panel.getParent().getParent().getParent().setVisible(false);
-
         ClickListenerDocument nextCallback = new ClickListenerDocument(){
             public void onClick(Widget sender){
                 // We should now have a file or link
                 addFileDialog.hide();
-                panel.getParent().getParent().getParent().setVisible(true);
 
                 if (sender instanceof URLEntry){
                     // Was a LINK
@@ -247,6 +243,8 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
                 close();
             }
         };
+
+        // we need to hide the previous dialog first
         addFileDialog = new AddFileDialog(Main.getSingleton().getEditor().getCurrentAssetPageName(), nextCallback, cancelCallback);
     }
 
@@ -300,18 +298,25 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     }
 
     public void onClick(Widget sender) {
-        if (sender == bttLink)
+        if (sender == bttLink) {
+            hideParentDialog();
             initFileOrLink();
-        else if (sender == bttBlankContent)
+        } else if (sender == bttBlankContent) {
+            hideParentDialog();
             initBlankContentBlock(Constants.TEXTASSET_TYPE_TEXT);
-        else if (sender == bttHTMLContent)
+        } else if (sender == bttHTMLContent) {
+            hideParentDialog();
             initBlankContentBlock(Constants.TEXTASSET_TYPE_HTML);
-        else if (sender == bttNewFolder)
+        } else if (sender == bttNewFolder) {
+            hideParentDialog();
             initFolder();
-        else if (sender == bttExistingResource)
+        } else if (sender == bttExistingResource) {
+            hideParentDialog();
             findResource();
-        else if (sender == bttFromTemplate)
+        } else if (sender == bttFromTemplate) {
+            hideParentDialog();
             initFromTemplate();
+        }
     }
 
     public void setActive(Button button) {
@@ -333,8 +338,6 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
     // Launch From Template Dialog
     private void initFromTemplate() {
-        panel.getParent().getParent().getParent().setVisible(false);
-
         AsyncCallback callback = new AsyncCallback(){
             public void onFailure(Throwable throwable) {
                 chooseTemplateDialog.hide();
@@ -344,7 +347,6 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
             public void onSuccess(Object result) {
                 // We should now have a file or link
                 chooseTemplateDialog.hide();
-                panel.getParent().getParent().getParent().setVisible(true);
                 // We retrieve a temporary document from the copy
                 newDoc = (AssetDocument) result;
                 // let's init the meta data with less work since we have retrieved the template

@@ -426,6 +426,7 @@ public class Editor implements WindowResizeListener {
         if (wizard != null)
             dialog.add(panel);
         dialog.removeController(dialog.getController(TabFocusController.class));
+        wizard.setParentDialog(dialog);
     }
 
     public String findParent(String currentAssetPageName) {
