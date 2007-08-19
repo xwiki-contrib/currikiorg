@@ -49,6 +49,7 @@ public class FindPanel extends ModalDialog {
     }
 
     public FindPanel(ResourceAdder addAssetWizard, Viewer viewer) {
+        removeController(getController(TabFocusController.class));
         wizard = addAssetWizard;
         this.viewer = viewer;
         initPanel();
