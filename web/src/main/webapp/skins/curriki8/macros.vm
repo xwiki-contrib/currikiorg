@@ -879,6 +879,7 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
 <div class="righttext"><span id="section${seccounter}title"><div class="lefttext" style="width: 438px;"><img src="$defaultGif"/>&nbsp;<strong class="strong">$currikiTitle</strong></div></span>
 <div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div></div>
 #end
+#if(!$isPrint)
 <script type="text/javascript">
 function toggleSectionVisibility(seccounter, showhide){
   var seccontent = document.getElementById("section" + seccounter + "content");
@@ -908,6 +909,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 createCookie("Section${seccounter}Hidden", true, "");
 #end
 </script>
+#end
 <div id="section${seccounter}content" class="#if($doHide)hidden#end">
 #end
 ##
