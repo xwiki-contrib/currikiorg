@@ -134,6 +134,7 @@ public class HistoryPage extends AbstractPage {
             table.setText(0, 1, Main.getTranslation("history.from"));
             startCol = 2;
         }
+        table.getRowFormatter().setStyleName(0, "history-versions-title");
         table.setText(0, startCol, Main.getTranslation("history.version"));
         table.setText(0, startCol + 1, Main.getTranslation("history.author"));
         table.setText(0, startCol + 2, Main.getTranslation("history.date"));
