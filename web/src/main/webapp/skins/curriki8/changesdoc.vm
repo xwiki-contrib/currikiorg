@@ -36,10 +36,10 @@ $msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocommen
 
 <div id="changes-metadata">
 <table class="changes-table">
-<tr>
+<tr class="changes-table-title">
 <th colspan="3">$msg.get("changes.metadatachanges")</th>
 </tr>
-<tr>
+<tr class="changes-table-title">
 <th>$msg.get("changes.property")</th><th>$msg.get("changes.version") $request.rev1</th><th>$msg.get("changes.version") $request.rev2</th>
 </tr>
 #set($hasmetadatachanges = 0)
@@ -95,7 +95,7 @@ $value
 #set($text2 = $newcontent)
 #end
 <table class="changes-table">
-<tr>
+<tr class="changes-table-title">
 <th>$msg.get("changes.contentchanges")</th>
 </tr>
 <tr>
@@ -112,10 +112,10 @@ $xwiki.diff.getDifferencesAsHTML($text1, $text2 ,false)
 
 <div id="changes-attachments">
 <table class="changes-table">
-<tr>
+<tr class="changes-table-title">
 <th colspan="3">$msg.get("changes.attachmentchanges")</th>
 </tr>
-<tr>
+<tr class="changes-table-title">
 <th>$msg.get("changes.filename")</th><th>$msg.get("changes.action")</th>
 </tr>
 #set($hasattachmentchanges = 0)
@@ -145,7 +145,7 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 
 <div id="changes-comments">
 <table class="changes-table">
-<tr>
+<tr class="changes-table-title">
 <th colspan="3">$msg.get("changes.commentchanges")</th>
 </tr>
 #set($commentchanges = 0)
@@ -156,7 +156,7 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 #if($commentchangetitledone==0)
 #set($commentchanges = 1 + $commentchanges)
 #set($commentchangetitledone = 1)
-<tr>
+<tr class="changes-table-title changes-table-comment-subtitle">
 <th>$msg.get("changes.comment.property")</th>
 <th>$msg.get("changes.comment.previousvalue")</th>
 <th>$msg.get("changes.comment.newvalue")</th>
