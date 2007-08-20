@@ -2542,7 +2542,7 @@ div.item-panel {
   color: #3F3F3F;
   margin-right: 30px;
 }
-.item-panel .item-header-buttons .gwt-Button, .item-composite-panel .gwt-Button {
+.item-panel .item-header-buttons .gwt-Button, .item-composite-panel .gwt-Button, .gwt-Hyperlink a {
   background-color: transparent;
   border: 0;
   border-right: 1px solid #E5E5E5;
@@ -2555,7 +2555,20 @@ div.item-panel {
   width: auto;
   overflow: visible;
 }
-.item-panel .item-header-buttons .edit-btt-comment, .item-panel .item-header-buttons .edit-btt-save {
+.edit-panel-links {
+  float: right;
+  padding: 10px 15px 0;
+}
+.gwt-Hyperlink {
+  float: left;
+  text-align: center;
+  padding: 0 2px;
+}
+.edit-panel-link-view {
+  border-right: 1px solid #A0A0A0;
+  padding: 0 7px;
+}
+.item-panel .item-header-buttons .edit-btt-comment, .item-panel .item-header-buttons .edit-btt-save, .edit-panel-link-print, .gwt-Hyperlink a {
   border: 0;
   padding-right: 0;
 }
@@ -3189,6 +3202,7 @@ height: 313px;
 .more-info a {
   cursor: pointer;
   color: #1963AA;
+  text-decoration: none;  
 }
 .more-info a:hover {
   color: #333365;
