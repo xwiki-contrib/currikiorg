@@ -1,37 +1,38 @@
 <div id="changes-title">
-<h1>$msg.get("changes.changes") $doc.name $msg.get("changes.in") $msg.get("changes.space") $doc.web</h1>
+<h1>$msg.get("changes.changesofpage") $doc.name $msg.get("changes.in") $msg.get("changes.space") $doc.web</h1>
 </div>
 <div id="changes-info">
-<table class="changes-table">
-<tr>
-<th>$msg.get("changes.from")</th>
-<th>$msg.get("changes.to")</th>
-</tr>
-<tr>
-<th colspan="2">$msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocomment") #else $newdoc.comment #end </th>
-</tr>
-<tr>
-<td>
-$msg.get("changes.version") $request.rev1
-<br />
+<div id="changes-info-boxes">
+<div id="changes-info-boxes-inside">
+<div id="changes-info-box-from" class="changes-info-box">
+<div class="changes-info-title">$msg.get("changes.from") $msg.get("changes.version") $request.rev1</div>
+<div class="changes-info-content">
 #if($origdoc)
 $msg.get("changes.editedby") $xwiki.renderText($xwiki.getLocalUserName($newdoc.author),$doc)
 <br />
 $msg.get("changes.on") $xwiki.formatDate($origdoc.date)
 #end
-</td>
-<td>
-$msg.get("changes.version") $request.rev2
-<br />
+</div>
+</div>
+<div id="changes-info-box-to" class="changes-info-box">
+<div class="changes-info-title">$msg.get("changes.to") $msg.get("changes.version") $request.rev2</div>
+<div class="changes-info-content">
 #if($newdoc)
 $msg.get("changes.editedby") $xwiki.renderText($xwiki.getLocalUserName($newdoc.author),$doc)
 <br />
 $msg.get("changes.on") $xwiki.formatDate($newdoc.date)
 #end
-</td>
-</tr>
-</table>
 </div>
+</div>
+<div class="clearfloats"></div>
+</div>
+</div>
+<div class="clearfloats"></div>
+<div id="changes-info-comment">
+$msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocomment") #else $newdoc.comment #end
+</div>
+</div>
+<div class="clearfloats"></div>
 
 <div id="changes-metadata">
 <table class="changes-table">
@@ -46,9 +47,10 @@ $msg.get("changes.on") $xwiki.formatDate($newdoc.date)
 #set($hasmetadatachanges = 1)
 <tr>
 #if($item.field=="author")
-<td>$msg.get("changes.author")</td><td>$xwiki.getLocalUserName($item.getPrevvalue())</td><td>$xwiki.getLocalUserName($item.getNewvalue())</td>
+<td>$msg.get("changes.metadata.author")</td><td>$xwiki.getLocalUserName($item.getPrevValue())</td><td>$xwiki.getLocalUserName($item.getNewValue())</td>
 #else
-<td>$item.getField()</td><td>$item.getPrevValue().toString()</td><td>$item.getNewValue().toString(), false)</td>
+#set($propname = $item.getField())
+<td>$msg.get("changes.metadata.${propname}")</td><td> $!item.getPrevValue() </td><td> $!item.getNewValue() </td>
 #end
 </tr>
 #end
@@ -61,15 +63,11 @@ $msg.get("changes.on") $xwiki.formatDate($newdoc.date)
 <td>$msg.get("changes.asset.${propname}")</td>
 <td>
 #set($value = $objdiff.getPrevValue().toString())
-#if($value!="choose")
 $value
-#end
 </td>
 <td>
 #set($value = $objdiff.getNewValue().toString())
-#if($value!="choose")
 $value
-#end
 </td>
 </tr>
 #end
@@ -81,6 +79,7 @@ $value
 </table>
 </div>
 
+<div id="changes-content">
 #set($ok = $origdoc.use("XWiki.TextAssetClass"))
 #set($origcontent = $!origdoc.getValue("text").trim())
 #if(!$origcontent)
@@ -95,7 +94,6 @@ $value
 #else
 #set($text2 = $newcontent)
 #end
-<div id="changes-content">
 <table class="changes-table">
 <tr>
 <th>$msg.get("changes.contentchanges")</th>
@@ -112,7 +110,7 @@ $xwiki.diff.getDifferencesAsHTML($text1, $text2 ,false)
 </table>
 </div>
 
-<div id="changes-attachment">
+<div id="changes-attachments">
 <table class="changes-table">
 <tr>
 <th colspan="3">$msg.get("changes.attachmentchanges")</th>
@@ -143,6 +141,7 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 <tr><td colspan="3">$msg.get("changes.noattachmentchanges")</td></tr>
 #end
 </table>
+</div>
 
 <div id="changes-comments">
 <table class="changes-table">
@@ -158,12 +157,9 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 #set($commentchanges = 1 + $commentchanges)
 #set($commentchangetitledone = 1)
 <tr>
-<td colspan="3">$msg.get("changes.commentchange") $commentchanges</th>
-</tr>
-<tr>
-<td>$msg.get("changes.comment.property")</td>
-<td>$msg.get("changes.comment.previousvalue")</td>
-<td>$msg.get("changes.comment.newvalue")</td>
+<th>$msg.get("changes.comment.property")</th>
+<th>$msg.get("changes.comment.previousvalue")</th>
+<th>$msg.get("changes.comment.newvalue")</th>
 </tr>
 #end
 #set($propname = $objdiff.getPropName())
