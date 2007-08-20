@@ -171,7 +171,7 @@ public class HistoryPage extends AbstractPage {
                 public void onClick(Widget widget) {
                     // viewing older version of a document.
                     Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                    String url = currentAsset.getViewURL() + "?rev=" + version;
+                    String url = currentAsset.getViewURL() + "?xpage=viewrev&rev=" + version;
                     if ("dialog".equals(WindowUtils.getLocation().getParameter("preview")))
                         PreviewDialog.show(url);
                     else
@@ -241,7 +241,7 @@ public class HistoryPage extends AbstractPage {
                 {
                     // Rollback has been accepted
                     Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                    String url = currentAsset.getViewURL() + "?viewer=changes&rev1=" + fromSelection + "&rev2=" + toSelection;
+                    String url = currentAsset.getViewURL() + "?xpage=compare&rev1=" + fromSelection + "&rev2=" + toSelection;
                     Window.open(url, "_blank", "");
                 }
             });

@@ -1,0 +1,41 @@
+#if(!$mode)
+#set($mode="print")
+#set($linkurl = $doc.getURL("view"))
+#end
+#findCurrikiTitle($doc)
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#set($showLeftPanels = "0")
+#set($showRightPanels = "0")
+#set($printss = true)
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#template("htmlheader.vm")
+<div id="printheader" class="layoutsection">
+ <div id="header-logo">
+    <a href="$xwiki.getURL("Main.WebHome", "view")" title="Home">
+#set($logourl = $xwiki.getSkinFile("curriki-logo.png"))
+      <img src="$logourl" alt="Curriki logo"/>
+    </a>
+ </div>
+ <div id="header-banner">
+  <div id="header-title-zone">
+    <div id="header-title">
+       $msg.get("${mode}.title")
+    </div>
+    <div id="header-subtitle">
+       $xwiki.parseMessage("${mode}.subtitle")
+    </div>
+    <div id="header-title-link">
+       <a href="$linkurl">$msg.get("${mode}.linktext")</a>
+    </div>
+  </div>
+  <div id="header-closebutton">
+#if($mode=="print")
+      <button type="button" class="gwt-Button close-btt" onClick="document.getElementById('header-banner').style.display='none'; window.print();">$msg.get("header.print")</button>
+#end
+      <button type="button" class="gwt-Button close-btt" onClick="window.close();">$msg.get("header.close")</button>
+  </div>
+ </div>
+</div>
+<div class="clearfloats"></div>

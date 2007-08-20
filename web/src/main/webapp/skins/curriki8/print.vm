@@ -1,29 +1,5 @@
-#template("xwikivars.vm")
-#template("layoutvars.vm")
-#set($showLeftPanels = "0")
-#set($showRightPanels = "0")
-#set($printss = true)
-#template("htmlheader.vm")
-<div id="printheader" class="layoutsection">
-  <div id="companylogo">
-    <a href="$xwiki.getURL("Main.WebHome", "view")" title="Home">
-#set($logourl = $xwiki.getSkinFile("curriki-logo.png"))
-      <img src="$logourl" alt="Curriki logo"/>
-    </a>
-#if($request.withbuttons)
-    <div id="closebutton">
-      <button type="button" class="gwt-Button close-btt" onClick="document.getElementById('closebutton').style.display='none'; window.print();">$msg.get("header.print")</button>
-      <button type="button" class="gwt-Button close-btt" onClick="window.close();">$msg.get("header.close")</button>
-    </div>
-#end
-  </div>
-</div>
+#template("printheader.vm")
 <div id="printcontainer">
 #template("contentview.vm")
 <div class="clearfloats"></div>
 </div>## printcontainer
-#if(!$request.withbuttons)
-<script type="text/javascript">
-window.print();
-</script>
-#end

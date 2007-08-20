@@ -75,7 +75,7 @@ public class EditPage extends AbstractPage {
         printLink.addClickListener(new ClickListener() {
             public void onClick(Widget widget) {
                 Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                String url = currentAsset.getViewURL() + "?viewer=print&withbuttons=1";
+                String url = currentAsset.getViewURL() + "?viewer=print";
                 Window.open(url, "_blank", "");
             }
         });
