@@ -93,7 +93,7 @@ public class HistoryPage extends AbstractPage {
             public void onFailure(Throwable caught) {
                 super.onFailure(caught);
                 panel.clear();
-                panel.add(new HTML(Main.getTranslation("comment.errorgettinghistory")));
+                panel.add(new HTML(Main.getTranslation("history.errorgettinghistory")));
             }
 
             public void onSuccess(Object result) {
