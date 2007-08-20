@@ -944,9 +944,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             copyProperty(parentLicenceObjAsset, newLicenceObj, Constants.ASSET_LICENCE_TYPE_PROPERTY);
         }
         else {
-            List license = new ArrayList();
-            license.add(Constants.ASSET_LICENCE_TYPE_DEFAULT);
-            newLicenceObj.setDBStringListValue(Constants.ASSET_LICENCE_TYPE_PROPERTY, license);
+            newLicenceObj.setStringValue(Constants.ASSET_LICENCE_TYPE_PROPERTY, Constants.ASSET_LICENCE_TYPE_DEFAULT);
         }
 
         // User should be by default the pretty name of the user added with the current template rights holder
