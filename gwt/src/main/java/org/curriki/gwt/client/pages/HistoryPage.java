@@ -168,6 +168,8 @@ public class HistoryPage extends AbstractPage {
                 });
                 table.setWidget(row+1, 1, fromButton);
                 startCol = 2;
+                table.getCellFormatter().setStyleName(row+1, 0, "to");
+                table.getCellFormatter().setStyleName(row+1, 1, "from");
             }
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
             String sdate = formatter.format(new Date(vinfo.getDate()));
@@ -203,6 +205,11 @@ public class HistoryPage extends AbstractPage {
             String comment = vinfo.getComment();
             comment = comment.replaceAll("<a", "<a target=\"_blank\"");
             table.setHTML(row+1, startCol + 3, comment);
+
+            table.getCellFormatter().setStyleName(row+1, startCol, "version");
+            table.getCellFormatter().setStyleName(row+1, startCol + 1, "author");
+            table.getCellFormatter().setStyleName(row+1, startCol + 2, "date");
+            table.getCellFormatter().setStyleName(row+1, startCol + 3, "comment");
 
             if (row!=0) {
                 Button button = new Button();
@@ -240,6 +247,7 @@ public class HistoryPage extends AbstractPage {
                     }
                 });
                 table.setWidget(row+1, startCol + 4, button);
+                table.getCellFormatter().setStyleName(row+1, startCol + 4, "rollback");
             }
         }
 
