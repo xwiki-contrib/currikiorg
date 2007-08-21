@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1172005824000</creationDate>
-<date>1187708736000</date>
-<contentUpdateDate>1187708736000</contentUpdateDate>
-<version>1.27</version>
+<date>1187714112000</date>
+<contentUpdateDate>1187714112000</contentUpdateDate>
+<version>1.28</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Change directory to save in.</comment>
+<comment>Turn on backup-pack and preserve-version</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -69,6 +69,10 @@ if (request.pagelist != null){
   pagelist = request.pagelist
 }
 
+if (request.createzip != null){
+  createzip = request.createzip
+}
+
 if (request.confirm=="1") {
   println "Starting export"
   println "Delete existing files"
@@ -79,6 +83,12 @@ if (request.confirm=="1") {
   } else {
     pack.setName("curriki")
   }
+
+  pack.setDescription("Export of Curriki Wiki-based Application Code");
+
+  pack.setBackupPack(true);
+  pack.setPreserveVersion(true);
+
   pack.setWithVersions(false)
 //  pack.setWithVersions(true)
   
