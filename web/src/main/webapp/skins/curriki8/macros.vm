@@ -1079,7 +1079,7 @@ $status
   #sep()
  #end
  #if($asset.hasAccessLevel("view"))
-  <a href="$asset.getURL("view", "viewer=print")">$msg.get("caption.print")</a>
+  <a href="$asset.getURL("view", "viewer=print")" onclick="window.open('$asset.getURL("view", "viewer=print")');return false;">$msg.get("caption.print")</a>
  #end
  #if($asset.hasAccessLevel("edit"))
   #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
