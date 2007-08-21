@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>Main</web>
@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1161914843000</creationDate>
-<date>1180044195000</date>
-<contentUpdateDate>1180044195000</contentUpdateDate>
-<version>1.203</version>
+<date>1187291337000</date>
+<contentUpdateDate>1187291337000</contentUpdateDate>
+<version>1.220</version>
 <title>Register to Join Curriki</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-650</comment>
+<comment>set errorMissing=true if "I accept" not checked.</comment>
 <attachment>
 <filename>Register draft v4.doc</filename>
 <filesize>32256</filesize>
@@ -40,18 +40,18 @@
 <nameField></nameField>
 <validationScript></validationScript>
 <tags>
-<name>tags</name>
-<prettyName>Tags</prettyName>
-<unmodifiable>0</unmodifiable>
-<relationalStorage>1</relationalStorage>
+<cache>0</cache>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
-<size>30</size>
-<separator> </separator>
-<cache>0</cache>
-<separators> ,|</separators>
-<values></values>
+<name>tags</name>
 <number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
@@ -127,7 +127,7 @@ $msg.get("joincurriki.infos")
 
 #titlebar($msg.get("joincurriki.letsKnowWhoYouAre") "" "" "purple")
 #set($message = $reg.getMessage())
-#if($message!="")
+#if($message &amp;&amp; $message!="")
 &lt;div class="errormessage"&gt;
 $message
 &lt;br/&gt;
@@ -146,6 +146,9 @@ $msg.get("joincurriki.enterRequestedInfo")
 #set($userdoc = $xwiki.getDocument("XWiki.XWikiUserTemplate"))
 #set($ok = $userdoc.addObjectFromRequest("XWiki.XWikiUsers"))
 $userdoc.use("XWiki.XWikiUsers")
+#if(!$userdoc.show_contact || $userdoc.show_contact == "")
+#set($junk = ($userdoc.set('show_contact', '1')))
+#end
 
 #formfield("xwikiname" $msg.get("joincurriki.chooseYourCommunityName") true)
 #formfield("first_name" "" true)
@@ -153,7 +156,9 @@ $userdoc.use("XWiki.XWikiUsers")
 #formfield("password" $msg.get("joincurriki.enterPassword") true)
 #formfield("password2" $msg.get("joincurriki.enterPasswordConfirm") true)
 #formfield("email" $msg.get("joincurriki.enterValidEmail") true)
+#formfield("opt_out" $msg.get("joincurriki.chooseOptOut") false)
 #formfield("member_type" "" false)
+#formfield("topics" $msg.get("joincurriki.topics") false)
 #formfield("country" "" false)
 #formfield("state" "" false)
 #formfield("city" "" false)
@@ -185,14 +190,24 @@ $msg.get("joincurriki.emailWillBeSent")
 &lt;script type="text/javascript"&gt;
  function validateRegisterForm(){
    var errorTot =  false;
+   var errorMissing = false;
    var error = false;
 
+   var nameStr = $F("xwikiname");
+   if (nameStr.replace(/[A-Za-z0-9]/g, "") != ""){
+       alert("$msg.get("joincurriki.xwikiname.badchars")");
+       hightLightEl("register_block_xwikiname");
+       errorTot = true;
+   } else {
+       unHightLightEl("register_block_xwikiname");
+   }
 
    var checked = $('register').elements["XWiki.XWikiUsers_0_show_contact"][0].checked || $('register').elements["XWiki.XWikiUsers_0_show_contact"][1].checked;
 
    if (!checked){
      hightLightEl("register_block_show_contact");
      errorTot = true;
+     errorMissing = true;
    }
    else {
      unHightLightEl("register_block_show_contact");
@@ -202,6 +217,7 @@ $msg.get("joincurriki.emailWillBeSent")
    if (!$('XWiki.XWikiUsers_0_i_agree').checked){
      hightLightEl("register_block_i_agree");
      errorTot = true;
+     errorMissing = true;
    }
    else {
      unHightLightEl("register_block_i_agree");
@@ -217,24 +233,23 @@ $msg.get("joincurriki.emailWillBeSent")
    }
 */
 
-   if($('XWiki.XWikiUsers_0_password').value.indexOf(" ") &gt;= 0){
+   if($('register')['XWiki.XWikiUsers_0_password'].value.indexOf(" ") &gt;= 0){
      alert("$msg.get("joincurriki.password.noSpaces")");
      errorTot = true;
    }
 
-   if ($('XWiki.XWikiUsers_0_password').value.length &lt; 5) {
-     hightLightEl('XWiki.XWikiUsers_0_password');
+   if ($('register')['XWiki.XWikiUsers_0_password'].value.length &lt; 5) {
+     //hightLightEl('XWiki.XWikiUsers_0_password');
      alert("$msg.get("joincurriki.password.tooShort")");
      errorTot = true;
    }
    else {
-     if ($('2XWiki.XWikiUsers_0_password').value != $('XWiki.XWikiUsers_0_password').value){
-       hightLightEl('XWiki.XWikiUsers_0_password');
-       hightLightEl('2XWiki.XWikiUsers_0_password');
+     if ($('register')['2XWiki.XWikiUsers_0_password'].value != $('register')['XWiki.XWikiUsers_0_password'].value){
+       //hightLightEl('XWiki.XWikiUsers_0_password');
+       //hightLightEl('2XWiki.XWikiUsers_0_password');
        alert("$msg.get("joincurriki.password.noMatch")");
        errorTot = true;
      }
-
    }
    
    var emailStr = $('XWiki.XWikiUsers_0_email').value;
@@ -252,15 +267,21 @@ $msg.get("joincurriki.emailWillBeSent")
        if (error){
          hightLightEl(mendatoryValueField[i][1]);
          errorTot = true;
+         errorMissing = true;
        }
        else {
          unHightLightEl(mendatoryValueField[i][1]);
        }
    }
-   if (errorTot)
-     alert("$msg.get("joincurriki.someDataMissing")");
-   else
+
+
+   if (errorTot) {
+      if (errorMissing) {
+       alert("$msg.get("joincurriki.someDataMissing")");
+      }
+   } else {
      checkEmail();
+   }
    return false;
  }
 
@@ -338,6 +359,9 @@ $xwiki.addTooltipJS()
 #else
 $msg.get("joincurriki.accountCreated")
 
+&lt;script type="text/javascript"&gt;
+if (window.urchinTracker) urchinTracker('/xwiki/bin/view/Main/JoinCurriki/Registered');
+&lt;/script&gt;
 &lt;div id="currikimain" class="main"&gt;
 &lt;form  id="loginForm" action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit")" method="post"&gt;
 &lt;input type="hidden" name="xredirect" value="$xwiki.getURL("Members.WebHome")" /&gt;

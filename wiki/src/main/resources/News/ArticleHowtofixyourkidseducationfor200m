@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>News</web>
@@ -22,39 +22,6 @@
 <comment>edits</comment>
 <object>
 <class>
-<name>XWiki.TagClass</name>
-<customClass></customClass>
-<customMapping></customMapping>
-<defaultViewSheet></defaultViewSheet>
-<defaultEditSheet></defaultEditSheet>
-<defaultWeb></defaultWeb>
-<nameField></nameField>
-<validationScript></validationScript>
-<tags>
-<name>tags</name>
-<prettyName>Tags</prettyName>
-<unmodifiable>0</unmodifiable>
-<relationalStorage>1</relationalStorage>
-<displayType>select</displayType>
-<multiSelect>1</multiSelect>
-<size>30</size>
-<separator> </separator>
-<cache>0</cache>
-<separators> ,|</separators>
-<values></values>
-<number>1</number>
-<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-</tags>
-</class>
-<name>News.ArticleHowtofixyourkidseducationfor200m</name>
-<number>0</number>
-<className>XWiki.TagClass</className>
-<property>
-<tags/>
-</property>
-</object>
-<object>
-<class>
 <name>XWiki.ArticleClass</name>
 <customClass></customClass>
 <customMapping></customMapping>
@@ -63,98 +30,87 @@
 <defaultWeb></defaultWeb>
 <nameField></nameField>
 <validationScript></validationScript>
-<extract>
-<name>extract</name>
-<prettyName>Extract</prettyName>
-<unmodifiable>0</unmodifiable>
-<size>80</size>
-<rows>5</rows>
-<customDisplay></customDisplay>
-<contenttype>FullyRenderedText</contenttype>
-<validationRegExp></validationRegExp>
-<tooltip></tooltip>
-<editor>---</editor>
-<validationMessage></validationMessage>
-<number>4</number>
-<classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
-</extract>
-<title>
-<name>title</name>
-<prettyName>Title</prettyName>
-<unmodifiable>0</unmodifiable>
-<size>80</size>
-<customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
-<tooltip></tooltip>
-<validationMessage></validationMessage>
-<number>1</number>
-<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-</title>
 <category>
-<name>category</name>
-<prettyName>Category</prettyName>
-<unmodifiable>0</unmodifiable>
-<relationalStorage>1</relationalStorage>
-<displayType>select</displayType>
-<multiSelect>1</multiSelect>
-<size>5</size>
-<separator> </separator>
 <cache>0</cache>
 <classname></classname>
-<sort>none</sort>
-<tooltip></tooltip>
-<valueField></valueField>
 <customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
+<displayType>select</displayType>
 <idField></idField>
-<sql>select prop.value from BaseObject as obj, StringProperty as prop where obj.className='Blog.Categories' and prop.id.id = obj.id and prop.id.name='name'</sql>
-<picker></picker>
+<multiSelect>1</multiSelect>
+<name>category</name>
 <number>2</number>
+<picker></picker>
+<prettyName>Category</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<size>5</size>
+<sort>none</sort>
+<sql>select prop.value from BaseObject as obj, StringProperty as prop where obj.className='Blog.Categories' and prop.id.id = obj.id and prop.id.name='name'</sql>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
 <validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<valueField></valueField>
 <classType>com.xpn.xwiki.objects.classes.DBListClass</classType>
 </category>
-<keywords>
-<name>keywords</name>
-<prettyName>Keywords</prettyName>
-<unmodifiable>0</unmodifiable>
-<size>80</size>
-<customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
-<tooltip></tooltip>
-<validationMessage></validationMessage>
-<number>5</number>
-<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-</keywords>
 <content>
-<name>content</name>
-<prettyName>Content</prettyName>
-<unmodifiable>0</unmodifiable>
-<size>80</size>
-<rows>20</rows>
-<customDisplay></customDisplay>
 <contenttype>FullyRenderedText</contenttype>
-<validationRegExp></validationRegExp>
-<tooltip></tooltip>
+<customDisplay></customDisplay>
 <editor>Wysiwyg</editor>
-<validationMessage></validationMessage>
+<name>content</name>
 <number>3</number>
+<prettyName>Content</prettyName>
+<rows>20</rows>
+<size>80</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
 <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
 </content>
+<extract>
+<contenttype>FullyRenderedText</contenttype>
+<customDisplay></customDisplay>
+<editor>---</editor>
+<name>extract</name>
+<number>4</number>
+<prettyName>Extract</prettyName>
+<rows>5</rows>
+<size>80</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+</extract>
+<keywords>
+<customDisplay></customDisplay>
+<name>keywords</name>
+<number>5</number>
+<prettyName>Keywords</prettyName>
+<size>80</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</keywords>
+<title>
+<customDisplay></customDisplay>
+<name>title</name>
+<number>1</number>
+<prettyName>Title</prettyName>
+<size>80</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</title>
 </class>
 <name>News.ArticleHowtofixyourkidseducationfor200m</name>
 <number>0</number>
 <className>XWiki.ArticleClass</className>
-<property>
-<extract>The same trip to Beijing provided us time to sit down with Sun Microsystems Chairman Scott McNealy to discuss, of all things, his views on education. McNealy was in town to announce the second version of something called Curriki, during an education conference. One day later Microsoft Chairman Bill Gates unveiled 3 versions of Windows in the same city. It's funny what these Chairmen get up to.
-
-For the unfamiliar, Curriki is McNealy's pet project around what you might call open source education.</extract>
-</property>
-<property>
-<title>How to fix your kids' education for $200m</title>
-</property>
-<property>
-<keywords></keywords>
-</property>
 <property>
 <category/>
 </property>
@@ -224,7 +180,7 @@ It's this measurement quality that stands as key to McNealy.\\
 \\
 "We'll build in feedback mechanisms so that every group competes against all the other groups," he said. "You might find that third grade math seems to be getting better reviews than fifth grade social studies. So, we'll find out what's wrong with fifth grade social studies."\\
 \\
-Such a feedback loop could deliver a drastic improvements over the current textbook system where publishers often update texts with a new format simply so they can sell fresh editions of the same, old material. Move a few pictures around, bold some text and voilà, a teacher's lesson plan from 2007 fails to work for 2008 texts, since the page numbering has been skewed.\\
+Such a feedback loop could deliver a drastic improvements over the current textbook system where publishers often update texts with a new format simply so they can sell fresh editions of the same, old material. Move a few pictures around, bold some text and voilÃ , a teacher's lesson plan from 2007 fails to work for 2008 texts, since the page numbering has been skewed.\\
 \\
 \\
 Open Source Social Studies\\
@@ -265,6 +221,50 @@ The scope of Curriki appears daunting but not out of the realm of McNealy's expe
 McNealy does not dismiss such challenges and admits that he's gone after and failed at a number of similar projects.\\
 \\
 "I have done bigger, crazier projects. Trust me."</content>
+</property>
+<property>
+<extract>The same trip to Beijing provided us time to sit down with Sun Microsystems Chairman Scott McNealy to discuss, of all things, his views on education. McNealy was in town to announce the second version of something called Curriki, during an education conference. One day later Microsoft Chairman Bill Gates unveiled 3 versions of Windows in the same city. It's funny what these Chairmen get up to.
+
+For the unfamiliar, Curriki is McNealy's pet project around what you might call open source education.</extract>
+</property>
+<property>
+<keywords></keywords>
+</property>
+<property>
+<title>How to fix your kids' education for $200m</title>
+</property>
+</object>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>News.ArticleHowtofixyourkidseducationfor200m</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
 </property>
 </object>
 <content>#includeForm("XWiki.ArticleClassSheet")</content>

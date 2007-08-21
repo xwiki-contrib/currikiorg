@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>XWiki</web>
@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1171310101000</creationDate>
-<date>1180509002000</date>
-<contentUpdateDate>1180509002000</contentUpdateDate>
-<version>1.172</version>
+<date>1187386690000</date>
+<contentUpdateDate>1187386690000</contentUpdateDate>
+<version>1.192</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Added ccb.title</comment>
+<comment>Changed "Please Note" message re under-13s</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -31,18 +31,18 @@
 <nameField></nameField>
 <validationScript></validationScript>
 <tags>
-<name>tags</name>
-<prettyName>Tags</prettyName>
-<unmodifiable>0</unmodifiable>
-<relationalStorage>1</relationalStorage>
+<cache>0</cache>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
-<size>30</size>
-<separator> </separator>
-<cache>0</cache>
-<separators> ,|</separators>
-<values></values>
+<name>tags</name>
 <number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
@@ -57,6 +57,8 @@
 #general captions
 
 add=Add
+
+readmore=Read More 
 
 caption.joinnow=Join Now!
 caption.joinUsNow=Join Now!
@@ -103,6 +105,7 @@ caption.show=Show
 caption.hide=Hide
 caption.next=Next
 caption.prev=Prev
+caption.previous=Previous
 
 
 
@@ -345,6 +348,7 @@ forgotPassword.passwordsDoesNotMatch=The username and password you entered do no
 forgotPassword.enterPassword=You can now enter a new password:
 forgotPassword.enterPassword.prompt=Please enter a new password:
 forgotPassword.enterPasswordConfirm.prompt=Please confirm the new password:
+forgotPassword.Go=Go &amp;#xBB;
 
 
 
@@ -385,9 +389,10 @@ forgotUsernamesEmail.part2=Forgot your username? It happens to the best of us. Y
 #Main.JoinCurriki
 
 joincurriki.fileds.xwikiname=Community/Screen name (your login ID):
+joincurriki.xwikiname.badchars=This community name is invalid. Please enter a name without spaces or special characters.
 joincurriki.repeat=repeat
 joincurriki.registerToJoinCurriki=Register to Join Curriki
-joincurriki.infos=Thanks for becoming a part of the Curriki Online Community. Joining Curriki is your first step towards accessing and creating high quality teaching resources.
+joincurriki.infos=Thanks for becoming a part of the Curriki Online Community. Joining Curriki is your first step towards accessing and creating high quality teaching resources.&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Please note:&lt;/strong&gt; As per Curriki's &lt;a href="javascript:void()" onclick="showpopup('/xwiki/bin/view/Main/TOS?xpage=popup'); return false;"&gt;Terms of Service&lt;/a&gt;, you must be at least 13 years of age to register. No persons under the age of 13 may register.
 
 joincurriki.letsKnowWhoYouAre=Let Us Know Who You Are
 joincurriki.enterRequestedInfo=Enter the requested information to become a member and to create a profile. Items marked with an exclamation point(!) are required.
@@ -396,7 +401,7 @@ joincurriki.enterPassword=Enter your password.
 joincurriki.enterPasswordConfirm=Confirm your password.
 joincurriki.enterValidEmail=Enter a valid email address.
 joincurriki.ifApplicable=(if applicable)
-joincurriki.showContact=Do you want your contact information to be visible to other Curriki members?
+joincurriki.showContact=Allow Curriki members to view my member profile.
 joincurriki.fileds.age=Age
 joincurriki.iAm13YearsOld=I am at least 13 years old.
 joincurriki.privacyAndTOS=Privacy and Terms of Use Policies
@@ -413,19 +418,22 @@ joincurriki.email.alreadyUsed=Your email has already been used.
 joincurriki.login.alreadyUsed=Your login has already been used.
 joincurriki.saveMyInfoAndRegister=Save Information and Register
 joincurriki.accountCreated=Your account has been created. You can now log in.
-
+joincurriki.chooseOptOut=Do not send me email about participating in the Curriki community.
+joincurriki.topics=
 
 joincurriki.fileds.first_name=First Name (will appear in Curriki in some locations):
 joincurriki.fileds.last_name=Last Name (will appear in Curriki in some locations):
 joincurriki.fileds.password=Password:
 joincurriki.fileds.password2=Password (repeat):
 joincurriki.fileds.email=Email Address:
+joincurriki.fileds.opt_out=Email opt-out:
+joincurriki.fileds.topics=Topics of Interest:
 joincurriki.fileds.member_type=Member Type:
 joincurriki.fileds.country=Country:
 joincurriki.fileds.state=State/Province:
 joincurriki.fileds.city=City:
 joincurriki.fileds.affiliation=Organization Affiliation:
-joincurriki.fileds.show_contact=Show your contact information:
+joincurriki.fileds.show_contact=Show your profile:
 
 
 
@@ -777,21 +785,24 @@ panels.contribute.addContent=Add Content
 #XWiki.XWikiUserSheet
 
 profile.edit=Edit Profile
-profile.accessDenied=Only other Curriki members can see other members profiles. Please [Join|Main.JoinCurriki] the Community, or &lt;a class="curriki-link" href="{0}"&gt;Log-in&lt;/a&gt;.
+profile.accessDenied=Depending on selections made during the registration process, only Curriki members can see the profiles of some members. To see the profile for this member, please [join|Main.JoinCurriki] the Community, or &lt;a class="curriki-link" href="{0}"&gt;log in&lt;/a&gt;.
 profile.userNotVisible=This user prefers to not show his contact information.
 profile.removePhoto.confirmation=Do you really want to delete your photo?
 profile.removePhoto=Remove Photo
 profile.removeYourPhoto=Remove Your Photo
 profile.modifyYourPhoto=Change Your Photo
-profile.field.firstName=First Name:
-profile.field.lastName=Last Name:
+profile.field.firstName=First Name (appears in Curriki in some locations):
+profile.field.lastName=Last Name (appears in Curriki in some locations):
+profile.field.display.firstName=First Name:
+profile.field.display.lastName=Last Name:
 profile.field.memberType=Member Type:
 profile.field.affiliation=Organization Affiliation:
 profile.field.country=Country:
 profile.field.state=State/Province:
 profile.field.city=City:
-profile.field.showContact=Allow Community to See Contact Information:
+profile.field.showContact=Allow Curriki members to view my profile without my email address or password:
 profile.field.email=Email:
+profile.field.opt_out=Do not send me email about participating in the Curriki community:
 profile.field.password=Password:
 profile.field.passwordConfirm=Confirm Password:
 profile.field.topics=Topics of Interest:
@@ -812,7 +823,7 @@ profile.field.email.invalid=Email is not valid.
 #Members.MyCollections
 
 myColls.title=My Collections
-myColls.info=Create and share your collections so community members can use your learning resources to develop educational materials.
+myColls.info=Create and share collections with the community.
 
 #XWiki.MyCurrikiTemplate
 
@@ -824,10 +835,10 @@ myCurriki.contributions=My Contributions
 myCurriki.collections=My Collections
 myCurriki.blogs=My Blogs
 
-myCurriki.collections.intro=A listing of the collections you've created or linked to
+myCurriki.collections.intro=Find collections created and linked to here.
 myCurriki.collection.create=Create a Collection
 
-myCurriki.contributions.intro=A listing of the learning resources you've added to the repository
+myCurriki.contributions.intro=Find up to 20 contributed resources here, and when there are more than 20, click 'View All' for a full listing.
 myCurriki.contributions.viewAll=View All Contributions
 
 #XWiki.MyCurrikiBlogs
@@ -837,7 +848,7 @@ myBlogs.noBlog=No Blog
 myBlogs.viewAllEntries=View All Blog Entries
 myBlogs.title=My Blogs ({0})
 
-myBlogs.usage=Share your activities with the community by maintaining a blog about what you'd like to accomplish with Curriki, what you're up to, what's been working for you and what hasn't. You can also use the blog just to keep notes for yourself.
+myBlogs.usage=Find blog entries here.
 myBlogs.addArticle=Add an Entry
 myBlogs.addArticle.details=Enter the title of your entry, click on 'Add an Entry,' and follow the instructions.
 myBlogs.articleTitle=Entry Title
@@ -902,12 +913,12 @@ asset.contentNotAllowed=This content is marked Private.
 
 #XWiki.MyContributionsTemplate
 
-mycontribs.intro=These are all the resources you've contributed. These are only your "top level" resources; many of these may contain sub-resources. Click "View" in the column titled *Action* to see all the details about and contents within a resource.
+mycontribs.intro=Find up to 20 contributions listed below.
 mycontribs.title=Contributions
 
 #XWiki.MyCollectionsTemplate
 
-colls.infos=Collections are ways for you to group learning resources that you would like to keep together. They may be grouped by file type, by purpose, or even just to make it easy to find your most often used resources. You may create as many collections as you like.
+colls.infos=Find collections created and linked to here.
 
 colls.description=Description:
 colls.last_edited=Last Edited:
@@ -930,6 +941,10 @@ mime.zip.opencontents=Open Contents
 mime.zip.closecontents=Close Contents
 mime.zip.launch=Launch Archive
 
+mimetype.flashdisplay.play=Play in This Window
+mimetype.flashdisplay.pause=Pause
+mimetype.flashdisplay.newwindow=Launch in a New Window
+mimetype.flashdisplay.flashcontenttext=This is a placeholder for the flash content.
 #&lt;/pre&gt;
 
 default_collection=Default Collection
@@ -942,12 +957,15 @@ metadata.instructional_component_title2=Instructional Component Type
 emailoptout.pleasepass=Sorry, you must pass an email address to opt out of emails.
 emailoptout.norecord=Sorry, there is no record of that email address.
 emailoptout.errormultiple=An error occurred.  This email address is associated with multiple accounts.
-emailoptout.removed=The email address {0} has been opted out of emails.
+emailoptout.removed=The email address {0} has been opted out of emails from Curriki.  In the future, if you want to revert, please send a mail request to info@curriki.org.
 
 # Errors if attempting to do a recursive add
 addsubasset.recursive_add=You cannot add an asset to itself.
 addsubasset.recursive_add_message=You cannot add an asset to itself, or any sub-assets of itself.
 
 # Curriki Currikulum Builder Loading page
-ccb.title=Curriki Currikulum Builder</content>
+ccb.title=Curriki Currikulum Builder
+
+#VIDITalk integration
+viditalk.sitecode=8204167813</content>
 </xwikidoc>

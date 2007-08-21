@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>XWiki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.jeremi</creator>
-<author>XWiki.noahk</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.noahk</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1173445381000</creationDate>
-<date>1180649194000</date>
-<contentUpdateDate>1180649194000</contentUpdateDate>
-<version>1.102</version>
+<date>1187642726000</date>
+<contentUpdateDate>1187642726000</contentUpdateDate>
+<version>1.125</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>changed main.login_first text</comment>
+<comment>Added editor translations</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -31,18 +31,18 @@
 <nameField></nameField>
 <validationScript></validationScript>
 <tags>
-<name>tags</name>
-<prettyName>Tags</prettyName>
-<unmodifiable>0</unmodifiable>
-<relationalStorage>1</relationalStorage>
+<cache>0</cache>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
-<size>30</size>
-<separator> </separator>
-<cache>0</cache>
-<separators> ,|</separators>
-<values></values>
+<name>tags</name>
 <number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
@@ -66,6 +66,7 @@ main.error=error
 menu.table_of_content=Table of Contents
 header.editor_title=Currikulum Builder
 header.editor_subtitle=You are now in Curriki's Currikulum Builder, where you can create, edit, and collaborate on learning resources, curricula, and collections.
+header.print=Print
 header.close=Close
 loading.loading_msg=Loading, please wait...
 error.could_not_get_wiki_document=Could not get wiki document
@@ -106,6 +107,8 @@ addfile.add_a_learning_resource=Add a Learning Resource
 addfile.select_file_or_link=Select a file or link to add to Curriki.
 addfile.this_is_a_file_on_my_computer=This is a file from my computer.
 addfile.this_is_a_web_link=This is a Web link.
+addfile.record_a_video=Upload or Record a video
+addfile.next_for_viditalk=Click Next to upload or record your video
 addfile.invalid_url=Please specify a valid URL.
 addfile.please_make_a_selection=Please make a selection.
 asset.title=Title
@@ -155,11 +158,13 @@ login.login=Login
 login.loginfailed=Login failed
 login.username=Username
 login.password=Password
+template.describethelearningresource=Describe the Resource or Collection
 metadata.add_resource_metadata_desc=&lt;ul&gt;&lt;li&gt;You must provide basic information to describe it.&lt;/li&gt;&lt;li&gt;The information you provide makes the resource or collection easier to find.&lt;/li&gt;&lt;/ul&gt;
 metadata.complete_required_fields=&lt;strong&gt;(&lt;span class="required_fields"&gt;!&lt;/span&gt;) Complete the required fields below.&lt;/strong&gt;
 metadata.required_information=Required Information
 metadata.more_info_false=Open More Information
 metadata.more_info_true=Close More Information
+metadata.more_info_text=Curriki automatically supplies additional information about your resource or collection, such as license type and access privileges.  By clicking Next, you agree to apply a Curriki-compatible license to your resource or collection.&lt;br /&gt;&lt;br /&gt;If you want to adjust the license or any other information for your resource or collection, click More Information.
 metadata.error_displaying_subject_field=Error displaying subject field.
 metadata.required_fields=Required Information
 metadata.required_information=Required Information
@@ -170,10 +175,11 @@ metadata.title_title=Title
 metadata.title_txt=
 metadata.title_content=Enter your title here.
 metadata.title_tooltip=Name for this element, including display in search lists and as a caption for images
+metadata.copy_info_text=If you have copied this resource, update the Title and Description fields to indicate how it is different from the original.
 metadata.description_title=Description
 metadata.description_txt=
 metadata.description_content=
-metadata.description_tooltip=When people read this description they should know what your resource is ? the more detail the better.
+metadata.description_tooltip=When people read this description they should know what your resource is. The more detail the better!
 metadata.keywords_title=Key Words
 metadata.keywords_txt=
 metadata.keywords_content=
@@ -223,7 +229,7 @@ template.template=Template
 template.error_while_getting_templates=Error while getting templates
 template.create_a_learning_resource=Create a Learning Resource
 template.select_a_template_style=Select a template style.
-template.select_a_template_style_subtitle=Currently we offer one template. More templates are in development!
+template.select_a_template_style_subtitle=
 template.propose_duplication_title=Template Asset Duplication
 template.propose_duplication_text_editable=This asset originates from a template and is not yet duplicated in your collection. Click next to duplicate it in your collection or cancel to edit the template asset itself.
 template.propose_duplication_text_noneditable=This asset originates from a template and is not yet duplicated in your collection. Click next to duplicate it in your collection or cancel the operation.
@@ -254,7 +260,7 @@ curriki.comment.createnewsourceasset=Created new resource
 curriki.comment.insertsubassetincompositeasset=Insert sub asset {0} ({1}) of category {2} in collection at position {3}
 curriki.comment.removesubassetincompositeasset=Remove sub asset {0} ({1}) from collection at position {2}
 curriki.comment.addingsubassettocompositeasset=Added sub asset {0} ({1}) of category {2} in collection at position {3}
-curriki.comment.finishcreatingsubasset=Finished creating sub asset of category {1}
+curriki.comment.finishcreatingsubasset=Finished creating sub asset of category {0}
 curriki.comment.createlinksourceasset=Create text source asset
 curriki.comment.createlinksourceasset=Create link source asset
 curriki.comment.updatemetadata=Update Information
@@ -268,6 +274,7 @@ addasset.desc_blank_content_block=Insert an open block to create new text, then 
 addasset.desc_html_content_block=Insert an open block to author or paste HTML content.
 addasset.desc_folder=Organize additional resources here.
 addasset.desc_existing_resource=Curriki's repository offers many options for developing and enhancing your content.
+addasset.desc_template=Create a new resource using a Curriki template.
 addasset.enter_link=Please enter the URL.
 addasset.select_file=Select the file to upload.
 addasset.what_would_you_like_to_add=What would you like to add?
@@ -313,6 +320,101 @@ comment.errorgettinghistory=Error getting history
 preview.loadingpreview=Loading preview
 preview.errorgettingpreview=Error getting preview
 viditalk.sitecode=8204167813
+viditalk.download_msg=Download Video
 comment.commentcannotbeempty=Please enter a comment. Empty comments are not allowed.
+edit.propose_duplication_title=Edit or Copy?
+edit.propose_duplication_text=Are you sure you want to change this resource created by {0}?&lt;br /&gt;&lt;br /&gt;To edit this resource for your own specific purpose, create a new version by clicking Copy below to save it as your own. (Next you will be prompted to save it into your My Curriki under a different title.)&lt;br /&gt;&lt;br /&gt;If you want to edit this resource for use by the whole Curriki community, click Continue to Edit. Your modifications will change the document of record and the previous version will be available under the Currikulum Builder's History tab.
+edit.propose_continue=Continue to Edit
+edit.propose_copy=Copy
+edit.propose_cancel=Cancel
+duplicate.copy_of=Copy of
+
+mimetype.flashdisplay.play=Play in This Window
+mimetype.flashdisplay.pause=Pause
+mimetype.flashdisplay.newwindow=Launch in a New Window
+mimetype.flashdisplay.flashcontenttext=This is a placeholder for the flash content.
+## history in CB
+history.errorgettinghistory=Error getting history information from the server
+history.to=To
+history.from=From
+history.version=Version
+history.author=Author
+history.date=Date
+history.comment=Comment
+history.rollback=Rollback
+history.rollback.cancel=Cancel Rollback
+history.rollback.confirm=Confirm Rollback
+history.rollback.exception=Exception while rollbacking Curriki Asset
+history.rollback.confirm.message=Are you sure you want to rollback this asset to version {0}
+history.compare=Compare Changes
+## compare page
+changes.changesofpage=Changes of Asset
+changes.in=in
+changes.space=space
+changes.from=From
+changes.to=To
+changes.comment=Change comment
+changes.nocomment=There is no comment for this version
+changes.version=Version
+changes.editedby=edited by
+changes.on=on
+changes.metadatachanges=Metadata changes
+changes.property=Property
+changes.nometadatachanges=There are no metadata changes
+changes.contentchanges=Content changes
+changes.nocontentchanges=There are no content changes
+changes.attachmentchanges=Attachment changes
+changes.noattachmentchanges=There are no attachment changes
+changes.filename=Filename
+changes.action=Action
+changes.commentchanges=Comment changes
+changes.nocommentchanges=There are no comment changes
+changes.metadata.parent=Parent
+changes.metadata.web=Space
+changes.metadata.name=Page Name
+changes.metadata.author=Author
+changes.metadata.language=Language
+changes.metadata.defaultLanguage=Default Language
+changes.asset.title=Title
+changes.asset.description=Description
+changes.asset.keywords=Keywords
+changes.asset.aggregation_level=Aggregation Level
+changes.asset.difficulty=Difficulty
+changes.asset.status=Status
+changes.asset.fw_items=Subjects
+changes.asset.instructional_component=Instructional Component
+changes.asset.category=Category
+changes.asset.rights=Rights
+changes.asset.educational_level=Educational Level
+changes.asset.educational_level2=Educational Level
+changes.asset.language=Language
+changes.asset.instructional_component2=Instructional Component
+changes.asset.caption_desc=Caption description
+changes.asset.alt_desc=Alternate description
+changes.asset.tracking=Source asset
+changes.attachmentadded=Attachment has been added 
+changes.attachmentdeleted=Attachment has been deleted
+changes.attachmentupdatedfromversion=Attachment has been updated from version
+changes.toversion=to version
+changes.commentchange=Comment change
+changes.comment.property=Property
+changes.comment.previousvalue=Previous value
+changes.comment.newvalue=New value
+changes.comment.author=Author
+changes.comment.date=Date
+changes.comment.comment=Comment
+## headers
+print.title=Print Preview
+print.subtitle=You are now viewing $currikiTitle
+print.linktext=Go to View
+viewrev.title=View Revision
+viewrev.subtitle=You are now viewing version $request.rev of $currikiTitle
+viewrev.linktext=Go to View
+compare.title=Compare Changes
+compare.subtitle=You are now viewing the changes between version $request.rev1 and $request.rev2 of $currikiTitle
+compare.linktext=Go to View
+## editor
+editor.print=Print
+editor.view=View
 #&lt;/pre&gt;</content>
 </xwikidoc>

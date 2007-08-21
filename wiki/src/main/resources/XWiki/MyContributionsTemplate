@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>XWiki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.thimel</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.thimel</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.thimel</contentAuthor>
 <creationDate>1177320512000</creationDate>
-<date>1179757915000</date>
-<contentUpdateDate>1179757915000</contentUpdateDate>
-<version>1.59</version>
+<date>1187256944000</date>
+<contentUpdateDate>1187256944000</contentUpdateDate>
+<version>1.70</version>
 <title>My Contributions</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Missing translation string</comment>
+<comment> </comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -31,18 +31,18 @@
 <nameField></nameField>
 <validationScript></validationScript>
 <tags>
-<name>tags</name>
-<prettyName>Tags</prettyName>
-<unmodifiable>0</unmodifiable>
-<relationalStorage>1</relationalStorage>
+<cache>0</cache>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
-<size>30</size>
-<separator> </separator>
-<cache>0</cache>
-<separators> ,|</separators>
-<values></values>
+<name>tags</name>
 <number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
@@ -94,12 +94,12 @@ $msg.get("mycontribs.intro")
 &lt;/style&gt;
 &lt;table class="my-contribs-table"&gt;
  &lt;tr&gt;
-  &lt;th width="93px"&gt;Resource Name&lt;/th&gt;
-  &lt;th width="148px"&gt;Description&lt;/th&gt;
-  &lt;th width="35px"&gt;Type&lt;/th&gt;
-  &lt;th width="100px"&gt;Educational Level(s)&lt;/th&gt;
-  &lt;th width="85px"&gt;Community Availability&lt;/th&gt;
-  &lt;th&gt;Action&lt;/th&gt;
+  &lt;th width="104px"&gt;Resource Name&lt;/th&gt;
+  &lt;th width="153px"&gt;Description&lt;/th&gt;
+  &lt;th width="74px"&gt;Type&lt;/th&gt;
+  &lt;th width="105px"&gt;Educational Level(s)&lt;/th&gt;
+  &lt;th width="78px"&gt;Community Availability&lt;/th&gt;
+  &lt;th width="98px"&gt;Action&lt;/th&gt;
  &lt;/tr&gt;
 ##
 ##
@@ -131,17 +131,17 @@ $msg.get("mycontribs.intro")
 #if(!$title || $title.length() == 0)
  #set($title = $msg.get("caption.untitled"))
 #end
- &lt;td width="93px"&gt;&lt;a class="curriki-link" href="$asset.getURL("view")"&gt;{pre}$title{/pre}&lt;/a&gt;&lt;/td&gt;
+ &lt;td width="104px"&gt;&lt;a class="curriki-link" href="$asset.getURL("view")"&gt;{pre}$title{/pre}&lt;/a&gt;&lt;/td&gt;
 #set($assetDescr = $!asset.description)
 #if($assetDescr.length() &gt; 110)
  #set($assetDescr = "${assetDescr.substring(0, 110)}...")
 #end
- &lt;td width="148px"&gt;{pre}$assetDescr{/pre}&lt;/td&gt;
- &lt;td width="35px"&gt;
-#if($asset.attachmentList.size() == 0)
+ &lt;td width="153px"&gt;{pre}$assetDescr{/pre}&lt;/td&gt;
+ &lt;td align="center" width="74px" cellpadding="0" style="padding: 0px;"&gt;#if($asset.attachmentList.size() == 0)
   #set($mime = "")
-  #set($rowType="")
+  #set($rowType="currikulum")
 #else
+  #mimeicon($asset.attachmentList.get(0).getFilename())
   #set($mime = $asset.attachmentList.get(0).mimeType)
   #set($rowType="mime")
 #end
@@ -149,16 +149,18 @@ $msg.get("mycontribs.intro")
   #set($rowType="URL")
 #end
 #if($rowType == "URL")
-{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/html.png")" alt="[URL]" title="[URL]"/&gt;{/pre}
-#end
+{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/HTM.png")" alt="[URL]" title="[URL]"/&gt;{/pre}#end
 #if($rowType == "mime")
-{pre}#mimetypeimg($mime $title){/pre}
+#if(!$ext)
+  #set($ext = "Unknown")
 #end
+{pre}&lt;img src="$macro_iconUrl" alt="[$ext]" title="[$ext]"/&gt;{/pre}#end
 #if($rowType == "curriki-link")
-{pre}&lt;img src="$xwiki.getSkinFile("curriki-link.png")" alt="[Curriki Page]" title="[Curriki Page]"/&gt;{/pre}
-#end
+{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/Currikulum_Icon.png")" alt="[Curriki Page]" title="[Curriki Page]"/&gt;{/pre}#end
+#if($rowType == "currikulum")
+{pre}&lt;img src="$xwiki.getSkinFile("mimetypes/Currikulum_Icon.png")" alt="[Currikulum Item]" title="[Currikulum Item]"/&gt;{/pre}#end
 &lt;/td&gt;
- &lt;td width="100px"&gt;
+ &lt;td width="105px"&gt;
 #set($levels = $!asset.educational_level2)
 #if($levels == "Choose from list...")
  All
@@ -170,8 +172,8 @@ $msg.get("mycontribs.intro")
  #end
 #end
 &lt;/td&gt;
- &lt;td width="85px"&gt;$!asset.getObject("AssetClass").getProperty("rights").getValue()&lt;/td&gt;
- &lt;td align="center"&gt;
+ &lt;td width="78px"&gt;$!asset.getObject("AssetClass").getProperty("rights").getValue()&lt;/td&gt;
+ &lt;td width="98px" align="center"  cellpadding="0" style="padding: 0px;"&gt;
 &lt;div display="block"&gt;
 &lt;div class="curriki-link"&gt;
 [$msg.get("caption.view")&gt;$asset.fullName] #if($asset.hasAccessLevel("edit"))

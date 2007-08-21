@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>XWiki</web>
@@ -30,79 +30,79 @@
 <nameField></nameField>
 <validationScript></validationScript>
 <expiryDate>
-<prettyName>Expiry date</prettyName>
 <customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
-<emptyIsToday>1</emptyIsToday>
-<tooltip></tooltip>
 <dateFormat>dd/MM/yyyy</dateFormat>
-<unmodifiable>0</unmodifiable>
-<size>20</size>
+<emptyIsToday>1</emptyIsToday>
 <name>expiryDate</name>
-<validationMessage></validationMessage>
 <number>2</number>
 <picker>1</picker>
+<prettyName>Expiry date</prettyName>
+<size>20</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
 <classType>com.xpn.xwiki.objects.classes.DateClass</classType>
 </expiryDate>
-<licenseType2>
-<classname></classname>
-<sort>none</sort>
-<tooltip></tooltip>
-<unmodifiable>0</unmodifiable>
-<valueField></valueField>
-<prettyName>licenseType2</prettyName>
-<cache>0</cache>
-<customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
-<multiSelect>0</multiSelect>
-<displayType>select</displayType>
-<separator> </separator>
-<size>1</size>
-<idField></idField>
-<relationalStorage>0</relationalStorage>
-<name>licenseType2</name>
-<sql>select obj.name, prop.value from BaseObject as obj, StringProperty as prop, IntegerProperty as oprop where  obj.className='XWiki.LicenceClass' and prop.id.id = obj.id  and prop.id.name = 'name' and oprop.id.id = obj.id and oprop.id.name = 'order' order by oprop.value</sql>
-<picker></picker>
-<number>5</number>
-<validationMessage></validationMessage>
-<classType>com.xpn.xwiki.objects.classes.DBListClass</classType>
-</licenseType2>
 <externalRightsHolder>
-<prettyName>External right holder</prettyName>
 <customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
+<name>externalRightsHolder</name>
+<number>3</number>
+<prettyName>External right holder</prettyName>
+<size>60</size>
 <tooltip></tooltip>
 <unmodifiable>0</unmodifiable>
-<size>60</size>
-<name>externalRightsHolder</name>
 <validationMessage></validationMessage>
-<number>3</number>
+<validationRegExp></validationRegExp>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </externalRightsHolder>
-<rightsHolder>
-<prettyName>Right holder</prettyName>
-<customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
-<tooltip></tooltip>
-<unmodifiable>0</unmodifiable>
-<size>20</size>
-<name>rightsHolder</name>
-<validationMessage></validationMessage>
-<number>1</number>
-<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-</rightsHolder>
 <licenseType>
-<prettyName>Licence type</prettyName>
 <customDisplay></customDisplay>
-<validationRegExp></validationRegExp>
+<name>licenseType</name>
+<number>4</number>
+<prettyName>Licence type</prettyName>
+<size>60</size>
 <tooltip></tooltip>
 <unmodifiable>0</unmodifiable>
-<size>60</size>
-<name>licenseType</name>
 <validationMessage></validationMessage>
-<number>4</number>
+<validationRegExp></validationRegExp>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </licenseType>
+<licenseType2>
+<cache>0</cache>
+<classname></classname>
+<customDisplay></customDisplay>
+<displayType>select</displayType>
+<idField></idField>
+<multiSelect>0</multiSelect>
+<name>licenseType2</name>
+<number>5</number>
+<picker></picker>
+<prettyName>licenseType2</prettyName>
+<relationalStorage>0</relationalStorage>
+<separator> </separator>
+<size>1</size>
+<sort>none</sort>
+<sql>select obj.name, prop.value from BaseObject as obj, StringProperty as prop, IntegerProperty as oprop where  obj.className='XWiki.LicenceClass' and prop.id.id = obj.id  and prop.id.name = 'name' and oprop.id.id = obj.id and oprop.id.name = 'order' order by oprop.value</sql>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<valueField></valueField>
+<classType>com.xpn.xwiki.objects.classes.DBListClass</classType>
+</licenseType2>
+<rightsHolder>
+<customDisplay></customDisplay>
+<name>rightsHolder</name>
+<number>1</number>
+<prettyName>Right holder</prettyName>
+<size>20</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</rightsHolder>
 </class>
 <content>
 </content></xwikidoc>
