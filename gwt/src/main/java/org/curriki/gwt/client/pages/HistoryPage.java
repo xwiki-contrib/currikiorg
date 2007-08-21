@@ -196,39 +196,44 @@ public class HistoryPage extends AbstractPage {
             String comment = vinfo.getComment();
             comment = comment.replaceAll("<a", "<a target=\"_blank\"");
             table.setHTML(row+1, startCol + 3, comment);
-            Button button = new Button();
-            button.setText(Main.getTranslation("history.rollback"));
-            button.setStyleName("history-rollback-button");
-            button.addClickListener(new ClickListener() {
-                public void onClick(Widget widget) {
-                    Button cancelRollback = new Button(Main.getTranslation("history.rollback.cancel"));
-                    Button confirmRollback = new Button(Main.getTranslation("history.rollback.confirm"), new ClickListener(){
-                        public void onClick(Widget widget)
-                        {
-                            // Rollback has been accepted
-                            Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                            String url = currentAsset.getViewURL().replaceAll("/view/", "/rollback/") + "?rev=" + version + "&confirm=1";
-                            HTTPRequest.asyncGet(url, new ResponseTextHandler() {
-                                public void onCompletion(String string) {
+
+            if (row!=0) {
+                Button button = new Button();
+                button.setText(Main.getTranslation("history.rollback"));
+                button.setStyleName("history-rollback-button");
+                button.addClickListener(new ClickListener() {
+                    public void onClick(Widget widget) {
+                        Button cancelRollback = new Button(Main.getTranslation("history.rollback.cancel"));
+                        Button confirmRollback = new Button(Main.getTranslation("history.rollback.confirm"), new ClickListener(){
+                            public void onClick(Widget widget)
+                            {
+                                // Rollback has been accepted
+                                Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                                String url = currentAsset.getViewURL().replaceAll("/view/", "/rollback/") + "?rev=" + version + "&confirm=1";
+                                HTTPRequest.asyncGet(url, new ResponseTextHandler() {
+                                    public void onCompletion(String string) {
                                         if (string.toLowerCase().indexOf("exception")!=-1) {
                                             Window.alert(Main.getTranslation("history.rollback.exception"));
                                         } else {
                                             Editor editor = Main.getSingleton().getEditor();
-                                            editor.resetCache();
+                                            editor.setCurrentAssetInvalid(true);
+                                            // Tree is invalid when it is a composite asset that is rolledback
+                                            editor.setTreeContentInvalid(true);
                                             editor.refreshState();
                                         }
-                                }
-                            });
-                        }
-                    });
-                    Button[] buttons = { cancelRollback, confirmRollback };
-                    String[] args = { version };
-                    ChoiceDialog rollbackProposal = new ChoiceDialog(Main.getTranslation("history.rollback.confirm"),
-                            Main.getSingleton().getTranslator().getTranslation("history.rollback.confirm.message", args),
-                            buttons, "history-rollback-confirm-dialog");
-                }
-            });
-            table.setWidget(row+1, startCol + 4, button);
+                                    }
+                                });
+                            }
+                        });
+                        Button[] buttons = { cancelRollback, confirmRollback };
+                        String[] args = { version };
+                        ChoiceDialog rollbackProposal = new ChoiceDialog(Main.getTranslation("history.rollback.confirm"),
+                                Main.getSingleton().getTranslator().getTranslation("history.rollback.confirm.message", args),
+                                buttons, "history-rollback-confirm-dialog");
+                    }
+                });
+                table.setWidget(row+1, startCol + 4, button);
+            }
         }
 
         // Adding compare button
