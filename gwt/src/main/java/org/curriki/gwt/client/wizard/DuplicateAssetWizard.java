@@ -75,14 +75,18 @@ public class DuplicateAssetWizard {
                 if (collections == null || collections.getSelectedItem() == null || collections.getSelectedItem().getPageName() == null || collections.getSelectedItem().getPageName() == "__NOSELECT__"){
                     Window.alert(Main.getTranslation("duplicateasset.selectcollection"));
                 } else{
-                    collections.hide();
+                    if (collections.isAttached()){
+                        collections.hide();
+                    }
                     duplicateAsset(assetName, collections.getSelectedItem().getPageName());
                 }
             }
         };
         ClickListener cancel =  new ClickListener(){
             public void onClick(Widget sender){
-                collections.hide();
+                if (collections.isAttached()){
+                    collections.hide();
+                }
             }
         };
         collections = new ChooseCollectionDialog(next, cancel);

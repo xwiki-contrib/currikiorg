@@ -215,7 +215,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         // we select the root of the Master framework
         List fwList = new ArrayList();
-        fwList.add("FW_masterFramework.WebHome");
+        fwList.add(Constants.ASSET_FW_ITEMS_DEFAULT);
         obj.setDBStringListValue(Constants.ASSET_FW_ITEMS_PROPERTY, fwList);
 
         context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewcollection"), context);

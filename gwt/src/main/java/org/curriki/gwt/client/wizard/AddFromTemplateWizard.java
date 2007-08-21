@@ -62,14 +62,18 @@ public class AddFromTemplateWizard {
                     collections.getSelectedItem().getPageName().equals("__NOSELECT__")){
                     Window.alert(Main.getTranslation("template.selectcollection"));
                 } else{
-                    collections.hide();
+                    if (collections.isAttached()){
+                        collections.hide();
+                    }
                     addFromTemplate(collections.getSelectedItem().getPageName());
                 }
             }
         };
         ClickListener cancel =  new ClickListener(){
             public void onClick(Widget sender){
-                collections.hide();
+                if (collections.isAttached()){
+                    collections.hide();
+                }
             }
         };
         collections = new ChooseCollectionDialog("choosecollection.create_a_learning_resource", Constants.DIALOG_CHOOSE_COLLECTION_CREATE, next, cancel);

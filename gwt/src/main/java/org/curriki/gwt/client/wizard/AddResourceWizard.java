@@ -45,14 +45,18 @@ public class AddResourceWizard
                 if (collections == null || collections.getSelectedItem() == null || collections.getSelectedItem().getPageName() == null || collections.getSelectedItem().getPageName().equals("__NOSELECT__")){
                     Window.alert(Main.getTranslation("addresource.need_to_select_collection"));
                 } else{
-                    collections.hide();
+                    if (collections.isAttached()){
+                        collections.hide();
+                    }
                     addResource(collections.getSelectedItem().getPageName());
                 }
             }
         };
         ClickListener cancel =  new ClickListener(){
             public void onClick(Widget sender){
-                collections.hide();
+                if (collections.isAttached()){
+                    collections.hide();
+                }
             }
         };
         collections = new ChooseCollectionDialog(next, cancel);

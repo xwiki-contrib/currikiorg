@@ -128,6 +128,7 @@ public class Constants {
     public static final String RIGHT_PRIVATE = "private";
 
     public static final String ASSET_LICENCE_TYPE_DEFAULT = "Licences.CurrikiLicense";
+    public static final String ASSET_FW_ITEMS_DEFAULT = "FW_masterFramework.WebHome";
 
     public static final int PAGE_EDIT = 0;
     public static final int PAGE_PREVIEW = 1;

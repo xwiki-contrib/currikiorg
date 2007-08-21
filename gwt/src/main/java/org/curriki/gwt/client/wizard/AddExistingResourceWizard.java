@@ -22,19 +22,18 @@
  */
 package org.curriki.gwt.client.wizard;
 
-import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
-import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
-import org.curriki.gwt.client.widgets.find.ResourceAdder;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.CurrikiAsyncCallback;
-import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.utils.Translator;
-import org.curriki.gwt.client.utils.CompletionCallback;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Command;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.utils.CompletionCallback;
+import org.curriki.gwt.client.widgets.find.ResourceAdder;
+import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
+import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
 
 public class AddExistingResourceWizard implements CompletionCallback, ResourceAdder {
     private static ChooseCollectionDialog collections;
@@ -72,7 +71,9 @@ public class AddExistingResourceWizard implements CompletionCallback, ResourceAd
             };
             ClickListener cancel =  new ClickListener(){
                 public void onClick(Widget sender){
-                    collections.hide();
+                    if (collections.isAttached()){
+                        collections.hide();
+                    }
                 }
             };
             collections = new ChooseCollectionDialog(next, cancel);
@@ -88,7 +89,9 @@ public class AddExistingResourceWizard implements CompletionCallback, ResourceAd
         public void onFailure(Throwable throwable) {
             super.onFailure(throwable);
             Window.alert(Main.getSingleton().getTranslator().getTranslation("addexistingasset.couldnotaddtocollection=", new String[] {resource, throwable.getMessage()}));
-            collections.hide();
+            if (collections.isAttached()){
+                collections.hide();
+            }
             collections = null;
         }
 
@@ -97,7 +100,9 @@ public class AddExistingResourceWizard implements CompletionCallback, ResourceAd
             if (!((Boolean) object).booleanValue()){
                 Window.alert(Main.getSingleton().getTranslator().getTranslation("addexistingasset.failedtoaddtocollection", new String[] {resource}));
             }
-            collections.hide();
+            if (collections.isAttached()){
+                collections.hide();
+            }
             collections = null;
 
             if (((Boolean) object).booleanValue()){
