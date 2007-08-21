@@ -132,6 +132,8 @@ public class HistoryPage extends AbstractPage {
         if (!isComposite) {
             table.setText(0, 0, Main.getTranslation("history.to"));
             table.setText(0, 1, Main.getTranslation("history.from"));
+            table.getCellFormatter().setStyleName(0, 0, "to");
+            table.getCellFormatter().setStyleName(0, 1, "from");
             startCol = 2;
         }
         table.getRowFormatter().setStyleName(0, "history-versions-title");
@@ -140,6 +142,11 @@ public class HistoryPage extends AbstractPage {
         table.setText(0, startCol + 2, Main.getTranslation("history.date"));
         table.setText(0, startCol + 3, Main.getTranslation("history.comment"));
         table.setText(0, startCol + 4, Main.getTranslation("history.rollback"));
+        table.getCellFormatter().setStyleName(0, startCol, "version");
+        table.getCellFormatter().setStyleName(0, startCol + 1, "author");
+        table.getCellFormatter().setStyleName(0, startCol + 2, "date");
+        table.getCellFormatter().setStyleName(0, startCol + 3, "comment");
+        table.getCellFormatter().setStyleName(0, startCol + 4, "rollback");
 
         for (int row = 0;row < versionsList.size(); row++) {
             final VersionInfo vinfo = (VersionInfo) versionsList.get(row);
