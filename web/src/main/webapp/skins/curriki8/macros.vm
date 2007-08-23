@@ -876,11 +876,13 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
 #end
 #findCurrikiTitle($embeddedDoc)
 <div class="righttext"><span id="section${seccounter}title"><div class="lefttext" style="width: 438px;"><img src="$defaultGif"/>&nbsp;<strong class="strong">$currikiTitle</strong></div></span>
-<div>
 #if(!$isPrint)
+<div>
 <a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a>
+</div>
 #end
-</div></div>
+</div>
+<div class="clearfloats"></div>
 #if(!$isPrint)
 <script type="text/javascript">
 function toggleSectionVisibility(seccounter, showhide){
