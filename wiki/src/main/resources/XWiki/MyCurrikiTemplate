@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1175109329000</creationDate>
-<date>1186611015000</date>
-<contentUpdateDate>1186611015000</contentUpdateDate>
-<version>1.126</version>
+<date>1188317631000</date>
+<contentUpdateDate>1188317631000</contentUpdateDate>
+<version>1.129</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Made Delete not crawlable</comment>
+<comment>CURRIKI-864</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -79,6 +79,10 @@
 
 #set($collectionsList = $collectionsHome.getObjects("SubAssetClass"))
 #set($userCollHomeURL = $collectionsHome.getURL("view", "bc=${bcLocal}"))
+
+##
+## Collections
+##
 #beginsection("${userPrefix} Collections (${collectionsList.size()})" $msg.get("caption.viewAll") $userCollHomeURL "red")
 
 #if($collectionsList.size() &gt; 0)
@@ -124,16 +128,17 @@ $msg.get("caption.none")
 #end
 #endsection()
 
-#includeForm("XWiki.MyCurrikiBlogs")
-
+##
+## Contributions
+##
 #set($contribsSeuil = 20)
 #set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='XWiki.${shortname}' and doc.web='Coll_${shortname}' order by doc.date desc ")
 #set($assetList = $xwiki.searchDocuments($sql))
 ## #set($assetList = $mmng.getPublishedCollection("XWiki.${shortname}"))
 #if($assetList.size() &gt; $contribsSeuil)
-#beginsectionandshow("${userPrefix} Contributions (${assetList.size()})" $msg.get("caption.viewAll") $xwiki.getURL("XWiki.MyContributionsTemplate", "view", "user=${shortname}&amp;bc=${bcLocal}") "red" false)
+#beginsectionandshow("${userPrefix} Contributions (${assetList.size()})" $msg.get("caption.viewAll") $xwiki.getURL("XWiki.MyContributionsTemplate", "view", "user=${shortname}&amp;bc=${bcLocal}") "red" true)
 #else
-#beginsectionandshow("${userPrefix} Contributions (${assetList.size()})" "" "" "red" false)
+#beginsectionandshow("${userPrefix} Contributions (${assetList.size()})" "" "" "red" true)
 #end
 
 #if($assetList.size() &gt; 0)
@@ -177,4 +182,9 @@ $msg.get("myCurriki.contributions.intro")
 $msg.get("caption.none")
 #end
 #endsection()
-</content></xwikidoc>
+
+##
+## Blogs
+##
+#includeForm("XWiki.MyCurrikiBlogs")</content>
+</xwikidoc>
