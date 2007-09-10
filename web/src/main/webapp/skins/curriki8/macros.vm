@@ -769,6 +769,7 @@ togglePanelVisibility(document.getElementById("${id}"));
 #set($member = "XWiki.${member}")
 #end
 #set($memberdoc = $xwiki.getDocument($member))
+#if(!$memberdoc.isNew())
 #set($memberobj = $memberdoc.getObject("XWiki.XWikiUsers"))
 <div class="vcard">
    <div class="userpic">
@@ -797,10 +798,11 @@ togglePanelVisibility(document.getElementById("${id}"));
 #set($i = $i + 1)
 #set($content = "${content.substring(0,$i)} [...>${memberdoc.fullName}]")
 #end
-$memberdoc.getRenderedContent($content)</div>
+$memberdoc.getRenderedContent("$!content")</div>
 </div> ## userdata
 <div class="clr"></div>
 </div> ## vcard
+#end
 #end
 ##
 ##
@@ -1009,11 +1011,8 @@ $!xwiki.formatDate($asset.date, "MM/dd/yy")
 #set($status = $!asset.status)
 #if($status.trim() == "Choose from list...")
  #set($status = " ")
-#end
- *$msg.get("metadata.review_status_title"):* <br />
-##For the moment, we display only "Coming Soon"
-#set($status = $msg.get("caption.comingSoon"))
-$status
+#end    
+#displayCRS($asset)
 </div>
 </td></tr></table>
 </div>
@@ -1289,4 +1288,91 @@ $text
 ## Adding this macro which does not seem to be loaded from albatross/macros.vm
 #macro(xwikitopmenuentrystart $actionurl $linktext $id)
 <div class="topmenuentry" onmouseover="showsubmenu(this);" onmouseout="hidesubmenu(this);" id="$id"><a class="tme" href="$actionurl"><strong>$linktext</strong></a><span class="hidden menucolon">: </span><span class="submenu hidden">
+#end
+
+
+## Curriki Review Status Macros
+## This macro displays the current review status
+## in the asset view page
+#macro(displayCRS $asset)
+<div class="crs_review">
+<div class="crs_reviewtitle">
+$msg.get("curriki.crs.review"):
+</div>
+#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+#set($status = $asset.getValue("status"))
+#if((!$status)||($status=="0"))
+<div class="crs_reviewrating">
+<div class="crs_reviewratingtext">
+$msg.get("curriki.crs.unrated")
+</div>
+</div>
+#else
+#set($lastreview_date = $asset.getValue("lastreview_date"))
+<div class="crs_reviewrating">
+<div class="crs_reviewimage">
+<img src="$xwiki.getSkinFile("crs${status}.png")" height="48" />
+<div class="crs_reviewratingtext">
+$msg.get("curriki.crs.rating${status}")
+</div>
+#if($lastreview_date)
+<div class="crs_reviewratingdate">
+$msg.get("curriki.crs.asof") $lastreview_date
+</div>
+#end
+</div>
+</div>
+#end
+#set($nomination = $asset.getValue("reviewpending"))
+<div class="crs_reviewtitle">
+#if($nomination=="1")
+$msg.get("curriki.crs.reviewpending")
+#else
+#if($context.user!="XWiki.XWikiGuest")
+[$msg.get("curriki.crs.nominate")>CRS.Nominate?page=${asset.fullName}]
+#end
+#end
+</div>
+#if(($nomination=="1")&&($xwiki.hasAccessLevel("view", "CRS.Reviews")))
+<div class="crs_reviewreview">
+[$msg.get("curriki.crs.review")>CRS.Review?page=${asset.fullName}]
+</div>
+#end
+</div>
+#end
+
+
+## this macro diplays all the reviews in ante-chronological order
+#macro(displayCRSReviews $asset)
+<div class="crs_reviews">
+<div class="crs_reviewstitle">
+$msg.get("curriki.crs.reviewlist.currikireview")
+</div>
+#set($reviewlist = $xwiki.arrayList)
+#foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
+#if($obj)
+#set($ok = $reviewlist.add(0, $obj))
+#end
+#end
+#if($reviewlist.size()>0)
+#foreach($obj in $reviewlist)
+#set($ok = $asset.use($obj))
+#set($vtc = $asset.getValue("technicalcompletness"))
+#set($vca = $asset.getValue("contentaccuracy"))
+#set($vap = $asset.getValue("appropriatepedagogy"))
+#set($rating = $asset.getValue("rating"))
+#set($comment = $asset.display("comment"))
+#set($date = $asset.getValue("date"))
+#set($user = $asset.display("user"))
+<div class="crs_reviewsdate">
+$xwiki.formatDate($date, "yyyy MMM dd")
+</div>
+<div class="crs_reviewscomment">
+$comment
+</div>
+#end
+#else
+$msg.get("curriki.crs.reviewlist.nocurrikireviews")
+#end
+</div>
 #end

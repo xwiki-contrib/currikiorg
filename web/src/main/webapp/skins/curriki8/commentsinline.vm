@@ -24,6 +24,9 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
  $msg.get("asset.commentNotAllowed")
 #end
 #end
+#if($doc.getObject("XWiki.AssetClass"))
+#displayCRSReviews($doc)
+#end
 ###
 ### List document comments
 ###
