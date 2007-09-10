@@ -1011,7 +1011,7 @@ $!xwiki.formatDate($asset.date, "MM/dd/yy")
 #set($status = $!asset.status)
 #if($status.trim() == "Choose from list...")
  #set($status = " ")
-#end    
+#end
 #displayCRS($asset)
 </div>
 </td></tr></table>
@@ -1299,6 +1299,8 @@ $text
 <div class="crs_reviewtitle">
 $msg.get("curriki.crs.review"):
 </div>
+#set($ok = $asset.use("XWiki.AssetClass"))
+#set($rights = $!asset.getValue("rights"))
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
 #set($status = $asset.getValue("status"))
 #if((!$status)||($status=="0"))
@@ -1312,6 +1314,7 @@ $msg.get("curriki.crs.unrated")
 <div class="crs_reviewrating">
 <div class="crs_reviewimage">
 <img src="$xwiki.getSkinFile("crs${status}.png")" height="48" />
+</div>
 <div class="crs_reviewratingtext">
 $msg.get("curriki.crs.rating${status}")
 </div>
@@ -1321,10 +1324,10 @@ $msg.get("curriki.crs.asof") $lastreview_date
 </div>
 #end
 </div>
-</div>
 #end
+#if(($status!="P")&&($rights!="private"))
 #set($nomination = $asset.getValue("reviewpending"))
-<div class="crs_reviewtitle">
+<div class="crs_reviewpending">
 #if($nomination=="1")
 $msg.get("curriki.crs.reviewpending")
 #else
@@ -1338,6 +1341,7 @@ $msg.get("curriki.crs.reviewpending")
 [$msg.get("curriki.crs.review")>CRS.Review?page=${asset.fullName}]
 </div>
 #end
+#end
 </div>
 #end
 
@@ -1349,6 +1353,8 @@ $msg.get("curriki.crs.reviewpending")
 $msg.get("curriki.crs.reviewlist.currikireview")
 </div>
 #set($reviewlist = $xwiki.arrayList)
+#set($ok = $asset.use("XWiki.AssetClass"))
+#set($ict = $asset.display("instructional_component"))
 #foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
 #if($obj)
 #set($ok = $reviewlist.add(0, $obj))
@@ -1361,6 +1367,7 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 #set($vca = $asset.getValue("contentaccuracy"))
 #set($vap = $asset.getValue("appropriatepedagogy"))
 #set($rating = $asset.getValue("rating"))
+#set($ratingimg = $xwiki.getSkinFile("crs${rating}.png"))
 #set($comment = $asset.display("comment"))
 #set($date = $asset.getValue("date"))
 #set($user = $asset.display("user"))
@@ -1368,7 +1375,7 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 $xwiki.formatDate($date, "yyyy MMM dd")
 </div>
 <div class="crs_reviewscomment">
-$comment
+$msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $comment])
 </div>
 #end
 #else
