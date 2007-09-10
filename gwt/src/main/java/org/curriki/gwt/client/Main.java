@@ -483,4 +483,11 @@ public class Main implements EntryPoint {
         else
             return panel.getAbsoluteTop() + panel.getScrollPosition();
     }
+
+    /**
+     * Native method in JavaScript to access gwt:property
+     */
+    public static native String getProperty(String name) /*-{
+	 return $wnd.__gwt_getMetaProperty(name);
+     }-*/;
 }

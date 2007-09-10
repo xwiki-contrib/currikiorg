@@ -197,4 +197,8 @@ public class Constants {
     public static final int PROPOSE_DUPLICATE_TEMPLATE = 1;
     public static final int PROPOSE_DUPLICATE_EDIT = 2;
     public static final int DEFAULT_NB_VERSIONS = 0;
+
+    // CRS constants
+    public static final String CURRIKI_REVIEW_STATUS_CLASS = "CRS.CurrikiReviewStatusClass";
+    public static final String CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewStatusClass";
 }

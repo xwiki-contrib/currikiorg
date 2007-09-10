@@ -25,30 +25,14 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FormHandler;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Hidden;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.xpn.xwiki.gwt.api.client.DOMUtils;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.User;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.editor.Editor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,12 +137,10 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         hPanel.setCellWidth(hPanel.getWidget(1), "50%");
         panel.add(hPanel);
 
-
         addSectionTitle("general_information", fullMode);
         addEditor(assetObj, "keywords", "keywords", panel, false, fullMode);
         addEditor(assetObj, "language", "language", panel, false, fullMode);
-        // addEditor(assetObj, "review_status", "review_status");
-
+        addCRS(doc, panel, "private".equals(assetObj.get("rights")));
 
         addSectionTitle("educational_information", fullMode);
         addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panel, false, fullMode);
@@ -184,6 +166,72 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             //moreInfoLabel.addStyleName("more-info-"+fullMode);
             panel.add(moreInfoLabel);
         }
+    }
+
+    private void addCRS(Document doc, Panel panel, boolean isPrivate) {
+        XObject crsObj = doc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+        Integer reviewpending = (crsObj==null) ? null : (Integer) crsObj.get("reviewpending");
+        Object status = (crsObj==null) ? null : crsObj.get("status");
+        Object lastReviewDate = (crsObj==null) ? null : crsObj.getViewProperty("lastreview_date");
+        FlowPanel crsPanel = new FlowPanel();
+        crsPanel.setStyleName("crs_review");
+        HTMLPanel crsPanelTitle = new HTMLPanel(Main.getTranslation("curriki.crs.review"));
+        crsPanelTitle.setStyleName("crs_reviewtitle");
+        crsPanel.add(crsPanelTitle);
+        FlowPanel crsRatingPanel = new FlowPanel();
+        crsRatingPanel.setStyleName("crs_reviewrating");
+        if ((status==null)||(status.equals("0"))) {
+            HTMLPanel crsRatingTextPanel = new HTMLPanel(Main.getTranslation("curriki.crs.unrated"));
+            crsRatingTextPanel.setStyleName("crs_reviewratingtext");
+            crsRatingPanel.add(crsRatingTextPanel);
+        } else {
+            HTMLPanel crsRatingTextPanel = new HTMLPanel(Main.getTranslation("curriki.crs.rating"  + status));
+            crsRatingTextPanel.setStyleName("crs_reviewratingtext");
+            crsRatingPanel.add(crsRatingTextPanel);
+            if ((lastReviewDate!=null)&&(!lastReviewDate.equals(""))) {
+                HTMLPanel crsRatingDatePanel = new HTMLPanel(Main.getTranslation("curriki.crs.asof") + lastReviewDate);
+                crsRatingDatePanel.setStyleName("crs_reviewratingdate");
+                crsRatingPanel.add(crsRatingDatePanel);
+            }
+            Image crsRatingImage = new Image();
+            crsRatingImage.setStyleName("crs_reviewratingtext");
+            crsRatingPanel.add(crsRatingImage);
+        }
+        crsPanel.add(crsRatingPanel);
+        if (!"P".equals(status)&&!isPrivate) {
+            if ((reviewpending!=null)&&reviewpending.intValue()==1)  {
+                HTMLPanel crsReviewPendingPanel = new HTMLPanel(Main.getTranslation("curriki.crs.reviewpending"));
+                crsReviewPendingPanel.setStyleName("crs_reviewpending");
+                crsPanel.add(crsReviewPendingPanel);
+            } else {
+                Hyperlink crsReviewNominateLink = new Hyperlink();
+                crsReviewNominateLink.setText(Main.getTranslation("curriki.crs.reviewnominate"));
+                crsReviewNominateLink.setStyleName("crs_reviewnominate");
+                crsReviewNominateLink.addClickListener(new ClickListener() {
+                    public void onClick(Widget widget) {
+                        Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                        String url = Main.getTranslation("params.crs.nominateurl") + "?page=" + currentAsset.getFullName();
+                        Window.open(url, "_blank", "");
+                    }
+                });
+                crsPanel.add(crsReviewNominateLink);
+            }
+            // if the reviewer mode is set to one then we show the review link
+            if ("1".equals(Main.getProperty("reviewer"))) {
+                Hyperlink crsReviewReviewLink = new Hyperlink();
+                crsReviewReviewLink.setText(Main.getTranslation("curriki.crs.reviewreview"));
+                crsReviewReviewLink.setStyleName("crs_reviewreview");
+                crsReviewReviewLink.addClickListener(new ClickListener() {
+                    public void onClick(Widget widget) {
+                        Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                        String url = Main.getTranslation("params.crs.reviewurl") + "?page=" + currentAsset.getFullName();
+                        Window.open(url, "_blank", "");
+                    }
+                });
+                crsPanel.add(crsReviewReviewLink);
+            }
+        }
+        panel.add(crsPanel);
     }
 
     public void addSectionTitle(String titleKey, boolean visible){
