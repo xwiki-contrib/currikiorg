@@ -203,7 +203,7 @@ public class Constants {
     public static final String CURRIKI_REVIEW_STATUS_STATUS = "status";
     public static final String CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE = "lastreview_date";
     public static final String CURRIKI_REVIEW_STATUS_REVIEWPENDING = "reviewpending";
-    public static final String CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewStatusClass";
+    public static final String CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewClass";
     public static final String CURRIKI_REVIEW_TECHNICALCOMPLETNESS_PROPERTY = "technicalcompletness";
     public static final String CURRIKI_REVIEW_CONTENTACCURACY_PROPERTY = "contentaccuracy";
     public static final String CURRIKI_REVIEW_APPROPRIATEPEDAGOGY_PROPERTY = "appropriatepedagogy";
