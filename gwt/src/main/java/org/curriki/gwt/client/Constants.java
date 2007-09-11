@@ -200,5 +200,14 @@ public class Constants {
 
     // CRS constants
     public static final String CURRIKI_REVIEW_STATUS_CLASS = "CRS.CurrikiReviewStatusClass";
+    public static final String CURRIKI_REVIEW_STATUS_STATUS = "status";
+    public static final String CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE = "lastreview_date";
+    public static final String CURRIKI_REVIEW_STATUS_REVIEWPENDING = "reviewpending";
     public static final String CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewStatusClass";
+    public static final String CURRIKI_REVIEW_TECHNICALCOMPLETNESS_PROPERTY = "technicalcompletness";
+    public static final String CURRIKI_REVIEW_CONTENTACCURACY_PROPERTY = "contentaccuracy";
+    public static final String CURRIKI_REVIEW_APPROPRIATEPEDAGOGY_PROPERTY = "appropriatepedagogy";
+    public static final String CURRIKI_REVIEW_RATING_PROPERTY = "rating";
+    public static final String CURRIKI_REVIEW_DATE_PROPERTY = "date";
+    public static final String CURRIKI_REVIEW_COMMENT_PROPERTY = "comment";
 }

@@ -1352,6 +1352,7 @@ $msg.get("curriki.crs.reviewpending")
 <div class="crs_reviewstitle">
 $msg.get("curriki.crs.reviewlist.currikireview")
 </div>
+<div class="crs_reviewslist">
 #set($reviewlist = $xwiki.arrayList)
 #set($ok = $asset.use("XWiki.AssetClass"))
 #set($ict = $asset.display("instructional_component"))
@@ -1362,6 +1363,7 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 #end
 #if($reviewlist.size()>0)
 #foreach($obj in $reviewlist)
+<div class="crs_reviewsreview">
 #set($ok = $asset.use($obj))
 #set($vtc = $asset.getValue("technicalcompletness"))
 #set($vca = $asset.getValue("contentaccuracy"))
@@ -1375,11 +1377,19 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 $xwiki.formatDate($date, "yyyy MMM dd")
 </div>
 <div class="crs_reviewscomment">
+#if($rating&&($rating!="0")
 $msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $comment])
+#else
+$msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $comment])
+#end
+</div>
 </div>
 #end
 #else
+<div class="crs_reviewslistmessage">
 $msg.get("curriki.crs.reviewlist.nocurrikireviews")
+</div>
 #end
+</div>
 </div>
 #end
