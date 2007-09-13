@@ -93,11 +93,14 @@ public class Main implements EntryPoint
         if (dosearch == null) {
             // Check if started with search set to 1 using javascript like
             // var GWTArguments = { search: "1" };
-            Dictionary arguments = Dictionary.getDictionary("GWTArguments");
-            if (arguments != null && arguments.get("search") != null){
-                dosearch = arguments.get("search");
+            try {
+                Dictionary arguments = Dictionary.getDictionary("GWTArguments");
+                if (arguments != null && arguments.get("search") != null){
+                    dosearch = arguments.get("search");
+                }
+            } catch (Exception e){
+                // Ignore any exception
             }
-
         }
 
         if (dosearch != null){
