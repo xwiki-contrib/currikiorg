@@ -23,12 +23,12 @@
 package org.curriki.gwt.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.i18n.client.Dictionary;
 import com.xpn.xwiki.gwt.api.client.User;
 import com.xpn.xwiki.gwt.api.client.XWikiGWTException;
 import com.xpn.xwiki.gwt.api.client.Document;
@@ -41,14 +41,17 @@ import org.curriki.gwt.client.utils.Loading;
 import org.curriki.gwt.client.utils.Translator;
 import org.curriki.gwt.client.wizard.*;
 import org.curriki.gwt.client.editor.Editor;
+import org.curriki.gwt.client.search.Searcher;
 
-public class Main implements EntryPoint {
+public class Main implements EntryPoint
+{
     private static Main singleton;
     private Translator translator;
     private Loading loading;
 
     /*************************** Editor *********************/
     private Editor editor;
+    private Searcher searcher;
 
     /*************************** Wizards ********************/
     private AddExistingResourceWizard addExistingWizard;
@@ -85,8 +88,36 @@ public class Main implements EntryPoint {
         singleton = this;
         String action = WindowUtils.getLocation().getParameter("action");
         String page = WindowUtils.getLocation().getParameter("page");
+        String dosearch = WindowUtils.getLocation().getParameter("search");
 
-        if ((action!=null)||(page!=null)) {
+        if (dosearch == null) {
+            // Check if started with search set to 1 using javascript like
+            // var GWTArguments = { search: "1" };
+            Dictionary arguments = Dictionary.getDictionary("GWTArguments");
+            if (arguments != null && arguments.get("search") != null){
+                dosearch = arguments.get("search");
+            }
+
+        }
+
+        if (dosearch != null){
+            // Bring up Site search app
+            callSiteAddJSAPI(singleton); // Need to makes sure other GWT links still work
+
+            searcher = new Searcher();
+            checkTranslator(new AsyncCallback() {
+                public void onFailure(Throwable throwable) {
+                }
+                public void onSuccess(Object object) {
+                    Command loadSearcher = new Command(){
+                        public void execute(){
+                            searcher.init();
+                        }
+                    };
+                    fetchUser(loadSearcher);
+                }
+            });
+        } else  if ((action!=null)||(page!=null)) {
             editor = new Editor();
             checkTranslator(new AsyncCallback() {
                 public void onFailure(Throwable throwable) {

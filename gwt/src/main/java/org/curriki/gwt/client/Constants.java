@@ -50,6 +50,7 @@ public class Constants {
     public static final String ASSET_FW_ITEMS_PROPERTY = "fw_items";
     public static final String ASSET_DESCRIPTION_PROPERTY = "description";
     public static final String ASSET_EDUCATIONAL_LEVEL_PROPERTY = "educational_level2";
+    public static final String ASSET_LANGUAGE_PROPERTY = "language"; 
     public static final String ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY = "instructional_component2";
     public static final String ASSET_TITLE_PROPERTY = "title";
     public static final String ASSET_RIGHTS_PROPERTY = "rights";
