@@ -10,8 +10,8 @@ import org.curriki.gwt.client.widgets.browseasset.AssetItem;
 import java.util.List;
 
 /*
- * Copyright 2006, XpertNet SARL, and individual contributors as indicated
- * by the contributors.txt.
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
