@@ -61,7 +61,7 @@ public class InstructionalTypeColumn extends ResultsColumn
         String name = getDisplayString(value);
         FlowPanel ret = new FlowPanel();
 
-        if (name.matches("#--#")){
+        if (name.indexOf("#--#") != -1){
             name = "Multiple:";
         }
 
