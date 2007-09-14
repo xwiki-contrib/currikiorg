@@ -22,11 +22,13 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.Constants;
-import com.xpn.xwiki.gwt.api.client.Document;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTML;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.model.Document;
 
 public class InstructionalTypeColumn extends ResultsColumn
 {
@@ -56,21 +58,24 @@ public class InstructionalTypeColumn extends ResultsColumn
 
     public Widget getDisplayWidget(Document value)
     {
-        String icon = "";
-        String name = "";
+        String name = getDisplayString(value);
+        FlowPanel ret = new FlowPanel();
 
-        if (value.getObject(Constants.ASSET_CLASS) != null){
-            value.use(Constants.ASSET_CLASS);
-            if (value.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY) != null){
-                name = value.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
-                icon = name.replaceAll(":.*", "");
-                name = name.replaceFirst(icon+":", "");
-                if (icon.length() > 0) {
-                    icon = "<img src=\""+ Constants.ICON_PATH+"ICTIcon-"+icon+".png\" />";
-                }
-            }
+        if (name.matches("#--#")){
+            name = "Multiple:";
         }
 
-        return new HTML(icon+name);
+        if (name.length() > 0){
+            String icon = name.replaceAll(":.*", "");
+            name = name.replaceFirst(icon+":", "");
+            if (icon.length() > 0) {
+                Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".png");
+                img.setTitle(icon);
+                ret.add(img);
+            }
+            ret.add(new Label(name));
+        }
+
+        return ret;
     }
 }

@@ -142,7 +142,7 @@ public class Constants {
     public static final String CATEGORY_AUDIO = "Media: Audio/Video";
     public static final String CATEGORY_ANIMATION = "Media: Animation/Activity";
     public static final String CATEGORY_ARCHIVE = "Archive: Web Site/Zip/Stuffit File";
-    public static final Object CATEGORY_TEXT = "text";
+    public static final String CATEGORY_TEXT = "text";
     public static final String CATEGORY_COLLECTION = "collection";
     public static final String CATEGORY_LINK = "link";
     public static final String CATEGORY_UNKNOWN = "unknown";

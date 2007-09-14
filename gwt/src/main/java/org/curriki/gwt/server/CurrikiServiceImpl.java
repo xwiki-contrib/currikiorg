@@ -1520,10 +1520,10 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             return doc;
         } finally {
             context.setDoc(cdoc);
-        }    }
+        }
+    }
 
     /* Lucene Searching */
-
     public List luceneSearch(String terms, int start, int nb) throws XWikiGWTException {
         List docs = new ArrayList();
 
@@ -1548,6 +1548,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
                 // TODO: We really should create a sub-class of Document for this
                 doc.setCreator(context.getWiki().getUserName(xd.getCreator(), null, false, context));
+
                 BaseObject obj = xd.getObject(Constants.COMPOSITEASSET_CLASS);
                 if (obj != null){
                     doc.setFormat("composite");

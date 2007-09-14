@@ -22,15 +22,15 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.Constants;
-import com.xpn.xwiki.gwt.api.client.Document;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Label;
+import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.Main;
 
 public class TitleColumn extends ResultsColumn
 {
-    protected int maxLength = 40;
+    protected int maxLength = 78;
 
     public TitleColumn()
     {
@@ -63,26 +63,32 @@ public class TitleColumn extends ResultsColumn
 
     public Widget getDisplayWidget(Document value)
     {
-        Label nameCol = new Label();
+        HTML nameCol = new HTML();
+        String url = value.getViewURL();
         String name = (value.getTitle().length() > 0) ? value.getTitle() : value.getName();
+        String desc = "";
+
         if (name.length() > maxLength){
-            nameCol.setTitle(name);
             name = name.substring(0, (maxLength-1))+"...";
         }
-        nameCol.setText(name);
 
         if (value.getObject(Constants.ASSET_CLASS) != null){
             value.use(Constants.ASSET_CLASS);
             if (value.get(Constants.ASSET_TITLE_PROPERTY) != null){
                 name = value.get(Constants.ASSET_TITLE_PROPERTY);
                 if (name.length() > maxLength){
-                    nameCol.setTitle(name);
                     name = name.substring(0, (maxLength-1))+"...";
                 }
-                if (name.length() > 0){
-                    nameCol.setText(name);
-                }
             }
+
+            if (value.get(Constants.ASSET_DESCRIPTION_PROPERTY) != null){
+                desc = value.get(Constants.ASSET_DESCRIPTION_PROPERTY);
+            }
+        }
+
+        nameCol.setHTML("<a href=\""+url+"\">"+name+"</a>");
+        if (desc.length() > 0){
+            addTooltip(nameCol, "<b>Description:</b><br>"+desc);
         }
 
         return nameCol;

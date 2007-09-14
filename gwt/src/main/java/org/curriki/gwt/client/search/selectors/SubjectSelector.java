@@ -22,9 +22,9 @@
  */
 package org.curriki.gwt.client.search.selectors;
 
-import com.xpn.xwiki.gwt.api.client.Document;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
+import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;

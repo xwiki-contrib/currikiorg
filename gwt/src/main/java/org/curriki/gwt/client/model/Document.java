@@ -1,6 +1,6 @@
 /*
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright 2007, The Global Education and Learning Community,
+ * and individual contributors as indicated by the contributors.txt.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,17 +20,19 @@
  * @author dward
  *
  */
-package org.curriki.gwt.client.search.columns;
+package org.curriki.gwt.client.model;
 
-import com.google.gwt.user.client.ui.Widget;
-import com.xpn.xwiki.gwt.api.client.Document;
-
-public interface ResultsColumnDisplayable
+public class Document extends com.xpn.xwiki.gwt.api.client.Document
 {
-    abstract public String getHeaderString();
-    abstract public Widget getHeaderWidget();
-    abstract public String getHeaderColumnStyle();
-    abstract public String getColumnStyle();
-    abstract public String getDisplayString(Document value);
-    abstract public Widget getDisplayWidget(Document value);
+    private String username;
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
 }

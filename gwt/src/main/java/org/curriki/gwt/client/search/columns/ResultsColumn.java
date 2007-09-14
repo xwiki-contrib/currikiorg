@@ -22,9 +22,13 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import com.xpn.xwiki.gwt.api.client.Document;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.Widget;
+import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 
 abstract public class ResultsColumn implements ResultsColumnDisplayable
 {
@@ -70,5 +74,13 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
     public Widget getDisplayWidget(Document value)
     {
         return new Label(getDisplayString(value));
+    }
+
+    protected void addTooltip(SourcesMouseEvents item, String text) {
+        PopupPanel popup = new PopupPanel(true);
+        popup.setStyleName("search-description-popup");
+        // popup.setWidth("300px");
+        popup.add(new HTML(text));
+        item.addMouseListener(new TooltipMouseListener(popup));
     }
 }

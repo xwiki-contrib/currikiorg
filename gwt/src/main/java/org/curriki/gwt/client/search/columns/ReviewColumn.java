@@ -22,11 +22,11 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.Constants;
-import com.xpn.xwiki.gwt.api.client.Document;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTML;
+import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.Main;
 
 public class ReviewColumn extends ResultsColumn
 {
@@ -42,15 +42,29 @@ public class ReviewColumn extends ResultsColumn
 
     public String getDisplayString(Document value)
     {
-        //TODO: Where do we get this value?
-        return "1";
+        String rating = "";
+
+        if (value.getObject(Constants.CURRIKI_REVIEW_CLASS) != null){
+            value.use(Constants.CURRIKI_REVIEW_CLASS);
+            if (value.get(Constants.CURRIKI_REVIEW_RATING_PROPERTY) != null){
+                rating = value.get(Constants.CURRIKI_REVIEW_RATING_PROPERTY);
+            }
+        }
+
+        return rating;
     }
 
     public Widget getDisplayWidget(Document value)
     {
-        //TODO: Where do we get this value?
-        String icon = "1";
-        icon = "<img src=\""+ Constants.ICON_PATH+"CRS"+icon+".png\" />";
-        return new HTML(icon);
+        String rating = getDisplayString(value);
+        Image img = new Image();
+        if (rating.length() > 0){
+            if (!rating.equals("0")){
+                img = new Image(Constants.ICON_PATH+"CRS"+rating+".png");
+            }
+            this.addTooltip(img, Main.getTranslation("search.CRS.tooltip."+rating));
+        }
+
+        return img;
     }
 }

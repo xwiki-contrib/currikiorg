@@ -34,12 +34,11 @@ public class FileTypeSelector extends DropdownSingleSelector
         super();
         setFieldName("XWiki.AssetClass."+ Constants.ASSET_CATEGORY_PROPERTY);
         
-        // TODO: put correct values in
         addOption(Main.getTranslation("Any"), "");
-        addOption(Main.getTranslation("Audio/Video"), "Media: Audio/Video");
-        addOption(Main.getTranslation("Curriki"), "text");
-        addOption(Main.getTranslation("Image"), "Image: GIF, JPG, PNG, BMP");
-        addOption(Main.getTranslation("Web"), "link");
+        addOption(Main.getTranslation("Audio/Video"), Constants.CATEGORY_AUDIO);
+        addOption(Main.getTranslation("Curriki"), Constants.CATEGORY_TEXT);
+        addOption(Main.getTranslation("Image"), Constants.CATEGORY_IMAGE);
+        addOption(Main.getTranslation("Web"), Constants.CATEGORY_LINK);
     }
 
     public Widget getLabel()
