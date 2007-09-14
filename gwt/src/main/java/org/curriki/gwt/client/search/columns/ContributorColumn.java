@@ -39,6 +39,8 @@ public class ContributorColumn extends ResultsColumn
 
     public String getDisplayString(Document value)
     {
+        //TODO: We need to get the username and make this a link to the contributor's "My Curriki" page
+        
         String creator = "";
         if (value.getCreator() != null){
             creator = value.getCreator();

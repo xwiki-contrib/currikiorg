@@ -26,4 +26,5 @@ public interface Paginator
 {
     public int getFetchCount();
     public int getStart();
+    public void adjust(int count, int start, int hitcount);
 }

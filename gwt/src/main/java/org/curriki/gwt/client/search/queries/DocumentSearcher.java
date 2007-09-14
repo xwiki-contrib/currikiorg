@@ -34,4 +34,5 @@ public interface DocumentSearcher
     public void doSearch(int start, int count);
     public int getHitcount();
     public List getResults();
+    public void setPaginator(Paginator paginator);
 }

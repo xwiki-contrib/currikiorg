@@ -83,24 +83,26 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         int count = Constants.DIALOG_FIND_FETCH_COUNT;
 
         if (results != null) {
-            if (paginator != null){
-                start = paginator.getStart();
-                count = paginator.getFetchCount();
-            }
-
             query = new LuceneAssetQuery();
             query.setReceiver(results);
+
             if (selector != null){
                 query.setCriteria(selector.getFilter());
             }
 
-            query.doSearch(start, count);
+            if (paginator != null){
+                query.setPaginator(paginator);
+                query.doSearch();
+            } else {
+                query.doSearch(start, count);
+            }
         }
     }
 
-    public void addPaginator(Paginator paginator)
+    public void setPaginator(Paginator paginator)
     {
         this.paginator = paginator;
+        results.setPaginator(paginator);
     }
 
     public void clear(){
@@ -129,7 +131,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         curRow++;
     }
 
-    public void addSelector(Selectable selector){
+    public void setSelector(Selectable selector){
         this.selector = selector;
     }
 }

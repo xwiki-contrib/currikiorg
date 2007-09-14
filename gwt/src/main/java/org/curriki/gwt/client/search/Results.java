@@ -25,6 +25,7 @@ package org.curriki.gwt.client.search;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.search.panels.ResultsRenderer;
 import org.curriki.gwt.client.search.queries.ResultsReceiver;
+import org.curriki.gwt.client.search.queries.Paginator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.List;
 public class Results implements ResultsReceiver
 {
     protected ResultsRenderer renderer;
+    protected Paginator paginator;
 
     public void setRederer(ResultsRenderer renderer){
         this.renderer = renderer;
@@ -47,6 +49,10 @@ public class Results implements ResultsReceiver
             renderer.addRow(doc);
         }
 
-        //TODO: Set pagination info
+        paginator.adjust(paginator.getFetchCount(), paginator.getStart(), hitcount);
+    }
+
+    public void setPaginator(Paginator paginator){
+        this.paginator = paginator;
     }
 }

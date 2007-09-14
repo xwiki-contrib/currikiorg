@@ -24,9 +24,12 @@ package org.curriki.gwt.client.search.columns;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 
 public class TitleColumn extends ResultsColumn
 {
@@ -92,5 +95,13 @@ public class TitleColumn extends ResultsColumn
         }
 
         return nameCol;
+    }
+
+    protected void addTooltip(SourcesMouseEvents item, String text) {
+        PopupPanel popup = new PopupPanel(true);
+        popup.setStyleName("search-title-description-popup");
+        popup.setWidth("300px");
+        popup.add(new HTML(text));
+        item.addMouseListener(new TooltipMouseListener(popup, 234, (Widget) item));
     }
 }

@@ -22,53 +22,53 @@
  */
 package org.curriki.gwt.client.search.panels;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import org.curriki.gwt.client.search.queries.Paginator;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.widgets.find.Paginatable;
+import org.curriki.gwt.client.search.queries.DoesSearch;
+import org.curriki.gwt.client.search.queries.Paginator;
 
-public class PaginationPanel extends HorizontalPanel implements Paginator
+public class PaginationPanel extends VerticalPanel implements Paginator
 {
-    Hyperlink first = new Hyperlink();
-    Hyperlink prev = new Hyperlink();
-    Label page = new Label();
-    Hyperlink next = new Hyperlink();
-    Hyperlink last = new Hyperlink();
-    boolean canPrevious = false;
-    boolean canNext = false;
-    Paginatable callback;
-    int count = 0;
-    int start = 0;
-    int hitcount = 0;
-    int lastindex = 0;
+    protected Hyperlink first = new Hyperlink();
+    protected Hyperlink prev = new Hyperlink();
+    protected Label page = new Label();
+    protected Hyperlink next = new Hyperlink();
+    protected Hyperlink last = new Hyperlink();
+    protected boolean canPrevious = false;
+    protected boolean canNext = false;
+    protected DoesSearch searcher;
+    protected int start = 1;
+    protected int count = Constants.DIALOG_FIND_FETCH_COUNT;
+    protected int hitcount = 0;
+    protected int lastindex = 0;
+    protected Paginator paginator;
+    protected HorizontalPanel pResults = new HorizontalPanel();
+    protected HorizontalPanel pNav = new HorizontalPanel();
 
     public PaginationPanel(){
-        //TODO: Initialize panel
+        paginator = this;
+        init("search-pagination");
     }
 
-    public int getFetchCount()
+    public Paginator getPaginator()
     {
-        //TODO: This should be configurable
-        return Constants.DIALOG_FIND_FETCH_COUNT;
+        return paginator;
     }
 
-    public int getStart()
-    {
-        return start;
-    }
-    
-    public void init(String style, Paginatable callback){
+    public void init(String style){
         // setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         addStyleName(style);
         setVisible(false);
+        pResults.setStyleName("search-pagination-results");
 
-        this.callback = callback;
-
+        pNav.setStyleName("search-pagination-nav");
         ClickListener paginate = new ClickListener(){
             public void onClick(Widget sender){
                 changePage(sender);
@@ -78,37 +78,40 @@ public class PaginationPanel extends HorizontalPanel implements Paginator
         first.addStyleName("pagination-item-first");
         first.addStyleName("pagination-item-disabled");
         first.addClickListener(paginate);
-        add(first);
+        pNav.add(first);
 
-        add(new Label(" | "));
+        pNav.add(new Label(" | "));
 
         prev.setText(Main.getTranslation("find.prev"));
         prev.addStyleName("pagination-item-prev");
         prev.addStyleName("pagination-item-disabled");
         prev.addClickListener(paginate);
-        add(prev);
+        pNav.add(prev);
 
-        add(new Label(" | "));
+        pNav.add(new Label(" | "));
 
         page.setText(Main.getTranslation("find.page")+" 1 / 1");
         page.addStyleName("pagination-item-page");
-        add(page);
+        pNav.add(page);
 
-        add(new Label(" | "));
+        pNav.add(new Label(" | "));
 
         next.setText(Main.getTranslation("find.next"));
         prev.addStyleName("pagination-item-next");
         next.addStyleName("pagination-item-disabled");
         next.addClickListener(paginate);
-        add(next);
+        pNav.add(next);
 
-        add(new Label(" | "));
+        pNav.add(new Label(" | "));
 
         last.setText(Main.getTranslation("find.last"));
         prev.addStyleName("pagination-item-last");
         last.addStyleName("pagination-item-disabled");
         last.addClickListener(paginate);
-        add(last);
+        pNav.add(last);
+
+        add(pResults);
+        add(pNav);
     }
 
     private void changePage(Widget sender) {
@@ -126,7 +129,9 @@ public class PaginationPanel extends HorizontalPanel implements Paginator
 
         if (newstart != start){
             start = newstart;
-            callback.paginate(start);
+            if (searcher != null){
+                searcher.doSearch();
+            }
         }
     }
 
@@ -135,11 +140,18 @@ public class PaginationPanel extends HorizontalPanel implements Paginator
         this.start = start;
         this.hitcount = hitcount;
 
+        if (hitcount < count){
+            count = hitcount;
+        }
+
         int pagecount = hitcount / count + (((hitcount % count) > 0) ? 1 : 0);
 
         int curpage = (start / count) + 1;
 
         lastindex = ((pagecount - 1)*count)+1;
+
+        pResults.clear();
+        pResults.add(new HTML(Main.getTranslation("Results")+" "+start+" - "+(start+count-1)+" of about "+hitcount));
 
         if (start > 1){
             // First and Prev should be enabled
@@ -188,5 +200,30 @@ public class PaginationPanel extends HorizontalPanel implements Paginator
         } else {
             setVisible(false);
         }
+    }
+
+    public int getLimit()
+    {
+        return count;
+    }
+
+    public void setLimit(int limit)
+    {
+        this.count = limit;
+    }
+
+    public int getFetchCount()
+    {
+        return getLimit();
+    }
+
+    public int getStart()
+    {
+        return start;
+    }
+
+    public void setSearcher(DoesSearch searcher)
+    {
+        this.searcher = searcher;
     }
 }

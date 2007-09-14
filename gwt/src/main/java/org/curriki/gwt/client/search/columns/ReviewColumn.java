@@ -24,6 +24,7 @@ package org.curriki.gwt.client.search.columns;
 
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
@@ -56,11 +57,18 @@ public class ReviewColumn extends ResultsColumn
 
     public Widget getDisplayWidget(Document value)
     {
+        final String url = value.getViewURL()+"?viewer=comments";
+
         String rating = getDisplayString(value);
         Image img = new Image();
         if (rating.length() > 0){
             if (!rating.equals("0")){
                 img = new Image(Constants.ICON_PATH+"CRS"+rating+".png");
+                img.addClickListener(new ClickListener() {
+                    public void onClick(Widget sender) {
+                        Main.changeWindowHref(url);
+                    }
+                });
             }
             this.addTooltip(img, Main.getTranslation("search.CRS.tooltip."+rating));
         }

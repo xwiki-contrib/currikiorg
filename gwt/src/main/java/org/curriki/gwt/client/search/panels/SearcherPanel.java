@@ -52,11 +52,12 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         add(rTitle);
 
         results = new ResultsPanel();
-        results.addSelector(selector);
+        results.setSelector(selector);
         add(results);
 
         pagination = new PaginationPanel();
-        results.addPaginator(pagination);
+        results.setPaginator(pagination.getPaginator());
+        pagination.setSearcher(results);
         add(pagination);
     }
 

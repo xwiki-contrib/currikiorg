@@ -38,6 +38,7 @@ public class LuceneQuery implements DocumentSearcher
     protected List results;
     protected int hitcount;
     protected ResultsReceiver receiver;
+    protected Paginator paginator;
     protected int limit = Constants.DIALOG_FIND_FETCH_COUNT;
 
     public int getLimit(){
@@ -76,6 +77,15 @@ public class LuceneQuery implements DocumentSearcher
         this.receiver = receiver;
     }
 
+    public void doSearch()
+    {
+        if (paginator != null){
+            doSearch(paginator.getStart(), paginator.getFetchCount());
+        } else {
+            doSearch(1, limit);
+        }
+    }
+    
     public void doSearch(int start, int count)
     {
         CurrikiService.App.getInstance().luceneSearch(searchTerms, start, limit, new LuceneQuery.populateResultsCallback());
@@ -138,5 +148,10 @@ public class LuceneQuery implements DocumentSearcher
                 receiver.setResults(getHitcount(), getResults());
             }
         }
+    }
+
+    public void setPaginator(Paginator paginator)
+    {
+        this.paginator = paginator;
     }
 }

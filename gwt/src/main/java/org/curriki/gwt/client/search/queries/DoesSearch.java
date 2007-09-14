@@ -25,5 +25,5 @@ package org.curriki.gwt.client.search.queries;
 public interface DoesSearch
 {
     public void doSearch();
-    public void addPaginator(Paginator paginator);
+    public void setPaginator(Paginator paginator);
 }

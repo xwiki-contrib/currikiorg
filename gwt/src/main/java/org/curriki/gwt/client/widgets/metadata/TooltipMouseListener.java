@@ -6,12 +6,24 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TooltipMouseListener implements MouseListener {
     protected PopupPanel popup;
+    protected int left = -1;
+    protected Widget fromWidget;
 
     public void onMouseDown(Widget widget, int i, int i1) {
     }
 
     public void onMouseEnter(Widget widget) {
-        popup.setPopupPosition(widget.getAbsoluteLeft() + 30, widget.getAbsoluteTop() + 5);
+        Widget useWidget;
+        if (fromWidget != null){
+            useWidget = fromWidget;
+        } else {
+            useWidget = widget;
+        }
+        if (left == -1){
+            popup.setPopupPosition(useWidget.getAbsoluteLeft() + 30, useWidget.getAbsoluteTop() + 5);
+        } else {
+            popup.setPopupPosition(useWidget.getAbsoluteLeft() + left, useWidget.getAbsoluteTop() + 5);
+        }
         popup.show();
     }
 
@@ -27,5 +39,19 @@ public class TooltipMouseListener implements MouseListener {
 
     public TooltipMouseListener(PopupPanel popup) {
         this.popup = popup;
+    }
+
+    public TooltipMouseListener(PopupPanel popup, int left, Widget fromWidget){
+        this(popup);
+        setLeft(left);
+        setFromWidget(fromWidget);
+    }
+
+    public void setLeft(int left){
+        this.left = left;
+    }
+
+    public void setFromWidget(Widget fromWidget){
+        this.fromWidget = fromWidget;
     }
 }
