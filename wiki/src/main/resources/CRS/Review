@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xwikidoc>
 <web>CRS</web>
@@ -206,6 +206,11 @@ $asset.display("comment", "hidden")
 #set($vca = $asset.getValue("contentaccuracy"))
 #set($vap = $asset.getValue("appropriatepedagogy"))
 #set($comment = $asset.getValue("comment"))
+#if((!$ict)||($ict=="")||($ict=="choose")||(!$vtc)||($vtc=="")||(!$vca)||($vca=="")||(!$vap)||($vap==""))
+$msg.get("curriki.crs.review.incomplete")
+
+&lt;input type="submit" name="revise" value="$msg.get("curriki.crs.review.revise")" onclick="history.go(-1); return false;" /&gt;
+#else
 $msg.get("curriki.crs.review.preview"):
 
 $msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $comment])
@@ -214,6 +219,7 @@ $msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $c
 &lt;input type="submit" name="revise" value="$msg.get("curriki.crs.review.revise")" onclick="history.go(-1); return false;" /&gt;
 &lt;input type="submit" name="submit" value="$msg.get("curriki.crs.review.submitreview")" /&gt;
 &lt;/form&gt;
+#end
 #end
 #else
 #set($ok = $asset.use("XWiki.AssetClass"))
