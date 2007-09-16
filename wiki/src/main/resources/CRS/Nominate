@@ -61,7 +61,11 @@ $msg.get("curriki.crs.nominate_cannot")
 #set($ok = $asset.save())
 
 $asset.getValue("reviewpending")
+#if($request.fromgwt=="1")
+$msg.get("curriki.crs.nominate_thankyoufromgwt")
+#else
 $msg.get("curriki.crs.nominate_thankyou", [$asset.getURL()])
+#end
 #else
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
 #set($reviewpending = $asset.getValue("reviewpending"))
@@ -73,6 +77,7 @@ $asset.getDisplayTitle()
 1.1 $msg.get("curriki.crs.nominate_comment")
 
 &lt;form action=""&gt;
+&lt;input type="hidden" name="fromgwt" value="$!request.fromgwt" /&gt;
 &lt;input type="hidden" name="page" value="$!request.page" /&gt;
 &lt;input type="hidden" name="CRS.CurrikiReviewStatusClass_0_reviewpending" value="1" /&gt;
 &lt;input type="hidden" name="CRS.CurrikiReviewStatusClass_0_nomination_user" value="$context.user" /&gt;
