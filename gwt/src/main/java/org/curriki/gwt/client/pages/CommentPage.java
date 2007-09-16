@@ -116,15 +116,16 @@ public class CommentPage extends AbstractPage {
     private void loadComments() {
         Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
         commentsPanel.clear();
-        FlowPanel crsPanel = new FlowPanel();
-        crsPanel.addStyleName("crs_reviews");
-        FlowPanel crsTitlePanel = new FlowPanel();
-        crsTitlePanel.addStyleName("crs_reviewstitle");
-        crsTitlePanel.add(new HTML(Main.getTranslation("curriki.crs.reviewlist.currikireview")));
-        crsPanel.add(crsTitlePanel);
 
         List objects = currentAsset.getObjects(Constants.CURRIKI_REVIEW_CLASS);
         if ((objects!=null)&&(objects.size()>0)) {
+            FlowPanel crsPanel = new FlowPanel();
+            crsPanel.addStyleName("crs_reviews");
+            FlowPanel crsTitlePanel = new FlowPanel();
+            crsTitlePanel.addStyleName("crs_reviewstitle");
+            crsTitlePanel.add(new HTML(Main.getTranslation("curriki.crs.reviewlist.currikireview")));
+            crsPanel.add(crsTitlePanel);
+
             FlowPanel crsReviewListPanel = new FlowPanel();
             crsReviewListPanel.addStyleName("crs_reviewslist");
             XObject assetObj = currentAsset.getObject(Constants.ASSET_CLASS);
@@ -160,14 +161,8 @@ public class CommentPage extends AbstractPage {
                 }
             }
             crsPanel.add(crsReviewListPanel);
-        } else {
-            FlowPanel crsReviewsListMessagePanel = new FlowPanel();
-            crsReviewsListMessagePanel.addStyleName("crs_reviewslistmessage");
-            HTML html = new HTML(Main.getSingleton().getTranslator().getTranslation("curriki.crs.reviewlist.nocurrikireviews"));
-            crsReviewsListMessagePanel.add(html);
-            crsPanel.add(crsReviewsListMessagePanel);
-        }
-        commentsPanel.add(crsPanel);
+            commentsPanel.add(crsPanel);
+        } 
 
         if (currentAsset.getCommentsNumber()>0) {
             commentsPanel.add(new HTML(Main.getTranslation("comment.loadingcomments")));

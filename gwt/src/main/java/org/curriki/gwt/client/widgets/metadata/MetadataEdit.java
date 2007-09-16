@@ -191,7 +191,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         crsPanel.add(crsPanelTitle);
         FlowPanel crsRatingPanel = new FlowPanel();
         crsRatingPanel.setStyleName("crs_reviewrating");
-        if ((status==null)||(status.equals("0"))) {
+        if ((status==null)||(status.equals("0"))||(status.equals(""))) {
             HTMLPanel crsRatingTextPanel = new HTMLPanel(Main.getTranslation("curriki.crs.unrated"));
             crsRatingTextPanel.setStyleName("crs_reviewratingtext");
             crsRatingPanel.add(crsRatingTextPanel);

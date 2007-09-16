@@ -1303,7 +1303,7 @@ $msg.get("curriki.crs.review"):
 #set($rights = $!asset.getValue("rights"))
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
 #set($status = $asset.getValue("status"))
-#if((!$status)||($status=="0"))
+#if((!$status)||($status=="0")||($status==""))
 <div class="crs_reviewrating">
 <div class="crs_reviewratingtext">
 $msg.get("curriki.crs.unrated")
@@ -1348,11 +1348,6 @@ $msg.get("curriki.crs.reviewpending")
 
 ## this macro diplays all the reviews in ante-chronological order
 #macro(displayCRSReviews $asset)
-<div class="crs_reviews">
-<div class="crs_reviewstitle">
-$msg.get("curriki.crs.reviewlist.currikireview")
-</div>
-<div class="crs_reviewslist">
 #set($reviewlist = $xwiki.arrayList)
 #set($ok = $asset.use("XWiki.AssetClass"))
 #set($ict = $asset.display("instructional_component"))
@@ -1362,6 +1357,11 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 #end
 #end
 #if($reviewlist.size()>0)
+<div class="crs_reviews">
+<div class="crs_reviewstitle">
+$msg.get("curriki.crs.reviewlist.currikireview")
+</div>
+<div class="crs_reviewslist">
 #foreach($obj in $reviewlist)
 <div class="crs_reviewsreview">
 #set($ok = $asset.use($obj))
@@ -1384,12 +1384,7 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 #end
 </div>
 </div>
-#end
-#else
-<div class="crs_reviewslistmessage">
-$msg.get("curriki.crs.reviewlist.nocurrikireviews")
+</div>
 </div>
 #end
-</div>
-</div>
 #end
