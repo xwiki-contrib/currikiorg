@@ -236,7 +236,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 crsReviewNominateLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
                         Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                        String url = Main.getTranslation("params.crs.nominateurl") + "?page=" + currentAsset.getFullName();
+                        String url = Main.getTranslation("params.crs.nominateurl") + "?fromgwt=1&amp;page=" + currentAsset.getFullName();
                         Window.open(url, "_blank", "");
                     }
                 });
