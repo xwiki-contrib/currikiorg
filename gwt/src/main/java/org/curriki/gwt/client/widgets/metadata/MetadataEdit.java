@@ -40,10 +40,12 @@ import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
+import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Date;
 
 
 public class MetadataEdit extends Composite implements MouseListener, ClickListener
@@ -183,7 +185,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         Integer reviewpending = (crsObj==null) ? null : (Integer) crsObj.get(Constants.CURRIKI_REVIEW_STATUS_REVIEWPENDING);
         String status = (crsObj==null) ? null : (String) crsObj.get(Constants.CURRIKI_REVIEW_STATUS_STATUS);
         currentCRSStatus = status;
-        Object lastReviewDate = (crsObj==null) ? null : crsObj.getViewProperty(Constants.CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE);
+        Date lastReviewDate = (crsObj==null) ? null : (Date) crsObj.getProperty(Constants.CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE);
         FlowPanel crsPanel = new FlowPanel();
         crsPanel.setStyleName("crs_review");
         HTMLPanel crsPanelTitle = new HTMLPanel(Main.getTranslation("curriki.crs.review"));
@@ -200,7 +202,9 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             crsRatingTextPanel.setStyleName("crs_reviewratingtext");
             crsRatingPanel.add(crsRatingTextPanel);
             if ((lastReviewDate!=null)&&(!lastReviewDate.equals(""))) {
-                HTMLPanel crsRatingDatePanel = new HTMLPanel(Main.getTranslation("curriki.crs.asof") + lastReviewDate);
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+                String sreviewDate = formatter.format(lastReviewDate);
+                HTMLPanel crsRatingDatePanel = new HTMLPanel(Main.getTranslation("curriki.crs.asof") + sreviewDate);
                 crsRatingDatePanel.setStyleName("crs_reviewratingdate");
                 crsRatingPanel.add(crsRatingDatePanel);
             }
@@ -236,7 +240,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 crsReviewNominateLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
                         Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                        String url = Main.getTranslation("params.crs.nominateurl") + "?fromgwt=1&amp;page=" + currentAsset.getFullName();
+                        String url = Main.getTranslation("params.crs.nominateurl") + "?fromgwt=1&page=" + currentAsset.getFullName();
                         Window.open(url, "_blank", "");
                     }
                 });
@@ -251,11 +255,11 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                     String questionText;
                     String titleText;
                     if ("P".equals(currentCRSStatus)) {
-                        questionText = Main.getTranslation("curriki.crs.confirmsettopartner");
-                        titleText = "curriki.crs.settopartner";
-                    } else {
                         questionText = Main.getTranslation("curriki.crs.confirmunsettopartner");
                         titleText = "curriki.crs.unsettopartner";
+                    } else {
+                        questionText = Main.getTranslation("curriki.crs.confirmsettopartner");
+                        titleText = "curriki.crs.settopartner";
                     }
                     ncDialog = new NextCancelDialog(titleText, questionText, "crsconfirmsettopartner", new AsyncCallback() {
                         public void onFailure(Throwable throwable) {
