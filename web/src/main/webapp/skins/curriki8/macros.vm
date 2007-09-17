@@ -1297,7 +1297,9 @@ $text
 #macro(displayCRS $asset)
 <div class="crs_review">
 <div class="crs_reviewtitle">
+<a href="$xwiki.getURL("Coll_curriki.CurrikiReviewSystemCollection", "view", "bc=XWiki.curriki")">
 $msg.get("curriki.crs.review"):
+</a>
 </div>
 #set($ok = $asset.use("XWiki.AssetClass"))
 #set($rights = $!asset.getValue("rights"))
@@ -1359,9 +1361,7 @@ $msg.get("curriki.crs.reviewpending")
 #if($reviewlist.size()>0)
 <div class="crs_reviews">
 <div class="crs_reviewstitle">
-<a href="$xwiki.getURL("Coll_curriki.CurrikiReviewSystemCollection", "view", "bc=XWiki.curriki")">
 $msg.get("curriki.crs.reviewlist.currikireview")
-</a>
 </div>
 <div class="crs_reviewslist">
 #foreach($obj in $reviewlist)
