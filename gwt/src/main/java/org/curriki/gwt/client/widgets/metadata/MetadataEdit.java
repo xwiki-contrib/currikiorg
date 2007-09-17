@@ -191,6 +191,14 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         HTMLPanel crsPanelTitle = new HTMLPanel(Main.getTranslation("curriki.crs.review"));
         crsPanelTitle.setStyleName("crs_reviewtitle");
         crsPanel.add(crsPanelTitle);
+        String txt = Main.getTranslation("curriki.crs.review.tooltip");
+        Image image = new Image(Constants.ICON_PATH+"exclamation.png");
+        PopupPanel popup = new PopupPanel(true);
+        popup.setStyleName("metadata-tooltip-popup");
+        // popup.setWidth("300px");
+        popup.add(new HTML(txt));
+        image.addMouseListener(new TooltipMouseListener(popup));
+        crsPanel.add(image);
         FlowPanel crsRatingPanel = new FlowPanel();
         crsRatingPanel.setStyleName("crs_reviewrating");
         if ((status==null)||(status.equals("0"))||(status.equals(""))) {
