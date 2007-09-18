@@ -39,7 +39,9 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.NominateDialog;
 import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -248,8 +250,21 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 crsReviewNominateLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
                         Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                        String url = Main.getTranslation("params.crs.nominateurl") + "?fromgwt=1&page=" + currentAsset.getFullName();
-                        Window.open(url, "_blank", "");
+                        new NominateDialog(currentAsset, new AsyncCallback() {
+                            public void onFailure(Throwable throwable) {
+                                // nothing to do this was a cancel
+                            }
+
+                            public void onSuccess(Object object) {
+                                // Refresh the page
+                                Editor editor = Main.getSingleton().getEditor();
+                                editor.setCurrentAssetInvalid(true);
+                                editor.refreshState();
+                            }
+                        });
+
+                        // String url = Main.getTranslation("params.crs.nominateurl") + "?fromgwt=1&page=" + currentAsset.getFullName();
+                        // Window.open(url, "_blank", "");
                     }
                 });
                 crsPanel.add(crsReviewNominateLink);

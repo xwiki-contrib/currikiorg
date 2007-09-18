@@ -696,3 +696,17 @@ function addResourceToCollection3() {
     else
         window.setTimeout(addResourceToCollection3, __gwt_retryWaitMillis);
 }
+
+var nominateAssetName;
+function nominateAsset2(assetName) {
+  nominateAssetName = assetName;
+  nominateAsset3();
+}
+
+function nominateAsset3() {
+  loadGWT();
+  if (__gwt_moduleControlBlocks.isReady())
+   nominateAsset(nominateAssetName);
+  else
+   window.setTimeout(nominateAsset3, __gwt_retryWaitMillis);
+}

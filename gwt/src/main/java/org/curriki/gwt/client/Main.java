@@ -26,6 +26,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.i18n.client.Dictionary;
@@ -33,6 +34,7 @@ import com.xpn.xwiki.gwt.api.client.User;
 import com.xpn.xwiki.gwt.api.client.XWikiGWTException;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.widgets.modaldialogbox.ModalMsgDialogBox;
+import org.curriki.gwt.client.widgets.modaldialogbox.NominateDialog;
 import org.curriki.gwt.client.widgets.loginpanel.LoginDialogBox;
 import org.curriki.gwt.client.widgets.find.FindPanel;
 import org.curriki.gwt.client.widgets.find.Viewer;
@@ -285,6 +287,17 @@ public class Main implements EntryPoint
         $wnd.addResourceToCollection = function(collection) {
             x.@org.curriki.gwt.client.Main::addResourceToCollection(Ljava/lang/String;)(collection);
         };
+        $wnd.nominateAsset = function(assetName) {
+            x.@org.curriki.gwt.client.Main::nominateAsset(Ljava/lang/String;)(assetName);
+        };
+    }-*/;
+
+    /**
+     * Reload
+     * @param x
+     */
+    public native void reload() /*-{
+        history.go(0);
     }-*/;
 
     /**
@@ -377,6 +390,20 @@ public class Main implements EntryPoint
             public void onSuccess(Object object) {
                 addResourceWizard = new AddResourceWizard();
                 addResourceWizard.addResource(collection);
+            }
+        });
+    }
+
+    /**
+     * Start nomination dialog
+     * @param assetName asset full name
+     */
+    public void nominateAsset(final String assetName) {
+        new NominateDialog(assetName, new AsyncCallback() {
+            public void onFailure(Throwable throwable) {
+            }
+            public void onSuccess(Object object) {
+
             }
         });
     }
