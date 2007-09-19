@@ -1,5 +1,9 @@
 ##template("macros.vm")
+#if($doc.web.startsWith("Coll_"))
 #set($leftPanels="Panels.Navigation,Panels.TOC,Panels.FeaturedMembers")
+#else
+#set($leftPanels="Panels.Navigation,Panels.TOC")
+#end
 #set($leftPanels=$leftPanels.split(","))
 ##
 ##
