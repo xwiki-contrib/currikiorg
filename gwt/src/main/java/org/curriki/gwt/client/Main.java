@@ -293,14 +293,6 @@ public class Main implements EntryPoint
     }-*/;
 
     /**
-     * Reload
-     * @param x
-     */
-    public native void reload() /*-{
-        history.go(0);
-    }-*/;
-
-    /**
      * check if translator is loaded
      *
      * @param cback Where to call back after the translator is loaded.
@@ -399,11 +391,17 @@ public class Main implements EntryPoint
      * @param assetName asset full name
      */
     public void nominateAsset(final String assetName) {
-        new NominateDialog(assetName, new AsyncCallback() {
+        checkTranslator(new AsyncCallback() {
             public void onFailure(Throwable throwable) {
             }
             public void onSuccess(Object object) {
-
+                new NominateDialog(assetName, new AsyncCallback() {
+                    public void onFailure(Throwable throwable) {
+                    }
+                    public void onSuccess(Object object) {
+                        reloadWindow();
+                    }
+                });
             }
         });
     }
