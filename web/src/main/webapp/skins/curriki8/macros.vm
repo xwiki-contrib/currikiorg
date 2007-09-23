@@ -1315,7 +1315,9 @@ $msg.get("curriki.crs.unrated")
 #set($lastreview_date = $asset.getValue("lastreview_date"))
 <div class="crs_reviewrating">
 <div class="crs_reviewimage">
+<a href="$asset.getURL("view", "viewer=comments")">
 <img src="$xwiki.getSkinFile("crs${status}.png")" height="48" />
+</a>
 </div>
 <div class="crs_reviewratingtext">
 $msg.get("curriki.crs.rating${status}")

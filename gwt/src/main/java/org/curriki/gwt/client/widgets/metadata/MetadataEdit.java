@@ -39,6 +39,7 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.pages.ComponentsPage;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
 import org.curriki.gwt.client.widgets.modaldialogbox.NominateDialog;
@@ -220,6 +221,11 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 crsRatingPanel.add(crsRatingDatePanel);
             }
             Image crsRatingImage = new Image(Constants.SKIN_PATH + "crs" + status + ".png");
+            crsRatingImage.addClickListener(new ClickListener() {
+                public void onClick(Widget widget) {
+                    ComponentsPage.getSingleton().switchPage("comment");
+                }
+            });
             crsRatingImage.setStyleName("crs_reviewratingtext");
             crsRatingPanel.add(crsRatingImage);
         }
