@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.Window;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
+import com.xpn.xwiki.gwt.api.client.User;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Constants;
@@ -131,24 +132,29 @@ public class NominateDialog extends ModalDialog {
 
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     String sdate = formatter.format(new Date());
-                    String suser =  Main.getSingleton().getUser().getFullName();
-
-                    if (obj==null) {
-                        obj = new XObject();
-                        obj.setClassName(Constants.CURRIKI_REVIEW_STATUS_CLASS);
-                        obj.setName(asset.getFullName());
-                        obj.setNumber(0);
-                        obj.set("nomination_user", suser);
-                        obj.set("nomination_date", sdate);
-                        obj.set("nomination_comment", commentTextArea.getText());
-                        obj.set("reviewpending", "1");
-                        CurrikiService.App.getInstance().addObject(asset.getFullName(), obj, saveCallback);
+                    User user =  Main.getSingleton().getUser();
+                    if (user==null) {
+                        Main.getSingleton().checkAnonymous();
                     } else {
-                        obj.set("nomination_user", suser);
-                        obj.set("nomination_date", sdate);
-                        obj.set("nomination_comment", commentTextArea.getText());
-                        obj.set("reviewpending", "1");
-                        CurrikiService.App.getInstance().saveObject(obj, saveCallback);
+                        String suser =  user.getFullName();
+
+                        if (obj==null) {
+                            obj = new XObject();
+                            obj.setClassName(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+                            obj.setName(asset.getFullName());
+                            obj.setNumber(0);
+                            obj.set("nomination_user", suser);
+                            obj.set("nomination_date", sdate);
+                            obj.set("nomination_comment", commentTextArea.getText());
+                            obj.set("reviewpending", "1");
+                            CurrikiService.App.getInstance().addObject(asset.getFullName(), obj, saveCallback);
+                        } else {
+                            obj.set("nomination_user", suser);
+                            obj.set("nomination_date", sdate);
+                            obj.set("nomination_comment", commentTextArea.getText());
+                            obj.set("reviewpending", "1");
+                            CurrikiService.App.getInstance().saveObject(obj, saveCallback);
+                        }
                     }
                 }
             }

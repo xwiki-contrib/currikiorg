@@ -395,6 +395,8 @@ public class Main implements EntryPoint
             public void onFailure(Throwable throwable) {
             }
             public void onSuccess(Object object) {
+                // we need to make sure we know the user
+                checkAnonymous();
                 new NominateDialog(assetName, new AsyncCallback() {
                     public void onFailure(Throwable throwable) {
                     }
