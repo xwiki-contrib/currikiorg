@@ -1338,7 +1338,7 @@ $msg.get("curriki.crs.reviewpending")
 #end
 #end
 </div>
-#if(($nomination=="1")&&($xwiki.hasAccessLevel("view", "CRS.Reviews")))
+#if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
 <div class="crs_reviewreview">
 [$msg.get("curriki.crs.review")>CRS.Review?page=${asset.fullName}]
 </div>

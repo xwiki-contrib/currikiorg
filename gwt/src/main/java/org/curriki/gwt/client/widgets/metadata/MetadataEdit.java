@@ -229,21 +229,6 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 HTMLPanel crsReviewPendingPanel = new HTMLPanel(Main.getTranslation("curriki.crs.reviewpending"));
                 crsReviewPendingPanel.setStyleName("crs_reviewpending");
                 crsPanel.add(crsReviewPendingPanel);
-
-                // if the reviewer mode is set to one then we show the review link
-                if (("reviewer".equals(role))||("admin".equals(role))) {
-                    Hyperlink crsReviewReviewLink = new Hyperlink();
-                    crsReviewReviewLink.setText(Main.getTranslation("curriki.crs.reviewreview"));
-                    crsReviewReviewLink.setStyleName("crs_reviewreview");
-                    crsReviewReviewLink.addClickListener(new ClickListener() {
-                        public void onClick(Widget widget) {
-                            Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                            String url = Main.getTranslation("params.crs.reviewurl") + "?page=" + currentAsset.getFullName();
-                            Window.open(url, "_blank", "");
-                        }
-                    });
-                    crsPanel.add(crsReviewReviewLink);
-                }                
             } else {
                 Hyperlink crsReviewNominateLink = new Hyperlink();
                 crsReviewNominateLink.setText(Main.getTranslation("curriki.crs.reviewnominate"));
@@ -270,7 +255,23 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 });
                 crsPanel.add(crsReviewNominateLink);
             }
+
+            // if the reviewer mode is set to one then we show the review link
+            if (("reviewer".equals(role))||("admin".equals(role))) {
+                Hyperlink crsReviewReviewLink = new Hyperlink();
+                crsReviewReviewLink.setText(Main.getTranslation("curriki.crs.reviewreview"));
+                crsReviewReviewLink.setStyleName("crs_reviewreview");
+                crsReviewReviewLink.addClickListener(new ClickListener() {
+                    public void onClick(Widget widget) {
+                        Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
+                        String url = Main.getTranslation("params.crs.reviewurl") + "?page=" + currentAsset.getFullName();
+                        Window.open(url, "_blank", "");
+                    }
+                });
+                crsPanel.add(crsReviewReviewLink);
+            }
         }
+
         if ("admin".equals(role)) {
             final CheckBox setToPCheckBox = new CheckBox(Main.getTranslation("curriki.crs.settopartner"));
             setToPCheckBox.setChecked("P".equals(currentCRSStatus));
