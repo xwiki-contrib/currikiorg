@@ -265,7 +265,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             // if the reviewer mode is set to one then we show the review link
             if (("reviewer".equals(role))||("admin".equals(role))) {
                 Hyperlink crsReviewReviewLink = new Hyperlink();
-                crsReviewReviewLink.setText(Main.getTranslation("curriki.crs.reviewreview"));
+                crsReviewReviewLink.setText(Main.getTranslation("curriki.crs.review"));
                 crsReviewReviewLink.setStyleName("crs_reviewreview");
                 crsReviewReviewLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
