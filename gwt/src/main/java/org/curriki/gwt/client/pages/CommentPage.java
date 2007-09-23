@@ -117,52 +117,75 @@ public class CommentPage extends AbstractPage {
         Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
         commentsPanel.clear();
 
-        List objects = currentAsset.getObjects(Constants.CURRIKI_REVIEW_CLASS);
-        if ((objects!=null)&&(objects.size()>0)) {
+        XObject crsStatusObj = currentAsset.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+        String status = (crsStatusObj==null) ? null : crsStatusObj.getViewProperty(Constants.CURRIKI_REVIEW_STATUS_STATUS);
+        if ((status!=null)&&(status.equals("P"))) {
             FlowPanel crsPanel = new FlowPanel();
             crsPanel.addStyleName("crs_reviews");
             FlowPanel crsTitlePanel = new FlowPanel();
             crsTitlePanel.addStyleName("crs_reviewstitle");
             crsTitlePanel.add(new HTML(Main.getTranslation("curriki.crs.reviewlist.currikireview")));
             crsPanel.add(crsTitlePanel);
-
             FlowPanel crsReviewListPanel = new FlowPanel();
             crsReviewListPanel.addStyleName("crs_reviewslist");
-            XObject assetObj = currentAsset.getObject(Constants.ASSET_CLASS);
-            String ict = assetObj.getViewProperty(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
-            for (int i=objects.size()-1;i>=0;i--) {
-                XObject crsObj = (XObject) objects.get(i);
-                if (crsObj!=null) {
-                    FlowPanel crsReviewPanel = new FlowPanel();
-                    crsReviewPanel.addStyleName("crs_reviewsreview");
-                    FlowPanel crsReviewDatePanel = new FlowPanel();
-                    crsReviewDatePanel.addStyleName("crs_reviewsdate");
-                    crsReviewDatePanel.add(new HTML(crsObj.getViewProperty(Constants.CURRIKI_REVIEW_DATE_PROPERTY)));
-                    crsReviewPanel.add(crsReviewDatePanel);
-                    FlowPanel crsReviewContentPanel = new FlowPanel();
-                    crsReviewContentPanel.addStyleName("crs_reviewscontent");
-                    String vtc = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_TECHNICALCOMPLETNESS_PROPERTY);
-                    String vca = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_CONTENTACCURACY_PROPERTY);
-                    String vap = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_APPROPRIATEPEDAGOGY_PROPERTY);
-                    String comment = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_COMMENT_PROPERTY);
-                    String rating = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_RATING_PROPERTY);
-                    String ratingimg = Constants.SKIN_PATH + "crs" + rating + ".png";
-                    if ((rating==null)||(rating.equals("0"))) {
-                        String[] args = {(ict==null) ? "" : ict, (vtc==null) ? "" : vtc, (vca==null) ? "" : vca, (vap==null) ? "" : vca, (comment==null) ? "" : comment};
-                        HTML html = new HTML(Main.getSingleton().getTranslator().getTranslation("curriki.crs.generatedcommentunrated", args));
-                        crsReviewContentPanel.add(html);
-                    } else {
-                        String[] args = {(ict==null) ? "" : ict, (ratingimg==null) ? "" : ratingimg, (vtc==null) ? "" : vtc, (vca==null) ? "" : vca, (vap==null) ? "" : vca, (comment==null) ? "" : comment};
-                        HTML html = new HTML(Main.getSingleton().getTranslator().getTranslation("curriki.crs.generatedcomment", args));
-                        crsReviewContentPanel.add(html);
-                    }
-                    crsReviewPanel.add(crsReviewContentPanel);
-                    crsReviewListPanel.add(crsReviewPanel);
-                }
-            }
+            FlowPanel crsReviewPanel = new FlowPanel();
+            crsReviewPanel.addStyleName("crs_reviewsreview");
+            FlowPanel crsReviewContentPanel = new FlowPanel();
+            crsReviewContentPanel.addStyleName("crs_reviewscontent");
+            crsReviewContentPanel.addStyleName("crs_reviewscontentpartner");
+            crsReviewContentPanel.add(new HTML(Main.getTranslation("curriki.crs.reviewlist.currikihaspartnered")));
+            crsReviewPanel.add(crsReviewContentPanel);
+            crsReviewListPanel.add(crsReviewPanel);
             crsPanel.add(crsReviewListPanel);
             commentsPanel.add(crsPanel);
-        } 
+        } else {
+            List objects = currentAsset.getObjects(Constants.CURRIKI_REVIEW_CLASS);
+            if ((objects!=null)&&(objects.size()>0)) {
+                FlowPanel crsPanel = new FlowPanel();
+                crsPanel.addStyleName("crs_reviews");
+                FlowPanel crsTitlePanel = new FlowPanel();
+                crsTitlePanel.addStyleName("crs_reviewstitle");
+                crsTitlePanel.add(new HTML(Main.getTranslation("curriki.crs.reviewlist.currikireview")));
+                crsPanel.add(crsTitlePanel);
+
+                FlowPanel crsReviewListPanel = new FlowPanel();
+                crsReviewListPanel.addStyleName("crs_reviewslist");
+                XObject assetObj = currentAsset.getObject(Constants.ASSET_CLASS);
+                String ict = assetObj.getViewProperty(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
+                for (int i=objects.size()-1;i>=0;i--) {
+                    XObject crsObj = (XObject) objects.get(i);
+                    if (crsObj!=null) {
+                        FlowPanel crsReviewPanel = new FlowPanel();
+                        crsReviewPanel.addStyleName("crs_reviewsreview");
+                        FlowPanel crsReviewDatePanel = new FlowPanel();
+                        crsReviewDatePanel.addStyleName("crs_reviewsdate");
+                        crsReviewDatePanel.add(new HTML(crsObj.getViewProperty(Constants.CURRIKI_REVIEW_DATE_PROPERTY)));
+                        crsReviewPanel.add(crsReviewDatePanel);
+                        FlowPanel crsReviewContentPanel = new FlowPanel();
+                        crsReviewContentPanel.addStyleName("crs_reviewscontent");
+                        String vtc = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_TECHNICALCOMPLETNESS_PROPERTY);
+                        String vca = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_CONTENTACCURACY_PROPERTY);
+                        String vap = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_APPROPRIATEPEDAGOGY_PROPERTY);
+                        String comment = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_COMMENT_PROPERTY);
+                        String rating = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_RATING_PROPERTY);
+                        String ratingimg = Constants.SKIN_PATH + "crs" + rating + ".png";
+                        if ((rating==null)||(rating.equals("0"))) {
+                            String[] args = {(ict==null) ? "" : ict, (vtc==null) ? "" : vtc, (vca==null) ? "" : vca, (vap==null) ? "" : vca, (comment==null) ? "" : comment};
+                            HTML html = new HTML(Main.getSingleton().getTranslator().getTranslation("curriki.crs.generatedcommentunrated", args));
+                            crsReviewContentPanel.add(html);
+                        } else {
+                            String[] args = {(ict==null) ? "" : ict, (ratingimg==null) ? "" : ratingimg, (vtc==null) ? "" : vtc, (vca==null) ? "" : vca, (vap==null) ? "" : vca, (comment==null) ? "" : comment};
+                            HTML html = new HTML(Main.getSingleton().getTranslator().getTranslation("curriki.crs.generatedcomment", args));
+                            crsReviewContentPanel.add(html);
+                        }
+                        crsReviewPanel.add(crsReviewContentPanel);
+                        crsReviewListPanel.add(crsReviewPanel);
+                    }
+                }
+                crsPanel.add(crsReviewListPanel);
+                commentsPanel.add(crsPanel);
+            }
+        }
 
         if (currentAsset.getCommentsNumber()>0) {
             commentsPanel.add(new HTML(Main.getTranslation("comment.loadingcomments")));
