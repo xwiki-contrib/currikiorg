@@ -90,8 +90,13 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
             String type = item.getType();
             panel.addStyleName("item-" + type + "-panel");
             rpanel.addStyleName("item-" + type + "-panel2");
-            if (item!=null)
-               item.addStyleName("item-" + type + "-panel-content");
+            item.addStyleName("item-" + type + "-panel-content");
+            AssetDocument doc = item.getDocument();
+            if (doc.isDirectionBlock()) {
+                panel.addStyleName("item-direction-panel");
+                rpanel.addStyleName("item-direction-panel2");
+                item.addStyleName("item-direction-panel-content");
+            }
         }
     }
 

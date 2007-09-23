@@ -27,11 +27,9 @@ import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XWikiGWTException;
+import com.xpn.xwiki.gwt.api.client.XObject;
 import com.xpn.xwiki.gwt.api.server.XWikiServiceImpl;
-import com.xpn.xwiki.objects.BaseElement;
-import com.xpn.xwiki.objects.BaseObject;
-import com.xpn.xwiki.objects.ListProperty;
-import com.xpn.xwiki.objects.PropertyInterface;
+import com.xpn.xwiki.objects.*;
 import com.xpn.xwiki.objects.classes.ListItem;
 import com.xpn.xwiki.plugin.image.ImagePlugin;
 import com.xpn.xwiki.plugin.lucene.LucenePlugin;
@@ -1267,6 +1265,17 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         XWikiDocument doc = context.getWiki().getDocument(parent.getAssetPage(), context);
 
+        // we should not include direction blocks in the tree
+        BaseObject tobj = doc.getObject(Constants.TEXTASSET_CLASS);
+        if ((tobj!=null)) {
+            LongProperty lprop = (LongProperty)tobj.get(Constants.TEXTASSET_TYPE_PROPERTY);
+            if ((lprop!=null)&&(lprop.getValue()!=null)) {
+                long textType = ((Long) lprop.getValue()).longValue();
+                if (textType==Constants.TEXTASSET_TYPE_DIRECTION)
+                    return null;
+            }
+        }
+        
         if (doc.getObject(Constants.COMPOSITEASSET_CLASS) != null){
             parent.setType(Constants.CATEGORY_COLLECTION);
             parent.setProtected(true);
@@ -1312,16 +1321,18 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             long index = smallerObj.getLongValue(Constants.SUBASSET_ORDER_PROPERTY);
 
             AssetItem currItem = new AssetItem(assetPage, index);
-            items.add(currItem);
+
             if (assetPage.equals(Constants.PAGE_BREAK)){
                 currItem.setText("-------------");
+                items.add(currItem);
             }
-            else
-                getFullTreeItem(currItem, context);
+            else {
+                if (getFullTreeItem(currItem, context)!=null)
+                    items.add(currItem);
+            }
         }
         parent.setItems(items);
         return parent;
-
     }
 
 

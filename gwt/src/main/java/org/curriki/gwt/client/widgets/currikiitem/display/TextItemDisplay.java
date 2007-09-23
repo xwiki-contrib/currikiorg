@@ -30,10 +30,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.jpavel.gwt.wysiwyg.client.Editor;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
-import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.*;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 
 import java.util.Map;
@@ -56,7 +53,7 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     }
 
     public String getType() {
-        return Constants.TYPE_TEXT;
+         return Constants.TYPE_TEXT;
     }
 
     private native String addMCEControl(Element e, String imagepath, String attachpath) /*-{
@@ -133,10 +130,10 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
         }
 
         XObject obj = doc.getObject(Constants.TEXTASSET_CLASS);
-        if (obj.get(Constants.TEXTASSET_TYPE_PROPERTY) == null || ((Long)obj.get(Constants.TEXTASSET_TYPE_PROPERTY)).longValue() == 0)
-            viewLabel.setHTML(obj.getViewProperty(Constants.TEXTASSET_TEXT_PROPERTY));
-        else
+        if (obj.get(Constants.TEXTASSET_TYPE_PROPERTY) != null && ((Long)obj.get(Constants.TEXTASSET_TYPE_PROPERTY)).longValue() == Constants.TEXTASSET_TYPE_HTML)
             viewLabel.setHTML((String) obj.getProperty(Constants.TEXTASSET_TEXT_PROPERTY));
+        else
+            viewLabel.setHTML(obj.getViewProperty(Constants.TEXTASSET_TEXT_PROPERTY));
 
         if(panel.getWidgetIndex(viewLabel) == -1)
             panel.add(viewLabel);
@@ -222,10 +219,10 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
                 super.onSuccess(object);
                 if (object != null && ((Boolean)object).booleanValue()) {
                     XObject obj = doc.getObject(Constants.TEXTASSET_CLASS);
-                    if (obj.get(Constants.TEXTASSET_TYPE_PROPERTY) == null || ((Long)obj.get(Constants.TEXTASSET_TYPE_PROPERTY)).longValue() == 0)
-                        initVerbatim((String) obj.get(Constants.TEXTASSET_TEXT_PROPERTY));
-                    else
+                    if (obj.get(Constants.TEXTASSET_TYPE_PROPERTY) != null && ((Long)obj.get(Constants.TEXTASSET_TYPE_PROPERTY)).longValue() == Constants.TEXTASSET_TYPE_HTML)
                         initWYSIWYG((String) obj.get(Constants.TEXTASSET_TEXT_PROPERTY));
+                    else
+                        initVerbatim((String) obj.get(Constants.TEXTASSET_TEXT_PROPERTY));
                 }
                 else {
                     panel.add(viewLabel);

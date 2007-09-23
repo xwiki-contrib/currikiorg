@@ -76,6 +76,9 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     // Button to insert an html content block
     private Button bttHTMLContent;
 
+    // Button to insert an direction content block
+    private Button bttDirectionContent;
+
     // Button to insert a new folder of content
     private Button bttNewFolder;
 
@@ -263,18 +266,21 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     */
 
 
-    private void initBlankContentBlock(long html) {
+    private void initBlankContentBlock(final long type) {
         String space = Main.getSingleton().getEditor().getCurrentSpace();
         if (space == null)
             space = Constants.TEMPORARY_ASSET_SPACE;
-        CurrikiService.App.getInstance().createTextSourceAsset(Main.getSingleton().getEditor().getCurrentAssetPageName(), html, new CurrikiAsyncCallback() {
+        CurrikiService.App.getInstance().createTextSourceAsset(Main.getSingleton().getEditor().getCurrentAssetPageName(), type, new CurrikiAsyncCallback() {
 
             public void onSuccess(Object object) {
                 super.onSuccess(object);
                 newDoc = (Document) object;
 
                 category = Constants.TYPE_TEXT;
-                initMetadata(false);
+                if (type==Constants.TEXTASSET_TYPE_DIRECTION)
+                    finishWizard();
+                else
+                    initMetadata(false);
             }
         });
     }
@@ -307,6 +313,9 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         } else if (sender == bttHTMLContent) {
             hideParentDialog();
             initBlankContentBlock(Constants.TEXTASSET_TYPE_HTML);
+        } else if (sender == bttDirectionContent) {
+            hideParentDialog();
+            initBlankContentBlock(Constants.TEXTASSET_TYPE_DIRECTION);
         } else if (sender == bttNewFolder) {
             hideParentDialog();
             initFolder();
@@ -323,6 +332,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         bttLink.removeStyleName("gwt-ButtonNav-active");
         bttBlankContent.removeStyleName("gwt-ButtonNav-active");
         bttHTMLContent.removeStyleName("gwt-ButtonNav-active");
+        bttDirectionContent.removeStyleName("gwt-ButtonNav-active");
         bttNewFolder.removeStyleName("gwt-ButtonNav-active");
         bttExistingResource.removeStyleName("gwt-ButtonNav-active");
         bttFromTemplate.removeStyleName("gwt-ButtonNav-active");
@@ -409,7 +419,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     public void initWhatToAdd() {
         panel.clear();
         setParentCaption(Main.getTranslation("addasset.what_would_you_like_to_add"));
-        Grid grid = new Grid(10, 1);
+        Grid grid = new Grid(11, 1);
         helpGrid = new Grid(2, 1);
         helpGrid.getCellFormatter().addStyleName(0, 0, "help-grid-head");
         helpGrid.getCellFormatter().addStyleName(1, 0, "help-grid-content");
@@ -447,21 +457,25 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         bttHTMLContent = new WhatToAddButton("html_content_block", this);
         grid.setWidget(5, 0, bttHTMLContent);
 
+        // New resource: Direction content block
+        bttDirectionContent = new WhatToAddButton("direction_content_block", this);
+        grid.setWidget(6, 0, bttDirectionContent);
+
         // New resource: Folder
         bttNewFolder = new WhatToAddButton("folder", this);
-        grid.setWidget(6, 0, bttNewFolder);
+        grid.setWidget(7, 0, bttNewFolder);
 
         // New resource: Template
         bttFromTemplate = new WhatToAddButton("template", this);
-        grid.setWidget(7, 0, bttFromTemplate);
+        grid.setWidget(8, 0, bttFromTemplate);
 
         // Separator: New Element
         label = new Label(Main.getTranslation("addasset.formatting_element"));
         label.addStyleName("curriki-subtitle");
-        grid.setWidget(8, 0, label);
+        grid.setWidget(9, 0, label);
 
         // Template is added a second time
-        grid.setWidget(9, 0, bttFromTemplate);
+        grid.setWidget(10, 0, bttFromTemplate);
 
 
         panel.add(grid, DockPanel.CENTER);

@@ -129,6 +129,18 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
     }
 
     /**
+     * Verified if document is viewable
+     * @return
+     */
+    public boolean isDirectionBlock() {
+        try {
+            return item.getItem().getDocument().isDirectionBlock();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * Sets the mode (0 VIEW 1 EDIT)
      * @param mode
      */
@@ -246,7 +258,10 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
     }
 
     public void setTitle(String title){
-        this.title.setText(title);
+        if (isDirectionBlock())
+            this.title.setText(Main.getTranslation("editor.cbdirections"));
+        else
+            this.title.setText(title);
     }
 
     public void onClick(Widget widget) {
@@ -318,7 +333,7 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
         if (isViewable())
             buttonPanel.add(metaBt);
 
-        if (isViewable()) {
+        if (isViewable()&&!isDirectionBlock()) {
             buttonPanel.add(commentBt);
             commentBt.setText(Main.getTranslation("editor.btt_comment") + " (" + getCurrentCommentNumber() + ")");
         }

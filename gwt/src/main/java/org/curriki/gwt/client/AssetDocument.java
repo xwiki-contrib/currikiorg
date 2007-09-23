@@ -1,6 +1,7 @@
 package org.curriki.gwt.client;
 
 import com.xpn.xwiki.gwt.api.client.Document;
+import com.xpn.xwiki.gwt.api.client.XObject;
 /*
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -90,4 +91,15 @@ public class AssetDocument extends Document {
         this.composite = composite;
     }
 
+    public boolean isDirectionBlock() {
+        XObject obj = getObject(Constants.TEXTASSET_CLASS);
+        if (obj==null)
+            return false;
+        if (obj.get(Constants.TEXTASSET_TYPE_PROPERTY) == null)
+            return false;
+        if (((Long)obj.get(Constants.TEXTASSET_TYPE_PROPERTY)).longValue() == Constants.TEXTASSET_TYPE_DIRECTION)
+            return true;
+        else
+            return false;
+    }
 }

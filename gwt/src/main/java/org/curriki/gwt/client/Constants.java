@@ -91,6 +91,7 @@ public class Constants {
     public static final String TEXTASSET_TYPE_PROPERTY = "type";
     public static final long TEXTASSET_TYPE_TEXT = 0;
     public static final long TEXTASSET_TYPE_HTML = 1;
+    public static final long TEXTASSET_TYPE_DIRECTION = 2;
 
     public static final String VIDITALK_CLASS = "XWiki.VIDITalkAssetClass";
     public static final String VIDITALK_VIDEO_ID_PROPERTY = "video_id";
@@ -114,6 +115,7 @@ public class Constants {
 
 
     public static final String TYPE_TEXT = "text";
+    public static final String TYPE_DIRECTION = "direction";
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_ATTACHMENT = "attachment";
     public static final String TYPE_ANIMATION = "animation";

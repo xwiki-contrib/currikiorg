@@ -708,6 +708,12 @@ $doc.display("content", $obj)
 ##
 ## Displays a navigation category, with sub-elements
 #macro(navigationCategory $text $link $expanded $items)
+#if($doc.web.startsWith("Coll_")
+#set($expanded = false)
+#set($cookiebase = "${context.user}_asset_")
+#else
+#set($cookiebase = "${context.user}_")
+#end
 #if(!$navcatcounter)
 #set($navcatcounter = 1)
 #else
@@ -715,12 +721,12 @@ $doc.display("content", $obj)
 #end
 #set($id = "currikinavcategory_${navcatcounter}")
 #if($expanded == true)
-#set($cookiemagic = "if(expanded) createCookie('${context.user}_${id}','false', ''); else eraseCookie('${context.user}_${id}');")
+#set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
 #else
-#set($cookiemagic = "if(expanded) eraseCookie('${context.user}_${id}'); else createCookie('${context.user}_${id}', 'true', '');")
+#set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
 #end
 #set($exp2 = "")
-#set($exp2 = $xwiki.getUserPreferenceFromCookie("${context.user}_$id"))
+#set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
 #if(!$exp2.equals(""))
 #if($exp2 == 'true')
 #set($expanded = true)
