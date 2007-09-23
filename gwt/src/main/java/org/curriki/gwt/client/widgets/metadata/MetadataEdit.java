@@ -192,7 +192,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         Date lastReviewDate = (crsObj==null) ? null : (Date) crsObj.getProperty(Constants.CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE);
         FlowPanel crsPanel = new FlowPanel();
         crsPanel.setStyleName("crs_review");
-        HTMLPanel crsPanelTitle = new HTMLPanel(Main.getTranslation("curriki.crs.review"));
+        HTMLPanel crsPanelTitle = new HTMLPanel(Main.getTranslation("curriki.crs.currikireview"));
         crsPanelTitle.setStyleName("crs_reviewtitle");
         crsPanel.add(crsPanelTitle);
         String txt = Main.getTranslation("curriki.crs.review.tooltip");
