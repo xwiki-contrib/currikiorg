@@ -103,7 +103,7 @@ public class SelectorPanel extends VerticalPanel implements ChangeListener, Clic
         }
 
         if (filter.length() > 0){
-            filter = " ("+filter+") ";
+            filter = " "+filter+" ";
         }
 
         return filter;

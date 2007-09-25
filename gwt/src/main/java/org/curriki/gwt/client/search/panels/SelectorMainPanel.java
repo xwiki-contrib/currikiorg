@@ -106,7 +106,7 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
         }
 
         if (filter.length() > 0){
-            filter = " ("+filter+") ";
+            filter = " "+filter+" ";
         }
 
         return filter;

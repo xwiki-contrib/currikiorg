@@ -127,7 +127,7 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
         }
 
         if (filter.length() > 0){
-            filter = " ("+filter+") ";
+            filter = " "+filter+" ";
         }
 
         return filter;

@@ -129,7 +129,7 @@ abstract public class DropdownSelector extends ListBox implements Selectable
         if (value.length() > 0){
             //TODO: These values must be escaped somehow for lucene + - && || ! ( ) { } [ ] ^ " ~ * ? : \
             //value = value.replaceAll(":", "\\:");
-            value = "+\""+value+"\"";
+            value = "\""+value+"\"";
             if (getFieldName() != null){
                 if (getFieldName().length() == 0 || getFieldName().startsWith("__")){
                     filter = value;
