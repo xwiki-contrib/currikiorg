@@ -35,7 +35,7 @@ public class EducationalLevelSelector extends DropdownSingleSelector
         setFieldName("XWiki.AssetClass."+ Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY);
         
         addOption(Main.getTranslation("search.selector.level.any"), "");
-        addOption(Main.getTranslation("search.selector.level.prek / Ages 0-4"), "prek");
+        addOption(Main.getTranslation("search.selector.level.prek"), "prek");
         addOption(Main.getTranslation("search.selector.level.gr-k-2"), "gr-k-2");
         addOption(Main.getTranslation("search.selector.level.gr-3-5"), "gr-3-5");
         addOption(Main.getTranslation("search.selector.level.gr-6-8"), "gr-6-8");
