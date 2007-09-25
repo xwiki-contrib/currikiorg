@@ -133,6 +133,8 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
 
                 if (sw.getSortBy().equals(sortBy)){
                     g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header-sorted");
+                } else {
+                    g.getFlexCellFormatter().removeStyleName(curRow, i, "find-results-column-header-sorted");
                 }
             }
             g.setWidget(curRow, i, w);
@@ -172,7 +174,6 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
                     if (oldSortBy.equals(sortBy)){
                         // TODO: We will want to reverse the sort once XWiki supports that
                     } else {
-                        sortBy = oldSortBy;
                         doSearch();
                     }
                 } else {
