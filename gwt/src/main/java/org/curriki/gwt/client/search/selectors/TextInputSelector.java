@@ -71,11 +71,13 @@ abstract public class TextInputSelector extends TextBox implements Selectable
     public String getFilter(){
         String filter = "";
         if (getText().length() > 0){
+            String value = getText();
+            //TODO: These values must be escaped somehow for lucene + - && || ! ( ) { } [ ] ^ " ~ * ? : \
             if (getFieldName() != null){
                 if (getFieldName().length() == 0 || getFieldName().startsWith("__")){
-                    filter = getText();
+                    filter = value;
                 } else {
-                    filter = getFieldName()+":"+getText();
+                    filter = getFieldName()+":"+value;
                 }
             }
         }
@@ -96,7 +98,7 @@ abstract public class TextInputSelector extends TextBox implements Selectable
     }
 
     protected Widget getTooltip(String name) {
-        String txt = Main.getTranslation("search." + name + "_tooltip");
+        String txt = Main.getTranslation("search.selector." + name + "_tooltip");
         Image image = new Image(Constants.ICON_PATH+"exclamation.png");
         PopupPanel popup = new PopupPanel(true);
         popup.setStyleName("search-tooltip-popup");

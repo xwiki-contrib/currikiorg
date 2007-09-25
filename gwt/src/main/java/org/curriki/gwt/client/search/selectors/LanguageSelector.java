@@ -33,7 +33,7 @@ public class LanguageSelector extends DropdownSingleSelector
         super();
         setFieldName("XWiki.AssetClass."+ Constants.ASSET_LANGUAGE_PROPERTY);
         
-        addOption(Main.getTranslation("Any"), "");
+        addOption(Main.getTranslation("search.selector.language.any"), "");
         addOption(Main.getTranslation("English"), "eng");
         addOption(Main.getTranslation("Chinese"), "zho");
         addOption(Main.getTranslation("Dutch"), "nld");
@@ -49,6 +49,6 @@ public class LanguageSelector extends DropdownSingleSelector
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("Language"));
+        return new Label(Main.getTranslation("search.selector.language"));
     }
 }

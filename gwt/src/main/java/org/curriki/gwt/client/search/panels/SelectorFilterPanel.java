@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.search.selectors.EducationalLevelSelector;
 import org.curriki.gwt.client.search.selectors.FileTypeSelector;
 import org.curriki.gwt.client.search.selectors.InstructionalTypeSelector;
-import org.curriki.gwt.client.search.selectors.LanguageSelector;
 import org.curriki.gwt.client.search.selectors.Selectable;
 import org.curriki.gwt.client.search.selectors.SelectionCollection;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
@@ -61,9 +60,9 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
         FileTypeSelector sFileType = new FileTypeSelector();
         sFileType.addChangeListener(this);
         selectors.add(sFileType);
-        LanguageSelector sLanguage = new LanguageSelector();
-        sLanguage.addChangeListener(this);
-        selectors.add(sLanguage);
+//        LanguageSelector sLanguage = new LanguageSelector();
+//        sLanguage.addChangeListener(this);
+//        selectors.add(sLanguage);
         SpecialFilterSelector sSpecial = new SpecialFilterSelector();
         sSpecial.addChangeListener(this);
         selectors.add(sSpecial);
@@ -79,11 +78,11 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
         g.setWidget(1, 2, sInstructionType);
 
         g.setWidget(2, 0, sFileType.getLabel());
-        g.setWidget(2, 1, sLanguage.getLabel());
+//        g.setWidget(2, 1, sLanguage.getLabel());
         g.setWidget(2, 2, sSpecial.getLabel());
 
         g.setWidget(3, 0, sFileType);
-        g.setWidget(3, 1, sLanguage);
+//        g.setWidget(3, 1, sLanguage);
         g.setWidget(3, 2, sSpecial);
 
         add(g);

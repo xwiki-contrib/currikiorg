@@ -86,6 +86,10 @@ public class Main implements EntryPoint
         return getSingleton().translator.getTranslation(key);
     }
 
+    public static String getTranslation(String key, String[] args) {
+        return getSingleton().translator.getTranslation(key, args);
+    }
+
     public void onModuleLoad() {
         singleton = this;
         String action = WindowUtils.getLocation().getParameter("action");

@@ -37,7 +37,7 @@ public class TitleColumn extends ResultsColumn
 
     public TitleColumn()
     {
-        this.header = Main.getTranslation("Title");
+        this.header = Main.getTranslation("search.results.col.title");
         this.columnStyle = "results-resource-cell";
     }
 

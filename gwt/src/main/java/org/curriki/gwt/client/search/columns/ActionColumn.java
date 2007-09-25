@@ -28,7 +28,7 @@ public class ActionColumn extends ResultsColumn
 {
     public ActionColumn()
     {
-        this.header = Main.getTranslation("Action");
+        this.header = Main.getTranslation("search.results.col.action");
     }
 
     public ActionColumn(String header, String columnStyle)

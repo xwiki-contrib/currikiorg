@@ -53,7 +53,7 @@ public class SubjectSelector extends DropdownSingleSelector
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("Subject"));
+        return new Label(Main.getTranslation("search.selector.subject"));
     }
 
     public class LoadSelectorCallback extends CurrikiAsyncCallback
@@ -69,7 +69,7 @@ public class SubjectSelector extends DropdownSingleSelector
             List results = (List) object;
             Iterator i = results.iterator();
 
-            list.addItem(Main.getTranslation("Any"), "FW_masterFramework.WebHome");
+            list.addItem(Main.getTranslation("search.selector.subject.any"), "FW_masterFramework.WebHome");
 
             while (i.hasNext()){
                 Document doc = (Document) i.next();

@@ -34,15 +34,15 @@ public class FileTypeSelector extends DropdownSingleSelector
         super();
         setFieldName("XWiki.AssetClass."+ Constants.ASSET_CATEGORY_PROPERTY);
         
-        addOption(Main.getTranslation("Any"), "");
-        addOption(Main.getTranslation("Audio/Video"), Constants.CATEGORY_AUDIO);
-        addOption(Main.getTranslation("Curriki"), Constants.CATEGORY_TEXT);
-        addOption(Main.getTranslation("Image"), Constants.CATEGORY_IMAGE);
-        addOption(Main.getTranslation("Web"), Constants.CATEGORY_LINK);
+        addOption(Main.getTranslation("search.selector.filetype.any"), "");
+        addOption(Main.getTranslation("search.selector.filetype.audio"), Constants.CATEGORY_AUDIO);
+        addOption(Main.getTranslation("search.selector.filetype.text"), Constants.CATEGORY_TEXT);
+        addOption(Main.getTranslation("search.selector.filetype.image"), Constants.CATEGORY_IMAGE);
+        addOption(Main.getTranslation("search.selector.filetype.link"), Constants.CATEGORY_LINK);
     }
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("File Type"));
+        return new Label(Main.getTranslation("search.selector.filetype"));
     }
 }

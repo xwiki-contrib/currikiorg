@@ -34,47 +34,46 @@ public class InstructionalTypeSelector extends DropdownSingleSelector
         super();
         setFieldName("XWiki.AssetClass."+Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
         
-        addOption(Main.getTranslation("Any"), "");
+        addOption(Main.getTranslation("search.selector.ict.any"), "");
 
-        addGroup(Main.getTranslation("Activity"));
-        addGroupOption(Main.getTranslation("Activity"), Main.getTranslation("Excercise"), "activity_exercise");
-        addGroupOption(Main.getTranslation("Activity"), Main.getTranslation("Exercise"), "activity_exercise");
-        addGroupOption(Main.getTranslation("Activity"), Main.getTranslation("Experiment/Lab"), "activity_lab");
-        addGroupOption(Main.getTranslation("Activity"), Main.getTranslation("Graphic Organizer/Worksheet"), "activity_worksheet");
-        addGroupOption(Main.getTranslation("Activity"), Main.getTranslation("Problem Set"), "activity_problemset");
+        addGroup(Main.getTranslation("search.selector.ict.activity"));
+        addGroupOption(Main.getTranslation("search.selector.ict.activity"), Main.getTranslation("search.selector.ict.activity.exercise"), "activity_exercise");
+        addGroupOption(Main.getTranslation("search.selector.ict.activity"), Main.getTranslation("search.selector.ict.activity.lab"), "activity_lab");
+        addGroupOption(Main.getTranslation("search.selector.ict.activity"), Main.getTranslation("search.selector.ict.activity.worksheet"), "activity_worksheet");
+        addGroupOption(Main.getTranslation("search.selector.ict.activity"), Main.getTranslation("search.selector.ict.activity.problemset"), "activity_problemset");
 
-        addGroup(Main.getTranslation("Book"));
-        addGroupOption(Main.getTranslation("Book"), Main.getTranslation("Fiction"), "book_fiction");
-        addGroupOption(Main.getTranslation("Book"), Main.getTranslation("Non-Fiction"), "book_nonfiction");
-        addGroupOption(Main.getTranslation("Book"), Main.getTranslation("Readings/Excerpts"), "book_readings");
-        addGroupOption(Main.getTranslation("Book"), Main.getTranslation("Text Book"), "book_textbook");
+        addGroup(Main.getTranslation("search.selector.ict.book"));
+        addGroupOption(Main.getTranslation("search.selector.ict.book"), Main.getTranslation("search.selector.ict.book.fiction"), "book_fiction");
+        addGroupOption(Main.getTranslation("search.selector.ict.book"), Main.getTranslation("search.selector.ict.book.nonfiction"), "book_nonfiction");
+        addGroupOption(Main.getTranslation("search.selector.ict.book"), Main.getTranslation("search.selector.ict.book.readings"), "book_readings");
+        addGroupOption(Main.getTranslation("search.selector.ict.book"), Main.getTranslation("search.selector.ict.book.textbook"), "book_textbook");
 
-        addGroup(Main.getTranslation("Curriculum"));
-        addGroupOption(Main.getTranslation("Curriculum"), Main.getTranslation("Assessment/Test"), "curriculum_assessment");
-        addGroupOption(Main.getTranslation("Curriculum"), Main.getTranslation("Full Course"), "curriculum_course");
-        addGroupOption(Main.getTranslation("Curriculum"), Main.getTranslation("Lesson Plan"), "curriculum_lp");
-        addGroupOption(Main.getTranslation("Curriculum"), Main.getTranslation("Scope & Sequence"), "curriculum_scope");
-        addGroupOption(Main.getTranslation("Curriculum"), Main.getTranslation("Standards"), "curriculum_standards");
-        addGroupOption(Main.getTranslation("Curriculum"), Main.getTranslation("Syllabus"), "curriculum_syllabus");
+        addGroup(Main.getTranslation("search.selector.ict.curriculum"));
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.assessment"), "curriculum_assessment");
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.course"), "curriculum_course");
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.lp"), "curriculum_lp");
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.scope"), "curriculum_scope");
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.standards"), "curriculum_standards");
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.syllabus"), "curriculum_syllabus");
 
-        addGroup(Main.getTranslation("Resource"));
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Animation/Simulation"), "resource_animation");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Diagram/Illustration"), "resource_diagram");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Index/List"), "resource_index");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Photograph"), "resource_photograph");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Presentation/Slide Show"), "resource_presentation");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Reference Collection"), "resource_collection");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Script/Transcript"), "resource_script");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Speech/Lecture/Song"), "resource_speech");
-        addGroupOption(Main.getTranslation("Resource"), Main.getTranslation("Table/Graph/Chart"), "resource_table");
+        addGroup(Main.getTranslation("search.selector.ict.resource"));
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.animation"), "resource_animation");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.diagram"), "resource_diagram");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.index"), "resource_index");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.photograph"), "resource_photograph");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.presentation"), "resource_presentation");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.collection"), "resource_collection");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.script"), "resource_script");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.speech"), "resource_speech");
+        addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.table"), "resource_table");
 
-        addOption(Main.getTranslation("Other"), "other");
+        addOption(Main.getTranslation("search.selector.ict.other"), "other");
     }
 
     public Widget getLabel()
     {
         HorizontalPanel p = new HorizontalPanel();
-        p.add(new Label(Main.getTranslation("Instructional Type")));
+        p.add(new Label(Main.getTranslation("search.selector.ict")));
         p.add(getTooltip("ict"));
         return p;
     }

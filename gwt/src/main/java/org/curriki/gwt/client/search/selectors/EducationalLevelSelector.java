@@ -34,21 +34,21 @@ public class EducationalLevelSelector extends DropdownSingleSelector
         super();
         setFieldName("XWiki.AssetClass."+ Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY);
         
-        addOption(Main.getTranslation("Any"), "");
-        addOption(Main.getTranslation("Preschool / Ages 0-4"), "prek");
-        addOption(Main.getTranslation("Gr. K-2 / Ages 5-7"), "gr-k-2");
-        addOption(Main.getTranslation("Gr. 3-5 / Ages 8-10"), "gr-3-5");
-        addOption(Main.getTranslation("Gr. 6-8 / Ages 11-13"), "gr-6-8");
-        addOption(Main.getTranslation("Gr. 9-10 / Ages 14-16"), "gr-9-10");
-        addOption(Main.getTranslation("Gr. 11-12 / Ages 16-18"), "gr-11-12");
-        addOption(Main.getTranslation("College and Beyond"), "college_and_beyond");
-        addOption(Main.getTranslation("Professional Development"), "professional_development");
-        addOption(Main.getTranslation("Special Education"), "special_education");
-        addOption(Main.getTranslation("Other"), "na");
+        addOption(Main.getTranslation("search.selector.level.any"), "");
+        addOption(Main.getTranslation("search.selector.level.prek / Ages 0-4"), "prek");
+        addOption(Main.getTranslation("search.selector.level.gr-k-2"), "gr-k-2");
+        addOption(Main.getTranslation("search.selector.level.gr-3-5"), "gr-3-5");
+        addOption(Main.getTranslation("search.selector.level.gr-6-8"), "gr-6-8");
+        addOption(Main.getTranslation("search.selector.level.gr-9-10"), "gr-9-10");
+        addOption(Main.getTranslation("search.selector.level.gr-11-12"), "gr-11-12");
+        addOption(Main.getTranslation("search.selector.level.college_and_beyond"), "college_and_beyond");
+        addOption(Main.getTranslation("search.selector.level.professional_development"), "professional_development");
+        addOption(Main.getTranslation("search.selector.level.special_education"), "special_education");
+        addOption(Main.getTranslation("search.selector.level.na"), "na");
     }
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("Level"));
+        return new Label(Main.getTranslation("search.selector.level"));
     }
 }

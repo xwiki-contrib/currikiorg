@@ -27,9 +27,12 @@ import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XWikiGWTException;
-import com.xpn.xwiki.gwt.api.client.XObject;
 import com.xpn.xwiki.gwt.api.server.XWikiServiceImpl;
-import com.xpn.xwiki.objects.*;
+import com.xpn.xwiki.objects.BaseElement;
+import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.objects.ListProperty;
+import com.xpn.xwiki.objects.LongProperty;
+import com.xpn.xwiki.objects.PropertyInterface;
 import com.xpn.xwiki.objects.classes.ListItem;
 import com.xpn.xwiki.plugin.image.ImagePlugin;
 import com.xpn.xwiki.plugin.lucene.LucenePlugin;
@@ -1542,52 +1545,66 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             XWikiContext context = getXWikiContext();
             LucenePluginApi lucene = (LucenePluginApi) context.getWiki().getPluginApi("lucene", context);
 
-            // Need to add sorting
-            SearchResults search = lucene.getSearchResults(terms, "name", "default,en");
+            if (lucene == null){
+                // Could not load plugin
+                throw new Exception("ERROR: Could not load Lucene plugin.");
+            } else {
+                // Need to add sorting
+                SearchResults search = lucene.getSearchResults(terms, "name", "default,en");
 
-            List results = search.getResults(start, nb);
-
-            // First element in list is the hit count
-            docs.add(Integer.valueOf(search.getTotalHitcount()));
-
-            Iterator i = results.iterator();
-
-            while (i.hasNext()) {
-                SearchResult r = (SearchResult) i.next();
-                XWikiDocument xd = context.getWiki().getDocument(r.getWeb()+"."+r.getName(), context);
-                Document doc = newDocument(new Document(), xd, true, true, false, false, context);
-
-                // TODO: We really should create a sub-class of Document for this
-                doc.setCreator(context.getWiki().getUserName(xd.getCreator(), null, false, context));
-
-                BaseObject obj = xd.getObject(Constants.COMPOSITEASSET_CLASS);
-                if (obj != null){
-                    doc.setFormat("composite");
+                if (search == null){
+                    // Get search results didn't work for some reason
+                    throw new Exception("ERROR: Lucene search failed (terms: "+terms+")");
                 } else {
-                    List attachments = xd.getAttachmentList();
-                    if (!attachments.isEmpty()){
-                        XWikiAttachment attach = (XWikiAttachment) attachments.get(0);
+                    List results = search.getResults(start, nb);
 
-                        String attName = attach.getFilename();
+                    // First element in list is the hit count
+                    docs.add(Integer.valueOf(search.getTotalHitcount()));
 
-                        String extension = (attName.lastIndexOf(".") != -1 ? attName.substring(attName.lastIndexOf(".") + 1).toUpperCase(): null);
+                    Iterator i = results.iterator();
 
-                        if (extension == null){
-                            extension = "Unknown";
-                        }
-
-                        doc.setFormat(extension);
-                    } else {
-                        obj = xd.getObject(Constants.EXTERNAL_ASSET_CLASS);
-                        if (obj != null){
-                            doc.setFormat("WWW");
+                    while (i.hasNext()) {
+                        SearchResult r = (SearchResult) i.next();
+                        XWikiDocument xd = context.getWiki().getDocument(r.getWeb()+"."+r.getName(), context);
+                        if (xd == null){
+                            // ignore document as it doesn't seem to exist
                         } else {
-                            doc.setFormat("block");
+                            Document doc = newDocument(new Document(), xd, true, true, false, false, context);
+
+                            // TODO: We really should create a sub-class of Document for this
+                            doc.setCreator(context.getWiki().getUserName(xd.getCreator(), null, false, context));
+
+                            BaseObject obj = xd.getObject(Constants.COMPOSITEASSET_CLASS);
+                            if (obj != null){
+                                doc.setFormat("composite");
+                            } else {
+                                List attachments = xd.getAttachmentList();
+                                if (!attachments.isEmpty()){
+                                    XWikiAttachment attach = (XWikiAttachment) attachments.get(0);
+
+                                    String attName = attach.getFilename();
+
+                                    String extension = (attName.lastIndexOf(".") != -1 ? attName.substring(attName.lastIndexOf(".") + 1).toUpperCase(): null);
+
+                                    if (extension == null){
+                                        extension = "Unknown";
+                                    }
+
+                                    doc.setFormat(extension);
+                                } else {
+                                    obj = xd.getObject(Constants.EXTERNAL_ASSET_CLASS);
+                                    if (obj != null){
+                                        doc.setFormat("WWW");
+                                    } else {
+                                        doc.setFormat("block");
+                                    }
+                                }
+                            }
+
+                            docs.add(doc);
                         }
                     }
                 }
-
-                docs.add(doc);
             }
         } catch (Exception e){
             throw getXWikiGWTException(e);

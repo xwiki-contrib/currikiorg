@@ -36,11 +36,8 @@ import org.curriki.gwt.client.search.queries.Paginator;
 
 public class PaginationPanel extends VerticalPanel implements Paginator
 {
-    protected Hyperlink first = new Hyperlink();
     protected Hyperlink prev = new Hyperlink();
-    protected Label page = new Label();
     protected Hyperlink next = new Hyperlink();
-    protected Hyperlink last = new Hyperlink();
     protected boolean canPrevious = false;
     protected boolean canNext = false;
     protected DoesSearch searcher;
@@ -51,6 +48,7 @@ public class PaginationPanel extends VerticalPanel implements Paginator
     protected Paginator paginator;
     protected HorizontalPanel pResults = new HorizontalPanel();
     protected HorizontalPanel pNav = new HorizontalPanel();
+    protected ClickListener paginate;
 
     public PaginationPanel(){
         paginator = this;
@@ -66,49 +64,16 @@ public class PaginationPanel extends VerticalPanel implements Paginator
         // setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         addStyleName(style);
         setVisible(false);
+
+        // "Results x - y of about z" line
         pResults.setStyleName("search-pagination-results");
 
         pNav.setStyleName("search-pagination-nav");
-        ClickListener paginate = new ClickListener(){
+        paginate = new ClickListener(){
             public void onClick(Widget sender){
                 changePage(sender);
             }
         };
-        first.setText(Main.getTranslation("find.first"));
-        first.addStyleName("pagination-item-first");
-        first.addStyleName("pagination-item-disabled");
-        first.addClickListener(paginate);
-        pNav.add(first);
-
-        pNav.add(new Label(" | "));
-
-        prev.setText(Main.getTranslation("find.prev"));
-        prev.addStyleName("pagination-item-prev");
-        prev.addStyleName("pagination-item-disabled");
-        prev.addClickListener(paginate);
-        pNav.add(prev);
-
-        pNav.add(new Label(" | "));
-
-        page.setText(Main.getTranslation("find.page")+" 1 / 1");
-        page.addStyleName("pagination-item-page");
-        pNav.add(page);
-
-        pNav.add(new Label(" | "));
-
-        next.setText(Main.getTranslation("find.next"));
-        prev.addStyleName("pagination-item-next");
-        next.addStyleName("pagination-item-disabled");
-        next.addClickListener(paginate);
-        pNav.add(next);
-
-        pNav.add(new Label(" | "));
-
-        last.setText(Main.getTranslation("find.last"));
-        prev.addStyleName("pagination-item-last");
-        last.addStyleName("pagination-item-disabled");
-        last.addClickListener(paginate);
-        pNav.add(last);
 
         add(pResults);
         add(pNav);
@@ -117,14 +82,19 @@ public class PaginationPanel extends VerticalPanel implements Paginator
     private void changePage(Widget sender) {
         int newstart = start;
 
-        if (canPrevious && sender == first){
-            newstart = 1;
-        } else if (canPrevious && sender == prev){
+        if (canPrevious && sender == prev){
             newstart = start - count;
         } else if (canNext && sender == next){
             newstart = start + count;
-        } else if (canNext && sender == last){
-            newstart = lastindex;
+        } else {
+            try {
+                int fromTitle = Integer.parseInt(sender.getTitle());
+
+                // Go to this page
+                newstart = (fromTitle-1)*count+1;
+            } catch(Exception e){
+                // ignore
+            }
         }
 
         if (newstart != start){
@@ -136,9 +106,9 @@ public class PaginationPanel extends VerticalPanel implements Paginator
     }
 
     public void adjust(int count, int start, int hitcount) {
-        this.count = count;
-        this.start = start;
-        this.hitcount = hitcount;
+        this.count = count; // Count per page
+        this.start = start; // First on page
+        this.hitcount = hitcount; // Total hits
 
         if (hitcount < count){
             count = hitcount;
@@ -150,51 +120,88 @@ public class PaginationPanel extends VerticalPanel implements Paginator
 
         lastindex = ((pagecount - 1)*count)+1;
 
+        int lastOnPage = (start+count)-1;
+
+        if (lastOnPage > hitcount){
+            lastOnPage = hitcount;
+        }
+
+        // Summary row
         pResults.clear();
-        pResults.add(new HTML(Main.getTranslation("Results")+" "+start+" - "+(start+count-1)+" of about "+hitcount));
+        pResults.add(new HTML(Main.getTranslation("search.nav.summary", new String[] {
+            Integer.toString(start),
+            Integer.toString(lastOnPage),
+            Integer.toString(hitcount)}
+        )));
+
+        // Pagination row
+        // "Previous 11 12 13 14 15 16 17 18 19 20 Next"
+        pNav.clear();
+
+        int pageOffset = (curpage - 1) / 10;
+
+        prev.setText(Main.getTranslation("search.nav.prev"));
+        prev.addStyleName("pagination-item-prev");
+        prev.addStyleName("pagination-item-disabled");
+        prev.addClickListener(paginate);
+        pNav.add(prev);
+
+        pNav.add(new Label("   "));
+
+        for (int i=1; i<=10; i++){
+            int pPage = pageOffset + i;
+            if (pPage <= pagecount){
+                String pPageString = (new Integer(pPage)).toString();
+                Label n = new Label(pPageString);
+                n.setTitle(pPageString);
+                n.addStyleName("pagination-item-page");
+                if (curpage == pPage) {
+                    n.addStyleName("pagination-item-current");
+                }
+                n.addClickListener(paginate);
+                pNav.add(n);
+
+                pNav.add(new Label(" "));
+            }
+        }
+
+        pNav.add(new Label("  "));
+
+        next.setText(Main.getTranslation("search.nav.next"));
+        prev.addStyleName("pagination-item-next");
+        next.addStyleName("pagination-item-disabled");
+        next.addClickListener(paginate);
+        pNav.add(next);
 
         if (start > 1){
             // First and Prev should be enabled
             canPrevious = true;
 
-            first.removeStyleName("pagination-item-disabled");
             prev.removeStyleName("pagination-item-disabled");
-
-            first.addStyleName("pagination-item-enabled");
             prev.addStyleName("pagination-item-enabled");
         } else {
             // First and Prev should be disabled
             canPrevious = false;
 
-            first.removeStyleName("pagination-item-enabled");
             prev.removeStyleName("pagination-item-enabled");
-
-            first.addStyleName("pagination-item-disabled");
             prev.addStyleName("pagination-item-disabled");
         }
-
-        page.setText(Main.getTranslation("find.page")+" "+curpage+" / "+pagecount);
 
         if (start < lastindex){
             // Next and Last should be enabled
             canNext = true;
 
             next.removeStyleName("pagination-item-disabled");
-            last.removeStyleName("pagination-item-disabled");
-
             next.addStyleName("pagination-item-enabled");
-            last.addStyleName("pagination-item-enabled");
         } else {
             // Next and Last should be disabled
             canNext = false;
 
             next.removeStyleName("pagination-item-enabled");
-            last.removeStyleName("pagination-item-enabled");
-
             next.addStyleName("pagination-item-disabled");
-            last.addStyleName("pagination-item-disabled");
         }
 
+        // Should we display the paginator?
         if (hitcount > 0) {
             setVisible(true);
         } else {

@@ -127,6 +127,9 @@ abstract public class DropdownSelector extends ListBox implements Selectable
         String filter = "";
         String value = getValue(getSelectedIndex());
         if (value.length() > 0){
+            //TODO: These values must be escaped somehow for lucene + - && || ! ( ) { } [ ] ^ " ~ * ? : \
+            //value = value.replaceAll(":", "\\:");
+            value = "+\""+value+"\"";
             if (getFieldName() != null){
                 if (getFieldName().length() == 0 || getFieldName().startsWith("__")){
                     filter = value;
@@ -141,18 +144,25 @@ abstract public class DropdownSelector extends ListBox implements Selectable
 
     public SelectionCollection getSelected()
     {
-        //TODO: get list of selected items
-        return new SelectionCollection();
+        SelectionCollection s = new SelectionCollection();
+
+        String value = getValue(getSelectedIndex());
+        if (value.length() > 0){
+            s.put(getFieldName(), value);
+        } else {
+            s.remove(getFieldName());
+        }
+
+        return s;
     }
 
     public void setSelected(SelectionCollection selection)
     {
         //TODO: set selected items
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     protected Widget getTooltip(String name) {
-        String txt = Main.getTranslation("search." + name + "_tooltip");
+        String txt = Main.getTranslation("search.selector." + name + "_tooltip");
         Image image = new Image(Constants.ICON_PATH+"exclamation.png");
         PopupPanel popup = new PopupPanel(true);
         popup.setStyleName("search-tooltip-popup");

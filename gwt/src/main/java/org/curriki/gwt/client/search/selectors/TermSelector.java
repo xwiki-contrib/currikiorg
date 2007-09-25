@@ -30,6 +30,7 @@ import org.curriki.gwt.client.Main;
 public class TermSelector extends TextInputSelector
 {
     protected int selectorSize = 30;
+    protected String selector_id = "terms";
 
     public TermSelector() {
         super();
@@ -49,8 +50,8 @@ public class TermSelector extends TextInputSelector
     public Widget getLabel()
     {
         HorizontalPanel p = new HorizontalPanel();
-        p.add(new Label(Main.getTranslation("Search Terms")));
-        p.add(getTooltip("terms"));
+        p.add(new Label(Main.getTranslation("search.selector."+selector_id)));
+        p.add(getTooltip(selector_id));
         return p;
     }
 }

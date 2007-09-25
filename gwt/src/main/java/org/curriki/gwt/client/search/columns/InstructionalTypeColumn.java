@@ -34,7 +34,7 @@ public class InstructionalTypeColumn extends ResultsColumn
 {
     public InstructionalTypeColumn()
     {
-        this.header = Main.getTranslation("Instructional Type");
+        this.header = Main.getTranslation("search.results.col.ict");
     }
 
     public InstructionalTypeColumn(String header, String columnStyle)

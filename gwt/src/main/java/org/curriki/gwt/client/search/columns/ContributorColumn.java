@@ -29,7 +29,7 @@ public class ContributorColumn extends ResultsColumn
 {
     public ContributorColumn()
     {
-        this.header = Main.getTranslation("Contributor");
+        this.header = Main.getTranslation("search.resutls.col.creator");
     }
 
     public ContributorColumn(String header, String columnStyle)

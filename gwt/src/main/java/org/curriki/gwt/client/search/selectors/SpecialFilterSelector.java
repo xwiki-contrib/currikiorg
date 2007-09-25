@@ -34,17 +34,17 @@ public class SpecialFilterSelector extends DropdownSingleSelector
         super();
         setFieldName("__special");
 
-        addOption(Main.getTranslation("None"), "");
+        addOption(Main.getTranslation("search.selector.filters.none"), "");
         if (!Main.getSingleton().getUser().getFullName().equals(Constants.USER_XWIKI_GUEST)) {
-            addOption(Main.getTranslation("Only My Contributions"), "mine");
+            addOption(Main.getTranslation("search.selector.filters.mine"), "mine");
         }
-        addOption(Main.getTranslation("Only Collections"), "collections");
+        addOption(Main.getTranslation("search.selector.filters.collections"), "collections");
     }
 
     public Widget getLabel()
     {
         HorizontalPanel p = new HorizontalPanel();
-        p.add(new Label(Main.getTranslation("Special Filters")));
+        p.add(new Label(Main.getTranslation("search.selector.filters")));
         p.add(getTooltip("filters"));
         return p;
     }
@@ -58,17 +58,10 @@ public class SpecialFilterSelector extends DropdownSingleSelector
                 filter = "XWiki.CompositeAssetClass.type:collection";
             }
             if (value.equals("mine")){
-                filter = "creator:"+Main.getSingleton().getUser().getFullName();
+                filter = "creator:"+Main.getSingleton().getUser().getFullName(); // This is the full USERNAME, not realname
             }
         }
 
         return filter;
-    }
-
-    public SelectionCollection getSelected()
-    {
-        SelectionCollection s = new SelectionCollection();
-        
-        return s;
     }
 }

@@ -63,7 +63,8 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
 
         add(pTerms);
 
-        search = new Button(Main.getTranslation("Search"));
+        search = new Button(Main.getTranslation("search.search_button"));
+        search.addStyleName("search-searchbutton");
         search.addClickListener(this);
         add(search);
     }

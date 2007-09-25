@@ -96,6 +96,8 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             } else {
                 query.doSearch(start, count);
             }
+            
+            //TODO: Add to history
         }
     }
 

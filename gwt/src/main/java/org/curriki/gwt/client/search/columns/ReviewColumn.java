@@ -33,7 +33,7 @@ public class ReviewColumn extends ResultsColumn
 {
     public ReviewColumn()
     {
-        this.header = Main.getTranslation("Review");
+        this.header = Main.getTranslation("search.results.col.review");
     }
 
     public ReviewColumn(String header, String columnStyle)
@@ -70,7 +70,7 @@ public class ReviewColumn extends ResultsColumn
                     }
                 });
             }
-            this.addTooltip(img, Main.getTranslation("search.CRS.tooltip."+rating));
+            this.addTooltip(img, Main.getTranslation("search.crs.tooltip."+rating));
         }
 
         return img;

@@ -39,21 +39,31 @@ public class SelectorPanel extends VerticalPanel implements ChangeListener, Clic
 {
     protected SelectorMainPanel main;
     protected SelectorFilterPanel filters;
+    protected SelectorTogglePanel bottom;
     protected SelectorCollection selectors = new SelectorCollection();
     protected String fieldName;
 
     public SelectorPanel()
     {
         main = new SelectorMainPanel();
+        main.addStyleName("search-selector-main");
         main.addChangeListener(this);
         main.addClickListener(this);
         selectors.add(main);
         add(main);
 
         filters = new SelectorFilterPanel();
+        filters.addStyleName("search-selector-filters");
         filters.addChangeListener(this);
         selectors.add(filters);
         add(filters);
+
+        filters.setVisible(false);
+
+        bottom = new SelectorTogglePanel();
+        bottom.addStyleName("search-selector-bottom");
+        bottom.setTogglePanel(filters);
+        add(bottom);
     }
 
     public Widget getLabel()
