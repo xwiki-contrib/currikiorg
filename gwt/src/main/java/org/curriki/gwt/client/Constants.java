@@ -29,6 +29,7 @@ public class Constants {
     public static final String TRANSLATION_PAGE = "XWiki.CurrikiGWTTranslation";
 
     public static final String CURRIKI_SERVICE = "/xwiki/gwt/CurrikiService";
+    public static final String USER_URL_PREFIX = "/xwiki/bin/view/XWiki/";
 
     public static final String SKIN_PATH = "/xwiki/skins/curriki8/";
     public static final String MIMETYPE_PATH = SKIN_PATH+"mimetypes/";

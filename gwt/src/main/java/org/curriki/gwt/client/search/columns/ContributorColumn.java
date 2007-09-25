@@ -22,8 +22,11 @@
  */
 package org.curriki.gwt.client.search.columns;
 
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.Constants;
 
 public class ContributorColumn extends ResultsColumn
 {
@@ -41,12 +44,21 @@ public class ContributorColumn extends ResultsColumn
 
     public String getDisplayString(Document value)
     {
-        //TODO: We need to get the username and make this a link to the contributor's "My Curriki" page
-        
         String creator = "";
         if (value.getCreator() != null){
             creator = value.getCreator();
         }
         return creator;
+    }
+
+    public Widget getDisplayWidget(Document value)
+    {
+        HTML nameCol = new HTML();
+        String name = getDisplayString(value);
+        String url = Constants.USER_URL_PREFIX+name;
+
+        nameCol.setHTML("<a href=\""+url+"\">"+name+"</a>");
+
+        return nameCol;
     }
 }

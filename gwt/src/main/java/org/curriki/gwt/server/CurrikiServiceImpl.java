@@ -1579,7 +1579,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                             Document doc = newDocument(new Document(), xd, true, true, false, false, context);
 
                             // TODO: We really should create a sub-class of Document for this
-                            doc.setCreator(context.getWiki().getUserName(xd.getCreator(), null, false, context));
+                            //doc.setCreator(context.getWiki().getUserName(xd.getCreator(), null, false, context));
 
                             BaseObject obj = xd.getObject(Constants.COMPOSITEASSET_CLASS);
                             if (obj != null){
