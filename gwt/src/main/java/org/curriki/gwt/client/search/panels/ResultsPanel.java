@@ -25,6 +25,7 @@ package org.curriki.gwt.client.search.panels;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.search.Results;
 import org.curriki.gwt.client.search.columns.ActionColumn;
 import org.curriki.gwt.client.search.columns.ContributorColumn;
@@ -36,7 +37,6 @@ import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.LuceneAssetQuery;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
-import org.curriki.gwt.client.Constants;
 
 public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer
 {
@@ -70,7 +70,8 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         columns[3] = new ReviewColumn();
         columns[4] = new ActionColumn();
 
-        //TODO: Set up empty layout
+        //TODO: Add sorting for headers
+
         g = new FlexTable();
         addHeadings();
         
