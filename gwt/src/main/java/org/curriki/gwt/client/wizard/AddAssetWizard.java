@@ -278,7 +278,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
                 category = Constants.TYPE_TEXT;
                 if (type==Constants.TEXTASSET_TYPE_DIRECTION)
-                    finishWizard();
+                    initMetadata(false);
                 else
                     initMetadata(false);
             }
