@@ -1,6 +1,6 @@
 /*
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright 2007, The Global Education and Learning Community,
+ * and individual contributors as indicated by the contributors.txt.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -22,18 +22,8 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import org.curriki.gwt.client.Main;
-
-public class ActionColumn extends ResultsColumn
+public interface SortableHeader
 {
-    public ActionColumn()
-    {
-        this.header = Main.getTranslation("search.results.col.action");
-        this.columnStyle = "results-action-cell";
-    }
-
-    public ActionColumn(String header, String columnStyle)
-    {
-        super(header, columnStyle);
-    }
+    public String getSortBy();
+    public boolean isSortable();
 }

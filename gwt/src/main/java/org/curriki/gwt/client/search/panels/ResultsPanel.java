@@ -24,6 +24,8 @@ package org.curriki.gwt.client.search.panels;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.search.Results;
@@ -33,12 +35,13 @@ import org.curriki.gwt.client.search.columns.InstructionalTypeColumn;
 import org.curriki.gwt.client.search.columns.ResultsColumnDisplayable;
 import org.curriki.gwt.client.search.columns.ReviewColumn;
 import org.curriki.gwt.client.search.columns.TitleColumn;
+import org.curriki.gwt.client.search.columns.SortableColumnHeader;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.LuceneAssetQuery;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
 
-public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer
+public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer, ClickListener
 {
     protected Results results;
     protected LuceneAssetQuery query;
@@ -47,7 +50,8 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     protected ResultsColumnDisplayable[] columns = new ResultsColumnDisplayable[5];
     protected int columnCount = 4;
     protected int curRow = 0;
-    protected Selectable selector; 
+    protected Selectable selector;
+    protected String sortBy;
 
     public ResultsPanel(){
         init(false);
@@ -70,8 +74,6 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         columns[3] = new ReviewColumn();
         columns[4] = new ActionColumn();
 
-        //TODO: Add sorting for headers
-
         g = new FlexTable();
         addHeadings();
         
@@ -90,6 +92,8 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             if (selector != null){
                 query.setCriteria(selector.getFilter());
             }
+
+            query.setSortBy(sortBy);
 
             if (paginator != null){
                 query.setPaginator(paginator);
@@ -119,8 +123,18 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         curRow = 0;
         g.getRowFormatter().addStyleName(curRow, "find-results-table-title");
         for (int i=0; i<columnCount; i++){
+            g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header");
             g.getFlexCellFormatter().addStyleName(curRow, i, columns[i].getHeaderColumnStyle());
-            g.setWidget(curRow, i, columns[i].getHeaderWidget());
+            Widget w = columns[i].getHeaderWidget();
+            if (w instanceof SortableColumnHeader){
+                SortableColumnHeader sw = (SortableColumnHeader) w;
+
+                sw.addClickListener(this);
+                if (sw.getSortBy().equals(sortBy)){
+                    g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header-sorted");
+                }
+            }
+            g.setWidget(curRow, i, w);
         }
         curRow++;
     }
@@ -128,6 +142,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     {
         g.getRowFormatter().addStyleName(curRow, "find-results-table-result");
         for (int i=0; i<columnCount; i++){
+            g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-cell");
             g.getFlexCellFormatter().addStyleName(curRow, i, columns[i].getColumnStyle());
             g.setWidget(curRow, i, columns[i].getDisplayWidget(doc));
         }
@@ -136,5 +151,24 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
 
     public void setSelector(Selectable selector){
         this.selector = selector;
+    }
+
+    public void onClick(Widget widget)
+    {
+        if (widget instanceof SortableColumnHeader){
+            String oldSortBy = sortBy;
+            sortBy = ((SortableColumnHeader) widget).getSortBy();
+
+            if (oldSortBy.equals(sortBy)){
+                // TODO: We will want to reverse the sort once XWiki supports that
+            } else {
+                sortBy = oldSortBy;
+                doSearch();
+            }
+        }
+    }
+
+    public String getSortBy(){
+        return sortBy;
     }
 }

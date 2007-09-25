@@ -34,6 +34,8 @@ public class ReviewColumn extends ResultsColumn
     public ReviewColumn()
     {
         this.header = Main.getTranslation("search.results.col.review");
+        this.columnStyle = "results-review-cell";
+        this.sortBy = Constants.CURRIKI_REVIEW_CLASS+"."+Constants.CURRIKI_REVIEW_RATING_PROPERTY;
     }
 
     public ReviewColumn(String header, String columnStyle)

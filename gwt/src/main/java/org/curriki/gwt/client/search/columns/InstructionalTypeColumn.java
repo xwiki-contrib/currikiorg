@@ -35,6 +35,8 @@ public class InstructionalTypeColumn extends ResultsColumn
     public InstructionalTypeColumn()
     {
         this.header = Main.getTranslation("search.results.col.ict");
+        this.columnStyle = "results-ict-cell";
+        this.sortBy = Constants.ASSET_CLASS+"."+Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY;
     }
 
     public InstructionalTypeColumn(String header, String columnStyle)

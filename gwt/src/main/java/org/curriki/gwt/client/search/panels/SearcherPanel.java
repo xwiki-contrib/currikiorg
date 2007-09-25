@@ -69,6 +69,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
     public void onClick(Widget widget)
     {
         if (widget instanceof SelectorPanel){
+            pagination.setStart(1); // Reset to first page
             getSearcher().doSearch();
         }
     }

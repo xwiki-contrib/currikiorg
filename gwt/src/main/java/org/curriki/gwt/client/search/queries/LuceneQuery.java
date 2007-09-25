@@ -35,6 +35,7 @@ import java.util.Vector;
 public class LuceneQuery implements DocumentSearcher
 {
     protected String searchTerms = "";
+    protected String sortBy;
     protected List results;
     protected int hitcount;
     protected ResultsReceiver receiver;
@@ -72,6 +73,10 @@ public class LuceneQuery implements DocumentSearcher
         searchTerms = criteria;
     }
 
+    public void setSortBy(String sortBy){
+        this.sortBy = sortBy;
+    }
+
     public void setReceiver(ResultsReceiver receiver)
     {
         this.receiver = receiver;
@@ -88,7 +93,7 @@ public class LuceneQuery implements DocumentSearcher
     
     public void doSearch(int start, int count)
     {
-        CurrikiService.App.getInstance().luceneSearch(searchTerms, start, limit, new LuceneQuery.populateResultsCallback());
+        CurrikiService.App.getInstance().luceneSearch(searchTerms, start, limit, sortBy, new LuceneQuery.populateResultsCallback());
     }
 
     public int getHitcount()

@@ -1539,6 +1539,10 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
     /* Lucene Searching */
     public List luceneSearch(String terms, int start, int nb) throws XWikiGWTException {
+        return luceneSearch(terms, start, nb, "name");
+    }
+
+    public List luceneSearch(String terms, int start, int nb, String sortBy) throws XWikiGWTException {
         List docs = new ArrayList();
 
         try {
@@ -1550,7 +1554,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 throw new Exception("ERROR: Could not load Lucene plugin.");
             } else {
                 // Need to add sorting
-                SearchResults search = lucene.getSearchResults(terms, "name", "default,en");
+                SearchResults search = lucene.getSearchResults(terms, sortBy, "default,en");
 
                 if (search == null){
                     // Get search results didn't work for some reason

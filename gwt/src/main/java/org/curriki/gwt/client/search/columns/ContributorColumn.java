@@ -22,14 +22,16 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import org.curriki.gwt.client.Main;
 import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Main;
 
 public class ContributorColumn extends ResultsColumn
 {
     public ContributorColumn()
     {
-        this.header = Main.getTranslation("search.resutls.col.creator");
+        this.header = Main.getTranslation("search.results.col.creator");
+        this.columnStyle = "results-creator-cell";
+        this.sortBy = "creator";
     }
 
     public ContributorColumn(String header, String columnStyle)

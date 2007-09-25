@@ -38,7 +38,8 @@ public class TitleColumn extends ResultsColumn
     public TitleColumn()
     {
         this.header = Main.getTranslation("search.results.col.title");
-        this.columnStyle = "results-resource-cell";
+        this.columnStyle = "results-title-cell";
+        this.sortBy = Constants.ASSET_CLASS+"."+Constants.ASSET_TITLE_PROPERTY;
     }
 
     public TitleColumn(String header, String columnStyle)

@@ -62,6 +62,7 @@ public interface CurrikiService extends XWikiService {
 
     // Lucene search
     public List luceneSearch(String terms, int start, int nb) throws XWikiGWTException;
+    public List luceneSearch(String terms, int start, int nb, String sortBy) throws XWikiGWTException;
 
     // Templates
     public List getTemplates() throws XWikiGWTException;

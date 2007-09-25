@@ -70,6 +70,7 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
 
     // Lucene search
     void luceneSearch(String terms, int start, int nb, AsyncCallback async);
+    void luceneSearch(String terms, int start, int nb, String sortBy, AsyncCallback async);
 
     // Templates
     void getTemplates(AsyncCallback async);

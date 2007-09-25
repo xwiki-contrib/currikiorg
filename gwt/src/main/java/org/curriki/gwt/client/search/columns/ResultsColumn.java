@@ -34,6 +34,7 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
 {
     protected String header = "";
     protected String columnStyle = "results-column";
+    protected String sortBy;
 
     protected ResultsColumn()
     {
@@ -45,6 +46,21 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
         this.columnStyle = columnStyle;
     }
 
+    protected ResultsColumn(String header, String columnStyle, String sortBy)
+    {
+        this.header = header;
+        this.columnStyle = columnStyle;
+        this.sortBy = sortBy;
+    }
+
+    public void setSortBy(String sortBy){
+        this.sortBy = sortBy;
+    }
+
+    public String getSortBy(){
+        return sortBy;
+    }
+
     public String getHeaderString()
     {
         return this.header;
@@ -52,7 +68,8 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
 
     public Widget getHeaderWidget()
     {
-        return new Label(this.header);
+        SortableColumnHeader h = new SortableColumnHeader(header, sortBy);
+        return h;
     }
 
     public String getColumnStyle()
