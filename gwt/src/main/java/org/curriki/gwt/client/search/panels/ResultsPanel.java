@@ -24,8 +24,9 @@ package org.curriki.gwt.client.search.panels;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.search.Results;
@@ -34,14 +35,14 @@ import org.curriki.gwt.client.search.columns.ContributorColumn;
 import org.curriki.gwt.client.search.columns.InstructionalTypeColumn;
 import org.curriki.gwt.client.search.columns.ResultsColumnDisplayable;
 import org.curriki.gwt.client.search.columns.ReviewColumn;
-import org.curriki.gwt.client.search.columns.TitleColumn;
 import org.curriki.gwt.client.search.columns.SortableColumnHeader;
+import org.curriki.gwt.client.search.columns.TitleColumn;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.LuceneAssetQuery;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
 
-public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer, ClickListener
+public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer, TableListener
 {
     protected Results results;
     protected LuceneAssetQuery query;
@@ -75,6 +76,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         columns[4] = new ActionColumn();
 
         g = new FlexTable();
+        g.addTableListener(this);
         addHeadings();
         
         add(g);
@@ -129,7 +131,6 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             if (w instanceof SortableColumnHeader){
                 SortableColumnHeader sw = (SortableColumnHeader) w;
 
-                sw.addClickListener(this);
                 if (sw.getSortBy().equals(sortBy)){
                     g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header-sorted");
                 }
@@ -153,22 +154,31 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         this.selector = selector;
     }
 
-    public void onClick(Widget widget)
-    {
-        if (widget instanceof SortableColumnHeader){
-            String oldSortBy = sortBy;
-            sortBy = ((SortableColumnHeader) widget).getSortBy();
-
-            if (oldSortBy.equals(sortBy)){
-                // TODO: We will want to reverse the sort once XWiki supports that
-            } else {
-                sortBy = oldSortBy;
-                doSearch();
-            }
-        }
-    }
-
     public String getSortBy(){
         return sortBy;
+    }
+
+    public void onCellClicked(SourcesTableEvents sourcesTableEvents, int row, int cell)
+    {
+        if (row == 0){ // Only accept clicks on headings
+            Widget widget = g.getWidget(row, cell);
+            if ((widget != null) && (widget instanceof SortableColumnHeader)){
+                SortableColumnHeader pressed = (SortableColumnHeader) widget;
+
+                if (pressed.isSortable()){
+                    String oldSortBy = sortBy;
+                    sortBy = pressed.getSortBy();
+
+                    if (oldSortBy.equals(sortBy)){
+                        // TODO: We will want to reverse the sort once XWiki supports that
+                    } else {
+                        sortBy = oldSortBy;
+                        doSearch();
+                    }
+                } else {
+                    // Ignore click if not sortable
+                }
+            }
+        }
     }
 }

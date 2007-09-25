@@ -1544,6 +1544,9 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
     public List luceneSearch(String terms, int start, int nb, String sortBy) throws XWikiGWTException {
         List docs = new ArrayList();
+        if (sortBy == null){
+            sortBy = "name";
+        }
 
         try {
             XWikiContext context = getXWikiContext();

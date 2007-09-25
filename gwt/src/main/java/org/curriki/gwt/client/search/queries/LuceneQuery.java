@@ -93,6 +93,9 @@ public class LuceneQuery implements DocumentSearcher
     
     public void doSearch(int start, int count)
     {
+        if (sortBy == null){
+            sortBy = "name";
+        }
         CurrikiService.App.getInstance().luceneSearch(searchTerms, start, limit, sortBy, new LuceneQuery.populateResultsCallback());
     }
 
