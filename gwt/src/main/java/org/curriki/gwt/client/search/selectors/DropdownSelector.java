@@ -166,7 +166,7 @@ abstract public class DropdownSelector extends ListBox implements Selectable, Ke
         return image;
     }
 
-    public native int getOptionCount(Element element) /*-{
+    public native int getOptionCount(Element elem) /*-{
         return elem.options.length;
     }-*/;
 
