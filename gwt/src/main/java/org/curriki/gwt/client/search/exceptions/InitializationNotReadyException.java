@@ -1,6 +1,6 @@
 /*
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright 2007, The Global Education and Learning Community,
+ * and individual contributors as indicated by the contributors.txt.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,14 +20,8 @@
  * @author dward
  *
  */
-package org.curriki.gwt.client.search.panels;
+package org.curriki.gwt.client.search.exceptions;
 
-import com.xpn.xwiki.gwt.api.client.Document;
-
-public interface ResultsRenderer
+public class InitializationNotReadyException extends RuntimeException
 {
-    public void clear();
-    public void addHeadings();
-    public void addRow(Document doc);
-    public void addRowNoResults();
 }

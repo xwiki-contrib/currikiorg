@@ -22,29 +22,28 @@
  */
 package org.curriki.gwt.client.search.selectors;
 
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.search.exceptions.InitializationNotReadyException;
+import org.curriki.gwt.client.search.history.ClientState;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class SubjectSelector extends DropdownSingleSelector
 {
-    //private static final String FRAMEWORK_CUSTOM_QUERY_PAGE = "GWT.GetDefaultFrameworkQuery";
+    private boolean isReady = false;
 
     public SubjectSelector() {
         super();
         setFieldName("XWiki.AssetClass."+Constants.ASSET_FW_ITEMS_PROPERTY);
-        // We need to make a call to customQuery() from XWikiServiceImpl to get the list using the following query
-        //select doc.fullName, doc.title, doc.parent
-        //  from XWikiDocument as doc, BaseObject as obj
-        //  where doc.fullName=obj.name and obj.className='XWiki.FrameworkItemClass' order by doc.title
-//        CurrikiService.App.getInstance().customQuery(FRAMEWORK_CUSTOM_QUERY_PAGE, new LoadSelectorCallback(this));
+
+        // Fetch subjects from server
         CurrikiService.App.getInstance().getDocuments(", BaseObject as obj " +
             "where doc.fullName=obj.name and obj.className='XWiki.FrameworkItemClass'" +
             " and doc.parent = 'FW_masterFramework.WebHome'" +
@@ -56,7 +55,16 @@ public class SubjectSelector extends DropdownSingleSelector
         return new Label(Main.getTranslation("search.selector.subject"));
     }
 
-    public class LoadSelectorCallback extends CurrikiAsyncCallback
+    public void loadState(ClientState state) throws InitializationNotReadyException
+    {
+        if (!isReady){
+            throw new InitializationNotReadyException();
+        } else {
+            super.loadState(state);
+        }
+    }
+
+    protected class LoadSelectorCallback extends CurrikiAsyncCallback
     {
         DropdownSingleSelector list;
 
@@ -75,6 +83,8 @@ public class SubjectSelector extends DropdownSingleSelector
                 Document doc = (Document) i.next();
                 list.addOption(doc.getTitle(), doc.getFullName());
             }
+            
+            isReady = true;
         }
     }
 }

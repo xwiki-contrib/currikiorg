@@ -50,6 +50,10 @@ public class Results implements ResultsReceiver
         }
 
         paginator.adjust(paginator.getFetchCount(), paginator.getStart(), hitcount);
+
+        if (hitcount == 0){
+            renderer.addRowNoResults();
+        }
     }
 
     public void setPaginator(Paginator paginator){

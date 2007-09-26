@@ -23,9 +23,11 @@
 package org.curriki.gwt.client.search.history;
 
 import com.google.gwt.user.client.HistoryListener;
+import com.google.gwt.user.client.Timer;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
+import org.curriki.gwt.client.search.exceptions.InitializationNotReadyException;
 
 public class SearcherHistory implements HistoryListener
 {
@@ -34,6 +36,7 @@ public class SearcherHistory implements HistoryListener
     protected Paginator paginator;
     protected ClientState state;
     protected boolean ignoreNextChange = false;
+    protected String currentToken;
 
     public boolean isIgnoreNextChange()
     {
@@ -47,10 +50,24 @@ public class SearcherHistory implements HistoryListener
 
     public void onHistoryChanged(String token)
     {
+        currentToken = token;
         if (!isIgnoreNextChange()){
             state.InitFromToken(token);
-            loadState();
-            searcher.doSearchFromHistory();
+            try {
+                loadState();
+                if ((state.getValue("__terms").length() > 0) || state.getValue("__go").equals("1")) {
+                    // Only do a search if terms are passed
+                    searcher.doSearchFromHistory();
+                }
+            } catch (InitializationNotReadyException e){
+                // Try again in a bit if we are not ready to initialize
+                Timer t = new Timer(){
+                    public void run(){
+                        onHistoryChanged(currentToken);
+                    }
+                };
+                t.schedule(500);
+            }
         } else {
             setIgnoreNextChange(false);
         }
@@ -93,7 +110,8 @@ public class SearcherHistory implements HistoryListener
         }
     }
 
-    public void loadState(){
+    public void loadState() throws InitializationNotReadyException
+    {
         if (searcher instanceof KeepsState){
             ((KeepsState) searcher).loadState(state);
         }

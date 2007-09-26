@@ -27,9 +27,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.History;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.Results;
 import org.curriki.gwt.client.search.history.SearcherHistory;
 import org.curriki.gwt.client.search.history.KeepsState;
@@ -155,14 +157,26 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         }
         curRow++;
     }
+
     public void addRow(Document doc)
     {
         g.getRowFormatter().addStyleName(curRow, "find-results-table-result");
+        g.getFlexCellFormatter().setColSpan(curRow, 0, 1);
         for (int i=0; i<columnCount; i++){
             g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-cell");
             g.getFlexCellFormatter().addStyleName(curRow, i, columns[i].getColumnStyle());
             g.setWidget(curRow, i, columns[i].getDisplayWidget(doc));
         }
+        curRow++;
+    }
+
+    public void addRowNoResults()
+    {
+        g.getRowFormatter().addStyleName(curRow, "find-results-table-result");
+        g.getFlexCellFormatter().setColSpan(curRow, 0, 4);
+        HTML msg = new HTML(Main.getTranslation("search.noresults"));
+        msg.addStyleName("search-noresults");
+        g.setWidget(curRow, 0, msg);
         curRow++;
     }
 

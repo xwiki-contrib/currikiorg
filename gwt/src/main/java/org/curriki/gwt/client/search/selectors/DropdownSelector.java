@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 
 import java.util.HashMap;
