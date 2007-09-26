@@ -27,9 +27,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.History;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.search.Results;
+import org.curriki.gwt.client.search.history.SearcherHistory;
+import org.curriki.gwt.client.search.history.KeepsState;
+import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.search.columns.ActionColumn;
 import org.curriki.gwt.client.search.columns.ContributorColumn;
 import org.curriki.gwt.client.search.columns.InstructionalTypeColumn;
@@ -42,8 +46,10 @@ import org.curriki.gwt.client.search.queries.LuceneAssetQuery;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
 
-public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer, TableListener
+public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer, TableListener,
+    KeepsState
 {
+    protected SearcherHistory history;
     protected Results results;
     protected LuceneAssetQuery query;
     protected Paginator paginator;
@@ -82,11 +88,21 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         add(g);
     }
 
-    public void doSearch()
-    {
-        int start = 1;
-        int count = Constants.DIALOG_FIND_FETCH_COUNT;
+    public void addHistory(SearcherHistory history){
+        this.history = history;
+    }
 
+    public void doSearch() {
+        history.setIgnoreNextChange(true);
+        History.newItem(history.createToken());
+        doRealSearch();
+    }
+
+    public void doSearchFromHistory(){
+        doRealSearch();
+    }
+
+    public void doRealSearch(){
         if (results != null) {
             query = new LuceneAssetQuery();
             query.setReceiver(results);
@@ -101,10 +117,8 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
                 query.setPaginator(paginator);
                 query.doSearch();
             } else {
-                query.doSearch(start, count);
+                query.doSearch(1, Constants.DIALOG_FIND_FETCH_COUNT);
             }
-            
-            //TODO: Add to history
         }
     }
 
@@ -158,6 +172,24 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
 
     public String getSortBy(){
         return sortBy;
+    }
+
+    public void loadState(ClientState state)
+    {
+        if (state.getValue(Constants.HISTORY_FIELD_SORTBY).length() > 0){
+            sortBy = state.getValue(Constants.HISTORY_FIELD_SORTBY);
+        } else {
+            sortBy = "";
+        }
+    }
+
+    public void saveState(ClientState state)
+    {
+        if (sortBy.length() > 0){
+            state.setValue(Constants.HISTORY_FIELD_SORTBY, sortBy);
+        } else {
+            state.setValue(Constants.HISTORY_FIELD_SORTBY, "");
+        }
     }
 
     public void onCellClicked(SourcesTableEvents sourcesTableEvents, int row, int cell)

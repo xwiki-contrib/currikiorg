@@ -31,12 +31,14 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.history.KeepsState;
+import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
-abstract public class DropdownSelector extends ListBox implements Selectable
+abstract public class DropdownSelector extends ListBox implements Selectable, KeepsState
 {
     protected Element selectbox;
     protected Map groups = new HashMap();
@@ -106,6 +108,17 @@ abstract public class DropdownSelector extends ListBox implements Selectable
         return elem.options[index].selected;
     }-*/;
 
+    /**
+     * Override setSelectedIndex() so that we get the n'th item in the options array instead of the n'th child
+     */
+    public void setSelectedIndex(int index){
+        setItemSelected(this.getElement(), index, true);
+    }
+
+    public native void setItemSelected(Element elem, int index, boolean selected) /*-{
+        elem.options[index].selected = selected;
+    }-*/;
+
     public void setFieldName(String name)
     {
         this.fieldName = name;
@@ -142,25 +155,6 @@ abstract public class DropdownSelector extends ListBox implements Selectable
         return filter;
     }
 
-    public SelectionCollection getSelected()
-    {
-        SelectionCollection s = new SelectionCollection();
-
-        String value = getValue(getSelectedIndex());
-        if (value.length() > 0){
-            s.put(getFieldName(), value);
-        } else {
-            s.remove(getFieldName());
-        }
-
-        return s;
-    }
-
-    public void setSelected(SelectionCollection selection)
-    {
-        //TODO: set selected items
-    }
-
     protected Widget getTooltip(String name) {
         String txt = Main.getTranslation("search.selector." + name + "_tooltip");
         Image image = new Image(Constants.ICON_PATH+"exclamation.png");
@@ -170,5 +164,45 @@ abstract public class DropdownSelector extends ListBox implements Selectable
         popup.add(new HTML(txt));
         image.addMouseListener(new TooltipMouseListener(popup));
         return image;
+    }
+
+    public native int getOptionCount(Element element) /*-{
+        return elem.options.length;
+    }-*/;
+
+    public void saveState(ClientState state)
+    {
+        if (getFieldName().length() > 0){
+            String value = getValue(getSelectedIndex());
+            if (value.length() > 0){
+                state.setValue(getFieldName(), value);
+            } else {
+                state.setValue(getFieldName(), "");
+            }
+        }
+    }
+
+    public void loadState(ClientState state)
+    {
+        if (getFieldName().length() > 0){
+            String value = state.getValue(getFieldName());
+            if (value.length() > 0){
+                String curValue = getValue(getSelectedIndex());
+                if (!value.equals(curValue)){
+                    Element e = this.getElement();
+                    int children = getOptionCount(e);
+                    for (int i=0; i<children; i++){
+                        String opt = getValue(i);
+                        if (opt.equals(value)){
+                            // Set selected
+                            setItemSelected(e, i, true);
+                        } else {
+                            // Set not selected
+                            setItemSelected(e, i, false);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

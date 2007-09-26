@@ -29,7 +29,7 @@ public class Constants {
     public static final String TRANSLATION_PAGE = "XWiki.CurrikiGWTTranslation";
 
     public static final String CURRIKI_SERVICE = "/xwiki/gwt/CurrikiService";
-    public static final String USER_URL_PREFIX = "/xwiki/bin/view/XWiki/";
+    public static final String USER_URL_PREFIX = "/xwiki/bin/view/XWiki/XWiki/";
 
     public static final String SKIN_PATH = "/xwiki/skins/curriki8/";
     public static final String MIMETYPE_PATH = SKIN_PATH+"mimetypes/";
@@ -214,4 +214,8 @@ public class Constants {
     public static final String CURRIKI_REVIEW_RATING_PROPERTY = "rating";
     public static final String CURRIKI_REVIEW_DATE_PROPERTY = "date";
     public static final String CURRIKI_REVIEW_COMMENT_PROPERTY = "comment";
+
+    public static final String HISTORY_FIELD_SORTBY = "__sortBy";
+    public static final String HISTORY_FIELD_ATITEM = "__atItem";
+    public static final String HISTORY_FIELD_ADV_TOGGLE = "__advShow"; 
 }

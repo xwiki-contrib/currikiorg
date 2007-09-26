@@ -28,11 +28,12 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.EducationalLevelSelector;
 import org.curriki.gwt.client.search.selectors.FileTypeSelector;
 import org.curriki.gwt.client.search.selectors.InstructionalTypeSelector;
 import org.curriki.gwt.client.search.selectors.Selectable;
-import org.curriki.gwt.client.search.selectors.SelectionCollection;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
 import org.curriki.gwt.client.search.selectors.SpecialFilterSelector;
 import org.curriki.gwt.client.search.selectors.SubjectSelector;
@@ -40,7 +41,7 @@ import org.curriki.gwt.client.search.selectors.SubjectSelector;
 import java.util.Iterator;
 
 public class SelectorFilterPanel extends VerticalPanel implements ChangeListener, Selectable,
-    SourcesChangeEvents
+    SourcesChangeEvents, KeepsState
 {
     protected SelectorCollection selectors = new SelectorCollection();
     protected String fieldName;
@@ -133,27 +134,25 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
         return filter;
     }
 
-    public SelectionCollection getSelected()
+    public void loadState(ClientState state)
     {
-        SelectionCollection selected = new SelectionCollection();
         Iterator i = selectors.iterator();
         while (i.hasNext()){
-            Selectable s = (Selectable) i.next();
-            Iterator j = s.getSelected().keySet().iterator();
-            while (j.hasNext()){
-                String key = (String) j.next();
-                selected.put(key, s.getSelected().get(key));
+            Object s = i.next();
+            if (s instanceof KeepsState){
+                ((KeepsState) s).loadState(state);
             }
         }
-
-        return selected;
     }
 
-    public void setSelected(SelectionCollection selection)
+    public void saveState(ClientState state)
     {
         Iterator i = selectors.iterator();
         while (i.hasNext()){
-            ((Selectable) i.next()).setSelected(selection);
+            Object s = i.next();
+            if (s instanceof KeepsState){
+                ((KeepsState) s).saveState(state);
+            }
         }
     }
 

@@ -33,8 +33,10 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.Paginator;
+import org.curriki.gwt.client.search.history.KeepsState;
+import org.curriki.gwt.client.search.history.ClientState;
 
-public class PaginationPanel extends VerticalPanel implements Paginator
+public class PaginationPanel extends VerticalPanel implements Paginator, KeepsState
 {
     protected Hyperlink prev = new Hyperlink();
     protected Hyperlink next = new Hyperlink();
@@ -265,5 +267,21 @@ public class PaginationPanel extends VerticalPanel implements Paginator
     public void setSearcher(DoesSearch searcher)
     {
         this.searcher = searcher;
+    }
+
+    public void loadState(ClientState state)
+    {
+        try {
+            Integer i = Integer.valueOf(state.getValue(Constants.HISTORY_FIELD_ATITEM));
+            start = i.intValue();
+        } catch (Exception e){
+            // Ignore
+            start = 1;
+        }
+    }
+
+    public void saveState(ClientState state)
+    {
+        state.setValue(Constants.HISTORY_FIELD_ATITEM, Integer.toString(start));
     }
 }

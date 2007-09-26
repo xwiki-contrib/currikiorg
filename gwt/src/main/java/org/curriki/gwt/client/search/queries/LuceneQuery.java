@@ -26,7 +26,6 @@ import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.search.selectors.SelectionCollection;
 
 import java.util.Iterator;
 import java.util.List;
@@ -48,24 +47,6 @@ public class LuceneQuery implements DocumentSearcher
 
     public void setLimit(int limit){
         this.limit = limit;
-    }
-
-    public void setCriteria(SelectionCollection criteria)
-    {
-        searchTerms = "";
-        Iterator i = criteria.keySet().iterator();
-        while (i.hasNext()){
-            String key = (String) i.next();
-            String value = criteria.get(key);
-
-            if (value.length() > 0){
-                if (key.length() > 0){
-                    searchTerms += " AND "+key+":"+value;
-                } else {
-                    searchTerms += " AND "+value;
-                }
-            }
-        }
     }
 
     public void setCriteria(String criteria)
@@ -93,7 +74,7 @@ public class LuceneQuery implements DocumentSearcher
     
     public void doSearch(int start, int count)
     {
-        if (sortBy == null){
+        if ((sortBy == null) || (sortBy.length() == 0)){
             sortBy = "name";
         }
         CurrikiService.App.getInstance().luceneSearch(searchTerms, start, limit, sortBy, new LuceneQuery.populateResultsCallback());

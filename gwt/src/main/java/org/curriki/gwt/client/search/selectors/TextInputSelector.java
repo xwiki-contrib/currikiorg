@@ -29,9 +29,11 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HTML;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.history.KeepsState;
+import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 
-abstract public class TextInputSelector extends TextBox implements Selectable
+abstract public class TextInputSelector extends TextBox implements Selectable, KeepsState
 {
     protected String fieldName;
 
@@ -84,16 +86,17 @@ abstract public class TextInputSelector extends TextBox implements Selectable
         return filter;
     }
 
-    public SelectionCollection getSelected(){
-        SelectionCollection s = new SelectionCollection();
-        s.put(getName(), getText());
-
-        return s;
+    public void loadState(ClientState state)
+    {
+        if (getName().length() > 0){
+            setText(state.getValue(getName()));
+        }
     }
 
-    public void setSelected(SelectionCollection selection){
-        if (selection.containsKey(getName())){
-            setText(selection.get(getName()));
+    public void saveState(ClientState state)
+    {
+        if (getName().length() > 0){
+            state.setValue(getName(), getText());
         }
     }
 

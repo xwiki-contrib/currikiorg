@@ -1,6 +1,6 @@
 /*
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright 2007, The Global Education and Learning Community,
+ * and individual contributors as indicated by the contributors.txt.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,17 +20,10 @@
  * @author dward
  *
  */
-package org.curriki.gwt.client.search.selectors;
+package org.curriki.gwt.client.search.history;
 
-import java.util.HashMap;
-
-public class SelectionCollection extends HashMap
+public interface KeepsState
 {
-    public void put(String id, String value){
-        super.put(id, value);
-    }
-
-    public String get(String id){
-        return (String) super.get(id);
-    }
+    public void loadState(ClientState state);
+    public void saveState(ClientState state);
 }

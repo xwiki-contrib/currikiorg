@@ -79,9 +79,14 @@ public class TitleColumn extends ResultsColumn
         if (value.getObject(Constants.ASSET_CLASS) != null){
             value.use(Constants.ASSET_CLASS);
             if (value.get(Constants.ASSET_TITLE_PROPERTY) != null){
-                name = value.get(Constants.ASSET_TITLE_PROPERTY);
-                if (name.length() > maxLength){
-                    name = name.substring(0, (maxLength-1))+"...";
+                String title = value.get(Constants.ASSET_TITLE_PROPERTY);
+                title = title.replaceAll("^ *", "");
+                title = title.replaceAll(" *$", "");
+                if (title.length() > 0){
+                    name = title;
+                    if (name.length() > maxLength){
+                        name = name.substring(0, (maxLength-1))+"...";
+                    }
                 }
             }
 
@@ -90,6 +95,10 @@ public class TitleColumn extends ResultsColumn
             }
         }
 
+        if (name.length() < 1){
+            name = Main.getTranslation("search.unknown_title");
+        }
+        
         nameCol.setHTML("<a href=\""+url+"\">"+name+"</a>");
         if (desc.length() > 0){
             addTooltip(nameCol, "<b>Description:</b><br>"+desc);

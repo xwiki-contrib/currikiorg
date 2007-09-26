@@ -71,7 +71,7 @@ public class InstructionalTypeColumn extends ResultsColumn
             String icon = name.replaceAll(":.*", "");
             name = name.replaceFirst(icon+":", "");
             if (icon.length() > 0) {
-                Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".png");
+                Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".gif");
                 img.setTitle(icon);
                 ret.add(img);
             }

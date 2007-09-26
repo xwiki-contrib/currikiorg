@@ -55,9 +55,11 @@ public class ContributorColumn extends ResultsColumn
     {
         HTML nameCol = new HTML();
         String name = getDisplayString(value);
-        String url = Constants.USER_URL_PREFIX+name;
-
-        nameCol.setHTML("<a href=\""+url+"\">"+name+"</a>");
+        if (name.length() > 0){
+            name = name.replaceFirst("XWiki.", "");
+            String url = Constants.USER_URL_PREFIX+name;
+            nameCol.setHTML("<a href=\""+url+"\">"+name+"</a>");
+        }
 
         return nameCol;
     }

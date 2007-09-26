@@ -28,13 +28,16 @@ import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.Selectable;
-import org.curriki.gwt.client.search.selectors.SelectionCollection;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
 import org.curriki.gwt.client.search.selectors.TermSelector;
 import org.curriki.gwt.client.search.selectors.TextInputSelector;
@@ -42,7 +45,7 @@ import org.curriki.gwt.client.search.selectors.TextInputSelector;
 import java.util.Iterator;
 
 public class SelectorMainPanel extends HorizontalPanel implements ChangeListener, ClickListener,
-    Selectable, SourcesChangeEvents, SourcesClickEvents
+    Selectable, SourcesChangeEvents, SourcesClickEvents, KeepsState
 {
     protected TextInputSelector terms;
     protected Button search;
@@ -55,6 +58,13 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
         terms = new TermSelector();
         terms.setFieldName("");
         terms.addChangeListener(this);
+        terms.addKeyboardListener(new KeyboardListenerAdapter() {
+            public void onKeyDown(Widget sender, char keyCode, int modifiers){
+                if (keyCode == KeyboardListener.KEY_ENTER){
+                    onClick(sender);
+                }
+            }
+        });
         selectors.add(terms);
 
         VerticalPanel pTerms = new VerticalPanel();
@@ -112,30 +122,6 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
         return filter;
     }
 
-    public SelectionCollection getSelected()
-    {
-        SelectionCollection selected = new SelectionCollection();
-        Iterator i = selectors.iterator();
-        while (i.hasNext()){
-            Selectable s = (Selectable) i.next();
-            Iterator j = s.getSelected().keySet().iterator();
-            while (j.hasNext()){
-                String key = (String) j.next();
-                selected.put(key, s.getSelected().get(key));
-            }
-        }
-
-        return selected;
-    }
-
-    public void setSelected(SelectionCollection selection)
-    {
-        Iterator i = selectors.iterator();
-        while (i.hasNext()){
-            ((Selectable) i.next()).setSelected(selection);
-        }
-    }
-
     public void onChange(Widget widget)
     {
         if (widget instanceof Selectable) {
@@ -179,6 +165,28 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
     {
         if (clickListeners != null) {
             clickListeners.remove(clickListener);
+        }
+    }
+
+    public void loadState(ClientState state)
+    {
+        Iterator i = selectors.iterator();
+        while (i.hasNext()){
+            Object s = i.next();
+            if (s instanceof KeepsState){
+                ((KeepsState) s).loadState(state);
+            }
+        }
+    }
+
+    public void saveState(ClientState state)
+    {
+        Iterator i = selectors.iterator();
+        while (i.hasNext()){
+            Object s = i.next();
+            if (s instanceof KeepsState){
+                ((KeepsState) s).saveState(state);
+            }
         }
     }
 }

@@ -28,6 +28,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.queries.DoesSearch;
+import org.curriki.gwt.client.search.queries.Paginator;
+import org.curriki.gwt.client.search.selectors.Selectable;
+import org.curriki.gwt.client.search.history.SearcherHistory;
 
 public class SearcherPanel extends VerticalPanel implements ClickListener
 {
@@ -61,9 +64,21 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         add(pagination);
     }
 
+    public void addHistory(SearcherHistory history){
+        results.addHistory(history);
+    }
+
     public DoesSearch getSearcher()
     {
         return results;
+    }
+
+    public Selectable getSelector(){
+        return selector;
+    }
+
+    public Paginator getPaginator(){
+        return pagination;
     }
 
     public void onClick(Widget widget)

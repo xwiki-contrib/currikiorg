@@ -27,8 +27,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.search.history.KeepsState;
+import org.curriki.gwt.client.search.history.ClientState;
 
-public class SelectorTogglePanel extends VerticalPanel implements ClickListener
+public class SelectorTogglePanel extends VerticalPanel implements ClickListener, KeepsState
 {
     protected SelectorFilterPanel filters;
     protected HTML toggleWidget;
@@ -75,8 +78,27 @@ public class SelectorTogglePanel extends VerticalPanel implements ClickListener
         }
     }
 
+    public void setToggleValue(boolean show){
+        if (filters == null){
+            return;
+        }
+
+        filters.setVisible(show);
+        doSetToggleWidget();
+    }
+
     public void onClick(Widget widget)
     {
         doToggle();
+    }
+
+    public void loadState(ClientState state){
+        if (state.getValue(Constants.HISTORY_FIELD_ADV_TOGGLE).length() > 0){
+            setToggleValue(state.getValue(Constants.HISTORY_FIELD_ADV_TOGGLE).equals("1"));
+        }
+    }
+
+    public void saveState(ClientState state){
+        state.setValue(Constants.HISTORY_FIELD_ADV_TOGGLE, (filters.isVisible()?"1":"0"));
     }
 }

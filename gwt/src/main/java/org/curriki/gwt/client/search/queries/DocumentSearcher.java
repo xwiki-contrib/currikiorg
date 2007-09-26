@@ -22,14 +22,12 @@
  */
 package org.curriki.gwt.client.search.queries;
 
-import org.curriki.gwt.client.search.selectors.SelectionCollection;
-
 import java.util.List;
 
 public interface DocumentSearcher
 {
     public void setLimit(int limit);
-    public void setCriteria(SelectionCollection criteria);
+    public void setCriteria(String criteria);
     public void setReceiver(ResultsReceiver receiver);
     public void doSearch(int start, int count);
     public int getHitcount();

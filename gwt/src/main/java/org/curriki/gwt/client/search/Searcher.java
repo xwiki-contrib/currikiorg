@@ -25,22 +25,23 @@ package org.curriki.gwt.client.search;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.curriki.gwt.client.search.panels.SearcherPanel;
+import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.SearcherHistory;
 
 public class Searcher
 {
-    private org.curriki.gwt.client.search.SearcherHistory history;
+    private SearcherHistory history;
+    private ClientState state;
 
     public void init()
     {
-        history = new org.curriki.gwt.client.search.SearcherHistory();
+        history = new SearcherHistory();
+        History.addHistoryListener(history);
+        state = new ClientState();
+        history.addState(state);
 
         String initToken = History.getToken();
-        boolean doSearch = false;
-        if (initToken.length() == 0){
-            /* An empty token can be a state -- just "search page" */
-            //initToken = "_";
-            doSearch = true;
-        }
+        state.InitFromToken(initToken);
 
         // History needs to track search parameters and what page we are on for results
         
@@ -58,10 +59,10 @@ public class Searcher
         //  Have buttons "Previous" 11 12 13 ... 19 20 "Next"
 
         SearcherPanel main = new SearcherPanel();
+        main.addHistory(history);
         history.addSearcher(main.getSearcher());
-
-        // Sets up defaults based on history
-        history.onHistoryChanged(initToken);
+        history.addSelector(main.getSelector());
+        history.addPaginator(main.getPaginator());
 
         if (RootPanel.get("searchElement") != null){
             RootPanel.get("searchElement").add(main);
@@ -69,10 +70,7 @@ public class Searcher
             RootPanel.get().add(main);
         }
 
-        History.addHistoryListener(history);
-
-        if (doSearch){
-            main.getSearcher().doSearch();
-        }
+        // Sets up defaults based on history
+        history.onHistoryChanged(initToken);
     }
 }

@@ -30,6 +30,4 @@ public interface Selectable
     public void setFieldName(String name);
     public String getFieldName();
     public String getFilter();
-    public SelectionCollection getSelected();
-    public void setSelected(SelectionCollection selection);
 }

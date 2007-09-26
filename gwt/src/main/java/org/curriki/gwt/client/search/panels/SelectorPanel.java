@@ -28,14 +28,15 @@ import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.Selectable;
-import org.curriki.gwt.client.search.selectors.SelectionCollection;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
 
 import java.util.Iterator;
 
 public class SelectorPanel extends VerticalPanel implements ChangeListener, ClickListener,
-    Selectable, SourcesClickEvents
+    Selectable, SourcesClickEvents, KeepsState
 {
     protected SelectorMainPanel main;
     protected SelectorFilterPanel filters;
@@ -109,30 +110,30 @@ public class SelectorPanel extends VerticalPanel implements ChangeListener, Clic
         return filter;
     }
 
-    public SelectionCollection getSelected()
+    public void loadState(ClientState state)
     {
-        SelectionCollection selected = new SelectionCollection();
         Iterator i = selectors.iterator();
         while (i.hasNext()){
-            Selectable s = (Selectable) i.next();
-            Iterator j = s.getSelected().keySet().iterator();
-            while (j.hasNext()){
-                String key = (String) j.next();
-                selected.put(key, s.getSelected().get(key));
+            Object s = i.next();
+            if (s instanceof KeepsState){
+                ((KeepsState) s).loadState(state);
             }
         }
-
-        return selected;
+        bottom.loadState(state);
     }
 
-    public void setSelected(SelectionCollection selection)
+    public void saveState(ClientState state)
     {
         Iterator i = selectors.iterator();
         while (i.hasNext()){
-            ((Selectable) i.next()).setSelected(selection);
+            Object s = i.next();
+            if (s instanceof KeepsState){
+                ((KeepsState) s).saveState(state);
+            }
         }
+        bottom.saveState(state);
     }
-    
+
     public void onChange(Widget widget)
     {
         //TODO: Get changed values
