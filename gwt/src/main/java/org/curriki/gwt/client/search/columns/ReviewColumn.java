@@ -50,7 +50,7 @@ public class ReviewColumn extends ResultsColumn
         if (value.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS) != null){
             value.use(Constants.CURRIKI_REVIEW_STATUS_CLASS);
             if (value.get(Constants.CURRIKI_REVIEW_STATUS_STATUS) != null){
-                rating = value.get(Constants.CURRIKI_REVIEW_STATUS_STATUS);
+                rating = String.valueOf(value.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS));
             }
         }
 
