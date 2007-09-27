@@ -22,7 +22,6 @@
 package org.curriki.gwt.client.wizard;
 
 import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -42,14 +41,14 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
+import org.curriki.gwt.client.search.editor.SearchPanel;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.pages.EditPage;
 import org.curriki.gwt.client.utils.ClickListenerDocument;
 import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
 import org.curriki.gwt.client.widgets.addfile.URLEntry;
 import org.curriki.gwt.client.widgets.addfile.VidiTalkUploadComponent;
-import org.curriki.gwt.client.widgets.find.FindPanel;
-import org.curriki.gwt.client.widgets.find.ResourceAdder;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 import org.curriki.gwt.client.widgets.template.ChooseTemplateDialog;
 import org.curriki.gwt.client.widgets.upload.UploadWidget;
@@ -342,8 +341,8 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     // Launch Find Existing resources Dialog
     private void findResource() {
         close();
-        FindPanel findPanel = new FindPanel(this);
-        findPanel.show();
+        SearchPanel search = new SearchPanel(this);
+        search.show();
     }
 
     // Launch From Template Dialog

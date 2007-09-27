@@ -59,10 +59,10 @@ public class ReviewColumn extends ResultsColumn
 
     public Widget getDisplayWidget(Document value)
     {
+        Image img = null;
         final String url = value.getViewURL()+"?viewer=comments";
 
         String rating = getDisplayString(value);
-        Image img = new Image();
         if (rating.length() > 0){
             if (!rating.equals("0")){
                 img = new Image(Constants.ICON_PATH+"CRS"+rating+".png");
@@ -71,8 +71,8 @@ public class ReviewColumn extends ResultsColumn
                         Main.changeWindowHref(url);
                     }
                 });
+                this.addTooltip(img, Main.getTranslation("search.crs.tooltip."+rating));
             }
-            this.addTooltip(img, Main.getTranslation("search.crs.tooltip."+rating));
         }
 
         return img;

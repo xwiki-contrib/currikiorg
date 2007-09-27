@@ -28,11 +28,15 @@ import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.History;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.Results;
+import org.curriki.gwt.client.search.editor.Viewer;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
 import org.curriki.gwt.client.search.history.SearcherHistory;
 import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.history.ClientState;
@@ -56,11 +60,15 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     protected LuceneAssetQuery query;
     protected Paginator paginator;
     protected FlexTable g;
+    protected ScrollPanel s;
     protected ResultsColumnDisplayable[] columns = new ResultsColumnDisplayable[5];
     protected int columnCount = 4;
     protected int curRow = 0;
     protected Selectable selector;
     protected String sortBy;
+    protected ClickListener cancelCallback;
+    protected Viewer viewer;
+    protected ResourceAdder resourceAdder;
 
     public ResultsPanel(){
         init(false);
@@ -83,11 +91,16 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         columns[3] = new ReviewColumn();
         columns[4] = new ActionColumn();
 
+        s = new ScrollPanel();
+        s.addStyleName("find-results-scroller");
+
         g = new FlexTable();
+        g.addStyleName("find-results-table");
         g.addTableListener(this);
         addHeadings();
         
-        add(g);
+        s.add(g);
+        add(s);
     }
 
     public void addHistory(SearcherHistory history){
@@ -95,8 +108,10 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     }
 
     public void doSearch() {
-        history.setIgnoreNextChange(true);
-        History.newItem(history.createToken());
+        if (history != null){
+            history.setIgnoreNextChange(true);
+            History.newItem(history.createToken());
+        }
         doRealSearch();
     }
 
@@ -226,6 +241,45 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
                     // Ignore click if not sortable
                 }
             }
+        }
+    }
+
+    public void setCancelCallback(ClickListener cancelCallback)
+    {
+        this.cancelCallback = cancelCallback;
+        if (columns[0] instanceof TitleColumn){
+            TitleColumn title = (TitleColumn) columns[0];
+            title.setCancelListener(cancelCallback);
+        }
+        if (columns[4] instanceof ActionColumn){
+            ActionColumn act = (ActionColumn) columns[4];
+            act.setCancelListener(cancelCallback);
+        }
+    }
+
+    public void setViewer(Viewer viewer)
+    {
+        this.viewer = viewer;
+        if (columns[0] instanceof TitleColumn){
+            TitleColumn title = (TitleColumn) columns[0];
+            title.setViewer(viewer);
+        }
+    }
+
+   public void setResourceAdder(ResourceAdder resourceAdder)
+    {
+        this.resourceAdder = resourceAdder;
+        if (columns[0] instanceof TitleColumn){
+            TitleColumn title = (TitleColumn) columns[0];
+            title.setResourceAdder(resourceAdder);
+            if (viewer == null){
+                setViewer(title);
+            }
+        }
+        if (columns[4] instanceof ActionColumn){
+            ActionColumn act = (ActionColumn) columns[4];
+            act.setResourceAdder(resourceAdder);
+            columnCount = 5;
         }
     }
 }

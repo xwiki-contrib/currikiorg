@@ -31,6 +31,8 @@ import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
 import org.curriki.gwt.client.search.history.SearcherHistory;
+import org.curriki.gwt.client.search.editor.Viewer;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
 
 public class SearcherPanel extends VerticalPanel implements ClickListener
 {
@@ -39,6 +41,11 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
     protected PaginationPanel pagination;
 
     public SearcherPanel()
+    {
+        init();
+    }
+
+    public void init()
     {
         VerticalPanel pTitle = new VerticalPanel();
         pTitle.addStyleName("search-top-titlebar");
@@ -87,5 +94,21 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
             pagination.setStart(1); // Reset to first page
             getSearcher().doSearch();
         }
+    }
+
+    public void setCancelCallback(ClickListener cancelCallback)
+    {
+        selector.setCancelCallback(cancelCallback);
+        results.setCancelCallback(cancelCallback);
+    }
+
+    public void setViewer(Viewer viewer)
+    {
+        results.setViewer(viewer);
+    }
+
+    public void setResourceAdder(ResourceAdder wizard)
+    {
+        results.setResourceAdder(wizard);
     }
 }

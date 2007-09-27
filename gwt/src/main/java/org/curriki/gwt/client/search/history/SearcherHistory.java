@@ -75,6 +75,7 @@ public class SearcherHistory implements HistoryListener
 
     public String createToken(){
         saveState();
+        state.setValue("__go", "1");
         return state.getHistoryToken();
     }
 

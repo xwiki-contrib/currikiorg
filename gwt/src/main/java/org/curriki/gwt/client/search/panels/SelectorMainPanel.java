@@ -49,8 +49,10 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
 {
     protected TextInputSelector terms;
     protected Button search;
+    protected Button cancel;
     protected SelectorCollection selectors = new SelectorCollection();
     protected String fieldName;
+    protected ClickListener cancelCallback;
 
     public SelectorMainPanel()
     {
@@ -77,6 +79,12 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
         search.addStyleName("search-searchbutton");
         search.addClickListener(this);
         add(search);
+
+        cancel = new Button(Main.getTranslation("search.cancel_button"));
+        cancel.addStyleName("search-cancelbutton");
+        cancel.addClickListener(this);
+        cancel.setVisible(false);
+        add(cancel);
     }
 
     public Widget getLabel()
@@ -131,7 +139,14 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
 
     public void onClick(Widget widget)
     {
-        clickListeners.fireClick(this);
+        if (widget.equals(search)){
+            clickListeners.fireClick(this);
+        }
+        if (widget.equals(cancel)){
+            if (cancelCallback != null){
+                cancelCallback.onClick(widget);
+            }
+        }
     }
 
     private ChangeListenerCollection changeListeners;
@@ -188,5 +203,11 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
                 ((KeepsState) s).saveState(state);
             }
         }
+    }
+
+   public void setCancelCallback(ClickListener cancelCallback)
+    {
+        this.cancelCallback = cancelCallback;
+        cancel.setVisible(true);
     }
 }

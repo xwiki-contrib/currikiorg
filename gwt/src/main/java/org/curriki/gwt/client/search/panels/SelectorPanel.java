@@ -165,4 +165,12 @@ public class SelectorPanel extends VerticalPanel implements ChangeListener, Clic
             clickListeners.remove(clickListener);
         }
     }
+
+    public void setCancelCallback(ClickListener cancelCallback)
+    {
+        main.setCancelCallback(cancelCallback);
+
+        // If we have a cancel callback then we are in CB, so open selectors by default
+        bottom.setToggleValue(true);
+    }
 }

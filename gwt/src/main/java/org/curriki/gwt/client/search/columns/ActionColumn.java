@@ -22,10 +22,20 @@
  */
 package org.curriki.gwt.client.search.columns;
 
+import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
+import org.curriki.gwt.client.utils.ClickListenerString;
 
 public class ActionColumn extends ResultsColumn
 {
+    protected ResourceAdder resourceAdder;
+    protected ClickListener cancelListener;
+
     public ActionColumn()
     {
         this.header = Main.getTranslation("search.results.col.action");
@@ -35,5 +45,40 @@ public class ActionColumn extends ResultsColumn
     public ActionColumn(String header, String columnStyle)
     {
         super(header, columnStyle);
+    }
+
+    public void setResourceAdder(ResourceAdder resourceAdder){
+        this.resourceAdder = resourceAdder;
+    }
+
+    public void setCancelListener(ClickListener cancelListener){
+        this.cancelListener = cancelListener;
+    }
+
+    public Widget getDisplayWidget(Document value)
+    {
+        if (resourceAdder != null && (Main.getSingleton().getUser() != null) && !(Main.getSingleton().getUser().getFullName().equals(Constants.USER_XWIKI_GUEST))){
+            Hyperlink a = new Hyperlink();
+            a.addStyleName("results-action-cell-link");
+            a.setHTML(Main.getTranslation("editor.btt_add"));
+            a.addClickListener(new AddAsset(value.getFullName()));
+            return a;
+        }
+
+        return null;
+    }
+
+    private class AddAsset extends ClickListenerString
+    {
+        public AddAsset(String arg) {
+            super(arg);
+        }
+
+        public void onClick(Widget sender) {
+            resourceAdder.addExistingResource(arg);
+            if (cancelListener != null){
+                cancelListener.onClick(sender);
+            }
+        }
     }
 }
