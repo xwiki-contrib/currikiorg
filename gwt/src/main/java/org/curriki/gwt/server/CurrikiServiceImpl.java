@@ -1090,7 +1090,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             // Let's choose a nice name for the page
             String prettyName = context.getWiki().clearName(assetDoc.getStringValue(Constants.ASSET_TITLE_PROPERTY), true, true, context);
-            assetDoc.rename(space + "." + getUniquePageName(space, prettyName), new ArrayList(), context);
+            assetDoc.rename(space + "." + getUniquePageName(space, prettyName.trim()), new ArrayList(), context);
 
             position = addSubAsset(compositeAssetDoc, space + "." + assetDoc.getName(), position, context);
 
