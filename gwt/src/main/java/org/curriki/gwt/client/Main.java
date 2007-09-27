@@ -36,14 +36,14 @@ import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.widgets.modaldialogbox.ModalMsgDialogBox;
 import org.curriki.gwt.client.widgets.modaldialogbox.NominateDialog;
 import org.curriki.gwt.client.widgets.loginpanel.LoginDialogBox;
-import org.curriki.gwt.client.widgets.find.FindPanel;
-import org.curriki.gwt.client.widgets.find.Viewer;
 import org.curriki.gwt.client.utils.WindowUtils;
 import org.curriki.gwt.client.utils.Loading;
 import org.curriki.gwt.client.utils.Translator;
 import org.curriki.gwt.client.wizard.*;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.search.Searcher;
+import org.curriki.gwt.client.search.editor.Viewer;
+import org.curriki.gwt.client.search.editor.SearchPanel;
 
 public class Main implements EntryPoint
 {
@@ -61,7 +61,7 @@ public class Main implements EntryPoint
     private AddResourceWizard addResourceWizard;
     private CreateCollectionWizard createCollWizard;
     private CreateCollectionWizard addCollectionWizard;
-    private FindPanel findPopup;
+    private SearchPanel findPopup;
     private AddFromTemplateWizard addFromTemplateWizard;
 
     public User getUser() {
@@ -500,7 +500,7 @@ public class Main implements EntryPoint
                                 reloadWindow();
                             }
                         });
-                        findPopup = new FindPanel(addWizard, viewer);
+                        findPopup = new SearchPanel(addWizard, viewer);
                         findPopup.show();
                     }
                 };

@@ -30,8 +30,8 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
 import org.curriki.gwt.client.utils.CompletionCallback;
-import org.curriki.gwt.client.widgets.find.ResourceAdder;
 import org.curriki.gwt.client.widgets.siteadd.ChooseCollectionDialog;
 import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
 
