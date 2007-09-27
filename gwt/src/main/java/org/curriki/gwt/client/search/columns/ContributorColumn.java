@@ -30,6 +30,8 @@ import org.curriki.gwt.client.Constants;
 
 public class ContributorColumn extends ResultsColumn
 {
+    protected boolean useNewWindow = false;
+
     public ContributorColumn()
     {
         this.header = Main.getTranslation("search.results.col.creator");
@@ -58,9 +60,17 @@ public class ContributorColumn extends ResultsColumn
         if (name.length() > 0){
             name = name.replaceFirst("XWiki.", "");
             String url = Constants.USER_URL_PREFIX+name;
-            nameCol.setHTML("<a href=\""+url+"\">"+name+"</a>");
+            String target = "";
+            if (useNewWindow){
+                target = " target=\"AssetContributor\" ";
+            }
+            nameCol.setHTML("<a href=\""+url+"\""+target+">"+name+"</a>");
         }
 
         return nameCol;
+    }
+
+    public void setUseNewWindow(boolean useNewWindow){
+        this.useNewWindow = useNewWindow;
     }
 }

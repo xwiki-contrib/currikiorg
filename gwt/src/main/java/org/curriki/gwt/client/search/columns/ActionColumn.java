@@ -57,7 +57,9 @@ public class ActionColumn extends ResultsColumn
 
     public Widget getDisplayWidget(Document value)
     {
-        if (resourceAdder != null && (Main.getSingleton().getUser() != null) && !(Main.getSingleton().getUser().getFullName().equals(Constants.USER_XWIKI_GUEST))){
+        if ((resourceAdder != null) && (cancelListener != null) &&
+            (Main.getSingleton().getUser() != null) &&
+            !(Main.getSingleton().getUser().getFullName().equals(Constants.USER_XWIKI_GUEST))){
             Hyperlink a = new Hyperlink();
             a.addStyleName("results-action-cell-link");
             a.setHTML(Main.getTranslation("editor.btt_add"));

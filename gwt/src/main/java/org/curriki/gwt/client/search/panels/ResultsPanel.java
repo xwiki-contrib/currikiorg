@@ -22,24 +22,19 @@
  */
 package org.curriki.gwt.client.search.panels;
 
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.History;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.Results;
-import org.curriki.gwt.client.search.editor.Viewer;
-import org.curriki.gwt.client.search.editor.ResourceAdder;
-import org.curriki.gwt.client.search.history.SearcherHistory;
-import org.curriki.gwt.client.search.history.KeepsState;
-import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.search.columns.ActionColumn;
 import org.curriki.gwt.client.search.columns.ContributorColumn;
 import org.curriki.gwt.client.search.columns.InstructionalTypeColumn;
@@ -47,6 +42,11 @@ import org.curriki.gwt.client.search.columns.ResultsColumnDisplayable;
 import org.curriki.gwt.client.search.columns.ReviewColumn;
 import org.curriki.gwt.client.search.columns.SortableColumnHeader;
 import org.curriki.gwt.client.search.columns.TitleColumn;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
+import org.curriki.gwt.client.search.editor.Viewer;
+import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.KeepsState;
+import org.curriki.gwt.client.search.history.SearcherHistory;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.LuceneAssetQuery;
 import org.curriki.gwt.client.search.queries.Paginator;
@@ -251,6 +251,10 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             TitleColumn title = (TitleColumn) columns[0];
             title.setCancelListener(cancelCallback);
         }
+        if (columns[3] instanceof ReviewColumn){
+            ReviewColumn review = (ReviewColumn) columns[3];
+            review.setCancelListener(cancelCallback);
+        }
         if (columns[4] instanceof ActionColumn){
             ActionColumn act = (ActionColumn) columns[4];
             act.setCancelListener(cancelCallback);
@@ -264,6 +268,10 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             TitleColumn title = (TitleColumn) columns[0];
             title.setViewer(viewer);
         }
+        if (columns[3] instanceof ReviewColumn){
+            ReviewColumn review = (ReviewColumn) columns[3];
+            review.setViewer(viewer);
+        }
     }
 
    public void setResourceAdder(ResourceAdder resourceAdder)
@@ -274,6 +282,17 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             title.setResourceAdder(resourceAdder);
             if (viewer == null){
                 setViewer(title);
+            }
+        }
+        if (columns[2] instanceof ContributorColumn){
+            ContributorColumn creator = (ContributorColumn) columns[2];
+            creator.setUseNewWindow(true);
+        }
+        if (columns[3] instanceof ReviewColumn){
+            ReviewColumn review = (ReviewColumn) columns[3];
+            review.setResourceAdder(resourceAdder);
+            if (viewer == null){
+                setViewer(review);
             }
         }
         if (columns[4] instanceof ActionColumn){

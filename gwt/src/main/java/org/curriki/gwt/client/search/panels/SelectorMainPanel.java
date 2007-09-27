@@ -139,7 +139,7 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
 
     public void onClick(Widget widget)
     {
-        if (widget.equals(search)){
+        if (widget.equals(search) || widget.equals(terms)){
             clickListeners.fireClick(this);
         }
         if (widget.equals(cancel)){

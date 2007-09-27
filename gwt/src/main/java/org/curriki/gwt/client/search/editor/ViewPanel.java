@@ -26,18 +26,33 @@ import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.utils.ClickListenerListener;
 
+import java.util.Map;
+
 public class ViewPanel extends VerticalPanel {
     ScrollPanel view;
     ModalDialog dialog;
+    Map args = null;
 
     public ViewPanel(ClickListener act_add) {
         initPanel(act_add);
+    }
+
+    public ViewPanel(ClickListener act_add, Map args) {
+        initPanel(act_add);
+        this.args = args;
     }
 
     private void initPanel(ClickListener act_add) {
@@ -86,7 +101,7 @@ public class ViewPanel extends VerticalPanel {
 
     public void displayResource(String resourceName){
         // Fetch resource to display
-        CurrikiService.App.getInstance().getDocumentContent(resourceName, true, new displayRenderedContent(view));
+        CurrikiService.App.getInstance().getDocumentContent(resourceName, true, args, new displayRenderedContent(view));
     }
 
     public class displayRenderedContent extends CurrikiAsyncCallback {
