@@ -74,7 +74,7 @@ public class NominateDialog extends ModalDialog {
         setCaption(Main.getTranslation("curriki.crs.nominate"), false);
 
         FlowPanel introTitlePanel = new FlowPanel();
-        introTitlePanel.addStyleName(getCSSName("subtitle"));
+        introTitlePanel.addStyleName(getCSSName("title"));
         introTitlePanel.add(new HTML(Main.getTranslation("curriki.crs.nominate.nominatefollowingresourceforreview")));
         add(introTitlePanel);
 
@@ -85,7 +85,7 @@ public class NominateDialog extends ModalDialog {
         add(pagenamePanel);
 
         FlowPanel commentTitlePanel = new FlowPanel();
-        commentTitlePanel.addStyleName(getCSSName("subtitle"));
+        commentTitlePanel.addStyleName(getCSSName("title"));
         commentTitlePanel.add(new HTML(Main.getTranslation("curriki.crs.nominate.comments")));
         add(commentTitlePanel);
 
@@ -94,11 +94,14 @@ public class NominateDialog extends ModalDialog {
         commentTextPanel.add(new HTML(Main.getTranslation("curriki.crs.nominate.commentstext")));
         add(commentTextPanel);
 
+        FlowPanel commentTextAreaPanel = new FlowPanel();
+        commentTextAreaPanel.addStyleName(getCSSName("commentstextarea"));
         commentTextArea = new TextArea();
         commentTextArea.addStyleName(getCSSName("commentstextarea"));
         commentTextArea.setCharacterWidth(80);
         commentTextArea.setVisibleLines(8);
-        add(commentTextArea);
+        commentTextAreaPanel.add(commentTextArea);
+        add(commentTextAreaPanel);
 
         FlowPanel commentFooterPanel = new FlowPanel();
         commentFooterPanel.addStyleName(getCSSName("commentstext"));
