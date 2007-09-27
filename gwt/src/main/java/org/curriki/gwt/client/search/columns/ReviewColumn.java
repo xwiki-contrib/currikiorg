@@ -47,10 +47,10 @@ public class ReviewColumn extends ResultsColumn
     {
         String rating = "";
 
-        if (value.getObject(Constants.CURRIKI_REVIEW_CLASS) != null){
-            value.use(Constants.CURRIKI_REVIEW_CLASS);
-            if (value.get(Constants.CURRIKI_REVIEW_RATING_PROPERTY) != null){
-                rating = value.get(Constants.CURRIKI_REVIEW_RATING_PROPERTY);
+        if (value.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS) != null){
+            value.use(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+            if (value.get(Constants.CURRIKI_REVIEW_STATUS_STATUS) != null){
+                rating = value.get(Constants.CURRIKI_REVIEW_STATUS_STATUS);
             }
         }
 
