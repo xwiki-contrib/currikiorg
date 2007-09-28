@@ -84,8 +84,8 @@
 ##
  <div id="curriki-header-right">
   <div class="header-inner">
-   <p class="curriki-small-infos">$msg.get("headerFindResource")</p>
-   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")">
+   <p class="curriki-small-infos">$msg.get("header.find_resource")</p>
+   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="this.form.method='post'; if (this.form.brsqry.value!='search') {this.form.action=this.form.action+'#__terms='+this.form.brsqry.value;};">
 <div id="curriki-search-field-container">
     <div id="curriki-search-field" class="curriki-search-a">
      <input type="hidden" class="hidden" name="area" value=""/>
@@ -96,22 +96,19 @@
      <input type="text" name="brsqry" id="curriki-searchbox" value="$!brsqry" 
      onfocus="if (this.value=='search') this.value=''; else this.select()" 
      onblur="if (this.value=='') this.value='search'"/>
-     <button id="searchbtn" onclick="this.form.method='post'; if (this.form.brsqry.value!='search') {this.form.action=this.form.action+'#__terms='+this.form.brsqry.value;};" type="submit" name="btn">$msg.get("headerSearchGo")</button>
+     <button id="searchbtn" onclick="this.form.method='post'; if (this.form.brsqry.value!='search') {this.form.action=this.form.action+'#__terms='+this.form.brsqry.value;};" type="submit" name="btn">$msg.get("header.search_go")</button>
     </div> ## curriki-search-field
 </div> ## curriki-search-field-container
-<div id="browse-btn-container">
-<button id="browse-btn" class="browse-button" onclick="this.form.action='$xwiki.getURL("Main.BrowseSearch")'; if (document.searchform.brsqry.value=='search') {document.searchform.brsqry.value='';}; return true;" type="submit">$msg.get("headerBrowse")</button>
-##button("Browse" "red" "submit" "browse-btn" "if (document.searchform.brsqry.value='search') {document.searchform.brsqry.value='';};")
-</div> ## browse-btn-container
    </form>
-<div id="advsearchlink"><a href="$xwiki.getURL("Main.GWTSearch")" onclick="this.href=this.href+'#__advShow=1'; if (document.searchform.brsqry.value!='search') {this.href=this.href+'&__terms='+document.searchform.brsqry.value;}; return true;">$msg.get("AdvancedSearch")</a></div>
+<div id="advsearchlink">
+<a href="$xwiki.getURL("Main.GWTSearch")" onclick="this.href=this.href+'#__advShow=1'; if (document.searchform.brsqry.value!='search') {this.href=this.href+'&__terms='+document.searchform.brsqry.value;}; return true;">$msg.get("header.advanced_search")</a>
+#sep()
+<a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
+</div>
   </div> ## header-inner
  </div> ## curriki-header-right
 <div class="clearfloats"></div>
 </div> ## curriki-header
-##<script>
-##Rico.Corner.round('browse-btn', {compact:true,color:'transparent',bgColor:'#e3e4f5'});
-##</script>
 #################################################################################
 ## End of header
 ##
@@ -119,4 +116,3 @@
 ##
 ##
 ##
-    
