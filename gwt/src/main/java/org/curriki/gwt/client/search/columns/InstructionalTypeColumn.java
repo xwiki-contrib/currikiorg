@@ -70,7 +70,7 @@ public class InstructionalTypeColumn extends ResultsColumn
             }
         }
 
-        if (name.indexOf("#--#") != -1){
+        if (name.indexOf(",") != -1){
             Image img = new Image(Constants.ICON_PATH+"ICTIcon-Multiple.gif");
             ret.add(img);
             ret.add(new Label(Main.getTranslation("search.results.col.ict.multiple")));
@@ -78,7 +78,7 @@ public class InstructionalTypeColumn extends ResultsColumn
             String icon = name.replaceFirst("_.*", "");
             if ((icon.length() > 0) && !icon.equals(name)){
                 String iconTitle = Main.getTranslation("search.selector.ict."+icon);
-                icon = icon.toUpperCase().substring(0, 1)+icon.substring(1);
+                icon = icon.toUpperCase().substring(1, 2)+icon.substring(2, icon.length()-1);
                 Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".gif");
                 img.setTitle(iconTitle);
                 ret.add(img);
