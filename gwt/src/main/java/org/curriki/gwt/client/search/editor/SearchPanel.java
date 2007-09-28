@@ -55,7 +55,7 @@ public class SearchPanel extends ModalDialog {
     }
 
     private void initPanel() {
-        setCaption(Main.getTranslation("search.search_dialog_title"), false);
+        setCaption(Main.getTranslation("search.top_titlebar"), false);
         setWidth("699");
         setHeight("484");
         addStyleName("search-cb-panel");

@@ -42,15 +42,22 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
 
     public SearcherPanel()
     {
-        init();
+        init(false);
     }
 
-    public void init()
+    public SearcherPanel(boolean fromCB)
     {
-        VerticalPanel pTitle = new VerticalPanel();
-        pTitle.addStyleName("search-top-titlebar");
-        pTitle.add(new Label(Main.getTranslation("search.top_titlebar")));
-        add(pTitle);
+        init(fromCB);
+    }
+
+    public void init(boolean fromCB)
+    {
+        if (!fromCB){
+            VerticalPanel pTitle = new VerticalPanel();
+            pTitle.addStyleName("search-top-titlebar");
+            pTitle.add(new Label(Main.getTranslation("search.top_titlebar")));
+            add(pTitle);
+        }
 
         selector = new SelectorPanel();
         selector.addClickListener(this);
