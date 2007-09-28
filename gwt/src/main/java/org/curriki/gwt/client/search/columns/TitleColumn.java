@@ -40,6 +40,7 @@ import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 public class TitleColumn extends ResultsColumn implements Viewer
 {
     protected int maxLength = 78;
+    protected int maxDescLength = 78;
     protected Viewer viewer;
     protected ResourceAdder wizard;
     protected ClickListener cancelListener = null;
@@ -121,6 +122,9 @@ public class TitleColumn extends ResultsColumn implements Viewer
 
             if (value.get(Constants.ASSET_DESCRIPTION_PROPERTY) != null){
                 desc = value.get(Constants.ASSET_DESCRIPTION_PROPERTY);
+                if (desc.length() > maxDescLength){
+                    desc = desc.substring(0, (maxDescLength-1))+"...";
+                }
             }
         }
 

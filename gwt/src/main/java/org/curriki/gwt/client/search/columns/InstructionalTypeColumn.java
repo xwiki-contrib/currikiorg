@@ -60,22 +60,32 @@ public class InstructionalTypeColumn extends ResultsColumn
 
     public Widget getDisplayWidget(Document value)
     {
-        String name = getDisplayString(value);
+        String name = "";
         FlowPanel ret = new FlowPanel();
 
-        if (name.indexOf("#--#") != -1){
-            name = "Multiple:";
+        if (value.getObject(Constants.ASSET_CLASS) != null){
+            value.use(Constants.ASSET_CLASS);
+            if (value.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY) != null){
+                name = String.valueOf(value.getValue(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY));
+            }
         }
 
-        if (name.length() > 0){
-            String icon = name.replaceAll(":.*", "");
-            name = name.replaceFirst(icon+":", "");
-            if (icon.length() > 0) {
+        if (name.indexOf("#--#") != -1){
+            Image img = new Image(Constants.ICON_PATH+"ICTIcon-Multiple.gif");
+            ret.add(img);
+            ret.add(new Label(Main.getTranslation("search.results.col.ict.multiple")));
+        } else  if (name.length() > 0){
+            String icon = name.replaceFirst("_.*", "");
+            if ((icon.length() > 0) && !icon.equals(name)){
+                String iconTitle = Main.getTranslation("search.selector.ict."+icon);
+                icon = icon.toUpperCase().substring(0, 1)+icon.substring(1);
                 Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".gif");
-                img.setTitle(icon);
+                img.setTitle(iconTitle);
                 ret.add(img);
+                
+                name = Main.getTranslation("search.selector.ict."+name.replaceFirst("_", "."));
+                ret.add(new Label(name));
             }
-            ret.add(new Label(name));
         }
 
         return ret;
