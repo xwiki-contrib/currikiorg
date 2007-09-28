@@ -67,6 +67,7 @@ public class InstructionalTypeColumn extends ResultsColumn
             value.use(Constants.ASSET_CLASS);
             if (value.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY) != null){
                 name = String.valueOf(value.getValue(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY));
+                name = name.substring(1, name.length()-1); // Remove [ and ]
             }
         }
 
@@ -78,7 +79,7 @@ public class InstructionalTypeColumn extends ResultsColumn
             String icon = name.replaceFirst("_.*", "");
             if ((icon.length() > 0) && !icon.equals(name)){
                 String iconTitle = Main.getTranslation("search.selector.ict."+icon);
-                icon = icon.toUpperCase().substring(1, 2)+icon.substring(2, icon.length()-1);
+                icon = icon.toUpperCase().substring(0, 1)+icon.substring(1);
                 Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".gif");
                 img.setTitle(iconTitle);
                 ret.add(img);
