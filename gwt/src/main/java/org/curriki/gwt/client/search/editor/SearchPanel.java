@@ -66,7 +66,7 @@ public class SearchPanel extends ModalDialog {
             }
         };
 
-        SearcherPanel search = new SearcherPanel();
+        SearcherPanel search = new SearcherPanel(true);
         search.setViewer(viewer);
         search.setCancelCallback(cancelCallback);
         search.setResourceAdder(wizard);
