@@ -23,23 +23,22 @@
 package org.curriki.gwt.client.search.panels;
 
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.HTML;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.history.ClientState;
+import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.Paginator;
-import org.curriki.gwt.client.search.history.KeepsState;
-import org.curriki.gwt.client.search.history.ClientState;
 
 public class PaginationPanel extends VerticalPanel implements Paginator, KeepsState
 {
-    protected Hyperlink prev = new Hyperlink();
-    protected Hyperlink next = new Hyperlink();
+    protected Label prev = new Label();
+    protected Label next = new Label();
     protected boolean canPrevious = false;
     protected boolean canNext = false;
     protected DoesSearch searcher;
@@ -107,8 +106,8 @@ public class PaginationPanel extends VerticalPanel implements Paginator, KeepsSt
             if (newstart > lastindex){
                 newstart = lastindex;
             }
-        } else if ((sender != prev) && (sender != next) && (sender instanceof Hyperlink)) {
-            Hyperlink sPage = (Hyperlink) sender;
+        } else if ((sender != prev) && (sender != next) && (sender instanceof Label)) {
+            Label sPage = (Label) sender;
             try {
                 int fromText = Integer.parseInt(sPage.getText());
 
@@ -170,7 +169,7 @@ public class PaginationPanel extends VerticalPanel implements Paginator, KeepsSt
             int pPage = (pageOffset*10) + i;
             if (pPage <= pagecount){
                 String pPageString = (new Integer(pPage)).toString();
-                Hyperlink n = new Hyperlink();
+                Label n = new Label();
                 n.setText(pPageString);
                 n.setTitle(Main.getTranslation("search.nav.page")+" "+pPageString);
                 n.addStyleName("pagination-item");

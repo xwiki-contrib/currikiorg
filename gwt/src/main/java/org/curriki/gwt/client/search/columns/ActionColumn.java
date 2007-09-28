@@ -22,9 +22,9 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
@@ -60,7 +60,7 @@ public class ActionColumn extends ResultsColumn
         if ((resourceAdder != null) && (cancelListener != null) &&
             (Main.getSingleton().getUser() != null) &&
             !(Main.getSingleton().getUser().getFullName().equals(Constants.USER_XWIKI_GUEST))){
-            Hyperlink a = new Hyperlink();
+            HTML a = new HTML();
             a.addStyleName("results-action-cell-link");
             a.setHTML(Main.getTranslation("editor.btt_add"));
             a.addClickListener(new AddAsset(value.getFullName()));
