@@ -74,14 +74,14 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         init(false);
     }
 
-    public ResultsPanel(boolean action){
-        if (action){
+    public ResultsPanel(boolean fromCB){
+        if (fromCB){
             columnCount = 5;
         }
-        init(action);
+        init(fromCB);
     }
 
-    public void init(boolean action){
+    public void init(boolean fromCB){
         results = new Results();
         results.setRederer(this);
 
@@ -91,16 +91,20 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         columns[3] = new ReviewColumn();
         columns[4] = new ActionColumn();
 
-        s = new ScrollPanel();
-        s.addStyleName("find-results-scroller");
-
         g = new FlexTable();
         g.addStyleName("find-results-table");
         g.addTableListener(this);
         addHeadings();
-        
-        s.add(g);
-        add(s);
+
+        if (fromCB){
+            s = new ScrollPanel();
+            s.addStyleName("find-results-scroller");
+
+            s.add(g);
+            add(s);
+        } else {
+            add(g);
+        }
     }
 
     public void addHistory(SearcherHistory history){

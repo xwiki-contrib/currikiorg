@@ -68,7 +68,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         rTitle.add(new Label(Main.getTranslation("search.results_title")));
         add(rTitle);
 
-        results = new ResultsPanel();
+        results = new ResultsPanel(fromCB);
         results.setSelector(selector);
         add(results);
 
