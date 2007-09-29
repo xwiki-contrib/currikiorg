@@ -64,9 +64,9 @@ public class NominateDialog extends ModalDialog {
 
     public String getCSSName(String name) {
         if ((name==null)||name.equals(""))
-            return "crs_nominate_" + name;
-        else
             return "crs_nominate";
+        else
+            return "crs_nominate_" + name;
     }
 
     public void init(){
