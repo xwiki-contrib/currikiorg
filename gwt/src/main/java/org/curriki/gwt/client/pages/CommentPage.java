@@ -152,6 +152,7 @@ public class CommentPage extends AbstractPage {
                 crsReviewListPanel.addStyleName("crs_reviewslist");
                 XObject assetObj = currentAsset.getObject(Constants.ASSET_CLASS);
                 String ict = assetObj.getViewProperty(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
+                ict = (ict==null) ? "" : ict.replaceAll("#--#", ",");
                 for (int i=objects.size()-1;i>=0;i--) {
                     XObject crsObj = (XObject) objects.get(i);
                     if (crsObj!=null) {

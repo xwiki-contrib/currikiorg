@@ -1377,7 +1377,7 @@ $msg.get("curriki.crs.reviewlist.currikihaspartnered")
 #else
 #set($reviewlist = $xwiki.arrayList)
 #set($ok = $asset.use("XWiki.AssetClass"))
-#set($ict = $asset.display("instructional_component2"))
+#set($ict = $asset.display("instructional_component2").replaceAll("#--#",","))
 #foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
 #if($obj)
 #set($ok = $reviewlist.add(0, $obj))
