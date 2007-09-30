@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
+import com.xpn.xwiki.gwt.api.client.User;
 import org.curriki.gwt.client.AssetDocument;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
@@ -153,55 +154,75 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
         this.parentAsset = parent;
     }
 
+    private void duplicateTemplate() {
+        CurrikiService.App.getInstance().duplicateTemplateAsset(getParentAsset(), getDocumentFullName(), getIndex(), new CurrikiAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                super.onFailure(caught);
+                // Action failed but we want to reload anyway to see if something happened
+                // The action worked we want to reload the current asset and the tree
+                Editor editor = Main.getSingleton().getEditor();
+                editor.setCurrentAssetInvalid(true);
+                editor.setTreeContentInvalid(true);
+                editor.refreshState();
+            }
+
+            public void onSuccess(Object result) {
+                super.onSuccess(result);
+
+                // Duplicate should have happened
+                String newPageName = (String) result;
+
+                // The action worked we want to reload the current asset and the tree
+                // We want to select the newly duplicated asset
+                Editor editor = Main.getSingleton().getEditor();
+                editor.setCurrentAssetInvalid(true);
+                editor.setTreeContentInvalid(true);
+                editor.setSelectedDocumentName(newPageName);
+                editor.setSelectedDocumentEditMode(true);
+                editor.refreshState();
+            }
+        });
+    }
+
     public void onEditClick() {
         AssetDocument doc = item.getDocument();
         int proposeDialog = 0;
+        User user = Main.getSingleton().getUser();
+        final boolean isTemplateUser = Constants.TEMPLATES_USER.equals(user.getName());
 
         if (doc.isCurrikiTemplate()&&!doc.isParentCurrikiTemplate()) {
-            proposeDialog = Constants.PROPOSE_DUPLICATE_TEMPLATE;
+            // We are currently on a template document
+            if (isTemplateUser) {
+                // If the user is the template user then we should give the choice between editing and duplicating
+                proposeDialog = Constants.PROPOSE_DUPLICATE_TEMPLATE;
+            } else {
+                // If the user is not a template user we should not ask and duplicate directly
+                // the template and go in edit mode
+                duplicateTemplate();
+                return;
+            }
         } else if (!doc.getCreator().equals(Main.getSingleton().getUser().getFullName())){
+            // we are on a standard documet
+            // If the creator is not the current user then we don't want to go directly in edit mode
+            // We might want to want to duplicate the document to your collection..
             proposeDialog = Constants.PROPOSE_DUPLICATE_EDIT;
         }
+        // In all other case we just go in edit mode on the asset
+
         if (proposeDialog == Constants.PROPOSE_DUPLICATE_TEMPLATE){
             // Propose duplicating the template document in place
             proposeDuplicatingTemplate(new AsyncCallback() {
                 public void onFailure(Throwable throwable) {
                     // If not edit right we had put the button only because it was a template
                     proposeTemplateDuplicationDialog.hide();
-                    if (item.getDocument().hasEditRight())
+                    if (item.getDocument().hasEditRight()&&isTemplateUser) {
                         changeToEditMode();
+                    }
                 }
 
                 public void onSuccess(Object object) {
                     proposeTemplateDuplicationDialog.hide();
-
-                    CurrikiService.App.getInstance().duplicateTemplateAsset(getParentAsset(), getDocumentFullName(), getIndex(), new CurrikiAsyncCallback() {
-                        public void onFailure(Throwable caught) {
-                            super.onFailure(caught);
-                            // Action failed but we want to reload anyway to see if something happened
-                            // The action worked we want to reload the current asset and the tree
-                            Editor editor = Main.getSingleton().getEditor();
-                            editor.setCurrentAssetInvalid(true);
-                            editor.setTreeContentInvalid(true);
-                            editor.refreshState();
-                        }
-
-                        public void onSuccess(Object result) {
-                            super.onSuccess(result);
-
-                            // Duplicate should have happened
-                            String newPageName = (String) result;
-
-                            // The action worked we want to reload the current asset and the tree
-                            // We want to select the newly duplicated asset
-                            Editor editor = Main.getSingleton().getEditor();
-                            editor.setCurrentAssetInvalid(true);
-                            editor.setTreeContentInvalid(true);
-                            editor.setSelectedDocumentName(newPageName);
-                            editor.setSelectedDocumentEditMode(true);
-                            editor.refreshState();
-                        }
-                    });
+                    duplicateTemplate();
                 }
             });
         } else if (proposeDialog == Constants.PROPOSE_DUPLICATE_EDIT){
@@ -217,7 +238,7 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
                     // What was selected?
                     String result = (String) object;
                     if (result.equals("Edit")){
-                        if (item.getDocument().hasEditRight()){
+                        if (item.getDocument().hasEditRight()) {
                             changeToEditMode();
                         }
                     } else if (result.equals("Copy")){
@@ -248,7 +269,10 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
     private void proposeDuplicatingTemplate(AsyncCallback cb) {
         String titleText = "template.propose_duplication_title";
         String questionText;
-        if (item.getDocument().hasEditRight())
+        User user = Main.getSingleton().getUser();
+        final boolean isTemplateUser = Constants.TEMPLATES_USER.equals(user.getName());
+
+        if (item.getDocument().hasEditRight()&&isTemplateUser)
             questionText = "template.propose_duplication_text_editable";
         else
             questionText = "template.propose_duplication_text_noneditable";

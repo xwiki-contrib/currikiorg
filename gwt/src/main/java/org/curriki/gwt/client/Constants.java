@@ -171,6 +171,7 @@ public class Constants {
     public static final String DIALOG_ADD_VIDITALK_VIDEO = VIDITALK_CAPTURE;
 
     public static final String TEMPLATES_SPACE = "Coll_Templates";
+    public static final String TEMPLATES_USER = "Templates";
 
     public static final String TEMPLATE_ABOUT_COLLECTION = "Coll_Templates.AboutyourCollection";
 
