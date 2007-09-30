@@ -330,8 +330,9 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
             buttonPanel.add(moveBt);
         }
 
-        if (isViewable())
+        if (isViewable()&&!isDirectionBlock()) {
             buttonPanel.add(metaBt);
+        }
 
         if (isViewable()&&!isDirectionBlock()) {
             buttonPanel.add(commentBt);
