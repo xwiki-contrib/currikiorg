@@ -276,8 +276,26 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
                 newDoc = (Document) object;
 
                 category = Constants.TYPE_TEXT;
-                if (type==Constants.TEXTASSET_TYPE_DIRECTION)
-                    initMetadata(false);
+                if (type==Constants.TEXTASSET_TYPE_DIRECTION) {
+                    // we should save the meta data and directly create the asset
+                    CurrikiService.App.getInstance().updateMetadata(newDoc.getFullName(), false, new CurrikiAsyncCallback() {
+                        public void onSuccess(Object result) {
+                            super.onSuccess(result);
+                            newDoc = (Document) result;
+                            getCategory();
+
+                            XObject assetObj = newDoc.getObject(Constants.ASSET_CLASS);
+                            assetObj.set(Constants.ASSET_CATEGORY_PROPERTY, category);
+                            assetObj.set(Constants.ASSET_DESCRIPTION_PROPERTY, "Direction Block");
+                            CurrikiService.App.getInstance().saveObject(assetObj, new CurrikiAsyncCallback() {
+                                public void onSuccess(Object result) {
+                                    super.onSuccess(result);
+                                    finishWizard();
+                                }
+                            });
+                        }
+                    });
+                }
                 else
                     initMetadata(false);
             }
