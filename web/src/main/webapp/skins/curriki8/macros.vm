@@ -1146,8 +1146,9 @@ $objTxt.text
    #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
  <hr >
    #else
-    #set($objTxt = $asset.getObject("XWiki.TextAssetClass"))
-    #if($objTxt&&$objTxt.type&&($objTxt.type==2))
+    #set($ok = $asset.use("XWiki.TextAssetClass"))
+    #set($type = $asset.getValue("type"))
+    #if("$type"=="2"))
 ## We are not showing direction block assets
     #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
 ## We are not showing protected assets
