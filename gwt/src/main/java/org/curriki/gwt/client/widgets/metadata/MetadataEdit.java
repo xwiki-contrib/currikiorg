@@ -189,7 +189,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         Integer reviewpending = (crsObj==null) ? null : (Integer) crsObj.get(Constants.CURRIKI_REVIEW_STATUS_REVIEWPENDING);
         String status = (crsObj==null) ? null : (String) crsObj.get(Constants.CURRIKI_REVIEW_STATUS_STATUS);
         currentCRSStatus = status;
-        Date lastReviewDate = (crsObj==null) ? null : (Date) crsObj.getProperty(Constants.CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE);
+        String lastReviewDate = crsObj.getViewProperty(Constants.CURRIKI_REVIEW_STATUS_LASTTREVIEWDATE);
         FlowPanel crsPanel = new FlowPanel();
         crsPanel.setStyleName("crs_review");
         HTMLPanel crsPanelTitle = new HTMLPanel(Main.getTranslation("curriki.crs.currikireview"));
@@ -215,8 +215,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             crsRatingTextPanel.setStyleName("crs_reviewratingtext");
             crsRatingPanel.add(crsRatingTextPanel);
             if ((lastReviewDate!=null)&&(!lastReviewDate.equals(""))) {
-                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
-                String sreviewDate = formatter.format(lastReviewDate);
+                String sreviewDate = lastReviewDate.substring(0,8);
                 HTMLPanel crsRatingDatePanel = new HTMLPanel(Main.getTranslation("curriki.crs.asof") + " " + sreviewDate);
                 crsRatingDatePanel.setStyleName("crs_reviewratingdate");
                 crsRatingPanel.add(crsRatingDatePanel);
