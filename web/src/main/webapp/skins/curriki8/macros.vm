@@ -285,8 +285,9 @@ $msg.get($prop.name)#end
 #end
 <div id="section_${seccounter}">
 <div class="titlebar titlebar_$color" id="section${seccounter}titlebar"><h3 id="section${seccounter}title"#if($link!="") class="titlebar_left"#end>$lefttitle</h3>#if($link!="")<div id="section${seccounter}links" class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc </a></div>#end</div>
-#if(!$isPrint)
 <script type="text/javascript">
+#if(!$togglesectionvisibility)
+#set($togglesectionvisibility = 1)
 function toggleSectionVisibility(seccounter, showhide){
   var seccontent = document.getElementById("section" + seccounter + "content");
   if(eltHasClass(seccontent, "hidden")){
@@ -307,6 +308,7 @@ function toggleSectionVisibility(seccounter, showhide){
   }
   return false;
 }
+#end
 addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
 #if($link=="")
 var linksDiv = document.createElement("div");
@@ -332,7 +334,6 @@ showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccoun
 showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
 linksDiv.appendChild(showhide${seccounter});
 </script>
-#end
 #if($show)
 <div id="section${seccounter}content" class="">
 #else
@@ -891,8 +892,9 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
 #end
 </div>
 <div class="clearfloats"></div>
-#if(!$isPrint)
 <script type="text/javascript">
+#if(!$togglesectionvisibility)
+#set($togglesectionvisibility = 1)
 function toggleSectionVisibility(seccounter, showhide){
   var seccontent = document.getElementById("section" + seccounter + "content");
   if(eltHasClass(seccontent, "hidden")){
@@ -913,6 +915,7 @@ function toggleSectionVisibility(seccounter, showhide){
   }
   return false;
 }
+#end
 addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
 var showhide${seccounter} = document.getElementById("section${seccounter}title");
 showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
@@ -921,7 +924,6 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 createCookie("Section${seccounter}Hidden", true, "");
 #end
 </script>
-#end
 <div id="section${seccounter}content" class="#if($doHide)hidden#end">
 #end
 ##
