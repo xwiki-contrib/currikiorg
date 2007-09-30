@@ -221,7 +221,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 crsRatingDatePanel.setStyleName("crs_reviewratingdate");
                 crsRatingPanel.add(crsRatingDatePanel);
             }
-            Image crsRatingImage = new Image(Constants.SKIN_PATH + "crs" + status + ".png");
+            Image crsRatingImage = new Image(Constants.SKIN_PATH + "crs" + status + ".gif");
             crsRatingImage.addClickListener(new ClickListener() {
                 public void onClick(Widget widget) {
                     ComponentsPage.getSingleton().switchPage("comment");
