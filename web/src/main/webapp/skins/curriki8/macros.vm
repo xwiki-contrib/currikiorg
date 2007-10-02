@@ -1036,10 +1036,10 @@ $!xwiki.formatDate($asset.date, "MM/dd/yy")
  *$msg.get("metadata.language_title"):* $!asset.display("language", "view", $assetObj)
 
  *$msg.get("metadata.instructional_component_title2"):* <br />
-#set($instrComponent = $!asset.instructional_component2)
+#set($instrComponent = $!asset.display("instructional_component2","view", $assetObj))
 <select name="componentType" multiple size="3">
 #if($instrComponent != "Choose from list...")
- {pre}#set($icitems = $instrComponent.split("#--#")){/pre}
+ #set($icitems = $instrComponent.split("#--#"))
  #foreach($icitem in $icitems)
   <option>${icitem}</option>
  #end
@@ -1056,7 +1056,7 @@ $!xwiki.formatDate($asset.date, "MM/dd/yy")
 #end
  *$msg.get("metadata.right_holder_title"):* $!holder
 
- *$msg.get("metadata.rights_title"):* $!asset.rights
+ *$msg.get("metadata.rights_title"):* $!asset.display("rights", "view", $assetObj)
 
  *$msg.get("metadata.license_type_title"):* $!asset.display("licenseType2", "view", $rightsObject)
 
@@ -1147,8 +1147,8 @@ $objTxt.text
  <hr >
    #else
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
-    #set($objTxt = $embeddedDoc.getObject("XWiki.TextAssetClass"))
-    #if($objTxt.type==2)
+    #set($objTxt = $!embeddedDoc.getObject("XWiki.TextAssetClass"))
+    #if("${objTxt.type}"=="2")
 ## We are not showing direction block assets
     #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
 ## We are not showing protected assets
@@ -1318,6 +1318,7 @@ $msg.get("curriki.crs.currikireview"):
 #set($ok = $asset.use("XWiki.AssetClass"))
 #set($rights = $!asset.getValue("rights"))
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+#set($status = "")
 #set($status = $asset.getValue("status"))
 #if((!$status)||($status=="0")||($status==""))
 <div class="crs_reviewrating">
@@ -1330,7 +1331,7 @@ $msg.get("curriki.crs.unrated")
 <div class="crs_reviewrating">
 <div class="crs_reviewimage">
 <a href="$asset.getURL("view", "viewer=comments")">
-<img src="$xwiki.getSkinFile("crs${status}.png")" height="48" />
+<img src="$xwiki.getSkinFile("crs${status}.gif")" height="48" />
 </a>
 </div>
 <div class="crs_reviewratingtext">
@@ -1406,7 +1407,7 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 #set($date = $asset.getValue("date"))
 #set($user = $asset.display("user"))
 <div class="crs_reviewsdate">
-$xwiki.formatDate($date, "yyyy MMM dd")
+$xwiki.formatDate($date, "MM/dd/yy")
 </div>
 <div class="crs_reviewscomment">
 #if($rating&&($rating!="0"))

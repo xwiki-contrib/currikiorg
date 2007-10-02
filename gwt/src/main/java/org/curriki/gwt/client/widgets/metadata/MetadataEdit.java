@@ -215,7 +215,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             crsRatingTextPanel.setStyleName("crs_reviewratingtext");
             crsRatingPanel.add(crsRatingTextPanel);
             if ((lastReviewDate!=null)&&(!lastReviewDate.equals(""))) {
-                String sreviewDate = lastReviewDate.substring(0,8);
+                String sreviewDate = (lastReviewDate.length()>=8) ? lastReviewDate.substring(0,8) : lastReviewDate;
                 HTMLPanel crsRatingDatePanel = new HTMLPanel(Main.getTranslation("curriki.crs.asof") + " " + sreviewDate);
                 crsRatingDatePanel.setStyleName("crs_reviewratingdate");
                 crsRatingPanel.add(crsRatingDatePanel);

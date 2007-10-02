@@ -232,10 +232,14 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
         openBt.addClickListener(this);
         openBt.addStyleName("edit-btt-open");
 
-        hideBt = new Image(Constants.ICON_PATH+"collapse_down.png");
+        String imgSuffix = ".png";
+        if (isDirectionBlock())
+            imgSuffix = "_white.gif";
+
+        hideBt = new Image(Constants.ICON_PATH+"collapse_down" + imgSuffix);
         hideBt.addClickListener(this);
 
-        showBt = new Image(Constants.ICON_PATH+"collapse.png");
+        showBt = new Image(Constants.ICON_PATH+"collapse" + imgSuffix);
         showBt.addClickListener(this);
 
         // panel.setWidth("100%");

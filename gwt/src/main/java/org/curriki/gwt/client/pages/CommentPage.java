@@ -32,7 +32,7 @@ import java.util.List;
  */
 
 public class CommentPage extends AbstractPage {
-    SimplePanel commentsPanel = new SimplePanel();
+    VerticalPanel commentsPanel = new VerticalPanel();
     Button bttAddComment = new Button(Main.getTranslation("editor.btt_addcomment"));
     Button bttAddComment2 = new Button(Main.getTranslation("editor.btt_addcomment"));
     Button bttSaveComment = new Button(Main.getTranslation("editor.btt_savecomment"));
@@ -160,7 +160,9 @@ public class CommentPage extends AbstractPage {
                         crsReviewPanel.addStyleName("crs_reviewsreview");
                         FlowPanel crsReviewDatePanel = new FlowPanel();
                         crsReviewDatePanel.addStyleName("crs_reviewsdate");
-                        crsReviewDatePanel.add(new HTML(crsObj.getViewProperty(Constants.CURRIKI_REVIEW_DATE_PROPERTY)));
+                        String reviewDate = crsObj.getViewProperty(Constants.CURRIKI_REVIEW_DATE_PROPERTY);
+                        String sreviewDate = (reviewDate.length()>=8) ? reviewDate.substring(0,8) : reviewDate;
+                        crsReviewDatePanel.add(new HTML(sreviewDate));
                         crsReviewPanel.add(crsReviewDatePanel);
                         FlowPanel crsReviewContentPanel = new FlowPanel();
                         crsReviewContentPanel.addStyleName("crs_reviewscontent");
