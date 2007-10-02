@@ -180,6 +180,9 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     public void addRow(Document doc)
     {
         g.getRowFormatter().addStyleName(curRow, "find-results-table-result");
+        if ((curRow % 2) == 0){
+            g.getRowFormatter().addStyleName(curRow, "find-results-table-result-odd");
+        }
         g.getFlexCellFormatter().setColSpan(curRow, 0, 1);
         for (int i=0; i<columnCount; i++){
             g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-cell");

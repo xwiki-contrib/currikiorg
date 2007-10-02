@@ -45,7 +45,7 @@ public class SpecialFilterSelector extends DropdownSingleSelector
     {
         HorizontalPanel p = new HorizontalPanel();
         p.add(new Label(Main.getTranslation("search.selector.filters")));
-        p.add(getTooltip("filters"));
+        //p.add(getTooltip("filters"));
         return p;
     }
 

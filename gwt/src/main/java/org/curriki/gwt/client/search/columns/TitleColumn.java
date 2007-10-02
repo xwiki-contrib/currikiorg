@@ -40,7 +40,7 @@ import org.curriki.gwt.client.widgets.metadata.TooltipMouseListener;
 public class TitleColumn extends ResultsColumn implements Viewer
 {
     protected int maxLength = 78;
-    protected int maxDescLength = 78;
+    protected int maxDescLength = 335;
     protected Viewer viewer;
     protected ResourceAdder wizard;
     protected ClickListener cancelListener = null;

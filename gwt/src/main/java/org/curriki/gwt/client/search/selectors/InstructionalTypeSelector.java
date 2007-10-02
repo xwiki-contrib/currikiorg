@@ -74,7 +74,7 @@ public class InstructionalTypeSelector extends DropdownSingleSelector
     {
         HorizontalPanel p = new HorizontalPanel();
         p.add(new Label(Main.getTranslation("search.selector.ict")));
-        p.add(getTooltip("ict"));
+        //p.add(getTooltip("ict"));
         return p;
     }
 }

@@ -52,6 +52,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
 
     public void init(boolean fromCB)
     {
+        addStyleName("search-panel");
         if (!fromCB){
             VerticalPanel pTitle = new VerticalPanel();
             pTitle.addStyleName("search-top-titlebar");
@@ -60,6 +61,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         }
 
         selector = new SelectorPanel();
+        selector.addStyleName("search-selector");
         selector.addClickListener(this);
         add(selector);
 
@@ -69,10 +71,12 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         add(rTitle);
 
         results = new ResultsPanel(fromCB);
+        results.addStyleName("search-results");
         results.setSelector(selector);
         add(results);
 
         pagination = new PaginationPanel();
+        pagination.addStyleName("search-pagination");
         results.setPaginator(pagination.getPaginator());
         pagination.setSearcher(results);
         add(pagination);

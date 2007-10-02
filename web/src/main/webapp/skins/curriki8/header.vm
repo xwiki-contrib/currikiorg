@@ -85,7 +85,7 @@
  <div id="curriki-header-right">
   <div class="header-inner">
    <p class="curriki-small-infos">$msg.get("header.find_resource")</p>
-   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="this.form.method='post'; if (this.form.brsqry.value!='search') {this.form.action=this.form.action+'#__terms='+this.form.brsqry.value;};">
+   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="document.searchform.method='post'; if (document.searchform.brsqry.value!='search') {document.searchform.action=this.form.action+'#__terms='+document.searchform.brsqry.value;};">
 <div id="curriki-search-field-container">
     <div id="curriki-search-field" class="curriki-search-a">
      <input type="hidden" class="hidden" name="area" value=""/>
@@ -96,7 +96,7 @@
      <input type="text" name="brsqry" id="curriki-searchbox" value="$!brsqry" 
      onfocus="if (this.value=='search') this.value=''; else this.select()" 
      onblur="if (this.value=='') this.value='search'"/>
-     <button id="searchbtn" onclick="this.form.method='post'; if (this.form.brsqry.value!='search') {this.form.action=this.form.action+'#__terms='+this.form.brsqry.value;};" type="submit" name="btn">$msg.get("header.search_go")</button>
+     <button id="searchbtn" onclick="document.searchform.method='post'; if (document.searchform.brsqry.value!='search') {document.searchform.action=document.searchform.action+'#__terms='+document.searchform.brsqry.value;};" type="submit" name="btn">$msg.get("header.search_go")</button>
     </div> ## curriki-search-field
 </div> ## curriki-search-field-container
    </form>

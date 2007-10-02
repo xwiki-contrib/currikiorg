@@ -52,7 +52,7 @@ public class TermSelector extends TextInputSelector
     {
         HorizontalPanel p = new HorizontalPanel();
         p.add(new Label(Main.getTranslation("search.selector.terms")));
-        p.add(getTooltip("terms"));
+        //p.add(getTooltip("terms"));
         return p;
     }
 }
