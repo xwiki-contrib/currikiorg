@@ -85,7 +85,7 @@
  <div id="curriki-header-right">
   <div class="header-inner">
    <p class="curriki-small-infos">$msg.get("header.find_resource")</p>
-   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="document.searchform.method='post'; if (document.searchform.brsqry.value!='search') {document.searchform.action=this.form.action+'#__terms='+document.searchform.brsqry.value;};">
+   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="document.searchform.method='post'; if (document.searchform.brsqry.value!='search') {document.searchform.action=document.searchform.action+'#__terms='+document.searchform.brsqry.value;};">
 <div id="curriki-search-field-container">
     <div id="curriki-search-field" class="curriki-search-a">
      <input type="hidden" class="hidden" name="area" value=""/>
