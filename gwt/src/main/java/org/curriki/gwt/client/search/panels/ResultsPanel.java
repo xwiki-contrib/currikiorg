@@ -166,7 +166,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             if (w instanceof SortableColumnHeader){
                 SortableColumnHeader sw = (SortableColumnHeader) w;
 
-                if (sw.getSortBy().equals(sortBy)){
+                if (sortBy != null && !sortBy.equals("") && sw.getSortBy() != null && sw.getSortBy().equals(sortBy)){
                     g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header-sorted");
                 } else {
                     g.getFlexCellFormatter().removeStyleName(curRow, i, "find-results-column-header-sorted");
