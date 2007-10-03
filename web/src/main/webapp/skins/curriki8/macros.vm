@@ -1317,9 +1317,12 @@ $msg.get("curriki.crs.currikireview"):
 </div>
 #set($ok = $asset.use("XWiki.AssetClass"))
 #set($rights = $!asset.getValue("rights"))
+#if($asset.getObject("CRS.CurrikiReviewStatusClass"))
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-#set($status = "")
 #set($status = $asset.getValue("status"))
+#else
+#set($status = "")
+#end
 #if((!$status)||($status=="0")||($status==""))
 <div class="crs_reviewrating">
 <div class="crs_reviewratingtext">
