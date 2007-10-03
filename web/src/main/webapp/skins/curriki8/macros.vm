@@ -845,11 +845,11 @@ $memberdoc.getRenderedContent("$!content")</div>
 $bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
 <div class="clearfloats"></div>
 
-<a href="$bentrydoc.getURL("view", "bc=$!{bcLocal}")" class="curriki-link">$msg.get("caption.readmore")</a>#end
+<a href="$bentrydoc.getURL("view", "bc=$!{request.bc}")" class="curriki-link">$msg.get("caption.readmore")</a>#end
 </div>
 <div class="clearfloats"></div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
-$msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!{bcLocal}#end#comments]
+$msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!{request.bc}#end#comments]
 </div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 ## <a class="curriki-link" href="#" >$msg.get("caption.sendToAFriend")</a>
@@ -1066,9 +1066,9 @@ $!xwiki.formatDate($asset.date, "MM/dd/yy")
 <div class="asset-metadatas-block">
 <div class="righttext">
 #if($request.showMeta == true)
-<a href="$asset.getURL("view", "bc=$!{bcLocal}")">$msg.get("asset.closeMoreInformation")</a>
+<a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("asset.closeMoreInformation")</a>
 #else
-<a href="$asset.getURL("view", "bc=$!{bcLocal}&showMeta=true")">$msg.get("asset.moreInformation")</a>
+<a href="$asset.getURL("view", "bc=$!{request.bc}&showMeta=true")">$msg.get("asset.moreInformation")</a>
 #end
 </div>
 </div> ## asset-metadatas-block
@@ -1234,7 +1234,7 @@ $msg.get("asset.externallink")
 <div class="righttext"><div class="lefttext">
 <div style="width:510px; text-align:left;">
 *$msg.get("colls.description")* $!collDoc.description</div></div>
-<a href="$xwiki.getURL($collDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("caption.view")</a> #if($collDoc.hasAccessLevel("edit"))
+<a href="$xwiki.getURL($collDoc.fullName, "view", "bc=$!{request.bc}")">$msg.get("caption.view")</a> #if($collDoc.hasAccessLevel("edit"))
 #sep() <a target="_blank" href="#gwtEditUrl(${collDoc.fullName})">$msg.get("caption.edit")</a>
 #end
 #if("XWiki.${shortname}" == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($collDoc.fullName, "delete"))
