@@ -65,7 +65,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     protected int columnCount = 4;
     protected int curRow = 0;
     protected Selectable selector;
-    protected String sortBy;
+    protected String sortBy = "";
     protected ClickListener cancelCallback;
     protected Viewer viewer;
     protected ResourceAdder resourceAdder;
