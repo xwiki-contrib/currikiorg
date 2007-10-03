@@ -1147,6 +1147,7 @@ $objTxt.text
  <hr >
    #else
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
+    #set($type = "")
     #set($type = $!embeddedDoc.getValue("type", $embeddedDoc.getObject("XWiki.TextAssetClass")))
     #if("$type"=="2")
 ## We are not showing direction block assets
