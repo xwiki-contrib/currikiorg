@@ -39,6 +39,7 @@ public class SpecialFilterSelector extends DropdownSingleSelector
             addOption(Main.getTranslation("search.selector.filters.mine"), "mine");
         }
         addOption(Main.getTranslation("search.selector.filters.collections"), "collections");
+        addOption(Main.getTranslation("search.selector.filters.reviewed"), "reviewed");
     }
 
     public Widget getLabel()
@@ -56,6 +57,9 @@ public class SpecialFilterSelector extends DropdownSingleSelector
         if (value.length() > 0){
             if (value.equals("collections")){
                 filter = "XWiki.CompositeAssetClass.type:collection";
+            }
+            if (value.equals("reviewed")){
+                filter = "CRS.CurrikiReviewStatusClass.status:(1 OR 2 OR 3 OR P)";
             }
             if (value.equals("mine")){
                 filter = "creator:"+Main.getSingleton().getUser().getFullName(); // This is the full USERNAME, not realname
