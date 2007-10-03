@@ -47,7 +47,7 @@ public class ReviewColumn extends ResultsColumn implements Viewer
     {
         this.header = Main.getTranslation("search.results.col.review");
         this.columnStyle = "results-review-cell";
-        this.sortBy = Constants.CURRIKI_REVIEW_CLASS+"."+Constants.CURRIKI_REVIEW_RATING_PROPERTY;
+        this.sortBy = Constants.CURRIKI_REVIEW_STATUS_CLASS+"."+Constants.CURRIKI_REVIEW_STATUS_STATUS;
     }
 
     public ReviewColumn(String header, String columnStyle)
