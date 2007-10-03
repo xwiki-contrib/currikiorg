@@ -1147,8 +1147,8 @@ $objTxt.text
  <hr >
    #else
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
-    #set($objTxt = $!embeddedDoc.getObject("XWiki.TextAssetClass"))
-    #if("${objTxt.type}"=="2")
+    #set($type = $!embeddedDoc.getValue("type", $embeddedDoc.getObject("XWiki.TextAssetClass")))
+    #if("$type"=="2")
 ## We are not showing direction block assets
     #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
 ## We are not showing protected assets
