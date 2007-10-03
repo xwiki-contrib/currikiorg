@@ -70,12 +70,14 @@ public class ViewPanel extends VerticalPanel {
                 act.onClick(sender);
             }
         });
+        a.addStyleName("view-action-add");
         actions.add(a);
         Button b = new Button(Main.getTranslation("editor.btt_back"), new ClickListener() {
             public void onClick(Widget sender) {
                 dialog.hide();
             }
         });
+        b.addStyleName("view-action-back");
         actions.add(b);
 
         main.add(actions);
