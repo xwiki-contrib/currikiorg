@@ -84,7 +84,7 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
 
         g.setWidget(3, 0, sFileType);
 //        g.setWidget(3, 1, sLanguage);
-        g.setWidget(3, 2, sSpecial);
+        g.setWidget(3, 1, sSpecial);
 
         add(g);
 
