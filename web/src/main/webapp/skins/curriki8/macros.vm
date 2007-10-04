@@ -821,7 +821,7 @@ $memberdoc.getRenderedContent("$!content")</div>
 ##
 ##
 #macro(displayBlogArticle $bentrydoc $bentryobj $displayFully)
-#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,"MM-dd-yy"))
+#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("dateFormat")))
 #set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,"hh:mm a"))
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
 #if($title == "")
@@ -1015,7 +1015,7 @@ $!xwiki.getUserName($asset.creator)
 </td></tr></table> ##tableau pr l'image
 </td><td width="16%">
  *$msg.get("asset.lastupdated"):* <br />
-$!xwiki.formatDate($asset.date, "MM/dd/yy")
+$!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 </td><td width="42%">
 <div style="float:right;">
 #set($status = $!asset.status)
@@ -1242,7 +1242,7 @@ $msg.get("asset.externallink")
 #sep() <a onclick="this.href='$deleteUrl'; return confirm('$deleteMsg')" href="javascript:void()">$msg.get("caption.delete")</a>
 #end
 </div>
-*$msg.get("colls.last_edited")* $!xwiki.formatDate($collDoc.date, "MM/dd/yy")<br />
+*$msg.get("colls.last_edited")* $!xwiki.formatDate($collDoc.date, $msg.get("dateFormat"))<br />
 #if($!collDoc.fw_items.trim() == "")
  #set($subjects = "All")
 #else
@@ -1343,7 +1343,7 @@ $msg.get("curriki.crs.rating${status}")
 </div>
 #if($lastreview_date)
 <div class="crs_reviewratingdate">
-$msg.get("curriki.crs.asof") $xwiki.formatDate($lastreview_date, "MM/dd/yy")
+$msg.get("curriki.crs.asof") $xwiki.formatDate($lastreview_date, $msg.get("dateFormat"))
 </div>
 #end
 </div>
@@ -1411,7 +1411,7 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 #set($date = $asset.getValue("date"))
 #set($user = $asset.display("user"))
 <div class="crs_reviewsdate">
-$xwiki.formatDate($date, "MM/dd/yy")
+$xwiki.formatDate($date, $msg.get("dateFormat"))
 </div>
 <div class="crs_reviewscomment">
 #if($rating&&($rating!="0"))
