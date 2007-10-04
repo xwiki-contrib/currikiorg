@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.search.history.KeepsState;
@@ -34,6 +35,7 @@ import org.curriki.gwt.client.search.history.ClientState;
 public class SelectorTogglePanel extends VerticalPanel implements ClickListener, KeepsState
 {
     protected SelectorFilterPanel filters;
+    protected ScrollPanel scroller;
     protected HTML toggleWidget;
 
     public SelectorTogglePanel()
@@ -73,8 +75,16 @@ public class SelectorTogglePanel extends VerticalPanel implements ClickListener,
         
         if (filters.isVisible()){
             toggleWidget.setHTML(Main.getTranslation("search.instruction.adv.close"));
+            if (scroller != null){
+                scroller.removeStyleName("find-results-scroller-simple");
+                scroller.addStyleName("find-results-scroller-advanced");
+            }
         } else {
             toggleWidget.setHTML(Main.getTranslation("search.instruction.adv.open"));
+            if (scroller != null){
+                scroller.removeStyleName("find-results-scroller-advanced");
+                scroller.addStyleName("find-results-scroller-simple");
+            }
         }
     }
 
@@ -100,5 +110,10 @@ public class SelectorTogglePanel extends VerticalPanel implements ClickListener,
 
     public void saveState(ClientState state){
         state.setValue(Constants.HISTORY_FIELD_ADV_TOGGLE, (filters.isVisible()?"1":"0"));
+    }
+
+    public void addResultsScrollPanel(ScrollPanel scrollPanel)
+    {
+        scroller = scrollPanel;
     }
 }

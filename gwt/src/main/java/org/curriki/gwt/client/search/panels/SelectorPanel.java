@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.Selectable;
@@ -172,5 +173,10 @@ public class SelectorPanel extends VerticalPanel implements ChangeListener, Clic
 
         // If we have a cancel callback then we are in CB, so open selectors by default
         bottom.setToggleValue(true);
+    }
+
+    public void addResultsScrollPanel(ScrollPanel scrollPanel)
+    {
+        bottom.addResultsScrollPanel(scrollPanel);
     }
 }

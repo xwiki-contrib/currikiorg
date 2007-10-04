@@ -315,6 +315,11 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         }
     }
 
+    public ScrollPanel getScrollPanel()
+    {
+        return s;
+    }
+
     public class hoverOnMouseover extends MouseListenerAdapter {
         public void onMouseEnter(Widget w){
             w.addStyleName("mouse-over");

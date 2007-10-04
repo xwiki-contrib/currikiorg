@@ -74,6 +74,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         results.addStyleName("search-results");
         results.setSelector(selector);
         add(results);
+        selector.addResultsScrollPanel(results.getScrollPanel());
 
         pagination = new PaginationPanel();
         pagination.addStyleName("search-pagination");
