@@ -262,10 +262,15 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
     }
 
     public void setTitle(String title){
-        if (isDirectionBlock())
+        String imgSuffix = ".png";
+        if (isDirectionBlock()) {
+            imgSuffix = "_white.gif";
             this.title.setText(Main.getTranslation("editor.cbdirections"));
-        else
+        } else {
             this.title.setText(title);
+        }
+        hideBt.setUrl(Constants.ICON_PATH+"collapse_down" + imgSuffix);
+        showBt.setUrl(Constants.ICON_PATH+"collapse" + imgSuffix);
     }
 
     public void onClick(Widget widget) {
