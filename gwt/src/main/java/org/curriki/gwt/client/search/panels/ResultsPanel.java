@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
@@ -69,6 +70,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     protected ClickListener cancelCallback;
     protected Viewer viewer;
     protected ResourceAdder resourceAdder;
+    protected hoverOnMouseover hoverMarker = new hoverOnMouseover();
 
     public ResultsPanel(){
         init(false);
@@ -166,10 +168,14 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             if (w instanceof SortableColumnHeader){
                 SortableColumnHeader sw = (SortableColumnHeader) w;
 
-                if (sortBy != null && !sortBy.equals("") && sw.getSortBy() != null && sw.getSortBy().equals(sortBy)){
-                    g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header-sorted");
-                } else {
-                    g.getFlexCellFormatter().removeStyleName(curRow, i, "find-results-column-header-sorted");
+                if (sw != null && sw.getSortBy() != null && !sw.getSortBy().equals("")){
+                    sw.addMouseListener(hoverMarker);
+
+                    if (sortBy != null && !sortBy.equals("") && sw.getSortBy().equals(sortBy)){
+                        g.getFlexCellFormatter().addStyleName(curRow, i, "find-results-column-header-sorted");
+                    } else {
+                        g.getFlexCellFormatter().removeStyleName(curRow, i, "find-results-column-header-sorted");
+                    }
                 }
             }
             g.setWidget(curRow, i, w);
@@ -306,6 +312,16 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
             ActionColumn act = (ActionColumn) columns[4];
             act.setResourceAdder(resourceAdder);
             columnCount = 5;
+        }
+    }
+
+    public class hoverOnMouseover extends MouseListenerAdapter {
+        public void onMouseEnter(Widget w){
+            w.addStyleName("mouse-over");
+        }
+
+        public void onMouseLeave(Widget w){
+            w.removeStyleName("mouse-over");
         }
     }
 }

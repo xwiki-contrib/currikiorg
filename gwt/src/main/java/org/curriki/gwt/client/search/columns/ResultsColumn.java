@@ -68,8 +68,11 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
 
     public Widget getHeaderWidget()
     {
-        SortableColumnHeader h = new SortableColumnHeader(header, sortBy);
-        return h;
+        if (sortBy != null && !sortBy.equals("")){
+            return new SortableColumnHeader(header, sortBy);
+        } else {
+            return new Label(header);
+        }
     }
 
     public String getColumnStyle()
