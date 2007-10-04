@@ -30,4 +30,5 @@ public interface ResultsRenderer
     public void addHeadings();
     public void addRow(Document doc);
     public void addRowNoResults();
+    public void addRowNoShowableResults();
 }

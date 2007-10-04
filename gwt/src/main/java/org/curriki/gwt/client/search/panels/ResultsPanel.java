@@ -208,6 +208,16 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
         curRow++;
     }
 
+    public void addRowNoShowableResults()
+    {
+        g.getRowFormatter().addStyleName(curRow, "find-results-table-result");
+        g.getFlexCellFormatter().setColSpan(curRow, 0, 4);
+        HTML msg = new HTML(Main.getTranslation("search.noshowableresults"));
+        msg.addStyleName("search-noresults");
+        g.setWidget(curRow, 0, msg);
+        curRow++;
+    }
+
     public void setSelector(Selectable selector){
         this.selector = selector;
     }

@@ -41,15 +41,22 @@ public class Results implements ResultsReceiver
     
     public void setResults(int hitcount, List documentList)
     {
+        int shownResults = 0;
+
         renderer.clear();
         
         Iterator i = documentList.iterator();
         while (i.hasNext()){
             Document doc = (Document) i.next();
             renderer.addRow(doc);
+            shownResults++;
         }
 
         paginator.adjust(paginator.getFetchCount(), paginator.getStart(), hitcount);
+
+        if (shownResults == 0 && hitcount > 0){
+            renderer.addRowNoShowableResults();
+        }
 
         if (hitcount == 0){
             renderer.addRowNoResults();
