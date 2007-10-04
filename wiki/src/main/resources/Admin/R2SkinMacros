@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1179866330000</creationDate>
-<date>1179866368000</date>
-<contentUpdateDate>1179866368000</contentUpdateDate>
-<version>1.2</version>
+<date>1191257847000</date>
+<contentUpdateDate>1191257847000</contentUpdateDate>
+<version>1.6</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Moved R2SkinMacros to Admin instead of Sandbox</comment>
+<comment>Surround info with {pre} {/pre}</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -730,5 +730,44 @@ Sample code for the [Panels.FeaturedMembers] panel
 \#panelfooter()
 {code}
 
-The &lt;tt&gt;\#displayMember()&lt;/tt&gt; macro's parameter is the username of the momber on Curriki.</content>
+The &lt;tt&gt;\#displayMember()&lt;/tt&gt; macro's parameter is the username of the momber on Curriki.
+
+1.1 Browse Page
+
+1.1.1 Macros
+
+{code}
+#transsubjectcard("translation_token" "&lt;search to get count&gt;" "&lt;added to URL for search&gt;")
+{code}
+
+example:
+{code}
+#transsubjectcard("promo_1" "Romeo Juliet" "__terms=Romeo Juliet")
+{code}
+
+Where &lt;br /&gt;
+&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&lt;tt&gt;translation_token&lt;/tt&gt; is for finding the image URL and description text out of the translation page (XWiki.Translations) of the form &lt;br /&gt;
+{pre}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;browse.subject.image.translation_token=/URL_TO_IMAGE
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;browse.subject.description.translation_token=text to show under image
+{/pre}
+&lt;br /&gt;&lt;br /&gt;
+{pre}
+&amp;nbsp;&amp;nbsp;&lt;tt&gt;search to get count&lt;/tt&gt; is for specifying the search on the browse page in order to get the count after the link.  Can be:
+&lt;ul&gt;
+&lt;li&gt;simple terms - search anywhere in the document for the terms (needs to be prefixed with __terms= for URL)&lt;/li&gt;
+&lt;li&gt;XWiki.AssetClass.category:category_to_search_for&lt;/li&gt;
+&lt;li&gt;XWiki.AssetClass.educational_level2:educational_level_to_search_for&lt;/li&gt;
+&lt;li&gt;XWiki.AssetClass.fw_items:subject_area_to_search_for&lt;/li&gt;
+&lt;li&gt;XWiki.AssetClass.instructional_component2:instructional_compontent_to_search_for&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&lt;tt&gt;added to URL for search&lt;/tt&gt; is for specifying what needs to get added to the search URL so that clicking on the link will go to the search page and bring up the appropriate search.  In addition to the items for the search query above you can add:
+&lt;ul&gt;
+&lt;li&gt;__advShow=1 - Open advanced search&lt;/li&gt;
+&lt;li&gt;__go=1 - Assumed if __terms sent, not otherwise&lt;/li&gt;
+&lt;li&gt;__special=(mine|collections) - Which special filter to use&lt;/li&gt;
+&lt;/ul&gt;
+{/pre}</content>
 </xwikidoc>

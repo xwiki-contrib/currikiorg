@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.Hindi</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.Hindi</contentAuthor>
 <creationDate>1186500630000</creationDate>
-<date>1186589258000</date>
-<contentUpdateDate>1186589258000</contentUpdateDate>
-<version>1.3</version>
+<date>1188830567000</date>
+<contentUpdateDate>1188830567000</contentUpdateDate>
+<version>1.4</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Re-save Russian translation</comment>
+<comment>added</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -54,6 +54,32 @@
 </property>
 </object>
 <content>#&lt;pre&gt;
+#side panel
+panel.navigation.browseresource= Browser Resources
+panel.navigation.featureresources=Feature Resources
+panel.navigation.bysubject=By Subject
+panel.navigation.contributeresources=Contribute Resources
+panel.navigation.add_learning_resource=Add a Learning Resource
+panel.navigation.create_learning_resource=Create a Learning Resource
+panel.navigation.build_collection=Build a Collection
+panel.navigation.mycurriki=My Curriki
+panel.navigation.mycollection=My Collections
+panel.navigation.myblogs=My Blogs
+panel.navigation.mycontributors=My Contributions
+panel.navigation.membercommunity=Member Community
+panel.navigation.featuredmembers=FeaturedMembers
+panel.navigation.volunteer=Volunteer
+panel.navigation.about_curriki=About Curriki
+panel.navigation.News=New
+panel.navigation.board=.Board
+panel.navigation.leadership_team=Leadership Team
+panel.navigation.donate=Donate
+panel.navigation.partners_sponsers=Partners and Sponsors
+panel.navigation.features_partners=Featured Partners
+panel.navigation.help=Help
+panel.navigation.faqs=FAQs
+panel.contact_us=Contact Us
+
 #general captions
 add=Добавить
 readmore=Читать дальше

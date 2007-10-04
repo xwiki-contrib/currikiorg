@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1189372362000</creationDate>
-<date>1190053368000</date>
-<contentUpdateDate>1190053368000</contentUpdateDate>
-<version>1.7</version>
-<title>Review</title>
+<date>1191364561000</date>
+<contentUpdateDate>1191364561000</contentUpdateDate>
+<version>1.37</version>
+<title>Review Form</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Added check if the form was filed</comment>
+<comment>Fix display</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -154,7 +154,7 @@
 </property>
 </object>
 <content>#set($asset = $xwiki.getDocument($request.page))
-1.1 $msg.get("curriki.crs.review") $asset.getDisplayTitle()
+1.1 $msg.get("curriki.crs.review"): $asset.getDisplayTitle()
 #if($request.submit)
 #set($ok = $asset.updateObjectFromRequest("XWiki.AssetClass"))
 #set($ok = $asset.use("XWiki.AssetClass"))
@@ -187,33 +187,61 @@
 #set($ok = $asset.set("lastreview_date", $xwiki.formatDate($xwiki.date, "dd/MM/yyyy HH:mm:ss")))
 #set($ok = $asset.set("reviewpending", 0))
 $asset.save()
-$msg.get("curriki.crs.review.saved"). $msg.get("curriki.crs.review.returnto") [$msg.get("curriki.crs.review.document")&gt;$asset.fullName] $msg.get("curriki.crs.review.or") [$msg.get("curriki.crs.review.reviewpage")&gt;Reviews].
+$msg.get("curriki.crs.review.saved") $msg.get("curriki.crs.review.returnto") [$msg.get("curriki.crs.review.document")&gt;$asset.fullName] $msg.get("curriki.crs.review.or") [$msg.get("curriki.crs.review.reviewpage")&gt;Reviews].
+
+#set($assetowner = $asset.creator)
+#if($assetowner&amp;&amp;($assetowner!=""))
+#set($assetownerdoc = $xwiki.getDocument($assetowner))
+#set($ok = $assetownerdoc.use("XWiki.XWikiUsers"))
+#set($optout = $assetownerdoc.getValue("opt_out"))
+#set($email = $assetownerdoc.getValue("email"))
+#if("$!optout"!="1"&amp;&amp;$email!="")
+#set($assettitle = $asset.displayTitle)
+#set($adminemail = $xwiki.getXWikiPreference("admin_email"))
+#set($assetrating = $msg.get("CRS.CurrikiReviewStatusClass_status_${rating}"))
+#set($assetrating = "${rating} - ${assetrating}")
+#set($assetcommentsurl = $asset.getExternalURL("view", "viewer=comments"))
+#set($profileurl = $assetownerdoc.getExternalURL())
+#set($mesg = $xwiki.parseContent($xwiki.getDocument("CRS.ReviewEmail").getContent()))
+#set($junk = $xwiki.sendMessage($adminemail, $email, $mesg))
+$msg.get("curriki.crs.review.mailsentto") [$email&gt;$assetowner]:
+
+&lt;pre&gt;
+$mesg
+&lt;/pre&gt;
+#end
+#end
 #else
-#set($ok = $asset.set("comment", $newcomment))
 &lt;form action=""&gt;
 &lt;input type="hidden" name="page" value="$!request.page" /&gt;
 #set($ok = $asset.use("XWiki.AssetClass"))
-$asset.display("instructional_component", "hidden")
+$asset.display("instructional_component2", "hidden")
 #set($ict = $asset.getValue("instructional_component2"))
+#set($sict = $asset.display("instructional_component2").replaceAll("#--#",","))
 #set($ok = $asset.use($objs.get(0)))
 $asset.display("technicalcompletness","hidden")
 $asset.display("contentaccuracy","hidden")
 $asset.display("appropriatepedagogy","hidden")
 $asset.display("comment", "hidden")
 #set($rating = $asset.getValue("rating"))
-#set($ratingimg = $xwiki.getSkinFile("crs${rating}.png"))
+#set($ratingimg = $xwiki.getSkinFile("crs${rating}.gif"))
 #set($vtc = $asset.getValue("technicalcompletness"))
 #set($vca = $asset.getValue("contentaccuracy"))
 #set($vap = $asset.getValue("appropriatepedagogy"))
 #set($comment = $asset.getValue("comment"))
-#if((!$ict)||($ict=="")||($ict=="choose")||(!$vtc)||($vtc=="")||(!$vca)||($vca=="")||(!$vap)||($vap==""))
+#if((!$sict)||($sict=="")||($sict=="choose")||(!$vtc)||($vtc=="")||(!$vca)||($vca=="")||(!$vap)||($vap==""))
 $msg.get("curriki.crs.review.incomplete")
 
 &lt;input type="submit" name="revise" value="$msg.get("curriki.crs.review.revise")" onclick="history.go(-1); return false;" /&gt;
 #else
-$msg.get("curriki.crs.review.preview"):
+$msg.get("curriki.crs.review.preview") 
 
-$msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $comment])
+#if($rating&amp;&amp;($rating!="0"))
+{pre}$msg.get("curriki.crs.generatedcomment", [$sict, $ratingimg, $vtc, $vca, $vap, $comment]){/pre}
+#else
+{pre}$msg.get("curriki.crs.generatedcommentunrated", [$sict, $vtc, $vca, $vap, $comment]){/pre}
+#end
+
 
 &lt;input type="hidden" name="confirm" value="1" /&gt;
 &lt;input type="submit" name="revise" value="$msg.get("curriki.crs.review.revise")" onclick="history.go(-1); return false;" /&gt;
@@ -235,9 +263,10 @@ $msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $c
 
 * $msg.get("curriki.crs.review.submittedby"): #if($nomuser!="") [$nomuser] #end $msg.get("curriki.crs.review.on") $nomdate
 #if($status&amp;&amp;($status!="0")&amp;&amp;($status!=""))
-* $msg.get("curriki.crs.reviews.currentrating"): $status by #if($lastreview_user!="") [$lastreview_user] #end $msg.get("curriki.crs.review.on") $lastreview_date
+* $msg.get("curriki.crs.review.currentrating"): $status
+* $msg.get("curriki.crs.review.lastreviewed"): $lastreview_date
 #else
-* $msg.get("curriki.crs.review.currentrating"): none  
+* $msg.get("curriki.crs.review.currentrating"): $msg.get("curriki.crs.unrated")
 #end
 
 *$msg.get("curriki.crs.review.nominatorsnotes")*: 
@@ -266,34 +295,13 @@ $asset.display("contentaccuracy", "edit")
 
 $asset.display("appropriatepedagogy", "edit")
 
-1.1.1 $msg.get("curriki.crs.review.comment"):
+1.1.1 $msg.get("curriki.crs.review.comments"):
+
+$msg.get("curriki.crs.review.commentsdetails")
 
 $asset.display("comment", "edit")
 
-&lt;input type="submit" name="submit" value="$msg.get("curriki.crs.review.submitreview")" /&gt;
+&lt;input type="submit" name="submit" value="$msg.get("curriki.crs.review.submitpreview")" /&gt;
 &lt;/form&gt;
 #end</content>
-<renderedcontent>&lt;h3 class="heading-1-1"&gt;&lt;span id="HReviewHome"&gt;Review Home&lt;/span&gt;&lt;/h3&gt;
-&lt;ul class="star"&gt;
-&lt;li&gt;Submitted by:  on&lt;/li&gt;
-&lt;li&gt;curriki.crs.review.currentrating: none&lt;/li&gt;
-&lt;/ul&gt;&lt;strong class="strong"&gt;Nominator's notes&lt;/strong&gt;:&lt;p class="paragraph"/&gt;
-&lt;p class="paragraph"/&gt;
-&lt;form action=""&gt;
-&lt;input type="hidden" name="page" value="" /&gt;
-&lt;strong class="strong"&gt;Set ICT&lt;/strong&gt;: 
-&lt;h4 class="heading-1-1-1"&gt;&lt;span id="HTechnicalCompletness3A"&gt;Technical Completness: &lt;/span&gt;&lt;/h4&gt;&lt;p class="paragraph"/&gt;
-
-&lt;span class="xwiki-form-listclass" id="xwiki-form-technicalcompletness"&gt;&lt;input name='CRS.CurrikiReviewClass_0_technicalcompletness' type='radio' value='0'/&gt;Unrated/Not rateable&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-technicalcompletness"&gt;&lt;input name='CRS.CurrikiReviewClass_0_technicalcompletness' type='radio' value='1'/&gt;Basic&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-technicalcompletness"&gt;&lt;input name='CRS.CurrikiReviewClass_0_technicalcompletness' type='radio' value='2'/&gt;Good&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-technicalcompletness"&gt;&lt;input name='CRS.CurrikiReviewClass_0_technicalcompletness' type='radio' value='3'/&gt;Exemplary&lt;/span&gt;&lt;input name='CRS.CurrikiReviewClass_0_technicalcompletness' type='hidden' value=''/&gt;&lt;input name='CRS.CurrikiReviewClass_0_technicalcompletness' type='hidden' value=''/&gt;
-&lt;h4 class="heading-1-1-1"&gt;&lt;span id="HContentAccuracy3A"&gt;Content Accuracy:&lt;/span&gt;&lt;/h4&gt;&lt;p class="paragraph"/&gt;
-
-&lt;span class="xwiki-form-listclass" id="xwiki-form-contentaccuracy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_contentaccuracy' type='radio' value='0'/&gt;Unrated/Not rateable&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-contentaccuracy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_contentaccuracy' type='radio' value='1'/&gt;Basic&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-contentaccuracy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_contentaccuracy' type='radio' value='2'/&gt;Good&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-contentaccuracy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_contentaccuracy' type='radio' value='3'/&gt;Exemplary&lt;/span&gt;&lt;input name='CRS.CurrikiReviewClass_0_contentaccuracy' type='hidden' value=''/&gt;&lt;input name='CRS.CurrikiReviewClass_0_contentaccuracy' type='hidden' value=''/&gt;
-&lt;h4 class="heading-1-1-1"&gt;&lt;span id="HAppropriatePedagogy3A"&gt;Appropriate Pedagogy: &lt;/span&gt;&lt;/h4&gt;&lt;p class="paragraph"/&gt;
-
-&lt;span class="xwiki-form-listclass" id="xwiki-form-appropriatepedagogy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_appropriatepedagogy' type='radio' value='0'/&gt;Unrated/Not rateable&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-appropriatepedagogy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_appropriatepedagogy' type='radio' value='1'/&gt;Basic&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-appropriatepedagogy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_appropriatepedagogy' type='radio' value='2'/&gt;Good&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-appropriatepedagogy"&gt;&lt;input name='CRS.CurrikiReviewClass_0_appropriatepedagogy' type='radio' value='3'/&gt;Exemplary&lt;/span&gt;&lt;input name='CRS.CurrikiReviewClass_0_appropriatepedagogy' type='hidden' value=''/&gt;&lt;input name='CRS.CurrikiReviewClass_0_appropriatepedagogy' type='hidden' value=''/&gt;
-&lt;h4 class="heading-1-1-1"&gt;&lt;span id="HComment3A"&gt;Comment:&lt;/span&gt;&lt;/h4&gt;&lt;p class="paragraph"/&gt;
-
-&lt;textarea id='CRS.CurrikiReviewClass_0_comment' rows='5' name='CRS.CurrikiReviewClass_0_comment' cols='40'&gt;&lt;/textarea&gt;&lt;p class="paragraph"/&gt;
-&lt;input type="submit" name="submit" value="Submit Review" /&gt;
-&lt;/form&gt;</renderedcontent>
 </xwikidoc>
