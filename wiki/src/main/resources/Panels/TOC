@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>Panels</web>
@@ -7,19 +7,19 @@
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.ludovic</creator>
-<author>XWiki.ludovic</author>
+<creator>XWiki.LudovicDubost</creator>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ludovic</contentAuthor>
-<creationDate>1190208498000</creationDate>
-<date>1190213693000</date>
-<contentUpdateDate>1190213693000</contentUpdateDate>
-<version>1.20</version>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<creationDate>1190211387000</creationDate>
+<date>1191543984000</date>
+<contentUpdateDate>1191543984000</contentUpdateDate>
+<version>1.43</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Fix empty asset in list</comment>
 <object>
 <class>
 <name>Panels.PanelClass</name>
@@ -98,10 +98,58 @@
 <property>
 <content>#set($assetObj = $doc.getObject("XWiki.AssetClass"))
 #if($assetObj)
+&lt;style type="text/css"&gt;
+.collapsed ul {
+  display: none;
+}
+&lt;/style&gt;
+#macro(addli $assetDoc $istree $addbc)
+#if($istree)
+#set($cookiebase = "${startDoc.fullName}_")
+#if(!$navcatcounter)
+#set($navcatcounter = 1)
+#else
+#set($navcatcounter = $navcatcounter + 1)
+#end
+#set($id = "assettree_${navcatcounter}")
+#if($expanded == true)
+#set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
+#else
+#set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
+#end
+#set($exp2 = "")
+#set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
+#if(!$exp2.equals(""))
+#if($exp2 == 'true')
+#set($expanded = true)
+#else
+#set($expanded = false)
+#end
+#end
+#set($onclick = "event.cancelBubble = true; var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this)")
+&lt;li id="${id}" #if($doc.fullName==$assetDoc.fullName) class="treeitem selected #if($expanded) expanded #else collapsed #end" #else class="treeitem #if($expanded) expanded #else collapsed #end" #end onclick="${onclick}" &gt;
+&lt;img src="$xwiki.getSkinFile("pixel.gif")" width="14" height="14" /&gt;
+&lt;a onclick="event.cancelBubble = true;" href="$assetDoc.getURL("view", "bc=$!bc$!addbc")"&gt;
+$currikiTitle
+&lt;/a&gt;
+#if(!$expanded)
+&lt;script type="text/javascript"&gt;
+togglePanelVisibility(document.getElementById("${id}"));
+&lt;/script&gt;
+#end
+#else
+&lt;li id="${id}" #if($doc.fullName==$assetDoc.fullName) class="selected" #end&gt;
+&lt;a onclick="event.cancelBubble = true;" href="$assetDoc.getURL("view", "bc=$!bc$!addbc")"&gt;
+$currikiTitle
+&lt;/a&gt;
+#end
+#end
 #set($ok = $doc.use($assetObj))
-#panelheader('$msg.get("curriki.toc.title")')
-&lt;img src="$xwiki.getSkinFile("curriki-nav-closed.png")" /&gt;
-#set($bc = $request.bc)
+&lt;div class="panel expanded"&gt;
+&lt;h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);"&gt;$msg.get("curriki.toc.title")&lt;/h5&gt;
+&lt;div class="xwikipanelcontents toc"&gt;
+&lt;img src="$xwiki.getSkinFile("arrow-red.png")" /&gt;
+#set($bc = $!request.bc)
 #set($startDoc = $doc)
 #set($subAssets = $doc.getObjects("XWiki.SubAssetClass"))
 #if(((!$subAssets)||($subAssets.size()==0))&amp;&amp;$request.bc)
@@ -111,9 +159,9 @@
 #foreach($bcItem in $request.bc.split(";"))
 #if($parent!="")
 #if($bc!="")
-#set($bc = "${bc};")
+#set($bc = "$!bc;")
 #end
-#set($bc="${bc}${parent}")
+#set($bc="$!bc$!parent")
 #end
 #set($parent = $bcItem)
 #end
@@ -122,7 +170,6 @@
 #findCurrikiTitle($startDoc)
 &lt;div class="curriki_toc"&gt;
 &lt;ul&gt;
-&lt;li #if($doc.fullName==$startDoc.fullName) class="selected" #end&gt;&lt;a href="$startDoc.getURL("view", "bc=${bc}")"&gt;$currikiTitle&lt;/a&gt;
 #set($objs = $startDoc.getObjects("XWiki.SubAssetClass"))
 #set($assetList = $xwiki.arrayList)
 #foreach($obj in $objs)
@@ -139,19 +186,25 @@
 #end
 #end
 #if($assetList.size()&gt;0)
+#addli($startDoc true "")
+#else
+#addli($startDoc false "")
+#end
+#if($assetList.size()&gt;0)
 &lt;ul&gt;
 #foreach($assetPage in $assetList)
+#if($assetPage!="")
 #set($assetDoc = $xwiki.getDocument($assetPage))
+#set($ok = $assetDoc.use("XWiki.TextAssetClass"))
+#set($type = "")
+#set($type = $assetDoc.getValue("type"))
+#if("$type"!="2")
 #findCurrikiTitle($assetDoc)
-&lt;li #if($doc.fullName==$assetDoc.fullName) class="selected" #end&gt;
-&lt;a href="$assetDoc.getURL("view", "bc=${bc};$doc.fullName")"&gt;
-$currikiTitle
-&lt;/a&gt;
 #set($objs2 = $assetDoc.getObjects("XWiki.SubAssetClass"))
 #set($assetList2 = $xwiki.arrayList)
 #foreach($obj2 in $objs2)
 #set($ok = $assetList2.add(""))
-#end
+#end 
 #foreach($obj2 in $objs2)
 #set($ok = $assetDoc.use($obj2))
 #set($position2 = $assetDoc.getValue("order"))
@@ -160,34 +213,45 @@ $currikiTitle
 #set($ok = $assetList2.add($assetPage2))
 #else
 #set($ok = $assetList2.set($position2.intValue(), $assetPage2))
-#end
-#end
+#end ## end if position
+#end ## end foreach
+#if($assetList2.size()&gt;0)
+#addli($assetDoc true ";$startDoc.fullName")
+#else
+#addli($assetDoc false ";$startDoc.fullName")
+#end ## end addli
 #if($assetList2.size()&gt;0)
 &lt;ul&gt;
 #foreach($assetPage2 in $assetList2)
+#if($assetPage2!="")
 #set($assetDoc2 = $xwiki.getDocument($assetPage2))
+#set($ok = $assetDoc2.use("XWiki.TextAssetClass"))
+#set($type2 = "")
+#set($type2 = $assetDoc2.getValue("type"))
+#if("$type2"!="2")
 #findCurrikiTitle($assetDoc2)
-&lt;li #if($doc.fullName==$assetDoc2.fullName) class="selected" #end&gt;
-&lt;a href="$assetDoc2.getURL("view", "bc=${bc};$startDoc.fullName;$assetDoc.fullName")"&gt;
-$currikiTitle
-&lt;/a&gt;
+#addli($assetDoc2 false ";${startDoc.fullName};${assetDoc.fullName}")
 &lt;/li&gt;
+#end ## end checktype level 2
 #end
+#end ##end foreach
 &lt;/ul&gt;
-#end
+#end ## end ul
 &lt;/li&gt;
+#end ## end checktype level 1
 #end
+#end ## end foreach
 &lt;/ul&gt;
 &lt;/li&gt;
+#end
 &lt;/ul&gt;
 &lt;/div&gt;
-#end
 &lt;br /&gt;
 #panelfooter()
 #end</content>
 </property>
 <property>
-<description>Asset Table of Content</description>
+<description>Asset Table of Contents</description>
 </property>
 <property>
 <name>TOC</name>
@@ -230,27 +294,4 @@ $currikiTitle
 </property>
 </object>
 <content>#includeForm("Panels.PanelSheet")</content>
-<renderedcontent>&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td class="label"&gt;&lt;label&gt;Name:&lt;/label&gt;&lt;/td&gt;
-    &lt;td&gt;TOC&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td class="label"&gt;&lt;label&gt;Panel type:&lt;/label&gt;&lt;/td&gt;
-    &lt;td&gt;view&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td class="label"&gt;&lt;label&gt;Category:&lt;/label&gt;&lt;/td&gt;
-    &lt;td&gt;Information&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td class="label"&gt;&lt;label&gt;Description:&lt;/label&gt;&lt;/td&gt;
-    &lt;td&gt;Asset Table of Content&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td class="label"&gt;&lt;label&gt;Content:&lt;/label&gt;&lt;/td&gt;
-    &lt;td&gt;
-&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;</renderedcontent>
 </xwikidoc>
