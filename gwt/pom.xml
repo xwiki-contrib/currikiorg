@@ -87,7 +87,7 @@
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-web-gwt</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>${platform.web.version}</version>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
            WAR. However an issue in the GWT maven plugin prevents it from working with
            "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
@@ -96,7 +96,7 @@
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-web-gwt</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>${platform.web.version}</version>
       <classifier>sources</classifier>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
            WAR. However an issue in the GWT maven plugin prevents it from working with
@@ -106,7 +106,7 @@
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-core</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>${platform.core.version}</version>
       <!-- We don't want all the Core libs to be put in WEB-INF/lib as this GWT WAR will be
            overlayed with the Standard WAR which already contains all the required libs -->
       <scope>provided</scope>
