@@ -105,17 +105,15 @@ public class DuplicateAssetWizard {
                 super.onSuccess(result);
                 newDoc = (AssetDocument) result;
 
-                if (markAsCopy){
-                    // TODO: There should be a better way to set the property value on the browser side, but it seems to only be able to be set on the server side
-                    XObject assetObj = newDoc.getObject(Constants.ASSET_CLASS);
-                    String editVersion = assetObj.getEditProperty(Constants.ASSET_TITLE_PROPERTY);
+                // Fix for CURRIKI-971 - New copy never has a title
 
-                    //Look for ' value="title"' and insert "Copy of" before the title part
-                    int titlePos = editVersion.indexOf("value=");
-                    editVersion = editVersion.substring(0, titlePos+7)+Main.getTranslation("duplicate.copy_of")+" "+editVersion.substring(titlePos+7);
-                    assetObj.setEditProperty(Constants.ASSET_TITLE_PROPERTY, editVersion);
+                // TODO: There should be a better way to set the property value on the browser side, but it seems to only be able to be set on the server side
+                XObject assetObj = newDoc.getObject(Constants.ASSET_CLASS);
+                String editVersion = assetObj.getEditProperty(Constants.ASSET_TITLE_PROPERTY);
 
-                }
+                //Look for ' value="title"' and replace with 'value=""' to blank out title.
+                editVersion = editVersion.replaceFirst("value=\"[^\"]*\"", "value=\"\"");
+                assetObj.setEditProperty(Constants.ASSET_TITLE_PROPERTY, editVersion);
 
                 initMetadataUI();
             }
