@@ -587,22 +587,24 @@ function __gwt_bootstrap() {
   __gwt_loadModules();
 }
 
-// Uses prototype.js (should be loaded)
+// Uses jquery.js (should be loaded)
 function displayLoadingMsg() {
-    $('loadingGWT').show();
+    if (window.jQuery)
+        jQuery(function($){
+            // Put the dialogue box up
+            //This is a translated string (which means it cannot be sent by apache)
+            $("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>$msg.get('loading.loading_msg')</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>").append('body').show();
+        });
 }
 
 function hideLoadingMsg() {
-   $('loadingGWT').hide();
+    if (window.jQuery)
+        jQuery(function($){
+            $('#loadingGWT').hide();
+        });
 
     return true;
 }
-
-// Put the dialogue box up
-//This is a translated string (which means it cannot be sent by apache)
-document.write("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>${msg.get('loading.loading_msg')}</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>");
-hideLoadingMsg();
-
 
 function isGWTLoaded() {
     return (__gwt_moduleControlBlocks.isReady() && __gwt_isHostPageLoaded && window.currikiGWTLoaded);
