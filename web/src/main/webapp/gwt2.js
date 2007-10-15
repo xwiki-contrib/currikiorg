@@ -591,9 +591,11 @@ function __gwt_bootstrap() {
 function displayLoadingMsg() {
     if (window.jQuery)
         (function($){
-            // Put the dialogue box up
-            //This is a translated string (which means it cannot be sent by apache)
-            $("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>$msg.get('loading.loading_msg')</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>").appendTo('body');
+            $('<div id="loadingGWTGlass" class="tk-GlassPanel tk-ModalDialog-glassPanel" style="position: absolute; left: 0px; top: 0px; width: 100%; height: '+$(window).height()+'px;"/>').appendTo('body');
+            $("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>Loading, please wait...</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>").appendTo('body');
+            if (window.GWTArguments && window.GWTArguments.loading_msg){
+                $("#loadingGWTMsg").html(GWTArguments.loading_msg);
+            }
         })(jQuery);
 }
 
@@ -601,6 +603,7 @@ function hideLoadingMsg() {
     if (window.jQuery)
         (function($){
             $('#loadingGWT').remove();
+            $('#loadingGWTGlass').remove();
         })(jQuery);
 
     return true;
