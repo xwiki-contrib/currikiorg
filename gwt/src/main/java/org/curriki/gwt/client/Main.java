@@ -109,6 +109,8 @@ public class Main implements EntryPoint
             }
         }
 
+        hideLoadingMessage();
+
         if (dosearch != null){
             // Bring up Site search app
             callSiteAddJSAPI(singleton); // Need to makes sure other GWT links still work
@@ -294,6 +296,8 @@ public class Main implements EntryPoint
         $wnd.nominateAsset = function(assetName) {
             x.@org.curriki.gwt.client.Main::nominateAsset(Ljava/lang/String;)(assetName);
         };
+
+        $wnd.currikiGWTLoaded = true;
     }-*/;
 
     /**
@@ -559,6 +563,13 @@ public class Main implements EntryPoint
      * Native method in JavaScript to access gwt:property
      */
     public static native String getProperty(String name) /*-{
-	 return $wnd.__gwt_getMetaProperty(name);
-     }-*/;
+        return $wnd.__gwt_getMetaProperty(name);
+    }-*/;
+
+    /**
+     * Native method in JavaScript to turn off the pre-GWT loading message
+     */
+    public static native void hideLoadingMessage() /*-{
+        if ($wnd.hideLoadingMsg) $wnd.hideLoadingMsg();
+    }-*/;
 }

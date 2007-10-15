@@ -587,18 +587,40 @@ function __gwt_bootstrap() {
   __gwt_loadModules();
 }
 
-var gwtLoaded = false; 
+// Uses prototype.js (should be loaded)
+function displayLoadingMsg() {
+    $('loadingGWT').show();
+}
+
+function hideLoadingMsg() {
+   $('loadingGWT').hide();
+
+    return true;
+}
+
+// Put the dialogue box up
+//This is a translated string (which means it cannot be sent by apache)
+document.write("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>${msg.get('loading.loading_msg')}</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>");
+hideLoadingMsg();
+
+
+function isGWTLoaded() {
+    return (__gwt_moduleControlBlocks.isReady() && __gwt_isHostPageLoaded && window.currikiGWTLoaded);
+}
+
+var gwtLoaded = false;
 function loadGWT() {
   if (gwtLoaded==false) {
    gwtLoaded = true;
    __gwt_isHostPageLoaded = true;
-   __gwt_bootstrap();   
+   __gwt_bootstrap();
+   displayLoadingMsg();
   }
 }
 
 function addFile2() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    addFile();
   else
    window.setTimeout(addFile2, __gwt_retryWaitMillis);
@@ -606,7 +628,7 @@ function addFile2() {
 
 function addCollection2() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    addCollection();
   else
    window.setTimeout(addCollection2, __gwt_retryWaitMillis);
@@ -614,7 +636,7 @@ function addCollection2() {
 
 function addFromTemplate2() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    addFromTemplate();
   else
    window.setTimeout(addFromTemplate2, __gwt_retryWaitMillis);
@@ -629,7 +651,7 @@ function findPopup2() {
 }
 function findPopup3() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady()){
+  if (isGWTLoaded()){
     findPopup();
     findCalled=false;
   } else
@@ -645,7 +667,7 @@ function addExistingResource2(resource) {
 
 function addExistingResource3() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    addExistingResource(addExistingResourceResource);
   else
    window.setTimeout(addExistingResource3, __gwt_retryWaitMillis);
@@ -659,7 +681,7 @@ function addFileToCollection2(collection) {
 
 function addFileToCollection3() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    addFileToCollection(addFileToCollectionCollection);
   else
    window.setTimeout(addFileToCollection3, __gwt_retryWaitMillis);
@@ -677,7 +699,7 @@ function createCollection2(space, pageName, pageTitle) {
 
 function createCollection3() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    createCollection(createCollectionSpace,createCollectionPageName,createCollectionPageTitle);
   else
    window.setTimeout(createCollection3, __gwt_retryWaitMillis);
@@ -691,7 +713,7 @@ function addResourceToCollection2(collection) {
 
 function addResourceToCollection3() {
     loadGWT();
-    if (__gwt_moduleControlBlocks.isReady())
+    if (isGWTLoaded())
         addResourceToCollection(addResourceToCollectionCollection);
     else
         window.setTimeout(addResourceToCollection3, __gwt_retryWaitMillis);
@@ -705,7 +727,7 @@ function nominateAsset2(assetName) {
 
 function nominateAsset3() {
   loadGWT();
-  if (__gwt_moduleControlBlocks.isReady())
+  if (isGWTLoaded())
    nominateAsset(nominateAssetName);
   else
    window.setTimeout(nominateAsset3, __gwt_retryWaitMillis);
