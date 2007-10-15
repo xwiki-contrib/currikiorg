@@ -590,18 +590,18 @@ function __gwt_bootstrap() {
 // Uses jquery.js (should be loaded)
 function displayLoadingMsg() {
     if (window.jQuery)
-        jQuery(function($){
+        (function($){
             // Put the dialogue box up
             //This is a translated string (which means it cannot be sent by apache)
-            $("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>$msg.get('loading.loading_msg')</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>").append('body').show();
-        });
+            $("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>$msg.get('loading.loading_msg')</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>").appendTo('body');
+        })(jQuery);
 }
 
 function hideLoadingMsg() {
     if (window.jQuery)
-        jQuery(function($){
-            $('#loadingGWT').hide();
-        });
+        (function($){
+            $('#loadingGWT').remove();
+        })(jQuery);
 
     return true;
 }
