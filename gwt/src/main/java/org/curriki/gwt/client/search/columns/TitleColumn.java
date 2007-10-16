@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
@@ -44,6 +45,7 @@ public class TitleColumn extends ResultsColumn implements Viewer
     protected Viewer viewer;
     protected ResourceAdder wizard;
     protected ClickListener cancelListener = null;
+    protected hoverOnMouseover hoverMarker = new hoverOnMouseover();
 
     public TitleColumn()
     {
@@ -147,6 +149,7 @@ public class TitleColumn extends ResultsColumn implements Viewer
                     viewer.displayView(doc);
                 }
             });
+            nameCol.addMouseListener(hoverMarker);
         }
 
         return nameCol;
@@ -186,5 +189,15 @@ public class TitleColumn extends ResultsColumn implements Viewer
         popup.setWidth("300px");
         popup.add(new HTML(text));
         item.addMouseListener(new TooltipMouseListener(popup, 234, (Widget) item));
+    }
+
+    public class hoverOnMouseover extends MouseListenerAdapter {
+        public void onMouseEnter(Widget w){
+            w.addStyleName("mouse-over");
+        }
+
+        public void onMouseLeave(Widget w){
+            w.removeStyleName("mouse-over");
+        }
     }
 }
