@@ -590,13 +590,13 @@ function __gwt_bootstrap() {
 // Uses jquery.js (should be loaded)
 function displayLoadingMsg() {
     if (window.jQuery)
-        jQuery(document).ready(function($){
+        (function($){
             $('<div id="loadingGWTGlass" class="tk-GlassPanel tk-ModalDialog-glassPanel" style="position: absolute; left: 0px; top: 0px; width: 100%; height: '+$(window).height()+'px;"/>').appendTo('body');
             $("<div id='loadingGWT' class='tk-ModalDialog dialog-loading'><div id='loadingGWTMsg'>Loading, please wait...</div><div id='loadingGWTImg'><img src='/xwiki/skins/curriki8/icons/spinner.gif' /></div></div>").appendTo('body');
             if (window.GWTArguments && window.GWTArguments.loading_msg){
                 $("#loadingGWTMsg").html(GWTArguments.loading_msg);
             }
-        });
+        })(jQuery);
 }
 
 function hideLoadingMsg() {
