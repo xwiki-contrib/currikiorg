@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
@@ -52,6 +51,7 @@ import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.LuceneAssetQuery;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
+import org.curriki.gwt.client.utils.StyleOnMouseover;
 
 public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRenderer, TableListener,
     KeepsState
@@ -70,7 +70,7 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     protected ClickListener cancelCallback;
     protected Viewer viewer;
     protected ResourceAdder resourceAdder;
-    protected hoverOnMouseover hoverMarker = new hoverOnMouseover();
+    protected StyleOnMouseover hoverMarker = new StyleOnMouseover();
 
     public ResultsPanel(){
         init(false);
@@ -328,15 +328,5 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
     public ScrollPanel getScrollPanel()
     {
         return s;
-    }
-
-    public class hoverOnMouseover extends MouseListenerAdapter {
-        public void onMouseEnter(Widget w){
-            w.addStyleName("mouse-over");
-        }
-
-        public void onMouseLeave(Widget w){
-            w.removeStyleName("mouse-over");
-        }
     }
 }

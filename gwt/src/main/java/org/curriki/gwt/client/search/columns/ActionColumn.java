@@ -30,11 +30,13 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.editor.ResourceAdder;
 import org.curriki.gwt.client.utils.ClickListenerString;
+import org.curriki.gwt.client.utils.StyleOnMouseover;
 
 public class ActionColumn extends ResultsColumn
 {
     protected ResourceAdder resourceAdder;
     protected ClickListener cancelListener;
+    protected StyleOnMouseover hoverMarker = new StyleOnMouseover();
 
     public ActionColumn()
     {
@@ -64,6 +66,7 @@ public class ActionColumn extends ResultsColumn
             a.addStyleName("results-action-cell-link");
             a.setHTML(Main.getTranslation("editor.btt_add"));
             a.addClickListener(new AddAsset(value.getFullName()));
+            a.addMouseListener(hoverMarker);
             return a;
         }
 
