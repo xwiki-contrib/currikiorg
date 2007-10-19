@@ -25,16 +25,16 @@ package org.curriki.gwt.client.utils;
 import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MouseoverStyle extends MouseListenerAdapter
+public class StyleOnMouseover extends MouseListenerAdapter
 {
     protected String style;
 
-    public MouseoverStyle(){
+    public StyleOnMouseover(){
         super();
         style = "mouse-over";
     }
 
-    public MouseoverStyle(String style){
+    public StyleOnMouseover(String style){
         super();
         this.style = style;
     }
