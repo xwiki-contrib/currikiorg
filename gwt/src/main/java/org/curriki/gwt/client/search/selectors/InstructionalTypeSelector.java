@@ -56,6 +56,7 @@ public class InstructionalTypeSelector extends DropdownSingleSelector
         addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.scope"), "curriculum_scope");
         addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.standards"), "curriculum_standards");
         addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.syllabus"), "curriculum_syllabus");
+        addGroupOption(Main.getTranslation("search.selector.ict.curriculum"), Main.getTranslation("search.selector.ict.curriculum.workbook"), "curriculum_workbook");
 
         addGroup(Main.getTranslation("search.selector.ict.resource"));
         addGroupOption(Main.getTranslation("search.selector.ict.resource"), Main.getTranslation("search.selector.ict.resource.animation"), "resource_animation");
