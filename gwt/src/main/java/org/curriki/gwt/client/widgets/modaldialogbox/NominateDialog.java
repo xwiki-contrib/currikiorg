@@ -115,9 +115,9 @@ public class NominateDialog extends ModalDialog {
         submitButton.addStyleName("gwt-ButtonOrange");
         submitButton.addClickListener(new ClickListener(){
             public void onClick(Widget sender){
-                if (commentTextArea.getText().equals("")) {
-                    Window.alert(Main.getTranslation("curriki.crs.nominate.cannotnominatewithoutcomment"));
-                } else {
+                // if (commentTextArea.getText().equals("")) {
+                //     Window.alert(Main.getTranslation("curriki.crs.nominate.cannotnominatewithoutcomment"));
+                // } else {
                     XObject obj = asset.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
                     CurrikiAsyncCallback saveCallback = new CurrikiAsyncCallback() {
                         public void onFailure(Throwable caught) {
@@ -159,7 +159,7 @@ public class NominateDialog extends ModalDialog {
                             CurrikiService.App.getInstance().saveObject(obj, saveCallback);
                         }
                     }
-                }
+                // }
             }
         });
         add(submitButton);
