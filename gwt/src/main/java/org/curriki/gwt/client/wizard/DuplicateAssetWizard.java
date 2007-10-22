@@ -96,7 +96,7 @@ public class DuplicateAssetWizard {
     public void duplicateAsset(String assetName, String collection) {
         this.collectionName = collection;
 
-        CurrikiService.App.getInstance().createTempSourceAssetFromTemplate(assetName, collectionName, false, new CurrikiAsyncCallback() {
+        CurrikiService.App.getInstance().createTempSourceAssetFromTemplate(assetName, collectionName, false, true, new CurrikiAsyncCallback() {
             public void onFailure(Throwable caught) {
                 super.onFailure(caught);
             }
