@@ -35,10 +35,7 @@ import com.xpn.xwiki.gwt.api.client.DOMUtils;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.User;
 import com.xpn.xwiki.gwt.api.client.XObject;
-import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.*;
 import org.curriki.gwt.client.pages.ComponentsPage;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
@@ -103,14 +100,19 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         this.doc = doc;
         this.fullMode = fullMode;
 
-        form.setAction(doc.getSaveURL());
-        showEdit();
+        if (((AssetDocument) doc).isDirectionBlock()) {
+            panel.clear();
+            panel.add(new HTML(Main.getTranslation("metadata.directionblocks_have_no_metadata")));
+        } else {
+            form.setAction(doc.getSaveURL());
+            showEdit();
 
-        // WARNING: This seems to break in certain cases in IE because of changes in the resizing algorythm
-        // Send resize message if we are in the editor
-        // Editor editor = Main.getSingleton().getEditor();
-        // if (editor!=null)
-        //    editor.onWindowResized(Window.getClientWidth(), Window.getClientHeight());
+            // WARNING: This seems to break in certain cases in IE because of changes in the resizing algorythm
+            // Send resize message if we are in the editor
+            // Editor editor = Main.getSingleton().getEditor();
+            // if (editor!=null)
+            //    editor.onWindowResized(Window.getClientWidth(), Window.getClientHeight());
+        }
     }
 
     public void addFormHandler(FormHandler formHandler){
