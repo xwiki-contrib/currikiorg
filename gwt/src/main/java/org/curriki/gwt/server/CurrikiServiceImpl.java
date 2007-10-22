@@ -883,6 +883,23 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         }
     }
 
+    public Document createTempSourceAssetFromTemplate(String templatePageName, String compositeAssetPage, boolean clearattachments, boolean clearTitle) throws XWikiGWTException {
+        try {
+            XWikiContext context = getXWikiContext();
+            XWikiDocument assetDoc = createTempSourceAssetFromTemplate(templatePageName, compositeAssetPage, clearattachments, context);
+
+            if (clearTitle){
+                BaseObject newObjAsset = assetDoc.getObject(Constants.ASSET_CLASS);
+                newObjAsset.setStringValue(Constants.ASSET_TITLE_PROPERTY, "");
+            }
+
+            return newDocument(new Document(), assetDoc, true, false, true, false, context);
+
+        } catch (Exception e) {
+            throw getXWikiGWTException(e);
+        }
+    }
+
     private XWikiDocument createTempSourceAssetFromTemplate(String templatePageName, String compositeAssetPage, boolean clearattachments, XWikiContext context) throws XWikiException, XWikiGWTException {
         return createSourceAssetFromTemplate(templatePageName, compositeAssetPage, Constants.TEMPORARY_ASSET_SPACE, null, clearattachments, context);
     }
@@ -951,7 +968,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         // Keep the information allowing to track where that asset came from
         newObjAsset.setStringValue(Constants.ASSET_TRACKING_PROPERTY, templatePageName);
-        
+
         assetDoc.setCreator(context.getUser());
         // Clear rights objects otherwise this will trigger a remove object although these have never been saved
         assetDoc.setObjects("XWiki.XWikiRights", new Vector());

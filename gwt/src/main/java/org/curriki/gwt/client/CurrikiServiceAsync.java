@@ -77,6 +77,8 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
 
     void createTempSourceAssetFromTemplate(String templatePageName, String compositeAssetPage, boolean clearattachments, AsyncCallback async);
 
+    void createTempSourceAssetFromTemplate(String templatePageName, String compositeAssetPage, boolean clearattachments, boolean clearTitle, AsyncCallback async);
+
     void duplicateTemplateAsset(String parentAsset, String documentFullName, long index, AsyncCallback async);
 
     // Zip Assets

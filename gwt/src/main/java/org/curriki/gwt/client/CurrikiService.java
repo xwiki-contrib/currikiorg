@@ -67,6 +67,7 @@ public interface CurrikiService extends XWikiService {
     // Templates
     public List getTemplates() throws XWikiGWTException;
     public Document createTempSourceAssetFromTemplate(String templatePageName, String compositeAssetPage, boolean clearattachments) throws XWikiGWTException;
+    public Document createTempSourceAssetFromTemplate(String templatePageName, String compositeAssetPage, boolean clearattachments, boolean clearTitle) throws XWikiGWTException;
     public String duplicateTemplateAsset(String parentAsset, String documentFullName, long index) throws XWikiGWTException;
 
     // Zip Assets
