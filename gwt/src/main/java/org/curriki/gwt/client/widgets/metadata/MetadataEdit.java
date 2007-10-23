@@ -516,7 +516,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
             // We need to do it this way because of Internet Explorer
             // This also works with Gecko and Safari
-            setText(e, script);
+            DOM.setInnerHTML(e, script);
         }
     }
 
