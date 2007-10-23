@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.martagirdea</creator>
-<author>XWiki.ToddSherman</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ToddSherman</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1171480785000</creationDate>
-<date>1191445377000</date>
-<contentUpdateDate>1191445377000</contentUpdateDate>
-<version>1.145</version>
+<date>1192584092000</date>
+<contentUpdateDate>1192584092000</contentUpdateDate>
+<version>1.153</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Changed BrowseSearch to just Browse to go to new Browse page.</comment>
+<comment>use window.onload</comment>
 <object>
 <class>
 <name>Panels.PanelClass</name>
@@ -103,6 +103,10 @@
 &lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/xwiki/jquery.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+ jQuery.noConflict();
+&lt;/script&gt;
 &lt;script language="javascript" src="/xwiki/gwt2.js"&gt;&lt;/script&gt;
 &lt;script language="JavaScript"&gt;
  function tourpop()
@@ -112,7 +116,13 @@
 &lt;/SCRIPT&gt;
 &lt;iframe src="javascript:''" id="__gwt_historyFrame" style="width:0;height:0;border:0"&gt;&lt;/iframe&gt;
 &lt;script type="text/javascript"&gt;
- if (window.GWTArguments &amp;&amp; window.GWTArguments.load_on_startup) {loadGWT();}
+  if (!window.GWTArguments) {
+  GWTArguments = { };
+ }
+ if (!window.GWTArguments.loading_msg){
+  GWTArguments.loading_msg = "$msg.get('loading.loading_msg')";
+ }
+ if (window.GWTArguments.load_on_startup) {window.onload=loadGWT;}
 &lt;/script&gt;
 &lt;div id="treeviewtemp" style="display: none;"&gt;&lt;/div&gt;
 #beginNavigationPanel()

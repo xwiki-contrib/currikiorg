@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1175109329000</creationDate>
-<date>1188506061000</date>
-<contentUpdateDate>1188506061000</contentUpdateDate>
-<version>1.131</version>
+<date>1193076544000</date>
+<contentUpdateDate>1193076544000</contentUpdateDate>
+<version>1.132</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-870 - Remove "View All Contributions" button (put back needed #end)</comment>
+<comment>Fix CURRIK-1066</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -148,10 +148,12 @@ $msg.get("myCurriki.contributions.intro")
 &lt;table class="my-curriki-table"&gt;
 #set($contribCount = 0)
 #foreach($assetPage in $assetList)
-#set($contribCount = 1 + $contribCount)
-#if($contribCount &lt;= $contribsSeuil)
+#if($contribCount &lt; $contribsSeuil)
 #if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
 #set($asset = $xwiki.getDocument($assetPage))
+#set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
+#if("$type"!="2")
+#set($contribCount = 1 + $contribCount)
 &lt;tr&gt;&lt;td&gt;
 #findCurrikiTitle($asset)
 #set($title = $currikiTitle)
@@ -160,7 +162,7 @@ $msg.get("myCurriki.contributions.intro")
 #end
 &lt;div class="righttext"&gt;&lt;div class="lefttext"&gt;
 *{pre}$title{/pre}*&lt;/div&gt;
-&lt;a href="$xwiki.getURL($asset.fullName, "view", "bc=${bcLocal}")"&gt;$msg.get("caption.view")&lt;/a&gt;
+&lt;a href="$xwiki.getURL($asset.fullName, "view")"&gt;$msg.get("caption.view")&lt;/a&gt;
 #if($asset.hasAccessLevel("edit"))
 #sep() &lt;a target="_blank" href="#gwtEditUrl(${asset.fullName})"&gt;$msg.get("caption.edit")&lt;/a&gt;
 #end
@@ -171,6 +173,7 @@ $msg.get("myCurriki.contributions.intro")
 &lt;/div&gt;
 #end
 &lt;/td&gt;&lt;/tr&gt;
+#end
 #end
 #end
 &lt;/table&gt;
