@@ -89,7 +89,7 @@ public class AddExistingResourceWizard implements CompletionCallback, ResourceAd
         public void onFailure(Throwable throwable) {
             super.onFailure(throwable);
             Window.alert(Main.getSingleton().getTranslator().getTranslation("addexistingasset.couldnotaddtocollection=", new String[] {resource, throwable.getMessage()}));
-            if (collections.isAttached()){
+            if (collections != null && collections.isAttached()){
                 collections.hide();
             }
             collections = null;
@@ -100,7 +100,7 @@ public class AddExistingResourceWizard implements CompletionCallback, ResourceAd
             if (!((Boolean) object).booleanValue()){
                 Window.alert(Main.getSingleton().getTranslator().getTranslation("addexistingasset.failedtoaddtocollection", new String[] {resource}));
             }
-            if (collections.isAttached()){
+            if (collections != null && collections.isAttached()){
                 collections.hide();
             }
             collections = null;
