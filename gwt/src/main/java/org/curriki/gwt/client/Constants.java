@@ -56,6 +56,7 @@ public class Constants {
     public static final String ASSET_TITLE_PROPERTY = "title";
     public static final String ASSET_RIGHTS_PROPERTY = "rights";
     public static final String ASSET_TRACKING_PROPERTY = "tracking";
+    public static final String ASSET_HIDE_FROM_SEARCH_PROPERTY = "hide_from_search";
 
     public static final String ASSET_CAPTION_DESCRIPTION_PROPERTY = "caption_desc";
     public static final String ASSET_ALT_DESCRIPTION_PROPERTY = "alt_desc";        

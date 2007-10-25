@@ -28,8 +28,11 @@ public class LuceneAssetQuery extends LuceneQuery
 {
     public void doSearch(int start, int count)
     {
-        searchTerms = "XWiki.AssetClass."+ Constants.ASSET_FW_ITEMS_PROPERTY+":FW_masterFramework.WebHome AND " + searchTerms;
-        searchTerms += " AND NOT XWiki.TextAssetClass.type:2 AND NOT web:AssetTemp AND NOT web:Coll_Templates AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex";
+        searchTerms = Constants.ASSET_CLASS+"."+ Constants.ASSET_FW_ITEMS_PROPERTY+":"+Constants.ASSET_FW_ITEMS_DEFAULT+" AND "+searchTerms;
+        searchTerms += " AND NOT "+Constants.TEXTASSET_CLASS+"."+Constants.TEXTASSET_TYPE_PROPERTY+":"+Constants.TEXTASSET_TYPE_DIRECTION;
+        searchTerms += " AND NOT web:AssetTemp AND NOT web:"+Constants.TEMPLATES_SPACE;
+        searchTerms += " AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex";
+        searchTerms += " AND NOT "+Constants.ASSET_CLASS+"."+Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY+":1";
         super.doSearch(start, count);
     }
 }
