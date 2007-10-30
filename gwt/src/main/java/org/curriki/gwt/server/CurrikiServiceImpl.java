@@ -65,7 +65,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-
 public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiService {
     private static final Log log = LogFactory.getLog(CurrikiServiceImpl.class);
 
@@ -203,8 +202,9 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         obj.set(Constants.ASSET_TITLE_PROPERTY, pageTitle, context);
         if (doc.getName().equals(Constants.DEFAULT_COLLECTION_PAGE)){
             String username = context.getUser();
-            username = username.substring(username.indexOf(".")+1);
-            pageTitle = username + "'s " + context.getMessageTool().get("default_collection");
+            XWikiDocument userdoc = context.getWiki().getDocument(username, context);
+            BaseObject userobj = userdoc.getObject("XWiki.XWikiUsers");
+            pageTitle = userobj.getStringValue("first_name") + "'s " + context.getMessageTool().get("default_collection");
             obj.setStringValue(Constants.ASSET_TITLE_PROPERTY, pageTitle);
             obj.setLargeStringValue(Constants.ASSET_DESCRIPTION_PROPERTY, pageTitle);
 
