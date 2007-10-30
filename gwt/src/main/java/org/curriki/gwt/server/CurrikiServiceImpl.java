@@ -50,6 +50,7 @@ import org.curriki.gwt.client.AssetDocument;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.TreeListItem;
+import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
 import org.curriki.gwt.client.widgets.browseasset.AssetItem;
 import org.curriki.gwt.client.widgets.template.TemplateInfo;
 import org.curriki.xwiki.plugin.asset.Asset;
@@ -1529,10 +1530,13 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         XWikiDocument cdoc = context.getDoc();
         try {
             context.setDoc(xdoc);
-            if(xdoc.getObject(Constants.ASSET_CLASS) != null)
-                doc = new AssetDocument();
-            else if (doc == null)
+            if(xdoc.getObject(Constants.ASSET_CLASS) != null) {
+                if (doc == null || !(doc instanceof AssetDocument)) {
+                    doc = new AssetDocument();
+                }
+            } else if (doc == null) {
                 doc = new Document();
+            }
             super.newDocument(doc, xdoc, withObjects, withViewDisplayers, withEditDisplayers, withRenderedContent, context);
 
             BaseObject obj = xdoc.getObject(Constants.ASSET_LICENCE_CLASS);
@@ -1593,10 +1597,9 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                         if (xd == null){
                             // ignore document as it doesn't seem to exist
                         } else {
-                            Document doc = newDocument(new Document(), xd, true, true, false, false, context);
+                            AssetDocumentWithOwnerName doc = (AssetDocumentWithOwnerName) newDocument(new AssetDocumentWithOwnerName(), xd, true, true, false, false, context);
 
-                            // TODO: We really should create a sub-class of Document for this
-                            //doc.setCreator(context.getWiki().getUserName(xd.getCreator(), null, false, context));
+                            doc.setOwner_name(context.getWiki().getUserName(xd.getCreator(), null, false, context));
 
                             BaseObject obj = xd.getObject(Constants.COMPOSITEASSET_CLASS);
                             if (obj != null){

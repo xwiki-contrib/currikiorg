@@ -22,7 +22,6 @@
  */
 package org.curriki.gwt.client.search.queries;
 
-import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
@@ -115,8 +114,7 @@ public class LuceneQuery implements DocumentSearcher
             }
         }
 
-        public void onSuccess(Object
-            object) {
+        public void onSuccess(Object object) {
             super.onSuccess(object);
             List resultSet = new Vector();
 
@@ -127,7 +125,7 @@ public class LuceneQuery implements DocumentSearcher
             setHitcount(((Integer) i.next()).intValue());
 
             while (i.hasNext()){
-                Document item = (Document) i.next();
+                AssetDocumentWithOwnerName item = (AssetDocumentWithOwnerName) i.next();
                 resultSet.add(item);
             }
 

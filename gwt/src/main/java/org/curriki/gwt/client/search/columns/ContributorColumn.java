@@ -25,8 +25,9 @@ package org.curriki.gwt.client.search.columns;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
-import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
 
 public class ContributorColumn extends ResultsColumn
 {
@@ -47,7 +48,14 @@ public class ContributorColumn extends ResultsColumn
     public String getDisplayString(Document value)
     {
         String creator = "";
-        if (value.getCreator() != null){
+        if (value instanceof AssetDocumentWithOwnerName){
+            AssetDocumentWithOwnerName docWithName = ((AssetDocumentWithOwnerName) value);
+            if (docWithName.getOwner_name() != null){
+                creator = docWithName.getOwner_name();
+            } else {
+                creator = docWithName.getCreator();
+            }
+        } else  if (value.getCreator() != null){
             creator = value.getCreator();
         }
         return creator;
@@ -56,15 +64,19 @@ public class ContributorColumn extends ResultsColumn
     public Widget getDisplayWidget(Document value)
     {
         HTML nameCol = new HTML();
-        String name = getDisplayString(value);
-        if (name.length() > 0){
-            name = name.replaceFirst("XWiki.", "");
-            String url = Constants.USER_URL_PREFIX+name;
+        String creatorName = getDisplayString(value);
+        String creator = "";
+        if (value.getCreator() != null){
+            creator = value.getCreator();
+        }
+        if (creator.length() > 0){
+            creator = creator.replaceFirst("XWiki.", "");
+            String url = Constants.USER_URL_PREFIX+creator;
             String target = "";
             if (useNewWindow){
                 target = " target=\"AssetContributor\" ";
             }
-            nameCol.setHTML("<a href=\""+url+"\""+target+">"+name+"</a>");
+            nameCol.setHTML("<a href=\""+url+"\""+target+">"+creatorName+"</a>");
         }
 
         return nameCol;
