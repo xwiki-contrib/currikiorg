@@ -156,7 +156,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addSectionTitle("general_information", fullMode);
         addEditor(assetObj, "keywords", "keywords", panel, false, fullMode);
         addEditor(assetObj, "language", "language", panel, false, fullMode);
-        addEditor(assetObj, "hidden_from_search", "hidden_from_search", panel, false, fullMode);
+        addEditor(assetObj, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, panel, false, fullMode);
 
         if (fullMode)
             addCRS(doc, panel, "private".equals(assetObj.get("rights")));
@@ -608,6 +608,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         switchVisibility("licenseType2", fullMode);
         switchVisibility("keywords", fullMode);
         switchVisibility("language", fullMode);
+        switchVisibility(Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, fullMode);
         moreInfoText.setVisible(!fullMode);
         if (resizeListener != null) {
             //Window.alert("plop");
