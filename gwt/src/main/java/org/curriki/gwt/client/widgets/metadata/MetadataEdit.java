@@ -156,6 +156,8 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addSectionTitle("general_information", fullMode);
         addEditor(assetObj, "keywords", "keywords", panel, false, fullMode);
         addEditor(assetObj, "language", "language", panel, false, fullMode);
+        addEditor(assetObj, "hidden_from_search", "hidden_from_search", panel, false, fullMode);
+
         if (fullMode)
             addCRS(doc, panel, "private".equals(assetObj.get("rights")));
 
