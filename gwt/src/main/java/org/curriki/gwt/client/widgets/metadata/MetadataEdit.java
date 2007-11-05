@@ -458,6 +458,11 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                         DOM.setInnerText(resEl, txt);
                 }
             }
+
+            txt = Main.getTranslation("metadata." + keyValue + "_after");
+            if (txt.length() > 0 && !txt.equals("metadata." + keyValue + "_after")) {
+                htmlblock.setHTML(htmlblock.getHTML()+txt);
+            }
         }
 
         if (script != null) {
