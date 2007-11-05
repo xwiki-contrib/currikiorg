@@ -26,9 +26,11 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.Window;
-import org.curriki.gwt.client.*;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 
@@ -68,6 +70,13 @@ public class MetadataPage extends AbstractPage {
 
         panel.add(bttSend);
 
+
+        String txt = Main.getTranslation("metadata.save_button_text");
+        if (txt.length() > 0 && !txt.equals("metadata.save_button_text")) {
+            HTML saveText = new HTML(txt);
+            saveText.addStyleName("metadata-save-text");
+            panel.add(saveText);
+        }
 
         initWidget(panel);
     }

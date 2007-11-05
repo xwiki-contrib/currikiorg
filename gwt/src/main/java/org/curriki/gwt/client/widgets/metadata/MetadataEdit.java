@@ -153,6 +153,8 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         hPanel.setCellWidth(hPanel.getWidget(1), "50%");
         panel.add(hPanel);
 
+        addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panel, true, fullMode);
+
         addSectionTitle("general_information", fullMode);
         addEditor(assetObj, "keywords", "keywords", panel, false, fullMode);
         addEditor(assetObj, "language", "language", panel, false, fullMode);
@@ -160,9 +162,6 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
         if (fullMode)
             addCRS(doc, panel, "private".equals(assetObj.get("rights")));
-
-        addSectionTitle("educational_information", fullMode);
-        addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panel, false, fullMode);
 
 
         User user = Main.getSingleton().getUser();
