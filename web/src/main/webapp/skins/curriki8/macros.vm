@@ -1061,7 +1061,11 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 
  *$msg.get("metadata.license_type_title"):* $!asset.display("licenseType2", "view", $rightsObject)
 
- *$msg.get("metadata.hidden_from_search"):* $!asset.display("hidden_from_search", "view", $assetObj)
+#set($hidden = $!asset.display("hidden_from_search", "view", $assetObj))
+#if($hidden == "")
+#set($hidden = $msg.get("yesno_0"))
+#end
+ *$msg.get("metadata.hidden_from_search"):* $hidden
 
 </div>
 <hr class="my-curriki-hr" >
