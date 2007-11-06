@@ -219,5 +219,7 @@ public class Constants {
 
     public static final String HISTORY_FIELD_SORTBY = "__sortBy";
     public static final String HISTORY_FIELD_ATITEM = "__atItem";
-    public static final String HISTORY_FIELD_ADV_TOGGLE = "__advShow"; 
+    public static final String HISTORY_FIELD_ADV_TOGGLE = "__advShow";
+
+    public static final String HELP_URL = "/xwiki/bin/view/Coll_Help/Help?viewer=help";
 }

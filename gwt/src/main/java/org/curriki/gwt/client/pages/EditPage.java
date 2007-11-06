@@ -26,6 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
+import com.xpn.xwiki.gwt.api.client.dialog.Dialog;
 import org.curriki.gwt.client.*;
 import org.curriki.gwt.client.utils.WindowUtils;
 import org.curriki.gwt.client.editor.Editor;
@@ -33,6 +34,7 @@ import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItemImpl;
 import org.curriki.gwt.client.widgets.currikiitem.display.AbstractItemDisplay;
 import org.curriki.gwt.client.widgets.preview.PreviewDialog;
+import org.curriki.gwt.client.widgets.help.HelpDialog;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,6 +61,22 @@ public class EditPage extends AbstractPage {
 
         FlowPanel linkPanel = new FlowPanel();
         linkPanel.addStyleName("edit-panel-links");
+
+        // help link
+        Hyperlink helpLink = new Hyperlink();
+           helpLink.addStyleName("edit-panel-link-view");
+           helpLink.addClickListener(new ClickListener() {
+               public void onClick(Widget widget) {
+                   // Show help collection
+                   Button[] buttons = { };
+                   new HelpDialog("help", Main.getHelpURL(), "help");
+               }
+           });
+           helpLink.setText(Main.getTranslation("editor.help"));
+           linkPanel.add(helpLink);
+
+
+        // view link
         Hyperlink viewLink = new Hyperlink();
         viewLink.addStyleName("edit-panel-link-view");
         viewLink.addClickListener(new ClickListener() {
@@ -70,6 +88,8 @@ public class EditPage extends AbstractPage {
         });
         viewLink.setText(Main.getTranslation("editor.view"));
         linkPanel.add(viewLink);
+
+        // print link
         Hyperlink printLink = new Hyperlink();
         printLink.addStyleName("edit-panel-link-print");
         printLink.addClickListener(new ClickListener() {
@@ -93,6 +113,7 @@ public class EditPage extends AbstractPage {
         panel.setStyleName("edit-page");
         initWidget(panel);
     }
+    
 
     public void init() {
         super.init();

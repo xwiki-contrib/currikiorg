@@ -1,0 +1,27 @@
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#set($showLeftPanels = "0")
+#set($showRightPanels = "0")
+#set($printss = true)
+#template("helpheader.vm")
+$context.setLinksQueryString("xpage=help")
+<div id="contentcontainer" class="help">
+ <div id="contentcontainerinner" class="contenthideright">
+  <div class="leftsidecolumns">
+   <div id="contentcolumn">
+    <div class="main layoutsubsection">
+     #template("contentview.vm")
+     <div class="clearfloats"></div>
+    </div>
+   </div>
+   <div id="leftPanels" class="panels left help">
+    #displaypanel("Panels.TOC")
+   </div>
+   <div class="clearfloats"></div>
+ </div>
+</div>
+$context.unsetLinksQueryString()
+
+
+
+

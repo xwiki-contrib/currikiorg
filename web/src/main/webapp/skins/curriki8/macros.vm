@@ -1122,12 +1122,14 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 #else
 $objTxt.text
 #end
+<div class="clearfloats"></div>
 </div>
 #elseif ($asset.getObject("XWiki.VIDITalkAssetClass"))
  #set($objVT = $asset.getObject("XWiki.VIDITalkAssetClass"))
  #set($video_id = $objVT.video_id)
 <div class="asset-content-body" style="text-align:center;">
  #includeForm("GWT.ViditalkPlayback")
+<div class="clearfloats"></div>
 </div>
 #elseif ($asset.getObject("XWiki.CompositeAssetClass") && $objComp != "")
  #if($develop)
@@ -1202,6 +1204,7 @@ $objTxt.text
  <div class="asset-content-body" style="text-align:center;">
  #set($mimedoc = $asset)
  #includeForm($mimeDisplay)
+ <div class="clearfloats"></div>
  </div>
  <hr class="my-curriki-hr" >
  <div class="asset-content-options">
@@ -1210,6 +1213,7 @@ $objTxt.text
   </a>&nbsp;&nbsp;
   <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
  </div>
+ <div class="clearfloats"></div>
 #else
 <div class="asset-content-body">
  #set($objExt = $asset.getObject("XWiki.ExternalAssetClass", true))
@@ -1221,6 +1225,7 @@ $msg.get("asset.externallink")
  #end
 
   <a href="$url" onclick="window.open('$url'); return false;">#breakLinkText($url, 90)</a>
+  <div class="clearfloats"></div>
 </div>
 #end
 #end ##view acces level
@@ -1435,3 +1440,71 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 #end
 #end
 
+#macro(displayMode)
+#set($mode = "")
+#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("print"))
+#set($mode = "print")
+#end
+#if($request.getParameter("xpage") && $request.getParameter("xpage").equals("assetpreview"))
+#set($mode = "preview")
+#end
+#if($request.getParameter("xpage") && $request.getParameter("xpage").equals("help"))
+#set($mode = "help")
+#end
+#if($request.rev)
+#set($mode = "rev")
+#end
+#if($mode!="")
+#set($isPrint = true)
+#else
+#set($isPrint = false)
+#end
+#end
+#macro(displayAsset $currDoc)
+#if(!$isPrint)
+<div class="asset-tabs">
+<a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a>
+<a class="asset-tab"  href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">Comments ($currDoc.comments.size())</a>
+</div> ## tabs
+#end
+<div id="wizzard" class="asset-page">
+#set($obj = $currDoc.getObject("XWiki.AssetClass", true))
+#if(!$isPrint)
+<div class="righttext">
+#displaylinks($currDoc)
+</div>
+#end
+<div class="asset-contents $mode">
+#if(!$isPrint)
+#displayassetmetadatas($currDoc, $isPrint)
+#else
+#displayassettitlebar($currDoc, $isPrint)
+#end
+<div class="asset-display">
+##
+## Uncomment the following block to enable the showAll option
+##
+## #if($request.viewAll == true)
+##  #set($showAllvar = true)
+## #else
+##  #set($showAllvar = false)
+## #end
+##
+#set($showAllvar = true)
+##
+ #displayAssetContent($currDoc true $showAllvar)
+#if(!$isPrint)
+<hr class="my-curriki-solid-hr" >
+<div class="asset-content-footer">
+<div class="asset-content-footer-bordered">
+<a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.comments.size()])</a> #sep()
+## <a href="#">$msg.get("caption.sendToAFriend")</a> #sep()
+<a href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.linkToThePage")</a> #sep()
+#displaylinks($currDoc)
+</div> ##content-footer-bordered
+</div> ##content-footer
+#end ## if ! print
+</div> ##display
+</div> ##contents
+</div>
+#end

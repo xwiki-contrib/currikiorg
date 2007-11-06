@@ -572,4 +572,11 @@ public class Main implements EntryPoint
     public static native void hideLoadingMessage() /*-{
         if ($wnd.hideLoadingMsg) $wnd.hideLoadingMsg();
     }-*/;
+
+    public static String getHelpURL() {
+        String helpURL = getProperty("helpurl");
+        if ((helpURL==null)||(helpURL.equals("")))
+         helpURL = Constants.HELP_URL;
+        return helpURL;
+    }
 }
