@@ -158,7 +158,18 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addSectionTitle("general_information", fullMode);
         addEditor(assetObj, "keywords", "keywords", panel, false, fullMode);
         addEditor(assetObj, "language", "language", panel, false, fullMode);
-        addEditor(assetObj, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, panel, false, fullMode);
+
+        String rating = "";
+        if (doc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS) != null){
+            doc.use(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+            if (doc.get(Constants.CURRIKI_REVIEW_STATUS_STATUS) != null){
+                rating = String.valueOf(doc.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS));
+            }
+        }
+        if (!(rating.equals("P") || rating.equals("3"))){
+            // Only show Hide From Search if the CRS rating is not a P or 3
+            addEditor(assetObj, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, panel, false, fullMode);
+        }
 
         if (fullMode)
             addCRS(doc, panel, "private".equals(assetObj.get("rights")));
