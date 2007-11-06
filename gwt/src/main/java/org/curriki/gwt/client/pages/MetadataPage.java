@@ -37,6 +37,7 @@ import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 public class MetadataPage extends AbstractPage {
     MetadataEdit meta = new MetadataEdit(true);
     Button bttSend = new Button(Main.getTranslation("editor.btt_save"));
+    HTML txtSend = new HTML();
 
     public MetadataPage(){
         panel.add(meta);
@@ -73,9 +74,9 @@ public class MetadataPage extends AbstractPage {
 
         String txt = Main.getTranslation("metadata.save_button_text");
         if (txt.length() > 0 && !txt.equals("metadata.save_button_text")) {
-            HTML saveText = new HTML(txt);
-            saveText.addStyleName("metadata-save-text");
-            panel.add(saveText);
+            txtSend.setHTML(txt);
+            txtSend.addStyleName("metadata-save-text");
+            panel.add(txtSend);
         }
 
         initWidget(panel);
@@ -88,8 +89,11 @@ public class MetadataPage extends AbstractPage {
     public void init() {
         super.init();
         panel.remove(bttSend);
-        if (Main.getSingleton().getEditor().getCurrentAsset().hasEditRight())
-         panel.add(bttSend);
+        panel.remove(txtSend);
+        if (Main.getSingleton().getEditor().getCurrentAsset().hasEditRight()){
+            panel.add(bttSend);
+            panel.add(txtSend);
+        }
         meta.init(Main.getSingleton().getEditor().getCurrentAsset(), true);
     }
 }
