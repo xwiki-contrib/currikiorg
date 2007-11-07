@@ -76,21 +76,21 @@ public class HelpDialog extends ModalDialog {
         setCaption(caption);
 
         int absoluteTop = getAbsoluteTop();
-        int width = Window.getClientWidth() * 3 / 4;
-        int height = (Window.getClientHeight() - absoluteTop) * 3 / 4;
+        int width = Window.getClientWidth() * 90 / 100;
+        int height = (Window.getClientHeight() - absoluteTop) * 85 / 100;
         // resize to be 80%
         setWidth((width) + "px");
         setHeight((height) + "px");
 
         BasicPanel main = new BasicPanel();
         main.setWidth((width) + "px");
-        main.setHeight((height - 50) + "px");
+        main.setHeight((height - 20) + "px");
         main.addStyleName(getCSSName("content"));
 
         frame = new Frame(url);
         frame.setStyleName(getCSSName("frame"));
-        frame.setWidth((width - 50) + "px");
-        frame.setHeight((height - 50) + "px");
+        frame.setWidth((width - 10) + "px");
+        frame.setHeight((height - 20) + "px");
         main.add(frame);
         add(main);
         show();
