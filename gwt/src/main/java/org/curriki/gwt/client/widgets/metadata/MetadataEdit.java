@@ -657,11 +657,12 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             missing += "description";
         }
 
-        if (form["XWiki.AssetClass_0_instructional_component2"].selectedIndex == -1) {
+        // There are 2 fields of this name, the first is the selector, second is a hidden input
+        if (form["XWiki.AssetClass_0_instructional_component2"][0].selectedIndex == -1) {
             if (!first)
                 missing += ",";
             first = false;
-            missing += "instructional_component";
+            missing += "instructional_component2";
         }
 
         var checkboxes  = form["XWiki.AssetClass_0_educational_level2"];
