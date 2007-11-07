@@ -1131,18 +1131,18 @@ $objTxt.text
  #includeForm("GWT.ViditalkPlayback")
 <div class="clearfloats"></div>
 </div>
-#elseif ($asset.getObject("XWiki.CompositeAssetClass") && $objComp != "")
+#elseif ($objComp && $objComp != "")
  #if($develop)
  <div class="asset-content-body">
-#set($objs = $currDoc.getObjects("XWiki.SubAssetClass"))
+#set($objs = $asset.getObjects("XWiki.SubAssetClass"))
 #set($assetList = $xwiki.arrayList)
 #foreach($obj in $objs)
 #set($ok = $assetList.add(""))
 #end
 #foreach($obj in $objs)
-#set($ok = $currDoc.use($obj))
-#set($position = $currDoc.getValue("order"))
-#set($assetPage = $currDoc.getValue("assetpage"))
+#set($ok = $asset.use($obj))
+#set($position = $asset.getValue("order"))
+#set($assetPage = $asset.getValue("assetpage"))
 #if($position >= $assetList.size())
 #set($ok = $assetList.add($assetPage))
 #else
