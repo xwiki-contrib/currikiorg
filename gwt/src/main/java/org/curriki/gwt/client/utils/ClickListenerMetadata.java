@@ -34,6 +34,8 @@ public class ClickListenerMetadata implements ClickListener {
     }
 
     public void onClick(Widget sender) {
-        meta.submit();
+        if (meta.doNext()){
+            meta.submit();
+        }
     }
 }

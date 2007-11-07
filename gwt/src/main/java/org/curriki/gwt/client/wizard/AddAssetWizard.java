@@ -41,11 +41,12 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.search.editor.ResourceAdder;
-import org.curriki.gwt.client.search.editor.SearchPanel;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.pages.EditPage;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
+import org.curriki.gwt.client.search.editor.SearchPanel;
 import org.curriki.gwt.client.utils.ClickListenerDocument;
+import org.curriki.gwt.client.utils.ClickListenerMetadata;
 import org.curriki.gwt.client.widgets.addfile.AddFileDialog;
 import org.curriki.gwt.client.widgets.addfile.URLEntry;
 import org.curriki.gwt.client.widgets.addfile.VidiTalkUploadComponent;
@@ -152,7 +153,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         meta.SetHiddenCategoryValue(category);
         panel.add(meta, DockPanel.CENTER);
 
-        bttNext = new Button(Main.getTranslation("editor.btt_next"), new MetadataClickListener(meta));
+        bttNext = new Button(Main.getTranslation("editor.btt_next"), new ClickListenerMetadata(meta));
         bttNext.addStyleName("gwt-ButtonOrange");
         bttNext.addStyleName("gwt-bttNext");
 
@@ -202,18 +203,6 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         // Tree is invalid since we added an asset
         editor.setTreeContentInvalid(true);
         editor.refreshState();
-    }
-
-    public class MetadataClickListener implements ClickListener {
-        MetadataEdit meta;
-
-        public MetadataClickListener(MetadataEdit meta) {
-            this.meta = meta;
-        }
-
-        public void onClick(Widget sender) {
-            meta.submit();
-        }
     }
 
     public void initFileOrLink() {

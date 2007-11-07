@@ -21,13 +21,21 @@
  */
 package org.curriki.gwt.client.wizard;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.xpn.xwiki.gwt.api.client.Document;
+import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.CurrikiAsyncCallback;
-import org.curriki.gwt.client.utils.Translator;
+import org.curriki.gwt.client.utils.ClickListenerMetadata;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 
 
@@ -87,7 +95,7 @@ public class CreateCompositeAssetWizard extends Wizard {
 
             panel.add(meta, DockPanel.CENTER);
 
-            bttNext = new Button(Main.getTranslation("editor.btt_finish"), new MetadataClickListener(meta));
+            bttNext = new Button(Main.getTranslation("editor.btt_finish"), new ClickListenerMetadata(meta));
             bttNext.addStyleName("gwt-ButtonOrange");
 
             HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -96,18 +104,6 @@ public class CreateCompositeAssetWizard extends Wizard {
             
             panel.add(buttonPanel, DockPanel.SOUTH);
             onResize();
-        }
-    }
-
-    public class MetadataClickListener implements ClickListener {
-        MetadataEdit meta;
-
-        public MetadataClickListener(MetadataEdit meta) {
-            this.meta = meta;
-        }
-
-        public void onClick(Widget sender) {
-            meta.submit();
         }
     }
 

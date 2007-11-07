@@ -40,12 +40,10 @@ import org.curriki.gwt.client.pages.ComponentsPage;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
 import org.curriki.gwt.client.widgets.modaldialogbox.NominateDialog;
-import org.gwtwidgets.client.util.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Date;
 
 
 public class MetadataEdit extends Composite implements MouseListener, ClickListener
@@ -54,6 +52,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     private Document doc;
     private FormPanel form = new FormPanel();
     private boolean fullMode;
+    private boolean startFullMode;
     private HashMap fieldMap = new HashMap();
     private Hyperlink moreInfoLabel = null;
     private HTML moreInfoText = null;
@@ -62,6 +61,9 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     private NextCancelDialog ncDialog;
     // CRS
     private String currentCRSStatus;
+    private int step = 1;
+    private VerticalPanel panelStep1;
+    private VerticalPanel panelStep2;
 
     public MetadataEdit(boolean fullMode){
         this(null, fullMode);
@@ -99,10 +101,12 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             return;
         this.doc = doc;
         this.fullMode = fullMode;
+        this.startFullMode = fullMode;
 
         if (((AssetDocument) doc).isDirectionBlock()) {
             panel.clear();
             panel.add(new HTML(Main.getTranslation("metadata.directionblocks_have_no_metadata")));
+            startFullMode = true; // So that "Next" will work correctly
         } else {
             form.setAction(doc.getSaveURL());
             showEdit();
@@ -123,23 +127,21 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         panel.clear();
 
         panel.add(new Hidden("comment", Main.getTranslation("curriki.comment.updatemetadata")));
-        if (!fullMode) {
-            addSectionTitle("when_you_add_a_resource", true);
-            panel.add(new HTML(Main.getTranslation("metadata.add_resource_metadata_desc")));
-            addSubTitle("complete_required_fields");
-        }
-        //HTML htmlRequired = new HTML("<span class=\"required_fields\">!</span> " + Main.getTranslation("metadata.required_fields"));
-        //panel.add(htmlRequired);
 
+        if (startFullMode){
+            showTabEdit();
+        } else {
+            showDialogEdit();
+        }
+    }
+
+    protected void showTabEdit(){
         addSectionTitle("required_information", true);
 
         XObject assetObj = doc.getObject(Constants.ASSET_CLASS);
         XObject rightObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
 
         addEditor(assetObj, "title", "title", true);
-        HTML copyInfo = new HTML(Main.getTranslation("metadata.copy_info_text"));
-        copyInfo.addStyleName("copy-info-text");
-        panel.add(copyInfo);
         addEditor(assetObj, "description", "description", true);
 
 
@@ -195,6 +197,61 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             //moreInfoLabel.addStyleName("more-info-"+fullMode);
             panel.add(moreInfoLabel);
         }
+    }
+
+    protected void showDialogEdit(){
+        panelStep1 = new VerticalPanel();
+        panelStep2 = new VerticalPanel();
+        panelStep2.setVisible(false);
+
+        addSectionTitle(panelStep1, "when_you_add_a_resource", true);
+        panelStep1.add(new HTML(Main.getTranslation("metadata.add_resource_metadata_desc")));
+        addSubTitle(panelStep1, "complete_required_fields");
+
+        XObject assetObj = doc.getObject(Constants.ASSET_CLASS);
+        XObject rightObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
+
+        addEditor(assetObj, "title", "title", panelStep1, true, true);
+        addEditor(assetObj, "description", "description", panelStep1, true, true);
+
+        HorizontalPanel hPanel = new HorizontalPanel();
+
+        hPanel.addStyleName("subject-level-table");
+        addEditor(assetObj, "fw_items", "fw_items", hPanel, true, true);
+        addEditor(assetObj, "educational_level2", "educational_level", hPanel, true, true);
+        hPanel.setCellWidth(hPanel.getWidget(0), "50%");
+        hPanel.setCellWidth(hPanel.getWidget(1), "50%");
+        panelStep1.add(hPanel);
+
+        addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panelStep1, true, fullMode);
+
+        panel.add(panelStep1);
+
+
+        addSubTitle(panelStep2, "review_and_update_fields");
+        User user = Main.getSingleton().getUser();
+        boolean forceViewMode = !(user == null || (doc.getCreator().equals(user.getFullName()) || user.isAdmin()));
+        addEditor(assetObj, "rights", "rights", panelStep2, false, true, forceViewMode);
+
+        String rating = "";
+        if (doc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS) != null){
+            doc.use(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+            if (doc.get(Constants.CURRIKI_REVIEW_STATUS_STATUS) != null){
+                rating = String.valueOf(doc.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS));
+            }
+        }
+        if (!(rating.equals("P") || rating.equals("3"))){
+            // Only show Hide From Search if the CRS rating is not a P or 3
+            addEditor(assetObj, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, panelStep2, false, true);
+        }
+
+        addEditor(assetObj, "keywords", "keywords", panelStep2, false, true);
+        addEditor(assetObj, "language", "language", panelStep2, false, true);
+
+        addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panelStep2, false, true, forceViewMode);
+        addEditor(rightObj, "licenseType2", "license_type", panelStep2, false, true, forceViewMode);
+
+        panel.add(panelStep2);
     }
 
     private void addCRS(Document doc, Panel panel, boolean isPrivate) {
@@ -339,21 +396,33 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
     
     public void addSectionTitle(String titleKey, boolean visible){
+        addSectionTitle(panel, titleKey, visible);
+    }
+
+    public void addSectionTitle(Panel panel, String titleKey, boolean visible){
         Label label = new Label(Main.getTranslation("metadata." + titleKey));
         label.addStyleName("curriki-title");
         label.setVisible(visible);
-        
+
         fieldMap.put(titleKey, label);
         panel.add(label);
     }
 
     public void addSubTitle(String titleKey){
+        addSubTitle(panel, titleKey);
+    }
+
+    public void addSubTitle(Panel panel, String titleKey){
         HTML title = new HTML(Main.getTranslation("metadata." + titleKey));
         title.addStyleName("curriki-subtitle");
         panel.add(title);
     }
 
     public void SetHiddenCategoryValue(String value){
+        SetHiddenCategoryValue(panel, value);
+    }
+
+    public void SetHiddenCategoryValue(Panel panel, String value){
         XObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null){
             Hidden hidden = new Hidden(obj.getEditPropertyFieldName("category"), value);
@@ -538,24 +607,31 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
 
     public void submit(){
-        String missing = isFormValid();
-        if (missing.equals(""))
+        if (!hasMissing()){
             form.submit();
-        else {
+        }
+    }
+
+    public boolean hasMissing(){
+        String missing = isFormValid();
+        if (missing.equals("")){
+            return false;
+        } else {
             String[] missings = missing.split(",");
             String text;
             if (missings.length==1) {
-              text = Main.getTranslation("metadata.field_missing") + ": " + Main.getTranslation("metadata." + missings[0] + "_title");
+                text = Main.getTranslation("metadata.field_missing") + ": " + Main.getTranslation("metadata." + missings[0] + "_title");
             } else {
                 text = Main.getTranslation("metadata.fields_missing");
                 text += " : ";
                 for (int i=0;i<missings.length;i++) {
                     if (i>0)
-                     text += ",";
+                        text += ",";
                     text += Main.getTranslation("metadata." + missings[i] + "_title");
                 }
             }
             Window.alert(text);
+            return true;
         }
     }
 
@@ -579,6 +655,13 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 missing += ",";
             first = false;
             missing += "description";
+        }
+
+        if (form["XWiki.AssetClass_0_instructional_component2"].selectedIndex == -1) {
+            if (!first)
+                missing += ",";
+            first = false;
+            missing += "instructional_component";
         }
 
         var checkboxes  = form["XWiki.AssetClass_0_educational_level2"];
@@ -631,6 +714,17 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         }
     }
 
+    private void set_view_step(int nextStep){
+        if (nextStep == 1){
+            panelStep1.setVisible(true);
+            panelStep2.setVisible(false);
+        }
+        if (nextStep == 2){
+            panelStep1.setVisible(false);
+            panelStep2.setVisible(true);
+        }
+    }
+
     public void onMouseDown(Widget sender, int x, int y) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -660,5 +754,24 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
     public void setResizeListener(WindowResizeListener resizeListener) {
         this.resizeListener = resizeListener;
+    }
+
+    public boolean doNext(){
+        if (startFullMode){
+            return true;
+        }
+        if (step == 1){
+            if (!hasMissing()){
+                // Go to step 2
+                step = 2;
+                set_view_step(step);
+            }
+            return false;
+        } else if (step == 2){
+            if (hasMissing()){
+                return false;
+            }
+        }
+        return true;
     }
 }
