@@ -1578,11 +1578,17 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 throw new Exception("ERROR: Could not load Lucene plugin.");
             } else {
                 // Need to add sorting
-                SearchResults search = lucene.getSearchResults(terms, sortBy, "default,en");
+                SearchResults search;
+                try {
+                    search = lucene.getSearchResults(terms, sortBy, "default,en");
+                } catch (Exception e){
+                   search = null;
+                }
 
                 if (search == null){
                     // Get search results didn't work for some reason
-                    throw new Exception("ERROR: Lucene search failed (terms: "+terms+")");
+                    //throw new Exception("ERROR: Lucene search failed (terms: "+terms+")");
+                    docs.add(Integer.valueOf(0));
                 } else {
                     List results = search.getResults(start, nb);
 

@@ -223,7 +223,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         hPanel.setCellWidth(hPanel.getWidget(1), "50%");
         panelStep1.add(hPanel);
 
-        addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panelStep1, true, fullMode);
+        addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panelStep1, true, true);
 
         panel.add(panelStep1);
 
