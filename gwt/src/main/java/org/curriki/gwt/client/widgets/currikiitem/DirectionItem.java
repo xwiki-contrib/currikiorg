@@ -9,12 +9,14 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.pages.EditPage;
 import org.curriki.gwt.client.widgets.currikiitem.display.AbstractItemDisplay;
+import org.curriki.gwt.client.widgets.modaldialogbox.NextCancelDialog;
 /*
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -47,6 +49,7 @@ public class DirectionItem extends Composite implements CurrikiItem {
     private DockPanel panel = new DockPanel();
     private long index = -1;
     private boolean selected = false;
+    private NextCancelDialog confirmRemoveDialog;
 
     public DirectionItem(Document doc, String key){
         int obj_id = Integer.valueOf(key.substring(Constants.DIRECTION.length())).intValue();
@@ -176,7 +179,15 @@ public class DirectionItem extends Composite implements CurrikiItem {
     }
 
     public void onRemoveClick() {
-        Main.getSingleton().getEditor().removeAsset(getIndex());
+        confirmRemoveDialog = new NextCancelDialog(Main.getTranslation("curriki.editor.confirmremovetitle"), Main.getTranslation("curriki.editor.confirmremovetext"), "editorconfirmremove", new AsyncCallback() {
+            public void onFailure(Throwable throwable) {
+                confirmRemoveDialog.hide();
+            }
+            public void onSuccess(Object object) {
+                confirmRemoveDialog.hide();
+                Main.getSingleton().getEditor().removeAsset(getIndex());
+            }
+        });
     }
 
     public void onHideClick() {

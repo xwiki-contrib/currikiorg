@@ -60,6 +60,8 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
 
     private NextCancelDialog proposeTemplateDuplicationDialog;
     private ChoiceDialog proposeEditDuplicationDialog;
+    private NextCancelDialog confirmRemoveDialog;
+
 
     public CurrikiItemImpl(){
         init();
@@ -394,7 +396,15 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
     }
 
     public void onRemoveClick() {
-        Main.getSingleton().getEditor().removeAsset(getIndex());
+        confirmRemoveDialog = new NextCancelDialog(Main.getTranslation("curriki.editor.confirmremovetitle"), Main.getTranslation("curriki.editor.confirmremovetext"), "editorconfirmremove", new AsyncCallback() {
+            public void onFailure(Throwable throwable) {
+                confirmRemoveDialog.hide();
+            }
+            public void onSuccess(Object object) {
+                confirmRemoveDialog.hide();
+                Main.getSingleton().getEditor().removeAsset(getIndex());
+            }
+        });
     }
 
     public void onCommentClick() {

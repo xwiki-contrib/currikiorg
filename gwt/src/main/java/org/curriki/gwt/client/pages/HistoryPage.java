@@ -233,6 +233,7 @@ public class HistoryPage extends AbstractPage {
                                             editor.setCurrentAssetInvalid(true);
                                             // Tree is invalid when it is a composite asset that is rolledback
                                             editor.setTreeContentInvalid(true);
+                                            editor.resetCache();
                                             editor.refreshState();
                                         }
                                     }

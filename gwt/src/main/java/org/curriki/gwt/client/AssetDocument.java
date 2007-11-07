@@ -42,7 +42,7 @@ public class AssetDocument extends Document {
     }
 
     public boolean isDuplicatable() {
-        return duplicatable;
+        return duplicatable && !isDirectionBlock();
     }
 
     public void setDuplicatable(boolean duplicatable) {

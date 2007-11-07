@@ -22,6 +22,7 @@
 package org.curriki.gwt.client.widgets.currikiitem;
 
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.Window;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.Constants;
 
