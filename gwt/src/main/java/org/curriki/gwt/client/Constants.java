@@ -38,6 +38,8 @@ public class Constants {
     public static final String ICON_SPINNER = ICON_PATH+"spinner.gif";
     public static final String CURRIKI_LOGO = SKIN_PATH+"curriki-logo.png";
 
+    public static final String ICT_HELP_URL ="/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.AboutLearningResources";
+
     public static final String DEFAULT_MP3PLAYER_URL = "/xwiki/bin/download/MimeType/audio_mp3/mini_player_mp3.swf";
 
     public static final String COMPOSITEASSET_CLASS = "XWiki.CompositeAssetClass";

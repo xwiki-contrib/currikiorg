@@ -23,6 +23,7 @@
 package org.curriki.gwt.client.search.columns;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -61,7 +62,10 @@ public class InstructionalTypeColumn extends ResultsColumn
     public Widget getDisplayWidget(Document value)
     {
         String name = "";
-        FlowPanel ret = new FlowPanel();
+        String displayName = "";
+        String displayImg = "";
+        String displayImgTitle = "";
+        HTML ictCol = new HTML();
 
         if (value.getObject(Constants.ASSET_CLASS) != null){
             value.use(Constants.ASSET_CLASS);
@@ -72,23 +76,25 @@ public class InstructionalTypeColumn extends ResultsColumn
         }
 
         if (name.indexOf(",") != -1){
-            Image img = new Image(Constants.ICON_PATH+"ICTIcon-Multiple.gif");
-            ret.add(img);
-            ret.add(new Label(Main.getTranslation("search.results.col.ict.multiple")));
-        } else  if (name.length() > 0){
+            displayImg = Constants.ICON_PATH+"ICTIcon-Multiple.gif";
+            displayName = Main.getTranslation("search.results.col.ict.multiple");
+            displayImgTitle = displayName;
+        } else if (name.length() > 0){
             String icon = name.replaceFirst("_.*", "");
             if ((icon.length() > 0) && !icon.equals(name)){
                 String iconTitle = Main.getTranslation("search.selector.ict."+icon);
                 icon = icon.toUpperCase().substring(0, 1)+icon.substring(1);
-                Image img = new Image(Constants.ICON_PATH+"ICTIcon-"+icon+".gif");
-                img.setTitle(iconTitle);
-                ret.add(img);
-                
-                name = Main.getTranslation("search.selector.ict."+name.replaceFirst("_", "."));
-                ret.add(new Label(name));
+
+                displayImg = Constants.ICON_PATH+"ICTIcon-"+icon+".gif";
+                displayImgTitle = iconTitle;
+                displayName = Main.getTranslation("search.selector.ict."+name.replaceFirst("_", "."));
             }
         }
 
-        return ret;
+        if (displayName.length() > 0){
+            ictCol.setHTML("<div><a href=\""+Constants.ICT_HELP_URL+"\" target=\"ICT_HELP\"><img class=\"gwt-Image\" src=\""+displayImg+"\" title=\""+displayImgTitle+"\" /><div class=\"gwt-Label\">"+displayName+"</div></a></div>");
+        }
+
+        return ictCol;
     }
 }
