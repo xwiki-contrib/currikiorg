@@ -621,7 +621,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             String text;
             text = Main.getTranslation("metadata.fields_missing") + ":\n";
             for (int i=0;i<missings.length;i++) {
-                text += "  - "+Main.getTranslation("metadata." + missings[i] + "_title");
+                text += "  - "+Main.getTranslation("metadata." + missings[i] + "_title"+"\n");
             }
             Window.alert(text);
             return true;
