@@ -57,7 +57,7 @@ public class AddResourceDialog extends ModalDialog {
     public void init(){
         addStyleName("dialog-addresource");
         //addController(new ModalDialog.DragStyleController(this));
-        setCaption(Main.getTranslation("addresource.add_a_learning_resource"), false);
+        setCaption(Main.getTranslation("addresource.add_a_learning_resource"), true);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("dialog-addresource-content");

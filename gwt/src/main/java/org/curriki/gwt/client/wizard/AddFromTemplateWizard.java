@@ -121,7 +121,7 @@ public class AddFromTemplateWizard {
         metaPanel = new ModalDialog();
         metaPanel.removeController(metaPanel.getController(TabFocusController.class));
         metaPanel.addStyleName("dialog-metadata");
-        metaPanel.setCaption(Main.getTranslation("template.describethelearningresource"), false);
+        metaPanel.setCaption(Main.getTranslation("template.describethelearningresource"), true);
 
         metaPanel.add(meta);
 

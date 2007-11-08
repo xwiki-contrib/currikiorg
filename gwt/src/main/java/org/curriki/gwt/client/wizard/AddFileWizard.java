@@ -171,7 +171,7 @@ public class AddFileWizard implements CompletionCallback
         metaPanel = new ModalDialog();
         metaPanel.removeController(metaPanel.getController(TabFocusController.class));
         metaPanel.addStyleName("dialog-metadata");
-        metaPanel.setCaption(Main.getTranslation("addfile.describelearningresource"), false);
+        metaPanel.setCaption(Main.getTranslation("addfile.describelearningresource"), true);
 
         metaPanel.add(meta);
 

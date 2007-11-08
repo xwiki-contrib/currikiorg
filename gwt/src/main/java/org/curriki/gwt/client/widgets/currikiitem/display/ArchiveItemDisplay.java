@@ -157,11 +157,11 @@ public class ArchiveItemDisplay extends AttachementItemDisplay {
                 if (!treeVisible) {
                     initDisplayFileTree();
                     treeVisible = true;
-                    bttShowHideTree.setText(Main.getTranslation("asset.archive.hidetree"));
+                    bttShowHideTree.setHTML(Main.getTranslation("asset.archive.hidetree"));
                 } else {
                     treePanel.setVisible(false);
                     treeVisible = false;
-                    bttShowHideTree.setText(Main.getTranslation("asset.archive.showtree"));
+                    bttShowHideTree.setHTML(Main.getTranslation("asset.archive.showtree"));
                 }
             }
         });

@@ -68,7 +68,7 @@ public class ChooseCollectionDialog extends ModalDialog {
     public void init(){
         addStyleName("collections-dialog");
         //addController(new ModalDialog.DragStyleController(this));
-        setCaption(Main.getTranslation(titleTranslation), false);
+        setCaption(Main.getTranslation(titleTranslation), true);
         setContentMinWidth(634);
         setContentMinHeight(450);
 

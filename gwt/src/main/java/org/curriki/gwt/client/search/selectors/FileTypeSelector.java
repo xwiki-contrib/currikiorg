@@ -26,6 +26,7 @@ import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.Constants;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
 public class FileTypeSelector extends DropdownSingleSelector
 {
@@ -43,6 +44,6 @@ public class FileTypeSelector extends DropdownSingleSelector
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("search.selector.filetype"));
+        return new HTML(Main.getTranslation("search.selector.filetype"));
     }
 }

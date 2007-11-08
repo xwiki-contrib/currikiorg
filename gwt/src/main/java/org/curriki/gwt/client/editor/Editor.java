@@ -374,12 +374,12 @@ public class Editor implements WindowResizeListener {
         CreateCompositeAssetWizard wizard = new CreateCompositeAssetWizard(space);
         wizard.setCloseListener(new CloseDialogListener());
         initDialogBox(wizard);
-        dialog.setCaption("Insert", false);
+        dialog.setCaption("Insert", true);
         wizard.setParentCaptionListener(new AsyncCallback() {
             public void onFailure(Throwable caught) {
             }
             public void onSuccess(Object result) {
-                dialog.setCaption((String) result, false);
+                dialog.setCaption((String) result, true);
             }
         });
 
@@ -403,7 +403,7 @@ public class Editor implements WindowResizeListener {
             public void onFailure(Throwable caught) {
             }
             public void onSuccess(Object result) {
-                dialog.setCaption((String) result, false);
+                dialog.setCaption((String) result, true);
             }
         });
 
@@ -413,7 +413,7 @@ public class Editor implements WindowResizeListener {
             }
         });
 
-        dialog.setCaption(Main.getTranslation("addasset.title"), false);
+        dialog.setCaption(Main.getTranslation("addasset.title"), true);
 
         dialog.show();
     }

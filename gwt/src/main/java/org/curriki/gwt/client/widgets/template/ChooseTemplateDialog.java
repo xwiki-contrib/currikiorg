@@ -52,7 +52,7 @@ public class ChooseTemplateDialog extends ModalDialog {
 
     public void init(List templates){
         addStyleName("dialog-choosetemplate");
-        setCaption(Main.getTranslation("template.create_a_learning_resource"), false);
+        setCaption(Main.getTranslation("template.create_a_learning_resource"), true);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("dialog-choosetemplate-content");

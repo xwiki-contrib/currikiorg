@@ -22,10 +22,7 @@
  */
 package org.curriki.gwt.client.search.panels;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.Paginator;
@@ -56,7 +53,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
         if (!fromCB){
             VerticalPanel pTitle = new VerticalPanel();
             pTitle.addStyleName("search-top-titlebar");
-            pTitle.add(new Label(Main.getTranslation("search.top_titlebar")));
+            pTitle.add(new HTML(Main.getTranslation("search.top_titlebar")));
             add(pTitle);
         }
 
@@ -67,7 +64,7 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
 
         VerticalPanel rTitle = new VerticalPanel();
         rTitle.addStyleName("search-results-title");
-        rTitle.add(new Label(Main.getTranslation("search.results_title")));
+        rTitle.add(new HTML(Main.getTranslation("search.results_title")));
         add(rTitle);
 
         results = new ResultsPanel(fromCB);

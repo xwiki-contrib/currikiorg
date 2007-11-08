@@ -34,7 +34,7 @@ public class ThankYouDialog extends ModalDialog {
     public ThankYouDialog(String thankYouPage, ClickListener continueCallback) {
         addStyleName("thankyou-dialog");
         //addController(new ModalDialog.DragStyleController(this));
-        setCaption(Main.getTranslation("dialog."+thankYouPage+".caption"), false);
+        setCaption(Main.getTranslation("dialog."+thankYouPage+".caption"), true);
         setContentMinWidth(400);
         setContentMinHeight(100);
 

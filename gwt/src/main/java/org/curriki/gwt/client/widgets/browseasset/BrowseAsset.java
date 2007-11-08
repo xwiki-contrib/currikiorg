@@ -238,7 +238,7 @@ public class BrowseAsset  extends Tree implements SelectedAssetChangeListener {
             }
         }
         if (treeItem.getPageName().equals(assetPageName)) {
-            treeItem.setText(title);
+            treeItem.setHTML(title);
         }
 
         for (int i = 0; i < treeItem.getChildCount(); i++){

@@ -191,7 +191,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
         if (!fullMode) {
             moreInfoLabel = new Hyperlink();
-            moreInfoLabel.setText(Main.getTranslation("metadata.more_info_"+fullMode));
+            moreInfoLabel.setHTML(Main.getTranslation("metadata.more_info_"+fullMode));
             moreInfoLabel.addClickListener(this);
             moreInfoLabel.addStyleName("more-info");
             //moreInfoLabel.addStyleName("more-info-"+fullMode);
@@ -308,7 +308,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 crsPanel.add(crsReviewPendingPanel);
             } else {
                 Hyperlink crsReviewNominateLink = new Hyperlink();
-                crsReviewNominateLink.setText(Main.getTranslation("curriki.crs.reviewnominate"));
+                crsReviewNominateLink.setHTML(Main.getTranslation("curriki.crs.reviewnominate"));
                 crsReviewNominateLink.setStyleName("crs_reviewnominate");
                 crsReviewNominateLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
@@ -336,7 +336,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             // if the reviewer mode is set to one then we show the review link
             if (("reviewer".equals(role))||("admin".equals(role))) {
                 Hyperlink crsReviewReviewLink = new Hyperlink();
-                crsReviewReviewLink.setText(Main.getTranslation("curriki.crs.review"));
+                crsReviewReviewLink.setHTML(Main.getTranslation("curriki.crs.review"));
                 crsReviewReviewLink.setStyleName("crs_reviewreview");
                 crsReviewReviewLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
@@ -400,7 +400,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
 
     public void addSectionTitle(Panel panel, String titleKey, boolean visible){
-        Label label = new Label(Main.getTranslation("metadata." + titleKey));
+        Label label = new HTML(Main.getTranslation("metadata." + titleKey));
         label.addStyleName("curriki-title");
         label.setVisible(visible);
 
@@ -502,7 +502,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         if (keyValue != null) {
             String txt = Main.getTranslation("metadata." + keyValue + "_title");
             if (txt.length() > 0 && !txt.equals("metadata." + keyValue + "_title")) {
-                Label title = new Label(txt + ":");
+                Label title = new HTML(txt + ":");
                 title.addStyleName("curriki-subtitle");
                 hPanel.add(title);
             }
@@ -742,7 +742,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     public void onClick(Widget sender){
         //moreInfoLabel.removeStyleName("more-info-" + fullMode);
         switchMode();
-        moreInfoLabel.setText(Main.getTranslation("metadata.more_info_" + fullMode));
+        moreInfoLabel.setHTML(Main.getTranslation("metadata.more_info_" + fullMode));
         //moreInfoLabel.addStyleName("more-info-" + fullMode);
     }
 

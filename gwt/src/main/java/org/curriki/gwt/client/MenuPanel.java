@@ -42,7 +42,7 @@ public class MenuPanel extends Composite implements WindowResizeListener {
 
     public MenuPanel() {
 
-        Label label = new Label(Main.getTranslation("menu.table_of_content"));
+        HTML label = new HTML(Main.getTranslation("menu.table_of_content"));
         label.addStyleName("table-of-content");
         menuPanel.add(label);
 

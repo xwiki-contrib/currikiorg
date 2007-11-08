@@ -25,15 +25,7 @@ import asquare.gwt.tk.client.ui.BasicPanel;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.FormHandler;
-import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormSubmitEvent;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.AssetDocument;
@@ -417,8 +409,8 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         public void showDescription(){
             String title = Main.getTranslation("addasset." + key);
             title = title.replaceAll("<br/>", "");
-            helpGrid.setText(0, 0, title);
-            helpGrid.setText(1, 0, Main.getTranslation("addasset.desc_" + key));
+            helpGrid.setHTML(0, 0, title);
+            helpGrid.setHTML(1, 0, Main.getTranslation("addasset.desc_" + key));
         }
     }
 
@@ -433,7 +425,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
 
         // Separator: Existing element block
-        Label label = new Label(Main.getTranslation("addasset.existing_element"));
+        Label label = new HTML(Main.getTranslation("addasset.existing_element"));
         label.addStyleName("curriki-subtitle");
         grid.setWidget(0, 0, label);
 
@@ -451,7 +443,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         grid.setWidget(2, 0, bttSeparator);      */
 
         // Separator: New Element
-        label = new Label(Main.getTranslation("addasset.new_element"));
+        label = new HTML(Main.getTranslation("addasset.new_element"));
         label.addStyleName("curriki-subtitle");
         grid.setWidget(3, 0, label);
 
@@ -476,7 +468,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         grid.setWidget(8, 0, bttFromTemplate);
 
         // Separator: New Element
-        label = new Label(Main.getTranslation("addasset.formatting_element"));
+        label = new HTML(Main.getTranslation("addasset.formatting_element"));
         label.addStyleName("curriki-subtitle");
         grid.setWidget(9, 0, label);
 

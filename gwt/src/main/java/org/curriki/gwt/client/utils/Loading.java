@@ -25,6 +25,7 @@ package org.curriki.gwt.client.utils;
 import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.Window;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
@@ -46,7 +47,7 @@ public class Loading {
         if (loadingPanel == null && !disable){
             loadingPanel = new ModalDialog();
             loadingPanel.addStyleName("dialog-loading");
-            loadingPanel.add(new Label(Main.getTranslation("loading.loading_msg")));
+            loadingPanel.add(new HTML(Main.getTranslation("loading.loading_msg")));
             loadingPanel.add(new Image(Constants.ICON_SPINNER));
         }
 

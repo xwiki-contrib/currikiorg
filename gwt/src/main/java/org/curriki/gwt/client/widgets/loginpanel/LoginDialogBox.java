@@ -61,7 +61,7 @@ public class LoginDialogBox extends ModalDialog {
             }
         };
 
-        setCaption(Main.getTranslation("login.login"), false);
+        setCaption(Main.getTranslation("login.login"), true);
         loginPanel = new LoginPanel(loginPanelCallback);
         add(loginPanel);
     }

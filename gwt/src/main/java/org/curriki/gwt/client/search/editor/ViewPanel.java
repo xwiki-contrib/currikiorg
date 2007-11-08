@@ -95,7 +95,7 @@ public class ViewPanel extends VerticalPanel {
 
         dialog = new ModalDialog();
         dialog.addController(new ModalDialog.DragStyleController(dialog));
-        dialog.setCaption(Main.getTranslation("find.preview"), false);
+        dialog.setCaption(Main.getTranslation("find.preview"), true);
         dialog.add(this);
 
         //RootPanel.get().add(dialog);

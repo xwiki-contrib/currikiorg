@@ -266,9 +266,9 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
         String imgSuffix = ".png";
         if (isDirectionBlock()) {
             imgSuffix = "_white.gif";
-            this.title.setText(Main.getTranslation("editor.cbdirections"));
+            this.title.setHTML(Main.getTranslation("editor.cbdirections"));
         } else {
-            this.title.setText(title);
+            this.title.setHTML(title);
         }
         hideBt.setUrl(Constants.ICON_PATH+"collapse_down" + imgSuffix);
         showBt.setUrl(Constants.ICON_PATH+"collapse" + imgSuffix);
@@ -346,7 +346,7 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
 
         if (isViewable()&&!isDirectionBlock()) {
             buttonPanel.add(commentBt);
-            commentBt.setText(Main.getTranslation("editor.btt_comment") + " (" + getCurrentCommentNumber() + ")");
+            commentBt.setHTML(Main.getTranslation("editor.btt_comment") + " (" + getCurrentCommentNumber() + ")");
         }
     }
 

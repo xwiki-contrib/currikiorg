@@ -2,12 +2,7 @@ package org.curriki.gwt.client.widgets.moveasset;
 
 import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.WindowResizeListener;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.*;
 import org.curriki.gwt.client.Main;
 /*
  * See the NOTICE file distributed with this work for additional
@@ -40,11 +35,11 @@ public class MoveModalBox extends ModalDialog {
         super();
         addStyleName("move-modal-box");
         this.dialog = this;
-        setCaption(Main.getTranslation("moveasset.move"), false);
+        setCaption(Main.getTranslation("moveasset.move"), true);
         MoveAsset moveAsset = new MoveAsset(rootAsset, assetPageName, parentName, pos, new BoxWindowResizeListener());
         moveAsset.setParentDialog(this);
         panel = new VerticalPanel();
-        panel.add(new Label(Main.getTranslation("moveasset.select_asset_to_move")));
+        panel.add(new HTML(Main.getTranslation("moveasset.select_asset_to_move")));
 
         ScrollPanel movePanel = new ScrollPanel();
         movePanel.addStyleName("move-modal-box-scroller");

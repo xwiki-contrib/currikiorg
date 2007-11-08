@@ -61,7 +61,7 @@ public class NextCancelDialog extends ModalDialog {
 
     public void init(){
         addStyleName(getCSSName(""));
-        setCaption(Main.getTranslation(titleText), false);
+        setCaption(Main.getTranslation(titleText), true);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName(getCSSName("content"));

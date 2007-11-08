@@ -1,13 +1,6 @@
 package org.curriki.gwt.client.widgets.design;
 
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Window;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.Constants;
@@ -48,10 +41,10 @@ public class Header extends Composite {
         VerticalPanel vPanel = new VerticalPanel();
         panel.add(vPanel, DockPanel.CENTER);
 
-        Label label = new Label(Main.getTranslation("header.editor_title"));
+        HTML label = new HTML(Main.getTranslation("header.editor_title"));
         label.addStyleName("editor-title");
         vPanel.add(label);
-        label = new Label(Main.getTranslation("header.editor_subtitle"));
+        label = new HTML(Main.getTranslation("header.editor_subtitle"));
         label.addStyleName("editor-subtitle");
         vPanel.add(label);
 

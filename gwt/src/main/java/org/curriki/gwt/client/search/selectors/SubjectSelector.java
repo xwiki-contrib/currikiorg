@@ -24,6 +24,7 @@ package org.curriki.gwt.client.search.selectors;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTML;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
@@ -52,7 +53,7 @@ public class SubjectSelector extends DropdownSingleSelector
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("search.selector.subject"));
+        return new HTML(Main.getTranslation("search.selector.subject"));
     }
 
     public void loadState(ClientState state) throws InitializationNotReadyException

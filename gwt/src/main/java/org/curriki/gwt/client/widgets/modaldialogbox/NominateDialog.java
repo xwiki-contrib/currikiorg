@@ -71,7 +71,7 @@ public class NominateDialog extends ModalDialog {
 
     public void init(){
         addStyleName(getCSSName(""));
-        setCaption(Main.getTranslation("curriki.crs.nominate"), false);
+        setCaption(Main.getTranslation("curriki.crs.nominate"), true);
 
         FlowPanel introTitlePanel = new FlowPanel();
         introTitlePanel.addStyleName(getCSSName("title"));

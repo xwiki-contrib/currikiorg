@@ -57,7 +57,7 @@ public class ChoiceDialog extends ModalDialog {
 
     public void init(){
         addStyleName(getCSSName(""));
-        setCaption(titleText, false);
+        setCaption(titleText, true);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName(getCSSName("content"));

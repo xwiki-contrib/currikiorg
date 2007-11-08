@@ -35,10 +35,10 @@ public class AssetList  extends Composite {
     public AssetList(List docs){
         grid = new Grid(docs.size() + 1, MAX_COL);
 
-        grid.setText(0, 1, Main.getTranslation("asset.title"));
-        grid.setText(0, 2, Main.getTranslation("asset.subject"));
-        grid.setText(0, 3, Main.getTranslation("asset.level"));
-        grid.setText(0, 4, Main.getTranslation("asset.type"));
+        grid.setHTML(0, 1, Main.getTranslation("asset.title"));
+        grid.setHTML(0, 2, Main.getTranslation("asset.subject"));
+        grid.setHTML(0, 3, Main.getTranslation("asset.level"));
+        grid.setHTML(0, 4, Main.getTranslation("asset.type"));
         
         initWidget(grid);
     }

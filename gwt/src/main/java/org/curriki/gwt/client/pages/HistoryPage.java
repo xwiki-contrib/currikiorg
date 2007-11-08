@@ -130,18 +130,18 @@ public class HistoryPage extends AbstractPage {
         table.setStyleName("history-versions");
         int startCol = 0;
         if (!isComposite) {
-            table.setText(0, 0, Main.getTranslation("history.to"));
-            table.setText(0, 1, Main.getTranslation("history.from"));
+            table.setHTML(0, 0, Main.getTranslation("history.to"));
+            table.setHTML(0, 1, Main.getTranslation("history.from"));
             table.getCellFormatter().setStyleName(0, 0, "to");
             table.getCellFormatter().setStyleName(0, 1, "from");
             startCol = 2;
         }
         table.getRowFormatter().setStyleName(0, "history-versions-title");
-        table.setText(0, startCol, Main.getTranslation("history.version"));
-        table.setText(0, startCol + 1, Main.getTranslation("history.author"));
-        table.setText(0, startCol + 2, Main.getTranslation("history.date"));
-        table.setText(0, startCol + 3, Main.getTranslation("history.comment"));
-        table.setText(0, startCol + 4, Main.getTranslation("history.rollback"));
+        table.setHTML(0, startCol, Main.getTranslation("history.version"));
+        table.setHTML(0, startCol + 1, Main.getTranslation("history.author"));
+        table.setHTML(0, startCol + 2, Main.getTranslation("history.date"));
+        table.setHTML(0, startCol + 3, Main.getTranslation("history.comment"));
+        table.setHTML(0, startCol + 4, Main.getTranslation("history.rollback"));
         table.getCellFormatter().setStyleName(0, startCol, "version");
         table.getCellFormatter().setStyleName(0, startCol + 1, "author");
         table.getCellFormatter().setStyleName(0, startCol + 2, "date");
@@ -175,7 +175,7 @@ public class HistoryPage extends AbstractPage {
             String sdate = formatter.format(new Date(vinfo.getDate()));
             Hyperlink link = new Hyperlink();
             link.setStyleName("history-versionlink");
-            link.setText(version);
+            link.setHTML(version);
             link.addClickListener(new ClickListener() {
                 public void onClick(Widget widget) {
                     // viewing older version of a document.
@@ -191,7 +191,7 @@ public class HistoryPage extends AbstractPage {
             if (!vinfo.getAuthor().equals("WebHome"))  {
                 Hyperlink authorLink = new Hyperlink();
                 authorLink.setStyleName("history-authorlink");
-                authorLink.setText(vinfo.getAuthor());
+                authorLink.setHTML(vinfo.getAuthor());
                 authorLink.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
                         // Rollback has been accepted
@@ -201,7 +201,7 @@ public class HistoryPage extends AbstractPage {
                 table.setWidget(row+1, startCol + 1, authorLink);
             }
 
-            table.setText(row+1, startCol + 2, sdate);
+            table.setHTML(row+1, startCol + 2, sdate);
             String comment = vinfo.getComment();
             comment = comment.replaceAll("<a", "<a target=\"_blank\"");
             table.setHTML(row+1, startCol + 3, comment);
@@ -213,7 +213,7 @@ public class HistoryPage extends AbstractPage {
 
             if (row!=0) {
                 Button button = new Button();
-                button.setText(Main.getTranslation("history.rollback"));
+                button.setHTML(Main.getTranslation("history.rollback"));
                 button.setStyleName("history-rollback-button");
                 button.addClickListener(new ClickListener() {
                     public void onClick(Widget widget) {
@@ -255,7 +255,7 @@ public class HistoryPage extends AbstractPage {
         // Adding compare button
         if (!isComposite) {
             Button button = new Button();
-            button.setText(Main.getTranslation("history.compare"));
+            button.setHTML(Main.getTranslation("history.compare"));
             button.setStyleName("history-compare-button");
             button.addClickListener(new ClickListener() {
                 public void onClick(Widget widget)

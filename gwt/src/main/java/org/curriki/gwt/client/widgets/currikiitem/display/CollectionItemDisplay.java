@@ -63,7 +63,7 @@ public class CollectionItemDisplay  extends AbstractItemDisplay {
     }
 
     public void initDisplay(Document doc) {
-//        Label label = new Label(Main.getTranslation("collection")){
+//        Label label = new HTML(Main.getTranslation("collection")){
 //            public void onBrowserEvent(Event event) {
 //                item.onBrowserEvent(event);
 //            }

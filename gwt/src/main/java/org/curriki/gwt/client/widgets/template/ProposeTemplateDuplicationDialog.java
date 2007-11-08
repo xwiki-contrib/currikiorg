@@ -41,7 +41,7 @@ public class ProposeTemplateDuplicationDialog extends ModalDialog {
 
     public void init(List templates){
         addStyleName("dialog-proposeduplication");
-        setCaption(Main.getTranslation("Template Editing"), false);
+        setCaption(Main.getTranslation("Template Editing"), true);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("dialog-proposeduplication-content");

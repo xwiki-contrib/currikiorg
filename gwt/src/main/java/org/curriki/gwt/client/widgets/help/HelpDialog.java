@@ -55,7 +55,7 @@ public class HelpDialog extends ModalDialog {
                 }
             }
         };
-        Button closeButton = new Button(Main.getTranslation("close"));
+        Button closeButton = new Button(Main.getTranslation("editor.help.close"));
         closeButton.addStyleName(getCSSName("caption-button"));
         closeButton.addClickListener(closeDialog);
         caption.add(closeButton);
@@ -69,7 +69,7 @@ public class HelpDialog extends ModalDialog {
                 }
             }
         };
-        Button openButton = new Button(Main.getTranslation("openinnewwindow"));
+        Button openButton = new Button(Main.getTranslation("editor.help.openinnewwindow"));
         openButton.addStyleName(getCSSName("caption-button"));
         openButton.addClickListener(openDialog);
         caption.add(openButton);

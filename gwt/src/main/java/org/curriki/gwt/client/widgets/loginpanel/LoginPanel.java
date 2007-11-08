@@ -28,23 +28,7 @@
 
 package org.curriki.gwt.client.widgets.loginpanel;
 
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTMLTable;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.EventListener;
@@ -59,15 +43,15 @@ public class LoginPanel extends Composite {
 
     private final VerticalPanel vp = new VerticalPanel();
 
-    private final Label message = new Label();
-    private final Label errorMessage = new Label();
+    private final Label message = new HTML();
+    private final Label errorMessage = new HTML();
     private final Grid grid = new Grid(3, 2);
 
     private final TextBox username = new TextBox();
-    private final Label usernameLabel = new Label(Main.getTranslation("login.username"));
+    private final Label usernameLabel = new HTML(Main.getTranslation("login.username"));
 
     private final PasswordTextBox password = new PasswordTextBox();
-    private final Label passwordLabel = new Label(Main.getTranslation("login.password"));
+    private final Label passwordLabel = new HTML(Main.getTranslation("login.password"));
 
     private final Image wait = new Image(Constants.ICON_SPINNER);
     private final SimplePanel waitPanel = new SimplePanel();

@@ -125,7 +125,7 @@ public class ImageItemDisplay  extends AttachementItemDisplay {
         }
 
         // Let's put the description for all
-        Label caption = new Label();
+        Label caption = new HTML();
         XObject obj = doc.getObject(Constants.ASSET_CLASS);
         String captionTxt = obj.getViewProperty(Constants.ASSET_CAPTION_DESCRIPTION_PROPERTY);
         if (captionTxt == null || captionTxt.trim().length() == 0) {

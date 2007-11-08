@@ -37,8 +37,8 @@ import org.curriki.gwt.client.search.queries.Paginator;
 
 public class PaginationPanel extends VerticalPanel implements Paginator, KeepsState
 {
-    protected Label prev = new Label();
-    protected Label next = new Label();
+    protected Label prev = new HTML();
+    protected Label next = new HTML();
     protected boolean canPrevious = false;
     protected boolean canNext = false;
     protected DoesSearch searcher;
@@ -163,13 +163,13 @@ public class PaginationPanel extends VerticalPanel implements Paginator, KeepsSt
 
         pNav.add(prev);
 
-        pNav.add(new Label("   "));
+        pNav.add(new HTML("   "));
 
         for (int i=1; i<=10; i++){
             int pPage = (pageOffset*10) + i;
             if (pPage <= pagecount){
                 String pPageString = (new Integer(pPage)).toString();
-                Label n = new Label();
+                Label n = new HTML();
                 n.setText(pPageString);
                 n.setTitle(Main.getTranslation("search.nav.page")+" "+pPageString);
                 n.addStyleName("pagination-item");
@@ -180,11 +180,11 @@ public class PaginationPanel extends VerticalPanel implements Paginator, KeepsSt
                 n.addClickListener(paginate);
                 pNav.add(n);
 
-                pNav.add(new Label(" "));
+                pNav.add(new HTML(" "));
             }
         }
 
-        pNav.add(new Label("  "));
+        pNav.add(new HTML("  "));
 
         pNav.add(next);
 

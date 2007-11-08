@@ -72,7 +72,7 @@ public class EditPage extends AbstractPage {
                    new HelpDialog("help", Main.getHelpURL(), "help");
                }
            });
-           helpLink.setText(Main.getTranslation("editor.help"));
+           helpLink.setHTML(Main.getTranslation("editor.help"));
            linkPanel.add(helpLink);
 
 
@@ -86,7 +86,7 @@ public class EditPage extends AbstractPage {
                 Window.open(url, "_blank", "");
             }
         });
-        viewLink.setText(Main.getTranslation("editor.view"));
+        viewLink.setHTML(Main.getTranslation("editor.view"));
         linkPanel.add(viewLink);
 
         // print link
@@ -99,11 +99,11 @@ public class EditPage extends AbstractPage {
                 Window.open(url, "_blank", "");
             }
         });
-        printLink.setText(Main.getTranslation("editor.print"));
+        printLink.setHTML(Main.getTranslation("editor.print"));
         linkPanel.add(printLink);
         panel.add(linkPanel);
 
-        compositeAssetTitle = new Label();
+        compositeAssetTitle = new HTML();
         compositeAssetTitle.addStyleName("edit-panel-title");
         panel.add(compositeAssetTitle);
 
@@ -302,10 +302,10 @@ public class EditPage extends AbstractPage {
         clickListener.setBttNo(bttNo);
         clickListener.setBttYes(bttYes);
 
-        dialog.setCaption(Main.getTranslation("editor.app_full_name"), false);
+        dialog.setCaption(Main.getTranslation("editor.app_full_name"), true);
 
         Grid grid = new Grid(2,1);
-        grid.setText(0, 0, Main.getTranslation("editor.do_you_want_to_save"));
+        grid.setHTML(0, 0, Main.getTranslation("editor.do_you_want_to_save"));
 
         HorizontalPanel panel = new HorizontalPanel();
 

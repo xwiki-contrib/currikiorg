@@ -34,14 +34,14 @@ public class ModalMsgDialogBox {
     }
 
     public ModalMsgDialogBox(String title, String msg, String styleName){
-        dialog.setCaption(title, false);
+        dialog.setCaption(title, true);
         if (styleName!=null) {
             ScrollPanel scroll = new ScrollPanel();
-            scroll.add(new Label(msg));
+            scroll.add(new HTML(msg));
             scroll.addStyleName(styleName);
             dialog.add(scroll);
         } else {
-            dialog.add(new Label(msg));
+            dialog.add(new HTML(msg));
         }
         dialog.add(new CloseButton(dialog, Main.getTranslation("Ok")));
         dialog.show();

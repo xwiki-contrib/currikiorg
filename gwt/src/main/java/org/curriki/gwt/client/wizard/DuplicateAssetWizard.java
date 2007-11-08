@@ -138,7 +138,7 @@ public class DuplicateAssetWizard {
         metaPanel = new ModalDialog();
         metaPanel.removeController(metaPanel.getController(TabFocusController.class));
         metaPanel.addStyleName("dialog-metadata");
-        metaPanel.setCaption(Main.getTranslation("duplicateasset.describelearningresource"), false);
+        metaPanel.setCaption(Main.getTranslation("duplicateasset.describelearningresource"), true);
 
         metaPanel.add(meta);
 

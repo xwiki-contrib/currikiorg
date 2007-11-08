@@ -71,7 +71,7 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
         if (sortBy != null && !sortBy.equals("")){
             return new SortableColumnHeader(header, sortBy);
         } else {
-            return new Label(header);
+            return new HTML(header);
         }
     }
 
@@ -93,7 +93,7 @@ abstract public class ResultsColumn implements ResultsColumnDisplayable
 
     public Widget getDisplayWidget(Document value)
     {
-        return new Label(getDisplayString(value));
+        return new HTML(getDisplayString(value));
     }
 
     protected void addTooltip(SourcesMouseEvents item, String text) {

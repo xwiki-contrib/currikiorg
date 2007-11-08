@@ -26,6 +26,7 @@ import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.Constants;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
 public class LanguageSelector extends DropdownSingleSelector
 {
@@ -49,6 +50,6 @@ public class LanguageSelector extends DropdownSingleSelector
 
     public Widget getLabel()
     {
-        return new Label(Main.getTranslation("search.selector.language"));
+        return new HTML(Main.getTranslation("search.selector.language"));
     }
 }

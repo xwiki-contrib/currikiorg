@@ -27,6 +27,7 @@ import org.curriki.gwt.client.Constants;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 public class InstructionalTypeSelector extends DropdownSingleSelector
 {
@@ -75,7 +76,7 @@ public class InstructionalTypeSelector extends DropdownSingleSelector
     public Widget getLabel()
     {
         HorizontalPanel p = new HorizontalPanel();
-        p.add(new Label(Main.getTranslation("search.selector.ict")));
+        p.add(new HTML(Main.getTranslation("search.selector.ict")));
         //p.add(getTooltip("ict"));
         return p;
     }

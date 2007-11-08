@@ -45,7 +45,7 @@ public class WizardBox {
 
     public WizardBox(String title){
         dialog.addStyleName("wizard");
-        dialog.setCaption(title, false);
+        dialog.setCaption(title, true);
         bttPanel.add(bttFinish, DockPanel.EAST);
     }
 

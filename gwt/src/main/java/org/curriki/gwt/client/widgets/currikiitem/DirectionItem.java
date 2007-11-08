@@ -1,12 +1,6 @@
 package org.curriki.gwt.client.widgets.currikiitem;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -55,7 +49,7 @@ public class DirectionItem extends Composite implements CurrikiItem {
         int obj_id = Integer.valueOf(key.substring(Constants.DIRECTION.length())).intValue();
         XObject obj = doc.getObject(Constants.DIRECTION_CLASS, obj_id);
         String text = (String) obj.get(Constants.DIRECTION_TEXT_PROPERTY);
-        directions = new Label(text){
+        directions = new HTML(text){
             public void onBrowserEvent(Event event) {
                 if (DOM.eventGetType(event) == Event.ONCLICK)
                     onSelectClick();

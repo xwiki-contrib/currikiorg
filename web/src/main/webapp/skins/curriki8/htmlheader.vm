@@ -40,6 +40,11 @@ urchinTracker();
 <script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+#if($context.action=="admin")
+<script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js")"></script>
+#end
 <link rel="stylesheet" href="/xwiki/bin/view/XWiki/style?xpage=plain" type="text/css" />
 #if($request.getHeader("user-agent").indexOf("MSIE")!=-1)
 <!--[if IE 7]>

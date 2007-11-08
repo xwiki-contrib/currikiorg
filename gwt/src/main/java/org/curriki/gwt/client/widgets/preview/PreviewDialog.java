@@ -32,9 +32,9 @@ public class PreviewDialog  {
     final ModalDialog dialog = new ModalDialog();
 
     public PreviewDialog(String title, String msg, String url, String styleName){
-        dialog.setCaption(title, false);
+        dialog.setCaption(title, true);
         dialog.setStyleName(styleName);
-        dialog.add(new Label(msg));
+        dialog.add(new HTML(msg));
         int height = Window.getClientHeight() - 100;
         if (height<100)
          height = 100;

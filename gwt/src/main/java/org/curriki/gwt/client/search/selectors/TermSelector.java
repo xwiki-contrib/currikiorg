@@ -25,6 +25,7 @@ package org.curriki.gwt.client.search.selectors;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 import org.curriki.gwt.client.Main;
 
 public class TermSelector extends TextInputSelector
@@ -51,7 +52,7 @@ public class TermSelector extends TextInputSelector
     public Widget getLabel()
     {
         HorizontalPanel p = new HorizontalPanel();
-        p.add(new Label(Main.getTranslation("search.selector.terms")));
+        p.add(new HTML(Main.getTranslation("search.selector.terms")));
         //p.add(getTooltip("terms"));
         return p;
     }

@@ -25,12 +25,7 @@ package org.curriki.gwt.client.widgets.menu;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.IndexedPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class SimpleMenuPanel extends ComplexPanel implements IndexedPanel {
     private boolean hiddingEnable = true;
@@ -257,7 +252,7 @@ public class SimpleMenuPanel extends ComplexPanel implements IndexedPanel {
     public void onModuleLoad() {
         RootPanel.get().add(this);
         this.add("menu1", new Button("test"), "test");
-        this.add("menu2", new Label("test"), "test 2");
+        this.add("menu2", new HTML("test"), "test 2");
         hidePanelItem("menu2");
     }
 }

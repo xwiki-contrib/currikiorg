@@ -25,6 +25,7 @@ package org.curriki.gwt.client.widgets.siteadd;
 import asquare.gwt.tk.client.ui.BasicPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.Window;
 import org.curriki.gwt.client.utils.Translator;
@@ -46,7 +47,7 @@ public class MyCollectionsPanel extends BasicPanel {
     public MyCollectionsPanel(AsyncCallback countCallback){
         this.countCallback = countCallback;
 
-        Label caption = new Label(Main.getTranslation("mycollections.title"));
+        Label caption = new HTML(Main.getTranslation("mycollections.title"));
         caption.addStyleName("selector-mycollections-caption");
         add(caption);
 

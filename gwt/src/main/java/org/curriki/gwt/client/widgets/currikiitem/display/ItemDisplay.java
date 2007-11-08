@@ -214,7 +214,7 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
     }
 
     protected void initDisplayDescription(Document doc) {
-        Label caption = new Label(){
+        Label caption = new HTML(){
             public void onBrowserEvent(Event event) {
                 item.onBrowserEvent(event);
             }
@@ -230,7 +230,7 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
     public void initDisplay(Document doc) {
         panel.clear();
 
-        link = new Label(){
+        link = new HTML(){
             public void onBrowserEvent(Event event) {
                 item.onBrowserEvent(event);
             }
@@ -256,7 +256,7 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
 
         if (link != null && panel.getWidgetIndex(link) != -1)
             panel.remove(link);
-        link = new Label(){
+        link = new HTML(){
             public void onBrowserEvent(Event event) {
                 item.onBrowserEvent(event);
             }
@@ -264,7 +264,7 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
         link.sinkEvents(Event.ONCLICK | Event.ONDBLCLICK);
         link.addStyleName("item-link");
 
-        Label caption = new Label();
+        Label caption = new HTML();
         caption.setText(Main.getTranslation("asset.externallink"));
         caption.setStyleName("item-description");
         if(panel.getWidgetIndex(caption) == -1)
@@ -306,7 +306,7 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
     protected abstract void initEdit();
 
     protected Label getSubtitleLabel(String titleKey){
-        Label label = new Label(Main.getTranslation(titleKey));
+        Label label = new HTML(Main.getTranslation(titleKey));
         label.addStyleName("curriki-subtitle");
         return label;
     }
