@@ -213,12 +213,12 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             List eduList = new ArrayList();
             eduList.add("na");
             obj.setDBStringListValue(Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY, eduList);
-        }
 
-        // we select the root of the Master framework
-        List fwList = new ArrayList();
-        fwList.add(Constants.ASSET_FW_ITEMS_DEFAULT);
-        obj.setDBStringListValue(Constants.ASSET_FW_ITEMS_PROPERTY, fwList);
+            // we select the root of the Master framework
+            List fwList = new ArrayList();
+            fwList.add(Constants.ASSET_FW_ITEMS_DEFAULT);
+            obj.setDBStringListValue(Constants.ASSET_FW_ITEMS_PROPERTY, fwList);
+        }
 
         context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewcollection"), context);
         return doc;
