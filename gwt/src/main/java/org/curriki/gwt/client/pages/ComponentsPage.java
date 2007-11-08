@@ -117,7 +117,7 @@ public class ComponentsPage extends Composite implements TabListener {
             int index = tabPanel.getWidgetIndex(commentPage);
             int selectedIndex = tabPanel.getTabBar().getSelectedTab();
             tabPanel.remove(commentPage);
-            tabPanel.insert(commentPage, getCommentTabName(), index);
+            tabPanel.insert(commentPage, getCommentTabName(), true, index);
             if (index==selectedIndex)
              tabPanel.selectTab(index);
         }
