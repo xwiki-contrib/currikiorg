@@ -1461,6 +1461,14 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 #end
 #end
 #macro(displayAsset $currDoc)
+<style type="text/css">
+.asset-contents {
+  width: 800px;
+}
+.titlebar {
+  width: 800px;
+}
+</style>
 #if(!$isPrint)
 <div class="asset-tabs">
 <a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a>
