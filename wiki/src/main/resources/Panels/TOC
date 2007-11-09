@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1190211387000</creationDate>
-<date>1191543984000</date>
-<contentUpdateDate>1191543984000</contentUpdateDate>
-<version>1.43</version>
+<date>1194298987000</date>
+<contentUpdateDate>1194298987000</contentUpdateDate>
+<version>1.44</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix empty asset in list</comment>
+<comment>Fixed wiki syntax in TOC</comment>
 <object>
 <class>
 <name>Panels.PanelClass</name>
@@ -96,7 +96,8 @@
 <category>Information</category>
 </property>
 <property>
-<content>#set($assetObj = $doc.getObject("XWiki.AssetClass"))
+<content>{pre}
+#set($assetObj = $doc.getObject("XWiki.AssetClass"))
 #if($assetObj)
 &lt;style type="text/css"&gt;
 .collapsed ul {
@@ -248,7 +249,8 @@ $currikiTitle
 &lt;/div&gt;
 &lt;br /&gt;
 #panelfooter()
-#end</content>
+#end
+{/pre}</content>
 </property>
 <property>
 <description>Asset Table of Contents</description>

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1189372362000</creationDate>
-<date>1191364561000</date>
-<contentUpdateDate>1191364561000</contentUpdateDate>
-<version>1.37</version>
+<date>1193771332000</date>
+<contentUpdateDate>1193771332000</contentUpdateDate>
+<version>1.41</version>
 <title>Review Form</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix display</comment>
+<comment>Fix CURRIKI-1091</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -159,6 +159,9 @@
 #set($ok = $asset.updateObjectFromRequest("XWiki.AssetClass"))
 #set($ok = $asset.use("XWiki.AssetClass"))
 #set($ict = $asset.display("instructional_component2"))
+#if(!$asset.getObject("CRS.CurrikiReviewStatusClass"))
+#set($ok = $asset.newObject("CRS.CurrikiReviewStatusClass"))
+#end
 #set($objs = $asset.updateObjectsFromRequest("CRS.CurrikiReviewClass"))
 #set($ok = $asset.use($objs.get(0)))
 #set($comment = $asset.getValue("comment"))
@@ -180,13 +183,13 @@
 #set($ok = $asset.set("rating", $rating))
 #if($request.confirm)
 #set($ok = $asset.set("user", $context.user))
-#set($ok = $asset.set("date", $xwiki.formatDate($xwiki.date, "dd/MM/yyyy HH:mm:ss")))
+#set($ok = $asset.set("date", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm:ss")))
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
 #set($ok = $asset.set("status", $rating))
 #set($ok = $asset.set("lastreview_user", $context.user))
-#set($ok = $asset.set("lastreview_date", $xwiki.formatDate($xwiki.date, "dd/MM/yyyy HH:mm:ss")))
+#set($ok = $asset.set("lastreview_date", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm:ss")))
 #set($ok = $asset.set("reviewpending", 0))
-$asset.save()
+$asset.saveWithProgrammingRights()
 $msg.get("curriki.crs.review.saved") $msg.get("curriki.crs.review.returnto") [$msg.get("curriki.crs.review.document")&gt;$asset.fullName] $msg.get("curriki.crs.review.or") [$msg.get("curriki.crs.review.reviewpage")&gt;Reviews].
 
 #set($assetowner = $asset.creator)
