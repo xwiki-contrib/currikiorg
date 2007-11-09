@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>FileCheck</web>
+<name>WebHome</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.LudovicDubost</creator>
+<author>XWiki.LudovicDubost</author>
+<customClass></customClass>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<creationDate>1194209149000</creationDate>
+<date>1194550257000</date>
+<contentUpdateDate>1194550257000</contentUpdateDate>
+<version>1.38</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>Fix creator display</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>FileCheck.WebHome</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>1 $msg.fc_filecheck
+
+#if($request.nbstart)
+#set($inbstart = $xwiki.parseInt($request.nbstart))
+#else
+#set($inbstart = 0)
+#end
+#set($qs = "type=$!request.type")
+#set($inbitems = 20)
+#set($counter = 0)
+#set($fromsql = "")
+#set($wheresql = "")
+#if($request.from&amp;&amp;($request.from!="")&amp;&amp;($request.from!="YYYY/MM/DD"))
+#set($wheresql = "$wheresql and doc.date&gt;'$request.from'")
+#set($from = $request.from)
+#set($qs = "${qs}&amp;from=$from")
+#else
+#set($from = "YYYY/MM/DD")
+#end
+#if($request.to&amp;&amp;($request.to!=""))
+#set($wheresql = "$wheresql and doc.date&lt;'$request.to'")
+#set($qs = "${qs}&amp;to=$to")
+#end
+#if($request.type=="1")
+#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
+#elseif($request.type=="2")
+#set($fromsql = "$fromsql ,StringProperty as sprop")
+#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null and sprop.value &lt;&gt; '0'")
+#elseif($request.type=="3")
+#set($wheresql = "$wheresql and (doc.version='1.0' or doc.version='1.1' or doc.version='1.2')")
+#end
+#if($request.order=="fcstatus")
+#if($request.type!="2")
+#set($fromsql = "$fromsql ,StringProperty as sprop")
+#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
+#end
+#set($order = "sprop.value asc")
+#elseif($request.order=="fcdate")
+#set($fromsql = "$fromsql ,DateProperty as dprop")
+#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
+#set($order = "dprop.value asc")
+#else
+#set($order = "doc.date desc")
+#end
+#set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%'  and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!wheresql order by $order")
+&lt;!-- $sql --&gt;
+&lt;form action=""&gt;
+1.1 $msg.fc_daterange
+
+$msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from" value="$!from" size="12" /&gt; $msg.fc_to &lt;input type="text" style="width: auto;" name="to" value="$!request.to" size="12" /&gt;
+
+1.1 $msg.fc_filterby
+
+&lt;input type="radio" name="type" value="0" #if(!$request.type||($request.type=="0")) checked #end /&gt; $msg.fc_all &lt;br /&gt;
+&lt;input type="radio" name="type" value="1" #if($request.type=="1") checked #end /&gt; $msg.fc_onlywithoutfcstatus &lt;br /&gt;
+&lt;input type="radio" name="type" value="2" #if($request.type=="2") checked #end /&gt; $msg.fc_onlywithfcstatus &lt;br /&gt;
+&lt;input type="radio" name="type" value="3" #if($request.type=="3") checked #end /&gt; $msg.fc_onlyincompleteassets &lt;br /&gt;
+&lt;br /&gt;
+&lt;input type="submit" value="$msg.fc_ok" /&gt;
+&lt;/form&gt;
+
+&lt;table border="1" width="100%"&gt;
+&lt;tr&gt;
+&lt;th&gt; $msg.fc_resourcetitle &lt;/td&gt;
+&lt;th&gt; $msg.fc_dateadded &lt;/td&gt;
+&lt;th&gt; $msg.fc_contributor &lt;/td&gt;
+&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus] &lt;/td&gt;
+&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate] &lt;/td&gt;
+&lt;th&gt; $msg.fc_notes &lt;/td&gt;
+&lt;th&gt; $msg.fc_select &lt;/td&gt;
+&lt;/tr&gt;
+#foreach($fullname in $xwiki.searchDocuments($sql,$inbitems,$inbstart))
+#set($counter = $counter+1)
+#set($itemdoc = $xwiki.getDocument($fullname))
+#set($ok = $itemdoc.use("XWiki.AssetClass"))
+#findCurrikiTitle($itemdoc)
+&lt;tr&gt;
+&lt;td&gt;
+[$currikiTitle&gt;$fullname]
+&lt;/td&gt;
+&lt;td&gt;
+$itemdoc.date
+&lt;/td&gt;
+&lt;td&gt;
+$xwiki.getLocalUserName($itemdoc.creator)
+&lt;/td&gt;
+&lt;td&gt;
+$itemdoc.display("fcstatus")
+&lt;/td&gt;
+&lt;td&gt;
+$itemdoc.display("fcdate")
+&lt;/td&gt;
+&lt;td&gt;
+$itemdoc.display("fcnotes")
+&lt;/td&gt;
+&lt;td&gt;
+#set($qs = $xwiki.getURLEncoded($fullname))
+[${msg.fc_action}&gt;Check?page=$qs]
+&lt;/td&gt;
+&lt;/tr&gt;
+#end
+&lt;/table&gt;
+
+#if($counter==$inbitems)
+&lt;div style="text-align:center; margin-top:10px;"&gt;
+#if ($inbstart!=0)
+#set($iprev = $inbstart - $inbitems)
+&lt;span class="search searchprevious"&gt;[$msg.fc_previous&gt;$doc.name?nbstart=${iprev}]&lt;/span&gt;
+#end
+#set($inext = $inbstart + $inbitems)
+&lt;span class="search searchnext"&gt;[$msg.fc_next&gt;$doc.name?nbstart=${inext}]&lt;/span&gt;
+&lt;/div&gt;
+#end
+</content></xwikidoc>
