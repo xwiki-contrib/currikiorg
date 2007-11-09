@@ -643,11 +643,18 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             missing += "title";
         }
 
-       if (form["XWiki.AssetClass_0_description"].value == "") {
+        if (form["XWiki.AssetClass_0_description"].value == "") {
             if (!first)
                 missing += ",";
             first = false;
             missing += "description";
+        }
+
+       if (form["XWiki.AssetClass_0_fw_items"].value == "") {
+            if (!first)
+                missing += ",";
+            first = false;
+            missing += "fw_items";
         }
 
         // There are 2 fields of this name, the first is the selector, second is a hidden input
