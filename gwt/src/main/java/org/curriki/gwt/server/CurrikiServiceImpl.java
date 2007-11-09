@@ -535,6 +535,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             params.add("" + position);
 
             String comment = context.getMessageTool().get("curriki.comment.insertsubassetincompositeasset", params);
+            compositeAssetDoc.setAuthor(context.getUser());
             context.getWiki().saveDocument(compositeAssetDoc, comment, context);
 
             return true;
@@ -628,6 +629,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                     params.add("" + position);
                     String comment = context.getMessageTool().get("curriki.comment.removesubassetincompositeasset", params);
 
+                    compositeAssetDoc.setAuthor(context.getUser());
                     context.getWiki().saveDocument(compositeAssetDoc, comment, context);
                     break;
                 }
