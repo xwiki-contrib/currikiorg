@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1189370470000</creationDate>
-<date>1194451684000</date>
-<contentUpdateDate>1194451684000</contentUpdateDate>
-<version>1.7</version>
+<date>1194640420000</date>
+<contentUpdateDate>1194640420000</contentUpdateDate>
+<version>1.9</version>
 <title>Reviews</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix title</comment>
+<comment>Fix view</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -171,7 +171,7 @@ $msg.get("curriki.crs.reviews.viewnominated"): &lt;select name="fw_item" onchang
 #set($sql = ", BaseObject as obj, IntegerProperty as prop where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and prop.id.name='reviewpending' and prop.value=1")
 #end
 {table}
-$msg.get("curriki.crs.reviews.assetname") | $msg.get("curriki.crs.reviews.ict") | $msg.get("curriki.crs.reviews.educlevel") | $msg.get("curriki.crs.reviews.lastreviewed") | $msg.get("curriki.crs.reviews.currentrating") | $msg.get("curriki.crs.reviews.actions")
+$msg.get("curriki.crs.reviews.assetname")  | $msg.get("curriki.crs.reviews.ict") | $msg.get("curriki.crs.reviews.educlevel")  | $msg.get("curriki.crs.reviews.lastreviewed")  | $msg.get("curriki.crs.reviews.currentrating")  | $msg.get("curriki.crs.reviews.actions")
 #foreach($assetdocname in $xwiki.searchDocuments($sql))
 #set($asset = $xwiki.getDocument($assetdocname))
 #set($ok = $asset.use("XWiki.AssetClass"))
@@ -182,7 +182,7 @@ $msg.get("curriki.crs.reviews.assetname") | $msg.get("curriki.crs.reviews.ict") 
 #set($nomuser = $asset.display("nomination_user"))
 #set($lastreview_date = $asset.display("lastreview_date"))
 #set($status = $asset.display("status"))
-{pre} &lt;a href="$asset.getURL()" target="_blank"&gt;$asset.getDisplayTitle()&lt;/a&gt; {/pre}  | {pre} $ict  {/pre}  | {pre} $educlevel.replaceAll("#--#",",")  {/pre} | {pre} $lastreview_date  {/pre} | {pre} $status  {/pre} | {pre} &lt;span class="wikilink"&gt;&lt;a href="$asset.getURL()" target="_blank"&gt;$msg.get("curriki.crs.reviews.view")&lt;/a&gt;&lt;/span&gt; {/pre} [$msg.get("curriki.crs.reviews.review")&gt;Review?page=$assetdocname]
+{pre} &lt;a href="$asset.getURL()" target="_blank"&gt;$asset.getDisplayTitle()&lt;/a&gt; {/pre}  | {pre}&amp;nbsp; $ict  {/pre}  | {pre}&amp;nbsp; $educlevel.replaceAll("#--#",",")  {/pre} | {pre}&amp;nbsp; $lastreview_date  {/pre} | {pre}&amp;nbsp; $status  {/pre} | {pre} &lt;span class="wikilink"&gt;&lt;a href="$asset.getURL()" target="_blank"&gt;$msg.get("curriki.crs.reviews.view")&lt;/a&gt;&lt;/span&gt; {/pre} [$msg.get("curriki.crs.reviews.review")&gt;Review?page=$assetdocname]
 #end
 {table}</content>
 </xwikidoc>

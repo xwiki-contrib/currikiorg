@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1194550257000</date>
-<contentUpdateDate>1194550257000</contentUpdateDate>
-<version>1.38</version>
+<date>1194640083000</date>
+<contentUpdateDate>1194640083000</contentUpdateDate>
+<version>1.45</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix creator display</comment>
+<comment>Added count</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -98,6 +98,8 @@
 #set($order = "doc.date desc")
 #end
 #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%'  and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!wheresql order by $order")
+#set($countsql = "select count(*) from XWikiDocument as doc ${sql}")
+#set($totalnb = $xwiki.search($countsql))
 &lt;!-- $sql --&gt;
 &lt;form action=""&gt;
 1.1 $msg.fc_daterange
@@ -114,7 +116,7 @@ $msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from"
 &lt;input type="submit" value="$msg.fc_ok" /&gt;
 &lt;/form&gt;
 
-&lt;table border="1" width="100%"&gt;
+&lt;table class="filechecktable"&gt;
 &lt;tr&gt;
 &lt;th&gt; $msg.fc_resourcetitle &lt;/td&gt;
 &lt;th&gt; $msg.fc_dateadded &lt;/td&gt;
@@ -130,28 +132,28 @@ $msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from"
 #set($ok = $itemdoc.use("XWiki.AssetClass"))
 #findCurrikiTitle($itemdoc)
 &lt;tr&gt;
-&lt;td&gt;
+&lt;td&gt;&lt;div class="title"&gt;
 [$currikiTitle&gt;$fullname]
-&lt;/td&gt;
-&lt;td&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div class="date"&gt;
 $itemdoc.date
-&lt;/td&gt;
-&lt;td&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div class="username"&gt;
 $xwiki.getLocalUserName($itemdoc.creator)
-&lt;/td&gt;
-&lt;td&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div class="fcstatus"&gt;
 $itemdoc.display("fcstatus")
-&lt;/td&gt;
-&lt;td&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div class="fcdate"&gt;
 $itemdoc.display("fcdate")
-&lt;/td&gt;
-&lt;td&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div class="fcnotes"&gt;
 $itemdoc.display("fcnotes")
-&lt;/td&gt;
-&lt;td&gt;
+&lt;/div&gt;&lt;/td&gt;
+&lt;td&gt;&lt;div class="action"&gt;
 #set($qs = $xwiki.getURLEncoded($fullname))
 [${msg.fc_action}&gt;Check?page=$qs]
-&lt;/td&gt;
+&lt;/div&gt;&lt;/td&gt;
 &lt;/tr&gt;
 #end
 &lt;/table&gt;
@@ -162,7 +164,13 @@ $itemdoc.display("fcnotes")
 #set($iprev = $inbstart - $inbitems)
 &lt;span class="search searchprevious"&gt;[$msg.fc_previous&gt;$doc.name?nbstart=${iprev}]&lt;/span&gt;
 #end
+#set($istart = $inbstart + 1)
 #set($inext = $inbstart + $inbitems)
+#set($stotalnb = "$totalnb")
+#set($stotalnb = $stotalnb.replace('[',' ').replace(']',' '))
+&lt;span class="search searchcount"&gt;
+{pre} $istart - $inext $msg.of $stotalnb {/pre}
+&lt;/span&gt;
 &lt;span class="search searchnext"&gt;[$msg.fc_next&gt;$doc.name?nbstart=${inext}]&lt;/span&gt;
 &lt;/div&gt;
 #end
