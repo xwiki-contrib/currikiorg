@@ -4317,7 +4317,7 @@ width:100%;
   width: 95%;
 }
 
-.help.asset-contents .titlebar {
+.help.asset-contents .titlebar,.help.asset-contents .asset-content-body-composite-source {
   width: 100%;
 }
 
@@ -4329,9 +4329,11 @@ width:100%;
   width:100%;
 }
 
-#contentcontainer.help {
-  padding-right: 220px;  
+#if($request.getHeader("user-agent").indexOf("MSIE")==-1)
+#contentcontainer.help  {
+  margin-right: 220px;
 }
+#end
 
 #leftPanels.help {
  padding: 1px;
@@ -4357,13 +4359,14 @@ width:100%;
  border: 0px;   
 }
 
-
 body.admin {
  padding-top: 20px;
 }
 
+
+
 /* JIRA 1084 - Adding an hover effect on the browse boxes  */
-.browse-subject-table-row .mouseover {
+.subject-card:hover {
  background-color: #F6F8C9;
  border-color: #FF4100;
 }
@@ -4371,10 +4374,10 @@ body.admin {
 /* JIRA 1052 - Problem with the bullets on IE in the CB */
 .item-direction-panel-content .gwt-HTML ul {
  padding-left: 3px;
-} 
+}
 
 
-/* JIRA 1104 - Design the CB help */ 
+/* JIRA 1104 - Design the CB help */
 .dialog-help .Caption {
  background-color: #E3E4F6;
  border: none;
@@ -4393,6 +4396,8 @@ body.admin {
 }
 .dialog-help-frame {
  background-color: #FFF;
+ overflow-x: hidden;
+ overflow-y: scroll;
 }
 #contentcontainerinner {
  border-color: #FFF;
@@ -4426,6 +4431,22 @@ body.admin {
 .edit-profile table table td {
  overflow: hidden;
 }
+.filechecktable {
+ border-left: 1px solid #EEEEEE;
+}
+.filechecktable td {
+ border-bottom: 1px solid #EEEEEE;
+ border-right: 1px solid #EEEEEE;
+}
+.filechecktable td div {
+ overflow: hidden;
+}
+.filechecktable td div.fcnotes {
+ width: 100px;
+}
+.filechecktable td div.username{
+ width: 60px;
+}
 
 /* JIRA 1015 - We need to make the text "Open Advanced Search" and "Close Advanced Search" in white, not the purple color. Let me know if you need to know where to find -- in Search Results.*/
 #searchElement table table.search-selector-bottom {
@@ -4433,4 +4454,71 @@ body.admin {
 }
 .search-selector-bottom {
  color: #fff;
+}
+
+/* JIRA 1118 - Opt out align checkbox */
+#register_block_opt_out .register_help {
+ line-height:16px;
+ position: absolute;
+ padding: 3px 0 0 25px;
+}
+#register_block_opt_out input {
+ border-color: #fff;
+}
+
+/* JIRA 1124 - Problem with right floating images in IE */
+.asset-content-body-composite-source, .asset-content-body {
+ width: 580px;
+}
+
+/* JIRA 1132 - Bold titles in metadata dialog */
+.field-panel-field .curriki-subtitle, .curriki-subtitle, .move-modal-box .gwt-Label {
+ font-family:Arial;
+ font-size:13px;
+ font-style:normal;
+ font-weight:bold;
+ line-height:normal;
+ margin: 5px 0px;
+}
+.curriki-txt {
+ margin-bottom: 5px;
+}
+
+/* JIRA 1131 - Make the introduction texts smaller in the metadata */
+.field_instructions {
+ font-size: 10px;
+}
+
+/* Fixing the color and alignments issues in the cb search */
+.search-selector-main .gwt-HTML, .search-selector-filters .gwt-HTML {
+ color: #FFF;
+}
+.results-action-cell {
+ vertical-align: middle;
+}
+.find-results-table-title .gwt-HTML {
+ color: #FFFFFF;
+ font-family:Helvetica,sans-serif;
+ font-size:12px;
+ font-style:normal;
+ font-weight:bold;
+ text-align: center;
+ text-transform:uppercase;
+ margin-bottom: 0;
+}
+.results-action-cell-link {
+ text-align: center;
+}
+.results-ict-cell .gwt-HTML {
+ text-align: center;
+}
+.find-results-table-title  {
+ height: 10px;
+}
+.find-results-table-title .gwt-Label {
+ text-align: center;
+ padding: 0;
+ margin: 0;
+}
+.find-results-column-header {
 }
