@@ -1560,7 +1560,7 @@ table.my-curriki-table td {
  margin-bottom: 5px;
 }
 .asset-content-body-composite-composite {
- padding: 2px;
+ padding: 5px;
  margin-bottom: 5px;
  border: 1px solid #ff4204;
 }
@@ -2727,12 +2727,6 @@ div.item-panel {
 }
 html > body #printcontainer table {
   width: 100%;
-}
-.main #dropshadow .asset-content-body-composite-source div {
-  width: 800px;
-}
-.main #dropshadow .asset-content-body-composite-source div div {
-  width: auto;
 }
 .asset-content-body-composite-source .clearfloats {
  display: block;
@@ -4289,50 +4283,6 @@ width:100%;
  	text-align: center;
 }
 
-// change asset styles depending on the mode (normal, print, help)
-.asset-contents {
-  width: 600px;
-}
-.asset-metadatas-block {
-  width: 590px;
-}
-.titlebar {
-  width: 600px;
-}
-.print.asset-contents {
-  width: 600px;
-}
-.print.asset-contents .asset-metadatas-block {
-  width: 590px;
-}
-.print.asset-contents .titlebar {
-  width: 600px;
-}
-
-.help.asset-contents {
-  width: 100%;
-}
-
-
-.help.asset-contents .titlebar,.help.asset-contents .asset-content-body, .help.asset-contents .asset-content-body-composite-source {
-  width: 100%;
-}
-
-.help.asset-contents .asset-metadatas-block {
-  width: 95%;
-}
-.help.asset-contents .asset-content-body {
-  width: 98%; padding:5px;
-}
-
-#dropshadow.help {
-}
-
-#dropshadow.help, #currikimaincontainer.help,
-#contentcontainer.help .asset-contents, #contentcontainer.help .titlebar {
-  width:100%;
-}
-
 #leftPanels.help {
  padding: 1px;
 }
@@ -4464,11 +4414,6 @@ body.admin {
  border-color: #fff;
 }
 
-/* JIRA 1124 - Problem with right floating images in IE */
-.asset-content-body-composite-source, .asset-content-body {
- width: 580px;
-}
-
 /* JIRA 1132 - Bold titles in metadata dialog */
 .field-panel-field .curriki-subtitle, .curriki-subtitle, .move-modal-box .gwt-Label {
  font-family:Arial;
@@ -4520,3 +4465,31 @@ body.admin {
 }
 .find-results-column-header {
 }
+
+#dropshadow.help, #currikimaincontainer.help,
+#contentcontainer.help .asset-contents, #contentcontainer.help .titlebar {
+  width: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.asset-contents, .asset-contents .titlebar,.asset-contents .asset-content-body, .asset-contents .asset-content-body-composite-source {
+  width: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+// change asset styles depending on the mode (normal, print, help)
+.asset-contents {
+  width: 600px;
+}
+
+/* JIRA 1124 - Problem with right floating images in IE */
+.asset-content-body-composite-source, .asset-content-body {
+ width: 580px;
+}
+
+.asset-contents .asset-content-body {
+ padding: 10px;
+}
+
