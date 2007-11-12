@@ -45,16 +45,8 @@ urchinTracker();
 <script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js")"></script>
 #end
-<link rel="stylesheet" href="/xwiki/bin/view/XWiki/style?xpage=plain" type="text/css" />
-#if($request.getHeader("user-agent").indexOf("MSIE")!=-1)
-<!--[if IE 7]>
-<style type="text/css">
-#browse-btn{
-  padding: 4px 0px !important;
-}
-</style>
-<![endif]-->
-<!--[if IE]>
+#set($ua = $request.getHeader("user-agent"))
+#if($ua.indexOf("MSIE")!=-1)
 <style type="text/css">
 * html #actionmenu{
   width: expression(document.body.clientWidth) !important;
@@ -63,13 +55,22 @@ urchinTracker();
   height: 18px;
   line-height: 18px;
 }
-.tk-ModalDialog-content .find-selector-container .find-selector SELECT.gwt-ListBox { 
+.tk-ModalDialog-content .find-selector-container .find-selector SELECT.gwt-ListBox {
   height: 19px;
   line-height: 19px;
 }
 </style>
-<![endif]-->
+#if(($ua.indexOf("MSIE 6")!=-1)||($ua.indexOf("MSIE 5")!=-1))
+<link href="$xwiki.getSkinFile("ie6.css", true)" rel="stylesheet" type="text/css" />
+#else
+<style type="text/css">
+#browse-btn{
+  padding: 4px 0px !important;
+}
+</style>
 #end
+#end
+<link rel="stylesheet" href="/xwiki/bin/view/XWiki/style?xpage=plain" type="text/css" />
 #if(($context.action=="inline")||($context.action=="edit") || ($context.action=="admin"))
 <script type="text/javascript">
  var cancelEditNextOnunload;

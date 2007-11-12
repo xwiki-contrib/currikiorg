@@ -35,6 +35,12 @@ urchinTracker();
 <script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+#set($ua = $request.getHeader("user-agent"))
+#if($ua.indexOf("MSIE 6")!=-1)
+#if(($ua.indexOf("MSIE 6")==-1)&&($ua.indexOf("MSIE 5")==-1))
+<link href="$xwiki.getSkinFile("ie6.css", true)" rel="stylesheet" type="text/css" />
+#end
+#end
 <link rel="stylesheet" href="/xwiki/bin/view/XWiki/style?xpage=plain" type="text/css" />
 </head>
 <body id="body" class="help">
