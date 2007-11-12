@@ -8,15 +8,14 @@ $context.setLinksQueryString("xpage=help")
 <div id="contentcontainer" class="help">
  <div id="contentcontainerinner" class="contenthideright">
   <div class="leftsidecolumns">
-   <div id="contentcolumn">
+    <div id="leftPanels" class="panels left help">
+     #displaypanel("Panels.TOC")
+    </div>
+    <div id="contentcolumn">
     <div class="main layoutsubsection">
-     #template("space.vm") 
      #template("contentview.vm")
      <div class="clearfloats"></div>
     </div>
-   </div>
-   <div id="leftPanels" class="panels left help">
-    #displaypanel("Panels.TOC")
    </div>
    <div class="clearfloats"></div>
  </div>
@@ -27,7 +26,3 @@ $context.unsetLinksQueryString()
 </div>
 </body>
 </html>
-
-
-
-

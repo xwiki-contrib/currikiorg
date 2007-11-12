@@ -1470,8 +1470,10 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 <div id="wizzard" class="asset-page">
 #set($obj = $currDoc.getObject("XWiki.AssetClass", true))
 #if(!$isPrint)
+<div class="asset-links">
 <div class="righttext">
 #displaylinks($currDoc)
+</div>
 </div>
 #end
 <div class="asset-contents $mode">
