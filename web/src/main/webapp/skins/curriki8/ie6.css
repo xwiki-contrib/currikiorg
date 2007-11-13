@@ -7,6 +7,7 @@
   margin-right: 10px;
 }
 .contenthideright {
+  margin-right: 0px;
   margin-left: auto;
 }
 /* end ie6 menu */
@@ -15,6 +16,8 @@
 .help #contentcolumn {
  padding-left: 0px;
  float: right;
+ margin-left: 20px;
+ margin-right: -5px;
 }
 .help #leftPanels.left {
   margin-left: 0px;
@@ -24,3 +27,45 @@
   margin-left: auto;
 }
 /* end ie6 help */
+
+/* View mode - fixing the floating assets issue */
+#contentcolumn {
+ width: 615px !important;
+ margin-left: 4px;
+}
+#contentcolumn .layoutsubsection {
+ width: 615px !important;
+}
+.leftsidecolumns .asset-contents {
+ margin-right: -20px;
+}
+.leftsidecolumns .asset-metadatas .titlebar {
+ width:593px !important;
+}
+.leftsidecolumns .asset-metadatas {
+ width: 585px !important;
+ padding: 0;
+ margin-right: -10px;
+}
+.leftsidecolumns .asset-contents .asset-content-body-composite-source, .leftsidecolumns .asset-contents .asset-content-body-composite-composite {
+ width: 572px;
+}
+.leftsidecolumns .asset-metadatas-block .strong {
+ font-size: 12px;
+}
+.dialog-next, .gwt-ButtonOrange {
+ background: #FF7F00;
+ border: 1px solid #FF4100;
+ color: #FFFFFF;
+}
+.my-curriki-table .righttext {
+ font-size: 12px;
+}
+
+/* Help fixing content width issues */
+.help #contentcolumn, .help #contentcolumn .layoutsubsection, .leftsidecolumns .help .asset-metadatas, .leftsidecolumns .help .asset-metadatas, .leftsidecolumns .help .asset-metadatas .titlebar, .leftsidecolumns .help .asset-content-body-composite-source, .leftsidecolumns .help .asset-content-body-composite-composite {
+ width: auto !important;
+}
+.leftsidecolumns .help .asset-metadatas {
+ margin-right: 0px !important;
+}

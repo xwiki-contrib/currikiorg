@@ -4579,10 +4579,73 @@ help .titlebar {
   float: left;     
 }
 
+/* Added 2007-11-13 */
 /* Fixing the grey outer border in the cb help */
 .help .asset-page {
 padding: 10px;
 }
 .help .titlebar_red {
 margin: 0;
+}
+
+/* Fixing the grey outer border in the cb help */
+#currikimaincontainer .asset-page { 
+ padding: 10px;
+}
+#currikimaincontainer .titlebar_red { 
+ margin: 0;
+}
+#printcontainer .asset-display { 
+ margin-top: 10px;
+}
+
+/* fixing the main site print and view alignment issues */
+.leftsidecolumns .asset-contents {
+ width: 595px;
+ background: #FFF;
+}
+.leftsidecolumns .asset-metadatas {
+ width: 595px;
+}
+.leftsidecolumns .asset-metadatas .titlebar {
+ width: 595px;
+}
+.leftsidecolumns .asset-content-body {
+ padding: 10px 0px !important;
+}
+.asset-contents .asset-content-body-composite-source, .asset-contents .asset-content-body-composite-composite {
+ width: 810px important;
+}
+.leftsidecolumns .asset-contents .asset-content-body-composite-source, .leftsidecolumns .asset-contents .asset-content-body-composite-composite {
+ margin: 0 0 10px 0 !important;
+ position: relative;
+ left: 10px;
+ background: #FFF;
+ width: 565px;
+}
+.help .leftsidecolumns .asset-contents .asset-content-body-composite-source {
+ float: none;
+}
+.asset-content-body-composite-source .righttext div {
+ float: right;
+}
+.asset-content-body-composite-source .righttext .lefttext {
+ float: none;
+}
+.asset-content-body-composite-source .righttext .titlebar_left {
+ padding: 0 !important;
+}
+.contentcolumn {
+ width: 620px;
+}
+
+/* Fixing the cb help */
+.leftsidecolumns .help .asset-metadatas, .leftsidecolumns .help .asset-metadatas, .leftsidecolumns .help .asset-metadatas .titlebar, .leftsidecolumns .help .asset-content-body-composite-source, .leftsidecolumns .help .asset-content-body-composite-composite {
+ width: auto;
+}
+.leftsidecolumns .help .asset-content-body-composite-source, .leftsidecolumns .help .asset-content-body-composite-composite {
+ position: static;
+}
+.leftsidecolumns .help .asset-content-body {
+ padding: 10px 10px 0 !important;
 }
