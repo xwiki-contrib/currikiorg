@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1194209262000</creationDate>
-<date>1194467081000</date>
-<contentUpdateDate>1194467081000</contentUpdateDate>
-<version>1.11</version>
+<date>1194649755000</date>
+<contentUpdateDate>1194649755000</contentUpdateDate>
+<version>1.14</version>
 <title>$msg.fc_filecheck</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Added bc</comment>
+<comment>Remove nominate link</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -69,15 +69,13 @@
 $asset.applyRightsPolicy("private")
 #elseif("$status"=="4")
 #set($emailsource = "FileCheck.ResourceDeletedEmail")
-$asset.changeOwnership("XWiki.Deleted")
+$asset.changeOwnership("XWiki.Delete")
 $asset.applyRightsPolicy("private")
 #end
 #set($message = "fc_updatemessage_${status}")
 $asset.saveWithProgrammingRights($message) 
 $msg.get("fc_filecheckddone"). $msg.get("fc_returnto") [$msg.get("fc_document")&gt;$asset.fullName] $msg.get("fc_or") [$msg.get("fc_fchomepage")&gt;WebHome].
-#if("$status"=="1")
-&lt;a href="javascript:nominateAsset2('${asset.fullName}')"&gt;$msg.get("fc_nominate")&lt;/a&gt;
-#end
+
 #if($emailsource!="")
 #if($assetowner&amp;&amp;($assetowner!=""))
 #set($assetownerdoc = $xwiki.getDocument($assetowner))
