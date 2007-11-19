@@ -208,6 +208,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             pageTitle = userobj.getStringValue("first_name") + "'s " + context.getMessageTool().get("default_collection");
             obj.setStringValue(Constants.ASSET_TITLE_PROPERTY, pageTitle);
             obj.setLargeStringValue(Constants.ASSET_DESCRIPTION_PROPERTY, pageTitle);
+            obj.setIntValue(Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, 1);
 
             // we select the "Other" the education level
             List eduList = new ArrayList();
