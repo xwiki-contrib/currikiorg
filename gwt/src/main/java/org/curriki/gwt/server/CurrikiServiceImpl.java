@@ -834,10 +834,9 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             BaseObject parentObjAsset = (BaseObject) compositeAssetDoc.getObject(Constants.ASSET_CLASS).clone();
 
             copyProperty(parentObjAsset, newObjAsset, Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY);
-
             copyProperty(parentObjAsset, newObjAsset, Constants.ASSET_FW_ITEMS_PROPERTY);
-
             copyProperty(parentObjAsset, newObjAsset, Constants.ASSET_RIGHTS_PROPERTY);
+            copyProperty(parentObjAsset, newObjAsset, Constants.ASSET_KEYWORDS_PROPERTY);
         }
 
         // let's make sure default value is not empty
@@ -943,6 +942,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             mergeProperty(parentObjAsset, newObjAsset, Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY);
             mergeProperty(parentObjAsset, newObjAsset, Constants.ASSET_FW_ITEMS_PROPERTY);
             copyProperty(parentObjAsset, newObjAsset, Constants.ASSET_RIGHTS_PROPERTY);
+            mergeProperty(parentObjAsset, newObjAsset, Constants.ASSET_KEYWORDS_PROPERTY);
         }
 
         // let's make sure default value is not empty
