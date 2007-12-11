@@ -115,7 +115,7 @@ public class Constants {
             "obj.className='"+ MIMETYPE_CLASS + "' " +
             "and doc.fullName=obj.name";
 
-    public static final String DEFAULT_COLLECTION_PAGE = "Default";
+    public static final String DEFAULT_COLLECTION_PAGE = "Favorites";
     public static final String ROOT_COLLECTION_PAGE = "WebHome";
 
 

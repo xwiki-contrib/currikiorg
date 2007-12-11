@@ -170,13 +170,11 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 createRootCollection(space, context);
             }
 
-            /* CURRIKI-816 - No longer create DEFAULT collection when creating another collection
             if (!pageName.equals(Constants.DEFAULT_COLLECTION_PAGE)){
                 if (!isDefaultCollectionExists(space)){
                     createDefaultCollection(space);
                 }
             }
-            */
 
             Document doc;
             if (pageName.equals(Constants.DEFAULT_COLLECTION_PAGE)){
@@ -202,13 +200,16 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         obj.set(Constants.ASSET_CATEGORY_PROPERTY, Constants.CATEGORY_COLLECTION, context);
         obj.set(Constants.ASSET_TITLE_PROPERTY, pageTitle, context);
         if (doc.getName().equals(Constants.DEFAULT_COLLECTION_PAGE)){
-            String username = context.getUser();
-            XWikiDocument userdoc = context.getWiki().getDocument(username, context);
-            BaseObject userobj = userdoc.getObject("XWiki.XWikiUsers");
-            pageTitle = userobj.getStringValue("first_name") + "'s " + context.getMessageTool().get("default_collection");
+            pageTitle = context.getMessageTool().get("mycurriki.favorites.collection.title");
             obj.setStringValue(Constants.ASSET_TITLE_PROPERTY, pageTitle);
+            pageTitle = context.getMessageTool().get("mycurriki.favorites.collection.description");
             obj.setLargeStringValue(Constants.ASSET_DESCRIPTION_PROPERTY, pageTitle);
             obj.setIntValue(Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, 1);
+
+            // we select the "Resource: Reference Collection" ICT value
+            List ictList = new ArrayList();
+            ictList.add("resource_collection");
+            obj.setDBStringListValue(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, ictList);
 
             // we select the "Other" the education level
             List eduList = new ArrayList();
@@ -362,31 +363,10 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             String user = context.getUser();
             String space = "Coll_"+user.replaceFirst("XWiki.", "");
 
-            /* CURRIKI-816
-             * No longer create DEFAULT collection automatically if any other collection exists
-             * but create it if one does not exist
-             */
             if (!isRootCollectionExists(space, context)){
                 createDefaultCollection(space);
-            } else {
-                XWikiDocument doc = context.getWiki().getDocument(space+"."+Constants.ROOT_COLLECTION_PAGE, context);
-                if (doc.getObjectNumbers(Constants.SUBASSET_CLASS) == 0){
-                    createDefaultCollection(space);
-                } else {
-                    // Work around a bug XWIKI-1624
-                    // TODO: Remove the work-around once XWIKI-1624 is fixed
-                    List subAssets = doc.getObjects(Constants.SUBASSET_CLASS);
-                    Iterator i = subAssets.iterator();
-                    int count = 0;
-                    while (i.hasNext() && count == 0){
-                        if (i.next() != null){
-                            count++;
-                        }
-                    }
-                    if (count == 0){
-                        createDefaultCollection(space);
-                    }
-                }
+            } else if (!isDefaultCollectionExists(space)){
+                createDefaultCollection(space);
             }
 
             return getCollectionTreeItem(space+"."+Constants.ROOT_COLLECTION_PAGE);
