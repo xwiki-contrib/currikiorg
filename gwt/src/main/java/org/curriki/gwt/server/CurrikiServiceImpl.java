@@ -1722,7 +1722,15 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 AssetItem currItem = new AssetItem(assetPage, index);
                 currItem = getCollectionTreeItem(currItem, context);
                 if (currItem != null){
-                    items.add(currItem);
+                    if (assetPage.endsWith("."+Constants.DEFAULT_COLLECTION_PAGE)){
+                        try {
+                            items.add(0, currItem);
+                        } catch (Exception e){
+                            items.add(currItem);
+                        }
+                    } else {
+                        items.add(currItem);
+                    }
                 }
             }
         }
