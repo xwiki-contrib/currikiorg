@@ -46,7 +46,11 @@
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    #findCurrikiTitle($bcDoc)
-   <a href="$bcDoc.getURL("view", "bc=${previousBc}")">$currikiTitle</a>
+   #set($userArg = "")
+   #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+    #set($userArg="&user=$request.user")
+   #end
+   <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
    #set($previousBc = "${previousBc};${bcItem}")
   #end
  #end

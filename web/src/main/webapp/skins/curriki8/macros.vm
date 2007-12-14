@@ -136,6 +136,13 @@ $linkToBreak.substring(0, $index)
   #elseif($currikiDoc.getObject("XWiki.ArticleClass"))
    #set($currikiTitle = $!currikiDoc.display("title", "view", $currikiDoc.getObject("XWiki.ArticleClass")))
   #end
+ #elseif($currikiDoc.fullName == "MyCurriki.WebHome" && "$!request.user" != "")
+  #set($whofor = $request.user)
+  #if(!$whofor.startsWith("XWiki.")) ## {
+   #set($whofor = "XWiki.$whofor")
+  #end ## }
+  #set($userDoc = $xwiki.getDocument($whofor))
+  #set($currikiTitle = "$!userDoc.display('first_name', 'view') $!userDoc.display('last_name', 'view')")
  #elseif($currikiDoc.space == "XWiki" && $currikiDoc.getObject("XWiki.XWikiUsers"))
   #findUserPrefix($currikiDoc.name)
   #set($currikiTitle = "${userPrefix} Curriki")
@@ -704,7 +711,11 @@ $doc.display("content", $obj)
 ## Macro for verifying if an entry in the nav panel is active
 #macro(checkActive $docname $result)
 #if($doc.fullName == $docname)
+#if($doc.space == "MyCurriki" && "$!request.user" != "")
+#set($result = false)
+#else
 #set($result = true)
+#end
 #end
 #end
 ##
