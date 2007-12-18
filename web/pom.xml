@@ -55,6 +55,21 @@
       <version>3.8.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+	<groupId>com.xpn.xwiki.platform.plugins</groupId>
+	<artifactId>xwiki-plugin-spacemanager</artifactId>
+	<version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+	<groupId>org.curriki</groupId>
+	<artifactId>curriki-plugin-spacemanager</artifactId>
+	<version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+	<groupId>com.xpn.xwiki.platform.plugins</groupId>
+	<artifactId>xwiki-plugin-invitationmanager</artifactId>
+	<version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -110,10 +125,16 @@
               org.curriki.xwiki.plugin.licence.LicenceManagerPlugin, \
               org.curriki.xwiki.plugin.mimetype.MimeTypePlugin, \
               com.xpn.xwiki.plugin.lucene.LucenePlugin, \
-              com.xpn.curriki.plugin.spacemanager.impl.CurikiSpaceManager, \
-              com.xpn.xwiki.plugin.invitationmanager.impl.InvitationManagerImpl
+              org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager, \
+              org.xwiki.plugin.invitationmanager.plugin.InvitationManagerPlugin
             </xwikiCfgPlugins>
             <xwikiCfgAdditionalProperties>
+	      ## Spacemanager settings
+	      # Configure the spacemanager extension
+	      xwiki.spacemanager.extension=org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension
+	      # Set the groupname prefix
+              xwiki.spacemanager.prefix=Group_
+	    
               ## Lucene settings
               # Configure the index location
               xwiki.plugins.lucene.indexdir=c:\\lucene
