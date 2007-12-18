@@ -124,6 +124,18 @@ public class SpaceManagerPluginApi extends PluginApi
     }
 
     /**
+     * @return On success returns the newly created space and null on failure
+     */
+    public Space createSpaceFromRequest(String templateSpace) throws SpaceManagerException {
+        if (!hasProgrammingRights())
+            return null;
+        Space space =
+                getSpaceManager().createSpaceFromRequest(templateSpace, context);
+        return space;
+    }
+
+
+    /**
      * Delete a space, including or not the space data
      *
      * @param spaceName
