@@ -11,7 +11,7 @@ import com.xpn.xwiki.objects.classes.BaseClass;
 
 public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 
-	public static final String CURRIKI_SPACE_TYPE = "space";
+	public static final String CURRIKI_SPACE_TYPE = "currikispace";
 	public static final String CURRIKI_SPACE_CLASS_NAME = "XWiki.CurrikiSpaceClass";
 	
 	public CurrikiSpaceManagerExtension() {
