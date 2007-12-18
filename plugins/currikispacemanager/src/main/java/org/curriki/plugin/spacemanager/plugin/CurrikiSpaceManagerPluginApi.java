@@ -29,6 +29,10 @@ public class CurrikiSpaceManagerPluginApi extends SpaceManagerPluginApi {
         return getCurrikiSpaceManager().getSpacesByTopic(topic, nb, start, context);
     }
 
+    public List getSpaceNamesByTopic(String topic, int nb, int start) throws SpaceManagerException {
+        return getCurrikiSpaceManager().getSpaceNamesByTopic(topic, nb, start, context);
+    }
+
     public List countSpacesByTopic(String parentTopic) throws SpaceManagerException {
         return getCurrikiSpaceManager().countSpacesByTopic(parentTopic, context);
     }
