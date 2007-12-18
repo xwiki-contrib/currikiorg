@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<web>toto</web>
+<name>WebHome</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.superadmin</creator>
+<author>XWiki.superadmin</author>
+<customClass></customClass>
+<contentAuthor>XWiki.superadmin</contentAuthor>
+<creationDate>1197932335000</creationDate>
+<date>1197935180000</date>
+<contentUpdateDate>1197935180000</contentUpdateDate>
+<version>1.12</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>aaaaaa</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>toto.WebHome</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>##Loading spacemanager
+#set($sm = $xwiki.csm)
+
+#set($spaceName = "abab")
+#set($s = $sm.getSpace($spaceName))
+#beginsection("Group Title", "", "", "red")
+&lt;div&gt;&lt;strong&gt;$s.getDisplayTitle()&lt;/strong&gt;&lt;/div&gt;
+&lt;div&gt;$s.getDescription()&lt;/div&gt;
+#endsection()
+
+#beginsection("Recent Group Activity", "", "", "red")
+#set($lm = $sm.getLastModifiedDocuments($spaceName,false,5,0))
+#foreach($l in $lm)
+&lt;div class="spacedoc"&gt;
+  &lt;span class="spacedoc-date"&gt;$l.getDate()&lt;/span&gt;
+    &lt;span class="spacedoc-title"&gt;$l.getDisplayTitle()&lt;/span&gt;
+      &lt;span class="spacedoc-editor"&gt;$l.getAuthor()&lt;/span&gt;
+      &lt;/div&gt;
+      #end
+      #endsection()
+      
+      #beginsection("Group Info", "", "", "red")
+      &lt;div&gt;
+      Group Membership Policy: $s.display("policy","view")
+      &lt;/div&gt;
+      &lt;div&gt;
+      Group Default Licence:
+      $s.display("licence","view")
+      &lt;/div&gt;
+      &lt;div&gt;
+      Language:
+      $s.display("language","view")
+      &lt;/div&gt;
+      &lt;div&gt;
+      Set default group access policy:
+      $s.display("accessprivileges","view")
+      &lt;/div&gt;
+      &lt;div&gt;
+      Set default group access policy:
+      $s.display("accessprivileges","view")
+      &lt;/div&gt;
+      &lt;div&gt;
+      &lt;table border="0"&gt;
+      &lt;tr&gt;
+      &lt;td&gt;Subject&lt;/td&gt;
+      &lt;td&gt;Educational level&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+      &lt;td&gt; $s.display("topic","view") &lt;/td&gt;
+      &lt;td&gt; $s.display("educationLevel","view") &lt;/td&gt;
+      &lt;/tr&gt;&lt;/table&gt;
+      &lt;/div&gt;
+      #endsection()</content>
+      <renderedcontent>
+      &lt;div id="section_1"&gt;
+      &lt;div class="titlebar titlebar_red" id="section1titlebar"&gt;&lt;h3 id="section1title"&gt;Group Title&lt;/h3&gt;&lt;/div&gt;
+      &lt;script type="text/javascript"&gt;
+      function toggleSectionVisibility(seccounter, showhide){
+        var seccontent = document.getElementById("section" + seccounter + "content");
+	  if(eltHasClass(seccontent, "hidden")){
+	      rmClass(seccontent, "hidden");
+	          // change text
+		      showhide.removeChild(showhide.firstChild);
+		          showhide.appendChild(document.createTextNode("Hide"));
+			      // erase cookie
+			          eraseCookie("Section" + seccounter + "Hidden");
+				    }
+				      else{
+				          addClass(seccontent, "hidden");
+					      // Change text
+					          showhide.removeChild(showhide.firstChild);
+						      showhide.appendChild(document.createTextNode("Show"));
+						          // set cookie
+							      createCookie("Section" + seccounter + "Hidden", true, "");
+							        }
+								  return false;
+								  }
+								  addClass(document.getElementById("section1title"), "titlebar_left");
+								  var linksDiv = document.createElement("div");
+								  linksDiv.setAttribute("id", "section1links");
+								  linksDiv.setAttribute("class", "titlebarRight");
+								  linksDiv.className = "titlebarRight";
+								  document.getElementById("section1titlebar").appendChild(linksDiv);
+								  linksDiv.appendChild(document.createElement("a"));
+								  linksDiv = linksDiv.firstChild;
+								  linksDiv.setAttribute("href", "#section1content");
+								  var showhide1 = document.createElement("span");
+								  showhide1.appendChild(document.createTextNode("Hide"));
+								  showhide1.setAttribute("onclick", "toggleSectionVisibility(1, showhide1); return false;");
+								  showhide1.onclick = new Function("toggleSectionVisibility(1, showhide1); return false;");
+								  linksDiv.appendChild(showhide1);
+								  &lt;/script&gt;
+								  &lt;div id="section1content" class=""&gt;
+								  &lt;div&gt;&lt;strong&gt;abab&lt;/strong&gt;&lt;/div&gt;
+								  &lt;div&gt;ads dfa sf sd ds fsddfsdf sdfsd fds fdsf sdf sfssssssssssss dsddddddddddddddddddddd f dsfdssssssssssssssssssssd f dsd&lt;/div&gt;
+								  &lt;/div&gt;
+								  &lt;div class="clearfloats"&gt;&lt;/div&gt;
+								  &lt;/div&gt;&lt;p class="paragraph"/&gt;
+								  &lt;div id="section_2"&gt;
+								  &lt;div class="titlebar titlebar_red" id="section2titlebar"&gt;&lt;h3 id="section2title"&gt;Recent Group Activity&lt;/h3&gt;&lt;/div&gt;
+								  &lt;script type="text/javascript"&gt;
+								  addClass(document.getElementById("section2title"), "titlebar_left");
+								  var linksDiv = document.createElement("div");
+								  linksDiv.setAttribute("id", "section2links");
+								  linksDiv.setAttribute("class", "titlebarRight");
+								  linksDiv.className = "titlebarRight";
+								  document.getElementById("section2titlebar").appendChild(linksDiv);
+								  linksDiv.appendChild(document.createElement("a"));
+								  linksDiv = linksDiv.firstChild;
+								  linksDiv.setAttribute("href", "#section2content");
+								  var showhide2 = document.createElement("span");
+								  showhide2.appendChild(document.createTextNode("Hide"));
+								  showhide2.setAttribute("onclick", "toggleSectionVisibility(2, showhide2); return false;");
+								  showhide2.onclick = new Function("toggleSectionVisibility(2, showhide2); return false;");
+								  linksDiv.appendChild(showhide2);
+								  &lt;/script&gt;
+								  &lt;div id="section2content" class=""&gt;
+								  &lt;/div&gt;
+								  &lt;div class="clearfloats"&gt;&lt;/div&gt;
+								  &lt;/div&gt;&lt;p class="paragraph"/&gt;
+								  &lt;div id="section_3"&gt;
+								  &lt;div class="titlebar titlebar_red" id="section3titlebar"&gt;&lt;h3 id="section3title"&gt;Group Info&lt;/h3&gt;&lt;/div&gt;
+								  &lt;script type="text/javascript"&gt;
+								  addClass(document.getElementById("section3title"), "titlebar_left");
+								  var linksDiv = document.createElement("div");
+								  linksDiv.setAttribute("id", "section3links");
+								  linksDiv.setAttribute("class", "titlebarRight");
+								  linksDiv.className = "titlebarRight";
+								  document.getElementById("section3titlebar").appendChild(linksDiv);
+								  linksDiv.appendChild(document.createElement("a"));
+								  linksDiv = linksDiv.firstChild;
+								  linksDiv.setAttribute("href", "#section3content");
+								  var showhide3 = document.createElement("span");
+								  showhide3.appendChild(document.createTextNode("Hide"));
+								  showhide3.setAttribute("onclick", "toggleSectionVisibility(3, showhide3); return false;");
+								  showhide3.onclick = new Function("toggleSectionVisibility(3, showhide3); return false;");
+								  linksDiv.appendChild(showhide3);
+								  &lt;/script&gt;
+								  &lt;div id="section3content" class=""&gt;
+								  &lt;div&gt;
+								  Group Membership Policy: Open membership
+								  &lt;/div&gt;
+								  &lt;div&gt;
+								  Group Default Licence:
+								  Curriki License (Creative Commons Attribution 3.0)
+								  &lt;/div&gt;
+								  &lt;div&gt;
+								  Language:
+								  English
+								  &lt;/div&gt;
+								  &lt;div&gt;
+								  Set default group access policy:
+								  Open
+								  &lt;/div&gt;
+								  &lt;div&gt;
+								  Set default group access policy:
+								  Open
+								  &lt;/div&gt;
+								  &lt;div&gt;
+								  &lt;table border="0"&gt;
+								  &lt;tr&gt;
+								  &lt;td&gt;Subject&lt;/td&gt;
+								  &lt;td&gt;Educational level&lt;/td&gt;
+								  &lt;/tr&gt;
+								  &lt;tr&gt;
+								  &lt;td&gt;  &lt;/td&gt;
+								  &lt;td&gt; Gr. K-2 / Ages 5-7 &lt;/td&gt;
+								  &lt;/tr&gt;&lt;/table&gt;
+								  &lt;/div&gt;
+								  &lt;/div&gt;
+								  &lt;div class="clearfloats"&gt;&lt;/div&gt;
+								  &lt;/div&gt;</renderedcontent>
+								  </xwikidoc>

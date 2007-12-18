@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <!--
  *
  * See the NOTICE file distributed with this work for additional
@@ -27,29 +28,40 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
+    <artifactId>curriki-plugins</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.curriki</groupId>
-  <artifactId>curriki-plugins</artifactId>
-  <packaging>pom</packaging>
-  <name>XWiki Products - Curriki - Plugins - Parent POM</name>
-  <description>XWiki Products - Curriki - Plugins - Parent POM</description>
+  <artifactId>curriki-plugin-spacemanager</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>XWiki Products - Curriki - Plugins - Space Manager</name>
+  <packaging>jar</packaging>
+  <description>XWiki Products - Curriki - Plugins - Space Manager</description>
   <dependencies>
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-core</artifactId>
-      <version>${platform.core.version}</version>
+      <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>jmock</groupId>
+      <artifactId>jmock-cglib</artifactId>
+      <version>1.1.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-mailsender</artifactId>
+      <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-spacemanager</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-invitationmanager</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
-  <modules>
-    <module>asset</module>
-    <module>licence</module>
-    <module>framework</module>
-    <module>mimetype</module>
-    <module>metadata</module>
-    <module>spacemanager</module>
-    <module>invitationmanager</module>
-    <module>currikispacemanager</module>
-  </modules>
-</project>
+</project>      

@@ -1,0 +1,223 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+package org.xwiki.plugin.invitationmanager.impl;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.xwiki.plugin.invitationmanager.api.JoinRequest;
+
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.api.Document;
+
+/**
+ * The default implementation of {@link JoinRequest}
+ */
+public abstract class JoinRequestImpl extends Document implements JoinRequest
+{
+    public static interface JoinRequestFields
+    {
+        String REQUEST_DATE = "requestDate";
+
+        String RESPONSE_DATE = "responseDate";
+
+        String ROLES = "roles";
+
+        String SPACE = "space";
+
+        String STATUS = "status";
+
+        String TEXT = "text";
+
+        String MAP = "map";
+    }
+
+    protected InvitationManagerImpl manager;
+
+    public JoinRequestImpl(InvitationManagerImpl manager, XWikiContext context)
+    {
+        super(null, context);
+        this.manager = manager;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getMap()
+     */
+    public Map getMap()
+    {
+        String content = doc.getObject(getClassName()).getLargeStringValue(JoinRequestFields.MAP);
+        String[] lines = content.split("\n");
+        Map map = new HashMap();
+        for (int i = 0; i < lines.length; i++) {
+            String[] mapEntry = lines[i].split("=");
+            map.put(mapEntry[0].trim(), mapEntry[1]);
+        }
+        return map;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getRequestDate()
+     */
+    public Date getRequestDate()
+    {
+        return doc.getObject(getClassName()).getDateValue(JoinRequestFields.REQUEST_DATE);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getResponseDate()
+     */
+    public Date getResponseDate()
+    {
+        return doc.getObject(getClassName()).getDateValue(JoinRequestFields.RESPONSE_DATE);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getRoles()
+     */
+    public List getRoles()
+    {
+        return doc.getObject(getClassName()).getListValue(JoinRequestFields.ROLES);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getSpace()
+     */
+    public String getSpace()
+    {
+        return doc.getObject(getClassName()).getStringValue(JoinRequestFields.SPACE);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getStatus()
+     */
+    public int getStatus()
+    {
+        return doc.getObject(getClassName()).getIntValue(JoinRequestFields.STATUS);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#getText()
+     */
+    public String getText()
+    {
+        return getDoc().getObject(getClassName()).getLargeStringValue(JoinRequestFields.TEXT);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setMap(Map)
+     */
+    public void setMap(Map map)
+    {
+        StringBuffer content = new StringBuffer();
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            content.append(entry.getKey() + "=" + entry.getValue() + "\n");
+        }
+        getDoc().getObject(getClassName()).setLargeStringValue(JoinRequestFields.MAP,
+            content.toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setRequestDate(Date)
+     */
+    public void setRequestDate(Date requestDate)
+    {
+        getDoc().getObject(getClassName()).setDateValue(JoinRequestFields.REQUEST_DATE,
+            requestDate);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setResponseDate(Date)
+     */
+    public void setResponseDate(Date responseDate)
+    {
+        getDoc().getObject(getClassName()).setDateValue(JoinRequestFields.RESPONSE_DATE,
+            responseDate);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setRoles(List)
+     */
+    public void setRoles(List roles)
+    {
+        getDoc().getObject(getClassName()).setDBStringListValue(JoinRequestFields.ROLES, roles);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setSpace(String)
+     */
+    public void setSpace(String space)
+    {
+        getDoc().getObject(getClassName()).setStringValue(JoinRequestFields.SPACE, space);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setStatus(int)
+     */
+    public void setStatus(int status)
+    {
+        getDoc().getObject(getClassName()).setIntValue(JoinRequestFields.STATUS, status);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see JoinRequest#setText(String)
+     */
+    public void setText(String text)
+    {
+        getDoc().getObject(getClassName()).setLargeStringValue(JoinRequestFields.TEXT, text);
+    }
+
+    protected String getClassName()
+    {
+        return manager.getJoinRequestClassName(this.getClass());
+    }
+}

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<xwikidoc>
+<web>Groups</web>
+<name>CreateNewGroup</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>1</translation>
+<parent></parent>
+<creator>XWiki.superadmin</creator>
+<author>XWiki.superadmin</author>
+
+<customClass></customClass>
+<contentAuthor>XWiki.superadmin</contentAuthor>
+<creationDate>1197567777000</creationDate>
+<date>1197641693000</date>
+<contentUpdateDate>1197641693000</contentUpdateDate>
+<version>1.40</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>aaaa</comment>
+
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Groups.CreateNewGroup</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>##Loading spacemanager
+#set($sm = $xwiki.csm)
+$sm.getVersion()
+
+&lt;form action=" $doc.getURL() " method="post"&gt;
+
+##Creating a fake space
+#if($request.method=="POST")
+#set($newspace = $sm.createSpaceFromRequest())
+#else
+#set($newspace = $sm.getSpace(""))
+#set($ok = $sm.updateSpaceFromRequest($newspace))
+#end
+
+##Show the inputs for form
+
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Name and describe your group&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;strong&gt;Enter the group's title:&lt;/strong&gt; &lt;br /&gt;
+$newspace.display("displayTitle","edit")
+
+&lt;strong&gt;Enter the groups description:&lt;/strong&gt; &lt;br /&gt;
+
+$newspace.display("description","edit")
+
+&lt;strong&gt;Enter the group's homepage:&lt;/strong&gt; &lt;br /&gt;
+$newspace.display("urlshortcut","edit") .curriki.org
+&lt;/div&gt;
+
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Set group membership policy&lt;/strong&gt;&lt;/div&gt;
+
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+$newspace.display("policy","edit")
+&lt;/div&gt;
+
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Select the topic and level&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;table border="0"&gt;&lt;tr&gt;
+
+&lt;td&gt; $newspace.display("topic","edit") &lt;/td&gt;
+&lt;td&gt; $newspace.display("educationLevel","edit") &lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Select Language&lt;/strong&gt;&lt;/div&gt;
+
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+$newspace.display("language","edit")
+&lt;/div&gt;
+
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Set group default licence policy&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+$newspace.display("licence","edit")
+&lt;/div&gt;
+
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Set default group access policy&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+$newspace.display("accessprivileges","edit")
+&lt;/div&gt;
+
+&lt;input type="submit" value="Create Group"&gt;
+&lt;/form&gt;</content>
+
+<renderedcontent>dd&lt;p class="paragraph"/&gt;
+&lt;form action=" /xwiki/bin/view/Groups/CreateNewGroup " method="post"&gt;&lt;p class="paragraph"/&gt;&lt;p class="paragraph"/&gt;
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Name and describe your group&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;strong&gt;Enter the group's title:&lt;/strong&gt; &lt;br /&gt;
+
+&lt;input size='64' id='XWiki.SpaceClass_0_displayTitle' name='XWiki.SpaceClass_0_displayTitle' type='text'/&gt;&lt;p class="paragraph"/&gt;
+&lt;strong&gt;Enter the groups description:&lt;/strong&gt; &lt;br /&gt;
+&lt;textarea id='XWiki.SpaceClass_0_description' rows='4' name='XWiki.SpaceClass_0_description' cols='45'&gt;&lt;/textarea&gt;&lt;p class="paragraph"/&gt;
+&lt;strong&gt;Enter the group's homepage:&lt;/strong&gt; &lt;br /&gt;
+
+&lt;input size='128' id='XWiki.SpaceClass_0_urlshortcut' name='XWiki.SpaceClass_0_urlshortcut' type='text'/&gt; .curriki.org
+&lt;/div&gt;&lt;p class="paragraph"/&gt;
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Set group membership policy&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;span class="xwiki-form-listclass" id="xwiki-form-policy"&gt;&lt;input name='XWiki.SpaceClass_0_policy' type='radio' value='open'/&gt;Open membership&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-policy"&gt;&lt;input name='XWiki.SpaceClass_0_policy' type='radio' value='closed'/&gt;Closed membership&lt;/span&gt;&lt;input name='XWiki.SpaceClass_0_policy' type='hidden' value=''/&gt;&lt;input name='XWiki.SpaceClass_0_policy' type='hidden' value=''/&gt;
+
+&lt;/div&gt;&lt;p class="paragraph"/&gt;
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Select the topic and level&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;table border="0"&gt;&lt;tr&gt;
+&lt;td&gt; &lt;select size='12' id='XWiki.CurrikiSpaceClass_0_topic' multiple='multiple' name='XWiki.CurrikiSpaceClass_0_topic'&gt;&lt;option value=' Choose from list...' label=' Choose from list...'&gt; Choose from list...&lt;/option&gt;&lt;option value='Archive: Web Site/Zip/Stuffit File' label='Archive: Web Site/Zip/Stuffit File'&gt;Archive: Web Site/Zip/Stuffit File&lt;/option&gt;&lt;option value='Document: .Doc, .XLS, PDF' label='Document: .Doc, .XLS, PDF'&gt;Document: .Doc, .XLS, PDF&lt;/option&gt;&lt;option value='Image: GIF, JPG, PNG, BMP' label='Image: GIF, JPG, PNG, BMP'&gt;Image: GIF, JPG, PNG, BMP&lt;/option&gt;&lt;option value='Media: Animation/Activity' label='Media: Animation/Activity'&gt;Media: Animation/Activity&lt;/option&gt;&lt;option value='Media: Audio/Video' label='Media: Audio/Video'&gt;Media: Audio/Video&lt;/option&gt;&lt;option value='Other?' label='Other?'&gt;Other?&lt;/option&gt;&lt;/select&gt; &lt;/td&gt;
+
+&lt;td&gt; &lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='prek'/&gt;Preschool / Ages 0-4&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='gr-k-2'/&gt;Gr. K-2 / Ages 5-7&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='gr-3-5'/&gt;Gr. 3-5 / Ages 8-10&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='gr-6-8'/&gt;Gr. 6-8 / Ages 11-13&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='gr-9-10'/&gt;Gr. 9-10 / Ages 14-16&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='gr-11-12'/&gt;Gr. 11-12 / Ages 16-18&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='college_and_beyond'/&gt;College and Beyond&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='professional_development'/&gt;Professional Development&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='special_education'/&gt;Special Education&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-educationLevel"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='checkbox' value='na'/&gt;Other&lt;/span&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='hidden' value=''/&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_educationLevel' type='hidden' value=''/&gt; &lt;/td&gt;
+
+&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;&lt;p class="paragraph"/&gt;
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Select Language&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;select id='XWiki.CurrikiSpaceClass_0_language' name='XWiki.CurrikiSpaceClass_0_language' size='1'&gt;&lt;option value='eng' label='English'&gt;English&lt;/option&gt;&lt;option value='zho' label='Chinese'&gt;Chinese&lt;/option&gt;&lt;option value='nld' label='Dutch'&gt;Dutch&lt;/option&gt;&lt;option value='fra' label='French'&gt;French&lt;/option&gt;&lt;option value='deu' label='German'&gt;German&lt;/option&gt;&lt;option value='ita' label='Italian'&gt;Italian&lt;/option&gt;&lt;option value='jpn' label='Japanese'&gt;Japanese&lt;/option&gt;&lt;option value='kor' label='Korean'&gt;Korean&lt;/option&gt;&lt;option value='por' label='Portuguese'&gt;Portuguese&lt;/option&gt;&lt;option value='rus' label='Russian'&gt;Russian&lt;/option&gt;&lt;option value='spa' label='Spanish'&gt;Spanish&lt;/option&gt;&lt;/select&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_language' type='hidden' value=''/&gt;
+
+&lt;/div&gt;&lt;p class="paragraph"/&gt;
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Set group default licence policy&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;select id='XWiki.CurrikiSpaceClass_0_licence' name='XWiki.CurrikiSpaceClass_0_licence' size='1'&gt;&lt;option value='Licences.CurrikiLicense' label='Curriki License (Creative Commons Attribution 3.0)'&gt;Curriki License (Creative Commons Attribution 3.0)&lt;/option&gt;&lt;option value='Licences.PublicDomain' label='Public Domain'&gt;Public Domain&lt;/option&gt;&lt;option value='Licences.CreativeCommonsAttributionNon-Commercial' label='Creative Commons Attribution Non-Commercial'&gt;Creative Commons Attribution Non-Commercial&lt;/option&gt;&lt;option value='Licences.CreativeCommonsAttributionNoDerivatives' label='Creative Commons Attribution No Derivatives'&gt;Creative Commons Attribution No Derivatives&lt;/option&gt;&lt;option value='Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives' label='Creative Commons Attribution Non-Commercial No Derivatives'&gt;Creative Commons Attribution Non-Commercial No Derivatives&lt;/option&gt;&lt;option value='Licences.CreativeCommonsAttributionSharealike' label='Creative Commons Attribution Share Alike'&gt;Creative Commons Attribution Share Alike&lt;/option&gt;&lt;option value='Licences.CreativeCommonsAttributionNon-CommercialShareAlike' label='Creative Commons Attribution Non-Commercial Share Alike'&gt;Creative Commons Attribution Non-Commercial Share Alike&lt;/option&gt;&lt;option value='Licences.CreativeCommonsSharealike' label='DEPRECATED: Creative Commons Sharealike'&gt;DEPRECATED: Creative Commons Sharealike&lt;/option&gt;&lt;option value='Licences.GnuDocumentationLicense' label='DEPRECATED: Gnu Documentation License'&gt;DEPRECATED: Gnu Documentation License&lt;/option&gt;&lt;option value='Licences.CreativeCommonsNon-Commercial' label='DEPRECATED: Creative Commons Non-Commercial'&gt;DEPRECATED: Creative Commons Non-Commercial&lt;/option&gt;&lt;/select&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_licence' type='hidden' value=''/&gt;
+
+&lt;/div&gt;&lt;p class="paragraph"/&gt;
+&lt;div style="color:white;background-color:blue; padding:2px;"&gt;&lt;strong&gt;Set default group access policy&lt;/strong&gt;&lt;/div&gt;
+&lt;div style="background-color:#cccccc; padding:10px;"&gt;
+&lt;span class="xwiki-form-listclass" id="xwiki-form-accessprivileges"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_accessprivileges' type='radio' value='open'/&gt;Open&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-accessprivileges"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_accessprivileges' type='radio' value='protected'/&gt;Protected&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-accessprivileges"&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_accessprivileges' type='radio' value='private'/&gt;Private&lt;/span&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_accessprivileges' type='hidden' value=''/&gt;&lt;input name='XWiki.CurrikiSpaceClass_0_accessprivileges' type='hidden' value=''/&gt;
+
+&lt;/div&gt;&lt;p class="paragraph"/&gt;
+&lt;input type="submit" value="Create Group"&gt;
+&lt;/form&gt;</renderedcontent>
+</xwikidoc>
