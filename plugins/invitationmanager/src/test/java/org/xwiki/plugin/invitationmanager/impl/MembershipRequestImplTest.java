@@ -19,25 +19,74 @@
  */
 package org.xwiki.plugin.invitationmanager.impl;
 
-import com.xpn.xwiki.XWikiContext;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
+import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
 
 /**
  * Unit tests for {@link MembershipRequestImpl} class
  */
 public class MembershipRequestImplTest extends MembershipRequestTest
 {
-    private XWikiContext context;
-
     private InvitationManagerImpl manager;
 
     protected void setUp() throws Exception
     {
         super.setUp();
+
+        manager = new InvitationManagerImpl();
         joinRequest = new MembershipRequestImpl(null, null, true, manager, context);
     }
 
     public void testSave()
     {
-        // TODO
+        try {
+            String requester = "testRequester";
+            String space = "testSpace";
+
+            MembershipRequest expected =
+                new MembershipRequestImpl(requester, space, true, manager, context);
+            expected.setResponder("testResponder");
+
+            Map map = new HashMap();
+            map.put("allowMailNotifications", "false");
+            map.put("notifyChanges", "true");
+            expected.setMap(map);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            expected.setRequestDate(sdf.parse("2006.09.25"));
+            expected.setResponseDate(new Date());
+
+            List roles = new ArrayList();
+            roles.add("developer");
+            roles.add("tester");
+            expected.setRoles(roles);
+
+            expected.setStatus(JoinRequestStatus.REFUSED);
+            expected.setText("testText");
+
+            expected.save();
+
+            MembershipRequest actual =
+                new MembershipRequestImpl(requester, space, false, manager, context);
+
+            assertEquals(expected.getRequester(), actual.getRequester());
+            assertEquals(expected.getResponder(), actual.getResponder());
+            assertEquals(expected.getMap(), actual.getMap());
+            assertEquals(expected.getRequestDate(), actual.getRequestDate());
+            assertEquals(expected.getResponseDate(), actual.getResponseDate());
+            assertEquals(expected.getRoles(), actual.getRoles());
+            assertEquals(expected.getSpace(), actual.getSpace());
+            assertEquals(expected.getStatus(), actual.getStatus());
+            assertEquals(expected.getText(), actual.getText());
+        } catch (Exception e) {
+            assertTrue(false);
+        }
     }
 }

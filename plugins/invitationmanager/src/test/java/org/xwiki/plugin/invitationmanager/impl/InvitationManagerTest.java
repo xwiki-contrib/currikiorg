@@ -19,9 +19,14 @@
  */
 package org.xwiki.plugin.invitationmanager.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
+import org.jmock.core.Invocation;
+import org.jmock.core.stub.CustomStub;
 import org.xwiki.plugin.invitationmanager.api.Invitation;
 import org.xwiki.plugin.invitationmanager.api.InvitationManager;
 import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
@@ -29,8 +34,13 @@ import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
 import org.xwiki.plugin.spacemanager.api.SpaceManager;
 import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
 
+import com.xpn.xwiki.XWiki;
+import com.xpn.xwiki.XWikiConfig;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.store.XWikiHibernateStore;
+import com.xpn.xwiki.store.XWikiStoreInterface;
 
 /**
  * Unit tests for classes implementing {@link InvitationManager} interface
@@ -43,6 +53,12 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
 
     protected XWikiContext context;
 
+    protected XWiki xwiki;
+
+    protected Mock mockXWikiStore;
+
+    protected Map docs = new HashMap();
+
     protected static final String SPACE = "MySpace";
 
     protected static final String ADMIN = "MySpaceAdmin";
@@ -54,7 +70,52 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        // TODO: mock objects
+
+        context = new XWikiContext();
+        xwiki = new XWiki(new XWikiConfig(), context);
+        context.setWiki(xwiki);
+
+        mockXWikiStore =
+            mock(XWikiHibernateStore.class, new Class[] {XWiki.class, XWikiContext.class},
+                new Object[] {xwiki, context});
+        mockXWikiStore.stubs().method("loadXWikiDoc").will(
+            new CustomStub("Implements XWikiStoreInterface.loadXWikiDoc")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    XWikiDocument shallowDoc = (XWikiDocument) invocation.parameterValues.get(0);
+
+                    if (docs.containsKey(shallowDoc.getFullName())) {
+                        return (XWikiDocument) docs.get(shallowDoc.getFullName());
+                    } else {
+                        return shallowDoc;
+                    }
+                }
+            });
+        this.mockXWikiStore.stubs().method("saveXWikiDoc").will(
+            new CustomStub("Implements XWikiStoreInterface.saveXWikiDoc")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    XWikiDocument document = (XWikiDocument) invocation.parameterValues.get(0);
+                    document.setNew(false);
+                    document.setStore((XWikiStoreInterface) mockXWikiStore.proxy());
+                    docs.put(document.getFullName(), document);
+                    return null;
+                }
+            });
+        this.mockXWikiStore.stubs().method("exists").will(
+            new CustomStub("Implements XWikiStoreInterface.exists")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    XWikiDocument document = (XWikiDocument) invocation.parameterValues.get(0);
+                    return (docs.get(document.getFullName()) == null) ? Boolean.FALSE
+                        : Boolean.TRUE;
+                }
+            });
+
+        xwiki.setStore((XWikiStoreInterface) mockXWikiStore.proxy());
     }
 
     public void testAcceptInvitation()

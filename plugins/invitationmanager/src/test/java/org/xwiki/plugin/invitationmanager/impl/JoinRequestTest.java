@@ -25,8 +25,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jmock.Mock;
+import org.jmock.core.Invocation;
+import org.jmock.core.stub.CustomStub;
 import org.xwiki.plugin.invitationmanager.api.JoinRequest;
 import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
+
+import com.xpn.xwiki.XWiki;
+import com.xpn.xwiki.XWikiConfig;
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.store.XWikiHibernateStore;
+import com.xpn.xwiki.store.XWikiStoreInterface;
+import com.xpn.xwiki.user.api.XWikiRightService;
 
 /**
  * Unit tests for classes implementing {@link JoinRequest} interface
@@ -35,14 +46,70 @@ public abstract class JoinRequestTest extends org.jmock.cglib.MockObjectTestCase
 {
     protected JoinRequest joinRequest;
 
+    protected XWikiContext context;
+
+    protected XWiki xwiki;
+
+    protected Mock mockXWikiStore;
+
+    protected Mock mockXWikiRightService;
+
+    protected Map docs = new HashMap();
+
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+
+        context = new XWikiContext();
+        xwiki = new XWiki(new XWikiConfig(), context);
+        context.setWiki(xwiki);
+
+        mockXWikiStore =
+            mock(XWikiHibernateStore.class, new Class[] {XWiki.class, XWikiContext.class},
+                new Object[] {xwiki, context});
+        mockXWikiStore.stubs().method("loadXWikiDoc").will(
+            new CustomStub("Implements XWikiStoreInterface.loadXWikiDoc")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    XWikiDocument shallowDoc = (XWikiDocument) invocation.parameterValues.get(0);
+
+                    if (docs.containsKey(shallowDoc.getFullName())) {
+                        return (XWikiDocument) docs.get(shallowDoc.getFullName());
+                    } else {
+                        return shallowDoc;
+                    }
+                }
+            });
+        this.mockXWikiStore.stubs().method("saveXWikiDoc").will(
+            new CustomStub("Implements XWikiStoreInterface.saveXWikiDoc")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    XWikiDocument document = (XWikiDocument) invocation.parameterValues.get(0);
+                    document.setNew(false);
+                    document.setStore((XWikiStoreInterface) mockXWikiStore.proxy());
+                    docs.put(document.getFullName(), document);
+                    return null;
+                }
+            });
+
+        mockXWikiRightService = mock(XWikiRightService.class, new Class[] {}, new Object[] {});
+        mockXWikiRightService.stubs().method("hasAccessLevel").withAnyArguments().will(
+            returnValue(true));
+
+        xwiki.setStore((XWikiStoreInterface) mockXWikiStore.proxy());
+        xwiki.setRightService((XWikiRightService) mockXWikiRightService.proxy());
+    }
+
     /**
      * test for {@link JoinRequest#getMap()}
      */
     public void testMap()
     {
         Map map = new HashMap();
-        map.put("allowMailNotifications", Boolean.TRUE);
-        map.put("notifyChanges", Boolean.FALSE);
+        map.put("allowMailNotifications", "true");
+        map.put("notifyChanges", "false");
         joinRequest.setMap(map);
         assertEquals(map, joinRequest.getMap());
     }

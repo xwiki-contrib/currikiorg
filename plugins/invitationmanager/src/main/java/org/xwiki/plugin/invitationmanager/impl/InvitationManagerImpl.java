@@ -38,6 +38,7 @@ import org.xwiki.plugin.spacemanager.api.SpaceManagers;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
 
 /**
@@ -230,8 +231,69 @@ public class InvitationManagerImpl implements InvitationManager
      */
     public List getInvitations(Invitation prototype, int start, int count, XWikiContext context)
     {
-        // TODO
-        return Collections.EMPTY_LIST;
+        try {
+            String className = getJoinRequestClassName(Invitation.class);
+            StringBuffer fromClause =
+                new StringBuffer("from XWikiDocument as doc, BaseObject as obj");
+            StringBuffer whereClause =
+                new StringBuffer("where doc.fullName=obj.name and obj.className = '" + className
+                    + "'");
+
+            String space = prototype.getSpace();
+            String invitee = prototype.getInvitee();
+            if (space != null && invitee != null) {
+                Invitation invitation = getInvitation(space, invitee, context);
+                // find a better way of testing if the invitation is new
+                if (((XWikiDocument) invitation).isNew()) {
+                    return Collections.EMPTY_LIST;
+                }
+                List list = new ArrayList();
+                list.add(invitation);
+                return list;
+            } else if (space != null) {
+                fromClause.append(", StringProperty as space");
+                whereClause
+                    .append(" and obj.id=space.id.id and space.id.name='"
+                        + InvitationImpl.InvitationFields.SPACE + "' and space.value='" + space
+                        + "'");
+            } else if (invitee != null) {
+                fromClause.append(" StringProperty as invitee");
+                whereClause.append(" and obj.id=invitee.id.id and invitee.id.name='"
+                    + InvitationImpl.InvitationFields.INVITEE + "' and invitee.value='" + invitee
+                    + "'");
+            }
+
+            int status = prototype.getStatus();
+            if (status != JoinRequestStatus.ANY) {
+                fromClause.append(", IntegerProperty as status");
+                whereClause.append(" and obj.id=status.id.id and status.id.name='"
+                    + InvitationImpl.InvitationFields.STATUS + "' and status.value=" + status);
+            }
+
+            List roles = prototype.getRoles();
+            if (roles != null && roles.size() > 0) {
+                String role = (String) prototype.getRoles().get(0);
+                fromClause.append(", DBStringListProperty as roles join roles.list as role");
+                whereClause.append(" and obj.id=roles.id.id and roles.id.name='"
+                    + InvitationImpl.InvitationFields.ROLES + "' and instr(role.id, '" + role
+                    + "')>0");
+            }
+
+            String inviter = prototype.getInviter();
+            if (inviter != null) {
+                fromClause.append(" StringProperty as inviter");
+                whereClause.append(" and obj.id=inviter.id.id and inviter.id.name='"
+                    + InvitationImpl.InvitationFields.INVITER + "' and inviter.value='" + inviter
+                    + "'");
+            }
+
+            String sql =
+                "select distinct doc " + fromClause.toString() + " " + whereClause.toString();
+            return context.getWiki().getStore().search(sql, count, start, context);
+        } catch (XWikiException e) {
+            e.printStackTrace();
+            return Collections.EMPTY_LIST;
+        }
     }
 
     /**
@@ -393,8 +455,69 @@ public class InvitationManagerImpl implements InvitationManager
     public List getMembershipRequests(MembershipRequest prototype, int start, int count,
         XWikiContext context)
     {
-        // TODO
-        return Collections.EMPTY_LIST;
+        try {
+            String className = getJoinRequestClassName(MembershipRequest.class);
+            StringBuffer fromClause =
+                new StringBuffer("from XWikiDocument as doc, BaseObject as obj");
+            StringBuffer whereClause =
+                new StringBuffer("where doc.fullName=obj.name and obj.className = '" + className
+                    + "'");
+
+            String space = prototype.getSpace();
+            String requester = prototype.getRequester();
+            if (space != null && requester != null) {
+                MembershipRequest request = getMembershipRequest(space, requester, context);
+                // find a better way of testing if the request is new
+                if (((XWikiDocument) request).isNew()) {
+                    return Collections.EMPTY_LIST;
+                }
+                List list = new ArrayList();
+                list.add(request);
+                return list;
+            } else if (space != null) {
+                fromClause.append(", StringProperty as space");
+                whereClause.append(" and obj.id=space.id.id and space.id.name='"
+                    + MembershipRequestImpl.MembershipRequestFields.SPACE + "' and space.value='"
+                    + space + "'");
+            } else if (requester != null) {
+                fromClause.append(" StringProperty as requester");
+                whereClause.append(" and obj.id=requester.id.id and requester.id.name='"
+                    + MembershipRequestImpl.MembershipRequestFields.REQUESTER
+                    + "' and requester.value='" + requester + "'");
+            }
+
+            int status = prototype.getStatus();
+            if (status != JoinRequestStatus.ANY) {
+                fromClause.append(", IntegerProperty as status");
+                whereClause.append(" and obj.id=status.id.id and status.id.name='"
+                    + MembershipRequestImpl.MembershipRequestFields.STATUS
+                    + "' and status.value=" + status);
+            }
+
+            List roles = prototype.getRoles();
+            if (roles != null && roles.size() > 0) {
+                String role = (String) prototype.getRoles().get(0);
+                fromClause.append(", DBStringListProperty as roles join roles.list as role");
+                whereClause.append(" and obj.id=roles.id.id and roles.id.name='"
+                    + MembershipRequestImpl.MembershipRequestFields.ROLES
+                    + "' and instr(role.id, '" + role + "')>0");
+            }
+
+            String responder = prototype.getResponder();
+            if (responder != null) {
+                fromClause.append(" StringProperty as responder");
+                whereClause.append(" and obj.id=responder.id.id and responder.id.name='"
+                    + MembershipRequestImpl.MembershipRequestFields.RESPONDER
+                    + "' and responder.value='" + responder + "'");
+            }
+
+            String sql =
+                "select distinct doc " + fromClause.toString() + " " + whereClause.toString();
+            return context.getWiki().getStore().search(sql, count, start, context);
+        } catch (XWikiException e) {
+            e.printStackTrace();
+            return Collections.EMPTY_LIST;
+        }
     }
 
     /**
@@ -856,9 +979,14 @@ public class InvitationManagerImpl implements InvitationManager
                 toUser = membershipRequest.getRequester();
             }
         }
+        if (!isEmailAddress(fromUser)) {
+            fromUser = getEmailAddress(fromUser, context);
+        }
+        if (!isEmailAddress(toUser)) {
+            toUser = getEmailAddress(toUser, context);
+        }
         MailSenderPlugin mailSender =
             (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);
-        // TODO wikiName to e-mail address
         mailSender.sendMailFromTemplate(templateDocFullName, fromUser, toUser, "", "", context
             .getLanguage(), vContext, context);
     }
@@ -869,7 +997,7 @@ public class InvitationManagerImpl implements InvitationManager
         if (isEmailAddress(wikiNameOrMailAddress)) {
             String email = wikiNameOrMailAddress;
             String sql =
-                "select distinct doc.name from XWikiDocument as doc, BaseObject as obj, StringProperty typeprop where doc.fullName=obj.name and obj.className = 'XWiki.XWikiUsers' and obj.id=typeprop.id.id and typeprop.id.name='email' and typeprop.value='"
+                "select distinct doc.name from XWikiDocument as doc, BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className = 'XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"
                     + email + "'";
             List userList = context.getWiki().getStore().search(sql, 1, 0, context);
             if (userList.size() > 0) {
@@ -890,6 +1018,13 @@ public class InvitationManagerImpl implements InvitationManager
     private boolean isEmailAddress(String str)
     {
         return str.contains("@");
+    }
+
+    private String getEmailAddress(String user, XWikiContext context) throws XWikiException
+    {
+        user = findUser(user, context);
+        XWikiDocument userDoc = context.getWiki().getDocument(user, context);
+        return userDoc.getObject("XWiki.XWikiUsers").getStringValue("email");
     }
 
     // copy & paste from XWikiAuthServiceImpl#findUser(String, XWikiContext)
