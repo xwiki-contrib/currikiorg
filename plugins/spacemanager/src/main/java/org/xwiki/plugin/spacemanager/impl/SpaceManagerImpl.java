@@ -555,11 +555,11 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     public List getSpaceNames(String userName, String role, XWikiContext context) throws SpaceManagerException {
         String sql;
         if (role==null)
-         sql = "select distinct doc.web from XWikiDocument as doc, BaseObject as obj, StringProperty as memberprop where doc.name='MemberGroup' and doc.fullName=obj.name and obj.className = 'XWiki.XWikiAllGroup'"
+         sql = "select distinct doc.web from XWikiDocument as doc, BaseObject as obj, StringProperty as memberprop where doc.name='MemberGroup' and doc.fullName=obj.name and obj.className = 'XWiki.XWikiGroups'"
                 + " and obj.id=memberprop.id.id and memberprop.id.name='member' and memberprop.value='" + userName + "'";
         else {
             String roleGroupName = getRoleGroupName("", role).substring(1);
-            sql = "select distinct doc.web from XWikiDocument as doc, BaseObject as obj, StringProperty as memberprop where doc.name='" + roleGroupName + "' and doc.fullName=obj.name and obj.className = 'XWiki.XWikiAllGroup'"
+            sql = "select distinct doc.web from XWikiDocument as doc, BaseObject as obj, StringProperty as memberprop where doc.name='" + roleGroupName + "' and doc.fullName=obj.name and obj.className = 'XWiki.XWikiGroups'"
                    + " and obj.id=memberprop.id.id and memberprop.id.name='member' and memberprop.value='" + userName + "'";
 
         }
