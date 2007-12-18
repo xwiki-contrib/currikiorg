@@ -325,11 +325,16 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
         // Copy over template data over our current data
         if(templateSpaceName != null){
-        	try {
-        		context.getWiki().copyWikiWeb(templateSpaceName, context.getDatabase(), context.getDatabase(), null, context);
-        	} catch (XWikiException e) {
-        		throw new SpaceManagerException(e);
-        	}
+            try {
+                List list = context.getWiki().getStore().searchDocumentsNames("where doc.web='" + templateSpaceName + "'", context);
+                for (Iterator it = list.iterator(); it.hasNext();) {
+                    String docname = (String) it.next();
+                    XWikiDocument doc = context.getWiki().getDocument(docname, context);
+                    context.getWiki().copyDocument(doc.getFullName(), templateSpaceName + "." + doc.getName(), context);
+                }
+            } catch (XWikiException e) {
+                throw new SpaceManagerException(e);
+            }
         }
 
         // Make sure we set the type
