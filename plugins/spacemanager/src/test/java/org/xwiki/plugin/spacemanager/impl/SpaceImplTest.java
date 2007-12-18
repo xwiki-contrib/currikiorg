@@ -89,6 +89,9 @@ public class SpaceImplTest extends org.jmock.cglib.MockObjectTestCase{
             XWikiContext.class}, new Object[] {this.xwiki, this.context});
         this.mockXWikiVersioningStore.stubs().method("getXWikiDocumentArchive").will(
             returnValue(null));
+        this.mockXWikiStore.stubs().method("searchDocumentsNames").will(
+                  returnValue(new ArrayList()));
+        
 
         this.xwiki.setStore((XWikiStoreInterface) mockXWikiStore.proxy());
         this.xwiki.setVersioningStore((XWikiVersioningStoreInterface) mockXWikiVersioningStore
