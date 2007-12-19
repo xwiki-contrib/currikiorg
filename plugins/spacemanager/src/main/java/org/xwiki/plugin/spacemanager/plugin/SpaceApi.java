@@ -74,6 +74,10 @@ public class SpaceApi {
         getSpace().setCreator(creator);
     }
     
+    public String getSpaceName(){
+    	return getSpace().getSpaceName();
+    }
+    
     /**
      * Gets the display title of the space
      * @return

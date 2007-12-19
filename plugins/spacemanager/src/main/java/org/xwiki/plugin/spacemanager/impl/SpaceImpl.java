@@ -43,7 +43,6 @@ public class SpaceImpl extends Document implements Space {
 	public static final String SPACE_LANGUAGE = "language";
 	protected SpaceManagerImpl manager = null;
 
-
     /**
 	 * Space constructor creating a space if does not exist
 	 * @param spaceTitle The display name of the space
@@ -51,7 +50,7 @@ public class SpaceImpl extends Document implements Space {
 	 */
 	public SpaceImpl(String spaceName, String spaceTitle, boolean create, SpaceManagerImpl manager, XWikiContext context) throws SpaceManagerException{
         super(null, context);
-		this.manager = manager;
+		this.manager = manager; 
 
         // if we haven't been provided with a space name we computer it from the space title
         if (spaceName==null)
