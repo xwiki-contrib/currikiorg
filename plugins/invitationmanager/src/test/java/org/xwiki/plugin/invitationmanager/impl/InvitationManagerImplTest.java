@@ -21,7 +21,6 @@ package org.xwiki.plugin.invitationmanager.impl;
 
 import org.xwiki.plugin.invitationmanager.api.Invitation;
 import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
-import org.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 
 import com.xpn.xwiki.XWikiException;
 
@@ -34,8 +33,6 @@ public class InvitationManagerImplTest extends InvitationManagerTest
     {
         super.setUp();
         invitationManager = new InvitationManagerImpl();
-        spaceManager =
-            new SpaceManagerImpl("spacemanager", SpaceManagerImpl.class.toString(), context);
     }
 
     protected Invitation createInvitation(String invitee, String space) throws XWikiException

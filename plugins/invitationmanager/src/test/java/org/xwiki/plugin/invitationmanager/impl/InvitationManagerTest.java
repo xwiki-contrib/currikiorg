@@ -19,10 +19,12 @@
  */
 package org.xwiki.plugin.invitationmanager.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Set;
 
 import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
@@ -33,7 +35,6 @@ import org.xwiki.plugin.invitationmanager.api.InvitationManager;
 import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
 import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
 import org.xwiki.plugin.spacemanager.api.SpaceManager;
-import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiConfig;
@@ -50,15 +51,19 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
 {
     protected InvitationManager invitationManager;
 
-    protected SpaceManager spaceManager;
-
     protected XWikiContext context;
 
     protected XWiki xwiki;
 
     protected Mock mockXWikiStore;
 
+    protected Mock mockSpaceManager;
+
     protected Map docs = new HashMap();
+
+    protected Map space2members = new HashMap();
+
+    protected Map role2users = new HashMap();
 
     protected static final String SPACE = "MySpace";
 
@@ -76,6 +81,12 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
         xwiki = new XWiki(new XWikiConfig(), context);
         context.setWiki(xwiki);
 
+        setUpStore();
+        setUpSpaceManager();
+    }
+
+    private void setUpStore()
+    {
         mockXWikiStore =
             mock(XWikiHibernateStore.class, new Class[] {XWiki.class, XWikiContext.class},
                 new Object[] {xwiki, context});
@@ -115,110 +126,131 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
                         : Boolean.TRUE;
                 }
             });
-        this.mockXWikiStore.stubs().method("search").will(
-                  returnValue(new ArrayList()));        
+        this.mockXWikiStore.stubs().method("search").will(returnValue(new ArrayList()));
 
         xwiki.setStore((XWikiStoreInterface) mockXWikiStore.proxy());
     }
 
-    public void testEmptyTest() {
-        
+    private void setUpSpaceManager()
+    {
+        mockXWikiStore = mock(SpaceManager.class, new Class[] {}, new Object[] {});
+        mockXWikiStore.stubs().method("userIsMember").will(
+            new CustomStub("Implements SpaceManager.userIsMember")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    String space = (String) invocation.parameterValues.get(0);
+                    String user = (String) invocation.parameterValues.get(1);
+                    Set members = (Set) space2members.get(space);
+                    return (members != null && members.contains(user)) ? Boolean.TRUE
+                        : Boolean.FALSE;
+                }
+            });
+        mockXWikiStore.stubs().method("getUsersForRole").will(
+            new CustomStub("Implements SpaceManager.getUsersForRole")
+            {
+                public Object invoke(Invocation invocation) throws Throwable
+                {
+                    String role = (String) invocation.parameterValues.get(1);
+                    Set users = (Set) role2users.get(role);
+                    if (users != null) {
+                        return users;
+                    } else {
+                        return Collections.EMPTY_SET;
+                    }
+                }
+            });
     }
 
-    /*
-    public void testAcceptInvitation()
+    public void testEmptyTest()
+    {
+
+    }
+
+    public void _testAcceptInvitation()
     {
         try {
             String nonMember = "testAcceptInvitation_nonMember";
             context.setUser(ADMIN);
             invitationManager.inviteUser(nonMember, SPACE, false, DEVELOPER_ROLE, context);
 
-            assertFalse(spaceManager.userIsMember(SPACE, nonMember, context));
-            assertFalse(spaceManager.getUsersForRole(SPACE, DEVELOPER_ROLE, context).contains(
-                nonMember));
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
+            assertFalse(getSpaceManager().getUsersForRole(SPACE, DEVELOPER_ROLE, context)
+                .contains(nonMember));
 
             context.setUser(nonMember);
             invitationManager.acceptInvitation(SPACE, context);
 
-            assertTrue(spaceManager.userIsMember(SPACE, nonMember, context));
-            assertTrue(spaceManager.getUsersForRole(SPACE, DEVELOPER_ROLE, context).contains(
-                nonMember));
+            assertTrue(getSpaceManager().userIsMember(SPACE, nonMember, context));
+            assertTrue(getSpaceManager().getUsersForRole(SPACE, DEVELOPER_ROLE, context)
+                .contains(nonMember));
         } catch (XWikiException e) {
             assertTrue(false);
         }
     }
 
-    public void testAcceptMembership()
+    public void _testAcceptMembership()
     {
         try {
             String nonMember = "testAcceptMembership_nonMember";
             context.setUser(nonMember);
-            invitationManager.requestMembership(SPACE, "I love you space", DEVELOPER_ROLE,
+            invitationManager.requestMembership(SPACE, "I love yout space", DEVELOPER_ROLE,
                 context);
 
-            assertFalse(spaceManager.userIsMember(SPACE, nonMember, context));
-            assertFalse(spaceManager.getUsersForRole(SPACE, DEVELOPER_ROLE, context).contains(
-                nonMember));
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
+            assertFalse(getSpaceManager().getUsersForRole(SPACE, DEVELOPER_ROLE, context)
+                .contains(nonMember));
 
             context.setUser(ADMIN);
             invitationManager.acceptMembership(SPACE, nonMember, context);
 
-            assertTrue(spaceManager.userIsMember(SPACE, nonMember, context));
-            assertTrue(spaceManager.getUsersForRole(SPACE, DEVELOPER_ROLE, context).contains(
-                nonMember));
+            assertTrue(getSpaceManager().userIsMember(SPACE, nonMember, context));
+            assertTrue(getSpaceManager().getUsersForRole(SPACE, DEVELOPER_ROLE, context)
+                .contains(nonMember));
         } catch (XWikiException e) {
             assertTrue(false);
         }
     }
 
-    public void testCancelInvitation()
+    public void _testCancelInvitation()
     {
         try {
             String nonMember = "testCancelInvitation_nonMember";
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
+
             context.setUser(ADMIN);
             invitationManager.inviteUser(nonMember, SPACE, false, context);
             invitationManager.cancelInvitation(nonMember, SPACE, context);
+            Invitation invitation = getInvitation(nonMember, SPACE);
 
-            Invitation prototype = createInvitation(nonMember, SPACE);
-            prototype.setInviter(ADMIN);
-            prototype.setStatus(JoinRequestStatus.SENT);
-            List invitations = invitationManager.getInvitations(prototype, context);
-            assertEquals(0, invitations.size());
-
-            prototype.setStatus(JoinRequestStatus.CANCELLED);
-            invitations = invitationManager.getInvitations(prototype, context);
-            assertEquals(1, invitations.size());
-
-            assertFalse(spaceManager.userIsMember(SPACE, nonMember, context));
+            assertEquals(JoinRequestStatus.CANCELLED, invitation.getStatus());
+            assertNull(invitation.getResponseDate());
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
         } catch (XWikiException e) {
             assertTrue(false);
         }
     }
 
-    public void testCancelMembershipRequest()
+    public void _testCancelMembershipRequest()
     {
         try {
             String nonMember = "testCancelMembershipRequest_nonMember";
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
+
             context.setUser(nonMember);
-            invitationManager.requestMembership(SPACE, "I love you space", context);
+            invitationManager.requestMembership(SPACE, "I love your space", context);
             invitationManager.cancelMembershipRequest(SPACE, context);
+            MembershipRequest request = getMembershipRequest(nonMember, SPACE);
 
-            MembershipRequest prototype = createMembershipRequest(nonMember, SPACE);
-            prototype.setStatus(JoinRequestStatus.SENT);
-            List membershipRequests = invitationManager.getMembershipRequests(prototype, context);
-            assertEquals(0, membershipRequests.size());
-
-            prototype.setStatus(JoinRequestStatus.CANCELLED);
-            membershipRequests = invitationManager.getMembershipRequests(prototype, context);
-            assertEquals(1, membershipRequests.size());
-
-            assertFalse(spaceManager.userIsMember(SPACE, nonMember, context));
+            assertEquals(JoinRequestStatus.CANCELLED, request.getStatus());
+            assertNull(request.getResponseDate());
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
         } catch (XWikiException e) {
             assertTrue(false);
         }
     }
 
-    public void testGetInvitations()
+    public void _testGetInvitations()
     {
         String nonMember = "testGetInvitations_nonMember";
         context.setUser(ADMIN);
@@ -247,11 +279,11 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
         assertNotNull(invitationReceived);
     }
 
-    public void testGetMembershipRequests()
+    public void _testGetMembershipRequests()
     {
         String nonMember = "testGetMembershipRequests_nonMember";
         context.setUser(nonMember);
-        invitationManager.requestMembership(SPACE, "I love you space", context);
+        invitationManager.requestMembership(SPACE, "I love your space", context);
 
         List requests = invitationManager.getMembershipRequests(JoinRequestStatus.SENT, context);
         MembershipRequest requestSent = null;
@@ -276,10 +308,12 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
         assertNotNull(requestReceived);
     }
 
-    public void testInviteUser()
+    public void _testInviteUser()
     {
         try {
             String nonMember = "testInviteUser_nonMember";
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
+
             context.setUser(ADMIN);
             invitationManager.inviteUser(nonMember, SPACE, false, context);
             invitationManager.inviteUser(nonMember, SPACE, false, context);
@@ -294,11 +328,7 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
             context.setUser(nonMember);
             invitationManager.acceptInvitation(SPACE, context);
 
-            try {
-                assertTrue(spaceManager.userIsMember(SPACE, nonMember, context));
-            } catch (SpaceManagerException e) {
-                assertTrue(false);
-            }
+            assertTrue(getSpaceManager().userIsMember(SPACE, nonMember, context));
 
             context.setUser(ADMIN);
             invitationManager.inviteUser(nonMember, SPACE, false, context);
@@ -313,64 +343,49 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
         }
     }
 
-    public void testRejectInvitation()
+    public void _testRejectInvitation()
     {
         try {
             String nonMember = "testRejectInvitation_nonMember";
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
+
             context.setUser(ADMIN);
             invitationManager.inviteUser(nonMember, SPACE, false, context);
 
-            Invitation prototype = createInvitation(nonMember, SPACE);
-            prototype.setInviter(ADMIN);
-            prototype.setStatus(JoinRequestStatus.SENT);
-            List invitations = invitationManager.getInvitations(prototype, context);
-            assertEquals(1, invitations.size());
-
             context.setUser(nonMember);
             invitationManager.rejectInvitation(SPACE, context);
+            Invitation invitation = getInvitation(nonMember, SPACE);
 
-            invitations = invitationManager.getInvitations(prototype, context);
-            assertEquals(0, invitations.size());
-
-            prototype.setStatus(JoinRequestStatus.REFUSED);
-            invitations = invitationManager.getInvitations(prototype, context);
-            assertEquals(1, invitations.size());
-
-            assertFalse(spaceManager.userIsMember(SPACE, nonMember, context));
+            assertEquals(JoinRequestStatus.REFUSED, invitation.getStatus());
+            assertNotNull(invitation.getResponseDate());
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
         } catch (XWikiException e) {
             assertTrue(false);
         }
     }
 
-    public void testRejectMembership()
+    public void _testRejectMembership()
     {
         try {
             String nonMember = "testRejectMembership_nonMember";
-            context.setUser(nonMember);
-            invitationManager.requestMembership(SPACE, "I love you space", context);
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
 
-            MembershipRequest prototype = createMembershipRequest(nonMember, SPACE);
-            prototype.setStatus(JoinRequestStatus.SENT);
-            List membershipRequests = invitationManager.getMembershipRequests(prototype, context);
-            assertEquals(1, membershipRequests.size());
+            context.setUser(nonMember);
+            invitationManager.requestMembership(SPACE, "I love your space", context);
 
             context.setUser(ADMIN);
             invitationManager.rejectMembership(SPACE, nonMember, context);
+            MembershipRequest request = getMembershipRequest(nonMember, SPACE);
 
-            membershipRequests = invitationManager.getMembershipRequests(prototype, context);
-            assertEquals(0, membershipRequests.size());
-
-            prototype.setStatus(JoinRequestStatus.REFUSED);
-            membershipRequests = invitationManager.getMembershipRequests(prototype, context);
-            assertEquals(1, membershipRequests.size());
-
-            assertFalse(spaceManager.userIsMember(SPACE, nonMember, context));
+            assertEquals(JoinRequestStatus.REFUSED, request.getStatus());
+            assertNotNull(request.getResponseDate());
+            assertFalse(getSpaceManager().userIsMember(SPACE, nonMember, context));
         } catch (XWikiException e) {
             assertTrue(false);
         }
     }
 
-    public void testRequestMembership()
+    public void _testRequestMembership()
     {
         try {
             String nonMember = "testRequestMembership_nonMember";
@@ -388,7 +403,7 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
             context.setUser(ADMIN);
             invitationManager.acceptMembership(SPACE, nonMember, context);
 
-            assertTrue(spaceManager.userIsMember(SPACE, nonMember, context));
+            assertTrue(getSpaceManager().userIsMember(SPACE, nonMember, context));
 
             context.setUser(nonMember);
             invitationManager.requestMembership(SPACE, "I really really love you space", context);
@@ -402,7 +417,11 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
             assertTrue(false);
         }
     }
-    */
+
+    protected SpaceManager getSpaceManager()
+    {
+        return (SpaceManager) mockSpaceManager.proxy();
+    }
 
     protected abstract Invitation getInvitation(String invitee, String space)
         throws XWikiException;
