@@ -659,7 +659,7 @@ public class InvitationManagerImpl implements InvitationManager
             invitation.setRoles(roles);
             invitation.setStatus(JoinRequestStatus.SENT);
             if (registeredUser == null) {
-                invitation.setCode(generateEmailCode());
+                invitation.setCode(generateInvitationCode());
                 // make the e-mail address available in the invitee field
                 invitation.setInvitee(wikiNameOrMailAddress);
             }
@@ -852,6 +852,11 @@ public class InvitationManagerImpl implements InvitationManager
         requestMembership(space, message, Collections.EMPTY_LIST, context);
     }
 
+    /**
+     * @return the name of the document (wiki page) that is the default mail template to be used for
+     *         notifying the execution of the specified action on a request of class
+     *         <code>joinRequestClass</code> related to the given space.
+     */
     private String getDefaultTemplateMailDocumentName(String space, Class joinRequestClass,
         String action, XWikiContext context)
     {
@@ -866,6 +871,11 @@ public class InvitationManagerImpl implements InvitationManager
         return docName;
     }
 
+    /**
+     * @return the name of the document (wiki page) to be used for storing a request of class
+     *         <code>joinRequestClass</code> that would allow the specified user to join the
+     *         specified space.
+     */
     public String getJoinRequestDocumentName(Class joinRequestClass, String space, String user)
     {
         if (space == null) {
@@ -878,23 +888,37 @@ public class InvitationManagerImpl implements InvitationManager
             + "_" + user;
     }
 
+    /**
+     * @return the xwiki class associated with the given join request type
+     */
     public String getJoinRequestClassName(Class joinRequestType)
     {
         return "XWiki." + joinRequestType.getName() + "Class";
     }
 
+    /**
+     * @return the stored invitation uniquely identified by the given space and invitee
+     */
     private Invitation getInvitation(String space, String invitee, XWikiContext context)
         throws XWikiException
     {
         return new InvitationImpl(invitee, space, false, this, context);
     }
 
+    /**
+     * @return a newly created invitation to be sent to the <code>invitee</code> in order to join
+     *         the <code>space</code>
+     */
     private Invitation createInvitation(String invitee, String space, XWikiContext context)
         throws XWikiException
     {
         return new InvitationImpl(invitee, space, true, this, context);
     }
 
+    /**
+     * Creates a custom invitation for the currently logged-in user, from the given one, and then
+     * saves it.
+     */
     private void customizeInvitation(Invitation invitation, int status, XWikiContext context)
         throws XWikiException
     {
@@ -911,28 +935,45 @@ public class InvitationManagerImpl implements InvitationManager
         customInvitation.save();
     }
 
+    /**
+     * @return the stored membership request uniquely identified by the given space and requester
+     */
     private MembershipRequest getMembershipRequest(String space, String requester,
         XWikiContext context) throws XWikiException
     {
         return new MembershipRequestImpl(requester, space, false, this, context);
     }
 
+    /**
+     * @return a newly created membership request to be sent by the <code>requester</code> in
+     *         order to join the <code>space</code>
+     */
     private MembershipRequest createMembershipRequest(String requester, String space,
         XWikiContext context) throws XWikiException
     {
         return new MembershipRequestImpl(requester, space, true, this, context);
     }
 
+    /**
+     * @return the encoded email address to be used when naming the document (wiki page) storing the
+     *         invitation to the unregistered user with the given email address
+     */
     private String encodeEmailAddress(String emailAddress)
     {
         return emailAddress.hashCode() + "";
     }
 
-    private String generateEmailCode()
+    /**
+     * @return a new random code for an invitation
+     */
+    private String generateInvitationCode()
     {
         return RandomStringUtils.randomAlphabetic(8).toLowerCase();
     }
 
+    /**
+     * Wrapper method for adding a user to a space and to the given roles using the space manager
+     */
     private void addMember(String space, String user, List roles, XWikiContext context)
         throws XWikiException
     {
@@ -945,6 +986,9 @@ public class InvitationManagerImpl implements InvitationManager
         }
     }
 
+    /**
+     * Wrapper method for sending a mail using the mail sender plug-in
+     */
     private void sendMail(String action, JoinRequest request, String templateDocFullName,
         XWikiContext context) throws XWikiException
     {
@@ -991,6 +1035,12 @@ public class InvitationManagerImpl implements InvitationManager
             .getLanguage(), vContext, context);
     }
 
+    /**
+     * @return the wiki name of the registered user with the given
+     *         <code>wikiNameOrMailAddress</code>
+     * @throws XWikiException if there is no registered user with the given wiki name or email
+     *             address
+     */
     private String getRegisteredUser(String wikiNameOrMailAddress, XWikiContext context)
         throws XWikiException
     {
@@ -1015,11 +1065,17 @@ public class InvitationManagerImpl implements InvitationManager
         }
     }
 
+    /**
+     * Helper method for testing if a given string is an email address.
+     */
     private boolean isEmailAddress(String str)
     {
         return str.contains("@");
     }
 
+    /**
+     * @return the email address of the given user, provided he is registered
+     */
     private String getEmailAddress(String user, XWikiContext context) throws XWikiException
     {
         user = findUser(user, context);
