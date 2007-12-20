@@ -511,7 +511,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             BaseObject directionObj = compositeAssetDoc.newObject(Constants.DIRECTION_CLASS, context);
 
             addSubAsset(compositeAssetDoc, Constants.DIRECTION + directionObj.getNumber(), position, context);
-
+            compositeAssetDoc.setAuthor(context.getUser());
             context.getWiki().saveDocument(compositeAssetDoc, context.getMessageTool().get("curriki.comment.adddirectionblock"), context);
 
         } catch (Exception e) {
@@ -917,8 +917,10 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         if (assertDuplicateRight(templateAssetDoc, context)==false)
           return null;
 
-        if (pageName == null){
+        if ((pageName == null)||(pageName.equals(""))) {
             pageName = context.getWiki().getUniquePageName(space, context);
+        } else {
+            pageName = context.getWiki().getUniquePageName(space, pageName, context);
         }
 
         XWikiDocument assetDoc = context.getWiki().getDocument(space, pageName, context);
