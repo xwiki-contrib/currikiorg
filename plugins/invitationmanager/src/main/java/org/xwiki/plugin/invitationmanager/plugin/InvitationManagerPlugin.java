@@ -56,7 +56,7 @@ public class InvitationManagerPlugin extends XWikiDefaultPlugin
      */
     public String getName()
     {
-        return new String("invitemanager");
+        return new String("invitationmanager");
     }
 
     /**
