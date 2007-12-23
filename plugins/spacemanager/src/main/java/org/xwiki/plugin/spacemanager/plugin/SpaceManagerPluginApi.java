@@ -26,6 +26,7 @@ import org.xwiki.plugin.spacemanager.api.SpaceManager;
 import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
 
 import java.util.List;
+import java.util.Collection;
 
 /**
  * Api for creating and retrieving Spaces 
@@ -286,6 +287,16 @@ public class SpaceManagerPluginApi extends PluginApi
      */
      public List getLastModifiedDocuments(String spaceName, boolean recursive, int nb, int start) throws SpaceManagerException{
     	 return getSpaceManager().getLastModifiedDocuments(spaceName, context, recursive, nb, start);
+     }
+
+
+    /**
+     * Return the list of members of the space
+     * @param spaceName
+     * @throws SpaceManagerException
+     */  
+     public Collection getMembers(String spaceName) throws SpaceManagerException {
+         return getSpaceManager().getMembers(spaceName, context);
      }
 
     /**
