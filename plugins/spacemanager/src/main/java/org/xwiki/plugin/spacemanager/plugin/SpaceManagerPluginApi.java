@@ -381,4 +381,9 @@ public class SpaceManagerPluginApi extends PluginApi
     public int countSpaces() throws SpaceManagerException {
         return getSpaceManager().countSpaces(context);
     }
+
+    public boolean isMember(String spaceName, String username) throws SpaceManagerException {
+        return getSpaceManager().isMember(spaceName, username, context);
+    }
+
 }

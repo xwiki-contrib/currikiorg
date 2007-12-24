@@ -317,7 +317,7 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @return
      * @throws SpaceManagerException
      */
-    public boolean userIsMember(String spaceName, String user, XWikiContext context) throws SpaceManagerException;
+    public boolean isMember(String spaceName, String user, XWikiContext context) throws SpaceManagerException;
 
     /**
      *

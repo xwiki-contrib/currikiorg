@@ -643,9 +643,9 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     }
 
     
-    public boolean userIsMember(String spaceName, String username, XWikiContext context) throws SpaceManagerException {
+    public boolean isMember(String spaceName, String username, XWikiContext context) throws SpaceManagerException {
         try {
-            return isMember(username, getMemberGroupName(spaceName), context);
+            return isMemberOfGroup(username, getMemberGroupName(spaceName), context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -675,7 +675,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     }
 
 
-    private boolean isMember(String username, String groupname, XWikiContext context) throws XWikiException {
+    private boolean isMemberOfGroup(String username, String groupname, XWikiContext context) throws XWikiException {
         Collection coll = context.getWiki().getGroupService(context).getAllGroupsNamesForMember(username, 0, 0, context);
         Iterator it = coll.iterator();
         while (it.hasNext()) {
@@ -695,7 +695,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     private void addUserToGroup(String username, String groupName, XWikiContext context) throws XWikiException
     {
         // don't add if he is already a member
-        if (isMember(username, groupName, context))
+        if (isMemberOfGroup(username, groupName, context))
          return;
 
         XWiki xwiki = context.getWiki();
