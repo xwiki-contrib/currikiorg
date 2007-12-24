@@ -67,6 +67,20 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
         }
     }
 
+    /**
+     * Allows to load an invitation from a wiki document
+     * @param fullName
+     * @param manager
+     * @param context
+     * @throws XWikiException
+     */
+    public MembershipRequestImpl(String fullName, InvitationManagerImpl manager, XWikiContext context)
+        throws XWikiException
+    {
+        super(fullName, manager, context);
+    }
+
+
     protected String getClassName() {
        return manager.getJoinRequestClassName("Invitation");
     }

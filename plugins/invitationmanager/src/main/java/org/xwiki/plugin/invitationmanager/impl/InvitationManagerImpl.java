@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.velocity.VelocityContext;
@@ -35,12 +34,11 @@ import org.xwiki.plugin.spacemanager.api.SpaceManagers;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
 import com.xpn.xwiki.plugin.mailsender.Mail;
-
-import javax.mail.MessagingException;
 
 /**
  * The default implementation for {@link InvitationManager}
@@ -240,22 +238,22 @@ public class InvitationManagerImpl implements InvitationManager
 
             String space = prototype.getSpace();
             String invitee = prototype.getInvitee();
-            if (space != null && invitee != null) {
+            if (!"".equals(space) && !"".equals(invitee)) {
                 Invitation invitation = getInvitation(space, invitee, context);
                 // find a better way of testing if the invitation is new
-                if (((XWikiDocument) invitation).isNew()) {
+                if (((Document) invitation).isNew()) {
                     return Collections.EMPTY_LIST;
                 }
                 List list = new ArrayList();
                 list.add(invitation);
                 return list;
-            } else if (space != null) {
+            } else if (!"".equals(space)) {
                 fromClause.append(", StringProperty as space");
                 whereClause
                         .append(" and obj.id=space.id.id and space.id.name='"
                                 + InvitationImpl.InvitationFields.SPACE + "' and space.value='" + space
                                 + "'");
-            } else if (invitee != null) {
+            } else if (!"".equals(invitee)) {
                 fromClause.append(" StringProperty as invitee");
                 whereClause.append(" and obj.id=invitee.id.id and invitee.id.name='"
                         + InvitationImpl.InvitationFields.INVITEE + "' and invitee.value='" + invitee
@@ -279,7 +277,7 @@ public class InvitationManagerImpl implements InvitationManager
             }
 
             String inviter = prototype.getInviter();
-            if (inviter != null) {
+            if (!"".equals(inviter)) {
                 fromClause.append(" StringProperty as inviter");
                 whereClause.append(" and obj.id=inviter.id.id and inviter.id.name='"
                         + InvitationImpl.InvitationFields.INVITER + "' and inviter.value='" + inviter
@@ -287,12 +285,45 @@ public class InvitationManagerImpl implements InvitationManager
             }
 
             String sql =
-                    "select distinct doc " + fromClause.toString() + " " + whereClause.toString();
-            return context.getWiki().getStore().search(sql, count, start, context);
+                    "select distinct doc.fullName " + fromClause.toString() + " " + whereClause.toString();
+
+            return wrapInvitations(context.getWiki().getStore().search(sql, count, start, context), context);
         } catch (XWikiException e) {
             e.printStackTrace();
             return Collections.EMPTY_LIST;
         }
+    }
+
+    private List wrapInvitations(List list, XWikiContext context) {
+        ArrayList result = new ArrayList();
+        if (list==null)
+         return null;
+        for (int i=0;i<list.size();i++) {
+            String inviteDocName = (String) list.get(i);
+            try {
+                result.add(new InvitationImpl(inviteDocName, this, context));
+            } catch (XWikiException e) {
+                // let's not a single invitation break our requests
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+      private List wrapMembershipRequests(List list, XWikiContext context) {
+        ArrayList result = new ArrayList();
+        if (list==null)
+         return null;
+        for (int i=0;i<list.size();i++) {
+            String inviteDocName = (String) list.get(i);
+            try {
+                result.add(new MembershipRequestImpl(inviteDocName, this, context));
+            } catch (XWikiException e) {
+                // let's not a single invitation break our requests
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     /**
@@ -335,11 +366,13 @@ public class InvitationManagerImpl implements InvitationManager
                                XWikiContext context)
     {
         try {
-            List roles = new ArrayList();
-            roles.add(role);
             Invitation prototype = createInvitation(null, space, context);
+            if ((role!=null)&&!"".equals(role)) {
+                List roles = new ArrayList();
+                roles.add(role);
+                prototype.setRoles(roles);
+            }
             prototype.setStatus(status);
-            prototype.setRoles(roles);
             return getInvitations(prototype, start, count, context);
         } catch (XWikiException e) {
             e.printStackTrace();
@@ -464,21 +497,21 @@ public class InvitationManagerImpl implements InvitationManager
 
             String space = prototype.getSpace();
             String requester = prototype.getRequester();
-            if (space != null && requester != null) {
+            if (!"".equals(space) && !"".equals(requester)) {
                 MembershipRequest request = getMembershipRequest(space, requester, context);
                 // find a better way of testing if the request is new
-                if (((XWikiDocument) request).isNew()) {
+                if (((Document) request).isNew()) {
                     return Collections.EMPTY_LIST;
                 }
                 List list = new ArrayList();
                 list.add(request);
                 return list;
-            } else if (space != null) {
+            } else if (!"".equals(space)) {
                 fromClause.append(", StringProperty as space");
                 whereClause.append(" and obj.id=space.id.id and space.id.name='"
                         + MembershipRequestImpl.MembershipRequestFields.SPACE + "' and space.value='"
                         + space + "'");
-            } else if (requester != null) {
+            } else if (!"".equals(requester)) {
                 fromClause.append(" StringProperty as requester");
                 whereClause.append(" and obj.id=requester.id.id and requester.id.name='"
                         + MembershipRequestImpl.MembershipRequestFields.REQUESTER
@@ -503,7 +536,7 @@ public class InvitationManagerImpl implements InvitationManager
             }
 
             String responder = prototype.getResponder();
-            if (responder != null) {
+            if (!"".equals(responder)) {
                 fromClause.append(" StringProperty as responder");
                 whereClause.append(" and obj.id=responder.id.id and responder.id.name='"
                         + MembershipRequestImpl.MembershipRequestFields.RESPONDER
@@ -511,8 +544,8 @@ public class InvitationManagerImpl implements InvitationManager
             }
 
             String sql =
-                    "select distinct doc " + fromClause.toString() + " " + whereClause.toString();
-            return context.getWiki().getStore().search(sql, count, start, context);
+                    "select distinct doc.fullName " + fromClause.toString() + " " + whereClause.toString();
+            return wrapMembershipRequests(context.getWiki().getStore().search(sql, count, start, context), context);
         } catch (XWikiException e) {
             e.printStackTrace();
             return Collections.EMPTY_LIST;
@@ -983,7 +1016,7 @@ public class InvitationManagerImpl implements InvitationManager
             throws XWikiException
     {
         SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(space, context);
-        if (!spaceManager.userIsMember(space, user, context)) {
+        if (!spaceManager.isMember(space, user, context)) {
             spaceManager.addMember(space, user, context);
             if (roles != null && roles.size() > 0) {
                 spaceManager.addUserToRoles(space, user, roles, context);

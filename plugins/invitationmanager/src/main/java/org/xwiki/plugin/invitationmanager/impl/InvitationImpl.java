@@ -71,6 +71,19 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
         }
     }
 
+    /**
+     * Allows to load an invitation from a wiki document
+     * @param fullName
+     * @param manager
+     * @param context
+     * @throws XWikiException
+     */
+    public InvitationImpl(String fullName, InvitationManagerImpl manager, XWikiContext context)
+        throws XWikiException
+    {
+        super(fullName, manager, context);
+    }
+
     protected String getClassName() {
        return manager.getJoinRequestClassName("Invitation");
     }

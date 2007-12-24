@@ -28,6 +28,7 @@ import java.util.Map;
 import org.xwiki.plugin.invitationmanager.api.JoinRequest;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Document;
 
 /**
@@ -35,6 +36,7 @@ import com.xpn.xwiki.api.Document;
  */
 public abstract class JoinRequestImpl extends Document implements JoinRequest
 {
+
     public static interface JoinRequestFields
     {
         String REQUEST_DATE = "requestDate";
@@ -58,6 +60,12 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
     {
         super(null, context);
         this.manager = manager;
+    }
+
+    public JoinRequestImpl(String fullName, InvitationManagerImpl manager, XWikiContext context) throws XWikiException {
+        this(manager, context);
+        // we initialize the request document
+        doc = context.getWiki().getDocument(fullName, context);
     }
 
     /**
