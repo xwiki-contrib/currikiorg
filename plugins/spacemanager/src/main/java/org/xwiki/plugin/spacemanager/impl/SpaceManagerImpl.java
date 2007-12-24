@@ -749,7 +749,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
        return context.getWiki().getGroupService(context);
     }
 
-    public SpaceUserProfile getUserSpaceProfile(String spaceName, String username, XWikiContext context) throws SpaceManagerException {
+    public SpaceUserProfile getSpaceUserProfile(String spaceName, String username, XWikiContext context) throws SpaceManagerException {
         return newUserSpaceProfile(username, spaceName, context);
     }
 

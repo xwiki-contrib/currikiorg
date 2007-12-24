@@ -17,18 +17,27 @@ import com.xpn.xwiki.api.Document;
  */
 public class SpaceUserProfileImpl extends Document implements SpaceUserProfile {
     private static final String SPACE_USER_PROFILE_CLASS_NAME = "XWiki.SpaceUserProfileClass";
+    private String userName;
     private SpaceManager manager;
+    private Document userDoc;
 
 
     public SpaceUserProfileImpl(String userName, String spaceName, SpaceManager manager, XWikiContext context) throws XWikiException {
         super(null, context);
         this.manager = manager;
+        this.userName = userName;
         String docName = manager.getSpaceUserProfilePageName(userName, spaceName);
         doc = context.getWiki().getDocument(docName, context);
     }
 
     protected String getSpaceUserProfileClassName() {
         return SPACE_USER_PROFILE_CLASS_NAME;
+    }
+
+    protected Document getUserDocument() throws XWikiException {
+        if (userDoc==null)
+         userDoc = new Document(context.getWiki().getDocument(userName, context), context);
+        return userDoc;
     }
 
     public String getProfile() {
@@ -60,6 +69,34 @@ public class SpaceUserProfileImpl extends Document implements SpaceUserProfile {
             updateObjectFromRequest(getSpaceUserProfileClassName());
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
+        }
+    }
+
+    public String getUserProperty(String propName) {
+        try {
+            return (String) getUserDocument().getObject("XWiki.XWikiUsers").display(propName, "view");
+        } catch (XWikiException e) {
+            return "";
+        }
+    }
+
+    public String getFirstName() {
+        return getUserProperty("first_name");
+    }
+
+    public String getLastName() {
+        return getUserProperty("last_name");
+    }
+
+    public String getEmail() {
+        return getUserProperty("email");
+    }
+
+    public String getUserURL() {
+        try {
+            return getUserDocument().getURL();
+        } catch (XWikiException e) {
+            return "";
         }
     }
 }

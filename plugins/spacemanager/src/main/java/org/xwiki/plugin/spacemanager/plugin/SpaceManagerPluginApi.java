@@ -24,6 +24,7 @@ import com.xpn.xwiki.plugin.PluginApi;
 import org.xwiki.plugin.spacemanager.api.Space;
 import org.xwiki.plugin.spacemanager.api.SpaceManager;
 import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
+import org.xwiki.plugin.spacemanager.api.SpaceUserProfile;
 
 import java.util.List;
 import java.util.Collection;
@@ -364,12 +365,14 @@ public class SpaceManagerPluginApi extends PluginApi
     // public List getRoles(Space space) throws SpaceManagerException;
 
     /**
-     *
-     * @param space
+     * Gets a user profile object
+     * @param spaceName
      * @param user
      * @return
      */
-    // public SpaceUserProfile getUserSpaceProfile(Space space, String user) throws SpaceManagerException;
+    public SpaceUserProfile getSpaceUserProfile(String spaceName, String user) throws SpaceManagerException {
+        return getSpaceManager().getSpaceUserProfile(spaceName, user, context);
+    }
 
     /**
      * Count number of spaces

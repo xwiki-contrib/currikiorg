@@ -334,7 +334,7 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @param context
      * @return
      */
-    public SpaceUserProfile getUserSpaceProfile(String spaceName, String user, XWikiContext context) throws SpaceManagerException;
+    public SpaceUserProfile getSpaceUserProfile(String spaceName, String user, XWikiContext context) throws SpaceManagerException;
 
     /**
      * Get the space user profile page name
