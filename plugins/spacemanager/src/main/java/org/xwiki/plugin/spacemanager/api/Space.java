@@ -53,8 +53,21 @@ public interface Space {
 	 * @return
 	 */
 	public void setType( String type );
-		
+
+    /**
+	 * Gets the policy of the space
+	 * @return
+	 */
+	public String getPolicy();
+
 	/**
+	 * Sets the policy of the space
+	 * @param policy
+	 * @return
+	 */
+	public void setPolicy( String policy );
+
+    /**
 	 * Gets the name of the creator of this space
 	 * @return
 	 */

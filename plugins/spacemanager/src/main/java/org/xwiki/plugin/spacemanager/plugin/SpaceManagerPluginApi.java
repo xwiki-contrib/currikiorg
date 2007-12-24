@@ -301,6 +301,44 @@ public class SpaceManagerPluginApi extends PluginApi
      }
 
     /**
+     * Join the space
+     *
+     * @param spaceName
+     */
+    public boolean joinSpace(String spaceName) throws SpaceManagerException {
+        Space space = getSpace(spaceName);
+        if ("open".equals(space.getPolicy())) {
+            getSpaceManager().addMember(spaceName, context.getUser(), context);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Add a wiki user as member in the space
+     *
+     * @param spaceName
+     * @param wikiname
+     */
+    public void addMember(String spaceName, String wikiname) throws SpaceManagerException {
+        if (hasProgrammingRights())
+         getSpaceManager().addMember(spaceName, wikiname, context);
+    }
+
+    /**
+     * Add a wiki user as admin in the space
+     *
+     * @param spaceName
+     * @param wikiname
+     */
+    public void addAdmin(String spaceName, String wikiname) throws SpaceManagerException {
+        if (hasProgrammingRights())
+         getSpaceManager().addAdmin(spaceName, wikiname, context);
+    }
+
+
+    /**
      * Search for documents in the space
      *
      * @param space

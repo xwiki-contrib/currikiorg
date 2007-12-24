@@ -178,6 +178,22 @@ public class SpaceImpl extends Document implements Space {
     }
 
     /**
+     * Gets the membership policy of the space
+     * @return
+     */
+    public String getPolicy() {
+        return doc.getStringValue(manager.getSpaceClassName(), SPACE_POLICY);
+	}
+
+	/**
+	 * Sets the policy of the space
+	 * @param policy Space Type
+	 */
+    public void setPolicy(String policy) {
+        getDoc().setStringValue(manager.getSpaceClassName(), SPACE_POLICY, policy);
+	}
+
+    /**
      * Gets a preference for the space
      * @param prefName The preference name
      * @return
