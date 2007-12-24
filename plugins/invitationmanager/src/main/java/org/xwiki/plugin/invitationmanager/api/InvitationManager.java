@@ -29,6 +29,9 @@ import com.xpn.xwiki.XWikiContext;
  */
 public interface InvitationManager
 {
+    public static String DEFAULT_RESOURCE_SPACE = "Groups";
+    String DEFAULT_INVITATIONS_SPACE_SUFFIX = "_Invitations";
+
     /**
      * Requests a space membership in the name of the current logged-in user. Registers the request
      * in the database, and possibly notify space administrators of the request
@@ -38,26 +41,26 @@ public interface InvitationManager
      * @param context A XWikiContext instance
      * @see MembershipRequest
      */
-    void requestMembership(String space, String message, XWikiContext context);
+    void requestMembership(String space, String message, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @see #requestMembership(String, String, XWikiContext)
      * @param role The role the requester would like to have in the space, provided he is accepted
      */
-    void requestMembership(String space, String message, String role, XWikiContext context);
+    void requestMembership(String space, String message, String role, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @see #requestMembership(String, String, String, XWikiContext)
      * @param roles The list of roles the requester would like to have in the space, provided he is
      *            accepted
      */
-    void requestMembership(String space, String message, List roles, XWikiContext context);
+    void requestMembership(String space, String message, List roles, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @see #requestMembership(String, String, List, XWikiContext)
      * @param map A map of additional parameters for the membership request
      */
-    void requestMembership(String space, String message, List roles, Map map, XWikiContext context);
+    void requestMembership(String space, String message, List roles, Map map, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Returns all the membership requests that match the given prototype. Only the not null fields
@@ -193,7 +196,7 @@ public interface InvitationManager
      * context user is not an administrator of the space, does nothing and log a warning in the
      * context
      */
-    void acceptMembership(String space, String userName, XWikiContext context);
+    void acceptMembership(String space, String userName, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Accept a pending membership using a custom email template which can differ from the
@@ -202,7 +205,7 @@ public interface InvitationManager
      * 
      * @see #acceptMembership(String, String, XWikiContext)
      */
-    void acceptMembership(String space, String userName, String templateMail, XWikiContext context);
+    void acceptMembership(String space, String userName, String templateMail, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Reject a pending membership request. Update the membership request object, and notify the
@@ -211,7 +214,7 @@ public interface InvitationManager
      * wiki preference would be used). If the context user is not an administrator of the space,
      * does nothing and log a warning in the context.
      */
-    void rejectMembership(String space, String userName, XWikiContext context);
+    void rejectMembership(String space, String userName, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Reject a pending membership request using a custom email template, which can differ from the
@@ -220,7 +223,7 @@ public interface InvitationManager
      * 
      * @see #rejectMembership(String, String, XWikiContext)
      */
-    void rejectMembership(String space, String userName, String templateMail, XWikiContext context);
+    void rejectMembership(String space, String userName, String templateMail, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The currently logged-in user cancels the pending membership request which he sent to join the
@@ -229,7 +232,7 @@ public interface InvitationManager
      * @param space The space for which to cancel the membership request
      * @param context A XWikiContext instance
      */
-    void cancelMembershipRequest(String space, XWikiContext context);
+    void cancelMembershipRequest(String space, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Invites a user to join the space. It can be a registered user, in which case the
@@ -248,34 +251,34 @@ public interface InvitationManager
      *            should be a mailing list address
      * @param context A XWikiContext instance
      */
-    void inviteUser(String user, String space, boolean open, XWikiContext context);
+    void inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String, XWikiContext)
      */
-    void inviteUser(String user, String space, boolean open, String role, XWikiContext context);
+    void inviteUser(String user, String space, boolean open, String role, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param roles The list of roles the user will have in the space, provided he accepts the
      *            invitation
      * @see #inviteUser(String, String, XWikiContext)
      */
-    void inviteUser(String user, String space, boolean open, List roles, XWikiContext context);
+    void inviteUser(String user, String space, boolean open, List roles, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List, XWikiContext)
      */
     void inviteUser(String user, String space, boolean open, List roles, String templateMail,
-        XWikiContext context);
+        XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param map A map of additional parameters for the invitation
      * @see #inviteUser(String, String, List, String, XWikiContext)
      */
     void inviteUser(String user, String space, boolean open, List roles, String templateMail,
-        Map map, XWikiContext context);
+        Map map, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The current logged-in user accepts the invitation to join the specified space.
@@ -283,7 +286,7 @@ public interface InvitationManager
      * @param space The space the user accepts to join
      * @param context A XWikiContext instance
      */
-    void acceptInvitation(String space, XWikiContext context);
+    void acceptInvitation(String space, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The current logged-in user accepts the invitation to join the specified space, using an email
@@ -295,7 +298,7 @@ public interface InvitationManager
      *            address to which the invitation was sent is not a mailing list)
      * @param context A XWikiContext instance
      */
-    void acceptInvitation(String space, String email, String code, XWikiContext context);
+    void acceptInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The currently logged-in user rejects the invitation to join the specified space
@@ -303,7 +306,7 @@ public interface InvitationManager
      * @param space The space the user refuses to join
      * @param context A XWikiContext instance
      */
-    void rejectInvitation(String space, XWikiContext context);
+    void rejectInvitation(String space, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Rejects the invitation to join the specified space, which was sent to the specified e-mail
@@ -314,7 +317,7 @@ public interface InvitationManager
      * @param code The code of the invitation
      * @param context A XWikiContext instance
      */
-    void rejectInvitation(String space, String email, String code, XWikiContext context);
+    void rejectInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Cancels the pending invitation which was sent to the specified user to join the specified
@@ -324,7 +327,7 @@ public interface InvitationManager
      * @param space The space for which to cancel the invitation
      * @param context A XWikiContext instance
      */
-    void cancelInvitation(String user, String space, XWikiContext context);
+    void cancelInvitation(String user, String space, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Returns all the invitation that match the given prototype.

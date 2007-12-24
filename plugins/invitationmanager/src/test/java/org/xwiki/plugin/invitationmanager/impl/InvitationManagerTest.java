@@ -30,10 +30,7 @@ import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
 import org.jmock.core.Invocation;
 import org.jmock.core.stub.CustomStub;
-import org.xwiki.plugin.invitationmanager.api.Invitation;
-import org.xwiki.plugin.invitationmanager.api.InvitationManager;
-import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
-import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
+import org.xwiki.plugin.invitationmanager.api.*;
 import org.xwiki.plugin.spacemanager.api.SpaceManager;
 
 import com.xpn.xwiki.XWiki;
@@ -250,8 +247,7 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
         }
     }
 
-    public void _testGetInvitations()
-    {
+    public void _testGetInvitations() throws InvitationManagerException {
         String nonMember = "testGetInvitations_nonMember";
         context.setUser(ADMIN);
         invitationManager.inviteUser(nonMember, SPACE, false, context);
@@ -279,8 +275,7 @@ public abstract class InvitationManagerTest extends MockObjectTestCase
         assertNotNull(invitationReceived);
     }
 
-    public void _testGetMembershipRequests()
-    {
+    public void _testGetMembershipRequests() throws InvitationManagerException {
         String nonMember = "testGetMembershipRequests_nonMember";
         context.setUser(nonMember);
         invitationManager.requestMembership(SPACE, "I love your space", context);

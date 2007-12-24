@@ -26,6 +26,7 @@ import java.util.Map;
 import org.xwiki.plugin.invitationmanager.api.Invitation;
 import org.xwiki.plugin.invitationmanager.api.InvitationManager;
 import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
+import org.xwiki.plugin.invitationmanager.api.InvitationManagerException;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.plugin.PluginApi;
@@ -51,8 +52,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param space A space to join.
      * @param message A message to the administrators of the space, explaining the request
      */
-    public void requestMembership(String space, String message)
-    {
+    public void requestMembership(String space, String message) throws InvitationManagerException {
         getInvitationManager().requestMembership(space, message, context);
     }
 
@@ -60,8 +60,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @see #requestMembership(String, String)
      * @param role The role the requester would like to have in the space, provided he is accepted
      */
-    public void requestMembership(String space, String message, String role)
-    {
+    public void requestMembership(String space, String message, String role) throws InvitationManagerException {
         getInvitationManager().requestMembership(space, message, role, context);
     }
 
@@ -70,8 +69,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param roles The list of roles the requester would like to have in the space, provided he is
      *            accepted
      */
-    public void requestMembership(String space, String message, List roles)
-    {
+    public void requestMembership(String space, String message, List roles) throws InvitationManagerException {
         getInvitationManager().requestMembership(space, message, roles, context);
     }
 
@@ -79,8 +77,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @see #requestMembership(String, String, List)
      * @param map A map of additional parameters for the membership request
      */
-    public void requestMembership(String space, String message, List roles, Map map)
-    {
+    public void requestMembership(String space, String message, List roles, Map map) throws InvitationManagerException {
         getInvitationManager().requestMembership(space, message, roles, map, context);
     }
 
@@ -252,8 +249,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * default template email for membership acceptance. If the context user is not an administrator
      * of the space, does nothing and log a warning in the context
      */
-    public void acceptMembership(String space, String userName)
-    {
+    public void acceptMembership(String space, String userName) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().acceptMembership(space, userName, context);
         }
@@ -266,8 +262,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @see #acceptMembership(String, String)
      */
-    public void acceptMembership(String space, String userName, String templateMail)
-    {
+    public void acceptMembership(String space, String userName, String templateMail) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().acceptMembership(space, userName, templateMail, context);
         }
@@ -279,8 +274,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * If the context user is not an administrator of the space, does nothing and log a warning in
      * the context.
      */
-    public void rejectMembership(String space, String userName)
-    {
+    public void rejectMembership(String space, String userName) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().rejectMembership(space, userName, context);
         }
@@ -293,8 +287,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @see #rejectMembership(String, String)
      */
-    public void rejectMembership(String space, String userName, String templateMail)
-    {
+    public void rejectMembership(String space, String userName, String templateMail) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().rejectMembership(space, userName, templateMail, context);
         }
@@ -306,8 +299,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space for which to cancel the membership request
      */
-    public void cancelMembershipRequest(String space)
-    {
+    public void cancelMembershipRequest(String space) throws InvitationManagerException {
         getInvitationManager().cancelMembershipRequest(space, context);
     }
 
@@ -327,8 +319,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param open <code>true</code> if the invitation is open. In this case the <code>user</code>
      *            should be a mailing list address
      */
-    public void inviteUser(String user, String space, boolean open)
-    {
+    public void inviteUser(String user, String space, boolean open) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, context);
         }
@@ -338,8 +329,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String)
      */
-    public void inviteUser(String user, String space, boolean open, String role)
-    {
+    public void inviteUser(String user, String space, boolean open, String role) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, role, context);
         }
@@ -350,8 +340,7 @@ public class InvitationManagerPluginApi extends PluginApi
      *            invitation
      * @see #inviteUser(String, String)
      */
-    public void inviteUser(String user, String space, boolean open, List roles)
-    {
+    public void inviteUser(String user, String space, boolean open, List roles) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, roles, context);
         }
@@ -361,8 +350,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List)
      */
-    public void inviteUser(String user, String space, boolean open, List roles, String templateMail)
-    {
+    public void inviteUser(String user, String space, boolean open, List roles, String templateMail) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, roles, templateMail, context);
         }
@@ -373,8 +361,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @see #inviteUser(String, String, List, String)
      */
     public void inviteUser(String user, String space, boolean open, List roles, String templateMail,
-        Map map)
-    {
+        Map map) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, roles, templateMail, map,
                 context);
@@ -386,8 +373,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space the user accepts to join
      */
-    public void acceptInvitation(String space)
-    {
+    public void acceptInvitation(String space) throws InvitationManagerException {
         getInvitationManager().acceptInvitation(space, context);
     }
 
@@ -400,8 +386,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param code The code of the invitation, when it was sent to a single person (e.g. the e-mail
      *            address to which the invitation was sent is not a mailing list)
      */
-    public void acceptInvitation(String space, String email, String code)
-    {
+    public void acceptInvitation(String space, String email, String code) throws InvitationManagerException {
         getInvitationManager().acceptInvitation(space, email, code, context);
     }
 
@@ -410,8 +395,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space the user refuses to join
      */
-    public void rejectInvitation(String space)
-    {
+    public void rejectInvitation(String space) throws InvitationManagerException {
         getInvitationManager().rejectInvitation(space, context);
     }
 
@@ -423,8 +407,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param email The e-mail address where the invitation was sent
      * @param code The code of the invitation
      */
-    public void rejectInvitation(String space, String email, String code)
-    {
+    public void rejectInvitation(String space, String email, String code) throws InvitationManagerException {
         getInvitationManager().rejectInvitation(space, email, code, context);
     }
 
@@ -435,8 +418,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param user Wikiname for a registered user or e-mail address for a unregistered user
      * @param space The space for which to cancel the invitation
      */
-    public void cancelInvitation(String user, String space)
-    {
+    public void cancelInvitation(String user, String space) throws InvitationManagerException {
         getInvitationManager().cancelInvitation(user, space, context);
     }
 

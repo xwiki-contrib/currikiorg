@@ -67,6 +67,10 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
         }
     }
 
+    protected String getClassName() {
+       return manager.getJoinRequestClassName("Invitation");
+    }
+    
     /**
      * {@inheritDoc}
      * 
@@ -112,7 +116,7 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
     protected void initRequestDoc(String space, String requester) throws XWikiException
     {
         String docName =
-            manager.getJoinRequestDocumentName(MembershipRequest.class, space, requester);
+            manager.getJoinRequestDocumentName("MembershipRequest", space, requester, context);
         doc = context.getWiki().getDocument(docName, context);
     }
 

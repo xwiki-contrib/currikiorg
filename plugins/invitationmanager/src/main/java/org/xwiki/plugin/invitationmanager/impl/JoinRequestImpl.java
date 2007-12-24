@@ -216,8 +216,5 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
         getDoc().getObject(getClassName()).setLargeStringValue(JoinRequestFields.TEXT, text);
     }
 
-    protected String getClassName()
-    {
-        return manager.getJoinRequestClassName(this.getClass());
-    }
+    protected abstract String getClassName();
 }

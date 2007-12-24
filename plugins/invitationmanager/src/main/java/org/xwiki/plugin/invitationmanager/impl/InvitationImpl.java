@@ -71,6 +71,10 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
         }
     }
 
+    protected String getClassName() {
+       return manager.getJoinRequestClassName("Invitation");
+    }
+    
     /**
      * {@inheritDoc}
      * 
@@ -153,7 +157,7 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
 
     protected void initRequestDoc(String space, String invitee) throws XWikiException
     {
-        String docName = manager.getJoinRequestDocumentName(Invitation.class, space, invitee);
+        String docName = manager.getJoinRequestDocumentName("Invitation", space, invitee, context);
         doc = context.getWiki().getDocument(docName, context);
     }
 
