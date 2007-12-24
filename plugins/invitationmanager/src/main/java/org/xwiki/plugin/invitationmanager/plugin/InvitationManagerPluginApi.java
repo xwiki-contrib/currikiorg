@@ -266,7 +266,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @see #acceptMembership(String, String)
      */
-    void acceptMembership(String space, String userName, String templateMail)
+    public void acceptMembership(String space, String userName, String templateMail)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().acceptMembership(space, userName, templateMail, context);
@@ -279,7 +279,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * If the context user is not an administrator of the space, does nothing and log a warning in
      * the context.
      */
-    void rejectMembership(String space, String userName)
+    public void rejectMembership(String space, String userName)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().rejectMembership(space, userName, context);
@@ -293,7 +293,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @see #rejectMembership(String, String)
      */
-    void rejectMembership(String space, String userName, String templateMail)
+    public void rejectMembership(String space, String userName, String templateMail)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().rejectMembership(space, userName, templateMail, context);
@@ -306,7 +306,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space for which to cancel the membership request
      */
-    void cancelMembershipRequest(String space)
+    public void cancelMembershipRequest(String space)
     {
         getInvitationManager().cancelMembershipRequest(space, context);
     }
@@ -327,7 +327,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param open <code>true</code> if the invitation is open. In this case the <code>user</code>
      *            should be a mailing list address
      */
-    void inviteUser(String user, String space, boolean open)
+    public void inviteUser(String user, String space, boolean open)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, context);
@@ -338,7 +338,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String)
      */
-    void inviteUser(String user, String space, boolean open, String role)
+    public void inviteUser(String user, String space, boolean open, String role)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, role, context);
@@ -350,7 +350,7 @@ public class InvitationManagerPluginApi extends PluginApi
      *            invitation
      * @see #inviteUser(String, String)
      */
-    void inviteUser(String user, String space, boolean open, List roles)
+    public void inviteUser(String user, String space, boolean open, List roles)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, roles, context);
@@ -361,7 +361,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List)
      */
-    void inviteUser(String user, String space, boolean open, List roles, String templateMail)
+    public void inviteUser(String user, String space, boolean open, List roles, String templateMail)
     {
         if (hasProgrammingRights()) {
             getInvitationManager().inviteUser(user, space, open, roles, templateMail, context);
@@ -372,7 +372,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param map A map of additional parameters for the invitation
      * @see #inviteUser(String, String, List, String)
      */
-    void inviteUser(String user, String space, boolean open, List roles, String templateMail,
+    public void inviteUser(String user, String space, boolean open, List roles, String templateMail,
         Map map)
     {
         if (hasProgrammingRights()) {
@@ -386,7 +386,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space the user accepts to join
      */
-    void acceptInvitation(String space)
+    public void acceptInvitation(String space)
     {
         getInvitationManager().acceptInvitation(space, context);
     }
@@ -400,7 +400,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param code The code of the invitation, when it was sent to a single person (e.g. the e-mail
      *            address to which the invitation was sent is not a mailing list)
      */
-    void acceptInvitation(String space, String email, String code)
+    public void acceptInvitation(String space, String email, String code)
     {
         getInvitationManager().acceptInvitation(space, email, code, context);
     }
@@ -410,7 +410,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space the user refuses to join
      */
-    void rejectInvitation(String space)
+    public void rejectInvitation(String space)
     {
         getInvitationManager().rejectInvitation(space, context);
     }
@@ -423,7 +423,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param email The e-mail address where the invitation was sent
      * @param code The code of the invitation
      */
-    void rejectInvitation(String space, String email, String code)
+    public void rejectInvitation(String space, String email, String code)
     {
         getInvitationManager().rejectInvitation(space, email, code, context);
     }
@@ -435,7 +435,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param user Wikiname for a registered user or e-mail address for a unregistered user
      * @param space The space for which to cancel the invitation
      */
-    void cancelInvitation(String user, String space)
+    public void cancelInvitation(String user, String space)
     {
         getInvitationManager().cancelInvitation(user, space, context);
     }
@@ -446,7 +446,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param prototype The invitation prototype to match
      * @return A list of invitations
      */
-    List getInvitations(Invitation prototype)
+    public List getInvitations(Invitation prototype)
     {
         return getInvitations(prototype, 0, 0);
     }
@@ -456,7 +456,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(Invitation)
      */
-    List getInvitations(Invitation prototype, int start, int count)
+    public List getInvitations(Invitation prototype, int start, int count)
     {
         if (hasProgrammingRights()) {
             return getInvitationManager().getInvitations(prototype, start, count, context);
@@ -472,7 +472,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param space The space for which to retrieve the invitations
      * @return A list of invitations
      */
-    List getInvitations(String space)
+    public List getInvitations(String space)
     {
         return getInvitationManager().getInvitations(space, context);
     }
@@ -482,7 +482,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(String)
      */
-    List getInvitations(String space, int start, int count)
+    public List getInvitations(String space, int start, int count)
     {
         return getInvitationManager().getInvitations(space, start, count, context);
     }
@@ -494,7 +494,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param status The status the invitations must have
      * @return A list of invitations
      */
-    List getInvitations(String space, int status)
+    public List getInvitations(String space, int status)
     {
         return getInvitationManager().getInvitations(space, status, context);
     }
@@ -504,7 +504,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(String, int)
      */
-    List getInvitations(String space, int status, int start, int count)
+    public List getInvitations(String space, int status, int start, int count)
     {
         return getInvitationManager().getInvitations(space, status, start, count, context);
     }
@@ -516,7 +516,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param role The role the invitations must address
      * @return A list of invitations
      */
-    List getInvitations(String space, String role)
+    public List getInvitations(String space, String role)
     {
         return getInvitationManager().getInvitations(space, role, context);
     }
@@ -526,7 +526,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(String, String)
      */
-    List getInvitations(String space, String role, int start, int count)
+    public List getInvitations(String space, String role, int start, int count)
     {
         return getInvitationManager().getInvitations(space, role, start, count, context);
     }
@@ -540,7 +540,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param role The role the invitations must address
      * @return A list of invitations
      */
-    List getInvitations(String space, int status, String role)
+    public List getInvitations(String space, int status, String role)
     {
         return getInvitationManager().getInvitations(space, status, role, context);
     }
@@ -550,7 +550,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(String, int, String)
      */
-    List getInvitations(String space, int status, String role, int start, int count)
+    public List getInvitations(String space, int status, String role, int start, int count)
     {
         return getInvitationManager().getInvitations(space, status, role, start, count, context);
     }
@@ -561,7 +561,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @return A list of invitations
      */
-    List getInvitations()
+    public List getInvitations()
     {
         return getInvitationManager().getInvitations(context);
     }
@@ -571,7 +571,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(String)
      */
-    List getInvitations(int start, int count)
+    public List getInvitations(int start, int count)
     {
         return getInvitationManager().getInvitations(start, count, context);
     }
@@ -583,7 +583,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param status The status the invitations must have
      * @return A list of invitations
      */
-    List getInvitations(int status)
+    public List getInvitations(int status)
     {
         return getInvitationManager().getInvitations(status, context);
     }
@@ -593,7 +593,7 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param count The maximum number of items to return
      * @see #getInvitations(String, int)
      */
-    List getInvitations(int status, int start, int count)
+    public List getInvitations(int status, int start, int count)
     {
         return getInvitationManager().getInvitations(status, start, count, context);
     }
