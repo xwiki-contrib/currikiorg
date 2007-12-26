@@ -62,12 +62,9 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
         initRequestDoc(space, invitee);
         // if we are asked to create the request
         if (create) {
-            // we created it if it does not yet exist, otherwise throw exception
-            if (isNew()) {
-                createRequestDoc(invitee, inviter, space, open, roles, map);
-            } else {
-                throw new XWikiException(-1, -1, "Invitation already exists");
-            }
+            // we created it if it does not yet exist, otherwise pass
+            if (isNew())
+                createRequestDoc(invitee, inviter, space, open, roles, map);      
         }
     }
 
