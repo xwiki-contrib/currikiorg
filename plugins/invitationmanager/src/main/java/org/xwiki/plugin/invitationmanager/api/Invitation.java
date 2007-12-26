@@ -26,6 +26,11 @@ package org.xwiki.plugin.invitationmanager.api;
 public interface Invitation extends JoinRequest
 {
     /**
+     * Returns true is this invitation is new
+     */
+    boolean isNew();
+
+    /**
      * @return The one who is invited to join the space
      */
     String getInvitee();

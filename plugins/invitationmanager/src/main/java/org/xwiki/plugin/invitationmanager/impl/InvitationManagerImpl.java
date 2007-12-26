@@ -65,7 +65,7 @@ public class InvitationManagerImpl implements InvitationManager
      *
      * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
      */
-    public void acceptInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
+    public boolean acceptInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
         try {
             Invitation invitation = getInvitation(space, encodeEmailAddress(email), context);
             if (code.equals(invitation.getCode())
@@ -74,13 +74,16 @@ public class InvitationManagerImpl implements InvitationManager
                     invitation.setStatus(JoinRequestStatus.ACCEPTED);
                     invitation.setResponseDate(new Date());
                     invitation.setInvitee(context.getUser());
-                    invitation.save();
+                    invitation.saveWithProgrammingRights();
                 }
                 // update the list of space members and their roles
                 addMember(space, context.getUser(), invitation.getRoles(), context);
 
                 // create a custom invitation for the currently logged-in user
                 customizeInvitation(invitation, JoinRequestStatus.ACCEPTED, context);
+                return true;
+            } else {
+                return false;
             }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -90,9 +93,28 @@ public class InvitationManagerImpl implements InvitationManager
     /**
      * {@inheritDoc}
      *
+     * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
+     */
+    public boolean verifyInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
+        try {
+            Invitation invitation = getInvitation(space, encodeEmailAddress(email), context);
+            if (code.equals(invitation.getCode())
+                    && invitation.getStatus() == JoinRequestStatus.SENT) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (XWikiException e) {
+                return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @see InvitationManager#acceptInvitation(String, XWikiContext)
      */
-    public void acceptInvitation(String space, XWikiContext context) throws InvitationManagerException {
+    public boolean acceptInvitation(String space, XWikiContext context) throws InvitationManagerException {
         try {
             Invitation invitation = getInvitation(space, context.getUser(), context);
             int status = invitation.getStatus();
@@ -103,10 +125,29 @@ public class InvitationManagerImpl implements InvitationManager
                 // update the list of members and their roles
                 addMember(space, context.getUser(), invitation.getRoles(), context);
                 // save the invitation status
-                invitation.save();
-            }
+                invitation.saveWithProgrammingRights();
+                return true;
+            } else {
+                return false;
+            }           
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
+        }
+    }
+
+     /**
+     * {@inheritDoc}
+     *
+     * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
+     */
+    public boolean verifyInvitation(String space, XWikiContext context) throws InvitationManagerException {
+        try {
+            Invitation invitation = getInvitation(space, context.getUser(), context);
+            if (invitation!=null)
+                return true;
+                return false;
+        } catch (XWikiException e) {
+                return false;
         }
     }
 
@@ -132,7 +173,7 @@ public class InvitationManagerImpl implements InvitationManager
                 addMember(space, userName, request.getRoles(), context);
 
                 // save after adding user and sending email
-                request.save();
+                request.saveWithProgrammingRights();
             }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -161,7 +202,7 @@ public class InvitationManagerImpl implements InvitationManager
             Invitation invitation = getInvitation(space, user, context);
             if (invitation.getStatus() == JoinRequestStatus.SENT) {
                 invitation.setStatus(JoinRequestStatus.CANCELLED);
-                invitation.save();
+                invitation.saveWithProgrammingRights();
             }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -178,7 +219,7 @@ public class InvitationManagerImpl implements InvitationManager
             MembershipRequest request = getMembershipRequest(space, context.getUser(), context);
             if (request.getStatus() == JoinRequestStatus.SENT) {
                 request.setStatus(JoinRequestStatus.CANCELLED);
-                request.save();
+                request.saveWithProgrammingRights();
             }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -670,7 +711,7 @@ public class InvitationManagerImpl implements InvitationManager
      *
      * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, List, String, Map, XWikiContext)
      */
-    public void inviteUser(String wikiNameOrMailAddress, String space, boolean open, List roles,
+    public boolean inviteUser(String wikiNameOrMailAddress, String space, boolean open, List roles,
                            String templateMail, Map map, XWikiContext context) throws InvitationManagerException {
         String invitee;
         String registeredUser = null;
@@ -684,6 +725,10 @@ public class InvitationManagerImpl implements InvitationManager
             }
             // create the invitation object
             Invitation invitation = createInvitation(invitee, space, context);
+
+            if (!invitation.isNew())
+                return false;
+
             invitation.setInviter(context.getUser());
             invitation.setMap(map);
             invitation.setOpen(open);
@@ -699,7 +744,8 @@ public class InvitationManagerImpl implements InvitationManager
             sendMail(JoinRequestAction.SEND, invitation, templateMail, context);
 
             // save invitation after 
-            invitation.save();
+            invitation.saveWithProgrammingRights();
+            return true;
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
         }
@@ -710,9 +756,9 @@ public class InvitationManagerImpl implements InvitationManager
      *
      * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, List, String, XWikiContext)
      */
-    public void inviteUser(String user, String space, boolean open, List roles,
+    public boolean inviteUser(String user, String space, boolean open, List roles,
                            String templateMail, XWikiContext context) throws InvitationManagerException {
-        inviteUser(user, space, open, roles, templateMail, Collections.EMPTY_MAP, context);
+        return inviteUser(user, space, open, roles, templateMail, Collections.EMPTY_MAP, context);
     }
 
     /**
@@ -720,12 +766,12 @@ public class InvitationManagerImpl implements InvitationManager
      *
      * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, List, XWikiContext)
      */
-    public void inviteUser(String user, String space, boolean open, List roles,
+    public boolean inviteUser(String user, String space, boolean open, List roles,
                            XWikiContext context) throws InvitationManagerException {
         String templateMail =
                 getDefaultTemplateMailDocumentName(space, "Invitation", JoinRequestAction.SEND,
                         context);
-        inviteUser(user, space, open, roles, templateMail, context);
+        return inviteUser(user, space, open, roles, templateMail, context);
     }
 
     /**
@@ -733,11 +779,11 @@ public class InvitationManagerImpl implements InvitationManager
      *
      * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, String, XWikiContext)
      */
-    public void inviteUser(String user, String space, boolean open, String role,
+    public boolean inviteUser(String user, String space, boolean open, String role,
                            XWikiContext context) throws InvitationManagerException {
         List roles = new ArrayList();
         roles.add(role);
-        inviteUser(user, space, open, roles, context);
+        return inviteUser(user, space, open, roles, context);
     }
 
     /**
@@ -745,8 +791,8 @@ public class InvitationManagerImpl implements InvitationManager
      *
      * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, XWikiContext)
      */
-    public void inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException {
-        inviteUser(user, space, open, Collections.EMPTY_LIST, context);
+    public boolean inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException {
+       return  inviteUser(user, space, open, Collections.EMPTY_LIST, context);
     }
 
     /**
@@ -763,7 +809,7 @@ public class InvitationManagerImpl implements InvitationManager
                     invitation.setStatus(JoinRequestStatus.REFUSED);
                     invitation.setResponseDate(new Date());
                     invitation.setInvitee(context.getUser());
-                    invitation.save();
+                    invitation.saveWithProgrammingRights();
                 }
                 // create a custom invitation for the currently logged-in user
                 customizeInvitation(invitation, JoinRequestStatus.REFUSED, context);
@@ -784,7 +830,7 @@ public class InvitationManagerImpl implements InvitationManager
             if (invitation.getStatus() == JoinRequestStatus.SENT) {
                 invitation.setStatus(JoinRequestStatus.REFUSED);
                 invitation.setResponseDate(new Date());
-                invitation.save();
+                invitation.saveWithProgrammingRights();
             }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -805,7 +851,7 @@ public class InvitationManagerImpl implements InvitationManager
                 request.setResponseDate(new Date());
                 request.setResponder(context.getUser());
                 sendMail(JoinRequestAction.REJECT, request, templateMail, context);
-                request.save();
+                request.saveWithProgrammingRights();
             }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -839,7 +885,7 @@ public class InvitationManagerImpl implements InvitationManager
             request.setRoles(roles);
             request.setStatus(JoinRequestStatus.SENT);
             request.setText(message);
-            request.save();
+            request.saveWithProgrammingRights();
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
         }
@@ -970,7 +1016,7 @@ public class InvitationManagerImpl implements InvitationManager
         customInvitation.setStatus(status);
         customInvitation.setOpen(false);
         customInvitation.setText(invitation.getText());
-        customInvitation.save();
+        customInvitation.saveWithProgrammingRights();
     }
 
     /**

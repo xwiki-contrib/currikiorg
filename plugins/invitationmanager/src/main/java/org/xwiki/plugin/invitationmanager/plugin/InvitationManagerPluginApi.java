@@ -319,20 +319,22 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param open <code>true</code> if the invitation is open. In this case the <code>user</code>
      *            should be a mailing list address
      */
-    public void inviteUser(String user, String space, boolean open) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open) throws InvitationManagerException {
         if (hasProgrammingRights()) {
-            getInvitationManager().inviteUser(user, space, open, context);
+            return getInvitationManager().inviteUser(user, space, open, context);
         }
+        return false;
     }
 
     /**
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String)
      */
-    public void inviteUser(String user, String space, boolean open, String role) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, String role) throws InvitationManagerException {
         if (hasProgrammingRights()) {
-            getInvitationManager().inviteUser(user, space, open, role, context);
+            return getInvitationManager().inviteUser(user, space, open, role, context);
         }
+        return false;
     }
 
     /**
@@ -340,32 +342,57 @@ public class InvitationManagerPluginApi extends PluginApi
      *            invitation
      * @see #inviteUser(String, String)
      */
-    public void inviteUser(String user, String space, boolean open, List roles) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, List roles) throws InvitationManagerException {
         if (hasProgrammingRights()) {
-            getInvitationManager().inviteUser(user, space, open, roles, context);
+            return getInvitationManager().inviteUser(user, space, open, roles, context);
         }
+        return false;
     }
 
     /**
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List)
      */
-    public void inviteUser(String user, String space, boolean open, List roles, String templateMail) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, List roles, String templateMail) throws InvitationManagerException {
         if (hasProgrammingRights()) {
-            getInvitationManager().inviteUser(user, space, open, roles, templateMail, context);
+            return getInvitationManager().inviteUser(user, space, open, roles, templateMail, context);
         }
+        return false;
     }
 
     /**
      * @param map A map of additional parameters for the invitation
      * @see #inviteUser(String, String, List, String)
      */
-    public void inviteUser(String user, String space, boolean open, List roles, String templateMail,
+    public boolean inviteUser(String user, String space, boolean open, List roles, String templateMail,
         Map map) throws InvitationManagerException {
         if (hasProgrammingRights()) {
-            getInvitationManager().inviteUser(user, space, open, roles, templateMail, map,
+            return getInvitationManager().inviteUser(user, space, open, roles, templateMail, map,
                 context);
         }
+        return false;
+    }
+
+    /**
+     * The current logged-in user verifies the invitation to join the specified space.
+     *
+     * @param space The space the user accepts to join
+     */
+    public boolean verifyInvitation(String space) throws InvitationManagerException {
+        return getInvitationManager().verifyInvitation(space, context);
+    }
+
+    /**
+     * The current logged-in user verifies the invitation to join the specified space, using an email
+     * address and a code.
+     *
+     * @param space The space the user accepts to join
+     * @param email The e-mail where the invitation was sent
+     * @param code The code of the invitation, when it was sent to a single person (e.g. the e-mail
+     *            address to which the invitation was sent is not a mailing list)
+     */
+    public boolean  verifyInvitation(String space, String email, String code) throws InvitationManagerException {
+        return getInvitationManager().verifyInvitation(space, email, code, context);
     }
 
     /**
@@ -373,8 +400,8 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @param space The space the user accepts to join
      */
-    public void acceptInvitation(String space) throws InvitationManagerException {
-        getInvitationManager().acceptInvitation(space, context);
+    public boolean acceptInvitation(String space) throws InvitationManagerException {
+        return getInvitationManager().acceptInvitation(space, context);
     }
 
     /**
@@ -386,8 +413,8 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param code The code of the invitation, when it was sent to a single person (e.g. the e-mail
      *            address to which the invitation was sent is not a mailing list)
      */
-    public void acceptInvitation(String space, String email, String code) throws InvitationManagerException {
-        getInvitationManager().acceptInvitation(space, email, code, context);
+    public boolean acceptInvitation(String space, String email, String code) throws InvitationManagerException {
+        return getInvitationManager().acceptInvitation(space, email, code, context);
     }
 
     /**

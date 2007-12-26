@@ -251,34 +251,54 @@ public interface InvitationManager
      *            should be a mailing list address
      * @param context A XWikiContext instance
      */
-    void inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException;
+    boolean inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String, XWikiContext)
      */
-    void inviteUser(String user, String space, boolean open, String role, XWikiContext context) throws InvitationManagerException;
+    boolean inviteUser(String user, String space, boolean open, String role, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param roles The list of roles the user will have in the space, provided he accepts the
      *            invitation
      * @see #inviteUser(String, String, XWikiContext)
      */
-    void inviteUser(String user, String space, boolean open, List roles, XWikiContext context) throws InvitationManagerException;
+    boolean inviteUser(String user, String space, boolean open, List roles, XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List, XWikiContext)
      */
-    void inviteUser(String user, String space, boolean open, List roles, String templateMail,
+    boolean inviteUser(String user, String space, boolean open, List roles, String templateMail,
         XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param map A map of additional parameters for the invitation
      * @see #inviteUser(String, String, List, String, XWikiContext)
      */
-    void inviteUser(String user, String space, boolean open, List roles, String templateMail,
+    boolean inviteUser(String user, String space, boolean open, List roles, String templateMail,
         Map map, XWikiContext context) throws InvitationManagerException;
+
+    /**
+     * The current logged-in user verify the invitation to join the specified space.
+     *
+     * @param space The space the user accepts to join
+     * @param context A XWikiContext instance
+     */
+    boolean verifyInvitation(String space, XWikiContext context) throws InvitationManagerException;
+
+    /**
+     * The current logged-in user verifies the invitation to join the specified space, using an email
+     * address and a code. 
+     *
+     * @param space The space the user accepts to join
+     * @param email The e-mail where the invitation was sent
+     * @param code The code of the invitation, when it was sent to a single person (e.g. the e-mail
+     *            address to which the invitation was sent is not a mailing list)
+     * @param context A XWikiContext instance
+     */
+    boolean verifyInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The current logged-in user accepts the invitation to join the specified space.
@@ -286,7 +306,7 @@ public interface InvitationManager
      * @param space The space the user accepts to join
      * @param context A XWikiContext instance
      */
-    void acceptInvitation(String space, XWikiContext context) throws InvitationManagerException;
+    boolean acceptInvitation(String space, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The current logged-in user accepts the invitation to join the specified space, using an email
@@ -298,7 +318,7 @@ public interface InvitationManager
      *            address to which the invitation was sent is not a mailing list)
      * @param context A XWikiContext instance
      */
-    void acceptInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException;
+    boolean acceptInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException;
 
     /**
      * The currently logged-in user rejects the invitation to join the specified space

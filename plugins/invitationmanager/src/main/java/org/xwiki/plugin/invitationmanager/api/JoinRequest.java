@@ -109,4 +109,12 @@ public interface JoinRequest
      * @throws XWikiException
      */
     void save() throws XWikiException;
+
+    /**
+     * Saves the modified request
+     *
+     * @throws XWikiException
+     */
+    void saveWithProgrammingRights() throws XWikiException;
+
 }
