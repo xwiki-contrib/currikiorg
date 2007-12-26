@@ -244,9 +244,10 @@ public class SpaceManagerImplTest extends org.jmock.cglib.MockObjectTestCase {
 
 		List testlist = new ArrayList();
 		testlist.add("XWiki.cristi");
-		testlist.addAll(newusers);
+        testlist.add("XWiki.testuser1");
+        testlist.add("XWiki.testuser2");
 		l = (List) this.spaceManager.getMembers(s1.getSpaceName(), context);
-		assertEquals(l, testlist);
+		assertEquals(testlist, l);
 	}
 
     public void testAddAdmin() throws SpaceManagerException {
@@ -262,10 +263,11 @@ public class SpaceManagerImplTest extends org.jmock.cglib.MockObjectTestCase {
 		this.spaceManager.addAdmins(s1.getSpaceName(), newusers, context);
 
 		List testlist = new ArrayList();
-		testlist.add("XWiki.cristi");
-		testlist.addAll(newusers);
+        testlist.add("XWiki.cristi");
+        testlist.add("XWiki.testuser1");
+        testlist.add("XWiki.testuser2");
 		l = (List) this.spaceManager.getAdmins(s1.getSpaceName(), context);
-		assertEquals(l, testlist);
+		assertEquals(testlist, l);
 	}
 
     /**

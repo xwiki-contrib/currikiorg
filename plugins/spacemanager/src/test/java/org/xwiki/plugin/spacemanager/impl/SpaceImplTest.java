@@ -19,7 +19,7 @@ import com.xpn.xwiki.store.XWikiHibernateVersioningStore;
 import com.xpn.xwiki.store.XWikiStoreInterface;
 import com.xpn.xwiki.store.XWikiVersioningStoreInterface;
 
-public class SpaceImplTest extends org.jmock.cglib.MockObjectTestCase{
+public class SpaceImplTest extends org.jmock.cglib.MockObjectTestCase {
 	
 	private XWikiContext context;
 	private SpaceManagerImpl spaceManager;

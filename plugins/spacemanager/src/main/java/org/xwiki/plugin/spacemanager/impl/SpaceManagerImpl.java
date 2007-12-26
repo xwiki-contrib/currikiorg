@@ -707,14 +707,18 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         memberObject.setName(groupDoc.getFullName());
         memberObject.setStringValue("member", username);
         groupDoc.addObject(groupClass.getName(), memberObject);
+        xwiki.saveDocument(groupDoc, context.getMessageTool().get("core.comment.addedUserToGroup"),
+                 context);
+        /*
         if (groupDoc.isNew()) {
-            xwiki.saveDocument(groupDoc, context.getMessageTool().get("core.comment.addedUserToGroup"),
-                context);
         } else {
             xwiki.getHibernateStore().saveXWikiObject(memberObject, context, true);
         }
         // we need to make sure we add the user to the group cache
-        xwiki.getGroupService(context).addUserToGroup(username, context.getDatabase(), groupName, context);
+        try {
+            xwiki.getGroupService(context).addUserToGroup(username, context.getDatabase(), groupName, context);
+        } catch (Exception e) {}
+        */
    }
 
 
