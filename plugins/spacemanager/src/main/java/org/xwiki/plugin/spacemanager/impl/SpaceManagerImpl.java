@@ -713,6 +713,8 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         } else {
             xwiki.getHibernateStore().saveXWikiObject(memberObject, context, true);
         }
+        // we need to make sure we add the user to the group cache
+        xwiki.getGroupService(context).addUserToGroup(username, context.getDatabase(), groupName, context);
    }
 
 
