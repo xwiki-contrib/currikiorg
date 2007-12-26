@@ -130,9 +130,10 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      * 
      * @see JoinRequest#getStatus()
      */
-    public int getStatus()
+    public String getStatus()
     {
-        return doc.getObject(getClassName()).getIntValue(JoinRequestFields.STATUS);
+        String status = doc.getObject(getClassName()).getStringValue(JoinRequestFields.STATUS);
+        return (status==null) ? "0" : status;
     }
 
     /**
@@ -209,9 +210,9 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      * 
      * @see JoinRequest#setStatus(int)
      */
-    public void setStatus(int status)
+    public void setStatus(String status)
     {
-        getDoc().getObject(getClassName()).setIntValue(JoinRequestFields.STATUS, status);
+        getDoc().getObject(getClassName()).setStringValue(JoinRequestFields.STATUS, status);
     }
 
     /**

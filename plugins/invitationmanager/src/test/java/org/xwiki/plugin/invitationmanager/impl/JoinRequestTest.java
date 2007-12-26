@@ -161,7 +161,7 @@ public abstract class JoinRequestTest extends org.jmock.cglib.MockObjectTestCase
      */
     public void testStatus()
     {
-        int status = JoinRequestStatus.SENT;
+        String status = JoinRequestStatus.SENT;
         joinRequest.setStatus(status);
         assertEquals(status, joinRequest.getStatus());
     }

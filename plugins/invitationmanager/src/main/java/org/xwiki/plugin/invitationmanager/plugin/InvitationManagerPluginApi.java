@@ -249,10 +249,11 @@ public class InvitationManagerPluginApi extends PluginApi
      * default template email for membership acceptance. If the context user is not an administrator
      * of the space, does nothing and log a warning in the context
      */
-    public void acceptMembership(String space, String userName) throws InvitationManagerException {
+    public boolean acceptMembership(String space, String userName) throws InvitationManagerException {
         if (hasProgrammingRights()) {
-            getInvitationManager().acceptMembership(space, userName, context);
+            return getInvitationManager().acceptMembership(space, userName, context);
         }
+        return false;
     }
 
     /**
@@ -262,10 +263,11 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @see #acceptMembership(String, String)
      */
-    public void acceptMembership(String space, String userName, String templateMail) throws InvitationManagerException {
+    public boolean acceptMembership(String space, String userName, String templateMail) throws InvitationManagerException {
         if (hasProgrammingRights()) {
             getInvitationManager().acceptMembership(space, userName, templateMail, context);
         }
+        return false;
     }
 
     /**

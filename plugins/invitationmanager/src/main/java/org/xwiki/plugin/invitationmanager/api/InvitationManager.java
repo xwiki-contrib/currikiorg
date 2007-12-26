@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 
 /**
  * Manages invitations and membership requests
@@ -196,7 +197,7 @@ public interface InvitationManager
      * context user is not an administrator of the space, does nothing and log a warning in the
      * context
      */
-    void acceptMembership(String space, String userName, XWikiContext context) throws InvitationManagerException;
+    boolean acceptMembership(String space, String userName, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Accept a pending membership using a custom email template which can differ from the
@@ -205,7 +206,7 @@ public interface InvitationManager
      * 
      * @see #acceptMembership(String, String, XWikiContext)
      */
-    void acceptMembership(String space, String userName, String templateMail, XWikiContext context) throws InvitationManagerException;
+    boolean acceptMembership(String space, String userName, String templateMail, XWikiContext context) throws InvitationManagerException;
 
     /**
      * Reject a pending membership request. Update the membership request object, and notify the
@@ -468,4 +469,9 @@ public interface InvitationManager
      * @see #getInvitations(String, int, XWikiContext)
      */
     List getInvitations(int status, int start, int count, XWikiContext context);
+
+    /**
+     * Creates the classes used by the invitation manager when necessary
+     */
+    void initClasses(XWikiContext context) throws XWikiException;
 }

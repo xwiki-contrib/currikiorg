@@ -31,6 +31,11 @@ import com.xpn.xwiki.XWikiException;
 public interface JoinRequest
 {
     /**
+     * Returns true is this invitation is new
+     */
+    boolean isNew();
+    
+    /**
      * @return A map with additional parameters for this request
      */
     Map getMap();
@@ -86,12 +91,12 @@ public interface JoinRequest
      * @return The status of this request
      * @see JoinRequestStatus
      */
-    int getStatus();
+    String getStatus();
 
     /**
      * @see #getStatus()
      */
-    void setStatus(int status);
+    void setStatus(String status);
 
     /**
      * @return An explanatory text for this request

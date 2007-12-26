@@ -78,4 +78,21 @@ public class InvitationManagerPlugin extends XWikiDefaultPlugin
     {
         this.invitationManager = invitationManager;
     }
+
+
+    public void init(XWikiContext context) {
+        super.init(context);
+        try {
+            invitationManager.initClasses(context);
+        } catch (Exception e) {
+        }
+    }
+
+    public void virtualInit(XWikiContext context) {
+        super.virtualInit(context);
+        try {
+            invitationManager.initClasses(context);
+        } catch (Exception e) {
+        }
+    }
 }

@@ -82,7 +82,7 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
     }
 
     protected String getClassName() {
-       return manager.getJoinRequestClassName("Invitation");
+       return manager.getInvitationClassName();
     }
     
     /**

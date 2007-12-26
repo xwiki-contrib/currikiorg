@@ -35,6 +35,7 @@ import com.xpn.xwiki.objects.BaseObject;
  */
 public class MembershipRequestImpl extends JoinRequestImpl implements MembershipRequest
 {
+    
     public static interface MembershipRequestFields extends JoinRequestFields
     {
         String REQUESTER = "requester";
@@ -61,8 +62,6 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
             // we created it if it does not yet exist, otherwise throw exception
             if (isNew()) {
                 createRequestDoc(requester, space, text, roles, map);
-            } else {
-                throw new XWikiException(-1, -1, "MembershipRequest already exists");
             }
         }
     }
@@ -82,7 +81,7 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
 
 
     protected String getClassName() {
-       return manager.getJoinRequestClassName("Invitation");
+       return manager.getMembershipRequestClassName();
     }
     
     /**
