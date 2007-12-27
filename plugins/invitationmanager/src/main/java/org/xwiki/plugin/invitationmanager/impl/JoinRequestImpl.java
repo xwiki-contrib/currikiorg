@@ -76,15 +76,24 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
     public Map getMap()
     {
         String content = (String) getValue(JoinRequestFields.MAP, getObject(getClassName()));
-        if (content==null)
-         content = "";
-        String[] lines = content.split("\n");
         Map map = new HashMap();
+        if (content==null)
+         return map;
+        String[] lines = content.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            String[] mapEntry = lines[i].split("=");
-            map.put(mapEntry[0].trim(), mapEntry[1]);
+            String[] mapEntry = lines[i].split("|");
+            if (mapEntry.length>1)
+            map.put(mapEntry[0].trim(), decode(mapEntry[1]));
         }
         return map;
+    }
+
+    private Object decode(String s) {
+        return s.replaceAll("%__%", "|");
+    }
+
+    private Object encode(String s) {
+        return s.replaceAll("|", "%__%");
     }
 
     /**
@@ -159,7 +168,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
-            content.append(entry.getKey() + "=" + entry.getValue() + "\n");
+            content.append(entry.getKey() + "|" + encode((String) entry.getValue()) + "\n");
         }
         getDoc().getObject(getClassName()).setLargeStringValue(JoinRequestFields.MAP,
             content.toString());
