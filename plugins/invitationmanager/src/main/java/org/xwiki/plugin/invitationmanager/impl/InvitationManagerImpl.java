@@ -830,6 +830,7 @@ public class InvitationManagerImpl implements InvitationManager
         String invitee;
         String registeredUser = null;
         try {
+            wikiNameOrMailAddress = wikiNameOrMailAddress.trim();
             registeredUser = getRegisteredUser(wikiNameOrMailAddress, context);
             if (registeredUser == null) {
                 // hide the e-mail address (only for invitation document name)
@@ -858,7 +859,7 @@ public class InvitationManagerImpl implements InvitationManager
             if (registeredUser == null) {
                 invitation.setCode(generateInvitationCode());
                 // make the e-mail address available in the invitee field
-                invitation.setInvitee(invitee);
+                invitation.setInvitee(wikiNameOrMailAddress);
             } else {
                 invitation.setInvitee(registeredUser);
             }
