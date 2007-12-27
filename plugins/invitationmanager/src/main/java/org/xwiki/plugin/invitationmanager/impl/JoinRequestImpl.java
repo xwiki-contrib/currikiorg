@@ -75,7 +75,9 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public Map getMap()
     {
-        String content = doc.getObject(getClassName()).getLargeStringValue(JoinRequestFields.MAP);
+        String content = (String) getValue(JoinRequestFields.MAP, getObject(getClassName()));
+        if (content==null)
+         content = "";
         String[] lines = content.split("\n");
         Map map = new HashMap();
         for (int i = 0; i < lines.length; i++) {
@@ -92,7 +94,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public Date getRequestDate()
     {
-        return doc.getObject(getClassName()).getDateValue(JoinRequestFields.REQUEST_DATE);
+        return (Date) getValue(JoinRequestFields.REQUEST_DATE, getObject(getClassName()));
     }
 
     /**
@@ -102,7 +104,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public Date getResponseDate()
     {
-        return doc.getObject(getClassName()).getDateValue(JoinRequestFields.RESPONSE_DATE);
+        return (Date) getValue(JoinRequestFields.RESPONSE_DATE, getObject(getClassName()));
     }
 
     /**
@@ -112,7 +114,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public List getRoles()
     {
-        return doc.getObject(getClassName()).getListValue(JoinRequestFields.ROLES);
+        return (List) getValue(JoinRequestFields.ROLES, getObject(getClassName()));
     }
 
     /**
@@ -122,7 +124,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public String getSpace()
     {
-        return doc.getObject(getClassName()).getStringValue(JoinRequestFields.SPACE);
+        return (String) getValue(JoinRequestFields.SPACE, getObject(getClassName()));
     }
 
     /**
@@ -132,7 +134,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public String getStatus()
     {
-        String status = doc.getObject(getClassName()).getStringValue(JoinRequestFields.STATUS);
+        String status = (String) getValue(JoinRequestFields.STATUS, getObject(getClassName()));
         return (status==null) ? "0" : status;
     }
 
@@ -143,7 +145,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public String getText()
     {
-        return getDoc().getObject(getClassName()).getLargeStringValue(JoinRequestFields.TEXT);
+        return (String) getValue(JoinRequestFields.TEXT, getObject(getClassName()));
     }
 
     /**

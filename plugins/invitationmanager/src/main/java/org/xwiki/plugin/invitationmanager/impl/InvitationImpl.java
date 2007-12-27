@@ -92,7 +92,7 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
      */
     public String getCode()
     {
-        return doc.getObject(getClassName()).getStringValue(InvitationFields.CODE);
+        return (String) getValue(InvitationFields.CODE, getObject(getClassName()));
     }
 
     /**
@@ -102,7 +102,7 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
      */
     public String getInvitee()
     {
-        return doc.getObject(getClassName()).getStringValue(InvitationFields.INVITEE);
+        return (String) getValue(InvitationFields.INVITEE, getObject(getClassName()));
     }
 
     /**
@@ -112,7 +112,7 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
      */
     public String getInviter()
     {
-        return doc.getObject(getClassName()).getStringValue(InvitationFields.INVITER);
+        return (String) getValue(InvitationFields.INVITER, getObject(getClassName()));
     }
 
     /**
@@ -122,7 +122,8 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
      */
     public boolean isOpen()
     {
-        return doc.getObject(getClassName()).getIntValue(InvitationFields.OPEN) > 0;
+        Integer open = (Integer) getValue(InvitationFields.CODE, getObject(getClassName()));
+        return ((open!=null)&&(open.intValue()>0));
     }
 
     /**
