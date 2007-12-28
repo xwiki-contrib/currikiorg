@@ -89,11 +89,11 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
     }
 
     private Object decode(String s) {
-        return s.replaceAll("%\\_\\_%", "|");
+        return s.replaceAll("%\\_\\_%", "|").replaceAll("%NL%", "\n");
     }
 
     private Object encode(String s) {
-        return s.replaceAll("\\|", "%__%");
+        return s.replaceAll("\\|", "%__%").replaceAll("\n","%NL%");
     }
 
     /**
