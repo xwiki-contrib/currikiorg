@@ -122,7 +122,7 @@ public class InvitationImpl extends JoinRequestImpl implements Invitation
      */
     public boolean isOpen()
     {
-        Integer open = (Integer) getValue(InvitationFields.CODE, getObject(getClassName()));
+        Integer open = (Integer) getValue(InvitationFields.OPEN, getObject(getClassName()));
         return ((open!=null)&&(open.intValue()>0));
     }
 

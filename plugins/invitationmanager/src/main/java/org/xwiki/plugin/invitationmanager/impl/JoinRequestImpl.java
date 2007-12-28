@@ -81,19 +81,19 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
          return map;
         String[] lines = content.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            String[] mapEntry = lines[i].split("|");
+            String[] mapEntry = lines[i].split("\\|");
             if (mapEntry.length>1)
-            map.put(mapEntry[0].trim(), decode(mapEntry[1]));
+            map.put(decode(mapEntry[0]), decode(mapEntry[1]));
         }
         return map;
     }
 
     private Object decode(String s) {
-        return s.replaceAll("%__%", "|");
+        return s.replaceAll("%\\_\\_%", "|");
     }
 
     private Object encode(String s) {
-        return s.replaceAll("|", "%__%");
+        return s.replaceAll("\\|", "%__%");
     }
 
     /**
@@ -168,7 +168,7 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
-            content.append(entry.getKey() + "|" + encode((String) entry.getValue()) + "\n");
+            content.append(encode((String) entry.getKey()) + "|" + encode((String) entry.getValue()) + "\n");
         }
         getDoc().getObject(getClassName()).setLargeStringValue(JoinRequestFields.MAP,
             content.toString());
