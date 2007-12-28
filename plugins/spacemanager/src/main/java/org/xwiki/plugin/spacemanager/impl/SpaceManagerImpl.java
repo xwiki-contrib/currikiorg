@@ -707,6 +707,9 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         memberObject.setName(groupDoc.getFullName());
         memberObject.setStringValue("member", username);
         groupDoc.addObject(groupClass.getName(), memberObject);
+        String content = groupDoc.getContent();
+        if ((content == null)||(content.equals("")))
+         groupDoc.setContent("#includeForm(\"XWiki.XWikiGroupSheet\")");
         xwiki.saveDocument(groupDoc, context.getMessageTool().get("core.comment.addedUserToGroup"),
                  context);
         /*
