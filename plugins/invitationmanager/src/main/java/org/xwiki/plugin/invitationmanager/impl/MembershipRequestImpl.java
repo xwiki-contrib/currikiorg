@@ -91,7 +91,8 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
      */
     public String getRequester()
     {
-        return (String) getValue(MembershipRequestFields.REQUESTER, getObject(getClassName()));
+        String requester = (String) getValue(MembershipRequestFields.REQUESTER, getObject(getClassName()));
+        return (requester==null) ? "" : requester;
     }
 
     /**
@@ -101,7 +102,8 @@ public class MembershipRequestImpl extends JoinRequestImpl implements Membership
      */
     public String getResponder()
     {
-        return (String) getValue(MembershipRequestFields.RESPONDER, getObject(getClassName()));
+        String responder = (String) getValue(MembershipRequestFields.RESPONDER, getObject(getClassName()));
+        return (responder==null) ? "" : responder;
     }
 
     /**

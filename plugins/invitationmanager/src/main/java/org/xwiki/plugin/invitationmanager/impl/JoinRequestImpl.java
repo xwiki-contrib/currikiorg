@@ -133,7 +133,8 @@ public abstract class JoinRequestImpl extends Document implements JoinRequest
      */
     public String getSpace()
     {
-        return (String) getValue(JoinRequestFields.SPACE, getObject(getClassName()));
+        String space = (String) getValue(JoinRequestFields.SPACE, getObject(getClassName()));
+        return (space==null) ? "" : space;
     }
 
     /**
