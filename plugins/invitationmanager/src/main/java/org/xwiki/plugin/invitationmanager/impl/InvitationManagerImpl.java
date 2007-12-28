@@ -315,6 +315,7 @@ public class InvitationManagerImpl implements InvitationManager
         needsUpdate |= bclass.addDBListField(JoinRequestImpl.JoinRequestFields.ROLES, "Roles", 5, true, "");
 
         if (className.equals(getInvitationClassName())) {
+            needsUpdate |= bclass.addTextField(InvitationImpl.InvitationFields.CODE, "Code", 40);
             needsUpdate |= bclass.addTextField(InvitationImpl.InvitationFields.INVITEE, "Invitee", 40);
             needsUpdate |= bclass.addTextField(InvitationImpl.InvitationFields.INVITEE, "Inviter", 40);
             needsUpdate |= bclass.addBooleanField(InvitationImpl.InvitationFields.OPEN, "Open", "yesno");
