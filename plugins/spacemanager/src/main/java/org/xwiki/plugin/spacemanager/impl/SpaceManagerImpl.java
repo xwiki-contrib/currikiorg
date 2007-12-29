@@ -247,7 +247,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         // Make sure we set the type
         newspace.setType(getSpaceTypeName());
         try {
-            newspace.save();
+            newspace.saveWithProgrammingRights();
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -286,7 +286,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setDisplayTitle(spaceTitle);
         newspace.setCreator(context.getUser());
         try {
-            newspace.save();
+            newspace.saveWithProgrammingRights();
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -342,7 +342,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         // we need to do it twice because data could have been overwritten by copyWikiWeb
 		newspace.updateSpaceFromRequest();
         try {
-            newspace.save();
+            newspace.saveWithProgrammingRights();
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -382,7 +382,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         if (!space.isNew()) {
             space.setType("deleted");
             try {
-                space.save();
+                space.saveWithProgrammingRights();
             } catch (XWikiException e) {
                 throw new SpaceManagerException(e);                
             }
@@ -411,7 +411,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         if (space.isDeleted()) {
              space.setType(getSpaceTypeName());
             try {
-                space.save();
+                space.saveWithProgrammingRights();
             } catch (XWikiException e) {
                 throw new SpaceManagerException(e);
             }
@@ -587,7 +587,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
      */
     public void saveSpace(Space space, XWikiContext context) throws SpaceManagerException {
         try {
-            space.save();
+            space.saveWithProgrammingRights();
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }

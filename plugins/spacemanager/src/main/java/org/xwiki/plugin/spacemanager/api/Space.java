@@ -159,6 +159,12 @@ public interface Space {
     public void save() throws XWikiException;
 
     /**
+     * Save the modified space
+     * @throws XWikiException
+     */
+    public void saveWithProgrammingRights() throws XWikiException;
+
+    /**
      * Update the space data from the request
      */
     public void updateSpaceFromRequest() throws SpaceManagerException;

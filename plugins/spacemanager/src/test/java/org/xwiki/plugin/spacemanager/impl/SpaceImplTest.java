@@ -13,6 +13,7 @@ import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiConfig;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.store.XWikiHibernateStore;
 import com.xpn.xwiki.store.XWikiHibernateVersioningStore;
@@ -97,9 +98,28 @@ public class SpaceImplTest extends org.jmock.cglib.MockObjectTestCase {
         this.xwiki.setVersioningStore((XWikiVersioningStoreInterface) mockXWikiVersioningStore
             .proxy());
         this.context.setWiki(xwiki);
+        this.context.setDatabase("xwiki");
+        this.context.setMainXWiki("xwiki");
+        this.context.setUser("XWiki.Admin");
 
         this.spaceManager = new SpaceManagerImpl("spacemanager",SpaceManagerImpl.class.toString(),context);
         this.spaceManager.init(context);
+
+        XWikiDocument prefdoc = new XWikiDocument("XWiki", "XWikiPreferences");
+        BaseObject obj = new BaseObject();
+        obj.setName("XWiki.XWikiPreferences");
+        obj.setClassName("XWiki.XWikiGlobalRights");
+        obj.setStringValue("users", "XWiki.Admin");
+        obj.setStringValue("groups", "");
+        obj.setStringValue("levels", "admin,programming");
+        obj.setIntValue("allow", 1);
+        prefdoc.addObject("XWiki.XWikiGlobalRights", obj);
+        this.xwiki.saveDocument(prefdoc, context);
+
+        XWikiDocument doc = new XWikiDocument("Main", "WebHome");
+        doc.setAuthor("xwiki:XWiki.Admin");
+        context.setDoc(doc);
+
         this.space = (SpaceImpl) this.spaceManager.createSpace(displayTitle, context);
 	}
 	
