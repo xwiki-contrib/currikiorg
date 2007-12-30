@@ -61,6 +61,12 @@ public interface SpaceUserProfile {
     public void save() throws XWikiException;
 
     /**
+     * Saves changes made to the profile
+     * @throws XWikiException
+     */
+    public void saveWithProgrammingRights() throws XWikiException;
+
+    /**
      * Allows to retrieve a user property from the User page
      * @param propName
      * @return

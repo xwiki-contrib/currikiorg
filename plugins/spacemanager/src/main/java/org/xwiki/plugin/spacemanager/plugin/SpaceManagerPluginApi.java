@@ -308,8 +308,7 @@ public class SpaceManagerPluginApi extends PluginApi
     public boolean joinSpace(String spaceName) throws SpaceManagerException {
         Space space = getSpace(spaceName);
         if ("open".equals(space.getPolicy())) {
-            getSpaceManager().addMember(spaceName, context.getUser(), context);
-            return true;
+            return getSpaceManager().joinSpace(spaceName, context);
         } else {
             return false;
         }

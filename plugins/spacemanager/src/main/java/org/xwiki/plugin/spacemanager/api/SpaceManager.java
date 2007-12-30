@@ -350,4 +350,12 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @return int
      */
     public int countSpaces(XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Allows the current user to join the space
+     * @param spaceName
+     * @param context
+     * @return
+     */
+    public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException;
 }

@@ -92,7 +92,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         needsUpdate |= bclass.addTextField(SpaceImpl.SPACE_TYPE, "Group or plain space", 32);
         needsUpdate |= bclass.addTextField(SpaceImpl.SPACE_URLSHORTCUT, "URL Shortcut", 128);
         needsUpdate |= bclass.addStaticListField(SpaceImpl.SPACE_POLICY, "Membership Policy", 1, false, "open=Open membership|closed=Closed membership","radio");
-        needsUpdate |= bclass.addStaticListField(SpaceImpl.SPACE_LANGUAGE, "Language", "eng=English|zho=Chinese|nld=Dutch|fra=French|deu=German|ita=Italian|jpn=Japanese|kor=Korean|por=Portuguese|rus=Russian|spa=Spanish");
+        needsUpdate |= bclass.addStaticListField(SpaceImpl.SPACE_LANGUAGE, "Language", "en=English|zh=Chinese|nl=Dutch|fr=French|de=German|it=Italian|jp=Japanese|kr=Korean|po=Portuguese|ru=Russian|sp=Spanish");
 
         String content = doc.getContent();
         if ((content == null) || (content.equals(""))) {
@@ -140,6 +140,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         	getSpaceManagerExtension().init(context);
             SpaceManagers.addSpaceManager(this);
         	getSpaceClass(context);
+            SpaceUserProfileImpl.getSpaceUserProfileClass(context);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -813,6 +814,20 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
+    }
+
+    public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException {
+        try {
+            SpaceUserProfile userProfile = newUserSpaceProfile(context.getUser(), spaceName, context);
+            userProfile.updateProfileFromRequest();
+            userProfile.saveWithProgrammingRights();
+            addMember(spaceName, context.getUser(), context);
+            return true;
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+
+
     }
 
 }
