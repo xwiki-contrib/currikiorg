@@ -152,8 +152,9 @@ public class InvitationManagerImpl implements InvitationManager
     public boolean verifyInvitation(String space, XWikiContext context) throws InvitationManagerException {
         try {
             Invitation invitation = getInvitation(space, context.getUser(), context);
-            if (invitation!=null)
+            if ((invitation!=null)&&(invitation.getStatus().equals(JoinRequestStatus.SENT)))
                 return true;
+            else
                 return false;
         } catch (XWikiException e) {
                 return false;
