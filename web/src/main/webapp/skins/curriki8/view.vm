@@ -3,10 +3,11 @@
 ###
 ### General wrapper for view actions
 ###
+#set($isPrint = $request.getParameter("viewer").equals("print")||$request.getParameter("viewer").equals("help"))
 #if ($request.getParameter("raw").equals("1"))
 #template("code.vm")
 #else
-#if(!$request.getParameter("viewer").equals("print"))
+#if(!$isPrint)
 #template("startpage.vm")
 #end
 #if((!$viewer) || ($viewer == ""))
@@ -24,13 +25,17 @@
 ## #template("docextra.vm")
 <div class="clearfloats"></div>
 #else
+#if(!$isPrint)
 <div class="main layoutsubsection">
+#end
 #template("${viewer}.vm")
 <div class="clearfloats">
 </div>
 #end
+#if(!$isPrint)
 </div>## main
-#if(!$request.getParameter("viewer").equals("print"))
+#end
+#if(!$isPrint)
 #template("endpage.vm")
 #else
         </div>## contentcolumn
