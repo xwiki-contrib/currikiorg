@@ -59,6 +59,7 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
         needsUpdate |= bclass.addStaticListField(CurrikiSpace.SPACE_ACCESSLEVEL, "Default access privileges", 1, false, "open=Open|protected=Protected|private=Private", "radio");
         needsUpdate |= bclass.addStaticListField(CurrikiSpace.SPACE_EDUCATION_LEVEL, "Educational level", 12, true, "choose=Choose from list...|preschool=Preschool|earlyelementary=Early Elementary|upperelementary=Upper Elementary|middleschool=Middle School|highschool=High School|highered=Higher Ed|professional=Professional|na=NA");
         needsUpdate |= bclass.addDBTreeListField(CurrikiSpace.SPACE_TOPIC, "Topic", 12, true, "select doc.fullName, doc.title, doc.parent from XWikiDocument as doc, BaseObject as obj where doc.web in ('FW_masterFramework') and doc.fullName=obj.name and obj.className='XWiki.FrameworkItemClass' order by doc.title");
+        needsUpdate |= bclass.addTextField(CurrikiSpace.SPACE_LOGO, "Logo Filename", 32);
 
         if (needsUpdate)
             xwiki.saveDocument(doc, context);
