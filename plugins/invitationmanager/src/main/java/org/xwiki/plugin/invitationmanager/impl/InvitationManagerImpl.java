@@ -22,10 +22,11 @@ package org.xwiki.plugin.invitationmanager.impl;
 import java.util.*;
 
 import org.xwiki.plugin.invitationmanager.api.*;
-import org.xwiki.plugin.spacemanager.impl.SpaceImpl;
 import org.xwiki.plugin.spacemanager.api.SpaceManager;
 import org.xwiki.plugin.spacemanager.api.SpaceManagers;
 import org.xwiki.plugin.spacemanager.api.Space;
+import org.xwiki.plugin.spacemanager.api.SpaceUserProfile;
+import org.xwiki.plugin.spacemanager.impl.SpaceUserProfileImpl;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.velocity.VelocityContext;
 
@@ -46,6 +47,8 @@ public class InvitationManagerImpl implements InvitationManager
 {
     public static interface JoinRequestAction
     {
+        String CREATE = "Create";
+
         String SEND = "Send";
 
         String ACCEPT = "Accept";
@@ -184,6 +187,9 @@ public class InvitationManagerImpl implements InvitationManager
                 // send notification mail
                 sendMail(JoinRequestAction.ACCEPT, request, templateMail, context);
 
+                // create space user profile based on the membership request
+                createSpaceUserProfile(space, request, context);
+                
                 // update the list of members and their roles
                 addMember(space, userName, request.getRoles(), context);
 
@@ -200,13 +206,15 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#acceptMembership(String, String, XWikiContext)
      */
-    public boolean acceptMembership(String space, String userName, XWikiContext context) throws InvitationManagerException {
+    public boolean acceptMembership(String space, String userName, XWikiContext context)
+        throws InvitationManagerException
+    {
         String templateMail =
-                getDefaultTemplateMailDocumentName(space, "MembershipRequest",
-                        JoinRequestAction.ACCEPT, context);
+            getDefaultTemplateMailDocumentName(space, "Request", JoinRequestAction.ACCEPT,
+                context);
         return acceptMembership(space, userName, templateMail, context);
     }
 
@@ -824,11 +832,14 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
-     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, List, String, Map, XWikiContext)
+     * 
+     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String,
+     *      boolean, List, String, Map, XWikiContext)
      */
-    public boolean inviteUser(String wikiNameOrMailAddress, String space, boolean open, List roles,
-                           String templateMail, Map map, XWikiContext context) throws InvitationManagerException {
+    public boolean inviteUser(String wikiNameOrMailAddress, String space, boolean open,
+        List roles, String templateMail, Map map, XWikiContext context)
+        throws InvitationManagerException
+    {
         String invitee;
         String registeredUser = null;
         try {
@@ -867,9 +878,14 @@ public class InvitationManagerImpl implements InvitationManager
             }
 
             // send a notification mail
+            if (templateMail == null) {
+                templateMail =
+                    getDefaultTemplateMailDocumentName(space, "Invitation",
+                        JoinRequestAction.SEND, context);
+            }
             sendMail(JoinRequestAction.SEND, invitation, templateMail, context);
 
-            // save invitation after 
+            // save invitation after
             invitation.saveWithProgrammingRights();
             return true;
         } catch (XWikiException e) {
@@ -986,31 +1002,46 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#rejectMembership(String, String, XWikiContext)
      */
-    public void rejectMembership(String space, String userName, XWikiContext context) throws InvitationManagerException {
+    public void rejectMembership(String space, String userName, XWikiContext context)
+        throws InvitationManagerException
+    {
         String templateMail =
-                getDefaultTemplateMailDocumentName(space, "MembershipRequest",
-                        JoinRequestAction.REJECT, context);
+            getDefaultTemplateMailDocumentName(space, "Request", JoinRequestAction.REJECT,
+                context);
         rejectMembership(space, userName, templateMail, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#requestMembership(String, String, List, Map, XWikiContext)
      */
     public void requestMembership(String space, String message, List roles, Map map,
-                                  XWikiContext context) throws InvitationManagerException {
+        XWikiContext context) throws InvitationManagerException
+    {
         try {
             MembershipRequest request =
-                    createMembershipRequest(context.getUser(), space, context);
+                createMembershipRequest(context.getUser(), space, context);
             request.setMap(map);
             request.setRequestDate(new Date());
             request.setRoles(roles);
             request.setStatus(JoinRequestStatus.SENT);
             request.setText(message);
+            // e-mail notification is sent to user's e-mail address informing them of their "Pending
+            // approval" status
+            String requestSentMailTemplate =
+                getDefaultTemplateMailDocumentName(space, "Request", JoinRequestAction.CREATE,
+                    context);
+            sendMail(JoinRequestAction.CREATE, request, requestSentMailTemplate, context);
+            // send "Membership Request awaiting approval" notification via e-mail to the space
+            // administrator(s)
+            String requestPendingMailTemplate =
+                getDefaultTemplateMailDocumentName(space, "Request", JoinRequestAction.SEND,
+                    context);
+            sendMail(JoinRequestAction.SEND, request, requestPendingMailTemplate, context);
             request.saveWithProgrammingRights();
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
@@ -1019,7 +1050,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#requestMembership(String, String, List, XWikiContext)
      */
     public void requestMembership(String space, String message, List roles, XWikiContext context) throws InvitationManagerException {
@@ -1228,75 +1259,94 @@ public class InvitationManagerImpl implements InvitationManager
      * Wrapper method for sending a mail using the mail sender plug-in
      */
     private void sendMail(String action, JoinRequest request, String templateDocFullName,
-                          XWikiContext context) throws XWikiException
+        XWikiContext context) throws XWikiException
     {
         VelocityContext vContext = new VelocityContext();
         String spaceName = request.getSpace();
         SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(spaceName, context);
         Space space = spaceManager.getSpace(spaceName, context);
         vContext.put(SPACE_VELOCITY_KEY, space);
-        String fromUser = null, toUser = null;
+        String fromUser = context.getWiki().getXWikiPreference("admin_email", context);
+        String[] toUsers = new String[0];
         if (request instanceof Invitation) {
             Invitation invitation = (Invitation) request;
             vContext.put(INVITATION_VELOCITY_KEY, invitation);
             if (JoinRequestAction.SEND.equals(action)) {
                 // invitation notification mail
-                fromUser = invitation.getInviter();
-                toUser = invitation.getInvitee();
+                toUsers = new String[] {invitation.getInvitee()};
             } else {
                 // accept or reject invitation mail
-                fromUser = invitation.getInvitee();
-                toUser = invitation.getInviter();
+                toUsers = new String[] {invitation.getInviter()};
             }
         } else if (request instanceof MembershipRequest) {
             MembershipRequest membershipRequest = (MembershipRequest) request;
             vContext.put(MEMBERSHIP_REQUEST_VELOCITY_KEY, membershipRequest);
             if (JoinRequestAction.SEND.equals(action)) {
-                // membership request notification mail
-                fromUser = membershipRequest.getRequester();
-                toUser = membershipRequest.getResponder();
+                // notify the space administrators of a new membership request pending for approval
+                toUsers = (String[]) spaceManager.getAdmins(spaceName, context).toArray();
             } else {
-                // accept or reject membership request mail
-                fromUser = membershipRequest.getResponder();
-                toUser = membershipRequest.getRequester();
+                // create, accept or reject membership request mail
+                toUsers = new String[] {membershipRequest.getRequester()};
             }
         }
 
-        // TODO: replace by admin email.. we cannot send invitation from a different domain..
-        if (!isEmailAddress(fromUser)) {
-            fromUser = getEmailAddress(fromUser, context);
+        if (fromUser == null) {
+            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                InvitationManagerException.ERROR_INVITATION_SENDER_EMAIL_INVALID,
+                "Sender email is invalid");
         }
 
-        if (fromUser==null) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_SENDER_EMAIL_INVALID,
-                        "Sender email is invalid");
+        boolean toUsersValid = toUsers.length > 0;
+        for (int i = 0; i < toUsers.length && toUsersValid; i++) {
+            if (!isEmailAddress(toUsers[i])) {
+                toUsers[i] = getEmailAddress(toUsers[i], context);
+            }
+            if (toUsers[i] == null) {
+                toUsersValid = false;
+            }
         }
 
-        if (!isEmailAddress(toUser)) {
-            toUser = getEmailAddress(toUser, context);
+        if (!toUsersValid) {
+            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                InvitationManagerException.ERROR_INVITATION_TARGET_EMAIL_INVALID,
+                "Target email is invalid");
         }
-
-        if (toUser==null) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_TARGET_EMAIL_INVALID,
-                        "Target email is invalid");
-        }
+        String strToUsers = join(toUsers, ",");
 
         MailSenderPlugin mailSender = getMailSenderPlugin(context);
         XWikiDocument mailDoc = context.getWiki().getDocument(templateDocFullName, context);
         XWikiDocument translatedMailDoc = mailDoc.getTranslatedDocument(context);
-        mailSender.prepareVelocityContext(fromUser, toUser, "", vContext, context);
+        mailSender.prepareVelocityContext(fromUser, strToUsers, "", vContext, context);
         vContext.put("xwiki", new XWiki(context.getWiki(), context));
-        String mailSubject = XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName, vContext);
-        String mailContent = XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(), templateDocFullName, vContext);
+        String mailSubject =
+            XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
+                vContext);
+        String mailContent =
+            XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(), templateDocFullName,
+                vContext);
 
-        Mail mail = new Mail(fromUser, toUser, null, null, mailSubject, mailContent, null);
+        Mail mail = new Mail(fromUser, strToUsers, null, null, mailSubject, mailContent, null);
 
         try {
             mailSender.sendMail(mail, context);
         } catch (Exception e) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_SENDING_EMAIL_FAILED,
-                    "Sending notification email failed", e);
+            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                InvitationManagerException.ERROR_INVITATION_SENDING_EMAIL_FAILED,
+                "Sending notification email failed",
+                e);
         }
+    }
+    
+    private static final String join(String[] array, String separator)
+    {
+        StringBuffer result = new StringBuffer("");
+        if (array.length > 0) {
+            result.append(array[0]);
+        }
+        for (int i = 1; i < array.length; i++) {
+            result.append("," + array[i]);
+        }
+        return result.toString();
     }
 
     private MailSenderPlugin getMailSenderPlugin(XWikiContext context) throws InvitationManagerException {
@@ -1345,7 +1395,7 @@ public class InvitationManagerImpl implements InvitationManager
                     "Curriki ID is invalid", e);
         }
     }
-
+    
     /**
      * Helper method for testing if a given string is an email address.
      */
@@ -1388,20 +1438,45 @@ public class InvitationManagerImpl implements InvitationManager
     }
 
     // copy & paste from XWikiAuthServiceImpl#findUser(String, XWikiContext)
-    private String findUser(String username, XWikiContext context) throws InvitationManagerException
+    private String findUser(String username, XWikiContext context)
+        throws InvitationManagerException
     {
         try {
-            String user;
-
             // First let's look in the cache
             if (context.getWiki().exists("XWiki." + username, context))
                 return "XWiki." + username;
             else
                 return null;
         } catch (Exception e) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_ERROR_FINDING_USER,
-                    "Error finding user " + username, e);
+            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                InvitationManagerException.ERROR_INVITATION_ERROR_FINDING_USER,
+                "Error finding user " + username,
+                e);
         }
 
+    }
+    
+    /**
+     * Creates and saves a user profile associated with the given space and the user who made the
+     * membership request
+     */
+    private void createSpaceUserProfile(String spaceName, MembershipRequest request,
+        XWikiContext context) throws XWikiException
+    {
+        SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(spaceName, context);
+        SpaceUserProfile profile =
+            new SpaceUserProfileImpl(request.getRequester(), spaceName, spaceManager, context);
+        profile.setAllowNotifications("true".equals(request.getMap().get("allowNotifications")));
+        profile.setAllowNotificationsFromSelf("true".equals(request.getMap().get(
+            "allowNotificationsFromSelf")));
+        String profileText = (String) request.getMap().get("profile");
+        if (profileText == null) {
+            profileText = request.getText();
+        }
+        if (profileText == null) {
+            profileText = "";
+        }
+        profile.setProfile(profileText);
+        profile.saveWithProgrammingRights();
     }
 }
