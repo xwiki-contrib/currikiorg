@@ -14,7 +14,7 @@ public class CurrikiSpace extends SpaceImpl {
 	public static final String SPACE_ACCESSLEVEL = "accessprivileges";
 	public static final String SPACE_EDUCATION_LEVEL = "educationLevel";
 	public static final String SPACE_TOPIC = "topic";
-+       public static final String SPACE_LOGO = "logo";
+    public static final String SPACE_LOGO = "logo";
 
 	public CurrikiSpace(String spaceName, String spaceTitle, boolean create, SpaceManagerImpl manager, XWikiContext context)
 			throws SpaceManagerException {
