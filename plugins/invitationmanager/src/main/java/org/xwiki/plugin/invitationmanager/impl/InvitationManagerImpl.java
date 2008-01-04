@@ -69,20 +69,24 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
      */
-    public boolean acceptInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
+    public boolean acceptInvitation(String space, String email, String code, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
             Invitation invitation = getInvitation(space, encodeEmailAddress(email), context);
             if (code.equals(invitation.getCode())
-                    && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
+                && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
                 if (!invitation.isOpen()) {
                     invitation.setStatus(JoinRequestStatus.ACCEPTED);
                     invitation.setResponseDate(new Date());
                     invitation.setInvitee(context.getUser());
                     invitation.saveWithProgrammingRights();
                 }
+                // create and save a new space user profile based on the HTTP request
+                createSpaceUserProfile(space, context);
                 // update the list of space members and their roles
                 addMember(space, context.getUser(), invitation.getRoles(), context);
 
@@ -118,22 +122,26 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#acceptInvitation(String, XWikiContext)
      */
-    public boolean acceptInvitation(String space, XWikiContext context) throws InvitationManagerException {
+    public boolean acceptInvitation(String space, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
             Invitation invitation = getInvitation(space, context.getUser(), context);
 
             // if the invitation does not exist we need to return false
             if (invitation.isNew())
                 return false;
-            
+
             String status = invitation.getStatus();
             if (status.equals(JoinRequestStatus.SENT) || status.equals(JoinRequestStatus.REFUSED)) {
                 // update the invitation object
                 invitation.setResponseDate(new Date());
                 invitation.setStatus(JoinRequestStatus.ACCEPTED);
+                // create and save a new space user profile based on the HTTP request
+                createSpaceUserProfile(space, context);
                 // update the list of members and their roles
                 addMember(space, context.getUser(), invitation.getRoles(), context);
                 // save the invitation status
@@ -141,17 +149,17 @@ public class InvitationManagerImpl implements InvitationManager
                 return true;
             } else {
                 return false;
-            }           
+            }
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
         }
     }
 
      /**
-     * {@inheritDoc}
-     *
-     * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
-     */
+         * {@inheritDoc}
+         * 
+         * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
+         */
     public boolean verifyInvitation(String space, XWikiContext context) throws InvitationManagerException {
         try {
             Invitation invitation = getInvitation(space, context.getUser(), context);
@@ -166,11 +174,12 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#acceptMembership(String, String, String, XWikiContext)
      */
     public boolean acceptMembership(String space, String userName, String templateMail,
-                                 XWikiContext context) throws InvitationManagerException {
+        XWikiContext context) throws InvitationManagerException
+    {
         try {
             MembershipRequest request = getMembershipRequest(space, userName, context);
 
@@ -187,9 +196,9 @@ public class InvitationManagerImpl implements InvitationManager
                 // send notification mail
                 sendMail(JoinRequestAction.ACCEPT, request, templateMail, context);
 
-                // create space user profile based on the membership request
+                // create and save a new space user profile based on the membership request
                 createSpaceUserProfile(space, request, context);
-                
+
                 // update the list of members and their roles
                 addMember(space, userName, request.getRoles(), context);
 
@@ -1234,7 +1243,7 @@ public class InvitationManagerImpl implements InvitationManager
      * Wrapper method for adding a user to a space and to the given roles using the space manager
      */
     private void addMember(String space, String user, List roles, XWikiContext context)
-            throws XWikiException
+        throws XWikiException
     {
         SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(space, context);
         if (!spaceManager.isMember(space, user, context)) {
@@ -1477,6 +1486,20 @@ public class InvitationManagerImpl implements InvitationManager
             profileText = "";
         }
         profile.setProfile(profileText);
+        profile.saveWithProgrammingRights();
+    }
+    
+    /**
+     * Creates and saves a user profile associated with the given space and the currently logged in
+     * user
+     */
+    private void createSpaceUserProfile(String spaceName, XWikiContext context)
+        throws XWikiException
+    {
+        SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(spaceName, context);
+        SpaceUserProfile profile =
+            new SpaceUserProfileImpl(context.getUser(), spaceName, spaceManager, context);
+        profile.updateProfileFromRequest();
         profile.saveWithProgrammingRights();
     }
 }
