@@ -60,7 +60,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     public static final String INVITATION_VELOCITY_KEY = "invitation";
 
-    public static final String MEMBERSHIP_REQUEST_VELOCITY_KEY = "request";
+    public static final String MEMBERSHIP_REQUEST_VELOCITY_KEY = "membershiprequest";
 
     public static final String INVITATION_CLASS_NAME =  "XWiki.InvitationClass";
 
