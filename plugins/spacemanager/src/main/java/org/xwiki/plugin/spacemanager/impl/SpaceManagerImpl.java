@@ -349,7 +349,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         }
         // we need to add the creator as a member and as an admin
         addAdmin(newspace.getSpaceName(), context.getUser(), context);
-        joinSpace(newspace.getSpaceName(), context);
+        addMember(newspace.getSpaceName(), context.getUser(), context);
         return newspace;
 	}
 
