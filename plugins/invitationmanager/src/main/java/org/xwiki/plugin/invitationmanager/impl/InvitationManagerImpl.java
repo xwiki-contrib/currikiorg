@@ -1295,7 +1295,8 @@ public class InvitationManagerImpl implements InvitationManager
             vContext.put(MEMBERSHIP_REQUEST_VELOCITY_KEY, membershipRequest);
             if (JoinRequestAction.SEND.equals(action)) {
                 // notify the space administrators of a new membership request pending for approval
-                toUsers = (String[]) spaceManager.getAdmins(spaceName, context).toArray();
+                Collection admins = spaceManager.getAdmins(spaceName, context);
+                toUsers = (String[]) admins.toArray(new String[admins.size()]);
             } else {
                 // create, accept or reject membership request mail
                 toUsers = new String[] {membershipRequest.getRequester()};
