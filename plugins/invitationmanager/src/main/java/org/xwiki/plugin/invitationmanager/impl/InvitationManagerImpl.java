@@ -1276,7 +1276,7 @@ public class InvitationManagerImpl implements InvitationManager
         Space space = spaceManager.getSpace(spaceName, context);
         vContext.put(SPACE_VELOCITY_KEY, space);
         String fromUser = context.getWiki().getXWikiPreference("invitation_email", context);
-        if (fromUser == null) {
+        if (fromUser == null || fromUser.trim().length() == 0) {
             fromUser = context.getWiki().getXWikiPreference("admin_email", context);
         }
         String[] toUsers = new String[0];
