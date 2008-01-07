@@ -15,9 +15,14 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public interface SpaceManager extends XWikiPluginInterface {
+    public static interface SpaceAction
+    {
+        String CREATE = "Create";
+    }
 
     public static final String SPACE_DEFAULT_TYPE = "space";
     public static final String SPACE_CLASS_NAME = "XWiki.SpaceClass";
+    String DEFAULT_RESOURCE_SPACE = "Spaces";
 
     /**
      * Translate a space name to a space Wiki name

@@ -110,6 +110,7 @@ public class SpaceManagerImplTest extends org.jmock.cglib.MockObjectTestCase {
         this.context.setMainXWiki("xwiki");
 
         this.spaceManager = new SpaceManagerImpl("spacemanager",SpaceManagerImpl.class.toString(),context);
+        this.spaceManager.setMailNotification(false);
         this.spaceManager.init(context);
 
         XWikiDocument prefdoc = new XWikiDocument("XWiki", "XWikiPreferences");

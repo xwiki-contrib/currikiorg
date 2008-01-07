@@ -28,6 +28,11 @@ public class SpaceManagerException extends XWikiException
     public static final int ERROR_SPACE_ALREADY_EXISTS = 100001;
     public static final int ERROR_SPACE_TITLE_MISSING = 100002;
     public static final int ERROR_SPACE_DATA_INVALID = 100003;
+    public static final int ERROR_SPACE_SENDER_EMAIL_INVALID = 100004;
+    public static final int ERROR_SPACE_TARGET_EMAIL_INVALID = 100005;
+    public static final int ERROR_SPACE_MANAGER_REQUIRES_MAILSENDER_PLUGIN = 100006;
+    public static final int ERROR_SPACE_SENDING_EMAIL_FAILED = 100007;
+    public static final int ERROR_SPACE_CANNOT_FIND_EMAIL_ADDRESS = 100008;
 
     public SpaceManagerException(){
 	}

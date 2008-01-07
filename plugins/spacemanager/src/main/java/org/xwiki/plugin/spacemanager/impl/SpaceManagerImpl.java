@@ -29,7 +29,11 @@ import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import com.xpn.xwiki.plugin.mailsender.Mail;
+import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
+import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
+import org.apache.velocity.VelocityContext;
 import org.xwiki.plugin.spacemanager.api.*;
 import org.xwiki.plugin.spacemanager.plugin.SpaceManagerPluginApi;
 
@@ -42,10 +46,13 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 	
 	public final static String SPACEMANAGER_EXTENSION_CFG_PROP = "xwiki.spacemanager.extension";
 	public final static String SPACEMANAGER_DEFAULT_EXTENSION = "org.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl";
+	
 	/**
 	 * The extension that defines specific functions for this space manager
 	 */
     protected SpaceManagerExtension spaceManagerExtension;
+    
+    protected boolean mailNotification = true;
 
     /**
 	 * Space manager constructor
@@ -255,6 +262,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         // we need to add the creator as a member and as an admin
         addAdmin(newspace.getSpaceName(), context.getUser(), context);
         addMember(newspace.getSpaceName(), context.getUser(), context);
+        sendMail(SpaceAction.CREATE, newspace, context);
         return newspace;
     }
 
@@ -294,6 +302,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         // we need to add the creator as a member and as an admin
         addAdmin(newspace.getSpaceName(), context.getUser(), context);
         addMember(newspace.getSpaceName(), context.getUser(), context);
+        sendMail(SpaceAction.CREATE, newspace, context);
         return newspace;
     }
 
@@ -350,6 +359,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         // we need to add the creator as a member and as an admin
         addAdmin(newspace.getSpaceName(), context.getUser(), context);
         addMember(newspace.getSpaceName(), context.getUser(), context);
+        sendMail(SpaceAction.CREATE, newspace, context);
         return newspace;
 	}
 
@@ -830,4 +840,174 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
     }
 
+    private void sendMail(String action, Space space, XWikiContext context)
+        throws SpaceManagerException
+    {
+        if (!mailNotification) {
+            return;
+        }
+
+        VelocityContext vContext = new VelocityContext();
+        vContext.put("space", space);
+        String fromUser = context.getWiki().getXWikiPreference("space_email", context);
+        if (fromUser == null || fromUser.trim().length() == 0) {
+            fromUser = context.getWiki().getXWikiPreference("admin_email", context);
+        }
+        String[] toUsers = new String[0];
+        if (SpaceAction.CREATE.equals(action)) {
+            // notify space administrators upon space creation
+            Collection admins = getAdmins(space.getSpaceName(), context);
+            toUsers = (String[]) admins.toArray(new String[admins.size()]);
+        }
+
+        if (fromUser == null) {
+            throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
+                SpaceManagerException.ERROR_SPACE_SENDER_EMAIL_INVALID,
+                "Sender email is invalid");
+        }
+
+        boolean toUsersValid = toUsers.length > 0;
+        for (int i = 0; i < toUsers.length && toUsersValid; i++) {
+            if (!isEmailAddress(toUsers[i])) {
+                toUsers[i] = getEmailAddress(toUsers[i], context);
+            }
+            if (toUsers[i] == null) {
+                toUsersValid = false;
+            }
+        }
+
+        if (!toUsersValid) {
+            throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
+                SpaceManagerException.ERROR_SPACE_TARGET_EMAIL_INVALID,
+                "Target email is invalid");
+        }
+        String strToUsers = join(toUsers, ",");
+
+        MailSenderPlugin mailSender = getMailSenderPlugin(context);
+
+        try {
+            String templateDocFullName =
+                getTemplateMailPageName(space.getSpaceName(), action, context);
+            XWikiDocument mailDoc = context.getWiki().getDocument(templateDocFullName, context);
+            XWikiDocument translatedMailDoc = mailDoc.getTranslatedDocument(context);
+            mailSender.prepareVelocityContext(fromUser, strToUsers, "", vContext, context);
+            vContext.put("xwiki", new com.xpn.xwiki.api.XWiki(context.getWiki(), context));
+            String mailSubject =
+                XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
+                    vContext);
+            String mailContent =
+                XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(),
+                    templateDocFullName, vContext);
+
+            Mail mail =
+                new Mail(fromUser, strToUsers, null, null, mailSubject, mailContent, null);
+            mailSender.sendMail(mail, context);
+        } catch (Exception e) {
+            throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
+                SpaceManagerException.ERROR_SPACE_SENDING_EMAIL_FAILED,
+                "Sending notification email failed",
+                e);
+        }
+    }
+
+    private MailSenderPlugin getMailSenderPlugin(XWikiContext context)
+        throws SpaceManagerException
+    {
+        MailSenderPlugin mailSender =
+            (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);
+
+        if (mailSender == null)
+            throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
+                SpaceManagerException.ERROR_SPACE_MANAGER_REQUIRES_MAILSENDER_PLUGIN,
+                "SpaceManager requires the mail sender plugin");
+
+        return mailSender;
+    }
+
+    // code duplicated from InvitationManagerImpl !!!
+    private static final String join(String[] array, String separator)
+    {
+        StringBuffer result = new StringBuffer("");
+        if (array.length > 0) {
+            result.append(array[0]);
+        }
+        for (int i = 1; i < array.length; i++) {
+            result.append("," + array[i]);
+        }
+        return result.toString();
+    }
+
+    // code duplicated from InvitationManagerImpl !!!
+    private boolean isEmailAddress(String str)
+    {
+        return str.contains("@");
+    }
+
+    // code duplicated from InvitationManagerImpl !!!
+    private String getEmailAddress(String user, XWikiContext context)
+        throws SpaceManagerException
+    {
+        try {
+            String wikiuser = (user.startsWith("XWiki.")) ? user : "XWiki." + user;
+
+            if (wikiuser == null)
+                return null;
+
+            XWikiDocument userDoc = null;
+            userDoc = context.getWiki().getDocument(wikiuser, context);
+
+            if (userDoc.isNew())
+                return null;
+
+            String email = "";
+            try {
+                email = userDoc.getObject("XWiki.XWikiUsers").getStringValue("email");
+            } catch (Exception e) {
+                return null;
+            }
+            if ((email == null) || (email.equals("")))
+                return null;
+
+            return email;
+        } catch (Exception e) {
+            throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
+                SpaceManagerException.ERROR_SPACE_CANNOT_FIND_EMAIL_ADDRESS,
+                "Cannot find email address of user " + user,
+                e);
+        }
+    }
+
+    private String getTemplateMailPageName(String spaceName, String action, XWikiContext context)
+    {
+        String docName = spaceName + "." + "MailTemplate" + action + "Space";
+        try {
+            if (context.getWiki().getDocument(docName, context).isNew()) {
+                docName = null;
+            }
+        } catch (XWikiException e) {
+            docName = null;
+        }
+        if (docName == null) {
+            docName = getDefaultResourceSpace(context) + "." + "MailTemplate" + action + "Space";
+        }
+
+        return docName;
+    }
+
+    private String getDefaultResourceSpace(XWikiContext context)
+    {
+        // we should use "xwiki.spacemanager.resourcespace"
+        return context.getWiki().Param("xwiki.invitationmanager.resourcespace",
+            SpaceManager.DEFAULT_RESOURCE_SPACE);
+    }
+
+    public boolean isMailNotification()
+    {
+        return mailNotification;
+    }
+
+    public void setMailNotification(boolean mailNotification)
+    {
+        this.mailNotification = mailNotification;
+    }
 }
