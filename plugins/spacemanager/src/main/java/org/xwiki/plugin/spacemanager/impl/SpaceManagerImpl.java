@@ -628,6 +628,20 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see SpaceManager#removeAdmin(String, String, XWikiContext)
+     */
+    public void removeAdmin(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException
+    {
+        try {
+            removeUserFromGroup(userName, getAdminGroupName(spaceName), context);
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+    }
 
     public void addUserToRole(String spaceName, String username, String role, XWikiContext context) throws SpaceManagerException {
         try {
@@ -675,11 +689,47 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         }
     }
 
+	/**
+     * {@inheritDoc}
+     * 
+     * @see SpaceManager#removeUserFromRoles(String, String, List, XWikiContext)
+     */
+    public void removeUserFromRoles(String spaceName, String userName, List roles,
+        XWikiContext context) throws SpaceManagerException
+    {
+        for (int i = 0; i < roles.size(); i++) {
+            removeUserFromRole(spaceName, userName, (String) roles.get(i), context);
+        }
+    }
 
+    public void removeUserFromRole(String spaceName, String userName, String role,
+        XWikiContext context) throws SpaceManagerException
+    {
+        try {
+            removeUserFromGroup(userName, getRoleGroupName(spaceName, role), context);
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+    }
 
 	public void addMember(String spaceName, String username, XWikiContext context) throws SpaceManagerException {
         try {
             addUserToGroup(username, getMemberGroupName(spaceName), context);
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+    }
+
+	/**
+     * {@inheritDoc}
+     * 
+     * @see SpaceManager#removeMember(String, String, XWikiContext)
+     */
+    public void removeMember(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException
+    {
+        try {
+            removeUserFromGroup(userName, getMemberGroupName(spaceName), context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -735,7 +785,25 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         */
    }
 
+    private void removeUserFromGroup(String userName, String groupName, XWikiContext context)
+        throws XWikiException
+    {
+        // don't remove if he's not a member
+        if (!isMemberOfGroup(userName, groupName, context)) {
+            return;
+        }
 
+        XWiki xwiki = context.getWiki();
+        BaseClass groupClass = xwiki.getGroupClass(context);
+        XWikiDocument groupDoc = xwiki.getDocument(groupName, context);
+        BaseObject memberObject = groupDoc.getObject(groupClass.getName(), "member", userName);
+        if (memberObject == null) {
+            return;
+        }
+        groupDoc.removeObject(memberObject);
+        xwiki.saveDocument(groupDoc, context.getMessageTool()
+            .get("core.comment.removedUserFromGroup"), context);
+    }
 
     public void addMembers(String spaceName, List usernames, XWikiContext context) throws SpaceManagerException {
         for(int i=0;i<usernames.size();i++) {

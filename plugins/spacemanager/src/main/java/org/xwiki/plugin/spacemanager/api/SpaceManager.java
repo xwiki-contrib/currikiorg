@@ -254,6 +254,17 @@ public interface SpaceManager extends XWikiPluginInterface {
     public void addMember(String spaceName, String username, XWikiContext context) throws SpaceManagerException;
 
     /**
+     * Removes the member with the given name from the space with the specified name.
+     * 
+     * @param spaceName
+     * @param userName
+     * @param context
+     * @throws SpaceManagerException
+     */
+    void removeMember(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException;
+
+    /**
      *
      * @param spaceName
      * @param context
@@ -280,6 +291,18 @@ public interface SpaceManager extends XWikiPluginInterface {
     public void addAdmins(String spaceName, List usernames, XWikiContext context) throws SpaceManagerException;
 
     /**
+     * Removes the user with the given name from the list of admins of the specified space. The user
+     * remains a member of the space.
+     * 
+     * @param spaceName
+     * @param userName
+     * @param context
+     * @throws SpaceManagerException
+     */
+    void removeAdmin(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException;
+
+    /**
      * @return the list of all members of the space that are admins
      */
     public Collection getAdmins(String spaceName, XWikiContext context) throws SpaceManagerException;
@@ -303,6 +326,18 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @param context
      */
     public void addUsersToRoles(String spaceName, List usernames, List roles, XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Removes the user with the given name from the list of users who have the given roles.
+     * 
+     * @param spaceName
+     * @param userName
+     * @param roles
+     * @param context
+     * @throws SpaceManagerException
+     */
+    void removeUserFromRoles(String spaceName, String userName, List roles, XWikiContext context)
+        throws SpaceManagerException;
 
     /**
      * Get the list of users for a role
