@@ -181,7 +181,7 @@ $msg.get($prop.name)#end
 #set($type = "submit")
 #end
 ##<span class="btn-wrapper btn-wrapper-${color}">
-<button#if($id != "") id="${id}"#end class="button_${color}"#if($onclick != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
+<button#if($id != "") id="${id}"#end class="button#if($color != "") button-${color}#end"#if($onclick != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
 #end
 ##
 ##
