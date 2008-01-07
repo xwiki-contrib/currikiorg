@@ -1,6 +1,27 @@
+#set($sm = $xwiki.csm)
+#set($spaceName = $doc.getSpace())
+#if($spaceName != "Groups")
+  #set($s = $sm.getSpace($spaceName))
+#end
+
+
 #macro(parentsBreadcrumb $bcDoc $level)
- #set($parent = $bcDoc.parent)
- #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
+
+##groups specifics
+###group creation page
+#if($bcDoc.fullName == "Groups.CreateNewGroup")
+  #set($usr = $context.user)
+  $xwiki.getUserName($usr,true) &gt;
+#end
+###group home
+#if($s)
+  <a href="$s.getHomeURL()">$s.getSpaceName()</a> &gt;
+#end
+
+##end group specifics
+
+#set($parent = $bcDoc.parent) 
+#if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
   #set($bcLocal = "${parent};${bcLocal}")
   #set($level = $level + 1)
   #parentsBreadcrumb($xwiki.getDocument($parent) $level)
@@ -37,21 +58,34 @@
  #set($previousBc = "")
  #foreach($bcItem in $bcLocal.split(";"))
   #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+   
    #if(!$isFirst)
     &gt; 
    #end
+
    #set($isFirst = false)
    #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
+   
    #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
+
    #findCurrikiTitle($bcDoc)
+
+   #if($s)
+     #if($bcDoc.name=="WebHome")
+       #set($currikiTitle = "Home")
+     #end 
+   #end
+
    #set($userArg = "")
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
     #set($userArg="&user=$request.user")
    #end
+
    <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
    #set($previousBc = "${previousBc};${bcItem}")
+
   #end
  #end
 #end
