@@ -28,17 +28,18 @@ import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.Selectable;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
+import org.curriki.gwt.client.search.selectors.SpaceFilterSelector;
 import org.curriki.gwt.client.search.selectors.TermSelector;
 import org.curriki.gwt.client.search.selectors.TextInputSelector;
 
@@ -48,6 +49,7 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
     Selectable, SourcesChangeEvents, SourcesClickEvents, KeepsState
 {
     protected TextInputSelector terms;
+    protected SpaceFilterSelector space;
     protected Button search;
     protected Button cancel;
     protected SelectorCollection selectors = new SelectorCollection();
@@ -68,6 +70,10 @@ public class SelectorMainPanel extends HorizontalPanel implements ChangeListener
             }
         });
         selectors.add(terms);
+
+        // Space filter for Groups
+        space = new SpaceFilterSelector();
+        selectors.add(space);
 
         VerticalPanel pTerms = new VerticalPanel();
         pTerms.add(terms.getLabel());
