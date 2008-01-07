@@ -72,11 +72,17 @@
 
    #findCurrikiTitle($bcDoc)
 
+   ##groups specific rules
    #if($s)
      #if($bcDoc.name=="WebHome")
        #set($currikiTitle = "Home")
      #end 
+   #else
+     #if($bcDoc.fullName == "Groups.CreateNewGroup")
+       #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
+     #end
    #end
+   ##end of groups specific rules
 
    #set($userArg = "")
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
