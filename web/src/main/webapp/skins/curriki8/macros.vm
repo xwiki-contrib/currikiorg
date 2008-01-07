@@ -1521,3 +1521,580 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 </div> ##contents
 </div>
 #end
+##
+##
+##
+## MyCurriki Macros ## {
+##
+##
+## MyCurriki tab macro
+#macro(mycurrikitabs $curtab $whofor) ## {
+#set($tabs = ["profile","favorites","contributions","collections","blog","groups"])
+<div id="mycurriki-tabs" class="tabs">
+#foreach($tab in $tabs) ## {
+#if("$!whofor" == "" || $whofor == $context.user) ## {
+#set($url=$xwiki.getURL($msg.get("mycurriki.tab.${tab}.page"), "view"))
+#else ## } {
+#set($url=$xwiki.getURL($msg.get("mycurriki.tab.${tab}.page"), "view", "user=${whofor}"))
+#end ## }
+<a class="tab#if($curtab==$tab) tab-selected#end" href="$url">$msg.get("mycurriki.tab.${tab}.label")</a>
+#end ## foreach ## }
+</div>
+#end ## macro ## }
+##
+##
+## MyCurriki header macro
+#macro(mycurrikiheader $userobj) ## {
+<div id="mycurriki-header" class="mycurriki-header">
+<div id="mycurriki-header-title" class="heading-1">$userobj.first_name $userobj.last_name</div>
+</div>
+#end ## macro ## }
+##
+##
+## Main curriki page generation macro
+#macro(mycurrikipagefull $pageref $whofor $hasbutton) ## {
+## Determine whofor
+#if("$!whofor" == "") ## {
+#if("$!request.user" != "") ## {
+#set($whofor = $request.user)
+#else ## } {
+#if($doc.web.startsWith("Blog_")) ## {
+#set($whofor = $doc.web.substring(5))
+#else ## } {
+#if("$!whofor" == "") ## {
+#set($whofor = $context.user)
+#end ## }
+#end ## }
+#end ## }
+#end ## }
+#if(!$whofor.startsWith("XWiki.")) ## {
+#set($whofor = "XWiki.$whofor")
+#end ## }
+## Now know whofor
+#set($userdoc = $xwiki.getDocument($whofor))
+#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+<div id="mycurriki-$pageref" class="mycurriki mycurriki-$pageref">
+#mycurrikiheader($userobj)
+#mycurrikitabs($pageref $whofor)
+<div id="mycurriki-main" class="tab-container">
+<div id="mycurriki-main-header">
+#if($hasbutton == 1) ## {
+#mycurrikipage_button($userobj)
+#end ## }
+#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
+<div id="mycurriki-main-header-left">
+## <div id="mycurriki-main-header-title" class="main-title">
+## TODO: Please note that these rules will only be valid for english
+## #findUserPrefix($userdoc.fullName.substring(6))
+## $userPrefix $msg.get("mycurriki.tab.${pageref}.label")
+#if($hasbutton == 1) ## {
+## <br />
+#end ## }
+## </div>
+#if($subtitle != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ## {
+<div id="mycurriki-main-header-subtitle" class="tab-deck">$subtitle</div>
+#end ## }
+</div>
+<div class="clearfloats"></div>
+</div>
+<div id="mycurriki-main-content" class="frame">
+#mycurrikipage_content($userdoc $userobj)
+</div>
+</div>
+</div>
+#end ##macro ## }
+##
+##
+## Page
+#macro(mycurrikipage $pageref) ## {
+#mycurrikipagefull($pageref "" 0)
+#end ##macro ## }
+##
+##
+## Page with Button
+#macro(mycurrikipagewithbutton $pageref) ## {
+#mycurrikipagefull($pageref "" 1)
+#end ##macro ## }
+##
+##
+## Subject breadcrumb macro
+#macro(subjectBreadcrumb $bcParam $bcCurrentDoc)
+ ##Preparation de la liste
+ #set($bcParent = $bcParam)
+ #if($bcParam && $!bcParam != "")
+  #if($bcParam.endsWith($bcCurrentDoc.fullName))
+   #set($bcLocal = $bcParam)
+  #else
+   #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
+  #end
+ #else
+  #set($bcLocal = $bcCurrentDoc.fullName)
+ #end
+ #if(!$bcParam || $!bcParam == "")
+  #parentsBreadcrumb($bcCurrentDoc, 0)
+ #end
+ #set($bcLocal = $bcLocal.replace("FW_masterFramework.WebHome;", ''))
+ ##Deroulage de la liste
+ #set($isFirst = true)
+ #set($previousBc = "")
+ #foreach($bcItem in $bcLocal.split(";"))
+  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+   #if(!$isFirst)
+    &gtbcCurrentDoc
+   #end
+   #set($isFirst = false)
+   #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
+   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+    #set($bcDoc = $xwiki.getDocument($request.editArticle))
+   #end
+   #findCurrikiTitle($bcDoc)
+   #set($userArg = "")
+   #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+    #set($userArg="&user=$request.user")
+   #end
+   <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
+   #set($previousBc = "${previousBc};${bcItem}")
+  #end
+ #end
+#end
+##
+##
+## title Macro
+#macro(mycurrikiassettitle $asset) ## {
+#findCurrikiTitle($asset)
+#set($title = $currikiTitle)
+#if(!$title || $title.length() == 0) ## {
+ #set($title = $msg.get("caption.untitled"))
+#end ## }
+<a class="curriki-link" href="$asset.getURL("view")">{pre}$title{/pre}</a>
+#end ## macro ## }
+##
+##
+## title with mouseover description Macro
+#macro(mycurrikiassettitlewithmodesc $asset) ## {
+#set($descnb = $descnb + 1)
+#findCurrikiTitle($asset)
+#set($title = $currikiTitle)
+#if(!$title || $title.length() == 0) ## {
+ #set($title = $msg.get("caption.untitled"))
+#end ## }
+<a class="curriki-link" href="$asset.getURL("view")" onmouseover="$('mycurriki-description-${descnb}').show();" onmouseout="$('mycurriki-description-${descnb}').hide();">{pre}$title{/pre}</a>
+<div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
+{pre}
+$msg.get("mycurriki.favorites.mouseover.description")<br />
+$!asset.getObject("XWiki.AssetClass").getProperty("description").getValue() <br />
+<br />
+$msg.get('mycurriki.favorites.mouseover.subject') <br />
+#set($subj = $!asset.getValue('fw_items'))
+#set($c = 0)
+#foreach($item in $subj) ## {
+#if($item == "FW_masterFramework.WebHome") ## {
+## Don't count WebHome
+#else ## } {
+#set($c = $c + 1)
+#if($c <= 2) ## {
+#set($fw = $xwiki.getDocument($item))
+## $fw.displayTitle <br />
+## #set($bcLocal = $item)
+#subjectBreadcrumb("" $fw) <br />
+#end ## }
+#end ## }
+#end ## }
+#if($c > 2) ## {
+...<br />
+#end ## }
+<br />
+$msg.get('mycurriki.favorites.mouseover.level')<br />
+#set($levl = $!asset.getValue('educational_level2'))
+#set($c = 0)
+#foreach($item in $levl) ## {
+#set($c = $c + 1)
+#if($c <= 2) ## {
+$msg.get("search.selector.level.${item}")<br />
+#end ## }
+#end ## }
+#if($c > 2) ## {
+...<br />
+#end ## }
+{/pre}
+</div>
+#end ## macro ## }
+##
+##
+## title with mouseover description Macro and breadcrumb for favorites
+#macro(mycurrikifavassettitlewithmodesc $asset) ## {
+#set($descnb = $descnb + 1)
+#findCurrikiTitle($asset)
+#set($title = $currikiTitle)
+#if(!$title || $title.length() == 0) ## {
+ #set($title = $msg.get("caption.untitled"))
+#end ## }
+<a class="curriki-link" href="$asset.getURL("view")" onmouseover="$('mycurriki-description-${descnb}').show();" onmouseout="$('mycurriki-description-${descnb}').hide();">{pre}$title{/pre}</a>
+<div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
+{pre}
+$msg.get("mycurriki.favorites.mouseover.description")<br />
+$!asset.getObject("XWiki.AssetClass").getProperty("description").getValue() <br />
+<br />
+$msg.get('mycurriki.favorites.mouseover.subject') <br />
+#set($subj = $!asset.getValue('fw_items'))
+#set($c = 0)
+#foreach($item in $subj) ## {
+#if($item == "FW_masterFramework.WebHome") ## {
+## Don't count WebHome
+#else ## } {
+#set($c = $c + 1)
+#if($c <= 2) ## {
+#set($fw = $xwiki.getDocument($item))
+## $fw.displayTitle <br />
+## #set($bcLocal = $item)
+#subjectBreadcrumb("" $fw) <br />
+#end ## }
+#end ## }
+#end ## }
+#if($c > 2) ## {
+...<br />
+#end ## }
+<br />
+$msg.get('mycurriki.favorites.mouseover.level')<br />
+#set($levl = $!asset.getValue('educational_level2'))
+#set($c = 0)
+#foreach($item in $levl) ## {
+#set($c = $c + 1)
+#if($c <= 2) ## {
+$msg.get("search.selector.level.${item}")<br />
+#end ## }
+#end ## }
+#if($c > 2) ## {
+...<br />
+#end ## }
+{/pre}
+</div>
+#end ## macro ## }
+##
+##
+## Access Rights Macro
+#macro(mycurrikiaccess $asset) ## {
+#set($access = $!asset.getObject("XWiki.AssetClass").getProperty("rights").getValue())
+$msg.get("mycurriki.macro.access.${access}")
+#end ## macro ## }
+##
+##
+## ICT icon Macro
+#macro(mycurrikiict $asset) ## {
+#set($ict = "")
+#set($ict = $!asset.getObject("XWiki.AssetClass").getProperty("instructional_component2").getValue())
+#if($ict == "" || $ict.size() == 0) ## {
+## No ICT set -- nothing to do
+#else ## } {
+#if($ict.size() > 1) ## {
+##Multiple
+#set($icon = $xwiki.getSkinFile("icons/ICTIcon-Multiple.gif"))
+#set($text = $msg.get('search.results.col.ict.multiple'))
+#else ## } {
+##Single
+#set($ict = $ict.get(0))
+#set($icon = "${ict.substring(0,1).toUpperCase()}${ict.substring(1)}")
+#set($icon = $icon.replaceFirst("_.*", ""))
+#set($icon = $xwiki.getSkinFile("icons/ICTIcon-${icon}.gif"))
+#set($text = $ict.replaceFirst("_", "."))
+#set($text = "search.selector.ict.${text}")
+#set($text = $msg.get($text))
+#end ## if not multiple ## }
+<a href="/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.AboutLearningResources" target=\"ICT_HELP\"><img src="${icon}" alt="${text}" title="${text}" /></a>
+#end ## if not empty ## }
+#end ## Macro ## }
+##
+##
+## File Type Icon Macro
+#macro(mycurrikifiletype $asset) ## {
+#if($asset.attachmentList.size() == 0) ## {
+  #set($mime = "")
+  #set($rowType="currikulum")
+#else ## } {
+  #mimeicon($asset.attachmentList.get(0).getFilename())
+  #set($mime = $asset.attachmentList.get(0).mimeType)
+  #set($rowType="mime")
+#end ## }
+#if($asset.getObject("XWiki.ExternalAssetClass")) ## {
+  #set($rowType="URL")
+#end ## }
+#if($rowType == "URL") ## {
+#set($text = $msg.get("mycurriki.macro.filetype.URL"))
+{pre}<img src="$xwiki.getSkinFile("mimetypes/HTM.png")" alt="[${text}]" title="[${text}]"/>{/pre}
+#end ## }
+#if($rowType == "mime") ## {
+#if(!$m_fileExt || $m_fileExt == "Unknown") ## {
+  #set($text = $msg.get("mycurriki.macro.filetype.unknown"))
+#else ## } {
+  #set($text = $m_fileExt)
+#end ## if ext ## }
+{pre}<img src="$macro_iconUrl" alt="[${text}]" title="[${text}]"/>{/pre}
+#end ## if mime ## }
+#if($rowType == "curriki-link") ## {
+#set($text = $msg.get("mycurriki.macro.filetype.curriki"))
+{pre}<img src="$xwiki.getSkinFile("mimetypes/Currikulum_Icon.png")" alt="[${text}]" title="[${text}]"/>{/pre}
+#end ## }
+#if($rowType == "currikulum") ## {
+#set($text = $msg.get("mycurriki.macro.filetype.currikulum"))
+{pre}<img src="$xwiki.getSkinFile("mimetypes/Currikulum_Icon.png")" alt="[${text}]" title="[${text}]"/>{/pre}
+#end ## }
+#end ## Macro ## }
+##
+##
+## Last Update date
+#macro(mycurrikilastupdate $asset) ## {
+$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))
+#end ## macro ## }
+##
+##
+## Contributor name
+#macro(mycurrikicontributor $asset) ## {
+$xwiki.getUserName($asset.creator)
+#end ## macro ## }
+##
+##
+## Pagination Macro with args
+#macro(mycurrikipaginatorargs $called $from $nbToDisplay $of $addargs) ## {
+<div id="mycurriki-paginator" class="table-results">
+## Make sure we have sane settings for $of
+#if($of < 0) ## {
+#set($of = 0)
+#end ## }
+## We don't show the paginator if nothing to paginate
+#if($of != 0) ## {
+## Make sure we have sane settings for $from
+#if($from < 0) ## {
+#set($from = 0)
+#end ## }
+#if($from >= $of) ## {
+#set($from = $of - 1)
+#end ## }
+## Make sure we have sane settings for $nbToDisplay
+#if($nbToDisplay < 1) ## {
+#set($nbToDisplay = 1)
+#end ## }
+#if("$called"=="") ## {
+#set($called = $msg.get("mycurriki.macro.paginate.results"))
+#end ## }
+## Determine what $to sould be
+#set($to = ($from + $nbToDisplay) - 1)
+#if($to >= $of) ## {
+#set($to = ($of - 1))
+#end ## }
+## Now figure out total, current, first, and last page
+#set($pages = (($of - 1) / $nbToDisplay) + 1)
+#set($cpage = ($from / $nbToDisplay) + 1)
+#set($fpage = ($cpage / 10) + 1)
+#set($lpage = $fpage + 9)
+#if($lpage > $pages) ## {
+#set($lpage = $pages)
+#end ## }
+## Figure out if we need a user argument
+#if("$!request.user" == "") ## {
+#set($addarg="")
+#else ## } {
+#set($addarg="user=${request.user}&")
+#end ## }
+#if($addargs != "") ## {
+#set($addarg="${addarg}${addargs}&")
+#end ## }
+<div id="mycurriki-paginator-line1" class="table-results-title">
+## Display 1 -> X+1 instead of 0 -> X
+#set($dFrom = $from + 1)
+#set($dTo = $to + 1)
+$called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
+</div>
+<div id="mycurriki-paginator-line2" class="table-results-navigation">
+#if($cpage == 1) ## {
+#set($npage = 0)
+#else ## } {
+#set($npage = (($cpage - 2) * $nbToDisplay))
+#end ## }
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+#if($cpage!=1) ## {
+<a href="${url}" class="table-results-previous#if($cpage==1) table-results-disabled" onclick="return false;#end">$msg.get("mycurriki.macro.paginate.previous")</a>
+#end ## }
+#foreach ($pg in [${fpage}..${lpage}]) ## {
+#set($npage = (($pg - 1) * $nbToDisplay))
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+<a href="${url}"#if($pg==$cpage) class="table-results-navigation-selected" onclick="return false;"#end>$pg</a>
+#end ## }
+#if($cpage==$pages) ## {
+#set($npage = (($pages - 1) * $nbToDisplay))
+#else ## } {
+#set($npage = ($cpage * $nbToDisplay))
+#end ## }
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+#if($cpage!=$pages) ## {
+<a href="${url}" class="table-results-next#if($cpage==$pages) table-results-disabled" onclick="return false;#end">$msg.get("mycurriki.macro.paginate.next")</a>
+#end ## }
+</div>
+#end ## if != 0 ## }
+</div>
+#end ## macro ## }
+##
+##
+## Pagination Macro
+#macro(mycurrikipaginator $called $from $nbToDisplay $of) ## {
+#mycurrikipaginatorargs($called $from $nbToDisplay $of "")
+#end ## }
+##
+##
+## Collection description Macro
+#macro(mycurrikicollectiondescription $asset) ## {
+#set($desc = $!asset.getObject("XWiki.AssetClass").getProperty("description").getValue())
+$!desc
+#end ## macro ## }
+##
+##
+## Avatar
+#macro(mycurrikiavatar $userdoc) ## {
+#if($userdoc.attachmentList.size()==0)  ## {
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+  <a href="$userdoc.getURL("view")" >
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
+ #end ## }
+#end ## }
+#end ## macro ## }
+##
+##
+## Avatar with name
+#macro(mycurrikiavatarwithname $userdoc) ## {
+#if($userdoc.attachmentList.size()==0)  ## {
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+  <a href="$userdoc.getURL("view")" >
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
+ #end ## }
+#end  $xwiki.getUserName($userdoc.fullName) ## }
+#end ## macro ## }
+##
+##
+## Titlebar with javascript and regular link
+#macro(mycurrikifulltitlebar $lefttitle $righttitle $link $js $color $idpfx) ## {
+#if("$!link" != "") ## {
+#normalizelink($link)
+#end ## }
+#set($righttitletrunc = $righttitle)
+#if ($righttitletrunc.length() > 35) ## {
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end ## }
+#if("$!idpfx" != "") ## {
+#set($qt = '"')
+#set($tmp = "id=${qt}${idpfx}-")
+#set($dId = "${tmp}bar${qt}")
+#set($tId = "${tmp}title${qt}")
+#set($rdId = "${tmp}right${qt}")
+#set($lId = "${tmp}link${qt}")
+#else ## } {
+#set($dId = "")
+#set($tId = "")
+#set($rdId = "")
+#set($lId = "")
+#end ## }
+<div $dId class="titleheader titleheader-$color"><h3 $tId#if($link!="") class="titleheader-left"#end>$lefttitle</h3>#if($link!="" || $js!="")<div $rdId class="titleheader-right"><a $lId #if("$!link"!="") href="$link"#end#if("$!js"!="") onclick="$js"#end title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+</div>
+#end ## macro ## }
+##
+##
+## Titlebar with javascript link
+#macro(mycurrikijstitlebar $lefttitle $righttitle $link $color) ## {
+#mycurrikifulltitlebar($lefttitle $righttitle "" $link $color "")
+#end ## macro ## }
+##
+##
+## Titlebar
+#macro(mycurrikititlebar $lefttitle $righttitle $link $color) ## {
+#mycurrikifulltitlebar($lefttitle $righttitle $link "" $color "")
+#end ## macro ## }
+##
+##
+## Group display
+#macro(mycurrikiGroupInfo $m_groupName) ## {
+#if(!$g_rowCount) ## {
+#set($g_rowCount = 0)
+#end ## }
+#set($g_rowCount = $g_rowCount + 1)
+#set($m_sm = $xwiki.csm)
+#set($s = $m_sm.getSpace($m_groupName))
+## Get logo
+#set($logofilename = $s.display("logo","view"))
+#if($logofilename != "")
+  #set($spacehome = $s.getSpaceName()+"WebHome")
+  #set($srcdoc = $xwiki.getDocument($spacehome))
+  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
+#else
+  #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
+  #set($m_logo = $srcdoc.getAttachmentURL("default_logo.png"))
+#end
+#if("$!first_frame_done" == "") ## {
+<div class="frame">
+#else ## } {
+#set($first_frame_done = "")
+#end ## }
+<div class="frame-inset-titlebar">
+#mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
+</div>
+<div class="frame-inset-logo">
+<img src="$m_logo" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
+</div>
+<div class="frame-inset-description">
+$s.getDescription()
+</div>
+</div>
+#end ## }
+##
+##
+## Blog Entries
+#macro(displayMyCurrikiBlogArticle $bentrydoc $bentryobj $displayFully) ## {
+#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.dateFormat")))
+#set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
+## #set($title = $!bentrydoc.display("title","view", $bentryobj))
+## #if($title == "") ## {
+## #set($title = "&nbsp;")
+## #end ## }
+## 1 $title
+#set($extract = $!bentrydoc.display("extract","view", $bentryobj))
+<div class="article_content" >
+#set($content = $bentrydoc.display("content", "view", $bentryobj))
+#if(!$displayFully)
+ #if($!extract != "")
+  #set($content = $extract)
+ #else
+  #if($content.length()>400)
+   #set($i = $content.lastIndexOf(" ",400))
+   #set($i = $i + 1)
+   #set($content = "${content.substring(0,$i)}")
+  #end
+ #end
+#end
+$bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
+<div class="clearfloats"></div>
+
+<a href="$bentrydoc.getURL("view", "bc=$!request.bc")" class="curriki-link">$msg.get("caption.readmore")</a>#end
+</div>
+<div class="clearfloats"></div>
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
+$msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
+</div>
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
+## <a class="curriki-link" href="#" >$msg.get("caption.sendToAFriend")</a>
+## #sep()
+<a class="curriki-link" href="$bentrydoc.getURL("view")" >$msg.get("myBlog.permalink")</a>
+#sep() {pre}
+#if ($bentrydoc.hasAccessLevel("edit"))
+<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a> #sep()
+<a class="curriki-link" href="$bentrydoc.getURL("delete")" >$msg.get("caption.delete")</a>
+#end
+{/pre}
+</div>
+#end ## }
+##
+## End of MyCurriki macros ## }
+##
+##
+##
