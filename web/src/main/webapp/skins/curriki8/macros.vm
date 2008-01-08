@@ -1013,12 +1013,13 @@ createCookie("Section${seccounter}Hidden", true, "");
 #set($creatorDoc = $xwiki.getDocument($asset.creator))
 #set($width = 52)
 #if($asset.space.startsWith("Coll_Group_")) ## {
+#set($spacehome = $asset.space.replaceFirst("Coll_", ""))
 ## For group assets
 #set($m_sm = $xwiki.csm)
-#set($s = $m_sm.getSpace($asset.space.replaceFirst("Coll_", "")))
+#set($s = $m_sm.getSpace($spacehome))
 #set($logofilename = $s.display("logo","view"))
 #if($logofilename != "")
-  #set($spacehome = $s.getSpaceName()+"WebHome")
+  #set($spacehome = $s.getSpaceName()+".WebHome")
   #set($srcdoc = $xwiki.getDocument($spacehome))
   #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
 #else
