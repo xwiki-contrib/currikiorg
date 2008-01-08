@@ -42,6 +42,7 @@ public class InvitationImplTest extends InvitationTest
         super.setUp();
 
         manager = new InvitationManagerImpl();
+        manager.setMailNotification(false);
         joinRequest = new InvitationImpl(null, null, true, manager, context);
     }
 

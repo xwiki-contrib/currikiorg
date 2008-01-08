@@ -66,6 +66,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     public static final String MEMBERSHIP_REQUEST_CLASS_NAME =  "XWiki.MembershipRequestClass";
 
+    private boolean mailNotification = true;
 
     /**
      * {@inheritDoc}
@@ -1270,6 +1271,10 @@ public class InvitationManagerImpl implements InvitationManager
     private void sendMail(String action, JoinRequest request, String templateDocFullName,
         XWikiContext context) throws XWikiException
     {
+        if (!mailNotification) {
+            return;
+        }
+
         VelocityContext vContext = new VelocityContext();
         String spaceName = request.getSpace();
         SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(spaceName, context);
@@ -1505,5 +1510,15 @@ public class InvitationManagerImpl implements InvitationManager
             new SpaceUserProfileImpl(context.getUser(), spaceName, spaceManager, context);
         profile.updateProfileFromRequest();
         profile.saveWithProgrammingRights();
+    }
+    
+    public boolean isMailNotification()
+    {
+        return mailNotification;
+    }
+
+    public void setMailNotification(boolean mailNotification)
+    {
+        this.mailNotification = mailNotification;
     }
 }

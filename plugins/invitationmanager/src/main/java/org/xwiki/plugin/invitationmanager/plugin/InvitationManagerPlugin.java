@@ -47,6 +47,12 @@ public class InvitationManagerPlugin extends XWikiDefaultPlugin
     public InvitationManagerPlugin(String name, String className, XWikiContext context)
     {
         super(name, className, context);
+
+        // move this to InvitationManagerImpl in the near future
+        String mailNotificationCfg =
+            context.getWiki().Param("xwiki.invitationmanager.mailnotification", "1").trim();
+        boolean mailNotification = "1".equals(mailNotificationCfg);
+        ((InvitationManagerImpl) invitationManager).setMailNotification(mailNotification);
     }
 
     /**

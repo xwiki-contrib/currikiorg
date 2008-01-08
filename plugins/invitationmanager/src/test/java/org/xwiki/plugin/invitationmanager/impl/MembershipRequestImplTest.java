@@ -41,6 +41,7 @@ public class MembershipRequestImplTest extends MembershipRequestTest
         super.setUp();
 
         manager = new InvitationManagerImpl();
+        manager.setMailNotification(false);
         joinRequest = new MembershipRequestImpl(null, null, true, manager, context);
     }
 

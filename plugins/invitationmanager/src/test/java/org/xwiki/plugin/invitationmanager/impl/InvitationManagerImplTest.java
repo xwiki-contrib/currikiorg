@@ -33,6 +33,7 @@ public class InvitationManagerImplTest extends InvitationManagerTest
     {
         super.setUp();
         invitationManager = new InvitationManagerImpl();
+        ((InvitationManagerImpl) invitationManager).setMailNotification(false);
     }
 
     protected Invitation createInvitation(String invitee, String space) throws XWikiException
