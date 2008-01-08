@@ -2049,7 +2049,7 @@ $!desc
 ## Get logo
 #set($logofilename = $s.display("logo","view"))
 #if($logofilename != "")
-  #set($spacehome = $s.getSpaceName()+"WebHome")
+  #set($spacehome = $s.getSpaceName()+".WebHome")
   #set($srcdoc = $xwiki.getDocument($spacehome))
   #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
 #else
