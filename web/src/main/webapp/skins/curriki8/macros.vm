@@ -1012,6 +1012,31 @@ createCookie("Section${seccounter}Hidden", true, "");
 <table width="100%"><tr><td width="42%">
 #set($creatorDoc = $xwiki.getDocument($asset.creator))
 #set($width = 52)
+## TODO: Need to redo for group assets
+#if($asset.space.startsWith("Coll_Group_")) ## {
+## For group assets
+#set($sm = $xwiki.csm)
+#set($s = $sm.getSpace($asset.space.replace("Coll_", "")))
+#set($logofilename = $s.display("logo","view"))
+#if($logofilename != "")
+  #set($spacehome = $s.getSpaceName()+"WebHome/")
+  #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
+  #set($att = $doc.getAttachmentURL($logofilename))
+#else
+  #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
+  #set($att = $srcdoc.getAttachmentURL("default_logo.png"))
+#end
+<div id="asset-metadatas-block-groupimg">
+<img src="$att" />
+</div>
+<div id="asset-metadatas-block-groupname">
+<span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span> $s.getDisplayTitle()
+</div>
+<div id="asset-metadatas-block-username">
+<span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span> $!xwiki.getUserName($asset.creator)
+</div>
+#else ## } {
+## For non-group assets
 <table><tr><td>
 #if($creatorDoc.attachmentList.size()==0)
  <img src="$xwiki.getSkinFile("noavatar.png")" width="${width}"/>
@@ -1024,7 +1049,8 @@ createCookie("Section${seccounter}Hidden", true, "");
 </td><td valign="bottom">
 <span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span><br />
 $!xwiki.getUserName($asset.creator)
-</td></tr></table> ##tableau pr l'image
+</td></tr></table>
+#end ## }
 </td><td width="16%">
  *$msg.get("asset.lastupdated"):* <br />
 $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
