@@ -1016,7 +1016,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 #if($asset.space.startsWith("Coll_Group_")) ## {
 ## For group assets
 #set($sm = $xwiki.csm)
-#set($s = $sm.getSpace($asset.space.replace("Coll_", "")))
+#set($s = $sm.getSpace($asset.space.replaceFirst("Coll_", "")))
 #set($logofilename = $s.display("logo","view"))
 #if($logofilename != "")
   #set($spacehome = $s.getSpaceName()+"WebHome/")
