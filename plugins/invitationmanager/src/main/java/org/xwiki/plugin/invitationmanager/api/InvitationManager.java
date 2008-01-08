@@ -30,7 +30,7 @@ import com.xpn.xwiki.XWikiException;
  */
 public interface InvitationManager
 {
-    public static String DEFAULT_RESOURCE_SPACE = "Groups";
+    public static String DEFAULT_RESOURCE_SPACE = "InvitationManagerResources";
     String DEFAULT_INVITATIONS_SPACE_SUFFIX = "_Invitations";
 
     /**
