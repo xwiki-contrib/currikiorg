@@ -42,10 +42,10 @@ import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
 
 public class CreateCollectionWizard {
-    private String createdPage;
     private String category;
     private static ModalDialog metaPanel;
     private ThankYouDialog thankYouDialog;
+    private String space;
 
     private Document doc;
 
@@ -54,6 +54,7 @@ public class CreateCollectionWizard {
     }
 
     public void createCollection(String space, String pageName, String pageTitle){
+        this.space = space;
         CurrikiService.App.getInstance().createCollectionDocument(space, pageName, pageTitle, new CurrikiAsyncCallback() {
             public void onFailure(Throwable throwable) {
                 super.onFailure(throwable);
@@ -92,7 +93,11 @@ public class CreateCollectionWizard {
                 metaPanel.hide();
 
                 // We need to move the asset to the root collection
-                CurrikiService.App.getInstance().finalizeAssetCreation(doc.getFullName(), Constants.ROOT_COLLECTION_PAGE, -1,
+                String parent = Constants.ROOT_COLLECTION_PAGE;
+                if (space != null){
+                    parent = space+"."+parent;
+                }
+                CurrikiService.App.getInstance().finalizeAssetCreation(doc.getFullName(), parent, -1,
                         new CurrikiAsyncCallback(){
                             public void onFailure(Throwable caught) {
                                 super.onFailure(caught);
