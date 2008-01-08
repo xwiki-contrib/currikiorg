@@ -1064,8 +1064,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
     private String getDefaultResourceSpace(XWikiContext context)
     {
-        // we should use "xwiki.spacemanager.resourcespace"
-        return context.getWiki().Param("xwiki.invitationmanager.resourcespace",
+        return context.getWiki().Param("xwiki.spacemanager.resourcespace",
             SpaceManager.DEFAULT_RESOURCE_SPACE);
     }
 

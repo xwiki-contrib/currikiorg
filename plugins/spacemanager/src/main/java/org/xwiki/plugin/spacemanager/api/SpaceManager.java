@@ -22,7 +22,7 @@ public interface SpaceManager extends XWikiPluginInterface {
 
     public static final String SPACE_DEFAULT_TYPE = "space";
     public static final String SPACE_CLASS_NAME = "XWiki.SpaceClass";
-    String DEFAULT_RESOURCE_SPACE = "Spaces";
+    String DEFAULT_RESOURCE_SPACE = "SpaceManagerResources";
 
     /**
      * Translate a space name to a space Wiki name
