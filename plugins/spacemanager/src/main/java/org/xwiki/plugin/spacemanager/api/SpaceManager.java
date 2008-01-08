@@ -350,7 +350,7 @@ public interface SpaceManager extends XWikiPluginInterface {
     public Collection getUsersForRole(String spaceName, String role, XWikiContext context) throws SpaceManagerException;
 
     /**
-     * Checks id the a user is a member in a space
+     * Checks if a user is a member in a space
      * @param spaceName
      * @param user
      * @param context
@@ -358,6 +358,18 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @throws SpaceManagerException
      */
     public boolean isMember(String spaceName, String user, XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Checks if the user with the given name is an admin of the specified space
+     * 
+     * @param spaceName
+     * @param userName
+     * @param context
+     * @return
+     * @throws SpaceManagerException
+     */
+    boolean isAdmin(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException;
 
     /**
      *

@@ -46,13 +46,14 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 	
 	public final static String SPACEMANAGER_EXTENSION_CFG_PROP = "xwiki.spacemanager.extension";
 	public final static String SPACEMANAGER_DEFAULT_EXTENSION = "org.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl";
+	public final static String SPACEMANAGER_DEFAULT_MAIL_NOTIFICATION = "1";
 	
 	/**
 	 * The extension that defines specific functions for this space manager
 	 */
     protected SpaceManagerExtension spaceManagerExtension;
     
-    protected boolean mailNotification = true;
+    protected boolean mailNotification;
 
     /**
 	 * Space manager constructor
@@ -63,6 +64,10 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     public SpaceManagerImpl(String name, String className, XWikiContext context)
     {
         super(name, className, context);
+        String mailNotificationCfg =
+            context.getWiki().Param("xwiki.spacemanager.mailnotification",
+                SpaceManagerImpl.SPACEMANAGER_DEFAULT_MAIL_NOTIFICATION).trim();
+        mailNotification = "1".equals(mailNotificationCfg);
     }
 
     /**
@@ -642,6 +647,16 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             throw new SpaceManagerException(e);
         }
     }
+    
+    public boolean isAdmin(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException
+    {
+        try {
+            return isMemberOfGroup(userName, getAdminGroupName(spaceName), context);
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+    }
 
     public void addUserToRole(String spaceName, String username, String role, XWikiContext context) throws SpaceManagerException {
         try {
@@ -729,6 +744,19 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         throws SpaceManagerException
     {
         try {
+            // remove admin role
+            if (isAdmin(spaceName, userName, context)) {
+                removeAdmin(spaceName, userName, context);
+            }
+            // remove all the other roles
+            Iterator it = getRoles(spaceName, context).iterator();
+            while (it.hasNext()) {
+                String role = (String) it.next();
+                removeUserFromRole(spaceName, userName, role, context);
+            }
+            // delete space user profile
+            deleteSpaceUserProfile(spaceName, userName, context);
+            // remove member
             removeUserFromGroup(userName, getMemberGroupName(spaceName), context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
@@ -839,6 +867,18 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
     public SpaceUserProfile getSpaceUserProfile(String spaceName, String username, XWikiContext context) throws SpaceManagerException {
         return newUserSpaceProfile(username, spaceName, context);
+    }
+    
+    private void deleteSpaceUserProfile(String spaceName, String userName, XWikiContext context)
+        throws SpaceManagerException
+    {
+        try {
+            String docName = getSpaceUserProfilePageName(userName, spaceName);
+            XWikiDocument doc = context.getWiki().getDocument(docName, context);
+            context.getWiki().deleteDocument(doc, context);
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
     }
 
     public String getSpaceUserProfilePageName(String userName, String spaceName) {

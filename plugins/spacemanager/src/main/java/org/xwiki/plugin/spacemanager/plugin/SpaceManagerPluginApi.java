@@ -302,7 +302,7 @@ public class SpaceManagerPluginApi extends PluginApi
 
     /**
      * Join the space
-     *
+     * 
      * @param spaceName
      */
     public boolean joinSpace(String spaceName) throws SpaceManagerException {
@@ -326,6 +326,20 @@ public class SpaceManagerPluginApi extends PluginApi
     }
 
     /**
+     * Removes a wiki user from the list of space members
+     * 
+     * @param spaceName
+     * @param wikiName
+     * @throws SpaceManagerException
+     */
+    public void removeMember(String spaceName, String wikiName) throws SpaceManagerException
+    {
+        if (hasProgrammingRights()) {
+            getSpaceManager().removeMember(spaceName, wikiName, context);
+        }
+    }
+
+    /**
      * Add a wiki user as admin in the space
      *
      * @param spaceName
@@ -336,6 +350,19 @@ public class SpaceManagerPluginApi extends PluginApi
          getSpaceManager().addAdmin(spaceName, wikiname, context);
     }
 
+    /**
+     * Removes a wiki user from the list of space admins
+     * 
+     * @param spaceName
+     * @param wikiName
+     * @throws SpaceManagerException
+     */
+    public void removeAdmin(String spaceName, String wikiName) throws SpaceManagerException
+    {
+        if (hasProgrammingRights()) {
+            getSpaceManager().removeAdmin(spaceName, wikiName, context);
+        }
+    }
 
     /**
      * Search for documents in the space
@@ -365,7 +392,10 @@ public class SpaceManagerPluginApi extends PluginApi
     /**
      * @return the list of all members of the space that are admins
      */
-    // public List getAdmins(Space space) throws SpaceManagerException;
+    public Collection getAdmins(String spaceName) throws SpaceManagerException
+    {
+        return getSpaceManager().getAdmins(spaceName, context);
+    }
 
     /**
      * Add user to the specific role in the space
@@ -423,4 +453,8 @@ public class SpaceManagerPluginApi extends PluginApi
         return getSpaceManager().isMember(spaceName, username, context);
     }
 
+    public boolean isAdmin(String spaceName, String userName) throws SpaceManagerException
+    {
+        return getSpaceManager().isAdmin(spaceName, userName, context);
+    }
 }
