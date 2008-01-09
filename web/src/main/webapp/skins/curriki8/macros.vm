@@ -1017,6 +1017,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 ## For group assets
 #set($m_sm = $xwiki.csm)
 #set($s = $m_sm.getSpace($spacehome))
+#set($sUrl = $s.getHomeURL())
 #set($logofilename = $s.display("logo","view"))
 #if($logofilename != "")
   #set($spacehome = $s.getSpaceName()+".WebHome")
@@ -1027,10 +1028,11 @@ createCookie("Section${seccounter}Hidden", true, "");
   #set($m_logo = $srcdoc.getAttachmentURL("default_logo.png"))
 #end
 <div id="asset-metadatas-block-groupimg">
-<img src="$m_logo" />
+<a href="${sUrl}"><img src="$m_logo" /></a>
 </div>
 <div id="asset-metadatas-block-groupname">
-<span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span> $s.getDisplayTitle()
+<span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
+ <a href="${sUrl}">$s.getDisplayTitle()</a>
 </div>
 <div id="asset-metadatas-block-username">
 <span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span> $!xwiki.getUserName($asset.creator)
