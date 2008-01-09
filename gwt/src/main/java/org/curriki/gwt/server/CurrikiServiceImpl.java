@@ -170,7 +170,8 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 createRootCollection(space, context);
             }
 
-            if (!pageName.equals(Constants.DEFAULT_COLLECTION_PAGE)){
+            // CURRIKI-1379 - Group spaces don't get Favorites collection
+            if (!pageName.equals(Constants.DEFAULT_COLLECTION_PAGE) && !space.startsWith("Coll_Group_")){
                 if (!isDefaultCollectionExists(space)){
                     createDefaultCollection(space);
                 }
