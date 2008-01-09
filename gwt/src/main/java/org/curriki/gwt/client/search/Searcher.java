@@ -33,7 +33,11 @@ public class Searcher
     private SearcherHistory history;
     private ClientState state;
 
-    public void init()
+    public void init() {
+        init(null);
+    }
+
+    public void init(String passedToken)
     {
         history = new SearcherHistory();
         History.addHistoryListener(history);
@@ -42,6 +46,8 @@ public class Searcher
 
         String initToken = History.getToken();
         state.InitFromToken(initToken);
+        state.AddFromToken(passedToken);
+        initToken = state.getHistoryToken();
 
         // History needs to track search parameters and what page we are on for results
         

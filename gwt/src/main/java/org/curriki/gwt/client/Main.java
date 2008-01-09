@@ -97,8 +97,8 @@ public class Main implements EntryPoint
         String dosearch = WindowUtils.getLocation().getParameter("search");
 
         if (dosearch == null) {
-            // Check if started with search set to 1 using javascript like
-            // var GWTArguments = { search: "1" };
+            // Check if started with search set using javascript like
+            // var GWTArguments = { search: "" };
             try {
                 Dictionary arguments = Dictionary.getDictionary("GWTArguments");
                 if (arguments != null && arguments.get("search") != null){
@@ -115,6 +115,7 @@ public class Main implements EntryPoint
             // Bring up Site search app
             callSiteAddJSAPI(singleton); // Need to makes sure other GWT links still work
 
+            final String searchArgs = dosearch; // Need a final value for inner class below
             searcher = new Searcher();
             checkTranslator(new AsyncCallback() {
                 public void onFailure(Throwable throwable) {
@@ -122,7 +123,7 @@ public class Main implements EntryPoint
                 public void onSuccess(Object object) {
                     Command loadSearcher = new Command(){
                         public void execute(){
-                            searcher.init();
+                            searcher.init(searchArgs);
                         }
                     };
                     fetchUser(loadSearcher);

@@ -52,6 +52,14 @@ public class ClientState
     public void InitFromToken(String historyToken)
     {
         paramsMap.clear();
+        AddFromToken(historyToken);
+    }
+
+    /**
+     * Add state from token
+     */
+    public void AddFromToken(String historyToken)
+    {
         if (historyToken != null && historyToken.length() > 1) {
             String[] kvPairs = historyToken.split("&");
             for (int i = 0; i < kvPairs.length; i++) {
