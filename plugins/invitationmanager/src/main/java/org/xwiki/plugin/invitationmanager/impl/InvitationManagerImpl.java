@@ -868,9 +868,19 @@ public class InvitationManagerImpl implements InvitationManager
             // create the invitation object
             Invitation invitation = createInvitation(invitee, space, context);
 
+            // if we get here it means the invitee is not a member of the space
             if (!invitation.isNew()) {
-                addToAlreadyInvited(invitee, context);
-                return false;
+                String status = invitation.getStatus();
+                // maybe it's an old invitation
+                if (JoinRequestStatus.CREATED.equals(status)
+                    || JoinRequestStatus.SENT.equals(status)) {
+                    // is's a new one
+                    addToAlreadyInvited(invitee, context);
+                    return false;
+                } else {
+                    // is's an old one
+                    // in this case we overwrite the invitation
+                }
             }
 
             invitation.setInviter(context.getUser());
