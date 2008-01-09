@@ -2081,11 +2081,13 @@ $s.getDescription()
 #macro(displayMyCurrikiBlogArticle $bentrydoc $bentryobj $displayFully) ## {
 #set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.dateFormat")))
 #set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
-## #set($title = $!bentrydoc.display("title","view", $bentryobj))
-## #if($title == "") ## {
-## #set($title = "&nbsp;")
-## #end ## }
-## 1 $title
+#if($doc.web == "MyCurriki") ## {
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "") ## {
+#set($title = "&nbsp;")
+#end ## }
+1 $title
+## }
 #set($extract = $!bentrydoc.display("extract","view", $bentryobj))
 <div class="article_content" >
 #set($content = $bentrydoc.display("content", "view", $bentryobj))
