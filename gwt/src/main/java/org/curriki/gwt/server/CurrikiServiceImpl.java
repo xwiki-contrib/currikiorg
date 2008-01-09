@@ -636,6 +636,15 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
     }
 
     private void applyRightsPolicy(XWikiDocument assetDoc, XWikiContext context) throws XWikiException {
+        // If collection is user
+        String usergroupfield = "users";
+        String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
+
+        // If collection is group
+        if (assetDoc.getSpace().startsWith("Coll_Group_")) {
+            usergroupfield = "groups";
+            usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
+        }
 
         assetDoc.removeObjects("XWiki.XWikiRights");
 
@@ -648,7 +657,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         rightObj.setIntValue("allow", 1);
 
         rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-        rightObj.setStringValue("users", ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator());
+        rightObj.setStringValue(usergroupfield, usergroupvalue);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
@@ -663,7 +672,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         }
         else {
             rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-            rightObj.setStringValue("users", ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator());
+            rightObj.setStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
             rightObj.setIntValue("allow", 1);
         }
@@ -671,6 +680,16 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
 
     private void protectPage(XWikiDocument assetDoc, XWikiContext context) throws XWikiException {
+        // If collection is user
+        String usergroupfield = "users";
+        String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
+
+        // If collection is group
+        if (assetDoc.getSpace().startsWith("Coll_Group_")) {
+            usergroupfield = "groups";
+            usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
+        }
+
         assetDoc.removeObjects("XWiki.XWikiRights");
 
         BaseObject obj = assetDoc.newObject("XWiki.XWikiRights", context);
@@ -684,14 +703,24 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         obj.setIntValue("allow", 1);
 
         obj = assetDoc.newObject("XWiki.XWikiRights", context);
-        obj.setStringValue("users", ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator());
+        obj.setStringValue(usergroupfield, usergroupvalue);
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
     }
 
-    private void protectEditPage(XWikiDocument doc, XWikiContext context) throws XWikiException {
-            BaseObject obj = doc.newObject("XWiki.XWikiRights", context);
-            obj.setStringValue("users", ("".equals(doc.getCreator())) ? context.getUser() : doc.getCreator());
+    private void protectEditPage(XWikiDocument assetDoc, XWikiContext context) throws XWikiException {
+        // If collection is user
+        String usergroupfield = "users";
+        String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
+
+        // If collection is group
+        if (assetDoc.getSpace().startsWith("Coll_Group_")) {
+            usergroupfield = "groups";
+            usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
+        }
+
+            BaseObject obj = assetDoc.newObject("XWiki.XWikiRights", context);
+            obj.setStringValue(usergroupfield, usergroupvalue);
             obj.setStringValue("levels", "edit");   
             obj.setIntValue("allow", 1);
     }
@@ -699,7 +728,10 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
     private void protectSpace(String spaceName, XWikiContext context) throws XWikiException {
         String owner = context.getUser();
         boolean ownerIsUser = true;
-        if (spaceName.startsWith("Coll_")){
+        if (spaceName.startsWith("Coll_Group_")){
+            owner = spaceName.substring(5) + ".MemberGroup";
+            ownerIsUser = false;
+        } else if (spaceName.startsWith("Coll_")){
             String spaceOwner = "XWiki."+spaceName.replaceFirst("Coll_", "");
             if (context.getWiki().exists(spaceOwner, context)){
                 XWikiDocument ownerDoc = context.getWiki().getDocument(spaceOwner, context);
@@ -735,6 +767,14 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         }
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
+
+        if (spaceName.startsWith("Coll_Group_")){
+            doc.setStringValue("XWiki.XWikiPreferences", "parent", spaceName.substring(5));
+            obj = doc.newObject("XWiki.XWikiGlobalRights", context);
+            obj.setStringValue("groups", spaceName.substring(5) + ".AdminGroup");
+            obj.setStringValue("levels", "admin");
+            obj.setIntValue("allow", 1);
+        }
 
         context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.protectspace"), context);
     }
