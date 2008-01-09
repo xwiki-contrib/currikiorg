@@ -749,11 +749,11 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
                 removeAdmin(spaceName, userName, context);
             }
             // remove all the other roles
-            Iterator it = getRoles(spaceName, context).iterator();
-            while (it.hasNext()) {
-                String role = (String) it.next();
-                removeUserFromRole(spaceName, userName, role, context);
-            }
+            //Iterator it = getRoles(spaceName, context).iterator();
+            //while (it.hasNext()) {
+            //    String role = (String) it.next();
+            //    removeUserFromRole(spaceName, userName, role, context);
+            //}
             // delete space user profile
             deleteSpaceUserProfile(spaceName, userName, context);
             // remove member
