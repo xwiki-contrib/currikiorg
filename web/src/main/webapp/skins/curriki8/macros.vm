@@ -2042,7 +2042,7 @@ $!desc
 ##
 ##
 ## Group display
-#macro(mycurrikiGroupInfo $m_groupName) ## {
+#macro(mycurrikiGroupInfo $m_groupName $displayType) ## {
 #if(!$g_rowCount) ## {
 #set($g_rowCount = 0)
 #end ## }
@@ -2065,7 +2065,12 @@ $!desc
 #set($first_frame_done = "")
 #end ## }
 <div class="frame-inset-titlebar">
-#mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
+#if($displayType == "edit")
+  #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
+  #mycurrikititlebar($s.getDisplayTitle() $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
+#else
+  #mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
+#end
 </div>
 <div class="frame-inset-logo">
 <img src="$m_logo" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
@@ -2075,6 +2080,8 @@ $s.getDescription()
 </div>
 </div>
 #end ## }
+'
+
 ##
 ##
 ## Blog Entries
