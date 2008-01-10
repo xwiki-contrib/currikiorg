@@ -2057,8 +2057,19 @@ $!desc
   #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
 #else
   #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
+  #set($logofilename = "default_logo.png")
   #set($m_logo = $srcdoc.getAttachmentURL("default_logo.png"))
 #end
+#set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
+#set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
+#if($logowidth > 121)
+  #set($logowidth = 121)
+#end
+#if($logoheight > 83)
+  #set($logoheight = 83)
+#end
+
+
 #if("$!first_frame_done" == "") ## {
 <div class="frame">
 #else ## } {
@@ -2073,7 +2084,7 @@ $!desc
 #end
 </div>
 <div class="frame-inset-logo">
-<img src="$m_logo" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
+<img src="$m_logo" width="$logowidth" height="$logoheight" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
 </div>
 <div class="frame-inset-description">
 $s.getDescription()
