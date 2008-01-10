@@ -1025,10 +1025,21 @@ createCookie("Section${seccounter}Hidden", true, "");
   #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
 #else
   #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
-  #set($m_logo = $srcdoc.getAttachmentURL("default_logo.png"))
+  #set($logofilename = "default_logo.gif")
+  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
+#end
+#set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
+#set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
+#if($logowidth > 121)
+  #set($logowidth = 121)
+#end
+#if($logoheight > 83)
+  #set($logoheight = 83)
 #end
 <div id="asset-metadatas-block-groupimg">
-<a href="${sUrl}"><img src="$m_logo" /></a>
+<a href="${sUrl}">
+<img src="$m_logo" width="$logowidth" height="$logoheight" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
+</a>
 </div>
 <div id="asset-metadatas-block-groupname">
 <span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
