@@ -252,33 +252,36 @@ public interface InvitationManager
      *            should be a mailing list address
      * @param context A XWikiContext instance
      */
-    boolean inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException;
+    void inviteUser(String user, String space, boolean open, XWikiContext context)
+        throws InvitationManagerException;
 
     /**
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String, XWikiContext)
      */
-    boolean inviteUser(String user, String space, boolean open, String role, XWikiContext context) throws InvitationManagerException;
+    void inviteUser(String user, String space, boolean open, String role, XWikiContext context)
+        throws InvitationManagerException;
 
     /**
      * @param roles The list of roles the user will have in the space, provided he accepts the
      *            invitation
      * @see #inviteUser(String, String, XWikiContext)
      */
-    boolean inviteUser(String user, String space, boolean open, List roles, XWikiContext context) throws InvitationManagerException;
+    void inviteUser(String user, String space, boolean open, List roles, XWikiContext context)
+        throws InvitationManagerException;
 
     /**
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List, XWikiContext)
      */
-    boolean inviteUser(String user, String space, boolean open, List roles, String templateMail,
+    void inviteUser(String user, String space, boolean open, List roles, String templateMail,
         XWikiContext context) throws InvitationManagerException;
 
     /**
      * @param map A map of additional parameters for the invitation
      * @see #inviteUser(String, String, List, String, XWikiContext)
      */
-    boolean inviteUser(String user, String space, boolean open, List roles, String templateMail,
+    void inviteUser(String user, String space, boolean open, List roles, String templateMail,
         Map map, XWikiContext context) throws InvitationManagerException;
 
     /**

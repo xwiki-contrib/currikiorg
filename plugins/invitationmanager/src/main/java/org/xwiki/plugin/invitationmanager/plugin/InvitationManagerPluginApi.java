@@ -321,9 +321,17 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param open <code>true</code> if the invitation is open. In this case the <code>user</code>
      *            should be a mailing list address
      */
-    public boolean inviteUser(String user, String space, boolean open) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            return getInvitationManager().inviteUser(user, space, open, context);
+            try {
+                getInvitationManager().inviteUser(user, space, open, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
         return false;
     }
@@ -332,9 +340,17 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param role The role the user will have in the space, provided he accepts the invitation
      * @see #inviteUser(String, String)
      */
-    public boolean inviteUser(String user, String space, boolean open, String role) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, String role)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            return getInvitationManager().inviteUser(user, space, open, role, context);
+            try {
+                getInvitationManager().inviteUser(user, space, open, role, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
         return false;
     }
@@ -344,9 +360,17 @@ public class InvitationManagerPluginApi extends PluginApi
      *            invitation
      * @see #inviteUser(String, String)
      */
-    public boolean inviteUser(String user, String space, boolean open, List roles) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, List roles)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            return getInvitationManager().inviteUser(user, space, open, roles, context);
+            try {
+                getInvitationManager().inviteUser(user, space, open, roles, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
         return false;
     }
@@ -355,9 +379,19 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param templateMail Custom e-mail template
      * @see #inviteUser(String, String, List)
      */
-    public boolean inviteUser(String user, String space, boolean open, List roles, String templateMail) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, List roles,
+        String templateMail)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            return getInvitationManager().inviteUser(user, space, open, roles, templateMail, context);
+            try {
+                getInvitationManager()
+                    .inviteUser(user, space, open, roles, templateMail, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
         return false;
     }
@@ -366,11 +400,19 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param map A map of additional parameters for the invitation
      * @see #inviteUser(String, String, List, String)
      */
-    public boolean inviteUser(String user, String space, boolean open, List roles, String templateMail,
-        Map map) throws InvitationManagerException {
+    public boolean inviteUser(String user, String space, boolean open, List roles,
+        String templateMail, Map map)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            return getInvitationManager().inviteUser(user, space, open, roles, templateMail, map,
-                context);
+            try {
+                getInvitationManager().inviteUser(user, space, open, roles, templateMail, map,
+                    context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
         return false;
     }

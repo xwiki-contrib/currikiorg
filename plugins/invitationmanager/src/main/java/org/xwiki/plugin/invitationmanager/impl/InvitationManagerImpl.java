@@ -846,25 +846,38 @@ public class InvitationManagerImpl implements InvitationManager
      * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String,
      *      boolean, List, String, Map, XWikiContext)
      */
-    public boolean inviteUser(String wikiNameOrMailAddress, String space, boolean open,
-        List roles, String templateMail, Map map, XWikiContext context)
-        throws InvitationManagerException
+    public void inviteUser(String wikiNameOrMailAddress, String space, boolean open, List roles,
+        String templateMail, Map map, XWikiContext context) throws InvitationManagerException
     {
-        String invitee;
-        String registeredUser = null;
         try {
+            if (wikiNameOrMailAddress == null || wikiNameOrMailAddress.trim().length() == 0) {
+                throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                    InvitationManagerException.ERROR_INVITATION_INVITEE_MISSING,
+                    "Invitee missing");
+            }
+
             wikiNameOrMailAddress = wikiNameOrMailAddress.trim();
-            registeredUser = getRegisteredUser(wikiNameOrMailAddress, context);
+            String registeredUser = getRegisteredUser(wikiNameOrMailAddress, context);
+            String invitee;
             if (registeredUser == null) {
+                // it should be an e-mail address
+                if (!isEmailAddress(wikiNameOrMailAddress)) {
+                    throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                        InvitationManagerException.ERROR_INVITATION_INVITEE_EMAIL_INVALID,
+                        "Invalid invitee e-mail address");
+                }
                 // hide the e-mail address (only for invitation document name)
                 invitee = encodeEmailAddress(wikiNameOrMailAddress);
             } else {
                 invitee = registeredUser;
                 if (isMember(space, invitee, context)) {
                     addToAlreadyMember(invitee, context);
-                    return false;
+                    throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                        InvitationManagerException.ERROR_INVITATION_ALREADY_MEMBER,
+                        "Already member");
                 }
             }
+
             // create the invitation object
             Invitation invitation = createInvitation(invitee, space, context);
 
@@ -876,7 +889,9 @@ public class InvitationManagerImpl implements InvitationManager
                     || JoinRequestStatus.SENT.equals(status)) {
                     // is's a new one
                     addToAlreadyInvited(invitee, context);
-                    return false;
+                    throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                        InvitationManagerException.ERROR_INVITATION_ALREADY_EXISTS,
+                        "Already invited");
                 } else {
                     // is's an old one
                     // in this case we overwrite the invitation
@@ -907,7 +922,8 @@ public class InvitationManagerImpl implements InvitationManager
 
             // save invitation after
             invitation.saveWithProgrammingRights();
-            return true;
+        } catch (InvitationManagerException e) {
+            throw e;
         } catch (XWikiException e) {
             throw new InvitationManagerException(e);
         }
@@ -915,51 +931,60 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
-     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, List, String, XWikiContext)
+     * 
+     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String,
+     *      boolean, List, String, XWikiContext)
      */
-    public boolean inviteUser(String user, String space, boolean open, List roles,
-                           String templateMail, XWikiContext context) throws InvitationManagerException {
-        return inviteUser(user, space, open, roles, templateMail, Collections.EMPTY_MAP, context);
+    public void inviteUser(String user, String space, boolean open, List roles,
+        String templateMail, XWikiContext context) throws InvitationManagerException
+    {
+        inviteUser(user, space, open, roles, templateMail, Collections.EMPTY_MAP, context);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, List, XWikiContext)
+     * 
+     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String,
+     *      boolean, List, XWikiContext)
      */
-    public boolean inviteUser(String user, String space, boolean open, List roles,
-                           XWikiContext context) throws InvitationManagerException {
+    public void inviteUser(String user, String space, boolean open, List roles,
+        XWikiContext context) throws InvitationManagerException
+    {
         String templateMail =
-                getDefaultTemplateMailDocumentName(space, "Invitation", JoinRequestAction.SEND,
-                        context);
-        return inviteUser(user, space, open, roles, templateMail, context);
+            getDefaultTemplateMailDocumentName(space, "Invitation", JoinRequestAction.SEND,
+                context);
+        inviteUser(user, space, open, roles, templateMail, context);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, String, XWikiContext)
+     * 
+     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String,
+     *      boolean, String, XWikiContext)
      */
-    public boolean inviteUser(String user, String space, boolean open, String role,
-                           XWikiContext context) throws InvitationManagerException {
+    public void inviteUser(String user, String space, boolean open, String role,
+        XWikiContext context) throws InvitationManagerException
+    {
         List roles = new ArrayList();
         roles.add(role);
-        return inviteUser(user, space, open, roles, context);
+        inviteUser(user, space, open, roles, context);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String, boolean, XWikiContext)
+     * 
+     * @see org.xwiki.plugin.invitationmanager.api.InvitationManager#inviteUser(String, String,
+     *      boolean, XWikiContext)
      */
-    public boolean inviteUser(String user, String space, boolean open, XWikiContext context) throws InvitationManagerException {
-       return  inviteUser(user, space, open, Collections.EMPTY_LIST, context);
+    public void inviteUser(String user, String space, boolean open, XWikiContext context)
+        throws InvitationManagerException
+    {
+        inviteUser(user, space, open, Collections.EMPTY_LIST, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#rejectInvitation(String, String, String, XWikiContext)
      */
     public void rejectInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
@@ -1189,7 +1214,7 @@ public class InvitationManagerImpl implements InvitationManager
      *         the <code>space</code>
      */
     private Invitation createInvitation(String invitee, String space, XWikiContext context)
-            throws XWikiException
+        throws XWikiException
     {
         return new InvitationImpl(invitee, space, true, this, context);
     }
@@ -1266,13 +1291,16 @@ public class InvitationManagerImpl implements InvitationManager
     }
 
     /**
-     * Wrapper method for adding a user to a space and to the given roles using the space manager
+     * Wrapper method for testing if a user is a member of a space
      */
     private boolean isMember(String space, String user, XWikiContext context)
-            throws XWikiException
     {
-        SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(space, context);
-        return spaceManager.isMember(space, user, context);
+        try {
+            SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(space, context);
+            return spaceManager.isMember(space, user, context);
+        } catch (XWikiException e) {
+            return false;
+        }
     }
 
     /**
@@ -1390,37 +1418,25 @@ public class InvitationManagerImpl implements InvitationManager
     /**
      * @return the wiki name of the registered user with the given
      *         <code>wikiNameOrMailAddress</code>
-     * @throws XWikiException if there is no registered user with the given wiki name or email
-     *             address
      */
     private String getRegisteredUser(String wikiNameOrMailAddress, XWikiContext context)
-            throws InvitationManagerException
     {
+        if (!isEmailAddress(wikiNameOrMailAddress)) {
+            return findUser(wikiNameOrMailAddress, context);
+        }
+        String email = wikiNameOrMailAddress;
+        String sql =
+            "select distinct doc.name from XWikiDocument as doc, BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className = 'XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"
+                + email + "'";
+        List userList = Collections.EMPTY_LIST;
         try {
-            if (isEmailAddress(wikiNameOrMailAddress)) {
-                String email = wikiNameOrMailAddress;
-                String sql =
-                        "select distinct doc.name from XWikiDocument as doc, BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className = 'XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"
-                                + email + "'";
-                List userList = null;
-                userList = context.getWiki().getStore().search(sql, 1, 0, context);
-                if (userList.size() > 0) {
-                    return (String) userList.get(0);
-                } else {
-                    return null;
-                }
-            } else {
-                String user = findUser(wikiNameOrMailAddress, context);
-                if (user == null) {
-                    throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_CURRIKI_ID_INVALID,
-                            "Curriki ID is invalid");
-                } else {
-                    return user;
-                }
-            }
-        } catch (Exception e) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_CURRIKI_ID_INVALID,
-                    "Curriki ID is invalid", e);
+            userList = context.getWiki().getStore().search(sql, 1, 0, context);
+        } catch (XWikiException e) {
+        }
+        if (userList.size() > 0) {
+            return (String) userList.get(0);
+        } else {
+            return null;
         }
     }
     
@@ -1465,23 +1481,13 @@ public class InvitationManagerImpl implements InvitationManager
         }
     }
 
-    // copy & paste from XWikiAuthServiceImpl#findUser(String, XWikiContext)
     private String findUser(String username, XWikiContext context)
-        throws InvitationManagerException
     {
-        try {
-            // First let's look in the cache
-            if (context.getWiki().exists("XWiki." + username, context))
-                return "XWiki." + username;
-            else
-                return null;
-        } catch (Exception e) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
-                InvitationManagerException.ERROR_INVITATION_ERROR_FINDING_USER,
-                "Error finding user " + username,
-                e);
-        }
-
+        // First let's look in the cache
+        if (context.getWiki().exists("XWiki." + username, context))
+            return "XWiki." + username;
+        else
+            return null;
     }
     
     /**
