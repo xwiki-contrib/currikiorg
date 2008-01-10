@@ -2057,8 +2057,8 @@ $!desc
   #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
 #else
   #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
-  #set($logofilename = "default_logo.png")
-  #set($m_logo = $srcdoc.getAttachmentURL("default_logo.png"))
+  #set($logofilename = "default_logo.gif")
+  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
 #end
 #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
 #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
