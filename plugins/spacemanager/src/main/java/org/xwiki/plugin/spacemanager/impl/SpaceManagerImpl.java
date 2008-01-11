@@ -33,9 +33,11 @@ import com.xpn.xwiki.plugin.mailsender.Mail;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.xwiki.plugin.spacemanager.api.*;
 import org.xwiki.plugin.spacemanager.plugin.SpaceManagerPluginApi;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.util.*;
 
@@ -247,6 +249,93 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 	}
     
     /**
+     * Gives a group certain rights over a space
+     * @param spaceName Name of the space
+     * @param groupName Name of the group that will have the value
+     * @param level Access level
+     * @param allow True if the right is allow, deny if not
+     */
+    protected boolean giveRightToGroup( String spaceName, String groupName, String level, boolean allow, XWikiContext context) throws XWikiException {
+    	final String rightsClass = "XWiki.XWikiRights";
+    	final String prefDocName = spaceName+".WebPreferences";
+    	final String groupsField = "groups";
+    	final String levelsField = "levels";
+    	final String allowField = "allow";
+    	
+    	XWikiDocument prefDoc;
+        prefDoc = context.getWiki().getDocument(prefDocName,context);
+
+        //checks to see if the right is not already given
+    	boolean exists = false;
+    	boolean isUpdated = false;
+    	int indx = -1;
+    	boolean foundlevel = false;
+    	int allowInt;
+    	if(allow)	allowInt = 1;
+    	else	allowInt = 0;
+    	List objs = prefDoc.getObjects(rightsClass);
+    	for(int i=0; i<objs.size(); i++){
+    		BaseObject bobj = (BaseObject) objs.get(i);
+    		if(bobj==null)
+    			continue;
+    		String groups = bobj.getStringValue(groupsField);
+            String levels = bobj.getStringValue(levelsField);
+            int allowDeny = bobj.getIntValue(allowField);
+            boolean allowdeny = (bobj.getIntValue(allowField) == 1);
+            String[] levelsarray = levels.split( " ,|" );
+            String[] groupsarray = groups.split( " ,|" );
+            if( ArrayUtils.contains(groupsarray,groupName) ){
+            	exists = true;
+            	if(!foundlevel)
+            		indx = i;
+            	if( ArrayUtils.contains(levelsarray,level) ){
+            		foundlevel = true;
+            		if(allowInt == allowDeny){
+            			isUpdated = true;
+            			break;
+            		}
+            	}
+            }
+    	}
+    	
+    	//sets the rights. the aproach is to break rules/levels in as many XWikiRigts elements so
+    	//we don't have to handle lots of situation when we change rights
+    	if( !exists ){
+    		BaseObject bobj = new BaseObject();
+    		bobj.setStringValue(groupsField, groupName); 
+    		bobj.setStringValue(levelsField, level);
+        	bobj.setIntValue(allowField, allowInt);
+    		prefDoc.addObject(rightsClass,bobj);
+    	    context.getWiki().saveDocument(prefDoc, context);
+    		return true;
+    	}else{
+    		if(isUpdated){
+    			return true;
+    		}else{
+    			BaseObject bobj = (BaseObject) objs.get(indx);
+    			String groups = bobj.getStringValue(groupsField);
+                String levels = bobj.getStringValue(levelsField);
+                String[] levelsarray = levels.split( " ,|" );
+                String[] groupsarray = groups.split( " ,|" );
+    			
+                if( levelsarray.length == 1 && groupsarray.length == 1 && levelsarray[0] == level ){
+                	//if there is only this group and this level in the rule update this rule
+                } else {
+                	//if there are more groups/levels, extract this one(s)
+                	bobj = new BaseObject();
+                	bobj.setStringValue(levelsField, level);
+                	bobj.setIntValue(allowField, allowInt);
+                	bobj.setStringValue(groupsField, groupName);
+                }
+                
+        		prefDoc.addObject(rightsClass,bobj);
+        		context.getWiki().saveDocument(prefDoc, context);
+        		return true;
+    		}
+    	}
+    }
+    
+    /**
      * Creates a new space from scratch
      * @param spaceTitle The name(display title) of the new space
      * @param context The XWiki Context
@@ -261,12 +350,17 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         try {
             newspace.saveWithProgrammingRights();
+            // we need to add the creator as a member and as an admin
+            addAdmin(newspace.getSpaceName(), context.getUser(), context);
+            addMember(newspace.getSpaceName(), context.getUser(), context);
+
+            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "view", true, context );
+            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
+            giveRightToGroup( newspace.getSpaceName(), getMemberGroupName( newspace.getSpaceName() ), "view", true, context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
-        // we need to add the creator as a member and as an admin
-        addAdmin(newspace.getSpaceName(), context.getUser(), context);
-        addMember(newspace.getSpaceName(), context.getUser(), context);
+
         sendMail(SpaceAction.CREATE, newspace, context);
         return newspace;
     }
@@ -301,13 +395,18 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setCreator(context.getUser());
         try {
             newspace.saveWithProgrammingRights();
+            // we need to add the creator as a member and as an admin
+            addAdmin(newspace.getSpaceName(), context.getUser(), context);
+            addMember(newspace.getSpaceName(), context.getUser(), context);
+
+            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "view", true, context );
+            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
+            giveRightToGroup( newspace.getSpaceName(), getMemberGroupName( newspace.getSpaceName() ), "view", true, context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
-        // we need to add the creator as a member and as an admin
-        addAdmin(newspace.getSpaceName(), context.getUser(), context);
-        addMember(newspace.getSpaceName(), context.getUser(), context);
         sendMail(SpaceAction.CREATE, newspace, context);
+
         return newspace;
     }
 
@@ -358,12 +457,16 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 		newspace.updateSpaceFromRequest();
         try {
             newspace.saveWithProgrammingRights();
+            // we need to add the creator as a member and as an admin
+            addAdmin(newspace.getSpaceName(), context.getUser(), context);
+            addMember(newspace.getSpaceName(), context.getUser(), context);
+            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "view", true, context );
+            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
+            giveRightToGroup( newspace.getSpaceName(), getMemberGroupName( newspace.getSpaceName() ), "view", true, context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
-        // we need to add the creator as a member and as an admin
-        addAdmin(newspace.getSpaceName(), context.getUser(), context);
-        addMember(newspace.getSpaceName(), context.getUser(), context);
+
         sendMail(SpaceAction.CREATE, newspace, context);
         return newspace;
 	}
