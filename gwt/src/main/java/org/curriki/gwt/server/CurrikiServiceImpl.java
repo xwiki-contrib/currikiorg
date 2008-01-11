@@ -955,6 +955,12 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
            assetDoc.setAttachmentList(new ArrayList());
         }
 
+        // Fix for CURRIKI-1265 - copied templates need to be a curriki_document, not a collection
+        BaseObject newObjComposite = assetDoc.getObject(Constants.COMPOSITEASSET_CLASS);
+        if (newObjComposite!=null){
+            newObjComposite.setStringValue(Constants.COMPOSITEASSET_TYPE_PROPERTY, Constants.COMPOSITE_CURRIKI_DOCUMENT);
+        }
+
         BaseObject newObjAsset = assetDoc.getObject(Constants.ASSET_CLASS);
         if (newObjAsset==null)
                  newObjAsset = assetDoc.newObject(Constants.ASSET_CLASS, context);
