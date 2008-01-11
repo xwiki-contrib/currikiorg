@@ -96,7 +96,7 @@ $linkToBreak.substring(0, $index)
  #set($m_fileExt = "Unknown")
 #end
 #set($macro_iconUrl = "")
-#set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.png"))
+#set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
 #end
 ##
 ##
@@ -1859,7 +1859,7 @@ $msg.get("mycurriki.macro.access.${access}")
 #end ## }
 #if($rowType == "URL") ## {
 #set($text = $msg.get("mycurriki.macro.filetype.URL"))
-{pre}<img src="$xwiki.getSkinFile("mimetypes/HTM.png")" alt="[${text}]" title="[${text}]"/>{/pre}
+{pre}<img src="$xwiki.getSkinFile("mimetypes/HTM.gif")" alt="[${text}]" title="[${text}]"/>{/pre}
 #end ## }
 #if($rowType == "mime") ## {
 #if(!$m_fileExt || $m_fileExt == "Unknown") ## {
