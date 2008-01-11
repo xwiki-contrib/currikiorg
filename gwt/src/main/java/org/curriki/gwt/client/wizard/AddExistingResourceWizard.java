@@ -88,7 +88,7 @@ public class AddExistingResourceWizard implements CompletionCallback, ResourceAd
     public class addedAssetToCollection extends CurrikiAsyncCallback {
         public void onFailure(Throwable throwable) {
             super.onFailure(throwable);
-            Window.alert(Main.getSingleton().getTranslator().getTranslation("addexistingasset.couldnotaddtocollection", new String[] {resource, throwable.getMessage()}));
+            //Window.alert(Main.getSingleton().getTranslator().getTranslation("addexistingasset.couldnotaddtocollection", new String[] {resource, throwable.getMessage()}));
             if (collections != null && collections.isAttached()){
                 collections.hide();
             }
