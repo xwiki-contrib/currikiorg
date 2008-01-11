@@ -1,8 +1,9 @@
 #set($sm = $xwiki.csm)
 #set($spaceName = $doc.getSpace())
-#if($spaceName != "Groups")
-  #set($s = $sm.getSpace($spaceName))
-#end
+#set($s = $sm.getSpace($spaceName))
+#if( $s ) #if( $s.isNew() || $s.isDeleted() )
+  #set( $s = "" )
+#end #end
 
 
 #macro(parentsBreadcrumb $bcDoc $level)
@@ -14,11 +15,8 @@
   $xwiki.getUserName($usr,true) &gt;
 #end
 ###group home
-#if($s)
-  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
-#end
 
-##end group specifics
+#if($!s=="") ## NOT groups specific
 
 #set($parent = $bcDoc.parent) 
 #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
@@ -33,6 +31,13 @@
    #parentsBreadcrumb($xwiki.getDocument(${bcItem.name}) $level)
   #end
  #end
+
+#else ##non group specific
+
+<a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
+
+#end
+
 #end
 ##
 ##
@@ -73,14 +78,24 @@
    #findCurrikiTitle($bcDoc)
 
    ##groups specific rules
-   #if($s)
-     #if($bcDoc.name=="WebHome")
-       #set($currikiTitle = "Home")
-     #end 
+   #if($!s=="") 
+     ##don't fix anything
    #else
-     #if($bcDoc.fullName == "Groups.CreateNewGroup")
-       #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
-     #end
+     #if($bcDoc.name==$msg.groups_home_page)
+       #set($currikiTitle = $msg.groups_home_tabname)
+       #if($request.action)
+         #if($request.action=="editmasthead")
+           #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
+	 #end
+         #if($request.action=="editinfo")
+           #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
+         #end
+       #end
+     #end 
+   ###else
+   ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
+   ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
+   ##  #end
    #end
    ##end of groups specific rules
 
