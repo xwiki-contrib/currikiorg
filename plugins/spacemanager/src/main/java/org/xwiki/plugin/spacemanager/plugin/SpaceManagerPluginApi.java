@@ -200,13 +200,14 @@ public class SpaceManagerPluginApi extends PluginApi
     /**
      * Search for spaces using an HQL query returning Space objects
      *
-     * @param hql
+     * @param fromsql
+     * @param wheresql
      * @param start
      * @param nb
      * @return list of space objects
      */
-    public List searchSpaces(String hql, int nb, int start) throws SpaceManagerException {
-        List spacesList = getSpaceManager().searchSpaces(hql, "", nb, start, context);
+    public List searchSpaces(String fromsql, String wheresql, int nb, int start) throws SpaceManagerException {
+        List spacesList = getSpaceManager().searchSpaces(fromsql, wheresql, nb, start, context);
         return spacesList;
 
     }
@@ -214,13 +215,14 @@ public class SpaceManagerPluginApi extends PluginApi
     /**
      * Search for spaces using an HQL query returning Space Names
      *
-     * @param hql
+     * @param fromsql
+     * @param wheresql
      * @param start
      * @param nb
      * @return
      */
-    public List searchSpaceNames(String hql, int nb, int start) throws SpaceManagerException {
-        return getSpaceManager().searchSpaceNames(hql, "", nb, start, context);
+    public List searchSpaceNames(String fromsql, String wheresql, int nb, int start) throws SpaceManagerException {
+        return getSpaceManager().searchSpaceNames(fromsql, wheresql, nb, start, context);
     }
     /**
      * Get the list of spaces for a user in a specific role

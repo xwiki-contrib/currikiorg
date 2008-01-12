@@ -256,7 +256,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
      * @param allow True if the right is allow, deny if not
      */
     protected boolean giveRightToGroup( String spaceName, String groupName, String level, boolean allow, boolean global, XWikiContext context) throws XWikiException {
-        final String rightsClass = global ? "XWiki.XWikiRights" : "XWiki.XWikiRights";
+        final String rightsClass = global ? "XWiki.XWikiGlobalRights" : "XWiki.XWikiRights";
         final String prefDocName = spaceName+".WebPreferences";
         final String groupsField = "groups";
         final String levelsField = "levels";
@@ -304,6 +304,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         //we don't have to handle lots of situation when we change rights
         if( !exists ){
             BaseObject bobj = new BaseObject();
+            bobj.setClassName(rightsClass);
             bobj.setStringValue(groupsField, groupName);
             bobj.setStringValue(levelsField, level);
             bobj.setIntValue(allowField, allowInt);
@@ -325,6 +326,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
                 } else {
                     //if there are more groups/levels, extract this one(s)
                     bobj = new BaseObject();
+                    bobj.setClassName(rightsClass);
                     bobj.setStringValue(levelsField, level);
                     bobj.setIntValue(allowField, allowInt);
                     bobj.setStringValue(groupsField, groupName);
