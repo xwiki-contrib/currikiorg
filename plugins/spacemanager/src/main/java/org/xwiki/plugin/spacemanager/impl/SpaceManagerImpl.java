@@ -255,8 +255,8 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
      * @param level Access level
      * @param allow True if the right is allow, deny if not
      */
-    protected boolean giveRightToGroup( String spaceName, String groupName, String level, boolean allow, XWikiContext context) throws XWikiException {
-    	final String rightsClass = "XWiki.XWikiRights";
+    protected boolean giveRightToGroup( String spaceName, String groupName, String level, boolean allow, boolean global, XWikiContext context) throws XWikiException {
+    	final String rightsClass = global ? "XWiki.XWikiRights" : "XWiki.XWikiRights";
     	final String prefDocName = spaceName+".WebPreferences";
     	final String groupsField = "groups";
     	final String levelsField = "levels";
@@ -334,7 +334,14 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     		}
     	}
     }
-    
+
+    protected void setGroupRights(Space newspace, XWikiContext context) throws XWikiException {
+        // Set admin edit rights on group prefs
+        giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, false, context );
+        // Set admin admin rights on group prefs
+        giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "admin", true, true, context );
+    }
+
     /**
      * Creates a new space from scratch
      * @param spaceTitle The name(display title) of the new space
@@ -353,8 +360,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-
-            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
+            setGroupRights(newspace, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -396,8 +402,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-
-            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
+            setGroupRights(newspace, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -456,7 +461,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
+            setGroupRights(newspace, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
