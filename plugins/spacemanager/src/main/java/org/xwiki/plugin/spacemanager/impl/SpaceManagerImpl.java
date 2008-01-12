@@ -354,9 +354,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
 
-            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "view", true, context );
             giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
-            giveRightToGroup( newspace.getSpaceName(), getMemberGroupName( newspace.getSpaceName() ), "view", true, context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -399,9 +397,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
 
-            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "view", true, context );
             giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
-            giveRightToGroup( newspace.getSpaceName(), getMemberGroupName( newspace.getSpaceName() ), "view", true, context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -460,9 +456,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-            giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "view", true, context );
             giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, context );
-            giveRightToGroup( newspace.getSpaceName(), getMemberGroupName( newspace.getSpaceName() ), "view", true, context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
