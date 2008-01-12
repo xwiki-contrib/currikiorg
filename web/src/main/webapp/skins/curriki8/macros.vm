@@ -2090,6 +2090,8 @@ $!desc
 #if($displayType == "edit")
   #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
   #mycurrikititlebar($s.getDisplayTitle() $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
+#elseif($displayType == "view")
+  #mycurrikititlebar($s.getDisplayTitle() "" "" "blue")
 #else
   #mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
 #end
