@@ -305,6 +305,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         if( !exists ){
             BaseObject bobj = new BaseObject();
             bobj.setClassName(rightsClass);
+            bobj.setName(prefDoc.getFullName());
             bobj.setStringValue(groupsField, groupName);
             bobj.setStringValue(levelsField, level);
             bobj.setIntValue(allowField, allowInt);
@@ -326,6 +327,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
                 } else {
                     //if there are more groups/levels, extract this one(s)
                     bobj = new BaseObject();
+                    bobj.setName(prefDoc.getFullName());
                     bobj.setClassName(rightsClass);
                     bobj.setStringValue(levelsField, level);
                     bobj.setIntValue(allowField, allowInt);
