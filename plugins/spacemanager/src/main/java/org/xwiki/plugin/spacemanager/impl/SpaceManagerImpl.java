@@ -983,7 +983,8 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         try {
             String docName = getSpaceUserProfilePageName(userName, spaceName);
             XWikiDocument doc = context.getWiki().getDocument(docName, context);
-            context.getWiki().deleteDocument(doc, context);
+            if (!doc.isNew())
+              context.getWiki().deleteDocument(doc, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
