@@ -410,4 +410,40 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @return
      */
     public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Set the rights in the space
+     * @param space
+     * @param context
+     * @throws SpaceManagerException
+     */
+    public void setSpaceRights(Space space, XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Set the rights in the space
+     * @param space
+     * @param oldPolicy previous policy
+     * @param newPolicy new policy
+     * @param context
+     * @throws SpaceManagerException
+     */
+    public void updateSpaceRights(Space space, String oldPolicy, String newPolicy, XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Set the rights in the sub-space
+     * @param space
+     * @param subSpace
+     * @param context
+     * @throws SpaceManagerException
+     */
+    public void setSubSpaceRights(Space space, String subSpace, XWikiContext context) throws SpaceManagerException;
+
+    /**
+     * Get the list of sub-spaces to protect
+     * @param context
+     * @return
+     * @throws SpaceManagerException
+     */
+    public String[] getProtectedSubSpaces(XWikiContext context) throws SpaceManagerException;
+      
 }

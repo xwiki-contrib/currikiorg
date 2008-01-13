@@ -33,7 +33,6 @@ import com.xpn.xwiki.plugin.mailsender.Mail;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.xwiki.plugin.spacemanager.api.*;
 import org.xwiki.plugin.spacemanager.plugin.SpaceManagerPluginApi;
@@ -47,6 +46,8 @@ import java.util.*;
 public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager {
 
     public final static String SPACEMANAGER_EXTENSION_CFG_PROP = "xwiki.spacemanager.extension";
+    public final static String SPACEMANAGER_PROTECTED_SUBSPACES_PROP = "xwiki.spacemanager.protectedsubspaces";
+    public final static String SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES = "";
     public final static String SPACEMANAGER_DEFAULT_EXTENSION = "org.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl";
     public final static String SPACEMANAGER_DEFAULT_MAIL_NOTIFICATION = "1";
 
@@ -248,6 +249,21 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         return spaceName + ".WebPreferences";
     }
 
+
+    /**
+     * Get the list of sub spaces to protect
+     * @param context
+     * @return
+     */
+    public String[] getProtectedSubSpaces(XWikiContext context) {
+        String protectedSubSpaces = context.getWiki().Param(SPACEMANAGER_PROTECTED_SUBSPACES_PROP, SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES);
+        if ((protectedSubSpaces!=null)&&(!protectedSubSpaces.equals(""))) {
+            return protectedSubSpaces.split(",");
+        } else {
+            return new String[0];
+        }
+    }
+    
     /**
      * Gives a group certain rights over a space
      * @param spaceName Name of the space
@@ -255,7 +271,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
      * @param level Access level
      * @param allow True if the right is allow, deny if not
      */
-    protected boolean giveRightToGroup( String spaceName, String groupName, String level, boolean allow, boolean global, XWikiContext context) throws XWikiException {
+    protected boolean addRightToGroup( String spaceName, String groupName, String level, boolean allow, boolean global, XWikiContext context) throws XWikiException {
         final String rightsClass = global ? "XWiki.XWikiGlobalRights" : "XWiki.XWikiRights";
         final String prefDocName = spaceName+".WebPreferences";
         final String groupsField = "groups";
@@ -341,11 +357,106 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         }
     }
 
-    protected void setGroupRights(Space newspace, XWikiContext context) throws XWikiException {
+    /**
+     * Gives a group certain rights over a space
+     * @param spaceName Name of the space
+     * @param groupName Name of the group that will have the value
+     * @param level Access level
+     * @param allow True if the right is allow, deny if not
+     */
+    protected boolean removeRightFromGroup( String spaceName, String groupName, String level, boolean allow, boolean global, XWikiContext context) throws XWikiException {
+        final String rightsClass = global ? "XWiki.XWikiGlobalRights" : "XWiki.XWikiRights";
+        final String prefDocName = spaceName+".WebPreferences";
+        final String groupsField = "groups";
+        final String levelsField = "levels";
+        final String allowField = "allow";
+
+        XWikiDocument prefDoc;
+        prefDoc = context.getWiki().getDocument(prefDocName,context);
+
+        boolean foundlevel = false;
+        int allowInt;
+        if (allow)
+            allowInt = 1;
+        else
+            allowInt = 0;
+        List objs = prefDoc.getObjects(rightsClass);
+        if (objs!=null) {
+            for(int i=0; i<objs.size(); i++){
+                BaseObject bobj = (BaseObject) objs.get(i);
+                if(bobj==null)
+                    continue;
+                String groups = bobj.getStringValue(groupsField);
+                String levels = bobj.getStringValue(levelsField);
+                int allowDeny = bobj.getIntValue(allowField);
+                boolean allowdeny = (bobj.getIntValue(allowField) == 1);
+                String[] levelsarray = levels.split( " ,|" );
+                String[] groupsarray = groups.split( " ,|" );
+                if( ArrayUtils.contains(groupsarray,groupName) ) {
+                    if(!foundlevel)
+                    if( ArrayUtils.contains(levelsarray,level) ){
+                        foundlevel = true;
+                        if(allowInt == allowDeny){
+                            prefDoc.removeObject(bobj);
+                            context.getWiki().saveDocument(prefDoc, context);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void setSpaceRights(Space newspace, XWikiContext context) throws SpaceManagerException {
         // Set admin edit rights on group prefs
-        giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, false, context );
-        // Set admin admin rights on group prefs
-        giveRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "admin", true, true, context );
+        try {
+            addRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "edit", true, false, context );
+            // Set admin admin rights on group prefs
+            addRightToGroup( newspace.getSpaceName(), getAdminGroupName( newspace.getSpaceName() ), "admin", true, true, context );
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+
+        String[] subSpaces = getProtectedSubSpaces(context);
+        for (int i=0;i<subSpaces.length;i++) {
+            setSubSpaceRights(newspace, subSpaces[i], context);
+        }
+    }
+
+    public void updateSpaceRights(Space space, String oldPolicy, String newPolicy, XWikiContext context) throws SpaceManagerException {
+        try {
+            if (oldPolicy.equals(newPolicy))
+                return;
+
+            String[] subSpaces = getProtectedSubSpaces(context);
+            for (int i=0;i<subSpaces.length;i++) {
+                if (newPolicy.equals("closed")) {
+                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                } else if (newPolicy.equals("open")) {
+                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                }
+            }
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+    }
+
+    public void setSubSpaceRights(Space space, String subSpace, XWikiContext context) throws SpaceManagerException {
+        try {
+            if ((subSpace!=null)&&(!subSpace.equals(""))) {
+                // Set admin edit rights on Messages group prefs
+                addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "edit", true, false, context );
+                // Set admin admin rights on Messages group prefs
+                addRightToGroup( subSpace + "_" + space.getSpaceName(), getAdminGroupName( space.getSpaceName() ), "admin", true, true, context );
+
+                if ("closed".equals(space.getPolicy())) {
+                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                }
+            }
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
     }
 
     /**
@@ -366,7 +477,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-            setGroupRights(newspace, context);
+            setSpaceRights(newspace, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -408,7 +519,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-            setGroupRights(newspace, context);
+            setSpaceRights(newspace, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -467,7 +578,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
-            setGroupRights(newspace, context);
+            setSpaceRights(newspace, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
