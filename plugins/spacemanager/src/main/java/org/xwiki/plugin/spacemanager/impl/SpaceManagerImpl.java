@@ -433,8 +433,10 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             for (int i=0;i<subSpaces.length;i++) {
                 if (newPolicy.equals("closed")) {
                     addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
                 } else if (newPolicy.equals("open")) {
                     removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
                 }
             }
         } catch (XWikiException e) {
@@ -452,6 +454,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
                 if ("closed".equals(space.getPolicy())) {
                     addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
                 }
             }
         } catch (XWikiException e) {

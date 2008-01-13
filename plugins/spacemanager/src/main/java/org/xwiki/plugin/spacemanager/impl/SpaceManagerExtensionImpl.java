@@ -34,7 +34,7 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
 	}
 
     public String getSpaceUserProfilePageName(String userName, String spaceName) {
-        return spaceName + ".UserProfile_" + userName.substring(userName.indexOf(".") + 1);
+        return "UserProfiles_" + spaceName + "." + userName.substring(userName.indexOf(".") + 1);
     }
 
     /**
