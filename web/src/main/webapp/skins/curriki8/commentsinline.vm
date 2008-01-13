@@ -64,7 +64,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 </div>
 #set($date = $!comment.getProperty("date").value)
       <div class="commentheader"><span class="commentauthor">$!xwiki.getUserName($doc.display('author','view',$comment))</span>
-#if($date!="") <span class="commentdate">$xwiki.formatDate($date,$msg.get("dateFormat"))</span>#end
+#if($date!="") <span class="commentdate">$xwiki.formatDate($date,$msg.get("mycurriki.datetimeFormat"))</span>#end
 #set($delredir = $doc.getURL("view", "viewer=comments"))
 ## #if($hasedit) <span class="commentdelete"><a class="commentremove" href="$doc.getURL("objectremove" , "classname=XWiki.XWikiComments&amp;classid=${comment.number}&amp;xredirect=${delredir}")"
 ##    onclick="return confirm('$msg.get("confirmcommentremove")')">$msg.get("removethiscomment")</a></span>#end ## endif hasedit
