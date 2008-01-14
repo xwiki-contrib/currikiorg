@@ -135,6 +135,13 @@ public class Constants {
     public static final String RIGHT_PROTECTED = "members";
     public static final String RIGHT_PRIVATE = "private";
 
+    public static final String GROUP_RIGHTS_PAGE = "WebPreferences";
+    public static final String GROUP_RIGHTS_CLASS = "CurrikiSpaceClass";
+    public static final String GROUP_RIGHTS_PROPERTY = "accessprivileges";
+    public static final String GROUP_RIGHT_PUBLIC = "open";
+    public static final String GROUP_RIGHT_PROTECTED = "protected";
+    public static final String GROUP_RIGHT_PRIVATE = "private";
+
     public static final String ASSET_LICENCE_TYPE_DEFAULT = "Licences.CurrikiLicense";
     public static final String ASSET_FW_ITEMS_DEFAULT = "FW_masterFramework.WebHome";
 

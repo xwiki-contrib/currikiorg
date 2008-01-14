@@ -197,7 +197,33 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         XWikiDocument doc = context.getWiki().getDocument(fullName, context);
 
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.set(Constants.ASSET_RIGHTS_PROPERTY, Constants.RIGHT_PUBLIC, context);
+
+        // Fix for CURRIKI-1413 - Collections for groups need to inherit rights from the group
+        if (doc.getSpace().startsWith("Coll_Group_")){
+            String rights = Constants.RIGHT_PUBLIC;
+
+            // TODO: This should probably be using the SpaceManager extension
+            XWikiDocument spaceDoc = context.getWiki().getDocument(doc.getSpace()+"."+Constants.GROUP_RIGHTS_PAGE, context);
+            if (spaceDoc != null){
+                // Note that the values for the group access defaults
+                //  DO NOT MATCH the values that need to be applied to the collection
+                BaseObject rObj = doc.getObject(Constants.GROUP_RIGHTS_CLASS);
+                if (rObj != null){
+                    String groupDefaultPrivs = rObj.getStringValue(Constants.GROUP_RIGHTS_PROPERTY);
+                    if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PRIVATE)){
+                        rights = Constants.RIGHT_PRIVATE;
+                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PROTECTED)){
+                        rights = Constants.RIGHT_PROTECTED;
+                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PUBLIC)){
+                        rights = Constants.RIGHT_PUBLIC;
+                    }
+                }
+            }
+
+            obj.set(Constants.ASSET_RIGHTS_PROPERTY, rights, context);
+        } else {
+            obj.set(Constants.ASSET_RIGHTS_PROPERTY, Constants.RIGHT_PUBLIC, context);
+        }
         obj.set(Constants.ASSET_CATEGORY_PROPERTY, Constants.CATEGORY_COLLECTION, context);
         obj.set(Constants.ASSET_TITLE_PROPERTY, pageTitle, context);
         if (doc.getName().equals(Constants.DEFAULT_COLLECTION_PAGE)){
