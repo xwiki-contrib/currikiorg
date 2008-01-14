@@ -432,11 +432,11 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             String[] subSpaces = getProtectedSubSpaces(context);
             for (int i=0;i<subSpaces.length;i++) {
                 if (newPolicy.equals("closed")) {
-                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
-                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
+                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, true, context );
+                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, true, context );
                 } else if (newPolicy.equals("open")) {
-                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
-                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
+                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, true, context );
+                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, true, context );
                 }
             }
         } catch (XWikiException e) {
@@ -448,13 +448,13 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         try {
             if ((subSpace!=null)&&(!subSpace.equals(""))) {
                 // Set admin edit rights on Messages group prefs
-                addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "edit", true, false, context );
+                addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "edit", true, true, context );
                 // Set admin admin rights on Messages group prefs
-                addRightToGroup( subSpace + "_" + space.getSpaceName(), getAdminGroupName( space.getSpaceName() ), "admin", true, true, context );
+                addRightToGroup( subSpace + "_" + space.getSpaceName(), getAdminGroupName( space.getSpaceName() ), "admin", true, false, context );
 
                 if ("closed".equals(space.getPolicy())) {
-                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
-                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
+                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, true, context );
+                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, true, context );
                 }
             }
         } catch (XWikiException e) {
