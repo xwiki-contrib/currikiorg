@@ -89,7 +89,7 @@ public class CurrikiSpace extends SpaceImpl {
             if(subjects==null || subjects.size()<1)
             	errors.put( this.VALIDATION_SUBJECT_REQUIRED, "1" );
             
-            	
+                        	
             //licence is set
             String licence = this.doc.getStringValue(CurrikiSpace.SPACE_LICENCE);
             if(type!=null && type=="")
@@ -97,13 +97,13 @@ public class CurrikiSpace extends SpaceImpl {
             
             //privacy level is set
             String privacy = this.doc.getStringValue(CurrikiSpace.SPACE_POLICY);
-            if(type!=null && type=="")
+            if(privacy!=null && privacy=="")
             	errors.put( this.VALIDATION_PRIVACY_REQUIRED, "1" );
             
             if(errors.size()>0)
             {
             	//context.put("validation", errors);
-            	success &= false;
+            	//success &= false;
             }
             
         } catch (XWikiException e) {
