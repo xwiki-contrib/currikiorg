@@ -1172,7 +1172,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     }
 
     private void sendMail(String action, Space space, XWikiContext context)
-            throws SpaceManagerException
+        throws SpaceManagerException
     {
         if (!mailNotification) {
             return;
@@ -1193,8 +1193,8 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
         if (fromUser == null) {
             throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
-                    SpaceManagerException.ERROR_SPACE_SENDER_EMAIL_INVALID,
-                    "Sender email is invalid");
+                SpaceManagerException.ERROR_SPACE_SENDER_EMAIL_INVALID,
+                "Sender email is invalid");
         }
 
         boolean toUsersValid = toUsers.length > 0;
@@ -1209,8 +1209,8 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
         if (!toUsersValid) {
             throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
-                    SpaceManagerException.ERROR_SPACE_TARGET_EMAIL_INVALID,
-                    "Target email is invalid");
+                SpaceManagerException.ERROR_SPACE_TARGET_EMAIL_INVALID,
+                "Target email is invalid");
         }
         String strToUsers = join(toUsers, ",");
 
@@ -1218,26 +1218,27 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
         try {
             String templateDocFullName =
-                    getTemplateMailPageName(space.getSpaceName(), action, context);
+                getTemplateMailPageName(space.getSpaceName(), action, context);
             XWikiDocument mailDoc = context.getWiki().getDocument(templateDocFullName, context);
             XWikiDocument translatedMailDoc = mailDoc.getTranslatedDocument(context);
             mailSender.prepareVelocityContext(fromUser, strToUsers, "", vContext, context);
             vContext.put("xwiki", new com.xpn.xwiki.api.XWiki(context.getWiki(), context));
+            vContext.put("context", new com.xpn.xwiki.api.Context(context));
             String mailSubject =
-                    XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
-                            vContext);
+                XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
+                    vContext);
             String mailContent =
-                    XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(),
-                            templateDocFullName, vContext);
+                XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(),
+                    templateDocFullName, vContext);
 
             Mail mail =
-                    new Mail(fromUser, strToUsers, null, null, mailSubject, mailContent, null);
+                new Mail(fromUser, strToUsers, null, null, mailSubject, mailContent, null);
             mailSender.sendMail(mail, context);
         } catch (Exception e) {
             throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER,
-                    SpaceManagerException.ERROR_SPACE_SENDING_EMAIL_FAILED,
-                    "Sending notification email failed",
-                    e);
+                SpaceManagerException.ERROR_SPACE_SENDING_EMAIL_FAILED,
+                "Sending notification email failed",
+                e);
         }
     }
 
