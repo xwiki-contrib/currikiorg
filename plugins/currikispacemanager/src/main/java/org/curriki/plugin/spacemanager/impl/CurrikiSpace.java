@@ -89,10 +89,6 @@ public class CurrikiSpace extends SpaceImpl {
             if(subjects==null || subjects.size()<1)
             	errors.put( this.VALIDATION_SUBJECT_REQUIRED, "1" );
             
-            //type is set
-            String type = this.doc.getStringValue(CurrikiSpace.SPACE_TYPE);
-            if(type!=null && type=="")
-            	errors.put( this.VALIDATION_TYPE_REQUIRED, "1" );	
             	
             //licence is set
             String licence = this.doc.getStringValue(CurrikiSpace.SPACE_LICENCE);
@@ -106,7 +102,7 @@ public class CurrikiSpace extends SpaceImpl {
             
             if(errors.size()>0)
             {
-            	context.put("validation", errors);
+            	//context.put("validation", errors);
             	success &= false;
             }
             
