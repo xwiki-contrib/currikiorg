@@ -92,7 +92,7 @@ public class CurrikiSpace extends SpaceImpl {
                         	
             //licence is set
             String licence = this.doc.getStringValue(CurrikiSpace.SPACE_LICENCE);
-            if(type!=null && type=="")
+            if(licence!=null && licence=="")
             	errors.put( this.VALIDATION_LICENCE_REQUIRED, "1" );
             
             //privacy level is set
