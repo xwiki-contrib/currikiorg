@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class CurrikiSpaceManager extends SpaceManagerImpl {
     private static final String CURRIKI_SPACEMANAGER_DEFAULT_EXTENSION = "org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension";
+    private static final String CURRIKI_SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES = "UserProfiles,Messages,Documentation";
 
     /**
 	 * Space manager constructor
@@ -36,6 +37,7 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
     public String getName() {
         return "csm";
     }
+
 
     /**
 	* Loads the CurrikiSpaceManagerExtension specified in the config file
@@ -62,6 +64,20 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
         }
 
         return spaceManagerExtension;
+    }
+
+    /**
+     * Get the list of sub spaces to protect
+     * @param context
+     * @return
+     */
+    public String[] getProtectedSubSpaces(XWikiContext context) {
+        String protectedSubSpaces = context.getWiki().Param(SPACEMANAGER_PROTECTED_SUBSPACES_PROP, CURRIKI_SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES);
+        if ((protectedSubSpaces!=null)&&(!protectedSubSpaces.equals(""))) {
+            return protectedSubSpaces.split(",");
+        } else {
+            return new String[0];
+        }
     }
 
     /**
