@@ -33,6 +33,9 @@ public class SpaceManagerException extends XWikiException
     public static final int ERROR_SPACE_MANAGER_REQUIRES_MAILSENDER_PLUGIN = 100006;
     public static final int ERROR_SPACE_SENDING_EMAIL_FAILED = 100007;
     public static final int ERROR_SPACE_CANNOT_FIND_EMAIL_ADDRESS = 100008;
+    
+    public static final int ERROR_VALIDATE_TITLE_TOO_SHORT = 100009;
+    public static final int ERROR_VALIDATE_TITLE_TOO_LONG = 100010;
 
     public SpaceManagerException(){
 	}

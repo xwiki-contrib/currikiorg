@@ -75,10 +75,17 @@ public class SpaceManagerPluginApi extends PluginApi
      * @throws SpaceManagerException
      */
     public Space createSpace(String spaceName) throws SpaceManagerException {
-        if (!hasProgrammingRights())
-            return null;
-        Space space =
-                getSpaceManager().createSpace(spaceName, context);
+    	Space space;
+        try{
+        	if (!hasProgrammingRights()) return null;
+        	space = getSpaceManager().createSpace(spaceName, context);
+        }catch(SpaceManagerException e){
+        	if(e.getCode()==SpaceManagerException.ERROR_SPACE_DATA_INVALID){
+        		return null;
+        	}else{
+        		throw e;
+        	}
+        }
         return space;
     }
 
@@ -90,12 +97,18 @@ public class SpaceManagerPluginApi extends PluginApi
      * @return On success returns the newly created space and null on failure
      */
     public Space createSpaceFromTemplate(String spaceName, String templateSpaceName) throws SpaceManagerException {
-        if (!hasProgrammingRights())
-            return null;
-        Space space =
-                getSpaceManager().createSpaceFromTemplate(spaceName, templateSpaceName, context);
+    	Space space;
+    	try{
+    		if (!hasProgrammingRights()) return null;
+    		space = getSpaceManager().createSpaceFromTemplate(spaceName, templateSpaceName, context);
+    	}catch(SpaceManagerException e){
+        	if(e.getCode()==SpaceManagerException.ERROR_SPACE_DATA_INVALID){
+        		return null;
+        	}else{
+        		throw e;
+        	}
+        }
         return space;
-
     }
 
     /**
@@ -107,10 +120,17 @@ public class SpaceManagerPluginApi extends PluginApi
      * @return On success returns the newly created space and null on failure
      */
     public Space createSpaceFromApplication(String spaceName, String applicationName) throws SpaceManagerException {
-        if (!hasProgrammingRights())
-            return null;
-        Space space =
-                getSpaceManager().createSpaceFromApplication(spaceName, applicationName, context);
+    	Space space;
+    	try{
+    		if (!hasProgrammingRights()) return null;
+    		space = getSpaceManager().createSpaceFromApplication(spaceName, applicationName, context);
+    	}catch(SpaceManagerException e){
+        	if(e.getCode()==SpaceManagerException.ERROR_SPACE_DATA_INVALID){
+        		return null;
+        	}else{
+        		throw e;
+        	}
+        }
         return space;
     }
 
@@ -118,10 +138,17 @@ public class SpaceManagerPluginApi extends PluginApi
      * @return On success returns the newly created space and null on failure
      */
     public Space createSpaceFromRequest() throws SpaceManagerException {
-        if (!hasProgrammingRights())
-            return null;
-        Space space =
-                getSpaceManager().createSpaceFromRequest(context);
+    	Space space;
+    	try{
+    		if (!hasProgrammingRights()) return null;
+    		space = getSpaceManager().createSpaceFromRequest(context);
+    	}catch(SpaceManagerException e){
+        	if(e.getCode()==SpaceManagerException.ERROR_SPACE_DATA_INVALID){
+        		return null;
+        	}else{
+        		throw e;
+        	}
+        }
         return space;
     }
 
@@ -129,10 +156,17 @@ public class SpaceManagerPluginApi extends PluginApi
      * @return On success returns the newly created space and null on failure
      */
     public Space createSpaceFromRequest(String templateSpace) throws SpaceManagerException {
-        if (!hasProgrammingRights())
-            return null;
-        Space space =
-                getSpaceManager().createSpaceFromRequest(templateSpace, context);
+    	Space space;
+    	try{
+    		if (!hasProgrammingRights())  return null;
+    		space = getSpaceManager().createSpaceFromRequest(templateSpace, context);
+    	}catch(SpaceManagerException e){
+        	if(e.getCode()==SpaceManagerException.ERROR_SPACE_DATA_INVALID){
+        		return null;
+        	}else{
+        		throw e;
+        	}
+        }
         return space;
     }
 
