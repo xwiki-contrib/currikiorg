@@ -68,15 +68,16 @@ public class CurrikiSpace extends SpaceImpl {
             	errors.put( this.VALIDATION_SPACE_EXISTS, "1" );
             
             //same shortcut url
+            //NOT WORKING
             //List list = context.getWiki().getStore().searchDocumentsNames("where doc.url='" + this.getHomeShortcutURL() + "'", context);
             //if(list!=null && list.size()>0)
-           // 	errors.add( "There is already a group with this url! ");
+            	//errors.add( this.VALIDATION_URL_EXISTS, "1" );
             
             //description is set
             String desc = this.getDescription();
             if(desc.length() < 5 )
             	errors.put( this.VALIDATION_DESC_SHORT, "1" );
-            if(desc.length() > 5 )
+            if(desc.length() > 960 )
             	errors.put( this.VALIDATION_DESC_LONG, "1" );
             
             //categories is set
