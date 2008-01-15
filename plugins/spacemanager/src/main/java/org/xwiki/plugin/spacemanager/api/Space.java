@@ -4,6 +4,7 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 
 import java.util.List;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -175,4 +176,10 @@ public interface Space {
      * @throws SpaceManagerException
      */
     public boolean validateSpaceData() throws SpaceManagerException;
+
+    /**
+     * Set the creation date of the space
+     * @param date
+     */
+    public void setCreationDate(Date date);
 }

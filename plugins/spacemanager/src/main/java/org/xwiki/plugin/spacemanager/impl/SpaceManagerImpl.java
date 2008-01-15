@@ -517,6 +517,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         newspace.setDisplayTitle(spaceTitle);
         newspace.setCreator(context.getUser());
+        newspace.setCreationDate(new Date());
         try {
             newspace.saveWithProgrammingRights();
             // we need to add the creator as a member and as an admin
@@ -576,6 +577,9 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         // we need to do it twice because data could have been overwritten by copyWikiWeb
         newspace.updateSpaceFromRequest();
+        newspace.setCreator(context.getUser());
+        newspace.setCreationDate(new Date());
+        
         try {
             newspace.saveWithProgrammingRights();
             // we need to add the creator as a member and as an admin

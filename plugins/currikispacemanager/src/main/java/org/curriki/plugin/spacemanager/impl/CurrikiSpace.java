@@ -68,8 +68,8 @@ public class CurrikiSpace extends SpaceImpl {
             	errors.put( this.VALIDATION_SPACE_EXISTS, "1" );
             
             //same shortcut url
-            //NOT WORKING
-            //List list = context.getWiki().getStore().searchDocumentsNames("where doc.url='" + this.getHomeShortcutURL() + "'", context);
+            List list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.id=urlprop.id.id and urlprop.id.name='"
+                                    + SPACE_URLSHORTCUT + "' and urlprop.value='" + this.getHomeShortcutURL() + "'", context);
             //if(list!=null && list.size()>0)
             	//errors.add( this.VALIDATION_URL_EXISTS, "1" );
             

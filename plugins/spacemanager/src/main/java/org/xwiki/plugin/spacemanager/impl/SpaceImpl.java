@@ -29,6 +29,7 @@ import org.xwiki.plugin.spacemanager.api.Space;
 import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
 
 import java.util.List;
+import java.util.Date;
 
 /**
  * Implementing class
@@ -265,5 +266,9 @@ public class SpaceImpl extends Document implements Space {
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
+    }
+
+    public void setCreationDate(Date date) {
+        getDoc().setCreationDate(date);
     }
 }
