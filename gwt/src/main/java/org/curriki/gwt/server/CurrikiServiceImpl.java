@@ -171,7 +171,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             }
 
             // CURRIKI-1379 - Group spaces don't get Favorites collection
-            if (!pageName.equals(Constants.DEFAULT_COLLECTION_PAGE) && !space.startsWith("Coll_Group_")){
+            if (!pageName.equals(Constants.DEFAULT_COLLECTION_PAGE) && !space.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)){
                 if (!isDefaultCollectionExists(space)){
                     createDefaultCollection(space);
                 }
@@ -185,7 +185,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 doc = createTempCompositeAsset(space+"."+Constants.ROOT_COLLECTION_PAGE, Constants.COMPOSITE_COLLECTION);
             }
 
-            XWikiDocument xDoc = initCollectionSettings(doc.getFullName(), pageTitle, context);
+            XWikiDocument xDoc = initCollectionSettings(doc.getFullName(), pageTitle, space, context);
 
             return newDocument(new Document(), xDoc, true, false, true, false, context);
         } catch (Exception e) {
@@ -193,13 +193,13 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         }
     }
 
-    private XWikiDocument initCollectionSettings(String fullName, String pageTitle, XWikiContext context) throws XWikiException {
+    private XWikiDocument initCollectionSettings(String fullName, String pageTitle, String space, XWikiContext context) throws XWikiException {
         XWikiDocument doc = context.getWiki().getDocument(fullName, context);
 
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
 
         // Fix for CURRIKI-1413 - Collections for groups need to inherit rights from the group
-        if (doc.getSpace().startsWith("Coll_Group_")){
+        if (space.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)){
             String rights = Constants.RIGHT_PUBLIC;
 
             // TODO: This should probably be using the SpaceManager extension
@@ -667,7 +667,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
 
         // If collection is group
-        if (assetDoc.getSpace().startsWith("Coll_Group_")) {
+        if (assetDoc.getSpace().startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
             usergroupfield = "groups";
             usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
         }
@@ -711,7 +711,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
 
         // If collection is group
-        if (assetDoc.getSpace().startsWith("Coll_Group_")) {
+        if (assetDoc.getSpace().startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
             usergroupfield = "groups";
             usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
         }
@@ -740,7 +740,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
 
         // If collection is group
-        if (assetDoc.getSpace().startsWith("Coll_Group_")) {
+        if (assetDoc.getSpace().startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
             usergroupfield = "groups";
             usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
         }
@@ -754,7 +754,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
     private void protectSpace(String spaceName, XWikiContext context) throws XWikiException {
         String owner = context.getUser();
         boolean ownerIsUser = true;
-        if (spaceName.startsWith("Coll_Group_")){
+        if (spaceName.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)){
             owner = spaceName.substring(5) + ".MemberGroup";
             ownerIsUser = false;
         } else if (spaceName.startsWith("Coll_")){
@@ -794,7 +794,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
-        if (spaceName.startsWith("Coll_Group_")){
+        if (spaceName.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)){
             doc.setStringValue("XWiki.XWikiPreferences", "parent", spaceName.substring(5));
             obj = doc.newObject("XWiki.XWikiGlobalRights", context);
             obj.setStringValue("groups", spaceName.substring(5) + ".AdminGroup");

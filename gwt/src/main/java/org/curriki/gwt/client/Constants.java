@@ -141,6 +141,7 @@ public class Constants {
     public static final String GROUP_RIGHT_PUBLIC = "open";
     public static final String GROUP_RIGHT_PROTECTED = "protected";
     public static final String GROUP_RIGHT_PRIVATE = "private";
+    public static final String GROUP_COLLECTION_SPACE_PREFIX = "Coll_Group_";
 
     public static final String ASSET_LICENCE_TYPE_DEFAULT = "Licences.CurrikiLicense";
     public static final String ASSET_FW_ITEMS_DEFAULT = "FW_masterFramework.WebHome";
