@@ -75,7 +75,7 @@ public class CurrikiSpace extends SpaceImpl {
             //same title
             List list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as tprop where doc.fullName=obj.name and obj.className='"
                                     + manager.getSpaceClassName() + "' and obj.id=tprop.id.id and tprop.id.name='"
-                                    + SPACE_DISPLAYTITLE + "' and tprop.value='" + this.getDisplayTitle() + "'", context);
+                                    + SPACE_DISPLAYTITLE + "' and tprop.value='" + this.getDisplayTitle() + "' and doc.fullName<>'" + getSpaceName() + ".WebPreferences'", context);
             if(list!=null && list.size()>0)
                         errors.put( this.VALIDATION_TITLE_EXISTS, "1" );
 
@@ -90,7 +90,7 @@ public class CurrikiSpace extends SpaceImpl {
             if (url.length()>0) {
                 list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.className='"
                         + manager.getSpaceClassName() + "' and obj.id=urlprop.id.id and urlprop.id.name='"
-                        + SPACE_URLSHORTCUT + "' and urlprop.value='" + this.getHomeShortcutURL() + "'", context);
+                        + SPACE_URLSHORTCUT + "' and urlprop.value='" + this.getHomeShortcutURL() + "' and doc.fullName<>'" + getSpaceName() + ".WebPreferences'", context);
                 if(list!=null && list.size()>0)
                     errors.put( this.VALIDATION_URL_EXISTS, "1" );
             }
