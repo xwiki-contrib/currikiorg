@@ -200,10 +200,11 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         // Fix for CURRIKI-1413 - Collections for groups need to inherit rights from the group
         if (space.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)){
+            String groupSpace = space.replaceFirst(Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "");
             String rights = Constants.RIGHT_PUBLIC;
 
             // TODO: This should probably be using the SpaceManager extension
-            XWikiDocument spaceDoc = context.getWiki().getDocument(space+"."+Constants.GROUP_RIGHTS_PAGE, context);
+            XWikiDocument spaceDoc = context.getWiki().getDocument(groupSpace+"."+Constants.GROUP_RIGHTS_PAGE, context);
             if (spaceDoc != null){
                 // Note that the values for the group access defaults
                 //  DO NOT MATCH the values that need to be applied to the collection
