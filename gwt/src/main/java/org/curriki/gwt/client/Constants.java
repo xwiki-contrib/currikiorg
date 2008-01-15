@@ -136,7 +136,7 @@ public class Constants {
     public static final String RIGHT_PRIVATE = "private";
 
     public static final String GROUP_RIGHTS_PAGE = "WebPreferences";
-    public static final String GROUP_RIGHTS_CLASS = "CurrikiSpaceClass";
+    public static final String GROUP_RIGHTS_CLASS = "XWiki.CurrikiSpaceClass";
     public static final String GROUP_RIGHTS_PROPERTY = "accessprivileges";
     public static final String GROUP_RIGHT_PUBLIC = "open";
     public static final String GROUP_RIGHT_PROTECTED = "protected";
