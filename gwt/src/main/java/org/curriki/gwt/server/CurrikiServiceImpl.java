@@ -204,11 +204,11 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             String rights = Constants.RIGHT_PUBLIC;
 
             // TODO: This should probably be using the SpaceManager extension
-            XWikiDocument spaceDoc = context.getWiki().getDocument(groupSpace+"."+Constants.GROUP_RIGHTS_PAGE, context);
-            if (spaceDoc != null){
+            XWikiDocument groupSpaceDoc = context.getWiki().getDocument(groupSpace+"."+Constants.GROUP_RIGHTS_PAGE, context);
+            if (groupSpaceDoc != null){
                 // Note that the values for the group access defaults
                 //  DO NOT MATCH the values that need to be applied to the collection
-                BaseObject rObj = doc.getObject(Constants.GROUP_RIGHTS_CLASS);
+                BaseObject rObj = groupSpaceDoc.getObject(Constants.GROUP_RIGHTS_CLASS);
                 if (rObj != null){
                     String groupDefaultPrivs = rObj.getStringValue(Constants.GROUP_RIGHTS_PROPERTY);
                     if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PRIVATE)){
