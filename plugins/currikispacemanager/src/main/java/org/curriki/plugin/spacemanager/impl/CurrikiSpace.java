@@ -32,8 +32,9 @@ public class CurrikiSpace extends SpaceImpl {
     public static final String VALIDATION_SUBJECT_REQUIRED = "subject-required";
     public static final String VALIDATION_LICENCE_REQUIRED = "licence-required";
     public static final String VALIDATION_PRIVACY_REQUIRED = "privacy-required";
+    public static final String VALIDATION_TITLE_EXISTS = "title-exists";
 
-	public CurrikiSpace(String spaceName, String spaceTitle, boolean create, SpaceManagerImpl manager, XWikiContext context)
+    public CurrikiSpace(String spaceName, String spaceTitle, boolean create, SpaceManagerImpl manager, XWikiContext context)
 			throws SpaceManagerException {
 		super(spaceName, spaceTitle, create, manager, context);
 		// TODO Auto-generated constructor stub
@@ -64,14 +65,24 @@ public class CurrikiSpace extends SpaceImpl {
             	errors.put( this.VALIDATION_TITLE_LONG, "1" );
             
             //existance of a group with this name
-            if(!this.isNew())
-            	errors.put( this.VALIDATION_SPACE_EXISTS, "1" );
-            
+            // this won't work because we manage space name uniqueness
+            // if(!this.isNew())
+            //	errors.put( this.VALIDATION_SPACE_EXISTS, "1" );
+            // we need to test for the title itself
+
+            //same title
+            List list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as tprop where doc.fullName=obj.name and obj.className='"
+                                    + manager.getSpaceClassName() + "' and obj.id=tprop.id.id and tprop.id.name='"
+                                    + SPACE_DISPLAYTITLE + "' and tprop.value='" + this.getDisplayTitle() + "'", context);
+            if(list!=null && list.size()>0)
+                        errors.put( this.VALIDATION_TITLE_EXISTS, "1" );
+
             //same shortcut url
-            List list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.id=urlprop.id.id and urlprop.id.name='"
+            list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.className='"
+                                    + manager.getSpaceClassName() + "' and obj.id=urlprop.id.id and urlprop.id.name='"
                                     + SPACE_URLSHORTCUT + "' and urlprop.value='" + this.getHomeShortcutURL() + "'", context);
-            //if(list!=null && list.size()>0)
-            	//errors.add( this.VALIDATION_URL_EXISTS, "1" );
+            if(list!=null && list.size()>0)
+            	errors.put( this.VALIDATION_URL_EXISTS, "1" );
             
             //description is set
             String desc = this.getDescription();
@@ -103,8 +114,8 @@ public class CurrikiSpace extends SpaceImpl {
             
             if(errors.size()>0)
             {
-            	//context.put("validation", errors);
-            	//success &= false;
+            	context.put("validation", errors);
+            	success &= false;
             }
             
         } catch (XWikiException e) {
