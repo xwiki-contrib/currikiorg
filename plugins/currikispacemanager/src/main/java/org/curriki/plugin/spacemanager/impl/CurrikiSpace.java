@@ -87,12 +87,14 @@ public class CurrikiSpace extends SpaceImpl {
                 errors.put( this.VALIDATION_URL_LONG, "1" );
 
             //same shortcut url
-            list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.className='"
-                                    + manager.getSpaceClassName() + "' and obj.id=urlprop.id.id and urlprop.id.name='"
-                                    + SPACE_URLSHORTCUT + "' and urlprop.value='" + this.getHomeShortcutURL() + "'", context);
-            if(list!=null && list.size()>0)
-            	errors.put( this.VALIDATION_URL_EXISTS, "1" );
-            
+            if (url.length()>0) {
+                list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.className='"
+                        + manager.getSpaceClassName() + "' and obj.id=urlprop.id.id and urlprop.id.name='"
+                        + SPACE_URLSHORTCUT + "' and urlprop.value='" + this.getHomeShortcutURL() + "'", context);
+                if(list!=null && list.size()>0)
+                    errors.put( this.VALIDATION_URL_EXISTS, "1" );
+            }
+
             //description is set
             String desc = this.getDescription();
             if(desc.length() < 5 )
