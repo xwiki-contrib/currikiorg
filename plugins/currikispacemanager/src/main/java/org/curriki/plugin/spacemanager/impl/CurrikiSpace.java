@@ -26,6 +26,8 @@ public class CurrikiSpace extends SpaceImpl {
     public static final String VALIDATION_DESC_SHORT = "desc-short";
     public static final String VALIDATION_DESC_LONG = "desc-long";
     public static final String VALIDATION_SPACE_EXISTS = "space-exists";
+    public static final String VALIDATION_URL_SHORT = "url-short";
+    public static final String VALIDATION_URL_LONG = "url-long";
     public static final String VALIDATION_URL_EXISTS = "url-exists";
     public static final String VALIDATION_EDUCATION_REQUIRED = "education-required";
     public static final String VALIDATION_TYPE_REQUIRED = "type-required";
@@ -76,6 +78,13 @@ public class CurrikiSpace extends SpaceImpl {
                                     + SPACE_DISPLAYTITLE + "' and tprop.value='" + this.getDisplayTitle() + "'", context);
             if(list!=null && list.size()>0)
                         errors.put( this.VALIDATION_TITLE_EXISTS, "1" );
+
+
+            String url = this.getHomeShortcutURL();
+            if(url.length() < 1)
+                errors.put( this.VALIDATION_URL_SHORT, "1" );
+            if(url.length() > 32)
+                errors.put( this.VALIDATION_URL_LONG, "1" );
 
             //same shortcut url
             list = context.getWiki().getStore().searchDocumentsNames(",BaseObject as obj, StringProperty as urlprop where doc.fullName=obj.name and obj.className='"
