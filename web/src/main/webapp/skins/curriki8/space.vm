@@ -1,12 +1,12 @@
+
+#macro(parentsBreadcrumb $bcDoc $level)
+
 #set($sm = $xwiki.csm)
-#set($spaceName = $doc.getSpace())
+#set($spaceName = $bcDoc.getSpace())
 #set($s = $sm.getSpace($spaceName))
 #if( $s ) #if( $s.isNew() || $s.isDeleted() )
   #set( $s = "" )
 #end #end
-
-
-#macro(parentsBreadcrumb $bcDoc $level)
 
 ##groups specifics
 ###group creation page
@@ -44,6 +44,14 @@
 ##
 ##
 #macro(currikiBreadcrumb $bcParam $bcCurrentDoc)
+
+#set($sm = $xwiki.csm)
+#set($spaceName = $bcCurrentDoc.getSpace())
+#set($s = $sm.getSpace($spaceName))
+#if( $s ) #if( $s.isNew() || $s.isDeleted() )
+  #set( $s = "" )
+#end #end
+
  ##Preparation de la liste
  #set($bcParent = $bcParam)
  #if($bcParam && $!bcParam != "")
