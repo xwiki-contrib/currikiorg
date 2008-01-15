@@ -566,7 +566,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
                 for (Iterator it = list.iterator(); it.hasNext();) {
                     String docname = (String) it.next();
                     XWikiDocument doc = context.getWiki().getDocument(docname, context);
-                    context.getWiki().copyDocument(doc.getFullName(), newspace.getSpaceName() + "." + doc.getName(), context);
+                    context.getWiki().copyDocument(doc.getFullName(), newspace.getSpaceName() + "." + doc.getName(), null, null, null, true, false, true, context);
                 }
             } catch (XWikiException e) {
                 throw new SpaceManagerException(e);
