@@ -18,6 +18,8 @@ public interface SpaceManager extends XWikiPluginInterface {
     public static interface SpaceAction
     {
         String CREATE = "Create";
+
+        String JOIN = "Join";
     }
 
     public static final String SPACE_DEFAULT_TYPE = "space";
