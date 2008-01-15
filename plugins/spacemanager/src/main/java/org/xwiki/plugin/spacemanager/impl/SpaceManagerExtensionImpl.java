@@ -12,6 +12,7 @@ import com.xpn.xwiki.web.XWikiRequest;
 
 public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
 
+	protected SpaceManager sm = null;
 
     public String getSpaceTypeName() {
         return SpaceManager.SPACE_DEFAULT_TYPE;
@@ -25,11 +26,11 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
         return false;
     }
     
-	public void init(XWikiContext context) throws SpaceManagerException {
+	public void init(SpaceManager sm, XWikiContext context) throws SpaceManagerException {
 		// TODO Auto-generated method stub		
 	}
 
-	public void virtualInit(XWikiContext context) throws SpaceManagerException {
+	public void virtualInit(SpaceManager sm, XWikiContext context) throws SpaceManagerException {
 		// TODO Auto-generated method stub		
 	}
 
@@ -54,8 +55,9 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
      *
      * @param spaceName
      * @param context
+	 * @throws SpaceManagerException 
      */
-    public void postCreateSpace(String spaceName, XWikiContext context){
+    public void postCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException{
 		// @todo: actions done after before the creation of the space
 	}
 	

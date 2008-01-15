@@ -60,8 +60,9 @@ public interface SpaceManagerExtension {
      *
      * @param spaceName
      * @param context
+	 * @throws SpaceManagerException 
      */
-    public void postCreateSpace(String spaceName, XWikiContext context);
+    public void postCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException;
 	
 	/**
      * API called before a space is deleted
@@ -104,12 +105,12 @@ public interface SpaceManagerExtension {
      * Initializes the SpaceManager extension in the main wiki 
      * @throws SpaceManagerException 
      */
-    public void init(XWikiContext context) throws SpaceManagerException;
+    public void init(SpaceManager sm, XWikiContext context) throws SpaceManagerException;
 
     /**
      * Initializes the SpaceManager extension in the virtual wikis
      */
-    public void virtualInit(XWikiContext context) throws SpaceManagerException;
+    public void virtualInit(SpaceManager sm, XWikiContext context) throws SpaceManagerException;
 
     /**
      * Get space user profile page name

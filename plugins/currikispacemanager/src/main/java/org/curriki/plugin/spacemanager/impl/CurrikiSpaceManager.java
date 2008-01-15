@@ -10,6 +10,7 @@ import org.xwiki.plugin.spacemanager.api.SpaceManagerExtension;
 import org.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 /**
@@ -48,19 +49,22 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
 	{
         if (spaceManagerExtension==null) {
             String extensionName = context.getWiki().Param(SPACEMANAGER_EXTENSION_CFG_PROP,CURRIKI_SPACEMANAGER_DEFAULT_EXTENSION);
+            
             try {
-                if (extensionName!=null)
-                 spaceManagerExtension = (SpaceManagerExtension) Class.forName(extensionName).newInstance();
+                if (extensionName!=null){
+                	spaceManagerExtension = (CurrikiSpaceManagerExtension)Class.forName(extensionName).newInstance();
+                }
             } catch (Throwable e){
                 try{
-                    spaceManagerExtension = (SpaceManagerExtension) Class.forName(CURRIKI_SPACEMANAGER_DEFAULT_EXTENSION).newInstance();
+                	spaceManagerExtension = (CurrikiSpaceManagerExtension)Class.forName(CURRIKI_SPACEMANAGER_DEFAULT_EXTENSION).newInstance();
                 } catch(Throwable  e2){
+                	
                 }
             }
         }
 
         if (spaceManagerExtension==null) {
-            spaceManagerExtension = new CurrikiSpaceManagerExtension();
+            spaceManagerExtension = new CurrikiSpaceManagerExtension( );
         }
 
         return spaceManagerExtension;

@@ -1,5 +1,7 @@
 package org.curriki.plugin.spacemanager.impl;
 
+import org.xwiki.plugin.spacemanager.api.Space;
+import org.xwiki.plugin.spacemanager.api.SpaceManager;
 import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
 import org.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl;
 
@@ -14,9 +16,7 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 	public static final String CURRIKI_SPACE_TYPE = "currikispace";
 	public static final String CURRIKI_SPACE_CLASS_NAME = "XWiki.CurrikiSpaceClass";
 	
-	public CurrikiSpaceManagerExtension() {
-		// TODO Auto-generated constructor stub
-	}
+	public static final String LEADERS_GROUP_NAME = "Group_CurrikiLeadersGroup";
 	
 	public String getSpaceTypeName() {
         return CURRIKI_SPACE_TYPE;
@@ -71,18 +71,30 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 		return false;
 	}
 	
-	public void init(XWikiContext context) throws SpaceManagerException {
+	public void init(SpaceManager _sm, XWikiContext context) throws SpaceManagerException {
 		try {
 			getCurrikiSpaceClass(context);
+			this.sm = _sm;
 		} catch (XWikiException e) {
 			throw new SpaceManagerException(e);
 		}	
 	}
 
-	public void virtualInit(XWikiContext context) throws SpaceManagerException {
+	public void virtualInit(SpaceManager _sm, XWikiContext context) throws SpaceManagerException {
 		try {
 			getCurrikiSpaceClass(context);
+			this.sm = _sm;
 		} catch (XWikiException e) {
+			throw new SpaceManagerException(e);
+		}
+	}
+	
+	public void postCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException{
+		try{
+			Space s = sm.getSpace(spaceName, context);
+			sm.addMember( LEADERS_GROUP_NAME, s.getCreator(), context);
+			
+		}catch(XWikiException e){
 			throw new SpaceManagerException(e);
 		}
 	}

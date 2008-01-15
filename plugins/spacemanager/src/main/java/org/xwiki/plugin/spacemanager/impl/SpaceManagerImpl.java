@@ -38,6 +38,7 @@ import org.xwiki.plugin.spacemanager.api.*;
 import org.xwiki.plugin.spacemanager.plugin.SpaceManagerPluginApi;
 import org.apache.commons.lang.ArrayUtils;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
@@ -152,7 +153,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     public void init(XWikiContext context) {
         try {
             getSpaceManagerExtension(context);
-            getSpaceManagerExtension().init(context);
+            getSpaceManagerExtension().init(this, context);
             SpaceManagers.addSpaceManager(this);
             getSpaceClass(context);
             SpaceUserProfileImpl.getSpaceUserProfileClass(context);
@@ -168,7 +169,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     public void virtualInit(XWikiContext context) {
         try {
             getSpaceClass(context);
-            getSpaceManagerExtension().virtualInit(context);
+            getSpaceManagerExtension().virtualInit(this, context);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -193,19 +194,21 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     {
         if (spaceManagerExtension==null) {
             String extensionName = context.getWiki().Param(SPACEMANAGER_EXTENSION_CFG_PROP,SPACEMANAGER_DEFAULT_EXTENSION);
+            
             try {
-                if (extensionName!=null)
-                    spaceManagerExtension = (SpaceManagerExtension) Class.forName(extensionName).newInstance();
+                if (extensionName!=null){
+                	spaceManagerExtension = (SpaceManagerExtension) Class.forName(extensionName).newInstance();
+                }
             } catch (Throwable e){
                 try{
-                    spaceManagerExtension = (SpaceManagerExtension) Class.forName(SPACEMANAGER_DEFAULT_EXTENSION).newInstance();
+                	spaceManagerExtension = (SpaceManagerExtension) Class.forName(SPACEMANAGER_DEFAULT_EXTENSION).newInstance();
                 } catch(Throwable  e2){
                 }
             }
         }
 
         if (spaceManagerExtension==null) {
-            spaceManagerExtension = new SpaceManagerExtensionImpl();
+            spaceManagerExtension = new SpaceManagerExtensionImpl( );
         }
 
         return spaceManagerExtension;
@@ -432,11 +435,11 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             String[] subSpaces = getProtectedSubSpaces(context);
             for (int i=0;i<subSpaces.length;i++) {
                 if (newPolicy.equals("closed")) {
-                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, true, context );
-                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, true, context );
+                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                    addRightToGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
                 } else if (newPolicy.equals("open")) {
-                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, true, context );
-                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, true, context );
+                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                    removeRightFromGroup( subSpaces[i] + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
                 }
             }
         } catch (XWikiException e) {
@@ -448,13 +451,13 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         try {
             if ((subSpace!=null)&&(!subSpace.equals(""))) {
                 // Set admin edit rights on Messages group prefs
-                addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "edit", true, true, context );
+                addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "edit", true, false, context );
                 // Set admin admin rights on Messages group prefs
-                addRightToGroup( subSpace + "_" + space.getSpaceName(), getAdminGroupName( space.getSpaceName() ), "admin", true, false, context );
+                addRightToGroup( subSpace + "_" + space.getSpaceName(), getAdminGroupName( space.getSpaceName() ), "admin", true, true, context );
 
                 if ("closed".equals(space.getPolicy())) {
-                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, true, context );
-                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, true, context );
+                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "view", true, false, context );
+                    addRightToGroup( subSpace + "_" + space.getSpaceName(), getMemberGroupName(space.getSpaceName() ), "comment", true, false, context );
                 }
             }
         } catch (XWikiException e) {
@@ -472,7 +475,13 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     public Space createSpace(String spaceTitle, XWikiContext context) throws SpaceManagerException {
         // Init out space object by creating the space
         // this will throw an exception when the space exists
+    	
         Space newspace = newSpace(null, spaceTitle, true, context);
+        
+        //execute precreate actions
+        if( !getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context ) )
+        	return null;
+        
         // Make sure we set the type
         newspace.setType(getSpaceTypeName());
         try {
@@ -481,11 +490,14 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
             setSpaceRights(newspace, context);
+            //execute post space creation
+            getSpaceManagerExtension().postCreateSpace( newspace.getSpaceName(), context );
+            
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
 
-        sendMail(SpaceAction.CREATE, newspace, context);
+        sendMail(SpaceAction.CREATE, newspace, context); //this should be in the extension's postcreate
         return newspace;
     }
 
@@ -501,6 +513,10 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         // Init out space object by creating the space
         // this will throw an exception when the space exists
         Space newspace = newSpace(null, spaceTitle, false, context);
+   
+        //execute precreate actions
+        if( !getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context ) )
+        	return null;
 
         // Make sure this space does not already exist
         if (!newspace.isNew())
@@ -517,13 +533,15 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         newspace.setDisplayTitle(spaceTitle);
         newspace.setCreator(context.getUser());
-        newspace.setCreationDate(new Date());
+        //newspace.setCreationTime(context.getWiki().getCurrentDate());
         try {
             newspace.saveWithProgrammingRights();
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
             setSpaceRights(newspace, context);
+            //execute post space creation
+            getSpaceManagerExtension().postCreateSpace( newspace.getSpaceName(), context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -555,6 +573,11 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER, SpaceManagerException.ERROR_SPACE_TITLE_MISSING, "Space title is missing");
         }
         Space newspace = newSpace(null, spaceTitle, true, context);
+        
+        //execute precreate actions
+        if( !getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context ) )
+        	return null;
+        
         newspace.updateSpaceFromRequest();
         if (!newspace.validateSpaceData())
             throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER, SpaceManagerException.ERROR_SPACE_DATA_INVALID, "Space data is not valid");
@@ -566,7 +589,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
                 for (Iterator it = list.iterator(); it.hasNext();) {
                     String docname = (String) it.next();
                     XWikiDocument doc = context.getWiki().getDocument(docname, context);
-                    context.getWiki().copyDocument(doc.getFullName(), newspace.getSpaceName() + "." + doc.getName(), null, null, null, true, false, true, context);
+                    context.getWiki().copyDocument(doc.getFullName(), newspace.getSpaceName() + "." + doc.getName(), context);
                 }
             } catch (XWikiException e) {
                 throw new SpaceManagerException(e);
@@ -577,15 +600,14 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         // we need to do it twice because data could have been overwritten by copyWikiWeb
         newspace.updateSpaceFromRequest();
-        newspace.setCreator(context.getUser());
-        newspace.setCreationDate(new Date());
-        
         try {
             newspace.saveWithProgrammingRights();
             // we need to add the creator as a member and as an admin
             addAdmin(newspace.getSpaceName(), context.getUser(), context);
             addMember(newspace.getSpaceName(), context.getUser(), context);
             setSpaceRights(newspace, context);
+            //execute precreate actions
+            getSpaceManagerExtension().postCreateSpace( newspace.getSpaceName(), context );
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
@@ -621,15 +643,21 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER, SpaceManagerException.ERROR_XWIKI_NOT_IMPLEMENTED, "Not implemented");
         }
         Space space = getSpace(spaceName, context);
-        if (!space.isNew()) {
-            space.setType("deleted");
-            try {
-                space.saveWithProgrammingRights();
-            } catch (XWikiException e) {
-                throw new SpaceManagerException(e);
+        
+        //execute pre delete actions
+        if( getSpaceManagerExtension().preDeleteSpace(space.getSpaceName(), deleteData, context) )
+        {
+            if (!space.isNew()) {
+            	space.setType("deleted");
+            	try {
+            		space.saveWithProgrammingRights();
+            		//execute post delete actions
+            		getSpaceManagerExtension().postDeleteSpace(space.getSpaceName(), deleteData, context);
+            	} catch (XWikiException e) {
+            		throw new SpaceManagerException(e);
+            	}
             }
         }
-
     }
 
     /**
@@ -1161,24 +1189,18 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see SpaceManager#joinSpace(String, XWikiContext)
-     */
-    public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException
-    {
+    public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException {
         try {
-            SpaceUserProfile userProfile =
-                newUserSpaceProfile(context.getUser(), spaceName, context);
+            SpaceUserProfile userProfile = newUserSpaceProfile(context.getUser(), spaceName, context);
             userProfile.updateProfileFromRequest();
             userProfile.saveWithProgrammingRights();
             addMember(spaceName, context.getUser(), context);
-            sendMail(SpaceAction.JOIN, getSpace(spaceName, context), context);
             return true;
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
+
+
     }
 
     private void sendMail(String action, Space space, XWikiContext context)
@@ -1199,9 +1221,6 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // notify space administrators upon space creation
             Collection admins = getAdmins(space.getSpaceName(), context);
             toUsers = (String[]) admins.toArray(new String[admins.size()]);
-        } else if (SpaceAction.JOIN.equals(action)) {
-            // send join group confirmation e-mail
-            toUsers = new String[] {context.getUser()};
         }
 
         if (fromUser == null) {
