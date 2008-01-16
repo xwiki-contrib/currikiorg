@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
 import org.xwiki.plugin.spacemanager.impl.SpaceImpl;
@@ -29,6 +31,7 @@ public class CurrikiSpace extends SpaceImpl {
     public static final String VALIDATION_URL_SHORT = "url-short";
     public static final String VALIDATION_URL_LONG = "url-long";
     public static final String VALIDATION_URL_EXISTS = "url-exists";
+    public static final String VALIDATION_URL_INVALID = "url-invalid";
     public static final String VALIDATION_EDUCATION_REQUIRED = "education-required";
     public static final String VALIDATION_TYPE_REQUIRED = "type-required";
     public static final String VALIDATION_SUBJECT_REQUIRED = "subject-required";
@@ -94,6 +97,13 @@ public class CurrikiSpace extends SpaceImpl {
                 if(list!=null && list.size()>0)
                     errors.put( this.VALIDATION_URL_EXISTS, "1" );
             }
+            
+            //valid characters in url
+            Pattern p = Pattern.compile("([a-zA-Z])([a-zA-Z0-9\\-]*)");
+            Matcher m = p.matcher(url);
+            if( !m.matches() )
+            	errors.put( this.VALIDATION_URL_INVALID, "1" );
+            
 
             //description is set
             String desc = this.getDescription();
