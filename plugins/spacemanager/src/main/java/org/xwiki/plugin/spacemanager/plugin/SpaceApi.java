@@ -171,4 +171,11 @@ public class SpaceApi {
             throw new SpaceManagerException(e);
         }
     }
+    
+    /**
+     * Validates the space data
+     */
+    public boolean validateSpaceData(){
+    	return validateSpaceData();
+    }
 }

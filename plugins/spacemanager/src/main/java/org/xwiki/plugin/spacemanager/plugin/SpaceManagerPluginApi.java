@@ -293,8 +293,7 @@ public class SpaceManagerPluginApi extends PluginApi
         if (!hasProgrammingRights())
          return false;
 
-        getSpaceManager().updateSpaceFromRequest(space, context);
-        return true;
+        return getSpaceManager().updateSpaceFromRequest(space, context);
     }
 
     /**

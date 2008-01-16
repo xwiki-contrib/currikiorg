@@ -842,8 +842,12 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         return spaceList;
     }
 
-    public void updateSpaceFromRequest(Space space, XWikiContext context) throws SpaceManagerException {
-        space.updateSpaceFromRequest();
+    public boolean updateSpaceFromRequest(Space space, XWikiContext context) throws SpaceManagerException {
+    	space.updateSpaceFromRequest();
+    	if(space.validateSpaceData())	
+        	return true;
+        else
+        	return false;        
     }
 
     public boolean validateSpaceData(Space space, XWikiContext context) throws SpaceManagerException {

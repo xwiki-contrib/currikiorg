@@ -196,7 +196,7 @@ public interface SpaceManager extends XWikiPluginInterface {
      * @param space
      * @param context
      */
-    public void updateSpaceFromRequest(Space space, XWikiContext context) throws SpaceManagerException;
+    public boolean updateSpaceFromRequest(Space space, XWikiContext context) throws SpaceManagerException;
 
     /**
      * Validate that the space data is valid. Wrong data are stored in the context
