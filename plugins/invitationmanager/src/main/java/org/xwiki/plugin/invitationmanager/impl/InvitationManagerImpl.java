@@ -1374,6 +1374,7 @@ public class InvitationManagerImpl implements InvitationManager
         XWikiDocument translatedMailDoc = mailDoc.getTranslatedDocument(context);
         mailSender.prepareVelocityContext(fromUser, strToUsers, "", vContext, context);
         vContext.put("xwiki", new XWiki(context.getWiki(), context));
+        vContext.put("context", new com.xpn.xwiki.api.Context(context));
         String mailSubject =
             XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
                 vContext);

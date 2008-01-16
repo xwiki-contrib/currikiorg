@@ -276,10 +276,19 @@ public class InvitationManagerPluginApi extends PluginApi
      * If the context user is not an administrator of the space, does nothing and log a warning in
      * the context.
      */
-    public void rejectMembership(String space, String userName) throws InvitationManagerException {
+    public boolean rejectMembership(String space, String userName)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            getInvitationManager().rejectMembership(space, userName, context);
+            try {
+                getInvitationManager().rejectMembership(space, userName, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
+        return false;
     }
 
     /**
@@ -289,10 +298,19 @@ public class InvitationManagerPluginApi extends PluginApi
      * 
      * @see #rejectMembership(String, String)
      */
-    public void rejectMembership(String space, String userName, String templateMail) throws InvitationManagerException {
+    public boolean rejectMembership(String space, String userName, String templateMail)
+    {
+        context.remove("InvitationManagerException");
         if (hasProgrammingRights()) {
-            getInvitationManager().rejectMembership(space, userName, templateMail, context);
+            try {
+                getInvitationManager().rejectMembership(space, userName, templateMail, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
         }
+        return false;
     }
 
     /**
