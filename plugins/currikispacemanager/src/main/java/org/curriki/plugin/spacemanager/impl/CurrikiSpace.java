@@ -25,6 +25,7 @@ public class CurrikiSpace extends SpaceImpl {
     
     public static final String VALIDATION_TITLE_SHORT = "title-short";
     public static final String VALIDATION_TITLE_LONG = "title-long";
+    public static final String VALIDATION_TITLE_INVALID = "title-invalid";
     public static final String VALIDATION_DESC_SHORT = "desc-short";
     public static final String VALIDATION_DESC_LONG = "desc-long";
     public static final String VALIDATION_SPACE_EXISTS = "space-exists";
@@ -66,9 +67,16 @@ public class CurrikiSpace extends SpaceImpl {
             String title = this.getDisplayTitle();
             if(title.length() < 1)	
             	errors.put( this.VALIDATION_TITLE_SHORT, "1" );
-            if(title.length() > 32)
-            	errors.put( this.VALIDATION_TITLE_LONG, "1" );
-            
+           
+            if(title.length() > 64)
+             	errors.put( this.VALIDATION_TITLE_LONG, "1" );
+				
+			//valid characters in title
+            Pattern pt = Pattern.compile("([ a-zA-Z0-9\\-\\_\\+\\,\\.\\?\\!\\@\\$\\&\\*\\(\\)]*)");
+			Matcher mt = pt.matcher(title);
+            if( !mt.matches() )
+            	errors.put( this.VALIDATION_TITLE_INVALID, "1" );
+
             //existance of a group with this name
             // this won't work because we manage space name uniqueness
             // if(!this.isNew())
