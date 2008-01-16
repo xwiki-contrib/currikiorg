@@ -1635,7 +1635,11 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 #if($hasbutton == 1) ## {
 #mycurrikipage_button($userobj)
 #end ## }
+#if("$!pageref" == "blog") ## {
+#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle", ["$userobj.first_name $userobj.last_name"]))
+#else ## } {
 #set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
+#end ## }
 <div id="mycurriki-main-header-left">
 ## <div id="mycurriki-main-header-title" class="main-title">
 ## TODO: Please note that these rules will only be valid for english
