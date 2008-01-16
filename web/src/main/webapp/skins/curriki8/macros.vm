@@ -1030,15 +1030,30 @@ createCookie("Section${seccounter}Hidden", true, "");
 #end
 #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
 #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
-#if($logowidth > 121)
-  #set($logowidth = 121)
+##if($logowidth > 121)
+##  #set($logowidth = 121)
+###end
+###if($logoheight > 83)
+##  #set($logoheight = 83)
+###end
+
+## find out wich dimmension overflows the most
+#set( $image_resize = "" )
+#if( $logowidth > 120 || $logoheight > 82 )
+  #set( $ratio = $logowidth / $logoheight )
+  #set( $width_overflow = 80 * $ratio )
+  #set( $height_overflow = 120 / $ratio )
+  #if( $width_overflow > 120 )
+	#set( $image_resize = "?width=120")
+  #else
+	#set( $image_resize = "?height=82")
+  #end
 #end
-#if($logoheight > 83)
-  #set($logoheight = 83)
-#end
+
 <div id="asset-metadatas-block-groupimg">
 <a href="${sUrl}">
-<img src="$m_logo" width="$logowidth" height="$logoheight" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
+##<img src="$m_logo" width="$logowidth" height="$logoheight" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
+<img src="${m_logo}${image_resize}" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
 </a>
 </div>
 <div id="asset-metadatas-block-groupname">
