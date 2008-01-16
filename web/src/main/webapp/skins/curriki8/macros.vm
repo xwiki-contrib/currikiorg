@@ -2066,13 +2066,13 @@ $!desc
   #set($spacehome = $s.getSpaceName()+".WebHome")
   #set($srcdoc = $xwiki.getDocument($spacehome))
   #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
+  #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
+  #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
 #else
-  #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
-  #set($logofilename = "default_logo.gif")
-  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
+  #set($srcdoc = $xwiki.getSkinFile("groups_default_logo.gif"))
+  #set($logowidth = 121)
+  #set($logoheight = 83)
 #end
-#set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
-#set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
 #if($logowidth > 121)
   #set($logowidth = 121)
 #end
