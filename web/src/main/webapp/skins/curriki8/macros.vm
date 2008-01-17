@@ -1905,7 +1905,7 @@ $xwiki.getUserName($asset.creator)
 ## Now figure out total, current, first, and last page
 #set($pages = (($of - 1) / $nbToDisplay) + 1)
 #set($cpage = ($from / $nbToDisplay) + 1)
-#set($fpage = ($cpage / 10) + 1)
+#set($fpage = ((($cpage - 1) / 10) * 10) + 1)
 #set($lpage = $fpage + 9)
 #if($lpage > $pages) ## {
 #set($lpage = $pages)
