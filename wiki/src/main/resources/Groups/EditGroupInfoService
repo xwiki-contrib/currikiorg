@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>Groups</web>
+<name>EditGroupInfoService</name>
+<language></language>
+<defaultLanguage></defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator></creator>
+<author>XWiki.LudovicDubost</author>
+<customClass></customClass>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<creationDate>1200444081000</creationDate>
+<date>1200487525000</date>
+<contentUpdateDate>1200487525000</contentUpdateDate>
+<version>1.4</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<content>#includeMacros("Groups.Macros")
+##Loading spacemanager
+#set($sm = $xwiki.csm)
+#set($spaceName = $request.space)
+#set($divid = $request.divid)
+#set($s = $sm.getSpace($spaceName))
+#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
+#if(!$isGroupAdmin)
+$msg.groups_needsadminrights
+#else
+&lt;form id="wblockform" action="$xwiki.getURL("Groups.SaveGroupInfoService")" method="post" onsubmit="new iframe(this,{update:'${divid}'}); return false;"&gt;
+&lt;input type="hidden" name="divid" value="$request.divid" /&gt;
+&lt;input type="hidden" name="space" value="$request.space" /&gt;
+
+############# membership policy ################
+#begingroupsection($msg.groups_home_editinformation_member_policy_title,"","","blue", false)
+$s.display("policy","edit")
+
+#endgroupsection()
+
+############# subject - level #################
+#begingroupsection($msg.groups_home_editinformation_subjectlevel_title,"","","blue", false)
+
+&lt;table border="0"&gt;
+&lt;tr&gt;
+&lt;th&gt;$msg.groups_home_editinformation_subject_title&lt;/th&gt;
+&lt;th&gt;$msg.groups_home_editinformation_level_title&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td width="50%"&gt; $s.display("topic","edit") &lt;/td&gt;
+&lt;td width="50%"&gt; $s.display("educationLevel","edit") &lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+
+#endgroupsection()
+
+############### language ###################
+#begingroupsection($msg.groups_home_editinformation_language_title,"","","blue", false)
+
+$s.display("language","edit")
+
+#endgroupsection()
+
+############## licence ##############
+#begingroupsection($msg.groups_home_editinformation_license_title,"","","blue", false)
+
+$s.display("licence","edit")
+
+#endgroupsection()
+
+################ information access #####
+#begingroupsection($msg.groups_home_editinformation_access_title,"","","blue", false)
+
+$s.display("accessprivileges","edit")
+
+#endgroupsection()
+
+
+############## webadress ###########
+#begingroupsection($msg.groups_home_editinformation_webaddress_title,"","","blue", false)
+
+$msg.groups_home_editinformation_webaddress_instruction &lt;br /&gt;
+http:&amp;#47;&amp;#47; $s.display("urlshortcut","edit") .groups.curriki.org
+
+#endgroupsection()
+
+&lt;table&gt;&lt;tr&gt;
+&lt;td&gt;&lt;input type="submit" value="$msg.groups_home_editinformation_submit_btt" /&gt;&lt;/td&gt;
+&lt;td&gt;#button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )&lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+
+&lt;/form&gt;
+&lt;div class="tooltips"&gt;
+$xwiki.addTooltipJS()
+&lt;/div&gt;
+#end</content>
+</xwikidoc>

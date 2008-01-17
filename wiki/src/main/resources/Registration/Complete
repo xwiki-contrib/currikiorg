@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1192654245000</creationDate>
-<date>1194550666000</date>
-<contentUpdateDate>1194550666000</contentUpdateDate>
-<version>1.14</version>
+<date>1200175161000</date>
+<contentUpdateDate>1200175161000</contentUpdateDate>
+<version>1.21</version>
 <title>Registration Complete</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-1113</comment>
+<comment>Fix login box</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -53,7 +53,8 @@
 <tags/>
 </property>
 </object>
-<content>#if($request.xwikiname &amp;&amp; $request.xwikiname != "" &amp;&amp; $request.validkey &amp;&amp; $request.validkey != "")
+<content>#includeMacros("Groups.Macros")
+#if($request.xwikiname &amp;&amp; $request.xwikiname != "" &amp;&amp; $request.validkey &amp;&amp; $request.validkey != "")
 #set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
 #set($junk = $reg.setObjects($xwiki, $context, $msg))
 #set($result = $reg.validateUser(true))
@@ -61,11 +62,10 @@
 &lt;div class="registration-complete"&gt;
 $msg.get("registration.validate.validated")
 &lt;br /&gt;
-&lt;form action="$xwiki.getURL("XWiki.XWikiLogin", "login")" method="get"&gt;
-&lt;div class="buttons"&gt;
-&lt;button class="button" type="submit" name="" value=""&gt;$msg.get("registration.login_button")&lt;/button&gt;
-&lt;/div&gt;
-&lt;/form&gt;
+#set($userdoc = $xwiki.getDocument("XWiki.${request.xwikiname}"))
+#set($ok = $userdoc.use("XWiki.XWikiUsers"))
+#set($logredir = $!userdoc.getValue("validredirect").replaceAll("-","&amp;"))
+#loginbox("$logredir")
 &lt;/div&gt;
 #else
 $msg.get("registration.validate.failed.bad_key_or_loginname")

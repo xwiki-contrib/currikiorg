@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>Groups</web>
+<name>WebHomeSheet</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.superadmin</creator>
+<author>XWiki.LudovicDubost</author>
+<customClass></customClass>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<creationDate>1198004622000</creationDate>
+<date>1200487452000</date>
+<contentUpdateDate>1200487452000</contentUpdateDate>
+<version>1.48</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Groups.WebHomeSheet</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#includeMacros("Groups.Macros")
+#groupinit()
+#groupsheader("home")
+#if($request.firsttime=="1")
+&lt;div id="groups_firsttimewelcome"&gt;
+&lt;div id="groups_firsttimewelcome_title"&gt;
+$msg.get("groups_home_firsttimewelcome_title")
+&lt;/div&gt;
+##&lt;div id="groups_firsttimewelcome_closebutton"&gt;
+##&lt;a href="javascript:void()" onclick="$('groups_firsttimewelcome').style.display='none'; return false;"&gt;$msg.groups_firsttimewelcome_close&lt;/a&gt;
+##&lt;/div&gt;
+#includeInContext("Groups.CreateNewGroupDone")    
+&lt;/div&gt;
+#end
+#set($action = $request.get("action"))
+#if($action=="editmasthead")
+  #includeInContext("Groups.EditMastheadSheet")
+#elseif($action=="editinfo")
+  #includeInContext("Groups.EditInfoSheet")
+#else
+&lt;div class="head"&gt;
+#if($isGroupAdmin)
+#mycurrikiGroupInfo($s.spaceName "edit")
+#else
+#mycurrikiGroupInfo($s.spaceName "view")
+#end
+&lt;/div&gt;
+############### welcome message ##########
+#groupsdisplaywelcome($msg.groups_home_welcome $spaceName $doc.name $isGroupAdmin)
+############### activities #################
+#*
+#begingroupsection($msg.groups_home_activities_title $msg.groups_home_activities_feed "#" "blue" $isGroupAdmin)
+#set($lm = $sm.getLastModifiedDocuments($spaceName,false,5,0))
+#foreach($l in $lm)
+&lt;div class="spacedoc"&gt;
+  &lt;span class="spacedoc-date"&gt;$xwiki.formatDate($l.getDate(), $msg.get("mycurriki.dateFormat"))&lt;/span&gt;
+  &lt;span class="spacedoc-title"&gt;$l.getDisplayTitle()&lt;/span&gt;
+  &lt;span class="spacedoc-editor"&gt;$l.getAuthor()&lt;/span&gt;
+&lt;/div&gt;
+#end
+#endgroupsection()
+*#
+############# informations ##################
+#set($editlink = $s.getHomeURL()+"?action=editinfo")
+#if($isGroupAdmin&amp;&amp;$request.ajax=="1")
+&lt;script type="text/javascript"&gt;
+function editGroupInfo(spaceName,divid) {
+  var pars = "space=" + spaceName + "&amp;divid=" + divid + "&amp;xpage=plain";
+  $(divid).innerHTML = "&lt;p&gt;${msg.groups_loadinginprogress}&lt;/p&gt;";
+  // call url to get the edit html to edit the profile
+  var myAjax = new Ajax.XWikiRequest( "Groups", "EditGroupInfoService", {method: 'get', parameters: pars, onComplete: editGroupInfoCallback, divid: divid });
+}
+function editGroupInfoCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+}
+function cancelEditGroupInfo(spaceName,divid) {
+  if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
+   var pars = "space=" + spaceName + "&amp;divid=" + divid + "&amp;xpage=plain";
+   $(divid).innerHTML = "&lt;p&gt;${msg.groups_loadinginprogress}&lt;/p&gt;";
+   // call url to get the edit html to edit the profile
+   var myAjax = new Ajax.XWikiRequest( "Groups", "ViewGroupInfoService", {method: 'get', parameters: pars, onComplete: cancelEditGroupInfoCallback, divid: divid });
+  }
+}
+function cancelEditGroupInfoCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+}
+&lt;/script&gt;
+#begingroupsection($msg.groups_home_information_title, $msg.groups_home_information_link, "javascript:editGroupInfo('${spaceName}','group-info')", "blue" $isGroupAdmin)
+#else
+#begingroupsection($msg.groups_home_information_title, $msg.groups_home_information_link, "$editlink", "blue" $isGroupAdmin)
+#end
+&lt;div id="group-info"&gt;
+&lt;div class="group-membership-policy"&gt;
+&lt;strong class="caption"&gt;$msg.get("groups_home_information_member_policy")&lt;/strong&gt; $s.display("policy","view")
+&lt;/div&gt;
+&lt;div class="group-licence"&gt;
+&lt;strong class="caption"&gt;$msg.get("groups_home_information_license")&lt;/strong&gt;
+$s.display("licence","view")
+&lt;/div&gt;
+&lt;div class="group-language"&gt;
+&lt;strong class="caption"&gt;$msg.get("groups_home_information_language")&lt;/strong&gt;
+$s.display("language","view")
+&lt;/div&gt;
+&lt;div class="group-access-policy"&gt;
+&lt;strong class="caption"&gt;$msg.get("groups_home_information_access")&lt;/strong&gt;
+$s.display("accessprivileges","view")
+&lt;/div&gt;
+&lt;div class="group-creation-date"&gt;
+&lt;strong class="caption"&gt;$msg.get("groups_home_information_creationdate")&lt;/strong&gt; $xwiki.formatDate($s.getCreationDate(), $msg.get("mycurriki.dateFormat"))
+&lt;/div&gt;
+&lt;div class="group-subject-education-level"&gt;
+&lt;table width="100%" border="0"&gt;
+&lt;tr&gt;
+&lt;th width="50%" class="caption"&gt;$msg.get("groups_home_information_subject")&lt;/th&gt;
+&lt;th width="50%" class="caption"&gt;$msg.get("groups_home_information_level")&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; $s.display("topic","view") &lt;/td&gt;
+&lt;td&gt; $s.display("educationLevel","view").replaceAll("#--#","&lt;br /&gt;") &lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+#endgroupsection()
+############### group contributions ################
+&lt;div class="groups-curriculum"&gt;
+&lt;div id="groups-search" class="frame"&gt;
+#mycurrikititlebar($msg.get("groups_home_contributions_title") "" "" "red")
+&lt;div class="frame-content"&gt;
+$msg.get("groups_home_contributions_infotxt")
+&lt;div&gt;
+{pre}
+&lt;form id="groupsearch"
+      onsubmit="document.groupsearch.method='post'; if (document.groupsearch.brsqry.value!='') {document.groupsearch.action=document.groupsearch.action+'#__terms='+document.groupsearch.brsqry.value;}; document.location.href=document.groupsearch.action; return false;"
+      action="/xwiki/bin/view/${spaceName}/ContributionsSearch"
+      name="groupsearch"&gt;
+{/pre}
+&lt;div class="groupcontribution-leftbutton"&gt;
+&lt;a class="button button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")"&gt;$msg.get("groups.curriculum.contributions.viewAll")&lt;/a&gt;
+$msg.get('groups.curriculum.contributions.viewORsearch')
+&lt;/div&gt;
+##
+&lt;div id="curriki-search-field-container"&gt;
+    &lt;div class="curriki-search-a" id="curriki-search-field"&gt;
+     &lt;input type="hidden" value="" name="area" class="hidden"/&gt;
+     &lt;input type="text" value="$msg.groups_home_contributions_searchfieldtxt" id="curriki-searchbox" name="brsqry" onfocus="if(this.value=='$msg.groups_home_contributions_searchfieldtxt') this.value='';" onblur="if(this.value=='') this.value='$msg.groups_home_contributions_searchfieldtxt';" /&gt;
+     &lt;button name="btn" type="submit" id="searchbtn"&gt;$msg.get("groups.curriculum.contributions.go")&lt;/button&gt;
+    &lt;/div&gt; &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+################# group memberships ################
+#groupsmembershipinfo($spaceName)
+#end
+#groupsfooter()</content>
+</xwikidoc>

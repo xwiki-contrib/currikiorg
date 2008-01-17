@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>Groups</web>
+<name>EditInfoSheet</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.cristi</creator>
+<author>XWiki.Gpousseo</author>
+<customClass></customClass>
+<contentAuthor>XWiki.Gpousseo</contentAuthor>
+<creationDate>1198091297000</creationDate>
+<date>1200593878000</date>
+<contentUpdateDate>1200593878000</contentUpdateDate>
+<version>1.40</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>dd</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Groups.EditInfoSheet</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#includeMacros("Groups.Macros")
+
+##Loading spacemanager
+#set($sm = $xwiki.csm)
+#set($spaceName = $doc.space)
+#set($s = $sm.getSpace($spaceName))
+
+#if($request.method=="POST")
+  #set($oldPolicy = $s.policy)
+  #set($ok = $sm.updateSpaceFromRequest($s))
+#end
+
+#if($ok)
+  $s.save($xwiki.getContext())
+  #if($oldPolicy!=$s.policy)
+     ## we need to update the rights
+     $sm.updateSpaceRights($s, $oldPolicy, $s.policy)
+  #end
+  $response.sendRedirect($s.getHomeURL())
+#else
+&lt;form class="CreateNewGroup" action="#" method="post"&gt;
+
+############# membership policy ################
+&lt;div class="frame"&gt;
+#mycurrikititlebar($msg.groups_home_editinformation_member_policy_title,"","","blue")
+&lt;div class="section frame-content"&gt;
+
+$s.display("policy","edit")
+
+&lt;/div&gt;
+&lt;/div&gt;
+##endgroupsection()
+
+############# subject - level #################
+&lt;div class="frame"&gt;
+#mycurrikititlebar($msg.groups_home_editinformation_subjectlevel_title,"","","blue")
+&lt;div class="section frame-content"&gt;
+
+&lt;table border="0"&gt;
+&lt;tr&gt;
+&lt;th&gt;$msg.groups_home_editinformation_subject_title&lt;/th&gt;
+&lt;th&gt;$msg.groups_home_editinformation_level_title&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td width="50%"&gt; $s.display("topic","edit") &lt;/td&gt;
+&lt;td width="50%"&gt; $s.display("educationLevel","edit") &lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+
+   #validateGroup( "subject-required" "" $msg.groups_validation_subject_required)
+   #validateGroup( "education-required" "" $msg.groups_validation_education_required)
+
+&lt;/div&gt;
+&lt;/div&gt;
+##endgroupsection()
+
+############### language ###################
+&lt;div class="frame"&gt;
+#mycurrikititlebar($msg.groups_home_editinformation_language_title,"","","blue")
+&lt;div class="section frame-content"&gt;
+
+$s.display("language","edit")
+
+&lt;/div&gt;
+&lt;/div&gt;
+##endgroupsection()
+
+############## licence ##############
+&lt;div class="frame"&gt;
+#mycurrikititlebar($msg.groups_home_editinformation_license_title,"","","blue")
+&lt;div class="section frame-content"&gt;
+
+$s.display("licence","edit")
+#validateGroup( "licence-required" "" $msg.groups_validation_licence_required)
+
+&lt;/div&gt;
+&lt;/div&gt;
+##endgroupsection()
+
+################ information access #####
+&lt;div class="frame"&gt;
+#mycurrikititlebar($msg.groups_home_editinformation_access_title,"","","blue")
+&lt;div class="section frame-content"&gt;
+
+$s.display("accessprivileges","edit")
+
+&lt;/div&gt;
+&lt;/div&gt;
+##endgroupsection()
+
+
+############## webadress ###########
+&lt;div class="frame"&gt;
+#mycurrikititlebar($msg.groups_home_editinformation_webaddress_title,"","","blue")
+&lt;div class="section frame-content"&gt;
+
+$msg.groups_home_editinformation_webaddress_instruction &lt;br /&gt;
+http:&amp;#47;&amp;#47; $s.display("urlshortcut","edit") .groups.curriki.org
+
+#validateGroup( "url-short" "" $msg.groups_validation_url_short)
+#validateGroup( "url-long" "" $msg.groups_validation_url_long)
+#validateGroup( "url-exists" "" $msg.groups_validation_url_exists)
+#validateGroup( "url-invalid" "" $msg.groups_validation_url_invalid)
+
+&lt;/div&gt;
+&lt;/div&gt;
+##endgroupsection()
+
+&lt;div class="button-center"&gt;&lt;input class="button button-orange" type="submit" value="$msg.groups_home_editinformation_submit_btt" /&gt; #button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )&lt;/div&gt;
+
+&lt;/form&gt;
+#end
+&lt;div class="tooltips"&gt;
+$xwiki.addTooltipJS()
+&lt;/div&gt;</content>
+</xwikidoc>

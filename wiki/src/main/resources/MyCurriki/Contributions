@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>MyCurriki</web>
+<name>Contributions</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent>MyCurriki.WebHome</parent>
+<creator>XWiki.dward</creator>
+<author>XWiki.dward</author>
+<customClass></customClass>
+<contentAuthor>XWiki.dward</contentAuthor>
+<creationDate>1196982068000</creationDate>
+<date>1200586946000</date>
+<contentUpdateDate>1200586946000</contentUpdateDate>
+<version>1.34</version>
+<title>Contributions</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>Remove AssetTemp</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>MyCurriki.Contributions</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#includeMacros("MyCurriki.MyCurrikiMacros")
+## SPECIFIC MACROS
+#macro(contributionAsset $asset $allcols)
+#if(!$g_rowCount) ## {
+#set($g_rowCount = 0)
+#end ## }
+#set($g_rowCount = $g_rowCount + 1)
+&lt;tr class="table-row#if(($g_rowCount % 2) == 0) table-odds#end"&gt;
+&lt;td class="table-col-title"&gt;#mycurrikiassettitlewithmodesc($asset)&lt;/td&gt;
+&lt;td class="table-col-ict"&gt;#mycurrikiict($asset)&lt;/td&gt;
+&lt;td class="table-col-updated"&gt;#mycurrikilastupdate($asset)&lt;/td&gt;
+#if($allcols)
+&lt;td class="table-col-access"&gt;#mycurrikiaccess($asset)&lt;/td&gt;
+#end ## if allcols
+&lt;td class="table-col-filetype"&gt;#mycurrikifiletype($asset)&lt;/td&gt;
+#if($allcols)
+&lt;td class="table-col-action"&gt;
+&lt;div class="button-links"&gt;
+#if($asset.hasAccessLevel("edit"))
+&lt;a class="button-link" target="_blank" href="#gwtEditUrl(${asset.fullName})"&gt;$msg.get("caption.edit")&lt;/a&gt;
+#end
+#if($asset.creator == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($asset.fullName, "delete"))
+#set($deleteMsg = $msg.get('mycurriki.contributions.actions.delete.confirm'))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&amp;docName=${asset.fullName}&amp;sourceDoc=$doc.getURL('view')"))
+&lt;a class="button-link-table" onclick="return confirm('$deleteMsg')" href="$deleteUrl"&gt;$msg.get("caption.delete")&lt;/a&gt;
+#end
+&lt;/div&gt;
+&lt;/td&gt;
+#end ## if allcols
+&lt;/tr&gt;
+#end
+## content macro
+#macro(mycurrikipage_content $userdoc $userobj)
+#set($headerArgs="user=${userdoc.fullName}&amp;")
+#set($allcols = false)
+#if($context.user=="XWiki.XWikiGuest")
+## Settings for guests here
+#end
+#if($context.user==$userdoc.fullName)
+## Settings for owner here
+#set($allcols = true)
+#set($headerArgs="")
+#end
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+#set($descnb = 0)
+## Do query for contributions
+#if("$!request.sortBy"=="") ## {
+#set($sortBy = "date")
+#set($sortDir = 'desc')
+#elseif($request.sortBy=="date") ## } {
+#set($sortBy = "date")
+#set($sortDir = 'desc')
+#elseif($request.sortBy=="title") ## } {
+#set($sortBy = "title")
+#set($sortDir = 'asc')
+#elseif($request.sortBy=="access" &amp;&amp; $allcols) ## } {
+#set($sortBy = "access")
+#set($sortDir = 'asc')
+#else ## } {
+#set($sortBy = "date")
+#set($sortDir = 'desc')
+#end ## }
+##
+#if("$!request.sortDir"=="") ## {
+#elseif($request.sortDir=="asc") ## } {
+#set($sortDir = 'asc')
+#elseif($request.sortDir=="desc") ## } {
+#set($sortDir = 'desc')
+#end ## }
+##
+#set($sortArgs = "")
+#if($sortBy == "date") ## {
+#if($sortDir == "asc") ## {
+#set($sortArgs = "sortDir=asc")
+#end ## }
+#elseif ($sortBy == "title") ## } {
+#set($sortArgs = "sortBy=title")
+#if($sortDir == "desc") ## {
+#set($sortArgs = "${sortArgs}&amp;sortDir=desc")
+#end ## }
+#elseif ($sortBy == "access") ## } {
+#set($sortArgs = "sortBy=access")
+#if($sortDir == "desc") ## {
+#set($sortArgs = "${sortArgs}&amp;sortDir=desc")
+#end ## }
+#end ## }
+##
+## Order by reverse last updated
+#if($sortBy=="title") ## {
+#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
+#elseif($sortBy=="access") ## Default sort by rights ## } {
+#set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
+#else ## Default sort by date ## } {
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by doc.date $sortDir")
+#end ## }
+## Order by property ascending
+## How can we sort by
+## filetype (determined in a macro)
+## instructional_component (if not exists how do we act as blank)
+##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by prop1.value $sortDir")
+##
+##
+#set($assetList = $xwiki.searchDocuments($sql))
+#set($nbToDisplay = 20)
+#set($startIndex = 0)
+#set($Integer = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex &gt; ($assetList.size() - 1))
+ #set($startIndex = $assetList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex &gt; ($assetList.size() - 1))
+ #set($endIndex = $assetList.size() - 1)
+#end
+## Display contributions in table using pagination
+&lt;table id="mycurriki-contributions-table" class="table table-contributions"&gt;
+&lt;tr&gt;
+#if($sortBy=="title" &amp;&amp; $sortDir == "asc") ## {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title&amp;sortDir=desc"))
+#else ## } {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title"))
+#end ## }
+&lt;th class="table-header#if($sortBy=="title") table-header-sorted#end table-col-title"&gt;&lt;a href="$url"&gt;$msg.get('mycurriki.contributions.table.title')&lt;/a&gt;&lt;/th&gt;
+&lt;th class="table-header table-header-fixed table-col-ict"&gt;$msg.get('mycurriki.contributions.table.ict')&lt;/th&gt;
+#if($sortBy=="date" &amp;&amp; $sortDir == "desc") ## {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortDir=asc"))
+#else ## } {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}"))
+#end ## }
+&lt;th class="table-header#if($sortBy=="date") table-header-sorted#end table-col-lastupdated"&gt;&lt;a href="$url"&gt;$msg.get('mycurriki.contributions.table.lastupdated')&lt;/a&gt;&lt;/th&gt;
+#if($allcols)
+#if($sortBy=="access" &amp;&amp; $sortDir == "asc") ## {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=access&amp;sortDir=desc"))
+#else ## } {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=access"))
+#end ## }
+&lt;th class="table-header#if($sortBy=="access") table-header-sorted#end table-col-access"&gt;&lt;a href="$url"&gt;$msg.get('mycurriki.contributions.table.access')&lt;/a&gt;&lt;/th&gt;
+#end ## if allcols
+&lt;th class="table-header table-header-fixed table-col-filetype"&gt;$msg.get('mycurriki.contributions.table.filetype')&lt;/th&gt;
+#if($allcols)
+&lt;th class="table-header table-header-fixed table-col-action"&gt;$msg.get('mycurriki.contributions.table.action')&lt;/th&gt;
+#end ## if allcols
+&lt;/tr&gt;
+## row per item -- number of rows configurable
+#set($showcount = 0)
+#foreach($assetPage in $assetList)
+#if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
+#set($asset = $xwiki.getDocument($assetPage))
+#set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
+#if("$type"!="2")
+#set($showcount = 1 + $showcount)
+#if(($showcount &gt; $startIndex) &amp;&amp; ($showcount &lt; ($endIndex + 2)))
+#contributionAsset($asset $allcols)
+#end ## showcount &gt; startIndex &amp;&amp; showcount &lt; endIndex
+#end ## type != 2
+#end  ## if has view access
+#end ## foreach assetPage in list
+#if($showcount == 0)
+&lt;tr&gt;&lt;td colspan="6"&gt;$msg.get("mycurriki.contributions.noresults")&lt;/td&gt;&lt;/tr&gt;
+#end
+&lt;/table&gt;
+## Pagination here
+#mycurrikipaginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
+#end
+##
+##
+## END OF MACROS
+## END OF SETTINGS
+## Display of page
+#mycurrikipage("contributions")</content>
+</xwikidoc>

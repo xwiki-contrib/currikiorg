@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.thimel</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.thimel</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1171311598000</creationDate>
-<date>1179770344000</date>
-<contentUpdateDate>1191618610000</contentUpdateDate>
-<version>1.86</version>
+<date>1197329116000</date>
+<contentUpdateDate>1197329116000</contentUpdateDate>
+<version>1.89</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Get user for blog space</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -53,7 +53,27 @@
 <tags/>
 </property>
 </object>
-<content>&lt;div class="edit-blog"&gt;
+<content>#if($doc.web == "Members") ## {
+$response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
+#else ## } {
+#set($user = $context.user)
+#if($user.startsWith("XWiki.")) ## {
+#set($user = $user.substring(6))
+#end ## }
+#if($doc.web.startsWith("Blog_")) ## {
+#set($shortname = $doc.web.substring(5))
+#else ## } {
+#set($shortname = $user)
+#end ## }
+#if($user == $shortname) ## {
+$response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
+#else ## } {
+#set($userarg = "user=${shortname}")
+$response.sendRedirect($xwiki.getURL('MyCurriki.Blog', 'view', "$userarg"))
+#end ## }
+#end ## }
+#*
+&lt;div class="edit-blog"&gt;
 #if(!$user)
  #if($doc.web != "Members")
   #set($user = $doc.web.substring(5))
@@ -133,4 +153,5 @@
 
 #blog($category $nbitems $nbstart)
 &lt;/div&gt;
-</content></xwikidoc>
+*#</content>
+</xwikidoc>

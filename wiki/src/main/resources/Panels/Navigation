@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.martagirdea</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1171480785000</creationDate>
-<date>1192583192000</date>
-<contentUpdateDate>1192583192000</contentUpdateDate>
-<version>1.156</version>
+<date>1200173298000</date>
+<contentUpdateDate>1200173298000</contentUpdateDate>
+<version>1.169</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Change to window.onload</comment>
+<comment>Fix create group link</comment>
 <object>
 <class>
 <name>Panels.PanelClass</name>
@@ -154,11 +154,11 @@
 #if(!$isguest)
 #navigationCategory($msg.get('panel.navigation.mycurriki'), "$context.user", true,
   [
-   [$msg.get('panel.navigation.mycollection'), "XWiki.MyCollectionsTemplate"],
-
-   [$msg.get('panel.navigation.mycontributors'),"XWiki.MyContributionsTemplate?user=${suser}"],
-   [$msg.get('panel.navigation.myblogs'), "Members.MyBlog"]
-
+   [$msg.get('panel.navigation.myfavorites'), "MyCurriki.Favorites"],
+   [$msg.get('panel.navigation.mycontributors'),"MyCurriki.Contributions"],
+   [$msg.get('panel.navigation.mycollection'), "MyCurriki.Collections"],
+   [$msg.get('panel.navigation.myblogs'), "MyCurriki.Blog"],
+   [$msg.get('panel.navigation.mygroups'), "MyCurriki.Groups"]
   ]
 )
 #end
@@ -167,7 +167,9 @@
 ##
 #navigationCategory($msg.get('panel.navigation.membercommunity'), "Members.WebHome", true,
   [
-   [$msg.get('panel.navigation.volunteer'), "Main.Volunteer"]
+   [$msg.get('panel.navigation.volunteer'), "Main.Volunteer"],
+   [$msg.get('panel.navigation.browseGroups'), "Groups.Browse"],
+   [$msg.get('panel.navigation.createGroup'), "Groups.AboutCreatingGroups"]
   ]
 )
 ##

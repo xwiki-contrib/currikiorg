@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>Groups</web>
+<name>RequestMembershipSheet</name>
+<language></language>
+<defaultLanguage></defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator></creator>
+<author>XWiki.mflorea</author>
+<customClass></customClass>
+<contentAuthor>XWiki.mflorea</contentAuthor>
+<creationDate>1198533941000</creationDate>
+<date>1200403778000</date>
+<contentUpdateDate>1200403778000</contentUpdateDate>
+<version>1.23</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>a</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Groups.RequestMembershipSheet</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#includeMacros("Groups.Macros")
+#groupsheader("members")
+##Loading invitationmanager
+#set($sm = $xwiki.csm)
+#set($spaceName = $doc.space)
+#set($space = $sm.getSpace($spaceName))
+#set($spaceTitle = $space.displayTitle)
+#begingroupsection($msg.get("groups_members_request_title",[$spaceTitle]),"","","blue",false)
+#if($context.user=="XWiki.XWikiGuest")
+$msg.get("groups_members_request_needaccount")
+#elseif($sm.isMember($spaceName,$context.user))
+$msg.get("groups_members_request_alreadymember")
+#elseif($request.method.toLowerCase()=="post")
+#set($im = $xwiki.invitationmanager)
+#set($text = $request.getParameter("text"))
+## send request (invitee, space, open, text)
+#set($map = $xwiki.hashMap)
+#set($roles = $xwiki.arrayList)
+#if($request.allowNotifications)
+#set($ok = $map.put("allowNotifications", "true"))
+#end
+#if($request.allowNotificationsFromSelf)
+#set($ok = $map.put("allowNotificationsFromSelf", "true"))
+#end
+#set($ok = $map.put("profile", $!request.profile))
+$im.requestMembership($spaceName,$text, $roles, $map)
+$msg.get("groups_members_request_sent",[$spaceTitle])
+#else
+&lt;form action="" method="post"&gt;
+&lt;p&gt;
+$msg.get("groups_members_request_infotxt",[$spaceTitle])
+&lt;br /&gt;
+$msg.get("groups_members_request_reasons_instruction")
+#tooltip("reasons-tooltip",$msg.get("groups_members_request_reasons_tooltip"))
+{pre}
+&lt;textarea name="text" cols="80" rows="7"&gt;&lt;/textarea&gt;
+{/pre}
+&lt;br /&gt;
+$msg.get("groups_members_request_bio_instruction")
+#tooltip("bio-tooltip",$msg.get("groups_members_request_bio_tooltip"))
+{pre}
+&lt;textarea name="profile" cols="80" rows="7"&gt;&lt;/textarea&gt;
+{/pre}
+
+&lt;br /&gt;
+&lt;input type="checkbox" name="allowNotifications" value="1" checked /&gt; $msg.get("groups_members_create_membersettings_email") #tooltip("email-tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))&lt;br /&gt;
+&lt;input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /&gt; $msg.get("groups_members_create_membersettings_changenotice") &lt;br /&gt;
+&lt;p class="paragraph button-right"&gt;&lt;input type="submit" class="button button-orange" value="$msg.get("groups_members_request_request_btt")" /&gt;&lt;/p&gt;
+&lt;/p&gt;
+&lt;/form&gt;
+#end
+#endgroupsection()
+#groupsfooter()
+&lt;div class="tooltips"&gt;
+$xwiki.addTooltipJS()
+&lt;/div&gt;</content>
+</xwikidoc>

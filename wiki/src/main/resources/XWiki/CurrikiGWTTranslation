@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.jeremi</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.jkl1231</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1173445381000</creationDate>
-<date>1194637961000</date>
-<contentUpdateDate>1194637961000</contentUpdateDate>
-<version>1.69</version>
+<date>1200516930000</date>
+<contentUpdateDate>1200516930000</contentUpdateDate>
+<version>1.84</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -60,7 +60,7 @@ params.iconsurl=/xwiki/skins/curriki8/icons/
 params.template.defaultimageurl=templatedefault.gif
 ## Translations
 main.curriki=Curriki
-main.login_first=You must be logged in to use that feature.  Please log in or click "Become a Member" to register.
+main.login_first=You must be logged in to use that feature. Please log in or click "Become a Member" to register.
 main.missing_rights=You don't have the necessary rights for this action.
 main.error=error
 menu.table_of_content=Table of Contents
@@ -103,15 +103,15 @@ editor.btt_go=Next &gt;&gt;
 editor.btt_comment=Comments
 editor.btt_savecomment= Save Comment
 editor.do_you_want_to_save=Do you want to save?
-editor.youareeditinganassetsaveyourworkfirst=You are currently editing a resurce. Please save your work or cancel editing before performing this action.
+editor.youareeditinganassetsaveyourworkfirst=You are currently editing a resource. Please save your work or cancel editing before performing this action.
 editor.help.openinnewwindow=Open In New Window
 editor.help.close=Close
 addfile.add_a_learning_resource=Add a Learning Resource
 addfile.select_file_or_link=Select a file or link to add to Curriki.
-addfile.this_is_a_file_on_my_computer=This is a file from my computer.
-addfile.this_is_a_web_link=This is a Web link.
-addfile.record_a_video=Upload or Record a video
-addfile.next_for_viditalk=Click Next to upload or record your video
+addfile.this_is_a_file_on_my_computer=Get a file from my computer.
+addfile.this_is_a_web_link=Insert a web link.
+addfile.record_a_video=Upload or record a video.
+addfile.next_for_viditalk=Click Next to upload or record your video.
 addfile.invalid_url=Please specify a valid URL.
 addfile.please_make_a_selection=Please make a selection.
 asset.title=Title
@@ -135,9 +135,9 @@ asset.image.caption_text=Caption:
 asset.image.alt_desc_text=Alternative text:
 asset.image.resize_image_text=Resize image text:
 asset.download=Download
-asset.archive.showtree=Open Contents
-asset.archive.hidetree=Hide Contents
-asset.archive.launcharchive=Launch archive
+asset.archive.showtree=Show Files
+asset.archive.hidetree=Hide Files
+asset.archive.launcharchive=Start
 asset.archive.uploadfile=Upload file
 asset.archive.launchfilehelp=NOTE: To set a new start file, please open contents and click on your new start file. This file will become the new start file after you save.
 find.find_resource_by=Find Resources in the Repository
@@ -223,9 +223,9 @@ metadata.rights_title=Access Privileges
 metadata.rights_txt=&lt;span class="field_instructions"&gt;Select &lt;strong&gt;Private&lt;/strong&gt; to keep your material in "draft" until it is ready to be released&lt;br /&gt;into the repository for general use.&lt;/span&gt;
 metadata.rights_tooltip=This setting determines who has the rights to view or edit any resource.
 metadata.rights_content=
-metadata.rightsHolder_tooltip=Access and edit rights for this asset
+metadata.rightsHolder_tooltip=This is the person or organization that holds the rights to this resource -- the owner of this intellectual property.
 metadata.license_type_title=License Deed
-metadata.license_type_txt=Please be sure you have read and understand the &lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;Terms of Use&lt;/a&gt; and that you have the rights to contribute this content.&lt;br /&gt;&lt;br /&gt;We have selected a Curriki-compatible license for your resource.  This license was chosen to provide maximum flexibility to community members so they can use and modify your contribution.  The default Curriki license is a widely used Creative Commons license Attribution &lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open("http://creativecommons.org/licenses/by/3.0/", "CC30"); return false;"&gt;3.0&lt;/a&gt;.  If you wish to assign another license, please select from the drop-down list below.  To learn about all the Creative Commons licenses, please &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open("http://creativecommons.org/about/licenses/meet-the-licenses", "CCmeet"); return false;"&gt;click here&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;Set License Deed:
+metadata.license_type_txt=Please be sure you have read and understand the &lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;Terms of Use&lt;/a&gt; and that you have the rights to contribute this content.&lt;br /&gt;&lt;br /&gt;The Curriki-compatible license provides maximum flexibility to the community, so members can use and modify others' contributions.  The default Curriki license is a widely used Creative Commons license Attribution &lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open("http://creativecommons.org/licenses/by/3.0/", "CC30"); return false;"&gt;3.0&lt;/a&gt;.  If you wish to assign another license, please select from the drop-down list below.  To learn about all the Creative Commons licenses, please &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open("http://creativecommons.org/about/licenses/meet-the-licenses", "CCmeet"); return false;"&gt;click here&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;Set License Deed:
 metadata.license_type_content=
 metadata.licenseType2_tooltip=License protecting this content
 metadata.field_missing=The following field is mandatory.
@@ -314,7 +314,7 @@ addresource.add_a_learning_resource=Add a Learning Resource
 addresource.what_type_of_resource=What type of resource would you like to add?
 addresource.from_repository=A resource from Curriki's repository
 addresource.from_file_or_link=A file from your computer or a link from the web
-addresource.from_template=A new file to be created using Curriki's templates
+addresource.from_template=A new resource to be created using Curriki's templates
 addresource.please_make_a_selection=Please make a select
 createcollection.describelearningresource=Describe the Learning Resource
 createcollection.couldnotaddcolection=Could not add collection
@@ -432,7 +432,7 @@ editor.print=Print Preview
 editor.view=Web View
 editor.help=Help
 curriki.editor.confirmremovetitle=Remove Resource
-curriki.editor.confirmremovetext=Click Ok to remove this resource from this location. (If you created or added this resource, you can still find it under Contributions in My Curriki.)
+curriki.editor.confirmremovetext=Click Next to remove this resource from this location. (If you created or added this resource, you can still find it in My Contributions, and also in your group's Contributions if added as part of a group.)
 
 ## CRS use in GWT and in Wiki
 curriki.crs.currikireview=Curriki Review
