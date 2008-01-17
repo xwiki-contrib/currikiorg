@@ -1018,44 +1018,10 @@ createCookie("Section${seccounter}Hidden", true, "");
 #set($m_sm = $xwiki.csm)
 #set($s = $m_sm.getSpace($spacehome))
 #set($sUrl = $s.getHomeURL())
-#set($logofilename = $s.display("logo","view"))
-#if($logofilename != "")
-  #set($spacehome = $s.getSpaceName()+".WebHome")
-  #set($srcdoc = $xwiki.getDocument($spacehome))
-  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
-#else
-  #set($srcdoc = $xwiki.getDocument("Groups.WebHome"))
-  #set($logofilename = "default_logo.gif")
-  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
-#end
-#set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
-#set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
-##if($logowidth > 121)
-##  #set($logowidth = 121)
-###end
-###if($logoheight > 83)
-##  #set($logoheight = 83)
-###end
 
-## find out wich dimmension overflows the most
-#set( $image_resize = "" )
-#if( $logowidth > 120 || $logoheight > 82 )
-  #set( $ratio = $logowidth / $logoheight )
-  #set( $width_overflow = 80 * $ratio )
-  #set( $height_overflow = 120 / $ratio )
-  #if( $width_overflow > 120 )
-	#set( $image_resize = "?width=120")
-  #else
-	#set( $image_resize = "?height=82")
-  #end
-#end
 
-<div id="asset-metadatas-block-groupimg">
-<a href="${sUrl}">
-##<img src="$m_logo" width="$logowidth" height="$logoheight" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
-<img src="${m_logo}${image_resize}" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
-</a>
-</div>
+#groupLogo( $s )
+
 <div id="asset-metadatas-block-groupname">
 <span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
  <a href="${sUrl}">$s.getDisplayTitle()</a>
@@ -2071,6 +2037,52 @@ $!desc
 #end ## macro ## }
 ##
 ##
+## Group logo display
+#macro(groupLogo $space)
+  
+  #set($logofilename = $space.display("logo","view"))
+  #if($logofilename != "")
+    #set($spacehome = $space.getSpaceName()+".WebHome")
+    #set($srcdoc = $xwiki.getDocument($spacehome))
+    #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
+    #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
+    #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
+  #else
+    #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
+	#set($logowidth = 120)
+	#set($logoheight = 82)
+  #end
+  
+#set( $image_resize = "" )
+#if($logowidth > 120 || $logoheight > 82)
+  ## find out wich dimmension overflows the most and computes scaled sizes
+  #set( $ratiox = $logowidth / 120)
+  #set( $ratioy = $logoheight / 82)
+  #set( $ratio = $logowidth / $logoheight)
+  #if($ratiox>$ratioy)
+    #set($width = 120)
+    #set($height = $width / $ratio)
+    #set( $image_resize = "?width=120")
+  #else
+    #set($height = 82)
+    #set($width = $height * $ratio)
+    #set( $image_resize = "?height=82")
+  #end
+#else
+  #set($height = $logoheight)
+  #set($width = $logowidth)
+#end
+
+
+  ##display logo
+  <div class="frame-inset-logo">
+    <a href="$space.getHomeURL()" title="$space.getDisplayTitle()" alt="$space.getDisplayTitle()">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="${space.getDisplayTitle()}" alt="${space.getDisplayTitle()}" />
+    </a>
+  </div>
+  
+#end
+##
 ## Group display
 #macro(mycurrikiGroupInfo $m_groupName $displayType) ## {
 #if(!$g_rowCount) ## {
@@ -2079,30 +2091,8 @@ $!desc
 #set($g_rowCount = $g_rowCount + 1)
 #set($m_sm = $xwiki.csm)
 #set($s = $m_sm.getSpace($m_groupName))
-## Get logo
-#set($logofilename = $s.display("logo","view"))
-#if($logofilename != "")
-  #set($spacehome = $s.getSpaceName()+".WebHome")
-  #set($srcdoc = $xwiki.getDocument($spacehome))
-  #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
-  #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
-  #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
-#else
-  #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
-#end
-## find out wich dimmension overflows the most
-#set( $image_resize = "" )
-#set( $ratiox = $logowidth / 120)
-#set( $ratioy = $logoheight / 82)
-#if($ratiox>$ratioy)
- #set($width = 120)
- #set($height = $logoheight * 120 / $logowidth)
- #set( $image_resize = "?width=120")
-#else
- #set($height = 82)
- #set($width = $logowidth * 82 / $logoheight)
- #set( $image_resize = "?height=82")
-#end
+
+
 #if("$!first_frame_done" == "") ## {
 <div class="frame">
 #else ## } {
@@ -2118,11 +2108,9 @@ $!desc
   #mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
 #end
 </div>
-<div class="frame-inset-logo">
-<a href="$s.getHomeURL()" title="$s.getDisplayTitle()" alt="$s.getDisplayTitle()">
-<img src="${m_logo}${image_resize}" width="$width" height="$height" title="${s.getDisplayTitle()}" alt="${s.getDisplayTitle()}" />
-</a>
-</div>
+
+#groupLogo( $s )
+
 <div class="frame-inset-description">
 $s.getDescription()
 </div>
