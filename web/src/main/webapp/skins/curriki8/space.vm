@@ -118,9 +118,25 @@
 
    <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
    #set($previousBc = "${previousBc};${bcItem}")
+   
+   #set($more = "")
+   #if($bcDoc.fullName == "Groups.Browse")
+     #if( $request.subject )
+		#set($sdoc = $xwiki.getDocument($request.subject))
+		#set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
+		#set($more_href = "${doc.getURL()}?subject=${request.subject}")
+     #end
+   #end
+
+ 
+   #if($more != "")
+     &gt; <a href="$more_href">$more</a>
+   #end
+   
 
   #end
  #end
+ 
 #end
 ##
 ##
