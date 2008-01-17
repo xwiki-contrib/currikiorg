@@ -95,7 +95,7 @@ public class SpaceUserProfileImpl extends Document implements SpaceUserProfile {
     }
 
     public void setProfile(String profile) {
-        getDoc().setStringValue(getSpaceUserProfileClassName(), SPACE_USER_PROFILE_PROFILE, profile);
+        getDoc().setLargeStringValue(getSpaceUserProfileClassName(), SPACE_USER_PROFILE_PROFILE, profile);
     }
 
     public boolean getAllowNotifications() {

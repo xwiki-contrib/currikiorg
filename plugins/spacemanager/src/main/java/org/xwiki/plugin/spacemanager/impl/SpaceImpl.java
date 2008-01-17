@@ -175,7 +175,7 @@ public class SpaceImpl extends Document implements Space {
      * @param description The new description
      */
     public void setDescription(String description) {
-        getDoc().setStringValue(manager.getSpaceClassName(), SPACE_DESCRIPTION, description);
+        getDoc().setLargeStringValue(manager.getSpaceClassName(), SPACE_DESCRIPTION, description);
     }
 
     /**
