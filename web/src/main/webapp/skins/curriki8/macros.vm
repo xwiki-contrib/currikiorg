@@ -2612,6 +2612,7 @@ $msg.get("groups_members_admin_current_membersettings_error")
 ## if group admin
 #set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
 <a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
+|
 <a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
 ## end
 </div>
@@ -2808,11 +2809,11 @@ Object.extend(Object.extend(Ajax.XWikiRequest.prototype, Ajax.Request.prototype)
 <script type="text/javascript">
 
 function acceptRequest(divid, memberName, displayName) {
-      $(divid).innerHTML = "<div class=\"groups_members_request_confirm\"><form><p>${msg.groups_members_accept_confirm}</p><br />"
+      $(divid).innerHTML = "<div class=\"groups_members_request_confirm \"><form><p>${msg.groups_members_accept_confirm}</p><br />"
       						// + "<input type=\"button\" class=\"button\" value=\"${msg.groups_members_accept_cancel_btt}\""
       						// + " onclick=\"acceptRequestCancel('" + divid + "','" + memberName + "');\" />"
-      						+ "<input type=\"button\" class=\"button\" value=\"${msg.groups_members_accept_confirm_btt}\""
-      						+ " onclick=\"acceptRequestConfirm('" + divid + "','" + memberName + "');\" />"
+      						+ "<div class=\"button-right\"><input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_accept_confirm_btt}\""
+      						+ " onclick=\"acceptRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
       						+ "</form></div>";
 }
 function acceptRequestConfirm(divid, memberName) {
@@ -2835,8 +2836,8 @@ function rejectRequest(divid, memberName, displayName) {
       $(divid).innerHTML = "<div class=\"groups_members_request_confirm\"><form><p>${msg.groups_members_reject_confirm}</p><textarea id=\"" + divid + "-reason\" cols=\"60\" rows=\"7\"></textarea><br />"
       						// + "<input type=\"button\" class=\"button\" value=\"${msg.groups_members_reject_cancel_btt}\""
       						// + " onclick=\"rejectRequestCancel('" + divid + "','" + memberName + "');\" />"
-      						+ "<input type=\"button\" class=\"button\" value=\"${msg.groups_members_reject_confirm_btt}\""
-      						+ " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" />"
+      						+ "<div class=\"button-right\"><input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_reject_confirm_btt}\""
+      						+ " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
       						+ "</form></div>";
 }
 function rejectRequestConfirm(divid, memberName) {
