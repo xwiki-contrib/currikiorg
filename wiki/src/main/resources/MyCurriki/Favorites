@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1197412524000</creationDate>
-<date>1199298523000</date>
-<contentUpdateDate>1199298523000</contentUpdateDate>
-<version>1.24</version>
+<date>1200675948000</date>
+<contentUpdateDate>1200675948000</contentUpdateDate>
+<version>1.26</version>
 <title>Favorites</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>change to using fav specific title</comment>
+<comment></comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -123,11 +123,14 @@
 #foreach($assetPointer in $assetList) ## {
 #set($assetPage = $assetPointer.get('assetpage'))
 #if($xwiki.hasAccessLevel("view", $context.user, $assetPage)) ## {
+#set($asset = $xwiki.getDocument($assetPage))
+#set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
+#if("$type"!="2") ## {
 #set($showcount = 1 + $showcount)
 #if(($showcount &gt; $startIndex) &amp;&amp; ($showcount &lt; ($endIndex + 2))) ## {
-#set($asset = $xwiki.getDocument($assetPage))
 #favoriteAsset($asset $allcols)
 #end ## showcount &gt; startIndex &amp;&amp; showcount &lt; endIndex ## }
+#end  ## type != 2 ## }
 #end  ## if has view access ## }
 #end ## foreach assetPage in list ## }
 #if($showcount == 0) ## {
