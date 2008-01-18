@@ -69,7 +69,7 @@
 <div id="currikiuserarea">
 <p class="welcomemsg">$msg.get("headerWelcome", [$userdoc.first_name])</p>
 <p><a id="curriki-my" href="$userdoc.getURL("view")">$msg.get("headerMyCurriki")</a>#sep() 
- #if($hasadmin)
+ #if($hasGlobalAdmin)
   <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("admin")</a> #sep()
  #end
 #set($logredir = $xwiki.getURL("Main.WebHome"))
