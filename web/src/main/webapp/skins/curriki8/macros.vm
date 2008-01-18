@@ -2553,7 +2553,23 @@ $profile
 #end
 ##
 #macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid)
+#set($mdoc = $xwiki.getDocument($memberName))
+#if(!$mdoc.isNew())
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+#end
 #set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+<div class="groups-members-membername">
+<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+</div>
 <form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;">
 <div class="groups-members-member-buttons">
 <input type="button"  class="button button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
@@ -2593,7 +2609,7 @@ $msg.get("groups_members_admin_current_membersettings_error")
 ##
 #macro(groupsdisplaymembershiprequest $msreq $gdsrid)
 #set($divid = "groups-members-request-$gdsrid")
-<div id="$divid" class="groups-members-request">
+<div id="$divid" class="groups-members-request groups-members-request-confirm">
 #set($memberName = $msreq.requester)
 #set($mdoc = $xwiki.getDocument($memberName))
 <div class="groups-members-memberpic userpic">
