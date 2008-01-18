@@ -2605,63 +2605,6 @@ $msg.get("groups_members_admin_current_membersettings_error")
 ##
 ##
 ## PAGE: Groups.MembersSheet
-## Macro to display a membership request
-##
-#macro(groupsdisplaymembershiprequest $msreq $gdsrid)
-#set($divid = "groups-members-request-$gdsrid")
-<div id="$divid" class="groups-members-request groups-members-request-confirm">
-#set($memberName = $msreq.requester)
-#set($mdoc = $xwiki.getDocument($memberName))
-<div class="groups-members-memberpic userpic">
-#if($mdoc.attachmentList.size()==0)
- <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
-#else
- #foreach ($attach in $mdoc.attachmentList)
-  <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
- #end
-#end
-</div>
-#set($divid = "groups-members-request-info-$gdsrid")
-<div id="$divid" class="groups-members-request-info">
-<div class="groups-members-request-links">
-## if group admin
-#set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
-<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
-|
-<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
-## end
-</div>
-<div class="groups-members-request-name">
-#if($mdoc.isNew())
-$memberName
-#else
-$xwiki.getLocalUserName($memberName)
-#end
-</div>
-<div class="groups-members-request-date">
-#set($requestDate = $xwiki.formatDate($msreq.requestDate,$msg.get("mycurriki.datetimeFormat")))	
-$msg.get("groups_members_admin_pending_requested") $requestDate ## $msg.get("groups_members_admin_pending_forrole")
-</div>
-<div class="groups-members-request-status">
-$msg.get("groups_members_admin_pending_status") $msg.get("groups_members_request_status_${msreq.status}") 
-</div>
-</div>
-<div class="groups-members-request-message">
-<div class="groups-members-request-message-label">
-$msg.get("groups_members_admin_pending_reasons") 
-</div>
-<div class="groups-members-request-message-content">
-{pre}
-$msreq.text
-{/pre}
-</div>
-</div>
-</div>
-#end
-##
-##
-## PAGE: Groups.MembersSheet
 ## Macro to display a single invitation in the invitation list
 ##
 #macro(groupsdisplayinvitation $invitation)
@@ -2816,6 +2759,62 @@ Object.extend(Object.extend(Ajax.XWikiRequest.prototype, Ajax.Request.prototype)
 ##
 ##
 ## PAGE: Groups.MembersSheet
+## Macro to display a membership request
+##
+#macro(groupsdisplaymembershiprequest $msreq $gdsrid)
+#set($divid = "groups-members-request-$gdsrid")
+<div id="$divid" class="groups-members-request">
+#set($memberName = $msreq.requester)
+#set($mdoc = $xwiki.getDocument($memberName))
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+<div class="groups-members-request-name">
+#if($mdoc.isNew())
+$memberName
+#else
+$xwiki.getLocalUserName($memberName)
+#end
+</div>
+#set($divid = "groups-members-request-info-$gdsrid")
+<div id="${divid}" class="groups-members-request-info">
+<div class="groups-members-request-links">
+## if group admin
+#set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
+<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
+|
+<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
+## end
+</div>
+<div class="groups-members-request-date">
+#set($requestDate = $xwiki.formatDate($msreq.requestDate,$msg.get("mycurriki.datetimeFormat")))
+$msg.get("groups_members_admin_pending_requested") $requestDate ## $msg.get("groups_members_admin_pending_forrole")
+</div>
+<div class="groups-members-request-status">
+$msg.get("groups_members_admin_pending_status") $msg.get("groups_members_request_status_${msreq.status}")
+</div>
+<div class="groups-members-request-message">
+<div class="groups-members-request-message-label">
+$msg.get("groups_members_admin_pending_reasons")
+</div>
+<div class="groups-members-request-message-content">
+{pre}
+$msreq.text
+{/pre}
+</div>
+</div>
+</div>
+</div>
+#end
+##
+## PAGE: Groups.MembersSheet
 ## Macro to display the javascript for
 ## accepting and rejecting membership requests
 ##
@@ -2825,12 +2824,18 @@ Object.extend(Object.extend(Ajax.XWikiRequest.prototype, Ajax.Request.prototype)
 <script type="text/javascript">
 
 function acceptRequest(divid, memberName, displayName) {
-      $(divid).innerHTML = "<div class=\"groups_members_request_confirm \"><form><p>${msg.groups_members_accept_confirm}</p><br />"
-      						// + "<input type=\"button\" class=\"button\" value=\"${msg.groups_members_accept_cancel_btt}\""
-      						// + " onclick=\"acceptRequestCancel('" + divid + "','" + memberName + "');\" />"
-      						+ "<div class=\"button-right\"><input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_accept_confirm_btt}\""
-      						+ " onclick=\"acceptRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
-      						+ "</form></div>";
+      $(divid).oldInnerHTML = $(divid).innerHTML;
+      $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box \"><form><p>${msg.groups_members_accept_confirm}</p><br />"
+                                                 + "<div class=\"button-right\"><input type=\"button\" class=\"button button-grey\" value=\"${msg.groups_members_cancel_btt}\""
+                                                 + " onclick=\"acceptRequestCancel('" + divid + "','" + memberName + "');\" />"
+                                                + "<input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_accept_confirm_btt}\""
+                                                + " onclick=\"acceptRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
+                                                + "</form></div>";
+      $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
+}
+function acceptRequestCancel(divid, memberName) {
+      $(divid).innerHTML = $(divid).oldInnerHTML;
+      $(divid).parentNode.className = "groups-members-request";
 }
 function acceptRequestConfirm(divid, memberName) {
       var pars = "user=" + memberName + "&space=${spaceName}&xpage=plain";
@@ -2843,18 +2848,25 @@ function acceptRequestCallback(ajaxreq) {
     var result = ajaxreq.transport.responseText;
     // alert(result);
     var divid = ajaxreq.options.divid;
-    if (result=="SUCCESS")     
+    if (result=="SUCCESS")
      $(divid).innerHTML = "<p>${msg.groups_members_accept_done}</p>";
     else
-     $(divid).innerHTML = "<p>${msg.groups_members_accept_failed}</p>" + "<p>" + result + "</p>";  
+     $(divid).innerHTML = "<p>${msg.groups_members_accept_failed}</p>" + "<p>" + result + "</p>";
+     $(divid).parentNode.className = "groups-members-request";
 }
-function rejectRequest(divid, memberName, displayName) {
-      $(divid).innerHTML = "<div class=\"groups_members_request_confirm\"><form><p>${msg.groups_members_reject_confirm}</p><textarea id=\"" + divid + "-reason\" cols=\"60\" rows=\"7\"></textarea><br />"
-      						// + "<input type=\"button\" class=\"button\" value=\"${msg.groups_members_reject_cancel_btt}\""
-      						// + " onclick=\"rejectRequestCancel('" + divid + "','" + memberName + "');\" />"
-      						+ "<div class=\"button-right\"><input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_reject_confirm_btt}\""
-      						+ " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
-      						+ "</form></div>";
+function rejectRequest(divid, memberName) {
+      $(divid).oldInnerHTML = $(divid).innerHTML;
+      $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box\"><form><p>${msg.groups_members_reject_confirm}</p><textarea id=\"" + divid + "-reason\" cols=\"60\" rows=\"7\"></textarea><br />"
+                                                + "<div class=\"button-right\"><input type=\"button\" class=\"button button-grey\" value=\"${msg.groups_members_cancel_btt}\""
+                                                + " onclick=\"rejectRequestCancel('" + divid + "','" + memberName + "');\" />"
+                                                + "<input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_reject_confirm_btt}\""
+                                                + " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
+                                                + "</form></div>";
+      $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
+}
+function rejectRequestCancel(divid, memberName, displayName) {
+      $(divid).innerHTML = $(divid).oldInnerHTML;
+      $(divid).parentNode.className = "groups-members-request";
 }
 function rejectRequestConfirm(divid, memberName) {
       var reason = encodeURIComponent($(divid+"-reason").value);
@@ -2868,16 +2880,17 @@ function rejectRequestCallback(ajaxreq) {
     var result = ajaxreq.transport.responseText;
     // alert(result);
     var divid = ajaxreq.options.divid;
-    if (result=="SUCCESS")     
+    if (result=="SUCCESS")
      $(divid).innerHTML = "<p>${msg.groups_members_reject_done}</p>";
     else
-     $(divid).innerHTML = "<p>${msg.groups_members_reject_failed}</p>" + "<p>" + result + "</p>";   
+     $(divid).innerHTML = "<p>${msg.groups_members_reject_failed}</p>" + "<p>" + result + "</p>";
+    $(divid).parentNode.className = "groups-members-request";
 }
 </script>
 {/pre}
 #end
 ##
-
+dd
 ## Macro to display a form field tooltip
 ##
 #macro(tooltip $name $txt) ##{
