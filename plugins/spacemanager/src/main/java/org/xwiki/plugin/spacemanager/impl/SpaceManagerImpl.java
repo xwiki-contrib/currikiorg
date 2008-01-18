@@ -535,7 +535,8 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         newspace.setDisplayTitle(spaceTitle);
         newspace.setCreator(context.getUser());
-        //newspace.setCreationTime(context.getWiki().getCurrentDate());
+        newspace.setCreationDate(new Date());
+
         try {
             newspace.saveWithProgrammingRights();
             // we need to add the creator as a member and as an admin
@@ -591,7 +592,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
                 for (Iterator it = list.iterator(); it.hasNext();) {
                     String docname = (String) it.next();
                     XWikiDocument doc = context.getWiki().getDocument(docname, context);
-                    context.getWiki().copyDocument(doc.getFullName(), newspace.getSpaceName() + "." + doc.getName(), context);
+                    context.getWiki().copyDocument(doc.getFullName(), newspace.getSpaceName() + "." + doc.getName(), null, null, null, true, false, true, context);
                 }
             } catch (XWikiException e) {
                 throw new SpaceManagerException(e);
@@ -602,6 +603,9 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         newspace.setType(getSpaceTypeName());
         // we need to do it twice because data could have been overwritten by copyWikiWeb
         newspace.updateSpaceFromRequest();
+        newspace.setCreator(context.getUser());
+        newspace.setCreationDate(new Date());
+        
         try {
             newspace.saveWithProgrammingRights();
             // we need to add the creator as a member and as an admin
@@ -1195,18 +1199,24 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         }
     }
 
-    public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException {
+    /**
+     * {@inheritDoc}
+     * 
+     * @see SpaceManager#joinSpace(String, XWikiContext)
+     */
+    public boolean joinSpace(String spaceName, XWikiContext context) throws SpaceManagerException
+    {
         try {
-            SpaceUserProfile userProfile = newUserSpaceProfile(context.getUser(), spaceName, context);
+            SpaceUserProfile userProfile =
+                newUserSpaceProfile(context.getUser(), spaceName, context);
             userProfile.updateProfileFromRequest();
             userProfile.saveWithProgrammingRights();
             addMember(spaceName, context.getUser(), context);
+            sendMail(SpaceAction.JOIN, getSpace(spaceName, context), context);
             return true;
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
-
-
     }
 
     private void sendMail(String action, Space space, XWikiContext context)
@@ -1227,6 +1237,9 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
             // notify space administrators upon space creation
             Collection admins = getAdmins(space.getSpaceName(), context);
             toUsers = (String[]) admins.toArray(new String[admins.size()]);
+        } else if (SpaceAction.JOIN.equals(action)) {
+            // send join group confirmation e-mail
+            toUsers = new String[] {context.getUser()};
         }
 
         if (fromUser == null) {
