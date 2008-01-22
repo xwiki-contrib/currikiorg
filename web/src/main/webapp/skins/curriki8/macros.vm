@@ -1836,8 +1836,12 @@ $msg.get("mycurriki.macro.access.${access}")
   #set($mime = $asset.attachmentList.get(0).mimeType)
   #set($rowType="mime")
 #end ## }
+#if($asset.getObject("XWiki.TextAssetClass")) ## {
+  #set($rowType="currikulum")
+#else ## } {
 #if($asset.getObject("XWiki.ExternalAssetClass")) ## {
   #set($rowType="URL")
+#end ## }
 #end ## }
 #if($rowType == "URL") ## {
 #set($text = $msg.get("mycurriki.macro.filetype.URL"))
