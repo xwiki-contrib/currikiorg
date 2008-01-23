@@ -42,7 +42,7 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
      * @param context
      * @return
      */
-	public boolean preCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException {
+	public boolean preCreateSpace(String spaceName, XWikiContext context) {
 		// @todo: actions done before the creation of the space
 		return true;
 	}
