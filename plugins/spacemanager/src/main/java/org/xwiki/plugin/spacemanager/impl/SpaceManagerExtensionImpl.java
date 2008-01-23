@@ -1,6 +1,3 @@
-/**
-	Implementation of a specific SpaceManagerExtension
-*/
 package org.xwiki.plugin.spacemanager.impl;
 
 import org.xwiki.plugin.spacemanager.api.*;
@@ -8,8 +5,10 @@ import org.xwiki.plugin.spacemanager.api.*;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
-import com.xpn.xwiki.web.XWikiRequest;
 
+/**
+ * Implementation of a specific SpaceManagerExtension
+ */
 public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
 
 	protected SpaceManager sm = null;
@@ -26,12 +25,10 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
         return false;
     }
     
-	public void init(SpaceManager sm, XWikiContext context) throws SpaceManagerException {
-		// TODO Auto-generated method stub		
+	public void init(SpaceManager sm, XWikiContext context) throws SpaceManagerException {		
 	}
 
-	public void virtualInit(SpaceManager sm, XWikiContext context) throws SpaceManagerException {
-		// TODO Auto-generated method stub		
+	public void virtualInit(SpaceManager sm, XWikiContext context) throws SpaceManagerException {	
 	}
 
     public String getSpaceUserProfilePageName(String userName, String spaceName) {
@@ -45,7 +42,7 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
      * @param context
      * @return
      */
-	public boolean preCreateSpace(String spaceName, XWikiContext context){
+	public boolean preCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException {
 		// @todo: actions done before the creation of the space
 		return true;
 	}
