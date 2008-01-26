@@ -940,7 +940,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
 
     public Collection getUsersForRole(String spaceName, String role, XWikiContext context) throws SpaceManagerException {
         try {
-            return getGroupService(context).getAllMembersNamesForGroup(getMemberGroupName(spaceName), 0, 0, context);
+            return getGroupService(context).getAllMembersNamesForGroup(getRoleGroupName(spaceName, role), 0, 0, context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
