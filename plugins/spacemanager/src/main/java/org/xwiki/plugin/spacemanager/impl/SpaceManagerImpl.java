@@ -1116,14 +1116,48 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     }
 
 
-    public Collection getMembers(String spaceName, XWikiContext context) throws SpaceManagerException {
+    public Collection getMembers(String spaceName, final XWikiContext context)
+        throws SpaceManagerException
+    {
         try {
-            return getGroupService(context).getAllMembersNamesForGroup(getMemberGroupName(spaceName), 0, 0, context);
+            return sortUserNames(getGroupService(context).getAllMembersNamesForGroup(
+                getMemberGroupName(spaceName), 0, 0, context), context);
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
     }
 
+    private List sortUserNames(Collection collectionOfUsers, final XWikiContext context)
+    {
+        List users = new ArrayList(collectionOfUsers);
+        Collections.sort(users, new Comparator()
+        {
+            public int compare(Object a, Object b)
+            {
+                try {
+                    XWikiDocument aDoc = context.getWiki().getDocument((String) a, context);
+                    XWikiDocument bDoc = context.getWiki().getDocument((String) b, context);
+                    String aFirstName =
+                        aDoc.getObject("XWiki.XWikiUsers").getStringValue("first_name");
+                    String bFirstName =
+                        bDoc.getObject("XWiki.XWikiUsers").getStringValue("first_name");
+                    int cmp = aFirstName.compareToIgnoreCase(bFirstName);
+                    if (cmp == 0) {
+                        String aLastName =
+                            aDoc.getObject("XWiki.XWikiUsers").getStringValue("last_name");
+                        String bLastName =
+                            bDoc.getObject("XWiki.XWikiUsers").getStringValue("last_name");
+                        return aLastName.compareTo(bLastName);
+                    } else {
+                        return cmp;
+                    }
+                } catch (Exception e) {
+                    return ((String) a).compareTo((String) b);
+                }
+            }
+        });
+        return users;
+    }
 
     public String getMemberGroupName(String spaceName) {
         return getSpaceManagerExtension().getMemberGroupName(spaceName);
