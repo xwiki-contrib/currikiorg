@@ -481,8 +481,12 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         Space newspace = newSpace(null, spaceTitle, true, context);
         
         //execute precreate actions
-        if( !getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context ) )
-        	return null;
+        try {
+        	getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context );
+		}
+        catch (SpaceManagerException e) {
+        	throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER, SpaceManagerException.ERROR_SPACE_CREATION_ABORTED_BY_EXTENSION, "Space creation aborted by extension", e);
+        }
         
         // Make sure we set the type
         newspace.setType(getSpaceTypeName());
@@ -517,8 +521,12 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         Space newspace = newSpace(null, spaceTitle, false, context);
    
         //execute precreate actions
-        if( !getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context ) )
-        	return null;
+        try {
+        	getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context );
+		}
+        catch (SpaceManagerException e) {
+        	throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER, SpaceManagerException.ERROR_SPACE_CREATION_ABORTED_BY_EXTENSION, "Space creation aborted by extension", e);
+        }
 
         // Make sure this space does not already exist
         if (!newspace.isNew())
@@ -578,8 +586,12 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         Space newspace = newSpace(null, spaceTitle, true, context);
         
         //execute precreate actions
-        if( !getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context ) )
-        	return null;
+        try {
+        	getSpaceManagerExtension().preCreateSpace( newspace.getSpaceName(), context );
+		}
+        catch (SpaceManagerException e) {
+        	throw new SpaceManagerException(SpaceManagerException.MODULE_PLUGIN_SPACEMANAGER, SpaceManagerException.ERROR_SPACE_CREATION_ABORTED_BY_EXTENSION, "Space creation aborted by extension", e);
+        }
         
         newspace.updateSpaceFromRequest();
         if (!newspace.validateSpaceData())

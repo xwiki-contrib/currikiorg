@@ -36,15 +36,10 @@ public class SpaceManagerExtensionImpl implements SpaceManagerExtension{
     }
 
     /**
-     * API called before the space in created
-     *
-     * @param spaceName
-     * @param context
-     * @return
+     * {@inheritDoc}
      */
-	public boolean preCreateSpace(String spaceName, XWikiContext context) {
+	public void preCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException {
 		// @todo: actions done before the creation of the space
-		return true;
 	}
 	
 	/**

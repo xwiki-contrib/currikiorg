@@ -51,9 +51,9 @@ public interface SpaceManagerExtension {
      *
      * @param spaceName
      * @param context
-     * @return If it returns true, it will continue with the space creation, otherwise it will abord it
+     * @throws SpaceManagerException when aborting the space creation process
      */
-	public boolean preCreateSpace(String spaceName, XWikiContext context);
+	public void preCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException;
 	
 	/**
      * API called after a space is created
