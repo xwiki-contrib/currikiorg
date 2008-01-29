@@ -2651,17 +2651,31 @@ $msg.get("groups.members.invitedby") $xwiki.getLocalUserName($invitation.inviter
 #macro(groupsdisplaymembers $spaceName)
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
 #groupsdisplayeditmemberjs()
-#set($mid = 0)
 #set($members = $sm.getMembers($spaceName))
+## pagination parameters
+#set($itemsPerPage=10)
+#if($request.ipp)
+#set($itemsPerPage=$xwiki.parseInt($request.ipp))
+#end
+#set($startIndex=0)
+#if($request.startIndex)
+#set($startIndex=$xwiki.parseInt($request.startIndex))
+#end
+#set($totalCount=$members.size())
+## end pagination parameters
 #if($members.size()==0)
 $msg.get("groups_members_admin_current_members_nomembers")
 #else
 $msg.get("groups_members_admin_current_members_infotxt")
-#foreach($member in $members)
-#set($mid = $mid + 1)
-#groupsdisplaymember($member $spaceName $mid)
+#set($endIndex = $startIndex + $itemsPerPage - 1)
+#if($endIndex >= $totalCount)
+#set($endIndex = $totalCount - 1)
+#end
+#foreach($mid in [$startIndex..$endIndex])
+#groupsdisplaymember($members.get($mid) $spaceName $mid)
 #end ## foreach
 #end ## if
+#mycurrikipaginatorargs($msg.get("groups_members_page"),$startIndex,$itemsPerPage,$totalCount,"type=0")
 #end
 ##
 ##
