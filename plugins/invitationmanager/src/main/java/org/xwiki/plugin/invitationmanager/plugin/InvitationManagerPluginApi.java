@@ -507,8 +507,19 @@ public class InvitationManagerPluginApi extends PluginApi
      * @param user Wikiname for a registered user or e-mail address for a unregistered user
      * @param space The space for which to cancel the invitation
      */
-    public void cancelInvitation(String user, String space) throws InvitationManagerException {
-        getInvitationManager().cancelInvitation(user, space, context);
+    public boolean cancelInvitation(String user, String space)
+    {
+        context.remove("InvitationManagerException");
+        if (hasProgrammingRights()) {
+            try {
+                getInvitationManager().cancelInvitation(user, space, context);
+                return true;
+            } catch (InvitationManagerException e) {
+                context.put("InvitationManagerException", e);
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
