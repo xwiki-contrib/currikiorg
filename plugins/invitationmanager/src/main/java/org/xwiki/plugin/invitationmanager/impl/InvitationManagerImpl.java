@@ -230,12 +230,15 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#cancelInvitation(String, String, XWikiContext)
      */
-    public void cancelInvitation(String user, String space, XWikiContext context) throws InvitationManagerException {
+    public void cancelInvitation(String userNameOrMail, String space, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
-            Invitation invitation = getInvitation(space, user, context);
+            Invitation invitation =
+                getInvitation(space, getInvitee(userNameOrMail, context), context);
             if (invitation.getStatus().equals(JoinRequestStatus.SENT)) {
                 invitation.setStatus(JoinRequestStatus.CANCELLED);
                 invitation.saveWithProgrammingRights();
@@ -1537,5 +1540,16 @@ public class InvitationManagerImpl implements InvitationManager
     public void setMailNotification(boolean mailNotification)
     {
         this.mailNotification = mailNotification;
+    }
+    
+    private String getInvitee(String wikiNameOrMailAddress, XWikiContext context)
+    {
+        wikiNameOrMailAddress = wikiNameOrMailAddress.trim();
+        String registeredUser = getRegisteredUser(wikiNameOrMailAddress, context);
+        if (registeredUser == null) {
+            return encodeEmailAddress(wikiNameOrMailAddress);
+        } else {
+            return registeredUser;
+        }
     }
 }
