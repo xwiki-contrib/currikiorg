@@ -2489,10 +2489,6 @@ function removeMember(memberName,spaceName) {
   var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
   return false;
 }
-function refreshPage(ajaxreq) {
-  alert(ajaxreq.transport.responseText);
-  window.location.href = window.location.href;
-}
 </script>
 {/pre}
 #end
@@ -2612,6 +2608,7 @@ $msg.get("groups_members_admin_current_membersettings_error")
 ## Macro to display a single invitation in the invitation list
 ##
 #macro(groupsdisplayinvitation $invitation)
+#groupsajaxjs()
 <div class="groups-members-invitee">
 #set($memberName = $invitation.invitee)
 #set($mdoc = $xwiki.getDocument($memberName))
@@ -2640,6 +2637,20 @@ $msg.get("groups.members.invitedby") $xwiki.getLocalUserName($invitation.inviter
 ##<div class="groups-members-inviteestatus">
 ##$msg.get("groups.members.invitestatus") $msg.get("groups.members.invitestatus.${invitation.status}") 
 ##</div>
+<div>
+<script type="text/javascript">
+function cancelInvitation(invitee, spaceName){
+	if (!window.confirm('$msg.get("groups_members_admin_invitations_cancel_confirm")')){
+		return;
+	}
+	var pars = "user=" + invitee + "&space=" + spaceName  + "&code=4&xpage=plain";
+  // call url to cancel invitation
+  var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
+  return false;
+}
+</script>
+<a href="javascript:void()" onclick="cancelInvitation('$invitation.invitee', '$invitation.space'); return false;">$msg.get("groups_members_admin_invitations_cancel_link")</a>
+</div>
 </div>
 </div>
 #end
@@ -2771,6 +2782,10 @@ Object.extend(Object.extend(Ajax.XWikiRequest.prototype, Ajax.Request.prototype)
         alert("error, callback");
   }
 });
+function refreshPage(ajaxreq) {
+  alert(ajaxreq.transport.responseText);
+  window.location.href = window.location.href;
+}
 </script>
 {/pre}
 #end
