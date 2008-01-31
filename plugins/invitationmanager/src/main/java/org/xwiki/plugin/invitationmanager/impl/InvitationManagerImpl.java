@@ -1430,7 +1430,7 @@ public class InvitationManagerImpl implements InvitationManager
         }
         String email = wikiNameOrMailAddress;
         String sql =
-            "select distinct doc.name from XWikiDocument as doc, BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className = 'XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"
+            "select distinct doc.fullName from XWikiDocument as doc, BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className = 'XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"
                 + email + "'";
         List userList = Collections.EMPTY_LIST;
         try {
@@ -1485,11 +1485,14 @@ public class InvitationManagerImpl implements InvitationManager
         }
     }
 
-    private String findUser(String username, XWikiContext context)
+    private String findUser(String userName, XWikiContext context)
     {
-        // First let's look in the cache
-        if (context.getWiki().exists("XWiki." + username, context))
-            return "XWiki." + username;
+        userName = userName.trim();
+        if (!userName.startsWith("XWiki.")) {
+            userName = "XWiki." + userName;
+        }
+        if (context.getWiki().exists(userName, context))
+            return userName;
         else
             return null;
     }
