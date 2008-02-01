@@ -42,7 +42,10 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
- * Manages spaces
+ * Space manager plugin implementation class.
+ * Manages {@link Space} spaces
+ * 
+ * @version $Id: $
  */
 public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager {
 
