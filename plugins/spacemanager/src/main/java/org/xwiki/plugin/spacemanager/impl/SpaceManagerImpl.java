@@ -252,7 +252,6 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
         return spaceName + ".WebPreferences";
     }
 
-
     /**
      * Get the list of sub spaces to protect
      * @param context
@@ -835,7 +834,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     /**
      * Gets a list of spaces names in which a specific user has a specific role
      * @param userName The username of the targeted user
-     * @param role The role which the user must have
+     * @param role The role which the user must have (null for just member)
      * @param context The XWiki Context
      * @return list of Strings (space names)
      * @throws SpaceManagerException
@@ -1040,7 +1039,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     }
 
 
-    private boolean isMemberOfGroup(String username, String groupname, XWikiContext context) throws XWikiException {
+    protected boolean isMemberOfGroup(String username, String groupname, XWikiContext context) throws XWikiException {
         Collection coll = context.getWiki().getGroupService(context).getAllGroupsNamesForMember(username, 0, 0, context);
         Iterator it = coll.iterator();
         while (it.hasNext()) {
@@ -1057,7 +1056,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
      * @param context
      * @throws XWikiException
      */
-    private void addUserToGroup(String username, String groupName, XWikiContext context) throws XWikiException
+    protected void addUserToGroup(String username, String groupName, XWikiContext context) throws XWikiException
     {
         // don't add if he is already a member
         if (isMemberOfGroup(username, groupName, context))
