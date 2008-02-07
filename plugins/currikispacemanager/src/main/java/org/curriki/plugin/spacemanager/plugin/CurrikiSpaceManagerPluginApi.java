@@ -1,16 +1,17 @@
 package org.curriki.plugin.spacemanager.plugin;
 
-import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
-import org.xwiki.plugin.spacemanager.plugin.SpaceManagerPluginApi;
-import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
-import com.xpn.xwiki.XWikiContext;
-
 import java.util.List;
+
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
+
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
+import com.xpn.xwiki.plugin.spacemanager.plugin.SpaceManagerPluginApi;
 
 /**
  * Created by IntelliJ IDEA.
  * User: ludovic
- * Date: 17 dŽc. 2007
+ * Date: 17 dï¿½c. 2007
  * Time: 08:59:52
  * To change this template use File | Settings | File Templates.
  */

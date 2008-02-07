@@ -19,26 +19,36 @@
  */
 package org.xwiki.plugin.invitationmanager.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import org.xwiki.plugin.invitationmanager.api.*;
-import org.xwiki.plugin.spacemanager.api.SpaceManager;
-import org.xwiki.plugin.spacemanager.api.SpaceManagers;
-import org.xwiki.plugin.spacemanager.api.Space;
-import org.xwiki.plugin.spacemanager.api.SpaceUserProfile;
-import org.xwiki.plugin.spacemanager.impl.SpaceUserProfileImpl;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.velocity.VelocityContext;
+import org.xwiki.plugin.invitationmanager.api.Invitation;
+import org.xwiki.plugin.invitationmanager.api.InvitationManager;
+import org.xwiki.plugin.invitationmanager.api.InvitationManagerException;
+import org.xwiki.plugin.invitationmanager.api.JoinRequest;
+import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
+import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
-import com.xpn.xwiki.render.XWikiVelocityRenderer;
-import com.xpn.xwiki.plugin.mailsender.Mail;
-import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.XWiki;
-import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.classes.BaseClass;
+import com.xpn.xwiki.plugin.mailsender.Mail;
+import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
+import com.xpn.xwiki.plugin.spacemanager.api.Space;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagers;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile;
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceUserProfileImpl;
+import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
 /**
  * The default implementation for {@link InvitationManager}

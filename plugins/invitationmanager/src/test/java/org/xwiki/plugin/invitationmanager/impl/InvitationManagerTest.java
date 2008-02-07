@@ -30,14 +30,18 @@ import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
 import org.jmock.core.Invocation;
 import org.jmock.core.stub.CustomStub;
-import org.xwiki.plugin.invitationmanager.api.*;
-import org.xwiki.plugin.spacemanager.api.SpaceManager;
+import org.xwiki.plugin.invitationmanager.api.Invitation;
+import org.xwiki.plugin.invitationmanager.api.InvitationManager;
+import org.xwiki.plugin.invitationmanager.api.InvitationManagerException;
+import org.xwiki.plugin.invitationmanager.api.JoinRequestStatus;
+import org.xwiki.plugin.invitationmanager.api.MembershipRequest;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiConfig;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
 import com.xpn.xwiki.store.XWikiHibernateStore;
 import com.xpn.xwiki.store.XWikiStoreInterface;
 

@@ -1,17 +1,17 @@
 package org.curriki.plugin.spacemanager.impl;
 
-import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.XWikiException;
-import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import com.xpn.xwiki.api.Api;
-import org.xwiki.plugin.spacemanager.api.Space;
-import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
-import org.xwiki.plugin.spacemanager.api.SpaceManagerExtension;
-import org.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
+import java.util.List;
+
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 
-import java.lang.reflect.Constructor;
-import java.util.List;
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.api.Api;
+import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import com.xpn.xwiki.plugin.spacemanager.api.Space;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerExtension;
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 
 /**
  * Created by IntelliJ IDEA.

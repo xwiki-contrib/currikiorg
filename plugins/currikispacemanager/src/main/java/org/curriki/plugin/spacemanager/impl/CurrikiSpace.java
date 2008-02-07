@@ -1,19 +1,17 @@
 package org.curriki.plugin.spacemanager.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
-import org.xwiki.plugin.spacemanager.impl.SpaceImpl;
-import org.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
-
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceImpl;
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 
 public class CurrikiSpace extends SpaceImpl {
 	

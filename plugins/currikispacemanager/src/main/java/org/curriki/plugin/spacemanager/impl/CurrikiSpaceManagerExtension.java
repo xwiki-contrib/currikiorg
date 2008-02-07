@@ -1,15 +1,14 @@
 package org.curriki.plugin.spacemanager.impl;
 
-import org.xwiki.plugin.spacemanager.api.Space;
-import org.xwiki.plugin.spacemanager.api.SpaceManager;
-import org.xwiki.plugin.spacemanager.api.SpaceManagerException;
-import org.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl;
-
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.classes.BaseClass;
+import com.xpn.xwiki.plugin.spacemanager.api.Space;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl;
 
 public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 
