@@ -65,7 +65,7 @@
         <!-- Step 2: Expand the XAR file -->
         <plugin>
           <groupId>com.xpn.xwiki.platform</groupId>
-          <artifactId>xwiki-xar-plugin</artifactId>
+          <artifactId>xwiki-build-xar-plugin</artifactId>
           <version>${platform.tools.version}</version>
           <configuration>
             <groupId>org.curriki</groupId>
@@ -84,7 +84,7 @@
         <!-- Step 3: Import the XAR content into the Database -->
         <plugin>
           <groupId>com.xpn.xwiki.platform</groupId>
-          <artifactId>xwiki-packager-plugin</artifactId>
+          <artifactId>xwiki-packager</artifactId>
           <version>${platform.tools.version}</version>
           <configuration>
             <sourceDirectory>${project.build.directory}/xar</sourceDirectory>
