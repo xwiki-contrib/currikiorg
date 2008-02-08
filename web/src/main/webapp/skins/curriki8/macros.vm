@@ -2580,6 +2580,17 @@ $profile
 <input type="hidden" name="xpage" value="plain" />
 $uprofile.display("profile","edit")
 <br />
+#if($sm.getRoles($spaceName).size() > 0) ## {
+$msg.get("groups.members.selectroles")<br />
+$msg.get("groups.members.selectroles.info")<br />
+<select name="roles" multiple size=4>
+#groupRoleSelector($spaceName false false $memberName)
+</select>
+#foreach($role in $ret_hasRoles) ## {
+<input type="hidden" name="hasrole" value="${role}" />
+#end ## }
+<br />
+#end ## }
 $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
 <br />
 $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
@@ -3077,5 +3088,146 @@ $msgcontent
    ##msgok
 #end
 #end ##}
+##
+## Core Group Role macros
+##
+#macro(groupGetRoles $spaceName $withAdmin) ## {
+## Sets ret_groupRoles
+#set($ret_groupRoles = $xwiki.arrayList)
+#set($ret_groupRoleNames = $sm.getRoles($spaceName))
+#foreach($role in $ret_groupRoleNames) ## {
+  #set($discard = $ret_groupRoles.add($xwiki.getDocument($role)))
+#end ## }
+#if($withAdmin) ## {
+  #set($adminGroup = $xwiki.getDocument($sm.getAdminGroupName($spaceName)))
+  #set($discard = $adminGroup.setTitle($msg.get("groups.roles.admin.title")))
+  #set($discard = $ret_groupRoleNames.add(0, $sm.getAdminGroupName($spaceName)))
+  #set($discard = $ret_groupRoles.add(0, $adminGroup))
+#end ## }
+#end ## }
+##
+##
+#macro(checkForUniqueRole $spaceName $roleName) ## {
+#set($ret_isRoleUnique = true)
+#groupGetRoles($spaceName true)
+#foreach($role in $ret_groupRoles)
+  #if($roleName.equalsIgnoreCase($role.title)) ## {
+    #set($ret_isRoleUnique = false)
+  #end ## }
+#end ## }
+#end ## }
+##
+##
+#macro(checkForValidSizeRole $spaceName $roleName) ## {
+#set($ret_isRoleValidSize = true)
+#if($roleName.length() > 32 || $roleName.length() == 0) ## {
+  #set($ret_isRoleValidSize = false)
+#end ## }
+#end ## }
+##
+##
+#macro(findUniquePageWithExtra $spaceName $prefix $suffix $extra) ## {
+#set($ret_pageName = "${prefix}${extra}${suffix}")
+#if($xwiki.exists($ret_pageName)) ## {
+  #set($extra = "_"+$xwiki.generateRandomString(3).toLowerCase())
+  #findUniquePageWithExtra($spaceName $prefix $suffix $extra)
+#end ## }
+#end ## }
+##
+##
+#macro(findUniqueRolePage $spaceName $roleName) ## {
+#set($clearName = $xwiki.clearName($roleName))
+#if($clearName.length() == 0) ## {
+  #set($clearName = "__"+$xwiki.generateRandomString(3).toLowerCase())
+#end ## }
+#findUniquePageWithExtra($spaceName "Role_${clearName}" "Group" "")
+#end ## }
+##
+##
+#macro(createGroupRole $spaceName $roleName) ## {
+#set($ret_err = false)
+#set($ret_rDoc = false)
+#set($roleName = $roleName.trim())
+#checkForUniqueRole($spaceName $roleName)
+#checkForValidSizeRole($spaceName $roleName)
+#if(!$ret_isRoleUnique) ## {
+  #set($ret_err = $msg.get("groups.roles.create.notunique"))
+#elseif(!$ret_isRoleValidSize) ## } {
+  #set($ret_err = $msg.get("groups.roles.create.invalidsize"))
+#else ## } {
+  #findUniqueRolePage($spaceName $roleName)
+  #set($ret_rDoc = $xwiki.getDocument("${spaceName}.${ret_pageName}"))
+  #set($discard = $ret_rDoc.setTitle($roleName))
+  #set($discard = $ret_rDoc.saveWithProgrammingRights($msg.get("groups.roles.comment.created", [$roleName])))
+  #set($ret_success = $msg.get("groups.roles.create.created", [$roleName]))
+#end ## }
+#end ## }
+##
+##
+#macro(renameGroupRole $groupDoc $newRoleName) ## {
+#set($ret_err = false)
+#set($newRoleName = $newRoleName.trim())
+#checkForUniqueRole($groupDoc.space $newRoleName)
+#checkForValidSizeRole($groupDoc.space $newRoleName)
+#if(!$ret_isRoleUnique) ## {
+  #set($ret_err = $msg.get("groups.roles.rename.notunique"))
+#elseif(!$ret_isRoleValidSize) ## } {
+  #set($ret_err = $msg.get("groups.roles.rename.invalidsize"))
+#else ## } {
+  #set($discard = $groupDoc.setTitle($newRoleName))
+  #set($discard = $groupDoc.saveWithProgrammingRights($msg.get("groups.roles.comment.renamed", [$oldRoleName,$newRoleName])))
+  #set($ret_success = $msg.get("groups.roles.rename.renamed", [$oldRoleName, $newRoleName]))
+#end ## }
+#end ## }
+##
+##
+#macro(deleteGroupRole $groupDoc) ## {
+#set($roleName = $groupDoc.title)
+#set($discard = $groupDoc.deleteWithProgrammingRights())
+#set($ret_success = $msg.get("groups.roles.delete.deleted", [$roleName]))
+#end ## }
+##
+##
+#macro(addUserToRole $groupName $member) ## {
+#set($discard = $sm.addUserToRole($spaceName, $member, $groupName))
+#end ## }
+##
+##
+#macro(removeUserFromRole $groupName $member) ## {
+#set($discard = $sm.removeUserFromRole($spaceName, $member, $groupName))
+#end ## }
+##
+##
+#macro(groupGetRoleMemberCount $groupDoc) ## {
+## Sets ret_roleCount
+#set($userList = $groupDoc.getObjects("XWiki.XWikiGroups"))
+#set($ret_roleCount = $userList.size())
+#end ## }
+##
+##
+#macro(groupRoleSelector $spaceName $withAdmin $disableEmpty $selectFor) ## {
+#groupGetRoles($spaceName $withAdmin)
+#set($ret_hasRoles = $xwiki.arrayList)
+#foreach($role in $ret_groupRoles) ## {
+  #if($disableEmpty) ## {
+    #groupGetRoleMemberCount($role)
+    #set($disabled = ($ret_roleCount == 0))
+  #else ## } {
+    #set($disabled = false)
+  #end ## }
+  #if($!selectFor) ## {
+    #set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName ='${role.fullName}' and doc.fullName=obj.name and obj.className='XWiki.XWikiGroups' and obj.id=prop1.id.id and prop1.id.name='member' and prop1.id.value='${selectFor}'")
+    #set($search = $xwiki.searchDocuments($sql, 1, 0))
+    #set($selected = ($search.size() > 0))
+    #if($selected) ## {
+      #set($discard = $ret_hasRoles.add($role.fullName))
+    #end ## }
+  #else ## } {
+    #set($selected = false)
+  #end ## }
+<option#if($disabled) DISABLED#end #if($selected) SELECTED#end value="${role.fullName}">$role.title</option>
+#end ## }
+#end ## }
+##
 ##
 ## End of Groups Macros ## }
