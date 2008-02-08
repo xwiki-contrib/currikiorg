@@ -45,4 +45,12 @@ public class CurrikiSpaceManagerPluginApi extends SpaceManagerPluginApi {
     public String getMemberGroupName(String spaceName) {
         return getCurrikiSpaceManager().getMemberGroupName(spaceName);
     }
+
+    public void addUserToRole(String spaceName, String userName, String role) throws SpaceManagerException {
+        getCurrikiSpaceManager().addUserToRole(spaceName, userName, role, context);
+    }
+
+    public void removeUserFromRole(String spaceName, String userName, String role) throws SpaceManagerException {
+        getCurrikiSpaceManager().removeUserFromRole(spaceName, userName, role, context);
+    }
 }
