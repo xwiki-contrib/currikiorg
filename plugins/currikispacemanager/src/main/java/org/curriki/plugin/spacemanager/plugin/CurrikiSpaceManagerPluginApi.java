@@ -37,4 +37,12 @@ public class CurrikiSpaceManagerPluginApi extends SpaceManagerPluginApi {
     public List countSpacesByTopic(String parentTopic) throws SpaceManagerException {
         return getCurrikiSpaceManager().countSpacesByTopic(parentTopic, context);
     }
+
+    public String getAdminGroupName(String spaceName) {
+        return getCurrikiSpaceManager().getAdminGroupName(spaceName);
+    }
+
+    public String getMemberGroupName(String spaceName) {
+        return getCurrikiSpaceManager().getMemberGroupName(spaceName);
+    }
 }
