@@ -105,9 +105,16 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
      * @param role The page name of the role we want to use
      * @return The full page name of the role
      *
-     * TODO: This should probably check to see if the role is valid
      */
     public String getRoleGroupName(String spaceName, String role) {
+        if (getAdminGroupName(spaceName).equals(role) || getMemberGroupName(spaceName).equals(role)){
+            return role;
+        } else if (getAdminGroupName(spaceName).equals(spaceName+"."+role)){
+            return getAdminGroupName(spaceName);
+        } else if (getMemberGroupName(spaceName).equals(spaceName+"."+role)){
+            return getMemberGroupName(spaceName);
+        }
+
         return (role.startsWith(spaceName+".")?role:spaceName+"."+role);
     }
 }
