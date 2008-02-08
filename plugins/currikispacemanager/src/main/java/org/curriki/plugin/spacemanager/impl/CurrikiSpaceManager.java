@@ -1,9 +1,5 @@
 package org.curriki.plugin.spacemanager.impl;
 
-import java.util.List;
-
-import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
-
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
@@ -12,6 +8,11 @@ import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerExtension;
 import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
+import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -142,6 +143,25 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
         } catch (XWikiException e) {
             throw new SpaceManagerException(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection getRoles(String spaceName, XWikiContext context) throws SpaceManagerException {
+        List parameterValues = new ArrayList();
+        String where = "where doc.web = ? and doc.name like ? order by doc.title";
+        parameterValues.add(spaceName);
+        parameterValues.add("Role_%Group");
+
+        List roles;
+        try {
+            roles = context.getWiki().getStore().searchDocumentsNames(where, 0, 0, parameterValues, context);
+        } catch (XWikiException e) {
+            throw new SpaceManagerException(e);
+        }
+
+        return roles;
     }
 
 }
