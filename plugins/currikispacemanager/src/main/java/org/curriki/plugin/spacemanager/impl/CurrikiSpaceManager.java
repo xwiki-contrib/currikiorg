@@ -109,7 +109,7 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
         String fromhql = ", BaseObject as cobj, DBStringListProperty as lprop";
         String wheresql = " and doc.fullName=cobj.name and cobj.className='" + currikiClassName
                         + "' and cobj.id=lprop.id.id and lprop.id.name='" + CurrikiSpace.SPACE_TOPIC + "' and '" + topic + "' in elements(lprop.list)" ;
-        return searchSpaces(fromhql, wheresql, nb, start, context);
+        return searchSpaces(fromhql, wheresql, "order by doc.creationDate desc", nb, start, context);
     }
 
     public List getSpaceNamesByTopic(String topic, int nb, int start, XWikiContext context) throws SpaceManagerException {
@@ -117,7 +117,7 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
         String fromhql = ", BaseObject as cobj, DBStringListProperty as lprop";
         String wheresql = " and doc.fullName=cobj.name and cobj.className='" + currikiClassName
                         + "' and cobj.id=lprop.id.id and lprop.id.name='" + CurrikiSpace.SPACE_TOPIC + "' and '" + topic + "' in elements(lprop.list)" ;
-        return searchSpaceNames(fromhql, wheresql, nb, start, context);
+        return searchSpaceNames(fromhql, wheresql, "order by doc.creationDate desc", nb, start, context);
     }
 
     public List countSpacesByTopic(String parentTopic, XWikiContext context) throws SpaceManagerException {
