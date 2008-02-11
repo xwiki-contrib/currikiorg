@@ -1,51 +1,92 @@
 package org.curriki.plugin.activitystream.impl;
 
-import org.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
-import org.xwiki.plugin.activitystream.api.ActivityEventType;
-import com.xpn.xwiki.notify.XWikiNotificationRule;
-import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
-import com.xpn.xwiki.doc.XWikiDocument;
-import com.xpn.xwiki.XWikiContext;
-
 import java.util.ArrayList;
+import java.util.List;
 
+import org.xwiki.plugin.activitystream.api.ActivityEventType;
+import org.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 
-public class CurrikiActivityStream extends ActivityStreamImpl {
-    private String CURRIKI_SPACE_TYPE = "currikispace";
-    private String SPACE_CLASS_NAME = "XWiki.SpaceClass";
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
+import com.xpn.xwiki.notify.XWikiNotificationRule;
+import com.xpn.xwiki.objects.BaseObject;
+
+public class CurrikiActivityStream extends ActivityStreamImpl
+{
+    private static final String CURRIKI_SPACE_TYPE = "currikispace";
+
+    private static final String SPACE_CLASS_NAME = "XWiki.SpaceClass";
 
     public CurrikiActivityStream()
     {
         super();
     }
 
-    public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc, int event, XWikiContext context) {
-        try {
-        ArrayList params = new ArrayList();
-        params.add(newdoc.getDisplayTitle(context));
+    /**
+     * {@inheritDoc}
+     */
+    public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
+        int event, XWikiContext context)
+    {
+        String spaceName = newdoc.getSpace();
+        if (spaceName == null) {
+            return;
+        }
+        if (spaceName.startsWith("Messages_Group_")) {
+            handleMessageEvent(newdoc, olddoc, event, context);
+        } else if (spaceName.startsWith("Documentation_Group_")) {
+            // TODO and newdoc is truly a documentation
+            handleDocumentationEvent(newdoc, olddoc, event, context);
+        } else if (spaceName.startsWith("Coll_Group_")) {
+            // TODO and newdoc is truly a resource
+            handleResourceEvent(newdoc, olddoc, event, context);
+        } else if (spaceName.startsWith("UserProfiles_Group_")
+            && newdoc.getObject("XWiki.SpaceUserProfileClass") != null) {
+            handleMemberEvent(newdoc, olddoc, event, context);
+        }
+        // TODO handle events from MemberGroup, AdminGroup and Role_<roleName>Group
+    }
 
+    protected void handleMessageEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
+        XWikiContext context)
+    {
         String streamName = getStreamName(newdoc.getSpace(), context);
-        if (streamName==null)
-         return;
+        if (streamName == null) {
+            return;
+        }
 
+        BaseObject article = newdoc.getObject("XWiki.ArticleClass");
+        if (article == null) {
+            if (olddoc == null) {
+                return;
+            }
+            article = olddoc.getObject("XWiki.ArticleClass");
+            if (article == null) {
+                return;
+            }
+            event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
+        } else if (olddoc == null
+            || (olddoc != null && olddoc.getObject("XWiki.ArticleClass") == null)) {
+            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+        }
+
+        List params = new ArrayList();
+        params.add(article.getStringValue("title"));
+
+        try {
             switch (event) {
-                case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
-                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE, "as_document_has_been_updated", params, context);
-                    break;
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
-                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE, "as_document_has_been_created", params, context);
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
+                        "as_message_has_been_created", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
+                        "as_message_has_been_updated", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
-                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE, "as_document_has_been_deleted", params, context);
-                    break;
-                case XWikiDocChangeNotificationInterface.EVENT_UPDATE_CONTENT:
-                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE, "as_document_has_been_updated", params, context);
-                    break;
-                case XWikiDocChangeNotificationInterface.EVENT_UPDATE_OBJECT:
-                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE, "as_document_has_been_updated", params, context);
-                    break;
-                case XWikiDocChangeNotificationInterface.EVENT_UPDATE_CLASS:
-                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE, "as_document_has_been_updated", params, context);
+                    addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
+                        "as_message_has_been_deleted", params, context);
                     break;
             }
         } catch (Throwable e) {
@@ -54,7 +95,104 @@ public class CurrikiActivityStream extends ActivityStreamImpl {
         }
     }
 
-    public String getStreamName(String space, XWikiContext context) {
+    protected void handleDocumentationEvent(XWikiDocument newdoc, XWikiDocument olddoc,
+        int event, XWikiContext context)
+    {
+        List params = new ArrayList();
+        params.add(newdoc.getDisplayTitle(context));
+
+        String streamName = getStreamName(newdoc.getSpace(), context);
+        if (streamName == null) {
+            return;
+        }
+
+        try {
+            switch (event) {
+                case XWikiDocChangeNotificationInterface.EVENT_NEW:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
+                        "as_documentation_has_been_created", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
+                        "as_documentation_has_been_updated", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_DELETE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        "as_documentation_has_been_deleted", params, context);
+                    break;
+            }
+        } catch (Throwable e) {
+            // Error in activity stream notify should be ignored but logged in the log file
+            e.printStackTrace();
+        }
+    }
+
+    protected void handleResourceEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
+        XWikiContext context)
+    {
+        List params = new ArrayList();
+        params.add(newdoc.getDisplayTitle(context));
+
+        String streamName = getStreamName(newdoc.getSpace(), context);
+        if (streamName == null) {
+            return;
+        }
+
+        try {
+            switch (event) {
+                case XWikiDocChangeNotificationInterface.EVENT_NEW:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
+                        "as_resource_has_been_created", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
+                        "as_resource_has_been_updated", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_DELETE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        "as_resource_has_been_deleted", params, context);
+                    break;
+            }
+        } catch (Throwable e) {
+            // Error in activity stream notify should be ignored but logged in the log file
+            e.printStackTrace();
+        }
+    }
+
+    protected void handleMemberEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
+        XWikiContext context)
+    {
+        List params = new ArrayList();
+        params.add(newdoc.getDisplayTitle(context));
+
+        String streamName = getStreamName(newdoc.getSpace(), context);
+        if (streamName == null) {
+            return;
+        }
+
+        try {
+            switch (event) {
+                case XWikiDocChangeNotificationInterface.EVENT_NEW:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
+                        "as_member_has_been_created", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
+                        "as_member_has_been_updated", params, context);
+                    break;
+                case XWikiDocChangeNotificationInterface.EVENT_DELETE:
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        "as_member_has_been_deleted", params, context);
+                    break;
+            }
+        } catch (Throwable e) {
+            // Error in activity stream notify should be ignored but logged in the log file
+            e.printStackTrace();
+        }
+    }
+
+    public String getStreamName(String space, XWikiContext context)
+    {
         XWikiDocument doc;
         try {
             doc = context.getWiki().getDocument(space, "WebPreferences", context);
@@ -69,7 +207,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl {
             if (CURRIKI_SPACE_TYPE.equals(type))
                 return parentSpace;
 
-            // could not find a curriki space
+            // could not find a Curriki space
             return null;
         } catch (Exception e) {
             return null;
