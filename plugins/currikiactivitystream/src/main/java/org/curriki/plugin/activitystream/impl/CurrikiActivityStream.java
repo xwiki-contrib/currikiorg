@@ -249,6 +249,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getStreamName(String space, XWikiContext context)
     {
         XWikiDocument doc;
