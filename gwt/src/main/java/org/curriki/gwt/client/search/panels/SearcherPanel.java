@@ -22,14 +22,18 @@
  */
 package org.curriki.gwt.client.search.panels;
 
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.i18n.client.Dictionary;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.search.editor.ResourceAdder;
+import org.curriki.gwt.client.search.editor.Viewer;
+import org.curriki.gwt.client.search.history.SearcherHistory;
 import org.curriki.gwt.client.search.queries.DoesSearch;
 import org.curriki.gwt.client.search.queries.Paginator;
 import org.curriki.gwt.client.search.selectors.Selectable;
-import org.curriki.gwt.client.search.history.SearcherHistory;
-import org.curriki.gwt.client.search.editor.Viewer;
-import org.curriki.gwt.client.search.editor.ResourceAdder;
 
 public class SearcherPanel extends VerticalPanel implements ClickListener
 {
@@ -50,10 +54,19 @@ public class SearcherPanel extends VerticalPanel implements ClickListener
     public void init(boolean fromCB)
     {
         addStyleName("search-panel");
+        String topTitle = Main.getTranslation("search.top_titlebar");
+        try {
+            Dictionary arguments = Dictionary.getDictionary("GWTArguments");
+            if (arguments != null && arguments.get("search_top_title") != null){
+                topTitle = arguments.get("search_top_title");
+            }
+        } catch (Exception e){
+            // Ignore any exception
+        }
         if (!fromCB){
             VerticalPanel pTitle = new VerticalPanel();
             pTitle.addStyleName("search-top-titlebar");
-            pTitle.add(new HTML(Main.getTranslation("search.top_titlebar")));
+            pTitle.add(new HTML(topTitle));
             add(pTitle);
         }
 
