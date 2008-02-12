@@ -73,25 +73,30 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         String articleTitle = article.getStringValue("title");
         String articleLink =
             "[" + articleTitle + ">" + article.getName().replaceAll("@", "%40") + "]";
+        // should "from" be the creator of the message or the event initiator?
+        String from = context.getWiki().getUserName(context.getUser(), context);
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
                     params.add(articleLink);
+                    params.add(from);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "as_message_has_been_created",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mes_add",
                         params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     params.add(articleLink);
+                    params.add(from);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "as_message_has_been_updated",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mes_edit",
                         params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     params.add(articleTitle);
+                    params.add(from);
                     addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "as_message_has_been_deleted",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mes_del",
                         params, context);
                     break;
             }
@@ -120,25 +125,30 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         String docLink =
             "[" + docDisplayTitle + ">" + newdoc.getSpace() + "."
                 + newdoc.getName().replaceAll("@", "%40") + "]";
+        // should "user" be the creator of the message or the event initiator?
+        String user = context.getWiki().getUserName(context.getUser(), context);
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
                     params.add(docLink);
+                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "as_documentation_has_been_created",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_doc_wiki_add",
                         params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     params.add(docLink);
+                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "as_documentation_has_been_updated",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_doc_wiki_upd",
                         params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     params.add(docDisplayTitle);
+                    params.add(user);
                     addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "as_documentation_has_been_deleted",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_doc_wiki_del",
                         params, context);
                     break;
             }
@@ -156,10 +166,19 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             return;
         }
 
-        // TODO is this truly a resource
-        // update event parameter (workaround)
-        if (newdoc.isNew()) {
+        BaseObject asset = newdoc.getObject("XWiki.AssetClass");
+        if (asset == null) {
+            if (olddoc == null) {
+                return;
+            }
+            asset = olddoc.getObject("XWiki.AssetClass");
+            if (asset == null) {
+                return;
+            }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
+        } else if ((olddoc != null && olddoc.getObject("XWiki.AssetClass") == null)
+            || (olddoc == null && "1.2".equals(newdoc.getVersion()))) {
+            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
         }
 
         List params = new ArrayList();
@@ -167,25 +186,30 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         String docLink =
             "[" + docDisplayTitle + ">" + newdoc.getSpace() + "."
                 + newdoc.getName().replaceAll("@", "%40") + "]";
+        // should "from" be the creator of the message or the event initiator?
+        String user = context.getWiki().getUserName(context.getUser(), context);
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
                     params.add(docLink);
+                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "as_resource_has_been_created",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_res_add",
                         params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     params.add(docLink);
+                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "as_resource_has_been_updated",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_res_edit",
                         params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     params.add(docDisplayTitle);
+                    params.add(user);
                     addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "as_resource_has_been_deleted",
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_res_del",
                         params, context);
                     break;
             }
@@ -229,18 +253,16 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
                     addDocumentActivityEvent(streamName, userDoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "as_member_has_been_created", params,
-                        context);
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mem_new",
+                        params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, userDoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "as_member_has_been_updated", params,
-                        context);
+                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mem_upd",
+                        params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
-                    // addDocumentActivityEvent(streamName, userDoc, ActivityEventType.DELETE,
-                    // ActivityEventPriority.NOTIFICATION, "as_member_has_been_deleted", params,
-                    // context);
+                    // ignore
                     break;
             }
         } catch (Throwable e) {
