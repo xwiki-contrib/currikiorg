@@ -106,14 +106,19 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         }
 
         String docTitle = newdoc.getTitle();
-        String docType =
-            newdoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
+        String docType = "wikipage";
+        if (newdoc.getObject("XWiki.TagClass") != null) {
+            docType =
+                newdoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
+        }
 
         // update event parameter (workaround)
         if (newdoc.isNew()) {
             docTitle = olddoc.getTitle();
-            docType =
-                olddoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
+            if (olddoc.getObject("XWiki.TagClass") != null) {
+                docType =
+                    olddoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
+            }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else if (olddoc == null && "1.2".equals(newdoc.getVersion())) {
             event = XWikiDocChangeNotificationInterface.EVENT_NEW;

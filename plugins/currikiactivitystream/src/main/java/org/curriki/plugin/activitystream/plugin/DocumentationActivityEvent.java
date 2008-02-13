@@ -49,7 +49,6 @@ public class DocumentationActivityEvent extends ActivityEvent
             if (!doc.isNew()) {
                 docTitle = doc.getTitle();
                 docLink = "[" + docTitle + ">" + doc.getExternalURL("view", context) + "]";
-                isFile = doc.getTags(context).contains("documentation-file");
             }
         } catch (XWikiException e) {
         }
