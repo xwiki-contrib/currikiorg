@@ -3,11 +3,14 @@ package org.curriki.plugin.activitystream.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xwiki.plugin.activitystream.api.ActivityEvent;
 import org.xwiki.plugin.activitystream.api.ActivityEventPriority;
 import org.xwiki.plugin.activitystream.api.ActivityEventType;
+import org.xwiki.plugin.activitystream.impl.ActivityEventImpl;
 import org.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
 import com.xpn.xwiki.notify.XWikiNotificationRule;
@@ -70,34 +73,22 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         }
 
         List params = new ArrayList();
-        String articleTitle = article.getStringValue("title");
-        String articleLink =
-            "[" + articleTitle + ">" + article.getName().replaceAll("@", "%40") + "]";
-        // should "from" be the creator of the message or the event initiator?
-        String from = context.getWiki().getUserName(context.getUser(), context);
+        params.add(article.getStringValue("title"));
+        params.add(getUserName(context.getUser(), context));
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
-                    params.add(articleLink);
-                    params.add(from);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mes_add",
-                        params, context);
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
-                    params.add(articleLink);
-                    params.add(from);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mes_edit",
-                        params, context);
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
-                    params.add(articleTitle);
-                    params.add(from);
-                    addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mes_del",
-                        params, context);
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
             }
         } catch (Throwable e) {
@@ -114,42 +105,38 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             return;
         }
 
-        // TODO is this truly a documentation
+        String docTitle = newdoc.getTitle();
+        String docType =
+            newdoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
+
         // update event parameter (workaround)
         if (newdoc.isNew()) {
+            docTitle = olddoc.getTitle();
+            docType =
+                olddoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
+        } else if (olddoc == null && "1.2".equals(newdoc.getVersion())) {
+            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
         }
 
         List params = new ArrayList();
-        String docDisplayTitle = newdoc.getDisplayTitle(context);
-        String docLink =
-            "[" + docDisplayTitle + ">" + newdoc.getSpace() + "."
-                + newdoc.getName().replaceAll("@", "%40") + "]";
-        // should "user" be the creator of the message or the event initiator?
-        String user = context.getWiki().getUserName(context.getUser(), context);
+        params.add(docTitle);
+        params.add(getUserName(context.getUser(), context));
+        params.add(docType);
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
-                    params.add(docLink);
-                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_doc_wiki_add",
-                        params, context);
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
-                    params.add(docLink);
-                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_doc_wiki_upd",
-                        params, context);
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
-                    params.add(docDisplayTitle);
-                    params.add(user);
-                    addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_doc_wiki_del",
-                        params, context);
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
             }
         } catch (Throwable e) {
@@ -182,35 +169,22 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         }
 
         List params = new ArrayList();
-        String docDisplayTitle = newdoc.getDisplayTitle(context);
-        String docLink =
-            "[" + docDisplayTitle + ">" + newdoc.getSpace() + "."
-                + newdoc.getName().replaceAll("@", "%40") + "]";
-        // should "from" be the creator of the message or the event initiator?
-        String user = context.getWiki().getUserName(context.getUser(), context);
+        params.add(asset.getStringValue("title"));
+        params.add(getUserName(context.getUser(), context));
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
-                    params.add(docLink);
-                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_res_add",
-                        params, context);
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
-                    params.add(docLink);
-                    params.add(user);
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_res_edit",
-                        params, context);
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
-                    params.add(docDisplayTitle);
-                    params.add(user);
-                    addDocumentActivityEvent(streamName, olddoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_res_del",
-                        params, context);
+                    addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
             }
         } catch (Throwable e) {
@@ -244,22 +218,28 @@ public class CurrikiActivityStream extends ActivityStreamImpl
 
         try {
             String profileName = profile.getName();
-            String userName = "XWiki." + profileName.substring(profileName.indexOf(".") + 1);
-            XWikiDocument userDoc = context.getWiki().getDocument(userName, context);
+            String user = "XWiki." + profileName.substring(profileName.indexOf(".") + 1);
+            XWikiDocument userDoc = context.getWiki().getDocument(user, context);
 
             List params = new ArrayList();
-            params.add(context.getWiki().getUserName(userName, context));
+            params.add(user);
+            params.add(getUserName(user, context));
+
+            ActivityEvent activityEvent = new ActivityEventImpl();
+            activityEvent.setStream(streamName);
+            activityEvent.setPriority(ActivityEventPriority.NOTIFICATION);
+            activityEvent.setUrl(userDoc.getExternalURL("view", context));
+            activityEvent.setParams(params);
+            activityEvent.setDate(newdoc.getDate());
 
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
-                    addDocumentActivityEvent(streamName, userDoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mem_new",
-                        params, context);
+                    activityEvent.setType(ActivityEventType.CREATE);
+                    addActivityEvent(activityEvent, newdoc, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
-                    addDocumentActivityEvent(streamName, userDoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "groups_home_activity_mem_upd",
-                        params, context);
+                    activityEvent.setType(ActivityEventType.UPDATE);
+                    addActivityEvent(activityEvent, newdoc, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     // ignore
@@ -295,5 +275,23 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private String getUserName(String user, XWikiContext context)
+    {
+        String userName = null;
+        try {
+            XWikiDocument userDoc = context.getWiki().getDocument(user, context);
+            if (!userDoc.isNew()) {
+                userName =
+                    (userDoc.getStringValue("XWiki.XWikiUsers", "first_name") + " " + userDoc
+                        .getStringValue("XWiki.XWikiUsers", "last_name")).trim();
+            }
+        } catch (XWikiException e) {
+        }
+        if (userName == null) {
+            userName = user.substring(user.indexOf(".") + 1);
+        }
+        return userName;
     }
 }
