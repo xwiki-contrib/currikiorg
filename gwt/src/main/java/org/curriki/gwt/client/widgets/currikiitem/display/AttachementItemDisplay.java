@@ -101,7 +101,7 @@ public class AttachementItemDisplay extends ItemDisplay {
             // Create branched icon
             icon = new Image();
             icon.addStyleName("item-download-link");
-            icon.setUrl(Constants.MIMETYPE_PATH + extension + ".png");
+            icon.setUrl(Constants.MIMETYPE_PATH + extension + ".gif");
             icon.addClickListener(openClick);
 
             if(panel.getWidgetIndex(icon) == -1)
