@@ -2115,7 +2115,78 @@ $s.getDescription()
 </div>
 </div>
 #end ## }
+##
+## Group masthead showing messages viewable by the user
+##
+#macro(mycurrikiGroupInfoMessages $m_groupName $displayType) ## {
+#if(!$g_rowCount) ## {
+#set($g_rowCount = 0)
+#end ## }
+#set($g_rowCount = $g_rowCount + 1)
+#set($m_sm = $xwiki.csm)
+#set($s = $m_sm.getSpace($m_groupName))
 
+
+#if("$!first_frame_done" == "") ## {
+<div class="frame">
+#else ## } {
+#set($first_frame_done = "")
+#end ## }
+<div class="frame-inset-titlebar">
+#if($displayType == "edit")
+  #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
+  #mycurrikititlebar($s.getDisplayTitle() $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
+#elseif($displayType == "view")
+  #mycurrikititlebar($s.getDisplayTitle() "" "" "blue")
+#else
+  #mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
+#end
+</div>
+
+#groupLogo( $s )
+
+<div class="frame-inset-description">
+$s.getDescription()
+</div>
+#if("$context.user" == "$!userdoc.fullName" ) ## {
+## Get last 5 messages
+#set($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.web='Messages_${m_groupName}' order by doc.creationDate desc")
+#set($messages = $xwiki.searchDocuments($sql, 100, 0))
+#if($messages.size() > 0) ## {
+<div id="mycurriki-groups-message-container">
+## Show messages
+<div id="mycurriki-group-mymessages-${m_groupName}" class="lefttext xwikicomment">
+<div class="righttext floatright">
+<a href="$xwiki.getURL("${m_groupName}.Messages", "view")">$msg.get("mycurriki.groups.viewmessages")</a>
+</div>
+<b>$msg.get("mycurriki.groups.mymessages")</b>
+</div>
+#set($showCount = 0)
+#foreach($messageName in $messages) ## {
+#if($showCount < 3) ## {
+#if($xwiki.hasAccessLevel("view", $context.user, $messageName)) ## {
+#set($showCount = 1 + $showCount)
+#set($message = $xwiki.getDocument($messageName))
+#set($msgContent = $message.getObject("XWiki.ArticleClass"))
+<div id="mycurriki-group-mymessages-${message.fullName}" class="lefttext xwikicomment">
+<div class="righttext floatright">
+$xwiki.formatDate($message.creationDate, $msg.get("mycurriki.datetimeFormat"))
+$msg.get("mycurriki.groups.message.by") <a href="$xwiki.getURL("${message.creator}", "view")">$xwiki.getUserName($message.creator)</a>
+</div>
+#set($showTitle = $msgContent.title)
+#if($showTitle.length() > 32) ## {
+#set($showTitle = $showTitle.substring(0, 32)+"...")
+#end ## }
+<a href="$xwiki.getURL($message.fullName, "view")"><b>$showTitle</b></a>
+</div>
+#end ## }
+#end ## }
+#end ## }
+</div>
+#end ## }
+#end ## }
+</div>
+#end ## }
 ##
 ##
 ## Blog Entries
@@ -2493,7 +2564,7 @@ function removeMember(memberName,spaceName) {
 {/pre}
 #end
 ##
-#macro(groupsdisplaymemberinfo $memberName $spaceName $divid)
+#macro(groupsdisplaymemberinfo $memberName $spaceName $divid) ## {
 #set($mdoc = $xwiki.getDocument($memberName))
 #if(!$mdoc.isNew())
 <div class="groups-members-memberpic userpic">
@@ -2551,6 +2622,74 @@ $profile
 #end
 </div>
 #end
+##
+#macro(groupsdisplaymemberinfo $memberName $spaceName $divid)
+#set($mdoc = $xwiki.getDocument($memberName))
+#if(!$mdoc.isNew())
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+#end
+#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+#if($isGroupAdmin||$memberName==$context.user)
+<div class="groups-members-membereditlink">
+<a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("groups_members_admin_current_members_editsettings_link")</a>
+</div>
+#end
+#if($isGroupAdmin)
+#set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
+#set($adminCount = $sm.getAdmins($spaceName).size())
+#if($memberIsAdmin)
+#if($adminCount>1)
+<div class="groups-members-addadmin">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_removeadmin_confirm")')) {removeAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_removeadmin_link")</a>
+</div>
+#end
+#else
+<div class="groups-members-addadmin">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_addadmin_confirm")')) {addAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_addadmin_link")</a>
+</div>
+#end
+#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+<div class="groups-members-remove">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
+</div>
+#end
+#else
+#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+#if($memberName==$context.user)
+<div class="groups-members-remove">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
+</div>
+#end
+#end
+#end
+<div class="groups-members-membername">
+<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+#if($memberIsAdmin) ## {
+  ($msg.get('groups.roles.admin.title'))
+#else ## } {
+  #set($memberRoles = $sm.getRoles($spaceName, $memberName))
+  #if($memberRoles.size() > 0) ## {
+    #set($firstRole = $xwiki.getDocument($memberRoles.get(0)))
+    ($firstRole.title)
+  #end ## }
+#end ## }
+</div>
+<div class="groups-members-memberprofile">
+#set($profile = $uprofile.profile)
+#if($profile)
+$profile
+#end
+</div>
+#end ## }
 ##
 #macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid)
 #set($mdoc = $xwiki.getDocument($memberName))
