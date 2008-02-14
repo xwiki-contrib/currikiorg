@@ -2718,10 +2718,9 @@ $profile
 <input type="hidden" name="divid" value="$!divid" />
 <input type="hidden" name="xpage" value="plain" />
 $uprofile.display("profile","edit")
-<br />
 #if($sm.getRoles($spaceName).size() > 0) ## {
-$msg.get("groups.members.selectroles")<br />
-$msg.get("groups.members.selectroles.info")<br />
+<div class="select-roles">$msg.get("groups.members.selectroles")</div>
+<div class="instruction">$msg.get("groups.members.selectroles.info")</div>
 <select name="roles" multiple size=4>
 #groupRoleSelector($spaceName false false $memberName)
 </select>
