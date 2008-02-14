@@ -1,3 +1,38 @@
 <div>
+#if($doc.space.startsWith("Documentation_"))
+  ##includeMacros("Groups.Macros")
+  #groupinit()
+  #groupsheader("documentation")
+
+  #set($editURL = $s.homeURL + "Documentation")
+  #set($editURL = $editURL + "?action=editdoc&pagename=")
+  #set($editURL = $editURL + $doc.getFullName())
+  
+  #set($tit = $doc.title)
+  #if($request.vers)
+    #set($tit = $tit + " ( version " )
+    #set($tit = $tit + $request.vers)
+    #set($tit = $tit + " )" )
+  #end
+  
+  #begingroupsection("${tit}" "${msg.groups_documentation_documents_edit}" "$editURL" "blue" true)
+  <span class="date">
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($doc.author, true) ${msg.groups_documentation_documents_on}    $xwiki.formatDate($doc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span>
+<br />
+
+    #if($request.vers)
+      This is the revision ${request.vers} of the ducument
+      <br />
+    #end
+    <br />
+    <div class="doccontent">
+#end
+
 $cdoc.getRenderedContent()
+
+#if($doc.space.startsWith("Documentation_"))
+  </div>
+  #endgroupsection()
+  #groupsfooter()
+#end
 </div>
