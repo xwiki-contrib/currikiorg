@@ -33,20 +33,25 @@ public class CurrikiActivityStream extends ActivityStreamImpl
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
-        String spaceName = newdoc.getSpace();
-        if (spaceName == null) {
-            return;
+        try {
+            String spaceName = newdoc.getSpace();
+            if (spaceName == null) {
+                return;
+            }
+            if (spaceName.startsWith("Messages_Group_")) {
+                handleMessageEvent(newdoc, olddoc, event, context);
+            } else if (spaceName.startsWith("Documentation_Group_")) {
+                handleDocumentationEvent(newdoc, olddoc, event, context);
+            } else if (spaceName.startsWith("Coll_Group_")) {
+                handleResourceEvent(newdoc, olddoc, event, context);
+            } else if (spaceName.startsWith("UserProfiles_Group_")) {
+                handleMemberEvent(newdoc, olddoc, event, context);
+            }
+            // TODO handle events from MemberGroup, AdminGroup and Role_<roleName>Group
+        } catch (Throwable t) {
+            // Error in activity stream notify should be ignored but logged in the log file
+            t.printStackTrace();
         }
-        if (spaceName.startsWith("Messages_Group_")) {
-            handleMessageEvent(newdoc, olddoc, event, context);
-        } else if (spaceName.startsWith("Documentation_Group_")) {
-            handleDocumentationEvent(newdoc, olddoc, event, context);
-        } else if (spaceName.startsWith("Coll_Group_")) {
-            handleResourceEvent(newdoc, olddoc, event, context);
-        } else if (spaceName.startsWith("UserProfiles_Group_")) {
-            handleMemberEvent(newdoc, olddoc, event, context);
-        }
-        // TODO handle events from MemberGroup, AdminGroup and Role_<roleName>Group
     }
 
     protected void handleMessageEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
@@ -100,6 +105,10 @@ public class CurrikiActivityStream extends ActivityStreamImpl
     protected void handleDocumentationEvent(XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
+        if (newdoc.getFullName().endsWith(".WebPreferences")) {
+            return;
+        }
+
         String streamName = getStreamName(newdoc.getSpace(), context);
         if (streamName == null) {
             return;
