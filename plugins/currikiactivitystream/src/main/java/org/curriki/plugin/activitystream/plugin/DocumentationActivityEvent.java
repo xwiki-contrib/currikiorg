@@ -22,12 +22,14 @@ package org.curriki.plugin.activitystream.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.curriki.plugin.activitystream.impl.CurrikiActivityStream;
 import org.xwiki.plugin.activitystream.api.ActivityEventType;
 import org.xwiki.plugin.activitystream.plugin.ActivityEvent;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.BaseObject;
 
 public class DocumentationActivityEvent extends ActivityEvent
 {
@@ -41,13 +43,16 @@ public class DocumentationActivityEvent extends ActivityEvent
         super(event, context);
 
         String docTitle = event.getParam1();
-        boolean isFile = "file".equals(event.getParam3());
+        String docType = event.getParam3();
         String docLink = docTitle;
         XWikiDocument doc;
+        BaseObject tag;
         try {
             doc = context.getWiki().getDocument(event.getPage(), context);
-            if (!doc.isNew()) {
+            tag = doc.getObject("XWiki.TagClass");
+            if (tag != null) {
                 docTitle = doc.getTitle();
+                docType = tag.getStringValue("tags");
                 docLink = "[" + docTitle + ">" + doc.getExternalURL("view", context) + "]";
             }
         } catch (XWikiException e) {
@@ -68,7 +73,7 @@ public class DocumentationActivityEvent extends ActivityEvent
         }
 
         String eventTitle = "";
-        if (isFile) {
+        if (docType.contains(CurrikiActivityStream.DOCUMENTATION_FILE)) {
             if (ActivityEventType.UPDATE.equals(event.getType())) {
                 eventTitle = "groups_home_activity_doc_upd";
             } else if (ActivityEventType.CREATE.equals(event.getType())) {
@@ -76,7 +81,7 @@ public class DocumentationActivityEvent extends ActivityEvent
             } else if (ActivityEventType.DELETE.equals(event.getType())) {
                 eventTitle = "groups_home_activity_doc_del";
             }
-        } else {
+        } else if (docType.contains(CurrikiActivityStream.DOCUMENTATION_WIKI)) {
             if (ActivityEventType.UPDATE.equals(event.getType())) {
                 eventTitle = "groups_home_activity_doc_wiki_upd";
             } else if (ActivityEventType.CREATE.equals(event.getType())) {

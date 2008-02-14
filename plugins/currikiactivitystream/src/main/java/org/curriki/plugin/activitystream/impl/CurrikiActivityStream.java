@@ -22,6 +22,10 @@ public class CurrikiActivityStream extends ActivityStreamImpl
 
     private static final String SPACE_CLASS_NAME = "XWiki.SpaceClass";
 
+    public static final String DOCUMENTATION_FILE = "documentation-file";
+
+    public static final String DOCUMENTATION_WIKI = "documentation-wiki";
+
     public CurrikiActivityStream()
     {
         super();
@@ -105,32 +109,41 @@ public class CurrikiActivityStream extends ActivityStreamImpl
     protected void handleDocumentationEvent(XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
-        if (newdoc.getFullName().endsWith(".WebPreferences")) {
-            return;
-        }
-
         String streamName = getStreamName(newdoc.getSpace(), context);
         if (streamName == null) {
             return;
         }
 
         String docTitle = newdoc.getTitle();
-        String docType = "wikipage";
-        if (newdoc.getObject("XWiki.TagClass") != null) {
-            docType =
-                newdoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
+        BaseObject tag = newdoc.getObject("XWiki.TagClass");
+        if (tag == null) {
+            if (olddoc == null) {
+                return;
+            }
+            tag = olddoc.getObject("XWiki.TagClass");
+            if (tag == null) {
+                return;
+            }
+            docTitle = olddoc.getTitle();
+            event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
+        } else {
+            String initialVersion = "1.3";
+            if (tag.getStringValue("tags").contains(DOCUMENTATION_FILE)) {
+                initialVersion = "1.4";
+            }
+            if ((olddoc != null && olddoc.getObject("XWiki.TagClass") == null)
+                || (olddoc == null && initialVersion.equals(newdoc.getVersion()))) {
+                event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            }
         }
 
-        // update event parameter (workaround)
-        if (newdoc.isNew()) {
-            docTitle = olddoc.getTitle();
-            if (olddoc.getObject("XWiki.TagClass") != null) {
-                docType =
-                    olddoc.getTags(context).contains("documentation-file") ? "file" : "wikipage";
-            }
-            event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
-        } else if (olddoc == null && "1.2".equals(newdoc.getVersion())) {
-            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+        String docType = tag.getStringValue("tags");
+        if (docType.contains(DOCUMENTATION_FILE)) {
+            docType = DOCUMENTATION_FILE;
+        } else if (docType.contains(DOCUMENTATION_WIKI)) {
+            docType = DOCUMENTATION_WIKI;
+        } else {
+            return;
         }
 
         List params = new ArrayList();
@@ -177,9 +190,13 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 return;
             }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
-        } else if ((olddoc != null && olddoc.getObject("XWiki.AssetClass") == null)
-            || (olddoc == null && "1.2".equals(newdoc.getVersion()))) {
-            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+        } else {
+            double version = Double.parseDouble(newdoc.getVersion());
+            if (version < 1.6) {
+                return;
+            } else if (version == 1.6) {
+                event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            }
         }
 
         List params = new ArrayList();
