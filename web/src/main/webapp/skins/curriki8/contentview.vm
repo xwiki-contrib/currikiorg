@@ -1,5 +1,9 @@
 <div>
-#if($doc.space.startsWith("Documentation_"))
+#if($doc.space.startsWith("Documentation_") && $doc.name != "WebPreferences" && $doc.name != "WebHome" && $doc.name != "AboutDocumentation")
+ #set($isdocumentation = "true")
+#end
+
+#if($isdocumentation)
   ##includeMacros("Groups.Macros")
   #groupinit()
   #groupsheader("documentation")
@@ -30,7 +34,7 @@
 
 $cdoc.getRenderedContent()
 
-#if($doc.space.startsWith("Documentation_"))
+#if($isdocumentation)
   </div>
   #endgroupsection()
   #groupsfooter()
