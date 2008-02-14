@@ -8,9 +8,14 @@
   #groupinit()
   #groupsheader("documentation")
 
-  #set($editURL = $s.homeURL + "Documentation")
-  #set($editURL = $editURL + "?action=editdoc&pagename=")
-  #set($editURL = $editURL + $doc.getFullName())
+  #set($editURL = "")
+  #set($editTxt = "")
+  #if( $sm.isMember( $s.spaceName, $context.user ) )
+    #set($editURL = $s.homeURL + "Documentation")
+    #set($editURL = $editURL + "?action=editdoc&pagename=")
+    #set($editURL = $editURL + $doc.getFullName())
+	#set($editTxt = ${msg.groups_documentation_documents_edit})
+  #end
   
   #set($tit = $doc.title)
   #if($request.vers)
@@ -19,7 +24,7 @@
     #set($tit = $tit + " )" )
   #end
   
-  #begingroupsection("${tit}" "${msg.groups_documentation_documents_edit}" "$editURL" "blue" true)
+  #begingroupsection("${tit}" "${editTxt}" "${editURL}" "blue" true)
   <span class="date">
       ${msg.groups_documentation_documents_modified} $xwiki.getUserName($doc.author, true) ${msg.groups_documentation_documents_on}    $xwiki.formatDate($doc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span>
 <br />
