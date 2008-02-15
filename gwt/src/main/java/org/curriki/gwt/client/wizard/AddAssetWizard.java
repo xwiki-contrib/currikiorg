@@ -178,6 +178,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
                     if (!((Boolean) result).booleanValue()){
                         Window.alert(Main.getSingleton().getTranslator().getTranslation("checkversion.versionhaschanged"));
+                        closeParent();
                         editor.setCurrentAssetInvalid(true);
                         editor.setTreeContentInvalid(true);
                         editor.refreshState();
