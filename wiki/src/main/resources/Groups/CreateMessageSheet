@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1199656481000</creationDate>
-<date>1202998785000</date>
-<contentUpdateDate>1202998785000</contentUpdateDate>
-<version>1.93</version>
+<date>1203062866000</date>
+<contentUpdateDate>1203062866000</contentUpdateDate>
+<version>1.105</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -233,17 +233,11 @@ var menu=getClass[0].getElementsByTagName('td');
 var tr = document.createElement('tr');
 tr.className=divId;
 var td1 = document.createElement('td');
-var child = menu[0].firstChild;
-while(child){
-var nextSibling = child.nextSibling;
-td1.appendChild(child);
-child = nextSibling;
-}
-menu[0].innerHTML='';
 var td2 = document.createElement('td');
 var td3 = document.createElement('td');
 getClass[0].parentNode.insertBefore(tr, getClass[0]);
 tr.appendChild(td1);
+moveChildNodes(menu[0], td1);
 tr.appendChild(td2);
 tr.appendChild(td3);
 
@@ -262,30 +256,52 @@ if (!selectObj.disabled){
 var parentTr=this.parentNode.parentNode;
 var getClass=document.getElementsByClassName(parentTr.className);
 if(parentTr==getClass[0]){
-var child = parentTr.getElementsByTagName('td')[0].firstChild;
-var newParent = getClass[1].getElementsByTagName('td')[0];
-while(child){
-var nextSibling = child.nextSibling;
-newParent.appendChild(child);
-child = nextSibling;
-}
-//getClass[1].getElementsByTagName('td')[0].innerHTML=parentTr.getElementsByTagName('td')[0].innerHTML;
+moveChildNodes(parentTr.getElementsByTagName('td')[0],getClass[1].getElementsByTagName('td')[0]);
 }
 this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 option.style.display = '';
+option.disabled = false;
 }
 return false;
 };
 td2.appendChild(document.createTextNode(option.text));
 td3.appendChild(deleteLink);
 option.style.display = 'none';
+option.disabled = true;
 selectObj.selectedIndex = 0;
 selectObj.onchange();
 }
-function enableSelect(enabled, selectId){
+function getInputs(parent, type){
+var inputs = parent.getElementsByTagName('input');
+var result = [];
+for(var i=0; i&lt;inputs.length; i++){
+if (inputs[i].type == type){
+result.push(inputs[i]);
+}
+}
+return result;
+}
+function moveChildNodes(fromParent, toParent){
+var checkboxes = getInputs(fromParent, 'checkbox');
+var checked = new Array(checkboxes.length);
+for(var i=0; i&lt;checkboxes.length; i++){
+checked[i] = checkboxes[i].checked;
+}
+var child = fromParent.firstChild;
+while(child){
+var nextSibling = child.nextSibling;
+toParent.appendChild(child);
+child = nextSibling;
+}
+checkboxes = getInputs(toParent, 'checkbox');
+for(var i=0; i&lt;checkboxes.length; i++){
+checkboxes[i].checked = checked[i];
+}
+}
+function enableSelect(checkbox, selectId){
 var selectObj = document.getElementById(selectId);
 selectObj.selectedIndex = 0;
-selectObj.disabled = !enabled;
+selectObj.disabled = !checkbox.checked;
 selectObj.onchange();
 }
 function getSelectedOptions(select){
@@ -328,7 +344,7 @@ return toGroup || rolesSaved || membersSaved;
 &lt;/tr&gt;
 &lt;tr class="selectedRoles"&gt;
 &lt;td&gt;
-&lt;input id="toRole" name="toRole" type="checkbox" style="width:auto;" onclick="enableSelect(this.checked, 'rolesList')" /&gt;&lt;label for="toRole"&gt;$msg.get('groups_messages_create_to_role_label')&lt;/label&gt;
+&lt;input id="toRole" name="toRole" type="checkbox" style="width:auto;" onclick="enableSelect(this, 'rolesList')" /&gt;&lt;label for="toRole"&gt;$msg.get('groups_messages_create_to_role_label')&lt;/label&gt;
 &lt;/td&gt;
 &lt;td&gt;
 &lt;input id="selectedRolesList" name="selectedRolesList" type="hidden" value="" /&gt;
@@ -347,7 +363,7 @@ return toGroup || rolesSaved || membersSaved;
 &lt;/tr&gt;
 &lt;tr class="selectedMembers"&gt;
 &lt;td&gt;
-&lt;input id="toMember" name="toMember" type="checkbox" style="width:auto;" onclick="enableSelect(this.checked, 'membersList')" /&gt;&lt;label for="toMember"&gt;$msg.get('groups_messages_create_to_member_label')&lt;/label&gt;
+&lt;input id="toMember" name="toMember" type="checkbox" style="width:auto;" onclick="enableSelect(this, 'membersList')" /&gt;&lt;label for="toMember"&gt;$msg.get('groups_messages_create_to_member_label')&lt;/label&gt;
 &lt;/td&gt;
 &lt;td&gt;
 &lt;input id="selectedMembersList" name="selectedMembersList" type="hidden" value="" /&gt;

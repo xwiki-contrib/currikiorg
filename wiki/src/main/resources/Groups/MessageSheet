@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1200180825000</creationDate>
-<date>1203024648000</date>
-<contentUpdateDate>1203024648000</contentUpdateDate>
-<version>1.97</version>
+<date>1203087086000</date>
+<contentUpdateDate>1203087086000</contentUpdateDate>
+<version>1.105</version>
 <title>Message Sheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -143,6 +143,7 @@ function cancelEditMessage(spaceName,pageName,divid) {
   var myAjax = new Ajax.XWikiRequest( "Groups", "ViewMessageService", {method: 'get', parameters: pars, onComplete: cancelEditMessageCallback, divid: divid });
 }
 function cancelEditMessageCallback(ajaxreq) {
+ alert('Cancel done');
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
 }
@@ -156,6 +157,21 @@ function deleteMessage(spaceName,pageName) {
 function deleteMessageCallback(ajaxreq) {
   alert('$msg.groups_messages_view_message_delete_done');
   location= '$xwiki.getURL("${spaceName}.Messages")';
+}
+function updateSectionTitle(ajaxreq){
+  var h3s = document.getElementById('section_1').getElementsByTagName('h3');
+  if (h3s.length == 0){
+    return;
+  }
+  var sectionTitle = h3s[0];
+  var tmpDiv = document.createElement('div');
+  tmpDiv.innerHTML = ajaxreq.responseText;
+  var ps = tmpDiv.getElementsByTagName('p');
+  for(var i=0; i&lt;ps.length; i++){
+    if (ps[i].className == 'frame-title'){
+      sectionTitle.innerHTML = ps[i].innerHTML;
+    }
+  }
 }
 &lt;/script&gt;
 {/pre}
@@ -246,11 +262,12 @@ document.getElementById("commentform").className = "collapsed";
 	 #mimeicon($attach.filename)
 	 &lt;/div&gt;
 	 &lt;p&gt;&lt;span class="date"&gt;{pre}&lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")"&gt;#packName($attach.filename)&lt;/a&gt;&lt;/span&gt; $attach.version 
-#if($hasedit || $hasadmin)
 &lt;span class="right"&gt;
-          &lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")"&gt;$msg.get("download")&lt;/a&gt; | 
-          &lt;a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="return confirm('$msg.get("confirmdelattachment")');" title="$msg.get("deletethisattachment")"&gt;$msg.get("delete")&lt;/a&gt;&lt;/span&gt;{/pre}
+  &lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")"&gt;$msg.get("download")&lt;/a&gt;
+#if($hasedit || $hasadmin)
+   | &lt;a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="return confirm('$msg.get("confirmdelattachment")');" title="$msg.get("deletethisattachment")"&gt;$msg.get("delete")&lt;/a&gt;
 #end
+&lt;/span&gt;{/pre}
 	 &lt;!-- Paragraph containing the post text --&gt;
 	 &lt;p&gt;&lt;span class="date"&gt;$msg.groups_messages_view_attachments_providedby $xwiki.getLocalUserName($attach.author) $msg.groups_messages_view_attachments_on $xwiki.formatDate($doc.creationDate,$msg.get("mycurriki.datetimeFormat"))&lt;/span&gt;&lt;/p&gt;
 	&lt;/div&gt;

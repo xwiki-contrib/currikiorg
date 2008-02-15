@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>Groups</web>
+<name>DocumentationHistorySheet</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.cristi</creator>
+<author>XWiki.cristi</author>
+<customClass></customClass>
+<contentAuthor>XWiki.cristi</contentAuthor>
+<creationDate>1202816566000</creationDate>
+<date>1202979352000</date>
+<contentUpdateDate>1202979352000</contentUpdateDate>
+<version>1.11</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>CURRIKI-1636</comment>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Groups.DocumentationHistorySheet</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#set($stopRender = "ok")
+
+ &lt;div class="edit-history"&gt;
+   
+     &lt;a href="${doc.uRL}?action=editdoc&amp;pagename=${request.pagename}"&gt;
+Edit
+&lt;/a&gt;
+  &lt;span class="inactive-link"&gt;History&lt;/span&gt; 
+   &lt;/div&gt;
+   #begingroupsection("Wiki Page History" "" "" "blue" true)    
+
+#set($docdoc = $xwiki.getDocument($request.pagename))
+#if($docdoc.isNew())
+  No such doc
+#else
+
+&lt;div id="historycontent" class="xwikiintracontent"&gt;
+    #set( $subaction = $doc.getURL() + "?action=compare" )
+    #set( $subaction = $subaction + "&amp;pagename=${request.pagename}" )
+    &lt;form action="${subaction}" method="post"&gt;
+      &lt;div id="history"&gt;
+      &lt;div class="centered"&gt;
+      &lt;table class="xwikidatatable" summary="$msg.get(document) ${doc.displayTitle} &amp;mdash; $msg.get("history")" width="100%"&gt;
+        &lt;tr&gt;
+          &lt;th&gt;$msg.get("from")&lt;/th&gt;
+          &lt;th&gt;$msg.get("to")&lt;/th&gt;
+          &lt;th&gt;$msg.get("version")&lt;/th&gt;
+          &lt;th&gt;$msg.get("reveditor")&lt;/th&gt;
+          &lt;th&gt;$msg.get("datetime")&lt;/th&gt;
+#if($hasedit || $hasadmin)
+          &lt;th&gt;$msg.get("action")&lt;/th&gt;
+#end
+        &lt;/tr&gt;
+#if(!$revisionscount)
+#set($revisionscount = 0)
+#end
+#if ($docdoc.realLanguage!="")
+#set($lang = "&amp;amp;language=${docdoc.realLanguage}")
+#else
+#set($lang = "")
+#end
+#foreach ($version in $docdoc.getRecentRevisions($revisionscount))
+#set($origdoc = "")
+#set($newdoc = "")
+#set($nextversion = $version)
+#set($newdoc = $xwiki.getDocument($docdoc, $nextversion))
+        &lt;tr class="row"&gt;
+          &lt;td&gt;&lt;input type="radio" name="rev1" value="$nextversion" /&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;input type="radio" name="rev2" value="$nextversion" /&gt;&lt;/td&gt;
+          &lt;td&gt;
+#set($revURL = $doc.getURL() + "?action=viewdoc&amp;vers=")
+#set($revURL = $revURL + $nextversion)
+#set($revURL = $revURL + "&amp;pagename=")
+#set($revURL = $revURL + $request.pagename)
+&lt;a href="${revURL}")"&gt;$nextversion&lt;/a&gt;&lt;/td&gt;
+#if($newdoc=="")
+          &lt;td&gt;&amp;ndash;&lt;/td&gt;
+          &lt;td&gt;&amp;ndash;&lt;/td&gt;
+#else
+          &lt;td&gt;$xwiki.getLocalUserName($newdoc.author)&lt;/td&gt;
+          &lt;td&gt;$xwiki.formatDate($newdoc.date, $msg.get("mycurriki.datetimeFormat"))&lt;/td&gt;
+#end
+#if($hasedit || $hasadmin)
+   #set($bURL = $docdoc.getURL())
+   
+   #set($rollURL = $docdoc.getURL("rollback","rev=$nextversion") )
+   #set($rollURL = $rollURL + "&amp;xredirect=")
+   #set($rollURL = $rollURL + $xwiki.getURLEncoded( $bURL ) )
+
+          &lt;td&gt;
+#if( $velocityCount&gt; 1 )
+&lt;a href="${rollURL}" onclick="if (confirm('$msg.get("readytorollback") $nextversion')){this.href += '&amp;amp;confirm=1'; return true;} return false;" class="button button-orange"&gt;$msg.get("rollback")&lt;/a&gt;
+#end
+&lt;/td&gt;
+#end
+        &lt;/tr&gt;
+#end
+&lt;/table&gt;
+      &lt;div class="buttons"&gt;&lt;input type="submit" accesskey="c" value="$msg.get("compare")" class="button"/&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+  &lt;/div&gt;
+
+
+#end
+
+   #endgroupsection()</content>
+</xwikidoc>
