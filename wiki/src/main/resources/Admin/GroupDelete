@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1200301965000</creationDate>
-<date>1200302853000</date>
-<contentUpdateDate>1200302853000</contentUpdateDate>
-<version>1.7</version>
+<date>1200697977000</date>
+<contentUpdateDate>1200697977000</contentUpdateDate>
+<version>1.8</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix</comment>
+<comment>Added Documentation subspace to subspaces to delete</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -67,7 +67,7 @@
 
 1.1 List of docs that will be deleted
 
-#foreach($subspace in ["","Messages_","Coll_","UserProfiles_"])
+#foreach($subspace in ["","Messages_","Coll_","UserProfiles_","Documentation_"])
 #foreach($item in $xwiki.getSpaceDocsName("${subspace}${request.space}"))
 * ${subspace}${request.space}.${item}
 #end

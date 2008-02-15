@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.jkl1231</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jkl1231</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1197923838000</date>
-<contentUpdateDate>1197923838000</contentUpdateDate>
-<version>1.82</version>
+<date>1202996299000</date>
+<contentUpdateDate>1202996299000</contentUpdateDate>
+<version>1.83</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>Fix date</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -74,14 +74,14 @@
 #set($wheresql = "$wheresql )")
 #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.className='XWiki.TextAssetClass' and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
 #if($request.from&amp;&amp;($request.from!="")&amp;&amp;($request.from!="YYYY/MM/DD"))
-#set($wheresql = "$wheresql and doc.date&gt;'$request.from'")
+#set($wheresql = "$wheresql and doc.creationDate&gt;'$request.from'")
 #set($from = $request.from)
 #set($qs = "${qs}&amp;from=$!request.from")
 #else
 #set($from = "YYYY/MM/DD")
 #end
 #if($request.to&amp;&amp;($request.to!=""))
-#set($wheresql = "$wheresql and doc.date&lt;'$request.to'")
+#set($wheresql = "$wheresql and doc.creationDate&lt;'$request.to'")
 #set($qs = "${qs}&amp;to=$!request.to")
 #end
 #if($request.type=="1")

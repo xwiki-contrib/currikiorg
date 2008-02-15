@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-<web>Groups</web>
-<name>ContributionsSearchSheet</name>
+<web>Admin</web>
+<name>GivePropRights</name>
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.dward</creator>
+<creator>XWiki.LudovicDubost</creator>
 <author>XWiki.dward</author>
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
-<creationDate>1199894916000</creationDate>
-<date>1202845839000</date>
-<contentUpdateDate>1202845839000</contentUpdateDate>
-<version>1.5</version>
+<creationDate>1200615531000</creationDate>
+<date>1200675928000</date>
+<contentUpdateDate>1200675928000</contentUpdateDate>
+<version>1.6</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Set title for search page to indicate group search</comment>
+<comment>Add empty lines</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -46,27 +46,30 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
-<name>Groups.ContributionsSearchSheet</name>
+<name>Admin.GivePropRights</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
 <property>
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#groupsinit()
-#groupsheader("curriculum")
-{pre}
-&lt;script type="text/javascript"&gt;
-var GWTArguments = {
-  search: "__space=Coll_${spaceName}&amp;__go=1",
-  search_top_title: "$msg.get('groups.search.top_title', [$spaceName])",
-  load_on_startup: "1"
-};
-&lt;/script&gt;
-{/pre}
-&lt;div id="searchElement"&gt;
-&lt;/div&gt;
+<content>1 Give prog rights
 
-#groupsfooter()</content>
+[Confirm&gt;$doc.fullName?confirm=1]
+
+#foreach($item in $xwiki.searchDocuments("where doc.web='Groups'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='MyCurriki'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.fullName in ('Members.MyBlog', 'XWiki.MyBlogGroovy')"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##</content>
 </xwikidoc>

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1198534336000</creationDate>
-<date>1200675946000</date>
-<contentUpdateDate>1200675946000</contentUpdateDate>
-<version>1.73</version>
+<date>1203011616000</date>
+<contentUpdateDate>1203011616000</contentUpdateDate>
+<version>1.80</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>CURRIKI-1681</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -56,6 +56,10 @@
 <content>#includeMacros("Groups.Macros")
 #macro(confirmjoinform $spaceTitle)
 #set($userprofile = $sm.getSpaceUserProfile($spaceName,$context.user))
+#set($userprofilePage = $sm.getSpaceUserProfilePageName($spaceName,$context.user))
+## Set defaults CURRIKI-1681
+#set($junk = $userprofile.set("allowNotifications", 1))
+#set($junk = $userprofile.set("allowNotificationsFromSelf", 1))
 &lt;form action="" method="post"&gt;
 &lt;p&gt;
 &lt;input type="hidden" name="confirm" value="1" /&gt;
@@ -65,6 +69,16 @@ $msg.get("groups_members_join_infotxt",[$spaceTitle])
 #tooltip("bio_tooltip",$msg.get("groups_members_join_bio_tooltip"))
 &lt;br /&gt;
 $userprofile.display("profile","edit")
+
+#if($sm.getRoles($spaceName).size() &gt; 0) ## {
+&lt;br /&gt;
+&lt;strong&gt;$msg.get("groups.members.selectroles")&lt;/strong&gt;&lt;br /&gt;
+&lt;span class="instruction"&gt;$msg.get("groups.members.join.selectroles.info")&lt;/span&gt;&lt;br /&gt;
+&lt;select name="roles" multiple size=4&gt;
+#groupRoleSelector($spaceName false false false)
+&lt;/select&gt;
+#end ## }
+
 &lt;br /&gt;
 $userprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
 #tooltip("email_tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))
@@ -123,6 +137,10 @@ $msg.get("groups_members_join_alreadymember")
 #if(($spacePolicy=="open")&amp;&amp;($verInv==false))
  #if($request.confirm=="1")
   #if($sm.joinSpace($spaceName))
+    #set($wantedRoles = $!request.getParameterValues('roles'))
+    #foreach($role in $wantedRoles) ## {
+      #addUserToRole($role $context.user)
+    #end ## }
    $msg.get("groups_members_join_success") 
   #else
    $msg.get("groups_members_join_failure")
@@ -140,6 +158,10 @@ $msg.get("groups_members_join_alreadymember")
    #set($acceptInv = $im.acceptInvitation($spaceName))
   #end
   #if($acceptInv)
+    #set($wantedRoles = $!request.getParameterValues('roles'))
+    #foreach($role in $wantedRoles) ## {
+      #addUserToRole($role $context.user)
+    #end ## }
     $msg.get("groups_members_join_success")
    #else
     $msg.get("groups_members_join_failure")

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.dward</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1200180825000</creationDate>
-<date>1200675947000</date>
-<contentUpdateDate>1200675947000</contentUpdateDate>
-<version>1.74</version>
+<date>1203024648000</date>
+<contentUpdateDate>1203024648000</contentUpdateDate>
+<version>1.97</version>
 <title>Message Sheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>a</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -65,7 +65,12 @@
 #end ## }
 #end ## }
 #end ## }
+#if($request.edit=="1")
+$response.sendRedirect($xwiki.getURL($doc.fullName, "view", "edit=1"))
+#else
+$xwiki.getURL($doc.fullName)
 $response.sendRedirect($xwiki.getURL($doc.fullName))
+#end
 #else ## } {
 #includeMacros("Groups.Macros")
 #groupsinit()
@@ -74,6 +79,11 @@ $response.sendRedirect($xwiki.getURL($doc.fullName))
 #set($msgtitle = $doc.display("title", "view"))
 #set($msgcontent = $doc.display("content", "view"))
 #set($divid = "groups-message-edit")
+#if($request.xredirect)
+#set($redirect = $request.xredirect)
+#else
+#set( $redirect = $xwiki.getRequestURL().replaceAll("&amp;", "&amp;amp;"))
+#end
 #if($doc.hasAccessLevel("edit"))
   ## this is the autoincrement value used to create unique ids
   #if(!$counter)
@@ -87,6 +97,7 @@ $response.sendRedirect($xwiki.getURL($doc.fullName))
    &lt;div class="titleheader titleheader-blue"&gt;&lt;h3 class="titleheader-left"&gt;$msgtitle&lt;/h3&gt;
     &lt;div class="titleheader-right"&gt;
      &lt;a href="javascript:editMessage('$doc.space','$doc.name','$divid')" title="$editText"&gt;$editText&lt;/a&gt;
+     #sep()
      &lt;a href="javascript:deleteMessage('$doc.space','$doc.name')" title="$deleteText"&gt;$deleteText&lt;/a&gt;
     &lt;/div&gt;
   &lt;/div&gt;
@@ -187,7 +198,7 @@ function deleteMessageCallback(ajaxreq) {
 #set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
 $xwiki.getUserName($comment.author) | &lt;span class="blog-comment-date"&gt;$commentDate&lt;/span&gt;
 #if(($comment.author == $context.user)||$sm.isAdmin($spaceName,$context.user)) ## {
-&lt;a class="right" href="?deletecomment=1&amp;date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}');"&gt;$msg.get('mycurriki.blog.comment.delete')&lt;/a&gt; ## Link to delete -- use XWikiComments.author and date to get unique specification
+&lt;a class="right" href="?deletecomment=1&amp;date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return updateHref(this, confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'));"&gt;$msg.get('mycurriki.blog.comment.delete')&lt;/a&gt; ## Link to delete -- use XWikiComments.author and date to get unique specification
 #end ## }
 &lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -198,7 +209,7 @@ $comment.comment
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 &lt;div id="commentscontent" class="xwikiintracontent"&gt;
-&lt;div class="button-right"&gt;&lt;a class="button button-orange" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")"&gt;$msg.get("addcomment")&lt;/a&gt;&lt;/div&gt;
+&lt;div class="button-right"&gt;&lt;a class="button button-orange" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")"&gt;$msg.get("groups_messages_view_addcomment_btt")&lt;/a&gt;&lt;/div&gt;
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
       &lt;form id="commentAddForm" action="$doc.getURL("commentadd")" method="post"&gt;
@@ -210,7 +221,7 @@ $comment.comment
         &lt;input type="hidden" name="XWiki.XWikiComments_date" value=""/&gt;
         &lt;div&gt;&lt;textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'&gt;&lt;/textarea&gt;&lt;/div&gt;
         &lt;div&gt;
-	&lt;button class="button button-orange" type="submit"&gt;$msg.get("caption.saveComment")&lt;/button&gt;
+	&lt;button class="button button-orange" type="submit" onclick="return updateXRedirect('commentAddForm', true);"&gt;$msg.get("caption.saveComment")&lt;/button&gt;
 	&lt;button class="button button-grey" type="reset" onclick="hideForm(this.form);"&gt;$msg.get("cancel")&lt;/button&gt;
         &lt;/div&gt;
         &lt;/fieldset&gt;
@@ -234,9 +245,11 @@ document.getElementById("commentform").className = "collapsed";
 	 &lt;div class="attachments_icon"&gt;
 	 #mimeicon($attach.filename)
 	 &lt;/div&gt;
-	 &lt;p&gt;&lt;span class="date"&gt;&lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")"&gt;#packName($attach.filename)&lt;/a&gt;&lt;/span&gt; $attach.version 
+	 &lt;p&gt;&lt;span class="date"&gt;{pre}&lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")"&gt;#packName($attach.filename)&lt;/a&gt;&lt;/span&gt; $attach.version 
 #if($hasedit || $hasadmin)
-          &lt;a class="right" href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="return confirm('$msg.get("confirmdelattachment")');" title="$msg.get("deletethisattachment")"&gt;$msg.get("delete")&lt;/a&gt;&lt;/span&gt;
+&lt;span class="right"&gt;
+          &lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")"&gt;$msg.get("download")&lt;/a&gt; | 
+          &lt;a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="return confirm('$msg.get("confirmdelattachment")');" title="$msg.get("deletethisattachment")"&gt;$msg.get("delete")&lt;/a&gt;&lt;/span&gt;{/pre}
 #end
 	 &lt;!-- Paragraph containing the post text --&gt;
 	 &lt;p&gt;&lt;span class="date"&gt;$msg.groups_messages_view_attachments_providedby $xwiki.getLocalUserName($attach.author) $msg.groups_messages_view_attachments_on $xwiki.formatDate($doc.creationDate,$msg.get("mycurriki.datetimeFormat"))&lt;/span&gt;&lt;/p&gt;
@@ -254,7 +267,36 @@ document.getElementById("commentform").className = "collapsed";
 &lt;div&gt;&lt;label id="xwikiuploadfilelabel" for="xwikiuploadfile"&gt;$msg.get("choosefiletoupload"):&lt;/label&gt;&lt;/div&gt;
 &lt;div&gt;&lt;input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/&gt;&lt;/div&gt;
 &lt;div&gt;
-&lt;span&gt;&lt;input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="return updateAttachName(this.form, '$msg.get("doyouwanttoreplace")')" /&gt;&lt;/span&gt;
+{pre}
+&lt;script type="text/javascript"&gt;
+function isEditMode(){
+var child = document.getElementById('${divid}').firstChild;
+while(child){
+if (child.tagName &amp;&amp; child.tagName.toLowerCase()=='form'){
+return true;
+}
+child = child.nextSibling;
+}
+return false;
+}
+function updateXRedirect(formName, returnValue){
+var xredirect = document.forms[formName].xredirect;
+if (isEditMode()){
+xredirect.value = '${doc.getURL("view", "edit=1")}';
+}else{
+xredirect.value = '${doc.getURL("view")}';
+}
+return returnValue;
+}
+function updateHref(anchor, returnValue){
+if (isEditMode()){
+anchor.href += '&amp;edit=1';
+}
+return returnValue;
+}
+&lt;/script&gt;
+{/pre}
+&lt;span&gt;&lt;input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /&gt;&lt;/span&gt;
 ##&lt;span class="button button-orange"&gt;&lt;input type="reset" value="$msg.get("cancel")" onclick="hideForm(this.form);" class="button"/&gt;&lt;/span&gt;
 &lt;/div&gt;
 &lt;/fieldset&gt;

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1198444712000</creationDate>
-<date>1200675946000</date>
-<contentUpdateDate>1200675946000</contentUpdateDate>
-<version>1.5</version>
+<date>1203016096000</date>
+<contentUpdateDate>1203016096000</contentUpdateDate>
+<version>1.82</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>fix URL</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -57,8 +57,232 @@
 #groupinit()
 #groupsheader("documentation")
 #if(!$isGroupMember &amp;&amp; ($s.policy=="closed"))
-$msg.get("groups_documentation_onlyaccessibletomembers")
+  $msg.get("groups_documentation_onlyaccessibletomembers")
 #else
+
+#set( $docsSpaceName = "Documentation_"+$doc.space )
+
+#if( $request.action == "newdoc")
+  #includeInContext( "Groups.DocumentationNewWikiPageSheet" )
 #end
-#groupsfooter()
-</content></xwikidoc>
+
+#if( $request.action == "viewdoc")
+  #includeInContext( "Groups.DocumentationViewPageSheet" )
+#end
+
+#if( !${request.action} &amp;&amp; $request.pagename )
+  #includeInContext( "Groups.DocumentationViewPageSheet" )
+#end
+
+#if( $request.action == "editdoc")
+  #includeInContext( "Groups.DocumentationEditPageSheet" )
+#end
+
+
+#if( $request.action == "history")
+  #includeInContext( "Groups.DocumentationHistorySheet" )
+#end
+
+#if( $request.action == "compare")
+  #includeInContext( "Groups.DocumentationCompareSheet" )
+#end
+
+
+#if( $request.action == "editabout")
+  #includeInContext( "Groups.DocumentationEditAboutSheet" )
+#end
+
+
+
+## if the sheets allow the page to continue render
+#if( $stopRender )
+  ##do nothing
+#else
+
+#set( $editLink = "" )
+#set( $editTitle = "" )
+#if( $sm.isAdmin( $s.spaceName, $context.user ) )
+  #set( $editLink = $doc.getURL() + "?action=editabout" )
+  #set( $editTitle = "Edit" )
+#end
+#begingroupsection("${msg.groups_documentation_about_title}" "${editTitle}" "${editLink}" "blue" true)
+
+  #set( $customDocName = $docsSpaceName + ".AboutDocumentation" )
+  #if( $xwiki.exists( $customDocName ) )
+    #set( $aboutCreateDoc = $xwiki.getDocument( $customDocName ) )
+  #else
+    #set( $aboutCreateDoc = $xwiki.getDocument("Groups.DocumentationWelcome"))
+  #end
+
+  $aboutCreateDoc.getRenderedContent()
+#endgroupsection()
+
+#if( $sm.isMember( $s.spaceName, $context.user ) ) ## {
+#begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
+
+  #if( $newDocSaved )
+     $msg.get( "groups_documentation_wiki_page_save_confirm", [$newDocSaved] )
+  #end
+
+  &lt;form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")"&gt;
+    &lt;input type="hidden" name="action" value="newdoc" /&gt;
+    &lt;input type="text" name="newdocname" value="${msg.groups_documentation_new_wiki_title}" /&gt;
+   &lt;button type="submit" class="button button-orange"&gt;${msg.groups_documentation_new_wiki_submit}&lt;/button&gt;
+  &lt;/form&gt;
+
+#endgroupsection()
+#end ## }
+
+
+#if( $sm.isMember( $s.spaceName, $context.user ) ) ## {
+#begingroupsection("${msg.groups_documentation_add_document_title}" "" "" "blue" true)
+
+#if($request.method=="POST")
+  #set($filename = $xwiki.fileupload.getFileName("filepath"))
+  
+  #if($filename&amp;&amp;($filename!=""))
+    ## create a doc for the upload
+    #set( $attDocName = $xwiki.getUniquePageName( "doc" ) )
+    #set( $attDocName = "."+$attDocName )
+    #set( $attDocName = $docsSpaceName + $attDocName )
+    #set( $tmp = $xwiki.copyDocument( "Groups.DocumentationAttachmentTemplate", $attDocName ) )
+    #set( $attDoc = $xwiki.getDocument( $attDocName ) )
+    $attDoc.save()
+    #set( $tmp = $attDoc.addAttachments() )
+
+    $attDoc.setTitle( $context.addedAttachments.get(0).filename )
+
+    ## marks this as being file
+    #set( $tmp = $attDoc.tagList.add( "documentation-file" ) )
+
+   $attDoc.save()
+
+  #end
+#end
+
+  $msg.groups_documentation_add_document_choose
+  &lt;form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;"&gt;
+
+&lt;input id="xwikiuploadname" type="hidden" name="filename" value="" /&gt;
+&lt;input id="xwikiuploadfile" type="file" name="filepath" value=""  size="40" /&gt;
+{pre}
+&lt;script type="text/javascript"&gt;
+function checkFileExtension() {
+  var isValid = true;
+  var ext = getFileExtension();
+  if (ext) {
+    if (ext != "ok" &amp;&amp; ext != "ai" &amp;&amp; ext != "gif" &amp;&amp; ext != "jpg" &amp;&amp; ext != "tif" &amp;&amp; ext != "bmp" &amp;&amp; ext != "jpe" &amp;&amp; ext != "psd" &amp;&amp; ext != "png" &amp;&amp; ext != "doc" &amp;&amp; ext != "docx" &amp;&amp; ext != "txt" &amp;&amp; ext != "rtf") {
+      isValid = false;
+    }
+  } else {
+    isValid = false;
+  }
+
+  //remove this/////////////////////////
+  isValid = true;
+  //////////////////////////////////////////////
+
+  if (!isValid) {
+    alert("$msg.get("mycurriki.profile.needPicture")");
+  }
+  return isValid;
+}
+function getFileExtension() {
+  var fileName = document.getElementById("xwikiuploadfile").value; 
+  if (fileName.length){
+   fileName = fileName.toLowerCase();
+   var pos = fileName.lastIndexOf(".");
+   if (pos &gt; 0){
+     return fileName.substring(pos + 1);
+   }
+  } 
+  return "ok";
+}
+&lt;/script&gt;
+{/pre}
+
+&lt;button type="submit" class="button button-orange"&gt;${msg.groups_documentation_add_document_upload}&lt;/button&gt;
+
+  &lt;/form&gt;
+#endgroupsection()
+#end ## }
+
+
+#begingroupsection("${msg.groups_documentation_documents_title}" "" "" "blue" true)
+
+#set($itemsPerPage = 5)
+#if( $request.ipp )
+   #set($itemsPerPage = $xwiki.parseInt($request.ipp))
+#end
+#set($startItem = 0)
+#if($request.startIndex)
+   #set($startItem = $xwiki.parseInt($request.startIndex))
+#end
+
+#set($allSpaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name&lt;&gt;'WebPreferences'" ))
+#set($totalcount = $allSpaceDocs.size())
+
+##set($spaceDocs = $xwiki.getSpaceDocsName( $docsSpaceName ))
+#set($spaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name&lt;&gt;'WebPreferences'  and doc.name&lt;&gt;'AboutDocumentation' order by doc.contentUpdateDate desc", $itemsPerPage, $startItem ))
+
+#foreach( $docName in  $spaceDocs)
+  
+  #set( $docdoc = $xwiki.getDocument( $docName ) )
+
+  #set( $doctitle = $docdoc.title )
+  #if( $doctitle == "" ) #set( $doctitle = $docdoc.name )  #end
+  &lt;div class="frame-inset document-content"&gt;
+
+    &lt;div class="headlines"&gt;
+      ##determining the icon to display
+      #if( $docdoc.getAttachmentList().size() == 0 )
+        #set( $icon = $xwiki.getSkinFile("mimetypes/WIKI.png") )
+      #else
+        #mimeicon($docdoc.getAttachmentList().get(0).filename)
+        #set( $icon=$macro_iconUrl) 
+      #end
+      &lt;div class="document-icon"&gt;&lt;img src="$icon" /&gt;&lt;/div&gt;
+
+
+  #set($viewURL = $docdoc.getURL())
+  ## #if( $docdoc.getAttachmentList().size() == 0 )
+  ##   #set($viewURL = $doc.getURL())
+  ##   #set($viewURL = $viewURL + "?action=viewdoc&amp;pagename=")
+  ##   #set($viewURL = $viewURL + $docName )
+  ## #end
+  &lt;a href="${viewURL}"&gt;&lt;b&gt;$doctitle&lt;/b&gt;&lt;/a&gt;
+   &lt;div class="button-link"&gt;
+#if( $sm.isMember( $s.spaceName, $context.user ) )
+      #if( $docdoc.getAttachmentList().size() == 0 )
+         #set($editURL = $doc.getURL())
+         #set($editURL = $editURL + "?action=editdoc&amp;pagename=")
+         #set($editURL = $editURL + $docName )
+  
+   &lt;a href="$editURL" &gt;${msg.groups_documentation_documents_edit}&lt;/a&gt; | 
+      #end
+
+      #if( $docdoc.getAttachmentList().size() == 0 )
+        #set($delConfirm = ${msg.groups_documentation_documents_del_wiki_confirm})
+      #else
+        #set($delConfirm = ${msg.groups_documentation_documents_del_doc_confirm})
+      #end
+      &lt;a href=" $docdoc.getURL( "delete" )?confirm=1&amp;xredirect=$doc.getURL()" onclick="if(!confirm('${delConfirm}')) return false;" &gt;${msg.groups_documentation_documents_del}&lt;/a&gt;
+#end
+      &lt;/div&gt;
+     &lt;/div&gt;
+     &lt;span class="date"&gt;
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  $xwiki.formatDate($docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))&lt;/span&gt;
+  &lt;/div&gt;
+
+#end  ##end foreach
+
+  #set($args = "")
+  #mycurrikipaginatorargs( "" $startItem $itemsPerPage $totalcount  $args  )
+
+
+#endgroupsection()
+
+#end ## end if sheets allow to continue render
+#end ## end if has right
+#groupsfooter()</content>
+</xwikidoc>

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1200388853000</creationDate>
-<date>1200675947000</date>
-<contentUpdateDate>1200675947000</contentUpdateDate>
-<version>1.4</version>
+<date>1202941649000</date>
+<contentUpdateDate>1202941649000</contentUpdateDate>
+<version>1.5</version>
 <title>Welcome to $space.displayTitle on Curriki!</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Use local domain name</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -55,7 +55,10 @@
 </object>
 <content>#if($space)
 #set($groupName=$space.displayTitle)
-#set($groupURL="http://"+$space.homeShortcutURL+".groups.curriki.org")
+#set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
+#set($serverURL=$serverURL.replaceAll("www.", ""))
+#set($groupURL="http://"+$space.homeShortcutURL+".groups."+$serverURL)
+
 #set($groupLongURL=$xwiki.getDocument("${space.spaceName}.WebHome").getExternalURL("view"))
 #end
 #set($memberName=$xwiki.getUserName($context.user,false))

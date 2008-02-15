@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.dward</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1199811577000</creationDate>
-<date>1200675947000</date>
-<contentUpdateDate>1200675947000</contentUpdateDate>
-<version>1.12</version>
+<date>1201787104000</date>
+<contentUpdateDate>1201787104000</contentUpdateDate>
+<version>1.14</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>a</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -83,6 +83,13 @@ $sm.removeMember($spaceName,$memberName)
 $msg.groups_memberremoved
 #else
 $msg.groups_cannotremovemember
+#end
+#elseif($actionCode == 4)
+## Cancel invitation for $memberName to join $spaceName
+#if($xwiki.invitationmanager.cancelInvitation($memberName, $spaceName))
+$msg.groups_invitationcancelled
+#else
+$msg.groups_cannotcancelinvitation
 #end
 #end
 #end</content>

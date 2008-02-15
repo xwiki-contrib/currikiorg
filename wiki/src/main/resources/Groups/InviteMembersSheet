@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1198492265000</creationDate>
-<date>1200675946000</date>
-<contentUpdateDate>1200675946000</contentUpdateDate>
-<version>1.52</version>
+<date>1202754680000</date>
+<contentUpdateDate>1202754680000</contentUpdateDate>
+<version>1.55</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Remove roles from Invite sheet</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -68,6 +68,10 @@ $msg.get("groups_invitation_onlyaccessibletomembers")
 #set($text = $request.getParameter("text"))
 #set($open = ($request.getParameter("open")=="open"))
 #set($roles = $xwiki.arrayList)
+#set($roleArray = $!request.getParameterValues('roles'))
+#foreach($role in $roleArray) ## {
+#set($discard = $roles.add($role))
+#end ## }
 #set($map = $xwiki.hashMap)
 #set($oldMessage = $map.put("message", $text))
 #set($invitationSentCount = 0)

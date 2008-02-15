@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1198444625000</creationDate>
-<date>1200675946000</date>
-<contentUpdateDate>1200675946000</contentUpdateDate>
-<version>1.40</version>
+<date>1203007972000</date>
+<contentUpdateDate>1203007972000</contentUpdateDate>
+<version>1.53</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Missed a )</comment>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -70,21 +70,54 @@ $msg.get("groups_messages_createmessage_infotxt")
 #endgroupsection()
 #end
 #begingroupsection($msg.get("groups_messages_allmessages_title",[$s.displayTitle]),"","","blue",false)
-   &lt;div class="frame-content messages-content"&gt;
-#if(0==1)
-   	&lt;form&gt;
-	 &lt;p&gt;$msg.get("groups_messages_filter_title")&lt;/p&gt;
-	 &lt;p class="messages-radio"&gt;
-	  &lt;input type="radio" id="toEntireGroup" name="filter" value="0" class="messages-radio-left" /&gt;&lt;label for="toEntireGroup"&gt;$msg.get("groups_messages_filter_toentiregroup")&lt;/label&gt;
-	  &lt;input type="radio" id="toMe" name="filter" value="1" /&gt;&lt;label for="toMe"&gt;$msg.get("groups_messages_filter_tome")&lt;/label&gt;
-	  &lt;!--&lt;input type="radio" id="toMyRole" name="filter" value="2" /&gt;&lt;label for="toMyRole"&gt;$msg.get("groups_messages_filter_tomyrole")&lt;/label&gt;--&gt;
-	  &lt;input type="radio" id="toAll" name="filter" value="3" /&gt;&lt;label for="toAll"&gt;$msg.get("groups_messages_filter_toall")&lt;/label&gt;
-	  &lt;!--&lt;button class="button button-orange"&gt;$msg.get("groups_messages_filter_submit")&lt;/button&gt;--&gt;
-	 &lt;/p&gt;
-	&lt;/form&gt;
+#if(!$request.filter)
+#set($filter = "0")
+#else
+#set($filter = $request.filter)
 #end
-
+&lt;div class="frame-content messages-content"&gt;
+  &lt;form&gt;
+    &lt;p&gt;$msg.get("groups_messages_filter_title")&lt;/p&gt;
+    &lt;p class="messages-radio"&gt;
+      &lt;input type="radio" id="toEntireGroup" name="filter" value="0" class="messages-radio-left" onclick="this.form.submit()" #if($filter=="0") checked="checked" #end/&gt;&lt;label for="toEntireGroup"&gt;$msg.get("groups_messages_filter_toentiregroup")&lt;/label&gt;
+      &lt;input type="radio" id="toMe" name="filter" value="1" onclick="this.form.submit()" #if($filter=="1") checked="checked" #end/&gt;&lt;label for="toMe"&gt;$msg.get("groups_messages_filter_tome")&lt;/label&gt;
+      &lt;input type="radio" id="toMyRole" name="filter" value="2" onclick="this.form.submit()" #if($filter=="2") checked="checked" #end/&gt;&lt;label for="toMyRole"&gt;$msg.get("groups_messages_filter_tomyrole")&lt;/label&gt;
+#if($isGroupAdmin)
+      &lt;input type="radio" id="toAll" name="filter" value="3" onclick="this.form.submit()" #if($filter=="3") checked="checked" #end/&gt;&lt;label for="toAll"&gt;$msg.get("groups_messages_filter_toall")&lt;/label&gt;
+#end
+    &lt;/p&gt;
+  &lt;/form&gt;
+##
+##  TODO: migration to XWIKI12 change String to LargeString
+##
+#if($filter=="0")
+## To Entire Group
+#set($membersGroup = $spaceName + ".MemberGroup")
+#set($noViewRightsSpecified = "not exists (from BaseObject as r, StringProperty as l where doc.fullName=r.name and r.className='XWiki.XWikiRights' and r.id=l.id.id and l.id.name='levels' and instr(l.value,'view')&gt;0)")
+#set($existsGroupViewRights = "exists (from BaseObject as rights, StringProperty as levels, StringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')&gt;0 and instr(groups.value,'${membersGroup}')&gt;0)")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
+#elseif($filter=="1")
+## To Me
+#set($existsUserViewRights = "exists (from BaseObject as rights, StringProperty as levels, StringProperty as users where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=users.id.id and users.id.name='users' and instr(levels.value,'view')&gt;0 and instr(users.value,'${context.user}')&gt;0)")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
+#elseif($filter=="2")
+## To My Roles
+#set($myRoles = $sm.getRoles($spaceName, $context.user))
+#if($isGroupAdmin)
+#set($ok = $myRoles.add("${spaceName}.AdminGroup"))
+#end
+#if($myRoles.size()&gt;0)
+#set($existsRoleViewRights = "exists (from BaseObject as rights, StringProperty as levels, StringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')&gt;0 and (")
+#foreach($role in $myRoles)
+#set($existsRoleViewRights = $existsRoleViewRights + "instr(groups.value,'${role}')&gt;0 or ")
+#end
+#set($existsRoleViewRights = $existsRoleViewRights + "1=0))")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ${existsRoleViewRights} order by doc.date desc")
+#end
+#elseif($filter=="3" &amp;&amp; $isGroupAdmin)
+## To All
 #set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and doc.web='Messages_$doc.web' order by doc.date desc")
+#end
 
 #set($itemsPerPage = 10)
 #if( $request.ipp )
@@ -94,10 +127,16 @@ $msg.get("groups_messages_createmessage_infotxt")
 #if($request.startIndex)
   #set($startIndex = $xwiki.parseInt($request.startIndex))
 #end
-#set($totalCount = $xwiki.searchDocuments($sql).size())
 
+#if($sql)
+#set($totalCount = $xwiki.searchDocuments($sql).size())
 #foreach($messagePageName in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
+#if($xwiki.checkAccess($messagePageName, "view")) ## {
 #messagelistmessage($messagePageName)
+#end ## }
+#end
+#else
+#set($totalCount = 0)
 #end
 
 #mycurrikipaginator($msg.get("groups_messages_page"),$startIndex,$itemsPerPage,$totalCount)

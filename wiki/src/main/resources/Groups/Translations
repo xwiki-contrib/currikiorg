@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1198492279000</creationDate>
-<date>1200681451000</date>
-<contentUpdateDate>1200681451000</contentUpdateDate>
-<version>1.236</version>
+<date>1203023211000</date>
+<contentUpdateDate>1203023211000</contentUpdateDate>
+<version>1.318</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -54,6 +54,55 @@
 </property>
 </object>
 <content>## &lt;pre&gt;
+datetime=Date/Time
+action=Action
+
+
+## FIELD LABELS 
+XWiki.SpaceClass_policy_open=Open Membership - Any Curriki member can join without approval or invitation.
+XWiki.SpaceClass_policy_closed=Closed Membership - Curriki members must be invited and accepted to join.
+
+XWiki.SpaceClass_language_eng=English
+XWiki.SpaceClass_language_zho=Chinese
+XWiki.SpaceClass_language_nld=Dutch
+XWiki.SpaceClass_language_fra=French
+XWiki.SpaceClass_language_deu=German
+XWiki.SpaceClass_language_ita=Italian
+XWiki.SpaceClass_language_jpn=Japanese
+XWiki.SpaceClass_language_kor=Korean
+XWiki.SpaceClass_language_por=Portuguese
+XWiki.SpaceClass_language_rus=Russian
+XWiki.SpaceClass_language_spa=Spanish
+
+XWiki.CurrikiSpaceClass_accessprivileges_open=Open - Anyone can view group content; any Curriki member can edit it.
+XWiki.CurrikiSpaceClass_accessprivileges_protected=Protected - Anyone can view group content; only group members can edit it.
+XWiki.CurrikiSpaceClass_accessprivileges_private=Private - Only group members can view and edit content.
+
+
+XWiki.CurrikiSpaceClass_educationLevel_prek=Preschool / Ages 0-4
+XWiki.CurrikiSpaceClass_educationLevel_gr-k-2=Gr. K-2 / Ages 5-7
+XWiki.CurrikiSpaceClass_educationLevel_gr-3-5=Gr. 3-5 / Ages 8-10
+XWiki.CurrikiSpaceClass_educationLevel_gr-6-8=Gr. 6-8 / Ages 11-13
+XWiki.CurrikiSpaceClass_educationLevel_gr-9-10=Gr. 9-10 / Ages 14-16
+XWiki.CurrikiSpaceClass_educationLevel_gr-11-12=Gr. 11-12 / Ages 16-18
+XWiki.CurrikiSpaceClass_educationLevel_college_and_beyond=College and Beyond
+XWiki.CurrikiSpaceClass_educationLevel_professional_development=Professional Development
+XWiki.CurrikiSpaceClass_educationLevel_special_education=Special Education
+XWiki.CurrikiSpaceClass_educationLevel_na=Other
+
+XWiki.CurrikiSpaceClass_language_eng=English
+XWiki.CurrikiSpaceClass_language_zho=Chinese
+XWiki.CurrikiSpaceClass_language_nld=Dutch
+XWiki.CurrikiSpaceClass_language_fra=French
+XWiki.CurrikiSpaceClass_language_deu=German
+XWiki.CurrikiSpaceClass_language_ita=Italian
+XWiki.CurrikiSpaceClass_language_jpn=Japanese
+XWiki.CurrikiSpaceClass_language_kor=Korean
+XWiki.CurrikiSpaceClass_language_por=Portuguese
+XWiki.CurrikiSpaceClass_language_rus=Russian
+XWiki.CurrikiSpaceClass_language_spa=Spanish
+
+eng=English|zho=Chinese|nld=Dutch|fra=French|deu=German|ita=Italian|jpn=Japanese|kor=Korean|por=Portuguese|rus=Russian|spa=Spanish
 
 ## CREATE NEW GROUP
 groups_creategroup_pagename=Create a New Group
@@ -66,7 +115,7 @@ groups_creategroup_about_infotxt=By creating a new group, you become the "group 
 
 groups_creategroup_namedescribe_title=Name and Describe Your Group
 
-groups_creategroup_namedescribe_groupname=Enter your group’s name here (64 character limit, no special characters)
+groups_creategroup_namedescribe_groupname=Enter your group’s name here (64 character limit)
 
 groups_creategroup_namedescribe_groupname_tooltip=This name appears in many places throughout your group space and the Curriki site; keep in mind that varying space constraints make it preferable to select a short group name.
 
@@ -159,7 +208,7 @@ groups_home_editmasthead_groupdescription_tooltip=When people browse or find lis
 
 groups_home_editmasthead_logo_infotxt_withoutlogo=Your group masthead is currently using the Curriki placeholder image. If you would like to show a different image, click "Browse" to find the new image on your computer. Once you locate the image, click "Submit Updates" to make it appear in your group masthead. The best size for this image is 120x82 pixels.
 
-groups_home_editmasthead_logo_infotxt_withlogo=Your group masthead is currently using the image on the left. If you would like to show a different image, click "Browse" to find the new image on your computer. Once you locate the image, click "Submit Updates" to make it appear in your group masthead. The best size for this image is 120x82 pixels. If you want to return to using the default Curriki Group image&lt;a href={0} onclick="return confirm(''Are you sure you want to remove the current image?'')"&gt;click here&lt;/a&gt; to remove the current image and the default Curriki Group image will appear.
+groups_home_editmasthead_logo_infotxt_withlogo=Your group masthead is currently using the image on the left. If you would like to show a different image, click "Browse" to find the new image on your computer. Once you locate the image, click "Submit Updates" to make it appear in your group masthead. The best size for this image is 120x82 pixels. If you want to return to using the default Curriki Group image, &lt;a href={0} onclick="return confirm(''Are you sure you want to remove the current image?'')"&gt;click here&lt;/a&gt; to remove the current image and the default Curriki Group image will appear.
 
 groups_home_editmasthead_logo_direction=Select and Upload Your Image
 groups_home_editmasthead_logo_bro_btt=Browse
@@ -178,8 +227,22 @@ groups_home_editwelcome_submit_btt=Submit Updates
 groups_home_editwelcome_cancel_btt=Cancel
 
 ##GROUP HOME - RECENT GROUP ACTIVITIES
-groups_home_activities_title=Recent Group Activities
-groups_home_activities_feed=RSS
+groups_home_activity_title=Recent Group Activity
+groups_home_activity_feed=RSS
+groups_home_activity_mem_new=New member joined – {0}
+groups_home_activity_mem_upd=Member profile updated – {0}
+groups_home_activity_res_add=Curriculum resource added – "{0}" by {1}
+groups_home_activity_res_edit=Curriculum resource edited – "{0}" by {1}
+groups_home_activity_res_del=Curriculum resource deleted – "{0}" by {1}
+groups_home_activity_mes_add=Message added – "{0}" from {1}
+groups_home_activity_mes_edit=Message edited – "{0}" from {1}
+groups_home_activity_mes_del=Message deleted – "{0}" from {1}
+groups_home_activity_doc_wiki_add=Wiki page added – "{0}" by {1}
+groups_home_activity_doc_add=File uploaded – "{0}" by {1}
+groups_home_activity_doc_wiki_upd=Wiki document updated – "{0}" by {1}
+groups_home_activity_doc_upd=File updated – "{0}" by {1}
+groups_home_activity_doc_wiki_del=Wiki document deleted – "{0}" by {1}
+groups_home_activity_doc_del=File deleted – "{0}" by {1}
 
 ## GROUP HOME -- INFORMATION
 groups_home_information_title=Information Settings
@@ -287,16 +350,21 @@ groups_messages_message_optionsedit_link=Edit
 groups_messages_message_attachments={0} Attachment(s)
 groups_messages_message_comments={0} Comment(s)
 
-groups_messages_filter_title=Filter Messages
-groups_messages_filter_toentiregroup=To Group
-groups_messages_filter_tome=To Me
-groups_messages_filter_toall=To All
+groups_messages_filter_title=Filter to show messages sent to:
+
+groups_messages_filter_toentiregroup=Group
+groups_messages_filter_tome=Me
+groups_messages_filter_tomyrole=My Role(s)
+groups_messages_filter_toall=All
 
 ## MESSAGES -- CREATE/EDIT
 groups_messages_create_about_title=About Creating Messages
 groups_messages_create_about_edit_link=Edit
 groups_messages_create_about_infotxt=
 groups_messages_create_title=Create/Edit Message
+
+groups_messages_savedone=The message has been saved.
+
 groups_messages_create_messagetitle_instruction=Enter message subject or title:
 
 groups_messages_create_messagecontent_instruction=Enter message content:
@@ -309,7 +377,25 @@ groups_messages_create_selectnotification_tooltip=Note that some members may hav
 groups_messages_create_selectnotification=Send email notification to the group.
 
 groups_messages_create_cancel_btt=Cancel
-groups_messages_create_submit_btt=Submit
+groups_messages_create_submit_btt=Send Message
+
+groups_messages_create_to_mandatory=Please select recipient(s).
+groups_messages_create_to_delete_tooltip=Remove this recipient or role.
+groups_messages_create_to_delete_role_tooltip=Remove this role.
+groups_messages_create_to_delete_member_tooltip=Remove this member.
+groups_messages_create_to_label=Send to:
+groups_messages_create_to_group_label=Entire Group
+groups_messages_create_to_role_label=Specific Role(s)
+groups_messages_create_to_role_default=Select Role(s)
+groups_messages_create_to_role_add_tooltip=Click to send the message to this role.
+groups_messages_create_to_role_add_label=Add
+groups_messages_create_to_member_label=Individual Group Members
+groups_messages_create_to_member_default=Select from Members List
+groups_messages_create_to_member_add_tooltip=Click to send the message to this member.
+groups_messages_create_to_member_add_label=Add
+
+groups_messages_create_notify_label=Notifications:
+groups_messages_create_notify_mail_label=Send email notification of this message to the "To" list.
 
 groups_messages_edit_cancel_btt=Cancel
 groups_messages_edit_submit_btt=Submit
@@ -322,7 +408,7 @@ groups_messages_view_message_delete_link=Delete
 groups_messages_createdby=by
 groups_messages_view_comments_title=Comment(s)
 groups_messages_view_comments_delete_link=Delete
-groups_messages_view_addcomment_btt=Add Comment
+groups_messages_view_addcomment_btt=Add a Comment
 groups_messages_view_addcomment_post_btt=Post Comment
 groups_messages_view_addcomment_cancel_btt=Cancel
 groups_messages_view_attachments_title=Attachment(s)
@@ -330,6 +416,8 @@ groups_messages_view_attachments_providedby=Provided by
 groups_messages_view_attachments_on=On
 groups_messages_view_attachments_delete_link=Delete
 groups_messages_view_attachments_btt=Attach a File
+attachthisfile=Attach This File
+addattachment=Add an Attachment
 groups_messages_view_attachments_instruction=Choose a file to upload.
 groups_messages_view_attachments_browse_btt=Browse
 groups_messages_view_attachments_upload_btt=Upload
@@ -401,17 +489,18 @@ groups_members_membership_group_infotxt=Do you have a friend or colleague who wo
 groups_members_membership_group_btt=Invite Member
 
 groups_members_list_title= Members
+groups_members_manage_roles=Manage Roles
 groups_members_admin_list_instruction=Filter to show only:
 groups_members_admin_list_togglecurrent=Current Members
 groups_members_admin_current_members_infotxt=Members in this group are listed below, 10 per page.
 
 groups_members_admin_current_members_editsettings_link=Edit Settings
 
-groups_members_admin_current_membersettings_email=COMING SOON: Send me email notifications for messages. (Check now if you wish this feature to apply when it becomes available.)
+groups_members_admin_current_membersettings_email=Allow group members to email me when messages are created.
 
-groups_members_admin_current_membersettings_changenotice=COMING SOON: Notify me when my contributions, messages, or wiki documents are changed. (Check now if you wish this feature to apply when it becomes available.)
+groups_members_admin_current_membersettings_changenotice=Notify me when my curriculum contributions, messages, or wiki documents are changed.
 
-groups_members_editsettings_loadinginprogress=Loading in progress
+groups_members_editsettings_loadinginprogress=Loading...
 groups_members_membersettings_savedone=The settings have been saved.
 groups_members_admin_current_membersettings_save_link=Save
 groups_members_admin_current_membersettings_cancel_link=Cancel
@@ -433,7 +522,7 @@ groups_members_admin_pending_deny_link=Deny
 groups_members_admin_pending_accept_link=Accept
 
 groups_members_admin_list_toggledenied=Denied
-groups_members_admin_denied_infotxt=The members shown in this listing have already been denied membership to this group. Click &amp;quot;Invite&amp;quot; to re-activate the membership request.
+groups_members_admin_denied_infotxt=The members shown in this listing have already been denied membership to this group. Click &amp;quot;Accept&amp;quot; to re-activate the membership request.
 groups_members_admin_denied_nodeniedmembershiprequests=There are currently no denied membership requests for this group.
 groups_members_admin_denied_invite_link=Invite
 groups_members_admin_list_btt=Submit
@@ -442,7 +531,9 @@ groups_members_list_paging_diff=Members
 groups_members_admin_list_toggleinvitations=Invitations
 
 groups_members_admin_invitations_infotxt=Here you can view all pending invitations for this group.
-groups_members_admin_invitations_infotxt_noinvitations=There are currently no invitations pending for this group.  
+groups_members_admin_invitations_infotxt_noinvitations=There are currently no invitations pending for this group.
+groups_members_admin_invitations_cancel_link=Cancel Invitation
+groups_members_admin_invitations_cancel_confirm=Are you sure you want to cancel this invitation?
 
 groups.members.invitedby=Invited by
 groups.members.on=on
@@ -474,9 +565,9 @@ groups_members_accept_failed=This operation failed. Please try again.
 groups_members_reject_failed=This operation failed. Please try again.
 groups_members_accept_inprogress=Loading, please wait...
 
-groups_members_create_membersettings_email=COMING SOON: Send me email when new group messages are created. (Check now if you wish this feature to apply when it becomes available.)
+groups_members_create_membersettings_email=Allow group members to email me when messages are created.
 groups_members_create_membersettings_email_tooltip=If you want to be notified by email when you receive messages for this group, click to select this option.
-groups_members_create_membersettings_changenotice=COMING SOON: Notify me when my contributions or messages are changed. (Check now if you wish this feature to apply when it becomes available.)
+groups_members_create_membersettings_changenotice=Notify me when my contributions or messages are changed.
 groups_members_cancel_btt=Cancel
 groups_members_request_sent=Your membership request for {0} has been sent. You will be informed by email when it is processed by the group leader.
 groups_members_request_needaccount=You need to have a Curriki account and be logged-in to request membership for a group.
@@ -506,11 +597,11 @@ groups_members_invite_openinvitation=This is an open invitation to a mailing lis
 groups_members_join_title=Join This Group
 groups_members_join_infotxt=In order to become a member of this group, please provide biographical information about yourself in the field below, then adjust the member settings based on your preferences. Finally, click &amp;quot;Join&amp;quot; to submit your new membership. You will be added to the list on the Members tab for this group; also, this group will be added to My Groups in My Curriki.
 groups_members_join_bio_tooltip=You can change your member settings for a group at any time by visiting the Members tab for that group and clicking &amp;quot;Edit Settings&amp;quot; next to your name.
-groups_members_create_membersettings_email=COMING SOON: Send me email when new group messages are created. (Check now if you wish this feature to apply when it becomes available.)
-
+groups_members_create_membersettings_email=Allow group members to email me when messages are created.
 groups_members_create_membersettings_email_tooltip=If you want to be notified by email when you receive messages for this group, click to select this option.
 
-groups_members_create_membersettings_changenotice=COMING SOON: Notify me when my contributions, messages, or wiki documents are changed. (Check now if you wish this feature to apply when it becomes available.)
+groups_members_create_membersettings_changenotice=Notify me when my curriculum contributions, messages, or wiki documents are changed.
+
 
 groups_members_join_btt=Join
 groups_members_cancel_btt=Cancel
@@ -522,6 +613,7 @@ groups_members_join_invitationinvalid=Your invitation is not valid. Are you logg
 
 
 ## old stuff
+download=Download
 ## Invite
 groups.invite.invite=Send Invitation
 groups.invite.title=Invite New Members for {0}
@@ -543,6 +635,42 @@ browseGroups.groups=Groups
 browseGroups.promo_card_1=&lt;div class="subject-card custom-subject-card"&gt;&lt;div class="subject-image"&gt;&lt;img src="/xwiki/bin/download/Groups/WebHome/default_logo.png"&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class="subject-desc" style="font-size: 10px;"&gt;&lt;br /&gt;Be among the first to create and facilitate a group on Curriki!&lt;br /&gt;&lt;a href="/xwiki/bin/view/Groups/AboutCreatingGroups"&gt;Learn About Creating a Group&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;
 browseGroups.promo_card_2=&lt;div class="subject-card custom-subject-card"&gt;&lt;div class="subject-desc" style="text-align: left; font-size: 10px;"&gt;&lt;strong&gt;Groups can:&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;Collaborate on curriculum design and development&lt;/li&gt;&lt;li&gt;Share resources&lt;/li&gt;&lt;li&gt;Communicate with messaging&lt;/li&gt;&lt;li&gt;And more...&lt;/li&gt;&lt;/ul&gt;&lt;div style="text-align: center;"&gt;&lt;a href="/xwiki/bin/view/Groups/AboutCreatingGroups"&gt;What can YOU do with a Curriki Group?&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt; 
 
+## GROUPS DOCUMENTATION
+groups_documentation_tabname=Documentation
+groups_documentation_page=Documentation
+
+groups_documentation_about_title=About Documentation
+groups_documentation_create_wiki_page_title=Create a New Page
+groups_documentation_wiki_page_save_confirm=
+groups_documentation_new_wiki_title=Enter Page Title
+groups_documentation_new_wiki_submit=Start
+
+groups_documentation_add_document_title=Add a File
+groups_documentation_add_document_choose=Choose a file to upload:
+groups_documentation_add_document_upload=Upload
+
+groups_documentation_documents_title=Group Documents
+groups_documentation_documents_del_wiki_confirm=Are you sure you want to delete this page?
+groups_documentation_documents_del_doc_confirm=Are you sure you want to delete this file?
+groups_documentation_documents_del=Delete
+groups_documentation_documents_edit=Edit
+groups_documentation_documents_modified=Added or modified by
+groups_documentation_documents_on=on
+
+groups_documentation_documents_nopage=There is no matching page.
+
+groups_documentation_update_title=Title:
+groups_documentation_enter_content=Content:
+
+groups_documentation_new_wiki_cancel=Cancel
+groups_documentation_new_wiki_save=Save
+groups_documentation_new_wiki_cancel_confirm=Are you sure you want to cancel?
+
+groups_documentation_edit_wiki_title=Edit Wiki Page
+groups_documentation_edit_wiki_cancel=Cancel
+groups_documentation_edit_wiki_save=Save
+groups_documentation_edit_wiki_cancel_confirm=Are you sure you want to cancel?
+
 ## Interstitial page
 
 ## Curriculum page
@@ -551,6 +679,7 @@ groups.curriculum.about.edit=Edit
 
 groups.curriculum.contributions.title=Group Contributions
 groups.curriculum.contributions.about=Here you can find any contributions from the group.
+
 groups.curriculum.contributions.viewAll=View All
 groups.curriculum.contributions.viewORsearch=OR
 groups.curriculum.contributions.go=Go &amp;#xBB;
@@ -579,11 +708,45 @@ groups_cannotremovelastadmin=Every group must have one leader; it is not possibl
 groups_adminadded=This member is now a group leader.
 groups_memberremoved=This member has been removed from the group.
 groups_cannotremovemember=This operation failed. Please try again.
+groups_invitationcancelled=This invitation has been cancelled.
+groups_cannotcancelinvitation=This operation failed. Please try again.
 
 groups_loadinginprogress=Loading, please wait...
 groups_onlyaccessibletomembers=This area is only available to group members.
 groups_messages_onlyaccessibletomembers=Messages are only available to group members.
 groups_members_onlyaccessibletomembers=Member lists are only available to group members.
 groups_documentation_onlyaccessibletomembers=Documentation is only available to group members.
+
+groups.roles.admin.title=Group Leader
+groups.roles.comment.created=Created role {0}
+groups.roles.comment.renamed=Renamed role {0} to {1}
+groups.roles.comment.addedUser=Added {0}
+groups.roles.comment.removedUser=Removed {0}
+groups.roles.manage.titlebar=Manage Roles
+groups.roles.manage.intro=&lt;p&gt;As a group leader, you can create and manage a list of roles for members of your group to choose from, either when they join the group, or later when they edit their member settings for the group.&lt;/p&gt;&lt;br&gt;&lt;p&gt;Using this feature, your group can send messages efficiently to members who play a specific role in the workings of your group. For instance, if yours is a curriculum develoment project, you might have a role "Subject Matter Expert" to which members could address specific content questions. Note the related filtering options on the Messages tab.&lt;/p&gt;
+groups.roles.manage.returnlink=Return to Members List
+groups.roles.manage.edit=Edit
+groups.roles.manage.save=Save
+groups.roles.manage.cancel=Cancel
+groups.roles.manage.delete=Delete
+groups.roles.manage.delete.confirm=Are you sure you wish to delete this role?
+groups.roles.manage.add=Add a Role
+groups.roles.create.nonunique=Each role name must be unique.
+groups.roles.create.invalidsize=Role names must be less than 32 characters.
+groups.roles.create.created=The role "{0}" has been created.
+groups.roles.rename.notunique=Each role name must be unique.
+groups.roles.rename.invalidsize=Role names must be less than 32 characters.
+groups.roles.rename.renamed=Role {0} has been renamed to {1}.
+groups.roles.delete.deleted=Role {0} has been deleted.
+groups.members.selectroles=Select Role(s):
+groups.members.selectroles.info=You can pick multiple roles by hitting the Ctrl (PC) or Apple (Mac) key as you click to select.
+groups.members.selectroles.tooltip=PLACEHOLDER
+
+groups.members.invite.selectroles.info=You can pick multiple roles by hitting the Ctrl (PC) or Apple (Mac) key as you click to select.
+
+groups.members.join.selectroles.info=You can pick multiple roles by hitting the Ctrl (PC) or Apple (Mac) key as you click to select.
+
+groups.search.top_title=FIND RESOURCES FROM THIS GROUP IN THE REPOSITORY
+
 ## &lt;/pre&gt;</content>
 </xwikidoc>
