@@ -28,6 +28,7 @@ import com.google.gwt.user.client.WindowResizeListener;
 import com.xpn.xwiki.gwt.api.client.Document;
 import org.curriki.gwt.client.widgets.browseasset.AssetTreeItem;
 import org.curriki.gwt.client.widgets.browseasset.BrowseAsset;
+import org.curriki.gwt.client.widgets.moveasset.MoveModalBox;
 import org.curriki.gwt.client.pages.EditPage;
 import org.curriki.gwt.client.pages.AbstractPage;
 import org.curriki.gwt.client.editor.Editor;
@@ -197,7 +198,30 @@ public class MenuPanel extends Composite implements WindowResizeListener {
                 return;
             }
 
-            Main.getSingleton().getEditor().launchInsertWizard();
+            final Editor editor =  Main.getSingleton().getEditor();
+            CurrikiService.App.getInstance().checkVersion(editor.getCurrentAssetPageName(), editor.getCurrentAsset().getVersion(), new CurrikiAsyncCallback() {
+                public void onFailure(Throwable caught) {
+                    super.onFailure(caught);
+                    // The action failed but we want to reload anyway in case something happened
+                    editor.setCurrentAssetInvalid(true);
+                    editor.setTreeContentInvalid(true);
+                    editor.refreshState();
+                }
+
+                public void onSuccess(Object result) {
+                    super.onSuccess(result);
+
+                    if (!((Boolean) result).booleanValue()){
+                        Window.alert(Main.getSingleton().getTranslator().getTranslation("checkversion.versionhaschanged"));
+                        editor.setCurrentAssetInvalid(true);
+                        editor.setTreeContentInvalid(true);
+                        editor.refreshState();
+                        return;
+                    }
+
+                    Main.getSingleton().getEditor().launchInsertWizard();
+                };
+            });
         }
     }
 

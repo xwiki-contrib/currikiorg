@@ -458,7 +458,32 @@ public class Editor implements WindowResizeListener {
     }
 
 
-    public void removeAsset(long index) {
+    public void removeAsset(final long index) {
+        CurrikiService.App.getInstance().checkVersion(currentAssetPageName, currentAsset.getVersion(), new CurrikiAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                super.onFailure(caught);
+                // The action failed but we want to reload anyway in case something happened
+                setCurrentAssetInvalid(true);
+                setTreeContentInvalid(true);
+                refreshState();
+            }
+
+            public void onSuccess(Object result) {
+                super.onSuccess(result);
+
+                if (!((Boolean) result).booleanValue()){
+                    Window.alert(Main.getSingleton().getTranslator().getTranslation("checkversion.versionhaschanged"));
+                    setCurrentAssetInvalid(true);
+                    setTreeContentInvalid(true);
+                    refreshState();
+                    return;
+                }
+                removeAsset2(index);
+            }
+        });
+    }
+
+    public void removeAsset2(final long index) {
         CurrikiService.App.getInstance().removeSubAsset(currentAssetPageName, index, new CurrikiAsyncCallback() {
             public void onFailure(Throwable caught) {
                 super.onFailure(caught);

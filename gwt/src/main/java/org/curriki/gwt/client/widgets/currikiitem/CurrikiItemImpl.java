@@ -467,8 +467,30 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
     }
 
     public void onMoveClick() {
-        MoveModalBox box = new MoveModalBox(Main.getSingleton().getEditor().getRootAssetPageName(), getItem().getDocumentFullName(), getParentAsset(), getIndex());
-        box.show();
+        final Editor editor =  Main.getSingleton().getEditor();
+        CurrikiService.App.getInstance().checkVersion(editor.getCurrentAssetPageName(), editor.getCurrentAsset().getVersion(), new CurrikiAsyncCallback() {
+            public void onFailure(Throwable caught) {
+                super.onFailure(caught);
+                // The action failed but we want to reload anyway in case something happened
+                editor.setCurrentAssetInvalid(true);
+                editor.setTreeContentInvalid(true);
+                editor.refreshState();
+            }
+
+            public void onSuccess(Object result) {
+                super.onSuccess(result);
+
+                if (!((Boolean) result).booleanValue()){
+                    Window.alert(Main.getSingleton().getTranslator().getTranslation("checkversion.versionhaschanged"));
+                    editor.setCurrentAssetInvalid(true);
+                    editor.setTreeContentInvalid(true);
+                    editor.refreshState();
+                    return;
+                }
+                MoveModalBox box = new MoveModalBox(Main.getSingleton().getEditor().getRootAssetPageName(), getItem().getDocumentFullName(), getParentAsset(), getIndex());
+                box.show();
+            };
+        });
     }
 
     public String getType() {

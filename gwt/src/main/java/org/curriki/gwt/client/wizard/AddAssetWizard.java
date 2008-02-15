@@ -24,6 +24,7 @@ package org.curriki.gwt.client.wizard;
 import asquare.gwt.tk.client.ui.BasicPanel;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.xpn.xwiki.gwt.api.client.Document;
@@ -162,7 +163,34 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     }
 
     private void finishWizard() {
-        // finishWizard() should only be called when a new asset is created (does a rename from AssetTemp)
+              final Editor editor =  Main.getSingleton().getEditor();
+            CurrikiService.App.getInstance().checkVersion(editor.getCurrentAssetPageName(), editor.getCurrentAsset().getVersion(), new CurrikiAsyncCallback() {
+                public void onFailure(Throwable caught) {
+                    super.onFailure(caught);
+                    // The action failed but we want to reload anyway in case something happened
+                    editor.setCurrentAssetInvalid(true);
+                    editor.setTreeContentInvalid(true);
+                    editor.refreshState();
+                }
+
+                public void onSuccess(Object result) {
+                    super.onSuccess(result);
+
+                    if (!((Boolean) result).booleanValue()){
+                        Window.alert(Main.getSingleton().getTranslator().getTranslation("checkversion.versionhaschanged"));
+                        editor.setCurrentAssetInvalid(true);
+                        editor.setTreeContentInvalid(true);
+                        editor.refreshState();
+                        return;
+                    }
+
+                    finishWizard2();
+                };
+            });
+    }
+
+    private void finishWizard2() {
+           // finishWizard() should only be called when a new asset is created (does a rename from AssetTemp)
         CurrikiService.App.getInstance().finalizeAssetCreation(newDoc.getFullName(),
                 Main.getSingleton().getEditor().getCurrentAssetPageName(), EditPage.getSingleton().getSelectedIndex() + 1,
                 new CurrikiAsyncCallback(){

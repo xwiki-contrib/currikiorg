@@ -46,7 +46,7 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
 
     void finalizeAssetCreation(String assetPage, String compositeAssetPage, long position, AsyncCallback async);
 
-    void updateViditalk(String fullName, String videoId, AsyncCallback async); 
+    void updateViditalk(String fullName, String videoId, AsyncCallback async);
 
     // Collections
     void isDefaultCollectionExists(String space, AsyncCallback async);
@@ -70,6 +70,7 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
 
     // Lucene search
     void luceneSearch(String terms, int start, int nb, AsyncCallback async);
+
     void luceneSearch(String terms, int start, int nb, String sortBy, AsyncCallback async);
 
     // Templates
@@ -83,4 +84,7 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
 
     // Zip Assets
     void getFileTreeList(String pageName, String fileName, AsyncCallback async);
+
+    // Check version
+    void checkVersion(String pageName, String version, AsyncCallback async);
 }

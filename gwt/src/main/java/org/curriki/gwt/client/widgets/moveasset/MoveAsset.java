@@ -1,6 +1,7 @@
 package org.curriki.gwt.client.widgets.moveasset;
 
 import com.google.gwt.user.client.WindowResizeListener;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
@@ -82,6 +83,7 @@ public class MoveAsset extends BrowseAsset {
 
     }
 
+
     private void initListener(){
         addTreeListener(new TreeListener(){
             public void onTreeItemSelected(TreeItem item) {
@@ -99,36 +101,7 @@ public class MoveAsset extends BrowseAsset {
                     */
                     final String newParent = ((AssetTreeItem)parent).getPageName();
                     final boolean isNewParentDifferent = !fromParent.equals(newParent);
-                    CurrikiService.App.getInstance().moveAsset(assetName, fromParent, fromPosition, newParent, newPosition, new CurrikiAsyncCallback(){
-
-                        public void onSuccess(Object result) {
-                            super.onSuccess(result);
-                            // If parent has changed we need to reload the parent one
-                            // If the moved asset is a source asset then we need to select the source asset
-                            // If the moved asset is a folder then we need to select the parent folder
-                            Editor editor =  Main.getSingleton().getEditor();
-                            if (isNewParentDifferent) {
-                                // Parent has changed, switch to that new parent
-                                editor.setCurrentAssetPageName(newParent);
-                                // If it was not the asset selected then we will select the new parent asset
-                                // If not we don't need to change anything as the asset will be selected
-                                if (!editor.getSelectedDocumentName().equals(assetName)) {
-                                    editor.setSelectedDocumentName(newParent);
-                                }
-                            } else {
-                                // If the parent has not changed force the current asset reload
-                                editor.setCurrentAssetInvalid(true);
-                            }
-                            // The tree is invalid with a move. We need to reload it.
-                            editor.setTreeContentInvalid(true);
-                            // Let's launch the refresh
-                            editor.refreshState();
-
-                            if (parentDialog instanceof MoveModalBox){
-                                ((MoveModalBox)parentDialog).hide();
-                            }
-                        }
-                    });
+                    moveAsset(newPosition, newParent, isNewParentDifferent);
                     return ;
                 }
 
@@ -160,6 +133,40 @@ public class MoveAsset extends BrowseAsset {
 
                 }                
             }
+
+            private void moveAsset(final long newPosition, final String newParent, final boolean newParentDifferent) {
+                            CurrikiService.App.getInstance().moveAsset(assetName, fromParent, fromPosition, newParent, newPosition, new CurrikiAsyncCallback(){
+
+                                public void onSuccess(Object result) {
+                                    super.onSuccess(result);
+                                    // If parent has changed we need to reload the parent one
+                                    // If the moved asset is a source asset then we need to select the source asset
+                                    // If the moved asset is a folder then we need to select the parent folder
+                                    Editor editor =  Main.getSingleton().getEditor();
+                                    if (newParentDifferent) {
+                                        // Parent has changed, switch to that new parent
+                                        editor.setCurrentAssetPageName(newParent);
+                                        // If it was not the asset selected then we will select the new parent asset
+                                        // If not we don't need to change anything as the asset will be selected
+                                        if (!editor.getSelectedDocumentName().equals(assetName)) {
+                                            editor.setSelectedDocumentName(newParent);
+                                        }
+                                    } else {
+                                        // If the parent has not changed force the current asset reload
+                                        editor.setCurrentAssetInvalid(true);
+                                    }
+                                    // The tree is invalid with a move. We need to reload it.
+                                    editor.setTreeContentInvalid(true);
+                                    // Let's launch the refresh
+                                    editor.refreshState();
+
+                                    if (parentDialog instanceof MoveModalBox){
+                                        ((MoveModalBox)parentDialog).hide();
+                                    }
+                                }
+                            });
+                        }
+
 
             public void onTreeItemStateChanged(TreeItem item) {
 

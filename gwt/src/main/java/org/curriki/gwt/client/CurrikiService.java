@@ -53,7 +53,6 @@ public interface CurrikiService extends XWikiService {
     public String createCollection(String space, String pageName, String pageTitle) throws XWikiGWTException;
     public Document createCollectionDocument(String space, String pageName, String pageTitle) throws XWikiGWTException;
 
-
     // Composite Assets and SubAssets
     public List getCompositeAsset(String compositeAssetPage) throws XWikiGWTException;
     public List removeSubAsset(String compositeAssetPage, long position) throws XWikiGWTException;
@@ -72,6 +71,9 @@ public interface CurrikiService extends XWikiService {
 
     // Zip Assets
     public List getFileTreeList(String pageName, String fileName) throws XWikiGWTException;
+
+    // Check version
+    public boolean checkVersion(String pageName, String version) throws XWikiGWTException;
 
     /**
      * Utility/Convinience class.

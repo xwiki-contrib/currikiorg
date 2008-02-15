@@ -643,7 +643,6 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                     break;
                 }
             }
-
             return getCompositeAsset(compositeAssetPage);
 
         } catch (Exception e) {
@@ -1087,6 +1086,16 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 tree.add(new TreeListItem(item.getId(), item.getValue(), item.getParent()));
             }
             return tree;
+        } catch (Exception e) {
+            throw getXWikiGWTException(e);
+        }
+    }
+
+    // Check version
+    public boolean checkVersion(String pageName, String version) throws XWikiGWTException {
+        try {
+            XWikiContext context = getXWikiContext();
+            return version.equals(context.getWiki().getDocument(pageName, context).getVersion());       
         } catch (Exception e) {
             throw getXWikiGWTException(e);
         }
