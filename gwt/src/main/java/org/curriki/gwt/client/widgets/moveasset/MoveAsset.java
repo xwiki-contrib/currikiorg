@@ -99,6 +99,7 @@ public class MoveAsset extends BrowseAsset {
                         newPosition = ((AssetTreeItem)(parent.getChild(treePos + 1))).getIndex();
                     }
                     */
+                    // Window.alert("New position: " + newPosition);
                     final String newParent = ((AssetTreeItem)parent).getPageName();
                     final boolean isNewParentDifferent = !fromParent.equals(newParent);
                     moveAsset(newPosition, newParent, isNewParentDifferent);
@@ -116,9 +117,11 @@ public class MoveAsset extends BrowseAsset {
 
                     int i = 0;
                     for (; i < index; i++){
-                        parent.addItem((TreeItem) items.get(i));
+                        AssetTreeItem subitem = (AssetTreeItem) items.get(i);
+                        parent.addItem(subitem);
                     }
-                    parent.addItem(new InsertHereTreeItem(index));
+                    int position = (int) ((AssetTreeItem) item).getIndex();
+                    parent.addItem(new InsertHereTreeItem(position));
                     AssetTreeItem assetTreeItem = (AssetTreeItem) items.get(i);
                     if (Constants.CATEGORY_COLLECTION.equals(assetTreeItem.getType())) {
                       assetTreeItem.addItem(new InsertHereTreeItem(assetTreeItem.getChildCount()));
@@ -126,7 +129,7 @@ public class MoveAsset extends BrowseAsset {
                     }
                     parent.addItem(assetTreeItem);
 
-                    parent.addItem(new InsertHereTreeItem(index+1));
+                    parent.addItem(new InsertHereTreeItem(position+1));
                     for (i++; i < items.size(); i++){
                         parent.addItem((TreeItem) items.get(i));
                     }
