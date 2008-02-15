@@ -70,13 +70,25 @@ public class MessageActivityEvent extends ActivityEvent
         } catch (XWikiException e) {
         }
 
+        String level = event.getParam3();
+        if (level == null || level.trim().length() == 0) {
+            level = "message";
+        }
         String eventTitle = "";
-        if (ActivityEventType.UPDATE.equals(event.getType())) {
-            eventTitle = "groups_home_activity_mes_edit";
-        } else if (ActivityEventType.CREATE.equals(event.getType())) {
-            eventTitle = "groups_home_activity_mes_add";
-        } else if (ActivityEventType.DELETE.equals(event.getType())) {
-            eventTitle = "groups_home_activity_mes_del";
+        if ("message".equals(level)) {
+            if (ActivityEventType.UPDATE.equals(event.getType())) {
+                eventTitle = "groups_home_activity_mes_edit";
+            } else if (ActivityEventType.CREATE.equals(event.getType())) {
+                eventTitle = "groups_home_activity_mes_add";
+            } else if (ActivityEventType.DELETE.equals(event.getType())) {
+                eventTitle = "groups_home_activity_mes_del";
+            }
+        } else if ("comment".equals(level)) {
+            if (ActivityEventType.CREATE.equals(event.getType())) {
+                eventTitle = "groups_home_activity_mes_com_add";
+            } else if (ActivityEventType.DELETE.equals(event.getType())) {
+                eventTitle = "groups_home_activity_mes_com_del";
+            }
         }
 
         List params = new ArrayList();

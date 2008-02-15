@@ -81,9 +81,16 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_NEW;
         }
 
+        String level = "message";
+        if ("commentadd".equals(context.getAction())) {
+            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            level = "comment";
+        }
+
         List params = new ArrayList();
         params.add(article.getStringValue("title"));
         params.add(getUserName(context.getUser(), context));
+        params.add(level);
 
         try {
             switch (event) {
