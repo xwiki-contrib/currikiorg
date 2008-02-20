@@ -23,26 +23,41 @@
   #set($bcLocal = "${parent};${bcLocal}")
   #set($level = $level + 1)
   #parentsBreadcrumb($xwiki.getDocument($parent) $level)
- #else
+#else
   #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='XWiki.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}'")
   #foreach($bcItem in $xwiki.search($hql, 1, 0))
    #set($bcLocal = "${bcItem.name};${bcLocal}")
    #set($level = $level + 1)
    #parentsBreadcrumb($xwiki.getDocument(${bcItem.name}) $level)
   #end
- #end
-
-#else ##non group specific
-
-<a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
-
-#if($bcDoc.name == "Contributions" || $bcDoc.name == "ContributionsSearch")
-<a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
 #end
 
-#end
+#if($bcDoc.space.startsWith("Documentation_")) ## documentation space
+  #set($grName = $bcDoc.space.substring( 14 ))
+  #set($s = $sm.getSpace($grName))
+  #if( $s )
+    #if( $s.isNew() || $s.isDeleted() )
+      #set( $s = "" )
+    #end
+  #end
+  #if($!s=="") #else
+  		  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name 
+  		  #set($docPageName = $grName+".Documentation") 
+  		  #set($docPage = $xwiki.getDocument( $docPageName ) ) 
+  		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
+  #end  
+#end ## end of documentation space
+  
+#else ##GROUP SPECIFIC
+  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
+ 
+  #if($bcDoc.name == "Contributions" || $bcDoc.name == "ContributionsSearch")
+    <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
+  #end
 
-#end
+#end  ## end group specifics
+
+#end ## end macro
 ##
 ##
 ##
@@ -93,17 +108,33 @@
    #if($!s=="") 
      ##don't fix anything
    #else
-     #if($bcDoc.name==$msg.groups_home_page)
+     #if($bcDoc.name==$msg.groups_home_page) ##home page
        #set($currikiTitle = $msg.groups_home_tabname)
        #if($request.action)
          #if($request.action=="editmasthead")
            #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
-	 #end
+	         #end
          #if($request.action=="editinfo")
            #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
          #end
        #end
-     #end 
+     #end ##end home page
+     #if($bcDoc.name=="Documentation") ##documentation page
+     	  #if(	$request.action)
+     	  	  #if($request.action == "newdoc")
+     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
+     	  	  #end
+     	  	  #if($request.action == "editdoc")
+     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
+     	  	  #end
+     	  	  #if($request.action == "history")
+     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
+     	  	  #end
+     	  	  #if($request.action == "compare")
+     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_compare_title}</a>")
+     	  	  #end
+     	  #end
+     #end  ##end documentation page
    ###else
    ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
    ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
