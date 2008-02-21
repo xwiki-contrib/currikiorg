@@ -77,7 +77,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else if ((olddoc != null && olddoc.getObject("XWiki.ArticleClass") == null)
-            || (olddoc == null && "1.4".equals(newdoc.getVersion()))) {
+            || (olddoc == null && "4.1".equals(newdoc.getVersion()))) {
             event = XWikiDocChangeNotificationInterface.EVENT_NEW;
         }
 
@@ -134,9 +134,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             docTitle = olddoc.getTitle();
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
-            String initialVersion = "1.3";
+            String initialVersion = "3.1";
             if (tag.getStringValue("tags").contains(DOCUMENTATION_FILE)) {
-                initialVersion = "1.4";
+                initialVersion = "4.1";
             }
             if ((olddoc != null && olddoc.getObject("XWiki.TagClass") == null)
                 || (olddoc == null && initialVersion.equals(newdoc.getVersion()))) {
@@ -199,9 +199,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            if (version < 1.6) {
+            if (version < 6.1) {
                 return;
-            } else if (version == 1.6) {
+            } else if (version == 6.1) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
             }
         }
@@ -250,7 +250,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else if ((olddoc != null && olddoc.getObject("XWiki.SpaceUserProfileClass") == null)
-            || (olddoc == null && "1.2".equals(newdoc.getVersion()))) {
+            || (olddoc == null && "2.1".equals(newdoc.getVersion()))) {
             event = XWikiDocChangeNotificationInterface.EVENT_NEW;
         }
 
