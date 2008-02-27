@@ -39,7 +39,7 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
 
     protected CurrikiActivityStream getCurrikiActivityStream()
     {
-        return (CurrikiActivityStream) ((CurrikiActivityStreamPlugin) getPlugin())
+        return (CurrikiActivityStream) ((CurrikiActivityStreamPlugin) getProtectedPlugin())
             .getActivityStream();
     }
 

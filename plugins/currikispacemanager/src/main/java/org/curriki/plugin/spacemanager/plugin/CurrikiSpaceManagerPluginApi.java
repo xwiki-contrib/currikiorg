@@ -23,7 +23,7 @@ public class CurrikiSpaceManagerPluginApi extends SpaceManagerPluginApi {
     }
 
     protected CurrikiSpaceManager getCurrikiSpaceManager() {
-        return (CurrikiSpaceManager) getPlugin();
+        return (CurrikiSpaceManager) getProtectedPlugin();
     }
 
     public List getSpacesByTopic(String topic, int nb, int start) throws SpaceManagerException {

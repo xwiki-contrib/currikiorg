@@ -43,7 +43,7 @@ public class InvitationManagerPluginApi extends PluginApi
 
     protected InvitationManager getInvitationManager()
     {
-        return ((InvitationManagerPlugin) getPlugin()).getInvitationManager();
+        return ((InvitationManagerPlugin) getProtectedPlugin()).getInvitationManager();
     }
 
     /**
