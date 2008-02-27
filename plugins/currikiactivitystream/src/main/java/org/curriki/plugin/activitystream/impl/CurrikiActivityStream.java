@@ -1,8 +1,28 @@
+/*
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.curriki.plugin.activitystream.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.velocity.VelocityContext;
 import org.xwiki.plugin.activitystream.api.ActivityEvent;
 import org.xwiki.plugin.activitystream.api.ActivityEventPriority;
 import org.xwiki.plugin.activitystream.api.ActivityEventType;
@@ -11,10 +31,19 @@ import org.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.api.XWiki;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
 import com.xpn.xwiki.notify.XWikiNotificationRule;
 import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.plugin.mailsender.Mail;
+import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
+import com.xpn.xwiki.plugin.spacemanager.api.Space;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagers;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile;
+import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
 public class CurrikiActivityStream extends ActivityStreamImpl
 {
@@ -101,6 +130,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
+                    sendUpdateNotification(newdoc.getSpace().substring("Messages_".length()),
+                        newdoc, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
@@ -167,6 +198,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
+                    sendUpdateNotification(
+                        newdoc.getSpace().substring("Documentation_".length()), newdoc, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
@@ -219,6 +252,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
+                    sendUpdateNotification(newdoc.getSpace().substring("Coll_".length()), newdoc,
+                        context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
@@ -278,6 +313,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     activityEvent.setType(ActivityEventType.UPDATE);
                     addActivityEvent(activityEvent, newdoc, context);
+                    sendUpdateNotification(newdoc.getSpace().substring("UserProfiles_".length()),
+                        newdoc, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     // ignore
@@ -331,5 +368,57 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             userName = user.substring(user.indexOf(".") + 1);
         }
         return userName;
+    }
+
+    /**
+     * Sends a notification email to the creator of the given document if it has been updated by
+     * another user and he opted in his space profile for this kind of notifications.
+     * 
+     * @param spaceName the space the changed document is associated with. Also, the document
+     *            creator's profile in this space can block this notification
+     * @param doc the changed document
+     * @param context the XWiki context
+     * @throws Exception
+     */
+    private void sendUpdateNotification(String spaceName, XWikiDocument doc, XWikiContext context)
+        throws Exception
+    {
+        if (doc.getCreator().equals(context.getUser())) {
+            return;
+        }
+        SpaceManager spaceManager = SpaceManagers.findSpaceManagerForSpace(spaceName, context);
+        SpaceUserProfile profile =
+            spaceManager.getSpaceUserProfile(spaceName, doc.getCreator(), context);
+        if (!profile.getAllowNotificationsFromSelf()) {
+            return;
+        }
+
+        Space space = spaceManager.getSpace(spaceName, context);
+        String templateDocFullName = "Groups.MailTemplateUpdateNotification";
+        XWikiDocument mailDoc = context.getWiki().getDocument(templateDocFullName, context);
+        XWikiDocument translatedMailDoc = mailDoc.getTranslatedDocument(context);
+
+        VelocityContext vContext = new VelocityContext();
+        vContext.put("space", space);
+        vContext.put("udoc", new Document(doc, context));
+        vContext.put("xwiki", new XWiki(context.getWiki(), context));
+        vContext.put("context", new com.xpn.xwiki.api.Context(context));
+
+        String mailFrom = context.getWiki().getXWikiPreference("admin_email", context);
+        String mailTo =
+            context.getWiki().getDocument(doc.getCreator(), context).getStringValue(
+                "XWiki.XWikiUsers", "email");
+        String mailSubject =
+            XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
+                vContext);
+        String mailContent =
+            XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(), templateDocFullName,
+                vContext);
+
+        MailSenderPlugin mailSender =
+            (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);
+        mailSender.prepareVelocityContext(mailFrom, mailTo, "", vContext, context);
+        Mail mail = new Mail(mailFrom, mailTo, null, null, mailSubject, mailContent, null);
+        mailSender.sendMail(mail, context);
     }
 }
