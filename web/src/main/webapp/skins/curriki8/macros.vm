@@ -1345,6 +1345,14 @@ $text
 <div class="topmenuentry" onmouseover="showsubmenu(this);" onmouseout="hidesubmenu(this);" id="$id"><a class="tme" href="$actionurl"><strong>$linktext</strong></a><span class="hidden menucolon">: </span><span class="submenu hidden">
 #end
 
+## Macro to display the CRS rating image
+##
+#macro(displayCRSIcon $name $status) ##{
+#set($__crsIcon = $xwiki.getSkinFile("crs${status}.gif"))
+#set($__crsRating = $msg.get("curriki.crs.rating${status}"))
+<span class="tooltip-generator">$xwiki.addTooltip("<img src='${__crsIcon}' id='tooltip-image-${name}' class='tooltip-image' height='48' alt='${__crsRating}' />", $__crsRating, "ttWidth='auto'")</span>
+#end ##}
+##
 
 ## Curriki Review Status Macros
 ## This macro displays the current review status
@@ -1375,7 +1383,7 @@ $msg.get("curriki.crs.unrated")
 <div class="crs_reviewrating">
 <div class="crs_reviewimage">
 <a href="$asset.getURL("view", "viewer=comments")">
-<img src="$xwiki.getSkinFile("crs${status}.gif")" height="48" />
+#displayCRSIcon("review", $status)
 </a>
 </div>
 <div class="crs_reviewratingtext">
@@ -1446,7 +1454,6 @@ $msg.get("curriki.crs.reviewlist.currikireview")
 #set($vca = $asset.getValue("contentaccuracy"))
 #set($vap = $asset.getValue("appropriatepedagogy"))
 #set($rating = $asset.getValue("rating"))
-#set($ratingimg = $xwiki.getSkinFile("crs${rating}.gif"))
 #set($comment = $asset.display("comment"))
 #set($date = $asset.getValue("date"))
 #set($user = $asset.display("user"))
@@ -1455,7 +1462,7 @@ $xwiki.formatDate($date, $msg.get("dateFormat"))
 </div>
 <div class="crs_reviewscomment">
 #if($rating&&($rating!="0"))
-$msg.get("curriki.crs.generatedcomment", [$ict, $ratingimg, $vtc, $vca, $vap, $comment])
+$msg.get("curriki.crs.generatedcomment", [$ict, "#displayCRSIcon(${date.time}, ${rating})", $vtc, $vca, $vap, $comment])
 #else
 $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $comment])
 #end
@@ -1464,6 +1471,7 @@ $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $commen
 #end
 </div>
 </div>
+$xwiki.addTooltipJS()
 #end
 #end
 #end
