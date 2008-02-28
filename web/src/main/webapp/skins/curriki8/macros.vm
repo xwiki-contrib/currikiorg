@@ -2258,6 +2258,11 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 <div class="hidden">
 <input type="hidden" name="xredirect" value="$logredir" /></div>
 #xwikimessageboxstart($msg.get("login") "")
+#set($message = $msg.get($xwiki.parseMessage()))
+#if($message)
+## errors for the previous login
+#error($message)
+#end
 <table class="xwikilogintable" summary="$msg.get("loginform")">
 <tr><th><label for="j_username">$msg.get("username"):</label></th>
 <td><input type="text" id="j_username" name="j_username" value=""/></td></tr>
