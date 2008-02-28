@@ -1536,7 +1536,7 @@ $xwiki.addTooltipJS()
 <div class="asset-content-footer">
 <div class="asset-content-footer-bordered">
 <a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.comments.size()])</a> #sep()
-## <a href="#">$msg.get("caption.sendToAFriend")</a> #sep()
+<a href="$currDoc.getURL("view", "bc=$!request.bc")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a> #sep()
 <a href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.linkToThePage")</a> #sep()
 #displaylinks($currDoc)
 </div> ##content-footer-bordered
