@@ -1,5 +1,9 @@
 #if($context.getMode()==0)
-#includeInContext("STAF.Dialog")
+## Send to a friend dialog
+## includeInContext doesn't work from vm files -- adds extra {pre}{/pre} items
+## #includeInContext("STAF.Dialog")
+#template('staf.vm')
+## End Send to a friend dialog
 </div>## xwikimaincontainerinner
 </div>## xwikimaincontainer
 #if("$!footerJScript" != "")

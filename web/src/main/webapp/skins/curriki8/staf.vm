@@ -1,0 +1,120 @@
+<div id="staf" class="frame send-a-friend" style="display: none;">
+<div class="titleheader titleheader-blue">
+<h3>$msg.get('staf.dialog.title')</h3>
+</div>
+<div id="staferr" style="display: none;" class="errormessage">
+</div>
+<form id="stafform" class="frame-content">
+<input type="hidden" id="stafresource" name="resource" value="$xwiki.getURL($doc.getFullName())" />
+<label class="top-label">$msg.get('staf.dialog.recipients')</label>
+<p class="explanatory">$msg.get('staf.dialog.recipients.comments')</p>
+<textarea id="stafrecipients" name="recipients"></textarea>
+
+<label>$msg.get('staf.dialog.customize')</label>
+<textarea id="stafcomment" name="comment">$msg.get('staf.dialog.customize.default')</textarea>
+<textarea id="stafcommentdefault" name="defaultcomment" style="display: none;">$msg.get('staf.dialog.customize.default')</textarea>
+
+<label>$msg.get('staf.dialog.yourname')</label>
+#set($userDoc = $xwiki.getDocument($context.user))
+#set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
+#set($name1 = $!userObj.getProperty("first_name").getValue())
+#set($name2 = $!userObj.getProperty("last_name").getValue())
+#set($name = "$!name1 $!name2")
+<input type="text" id="staffromname" name="fromname" maxlength="64" value="$name" />
+<input type="hidden" id="staffromnamedefault" name="defaultfromname" maxlength="64" value="$name" />
+
+<p><input type="checkbox" id="ccme" name="ccme" /> $msg.get('staf.dialog.ccme')</p>
+<strong>$msg.get('staf.dialog.youremail')</strong>
+#set($email = $!userObj.getProperty("email").getValue())
+$!email
+
+<p>$msg.get('staf.dialog.privacy')<p>
+<div class="button-links">
+<button class="button button-grey" onclick="stafCancel(); return false;">$msg.get('staf.dialog.cancel')</button>  <button class="button button-orange" onclick="stafSend(); return false;">$msg.get('staf.dialog.send')</button>
+</div>
+</form>
+</div>
+{pre}
+<script type="text/javascript">
+function stafShow(resource){
+	$('stafresource').value = resource;
+	$('staf').show();
+	if (window.urchinTracker){
+		urchinTracker('/features/staf/opened');
+	}
+}
+
+function stafCancel(){
+	var checkCancel = false;
+	var doCancel = true;
+	if ($('stafrecipients').value != '') {
+		checkCancel = true;
+	}
+	if ($('stafcomment').value != $('stafcommentdefault').value) {
+		checkCancel = true;
+	}
+	if ($('staffromname').value != $('staffromnamedefault').value) {
+		checkCancel = true;
+	}
+	if (checkCancel) {
+		doCancel = confirm("$msg.get('staf.dialog.shouldcancel')");
+	}
+	if (doCancel) {
+		$('staf').hide();
+		$('stafrecipients').value = '';
+		$('stafcomment').value = $('stafcommentdefault').value;
+		$('staffromname').value = $('staffromnamedefault').value;
+		if (window.urchinTracker){
+			urchinTracker('/features/staf/cancel/cancelled');
+		}
+	} else {
+		if (window.urchinTracker){
+			urchinTracker('/features/staf/cancel/notcancelled');
+		}
+	}
+}
+
+function stafSend(){
+	new Ajax.Request('$xwiki.getURL('STAF.SendMessage', 'view', 'xpage=plain')', {
+		method: 'post',
+		parameters: $('stafform').serialize(true),
+		onSuccess: function(transport, json){
+			if (json) {
+				if (json.err){
+					$('staferr').innerHTML = json.err;
+					$('staferr').show();
+					if (window.urchinTracker){
+						urchinTracker('/features/staf/corrections_needed');
+					}
+				} else if (json.ok) {
+					if (window.urchinTracker){
+						urchinTracker('/features/staf/sent/'+$('stafresource').value);
+					}
+					alert("$msg.get('staf.sent.okaymsg')");
+					$('staf').hide();
+					$('stafrecipients').value = '';
+					$('stafcomment').value = $('stafcommentdefault').value;
+					$('staffromname').value = $('staffromnamedefault').value;
+				} else {
+					if (window.urchinTracker){
+						urchinTracker('/features/staf/error/novalue');
+					}
+					alert("$msg.get('staf.sent.errored')");
+				}
+			} else {
+				if (window.urchinTracker){
+					urchinTracker('/features/staf/error/nojson');
+				}
+				alert("$msg.get('staf.sent.errored')");
+			}
+		},
+		onFailure: function(){
+			if (window.urchinTracker){
+				urchinTracker('/features/staf/error/failed');
+			}
+			alert("$msg.get('staf.sent.errored')");
+		}
+	});
+}
+</script>
+{/pre}
