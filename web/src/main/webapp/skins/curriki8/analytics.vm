@@ -1,0 +1,37 @@
+#set($GA_uacct = $xwiki.getXWiki().Param('curriki.system.GA', '0'))
+#if($GA_uacct != "0") ## {
+<script type="text/javascript">
+//<![CDATA[
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+#set($cookies = $request.getCookies())
+#foreach($cookie in $cookies) ##{
+#if($cookie.name == '__utmv') ##{
+#set($utmv = $cookie.value)
+#end ##}
+#end ##}
+#if($hasGlobalAdmin) ##{
+#if("$!utmv" != "Admin") ##{
+#set($set__utmv = 'Admin')
+#end ##}
+#else ## }{
+#if(!$isguest && "$!utmv" == "") ##{
+#set($set__utmv = 'Member')
+#end ##}
+#end ##}
+var pageTracker = _gat._getTracker("$GA_uacct");
+pageTracker._initData();
+#if("$!set__utmv" != "") ##{
+pageTracker._setVar('${set__utmv}');
+#end ##}
+pageTracker._trackPageview();
+#if("$!request.staf" == "1") ##{
+pageTracker._trackPageview('/features/staf/referred/'+window.location);
+#end ##}
+//]]>
+</script>
+#end ##}

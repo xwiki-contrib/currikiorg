@@ -9,11 +9,11 @@
 <label class="top-label">$msg.get('staf.dialog.recipients')</label>
 <p class="explanatory">$msg.get('staf.dialog.recipients.comments')</p>
 <textarea id="stafrecipients" name="recipients"></textarea>
-
+<br />
 <label>$msg.get('staf.dialog.customize')</label>
 <textarea id="stafcomment" name="comment">$msg.get('staf.dialog.customize.default')</textarea>
 <textarea id="stafcommentdefault" name="defaultcomment" style="display: none;">$msg.get('staf.dialog.customize.default')</textarea>
-
+<br />
 <label>$msg.get('staf.dialog.yourname')</label>
 #set($userDoc = $xwiki.getDocument($context.user))
 #set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
@@ -22,12 +22,12 @@
 #set($name = "$!name1 $!name2")
 <input type="text" id="staffromname" name="fromname" maxlength="64" value="$name" />
 <input type="hidden" id="staffromnamedefault" name="defaultfromname" maxlength="64" value="$name" />
-
+<br />
 <p><input type="checkbox" id="ccme" name="ccme" /> $msg.get('staf.dialog.ccme')</p>
 <strong>$msg.get('staf.dialog.youremail')</strong>
 #set($email = $!userObj.getProperty("email").getValue())
 $!email
-
+<br />
 <p>$msg.get('staf.dialog.privacy')<p>
 <div class="button-links">
 <button class="button button-grey" onclick="stafCancel(); return false;">$msg.get('staf.dialog.cancel')</button>  <button class="button button-orange" onclick="stafSend(); return false;">$msg.get('staf.dialog.send')</button>
@@ -38,6 +38,14 @@ $!email
 function addOverlay(){
 	var d=document.createElement('div');
 	d.setAttribute('id', 'washout');
+	d.setAttribute('class',"tk-GlassPanel");
+	d.style.display = "block";
+	d.style.position = "absolute";
+	d.style.cursor = "not-allowed";
+	d.style.top = "0px";
+	d.style.left = "0px";
+	d.style.width = $('body').offsetWidth+"px";
+	d.style.height = ($('body').offsetHeight+25)+"px";
 	$('body').appendChild(d);
 }
 
@@ -49,8 +57,8 @@ function stafShow(resource){
 	addOverlay();
 	$('stafresource').value = resource;
 	$('staf').show();
-	if (window.urchinTracker){
-		urchinTracker('/features/staf/opened');
+	if (window.pageTracker){
+		pageTracker._trackPageview('/features/staf/opened');
 	}
 }
 
@@ -75,12 +83,12 @@ function stafCancel(){
 		$('stafrecipients').value = '';
 		$('stafcomment').value = $('stafcommentdefault').value;
 		$('staffromname').value = $('staffromnamedefault').value;
-		if (window.urchinTracker){
-			urchinTracker('/features/staf/cancel/cancelled');
+		if (window.pageTracker){
+			pageTracker._trackPageview('/features/staf/cancel/cancelled');
 		}
 	} else {
-		if (window.urchinTracker){
-			urchinTracker('/features/staf/cancel/notcancelled');
+		if (window.pageTracker){
+			pageTracker._trackPageview('/features/staf/cancel/notcancelled');
 		}
 	}
 }
@@ -94,12 +102,12 @@ function stafSend(){
 				if (json.err){
 					$('staferr').innerHTML = json.err;
 					$('staferr').show();
-					if (window.urchinTracker){
-						urchinTracker('/features/staf/corrections_needed');
+					if (window.pageTracker){
+						pageTracker._trackPageview('/features/staf/corrections_needed');
 					}
 				} else if (json.ok) {
-					if (window.urchinTracker){
-						urchinTracker('/features/staf/sent/'+$('stafresource').value);
+					if (window.pageTracker){
+						pageTracker._trackPageview('/features/staf/sent/'+$('stafresource').value);
 					}
 					alert("$msg.get('staf.sent.okaymsg')");
 					$('staf').hide();
@@ -108,21 +116,21 @@ function stafSend(){
 					$('stafcomment').value = $('stafcommentdefault').value;
 					$('staffromname').value = $('staffromnamedefault').value;
 				} else {
-					if (window.urchinTracker){
-						urchinTracker('/features/staf/error/novalue');
+					if (window.pageTracker){
+						pageTracker._trackPageview('/features/staf/error/novalue');
 					}
 					alert("$msg.get('staf.sent.errored')");
 				}
 			} else {
-				if (window.urchinTracker){
-					urchinTracker('/features/staf/error/nojson');
+				if (window.pageTracker){
+					pageTracker._trackPageview('/features/staf/error/nojson');
 				}
 				alert("$msg.get('staf.sent.errored')");
 			}
 		},
 		onFailure: function(){
-			if (window.urchinTracker){
-				urchinTracker('/features/staf/error/failed');
+			if (window.pageTracker){
+				pageTracker._trackPageview('/features/staf/error/failed');
 			}
 			alert("$msg.get('staf.sent.errored')");
 		}

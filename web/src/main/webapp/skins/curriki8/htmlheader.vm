@@ -22,17 +22,9 @@ $title
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
 $!xwiki.getWebPreference("meta")
-#set($GA_uacct = $xwiki.getXWiki().Param('curriki.system.GA', '0'))
-#if($GA_uacct != "0")
-<script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct = "$GA_uacct";
-urchinTracker();
-</script>
-#end
+#template("analytics.vm")
 #template("stylesheets.vm")
-<meta http-equiv="imagetoolbar" content="no"/>
+<meta http-equiv="imagetoolbar" content="no" />
 <script type="text/javascript" src="$xwiki.getSkinFile("skin.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("rico/prototype.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("rico/rico.js")"></script>
