@@ -61,8 +61,9 @@ public class ReviewColumn extends ResultsColumn implements Viewer
 
         if (value.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS) != null){
             value.use(Constants.CURRIKI_REVIEW_STATUS_CLASS);
-            if (value.get(Constants.CURRIKI_REVIEW_STATUS_STATUS) != null){
-                rating = String.valueOf(value.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS));
+            Object status = value.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS);
+            if (status != null){
+                rating = String.valueOf(status);
             }
         }
 
