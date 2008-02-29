@@ -34,9 +34,19 @@ $!email
 </div>
 </form>
 </div>
-{pre}
 <script type="text/javascript">
+function addOverlay(){
+	var d=document.createElement('div');
+	d.setAttribute('id', 'washout');
+	$('body').appendChild(d);
+}
+
+function removeOverlay(){
+	$('body').removeChild($('washout'));
+}
+
 function stafShow(resource){
+	addOverlay();
 	$('stafresource').value = resource;
 	$('staf').show();
 	if (window.urchinTracker){
@@ -61,6 +71,7 @@ function stafCancel(){
 	}
 	if (doCancel) {
 		$('staf').hide();
+		removeOverlay();
 		$('stafrecipients').value = '';
 		$('stafcomment').value = $('stafcommentdefault').value;
 		$('staffromname').value = $('staffromnamedefault').value;
@@ -92,6 +103,7 @@ function stafSend(){
 					}
 					alert("$msg.get('staf.sent.okaymsg')");
 					$('staf').hide();
+					removeOverlay();
 					$('stafrecipients').value = '';
 					$('stafcomment').value = $('stafcommentdefault').value;
 					$('staffromname').value = $('staffromnamedefault').value;
@@ -117,4 +129,3 @@ function stafSend(){
 	});
 }
 </script>
-{/pre}
