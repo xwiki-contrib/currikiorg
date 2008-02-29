@@ -70,10 +70,10 @@ public class CurrikiSpace extends SpaceImpl {
              	errors.put( this.VALIDATION_TITLE_LONG, "1" );
 				
 			//valid characters in title
-            Pattern pt = Pattern.compile("([ a-zA-Z0-9\\-\\_\\+\\,\\.\\?\\!\\@\\$\\&\\*\\(\\)]*)");
+            /*Pattern pt = Pattern.compile("([ a-zA-Z0-9\\-\\_\\+\\,\\.\\?\\!\\@\\$\\&\\*\\(\\)]*)");
 			Matcher mt = pt.matcher(title);
             if( !mt.matches() )
-            	errors.put( this.VALIDATION_TITLE_INVALID, "1" );
+            	errors.put( this.VALIDATION_TITLE_INVALID, "1" );*/
 
             //existance of a group with this name
             // this won't work because we manage space name uniqueness
