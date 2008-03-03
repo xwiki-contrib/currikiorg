@@ -11,6 +11,7 @@ $msg.get("accountdisabled")
 #set($junk = $allowList.add("Registration.EmailVerification"))
 #set($junk = $allowList.add("Registration.EmailVerificationSent"))
 #set($junk = $allowList.add("Registration.EmailVerified"))
+#set($junk = $allowList.add("Registration.EmailNotReceived"))
 #if($allowList.contains($doc.fullName)) ## {
 $xwiki.includeForm($doc.fullName, false)
 #else ## }{
