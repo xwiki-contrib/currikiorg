@@ -14,23 +14,6 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 ###
 ###
 #template("startpage.vm")
-##
-## If the user is inactive + bounced email then go to email verification
-#set($username = $request.getParameter("j_username"))
-## Check for inactive due to bounced email
-#set($userdoc = $xwiki.getDocument("XWiki.${username}"))
-#if(!$userdoc.isNew()) ## {
-#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
-#set($active = $!userobj.getProperty('active').value)
-#set($undeliv = $!userobj.getProperty('email_undeliverable').value)
-#if("$!active" == "0" && "$!undeliv" == "1") ## {
-#set($session = $request.getSession(true))
-#set($junk = $session.putValue("EVuser", "${username}"))
-$response.sendRedirect($xwiki.getURL("Registration.EmailVerification"))
-#end ## }
-#end ## }
-##
-##
 #set($logredir = "${!request.xredirect}")
 #loginbox($logredir)
 #template("endpage.vm")

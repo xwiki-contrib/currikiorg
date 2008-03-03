@@ -1,0 +1,40 @@
+#template("xwiki.vm")
+#template("httpheader.vm")
+#template("header.vm")
+#template("baseheader.vm")
+<div id="xwikicontent">
+#if ($cause == "disabled") ## {
+$msg.get("accountdisabled")
+#else ## }{
+## Is this a page we want to load?
+#set($allowList = $xwiki.arrayList)
+#set($junk = $allowList.add("Registration.EmailVerification"))
+#set($junk = $allowList.add("Registration.EmailVerificationSent"))
+#set($junk = $allowList.add("Registration.EmailVerified"))
+#if($allowList.contains($doc.fullName)) ## {
+$xwiki.includeForm($doc.fullName, false)
+#else ## }{
+## Account not active -- why?  1. New, 2. Disabled due to undeliverable email
+#set($userDoc = $xwiki.getDocument($context.user))
+#set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
+#set($active = $!userObj.getProperty('active').value)
+#set($undeliv = $!userObj.getProperty('email_undeliverable').value)
+#if("$!active" == "0" && "$!undeliv" == "1") ## {
+$response.sendRedirect($xwiki.getURL("Registration.EmailVerification"))
+#else ## }{
+$msg.get("accountnotactive")
+<br />
+$msg.get("accountnotactive_email")
+<br />
+#set($confirmdoc = $xwiki.getDocument("XWiki.RegisterNewUserConfirmation")) 
+<form action="$confirmdoc.getURL("view")" method="post">
+<input type="hidden" name="xwikiname" value="$context.user" />
+<input type="text" name="validkey" size="16" />
+<input type="submit" value="$msg.get("confirmaccount")" />
+</form>
+#end ## }
+#end ## }
+#end ## }
+</div>
+#template("basefooter.vm")
+#template("footer.vm")
