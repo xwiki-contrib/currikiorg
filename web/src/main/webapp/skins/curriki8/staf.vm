@@ -35,10 +35,48 @@ $!email
 </form>
 </div>
 <script type="text/javascript">
+var windowState = (function(){
+	var readScroll = {scrollLeft:0,scrollTop:0};
+	var readSize = {clientWidth:0,clientHeight:0};
+	var readScrollX = 'scrollLeft';
+	var readScrollY = 'scrollTop';
+	var readWidth = 'clientWidth';
+	var readHeight = 'clientHeight';
+	function otherWindowTest(obj){
+		if((document.compatMode) && (document.compatMode == 'CSS1Compat') && (document.documentElement)){
+			return document.documentElement;
+		} else if(document.body) {
+			return document.body;
+		} else {
+			return obj;
+		}
+	};
+	if((typeof this.innerHeight == 'number') && (typeof this.innerWidth == 'number')){
+		readSize = this;
+		readWidth = 'innerWidth';
+		readHeight = 'innerHeight';
+	} else {
+		readSize = otherWindowTest(readSize);
+	}
+	if((typeof this.pageYOffset == 'number') && (typeof this.pageXOffset == 'number')){
+		readScroll = this;
+		readScrollY = 'pageYOffset';
+		readScrollX = 'pageXOffset';
+	} else {
+		readScroll = otherWindowTest(readScroll);
+	}
+	return {
+		getScrollX:function(){ return (readScroll[readScrollX]||0); },
+		getScrollY:function(){ return (readScroll[readScrollY]||0); },
+		getWidth:function(){ return (readSize[readWidth]||0); },
+		getHeight:function(){ return (readSize[readHeight]||0); }
+	};
+})();
+
 function addOverlay(){
 	var d=document.createElement('div');
-	d.setAttribute('id', 'washout');
-	d.setAttribute('class',"tk-GlassPanel");
+	d.setAttribute('id', "washout");
+	d.setAttribute('class', "tk-GlassPanel");
 	d.style.display = "block";
 	d.style.position = "absolute";
 	d.style.cursor = "not-allowed";
@@ -55,11 +93,23 @@ function removeOverlay(){
 
 function stafShow(resource){
 	addOverlay();
+	$('body').appendChild($('staf'));
 	$('stafresource').value = resource;
 	$('staf').show();
+  var hPos = Math.round(windowState.getScrollX()+((windowState.getWidth()-$('staf').offsetWidth)/2));
+  var vPos = Math.round(windowState.getScrollY()+((windowState.getHeight()-$('staf').offsetHeight)/2));
+  hPos = (hPos < 0)?0:hPos;
+  vPos = (vPos < 0)?0:vPos;
+  $('staf').style.width = hPos+"px";
+  $('staf').style.height = vPos+"px";
 	if (window.pageTracker){
 		pageTracker._trackPageview('/features/staf/opened');
 	}
+}
+
+function stafHide(){
+	$('staf').hide();
+	removeOverlay();
 }
 
 function stafCancel(){
@@ -78,8 +128,7 @@ function stafCancel(){
 		doCancel = confirm("$msg.get('staf.dialog.shouldcancel')");
 	}
 	if (doCancel) {
-		$('staf').hide();
-		removeOverlay();
+		stafHide();
 		$('stafrecipients').value = '';
 		$('stafcomment').value = $('stafcommentdefault').value;
 		$('staffromname').value = $('staffromnamedefault').value;
@@ -110,8 +159,7 @@ function stafSend(){
 						pageTracker._trackPageview('/features/staf/sent/'+$('stafresource').value);
 					}
 					alert("$msg.get('staf.sent.okaymsg')");
-					$('staf').hide();
-					removeOverlay();
+					stafHide();
 					$('stafrecipients').value = '';
 					$('stafcomment').value = $('stafcommentdefault').value;
 					$('staffromname').value = $('staffromnamedefault').value;
