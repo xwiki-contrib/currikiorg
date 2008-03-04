@@ -171,7 +171,9 @@ public class CommentPage extends AbstractPage {
                         String vap = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_APPROPRIATEPEDAGOGY_PROPERTY);
                         String comment = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_COMMENT_PROPERTY);
                         String rating = (String) crsObj.getProperty(Constants.CURRIKI_REVIEW_RATING_PROPERTY);
-                        String ratingimg = Constants.SKIN_PATH + "crs" + rating + ".gif";
+                        String ratingTooltip = Main.getTranslation("curriki.crs.rating" + rating);
+                        String ratingImgSrc = Constants.SKIN_PATH + "crs" + rating + ".gif";
+                        String ratingimg = "<img src=\"" + ratingImgSrc + "\" height=\"48\" alt=\"" + ratingTooltip + "\" title=\"" + ratingTooltip + "\" />";
                         if ((rating==null)||(rating.equals("0"))) {
                             String[] args = {(ict==null) ? "" : ict, (vtc==null) ? "" : vtc, (vca==null) ? "" : vca, (vap==null) ? "" : vca, (comment==null) ? "" : comment};
                             HTML html = new HTML(Main.getSingleton().getTranslator().getTranslation("curriki.crs.generatedcommentunrated", args));
