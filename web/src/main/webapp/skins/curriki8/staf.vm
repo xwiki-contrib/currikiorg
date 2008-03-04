@@ -35,6 +35,7 @@ $!email
 </form>
 </div>
 <script type="text/javascript">
+/* <![CDATA[ */
 var windowState = (function(){
 	var readScroll = {scrollLeft:0,scrollTop:0};
 	var readSize = {clientWidth:0,clientHeight:0};
@@ -79,7 +80,6 @@ function addOverlay(){
 	d.setAttribute('class', "tk-GlassPanel");
 	d.style.display = "block";
 	d.style.position = "absolute";
-	d.style.cursor = "not-allowed";
 	d.style.top = "0px";
 	d.style.left = "0px";
 	d.style.width = $('body').offsetWidth+"px";
@@ -96,12 +96,12 @@ function stafShow(resource){
 	$('body').appendChild($('staf'));
 	$('stafresource').value = resource;
 	$('staf').show();
-  var hPos = Math.round(windowState.getScrollX()+((windowState.getWidth()-$('staf').offsetWidth)/2));
-  var vPos = Math.round(windowState.getScrollY()+((windowState.getHeight()-$('staf').offsetHeight)/2));
-  hPos = (hPos < 0)?0:hPos;
-  vPos = (vPos < 0)?0:vPos;
-  $('staf').style.width = hPos+"px";
-  $('staf').style.height = vPos+"px";
+	var hPos = Math.round(windowState.getScrollX()+((windowState.getWidth()-$('staf').offsetWidth)/2));
+	var vPos = Math.round(windowState.getScrollY()+((windowState.getHeight()-$('staf').offsetHeight)/2));
+	hPos = (hPos < 0)?0:hPos;
+	vPos = (vPos < 0)?0:vPos;
+	$('staf').style.left = hPos+"px";
+	$('staf').style.top = vPos+"px";
 	if (window.pageTracker){
 		pageTracker._trackPageview('/features/staf/opened');
 	}
@@ -184,4 +184,5 @@ function stafSend(){
 		}
 	});
 }
+/* ]]> */
 </script>
