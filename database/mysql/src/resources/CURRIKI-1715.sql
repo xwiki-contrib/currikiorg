@@ -9,10 +9,10 @@ REPLACE
  SELECT XWO_ID, 'active', 0
    FROM xwikiobjects
   WHERE XWO_CLASSNAME = 'XWiki.XWikiUsers'
-    AND XWO_ID IN (SELECT XWS_ID
+    AND XWO_ID IN (SELECT XWI_ID
                      FROM xwikiintegers
-                    WHERE XWS_NAME = 'email_undeliverable'
-                      AND XWS_VALUE = 1
+                    WHERE XWI_NAME = 'email_undeliverable'
+                      AND XWI_VALUE = 1
                   );
 
 INSERT IGNORE
