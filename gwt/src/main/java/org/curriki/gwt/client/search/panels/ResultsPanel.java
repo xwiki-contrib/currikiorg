@@ -153,6 +153,10 @@ public class ResultsPanel extends FlowPanel implements DoesSearch, ResultsRender
 
     public void clear(){
         g.clear();
+        int rows = g.getRowCount();
+        for (int i=1; i<rows; i++){
+            g.removeRow(1);
+        }
         curRow = 0;
         addHeadings();
     }
