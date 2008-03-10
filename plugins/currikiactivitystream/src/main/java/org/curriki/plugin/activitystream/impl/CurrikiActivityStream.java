@@ -105,15 +105,23 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 return;
             }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
-        } else if ((olddoc != null && olddoc.getObject("XWiki.ArticleClass") == null)
-            || (olddoc == null && "4.1".equals(newdoc.getVersion()))) {
-            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+        } else {
+            double version = Double.parseDouble(newdoc.getVersion());
+            double initialVersion = 4.1;
+            if ((olddoc != null && olddoc.getObject("XWiki.ArticleClass") == null)
+                || (olddoc == null && version == initialVersion)) {
+                event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            } else if (version < initialVersion) {
+                return;
+            }
         }
 
+        boolean notify = false;
         String level = "message";
         if ("commentadd".equals(context.getAction())) {
             event = XWikiDocChangeNotificationInterface.EVENT_NEW;
             level = "comment";
+            notify = true;
         }
 
         List params = new ArrayList();
@@ -130,13 +138,16 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
-                    sendUpdateNotification(newdoc.getSpace().substring("Messages_".length()),
-                        newdoc, context);
+                    notify = true;
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
+            }
+            if (notify) {
+                sendUpdateNotification(newdoc.getSpace().substring("Messages_".length()), newdoc,
+                    context);
             }
         } catch (Throwable e) {
             // Error in activity stream notify should be ignored but logged in the log file
@@ -165,13 +176,16 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             docTitle = olddoc.getTitle();
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
-            String initialVersion = "3.1";
+            double version = Double.parseDouble(newdoc.getVersion());
+            double initialVersion = 3.1;
             if (tag.getStringValue("tags").contains(DOCUMENTATION_FILE)) {
-                initialVersion = "4.1";
+                initialVersion = 4.1;
             }
             if ((olddoc != null && olddoc.getObject("XWiki.TagClass") == null)
-                || (olddoc == null && initialVersion.equals(newdoc.getVersion()))) {
+                || (olddoc == null && version == initialVersion)) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            } else if (version < initialVersion) {
+                return;
             }
         }
 
@@ -232,10 +246,11 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            if (version < 6.1) {
-                return;
-            } else if (version == 6.1) {
+            double initialVersion = 6.1;
+            if (version == initialVersion) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            } else if (version < initialVersion) {
+                return;
             }
         }
 
@@ -284,9 +299,15 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 return;
             }
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
-        } else if ((olddoc != null && olddoc.getObject("XWiki.SpaceUserProfileClass") == null)
-            || (olddoc == null && "2.1".equals(newdoc.getVersion()))) {
-            event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+        } else {
+            double version = Double.parseDouble(newdoc.getVersion());
+            double initialVersion = 2.1;
+            if ((olddoc != null && olddoc.getObject("XWiki.SpaceUserProfileClass") == null)
+                || (olddoc == null && version == initialVersion)) {
+                event = XWikiDocChangeNotificationInterface.EVENT_NEW;
+            } else if (version < initialVersion) {
+                return;
+            }
         }
 
         try {
