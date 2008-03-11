@@ -36,6 +36,9 @@
   #if($doc.web=='Main')
    #set($logredir = $xwiki.getURL("Members.WebHome"))
   #end
+  #if($doc.fullName=='Registration.EmailVerified')
+   #set($logredir = $xwiki.getURL("Members.WebHome"))
+  #end
 ##Login Form
 <div id="curriki-login-area">
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post">
