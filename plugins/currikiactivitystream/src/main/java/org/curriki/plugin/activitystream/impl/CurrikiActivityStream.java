@@ -177,10 +177,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            double initialVersion = 3.1;
-            if (tag.getStringValue("tags").contains(DOCUMENTATION_FILE)) {
-                initialVersion = 4.1;
-            }
+            double initialVersion = 4.1;
             if ((olddoc != null && olddoc.getObject("XWiki.TagClass") == null)
                 || (olddoc == null && version == initialVersion)) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
@@ -246,7 +243,11 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            double initialVersion = 6.1;
+            double initialVersion = 4.1;
+            if (newdoc.getObject("XWiki.CompositeAssetClass") != null) {
+                // curriculum collection
+                initialVersion = 6.1;
+            }
             if (version == initialVersion) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
             } else if (version < initialVersion) {
@@ -334,8 +335,6 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     activityEvent.setType(ActivityEventType.UPDATE);
                     addActivityEvent(activityEvent, newdoc, context);
-                    sendUpdateNotification(newdoc.getSpace().substring("UserProfiles_".length()),
-                        newdoc, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     // ignore
