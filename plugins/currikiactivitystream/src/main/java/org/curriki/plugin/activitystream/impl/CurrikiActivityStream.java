@@ -243,7 +243,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            double initialVersion = 4.1;
+            double initialVersion = 5.1;
             if (newdoc.getObject("XWiki.CompositeAssetClass") != null) {
                 // curriculum collection
                 initialVersion = 6.1;
