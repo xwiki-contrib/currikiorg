@@ -22,9 +22,9 @@
  */
 package org.curriki.gwt.client.search.columns;
 
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
-public class SortableColumnHeader extends Label implements SortableHeader
+public class SortableColumnHeader extends HTML implements SortableHeader
 {
     protected String sortBy;
 
