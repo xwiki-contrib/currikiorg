@@ -1615,7 +1615,12 @@ $xwiki.addTooltipJS()
 #mycurrikipage_button($userobj)
 #end ## }
 #if("$!pageref" == "blog") ## {
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+#set($subtitle = $msg.get("mycurriki.tab.${pageref}.noblog.subtitle", ["$userobj.first_name $userobj.last_name"]))
+#else ## }{
 #set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle", ["$userobj.first_name $userobj.last_name"]))
+#end ## }
 #else ## } {
 #set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
 #end ## }
