@@ -976,6 +976,9 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         // Remove comments from copied asset
         if (assetDoc.getObjects("XWiki.XWikiComments")!=null)
             assetDoc.getObjects("XWiki.XWikiComments").clear();
+        // Remove inherited CRS-reviews from copied asset
+        assetDoc.removeObjects(Constants.CURRIKI_REVIEW_CLASS);
+        assetDoc.removeObjects(Constants.CURRIKI_REVIEW_STATUS_CLASS);
         // Let's remove all attachements
         if (clearattachments) {
            assetDoc.setAttachmentList(new ArrayList());
