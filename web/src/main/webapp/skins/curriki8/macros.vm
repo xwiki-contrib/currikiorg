@@ -242,6 +242,8 @@ $msg.get($prop.name)#end
 #macro(normalizelink $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
 #set($link = $xwiki.getURL($link))
+#else
+#set($link = $context.util.escapeURL($link))
 #end
 #end
 ##
