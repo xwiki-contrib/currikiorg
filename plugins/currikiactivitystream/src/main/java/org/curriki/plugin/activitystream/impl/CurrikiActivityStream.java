@@ -178,6 +178,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
             double initialVersion = 4.1;
+            if (tag.getStringValue("tags").contains(DOCUMENTATION_WIKI)) {
+                initialVersion = 3.1;
+            }
             if ((olddoc != null && olddoc.getObject("XWiki.TagClass") == null)
                 || (olddoc == null && version == initialVersion)) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
