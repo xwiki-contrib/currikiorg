@@ -322,9 +322,12 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
     protected void setViewButtons(){
         clearButtons();
 
-
-        // We show the edit button either if document is editable or if asset is a template and the parent one isn't (which means we should automatically duplicate
-        if (isEditable()||(item.getItem().getDocument().isCurrikiTemplate()&&!item.getItem().getDocument().isParentCurrikiTemplate())) {
+        boolean isTemplate = item.getItem().getDocument().isCurrikiTemplate();
+        boolean hasTemplateParent = item.getItem().getDocument().isParentCurrikiTemplate();
+        // We show the edit button either if document is editable or if asset is a template and the
+        // parent one isn't (which means we should automatically duplicate)
+        if ((isEditable() && (!isTemplate || hasTemplateParent))
+            || (isTemplate && !hasTemplateParent && !isLicenceProtected())) {
             if (isComposite()) {
                 buttonPanel.add(editCompBt);
             } else {

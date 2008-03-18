@@ -192,8 +192,8 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
         User user = Main.getSingleton().getUser();
         final boolean isTemplateUser = Constants.TEMPLATES_USER.equals(user.getName());
 
-        if (doc.isCurrikiTemplate()&&!doc.isParentCurrikiTemplate()) {
-            // We are currently on a template document
+        if (doc.isCurrikiTemplate() && !doc.isParentCurrikiTemplate()) {
+            // We are currently on a template document, which is not license protected
             if (isTemplateUser) {
                 // If the user is the template user then we should give the choice between editing and duplicating
                 proposeDialog = Constants.PROPOSE_DUPLICATE_TEMPLATE;
@@ -207,7 +207,9 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
             // we are on a standard documet
             // If the creator is not the current user then we don't want to go directly in edit mode
             // We might want to want to duplicate the document to your collection..
-            proposeDialog = Constants.PROPOSE_DUPLICATE_EDIT;
+            if (!doc.isLicenceProtected()) {
+                proposeDialog = Constants.PROPOSE_DUPLICATE_EDIT;
+            }
         }
         // In all other case we just go in edit mode on the asset
 
