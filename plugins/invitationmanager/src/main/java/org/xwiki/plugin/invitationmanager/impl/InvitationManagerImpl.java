@@ -72,9 +72,9 @@ public class InvitationManagerImpl implements InvitationManager
 
     public static final String MEMBERSHIP_REQUEST_VELOCITY_KEY = "membershiprequest";
 
-    public static final String INVITATION_CLASS_NAME =  "XWiki.InvitationClass";
+    public static final String INVITATION_CLASS_NAME = "XWiki.InvitationClass";
 
-    public static final String MEMBERSHIP_REQUEST_CLASS_NAME =  "XWiki.MembershipRequestClass";
+    public static final String MEMBERSHIP_REQUEST_CLASS_NAME = "XWiki.MembershipRequestClass";
 
     private boolean mailNotification = true;
 
@@ -87,7 +87,7 @@ public class InvitationManagerImpl implements InvitationManager
         throws InvitationManagerException
     {
         try {
-            Invitation invitation = getInvitation(space, encodeEmailAddress(email), context);
+            Invitation invitation = getInvitation(space, email, context);
             if (code.equals(invitation.getCode())
                 && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
                 if (!invitation.isOpen()) {
@@ -114,20 +114,22 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
      */
-    public boolean verifyInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
+    public boolean verifyInvitation(String space, String email, String code, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
-            Invitation invitation = getInvitation(space, encodeEmailAddress(email), context);
+            Invitation invitation = getInvitation(space, email, context);
             if (code.equals(invitation.getCode())
-                    && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
+                && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
                 return true;
             } else {
                 return false;
             }
         } catch (XWikiException e) {
-                return false;
+            return false;
         }
     }
 
@@ -166,20 +168,22 @@ public class InvitationManagerImpl implements InvitationManager
         }
     }
 
-     /**
-         * {@inheritDoc}
-         * 
-         * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
-         */
-    public boolean verifyInvitation(String space, XWikiContext context) throws InvitationManagerException {
+    /**
+     * {@inheritDoc}
+     * 
+     * @see InvitationManager#acceptInvitation(String, String, String, XWikiContext)
+     */
+    public boolean verifyInvitation(String space, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
             Invitation invitation = getInvitation(space, context.getUser(), context);
-            if ((invitation!=null)&&(invitation.getStatus().equals(JoinRequestStatus.SENT)))
+            if ((invitation != null) && (invitation.getStatus().equals(JoinRequestStatus.SENT)))
                 return true;
             else
                 return false;
         } catch (XWikiException e) {
-                return false;
+            return false;
         }
     }
 
@@ -247,8 +251,7 @@ public class InvitationManagerImpl implements InvitationManager
         throws InvitationManagerException
     {
         try {
-            Invitation invitation =
-                getInvitation(space, getInvitee(userNameOrMail, context), context);
+            Invitation invitation = getInvitation(space, userNameOrMail, context);
             if (invitation.getStatus().equals(JoinRequestStatus.SENT)) {
                 invitation.setStatus(JoinRequestStatus.CANCELLED);
                 invitation.saveWithProgrammingRights();
@@ -260,10 +263,12 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#cancelMembershipRequest(String, XWikiContext)
      */
-    public void cancelMembershipRequest(String space, XWikiContext context) throws InvitationManagerException {
+    public void cancelMembershipRequest(String space, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
             MembershipRequest request = getMembershipRequest(space, context.getUser(), context);
             if (request.getStatus().equals(JoinRequestStatus.SENT)) {
@@ -277,7 +282,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(int, int, int, XWikiContext)
      */
     public List getInvitations(int status, int start, int count, XWikiContext context)
@@ -291,38 +296,41 @@ public class InvitationManagerImpl implements InvitationManager
         }
     }
 
-    public void initClasses(XWikiContext context) throws XWikiException {
+    public void initClasses(XWikiContext context) throws XWikiException
+    {
         getInvitationClass(context);
         getMembershipRequestClass(context);
     }
 
     /**
-     *
      * @param context Xwiki context
      * @return Returns the Invitation Class as defined by the extension
      * @throws XWikiException
      */
-    protected BaseClass getInvitationClass(XWikiContext context) throws XWikiException {
+    protected BaseClass getInvitationClass(XWikiContext context) throws XWikiException
+    {
         String className = getInvitationClassName();
         String classContent = "1 XWiki Invitation Class";
 
         return getJoinRequestClass(className, classContent, context);
     }
 
-       /**
-     *
+    /**
      * @param context Xwiki context
      * @return Returns the Membership Class as defined by the extension
      * @throws XWikiException
      */
-    protected BaseClass getMembershipRequestClass(XWikiContext context) throws XWikiException {
+    protected BaseClass getMembershipRequestClass(XWikiContext context) throws XWikiException
+    {
         String className = getMembershipRequestClassName();
         String classContent = "1 XWiki Membership Request Class";
 
         return getJoinRequestClass(className, classContent, context);
     }
 
-    private BaseClass getJoinRequestClass(String className, String classContent, XWikiContext context) throws XWikiException {
+    private BaseClass getJoinRequestClass(String className, String classContent,
+        XWikiContext context) throws XWikiException
+    {
         XWikiDocument doc;
         com.xpn.xwiki.XWiki xwiki = context.getWiki();
         boolean needsUpdate = false;
@@ -338,23 +346,36 @@ public class InvitationManagerImpl implements InvitationManager
         BaseClass bclass = doc.getxWikiClass();
         bclass.setName(className);
 
-        needsUpdate |= bclass.addDateField(JoinRequestImpl.JoinRequestFields.REQUEST_DATE, "Request Date");
-        needsUpdate |= bclass.addDateField(JoinRequestImpl.JoinRequestFields.RESPONSE_DATE, "Response Date");
-        needsUpdate |= bclass.addTextAreaField(JoinRequestImpl.JoinRequestFields.TEXT, "Text", 80, 10);
-        needsUpdate |= bclass.addTextAreaField(JoinRequestImpl.JoinRequestFields.MAP, "Map", 80, 10);
+        needsUpdate |=
+            bclass.addDateField(JoinRequestImpl.JoinRequestFields.REQUEST_DATE, "Request Date");
+        needsUpdate |=
+            bclass.addDateField(JoinRequestImpl.JoinRequestFields.RESPONSE_DATE, "Response Date");
+        needsUpdate |=
+            bclass.addTextAreaField(JoinRequestImpl.JoinRequestFields.TEXT, "Text", 80, 10);
+        needsUpdate |=
+            bclass.addTextAreaField(JoinRequestImpl.JoinRequestFields.MAP, "Map", 80, 10);
         needsUpdate |= bclass.addTextField(JoinRequestImpl.JoinRequestFields.SPACE, "Space", 32);
-        needsUpdate |= bclass.addStaticListField(JoinRequestImpl.JoinRequestFields.STATUS, "Status", 1, false, "0=none|1=created|2=sent|3=accepted|4=refused|5=cancelled","select");
-        needsUpdate |= bclass.addDBListField(JoinRequestImpl.JoinRequestFields.ROLES, "Roles", 5, true, "");
+        needsUpdate |=
+            bclass.addStaticListField(JoinRequestImpl.JoinRequestFields.STATUS, "Status", 1,
+                false, "0=none|1=created|2=sent|3=accepted|4=refused|5=cancelled", "select");
+        needsUpdate |=
+            bclass.addDBListField(JoinRequestImpl.JoinRequestFields.ROLES, "Roles", 5, true, "");
 
         if (className.equals(getInvitationClassName())) {
             needsUpdate |= bclass.addTextField(InvitationImpl.InvitationFields.CODE, "Code", 40);
-            needsUpdate |= bclass.addTextField(InvitationImpl.InvitationFields.INVITEE, "Invitee", 40);
-            needsUpdate |= bclass.addTextField(InvitationImpl.InvitationFields.INVITEE, "Inviter", 40);
-            needsUpdate |= bclass.addBooleanField(InvitationImpl.InvitationFields.OPEN, "Open", "yesno");
-        }
-        else if (className.equals(getMembershipRequestClassName())) {
-            needsUpdate |= bclass.addTextField(MembershipRequestImpl.MembershipRequestFields.REQUESTER, "Requester", 40);
-            needsUpdate |= bclass.addTextField(MembershipRequestImpl.MembershipRequestFields.RESPONDER, "Responder", 40);
+            needsUpdate |=
+                bclass.addTextField(InvitationImpl.InvitationFields.INVITEE, "Invitee", 40);
+            needsUpdate |=
+                bclass.addTextField(InvitationImpl.InvitationFields.INVITEE, "Inviter", 40);
+            needsUpdate |=
+                bclass.addBooleanField(InvitationImpl.InvitationFields.OPEN, "Open", "yesno");
+        } else if (className.equals(getMembershipRequestClassName())) {
+            needsUpdate |=
+                bclass.addTextField(MembershipRequestImpl.MembershipRequestFields.REQUESTER,
+                    "Requester", 40);
+            needsUpdate |=
+                bclass.addTextField(MembershipRequestImpl.MembershipRequestFields.RESPONDER,
+                    "Responder", 40);
         }
 
         String content = doc.getContent();
@@ -368,10 +389,9 @@ public class InvitationManagerImpl implements InvitationManager
         return bclass;
     }
 
-
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(int, int, XWikiContext)
      */
     public List getInvitations(int start, int count, XWikiContext context)
@@ -381,7 +401,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(int, XWikiContext)
      */
     public List getInvitations(int status, XWikiContext context)
@@ -391,7 +411,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(Invitation, int, int, XWikiContext)
      */
     public List getInvitations(Invitation prototype, int start, int count, XWikiContext context)
@@ -399,10 +419,10 @@ public class InvitationManagerImpl implements InvitationManager
         try {
             String className = getInvitationClassName();
             StringBuffer fromClause =
-                    new StringBuffer("from XWikiDocument as doc, BaseObject as obj");
+                new StringBuffer("from XWikiDocument as doc, BaseObject as obj");
             StringBuffer whereClause =
-                    new StringBuffer("where doc.fullName=obj.name and obj.className = '" + className
-                            + "'");
+                new StringBuffer("where doc.fullName=obj.name and obj.className = '" + className
+                    + "'");
 
             String space = prototype.getSpace();
             String invitee = prototype.getInvitee();
@@ -418,21 +438,22 @@ public class InvitationManagerImpl implements InvitationManager
             } else if (!"".equals(space)) {
                 fromClause.append(", StringProperty as space");
                 whereClause
-                        .append(" and obj.id=space.id.id and space.id.name='"
-                                + InvitationImpl.InvitationFields.SPACE + "' and space.value='" + space
-                                + "'");
+                    .append(" and obj.id=space.id.id and space.id.name='"
+                        + InvitationImpl.InvitationFields.SPACE + "' and space.value='" + space
+                        + "'");
             } else if (!"".equals(invitee)) {
                 fromClause.append(" StringProperty as invitee");
                 whereClause.append(" and obj.id=invitee.id.id and invitee.id.name='"
-                        + InvitationImpl.InvitationFields.INVITEE + "' and invitee.value='" + invitee
-                        + "'");
+                    + InvitationImpl.InvitationFields.INVITEE + "' and invitee.value='" + invitee
+                    + "'");
             }
 
             String status = prototype.getStatus();
             if (!status.equals(JoinRequestStatus.ANY)) {
                 fromClause.append(", StringProperty as status");
                 whereClause.append(" and obj.id=status.id.id and status.id.name='"
-                        + InvitationImpl.InvitationFields.STATUS + "' and status.value='" + status + "'");
+                    + InvitationImpl.InvitationFields.STATUS + "' and status.value='" + status
+                    + "'");
             }
 
             List roles = prototype.getRoles();
@@ -440,33 +461,36 @@ public class InvitationManagerImpl implements InvitationManager
                 String role = (String) prototype.getRoles().get(0);
                 fromClause.append(", DBStringListProperty as roles join roles.list as role");
                 whereClause.append(" and obj.id=roles.id.id and roles.id.name='"
-                        + InvitationImpl.InvitationFields.ROLES + "' and instr(role.id, '" + role
-                        + "')>0");
+                    + InvitationImpl.InvitationFields.ROLES + "' and instr(role.id, '" + role
+                    + "')>0");
             }
 
             String inviter = prototype.getInviter();
             if (!"".equals(inviter)) {
                 fromClause.append(" StringProperty as inviter");
                 whereClause.append(" and obj.id=inviter.id.id and inviter.id.name='"
-                        + InvitationImpl.InvitationFields.INVITER + "' and inviter.value='" + inviter
-                        + "'");
+                    + InvitationImpl.InvitationFields.INVITER + "' and inviter.value='" + inviter
+                    + "'");
             }
 
             String sql =
-                    "select distinct doc.fullName " + fromClause.toString() + " " + whereClause.toString();
+                "select distinct doc.fullName " + fromClause.toString() + " "
+                    + whereClause.toString();
 
-            return wrapInvitations(context.getWiki().getStore().search(sql, count, start, context), context);
+            return wrapInvitations(context.getWiki().getStore()
+                .search(sql, count, start, context), context);
         } catch (XWikiException e) {
             e.printStackTrace();
             return Collections.EMPTY_LIST;
         }
     }
 
-    private List wrapInvitations(List list, XWikiContext context) {
+    private List wrapInvitations(List list, XWikiContext context)
+    {
         ArrayList result = new ArrayList();
-        if (list==null)
-         return null;
-        for (int i=0;i<list.size();i++) {
+        if (list == null)
+            return null;
+        for (int i = 0; i < list.size(); i++) {
             String inviteDocName = (String) list.get(i);
             try {
                 result.add(new InvitationImpl(inviteDocName, this, context));
@@ -478,11 +502,12 @@ public class InvitationManagerImpl implements InvitationManager
         return result;
     }
 
-      private List wrapMembershipRequests(List list, XWikiContext context) {
+    private List wrapMembershipRequests(List list, XWikiContext context)
+    {
         ArrayList result = new ArrayList();
-        if (list==null)
-         return null;
-        for (int i=0;i<list.size();i++) {
+        if (list == null)
+            return null;
+        for (int i = 0; i < list.size(); i++) {
             String inviteDocName = (String) list.get(i);
             try {
                 result.add(new MembershipRequestImpl(inviteDocName, this, context));
@@ -496,7 +521,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(Invitation, XWikiContext)
      */
     public List getInvitations(Invitation prototype, XWikiContext context)
@@ -506,18 +531,18 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, int, int, int, XWikiContext)
      */
     public List getInvitations(String space, int status, int start, int count,
-                               XWikiContext context)
+        XWikiContext context)
     {
         return getInvitations(space, status, null, start, count, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, int, int, XWikiContext)
      */
     public List getInvitations(String space, int start, int count, XWikiContext context)
@@ -527,15 +552,15 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, int, String, int, int, XWikiContext)
      */
     public List getInvitations(String space, int status, String role, int start, int count,
-                               XWikiContext context)
+        XWikiContext context)
     {
         try {
             Invitation prototype = createInvitation(null, space, context);
-            if ((role!=null)&&!"".equals(role)) {
+            if ((role != null) && !"".equals(role)) {
                 List roles = new ArrayList();
                 roles.add(role);
                 prototype.setRoles(roles);
@@ -550,7 +575,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, int, String, XWikiContext)
      */
     public List getInvitations(String space, int status, String role, XWikiContext context)
@@ -560,7 +585,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, int, XWikiContext)
      */
     public List getInvitations(String space, int status, XWikiContext context)
@@ -570,18 +595,18 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, String, int, int, XWikiContext)
      */
     public List getInvitations(String space, String role, int start, int count,
-                               XWikiContext context)
+        XWikiContext context)
     {
         return getInvitations(space, 0, role, start, count, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, String, XWikiContext)
      */
     public List getInvitations(String space, String role, XWikiContext context)
@@ -591,7 +616,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(String, XWikiContext)
      */
     public List getInvitations(String space, XWikiContext context)
@@ -601,7 +626,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getInvitations(XWikiContext)
      */
     public List getInvitations(XWikiContext context)
@@ -611,14 +636,14 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(int, int, int, XWikiContext)
      */
     public List getMembershipRequests(int status, int start, int count, XWikiContext context)
     {
         try {
             MembershipRequest prototype =
-                    createMembershipRequest(context.getUser(), null, context);
+                createMembershipRequest(context.getUser(), null, context);
             prototype.setStatus("" + status);
             return getMembershipRequests(prototype, start, count, context);
         } catch (XWikiException e) {
@@ -629,7 +654,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(int, int, XWikiContext)
      */
     public List getMembershipRequests(int start, int count, XWikiContext context)
@@ -639,7 +664,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(int, XWikiContext)
      */
     public List getMembershipRequests(int status, XWikiContext context)
@@ -649,19 +674,19 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(MembershipRequest, int, int, XWikiContext)
      */
     public List getMembershipRequests(MembershipRequest prototype, int start, int count,
-                                      XWikiContext context)
+        XWikiContext context)
     {
         try {
             String className = getMembershipRequestClassName();
             StringBuffer fromClause =
-                    new StringBuffer("from XWikiDocument as doc, BaseObject as obj");
+                new StringBuffer("from XWikiDocument as doc, BaseObject as obj");
             StringBuffer whereClause =
-                    new StringBuffer("where doc.fullName=obj.name and obj.className = '" + className
-                            + "'");
+                new StringBuffer("where doc.fullName=obj.name and obj.className = '" + className
+                    + "'");
 
             String space = prototype.getSpace();
             String requester = prototype.getRequester();
@@ -677,21 +702,21 @@ public class InvitationManagerImpl implements InvitationManager
             } else if (!"".equals(space)) {
                 fromClause.append(", StringProperty as space");
                 whereClause.append(" and obj.id=space.id.id and space.id.name='"
-                        + MembershipRequestImpl.MembershipRequestFields.SPACE + "' and space.value='"
-                        + space + "'");
+                    + MembershipRequestImpl.MembershipRequestFields.SPACE + "' and space.value='"
+                    + space + "'");
             } else if (!"".equals(requester)) {
                 fromClause.append(" StringProperty as requester");
                 whereClause.append(" and obj.id=requester.id.id and requester.id.name='"
-                        + MembershipRequestImpl.MembershipRequestFields.REQUESTER
-                        + "' and requester.value='" + requester + "'");
+                    + MembershipRequestImpl.MembershipRequestFields.REQUESTER
+                    + "' and requester.value='" + requester + "'");
             }
 
             String status = prototype.getStatus();
             if (!status.equals(JoinRequestStatus.ANY)) {
                 fromClause.append(", StringProperty as status");
                 whereClause.append(" and obj.id=status.id.id and status.id.name='"
-                        + MembershipRequestImpl.MembershipRequestFields.STATUS
-                        + "' and status.value='" + status + "'");
+                    + MembershipRequestImpl.MembershipRequestFields.STATUS
+                    + "' and status.value='" + status + "'");
             }
 
             List roles = prototype.getRoles();
@@ -699,21 +724,23 @@ public class InvitationManagerImpl implements InvitationManager
                 String role = (String) prototype.getRoles().get(0);
                 fromClause.append(", DBStringListProperty as roles join roles.list as role");
                 whereClause.append(" and obj.id=roles.id.id and roles.id.name='"
-                        + MembershipRequestImpl.MembershipRequestFields.ROLES
-                        + "' and instr(role.id, '" + role + "')>0");
+                    + MembershipRequestImpl.MembershipRequestFields.ROLES
+                    + "' and instr(role.id, '" + role + "')>0");
             }
 
             String responder = prototype.getResponder();
             if (!"".equals(responder)) {
                 fromClause.append(" StringProperty as responder");
                 whereClause.append(" and obj.id=responder.id.id and responder.id.name='"
-                        + MembershipRequestImpl.MembershipRequestFields.RESPONDER
-                        + "' and responder.value='" + responder + "'");
+                    + MembershipRequestImpl.MembershipRequestFields.RESPONDER
+                    + "' and responder.value='" + responder + "'");
             }
 
             String sql =
-                    "select distinct doc.fullName " + fromClause.toString() + " " + whereClause.toString();
-            return wrapMembershipRequests(context.getWiki().getStore().search(sql, count, start, context), context);
+                "select distinct doc.fullName " + fromClause.toString() + " "
+                    + whereClause.toString();
+            return wrapMembershipRequests(context.getWiki().getStore().search(sql, count, start,
+                context), context);
         } catch (XWikiException e) {
             e.printStackTrace();
             return Collections.EMPTY_LIST;
@@ -722,7 +749,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(MembershipRequest, XWikiContext)
      */
     public List getMembershipRequests(MembershipRequest prototype, XWikiContext context)
@@ -732,18 +759,18 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, int, int, int, XWikiContext)
      */
     public List getMembershipRequests(String space, int status, int start, int count,
-                                      XWikiContext context)
+        XWikiContext context)
     {
         return getMembershipRequests(space, status, null, start, count, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, int, int, XWikiContext)
      */
     public List getMembershipRequests(String space, int start, int count, XWikiContext context)
@@ -753,15 +780,15 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, int, String, int, int, XWikiContext)
      */
     public List getMembershipRequests(String space, int status, String role, int start,
-                                      int count, XWikiContext context)
+        int count, XWikiContext context)
     {
         try {
             MembershipRequest prototype = createMembershipRequest(null, space, context);
-            if ((role!=null)&&!"".equals(role)) {
+            if ((role != null) && !"".equals(role)) {
                 List roles = new ArrayList();
                 roles.add(role);
                 prototype.setRoles(roles);
@@ -776,7 +803,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, int, String, XWikiContext)
      */
     public List getMembershipRequests(String space, int status, String role, XWikiContext context)
@@ -786,7 +813,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, int, XWikiContext)
      */
     public List getMembershipRequests(String space, int status, XWikiContext context)
@@ -796,18 +823,18 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, String, int, int, XWikiContext)
      */
     public List getMembershipRequests(String space, String role, int start, int count,
-                                      XWikiContext context)
+        XWikiContext context)
     {
         return getMembershipRequests(space, 0, role, start, count, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, String, XWikiContext)
      */
     public List getMembershipRequests(String space, String role, XWikiContext context)
@@ -817,7 +844,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(String, XWikiContext)
      */
     public List getMembershipRequests(String space, XWikiContext context)
@@ -827,7 +854,7 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#getMembershipRequests(XWikiContext)
      */
     public List getMembershipRequests(XWikiContext context)
@@ -835,23 +862,25 @@ public class InvitationManagerImpl implements InvitationManager
         return getMembershipRequests(0, 0, context);
     }
 
-    private void addToAlreadyMember(String user, XWikiContext context) {
+    private void addToAlreadyMember(String user, XWikiContext context)
+    {
         List list = (List) context.get("im_alreadymember");
-        if (list==null) {
+        if (list == null) {
             list = new ArrayList();
             context.put("im_alreadymember", list);
         }
         list.add(user);
     }
 
-    private void addToAlreadyInvited(String user, XWikiContext context) {
-         List list = (List) context.get("im_alreadyinvited");
-         if (list==null) {
-             list = new ArrayList();
-             context.put("im_alreadyinvited", list);
-         }
-         list.add(user);
-     }
+    private void addToAlreadyInvited(String user, XWikiContext context)
+    {
+        List list = (List) context.get("im_alreadyinvited");
+        if (list == null) {
+            list = new ArrayList();
+            context.put("im_alreadyinvited", list);
+        }
+        list.add(user);
+    }
 
     /**
      * {@inheritDoc}
@@ -1000,11 +1029,13 @@ public class InvitationManagerImpl implements InvitationManager
      * 
      * @see InvitationManager#rejectInvitation(String, String, String, XWikiContext)
      */
-    public void rejectInvitation(String space, String email, String code, XWikiContext context) throws InvitationManagerException {
+    public void rejectInvitation(String space, String email, String code, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
-            Invitation invitation = getInvitation(space, encodeEmailAddress(email), context);
+            Invitation invitation = getInvitation(space, email, context);
             if (code.equals(invitation.getCode())
-                    && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
+                && invitation.getStatus().equals(JoinRequestStatus.SENT)) {
                 if (!invitation.isOpen()) {
                     invitation.setStatus(JoinRequestStatus.REFUSED);
                     invitation.setResponseDate(new Date());
@@ -1021,10 +1052,12 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#rejectInvitation(String, XWikiContext)
      */
-    public void rejectInvitation(String space, XWikiContext context) throws InvitationManagerException {
+    public void rejectInvitation(String space, XWikiContext context)
+        throws InvitationManagerException
+    {
         try {
             Invitation invitation = getInvitation(space, context.getUser(), context);
             if (invitation.getStatus().equals(JoinRequestStatus.SENT)) {
@@ -1039,11 +1072,12 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#rejectMembership(String, String, String, XWikiContext)
      */
     public void rejectMembership(String space, String userName, String templateMail,
-                                 XWikiContext context) throws InvitationManagerException {
+        XWikiContext context) throws InvitationManagerException
+    {
         try {
             MembershipRequest request = getMembershipRequest(space, userName, context);
             if (request.getStatus().equals(JoinRequestStatus.SENT)) {
@@ -1111,16 +1145,20 @@ public class InvitationManagerImpl implements InvitationManager
      * 
      * @see InvitationManager#requestMembership(String, String, List, XWikiContext)
      */
-    public void requestMembership(String space, String message, List roles, XWikiContext context) throws InvitationManagerException {
+    public void requestMembership(String space, String message, List roles, XWikiContext context)
+        throws InvitationManagerException
+    {
         requestMembership(space, message, roles, Collections.EMPTY_MAP, context);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#requestMembership(String, String, String, XWikiContext)
      */
-    public void requestMembership(String space, String message, String role, XWikiContext context) throws InvitationManagerException {
+    public void requestMembership(String space, String message, String role, XWikiContext context)
+        throws InvitationManagerException
+    {
         List roles = new ArrayList();
         roles.add(role);
         requestMembership(space, message, roles, context);
@@ -1128,10 +1166,12 @@ public class InvitationManagerImpl implements InvitationManager
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see InvitationManager#requestMembership(String, String, XWikiContext)
      */
-    public void requestMembership(String space, String message, XWikiContext context) throws InvitationManagerException {
+    public void requestMembership(String space, String message, XWikiContext context)
+        throws InvitationManagerException
+    {
         requestMembership(space, message, Collections.EMPTY_LIST, context);
     }
 
@@ -1140,8 +1180,8 @@ public class InvitationManagerImpl implements InvitationManager
      *         notifying the execution of the specified action on a request of class
      *         <code>joinRequestClass</code> related to the given space.
      */
-    private String getDefaultTemplateMailDocumentName(String space, String type,
-                                                      String action, XWikiContext context)
+    private String getDefaultTemplateMailDocumentName(String space, String type, String action,
+        XWikiContext context)
     {
         String docName = space + "." + "MailTemplate" + action + type;
         try {
@@ -1151,19 +1191,23 @@ public class InvitationManagerImpl implements InvitationManager
         } catch (XWikiException e) {
             docName = null;
         }
-        if (docName==null) {
+        if (docName == null) {
             docName = getDefaultResourceSpace(context) + "." + "MailTemplate" + action + type;
         }
 
         return docName;
     }
 
-    private String getDefaultResourceSpace(XWikiContext context) {
-        return context.getWiki().Param("xwiki.invitationmanager.resourcespace", InvitationManager.DEFAULT_RESOURCE_SPACE);
+    private String getDefaultResourceSpace(XWikiContext context)
+    {
+        return context.getWiki().Param("xwiki.invitationmanager.resourcespace",
+            InvitationManager.DEFAULT_RESOURCE_SPACE);
     }
 
-    private String getDefaultInvitationsSpaceSuffix(XWikiContext context) {
-        return context.getWiki().Param("xwiki.invitationmanager.invitationspacesuffix", InvitationManager.DEFAULT_INVITATIONS_SPACE_SUFFIX);
+    private String getDefaultInvitationsSpaceSuffix(XWikiContext context)
+    {
+        return context.getWiki().Param("xwiki.invitationmanager.invitationspacesuffix",
+            InvitationManager.DEFAULT_INVITATIONS_SPACE_SUFFIX);
     }
 
     /**
@@ -1171,7 +1215,8 @@ public class InvitationManagerImpl implements InvitationManager
      *         <code>joinRequestClass</code> that would allow the specified user to join the
      *         specified space.
      */
-    public String getJoinRequestDocumentName(String type, String space, String user, XWikiContext context)
+    public String getJoinRequestDocumentName(String type, String space, String user,
+        XWikiContext context)
     {
         if (space == null) {
             space = System.currentTimeMillis() + "";
@@ -1182,18 +1227,19 @@ public class InvitationManagerImpl implements InvitationManager
 
         user = clearUserName(user);
 
-        return getInvitationSpaceName(space, context) + "." + type
-                + "_" + user;
+        return getInvitationSpaceName(space, context) + "." + type + "_" + user;
     }
 
-    private String clearUserName(String user) {
+    private String clearUserName(String user)
+    {
         if (isEmailAddress(user))
-         return user.replaceAll("\\.", "_").replaceAll("\\@", "_at_");
+            return user.replaceAll("\\.", "_").replaceAll("\\@", "_at_");
         else
-         return user.replaceAll("XWiki\\.", "");                
+            return user.replaceAll("XWiki\\.", "");
     }
 
-    private String getInvitationSpaceName(String space, XWikiContext context) {
+    private String getInvitationSpaceName(String space, XWikiContext context)
+    {
         return space + getDefaultInvitationsSpaceSuffix(context);
     }
 
@@ -1217,9 +1263,42 @@ public class InvitationManagerImpl implements InvitationManager
      * @return the stored invitation uniquely identified by the given space and invitee
      */
     private Invitation getInvitation(String space, String invitee, XWikiContext context)
-            throws XWikiException
+        throws XWikiException
     {
-        return new InvitationImpl(invitee, space, false, this, context);
+        Invitation invitation = null;
+        if (space == null || invitee == null) {
+            // skip to the end
+        } else if (isEmailAddress(invitee)) {
+            String email = invitee.trim();
+            String encodedEmail = encodeEmailAddress(email);
+            String user = getRegisteredUser(invitee, context);
+            invitation = new InvitationImpl(encodedEmail, space, false, this, context);
+            if (invitation.isNew() && user != null) {
+                invitation = new InvitationImpl(user, space, false, this, context);
+            }
+            String realInvitee = invitation.getInvitee();
+            if (!email.equals(realInvitee) && !user.equals(realInvitee)) {
+                invitation = null;
+            }
+        } else {
+            String user = getRegisteredUser(invitee, context);
+            if (user != null) {
+                String email = "";
+                String encodedEmail = encodeEmailAddress(email);
+                invitation = new InvitationImpl(user, space, false, this, context);
+                if (invitation.isNew()) {
+                    invitation = new InvitationImpl(encodedEmail, space, false, this, context);
+                }
+                String realInvitee = invitation.getInvitee();
+                if (!email.equals(realInvitee) && !user.equals(realInvitee)) {
+                    invitation = null;
+                }
+            }
+        }
+        if (invitation == null) {
+            invitation = new InvitationImpl(null, null, false, this, context);
+        }
+        return invitation;
     }
 
     /**
@@ -1237,10 +1316,10 @@ public class InvitationManagerImpl implements InvitationManager
      * saves it.
      */
     private void customizeInvitation(Invitation invitation, String status, XWikiContext context)
-            throws XWikiException
+        throws XWikiException
     {
         Invitation customInvitation =
-                createInvitation(context.getUser(), invitation.getSpace(), context);
+            createInvitation(context.getUser(), invitation.getSpace(), context);
         customInvitation.setInviter(invitation.getInviter());
         customInvitation.setMap(invitation.getMap());
         customInvitation.setRequestDate(invitation.getRequestDate());
@@ -1256,7 +1335,7 @@ public class InvitationManagerImpl implements InvitationManager
      * @return the stored membership request uniquely identified by the given space and requester
      */
     private MembershipRequest getMembershipRequest(String space, String requester,
-                                                   XWikiContext context) throws XWikiException
+        XWikiContext context) throws XWikiException
     {
         return new MembershipRequestImpl(requester, space, false, this, context);
     }
@@ -1266,7 +1345,7 @@ public class InvitationManagerImpl implements InvitationManager
      *         order to join the <code>space</code>
      */
     private MembershipRequest createMembershipRequest(String requester, String space,
-                                                      XWikiContext context) throws XWikiException
+        XWikiContext context) throws XWikiException
     {
         return new MembershipRequestImpl(requester, space, true, this, context);
     }
@@ -1406,7 +1485,7 @@ public class InvitationManagerImpl implements InvitationManager
                 e);
         }
     }
-    
+
     private static final String join(String[] array, String separator)
     {
         StringBuffer result = new StringBuffer("");
@@ -1419,12 +1498,16 @@ public class InvitationManagerImpl implements InvitationManager
         return result.toString();
     }
 
-    private MailSenderPlugin getMailSenderPlugin(XWikiContext context) throws InvitationManagerException {
+    private MailSenderPlugin getMailSenderPlugin(XWikiContext context)
+        throws InvitationManagerException
+    {
         MailSenderPlugin mailSender =
-                (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);
+            (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);
 
-        if (mailSender==null)
-         throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_MANAGER_REQUIRES_MAILSENDER_PLUGIN, "Invitation Manager requires the mail sender plugin");
+        if (mailSender == null)
+            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                InvitationManagerException.ERROR_INVITATION_MANAGER_REQUIRES_MAILSENDER_PLUGIN,
+                "Invitation Manager requires the mail sender plugin");
 
         return mailSender;
     }
@@ -1453,7 +1536,7 @@ public class InvitationManagerImpl implements InvitationManager
             return null;
         }
     }
-    
+
     /**
      * Helper method for testing if a given string is an email address.
      */
@@ -1465,33 +1548,36 @@ public class InvitationManagerImpl implements InvitationManager
     /**
      * @return the email address of the given user, provided he is registered
      */
-    private String getEmailAddress(String user, XWikiContext context) throws InvitationManagerException
+    private String getEmailAddress(String user, XWikiContext context)
+        throws InvitationManagerException
     {
         try {
-        String wikiuser = (user.startsWith("XWiki.")) ? user : "XWiki." + user;
+            String wikiuser = (user.startsWith("XWiki.")) ? user : "XWiki." + user;
 
-        if (wikiuser==null)
-         return null;
+            if (wikiuser == null)
+                return null;
 
-        XWikiDocument userDoc = null;
+            XWikiDocument userDoc = null;
             userDoc = context.getWiki().getDocument(wikiuser, context);
 
-        if (userDoc.isNew())
-         return null;
+            if (userDoc.isNew())
+                return null;
 
-        String email = "";
-        try {
-          email =  userDoc.getObject("XWiki.XWikiUsers").getStringValue("email");
-        } catch (Exception e) {
-          return null;
-        }
-        if ((email==null)||(email.equals("")))
-          return null;
+            String email = "";
+            try {
+                email = userDoc.getObject("XWiki.XWikiUsers").getStringValue("email");
+            } catch (Exception e) {
+                return null;
+            }
+            if ((email == null) || (email.equals("")))
+                return null;
 
-        return email;
+            return email;
         } catch (Exception e) {
-            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER, InvitationManagerException.ERROR_INVITATION_CANNOT_FIND_EMAIL_ADDRESS,
-                            "Cannot find email address of user " + user, e);
+            throw new InvitationManagerException(InvitationManagerException.MODULE_PLUGIN_INVITATIONMANAGER,
+                InvitationManagerException.ERROR_INVITATION_CANNOT_FIND_EMAIL_ADDRESS,
+                "Cannot find email address of user " + user,
+                e);
         }
     }
 
@@ -1506,7 +1592,7 @@ public class InvitationManagerImpl implements InvitationManager
         else
             return null;
     }
-    
+
     /**
      * Creates and saves a user profile associated with the given space and the user who made the
      * membership request
@@ -1530,7 +1616,7 @@ public class InvitationManagerImpl implements InvitationManager
         profile.setProfile(profileText);
         profile.saveWithProgrammingRights();
     }
-    
+
     /**
      * Creates and saves a user profile associated with the given space and the currently logged in
      * user
@@ -1544,7 +1630,7 @@ public class InvitationManagerImpl implements InvitationManager
         profile.updateProfileFromRequest();
         profile.saveWithProgrammingRights();
     }
-    
+
     public boolean isMailNotification()
     {
         return mailNotification;
@@ -1553,16 +1639,5 @@ public class InvitationManagerImpl implements InvitationManager
     public void setMailNotification(boolean mailNotification)
     {
         this.mailNotification = mailNotification;
-    }
-    
-    private String getInvitee(String wikiNameOrMailAddress, XWikiContext context)
-    {
-        wikiNameOrMailAddress = wikiNameOrMailAddress.trim();
-        String registeredUser = getRegisteredUser(wikiNameOrMailAddress, context);
-        if (registeredUser == null) {
-            return encodeEmailAddress(wikiNameOrMailAddress);
-        } else {
-            return registeredUser;
-        }
     }
 }
