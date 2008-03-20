@@ -1026,7 +1026,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 #groupLogo( $s )
 <div id="asset-metadatas-block-groupname">
 <span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
- <a href="${sUrl}">$s.getDisplayTitle()</a>
+ <a href="${sUrl}">{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}</a>
 </div>
 <div id="asset-metadatas-block-username">
 <span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span> $!xwiki.getUserName($asset.creator)
@@ -2097,8 +2097,8 @@ $!desc
 #end
   ##display logo
   <div class="frame-inset-logo">
-    <a href="$space.getHomeURL()" title="$space.getDisplayTitle()" alt="$space.getDisplayTitle()">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="${space.getDisplayTitle()}" alt="${space.getDisplayTitle()}" />
+    <a href="$space.getHomeURL()" title="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}" alt="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" alt="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" />
     </a>
   </div>
 #end
@@ -2121,11 +2121,11 @@ $!desc
 <div class="frame-inset-titlebar">
 #if($displayType == "edit")
   #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #mycurrikititlebar($s.getDisplayTitle() $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
+  #mycurrikititlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
 #elseif($displayType == "view")
-  #mycurrikititlebar($s.getDisplayTitle() "" "" "blue")
+  #mycurrikititlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" "" "" "blue")
 #else
-  #mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
+  #mycurrikititlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
 #end
 </div>
 
@@ -2156,11 +2156,11 @@ $s.getDescription()
 <div class="frame-inset-titlebar">
 #if($displayType == "edit")
   #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #mycurrikititlebar($s.getDisplayTitle() $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
+  #mycurrikititlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
 #elseif($displayType == "view")
-  #mycurrikititlebar($s.getDisplayTitle() "" "" "blue")
+  #mycurrikititlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" "" "" "blue")
 #else
-  #mycurrikititlebar($s.getDisplayTitle() $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
+  #mycurrikititlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
 #end
 </div>
 
@@ -2334,7 +2334,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 ## Groups header
 ##
 #macro(groupsheader $curtab) ## {
-<h1>$s.getDisplayTitle()</h1>
+<h1>{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}</h1>
 <div id="groups-$curtab" class="groups groups-$curtab">
 #groupstabs($curtab)
 <div id="groups-${curtab}-main" class="tab-container">
