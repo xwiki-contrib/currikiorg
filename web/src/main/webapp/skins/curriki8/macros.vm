@@ -1958,7 +1958,9 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end ## }
 #set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
 #if($cpage!=1) ## {
-<a href="${url}" class="table-results-previous#if($cpage==1) table-results-disabled" onclick="return false;#end">$msg.get("mycurriki.macro.paginate.previous")</a>
+#set($prvpage = $cpage - 1)
+#set($altprev = "Page "+${prvpage})
+<a href="${url}" class="table-results-previous#if($cpage==1) table-results-disabled" onclick="return false;#end" alt="${altprev}" title="${altprev}">$msg.get("mycurriki.macro.paginate.previous")</a>
 #end ## }
 #foreach ($pg in [${fpage}..${lpage}]) ## {
 #set($npage = (($pg - 1) * $nbToDisplay))
@@ -1972,7 +1974,9 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end ## }
 #set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
 #if($cpage!=$pages) ## {
-<a href="${url}" class="table-results-next#if($cpage==$pages) table-results-disabled" onclick="return false;#end">$msg.get("mycurriki.macro.paginate.next")</a>
+#set($nxtpage = $cpage + 1)
+#set($altnext = "Page "+${nxtpage})
+<a href="${url}" class="table-results-next#if($cpage==$pages) table-results-disabled" onclick="return false;#end" alt="${altnext}" title="${altnext}">$msg.get("mycurriki.macro.paginate.next")</a>
 #end ## }
 </div>
 #end ## if != 0 ## }
