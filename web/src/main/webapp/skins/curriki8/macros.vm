@@ -120,6 +120,14 @@ $linkToBreak.substring(0, $index)
 ##
 ##
 #macro(findCurrikiTitle $currikiDoc)
+ #if($currikiDoc.getObject("XWiki.FrameworkItemClass"))
+  #set($key = "XWiki.AssetClass_fw_items_${currikiDoc.fullName}")
+  #set($currikiTitle = $msg.get($key))
+  #if($currikiTitle == $key)
+   #set($currikiTitle = $!currikiDoc.displayTitle)
+  #end
+ #else
+ #set($currikiDoc = $currikiDoc.getTranslatedDocument())
  #set($currikiTitle = $!currikiDoc.displayTitle)
  #if($currikiDoc.space.startsWith("Coll_"))
   #findUserPrefix($currikiDoc.space.substring(5))
@@ -146,6 +154,7 @@ $linkToBreak.substring(0, $index)
  #elseif($currikiDoc.space == "XWiki" && $currikiDoc.getObject("XWiki.XWikiUsers"))
   #findUserPrefix($currikiDoc.name)
   #set($currikiTitle = "${userPrefix} Curriki")
+ #end
  #end
 #end
 ##
