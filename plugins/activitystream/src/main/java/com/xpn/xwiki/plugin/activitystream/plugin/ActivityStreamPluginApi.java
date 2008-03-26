@@ -17,14 +17,12 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.plugin;
+package com.xpn.xwiki.plugin.activitystream.plugin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.xwiki.plugin.activitystream.api.ActivityStream;
-import org.xwiki.plugin.activitystream.api.ActivityStreamException;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -32,6 +30,8 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.plugin.PluginApi;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStream;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStreamException;
 
 /**
  * API for {@link ActivityStreamPlugin}
@@ -54,7 +54,7 @@ public class ActivityStreamPluginApi extends PluginApi
         return ((ActivityStreamPlugin) getProtectedPlugin()).getActivityStream();
     }
 
-    public void addActivityEvent(org.xwiki.plugin.activitystream.api.ActivityEvent event)
+    public void addActivityEvent(com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event)
         throws ActivityStreamException
     {
         if (hasProgrammingRights()) {
@@ -194,10 +194,10 @@ public class ActivityStreamPluginApi extends PluginApi
         if (events != null) {
             for (Iterator iter = events.iterator(); iter.hasNext();) {
                 Object obj = iter.next();
-                org.xwiki.plugin.activitystream.api.ActivityEvent event =
-                    (org.xwiki.plugin.activitystream.api.ActivityEvent) obj;
-                org.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent =
-                    new org.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
+                com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
+                    (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) obj;
+                com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent =
+                    new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
                         getXWikiContext());
                 result.add(wrappedEvent);
             }
@@ -211,9 +211,9 @@ public class ActivityStreamPluginApi extends PluginApi
         if (events != null) {
             for (Iterator iter = events.iterator(); iter.hasNext();) {
                 Object obj = iter.next();
-                org.xwiki.plugin.activitystream.plugin.ActivityEvent event =
-                    (org.xwiki.plugin.activitystream.plugin.ActivityEvent) obj;
-                org.xwiki.plugin.activitystream.api.ActivityEvent unwrappedEvent =
+                com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent event =
+                    (com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent) obj;
+                com.xpn.xwiki.plugin.activitystream.api.ActivityEvent unwrappedEvent =
                     event.getEvent();
                 result.add(unwrappedEvent);
             }
@@ -221,7 +221,7 @@ public class ActivityStreamPluginApi extends PluginApi
         return result;
     }
 
-    public SyndEntry getFeedEntry(org.xwiki.plugin.activitystream.plugin.ActivityEvent event)
+    public SyndEntry getFeedEntry(com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent event)
     {
         return getActivityStream().getFeedEntry(event.getEvent(), context);
     }

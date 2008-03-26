@@ -17,15 +17,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.plugin;
+package com.xpn.xwiki.plugin.activitystream.plugin;
 
-import org.xwiki.plugin.activitystream.api.ActivityStream;
-import org.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStream;
+import com.xpn.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 
 /**
  * Plug-in for for managing streams of activity events

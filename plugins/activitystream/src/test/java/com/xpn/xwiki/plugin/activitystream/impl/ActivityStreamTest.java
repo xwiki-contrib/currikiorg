@@ -17,13 +17,13 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.impl;
+package com.xpn.xwiki.plugin.activitystream.impl;
 
-import org.xwiki.plugin.activitystream.api.ActivityEvent;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStream;
 
 /**
- * Unit tests for classes implementing {@link ActivityEvent} interface.
+ * Unit tests for classes implementing {@link ActivityStream} interface.
  */
-public abstract class ActivityEventTest // extends MockObjectTestCase
+public abstract class ActivityStreamTest // extends MockObjectTestCase
 {
 }

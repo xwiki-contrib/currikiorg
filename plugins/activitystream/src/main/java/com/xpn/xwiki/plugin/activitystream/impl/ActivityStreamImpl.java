@@ -17,7 +17,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.impl;
+package com.xpn.xwiki.plugin.activitystream.impl;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -28,11 +28,6 @@ import java.net.MalformedURLException;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.hibernate.Session;
-import org.xwiki.plugin.activitystream.api.ActivityEvent;
-import org.xwiki.plugin.activitystream.api.ActivityEventPriority;
-import org.xwiki.plugin.activitystream.api.ActivityEventType;
-import org.xwiki.plugin.activitystream.api.ActivityStream;
-import org.xwiki.plugin.activitystream.api.ActivityStreamException;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -40,6 +35,11 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.notify.DocChangeRule;
 import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
 import com.xpn.xwiki.notify.XWikiNotificationRule;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEventPriority;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEventType;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStream;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStreamException;
 import com.xpn.xwiki.store.XWikiHibernateStore;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;

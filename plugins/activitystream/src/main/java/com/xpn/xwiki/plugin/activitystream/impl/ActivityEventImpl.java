@@ -17,15 +17,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.impl;
+package com.xpn.xwiki.plugin.activitystream.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.xwiki.plugin.activitystream.api.ActivityEvent;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent;
 
 public class ActivityEventImpl implements ActivityEvent
 {

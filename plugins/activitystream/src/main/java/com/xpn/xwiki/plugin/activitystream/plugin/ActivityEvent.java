@@ -1,4 +1,4 @@
-package org.xwiki.plugin.activitystream.plugin;
+package com.xpn.xwiki.plugin.activitystream.plugin;
 
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.XWikiContext;
@@ -14,9 +14,9 @@ import java.util.Date;
  */
 public class ActivityEvent extends Api {
 
-    protected org.xwiki.plugin.activitystream.api.ActivityEvent event;
+    protected com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event;
 
-    public ActivityEvent(org.xwiki.plugin.activitystream.api.ActivityEvent event, XWikiContext context) {
+    public ActivityEvent(com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event, XWikiContext context) {
         super(context);
         this.event = event;
     }
@@ -201,7 +201,7 @@ public class ActivityEvent extends Api {
         return event.getDisplayUser(context);
     }
 
-    protected org.xwiki.plugin.activitystream.api.ActivityEvent getEvent() {
+    protected com.xpn.xwiki.plugin.activitystream.api.ActivityEvent getEvent() {
         return event;
     }
 }

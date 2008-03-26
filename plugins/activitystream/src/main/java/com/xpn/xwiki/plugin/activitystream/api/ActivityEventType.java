@@ -17,11 +17,40 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.impl;
+package com.xpn.xwiki.plugin.activitystream.api;
 
 /**
- * Unit tests for {@link ActivityEventImpl} class
+ * The type of request. This list is extensible.
  */
-public class ActivityEventImplTest extends ActivityEventTest
+public interface ActivityEventType
 {
+    String OTHER = "other";
+
+    String CREATE = "create";
+
+    String UPDATE = "update";
+
+    String DELETE = "delete";
+
+    String MOVE = "move";
+
+    String CREATE_COMMENT = "createcomment";
+
+    String CREATE_ATTACHMENT = "createattachment";
+
+    String UPDATE_ATTACHMENT = "updateattachment";
+
+    String DELETE_ATTACHMENT = "deleteattachment";
+
+    String CREATE_USER = "createuser";
+
+    String DELETE_USER = "deleteuser";
+
+    String CREATE_SPACE = "createspace";
+
+    String DELETE_SPACE = "deletespace";
+
+    String CHANGE_RIGHTS = "changerights";
+
+    String NEW_MEMBER = "newmember";
 }

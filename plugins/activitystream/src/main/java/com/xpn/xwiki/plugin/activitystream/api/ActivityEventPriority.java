@@ -17,40 +17,31 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.api;
+package com.xpn.xwiki.plugin.activitystream.api;
 
 /**
- * The type of request. This list is extensible.
+ * The priorities possible for an Activity Event. This allows to filter complex events by only
+ * keeping the most high level event or by getting page level event.
  */
-public interface ActivityEventType
+public interface ActivityEventPriority
 {
-    String OTHER = "other";
+    /**
+     * The event is a storage level event (low level)
+     */
+    int STORAGE = 10;
 
-    String CREATE = "create";
+    /**
+     * The event is a notification level event (low level)
+     */
+    int NOTIFICATION = 20;
 
-    String UPDATE = "update";
+    /**
+     * The event is a action level event (high level)
+     */
+    int ACTION = 30;
 
-    String DELETE = "delete";
-
-    String MOVE = "move";
-
-    String CREATE_COMMENT = "createcomment";
-
-    String CREATE_ATTACHMENT = "createattachment";
-
-    String UPDATE_ATTACHMENT = "updateattachment";
-
-    String DELETE_ATTACHMENT = "deleteattachment";
-
-    String CREATE_USER = "createuser";
-
-    String DELETE_USER = "deleteuser";
-
-    String CREATE_SPACE = "createspace";
-
-    String DELETE_SPACE = "deletespace";
-
-    String CHANGE_RIGHTS = "changerights";
-
-    String NEW_MEMBER = "newmember";
+    /**
+     * The event is a program level event (highest level)
+     */
+    int PROGRAM = 40;
 }

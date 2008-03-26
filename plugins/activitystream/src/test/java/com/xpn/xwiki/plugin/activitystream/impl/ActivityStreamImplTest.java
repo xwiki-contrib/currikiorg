@@ -17,31 +17,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.plugin.activitystream.api;
+package com.xpn.xwiki.plugin.activitystream.impl;
 
 /**
- * The priorities possible for an Activity Event. This allows to filter complex events by only
- * keeping the most high level event or by getting page level event.
+ * Unit tests for {@link ActivityStreamImpl#} class.
  */
-public interface ActivityEventPriority
+public class ActivityStreamImplTest extends ActivityStreamTest
 {
-    /**
-     * The event is a storage level event (low level)
-     */
-    int STORAGE = 10;
-
-    /**
-     * The event is a notification level event (low level)
-     */
-    int NOTIFICATION = 20;
-
-    /**
-     * The event is a action level event (high level)
-     */
-    int ACTION = 30;
-
-    /**
-     * The event is a program level event (highest level)
-     */
-    int PROGRAM = 40;
 }
