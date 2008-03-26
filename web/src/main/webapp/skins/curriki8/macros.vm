@@ -3453,7 +3453,7 @@ $msgdoc.save()
 ## PAGE: Groups.CreateMessageSheet
 ## Macro to send a notification mail to the "To" list of the message that has just been created
 ##
-#macro(messageSendNotificationMail)
+#macro(messageSendNotificationMail $msgdoc)
 #if($request.notify && $xwiki.mailsender)
 #set($mailTo = "")
 #if($request.toGroup)
@@ -3495,11 +3495,14 @@ $msgdoc.save()
 #end
 #end
 #end
+#if($mailToList.size() > 0)
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
+## $msgdoc has to be in the current context
 #set($mailSubject = $doc.getRenderedContent($mailDoc.title))
 #set($mailContent = $doc.getRenderedContent($mailDoc.content))
-$xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null)
+#set($ok = $xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null))
+#end
 #end
 #end
 ##
