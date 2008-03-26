@@ -92,6 +92,22 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
     }
 
     /**
+     * Tests if the current user can see the edit button. This doesn't necessarily mean she can edit
+     * the document but that she can make a copy and then edit that copy.
+     * 
+     * @return true if the edit button should be displayed
+     */
+    public boolean canEdit()
+    {
+        boolean isTemplate = item.getItem().getDocument().isCurrikiTemplate();
+        boolean hasTemplateParent = item.getItem().getDocument().isParentCurrikiTemplate();
+        // We show the edit button either if document is editable or if asset is a template and the
+        // parent one isn't (which means we should automatically duplicate)
+        return (isEditable() && (!isTemplate || hasTemplateParent))
+            || (isTemplate && !hasTemplateParent && !isLicenceProtected());
+    }
+
+    /**
      * Verifies if document is duplicatable
      * Either the user is the owner
      * Or the document is viewable and doesn't have the No Derivatives licence
@@ -322,12 +338,7 @@ public class CurrikiItemHeader extends Composite implements ClickListener {
     protected void setViewButtons(){
         clearButtons();
 
-        boolean isTemplate = item.getItem().getDocument().isCurrikiTemplate();
-        boolean hasTemplateParent = item.getItem().getDocument().isParentCurrikiTemplate();
-        // We show the edit button either if document is editable or if asset is a template and the
-        // parent one isn't (which means we should automatically duplicate)
-        if ((isEditable() && (!isTemplate || hasTemplateParent))
-            || (isTemplate && !hasTemplateParent && !isLicenceProtected())) {
+        if (canEdit()) {
             if (isComposite()) {
                 buttonPanel.add(editCompBt);
             } else {

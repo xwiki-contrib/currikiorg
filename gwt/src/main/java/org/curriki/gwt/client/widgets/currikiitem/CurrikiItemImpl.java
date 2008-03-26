@@ -121,7 +121,9 @@ public class CurrikiItemImpl extends Composite implements CurrikiItem {
     public void onBrowserEvent(Event event) {
         if (DOM.eventGetType(event) == Event.ONDBLCLICK)
         {
-            onEditClick();    
+            if (header.canEdit()) {
+                onEditClick();
+            }
         }
         else if (DOM.eventGetType(event) == Event.ONCLICK)
         {
