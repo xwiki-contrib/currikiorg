@@ -22,7 +22,8 @@ package org.curriki.plugin.activitystream.plugin;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import org.xwiki.plugin.activitystream.plugin.ActivityStreamPlugin;
+import com.xpn.xwiki.plugin.activitystream.plugin.ActivityStreamPlugin;
+
 import org.curriki.plugin.activitystream.impl.CurrikiActivityStream;
 
 

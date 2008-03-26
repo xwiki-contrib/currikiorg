@@ -23,11 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.velocity.VelocityContext;
-import org.xwiki.plugin.activitystream.api.ActivityEvent;
-import org.xwiki.plugin.activitystream.api.ActivityEventPriority;
-import org.xwiki.plugin.activitystream.api.ActivityEventType;
-import org.xwiki.plugin.activitystream.impl.ActivityEventImpl;
-import org.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -37,6 +32,11 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
 import com.xpn.xwiki.notify.XWikiNotificationRule;
 import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEventPriority;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEventType;
+import com.xpn.xwiki.plugin.activitystream.impl.ActivityEventImpl;
+import com.xpn.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 import com.xpn.xwiki.plugin.mailsender.Mail;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPlugin;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;

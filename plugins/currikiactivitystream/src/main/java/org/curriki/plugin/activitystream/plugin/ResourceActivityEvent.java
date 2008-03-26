@@ -22,13 +22,13 @@ package org.curriki.plugin.activitystream.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xwiki.plugin.activitystream.api.ActivityEventType;
-import org.xwiki.plugin.activitystream.plugin.ActivityEvent;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEventType;
+import com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent;
 
 public class ResourceActivityEvent extends ActivityEvent
 {
@@ -36,7 +36,7 @@ public class ResourceActivityEvent extends ActivityEvent
 
     private String displayBody;
 
-    public ResourceActivityEvent(org.xwiki.plugin.activitystream.api.ActivityEvent event,
+    public ResourceActivityEvent(com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event,
         XWikiContext context)
     {
         super(event, context);
