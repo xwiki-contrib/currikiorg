@@ -3500,6 +3500,7 @@ $msgdoc.save()
 #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
 ## $msgdoc has to be in the current context because it is used in the mail template
 #set($msgdoc = $msg_doc)
+$msgdoc.use("XWiki.ArticleClass")
 #set($mailSubject = $doc.getRenderedContent($mailDoc.title))
 #set($mailContent = $doc.getRenderedContent($mailDoc.content))
 #set($ok = $xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null))
