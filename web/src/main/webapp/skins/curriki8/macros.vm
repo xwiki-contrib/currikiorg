@@ -884,8 +884,11 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
 #end
 #sep() {pre}
 #if ($bentrydoc.hasAccessLevel("edit"))
-<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a> #sep()
-<a class="curriki-link" href="$bentrydoc.getURL("delete")" >$msg.get("caption.delete")</a>
+<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a>
+#set($deleteMsg = $msg.get('mycurriki.blog.actions.delete.confirm'))
+#set($blogUrl = $xwiki.getURL("MyCurriki.Blog"))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${bentrydoc.fullName}&sourceDoc=${blogUrl}"))
+#sep() <a class="curriki-link" onclick="this.href='$deleteUrl'; return confirm('$deleteMsg');" href="javascript:void()">$msg.get("caption.delete")</a>
 #end
 {/pre}
 </div>
@@ -2273,8 +2276,11 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 #end
 #sep() {pre}
 #if ($bentrydoc.hasAccessLevel("edit"))
-<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a> #sep()
-<a class="curriki-link" href="$bentrydoc.getURL("delete")" >$msg.get("caption.delete")</a>
+<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a>
+#set($deleteMsg = $msg.get('mycurriki.blog.actions.delete.confirm'))
+#set($blogUrl = $xwiki.getURL("MyCurriki.Blog"))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${bentrydoc.fullName}&sourceDoc=${blogUrl}"))
+#sep() <a class="curriki-link" onclick="this.href='$deleteUrl'; return confirm('$deleteMsg');" href="javascript:void()">$msg.get("caption.delete")</a>
 #end
 {/pre}
 </div>
