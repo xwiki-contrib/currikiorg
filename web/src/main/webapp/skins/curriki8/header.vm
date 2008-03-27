@@ -88,7 +88,7 @@
  <div id="curriki-header-right">
   <div class="header-inner">
    <p class="curriki-small-infos">$msg.get("header.find_resource")</p>
-   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="if ($$('.gwt-Button.search-searchbutton')[0] && document.searchform.brsqry.value!='search') { $$('.gwt-TextBox[name=__terms]')[0].value=document.searchform.brsqry.value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if (document.searchform.brsqry.value!='search') {document.searchform.action=document.searchform.action+'#__terms='+document.searchform.brsqry.value.replace(/%/g, "%2525");}; document.location.href=document.searchform.action; } return false;">
+   <form id="searchform" name="searchform" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;">
 <div id="curriki-search-field-container">
     <div id="curriki-search-field" class="curriki-search-a">
      <input type="hidden" class="hidden" name="area" value=""/>
@@ -104,7 +104,7 @@
 </div> ## curriki-search-field-container
    </form>
 <div id="advsearchlink">
-<a href="$xwiki.getURL("Main.GWTSearch")" onclick="if ($$('.gwt-Button.search-searchbutton')[0]) {if (document.searchform.brsqry.value!='search'){ $$('.gwt-TextBox[name=__terms]')[0].value=document.searchform.brsqry.value; $$('.gwt-Button.search-searchbutton')[0].click(); } return false;} else {this.href=this.href+'#__advShow=1'; if (document.searchform.brsqry.value!='search') {this.href=this.href+'&__terms='+document.searchform.brsqry.value.replace(/%/g, "%2525");}; return true;}">$msg.get("header.advanced_search")</a>
+<a href="$xwiki.getURL("Main.GWTSearch")" onclick="if ($$('.gwt-Button.search-searchbutton').length>0) {if ($('curriki-searchbox').value!=='search'){ $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } return false;} else {this.href=this.href+'#__advShow=1'; if ($('curriki-searchbox').value!=='search') {this.href=this.href+'&__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');}; return true;}">$msg.get("header.advanced_search")</a>
 #sep()
 <a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
 </div>
