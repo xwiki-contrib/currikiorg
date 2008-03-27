@@ -3935,3 +3935,9 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 ##
 ## End from space.vm
 ##
+## allows to insert a style sheet
+#macro(css $filename)
+<style type="text/css">
+@import "$doc.getAttachmentURL($filename)";
+</style>
+#end
