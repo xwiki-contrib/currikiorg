@@ -3263,8 +3263,9 @@ showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${secco
 #set($obj = $adoc.getObject("XWiki.ArticleClass",0))
 #set($msgtitle = $adoc.display("title", "view"))
 #set($msgcontent = $adoc.display("content", "view"))
-#set($creationDate = $xwiki.formatDate($adoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
-<p><span class="date">$creationDate</span>, by <a>$xwiki.getLocalUserName($adoc.creator)</a></p>
+## CURRIKI-1860: we display the modification date and the last author
+#set($modificationDate = $xwiki.formatDate($adoc.date,$msg.get("mycurriki.datetimeFormat")))
+<p><span class="date">$modificationDate</span>, by <a>$xwiki.getLocalUserName($adoc.author)</a></p>
 <p class="frame-title">$msgtitle</p>
 <p>
 $msgcontent
