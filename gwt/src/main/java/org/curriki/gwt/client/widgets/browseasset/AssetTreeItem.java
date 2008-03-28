@@ -60,7 +60,8 @@ public class AssetTreeItem extends TreeItem {
             Iterator it = currItem.getItems().iterator();
             while(it.hasNext()){
                 AssetItem item = (AssetItem) it.next();
-                addItem(new AssetTreeItem(item));
+		if(item.getText()!="assetuntitled")
+                  addItem(new AssetTreeItem(item));
             }
         }
         addStyleName("asset-tree-item");
