@@ -59,6 +59,9 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     private WindowResizeListener resizeListener = null;
     private List mandatoryFields = new ArrayList();
     private NextCancelDialog ncDialog;
+    private Button bttSend = new Button(Main.getTranslation("editor.btt_save"));
+    private HTML txtSend = new HTML();
+    private FlowPanel sendContainer = new FlowPanel();
     // CRS
     private String currentCRSStatus;
     private int step = 1;
@@ -77,6 +80,23 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
         form.setMethod(FormPanel.METHOD_POST);
         form.setEncoding(FormPanel.ENCODING_URLENCODED);
+        
+        bttSend.addClickListener(new ClickListener(){
+            public void onClick(Widget sender) {
+                MetadataEdit.this.submit();
+            }
+        });
+        bttSend.addStyleName("metadata-save");
+
+        String txt = Main.getTranslation("metadata.save_button_text");
+        if (txt.length() > 0 && !txt.equals("metadata.save_button_text")) {
+            txtSend.setHTML(txt);
+            txtSend.addStyleName("metadata-save-text");
+        }
+
+        sendContainer.addStyleName("righttext");
+        sendContainer.add(bttSend);
+        sendContainer.add(txtSend);
 
         if(doc != null)
             init(doc, fullMode);
@@ -196,6 +216,11 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             moreInfoLabel.addStyleName("more-info");
             //moreInfoLabel.addStyleName("more-info-"+fullMode);
             panel.add(moreInfoLabel);
+        }
+
+        panel.remove(sendContainer);
+        if (Main.getSingleton().getEditor().getCurrentAsset().hasEditRight()){
+            panel.add(sendContainer);
         }
     }
 

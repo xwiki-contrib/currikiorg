@@ -21,35 +21,22 @@
  */
 package org.curriki.gwt.client.pages;
 
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FormHandler;
-import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormSubmitEvent;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.editor.Editor;
 import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+
 public class MetadataPage extends AbstractPage {
     MetadataEdit meta = new MetadataEdit(true);
-    Button bttSend = new Button(Main.getTranslation("editor.btt_save"));
-    HTML txtSend = new HTML();
 
     public MetadataPage(){
         panel.add(meta);
         panel.setStyleName("metadata-page");
-
-        bttSend.addClickListener(new ClickListener(){
-            public void onClick(Widget sender) {
-                meta.submit();
-            }
-        });
-
-        bttSend.addStyleName("metadata-save");
 
         meta.addFormHandler(new FormHandler(){
             public void onSubmit(FormSubmitEvent event) {
@@ -69,16 +56,6 @@ public class MetadataPage extends AbstractPage {
             }
         });
 
-        panel.add(bttSend);
-
-
-        String txt = Main.getTranslation("metadata.save_button_text");
-        if (txt.length() > 0 && !txt.equals("metadata.save_button_text")) {
-            txtSend.setHTML(txt);
-            txtSend.addStyleName("metadata-save-text");
-            panel.add(txtSend);
-        }
-
         initWidget(panel);
     }
 
@@ -88,12 +65,6 @@ public class MetadataPage extends AbstractPage {
     
     public void init() {
         super.init();
-        panel.remove(bttSend);
-        panel.remove(txtSend);
-        if (Main.getSingleton().getEditor().getCurrentAsset().hasEditRight()){
-            panel.add(bttSend);
-            panel.add(txtSend);
-        }
         meta.init(Main.getSingleton().getEditor().getCurrentAsset(), true);
     }
 }
