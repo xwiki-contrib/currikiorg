@@ -59,7 +59,8 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     private native String addMCEControl(Element e, String imagepath, String attachpath) /*-{
           $wnd.tinyMCE.settings["wiki_images_path"] = imagepath;
           $wnd.tinyMCE.settings["wiki_attach_path"] = attachpath;
-          return $wnd.tinyMCE.addMCEControl(e, e.id);
+          var elemid = e.id ? e.id : e.name;
+          return $wnd.tinyMCE.addMCEControl(e, elemid);
           // $wnd.tinyMCE.settings["wiki_images_path"] = imagepath;
           // $wnd.tinyMCE.settings["wiki_attach_path"] = attachpath;
       }-*/;
@@ -112,7 +113,7 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
         String imagepath = "/xwiki/bin/download/" + getDocumentFullName().replace('.', '/') + "/";
         String attachpath = "/xwiki/bin/view/" + getDocumentFullName().replace('.', '/');
         tinyMCEId = addMCEControl(textarea.getElement(), imagepath, attachpath);
-        Main.getSingleton().getEditor().ensureVisibleWidget(textarea);
+        Main.getSingleton().getEditor().ensureVisibleWidget(panel);
         // }
     }
 
@@ -228,6 +229,8 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
                     panel.add(viewLabel);
                     if (Window.confirm(Main.getTranslation("asset.asset_locked_force_edit"))){
                         switchToEdit(true);
+                    } else {
+                        cancelEditMode();
                     }
                 }
             }
@@ -250,7 +253,11 @@ public class TextItemDisplay extends AbstractItemDisplay implements WindowResize
     public void onWindowResized(int i, int i1) {
         if ((textarea!=null)&&(status == Constants.EDIT)) {
             String text = getContent();
-            panel.remove(0);
+            try {
+              panel.remove(0);
+            }catch(Exception e){
+              // don't fail
+            }
             initVerbatim(text);
         }
     }

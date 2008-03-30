@@ -207,6 +207,10 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
                     if (Window.confirm(Main.getTranslation("asset.asset_locked_force_edit"))){
                         switchToEdit(true);
                     }
+                    else
+                    {
+                    	cancelEditMode();
+                    }
                 }
 
             }
