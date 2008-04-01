@@ -3230,9 +3230,9 @@ showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${secco
 #end
 #set($messageDoc = $xwiki.getDocument($messagePageName))
 #set($ok = $messageDoc.use("XWiki.ArticleClass"))
-	<div class="frame-inset">
-#set($creationDate = $xwiki.formatDate($messageDoc.creationDate,$msg.get("mycurriki.datetimeFormat")))	
-	 <p><span class="date">$creationDate</span>, $msg.groups_messages_createdby <a>$xwiki.getLocalUserName($messageDoc.creator)</a></p>
+	<div class="frame-inset">	
+#set($modificationDate = $xwiki.formatDate($messageDoc.date,$msg.get("mycurriki.datetimeFormat")))
+	 <p><span class="date">$modificationDate</span>, $msg.groups_messages_createdby <a>$xwiki.getLocalUserName($messageDoc.author)</a></p>
 	 <p id="msgsection${seccounter}links" class="button-links">
 	  <a class="button-link" href="$messageDoc.getURL()">$msg.get("groups_messages_message_optionsview_link")</a>
 #if($messageDoc.hasAccessLevel("edit"))
