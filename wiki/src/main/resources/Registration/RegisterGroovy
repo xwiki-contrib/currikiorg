@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1193332613000</creationDate>
-<date>1198785601000</date>
-<contentUpdateDate>1198785601000</contentUpdateDate>
-<version>1.11</version>
+<date>1204747488000</date>
+<contentUpdateDate>1204747488000</contentUpdateDate>
+<version>5.1</version>
 <title>Groovy Script for Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Added validredirect</comment>
+<comment>Better email format checking</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -149,7 +150,7 @@ public class register {
    def atIndex = email.indexOf("@");
 
    // We should make this a bit better...
-   if ((atIndex &lt; 1) || (email.lastIndexOf(".") &lt;= (atIndex+1)) || (email.length() &lt;= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex)) {
+   if ((atIndex &lt; 1) || (email.lastIndexOf(".") &lt;= (atIndex+1)) || (email.length() &lt;= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
      message = "email_notvalid";
      return false;
    }
@@ -185,12 +186,14 @@ public class register {
 
    if (withValidation) {
      userobj.set("active", "0");
+     userobj.set("email_undeliverable", "1");
      validkey = xwiki.xWiki.generateValidationKey(16);
      userobj.set("validkey", validkey);
      if (request.xredirect!=null)
       userobj.set("validredirect", request.xredirect);
    } else {
      userobj.set("active", "1");
+     userobj.set("email_undeliverable", "0");
    }
 
    //userdoc.setParent("XWiki.XWikiUsers");

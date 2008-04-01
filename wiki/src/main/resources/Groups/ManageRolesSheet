@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1202239285000</creationDate>
-<date>1203005065000</date>
-<contentUpdateDate>1203005065000</contentUpdateDate>
-<version>1.42</version>
+<date>1206453490000</date>
+<contentUpdateDate>1206453490000</contentUpdateDate>
+<version>5.1</version>
 <title>Manage Roles</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cancel now a button</comment>
+<comment>a</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -61,7 +62,7 @@
   &lt;div id="groups-manage-role-line-${role.name}"&gt;
 &lt;div class="lefttext"&gt;
 &lt;div class="righttext floatright hidebuttons"&gt;
-&lt;a onclick="{pre}$('groups-manage-role-line-{/pre}${role.name}{pre}').hide(); $('groups-manage-roles-edit-{/pre}${role.name}{pre}').show(); $$('.hidebuttons').invoke('hide'); return false;{/pre}"&gt;$msg.get("groups.roles.manage.edit")&lt;/a&gt;
+&lt;a href="javascript:void()" onclick="{pre}$('groups-manage-role-line-{/pre}${role.name}{pre}').hide(); $('groups-manage-roles-edit-{/pre}${role.name}{pre}').show(); $$('.hidebuttons').invoke('hide'); return false;{/pre}"&gt;$msg.get("groups.roles.manage.edit")&lt;/a&gt;
 #sep()
 &lt;a href="$xwiki.getURL("${spaceName}.ManageRoles", "view", "delete=${role.name}")" onclick="return confirm('$msg.get("groups.roles.manage.delete.confirm")');"&gt;$msg.get("groups.roles.manage.delete")&lt;/a&gt;
 &lt;/div&gt;

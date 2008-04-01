@@ -12,14 +12,15 @@
 <customClass></customClass>
 <contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1200243725000</creationDate>
-<date>1203083280000</date>
-<contentUpdateDate>1203083280000</contentUpdateDate>
-<version>1.11</version>
+<date>1206726247000</date>
+<contentUpdateDate>1206726247000</contentUpdateDate>
+<version>5.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
 <comment>a</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -53,13 +54,20 @@
 <tags/>
 </property>
 </object>
-<content>#set($pageName = $request.page)
+<content>#includeMacros("Groups.Macros")
+#groupsinit()
+#set($pageName = $request.page)
 #set($spaceName = $request.space)
+#set($groupName = $spaceName)
+#if(!$groupName.startsWith("Group_"))
+#set($pos = 1 + $groupName.indexOf("_"))
+#set($groupName = $groupName.substring($pos))
+#end
 #set($divid = $request.divid)
 #set($adoc = $xwiki.getDocument("${spaceName}.${pageName}"))
 #set($ok = $adoc.use("XWiki.ArticleClass"))
 {pre}
-&lt;form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{update:'${divid}', onComplete:updateSectionTitle}); return false;"&gt;
+&lt;form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{update:'${divid}', onComplete:onAfterSave}); return false;"&gt;
 {/pre}
 &lt;p&gt;
 &lt;input type="hidden" name="xpage" value="plain" /&gt;
@@ -73,10 +81,32 @@ $adoc.display("title", "edit")
 *$msg.get("groups_messages_create_messagecontent_instruction")*
 $adoc.display("content", "edit")
 &lt;br /&gt;
+## The JavaScript needed is included in Groups.MessageSheet
+#set($viewRightObj = $adoc.getObject("XWiki.XWikiRights", "levels", "view"))
+#set($toGroup = true)
+#set($selectedRoles = [])
+#set($selectedMembers = [])
+#if($viewRightObj)
+$adoc.use($viewRightObj)
+#if(!$adoc.groups.contains("${groupName}.MemberGroup"))
+#set($toGroup = false)
+#end
+#foreach($role in $adoc.groups.split(","))
+#if($role.length()&gt;0 &amp;&amp; !$role.equals("XWiki.XWikiAllGroup") &amp;&amp; !$role.equals("${groupName}.MemberGroup"))
+#set($ok = $selectedRoles.add($role))
+#end
+#end
+#foreach($member in $adoc.users.split(","))
+#if($member.length()&gt;0)
+#set($ok = $selectedMembers.add($member))
+#end
+#end
+#end
+#messageAddSendToFormFields($groupName, $toGroup, $selectedRoles, $selectedMembers)
 {pre}
 &lt;div class="button-right"&gt; 
 &lt;input type="button" class="button button-grey" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" /&gt;
-&lt;input type="submit" class="button button-orange" value="$msg.get("groups_messages_edit_submit_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent();" /&gt;
+&lt;input type="submit" class="button button-orange" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" /&gt;
 &lt;/div&gt;
 {/pre}
 &lt;/p&gt;

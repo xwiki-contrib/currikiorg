@@ -12,14 +12,15 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1192830919000</creationDate>
-<date>1202515803000</date>
-<contentUpdateDate>1202515803000</contentUpdateDate>
-<version>1.46</version>
+<date>1206473168000</date>
+<contentUpdateDate>1206473168000</contentUpdateDate>
+<version>27.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Remove "To Login click OK"</comment>
+<comment>Message to require an email address</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -70,6 +71,8 @@ forgotPassword.enterPassword=You can now enter a new password:
 forgotPassword.enterPassword.prompt=Please enter a new password:
 forgotPassword.enterPasswordConfirm.prompt=Please confirm the new password:
 forgotPassword.Go=Go &amp;#xBB;
+forgotPassword.email.mandatory=An email address is required.
+forgotPassword.email.invalid=A valid email address is required.
 
 
 
@@ -89,6 +92,8 @@ forgotUsername.infos=Forgot your login name? Happens to the best of us. Enter th
 forgotUsername.enterEmail=Please enter your email address:
 forgotUsername.noUser=Sorry, no user exists for the email address {0}
 forgotUsername.emailSent=The login for {0} has been emailed.
+forgotUsername.email.mandatory=An email address is required.
+forgotUsername.email.invalid=A valid email address is required.
 
 
 
@@ -175,7 +180,7 @@ profile.removePhoto=Remove Photo
 profile.removeYourPhoto=Remove Your Photo
 profile.modifyYourPhoto=Change Your Photo
 profile.changeMyPhoto=Change My Photo
-profile.changeMyPhoto.needToRemove=You need to remove your picture first.  Do you want to do that ?
+profile.changeMyPhoto.needToRemove=You need to remove your picture first.  Do you want to do that?
 profile.field.firstName=Display Name 1:
 profile.field.lastName=Display Name 2:
 profile.field.display.firstName=Display Name 1:
@@ -225,11 +230,64 @@ email_not_received.missing=Please provide all the required information.
 email_not_received.error.need_login=Please enter a login name
 email_not_received.error.need_email=Please enter your email address
 email_not_received.error.need_phone=Please enter your phone number
-email_not_received.email_sent=An email has been sent to Curriki so your registration can be completed.
+
+email_not_received.email_sent=Thank you for contacting Curriki. A representative will contact you shortly.&lt;br /&gt;&lt;br /&gt;&lt;a href="/xwiki/bin/view/Main/" class="button button-orange"&gt;OK&lt;/a&gt;
+email_not_received_sent.title=Email Not Received Message Sent
 
 #Header
 loginUsername=login name
 
 #Enter Login Name Again
-username=Login Name</content>
-</xwikidoc>
+username=Login Name
+
+## Email Validation
+emailValidation.step1.errNoUser=Username not given.
+emailValidation.step1.errNotFound=User not found.
+emailValidation.step1.errNotBounced=Email is not bouncing.
+emailValidation.step1.errNoEmail=Please enter an email address.
+emailValidation.step1.errBadEmail=Please enter a valid email address.
+emailValidation.step1.errDupEmail=That email address is already used by another account.
+
+emailValidation.step1.title=Email Verification - Step 1 of 2
+emailValidation.step1.intro=Our member's security is Curriki's top concern. To maintain security Curriki requires that all email addresses be verified.
+emailValidation.step1.weHave=For {0} {1} our records show {2}.
+emailValidation.step1.pleaseSubmit=Please select the Submit button to send a verification email to this address. Or update the email address with a new address (your profile will be automatically update) and then select Submit.
+emailValidation.step1.submit=Submit
+
+emailValidation.step1.goElsewhere=Any changes made to the page will be lost. Select OK to be logged out and returned to the home page. You can return to this form by logging in.  Select Cancel to return to the form to submit your changes.
+
+emailValidation.sent.title=Email Verification Sent
+emailValidation.sent.text=&lt;p&gt;The first step in verifying your email address is complete.&lt;/p&gt;&lt;p&gt;To complete step 2, please check your email inbox for a message from webmaster@curriki.org&lt;/p&gt;&lt;p&gt;If you do not see the email, it may be because of a SPAM filter. Check your SPAM folder and be sure to add curriki.org to your "safe senders" list or address book.&lt;/p&gt;
+emailValidation.sent.notreceived=If you have not received an email within 10 minutes, please contact Curriki by using the &lt;a href="/xwiki/bin/view/Registration/EmailNotReceived"&gt;Email Not Received&lt;/a&gt; form.
+
+emailValidation.step2.title=Email Verified - Step 2 of 2 Completed
+emailValidation.step2.text=&lt;p&gt;Your email address has been confirmed.&lt;/p&gt;&lt;p&gt;Thank you.&lt;/p&gt;
+emailValidation.step2.ok=OK
+
+emailValidation.step2.errNoUser=Invalid user.
+emailValidation.step2.errNoVkey=Invalid key.
+emailValidation.step2.errBadVkey=Invalid key.
+emailValidation.step2.errNotFound=User not found.
+emailValidation.step2.errNotBounced=Email is not bouncing.
+
+staf.dialog.title=Send To a Friend
+staf.dialog.recipients=Email address(es) for recipient(s):
+staf.dialog.recipients.comments=Separate multiple email addresses with a comma.
+staf.dialog.customize=Customize message (optional):
+staf.dialog.customize.default=Here's a great resource I found at Curriki (a global education and learning community) that I thought you would enjoy.
+staf.dialog.yourname=Your name:
+staf.dialog.ccme=Send me a copy
+staf.dialog.youremail=Your email address:
+staf.dialog.privacy=Your email address is used to tell your friends who sent them this link. Email addresses for friends are only used to transmit this email. We do not store or use the email addresses entered or the data transmitted for any purpose. Please see the &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Privacy Policy&lt;/a&gt; for more information.
+staf.dialog.cancel=Cancel
+staf.dialog.send=Send
+staf.dialog.shouldcancel=Entered information will be lost. Are you sure you want to close?
+
+staf.from=sendtoafriend@curriki.org
+
+staf.sent.okaymsg=E-mail sent.
+staf.err.emptyto=Please enter an email address.
+staf.err.invalidemail=Please enter a valid email address.
+staf.err.isguest=Only Curriki members can send resources to a friend. Please log in or become a member.
+staf.sent.errored=An unknown error has occurred.
+</content></xwikidoc>

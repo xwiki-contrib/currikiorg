@@ -12,14 +12,15 @@
 <customClass></customClass>
 <contentAuthor>XWiki.cristi</contentAuthor>
 <creationDate>1202816566000</creationDate>
-<date>1202979352000</date>
-<contentUpdateDate>1202979352000</contentUpdateDate>
-<version>1.11</version>
+<date>1203506687000</date>
+<contentUpdateDate>1203506687000</contentUpdateDate>
+<version>5.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-1636</comment>
+<comment>CURRIKI-1658</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -60,9 +61,9 @@
      &lt;a href="${doc.uRL}?action=editdoc&amp;pagename=${request.pagename}"&gt;
 Edit
 &lt;/a&gt;
-  &lt;span class="inactive-link"&gt;History&lt;/span&gt; 
+  &lt;span class="inactive-link"&gt;${msg.groups_documentation_documents_history}&lt;/span&gt; 
    &lt;/div&gt;
-   #begingroupsection("Wiki Page History" "" "" "blue" true)    
+   #begingroupsection("${msg.groups_documentation_documents_history_title}" "" "" "blue" true)    
 
 #set($docdoc = $xwiki.getDocument($request.pagename))
 #if($docdoc.isNew())
@@ -77,11 +78,11 @@ Edit
       &lt;div class="centered"&gt;
       &lt;table class="xwikidatatable" summary="$msg.get(document) ${doc.displayTitle} &amp;mdash; $msg.get("history")" width="100%"&gt;
         &lt;tr&gt;
-          &lt;th&gt;$msg.get("from")&lt;/th&gt;
-          &lt;th&gt;$msg.get("to")&lt;/th&gt;
-          &lt;th&gt;$msg.get("version")&lt;/th&gt;
-          &lt;th&gt;$msg.get("reveditor")&lt;/th&gt;
-          &lt;th&gt;$msg.get("datetime")&lt;/th&gt;
+          &lt;th&gt;$msg.get("history.from")&lt;/th&gt;
+          &lt;th&gt;$msg.get("history.to")&lt;/th&gt;
+          &lt;th&gt;$msg.get("history.version")&lt;/th&gt;
+          &lt;th&gt;$msg.get("history.author")&lt;/th&gt;
+          &lt;th&gt;$msg.get("history.date")&lt;/th&gt;
 #if($hasedit || $hasadmin)
           &lt;th&gt;$msg.get("action")&lt;/th&gt;
 #end
@@ -124,14 +125,14 @@ Edit
 
           &lt;td&gt;
 #if( $velocityCount&gt; 1 )
-&lt;a href="${rollURL}" onclick="if (confirm('$msg.get("readytorollback") $nextversion')){this.href += '&amp;amp;confirm=1'; return true;} return false;" class="button button-orange"&gt;$msg.get("rollback")&lt;/a&gt;
+&lt;a href="${rollURL}" onclick="if (confirm('$msg.get("readytorollback") $nextversion')){this.href += '&amp;amp;confirm=1'; return true;} return false;" class="button button-orange"&gt;$msg.get("history.rollback")&lt;/a&gt;
 #end
 &lt;/td&gt;
 #end
         &lt;/tr&gt;
 #end
 &lt;/table&gt;
-      &lt;div class="buttons"&gt;&lt;input type="submit" accesskey="c" value="$msg.get("compare")" class="button"/&gt;&lt;/div&gt;
+      &lt;div class="buttons"&gt;&lt;input type="submit" accesskey="c" value="$msg.get("history.compare")" class="button"/&gt;&lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/form&gt;

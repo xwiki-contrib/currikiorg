@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.jeremi</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1173445381000</creationDate>
-<date>1203037050000</date>
-<contentUpdateDate>1203037050000</contentUpdateDate>
-<version>1.89</version>
+<date>1206952127000</date>
+<contentUpdateDate>1206952127000</contentUpdateDate>
+<version>36.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>Fix JS error in licence texte</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -54,6 +55,7 @@
 </property>
 </object>
 <content>#&lt;pre&gt;
+
 ## Params
 params.gwturl=/xwiki/bin/view/GWT/Editor?xpage=plain&amp;
 params.iconsurl=/xwiki/skins/curriki8/icons/
@@ -225,7 +227,7 @@ metadata.rights_tooltip=This setting determines who has the rights to view or ed
 metadata.rights_content=
 metadata.rightsHolder_tooltip=This is the person or organization that holds the rights to this resource -- the owner of this intellectual property.
 metadata.license_type_title=License Deed
-metadata.license_type_txt=Please be sure you have read and understand the &lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;Terms of Use&lt;/a&gt; and that you have the rights to contribute this content.&lt;br /&gt;&lt;br /&gt;The Curriki-compatible license provides maximum flexibility to the community, so members can use and modify others' contributions.  The default Curriki license is a widely used Creative Commons license Attribution &lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open("http://creativecommons.org/licenses/by/3.0/", "CC30"); return false;"&gt;3.0&lt;/a&gt;.  If you wish to assign another license, please select from the drop-down list below.  To learn about all the Creative Commons licenses, please &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open("http://creativecommons.org/about/licenses/meet-the-licenses", "CCmeet"); return false;"&gt;click here&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;Set License Deed:
+metadata.license_type_txt=Please be sure you have read and understand the &lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;Terms of Use&lt;/a&gt; and that you have the rights to contribute this content.&lt;br /&gt;&lt;br /&gt;The Curriki-compatible license provides maximum flexibility to the community, so members can use and modify others' contributions.  The default Curriki license is a widely used Creative Commons license Attribution &lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open('http://creativecommons.org/licenses/by/3.0/', 'CC30'); return false;"&gt;3.0&lt;/a&gt;.  If you wish to assign another license, please select from the drop-down list below.  To learn about all the Creative Commons licenses, please &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open('http://creativecommons.org/about/licenses/meet-the-licenses', 'CCmeet'); return false;"&gt;click here&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;Set License Deed:
 metadata.license_type_content=
 metadata.licenseType2_tooltip=License protecting this content
 metadata.field_missing=The following field is mandatory.
@@ -454,7 +456,7 @@ curriki.crs.confirmsettopartner=If you want to set this to Premium, click Next.
 curriki.crs.confirmunsettopartner=If you want to remove the Premium setting, click Next.
 curriki.crs.reviewlist.currikireview=Curriki Review
 curriki.crs.reviewlist.nocurrikireviews=This resource has not been reviewed.
-curriki.crs.generatedcomment=&lt;span class="crs_reviewscontenttext"&gt;This resource was reviewed using the rubric for {0} and received an overall CRS rating of &lt;/span&gt;&lt;img src="{1}" /&gt;&lt;br /&gt;&lt;br /&gt; Its component ratings were:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;Technical Completeness: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Content Accuracy: {3}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Appropriate Pedagogy: {4}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{5}
+curriki.crs.generatedcomment=&lt;span class="crs_reviewscontenttext"&gt;This resource was reviewed using the rubric for {0} and received an overall CRS rating of &lt;/span&gt;{1}&lt;br /&gt;&lt;br /&gt; Its component ratings were:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;Technical Completeness: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Content Accuracy: {3}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Appropriate Pedagogy: {4}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{5}
 curriki.crs.generatedcommentunrated=This resource was reviewed using the rubric for {0} and could not receive a rating.&lt;br /&gt;&lt;br /&gt; Its component ratings were:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;Technical Completeness: {1}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Content Accuracy: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Appropriate Pedagogy: {3}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{4}
 curriki.crs.nominate=Nominate
 curriki.crs.nominate.nominatefollowingresourceforreview=Nominate the following resource for review:
@@ -466,6 +468,7 @@ curriki.crs.nominate.submit=Submit
 curriki.crs.nominate.cancel=Cancel
 params.crs.nominateurl=/xwiki/bin/view/CRS/Nominate
 params.crs.reviewurl=/xwiki/bin/view/CRS/Review
+
 #Search 
 search.top_titlebar=Find Resources in the Repository 
 search.cancel_button=Cancel
@@ -474,8 +477,10 @@ search.selector.terms=Search Terms:
 search.selector.terms_tooltip=Terms to search for
 search.search_button=Search  
 search.search_dialog_title=Find Resources in the Repository
+
 search.selector.subject=Subject:
 search.selector.subject.any=Any
+
 search.selector.level=Level:
 search.selector.level.any=Any
 search.selector.level.prek=Preschool / Ages 0-4
@@ -488,6 +493,7 @@ search.selector.level.college_and_beyond=College and Beyond
 search.selector.level.professional_development=Professional Development
 search.selector.level.special_education=Special Education
 search.selector.level.na=Other
+
 search.selector.ict=Instructional Type:
 search.selector.ict_tooltip=Instructional component type to search for
 search.selector.ict.any=Any
@@ -521,18 +527,21 @@ search.selector.ict.resource.script=Script/Transcript
 search.selector.ict.resource.speech=Speech/Lecture/Song
 search.selector.ict.resource.table=Table/Graph/Chart
 search.selector.ict.other=Other
+
 search.selector.filetype=File Type:
 search.selector.filetype.any=Any
 search.selector.filetype.audio=Audio/Video
 search.selector.filetype.text=Curriki
 search.selector.filetype.image=Image
 search.selector.filetype.link=Web
+
 search.selector.filters=Special Filters:
 search.selector.filters_tooltip=Allows you to find certain types of items
 search.selector.filters.none=None
 search.selector.filters.mine=Only My Contributions
 search.selector.filters.collections=Only Collections
 search.selector.filters.reviewed=Only Reviewed Resources
+
 search.results.col.title=Title
 search.results.col.review=Review
 search.results.col.ict=Instructional Type
@@ -554,5 +563,206 @@ search.instruction.adv.close=Close Advanced Search
 search.noresults=Your search did not return matching resources.
 search.noshowableresults=Your search did not return matching resources.
 checkversion.versionhaschanged=Another Curriki member is also editing this collection or folder. Select OK to continue.
+
+## INFORMATION TAB
+
+## SUBJECT
+
+XWiki.AssetClass_fw_items_FW_masterFramework.WebHome=Subject Index
+XWiki.AssetClass_fw_items_FW_masterFramework.Arts=Arts
+XWiki.AssetClass_fw_items_FW_masterFramework.Architecture=Architecture
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.Dance=Dance
+XWiki.AssetClass_fw_items_FW_masterFramework.DramaDramatics=Drama/Dramatics
+XWiki.AssetClass_fw_items_FW_masterFramework.Film=Film
+XWiki.AssetClass_fw_items_FW_masterFramework.History=History
+XWiki.AssetClass_fw_items_FW_masterFramework.Music=Music
+XWiki.AssetClass_fw_items_FW_masterFramework.Photography=Photography
+XWiki.AssetClass_fw_items_FW_masterFramework.PopularCulture=Popular Culture
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology=Technology
+XWiki.AssetClass_fw_items_FW_masterFramework.VisualArts=Visual Arts
+XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation=Career &amp; Technical Education
+XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture_0=Agriculture
+XWiki.AssetClass_fw_items_FW_masterFramework.Business=Business
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_6=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=Education &amp; Teaching
+XWiki.AssetClass_fw_items_FW_masterFramework.OccupationalHomeEconomics=Occupational Home Economics
+XWiki.AssetClass_fw_items_FW_masterFramework.School-to-work=School-to-work
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology_2=Technology
+XWiki.AssetClass_fw_items_FW_masterFramework.Trade&amp;Industrial=Trade &amp; Industrial
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology=Educational Technology
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_0=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.IntegratingTechnologyintotheClassroom=Integrating Technology into the Classroom
+XWiki.AssetClass_fw_items_FW_masterFramework.UsingMultimedia&amp;theInternet=Using Multimedia &amp; the Internet
+XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=Foreign Languages
+XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet=Alphabet
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_7=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=Cultural Awareness
+XWiki.AssetClass_fw_items_FW_masterFramework.Grammar=Grammar
+XWiki.AssetClass_fw_items_FW_masterFramework.InformalEducation=Informal Education
+XWiki.AssetClass_fw_items_FW_masterFramework.Linguistics=Linguistics
+XWiki.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=Listening Comprehension
+XWiki.AssetClass_fw_items_FW_masterFramework.Reading=Reading
+XWiki.AssetClass_fw_items_FW_masterFramework.Speaking=Speaking
+XWiki.AssetClass_fw_items_FW_masterFramework.Spelling=Spelling
+XWiki.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=Vocabulary Writing
+XWiki.AssetClass_fw_items_FW_masterFramework.Health=Health 
+XWiki.AssetClass_fw_items_FW_masterFramework.BodySystems&amp;Senses=Body Systems &amp; Senses
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_1=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.EnvironmentalHealth=Environmental Health
+XWiki.AssetClass_fw_items_FW_masterFramework.HumanSexuality=Human Sexuality
+XWiki.AssetClass_fw_items_FW_masterFramework.MentalEmotionalHealth=Mental/Emotional Health
+XWiki.AssetClass_fw_items_FW_masterFramework.Nutrition=Nutrition
+XWiki.AssetClass_fw_items_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=Safety/Smoking/Substance Abuse Prevention
+XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy=Information &amp; Media Literacy
+XWiki.AssetClass_fw_items_FW_masterFramework.EvaluatingSources=Evaluating Sources
+XWiki.AssetClass_fw_items_FW_masterFramework.MediaEthics=Media Ethics
+XWiki.AssetClass_fw_items_FW_masterFramework.OnlineSafety=Online Safety
+XWiki.AssetClass_fw_items_FW_masterFramework.ResearchMethods=Research Methods
+XWiki.AssetClass_fw_items_FW_masterFramework.LanguageArts=Language Arts
+XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet_0=Alphabet
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_2=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.Journalism=Journalism
+XWiki.AssetClass_fw_items_FW_masterFramework.Listening&amp;Speaking=Listening &amp; Speaking
+XWiki.AssetClass_fw_items_FW_masterFramework.Literature=Literature
+XWiki.AssetClass_fw_items_FW_masterFramework.Phonics=Phonics
+XWiki.AssetClass_fw_items_FW_masterFramework.ReadingComprehension=Reading Comprehension
+XWiki.AssetClass_fw_items_FW_masterFramework.Research=Research
+XWiki.AssetClass_fw_items_FW_masterFramework.Spelling_0=Spelling
+XWiki.AssetClass_fw_items_FW_masterFramework.StoryTelling=Story Telling
+XWiki.AssetClass_fw_items_FW_masterFramework.Vocabulary=Vocabulary
+XWiki.AssetClass_fw_items_FW_masterFramework.Writing=Writing
+XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics=Mathematics
+XWiki.AssetClass_fw_items_FW_masterFramework.Algebra=Algebra
+XWiki.AssetClass_fw_items_FW_masterFramework.Appliedmathematics=Applied Mathematics
+XWiki.AssetClass_fw_items_FW_masterFramework.Arithmetic=Arithmetic
+XWiki.AssetClass_fw_items_FW_masterFramework.Calculus=Calculus
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_3=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.DataAnalysis&amp;Probability=Data Analysis &amp; Probability
+XWiki.AssetClass_fw_items_FW_masterFramework.Equations=Equations
+XWiki.AssetClass_fw_items_FW_masterFramework.Estimation=Estimation
+XWiki.AssetClass_fw_items_FW_masterFramework.Geometry=Geometry
+XWiki.AssetClass_fw_items_FW_masterFramework.Graphing=Graphing
+XWiki.AssetClass_fw_items_FW_masterFramework.Measurement=Measurement
+XWiki.AssetClass_fw_items_FW_masterFramework.NumberSense&amp;Operations=Number Sense &amp; Operations
+XWiki.AssetClass_fw_items_FW_masterFramework.Patterns=Patterns
+XWiki.AssetClass_fw_items_FW_masterFramework.ProblemSolving=Problem Solving
+XWiki.AssetClass_fw_items_FW_masterFramework.Statistics=Statistics
+XWiki.AssetClass_fw_items_FW_masterFramework.Trigonometry=Trigonometry
+XWiki.AssetClass_fw_items_FW_masterFramework.Science=Science
+XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture=Agriculture
+XWiki.AssetClass_fw_items_FW_masterFramework.Astronomy=Astronomy
+XWiki.AssetClass_fw_items_FW_masterFramework.Biology=Biology
+XWiki.AssetClass_fw_items_FW_masterFramework.Botany=Botany
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_4=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.Chemistry=Chemistry
+XWiki.AssetClass_fw_items_FW_masterFramework.Earthscience=Earth Science
+XWiki.AssetClass_fw_items_FW_masterFramework.Ecology=Ecology
+XWiki.AssetClass_fw_items_FW_masterFramework.Engineering=Engineering
+XWiki.AssetClass_fw_items_FW_masterFramework.Generalscience=General Science
+XWiki.AssetClass_fw_items_FW_masterFramework.Geology=Geology
+XWiki.AssetClass_fw_items_FW_masterFramework.HistoryofScience=History of Science
+XWiki.AssetClass_fw_items_FW_masterFramework.LifeSciences=Life Sciences
+XWiki.AssetClass_fw_items_FW_masterFramework.Meteorology=Meteorology
+XWiki.AssetClass_fw_items_FW_masterFramework.NaturalHistory=Natural History
+XWiki.AssetClass_fw_items_FW_masterFramework.Oceanography=Oceanography
+XWiki.AssetClass_fw_items_FW_masterFramework.Paleontology=Paleontology
+XWiki.AssetClass_fw_items_FW_masterFramework.PhysicalSciences=Physical Sciences
+XWiki.AssetClass_fw_items_FW_masterFramework.Physics=Physics
+XWiki.AssetClass_fw_items_FW_masterFramework.ProcessSkills=Process Skills
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology_0=Technology
+XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies=Social Studies
+XWiki.AssetClass_fw_items_FW_masterFramework.Anthropology=Anthropology
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_5=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.Civics=Civics
+XWiki.AssetClass_fw_items_FW_masterFramework.CurrentEvents=Current Events
+XWiki.AssetClass_fw_items_FW_masterFramework.Economics=Economics
+XWiki.AssetClass_fw_items_FW_masterFramework.Entrepreneurship=Entrepreneurship
+XWiki.AssetClass_fw_items_FW_masterFramework.Geography=Geography
+XWiki.AssetClass_fw_items_FW_masterFramework.GlobalAwareness=Global Awareness
+XWiki.AssetClass_fw_items_FW_masterFramework.Government=Government
+XWiki.AssetClass_fw_items_FW_masterFramework.History\u0020Local=History (Local)
+XWiki.AssetClass_fw_items_FW_masterFramework.PoliticalSystems=Political Systems
+XWiki.AssetClass_fw_items_FW_masterFramework.Psychology=Psychology
+XWiki.AssetClass_fw_items_FW_masterFramework.Research_0=Research
+XWiki.AssetClass_fw_items_FW_masterFramework.Sociology=Sociology
+XWiki.AssetClass_fw_items_FW_masterFramework.StateHistory=State History
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology_1=Technology
+XWiki.AssetClass_fw_items_FW_masterFramework.Thinking&amp;ProblemSolving=Thinking &amp; Problem Solving
+XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesGovernment=United States Government
+XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesHistory=United States History
+XWiki.AssetClass_fw_items_FW_masterFramework.WorldHistory=World History
+
+
+## EDUCATIONAL LEVEL
+
+XWiki.AssetClass_educational_level2_prek=Preschool / Ages 0-4
+XWiki.AssetClass_educational_level2_gr-k-2=Gr. K-2 / Ages 5-7
+XWiki.AssetClass_educational_level2_gr-3-5=Gr. 3-5 / Ages 8-10
+XWiki.AssetClass_educational_level2_gr-6-8=Gr. 6-8 / Ages 11-13
+XWiki.AssetClass_educational_level2_gr-9-10=Gr. 9-10 / Ages 14-16
+XWiki.AssetClass_educational_level2_gr-11-12=Gr. 11-12 / Ages 16-18
+XWiki.AssetClass_educational_level2_college_and_beyond=College and Beyond
+XWiki.AssetClass_educational_level2_professional_development=Professional Development
+XWiki.AssetClass_educational_level2_special_education=Special Education
+XWiki.AssetClass_educational_level2_na=Other
+
+### ICT
+
+XWiki.AssetClass_instructional_component2_activity_exercise=Activity: Exercise
+XWiki.AssetClass_instructional_component2_activity_lab=Activity: Experiment/Lab
+XWiki.AssetClass_instructional_component2_activity_worksheet=Activity: Graphic Organizer/Worksheet
+XWiki.AssetClass_instructional_component2_activity_problemset=Activity: Problem Set
+XWiki.AssetClass_instructional_component2_book_fiction=Book: Fiction
+XWiki.AssetClass_instructional_component2_book_nonfiction=Book: Non-Fiction
+XWiki.AssetClass_instructional_component2_book_readings=Book: Readings/Excerpts
+XWiki.AssetClass_instructional_component2_book_textbook=Book: Text Book
+XWiki.AssetClass_instructional_component2_curriculum_assessment=Curriculum: Assessment/Test
+XWiki.AssetClass_instructional_component2_curriculum_course=Curriculum: Full Course
+XWiki.AssetClass_instructional_component2_curriculum_unit=Curriculum: Unit
+XWiki.AssetClass_instructional_component2_curriculum_lp=Curriculum: Lesson Plan
+XWiki.AssetClass_instructional_component2_curriculum_scope=Curriculum: Scope &amp; Sequence
+XWiki.AssetClass_instructional_component2_curriculum_standards=Curriculum: Standards
+XWiki.AssetClass_instructional_component2_curriculum_syllabus=Curriculum: Syllabus
+XWiki.AssetClass_instructional_component2_curriculum_workbook=Curriulum: Workbook
+XWiki.AssetClass_instructional_component2_resource_animation=Resource: Animation/Simulation
+XWiki.AssetClass_instructional_component2_resource_diagram=Resource: Diagram/Illustration
+XWiki.AssetClass_instructional_component2_resource_index=Resource: Index/List
+XWiki.AssetClass_instructional_component2_resource_photograph=Resource: Photograph
+XWiki.AssetClass_instructional_component2_resource_presentation=Resource: Presentation/Slide Show
+XWiki.AssetClass_instructional_component2_resource_collection=Resource: Reference Collection
+XWiki.AssetClass_instructional_component2_resource_script=Resource: Script/Transcript
+XWiki.AssetClass_instructional_component2_resource_speech=Resource: Speech/Lecture/Song
+XWiki.AssetClass_instructional_component2_resource_table=Resource: Table/Graph/Chart
+XWiki.AssetClass_instructional_component2_other=Other
+
+## LANGUAGE
+XWiki.AssetClass_language_eng=English
+XWiki.AssetClass_language_zho=Chinese
+XWiki.AssetClass_language_nld=Dutch
+XWiki.AssetClass_language_fra=French
+XWiki.AssetClass_language_deu=German
+XWiki.AssetClass_language_ita=Italian
+XWiki.AssetClass_language_jpn=Japanese
+XWiki.AssetClass_language_kor=Korean
+XWiki.AssetClass_language_por=Portuguese
+XWiki.AssetClass_language_rus=Russian
+XWiki.AssetClass_language_spa=Spanish
+
+
+## LICENSES
+XWiki.AssetLicenseClass_licenseType2_Licences.CurrikiLicense=Curriki License (Creative Commons Attributions 3.0)
+XWiki.AssetLicenseClass_licenseType2_Licences.PublicDomain=Public Domain
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-Commercial=Creative Commons Attribution Non-Commercial
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives=Creative Commons Attribution Non-Commercial No Derivatives
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNoDerivatives=Creative Commons Attribution No Derivatives
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionSharealike=Creative Commons Attribution Share Alike
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialShareAlike=Creative Commons Attribution Non-Commercial Share Alike
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsNon-Commercial=DEPRICATED: Creative Commons Non-Commercial
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsSharealike=DEPRICATED: Creative Commons Share Alike
+XWiki.AssetLicenseClass_licenseType2_Licences.GnuDocumentationLicense=DEPRICATED: Gnu Documentation License
+
+
+
 &lt;/pre&gt;</content>
 </xwikidoc>

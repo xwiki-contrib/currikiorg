@@ -12,14 +12,15 @@
 <customClass></customClass>
 <contentAuthor>XWiki.cristi</contentAuthor>
 <creationDate>1197928561000</creationDate>
-<date>1202755033000</date>
-<contentUpdateDate>1202755033000</contentUpdateDate>
-<version>1.41</version>
+<date>1206098979000</date>
+<contentUpdateDate>1206098979000</contentUpdateDate>
+<version>26.1</version>
 <title>Browse Groups By Subject</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-1599 Ordering listing of all groups by creation date, descending</comment>
+<comment>debug</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -75,7 +76,9 @@
     &lt;/a&gt;
   &lt;/div&gt;
   &lt;div class="subject-desc"&gt;
-   ${msg.get("browse.subject.description.$subject")}
+   #if(${msg.get("browse.subject.description.$subject")} != "-")
+     ${msg.get("browse.subject.description.$subject")}
+   #end
   &lt;/div&gt;
 &lt;/div&gt;
 #end
@@ -173,7 +176,11 @@ $headerTitle
   #end
 
   #set($args = "subject=" + $xwiki.getURLEncoded($request.subject))
-  #mycurrikipaginatorargs( "" $startItem $itemsPerPage $totalcount  $args  )
+  
+  #if($totalcount.class.name == "java.lang.Long")
+    #set($totalcount = $totalcount.intValue())
+  #end
+  #mycurrikipaginatorargs( "" $startItem $itemsPerPage $totalcount $args  )
 
 #else
 bad request

@@ -12,14 +12,15 @@
 <customClass></customClass>
 <contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1199656481000</creationDate>
-<date>1203062866000</date>
-<contentUpdateDate>1203062866000</contentUpdateDate>
-<version>1.105</version>
+<date>1206541474000</date>
+<contentUpdateDate>1206541474000</contentUpdateDate>
+<version>5.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>CURRIKI-1852</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -72,85 +73,10 @@ $msg.get("groups_documentation_onlyaccessibletomembers")
 #set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
 $newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
 $newdoc.setParent("${spaceName}.Messages")
-## Add edit right to creator
-#if($newdoc.getObject("XWiki.XWikiRights"))
-$newdoc.use("XWiki.XWikiRights");
-#else
-$newdoc.use($newdoc.newObject("XWiki.XWikiRights"))
-#end
-$newdoc.set("users", $context.user)
-$newdoc.set("levels", "edit")
-$newdoc.set("groups",  "")
-$newdoc.set("allow","1")
-## Add view rights
-#set($users = $context.user)
-#if($request.toMember)
-#set($users = $users + "," + $request.selectedMembersList)
-#end
-#set($groups = "")
-#if($request.toGroup)
-#set($groups = $groups + "," + $spaceName + ".MemberGroup")
-#if($s.policy == "open")
-#set($groups = $groups + ",XWiki.XWikiAllGroup")
-#end
-#end
-#if($request.toRole)
-#set($groups = $groups + "," + $request.selectedRolesList)
-#end
-$newdoc.use($newdoc.newObject("XWiki.XWikiRights"))
-$newdoc.set("users", $users)
-$newdoc.set("groups",  $groups)
-$newdoc.set("levels", "view")
-$newdoc.set("allow","1")
-$newdoc.save()
+## Update rights
+#messageUpdateRightsFromRequest($newdoc)
 ## Send notification mail
-#if($request.notify)
-#set($mailTo = "")
-#if($request.toGroup)
-## add all group members
-#foreach($member in $sm.getMembers($spaceName))
-#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
-#if($profile &amp;&amp; $profile.allowNotifications)
-#set($mailTo = $mailTo + $xwiki.getUser($member).email + ",")
-#end
-#end
-#else
-#set($mailToList = $xwiki.arrayList)
-#if($request.toMember &amp;&amp; $request.selectedMembersList.trim().length() &gt; 0)
-## add selected members
-#foreach($member in $request.selectedMembersList.split(","))
-#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
-#if($profile &amp;&amp; $profile.allowNotifications)
-#set($memberEmail = $xwiki.getUser($member).email)
-#if(!$mailToList.contains($memberEmail))
-#set($ok = $mailToList.add($memberEmail))
-#set($mailTo = $mailTo + $memberEmail + ",")
-#end
-#end
-#end
-#end
-#if($request.toRole &amp;&amp; $request.selectedRolesList.trim().length() &gt; 0)
-## add members having selected roles
-#foreach($role in $request.selectedRolesList.split(","))
-#foreach($member in $sm.getUsersForRole($spaceName, $role))
-#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
-#if($profile &amp;&amp; $profile.allowNotifications)
-#set($memberEmail = $xwiki.getUser($member).email)
-#if(!$mailToList.contains($memberEmail))
-#set($ok = $mailToList.add($memberEmail))
-#set($mailTo = $mailTo + $memberEmail + ",")
-#end
-#end
-#end
-#end
-#end
-#end
-#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
-#set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
-#set($mailSubject = $doc.getRenderedContent($mailDoc.title))
-#set($mailContent = $doc.getRenderedContent($mailDoc.content))
-$xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null)
-#end
+#messageSendNotificationMail($newdoc)
 ## Redirect to message
 $response.sendRedirect($newdoc.getURL())
 #else
@@ -184,7 +110,7 @@ $bentrydoc.display("content", "edit", $bentryobj)
 		elements : "$editors",
 	        language: "en",
 		mode: "exact",
-		content_css: "$xwiki.getSkinFile("style.css")",
+		content_css: "$xwiki.getSkinFile("style.css", true)",
 		debug : false,
 		remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
@@ -193,201 +119,14 @@ $bentrydoc.display("content", "edit", $bentryobj)
         wiki_use_style: 'true',    
         wiki_plugins: 'core,attachments'
 	});
-function checkForm() {
-   var isValid = true;
-   var title = document.forms.inline['XWiki.ArticleClass_0_title'].value;
-   if (title.length &lt;= 1) {
-     alert("$msg.get("groups_messages_create_mandatory")");
-     isValid = false;
-   }
-   if (isValid &amp;&amp; !saveToList()){
-     alert('$msg.get("groups_messages_create_to_mandatory")');
-     isValid = false;
-   }
-   return isValid;
-}
 &lt;/script&gt;
 {/pre}
 #end
-{pre}
-&lt;script type="text/javascript"&gt;
-function displayAddLink(selectObj, linkId){
-var linkObj = document.getElementById(linkId);
-if (selectObj.value!=''){
-linkObj.style.display='';
-}else{
-linkObj.style.display='none';
-}
-}
-function addToList(addLink, selectId, divId){
-var selectObj = document.getElementById(selectId);
-if (selectObj.selectedIndex &lt; 0){
-return;
-}
-var option = selectObj.options[selectObj.selectedIndex]
-if (option.value.length == 0){
-return;
-}
-var getClass=document.getElementsByClassName(divId);
-var menu=getClass[0].getElementsByTagName('td');
-var tr = document.createElement('tr');
-tr.className=divId;
-var td1 = document.createElement('td');
-var td2 = document.createElement('td');
-var td3 = document.createElement('td');
-getClass[0].parentNode.insertBefore(tr, getClass[0]);
-tr.appendChild(td1);
-moveChildNodes(menu[0], td1);
-tr.appendChild(td2);
-tr.appendChild(td3);
-
-var deleteLink = document.createElement('a');
-deleteLink.appendChild(document.createTextNode('Delete'));
-deleteLink.href = 'javascript:void()';
-if (selectId == 'rolesList') {
-deleteLink.title = '${msg.get('groups_messages_create_to_delete_role_tooltip')}';
-} else if (selectId == 'membersList') {
-deleteLink.title = '${msg.get('groups_messages_create_to_delete_member_tooltip')}';
-} else {
-deleteLink.title = '${msg.get('groups_messages_create_to_delete_tooltip')}';
-}
-deleteLink.onclick = function(){
-if (!selectObj.disabled){
-var parentTr=this.parentNode.parentNode;
-var getClass=document.getElementsByClassName(parentTr.className);
-if(parentTr==getClass[0]){
-moveChildNodes(parentTr.getElementsByTagName('td')[0],getClass[1].getElementsByTagName('td')[0]);
-}
-this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
-option.style.display = '';
-option.disabled = false;
-}
-return false;
-};
-td2.appendChild(document.createTextNode(option.text));
-td3.appendChild(deleteLink);
-option.style.display = 'none';
-option.disabled = true;
-selectObj.selectedIndex = 0;
-selectObj.onchange();
-}
-function getInputs(parent, type){
-var inputs = parent.getElementsByTagName('input');
-var result = [];
-for(var i=0; i&lt;inputs.length; i++){
-if (inputs[i].type == type){
-result.push(inputs[i]);
-}
-}
-return result;
-}
-function moveChildNodes(fromParent, toParent){
-var checkboxes = getInputs(fromParent, 'checkbox');
-var checked = new Array(checkboxes.length);
-for(var i=0; i&lt;checkboxes.length; i++){
-checked[i] = checkboxes[i].checked;
-}
-var child = fromParent.firstChild;
-while(child){
-var nextSibling = child.nextSibling;
-toParent.appendChild(child);
-child = nextSibling;
-}
-checkboxes = getInputs(toParent, 'checkbox');
-for(var i=0; i&lt;checkboxes.length; i++){
-checkboxes[i].checked = checked[i];
-}
-}
-function enableSelect(checkbox, selectId){
-var selectObj = document.getElementById(selectId);
-selectObj.selectedIndex = 0;
-selectObj.disabled = !checkbox.checked;
-selectObj.onchange();
-}
-function getSelectedOptions(select){
-var selectedOptions = [];
-for(var i=0; i&lt;select.options.length; i++){
-if (select.options[i].style.display == 'none'){
-selectedOptions.push(select.options[i].value);
-}
-}
-return selectedOptions;
-}
-function saveSelectedOptions(checkBoxId, selectId, hiddenId){
-if (document.getElementById(checkBoxId).checked){
-var select = document.getElementById(selectId);
-var selectedOptions = getSelectedOptions(select);
-if (selectedOptions.length == 0){
-return false;
-}
-document.getElementById(hiddenId).value = selectedOptions.join(',');
-return true;
-}
-return false;
-}
-function saveToList(){
-var rolesSaved = saveSelectedOptions('toRole', 'rolesList', 'selectedRolesList');
-var membersSaved = saveSelectedOptions('toMember', 'membersList', 'selectedMembersList');
-var toGroup = document.getElementById('toGroup').checked;
-return toGroup || rolesSaved || membersSaved;
-}
-&lt;/script&gt;
-{/pre}
-&lt;div class="groups-create-messages"&gt;
-&lt;div class="strong"&gt;$msg.get('groups_messages_create_to_label')&lt;/div&gt;
-&lt;table&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td colspan="3"&gt;
-&lt;input id="toGroup" name="toGroup" type="checkbox" checked="checked" style="width:auto;" /&gt;&lt;label for="toGroup"&gt;$msg.get('groups_messages_create_to_group_label')&lt;/label&gt;
-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class="selectedRoles"&gt;
-&lt;td&gt;
-&lt;input id="toRole" name="toRole" type="checkbox" style="width:auto;" onclick="enableSelect(this, 'rolesList')" /&gt;&lt;label for="toRole"&gt;$msg.get('groups_messages_create_to_role_label')&lt;/label&gt;
-&lt;/td&gt;
-&lt;td&gt;
-&lt;input id="selectedRolesList" name="selectedRolesList" type="hidden" value="" /&gt;
-&lt;select id="rolesList" onchange="displayAddLink(this, 'addRoleLink')" disabled="true"&gt;
-&lt;option value=""&gt;$msg.get('groups_messages_create_to_role_default')&lt;/option&gt;
-#groupGetRoles($spaceName true)
-#foreach($role in $ret_groupRoles)
-#groupGetRoleMemberCount($role)
-&lt;option#if($ret_roleCount==0) DISABLED#end value="${role.fullName}"&gt;$role.title&lt;/option&gt;
-#end
-&lt;/select&gt;
-&lt;/td&gt;
-&lt;td&gt;
-&lt;a id="addRoleLink" href="javascript:void()" title="${msg.get('groups_messages_create_to_role_add_tooltip')}" onclick="addToList(this, 'rolesList', 'selectedRoles'); return false;" style="display:none;"&gt;$msg.get('groups_messages_create_to_role_add_label')&lt;/a&gt;
-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class="selectedMembers"&gt;
-&lt;td&gt;
-&lt;input id="toMember" name="toMember" type="checkbox" style="width:auto;" onclick="enableSelect(this, 'membersList')" /&gt;&lt;label for="toMember"&gt;$msg.get('groups_messages_create_to_member_label')&lt;/label&gt;
-&lt;/td&gt;
-&lt;td&gt;
-&lt;input id="selectedMembersList" name="selectedMembersList" type="hidden" value="" /&gt;
-&lt;select id="membersList" onchange="displayAddLink(this, 'addMemberLink');" disabled="true"&gt;
-&lt;option value="" selected="selected"&gt;$msg.get('groups_messages_create_to_member_default')&lt;/option&gt;
-#foreach($memberName in $sm.getMembers($spaceName))
-&lt;option value="${memberName}"&gt;$xwiki.getUserName($memberName, false)&lt;/option&gt;
-#end
-&lt;/select&gt;
-&lt;/td&gt;
-&lt;td&gt;
-&lt;a id="addMemberLink" href="javascript:void()" title="${msg.get('groups_messages_create_to_member_add_tooltip')}" onclick="addToList(this, 'membersList','selectedMembers'); return false;" style="display:none;"&gt;$msg.get('groups_messages_create_to_member_add_label')&lt;/a&gt;
-&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;div class="strong"&gt;$msg.get('groups_messages_create_notify_label')&lt;/div&gt;
-&lt;div&gt;
-&lt;input id="notify" name="notify" type="checkbox" style="width:auto;" /&gt;&lt;label for="notify"&gt;$msg.get('groups_messages_create_notify_mail_label')&lt;/label&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+#messageIncludeCreateJs()
+#messageAddSendToFormFields($spaceName, true, [], [])
 &lt;div class="righttext"&gt;
 {pre}
-&lt;input class="button button-orange floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm() == false) return false; document.forms.inline.submit(); return false;"/&gt;
+&lt;input class="button button-orange floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm('inline') == false) return false; document.forms.inline.submit(); return false;"/&gt;
 &lt;input class="button button-grey floatright" type="submit" name="formactioncancel" value="$msg.get("groups_messages_create_cancel_btt")" onclick="history.go(-1); return false;"/&gt;
 {/pre}
 &lt;/div&gt;

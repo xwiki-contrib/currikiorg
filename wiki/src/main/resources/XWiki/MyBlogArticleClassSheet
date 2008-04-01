@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1171396303000</creationDate>
-<date>1201114300000</date>
-<contentUpdateDate>1201114300000</contentUpdateDate>
-<version>1.81</version>
+<date>1204712596000</date>
+<contentUpdateDate>1204712596000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Add breadcrumb to user's MyCurriki</comment>
+<comment>extended delete rights on comments</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -59,7 +60,7 @@
 #set($comments = $doc.getComments())
 #set($findDate = $request.date.replace("%20", " "))
 #foreach($comment in $comments) ## {
-#if("$findDate" == "${doc.getValue('date', $comment)}" &amp;&amp; $comment.author == $context.user) ## {
+#if("$findDate" == "${doc.getValue('date', $comment)}" &amp;&amp; ($comment.author == $context.user || $xwiki.hasAdminRights() || $doc.hasAccessLevel("edit"))) ## {
 #set($junk = $doc.removeObject($comment))
 #set($junk = $doc.saveWithProgrammingRights())
 #end ## }
@@ -112,7 +113,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.EditArticle", "view", "${m_bc}editAr
 &lt;div class="blog-comment-line-name"&gt;
 #set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
 $xwiki.getUserName($comment.author) &lt;span class="blog-comment-date"&gt;$commentDate&lt;/span&gt;
-#if($comment.author == $context.user) ## {
+#if($comment.author == $context.user || $xwiki.hasAdminRights() || $doc.hasAccessLevel("edit")) ## {
 #sep()
 &lt;a href="?deletecomment=1&amp;date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}');"&gt;$msg.get('mycurriki.blog.comment.delete')&lt;/a&gt; ## Link to delete -- use XWikiComments.author and date to get unique specification
 #end ## }

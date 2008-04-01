@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.jkl1231</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jkl1231</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1202462431000</creationDate>
-<date>1202832316000</date>
-<contentUpdateDate>1202832316000</contentUpdateDate>
-<version>1.5</version>
-<title>Message Notification for $s.displayTitle -- $mytitle</title>
+<date>1206547470000</date>
+<contentUpdateDate>1206547470000</contentUpdateDate>
+<version>8.1</version>
+<title>Message Notification for $s.displayTitle -- $msgdoc.get('title')</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>a</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -58,11 +59,11 @@ Dear member of $s.displayTitle,
 
 You have received a message from $xwiki.getUserName($context.user, "$first_name $last_name", false) in $s.displayTitle.
 
-The title of this message is "$mytitle."
+The title of this message is "$msgdoc.get('title')".
 
 To view the message, click the URL below or paste it into your browser. (Remember, you must be logged in to Curriki to see this message.) 
 
-$newdoc.getExternalURL("view")
+$msgdoc.getExternalURL("view")
 
 To change your email notification settings for $s.displayTitle, visit your group member profile on your group's Members tab at: 
 

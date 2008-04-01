@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent>CRS.Reviews</parent>
 <creator>XWiki.ludovic</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1189372362000</creationDate>
-<date>1193771332000</date>
-<contentUpdateDate>1194996511000</contentUpdateDate>
-<version>1.41</version>
+<date>1205229768000</date>
+<contentUpdateDate>1205229768000</contentUpdateDate>
+<version>30.1</version>
 <title>Review Form</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>wrap review comment</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -218,7 +219,7 @@ $mesg
 #end
 #end
 #else
-&lt;form action=""&gt;
+&lt;form action="" method="post"&gt;
 &lt;input type="hidden" name="page" value="$!request.page" /&gt;
 #set($ok = $asset.use("XWiki.AssetClass"))
 $asset.display("instructional_component2", "hidden")
@@ -228,13 +229,14 @@ $asset.display("instructional_component2", "hidden")
 $asset.display("technicalcompletness","hidden")
 $asset.display("contentaccuracy","hidden")
 $asset.display("appropriatepedagogy","hidden")
-$asset.display("comment", "hidden")
 #set($rating = $asset.getValue("rating"))
-#set($ratingimg = $xwiki.getSkinFile("crs${rating}.gif"))
 #set($vtc = $asset.getValue("technicalcompletness"))
 #set($vca = $asset.getValue("contentaccuracy"))
 #set($vap = $asset.getValue("appropriatepedagogy"))
-#set($comment = $asset.getValue("comment"))
+#set($comment = $xwiki.getXMLEncoded($asset.getValue("comment")))
+#set($comment = $comment.replaceAll('(\w{80})', "$1&lt;wbr&gt;&amp;shy;"))
+$asset.set("comment", $comment)
+$asset.display("comment", "hidden")
 #if((!$sict)||($sict=="")||($sict=="choose")||(!$vtc)||($vtc=="")||(!$vca)||($vca=="")||(!$vap)||($vap==""))
 $msg.get("curriki.crs.review.incomplete")
 
@@ -243,7 +245,7 @@ $msg.get("curriki.crs.review.incomplete")
 $msg.get("curriki.crs.review.preview") 
 
 #if($rating&amp;&amp;($rating!="0"))
-{pre}$msg.get("curriki.crs.generatedcomment", [$sict, $ratingimg, $vtc, $vca, $vap, $comment]){/pre}
+{pre}$msg.get("curriki.crs.generatedcomment", [$sict, "#displayCRSIcon('CRSReviewRatingIcon', ${rating})", $vtc, $vca, $vap, $comment]){/pre}
 #else
 {pre}$msg.get("curriki.crs.generatedcommentunrated", [$sict, $vtc, $vca, $vap, $comment]){/pre}
 #end
@@ -279,7 +281,7 @@ $msg.get("curriki.crs.review.preview")
 
 $nomcomment
 
-&lt;form action=""&gt;
+&lt;form action="" method="post" onsubmit="return validate();"&gt;
 &lt;input type="hidden" name="page" value="$!request.page" /&gt;
 #set($ok = $asset.use("XWiki.AssetClass"))
 *Set ICT*: 
@@ -303,11 +305,25 @@ $asset.display("appropriatepedagogy", "edit")
 
 1.1.1 $msg.get("curriki.crs.review.comments"):
 
-$msg.get("curriki.crs.review.commentsdetails")
+#set($commentMaxLength = 400)
+$msg.get("curriki.crs.review.commentsdetails", [$commentMaxLength])
 
 $asset.display("comment", "edit")
 
 &lt;input type="submit" name="submit" value="$msg.get("curriki.crs.review.submitpreview")" /&gt;
 &lt;/form&gt;
-#end</content>
+#set($commentId = "CRS.CurrikiReviewClass_" + $obj.number + "_comment")
+&lt;script type="text/javascript"&gt;
+function validate(){
+  var comment = document.getElementById('$commentId');
+  if (comment.value.length &gt; $commentMaxLength){
+    alert('$msg.get("curriki.crs.review.comments.maxlengthexceeded", [$commentMaxLength])');
+    return false;
+  }
+  return true;
+}
+&lt;/script&gt;
+#end
+
+$xwiki.addTooltipJS()</content>
 </xwikidoc>

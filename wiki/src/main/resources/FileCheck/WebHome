@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1202996299000</date>
-<contentUpdateDate>1202996299000</contentUpdateDate>
-<version>1.83</version>
+<date>1204116002000</date>
+<contentUpdateDate>1204116002000</contentUpdateDate>
+<version>18.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix date</comment>
+<comment>a</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -55,13 +56,15 @@
 </object>
 <content>1 $msg.fc_filecheck
 #set($excludeList = ["jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "ShermanTank", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll"])
-#if($request.nbstart)
-#set($inbstart = $xwiki.parseInt($request.nbstart))
-#else
-#set($inbstart = 0)
+#set($startIndex = 0)
+#if($request.startIndex)
+  #set($startIndex = $xwiki.parseInt($request.startIndex))
+#end
+#set($itemsPerPage = 20)
+#if( $request.ipp )
+#set($itemsPerPage = $xwiki.parseInt($request.ipp))
 #end
 #set($qs = "type=$!request.type")
-#set($inbitems = 20)
 #set($counter = 0)
 #set($fromsql = "")
 #set($wheresql = "and doc.creator not in (")
@@ -107,7 +110,7 @@
 #end
 #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%'  and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!wheresql order by $order")
 #set($countsql = "select count(*) from XWikiDocument as doc ${sql}")
-#set($totalnb = $xwiki.search($countsql))
+#set($totalCount = $xwiki.search($countsql).get(0))
 &lt;!-- $sql --&gt;
 &lt;form action=""&gt;
 1.1 $msg.fc_daterange
@@ -134,7 +137,7 @@ $msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from"
 &lt;th&gt; $msg.fc_notes &lt;/td&gt;
 &lt;th&gt; $msg.fc_select &lt;/td&gt;
 &lt;/tr&gt;
-#foreach($fullname in $xwiki.searchDocuments($sql,$inbitems,$inbstart))
+#foreach($fullname in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
 #set($counter = $counter+1)
 #set($itemdoc = $xwiki.getDocument($fullname))
 #set($ok = $itemdoc.use("XWiki.AssetClass"))
@@ -169,20 +172,5 @@ $itemdoc.display("fcnotes")
 #if($request.order)
 #set($qs = "${qs}&amp;${request.order}")
 #end
-#if($counter==$inbitems)
-&lt;div style="text-align:center; margin-top:10px;"&gt;
-#if ($inbstart!=0)
-#set($iprev = $inbstart - $inbitems)
-&lt;span class="search searchprevious"&gt;[$msg.fc_previous&gt;$doc.name?nbstart=${iprev}&amp;${qs}]&lt;/span&gt;
-#end
-#set($istart = $inbstart + 1)
-#set($inext = $inbstart + $inbitems)
-#set($stotalnb = "$totalnb")
-#set($stotalnb = $stotalnb.replace('[',' ').replace(']',' '))
-&lt;span class="search searchcount"&gt;
-{pre} $istart - $inext $msg.of $stotalnb {/pre}
-&lt;/span&gt;
-&lt;span class="search searchnext"&gt;[$msg.fc_next&gt;$doc.name?nbstart=${inext}&amp;${qs}]&lt;/span&gt;
-&lt;/div&gt;
-#end
-</content></xwikidoc>
+#mycurrikipaginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)</content>
+</xwikidoc>

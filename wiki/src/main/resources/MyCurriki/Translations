@@ -12,14 +12,15 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1196365645000</creationDate>
-<date>1202832497000</date>
-<contentUpdateDate>1202832497000</contentUpdateDate>
-<version>1.66</version>
+<date>1206643375000</date>
+<contentUpdateDate>1206643375000</contentUpdateDate>
+<version>6.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Groups Messages now says "My Recent Messages"</comment>
+<comment>Add delete confirmation for blog entries</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -54,13 +55,14 @@
 </property>
 </object>
 <content>#{pre}
-mycurriki.datetimeFormat=MMM-dd-yyyy - hh:mm a
+mycurriki.datetimeFormat=MMM-dd-yyyy - hh:mm a z
 mycurriki.dateFormat=MMM-dd-yyyy
 mycurriki.timeFormat=hh:mm a z
 
 mycurriki.tab.blog.label=Blog
 mycurriki.tab.blog.page=MyCurriki.Blog
-mycurriki.tab.blog.subtitle=Here are any blog entries created by {0}. Curriki members can add a comment on any blog entry.
+mycurriki.tab.blog.subtitle=Find all blog entries created by {0}. Curriki members can add a comment on any blog entry.
+mycurriki.tab.blog.noblog.subtitle=Find all blog entries created by {0}. Curriki members can add a comment on any blog entry.
 mycurriki.tab.collections.label=Collections
 mycurriki.tab.collections.page=MyCurriki.Collections
 mycurriki.tab.collections.subtitle=Find any curriculum collections in the list below. 
@@ -129,6 +131,7 @@ mycurriki.blog.postedBy=Posted by {0} on {1} at {2}
 mycurriki.blog.comment.delete=Delete
 mycurriki.blog.comment.delete.confirm=Delete comment?
 mycurriki.blog.comment.empty=Please enter a comment to save.
+mycurriki.blog.actions.delete.confirm=Are you sure you wish to delete this blog entry?
 
 mycurriki.groups.visit=Visit This Group
 mycurriki.groups.mymessages=My Recent Messages
@@ -141,6 +144,7 @@ mycurriki.macro.filetype.curriki=Curriki Page
 mycurriki.macro.filetype.currikulum=Currikulum Item
 
 mycurriki.macro.access.public=Public
+
 mycurriki.macro.access.members=Protected
 mycurriki.macro.access.private=Private
 

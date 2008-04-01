@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.cristi</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.cristi</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.cristi</contentAuthor>
 <creationDate>1202291027000</creationDate>
-<date>1203113487000</date>
-<contentUpdateDate>1203113487000</contentUpdateDate>
-<version>1.39</version>
+<date>1206600908000</date>
+<contentUpdateDate>1206600908000</contentUpdateDate>
+<version>17.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix</comment>
+<comment>debug</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -53,30 +54,52 @@
 <tags/>
 </property>
 </object>
-<content>#if( $request.method == "POST")
-     #set( $attachDocName = $request.docname)
+<content>#if( $request.method == "POST" &amp;&amp; $request.doctitle.trim() != "" )
+     ##getting where the attached images were
+     #set( $attachDocName = $request.olddoc)
      #set( $attachDoc = $xwiki.getDocument( $attachDocName ) )
+
      #set( $newDocName = $xwiki.getUniquePageName( $docsSpaceName, $request.doctitle))  
      #set( $newDocName = "${docsSpaceName}.${newDocName}")
-     #set($ok = $xwiki.renamePage($attachDoc, $newDocName))
-     #set( $newDoc = $xwiki.getDocument( $newDocName ) )
+
+     ##renaming the old doc to the new title
+     #set($ok = $attachDoc.rename($newDocName))
+##$request.olddoc $attachDoc $attachDocName  $newDocName $ok 
+
+     ##set( $newDoc = $xwiki.getDocument( $newDocName ) )
+     #set( $newDoc = $attachDoc )
      $newDoc.setTitle( $request.doctitle )
      $newDoc.setContent( $request.doctext ) 
      $newDoc.save()
+
      #set($tg = $newDoc.newObject("XWiki.TagClass"))
      #set($tgok = $tg.set("tags","documentation-wiki"))
+
+    $newDoc.use($newDoc.newObject("XWiki.XWikiRights"))
+    $newDoc.set("users", $context.user)
+    $newDoc.set("levels", "delete")
+    $newDoc.set("allow","1")
+
      $newDoc.save()
      #set( $newDocSaved = $request.doctitle )
  #else    
    #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)    
     &lt;form action="#" method="post"&gt;
-       #set( $title = $request.newdocname )
-       #set( $newDocName = $xwiki.getUniquePageName( "Temp", $title))
+       #set( $dctitle = $request.newdocname )
+
+       ##creating temporary doc so the wiki editor knows where to attaach stuff
+       #set( $newDocName = $xwiki.getUniquePageName( "Temp", $dctitle))
        #set( $newDocName = "Temp.${newDocName}")
        #set( $newDoc = $xwiki.getDocument( $newDocName))
+       #set( $ok = $newDoc.save() )
+      
 &lt;label for="doctitle"&gt;${msg.groups_documentation_update_title}&lt;/label&gt;
-&lt;input type="hidden" name="docname" value="$newDocName" /&gt;
-&lt;input type="text" name="doctitle" value="$title" /&gt;
+&lt;input type="hidden" name="olddoc" value="${newDocName}" /&gt;
+
+#if( $request.doctitle.trim() == "" )
+  &lt;div class="error"&gt;${msg.group_documentation_empty_title}&lt;/div&gt;
+#end
+&lt;input type="text" name="doctitle" value="${dctitle}" /&gt;
 &lt;label for="doctext" class="doctext"&gt;${msg.groups_documentation_enter_content}&lt;/label&gt;
 
 
@@ -90,7 +113,7 @@ wikiEditor.init({
   elements : "doctext",
   language: "en",
   mode: "exact",
-  content_css: "$xwiki.getSkinFile("style.css")",
+  content_css: "$xwiki.getSkinFile("style.css",true)",
   debug : false,
   remove_linebreaks : false,
   plugins: 'table, contextmenu, paste, searchreplace',

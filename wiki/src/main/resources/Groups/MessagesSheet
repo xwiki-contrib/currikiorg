@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.dward</author>
+<author>XWiki.mflorea</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.mflorea</contentAuthor>
 <creationDate>1198444625000</creationDate>
-<date>1203007972000</date>
-<contentUpdateDate>1203007972000</contentUpdateDate>
-<version>1.53</version>
+<date>1204030534000</date>
+<contentUpdateDate>1204030534000</contentUpdateDate>
+<version>22.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Missed a )</comment>
+<comment>a</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -81,33 +82,41 @@ $msg.get("groups_messages_createmessage_infotxt")
     &lt;p class="messages-radio"&gt;
       &lt;input type="radio" id="toEntireGroup" name="filter" value="0" class="messages-radio-left" onclick="this.form.submit()" #if($filter=="0") checked="checked" #end/&gt;&lt;label for="toEntireGroup"&gt;$msg.get("groups_messages_filter_toentiregroup")&lt;/label&gt;
       &lt;input type="radio" id="toMe" name="filter" value="1" onclick="this.form.submit()" #if($filter=="1") checked="checked" #end/&gt;&lt;label for="toMe"&gt;$msg.get("groups_messages_filter_tome")&lt;/label&gt;
-      &lt;input type="radio" id="toMyRole" name="filter" value="2" onclick="this.form.submit()" #if($filter=="2") checked="checked" #end/&gt;&lt;label for="toMyRole"&gt;$msg.get("groups_messages_filter_tomyrole")&lt;/label&gt;
+      &lt;input type="radio" id="toMyRole" name="filter" value="2" onclick="this.form.submit()" #if($filter=="2") checked="checked" #end/&gt;&lt;select name="role" onchange="this.form.submit()" #if($filter!="2")disabled="disabled"#end&gt;
+&lt;option value="" #if(!$request.role || $request.role=="")selected="selected"#end&gt;$msg.get("groups_messages_filter_tomyrole")&lt;/option&gt;
+#set($myRoles = $sm.getRoles($spaceName, $context.user))
+#foreach($role in $myRoles)
+&lt;option value="$role" #if($role==$request.role)selected="selected"#end&gt;$xwiki.getDocument($role).title&lt;/option&gt;
+#end
+#if($isGroupAdmin)
+#set($roleDoc = $xwiki.getDocument($sm.getAdminGroupName($spaceName)))
+&lt;option value="${roleDoc.fullName}" #if($roleDoc.fullName==$request.role)selected="selected"#end&gt;$msg.get("groups.roles.admin.title")&lt;/option&gt;
+#end
+&lt;/select&gt;
 #if($isGroupAdmin)
       &lt;input type="radio" id="toAll" name="filter" value="3" onclick="this.form.submit()" #if($filter=="3") checked="checked" #end/&gt;&lt;label for="toAll"&gt;$msg.get("groups_messages_filter_toall")&lt;/label&gt;
 #end
     &lt;/p&gt;
   &lt;/form&gt;
-##
-##  TODO: migration to XWIKI12 change String to LargeString
-##
 #if($filter=="0")
 ## To Entire Group
 #set($membersGroup = $spaceName + ".MemberGroup")
 #set($noViewRightsSpecified = "not exists (from BaseObject as r, StringProperty as l where doc.fullName=r.name and r.className='XWiki.XWikiRights' and r.id=l.id.id and l.id.name='levels' and instr(l.value,'view')&gt;0)")
-#set($existsGroupViewRights = "exists (from BaseObject as rights, StringProperty as levels, StringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')&gt;0 and instr(groups.value,'${membersGroup}')&gt;0)")
+#set($existsGroupViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')&gt;0 and instr(groups.value,'${membersGroup}')&gt;0)")
 #set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
 #elseif($filter=="1")
 ## To Me
-#set($existsUserViewRights = "exists (from BaseObject as rights, StringProperty as levels, StringProperty as users where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=users.id.id and users.id.name='users' and instr(levels.value,'view')&gt;0 and instr(users.value,'${context.user}')&gt;0)")
+#set($existsUserViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as users where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=users.id.id and users.id.name='users' and instr(levels.value,'view')&gt;0 and instr(users.value,'${context.user}')&gt;0)")
 #set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
 #elseif($filter=="2")
 ## To My Roles
-#set($myRoles = $sm.getRoles($spaceName, $context.user))
-#if($isGroupAdmin)
-#set($ok = $myRoles.add("${spaceName}.AdminGroup"))
+#if($request.role!="")
+#set($myRoles = [$request.role])
+#elseif($isGroupAdmin)
+#set($ok = $myRoles.add($sm.getAdminGroupName($spaceName)))
 #end
 #if($myRoles.size()&gt;0)
-#set($existsRoleViewRights = "exists (from BaseObject as rights, StringProperty as levels, StringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')&gt;0 and (")
+#set($existsRoleViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')&gt;0 and (")
 #foreach($role in $myRoles)
 #set($existsRoleViewRights = $existsRoleViewRights + "instr(groups.value,'${role}')&gt;0 or ")
 #end
