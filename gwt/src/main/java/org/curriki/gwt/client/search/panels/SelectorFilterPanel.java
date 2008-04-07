@@ -80,16 +80,14 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
         g.setWidget(1, 2, sInstructionType);
 
         g.setWidget(2, 0, sFileType.getLabel());
-//        g.setWidget(2, 1, sLanguage.getLabel());
-        g.setWidget(2, 1, sSpecial.getLabel());
+        g.setWidget(2, 1, sLanguage.getLabel());
+        g.setWidget(2, 2, sSpecial.getLabel());
 
         g.setWidget(3, 0, sFileType);
-//        g.setWidget(3, 1, sLanguage);
-        g.setWidget(3, 1, sSpecial);
+        g.setWidget(3, 1, sLanguage);
+        g.setWidget(3, 2, sSpecial);
 
         add(g);
-
-        //TODO: Need open/close bar
     }
 
     public Widget getLabel()
