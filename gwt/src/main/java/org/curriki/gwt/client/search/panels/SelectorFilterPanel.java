@@ -33,6 +33,7 @@ import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.EducationalLevelSelector;
 import org.curriki.gwt.client.search.selectors.FileTypeSelector;
 import org.curriki.gwt.client.search.selectors.InstructionalTypeSelector;
+import org.curriki.gwt.client.search.selectors.LanguageSelector;
 import org.curriki.gwt.client.search.selectors.Selectable;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
 import org.curriki.gwt.client.search.selectors.SpecialFilterSelector;
