@@ -61,9 +61,9 @@ public class SelectorFilterPanel extends VerticalPanel implements ChangeListener
         FileTypeSelector sFileType = new FileTypeSelector();
         sFileType.addChangeListener(this);
         selectors.add(sFileType);
-//        LanguageSelector sLanguage = new LanguageSelector();
-//        sLanguage.addChangeListener(this);
-//        selectors.add(sLanguage);
+        LanguageSelector sLanguage = new LanguageSelector();
+        sLanguage.addChangeListener(this);
+        selectors.add(sLanguage);
         SpecialFilterSelector sSpecial = new SpecialFilterSelector();
         sSpecial.addChangeListener(this);
         selectors.add(sSpecial);

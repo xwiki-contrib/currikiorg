@@ -35,17 +35,17 @@ public class LanguageSelector extends DropdownSingleSelector
         setFieldName("XWiki.AssetClass."+ Constants.ASSET_LANGUAGE_PROPERTY);
         
         addOption(Main.getTranslation("search.selector.language.any"), "");
-        addOption(Main.getTranslation("English"), "eng");
-        addOption(Main.getTranslation("Chinese"), "zho");
-        addOption(Main.getTranslation("Dutch"), "nld");
-        addOption(Main.getTranslation("French"), "fra");
-        addOption(Main.getTranslation("German"), "deu");
-        addOption(Main.getTranslation("Italian"), "ita");
-        addOption(Main.getTranslation("Japenese"), "jpn");
-        addOption(Main.getTranslation("Korean"), "kor");
-        addOption(Main.getTranslation("Portuguese"), "por");
-        addOption(Main.getTranslation("Russian"), "rus");
-        addOption(Main.getTranslation("Spanish"), "spa");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_eng"), "eng");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_zho"), "zho");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_nld"), "nld");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_fra"), "fra");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_deu"), "deu");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_ita"), "ita");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_jpn"), "jpn");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_kor"), "kor");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_por"), "por");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_rus"), "rus");
+        addOption(Main.getTranslation("XWiki.AssetClass_language_spa"), "spa");
     }
 
     public Widget getLabel()
