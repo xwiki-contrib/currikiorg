@@ -71,25 +71,10 @@ $response.sendRedirect($doc.getURL($context.action, "editor=object"))
 <div class="bottombuttons">#template("editactions.vm")</div>
 </form>
 <script type="text/javascript">
-if ("undefined" !== typeof Rico) {
+if ("undefined" !== typeof Layout) {
+	Layout.accordion('xwikieditcontent');
+} else if ("undefined" !== typeof Rico) {
 	new Rico.Accordion( 'xwikiobjects', {panelHeight:'flex'} );
-} else if ("undefined" !== typeof Ext){
-	var subPanelsDom = Ext.query('#xwikiobjects>div.x-panel');
-	var subPanelsCmp = new Array();
-	for (var x in subPanelsDom){
-		subPanelsCmp[x] = new Ext.Panel({el: subPanelsDom[x], collapsed: x!=0});
-	}
-	var acdnPanel = new Ext.Panel({
-		layout: 'accordion'
-		,applyTo: 'xwikieditcontent'
-		,autoHeight: true
-		,autoScroll: true
-		,layoutConfig: {
-			animate: true
-			,fill: false
-		}
-		,items: subPanelsCmp
-	});
 }
 </script>
 #end
