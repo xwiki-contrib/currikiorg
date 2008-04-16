@@ -2651,8 +2651,8 @@ function removeMember(memberName,spaceName) {
 <a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("groups_members_admin_current_members_editsettings_link")</a>
 </div>
 #end
-#if($isGroupAdmin)
 #set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
+#if($isGroupAdmin)
 #set($adminCount = $sm.getAdmins($spaceName).size())
 #if($memberIsAdmin)
 #if($adminCount>1)
@@ -2710,8 +2710,8 @@ $profile
 <a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("groups_members_admin_current_members_editsettings_link")</a>
 </div>
 #end
-#if($isGroupAdmin)
 #set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
+#if($isGroupAdmin)
 #set($adminCount = $sm.getAdmins($spaceName).size())
 #if($memberIsAdmin)
 #if($adminCount>1)
