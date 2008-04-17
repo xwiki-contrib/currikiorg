@@ -3508,7 +3508,7 @@ $msgdoc.save()
 #end
 #end
 #end
-#if($mailToList.size() > 0)
+#if($!mailTo != "")
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
 ## $msgdoc has to be in the current context because it is used in the mail template
