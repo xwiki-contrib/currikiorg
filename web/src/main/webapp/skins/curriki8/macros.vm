@@ -2366,6 +2366,18 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 <div id="groups-${curtab}-main" class="tab-container">
 #end ## macro ## }
 ##
+##
+## page: all pages in the groups space in the documentation tab
+## There should be no {pre} because we call it from the skin
+## Groups header
+##
+#macro(groupsheaderdoc $curtab) ## {
+<h1>$s.getDisplayTitle()</h1>
+<div id="groups-$curtab" class="groups groups-$curtab">
+#groupstabs($curtab)
+<div id="groups-${curtab}-main" class="tab-container">
+#end ## macro ## }
+##
 ## page: all pages in the groups space
 ## Groups header
 ##
