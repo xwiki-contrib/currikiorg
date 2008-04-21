@@ -18,9 +18,9 @@
 ## Define the macro that displays the options in a category
 ##
 #macro(showsection $section $sectionitemsmap)
-  <div id="xwikiprefs${section}" class="x-panel">
-    <div id="xwikiprefs${section}Header" class="accordionTabTitleBar" class="x-panel-header"><h6>$msg.get($section)</h6></div>
-    <div id="xwikiprefs${section}Content" class="accordionTabContentBox" class="x-panel-body">
+  <div id="xwikiprefs${section}">
+    <div id="xwikiprefs${section}Header" class="accordionTabTitleBar"><h6>$msg.get($section)</h6></div>
+    <div id="xwikiprefs${section}Content" class="accordionTabContentBox">
       <div class="padded">
 <dl>
 #set($sectionitems = $sectionitemsmap.get($section))
@@ -59,7 +59,7 @@ $doc.displayEdit($prop, "${class.name}_${obj.number}_",  $obj)
 #set($formname = "update")
 #set($saveaction = "save")
 <form id="update" method="post" action="$doc.getURL("save")" onsubmit="cancelCancelEdit()">
-<div id="xwikieditcontent" class="x-panel">
+<div id="xwikieditcontent">
 #set($redirect = "$xwiki.getRequestURL()")
 #set($classname = "XWiki.XWikiPreferences")
 #set($class = $xwiki.getDocument($classname).xWikiClass)
@@ -75,20 +75,14 @@ $response.sendRedirect($doc.getURL("objectadd", "classname=XWiki.XWikiPreference
 <input type="hidden" name="global" value="1" />
 </div>
 <div>
-<div id="xwikiprefs" class="accordion x-panel-body">
+<div id="xwikiprefs" class="accordion">
 #foreach($section in $sections)
 #showsection($section $sectionitemsmap)
 #end
 </div> ## xwikiprefs
 <script type="text/javascript">
-if ("undefined" !== typeof createAccordion) {
-  var obj={div:'xwikiprefs', no:0};
-  Event.observe(window,'load',createAccordion.bind(this,obj));
-} else if ("undefined" !== typeof Layout) {
-	Layout.accordion('xwikieditcontent');
-} else if ("undefined" !== typeof Rico) {
-	new Rico.Accordion( 'xwikiprefs', { panelHeight:'max', maxHeight: 320} );
-}
+var obj={div:'xwikiprefs', no:0};
+Event.observe(window,'load',createAccordion.bind(this,obj));
 </script>
 </div> ## noname
 </div> ## xwikieditcontent

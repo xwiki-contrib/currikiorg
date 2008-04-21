@@ -31,7 +31,10 @@ $response.sendRedirect($doc.getURL($context.action, "editor=class"))
 </form>
 #if($hasProps)
 <script type="text/javascript">
-if ("undefined" !== typeof Layout) {
+if ("undefined" !== typeof createAccordion) {
+  var obj={div:'xwikiclassproperties', no:0};
+  Event.observe(window,'load',createAccordion.bind(this,obj));
+} else if ("undefined" !== typeof Layout) {
 	Layout.accordion('xwikieditcontent');
 } else if ("undefined" !== typeof Rico) {
 	new Rico.Accordion( 'xwikiclassproperties', {panelHeight:'flex'} );

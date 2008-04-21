@@ -21,7 +21,7 @@ $title
 #end
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
-$!xwiki.getWebPreference("meta")
+$xwiki.parseContent($!xwiki.getWebPreference("meta"))
 #template("analytics.vm")
 <link rel="stylesheet" href="$xwiki.getSkinFile("extjs/resources/css/ext-all.css")" type="text/css" />
 #template("stylesheets.vm")
@@ -31,10 +31,12 @@ $!xwiki.getWebPreference("meta")
 <script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/prototype/scriptaculous.js")?load=effects"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/prototype/ext-prototype-adapter.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
 #if($context.action=="admin")
 <script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>

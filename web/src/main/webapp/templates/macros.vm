@@ -1,0 +1,1156 @@
+##
+##
+## #template("name.vm")
+## Searches for the given velocity template and interprets it.
+## Only the velocity parser is executed on the file.
+## The template is searched in the following locations, in this order:
+## - as a property of the XWikiSkins object attached to the current skin document
+## - as an attachment to the current skin document
+## - as a file in the directory corresponding to the current skin
+## - the above 3 locations corresponding to the base skin
+## - the above 3 locations corresponding to the default skin
+## - as a file in the /templates/ directory
+##
+#macro(template $tname)
+$xwiki.parseTemplate($tname)
+#end
+##
+##
+## #renderTemplate("name.vm")
+## Searches for the given velocity template and renders it.
+## The template is searched in the following locations, in this order:
+## - as a property of the XWikiSkins object attached to the current skin document
+## - as an attachment to the current skin document
+## - as a file in the directory corresponding to the current skin
+## - the above 3 locations corresponding to the base skin
+## - the above 3 locations corresponding to the default skin
+## - as a file in the /templates/ directory
+##
+#macro(renderTemplate $tname )
+$xwiki.renderTemplate($tname)
+#end
+##
+##
+## #includeTopic("Space.Document")
+## Includes another fully rendered document inside the current response.
+## The topic is interpreted and rendered exactly as if it were viewed in a separate response,
+## meaning that the $doc variable will point to the included document. The resulting string is
+## wrapped with {pre}...{/pre}, in order to prevent double-rendering.
+## The platform prevents recursive includes.
+## This macro is useful for creating composite documents from smaller parts, or the other way around,
+## splitting a large document into smaller distinct chunks which can be edited in parallel.
+##
+#macro(includeTopic $topic)
+$xwiki.includeTopic($topic)
+#end
+##
+##
+## #includeMacros("Space.Document")
+## Includes the content of another document as velocity macros. Because of the way the velocity
+## engine works, trying to place macros in another document and including it with another method
+## will not have the expected result. Other than making the macros available, it works just as
+## #includeForm($topic)
+##
+#macro(includeMacros $topic)
+$xwiki.includeForm($topic)
+#end
+##
+##
+## #includeForm("Space.Document")
+## Includes another fully rendered document inside the current response.
+## The included content is interpreted and rendered in the current context, meaning that $doc will
+## point to the current document (the includer), and not the included one. The resulting string is
+## wrapped with {pre}...{/pre}, in order to prevent double-rendering.
+## The platform prevents recursive includes.
+## This macro is the core of the document-template-sheet functionality of XWiki, where a document
+## has an XObject attached to it, its content consists of the "#includeForm('Some.Sheet')" statement,
+## and the sheet works just as if it were actually inside the document's content.
+##
+#macro(includeForm $topic)
+$xwiki.includeForm($topic)
+#end
+##
+##
+## #includeInContext("Some.Document")
+## Alias for #includeForm
+##
+#macro(includeInContext $topic)
+$xwiki.includeForm($topic)
+#end
+##
+##
+## #includeServlet("/xwiki/bin/view/Some/Document?params")
+## Invokes on the server another servlet corresponding to the passed URL, and returns the output.
+## This is done using standard servlet mechanisms (javax.servlet.RequestDispatcher#include).
+##
+#macro(includeServlet $url)
+<!-- including $url -->
+$xwiki.invokeServletAndReturnAsString($url)
+<!-- included $url -->
+#end 
+##
+##
+## #versions()
+## Displays links to the last 4 versions (including the current one), and to the full history
+## page of the current document.
+##
+#macro(versions)
+#foreach($rev in $tdoc.getRecentRevisions(4))
+<a href="$doc.getURL("view", "rev=$rev")">$rev</a><span class="xwikisep"> | </span>
+#end
+#if ($tdoc.realLanguage!="")
+<a href="$doc.getURL("view", "xpage=diff&language=${tdoc.realLanguage}")">$msg.get("diff")</a><span class="xwikisep"> | </span>
+#else
+<a href="$doc.getURL("view", "xpage=diff")">$msg.get("history")</a><span class="xwikisep"> | </span>
+#end
+#end
+##
+##
+## #errorMarkup()
+## Display all queued Struts errors
+##
+#macro(errorMarkup)
+  #if ($errors && $!errors.exist() )
+    <ul>
+    #foreach ($e in $errors.all )
+      $e
+    #end
+    </ul>
+  #end
+#end
+##
+##
+## #errorMarkupForProperty("prop")
+## Display all queued Struts errors for a particular property
+##
+#macro(errorMarkupForProperty $property)
+  #if ($errors && $!errors.exist($property) )
+    <ul>
+    #foreach ($er in $errors.get($property))
+      $er
+    #end
+    </ul>
+  #end
+#end
+##
+##
+## #jabber("jabberId")
+## Displays the status for the given Jabber id 
+##
+#macro(jabber $id)
+<img src="http://edgar.netflint.net/status.php?jid=${id}&amp;type=image&amp;iconset=phpbb" alt="jabber $id" />
+#end
+##
+##
+## #skype("skypeId")
+## Displays the status for the given Skype id 
+##
+#macro(skype $id)
+<a href="skype:${id}?call"><img width="182" height="44" src="http://mystatus.skype.com/bigclassic/${id}" style="border: none;"></a>
+#end
+##
+##
+## #yahoo("yahooId")
+## Displays the status for the given Yahoo! id 
+##
+#macro(yahoo $id)
+<img border="0" src="http://opi.yahoo.com/online?u=${id}&amp;m=g&amp;t=1" alt="yahoo $id" />
+#end
+##
+##
+## #aim("aimId")
+## Displays the status for the given AIM id 
+##
+#macro(aim $id)
+#set($onurl = "http://${request.serverName}${xwiki.getSkinFile('aimonline.gif')}")
+#set($offurl = "http://${request.serverName}${xwiki.getSkinFile('aimoffline.gif')}")
+<img border="0" src="http://big.oscar.aol.com/nvludo?on_url=${onurl}&off_url=${offurl}" alt="Online detector"></a>
+#end
+##
+##
+## #msn("msnId")
+## Displays the status for the given MSN id 
+##
+#macro(msn $id)
+#set($onurl = "${request.serverName}${xwiki.getSkinFile('msnonline.gif')}")
+#set($offurl = "${request.serverName}${xwiki.getSkinFile('msnoffline.gif')}")
+<img border="0" src="http://turdinc.kicks-ass.net:6969/msn/${id}/onurl=${onurl}/offurl=${offurl}/unknownurl=${offurl}" />
+#end
+##
+##
+## #im("XWiki.Username")
+## Displays the instant messaging account status of the given user. The IM network and the account
+## name are taken from the user profile.  
+##
+#macro(im $user)
+#set($userdoc = $xwiki.getDocument($user))
+#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+#set($imtype = $userdoc.display("imtype","view",$userobj))
+#set($imaccount = $userdoc.display("imaccount","view",$userobj))
+#if($imtype=="Yahoo")
+#yahoo("$imaccount")
+#end
+#if($imtype=="AIM")
+#aim("$imaccount")
+#end
+#if($imtype=="MSN")
+#msn("$imaccount")
+#end
+#if($imtype=="Jabber")
+#jabber("$imaccount")
+#end
+#if($imtype=="Skype")
+#skype("$imaccount")
+#end
+#end
+##
+##
+## #sign("XWiki.Username")
+## Displays a "signature", a link to the user's profile page.
+##
+#macro(sign $username)
+#if($username.indexOf(".")==-1)
+#set($username = "XWiki.${username}")
+#end
+#if($xwiki.exists("$username"))
+$xwiki.getUserName("$username")
+#else
+$xwiki.getUserName("xwiki:${username}")
+#end
+#end
+
+#macro(includeHelp $pagename)
+  #if($xwiki.exists("xwiki:XWiki.${pagename}"))
+    $xwiki.includeForm("xwiki:XWiki.${pagename}",false)
+  #else
+    #if($xwiki.exists("XWiki.${pagename}"))
+      $xwiki.includeForm("XWiki.${pagename}",false)
+    #end
+  #end
+#end
+
+#macro(flickr $rss)
+{rss:feed=${rss}|full=1}
+#end
+
+#macro(flickrtag $tag)
+#flickr("http://www.flickr.com/services/feeds/photos_public.gne?tags=${tag}&format=rss_200")
+#end
+
+#macro(flickruser $id)
+#flickr("http://www.flickr.com/services/feeds/photos_public.gne?id=${id}&format=rss_200")
+#end
+
+#macro(flickrusertag $id $tag)
+#flickr("http://www.flickr.com/services/feeds/photos_public.gne?id=${id}&tags=${tag}&format=rss_200")
+#end
+
+#macro(map $address $cp $linktext)
+<a href="http://www.viamichelin.com/viamichelin/fra/dyn/controller/mapPerformPage?strAddress=${address}&strLocation=&strCP=${cp}&strCountry=1424&x=30&y=9">${linktext}</a>
+#end
+
+#macro(mindmap $mindmap $width $height)
+#if(!$width)
+#set($width="100%")
+#end
+#if(!$height)
+#set($height="600")
+#end
+#if(!$mindmap)
+#set($mindmap = "")
+#set($mmurl = "")
+#else
+#if($mindmap.startsWith("http"))
+#set($mmurl = $mindmap)
+#else
+#set($mmurl1 = $doc.getAttachmentURL($mindmap,"download"))
+#set($mmurl = "http://${request.serverName}:${request.serverPort}${mmurl1}")
+#end
+#end
+<applet code="freemind.main.FreeMindApplet.class" archive="${request.contextPath}/freemind/freemind.jar" width="${width}" height="${height}">
+<param name="type" value="application/x-java-applet;version=1.4" />
+<param name="scriptable" value="false" />
+<param name="modes" value="freemind.modes.browsemode.BrowseMode" />
+<param name="browsemode_initial_map" value="$mmurl" />
+<param name="initial_mode" value="Browse" />
+<param name="selection_method" value="selection_method_direct" />
+</applet>
+#end
+
+#macro(toc $pinit $pmax $pnumbered)
+#set($init = $pinit)
+#set($max = $pmax)
+#set($numbered = $pnumbered)
+ #set ($int = 0)
+ #set ($boolean = false)
+ #if ($init == "")
+  #set ($init = 2)
+ #else
+  #set ($init = $int.valueOf($init))
+ #end
+ #if ($max == "")
+  #set ($max = 6)
+ #else
+  #set ($max = $int.valueOf($max))
+ #end
+ #if ($numbered == "")
+  #set ($numbered = false)
+ #else
+  #set ($numbered = $boolean.valueOf($numbered))
+ #end
+ #set ($tocData = ${tdoc.getTOC($init, $max, $numbered)})
+ #set ($context.tocData = $tocData)
+ #set ($lastLevel = $init - 1)
+ #set ($depth = 0)
+ #set ($openeditem = true)
+<div class="toc">
+ #foreach ($tocEntry in $tocData.entrySet())
+  #set ($level = $tocEntry.value.level)
+  #if ($level > $lastLevel)
+   #set ($to = $lastLevel + 1)
+   #set ($iter = [$level .. $to])
+   #foreach ($n in $iter)
+    #if($openeditem)
+      #set($openeditem = false)
+    #else
+<li>
+    #end
+<ul class="tocLevel">
+    #set ($depth = $depth + 1)
+   #end
+  #elseif ($level < $lastLevel)
+   #set ($to = $level + 1)
+   #set ($iter = [$lastLevel .. $to])
+</li>
+   #foreach ($n in $iter)
+</ul>
+</li>
+    #set ($depth = $depth - 1)
+   #end
+  #else
+</li>
+  #end
+ <li class="tocEntry"><a href="#$tocEntry.key">$!tocEntry.value.numbering $xwiki.parseContent($tocEntry.value.text)</a>
+  #set ($lastLevel = $level)
+  #set($openeditem = true)
+ #end
+ #if ($depth > 0)
+  #set ($levels = [1 .. $depth])
+  #foreach($level in $levels)
+ </li>
+</ul>#end
+ #end
+</div>
+#end
+
+#macro(exportPackage)
+#set($export = $request.get("export"))
+#if ($export == "1")
+  #set($dateFormat = "dd MMM yyyy ? HH:mm")
+  #set($diff = $request.get("diff"))
+  #set($SpaceName = $request.get("SpaceName"))
+
+  1.1 Space : $SpaceName
+
+  <form method="POST" action="$doc.getName()?export=2">
+
+#set($docs = $xwiki.getSpaceDocsName($SpaceName))
+  <table border="1" style="text-align:center;">
+  <tr><td>Name</td><td>Export</td><td colspan="3">Default Action</td></tr>
+  <tr><td colspan="2"></td><td>overwrite</td><td>merge objects</td><td>skip</td></tr>
+  #foreach ($doc in $docs)
+    #if ($xwiki.hasAccessLevel("view", "${context.database}:${SpaceName}.${doc}"))
+
+    <tr><td>[${doc}>${SpaceName}.${doc}]</td><td><input type="checkbox" name="ToExport" value="${SpaceName}.${doc}" /></td><td><input type="radio" name="${SpaceName}.${doc}_default" value="overwrite" checked="true" /></td> <td><input type="radio" name="${SpaceName}.${doc}_default" value="merge" /></td> <td><input type="radio" name="${SpaceName}.${doc}_default" value="skip" /></td> </tr>
+
+    #end
+  #end
+  </table>
+
+  #if($SpaceName != "XWiki")
+
+
+    1.1 Space : XWiki
+
+    #set($docs = $xwiki.getSpaceDocsName("XWiki"))
+    <table border="1" style="text-align:center;">
+    <tr><td>Name</td><td>Export</td><td colspan="3">Default Action</td></tr>
+    <tr><td colspan="2"></td><td>overwrite</td><td>merge objects</td><td>skip</td></tr>
+    #foreach ($doc in $docs)
+      #if ($xwiki.hasAccessLevel("view", "${context.database}:XWiki.${doc}"))
+
+      <tr><td>[${doc}>XWiki.${doc}]</td><td><input type="checkbox" name="ToExport" value="XWiki.${doc}" /></td><td><input type="radio" name="XWiki.${doc}_default" value="overwrite" checked="true" /></td> <td><input type="radio" name="XWiki.${doc}_default" value="merge" /></td> <td><input type="radio" name="XWiki.${doc}_default" value="skip" /></td> </tr>
+
+      #end
+    #end
+    </table>
+  #end
+
+  <input type="submit" name="submitted" value="Valider">
+  </form>
+
+
+
+#elseif ($export == "2")
+  #set($ToExport = $request.getParameterValues("ToExport"))
+  $response.setContentType("application/zip")
+  #set($export = $xwiki.export)
+  #foreach ($itemexp in $ToExport)
+    #set($defaultAction = $request.get("${itemexp}_default"))
+    $export.add($itemexp, $defaultAction)
+  #end
+  $export.export()
+#else
+  <form method="POST" action="$doc.getName()?export=1">
+  Select the space you want to export : <br />
+  #set($spaces = $xwiki.getSpaces())
+  <select name="SpaceName">
+  #foreach ($space in $spaces)
+    <option value="$space">$space</option>
+  #end
+
+  </select>
+  <input type="submit" name="submitted" value="Valider">
+  </form>
+#end
+#end
+
+#macro(importPackage)
+#set($toexport = $request.get("export"))
+#if($toexport == "1")
+  #set($appName = $request.get("App"))
+  #set($alist = $doc.getAttachmentList())
+  #foreach ($oAttach in $alist)
+    #if ($oAttach.getFilename() == $appName)
+      #set($import = $xwiki.import)
+      $import.importPackage($oAttach.getContent())
+
+      #set($docs = $import.getDocuments())
+
+      #foreach($docInfo in $docs)
+        #set($right = "")
+        #set($right = $request.get("$docInfo.getFullName()_default"))
+        #if($right)
+          $import.setDocumentAction($docInfo.getFullName(), $right)
+        #end
+      #end
+
+
+      #set($ret = $import.install())
+      $import.getTestInstallToString($ret)
+    #end
+  #end
+
+
+#else
+  #set($alist = $doc.getAttachmentList())
+  #if ($alist.size() == 0)
+    Add the package in attachment
+  #end
+  #foreach ($oAttach in $alist)
+    #set($import = $xwiki.import)
+
+    1.1 $oAttach.getFilename()
+
+    $import.importPackage($oAttach.getContent())
+
+    1.1.1 Infos
+
+    Author : $import.getAuthor() <br />
+    Name : $import.getName() <br />
+    Description : $import.getDescription() <br />
+    Licence : $import.getLicence() <br />
+    Version : $import.getVersion() <br />
+
+    #set($canInstall = $import.testInstall())
+    install : $import.getTestInstallToString($canInstall)
+
+    1.1.1 Status of each Files
+    #set($docs = $import.getDocuments())
+
+    <form method="POST" action="$request.getRequestURL()?export=1">
+    <input type="hidden" name="App" value="$oAttach.getFilename()" />
+    <table border="1" style="text-align:center;">
+    <tr><td>Name</td><td>infos</td><td colspan="3">Action</td></tr>
+    <tr><td colspan="2"></td><td>overwrite</td><td>merge objects</td><td>skip</td></tr>
+
+
+    #foreach($docInfo in $docs)
+
+
+      <tr><td>[$docInfo.getFullName()>$docInfo.getFullName()]</td> <td>__$import.getTestInstallToString($docInfo.isInstallable())__</td>
+#if($import.getTestInstallToString($docInfo.isInstallable()) == "Already exist")
+  #if ($import.getActionToString($docInfo.getDefaultAction()) == "overwrite")
+    <td><input type="radio" name="$docInfo.getFullName()_default" value="overwrite" checked="true" /></td>
+  #else
+    <td><input type="radio" name="$docInfo.getFullName()_default" value="overwrite" /></td>
+  #end
+  #if ($import.getActionToString($docInfo.getDefaultAction()) == "merge")
+    <td><input type="radio" name="$docInfo.getFullName()_default" value="merge" checked="true" /></td>
+  #else
+   <td><input type="radio" name="$docInfo.getFullName()_default" value="merge" /></td>
+  #end
+  #if ($import.getActionToString($docInfo.getDefaultAction()) == "skip")
+    <td><input type="radio" name="$docInfo.getFullName()_default" value="skip" checked="true" /></td> </tr>
+  #else
+    <td><input type="radio" name="$docInfo.getFullName()_default" value="skip" /></td> </tr>
+  #end
+#else
+  <td colspan="3"></td>
+#end
+
+
+    #end
+    </table>
+    #if ($canInstall != 0)
+      1.1.1 You can install this application
+      <input type="submit" name="submitted" value="Valider">
+    #else
+      1.1.1 You can't install this application.
+    #end
+    </form>
+  #end
+#end
+
+#end
+###
+###    Separator
+###
+### Insert a span containing a |
+###
+#macro(sep)
+<span class="separator"> | </span>
+#end
+
+###
+###    useravatar
+###
+### Display the avatar of a user, or a standard image if the user has no avatar
+###
+### @param username The name of the user whose avatar will be displayed
+###
+#macro(useravatar $username)
+  #if(!$picturelist)
+    #set($picturelist = $xwiki.hashMap)
+  #end
+  #if(!$picturelist.containsKey($username))
+    #set($picture = "<img src='")
+    #set($picture = $picture.concat($xwiki.getSkinFile("noavatar.png")))
+    #set($picture = $picture.concat("' alt='$username' title='$username'/>"))
+    #set($profiledoc = $xwiki.getDocument($username))
+    #if(!$profiledoc.isNew())
+      #set($profileobj = $profiledoc.getObject("XWikiUsers", 0))
+      #if($profiledoc.attachmentList.size() != 0)
+        #set($hasavatar = 0)
+        #if($profileobj.avatar && $profileobj.avatar != "")
+          #foreach ($attach in $profiledoc.attachmentList)
+            #if($attach.filename == $profileobj.avatar)
+              #set($hasavatar = 1)
+            #end
+          #end
+        #end
+        #if($hasavatar == 1)
+          #set($pictureurl = $profiledoc.getAttachmentURL($profileobj.avatar))
+          #set($picture = "<img src='")
+          #set($picture = $picture.concat($pictureurl))
+          #set($picture = $picture.concat("' alt='"))
+          #set($picture = $picture.concat($username))
+          #set($picture = $picture.concat("' title='"))
+          #set($picture = $picture.concat($username))
+          #set($picture = $picture.concat("'/>"))
+        #end
+      #end
+    #end
+    $!picturelist.put($username, $picture)
+  #end
+  $picturelist.get($username)
+#end
+
+###
+###    mimetypeimg
+###
+### Display an icon according to the mimetype
+###
+### @param mime The reported mimetype of the file
+### @param fname The name of the file
+###
+#macro(mimetypeimg $mime $fname)
+  #set($idx = $fname.lastIndexOf("."))
+  #set($idx = $idx + 1)
+  #if(($idx != 0) && ($idx != -1))
+    #set($ext = $fname.substring($idx))
+  #else
+    #set($ext = "")
+  #end
+  #####    images
+  #if($mime.equals("image/svg"))<img src="$xwiki.getSkinFile("mimetypes/vectorgfx.png")" alt="SVG" title="SVG"/>
+  #elseif($mime.equals("application/svg+xml"))<img src="$xwiki.getSkinFile("mimetypes/vectorgfx.png")" alt="SVG" title="SVG"/>
+  #elseif($mime.startsWith("image/"))<img src="$xwiki.getSkinFile("mimetypes/jpg.png")" alt="Image" title="Image"/>
+  #####    text based
+  #elseif($mime.equals("text/plain"))<img src="$xwiki.getSkinFile("mimetypes/txt.png")" alt="Text" title="Text"/>
+  #elseif($mime.equals("text/html"))<img src="$xwiki.getSkinFile("mimetypes/html.png")" alt="HTML" title="HTML"/>
+  #elseif($mime.equals("text/css"))<img src="$xwiki.getSkinFile("mimetypes/url.png")" alt="CSS" title="CSS"/>
+  #elseif($mime.startsWith("text/"))<img src="$xwiki.getSkinFile("mimetypes/txt.png")" alt="Text" title="Text"/>
+  #####    documents
+  #elseif($mime.equals("application/xml"))<img src="$xwiki.getSkinFile("mimetypes/xml.png")" alt="XML" title="XML"/>
+  #elseif($mime.equals("application/pdf"))<img src="$xwiki.getSkinFile("mimetypes/pdf.png")" alt="PDF" title="PDF"/>
+  #elseif($mime.equals("application/postscript"))<img src="$xwiki.getSkinFile("mimetypes/ps.png")" alt="PS" title="PS"/>
+  #elseif($mime.equals("application/msword"))<img src="$xwiki.getSkinFile("mimetypes/word.png")" alt="Word" title="Word"/>
+  #elseif($mime.equals("application/powerpoint"))<img src="$xwiki.getSkinFile("mimetypes/ppt.png")" alt="PPT" title="PPT"/>
+  #elseif($mime.equals("application/x-shockwave-flash"))<img src="$xwiki.getSkinFile("mimetypes/swf.png")" alt="SWF" title="SWF"/>
+  #####    archives
+  #elseif($mime.equals("application/x-tar"))<img src="$xwiki.getSkinFile("mimetypes/tar.png")" alt="TAR" title="TAR"/>
+  #elseif($mime.equals("application/zip"))<img src="$xwiki.getSkinFile("mimetypes/zip1.png")" alt="ZIP" title="ZIP"/>
+  #elseif($mime.equals("application/x-gzip"))<img src="$xwiki.getSkinFile("mimetypes/tar_gz.png")" alt="GZ" title="GZ"/>
+  #elseif($mime.equals("application/java-archive"))<img src="$xwiki.getSkinFile("mimetypes/jar.png")" alt="JAR" title="JAR"/>
+  #####    media
+  #elseif($mime.startsWith("audio/"))<img src="$xwiki.getSkinFile("mimetypes/wav.png")" alt="Audio" title="Audio"/>
+  #elseif($mime.startsWith("video/"))<img src="$xwiki.getSkinFile("mimetypes/video.png")" alt="Video" title="Video"/>
+  #####    octet-streams extensions
+  #elseif($mime.equals("application/octet-stream"))
+    #if($ext.equals("xls"))<img src="$xwiki.getSkinFile("mimetypes/excel.png")" alt="XLS" title="XLS"/>
+    #elseif($ext.equals("bz") || $ext.equals("bz2") || $ext.equals("tbz"))<img src="$xwiki.getSkinFile("mimetypes/tar_bz.png")" alt="BZ" title="BZ"/>
+    #elseif($ext.equals("tgz"))<img src="$xwiki.getSkinFile("mimetypes/tar_gz.png")" alt="GZ" title="GZ"/>
+    #elseif($ext.equals("rar"))<img src="$xwiki.getSkinFile("mimetypes/zip1.png")" alt="RAR" title="RAR"/>
+    #elseif($ext.equals("odp") || $ext.equals("odt") || $ext.equals("odf") || $ext.equals("sxw") || $ext.equals("stw"))<img src="$xwiki.getSkinFile("mimetypes/openoffice.png")" alt="OpenOffice" title="OpenOffice"/>
+    #else<img src="$xwiki.getSkinFile("mimetypes/bin.png")" alt="BIN" title="BIN"/>
+    #end
+  #elseif($mime.startsWith("application/"))<img src="$xwiki.getSkinFile("mimetypes/exec.png")" alt="Application" title="Application"/>
+  #end
+#end
+
+###
+###    packName
+###
+### Display a shorter version of a string
+###
+### @param name The processed string
+###
+#macro(packName $name)
+#if(!$maxnamelength)
+#set($maxnamelength = 25)
+#end
+#set($idx = $name.lastIndexOf("."))
+#if(($idx != 0) && ($idx != -1))
+#set($ext = $name.substring($idx))
+#else
+#set($ext = "")
+#set($idx = $name.length())
+#end
+#set($fname = $name.substring(0, $idx))
+#if($fname.length() > $maxnamelength)$fname.substring(0, $maxnamelength)~$ext#else$name#end
+#end
+
+#macro(xwikiobjectfield $fielddoc $fieldname $fieldtext $action)
+<div class="xmblabel">$fieldtext</div>
+<div class="xmbfield">
+#if($fieldname!="")
+$fielddoc.display($fieldname, $action)
+#end
+</div>
+#end
+
+#macro(formfield $fieldtext $html)
+<div class="xmblabel">$fieldtext</div>
+<div class="xmbfield">
+$html
+</div>
+#end
+
+#macro(defaultDisplayObj $document $obj)
+ #set($class = $obj.xWikiClass)
+ #foreach($prop in $class.properties)
+  #formfield(${prop.prettyName} $document.display($prop.getName(), "edit", $obj))
+ #end
+#end
+
+#macro(defaultViewDisplayObj $document $obj)
+ #set($class = $obj.xWikiClass)
+ #foreach($prop in $class.properties)
+  #formfield(${prop.prettyName} $document.display($prop.getName(), "view", $obj))
+ #end
+#end
+
+##
+## Formats a date according to the ISO8601 standard
+##
+#macro(formatdateISO $date)
+#set($tz = $xwiki.formatDate($date, "Z"))
+#set($tz = "${tz.substring(0, 3)}:${tz.substring(3)}")
+$xwiki.formatDate($date, "yyyy-MM-dd")T$xwiki.formatDate($date, "HH:mm:ss")$tz#end
+
+##
+## Formats a username like a fn (hCard microformat)
+##
+#macro(userfn $username)
+#set($fn = $xwiki.getLocalUserName($username))
+#if($fn.indexOf("<a") >= 0)
+#set($fn = $fn.replaceAll("<a", '<a class="url fn"'))
+#else
+#set($fn = "<span class='fn'>$fn</span>")
+#end
+$fn
+#end
+
+###
+###
+### Macros for "foot notes"
+###
+### TODO:
+###       Make Radeox macros 
+###       Support in wysiwyg
+###
+###
+#macro(footnote $text)
+#if(!$page_footnotes)
+#set($page_footnotes = $xwiki.arrayList)
+#set($footnote_group_id = 1)
+#end
+#set($discard = $page_footnotes.add($text))
+#set($processedText = $text.replaceAll('[*~<>_-]', ''))
+#set($footnote_id = $page_footnotes.size())
+<sup class="footnoteRef" id="footnoteref_${footnote_group_id}_${footnote_id}"><a href="#footnote_${footnote_group_id}_${footnote_id}" title="$msg.get("core.footnotes.gotofootnote", [${footnote_id}]): {pre}$processedText{/pre}">\[$footnote_id\]</a></sup>#end
+##
+##
+##
+#macro(putFootnotes)
+#if($page_footnotes && ($page_footnotes.size() > 0))
+<div class="footnotes">
+<ol>
+#foreach($footnote in $page_footnotes)
+<li id="footnote_${footnote_group_id}_${velocityCount}">
+ <a class="footnoteBackRef" title="$msg.get("core.footnotes.backtoref")" href="#footnoteref_${footnote_group_id}_${velocityCount}">^</a>
+  $footnote</li>
+#end
+</ol>
+</div>
+#set($discard = $page_footnotes.clear())
+#set($footnote_group_id = $footnote_group_id + 1)
+#end
+#end
+##
+##
+##  Generate navigation links for paged documents
+## Deprecated, replaced by #printPagedViewLinks
+##
+#macro(pagedViewLinks $itemsPerPage $totalPages $crtPageNumber)
+#if($totalPages > 0)
+<div class="pagedNavigation">
+#if($crtPageNumber > 0)
+#set($prevPage = $crtPageNumber - 1)
+<span class="pagedLink"><a href="$doc.getURL($context.action, "page=0&ipp=${itemsPerPage}")">$msg.get("web.paging.firstPage")</a></span>
+<span class="pagedLink"><a href="$doc.getURL($context.action, "page=${prevPage}&ipp=${itemsPerPage}")">$msg.get("web.paging.previousPage")</a></span>
+#else
+<span class="pagedLink inactive">$msg.get("web.paging.firstPage")</span>
+<span class="pagedLink inactive">$msg.get("web.paging.previousPage")</span>
+#end
+#set($displayCrtPageNumber = $crtPageNumber + 1)
+#set($displayTotalPages = $totalPages + 1)
+<span class="pagedStatus">$msg.get("web.paging.pageNumberOf", [$displayCrtPageNumber, $displayTotalPages])</span>
+#if($crtPageNumber < $totalPages)
+#set($nextPage = $crtPageNumber + 1)
+<span class="pagedLink"><a href="$doc.getURL($context.action, "page=${nextPage}&ipp=${itemsPerPage}")">$msg.get("web.paging.nextPage")</a></span>
+<span class="pagedLink"><a href="$doc.getURL($context.action, "page=${totalPages}&ipp=${itemsPerPage}")">$msg.get("web.paging.lastPage")</a></span>
+#else
+<span class="pagedLink inactive">$msg.get("web.paging.nextPage")</span>
+<span class="pagedLink inactive">$msg.get("web.paging.lastPage")</span>
+#end
+</div>
+#end
+#end
+##
+##
+##  Generate navigation links for paged documents. It will use the URL parameters "ipp" to forward
+## the number of items per page, and "page" to indicate a certain page. The actual range (in items,
+## not in pages) can be computer using #preparePagedViewParams. The macro does not print anything
+## if only one page exists and $alwaysDisplay is not set to true. Does not alter any variables.
+##
+## @param itemsPerPage The number of items per page, will be forwarded in the links to other pages.
+## @param totalPages The total number of pages, starting at 1.
+## @param currentPageNumber The currently displayed page, starting at 1.
+## @param additionalQueryParams Query string fragmentthat should be put in the links. Should not
+##        start or end with ? or &
+## @param alwaysDisplay Force display of the links, even if there is only one page in total.
+##
+#macro(printPagedViewLinks $itemsPerPage $totalPages $currentPageNumber $additionalQueryParams $alwaysDisplay)
+  ## Only display if there are more than 1 pages or we explicitely require it.
+  #if(($totalPages > 1) || $alwaysDisplay)
+    <div class="pagedNavigation">
+    #if($currentPageNumber > 1)
+      #set($currentPageNumber = $currentPageNumber - 1)
+      <span class="pagedLink"><a href="$doc.getURL($context.action, "page=1&ipp=${itemsPerPage}")#if("$!additionalQueryParams" != "")&amp;$additionalQueryParams#end">$msg.get("web.paging.firstPage")</a></span>
+      <span class="pagedLink"><a href="$doc.getURL($context.action, "page=${currentPageNumber}&ipp=${itemsPerPage}")#if("$!additionalQueryParams" != "")&amp;$additionalQueryParams#end">$msg.get("web.paging.previousPage")</a></span>
+      #set($currentPageNumber = $currentPageNumber + 1)
+    #else
+      <span class="pagedLink inactive">$msg.get("web.paging.firstPage")</span>
+      <span class="pagedLink inactive">$msg.get("web.paging.previousPage")</span>
+    #end
+    <span class="pagedStatus">$msg.get("web.paging.pageNumberOf", [$currentPageNumber, $totalPages])</span>
+    #if($currentPageNumber < $totalPages)
+      #set($currentPageNumber = $currentPageNumber + 1)
+      <span class="pagedLink"><a href="$doc.getURL($context.action, "page=${currentPageNumber}&amp;ipp=${itemsPerPage}")#if("$!additionalQueryParams" != "")&amp;$additionalQueryParams#end">$msg.get("web.paging.nextPage")</a></span>
+      <span class="pagedLink"><a href="$doc.getURL($context.action, "page=${totalPages}&amp;ipp=${itemsPerPage}")#if("$!additionalQueryParams" != "")&amp;$additionalQueryParams#end">$msg.get("web.paging.lastPage")</a></span>
+      #set($currentPageNumber = $currentPageNumber - 1)
+    #else
+      <span class="pagedLink inactive">$msg.get("web.paging.nextPage")</span>
+      <span class="pagedLink inactive">$msg.get("web.paging.lastPage")</span>
+    #end
+    </div>
+  #end
+#end
+##
+##
+##  Used together with #printPagedViewLinks, computes the range of items to show and the
+## variables used by #printPagedViewLinks, $currentPageNumber, $itemsPerPage, $totalPages.
+##
+## @param totalItems The total number of items that need to be displayed.
+## @param defaultItemsPerPage The default number of items per page, if no override is found in the
+##        URL. If 0, then display all items.
+## @sets startAt The first item to display (inclusive).
+## @sets endAt The last item to display (exclusive).
+## @sets itemsPerPage The requested number of items per page.
+## @sets totalPages The total number of pages according to the requested number of items per page
+##        and total items. Starts at 1.
+## @sets currentPageNumber The current page displayed. If the requested page is not available (out
+##        of range), then it will be corrected to a valid number. Starts at 1.
+##
+#macro(preparePagedViewParams $totalItems $defaultItemsPerPage)
+  ## Reuse existing variable, in case it is manually overriden somewhere else
+  #if(!$itemsPerPage)
+    #if($request.ipp)
+      #set($itemsPerPage = $util.parseInt($request.ipp))
+    #else
+      #set($itemsPerPage = $defaultItemsPerPage)
+    #end
+  #end
+  ## Page numbers start at 1 outside this macro, but for internal computations we use 0-indexed values.
+  #set($currentPageNumber = $util.parseInt($request.page) - 1)
+  ## The first item to show. Must be >= 0.
+  #set($startAt = $itemsPerPage * $currentPageNumber)
+  #if($startAt < 0)
+    #set($startAt = 0)
+  #end
+  ## The last item to show (exclusive). Must be <= total number of items.
+  #set($endAt = $itemsPerPage * ($currentPageNumber + 1))
+  #if(($endAt > $totalItems) || ($itemsPerPage == 0))
+    #set($endAt = $totalItems)
+  #end
+  ## Never show the items after the last one... They don't exist!
+  #if($startAt >= $endAt)
+    #set($startAt = $endAt - 1)
+  #end
+  ## Compute the total number of pages.
+  #if($itemsPerPage == 0)
+    #set($totalPages = 1)
+  #else
+    #set($totalPages = ($totalItems - 1) / $itemsPerPage + 1)
+  #end
+  ## The requested page might not be available, so correct it to correspond to the displayed items.
+  #set($currentPageNumber = $startAt / $itemsPerPage + 1)
+#end
+##
+##
+## Macro to set a page break used in print, pdf and rtf mode
+##
+#macro(pagebreak)
+<p style="page-break-before: always;" />
+#end
+##
+##
+## Macro to include childs of a page
+##
+#set($clevel = 1)
+#macro(includeChilds $page)
+ #includeChilds($page false)
+#end
+## Macro to include childs at multiple levels
+#macro(includeChilds $page $withPageBreaks)
+ #if($clevel!=0)
+  #foreach($childDocName in $xwiki.searchDocuments("where doc.parent='$page' order by doc.creationDate"))
+    #set($childDoc = $xwiki.getDocument($childDocName))
+    #if(($childDoc)&&($childDoc.getSpace()!="Panels")&&($childDoc.getSpace()!="XWiki"))
+     #if($withPageBreaks)
+     #pagebreak()
+     #end
+     $childDoc.getRenderedContent()
+     #set($clevel = $xwiki.add($clevel,-1))
+     #includeChilds($childDocName $withPageBreaks)
+     #set($clevel = $xwiki.add($clevel,1))
+    #end
+  #end
+ #end
+#end
+
+## Macro to include childs of a page
+#macro(includeLinks $page)
+ #includeLinks($page false)
+#end
+## Macro to include childs at multiple levels
+#macro(includeLinks $page $withPageBreaks)
+ #if($clevel!=0)
+  #set($pageDoc = $xwiki.getDocument($page))
+  #foreach($child in $pageDoc.getLinks())
+    #set($childDocName = $child.getLink())
+    #set($childDoc = $xwiki.getDocument($childDocName))
+    #if(($childDoc)&&($childDoc.getSpace()!="Panels")&&($childDoc.getSpace()!="XWiki"))
+     #if($withPageBreaks)
+     #pagebreak()
+     #end
+     $childDoc.getRenderedContent()
+     #set($clevel = $xwiki.add($clevel,-1))
+     #includeLinks($childDocName $withPageBreaks)
+     #set($clevel = $xwiki.add($clevel,1))
+    #end
+  #end
+ #end
+#end
+
+###
+###    Panel header
+###
+### Generate the starting html code for a panel
+###
+### @param title The panel caption title
+###
+#macro(panelheader $title)
+#set($cookieName = "${context.user}_${panel}")
+#set($expanded = "expanded")
+#set($expanded = $xwiki.getUserPreferenceFromCookie($cookieName))
+## Note: We pass the Panel name as an HTML class attribute so that it's possible to style
+## the Panels selectively using CSS.
+#set ($specialClassAttribute = "")
+#if ($paneldoc && $paneldoc != "")
+  #set ($specialClassAttribute = $util.convertToAlphaNumeric($paneldoc.name))
+#end
+<div class="panel $expanded $specialClassAttribute">
+<h5 class="xwikipaneltitle" onclick="if(eltHasClass(this.parentNode, 'expanded')) createCookie('$cookieName','collapsed', ''); else eraseCookie('$cookieName'); togglePanelVisibility(this.parentNode);">$title</h5>
+<div class="xwikipanelcontents">
+#end
+
+#macro(panelhiddenheader $title)
+## Note: We pass the Panel name as an HTML class attribute so that it's possible to style
+## the Panels selectively using CSS.
+#set ($specialClassAttribute = "")
+#if ($paneldoc && $paneldoc != "")
+  #set ($specialClassAttribute = $util.convertToAlphaNumeric($paneldoc.name))
+#end
+<div class="panel expanded $specialClassAttribute">
+<h5 class="xwikipaneltitle hidden" onclick="togglePanelVisibility(this.parentNode);">$title</h5>
+<div class="xwikipanelcontents">
+#end
+
+#macro(largepanelheader $title)
+#set($cookieName = "${context.user}_${panel}")
+#set($expanded = "expanded")
+#set($expanded = $xwiki.getUserPreferenceFromCookie($cookieName))
+## Note: We pass the Panel name as an HTML class attribute so that it's possible to style
+## the Panels selectively using CSS.
+#set ($specialClassAttribute = "")
+#if ($paneldoc && $paneldoc != "")
+  #set ($specialClassAttribute = $util.convertToAlphaNumeric($paneldoc.name))
+#end
+<div class="large panel $expanded $specialClassAttribute">
+<h5 class="xwikipaneltitle" onclick="if(eltHasClass(this.parentNode, 'expanded')) createCookie('$cookieName','collapsed', ''); else eraseCookie('$cookieName'); togglePanelVisibility(this.parentNode);">$title</h5>
+<div class="xwikipanelcontents">
+#end
+
+###
+###    Panel footer
+###
+### Generate the ending html code for a panel
+###
+#macro(panelfooter)
+</div>
+</div>
+#end
+
+###
+###    Display Panel
+###
+### Extract and display the panel code from the panel object
+###
+#macro(displaypanel $name)
+  #set ($pobj = "")
+  ## Since Velocity does not do any assignment if the RHS is null we need to reset the paneldoc
+  ## as otherwise the previously set panel will be displayed. getDocument() returns null if the
+  ## user doesn't have the right to view a document.
+  #set ($paneldoc = "")
+  #set ($paneldoc = $xwiki.getDocument($name))
+  #if ($paneldoc != "")
+    #set ($pobj = $paneldoc.getObject("Panels.PanelClass"))
+    #if (!$pobj)
+      ## discarded
+    #else
+      $!doc.display("content", "view", $pobj)
+    #end
+  #end
+#end
+
+#macro(displayPropName $prop)
+#if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
+$prop.prettyName#else
+$msg.get($prop.name)#end
+#end
+
+###
+###    Display Panel content
+###
+###
+#macro(displaypanelcontent $doc $obj)
+$doc.display("content", $obj)
+#end
+
+###
+###    Toplevel Menu entry with subitems
+###
+### Generate a menu entry and start the subitem section
+###
+### @param actionurl The URL this entry points to
+### @param linktext The menu item text
+###
+#macro(xwikitopmenuentrystart $actionurl $linktext $id)
+<div class="topmenuentry" onmouseover="showsubmenu(this);" onmouseout="hidesubmenu(this);" id="$id">
+<a class="tme" #if ($actionurl != "") href="$actionurl" #else style="cursor:default;" #end><strong>$linktext</strong></a><span class="hidden menucolon">: </span><span class="submenu hidden">
+#end
+
+###
+###    Toplevel Menu entry without subitems
+###
+### Generate a menu entry withut subitems
+###
+### @param actionurl The URL this entry points to
+### @param linktext The menu item text
+###
+#macro(xwikitopmenuentry $actionurl $linktext $id)
+<div class="topmenuentry" id="$id"><a href="$actionurl"><strong>$linktext</strong></a></div>
+#end
+
+###
+###    Menu subitem entry
+###
+### Generate a submenu entry
+###
+### @param actionurl The URL this entry points to
+### @param linktext The menu item text
+###
+#macro(submenuitem $actionurl $linktext) 
+<span class="submenuitem"><a href="$actionurl">$linktext</a></span>
+#end
+
+###
+###    Menu disabled subitem entry
+###
+### Generate a disabled submenu entry
+###
+### @param text The menu item text
+###
+#macro(submenuitemdisabled $text)
+<span class="submenuitem disable">$text</span>
+#end
+
+
+###
+###    Menu submenu separator
+###
+#macro(submenuseparator)
+<span class="submenuseparator">&nbsp;</span>
+#end
+
+###
+###    Toplevel Menu entry end
+###
+### End the subitem section
+###
+#macro(xwikitopmenuentryend)
+</span></div>
+#end
+
+###
+###    Message box
+###
+#macro(xwikimessageboxstart $title $message)
+    <div class="centered">
+    <fieldset class="xwikimessage">
+      <legend>$title</legend>
+      <p class="xwikimessage">$message</p>
+#end
+#macro(xwikimessageboxend)
+    </fieldset>
+    </div>
+#end
+
+#macro(xwikimessagebox $title $message $urlyes $urlno $msgyes $msgno)
+#xwikimessageboxstart($title $message)
+      <div class="buttons"><a href="$urlyes"><input type="button" class="button" value="$msgyes" onclick="location='$urlyes'; return false;"/></a><a href="$urlno"><input type="button" class="button" value="$msgno" onclick="location='$urlno'; return false;"/></a></div>
+#xwikimessageboxend()
+#end
+
+#macro(xwikimessageboxfield $fielddoc $fieldname $fieldtext $html)
+<div class="xmblabel">$fieldtext</div>
+<div class="xmbfield">
+#if($fieldname!="")
+$fielddoc.display($fieldname, "edit")
+#end
+#if($html!="")
+$html
+#end
+</div>
+#end
+
+#macro(xwikimessageboxsubmit $submittext)
+<div class="xmbbutton">
+<input type="submit" value="$submittext" />
+</div>
+#end
+
+
+###
+###    message
+###
+
+#macro(warning $text)
+<div class="warningmessage"><span class="messagetype">$msg.get("warning"): </span>$text</div>
+#end
+
+#macro(error $text)
+<div class="errormessage"><span class="messagetype">$msg.get("error"): </span>$text</div>
+#end
+
+#macro(info $text)
+<div class="infomessage">$text</div>
+#end
+
+#macro(message $text)
+<div class="plainmessage">$text</div>
+#end
+
+#macro (floatingbox $text)
+<fieldset class="floatinginfobox">$text</fieldset>
+#end
+
+#macro (startfloatingbox)
+<fieldset class="floatinginfobox">
+#end
+
+#macro (endfloatingbox)
+</fieldset>
+#end
+
+###
+###    Display in page panels layout
+###
+###
+#macro(displayPanelLayout $nbcolumns $panelNameList)
+  <div class="panellayoutcontainer-${nbcolumns}col">
+    #set($lastColumnId = ($nbcolumns - 1))
+    #foreach($colId in [0..$lastColumnId])
+      <div class="panellayoutcol">
+        #foreach($panelName in $panelNameList)
+          #if($panelName && ($panelName != "") && (((($velocityCount - 1) + $nbcolumns) % $nbcolumns) == $colId))
+            #displaypanel($panelName)
+          #end
+        #end
+      </div>
+    #end
+  </div>
+#end

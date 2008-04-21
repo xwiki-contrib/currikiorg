@@ -13,7 +13,7 @@ $response.sendRedirect($doc.getURL($context.action, "editor=object"))
 #set($redirect = $xwiki.getRequestURL())
 <div class="clear"></div>
 <form id="update" method="post" action="$doc.getURL("save")" onsubmit="cancelCancelEdit()">
-<div id="xwikieditcontent" class="x-panel">
+<div id="xwikieditcontent">
 #set($q = "editor=object")
 #if($hasCustomClass)
 #set($q = "${q}&amp;classname=${request.classname}")
@@ -22,7 +22,7 @@ $response.sendRedirect($doc.getURL($context.action, "editor=object"))
 #end
 #end
 <div class="hidden"><input type="hidden" name="xcontinue" value="$doc.getURL($context.action, $q)"/></div>
-<div id="xwikiobjects" class="accordion x-panel-body">
+<div id="xwikiobjects" class="accordion">
 #foreach($class in $classes)
 #set($props = $class.getProperties())
 #foreach($prop in $props)
@@ -43,11 +43,13 @@ $response.sendRedirect($doc.getURL($context.action, "editor=object"))
 #else
 #set($objects = $doc.getObjects($class.name))
 #end
+#set($hasobjs = false)
 #foreach($obj in $objects)
 #if(!$hasCustomObject)
-<div id="field_${class.name}_${obj.number}" class="x-panel">
-<div id="field_${class.name}_${obj.number}_title" class="accordionTabTitleBar x-panel-header"><h6><tt><strong>${class.name}[${obj.number}]: </strong>$doc.display($firstfield, $obj)</tt></h6></div>
-<div id="field_${class.name}_${obj.number}_content" class="accordionTabContentBox x-panel-body"><div>
+#set($hasobjs = true)
+<div id="field_${class.name}_${obj.number}">
+<div id="field_${class.name}_${obj.number}_title" class="accordionTabTitleBar"><h6><tt><strong>${class.name}[${obj.number}]: </strong>$doc.display($firstfield, $obj)</tt></h6></div>
+<div id="field_${class.name}_${obj.number}_content" class="accordionTabContentBox"><div>
 #end
 #if($first == 1)
 <input type="hidden" name="${class.name}_nb" value="$nb" />
@@ -70,14 +72,10 @@ $response.sendRedirect($doc.getURL($context.action, "editor=object"))
 </div>
 <div class="bottombuttons">#template("editactions.vm")</div>
 </form>
+#if($hasobjs)
 <script type="text/javascript">
-if ("undefined" !== typeof createAccordion) {
-  var obj={div:'xwikiobjects', no:0};
-  Event.observe(window,'load',createAccordion.bind(this,obj));
-} else if ("undefined" !== typeof Layout) {
-	Layout.accordion('xwikieditcontent');
-} else if ("undefined" !== typeof Rico) {
-	new Rico.Accordion( 'xwikiobjects', {panelHeight:'flex'} );
-}
+var obj={div:'xwikiobjects', no:0};
+Event.observe(window,'load',createAccordion.bind(this,obj));
+#end
 </script>
 #end

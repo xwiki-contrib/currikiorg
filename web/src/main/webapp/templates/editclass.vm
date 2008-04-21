@@ -1,0 +1,43 @@
+#if($request.xpage && $request.xpage=="editclass")
+$response.sendRedirect($doc.getURL($context.action, "editor=class"))
+#else
+#set($formname = "propupdate")
+#set($saveaction = "propupdate")
+#set($class = $doc.getxWikiClass())
+#set($redirect = $xwiki.getRequestURL())
+<form id="$formname" method="post" action="$doc.getURL("preview")" onsubmit="cancelCancelEdit()">
+<div id="xwikieditcontent" class="clear">
+<div class="hidden"><input type="hidden" name="xcontinue" value="$doc.getURL("edit", "editor=class")"/></div>
+<div id="xwikiclassproperties" class="accordion">
+#set($hasProps = false)
+#foreach ($field in $class.properties)
+#set($hasProps = true)
+<div id="field_$field.name">
+<div id="field_${field.name}_title" class="accordionTabTitleBar"><h6><tt>$field.prettyName</tt></h6></div>
+<div id="field_${field.name}_content" class="accordionTabContentBox"><div>
+<dl>
+#foreach ($classprop in $field.xWikiClass.propertyNames)
+#set($propDef = $field.xWikiClass.get("$classprop"))
+#if($propDef.type.indexOf("Boolean") != -1)
+<dt><label>$doc.displayEdit($propDef, "${field.name}_" , $field) $propDef.getPrettyName()</label></dt>
+#else
+<dt><label for="${field.name}_$classprop">$propDef.getPrettyName():</label></dt>
+<dd>$doc.displayEdit($propDef, "${field.name}_" , $field)</dd>
+#end
+#end
+</dl>
+</div> ## noname
+</div> ## content
+</div> ## field
+#end
+</div> ## accordion
+</div> ## editcontent
+<div class="bottombuttons">#template("editactions.vm")</div>
+</form>
+#if($hasProps)
+<script type="text/javascript">
+var obj={div:'xwikiclassproperties',no:0};
+Event.observe(window,'load',createAccordion.bind(this,obj));
+</script>
+#end
+#end

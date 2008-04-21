@@ -1,12 +1,35 @@
 #################################################################################
 ##
-##
-##
-##
 ##    M A C R O S
 ##
 #################################################################################
 
+# Copied from base skin macros.vm
+###
+###    CSS properties
+###
+#macro(csscolorproperty $csspropname $fieldname)
+#set($objcolor = $colors.get($fieldname))
+#if($objcolor && $objcolor != "")
+  $csspropname: $objcolor;
+#end
+#end
+##
+##
+##
+#macro(csscolorpropertyimportant $csspropname $fieldname)
+#set($objcolor = $colors.get($fieldname))
+#if($objcolor && $objcolor != "")
+  $csspropname: $objcolor !important;
+#end
+#end
+
+#macro(displayPropName $prop)
+#if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
+$prop.prettyName#else
+$msg.get($prop.name)#end
+#end
+# End of base macros.vm
 
 ##
 ## GWT
@@ -23,11 +46,6 @@ $m_editUrl#end
 ##
 ## General
 ##
-#macro(displayPropName $prop)
-#if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
-$prop.prettyName#else
-$msg.get($prop.name)#end
-#end
 ##
 ##
 #macro(truncatetext $text $maxChars)
