@@ -17,11 +17,12 @@ import java.util.List;
 /**
  * Created by IntelliJ IDEA.
  * User: ludovic
- * Date: 14 d�c. 2007
+ * Date: 14 dec. 2007
  * Time: 09:23:04
  * To change this template use File | Settings | File Templates.
  */
 public class CurrikiSpaceManager extends SpaceManagerImpl {
+    public static final String CURRIKI_SPACEMANGER_NAME = "csm";
     private static final String CURRIKI_SPACEMANAGER_DEFAULT_EXTENSION = "org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension";
     private static final String CURRIKI_SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES = "UserProfiles,Messages,Documentation";
 
@@ -37,7 +38,7 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
     }
 
     public String getName() {
-        return "csm";
+        return CURRIKI_SPACEMANGER_NAME;
     }
 
 

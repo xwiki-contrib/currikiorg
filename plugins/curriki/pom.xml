@@ -21,37 +21,50 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  *
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
+    <artifactId>curriki-plugins</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.curriki</groupId>
-  <artifactId>curriki-plugins</artifactId>
-  <packaging>pom</packaging>
-  <name>XWiki Products - Curriki - Plugins - Parent POM</name>
-  <description>XWiki Products - Curriki - Plugins - Parent POM</description>
+  <artifactId>curriki-plugin-curriki</artifactId>
+  <name>XWiki Products - Curriki - Plugins - Curriki Plugin</name>
+  <packaging>jar</packaging>
+  <description>XWiki Products - Curriki - Plugins - Curriki Plugin</description>
   <dependencies>
     <dependency>
-      <groupId>com.xpn.xwiki.platform</groupId>
-      <artifactId>xwiki-core</artifactId>
-      <version>${platform.core.version}</version>
-      <scope>provided</scope>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-asset</artifactId>
+      <version>${pom.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-spacemanager</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-spacemanager</artifactId>
+      <version>${pom.version}</version>
+    </dependency>
+<!--
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-licence</artifactId>
+      <version>${pom.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-framework</artifactId>
+      <version>${pom.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugin-mimetype</artifactId>
+      <version>${pom.version}</version>
+    </dependency>
+-->
   </dependencies>
-  <modules>
-    <module>asset</module>
-    <module>licence</module>
-    <module>framework</module>
-    <module>mimetype</module>
-    <module>metadata</module>
-    <module>currikispacemanager</module>
-    <module>currikiactivitystream</module>
-    <module>curriki</module>
-    <module>servlet</module>
-  </modules>
 </project>

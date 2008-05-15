@@ -108,6 +108,11 @@
     <servlet-class>org.curriki.gwt.server.CurrikiServiceImpl</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>CurrikiRestlet</servlet-name>
+    <servlet-class>org.curriki.xwiki.servlet.RestletServlet</servlet-class>
+  </servlet>
+
   <!-- Unused mapping for now. In the future the correct mapping will be /* when the action servlet
        will be decommissioned in favor of the XWiki Action component --> 
   <servlet-mapping>
@@ -163,6 +168,11 @@
   <servlet-mapping>
     <servlet-name>CurrikiService</servlet-name>
     <url-pattern>/gwt/CurrikiService</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>CurrikiRestlet</servlet-name>
+    <url-pattern>/curriki/*</url-pattern>
   </servlet-mapping>
 
   <!-- We override the mime type definition for javascript and css files, as some containers don't

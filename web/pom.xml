@@ -85,6 +85,16 @@
 	<artifactId>curriki-plugin-activitystream</artifactId>
 	<version>1.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+	<groupId>org.curriki</groupId>
+	<artifactId>curriki-plugin-curriki</artifactId>
+	<version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+	<groupId>org.curriki</groupId>
+	<artifactId>curriki-plugin-servlet</artifactId>
+	<version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -119,30 +129,25 @@
             <xwikiCfgPlugins>\
               com.xpn.xwiki.monitor.api.MonitorPlugin,\
               com.xpn.xwiki.plugin.calendar.CalendarPlugin,\
-              com.xpn.xwiki.plugin.feed.FeedPlugin,\
-              com.xpn.xwiki.plugin.ldap.LDAPPlugin,\
-              com.xpn.xwiki.plugin.google.GooglePlugin,\
-              com.xpn.xwiki.plugin.flickr.FlickrPlugin,\
-              com.xpn.xwiki.plugin.mail.MailPlugin,\
               com.xpn.xwiki.plugin.packaging.PackagePlugin,\
               com.xpn.xwiki.plugin.query.QueryPlugin,\
-              com.xpn.xwiki.plugin.svg.SVGPlugin,\
-              com.xpn.xwiki.plugin.charts.ChartingPlugin,\
               com.xpn.xwiki.plugin.fileupload.FileUploadPlugin,\
               com.xpn.xwiki.plugin.image.ImagePlugin,\
-              com.xpn.xwiki.plugin.captcha.CaptchaPlugin,\
               com.xpn.xwiki.plugin.userdirectory.UserDirectoryPlugin,\
               com.xpn.xwiki.plugin.usertools.XWikiUserManagementToolsImpl,\
+              org.curriki.xwiki.plugin.curriki.CurrikiPlugin,\
+              org.curriki.xwiki.plugin.framework.FrameworkManagerPlugin,\
+              org.curriki.xwiki.plugin.licence.LicenceManagerPlugin,\
+              org.curriki.xwiki.plugin.mimetype.MimeTypePlugin,\
               com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin,\
-              com.xpn.xwiki.plugin.autotag.AutoTagPlugin, \
-              org.curriki.xwiki.plugin.asset.AssetManagerPlugin, \
-              org.curriki.xwiki.plugin.framework.FrameworkManagerPlugin, \
-              org.curriki.xwiki.plugin.licence.LicenceManagerPlugin, \
-              org.curriki.xwiki.plugin.mimetype.MimeTypePlugin, \
-              com.xpn.xwiki.plugin.lucene.LucenePlugin, \
-              com.xpn.xwiki.plugin.mailsender.MailSenderPlugin, \
-              org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager, \
-              com.xpn.xwiki.plugin.invitationmanager.plugin.InvitationManagerPlugin
+              com.xpn.xwiki.plugin.scheduler.SchedulerPlugin,\
+              com.xpn.xwiki.plugin.diff.DiffPlugin,\
+              com.xpn.xwiki.plugin.lucene.LucenePlugin,\
+              com.xpn.xwiki.plugin.rightsmanager.RightsManagerPlugin,\
+              org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
+              org.xwiki.plugin.invitationmanager.plugin.InvitationManagerPlugin,\
+              com.xpn.xwiki.plugin.mailsender.MailSenderPlugin,\
+              org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
             </xwikiCfgPlugins>
             <xwikiCfgAdditionalProperties>
 	      ## Spacemanager settings
