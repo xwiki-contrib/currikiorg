@@ -92,7 +92,7 @@ public class InstructionalTypeColumn extends ResultsColumn
         }
 
         if (displayName.length() > 0){
-            ictCol.setHTML("<div><a href=\""+Constants.ICT_HELP_URL+"\" target=\"ICT_HELP\"><img class=\"gwt-Image\" src=\""+displayImg+"\" title=\""+displayImgTitle+"\" /><div class=\"gwt-Label\">"+displayName+"</div></a></div>");
+            ictCol.setHTML("<div><img class=\"gwt-Image\" src=\""+displayImg+"\" title=\""+displayImgTitle+"\" /><div class=\"gwt-Label\">"+displayName+"</div></div>");
         }
 
         return ictCol;
