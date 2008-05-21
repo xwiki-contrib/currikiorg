@@ -30,71 +30,49 @@ import org.apache.commons.logging.LogFactory;
  * Curriki Servlet to process JavaScript (and other) requests
  */
 public abstract class BaseServlet extends HttpServlet {
-	private static final Log log = LogFactory.getLog(XWiki.class);
-
-	// Holding debug request and response objects
-	protected XWikiRequest request;
-	protected XWikiResponse response;
-
-	protected XWikiEngineContext engine;
-	protected XWikiContext context;
-
-    public BaseServlet() {
-        super();
-    }
-    
-   public BaseServlet(XWikiRequest request, XWikiResponse response, XWikiEngineContext engine) {
-       super();
-       this.request = request;
-       this.response = response;
-       this.engine = engine;
-   }
-
-    protected XWikiContext getXWikiContext() throws XWikiException {
-        return getXWikiContext(this.request, this.response);
-    }
+	private static final Log log = LogFactory.getLog(BaseServlet.class);
 
     protected XWikiContext getXWikiContext(HttpServletRequest req, HttpServletResponse res) throws XWikiException {
-           if (this.engine==null) {
-               ServletContext sContext = null;
-               try {
-                   sContext = getServletContext();
-               } catch (Exception ignore) { }
-               if (sContext != null) {
-                   engine = new XWikiServletContext(sContext);
-               } else {
-                   // use fake server context (created as dynamic proxy)
-                   ServletContext contextDummy = (ServletContext)generateDummy(ServletContext.class);
-                   engine = new XWikiServletContext(contextDummy);
-               }
-           }
+        XWikiEngineContext engine;
 
-           XWikiRequest  request = (this.request!=null) ? this.request : new XWikiServletRequest(req);
-           XWikiResponse response = (this.response!=null) ? this.response : new XWikiServletResponse(res);
-           XWikiContext context = Utils.prepareContext("", request, response, engine);
-           context.setMode(XWikiContext.MODE_SERVLET);
-           context.setDatabase("xwiki");
+        ServletContext sContext = null;
+        try {
+            sContext = getServletContext();
+        } catch (Exception ignore) { }
+        if (sContext != null) {
+            engine = new XWikiServletContext(sContext);
+        } else {
+            // use fake server context (created as dynamic proxy)
+            ServletContext contextDummy = (ServletContext)generateDummy(ServletContext.class);
+            engine = new XWikiServletContext(contextDummy);
+        }
 
-           XWiki xwiki = XWiki.getXWiki(context);
-           XWikiURLFactory urlf = xwiki.getURLFactoryService().createURLFactory(context.getMode(), context);
-           context.setURLFactory(urlf);
-           XWikiVelocityRenderer.prepareContext(context);
-           xwiki.prepareResources(context);
+        XWikiRequest  request = new XWikiServletRequest(req);
+        XWikiResponse response = new XWikiServletResponse(res);
+        XWikiContext context = Utils.prepareContext("", request, response, engine);
+        context.setMode(XWikiContext.MODE_SERVLET);
+        context.setDatabase("xwiki");
 
-           String username = "XWiki.XWikiGuest";
-           XWikiUser user = context.getWiki().checkAuth(context);
-           if (user != null) {
-               username = user.getUser();
-           }
-           context.setUser(username);
+        XWiki xwiki = XWiki.getXWiki(context);
+        XWikiURLFactory urlf = xwiki.getURLFactoryService().createURLFactory(context.getMode(), context);
+        context.setURLFactory(urlf);
+        XWikiVelocityRenderer.prepareContext(context);
+        xwiki.prepareResources(context);
 
-           if (context.getDoc() == null) {
-               context.setDoc(new XWikiDocument("Fake", "Document"));
-           }
+        String username = "XWiki.XWikiGuest";
+        XWikiUser user = context.getWiki().checkAuth(context);
+        if (user != null) {
+            username = user.getUser();
+        }
+        context.setUser(username);
 
-           context.put("ajax", new Boolean(true));
-           return context;
-       }
+        if (context.getDoc() == null) {
+            context.setDoc(new XWikiDocument("Fake", "Document"));
+        }
+
+        context.put("ajax", new Boolean(true));
+        return context;
+    }
 
     private Object generateDummy(Class someClass) {
         ClassLoader loader = someClass.getClassLoader();

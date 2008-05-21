@@ -23,22 +23,10 @@ public class RestletServlet extends BaseServlet {
     protected ServletConverter converter;
     private static final Log LOG = LogFactory.getLog(RestletServlet.class);
 
-    public RestletServlet() {
-        super();
-    }
-
-    public RestletServlet(XWikiRequest request, XWikiResponse response, XWikiEngineContext engine) {
-        super(request, response, engine);
-    }
-
     @Override protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         try {
-            request = new XWikiServletRequest(req);
-            response = new XWikiServletResponse(res);
-            context = getXWikiContext();
-
             converter = new ServletConverter(getServletContext());
-            converter.getContext().getAttributes().put("XWikiContext", context);
+            converter.getContext().getAttributes().put("XWikiContext", getXWikiContext(req, res));
 
             converter.setTarget(new BaseRouter(converter.getContext()));
             converter.service(req, res);

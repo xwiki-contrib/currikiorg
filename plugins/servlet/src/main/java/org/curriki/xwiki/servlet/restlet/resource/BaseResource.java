@@ -99,7 +99,7 @@ public class BaseResource extends Resource {
     }
 
     protected JSONObject representationToJSONObject(Representation representation) throws ResourceException {
-        String posted = null;
+        String posted;
         try {
             posted = representation.getText();
         } catch (IOException e) {
@@ -109,7 +109,7 @@ public class BaseResource extends Resource {
             throw error(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, "Please PUT in JSON format.");
         }
 
-        JSONObject json = null;
+        JSONObject json;
         try {
             JSON input = JSONSerializer.toJSON(posted);
             if (!input.isArray()){
