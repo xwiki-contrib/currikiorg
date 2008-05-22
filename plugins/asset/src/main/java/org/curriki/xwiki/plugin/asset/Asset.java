@@ -427,12 +427,20 @@ public class Asset extends CurrikiDocument {
         return subtyped;
     }
 
-    protected void inheritMetadata(String parentAsset) throws XWikiException {
+    public void inheritMetadata() throws XWikiException {
+        inheritMetadata(null);
+    }
+    
+    public void inheritMetadata(String parentAsset) throws XWikiException {
         assertCanEdit();
-        BaseObject assetObj = doc.newObject(Constants.ASSET_CLASS, context);
+
+        BaseObject assetObj = doc.getObject(Constants.ASSET_CLASS);
+        if (assetObj == null) {
+            assetObj = doc.newObject(Constants.ASSET_CLASS, context);
+        }
 
         XWikiDocument parentDoc = null;
-        if (parentAsset != null){
+        if (parentAsset != null) {
             parentDoc = context.getWiki().getDocument(parentAsset, context);
             if (parentDoc.isNew()) {
                 throw new AssetException(AssetException.MODULE_PLUGIN_ASSET, AssetException.ERROR_ASSET_NOT_FOUND, "Parent asset not found");
@@ -448,13 +456,16 @@ public class Asset extends CurrikiDocument {
             copyProperty(parentAssetObj, assetObj, Constants.ASSET_CLASS_KEYWORDS);
         }
 
-        // make sure default rights value is not empty
+        // make sure default rights value is not empty (default to public)
         String rights = assetObj.getStringValue(Constants.ASSET_CLASS_RIGHT);
         if ((rights==null)||(rights.equals(""))) {
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, Constants.ASSET_CLASS_RIGHT_PUBLIC);
         }
 
-        BaseObject newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
+        BaseObject newLicenceObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
+        if (newLicenceObj == null) {
+            newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
+        }
         // the Root collection does not have an asset Licence class
         if (parentDoc != null && parentDoc.getObject(Constants.ASSET_LICENCE_CLASS) != null) {
             BaseObject parentLicenceObjAsset = parentDoc.getObject(Constants.ASSET_LICENCE_CLASS);
