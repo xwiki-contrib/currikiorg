@@ -34,7 +34,7 @@ public class TextAsset extends Asset {
     }
 
     public void addText(Long type, String content) throws XWikiException {
-        if (hasA(Constants.EXTERNAL_ASSET_CLASS)) {
+        if (hasA(Constants.TEXT_ASSET_CLASS)) {
             throw new AssetException("This asset already has text.");
         }
 
