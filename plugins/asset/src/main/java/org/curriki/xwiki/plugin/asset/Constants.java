@@ -91,6 +91,9 @@ public interface Constants {
     String TEXT_ASSET_CLASS = "XWiki.TextAssetClass";
     String TEXT_ASSET_CLASS_TEXT = "text";
     String TEXT_ASSET_CLASS_TYPE = "type";
+    long TEXT_ASSET_CLASS_TYPE_TEXT = 0;
+    long TEXT_ASSET_CLASS_TYPE_HTML = 1;
+    long TEXT_ASSET_CLASS_TYPE_DIRECTION = 2;
 
     String MIMETYPE_PICTURE_CLASS = "MimeType.picture";
     String MIMETYPE_PICTURE_CLASS_DISPLAY_SIZE = "display_size";
