@@ -255,7 +255,7 @@ public class Asset extends CurrikiDocument {
             }
 
             // Check category
-            String category = obj.getStringValue(Constants.EXTERNAL_ASSET_LINK);
+            String category = obj.getStringValue(Constants.ASSET_CLASS_CATEGORY);
             if (category.equals(Constants.CATEGORY_IMAGE)) {
                 return ImageAsset.class;
             } else if (category.equals(Constants.CATEGORY_AUDIO)) {

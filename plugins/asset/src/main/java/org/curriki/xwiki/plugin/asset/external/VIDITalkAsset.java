@@ -25,8 +25,8 @@ public class VIDITalkAsset extends Asset {
     }
 
     public void addVideoId(String videoId) throws XWikiException {
-        if (hasA(Constants.EXTERNAL_ASSET_CLASS)) {
-            throw new AssetException("This asset already has alink.");
+        if (hasA(Constants.VIDITALK_CLASS)) {
+            throw new AssetException("This asset already has video.");
         }
 
         BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
@@ -34,7 +34,7 @@ public class VIDITalkAsset extends Asset {
     }
 
     public void setVideoId(String videoId) throws XWikiException {
-        doc.removeObjects(Constants.EXTERNAL_ASSET_CLASS);
+        doc.removeObjects(Constants.VIDITALK_CLASS);
 
         BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
         obj.setStringValue(Constants.VIDITALK_CLASS_VIDEO_ID, videoId);
