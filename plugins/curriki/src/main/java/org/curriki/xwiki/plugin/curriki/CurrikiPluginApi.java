@@ -74,4 +74,8 @@ public class CurrikiPluginApi extends Api {
     public List<Property> fetchAssetMetadata(String assetName) throws XWikiException {
         return plugin.fetchAssetMetadata(assetName, context);
     }
+
+    public Map<String, Object> fetchUserInfo() {
+        return plugin.fetchUserInfo(context);
+    }
 }

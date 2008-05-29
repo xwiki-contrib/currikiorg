@@ -255,4 +255,18 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return null;
     }
+
+    public Map<String, Object> fetchUserInfo(XWikiContext context) {
+        Map<String,Object> userInfo = new HashMap<String,Object>();
+
+        userInfo.put("username", context.getUser());
+
+        if (Constants.GUEST_USER.equals(context.getUser())) {
+            userInfo.put("fullname", "");
+        } else {
+            userInfo.put("fullname", context.getWiki().getUserName(context.getUser(), null, false, context));
+        }
+
+        return userInfo;
+    }
 }
