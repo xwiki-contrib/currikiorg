@@ -721,85 +721,100 @@ $doc.display("content", $obj)
 ##
 ##  NAVIGATION Panel
 ##
+
 ##  Begin panel: includes link to HOME
-#macro(beginNavigationPanel)
-<div class="panel expanded curriki-navigation">
-<div class="xwikipanelcontents">
-<div class="curriki-nav-container">
+#macro(beginNavigationPanel) ##{
+<div id="navigation" class="shadow-outer">
+<div class="shadow-middle">
+<div id="navigation-inner" class="shadow-inner navigation-menu">
 #set($active = false)
 #checkActive("Main.WebHome" $active)
-<div class="curriki-nav-main#if($active) mainactive active lactive#end" #if(!$active) onmouseover="addClass(this, 'active mainactive')" onmouseout="rmClass(this, 'active mainactive')" #end><h4>[$msg.get("navigationHome")>Main.WebHome]</h4></div>
-#end
+<div class="titles#if($active) selected#end home"><a href="$xwiki.getURL("Main.WebHome")">$msg.get("navigationHome")</a></div>
+#end ##}
 ##
+
 ##  End panel
-#macro(endNavigationPanel)
-</div> ## nav contents
-</div> ## panel contents
-</div> ## panel
-#end
+#macro(endNavigationPanel) ##{
+</div> ## shadow-outer
+</div> ## shadow-middle
+</div> ## shadow-inner navigation-menu
+#end ##}
+
 ##
 ## Macro for verifying if an entry in the nav panel is active
-#macro(checkActive $docname $result)
-#if($doc.fullName == $docname)
-#if($doc.space == "MyCurriki" && "$!request.user" != "")
-#set($result = false)
-#else
-#set($result = true)
-#end
-#end
-#end
+#macro(checkActive $docname $result) ##{
+  #if($doc.fullName == $docname) ##{
+    #if($doc.space == "MyCurriki" && "$!request.user" != "") ##{
+      #set($result = false)
+    #else ##}{
+      #set($result = true)
+    #end ##}
+  #end ##}
+#end ##}
+	
 ##
 ## Displays a navigation category, with sub-elements
-#macro(navigationCategory $text $link $expanded $items)
-#if($doc.web.startsWith("Coll_"))
-#set($expanded = false)
-#set($cookiebase = "${context.user}_asset_")
-#else
-#set($cookiebase = "${context.user}_")
-#end
-#if(!$navcatcounter)
-#set($navcatcounter = 1)
-#else
-#set($navcatcounter = $navcatcounter + 1)
-#end
-#set($id = "currikinavcategory_${navcatcounter}")
-#if($expanded == true)
-#set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
-#else
-#set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
-#end
-#set($exp2 = "")
-#set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
-#if(!$exp2.equals(""))
-#if($exp2 == 'true')
-#set($expanded = true)
-#else
-#set($expanded = false)
-#end
-#end
-#set($active = false)
-#foreach($item in $items)
-#checkActive($item.get(1) $active)
-#end
-<div id="$id" class="curriki-nav-category #if($active) active #end expanded">
-#if(!$expanded)
-<script type="text/javascript">
-togglePanelVisibility(document.getElementById("${id}"));
-</script>
-#end
-#set($theCategLink = $link)
-#normalizelink($theCategLink)
-<div class="curriki-nav-header" onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this.parentNode)" #if(!$active) onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed')" #end>
-<img src="$xwiki.getSkinFile("pixel.gif")" width="20" height="15" />
-<h4>#if($link != "")<a href="$theCategLink" onclick="event.cancelBubble = true;">$text</a>#else $text#end </h4></div>
-<ul>
-#foreach($item in $items)
-#set($active = false)
-#checkActive($item.get(1) $active)
-#set($theItemLink = $item.get(1))
-#normalizelink($theItemLink)
-<li class="#if($active) lactive #end #if($velocityCount == $items.size()) last #end"><a href="$theItemLink">$item.get(0)</a></li>#end</ul></div>
-#end
+#macro(navigationCategory $text $link $expanded $items) ##{
+  #if($doc.web.startsWith("Coll_")) ##{
+    #set($expanded = false) ##{
+    #set($cookiebase = "${context.user}_asset_")
+  #else ##}{
+    #set($cookiebase = "${context.user}_")
+  #end ##}  
+  #if(!$navcatcounter)  ##{
+    #set($navcatcounter = 1)
+  #else ##}{
+    #set($navcatcounter = $navcatcounter + 1)
+  #end ##}	  
+  #set($id = "currikinavcategory_${navcatcounter}")
+  #if($expanded == true) ##{
+    #set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
+  #else ##}{
+    #set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
+  #end ##}	  
+  #set($exp2 = "")
+  #set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
+  #if(!$exp2.equals("")) ##{
+    #if($exp2 == 'true') ##{
+      #set($expanded = true)
+    #else ##}{
+      #set($expanded = false)
+    #end ##}
+  #end ##}	  
+  #set($active = false)
+  #foreach($item in $items) ##{
+    #checkActive($item.get(1) $active)
+  #end ##}	  
+  #if(!$expanded) ##{
+    <script type="text/javascript">
+      togglePanelVisibility(document.getElementById("${id}"));
+    </script>
+  #end ##}	  
+  #set($theCategLink = $link)
+  #normalizelink($theCategLink)
+  <!--<div class="curriki-nav-header" onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this.parentNode)" #if(!$active) onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed')" #end> ##{
+    <img src="$xwiki.getSkinFile("pixel.gif")" width="20" height="15" />
+    <h4>#if($link != "")<a href="$theCategLink" onclick="event.cancelBubble = true;">$text</a>#else $text#end </h4>
+  </div> -->    
+  <a href="#if($link != "")${theCategLink}#else # #end" class="titles#if($active) selected#end">
+    #set($cls = "collapsed")
+    #if($expanded) #set($cls = "expanded") #end
+    <span class="${cls}" 	onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this.parentNode)"
+    				#if(!$active) 	onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" 
+						onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed')"#end></span>
+    $text
+  </a>    
+  <ul>
+  #foreach($item in $items)
+    #set($active = false)
+    #checkActive($item.get(1) $active)
+    #set($theItemLink = $item.get(1))
+    #normalizelink($theItemLink)
+    <li class="#if($active) lactive #end #if($velocityCount == $items.size()) last #end"><a href="$theItemLink">$item.get(0)</a></li>
+  #end ##}
+  </ul> ##}
+#end  ##}
+	
 ##
 ## Displayes a navigation entry (without sub-elements)
 #macro(navigationTopLevelEntry $text $link)
@@ -3972,3 +3987,22 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 @import "$doc.getAttachmentURL($filename)";
 </style>
 #end
+	
+## Macro to display the page title
+#macro(pageTitle) ##{
+  #if($doc.fullName=="GWT.Editor") ##{
+    $msg.get("editor.app_full_name")
+  #else ##}{
+    #if(!$title) ##{
+      #set( $title = $!xwiki.getWebPreference("title"))
+      #if ( $title != "") ##{
+        $xwiki.parseContent($title)
+      #else  ##}{
+        XWiki . $!doc.web . $!doc.displayTitle
+      #end ##}
+    #else ##}{
+      $title
+    #end ##}
+  #end ## }
+#end ##}
+## End pageTitle
