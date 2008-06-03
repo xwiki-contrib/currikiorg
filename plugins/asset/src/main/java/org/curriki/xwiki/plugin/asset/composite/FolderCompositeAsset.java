@@ -14,6 +14,8 @@ import java.lang.Object;
 import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
+import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 
 /**
  */
@@ -42,6 +44,10 @@ public class FolderCompositeAsset extends CompositeAsset {
         // collection type
         use(Constants.COMPOSITE_ASSET_CLASS);
         docInfo.put("collectionType", getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE));
+        docInfo.put("assetType", determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
+
+        // access rights
+        docInfo.put("rights", getRightsList());
 
         // Children
         Vector<Map<String,Object>> subList = getSubassetsInfo();
@@ -72,9 +78,29 @@ public class FolderCompositeAsset extends CompositeAsset {
                         subInfo.put("displayTitle", doc.getDisplayTitle());
                         subInfo.put("description", ((Asset) doc).getDescription());
                         subInfo.put("assetType", ((Asset) doc).determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
+                        subInfo.put("rights", ((Asset) doc).getRightsList());
+                    } else if (doc == null) {
+                        // getDocument returns null if the page is not viewable by the user
+                        subInfo.put("displayTitle", "");
+                        subInfo.put("description", "");
+                        subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
+                        
+                        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
+                        rightsInfo.put("view", false);
+                        rightsInfo.put("edit", false);
+                        rightsInfo.put("delete", false);
+                        subInfo.put("rights", rightsInfo);
                     }
                 } catch (Exception e) {
-                    // Couldn't get the document, so skip
+                    subInfo.put("displayTitle", "");
+                    subInfo.put("description", "");
+                    subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
+
+                    Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
+                    rightsInfo.put("view", false);
+                    rightsInfo.put("edit", false);
+                    rightsInfo.put("delete", false);
+                    subInfo.put("rights", rightsInfo);
                 }
 
                 subList.add(subInfo);

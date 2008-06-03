@@ -344,7 +344,7 @@ public class Asset extends CurrikiDocument {
         Class assetType = determineAssetSubtype();
         String fullAssetType = assetType.getCanonicalName();
         BaseStringProperty baseProp = new BaseStringProperty();
-        baseProp.setName("assetType");
+        baseProp.setName("fullAssetType");
         baseProp.setValue(fullAssetType);
         Property prop = new Property(baseProp, context);
         md.add(prop);
@@ -355,7 +355,7 @@ public class Asset extends CurrikiDocument {
             shortAssetType = shortAssetType.replaceAll("Asset$", "");
         }
         baseProp = new BaseStringProperty();
-        baseProp.setName("shortAssetType");
+        baseProp.setName("assetType");
         baseProp.setValue(shortAssetType);
         prop = new Property(baseProp, context);
         md.add(prop);

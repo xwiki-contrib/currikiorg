@@ -30,7 +30,7 @@ public class AssetResource extends BaseResource {
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
 
-        List<Property> results = null;
+        List<Property> results;
         try {
             results = plugin.fetchAssetMetadata(assetName);
         } catch (XWikiException e) {
@@ -45,7 +45,7 @@ public class AssetResource extends BaseResource {
                 if (propName.equals("title")
                     || propName.equals("description")
                     || propName.equals("assetType")
-                    || propName.equals("shortAssetType")) {
+                    || propName.equals("fullAssetType")) {
                     json.put(prop.getName(), prop.getValue());
                 }
             }

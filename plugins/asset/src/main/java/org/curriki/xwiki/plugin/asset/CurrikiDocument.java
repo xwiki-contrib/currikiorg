@@ -9,6 +9,8 @@ import com.xpn.xwiki.objects.BaseElement;
 import com.xpn.xwiki.doc.XWikiDocument;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class CurrikiDocument extends Document {
     public CurrikiDocument(XWikiDocument doc, XWikiContext context) {
@@ -67,5 +69,15 @@ public class CurrikiDocument extends Document {
         }
 
         return count;
+    }
+
+    public Map<String,Boolean> getRightsList() {
+        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
+
+        rightsInfo.put("view", hasAccessLevel("view"));
+        rightsInfo.put("edit", hasAccessLevel("edit"));
+        rightsInfo.put("delete", hasAccessLevel("delete"));
+
+        return rightsInfo;
     }
 }
