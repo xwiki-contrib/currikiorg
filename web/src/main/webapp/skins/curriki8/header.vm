@@ -70,26 +70,23 @@
 <!-- end of login area -->
 
 #else ## }{ ##
-	
- #set($userdoc = $xwiki.getDocument($context.user))
-  <div id="currikiuserarea">
-  <p class="welcomemsg">$msg.get("headerWelcome", [$userdoc.first_name])</p>
-  <p><a id="curriki-my" href="$userdoc.getURL("view")">$msg.get("headerMyCurriki")</a>#sep() 
-    #if($hasGlobalAdmin)
-      <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("admin")</a> #sep()
-    #end
-    #set($logredir = $xwiki.getURL("Main.WebHome"))
-    #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
-    <a class="link-attention" href="$logouturl" id="currikilogout">$msg.get("logout")</a>
-  </p>
-  </div> ## currikiuserarea
+  
+  #set($userdoc = $xwiki.getDocument($context.user))
+  <span href="#" class="welcome">$msg.get("headerWelcome", [$userdoc.first_name])</span>
+  #if($hasGlobalAdmin)
+    <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("admin")</a> #sep()
+  #end
+  #set($logredir = $xwiki.getURL("Main.WebHome"))
+  #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
+  <a href="$logouturl" class="logout">$msg.get("logout")</a>
+  
 #end ##}
 	
 </div> ##} ##header-member
 <!-- end of member area -->
 
 <!-- advanced search -->
-<div id="member-search"> ##{
+<div id="header-search"> ##{
   <form class="search-box" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;"> ##{
   
     <input type="hidden" class="hidden" name="area" value=""/>
