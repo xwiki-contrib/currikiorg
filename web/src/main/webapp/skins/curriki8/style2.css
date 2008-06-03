@@ -1,0 +1,162 @@
+/*********************
+BASIC ELEMENTS STYLES 
+**********************/
+body { background-color: #666; font: 12px arial; margin: 0; padding: 0 1%; text-align: center; }
+
+a { color: #1963aa; cursor: pointer; text-decoration: none; }
+a:hover { text-decoration: underline; }
+a img { border: none; }
+
+fieldset { border: none; padding: 0; margin: 0; }
+form { margin: 0; padding: 0; }
+input.input { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 0.9em; margin: 0; padding: 0.4em 0.2em !important; height: auto !important; height: 24px; }
+input.checkbox { border: 0; height: 15px; margin: 0px 2px 1px 0; padding: 0; width: 15px; }
+textarea { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 0.9em; padding: 0.4em 0.2em; }
+p { margin: 0; padding: 0.5em 0; }
+button { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 0.9em; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible;  }
+button:hover { background-color: #ffb808; }
+button.cancel { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
+button.cancel:hover { background-color: #b4b4b4; }
+h1,h2,h3,h4,h5,h6,h7 { padding: 0; margin: 0; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.2em; }
+table { border-collapse: collapse; }
+
+/* Shadow boxes */
+.shadow-outer { background-color: #ededed; }
+.shadow-middle { background-color: #C3C3C3; position: relative; height: 1%; top: -2px; left: -2px; }
+.shadow-inner { background-color: #f2f2f2; border: 1px solid #e1e1e1; border-bottom-width: 0; border-right-width: 0; position: relative; height: 1%; top: -3px; left: -3px; }
+
+/* Orange search box */
+.search-box { border: 2px solid #ff0000; background-color: #ff7f00; padding: 1.2em 0.1em 1em 1em; }
+.search-box .input { border: none; color: #666; font-size: 1.1em; width: 75%; margin-right: 5px;  }
+.search-box button { border: none; font-size: 1.1em; padding: 0.1em 0 0.1em 0; }
+
+/* header bars */
+.headerbar { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
+.headerbar a { color: #fff; }
+.violet, .sponsors .headerbar, .partners .headerbar, .information .headerbar { background-color: #8a91cb; }
+.orange, .ressource .search, .ressource .view, .ressource .featured { background-color: #e7793b; }
+.green, .ressource .create, .ressource .edit, .curriki-form .headerbar { background-color: #93c53c; }
+.blue, .members .headerbar, .groups .headerbar { background-color: #4e83c6; }
+
+.frame { border: 1px solid #dcdcdc; }
+.links { padding: 1em 0; }
+.frame-content { padding: 0.5em; }
+.instruction { color: #3f3f3f; font-size: 0.8em; }
+.clearfloat { clear: both; }
+
+/**********************
+ LOCALY APPLIED STYLES 
+***********************/
+#main { background: #fff url(images/shadow-left.jpg) repeat-y left; min-width: 860px; max-width: 860px; _width: expression((((document.body.clientWidth)) < 880 || ((document.body.clientWidth)) > 880 )? "880px": "auto" ); margin: 0 auto; padding: 0 0px 0 20px; text-align: left;  }
+#shadow-right { background: #fff url(images/shadow-right.jpg) repeat-y right; padding-right: 20px; }
+
+/* header */
+#header { border-bottom: 1px solid #999; height: 70px; padding: 5px 0 5px 0; }
+#header div { float: left; width: 33%; padding: 0 1em; height: 100%; }
+#header #header-logo { padding-left: 0; width: 195px !important; width: 205px; }
+#header-member { border-left: 1px solid #999; }
+#header-member form { height: 73px; position: relative; width: 355px !important; width: 330px; }
+#header-member .input { font-size: 0.9em; margin-bottom: 0.3em; padding: 0.4em 0.2em !important; height: auto !important; height: 24px; width: 221px; }
+#header-member .password { margin: 0 10px 0 0; width: 160px; }
+#header-member button { padding: 0.3em 0em; width: 48px; }
+#header-member form fieldset { position: absolute; bottom: 0; left: 0; font-size: 0.9em; padding: 0; width: 225px; }
+#header-member form fieldset a { position: absolute; bottom: 0; right: 0 !important; right: 6px; }
+#header-member .register { display: block; font-size: 1.3em; padding: 10px 0; text-align: center; position: absolute; right: 0px; top: 0px; width: 120px !important; width: 100px; }
+#header-member .register span { display: block; font-size: 1.3em; }
+#header-member .welcome { color: #1963aa; display: block; font-size: 1.3em; padding: 1.2em 0 0.6em; }
+#header-member .logout { color: #fb0f0c; }
+#header-member .logout:hover { text-decoration: none; }
+#header-member .separator { color: #3f3f3f; }
+#header #header-search { border-left: 1px solid #999; float: right; padding: 0.1em 0 0 1em; width: 255px !important; width: 280px; }
+#header-search button:hover { background-color: #ff7f00; }
+#header-search p { padding: 0.1em 0 0; text-align: right; }
+#header-search p a { font-size: 0.9em; }
+
+/* Left panel menu */
+#panels { padding: 1em 0; }
+#left-panel { float: left; height: 100%; padding-left: 0.3em; width: 215px; }
+#left-panel .shadow-outer { margin-bottom: 1em;  width: 205px; }
+#left-panel .links { font-size: 0.8em; padding: 0.5em 0 0; text-align: right; }
+.expanded #left-panel { display: block; }
+#navigation { color: #666699; }
+#navigation-inner { background: #f2f2f2; }
+#navigation-inner a { color: #5051a3; }
+#navigation-inner .titles { background-color: #cccde7; display: block; font-size: 1em; font-weight: bold; margin-top: 1px; padding: 2px 10px !important; position: relative; text-decoration: none; text-transform: uppercase; height: auto !important; height: 1%; padding-bottom: 0; }
+#navigation-inner .titles:hover { background-color: #5051a3; color: #fff; }
+#navigation-inner .titles:hover span.expanded, #navigation-inner .selected span.expanded { background-image: url("images/menu-expanded-hover.png"); }
+#navigation-inner .titles:hover span.collapsed, #navigation-inner .selected span.collapsed { background-image: url("images/menu-collapsed-hover.png"); }
+#navigation-inner .home { padding-bottom: 0.2em; margin-top: 0;  }
+#navigation-inner span { display: block; float: left; height: 18px; width: 24px; }
+#navigation-inner span.expanded { background: transparent url("images/menu-expanded.png") no-repeat scroll 2px 4px; }
+#navigation-inner span.collapsed { background: transparent url("images/menu-collapsed.png") no-repeat scroll 3px 1px; }
+#navigation-inner ul { background: #f2f2f2; list-style-type: none; margin: 0; padding: 0 0 0 2.9em; }
+#navigation-inner li { border-bottom: 1px solid #5051a3; padding: 0.2em 0; height: 1%; }
+#navigation-inner li a { display: inline; }
+#navigation-inner li a:hover { font-weight: bold; }
+#navigation-inner li.last { border: none; }
+#navigation-inner .selected { position: relative; height: 1%; }
+#navigation-inner a.selected { background-color: #5051a3; color: #fff; }
+#navigation-inner li.selected { background: #f2f2f2; color: #5051a3; }
+#navigation-inner li.selected a { font-weight: bold; }
+#navigation-inner .selected img { height: 13px; width: 9px; position: absolute; top: 3px; right: -9px;  }
+#navigation-inner li.selected img { right: -10px;  }
+
+#donate img { border: none; margin-bottom: -3px; width: 204px; }
+
+#sponsors .frame-content, #watch-curriki-grow .frame-content { font-size: 1.2em; color: #666; }
+#sponsors img { margin-bottom: 0.5em; width: 180px; }
+
+#watch-curriki-grow .stats { color: #1963aa; border-bottom: 1px solid #d0d0d0; width: 185px; }
+#watch-curriki-grow .stats td { padding: 0 15px 5px 0; }
+#watch-curriki-grow .links { font-size: 1em; font-weight: bold; }
+
+/* RIGHT PANEL */
+.expanded #right-panel { margin-left: 220px; }
+#breadcrumb { padding-bottom: 0.3em; border-bottom: 1px solid #999; }
+#content { padding: 2em 0 1em; overflow: auto !important; overflow: hidden; height: 1%; }
+
+/* Curricula */
+.curricula-panels { padding-top: 0.5em; }
+.curricula-panels .shadow-outer { float: left; width: 32%; margin-right: 1.8%; }
+.curricula-panels #curricula-connect { margin-right: 0; }
+.curricula-panels .headerbar { font-size: 1.1em; position: relative; height: 30px; padding: 0; }
+.curricula-panels .headerbar a {  display: block; padding: 0.5em; height: 30px; }
+.curricula-panels .headerbar a:hover { font-size: 1.1em; padding: 0.7em 0.5em 0 1em; position: absolute; height: 85% !important; width: 100% !important; height: 140%; width: 110%; top: -10%; left: -5%; z-index: 100; text-decoration: none; z-index: 1000; }
+.curricula-panels .search a:hover { background-color: #e7793b; }
+.curricula-panels .create a:hover { background-color: #93c53c; }
+.curricula-panels .groups a:hover { background-color: #4e83c6; }
+.curricula-panels a.content { border-bottom: 1px solid #c3c3c3; display: block; font-size: 1.3em; font-weight: bold; padding: 1em 0.5em 0; height: 100px; }
+.curricula-panels .footer { color: #5051a3; font-size: 1.2em; padding: 1em 0.5em; }
+.curricula-panels .footer a { display: block; }
+.curricula-panels .footer a img { margin-bottom: -10px; }
+#curricula-highlights { margin-top: 1em; }
+#curricula-highlights .headerbar { font-size: 1.1em; padding: 0.5em; }
+#curricula-highlights table { font-size: 1.2em; color: #666; margin: 1em 0.5em; }
+#curricula-highlights table td { padding: 1em; }
+#curricula-highlights table td.image { text-align: center; }
+#curricula-highlights table td.top { border-bottom: 1px solid #c3c3c3; }
+#curricula-highlights table h4 { font-size: 1.2em; color: #1963aa; font-weight: bold; }
+
+/* Curriki-form */
+.curriki-form em { font-style:normal; color: #fb0f0c; }
+.curriki-form .header p { padding: 0 0 1em; }
+.curriki-form .header p img { margin-bottom: -8px; height: 25px; width: 25px; }
+.curriki-form .frame{ margin-bottom: 2em; }
+.curriki-form .frame-content { padding: 0.5em 1em 1.5em; }
+.curriki-form h3 { padding-top: 1em; }
+.curriki-form .medium { width: 75%; }
+.curriki-form .small { width: 50%; }
+.curriki-form .entry { padding: 2em 0 0; }
+.curriki-form .entry h5 { font-size: 1.1em; }
+.curriki-form .entry h5 em { font-weight: normal; }
+.curriki-form .entry h5 img { margin-bottom: -5px; }
+.curriki-form .entry p.instruction { line-height: 130%; }
+.curriki-form .entry input.input { width: 90%; }
+.curriki-form .entry textarea { height: 9em; width: 90%; }
+.curriki-form .entry label { display: block; }
+.curriki-form table.subject-educational { font-size: 1em; width: 95%; }
+.curriki-form table.subject-educational td { width: 50%; padding-right: 1em; }
+.curriki-form .links { padding-bottom: 0; text-align: center; }
+.curriki-form .links button { display: inline; margin-right: 1.5em; }

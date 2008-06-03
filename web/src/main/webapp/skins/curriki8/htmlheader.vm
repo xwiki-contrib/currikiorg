@@ -4,28 +4,19 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>
-#if($doc.fullName=="GWT.Editor")
-$msg.get("editor.app_full_name")
-#else
-#if(!$title)
-#set( $title = $!xwiki.getWebPreference("title"))
-#if ( $title != "")
-$xwiki.parseContent($title)
-#else
-XWiki . $!doc.web . $!doc.displayTitle
-#end
-#else
-$title
-#end
-#end
-</title>
+
+<title>#pageTitle()</title>
+
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
 $xwiki.parseContent($!xwiki.getWebPreference("meta"))
+
 #template("analytics.vm")
+
 <link rel="stylesheet" href="$xwiki.getSkinFile("extjs/resources/css/ext-all.css")" type="text/css" />
 #template("stylesheets.vm")
+
 <meta http-equiv="imagetoolbar" content="no" />
+
 <script type="text/javascript" src="$xwiki.getSkinFile("skin.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/prototype/prototype.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/prototype/scriptaculous.js")?load=effects"></script>
@@ -37,13 +28,15 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 <script type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
-#if($context.action=="admin")
+
+#if($context.action=="admin") ##{
 <script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js")"></script>
-#end
+#end ##}
+		
 #set($ua = $request.getHeader("user-agent"))
-#if($ua.indexOf("MSIE")!=-1)
+#if($ua.indexOf("MSIE")!=-1) ##{
 <style type="text/css">
 * html #actionmenu{
   width: expression(document.body.clientWidth) !important;
@@ -60,18 +53,18 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 .tabs { padding: 15px 10px 5px; }
 #searchElement table table.search-selector-bottom { margin-top: -10px; }
 </style>
-#if(($ua.indexOf("MSIE 6")!=-1)||($ua.indexOf("MSIE 5")!=-1))
+#if(($ua.indexOf("MSIE 6")!=-1)||($ua.indexOf("MSIE 5")!=-1)) ##{
 <link href="$xwiki.getSkinFile("ie6.css", true)" rel="stylesheet" type="text/css" />
-#else
+#else ##}{
 <style type="text/css">
 #browse-btn{
   padding: 4px 0px !important;
 }
 </style>
-#end
-#end
+#end ##}
+#end ##}
 <link rel="stylesheet" href="/xwiki/bin/view/XWiki/style?xpage=plain" type="text/css" />
-#if(($context.action=="inline")||($context.action=="edit") || ($context.action=="admin"))
+#if(($context.action=="inline")||($context.action=="edit") || ($context.action=="admin")) ##{
 <script type="text/javascript">
  var cancelEditNextOnunload;
  var cancelCancelEditFlag = true;
@@ -98,11 +91,11 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 
  function lockEdit(){
     if (lockEditFlag==false) {
-#if($context.action=="inline")
+#if($context.action=="inline") ##{
       var surl = "$doc.getExternalURL("lock")?action=inline&ajax=1&${docvariant.replace("&amp;", "&")}";
-#else
+#else ##}{
       var surl = "$doc.getExternalURL("lock")?ajax=1&${docvariant.replace("&amp;", "&")}";
-#end
+#end ##}
       var myAjax = new Ajax.Request(
                 surl,
                 {
@@ -124,16 +117,24 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
  }
 </script>
 </head>
+
 <body onunload="cancelEdit()" onload="prepareCancelEdit();" id="body"#if($hasGlobalAdmin) class='admin'#end>
 <div id="dropshadowedit">
 <div id="currikimaincontaineredit">
-#else
+
+#else ##}{
+
 </head>
 <body id="body"#if($hasGlobalAdmin) class='admin'#end>
-<div id="dropshadow">
-<div id="currikimaincontainer">
-#end
-#else
+
+<div id="main">
+<div id="shadow-right">
+    
+##<div id="dropshadow"> ##from the old curriki8 skin
+##<div id="currikimaincontainer"> ##from the old curriki8 skin
+
+#end ##}
+#else ##}{
 #template("stylesheets2.vm")
 <script type="text/javascript" src="$xwiki.getSkinFile("skin.js")"></script>
-#end
+#end ##}

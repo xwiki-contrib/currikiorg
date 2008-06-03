@@ -1,47 +1,49 @@
 ## need to do this before xwikivars is called
-#if($request.method=="POST")
-#set($fileuploadlist = $xwiki.fileupload.getFileItems())
-#end
+#if($request.method=="POST") ##{
+  #set($fileuploadlist = $xwiki.fileupload.getFileItems())
+#end ##}
 ###
 ### Main "view" template
 ###
 ### General wrapper for view actions
 ###
-#if ($request.getParameter("raw").equals("1"))
-#template("code.vm")
-#else
-#if(!$request.getParameter("viewer").equals("print"))
-#template("startpage.vm")
-#end
-#if((!$viewer) || ($viewer == ""))
-#set($viewer = $request.getParameter("viewer"))
-#end
-#if((!$viewer) || ($viewer == ""))
-#set($viewer = "view")
-#end
-#if($viewer == "view")
-<div class="minwidthb"></div>
-<div class="main layoutsubsection">
-#template("space.vm")
-##$xwiki.includeForm("Sandbox.space", false)
-#template("contentview.vm")
-## #template("docextra.vm")
+#if ($request.getParameter("raw").equals("1")) ##{
+  #template("code.vm")
+#else ##}{
+
+#if(!$request.getParameter("viewer").equals("print")) ##{
+  #template("startpage.vm")
+#end ##}
+	
+#if((!$viewer) || ($viewer == "")) ##{
+  #set($viewer = $request.getParameter("viewer"))
+#end ##}
+	
+#if((!$viewer) || ($viewer == "")) ##{
+  #set($viewer = "view")
+#end ##}
+
+#if($viewer == "view") ##{
+  #template("space.vm")
+  ##$xwiki.includeForm("Sandbox.space", false)
+  #template("contentview.vm")
+  ## #template("docextra.vm")
+#else ##}{
+  #template("${viewer}.vm")
+#end ##}
 <div class="clearfloats"></div>
-#else
-<div class="main layoutsubsection">
-#template("${viewer}.vm")
-<div class="clearfloats">
-</div>
-#end
+
 </div>## main
-#if(!$request.getParameter("viewer").equals("print"))
-#template("endpage.vm")
-#else
-        </div>## contentcolumn
-      </div>## leftsidecolumns
-    <div class="clearfloats"></div>
-      </div>## contentcontainerinner
-    </div>## contentcontainer
-#template("htmlfooter.vm")
-#end
-#end
+
+#if(!$request.getParameter("viewer").equals("print")) ##{
+  #template("endpage.vm")
+#else ##}{
+  </div>## contentcolumn
+  </div>## leftsidecolumns
+  <div class="clearfloats"></div>
+  </div>## contentcontainerinner
+  </div>## contentcontainer
+  #template("htmlfooter.vm")
+#end ##}
+
+#end ##}
