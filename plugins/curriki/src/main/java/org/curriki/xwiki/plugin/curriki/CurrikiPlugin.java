@@ -172,14 +172,25 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         return groups;
     }
 
-    protected Map<String,String> getGroupInfo(String group, XWikiContext context) {
-        Map<String,String> groupInfo = new HashMap<String,String>();
+    protected Map<String,Object> getGroupInfo(String group, XWikiContext context) {
+        Map<String,Object> groupInfo = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi("csm", context);
 
         try {
             Space space = sm.getSpace(group);
             groupInfo.put("displayTitle", space.getDisplayTitle());
             groupInfo.put("description", space.getDescription());
+            Map<String,Object> collections = fetchGroupCollectionsInfo(group, context);
+            groupInfo.put("collectionCount", collections.size());
+            int editableCount = 0;
+            for (String collection : collections.keySet()) {
+                Map<String,Object> cInfo = (Map<String,Object>) collections.get(collection);
+                Map<String,Boolean> rInfo = (Map<String,Boolean>) cInfo.get("rights");
+                if (rInfo.get("edit")) {
+                    editableCount++;
+                }
+            }
+            groupInfo.put("editableCollectionCount", editableCount);
         } catch (Exception e) {
             LOG.error("Error getting group space", e);
             return null;
