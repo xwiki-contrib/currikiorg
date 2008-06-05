@@ -52,7 +52,7 @@
    }
   </script>
   
-  <button>$msg.get("headerLoginGo")</button>
+  <button type="submit" id="loginbtn" tabindex="4">$msg.get("headerLoginGo")</button>
 
   <!-- remember me -->
   <fieldset>
@@ -95,7 +95,7 @@
       #set($brsqry = "search")
     #end
     <input type="text" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='search') this.value=''; else this.select()" onblur="if (this.value=='') this.value='search'" />
-    <button>$msg.get("headerLoginGo")<!-- $msg.get("header.search_go") --></button>
+    <button type="submit">$msg.get("headerLoginGo")<!-- $msg.get("header.search_go") --></button>
       
   </form> ##}
   <p> ##{
