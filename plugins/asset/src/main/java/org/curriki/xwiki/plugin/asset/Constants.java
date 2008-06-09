@@ -28,6 +28,9 @@ public interface Constants {
     String COLLECTION_PREFIX = "Coll_";
     String FAVORITES_COLLECTION_NAME = "Favorites";
 
+    String FAVORITES_COLLECTION_PAGE = "Favorites";
+    String ROOT_COLLECTION_PAGE = "WebHome";
+
     /**
      *     Class FrameworkItemAssetClass
      */

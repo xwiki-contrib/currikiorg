@@ -10,6 +10,7 @@ import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.AssetException;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONException;
 import com.xpn.xwiki.XWikiException;
 
 /**
@@ -25,7 +26,15 @@ public class AssetsResource extends BaseResource {
         setupXWiki();
 
         JSONObject json = representationToJSONObject(representation);
-        String parent = json.getString("parent");
+        String parent = null;
+        try {
+            parent = json.getString("parent");
+            if (parent.length() < 1){
+                parent = null;
+            }
+        } catch (JSONException e) {
+            // No parent key to get
+        }
 
         Asset createdPage;
         try {

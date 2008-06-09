@@ -20,6 +20,7 @@
 package org.curriki.xwiki.plugin.asset;
 
 import com.xpn.xwiki.api.Property;
+import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.XWikiContext;
@@ -68,7 +69,7 @@ public class Asset extends CurrikiDocument {
 
         Asset assetDoc = new Asset(newDoc, context);
         assetDoc.init(parentAsset);
-        assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.createnewsourceasset"));
+        assetDoc.saveWithProgrammingRights(context.getMessageTool().get("curriki.comment.createnewsourceasset"));
 
         return assetDoc;
     }
@@ -325,6 +326,48 @@ public class Asset extends CurrikiDocument {
         return false;
     }
 
+    static public Asset fetchAsset(String assetName, XWikiContext context) throws XWikiException {
+        com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
+        Document doc = xwikiApi.getDocument(assetName);
+
+        if (doc instanceof Asset){
+            return ((Asset) doc).as(null);
+        } else {
+            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset could not be found");
+        }
+    }
+
+    static public Asset fetchAsset(String web, String page, XWikiContext context) throws XWikiException {
+        com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
+        Document doc = xwikiApi.getDocument(web, page);
+
+        if (doc instanceof Asset){
+            return ((Asset) doc).as(null);
+        } else {
+            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset could not be found");
+        }
+    }
+
+    static public boolean isRootCollectionExists(String space, XWikiContext context) {
+        try {
+            Asset collection = Asset.fetchAsset(space, Constants.ROOT_COLLECTION_PAGE, context);
+
+            return collection.isRootCollection();
+        } catch (XWikiException e) {
+            return false;
+        }
+    }
+
+    static public boolean isFavoritesCollectionExists(String space, XWikiContext context) {
+        try {
+            Asset collection = Asset.fetchAsset(space, Constants.FAVORITES_COLLECTION_PAGE, context);
+
+            return collection.isCollection();
+        } catch (XWikiException e) {
+            return false;
+        }
+    }
+
     public List<Property> getMetadata() {
         List<Property> md = new ArrayList<Property>();
 
@@ -440,7 +483,7 @@ public class Asset extends CurrikiDocument {
         }
 
         XWikiDocument parentDoc = null;
-        if (parentAsset != null) {
+        if (parentAsset != null && parentAsset.length() > 0) {
             parentDoc = context.getWiki().getDocument(parentAsset, context);
             if (parentDoc.isNew()) {
                 throw new AssetException(AssetException.MODULE_PLUGIN_ASSET, AssetException.ERROR_ASSET_NOT_FOUND, "Parent asset not found");
