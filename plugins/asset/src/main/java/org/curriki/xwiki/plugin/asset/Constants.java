@@ -58,6 +58,9 @@ public interface Constants {
 
     String ASSET_CLASS_INSTRUCTIONAL_COMPONENT = "instructional_component2";
 
+    String ASSET_CLASS_LANGUAGE = "language";
+    String ASSET_CLASS_HIDDEN_FROM_SEARCH = "hidden_from_search";
+
     /**
      *    Class ExternalAssetClass
      */

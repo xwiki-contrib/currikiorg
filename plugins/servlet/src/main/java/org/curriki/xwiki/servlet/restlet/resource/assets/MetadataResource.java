@@ -8,12 +8,15 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
-
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.Constants;
 import net.sf.json.JSONObject;
+import com.xpn.xwiki.api.Object;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.XWikiException;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  */
@@ -31,7 +34,7 @@ public class MetadataResource extends BaseResource {
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
 
-        List<Property> results = null;
+        List<Property> results;
         try {
             results = plugin.fetchAssetMetadata(assetName);
         } catch (XWikiException e) {
@@ -53,7 +56,82 @@ public class MetadataResource extends BaseResource {
 
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
-        List<Property> metadata = null;
+
+        Asset asset;
+        try {
+            asset = plugin.fetchAsset(assetName);
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
+
+        Object assetObj = asset.getObject(Constants.ASSET_CLASS);
+        Object licenseObj = asset.getObject(Constants.ASSET_LICENCE_CLASS);
+
+        // SRI1
+        // title
+        if (json.has("title")) {
+            assetObj.set(Constants.ASSET_CLASS_TITLE,  json.getString("title"));
+        }
+        // description
+        if (json.has("description")) {
+            assetObj.set(Constants.ASSET_CLASS_DESCRIPTION,  json.getString("description"));
+        }
+        // fw_items (array)
+        List fw_items;
+        if (json.has("fw_items")) {
+            fw_items = json.getJSONArray("fw_items");
+        } else {
+            fw_items = new ArrayList();
+        }
+        fw_items.add(Constants.ASSET_CLASS_FRAMEWORK_ITEMS_DEFAULT);
+        assetObj.set(Constants.ASSET_CLASS_FRAMEWORK_ITEMS,  fw_items);
+        // educational_level2 (array)
+        if (json.has("educational_level2")) {
+            List el2 = json.getJSONArray("educational_level2");
+            assetObj.set(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL,  el2);
+        }
+        // ict (string with ,)
+        if (json.has("ict")) {
+            List ict = json.getJSONArray("ict");
+            assetObj.set(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT,  ict);
+        }
+
+        // SRI2
+        // rights
+        if (json.has("rights")) {
+            assetObj.set(Constants.ASSET_CLASS_RIGHT,  json.getString("rights"));
+        }
+        // keywords
+        if (json.has("keywords")) {
+            assetObj.set(Constants.ASSET_CLASS_KEYWORDS,  json.getString("keywords"));
+        }
+        // language
+        if (json.has("language")) {
+            assetObj.set(Constants.ASSET_CLASS_LANGUAGE,  json.getString("language"));
+        }
+        // hidden_from_search ("on")
+        if (json.has("hidden_from_search")) {
+            assetObj.set(Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH, json.getString("hidden_from_search").equals("on")?1:0);
+        } else {
+            assetObj.set(Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH, 0);
+        }
+
+        // license_deed
+        if (json.has("license_deed")) {
+            licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_deed"));
+        }
+        // rights_holder
+        if (json.has("right_holder")) {
+            licenseObj.set(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER,  json.getString("right_holder"));
+        }
+
+        try {
+            asset.save("Set Metadata");
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
+        }
+
+        List<Property> metadata;
         try {
             metadata = plugin.fetchAssetMetadata(assetName);
         } catch (XWikiException e) {

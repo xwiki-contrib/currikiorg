@@ -11,6 +11,7 @@ import org.restlet.data.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.data.Reference;
+import org.restlet.data.Form;
 import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi;
 import org.curriki.xwiki.plugin.curriki.CurrikiPlugin;
 import com.xpn.xwiki.XWikiContext;
@@ -46,6 +47,17 @@ public class BaseResource extends Resource {
     protected void setupXWiki() {
         xwikiContext = getXWikiContext();
         plugin = (CurrikiPluginApi) xwikiContext.getWiki().getPluginApi(CurrikiPlugin.PLUGIN_NAME, xwikiContext);
+    }
+
+    public void acceptRepresentation(Representation representation) throws ResourceException {
+        // Allow PUT to be tunnelled over POST (unless overridden by a subclass)
+        Form f = getRequest().getResourceRef().getQueryAsForm();
+        if ("put".equalsIgnoreCase(f.getFirstValue("_method", "NOT-PUT"))) {
+            storeRepresentation(representation);
+            return;
+        }
+
+        throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
     }
 
     protected ResourceException error(Status status, String message) {

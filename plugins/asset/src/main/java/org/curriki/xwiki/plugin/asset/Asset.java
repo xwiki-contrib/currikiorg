@@ -69,7 +69,7 @@ public class Asset extends CurrikiDocument {
 
         Asset assetDoc = new Asset(newDoc, context);
         assetDoc.init(parentAsset);
-        assetDoc.saveWithProgrammingRights(context.getMessageTool().get("curriki.comment.createnewsourceasset"));
+        assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.createnewsourceasset"));
 
         return assetDoc;
     }

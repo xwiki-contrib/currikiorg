@@ -11,7 +11,7 @@ import org.curriki.xwiki.servlet.restlet.resource.metadata.FieldResource;
 public class MetadataRouter extends Router {
     public MetadataRouter(Context context) {
         super(context);
-        attach("/{className}/fields", FieldsResource.class).getTemplate().setMatchingMode(Template.MODE_EQUALS);
-        attach("/{className}/fields/{fieldName}", FieldResource.class).getTemplate().setMatchingMode(Template.MODE_EQUALS);
+        attach("/{className}/fields", FieldsResource.class);
+        attach("/{className}/fields/{fieldName}", FieldResource.class);
     }
 }

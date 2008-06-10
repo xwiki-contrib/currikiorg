@@ -12,29 +12,13 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 
 #template("analytics.vm")
 
-<link rel="stylesheet" href="$xwiki.getSkinFile("extjs/resources/css/ext-all.css")" type="text/css" />
 #template("stylesheets.vm")
 
 <meta http-equiv="imagetoolbar" content="no" />
 
-<script type="text/javascript" src="$xwiki.getSkinFile("skin.js")"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.2/prototype.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/prototype/ext-prototype-adapter.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
+#set($headerfile="html")
+#template("javascripts.vm")
 
-#if($context.action=="admin") ##{
-<script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js")"></script>
-#end ##}
-		
 #set($ua = $request.getHeader("user-agent"))
 #if($ua.indexOf("MSIE")!=-1) ##{
 <style type="text/css">

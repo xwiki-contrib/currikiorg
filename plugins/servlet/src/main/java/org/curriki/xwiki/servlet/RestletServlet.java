@@ -1,10 +1,5 @@
 package org.curriki.xwiki.servlet;
 
-import com.xpn.xwiki.web.XWikiRequest;
-import com.xpn.xwiki.web.XWikiResponse;
-import com.xpn.xwiki.web.XWikiEngineContext;
-import com.xpn.xwiki.web.XWikiServletResponse;
-import com.xpn.xwiki.web.XWikiServletRequest;
 import com.xpn.xwiki.XWikiException;
 import com.noelios.restlet.ext.servlet.ServletConverter;
 
