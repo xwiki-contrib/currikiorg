@@ -785,27 +785,31 @@ $doc.display("content", $obj)
   #foreach($item in $items) ##{
     #checkActive($item.get(1) $active)
   #end ##}	  
-  #if(!$expanded) ##{
-    <script type="text/javascript">
-      togglePanelVisibility(document.getElementById("${id}"));
-    </script>
-  #end ##}	  
   #set($theCategLink = $link)
   #normalizelink($theCategLink)
   <!--<div class="curriki-nav-header" onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this.parentNode)" #if(!$active) onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed')" #end> ##{
     <img src="$xwiki.getSkinFile("pixel.gif")" width="20" height="15" />
     <h4>#if($link != "")<a href="$theCategLink" onclick="event.cancelBubble = true;">$text</a>#else $text#end </h4>
   </div> -->    
-  <a href="#if($link != "")${theCategLink}#else # #end" class="titles#if($active) selected#end">
+<div class="expanded" id="${id}"> ##{
+  <a 	onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); 
+  		${cookiemagic}
+		togglePanelVisibility(this.parentNode);
+		var clName = 'collapsed';
+		if(!expanded) clName = 'expanded';
+		$('${id}_arrow').className = clName;" 
+  	#if(!$active)
+		onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" 
+		onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed');" 
+	#end 
+	class="titles#if($active) selected#end">
     #set($cls = "collapsed")
     #if($expanded) #set($cls = "expanded") #end
-    <span class="${cls}" 	onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this.parentNode)"
-    				#if(!$active) 	onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" 
-						onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed')"#end></span>
+    <span id="${id}_arrow" class="${cls}"></span>
     $text
   </a>    
   <ul>
-  #foreach($item in $items)
+  #foreach($item in $items) ##{
     #set($active = false)
     #checkActive($item.get(1) $active)
     #set($theItemLink = $item.get(1))
@@ -813,6 +817,12 @@ $doc.display("content", $obj)
     <li class="#if($active) lactive #end #if($velocityCount == $items.size()) last #end"><a href="$theItemLink">$item.get(0)</a></li>
   #end ##}
   </ul> ##}
+  #if(!$expanded) ##{
+    <script type="text/javascript">
+      togglePanelVisibility(document.getElementById("${id}"));
+    </script>
+  #end ##}
+</div> ##}
 #end  ##}
 	
 ##
