@@ -1,7 +1,7 @@
 var global_components_domain,
     CONST_COMPONENTS_FLASH_FOLDER,
     IS_VIDICOMPONENTS_INITIATED;
-if (!GLOBAL_FLAG_LOADED_VIDI_EMBED){
+if ("undefined" === typeof GLOBAL_FLAG_LOADED_VIDI_EMBED){
 	// Stub functions for when VIDITalk cannot be reached.
 	function viditalk_down(div_id){
 		document.getElementById(div_id).innerHTML="VIDITalk's server is currently down. Please try again later.";
