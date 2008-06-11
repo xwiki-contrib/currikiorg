@@ -12,6 +12,7 @@ import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.external.VIDITalkAsset;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONException;
 import com.xpn.xwiki.XWikiException;
 
 /**
@@ -66,9 +67,11 @@ public class ViditalksResource extends BaseResource {
 
         JSONObject json = representationToJSONObject(representation);
 
-        String link = json.getString("videoId");
-        if (link == null) {
-            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a link.");
+        String link;
+        try {
+            link = json.getString("videoId");
+        } catch (JSONException e) {
+            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a video id.");
         }
 
         Asset asset = null;

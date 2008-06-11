@@ -95,6 +95,28 @@ Curriki.assets = {
 			}
 		});
 	}
+	,CreateVIDITalk:function(assetPage, videoId, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage+'/viditalks'
+			,method:'POST'
+			,jsonData: {page:assetPage, videoId:videoId}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object with new ref info
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot add video');
+					throw {message: "CreateAsset: Json object not found"};
+				}
+				callback(o);
+			}
+			,failure:function(options){
+				console.error('Cannot add video', options);
+				throw {message: "Server Error: Cannot add video."};
+			}
+		});
+	}
 	,Publish:function(assetPage, space, callback){
 		// TODO: ExtJS + Prototype 1.6 can't do native PUT
 		Ext.Ajax.request({

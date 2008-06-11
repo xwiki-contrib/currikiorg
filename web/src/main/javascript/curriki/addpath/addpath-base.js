@@ -153,6 +153,8 @@ Curriki.module.addpath.init = function() {
 							show:function(){
 								window.uploadComplete = function(videoId) {
 									Ext.getCmp('video_upload-entry-value').setValue(videoId);
+									// TODO: I think there is a better way to do this
+									Ext.getCmp('nextbutton').events.click.fire();
 								}
 								window.capture_div='';
 								window.flashLoaded=false;
@@ -245,6 +247,45 @@ Curriki.module.addpath.init = function() {
 						,value:'video_capture'
 						,inputValue:'video_capture'
 						,boxLabel:_('add.contributemenu.option.video_capture')
+						,listeners:{
+							check:AddPath.RadioSelect
+						}
+					},{
+						 xtype:'container'
+						,id:'video_capture-entry-box'
+						,listeners:{
+							show:function(){
+								window.uploadComplete = function(videoId) {
+									Ext.getCmp('video_capture-entry-value').setValue(videoId);
+									// TODO: I think there is a better way to do this
+									Ext.getCmp('nextbutton').events.click.fire();
+								}
+								window.capture_div='';
+								window.flashLoaded=false;
+								window.called_once=false;
+								embedVidiCapture('video_capture-entry-video', _('viditalk.sitecode'), null, null, false);
+							}
+						}
+						,hidden:true
+						,items:[{
+							 xtype:'textfield'
+							,id:'video_capture-entry-value'
+							,allowBlank:false
+							,hidden:true
+							,disabled:true
+						},{
+							 xtype:'box'
+							,id:'video_capture-entry-video'
+							,autoEl:{
+								 tag:'div'
+								,html:''
+							}
+						}]
+						,autoEl:{
+							 tag:'div'
+							,id:'video_capture-container'
+							,html:''
+						}
 
 	// Create folder
 					},{
@@ -311,6 +352,7 @@ Curriki.module.addpath.init = function() {
 		if (selected) {
 			Ext.get('selecttemplate-thumbnail-header').dom.innerHTML = _('add.selecttemplate.'+radio.value+'.header')
 			Ext.get('selecttemplate-thumbnail-image').set({'src': _('add.selecttemplate.'+radio.value+'.thumbnail')});
+			Curriki.current.submitToTemplate = _('add.selecttemplate.'+radio.value+'.url');
 			Ext.getCmp('nextbutton').enable();
 		}
 	};
@@ -345,6 +387,12 @@ Curriki.module.addpath.init = function() {
 						,id:'nextbutton'
 						,cls:'button next'
 						,disabled:true
+						,listeners:{
+							'click':function(e, ev){
+								AddPath.PostToTemplate(Curriki.current.submitToTemplate);
+								Ext.getCmp(e.id).ownerCt.ownerCt.close();
+							}
+						}
 					}]
 					,items:[{
 						 layout:'column'
@@ -1703,8 +1751,30 @@ console.log("Published CB: ", newAsset);
 				break;
 
 			case 'video_upload':
-				Curriki.current.videoId = allValues['video_upload-entry-value'];
+			case 'video_capture':
+				Curriki.current.videoId = allValues[selected+'-entry-value'];
+
 				next = 'apSRI1';
+				Curriki.assets.CreateAsset(
+					Curriki.current.parentAsset,
+					function(asset){
+console.log("CreateAsset (video) CB: ", asset);
+						// Initial asset has been created
+						// 1. Add appropriate content (link, file, ...)
+						// 2. Go to next step
+						Curriki.current.asset = asset;
+
+						Curriki.assets.CreateVIDITalk(
+							asset.assetPage,
+							Curriki.current.videoId,
+							function(videoInfo){
+console.log("Created viditalk CB: ", videoInfo);
+								AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);
+							}
+						)
+					}
+				);
+				return;
 				break;
 
 			case 'link':
@@ -1713,7 +1783,7 @@ console.log("Published CB: ", newAsset);
 				Curriki.assets.CreateAsset(
 					Curriki.current.parentAsset,
 					function(asset){
-console.log("CreateAsset CB: ", asset);
+console.log("CreateAsset (link) CB: ", asset);
 						// Initial asset has been created
 						// 1. Add appropriate content (link, file, ...)
 						// 2. Go to next step
@@ -1747,9 +1817,6 @@ console.log("Created Link CB: ", linkInfo);
 			case 'scratch':
 				AddPath.PostToTemplate(_('form.scratch.url'));
 				return;
-				break;
-
-			case 'video_capture':
 				break;
 
 			case 'folder':
@@ -1834,6 +1901,8 @@ Curriki.current = {
 
 			,sri1:null
 			,sri2:null
+
+			,submitToTemplate:null
 
 			,drop:null
 		});
