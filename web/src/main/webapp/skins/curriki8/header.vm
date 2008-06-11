@@ -70,8 +70,9 @@
 <!-- end of login area -->
 
 #else ## }{ ## is logged in
-  
-  <span class="welcome">$msg.get("headerWelcome", [$xwiki.getUserName($context.getLocalUser(),true)])</span>
+ 
+  #set($userdoc = $xwiki.getDocument($context.user)) 
+  <span class="welcome">$msg.get("headerWelcome", ["<a href='$userdoc.getURL()'>${userdoc.first_name}</a>"])</span>
   #if($hasGlobalAdmin)
     <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("admin")</a> #sep()
   #end
