@@ -12,6 +12,7 @@ import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.external.ExternalAsset;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONException;
 import com.xpn.xwiki.XWikiException;
 
 /**
@@ -65,8 +66,10 @@ public class ExternalsResource extends BaseResource {
         String assetName = (String) request.getAttributes().get("assetName");
 
         JSONObject json = representationToJSONObject(representation);
-        String link = json.getString("link");
-        if (link == null) {
+        String link;
+        try {
+            link = json.getString("link");
+        } catch (JSONException e) {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a link.");
         }
 

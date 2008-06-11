@@ -592,7 +592,7 @@ Curriki.module.addpath.init = function() {
 								,id:'fw_items-validation'
 								,allowBlank:false
 								,minValue:1
-								,invalidText:'TRANSLATE: This field is required'
+								,invalidText:'TODO: TRANSLATE: This field is required'
 								,hidden:true
 								,listeners:{
 									 valid:function(field){
@@ -1033,36 +1033,36 @@ Curriki.module.addpath.init = function() {
 								 xtype:'box'
 								,autoEl:{
 									 tag:'div'
-									,id:'metadata-license_deed'
+									,id:'metadata-license_type'
 									,cls:'information-header'
 									,children:[{
 										 tag:'span'
-										,id:'metadata-license_deed-title'
-										,html:_('sri.license_deed_title')
+										,id:'metadata-license_type-title'
+										,html:_('sri.license_type_title')
 									},{
 										 tag:'img'
-										,id:'metadata-license_deed-info'
+										,id:'metadata-license_type-info'
 										,src:Curriki.ui.InfoImg
-										,qtip:_('sri.license_deed_tooltip')
+										,qtip:_('sri.license_type_tooltip')
 									}]
 								}
 							},{
 								 xtype:'box'
 								,autoEl:{
 									 tag:'div'
-									,html:_('sri.license_deed_txt')
+									,html:_('sri.license_type_txt')
 									,cls:'directions'
 								}
 							},{
 								 xtype:'box'
 								,autoEl:{
 									 tag:'div'
-									,html:_('sri.license_deed_heading')
+									,html:_('sri.license_type_heading')
 								}
 							},{
 								 xtype:'combo'
-								,id:'metadata-license_deed-entry'
-								,hiddenName:'license_deed'
+								,id:'metadata-license_type-entry'
+								,hiddenName:'license_type'
 								,hideLabel:true
 								,width:'75%'
 								,mode:'local'
@@ -1071,7 +1071,7 @@ Curriki.module.addpath.init = function() {
 								,valueField:'id'
 								,typeAhead:true
 								,triggerAction:'all'
-								,emptyText:_('sri.license_deed_empty_msg')
+								,emptyText:_('sri.license_type_empty_msg')
 								,selectOnFocus:true
 								,forceSelection:true
 								,value:Curriki.data.licence.initial
@@ -1477,6 +1477,19 @@ console.log("Published CB: ", newAsset);
 						,id:'nextbutton'
 						,cls:'button next'
 						,disabled:true
+						,listeners:{
+							click:{
+								 fn: function(){
+									AddPath.AddSubasset(function(){
+										var dlg = Ext.getCmp('ChooseLocationDialogueWindow');
+										if (dlg) {
+											dlg.close();
+										}
+									});
+								}
+								,scope:this
+							}
+						}
 					}]
 					,items:[{
 						 xtype:'box'
@@ -1515,13 +1528,24 @@ console.log("Published CB: ", newAsset);
 							,animate:true
 							,enableDrag:true
 							,containerScroll:true
-							,rootVisible:true
+							,rootVisible:false
 							,root: new Ext.tree.AsyncTreeNode({
-								 text:Curriki.current.asset.title
-								,id:'ctv-target:'+Curriki.current.asset.assetPage
-								,cls:'ctv-target ctv-resource resource-'+Curriki.current.asset.assetType
-								,leaf:true
+								 text:_('ROOT - Unshown')
+								,id:'ctv-drag-tree-root'
+								,cls:'ctv-drag-root'
+								,leaf:false
+								,allowDrag:false
+								,allowDrop:false
 								,loaded:true
+								,expanded:true
+								,children:[{
+									 text:Curriki.current.asset.title
+									,id:'ctv-target-node'
+									,assetName:Curriki.current.asset.assetPage
+									,cls:'ctv-target ctv-resource resource-'+Curriki.current.asset.assetType
+									,leaf:true
+									,loaded:true
+								}]
 							})
 						}]
 						,autoEl:{
@@ -1546,6 +1570,26 @@ console.log("Published CB: ", newAsset);
 							,enableDD:true
 							,containerScroll:true
 							,rootVisible:false
+							,listeners:{
+								nodedrop:{
+									fn: function(dropEvent){
+										var targetNode = Ext.getCmp('ctv-to-tree-cmp').getNodeById('ctv-target-node');
+										var parentNode = targetNode.parentNode;
+										var parentNodeId = parentNode.id;
+										var nextSibling = targetNode.nextSibling;
+										var targetIndex = -1;
+										if (nextSibling){
+											targetIndex = nextSibling.attributes.order||-1;
+										}
+										Curriki.current.drop = {
+											 parentPage:parentNodeId
+											,targetIndex:targetIndex
+										};
+										AddPath.EnableNext();
+									}
+									,scope:this
+								}
+							}
 							,root: new Ext.tree.AsyncTreeNode({
 								 text:_('ROOT - Unshown')
 								,id:'ctv-drop-tree-root'
@@ -1554,10 +1598,10 @@ console.log("Published CB: ", newAsset);
 								,allowDrag:false
 								,allowDrop:false
 								,loaded:true
-								,expanded:false
+								,expanded:true
 								,children:[
 									Curriki.data.user.collectionChildren.length>0?{
-									 text:_('TODO: MY COLLECTIONS')
+									 text:_('panels.myCurriki.myCollections')
 									,id:'ctv-drop-tree-collection-root'
 									,cls:'ctv-top ctv-header ctv-collections'
 									,leaf:false
@@ -1567,7 +1611,7 @@ console.log("Published CB: ", newAsset);
 									,children:Curriki.data.user.collectionChildren
 								}:{},
 									Curriki.data.user.groupChildren.length>0?{
-									 text:_('TODO: MY GROUPS')
+									 text:_('panels.myCurriki.myGroups')
 									,id:'ctv-drop-tree-group-root'
 									,cls:'ctv-top ctv-header ctv-groups'
 									,leaf:false
@@ -1622,6 +1666,19 @@ console.log("Published CB: ", newAsset);
 				sourceDlg.close();
 			}
 		});
+	}
+
+	AddPath.AddSubasset = function(callback){
+		Curriki.assets.CreateSubasset(
+			Curriki.current.drop.parentPage
+			,Curriki.current.asset.assetPage
+			,Curriki.current.drop.targetIndex
+			,function(){
+				if ("function" === typeof callback){
+					callback();
+				}
+			}
+		);
 	}
 
 	AddPath.ShowNextDialogue = function(next, current){
@@ -1704,7 +1761,7 @@ console.log("Created Link CB: ", linkInfo);
 				break;
 		}
 
-		if ('undefined' !== next){
+		if (!Ext.isEmpty(next)){
 			AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);
 		}
 	};
@@ -1733,7 +1790,7 @@ console.log("Created Link CB: ", linkInfo);
 //
 
 		// This should already have been handled, but do a simple test here
-		if ('undefined' === Curriki.data.user.me || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
+		if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
 			alert(_('createresources.needaccount', '/xwiki/bin/login/XWiki/XWikiLogin'));
 			return;
 		}
@@ -1777,6 +1834,8 @@ Curriki.current = {
 
 			,sri1:null
 			,sri2:null
+
+			,drop:null
 		});
 	}
 }

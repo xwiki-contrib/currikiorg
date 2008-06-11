@@ -12,10 +12,11 @@ import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
 
 import java.util.Map;
-import java.util.Vector;
+import java.util.List;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import com.xpn.xwiki.XWikiException;
 
 /**
@@ -34,7 +35,7 @@ public class SubassetsResource extends BaseResource {
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
 
-        Vector<Map<String,Object>> results = null;
+        List<Map<String,Object>> results = null;
 
         try {
             FolderCompositeAsset doc = (FolderCompositeAsset) plugin.fetchAssetAs(assetName, FolderCompositeAsset.class);
@@ -59,9 +60,18 @@ public class SubassetsResource extends BaseResource {
 
         JSONObject json = representationToJSONObject(representation);
 
-        String page = json.getString("page");
-        if (page == null) {
+        String page;
+        try {
+            page = json.getString("page");
+        } catch (JSONException e) {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a page name.");
+        }
+
+        Long order;
+        try {
+            order = json.getLong("order");
+        } catch (JSONException e) {
+            order = (long) -1;
         }
 
         Asset asset;
@@ -74,22 +84,21 @@ public class SubassetsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
         }
 
-        Long order;
         if (asset instanceof FolderCompositeAsset) {
             try {
                 FolderCompositeAsset fAsset = asset.as(FolderCompositeAsset.class);
-                order = fAsset.addSubasset(page);
+                order = fAsset.insertSubassetAt(page, order);
                 fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.addsubasset"));
             } catch (XWikiException e) {
                 // Should never occur
-                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a Folder");
+                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         } else {
             try {
                 asset.makeFolder(page);
-                order = new Long(0);
+                order = (long) 0;
             } catch (XWikiException e) {
-                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add external link");
+                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         }
 

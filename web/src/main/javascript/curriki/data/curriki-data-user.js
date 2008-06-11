@@ -127,6 +127,7 @@ console.log('Collections: ', this.collectionChildren);
 				collection.children.each(function(child){
 					var childInfo = {
 						 id:child.assetpage
+						,order:child.order
 						,text:child.displayTitle
 						,qtip:child.description
 						,cls:'ctv-resource resource-'+child.assetType

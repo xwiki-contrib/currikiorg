@@ -8,7 +8,10 @@ import com.xpn.xwiki.api.Document;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.lang.Object;
 
 import org.curriki.xwiki.plugin.asset.Constants;
@@ -50,7 +53,7 @@ public class FolderCompositeAsset extends CompositeAsset {
         docInfo.put("rights", getRightsList());
 
         // Children
-        Vector<Map<String,Object>> subList = getSubassetsInfo();
+        List<Map<String,Object>> subList = getSubassetsInfo();
         if (subList.size() > 0) {
             docInfo.put("children", subList);
         }
@@ -58,18 +61,18 @@ public class FolderCompositeAsset extends CompositeAsset {
         return docInfo;
     }
 
-    public Vector<Map<String,Object>> getSubassetsInfo() {
-        Vector objs = getObjects(Constants.SUBASSET_CLASS);
-        Vector<Map<String,Object>> subList = new Vector<Map<String,Object>>(objs.size());
+    public List<Map<String, Object>> getSubassetsInfo() {
+        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<Map<String,Object>> subList = new ArrayList<Map<String,Object>>(objs.size());
         for (Object obj : objs){
-            if (obj instanceof com.xpn.xwiki.api.Object) {
-                com.xpn.xwiki.api.Object xObj = (com.xpn.xwiki.api.Object) obj;
+            if (obj instanceof BaseObject) {
+                BaseObject xObj = (BaseObject) obj;
 
-                String subPage = (String) getValue(Constants.SUBASSET_CLASS_PAGE, xObj);
+                String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
 
-                Map<String,Object> subInfo = new HashMap<String, Object>(2);
+                Map<String,Object> subInfo = new HashMap<String, Object>(6);
                 subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
-                subInfo.put(Constants.SUBASSET_CLASS_ORDER, getValue(Constants.SUBASSET_CLASS_ORDER, xObj));
+                subInfo.put(Constants.SUBASSET_CLASS_ORDER, xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER));
 
                 com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
                 try {
@@ -107,19 +110,25 @@ public class FolderCompositeAsset extends CompositeAsset {
             }
         }
 
+        Collections.sort(subList, new Comparator<Map<String,Object>>(){
+            public int compare(Map<String,Object> s1, Map<String,Object> s2){
+                return ((Long) s1.get(Constants.SUBASSET_CLASS_ORDER)).compareTo((Long) s2.get(Constants.SUBASSET_CLASS_ORDER));
+            }
+        });
+
         return subList;
     }
 
     public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
-        Vector objs = getObjects(Constants.SUBASSET_CLASS);
+        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
         Map<String,Object> subInfo = new HashMap<String, Object>(5);
         for (Object obj : objs){
-            if (obj instanceof com.xpn.xwiki.api.Object) {
-                com.xpn.xwiki.api.Object xObj = (com.xpn.xwiki.api.Object) obj;
+            if (obj instanceof BaseObject) {
+                BaseObject xObj = (BaseObject) obj;
 
-                String subPage = (String) getValue(Constants.SUBASSET_CLASS_PAGE, xObj);
+                String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
 
-                Long order = Long.getLong((String) getValue(Constants.SUBASSET_CLASS_ORDER, xObj));
+                Long order = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                 if (order.equals(subassetId)) {
                     subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
                     subInfo.put(Constants.SUBASSET_CLASS_ORDER, order);
@@ -146,28 +155,90 @@ public class FolderCompositeAsset extends CompositeAsset {
         throw new AssetException(AssetException.ERROR_ASSET_SUBASSET_NOTFOUND, "No subasset exists with the order number "+subassetId);
     }
 
-    public long addSubasset(String page) throws XWikiException {
-        Vector objs = getObjects(Constants.SUBASSET_CLASS);
-        Long highestOrder = null;
-        for (Object obj : objs){
-            if (obj instanceof com.xpn.xwiki.api.Object) {
-                com.xpn.xwiki.api.Object xObj = (com.xpn.xwiki.api.Object) obj;
-                Long objOrder = Long.getLong((String) getValue(Constants.SUBASSET_CLASS_ORDER, xObj));
-                if (highestOrder == null || objOrder > highestOrder) {
-                    highestOrder = objOrder;
+    public long insertSubassetBefore(String page, String beforePage) throws XWikiException {
+        if (beforePage == null){
+            return addSubasset(page);
+        }
+
+        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        Long beforePosition = null;
+        for (Object obj : objs) {
+            if (obj instanceof BaseObject) {
+                BaseObject xObj = (BaseObject) obj;
+                String objName = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+                if (objName.equals(beforePage)){
+                    beforePosition = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                 }
             }
         }
 
-        if (highestOrder == null) {
-            highestOrder = new Long(0);
-        } else {
-            highestOrder++;
+        return insertSubassetAt(page, beforePosition);
+    }
+
+    public long insertSubassetAt(String page, Long atPosition) throws XWikiException {
+        if (atPosition == null || atPosition == -1){
+            return addSubasset(page);
         }
 
-        BaseObject obj = doc.newObject(Constants.SUBASSET_CLASS, context);
-        obj.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
-        obj.setLongValue(Constants.SUBASSET_CLASS_ORDER, highestOrder);
+        relocateAssets(atPosition);
+
+        createSubasset(page, atPosition);
+
+        return atPosition;
+    }
+
+    protected void relocateAssets(long freePosition) throws XWikiException {
+        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        if (objs == null) {
+            return ;
+        }
+        for (Object obj : objs) {
+            if (obj instanceof BaseObject) {
+                BaseObject xObj = (BaseObject) obj;
+                long objPos = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                if (objPos >= freePosition) {
+                    xObj.setLongValue(Constants.SUBASSET_CLASS_ORDER, objPos + 1);
+                }
+            }
+        }
+    }
+
+    public long addSubasset(String page) throws XWikiException {
+        Long highestOrder = getLastPosition() + 1;
+
+        createSubasset(page, highestOrder);
+
+        return highestOrder;
+    }
+
+    public void createSubasset(String page, Long position) throws XWikiException {
+        com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
+        try {
+            Document subAsset = xwikiApi.getDocument(page);
+            if (subAsset instanceof Asset) {
+                BaseObject obj = doc.newObject(Constants.SUBASSET_CLASS, context);
+                obj.setStringValue(Constants.SUBASSET_CLASS_PAGE, subAsset.getFullName());
+                obj.setLongValue(Constants.SUBASSET_CLASS_ORDER, position);
+            } else {
+                throw new AssetException(AssetException.ERROR_ASSET_SUBASSET_NOTFOUND, "Subasset to add does not exist");
+            }
+        } catch (Exception e) {
+            throw new AssetException(AssetException.ERROR_ASSET_SUBASSET_NOTFOUND, "Subasset to add does not exist");
+        }
+    }
+
+    protected long getLastPosition(){
+        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        long highestOrder = (long) -1;
+        for (Object obj : objs){
+            if (obj instanceof BaseObject) {
+                BaseObject xObj = (BaseObject) obj;
+                long objOrder = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                if (objOrder > highestOrder) {
+                    highestOrder = objOrder;
+                }
+            }
+        }
 
         return highestOrder;
     }

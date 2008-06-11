@@ -521,6 +521,14 @@ public class Asset extends CurrikiDocument {
         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, context.getWiki().getLocalUserName(context.getUser(), null, false, context));
     }
 
+    public FolderCompositeAsset makeFolder() throws XWikiException {
+        assertCanEdit();
+        FolderCompositeAsset asset = subclassAs(FolderCompositeAsset.class);
+
+        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"));
+        return asset;
+    }
+
     public FolderCompositeAsset makeFolder(String page) throws XWikiException {
         assertCanEdit();
         FolderCompositeAsset asset = subclassAs(FolderCompositeAsset.class);
