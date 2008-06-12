@@ -67,6 +67,14 @@ public class BaseResource extends Resource {
 
     protected Representation formatJSON(JSON json, Variant variant) {
         Representation r = null;
+        // TODO: Firefox 2 seems to not send the specified application/json header
+        //       (especially after a redirect)
+        //       so we will send application/json always for now
+        //       (as we don't support this API any other way right now)
+        if (true /* TODO:  This is a hack */) {
+            r = new StringRepresentation(json.toString(), MediaType.APPLICATION_JSON);
+        } else
+
         if (MediaType.APPLICATION_JSON.equals(variant.getMediaType())
             || MediaType.APPLICATION_JAVASCRIPT.equals(variant.getMediaType())
             || MediaType.TEXT_JAVASCRIPT.equals(variant.getMediaType())) {

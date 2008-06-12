@@ -5,7 +5,8 @@
 Ext.BLANK_IMAGE_URL = '/xwiki/skins/curriki8/extjs/resources/images/default/s.gif';
 
 Ext.Ajax.defaultHeaders = {
-	'Accept': 'application/json'
+	 'Accept': 'application/json'
+	,'Content-Type': 'application/json; charset=utf-8;'
 };
 Ext.Ajax.disableCaching=false;
 
