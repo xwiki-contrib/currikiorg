@@ -130,12 +130,32 @@ Curriki.module.addpath.init = function() {
 						 xtype:'textfield'
 						,inputType:'file'
 						,id:'file-entry-box'
-						,name:'file'
+						,name:'filepath'
 						,disabled:true
 						,allowBlank:false
 						,hideMode:'display'
 						,hideLabel:true
 						,hidden:true
+						,listeners:{ // focus, invalid, blur, valid
+							focus:function(){
+								var pName = Ext.getCmp('file-entry-box').getValue();
+								var i = pName.lastIndexOf('\\');
+								var j = pName.lastIndexOf('/');
+
+								var k = (i>j)?i:j;
+								pName = pName.substring(k+1);
+
+								Ext.getCmp('filename-entry-box').setValue(pName);
+							}
+						}
+					},{
+						 xtype:'textfield'
+						,id:'filename-entry-box'
+						,name:'filename'
+						,allowBlank:false
+						,hideLabel:true
+						,hidden:true
+						,disabled:true
 
 	// VIDITalk Video Upload
 					},{
@@ -1197,10 +1217,12 @@ console.log("Published CB: ", newAsset);
 	//   Go to My Favorites - 
 	//   Close - Go to where we came from
 
-		var link, text, handler, pageName;
+		var link, text, handler, pageName, disabled;
 		text = _('add.finalmessage.'+linkName+'.link');
 
 		pageName = Curriki.current.asset.assetPage;
+
+		disabled = false;
 
 		switch(linkName) {
 			case 'view':
@@ -1208,13 +1230,20 @@ console.log("Published CB: ", newAsset);
 				break;
 
 			case 'add':
+				// TODO:  ONLY show if the user has a collection to add to
+
 				// Start Content Tree View screen
-				handler = function(e,evt){
-					Curriki.ui.show('apLocation');
-					var sourceDlg = Ext.getCmp('done-dialogue');
-					if (sourceDlg){
-						sourceDlg.close();
+				if (Curriki.data.user.collectionChildren.length > 0
+				    || Curriki.data.user.groupChildren.length > 0){
+					handler = function(e,evt){
+						Curriki.ui.show('apLocation');
+						var sourceDlg = Ext.getCmp('done-dialogue');
+						if (sourceDlg){
+							sourceDlg.close();
+						}
 					}
+				} else {
+					disabled = true;
 				}
 				break;
 
@@ -1259,6 +1288,7 @@ console.log("Published CB: ", newAsset);
 			 text:_('add.finalmessage.'+linkName+'.link')
 			,cls:'button link'
 			,handler:handler
+			,hidden:disabled
 		};
 	}
 
@@ -1656,6 +1686,7 @@ console.log("Published CB: ", newAsset);
 									,allowDrag:false
 									,allowDrop:false
 									,loaded:true
+									,expanded:(Curriki.data.user.collectionChildren.length < 4)
 									,children:Curriki.data.user.collectionChildren
 								}:{},
 									Curriki.data.user.groupChildren.length>0?{
@@ -1666,6 +1697,7 @@ console.log("Published CB: ", newAsset);
 									,allowDrag:false
 									,allowDrop:false
 									,loaded:true
+									,expanded:(Curriki.data.user.groupChildren.length < 4)
 									,children:Curriki.data.user.groupChildren
 								}:{}
 								]
@@ -1686,7 +1718,6 @@ console.log("Published CB: ", newAsset);
 	Ext.reg('apLocation', AddPath.ChooseLocation);
 
 	AddPath.PostToTemplate = function(templateUrl){
-		// TODO: Put parent page name when adding to a folder
 		Curriki.assets.CreateAsset(Curriki.current.parentAsset, function(asset){
 			Curriki.current.asset = asset;
 			var sf = new Ext.FormPanel({
@@ -1713,6 +1744,26 @@ console.log("Published CB: ", newAsset);
 			if (sourceDlg){
 				sourceDlg.close();
 			}
+		});
+	}
+
+	AddPath.PostFile = function(callback){
+		Curriki.assets.CreateAsset(Curriki.current.parentAsset, function(asset){
+			Curriki.current.asset = asset;
+
+			Ext.Ajax.request({
+				url:'/xwiki/bin/upload/'+asset.assetPage.replace('.', '/')
+				,isUpload:true
+				,form:'addDialogueForm'
+				,callback:function(options, success, response){
+console.log('upload CB:', options, success, response);
+					var sourceDlg = Ext.getCmp(AddPath.AddSourceDialogueId);
+					if (sourceDlg){
+						sourceDlg.close();
+					}
+					callback();
+				}
+			});
 		});
 	}
 
@@ -1746,8 +1797,12 @@ console.log("Published CB: ", newAsset);
 		var next;
 		switch(selected) {
 			case 'file':
-				Curriki.current.fileName = allValues['file'];
+				Curriki.current.fileName = allValues['filename'];
 				next = 'apSRI1';
+				AddPath.PostFile(function(){
+					AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);
+				});
+				return;
 				break;
 
 			case 'video_upload':
