@@ -38,5 +38,9 @@ Ext.apply(Curriki.current, {
 console.log('Init Curriki');
 	Curriki.init(startfunc);
 console.log('Done Curriki');
+
+Ext.getCmp('ctv-to-tree-cmp').getNodeById('ctv-target-node');
+
+
 */
 });

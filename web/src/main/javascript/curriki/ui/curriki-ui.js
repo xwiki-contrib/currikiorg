@@ -118,6 +118,9 @@ console.log('createNode: End ',childInfo);
 				this.transId = Ext.Ajax.request({
 					 method: 'GET'
 					,url: this.dataUrl
+					,headers: {
+						'Accept':'application/json'
+					}
 					,success: this.handleResponse
 					,failure: this.handleFailure
 					,scope: this

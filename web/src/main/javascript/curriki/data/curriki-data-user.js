@@ -19,6 +19,9 @@ Curriki.data.user = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'me'
 			,method:'GET'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;
@@ -49,6 +52,9 @@ Curriki.data.user = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/collections'
 			,method:'GET'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;
@@ -81,6 +87,9 @@ console.log('Collections: ', this.collectionChildren);
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/groups'
 			,method:'GET'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;

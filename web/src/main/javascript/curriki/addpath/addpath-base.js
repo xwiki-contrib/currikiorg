@@ -1755,6 +1755,9 @@ console.log("Published CB: ", newAsset);
 				url:'/xwiki/bin/upload/'+asset.assetPage.replace('.', '/')
 				,isUpload:true
 				,form:'addDialogueForm'
+				,headers: {
+					'Accept':'application/json'
+				}
 				,callback:function(options, success, response){
 console.log('upload CB:', options, success, response);
 					var sourceDlg = Ext.getCmp(AddPath.AddSourceDialogueId);

@@ -9,6 +9,9 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix
 			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,jsonData: {'parent':parentPage||''}
 			,scope:this
 			,success:function(response, options){
@@ -33,6 +36,9 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/metadata?_method=PUT'
 			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,jsonData: metadata
 			,scope:this
 			,success:function(response, options){
@@ -55,6 +61,9 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/externals'
 			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,jsonData: {'link':linkUrl}
 			,scope:this
 			,success:function(response, options){
@@ -77,6 +86,9 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/subassets'
 			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,jsonData: {page:subassetPage, order:order}
 			,scope:this
 			,success:function(response, options){
@@ -99,6 +111,9 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/viditalks'
 			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,jsonData: {page:assetPage, videoId:videoId}
 			,scope:this
 			,success:function(response, options){
@@ -122,6 +137,9 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/published?_method=PUT'
 			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
 			,jsonData: {space: space}
 			,scope:this
 			,success:function(response, options){
