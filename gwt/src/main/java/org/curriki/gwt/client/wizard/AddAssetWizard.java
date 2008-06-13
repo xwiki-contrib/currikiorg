@@ -349,9 +349,12 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         } else if (sender == bttExistingResource) {
             hideParentDialog();
             findResource();
+        // Removed from EOU1 (1.6)
+        /*
         } else if (sender == bttFromTemplate) {
             hideParentDialog();
             initFromTemplate();
+        */
         }
     }
 
@@ -362,7 +365,10 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         bttDirectionContent.removeStyleName("gwt-ButtonNav-active");
         bttNewFolder.removeStyleName("gwt-ButtonNav-active");
         bttExistingResource.removeStyleName("gwt-ButtonNav-active");
+        // Removed from EOU1 (1.6)
+        /*
         bttFromTemplate.removeStyleName("gwt-ButtonNav-active");
+        */
         button.addStyleName("gwt-ButtonNav-active");
     }
 
@@ -446,7 +452,7 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
     public void initWhatToAdd() {
         panel.clear();
         setParentCaption(Main.getTranslation("addasset.what_would_you_like_to_add"));
-        Grid grid = new Grid(11, 1);
+        Grid grid = new Grid(8, 1);
         helpGrid = new Grid(2, 1);
         helpGrid.getCellFormatter().addStyleName(0, 0, "help-grid-head");
         helpGrid.getCellFormatter().addStyleName(1, 0, "help-grid-content");
@@ -499,13 +505,16 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         grid.setWidget(8, 0, bttFromTemplate);
         */
 
+        // Removed in EOU 1 (1.6)
+        /*
         // Separator: New Element
         label = new HTML(Main.getTranslation("addasset.formatting_element"));
         label.addStyleName("curriki-subtitle");
-        grid.setWidget(8, 0, label);
+        grid.setWidget(9, 0, label);
 
         // Template is added a second time
-        grid.setWidget(9, 0, bttFromTemplate);
+        grid.setWidget(10, 0, bttFromTemplate);
+        */
 
 
         panel.add(grid, DockPanel.CENTER);
