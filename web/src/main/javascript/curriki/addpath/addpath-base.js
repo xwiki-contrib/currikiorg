@@ -572,18 +572,21 @@ Curriki.module.addpath.init = function() {
 						,autoEl:{
 							 tag:'div'
 							,id:'metadata-title'
-							,cls:'information-header'
+							,cls:'information-header information-header-required'
 							,children:[{
-								 tag:'span'
+								 tag:'em'
 								,id:'metadata-title-required'
+								,cls:'required-indicator'
 								,html:_('form.required.fields.indicator')
 							},{
 								 tag:'span'
 								,id:'metadata-title-title'
+								,cls:'metadata-title'
 								,html:_('sri.title_title')
 							},{
 								 tag:'img'
 								,id:'metadata-title-info'
+								,cls:'metadata-tooltip'
 								,src:Curriki.ui.InfoImg
 								,qtip:_('sri.title_tooltip')
 							}]
@@ -610,18 +613,21 @@ Curriki.module.addpath.init = function() {
 						,autoEl:{
 							 tag:'div'
 							,id:'metadata-description'
-							,cls:'information-header'
+							,cls:'information-header information-header-required'
 							,children:[{
-								 tag:'span'
+								 tag:'em'
 								,id:'metadata-description-required'
+								,cls:'required-indicator'
 								,html:_('form.required.fields.indicator')
 							},{
 								 tag:'span'
 								,id:'metadata-description-title'
+								,cls:'metadata-title'
 								,html:_('sri.description_title')
 							},{
 								 tag:'img'
 								,id:'metadata-description-info'
+								,cls:'metadata-tooltip'
 								,src:Curriki.ui.InfoImg
 								,qtip:_('sri.description_tooltip')
 							}]
@@ -655,18 +661,21 @@ Curriki.module.addpath.init = function() {
 								,autoEl:{
 									 tag:'div'
 									,id:'metadata-fw_items'
-									,cls:'information-header'
+									,cls:'information-header information-header-required'
 									,children:[{
-										 tag:'span'
+										 tag:'em'
 										,id:'metadata-fw_items-required'
+										,cls:'required-indicator'
 										,html:_('form.required.fields.indicator')
 									},{
 										 tag:'span'
 										,id:'metadata-fw_items-title'
+										,cls:'metadata-title'
 										,html:_('sri.fw_items_title')
 									},{
 										 tag:'img'
 										,id:'metadata-fw_items-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.fw_items_tooltip')
 									}]
@@ -716,18 +725,21 @@ Curriki.module.addpath.init = function() {
 								,autoEl:{
 									 tag:'div'
 									,id:'metadata-educational_level2'
-									,cls:'information-header'
+									,cls:'information-header information-header-required'
 									,children:[{
-										 tag:'span'
+										 tag:'em'
 										,id:'metadata-educational_level2-required'
+										,cls:'required-indicator'
 										,html:_('form.required.fields.indicator')
 									},{
 										 tag:'span'
 										,id:'metadata-educational_level2-title'
+										,cls:'metadata-title'
 										,html:_('sri.educational_level2_title')
 									},{
 										 tag:'img'
 										,id:'metadata-educational_level2-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.educational_level2_tooltip')
 									}]
@@ -792,18 +804,21 @@ Curriki.module.addpath.init = function() {
 						,autoEl:{
 							 tag:'div'
 							,id:'metadata-instructional_component2'
-							,cls:'information-header'
+							,cls:'information-header information-header-required'
 							,children:[{
-								 tag:'span'
+								 tag:'em'
 								,id:'metadata-instructional_component2-required'
+								,cls:'required-indicator'
 								,html:_('form.required.fields.indicator')
 							},{
 								 tag:'span'
 								,id:'metadata-instructional_component2-title'
+								,cls:'metadata-title'
 								,html:_('sri.instructional_component2_title')
 							},{
 								 tag:'img'
 								,id:'metadata-instructional_component2-info'
+								,cls:'metadata-tooltip'
 								,src:Curriki.ui.InfoImg
 								,qtip:_('sri.instructional_component2_tooltip')
 							}]
@@ -965,10 +980,12 @@ Curriki.module.addpath.init = function() {
 									,children:[{
 										 tag:'span'
 										,id:'metadata-rights-title'
+										,cls:'metadata-title'
 										,html:_('sri.rights_title')
 									},{
 										 tag:'img'
 										,id:'metadata-rights-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.rights_tooltip')
 									}]
@@ -1001,10 +1018,12 @@ Curriki.module.addpath.init = function() {
 									,children:[{
 										 tag:'span'
 										,id:'metadata-hidden_from_search-title'
+										,cls:'metadata-title'
 										,html:_('sri.hidden_from_search_title')
 									},{
 										 tag:'img'
 										,id:'metadata-hidden_from_search-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.hidden_from_search_tooltip')
 									}]
@@ -1034,10 +1053,12 @@ Curriki.module.addpath.init = function() {
 									,children:[{
 										 tag:'span'
 										,id:'metadata-keywords-title'
+										,cls:'metadata-title'
 										,html:_('sri.keywords_title')
 									},{
 										 tag:'img'
 										,id:'metadata-keywords-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.keywords_tooltip')
 									}]
@@ -1069,10 +1090,12 @@ Curriki.module.addpath.init = function() {
 									,children:[{
 										 tag:'span'
 										,id:'metadata-language-title'
+										,cls:'metadata-title'
 										,html:_('sri.language_title')
 									},{
 										 tag:'img'
 										,id:'metadata-language-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.language_tooltip')
 									}]
@@ -1112,18 +1135,21 @@ Curriki.module.addpath.init = function() {
 								,autoEl:{
 									 tag:'div'
 									,id:'metadata-right_holder'
-									,cls:'information-header'
+									,cls:'information-header information-header-required'
 									,children:[{
-										 tag:'span'
+										 tag:'em'
 										,id:'metadata-title-required'
+										,cls:'required-indicator'
 										,html:_('form.required.fields.indicator')
 									},{
 										 tag:'span'
 										,id:'metadata-right_holder-title'
+										,cls:'metadata-title'
 										,html:_('sri.right_holder_title')
 									},{
 										 tag:'img'
 										,id:'metadata-right_holder-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.right_holder_tooltip')
 									}]
@@ -1157,10 +1183,12 @@ Curriki.module.addpath.init = function() {
 									,children:[{
 										 tag:'span'
 										,id:'metadata-license_type-title'
+										,cls:'metadata-title'
 										,html:_('sri.license_type_title')
 									},{
 										 tag:'img'
 										,id:'metadata-license_type-info'
+										,cls:'metadata-tooltip'
 										,src:Curriki.ui.InfoImg
 										,qtip:_('sri.license_type_tooltip')
 									}]
@@ -1282,6 +1310,8 @@ console.log("Published CB: ", newAsset);
 
 			case 'add':
 				// TODO:  ONLY show if the user has a collection to add to
+				// TODO:  is like starting from add path entry point E, J, or P (and sort of H)
+				// TODO:  Final message for add is per E
 
 				// Start Content Tree View screen
 				if (Curriki.data.user.collectionChildren.length > 0
@@ -1426,6 +1456,7 @@ console.log("Published CB: ", newAsset);
 					,AddPath.CloseDone(this)
 				]
 				,items:[
+// TODO: This needs arguments for "added {0} into {1}"
 					 AddPath.DoneMessage('addto')
 				]
 			});
@@ -1466,7 +1497,9 @@ console.log("Published CB: ", newAsset);
 				 title:_('add.finalmessage.title_folder')
 				,cls:'resource resource-add'
 				,bbar:[
-					 '->',AddPath.FinalLink('continue')
+					 AddPath.FinalLink('continue'),'-'
+					,AddPath.FinalLink('openbuilder'),'->'
+					,AddPath.CloseDone(this)
 				]
 				,items:[
 // TODO: This needs arguments for "added {0} into {1}"
@@ -1559,7 +1592,7 @@ console.log("Published CB: ", newAsset);
 
 	AddPath.ShowDone = function(){
 		var p = Ext.ComponentMgr.create({
-			 xtype:'apDone'+Curriki.current.flow
+			 xtype:'apDone'+Curriki.current.flow+Curriki.current.flowFolder
 			,id:'done-dialogue'
 		});
 		p.show();
@@ -1956,6 +1989,7 @@ console.log("CreateAsset (folder) CB: ", asset);
 							0,
 							function(assetInfo){
 console.log("Created Folder CB: ", assetInfo);
+								Curriki.current.flowFolder = 'Folder';
 								callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 								if (Curriki.current.parentAsset) {
 									// Get metadata if there was a parent asset
@@ -1985,7 +2019,7 @@ console.log("Created Folder CB: ", assetInfo);
 	};
 
 
-	AddPath.start = function(){
+	AddPath.start = function(path){
 // Possible ways to start:
 // 1. Add on left navigation (give list of sources)
 // 2. Add a collection link - type is predetermined
@@ -2020,9 +2054,61 @@ console.log("Created Folder CB: ", assetInfo);
 		if (Ext.isEmpty(Curriki.current.publishSpace)) {
 			Curriki.current.publishSpace = 'Coll_'+Curriki.data.user.me.username.replace(/XWiki\./, '');
 		}
+		if (!Ext.isEmpty(path)) {
+			Curriki.current.flow = path;
+		}
 
 		switch (Curriki.current.flow){
+			// Add a resource
 			case 'A':
+			case 'B':
+			case 'D':
+			case 'I':
+			case 'O':
+				Curriki.ui.show('apSource');
+				return;
+				break;
+
+			// Make a new resource
+			case 'D':
+				// This should not come here
+				// D.1 - Make a resource from scratch form
+				// D.2 - Make a Lesson Plan from a Template
+				// Both should go directly to the form
+				// but may call the close dialogue
+				return;
+				break;
+
+			// Add a new collection
+			case 'C':
+			case 'K':
+			case 'M': // Add a group collection
+				// We know that a collection needs to be made, then SRI
+				return;
+				break;
+
+			// Add Known (Existing) into a Target Collection or Folder
+			case 'E':
+			case 'H':
+			case 'J':
+			case 'P':
+				// Shows CTV
+				return;
+				break;
+
+			// Add Known (Existing) into Favorites
+			case 'G':
+				// Do work and then just show final dialogue
+				return;
+				break;
+
+			// Add Unknown (New or Existing) into a Collection or Folder
+			case 'F':
+			case 'L':
+			case 'N':
+				// Parent known, Destination Known
+				//Curriki.ui.show('apSource', {toFolder:true});
+				return;
 				break;
 
 			default:
@@ -2048,6 +2134,7 @@ Curriki.current = {
 			,publishSpace:null
 			,cameFrom:null
 			,flow:null
+			,flowFolder:''
 			,asset:null
 			,metadata:null
 
