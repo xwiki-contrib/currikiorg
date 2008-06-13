@@ -14,4 +14,8 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     protected String compositeAssetType() {
         return Constants.COMPOSITE_ASSET_CLASS_TYPE_ROOT_COLLECTION;
     }
+
+    public boolean isRootCollection() {
+        return true;
+    }
 }

@@ -72,6 +72,16 @@ public class SubassetsResource extends BaseResource {
             page = null;
         }
 
+        String collectionType;
+        try {
+            collectionType = json.getString("collectionType");
+            if (collectionType.equals("")){
+                collectionType = "folder";
+            }
+        } catch (JSONException e) {
+            collectionType = "folder";
+        }
+
         Long order;
         try {
             order = json.getLong("order");
@@ -104,8 +114,13 @@ public class SubassetsResource extends BaseResource {
             }
         } else {
             try {
-                asset.makeFolder(page);
-                order = (long) 0;
+                if (collectionType.equals("collection")) {
+                    asset.makeCollection(page);
+                    order = (long) 0;
+                } else {
+                    asset.makeFolder(page);
+                    order = (long) 0;
+                }
             } catch (XWikiException e) {
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }

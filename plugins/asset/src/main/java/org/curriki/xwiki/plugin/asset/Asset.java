@@ -536,6 +536,21 @@ public class Asset extends CurrikiDocument {
         return asset;
     }
 
+    public CollectionCompositeAsset makeCollection() throws XWikiException {
+        return makeCollection(null);
+    }
+
+    public CollectionCompositeAsset makeCollection(String page) throws XWikiException {
+        assertCanEdit();
+        CollectionCompositeAsset asset = subclassAs(CollectionCompositeAsset.class);
+
+        if (page != null) {
+            asset.addSubasset(page);
+        }
+        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"));
+        return asset;
+    }
+
     public ExternalAsset makeExternal(String link) throws XWikiException {
         assertCanEdit();
         ExternalAsset asset = subclassAs(ExternalAsset.class);
