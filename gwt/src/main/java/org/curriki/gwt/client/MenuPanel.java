@@ -38,7 +38,7 @@ public class MenuPanel extends Composite implements WindowResizeListener {
     private final VerticalPanel menuPanel = new VerticalPanel();
     private final ScrollPanel menuScrollPanel = new ScrollPanel();
     private final BrowseAsset assetTree = new BrowseAsset();
-    private final Button bttAdd = new Button("Add");
+    private final Button bttAdd = new Button(Main.getTranslation("menu.add"));
     private static MenuPanel singleton;
 
     public MenuPanel() {

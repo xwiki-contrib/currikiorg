@@ -492,17 +492,20 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         bttNewFolder = new WhatToAddButton("folder", this);
         grid.setWidget(7, 0, bttNewFolder);
 
+        // Removed in EOU 1 (1.6)
+        /*
         // New resource: Template
         bttFromTemplate = new WhatToAddButton("template", this);
         grid.setWidget(8, 0, bttFromTemplate);
+        */
 
         // Separator: New Element
         label = new HTML(Main.getTranslation("addasset.formatting_element"));
         label.addStyleName("curriki-subtitle");
-        grid.setWidget(9, 0, label);
+        grid.setWidget(8, 0, label);
 
         // Template is added a second time
-        grid.setWidget(10, 0, bttFromTemplate);
+        grid.setWidget(9, 0, bttFromTemplate);
 
 
         panel.add(grid, DockPanel.CENTER);
