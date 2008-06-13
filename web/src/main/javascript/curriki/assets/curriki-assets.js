@@ -131,6 +131,56 @@ Curriki.assets = {
 			}
 		});
 	}
+	,CreateFolder:function(assetPage, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage+'/subassets'
+			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
+			,jsonData: {collectionType:'folder'}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object for the current asset
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot create folder');
+					throw {message: "CreateAsset: Json object not found"};
+				}
+				callback(o);
+			}
+			,failure:function(options){
+				console.error('Cannot create folder', options);
+				throw {message: "Server Error: Cannot create folder."};
+			}
+		});
+	}
+	,CreateCollection:function(assetPage, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage+'/subassets'
+			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+			}
+			,jsonData: {collectionType:'collection'}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object for the current asset
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot create collection');
+					throw {message: "CreateAsset: Json object not found"};
+				}
+				callback(o);
+			}
+			,failure:function(options){
+				console.error('Cannot create collection', options);
+				throw {message: "Server Error: Cannot create collection."};
+			}
+		});
+	}
 	,CreateVIDITalk:function(assetPage, videoId, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/viditalks'

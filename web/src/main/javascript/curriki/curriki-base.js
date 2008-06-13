@@ -49,6 +49,7 @@ function initLoader() {
 */
 
 Ext.ns('Curriki');
+Ext.ns('Curriki.module');
 
 Ext.onReady(function(){
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});

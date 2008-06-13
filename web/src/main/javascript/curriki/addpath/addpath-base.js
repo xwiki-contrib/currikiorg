@@ -4,7 +4,7 @@
 /*global _ */
 
 Ext.ns('Curriki.module.addpath');
-Curriki.module.addpath.init = function() {
+Curriki.module.addpath.init = function(){
 	// Local alias
 	var AddPath = Curriki.module.addpath;
 
@@ -1334,12 +1334,11 @@ console.log("Published CB: ", newAsset);
 
 			case 'viewtarget':
 				link = '/xwiki/bin/view/'+pageName.replace('.', '/');
-				text = _('add.finalmessage.viewtarget.link', Curriki.current.asset.title);
+				text = _('add.finalmessage.viewtarget.link', Curriki.current.assetTitle||Curriki.current.sri1.title||'UNKNOWN');
 				break;
 
-			case 'continue':
-				// TODO: ???
-				link = '';
+			case 'continue': // F, N, L Folder version
+				link = Curriki.current.cameFrom;
 				break;
 
 			case 'contributions':
@@ -1374,12 +1373,37 @@ console.log("Published CB: ", newAsset);
 	}
 
 	AddPath.DoneMessage = function(name){
+		var msg;
+
+		switch(Curriki.current.flow){
+			case 'E':
+			case 'H':
+			case 'J':
+			case 'P':
+			case 'F':
+			case 'N':
+			case 'L':
+			case 'FFolder':
+			case 'NFolder':
+			case 'LFolder':
+				var msgArgs = [
+					Curriki.current.assetTitle||Curriki.current.sri1.title||'UNKNOWN'
+					,Curriki.current.parentTitle
+				];
+				msg = _('add.finalmessage.text_'+name+'_success');
+				break;
+
+			default:
+				msg = _('add.finalmessage.text_'+name+'_success');
+				break;
+		}
+
 		return {
 			 xtype:'box'
 			,autoEl:{
 				 tag:'div'
 				,cls:'done-message'
-				,html:_('add.finalmessage.text_'+name+'_success')
+				,html:msg
 			}
 		};
 	}
@@ -1859,14 +1883,29 @@ console.log('upload CB:', options, success, response);
 		);
 	}
 
+	AddPath.AddFavorite = function(callback){
+		Curriki.assets.CreateSubasset(
+			Curriki.current.parentAsset
+			,Curriki.current.assetName
+			,-1
+			,function(){
+				if ("function" === typeof callback){
+					callback();
+				}
+			}
+		);
+	}
+
 	AddPath.ShowNextDialogue = function(next, current){
 		var p = Ext.ComponentMgr.create({xtype:next});
 		p.show();
 		Ext.ComponentMgr.register(p);
 
-		var closeDlg = Ext.getCmp(current);
-		if (closeDlg){
-			closeDlg.close();
+		if (!Ext.isEmpty(current)) {
+			var closeDlg = Ext.getCmp(current);
+			if (closeDlg){
+				closeDlg.close();
+			}
 		}
 	}
 
@@ -1983,10 +2022,8 @@ console.log("Created Link CB: ", linkInfo);
 console.log("CreateAsset (folder) CB: ", asset);
 						Curriki.current.asset = asset;
 
-						Curriki.assets.CreateSubasset(
+						Curriki.assets.CreateFolder(
 							asset.assetPage,
-							'',
-							0,
 							function(assetInfo){
 console.log("Created Folder CB: ", assetInfo);
 								Curriki.current.flowFolder = 'Folder';
@@ -2004,6 +2041,35 @@ console.log("Created Folder CB: ", assetInfo);
 						)
 					}
 				);
+				return;
+				break;
+
+			case 'collection': // Only from start
+				next = 'apSRI1';
+				Curriki.assets.CreateAsset(
+					Curriki.current.parentAsset,
+					function(asset){
+console.log("CreateAsset (collection) CB: ", asset);
+						Curriki.current.asset = asset;
+
+						Curriki.assets.CreateCollection(
+							asset.assetPage,
+							function(assetInfo){
+console.log("Created Collection CB: ", assetInfo);
+								callback = function(){AddPath.ShowNextDialogue(next);};
+								callback();
+							}
+						)
+					}
+				);
+				return;
+				break;
+
+			case 'toFavorites': // Only from start
+				// Curriki.assets.{parentAsset,assetName} need to be set
+				AddPath.AddFavorite(function(){
+					AddPath.ShowDone();
+				});
 				return;
 				break;
 
@@ -2059,61 +2125,76 @@ console.log("Created Folder CB: ", assetInfo);
 		}
 
 		switch (Curriki.current.flow){
-			// Add a resource
-			case 'A':
-			case 'B':
-			case 'D':
-			case 'I':
-			case 'O':
+			// Add a resource to unknown - no parent
+			//case 'A': // From "Home Page" - removed from spec
+			case 'B': // Left nav
+			// case 'D-Add': // About Contributing page -- Really path B
+			case 'I': // Add a Resource in MyCurriki Contributions
+			case 'O': // Add a Resource in Group Curriculum View All Contribs
 				Curriki.ui.show('apSource');
 				return;
 				break;
 
-			// Make a new resource
+			// About Contributing page
 			case 'D':
-				// This should not come here
-				// D.1 - Make a resource from scratch form
-				// D.2 - Make a Lesson Plan from a Template
-				// Both should go directly to the form
-				// but may call the close dialogue
+				// D.Add - Add a Resource -- Is really path B
+				Curriki.current.flow = 'B';
+				Curriki.ui.show('apSource');
+				return;
+				break;
+			case 'D1':
+				// D.1   - Make a resource from scratch form
+				Curriki.current.flow = 'D';
+				AddPath.SourceSelected('scratch', {});
+				return;
+				break;
+			case 'D2':
+				// D.2   - Make a Lesson Plan from a Template
+				Curriki.current.flow = 'D';
+				AddPath.SourceSelected('template', {});
 				return;
 				break;
 
 			// Add a new collection
-			case 'C':
-			case 'K':
-			case 'M': // Add a group collection
-				// We know that a collection needs to be made, then SRI
+			case 'C': // About finding and collecting page
+			case 'K': // Add a Collection in MyCurriki Collections
+			case 'M': // Add a group collection in Group Collections listing
+				// Create collection, then SRI
+				AddPath.SourceSelected('collection', {});
 				return;
 				break;
 
 			// Add Known (Existing) into a Target Collection or Folder
-			case 'E':
-			case 'H':
-			case 'J':
-			case 'P':
+			case 'E': // Add in view
+			case 'H': // Add in MyCurriki Favorites
+			case 'J': // Add in MyCurriki Contributions
+			case 'P': // Add in Group Curriculum View All Contributions
+				// Need titles for new and parent assets in Done Msg
 				// Shows CTV
+				Curriki.ui.show('apLocation');
 				return;
 				break;
 
 			// Add Known (Existing) into Favorites
-			case 'G':
-				// Do work and then just show final dialogue
+			case 'G': // Favorite in view
+				// Add asset as subasset in Favorites then show final dialogue
+				AddPath.SourceSelected('toFavorites', {});
 				return;
 				break;
 
 			// Add Unknown (New or Existing) into a Collection or Folder
-			case 'F':
-			case 'L':
-			case 'N':
-				// Parent known, Destination Known
-				//Curriki.ui.show('apSource', {toFolder:true});
+			case 'F': // Build-up in view
+			case 'L': // Build-up in MyCurriki Collections
+			case 'N': // Build-up in Group Collections list
+				// Need titles for new and parent assets in Done Msg
+				// Parent known
+				Curriki.ui.show('apSource', {toFolder:true});
 				return;
 				break;
 
 			default:
 //TODO: Remove later as it shouldn't occur
-				// Sample Follows "A" path
+				// Sample Follows "A" path with folder info
 				Curriki.current.flow = 'A';
 				Curriki.ui.show('apSource', {toFolder:true});
 				break;
@@ -2122,6 +2203,30 @@ console.log("Created Folder CB: ", assetInfo);
 
 	Curriki.module.addpath.initialized = true;
 };
+
+Curriki.module.addpath.startPath = function(path, options){
+	// parentTitle needs to be passed for E, H, J, P, F, N, and L
+	// assetTitle needs to be passed for E, H, J, P (known asset)
+
+	if (!Ext.isEmpty(options)){
+		Curriki.current.assetName = options.assetName||null;
+		Curriki.current.parentAsset = options.parentAsset||null;
+		Curriki.current.publishSpace = options.publishSpace||null;
+		Curriki.current.cameFrom = options.cameFrom||null;
+
+		Curriki.current.assetTitle = options.assetTitle||null;
+		Curriki.current.parentTitle = options.parentTitle||null;
+	}
+
+	Curriki.init(function(){
+		if (Ext.isEmpty(Curriki.module.addpath.initialized)) {
+			Curriki.module.addpath.init();
+		}
+
+		Curriki.module.addpath.start(path);
+	});
+}
+
 Curriki.module.addpath.loaded = true;
 
 // Initialize "current" information
@@ -2135,6 +2240,10 @@ Curriki.current = {
 			,cameFrom:null
 			,flow:null
 			,flowFolder:''
+
+			,assetTitle:null
+			,parentTitle:null
+
 			,asset:null
 			,metadata:null
 
