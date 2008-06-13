@@ -41,8 +41,10 @@ Curriki.ui.dialog.Messages = Ext.extend(Curriki.ui.dialog.Base, {
 });
 Ext.reg('dialoguemessages', Curriki.ui.dialog.Messages);
 
-Curriki.ui.show = function(xtype){
-	var p = Ext.ComponentMgr.create({'xtype':xtype});
+Curriki.ui.show = function(xtype, options){
+	var o = {xtype:xtype};
+	Ext.apply(o,options);
+	var p = Ext.ComponentMgr.create(o);
 
 	p.show();
 	Ext.ComponentMgr.register(p);

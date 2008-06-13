@@ -522,18 +522,16 @@ public class Asset extends CurrikiDocument {
     }
 
     public FolderCompositeAsset makeFolder() throws XWikiException {
-        assertCanEdit();
-        FolderCompositeAsset asset = subclassAs(FolderCompositeAsset.class);
-
-        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"));
-        return asset;
+        return makeFolder(null);
     }
 
     public FolderCompositeAsset makeFolder(String page) throws XWikiException {
         assertCanEdit();
         FolderCompositeAsset asset = subclassAs(FolderCompositeAsset.class);
 
-        asset.addSubasset(page);
+        if (page != null) {
+            asset.addSubasset(page);
+        }
         saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"));
         return asset;
     }

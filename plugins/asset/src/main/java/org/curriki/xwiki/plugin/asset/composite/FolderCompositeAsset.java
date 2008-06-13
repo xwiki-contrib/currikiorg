@@ -63,75 +63,19 @@ public class FolderCompositeAsset extends CompositeAsset {
 
     public List<Map<String, Object>> getSubassetsInfo() {
         List objs = doc.getObjects(Constants.SUBASSET_CLASS);
-        List<Map<String,Object>> subList = new ArrayList<Map<String,Object>>(objs.size());
-        for (Object obj : objs){
-            if (obj instanceof BaseObject) {
-                BaseObject xObj = (BaseObject) obj;
 
-                String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+        if (objs != null ) {
+            List<Map<String,Object>> subList = new ArrayList<Map<String,Object>>(objs.size());
 
-                Map<String,Object> subInfo = new HashMap<String, Object>(6);
-                subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
-                subInfo.put(Constants.SUBASSET_CLASS_ORDER, xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER));
+            for (Object obj : objs) {
+                if (obj instanceof BaseObject) {
+                    BaseObject xObj = (BaseObject) obj;
 
-                com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
-                try {
-                    Document doc = xwikiApi.getDocument(subPage);
-                    if (doc instanceof Asset) {
-                        subInfo.put("displayTitle", doc.getDisplayTitle());
-                        subInfo.put("description", ((Asset) doc).getDescription());
-                        subInfo.put("assetType", ((Asset) doc).determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
-                        subInfo.put("rights", ((Asset) doc).getRightsList());
-                    } else if (doc == null) {
-                        // getDocument returns null if the page is not viewable by the user
-                        subInfo.put("displayTitle", "");
-                        subInfo.put("description", "");
-                        subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
-                        
-                        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
-                        rightsInfo.put("view", false);
-                        rightsInfo.put("edit", false);
-                        rightsInfo.put("delete", false);
-                        subInfo.put("rights", rightsInfo);
-                    }
-                } catch (Exception e) {
-                    subInfo.put("displayTitle", "");
-                    subInfo.put("description", "");
-                    subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
+                    String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
 
-                    Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
-                    rightsInfo.put("view", false);
-                    rightsInfo.put("edit", false);
-                    rightsInfo.put("delete", false);
-                    subInfo.put("rights", rightsInfo);
-                }
-
-                subList.add(subInfo);
-            }
-        }
-
-        Collections.sort(subList, new Comparator<Map<String,Object>>(){
-            public int compare(Map<String,Object> s1, Map<String,Object> s2){
-                return ((Long) s1.get(Constants.SUBASSET_CLASS_ORDER)).compareTo((Long) s2.get(Constants.SUBASSET_CLASS_ORDER));
-            }
-        });
-
-        return subList;
-    }
-
-    public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
-        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
-        Map<String,Object> subInfo = new HashMap<String, Object>(5);
-        for (Object obj : objs){
-            if (obj instanceof BaseObject) {
-                BaseObject xObj = (BaseObject) obj;
-
-                String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
-
-                Long order = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
-                if (order.equals(subassetId)) {
+                    Map<String,Object> subInfo = new HashMap<String, Object>(6);
                     subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
-                    subInfo.put(Constants.SUBASSET_CLASS_ORDER, order);
+                    subInfo.put(Constants.SUBASSET_CLASS_ORDER, xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER));
 
                     com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
                     try {
@@ -140,14 +84,79 @@ public class FolderCompositeAsset extends CompositeAsset {
                             subInfo.put("displayTitle", doc.getDisplayTitle());
                             subInfo.put("description", ((Asset) doc).getDescription());
                             subInfo.put("assetType", ((Asset) doc).determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
-                        } else {
-                            subInfo.put("error", "Subasset does not exist");
+                            subInfo.put("rights", ((Asset) doc).getRightsList());
+                        } else if (doc == null) {
+                            // getDocument returns null if the page is not viewable by the user
+                            subInfo.put("displayTitle", "");
+                            subInfo.put("description", "");
+                            subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
+
+                            Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
+                            rightsInfo.put("view", false);
+                            rightsInfo.put("edit", false);
+                            rightsInfo.put("delete", false);
+                            subInfo.put("rights", rightsInfo);
                         }
                     } catch (Exception e) {
-                        subInfo.put("error", "Subasset does not exist");
+                        subInfo.put("displayTitle", "");
+                        subInfo.put("description", "");
+                        subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
+
+                        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
+                        rightsInfo.put("view", false);
+                        rightsInfo.put("edit", false);
+                        rightsInfo.put("delete", false);
+                        subInfo.put("rights", rightsInfo);
                     }
 
-                    return subInfo;
+                    subList.add(subInfo);
+                }
+            }
+
+            Collections.sort(subList, new Comparator<Map<String,Object>>(){
+                public int compare(Map<String,Object> s1, Map<String,Object> s2){
+                    return ((Long) s1.get(Constants.SUBASSET_CLASS_ORDER)).compareTo((Long) s2.get(Constants.SUBASSET_CLASS_ORDER));
+                }
+            });
+
+            return subList;
+        }
+
+        return new ArrayList<Map<String,Object>>(1);
+    }
+
+    public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
+        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        Map<String,Object> subInfo = new HashMap<String, Object>(5);
+
+        if (objs != null) {
+            for (Object obj : objs){
+                if (obj instanceof BaseObject) {
+                    BaseObject xObj = (BaseObject) obj;
+
+                    String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+
+                    Long order = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    if (order.equals(subassetId)) {
+                        subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
+                        subInfo.put(Constants.SUBASSET_CLASS_ORDER, order);
+
+                        com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
+                        try {
+                            Document doc = xwikiApi.getDocument(subPage);
+                            if (doc instanceof Asset) {
+                                subInfo.put("displayTitle", doc.getDisplayTitle());
+                                subInfo.put("description", ((Asset) doc).getDescription());
+                                subInfo.put("assetType", ((Asset) doc).determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
+                            } else {
+                                subInfo.put("error", "Subasset does not exist");
+                            }
+                        } catch (Exception e) {
+                            subInfo.put("error", "Subasset does not exist");
+                        }
+
+                        return subInfo;
+                    }
                 }
             }
         }
@@ -162,12 +171,14 @@ public class FolderCompositeAsset extends CompositeAsset {
 
         List objs = doc.getObjects(Constants.SUBASSET_CLASS);
         Long beforePosition = null;
-        for (Object obj : objs) {
-            if (obj instanceof BaseObject) {
-                BaseObject xObj = (BaseObject) obj;
-                String objName = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
-                if (objName.equals(beforePage)){
-                    beforePosition = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+        if (objs != null) {
+            for (Object obj : objs) {
+                if (obj instanceof BaseObject) {
+                    BaseObject xObj = (BaseObject) obj;
+                    String objName = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+                    if (objName.equals(beforePage)){
+                        beforePosition = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    }
                 }
             }
         }
@@ -230,12 +241,14 @@ public class FolderCompositeAsset extends CompositeAsset {
     protected long getLastPosition(){
         List objs = doc.getObjects(Constants.SUBASSET_CLASS);
         long highestOrder = (long) -1;
-        for (Object obj : objs){
-            if (obj instanceof BaseObject) {
-                BaseObject xObj = (BaseObject) obj;
-                long objOrder = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
-                if (objOrder > highestOrder) {
-                    highestOrder = objOrder;
+        if (objs != null) {
+            for (Object obj : objs) {
+                if (obj instanceof BaseObject) {
+                    BaseObject xObj = (BaseObject) obj;
+                    long objOrder = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    if (objOrder > highestOrder) {
+                        highestOrder = objOrder;
+                    }
                 }
             }
         }

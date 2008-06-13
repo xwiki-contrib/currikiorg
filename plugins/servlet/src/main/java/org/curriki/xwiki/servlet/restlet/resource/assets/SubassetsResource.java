@@ -7,12 +7,14 @@ import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.data.Reference;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
 
 import java.util.Map;
 import java.util.List;
+import java.util.HashMap;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
@@ -63,8 +65,11 @@ public class SubassetsResource extends BaseResource {
         String page;
         try {
             page = json.getString("page");
+            if (page.equals("")){
+                page = null;
+            }
         } catch (JSONException e) {
-            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a page name.");
+            page = null;
         }
 
         Long order;
@@ -85,6 +90,10 @@ public class SubassetsResource extends BaseResource {
         }
 
         if (asset instanceof FolderCompositeAsset) {
+            if (page == null) {
+                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a page name.");
+            }
+
             try {
                 FolderCompositeAsset fAsset = asset.as(FolderCompositeAsset.class);
                 order = fAsset.insertSubassetAt(page, order);
@@ -102,6 +111,10 @@ public class SubassetsResource extends BaseResource {
             }
         }
 
-        getResponse().redirectSeeOther(getChildReference(getRequest().getResourceRef(), order.toString()));
+        if (page == null) {
+            getResponse().redirectSeeOther(getRequest().getResourceRef());
+        } else {
+            getResponse().redirectSeeOther(getChildReference(getRequest().getResourceRef(), order.toString()));
+        }
     }
 }

@@ -41,6 +41,7 @@ Curriki.module.addpath.init = function() {
 			entry_box.setDisabled(!checked);
 		}
 
+		Ext.getCmp(AddPath.AddSourceDialogueId).doLayout();
 		Ext.getCmp(AddPath.AddSourceDialogueId).syncShadow();
 	}
 
@@ -196,6 +197,7 @@ Curriki.module.addpath.init = function() {
 							,autoEl:{
 								 tag:'div'
 								,html:''
+								,height:'320px'
 							}
 						}]
 						,autoEl:{
@@ -300,6 +302,7 @@ Curriki.module.addpath.init = function() {
 							,autoEl:{
 								 tag:'div'
 								,html:''
+								,height:'320px'
 							}
 						}]
 						,autoEl:{
@@ -315,7 +318,6 @@ Curriki.module.addpath.init = function() {
 						,inputValue:'folder'
 						,boxLabel:_('add.contributemenu.option.folder')
 						,hidden:!this.toFolder
-						,hideLabel:!this.toFolder
 						,hideParent:true
 					}]
 				}]
@@ -1353,14 +1355,18 @@ console.log("Published CB: ", newAsset);
 	}
 
 	AddPath.CloseDone = function(dialog){
-		// TODO: We need to have this go back to where we came from
 		return {
 				 text:_('add.finalmessage.close.button')
 				,id:'closebutton'
 				,cls:'button cancel'
 				,listeners:{
 					'click':{
-						 fn:function(){this.close();}
+						 fn:function(e,evt){
+							this.close();
+							if (!Ext.isEmpty(Curriki.current.cameFrom)){
+								window.location.href=Curriki.current.cameFrom;
+							}
+						}
 						,scope:dialog
 					}
 				}
@@ -1863,9 +1869,6 @@ console.log('upload CB:', options, success, response);
 					Curriki.current.parentAsset,
 					function(asset){
 console.log("CreateAsset (video) CB: ", asset);
-						// Initial asset has been created
-						// 1. Add appropriate content (link, file, ...)
-						// 2. Go to next step
 						Curriki.current.asset = asset;
 
 						Curriki.assets.CreateVIDITalk(
@@ -1897,9 +1900,6 @@ console.log("Created viditalk CB: ", videoInfo);
 					Curriki.current.parentAsset,
 					function(asset){
 console.log("CreateAsset (link) CB: ", asset);
-						// Initial asset has been created
-						// 1. Add appropriate content (link, file, ...)
-						// 2. Go to next step
 						Curriki.current.asset = asset;
 
 						Curriki.assets.CreateExternal(
@@ -1943,6 +1943,34 @@ console.log("Created Link CB: ", linkInfo);
 				break;
 
 			case 'folder':
+				next = 'apSRI1';
+				Curriki.assets.CreateAsset(
+					Curriki.current.parentAsset,
+					function(asset){
+console.log("CreateAsset (folder) CB: ", asset);
+						Curriki.current.asset = asset;
+
+						Curriki.assets.CreateSubasset(
+							asset.assetPage,
+							'',
+							0,
+							function(assetInfo){
+console.log("Created Folder CB: ", assetInfo);
+								callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+								if (Curriki.current.parentAsset) {
+									// Get metadata if there was a parent asset
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
+										callback();
+									});
+								} else {
+									callback();
+								}
+							}
+						)
+					}
+				);
+				return;
 				break;
 
 			default:
@@ -1986,17 +2014,22 @@ console.log("Created Link CB: ", linkInfo);
 		}
 
 		// Defaults
-		Curriki.current.cameFrom = window.location.href;
-		Curriki.current.publishSpace = 'Coll_'+Curriki.data.user.me.username.replace(/.*\./, '');
+		if (Ext.isEmpty(Curriki.current.cameFrom)) {
+			Curriki.current.cameFrom = window.location.href;
+		}
+		if (Ext.isEmpty(Curriki.current.publishSpace)) {
+			Curriki.current.publishSpace = 'Coll_'+Curriki.data.user.me.username.replace(/XWiki\./, '');
+		}
 
 		switch (Curriki.current.flow){
 			case 'A':
 				break;
 
 			default:
-				// Follow "A" path
+//TODO: Remove later as it shouldn't occur
+				// Sample Follows "A" path
 				Curriki.current.flow = 'A';
-				Curriki.ui.show('apSource');
+				Curriki.ui.show('apSource', {toFolder:true});
 				break;
 		}
 	}
