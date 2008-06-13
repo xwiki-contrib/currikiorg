@@ -14,6 +14,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,width:634
 	,minWidth:400
 	,minHeight:100
+	,constrain:true
 	,autoScroll:true
 	,collapsible:false
 	,closable:false

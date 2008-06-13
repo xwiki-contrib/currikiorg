@@ -49,8 +49,7 @@ Curriki.module.addpath.init = function() {
 	AddPath.AddSource = Ext.extend(Curriki.ui.dialog.Actions, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.contributemenu.title_addto_'+(this.toFolder?'composite':'site'))
+				 title:_('add.contributemenu.title_addto_'+(this.toFolder?'composite':'site'))
 				,cls:'resource resource-add'
 				,id:AddPath.AddSourceDialogueId
 				,items:[{
@@ -58,6 +57,8 @@ Curriki.module.addpath.init = function() {
 					,id:'addDialoguePanel'
 					,formId:'addDialogueForm'
 					,labelWidth:25
+					,autoScroll:true
+					,border:false
 					,defaults:{
 						 labelSeparator:''
 						,hideLabel:true
@@ -381,7 +382,6 @@ Curriki.module.addpath.init = function() {
 		  initComponent:function(){
 			Ext.apply(this, {
 				 id:'SelectTemplateDialogueWindow'
-				,closeAction:'hide'
 				,title:_('add.selecttemplate.title')
 				,cls:'resource resource-add'
 				,items:[{
@@ -389,6 +389,8 @@ Curriki.module.addpath.init = function() {
 					,id:'SelectTemplateDialoguePanel'
 					,formId:'SelectTemplateDialogueForm'
 					,labelWidth:25
+					,autoScroll:true
+					,border:false
 					,defaults:{
 						 labelSeparator:''
 					}
@@ -474,14 +476,15 @@ Curriki.module.addpath.init = function() {
 	AddPath.Metadata1 = Ext.extend(Curriki.ui.dialog.Actions, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.setrequiredinfo.part1.title')
+				 title:_('add.setrequiredinfo.part1.title')
 				,cls:'resource resource-add'
 				,items:[{
 					 xtype:'form'
 					,id:'MetadataDialoguePanel'
 					,formId:'MetadataDialogueForm'
 					,labelWidth:25
+					,autoScroll:true
+					,border:false
 					,defaults:{
 						 labelSeparator:''
 					}
@@ -524,6 +527,25 @@ Curriki.module.addpath.init = function() {
 								AddPath.EnableNext();
 							} else {
 								AddPath.DisableNext();
+							}
+							// TODO: This should be elsewhere -- but which event?
+							if (Ext.isEmpty(Curriki.current.sri1fillin)) {
+								if (!Ext.isEmpty(Curriki.current.metadata)) {
+									var md = Curriki.current.metadata;
+
+									if (!Ext.isEmpty(md.fw_items) && Ext.isArray(md.fw_items)){
+										md.fw_items.each(function(fw_item){
+											Ext.getCmp('fw_items-tree').getNodeById(fw_item).getUI().toggleCheck(true);
+										});
+									}
+
+									if (!Ext.isEmpty(md.educational_level2) && Ext.isArray(md.educational_level2)){
+										md.educational_level2.each(function(el){
+											Ext.getCmp(Ext.select('input[type="checkbox"][name="educational_level2"][value="'+el+'"]').first().dom.id).setValue(true);
+										});
+									}
+								}
+								Curriki.current.sri1fillin = true;
 							}
 						}
 					}
@@ -838,7 +860,6 @@ Curriki.module.addpath.init = function() {
 		  initComponent:function(){
 			Ext.apply(this, {
 				 id:'MetadataDialogueWindow'
-				,closeAction:'hide'
 				,title:_('add.setrequiredinfo.part2.title')
 				,cls:'resource resource-add'
 				,items:[{
@@ -846,6 +867,8 @@ Curriki.module.addpath.init = function() {
 					,id:'MetadataDialoguePanel'
 					,formId:'MetadataDialogueForm'
 					,labelWidth:25
+					,autoScroll:true
+					,border:false
 					,defaults:{
 						 labelSeparator:''
 					}
@@ -884,6 +907,32 @@ Curriki.module.addpath.init = function() {
 								AddPath.EnableNext();
 							} else {
 								AddPath.DisableNext();
+							}
+							// TODO: This should be elsewhere -- but which event?
+							if (Ext.isEmpty(Curriki.current.sri2fillin)) {
+								if (!Ext.isEmpty(Curriki.current.metadata)) {
+									var md = Curriki.current.metadata;
+
+									if (!Ext.isEmpty(md.rights)){
+										Ext.getCmp(Ext.select('input[type="radio"][name="rights"][value="'+md.rights+'"]').first().dom.id).setValue(true);
+									}
+
+									if (!Ext.isEmpty(md.keywords)){
+										if (Ext.isArray(md.keywords)){
+											md.keywords = md.keywords.join(' ');
+										}
+										Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
+									}
+
+									if (!Ext.isEmpty(md.licenseType2)){
+										Ext.getCmp('metadata-license_type-entry').setValue(md.licenseType2);
+									}
+
+									if (!Ext.isEmpty(md.rightsHolder)){
+										Ext.getCmp('metadata-right_holder-entry').setValue(md.rightsHolder);
+									}
+								}
+								Curriki.current.sri2fillin = true;
 							}
 						}
 					}
@@ -1321,8 +1370,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneA = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_resource')
+				 title:_('add.finalmessage.title_resource')
 				,cls:'resource resource-add'
 				,bbar:[
 					 AddPath.FinalLink('view'),'-'
@@ -1345,8 +1393,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneC = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_collection')
+				 title:_('add.finalmessage.title_collection')
 				,cls:'resource resource-add'
 				,bbar:[
 					 AddPath.FinalLink('openbuilder'),'-'
@@ -1366,8 +1413,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneE = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_successful')
+				 title:_('add.finalmessage.title_successful')
 				,cls:'resource resource-add'
 				,bbar:[
 					 AddPath.FinalLink('viewtarget'),'->'
@@ -1389,8 +1435,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneF = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_successful')
+				 title:_('add.finalmessage.title_successful')
 				,cls:'resource resource-add'
 				,bbar:[
 					'->',AddPath.CloseDone(this)
@@ -1412,8 +1457,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneFFolder = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_folder')
+				 title:_('add.finalmessage.title_folder')
 				,cls:'resource resource-add'
 				,bbar:[
 					 '->',AddPath.FinalLink('continue')
@@ -1434,8 +1478,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneG = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_folder')
+				 title:_('add.finalmessage.title_folder')
 				,cls:'resource resource-add'
 				,bbar:[
 					 AddPath.FinalLink('favorites'),'->'
@@ -1453,8 +1496,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneK = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_collection')
+				 title:_('add.finalmessage.title_collection')
 				,cls:'resource resource-add'
 				,bbar:[
 					 '->',AddPath.FinalLink('continue')
@@ -1472,8 +1514,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneM = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_collection')
+				 title:_('add.finalmessage.title_collection')
 				,cls:'resource resource-add'
 				,bbar:[
 					 '->',AddPath.FinalLink('continue')
@@ -1491,8 +1532,7 @@ console.log("Published CB: ", newAsset);
 	AddPath.DoneI = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
 			Ext.apply(this, {
-				 closeAction:'hide'
-				,title:_('add.finalmessage.title_resource')
+				 title:_('add.finalmessage.title_resource')
 				,cls:'resource resource-add'
 				,bbar:[
 					 AddPath.FinalLink('view'),'-'
@@ -1527,7 +1567,6 @@ console.log("Published CB: ", newAsset);
 		  initComponent:function(){
 			Ext.apply(this, {
 				 id:'ChooseLocationDialogueWindow'
-				,closeAction:'hide'
 				,title:_('add.chooselocation.title')
 				,cls:'resource resource-add'
 				,items:[{
@@ -1535,6 +1574,8 @@ console.log("Published CB: ", newAsset);
 					,id:'ChooseLocationDialoguePanel'
 					,formId:'ChooseLocationDialogueForm'
 					,labelWidth:25
+					,autoScroll:true
+					,border:false
 					,defaults:{
 						 labelSeparator:''
 					}
@@ -1760,10 +1801,6 @@ console.log("Published CB: ", newAsset);
 				}
 				,callback:function(options, success, response){
 console.log('upload CB:', options, success, response);
-					var sourceDlg = Ext.getCmp(AddPath.AddSourceDialogueId);
-					if (sourceDlg){
-						sourceDlg.close();
-					}
 					callback();
 				}
 			});
@@ -1803,7 +1840,16 @@ console.log('upload CB:', options, success, response);
 				Curriki.current.fileName = allValues['filename'];
 				next = 'apSRI1';
 				AddPath.PostFile(function(){
-					AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);
+					callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+					if (Curriki.current.parentAsset) {
+						// Get metadata if there was a parent asset
+						Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+							Curriki.current.metadata = metadata;
+							callback();
+						});
+					} else {
+						callback();
+					}
 				});
 				return;
 				break;
@@ -1827,7 +1873,16 @@ console.log("CreateAsset (video) CB: ", asset);
 							Curriki.current.videoId,
 							function(videoInfo){
 console.log("Created viditalk CB: ", videoInfo);
-								AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);
+								callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+								if (Curriki.current.parentAsset) {
+									// Get metadata if there was a parent asset
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
+										callback();
+									});
+								} else {
+									callback();
+								}
 							}
 						)
 					}
@@ -1852,7 +1907,16 @@ console.log("CreateAsset (link) CB: ", asset);
 							Curriki.current.linkUrl,
 							function(linkInfo){
 console.log("Created Link CB: ", linkInfo);
-								AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);
+								callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+								if (Curriki.current.parentAsset) {
+									// Get metadata if there was a parent asset
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
+										callback();
+									});
+								} else {
+									callback();
+								}
 							}
 						)
 					}
@@ -1861,6 +1925,7 @@ console.log("Created Link CB: ", linkInfo);
 				break;
 
 			case 'repository':
+				// TODO: This has deferred out of EOU1
 				break;
 
 			case 'template':
@@ -1951,6 +2016,7 @@ Curriki.current = {
 			,cameFrom:null
 			,flow:null
 			,asset:null
+			,metadata:null
 
 			,selected:null
 			,fileName:null
@@ -1958,7 +2024,8 @@ Curriki.current = {
 			,linkUrl:null
 
 			,sri1:null
-			,sri2:null
+			,sri1fillin:null
+			,sri2fillin:null
 
 			,submitToTemplate:null
 

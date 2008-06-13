@@ -10,6 +10,7 @@ Ext.Ajax.defaultHeaders = {
 };
 Ext.Ajax.disableCaching=false;
 
+
 try {
 	console.log('init');
 } catch(e) {
@@ -48,6 +49,15 @@ function initLoader() {
 */
 
 Ext.ns('Curriki');
+
+Ext.onReady(function(){
+	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
+
+    Ext.Ajax.on('beforerequest', function(){Curriki.loadingMask.enable();Curriki.loadingMask.show();});
+    Ext.Ajax.on('requestcomplete', function(){Curriki.loadingMask.hide();Curriki.loadingMask.disable();});
+    Ext.Ajax.on('requestexception', function(){Curriki.loadingMask.hide();Curriki.loadingMask.disable();});
+});
+
 
 Ext.ns('Curriki.fn');
 Curriki.fn.id = function(prefix){
