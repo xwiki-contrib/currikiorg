@@ -1737,7 +1737,7 @@ console.log("Published CB: ", newAsset);
 									 text:(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle||'UNKNOWN'
 									,id:'ctv-target-node'
 									,assetName:(Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName
-									,cls:'ctv-target ctv-resource resource-'+(Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN'
+									,cls:'ctv-target ctv-resource resource-'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')
 									,leaf:true
 									,loaded:true
 								}]
@@ -2218,15 +2218,16 @@ Curriki.module.addpath.startPath = function(path, options){
 	// parentTitle needs to be passed for E, H, J, P, F, N, and L
 	// assetTitle needs to be passed for E, H, J, P (known asset)
 
+	var current = Curriki.current;
 	if (!Ext.isEmpty(options)){
-		Curriki.current.assetName = options.assetName||null;
-		Curriki.current.parentAsset = options.parentAsset||null;
-		Curriki.current.publishSpace = options.publishSpace||null;
-		Curriki.current.cameFrom = options.cameFrom||null;
+		current.assetName = options.assetName||null;
+		current.parentAsset = options.parentAsset||null;
+		current.publishSpace = options.publishSpace||null;
+		current.cameFrom = options.cameFrom||null;
 
-		Curriki.current.assetTitle = options.assetTitle||null;
-		Curriki.current.assetType = options.assetType||null;
-		Curriki.current.parentTitle = options.parentTitle||null;
+		current.assetTitle = options.assetTitle||null;
+		current.assetType = options.assetType||null;
+		current.parentTitle = options.parentTitle||null;
 	}
 
 	Curriki.init(function(){
@@ -2239,7 +2240,45 @@ Curriki.module.addpath.startPath = function(path, options){
 			Curriki.module.addpath.init();
 		}
 
-		Curriki.module.addpath.start(path);
+		var startFn = function(){
+			Curriki.module.addpath.start(path);
+		}
+
+		var parentFn;
+		if (!Ext.isEmpty(current.parentAsset)
+		    && Ext.isEmpty(current.parentTitle)) {
+			// Get parent asset info
+			parentFn = function(){
+				Curriki.assets.GetAssetInfo(current.parentAsset, function(info){
+					Curriki.current.parentTitle = info.title;
+					startFn();
+				});
+			}
+		} else {
+			parentFn = function(){
+				startFn();
+			};
+		}
+
+		var currentFn;
+		if (!Ext.isEmpty(current.assetName)
+		    && (Ext.isEmpty(current.assetTitle)
+		        || Ext.isEmpty(current.assetType))) {
+			// Get asset info
+			currentFn = function(){
+				Curriki.assets.GetAssetInfo(current.assetName, function(info){
+					Curriki.current.assetTitle = info.title;
+					Curriki.current.assetType = info.assetType;
+					parentFn();
+				});
+			}
+		} else {
+			currentFn = function(){
+				parentFn();
+			};
+		}
+
+		currentFn();
 	});
 }
 

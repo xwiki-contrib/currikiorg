@@ -31,6 +31,30 @@ Curriki.assets = {
 			}
 		});
 	}
+	,GetAssetInfo:function(assetPage, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage
+			,method:'GET'
+			,headers: {
+				'Accept':'application/json'
+			}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object with metadata
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot get resource metadata');
+					throw {message: "CreateAsset: Json object not found"};
+				}
+				callback(o);
+			}
+			,failure:function(options){
+				console.error('Cannot get resource metadata', options);
+				throw {message: "Server Error: Cannot get resource metadata."};
+			}
+		});
+	}
 	,GetMetadata:function(assetPage, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/metadata'
