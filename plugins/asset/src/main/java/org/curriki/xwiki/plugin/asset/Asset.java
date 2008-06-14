@@ -348,26 +348,6 @@ public class Asset extends CurrikiDocument {
         }
     }
 
-    static public boolean isRootCollectionExists(String space, XWikiContext context) {
-        try {
-            Asset collection = Asset.fetchAsset(space, Constants.ROOT_COLLECTION_PAGE, context);
-
-            return collection.isRootCollection();
-        } catch (XWikiException e) {
-            return false;
-        }
-    }
-
-    static public boolean isFavoritesCollectionExists(String space, XWikiContext context) {
-        try {
-            Asset collection = Asset.fetchAsset(space, Constants.FAVORITES_COLLECTION_PAGE, context);
-
-            return collection.isCollection();
-        } catch (XWikiException e) {
-            return false;
-        }
-    }
-
     public List<Property> getMetadata() {
         List<Property> md = new ArrayList<Property>();
 
@@ -591,6 +571,8 @@ public class Asset extends CurrikiDocument {
         if (!validate()) {
             throw new AssetException("Validation failed.");
         }
+
+        CollectionSpace.ensureExists(space, context);
 
         // Let's choose a nice name for the page
         String prettyName = context.getWiki().clearName(doc.getStringValue(Constants.ASSET_CLASS_TITLE), true, true, context);

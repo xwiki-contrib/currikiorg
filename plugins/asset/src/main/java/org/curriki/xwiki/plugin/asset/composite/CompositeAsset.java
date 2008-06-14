@@ -18,6 +18,13 @@ abstract class CompositeAsset extends Asset {
         super.initSubType();
         BaseObject obj = doc.newObject(Constants.COMPOSITE_ASSET_CLASS, context);
         obj.setStringValue(Constants.COMPOSITE_ASSET_CLASS_TYPE, compositeAssetType());
+
+        setDefaultContent();
+    }
+
+    protected void setDefaultContent() throws XWikiException {
+        assertCanEdit();
+        doc.setContent(Constants.COMPOSITE_ASSET_COMPOSITE_CONTENT);
     }
 
     abstract protected String compositeAssetType();

@@ -86,6 +86,8 @@ public interface Constants {
     String COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER = "curriki_document";
     String COMPOSITE_ASSET_CLASS_TYPE_COLLECTION = "collection";
     String COMPOSITE_ASSET_CLASS_TYPE_ROOT_COLLECTION = "root_collection";
+    String COMPOSITE_ASSET_COMPOSITE_CONTENT = "#includeForm(\"XWiki.CompositeAssetTemplate\")";
+    String COMPOSITE_ASSET_ROOT_COLLECTION_CONTENT = "#includeForm(\"XWiki.MyCollectionsTemplate\")";
 
     String SUBASSET_CLASS = "XWiki.SubAssetClass";
     String SUBASSET_CLASS_PAGE = "assetpage";
@@ -130,5 +132,5 @@ public interface Constants {
      */
     String GROUP_SPACE_PREFIX = "Group_";
     String GROUP_COLLECTION_PREFIX_SPACE_PREFIX = COLLECTION_PREFIX;
-    String GROUP_COLLECTION_SPACE_PREFIX = GROUP_COLLECTION_PREFIX_SPACE_PREFIX +GROUP_SPACE_PREFIX;
+    String GROUP_COLLECTION_SPACE_PREFIX = GROUP_COLLECTION_PREFIX_SPACE_PREFIX + GROUP_SPACE_PREFIX;
 }

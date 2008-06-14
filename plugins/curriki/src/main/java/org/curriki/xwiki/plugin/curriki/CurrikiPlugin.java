@@ -14,6 +14,7 @@ import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
 import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.CollectionSpace;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 
@@ -108,12 +109,19 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
    public List<String> fetchUserCollectionsList(String forUser, XWikiContext context) {
         String shortName = forUser.replaceFirst("XWiki.", "");
 
+        try {
+            CollectionSpace.ensureExists("Coll_"+shortName, context);
+        } catch (XWikiException e) {
+            // Ignore any error, will just return 0 results
+        }
+
         String qry = ", BaseObject as obj, StringProperty as props "
             + "where obj.id=props.id.id and doc.fullName=obj.name "
             + "and obj.className='"+ Constants.COMPOSITE_ASSET_CLASS+"' "
             + "and doc.creator=? "
             + "and doc.web=? "
-            + "and doc.name != '"+ Constants.FAVORITES_COLLECTION_NAME+"' "
+            + "and doc.name != '"+ Constants.FAVORITES_COLLECTION_PAGE+"' "
+            + "and doc.name != '"+ Constants.ROOT_COLLECTION_PAGE+"' "
             + "and props.id.name='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE+"' "
             + "and props.value='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE_COLLECTION+"' "
             + "order by doc.name";
@@ -202,10 +210,17 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     public List<String> fetchGroupCollectionsList(String forGroup, XWikiContext context) {
         String shortName = forGroup.replaceFirst(".WebHome$", "");
 
+        try {
+            CollectionSpace.ensureExists("Coll_"+shortName, context);
+        } catch (XWikiException e) {
+            // Ignore any error, will just return 0 results
+        }
+
         String qry = ", BaseObject as obj, StringProperty as props "
             + "where obj.id=props.id.id and doc.fullName=obj.name "
             + "and obj.className='"+ Constants.COMPOSITE_ASSET_CLASS+"' "
             + "and doc.web=? "
+            + "and doc.name != '"+ Constants.ROOT_COLLECTION_PAGE+"' "
             + "and props.id.name='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE+"' "
             + "and props.value='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE_COLLECTION+"' "
             + "order by doc.date desc";
