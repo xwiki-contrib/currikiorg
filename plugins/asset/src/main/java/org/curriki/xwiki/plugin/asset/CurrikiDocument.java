@@ -18,7 +18,7 @@ public class CurrikiDocument extends Document {
     }
 
     protected void assertCanEdit() throws XWikiException {
-        if (isNew() && Constants.ASSET_TEMPORARY_SPACE.equals(getSpace())) {
+        if (!Constants.GUEST_USER.equals(context.getUser()) && isNew() && Constants.ASSET_TEMPORARY_SPACE.equals(getSpace())) {
             // Allow access to temporary documents (so that they can be created in the ASSET_TEMPORARY_SPACE)
             return;
         }

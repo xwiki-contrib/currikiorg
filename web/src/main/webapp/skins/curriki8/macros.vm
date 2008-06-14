@@ -1183,16 +1183,33 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 ##
 ##
 #macro(displaylinks $asset)
- #if($asset.hasAccessLevel("edit"))
-  #if($asset.getObject("XWiki.CompositeAssetClass"))
-   <a href="javascript:addFileToCollection2('$xwiki.escapeURL($asset.fullName)');">$msg.get("caption.addResourceToThisCollection")</a>
-   #sep()
-  #end
- #end
- #if(($asset.hasAccessLevel("view"))&&($context.user!="XWiki.XWikiGuest"))
-  <a href="javascript:addExistingResource2('$xwiki.escapeURL($asset.fullName)');">$msg.get("caption.addToCollection")</a>
+ #checkForCollections()
+ #escapeForJS($asset.fullName)
+ #set($escapedFullName = $ret_escaped)
+ #findCurrikiTitle($asset)
+ #escapeForJS($currikiTitle)
+ #set($escapedTitle = $ret_escaped)
+## Favorite
+ #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
+   <a href="javascript:Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
   #sep()
- #end
+ #end ##}
+## Add
+ #if($g_userHasCollections)##{
+{pre}
+   <a href="javascript:Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+{/pre}
+   #sep()
+ #end##}
+## Build Up
+ #if($asset.hasAccessLevel("edit")) ##{
+  #if($asset.getObject("XWiki.CompositeAssetClass")) ##{
+{pre}
+   <a href="javascript:Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+{/pre}
+   #sep()
+  #end ##}
+ #end ##}
  #if($asset.hasAccessLevel("view"))
   <a href="$asset.getURL("view", "viewer=print")" onclick="window.open('$asset.getURL("view", "viewer=print")');return false;">$msg.get("caption.print")</a>
  #end
@@ -4016,3 +4033,36 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
   #end ## }
 #end ##}
 ## End pageTitle
+
+## From Add Path spec in EOU1
+##
+
+## Check for editable collections (to know if we can show 'Add'
+#macro(checkForCollections) ##{
+#if("$!g_checkedForCollections" == "") ##{
+#set($g_userHasCollections = false)
+#set($g_checkedForCollections = true)
+#set($m_userColls = $xwiki.curriki.fetchUserCollectionsList())
+#if($m_userColls.size() > 0) ##{
+#set($g_userHasCollections = true)
+#end# ##}
+#if(!$g_userHasCollections) ##{
+#set($m_grpEditCount = 0)
+#set($m_userGroups = $xwiki.curriki.fetchUserGroups())
+#foreach($grp in $m_userGroups.keySet()) ##{
+#set($m_groupEditable = $m_userGroups.get($grp).get('editableCollectionCount'))
+#set($m_grpEditCount = $m_grpEditCount + $m_groupEditable)
+#end ##}
+#if($m_grpEditCount > 0) ##{
+#set($g_userHasCollections = true)
+#end ##}
+#end ##}
+#end ##}
+#end ##}
+
+#macro(escapeForJS $value) ##{
+#set($ret_escaped = $value.replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+#end ##}
+
+##
+## End of add from Add Path spec in EOU1

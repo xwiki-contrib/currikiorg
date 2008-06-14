@@ -33,12 +33,24 @@ public class CurrikiPluginApi extends Api {
    }
     */
 
+    public List<String> fetchUserCollectionsList() {
+        return plugin.fetchUserCollectionsList(context.getUser(), context);
+    }
+
     public List<String> fetchUserCollectionsList(String forUser) {
         return plugin.fetchUserCollectionsList(forUser, context);
     }
 
+    public Map<String,Object> fetchUserCollectionsInfo() {
+        return plugin.fetchUserCollectionsInfo(context.getUser(), context);
+    }
+
     public Map<String,Object> fetchUserCollectionsInfo(String forUser) {
         return plugin.fetchUserCollectionsInfo(forUser, context);
+    }
+
+    public Map<String,Object> fetchUserGroups() {
+        return plugin.fetchUserGroups(context.getUser(), context);
     }
 
     public Map<String,Object> fetchUserGroups(String forUser) {

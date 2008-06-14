@@ -1275,7 +1275,16 @@ console.log("Published CB: ", newAsset);
 						Curriki.current.asset.title = newAsset.title;
 						Curriki.current.asset.description = newAsset.description;
 
-						AddPath.ShowDone();
+						if (Curriki.current.parentAsset){
+							Curriki.assets.CreateSubasset(
+								 Curriki.current.parentAsset
+								,Curriki.current.assetName
+								,-1
+								,AddPath.ShowDone()
+							);
+						} else {
+							AddPath.ShowDone();
+						}
 					}
 				)
 			}
@@ -1309,14 +1318,14 @@ console.log("Published CB: ", newAsset);
 				break;
 
 			case 'add':
-				// TODO:  ONLY show if the user has a collection to add to
-				// TODO:  is like starting from add path entry point E, J, or P (and sort of H)
-				// TODO:  Final message for add is per E
+				// Is like starting from add path entry point E, J, or P (and sort of H)
+				// Final message for add is per E
 
 				// Start Content Tree View screen
 				if (Curriki.data.user.collectionChildren.length > 0
 				    || Curriki.data.user.groupChildren.length > 0){
 					handler = function(e,evt){
+						Curriki.current.flow = 'E';
 						Curriki.ui.show('apLocation');
 						var sourceDlg = Ext.getCmp('done-dialogue');
 						if (sourceDlg){
@@ -1390,11 +1399,19 @@ console.log("Published CB: ", newAsset);
 					Curriki.current.assetTitle||Curriki.current.sri1.title||'UNKNOWN'
 					,Curriki.current.parentTitle
 				];
-				msg = _('add.finalmessage.text_'+name+'_success');
+				msg = '<p>'+_('add.finalmessage.text_'+name+'_success')+'</p>';
 				break;
 
 			default:
-				msg = _('add.finalmessage.text_'+name+'_success');
+				msg = '<p>'+_('add.finalmessage.text_'+name+'_success')+'</p>';
+				break;
+		}
+
+		switch(Curriki.current.flow){
+			case 'K':
+			case 'M':
+				msg += '<p>'+_('add.finalmessage.text_'+name+'_tip1')+'</p>';
+				msg += '<p>'+_('add.finalmessage.text_'+name+'_tip2')+'</p>';
 				break;
 		}
 
@@ -1480,7 +1497,7 @@ console.log("Published CB: ", newAsset);
 					,AddPath.CloseDone(this)
 				]
 				,items:[
-// TODO: This needs arguments for "added {0} into {1}"
+					// This needs arguments for "added {0} into {1}"
 					 AddPath.DoneMessage('addto')
 				]
 			});
@@ -1502,7 +1519,7 @@ console.log("Published CB: ", newAsset);
 					'->',AddPath.CloseDone(this)
 				]
 				,items:[
-// TODO: This needs arguments for "added {0} into {1}"
+					// This needs arguments for "added {0} into {1}"
 					 AddPath.DoneMessage('addto')
 				]
 			});
@@ -1512,8 +1529,6 @@ console.log("Published CB: ", newAsset);
 	Ext.reg('apDoneF', AddPath.DoneF);
 	Ext.reg('apDoneN', AddPath.DoneF);
 	Ext.reg('apDoneL', AddPath.DoneF);
-
-	// TODO: F, N, and L alternate here
 
 	AddPath.DoneFFolder = Ext.extend(Curriki.ui.dialog.Messages, {
 		  initComponent:function(){
@@ -1526,7 +1541,7 @@ console.log("Published CB: ", newAsset);
 					,AddPath.CloseDone(this)
 				]
 				,items:[
-// TODO: This needs arguments for "added {0} into {1}"
+					// This needs arguments for "added {0} into {1}"
 					 AddPath.DoneMessage('addto_folder')
 				]
 			});
@@ -1566,7 +1581,6 @@ console.log("Published CB: ", newAsset);
 				]
 				,items:[
 					 AddPath.DoneMessage('collection')
-//TODO: Need to add collection_tip1 and 2 here
 				]
 			});
 			AddPath.DoneK.superclass.initComponent.call(this);
@@ -1584,7 +1598,6 @@ console.log("Published CB: ", newAsset);
 				]
 				,items:[
 					 AddPath.DoneMessage('groupcollection')
-//TODO: Need to add groupcollection_tip1 and 2 here
 				]
 			});
 			AddPath.DoneM.superclass.initComponent.call(this);
@@ -1688,7 +1701,7 @@ console.log("Published CB: ", newAsset);
 							,cls:'instruction'
 						}
 
-	// TODO: DRAG BOX
+	// DRAG BOX
 					},{
 						 xtype:'container'
 						,id:'resource-pickup'
@@ -1721,10 +1734,10 @@ console.log("Published CB: ", newAsset);
 								,loaded:true
 								,expanded:true
 								,children:[{
-									 text:Curriki.current.asset.title
+									 text:(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle||'UNKNOWN'
 									,id:'ctv-target-node'
-									,assetName:Curriki.current.asset.assetPage
-									,cls:'ctv-target ctv-resource resource-'+Curriki.current.asset.assetType
+									,assetName:(Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName
+									,cls:'ctv-target ctv-resource resource-'+(Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN'
 									,leaf:true
 									,loaded:true
 								}]
@@ -1736,7 +1749,7 @@ console.log("Published CB: ", newAsset);
 							,html:''
 						}
 
-	// TODO: DROP TREE
+	// DROP TREE
 					},{
 						 xtype:'container'
 						,id:'resource-drop'
@@ -1885,7 +1898,7 @@ console.log('upload CB:', options, success, response);
 
 	AddPath.AddFavorite = function(callback){
 		Curriki.assets.CreateSubasset(
-			Curriki.current.parentAsset
+			'Coll_'+Curriki.data.user.me.username.replace('XWiki.', '')+'.Favorites'
 			,Curriki.current.assetName
 			,-1
 			,function(){
@@ -2105,11 +2118,13 @@ console.log("Created Collection CB: ", assetInfo);
 // 15. Build up (group collections) - like #7 but groups
 // 16. Add a resource (view all group contributions) - like #1 but groups
 // 17. Add (view all group contributions) - like #6 but groups
-//
+
+console.log('Starting path: ', path);
 
 		// This should already have been handled, but do a simple test here
 		if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
-			alert(_('createresources.needaccount', '/xwiki/bin/login/XWiki/XWikiLogin'));
+console.log('Not signed in:');
+			window.location.href='/xwiki/bin/login/XWiki/XWikiLogin?xredirect='+window.location.href;
 			return;
 		}
 
@@ -2169,8 +2184,10 @@ console.log("Created Collection CB: ", assetInfo);
 			case 'H': // Add in MyCurriki Favorites
 			case 'J': // Add in MyCurriki Contributions
 			case 'P': // Add in Group Curriculum View All Contributions
-				// Need titles for new and parent assets in Done Msg
+				// Need titles for current and parent assets in Done Msg
+				// We should be getting the current one passed in
 				// Shows CTV
+console.log('Starting path:', Curriki.current.flow);
 				Curriki.ui.show('apLocation');
 				return;
 				break;
@@ -2191,13 +2208,6 @@ console.log("Created Collection CB: ", assetInfo);
 				Curriki.ui.show('apSource', {toFolder:true});
 				return;
 				break;
-
-			default:
-//TODO: Remove later as it shouldn't occur
-				// Sample Follows "A" path with folder info
-				Curriki.current.flow = 'A';
-				Curriki.ui.show('apSource', {toFolder:true});
-				break;
 		}
 	}
 
@@ -2215,10 +2225,16 @@ Curriki.module.addpath.startPath = function(path, options){
 		Curriki.current.cameFrom = options.cameFrom||null;
 
 		Curriki.current.assetTitle = options.assetTitle||null;
+		Curriki.current.assetType = options.assetType||null;
 		Curriki.current.parentTitle = options.parentTitle||null;
 	}
 
 	Curriki.init(function(){
+		if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
+			window.location.href='/xwiki/bin/login/XWiki/XWikiLogin?xredirect='+window.location.href;
+			return;
+		}
+
 		if (Ext.isEmpty(Curriki.module.addpath.initialized)) {
 			Curriki.module.addpath.init();
 		}
@@ -2242,6 +2258,7 @@ Curriki.current = {
 			,flowFolder:''
 
 			,assetTitle:null
+			,assetType:null
 			,parentTitle:null
 
 			,asset:null
