@@ -72,17 +72,8 @@ public class CollectionSpace {
 
     public boolean isRootCollectionExists() {
         String rootPage = spaceName+"."+Constants.ROOT_COLLECTION_PAGE;
-        if (!context.getWiki().exists(rootPage, context)){
-            return false;
-        }
 
-        try {
-            Asset collection = Asset.fetchAsset(spaceName, Constants.ROOT_COLLECTION_PAGE, context);
-
-            return collection.isRootCollection();
-        } catch (XWikiException e) {
-            return false;
-        }
+        return context.getWiki().exists(rootPage, context);
     }
 
     protected void createRootCollection() throws XWikiException {
@@ -110,17 +101,8 @@ public class CollectionSpace {
 
     public boolean isFavoritesCollectionExists() {
         String favPage = spaceName+"."+Constants.FAVORITES_COLLECTION_PAGE;
-        if (!context.getWiki().exists(favPage, context)){
-            return false;
-        }
 
-        try {
-            Asset collection = Asset.fetchAsset(spaceName, Constants.FAVORITES_COLLECTION_PAGE, context);
-
-            return collection.isCollection();
-        } catch (XWikiException e) {
-            return false;
-        }
+        return context.getWiki().exists(favPage, context);
     }
 
     protected void createFavoritesCollection() throws XWikiException {
