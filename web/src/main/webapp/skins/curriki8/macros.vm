@@ -1191,13 +1191,15 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
  #set($escapedTitle = $ret_escaped)
 ## Favorite
  #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
-   <a href="javascript:Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
+{pre}
+   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
+{/pre}
   #sep()
  #end ##}
 ## Add
  #if($g_userHasCollections)##{
 {pre}
-   <a href="javascript:Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
 {/pre}
    #sep()
  #end##}
@@ -1205,7 +1207,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
  #if($asset.hasAccessLevel("edit")) ##{
   #if($asset.getObject("XWiki.CompositeAssetClass")) ##{
 {pre}
-   <a href="javascript:Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
 {/pre}
    #sep()
   #end ##}
@@ -4045,7 +4047,7 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 #set($m_userColls = $xwiki.curriki.fetchUserCollectionsList())
 #if($m_userColls.size() > 0) ##{
 #set($g_userHasCollections = true)
-#end# ##}
+#end ##}
 #if(!$g_userHasCollections) ##{
 #set($m_grpEditCount = 0)
 #set($m_userGroups = $xwiki.curriki.fetchUserGroups())
