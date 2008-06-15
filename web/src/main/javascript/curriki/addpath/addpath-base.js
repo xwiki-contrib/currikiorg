@@ -54,9 +54,23 @@ Curriki.module.addpath.init = function(){
 				,cls:'resource resource-add'
 				,id:AddPath.AddSourceDialogueId
 				,items:[{
+					 xtype:'panel'
+					,cls:'guidingquestion-container'
+					,items:[{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:this.toFolder
+								?_('add.contributemenu.guidingquestion_addto_composite', this.folderName)
+								:_('add.contributemenu.guidingquestion_addto_site')
+							,cls:'guidingquestion'
+						}
+					}]
+				},{
 					 xtype:'form'
 					,id:'addDialoguePanel'
 					,formId:'addDialogueForm'
+					,cls:'form-container'
 					,labelWidth:25
 					,autoScroll:true
 					,border:false
@@ -100,18 +114,22 @@ Curriki.module.addpath.init = function(){
 								AddPath.DisableNext();
 							}
 						}
+						,render:function(fPanel){
+//TODO: Try to generalize this (for different # of panels)
+							fPanel.ownerCt.on(
+								'bodyresize'
+								,function(wPanel, width, height){
+									if (height === 'auto') {
+										fPanel.setHeight('auto');
+									} else {
+										fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+									}
+								}
+							);
+						}
 					}
 					,items:[{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:this.toFolder
-								?_('add.contributemenu.guidingquestion_addto_composite', this.folderName)
-								:_('add.contributemenu.guidingquestion_addto_site')
-							,cls:'guidingquestion'
-						}
 	// Something had
-					},{
 						 xtype:'box'
 						,autoEl:{
 							 tag:'div'
@@ -182,6 +200,11 @@ Curriki.module.addpath.init = function(){
 								window.flashLoaded=false;
 								window.called_once=false;
 								embedVidiCapture('video_upload-entry-video', _('viditalk.sitecode'), null, null, false);
+							}
+							,hide:function(){
+								if (Ext.get('video_upload-entry-video')) {
+									Ext.DomHelper.overwrite(Ext.get('video_upload-entry-video'), '');
+								}
 							}
 						}
 						,hidden:true
@@ -287,6 +310,11 @@ Curriki.module.addpath.init = function(){
 								window.flashLoaded=false;
 								window.called_once=false;
 								embedVidiCapture('video_capture-entry-video', _('viditalk.sitecode'), null, null, false);
+							}
+							,hide:function(){
+								if (Ext.get('video_capture-entry-video')) {
+									Ext.DomHelper.overwrite(Ext.get('video_capture-entry-video'), '');
+								}
 							}
 						}
 						,hidden:true
@@ -481,6 +509,24 @@ Curriki.module.addpath.init = function(){
 				 title:_('add.setrequiredinfo.part1.title')
 				,cls:'resource resource-add'
 				,items:[{
+					 xtype:'panel'
+					,cls:'guidingquestion-container'
+					,items:[{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_('add.setrequiredinfo.part1.guidingquestion')
+							,cls:'guidingquestion'
+						}
+					},{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_('form.required.fields.instruction')
+							,cls:'instruction'
+						}
+					}]
+				},{
 					 xtype:'form'
 					,id:'MetadataDialoguePanel'
 					,formId:'MetadataDialogueForm'
@@ -550,24 +596,22 @@ Curriki.module.addpath.init = function(){
 								Curriki.current.sri1fillin = true;
 							}
 						}
+						,render:function(fPanel){
+//TODO: Try to generalize this (for different # of panels)
+							fPanel.ownerCt.on(
+								'bodyresize'
+								,function(wPanel, width, height){
+									if (height === 'auto') {
+										fPanel.setHeight('auto');
+									} else {
+										fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+									}
+								}
+							);
+						}
 					}
 					,items:[{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:_('add.setrequiredinfo.part1.guidingquestion')
-							,cls:'guidingquestion'
-						}
-					},{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:_('form.required.fields.instruction')
-							,cls:'instruction'
-						}
-
 	// Title
-					},{
 						 xtype:'box'
 						,autoEl:{
 							 tag:'div'
@@ -880,6 +924,24 @@ Curriki.module.addpath.init = function(){
 				,title:_('add.setrequiredinfo.part2.title')
 				,cls:'resource resource-add'
 				,items:[{
+					 xtype:'panel'
+					,cls:'guidingquestion-container'
+					,items:[{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_('add.setrequiredinfo.part2.guidingquestion')
+							,cls:'guidingquestion'
+						}
+					},{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_('form.required.fields.instruction')
+							,cls:'instruction'
+						}
+					}]
+				},{
 					 xtype:'form'
 					,id:'MetadataDialoguePanel'
 					,formId:'MetadataDialogueForm'
@@ -952,24 +1014,22 @@ Curriki.module.addpath.init = function(){
 								Curriki.current.sri2fillin = true;
 							}
 						}
+						,render:function(fPanel){
+//TODO: Try to generalize this (for different # of panels)
+							fPanel.ownerCt.on(
+								'bodyresize'
+								,function(wPanel, width, height){
+									if (height === 'auto') {
+										fPanel.setHeight('auto');
+									} else {
+										fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+									}
+								}
+							);
+						}
 					}
 					,items:[{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:_('add.setrequiredinfo.part2.guidingquestion')
-							,cls:'guidingquestion'
-						}
-					},{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:_('form.required.fields.instruction')
-							,cls:'instruction'
-						}
-
 	// Access Privileges
-						},{
 							 border:false
 							,items:[{
 								 xtype:'box'
@@ -1646,6 +1706,24 @@ console.log("Published CB: ", newAsset);
 				,title:_('add.chooselocation.title')
 				,cls:'resource resource-add'
 				,items:[{
+					 xtype:'panel'
+					,cls:'guidingquestion-container'
+					,items:[{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_('add.chooselocation.guidingquestion')
+							,cls:'guidingquestion'
+						}
+					},{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_('add.chooselocation.instruction')
+							,cls:'instruction'
+						}
+					}]
+				},{
 					 xtype:'form'
 					,id:'ChooseLocationDialoguePanel'
 					,formId:'ChooseLocationDialogueForm'
@@ -1686,23 +1764,23 @@ console.log("Published CB: ", newAsset);
 							}
 						}
 					}]
+					,listeners:{
+						render:function(fPanel){
+//TODO: Try to generalize this (for different # of panels)
+							fPanel.ownerCt.on(
+								'bodyresize'
+								,function(wPanel, width, height){
+									if (height === 'auto') {
+										fPanel.setHeight('auto');
+									} else {
+										fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+									}
+								}
+							);
+						}
+					}
 					,items:[{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:_('add.chooselocation.guidingquestion')
-							,cls:'guidingquestion'
-						}
-					},{
-						 xtype:'box'
-						,autoEl:{
-							 tag:'div'
-							,html:_('add.chooselocation.instruction')
-							,cls:'instruction'
-						}
-
 	// DRAG BOX
-					},{
 						 xtype:'container'
 						,id:'resource-pickup'
 						,items:[{
@@ -2205,7 +2283,7 @@ console.log('Starting path:', Curriki.current.flow);
 			case 'N': // Build-up in Group Collections list
 				// Need titles for new and parent assets in Done Msg
 				// Parent known
-				Curriki.ui.show('apSource', {toFolder:true});
+				Curriki.ui.show('apSource', {toFolder:true, folderName:Curriki.current.parentTitle});
 				return;
 				break;
 		}

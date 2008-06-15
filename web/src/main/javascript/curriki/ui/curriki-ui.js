@@ -14,12 +14,24 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,width:634
 	,minWidth:400
 	,minHeight:100
+	,maxHeight:575
+	,autoScroll:false
 	,constrain:true
-	,autoScroll:true
 	,collapsible:false
 	,closable:false
+	,resizable:false
 	,shadow:false
 	,defaults:{border:false}
+	,listeners:{
+		afterlayout:function(wnd, layout){
+			if (wnd.getFrameHeight()+wnd.getInnerHeight() > wnd.maxHeight){
+				wnd.setHeight(wnd.maxHeight);
+				wnd.center();
+			} else {
+				wnd.setHeight('auto');
+			}
+		}
+	}
 	,initComponent:function(){
 		Curriki.ui.dialog.Base.superclass.initComponent.call(this);
 	}
