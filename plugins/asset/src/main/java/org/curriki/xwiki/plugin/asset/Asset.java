@@ -566,7 +566,17 @@ public class Asset extends CurrikiDocument {
         return publish(space, true);
     }
 
+    public Asset publish(String space, String name) throws XWikiException {
+        return publish(space, name, true);
+    }
+
     public Asset publish(String space, boolean checkSpace) throws XWikiException {
+        String prettyName = context.getWiki().clearName(doc.getStringValue(Constants.ASSET_CLASS_TITLE), true, true, context);
+
+        return publish(space, prettyName, checkSpace);
+    }
+
+    public Asset publish(String space, String name, boolean checkSpace) throws XWikiException {
         assertCanEdit();
         if (!space.startsWith(Constants.COLLECTION_PREFIX)) {
             throw new AssetException("You cannot publish to the space "+space);
@@ -581,7 +591,7 @@ public class Asset extends CurrikiDocument {
         }
 
         // Let's choose a nice name for the page
-        String prettyName = context.getWiki().clearName(doc.getStringValue(Constants.ASSET_CLASS_TITLE), true, true, context);
+        String prettyName = context.getWiki().clearName(name, true, true, context);
         doc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList(), context);
         
         applyRightsPolicy();

@@ -20,10 +20,6 @@ public class CollectionSpace {
     }
 
     public void ensureExists() throws XWikiException {
-        if (isExists()){
-            return;
-        }
-
         if (!isPreferencesPageExists()) {
             protectSpace();
         }
@@ -121,10 +117,10 @@ public class CollectionSpace {
         Asset asset = Asset.createTempAsset(null, context);
 
         CollectionCompositeAsset fav = asset.makeCollection();
-        fav.setTitle(Constants.FAVORITES_COLLECTION_NAME);
-        fav.set(Constants.ASSET_CLASS_TITLE, Constants.FAVORITES_COLLECTION_NAME);
-        fav.set(Constants.ASSET_CLASS_DESCRIPTION, Constants.FAVORITES_COLLECTION_NAME);
-        fav.publish(spaceName, false);
+        fav.setTitle(Constants.FAVORITES_COLLECTION_TITLE);
+        fav.set(Constants.ASSET_CLASS_TITLE, Constants.FAVORITES_COLLECTION_TITLE);
+        fav.set(Constants.ASSET_CLASS_DESCRIPTION, Constants.FAVORITES_COLLECTION_TITLE);
+        fav.publish(spaceName, Constants.FAVORITES_COLLECTION_PAGE, false);
     }
 
     public boolean isGroupSpace() {

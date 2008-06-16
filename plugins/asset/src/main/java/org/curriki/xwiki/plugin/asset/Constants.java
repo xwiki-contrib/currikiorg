@@ -26,7 +26,7 @@ public interface Constants {
     String ASSET_DISPLAYTITLE_UNTITLED = "Untitiled";
 
     String COLLECTION_PREFIX = "Coll_";
-    String FAVORITES_COLLECTION_NAME = "Favorites";
+    String FAVORITES_COLLECTION_TITLE = "Favorites";
 
     String FAVORITES_COLLECTION_PAGE = "Favorites";
     String ROOT_COLLECTION_PAGE = "WebHome";

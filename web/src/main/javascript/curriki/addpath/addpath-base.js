@@ -30,7 +30,7 @@ Curriki.module.addpath.init = function(){
 		} else {
 			// Is just a HTML element
 			entry_box = Ext.get(e.value+'-entry-box');
-			if (entry_box.isVisible() != checked) {
+			if (entry_box && entry_box.isVisible() != checked) {
 				entry_box.setVisibilityMode(Ext.Element.DISPLAY).setVisible(checked);
 			}
 		}
@@ -41,8 +41,19 @@ Curriki.module.addpath.init = function(){
 			entry_box.setDisabled(!checked);
 		}
 
-		Ext.getCmp(AddPath.AddSourceDialogueId).doLayout();
-		Ext.getCmp(AddPath.AddSourceDialogueId).syncShadow();
+		entry_box = Ext.getCmp(e.value+'-container-cmp');
+		if (change && entry_box) {
+			if (entry_box.isVisible() != checked) {
+				entry_box.setVisible(checked);
+				entry_box.setDisabled(!checked);
+			}
+		}
+
+		var dlg = Ext.getCmp(AddPath.AddSourceDialogueId);
+		if (dlg) {
+			dlg.doLayout();
+			dlg.syncShadow();
+		}
 	}
 
 
@@ -143,39 +154,49 @@ Curriki.module.addpath.init = function(){
 						,value:'file'
 						,inputValue:'file'
 						,boxLabel:_('add.contributemenu.option.file')
+						,checked:true
 						,listeners:{
 							check:AddPath.RadioSelect
 						}
 					},{
-						 xtype:'textfield'
-						,inputType:'file'
-						,id:'file-entry-box'
-						,name:'filepath'
-						,disabled:true
-						,allowBlank:false
-						,hideMode:'display'
-						,hideLabel:true
-						,hidden:true
-						,listeners:{ // focus, invalid, blur, valid
-							focus:function(){
-								var pName = Ext.getCmp('file-entry-box').getValue();
-								var i = pName.lastIndexOf('\\');
-								var j = pName.lastIndexOf('/');
-
-								var k = (i>j)?i:j;
-								pName = pName.substring(k+1);
-
-								Ext.getCmp('filename-entry-box').setValue(pName);
-							}
+						 xtype:'container'
+						,id:'file-container-cmp'
+						,autoEl:{
+							 tag:'div'
+							,id:'file-container'
+							,html:''
 						}
-					},{
-						 xtype:'textfield'
-						,id:'filename-entry-box'
-						,name:'filename'
-						,allowBlank:false
-						,hideLabel:true
-						,hidden:true
-						,disabled:true
+						,items:[{
+							 xtype:'textfield'
+							,inputType:'file'
+							,id:'file-entry-box'
+							,name:'filepath'
+							,allowBlank:false
+							,hideMode:'display'
+							,hideLabel:true
+	//						,hidden:true
+	//						,disabled:true
+							,listeners:{ // focus, invalid, blur, valid
+								focus:function(){
+									var pName = Ext.getCmp('file-entry-box').getValue();
+									var i = pName.lastIndexOf('\\');
+									var j = pName.lastIndexOf('/');
+
+									var k = (i>j)?i:j;
+									pName = pName.substring(k+1);
+
+									Ext.getCmp('filename-entry-box').setValue(pName);
+								}
+							}
+						},{
+							 xtype:'textfield'
+							,id:'filename-entry-box'
+							,name:'filename'
+							,allowBlank:false
+							,hideLabel:true
+							,hidden:true
+							,disabled:true
+						}]
 
 	// VIDITalk Video Upload
 					},{
@@ -189,6 +210,12 @@ Curriki.module.addpath.init = function(){
 					},{
 						 xtype:'container'
 						,id:'video_upload-entry-box'
+						,hidden:true
+						,autoEl:{
+							 tag:'div'
+							,id:'video_upload-container'
+							,html:''
+						}
 						,listeners:{
 							show:function(){
 								window.uploadComplete = function(videoId) {
@@ -207,7 +234,6 @@ Curriki.module.addpath.init = function(){
 								}
 							}
 						}
-						,hidden:true
 						,items:[{
 							 xtype:'textfield'
 							,id:'video_upload-entry-value'
@@ -223,11 +249,6 @@ Curriki.module.addpath.init = function(){
 								,height:'320px'
 							}
 						}]
-						,autoEl:{
-							 tag:'div'
-							,id:'video_upload-container'
-							,html:''
-						}
 
 	// External Web Link
 					},{
@@ -239,16 +260,26 @@ Curriki.module.addpath.init = function(){
 							check:AddPath.RadioSelect
 						}
 					},{
-						 xtype:'textfield'
-						,id:'link-entry-box'
-						,name:'link'
-						,emptyText:_('add.contributemenu.link.empty_msg')
-						,disabled:true
-						,allowBlank:false
-						,hideMode:'display'
-						,hideLabel:true
+						 xtype:'container'
+						,id:'link-container-cmp'
 						,hidden:true
-						,vtype:'url'
+						,autoEl:{
+							 tag:'div'
+							,id:'link-container'
+							,html:''
+						}
+						,items:[{
+							 xtype:'textfield'
+							,id:'link-entry-box'
+							,name:'link'
+							,emptyText:_('add.contributemenu.link.empty_msg')
+							,disabled:true
+							,hidden:true
+							,allowBlank:false
+							,hideMode:'display'
+							,hideLabel:true
+							,vtype:'url'
+						}]
 
 	// Search Repository
 					},{
@@ -277,7 +308,7 @@ Curriki.module.addpath.init = function(){
 						 xtype:'radio'
 						,value:'template'
 						,inputValue:'template'
-						,checked:true
+//						,checked:true
 						,boxLabel:_('add.contributemenu.option.template')
 
 	// Create "from scratch"
