@@ -124,7 +124,7 @@ public class CollectionSpace {
         fav.setTitle(Constants.FAVORITES_COLLECTION_NAME);
         fav.set(Constants.ASSET_CLASS_TITLE, Constants.FAVORITES_COLLECTION_NAME);
         fav.set(Constants.ASSET_CLASS_DESCRIPTION, Constants.FAVORITES_COLLECTION_NAME);
-        fav.publish(spaceName);
+        fav.publish(spaceName, false);
     }
 
     public boolean isGroupSpace() {

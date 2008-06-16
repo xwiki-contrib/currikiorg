@@ -563,6 +563,10 @@ public class Asset extends CurrikiDocument {
     }
 
     public Asset publish(String space) throws XWikiException {
+        return publish(space, true);
+    }
+
+    public Asset publish(String space, boolean checkSpace) throws XWikiException {
         assertCanEdit();
         if (!space.startsWith(Constants.COLLECTION_PREFIX)) {
             throw new AssetException("You cannot publish to the space "+space);
@@ -572,7 +576,9 @@ public class Asset extends CurrikiDocument {
             throw new AssetException("Validation failed.");
         }
 
-        CollectionSpace.ensureExists(space, context);
+        if (checkSpace) {
+            CollectionSpace.ensureExists(space, context);
+        }
 
         // Let's choose a nice name for the page
         String prettyName = context.getWiki().clearName(doc.getStringValue(Constants.ASSET_CLASS_TITLE), true, true, context);
