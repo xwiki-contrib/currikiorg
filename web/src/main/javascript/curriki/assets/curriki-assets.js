@@ -11,6 +11,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {'parent':parentPage||''}
 			,scope:this
@@ -25,7 +26,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot create resource', options);
 				throw {message: "Server Error: Cannot create resource."};
 			}
@@ -37,6 +38,7 @@ Curriki.assets = {
 			,method:'GET'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,scope:this
 			,success:function(response, options){
@@ -49,7 +51,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot get resource metadata', options);
 				throw {message: "Server Error: Cannot get resource metadata."};
 			}
@@ -61,6 +63,7 @@ Curriki.assets = {
 			,method:'GET'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,scope:this
 			,success:function(response, options){
@@ -73,7 +76,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot get resource metadata', options);
 				throw {message: "Server Error: Cannot get resource metadata."};
 			}
@@ -86,6 +89,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: metadata
 			,scope:this
@@ -99,7 +103,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot set resource metadata', options);
 				throw {message: "Server Error: Cannot set resource metadata."};
 			}
@@ -111,6 +115,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {'link':linkUrl}
 			,scope:this
@@ -124,7 +129,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot create external link', options);
 				throw {message: "Server Error: Cannot create external link."};
 			}
@@ -136,6 +141,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {page:subassetPage, order:order}
 			,scope:this
@@ -149,7 +155,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot add subasset', options);
 				throw {message: "Server Error: Cannot add subasset."};
 			}
@@ -161,6 +167,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {collectionType:'folder'}
 			,scope:this
@@ -174,7 +181,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot create folder', options);
 				throw {message: "Server Error: Cannot create folder."};
 			}
@@ -186,6 +193,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {collectionType:'collection'}
 			,scope:this
@@ -199,7 +207,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot create collection', options);
 				throw {message: "Server Error: Cannot create collection."};
 			}
@@ -211,6 +219,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {page:assetPage, videoId:videoId}
 			,scope:this
@@ -224,7 +233,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot add video', options);
 				throw {message: "Server Error: Cannot add video."};
 			}
@@ -237,6 +246,7 @@ Curriki.assets = {
 			,method:'POST'
 			,headers: {
 				'Accept':'application/json'
+				,'Content-type':'application/json'
 			}
 			,jsonData: {space: space}
 			,scope:this
@@ -250,7 +260,7 @@ Curriki.assets = {
 				}
 				callback(o);
 			}
-			,failure:function(options){
+			,failure:function(response, options){
 				console.error('Cannot publish resource', options);
 				throw {message: "Server Error: Cannot publish resource."};
 			}

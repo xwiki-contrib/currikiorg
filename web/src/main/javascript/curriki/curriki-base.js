@@ -54,9 +54,22 @@ Ext.ns('Curriki.module');
 Ext.onReady(function(){
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
-    Ext.Ajax.on('beforerequest', function(){Curriki.loadingMask.enable();Curriki.loadingMask.show();});
-    Ext.Ajax.on('requestcomplete', function(){Curriki.loadingMask.hide();Curriki.loadingMask.disable();});
-    Ext.Ajax.on('requestexception', function(){Curriki.loadingMask.hide();Curriki.loadingMask.disable();});
+    Ext.Ajax.on('beforerequest', function(conn, options){
+console.log('beforerequest', conn, options);
+		Curriki.loadingMask.msg = options.waitMsg||_('loading.loading_msg');
+		Curriki.loadingMask.enable();
+		Curriki.loadingMask.show();
+	});
+    Ext.Ajax.on('requestcomplete', function(conn, response, options){
+console.log('requestcomplete', conn, response, options);
+		Curriki.loadingMask.hide();
+		Curriki.loadingMask.disable();
+	});
+    Ext.Ajax.on('requestexception', function(conn, response, options){
+console.log('requestexception', conn, response, options);
+		Curriki.loadingMask.hide();
+		Curriki.loadingMask.disable();
+	});
 });
 
 
