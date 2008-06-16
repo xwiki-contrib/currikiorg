@@ -3043,9 +3043,8 @@ $msg.get("groups_members_admin_invitations_infotxt")
 #macro(groupsajaxjs)
 {pre}
 <script type="text/javascript">
-Ajax.XWikiRequest = Class.create();
-Object.extend(Object.extend(Ajax.XWikiRequest.prototype, Ajax.Request.prototype), {
-  initialize: function($super, space, docName, options, action) {
+Ajax.XWikiRequest = Class.create(Ajax.Request, {
+    initialize: function($super, space, docName, options, action) {
     this.transport = Ajax.getTransport();
     if (action)
       this.action = action;
