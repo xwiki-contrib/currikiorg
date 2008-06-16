@@ -729,7 +729,15 @@ $doc.display("content", $obj)
 <div id="navigation-inner" class="shadow-inner navigation-menu">
 #set($active = false)
 #checkActive("Main.WebHome" $active)
-<div class="titles#if($active) selected#end home"><a href="$xwiki.getURL("Main.WebHome")">$msg.get("navigationHome")</a></div>
+<div class="home"><a class="titles#if($active) selected#end" href="$xwiki.getURL("Main.WebHome")"
+#if(!$active) 	onmouseover="addClass(this.parentNode, 'active');" 
+		onmouseout="rmClass(this.parentNode, 'active');" 
+#end >
+$msg.get("navigationHome")
+#if($active) ##{
+	<img src="$xwiki.getSkinFile("menu-selected.gif")" />
+#end ##}
+</a></div>
 #end ##}
 ##
 
@@ -792,21 +800,24 @@ $doc.display("content", $obj)
     <h4>#if($link != "")<a href="$theCategLink" onclick="event.cancelBubble = true;">$text</a>#else $text#end </h4>
   </div> -->    
 <div class="expanded" id="${id}"> ##{
-  <a 	onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); 
+  <a onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); 
   		${cookiemagic}
 		togglePanelVisibility(this.parentNode);
 		var clName = 'collapsed';
 		if(!expanded) clName = 'expanded';
 		$('${id}_arrow').className = clName;" 
-  	#if(!$active)
+  	#if(!$active) ##{
 		onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" 
 		onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed');" 
-	#end 
+	#end ##}
 	class="titles#if($active) selected#end">
     #set($cls = "collapsed")
     #if($expanded) #set($cls = "expanded") #end
     <span id="${id}_arrow" class="${cls}"></span>
     $text
+    #if($active) ##{
+	    <img src="$xwiki.getSkinFile("menu-selected.gif")" />
+    #end ##}
   </a>    
   <ul>
   #foreach($item in $items) ##{
