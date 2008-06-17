@@ -815,9 +815,6 @@ $msg.get("navigationHome")
     #if($expanded) #set($cls = "expanded") #end
     <span id="${id}_arrow" class="${cls}"></span>
     $text
-    #if($active) ##{
-	    <img src="$xwiki.getSkinFile("menu-selected.gif")" />
-    #end ##}
   </a>    
   <ul>
   #foreach($item in $items) ##{
@@ -825,7 +822,8 @@ $msg.get("navigationHome")
     #checkActive($item.get(1) $active)
     #set($theItemLink = $item.get(1))
     #normalizelink($theItemLink)
-    <li class="#if($active) lactive #end #if($velocityCount == $items.size()) last #end"><a href="$theItemLink">$item.get(0)</a></li>
+    <li class="#if($active) lactive #end #if($velocityCount == $items.size()) last #end"><a href="$theItemLink">$item.get(0)</a>
+    #if($active)<img src="$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
   #end ##}
   </ul> ##}
   #if(!$expanded) ##{
