@@ -83,10 +83,9 @@ Curriki.assets = {
 		});
 	}
 	,SetMetadata:function(assetPage, metadata, callback){
-		// TODO: ExtJS + Prototype 1.6 can't do native PUT
 		Ext.Ajax.request({
-			 url: this.json_prefix+'/'+assetPage+'/metadata?_method=PUT'
-			,method:'POST'
+			 url: this.json_prefix+'/'+assetPage+'/metadata'
+			,method:'PUT'
 			,headers: {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
@@ -240,10 +239,9 @@ Curriki.assets = {
 		});
 	}
 	,Publish:function(assetPage, space, callback){
-		// TODO: ExtJS + Prototype 1.6 can't do native PUT
 		Ext.Ajax.request({
-			 url: this.json_prefix+'/'+assetPage+'/published?_method=PUT'
-			,method:'POST'
+			 url: this.json_prefix+'/'+assetPage+'/published'
+			,method:'PUT'
 			,headers: {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
