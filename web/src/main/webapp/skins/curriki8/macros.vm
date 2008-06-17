@@ -822,7 +822,7 @@ $msg.get("navigationHome")
     #checkActive($item.get(1) $active)
     #set($theItemLink = $item.get(1))
     #normalizelink($theItemLink)
-    <li class="#if($active) lactive #end #if($velocityCount == $items.size()) last #end"><a href="$theItemLink">$item.get(0)</a>
+    <li class="#if($active)selected#end#if($velocityCount == $items.size()) last#end"><a href="$theItemLink">$item.get(0)</a>
     #if($active)<img src="$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
   #end ##}
   </ul> ##}
@@ -839,7 +839,7 @@ $msg.get("navigationHome")
 #macro(navigationTopLevelEntry $text $link)
 #set($active = false)
 #checkActive($link $active)
-<div class="curriki-nav-tlentry#if($active)active lactive #end" #if(!$active) onmouseover="addClass(this, 'curriki-nav-tlentryactive')" onmouseout="rmClass(this, 'curriki-nav-tlentryactive')" #end>
+<div class="curriki-nav-tlentry#if($active)active selected#end" #if(!$active) onmouseover="addClass(this, 'curriki-nav-tlentryactive')" onmouseout="rmClass(this, 'curriki-nav-tlentryactive')" #end>
 <div class="curriki-nav-header"><h4>[$text>$link]</h4></div>
 </div>
 #end
