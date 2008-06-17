@@ -718,7 +718,6 @@ Curriki.module.addpath.init = function(){
 						 xtype:'textarea'
 						,id:'metadata-description-entry'
 						,name:'description'
-						,emptyText:_('sri.description_content')
 						,allowBlank:false
 						,hideLabel:true
 						,width:'80%'
