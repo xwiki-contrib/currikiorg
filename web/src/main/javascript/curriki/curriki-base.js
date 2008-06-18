@@ -122,6 +122,11 @@ console.log('Start Callback: ', callback);
 
 Curriki.init = function(callback){
 console.log('Curriki.init: ', callback);
-	Curriki.data.user.GetUserinfo(function(){Curriki.start(callback);});
+	if (Ext.isEmpty(Curriki.initialized)) {
+		Curriki.data.user.GetUserinfo(function(){Curriki.start(callback);});
+		Curriki.initialized = true;
+	} else {
+		Curriki.start(callback);
+	}
 };
 
