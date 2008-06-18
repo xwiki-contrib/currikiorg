@@ -1399,7 +1399,7 @@ Curriki.module.addpath.init = function(){
 			var link, text, handler, pageName, disabled;
 			text = _('add.finalmessage.'+linkName+'.link');
 
-			pageName = Curriki.current.asset.assetPage;
+			pageName = (Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName;
 
 			disabled = false;
 
@@ -1744,6 +1744,7 @@ Curriki.module.addpath.init = function(){
 					,cls:'resource resource-add'
 					,items:[{
 						 xtype:'panel'
+						,id:'guidingquestion-container'
 						,cls:'guidingquestion-container'
 						,items:[{
 							 xtype:'box'
@@ -1818,8 +1819,9 @@ Curriki.module.addpath.init = function(){
 						}
 						,items:[{
 		// DRAG BOX
-							 xtype:'container'
+							 xtype:'panel'
 							,id:'resource-pickup'
+							,border:false
 							,items:[{
 								 xtype:'box'
 								,id:'resource-pickup-title'
@@ -1858,16 +1860,12 @@ Curriki.module.addpath.init = function(){
 									}]
 								})
 							}]
-							,autoEl:{
-								 tag:'div'
-								,id:'resource-pickup-box'
-								,html:''
-							}
 
 		// DROP TREE
 						},{
-							 xtype:'container'
+							 xtype:'panel'
 							,id:'resource-drop'
+							,border:false
 							,items:[{
 								 xtype:'treepanel'
 								,loader: new Curriki.ui.treeLoader.Base()
@@ -1935,11 +1933,6 @@ Curriki.module.addpath.init = function(){
 									]
 								})
 							}]
-							,autoEl:{
-								 tag:'div'
-								,id:'resource-drop-box'
-								,html:''
-							}
 
 						}]
 					}]
