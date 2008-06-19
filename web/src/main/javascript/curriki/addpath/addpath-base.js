@@ -1960,7 +1960,7 @@ Curriki.module.addpath.init = function(){
 						 {xtype:'hidden', name:'pageName', value:asset.assetPage}
 						,{xtype:'hidden', name:'cameFrom', value:Curriki.current.cameFrom}
 						,{xtype:'hidden', name:'flow', value:Curriki.current.flow}
-						,{xtype:'hidden', name:'parentPage', value:Curriki.current.asset.parentAsset}
+						,{xtype:'hidden', name:'parentPage', value:Curriki.current.parentAsset}
 					]
 				});
 				sf.submit();
