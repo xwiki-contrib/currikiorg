@@ -165,7 +165,7 @@ console.log('Collections: ', this.collectionChildren);
 
 				colInfo.children = children;
 			} else {
-				colInfo.leaf = true;
+				colInfo.leaf = ("undefined" === typeof child.rights || !child.rights.view) || ("undefined" === typeof child.assetType || child.assetType.search(/Composite$/) === -1);
 			}
 
 			retVal.push(colInfo);

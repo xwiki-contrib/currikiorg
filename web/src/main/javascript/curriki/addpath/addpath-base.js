@@ -2048,7 +2048,7 @@ Curriki.module.addpath.init = function(){
 		AddPath.AddSubasset = function(callback){
 			Curriki.assets.CreateSubasset(
 				Curriki.current.drop.parentPage
-				,Curriki.current.asset.assetPage
+				,(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle
 				,Curriki.current.drop.targetIndex
 				,function(){
 					if ("function" === typeof callback){
