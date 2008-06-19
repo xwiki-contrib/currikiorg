@@ -10,17 +10,18 @@ a img { border: none; }
 fieldset { border: none; padding: 0; margin: 0; }
 form { margin: 0; padding: 0; }
 input.input { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 0.9em; margin: 0; padding: 0.4em 0.2em !important; height: auto !important; height: 24px; }
-input.checkbox { border: 0; height: 15px; margin: 0px 2px 1px 0; padding: 0; width: 15px; }
-textarea { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 0.9em; padding: 0.4em 0.2em; }
-p { margin: 0; padding: 0.5em 0; }
-button { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 0.9em; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible;  }
-button:hover { background-color: #ffb808; }
-button.cancel { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
-button.cancel:hover { background-color: #b4b4b4; }
-h1,h2,h3,h4,h5,h6,h7 { padding: 0; margin: 0; }
-h2 { font-size: 1.5em; }
-h3 { font-size: 1.2em; }
+input.checkbox, input[type="checkbox"], input[type="radio"] { border: 0; height: 15px; margin: 0px 2px 1px 0; padding: 0; width: 15px; }
+textarea, .x-form-text, textarea.x-form-field { background-image: none; border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 13px; padding: 0.4em 0.2em; }
+p { margin: 0.5em 0; padding: 0; }
+button, .x-btn button { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
+button:hover, .x-btn button:hover { background-color: #ffb808; color: #fff; }
+button.cancel, #cancelbutton .x-btn-text, #ext-comp-1073 .x-btn-text { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
+button.cancel:hover, #cancelbutton .x-btn-text:hover, #ext-comp-1073 #cancelbutton .x-btn-text:hover { background-color: #b4b4b4; }
+h1,h2,h3,h4,h5,h6,h7 { font-style: normal; padding: 0; margin: 0; }
+h2 { font-size: 1.3em; }
+h3 { font-size: 1.25em; }
 table { border-collapse: collapse; }
+strong { font-weight: bold; }
 
 /* Shadow boxes */
 .shadow-outer { background-color: #ededed; }
@@ -28,7 +29,7 @@ table { border-collapse: collapse; }
 .shadow-inner { background-color: #f2f2f2; border: 1px solid #e1e1e1; border-bottom-width: 0; border-right-width: 0; position: relative; height: 1%; top: -3px; left: -3px; }
 
 /* Orange search box */
-.search-box { border: 2px solid #ff0000; background-color: #ff7f00; padding: 1.2em 0.1em 1em 1em; }
+.search-box { border: 2px solid #ff0000; background-color: #ff7f00; padding: 1.1em 0.1em 1em 0.9em; }
 .search-box .input { border: none; color: #666; font-size: 1.1em; width: 75%; margin-right: 5px;  }
 .search-box button { border: none; font-size: 1.1em; padding: 0.1em 0 0.1em 0; }
 
@@ -49,11 +50,12 @@ table { border-collapse: collapse; }
 /**********************
  LOCALY APPLIED STYLES 
 ***********************/
-#main { background: #fff url(images/shadow-left.jpg) repeat-y left; min-width: 860px; max-width: 860px; _width: expression((((document.body.clientWidth)) < 880 || ((document.body.clientWidth)) > 880 )? "880px": "auto" ); margin: 0 auto; padding: 0 0px 0 20px; text-align: left;  }
-#shadow-right { background: #fff url(images/shadow-right.jpg) repeat-y right; padding-right: 20px; }
+#main{ background: #fff url("images/shadow-left.jpg") repeat-y left; padding: 0 0px 0 20px; text-align: left; min-width: 860px; max-width: 860px; _width: expression((((document.body.clientWidth)) < 880 || ((document.body.clientWidth)) > 880 )? "880px": "auto" ); margin: 0 auto; text-align: left;  }
+#footerglobal { min-width: 850px; max-width: 850px; _width: expression((((document.body.clientWidth)) < 880 || ((document.body.clientWidth)) > 880 )? "870px": "auto" ); margin-left: -5px; }
+#shadow-right { background: #fff url("images/shadow-right.jpg") repeat-y right; padding-right: 20px; }
 
 /* header */
-#header { border-bottom: 1px solid #999; height: 70px; padding: 5px 0 5px 0; }
+#header { border-bottom: 1px solid #999; font-size: 12px; height: 70px; padding: 5px 0 5px 0; }
 #header div { float: left; width: 33%; padding: 0 1em; height: 100%; }
 #header #header-logo { padding-left: 0; width: 195px !important; width: 205px; }
 #header-member { border-left: 1px solid #999; }
@@ -71,12 +73,13 @@ table { border-collapse: collapse; }
 #header-member .separator { color: #3f3f3f; }
 #header #header-search { border-left: 1px solid #999; float: right; padding: 0.1em 0 0 1em; width: 255px !important; width: 280px; }
 #header-search button:hover { background-color: #ff7f00; }
-#header-search p { padding: 0.1em 0 0; text-align: right; }
+#header-search p { margin: 0; padding: 0; text-align: right; }
 #header-search p a { font-size: 0.9em; }
+#header-search .search-box .input { font-size: 1.2em; padding: 0.3em 0.2em; }
 
 /* Left panel menu */
-#panels { padding: 1em 0; }
-#left-panel { float: left; height: 100%; padding-left: 0.3em; width: 215px; }
+#panels { padding: 1em 0 0; }
+#left-panel { font-size: 12px; float: left; height: 100%; padding-left: 0.3em; width: 205px; }
 #left-panel .shadow-outer { margin-bottom: 1em;  width: 205px; }
 #left-panel .links { font-size: 0.8em; padding: 0.5em 0 0; text-align: right; }
 .expanded #left-panel { display: block; }
@@ -85,25 +88,26 @@ table { border-collapse: collapse; }
 #navigation-inner a { color: #5051a3; }
 #navigation-inner .titles { background-color: #cccde7; display: block; font-size: 1em; font-weight: bold; margin-top: 1px; padding: 2px 10px !important; position: relative; text-decoration: none; text-transform: uppercase; height: auto !important; height: 1%; padding-bottom: 0; }
 #navigation-inner .titles:hover { background-color: #5051a3; color: #fff; }
-#navigation-inner .titles:hover span.expanded, #navigation-inner .selected span.expanded { background-image: url("images/menu-expanded-hover.png"); }
-#navigation-inner .titles:hover span.collapsed, #navigation-inner .selected span.collapsed { background-image: url("images/menu-collapsed-hover.png"); }
-#navigation-inner .home { padding-bottom: 0.2em; margin-top: 0;  }
-#navigation-inner span { display: block; float: left; height: 18px; width: 24px; }
-#navigation-inner span.expanded { background: transparent url("images/menu-expanded.png") no-repeat scroll 2px 4px; }
-#navigation-inner span.collapsed { background: transparent url("images/menu-collapsed.png") no-repeat scroll 3px 1px; }
+#navigation-inner .titles:hover span.expanded, #navigation-inner .selected span.expanded { background-image: url("menu-expanded-hover.gif"); }
+#navigation-inner .titles:hover span.collapsed, #navigation-inner .selected span.collapsed { background-image: url("menu-collapsed-hover.gif"); }
+#navigation-inner .home a { margin: 0;  }
+#navigation-inner span { display: block; float: left; height: 18px; width: 24px; cursor: crosshair; }
+#navigation-inner span.expanded { background: transparent url("menu-expanded.gif") no-repeat scroll 2px 4px; }
+#navigation-inner span.collapsed { background: transparent url("menu-collapsed.gif") no-repeat scroll 3px 1px; }
 #navigation-inner ul { background: #f2f2f2; list-style-type: none; margin: 0; padding: 0 0 0 2.9em; }
 #navigation-inner li { border-bottom: 1px solid #5051a3; padding: 0.2em 0; height: 1%; }
 #navigation-inner li a { display: inline; }
-#navigation-inner li a:hover { font-weight: bold; }
+#navigation-inner li a:hover { color: #282974; }
 #navigation-inner li.last { border: none; }
 #navigation-inner .selected { position: relative; height: 1%; }
 #navigation-inner a.selected { background-color: #5051a3; color: #fff; }
 #navigation-inner li.selected { background: #f2f2f2; color: #5051a3; }
-#navigation-inner li.selected a { font-weight: bold; }
+#navigation-inner li.selected a { color: #282974; }
 #navigation-inner .selected img { height: 13px; width: 9px; position: absolute; top: 3px; right: -9px;  }
 #navigation-inner li.selected img { right: -10px;  }
 
-#donate img { border: none; margin-bottom: -3px; width: 204px; }
+#donate .shadow-inner{ background-color: #C3C3C3; }
+#donate img { border: none; margin-bottom: -3px; width: 203px; }
 
 #sponsors .frame-content, #watch-curriki-grow .frame-content { font-size: 1.2em; color: #666; }
 #sponsors img { margin-bottom: 0.5em; width: 180px; }
@@ -113,25 +117,25 @@ table { border-collapse: collapse; }
 #watch-curriki-grow .links { font-size: 1em; font-weight: bold; }
 
 /* RIGHT PANEL */
-.expanded #right-panel { margin-left: 220px; }
+.expanded #right-panel { margin-left: 210px; padding-left: 10px; }
 #breadcrumb { padding-bottom: 0.3em; border-bottom: 1px solid #999; }
-#content { padding: 2em 0 1em; overflow: auto !important; overflow: hidden; height: 1%; }
+#content, #attachmentscontent { padding: 2em 0 1em; overflow: auto !important; overflow: hidden; height: 1%; }
 
 /* Curricula */
-.curricula-panels { padding-top: 0.5em; }
-.curricula-panels .shadow-outer { float: left; width: 32%; margin-right: 1.8%; }
+.curricula-panels { padding: 0.5em 0 0 15px; position: relative; height: 1%; }
+.curricula-panels .shadow-outer { float: left; width: 31.7%; margin-right: 1.8%; }
 .curricula-panels #curricula-connect { margin-right: 0; }
-.curricula-panels .headerbar { font-size: 1.1em; position: relative; height: 30px; padding: 0; }
-.curricula-panels .headerbar a {  display: block; padding: 0.5em; height: 30px; }
-.curricula-panels .headerbar a:hover { font-size: 1.1em; padding: 0.7em 0.5em 0 1em; position: absolute; height: 85% !important; width: 100% !important; height: 140%; width: 110%; top: -10%; left: -5%; z-index: 100; text-decoration: none; z-index: 1000; }
+.curricula-panels .headerbar { font-size: 1.1em; position: relative; height: 40px; padding: 0; }
+.curricula-panels .headerbar a {  display: block; font-size: 20px; padding: 0.5em; height: 30px; text-transform: none; }
+.curricula-panels .headerbar a:hover { padding: 0.7em 0.5em 0 1em; position: absolute; height: 85% !important; width: 95% !important; height: 40px; width: 110%; top: -10%; left: -5%; text-decoration: none; z-index: 1000000; }
 .curricula-panels .search a:hover { background-color: #e7793b; }
 .curricula-panels .create a:hover { background-color: #93c53c; }
-.curricula-panels .groups a:hover { background-color: #4e83c6; }
-.curricula-panels a.content { border-bottom: 1px solid #c3c3c3; display: block; font-size: 1.3em; font-weight: bold; padding: 1em 0.5em 0; height: 100px; }
-.curricula-panels .footer { color: #5051a3; font-size: 1.2em; padding: 1em 0.5em; }
+.curricula-panels .groups .headerbar a:hover { background-color: #4e83c6; }
+.curricula-panels a.content { border: none; border-bottom: 1px solid #c3c3c3; display: block; font-size: 1.3em; font-weight: bold; padding: 1em 0.5em 0; height: 100px; }
+.curricula-panels .footer { color: #5051a3; font-size: 1.2em; padding: 1em 0.5em; margin: 0; }
 .curricula-panels .footer a { display: block; }
 .curricula-panels .footer a img { margin-bottom: -10px; }
-#curricula-highlights { margin-top: 1em; }
+#curricula-highlights { margin: 1em 7px 0 15px; }
 #curricula-highlights .headerbar { font-size: 1.1em; padding: 0.5em; }
 #curricula-highlights table { font-size: 1.2em; color: #666; margin: 1em 0.5em; }
 #curricula-highlights table td { padding: 1em; }
@@ -158,5 +162,118 @@ table { border-collapse: collapse; }
 .curriki-form .entry label { display: block; }
 .curriki-form table.subject-educational { font-size: 1em; width: 95%; }
 .curriki-form table.subject-educational td { width: 50%; padding-right: 1em; }
+.curriki-form table.subject-educational td td { width: auto; }
 .curriki-form .links { padding-bottom: 0; text-align: center; }
 .curriki-form .links button { display: inline; margin-right: 1.5em; }
+
+.curriki-form table.subject-educational th { background-color: transparent; }
+.curriki-form table.subject-educational td { vertical-align: top; }
+.curriki-form span.xwiki-form-listclass { display: block; margin: 3px 0; }
+form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
+.curriki-form #XWiki\.AssetClass_0_title, #XWiki\.AssetClass_0_description, #XWiki\.AssetClass_0_instructional_component2, #XWiki\.AssetClass_0_keywords, #XWiki\.AssetLicenseClass_0_rightsHolder { width: 99% !important; width: 95%; }
+.curriki-form #mce_editor_0 { height: 30em !important; width: 100%  !important; }
+
+/* Add Path */
+.x-panel { text-align: left; }
+.x-panel-ghost ul, .x-panel-ghost .x-window-tl { border: none; }
+.x-panel-noborder .x-panel-bbar-noborder .x-toolbar { border: none;  }
+.x-window, .x-panel-ghost, .ext-el-mask-msg { background-color: #fff; border: 1px solid #dcdcdc; font-size: 13px; padding: 0; }
+.x-window div, .x-panel-ghost * { background-color: transparent; background-image: none; }
+.x-window .x-window-tl, .x-panel-ghost .x-window-tl { background-color: #93c53c; padding: 0em 0.5em; text-transform: uppercase; }
+.x-window-tl .x-window-header { color: #fff; font: 12px arial;  font-weight: bold; padding: 3px 0; }
+.x-window .x-panel-body { padding: 1em 1em 0; }
+#MetadataDialogueForm .x-panel-body { padding-left: 0; }
+.x-btn button { display: inline; padding: 0; width: auto !important; }
+.x-toolbar .x-btn-over .x-btn-right, .x-toolbar .x-btn-over .x-btn-left { background-image: none; }
+.x-window-mc, .x-form-item, .x-btn button { font: 13px Arial,sans-serif; }
+.x-window .guidingquestion { font-size: 1.2em; font-weight: bold; padding: 0.5em 0; }
+.x-window .subtitle { font-size: 1em; font-weight: bold; padding: 0.5em 0; }
+input.x-form-radio { margin-bottom: -2px }
+.x-tree .x-panel-body, #ext-comp-1022 div, #ext-comp-1022 ul, ul.x-tree-root-ct, ul.x-tree-root-ct ul { padding-left: 0; }
+.ext-el-mask-msg * { border: none !important; background-image: none; font: 13px Arial; }
+
+.x-panel-body .x-tree-elbow-end-plus { background:transparent url(/xwiki/yui/treeview/assets/lp.gif) no-repeat; }
+.x-panel-body .x-tree-elbow-end-plus:hover { background:transparent url(/xwiki/yui/treeview/assets/lph.gif) no-repeat; }
+.x-panel-body .x-tree-elbow-plus { background:transparent url(/xwiki/yui/treeview/assets/tp.gif) no-repeat; }
+.x-panel-body .x-tree-elbow-plus:hover { background:transparent url(/xwiki/yui/treeview/assets/tph.gif) no-repeat; }
+.x-tree-arrows .x-tree-elbow-minus { background:transparent url(/xwiki/yui/treeview/assets/tm.gif) no-repeat; } 
+.x-tree-arrows .x-tree-elbow-minus:hover { background:transparent url(/xwiki/yui/treeview/assets/tmh.gif) no-repeat; } 
+.x-panel-body .x-tree-elbow-end-minus { background:transparent url(/xwiki/yui/treeview/assets/lm.gif) no-repeat; }
+.x-panel-body .x-tree-elbow-end-minus:hover { background:transparent url(/xwiki/yui/treeview/assets/lmh.gif) no-repeat; }
+.x-panel-body .x-tree-elbow { background:transparent url(/xwiki/yui/treeview/assets/tn.gif) no-repeat; }
+.x-panel-body .x-tree-elbow-end { background:transparent url(/xwiki/yui/treeview/assets/ln.gif) no-repeat; }
+.x-panel-body .x-tree-elbow-line { background: transparent url(/xwiki/yui/treeview/assets/vline.gif) no-repeat; }
+
+.ctv-groups a { font: 12px Arial; font-weight: bold; text-transform: uppercase; }
+.x-tree-node-anchor { font: 12px Arial; } 
+#resource-pickup-box { background: transparent url($xwiki.getSkinFile("images/ctv/drag_area.jpg")) no-repeat; height: 98px; margin-top: 1em; padding: 0.7em; }
+#resource-pickup-box * { background: transparent; }
+#resource-pickup-box .x-panel-body { padding-top: 0.1em; }
+#resource-pickup-box .x-tree-node-el { border: 1px dashed #93c53c; }
+.x-tree-node .x-tree-selected, .x-dd-drag-proxy { background-color: #93c53c; border: none; }
+.x-tree-node .x-tree-selected a span { color: #fff; }
+.x-tree-node .x-tree-node-over { background-color: transparent; }
+.x-panel-bwrap, .x-panel-bwrap .x-panel-body, .x-column-inner .x-panel { overflow: visible; height: auto; }
+#resource-drop-box .x-panel-body { padding: 0; }
+.x-tree-node a span { overflow: hidden; }
+#MetadataDialogueForm { height: auto; overflow-y: auto; overflow-x: hidden; }
+#MetadataDialogueForm img.x-tree-node-icon { display: none; }
+.x-tree-node .x-tree-selected { background-color: #fff; }
+.x-tree-node .x-tree-selected a span { color: #000; }
+ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
+
+.ux-mselect-item { font: 12px Arial; padding: 0 2px; }
+.directions { font-size: 10px; padding-bottom: 5px; }
+#fw_items-tree .x-panel-body { padding-top: 0; }
+#educational_level2-set { padding: 0; }
+.information-header { font-weight: bold; margin-top: 15px; }
+.information-header img { margin: 0 0 -4px 3px; }
+#ext-comp-1022  .x-panel-body { padding: 0; }
+.x-dd-drag-ghost { }
+
+.done-message { font: 13px Arial; padding: 1em 0; }
+.x-window-bbar .x-toolbar { border: none; }
+.x-toolbar .ytb-sep { background-image: none; border-left: 1px solid #999; }
+#ext-comp-1073 .x-btn button { background-color: transparent; border: none; color: #1963aa; }
+.x-toolbar .x-btn-over td.x-btn-center { background-image: none !important; text-decoration: underline; }
+.x-window .ux-mselect-selected { background-color: #3399ff; color: #fff; }
+.required-indicator { color: #fb0f0c; margin-right: 3px; }
+
+/* Groups */
+#groups-curriculum #groups-main-header .button { float: right; }
+.subject-card { margin: 5px; }
+
+/* Join curriki */
+#register_block_opt_out input { margin-bottom: -3px; }
+#register_block_opt_out .register_help { left: 20px; }
+.titlebar_purple { width: 100%; }
+
+/* Fixes for colorblack.css */
+.panel .accordionTabContentBox{ overflow: auto !important; }
+.about{ clear:both; }
+
+/* Admin wiki */
+textarea#content { overflow: auto; }
+
+/********************
+Overwrites for style1
+*********************/
+.browse-subject-table-cell { padding: 0; } 
+.titlebar { width: auto; }
+
+ul.star, ol { margin: 1em 0; padding-left: 30px; }
+ol { list-style-type: decimal; }
+
+/* search */
+.search-top-titlebar .gwt-HTML { padding-left: 10px; }
+.search-selector table td { padding-left: 10px; }
+.search-selector table td td { padding-left: 0; }
+#searchElement table table.search-selector-bottom { width: 620px; }
+#searchElement .gwt-ListBox { margin-bottom: 20px; }
+.search-selector-main { margin: 10px 0 5px; }
+
+/* Problem with p tags */
+.asset-contents p { zoom: 0; }
+
+/* Fixes for the WYSIWYG */
+.mceSeparatorLine { margin: 2px 0 !important; }
