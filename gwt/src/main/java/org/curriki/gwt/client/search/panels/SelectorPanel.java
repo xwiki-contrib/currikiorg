@@ -33,6 +33,7 @@ import org.curriki.gwt.client.search.history.ClientState;
 import org.curriki.gwt.client.search.history.KeepsState;
 import org.curriki.gwt.client.search.selectors.Selectable;
 import org.curriki.gwt.client.search.selectors.SelectorCollection;
+import org.curriki.gwt.client.search.filters.CRSFilter;
 
 import java.util.Iterator;
 
@@ -66,6 +67,9 @@ public class SelectorPanel extends VerticalPanel implements ChangeListener, Clic
         bottom.addStyleName("search-selector-bottom");
         bottom.setTogglePanel(filters);
         add(bottom);
+
+        // Other selectors (non-displayed)
+        selectors.add(new CRSFilter());
     }
 
     public Widget getLabel()
