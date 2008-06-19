@@ -105,13 +105,16 @@ Curriki.module.addpath.init = function(){
 							 text:_('add.contributemenu.next.button')
 							,id:'nextbutton'
 							,cls:'button next'
-							,disabled:true
 							,listeners:{
 								click:{
 									 fn: function(){
 										var form = this.findByType('form')[0].getForm();
-										var selected = (form.getValues(false))['assetSource'];
-										AddPath.SourceSelected(selected, form.getValues(false));
+										if (form.isValid()){
+											var selected = (form.getValues(false))['assetSource'];
+											AddPath.SourceSelected(selected, form.getValues(false));
+										} else {
+											alert(_('add.contributemenu.required.fields.dialog'));
+										}
 									}
 									,scope:this
 								}
@@ -119,14 +122,7 @@ Curriki.module.addpath.init = function(){
 						}]
 						,monitorValid:true
 						,listeners:{
-							clientvalidation:function(panel, valid){
-								if (valid) {
-									AddPath.EnableNext();
-								} else {
-									AddPath.DisableNext();
-								}
-							}
-							,render:function(fPanel){
+							render:function(fPanel){
 	//TODO: Try to generalize this (for different # of panels)
 								fPanel.ownerCt.on(
 									'bodyresize'
@@ -582,19 +578,61 @@ Curriki.module.addpath.init = function(){
 							 text:_('add.setrequiredinfo.part1.next.button')
 							,id:'nextbutton'
 							,cls:'button next'
-							,disabled:true
 							,listeners:{
 								click:{
 									 fn: function(){
 										var form = this.findByType('form')[0].getForm();
-										Curriki.current.sri1 = form.getValues(false);
-										Curriki.current.sri1.fw_items = this.findByType('treepanel')[0].getChecked('id');
+										if (form.isValid()){
+											Curriki.current.sri1 = form.getValues(false);
+											Curriki.current.sri1.fw_items = this.findByType('treepanel')[0].getChecked('id');
 
-										this.close();
+											this.close();
 
-										var p = Ext.ComponentMgr.create({'xtype':'apSRI2'});
-										p.show();
-										Ext.ComponentMgr.register(p);
+											var p = Ext.ComponentMgr.create({'xtype':'apSRI2'});
+											p.show();
+											Ext.ComponentMgr.register(p);
+										} else {
+											var errorMsg = {
+												 msg:_('form.scratch.required.fields.dialog')
+												,invalid:0
+												,form:form
+											}
+											Ext.each(['title', 'description', 'subject', 'level', 'ict'], function(item){
+												var invalid = null;
+
+												switch (item){
+													case 'title':
+													case 'description':
+													case 'ict':
+														if (!this.form.findField(item).isValid()){
+															invalid = item;
+														}
+														break;
+
+													case 'subject':
+														if (!this.form.findField('fw_items-validation').isValid()){
+															invalid = item;
+														}
+														break;
+
+													case 'level':
+														if (!this.form.findField('educational_level2-validation').isValid()){
+															invalid = item;
+														}
+														break;
+
+													default:
+														break;
+												}
+												if (!Ext.isEmpty(invalid)){
+													this.msg = this.msg+"\n\t"+_('form.scratch.required.fields.dialog.'+item);
+													this.invalid++;
+												}
+											}, errorMsg);
+											if (errorMsg.invalid > 0){
+												alert(errorMsg.msg);
+											}
+										}
 									}
 									,scope:this
 								}
@@ -603,11 +641,6 @@ Curriki.module.addpath.init = function(){
 						,monitorValid:true
 						,listeners:{
 							clientvalidation:function(panel, valid){
-								if (valid) {
-									AddPath.EnableNext();
-								} else {
-									AddPath.DisableNext();
-								}
 								// TODO: This should be elsewhere -- but which event?
 								if (Ext.isEmpty(Curriki.current.sri1fillin)) {
 									if (!Ext.isEmpty(Curriki.current.metadata)) {
@@ -768,7 +801,6 @@ Curriki.module.addpath.init = function(){
 									,id:'fw_items-validation'
 									,allowBlank:false
 									,minValue:1
-									,invalidText:'TODO: TRANSLATE: This field is required'
 									,hidden:true
 									,listeners:{
 										 valid:function(field){
@@ -995,16 +1027,43 @@ Curriki.module.addpath.init = function(){
 							 text:_('add.setrequiredinfo.part2.next.button')
 							,id:'nextbutton'
 							,cls:'button next'
-							,disabled:true
 							,listeners:{
 								click:{
 									 fn: function(){
 										var form = this.findByType('form')[0].getForm();
-										Curriki.current.sri2 = form.getValues(false);
+										if (form.isValid()){
+											Curriki.current.sri2 = form.getValues(false);
 
-										this.close();
+											this.close();
 
-										AddPath.MetadataFinished();
+											AddPath.MetadataFinished();
+										} else {
+											var errorMsg = {
+												 msg:_('form.scratch.required.fields.dialog')
+												,invalid:0
+												,form:form
+											}
+											Ext.each(['rights'], function(item){
+												var invalid = null;
+
+												switch (item){
+													case 'rights':
+														if (!this.form.findField('right_holder').isValid()){
+															invalid = item;
+														}
+														break;
+													default:
+														break;
+												}
+												if (!Ext.isEmpty(invalid)){
+													this.msg = this.msg+"\n\t"+_('form.scratch.required.fields.dialog.'+item);
+													this.invalid++;
+												}
+											}, errorMsg);
+											if (errorMsg.invalid > 0){
+												alert(errorMsg.msg);
+											}
+										}
 									}
 									,scope:this
 								}
@@ -1013,11 +1072,6 @@ Curriki.module.addpath.init = function(){
 						,monitorValid:true
 						,listeners:{
 							clientvalidation:function(panel, valid){
-								if (valid) {
-									AddPath.EnableNext();
-								} else {
-									AddPath.DisableNext();
-								}
 								// TODO: This should be elsewhere -- but which event?
 								if (Ext.isEmpty(Curriki.current.sri2fillin)) {
 									if (!Ext.isEmpty(Curriki.current.metadata)) {
