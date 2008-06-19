@@ -762,7 +762,7 @@ $msg.get("navigationHome")
 	
 ##
 ## Displays a navigation category, with sub-elements
-#macro(navigationCategory $text $link $expanded $items) ##{
+#macro(navigationCategory $text $rollovertext $link $expanded $items) ##{
   #set($iniexp = $expanded)
   #if($doc.web.startsWith("Coll_")) ##{
     #set($expanded = false) ##{
@@ -811,7 +811,8 @@ $msg.get("navigationHome")
 		onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" 
 		onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed');" 
 	#end ##}
-	class="titles#if($active) selected#end">
+	class="titles#if($active) selected#end"
+	title="${rollovertext}">
     #set($cls = "collapsed")
     #if($expanded) #set($cls = "expanded") #end
     <span id="${id}_arrow" class="${cls}"></span>
