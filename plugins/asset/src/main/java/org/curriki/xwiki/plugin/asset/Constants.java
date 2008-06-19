@@ -74,7 +74,7 @@ public interface Constants {
 
     String ASSET_LICENCE_ITEM_RIGHTS_HOLDER = "rightsHolder";
     String ASSET_LICENCE_ITEM_EXTERNAL_RIGHTS_HOLDER = "externalRightsHolder";
-    String ASSET_LICENCE_ITEM_LICENCE_TYPE = "licenseType";
+    String ASSET_LICENCE_ITEM_LICENCE_TYPE = "licenseType2";
     String ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT = "Licences.CurrikiLicense";
     String ASSET_LICENCE_ITEM_EXPIRY_DATE = "expiryDate";
 
