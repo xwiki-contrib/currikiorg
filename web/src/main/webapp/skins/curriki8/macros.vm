@@ -763,6 +763,7 @@ $msg.get("navigationHome")
 ##
 ## Displays a navigation category, with sub-elements
 #macro(navigationCategory $text $link $expanded $items) ##{
+  #set($iniexp = $expanded)
   #if($doc.web.startsWith("Coll_")) ##{
     #set($expanded = false) ##{
     #set($cookiebase = "${context.user}_asset_")
@@ -831,7 +832,8 @@ $msg.get("navigationHome")
       togglePanelVisibility(document.getElementById("${id}"));
     </script>
   #end ##}
-</div> ##}
+  </div> ##}
+  #set($expanded=$iniexp) ##rolling back the parameter to initial value so it won't affect future calls to this macro
 #end  ##}
 	
 ##
