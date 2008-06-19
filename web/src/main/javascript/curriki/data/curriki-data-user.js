@@ -145,7 +145,7 @@ console.log('Collections: ', this.collectionChildren);
 					};
 
 					if ("undefined" === typeof child.rights || !child.rights.view){
-						childInfo.text = _('TODO: Translation string here for unviewable resource');
+						childInfo.text = _('resource.unviewable');
 						childInfo.qtip = undefined;
 						childInfo.disabled = true;
 						childInfo.allowDrop = false;
@@ -165,7 +165,8 @@ console.log('Collections: ', this.collectionChildren);
 
 				colInfo.children = children;
 			} else {
-				colInfo.leaf = ("undefined" === typeof child.rights || !child.rights.view) || ("undefined" === typeof child.assetType || child.assetType.search(/Composite$/) === -1);
+				colInfo.leaf = false;
+				colInfo.children = [];
 			}
 
 			retVal.push(colInfo);
