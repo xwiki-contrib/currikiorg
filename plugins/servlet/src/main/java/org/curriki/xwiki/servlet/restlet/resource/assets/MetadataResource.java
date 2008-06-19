@@ -117,8 +117,8 @@ public class MetadataResource extends BaseResource {
         }
 
         // license_deed
-        if (json.has("license_deed")) {
-            licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_deed"));
+        if (json.has("license_type")) {
+            licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_type"));
         }
         // rights_holder
         if (json.has("right_holder")) {
