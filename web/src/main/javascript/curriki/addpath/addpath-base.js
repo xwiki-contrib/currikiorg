@@ -1490,7 +1490,7 @@ Curriki.module.addpath.init = function(){
 						Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'
 						,Curriki.current.parentTitle||'UNKNOWN'
 					];
-					msg = '<p>'+_('add.finalmessage.text_'+name+'_success')+'</p>';
+					msg = '<p>'+_('add.finalmessage.text_'+name+'_success', msgArgs)+'</p>';
 					break;
 
 				default:
