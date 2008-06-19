@@ -1792,6 +1792,34 @@ Curriki.module.addpath.init = function(){
 
 		AddPath.ChooseLocation = Ext.extend(Curriki.ui.dialog.Messages, {
 			  initComponent:function(){
+				var topChildren = [];
+				if (Curriki.data.user.collectionChildren.length>0){
+					topChildren.push({
+					 text:_('panels.myCurriki.myCollections')
+					,id:'ctv-drop-tree-collection-root'
+					,cls:'ctv-top ctv-header ctv-collections'
+					,leaf:false
+					,allowDrag:false
+					,allowDrop:false
+					,loaded:true
+					,expanded:(Curriki.data.user.collectionChildren.length < 4)
+					,children:Curriki.data.user.collectionChildren
+					});
+				}
+				if (Curriki.data.user.groupChildren.length>0){
+					topChildren.push({
+					 text:_('panels.myCurriki.myGroups')
+					,id:'ctv-drop-tree-group-root'
+					,cls:'ctv-top ctv-header ctv-groups'
+					,leaf:false
+					,allowDrag:false
+					,allowDrop:false
+					,loaded:true
+					,expanded:(Curriki.data.user.groupChildren.length < 4)
+					,children:Curriki.data.user.groupChildren
+					});
+				}
+
 				Ext.apply(this, {
 					 id:'ChooseLocationDialogueWindow'
 					,title:_('add.chooselocation.title')
@@ -1961,30 +1989,7 @@ Curriki.module.addpath.init = function(){
 									,allowDrop:false
 									,loaded:true
 									,expanded:true
-									,children:[
-										Curriki.data.user.collectionChildren.length>0?{
-										 text:_('panels.myCurriki.myCollections')
-										,id:'ctv-drop-tree-collection-root'
-										,cls:'ctv-top ctv-header ctv-collections'
-										,leaf:false
-										,allowDrag:false
-										,allowDrop:false
-										,loaded:true
-										,expanded:(Curriki.data.user.collectionChildren.length < 4)
-										,children:Curriki.data.user.collectionChildren
-									}:{},
-										Curriki.data.user.groupChildren.length>0?{
-										 text:_('panels.myCurriki.myGroups')
-										,id:'ctv-drop-tree-group-root'
-										,cls:'ctv-top ctv-header ctv-groups'
-										,leaf:false
-										,allowDrag:false
-										,allowDrop:false
-										,loaded:true
-										,expanded:(Curriki.data.user.groupChildren.length < 4)
-										,children:Curriki.data.user.groupChildren
-									}:{}
-									]
+									,children:topChildren
 								})
 							}]
 
