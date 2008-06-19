@@ -723,13 +723,13 @@ $doc.display("content", $obj)
 ##
 
 ##  Begin panel: includes link to HOME
-#macro(beginNavigationPanel) ##{
+#macro(beginNavigationPanel $homerollovertext) ##{
 <div id="navigation" class="shadow-outer">
 <div class="shadow-middle">
 <div id="navigation-inner" class="shadow-inner navigation-menu">
 #set($active = false)
 #checkActive("Main.WebHome" $active)
-<div class="home"><a class="titles#if($active) selected#end" href="$xwiki.getURL("Main.WebHome")"
+<div class="home"><a title="${homerollovertext}" class="titles#if($active) selected#end" href="$xwiki.getURL("Main.WebHome")"
 #if(!$active) 	onmouseover="addClass(this.parentNode, 'active');" 
 		onmouseout="rmClass(this.parentNode, 'active');" 
 #end >
@@ -824,7 +824,10 @@ $msg.get("navigationHome")
     #checkActive($item.get(1) $active)
     #set($theItemLink = $item.get(1))
     #normalizelink($theItemLink)
-    <li class="#if($active)selected#end#if($velocityCount == $items.size()) last#end"><a href="$theItemLink">$item.get(0)</a>
+    #set($linktitle = "")
+    #if($item.size()>2) #set($linktitle="title='$item.get(2)'") #end
+    <li class="#if($active)selected#end#if($velocityCount == $items.size()) last#end"><a ${linktitle} href="$theItemLink">$item.get(0)</a>
+    #set($linktitle = "") ##rolling back to default value
     #if($active)<img src="$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
   #end ##}
   </ul> ##}
