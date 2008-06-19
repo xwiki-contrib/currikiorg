@@ -1434,7 +1434,7 @@ Curriki.module.addpath.init = function(){
 
 				case 'viewtarget':
 					link = '/xwiki/bin/view/'+pageName.replace('.', '/');
-					text = _('add.finalmessage.viewtarget.link', Curriki.current.assetTitle||Curriki.current.sri1.title||'UNKNOWN');
+					text = _('add.finalmessage.viewtarget.link', Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN');
 					break;
 
 				case 'continue': // F, N, L Folder version
@@ -1487,8 +1487,8 @@ Curriki.module.addpath.init = function(){
 				case 'NFolder':
 				case 'LFolder':
 					var msgArgs = [
-						Curriki.current.assetTitle||Curriki.current.sri1.title||'UNKNOWN'
-						,Curriki.current.parentTitle
+						Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'
+						,Curriki.current.parentTitle||'UNKNOWN'
 					];
 					msg = '<p>'+_('add.finalmessage.text_'+name+'_success')+'</p>';
 					break;
@@ -2324,19 +2324,31 @@ Curriki.module.addpath.init = function(){
 };
 
 Curriki.module.addpath.startPath = function(path, options){
+	Curriki.module.addpath.initAndStart(function(){
+		Curriki.module.addpath.start(path);
+	}, options);
+}
+
+Curriki.module.addpath.startDoneMessage = function(options){
+	Curriki.module.addpath.initAndStart(function(){
+		Curriki.module.addpath.ShowDone();
+	}, options);
+}
+
+Curriki.module.addpath.initAndStart = function(fcn, options){
 	// parentTitle needs to be passed for E, H, J, P, F, N, and L
 	// assetTitle needs to be passed for E, H, J, P (known asset)
 
 	var current = Curriki.current;
 	if (!Ext.isEmpty(options)){
-		current.assetName = options.assetName||null;
-		current.parentAsset = options.parentAsset||null;
-		current.publishSpace = options.publishSpace||null;
-		current.cameFrom = options.cameFrom||null;
+		current.assetName = options.assetName||current.assetName;
+		current.parentAsset = options.parentAsset||current.parentAsset;
+		current.publishSpace = options.publishSpace||current.publishSpace;
+		current.cameFrom = options.cameFrom||current.cameFrom;
 
-		current.assetTitle = options.assetTitle||null;
-		current.assetType = options.assetType||null;
-		current.parentTitle = options.parentTitle||null;
+		current.assetTitle = options.assetTitle||current.assetTitle;
+		current.assetType = options.assetType||current.assetType;
+		current.parentTitle = options.parentTitle||current.parentTitle;
 	}
 
 	Curriki.init(function(){
@@ -2348,7 +2360,7 @@ Curriki.module.addpath.startPath = function(path, options){
 		Curriki.module.addpath.init();
 
 		var startFn = function(){
-			Curriki.module.addpath.start(path);
+			fcn();
 		}
 
 		var parentFn;
