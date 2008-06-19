@@ -137,8 +137,7 @@ Curriki.ui.component.asset.fwTree = {
 	,loader: new Ext.tree.TreeLoader()
 	,id:'fw_items-tree'
 	,useArrows:true
-	,height:255
-	,autoScroll:true
+	,autoHeight:true
 	,border:false
 	,cls:'fw-tree'
 	,animate:true

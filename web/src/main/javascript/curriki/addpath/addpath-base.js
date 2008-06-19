@@ -130,7 +130,8 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+											var gPanel = wPanel.findByType('panel')[0];
+											fPanel.setHeight(wPanel.getInnerHeight()-(gPanel.getBox().height));
 										}
 									}
 								);
@@ -669,7 +670,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getBox().height);
 										}
 									}
 								);
@@ -1107,7 +1108,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getBox().height);
 										}
 									}
 								);
@@ -1893,7 +1894,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getInnerHeight());
+											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getBox().height);
 										}
 									}
 								);
@@ -1905,13 +1906,6 @@ Curriki.module.addpath.init = function(){
 							,id:'resource-pickup'
 							,border:false
 							,items:[{
-								 xtype:'box'
-								,id:'resource-pickup-title'
-								,autoEl:{
-									 tag:'div'
-									,html:'TRANS: Click to drag this text'
-								}
-							},{
 								 xtype:'treepanel'
 								,loader: new Curriki.ui.treeLoader.Base()
 								,id:'ctv-from-tree-cmp'
@@ -2053,7 +2047,7 @@ Curriki.module.addpath.init = function(){
 		AddPath.AddSubasset = function(callback){
 			Curriki.assets.CreateSubasset(
 				Curriki.current.drop.parentPage
-				,(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle
+				,(Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName
 				,Curriki.current.drop.targetIndex
 				,function(){
 					if ("function" === typeof callback){
