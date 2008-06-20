@@ -27,6 +27,7 @@ CURRIKI="\
 	curriki/assets/curriki-assets.js \
 	curriki/ui/curriki-ui.js \
 	"
+#	ext/ExtJsOverride.js \
 
 cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
 
@@ -41,6 +42,5 @@ cat $CURRIKICSS | $COMPRESS_CSS > ../webapp/js/curriki-js.css
 ADDPATH="\
 	curriki/addpath/addpath-base.js \
 	"
-##	curriki/addpath/addpath-run.js \
 
 cat $ADDPATH | $COMPRESS_JS > ../webapp/js/curriki-module-addpath.js

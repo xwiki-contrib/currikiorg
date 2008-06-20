@@ -65,7 +65,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.contributemenu.title_addto_'+(this.toFolder?'composite':'site'))
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-source resource resource-add'
 					,id:AddPath.AddSourceDialogueId
 					,items:[{
 						 xtype:'panel'
@@ -443,7 +443,7 @@ Curriki.module.addpath.init = function(){
 				Ext.apply(this, {
 					 id:'SelectTemplateDialogueWindow'
 					,title:_('add.selecttemplate.title')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-templates resource resource-add'
 					,items:[{
 						 xtype:'form'
 						,id:'SelectTemplateDialoguePanel'
@@ -537,7 +537,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.setrequiredinfo.part1.title')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-metadata resource resource-add'
 					,items:[{
 						 xtype:'panel'
 						,cls:'guidingquestion-container'
@@ -754,6 +754,7 @@ Curriki.module.addpath.init = function(){
 							 xtype:'textarea'
 							,id:'metadata-description-entry'
 							,name:'description'
+							,emptyText:_('sri.description.empty_msg')
 							,allowBlank:false
 							,hideLabel:true
 							,width:'80%'
@@ -987,7 +988,7 @@ Curriki.module.addpath.init = function(){
 				Ext.apply(this, {
 					 id:'MetadataDialogueWindow'
 					,title:_('add.setrequiredinfo.part2.title')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-metadata resource resource-add'
 					,items:[{
 						 xtype:'panel'
 						,cls:'guidingquestion-container'
@@ -1221,6 +1222,7 @@ Curriki.module.addpath.init = function(){
 									 xtype:'textfield'
 									,id:'metadata-keywords-entry'
 									,name:'keywords'
+									,emptyText:_('sri.keywords.empty_msg')
 									,hideLabel:true
 									,width:'60%'
 								}]
@@ -1595,7 +1597,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_resource')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('view'),'-'
 						,AddPath.FinalLink('add'),'-'
@@ -1618,7 +1620,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_collection')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('openbuilder'),'-'
 						,AddPath.FinalLink('collections'),'->'
@@ -1638,7 +1640,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_successful')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('viewtarget'),'->'
 						,AddPath.CloseDone(this)
@@ -1661,7 +1663,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_successful')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						'->',AddPath.CloseDone(this)
 					]
@@ -1681,7 +1683,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_folder')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('continue'),'-'
 						,AddPath.FinalLink('openbuilder'),'->'
@@ -1704,7 +1706,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_folder')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('favorites'),'->'
 						,AddPath.CloseDone(this)
@@ -1722,7 +1724,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_collection')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 '->',AddPath.FinalLink('continue')
 					]
@@ -1739,7 +1741,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_collection')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 '->',AddPath.FinalLink('continue')
 					]
@@ -1756,7 +1758,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				Ext.apply(this, {
 					 title:_('add.finalmessage.title_resource')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('view'),'-'
 						,AddPath.FinalLink('add'),'->'
@@ -1825,7 +1827,7 @@ Curriki.module.addpath.init = function(){
 				Ext.apply(this, {
 					 id:'ChooseLocationDialogueWindow'
 					,title:_('add.chooselocation.title')
-					,cls:'resource resource-add'
+					,cls:'addpath addpath-ctv resource resource-add'
 					,autoScroll:false
 					,width:634
 					,items:[{
