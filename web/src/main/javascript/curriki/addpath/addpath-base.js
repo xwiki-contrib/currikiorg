@@ -1984,14 +1984,14 @@ Curriki.module.addpath.init = function(){
 												if (height === 'auto') {
 													tPanel.setHeight('auto');
 												} else {
-													tPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+wPanel.findByType('panel')[1].getBox().height+wPanel.items.get(1).bbar.getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
+													tPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+wPanel.findByType('panel')[0].el.getMargins('tb')+wPanel.findByType('panel')[1].getBox().height+wPanel.items.get(1).getFrameHeight()+wPanel.findByType('panel')[1].el.getMargins('tb')+(Ext.isIE?AddPath.ie_size_shift:0)));
 												}
 											}
 										);
 									}
 								}
 								,root: new Ext.tree.AsyncTreeNode({
-									 text:_('ROOT - Unshown')
+									 text:_('add.chooselocation.drop_root')
 									,id:'ctv-drop-tree-root'
 									,cls:'ctv-drop-root'
 									,leaf:false
