@@ -24,11 +24,16 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,defaults:{border:false}
 	,listeners:{
 		afterlayout:function(wnd, layout){
-			if (wnd.getFrameHeight()+wnd.getInnerHeight() > wnd.maxHeight){
-				wnd.setHeight(wnd.maxHeight);
-				wnd.center();
+			if (this.afterlayout_maxheight) {
+				// Don't collapse again
 			} else {
-				wnd.setHeight('auto');
+				if (wnd.getBox().height > wnd.maxHeight){
+					wnd.setHeight(wnd.maxHeight);
+					wnd.center();
+					this.afterlayout_maxheight = true;
+				} else {
+					wnd.setHeight('auto');
+				}
 			}
 		}
 	}

@@ -1826,6 +1826,8 @@ Curriki.module.addpath.init = function(){
 					 id:'ChooseLocationDialogueWindow'
 					,title:_('add.chooselocation.title')
 					,cls:'resource resource-add'
+					,autoScroll:false
+					,width:634
 					,items:[{
 						 xtype:'panel'
 						,id:'guidingquestion-container'
@@ -1850,7 +1852,7 @@ Curriki.module.addpath.init = function(){
 						,id:'ChooseLocationDialoguePanel'
 						,formId:'ChooseLocationDialogueForm'
 						,labelWidth:25
-						,autoScroll:true
+						,autoScroll:false
 						,border:false
 						,defaults:{
 							 labelSeparator:''
@@ -1887,19 +1889,6 @@ Curriki.module.addpath.init = function(){
 							}
 						}]
 						,listeners:{
-							render:function(fPanel){
-	//TODO: Try to generalize this (for different # of panels)
-								fPanel.ownerCt.on(
-									'bodyresize'
-									,function(wPanel, width, height){
-										if (height === 'auto') {
-											fPanel.setHeight('auto');
-										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
-										}
-									}
-								);
-							}
 						}
 						,items:[{
 		// DRAG BOX
@@ -1907,19 +1896,25 @@ Curriki.module.addpath.init = function(){
 							,id:'resource-pickup'
 							,border:false
 							,items:[{
+								 xtype:'box'
+								,autoEl:{
+									 tag:'div'
+									,html:_('add.chooselocation.instruction_short')
+									,cls:'instruction'
+								}
+							},{
 								 xtype:'treepanel'
 								,loader: new Curriki.ui.treeLoader.Base()
 								,id:'ctv-from-tree-cmp'
 								,useArrows:true
-								,autoScroll:true
+								,autoScroll:false
 								,border:false
 								,cls:'ctv-from-tree'
 								,animate:true
 								,enableDrag:true
-								,containerScroll:true
 								,rootVisible:false
 								,root: new Ext.tree.AsyncTreeNode({
-									 text:_('ROOT - Unshown')
+									 text:_('add.chooselocation.pickup_root')
 									,id:'ctv-drag-tree-root'
 									,cls:'ctv-drag-root'
 									,leaf:false
@@ -1947,8 +1942,8 @@ Curriki.module.addpath.init = function(){
 								 xtype:'treepanel'
 								,loader: new Curriki.ui.treeLoader.Base()
 								,id:'ctv-to-tree-cmp'
-								,useArrows:true
 								,autoScroll:true
+								,useArrows:true
 								,border:false
 								,cls:'ctv-to-tree'
 								,animate:true
@@ -1973,6 +1968,26 @@ Curriki.module.addpath.init = function(){
 											AddPath.EnableNext();
 										}
 										,scope:this
+									}
+									,expandnode:{
+										fn: function(node){
+											var wnd = this;
+											wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
+										}
+										,scope:this
+									}
+									,render:function(tPanel){
+//TODO: Try to generalize this (for different # of panels)
+										tPanel.ownerCt.ownerCt.ownerCt.on(
+											'bodyresize'
+											,function(wPanel, width, height){
+												if (height === 'auto') {
+													tPanel.setHeight('auto');
+												} else {
+													tPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+wPanel.findByType('panel')[1].getBox().height+wPanel.items.get(1).bbar.getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
+												}
+											}
+										);
 									}
 								}
 								,root: new Ext.tree.AsyncTreeNode({
