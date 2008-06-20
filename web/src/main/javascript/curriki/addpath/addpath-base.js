@@ -1947,6 +1947,7 @@ Curriki.module.addpath.init = function(){
 								,autoScroll:true
 								,useArrows:true
 								,border:false
+								,hlColor:'93C53C'
 								,cls:'ctv-to-tree'
 								,animate:true
 								,enableDD:true
