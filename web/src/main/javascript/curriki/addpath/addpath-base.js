@@ -132,7 +132,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
@@ -671,7 +671,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
@@ -1109,7 +1109,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
@@ -1895,7 +1895,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
