@@ -171,6 +171,7 @@ Curriki.module.addpath.init = function(){
 								,id:'file-entry-box'
 								,name:'filepath'
 								,allowBlank:false
+								,preventMark:true
 								,hideMode:'display'
 								,hideLabel:true
 		//						,hidden:true
@@ -192,6 +193,7 @@ Curriki.module.addpath.init = function(){
 								,id:'filename-entry-box'
 								,name:'filename'
 								,allowBlank:false
+								,preventMark:true
 								,hideLabel:true
 								,hidden:true
 								,disabled:true
@@ -237,6 +239,7 @@ Curriki.module.addpath.init = function(){
 								 xtype:'textfield'
 								,id:'video_upload-entry-value'
 								,allowBlank:false
+								,preventMark:true
 								,hidden:true
 								,disabled:true
 							},{
@@ -275,6 +278,7 @@ Curriki.module.addpath.init = function(){
 								,disabled:true
 								,hidden:true
 								,allowBlank:false
+								,preventMark:true
 								,hideMode:'display'
 								,hideLabel:true
 								,vtype:'url'
@@ -352,6 +356,7 @@ Curriki.module.addpath.init = function(){
 								 xtype:'textfield'
 								,id:'video_capture-entry-value'
 								,allowBlank:false
+								,preventMark:true
 								,hidden:true
 								,disabled:true
 							},{
@@ -626,9 +631,17 @@ Curriki.module.addpath.init = function(){
 													default:
 														break;
 												}
+												var title = Ext.get('metadata-'+item+'-title');
 												if (!Ext.isEmpty(invalid)){
 													this.msg = this.msg+"\n\t"+_('form.scratch.required.fields.dialog.'+item);
+													if (title) {
+														title.addClass('metadata-title-field-invalid');
+													}
 													this.invalid++;
+												} else {
+													if (title) {
+														title.removeClass('metadata-title-field-invalid');
+													}
 												}
 											}, errorMsg);
 											if (errorMsg.invalid > 0){
@@ -715,6 +728,7 @@ Curriki.module.addpath.init = function(){
 							,name:'title'
 							,emptyText:_('sri.title_content')
 							,allowBlank:false
+							,preventMark:true
 							,hideLabel:true
 							,width:'80%'
 
@@ -756,6 +770,7 @@ Curriki.module.addpath.init = function(){
 							,name:'description'
 							,emptyText:_('sri.description.empty_msg')
 							,allowBlank:false
+							,preventMark:true
 							,hideLabel:true
 							,width:'80%'
 
@@ -803,15 +818,22 @@ Curriki.module.addpath.init = function(){
 									 xtype:'numberfield'
 									,id:'fw_items-validation'
 									,allowBlank:false
+									,preventMark:true
 									,minValue:1
 									,hidden:true
 									,listeners:{
 										 valid:function(field){
+											if (!this.rendered || this.preventMark) {
+												return;
+											}
 											var fieldset = Ext.getCmp('fw_items-tree');
 											fieldset.removeClass('x-form-invalid');
 											fieldset.el.dom.qtip = '';
 										}
 										,invalid:function(field, msg){
+											if (!this.rendered || this.preventMark) {
+												return;
+											}
 											var fieldset = Ext.getCmp('fw_items-tree');
 											fieldset.addClass('x-form-invalid');
 											var iMsg = field.invalidText;
@@ -866,6 +888,7 @@ Curriki.module.addpath.init = function(){
 									 xtype:'numberfield'
 									,id:'educational_level2-validation'
 									,allowBlank:false
+									,preventMark:true
 									,minValue:1
 									,invalidText:'TRANSLATE: This field is required'
 									,hidden:true
@@ -892,6 +915,7 @@ Curriki.module.addpath.init = function(){
 									,id:'educational_level2-set'
 									,border:false
 									,autoHeight:true
+									,preventMark:true
 									,defaults:{
 										 xtype:'checkbox'
 										,name:'educational_level2'
@@ -954,6 +978,7 @@ Curriki.module.addpath.init = function(){
 							,width:250
 							,height:100
 							,allowBlank:false
+							,preventMark:true
 							,minLength:1
 							,isFormField:true
 		/*
@@ -1058,9 +1083,17 @@ Curriki.module.addpath.init = function(){
 													default:
 														break;
 												}
+												var title = Ext.get('metadata-'+item+'-title');
 												if (!Ext.isEmpty(invalid)){
 													this.msg = this.msg+"\n\t"+_('form.scratch.required.fields.dialog.'+item);
+													if (title) {
+														title.addClass('metadata-title-field-invalid');
+													}
 													this.invalid++;
+												} else {
+													if (title) {
+														title.removeClass('metadata-title-field-invalid');
+													}
 												}
 											}, errorMsg);
 											if (errorMsg.invalid > 0){
@@ -1317,6 +1350,7 @@ Curriki.module.addpath.init = function(){
 									,hideLabel:true
 									,value:Curriki.data.user.me.fullname
 									,allowBlank:false
+									,preventMark:true
 									,width:'60%'
 								}]
 
