@@ -4,7 +4,7 @@ BASIC ELEMENTS STYLES
 body { background-color: #666; font: 12px arial; margin: 0; padding: 0 1%; text-align: center; }
 
 a { color: #1963aa; cursor: pointer; text-decoration: none; }
-a:hover { text-decoration: underline; }
+a:hover { color: #282974; text-decoration: underline; }
 a img { border: none; }
 
 fieldset { border: none; padding: 0; margin: 0; }
@@ -15,11 +15,11 @@ textarea, .x-form-text, textarea.x-form-field { background-image: none; border-s
 p { margin: 0.5em 0; padding: 0; }
 button, .x-btn button { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
 button:hover, .x-btn button:hover { background-color: #ffb808; color: #fff; }
-button.cancel, #cancelbutton .x-btn-text, #ext-comp-1073 .x-btn-text { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
-button.cancel:hover, #cancelbutton .x-btn-text:hover, #ext-comp-1073 #cancelbutton .x-btn-text:hover { background-color: #b4b4b4; }
+button.cancel, .button-grey, #cancelbutton .x-btn-text, #ext-comp-1073 .x-btn-text, #closebutton button { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
+button.cancel:hover, button.button-grey:hover, #cancelbutton .x-btn-text:hover, #ext-comp-1073 #cancelbutton .x-btn-text:hover, #closebutton button:hover { background-color: #b4b4b4; color: #3f3f3f; }
 h1,h2,h3,h4,h5,h6,h7 { font-style: normal; padding: 0; margin: 0; }
-h2 { font-size: 1.3em; }
-h3 { font-size: 1.25em; }
+h2 { font-size: 16px; }
+h3 { font-size: 15px; }
 table { border-collapse: collapse; }
 strong { font-weight: bold; }
 
@@ -91,7 +91,7 @@ strong { font-weight: bold; }
 #navigation-inner .titles:hover span.expanded, #navigation-inner .selected span.expanded { background-image: url("menu-expanded-hover.gif"); }
 #navigation-inner .titles:hover span.collapsed, #navigation-inner .selected span.collapsed { background-image: url("menu-collapsed-hover.gif"); }
 #navigation-inner .home a { margin: 0;  }
-#navigation-inner span { display: block; float: left; height: 18px; width: 24px; cursor: crosshair; }
+#navigation-inner span { display: block; float: left; height: 18px; width: 24px; cursor: pointer; }
 #navigation-inner span.expanded { background: transparent url("menu-expanded.gif") no-repeat scroll 2px 4px; }
 #navigation-inner span.collapsed { background: transparent url("menu-collapsed.gif") no-repeat scroll 3px 1px; }
 #navigation-inner ul { background: #f2f2f2; list-style-type: none; margin: 0; padding: 0 0 0 2.9em; }
@@ -114,7 +114,7 @@ strong { font-weight: bold; }
 
 #watch-curriki-grow .stats { color: #1963aa; border-bottom: 1px solid #d0d0d0; width: 185px; }
 #watch-curriki-grow .stats td { padding: 0 15px 5px 0; }
-#watch-curriki-grow .links { font-size: 1em; font-weight: bold; }
+#watch-curriki-grow .links { font-size: 1em; font-weight: bold; margin-bottom: 0; padding: 0; text-align: right; }
 
 /* RIGHT PANEL */
 .expanded #right-panel { margin-left: 210px; padding-left: 10px; }
@@ -132,9 +132,9 @@ strong { font-weight: bold; }
 .curricula-panels .create a:hover { background-color: #93c53c; }
 .curricula-panels .groups .headerbar a:hover { background-color: #4e83c6; }
 .curricula-panels a.content { border: none; border-bottom: 1px solid #c3c3c3; display: block; font-size: 1.3em; font-weight: bold; padding: 1em 0.5em 0; height: 100px; }
-.curricula-panels .footer { color: #5051a3; font-size: 1.2em; padding: 1em 0.5em; margin: 0; }
-.curricula-panels .footer a { display: block; }
-.curricula-panels .footer a img { margin-bottom: -10px; }
+.curricula-panels .footer { color: #5051a3; font-size: 1.1em; padding: 1em 0.5em; margin: 0; }
+.curricula-panels .footer a { display: block; height: 25px; padding: 10px 0 5px 34px; position: relative; }
+.curricula-panels .footer a img { position: absolute; left: 0; top: 3px; }
 #curricula-highlights { margin: 1em 7px 0 15px; }
 #curricula-highlights .headerbar { font-size: 1.1em; padding: 0.5em; }
 #curricula-highlights table { font-size: 1.2em; color: #666; margin: 1em 0.5em; }
@@ -156,7 +156,7 @@ strong { font-weight: bold; }
 .curriki-form .entry h5 { font-size: 1.1em; }
 .curriki-form .entry h5 em { font-weight: normal; }
 .curriki-form .entry h5 img { margin-bottom: -5px; }
-.curriki-form .entry p.instruction { line-height: 130%; }
+.curriki-form .entry p.instruction { line-height: 130%; padding-bottom: 7px; }
 .curriki-form .entry input.input { width: 90%; }
 .curriki-form .entry textarea { height: 9em; width: 90%; }
 .curriki-form .entry label { display: block; }
@@ -172,9 +172,11 @@ strong { font-weight: bold; }
 form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
 .curriki-form #XWiki\.AssetClass_0_title, #XWiki\.AssetClass_0_description, #XWiki\.AssetClass_0_instructional_component2, #XWiki\.AssetClass_0_keywords, #XWiki\.AssetLicenseClass_0_rightsHolder { width: 99% !important; width: 95%; }
 .curriki-form #mce_editor_0 { height: 30em !important; width: 100%  !important; }
+.curriki-form .subject-educational .xwiki-form-listclass { padding-bottom: 1px; }
+.curriki-form .subject-educational .ygtvlabel { display: block; padding-top: 4px; }
 
 /* Add Path */
-.x-panel { text-align: left; }
+.x-panel, .x-window { text-align: left; }
 .x-panel-ghost ul, .x-panel-ghost .x-window-tl { border: none; }
 .x-panel-noborder .x-panel-bbar-noborder .x-toolbar { border: none;  }
 .x-window, .x-panel-ghost, .ext-el-mask-msg { background-color: #fff; border: 1px solid #dcdcdc; font-size: 13px; padding: 0; }
@@ -183,6 +185,7 @@ form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
 .x-window-tl .x-window-header { color: #fff; font: 12px arial;  font-weight: bold; padding: 3px 0; }
 .x-window .x-panel-body { padding: 1em 1em 0; }
 #MetadataDialogueForm .x-panel-body { padding-left: 0; }
+.x-window #resource-drop .x-panel-body { padding-top: 0; }
 .x-btn button { display: inline; padding: 0; width: auto !important; }
 .x-toolbar .x-btn-over .x-btn-right, .x-toolbar .x-btn-over .x-btn-left { background-image: none; }
 .x-window-mc, .x-form-item, .x-btn button { font: 13px Arial,sans-serif; }
@@ -204,13 +207,14 @@ input.x-form-radio { margin-bottom: -2px }
 .x-panel-body .x-tree-elbow-end { background:transparent url(/xwiki/yui/treeview/assets/ln.gif) no-repeat; }
 .x-panel-body .x-tree-elbow-line { background: transparent url(/xwiki/yui/treeview/assets/vline.gif) no-repeat; }
 
-.ctv-groups a { font: 12px Arial; font-weight: bold; text-transform: uppercase; }
+.ctv-groups a, .ctv-top a { font: 12px Arial; font-weight: bold; text-transform: uppercase; }
 .x-tree-node-anchor { font: 12px Arial; } 
-#resource-pickup-box { background: transparent url($xwiki.getSkinFile("images/ctv/drag_area.jpg")) no-repeat; height: 98px; margin-top: 1em; padding: 0.7em; }
-#resource-pickup-box * { background: transparent; }
-#resource-pickup-box .x-panel-body { padding-top: 0.1em; }
-#resource-pickup-box .x-tree-node-el { border: 1px dashed #93c53c; }
-.x-tree-node .x-tree-selected, .x-dd-drag-proxy { background-color: #93c53c; border: none; }
+#resource-pickup { background: transparent url($xwiki.getSkinFile("images/ctv/drag_area.jpg")) no-repeat; height: 98px; margin-top: 1em; padding: 0.7em; }
+#resource-pickup * { background-color: transparent; }
+#resource-pickup .x-panel-body { padding-top: 0.1em; }
+#resource-pickup .x-tree-node-el { border: 1px dashed #93c53c; }
+#resource-pickup .x-tree-ec-icon { background-image: none; width: 5px; }
+.x-tree-node .x-tree-selected, .x-dd-drag-proxy, .x-tree-node .x-tree-drag-append a span { background-color: #93c53c; border: none; }
 .x-tree-node .x-tree-selected a span { color: #fff; }
 .x-tree-node .x-tree-node-over { background-color: transparent; }
 .x-panel-bwrap, .x-panel-bwrap .x-panel-body, .x-column-inner .x-panel { overflow: visible; height: auto; }
@@ -229,12 +233,25 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 .information-header { font-weight: bold; margin-top: 15px; }
 .information-header img { margin: 0 0 -4px 3px; }
 #ext-comp-1022  .x-panel-body { padding: 0; }
-.x-dd-drag-ghost { }
-
+.x-dd-drag-ghost { padding-left: 5px; text-align: left; width: 300px; }
+.x-dd-drop-icon { background-image: none; width: 0; }
+.x-shadow * { background-image: none; visibility: hidden; }
+.x-dd-drag-proxy { opacity: 0.80;}
+.x-dd-drag-proxy * { background-color: transparent; }
+.x-tree-node-icon, .x-tree-node-leaf .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/ResourceGenericYellow.gif); }
+.ctv-groups .x-tree-node-icon, .ctv-top .x-tree-node-icon { display: none; } 
+.curriki-group .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/GroupsIcon.gif); }  
+.resource-CollectionComposite .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/FolderCollectionRed.gif); }  
+.resource-FolderComposite .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/FolderResourceOrange.gif); }
+.x-tree-node div.x-tree-drag-insert-above  { border-top: 1px dashed #93c53c; }
+.x-tree-node div.x-tree-drag-insert-below  { border-bottom: 1px dashed #93c53c; }
 .done-message { font: 13px Arial; padding: 1em 0; }
 .x-window-bbar .x-toolbar { border: none; }
 .x-toolbar .ytb-sep { background-image: none; border-left: 1px solid #999; }
-#ext-comp-1073 .x-btn button { background-color: transparent; border: none; color: #1963aa; }
+#ext-comp-1073 .x-btn button, #done-dialogue button { background-color: transparent; border: none; color: #1963aa; }
+#done-dialogue #closebutton button { background-color: #dcdcdc; border: 1px solid #A5A5A5; color: #3f3f3f; }
+#done-dialogue button:hover { color: #282974; text-decoration: underline; }
+#done-dialogue #closebutton button:hover { background-color: #b4b4b4; color: #3f3f3f; }
 .x-toolbar .x-btn-over td.x-btn-center { background-image: none !important; text-decoration: underline; }
 .x-window .ux-mselect-selected { background-color: #3399ff; color: #fff; }
 .required-indicator { color: #fb0f0c; margin-right: 3px; }
@@ -255,14 +272,30 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 /* Admin wiki */
 textarea#content { overflow: auto; }
 
+/* Send a friend */
+.send-a-friend { text-align: left; }
+
+
 /********************
 Overwrites for style1
 *********************/
 .browse-subject-table-cell { padding: 0; } 
 .titlebar { width: auto; }
+.button, .frame input.button { padding: 0 0.5em; }
+.panel { width: 203px; }
 
 ul.star, ol { margin: 1em 0; padding-left: 30px; }
 ol { list-style-type: decimal; }
+
+.table .button-links a { display: block; padding-left: 20px; text-align: left; }
+.table .button-links a:hover, .frame-inset .button-links a:hover { color: #282974; text-decoration: underline; }
+.table .button-links a.button-link-table  { border: none; }
+.frame-inset .button-links { margin-bottom: 15px; padding-left: 17px; }
+.frame-inset .button-links a { padding: 0 0 0 4px; }
+.frame-inset-ict { margin-bottom: 5px; }
+.frame-inset-title { padding: 1px 0 18px; }
+#mycurriki-collections .button-links p { display: inline; }
+.heading-1-1-1-1 { margin-top: 0; }
 
 /* search */
 .search-top-titlebar .gwt-HTML { padding-left: 10px; }
@@ -277,3 +310,18 @@ ol { list-style-type: decimal; }
 
 /* Fixes for the WYSIWYG */
 .mceSeparatorLine { margin: 2px 0 !important; }
+
+/* Groups */
+#section4content div.headlines p a b { display: block; padding-right: 90px; }
+
+/* My curriki*/
+.edit-profile .userpic, #mycurriki-main-content form td .userpic { margin-right: 15px; }
+.edit-profile table table td { padding-bottom: 5px; }
+#mycurriki-main-content form table table td strong { display: block; padding-top: 5px; }
+
+/* Print */
+#printheader { background-color: #E3E4F6; }
+#header-banner { width: auto; }
+#printheader #header-logo { background-color: #fff; padding-right: 10px; }
+#printcontainer_compare table { border: none; width: 98%; }
+#printcontainer .asset-contents, #printcontainer .titlebar { margin-bottom: 0; }
