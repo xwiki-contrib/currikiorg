@@ -9,6 +9,8 @@ Curriki.module.addpath.init = function(){
 		// Local alias
 		var AddPath = Curriki.module.addpath;
 
+		AddPath.ie_size_shift = 10;
+
 		AddPath.EnableNext = function() {
 			Ext.getCmp('nextbutton').enable();
 		}
@@ -130,8 +132,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											var gPanel = wPanel.findByType('panel')[0];
-											fPanel.setHeight(wPanel.getInnerHeight()-(gPanel.getBox().height));
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
@@ -670,7 +671,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getBox().height);
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
@@ -1108,7 +1109,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getBox().height);
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
@@ -1894,7 +1895,7 @@ Curriki.module.addpath.init = function(){
 										if (height === 'auto') {
 											fPanel.setHeight('auto');
 										} else {
-											fPanel.setHeight(wPanel.getInnerHeight()-wPanel.findByType('panel')[0].getBox().height);
+											fPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+(Ext.isIE()?AddPath.ie_size_shift:0)));
 										}
 									}
 								);
