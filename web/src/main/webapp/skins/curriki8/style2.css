@@ -13,8 +13,8 @@ input.input { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc
 input.checkbox, input[type="checkbox"], input[type="radio"] { border: 0; height: 15px; margin: 0px 2px 1px 0; padding: 0; width: 15px; }
 textarea, .x-form-text, textarea.x-form-field { background-image: none; border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 13px; padding: 0.4em 0.2em; }
 p { margin: 0.5em 0; padding: 0; }
-button, .x-btn button { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
-button:hover, .x-btn button:hover { background-color: #ffb808; color: #fff; }
+button, .x-btn button, .menu-add { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
+button:hover, .x-btn button:hover, .menu-add:hover { background-color: #ffb808; color: #fff; }
 button.cancel, .button-grey, #cancelbutton .x-btn-text, #ext-comp-1073 .x-btn-text, #closebutton button { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
 button.cancel:hover, button.button-grey:hover, #cancelbutton .x-btn-text:hover, #ext-comp-1073 #cancelbutton .x-btn-text:hover, #closebutton button:hover { background-color: #b4b4b4; color: #3f3f3f; }
 h1,h2,h3,h4,h5,h6,h7 { font-style: normal; padding: 0; margin: 0; }
@@ -172,8 +172,9 @@ strong { font-weight: bold; }
 form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
 .curriki-form #XWiki\.AssetClass_0_title, #XWiki\.AssetClass_0_description, #XWiki\.AssetClass_0_instructional_component2, #XWiki\.AssetClass_0_keywords, #XWiki\.AssetLicenseClass_0_rightsHolder { width: 99% !important; width: 95%; }
 .curriki-form #mce_editor_0 { height: 30em !important; width: 100%  !important; }
-.curriki-form .subject-educational .xwiki-form-listclass { padding-bottom: 1px; }
+.curriki-form .subject-educational .xwiki-form-listclass { padding-bottom: 1px !important; padding-bottom: 0; }
 .curriki-form .subject-educational .ygtvlabel { display: block; padding-top: 4px; }
+#XWiki\.AssetClass_0_language { margin-top: 1px !important; margin-top: 4px }
 
 /* Add Path */
 .x-panel, .x-window { text-align: left; }
@@ -209,7 +210,7 @@ input.x-form-radio { margin-bottom: -2px }
 
 .ctv-groups a, .ctv-top a { font: 12px Arial; font-weight: bold; text-transform: uppercase; }
 .x-tree-node-anchor { font: 12px Arial; } 
-#resource-pickup { background: transparent url($xwiki.getSkinFile("images/ctv/drag_area.jpg")) no-repeat; height: 98px; margin-top: 1em; padding: 0.7em; }
+#resource-pickup { background: transparent url($xwiki.getSkinFile("images/ctv/drag_area.jpg")) no-repeat; height: 98px; margin-top: 1em; padding: 0.7em; width: 360px; }
 #resource-pickup * { background-color: transparent; }
 #resource-pickup .x-panel-body { padding-top: 0.1em; }
 #resource-pickup .x-tree-node-el { border: 1px dashed #93c53c; }
@@ -325,3 +326,6 @@ ol { list-style-type: decimal; }
 #printheader #header-logo { background-color: #fff; padding-right: 10px; }
 #printcontainer_compare table { border: none; width: 98%; }
 #printcontainer .asset-contents, #printcontainer .titlebar { margin-bottom: 0; }
+
+/* CB */
+.gwt-Tree .asset-tree-item .gwt-TreeItem { display: block !important; }
