@@ -19,6 +19,7 @@ Curriki.data.user = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'me'
 			,method:'GET'
+			,disableCaching:true
 			,headers: {
 				'Accept':'application/json'
 			}
@@ -52,6 +53,7 @@ Curriki.data.user = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/collections'
 			,method:'GET'
+			,disableCaching:true
 			,headers: {
 				'Accept':'application/json'
 			}
@@ -87,6 +89,7 @@ console.log('Collections: ', this.collectionChildren);
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/groups'
 			,method:'GET'
+			,disableCaching:true
 			,headers: {
 				'Accept':'application/json'
 			}

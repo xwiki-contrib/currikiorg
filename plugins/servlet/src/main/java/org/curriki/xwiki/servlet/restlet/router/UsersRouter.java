@@ -12,7 +12,7 @@ import org.curriki.xwiki.servlet.restlet.resource.users.UserResource;
 public class UsersRouter extends Router {
     public UsersRouter(Context context) {
         super(context);
-        attach("/me", UserResource.class).getTemplate().setMatchingMode(Template.MODE_EQUALS);
+        attach("/me", UserResource.class);
         attach("/{userName}/groups", UserGroupsResource.class);
         attach("/{userName}/collections", UserCollectionsResource.class);
     }
