@@ -30,7 +30,7 @@ public class CRSFilter implements Selectable, KeepsState {
                 filter = "CRS.CurrikiReviewStatusClass.status:P";
             }
             if (value.equals("topreviewed")){
-                filter = "CRS.CurrikiReviewStatusClass.status:(2 OR 3 OR P)";
+                filter = "CRS.CurrikiReviewStatusClass.status:(2 OR 3)";
             }
         }
 
