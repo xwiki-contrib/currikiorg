@@ -87,15 +87,15 @@
 
 <!-- advanced search -->
 <div id="header-search"> ##{
-  <form name="searchform" class="search-box" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;"> ##{
+  <form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;"> ##{
   
     <input type="hidden" class="hidden" name="area" value=""/>
     #set($brsqry = $request.brsqry)
     #if(!$brsqry || $brsqry == "")
       #set($brsqry = "search")
     #end
-    <input type="text" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='search') this.value=''; else this.select()" onblur="if (this.value=='') this.value='search'" />
-    <button type="submit">$msg.get("headerLoginGo")<!-- $msg.get("header.search_go") --></button>
+    <input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='search') this.value=''; else this.select()" onblur="if (this.value=='') this.value='search'" />
+    <button type="submit" id="searchbtn" name="btn">$msg.get("headerLoginGo")<!-- $msg.get("header.search_go") --></button>
       
   </form> ##}
   <p> ##{
