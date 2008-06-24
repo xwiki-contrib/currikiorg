@@ -1723,8 +1723,7 @@ Curriki.module.addpath.init = function(){
 					 title:_('add.finalmessage.title_folder')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
-						 AddPath.FinalLink('continue'),'-'
-						,AddPath.FinalLink('openbuilder'),'->'
+						 AddPath.FinalLink('openbuilder'),'->'
 						,AddPath.CloseDone(this)
 					]
 					,items:[
