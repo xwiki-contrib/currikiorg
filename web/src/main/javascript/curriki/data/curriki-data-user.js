@@ -151,7 +151,6 @@ console.log('Collections: ', this.collectionChildren);
 						childInfo.text = _('resource.unviewable');
 						childInfo.qtip = undefined;
 						childInfo.disabled = true;
-						childInfo.allowDrop = false;
 						childInfo.leaf = true;
 						childInfo.cls = childInfo.cls+' rights-unviewable';
 					} else if (child.assetType.search(/Composite$/) === -1){
@@ -160,7 +159,8 @@ console.log('Collections: ', this.collectionChildren);
 					} else {
 						childInfo.leaf = false;
 						childInfo.loaded = false;
-						childInfo.allowDrop = child.rights.edit;
+						childInfo.allowDrop = true;
+						childInfo.disallowDropping = !child.rights.edit;
 					}
 
 					children.push(childInfo);
@@ -190,7 +190,8 @@ console.log('Collections: ', this.collectionChildren);
 					,qtip:group.description
 					,cls:'curriki-group'
 					,allowDrag:false
-					,allowDrop:false
+					,allowDrop:true
+					,disallowDropping:true
 					,loaded:true
 				};
 

@@ -1841,7 +1841,8 @@ Curriki.module.addpath.init = function(){
 					,cls:'ctv-top ctv-header ctv-collections'
 					,leaf:false
 					,allowDrag:false
-					,allowDrop:false
+					,allowDrop:true // Needed to auto-expand on hover
+					,disallowDropping:true // Disable drop on this node
 					,loaded:true
 					,expanded:(Curriki.data.user.collectionChildren.length < 4)
 					,children:Curriki.data.user.collectionChildren
@@ -1854,7 +1855,8 @@ Curriki.module.addpath.init = function(){
 					,cls:'ctv-top ctv-header ctv-groups'
 					,leaf:false
 					,allowDrag:false
-					,allowDrop:false
+					,allowDrop:true // Needed to auto-expand on hover
+					,disallowDropping:true // Disable drop on this node
 					,loaded:true
 					,expanded:(Curriki.data.user.groupChildren.length < 4)
 					,children:Curriki.data.user.groupChildren
@@ -1957,6 +1959,8 @@ Curriki.module.addpath.init = function(){
 									,id:'ctv-drag-tree-root'
 									,cls:'ctv-drag-root'
 									,leaf:false
+									,hlColor:'93C53C'
+									,hlDrop:false
 									,allowDrag:false
 									,allowDrop:false
 									,loaded:true
@@ -1985,13 +1989,36 @@ Curriki.module.addpath.init = function(){
 								,useArrows:true
 								,border:false
 								,hlColor:'93C53C'
+								,hlDrop:false
 								,cls:'ctv-to-tree'
 								,animate:true
 								,enableDD:true
+								,ddScroll:true
 								,containerScroll:true
 								,rootVisible:false
 								,listeners:{
-									nodedrop:{
+									nodedragover:{
+										fn: function(dragOverEvent){
+											var draggedNodeId = dragOverEvent.dropNode.attributes.assetName;
+											var parentNode = dragOverEvent.target;
+											if (!Ext.isEmpty(parentNode.attributes.disallowDropping)) {
+												dragOverEvent.cancel = true;
+												return false;
+											}
+											var cancel = false;
+											while (!Ext.isEmpty(parentNode) && !cancel){
+												if (parentNode.id === draggedNodeId) {
+													cancel = true;
+													dragOverEvent.cancel = true;
+													return false;
+												} else {
+													parentNode = parentNode.parentNode;
+												}
+											}
+										}
+										,scope:this
+									}
+									,nodedrop:{
 										fn: function(dropEvent){
 											var targetNode = Ext.getCmp('ctv-to-tree-cmp').getNodeById('ctv-target-node');
 											var parentNode = targetNode.parentNode;
