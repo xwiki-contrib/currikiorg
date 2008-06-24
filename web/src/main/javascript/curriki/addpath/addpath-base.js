@@ -1522,6 +1522,10 @@ Curriki.module.addpath.init = function(){
 
 				case 'openbuilder':
 					link = '/xwiki/bin/view/GWT/Editor?xpage=plain&page='+pageName+'&mode=edit';
+					handler = function(e,evt){
+						window.open(link, 'Currikulum');
+						window.location.href = Curriki.current.cameFrom;
+					};
 					break;
 
 				case 'viewtarget':
