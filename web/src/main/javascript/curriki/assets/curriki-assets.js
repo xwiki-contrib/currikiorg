@@ -27,8 +27,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot create resource', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot create resource', response, options);
+				alert('Error: '+response.responseText||'Unknown server error creating asset');
 			}
 		});
 	}
@@ -52,8 +52,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot get resource metadata', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot get resource metadata', response, options);
+				alert('Error: '+response.responseText||'Unknown server error getting resource information');
 			}
 		});
 	}
@@ -77,8 +77,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot get resource metadata', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot get resource metadata', response, options);
+				alert('Error: '+response.responseText||'Unknown server error getting resource metadata');
 			}
 		});
 	}
@@ -103,8 +103,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot set resource metadata', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot set resource metadata', response, options);
+				alert('Error: '+response.responseText||'Unknown server error setting resource metadata');
 			}
 		});
 	}
@@ -129,8 +129,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot create external link', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot create external link', response, options);
+				alert('Error: '+response.responseText||'Unknown server error creating external resource');
 			}
 		});
 	}
@@ -155,8 +155,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot add subasset', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot add subasset', response, options);
+				alert('Error: '+response.responseText||'Unknown server error creating subasset resource');
 			}
 		});
 	}
@@ -181,8 +181,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot create folder', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot create folder', response, options);
+				alert('Error: '+response.responseText||'Unknown server error creating folder');
 			}
 		});
 	}
@@ -207,8 +207,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot create collection', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot create collection', response, options);
+				alert('Error: '+response.responseText||'Unknown server error creating collection');
 			}
 		});
 	}
@@ -233,8 +233,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot add video', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot add video', response, options);
+				alert('Error: '+response.responseText||'Unknown server error creating VIDITalk resource');
 			}
 		});
 	}
@@ -259,8 +259,8 @@ Curriki.assets = {
 				callback(o);
 			}
 			,failure:function(response, options){
-				console.error('Cannot publish resource', options);
-				alert('Error: '+response.responseText);
+				console.error('Cannot publish resource', response, options);
+				alert('Error: '+response.responseText||'Unknown server error publishing resource');
 			}
 		});
 	}

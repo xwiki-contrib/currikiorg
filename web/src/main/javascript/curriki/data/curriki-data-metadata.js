@@ -132,25 +132,27 @@ Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 };
 Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
 Ext.ns('Curriki.ui.component.asset');
-Curriki.ui.component.asset.fwTree = {
-	 xtype:'treepanel'
-	,loader: new Ext.tree.TreeLoader()
-	,id:'fw_items-tree'
-	,useArrows:true
-	,autoHeight:true
-	,border:false
-	,cls:'fw-tree'
-	,animate:true
-	,enableDD:false
-	,containerScroll:true
-	,rootVisible:true
-	,root: new Ext.tree.AsyncTreeNode({
-		 text:_('XWiki.AssetClass_fw_items_FW_masterFramework.WebHome')
-		,id:'FW_masterFramework.WebHome'
-		,cls:'fw-item-top fw-item-parent fw-item'
-		,leaf:false
-		,loaded:true
-		,expanded:true
-		,children:Curriki.data.fw_item.fwChildren
-	})
+Curriki.ui.component.asset.getFwTree = function(){
+	return {
+		 xtype:'treepanel'
+		,loader: new Ext.tree.TreeLoader()
+		,id:'fw_items-tree'
+		,useArrows:true
+		,autoHeight:true
+		,border:false
+		,cls:'fw-tree'
+		,animate:true
+		,enableDD:false
+		,containerScroll:true
+		,rootVisible:true
+		,root: new Ext.tree.AsyncTreeNode({
+			 text:_('XWiki.AssetClass_fw_items_FW_masterFramework.WebHome')
+			,id:'FW_masterFramework.WebHome'
+			,cls:'fw-item-top fw-item-parent fw-item'
+			,leaf:false
+			,loaded:true
+			,expanded:true
+			,children:Curriki.data.fw_item.fwChildren
+		})
+	};
 };

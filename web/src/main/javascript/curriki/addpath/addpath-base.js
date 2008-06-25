@@ -846,7 +846,7 @@ Curriki.module.addpath.init = function(){
 										}
 									}
 								}
-								,Curriki.ui.component.asset.fwTree
+								,Curriki.ui.component.asset.getFwTree()
 								]
 
 		// Educational Level
@@ -1445,12 +1445,12 @@ Curriki.module.addpath.init = function(){
 				Curriki.current.asset.assetPage,
 				metadata,
 				function(newMetadata){
-	console.log("SetMD CB: ", newMetadata);
+console.log("SetMD CB: ", newMetadata);
 					Curriki.assets.Publish(
 						Curriki.current.asset.assetPage,
 						Curriki.current.publishSpace,
 						function(newAsset){
-	console.log("Published CB: ", newAsset);
+console.log("Published CB: ", newAsset);
 							Curriki.current.assetName = newAsset.assetPage;
 							Curriki.current.asset.assetPage = newAsset.assetPage;
 							Curriki.current.asset.assetType = newAsset.assetType;
@@ -2120,7 +2120,7 @@ Curriki.module.addpath.init = function(){
 						'Accept':'application/json'
 					}
 					,callback:function(options, success, response){
-	console.log('upload CB:', options, success, response);
+console.log('upload CB:', options, success, response);
 						callback(asset);
 					}
 				});
@@ -2198,14 +2198,14 @@ Curriki.module.addpath.init = function(){
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
 						function(asset){
-	console.log("CreateAsset (video) CB: ", asset);
+console.log("CreateAsset (video) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateVIDITalk(
 								asset.assetPage,
 								Curriki.current.videoId,
 								function(videoInfo){
-	console.log("Created viditalk CB: ", videoInfo);
+console.log("Created viditalk CB: ", videoInfo);
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 									if (Curriki.current.parentAsset) {
 										// Get metadata if there was a parent asset
@@ -2229,14 +2229,14 @@ Curriki.module.addpath.init = function(){
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
 						function(asset){
-	console.log("CreateAsset (link) CB: ", asset);
+console.log("CreateAsset (link) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateExternal(
 								asset.assetPage,
 								Curriki.current.linkUrl,
 								function(linkInfo){
-	console.log("Created Link CB: ", linkInfo);
+console.log("Created Link CB: ", linkInfo);
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 									if (Curriki.current.parentAsset) {
 										// Get metadata if there was a parent asset
@@ -2277,13 +2277,13 @@ Curriki.module.addpath.init = function(){
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
 						function(asset){
-	console.log("CreateAsset (folder) CB: ", asset);
+console.log("CreateAsset (folder) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateFolder(
 								asset.assetPage,
 								function(assetInfo){
-	console.log("Created Folder CB: ", assetInfo);
+console.log("Created Folder CB: ", assetInfo);
 									Curriki.current.flowFolder = 'Folder';
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 									if (Curriki.current.parentAsset) {
@@ -2307,13 +2307,13 @@ Curriki.module.addpath.init = function(){
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
 						function(asset){
-	console.log("CreateAsset (collection) CB: ", asset);
+console.log("CreateAsset (collection) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateCollection(
 								asset.assetPage,
 								function(assetInfo){
-	console.log("Created Collection CB: ", assetInfo);
+console.log("Created Collection CB: ", assetInfo);
 									callback = function(){AddPath.ShowNextDialogue(next);};
 									callback();
 								}
@@ -2364,11 +2364,11 @@ Curriki.module.addpath.init = function(){
 	// 16. Add a resource (view all group contributions) - like #1 but groups
 	// 17. Add (view all group contributions) - like #6 but groups
 
-	console.log('Starting path: ', path);
+console.log('Starting path: ', path);
 
 			// This should already have been handled, but do a simple test here
 			if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
-	console.log('Not signed in:');
+console.log('Not signed in:');
 				window.location.href='/xwiki/bin/login/XWiki/XWikiLogin?xredirect='+window.location.href;
 				return;
 			}
@@ -2432,7 +2432,7 @@ Curriki.module.addpath.init = function(){
 					// Need titles for current and parent assets in Done Msg
 					// We should be getting the current one passed in
 					// Shows CTV
-	console.log('Starting path:', Curriki.current.flow);
+console.log('Starting path:', Curriki.current.flow);
 					Curriki.ui.show('apLocation');
 					return;
 					break;
