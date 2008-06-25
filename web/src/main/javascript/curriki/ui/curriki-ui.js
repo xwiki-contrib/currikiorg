@@ -51,7 +51,7 @@ Curriki.ui.dialog.Actions = Ext.extend(Curriki.ui.dialog.Base, {
 Ext.reg('dialogueactions', Curriki.ui.dialog.Actions);
 
 Curriki.ui.dialog.Messages = Ext.extend(Curriki.ui.dialog.Base, {
-	 width:400
+	 width:500
 	,initComponent:function(){
 		Curriki.ui.dialog.Messages.superclass.initComponent.call(this);
 	}

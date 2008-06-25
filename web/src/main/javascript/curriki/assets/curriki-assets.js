@@ -28,7 +28,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot create resource', options);
-				throw {message: "Server Error: Cannot create resource."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -53,7 +53,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot get resource metadata', options);
-				throw {message: "Server Error: Cannot get resource metadata."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -78,7 +78,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot get resource metadata', options);
-				throw {message: "Server Error: Cannot get resource metadata."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -104,7 +104,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot set resource metadata', options);
-				throw {message: "Server Error: Cannot set resource metadata."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -130,7 +130,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot create external link', options);
-				throw {message: "Server Error: Cannot create external link."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -156,7 +156,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot add subasset', options);
-				alert(response.responseText);
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -182,7 +182,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot create folder', options);
-				throw {message: "Server Error: Cannot create folder."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -208,7 +208,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot create collection', options);
-				throw {message: "Server Error: Cannot create collection."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -234,7 +234,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot add video', options);
-				throw {message: "Server Error: Cannot add video."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}
@@ -260,7 +260,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot publish resource', options);
-				throw {message: "Server Error: Cannot publish resource."};
+				alert('Error: '+response.responseText);
 			}
 		});
 	}

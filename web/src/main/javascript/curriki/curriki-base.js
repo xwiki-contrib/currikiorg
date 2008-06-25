@@ -75,13 +75,14 @@ Curriki.id = function(prefix){
 
 Curriki.showLoading = function(msg){
 	if (!Ext.isEmpty(Curriki.loadingMask)){
-		Curriki.loadingMask.msg = msg||_('loading.loading_msg');
+		msg = msg||'loading.loading_msg';
+		Curriki.loadingMask.msg = _(msg);
 		Curriki.loadingMask.enable();
 		Curriki.loadingMask.show();
 	}
 }
 
-Curriki.hideLoading = function(msg){
+Curriki.hideLoading = function(){
 	if (!Ext.isEmpty(Curriki.loadingMask)){
 		Curriki.loadingMask.hide();
 		Curriki.loadingMask.disable();
