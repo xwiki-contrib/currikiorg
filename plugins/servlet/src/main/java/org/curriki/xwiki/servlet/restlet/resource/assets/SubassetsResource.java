@@ -109,7 +109,6 @@ public class SubassetsResource extends BaseResource {
                 order = fAsset.insertSubassetAt(page, order);
                 fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.addsubasset"));
             } catch (XWikiException e) {
-                // Should never occur
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         } else {

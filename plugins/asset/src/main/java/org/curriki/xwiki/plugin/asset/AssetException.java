@@ -13,6 +13,7 @@ public class AssetException extends XWikiException {
     public static final int ERROR_ASSET_INCOMPATIBLE = 103;
     public static final int ERROR_ASSET_SUBASSET_NOTFOUND = 104;
     public static final int ERROR_ASSET_SUBASSET_EXISTS = 105;
+    public static final int ERROR_ASSET_SUBASSET_RECURSION = 106;
 
     public AssetException(int module, int code, String message, Throwable e, Object[] args) {
         super(module, code, message, e, args);

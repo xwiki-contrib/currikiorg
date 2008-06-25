@@ -3,6 +3,7 @@ package org.curriki.xwiki.plugin.asset.composite;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.web.XWikiMessageTool;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.api.Document;
 
@@ -227,6 +228,35 @@ public class FolderCompositeAsset extends CompositeAsset {
         try {
             Document subAsset = xwikiApi.getDocument(page);
             if (subAsset instanceof Asset) {
+                // Do not allow ancestor to be added as a sub-asset
+                boolean done = false;
+                List<String> searchFor = new ArrayList<String>();
+                searchFor.add(doc.getFullName());
+
+                while (!done){
+                    String sql = null;
+                    for (String item : searchFor) {
+                        if (item.equals(page)) {
+                            XWikiMessageTool msg = (XWikiMessageTool) context.get("msg");
+                            throw new AssetException(AssetException.ERROR_ASSET_SUBASSET_RECURSION, msg.get("addsubasset.recursive_add_message"));
+                        }
+                        if (sql != null) {
+                            sql = sql + ", '" + item + "'";
+                        } else {
+                            sql = "'" + item + "'";
+                        }
+                    }
+
+                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.SubAssetClass' and prop.id.id = obj.id and prop.name='assetpage' and prop.value in (" + sql + ")";
+                    List<String> list = context.getWiki().getStore().searchDocumentsNames(sql, context);
+                    if ((list==null)||(list.size()==0)){
+                        done = true;
+                    } else {
+                        searchFor = list;
+                    }
+                }
+
+                // Is not being added to itself
                 BaseObject obj = doc.newObject(Constants.SUBASSET_CLASS, context);
                 obj.setStringValue(Constants.SUBASSET_CLASS_PAGE, subAsset.getFullName());
                 obj.setLongValue(Constants.SUBASSET_CLASS_ORDER, position);

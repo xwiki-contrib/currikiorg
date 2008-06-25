@@ -156,7 +156,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot add subasset', options);
-				throw {message: "Server Error: Cannot add subasset."};
+				alert(response.responseText);
 			}
 		});
 	}
