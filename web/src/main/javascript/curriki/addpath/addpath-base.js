@@ -2101,10 +2101,12 @@ console.log("Published CB: ", newAsset);
 				});
 				sf.submit();
 
+				/*  Removed (CURRIKI-2230), We are going to a new page anyway
 				var sourceDlg = Ext.getCmp(AddPath.AddSourceDialogueId);
 				if (sourceDlg){
 					sourceDlg.close();
 				}
+				*/
 			});
 		}
 
