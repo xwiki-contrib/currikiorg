@@ -2121,7 +2121,7 @@ Curriki.module.addpath.init = function(){
 					}
 					,callback:function(options, success, response){
 	console.log('upload CB:', options, success, response);
-						callback();
+						callback(asset);
 					}
 				});
 			});
@@ -2174,7 +2174,7 @@ Curriki.module.addpath.init = function(){
 				case 'file':
 					Curriki.current.fileName = allValues['filename'];
 					next = 'apSRI1';
-					AddPath.PostFile(function(){
+					AddPath.PostFile(function(asset){
 						callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 						if (Curriki.current.parentAsset) {
 							// Get metadata if there was a parent asset

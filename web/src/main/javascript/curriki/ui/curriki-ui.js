@@ -84,7 +84,7 @@ console.log('createNode: parent',parent);
 			}
 
 			var childInfo = {
-				 id:attr.assetpage
+				 id:attr.assetpage||attr.collectionPage
 				,text:attr.displayTitle
 				,qtip:attr.description
 				,cls:'resource-'+attr.assetType
