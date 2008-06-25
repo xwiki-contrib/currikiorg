@@ -20,15 +20,16 @@ Curriki.assets = {
 				// Should return an object with
 				//   assetPage, assetType, and fullAssetType items
 				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot create resource');
-					throw {message: "CreateAsset: Json object not found"};
+				if(!o || !o.assetPage) {
+					console.warn('Cannot create resource', response.responseText, options);
+					alert('Error creating resource: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot create resource', response, options);
-				alert('Error: '+response.responseText||'Unknown server error creating asset');
+				alert('Error: '+response.responseText||'Unknown server error creating resource');
 			}
 		});
 	}
@@ -46,10 +47,11 @@ Curriki.assets = {
 				// Should return an object with metadata
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot get resource metadata');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot get resource metadata', response.responseText, options);
+					alert('Error getting resource information: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot get resource metadata', response, options);
@@ -71,10 +73,11 @@ Curriki.assets = {
 				// Should return an object with metadata
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot get resource metadata');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot get resource metadata', response.responseText, options);
+					alert('Error getting resource metadata: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot get resource metadata', response, options);
@@ -97,10 +100,11 @@ Curriki.assets = {
 				// Should return an object with metadata
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot set resource metadata');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot set resource metadata', response.responseText, options);
+					alert('Error setting resource metadata: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot set resource metadata', response, options);
@@ -123,10 +127,11 @@ Curriki.assets = {
 				// Should return an object with new ref info
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot create external link');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot create external link', response.responseText, options);
+					alert('Error creating external link: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot create external link', response, options);
@@ -149,14 +154,15 @@ Curriki.assets = {
 				// Should return an object with new ref info
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot add subasset');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot add subasset', response.responseText, options);
+					alert('Error adding subasset: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot add subasset', response, options);
-				alert('Error: '+response.responseText||'Unknown server error creating subasset resource');
+				alert('Error: '+response.responseText||'Unknown server error adding subasset resource');
 			}
 		});
 	}
@@ -175,10 +181,11 @@ Curriki.assets = {
 				// Should return an object for the current asset
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot create folder');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot create folder', response.responseText, options);
+					alert('Error creating folder: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot create folder', response, options);
@@ -201,10 +208,11 @@ Curriki.assets = {
 				// Should return an object for the current asset
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot create collection');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot create collection', response.responseText, options);
+					alert('Error creating collection: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot create collection', response, options);
@@ -227,10 +235,11 @@ Curriki.assets = {
 				// Should return an object with new ref info
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot add video');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot add video', response.responseText, options);
+					alert('Error adding video: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot add video', response, options);
@@ -253,10 +262,11 @@ Curriki.assets = {
 				// Should return an object with the new asset URL
 				var o = json.evalJSON(true);
 				if(!o) {
-					console.warn('Cannot publish resource');
-					throw {message: "CreateAsset: Json object not found"};
+					console.warn('Cannot publish resource', response.responseText, options);
+					alert('Error publishing resource: '+response.responseText||'Unknown server error');
+				} else {
+					callback(o);
 				}
-				callback(o);
 			}
 			,failure:function(response, options){
 				console.error('Cannot publish resource', response, options);
