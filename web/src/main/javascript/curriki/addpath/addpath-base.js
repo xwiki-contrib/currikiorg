@@ -2176,9 +2176,10 @@ Curriki.module.addpath.init = function(){
 					next = 'apSRI1';
 					AddPath.PostFile(function(asset){
 						callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+
 						if (Curriki.current.parentAsset) {
 							// Get metadata if there was a parent asset
-							Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+							Curriki.assets.GetMetadata(asset.assetPage||Curriki.current.asset.assetPage, function(metadata){
 								Curriki.current.metadata = metadata;
 								callback();
 							});

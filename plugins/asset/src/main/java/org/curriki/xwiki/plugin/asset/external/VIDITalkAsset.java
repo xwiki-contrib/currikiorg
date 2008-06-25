@@ -31,6 +31,9 @@ public class VIDITalkAsset extends Asset {
 
         BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
         obj.setStringValue(Constants.VIDITALK_CLASS_VIDEO_ID, videoId);
+
+        obj = doc.getObject(Constants.ASSET_CLASS);
+        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_VIDITALK_VIDEO);
     }
 
     public void setVideoId(String videoId) throws XWikiException {
@@ -38,5 +41,8 @@ public class VIDITalkAsset extends Asset {
 
         BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
         obj.setStringValue(Constants.VIDITALK_CLASS_VIDEO_ID, videoId);
+
+        obj = doc.getObject(Constants.ASSET_CLASS);
+        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_VIDITALK_VIDEO);
     }
 }

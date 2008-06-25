@@ -19,6 +19,9 @@ abstract class CompositeAsset extends Asset {
         BaseObject obj = doc.newObject(Constants.COMPOSITE_ASSET_CLASS, context);
         obj.setStringValue(Constants.COMPOSITE_ASSET_CLASS_TYPE, compositeAssetType());
 
+        obj = doc.getObject(Constants.ASSET_CLASS);
+        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_COLLECTION);
+
         setDefaultContent();
     }
 

@@ -46,6 +46,9 @@ public class ExternalAsset extends Asset {
 
         BaseObject obj = doc.newObject(Constants.EXTERNAL_ASSET_CLASS, context);
         obj.setStringValue(Constants.EXTERNAL_ASSET_LINK, link);
+
+        obj = doc.getObject(Constants.ASSET_CLASS);
+        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_LINK);
     }
 
     public void setLink(String link) throws XWikiException {
@@ -53,6 +56,9 @@ public class ExternalAsset extends Asset {
 
         BaseObject obj = doc.newObject(Constants.EXTERNAL_ASSET_CLASS, context);
         obj.setStringValue(Constants.EXTERNAL_ASSET_LINK, link);
+        
+        obj = doc.getObject(Constants.ASSET_CLASS);
+        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_LINK);
     }
 
     public String getLink() throws XWikiException {
