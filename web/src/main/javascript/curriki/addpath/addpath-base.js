@@ -2001,10 +2001,18 @@ console.log("Published CB: ", newAsset);
 										fn: function(dragOverEvent){
 											var draggedNodeId = dragOverEvent.dropNode.attributes.assetName;
 											var parentNode = dragOverEvent.target;
+											if (dragOverEvent.point !== 'append') {
+												parentNode = parentNode.parentNode;
+												if (Ext.isEmpty(parentNode)) {
+													return false;
+												}
+											}
+
 											if (!Ext.isEmpty(parentNode.attributes.disallowDropping)) {
 												dragOverEvent.cancel = true;
 												return false;
 											}
+
 											var cancel = false;
 											while (!Ext.isEmpty(parentNode) && !cancel){
 												if (parentNode.id === draggedNodeId) {
