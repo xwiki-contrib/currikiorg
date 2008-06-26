@@ -200,7 +200,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         User user = Main.getSingleton().getUser();
         boolean forceViewMode = !(user == null || (doc.getCreator().equals(user.getFullName()) || user.isAdmin()));
         addSectionTitle("right_section", fullMode);
-        addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panel, false, fullMode, forceViewMode);
+        addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panel, true, fullMode, forceViewMode);
         addEditor(assetObj, "rights", "rights", panel, false, fullMode, forceViewMode);
         addEditor(rightObj, "licenseType2", "license_type", panel, false, fullMode, forceViewMode);
 
@@ -273,7 +273,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addEditor(assetObj, "keywords", "keywords", panelStep2, false, true);
         addEditor(assetObj, "language", "language", panelStep2, false, true);
 
-        addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panelStep2, false, true, forceViewMode);
+        addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panelStep2, true, true, forceViewMode);
         addEditor(rightObj, "licenseType2", "license_type", panelStep2, false, true, forceViewMode);
 
         panel.add(panelStep2);
@@ -705,6 +705,15 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             first = false;
             missing += "educational_level";
         }
+
+        if (form["XWiki.AssetClass_0_rightsHolder"].value == "") {
+            if (!first) {
+                missing += ",";
+            }
+            first = false;
+            missing += "right_holder";
+        }
+
         return missing;
     }-*/;
 
