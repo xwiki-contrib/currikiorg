@@ -32,7 +32,8 @@ Curriki.data.user = {
 					if (this.user_try < 5){
 						this.GetUserinfo(callback);
 					} else {
-						throw {message: "GetUserinfo: Json object not found"};
+						console.error('Cannot get user information', response, options);
+						alert('Error: '+(response.responseText||'Unknown server error getting user information.'));
 					}
 				} else {
 					this.user_try = 0;
@@ -40,9 +41,9 @@ Curriki.data.user = {
 					this.GetCollections(callback);
 				}
 			}
-			,failure:function(options){
-				console.error('Cannot get user information');
-				throw {message: "Server Error: Cannot find out who is logged in."};
+			,failure:function(response, options){
+				console.error('Cannot get user information', response, options);
+				alert('Error: '+(response.responseText||('Server error getting user information.  '+(response.statusText||''))));
 			}
 		});
 	}
@@ -66,7 +67,8 @@ Curriki.data.user = {
 					if (this.collection_try < 5){
 						this.GetCollections(callback);
 					} else {
-						throw {message: "GetUserinfo: Json object not found"};
+						console.error('Cannot get user\'s collection information', response, options);
+						alert('Error: '+(response.responseText||'Unknown server error getting user collections.'));
 					}
 				} else {
 					this.collection_try = 0;
@@ -76,8 +78,9 @@ console.log('Collections: ', this.collectionChildren);
 					this.GetGroups(callback);
 				}
 			}
-			,failure:function(options){
-				console.error('Cannot get user\'s collection information');
+			,failure:function(response, options){
+				console.error('Cannot get user\'s collection information', response, options);
+				alert('Error: '+(response.responseText||('Server error getting user collections.  '+(response.statusText||''))));
 				this.collections = [];
 				this.GetGroups(callback);
 			}
@@ -103,6 +106,8 @@ console.log('Collections: ', this.collectionChildren);
 						this.GetGroups(callback);
 					} else {
 						throw {message: "GetUserinfo: Json object not found"};
+						console.error('Cannot get user\'s group information', response, options);
+						alert('Error: '+(response.responseText||'Unknown server error getting user groups.'));
 					}
 				} else {
 					this.group_try = 0;
@@ -111,8 +116,9 @@ console.log('Collections: ', this.collectionChildren);
 					callback();
 				}
 			}
-			,failure:function(options){
-				console.error('Cannot get user\'s group information');
+			,failure:function(response, options){
+				console.error('Cannot get user\'s group information', response, options);
+				alert('Error: '+(response.responseText||('Server error getting user groups.  '+(response.statusText||''))));
 				this.groups = [];
 				callback();
 			}

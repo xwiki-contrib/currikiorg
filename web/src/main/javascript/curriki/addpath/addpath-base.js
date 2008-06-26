@@ -2130,8 +2130,12 @@ console.log("Published CB: ", newAsset);
 						'Accept':'application/json'
 					}
 					,callback:function(options, success, response){
-console.log('upload CB:', options, success, response);
-						callback(asset);
+						if (success) {
+							callback(asset);
+						} else {
+							console.log('Upload failed', options, response);
+							alert('Error: '+(response.responseText||('Server error uploading file.  '+(response.statusText||''))));
+						}
 					}
 				});
 			});
