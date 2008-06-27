@@ -1,0 +1,13 @@
+## lpattachfile.vm. Niels P. Mayer
+## Template for use by CurrikiStandardLessonPlan and other lesson plans that
+## use file attachments. The intent is to use something like
+## set($attachURL = $newAsset.getURL("view", "xpage=lpattachfile"))
+## to upload attachments to $newAsset. $newAsset being the asset being
+## populated, that resides in AssetTemp.
+
+<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+  <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40" />&nbsp;<button
+    id="attach_this_file_button"
+    onclick="try { return addFormAttachment(); } catch(e) { alert('$msg.get("attachthisfile") button onclick error: '+e+' ...'); return false; }"
+  >$msg.get("attachthisfile")</button>
+</form>
