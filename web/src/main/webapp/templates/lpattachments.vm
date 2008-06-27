@@ -33,7 +33,8 @@
 <div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
 <div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
 <div>
-{pre}<script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view")}';return returnValue;}</script>{/pre}
+<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+<script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view")}';return returnValue;}</script>
 <span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onClick="try { return updateXRedirect('inline', updateAttachName(document.forms.inline, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /></span>
 </div>
 </fieldset>
