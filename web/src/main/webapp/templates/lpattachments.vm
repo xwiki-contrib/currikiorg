@@ -11,20 +11,20 @@
 ## <div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
 <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-<fieldset class="expanded" id="attachform">
-<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
-<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
-<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
+<input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
+<input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
 <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}';return returnValue;}</script>
-<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" /></span>
-</fieldset>
+<input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
 </form>
 </div>
 ##
 ## List of attachments
 ##
 #if($doc.attachmentList.size()>0) ## {
+<p class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
+<h5 class="instruction">$msg.get("lesson.plan.attachments.title")</h5>
+
 #foreach ($attach in $doc.attachmentList) ## {
     <!-- Each comment row is inside an "attachments" class div -->
   	<div class="attachments">
