@@ -27,7 +27,7 @@
 #end ## } -- if
 <div id="attachmentscontent" class="xwikiintracontent">
 ## <div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
-<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+<form id="attachmentAddForm" action="$doc.getURL("upload", "xpage=plain")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
 <div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
 <div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
