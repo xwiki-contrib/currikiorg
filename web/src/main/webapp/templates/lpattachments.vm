@@ -8,7 +8,6 @@
 ## orig code from Groups.MessageSheet
 
 <div id="attachmentscontent" class="xwikiintracontent">
-## <div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
 <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
 <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
@@ -22,25 +21,14 @@
 ## List of attachments
 ##
 #if($doc.attachmentList.size()>0) ## {
-<p class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
-<h5 class="instruction">$msg.get("lesson.plan.attachments.title")</h5>
-
-#foreach ($attach in $doc.attachmentList) ## {
-    <!-- Each comment row is inside an "attachments" class div -->
-  	<div class="attachments">
-	 <!-- Paragraph containing the post infos -->
-	 <div class="attachments_icon">
-	 #mimeicon($attach.filename)
-	 </div>
-	 <p><span class="date">{pre}<a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")">#packName($attach.filename)</a></span> $attach.version 
-<span class="right">
-  <a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")">$msg.get("download")</a>
-   | <a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
-</span>{/pre}
-	 <!-- Paragraph containing the post text -->
-	 <p><span class="date">$msg.groups_messages_view_attachments_providedby $xwiki.getLocalUserName($attach.author) $msg.groups_messages_view_attachments_on $xwiki.formatDate($doc.creationDate,$msg.get("mycurriki.datetimeFormat"))</span></p>
-	</div>
-	<!-- End of an attachments row -->
-#end ## } -- foreach
+  <p class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
+  <h5 class="instruction">$msg.get("lesson.plan.attachments.title")</h5>
+  
+  #foreach ($attach in $doc.attachmentList) ## {
+    <div class="attachments">
+      #mimeicon($attach.filename)
+      $attach.version 
+      <span class="right"><a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a></span>
+    </div>
+  #end ## } -- foreach
 #end ## } -- if
- <!-- End of ATTACHMENTS FRAME -->
