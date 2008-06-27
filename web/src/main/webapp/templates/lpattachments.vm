@@ -1,0 +1,49 @@
+## lpattachments.vm. Niels P. Mayer
+## Template for use by CurrikiStandardLessonPlan and other lesson plans that
+## use file attachments. The intent is to use something like set($attachURL =
+## $newAsset.getURL("view", "xpage=lpattachments")) to upload attachments to
+## $newAsset. $newAsset being the asset being populated, that resides in
+## AssetTemp.
+
+## orig code from Groups.MessageSheet
+
+#if($doc.attachmentList.size()>0) ## {
+#foreach ($attach in $doc.attachmentList) ## {
+    <!-- Each comment row is inside an "attachments" class div -->
+  	<div class="attachments">
+	 <!-- Paragraph containing the post infos -->
+	 <div class="attachments_icon">
+	 #mimeicon($attach.filename)
+	 </div>
+	 <p><span class="date">{pre}<a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")">#packName($attach.filename)</a></span> $attach.version 
+<span class="right">
+  <a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")">$msg.get("download")</a>
+   | <a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
+</span>{/pre}
+	 <!-- Paragraph containing the post text -->
+	 <p><span class="date">$msg.groups_messages_view_attachments_providedby $xwiki.getLocalUserName($attach.author) $msg.groups_messages_view_attachments_on $xwiki.formatDate($doc.creationDate,$msg.get("mycurriki.datetimeFormat"))</span></p>
+	</div>
+	<!-- End of an attachments row -->
+#end ## } -- foreach
+#end ## } -- if
+<div id="attachmentscontent" class="xwikiintracontent">
+<input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+<fieldset class="expanded" id="attachform">
+<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
+<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
+<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
+<div>
+{pre}
+<script type="text/javascript">
+function updateXRedirect(formName, returnValue){
+var xredirect = document.forms[formName].xredirect;
+xredirect.value = '${doc.getURL("view")}';
+return returnValue;
+}
+</script>
+{/pre}
+<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onClick="try { return updateXRedirect('inline', updateAttachName(document.forms.inline, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /></span>
+</div>
+</fieldset>
+</form>
+ <!-- End of ATTACHMENTS FRAME -->
