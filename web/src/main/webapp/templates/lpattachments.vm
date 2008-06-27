@@ -6,6 +6,24 @@
 ## AssetTemp.
 
 ## orig code from Groups.MessageSheet
+
+<div id="attachmentscontent" class="xwikiintracontent">
+## <div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
+<form id="attachmentAddForm" action="$doc.getURL("upload", "xpage=plain")" enctype="multipart/form-data" method="post">
+<input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+<fieldset class="expanded" id="attachform">
+<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
+<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
+<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
+<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+<script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view")}';return returnValue;}</script>
+<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /></span>
+</fieldset>
+</form>
+</div>
+##
+## List of attachments
+##
 #if($doc.attachmentList.size()>0) ## {
 #foreach ($attach in $doc.attachmentList) ## {
     <!-- Each comment row is inside an "attachments" class div -->
@@ -25,17 +43,4 @@
 	<!-- End of an attachments row -->
 #end ## } -- foreach
 #end ## } -- if
-<div id="attachmentscontent" class="xwikiintracontent">
-## <div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
-<form id="attachmentAddForm" action="$doc.getURL("upload", "xpage=plain")" enctype="multipart/form-data" method="post">
-<input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
-<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
-<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
-<div>
-<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-<script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view")}';return returnValue;}</script>
-<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /></span>
-</div>
-</form>
  <!-- End of ATTACHMENTS FRAME -->
