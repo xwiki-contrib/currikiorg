@@ -35,7 +35,7 @@
 <div>
 <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view")}';return returnValue;}</script>
-<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onClick="try { return updateXRedirect('inline', updateAttachName(document.forms.inline, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /></span>
+<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /></span>
 </div>
 </form>
  <!-- End of ATTACHMENTS FRAME -->
