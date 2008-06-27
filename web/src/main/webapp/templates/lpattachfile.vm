@@ -6,7 +6,7 @@
 ## populated, that resides in AssetTemp.
 
 <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view")}';return returnValue;}</script>
-<form id="attachmentAddForm" action="$doc.getURL("upload", "xpage=plain")" enctype="multipart/form-data" method="post">
+<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
   <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
   <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40" />
   <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
