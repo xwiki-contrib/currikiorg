@@ -1,10 +1,14 @@
-## lpattachments.vm. Niels P. Mayer
-## Template for use by CurrikiStandardLessonPlan and other lesson plans that
-## use file attachments. The intent is to use something like set($attachURL =
-## $newAsset.getURL("view", "xpage=lpattachments")) to upload attachments to
-## $newAsset. $newAsset being the asset being populated, that resides in
-## AssetTemp. (code derived from Groups.MessageSheet).
+## lpattachments.vm by Niels P. Mayer
 ##
+## Template for use by CurrikiStandardLessonPlan and other lesson plans
+## that create new resources and allow for file attachments to those
+## resources. The intent is to use something like
+##    set($attachURL = $newAsset.getURL("view", "xpage=lpattachments"))
+## to upload attachments to $newAsset via
+##    <iframe src=$attachURL>...
+## embedded in CreateResources.CurrikiStandardLessonPlan and other similar
+## lesson plan templates. ($newAsset is the asset being populated, that
+## resides in AssetTemp)
 ##
 #if( $request.xredirect ) ## {
   #set( $redirect = $request.xredirect )
