@@ -18,18 +18,16 @@
 ##
 ## File upload area
 ##
-<div id="attachmentscontent" class="xwikiintracontent">
-  <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
-    <fieldset class="frame">
-      <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-      <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
-      <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
-      <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-      <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}';return returnValue;}</script>
-      <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
-    </fieldset>
+<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+  <fieldset class="frame">
+    <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+    <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
+    <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
+    <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+    <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}';return returnValue;}</script>
+    <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+  </fieldset>
 </form>
-</div>
 ##
 ## If there's attachments, display list of attachments and messages/headers
 ## accociated w/ them
@@ -38,10 +36,8 @@
   ##
   ## Headers and instructional text -- styled per #curriki_formprompt() in CreateResources.StyledMacros
   ##
-  <div class="entry medium">
-    <p class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
-    <h5 class="instruction medium">$msg.get("lesson.plan.attachments.title")</h5>
-  </div>
+  <br />$msg.get("lesson.plan.required.attachments.file.attached")
+  1.1.1.1.1 $msg.get("lesson.plan.attachments.title")
   ##
   ## Attachments list, as table
   ##
@@ -51,15 +47,15 @@
   ## iterate through attachments, creating a table-row for each
   ## 
   #foreach ($attach in $doc.attachmentList) ## {
-      <tr><td>
+      <tr><td class="attachments_icon">
         #mimeicon($attach.filename) 		## this hack-macro sets $macro_iconUrl as side-effect
-        <img src="$macro_iconUrl" alt="[${text}]" title="[${text}]"/>
-      </td><td>
-        $attach.filename
-      </td><td>
-        $attach.version
-      </td><td>
-        <a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
+        &nbsp;<img src="$macro_iconUrl" alt="[${m_fileExt}]" title="[${m_fileExt}]"/>&nbsp;
+      </td><td class="attachments_file">
+        &nbsp;${attach.filename}&nbsp;
+      </td><td class="attachments_version">
+        &nbsp;${attach.version}&nbsp;&nbsp;&nbsp;
+      </td><td class="attachments_delete">
+        &nbsp;<a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
       </td></tr>
     #end ## } -- foreach
   ##
