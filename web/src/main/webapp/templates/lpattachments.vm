@@ -37,7 +37,8 @@
   ## Headers and instructional text -- styled per #curriki_formprompt() in CreateResources.StyledMacros
   ##
   $msg.get("lesson.plan.required.attachments.file.attached")
-  <h4>$msg.get("lesson.plan.attachments.title")</h4>
+  <br /><strong>$msg.get("lesson.plan.attachments.title")</strong>
+
   ##
   ## Attachments list, as table
   ##
@@ -64,3 +65,7 @@
     </tbody>
     </table>
 #end ## } -- if
+##
+## refresh the parent iframe by calling a function in the "parent"
+##
+<script type="text/javascript">parent.setAttachmentsIframeSize();</script>
