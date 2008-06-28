@@ -32,11 +32,12 @@
 ##
 #if( $doc.attachmentList.size() > 0 )   ## {
   ##
-  ## Headers and instructional text -- styled per #curriki_formprompt() in CreateResources.StyledMacros
+  ## Headers and instructional text -- not styled per
+  ## #curriki_formprompt() in CreateResources.StyledMacros
+  ## because i can't figure out how to get styles to apply to an xpage=...	
   ##
   $msg.get("lesson.plan.required.attachments.file.attached")
   <br /><strong>$msg.get("lesson.plan.attachments.title")</strong>
-
   ##
   ## Attachments list, as table
   ##
@@ -52,7 +53,9 @@
       </td><td class="attachments_file">
         &nbsp;${attach.filename}&nbsp;
       </td><td class="attachments_version">
-        &nbsp;${attach.version}&nbsp;&nbsp;&nbsp;
+        &nbsp;${attach.version}&nbsp;
+      </td><td class="attachments_filesize">
+        &nbsp;${attach.getFilesize()}&nbsp;&nbsp;&nbsp;
       </td><td class="attachments_delete">
         &nbsp;<a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
       </td></tr>
