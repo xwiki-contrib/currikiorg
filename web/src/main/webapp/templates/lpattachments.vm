@@ -3,32 +3,64 @@
 ## use file attachments. The intent is to use something like set($attachURL =
 ## $newAsset.getURL("view", "xpage=lpattachments")) to upload attachments to
 ## $newAsset. $newAsset being the asset being populated, that resides in
-## AssetTemp.
-
-## orig code from Groups.MessageSheet
-
+## AssetTemp. (code derived from Groups.MessageSheet).
+##
+##
+#if( $request.xredirect ) ## {
+  #set( $redirect = $request.xredirect )
+#else ## } {
+  #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
+#end ## }
+##
+## File upload area
+##
 <div id="attachmentscontent" class="xwikiintracontent">
-<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
-<input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-<input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
-<input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
-<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-<script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}';return returnValue;}</script>
-<input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+  <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+    <fieldset class="frame">
+      <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+      <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
+      <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
+      <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+      <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}';return returnValue;}</script>
+      <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+    </fieldset>
 </form>
 </div>
 ##
-## List of attachments
+## If there's attachments, display list of attachments and messages/headers
+## accociated w/ them
 ##
-#if($doc.attachmentList.size()>0) ## {
-  <p class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
-  <h5 class="instruction">$msg.get("lesson.plan.attachments.title")</h5>
-  
+#if( $doc.attachmentList.size() > 0 )   ## {
+  ##
+  ## Headers and instructional text -- styled per #curriki_formprompt() in CreateResources.StyledMacros
+  ##
+  <div class="entry medium">
+    <p class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
+    <h5 class="instruction medium">$msg.get("lesson.plan.attachments.title")</h5>
+  </div>
+  ##
+  ## Attachments list, as table
+  ##
+  <table class="lp_attach_tbl">
+  <tbody>
+  ##
+  ## iterate through attachments, creating a table-row for each
+  ## 
   #foreach ($attach in $doc.attachmentList) ## {
-    <div class="attachments">
-      #mimeicon($attach.filename)
-      $attach.version 
-      <span class="right"><a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a></span>
-    </div>
-  #end ## } -- foreach
+      <tr><td>
+        #mimeicon($attach.filename) 		## this hack-macro sets $macro_iconUrl as side-effect
+        <img src="$macro_iconUrl" alt="[${text}]" title="[${text}]"/>
+      </td><td>
+        $attach.filename
+      </td><td>
+        $attach.version
+      </td><td>
+        <a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
+      </td></tr>
+    #end ## } -- foreach
+  ##
+  ## End of attachment table
+  ##
+    </tbody>
+    </table>
 #end ## } -- if
