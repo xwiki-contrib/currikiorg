@@ -33,7 +33,7 @@
   <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
   <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
   <script type="text/javascript">function getAttachmentsSize() { return (${total_attachments_size}); } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
-  <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize() < $msg.get("lesson.plan.file.size.maximum")) { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } else { alert('$msg.get('lesson.plan.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+  <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize() < $msg.get("lesson.plan.file.size.maximum")) { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } else { alert('$msg.get('lesson.plan.file.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
 </form>
 ##
 ## If there's attachments, display list of attachments and messages/headers
