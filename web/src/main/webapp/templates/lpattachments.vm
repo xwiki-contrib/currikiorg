@@ -16,6 +16,15 @@
   #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
 #end ## }
 ##
+## Attachment behavior changes to prevent attaching more files
+## when ($total_attachments_size >= 20Mb). This value available via Javascript
+## getAttachmentsSize();
+##
+#set( $total_attachments_size = 0 )
+#foreach ($attach in $doc.attachmentList) ## {
+  #set( $total_attachments_size += ${attach.getFilesize()} )  ## compute total size of atttachments
+#end ## } -- foreach
+##
 ## File upload area
 ##
 <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
@@ -23,8 +32,8 @@
   <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
   <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
   <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-  <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}';return returnValue;}</script>
-  <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+  <script type="text/javascript">function getAttachmentsSize() { return (${total_attachments_size}) } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
+  <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize()<20000000) { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } else { alert('$msg.get('lesson.plan.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
 </form>
 ##
 ## If there's attachments, display list of attachments and messages/headers
@@ -32,37 +41,40 @@
 ##
 #if( $doc.attachmentList.size() > 0 )   ## {
   ##
-  ## Headers and instructional text -- not styled per
+  ## Headers and instructional text -- styled per
   ## #curriki_formprompt() in CreateResources.StyledMacros
-  ## because i can't figure out how to get styles to apply to an xpage=...	
   ##
-  $msg.get("lesson.plan.required.attachments.file.attached")
-  <br /><strong>$msg.get("lesson.plan.attachments.title")</strong>
+  <div class="entry medium">
+    <p  class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
+    <h5 class="instruction">$msg.get("lesson.plan.attachments.title")</h5>
   ##
   ## Attachments list, as table
   ##
-  <table class="lp_attach_tbl">
+  <table class="instruction">
   <tbody>
   ##
   ## iterate through attachments, creating a table-row for each
   ## 
   #foreach ($attach in $doc.attachmentList) ## {
       <tr><td class="attachments_icon">
-        #mimeicon($attach.filename) 		## this hack-macro sets $macro_iconUrl as side-effect
+        #mimeicon($attach.filename)         ## this hack-macro sets $macro_iconUrl as side-effect
         &nbsp;<img src="$macro_iconUrl" alt="[${m_fileExt}]" title="[${m_fileExt}]"/>&nbsp;
       </td><td class="attachments_file">
         &nbsp;${attach.filename}&nbsp;
       </td><td class="attachments_version">
         &nbsp;${attach.version}&nbsp;
+#if( $total_attachments_size >= 20000000 )  ## {   -- display the filesize of attachments if "over the limit"
       </td><td class="attachments_filesize">
-        &nbsp;${attach.getFilesize()}&nbsp;&nbsp;&nbsp;
+        &nbsp;${attach.getFilesize()}&nbsp;
+#end                                        ## }
       </td><td class="attachments_delete">
-        &nbsp;<a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
+        &nbsp;&nbsp;&nbsp;<a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("lesson.plan.attachments.delete") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("lesson.plan.attachments.delete")">$msg.get("lesson.plan.attachments.delete")</a>
       </td></tr>
-    #end ## } -- foreach
+    #end                                    ## } -- foreach
   ##
   ## End of attachment table
   ##
     </tbody>
     </table>
+  </div>
 #end ## } -- if
