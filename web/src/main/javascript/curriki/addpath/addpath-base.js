@@ -1935,7 +1935,7 @@ console.log("Published CB: ", newAsset);
 											if (dlg) {
 												dlg.close();
 											}
-											window.location.href = Curriki.current.cameFrom;
+											AddPath.ShowDone();
 										});
 									}
 									,scope:this
