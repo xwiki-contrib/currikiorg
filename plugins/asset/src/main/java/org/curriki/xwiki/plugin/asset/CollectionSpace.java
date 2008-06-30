@@ -7,6 +7,8 @@ import com.xpn.xwiki.doc.XWikiDocument;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
 
@@ -120,6 +122,22 @@ public class CollectionSpace {
         fav.setTitle(Constants.FAVORITES_COLLECTION_TITLE);
         fav.set(Constants.ASSET_CLASS_TITLE, Constants.FAVORITES_COLLECTION_TITLE);
         fav.set(Constants.ASSET_CLASS_DESCRIPTION, Constants.FAVORITES_COLLECTION_TITLE);
+
+        // we select the "Resource: Reference Collection" ICT value
+        List<String> ictList = new ArrayList<String>();
+        ictList.add("resource_collection");
+        fav.set(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT, ictList);
+
+        // we select the "Other" the education level
+        List<String> eduList = new ArrayList<String>();
+        eduList.add("na");
+        fav.set(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, eduList);
+
+        // we select the root of the Master framework
+        List<String> fwList = new ArrayList<String>();
+        fwList.add(Constants.ASSET_CLASS_FRAMEWORK_ITEMS_DEFAULT);
+        fav.set(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, fwList);
+
         fav.publish(spaceName, Constants.FAVORITES_COLLECTION_PAGE, false);
     }
 

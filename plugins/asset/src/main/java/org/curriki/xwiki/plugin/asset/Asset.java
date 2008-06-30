@@ -477,6 +477,7 @@ public class Asset extends CurrikiDocument {
             copyProperty(parentAssetObj, assetObj, Constants.ASSET_CLASS_FRAMEWORK_ITEMS);
             copyProperty(parentAssetObj, assetObj, Constants.ASSET_CLASS_RIGHT);
             copyProperty(parentAssetObj, assetObj, Constants.ASSET_CLASS_KEYWORDS);
+            copyProperty(parentAssetObj, assetObj, Constants.ASSET_CLASS_LANGUAGE);
         }
 
         // make sure default rights value is not empty (default to public)
