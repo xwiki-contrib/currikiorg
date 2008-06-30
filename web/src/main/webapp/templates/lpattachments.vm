@@ -23,7 +23,7 @@
 #set( $total_attachments_size = 0 )         ## javascript:getAttachmentsSize()
 #set( $total_attachments_names = [] )       ## javascript:getAttachmentsNames()
 #foreach ($attach in $doc.attachmentList)   ## {
-  #set( $ok = $total_attachments_names.add(${attach.filename}) )                         ## append attachment filename to ArrayList
+  #set( $ok = $total_attachments_names.add('"' + ${attach.filename} + '"') )             ## append attachment filename to ArrayList
   #set( $total_attachments_size = ${total_attachments_size} + ${attach.getFilesize()} )  ## compute total size of atttachments
 #end					    ## } -- foreach
 ##
