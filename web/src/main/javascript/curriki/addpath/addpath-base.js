@@ -99,7 +99,10 @@ Curriki.module.addpath.init = function(){
 							,cls:'button cancel'
 							,listeners:{
 								click:{
-									 fn: function(){this.close();}
+									 fn: function(){
+											this.close();
+											window.location.href = Curriki.current.cameFrom;
+										}
 									,scope:this
 								}
 							}
@@ -467,6 +470,7 @@ Curriki.module.addpath.init = function(){
 							,listeners:{
 								'click':function(e, ev){
 									Ext.getCmp(e.id).ownerCt.ownerCt.close();
+									window.location.href = Curriki.current.cameFrom;
 								}
 							}
 						},{
@@ -577,7 +581,10 @@ Curriki.module.addpath.init = function(){
 							,cls:'button cancel'
 							,listeners:{
 								click:{
-									 fn: function(){this.close();}
+									 fn: function(){
+										this.close();
+										window.location.href = Curriki.current.cameFrom;
+									}
 									,scope:this
 								}
 							}
@@ -593,11 +600,14 @@ Curriki.module.addpath.init = function(){
 											Curriki.current.sri1 = form.getValues(false);
 											Curriki.current.sri1.fw_items = this.findByType('treepanel')[0].getChecked('id');
 
-											this.close();
+											AddPath.ShowNextDialogue('apSRI2', this.id);
 
+/* To be removed if above works
+											this.close();
 											var p = Ext.ComponentMgr.create({'xtype':'apSRI2'});
 											p.show();
 											Ext.ComponentMgr.register(p);
+*/
 										} else {
 											var errorMsg = {
 												 msg:_('form.scratch.required.fields.dialog')
@@ -1049,6 +1059,7 @@ Curriki.module.addpath.init = function(){
 							,listeners:{
 								'click':function(e, ev){
 									Ext.WindowMgr.get('MetadataDialogueWindow').close();
+									window.location.href = Curriki.current.cameFrom;
 								}
 							}
 						},{
@@ -1906,6 +1917,7 @@ console.log("Published CB: ", newAsset);
 								click:{
 									 fn: function(){
 										this.close();
+										window.location.href = Curriki.current.cameFrom;
 									}
 									,scope:this
 								}
@@ -1923,6 +1935,7 @@ console.log("Published CB: ", newAsset);
 											if (dlg) {
 												dlg.close();
 											}
+											window.location.href = Curriki.current.cameFrom;
 										});
 									}
 									,scope:this

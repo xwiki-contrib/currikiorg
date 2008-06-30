@@ -157,7 +157,8 @@ Curriki.assets = {
 					console.warn('Cannot add subasset', response.responseText, options);
 					alert('Error adding subasset: '+(response.responseText||'Unknown server error'));
 				} else {
-					callback(o);
+					// We need to refresh the collections for the user
+					Curriki.data.user.GetCollections(function(){callback(o);});
 				}
 			}
 			,failure:function(response, options){
