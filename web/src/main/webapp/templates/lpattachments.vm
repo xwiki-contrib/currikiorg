@@ -17,12 +17,13 @@
   #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
 #end			                    ## }
 ##
-## Attachment behavior changes to prevent attaching more files
-## when ($total_attachments_size >= 20Mb). This value available via Javascript
-## getAttachmentsSize() -- see below.
+## Compute velocity vars for attachments that are made available to 
+## framing app via javascript getAttachmentsSize() and getAttachmentsNames().
 ##
-#set( $total_attachments_size = 0 )
+#set( $total_attachments_size = 0 )         ## javascript:getAttachmentsSize()
+#set( $total_attachments_names = [] )       ## javascript:getAttachmentsNames()
 #foreach ($attach in $doc.attachmentList)   ## {
+  #set( $ok = $total_attachments_names.add(${attach.filename}) )                         ## append attachment filename to ArrayList
   #set( $total_attachments_size = ${total_attachments_size} + ${attach.getFilesize()} )  ## compute total size of atttachments
 #end					    ## } -- foreach
 ##
@@ -33,7 +34,7 @@
   <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
   <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
   <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-  <script type="text/javascript">function getAttachmentsSize() { return (${total_attachments_size}); } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
+  <script type="text/javascript">function getAttachmentsNames() { return (${total_attachments_names}); } function getAttachmentsSize() { return (${total_attachments_size}); } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
   <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize() < $msg.get("lesson.plan.file.size.maximum")) { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } else { alert('$msg.get('lesson.plan.file.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
 </form>
 ##
@@ -56,6 +57,7 @@
   ##
   ## iterate through attachments, creating a table-row for each
   ## 
+  #set( $Integer = 0 )                      ## need to use $Integer.parseInt()
   #foreach ($attach in $doc.attachmentList) ## {
       <tr><td class="attachments_icon">
         #mimeicon($attach.filename)         ## this hack-macro sets $macro_iconUrl as side-effect
@@ -64,7 +66,7 @@
         &nbsp;${attach.filename}&nbsp;
       </td><td class="attachments_version">
         &nbsp;${attach.version}&nbsp;
-#if( $total_attachments_size >= $msg.get("lesson.plan.file.size.maximum") ) ## {   -- display the filesize of attachments if "over the limit"
+#if( $total_attachments_size >= $Integer.parseInt($msg.get("lesson.plan.file.size.maximum")) ) ## {   -- display the filesize of attachments if "over the limit"
       </td><td class="attachments_filesize">
         &nbsp;${attach.getFilesize()}&nbsp;
 #end                                        ## }
