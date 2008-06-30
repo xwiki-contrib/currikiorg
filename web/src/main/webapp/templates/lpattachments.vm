@@ -24,9 +24,9 @@
 #set( $total_attachments_names = [] )       ## javascript:getAttachmentsNames()
 #set( $total_attachments_exts  = [] )       ## javascript:getAttachmentsExts()
 #foreach ($attach in $doc.attachmentList)   ## {
-  #mimeicon($attach.filename)                                                            ## this hack-macro sets ${macro_iconUrl} and ${m_fileExt} as side-effect
   #set( $ok = $total_attachments_names.add("'${attach.filename}'") )                     ## append attachment filename to ArrayList
-  #set( $ok = $total_attachments_icons.add("'${m_fileExt}'") )                           ## append attachment icon to ArrayList
+  #mimeicon($attach.filename)                                                            ## this hack-macro sets ${macro_iconUrl} and ${m_fileExt} as side-effect
+  #set( $ok = $total_attachments_exts.add("'${m_fileExt}'") )                           ## append attachment icon to ArrayList
   #set( $total_attachments_size = ${total_attachments_size} + ${attach.getFilesize()} )  ## compute total size of atttachments
 #end					    ## } -- foreach
 ##
