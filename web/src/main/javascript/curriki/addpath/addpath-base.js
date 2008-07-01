@@ -600,14 +600,11 @@ Curriki.module.addpath.init = function(){
 											Curriki.current.sri1 = form.getValues(false);
 											Curriki.current.sri1.fw_items = this.findByType('treepanel')[0].getChecked('id');
 
-											AddPath.ShowNextDialogue('apSRI2', this.id);
-
-/* To be removed if above works
 											this.close();
+
 											var p = Ext.ComponentMgr.create({'xtype':'apSRI2'});
 											p.show();
 											Ext.ComponentMgr.register(p);
-*/
 										} else {
 											var errorMsg = {
 												 msg:_('form.scratch.required.fields.dialog')
