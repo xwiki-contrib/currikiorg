@@ -2118,6 +2118,7 @@ console.log("Published CB: ", newAsset);
 						,{xtype:'hidden', name:'cameFrom', value:Curriki.current.cameFrom}
 						,{xtype:'hidden', name:'flow', value:Curriki.current.flow}
 						,{xtype:'hidden', name:'parentPage', value:Curriki.current.parentAsset}
+						,{xtype:'hidden', name:'publishSpace', value:Curriki.current.publishSpace}
 					]
 				});
 				sf.submit();
