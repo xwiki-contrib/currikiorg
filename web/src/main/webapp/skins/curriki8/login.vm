@@ -17,7 +17,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 ###
 ###
 #template("startpage.vm")
-#set($logredir = "${!request.xredirect}")
+#set($logredir = $!request.xredirect)
 #loginbox($logredir)
 #template("endpage.vm")
 #end

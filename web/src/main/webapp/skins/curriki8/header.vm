@@ -35,6 +35,10 @@
   #if($doc.web=='Registration') ##{
    #set($logredir = $xwiki.getURL("Main.WebHome"))
   #end ##}
+
+  #if ($request.xredirect) ##{
+   #set($logredir = $request.xredirect)
+  #end ##}
 	  
 <!-- login area -->
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post"> ##{
