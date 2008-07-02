@@ -1538,7 +1538,7 @@ console.log("Published CB: ", newAsset);
 
 				case 'viewtarget':
 					link = '/xwiki/bin/view/'+pageName.replace('.', '/');
-					text = _('add.finalmessage.viewtarget.link', Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN');
+					text = _('add.finalmessage.viewtarget.link', (Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'));
 					break;
 
 				case 'continue': // F, N, L Folder version
@@ -2050,6 +2050,7 @@ console.log("Published CB: ", newAsset);
 												 parentPage:parentNodeId
 												,targetIndex:targetIndex
 											};
+											Curriki.current.parentTitle = parentNode.text;
 											AddPath.EnableNext();
 										}
 										,scope:this
