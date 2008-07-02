@@ -1136,6 +1136,10 @@ Curriki.module.addpath.init = function(){
 											Ext.getCmp('metadata-license_type-entry').setValue(md.licenseType2);
 										}
 
+										if (!Ext.isEmpty(md.language)){
+											Ext.getCmp('metadata-language-entry').setValue(md.language);
+										}
+
 										if (!Ext.isEmpty(md.rightsHolder)){
 											Ext.getCmp('metadata-right_holder-entry').setValue(md.rightsHolder);
 										}
