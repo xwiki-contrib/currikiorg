@@ -1569,7 +1569,7 @@ console.log("Published CB: ", newAsset);
 			}
 
 			return {
-				 text:_('add.finalmessage.'+linkName+'.link')
+				 text:text
 				,cls:'button link'
 				,handler:handler
 				,hidden:disabled
