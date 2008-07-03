@@ -4057,7 +4057,24 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 ## End pageTitle
 
 ## From Add Path spec in EOU1
-##
+
+## For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+## formatTextareasIntoWikiText() ). Call sequence:
+## #currikiattachment_begin()
+## #currikiattachment("file1.gif")
+## #currikiattachment("file2.gif")
+## ...
+## #currikiattachment_end()
+#macro(currikiattachment_begin)  ##{
+  <table><tbody>
+#end                             ##}
+#macro(currikiattachment $fname) ##{
+  #mimeicon($fname)              ## sets $macro_iconUrl as side-effect
+  <tr><td>&nbsp;<img src="${macro_iconUrl}"/>&nbsp;</td><td>&nbsp;{attach:${fname}}&nbsp;</td></tr>
+#end                             ##}
+#macro(currikiattachment_end)    ##{
+  </tbody></table>
+#end                             ##}
 
 ## Check for editable collections (to know if we can show 'Add'
 #macro(checkForCollections) ##{
