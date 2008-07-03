@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>CreateResources</web>
+<name>CurrikiStandardLessonPlan</name>
+<language></language>
+<defaultLanguage></defaultLanguage>
+<translation>0</translation>
+<parent>Main.AboutContributing</parent>
+<creator>XWiki.NielsMayer</creator>
+<author>XWiki.NielsMayer</author>
+<customClass></customClass>
+<contentAuthor>XWiki.NielsMayer</contentAuthor>
+<creationDate>1213219553000</creationDate>
+<date>1215116317000</date>
+<contentUpdateDate>1215116317000</contentUpdateDate>
+<version>47.1</version>
+<title>Curriki Standard Lesson Plan</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>CreateResources.CurrikiStandardLessonPlan</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/CurrikiStandardLessonPlan
+## originally from http://next.dev.curriki.org/xwiki/bin/view/Groups/CreateNewGroup?viewer=code&amp;showlinenumbers=0&amp;language=en
+## NPM attempting to emulate first form in http://www.curriki.org/xwiki/bin/view/Project/Form+Templates?xpage=print&amp;language=en
+##
+## ---------- PREAMBLE, CHECK AUTHORIZATION ----------
+##
+##UNCOMMENT-TO-USE-LOCAL-STYLESHEET &lt;link rel="stylesheet" href="/xwiki/bin/view/CreateResources/styleG?xpage=plain" type="text/css" /&gt;
+##
+#if( $context.user=="XWiki.XWikiGuest" ) ## {
+#set( $url = $xwiki.getURL("XWiki.XWikiLogin","login","xredirect=$logredir") )
+$msg.get("createresources.needaccount", [$url])
+#else ## } {
+##
+## ----- OK, WE HAVE AUTHORITY SETUP THE FORM POST/GET ETC  -----
+##
+  #includeMacros("CreateResources.StyledMacros")
+  ##  parameters passed by other forms or itself
+  #set( $pageName   = $request.getParameter("pageName") )
+  #set( $cameFrom   = $request.getParameter("cameFrom") )
+  #set( $flow       = $request.getParameter("flow") )
+  #set( $parentPage = $request.getParameter("parentPage") )
+  #set( $publishSpace = $request.getParameter("publishSpace") )
+  #set( $error_wikitext = '1 Error: SLP Wysiwyg Badness!' )
+## DEBUG DEBUG DEBUG
+## &lt;p&gt;( before setting newAsset '$!request.page $request.method ): newTextAsset: '$!newTextAsset' , newAsset: '$!newAsset' , pageName: '$!pageName' , cameFrom: '$!cameFrom' , flow: '$!flow' , parentPage: '$!parentPage' , publishSpace: '$!publishSpace'&lt;/p&gt;
+## DEBUG DEBUG DEBUG
+  #if( "$!pageName" != "" ) ## {
+     ## pageName is name of previously created asset, get it and use it. For
+     ## CurrikiStandardLessonPlan, this case is not defined by the spec and
+     ## shouldn't happen. The main issue with getting this to work is that the
+     ## TextAsset associated with the asset in pageName needs to be parsed and
+     ## broken back out into the separate fields in this form. Normally none of
+     ## this would be an issue if "step 2" fields were real Xwiki objects, but
+     ## they're not. We end up concatenating the result of all the text fields
+     ## in "step 2" and placing that as the content of the TextAsset in a hidden
+     ## field of the same name -- XWiki.TextAssetClass_0 -- as would be used by
+     ## Xwiki if we attached a "XWiki.TextAssetClass" to the XWiki.AssetClass on
+     ## POST, the "synthetic" wysiwyg contents are stored via
+     ## .updateObjectFromRequest("XWiki.TextAssetClass")
+     #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
+  #else ## } {
+    ## empty pageName means no asset... so create new one. This is "default" action
+     #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
+     ## note-below: &lt;input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/&gt;
+     ## so followup POSTs set pageName to newly created asset, i.e. condition below:
+  #end ## }
+  #if( "$!newAsset"=="" ) ## {
+    #if( "$!pageName" != "" )&lt;p&gt;asset creation error:&lt;/p&gt;#else&lt;p&gt;asset lookup error:&lt;/p&gt;#end
+    &lt;dl&gt;
+      &lt;dt&gt;request.method&lt;/dt&gt;&lt;dd&gt;$!request.method&lt;/dd&gt;
+      &lt;dt&gt;request.page&lt;/dt&gt;&lt;dd&gt;$!request.page&lt;/dd&gt;
+      &lt;dt&gt;getParameter("pageName")&lt;/dt&gt;&lt;dd&gt;$!pageName&lt;/dd&gt;
+      &lt;dt&gt;getParameter("cameFrom")&lt;/dt&gt;&lt;dd&gt;$!cameFrom&lt;/dd&gt;
+      &lt;dt&gt;getParameter("flow")&lt;/dt&gt;&lt;dd&gt;$!flow&lt;/dd&gt;
+      &lt;dt&gt;getParameter("parentPage")&lt;/dt&gt;&lt;dd&gt;$!parentPage&lt;/dd&gt;
+      &lt;dt&gt;getParameter("publishSpace")&lt;/dt&gt;&lt;dd&gt;$!publishSpace&lt;/dd&gt;
+    &lt;/dl&gt;
+  #else ## } ----- $newAsset defined for entire branch below ----- {
+  ## create or get newTextAsset -- used to display WYSIWYG editor
+  #if( !$newAsset.getObject("XWiki.TextAssetClass") ) ## {
+    ## create TextAssetClass for use by WYSIWYG
+    #set( $newTextAsset = $newAsset.newObject("XWiki.TextAssetClass") )
+  #else ## } {
+    ## fetch existing TextAssetClass for use by WYSIWYG
+    #set( $newTextAsset = $newAsset.getObject("XWiki.TextAssetClass") )
+  #end ## }
+## DEBUG DEBUG DEBUG
+## &lt;p&gt;( '$!request.page $request.method ): newTextAsset: '$!newTextAsset' , newAsset: '$!newAsset' , pageName: '$!pageName' , cameFrom: '$!cameFrom' , flow: '$!flow' , parentPage: '$!parentPage' , publishSpace: '$!publishSpace'&lt;/p&gt;
+## DEBUG DEBUG DEBUG
+##
+## ---------- JAVASCRIPT SPECIFICALLY FOR THIS FORM ----------
+##
+{pre}&lt;script language="javascript" type="text/javascript"&gt;
+/* &lt;![CDATA[ */
+function checkStandardLessonPlanForm() {
+  var missed_fields_str = '';
+  var wysiwyg_lrn_objctvs_html= getWysiwygContentAsWikiTextorFallbackAsText('mce_editor_0', 'slp_learning_objectives');
+  var wysiwyg_procedures_html = getWysiwygContentAsWikiTextorFallbackAsText('mce_editor_1', 'slp_procedures');
+  var wysiwyg_answer_key_html = getWysiwygContentAsWikiTextorFallbackAsText('mce_editor_2', 'slp_answer_key');
+  var wysiwyg_standards_html  = getWysiwygContentAsWikiTextorFallbackAsText('mce_editor_3', 'slp_standards');
+  {
+    var form_title = $('XWiki.AssetClass_0_title').value;
+    if ((form_title.length &lt;= 1) || (form_title.trim() == '')) {
+      missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.title')');
+    }
+  }
+  {
+    var form_description = $('XWiki.AssetClass_0_description').value;
+    if ((form_description.length &lt;= 1) || (form_description.trim() == '')) {
+      missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.description')');
+    }
+  }
+  {
+    var form_fw_items = $('XWiki.AssetClass_0_fw_items').value;
+    if ( (form_fw_items.length &lt;= 1) || (form_fw_items == 'FW_masterFramework.WebHome') ) {
+      missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.subject')');
+    }
+  }
+  { // Eductional-Level -- for validation, must look at "checked" on each button.
+    var one_checked = false;
+    for (var idx = 0, form_checkboxes = document.forms.inline['XWiki.AssetClass_0_educational_level2'];
+	 ((idx &lt; form_checkboxes.length) &amp;&amp; !one_checked);
+	 idx++) {
+      if (form_checkboxes[idx].checked) {
+	one_checked = true;
+      }
+    }
+    if (!one_checked) {
+      missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.level')');
+    } 
+  }
+//NO-ICT-IN-SLP {
+//NO-ICT-IN-SLP  var form_inst_comp = $('XWiki.AssetClass_0_instructional_component2').value;
+//NO-ICT-IN-SLP  if ((form_inst_comp.length &lt;= 1) ) {
+//NO-ICT-IN-SLP    missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.ict')');
+//NO-ICT-IN-SLP  }
+//NO-ICT-IN-SLP }
+  if (wysiwyg_lrn_objctvs_html == null) {
+    missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.learning.objectives')');
+  }
+  if (wysiwyg_procedures_html == null) { 
+    missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.procedures')');
+  }
+  {
+    var form_rightsHolder = $('XWiki.AssetLicenseClass_0_rightsHolder').value;
+    if ((form_rightsHolder.length &lt;= 1) || (form_rightsHolder.trim() == '')) {
+      missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.rights')');
+    }
+  }
+  if (missed_fields_str != '') {  // since theres error messages, validation failed... bail out.
+    alert('$msg.get('lesson.plan.required.fields.dialog')' + missed_fields_str);
+    setTextAssetToWikiText('$error_wikitext');  // not POSTing due to 'false' return below, so this should not matter -- reset in case of going "back" in browser after successful POST??
+    setValidWikiText('0');// not POSTing due to 'false' return below, so this should not matter -- reset in case of going "back" in browser after successful POST??
+    return false;
+  }
+  else {
+    // If all required fields validate above, we cobble together all the
+    // fields filled in the form and set the value of
+    // 'XWiki.TextAssetClass_0_text' which is associated with a hidden
+    // INPUT with attributes: type="hidden"
+    // name="XWiki.TextAssetClass_0_text" id="XWiki.TextAssetClass_0_text"
+    // value="1 Error: SLP Wysiwyg Badness!".  Thus, this
+    // computed-in-javascript value is sent to AssetDone via POST and an
+    // asset will be created by processing the data via
+    // .updateObjectFromRequest("XWiki.TextAssetClass").  NOTE THAT IF THE
+    // DEFAULT VALUE OF THE HIDDEN FIELD IS SEEN ON POST, then that
+    // indicates an error condition and that this code here was never
+    // reached. (Firefox punts on a javascript errror and would thus
+    // continue through to POST if the validation code above fails... for
+    // example).
+    var slp_str = '';		// the string we concat into the TextAssetClass contents
+    {
+      var form_introduction = $('slp_introduction').value;
+      if ( !((form_introduction.length &lt;= 1) || (form_introduction.trim() == '')) ) {
+	slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.introduction.title")' + '\n' + form_introduction;
+      }
+    } 
+    for (var idx = 0, one_checked = false, form_radioboxes = document.forms.inline['slp_groupsize'];
+	 ((idx &lt; form_radioboxes.length) &amp;&amp; !one_checked);
+	 idx++) {
+      if (form_radioboxes[idx].checked) {
+	slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.group.size.title")\n' + form_radioboxes[idx].value;
+	one_checked = true;
+      }
+    }
+    if (wysiwyg_lrn_objctvs_html != null) { // nb: required field
+      slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.learning.objectives.title")' + '\n' + wysiwyg_lrn_objctvs_html;
+    }
+    {
+      var form_guiding_question = $('slp_guiding_question').value;
+      if (!((form_guiding_question.length &lt;= 1) || (form_guiding_question.trim() == ''))) {
+	slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.guiding.question.title")' + '\n' + form_guiding_question;
+      }
+    }
+    {
+      var form_materials = $('slp_materials').value;
+      if (!((form_materials.length &lt;= 1) || (form_materials.trim() == ''))) {
+	slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.materials.title")' + '\n' + form_materials;
+      }
+    }
+    if (wysiwyg_procedures_html != null) { //nb: required field
+      slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.procedures.title")' + '\n' + wysiwyg_procedures_html;
+    }
+    {
+      var form_assessment = $('slp_assessment').value;
+      if (!((form_assessment.length &lt;= 1) || (form_assessment.trim() == ''))) {
+	slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.assessment.title")' + '\n' + form_assessment;
+      }
+    }
+    if (wysiwyg_answer_key_html != null) {
+      slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.answer.key.title")' + '\n' + wysiwyg_answer_key_html;
+    }
+    if (wysiwyg_standards_html != null) {
+      slp_str = ((slp_str != '') ? (slp_str + '\n') : '') + '1.1.1.1 $msg.get("lesson.plan.standards.title")' + '\n' + wysiwyg_standards_html;
+    }
+    // Finally... Success
+    //
+    setTextAssetToWikiText(slp_str);
+    setValidWikiText('1');
+    return true;
+  }
+}
+// get wysiwyg contents... returns null if no content, else string of
+// wikitext.  if wysiwyg_id_str WYSIWYG is not created due to platform or
+// browser issues, fallback to using values in textarea assoc'd with
+// wysiwyg (in which case plaintext, not wikitext)
+function getWysiwygContentAsWikiTextorFallbackAsText(wysiwyg_id_str, textarea_fallback_id_str) {
+  var wysiwyg_content_o = tinyMCE.getInstanceById(wysiwyg_id_str); // was: $('mce_editor_0'); // WYSIWYG Associated with "Content"
+  var wysiwyg_content_txt;
+  var wysiwyg_content_html;
+  if (wysiwyg_content_o != null) {  // there's a WYSIWYG
+    // Too bad for IE not recognizing
+    // wysiwyg_content_o.getBody().textContent because that would be the
+    // exact right thing to use to validate whether WYSIWYG is empty,
+    // instead, we have this pile of special cases:
+    wysiwyg_content_html = wysiwyg_content_o.getBody().innerHTML; // this works across browsers, but .textContent, more useful for validation, does not work on IE
+    var trim_wysywyg_html = wysiwyg_content_html.trim().toLowerCase();
+    var search_idx_BR = trim_wysywyg_html.indexOf('&lt;br');
+    var spoo_de_IE = '&lt;p class=""&gt;&amp;nbsp;&lt;/p&gt;';
+    var search_idx_IE_spoo = trim_wysywyg_html.indexOf(spoo_de_IE);
+    var spoo_de_FF = '&lt;p class=""&gt;&amp;nbsp;&lt;br&gt;&lt;/p&gt;';
+    var search_idx_FF_spoo = trim_wysywyg_html.indexOf(spoo_de_FF);
+    if (((search_idx_BR == 0) &amp;&amp; (trim_wysywyg_html.length &lt;= 5)) || ((search_idx_IE_spoo == 0) &amp;&amp; (trim_wysywyg_html.length &lt;= spoo_de_IE.length)) ||  ((search_idx_FF_spoo == 0) &amp;&amp; (trim_wysywyg_html.length &lt;= spoo_de_FF.length))) {
+      wysiwyg_content_txt = ''; // treat the above cases as "empty wysiwyg editor" in validation below
+    }
+    else { //for validation below, use the HTML contents, which could be bogus if we fail to trap a future platform/browser special case for TinyMCE...
+      wysiwyg_content_txt = trim_wysywyg_html;  
+    }
+  }
+  else {			// fallback values incase there's no WYSIWYG
+    wysiwyg_content_txt  = $(textarea_fallback_id_str).value;
+  }
+  if ((wysiwyg_content_txt.length &lt;= 1) || (wysiwyg_content_txt.trim() == '')) {
+    return null;
+  }
+  else {
+    return wysiwyg_content_html;
+  }
+}
+// set value POSTed via form hidden field w/
+// id="XWiki.TextAssetClass_0_text" and default value="$error_wikitext"
+// (which if received on POST, indicates an unexpected error condition has
+// occurred).
+function setTextAssetToWikiText(str) {
+  var input_field_TextAssetClass_o = $('XWiki.TextAssetClass_0_text');
+  if (input_field_TextAssetClass_o != null) {
+    input_field_TextAssetClass_o.value = str;
+  }
+  else { alert('error in setTextAssetToWikiText()'); }
+}
+// set value POSTed via form hidden field w/ id="validSimpleWikiDoc" and
+// default value="0" (which if received on POST, indicates an unexpected
+// error condition has occurred). Value "1" noted by AssetDone as
+// validation success.
+function setValidWikiText(str) {
+  var input_field_validSimpleWikiDoc_o = $('validSimpleWikiDoc');
+  if (input_field_validSimpleWikiDoc_o != null) {
+    input_field_validSimpleWikiDoc_o.value = str;
+  }
+  else { alert('error in setValidWikiText()'); }
+}
+// 
+// 
+// 
+function appendSeparatedErrorMessageStr(message_str, missed_field_err_str) {
+  return(message_str + '\n\t\t' + missed_field_err_str);
+}
+// 
+// 
+// 
+var needUnloadDialog = true;
+function preventUnloadDialog () {
+  needUnloadDialog = false;
+}
+// 
+// unloadDialog() callback for window.onbeforeunload -- warn of data-loss
+// 
+function unloadDialog() {
+  if (needUnloadDialog) {
+    return "$msg.get('form.leaving.dialog')";
+  }
+}
+Ext.onReady( function() { window.onbeforeunload = unloadDialog; } );
+/* ]]&gt; */
+&lt;/script&gt;{/pre}
+  ##
+  ## -------------------- THE MAIN DISPLAY --------------------
+  ##
+  &lt;div class="header"&gt;
+  #curriki_formtitle($msg.get("lesson.plan.title"))
+  $msg.get("lesson.plan.title.description") &lt;a href="$msg.get('lesson.plan.title.description.link1.url')" target="_blank"&gt;$msg.get("lesson.plan.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('lesson.plan.title.description.link3.url')" target="_blank"&gt;$msg.get("lesson.plan.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;img src="$msg.get('lesson.plan.title.description.link2.thumbnail')" align="middle"&gt;&lt;a href="$msg.get('lesson.plan.title.description.link2.url')" target="_blank"&gt;$msg.get("lesson.plan.title.description.link2")&lt;/a&gt;
+  &lt;br /&gt;$msg.get("form.required.fields.instruction")
+  &lt;/div&gt;
+  ##
+  ## --------------------FORM ITSELF --------------------
+  ##
+  ## NB: default action goes back to this form, which shouldnt happen, because,
+  ## after successful validation via call to checkStandardLessonPlanForm(), the button
+  ## below sets document.forms.inline.action='$msg.get("form.done.url")'
+  ##
+  &lt;form action="" class="curriki-form" id="inline" enctype="multipart/form-data" method="post"&gt;
+  ##
+  ## "XWiki.TextAssetClass_0_text" is a fake "XWiki.TextAssetClass" so that
+  ## .updateObjectFromRequest("XWiki.TextAssetClass") reconstitutes a
+  ## XWiki.TextAssetClass from the concatenated results of editors in this
+  ## form.... This XWiki.TextAssetClass_0_text hidden field should be set
+  ## via JavaScript after successful validation by checkStandardLessonPlanForm().
+  ## It is then transmitted to AssetDone via POST. The value $error_wikitext indicates
+  ## the javascript value setting didn't work.
+  &lt;input type="hidden"  name="XWiki.TextAssetClass_0_text" id="XWiki.TextAssetClass_0_text" value="$error_wikitext" /&gt;
+  ## Force 0-value of instructional_component2 specifically for SLP.  Note lines
+  ## commented out below with "NO-ICT-IN-SLP" -- normally set via
+  ## display("instructional_component2","edit")
+  &lt;input type="hidden"  name="XWiki.AssetClass_0_instructional_component2" id="XWiki.AssetClass_0_instructional_component2" value="$msg.get('XWiki.AssetClass_instructional_component2_curriculum_lp')" /&gt;
+  ## Force 0-value of hidden_from_search specifically for SLP, note lines
+  ## commented out with "NO-HIDDENSRCH-IN-SLP". Normally set via
+  ## display("hidden_from_search","edit")
+  &lt;input type="hidden"  name="XWiki.AssetClass_0_hidden_from_search" id="XWiki.AssetClass_0_hidden_from_search" value="0" /&gt; 
+  ## XWiki.AssetClass_0_category is a fake "category" property of XWiki.AssetClass
+  ## This is forced here to value "WikiText". This hidden field is passed to AssetDone 
+  ## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
+  &lt;input type="hidden"  name="XWiki.AssetClass_0_category" id="XWiki.AssetClass_0_category" value="WikiText" /&gt; 
+  ## validSimpleWikiDoc is a hidden field that is set to "1" in checkStandardLessonPlanForm()
+  ## after successful validation. If AssetDone gets a POST with the default value of "0" set here
+  ## it will ignore the post as it means it's not validated.
+  &lt;input type="hidden" 	name="validSimpleWikiDoc" id="validSimpleWikiDoc" value="0" /&gt;
+  &lt;input type="hidden" 	name="page"		value="$!request.page"		/&gt;
+  &lt;input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/&gt;
+  &lt;input type="hidden"	name="cameFrom"
+#if( "$!request.cameFrom"=="" ) ## {
+   value="$msg.get('lesson.plan.url')"  ## default cameFrom to this form
+#else ## } {
+   value="$!request.cameFrom"           ## pass along cameFrom
+#end ## }
+   /&gt;
+  &lt;input type="hidden"	name="flow"		value="$!request.flow"		/&gt;
+  &lt;input type="hidden"	name="parentPage"	value="$!request.parentPage"	/&gt;
+  &lt;input type="hidden"	name="publishSpace"	value="$!request.publishSpace"	/&gt;
+#####################################################################
+  #curriki_formpart_begin($msg.get("lesson.plan.step1.header")) ## {
+  #curriki_forminstructions($msg.get("lesson.plan.step1.instruction"))
+  #curriki_formprompt($msg.get("sri.title_title"), $msg.get("sri.title_tooltip"), $msg.get("sri.title_txt"), true, "")
+  $newAsset.display("title","edit")
+  #curriki_formprompt($msg.get("sri.description_title"), $msg.get("sri.description_tooltip"), $msg.get("sri.description_txt"), true, "")
+  $newAsset.display("description","edit")
+  &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
+  #curriki_formprompt($msg.get("sri.fw_items_title"), $msg.get("sri.fw_items_tooltip"), $msg.get("sri.fw_items_txt"), true, "")
+  $newAsset.display("fw_items","edit")
+  &lt;/td&gt;&lt;td&gt;
+  #curriki_formprompt($msg.get("sri.educational_level_title"), $msg.get("sri.educational_level_tooltip"), $msg.get("sri.educational_level_txt"), true, "")
+  $newAsset.display("educational_level2","edit")
+  &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt; ##class="subject-educational"
+##NO-ICT-IN-SLP #curriki_formprompt($msg.get("sri.instructional_component2_title"), $msg.get("sri.instructional_component2_tooltip"), $msg.get("sri.instructional_component2_txt"), true, "")
+##NO-ICT-IN-SLP $newAsset.display("instructional_component2","edit")
+  #curriki_formprompt($msg.get("sri.keywords_title"), $msg.get("sri.keywords_tooltip"), $msg.get("sri.keywords_txt"), false, "")
+  $newAsset.display("keywords","edit")
+  #curriki_formprompt($msg.get("sri.language_title"), $msg.get("sri.language_tooltip"), $msg.get("sri.language_txt"), false, "")
+  $newAsset.display("language","edit")
+  #curriki_formpart_end() ## }
+#####################################################################
+  #curriki_formpart_begin($msg.get("lesson.plan.step2.header")) ## {
+  #curriki_forminstructions($msg.get("lesson.plan.step2.instruction"))
+## Introduction -- textarea
+  #curriki_formprompt($msg.get("lesson.plan.introduction.title"), $msg.get("lesson.plan.introduction.tooltip"), $msg.get("lesson.plan.introduction.instruction"), false, "")
+  &lt;textarea id='slp_introduction' name='slp_introduction' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Group Size -- enumerated type
+  #curriki_formprompt($msg.get("lesson.plan.group.size.title"), $msg.get("lesson.plan.group.size.tooltip"), "", false, "")
+  &lt;div style="padding: 5px 10px;"&gt;
+    &lt;span class="xwiki-form-listclass" id="xwiki-form-groupsize"&gt;
+      &lt;input name='slp_groupsize' checked='checked' type='radio'
+        value='$msg.get("lesson.plan.group.size.content1")'/&gt;
+               $msg.get("lesson.plan.group.size.content1")&lt;/span&gt;
+    &lt;span class="xwiki-form-listclass" id="xwiki-form-groupsize"&gt;
+      &lt;input name='slp_groupsize' type='radio'
+        value='$msg.get("lesson.plan.group.size.content2")'/&gt;
+               $msg.get("lesson.plan.group.size.content2")&lt;/span&gt;
+    &lt;span class="xwiki-form-listclass" id="xwiki-form-groupsize"&gt;
+      &lt;input name='slp_groupsize' type='radio'
+        value='$msg.get("lesson.plan.group.size.content3")'/&gt;
+               $msg.get("lesson.plan.group.size.content3")&lt;/span&gt;
+    &lt;span class="xwiki-form-listclass" id="xwiki-form-groupsize"&gt;
+      &lt;input name='slp_groupsize' type='radio'
+        value='$msg.get("lesson.plan.group.size.content4")'/&gt;
+               $msg.get("lesson.plan.group.size.content4")&lt;/span&gt;
+    &lt;span class="xwiki-form-listclass" id="xwiki-form-groupsize"&gt;
+      &lt;input name='slp_groupsize' type='radio'
+        value='$msg.get("lesson.plan.group.size.content5")'/&gt;
+               $msg.get("lesson.plan.group.size.content5")&lt;/span&gt;
+  &lt;/div&gt;
+## ! Learning Objectives -- wysiwyg
+  #curriki_formprompt($msg.get("lesson.plan.learning.objectives.title"), $msg.get("lesson.plan.learning.objectives.tooltip"), $msg.get("lesson.plan.learning.objectives.instruction"), true, "")
+  &lt;textarea id='slp_learning_objectives' name='slp_learning_objectives' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Guiding Question -- textarea
+  #curriki_formprompt($msg.get("lesson.plan.guiding.question.title"), $msg.get("lesson.plan.guiding.question.tooltip"), $msg.get("lesson.plan.guiding.question.instruction"), false, "")
+  &lt;textarea id='slp_guiding_question' name='slp_guiding_question' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Materials -- textarea
+  #curriki_formprompt($msg.get("lesson.plan.materials.title"), $msg.get("lesson.plan.materials.tooltip"), $msg.get("lesson.plan.materials.instruction"), false, "")
+  &lt;textarea id='slp_materials' name='slp_materials' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## ! Procedures - wysiwyg
+  #curriki_formprompt($msg.get("lesson.plan.procedures.title"), $msg.get("lesson.plan.procedures.tooltip"), "", true, "")
+  &lt;textarea id='slp_procedures' name='slp_procedures' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Assesment -- textarea
+  #curriki_formprompt($msg.get("lesson.plan.assessment.title"), $msg.get("lesson.plan.assessment.tooltip"), $msg.get("lesson.plan.assessment.instruction"), false, "")
+  &lt;textarea id='slp_assessment' name='slp_assessment' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Answer Key or Rubric -- Wysiwyg
+  #curriki_formprompt($msg.get("lesson.plan.answer.key.title"), $msg.get("lesson.plan.answer.key.tooltip"), $msg.get("lesson.plan.answer.key.instruction"), false, "")
+  &lt;textarea id='slp_answer_key' name='slp_answer_key' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Benchmark &amp; Standards -- Wysiwyg
+  #curriki_formprompt($msg.get("lesson.plan.standards.title"), $msg.get("lesson.plan.standards.tooltip"), $msg.get("lesson.plan.standards.instruction"), false, "")
+  &lt;textarea id='slp_standards' name='slp_standards' rows='5' width='100%'&gt;&lt;/textarea&gt;  
+## Required Resources (attachments) -- textfield w/ buttons
+  #curriki_formprompt($msg.get("lesson.plan.required.attachments.title"), $msg.get("lesson.plan.required.attachments.tooltip"), $msg.get("lesson.plan.required.attachments.instruction"), false, "")
+&lt;!-- ATTACHMENTS FRAME --&gt;
+#if($doc.attachmentList.size()&gt;0) ## {
+#foreach ($attach in $doc.attachmentList) ## {
+    &lt;!-- Each comment row is inside an "attachments" class div --&gt;
+  	&lt;div class="attachments"&gt;
+	 &lt;!-- Paragraph containing the post infos --&gt;
+	 &lt;div class="attachments_icon"&gt;
+	 #mimeicon($attach.filename)
+	 &lt;/div&gt;
+	 &lt;p&gt;&lt;span class="date"&gt;{pre}&lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")"&gt;#packName($attach.filename)&lt;/a&gt;&lt;/span&gt; $attach.version 
+&lt;span class="right"&gt;
+  &lt;a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")"&gt;$msg.get("download")&lt;/a&gt;
+   | &lt;a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("deletethisattachment") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("deletethisattachment")"&gt;$msg.get("delete")&lt;/a&gt;
+&lt;/span&gt;{/pre}
+	 &lt;!-- Paragraph containing the post text --&gt;
+	 &lt;p&gt;&lt;span class="date"&gt;$msg.groups_messages_view_attachments_providedby $xwiki.getLocalUserName($attach.author) $msg.groups_messages_view_attachments_on $xwiki.formatDate($doc.creationDate,$msg.get("mycurriki.datetimeFormat"))&lt;/span&gt;&lt;/p&gt;
+	&lt;/div&gt;
+	&lt;!-- End of an attachments row --&gt;
+#end ## } -- foreach
+#end ## } -- if
+&lt;div id="attachmentscontent" class="xwikiintracontent"&gt;
+&lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" /&gt;
+&lt;fieldset class="expanded" id="attachform"&gt;
+&lt;div&gt;&lt;input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/&gt;&lt;/div&gt;
+&lt;div&gt;&lt;label id="xwikiuploadfilelabel" for="xwikiuploadfile"&gt;$msg.get("choosefiletoupload"):&lt;/label&gt;&lt;/div&gt;
+&lt;div&gt;&lt;input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/&gt;&lt;/div&gt;
+&lt;div&gt;
+{pre}
+&lt;script type="text/javascript"&gt;
+function updateXRedirect(formName, returnValue){
+var xredirect = document.forms[formName].xredirect;
+xredirect.value = '${doc.getURL("view")}';
+return returnValue;
+}
+&lt;/script&gt;
+{/pre}
+&lt;span&gt;&lt;input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onClick="try { return updateXRedirect('inline', updateAttachName(document.forms.inline, '$msg.get("doyouwanttoreplace")')) } catch(e) { alert('$msg.get("attachthisfile") button onclick error: ' + e + ' ...'); return false; }" /&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;/fieldset&gt;
+## &lt;/form&gt;
+ &lt;!-- End of ATTACHMENTS FRAME --&gt;
+## Attachments -- list of icons &amp; filenames w/ remove link
+  #curriki_formprompt($msg.get("lesson.plan.attachments.title"), $msg.get("lesson.plan.attachments.tooltip"), "", false, "")
+  #curriki_formpart_end() ## }
+#####################################################################
+  #curriki_formpart_begin($msg.get("form.scratch.step3.header")) ## {
+  #curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
+##NO-HIDDENSRCH-IN-SLP #curriki_formprompt($msg.get("sri.hidden_from_search_title"), $msg.get("sri.hidden_from_search_tooltip"), $msg.get("sri.hidden_from_search_txt"), false, "")
+##NO-HIDDENSRCH-IN-SLP $newAsset.display("hidden_from_search","edit")
+##NO-HIDDENSRCH-IN-SLP &lt;label&gt;$msg.get("sri.hidden_from_search_after")&lt;/label&gt;		##special case where text is needed after display(), which appears as label-less toggle
+  #curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "")
+  $newAsset.display("rightsHolder","edit")
+  #curriki_formprompt($msg.get("sri.rights_title"), $msg.get("sri.rights_tooltip"), $msg.get("sri.rights_txt"), false, "")
+  $newAsset.display("rights","edit")
+  #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "")
+  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		##special case where additional text is needed as prompt before display()
+  $newAsset.display("licenseType2","edit")
+  #curriki_formpart_end() ## }
+#####################################################################
+  #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
+  &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
+  &lt;p class="links"&gt;
+     &lt;button
+      onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkStandardLessonPlanForm()) { preventUnloadDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: ' + e + ' ...'); return false; }"
+      &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
+     #if( "$!cameFrom" != "" ) ## { 
+       #set( $cancelURL = $cameFrom )
+     #else ## } {  
+       #set( $cancelURL = $xwiki.getURL("Main.WebHome") ) ## cameFrom not set means go to WebHome
+     #end ## }
+     &lt;button class="cancel"
+      onclick="try { preventUnloadDialog(); window.location.href='$cancelURL'; return false; } catch(e) { alert('$msg.get("form.scratch.cancel.button") button onclick error: ' + e + ' ...'); return false; }"
+      &gt;$msg.get("form.scratch.cancel.button")&lt;/button&gt;
+  &lt;/p&gt;
+  #curriki_formpart_end() ## }
+#####################################################################
+  &lt;div class="tooltips"&gt;
+    {pre} $xwiki.addTooltipJS() {/pre}
+  &lt;/div&gt;
+  &lt;/form&gt;
+#set( $noWYSIWYG  = $request.getParameter("noWYSIWYG") ) ##for testing,etc, a special parameter to force WYSIWYG editors to not display.
+#if( "$!noWYSIWYG" == "" ) ## {
+#curriki_wysiwyg_loader_preamble()
+#curriki_wysiwyg_loader_editor("slp_learning_objectives", $newAsset) ## id="mce_editor_0"
+#curriki_wysiwyg_loader_editor("slp_procedures", $newAsset)          ## id="mce_editor_1"
+#curriki_wysiwyg_loader_editor("slp_answer_key", $newAsset)          ## id="mce_editor_2"
+#curriki_wysiwyg_loader_editor("slp_standards", $newAsset)           ## id="mce_editor_3"
+#end ## } -- if "$!noWYSIWYG"==""
+#end ## } -- else, aka "$!newAsset"!="" 
+#end ## } -- $context.user=="XWiki.XWikiGuest"
+</content></xwikidoc>

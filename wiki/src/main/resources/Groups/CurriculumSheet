@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1198787617000</creationDate>
-<date>1203117040000</date>
-<contentUpdateDate>1203117040000</contentUpdateDate>
-<version>1.28</version>
+<date>1214931307000</date>
+<contentUpdateDate>1214931307000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Show "Build-Up" if user has edit rights, not just if they are a member.</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -62,10 +62,17 @@
 &lt;a href="$asset.getURL("view")" class="button-link"&gt;$msg.get("groups.curriculum.collections.view")&lt;/a&gt;
 #if($asset.hasAccessLevel("edit"))
 &lt;a target="_blank" href="#gwtEditUrl(${asset.fullName})" class="button-link-table"&gt;$msg.get("groups.curriculum.collections.edit")&lt;/a&gt;
+##
+#escapeForJS($asset.fullName)
+#set($escapedFullName = $ret_escaped)
+#findCurrikiTitle($asset)
+#escapeForJS($currikiTitle)
+#set($escapedTitle = $ret_escaped)
+{pre}
+&lt;a class="button-link-table" onclick="Curriki.module.addpath.startPath('N', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle', publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.buildup")" title="$msg.get("groups.curriculum.collections.buildup_tooltip")"&gt;$msg.get("groups.curriculum.collections.buildup")&lt;/a&gt;
+{/pre}
 #end
-#if($asset.hasAccessLevel("edit"))
-&lt;a href="javascript:addResourceToCollection2('${asset.fullName}');" class="button-link-table"&gt;$msg.get("groups.curriculum.collections.add")&lt;/a&gt;
-#end
+##
 #if($sm.isAdmin($spaceName, $context.user))
 #set($deleteMsg = $msg.get('groups.curriculum.collections.actions.delete.confirm'))
 #set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&amp;docName=${asset.fullName}&amp;sourceDoc=$doc.getURL('view')"))
@@ -166,7 +173,9 @@ function toggle_desc(){
 ## TODO: We need to know who can add to the collection here
 #if($context.action == "view")
 #if($sm.isMember($spaceName, $context.user))
-&lt;a class="button button-orange" href="javascript:createCollection2('Coll_${spaceName}', null, null);" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton")"&gt;$msg.get("groups.curriculum.collections.addButton")&lt;/a&gt;
+{pre}
+&lt;a class="button button-orange" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")"&gt;$msg.get("groups.curriculum.collections.addButton")&lt;/a&gt;
+{/pre}
 #end
 #end
 &lt;div id="groups-collections-instructional-text"&gt;

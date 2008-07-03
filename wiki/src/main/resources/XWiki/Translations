@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1171310101000</creationDate>
-<date>1206638795000</date>
-<contentUpdateDate>1206638795000</contentUpdateDate>
-<version>20.1</version>
+<date>1214864774000</date>
+<contentUpdateDate>1214864774000</contentUpdateDate>
+<version>54.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fixed History Local Bug</comment>
+<comment>Added overview.</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -57,39 +57,111 @@
 <content>#&lt;pre&gt;
 
 #side panel
-panel.navigation.browseresource=Browse Resources 
-panel.navigation.featureresources=Featured Resources
-panel.navigation.bysubject=By Subject
-panel.navigation.contributeresources=Contribute Resources
-panel.navigation.add_learning_resource=Add a Learning Resource
-panel.navigation.create_learning_resource=Create a Learning Resource
-panel.navigation.build_collection=Build a Collection
-panel.navigation.myfavorites=My Favorites
-panel.navigation.mycurriki=My Curriki
-panel.navigation.mycollection=My Collections
-panel.navigation.mycontributors=My Contributions
-panel.navigation.myblogs=My Blog
-panel.navigation.mygroups=My Groups
-panel.navigation.membercommunity=Member Community
-panel.navigation.volunteer=Volunteer
+panel.navigation.home=HOME
+panel.navigation.home.rollover=Curriki - The Global Education &amp; Learning Community
+
+panel.navigation.find=FIND
+panel.navigation.find.rollover=Collect lesson plans and curricula
+panel.navigation.find.about=About Finding &amp; Collecting
+panel.navigation.browse_by_subject=Browse Resources by Subject
+panel.navigation.advanced_search=Advanced Search
+panel.navigation.featured_resources=Featured Resources
+panel.navigation.reviewed_resources=Reviewed Resources
+
+panel.navigation.contribute=CONTRIBUTE
+panel.navigation.contribute.rollover=Add or create something new
+panel.navigation.contribute.about=About Contributing
+panel.navigation.addresource=Add a Resource
+panel.navigation.addresource.rollover.member=Add your best curricular materials or create something new
+panel.navigation.addresource.rollover.visitor=Curriki members can add and create curricular materials
+panel.navigation.crs=Curriki Review System
+
+panel.navigation.connect=CONNECT
+panel.navigation.connect.rollover=Collaborate with other educators
+panel.navigation.connect.about=About Connecting
 panel.navigation.featuredGroups=Featured Groups
 panel.navigation.browseGroups=Browse Groups by Subject
 panel.navigation.createGroup=Create a New Group
-panel.navigation.about_curriki=About Curriki
-panel.navigation.News=News
-panel.navigation.guidedtour=Guided Tour
+
+panel.navigation.mycurriki=MY CURRIKI
+panel.navigation.mycurriki.rollover=Access your member profile and much more
+panel.navigation.myprofile=My Profile
+panel.navigation.myfavorites=My Favorites
+panel.navigation.mycontributors=My Contributions
+panel.navigation.mycollection=My Collections
+panel.navigation.myblogs=My Blog
+panel.navigation.mygroups=My Groups
+
+panel.navigation.partners_sponsers=PARTNERS &amp; SPONSORS
+panel.navigation.partners_sponsers.rollover=Learn about Curriki's partners and sponsors
+panel.navigation.partners=Partners
+panel.navigation.sponsors=Sponsors
+panel.navigation.featured_partners=Featured Partners
+panel.navigation.partner_content=Partner Resources
+
+panel.navigation.help=HELP
+panel.navigation.help.rollover=Find information, instructions, and tutorials about using Curriki
+panel.navigation.help_collection=Help Collection
+panel.navigation.tutorials=Tutorials
+panel.navigation.contact_us=Contact Us
+
+panel.navigation.about_curriki=ABOUT CURRIKI
+panel.navigation.about_curriki.rollover=Find information about Curriki: news, leadership, volunteering, and more
+panel.navigation.guided_overview=Overview
+panel.navigation.guided_tour=Guided Tour
+panel.navigation.news=News
+panel.navigation.faqs=FAQs
 panel.navigation.board=Board
 panel.navigation.leadership_team=Leadership Team
+panel.navigation.volunteer=Volunteer
 panel.navigation.donate=Donate
-panel.navigation.partners_sponsers=Partners and Sponsors
-panel.navigation.features_partners=Featured Partners
-panel.navigation.help=Help
-panel.navigation.faqs=FAQs
-panel.navigation.contact_us=Contact Us
+
+##WATCH CURRIKI GROW PANEL
+panel.watchgrow.title=WATCH CURRIKI GROW
+panel.watchgrow.resources=Resources:
+panel.watchgrow.members=Members:
+panel.watchgrow.groups=Groups:
+panel.watchgrow.join=Join Now!
+
+## GLOBAL HEADER TEXT (What I have found thus far)
+
+headerWelcome=Welcome, {0}
+
+loginUsername=login name 
+loginPassword=password
+loginRememberme=Remember Me
+loginForgot=Forgot Login
+headerLoginGo=Go &amp;#xBB;
+
+BecomeMember_part1=Become
+BecomeMember_part2=a Member
+
+header.browse_subjects=Browse Subjects
+header.advanced_search=Advanced Search
+
+## CAN NOT FIND TRANSLATION STRINGS
+## Administration
+## Log-Out
+## search
+## login name
+
+
+## Depricated? AdvancedSearch=Advanced Search
+## Depricated? headerSearchGo=Go &amp;#xBB;
+## Depricated? header.search_go=Go &amp;#xBB;
+
+
+header.find_resource=Search or Browse Curriki
+
+
 
 panel.donate.title=Support the global education and learning community!
 
 panel.featuredmembers.members.count=members
+
+panel.sponsors.title=SPONSORS
+panel.featuredmembers.title=Featured Member
+
 #general captions
 
 add=Add
@@ -123,6 +195,7 @@ caption.searchContent=Search the Repository
 caption.searchResources=Search Resources
 
 caption.welcome=Welcome
+## I do not know where caption.welcome is used.
 
 caption.view=View
 caption.viewAll=View All
@@ -134,7 +207,7 @@ caption.addResourceToThisCollection=Add to This Collection
 caption.delete=Delete
 caption.sendToAFriend=Send to a Friend
 caption.linkToThePage=Link to This Page
-caption.NComments={0} comment(s)
+caption.NComments={0} Comment(s)
 caption.readmore=Read more...
 caption.download=Download
 caption.show=Show
@@ -143,6 +216,27 @@ caption.next=Next
 caption.prev=Prev
 caption.previous=Previous
 
+##NEW LINKS AT TOP OF VIEW TAB FOR RESOURCES PER EOU 1
+
+resource.view.favorite=Favorite
+resource.view.favorite_tooltip=Add this to My Favorites
+resource.view.add=Add
+resource.view.add_tooltip=Add this to a collection or folder
+resource.view.buildup=Build Up
+resource.view.buildup_tooltip=Add something to build up this collection or folder
+
+
+
+#XWiki.AssetTemplate
+
+asset.lastupdated=Last Updated
+asset.groupfrom=From
+asset.createdby=Created/Provided By
+asset.moreInformation=See Detailed Information
+asset.closeMoreInformation=Close Detailed Information
+asset.openToView=Detailed View
+asset.commentNotAllowed=You are not allowed to comment on this resource.
+asset.contentNotAllowed=This content is marked Private.
 
 
 caption.aboutCurriki=About Curriki
@@ -323,7 +417,7 @@ blogArticle.field.extract=Extract:
 blogArticle.field.title.mandatory=Title cannot be empty.
 blogArticle.field.content.mandatory=Content cannot be empty.
 
-blogArticle.commentsto={0} comment(s) to "{1}"
+blogArticle.commentsto={0} Comment(s) to "{1}"
 blogArticle.authorsays={0} Says:
 
 blogArticle.commentsDate={0} at {1} Pacific
@@ -332,16 +426,7 @@ blogArticle.commentsDate={0} at {1} Pacific
 
 blog.staffInfo=Here are some recent blog entries and musings from Curriki staffers.
 
-#XWiki.AssetTemplate
 
-asset.lastupdated=Last Updated
-asset.groupfrom=From
-asset.createdby=Created/Provided By
-asset.moreInformation=See Detailed Information
-asset.closeMoreInformation=Close Detailed Information
-asset.openToView=Detailed View
-asset.commentNotAllowed=You are not allowed to comment on this resource.
-asset.contentNotAllowed=This content is marked Private.
 
 #XWiki.MyContributionsTemplate
 
@@ -404,12 +489,6 @@ viditalk.sitecode=8204167813
 # TOC table of contents panel
 curriki.toc.title=Table of Contents
 
-# Header section for search and browse
-header.find_resource=Search or Browse Curriki
-header.browse_subjects=Browse Subjects
-header.advanced_search=Advanced Search
-header.search_go=Go &amp;#xBB;
-
 # Browse page
 browse.titlebar=Browse Resources by Subject
 browse.info=Click a subject to see a list of all the learning resources in that category.  The number in parentheses shows how many matching results are on the site right now.
@@ -447,7 +526,7 @@ browse.subject.title.promo_1=Romeo and Juliet Example
 browse.subject.image.promo_1=/xwiki/bin/download/XWiki/rmlucas/timespicturelargecropped.jpg
 browse.subject.description.promo_1=Text for Romeo and Juliet example
 
-featuredGroups.intro=Curriki features two groups each month. Want to learn more about creating a group and group capabilities? Visit &lt;a href="/xwiki/bin/view/Groups/AboutCreatingGroups"&gt;About Creating a Group&lt;/a&gt; and &lt;a href="/xwiki/bin/view/Coll_curriki/Groups?bc=;Coll_curriki.CurrikiHelp"&gt;Curriki Help Collection – Groups&lt;/a&gt;.&lt;br /&gt;
+featuredGroups.intro=Curriki regularly features outstanding groups. Want to learn more about creating a group and group capabilities? Visit &lt;a href="/xwiki/bin/view/Groups/AboutCreatingGroups"&gt;About Creating a Group&lt;/a&gt; and &lt;a href="/xwiki/bin/view/Coll_curriki/Groups?bc=;Coll_curriki.CurrikiHelp"&gt;Curriki Help Collection – Groups&lt;/a&gt;.&lt;br /&gt;
 
 # 404 Error Page
 err_404_previous_page=Go to the previous page

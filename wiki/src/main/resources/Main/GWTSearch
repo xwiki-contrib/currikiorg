@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1190835349000</creationDate>
-<date>1204921847000</date>
-<contentUpdateDate>1204921847000</contentUpdateDate>
-<version>4.1</version>
+<date>1214505155000</date>
+<contentUpdateDate>1214505155000</contentUpdateDate>
+<version>17.1</version>
 <title>Search</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Remove cdata</comment>
+<comment>Back to how it was -- changes made to gwt2.js</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,12 +54,21 @@
 <tags/>
 </property>
 </object>
-<content>&lt;script type="text/javascript"&gt;
-var GWTArguments = {
-  search: "",
-  load_on_startup: "1"
-};
+<content>{pre}
+&lt;script type="text/javascript"&gt;
+/* &lt;![CDATA[ */
+	#set($search = "")
+	#if("$!request.brsqry" != "") ##{
+		#set($search = "__terms=$!request.brsqry")
+	#end ##}
+	GWTArguments = {
+		search: "$search",
+		loading_msg: "$msg.get('loading.loading_msg')"
+	};
+	loadGWT();
+/* ]]&gt; */
 &lt;/script&gt;
 &lt;div id="searchElement"&gt;
-&lt;/div&gt;</content>
+&lt;/div&gt;
+{/pre}</content>
 </xwikidoc>

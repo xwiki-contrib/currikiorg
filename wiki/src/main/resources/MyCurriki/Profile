@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1202337443000</creationDate>
-<date>1205788540000</date>
-<contentUpdateDate>1205788540000</contentUpdateDate>
-<version>9.1</version>
+<date>1214866265000</date>
+<contentUpdateDate>1214866265000</contentUpdateDate>
+<version>11.1</version>
 <title>Profile</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Remove debug info</comment>
+<comment>CURRIKI-2287</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -82,8 +82,8 @@ $msg.get("profile.userNotVisible")
    &lt;div class="userpic"&gt;
 #if($userdoc.attachmentList.size()==0) 
    &lt;img src="$xwiki.getSkinFile("noavatar.png")"/&gt;
-   #if($context.action=="view")
-   &lt;a class="curriki-link" onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;' href="$userdoc.getURL("attach")"&gt;Change my photo&lt;/a&gt; 
+   #if($context.action=="view" &amp;&amp; ($userdoc.fullName == $context.user || $hasGlobalAdmin))
+   &lt;a class="curriki-link" onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;' href="$userdoc.getURL("attach")"&gt;$msg.get('profile.changeMyPhoto')&lt;/a&gt; 
    #end
 #else  ## attachmentList.size must be &gt; 0
    #foreach ($attach in $userdoc.attachmentList)

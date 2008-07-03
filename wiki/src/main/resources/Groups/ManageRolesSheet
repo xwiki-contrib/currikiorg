@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.mflorea</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.mflorea</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1202239285000</creationDate>
-<date>1206453490000</date>
-<contentUpdateDate>1206453490000</contentUpdateDate>
-<version>5.1</version>
+<date>1210694012000</date>
+<contentUpdateDate>1210694012000</contentUpdateDate>
+<version>6.1</version>
 <title>Manage Roles</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>Check Rights</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -83,6 +83,10 @@ $role.title
 ## Start page
 #groupinit()
 ##
+#if(!$isGroupAdmin &amp;&amp; !$hasGlobalAdmin) ## {
+$msg.get("groups_admins_onlyaccessibletoadmins")
+#else ## }{
+##
 ## Create, Rename, Delete roles
 ##
 #if($!request.create) ## {
@@ -133,5 +137,6 @@ $msg.get("groups.roles.manage.intro")
 &lt;/div&gt;
 ## Back to Members
 &lt;div id="groups-manage-roles-return" class="centertext"&gt;&lt;a href="/xwiki/bin/view/${spaceName}/Members"&gt;$msg.get("groups.roles.manage.returnlink")&lt;/a&gt;&lt;/div&gt;
-#groupsfooter()</content>
+#groupsfooter()
+#end ## }</content>
 </xwikidoc>

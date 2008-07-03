@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.jeremi</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.jkl1231</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1173445381000</creationDate>
-<date>1206952127000</date>
-<contentUpdateDate>1206952127000</contentUpdateDate>
-<version>36.1</version>
+<date>1214575189000</date>
+<contentUpdateDate>1214575189000</contentUpdateDate>
+<version>68.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix JS error in licence texte</comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -66,6 +66,7 @@ main.login_first=You must be logged in to use that feature. Please log in or cli
 main.missing_rights=You don't have the necessary rights for this action.
 main.error=error
 menu.table_of_content=Table of Contents
+menu.add=Build Up
 header.editor_title=Currikulum Builder
 header.editor_subtitle=You are now in Curriki's Currikulum Builder, where you can create, edit, and collaborate on learning resources, curricula, and collections.
 header.print=Print
@@ -89,7 +90,7 @@ editor.btt_remove_tt=Take this resource out of the Table of Contents for this co
 editor.btt_move=Move
 editor.btt_move_tt=Move this resource to a different place in this collection.
 editor.btt_metadata=Information
-editor.btt_metadata_tt=View and update the "information tags" for this resource.
+editor.btt_metadata_tt=View and update the Information settings for this resource.
 editor.btt_show=Show
 editor.btt_hide=Hide
 editor.btt_open=Open
@@ -98,7 +99,7 @@ editor.btt_compEdit=Edit
 editor.btt_finish=Next &gt;&gt;
 editor.btt_send=Send
 editor.btt_back=Back
-editor.btt_add=Add
+editor.btt_add=Build Up
 editor.btt_view=View
 editor.btt_find=Search
 editor.btt_go=Next &gt;&gt;
@@ -108,8 +109,8 @@ editor.do_you_want_to_save=Do you want to save?
 editor.youareeditinganassetsaveyourworkfirst=You are currently editing a resource. Please save your work or cancel editing before performing this action.
 editor.help.openinnewwindow=Open In New Window
 editor.help.close=Close
-addfile.add_a_learning_resource=Add a Learning Resource
-addfile.select_file_or_link=Select a file or link to add to Curriki.
+addfile.add_a_learning_resource=Add a Resource
+addfile.select_file_or_link=Select a file or link to add to this collection or folder.
 addfile.this_is_a_file_on_my_computer=Get a file from my computer.
 addfile.this_is_a_web_link=Insert a web link.
 addfile.record_a_video=Upload or record a video.
@@ -125,7 +126,7 @@ asset.asset_corrupted=This resource is corrupted; please remove it from your col
 asset.noderivatives=No Derivatives
 asset.description=Description:
 asset.asset_locked_force_edit=The asset is currently locked. Force edit?
-asset.externallink=This resource is an external link. You can click on the link to download the file or navigate to the site.
+asset.externallink=This resource is an external link. Use the link to download the file or navigate to the site.
 asset.invalid_url=Please specify a valid URL.
 asset.assetprivate=This resources is not viewable.
 asset.page_break=Page break
@@ -140,7 +141,7 @@ asset.download=Download
 asset.archive.showtree=Show Files
 asset.archive.hidetree=Hide Files
 asset.archive.launcharchive=Start
-asset.archive.uploadfile=Upload file
+asset.archive.uploadfile=Upload a newer version of the file
 asset.archive.launchfilehelp=NOTE: To set a new start file, please open contents and click on your new start file. This file will become the new start file after you save.
 find.find_resource_by=Find Resources in the Repository
 find.first=First
@@ -199,7 +200,7 @@ metadata.review_status=Coming Soon
 metadata.review_status_title=Curriki Review Status
 metadata.review_status_txt=
 metadata.review_status_content=
-metadata.review_status_tooltip=Curriki?s team of educational specialists will review submitted curricula. Look for this feature still to come!
+metadata.review_status_tooltip=Curriki's team of dedicated educators review nominated curricula.
 metadata.fw_items_title=Subject
 metadata.fw_items_txt=&lt;span class="field_instructions"&gt;Click arrows to expand or collapse subjects.&lt;/span&gt;
 metadata.fw_items_content=
@@ -213,7 +214,7 @@ metadata.educational_level2_txt=Select one or more level(s).
 metadata.educational_level2_content=
 metadata.educational_level2_tooltip=Level(s) for which your resource is appropriate
 metadata.instructional_component2_title=Instructional Component Type
-metadata.instructional_component2_txt=&lt;span class="field_instructions"&gt;Scroll to find the best option. You can select multiple options&lt;br /&gt;by hitting the Ctrl (PC) or Apple (Mac) key as you click to select.&lt;/span&gt;
+metadata.instructional_component2_txt=&lt;span class="field_instructions"&gt;Scroll to find the best option. You can select multiple options&lt;br /&gt;by hitting the Ctrl (PC) or Apple (Mac) key as you click to select. &lt;br&gt;Click &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.AboutLearningResources" target="_blank"&gt;here&lt;/a&gt; for definitions.
 metadata.instructional_component2_content=
 metadata.instructional_component2_tooltip=Type or format of content that best matches your resource
 metadata.right_section=Rights License and Ownership Information
@@ -252,7 +253,7 @@ template.describelearningresource=Describe the Learning Resource
 browseasset.insert_here=Insert Here
 moveasset.move=Move
 moveasset.select_asset_to_move=Select where you want to move your resource.
-choosecollection.add_a_learning_resource=Add A Learning Resource
+choosecollection.add_a_learning_resource=Add a Resource
 choosecollection.create_a_learning_resource=Create A Learning Resource
 mycollections.title=My Collections
 mycollections.no_collections_found=No collections found.
@@ -278,42 +279,42 @@ curriki.comment.finishcreatingsubasset=Finished creating sub asset of category {
 curriki.comment.createlinksourceasset=Create text source asset
 curriki.comment.createlinksourceasset=Create link source asset
 curriki.comment.updatemetadata=Update Information
-addasset.title=Add within the Currikulum Builder
+addasset.title=Add Within the Currikulum Builder
 addasset.set_required_metadata=Set Required Information
 addasset.desc_link=Include a great Web resource.
 addasset.desc_new_file=Add images, documents, and more from your computer.
-addasset.desc_file_or_link=Add a web resource or an image or document from your computer
-addasset.desc_separator=Insert the divider to visually separate pieces of content.
-addasset.direction_content_block=Direction Block
-addasset.desc_direction_content_block=Insert an element that will appear only in the Currikulum Builder to other authors/editors.
-addasset.desc_blank_content_block=Insert an open block to create new text, then style or format the text with our editing toolbar.
-addasset.desc_html_content_block=Insert an open block to author or paste HTML content.
-addasset.desc_folder=Organize additional resources here.
-addasset.desc_existing_resource=Curriki's repository offers many options for developing and enhancing your content.
-addasset.desc_template=Create a new resource using a Curriki template.
+addasset.desc_file_or_link=Upload a file from your computer, add a web link, or insert/capture a video.
+addasset.desc_separator=
+addasset.direction_content_block=Direction Element
+addasset.desc_direction_content_block=Insert an element that will appear only in the Currikulum Builder to other authors/editors. 
+addasset.desc_blank_content_block=Compose material in a "blank content block" to create a simple wiki resource.
+addasset.desc_html_content_block=Author or paste HTML content in this "blank HTML block" to create a resource.
+addasset.desc_folder=Create a folder to organize and sub-divide resources.
+addasset.desc_existing_resource=Find a resource that already exists in Curriki’s repository and insert it here.
+addasset.desc_template=
 addasset.enter_link=Please enter the URL.
 addasset.select_file=Select the file to upload.
 addasset.what_would_you_like_to_add=What would you like to add?
 addasset.link=Link
 addasset.new_file=New File
-addasset.file_or_link=File or Link
+addasset.file_or_link=File or Web Resource
 addasset.separator=Separator
-addasset.blank_content_block=Blank Content Block
-addasset.html_content_block=HTML Content Block
-addasset.template=Template
+addasset.blank_content_block=Resource from "Scratch"
+addasset.html_content_block=HTML Resource
+addasset.template=
 addasset.page_break=--------Page Break----------
 addasset.folder=Folder
-addasset.existing_resource=Add an existing resource&lt;br/&gt; from Curriki's repository.
-addasset.existing_element=Existing element
-addasset.new_element=New element
-addasset.formatting_element=Formatting element
+addasset.existing_resource=Resource from Curriki
+addasset.existing_element=What would you like to add? &lt;br&gt; Roll your cursor over each &lt;br&gt;option to learn more, then &lt;br&gt;click to select your choice.
+addasset.new_element=
+addasset.formatting_element=
 addexistingasset.selectcollection=You must select a collection to add the resource to.
 addexistingasset.couldnotaddtocollection=Could not add {0} to collection: {1}
 addexistingasset.failedtoaddtocollection=Failed to add {0} to collection.
 addfile.selectcollection=You must select a collection to put the file or link in.
 addfile.describelearningresource=Describe the Learning Resource
-addresource.add_a_learning_resource=Add a Learning Resource
-addresource.what_type_of_resource=What type of resource would you like to add?
+addresource.add_a_learning_resource=Add a File or Web Resource
+addresource.what_type_of_resource=Which type of resource are you adding?
 addresource.from_repository=A resource from Curriki's repository
 addresource.from_file_or_link=A file from your computer or a link from the web
 addresource.from_template=A new resource to be created using Curriki's templates
@@ -337,6 +338,7 @@ preview.loadingpreview=Loading preview
 preview.errorgettingpreview=Error getting preview
 viditalk.sitecode=8204167813
 viditalk.download_msg=Download Video
+viditalk.download_original_msg=Download Video (Original Format)
 comment.commentcannotbeempty=Please enter a comment. Empty comments are not allowed.
 edit.propose_duplication_title=Edit or Copy?
 edit.propose_duplication_text=Are you sure you want to change this resource created by {0}?&lt;br /&gt;&lt;br /&gt;To edit this resource for your own specific purpose, create a new version by clicking Copy below to save it as your own. (Next you will be prompted to save it into your My Curriki under a different title.)&lt;br /&gt;&lt;br /&gt;If you want to edit this resource for use by the whole Curriki community, click Continue to Edit. Your modifications will change the document of record and the previous version will be available under the Currikulum Builder's History tab.
@@ -445,15 +447,15 @@ curriki.crs.rating0=Not Rated/Not Rateable
 curriki.crs.rating1=Basic
 curriki.crs.rating2=Good
 curriki.crs.rating3=Exemplary
-curriki.crs.ratingP=Premium
+curriki.crs.ratingP=Partner
 curriki.crs.asof=as of
 curriki.crs.reviewpending=Review Pending
 curriki.crs.reviewnominate=Nominate
 curriki.crs.reviewreview=Review
-curriki.crs.settopartner=This is a Premium resource.
-curriki.crs.unsettopartner=This is NOT a Premium resource.
-curriki.crs.confirmsettopartner=If you want to set this to Premium, click Next.
-curriki.crs.confirmunsettopartner=If you want to remove the Premium setting, click Next.
+curriki.crs.settopartner=This is a Partner resource.
+curriki.crs.unsettopartner=This is NOT a Partner resource.
+curriki.crs.confirmsettopartner=If you want to set this to Partner, click Next.
+curriki.crs.confirmunsettopartner=If you want to remove the Partner setting, click Next.
 curriki.crs.reviewlist.currikireview=Curriki Review
 curriki.crs.reviewlist.nocurrikireviews=This resource has not been reviewed.
 curriki.crs.generatedcomment=&lt;span class="crs_reviewscontenttext"&gt;This resource was reviewed using the rubric for {0} and received an overall CRS rating of &lt;/span&gt;{1}&lt;br /&gt;&lt;br /&gt; Its component ratings were:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;Technical Completeness: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Content Accuracy: {3}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Appropriate Pedagogy: {4}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{5}
@@ -535,12 +537,17 @@ search.selector.filetype.text=Curriki
 search.selector.filetype.image=Image
 search.selector.filetype.link=Web
 
+search.selector.language=Language:
+search.selector.language.any=Any
+
 search.selector.filters=Special Filters:
 search.selector.filters_tooltip=Allows you to find certain types of items
 search.selector.filters.none=None
 search.selector.filters.mine=Only My Contributions
 search.selector.filters.collections=Only Collections
 search.selector.filters.reviewed=Only Reviewed Resources
+search.selector.filters.reviewed.top=Only Top Reviewed Resources
+search.selector.filters.reviewed.partners=Only Partner Resources
 
 search.results.col.title=Title
 search.results.col.review=Review
@@ -557,7 +564,7 @@ search.nav.summary=Results {0} - {1} of about {2}
 search.crs.tooltip.1=Basic
 search.crs.tooltip.2=Good
 search.crs.tooltip.3=Exemplary
-search.crs.tooltip.P=Premium
+search.crs.tooltip.P=Partner
 search.instruction.adv.open=Open Advanced Search
 search.instruction.adv.close=Close Advanced Search
 search.noresults=Your search did not return matching resources.
