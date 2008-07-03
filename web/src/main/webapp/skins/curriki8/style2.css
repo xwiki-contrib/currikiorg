@@ -13,8 +13,10 @@ input.input { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc
 input.checkbox, input[type="checkbox"], input[type="radio"] { border: 0; height: 15px; margin: 0px 2px 1px 0; padding: 0; width: 15px; }
 textarea, .x-form-text, textarea.x-form-field { background-image: none; border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 13px; padding: 0.4em 0.2em; white-space: pre; }
 p { margin: 0.5em 0; padding: 0; }
-button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange, input[type="submit"], input[type="button"], #attachmentAddForm .button-orange{ background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
-button:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-orange:hover, input[type="submit"]:hover, #attachmentAddForm .button-orange:hover { background-color: #ffb808; color: #fff; }
+button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange, #attachmentAddForm .button-orange{ background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
+input[type="submit"], input[type="button"] { background-color: #ff7f00; border-style: solid; border-width: 1px; border-color: #ff0000; color: #FFF; cursor: pointer; font-size: 11px; height: 23px; margin: 0; padding: 0 0.5em; overflow: visible; width: auto;  }
+button:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-orange:hover, #attachmentAddForm .button-orange:hover { background-color: #ffb808; color: #fff; }
+input[type="submit"]:hover { background-color: #ffb808; color: #fff; }
 button.cancel, .button-grey, #cancelbutton .x-btn-text, #ext-comp-1073 .x-btn-text, #closebutton button { background-color: #dcdcdc; border-color: #A5A5A5; color: #3f3f3f; }
 button.cancel:hover, button.button-grey:hover, #cancelbutton .x-btn-text:hover, #ext-comp-1073 #cancelbutton .x-btn-text:hover, #closebutton button:hover { background-color: #b4b4b4; color: #3f3f3f; }
 .flash-control-button, .flash-control-button-pause { line-height: normal; }
@@ -82,8 +84,8 @@ em, em strong { font-style: italic; }
 #header-search .search-box .input { font-size: 1.2em; padding: 0.3em 0.2em; }
 
 /* Left panel menu */
-#panels { padding: 1em 0 0; }
-#left-panel { font-size: 12px; float: left; height: 100%; padding-left: 0.3em; width: 205px; }
+#panels { padding: 0.3em 0 0; }
+#left-panel { font-size: 12px; float: left; height: 100%; padding: 0.5em 0 0 0.3em; width: 205px; }
 #left-panel .shadow-outer { margin-bottom: 1em;  width: 205px; }
 #left-panel .links { font-size: 0.8em; padding: 0.5em 0 0; text-align: right; }
 .expanded #left-panel { display: block; }
@@ -123,7 +125,7 @@ em, em strong { font-style: italic; }
 
 /* RIGHT PANEL */
 .expanded #right-panel { margin-left: 210px; padding-left: 10px; }
-#breadcrumb { padding-bottom: 0.3em; border-bottom: 1px solid #999; }
+#breadcrumb { padding-bottom: 0.3em; border-bottom: 1px solid #999; font-size: 11px; }
 #content, #attachmentscontent { padding: 2em 0 1em; overflow: hidden; height: 1%; }
 
 /* Curricula */
@@ -176,8 +178,9 @@ em, em strong { font-style: italic; }
 .curriki-form table.subject-educational td { vertical-align: top; }
 .curriki-form span.xwiki-form-listclass { display: block; margin: 3px 0 !important; margin: 0 0 2px; }
 form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
-.curriki-form #XWiki\.AssetClass_0_title { width: 99.5% !important; width: 95%; }
-#XWiki\.AssetClass_0_description, .curriki-form textarea { width: 100% !important; width: 95%; }
+.curriki-form #XWiki\.AssetClass_0_title { width: 99% !important; width: 95%; }
+#XWiki\.AssetClass_0_description, .curriki-form textarea { width: 99.5% !important; width: 95%; }
+.curriki-form textarea { height: 120px; }
 #XWiki\.AssetClass_0_keywords, #XWiki\.AssetLicenseClass_0_rightsHolder { width: 60%; }
 #XWiki\.AssetClass_0_language, #XWiki\.AssetLicenseClass_0_licenseType2 { width: 61%; }
 .curriki-form textarea { padding: 1px 0; }
@@ -188,11 +191,12 @@ form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
 .subject-educational td { font-size: 0; }
 .subject-educational td .entry, .subject-educational td .ygtvitem, .subject-educational td td, .subject-educational .xwiki-form-listclass { font-size: 12px; }
 #mce_editor_0_parent .mceEditor { height: 20em !important; }
-#attachment_iframe { border: none; }
+#attachment_iframe { border: none; margin-left: -10px; }
 .entry { font-family: Arial,sans-serif; }
 table.instruction { margin: 10px 0; }
-#attachmentAddForm { border: 1px solid #dcdcdc; padding: 10px; }
+#attachmentAddForm { padding: 10px; border: none; }
 .entry label, #attachments_size { font-size: 11px; }
+.curriki-form #attachment_iframe { width: 100%;  }
   
 /* Add Path */
 .x-panel, .x-window { text-align: left; }
@@ -330,6 +334,7 @@ ol { list-style-type: decimal; }
 #mycurriki-main-header-subtitle { width: 82%; }
 .asset-metadatas-block table { margin: 10px 0 0; }
 form em, .header em { font-style: normal; }
+.asset-content-body { overflow: auto; }
 
 /* search */
 .search-top-titlebar .gwt-HTML { padding-left: 10px; }
