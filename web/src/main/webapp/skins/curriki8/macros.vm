@@ -4060,19 +4060,19 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 
 ## For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
 ## formatTextareasIntoWikiText() ). Call sequence:
-## #currikiattachment_begin()
+## #currikiattachmentBegin()
 ## #currikiattachment("file1.gif")
 ## #currikiattachment("file2.gif")
 ## ...
-## #currikiattachment_end()
-#macro(currikiattachment_begin)  ##{
+## #currikiattachmentEnd()
+#macro(currikiattachmentBegin)  ##{
   <table><tbody>
 #end                             ##}
 #macro(currikiattachment $fname) ##{
   #mimeicon($fname)              ## sets $macro_iconUrl as side-effect
   <tr><td>&nbsp;<img src="${macro_iconUrl}"/>&nbsp;</td><td>&nbsp;{attach:${fname}}&nbsp;</td></tr>
 #end                             ##}
-#macro(currikiattachment_end)    ##{
+#macro(currikiattachmentEnd)    ##{
   </tbody></table>
 #end                             ##}
 
