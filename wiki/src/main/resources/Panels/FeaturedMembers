@@ -8,18 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.martagirdea</creator>
-<author>XWiki.noahk</author>
+<author>XWiki.superadmin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.noahk</contentAuthor>
+<contentAuthor>XWiki.superadmin</contentAuthor>
 <creationDate>1172389813000</creationDate>
-<date>1177616452000</date>
-<contentUpdateDate>1177616452000</contentUpdateDate>
-<version>1.51</version>
+<date>1213691654000</date>
+<contentUpdateDate>1213691654000</contentUpdateDate>
+<version>23.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>CURRIKI 1980</comment>
+<minorEdit>false</minorEdit>
 <object>
 <class>
 <name>Panels.PanelClass</name>
@@ -96,19 +97,33 @@
 <category>Navigation</category>
 </property>
 <property>
-<content>#panelheadercolor("Featured Members" "blue")
+<content>#if( $doc.fullName != "Main.WebHome" ) ##{
+
+&lt;div id="featuredmembers" class="shadow-outer"&gt; ##{
+&lt;div class="shadow-middle"&gt; ##{
+&lt;div class="shadow-inner"&gt; ##{
+&lt;div class="headerbar violet"&gt;$msg.get("panel.featuredmembers.title")&lt;/div&gt;
+&lt;div class="frame-content"&gt; ##{
+	   	
 ##
 ##
 ## List of Featured Members:
 ##
-#displayMember("JohnWallace")
-#displayMember("Weezo")
-#displayMember("OneMathematicalCatPlease")
+
+#displayMember("mreinig")
+
+##displayMember("driscoll")
 ##
 ##
 ##
-&lt;div class="membercount"&gt;[$xwiki.includeTopic("XWiki.MemberCount") members&gt;Main.WebHome]&lt;/div&gt;
-#panelfooter()</content>
+##&lt;div class="membercount"&gt;[$xwiki.includeTopic("XWiki.MemberCount") ##$msg.get("panel.featuredmembers.members.count")&gt;Main.WebHome]&lt;/div&gt;
+
+&lt;/div&gt; ##} ##frame-content
+&lt;/div&gt; ##} ##shadow-inner
+&lt;/div&gt; ##} ##shadow-middle
+&lt;/div&gt; ##} ##shadow-outer
+
+#end ##}</content>
 </property>
 <property>
 <description>Displays some members, selected by the admin.</description>
