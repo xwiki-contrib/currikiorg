@@ -4058,6 +4058,17 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 
 ## From Add Path spec in EOU1
 
+##
+## For CreateResources.Nortel6ELessonPlan output.
+## References translations from CreateResources.Translations.
+## This allows inclusion of Nortel Icon without hardcoding path to
+## image in each lesson plan output.
+##
+#macro(currikiNortelIcon)        ##{
+<img src="$msg.get('nortel.lesson.plan.output.heading.icon.url')" height="$msg.get('nortel.lesson.plan.output.heading.icon.height')" width="$msg.get('nortel.lesson.plan.output.heading.icon.width')">
+#end                             ##}
+
+##
 ## For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
 ## formatTextareasIntoWikiText() ). Call sequence:
 ## #currikiattachmentBegin()
