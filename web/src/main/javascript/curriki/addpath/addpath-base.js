@@ -2393,6 +2393,8 @@ console.log("Created Collection CB: ", assetInfo);
 	// 15. Build up (group collections) - like #7 but groups
 	// 16. Add a resource (view all group contributions) - like #1 but groups
 	// 17. Add (view all group contributions) - like #6 but groups
+	//
+	// 18. Add Template - Skip type selection and just show template selection
 
 console.log('Starting path: ', path);
 
@@ -2481,6 +2483,13 @@ console.log('Starting path:', Curriki.current.flow);
 					// Need titles for new and parent assets in Done Msg
 					// Parent known
 					Curriki.ui.show('apSource', {toFolder:true, folderName:Curriki.current.parentTitle});
+					return;
+					break;
+
+				// CURRIKI-2423
+				// Add Template (choice already made)
+				case 'R': // "Add From Template" in About Creating page
+					AddPath.SourceSelected('template', {});
 					return;
 					break;
 			}
