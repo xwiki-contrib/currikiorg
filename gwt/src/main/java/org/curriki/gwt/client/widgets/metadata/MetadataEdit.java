@@ -706,7 +706,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             missing += "educational_level";
         }
 
-        if (form["XWiki.AssetLicenseClass_0_rightsHolder"].value == "") {
+        if (form["XWiki.AssetLicenseClass_0_rightsHolder"] && form["XWiki.AssetLicenseClass_0_rightsHolder"].value == "") {
             if (!first) {
                 missing += ",";
             }
