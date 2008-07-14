@@ -669,14 +669,18 @@ Curriki.module.addpath.init = function(){
 										var md = Curriki.current.metadata;
 
 										if (!Ext.isEmpty(md.fw_items) && Ext.isArray(md.fw_items)){
+											Ext.getCmp('fw_items-tree').expandAll();
 											md.fw_items.each(function(fw_item){
 												var node = Ext.getCmp('fw_items-tree').getNodeById(fw_item);
 												if (node) {
+													node.attributes.checked = true;
 													node.getUI().toggleCheck(true);
 												} else {
 console.log('Node ',fw_item,' does not exist but is set');
 												}
 											});
+											Ext.getCmp('fw_items-tree').collapseAll();
+											Ext.getCmp('fw_items-tree').getNodeById('FW_masterFramework.WebHome').expand();
 										}
 
 										if (!Ext.isEmpty(md.educational_level2) && Ext.isArray(md.educational_level2)){
