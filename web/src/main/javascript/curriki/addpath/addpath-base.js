@@ -670,7 +670,12 @@ Curriki.module.addpath.init = function(){
 
 										if (!Ext.isEmpty(md.fw_items) && Ext.isArray(md.fw_items)){
 											md.fw_items.each(function(fw_item){
-												Ext.getCmp('fw_items-tree').getNodeById(fw_item).getUI().toggleCheck(true);
+												var node = Ext.getCmp('fw_items-tree').getNodeById(fw_item);
+												if (node) {
+													node.getUI().toggleCheck(true);
+												} else {
+console.log('Node ',fw_item,' does not exist but is set');
+												}
 											});
 										}
 
