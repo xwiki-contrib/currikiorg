@@ -1675,6 +1675,7 @@ $xwiki.addTooltipJS()
 ##
 ## MyCurriki edit photo macro
 #macro(mycurrikieditphoto $userdoc $xeditredirect) ##{ 
+  <!-- Edit Profile Photo -->
   <div class="userpic">
   #set($width = 88)
   #if($userdoc.attachmentList.size()==0) ##{
@@ -1694,11 +1695,13 @@ $xwiki.addTooltipJS()
     #end ##}
   #end ##}
   </div>
+  <!-- End Edit Profile Photo -->
 #end ##}
 ##
 ##
 ##
 #macro(mycurrikieditprofile $userdoc $userobj) ##{
+ <!-- Edit Profile Form -->
  <table border="0" cellspacing="2" cellpadding="2">
    <tr>
      <td> *${msg.get("profile.field.firstName")}*</td>
@@ -1782,20 +1785,24 @@ $xwiki.addTooltipJS()
      <td> $userdoc.display("comment", "edit", $userobj) </td>
    </tr>
  </table>
+ <!-- End Edit Profile Form -->
 #end ##}
 ##
 ##
 ##
 #macro(mycurrikieditprofilebuttons $xredirect) ##{
+  <!-- Edit Profile Buttons -->
   <div class="button-right">
     <input class="button button-grey" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
     <input class="button button-orange" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/>
   </div>
+  <!-- End Edit Profile Buttons -->
 #end ##}
 ##
 ##
 ##
 #macro(mycurrikieditprofilebox $userdoc $userobj) ##{
+  <!-- Profile Box -->
   #if($context.user == $userdoc.fullName)
     #set($userarg = "")
   #else ## user == owner
@@ -1922,7 +1929,250 @@ $xwiki.addTooltipJS()
     #set($footerJScript = "")
   #end
   #set($footerJScript = $footerJScript + '<script>$$("a").invoke("observe", "click", function(event){ var el = Event.element(event); if (((typeof el.id == "undefined") || (el.id != "profile-removephoto")) && !confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });</script>')
+  <!-- End Profile Box -->
 #end ##} 
+##
+##
+##
+## My Curriki Edit Profile Button
+#macro(mycurrikieditprofilebutton $userdoc) ##{
+  <!-- My Curriki edit profile button -->
+  #if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights())) ##{
+    <a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("mycurriki.profile.editButton")">$msg.get("mycurriki.profile.editButton")</a></span>
+  #end ##}
+  <!-- End My Curriki edit profile button -->
+#end ## } end macro
+##
+##
+##
+## My Curriki View Photo
+#macro(mycurrikiviewphoto $userdoc) ##{
+<!-- My Curriki View Photo --> 
+<div class="userpic">
+    #if($userdoc.attachmentList.size()==0) ##{
+      <img src="$xwiki.getSkinFile("noavatar.png")"/>
+      #if($context.action=="view" && ($userdoc.fullName == $context.user || $hasGlobalAdmin)) ##{
+	<a class="curriki-link" onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;' href="$userdoc.getURL("attach")">$msg.get('profile.changeMyPhoto')</a> 
+      #end ## }
+    #else  ## }{ attachmentList.size must be > 0
+      #foreach ($attach in $userdoc.attachmentList) ## {
+	<a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")" >
+	<img src="$userdoc.getAttachmentURL($attach.filename,"download")"  /></a>
+	#if ($context.action=="inline") ##{
+	  #set($deleteredir = $userdoc.getURL("inline"))
+	  <br/><a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');" title="$msg.get("profile.removeYourPhoto")">$msg.get("profile.removePhoto")</a>
+	  <br/>
+	#end  ## } if inline
+      #end  ## } foreach attach in list
+      #if ($context.action!="inline") ##{
+	#set($i = $context.user.indexOf(":")+1)
+	#set($attach = $userdoc.attachmentList.get(0))
+	#if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin) ## {
+	  #set($deleteredir = $userdoc.getURL("view"))
+	  <br/><a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('You need to remove your picture first. Do you want to do that ?');" >$msg.get("profile.modifyYourPhoto")</a>
+	  <br/>
+	#end  ## } is same user
+      #end  ## } is inline
+   #end ##}
+</div>
+<!-- End My Curriki View Photo --> 
+#end ##}
+##
+##
+##
+## My Curriki View Profile Form
+#macro(mycurrikiviewprofile $userdoc $userobj) ##{
+  <!-- Curriki View Profile -->
+  <table border="0" cellspacing="2" cellpadding="2">
+    <tr>
+     <td> *$msg.get("profile.field.display.firstName")* 
+     #if ($context.action=="inline") </td></tr><tr><td> #end
+     #dashIfEmpty($userdoc.display("first_name", $userobj)) </td>
+    </tr>
+    <tr>
+     <td> *$msg.get("profile.field.display.lastName")*
+     #if ($context.action=="inline") </td></tr><tr><td> #end
+     #dashIfEmpty($userdoc.display("last_name", $userobj))</td>
+    </tr>
+    <tr>
+     <td> *$msg.get("profile.field.memberType")*
+     #dashIfEmpty($userdoc.display("member_type", $userobj))</td>
+    </tr>
+    <tr>
+     <td> *$msg.get("profile.field.affiliation")*
+     #if ($context.action=="inline") </td></tr><tr><td> #end
+     #dashIfEmpty($userdoc.display("affiliation", $userobj))</td>
+    </tr>
+    </tr>
+     <td> *$msg.get("profile.field.city")*
+     #if ($context.action=="inline") </td></tr><tr><td> #end
+     #dashIfEmpty($userdoc.display("city", $userobj))</td>
+    </tr>
+    <tr>
+     <td> *$msg.get("profile.field.state")*
+     #if ($context.action=="inline") </td></tr><tr><td> #end
+     #dashIfEmpty($userdoc.display("state", $userobj))</td>
+    </tr>
+    <tr>
+     <td> *$msg.get("profile.field.country")*
+     #if ($context.action=="inline") </td></tr><tr><td> #end
+     #dashIfEmpty($userdoc.display("country", $userobj))</td>
+     </tr>
+     #if ($context.action=="inline") ##{
+       <tr>
+         <td> *$msg.get("profile.field.showContact")*
+         #dashIfEmpty($userdoc.display("show_contact", $userobj))</td>
+       </tr>
+     #end ##}
+     #if(($context.user==$userdoc.fullName)||($xwiki.hasAdminRights())) ##{
+       <tr>
+         <td> *$msg.get("profile.field.email")*
+         #if ($context.action=="inline") </td></tr><tr><td> #end
+         #dashIfEmpty($userdoc.display("email", $userobj))</td>
+       </tr>
+       <tr>
+         <td> *$msg.get("profile.field.showContact")*
+         #if ($context.action=="inline") </td></tr><tr><td> #end
+         #dashIfEmpty($userdoc.display("show_contact", $userobj))</td>
+       </tr>
+       <tr>
+         <td> *$msg.get("profile.field.opt_out")*
+         #if ($context.action=="inline") </td></tr><tr><td> #end
+         #dashIfEmpty($userdoc.display("opt_out", $userobj))</td>
+       </tr>
+       #if ($context.action=="inline") ##{
+         <tr>
+           <td> *$msg.get("profile.field.passwordConfirm")*
+             #if ($context.action=="inline") </td></tr><tr><td> #end
+             {pre}<input size='30' id='XWiki.XWikiUsers_0_password_repeat' value='$userdoc.display("password", "view", $userobj)' name='XWiki.XWikiUsers_0_password_repeat' type='password'/>{/pre}</td>
+         </tr>
+      #end ##}
+    #end ##}
+    <tr>
+      <td> *$msg.get("profile.field.topics")*
+      #if ($context.action=="inline") </td></tr><tr><td> #end
+      #set($topics = "")
+      {pre}#set($titems = $userdoc.topics.split("<br />")){/pre}
+      #foreach($titem in $titems) ##{
+	#if($titem.trim().startsWith("Subject Index &gt;")) ##{
+	  #set($titem = $titem.trim().substring(18))
+	#end ##{
+	#set($topics = "${topics}, ${titem}")
+      #end ##}
+      #if($topics.length() > 2) ##{
+	#set($topics = $topics.substring(2))
+      #end ##}
+      #dashIfEmpty($topics)</td>
+    </tr>
+    <tr>
+      <td> *$msg.get("profile.field.bio")*
+      #if ($context.action=="inline") </td></tr><tr><td> #end
+      #dashIfEmpty($userdoc.display("comment", $userobj)) </td>
+    </tr>
+  </table>
+  <!-- End Curriki View Profile -->
+#end ##} end macro
+##
+##
+##
+## MyCurriki View profile table
+#macro(mycurrikiviewprofiletable $userdoc $userobj) ##{
+  <!-- Curri View Profile Table -->
+  ## This is the main display
+  #set($class = $userobj.xWikiClass)
+  <div style="margin:0;padding:0" class="edit-profile"> ##{
+  <br />
+  <table border="0" cellspacing="0" cellpadding="3"> ##{
+      <tr> ##{
+        <td valign="top"> ##{
+          #mycurrikiviewphoto($userdoc)
+        </td> ##}
+        <td width="100%"> ##{
+          #mycurrikiviewprofile($userdoc $userobj)
+          #if($userdoc.attachmentList.size()==0 && $context.action=="view") ##{
+            #if(($userdoc.fullName==$context.user)||$xwiki.hasAdminRights()) ##{
+              #set($redirect = $xwiki.requestURL)
+              <div id="attachdiv" class="hidden"> ##{
+              <br /><br />
+              <form id="attach" action="$userdoc.getURL("upload")" enctype="multipart/form-data" method="post" name="profilImageAttach"> ##{
+                <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($redirect)"/>
+                <input id="xwikiuploadname" type="hidden" name="filename" value="" size="20"/>
+                <fieldset style="width:90%" class="expanded" id="attachform"> ##{
+                  <div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("profile.chooseAPhoto")</label></div>
+                  <div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="20"/></div>
+                  <div> ##{
+                    {pre} ##{
+                      <input type="submit" value="$msg.get("attachthisfile")" onclick="if (!checkFileExtension()) return false; return updateAttachName(document.forms.profilImageAttach, '$msg.get("doyouwanttoreplace")')" class="button button-orange"/>
+                    {/pre} ##}
+                    {pre} ##{
+                      <script type="text/javascript"> ##{
+			function checkFileExtension() {
+			  var isValid = true;
+			  var ext = getFileExtension();
+			  if (ext) {
+				if (ext != "ai" && ext != "gif" && ext != "jpg" && ext != "tif" && ext != "bmp" && ext != "jpe" && ext != "psd" && ext != "png") {
+					isValid = false;
+				}
+			  } else {
+				isValid = false;
+			  }
+			  if (!isValid) {
+				alert("$msg.get("mycurriki.profile.needPicture")");
+			  }
+			  return isValid;
+			}
+			
+			function getFileExtension() {
+			  var fileName = document.getElementById("xwikiuploadfile").value;
+			  if (fileName.length){
+			    fileName = fileName.toLowerCase();
+			    var pos = fileName.lastIndexOf(".");
+			    if (pos > 0){
+			      return fileName.substring(pos + 1);
+			    }
+			  }
+			  return "";
+			}
+                       </script> ##}
+                      {/pre} ##}
+                    </div> ##}
+                  </fieldset> ##}
+                </form> ##}
+              </div> ##}
+            #end ##}
+          #end ##}
+        </td> ##}
+      </tr> ##}
+    </table> ##}
+  </div> ##}
+  <!-- End Curri View Profile Table -->
+#end ##} endmacro
+##
+##
+##
+## MyCurriki View Profile Box
+#macro(mycurrikiviewprofilebox $userdoc $userobj) ##{
+  <!-- View Profile Box -->
+  #mycurrikititlebar($msg.get("mycurriki.profile.titlebar") "" "" "blue")
+  #if($context.user=="XWiki.XWikiGuest") ##{
+    #set($logredir = $doc.getURL("view"))
+    #set($loginurl = $xwiki.getURL("XWiki.XWikiLogin", "login", "xredirect=$logredir"))
+    #if("$!request.user" == "") ## {
+      $response.sendRedirect($loginurl)
+    #else ## }{
+      $msg.get("profile.accessDenied", [$loginurl])
+    #end ## }
+  #else ## }{ if XWiki.XWikiGuest
+    #set($showcontact=$userobj.getProperty("show_contact").getValue())
+    #if(($showcontact=="0")&&($context.user!=$userdoc.fullName)&&(!$xwiki.hasAdminRights())) ##{
+      $msg.get("profile.userNotVisible")
+    #else ## }{ if showcontact == No
+      #mycurrikiviewprofiletable( $userdoc $userobj)
+    #end ##} if showcontact == No
+  #end ##} if XWikiGuest
+  <!-- End View Profile Box -->
+#end ##} end macro
+##
 ##
 ##
 ## MyCurriki header macro
