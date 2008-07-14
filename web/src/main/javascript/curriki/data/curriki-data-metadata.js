@@ -135,7 +135,9 @@ Ext.ns('Curriki.ui.component.asset');
 Curriki.ui.component.asset.getFwTree = function(){
 	return {
 		 xtype:'treepanel'
-		,loader: new Ext.tree.TreeLoader()
+		,loader: new Ext.tree.TreeLoader({
+			preloadChildren:true
+		})
 		,id:'fw_items-tree'
 		,useArrows:true
 		,autoHeight:true
