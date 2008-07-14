@@ -11,9 +11,20 @@ Ext.Ajax.defaultHeaders = {
 Ext.Ajax.disableCaching=false;
 
 
+var cp = new Ext.state.CookieProvider({
+});
+
+var jsdebug = cp.get('jsdebug', '0');
+
 try {
-	console.log('init');
+	if (jsdebug === '1') {
+		console.log('init');
+	}
 } catch(e) {
+	jsdebug = '0';
+}
+
+if (jsdebug !== '1'){
 	console = {
 		 log: Ext.emptyFn
 		,debug: Ext.emptyFn
