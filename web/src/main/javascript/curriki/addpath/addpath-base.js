@@ -487,9 +487,9 @@ Curriki.module.addpath.init = function(){
 							}
 						}]
 						,listeners:{
-							'render':function(c){
+							'show':function(c){
 								var radio = Ext.getCmp('selecttemplate-radio-list1');
-								if (!Ext.isEmpty(radio)){
+								if (!Ext.isEmpty(radio) && !Ext.isEmpty(radio.getEl())){
 									radio.getEl().dom.checked = true;
 									radio.fireEvent('check', radio, true);
 								}
