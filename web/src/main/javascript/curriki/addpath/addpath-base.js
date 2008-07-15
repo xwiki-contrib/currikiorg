@@ -398,7 +398,6 @@ Curriki.module.addpath.init = function(){
 
 		AddPath.TemplateList = function() {
 			var retVal = [];
-
 			var i = 1;
 			while(_('add.selecttemplate.list'+i+'.header') !== 'add.selecttemplate.list'+i+'.header'){
 				var tpl = [];
@@ -407,6 +406,7 @@ Curriki.module.addpath.init = function(){
 					,name:'templateName'
 					,value:'list'+i
 					,id:'selecttemplate-radio-list'+i
+					,checked:(i===1?true:false)
 					,boxLabel:_('add.selecttemplate.list'+i+'.header')
 					,listeners:{
 						check:AddPath.TemplateSelect
@@ -435,6 +435,7 @@ Curriki.module.addpath.init = function(){
 				++i;
 			}
 
+			Curriki.current.submitToTemplate = _('add.selecttemplate.list1.url');
 			return retVal;
 		};
 
@@ -486,15 +487,6 @@ Curriki.module.addpath.init = function(){
 								}
 							}
 						}]
-						,listeners:{
-							'show':function(c){
-								var radio = Ext.getCmp('selecttemplate-radio-list1');
-								if (!Ext.isEmpty(radio) && !Ext.isEmpty(radio.getEl())){
-									radio.getEl().dom.checked = true;
-									radio.fireEvent('check', radio, true);
-								}
-							}
-						}
 						,items:[{
 							 layout:'column'
 							,defaults:{border:false}
@@ -531,11 +523,11 @@ Curriki.module.addpath.init = function(){
 											 tag:'div'
 											,id:'selecttemplate-thumbnail-header'
 											,style:'margin:0 0 4px 0'
-											,html:''
+											,html:_('add.selecttemplate.list1.header')
 										},{
 											 tag:'img'
 											,id:'selecttemplate-thumbnail-image'
-											,src:Ext.BLANK_IMAGE_URL
+											,src:_('add.selecttemplate.list1.thumbnail')
 											,onLoad:"Ext.getCmp('SelectTemplateDialogueWindow').syncShadow();"
 										}]
 									}
