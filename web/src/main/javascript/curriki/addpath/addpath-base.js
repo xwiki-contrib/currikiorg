@@ -398,6 +398,7 @@ Curriki.module.addpath.init = function(){
 
 		AddPath.TemplateList = function() {
 			var retVal = [];
+
 			var i = 1;
 			while(_('add.selecttemplate.list'+i+'.header') !== 'add.selecttemplate.list'+i+'.header'){
 				var tpl = [];
@@ -405,8 +406,6 @@ Curriki.module.addpath.init = function(){
 					 xtype:'radio'
 					,name:'templateName'
 					,value:'list'+i
-					,id:'selecttemplate-radio-list'+i
-					,checked:(i===1?true:false)
 					,boxLabel:_('add.selecttemplate.list'+i+'.header')
 					,listeners:{
 						check:AddPath.TemplateSelect
@@ -435,7 +434,6 @@ Curriki.module.addpath.init = function(){
 				++i;
 			}
 
-			Curriki.current.submitToTemplate = _('add.selecttemplate.list1.url');
 			return retVal;
 		};
 
@@ -523,11 +521,11 @@ Curriki.module.addpath.init = function(){
 											 tag:'div'
 											,id:'selecttemplate-thumbnail-header'
 											,style:'margin:0 0 4px 0'
-											,html:_('add.selecttemplate.list1.header')
+											,html:''
 										},{
 											 tag:'img'
 											,id:'selecttemplate-thumbnail-image'
-											,src:_('add.selecttemplate.list1.thumbnail')
+											,src:Ext.BLANK_IMAGE_URL
 											,onLoad:"Ext.getCmp('SelectTemplateDialogueWindow').syncShadow();"
 										}]
 									}
