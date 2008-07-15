@@ -406,6 +406,7 @@ Curriki.module.addpath.init = function(){
 					 xtype:'radio'
 					,name:'templateName'
 					,value:'list'+i
+					,id:'selecttemplate-radio-list'+i
 					,boxLabel:_('add.selecttemplate.list'+i+'.header')
 					,listeners:{
 						check:AddPath.TemplateSelect
@@ -485,6 +486,15 @@ Curriki.module.addpath.init = function(){
 								}
 							}
 						}]
+						,listeners:{
+							'render':function(c){
+								var radio = Ext.getCmp('selecttemplate-radio-list1');
+								if (!Ext.isEmpty(radio)){
+									radio.getEl().dom.checked = true;
+									radio.fireEvent('check', radio, true);
+								}
+							}
+						}
 						,items:[{
 							 layout:'column'
 							,defaults:{border:false}
