@@ -2175,6 +2175,161 @@ $xwiki.addTooltipJS()
 ##
 ##
 ##
+## MyCurriki Favorites header
+#macro(mycurrikifavoritesheader $allcols)
+<!-- MyCurriki Favorites Header -->
+<tr>
+  <th class="table-header table-col-title">$msg.get('mycurriki.favorites.table.title')</th>
+  <th class="table-header table-col-contributor">$msg.get('mycurriki.favorites.table.contributor')</th>
+  <th class="table-header table-col-ict">$msg.get('mycurriki.favorites.table.ict')</th>
+  <th class="table-header table-col-filetype">$msg.get('mycurriki.favorites.table.filetype')</th>
+  #if($allcols) ## {
+    <th class="table-header table-header-fixed table-col-action">$msg.get('mycurriki.favorites.table.action')</th>
+  #end ## if allcols ## }
+</tr>
+<!-- End MyCurriki Favorites Header -->
+#end ##} end macro mycurrikifavoritesheader
+##
+##
+##
+## MyCurriki Favorites item
+#macro(mycurrikifavoritesasset $asset $ret_escaped $currikiTitle $g_userHasCollections $allcols)
+  <!-- MyCurriki Favorites Asset -->
+  #if(!$g_rowCount) ## {
+    #set($g_rowCount = 0)
+  #end ## }
+  #set($g_rowCount = $g_rowCount + 1)
+  <tr class="table-row#if(($g_rowCount % 2) == 0) table-odds#end">
+    <td class="table-col-title">#mycurrikifavassettitlewithmodesc($asset)</td>
+    <td class="table-col-contributor">#mycurrikicontributor($asset)</td>
+    <td class="table-col-ict">#mycurrikiict($asset)</td>
+    <td class="table-col-filetype">#mycurrikifiletype($asset)</td>
+    #if($allcols) ## {
+      <td class="table-col-action">
+        <div class="button-links">
+          #checkForCollections()
+          #escapeForJS($asset.fullName)
+          #set($escapedFullName = $ret_escaped)
+          #findCurrikiTitle($asset)
+          #escapeForJS($currikiTitle)
+          #set($escapedTitle = $ret_escaped)
+          #if($g_userHasCollections && ($allcols || $hasGlobalAdmin))##{
+            {pre}
+            <a class="button-link" onclick="Curriki.module.addpath.startPath('H', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')">$msg.get('mycurriki.contributions.add')</a>
+            {/pre}
+          #end##}
+          #set($removeMsg = $msg.get('mycurriki.favorites.table.action.remove.confirm'))
+          #set($deleteUrl = $xwiki.getURL("MyCurriki.RemoveFavorite", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
+          <a class="button-link#if($g_userHasCollections && ($allcols || $hasGlobalAdmin))-table#end" onclick="return confirm('$removeMsg')" href="$deleteUrl">$msg.get("mycurriki.favorites.table.action.remove")</a>
+        </div>
+      </td>
+    #end ## if allcols ## }
+  </tr>
+  <!-- End MyCurriki Favorites Asset -->
+#end ##end macro mycurrikifavoritesasset
+##
+##
+##
+## MyCurriki Favorites Pagination
+#macro(mycurrikifavoritespagination $startIndex $nbToDisplay $assetList) ##{
+  <!-- MyCurriki Favorites Pagination -->
+  #mycurrikipaginator($msg.get("mycurriki.tab.favorites.label") $startIndex $nbToDisplay $assetList.size())
+  <!-- End MyCurriki Favorites Pagination -->
+#end ## } end macro mycurrikifavoritespagination
+##
+##
+##
+## MyCurriki Favorites Button
+#macro(mycurrikifavoritesbutton $userobj)
+  <!-- MyCurriki Favorites Button -->
+  #if($context.user==$userdoc.fullName) ## {
+    #set($shortname = $userdoc.fullName)
+    #set($breadcrumb="MyCurriki.WebHome")
+    #if($shortname.startsWith("XWiki.")) ## {
+      #set($shortname = $shortname.substring(6))
+    #end ## }
+    #set($favPage = "Coll_${shortname}.Favorites")
+    #if($xwiki.exists($favPage)) ## {
+      #set($favDoc = $xwiki.getDocument("Coll_${shortname}.Favorites"))
+      #set($assetList = $favDoc.getObjects('XWiki.SubAssetClass'))
+      #if($assetList.size() > 0) ## {
+        #if("$!breadcrumb" == "") ## {
+          #set($breadcrumb=$userdoc.fullName)
+        #end ## }
+        <a class="button button-orange" href="$xwiki.getURL("${favPage}", "view", "bc=${breadcrumb}")" title="$msg.get("mycurriki.favorites.viewButton")">$msg.get("mycurriki.favorites.viewButton")</a></span>
+      #end ## }
+    #end ## }
+  #end ## }
+  <!-- End MyCurriki Favorites Button -->
+#end
+##
+##
+##
+## MyCurriki Favorites Box
+#macro(mycurrikifavoritesbox $userdoc $userobj) ##{
+  <!-- MyCurriki Favorites Box -->
+  #set($allcols = false)
+  #if($context.user=="XWiki.XWikiGuest") ## {
+    ## Settings for guests here
+  #end ## }
+  #if($hasGlobalAdmin) ## {
+    ## Settings for admins here
+    #set($allcols = true)
+  #end ## }
+  #if($context.user==$userdoc.fullName) ## {
+    ## Settings for owner here
+    #set($allcols = true)
+  #end ## }
+  #set($shortname = $userdoc.fullName)
+  #if($shortname.startsWith("XWiki.")) ## {
+    #set($shortname = $shortname.substring(6))
+  #end ## }
+  ## Do query for favorites
+  #set($favDoc = $xwiki.getDocument("Coll_${shortname}.Favorites"))
+  #set($assetList = $favDoc.getObjects('XWiki.SubAssetClass'))
+  #set($nbToDisplay = 20)
+  #set($startIndex = 0)
+  #set($Integer = 0)
+  #if($request.startIndex) ## {
+    #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+  #end ## }
+  #if($startIndex > ($assetList.size() - 1)) ## {
+    #set($startIndex = $assetList.size() - 1)
+  #end ## }
+  #set($endIndex = $startIndex - 1 + $nbToDisplay)
+  #if($endIndex > ($assetList.size() - 1)) ## {
+    #set($endIndex = $assetList.size() - 1)
+  #end ## }
+  ## Display favorites in table using pagination
+  <table id="mycurriki-favorites-table" class="table table-favorites">
+    #mycurrikifavoritesheader($allcols)
+    ## row per item -- number of rows configurable
+    #set($descnb = 0)
+    #set($showcount = 0)
+    #foreach($assetPointer in $assetList) ## {
+      #set($assetPage = $assetPointer.get('assetpage'))
+      #if($xwiki.hasAccessLevel("view", $context.user, $assetPage)) ## {
+        #set($asset = $xwiki.getDocument($assetPage))
+        #set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
+        #if("$type"!="2") ## {
+          #set($showcount = 1 + $showcount)
+          #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2))) ## {
+            #favoriteAsset($asset $allcols)
+          #end ## showcount > startIndex && showcount < endIndex ## }
+        #end  ## type != 2 ## }
+      #end  ## if has view access ## }
+    #end ## foreach assetPage in list ## }
+    #if($showcount == 0) ## {
+      <tr><td colspan="6">$msg.get("mycurriki.favorites.noresults")</td></tr>
+    #end ## }
+  </table>
+  ## Pagination here
+  #mycurrikifavoritespagination( $startIndex $nbToDisplay $assetList )
+  <!-- End MyCurriki Favorites Box -->
+#end ##} end macro mycurrikifavoritesbox
+##
+##
+##
 ## MyCurriki header macro
 #macro(mycurrikiheader $userobj) ## {
 <div id="mycurriki-header" class="mycurriki-header">
