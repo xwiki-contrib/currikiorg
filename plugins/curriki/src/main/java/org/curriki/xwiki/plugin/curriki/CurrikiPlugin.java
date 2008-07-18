@@ -54,6 +54,10 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         super.flushCache();
     }
 
+    public Asset createAsset(String parent, String publishSpace, XWikiContext context) throws XWikiException {
+        return Asset.createTempAsset(parent, publishSpace, context);
+    }
+
     public Asset createAsset(String parent, XWikiContext context) throws XWikiException {
         return Asset.createTempAsset(parent, context);
     }

@@ -36,9 +36,19 @@ public class AssetsResource extends BaseResource {
             // No parent key to get
         }
 
+        String publishSpace = null;
+        try {
+            publishSpace = json.getString("publishSpace");
+            if (publishSpace.length() < 1){
+                publishSpace = null;
+            }
+        } catch (JSONException e) {
+            // No parent key to get
+        }
+
         Asset createdPage;
         try {
-            createdPage = plugin.createAsset(parent);
+            createdPage = plugin.createAsset(parent, publishSpace);
         } catch (XWikiException e) {
             if (e instanceof AssetException) {
                 if (e.getCode() == AssetException.ERROR_ASSET_NOT_FOUND) {

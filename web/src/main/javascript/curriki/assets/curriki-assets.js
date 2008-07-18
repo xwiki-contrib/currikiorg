@@ -5,7 +5,7 @@
 Ext.ns('Curriki.assets');
 Curriki.assets = {
 	 json_prefix:'/xwiki/curriki/assets'
-	,CreateAsset:function(parentPage, callback){
+	,CreateAsset:function(parentPage, publishSpace, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix
 			,method:'POST'
@@ -13,7 +13,10 @@ Curriki.assets = {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
 			}
-			,jsonData: {'parent':parentPage||''}
+			,jsonData: {
+				'parent':parentPage||''
+				,'publishSpace':publishSpace||''
+			}
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;

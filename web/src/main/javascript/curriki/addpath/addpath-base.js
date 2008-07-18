@@ -2111,7 +2111,7 @@ console.log("Published CB: ", newAsset);
 		Ext.reg('apLocation', AddPath.ChooseLocation);
 
 		AddPath.PostToTemplate = function(templateUrl){
-			Curriki.assets.CreateAsset(Curriki.current.parentAsset, function(asset){
+			Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
 				Curriki.current.asset = asset;
 				var sf = new Ext.FormPanel({
 					 standardSubmit:true
@@ -2144,7 +2144,7 @@ console.log("Published CB: ", newAsset);
 		}
 
 		AddPath.PostFile = function(callback){
-			Curriki.assets.CreateAsset(Curriki.current.parentAsset, function(asset){
+			Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
 				Curriki.current.asset = asset;
 
 				Ext.Ajax.request({
@@ -2236,6 +2236,7 @@ console.log("Published CB: ", newAsset);
 					next = 'apSRI1';
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
+						Curriki.current.publishSpace,
 						function(asset){
 console.log("CreateAsset (video) CB: ", asset);
 							Curriki.current.asset = asset;
@@ -2267,6 +2268,7 @@ console.log("Created viditalk CB: ", videoInfo);
 					next = 'apSRI1';
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
+						Curriki.current.publishSpace,
 						function(asset){
 console.log("CreateAsset (link) CB: ", asset);
 							Curriki.current.asset = asset;
@@ -2315,6 +2317,7 @@ console.log("Created Link CB: ", linkInfo);
 					next = 'apSRI1';
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
+						Curriki.current.publishSpace,
 						function(asset){
 console.log("CreateAsset (folder) CB: ", asset);
 							Curriki.current.asset = asset;
@@ -2345,6 +2348,7 @@ console.log("Created Folder CB: ", assetInfo);
 					next = 'apSRI1';
 					Curriki.assets.CreateAsset(
 						Curriki.current.parentAsset,
+						Curriki.current.publishSpace,
 						function(asset){
 console.log("CreateAsset (collection) CB: ", asset);
 							Curriki.current.asset = asset;
