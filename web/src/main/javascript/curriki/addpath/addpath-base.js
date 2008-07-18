@@ -2216,15 +2216,10 @@ console.log("Published CB: ", newAsset);
 					AddPath.PostFile(function(asset){
 						callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 
-						if (Curriki.current.parentAsset) {
-							// Get metadata if there was a parent asset
-							Curriki.assets.GetMetadata(asset.assetPage||Curriki.current.asset.assetPage, function(metadata){
-								Curriki.current.metadata = metadata;
-								callback();
-							});
-						} else {
+						Curriki.assets.GetMetadata(asset.assetPage||Curriki.current.asset.assetPage, function(metadata){
+							Curriki.current.metadata = metadata;
 							callback();
-						}
+						});
 					});
 					return;
 					break;
@@ -2247,15 +2242,10 @@ console.log("CreateAsset (video) CB: ", asset);
 								function(videoInfo){
 console.log("Created viditalk CB: ", videoInfo);
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
-									if (Curriki.current.parentAsset) {
-										// Get metadata if there was a parent asset
-										Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-											Curriki.current.metadata = metadata;
-											callback();
-										});
-									} else {
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
 										callback();
-									}
+									});
 								}
 							)
 						}
@@ -2279,15 +2269,10 @@ console.log("CreateAsset (link) CB: ", asset);
 								function(linkInfo){
 console.log("Created Link CB: ", linkInfo);
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
-									if (Curriki.current.parentAsset) {
-										// Get metadata if there was a parent asset
-										Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-											Curriki.current.metadata = metadata;
-											callback();
-										});
-									} else {
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
 										callback();
-									}
+									});
 								}
 							)
 						}
@@ -2328,15 +2313,10 @@ console.log("CreateAsset (folder) CB: ", asset);
 console.log("Created Folder CB: ", assetInfo);
 									Curriki.current.flowFolder = 'Folder';
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
-									if (Curriki.current.parentAsset) {
-										// Get metadata if there was a parent asset
-										Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-											Curriki.current.metadata = metadata;
-											callback();
-										});
-									} else {
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
 										callback();
-									}
+									});
 								}
 							)
 						}
@@ -2358,7 +2338,10 @@ console.log("CreateAsset (collection) CB: ", asset);
 								function(assetInfo){
 console.log("Created Collection CB: ", assetInfo);
 									callback = function(){AddPath.ShowNextDialogue(next);};
-									callback();
+									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+										Curriki.current.metadata = metadata;
+										callback();
+									});
 								}
 							)
 						}
