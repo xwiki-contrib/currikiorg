@@ -134,4 +134,10 @@ public interface Constants {
     String GROUP_SPACE_PREFIX = "Group_";
     String GROUP_COLLECTION_PREFIX_SPACE_PREFIX = COLLECTION_PREFIX;
     String GROUP_COLLECTION_SPACE_PREFIX = GROUP_COLLECTION_PREFIX_SPACE_PREFIX + GROUP_SPACE_PREFIX;
+    String GROUP_RIGHTS_PAGE = "WebPreferences";
+    String GROUP_RIGHTS_CLASS = "XWiki.CurrikiSpaceClass";
+    String GROUP_RIGHTS_PROPERTY = "accessprivileges";
+    String GROUP_RIGHT_PUBLIC = "open";
+    String GROUP_RIGHT_PROTECTED = "protected";
+    String GROUP_RIGHT_PRIVATE = "private";
 }

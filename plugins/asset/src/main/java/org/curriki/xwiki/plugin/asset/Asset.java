@@ -59,6 +59,10 @@ public class Asset extends CurrikiDocument {
     }
 
     public static Asset createTempAsset(String parentAsset, XWikiContext context) throws XWikiException {
+        return createTempAsset(parentAsset, null, context);
+    }
+
+    public static Asset createTempAsset(String parentAsset, String publishSpace, XWikiContext context) throws XWikiException {
         if (Constants.GUEST_USER.equals(context.getUser())) {
             throw new AssetException(AssetException.ERROR_ASSET_FORBIDDEN, "XWikiGuest cannot create assets.");
         }
@@ -68,17 +72,21 @@ public class Asset extends CurrikiDocument {
         XWikiDocument newDoc = context.getWiki().getDocument(Constants.ASSET_TEMPORARY_SPACE, pageName, context);
 
         Asset assetDoc = new Asset(newDoc, context);
-        assetDoc.init(parentAsset);
+        assetDoc.init(parentAsset, publishSpace);
         assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.createnewsourceasset"));
 
         return assetDoc;
     }
 
     protected void init(String parentAsset) throws XWikiException {
+        init(parentAsset, null);
+    }
+
+    protected void init(String parentAsset, String publishSpace) throws XWikiException {
         assertCanEdit();
         doc.setCreator(context.getUser());
 
-        inheritMetadata(parentAsset);
+        inheritMetadata(parentAsset, publishSpace);
 
         doc.setCustomClass(getClass().getName());
         setDefaultContent();
@@ -451,15 +459,45 @@ public class Asset extends CurrikiDocument {
     }
 
     public void inheritMetadata() throws XWikiException {
-        inheritMetadata(null);
+        inheritMetadata(null, null);
     }
-    
+
     public void inheritMetadata(String parentAsset) throws XWikiException {
+        inheritMetadata(parentAsset, null);
+    }
+
+    public void inheritMetadata(String parentAsset, String publishSpace) throws XWikiException {
         assertCanEdit();
 
         BaseObject assetObj = doc.getObject(Constants.ASSET_CLASS);
         if (assetObj == null) {
             assetObj = doc.newObject(Constants.ASSET_CLASS, context);
+        }
+
+        // CURRIKI-2451 - Make sure group rights are used by default
+        if (publishSpace != null && publishSpace.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
+            String groupSpace = publishSpace.replaceFirst(Constants.GROUP_COLLECTION_SPACE_PREFIX, Constants.GROUP_SPACE_PREFIX);
+            String rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
+
+            // TODO: This should probably be using the SpaceManager extension
+            XWikiDocument groupSpaceDoc = context.getWiki().getDocument(groupSpace+"."+Constants.GROUP_RIGHTS_PAGE, context);
+            if (groupSpaceDoc != null){
+                // Note that the values for the group access defaults
+                //  DO NOT MATCH the values that need to be applied to the collection
+                BaseObject rObj = groupSpaceDoc.getObject(Constants.GROUP_RIGHTS_CLASS);
+                if (rObj != null){
+                    String groupDefaultPrivs = rObj.getStringValue(Constants.GROUP_RIGHTS_PROPERTY);
+                    if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PRIVATE)){
+                        rights = Constants.ASSET_CLASS_RIGHT_PRIVATE;
+                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PROTECTED)){
+                        rights = Constants.ASSET_CLASS_RIGHT_MEMBERS;
+                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PUBLIC)){
+                        rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
+                    }
+                }
+            }
+
+            assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
         }
 
         XWikiDocument parentDoc = null;

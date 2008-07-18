@@ -69,8 +69,16 @@ public class CurrikiPluginApi extends Api {
         return plugin.createAsset(parentAsset, context);
     }
 
+    public Asset createAsset(String parentAsset, String publishSpace) throws XWikiException {
+        return plugin.createAsset(parentAsset, publishSpace, context);
+    }
+
     public String createAssetName(String parentAsset) throws XWikiException {
         return createAsset(parentAsset).getFullName();
+    }
+
+    public String createAssetName(String parentAsset, String publishSpace) throws XWikiException {
+        return createAsset(parentAsset, publishSpace).getFullName();
     }
 
     public Asset fetchAsset(String assetName) throws XWikiException {
