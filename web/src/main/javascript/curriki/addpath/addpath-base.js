@@ -2412,9 +2412,17 @@ console.log('Not signed in:');
 			if (Ext.isEmpty(Curriki.current.cameFrom)) {
 				Curriki.current.cameFrom = window.location.href;
 			}
+
+			if (!Ext.isEmpty(Curriki.current.parentAsset)
+			    && (Curriki.current.parentAsset.substr(0, 5) === 'Coll_')
+			) {
+				var parentSpace = Curriki.current.parentAsset.replace(/\..*$/, '');
+				Curriki.current.publishSpace = parentSpace;
+			}
 			if (Ext.isEmpty(Curriki.current.publishSpace)) {
 				Curriki.current.publishSpace = 'Coll_'+Curriki.data.user.me.username.replace(/XWiki\./, '');
 			}
+
 			if (!Ext.isEmpty(path)) {
 				Curriki.current.flow = path;
 			}
