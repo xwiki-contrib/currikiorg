@@ -443,8 +443,14 @@ Curriki.module.addpath.init = function(){
 
 		AddPath.TemplateSelect = function(radio, selected) {
 			if (selected) {
-				Ext.get('selecttemplate-thumbnail-image').set({'src': _('add.selecttemplate.'+radio.value+'.thumbnail')});
-				Curriki.current.submitToTemplate = _('add.selecttemplate.'+radio.value+'.url');
+				// CURRIKI-2434
+				// - Gets called while dialogue is being created (before shown)
+				//   so need to check if item is shown yet
+				var img = Ext.get('selecttemplate-thumbnail-image');
+				if (!Ext.isEmpty(img)) {
+					img.set({'src': _('add.selecttemplate.'+radio.value+'.thumbnail')});
+					Curriki.current.submitToTemplate = _('add.selecttemplate.'+radio.value+'.url');
+				}
 			}
 		};
 
