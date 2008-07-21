@@ -460,15 +460,20 @@ Curriki.module.addpath.init = function(){
 					 id:'SelectTemplateDialogueWindow'
 					,title:_('add.selecttemplate.title')
 					,cls:'addpath addpath-templates resource resource-add'
+					,border:false
+					,bodyBorder:false
 					,items:[{
 						 xtype:'form'
 						,id:'SelectTemplateDialoguePanel'
 						,formId:'SelectTemplateDialogueForm'
+						,border:false
+						,bodyBorder:false
 						,labelWidth:25
 						,autoScroll:true
-						,border:false
 						,defaults:{
 							 labelSeparator:''
+							,border:false
+							,bodyBorder:false
 						}
 						,buttonAlign:'right'
 						,buttons:[{
