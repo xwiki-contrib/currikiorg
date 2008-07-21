@@ -166,7 +166,7 @@ console.log('Collections: ', this.collectionChildren);
 						childInfo.leaf = false;
 						childInfo.loaded = false;
 						childInfo.allowDrop = true;
-						childInfo.disallowDropping = !child.rights.edit;
+						childInfo.disallowDropping = (child.rights.edit?null:true);
 					}
 
 					children.push(childInfo);

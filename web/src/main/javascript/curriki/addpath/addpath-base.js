@@ -406,6 +406,7 @@ Curriki.module.addpath.init = function(){
 					 xtype:'radio'
 					,name:'templateName'
 					,value:'list'+i
+					,checked:(i===1?true:false) // Default first as checked
 					,boxLabel:_('add.selecttemplate.list'+i+'.header')
 					,listeners:{
 						check:AddPath.TemplateSelect
@@ -434,15 +435,16 @@ Curriki.module.addpath.init = function(){
 				++i;
 			}
 
+			// Default to first item in the list
+			Curriki.current.submitToTemplate = _('add.selecttemplate.list1.url');
+
 			return retVal;
 		};
 
 		AddPath.TemplateSelect = function(radio, selected) {
 			if (selected) {
-				Ext.get('selecttemplate-thumbnail-header').dom.innerHTML = _('add.selecttemplate.'+radio.value+'.header')
 				Ext.get('selecttemplate-thumbnail-image').set({'src': _('add.selecttemplate.'+radio.value+'.thumbnail')});
 				Curriki.current.submitToTemplate = _('add.selecttemplate.'+radio.value+'.url');
-				Ext.getCmp('nextbutton').enable();
 			}
 		};
 
@@ -477,7 +479,6 @@ Curriki.module.addpath.init = function(){
 							 text:_('add.selecttemplate.next.button')
 							,id:'nextbutton'
 							,cls:'button next'
-							,disabled:true
 							,listeners:{
 								'click':function(e, ev){
 									AddPath.PostToTemplate(Curriki.current.submitToTemplate);
@@ -518,14 +519,9 @@ Curriki.module.addpath.init = function(){
 										,id:'selecttemplate-thumbnail'
 										,style:'margin:8px 0 8px 10px'
 										,children:[{
-											 tag:'div'
-											,id:'selecttemplate-thumbnail-header'
-											,style:'margin:0 0 4px 0'
-											,html:''
-										},{
 											 tag:'img'
 											,id:'selecttemplate-thumbnail-image'
-											,src:Ext.BLANK_IMAGE_URL
+											,src:_('add.selecttemplate.list1.thumbnail')
 											,onLoad:"Ext.getCmp('SelectTemplateDialogueWindow').syncShadow();"
 										}]
 									}
@@ -2031,7 +2027,7 @@ console.log("Published CB: ", newAsset);
 												}
 											}
 
-											if (!Ext.isEmpty(parentNode.attributes.disallowDropping)) {
+											if (!Ext.isEmpty(parentNode.attributes.disallowDropping) && (parentNode.attributes.disallowDropping === true)) {
 												dragOverEvent.cancel = true;
 												return false;
 											}
