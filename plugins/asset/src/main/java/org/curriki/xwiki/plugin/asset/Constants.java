@@ -140,4 +140,13 @@ public interface Constants {
     String GROUP_RIGHT_PUBLIC = "open";
     String GROUP_RIGHT_PROTECTED = "protected";
     String GROUP_RIGHT_PRIVATE = "private";
+
+    /**
+     * Rights
+     */
+    String RIGHTS_CLASS = "XWiki.XWikiRights";
+    String RIGHTS_CLASS_GROUP = "groups";
+    String RIGHTS_CLASS_USER = "users";
+    String RIGHTS_ADMIN_GROUP = "XWiki.XWikiAdminGroup";
+    String RIGHTS_ALL_GROUP = "XWiki.XWikiAllGroup";
 }
