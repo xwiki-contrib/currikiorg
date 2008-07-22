@@ -1708,8 +1708,7 @@ console.log("Published CB: ", newAsset);
 					 title:_('add.finalmessage.title_successful')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
-						 AddPath.FinalLink('viewtarget'),'->'
-						,AddPath.CloseDone(this)
+						 '->',AddPath.CloseDone(this)
 					]
 					,items:[
 						// This needs arguments for "added {0} into {1}"
