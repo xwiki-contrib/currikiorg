@@ -207,7 +207,7 @@ table.instruction { margin: 10px 0; }
 .x-window div, .x-panel-ghost * { background-color: transparent; background-image: none; }
 .x-window .x-window-tl, .x-panel-ghost .x-window-tl { background-color: #93c53c; padding: 0em 0.5em; text-transform: uppercase; }
 .x-window-tl .x-window-header { color: #fff; font: 12px arial;  font-weight: bold; padding: 3px 0; }
-.x-window .x-panel-body { padding: 1em 1em 0; }
+.x-window .x-panel-body { padding: 0.5em 0.5em 0; }
 #MetadataDialogueForm .x-panel-body { padding-left: 0; }
 .x-window #resource-drop .x-panel-body { padding-top: 0; }
 .x-btn button { display: inline; padding: 0; width: auto !important; }
@@ -379,3 +379,12 @@ form em, .header em { font-style: normal; }
 
 /* CURRIKI-2416 - Add spacing in NortelLearniTLessonPlan header */
 .lesson-plan-learn-line { padding-top: 8px; }
+
+/* CURRIKI-2444 - Printing needs overflow to be visible */
+@media print {
+#content, .asset-content-body { overflow: visible; }
+#header-title-zone, #header-closebutton { display: none; }
+.asset-content-options { display: none; }
+#mini_player_mp3 { display: none; }
+.flash-control-newwindow { display: none; }
+}
