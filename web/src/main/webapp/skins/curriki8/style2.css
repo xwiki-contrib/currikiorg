@@ -379,3 +379,13 @@ form em, .header em { font-style: normal; }
 
 /* CURRIKI-2416 - Add spacing in NortelLearniTLessonPlan header */
 .lesson-plan-learn-line { padding-top: 8px; }
+
+
+/* CURRIKI-2444 - Printing needs overflow to be visible */
+@media print {
+#content, .asset-content-body { overflow: visible; }
+#header-title-zone, #header-closebutton { display: none; }
+.asset-content-options { display: none; }
+#mini_player_mp3 { display: none; }
+.flash-control-newwindow { display: none; }
+}
