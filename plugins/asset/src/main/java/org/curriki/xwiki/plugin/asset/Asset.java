@@ -188,38 +188,47 @@ public class Asset extends CurrikiDocument {
         BaseObject rightObj;
 
         // If collection is user
-        String usergroupfield = "users";
-        String usergroupvalue = ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
+        String usergroupfield = Constants.RIGHTS_CLASS_USER;
+        String uservalue =  ("".equals(assetDoc.getCreator())) ? context.getUser() : assetDoc.getCreator();
+        String usergroupvalue = uservalue;
 
         // If collection is group
         if (assetDoc.getSpace().startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
-            usergroupfield = "groups";
+            usergroupfield = Constants.RIGHTS_CLASS_GROUP;
             usergroupvalue = assetDoc.getSpace().substring(5) + ".MemberGroup";
         }
 
         // Always let the admin group have edit access
-        rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-        rightObj.setStringValue("groups", "XWiki.XWikiAdminGroup");
+        rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
+        rightObj.setStringValue(Constants.RIGHTS_CLASS_GROUP, Constants.RIGHTS_ADMIN_GROUP);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
         // Always let the creator/group edit
-        rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
+        rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
+        // CURRIKI-2468 - allow creator to always edit/view their creations
+        if (usergroupfield.equals(Constants.RIGHTS_CLASS_GROUP)) {
+            rightObj.setStringValue(Constants.RIGHTS_CLASS_USER, uservalue);
+        }
         rightObj.setStringValue(usergroupfield, usergroupvalue);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
         if (rights.equals(Constants.ASSET_CLASS_RIGHT_PUBLIC)) {
             // Viewable by all and any member can edit
-            rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-            rightObj.setStringValue("groups", "XWiki.XWikiAllGroup");
+            rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
+            rightObj.setStringValue(Constants.RIGHTS_CLASS_GROUP, Constants.RIGHTS_ALL_GROUP);
             rightObj.setStringValue("levels", "edit");
             rightObj.setIntValue("allow", 1);
         } else if (rights.equals(Constants.ASSET_CLASS_RIGHT_MEMBERS)) {
             // Viewable by all, only user/group can edit
         } else {
             // rights == private, so only allow creator/group to view and edit
-            rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
+            rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
+            // CURRIKI-2468 - allow creator to always edit/view their creations
+            if (usergroupfield.equals(Constants.RIGHTS_CLASS_GROUP)) {
+                rightObj.setStringValue(Constants.RIGHTS_CLASS_USER, uservalue);
+            }
             rightObj.setStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
             rightObj.setIntValue("allow", 1);
