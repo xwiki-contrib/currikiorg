@@ -501,7 +501,7 @@ Curriki.module.addpath.init = function(){
 							 layout:'column'
 							,defaults:{border:false}
 							,items:[{
-								 columnWidth:0.6
+								 columnWidth:0.55
 								,items:[{
 									 xtype:'box'
 									,autoEl:{
@@ -520,7 +520,7 @@ Curriki.module.addpath.init = function(){
 									}
 								}]
 							},{
-								 columnWidth:0.4
+								 columnWidth:0.35
 								,items:[{
 									 xtype:'box'
 									,id:'selecttemplate-thumbnail-container'
