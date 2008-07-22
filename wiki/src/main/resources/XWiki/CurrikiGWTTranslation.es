@@ -13,13 +13,13 @@
 <contentAuthor>XWiki.albertobuffagni</contentAuthor>
 <creationDate>1213306159000</creationDate>
 <date>1213306159000</date>
-<contentUpdateDate>1213306159000</contentUpdateDate>
+<contentUpdateDate>1215461923000</contentUpdateDate>
 <version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>spanish translation</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>

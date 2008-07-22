@@ -13,13 +13,13 @@
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1212441677000</creationDate>
 <date>1212441845000</date>
-<contentUpdateDate>1212441845000</contentUpdateDate>
+<contentUpdateDate>1215461922000</contentUpdateDate>
 <version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>

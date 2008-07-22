@@ -13,7 +13,7 @@
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1186500712000</creationDate>
 <date>1187441250000</date>
-<contentUpdateDate>1203441513000</contentUpdateDate>
+<contentUpdateDate>1187822006000</contentUpdateDate>
 <version>1.4</version>
 <title></title>
 <template></template>

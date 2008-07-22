@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1210378529000</creationDate>
-<date>1215112024000</date>
-<contentUpdateDate>1215112024000</contentUpdateDate>
-<version>192.1</version>
+<date>1216766155000</date>
+<contentUpdateDate>1216766155000</contentUpdateDate>
+<version>204.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -74,6 +74,7 @@
 ## ASSET CLASS
 ## ADD PATH SELECTION DIALOGS
 ## ADD PATH FINAL MESSAGE DIALOGS
+## ADD PATH ERROR MESSAGE
 
 
 
@@ -139,7 +140,6 @@ form.scratch.step2.content.instruction=Enter content in the editing window below
 
 
 ## CURRIKI LESSON PLAN FORM
-lesson.plan.output.title.wikimarkup=*title*
 lesson.plan.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
 lesson.plan.title=Create a Resource from a Template (Curriki Standard Lesson Plan)
 lesson.plan.title.description=Learn more:
@@ -220,8 +220,6 @@ lesson.plan.attachments.attach.button=Attach This File
 lesson.plan.attachments.delete=Remove
 
 ##Curriki Standard Lesson Plan Template
-lesson.plan.required.fields.dialog.overview=- Learning Objectives
-lesson.plan.required.fields.dialog.overview=- Procedures
 
 lesson.plan.file.size.maximum=20000000
 lesson.plan.file.size.label=Total size of all attachments:
@@ -232,12 +230,16 @@ lesson.plan.file.size.dialog.button=OK
 
 ##NORTEL LEARNIT LESSON PLAN FORM
 
-nortel.lesson.plan.title=Create a Lesson Plan (Nortel LeariT 6E + S Template)
-nortel.lesson.plan.title.description=Learn more:
+nortel.lesson.plan.url=/xwiki/bin/view/CreateResources/NortelLearniTLessonPlan
+nortel.lesson.plan.title=Create a Lesson Plan (Nortel LearniT 6E + S Template)
+nortel.lesson.plan.title.description=&lt;br&gt;Learn more:
 
 nortel.form.title.description.link1=Models
-nortel.form.title.description.link2=Help
+nortel.form.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/ModelLessonsfromNortelLearniTs6ETemplate?bc=;Coll_NortelLearniT.NortelLearniT6ESForm
+nortel.form.title.description.link2=Detailed Help on Using the Form
+nortel.form.title.description.link2.url=http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniT6ESForm?bc
 nortel.form.title.description.link3=Nortel LearniT
+nortel.form.title.description.link3.url=http://www.curriki.org/xwiki/bin/view/Demo/nortellearnit
 
 nortel.lesson.plan.step2.title=Enter &amp; Format Lesson Content
 nortel.lesson.plan.step2.guidingquestion=What would another educator need to know to successfully put this lesson into practice?
@@ -275,7 +277,12 @@ nortel.lesson.plan.materials.tooltip=Enter supplies, handouts, equipment, softwa
 nortel.lesson.plan.project.title=Project:
 nortel.lesson.plan.project.instruction=
 nortel.lesson.plan.project.content=
-nortel.lesson.plan.project.tooltip=Describe student project(s) in some detail, including how they&amp;#39;ll pursue and present information.
+nortel.lesson.plan.project.tooltip=Describe student project(s) in some detail, including how they will pursue and present information.
+
+nortel.lesson.plan.timemanagement.title=Time Management Tips:
+nortel.lesson.plan.timemanagement.instruction=
+nortel.lesson.plan.timemanagement.content=
+nortel.lesson.plan.timemanagement.tooltip=Provide hints about how to pace the lesson.
 
 nortel.lesson.plan.assess.title=Assessment:
 nortel.lesson.plan.assess.instruction=
@@ -283,55 +290,53 @@ nortel.lesson.plan.assess.content=
 nortel.lesson.plan.assess.tooltip=Briefly indicate ongoing evaluation techniques for key student understandings. Note: Use Evaluate for detailed rubric(s).
 
 nortel.lesson.plan.engage.title=Engage:
-nortel.lesson.plan.engage.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.engage.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherIntroductionEngage" target="_blank"&gt;Engage&lt;/a&gt;. 
 nortel.lesson.plan.engage.content=
 nortel.lesson.plan.engage.tooltip=Indicate specific activities to capture student interest and encourage questioning leading to topic exploration.
 
 nortel.lesson.plan.explore.title=Explore:
-nortel.lesson.plan.explore.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.explore.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherExplore" target="_blank"&gt;Explore&lt;/a&gt;. 
 nortel.lesson.plan.explore.content=
 nortel.lesson.plan.explore.tooltip=Indicate activities and related technologies for student to perform/use to investigate the topic.
 
 nortel.lesson.plan.explain.title=Explain:
-nortel.lesson.plan.explain.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.explain.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherExplain" target="_blank"&gt;Explain&lt;/a&gt;. 
 nortel.lesson.plan.explain.content=
 nortel.lesson.plan.explain.tooltip=Indicate the presentations or outputs and formats students will make and use to demonstrate new knowledge, understandings, capabilities.
 
 nortel.lesson.plan.elaborate.title=Elaborate:
-nortel.lesson.plan.elaborate.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.elaborate.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherElaborate" target="_blank"&gt;Elaborate&lt;/a&gt;. 
 nortel.lesson.plan.elaborate.content=
 nortel.lesson.plan.elaborate.tooltip=Provide instructions on the specific project the student creates from the lesson plan activity.
 
 nortel.lesson.plan.evaluate.title=Evaluate:
-nortel.lesson.plan.evaluate.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.evaluate.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/Evaluate" target="_blank"&gt;Evaluate&lt;/a&gt;. 
 nortel.lesson.plan.evaluate.content=
-nortel.lesson.plan.evaluate.tooltip=Provide/describe the rubric/method for evaluating learning expressed in students\&amp;#39; activities/outputs.
+nortel.lesson.plan.evaluate.tooltip=Provide/describe the rubric/method for evaluating learning of students as expressed in their activities/outputs.
 
 nortel.lesson.plan.extend.title=Extend:
-nortel.lesson.plan.extend.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.extend.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherExtend" target="_blank"&gt;Extend&lt;/a&gt;. 
 nortel.lesson.plan.extend.content=
 nortel.lesson.plan.extend.tooltip=Frame some student-driven ways to expand existing investigations; communicate learning to others; apply knowledge in new circumstances.
 
 nortel.lesson.plan.standards.title=Standards:
-nortel.lesson.plan.standards.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.standards.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherStandards" target="_blank"&gt;Standards&lt;/a&gt;. 
 nortel.lesson.plan.standards.content=
 nortel.lesson.plan.standards.tooltip=Indicate standards/frameworks the lesson addresses.
 
 nortel.lesson.plan.required.attachments.title=Required Attachments:
-nortel.lesson.plan.required.attachments.instruction=Select and upload files from your computer. You can attach up to six files, not to exceed 20 MB in total. These will be offered as links in the published lesson plan.
-
-nortel.lesson.lesson.plan.required.attachments.tooltip=Attach any files referenced in this lesson, such as a handout, rubric, worksheet, or quiz.
-
-nortel.lesson.plan.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource. 
-
-After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
-
+nortel.lesson.plan.required.attachments.instruction=Select and upload files from your computer. Attached files cannot exceed 20 MB in total. These will be offered as links in the published lesson plan.
+nortel.lesson.plan.required.attachments.tooltip=Attach any files referenced in this lesson, such as a handout, rubric, worksheet, or quiz.
+nortel.lesson.plan.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource.&lt;br /&gt;&lt;br /&gt;After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
 nortel.lesson.plan.required.attachments.browse.button=Browse
 nortel.lesson.plan.required.attachments.attach.button=Attach This File
 nortel.lesson.plan.required.attachments.delete=Remove
 
-
-
+## see macros.vm: macro currikiNortelIcon()
+nortel.lesson.plan.output.heading.icon.url=http://www.curriki.org/xwiki/bin/download/Coll_jkl1231/SampleOutputforFormNortelLearniTTemplate/NlorgCurrikiHP.png
+nortel.lesson.plan.output.heading.icon.height=75
+nortel.lesson.plan.output.heading.icon.width=225
+nortel.lesson.plan.output.heading.content=This lesson was created using the Nortel LearniT 6E + S template for integrating technology within the curriculum.
 
 ## FROM SCRATCH ERROR MESSAGES
 
@@ -371,19 +376,20 @@ lesson.plan.required.fields.dialog.procedures=- Procedures
 
 ##Nortel LearniT Lesson Plan Template
 lesson.plan.required.fields.dialog.overview=- Overview
-lesson.plan.required.fields.dialog.overview=- Technology Integration
-lesson.plan.required.fields.dialog.overview=- Prerequisite Experience
-lesson.plan.required.fields.dialog.overview=- Teacher Prep Time
-lesson.plan.required.fields.dialog.overview=- Estimated Time for Completion
-lesson.plan.required.fields.dialog.overview=- Materials
-lesson.plan.required.fields.dialog.overview=- Project
-lesson.plan.required.fields.dialog.overview=- Assessment
-lesson.plan.required.fields.dialog.overview=- Engage
-lesson.plan.required.fields.dialog.overview=- Explore
-lesson.plan.required.fields.dialog.overview=- Explain
-lesson.plan.required.fields.dialog.overview=- Elaborate
-lesson.plan.required.fields.dialog.overview=- Evaluate
-lesson.plan.required.fields.dialog.overview=- Extend
+lesson.plan.required.fields.dialog.techinteg=- Technology Integration
+lesson.plan.required.fields.dialog.prereq=- Prerequisite Experience
+lesson.plan.required.fields.dialog.preptime=- Teacher Prep Time
+lesson.plan.required.fields.dialog.timecomplete=- Estimated Time for Completion
+lesson.plan.required.fields.dialog.materials=- Materials
+lesson.plan.required.fields.dialog.project=- Project
+lesson.plan.required.fields.dialog.timemanagement=- Time Management Tips
+lesson.plan.required.fields.dialog.assess=- Assessment
+lesson.plan.required.fields.dialog.engage=- Engage
+lesson.plan.required.fields.dialog.explore=- Explore
+lesson.plan.required.fields.dialog.explain=- Explain
+lesson.plan.required.fields.dialog.elaborate=- Elaborate
+lesson.plan.required.fields.dialog.evaluate=- Evaluate
+lesson.plan.required.fields.dialog.extend=- Extend
 
 
 
@@ -391,7 +397,7 @@ lesson.plan.required.fields.dialog.overview=- Extend
 
 ## TITLE OF THE RESOURCE
 sri.title_title=Title:
-sri.title_txt=If you copied this resource, update the Title to indicate how it is different from the original.
+sri.title_txt=If you copied this resource, update this field to indicate how it is different from the original.
 
 ##Appears as default text in the text entry box.
 sri.title_content=
@@ -400,7 +406,7 @@ sri.title_tooltip=Name for this element, including display in search lists and a
 
 ## DESCRIPTION
 sri.description_title=Description:
-sri.description_txt=If you copied this resource, update the Description to indicate how it is different from the original.
+sri.description_txt=If you copied this resource, update this field to indicate how it is different from the original.
 
 ## To be used later when edit is implemented
 sri.copy_info_text=If you have copied this resource, update the Title and Description fields to indicate how it is different from the original.
@@ -581,6 +587,8 @@ XWiki.AssetClass_fw_items_FW_masterFramework.Oceanography=Oceanography
 XWiki.AssetClass_fw_items_FW_masterFramework.Paleontology=Paleontology
 XWiki.AssetClass_fw_items_FW_masterFramework.PhysicalSciences=Physical Sciences
 XWiki.AssetClass_fw_items_FW_masterFramework.Physics=Physics
+
+
 XWiki.AssetClass_fw_items_FW_masterFramework.ProcessSkills=Process Skills
 XWiki.AssetClass_fw_items_FW_masterFramework.Technology_0=Technology
 XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies=Social Studies
@@ -723,9 +731,9 @@ add.contributemenu.option.video_capture=A video I&amp;#39;ll capture with my web
 add.contributemenu.option.folder=A folder where I&amp;#39;ll organize resources
 
 add.contributemenu.required.fields.dialog_file=Click Browse to select a file from your computer.
-add.contributemenu.required.fields.dialog_video_upload=Select a video to upload before clicking Next.
+add.contributemenu.required.fields.dialog_video_upload=Select a video to upload. Once uploaded, select Continue to complete the process.
 add.contributemenu.required.fields.dialog_link=Enter the URL for the web resource using the format http://www.website.com, then click Next.
-add.contributemenu.required.fields.dialog_video_capture=Capture a video with your webcam before clicking Next.
+add.contributemenu.required.fields.dialog_video_capture=Capture a video with your webcam. Once recorded, select Continue to complete the process.
 
 add.contributemenu.cancel.button=Cancel
 add.contributemenu.next.button=Next &gt;&gt;
@@ -733,14 +741,15 @@ add.contributemenu.next.button=Next &gt;&gt;
 ##Select a Template
 add.selecttemplate.title=Select a Template
 add.selecttemplate.guidingquestion=What kind of lesson plan would you like to create?
-add.selecttemplate.list1.header=Curriki Standard Lesson Plan
+add.selecttemplate.list1.header=&lt;b&gt;Curriki Standard Lesson Plan&lt;/&gt;
 add.selecttemplate.list1.description=The standard Curriki template offers the simplest lesson structure, with Learning Objectives and Procedures as the only required content.
 add.selecttemplate.list1.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/CurrikiStandardLessonPlanThumb.png
 add.selecttemplate.list1.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
-##add.selecttemplate.list2.header=Nortel LearniT Lesson Plan
-##add.selecttemplate.list2.description=Nortel LearniT provides a project-based, technology-integrated template incorporating experiences that Engage, Explore, Explain, Elaborate, Evaluate, and Extend learning, with the option to include Standards.
-##add.selecttemplate.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/NortelLessonPlanThumb.png
-##add.selecttemplate.list2.url=PLACEHOLDER: URL to template2 here
+add.selecttemplate.list2.header=&lt;b&gt;Nortel LearniT Lesson Plan&lt;/b&gt;
+add.selecttemplate.list2.description=Nortel LearniT provides a project-based, technology-integrated template incorporating experiences that Engage, Explore, Explain, Elaborate, Evaluate, and Extend learning, with the option to include Standards.
+add.selecttemplate.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/NortelLessonPlanThumb.png
+add.selecttemplate.list2.url=/xwiki/bin/view/CreateResources/NortelLearniTLessonPlan
+
 add.selecttemplate.cancel.button=Cancel
 add.selecttemplate.next.button=Next &gt;&gt;
 
@@ -810,5 +819,8 @@ add.finalmessage.continue.link=Continue &gt;&gt;
 add.finalmessage.openbuilder.link=Open in Currikulum Builder
 add.finalmessage.close.button=Close
 
+##Add Path Error Messages
+add.servertimedout.message=There was a problem accessing the server. Please try again.
+add.servertimedout.message.button=OK
 {/pre}
 </content></xwikidoc>

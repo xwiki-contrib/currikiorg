@@ -13,7 +13,7 @@
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1186500630000</creationDate>
 <date>1186589258000</date>
-<contentUpdateDate>1203441513000</contentUpdateDate>
+<contentUpdateDate>1187822007000</contentUpdateDate>
 <version>1.3</version>
 <title></title>
 <template></template>
