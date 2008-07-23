@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1212513224000</creationDate>
-<date>1215806069000</date>
-<contentUpdateDate>1215806069000</contentUpdateDate>
-<version>221.1</version>
+<date>1216839823000</date>
+<contentUpdateDate>1216839823000</contentUpdateDate>
+<version>222.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Add {pre} around cameFrom URLs so xwiki doesn't parse them</comment>
+<comment>.value() should be .value</comment>
 <minorEdit>false</minorEdit>
 <attachment>
 <filename>beauty1.jpg</filename>
@@ -223,7 +223,7 @@ function getFieldContentStr(field_id_str) {
 function getWysiwygFieldContent(wysiwyg_id_str, textarea_fallback_id_str) {
   var wysiwyg_content_o = tinyMCE.getInstanceById(wysiwyg_id_str); // WYSIWYG Associated with "Content"
   if (wysiwyg_content_o == null) { // no WYSIWYG--&gt;falback to textarea contents...
-    var wysiwyg_content_txt  = $(textarea_fallback_id_str).value();
+    var wysiwyg_content_txt  = $(textarea_fallback_id_str).value;
     if ((wysiwyg_content_txt.length &lt;= 1) || (wysiwyg_content_txt.trim() == '')) {
       return null;	   // --&gt; return signal for empty fallback textarea contents
     }
