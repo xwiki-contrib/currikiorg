@@ -1680,6 +1680,7 @@ console.log("Published CB: ", newAsset);
 		Ext.reg('apDoneA', AddPath.DoneA);
 		Ext.reg('apDoneB', AddPath.DoneA);
 		Ext.reg('apDoneD', AddPath.DoneA);
+		Ext.reg('apDoneR', AddPath.DoneA);
 
 
 		AddPath.DoneC = Ext.extend(Curriki.ui.dialog.Messages, {
