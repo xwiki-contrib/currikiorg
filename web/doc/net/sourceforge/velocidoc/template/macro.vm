@@ -1,0 +1,17 @@
+<html>
+<head>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="stylesheet.css" TITLE="Style">
+</head>
+<body>
+<b>Package Name :</b> ${macroDoc.template.package.packageName} <br>
+<b>Template Name :</b> ${macroDoc.template.name} <br>
+<b>Macro Name :</b> ${macroDoc.name}<br>
+<b>Declaration : <i>macro ( ${macroDoc.name} #foreach ($argument in $macroDoc.arguments) $argument #end )</i></b><br>
+<br>
+<h2>Notes - </h2><br>
+#set ($comment = $macroDoc.comment)
+${comment.content}
+<br>
+<hr>
+</body>
+</html>
