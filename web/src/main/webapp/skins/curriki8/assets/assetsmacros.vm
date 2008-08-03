@@ -1,0 +1,541 @@
+##
+##
+## AssetTemplate macros
+##
+##
+#macro(beginassetsection $lefttitle $link $showAllvar)
+#set($doHide = !$showAllvar)
+#if(!$seccounter)
+#set($seccounter = 1)
+#else
+#set($seccounter = $seccounter + 1)
+#end
+<div id="section_${seccounter}">
+#set($closedGif = $xwiki.getSkinFile("icons/collapse.png"))
+#set($openedGif = $xwiki.getSkinFile("icons/collapse_down.png"))
+#set($defaultGif = $openedGif)
+#if($doHide)
+ #set($defaultGif = $closedGif)
+#end
+#findCurrikiTitle($embeddedDoc)
+<div class="righttext">
+  <span id="section${seccounter}title">
+    <div class="lefttext" style="width: 438px;">
+      <img src="$defaultGif"/>&nbsp;
+      <strong class="strong">$currikiTitle</strong>
+    </div>
+  </span>
+#if(!$isPrint)
+  <div>
+    <a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a>
+  </div>
+#end
+</div>
+<div class="clearfloats"></div>
+<script type="text/javascript">
+#if(!$togglesectionvisibility)
+#set($togglesectionvisibility = 1)
+function toggleSectionVisibility(seccounter, showhide){
+  var seccontent = document.getElementById("section" + seccounter + "content");
+  if(eltHasClass(seccontent, "hidden")){
+    rmClass(seccontent, "hidden");
+    // change icon
+    var imgElem = showhide.firstChild.firstChild;
+    imgElem.setAttribute("src", "$openedGif");
+    // erase cookie
+    eraseCookie("Section" + seccounter + "Hidden");
+  }
+  else{
+    addClass(seccontent, "hidden");
+    // Change icon
+    var imgElem = showhide.firstChild.firstChild;
+    imgElem.setAttribute("src", "$closedGif");
+    // set cookie
+    createCookie("Section" + seccounter + "Hidden", true, "");
+  }
+  return false;
+}
+#end
+addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
+var showhide${seccounter} = document.getElementById("section${seccounter}title");
+showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+#if($doHide)
+createCookie("Section${seccounter}Hidden", true, "");
+#end
+</script>
+<div id="section${seccounter}content" class="#if($doHide)hidden#end">
+#end
+##
+##
+##
+##
+#macro(displayassettitlebar $asset, $isPrint)
+ <div class="asset-metadatas">
+ #findCurrikiTitle($asset)
+ #if($request.rev)
+ #set($currikiTitle = "$currikiTitle $msg.version $request.rev")
+ #end
+ #titlebar($currikiTitle "" "" "red")
+</div>
+#end
+##
+##
+##
+##
+#macro(displayassetmetadatas $asset, $isPrint)
+#set($assetObj = $asset.getObject("XWiki.AssetClass"))
+ <div class="asset-metadatas">
+ #findCurrikiTitle($asset)
+ #titlebar($currikiTitle "" "" "red")
+<div class="asset-metadatas-block">
+ *$msg.get("metadata.description_title"):* <br />
+ $asset.description
+<table width="100%"><tr><td width="263">
+ *$msg.get("metadata.fw_items_title"):* <br />
+<select name="fw_items" multiple size="3">
+#if($!asset.fw_items.trim() == "")
+ <option>All</option>
+#else
+ #set($subjects = "")
+ {pre}#set($sitems = $asset.fw_items.split("<br />")){/pre}
+ #set($previousCat = "")
+ #foreach($sitem in $sitems)
+  #if($sitem.trim().startsWith("Subject Index &gt;"))
+   #set($sitem = $sitem.trim().substring(18))
+  #end
+  #set($gtIndex = $sitem.indexOf("&gt;"))
+  #if($gtIndex != -1)
+   #set($foundCat = $sitem.substring(0, $gtIndex).trim())
+   #if($foundCat != $previousCat)
+    #set($previousCat = $foundCat)
+    <option>$previousCat</option>
+   #end
+   #set($nextIndex = 4 + $gtIndex)
+   <option>&nbsp; &nbsp; $sitem.substring($nextIndex)</option>
+  #else
+   #set($previousCat = $sitem)
+   <option>$previousCat</option>
+  #end
+ #end
+#end
+</select>
+</td><td width="61"> </td><td width="263">
+ *$msg.get("metadata.educational_level_title"):* <br />
+#set($levels = $!asset.educational_level2)
+<select name="levels" multiple size="3">
+#if($levels == "Choose from list...")
+ <option>All</option>
+#else
+ {pre}#set($litems = $levels.split("#--#")){/pre}
+ #set($levels = "")
+ #foreach($litem in $litems)
+  <option>${litem}</option>
+ #end
+#end
+</select>
+</td></tr></table>
+<table width="100%"><tr><td width="42%">
+#set($creatorDoc = $xwiki.getDocument($asset.creator))
+#set($width = 52)
+#if($asset.space.startsWith("Coll_Group_")) ## {
+#set($spacehome = $asset.space.replaceFirst("Coll_", ""))
+## For group assets
+#set($m_sm = $xwiki.csm)
+#set($s = $m_sm.getSpace($spacehome))
+#set($sUrl = $s.getHomeURL())
+#groupLogo( $s )
+<div id="asset-metadatas-block-groupname">
+<span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
+ <a href="${sUrl}">{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}</a>
+</div>
+<div id="asset-metadatas-block-username">
+<span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span> $!xwiki.getUserName($asset.creator)
+</div>
+#else ## } {
+## For non-group assets
+<table><tr><td>
+#if($creatorDoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="${width}"/>
+#else
+ #foreach ($attach in $creatorDoc.attachmentList)
+  <a href="$creatorDoc.getURL("view")" >
+  <img src="$creatorDoc.getAttachmentURL($attach.filename,"download")" width="${width}" /></a>
+ #end
+#end
+</td><td valign="bottom">
+<span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span><br />
+$!xwiki.getUserName($asset.creator)
+</td></tr></table>
+#end ## }
+</td><td width="16%">
+ *$msg.get("asset.lastupdated"):* <br />
+$!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
+</td><td width="42%">
+<div style="float:right;">
+#set($status = $!asset.status)
+#if($status.trim() == "Choose from list...")
+ #set($status = " ")
+#end
+#displayCRS($asset)
+</div>
+</td></tr></table>
+</div>
+#if(!$isPrint)
+<hr class="my-curriki-hr" >
+#if($request.showMeta == true)
+<div class="asset-metadatas-block">
+
+ *$msg.get("metadata.keywords_title"):* $!asset.display("keywords", "view", $assetObj)
+
+ *$msg.get("metadata.language_title"):* $!asset.display("language", "view", $assetObj)
+
+ *$msg.get("metadata.instructional_component_title2"):* <br />
+#set($instrComponent = $!asset.display("instructional_component2","view", $assetObj))
+<select name="componentType" multiple size="3">
+#if($instrComponent != "Choose from list...")
+ #set($icitems = $instrComponent.split("#--#"))
+ #foreach($icitem in $icitems)
+  <option>${icitem}</option>
+ #end
+#end
+</select>
+
+#set($rightsObject = $asset.getObject("XWiki.AssetLicenseClass"))
+#set($holder = $!asset.display("rightsHolder", "view", $rightsObject))
+#if($xwiki.getDocument($holder).isNew() == false)
+ #set($holder = $xwiki.getLocalUserName($holder))
+#end
+#if($holder == "WebHome")
+ #set($holder = " ")
+#end
+ *$msg.get("metadata.right_holder_title"):* $!holder
+
+ *$msg.get("metadata.rights_title"):* $!asset.display("rights", "view", $assetObj)
+
+ *$msg.get("metadata.license_type_title"):* $!asset.display("licenseType2", "view", $rightsObject)
+
+#set($hidden = $!asset.display("hidden_from_search", "view", $assetObj))
+#if($hidden == "")
+#set($hidden = $msg.get("yesno_0"))
+#end
+ *$msg.get("metadata.hidden_from_search"):* $hidden
+
+</div>
+<hr class="my-curriki-hr" >
+#end
+<div class="asset-metadatas-block">
+<div class="righttext">
+#if($request.showMeta == true)
+<a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("asset.closeMoreInformation")</a>
+#else
+<a href="$asset.getURL("view", "bc=$!request.bc&showMeta=true")">$msg.get("asset.moreInformation")</a>
+#end
+</div>
+</div> ## asset-metadatas-block
+#end ## if ! print
+<hr class="my-curriki-hr" >
+</div>
+#end ##macro metadatas
+##
+##
+##
+##
+#macro(displaylinks $asset)
+ #checkForCollections()
+ #escapeForJS($asset.fullName)
+ #set($escapedFullName = $ret_escaped)
+ #findCurrikiTitle($asset)
+ #escapeForJS($currikiTitle)
+ #set($escapedTitle = $ret_escaped)
+## Favorite
+ #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
+{pre}
+   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
+{/pre}
+  #sep()
+ #end ##}
+## Add
+ #if($g_userHasCollections)##{
+{pre}
+   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+{/pre}
+   #sep()
+ #end##}
+## Build Up
+ #if($asset.hasAccessLevel("edit")) ##{
+  #if($asset.getObject("XWiki.CompositeAssetClass")) ##{
+{pre}
+   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+{/pre}
+   #sep()
+  #end ##}
+ #end ##}
+ #if($asset.hasAccessLevel("view"))
+  <a href="$asset.getURL("view", "viewer=print")" onclick="window.open('$asset.getURL("view", "viewer=print")');return false;">$msg.get("caption.print")</a>
+ #end
+ #if($asset.hasAccessLevel("edit"))
+  #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
+ #end
+#end
+##
+##
+##
+##
+#macro(displayAssetContent $asset $develop $showAll)
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($objTxt = $asset.getObject("XWiki.TextAssetClass"))
+#set($objComp = $asset.getObject("XWiki.CompositeAssetClass"))
+#if($asset.getObject("XWiki.TextAssetClass"))
+<div class="asset-content-body">
+#if($objTxt.type == 1)
+{pre}$asset.getValue("text",$objTxt){/pre}
+#else
+$objTxt.text
+#end
+<div class="clearfloats"></div>
+</div>
+#elseif ($asset.getObject("XWiki.VIDITalkAssetClass"))
+ #set($objVT = $asset.getObject("XWiki.VIDITalkAssetClass"))
+ #set($video_id = $objVT.video_id)
+<div class="asset-content-body" style="text-align:center;">
+ #includeForm("GWT.ViditalkPlayback")
+<div class="clearfloats"></div>
+</div>
+#elseif ($objComp && $objComp != "")
+ #if($develop)
+ <div class="asset-content-body">
+#set($objs = $asset.getObjects("XWiki.SubAssetClass"))
+#set($assetList = $xwiki.arrayList)
+#foreach($obj in $objs)
+#set($ok = $assetList.add(""))
+#end
+#foreach($obj in $objs)
+#set($ok = $asset.use($obj))
+#set($position = $asset.getValue("order"))
+#set($assetPage = $asset.getValue("assetpage"))
+#if($position >= $assetList.size())
+#set($ok = $assetList.add($assetPage))
+#else
+#set($ok = $assetList.set($position.intValue(), $assetPage))
+#end
+#end
+##set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='XWiki.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetpage' and lg.name='order' order by lg.value ")
+##set($assetList = $xwiki.search($hql))
+  #foreach($assetPage in $assetList)
+   #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
+ <hr >
+   #else
+    #set($embeddedDoc = $xwiki.getDocument($assetPage))
+    #set($type = "")
+    #set($type = $!embeddedDoc.getValue("type", $embeddedDoc.getObject("XWiki.TextAssetClass")))
+    #if("$type"=="2")
+## We are not showing direction block assets
+    #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
+## We are not showing protected assets
+##     $msg.get("asset.contentNotAllowed")
+    #else
+     #set($embeddedDoc = $xwiki.getDocument($assetPage))
+     #if($embeddedDoc.getObject("XWiki.CompositeAssetClass"))
+      <div class="asset-content-body-composite-composite">
+#findCurrikiTitle($embeddedDoc)
+      <div class="righttext"><div class="lefttext">
+<a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">*$currikiTitle*</a>
+</div>
+<a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a>
+</div>
+      </div>
+     #else
+      <div class="asset-content-body-composite-source">
+#findCurrikiTitle($embeddedDoc)
+#beginassetsection($currikiTitle $embeddedDoc.fullName $showAll)
+       ##<div class="righttext"><div class="lefttext"> *$currikiTitle* </div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div>
+       #set($objComp = "")
+       #displayAssetContent($embeddedDoc false $showAll)
+#endsection()
+ 	  </div>
+     #end
+    #end ## content view right
+   #end
+  #end
+ </div>
+ #else
+## This text should be never displayed !!!!
+  Composite (not developed) : $!asset.displayTitle [$msg.get("asset.openToView")>$asset.fullName]
+ #end
+#elseif ($asset.attachmentList.size() > 0)
+#set($attachedFile = $asset.attachmentList.get(0))
+ #set($mime = $attachedFile.mimeType)
+ #set($hql = "select prop2.value from BaseObject as obj, StringProperty as prop, StringProperty as prop2 where  obj.className='XWiki.MimeTypeClass' and prop.id.id = obj.id and prop2.id.id = obj.id and prop2.id.name = 'specificDisplayTemplate' and prop.id.name = 'mimeType' and prop.value='$mime'")
+ #set($sDisp = $xwiki.xWiki.search($hql, $context.context))
+ #set($mimeDisplay = "MimeType.DefaultDisplay")
+ #if($sDisp && $sDisp.size() > 0 && $sDisp.get(0).trim() != "")
+  #set($mimeDisplay = $sDisp.get(0))
+ #end
+ <div class="asset-content-body" style="text-align:center;">
+ #set($mimedoc = $asset)
+ #includeForm($mimeDisplay)
+ <div class="clearfloats"></div>
+ </div>
+ <hr class="my-curriki-hr" >
+ <div class="asset-content-options">
+  <a href="$asset.getAttachmentURL("${attachedFile.filename}", "download")" title="$msg.get("downloadthisattachment")">
+  $attachedFile.getFilename().toLowerCase()
+  </a>&nbsp;&nbsp;
+  <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
+ </div>
+ <div class="clearfloats"></div>
+#else
+<div class="asset-content-body">
+ #set($objExt = $asset.getObject("XWiki.ExternalAssetClass", true))
+$msg.get("asset.externallink")
+ #set($url = $asset.display("link", "view", $asset.getObject("XWiki.ExternalAssetClass")))
+ #if($url.endsWith("jpg") || $url.endsWith("gif"))
+
+  <div align="center"><a href="$url" onclick="window.open('$url'); return false;"><img src="$url" align="middle" width="200" /></a></div>
+ #end
+
+  <a href="$url" onclick="window.open('$url'); return false;">#breakLinkText($url, 90)</a>
+  <div class="clearfloats"></div>
+</div>
+#end
+#end ##view acces level
+#end ##macro displaycontent
+##
+##
+##
+##
+##
+##
+#macro(showCollection $subasset)
+#set($collDoc = $xwiki.getDocument($subasset.assetpage))
+#if ($xwiki.getDocument($subasset.assetpage) && $collDoc.hasAccessLevel("view"))
+## look for the title
+#findCurrikiTitle($collDoc)
+## display the title
+#titlebar($currikiTitle "" "" "red")
+<div class="righttext"><div class="lefttext">
+<div style="width:510px; text-align:left;">
+*$msg.get("colls.description")* $!collDoc.description</div></div>
+<a href="$xwiki.getURL($collDoc.fullName, "view", "bc=$!request.bc")">$msg.get("caption.view")</a> #if($collDoc.hasAccessLevel("edit"))
+#sep() <a target="_blank" href="#gwtEditUrl(${collDoc.fullName})">$msg.get("caption.edit")</a>
+#end
+#if("XWiki.${shortname}" == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($collDoc.fullName, "delete"))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${collDoc.fullName}&sourceDoc=${localUrl}"))
+#sep() <a onclick="this.href='$deleteUrl'; return confirm('$deleteMsg')" href="javascript:void()">$msg.get("caption.delete")</a>
+#end
+</div>
+*$msg.get("colls.last_edited")* $!xwiki.formatDate($collDoc.date, $msg.get("dateFormat"))<br />
+#if($!collDoc.fw_items.trim() == "")
+ #set($subjects = "All")
+#else
+ #set($subjects = "")
+ {pre}#set($items = $collDoc.fw_items.split("<br />")){/pre}
+ #foreach($item in $items)
+  #if($item.trim().startsWith("Subject Index &gt;"))
+   #set($item = $item.trim().substring(18))
+  #end
+  #set($subjects = "${item}, ${subjects}")
+ #end
+ #set($sindex = $subjects.length() - 2)
+ #set($subjects = $subjects.substring(0, $sindex))
+#end
+*$msg.get("colls.subjects")* $subjects<br />
+#set($levels = $!collDoc.educational_level)
+#if($levels == "Choose from list...")
+ #set($levels = "All")
+#else
+ {pre}#set($litems = $levels.split("<br />")){/pre}
+ #set($levels = "")
+ #foreach($litem in $litems)
+  #set($levels = "${litem}, ${levels}")
+ #end
+ #set($lindex = $levels.length() - 2)
+ #set($levels = $levels.substring(0, $lindex))
+#end
+*$msg.get("colls.levels")* $levels
+#if($context.user=="XWiki.${shortname}" || $xwiki.hasAdminRights())
+<div class="righttext"><a class="button" onclick="addFile2(); return false;" href="#" title="$msg.get("colls.addResource")">$msg.get("colls.addResource")</a></div>
+#end ##edit rights
+#end ##view rights
+
+#end
+##
+
+
+#macro(displayMode)
+#set($mode = "")
+#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("print"))
+#set($mode = "print")
+#end
+#if($request.getParameter("xpage") && $request.getParameter("xpage").equals("assetpreview"))
+#set($mode = "preview")
+#end
+#if($request.getParameter("xpage") && $request.getParameter("xpage").equals("help"))
+#set($mode = "help")
+#end
+#if($request.rev)
+#set($mode = "rev")
+#end
+#if($mode!="")
+#set($isPrint = true)
+#else
+#set($isPrint = false)
+#end
+#end
+#macro(displayAsset $currDoc)
+#if(!$isPrint)
+<div class="asset-tabs">
+<a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a>
+<a class="asset-tab"  href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">Comments ($currDoc.comments.size())</a>
+</div> ## tabs
+#end
+<div id="wizzard" class="asset-page">
+#set($obj = $currDoc.getObject("XWiki.AssetClass", true))
+#if(!$isPrint)
+<div class="asset-links">
+<div class="righttext">
+#displaylinks($currDoc)
+</div>
+</div>
+#end
+<div class="asset-contents $mode">
+#if(!$isPrint)
+#displayassetmetadatas($currDoc, $isPrint)
+#else
+#displayassettitlebar($currDoc, $isPrint)
+#end
+<div class="asset-display">
+##
+## Uncomment the following block to enable the showAll option
+##
+## #if($request.viewAll == true)
+##  #set($showAllvar = true)
+## #else
+##  #set($showAllvar = false)
+## #end
+##
+#set($showAllvar = true)
+##
+ #displayAssetContent($currDoc true $showAllvar)
+#if(!$isPrint)
+<hr class="my-curriki-solid-hr" >
+<div class="asset-content-footer">
+<div class="asset-content-footer-bordered">
+<a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.comments.size()])</a> #sep()
+#if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $currDoc.fullName))
+<a href="$currDoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a> #sep()
+#else
+<a href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.linkToThePage")</a> #sep()
+#end
+#displaylinks($currDoc)
+</div> ##content-footer-bordered
+</div> ##content-footer
+#end ## if ! print
+</div> ##display
+</div> ##contents
+</div>
+#end
+

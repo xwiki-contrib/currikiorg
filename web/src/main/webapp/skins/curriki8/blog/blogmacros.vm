@@ -1,0 +1,58 @@
+##
+##
+##
+## Blogs
+##
+##
+#macro(displayBlogArticle $bentrydoc $bentryobj $displayFully)
+#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("dateFormat")))
+#set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,"hh:mm a"))
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "")
+#set($title = "&nbsp;")
+#end
+1 $title
+#set($extract = $!bentrydoc.display("extract","view", $bentryobj))
+<div class="article_content" >
+#set($content = $bentrydoc.display("content", "view", $bentryobj))
+#if(!$displayFully)
+ #if($!extract != "")
+  #set($content = $extract)
+ #else
+  #if($content.length()>400)
+   #set($i = $content.lastIndexOf(" ",400))
+   #set($i = $i + 1)
+   #set($content = "${content.substring(0,$i)}")
+  #end
+ #end
+#end
+$bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
+<div class="clearfloats"></div>
+
+<a href="$bentrydoc.getURL("view", "bc=$!request.bc")" class="curriki-link">$msg.get("caption.readmore")</a>#end
+</div>
+<div class="clearfloats"></div>
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
+$msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
+</div>
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
+#if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
+<a class="curriki-link" href="$bentrydoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a>
+## #sep()
+#else
+<a class="curriki-link" href="$bentrydoc.getURL("view")" >$msg.get("myBlog.permalink")</a>
+#end
+#sep() {pre}
+#if ($bentrydoc.hasAccessLevel("edit"))
+<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a>
+#set($deleteMsg = $msg.get('mycurriki.blog.actions.delete.confirm'))
+#set($blogUrl = $xwiki.getURL("MyCurriki.Blog"))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${bentrydoc.fullName}&sourceDoc=${blogUrl}"))
+#sep() <a class="curriki-link" onclick="this.href='$deleteUrl'; return confirm('$deleteMsg');" href="javascript:void()">$msg.get("caption.delete")</a>
+#end
+{/pre}
+</div>
+#end
+##
+##
+##
