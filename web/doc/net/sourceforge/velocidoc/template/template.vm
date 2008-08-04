@@ -22,7 +22,7 @@ a;lsdkf
 <b>Template :</b> ${templateDoc.name}<br>
 <b>Author : </b> $!{templateComment.getTag("@author").value}
 <hr>
-<b>Comments - </b>
+<b>Comments</b>
 #foreach ($com in $templateDoc.comments)
     <i>${com.content}<br></i>
     <b>Parameters</b><br>
@@ -43,12 +43,12 @@ Declaration : <b>macro ( ${macroDoc.name} #foreach ($argument in $macroDoc.argum
 ${comment.content}
 </i><br>
 #end
-<b>Parameter Notes - </b><br>
+<b>Parameters</b><br>
 #foreach ($param in $comment.params)
 &nbsp;&nbsp;&nbsp;&nbsp;<i>${param.name}</i> - ${param.description}<br>
 #end
 <br>
-<b>Macro code - </b><br>
+<b>Macro code</b><br>
 <pre>
 ${macroDoc.body.replaceAll("&", "&amp;").replaceAll(">","&gt;").replaceAll("<","&lt;")}
 </pre>
