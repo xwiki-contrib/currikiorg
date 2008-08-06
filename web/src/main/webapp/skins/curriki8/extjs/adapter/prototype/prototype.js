@@ -202,16 +202,11 @@ Object.extend(Function.prototype, {
     return names.length == 1 && !names[0] ? [] : names;
   },
 
-  /* DJW 2008-04-11
-   *   - Added changes from http://dev.rubyonrails.org/ticket/5393
-   *     to remove the "$A is not defined" error message
-   */
   bind: function() {
     if (arguments.length < 2 && Object.isUndefined(arguments[0])) return this;
-    var __method = this, args = window.$A(arguments), object = args.shift();
+    var __method = this, args = $A(arguments), object = args.shift();
     return function() {
-        if (typeof window.$A === 'function')
-          return __method.apply(object, args.concat(window.$A(arguments)));
+      return __method.apply(object, args.concat($A(arguments)));
     }
   },
 
