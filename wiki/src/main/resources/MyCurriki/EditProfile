@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>MyCurriki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>MyCurriki.Profile</parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1202337402000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>16.1</version>
+<date>1218297405000</date>
+<contentUpdateDate>1218297405000</contentUpdateDate>
+<version>5.1</version>
 <title>Edit Profile</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Documented code</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,167 +54,396 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("MyCurriki.MyCurrikiMacros")
-## content macro
-#macro(mycurrikipage_content $userdoc $userobj)
-#if($context.user == $userdoc.fullName)
-#set($userarg = "")
-#else ## user == owner
-#set($userarg = "user=${userdoc.fullName}")
-#if(!$xwiki.hasAdminRights())
-$response.sendRedirect($xwiki.getURL('MyCurriki.Profile', "$userarg"))
-#end ## not admin
-#end ## user == owner
-#set($xredirect = $xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
-#set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
-#set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
-## #set($xeditredirect = $xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}"))
-#set($xeditredirect = $xwiki.requestURL)
-#mycurrikititlebar($msg.get("mycurriki.editprofile.titlebar") "" "" "blue")
-&lt;form id="inline" action="$userdoc.getURL("preview")" method="post"&gt;
-&lt;input id="origemail" name="origemail" type="hidden" value="${userobj.getProperty('email').getValue()}" /&gt;
-{pre}&lt;input id="origpw" name="origpw" type="hidden" value="********" /&gt;{/pre}
-&lt;br /&gt;
-&lt;table border="0" cellspacing="0" cellpadding="3"&gt;
- &lt;tr&gt;
-  &lt;td valign="top"&gt;
-   &lt;div class="userpic"&gt;
-   #set($width = 88)
-#if($userdoc.attachmentList.size()==0) 
-   &lt;img src="$xwiki.getSkinFile("noavatar.png")" width="${width}"/&gt;
-#else
-   #foreach ($attach in $userdoc.attachmentList)
-     &lt;a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")" &gt;
-     &lt;img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="${width}" /&gt;&lt;/a&gt;
-     &lt;br/&gt;&lt;br/&gt;&lt;a class="curriki-link" id="profile-removephoto" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${xeditredirect}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');" title="$msg.get("profile.removeYourPhoto")"&gt;$msg.get("profile.removePhoto")&lt;/a&gt;
-     &lt;br/&gt;&lt;br/&gt;
-   #end
-#end
-   &lt;/div&gt;
-  &lt;/td&gt;
-  &lt;td width="100%"&gt;
-   &lt;table border="0" cellspacing="2" cellpadding="2"&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *${msg.get("profile.field.firstName")}* 
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("first_name", "edit", $userobj) &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.lastName")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("last_name", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.memberType")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("member_type", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.affiliation")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("affiliation", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.city")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("city", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.state")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("state", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.country")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("country", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.showContact")*
-     $userdoc.display("show_contact", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.email")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("email", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.opt_out")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("opt_out", "edit", $userobj) $msg.get("profile.field.opt_out.checkbox_text")&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.password")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("password", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.passwordConfirm")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     {pre}&lt;input size='30' id='XWiki.XWikiUsers_0_password_repeat' value='$userdoc.display("password", "view", $userobj)' name='XWiki.XWikiUsers_0_password_repeat' type='password'/&gt;{/pre}&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.topics")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("topics", "edit", $userobj)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.bio")*
-     &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
-     $userdoc.display("comment", "edit", $userobj) &lt;/td&gt;
-    &lt;/tr&gt;
-   &lt;/table&gt;
-  &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-&lt;/form&gt;
-&lt;div class="button-right"&gt;
-&lt;input class="button button-grey" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/&gt;
-&lt;input class="button button-orange" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/&gt;
+<content>#**
+  * MyCurriki Edit Profile Page
+  *
+  *#
+#**
+  * MyCurriki Edit Profile Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj)
+  #mycurriki_editprofilebox($userdoc $userobj)
+#end ## content macro
+##
+## Actual Display of page
+#mycurriki_page("profile")</content>
+<renderedcontent>&lt;p/&gt;
+            &lt;div id="mycurriki-profile" class="mycurriki mycurriki-profile"&gt;
+ &lt;div id="mycurriki-header" class="mycurriki-header"&gt;
+&lt;div id="mycurriki-header-title" class="heading-1"&gt;Administrator &lt;/div&gt;
 &lt;/div&gt;
-{pre}
+   &lt;div id="mycurriki-tabs" class="tabs"&gt;
+                 &lt;a class="tab tab-selected" href="/xwiki/bin/view/MyCurriki/Profile"&gt;Profile&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Favorites"&gt;Favorites&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Contributions"&gt;Contributions&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Collections"&gt;Collections&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Blog"&gt;Blog&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Groups"&gt;Groups&lt;/a&gt;
+     &lt;/div&gt;
+&lt;div id="mycurriki-main" class="tab-container"&gt;
+&lt;div id="mycurriki-main-header"&gt;
+   &lt;div id="mycurriki-main-header-left"&gt;
+  &lt;/div&gt;
+&lt;div class="clearfloats"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mycurriki-main-content" class="frame"&gt;
+     &lt;!-- Profile Box --&gt;&lt;p/&gt;
+        &lt;div  class="titleheader titleheader-blue"&gt;&lt;h3 &gt;Edit Member Information&lt;/h3&gt;&lt;/div&gt;
+  &lt;form id="inline" action="/xwiki/bin/preview/XWiki/Admin" method="post"&gt;
+    &lt;input id="origemail" name="origemail" type="hidden" value="webmaster@xwiki.com" /&gt;
+    
+    &lt;input id="origpw" name="origpw" type="hidden" value="********" /&gt;
+    &lt;br /&gt;
+    &lt;table border="0" cellspacing="0" cellpadding="3"&gt;
+      &lt;tr&gt;
+        &lt;td valign="top"&gt;
+             &lt;!-- Edit Profile Photo --&gt;
+  &lt;div class="userpic"&gt;
+         &lt;img src="/xwiki/skins/albatross/noavatar.png" width="88"/&gt;
+     &lt;/div&gt;
+  &lt;!-- End Edit Profile Photo --&gt;
+        &lt;/td&gt;
+        &lt;td width="100%"&gt;
+            &lt;!-- Edit Profile Form --&gt;
+ &lt;table border="0" cellspacing="2" cellpadding="2"&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Display Name 1:&lt;/strong&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_first_name' value='Administrator' name='XWiki.XWikiUsers_0_first_name' type='text'/&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Display Name 2:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_last_name' value='' name='XWiki.XWikiUsers_0_last_name' type='text'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Member Type:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;select id='XWiki.XWikiUsers_0_member_type' name='XWiki.XWikiUsers_0_member_type' size='1'&gt;&lt;option value='0' label='---'&gt;---&lt;/option&gt;&lt;option value='student' label='Student'&gt;Student&lt;/option&gt;&lt;option value='teacher' label='Teacher'&gt;Teacher&lt;/option&gt;&lt;option value='professional' label='Professional'&gt;Professional&lt;/option&gt;&lt;option value='parent' label='Parent'&gt;Parent&lt;/option&gt;&lt;/select&gt;&lt;input name='XWiki.XWikiUsers_0_member_type' type='hidden' value=''/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Organization Affiliation:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_affiliation' name='XWiki.XWikiUsers_0_affiliation' type='text'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;City:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_city' value='' name='XWiki.XWikiUsers_0_city' type='text'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;State/Province:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_state' name='XWiki.XWikiUsers_0_state' type='text'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Country:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;select id='XWiki.XWikiUsers_0_country' name='XWiki.XWikiUsers_0_country' size='1'&gt;&lt;option value='---' label='---'&gt;---&lt;/option&gt;&lt;option value='AD' label='Andorra'&gt;Andorra&lt;/option&gt;&lt;option value='AE' label='United Arab Emirates'&gt;United Arab Emirates&lt;/option&gt;&lt;option value='AF' label='Afghanistan'&gt;Afghanistan&lt;/option&gt;&lt;option value='AG' label='Antigua and Barbuda'&gt;Antigua and Barbuda&lt;/option&gt;&lt;option value='AI' label='Anguilla'&gt;Anguilla&lt;/option&gt;&lt;option value='AL' label='Albania'&gt;Albania&lt;/option&gt;&lt;option value='AM' label='Armenia'&gt;Armenia&lt;/option&gt;&lt;option value='AN' label='Netherlands Antilles'&gt;Netherlands Antilles&lt;/option&gt;&lt;option value='AO' label='Angola'&gt;Angola&lt;/option&gt;&lt;option value='AQ' label='Antarctica'&gt;Antarctica&lt;/option&gt;&lt;option value='AR' label='Argentina'&gt;Argentina&lt;/option&gt;&lt;option value='AS' label='American Samoa'&gt;American Samoa&lt;/option&gt;&lt;option value='AT' label='Austria'&gt;Austria&lt;/option&gt;&lt;option value='AU' label='Australia'&gt;Australia&lt;/option&gt;&lt;option value='AW' label='Aruba'&gt;Aruba&lt;/option&gt;&lt;option value='AX' label='?land Islands'&gt;?land Islands&lt;/option&gt;&lt;option value='AZ' label='Azerbaijan'&gt;Azerbaijan&lt;/option&gt;&lt;option value='BA' label='Bosnia and Herzegovina'&gt;Bosnia and Herzegovina&lt;/option&gt;&lt;option value='BB' label='Barbados'&gt;Barbados&lt;/option&gt;&lt;option value='BD' label='Bangladesh'&gt;Bangladesh&lt;/option&gt;&lt;option value='BE' label='Belgium'&gt;Belgium&lt;/option&gt;&lt;option value='BF' label='Burkina Faso'&gt;Burkina Faso&lt;/option&gt;&lt;option value='BG' label='Bulgaria'&gt;Bulgaria&lt;/option&gt;&lt;option value='BH' label='Bahrain'&gt;Bahrain&lt;/option&gt;&lt;option value='BI' label='Burundi'&gt;Burundi&lt;/option&gt;&lt;option value='BJ' label='Benin'&gt;Benin&lt;/option&gt;&lt;option value='BM' label='Bermuda'&gt;Bermuda&lt;/option&gt;&lt;option value='BN' label='Brunei Darussalam'&gt;Brunei Darussalam&lt;/option&gt;&lt;option value='BO' label='Bolivia'&gt;Bolivia&lt;/option&gt;&lt;option value='BR' label='Brazil'&gt;Brazil&lt;/option&gt;&lt;option value='BS' label='Bahamas'&gt;Bahamas&lt;/option&gt;&lt;option value='BT' label='Bhutan'&gt;Bhutan&lt;/option&gt;&lt;option value='BV' label='Bouvet Island'&gt;Bouvet Island&lt;/option&gt;&lt;option value='BW' label='Botswana'&gt;Botswana&lt;/option&gt;&lt;option value='BY' label='Belarus'&gt;Belarus&lt;/option&gt;&lt;option value='BZ' label='Belize'&gt;Belize&lt;/option&gt;&lt;option value='CA' label='Canada'&gt;Canada&lt;/option&gt;&lt;option value='CC' label='Cocos (Keeling) Islands'&gt;Cocos (Keeling) Islands&lt;/option&gt;&lt;option value='CD' label='Congo, the Democratic Republic of the'&gt;Congo, the Democratic Republic of the&lt;/option&gt;&lt;option value='CF' label='Central African Republic'&gt;Central African Republic&lt;/option&gt;&lt;option value='CG' label='Congo'&gt;Congo&lt;/option&gt;&lt;option value='CH' label='Switzerland'&gt;Switzerland&lt;/option&gt;&lt;option value='CI' label="Côte d'Ivoire"&gt;Côte d'Ivoire&lt;/option&gt;&lt;option value='CK' label='Cook Islands'&gt;Cook Islands&lt;/option&gt;&lt;option value='CL' label='Chile'&gt;Chile&lt;/option&gt;&lt;option value='CM' label='Cameroon'&gt;Cameroon&lt;/option&gt;&lt;option value='CN' label='China'&gt;China&lt;/option&gt;&lt;option value='CO' label='Colombia'&gt;Colombia&lt;/option&gt;&lt;option value='CR' label='Costa Rica'&gt;Costa Rica&lt;/option&gt;&lt;option value='CU' label='Cuba'&gt;Cuba&lt;/option&gt;&lt;option value='CV' label='Cape Verde'&gt;Cape Verde&lt;/option&gt;&lt;option value='CX' label='Christmas Island'&gt;Christmas Island&lt;/option&gt;&lt;option value='CY' label='Cyprus'&gt;Cyprus&lt;/option&gt;&lt;option value='CZ' label='Czech Republic'&gt;Czech Republic&lt;/option&gt;&lt;option value='DE' label='Germany'&gt;Germany&lt;/option&gt;&lt;option value='DJ' label='Djibouti'&gt;Djibouti&lt;/option&gt;&lt;option value='DK' label='Denmark'&gt;Denmark&lt;/option&gt;&lt;option value='DM' label='Dominica'&gt;Dominica&lt;/option&gt;&lt;option value='DO' label='Dominican Republic'&gt;Dominican Republic&lt;/option&gt;&lt;option value='DZ' label='Algeria'&gt;Algeria&lt;/option&gt;&lt;option value='EC' label='Ecuador'&gt;Ecuador&lt;/option&gt;&lt;option value='EE' label='Estonia'&gt;Estonia&lt;/option&gt;&lt;option value='EG' label='Egypt'&gt;Egypt&lt;/option&gt;&lt;option value='EH' label='Western Sahara'&gt;Western Sahara&lt;/option&gt;&lt;option value='ER' label='Eritrea'&gt;Eritrea&lt;/option&gt;&lt;option value='ES' label='Spain'&gt;Spain&lt;/option&gt;&lt;option value='ET' label='Ethiopia'&gt;Ethiopia&lt;/option&gt;&lt;option value='FI' label='Finland'&gt;Finland&lt;/option&gt;&lt;option value='FJ' label='Fiji'&gt;Fiji&lt;/option&gt;&lt;option value='FK' label='Falkland Islands (Malvinas)'&gt;Falkland Islands (Malvinas)&lt;/option&gt;&lt;option value='FM' label='Faroe Islands'&gt;Faroe Islands&lt;/option&gt;&lt;option value='FO' label='FO'&gt;FO&lt;/option&gt;&lt;option value='FR' label='France'&gt;France&lt;/option&gt;&lt;option value='GA' label='Gabon'&gt;Gabon&lt;/option&gt;&lt;option value='GB' label='United Kingdom'&gt;United Kingdom&lt;/option&gt;&lt;option value='GD' label='Grenada'&gt;Grenada&lt;/option&gt;&lt;option value='GE' label='Georgia'&gt;Georgia&lt;/option&gt;&lt;option value='GF' label='French Guiana'&gt;French Guiana&lt;/option&gt;&lt;option value='GG' label='Guernsey'&gt;Guernsey&lt;/option&gt;&lt;option value='GH' label='Ghana'&gt;Ghana&lt;/option&gt;&lt;option value='GI' label='Gibraltar'&gt;Gibraltar&lt;/option&gt;&lt;option value='GL' label='Greenland'&gt;Greenland&lt;/option&gt;&lt;option value='GM' label='Guinea'&gt;Guinea&lt;/option&gt;&lt;option value='GN' label='GN'&gt;GN&lt;/option&gt;&lt;option value='GP' label='GP'&gt;GP&lt;/option&gt;&lt;option value='GQ' label='Equatorial Guinea'&gt;Equatorial Guinea&lt;/option&gt;&lt;option value='GR' label='Greece'&gt;Greece&lt;/option&gt;&lt;option value='GS' label='South Georgia and the South Sandwich Islands'&gt;South Georgia and the South Sandwich Islands&lt;/option&gt;&lt;option value='GT' label='Guatemala'&gt;Guatemala&lt;/option&gt;&lt;option value='GU' label='Guam'&gt;Guam&lt;/option&gt;&lt;option value='GW' label='Guinea-Bissau'&gt;Guinea-Bissau&lt;/option&gt;&lt;option value='GY' label='Guyana'&gt;Guyana&lt;/option&gt;&lt;option value='HK' label='Hong Kong'&gt;Hong Kong&lt;/option&gt;&lt;option value='HM' label='Heard Island and McDonald Islands'&gt;Heard Island and McDonald Islands&lt;/option&gt;&lt;option value='HN' label='Honduras'&gt;Honduras&lt;/option&gt;&lt;option value='HR' label='Croatia'&gt;Croatia&lt;/option&gt;&lt;option value='HT' label='Haiti'&gt;Haiti&lt;/option&gt;&lt;option value='HU' label='Hungary'&gt;Hungary&lt;/option&gt;&lt;option value='ID' label='Indonesia'&gt;Indonesia&lt;/option&gt;&lt;option value='IE' label='Ireland'&gt;Ireland&lt;/option&gt;&lt;option value='IL' label='Israel'&gt;Israel&lt;/option&gt;&lt;option value='IM' label='Isle of Man'&gt;Isle of Man&lt;/option&gt;&lt;option value='IN' label='India'&gt;India&lt;/option&gt;&lt;option value='IO' label='British Indian Ocean Territory'&gt;British Indian Ocean Territory&lt;/option&gt;&lt;option value='IQ' label='Iraq'&gt;Iraq&lt;/option&gt;&lt;option value='IR' label='Iran, Islamic Republic of'&gt;Iran, Islamic Republic of&lt;/option&gt;&lt;option value='IS' label='Iceland'&gt;Iceland&lt;/option&gt;&lt;option value='IT' label='Italy'&gt;Italy&lt;/option&gt;&lt;option value='JE' label='Jersey'&gt;Jersey&lt;/option&gt;&lt;option value='JM' label='Jamaica'&gt;Jamaica&lt;/option&gt;&lt;option value='JO' label='Jordan'&gt;Jordan&lt;/option&gt;&lt;option value='JP' label='Japan'&gt;Japan&lt;/option&gt;&lt;option value='KE' label='Kenya'&gt;Kenya&lt;/option&gt;&lt;option value='KG' label='Kyrgyzstan'&gt;Kyrgyzstan&lt;/option&gt;&lt;option value='KH' label='Cambodia'&gt;Cambodia&lt;/option&gt;&lt;option value='KI' label='Kiribati'&gt;Kiribati&lt;/option&gt;&lt;option value='KM' label='Comoros'&gt;Comoros&lt;/option&gt;&lt;option value='KN' label='Saint Kitts and Nevis'&gt;Saint Kitts and Nevis&lt;/option&gt;&lt;option value='KP' label="Korea, Democratic People's Republic of"&gt;Korea, Democratic People's Republic of&lt;/option&gt;&lt;option value='KR' label='Korea, Republic of'&gt;Korea, Republic of&lt;/option&gt;&lt;option value='KW' label='Kuwait'&gt;Kuwait&lt;/option&gt;&lt;option value='KY' label='Cayman Islands'&gt;Cayman Islands&lt;/option&gt;&lt;option value='KZ' label='Kazakhstan'&gt;Kazakhstan&lt;/option&gt;&lt;option value='LA' label="Lao People's Democratic Republic"&gt;Lao People's Democratic Republic&lt;/option&gt;&lt;option value='LB' label='Lebanon'&gt;Lebanon&lt;/option&gt;&lt;option value='LC' label='Saint Lucia'&gt;Saint Lucia&lt;/option&gt;&lt;option value='LI' label='Liechtenstein'&gt;Liechtenstein&lt;/option&gt;&lt;option value='LK' label='Sri Lanka'&gt;Sri Lanka&lt;/option&gt;&lt;option value='LR' label='Liberia'&gt;Liberia&lt;/option&gt;&lt;option value='LS' label='Lesotho'&gt;Lesotho&lt;/option&gt;&lt;option value='LT' label='Lithuania'&gt;Lithuania&lt;/option&gt;&lt;option value='LU' label='Luxembourg'&gt;Luxembourg&lt;/option&gt;&lt;option value='LV' label='Latvia'&gt;Latvia&lt;/option&gt;&lt;option value='LY' label='Libyan Arab Jamahiriya'&gt;Libyan Arab Jamahiriya&lt;/option&gt;&lt;option value='MA' label='Morocco'&gt;Morocco&lt;/option&gt;&lt;option value='MC' label='Monaco'&gt;Monaco&lt;/option&gt;&lt;option value='MD' label='Moldova, Republic of'&gt;Moldova, Republic of&lt;/option&gt;&lt;option value='ME' label='Montenegro'&gt;Montenegro&lt;/option&gt;&lt;option value='MG' label='Madagascar'&gt;Madagascar&lt;/option&gt;&lt;option value='MH' label='Marshall Islands'&gt;Marshall Islands&lt;/option&gt;&lt;option value='MK' label='Macedonia, the former Yugoslav Republic of'&gt;Macedonia, the former Yugoslav Republic of&lt;/option&gt;&lt;option value='ML' label='Mali'&gt;Mali&lt;/option&gt;&lt;option value='MM' label='Myanmar'&gt;Myanmar&lt;/option&gt;&lt;option value='MN' label='Mongolia'&gt;Mongolia&lt;/option&gt;&lt;option value='MO' label='Macao'&gt;Macao&lt;/option&gt;&lt;option value='MP' label='Northern Mariana Islands'&gt;Northern Mariana Islands&lt;/option&gt;&lt;option value='MQ' label='Martinique'&gt;Martinique&lt;/option&gt;&lt;option value='MR' label='Mauritania'&gt;Mauritania&lt;/option&gt;&lt;option value='MS' label='Montserrat'&gt;Montserrat&lt;/option&gt;&lt;option value='MT' label='Malta'&gt;Malta&lt;/option&gt;&lt;option value='MU' label='Mauritius'&gt;Mauritius&lt;/option&gt;&lt;option value='MV' label='Maldives'&gt;Maldives&lt;/option&gt;&lt;option value='MW' label='Malawi'&gt;Malawi&lt;/option&gt;&lt;option value='MX' label='Mexico'&gt;Mexico&lt;/option&gt;&lt;option value='MY' label='Malaysia'&gt;Malaysia&lt;/option&gt;&lt;option value='MZ' label='Mozambique'&gt;Mozambique&lt;/option&gt;&lt;option value='NA' label='Namibia'&gt;Namibia&lt;/option&gt;&lt;option value='NC' label='New Caledonia'&gt;New Caledonia&lt;/option&gt;&lt;option value='NE' label='Niger'&gt;Niger&lt;/option&gt;&lt;option value='NF' label='Norfolk Island'&gt;Norfolk Island&lt;/option&gt;&lt;option value='NG' label='Nigeria'&gt;Nigeria&lt;/option&gt;&lt;option value='NI' label='Nicaragua'&gt;Nicaragua&lt;/option&gt;&lt;option value='NL' label='Netherlands'&gt;Netherlands&lt;/option&gt;&lt;option value='NO' label='Norway'&gt;Norway&lt;/option&gt;&lt;option value='NP' label='Nepal'&gt;Nepal&lt;/option&gt;&lt;option value='NR' label='Nauru'&gt;Nauru&lt;/option&gt;&lt;option value='NU' label='Niue'&gt;Niue&lt;/option&gt;&lt;option value='NZ' label='New Zealand'&gt;New Zealand&lt;/option&gt;&lt;option value='OM' label='Oman'&gt;Oman&lt;/option&gt;&lt;option value='PA' label='Panama'&gt;Panama&lt;/option&gt;&lt;option value='PE' label='Peru'&gt;Peru&lt;/option&gt;&lt;option value='PF' label='French Polynesia'&gt;French Polynesia&lt;/option&gt;&lt;option value='PG' label='Papua New Guinea'&gt;Papua New Guinea&lt;/option&gt;&lt;option value='PH' label='Philippines'&gt;Philippines&lt;/option&gt;&lt;option value='PK' label='Pakistan'&gt;Pakistan&lt;/option&gt;&lt;option value='PL' label='Poland'&gt;Poland&lt;/option&gt;&lt;option value='PM' label='Saint Pierre and Miquelon'&gt;Saint Pierre and Miquelon&lt;/option&gt;&lt;option value='PN' label='Pitcairn'&gt;Pitcairn&lt;/option&gt;&lt;option value='PR' label='Puerto Rico'&gt;Puerto Rico&lt;/option&gt;&lt;option value='PS' label='Palestinian Territory, Occupied'&gt;Palestinian Territory, Occupied&lt;/option&gt;&lt;option value='PT' label='Portugal'&gt;Portugal&lt;/option&gt;&lt;option value='PW' label='Palau'&gt;Palau&lt;/option&gt;&lt;option value='PY' label='Paraguay'&gt;Paraguay&lt;/option&gt;&lt;option value='QA' label='Qatar'&gt;Qatar&lt;/option&gt;&lt;option value='RE' label='Réunion'&gt;Réunion&lt;/option&gt;&lt;option value='RO' label='Romania'&gt;Romania&lt;/option&gt;&lt;option value='RS' label='Serbia'&gt;Serbia&lt;/option&gt;&lt;option value='RU' label='Russian Federation'&gt;Russian Federation&lt;/option&gt;&lt;option value='RW' label='Rwanda'&gt;Rwanda&lt;/option&gt;&lt;option value='SA' label='Saudi Arabia'&gt;Saudi Arabia&lt;/option&gt;&lt;option value='SB' label='Solomon Islands'&gt;Solomon Islands&lt;/option&gt;&lt;option value='SC' label='Seychelles'&gt;Seychelles&lt;/option&gt;&lt;option value='SD' label='Sudan'&gt;Sudan&lt;/option&gt;&lt;option value='SE' label='Sweden'&gt;Sweden&lt;/option&gt;&lt;option value='SG' label='Singapore'&gt;Singapore&lt;/option&gt;&lt;option value='SH' label='Saint Helena'&gt;Saint Helena&lt;/option&gt;&lt;option value='SI' label='Slovenia'&gt;Slovenia&lt;/option&gt;&lt;option value='SJ' label='Svalbard and Jan Mayen'&gt;Svalbard and Jan Mayen&lt;/option&gt;&lt;option value='SK' label='Slovakia'&gt;Slovakia&lt;/option&gt;&lt;option value='SL' label='Sierra Leone'&gt;Sierra Leone&lt;/option&gt;&lt;option value='SM' label='San Marino'&gt;San Marino&lt;/option&gt;&lt;option value='SN' label='Senegal'&gt;Senegal&lt;/option&gt;&lt;option value='SO' label='Somalia'&gt;Somalia&lt;/option&gt;&lt;option value='SR' label='Suriname'&gt;Suriname&lt;/option&gt;&lt;option value='ST' label='Sao Tome and Principe'&gt;Sao Tome and Principe&lt;/option&gt;&lt;option value='SV' label='El Salvador'&gt;El Salvador&lt;/option&gt;&lt;option value='SY' label='Syrian Arab Republic'&gt;Syrian Arab Republic&lt;/option&gt;&lt;option value='SZ' label='Swaziland'&gt;Swaziland&lt;/option&gt;&lt;option value='TC' label='Turks and Caicos Islands'&gt;Turks and Caicos Islands&lt;/option&gt;&lt;option value='TD' label='Chad'&gt;Chad&lt;/option&gt;&lt;option value='TF' label='French Southern Territories'&gt;French Southern Territories&lt;/option&gt;&lt;option value='TG' label='Togo'&gt;Togo&lt;/option&gt;&lt;option value='TH' label='Thailand'&gt;Thailand&lt;/option&gt;&lt;option value='TJ' label='Tajikistan'&gt;Tajikistan&lt;/option&gt;&lt;option value='TK' label='Tokelau'&gt;Tokelau&lt;/option&gt;&lt;option value='TL' label='Timor-Leste'&gt;Timor-Leste&lt;/option&gt;&lt;option value='TM' label='Turkmenistan'&gt;Turkmenistan&lt;/option&gt;&lt;option value='TN' label='Tunisia'&gt;Tunisia&lt;/option&gt;&lt;option value='TO' label='Tonga'&gt;Tonga&lt;/option&gt;&lt;option value='TR' label='Turkey'&gt;Turkey&lt;/option&gt;&lt;option value='TT' label='Trinidad and Tobago'&gt;Trinidad and Tobago&lt;/option&gt;&lt;option value='TV' label='Tuvalu'&gt;Tuvalu&lt;/option&gt;&lt;option value='TW' label='Taiwan, Province of China'&gt;Taiwan, Province of China&lt;/option&gt;&lt;option value='TZ' label='Tanzania, United Republic of'&gt;Tanzania, United Republic of&lt;/option&gt;&lt;option value='UA' label='Ukraine'&gt;Ukraine&lt;/option&gt;&lt;option value='UG' label='Uganda'&gt;Uganda&lt;/option&gt;&lt;option value='UM' label='United States Minor Outlying Islands'&gt;United States Minor Outlying Islands&lt;/option&gt;&lt;option value='US' label='United States'&gt;United States&lt;/option&gt;&lt;option value='UY' label='Uruguay'&gt;Uruguay&lt;/option&gt;&lt;option value='UZ' label='Uzbekistan'&gt;Uzbekistan&lt;/option&gt;&lt;option value='VA' label='Holy See (Vatican City State)'&gt;Holy See (Vatican City State)&lt;/option&gt;&lt;option value='VC' label='Saint Vincent and the Grenadines'&gt;Saint Vincent and the Grenadines&lt;/option&gt;&lt;option value='VE' label='Venezuela'&gt;Venezuela&lt;/option&gt;&lt;option value='VG' label='Virgin Islands, British'&gt;Virgin Islands, British&lt;/option&gt;&lt;option value='VI' label='Virgin Islands, U.S.'&gt;Virgin Islands, U.S.&lt;/option&gt;&lt;option value='VN' label='Viet Nam'&gt;Viet Nam&lt;/option&gt;&lt;option value='VU' label='Vanuatu'&gt;Vanuatu&lt;/option&gt;&lt;option value='WF' label='Wallis and Futuna'&gt;Wallis and Futuna&lt;/option&gt;&lt;option value='WS' label='Samoa'&gt;Samoa&lt;/option&gt;&lt;option value='YE' label='Yemen'&gt;Yemen&lt;/option&gt;&lt;option value='YT' label='Mayotte'&gt;Mayotte&lt;/option&gt;&lt;option value='ZA' label='South Africa'&gt;South Africa&lt;/option&gt;&lt;option value='ZM' label='Zambia'&gt;Zambia&lt;/option&gt;&lt;option value='ZW' label='Zimbabwe'&gt;Zimbabwe&lt;/option&gt;&lt;option selected='selected' value='' label=''&gt;&lt;/option&gt;&lt;/select&gt;&lt;input name='XWiki.XWikiUsers_0_country' type='hidden' value=''/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Allow Curriki members to view my profile:&lt;/strong&gt; &lt;span class="xwiki-form-listclass" id="xwiki-form-show_contact"&gt;&lt;input name='XWiki.XWikiUsers_0_show_contact' type='radio' value='1'/&gt;Yes&lt;/span&gt;&lt;span class="xwiki-form-listclass" id="xwiki-form-show_contact"&gt;&lt;input name='XWiki.XWikiUsers_0_show_contact' type='radio' value='0'/&gt;No&lt;/span&gt;&lt;input name='XWiki.XWikiUsers_0_show_contact' type='hidden' value=''/&gt;&lt;input name='XWiki.XWikiUsers_0_show_contact' type='hidden' value=''/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Email:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_email' value='webmaster@xwiki.com' name='XWiki.XWikiUsers_0_email' type='text'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Opt-out receiving email:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input name='XWiki.XWikiUsers_0_opt_out' type='checkbox' value='1'/&gt;&lt;input name='XWiki.XWikiUsers_0_opt_out' type='hidden' value='0'/&gt; I do not want to receive email about participating in the Curriki community.&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Password:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' value='********' name='XWiki.XWikiUsers_0_password' type='password'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Confirm Password:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input size='30' id='XWiki.XWikiUsers_0_password_repeat' value='********' name='XWiki.XWikiUsers_0_password_repeat' type='password'/&gt;&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Topics of Interest:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;input id='XWiki.XWikiUsers_0_topics' name='XWiki.XWikiUsers_0_topics' type='hidden'/&gt;&lt;style type="text/css"&gt;
+@import "/xwiki/yui/treeview/assets/tree.css";
+&lt;/style&gt;
+&lt;script type='text/javascript' src='/xwiki/yui/yahoo/yahoo-min.js' &gt;&lt;/script&gt;
+&lt;script type='text/javascript' src='/xwiki/yui/treeview/treeview-min.js' &gt;&lt;/script&gt;
+&lt;script type='text/javascript' src='/xwiki/yui/treeview/checknode.js'&gt;&lt;/script&gt;
+&lt;div id="treeview4"&gt;&lt;/div&gt;
 &lt;script type="text/javascript"&gt;
-function checkInlineForm() {
+	var tree4;
+	var nodes4 = {};
+	var nodeIndex4;
+	
+    function addTreeElement(tree, nodes, id, text, parent, checked) {
+	    var parent2;
+	    if (parent=="")
+	     parent2 = tree.getRoot();
+	    else
+	     parent2 = nodes[parent];
+	    nodes[id] = new YAHOO.widget.CheckNode(id, text,  parent2, checked, checked);
+        nodes[id].onCheckClick = onCheckClick;
+    }
+
+    function addTreeElementViewMode(tree, nodes, id, text, parent) {
+	    var parent2;
+	    if (parent=="")
+	     parent2 = tree.getRoot();
+	    else
+	     parent2 = nodes[parent];
+	    nodes[id] = new YAHOO.widget.TextNode(text, parent2, true);
+    }
+
+    function showTreeState() {
+        var out = [];
+        for (var i in tree4._nodes) {
+            var n = tree4._nodes[i];
+            if (n &amp;&amp; "undefined" != typeof n.checkState) {
+                if (n.checkState&gt;0) {
+                  out.push(n.data);
+                }
+            }
+        }
+        alert(out.join("|"));
+    }
+
+	function treeInit4() {
+		tree4 = new YAHOO.widget.TreeView("treeview4");
+	    var tree = tree4;
+        var nodes = nodes4;
+                                         addTreeElement(tree, nodes, "FW_masterFramework.WebHome", "Subject Index ", "",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Arts", "Arts", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Architecture", "Architecture", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers", "Careers", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Dance", "Dance", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.DramaDramatics", "Drama/Dramatics", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Film", "Film", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.History", "History", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Music", "Music", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Photography", "Photography", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.PopularCulture", "Popular Culture", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Technology", "Technology", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.VisualArts", "Visual Arts", "FW_masterFramework.Arts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.VocationalEducation", "Career &amp; Technical Education", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Agriculture_0", "Agriculture", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Business", "Business", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_6", "Careers", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Education&amp;Teaching", "Education &amp; Teaching", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.OccupationalHomeEconomics", "Occupational Home Economics", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.School-to-work", "School-to-work", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Technology_2", "Technology", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Trade&amp;Industrial", "Trade &amp; Industrial", "FW_masterFramework.VocationalEducation",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.EducationalTechnology", "Educational Technology", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_0", "Careers", "FW_masterFramework.EducationalTechnology",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.IntegratingTechnologyintotheClassroom", "Integrating Technology into the Classroom", "FW_masterFramework.EducationalTechnology",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.UsingMultimedia&amp;theInternet", "Using Multimedia &amp; the Internet", "FW_masterFramework.EducationalTechnology",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.ForeignLanguages", "Foreign Languages", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Alphabet", "Alphabet", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_7", "Careers", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.CulturalAwareness", "Cultural Awareness", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Grammar", "Grammar", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.InformalEducation", "Informal Education", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Linguistics", "Linguistics", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.ListeningComprehension", "Listening Comprehension", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Reading", "Reading", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Speaking", "Speaking", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Spelling", "Spelling", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.VocabularyWriting", "Vocabulary Writing", "FW_masterFramework.ForeignLanguages",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Health", "Health ", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.BodySystems&amp;Senses", "Body Systems &amp; Senses", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_1", "Careers", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.EnvironmentalHealth", "Environmental Health", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.HumanSexuality", "Human Sexuality", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.MentalEmotionalHealth", "Mental/Emotional Health", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Nutrition", "Nutrition", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.SafetySmokingSubstanceAbusePrevention", "Safety/Smoking/Substance Abuse Prevention", "FW_masterFramework.Health",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Information&amp;MediaLiteracy", "Information &amp; Media Literacy", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.EvaluatingSources", "Evaluating Sources", "FW_masterFramework.Information&amp;MediaLiteracy",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.MediaEthics", "Media Ethics", "FW_masterFramework.Information&amp;MediaLiteracy",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.OnlineSafety", "Online Safety", "FW_masterFramework.Information&amp;MediaLiteracy",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.ResearchMethods", "Research Methods", "FW_masterFramework.Information&amp;MediaLiteracy",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.LanguageArts", "Language Arts", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Alphabet_0", "Alphabet", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_2", "Careers", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Journalism", "Journalism", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Listening&amp;Speaking", "Listening &amp; Speaking", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Literature", "Literature", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Phonics", "Phonics", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.ReadingComprehension", "Reading Comprehension", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Research", "Research", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Spelling_0", "Spelling", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.StoryTelling", "Story Telling", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Vocabulary", "Vocabulary", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Writing", "Writing", "FW_masterFramework.LanguageArts",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Mathematics", "Mathematics", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Algebra", "Algebra", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Appliedmathematics", "Applied Mathematics", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Arithmetic", "Arithmetic", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Calculus", "Calculus", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_3", "Careers", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.DataAnalysis&amp;Probability", "Data Analysis &amp; Probability", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Equations", "Equations", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Estimation", "Estimation", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Geometry", "Geometry", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Graphing", "Graphing", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Measurement", "Measurement", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.NumberSense&amp;Operations", "Number Sense &amp; Operations", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Patterns", "Patterns", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.ProblemSolving", "Problem Solving", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Statistics", "Statistics", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Trigonometry", "Trigonometry", "FW_masterFramework.Mathematics",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Science", "Science", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Agriculture", "Agriculture", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Astronomy", "Astronomy", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Biology", "Biology", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Botany", "Botany", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_4", "Careers", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Chemistry", "Chemistry", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Earthscience", "Earth Science", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Ecology", "Ecology", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Engineering", "Engineering", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Generalscience", "General Science", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Geology", "Geology", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.HistoryofScience", "History of Science", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.LifeSciences", "Life Sciences", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Meteorology", "Meteorology", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.NaturalHistory", "Natural History", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Oceanography", "Oceanography", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Paleontology", "Paleontology", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.PhysicalSciences", "Physical Sciences", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Physics", "Physics", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.ProcessSkills", "Process Skills", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Technology_0", "Technology", "FW_masterFramework.Science",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.SocialStudies", "Social Studies", "FW_masterFramework.WebHome",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Anthropology", "Anthropology", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Careers_5", "Careers", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Civics", "Civics", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.CurrentEvents", "Current Events", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Economics", "Economics", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Entrepreneurship", "Entrepreneurship", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Geography", "Geography", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.GlobalAwareness", "Global Awareness", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Government", "Government", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.History Local", "History (Local)", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.PoliticalSystems", "Political Systems", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Psychology", "Psychology", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Research_0", "Research", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Sociology", "Sociology", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.StateHistory", "State History", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Technology_1", "Technology", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.Thinking&amp;ProblemSolving", "Thinking &amp; Problem Solving", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.UnitedStatesGovernment", "United States Government", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.UnitedStatesHistory", "United States History", "FW_masterFramework.SocialStudies",  false )
+                                                 addTreeElement(tree, nodes, "FW_masterFramework.WorldHistory", "World History", "FW_masterFramework.SocialStudies",  false )
+                   		tree.draw();
+        // tree.checkClickEvent.subscribe(onCheckClick);
+        tree.getRoot().children[0].check()
+        tree.getRoot().children[0].expand()
+	}
+
+	var callback = null;
+    function onCheckClick(eventType, args, tree) {
+        var out = [];
+
+        // Force checking again the main element
+        tree4.getRoot().children[0].check()
+        tree4.getRoot().children[0].expand()
+
+        for (var i in tree4._nodes) {
+            var n = tree4._nodes[i];
+            if (n &amp;&amp; "undefined" != typeof n.checkState) {
+                if (n.checkState&gt;0) {
+                  out.push(n.data);
+                }
+            }
+        }
+        document.getElementById("XWiki.XWikiUsers_0_topics").value=out.join("|");
+    }
+
+    // Init the tree
+    treeInit4();
+&lt;/script&gt;
+&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Bio:&lt;/strong&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt; &lt;textarea id='XWiki.XWikiUsers_0_comment' rows='5' name='XWiki.XWikiUsers_0_comment' cols='40'&gt;Admin is the default Wiki Admin.&lt;/textarea&gt; &lt;/td&gt;
+   &lt;/tr&gt;
+ &lt;/table&gt;
+ &lt;!-- End Edit Profile Form --&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/form&gt;
+     &lt;!-- Edit Profile Buttons --&gt;
+  &lt;div class="button-right"&gt;
+    &lt;input class="button button-grey" type="submit" name="formactioncancel" value="Cancel" onclick="document.forms.inline.action='/xwiki/bin/cancel/XWiki/Admin?xredirect=/xwiki/bin/view/MyCurriki/Profile'; document.forms.inline.submit(); return false;"/&gt;
+    &lt;input class="button button-orange" type="submit" name="formactionsave" value="Save" onclick="document.forms.inline.action='/xwiki/bin/save/XWiki/Admin?xredirect=/xwiki/bin/view/MyCurriki/Profile'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/&gt;
+  &lt;/div&gt;
+  &lt;!-- End Edit Profile Buttons --&gt;
+  
+  &lt;script type="text/javascript"&gt;
+  function checkInlineForm() {
   var isValid = true;
    if(document.forms.inline['XWiki.XWikiUsers_0_password'].value.indexOf(" ") &gt;= 0){
-     alert("$msg.get("profile.field.password.nospaces")");
+     alert("Spaces are forbidden in password.");
      isValid = false;
    }
 
    if (document.forms.inline['XWiki.XWikiUsers_0_password'].value.length &lt; 5) {
-     alert("$msg.get("profile.field.password.tooShort")");
+     alert("Password too short.");
      isValid = false;
    }
 
    if (document.forms.inline['XWiki.XWikiUsers_0_first_name'].value.length == 0) {
-     alert("$msg.get("profile.field.firstName.mandatory")");
+     alert("Display Name 1 is mandatory.");
      isValid = false;
    }
 
    if (document.forms.inline['XWiki.XWikiUsers_0_last_name'].value.length == 0) {
-     alert("$msg.get("profile.field.lastName.mandatory")");
+     alert("Display Name 2 is mandatory.");
      isValid = false;
    }
 
    var emailStr = document.forms.inline['XWiki.XWikiUsers_0_email'].value;
    if (emailStr.length &lt;= 1) {
-     alert("$msg.get("profile.field.email.mandatory")");
+     alert("Email is mandatory.");
      isValid = false;
    } else {
      var atIndex = emailStr.indexOf("@");
      if ((atIndex &lt; 1) || (emailStr.lastIndexOf(".") &lt;= (atIndex+1)) || (emailStr.length &lt;= (emailStr.lastIndexOf(".") + 1)) || (emailStr.lastIndexOf("@") != atIndex)) {
-       alert("$msg.get("profile.field.email.invalid")");
+       alert("Email is not valid.");
        isValid = false;
      }
    }
 
    if (document.forms.inline['XWiki.XWikiUsers_0_password_repeat'].value != document.forms.inline['XWiki.XWikiUsers_0_password'].value){
-       alert("$msg.get("profile.field.password.mustMatch")");
+       alert("Password does not match.");
        isValid = false;
   }
 
   if (document.forms.inline['origemail'].value != document.forms.inline['XWiki.XWikiUsers_0_email'].value) {
-    document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirectemail")';
+    document.forms.inline.action='/xwiki/bin/save/XWiki/Admin?xredirect=/xwiki/bin/view/MyCurriki/EditProfileEmail';
   }
 
   if (isValid) {
@@ -223,24 +452,24 @@ function checkInlineForm() {
   return false;
 }
 
-function checkEmail(){
-  var email = $F("XWiki.XWikiUsers_0_email");
-  var account = "${userdoc.fullName}";
-  var url= "$xwiki.getURL("XWiki.CheckAccountCreation").replaceAll("http","https")";
-  var pars = 'xpage=plain&amp;email=' + email + '&amp;account=' + account;
-  var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
-  return false;
-}
-
-function checkEmailResponse(originalRequest){
-  var text = originalRequest.responseText;
-  var res = eval('[' + text + '][0]');
-  if(!res.email){
-    alert("$msg.get("joincurriki.email.alreadyUsed")");
+  function checkEmail(){
+    var email = $F("XWiki.XWikiUsers_0_email");
+    var account = "XWiki.Admin";
+    var url= "/xwiki/bin/view/XWiki/CheckAccountCreation";
+    var pars = 'xpage=plain&amp;email=' + email + '&amp;account=' + account;
+    var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
     return false;
-  }  
-  document.forms.inline.onSubmit = "";
-  if (($F("XWiki.XWikiUsers_0_email") != $F("origemail"))
+  }
+
+  function checkEmailResponse(originalRequest){
+    var text = originalRequest.responseText;
+    var res = eval('[' + text + '][0]');
+    if(!res.email){
+      alert("Your email has already been used.");
+      return false;
+    }
+    document.forms.inline.onSubmit = "";
+    if (($F("XWiki.XWikiUsers_0_email") != $F("origemail"))
      &amp;&amp; (document.forms.inline['XWiki.XWikiUsers_0_password'].value != $F("origpw"))){
 	var ia=document.createElement('input');
 	ia.setAttribute('id', "XWiki.XWikiUsers_0_active");
@@ -256,21 +485,15 @@ function checkEmailResponse(originalRequest){
 	eu.setAttribute('value', "1");
 	$('inline').appendChild(eu);
 
-       document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirectemail2")';
-  }
-  document.forms.inline.submit();
-}
-
-document.forms.inline.onsubmit=checkInlineForm;
-&lt;/script&gt;
-{/pre}
-#if("$!footerJScript" == "")
-#set($footerJScript = "")
-#end
-#set($footerJScript = $footerJScript + '&lt;script&gt;$$("a").invoke("observe", "click", function(event){ var el = Event.element(event); if (((typeof el.id == "undefined") || (el.id != "profile-removephoto")) &amp;&amp; !confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });&lt;/script&gt;')
-#end ## content macro
-## END OF MACROS
-## END OF SETTINGS
-## Display of page
-#mycurrikipage("profile")</content>
+        document.forms.inline.action='/xwiki/bin/save/XWiki/Admin?xredirect=/xwiki/bin/view/Registration/EmailVerification?username=Admin';
+      }
+      document.forms.inline.submit();
+    }
+    document.forms.inline.onsubmit=checkInlineForm;
+  &lt;/script&gt;
+  
+      &lt;!-- End Profile Box --&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</renderedcontent>
 </xwikidoc>

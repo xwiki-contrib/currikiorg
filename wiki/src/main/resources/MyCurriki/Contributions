@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>MyCurriki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>MyCurriki.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1196982068000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>9.1</version>
+<date>1218297347000</date>
+<contentUpdateDate>1218297347000</contentUpdateDate>
+<version>4.1</version>
 <title>Contributions</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Documented code</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,202 +54,106 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("MyCurriki.MyCurrikiMacros")
-## SPECIFIC MACROS
-#macro(contributionAsset $asset $allcols)
-#if(!$g_rowCount) ## {
-#set($g_rowCount = 0)
-#end ## }
-#set($g_rowCount = $g_rowCount + 1)
-&lt;tr class="table-row#if(($g_rowCount % 2) == 0) table-odds#end"&gt;
-&lt;td class="table-col-title"&gt;#mycurrikiassettitlewithmodesc($asset)&lt;/td&gt;
-&lt;td class="table-col-ict"&gt;#mycurrikiict($asset)&lt;/td&gt;
-&lt;td class="table-col-updated"&gt;#mycurrikilastupdate($asset)&lt;/td&gt;
-#if($allcols)
-&lt;td class="table-col-access"&gt;#mycurrikiaccess($asset)&lt;/td&gt;
-#end ## if allcols
-&lt;td class="table-col-filetype"&gt;#mycurrikifiletype($asset)&lt;/td&gt;
-#if($allcols)
-&lt;td class="table-col-action"&gt;
-&lt;div class="button-links"&gt;
-#checkForCollections()
-#escapeForJS($asset.fullName)
-#set($escapedFullName = $ret_escaped)
-#findCurrikiTitle($asset)
-#escapeForJS($currikiTitle)
-#set($escapedTitle = $ret_escaped)
-#if($g_userHasCollections &amp;&amp; ($asset.creator == $context.user || $hasGlobalAdmin))##{
-{pre}
-&lt;a class="button-link" onclick="Curriki.module.addpath.startPath('J', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')"&gt;$msg.get('mycurriki.contributions.add')&lt;/a&gt;
-{/pre}
-#end##}
-#if($asset.hasAccessLevel("edit"))
-&lt;a class="button-link-table" target="_blank" href="#gwtEditUrl(${asset.fullName})"&gt;$msg.get("caption.edit")&lt;/a&gt;
+<content>#**
+  * MyCurriki Contributions Page
+  *
+  *#
+#**
+  * MyCurriki Contributions Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj)
+  #mycurriki_contributionsbox( $userdoc $userobj )
 #end
-#if($asset.creator == $context.user || $hasGlobalAdmin || $xwiki.checkAccess($asset.fullName, "delete"))
-#set($deleteMsg = $msg.get('mycurriki.contributions.actions.delete.confirm'))
-#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&amp;docName=${asset.fullName}&amp;sourceDoc=$doc.getURL('view')"))
-&lt;a class="button-link-table" onclick="return confirm('$deleteMsg')" href="$deleteUrl"&gt;$msg.get("caption.delete")&lt;/a&gt;
-#end
-&lt;/div&gt;
-&lt;/td&gt;
-#end ## if allcols
-&lt;/tr&gt;
-#end
-## content macro
-#macro(mycurrikipage_content $userdoc $userobj)
-#set($headerArgs="user=${userdoc.fullName}&amp;")
-#set($allcols = false)
-#if($context.user=="XWiki.XWikiGuest")
-## Settings for guests here
-#end
-#if($hasGlobalAdmin) ##{
-## Settings for admins here
-#set($allcols = true)
-#end ##}
-#if($context.user==$userdoc.fullName)
-## Settings for owner here
-#set($allcols = true)
-#set($headerArgs="")
-#end
-#set($shortname = $userdoc.fullName)
-#if($shortname.startsWith("XWiki."))
- #set($shortname = $shortname.substring(6))
-#end
-#set($descnb = 0)
-## Do query for contributions
-#if("$!request.sortBy"=="") ## {
-#set($sortBy = "date")
-#set($sortDir = 'desc')
-#elseif($request.sortBy=="date") ## } {
-#set($sortBy = "date")
-#set($sortDir = 'desc')
-#elseif($request.sortBy=="title") ## } {
-#set($sortBy = "title")
-#set($sortDir = 'asc')
-#elseif($request.sortBy=="access" &amp;&amp; $allcols) ## } {
-#set($sortBy = "access")
-#set($sortDir = 'asc')
-#else ## } {
-#set($sortBy = "date")
-#set($sortDir = 'desc')
-#end ## }
-##
-#if("$!request.sortDir"=="") ## {
-#elseif($request.sortDir=="asc") ## } {
-#set($sortDir = 'asc')
-#elseif($request.sortDir=="desc") ## } {
-#set($sortDir = 'desc')
-#end ## }
-##
-#set($sortArgs = "")
-#if($sortBy == "date") ## {
-#if($sortDir == "asc") ## {
-#set($sortArgs = "sortDir=asc")
-#end ## }
-#elseif ($sortBy == "title") ## } {
-#set($sortArgs = "sortBy=title")
-#if($sortDir == "desc") ## {
-#set($sortArgs = "${sortArgs}&amp;sortDir=desc")
-#end ## }
-#elseif ($sortBy == "access") ## } {
-#set($sortArgs = "sortBy=access")
-#if($sortDir == "desc") ## {
-#set($sortArgs = "${sortArgs}&amp;sortDir=desc")
-#end ## }
-#end ## }
-##
-## Order by reverse last updated
-#if($sortBy=="title") ## {
-#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
-#elseif($sortBy=="access") ## Default sort by rights ## } {
-#set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
-#else ## Default sort by date ## } {
-#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by doc.date $sortDir")
-#end ## }
-## Order by property ascending
-## How can we sort by
-## filetype (determined in a macro)
-## instructional_component (if not exists how do we act as blank)
-##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by prop1.value $sortDir")
-##
-##
-#set($assetList = $xwiki.searchDocuments($sql))
-#set($nbToDisplay = 20)
-#set($startIndex = 0)
-#set($Integer = 0)
-#if($request.startIndex)
- #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
-#end
-#if($startIndex &gt; ($assetList.size() - 1))
- #set($startIndex = $assetList.size() - 1)
-#end
-#set($endIndex = $startIndex - 1 + $nbToDisplay)
-#if($endIndex &gt; ($assetList.size() - 1))
- #set($endIndex = $assetList.size() - 1)
-#end
-## Display contributions in table using pagination
-&lt;table id="mycurriki-contributions-table" class="table table-contributions"&gt;
-&lt;tr&gt;
-#if($sortBy=="title" &amp;&amp; $sortDir == "asc") ## {
-#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title&amp;sortDir=desc"))
-#else ## } {
-#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title"))
-#end ## }
-&lt;th class="table-header#if($sortBy=="title") table-header-sorted#end table-col-title"&gt;&lt;a href="$url"&gt;$msg.get('mycurriki.contributions.table.title')&lt;/a&gt;&lt;/th&gt;
-&lt;th class="table-header table-header-fixed table-col-ict"&gt;$msg.get('mycurriki.contributions.table.ict')&lt;/th&gt;
-#if($sortBy=="date" &amp;&amp; $sortDir == "desc") ## {
-#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortDir=asc"))
-#else ## } {
-#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}"))
-#end ## }
-&lt;th class="table-header#if($sortBy=="date") table-header-sorted#end table-col-lastupdated"&gt;&lt;a href="$url"&gt;$msg.get('mycurriki.contributions.table.lastupdated')&lt;/a&gt;&lt;/th&gt;
-#if($allcols)
-#if($sortBy=="access" &amp;&amp; $sortDir == "asc") ## {
-#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=access&amp;sortDir=desc"))
-#else ## } {
-#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=access"))
-#end ## }
-&lt;th class="table-header#if($sortBy=="access") table-header-sorted#end table-col-access"&gt;&lt;a href="$url"&gt;$msg.get('mycurriki.contributions.table.access')&lt;/a&gt;&lt;/th&gt;
-#end ## if allcols
-&lt;th class="table-header table-header-fixed table-col-filetype"&gt;$msg.get('mycurriki.contributions.table.filetype')&lt;/th&gt;
-#if($allcols)
-&lt;th class="table-header table-header-fixed table-col-action"&gt;$msg.get('mycurriki.contributions.table.action')&lt;/th&gt;
-#end ## if allcols
-&lt;/tr&gt;
-## row per item -- number of rows configurable
-#set($showcount = 0)
-#foreach($assetPage in $assetList)
-#if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
-#set($asset = $xwiki.getDocument($assetPage))
-#set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
-#if("$type"!="2")
-#set($showcount = 1 + $showcount)
-#if(($showcount &gt; $startIndex) &amp;&amp; ($showcount &lt; ($endIndex + 2)))
-#contributionAsset($asset $allcols)
-#end ## showcount &gt; startIndex &amp;&amp; showcount &lt; endIndex
-#end ## type != 2
-#end  ## if has view access
-#end ## foreach assetPage in list
-#if($showcount == 0)
-&lt;tr&gt;&lt;td colspan="6"&gt;$msg.get("mycurriki.contributions.noresults")&lt;/td&gt;&lt;/tr&gt;
-#end
-&lt;/table&gt;
-## Pagination here
-#mycurrikipaginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
-#end
-##
-## add button
-#macro(mycurrikipage_button $userobj) ##{
-#if($context.action == "view" &amp;&amp; ($context.user==$userdoc.fullName || $hasGlobalAdmin))##{
-{pre}
-&lt;a class="button button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')"&gt;$msg.get('mycurriki.contributions.addButton')&lt;/a&gt;
-{/pre}
-#end ##}
+#**
+  * MyCurriki Contributions Page Button  Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagebutton $userobj) ##{
+  #mycurriki_contributionsbutton($userdoc $userobj)
 #end ## buttonmacro ##}
 ##
-## END OF MACROS
-## END OF SETTINGS
-## Display of page
-#mycurrikipagewithbutton("contributions")</content>
+## Actual Display of page
+#mycurriki_pagewithbutton("contributions")</content>
+<renderedcontent>&lt;p/&gt;
+
+            &lt;div id="mycurriki-contributions" class="mycurriki mycurriki-contributions"&gt;
+ &lt;div id="mycurriki-header" class="mycurriki-header"&gt;
+&lt;div id="mycurriki-header-title" class="heading-1"&gt;Administrator &lt;/div&gt;
+&lt;/div&gt;
+   &lt;div id="mycurriki-tabs" class="tabs"&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Profile"&gt;Profile&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Favorites"&gt;Favorites&lt;/a&gt;
+                 &lt;a class="tab tab-selected" href="/xwiki/bin/view/MyCurriki/Contributions"&gt;Contributions&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Collections"&gt;Collections&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Blog"&gt;Blog&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Groups"&gt;Groups&lt;/a&gt;
+     &lt;/div&gt;
+&lt;div id="mycurriki-main" class="tab-container"&gt;
+&lt;div id="mycurriki-main-header"&gt;
+      &lt;!-- MyCurriki Contributions Buttons --&gt;
+     &lt;!-- End MyCurriki Contributions Buttons --&gt;
+   &lt;div id="mycurriki-main-header-left"&gt;
+   &lt;div id="mycurriki-main-header-subtitle" class="tab-deck"&gt;Find any contributions in the list below. You can sort the columns headed Title, Last Updated, and Access. (You will only see Access for your own contributions.)&lt;/div&gt;
+ &lt;/div&gt;
+&lt;div class="clearfloats"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mycurriki-main-content" class="frame"&gt;
+     &lt;!-- MyCurriki Contributions Box --&gt;
+                                                                                    &lt;table id="mycurriki-contributions-table" class="table table-contributions"&gt;
+       &lt;!-- MyCurriki Contributions Header --&gt;
+  &lt;tr&gt;
+                    &lt;th class="table-header table-col-title"&gt;&lt;a href="/xwiki/bin/view/MyCurriki/Contributions?sortBy=title"&gt;Title&lt;/a&gt;&lt;/th&gt;
+      &lt;th class="table-header table-header-fixed table-col-ict"&gt;ICT&lt;/th&gt;
+                    &lt;th class="table-header table-header-sorted table-col-lastupdated"&gt;&lt;a href="/xwiki/bin/view/MyCurriki/Contributions?sortDir=asc"&gt;Last Updated&lt;/a&gt;&lt;/th&gt;
+                                &lt;th class="table-header table-col-access"&gt;&lt;a href="/xwiki/bin/view/MyCurriki/Contributions?sortBy=access"&gt;Access&lt;/a&gt;&lt;/th&gt;
+             &lt;th class="table-header table-header-fixed table-col-filetype"&gt;File Type&lt;/th&gt;
+              &lt;th class="table-header table-header-fixed table-col-action"&gt;Action&lt;/th&gt;
+           &lt;/tr&gt;
+    &lt;!-- End MyCurriki Contributions Header --&gt;
+                                              &lt;!-- MyCurriki Contributions Asset --&gt;
+        &lt;tr class="table-row"&gt;
+    &lt;td class="table-col-title"&gt;     &lt;a class="curriki-link" href="/xwiki/bin/view/Admin/FSSync" onmouseover="$('mycurriki-description-1').show();" onmouseout="$('mycurriki-description-1').hide();"&gt;FSSync&lt;/a&gt;
+&lt;div id="mycurriki-description-1" class="popup" style="display: none;"&gt;
+
+&lt;strong&gt;Description:&lt;/strong&gt;&lt;br /&gt;
+ &lt;br /&gt;
+&lt;br /&gt;
+&lt;strong&gt;Subject:&lt;/strong&gt; &lt;br /&gt;
+  &lt;br /&gt;
+&lt;strong&gt;Educational Level:&lt;/strong&gt;&lt;br /&gt;
+  
+&lt;/div&gt;
+&lt;/td&gt;
+    &lt;td class="table-col-ict"&gt;   &lt;/td&gt;
+    &lt;td class="table-col-updated"&gt; Aug-04-2008
+&lt;/td&gt;
+          &lt;td class="table-col-access"&gt; mycurriki.macro.access.${access}
+&lt;/td&gt;
+         &lt;td class="table-col-filetype"&gt;        &lt;img src="/xwiki/skins/curriki8/mimetypes/HTM.gif" alt="[URL]" title="[URL]"/&gt;
+    &lt;/td&gt;
+          &lt;td class="table-col-action"&gt;
+        &lt;div class="button-links"&gt;
+                                                                                       &lt;a class="button-link-table" target="_blank" href="${m_gwtUrl}page=Admin.FSSync&amp;mode=edit"&gt;Edit&lt;/a&gt;
+                                &lt;a class="button-link-table" onclick="return confirm('Are you sure you wish to delete this contribution?')" href="/xwiki/bin/view/XWiki/DeleteDocument?confirm=1&amp;docName=Admin.FSSync&amp;sourceDoc=/xwiki/bin/view/MyCurriki/Contributions"&gt;Delete&lt;/a&gt;
+                  &lt;/div&gt;
+      &lt;/td&gt;
+       &lt;/tr&gt;
+  &lt;!-- End MyCurriki Contributions Asset --&gt;
+                                       &lt;/table&gt;
+       &lt;!-- MyCurriki Contributions Pagination --&gt;
+   &lt;div id="mycurriki-paginator" class="table-results"&gt;
+             &lt;div id="mycurriki-paginator-line1" class="table-results-title"&gt;
+Contributions 1 - 1 of about 1
+&lt;/div&gt;
+&lt;div id="mycurriki-paginator-line2" class="table-results-navigation"&gt;
+    &lt;a href="/xwiki/bin/view/MyCurriki/Contributions?startIndex=0" class="table-results-navigation-selected" onclick="return false;"&gt;1&lt;/a&gt;
+    &lt;/div&gt;
+ &lt;/div&gt;
+  &lt;!-- End MyCurriki Contributions Pagination --&gt;
+  &lt;!-- End MyCurriki Contributions Box --&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</renderedcontent>
 </xwikidoc>

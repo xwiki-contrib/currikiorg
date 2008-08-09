@@ -1226,7 +1226,7 @@ $!desc
     #end ## if allcols ## }
   </tr>
   <!-- End MyCurriki Favorites Asset -->
-#end ##end macro mycurrikifavoritesasset
+#end ##end macro mycurriki_favoritesasset
 
 #**
   * Displays the pagination footer for the favorites section
@@ -1239,7 +1239,7 @@ $!desc
   <!-- MyCurriki Favorites Pagination -->
   #mycurriki_paginator($msg.get("mycurriki.tab.favorites.label") $startIndex $nbToDisplay $assetList.size())
   <!-- End MyCurriki Favorites Pagination -->
-#end ## } end macro mycurrikifavoritespagination
+#end ## } end macro mycurriki_favoritespagination
 
 
 #**
@@ -1591,9 +1591,13 @@ $!desc
   <!-- End MyCurriki Contributions Box -->
 #end ##} end macro
 
-##
-##
-## title with mouseover description Macro and breadcrumb for favorites
+
+
+#**
+  * Displays an asset title with mouseover description
+  *
+  * @param $asset Asset to display the title
+  *#
 #macro(mycurriki_favassettitlewithmodesc $asset) ## {
 #set($descnb = $descnb + 1)
 #findCurrikiTitle($asset)
@@ -1648,6 +1652,46 @@ $msg.get("search.selector.level.${item}")<br />
 ## My Curriki Groups Macros
 ##
 ##
+
+#**
+  * Displays the group list of the user
+  *
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_grouplist $userdoc $userobj)
+##
+#set($nbToDisplay = 5)
+##
+#set($sm = $xwiki.csm)
+#set($spaceList = $sm.getSpaceNames($userdoc.fullName, $xwiki.null))
+#set($startIndex = 0)
+#set($Integer = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex > ($spaceList.size() - 1))
+ #set($startIndex = $spaceList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex > ($spaceList.size() - 1))
+ #set($endIndex = $spaceList.size() - 1)
+#end
+##
+#set($first_frame_done = "yes")
+#set($showcount = 0)
+#foreach($space in $spaceList) ## {
+#set($showcount = 1 + $showcount)
+#if(($showcount > $startIndex) && ($showcount < ($endIndex + 2))) ## {
+#mycurriki_groupinfomessages($space "")
+#end ## }
+#end ## }
+#if($showcount != 0) ## {
+#set($sortArgs = "")
+<div class="frame">
+#mycurriki_paginatorargs($msg.get("mycurriki.tab.groups.label") $startIndex $nbToDisplay $spaceList.size() $sortArgs)
+#end ## }
+#end ## macro ## }
 
 #**
   * Display a Group logo for a space
@@ -1822,6 +1866,93 @@ $msg.get("mycurriki.groups.message.by") <a href="$xwiki.getURL("${message.creato
 ## My Curriki Blog Macros
 ##
 ##
+#**
+  * MyCurriki Blog Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogbox $userdoc $userobj)
+#mycurriki_titlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+<div>
+$msg.get("mycurriki.blog.noblog")
+</div>
+#else ## } {
+##
+#set($category = "$!request.category")
+#set($nbitems = "10")
+#set($nbstart = $request.nbstart)
+#set($space = "Blog_${shortname}")
+#if(!$itemname)
+ #set($itemname = "Blog")
+#end
+#set($next = $msg.get("myBlog.nextArticle"))
+#set($prev = $msg.get("myBlog.previousArticle"))
+#set($readnext = $msg.get("myBlog.continueReading"))
+#set($addanews = $msg.get("myBlogs.addArticle"))
+#set($addanewsdetails = $msg.get("myBlogs.addArticle.details"))
+#set($newstitle = $msg.get("myBlogs.articleTitle"))
+#set($spacesql = " and doc.web='${space}'")
+#if($category=='')
+#set ($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' $spacesql order by doc.creationDate desc")
+#else
+#set ($sql = ", BaseObject as obj, DBStringListProperty as cat join cat.list list where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' $spacesql and obj.id=cat.id.id and cat.id.name='category' and list='$category' order by doc.creationDate desc")
+#end
+#set($cdate = "")
+#set($inbitems = $xwiki.parseInt($nbitems))
+#set($inbstart = $xwiki.parseInt($nbstart))
+#set($counter = 0)
+#foreach ($item in $xwiki.searchDocuments($sql, $inbitems, $inbstart))
+#if ($counter != 0)
+ <hr />
+#end
+<div class="cd-article">
+#set($counter = $counter+1)
+#set($bentrydoc = $xwiki.getDocument($item))
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
+#mycurriki_blogarticle($bentrydoc, $bentryobj, false)
+<br/>
+#if($counter==$inbitems)
+<div style="float: right; margin-right: 30px">
+#if ($inbstart!=0)
+#set($iprev = $inbstart - $inbitems)
+[$prev>$doc.name?nbstart=${iprev}]
+#end
+#set($inext = $inbstart + $inbitems)
+[$next>$doc.name?nbstart=${inext}]
+</div>
+#end
+</div>
+#end
+#end ## }
+#end ## content macro
+
+
+#**
+  * MyCurriki Blog Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogbutton $userobj)
+#if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights()))
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+<a class="button button-orange" href="$xwiki.getURL("MyCurriki.BlogCreateBlog", "view", "xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createBlog")">$msg.get("mycurriki.blog.createBlog")</a>
+#else ## } {
+<a class="button button-orange" href="$xwiki.getURL("MyCurriki.BlogCreateArticle", "view", "space=Blog_${shortname}&xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createEntry")">$msg.get("mycurriki.blog.createEntry")</a>
+#end ## }
+#end
+#end ## button macro
+
 
 #**
   * Displaying a blog article for the my curriki view
@@ -1883,4 +2014,152 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 </div>
 #end ## }
 ##
+##
+##
+## Collections Macros
+##
+##
+#**
+  *  My Curriki Collection Actions
+  *
+  *  @param $asset Asset to display actions for
+  *#
+#macro(mycurriki_collectionactions $asset)
+<a href="$asset.getURL("view")" class="button-link">$msg.get("mycurriki.collections.view")</a>
+#if($asset.hasAccessLevel("edit"))
+<a target="_blank" href="#gwtEditUrl(${asset.fullName})" class="button-link-table">$msg.get("mycurriki.collections.edit")</a>
+#end
+
+#if($asset.hasAccessLevel("edit"))
+#escapeForJS($asset.fullName)
+#set($escapedFullName = $ret_escaped)
+#findCurrikiTitle($asset)
+#escapeForJS($currikiTitle)
+#set($escapedTitle = $ret_escaped)
+{pre}
+<a class="button-link-table" onclick="Curriki.module.addpath.startPath('L', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" alt="$msg.get("mycurriki.collections.buildup")" title="$msg.get("mycurriki.collections.buildup_tooltip")">$msg.get("mycurriki.collections.buildup")</a>
+{/pre}
+#end
+
+#if($asset.creator == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($asset.fullName, "delete"))
+#set($deleteMsg = $msg.get('mycurriki.collections.actions.delete.confirm'))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
+<a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table">$msg.get("mycurriki.collections.delete")</a>
+#end
+#end
+##
+##
+#**
+  *  My Curriki Collection Display
+  *
+  *  @param $asset Asset to display
+  *#
+#macro(mycurriki_collection $asset)
+#if(!$g_rowCount) ## {
+#set($g_rowCount = 0)
+#end ## }
+#set($g_rowCount = $g_rowCount + 1)
+<div class="frame-inset#if(($g_rowCount % 2) == 0) table-odds#end">
+<div>
+<div class="button-links">
+#mycurriki_collectionaction($asset)
+</div>
+<div class="frame-inset-ict">
+#mycurriki_ict($asset)
+</div>
+<div class="frame-inset-title">
+#mycurriki_assettitle($asset)
+</div>
+</div>
+<div class="frame-inset-description mycurriki-collections-row-description">
+#mycurriki_collectiondescription($asset)
+</div>
+</div>
+#end
+
+#**
+  * MyCurriki Collections Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_collections $userdoc $userobj)
+#if($context.user=="XWiki.XWikiGuest")
+## Settings for guests here
+#end
+#if($context.user==$userdoc.fullName)
+## Settings for owner here
+#end
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+## Do query for contributions
+#set($sql = ", BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CompositeAssetClass' and doc.creator='${userdoc.fullName}' and doc.web='Coll_${shortname}' and doc.name != 'Favorites' and props.id.name='type' and props.value='collection' order by doc.date desc")
+#set($assetList = $xwiki.searchDocuments($sql))
+#set($nbToDisplay = 20)
+#set($startIndex = 0)
+#set($Integer = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex > ($assetList.size() - 1))
+ #set($startIndex = $assetList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex > ($assetList.size() - 1))
+ #set($endIndex = $assetList.size() - 1)
+#end
+##
+{pre}
+<script type="text/javascript">
+var $hidden = false;
+function toggle_desc(){
+  var $action;
+  var $titl;
+  if ($hidden){
+    $hidden = false;
+    $action = 'show';
+    $titl = "$msg.get('mycurriki.collections.titlebarbutton')";
+  } else {
+    $hidden = true;
+    $action = 'hide';
+    $titl = "$msg.get('mycurriki.collections.titlebarbuttonalt')";
+  }
+  $$('.mycurriki-collections-row-description').invoke($action);
+  $('hider-link').title=$titl;
+  $('hider-link').innerHTML=$titl+"  &raquo;";
+  return false;
+}
+</script>
+{/pre}
+#mycurriki_fulltitlebar($msg.get("mycurriki.collections.titlebar") $msg.get("mycurriki.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
+## row per item -- number of rows configurable
+#set($showcount = 0)
+#foreach($assetPage in $assetList)
+#if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
+#set($showcount = 1 + $showcount)
+#if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
+#set($asset = $xwiki.getDocument($assetPage))
+#mycurriki_collection($asset)
+#end ## showcount > startIndex && showcount < endIndex
+#end  ## if has view access
+#end ## foreach assetPage in list
+#if($showcount == 0)
+<div class="centertext">$msg.get("mycurriki.collections.noresults")</div>
+#end ## showcount
+#mycurriki_paginator($msg.get("mycurriki.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
+#end ## content macro
+
+#**
+  * MyCurriki Collections Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_collectionbutton $userobj)
+#if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))
+{pre}
+<a class="button button-orange" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")">$msg.get("mycurriki.collections.addButton")</a>
+{/pre}
+#end
+#end ## buttonmacro
+
 ## End of MyCurriki Macros ## }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>MyCurriki</web>
@@ -7,19 +7,19 @@
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent>MyCurriki.WebHome</parent>
-<creator>XWiki.ShermanTank</creator>
-<author>XWiki.LudovicDubost</author>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1202337443000</creationDate>
-<date>1215191053000</date>
-<contentUpdateDate>1215191053000</contentUpdateDate>
-<version>12.1</version>
+<date>1218297377000</date>
+<contentUpdateDate>1218297377000</contentUpdateDate>
+<version>7.1</version>
 <title>Profile</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Documented code</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,216 +54,127 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("MyCurriki.MyCurrikiMacros")
-## PROFILE SPECIFIC MACROS
-## PROFILE content macro
-#macro(mycurrikipage_content $userdoc $userobj)
-#mycurrikititlebar($msg.get("mycurriki.profile.titlebar") "" "" "blue")
-#if($context.user=="XWiki.XWikiGuest")
-#set($logredir = $doc.getURL("view"))
-#set($loginurl = $xwiki.getURL("XWiki.XWikiLogin", "login", "xredirect=$logredir"))
-#if("$!request.user" == "") ## {
-$response.sendRedirect($loginurl)
-#else ## }{
-$msg.get("profile.accessDenied", [$loginurl])
-#end ## }
-#else ## if XWiki.XWikiGuest
-#set($showcontact=$userobj.getProperty("show_contact").getValue())
-#if(($showcontact=="0")&amp;&amp;($context.user!=$userdoc.fullName)&amp;&amp;(!$xwiki.hasAdminRights()))
-$msg.get("profile.userNotVisible")
-#else ## if showcontact == No
-## This is the main display
-#set($class = $userobj.xWikiClass)
-&lt;div style="margin:0;padding:0" class="edit-profile"&gt;
-&lt;br /&gt;
-&lt;table border="0" cellspacing="0" cellpadding="3"&gt;
- &lt;tr&gt;
-  &lt;td valign="top"&gt;
-   &lt;div class="userpic"&gt;
-#if($userdoc.attachmentList.size()==0) 
-   &lt;img src="$xwiki.getSkinFile("noavatar.png")"/&gt;
-   #if($context.action=="view" &amp;&amp; ($userdoc.fullName == $context.user || $hasGlobalAdmin))
-   &lt;a class="curriki-link" onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;' href="$userdoc.getURL("attach")"&gt;$msg.get('profile.changeMyPhoto')&lt;/a&gt; 
-   #end
-#else  ## attachmentList.size must be &gt; 0
-   #foreach ($attach in $userdoc.attachmentList)
-     &lt;a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")" &gt;
-     &lt;img src="$userdoc.getAttachmentURL($attach.filename,"download")"  /&gt;&lt;/a&gt;
-    #if ($context.action=="inline")
-     #set($deleteredir = $userdoc.getURL("inline"))
-     &lt;br/&gt;&lt;a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');" title="$msg.get("profile.removeYourPhoto")"&gt;$msg.get("profile.removePhoto")&lt;/a&gt;
-     &lt;br/&gt;
-    #end  ## if inline
-   #end  ## foreach attach in list
-   #if ($context.action!="inline")
-    #set($i = $context.user.indexOf(":")+1)
-    #set($attach = $userdoc.attachmentList.get(0))
-    #if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin)
-     #set($deleteredir = $userdoc.getURL("view"))
-     &lt;br/&gt;&lt;a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('You need to remove your picture first. Do you want to do that ?');" &gt;$msg.get("profile.modifyYourPhoto")&lt;/a&gt;
-     &lt;br/&gt;
-    #end  ## is same user
-   #end  ## is inline
-#end
-   &lt;/div&gt;
-  &lt;/td&gt;
-  &lt;td width="100%"&gt;
-   &lt;table border="0" cellspacing="2" cellpadding="2"&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.display.firstName")* 
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("first_name", $userobj)) &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.display.lastName")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("last_name", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.memberType")*
-     #dashIfEmpty($userdoc.display("member_type", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.affiliation")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("affiliation", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.city")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("city", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.state")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("state", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.country")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("country", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    #if ($context.action=="inline")
-    &lt;/tr&gt;
-
-     &lt;td&gt; *$msg.get("profile.field.showContact")*
-     #dashIfEmpty($userdoc.display("show_contact", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    #end
-#if(($context.user==$userdoc.fullName)||($xwiki.hasAdminRights()))
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.email")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("email", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.showContact")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("show_contact", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.opt_out")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("opt_out", $userobj))&lt;/td&gt;
-    &lt;/tr&gt;
-    #if ($context.action=="inline")
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.passwordConfirm")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     {pre}&lt;input size='30' id='XWiki.XWikiUsers_0_password_repeat' value='$userdoc.display("password", "view", $userobj)' name='XWiki.XWikiUsers_0_password_repeat' type='password'/&gt;{/pre}&lt;/td&gt;
-    &lt;/tr&gt;
-    #end
-#end
-    &lt;/tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.topics")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-#set($topics = "")
-{pre}#set($titems = $userdoc.topics.split("&lt;br /&gt;")){/pre}
-#foreach($titem in $titems)
- #if($titem.trim().startsWith("Subject Index &amp;gt;"))
-  #set($titem = $titem.trim().substring(18))
- #end
- #set($topics = "${topics}, ${titem}")
-#end
-#if($topics.length() &gt; 2)
- #set($topics = $topics.substring(2))
-#end
-     #dashIfEmpty($topics)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-     &lt;td&gt; *$msg.get("profile.field.bio")*
-     #if ($context.action=="inline") &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt; #end
-     #dashIfEmpty($userdoc.display("comment", $userobj)) &lt;/td&gt;
-    &lt;/tr&gt;
-   &lt;/table&gt;
-#if($userdoc.attachmentList.size()==0 &amp;&amp; $context.action=="view") 
-#if(($userdoc.fullName==$context.user)||$xwiki.hasAdminRights())
-#set($redirect = $xwiki.requestURL)
-&lt;div id="attachdiv" class="hidden"&gt;
-&lt;br /&gt;&lt;br /&gt;
-&lt;form id="attach" action="$userdoc.getURL("upload")" enctype="multipart/form-data" method="post" name="profilImageAttach"&gt;
-&lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($redirect)"/&gt;
-&lt;input id="xwikiuploadname" type="hidden" name="filename" value="" size="20"/&gt;
-&lt;fieldset style="width:90%" class="expanded" id="attachform"&gt;
-&lt;div&gt;&lt;label id="xwikiuploadfilelabel" for="xwikiuploadfile"&gt;$msg.get("profile.chooseAPhoto")&lt;/label&gt;&lt;/div&gt;
-&lt;div&gt;&lt;input id="xwikiuploadfile" type="file" name="filepath" value="" size="20"/&gt;&lt;/div&gt;
-&lt;div&gt;
-{pre}
-&lt;input type="submit" value="$msg.get("attachthisfile")" onclick="if (!checkFileExtension()) return false; return updateAttachName(document.forms.profilImageAttach, '$msg.get("doyouwanttoreplace")')" class="button button-orange"/&gt;
-{/pre}
-{pre}
-&lt;script type="text/javascript"&gt;
-function checkFileExtension() {
-  var isValid = true;
-  var ext = getFileExtension();
-  if (ext) {
-    if (ext != "ai" &amp;&amp; ext != "gif" &amp;&amp; ext != "jpg" &amp;&amp; ext != "tif" &amp;&amp; ext != "bmp" &amp;&amp; ext != "jpe" &amp;&amp; ext != "psd" &amp;&amp; ext != "png") {
-      isValid = false;
-    }
-  } else {
-    isValid = false;
-  }
-  if (!isValid) {
-    alert("$msg.get("mycurriki.profile.needPicture")");
-  }
-  return isValid;
-}
-function getFileExtension() {
-  var fileName = document.getElementById("xwikiuploadfile").value;
-  if (fileName.length){
-   fileName = fileName.toLowerCase();
-   var pos = fileName.lastIndexOf(".");
-   if (pos &gt; 0){
-     return fileName.substring(pos + 1);
-   }
-  }
-  return "";
-}
-&lt;/script&gt;
-{/pre}
-&lt;/div&gt;
-&lt;/fieldset&gt;
-&lt;/form&gt;
-&lt;/div&gt;
-#end
-#end
-  &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-&lt;/div&gt;
-#end ## if showcontact == No
-#end ## if XWikiGuest
-#end ## content macro
-##
-##
-## PROFILE edit button
-#macro(mycurrikipage_button $userobj)
-#if($context.action == "view" &amp;&amp; ($context.user==$userdoc.fullName || $xwiki.hasAdminRights()))
-&lt;a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("mycurriki.profile.editButton")"&gt;$msg.get("mycurriki.profile.editButton")&lt;/a&gt;&lt;/span&gt;
-#end
+<content>#**
+  * MyCurriki Profile Page
+  *
+  *#
+#**
+  * MyCurriki Profile Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj) ##{
+  #mycurriki_viewprofilebox($userdoc $userobj)
+#end ##} content macro
+#**
+  * MyCurriki Profile Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagebutton $userobj)
+  #mycurriki_editprofilebutton($userdoc)
 #end ## button macro
-## END OF MACROS
-## END OF SETTINGS
-## Display of page
-#mycurrikipagewithbutton("profile")
-</content></xwikidoc>
+## Actual page display
+#mycurriki_pagewithbutton("profile")</content>
+<renderedcontent>&lt;p/&gt;
+ 
+            &lt;div id="mycurriki-profile" class="mycurriki mycurriki-profile"&gt;
+ &lt;div id="mycurriki-header" class="mycurriki-header"&gt;
+&lt;div id="mycurriki-header-title" class="heading-1"&gt;Administrator &lt;/div&gt;
+&lt;/div&gt;
+   &lt;div id="mycurriki-tabs" class="tabs"&gt;
+                 &lt;a class="tab tab-selected" href="/xwiki/bin/view/MyCurriki/Profile"&gt;Profile&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Favorites"&gt;Favorites&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Contributions"&gt;Contributions&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Collections"&gt;Collections&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Blog"&gt;Blog&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Groups"&gt;Groups&lt;/a&gt;
+     &lt;/div&gt;
+&lt;div id="mycurriki-main" class="tab-container"&gt;
+&lt;div id="mycurriki-main-header"&gt;
+      &lt;!-- My Curriki edit profile button --&gt;
+     &lt;!-- End My Curriki edit profile button --&gt;
+   &lt;div id="mycurriki-main-header-left"&gt;
+   &lt;/div&gt;
+&lt;div class="clearfloats"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mycurriki-main-content" class="frame"&gt;
+      &lt;!-- View Profile Box --&gt;
+        &lt;div  class="titleheader titleheader-blue"&gt;&lt;h3 &gt;Member Information&lt;/h3&gt;&lt;/div&gt;
+                 &lt;!-- Curri View Profile Table --&gt;
+    &lt;div style="margin:0;padding:0" class="edit-profile"&gt;   &lt;br /&gt;
+  &lt;table border="0" cellspacing="0" cellpadding="3"&gt;       &lt;tr&gt;         &lt;td valign="top"&gt;            &lt;!-- My Curriki View Photo --&gt;
+&lt;div class="userpic"&gt;
+           &lt;img src="/xwiki/skins/albatross/noavatar.png"/&gt;
+            &lt;/div&gt;
+&lt;!-- End My Curriki View Photo --&gt;
+        &lt;/td&gt;         &lt;td width="100%"&gt;              &lt;!-- Curriki View Profile --&gt;
+  &lt;table border="0" cellspacing="2" cellpadding="2"&gt;
+    &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Display Name 1:&lt;/strong&gt;
+          Administrator
+ &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Display Name 2:&lt;/strong&gt;
+          &amp;ndash;
+&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Member Type:&lt;/strong&gt;
+     &amp;ndash;
+&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Organization Affiliation:&lt;/strong&gt;
+          &amp;ndash;
+&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/tr&gt;
+     &lt;td&gt; &lt;strong&gt;City:&lt;/strong&gt;
+          &amp;ndash;
+&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;State/Province:&lt;/strong&gt;
+          &amp;ndash;
+&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+     &lt;td&gt; &lt;strong&gt;Country:&lt;/strong&gt;
+          &amp;ndash;
+&lt;/td&gt;
+     &lt;/tr&gt;
+                   &lt;tr&gt;
+         &lt;td&gt; &lt;strong&gt;Email:&lt;/strong&gt;
+                  webmaster@xwiki.com
+&lt;/td&gt;
+       &lt;/tr&gt;
+       &lt;tr&gt;
+         &lt;td&gt; &lt;strong&gt;Allow Curriki members to view my profile:&lt;/strong&gt;
+                  &amp;ndash;
+&lt;/td&gt;
+       &lt;/tr&gt;
+       &lt;tr&gt;
+         &lt;td&gt; &lt;strong&gt;Opt-out receiving email:&lt;/strong&gt;
+                  &amp;ndash;
+&lt;/td&gt;
+       &lt;/tr&gt;
+                 &lt;tr&gt;
+      &lt;td&gt; &lt;strong&gt;Topics of Interest:&lt;/strong&gt;
+            
+       	                     , 
+&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;strong&gt;Bio:&lt;/strong&gt;
+            Admin is the default Wiki Admin.
+ &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;!-- End Curriki View Profile --&gt;
+                   &lt;/td&gt;       &lt;/tr&gt;     &lt;/table&gt;   &lt;/div&gt;   &lt;!-- End Curri View Profile Table --&gt;
+          &lt;!-- End View Profile Box --&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</renderedcontent>
+</xwikidoc>

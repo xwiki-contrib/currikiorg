@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>MyCurriki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>MyCurriki.WebHome</parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1202337302000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>6.1</version>
+<date>1218299050000</date>
+<contentUpdateDate>1218299050000</contentUpdateDate>
+<version>4.1</version>
 <title>Collections</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Updated code</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,91 +54,50 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("MyCurriki.MyCurrikiMacros")
-## SPECIFIC MACROS
-##
-##
-## action macro
-#macro(mycollectionactions $asset)
-&lt;a href="$asset.getURL("view")" class="button-link"&gt;$msg.get("mycurriki.collections.view")&lt;/a&gt;
-#if($asset.hasAccessLevel("edit"))
-&lt;a target="_blank" href="#gwtEditUrl(${asset.fullName})" class="button-link-table"&gt;$msg.get("mycurriki.collections.edit")&lt;/a&gt;
+<content>#**
+  * MyCurriki Collections Page
+  *
+  *#
+#**
+  * MyCurriki Collections Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj)
+#mycurriki_collections($userdoc $userobj)
 #end
+#**
+  * MyCurriki Collections Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagebutton $userobj)
+#mycurriki_collectionbutton($userobj)
+#end
+## Actual Display of page
+#mycurriki_pagewithbutton("collections")</content>
+<renderedcontent>&lt;p/&gt;
 
-#if($asset.hasAccessLevel("edit"))
-#escapeForJS($asset.fullName)
-#set($escapedFullName = $ret_escaped)
-#findCurrikiTitle($asset)
-#escapeForJS($currikiTitle)
-#set($escapedTitle = $ret_escaped)
-{pre}
-&lt;a class="button-link-table" onclick="Curriki.module.addpath.startPath('L', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" alt="$msg.get("mycurriki.collections.buildup")" title="$msg.get("mycurriki.collections.buildup_tooltip")"&gt;$msg.get("mycurriki.collections.buildup")&lt;/a&gt;
-{/pre}
-#end
+           &lt;div id="mycurriki-collections" class="mycurriki mycurriki-collections"&gt;
+ &lt;div id="mycurriki-header" class="mycurriki-header"&gt;
+&lt;div id="mycurriki-header-title" class="heading-1"&gt;Administrator &lt;/div&gt;
+&lt;/div&gt;
+   &lt;div id="mycurriki-tabs" class="tabs"&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Profile"&gt;Profile&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Favorites"&gt;Favorites&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Contributions"&gt;Contributions&lt;/a&gt;
+                 &lt;a class="tab tab-selected" href="/xwiki/bin/view/MyCurriki/Collections"&gt;Collections&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Blog"&gt;Blog&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Groups"&gt;Groups&lt;/a&gt;
+     &lt;/div&gt;
+&lt;div id="mycurriki-main" class="tab-container"&gt;
+&lt;div id="mycurriki-main-header"&gt;
+    &lt;div id="mycurriki-main-header-left"&gt;
+   &lt;div id="mycurriki-main-header-subtitle" class="tab-deck"&gt;Find any curriculum collections in the list below. &lt;/div&gt;
+ &lt;/div&gt;
+&lt;div class="clearfloats"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mycurriki-main-content" class="frame"&gt;
 
-#if($asset.creator == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($asset.fullName, "delete"))
-#set($deleteMsg = $msg.get('mycurriki.collections.actions.delete.confirm'))
-#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&amp;docName=${asset.fullName}&amp;sourceDoc=$doc.getURL('view')"))
-&lt;a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table"&gt;$msg.get("mycurriki.collections.delete")&lt;/a&gt;
-#end
-#end
-##
-##
-## collection macro
-#macro(collectionAsset $asset)
-#if(!$g_rowCount) ## {
-#set($g_rowCount = 0)
-#end ## }
-#set($g_rowCount = $g_rowCount + 1)
-&lt;div class="frame-inset#if(($g_rowCount % 2) == 0) table-odds#end"&gt;
-&lt;div&gt;
-&lt;div class="button-links"&gt;
-#mycollectionactions($asset)
-&lt;/div&gt;
-&lt;div class="frame-inset-ict"&gt;
-#mycurrikiict($asset)
-&lt;/div&gt;
-&lt;div class="frame-inset-title"&gt;
-#mycurrikiassettitle($asset)
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="frame-inset-description mycurriki-collections-row-description"&gt;
-#mycurrikicollectiondescription($asset)
-&lt;/div&gt;
-&lt;/div&gt;
-#end
-##
-##
-## content macro
-#macro(mycurrikipage_content $userdoc $userobj)
-#if($context.user=="XWiki.XWikiGuest")
-## Settings for guests here
-#end
-#if($context.user==$userdoc.fullName)
-## Settings for owner here
-#end
-#set($shortname = $userdoc.fullName)
-#if($shortname.startsWith("XWiki."))
- #set($shortname = $shortname.substring(6))
-#end
-## Do query for contributions
-#set($sql = ", BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CompositeAssetClass' and doc.creator='${userdoc.fullName}' and doc.web='Coll_${shortname}' and doc.name != 'Favorites' and props.id.name='type' and props.value='collection' order by doc.date desc")
-#set($assetList = $xwiki.searchDocuments($sql))
-#set($nbToDisplay = 20)
-#set($startIndex = 0)
-#set($Integer = 0)
-#if($request.startIndex)
- #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
-#end
-#if($startIndex &gt; ($assetList.size() - 1))
- #set($startIndex = $assetList.size() - 1)
-#end
-#set($endIndex = $startIndex - 1 + $nbToDisplay)
-#if($endIndex &gt; ($assetList.size() - 1))
- #set($endIndex = $assetList.size() - 1)
-#end
-##
-{pre}
 &lt;script type="text/javascript"&gt;
 var $hidden = false;
 function toggle_desc(){
@@ -147,11 +106,11 @@ function toggle_desc(){
   if ($hidden){
     $hidden = false;
     $action = 'show';
-    $titl = "$msg.get('mycurriki.collections.titlebarbutton')";
+    $titl = "Hide Descriptions";
   } else {
     $hidden = true;
     $action = 'hide';
-    $titl = "$msg.get('mycurriki.collections.titlebarbuttonalt')";
+    $titl = "Show Descriptions";
   }
   $$('.mycurriki-collections-row-description').invoke($action);
   $('hider-link').title=$titl;
@@ -159,36 +118,11 @@ function toggle_desc(){
   return false;
 }
 &lt;/script&gt;
-{/pre}
-#mycurrikifulltitlebar($msg.get("mycurriki.collections.titlebar") $msg.get("mycurriki.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
-## row per item -- number of rows configurable
-#set($showcount = 0)
-#foreach($assetPage in $assetList)
-#if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
-#set($showcount = 1 + $showcount)
-#if(($showcount &gt; $startIndex) &amp;&amp; ($showcount &lt; ($endIndex + 2)))
-#set($asset = $xwiki.getDocument($assetPage))
-#collectionAsset($asset)
-#end ## showcount &gt; startIndex &amp;&amp; showcount &lt; endIndex
-#end  ## if has view access
-#end ## foreach assetPage in list
-#if($showcount == 0)
-&lt;div class="centertext"&gt;$msg.get("mycurriki.collections.noresults")&lt;/div&gt;
-#end ## showcount
-#mycurrikipaginator($msg.get("mycurriki.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
-#end ## content macro
-##
-##
-## add button
-#macro(mycurrikipage_button $userobj)
-#if($context.action == "view" &amp;&amp; ($context.user==$userdoc.fullName || $hasGlobalAdmin))
-{pre}
-&lt;a class="button button-orange" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")"&gt;$msg.get("mycurriki.collections.addButton")&lt;/a&gt;
-{/pre}
-#end
-#end ## buttonmacro
-## END OF MACROS
-## END OF SETTINGS
-## Display of page
-#mycurrikipagewithbutton("collections")</content>
+
+#mycurrikifulltitlebar(Curriculum Collections Hide Descriptions "" "return toggle_desc();" "red" "hider")
+ &lt;div class="centertext"&gt;&lt;/div&gt;
+ #mycurrikipaginator(Collections -1 20 0)
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</renderedcontent>
 </xwikidoc>

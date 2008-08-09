@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>MyCurriki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>MyCurriki.WebHome</parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1202337483000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
+<date>1218297942000</date>
+<contentUpdateDate>1218297942000</contentUpdateDate>
+<version>3.1</version>
 <title>Blog</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Moved code to macros</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,94 +54,53 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("MyCurriki.MyCurrikiMacros")
-## content macro
-#macro(mycurrikipage_content $userdoc $userobj)
-#mycurrikititlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
-#set($shortname = $userdoc.fullName)
-#if($shortname.startsWith("XWiki."))
- #set($shortname = $shortname.substring(6))
+<content>#**
+  * MyCurriki Blog Page
+  *
+  *#
+#**
+  * MyCurriki Blog Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj) ## {
+#mycurriki_blogbox($userdoc $userobj)
 #end
-## #mycurrikiavatarwithname($userdoc)
+#**
+  * MyCurriki Blog Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagebutton $userobj)
+#mycurriki_blogbutton($userobj)
+#end
 ##
-#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
-#if(!$hasBlog) ## {
-&lt;div&gt;
-$msg.get("mycurriki.blog.noblog")
-&lt;/div&gt;
-#else ## } {
-##
-#set($category = "$!request.category")
-#set($nbitems = "10")
-#set($nbstart = $request.nbstart)
-#set($space = "Blog_${shortname}")
-#if(!$itemname)
- #set($itemname = "Blog")
-#end
-#set($next = $msg.get("myBlog.nextArticle"))
-#set($prev = $msg.get("myBlog.previousArticle"))
-#set($readnext = $msg.get("myBlog.continueReading"))
-#set($addanews = $msg.get("myBlogs.addArticle"))
-#set($addanewsdetails = $msg.get("myBlogs.addArticle.details"))
-#set($newstitle = $msg.get("myBlogs.articleTitle"))
-#macro(blog $category $nbitems $nbstart)
-#set($spacesql = " and doc.web='${space}'")
-#if($category=='')
-#set ($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name&lt;&gt;'ArticleClassTemplate' $spacesql order by doc.creationDate desc")
-#else
-#set ($sql = ", BaseObject as obj, DBStringListProperty as cat join cat.list list where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name&lt;&gt;'ArticleClassTemplate' $spacesql and obj.id=cat.id.id and cat.id.name='category' and list='$category' order by doc.creationDate desc")
-#end
-#set($cdate = "")
-#set($inbitems = $xwiki.parseInt($nbitems))
-#set($inbstart = $xwiki.parseInt($nbstart))
-#set($counter = 0)
-#foreach ($item in $xwiki.searchDocuments($sql, $inbitems, $inbstart))
-#if ($counter != 0)
- &lt;hr /&gt;
-#end
-&lt;div class="cd-article"&gt;
-#set($counter = $counter+1)
-#set($bentrydoc = $xwiki.getDocument($item))
-#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
-#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
-#displayMyCurrikiBlogArticle($bentrydoc, $bentryobj, false)
-&lt;br/&gt;
-#if($counter==$inbitems)
-&lt;div style="float: right; margin-right: 30px"&gt;
-#if ($inbstart!=0)
-#set($iprev = $inbstart - $inbitems)
-[$prev&gt;$doc.name?nbstart=${iprev}]
-#end
-#set($inext = $inbstart + $inbitems)
-[$next&gt;$doc.name?nbstart=${inext}]
-&lt;/div&gt;
-#end
-&lt;/div&gt;
-#end
-#end
+## Actual display of page
+#mycurriki_pagewithbutton("blog")</content>
+<renderedcontent>&lt;p/&gt;
 
-#blog($category $nbitems $nbstart)
-#end ## }
-#end ## content macro
-##
-##
-## Create button
-#macro(mycurrikipage_button $userobj)
-#if($context.action == "view" &amp;&amp; ($context.user==$userdoc.fullName || $xwiki.hasAdminRights()))
-#set($shortname = $userdoc.fullName)
-#if($shortname.startsWith("XWiki."))
- #set($shortname = $shortname.substring(6))
-#end
-#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
-#if(!$hasBlog) ## {
-&lt;a class="button button-orange" href="$xwiki.getURL("Members.MyBlog", "view", "xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createBlog")"&gt;$msg.get("mycurriki.blog.createBlog")&lt;/a&gt;
-#else ## } {
-&lt;a class="button button-orange" href="$xwiki.getURL("XWiki.CreateArticle", "view", "space=Blog_${shortname}&amp;xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createEntry")"&gt;$msg.get("mycurriki.blog.createEntry")&lt;/a&gt;
-#end ## }
-#end
-#end ## button macro
-## END OF MACROS
-## END OF SETTINGS
-## Display of page
-#mycurrikipagewithbutton("blog")</content>
+           &lt;div id="mycurriki-blog" class="mycurriki mycurriki-blog"&gt;
+ &lt;div id="mycurriki-header" class="mycurriki-header"&gt;
+&lt;div id="mycurriki-header-title" class="heading-1"&gt;Administrator &lt;/div&gt;
+&lt;/div&gt;
+   &lt;div id="mycurriki-tabs" class="tabs"&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Profile"&gt;Profile&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Favorites"&gt;Favorites&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Contributions"&gt;Contributions&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Collections"&gt;Collections&lt;/a&gt;
+                 &lt;a class="tab tab-selected" href="/xwiki/bin/view/MyCurriki/Blog"&gt;Blog&lt;/a&gt;
+                 &lt;a class="tab" href="/xwiki/bin/view/MyCurriki/Groups"&gt;Groups&lt;/a&gt;
+     &lt;/div&gt;
+&lt;div id="mycurriki-main" class="tab-container"&gt;
+&lt;div id="mycurriki-main-header"&gt;
+ #mycurriki_blogbutton(com.xpn.xwiki.api.Object@ff51ab)
+     &lt;div id="mycurriki-main-header-left"&gt;
+   &lt;div id="mycurriki-main-header-subtitle" class="tab-deck"&gt;Find all blog entries created by Administrator . Curriki members can add a comment on any blog entry.&lt;/div&gt;
+ &lt;/div&gt;
+&lt;div class="clearfloats"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mycurriki-main-content" class="frame"&gt;
+ #mycurriki_blogbox(XWiki.Admin com.xpn.xwiki.api.Object@ff51ab)
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</renderedcontent>
 </xwikidoc>
