@@ -4,7 +4,7 @@
 ##
 ##
 #**
-  * MyCurriki Blog Page Content Call Back function
+  * MyCurriki Blog Article List
   * @param $userdoc Document of the user
   * @param $userobj Object of the user
   *#
@@ -90,6 +90,93 @@ $msg.get("mycurriki.blog.noblog")
 #end
 #end ## button macro
 
+#**
+  * MyCurriki Blog Article Content
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogarticlepagecontent $userdoc $userobj) ## {
+#set($bentrydoc = $doc)
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get('mycurriki.datetimeFormat')))
+#if($cdate!=$creationDate) ## {
+ #set($cdate = $creationDate)
+#end ## }
+#if($context.action == "inline") ## {
+#set($m_user = $context.user.substring(6))
+#if("$doc.web" == "Blog_${m_user}")
+#set($m_bc="bc=MyCurriki.WebHome;MyCurriki.Blog&")
+#else
+#set($m_bc="")
+#end
+$response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_bc}editArticle=${doc.fullName}"))
+#else ## } {
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "") ## {
+#set($title = "&nbsp;")
+#end ## }
+#mycurriki_titlebar($title "" "" "blue")
+<div class="cd-article">
+#mycurriki_avatarwithname($xwiki.getDocument($bentrydoc.creator))
+#mycurriki_blogarticle($bentrydoc, $bentryobj, true)
+<a name="comments" ></a>
+<hr class="my-curriki-solid-hr"/>
+#set($comments = $bentrydoc.getComments())
+<strong class="strong">$msg.get("blogArticle.commentsto", [$comments.size(), $bentrydoc.display("title", "view", $bentryobj)])</strong>
+<hr class="my-curriki-solid-hr"/>
+#set($count = 0)
+#set($isFirst = true)
+#foreach($comment in $comments) ## {
+#if(!$isFirst) ## {
+ <hr class="my-curriki-hr"/>
+#end ## }
+<div id="comment${count}" class="blog-comment">
+<div class="blog-comment-avatar" "style=float:left;">
+#mycurriki_avatar($xwiki.getDocument($comment.author))
+</div>
+<div class="blog-comment-line-name">
+#set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
+$xwiki.getUserName($comment.author) <span class="blog-comment-date">$commentDate</span>
+#if($comment.author == $context.user || $xwiki.hasAdminRights() || $doc.hasAccessLevel("edit")) ## {
+#sep()
+<a href="?deletecomment=1&date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}');">$msg.get('mycurriki.blog.comment.delete')</a> ## Link to delete -- use XWikiComments.author and date to get unique specification
+#end ## }
+</div>
+<br />
+$comment.comment
+</div>
+#set($count = 1 - $count)
+#set($isFirst = false)
+#end ## foreach on comments ## }
+#if($xwiki.hasAccessLevel("comment")) ## {
+<div id="commentscontent" class="xwikiintracontent">
+<div class="righttext"><a class="button button-orange" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+#set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
+#set($comment = $cclass.newObject())
+      <form id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
+        <hr class="my-curriki-hr"/>
+
+        <fieldset class="expanded" id="commentform">
+        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
+        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
+        <div>
+	<button class="button button-orange" type="submit" id="button-comment-save" onclick="if ($F('XWiki.XWikiComments_comment').length == 0){alert('$msg.get("mycurriki.blog.comment.empty")'); return false;} else {return true;}">$msg.get("caption.saveComment")</button>
+	<button class="button button-grey" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
+        </div>
+        </fieldset>
+      </form>
+      <script type="text/javascript">
+//<!--
+document.getElementById("commentform").className = "collapsed";
+//-->
+      </script>
+</div>
+#end ## hasAccessLevel comments ## }
+</div>
+#end ##else on $context.action ## }
+#end ## content macro ## }
 
 #**
   * Displaying a blog article for the my curriki view
@@ -251,7 +338,10 @@ function checkForm() {
 </div>
 #end ## }
 
-
+#**
+  * Performs article saving
+  *
+  *#
 #macro(blog_savearticle)
 #set($space = "Blog_${context.user.substring(6)}")
 #if($request.space)
@@ -279,6 +369,10 @@ $newdoc.use("XWiki.ArticleClass")
 The article [$mytitle>$pagefullname] has been published successfully.
 #end
 
+#**
+  * Performs redirect to real blog home page
+  *
+  *#
 #macro(blog_redirect)
 #if($doc.web == "Members") ## {
 $response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
@@ -301,6 +395,10 @@ $response.sendRedirect($xwiki.getURL('MyCurriki.Blog', 'view', "$userarg"))
 #end ## }
 #end
 
+#**
+  * Creates a blog
+  *
+  *#
 #macro(blog_createblog)
 #if (!$isguest)
  #set($user = "${xwiki.getDocument($context.user).name}")
@@ -322,8 +420,11 @@ $msg.get("myBlog.onlyMemberCanCreate")
 
 
 
-
-#macro(blog_comment)
+#**
+  * Removes a blog comment
+  *
+  *#
+#macro(blog_deletecomment)
 #if("$!request.date" != "") ## {
 #set($comments = $doc.getComments())
 #set($findDate = $request.date.replace("%20", " "))
@@ -337,86 +438,3 @@ $msg.get("myBlog.onlyMemberCanCreate")
 $response.sendRedirect($xwiki.getURL($doc.fullName))
 #end
 
-
-#macro(mycurriki_blogarticlepagecontent $userdoc $userobj) ## {
-#set($bentrydoc = $doc)
-#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
-#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get('mycurriki.datetimeFormat')))
-#if($cdate!=$creationDate) ## {
- #set($cdate = $creationDate)
-#end ## }
-#if($context.action == "inline") ## {
-#set($m_user = $context.user.substring(6))
-#if("$doc.web" == "Blog_${m_user}")
-#set($m_bc="bc=MyCurriki.WebHome;MyCurriki.Blog&")
-#else
-#set($m_bc="")
-#end
-$response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_bc}editArticle=${doc.fullName}"))
-#else ## } {
-#set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "") ## {
-#set($title = "&nbsp;")
-#end ## }
-#mycurriki_titlebar($title "" "" "blue")
-<div class="cd-article">
-#mycurriki_avatarwithname($xwiki.getDocument($bentrydoc.creator))
-#mycurriki_blogarticle($bentrydoc, $bentryobj, true)
-<a name="comments" ></a>
-<hr class="my-curriki-solid-hr"/>
-#set($comments = $bentrydoc.getComments())
-<strong class="strong">$msg.get("blogArticle.commentsto", [$comments.size(), $bentrydoc.display("title", "view", $bentryobj)])</strong>
-<hr class="my-curriki-solid-hr"/>
-#set($count = 0)
-#set($isFirst = true)
-#foreach($comment in $comments) ## {
-#if(!$isFirst) ## {
- <hr class="my-curriki-hr"/>
-#end ## }
-<div id="comment${count}" class="blog-comment">
-<div class="blog-comment-avatar" "style=float:left;">
-#mycurriki_avatar($xwiki.getDocument($comment.author))
-</div>
-<div class="blog-comment-line-name">
-#set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
-$xwiki.getUserName($comment.author) <span class="blog-comment-date">$commentDate</span>
-#if($comment.author == $context.user || $xwiki.hasAdminRights() || $doc.hasAccessLevel("edit")) ## {
-#sep()
-<a href="?deletecomment=1&date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}');">$msg.get('mycurriki.blog.comment.delete')</a> ## Link to delete -- use XWikiComments.author and date to get unique specification
-#end ## }
-</div>
-<br />
-$comment.comment
-</div>
-#set($count = 1 - $count)
-#set($isFirst = false)
-#end ## foreach on comments ## }
-#if($xwiki.hasAccessLevel("comment")) ## {
-<div id="commentscontent" class="xwikiintracontent">
-<div class="righttext"><a class="button button-orange" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
-#set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
-#set($comment = $cclass.newObject())
-      <form id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
-        <hr class="my-curriki-hr"/>
-
-        <fieldset class="expanded" id="commentform">
-        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
-        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
-        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
-        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
-        <div>
-	<button class="button button-orange" type="submit" id="button-comment-save" onclick="if ($F('XWiki.XWikiComments_comment').length == 0){alert('$msg.get("mycurriki.blog.comment.empty")'); return false;} else {return true;}">$msg.get("caption.saveComment")</button>
-	<button class="button button-grey" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
-        </div>
-        </fieldset>
-      </form>
-      <script type="text/javascript">
-//<!--
-document.getElementById("commentform").className = "collapsed";
-//-->
-      </script>
-</div>
-#end ## hasAccessLevel comments ## }
-</div>
-#end ##else on $context.action ## }
-#end ## content macro ## }

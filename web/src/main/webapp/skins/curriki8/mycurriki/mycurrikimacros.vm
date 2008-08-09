@@ -10,7 +10,7 @@
   * - Favorites
   * - Contributions
   * - Groups
-  * - Blog
+  * - Blog (see blog/blogmacros.vm)
   *
   * These macros are used in the pages of the Wiki MyCurriki space
   *
@@ -940,6 +940,41 @@ $!desc
 <!-- End My Curriki View Photo -->
 #end ##}
 
+#**
+  * Edit the profile email
+  *
+  *#
+#macro(mycurriki_editprofileemail)
+## A user changed their email address
+## Force them to validate first
+#if($context.user == "XWiki.XWikiGuest") ## {
+## Not a real user -- Just bounce to home
+## TODO: Is this an issue if both email and password change at the same time?
+$response.sendRedirect($xwiki.getURL("Main.WebHome"))
+#end ## }
+##
+#if($xwiki.hasAdminRights()) ## {
+## Is an admin, so don't bother with verification
+#if("$!request.user" != "") ## {
+#set($userarg = "user=${request.user}")
+#else ## }{
+#set($userarg = "")
+#end ## }
+$response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
+#else ## } {
+##
+## Logout the user and redirect to Email Verification page
+#set($username = $context.user.replace("XWiki.", ""))
+#set($userDoc = $xwiki.getDocument("XWiki.${username}"))
+#set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
+#set($junk = $userObj.set("active", 0))
+#set($junk = $userObj.set("email_undeliverable", 1))
+#set($junk = $userDoc.saveWithProgrammingRights())
+#set($session = $request.getSession(true))
+#set($xredirect = $xwiki.getURL("Registration.EmailVerification", "view", "username=${username}"))
+$response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=${xredirect}"))
+#end ## }
+#end
 
 #**
   * Displays the profile of the user
