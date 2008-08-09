@@ -1,17 +1,114 @@
 ##
 ##
+## My Curriki Blog Macros
 ##
-## Blogs
 ##
-##
-#macro(displayBlogArticle $bentrydoc $bentryobj $displayFully)
-#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("dateFormat")))
-#set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,"hh:mm a"))
-#set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "")
-#set($title = "&nbsp;")
+#**
+  * MyCurriki Blog Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogbox $userdoc $userobj)
+#mycurriki_titlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
 #end
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+<div>
+$msg.get("mycurriki.blog.noblog")
+</div>
+#else ## } {
+##
+#set($category = "$!request.category")
+#set($nbitems = "10")
+#set($nbstart = $request.nbstart)
+#set($space = "Blog_${shortname}")
+#if(!$itemname)
+ #set($itemname = "Blog")
+#end
+#set($next = $msg.get("myBlog.nextArticle"))
+#set($prev = $msg.get("myBlog.previousArticle"))
+#set($readnext = $msg.get("myBlog.continueReading"))
+#set($addanews = $msg.get("myBlogs.addArticle"))
+#set($addanewsdetails = $msg.get("myBlogs.addArticle.details"))
+#set($newstitle = $msg.get("myBlogs.articleTitle"))
+#set($spacesql = " and doc.web='${space}'")
+#if($category=='')
+#set ($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' $spacesql order by doc.creationDate desc")
+#else
+#set ($sql = ", BaseObject as obj, DBStringListProperty as cat join cat.list list where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' $spacesql and obj.id=cat.id.id and cat.id.name='category' and list='$category' order by doc.creationDate desc")
+#end
+#set($cdate = "")
+#set($inbitems = $xwiki.parseInt($nbitems))
+#set($inbstart = $xwiki.parseInt($nbstart))
+#set($counter = 0)
+#foreach ($item in $xwiki.searchDocuments($sql, $inbitems, $inbstart))
+#if ($counter != 0)
+ <hr />
+#end
+<div class="cd-article">
+#set($counter = $counter+1)
+#set($bentrydoc = $xwiki.getDocument($item))
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
+#mycurriki_blogarticle($bentrydoc, $bentryobj, false)
+<br/>
+#if($counter==$inbitems)
+<div style="float: right; margin-right: 30px">
+#if ($inbstart!=0)
+#set($iprev = $inbstart - $inbitems)
+[$prev>$doc.name?nbstart=${iprev}]
+#end
+#set($inext = $inbstart + $inbitems)
+[$next>$doc.name?nbstart=${inext}]
+</div>
+#end
+</div>
+#end
+#end ## }
+#end ## content macro
+
+
+#**
+  * MyCurriki Blog Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogbutton $userobj)
+#if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights()))
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+<a class="button button-orange" href="$xwiki.getURL("MyCurriki.BlogCreateBlog", "view", "xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createBlog")">$msg.get("mycurriki.blog.createBlog")</a>
+#else ## } {
+<a class="button button-orange" href="$xwiki.getURL("MyCurriki.BlogCreateArticle", "view", "space=Blog_${shortname}&xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createEntry")">$msg.get("mycurriki.blog.createEntry")</a>
+#end ## }
+#end
+#end ## button macro
+
+
+#**
+  * Displaying a blog article for the my curriki view
+  *
+  * @param $bentrydoc Article document to display the article for
+  * @param $bentryobj Article object to display the article for
+  * @param $displayFully Displaying the full article or only the extract
+  * @author dward@curriki.org
+  *#
+#macro(mycurriki_blogarticle $bentrydoc $bentryobj $displayFully) ## {
+#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.dateFormat")))
+#set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
+#if($doc.web == "MyCurriki") ## {
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "") ## {
+#set($title = "&nbsp;")
+#end ## }
 1 $title
+#end ## }
 #set($extract = $!bentrydoc.display("extract","view", $bentryobj))
 <div class="article_content" >
 #set($content = $bentrydoc.display("content", "view", $bentryobj))
@@ -33,13 +130,13 @@ $bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName
 </div>
 <div class="clearfloats"></div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
-$msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
+$msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
 </div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 #if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
 <a class="curriki-link" href="$bentrydoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a>
-## #sep()
 #else
+## #sep()
 <a class="curriki-link" href="$bentrydoc.getURL("view")" >$msg.get("myBlog.permalink")</a>
 #end
 #sep() {pre}
@@ -52,11 +149,8 @@ $msg.get("myBlog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creat
 #end
 {/pre}
 </div>
-#end
+#end ## }
 ##
-##
-##
-
 #**
   * Display blog article in create or edit mode
   *
@@ -267,7 +361,6 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_b
 #mycurriki_titlebar($title "" "" "blue")
 <div class="cd-article">
 #mycurriki_avatarwithname($xwiki.getDocument($bentrydoc.creator))
-
 #mycurriki_blogarticle($bentrydoc, $bentryobj, true)
 <a name="comments" ></a>
 <hr class="my-curriki-solid-hr"/>
