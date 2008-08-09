@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>XWiki</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>XWiki.ArticleClass</parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1107744420000</creationDate>
-<date>1199611020000</date>
-<contentUpdateDate>1203116888000</contentUpdateDate>
-<version>1.66</version>
+<date>1218302549000</date>
+<contentUpdateDate>1218302549000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Moved code</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -55,8 +55,7 @@
 </property>
 </object>
 <content>#if($doc.web.startsWith("Blog_"))
-#includeMacros('MyCurriki.MyCurrikiMacros')
-#includeInContext("XWiki.MyBlogArticleClassSheet")
+#includeInContext("MyCurriki.BlogViewArticle")
 #else
 #set($obj = $doc.getObject("XWiki.ArticleClass",0))
 
@@ -120,4 +119,17 @@ document.forms.inline["XWiki.ArticleClass_0_title"].value = title;
 #end
 #end
 #end</content>
+<renderedcontent>
+&lt;div class="article_title"&gt;
+&lt;h3 class="heading-1-1" id="H24docdisplay2822title222C22view222C24obj29"&gt;&lt;span&gt;$doc.display("title", "view", $obj)&lt;/span&gt;&lt;/h3&gt;&lt;p/&gt;
+&lt;/div&gt;
+&lt;div class="article_content"&gt;
+$doc.display("content", "rendered", $obj)
+&lt;/div&gt;
+&lt;div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px;"&gt;
+Posted by &lt;span class="wikilink"&gt;&lt;a href="/xwiki/bin/view/XWiki/Admin"&gt;Administrator&lt;/a&gt;&lt;/span&gt; on February 7, 2005 in null | &lt;span class="wikilink"&gt;&lt;a href="/xwiki/bin/view/XWiki/ArticleClassSheet?viewer=comments"&gt;0 Comment&lt;/a&gt;&lt;/span&gt; | &lt;span class="wikilink"&gt;&lt;a href="/xwiki/bin/view/XWiki/ArticleClassSheet"&gt;Link to this Post&lt;/a&gt;&lt;/span&gt; | 
+&lt;a href="/xwiki/bin/inline/XWiki/ArticleClassSheet" &gt;Edit This Post&lt;/a&gt;
+| &lt;a href="/xwiki/bin/delete/XWiki/ArticleClassSheet" &gt;Delete This Post&lt;/a&gt;
+
+&lt;/div&gt;</renderedcontent>
 </xwikidoc>
