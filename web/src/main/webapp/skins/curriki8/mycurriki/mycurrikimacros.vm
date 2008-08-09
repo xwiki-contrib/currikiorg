@@ -65,9 +65,7 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_header $userobj) ## {
-<div id="mycurriki-header" class="mycurriki-header">
-<div id="mycurriki-header-title" class="heading-1">$userobj.first_name $userobj.last_name</div>
-</div>
+<h2>$userobj.first_name $userobj.last_name</h2>
 #end ## macro ## }
 
 
@@ -121,14 +119,6 @@ $text
 #set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
 #end ## }
 <div id="mycurriki-main-header-left">
-## <div id="mycurriki-main-header-title" class="main-title">
-## TODO: Please note that these rules will only be valid for english
-## #findUserPrefix($userdoc.fullName.substring(6))
-## $userPrefix $msg.get("mycurriki.tab.${pageref}.label")
-#if($hasbutton == 1) ## {
-## <br />
-#end ## }
-## </div>
 #if($subtitle != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ## {
 <div id="mycurriki-main-header-subtitle" class="tab-deck">$subtitle</div>
 #end ## }
@@ -636,14 +626,12 @@ $!desc
     #foreach ($attach in $userdoc.attachmentList) ##{
       <a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")" >
       <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="${width}" /></a>
-      <br/><br/>
       <a class="curriki-link" id="profile-removephoto"
 	 href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${xeditredirect}")"
 	 onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');"
 	 title="$msg.get("profile.removeYourPhoto")">
 	 $msg.get("profile.removePhoto")
       </a>
-      <br/><br/>
     #end ##}
   #end ##}
   </div>
@@ -660,6 +648,7 @@ $!desc
 #macro(mycurriki_editprofile $userdoc $userobj) ##{
  <!-- Edit Profile Form -->
  <table border="0" cellspacing="2" cellpadding="2">
+  <tbody> 
    <tr>
      <td> *${msg.get("profile.field.firstName")}*</td>
    </tr>
@@ -741,6 +730,7 @@ $!desc
    <tr>
      <td> $userdoc.display("comment", "edit", $userobj) </td>
    </tr>
+  </tbody>
  </table>
  <!-- End Edit Profile Form -->
 #end ##}
@@ -790,6 +780,7 @@ $!desc
     <input id="origpw" name="origpw" type="hidden" value="********" />{/pre}
     <br />
     <table border="0" cellspacing="0" cellpadding="3">
+     <tbody>
       <tr>
         <td valign="top">
           #mycurriki_editphoto($userdoc $xeditredirect)
@@ -798,6 +789,7 @@ $!desc
           #mycurriki_editprofile($userdoc $userobj)
         </td>
       </tr>
+     </tbody>
     </table>
   </form>
   #mycurriki_editprofilebuttons($xredirect)
@@ -932,8 +924,7 @@ $!desc
 	<img src="$userdoc.getAttachmentURL($attach.filename,"download")"  /></a>
 	#if ($context.action=="inline") ##{
 	  #set($deleteredir = $userdoc.getURL("inline"))
-	  <br/><a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');" title="$msg.get("profile.removeYourPhoto")">$msg.get("profile.removePhoto")</a>
-	  <br/>
+	  <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');" title="$msg.get("profile.removeYourPhoto")">$msg.get("profile.removePhoto")</a>
 	#end  ## } if inline
       #end  ## } foreach attach in list
       #if ($context.action!="inline") ##{
@@ -941,8 +932,7 @@ $!desc
 	#set($attach = $userdoc.attachmentList.get(0))
 	#if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin) ## {
 	  #set($deleteredir = $userdoc.getURL("view"))
-	  <br/><a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('You need to remove your picture first. Do you want to do that ?');" >$msg.get("profile.modifyYourPhoto")</a>
-	  <br/>
+	  <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('You need to remove your picture first. Do you want to do that ?');" >$msg.get("profile.modifyYourPhoto")</a>
 	#end  ## } is same user
       #end  ## } is inline
    #end ##}
@@ -960,6 +950,7 @@ $!desc
 #macro(mycurriki_viewprofile $userdoc $userobj) ##{
   <!-- Curriki View Profile -->
   <table border="0" cellspacing="2" cellpadding="2">
+   <tbody>
     <tr>
      <td> *$msg.get("profile.field.display.firstName")*
      #if ($context.action=="inline") </td></tr><tr><td> #end
@@ -1045,6 +1036,7 @@ $!desc
       #if ($context.action=="inline") </td></tr><tr><td> #end
       #mycurriki_dashifempty($userdoc.display("comment", $userobj)) </td>
     </tr>
+   </tbody>
   </table>
   <!-- End Curriki View Profile -->
 #end ##} end macro
@@ -1057,13 +1049,13 @@ $!desc
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_viewprofiletable $userdoc $userobj) ##{
-  <!-- Curri View Profile Table -->
+  <!-- Curriki View Profile Table -->
   ## This is the main display
   #set($class = $userobj.xWikiClass)
-  <div style="margin:0;padding:0" class="edit-profile"> ##{
-  <br />
+  <div style="margin:0px; padding:0px;" class="edit-profile"> ##{
   <table border="0" cellspacing="0" cellpadding="3"> ##{
-      <tr> ##{
+      <tbody> ##{
+       <tr> ##{
         <td valign="top"> ##{
           #mycurriki_viewphoto($userdoc)
         </td> ##}
@@ -1073,7 +1065,6 @@ $!desc
             #if(($userdoc.fullName==$context.user)||$xwiki.hasAdminRights()) ##{
               #set($redirect = $xwiki.requestURL)
               <div id="attachdiv" class="hidden"> ##{
-              <br /><br />
               <form id="attach" action="$userdoc.getURL("upload")" enctype="multipart/form-data" method="post" name="profilImageAttach"> ##{
                 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($redirect)"/>
                 <input id="xwikiuploadname" type="hidden" name="filename" value="" size="20"/>
@@ -1123,6 +1114,7 @@ $!desc
           #end ##}
         </td> ##}
       </tr> ##}
+     </tbody> ##}
     </table> ##}
   </div> ##}
   <!-- End Curri View Profile Table -->
