@@ -1331,6 +1331,56 @@ $!desc
 #end ##} end macro mycurrikifavoritesbox
 
 
+#**
+  * MyCurriki Favorites
+  * Remove a favorite
+  * @param $request.docName
+  *#
+#macro(mycurriki_removefavorite)
+#if($request.docName) ## {
+ #if("1" == $request.confirm) ## {
+  #set($shortname = $context.user)
+  #if($shortname.startsWith("XWiki.")) ## {
+   #set($shortname = $shortname.substring(6))
+  #end ## }
+  #set($favPage = "Coll_${shortname}.Favorites")
+  #set($done = false)
+  #if($xwiki.exists($favPage)) ## {
+   #set($favDoc = $xwiki.getDocument("Coll_${shortname}.Favorites"))
+   #set($assetList = $favDoc.getObjects('XWiki.SubAssetClass'))
+   #foreach($assetPointer in $assetList) ## {
+    #if($request.docName == $assetPointer.get('assetpage')) ## {
+     #set($junk = $favDoc.removeObject($assetPointer))
+     #set($junk = $favDoc.save($msg.get("mycurriki.favorites.removed.comment", [$request.docName])))
+     #set($done = true)
+    #end ## }
+   #end ## }
+  #end ## }
+ #end ## }
+ #if ($request.sourceDoc) ## {
+ $response.sendRedirect($request.sourceDoc)
+ #else ## } {
+  #if($message) ## {
+<div id="xwikimessage">
+$message
+</div>
+  #end ## }
+<div id="xwikicontent">
+<br />
+$msg.get("deleted")
+<br />
+<br />
+<br />
+</div>
+ #end ## }
+#else ## } {
+ #if ($request.sourceDoc) ## {
+ $response.sendRedirect($request.sourceDoc)
+ #else ## } {
+ $response.sendRedirect($xwiki.getURL("MyCurriki.Favorites"))
+ #end ## }
+#end ## }
+
 ##
 ## My Curriki Contributions
 ##
