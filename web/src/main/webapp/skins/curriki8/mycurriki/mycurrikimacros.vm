@@ -1351,7 +1351,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
         #if("$type"!="2") ## {
           #set($showcount = 1 + $showcount)
           #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2))) ## {
-            #favoriteAsset($asset $allcols)
+            #mycurriki_favoritesasset($asset $allcols)
           #end ## showcount > startIndex && showcount < endIndex ## }
         #end  ## type != 2 ## }
       #end  ## if has view access ## }
@@ -1978,7 +1978,7 @@ $msg.get("mycurriki.groups.message.by") <a href="$xwiki.getURL("${message.creato
 <div class="frame-inset#if(($g_rowCount % 2) == 0) table-odds#end">
 <div>
 <div class="button-links">
-#mycurriki_collectionaction($asset)
+#mycurriki_collectionactions($asset)
 </div>
 <div class="frame-inset-ict">
 #mycurriki_ict($asset)
