@@ -1215,12 +1215,12 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   * TODO: I'm not sure why ret_escaped and currikiTitle are needed
   *
   * @param $asset Asset to display
-  * @param $ret_escaped The asset escaped title to be usable in Javascript
-  * @param $currikiTitle The asset Title
-  * @param $g_userHasCollections True if the user has collections
   * @param $allcols True if we show the action column of the favorites
+  * @param $ret_escaped Impl param The asset escaped title to be usable in Javascript
+  * @param $currikiTitle Impl param The asset Title
+  * @param $g_userHasCollections Impl param True if the user has collections
   *#
-#macro(mycurriki_favoritesasset $asset $ret_escaped $currikiTitle $g_userHasCollections $allcols)
+#macro(mycurriki_favoritesasset $asset $allcols)
   <!-- MyCurriki Favorites Asset -->
   #if(!$g_rowCount) ## {
     #set($g_rowCount = 0)
