@@ -90,4 +90,4 @@ public class NominateResource extends BaseResource {
 
         getResponse().redirectSeeOther(newPage);
     }
-}\ No newline at end of file
+}
