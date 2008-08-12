@@ -21,6 +21,7 @@ cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 CURRIKI="\
 	ext/DDView.js \
 	ext/Multiselect.js \
+	ext/pPageSize.js \
 	curriki/curriki-base.js \
 	curriki/data/curriki-data-user.js \
 	curriki/data/curriki-data-metadata.js \
@@ -44,3 +45,9 @@ ADDPATH="\
 	"
 
 cat $ADDPATH | $COMPRESS_JS > ../webapp/js/curriki-module-addpath.js
+
+NOMINATE="\
+	curriki/crs/nominate-base.js \
+	"
+
+cat $NOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-nominate.js

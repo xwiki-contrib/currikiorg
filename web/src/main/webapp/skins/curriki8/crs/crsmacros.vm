@@ -56,7 +56,7 @@ $msg.get("curriki.crs.asof") $xwiki.formatDate($lastreview_date, $msg.get("dateF
 $msg.get("curriki.crs.reviewpending")
 #else
 #if($context.user!="XWiki.XWikiGuest")
-<a href="javascript:nominateAsset2('${asset.fullName}')">$msg.get("curriki.crs.nominate")</a>
+<a href="javascript:Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});">$msg.get("curriki.crs.nominate")</a>
 #end
 #end
 </div>
