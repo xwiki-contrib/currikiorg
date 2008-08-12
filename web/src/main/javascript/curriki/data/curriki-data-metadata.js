@@ -152,7 +152,6 @@ Curriki.ui.component.asset.getFwTree = function(){
 			,id:'FW_masterFramework.WebHome'
 			,cls:'fw-item-top fw-item-parent fw-item'
 			,leaf:false
-			,loaded:true
 			,expanded:true
 			,children:Curriki.data.fw_item.fwChildren
 		})
