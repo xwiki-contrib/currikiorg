@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.superadmin</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1198004622000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>7.1</version>
+<date>1218470342000</date>
+<contentUpdateDate>1218470342000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Fix macro names</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -76,9 +76,9 @@ $msg.get("groups_home_firsttimewelcome_title")
 #else
 &lt;div class="head"&gt;
 #if($isGroupAdmin)
-#mycurrikiGroupInfo($s.spaceName "edit")
+#mycurriki_groupinfo($s.spaceName "edit")
 #else
-#mycurrikiGroupInfo($s.spaceName "view")
+#mycurriki_groupinfo($s.spaceName "view")
 #end
 &lt;/div&gt;
 ############### welcome message ##########
@@ -179,7 +179,7 @@ $s.display("accessprivileges","view")
 ############### group contributions ################
 &lt;div class="groups-curriculum"&gt;
 &lt;div id="groups-search" class="frame"&gt;
-#mycurrikititlebar($msg.get("groups_home_contributions_title") "" "" "red")
+#mycurriki_titlebar($msg.get("groups_home_contributions_title") "" "" "red")
 &lt;div class="frame-content"&gt;
 $msg.get("groups_home_contributions_infotxt")
 &lt;div&gt;
@@ -209,4 +209,116 @@ $msg.get('groups.curriculum.contributions.viewORsearch')
 #groupsmembershipinfo($spaceName)
 #end
 #groupsfooter()</content>
+<renderedcontent>
+ &lt;h1&gt;&lt;/h1&gt;
+&lt;div id="groups-home" class="groups groups-home"&gt;
+ &lt;div id="groups-tabs" class="tabs"&gt;
+ &lt;a class="tab tab-selected" href="/xwiki/bin/view/Groups/"&gt;Home&lt;/a&gt;
+ &lt;a class="tab" href="/xwiki/bin/view/Groups/Messages"&gt;Messages&lt;/a&gt;
+ &lt;a class="tab" href="/xwiki/bin/view/Groups/Curriculum"&gt;Curriculum&lt;/a&gt;
+ &lt;a class="tab" href="/xwiki/bin/view/Groups/Members"&gt;Members&lt;/a&gt;
+ &lt;a class="tab" href="/xwiki/bin/view/Groups/Documentation"&gt;Documentation&lt;/a&gt;
+ &lt;/div&gt;
+&lt;div id="groups-home-main" class="tab-container"&gt;
+&lt;div class="head"&gt;&lt;p/&gt;
+ &lt;div class="frame"&gt;
+ &lt;div class="frame-inset-titlebar"&gt;
+        &lt;div  class="titleheader titleheader-blue"&gt;&lt;h3 &gt;&lt;/h3&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;p/&gt;
+          &lt;div class="frame-inset-logo"&gt;
+    &lt;a href="/xwiki/bin/view/Groups/" title="" alt=""&gt;
+      &lt;img src="/xwiki/skins/curriki8/groups_default_logo.gif" width="120" height="82" title="" alt="" /&gt;
+    &lt;/a&gt;
+  &lt;/div&gt;&lt;p/&gt;
+&lt;div class="frame-inset-description"&gt;&lt;p/&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p/&gt;
+&lt;p/&gt;
+  &lt;div class="frame" id="section_1"&gt;
+          #mycurrikititlebar(Welcome "" "" blue)
+	      &lt;div class="frame-content" id="section1content"&gt;&lt;p/&gt;
+&lt;div id="groups-members-welcomeblock"&gt;&lt;p/&gt;
+&lt;/div&gt;
+ &lt;div class="clearfloats"&gt;&lt;/div&gt;
+     &lt;/div&gt;
+  &lt;/div&gt;&lt;p/&gt;
+&lt;p/&gt;
+  &lt;div class="frame" id="section_2"&gt;
+          #mycurrikititlebar(Information Settings "" "" blue)
+	      &lt;div class="frame-content" id="section2content"&gt;&lt;p/&gt;
+&lt;div id="group-info"&gt;
+&lt;div class="group-membership-policy"&gt;
+&lt;strong class="caption"&gt;Membership Policy:&lt;/strong&gt; 
+&lt;/div&gt;
+&lt;div class="group-licence"&gt;
+&lt;strong class="caption"&gt;Default License Policy:&lt;/strong&gt;&lt;p/&gt;
+&lt;/div&gt;
+&lt;div class="group-language"&gt;
+&lt;strong class="caption"&gt;Language:&lt;/strong&gt;&lt;p/&gt;
+&lt;/div&gt;
+&lt;div class="group-access-policy"&gt;
+&lt;strong class="caption"&gt;Default Access Privileges:&lt;/strong&gt;&lt;p/&gt;
+&lt;/div&gt;
+&lt;div class="group-creation-date"&gt;
+&lt;strong class="caption"&gt;Creation Date:&lt;/strong&gt; Nov-23-2007
+&lt;/div&gt;
+&lt;div class="group-subject-education-level"&gt;
+&lt;table width="100%" border="0"&gt;
+&lt;tr&gt;
+&lt;th width="50%" class="caption"&gt;Subject:&lt;/th&gt;
+&lt;th width="50%" class="caption"&gt;Educational Level:&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;p/&gt;
+    &lt;/td&gt;
+&lt;td&gt;  &lt;/td&gt;
+&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+ &lt;div class="clearfloats"&gt;&lt;/div&gt;
+     &lt;/div&gt;
+  &lt;/div&gt;
+&lt;div class="groups-curriculum"&gt;
+&lt;div id="groups-search" class="frame"&gt;
+      &lt;div  class="titleheader titleheader-red"&gt;&lt;h3 &gt;Group Contributions&lt;/h3&gt;&lt;/div&gt;
+&lt;div class="frame-content"&gt;
+Here you can find any contributions from the group.
+&lt;div&gt;
+
+&lt;form id="groupsearch"
+      onsubmit="document.groupsearch.method='post'; if (document.groupsearch.brsqry.value!='') {document.groupsearch.action=document.groupsearch.action+'#__terms='+document.groupsearch.brsqry.value;}; document.location.href=document.groupsearch.action; return false;"
+      action="/xwiki/bin/view/Groups/ContributionsSearch"
+      name="groupsearch"&gt;
+
+&lt;div class="groupcontribution-leftbutton"&gt;
+&lt;a class="button button-orange" href="/xwiki/bin/view/Groups/Contributions" alt="View All" title="View All"&gt;View All&lt;/a&gt;
+OR
+&lt;/div&gt;
+&lt;div id="curriki-search-field-container"&gt;
+    &lt;div class="curriki-search-a" id="curriki-search-field"&gt;
+     &lt;input type="hidden" value="" name="area" class="hidden"/&gt;
+     &lt;input type="text" value="enter search terms" id="curriki-searchbox" name="brsqry" onfocus="if(this.value=='enter search terms') this.value='';" onblur="if(this.value=='') this.value='enter search terms';" /&gt;
+     &lt;button name="btn" type="submit" id="searchbtn"&gt;Go &amp;#xBB;&lt;/button&gt;
+    &lt;/div&gt; &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p/&gt;
+&lt;p/&gt;
+  &lt;div class="frame" id="section_3"&gt;
+          #mycurrikititlebar(Membership Information "" "" blue)
+	      &lt;div class="frame-content" id="section3content"&gt;&lt;p/&gt;
+Because this is a closed group, potential members must submit a membership request. If you are interested in joining this group, click "Request Membership" below.&lt;p/&gt;
+&lt;div id="groups-members-request-button" class="groups-members-button"&gt;
+&lt;a href="/xwiki/bin/view/Groups/RequestMembership" class="button button-orange"&gt;
+Request Membership
+&lt;/a&gt;
+&lt;/div&gt;
+ &lt;div class="clearfloats"&gt;&lt;/div&gt;
+     &lt;/div&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;
+&lt;/div&gt;</renderedcontent>
 </xwikidoc>
