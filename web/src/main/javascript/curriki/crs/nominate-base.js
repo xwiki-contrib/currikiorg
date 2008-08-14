@@ -152,8 +152,7 @@ Curriki.module.nominate.init = function() {
 
 		Nominate.Nominate = function(comments) {
 			Curriki.assets.NominateAsset(Curriki.current.assetName, comments,
-					function(asset) {
-						this.close();
+					function(response) {
 						window.location.href = Curriki.current.cameFrom;
 					});
 		};
@@ -174,7 +173,7 @@ Curriki.module.nominate.initAndStart = function(fcn, options) {
 		current.assetName = options.assetName || current.assetName;
 		current.parentAsset = options.parentAsset || current.parentAsset;
 		current.publishSpace = options.publishSpace || current.publishSpace;
-		current.cameFrom = options.cameFrom || current.cameFrom;
+		current.cameFrom = window.location.href;
 
 		current.assetTitle = options.assetTitle || current.assetTitle;
 		current.assetType = options.assetType || current.assetType;
