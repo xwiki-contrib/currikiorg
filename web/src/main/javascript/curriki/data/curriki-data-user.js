@@ -136,7 +136,6 @@ console.log('Collections: ', this.collectionChildren);
 				,cls:'resource-'+collection.assetType
 				,allowDrag:false
 				,allowDrop:true
-				,loaded:true
 			};
 
 			if (Ext.isArray(collection.children) && collection.children.length > 0) {
@@ -161,10 +160,8 @@ console.log('Collections: ', this.collectionChildren);
 						childInfo.cls = childInfo.cls+' rights-unviewable';
 					} else if (child.assetType.search(/Composite$/) === -1){
 						childInfo.leaf = true;
-						childInfo.loaded = true;
 					} else {
 						childInfo.leaf = false;
-						childInfo.loaded = false;
 						childInfo.allowDrop = true;
 						childInfo.disallowDropping = (child.rights.edit?null:true);
 					}
@@ -198,7 +195,6 @@ console.log('Collections: ', this.collectionChildren);
 					,allowDrag:false
 					,allowDrop:true
 					,disallowDropping:true
-					,loaded:true
 				};
 
 				retVal.push(colInfo);

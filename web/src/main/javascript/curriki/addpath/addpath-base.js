@@ -1871,7 +1871,6 @@ console.log("Published CB: ", newAsset);
 					,allowDrag:false
 					,allowDrop:true // Needed to auto-expand on hover
 					,disallowDropping:true // Disable drop on this node
-					,loaded:true
 					,expanded:(Curriki.data.user.collectionChildren.length < 4)
 					,children:Curriki.data.user.collectionChildren
 					});
@@ -1885,7 +1884,6 @@ console.log("Published CB: ", newAsset);
 					,allowDrag:false
 					,allowDrop:true // Needed to auto-expand on hover
 					,disallowDropping:true // Disable drop on this node
-					,loaded:true
 					,expanded:(Curriki.data.user.groupChildren.length < 4)
 					,children:Curriki.data.user.groupChildren
 					});
@@ -1993,7 +1991,6 @@ console.log("Published CB: ", newAsset);
 									,hlDrop:false
 									,allowDrag:false
 									,allowDrop:false
-									,loaded:true
 									,expanded:true
 									,children:[{
 										 text:(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle||'UNKNOWN'
@@ -2001,7 +1998,6 @@ console.log("Published CB: ", newAsset);
 										,assetName:(Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName
 										,cls:'ctv-target ctv-resource resource-'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')
 										,leaf:true
-										,loaded:true
 									}]
 								})
 							}]
@@ -2103,7 +2099,6 @@ console.log("Published CB: ", newAsset);
 									,leaf:false
 									,allowDrag:false
 									,allowDrop:false
-									,loaded:true
 									,expanded:true
 									,children:topChildren
 								})
