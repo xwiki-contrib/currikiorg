@@ -158,7 +158,6 @@ Curriki.module.nominate.init = function() {
 		};
 
 		Curriki.module.nominate.initialized = true;
-		
 	}
 };
 
