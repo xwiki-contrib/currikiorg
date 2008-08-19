@@ -51,3 +51,9 @@ NOMINATE="\
 	"
 
 cat $NOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-nominate.js
+
+REVIEW="\
+	curriki/crs/review-base.js \
+	"
+
+cat $REVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-review.js

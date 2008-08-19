@@ -19,37 +19,37 @@
  */
 package org.curriki.xwiki.plugin.asset;
 
-import com.xpn.xwiki.api.Property;
-import com.xpn.xwiki.api.Document;
-import com.xpn.xwiki.doc.XWikiDocument;
-import com.xpn.xwiki.doc.XWikiAttachment;
-import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.XWikiException;
-import com.xpn.xwiki.objects.BaseObject;
-import com.xpn.xwiki.objects.BaseStringProperty;
-
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.lang.reflect.Constructor;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
-import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
-import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
-import org.curriki.xwiki.plugin.asset.attachment.AttachmentAsset;
-import org.curriki.xwiki.plugin.asset.attachment.ImageAsset;
-import org.curriki.xwiki.plugin.asset.attachment.ArchiveAsset;
-import org.curriki.xwiki.plugin.asset.attachment.AudioAsset;
 import org.curriki.xwiki.plugin.asset.attachment.AnimationAsset;
-import org.curriki.xwiki.plugin.asset.text.TextAsset;
+import org.curriki.xwiki.plugin.asset.attachment.ArchiveAsset;
+import org.curriki.xwiki.plugin.asset.attachment.AttachmentAsset;
+import org.curriki.xwiki.plugin.asset.attachment.AudioAsset;
+import org.curriki.xwiki.plugin.asset.attachment.ImageAsset;
+import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
+import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
+import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 import org.curriki.xwiki.plugin.asset.external.ExternalAsset;
 import org.curriki.xwiki.plugin.asset.external.VIDITalkAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
+import org.curriki.xwiki.plugin.asset.text.TextAsset;
+
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.api.Property;
+import com.xpn.xwiki.doc.XWikiAttachment;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.objects.BaseStringProperty;
 
 public class Asset extends CurrikiDocument {
     private static final Log LOG = LogFactory.getLog(Asset.class);
@@ -134,7 +134,7 @@ public class Asset extends CurrikiDocument {
         if (className != null) {
             use(className);
         }
-        
+
         return (description == null || description.length() == 0) ? "" : description;
     }
 
@@ -322,7 +322,7 @@ public class Asset extends CurrikiDocument {
         }
         return true;
     }
-    
+
     public boolean isCollection() {
         if (isFolder()) {
             com.xpn.xwiki.api.Object obj = getObject(Constants.COMPOSITE_ASSET_CLASS);
@@ -641,13 +641,13 @@ public class Asset extends CurrikiDocument {
         // Let's choose a nice name for the page
         String prettyName = context.getWiki().clearName(name, true, true, context);
         doc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList(), context);
-        
+
         applyRightsPolicy();
 
         List<String> params = new ArrayList<String>();
         params.add(doc.getStringValue(Constants.ASSET_CLASS_CATEGORY));
         save(context.getMessageTool().get("curriki.comment.finishcreatingsubasset", params));
-        
+
         return this;
     }
 
@@ -661,5 +661,63 @@ public class Asset extends CurrikiDocument {
 
         // Super's validate
         return super.validate();
+    }
+
+	/**
+	 *
+	 * @param appropriatePedagogy
+	 * @param contentAccuracy
+	 * @param technicalCompletness
+	 * @return the calculated rating
+	 * @throws XWikiException
+	 */
+
+    public String calculateRating(String appropriatePedagogy, String contentAccuracy,String technicalCompletness)throws XWikiException{
+
+    	//validate that a value was selected in all categories
+    	if(appropriatePedagogy==null || "".equals(appropriatePedagogy)  ||
+    			contentAccuracy==null || "".equals(contentAccuracy) ||
+    			technicalCompletness==null || "".equals(technicalCompletness)){
+    		throw new AssetException(context.getMessageTool().get("curriki.crs.review.mustSelectAValueInAllCategories"));
+    	}
+    	//validate that only appropriatePedagogy is not rated
+    	//or all criteria are not rated
+    	if (!appropriatePedagogy.equals("0") && (contentAccuracy.equals("0") || technicalCompletness.equals("0"))) {
+    		throw new AssetException(context.getMessageTool().get("curriki.crs.review.notValidNotRatedCategorySelection"));
+    	}
+    	if (appropriatePedagogy.equals("0") &&
+    			((contentAccuracy.equals("0") && !technicalCompletness.equals("0"))||(!contentAccuracy.equals("0") && technicalCompletness.equals("0")))) {
+    		throw new AssetException(context.getMessageTool().get("curriki.crs.review.notValidNotRatedCategorySelection"));
+    	}
+
+    	int weightAppropriatePedagogy=2;
+    	int weightContentAccuracy=2;
+    	int weightTechnicalCompletness=1;
+
+    	int valueAppropriatePedagogy=Integer.parseInt(appropriatePedagogy);
+    	int valueContentAccuracy=Integer.parseInt(contentAccuracy);
+    	int valueTechnicalCompletness=Integer.parseInt(technicalCompletness);
+
+    	//weights are zero if the criteria value is zero
+    	weightAppropriatePedagogy=valueAppropriatePedagogy==0?0:weightAppropriatePedagogy;
+    	weightContentAccuracy=valueContentAccuracy==0?0:weightContentAccuracy;
+    	weightTechnicalCompletness=valueTechnicalCompletness==0?0:weightTechnicalCompletness;
+
+    	float numerator = weightAppropriatePedagogy*valueAppropriatePedagogy+weightContentAccuracy*valueContentAccuracy+weightTechnicalCompletness*valueTechnicalCompletness;
+    	float denominator= weightAppropriatePedagogy+weightContentAccuracy+weightTechnicalCompletness;
+
+
+    	int rating;
+    	if(weightAppropriatePedagogy==0 && weightContentAccuracy==0 && weightTechnicalCompletness==0){
+    		rating=0;
+    	}else{
+    		if(weightAppropriatePedagogy!=0){
+	    			rating=Math.round(numerator/denominator);
+	    		}else{
+	    			rating=(int)Math.floor(numerator/denominator);
+	    		}
+    		}
+
+    	return String.valueOf(rating);
     }
 }
