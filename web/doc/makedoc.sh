@@ -19,3 +19,9 @@
 rm -rf ../target/doc/
 mkdir -p  ../target/doc/ 
 ./bin/velocidoc.sh -src ./curriki/ -dst ../target/doc/ 
+rm -rf ../target/currikivelocityapi
+cp -r ../target/doc ../target/currikivelocityapi
+cd ../target
+zip -r currikivelocityapi.zip currikivelocityapi
+cp currikivelocityapi.zip ../doc
+cd ../doc
