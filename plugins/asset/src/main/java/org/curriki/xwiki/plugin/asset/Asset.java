@@ -720,4 +720,13 @@ public class Asset extends CurrikiDocument {
 
     	return String.valueOf(rating);
     }
+    
+    /**
+     * get the numbers of comments, the reviews are counted as a comment
+     * @return comment numbers
+     */
+    public Integer getCommentNumbers()
+    {
+    	return getComments().size() + getObjectNumbers(Constants.CURRIKI_REVIEW_CLASS);
+    }
 }

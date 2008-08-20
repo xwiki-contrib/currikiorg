@@ -489,7 +489,7 @@ $msg.get("asset.externallink")
 #if(!$isPrint)
 <div class="asset-tabs">
 <a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a>
-<a class="asset-tab"  href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">Comments ($currDoc.comments.size())</a>
+<a class="asset-tab"  href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">Comments ($currDoc.commentNumbers)</a>
 </div> ## tabs
 #end
 <div id="wizzard" class="asset-page">
@@ -524,7 +524,7 @@ $msg.get("asset.externallink")
 <hr class="my-curriki-solid-hr" >
 <div class="asset-content-footer">
 <div class="asset-content-footer-bordered">
-<a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.comments.size()])</a> #sep()
+<a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.commentNumbers])</a> #sep()
 #if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $currDoc.fullName))
 <a href="$currDoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a> #sep()
 #else
