@@ -69,15 +69,15 @@ public class NominateResource extends BaseResource {
             obj = asset.newObject("CRS.CurrikiReviewStatusClass");
             obj.set("name",asset.getFullName());
             obj.set("number",0);
-        }
+        } 
         obj.set("nomination_user", suser);
         obj.set("nomination_date", sdate);
         String comments = json.getString("comments");
         obj.set("nomination_comment", comments);
         obj.set("reviewpending", "1");
-
+        
         asset.save("save CRS nomination");
-
+        
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_BAD_REQUEST, e.getFullMessage());
         }
