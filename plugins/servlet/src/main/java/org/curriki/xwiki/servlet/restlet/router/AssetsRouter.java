@@ -11,6 +11,7 @@ import org.curriki.xwiki.servlet.restlet.resource.assets.SubassetResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.SubassetsResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.TextassetResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.TextassetsResource;
+import org.curriki.xwiki.servlet.restlet.resource.assets.UnnominateResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.ViditalkResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.ViditalksResource;
 import org.restlet.Context;
@@ -35,5 +36,6 @@ public class AssetsRouter extends Router {
         attach("/{assetName}/textassets/{textId}", TextassetResource.class);
         attach("/{assetName}/published", PublishedResource.class);
         attach("/{assetName}/nominate", NominateResource.class);
+        attach("/{assetName}/unnominate", UnnominateResource.class);
     }
 }

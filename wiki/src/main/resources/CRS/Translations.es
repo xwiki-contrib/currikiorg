@@ -118,6 +118,11 @@ curriki.crs.nominate_headertext= Puede escribir una nota opcional a los revisore
 curriki.crs.nominate_footertext=Su nominación no estará completa hasta que presione Enviar.
 curriki.crs.nominate_submit=Enviar
 curriki.crs.nominate_alreadynominated=Este recurso ya fue nominado.
+curriki.crs.review.managereviewstatus=ADMINISTRAR ESTADO DE REVISIÓN
+curriki.crs.review.reviewthisresource=REVISIÓN DEL RECURSO
+curriki.crs.review.unnominateconfirm=Haga clic en Sí, si desea eliminar este recurso de la cola de revisión y lo hacen aparecer como si no hubiera sido designado, con la condición de "Sin Calificación/No Calificable" 
+curriki.crs.review.unnominate=Este recurso no puede ni debe ser revisado en este momento
+curriki.crs.review.information=Información
 
 ## use in GWT and in Wiki
 curriki.crs.currikireview=Revisión Curriki

@@ -277,6 +277,33 @@ Curriki.assets = {
 				alert('Error: '+(response.responseText||('Server error publishing resource.  '+(response.statusText||''))));
 			}
 		});
+	},
+	UnnominateAsset:function(assetPage, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage+'/unnominate'
+			,method:'PUT'
+			,headers: {
+				'Accept':'application/json'
+				,'Content-type':'application/json'
+			}
+			,jsonData: {}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object with the new asset URL
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot unnominate resource', response.responseText, options);
+					alert('Error unnominating resource: '+(response.responseText||'Unknown server error'));
+				} else {
+					callback(o);
+				}
+			}
+			,failure:function(response, options){
+				console.error('Cannot unnominate resource', response, options);
+				alert('Error: '+(response.responseText||('Server error unnominating resource.  '+(response.statusText||''))));
+			}
+		});
 	}
 	,NominateAsset:function(assetPage, comments, callback){
 		Ext.Ajax.request({

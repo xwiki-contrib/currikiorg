@@ -57,3 +57,9 @@ REVIEW="\
 	"
 
 cat $REVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-review.js
+
+UNNOMINATE="\
+	curriki/crs/unnominate-base.js \
+	"
+
+cat $UNNOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-unnominate.js
