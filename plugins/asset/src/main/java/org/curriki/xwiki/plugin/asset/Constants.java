@@ -149,4 +149,9 @@ public interface Constants {
     String RIGHTS_CLASS_USER = "users";
     String RIGHTS_ADMIN_GROUP = "XWiki.XWikiAdminGroup";
     String RIGHTS_ALL_GROUP = "XWiki.XWikiAllGroup";
+    
+    /**
+     *     Class CRS.CurrikiReviewClass
+     */
+    String CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewClass";
 }
