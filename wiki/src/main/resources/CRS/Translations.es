@@ -54,7 +54,7 @@
 <tags/>
 </property>
 </object>
-<content>CRS.CurrikiReviewStatusClass_status_0=Sin Calificación/No Calificable 
+<content>CRS.CurrikiReviewStatusClass_status_0=Sin Calificación/No Calificable
 CRS.CurrikiReviewStatusClass_status_1=Básico
 CRS.CurrikiReviewStatusClass_status_2=Bueno
 CRS.CurrikiReviewStatusClass_status_3=Ejemplar
@@ -76,6 +76,7 @@ CRS.CurrikiReviewClass_rating_1=Básico
 CRS.CurrikiReviewClass_rating_2=Bueno
 CRS.CurrikiReviewClass_rating_3=Ejemplar
 curriki.crs.nominate=Nominar
+curriki.crs.review.CRSJumpPage.url=/xwiki/bin/view/Coll_curriki/CurrikiReviewSystemCollection?bc=XWiki.curriki
 curriki.crs.review.incomplete=Esta revisión esta incompleta. Por favor complete todos los campos.
 curriki.crs.review.submittedby=Enviado por
 curriki.crs.review.currentrating=Calificación Actual
@@ -87,13 +88,15 @@ curriki.crs.review.tc=Grado de Compleción Técnica
 curriki.crs.review.ca=Exactitud del Contenido
 curriki.crs.review.ap=Pedagogía Apropiada
 curriki.crs.review.comments=Comentarios
-curriki.crs.review.commentsdetails=La primera oración de su comentario será automáticamente generada basada en los puntajes seleccionados arriba. Por favor escriba unas pocas oraciones explicando sus elecciones. Ud tendra una vista previa completa del comentario y podrá enviarlo. Los comentarios no pueden exceder los {0} caracteres. 
+curriki.crs.review.commentsdetails=La primera oración de su comentario será automáticamente generada basada en los puntajes seleccionados arriba. Por favor escriba unas pocas oraciones explicando sus elecciones. Ud tendra una vista previa completa del comentario y podrá enviarlo. Los comentarios no pueden exceder los {0} caracteres.
 curriki.crs.review.comments.maxlengthexceeded=Los comentarios no pueden exceder los {0} caracteres.
+curriki.crs.review.notValidNotRatedCategorySelection=Solo se puede aplicar Sin Calificación/No Calificable en la categoría "Pedagogía Apropiada" o en todas las categorias.
+curriki.crs.review.mustSelectAValueInAllCategories=Debe seleccionar un valor en todas las categorias
 curriki.crs.review.submitpreview=Vista Previa
 curriki.crs.review.submitreview=Enviar Revisión
 curriki.crs.review.revise=Revisar
-curriki.crs.review.saved=Su revisión ha sido enviada. 
-curriki.crs.review.returnto=Volver a 
+curriki.crs.review.saved=Su revisión ha sido enviada.
+curriki.crs.review.returnto=Volver a
 curriki.crs.review.document=el recurso revisado
 curriki.crs.review.or=o
 curriki.crs.review.reviewpage=la cola de revisión
@@ -120,7 +123,7 @@ curriki.crs.nominate_submit=Enviar
 curriki.crs.nominate_alreadynominated=Este recurso ya fue nominado.
 curriki.crs.review.managereviewstatus=ADMINISTRAR ESTADO DE REVISIÓN
 curriki.crs.review.reviewthisresource=REVISIÓN DEL RECURSO
-curriki.crs.review.unnominateconfirm=Haga clic en Sí, si desea eliminar este recurso de la cola de revisión y lo hacen aparecer como si no hubiera sido designado, con la condición de "Sin Calificación/No Calificable" 
+curriki.crs.review.unnominateconfirm=Haga clic en Sí, si desea eliminar este recurso de la cola de revisión y lo hacen aparecer como si no hubiera sido designado, con la condición de "Sin Calificación/No Calificable"
 curriki.crs.review.unnominate=Este recurso no puede ni debe ser revisado en este momento
 curriki.crs.review.information=Información
 
@@ -134,7 +137,7 @@ curriki.crs.rating1=Básico
 curriki.crs.rating2=Bueno
 curriki.crs.rating3=Ejemplar
 curriki.crs.ratingP=Premium
-curriki.crs.asof=como de  
+curriki.crs.asof=como de
 curriki.crs.reviewpending=Revisar Pendientes
 curriki.crs.reviewnominate=Nominar
 curriki.crs.reviewreview=Revisar
@@ -145,7 +148,7 @@ curriki.crs.confirmunsettopartner=Si quiere quitarle el atributo Premium, selecc
 curriki.crs.reviewlist.currikireview=Revisión Curriki
 curriki.crs.reviewlist.currikihaspartnered=Curriki ha contratado con su socio para proveer recursos premium de curriculum
 curriki.crs.reviewlist.nocurrikireviews=Este recurso no ha sido revisado.
-curriki.crs.generatedcomment=Este recurso fue revisado usando la rubrica para {0} y ha recibido una calificación completa de {1}&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt; La calificación esta compuesta por:&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;table width="100%" border="0"&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Completud Técnica: {2}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;Exactitud del Contenido: {3}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;Pedagogía Apropiada: {4}&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;{5} 
+curriki.crs.generatedcomment=Este recurso fue revisado usando la rubrica para {0} y ha recibido una calificación completa de {1}&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt; La calificación esta compuesta por:&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;table width="100%" border="0"&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Completud Técnica: {2}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;Exactitud del Contenido: {3}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;Pedagogía Apropiada: {4}&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;{5}
 curriki.crs.generatedcommentunrated=Este recurso fue revisado usando la rubrica para {0} y no pudo recibir una calificación.&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt; La calificación esta compuesta por:&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;table width="100%" border="0"&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Completud Técnica: {1}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;Content Accuracy: {2}&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;Pedagogía Apropiada: {3}&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;br /&amp;gt;{4}
 curriki.toc.title=Tabla de Contenidos</content>
 </xwikidoc>
