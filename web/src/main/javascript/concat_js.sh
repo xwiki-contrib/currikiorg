@@ -63,3 +63,9 @@ UNNOMINATE="\
 	"
 
 cat $UNNOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-unnominate.js
+
+PARTNER="\
+	curriki/crs/partner-base.js \
+	"
+
+cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js

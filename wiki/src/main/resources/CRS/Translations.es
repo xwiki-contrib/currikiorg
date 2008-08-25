@@ -123,9 +123,13 @@ curriki.crs.nominate_submit=Enviar
 curriki.crs.nominate_alreadynominated=Este recurso ya fue nominado.
 curriki.crs.review.managereviewstatus=ADMINISTRAR ESTADO DE REVISIÓN
 curriki.crs.review.reviewthisresource=REVISIÓN DEL RECURSO
-curriki.crs.review.unnominateconfirm=Haga clic en Sí, si desea eliminar este recurso de la cola de revisión y lo hacen aparecer como si no hubiera sido designado, con la condición de "Sin Calificación/No Calificable"
+curriki.crs.review.unnominateconfirm=Haga clic en OK, si desea eliminar este recurso de la cola de revisión y lo hacen aparecer como si no hubiera sido designado, con la condición de "Sin Calificación/No Calificable" 
 curriki.crs.review.unnominate=Este recurso no puede ni debe ser revisado en este momento
 curriki.crs.review.information=Información
+curriki.crs.review.partnerconfirmtitle=ESTE ES UN RECURSO DE UN AFILIADO.
+curriki.crs.review.partnerconfirmmessage=Si tu quieres setear este recurso como de un Afiliado. click OK
+curriki.crs.review.partner=Este es un recurso de un Afiliado.
+
 
 ## use in GWT and in Wiki
 curriki.crs.currikireview=Revisión Curriki

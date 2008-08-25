@@ -269,11 +269,19 @@
                 			Curriki.module.unnominate.confirm();
 		                	document.getElementById('unnominate').checked = false;
 		                }
+				function clickPartnerCheckbox()
+		                {
+                			Curriki.module.partner.confirm();
+		                	document.getElementById('partner').checked = false;
+		                }
 			&lt;/script&gt;
 
 			1.1 $msg.get("curriki.crs.review.managereviewstatus")
 			&lt;input type="checkbox" id="unnominate" onclick="clickCheckbox()"&gt;$msg.get("curriki.crs.review.unnominate")
-			&lt;/input&gt;	
+			&lt;/input&gt;
+			&lt;/p&gt;
+			&lt;input type="checkbox" id="partner" onclick="clickPartnerCheckbox()"&gt;$msg.get("curriki.crs.review.partner")
+			&lt;/input&gt;
 			1.1 $msg.get("curriki.crs.review.reviewthisresource")
 			
 			*$msg.get("curriki.crs.review.nominatorsnotes")*:

@@ -6,6 +6,7 @@ import org.curriki.xwiki.servlet.restlet.resource.assets.ExternalResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.ExternalsResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.MetadataResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.NominateResource;
+import org.curriki.xwiki.servlet.restlet.resource.assets.PartnerResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.PublishedResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.SubassetResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.SubassetsResource;
@@ -37,5 +38,6 @@ public class AssetsRouter extends Router {
         attach("/{assetName}/published", PublishedResource.class);
         attach("/{assetName}/nominate", NominateResource.class);
         attach("/{assetName}/unnominate", UnnominateResource.class);
+        attach("/{assetName}/partner", PartnerResource.class);
     }
 }
