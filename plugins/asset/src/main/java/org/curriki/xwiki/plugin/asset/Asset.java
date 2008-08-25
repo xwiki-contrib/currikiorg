@@ -719,6 +719,12 @@ public class Asset extends CurrikiDocument {
 	    			rating=(int)Math.floor(numerator/denominator);
 	    		}
     		}
+    	
+    	//this is a special case, if pedagogy=N/R, CAccuracy=3 and TCompleteness=2
+    	// return 3
+    	if(weightAppropriatePedagogy==0 && valueContentAccuracy==3 && valueTechnicalCompletness==2){
+    		rating=3;
+    	}
 
     	return String.valueOf(rating);
     }
