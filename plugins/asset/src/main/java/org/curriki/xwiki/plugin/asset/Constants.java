@@ -47,7 +47,6 @@ public interface Constants {
     String ASSET_CLASS_CATEGORY = "category";
     String ASSET_CLASS_FRAMEWORK_ITEMS = "fw_items";
     String ASSET_CLASS_FRAMEWORK_ITEMS_DEFAULT = "FW_masterFramework.WebHome";
-    String ASSET_CLASS_STATUS = "status";
 
     String ASSET_CLASS_RIGHT = "rights";
     String ASSET_CLASS_RIGHT_PUBLIC = "public";
@@ -116,7 +115,7 @@ public interface Constants {
     String VIDITALK_PLAYER = "GWT.ViditalkPlayback";
     String VIDITALK_SITECODE_VAR = "viditalk.sitecode";
     String VIDITALK_DOWNLOAD_DIR = "http://flashmedia.viditalk.com/10/active/";
-    
+
     String CATEGORY_IMAGE = "Image: GIF, JPG, PNG, BMP";
     String CATEGORY_AUDIO = "Media: Audio/Video";
     String CATEGORY_ANIMATION = "Media: Animation/Activity";
@@ -149,9 +148,22 @@ public interface Constants {
     String RIGHTS_CLASS_USER = "users";
     String RIGHTS_ADMIN_GROUP = "XWiki.XWikiAdminGroup";
     String RIGHTS_ALL_GROUP = "XWiki.XWikiAllGroup";
-    
+
     /**
-     *     Class CRS.CurrikiReviewClass
+     * CRS
      */
-    String CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewClass";
+    String ASSET_CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewClass";
+    String ASSET_CURRIKI_REVIEW_CLASS_STATUS = "status";
+    String ASSET_CURRIKI_REVIEW_CLASS_STATUS_PARTNER="P";
+
+    /**
+     * BASIC FILE CHECK STATUS
+     */
+    String ASSET_BFCS_STATUS="fcstatus";
+    String ASSET_BFCS_STATUS_NONE="0";
+    String ASSET_BFCS_STATUS_OK="1";
+    String ASSET_BFCS_STATUS_SPECIALCHECKREQUIRED="2";
+    String ASSET_BFCS_STATUS_IMPROVEMENTREQUIRED="3";
+    String ASSET_BFCS_STATUS_DELETEDFROMMEMBERACCESS="4";
+
 }

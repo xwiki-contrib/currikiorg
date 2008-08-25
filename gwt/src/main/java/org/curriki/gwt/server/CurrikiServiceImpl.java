@@ -21,6 +21,28 @@
  */
 package org.curriki.gwt.server;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.curriki.gwt.client.AssetDocument;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.TreeListItem;
+import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
+import org.curriki.gwt.client.widgets.browseasset.AssetItem;
+import org.curriki.gwt.client.widgets.template.TemplateInfo;
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.mimetype.MimeType;
+import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
+
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiAttachment;
@@ -44,27 +66,6 @@ import com.xpn.xwiki.web.XWikiEngineContext;
 import com.xpn.xwiki.web.XWikiMessageTool;
 import com.xpn.xwiki.web.XWikiRequest;
 import com.xpn.xwiki.web.XWikiResponse;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.curriki.gwt.client.AssetDocument;
-import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.TreeListItem;
-import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
-import org.curriki.gwt.client.widgets.browseasset.AssetItem;
-import org.curriki.gwt.client.widgets.template.TemplateInfo;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.mimetype.MimeType;
-import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiService {
     private static final Log log = LogFactory.getLog(CurrikiServiceImpl.class);
@@ -457,7 +458,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             assertIfCompositeAssetDoesNotExist(parent, context);
 
-                
+
             XWikiDocument doc = createSourceAsset(parent, space, pageName, context);//context.getWiki().getDocument(space + "." + pageName, context);
             //assertEditRight(doc, context);
 
@@ -498,7 +499,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             compObj.set(Constants.COMPOSITEASSET_TYPE_PROPERTY, compositeAssetType, context);
 
             doc.setContent("#includeForm(\"XWiki.CompositeAssetTemplate\")");
-            
+
             doc.setCreator(context.getUser());
 
             protectPage(doc, context);
@@ -691,12 +692,18 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
             rightObj.setStringValue("groups", "XWiki.XWikiAllGroup");
             rightObj.setStringValue("levels", "edit");
-            rightObj.setIntValue("allow", 1);       
+            rightObj.setIntValue("allow", 1);
         }
         else if (rights != null && rights.equals(Constants.RIGHT_PROTECTED)) {
 
-        }
-        else {
+        }else if(rights != null && rights.equals(Constants.RIGHT_PRIVATE)){
+            //remove from review queue
+        	BaseObject crsObj = assetDoc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+            Integer reviewpending = crsObj.getIntValue("reviewpending");
+    		if(reviewpending!=null && reviewpending.equals(1)){
+    			crsObj.setIntValue("reviewpending", 0);
+    		}
+        }else {
             rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
             rightObj.setStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
@@ -747,7 +754,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             BaseObject obj = assetDoc.newObject("XWiki.XWikiRights", context);
             obj.setStringValue(usergroupfield, usergroupvalue);
-            obj.setStringValue("levels", "edit");   
+            obj.setStringValue("levels", "edit");
             obj.setIntValue("allow", 1);
     }
 
@@ -1050,7 +1057,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             XWikiDocument newAssetDoc = createSourceAssetFromTemplate(templatePageName, parentAsset, space, prettyName, false, context);
             if (newAssetDoc==null) {
-                throw new XWikiException(XWikiException.MODULE_XWIKI_GWT_API, -1, "Asset does not allow derivatives");                
+                throw new XWikiException(XWikiException.MODULE_XWIKI_GWT_API, -1, "Asset does not allow derivatives");
             }
 
             if (replaceSubAsset(compositeAssetDoc, templatePageName, newAssetDoc.getFullName(), index)==false) {
@@ -1098,7 +1105,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
     public boolean checkVersion(String pageName, String version) throws XWikiGWTException {
         try {
             XWikiContext context = getXWikiContext();
-            return version.equals(context.getWiki().getDocument(pageName, context).getVersion());       
+            return version.equals(context.getWiki().getDocument(pageName, context).getVersion());
         } catch (Exception e) {
             throw getXWikiGWTException(e);
         }
@@ -1152,7 +1159,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             applyRightsPolicy(doc, context);
 
             context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.applyrights"), context);
-            
+
         } catch (Exception e) {
             throw getXWikiGWTException(e);
         }
@@ -1336,7 +1343,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         for(long i = 0; i < orderedList.size(); i++){
             if (orderedList.get(new Long(i)) == null){
-                log.warn("there is no asset at the position " + i);    
+                log.warn("there is no asset at the position " + i);
             }
         }
     }
@@ -1367,7 +1374,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                     return null;
             }
         }
-        
+
         if (doc.getObject(Constants.COMPOSITEASSET_CLASS) != null){
             parent.setType(Constants.CATEGORY_COLLECTION);
             parent.setProtected(true);
@@ -1866,7 +1873,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             throw getXWikiGWTException(e);
         }
     }
-    
+
     public Document updateViditalk(String fullName, String videoId) throws XWikiGWTException {
         try {
             XWikiContext context = getXWikiContext();

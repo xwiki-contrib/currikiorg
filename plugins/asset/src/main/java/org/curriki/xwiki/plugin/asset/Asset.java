@@ -232,6 +232,8 @@ public class Asset extends CurrikiDocument {
             rightObj.setStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
             rightObj.setIntValue("allow", 1);
+            //private assets must be removed from review queue
+            removeFromReviewQueue();
         }
     }
 
@@ -720,13 +722,80 @@ public class Asset extends CurrikiDocument {
 
     	return String.valueOf(rating);
     }
-    
-    /**
+
+     /**
      * get the numbers of comments, the reviews are counted as a comment
      * @return comment numbers
      */
     public Integer getCommentNumbers()
     {
-    	return getComments().size() + getObjectNumbers(Constants.CURRIKI_REVIEW_CLASS);
+    	return getComments().size() + getObjectNumbers(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+    }
+
+
+    public boolean canBeNominatedOrReviewed(){
+    	use(Constants.ASSET_CLASS);
+        String rights = (String)getValue(Constants.ASSET_CLASS_RIGHT);
+
+        //false if access privilege is PRIVATE
+        if (rights!=null && rights.equals(Constants.ASSET_CLASS_RIGHT_PRIVATE)) {
+         return false;
+        }
+        //false if CRS.CurrikiReviewStatusClass.status == P (Partner)
+    	use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+        String status = (String)getValue(Constants.ASSET_CURRIKI_REVIEW_CLASS_STATUS);
+
+        if (status!=null && status.equals(Constants.ASSET_CURRIKI_REVIEW_CLASS_STATUS_PARTNER)) {
+            return false;
+        }
+
+        //false if BFCS is SPECIALCHECKREQUIRED,IMPROVEMENTREQUIRED or DELETEDFROMMEMBERACCESS
+        use(Constants.ASSET_CLASS);
+        String fcStatus = (String)getValue(Constants.ASSET_BFCS_STATUS);
+        if(fcStatus!=null && !fcStatus.equals("")){
+        	if(fcStatus.equals(Constants.ASSET_BFCS_STATUS_SPECIALCHECKREQUIRED) ||
+        		fcStatus.equals(Constants.ASSET_BFCS_STATUS_IMPROVEMENTREQUIRED) ||
+        		fcStatus.equals(Constants.ASSET_BFCS_STATUS_DELETEDFROMMEMBERACCESS)){
+        		return false;
+        	}
+        }
+
+    	return true;
+    }
+
+    /**
+     * If BFCS other than “OK” was applied or the resource is set to Private,
+     * the resource should be removed from the Review Queue and no longer show Nominate or Review links.
+     */
+    public void checkReviewQueue(){
+    	use(Constants.ASSET_CLASS);
+        String fcStatus = (String)getValue(Constants.ASSET_BFCS_STATUS);
+        if(fcStatus!=null && !fcStatus.equals("")){
+        	if(fcStatus.equals(Constants.ASSET_BFCS_STATUS_SPECIALCHECKREQUIRED) ||
+        		fcStatus.equals(Constants.ASSET_BFCS_STATUS_IMPROVEMENTREQUIRED) ||
+        		fcStatus.equals(Constants.ASSET_BFCS_STATUS_DELETEDFROMMEMBERACCESS)){
+        		removeFromReviewQueue();
+        		return;
+        	}
+        }
+
+        String rights = (String)getValue(Constants.ASSET_CLASS_RIGHT);
+
+        //false if access privilege is PRIVATE
+        if (rights!=null && rights.equals(Constants.ASSET_CLASS_RIGHT_PRIVATE)) {
+        	removeFromReviewQueue();
+        }
+
+    }
+
+    /**
+     * Remove the asset from the review queue
+     */
+    public void removeFromReviewQueue(){
+    	use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+        Integer reviewpending = (Integer)getValue("reviewpending");
+		if(reviewpending!=null && reviewpending.equals(1)){
+			set("reviewpending", "0");
+		}
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>FileCheck</web>
@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent>FileCheck.WebHome</parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1194209262000</creationDate>
-<date>1194649755000</date>
-<contentUpdateDate>1203116887000</contentUpdateDate>
-<version>1.14</version>
+<date>1219353061000</date>
+<contentUpdateDate>1219353061000</contentUpdateDate>
+<version>3.1</version>
 <title>$msg.fc_filecheck</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -55,107 +55,103 @@
 </property>
 </object>
 <content>#if($request.page)
-#set($asset = $xwiki.getDocument($request.page))
-1 $msg.fc_filecheck $asset.getDisplayTitle()
-#if($request.submit)
-#set($ok = $asset.updateObjectFromRequest("XWiki.AssetClass"))
-#set($ok = $asset.use("XWiki.AssetClass"))
-#set($ok = $asset.set("fcreviewer", $context.user))
-#set($ok = $asset.set("fcdate", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm")))
-#set($status = $asset.getValue("fcstatus"))
-#set($emailsource = "")
-#set($assetowner = $asset.creator)
-#if("$status"=="3")
-#set($emailsource = "FileCheck.ResourceImprovementEmail")
-$asset.applyRightsPolicy("private")
-#elseif("$status"=="4")
-#set($emailsource = "FileCheck.ResourceDeletedEmail")
-$asset.changeOwnership("XWiki.Delete")
-$asset.applyRightsPolicy("private")
-#end
-#set($message = "fc_updatemessage_${status}")
-$asset.saveWithProgrammingRights($message) 
-$msg.get("fc_filecheckddone"). $msg.get("fc_returnto") [$msg.get("fc_document")&gt;$asset.fullName] $msg.get("fc_or") [$msg.get("fc_fchomepage")&gt;WebHome].
-
-#if($emailsource!="")
-#if($assetowner&amp;&amp;($assetowner!=""))
-#set($assetownerdoc = $xwiki.getDocument($assetowner))
-#set($ok = $assetownerdoc.use("XWiki.XWikiUsers"))
-#set($optout = $assetownerdoc.getValue("opt_out"))
-#set($email = $assetownerdoc.getValue("email"))
-#if("$!optout"!="1"&amp;&amp;$email!="")
-#set($assettitle = $asset.displayTitle)
-#set($membername = $assetownerdoc.name)
-##set($adminemail = $xwiki.getXWikiPreference("admin_email"))
-##set($asseturl = $asset.getExternalURL("view"))
-##set($profileurl = $assetownerdoc.getExternalURL())
-#set($mesg = $xwiki.parseContent($xwiki.getDocument($emailsource).getTranslatedContent()))
-#set($junk = $xwiki.sendMessage("filecheck@curriki.org", $email, $mesg))
-$msg.get("fc_mailsentto") [$email&gt;$assetowner]:
-
-{pre}
-&lt;pre&gt;
-$mesg
-&lt;/pre&gt;
-{/pre}
-#end
-#end
-#end
-#else
-{pre}
-&lt;script type="text/javascript"&gt;
-var msg = new Object();
-#foreach($status in [1..4])
-msg["status$status"] = "$msg.get("fc_confirmmessage${status}")";
-#end
-function getCheckedValue(radioObj) {
-	if(!radioObj)
-		return "";
-	var radioLength = radioObj.length;
-	if(radioLength == undefined)
-		if(radioObj.checked)
-			return radioObj.value;
-		else
-			return "";
-	for(var i = 0; i &lt; radioLength; i++) {
-		if(radioObj[i].checked) {
-			return radioObj[i].value;
-		}
-	}
-	return "";
-}
-function confirmform(form) {
- var status = getCheckedValue(form["XWiki.AssetClass_0_fcstatus"]);
- if (status=="") {
-   alert("$msg.fc_noactionchecked");
- } else {
-   var result = confirm(msg["status" + status]);
-   if (result)   
-     return true;
- }
- return false;
-}
+	#set($asset = $xwiki.getDocument($request.page))
+	1 $msg.fc_filecheck $asset.getDisplayTitle()
+	#if($request.submit)
+		#set($ok = $asset.updateObjectFromRequest("XWiki.AssetClass"))
+		#set($ok = $asset.use("XWiki.AssetClass"))
+		#set($ok = $asset.set("fcreviewer", $context.user))
+		#set($ok = $asset.set("fcdate", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm")))
+		#set($status = $asset.getValue("fcstatus"))
+		#set($emailsource = "")
+		#set($assetowner = $asset.creator)
+		$asset.checkReviewQueue()
+		#if("$status"=="3")
+			#set($emailsource = "FileCheck.ResourceImprovementEmail")
+			$asset.applyRightsPolicy("private")
+			#elseif("$status"=="4")
+				#set($emailsource = "FileCheck.ResourceDeletedEmail")
+				$asset.changeOwnership("XWiki.Delete")
+				$asset.applyRightsPolicy("private")
+		#end
+		#set($message = "fc_updatemessage_${status}")
+		$asset.saveWithProgrammingRights($message)
+		$msg.get("fc_filecheckddone"). $msg.get("fc_returnto") [$msg.get("fc_document")&gt;$asset.fullName] $msg.get("fc_or") [$msg.get("fc_fchomepage")&gt;WebHome].
+		#if($emailsource!="")
+			#if($assetowner&amp;&amp;($assetowner!=""))
+				#set($assetownerdoc = $xwiki.getDocument($assetowner))
+				#set($ok = $assetownerdoc.use("XWiki.XWikiUsers"))
+				#set($optout = $assetownerdoc.getValue("opt_out"))
+				#set($email = $assetownerdoc.getValue("email"))
+				#if("$!optout"!="1"&amp;&amp;$email!="")
+					#set($assettitle = $asset.displayTitle)
+					#set($membername = $assetownerdoc.name)
+					##set($adminemail = $xwiki.getXWikiPreference("admin_email"))
+					##set($asseturl = $asset.getExternalURL("view"))
+					##set($profileurl = $assetownerdoc.getExternalURL())
+					#set($mesg = $xwiki.parseContent($xwiki.getDocument($emailsource).getTranslatedContent()))
+					#set($junk = $xwiki.sendMessage("filecheck@curriki.org", $email, $mesg))
+					$msg.get("fc_mailsentto") [$email&gt;$assetowner]:
+					{pre}
+					&lt;pre&gt;
+					$mesg
+					&lt;/pre&gt;
+					{/pre}
+				#end
+			#end
+		#end
+		#else
+			{pre}
+			&lt;script type="text/javascript"&gt;
+				var msg = new Object();
+				#foreach($status in [1..4])
+					msg["status$status"] = "$msg.get("fc_confirmmessage${status}")";
+				#end
+				function getCheckedValue(radioObj) {
+				if(!radioObj)
+				return "";
+				var radioLength = radioObj.length;
+				if(radioLength == undefined)
+				if(radioObj.checked)
+				return radioObj.value;
+				else
+				return "";
+				for(var i = 0; i &lt; radioLength; i++) {
+					if(radioObj[i].checked) {
+					return radioObj[i].value;
+					}
+					}
+					return "";
+					}
+					function confirmform(form) {
+					var status = getCheckedValue(form["XWiki.AssetClass_0_fcstatus"]);
+					if (status=="") {
+					alert("$msg.fc_noactionchecked");
+					} else {
+					var result = confirm(msg["status" + status]);
+					if (result)
+					return true;
+					}
+					return false;
+					}
 &lt;/script&gt;
 {/pre}
 &lt;form action="" onsubmit="return confirmform(this);"&gt;
-&lt;input type="hidden" name="page" value="$!request.page" /&gt;
-#set($ok = $asset.use("XWiki.AssetClass"))
-1.1 $msg.fc_chooseaction
-
-#set($fcstatus = $asset.getValue("fcstatus"))
-#foreach($status in [1..4])
-&lt;input type="radio" name="XWiki.AssetClass_0_fcstatus" value="${status}" #if("$status"=="$fcstatus") checked #end /&gt; $msg.get("fc_statusmessage${status}") &lt;br /&gt;
-#end
-
-1.1 $msg.fc_filechecknote
-
-$asset.display("fcnotes", "edit")
-
-&lt;input type="submit" name="cancel" value="$msg.fc_cancel" onclick="history.go(-1); return false;" /&gt;
-&lt;input type="submit" name="submit" value="$msg.fc_ok" /&gt;
+	&lt;input type="hidden" name="page" value="$!request.page" /&gt;
+	#set($ok = $asset.use("XWiki.AssetClass"))
+	1.1 $msg.fc_chooseaction
+	#set($fcstatus = $asset.getValue("fcstatus"))
+	#foreach($status in [1..4])
+		&lt;input type="radio" name="XWiki.AssetClass_0_fcstatus" value="${status}" #if("$status"=="$fcstatus") checked #end /&gt;
+			$msg.get("fc_statusmessage${status}") &lt;br /&gt;
+	#end
+	1.1 $msg.fc_filechecknote
+	$asset.display("fcnotes", "edit")
+	&lt;input type="submit" name="cancel" value="$msg.fc_cancel" onclick="history.go(-1); return false;" /&gt;
+	&lt;input type="submit" name="submit" value="$msg.fc_ok" /&gt;
 &lt;/form&gt;
-#end
-#else
-$msg.fc_noassetselected
+	#end
+	#else
+		$msg.fc_noassetselected
 #end</content>
 </xwikidoc>
