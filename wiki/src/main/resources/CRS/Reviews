@@ -170,9 +170,9 @@ $msg.get("curriki.crs.reviews.viewnominated"): &lt;select name="fw_item" onchang
 &lt;/form&gt;
 
 #if(($request.fw_item)&amp;&amp;($request.fw_item!=""))
-#set($sql = ", BaseObject as obj, IntegerProperty as prop, BaseObject as obj2, DBStringListProperty as prop2 join prop2.list list where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and prop.id.name='reviewpending' and prop.value=1 and doc.fullName=obj2.name and obj2.className='XWiki.AssetClass' and obj2.id=prop2.id.id and prop2.id.name='fw_items' and list = '${request.fw_item}'")
+	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate, BaseObject as obj2, DBStringListProperty as prop2 join prop2.list list where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and prop.id.name='reviewpending' and propDate.id.name='nomination_date' and prop.value=1 and doc.fullName=obj2.name and obj2.className='XWiki.AssetClass' and obj2.id=prop2.id.id and prop2.id.name='fw_items' and list = '${request.fw_item}' order by propDate.value desc")
 #else
-#set($sql = ", BaseObject as obj, IntegerProperty as prop where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and prop.id.name='reviewpending' and prop.value=1")
+	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and propDate.id.name='nomination_date' and prop.id.name='reviewpending' and prop.value=1 order by propDate.value desc")
 #end
 {table}
 $msg.get("curriki.crs.reviews.assetname")  | $msg.get("curriki.crs.reviews.ict") | $msg.get("curriki.crs.reviews.educlevel")  | $msg.get("curriki.crs.reviews.lastreviewed")  | $msg.get("curriki.crs.reviews.currentrating")  | $msg.get("curriki.crs.reviews.actions")
