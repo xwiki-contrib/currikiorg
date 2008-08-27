@@ -23,22 +23,30 @@ Curriki.module.nominate.init = function() {
 			initComponent : function() {
 				Ext.apply(this, {
 					title : _('curriki.crs.nominate'),
-					cls : 'title' // cls: the css class to use
-					,
+					cls : 'Caption', // cls: the css class to use
 					id : Nominate.NominateDialogueId,
 					items : [{// Begin Panel
 						// xtype is a symbolic name given to a class.
 						// Ext.reg('panel', Ext.Panel); defined in
 						// ext-all-debug.js
-						xtype : 'panel' // ,cls:'guidingquestion-container'
+						xtype : 'panel'
 						,
 						items : [{
 							xtype : 'box',
+							cls : 'crs_nominate_title',
 							autoEl : { // autoEl: for inserting html code
 								tag : 'div',
 								html : _('curriki.crs.nominate.nominatefollowingresourceforreview')
 										+ ' ' + Curriki.current.assetTitle,
-								cls : 'guidingquestion'
+								cls : 'crs_nominate_title'
+							}
+						}
+						,{
+							xtype : 'box',
+							autoEl : {
+								tag : 'div',
+								html : Curriki.current.assetTitle,
+								cls : 'crs_nominate_pagename'
 							}
 						}]
 					},		// End Panel
@@ -117,14 +125,14 @@ Curriki.module.nominate.init = function() {
 							autoEl : {
 								tag : 'div',
 								html : _('curriki.crs.nominate.comments'),
-								cls : 'guidingquestion'
+								cls : 'crs_nominate_title'
 							}
 						}, {
 							xtype : 'box',
 							autoEl : {
 								tag : 'div',
 								html : _('curriki.crs.nominate.commentstext'),
-								cls : 'commentstext'
+								cls : 'crs_nominate_commentstext'
 							}
 						}, {
 							xtype : 'textarea',
@@ -139,7 +147,7 @@ Curriki.module.nominate.init = function() {
 							autoEl : {
 								tag : 'div',
 								html : _('curriki.crs.nominate.commentsfootertext'),
-								cls : 'commentstext'
+								cls : 'crs_nominate_commentstext'
 							}
 						}]
 					}		// End Form
