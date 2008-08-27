@@ -76,7 +76,7 @@ CRS.CurrikiReviewClass_rating_1=Básico
 CRS.CurrikiReviewClass_rating_2=Bueno
 CRS.CurrikiReviewClass_rating_3=Ejemplar
 curriki.crs.nominate=Nominar
-curriki.crs.review.CRSJumpPage.url=/xwiki/bin/view/Coll_curriki/CurrikiReviewSystemCollection?bc=XWiki.curriki
+curriki.crs.review.CRSJumpPage.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
 curriki.crs.review.incomplete=Esta revisión esta incompleta. Por favor complete todos los campos.
 curriki.crs.review.submittedby=Enviado por
 curriki.crs.review.currentrating=Calificación Actual
