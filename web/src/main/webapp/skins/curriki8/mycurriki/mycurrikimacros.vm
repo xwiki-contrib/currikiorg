@@ -1388,14 +1388,13 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
      #set($junk = $favDoc.removeObject($assetPointer))
      #set($junk = $favDoc.save($msg.get("mycurriki.favorites.removed.comment", [$request.docName])))
      #set($done = true)
-    #end ## }
-   #end ## }
-  #end ## }
- #end ## }
+    #end ## if }
+   #end ## foreach }
+  #end ## if }
+ #end ## if confirm }
  #if ($request.sourceDoc) ## {
  $response.sendRedirect($request.sourceDoc)
- #end
-#else ## } {
+ #else ## } {
   #if($message) ## {
 <div id="xwikimessage">
 $message
@@ -1563,7 +1562,8 @@ $msg.get("deleted")
     #set($allcols = true)
   #end ##}
   #if($context.user==$userdoc.fullName)
-    ## Settings for owner here
+/1412
+## Settings for owner here
     #set($allcols = true)
     #set($headerArgs="")
   #end
