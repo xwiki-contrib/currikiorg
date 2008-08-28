@@ -58,6 +58,9 @@ public class Asset extends CurrikiDocument {
         super(doc, context);
     }
 
+    public void saveDocument(String comment) throws XWikiException {
+        saveDocument(comment, false);
+    }
     public static Asset createTempAsset(String parentAsset, XWikiContext context) throws XWikiException {
         return createTempAsset(parentAsset, null, context);
     }

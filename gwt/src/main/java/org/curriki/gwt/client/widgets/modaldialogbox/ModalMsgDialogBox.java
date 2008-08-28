@@ -1,6 +1,6 @@
 package org.curriki.gwt.client.widgets.modaldialogbox;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.ui.*;
 
 import org.curriki.gwt.client.Main;
@@ -27,7 +27,7 @@ import org.curriki.gwt.client.Main;
  */
 
 public class ModalMsgDialogBox {
-    final ModalDialog dialog = new ModalDialog();
+    final CurrikiDialog dialog = new CurrikiDialog();
 
     public ModalMsgDialogBox(String title, String msg){
         this(title, msg, null);
@@ -48,9 +48,9 @@ public class ModalMsgDialogBox {
     }
 
     class CloseListener implements ClickListener {
-        private final ModalDialog m_dialog;
+        private final CurrikiDialog m_dialog;
 
-        public CloseListener(ModalDialog dialog)
+        public CloseListener(CurrikiDialog dialog)
         {
             m_dialog = dialog;
         }
@@ -63,7 +63,7 @@ public class ModalMsgDialogBox {
     }
 
     class CloseButton extends Button {
-        public CloseButton(ModalDialog dialog, String msg)
+        public CloseButton(CurrikiDialog dialog, String msg)
         {
             super(msg);
             addClickListener(new CloseListener(dialog));

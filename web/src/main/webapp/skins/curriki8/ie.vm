@@ -1,0 +1,33 @@
+#**
+  * Special header elements for Internet Explorer
+  * Currently these are modified styles includes in the page or the ie6.css stylesheet
+  * @author XWiki
+  *#
+#set($ua = $request.getHeader("user-agent"))
+#if($ua.indexOf("MSIE")!=-1) ##{
+<style type="text/css">
+* html #actionmenu{
+  width: expression(document.body.clientWidth) !important;
+}
+.gwt-ModalDialog-Content .find-selector .gwt-TextBox {
+  height: 18px;
+  line-height: 18px;
+}
+.gwt-ModalDialog-Content .find-selector-container .find-selector SELECT.gwt-ListBox {
+  height: 19px;
+  line-height: 19px;
+}
+
+.tabs { padding: 15px 10px 5px; }
+#searchElement table table.search-selector-bottom { margin-top: -10px; }
+</style>
+#if(($ua.indexOf("MSIE 6")!=-1)||($ua.indexOf("MSIE 5")!=-1)) ##{
+<link href="$xwiki.getSkinFile("ie6.css", true)" rel="stylesheet" type="text/css" />
+#else ##}{
+<style type="text/css">
+#browse-btn{
+  padding: 4px 0px !important;
+}
+</style>
+#end ##}
+#end ##}

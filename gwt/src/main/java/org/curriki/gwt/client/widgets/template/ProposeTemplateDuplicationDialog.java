@@ -1,11 +1,11 @@
 package org.curriki.gwt.client.widgets.template;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.BasicPanel;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import org.curriki.gwt.client.*;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 import java.util.List;
 /**
@@ -30,7 +30,7 @@ import java.util.List;
  * @author ldubost
  */
 
-public class ProposeTemplateDuplicationDialog extends ModalDialog {
+public class ProposeTemplateDuplicationDialog extends CurrikiDialog {
     AsyncCallback nextCallback;
     CurrikiItem item;
 

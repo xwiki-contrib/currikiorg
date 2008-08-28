@@ -22,7 +22,7 @@
  */
 package org.curriki.gwt.client.search.editor;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -43,7 +43,7 @@ import java.util.Map;
 
 public class ViewPanel extends VerticalPanel {
     ScrollPanel view;
-    ModalDialog dialog;
+    CurrikiDialog dialog;
     Map args = null;
 
     public ViewPanel(ClickListener act_add) {
@@ -93,8 +93,8 @@ public class ViewPanel extends VerticalPanel {
 
         add(main);
 
-        dialog = new ModalDialog();
-        dialog.addController(new ModalDialog.DragStyleController(dialog));
+        dialog = new CurrikiDialog();
+        // TODO GWT15 dialog.addController(new CurrikiDialog.DragStyleController(dialog));
         dialog.setCaption(Main.getTranslation("find.preview"), true);
         dialog.add(this);
 

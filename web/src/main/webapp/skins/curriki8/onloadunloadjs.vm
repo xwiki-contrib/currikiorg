@@ -1,0 +1,58 @@
+#**
+  * Javascript used for locking files in edit mode. This is only used in inline, edit, admin modes
+  * @author XWiki
+  *#
+#if(($context.action=="inline")||($context.action=="edit") || ($context.action=="admin")) ##{
+<script type="text/javascript">
+ var cancelEditNextOnunload;
+ var cancelCancelEditFlag = true;
+ var  lockEditFlag = false;
+
+ function cancelEditResponse(){
+ }
+
+ function cancelEdit(){
+     if (cancelCancelEditFlag) {
+       var surl = "$doc.getExternalURL("cancel", "ajax=1")";
+       var myAjax = new Ajax.Request(
+                 surl,
+                 {
+                     method: 'get',
+                     parameters: "",
+                     asynchronous: true
+                 });
+        cancelCancelEditFlag = false;
+     }
+     if (cancelEditNextOnunload!=null)
+           cancelEditNextOnunload();
+ }
+
+ function lockEdit(){
+    if (lockEditFlag==false) {
+#if($context.action=="inline") ##{
+      var surl = "$doc.getExternalURL("lock")?action=inline&ajax=1&${docvariant.replace("&amp;", "&")}";
+#else ##}{
+      var surl = "$doc.getExternalURL("lock")?ajax=1&${docvariant.replace("&amp;", "&")}";
+#end ##}
+      var myAjax = new Ajax.Request(
+                surl,
+                {
+                    method: 'get',
+                    parameters: "",
+                    asynchronous: true
+                });
+       lockEditFlag = false;
+    }
+ }
+
+ function prepareCancelEdit() {
+     cancelEditNextOnunload = document.onunload;
+     document.onunload = cancelEdit;
+     lockEdit();
+ }
+ function cancelCancelEdit() {
+     cancelCancelEditFlag = false;
+ }
+</script>
+#set($onloadunload = "onunload='cancelEdit()' onload='prepareCancelEdit();'")
+#end

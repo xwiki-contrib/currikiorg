@@ -22,14 +22,13 @@
  */
 package org.curriki.gwt.client.widgets.modaldialogbox;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
-public class ChoiceDialog extends ModalDialog {
+public class ChoiceDialog extends CurrikiDialog {
     String titleText;
     String questionText;
     String cssDialogName;

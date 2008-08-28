@@ -1,37 +1,17 @@
+#**
+  * Setup the external stylesheets loaded by the curriki pages used by the curriki pages
+  * @author Curriki dev team
+  *#
 <link href="$xwiki.getSkinFile('extjs/resources/css/ext-all.css')" rel="stylesheet" type="text/css" />
 <link href="/xwiki/js/curriki-js.css" type="text/css" rel="stylesheet" type="text/css" />
 <link href="$xwiki.getSkinFile("style.css", true)" rel="stylesheet" type="text/css"  />
 ##secondary (new) skin
 <link href="$xwiki.getSkinFile("style2.css", true)" rel="stylesheet" type="text/css"  />
-
 #set( $defaultstyle = $xwiki.getWebPreference("stylesheet"))
 #set( $stylesheets = $xwiki.getWebPreference("stylesheets"))
-
-###if ($defaultstyle!="")
-##	<link href="$xwiki.getSkinFile($defaultstyle, true)" rel="stylesheet" type="text/css" title="default" />
-###else
-##	<link href="$xwiki.getSkinFile("style.css", true)" rel="stylesheet" type="text/css" />
-###end
-
+## IE specific style sheet
 #if($request.getHeader("user-agent").indexOf("MSIE")!=-1)
 	<link href="$xwiki.getSkinFile("ie.css")" rel="stylesheet" type="text/css" title="default" />
 #end
-	
-###if ($stylesheets != "")
-##	#set( $stylenb = 1)
-##	#foreach ( $stylesheet in $xwiki.split($stylesheets, ","))
-##		<link href="$xwiki.getSkinFile($stylesheet, true)" rel="alternate stylesheet" type="text/css"  title="Alternate StyleSheet $stylenb" />
-##		#set( $stylenb = $stylenb + 1)
-##	#end
-###else
-##	##<link href="$xwiki.getSkinFile("style1.css", true)" rel="alternate stylesheet" type="text/css"  title="Alternate StyleSheet 1" />
-##	##<link href="$xwiki.getSkinFile("style2.css", true)" rel="alternate stylesheet" type="text/css"  title="Alternate StyleSheet 2" />
-##	##<link href="$xwiki.getSkinFile("style3.css", true)" rel="alternate stylesheet" type="text/css"  title="Alternate StyleSheet 3" />
-###end
-##	
-##<style type="text/css">
-##$!xwiki.getWebPreference("style")
-##</style>
-##<style type="text/css">
-##$!doc.display("style", "view", $doc.getObject("XWiki.XWikiHTML",0))
-##</style>
+## Hook for inserting CSS skin extensions
+<!-- com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin -->	

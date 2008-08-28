@@ -22,7 +22,7 @@
  */
 package org.curriki.gwt.client.widgets.siteadd;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.HTML;

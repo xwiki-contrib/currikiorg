@@ -22,8 +22,7 @@
  */
 package org.curriki.gwt.client.search.editor;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Main;
@@ -32,23 +31,20 @@ import org.curriki.gwt.client.search.panels.SearcherPanel;
 /**
  *  This is the main panel for the "Search" tool
  */
-public class SearchPanel extends ModalDialog {
+public class SearchPanel extends CurrikiDialog {
     protected ResourceAdder wizard;
     protected Viewer viewer = null;
 
     public SearchPanel() {
         initPanel();
-        removeController(getController(TabFocusController.class));
     }
 
     public SearchPanel(ResourceAdder addAssetWizard) {
-        removeController(getController(TabFocusController.class));
         wizard = addAssetWizard;
         initPanel();
     }
 
     public SearchPanel(ResourceAdder addAssetWizard, Viewer viewer) {
-        removeController(getController(TabFocusController.class));
         wizard = addAssetWizard;
         this.viewer = viewer;
         initPanel();

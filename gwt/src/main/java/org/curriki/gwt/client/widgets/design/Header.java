@@ -39,6 +39,7 @@ public class Header extends Composite {
         // panel.setCellWidth(img, "220px");
 
         VerticalPanel vPanel = new VerticalPanel();
+        vPanel.addStyleName("header-block-title");
         panel.add(vPanel, DockPanel.CENTER);
 
         HTML label = new HTML(Main.getTranslation("header.editor_title"));

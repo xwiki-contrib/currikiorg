@@ -22,9 +22,6 @@
  */
 package org.curriki.gwt.client.widgets.siteadd;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -35,9 +32,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import org.curriki.gwt.client.utils.ClickListenerInt;
 
-public class AddResourceDialog extends ModalDialog {
+public class AddResourceDialog extends CurrikiDialog {
     ClickListenerInt nextCallback;
     ClickListener cancelCallback;
     String collectionName;
@@ -47,7 +46,6 @@ public class AddResourceDialog extends ModalDialog {
     private RadioButton fTemplate;
 
     public AddResourceDialog(String collectionName, ClickListenerInt nextCallback, ClickListener cancelCallback) {
-        removeController(getController(TabFocusController.class));
         this.nextCallback = nextCallback;
         this.collectionName = collectionName;
         this.cancelCallback = cancelCallback;

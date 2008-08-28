@@ -36,15 +36,25 @@
   <dependencies>
     <dependency>
       <groupId>com.xpn.xwiki.platform</groupId>
+      <artifactId>xwiki-core</artifactId>
+      <version>1.5-curriki</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform</groupId>
       <artifactId>xwiki-web-standard</artifactId>
       <version>${platform.web.version}</version>
       <type>war</type>
     </dependency>
     <dependency>
-      <groupId>com.xpn.xwiki.platform</groupId>
-      <artifactId>xwiki-core</artifactId>
-      <version>1.3.2-curriki</version>
-      <type>jar</type>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-lucene</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-skinx</artifactId>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.curriki</groupId>
@@ -135,6 +145,8 @@
             <xwikiCfgPlugins>\
               com.xpn.xwiki.monitor.api.MonitorPlugin,\
               com.xpn.xwiki.plugin.calendar.CalendarPlugin,\
+              com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin,\
+              com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin,\
               com.xpn.xwiki.plugin.packaging.PackagePlugin,\
               com.xpn.xwiki.plugin.query.QueryPlugin,\
               com.xpn.xwiki.plugin.fileupload.FileUploadPlugin,\
@@ -169,7 +181,20 @@
               xwiki.plugins.lucene.analyzer=org.apache.lucene.analysis.standard.StandardAnalyzer
               # Setting index interval
               xwiki.plugins.lucene.indexinterval=30
+          
+              # set the skin 
+              xwiki.defaultbaseskin=albatross
+              xwiki.defaultskin=curriki8
+ 
+              #set superadmin pass
+              ## xwiki.superadminpassword=system
+
+              # override the macro list 
+              xwiki.render.velocity.macrolist=/templates/macros.vm,/skins/albatross/macros.vm,/skins/curriki8/macros.vm,/skins/curriki8/blog/blogmacros.vm,/skins/curriki8/assets/assetsmacros.vm,/skins/curriki8/pages/pagesmacros.vm,/skins/curriki8/mycurriki/mycurrikimacros.vm,/skins/curriki8/groups/groupsmacros.vm,/skins/curriki8/crs/crsmacros.vm
             </xwikiCfgAdditionalProperties>
+<xwikiCfgDefaultSkin>albatross</xwikiCfgDefaultSkin>
+<xwikiCfgDefaultBaseSkin>albatross</xwikiCfgDefaultBaseSkin>
+<xwikiCfgEncoding>utf-8</xwikiCfgEncoding>
           </properties>
         </configuration>
       </plugin>
@@ -186,7 +211,8 @@
               </includes>
             </resource>
           </webResources>
-          <dependentWarExcludes>WEB-INF/lib/xwiki-core-1.3.2.jar</dependentWarExcludes>   
+          <dependentWarExcludes>WEB-INF/lib/xwiki-core-1.5.jar</dependentWarExcludes>   
+          <dependentWarExcludes>WEB-INF/lib/plexus-container-default-1.0-alpha-31.jar</dependentWarExcludes>   
         </configuration>
       </plugin>
     </plugins>

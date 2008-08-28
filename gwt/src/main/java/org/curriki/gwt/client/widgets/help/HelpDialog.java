@@ -1,15 +1,12 @@
 package org.curriki.gwt.client.widgets.help;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.util.DomUtil;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Window;
-import org.curriki.gwt.client.widgets.modaldialogbox.ChoiceDialog;
-import org.curriki.gwt.client.widgets.modaldialogbox.SizeDialogController;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 import org.curriki.gwt.client.Main;
 
-public class HelpDialog extends ModalDialog {
+public class HelpDialog extends CurrikiDialog {
     String titleText;
     String url;
     String cssDialogName;
@@ -25,7 +22,7 @@ public class HelpDialog extends ModalDialog {
 
     public HelpDialog()
     {
-        addController(new SizeDialogController(frame));
+        // TODO GWT15 addController(new SizeDialogController(frame));
     }
 
     public String getCSSName(String name) {
@@ -73,7 +70,8 @@ public class HelpDialog extends ModalDialog {
         openButton.addStyleName(getCSSName("caption-button"));
         openButton.addClickListener(openDialog);
         caption.add(openButton);
-        setCaption(caption);
+        // TODO GWT15 setCaption Widget
+        // setHTML(caption);
 
         int absoluteTop = getAbsoluteTop();
         int width = Window.getClientWidth() * 90 / 100;

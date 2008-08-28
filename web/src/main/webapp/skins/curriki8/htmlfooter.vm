@@ -1,11 +1,12 @@
-#if($context.getMode()==0)
-#template('staf.vm')
-
+#**
+  * HTML Footer: this will close the open tags in htmlheader.vm
+  * @author Curriki dev team
+  *#
     </div> ##currikimaincontainer
   </div> ## dropshadow
-  
-  ##</div>## xwikimaincontainerinnern ##from the old curriki8 skin
-  ##</div>## xwikimaincontainer ##from the old curriki8 skin
-
-#template('httpfooter.vm')
+#if("$!footerJScript" != "")
+<div id="footerjs" style="display: none;">$footerJScript</div>
 #end
+</body>
+</html>
+

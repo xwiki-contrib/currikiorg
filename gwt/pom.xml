@@ -35,6 +35,9 @@
   <packaging>war</packaging>
   <name>XWiki Products - Curriki - GWT</name>
   <description>XWiki Products - Curriki - GWT</description>
+  <properties>
+    <gwtVersion>1.4.61</gwtVersion>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>com.google.gwt</groupId>
@@ -56,18 +59,16 @@
     <dependency>
       <groupId>gwttk</groupId>
       <artifactId>gwttk</artifactId>
-      <version>${gwtGWTTKVersion}</version>
+      <version>0.2.2</version>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
            WAR. However an issue in the GWT maven plugin prevents it from working with
            "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
            it's fixed, add a <scope>provided</scope> element. -->
     </dependency>
-    <!-- The GWT Widget library is not in any Maven2 remote repository. For the time being we
-         have uploaded it in our custom Maven repository on http://maven.xwiki.org. -->
     <dependency>
       <groupId>gwt-widgets</groupId>
       <artifactId>gwt-widgets</artifactId>
-      <version>${gwtGWTWidgetVersion}</version>
+      <version>0.1.3</version>
       <!-- This JAR is used to generate JS files and shouldn't be included in the server side
            WAR. However an issue in the GWT maven plugin prevents it from working with
            "provided" scope. See http://code.google.com/p/gwt-maven/issues/detail?id=46. When
@@ -109,6 +110,12 @@
       <version>${platform.core.version}</version>
       <!-- We don't want all the Core libs to be put in WEB-INF/lib as this GWT WAR will be
            overlayed with the Standard WAR which already contains all the required libs -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.xpn.xwiki.platform.plugins</groupId>
+      <artifactId>xwiki-plugin-lucene</artifactId>
+      <version>1.5-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -202,28 +209,15 @@
   </build>
   <profiles>
     <profile>
-      <id>gwt-1.3.3</id>
+      <id>gwt-1.4.61</id>
       <activation>
         <property>
           <name>!gwt</name>
+          <value>1.4.61</value>
         </property>
       </activation>
       <properties>
-        <gwtVersion>1.3.3</gwtVersion>
-        <gwtGWTWidgetVersion>0.1.3</gwtGWTWidgetVersion>
-        <gwtGWTTKVersion>0.2.2</gwtGWTTKVersion>
-      </properties>
-    </profile>
-    <profile>
-      <id>gwt-1.4.10</id>
-      <activation>
-        <property>
-          <name>gwt</name>
-          <value>1.4.10</value>
-        </property>
-      </activation>
-      <properties>
-        <gwtVersion>1.4.10</gwtVersion>
+        <gwtVersion>1.4.61</gwtVersion>
         <gwtGWTWidgetVersion>0.1.5</gwtGWTWidgetVersion>
         <gwtGWTTKVersion>0.2.3</gwtGWTTKVersion>
       </properties>

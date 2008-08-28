@@ -22,7 +22,7 @@
  */
 package org.curriki.gwt.client.utils;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HTML;
@@ -31,7 +31,7 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.Main;
 
 public class Loading {
-    private ModalDialog loadingPanel = null;
+    private CurrikiDialog loadingPanel = null;
     private int currentRequest = 0;
     private boolean disable = false;
 
@@ -45,7 +45,7 @@ public class Loading {
 
     public void startLoading() {
         if (loadingPanel == null && !disable){
-            loadingPanel = new ModalDialog();
+            loadingPanel = new CurrikiDialog();
             loadingPanel.addStyleName("dialog-loading");
             loadingPanel.add(new HTML(Main.getTranslation("loading.loading_msg")));
             loadingPanel.add(new Image(Constants.ICON_SPINNER));

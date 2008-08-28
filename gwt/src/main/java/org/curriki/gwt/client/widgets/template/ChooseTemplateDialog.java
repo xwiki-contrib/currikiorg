@@ -1,7 +1,5 @@
 package org.curriki.gwt.client.widgets.template;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -20,12 +18,13 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 import org.curriki.gwt.client.utils.XWikiGWTPanelLoader;
-import org.curriki.gwt.client.utils.Translator;
 
 import java.util.List;
 
-public class ChooseTemplateDialog extends ModalDialog {
+public class ChooseTemplateDialog extends CurrikiDialog {
     AsyncCallback nextCallback;
     String parentAsset;
     VerticalPanel templateButtonPanel = new VerticalPanel();

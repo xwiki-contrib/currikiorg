@@ -22,21 +22,19 @@
  */
 package org.curriki.gwt.client.widgets.siteadd;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import org.curriki.gwt.client.utils.Translator;
 import org.curriki.gwt.client.utils.XWikiGWTPanelLoader;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
-public class ThankYouDialog extends ModalDialog {
+public class ThankYouDialog extends CurrikiDialog {
     public ThankYouDialog(String thankYouPage, ClickListener continueCallback) {
         addStyleName("thankyou-dialog");
-        //addController(new ModalDialog.DragStyleController(this));
         setCaption(Main.getTranslation("dialog."+thankYouPage+".caption"), true);
-        setContentMinWidth(400);
-        setContentMinHeight(100);
+        // TODO GWT15 setContentMinWidth(400);
+        // TODO GWT15 setContentMinHeight(100);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("thankyou-dialog-content");

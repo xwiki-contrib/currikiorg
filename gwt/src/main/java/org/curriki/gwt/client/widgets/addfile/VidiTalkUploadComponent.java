@@ -22,7 +22,7 @@
  */
 package org.curriki.gwt.client.widgets.addfile;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
@@ -54,7 +54,7 @@ public class VidiTalkUploadComponent extends BasicPanel
 
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
         divId = "viditalk_capture_div"+rnd;
-        setId(divId);
+        // TODO GWT15 setId(divId);
         addStyleName("dialog-addfile-text");
         addStyleName("dialog-viditalk-capture");
 

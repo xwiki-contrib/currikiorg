@@ -1,9 +1,7 @@
 package org.curriki.gwt.client.widgets.modaldialogbox;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.Window;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import com.xpn.xwiki.gwt.api.client.User;
@@ -37,7 +35,7 @@ import java.util.Date;
  * @author ldubost
  */
 
-public class NominateDialog extends ModalDialog {
+public class NominateDialog extends CurrikiDialog {
     private Document asset;
     private TextArea commentTextArea;
     private AsyncCallback cb;

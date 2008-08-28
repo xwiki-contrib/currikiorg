@@ -1,16 +1,12 @@
-## need to do this before xwikivars is called
+#**
+  * View entry point. This is the main entry point of most of the Curriki site pages
+  * @author XWiki
+  *#
+## Need to do this before xwikivars is called otherwise the data might be removed
 #if($request.method=="POST") ##{
   #set($fileuploadlist = $xwiki.fileupload.getFileItems())
 #end ##}
-###
-### Main "view" template
-###
-### General wrapper for view actions
-###
-#if ($request.getParameter("raw").equals("1")) ##{
-  #template("code.vm")
-#else ##}{
-
+## In Print Mode we don't want the standard header
 #if(!$request.getParameter("viewer").equals("print")) ##{
   #template("startpage.vm")
 #end ##}
@@ -18,23 +14,17 @@
 #if((!$viewer) || ($viewer == "")) ##{
   #set($viewer = $request.getParameter("viewer"))
 #end ##}
-	
 #if((!$viewer) || ($viewer == "")) ##{
   #set($viewer = "view")
 #end ##}
-
 #if($viewer == "view") ##{
   #template("space.vm")
-  ##$xwiki.includeForm("Sandbox.space", false)
   #template("contentview.vm")
-  ## #template("docextra.vm")
 #else ##}{
   #template("${viewer}.vm")
 #end ##}
 <div class="clearfloats"></div>
-
 </div>## main
-
 #if(!$request.getParameter("viewer").equals("print")) ##{
   #template("endpage.vm")
 #else ##}{
@@ -46,4 +36,3 @@
   #template("htmlfooter.vm")
 #end ##}
 
-#end ##}

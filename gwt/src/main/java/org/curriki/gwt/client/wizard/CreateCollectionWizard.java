@@ -22,8 +22,7 @@
  */
 package org.curriki.gwt.client.wizard;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -43,7 +42,7 @@ import org.curriki.gwt.client.widgets.siteadd.ThankYouDialog;
 
 public class CreateCollectionWizard {
     private String category;
-    private static ModalDialog metaPanel;
+    private static CurrikiDialog metaPanel;
     private ThankYouDialog thankYouDialog;
     private String space;
 
@@ -136,8 +135,7 @@ public class CreateCollectionWizard {
             }
         });
 
-        metaPanel = new ModalDialog();
-        metaPanel.removeController(metaPanel.getController(TabFocusController.class));
+        metaPanel = new CurrikiDialog();
         metaPanel.addStyleName("dialog-metadata");
         metaPanel.setCaption(Main.getTranslation("createcollection.describelearningresource"), true);
 

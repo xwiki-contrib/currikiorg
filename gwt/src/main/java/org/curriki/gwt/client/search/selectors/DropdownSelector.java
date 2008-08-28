@@ -49,8 +49,8 @@ abstract public class DropdownSelector extends ListBox implements Selectable, Ke
     }
 
     public DropdownSelector(boolean isMultipleSelect){
-        // super(isMultipleSelect); //TODO: Use this is for GWT 1.4
-        setMultipleSelect(isMultipleSelect); //TODO: This should not be used for GWT 1.4
+        super(isMultipleSelect); //TODO: Use this is for GWT 1.4
+        // setMultipleSelect(isMultipleSelect); //TODO: This should not be used for GWT 1.4
         
         this.selectbox = this.getElement();
     }

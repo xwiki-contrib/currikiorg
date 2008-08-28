@@ -29,21 +29,21 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import org.curriki.gwt.client.utils.Translator;
 import org.curriki.gwt.client.Main;
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 
 public class Wizard extends Composite {
     protected final DockPanel panel = new DockPanel();
     private ClickListener closeListener = null;
     private AsyncCallback parentCaptionCallback = null;
     protected WindowResizeListener resizeListener = null;
-    protected ModalDialog parentDialog;
+    protected CurrikiDialog parentDialog;
 
 
-    public void setParentDialog(ModalDialog parentDialog) {
+    public void setParentDialog(CurrikiDialog parentDialog) {
         this.parentDialog = parentDialog;
     }
 
-    public ModalDialog getParentDialog() {
+    public CurrikiDialog getParentDialog() {
         return parentDialog;
     }
 

@@ -66,17 +66,32 @@ import com.xpn.xwiki.web.XWikiEngineContext;
 import com.xpn.xwiki.web.XWikiMessageTool;
 import com.xpn.xwiki.web.XWikiRequest;
 import com.xpn.xwiki.web.XWikiResponse;
+import com.google.gwt.user.client.rpc.RemoteService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.curriki.gwt.client.AssetDocument;
+import org.curriki.gwt.client.Constants;
+import org.curriki.gwt.client.CurrikiService;
+import org.curriki.gwt.client.TreeListItem;
+import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
+import org.curriki.gwt.client.widgets.browseasset.AssetItem;
+import org.curriki.gwt.client.widgets.template.TemplateInfo;
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.mimetype.MimeType;
+import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
-public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiService {
+public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiService, RemoteService {
     private static final Log log = LogFactory.getLog(CurrikiServiceImpl.class);
 
     public CurrikiServiceImpl() {
         super();
     }
 
+    /*
     public CurrikiServiceImpl(XWikiRequest request, XWikiResponse response, XWikiEngineContext engine) {
         super(request, response, engine);
     }
+    */
 
     public boolean isDefaultCollectionExists(String space) throws XWikiGWTException {
         return isCollectionExists(space, Constants.DEFAULT_COLLECTION_PAGE);

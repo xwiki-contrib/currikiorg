@@ -22,9 +22,8 @@
  */
 package org.curriki.gwt.client.widgets.addfile;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -45,7 +44,7 @@ import org.curriki.gwt.client.utils.ClickListenerDocument;
 import org.curriki.gwt.client.utils.XWikiGWTPanelLoader;
 import org.curriki.gwt.client.widgets.upload.UploadWidget;
 
-public class AddFileDialog extends ModalDialog {
+public class AddFileDialog extends CurrikiDialog {
     ClickListenerDocument nextCallback;
     ClickListener cancelCallback;
     String collectionName;
@@ -60,7 +59,6 @@ public class AddFileDialog extends ModalDialog {
     private Button next;
 
     public AddFileDialog(String collectionName, ClickListenerDocument nextCallback, ClickListener cancelCallback) {
-        removeController(getController(TabFocusController.class));
         this.nextCallback = nextCallback;
         this.cancelCallback = cancelCallback;
         this.collectionName = collectionName;
@@ -69,10 +67,10 @@ public class AddFileDialog extends ModalDialog {
 
     public void init(){
         addStyleName("dialog-addfile");
-        //addController(new ModalDialog.DragStyleController(this));
+        //addController(new CurrikiDialog.DragStyleController(this));
         setCaption(Main.getTranslation("addfile.add_a_learning_resource"), true);
-        setContentMinWidth(579);
-        setContentMinHeight(468);
+        // TODO GWT15 setContentMinWidth(579);
+        // TODO GWT15 setContentMinHeight(468);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("dialog-addfile-content");

@@ -1,18 +1,9 @@
 package org.curriki.gwt.client.widgets.modaldialogbox;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.BasicPanel;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.DOM;
-import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
-import org.curriki.gwt.client.widgets.template.TemplateInfo;
-import org.curriki.gwt.client.widgets.template.ProposeTemplateDuplicationDialog;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.CurrikiAsyncCallback;
-import org.curriki.gwt.client.AssetDocument;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 import java.util.List;
 
@@ -38,7 +29,7 @@ import java.util.List;
  * @author ldubost
  */
 
-public class NextCancelDialog extends ModalDialog {
+public class NextCancelDialog extends CurrikiDialog {
     AsyncCallback nextCallback;
     String titleText;
     String questionText;

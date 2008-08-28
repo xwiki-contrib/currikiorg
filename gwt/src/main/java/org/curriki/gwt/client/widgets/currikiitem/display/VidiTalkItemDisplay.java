@@ -11,7 +11,7 @@ import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
-import asquare.gwt.tk.client.ui.BasicPanel;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
@@ -46,7 +46,7 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
             String rnd = (new Integer (Random.nextInt(2000000000))).toString();
             final String divId = "viditalk_div_"+rnd;
-            vPlayer.setId(divId);
+            // TODO GWT15 vPlayer.setId(divId);
             HTML msg = new HTML(Main.getTranslation("viditalk.loading_player"));
             vPlayer.add(msg);
 
@@ -82,7 +82,7 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
         final String divId = "viditalk_div_"+rnd;
-        vPlayer.setId(divId);
+        // TODO GWT15 vPlayer.setId(divId);
         HTML msg = new HTML(Main.getTranslation("viditalk.loading_capture"));
         vPlayer.add(msg);
 

@@ -41,7 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 
 
 public class EditPage extends AbstractPage {
@@ -290,7 +290,7 @@ public class EditPage extends AbstractPage {
     }
 
     private void askSaveChanges(CurrikiItem editedItem, CurrikiItem newlyEditedItem){
-        final ModalDialog dialog = new ModalDialog();
+        final CurrikiDialog dialog = new CurrikiDialog();
 
         AskSaveChangesClickListener clickListener = new AskSaveChangesClickListener(editedItem, newlyEditedItem, dialog);
 
@@ -327,9 +327,9 @@ public class EditPage extends AbstractPage {
         private Button bttNo;
         private CurrikiItem editedItem;
         private CurrikiItem newlyEditedItem;
-        private ModalDialog dialog;
+        private CurrikiDialog dialog;
 
-        AskSaveChangesClickListener(CurrikiItem editedItem, CurrikiItem newlyEditedItem, ModalDialog dialog){
+        AskSaveChangesClickListener(CurrikiItem editedItem, CurrikiItem newlyEditedItem, CurrikiDialog dialog){
             this.editedItem = editedItem;
             this.newlyEditedItem = newlyEditedItem;
             this.dialog = dialog;

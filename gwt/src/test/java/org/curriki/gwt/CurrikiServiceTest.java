@@ -54,7 +54,7 @@ public class CurrikiServiceTest extends org.jmock.cglib.MockObjectTestCase {
         rlist.add("Templates.WebHome");
         this.mockXWiki.stubs().method("search").will(returnValue(rlist));
 
-        CurrikiServiceImpl cservice = new CurrikiServiceImpl((XWikiRequest)mockServletRequest.proxy(), (XWikiResponse)mockServletResponse.proxy(), (XWikiEngineContext) mockEngineContext.proxy());
+        CurrikiServiceImpl cservice = new CurrikiServiceImpl();
         cservice.getTemplates();
     }
 

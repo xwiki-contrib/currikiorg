@@ -56,7 +56,8 @@ public abstract class BaseServlet extends HttpServlet {
         XWiki xwiki = XWiki.getXWiki(context);
         XWikiURLFactory urlf = xwiki.getURLFactoryService().createURLFactory(context.getMode(), context);
         context.setURLFactory(urlf);
-        XWikiVelocityRenderer.prepareContext(context);
+        // TODO: Fix velocity init in servlet 
+        // XWikiVelocityRenderer.prepareContext(context);
         xwiki.prepareResources(context);
 
         String username = "XWiki.XWikiGuest";

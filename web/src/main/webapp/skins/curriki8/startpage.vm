@@ -1,13 +1,15 @@
+#**
+  * Start Page. This is a generic file called by many of the entry point templates
+  * This template will setup the generic and layout variables, the super admin menu if necessary,
+  * but most importantly the header and opening HTML of all the view pages as well as the panels
+  * @author XWiki
+  *#
 #template("xwikivars.vm")
 #template("layoutvars.vm")
 #template("htmlheader.vm")
 #template("header.vm")
-<div id="menuview"> 
-  #template("menuview.vm")
-</div>
+#template("menuview.vm")
 <div id="panels" class="expanded">
-
 #template("leftpanels.vm")
-#template("rightpanels.vm")
-	
+###template("rightpanels.vm")	
 <div id="right-panel">

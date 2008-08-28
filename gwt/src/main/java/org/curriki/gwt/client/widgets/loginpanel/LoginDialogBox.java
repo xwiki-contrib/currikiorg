@@ -35,11 +35,9 @@ import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.Main;
-import org.curriki.gwt.client.widgets.modaldialogbox.SizeDialogController;
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 
-public class LoginDialogBox extends ModalDialog {
+public class LoginDialogBox extends CurrikiDialog {
     private LoginPanel loginPanel;
     private AsyncCallback loginCallback;
     private AsyncCallback loginPanelCallback;
@@ -47,7 +45,6 @@ public class LoginDialogBox extends ModalDialog {
 
     public LoginDialogBox() {
         super();
-        removeController(getController(TabFocusController.class));
     }
 
 

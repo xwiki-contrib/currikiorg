@@ -22,8 +22,6 @@
  */
 package org.curriki.gwt.client.widgets.siteadd;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Grid;
@@ -32,6 +30,8 @@ import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.utils.XWikiGWTPanelLoader;
 import org.curriki.gwt.client.widgets.browseasset.AssetTreeItem;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 /*
  * ChooseCollectionDialog
@@ -41,7 +41,7 @@ import org.curriki.gwt.client.widgets.browseasset.AssetTreeItem;
  *   Tree selector of collections to select where to place the new resource
  *   Cancel and Next buttons at bottom right.
  */
-public class ChooseCollectionDialog extends ModalDialog {
+public class ChooseCollectionDialog extends CurrikiDialog {
     ClickListener nextCallback;
     ClickListener cancelCallback;
     MyCollectionsPanel myCollections;
@@ -69,8 +69,8 @@ public class ChooseCollectionDialog extends ModalDialog {
         addStyleName("collections-dialog");
         //addController(new ModalDialog.DragStyleController(this));
         setCaption(Main.getTranslation(titleTranslation), true);
-        setContentMinWidth(634);
-        setContentMinHeight(450);
+        // TODO GWT15 setContentMinWidth(634);
+        // TODO GWT15 setContentMinHeight(450);
 
         BasicPanel main = new BasicPanel();
         main.addStyleName("collections-dialog-content");
@@ -125,9 +125,9 @@ public class ChooseCollectionDialog extends ModalDialog {
 
 
     public class collectionCount extends CurrikiAsyncCallback {
-        ModalDialog panel;
+        CurrikiDialog panel;
 
-        public collectionCount(ModalDialog panel){
+        public collectionCount(CurrikiDialog panel){
             this.panel = panel;
         }
 

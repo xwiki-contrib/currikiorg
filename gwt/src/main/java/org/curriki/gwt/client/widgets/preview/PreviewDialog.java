@@ -4,7 +4,7 @@ import org.curriki.gwt.client.widgets.modaldialogbox.ModalMsgDialogBox;
 import org.curriki.gwt.client.Main;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.Window;
-import asquare.gwt.tk.client.ui.ModalDialog;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 
 /**
  * See the NOTICE file distributed with this work for additional
@@ -29,7 +29,7 @@ import asquare.gwt.tk.client.ui.ModalDialog;
  */
 
 public class PreviewDialog  {
-    final ModalDialog dialog = new ModalDialog();
+    final CurrikiDialog dialog = new CurrikiDialog();
 
     public PreviewDialog(String title, String msg, String url, String styleName){
         dialog.setCaption(title, true);
@@ -54,9 +54,9 @@ public class PreviewDialog  {
    }
 
     class CloseListener implements ClickListener {
-        private final ModalDialog m_dialog;
+        private final CurrikiDialog m_dialog;
 
-        public CloseListener(ModalDialog dialog)
+        public CloseListener(CurrikiDialog dialog)
         {
             m_dialog = dialog;
         }
@@ -69,7 +69,7 @@ public class PreviewDialog  {
     }
 
     class CloseButton extends Button {
-        public CloseButton(ModalDialog dialog, String msg)
+        public CloseButton(CurrikiDialog dialog, String msg)
         {
             super(msg);
             addClickListener(new CloseListener(dialog));

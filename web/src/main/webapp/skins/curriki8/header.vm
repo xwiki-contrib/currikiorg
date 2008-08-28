@@ -1,78 +1,65 @@
-##template("macros.vm")
-#############################################
-##
-##  GWT settings
-##
-#set($gwtmainpath = "/xwiki/bin/view/GWT/Editor?xpage=plain&")
-#set($gwtsitepath = "/xwiki/gwt")
-
 <!-- header -->
 <div id="header"> ##{
 
 <!-- logo -->
+## TODO: Add translation for title and alt
+#set($altinfo = "Curriki &#226;&#8364;&#8220; Global Education Learning Community")
 <div id="header-logo"> ##{
-  <a href="$xwiki.getURL("Main.WebHome", "view")" title="Home">
-    <img src="$xwiki.getSkinFile("logo.gif")" alt="Curriki &ndash; Global Education Learning Community"/>
+  <a href="$xwiki.getURL("Main.WebHome", "view")" title="$altinfo">
+    <img src="$xwiki.getSkinFile("logo.gif")" title="$altinfo" alt="$altinfo" />
   </a>
 </div> ##}
 
 <!-- member area -->
 <div id="header-member"> ##{
 #if($isguest) ##{
-  #if($doc.web=='Main') ##{
-   #set($logredir = $xwiki.getURL("Main.WebHome"))
-  #end ##}
-  #if($doc.web=='Registration') ##{
-   #set($logredir = $xwiki.getURL("Main.WebHome"))
-  #end ##}
-
   #if ($request.xredirect) ##{
    #set($logredir = $request.xredirect)
-  #end ##}
-	  
+  #else
+   #set($logredir = $logredir)
+  #end	  
 <!-- login area -->
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post"> ##{
 
-  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="$msg.get("loginUsername")" onfocus="if (this.value=='$msg.get("loginUsername")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("loginUsername")';}"/>
-  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="if(window.ActiveXObject || this.type == 'password'){this.select();} else {this.type='$msg.get("loginPassword")'; this.value=''; this.focus();}" onblur="if ((!window.ActiveXObject) && this.value==''){this.value='$msg.get("loginPassword")'; this.type='text';}"/>
-  
+  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="$msg.get("header.login_username")" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
+  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="if(window.ActiveXObject || this.type == 'password'){this.select();} else {this.type='$msg.get("header.login_password")'; this.value=''; this.focus();}" onblur="if ((!window.ActiveXObject) && this.value==''){this.value='$msg.get("header.login_password")'; this.type='text';}"/>
+
   <script type="text/javascript">
-   if(! window.ActiveXObject){
+   if(!window.ActiveXObject){
      pwdInput = document.getElementById('j_loginpwd');
      if(pwdInput.value == '') {
        pwdInput.setAttribute('type', 'text');
-       pwdInput.value = '$msg.get("loginPassword")';
+       pwdInput.value = '$msg.get("header.login_password")';
      }
    }
   </script>
   
-  <button type="submit" id="loginbtn" tabindex="4">$msg.get("headerLoginGo")</button>
+  <button type="submit" id="loginbtn" tabindex="4">$msg.get("header.login_go")</button>
 
   <!-- remember me -->
   <fieldset>
-    <input tabindex="3" type="checkbox" class="checkbox" name="j_rememberme" value="true"/>$msg.get("loginRememberme")</label>
-    <a href="$xwiki.getURL("Main.ForgotPassword")" title="">$msg.get("loginForgot")</a>
+    <input tabindex="3" type="checkbox" class="checkbox" name="j_rememberme" value="true"/>$msg.get("header.login_rememberme")</label>
+    <a href="$xwiki.getURL("Main.ForgotPassword")" title="">$msg.get("header.login_forgot")</a>
   </fieldset>
   <!-- end of remember me -->
   
   <!-- registration -->
   #set($regurl = $xwiki.getURL("Main.JoinCurriki"))
-  <a href="$regurl" class="register"><span>$msg.get("BecomeMember_part1")</span> $msg.get("BecomeMember_part2")</a>
+  <a href="$regurl" class="register"><span>$msg.get("header.becomemember_part1")</span> $msg.get("header.becomemember_part2")</a>
   <!-- end of registration -->
   
 </form> ##}
 <!-- end of login area -->
 
 #else ## }{ ## is logged in
- 
-  #set($userdoc = $xwiki.getDocument($context.user)) 
-  <span class="welcome"><a href='$userdoc.getURL()'>$msg.get("headerWelcome", ["${userdoc.first_name}"])</a></span>
+  ## crtUserDoc is set in fudocs.vm
+  <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["${crtUserDoc.first_name}"])</a></span>
   #if($hasGlobalAdmin)
-    <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("admin")</a> #sep()
+    <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
   #end
   #set($logredir = $xwiki.getURL("Main.WebHome"))
   #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
-  <a href="$logouturl" class="logout">$msg.get("logout")</a>
+  <a href="$logouturl" class="logout">$msg.get("header.logout")</a>
   
 #end ##}
 	
@@ -81,7 +68,7 @@
 
 <!-- advanced search -->
 <div id="header-search"> ##{
-  <form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Main.GWTSearch")" onSubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;"> ##{
+  <form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Main.GWTSearch")" onsubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;"> ##{
   
     <input type="hidden" class="hidden" name="area" value=""/>
     #set($brsqry = $request.brsqry)
@@ -89,7 +76,7 @@
       #set($brsqry = "search")
     #end
     <input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='search') this.value=''; else this.select()" onblur="if (this.value=='') this.value='search'" />
-    <button type="submit" id="searchbtn" name="btn">$msg.get("headerLoginGo")<!-- $msg.get("header.search_go") --></button>
+    <button type="submit" id="searchbtn" name="btn">$msg.get("header.search_go")</button>
       
   </form> ##}
   <p> ##{

@@ -1,7 +1,6 @@
 package org.curriki.gwt.client.editor;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.Timer;
@@ -16,7 +15,6 @@ import org.curriki.gwt.client.utils.Location;
 import org.curriki.gwt.client.utils.WindowUtils;
 import org.curriki.gwt.client.widgets.design.Header;
 import org.curriki.gwt.client.widgets.modaldialogbox.ModalMsgDialogBox;
-import org.curriki.gwt.client.widgets.modaldialogbox.SizeDialogController;
 import org.curriki.gwt.client.wizard.AddAssetWizard;
 import org.curriki.gwt.client.wizard.CreateCompositeAssetWizard;
 import org.curriki.gwt.client.wizard.Wizard;
@@ -49,7 +47,7 @@ public class Editor implements WindowResizeListener {
     private ScrollPanel scrollAppPanel = new ScrollPanel();
     private Location location;
     private ComponentsPage componentsPage;
-    private ModalDialog dialog = null;
+    private CurrikiDialog dialog = null;
 
     private Timer windowSizeTimer;
 
@@ -385,7 +383,7 @@ public class Editor implements WindowResizeListener {
 
         wizard.setResizeListener(new WindowResizeListener() {
             public void onWindowResized(int width, int height) {
-                dialog.getController(SizeDialogController.class).plugIn(dialog);
+                // TODO GWT15  dialog.getController(SizeDialogController.class).plugIn(dialog);
             }
         });
         dialog.show();
@@ -409,7 +407,7 @@ public class Editor implements WindowResizeListener {
 
         wizard.setResizeListener(new WindowResizeListener() {
             public void onWindowResized(int width, int height) {
-                dialog.getController(SizeDialogController.class).plugIn(dialog);
+                // TODO GWT15  dialog.getController(SizeDialogController.class).plugIn(dialog);
             }
         });
 
@@ -419,13 +417,11 @@ public class Editor implements WindowResizeListener {
     }
 
     private void initDialogBox(Wizard wizard) {
-        dialog = new ModalDialog();
-        dialog.removeController(dialog.getController(ModalDialog.PositionDialogController.class));
+        dialog = new CurrikiDialog();
         Panel panel = new ScrollPanel(wizard);
-        dialog.addController(new SizeDialogController(panel));
+        // TODO GWT15 dialog.addController(new SizeDialogController(panel));
         if (wizard != null)
             dialog.add(panel);
-        dialog.removeController(dialog.getController(TabFocusController.class));
         wizard.setParentDialog(dialog);
     }
 

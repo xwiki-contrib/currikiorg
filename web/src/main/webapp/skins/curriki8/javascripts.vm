@@ -1,3 +1,7 @@
+#**
+  * Setup the external Javascript files loaded for the curriki pages
+  * @author Curriki dev team
+  *#
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js')"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.2/prototype.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects"></script>
@@ -24,7 +28,6 @@
 
 <script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
 <script src="$xwiki.getSkinFile('js/vidiembed_curiki.js')"></script>
-
 <script src="/xwiki/js/curriki-main.js"></script>
 <script src="/xwiki/js/curriki-module-addpath.js"></script>
 <script src="/xwiki/js/curriki-module-nominate.js"></script>
@@ -54,8 +57,11 @@
 <script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
 
 #if($context.action=="admin") ##{
+<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js")"></script>
 #end ##}
 #end ## }
+
+## Hook for inserting JavaScript skin extensions
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->

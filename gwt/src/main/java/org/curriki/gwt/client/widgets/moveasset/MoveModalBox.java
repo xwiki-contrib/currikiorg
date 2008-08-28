@@ -1,9 +1,9 @@
 package org.curriki.gwt.client.widgets.moveasset;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.*;
 import org.curriki.gwt.client.Main;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 /*
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -26,10 +26,10 @@ import org.curriki.gwt.client.Main;
  * @author jeremi
  */
 
-public class MoveModalBox extends ModalDialog {
+public class MoveModalBox extends CurrikiDialog {
     private String assetPageName;
     private VerticalPanel panel;
-    private ModalDialog dialog;
+    private CurrikiDialog dialog;
 
     public MoveModalBox(String rootAsset, String assetPageName, String parentName, long pos){
         super();

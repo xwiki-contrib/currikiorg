@@ -22,8 +22,7 @@
  */
 package org.curriki.gwt.client.wizard;
 
-import asquare.gwt.tk.client.ui.ModalDialog;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import org.curriki.gwt.client.widgets.modaldialogbox.CurrikiDialog;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -55,7 +54,7 @@ public class AddFileWizard implements CompletionCallback
     private static ChooseCollectionDialog collections;
     private static ThankYouDialog thankYouDialog;
     private static AddFileDialog file;
-    private static ModalDialog metaPanel;
+    private static CurrikiDialog metaPanel;
     private String collectionName;
 
     private Document newDoc;
@@ -168,8 +167,7 @@ public class AddFileWizard implements CompletionCallback
             }
         });
 
-        metaPanel = new ModalDialog();
-        metaPanel.removeController(metaPanel.getController(TabFocusController.class));
+        metaPanel = new CurrikiDialog();
         metaPanel.addStyleName("dialog-metadata");
         metaPanel.setCaption(Main.getTranslation("addfile.describelearningresource"), true);
 

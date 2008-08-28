@@ -1,3 +1,7 @@
+#**
+  * Footer: this will display the footer of Curriki
+  * @author Curriki dev team
+  *#
 <div id="footerglobal">
 <div class="footer-left">
 <a href="$xwiki.getURL("Main.PrivacyPolicy")">Privacy Policy</a> |
@@ -8,10 +12,14 @@ All content licensed <a href="http://creativecommons.org/about/licenses/meet-the
 <a href="$xwiki.getURL("Main.TOS")">Copyright</a>
 </div>
 <div class="footer-right">
-<a href="/xwiki/bin/view/Main/WebRss?xpage=rdf"><img src="/xwiki/bin/download/XWiki/CurrikiSkin2/ico_rss.gif" alt="RSS"/></a>
-<a href="#"><img src="/xwiki/bin/download/XWiki/CurrikiSkin2/ico_xhtml_valid.gif" alt="XHTML Valid"/></a>
-<a href="#"><img src="/xwiki/bin/download/XWiki/CurrikiSkin2/ico_css_valid.gif" alt="RSS Valid"/></a>
-<a href="http://www.xwiki.org"><img src="/xwiki/bin/download/XWiki/CurrikiSkin2/ico_xwiki_powered.gif" alt="XWiki Powered"/></a>
+<a href="/xwiki/bin/view/Main/WebRss?xpage=rdf"><img src="$xwiki.getSkinFile("ico_rss.gif")" alt="RSS"/></a>
+<a href="#"><img src="$xwiki.getSkinFile("ico_xhtml_valid.gif")" alt="XHTML Valid"/></a>
+<a href="#"><img src="$xwiki.getSkinFile("ico_css_valid.gif")" alt="RSS Valid"/></a>
+<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
 </div>
-<span class="clr">&nbsp;aaa</span>
+## TODO: check if we need this
+## <span class="clr">&nbsp;aaa</span>
 </div>
+## Additionnal Curriki Staf Footer
+#template('staf.vm')
+

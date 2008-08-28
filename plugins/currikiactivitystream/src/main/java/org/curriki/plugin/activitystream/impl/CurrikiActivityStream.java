@@ -433,10 +433,10 @@ public class CurrikiActivityStream extends ActivityStreamImpl
                 "XWiki.XWikiUsers", "email");
         String mailSubject =
             XWikiVelocityRenderer.evaluate(translatedMailDoc.getTitle(), templateDocFullName,
-                vContext);
+                vContext, context);
         String mailContent =
             XWikiVelocityRenderer.evaluate(translatedMailDoc.getContent(), templateDocFullName,
-                vContext);
+                vContext, context);
 
         MailSenderPlugin mailSender =
             (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);

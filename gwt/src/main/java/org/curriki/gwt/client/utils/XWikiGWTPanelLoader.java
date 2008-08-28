@@ -28,7 +28,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.Main;
-import asquare.gwt.tk.client.ui.BasicPanel;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 public class XWikiGWTPanelLoader extends CurrikiAsyncCallback {
     Panel view;

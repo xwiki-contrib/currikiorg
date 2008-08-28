@@ -1,4 +1,12 @@
+#**
+  * General variables used in most templates
+  * @author XWiki
+  *#
 #template("fudocs.vm")
+##  GWT settings
+#set($gwtmainpath = "/xwiki/bin/view/GWT/Editor?xpage=plain&")
+#set($gwtsitepath = "/xwiki/gwt")
+## Rights vars
 #set($isGuest = $context.getUser().equals("XWiki.XWikiGuest"))
 #set($hasEdit = $xwiki.hasAccessLevel("edit"))
 #set($hasAdmin = $xwiki.hasAccessLevel("admin"))
@@ -26,14 +34,6 @@
 #set($copyright=$xwiki.getWebCopyright())
 #set($xwikimode=$context.getMode())
 #set($logredir = $xwiki.getFormEncoded($xwiki.getRequestURL()))
-##
-#if($xwiki.exists("XWiki.MaintenanceInfo"))
-#set($maintenanceinfo = "XWiki.MaintenanceInfo")
-#else
-#if($xwiki.exists("xwiki:XWiki.MaintenanceInfo"))
-#set($maintenanceinfo = "xwiki:XWiki.MaintenanceInfo")
-#end
-#end
 ## Check language option
 #set($languageparams = "")
 #if(($xwiki.isMultiLingual()==true)&&($tdoc.realLanguage!=""))

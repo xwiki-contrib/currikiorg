@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>XWiki</web>
@@ -8,19 +8,28 @@
 <translation>0</translation>
 <parent>XWiki.WebHome</parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.jkl1231</author>
+<author>XWiki.superadmin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jkl1231</contentAuthor>
+<contentAuthor>XWiki.superadmin</contentAuthor>
 <creationDate>1107744418000</creationDate>
-<date>1215098627000</date>
-<contentUpdateDate>1215098627000</contentUpdateDate>
-<version>19.1</version>
+<date>1219944522000</date>
+<contentUpdateDate>1219944522000</contentUpdateDate>
+<version>12.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>Upload new attachment &lt;a href="/xwiki/bin/downloadrev/XWiki/XWikiPreferences/xwiki%2Dapplication%2Dadministration%2D1.2.xar?rev=1.1"&gt;xwiki-application-administration-1.2.xar&lt;/a&gt;</comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
+<attachment>
+<filename>xwiki-application-administration-1.2.xar</filename>
+<filesize>201499</filesize>
+<author>XWiki.superadmin</author>
+<date>1219944522000</date>
+<version>1.1</version>
+<comment></comment>
+</attachment>
 <class>
 <name>XWiki.XWikiPreferences</name>
 <customClass></customClass>
@@ -272,6 +281,14 @@
 <unmodifiable>0</unmodifiable>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </ldap_bind_pass>
+<ldap_exclude_group>
+<name>ldap_exclude_group</name>
+<number>71</number>
+<prettyName>Ldap group to exclude</prettyName>
+<size>60</size>
+<unmodifiable>0</unmodifiable>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</ldap_exclude_group>
 <ldap_fields_mapping>
 <name>ldap_fields_mapping</name>
 <number>65</number>
@@ -1010,7 +1027,7 @@
 <allow>1</allow>
 </property>
 <property>
-<groups>XWiki.XWikiAllGroup,XWiki.AdminGroup,</groups>
+<groups>XWiki.XWikiAllGroup,</groups>
 </property>
 <property>
 <levels>comment</levels>
@@ -1116,7 +1133,7 @@
 <groups>XWiki.AdminGroup,</groups>
 </property>
 <property>
-<levels>admin</levels>
+<levels>admin,programming</levels>
 </property>
 <property>
 <users></users>
@@ -1374,6 +1391,14 @@
 <unmodifiable>0</unmodifiable>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </ldap_bind_pass>
+<ldap_exclude_group>
+<name>ldap_exclude_group</name>
+<number>71</number>
+<prettyName>Ldap group to exclude</prettyName>
+<size>60</size>
+<unmodifiable>0</unmodifiable>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</ldap_exclude_group>
 <ldap_fields_mapping>
 <name>ldap_fields_mapping</name>
 <number>65</number>
@@ -1786,7 +1811,7 @@
 <ad_clientid></ad_clientid>
 </property>
 <property>
-<admin_email>webmaster@curriki.org</admin_email>
+<admin_email>ludovic@xwiki.com</admin_email>
 </property>
 <property>
 <auth_active_check>1</auth_active_check>
@@ -1826,7 +1851,7 @@ Thanks again for joining. We hope you enjoy the Curriki community!
 <default_language>en</default_language>
 </property>
 <property>
-<documentBundles>CreateResources.Translations,XWiki.Translations,XWiki.CurrikiGWTTranslation,CRS.Translations,Registration.Translations,FileCheck.Translations,Groups.Translations,MyCurriki.Translations,XWiki.ToTranslate</documentBundles>
+<documentBundles>XWiki.GlobalClassTranslations,CreateResources.Translations,XWiki.Translations,XWiki.CurrikiGWTTranslation,CRS.Translations,Registration.Translations,FileCheck.Translations,Groups.Translations,MyCurriki.Translations,XWiki.ToTranslate,Search.Translations</documentBundles>
 </property>
 <property>
 <edit_anonymous>---</edit_anonymous>
@@ -1866,6 +1891,9 @@ Thanks again for joining. We hope you enjoy the Curriki community!
 </property>
 <property>
 <ldap_bind_pass></ldap_bind_pass>
+</property>
+<property>
+<ldap_exclude_group></ldap_exclude_group>
 </property>
 <property>
 <ldap_fields_mapping></ldap_fields_mapping>
@@ -1949,7 +1977,7 @@ Thanks again for joining. We hope you enjoy the Curriki community!
 <multilingual>1</multilingual>
 </property>
 <property>
-<notification_pages></notification_pages>
+<notification_pages>Admin.FSSaveNotification</notification_pages>
 </property>
 <property>
 <pageWidth>1024</pageWidth>
@@ -1976,7 +2004,7 @@ Thanks again for joining. We hope you enjoy the Curriki community!
 <renderXWikiVelocityRenderer></renderXWikiVelocityRenderer>
 </property>
 <property>
-<rightPanels>Panels.Welcome</rightPanels>
+<rightPanels></rightPanels>
 </property>
 <property>
 <showLeftPanels>1</showLeftPanels>
@@ -1985,10 +2013,10 @@ Thanks again for joining. We hope you enjoy the Curriki community!
 <showRightPanels>0</showRightPanels>
 </property>
 <property>
-<skin>XWiki.CurrikiSkin8</skin>
+<skin>curriki8</skin>
 </property>
 <property>
-<smtp_server>192.168.1.80</smtp_server>
+<smtp_server>smtp.free.fr</smtp_server>
 </property>
 <property>
 <stylesheet>style.css</stylesheet>
@@ -2269,6 +2297,14 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 <unmodifiable>0</unmodifiable>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </ldap_bind_pass>
+<ldap_exclude_group>
+<name>ldap_exclude_group</name>
+<number>71</number>
+<prettyName>Ldap group to exclude</prettyName>
+<size>60</size>
+<unmodifiable>0</unmodifiable>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</ldap_exclude_group>
 <ldap_fields_mapping>
 <name>ldap_fields_mapping</name>
 <number>65</number>
@@ -2741,6 +2777,9 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 <ldap_bind_pass></ldap_bind_pass>
 </property>
 <property>
+<ldap_exclude_group></ldap_exclude_group>
+</property>
+<property>
 <ldap_fields_mapping></ldap_fields_mapping>
 </property>
 <property>
@@ -2864,7 +2903,180 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 <webcopyright></webcopyright>
 </property>
 </object>
-<content>1 Preferences
-
-To edit preférences, please use the edit preferences item from the "More Actions" menu.</content>
+<content>#includeForm("XWiki.AdminSheet")</content>
+<renderedcontent>&lt;a href="" onclick="document.getElementById('xwikierror1').style.display='block'; return false;"&gt;Error number 4001 in 4: Error while parsing velocity page XWiki.XWikiPreferences
+Wrapped Exception: Failed to evaluate content with id &lt;span class="wikilink"&gt;&lt;a href="/xwiki/bin/view/XWiki/XWikiPreferences"&gt;XWiki Preferences&lt;/a&gt;&lt;/span&gt;&lt;/a&gt;&lt;div id="xwikierror1" style="display: none;"&gt;&lt;pre&gt;
+Error number 4001 in 4: Error while parsing velocity page XWiki.XWikiPreferences
+Wrapped Exception: Failed to evaluate content with id &lt;span class="wikilink"&gt;&lt;a href="/xwiki/bin/view/XWiki/XWikiPreferences"&gt;XWiki Preferences&lt;/a&gt;&lt;/span&gt;
+com.xpn.xwiki.XWikiException: Error number 4001 in 4: Error while parsing velocity page XWiki.XWikiPreferences
+Wrapped Exception: Failed to evaluate content with id &lt;span class="wikilink"&gt;&lt;a href="/xwiki/bin/view/XWiki/XWikiPreferences"&gt;XWiki Preferences&lt;/a&gt;&lt;/span&gt;
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.evaluate(XWikiVelocityRenderer.java:112)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.render(XWikiVelocityRenderer.java:87)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:272)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:202)
+	at com.xpn.xwiki.XWiki.include(XWiki.java:3621)
+	at com.xpn.xwiki.api.XWiki.includeForm(XWiki.java:1372)
+	at com.xpn.xwiki.api.XWiki.includeForm(XWiki.java:1338)
+	at sun.reflect.GeneratedMethodAccessor510.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.apache.velocity.util.introspection.UberspectImpl$VelMethodImpl.invoke(UberspectImpl.java:295)
+	at org.apache.velocity.runtime.parser.node.ASTMethod.execute(ASTMethod.java:245)
+	at org.apache.velocity.runtime.parser.node.ASTReference.execute(ASTReference.java:203)
+	at org.apache.velocity.runtime.parser.node.ASTReference.render(ASTReference.java:294)
+	at org.apache.velocity.runtime.parser.node.SimpleNode.render(SimpleNode.java:318)
+	at org.apache.velocity.runtime.directive.VelocimacroProxy.render(VelocimacroProxy.java:194)
+	at org.apache.velocity.runtime.parser.node.ASTDirective.render(ASTDirective.java:170)
+	at org.apache.velocity.runtime.parser.node.SimpleNode.render(SimpleNode.java:318)
+	at org.xwiki.velocity.DefaultVelocityEngine.evaluate(DefaultVelocityEngine.java:178)
+	at org.xwiki.velocity.DefaultVelocityEngine.evaluate(DefaultVelocityEngine.java:143)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.evaluate(XWikiVelocityRenderer.java:107)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.render(XWikiVelocityRenderer.java:87)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:272)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:202)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:170)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderDocument(DefaultXWikiRenderingEngine.java:159)
+	at com.xpn.xwiki.doc.XWikiDocument.getRenderedContent(XWikiDocument.java:430)
+	at com.xpn.xwiki.doc.XWikiDocument.toXMLDocument(XWikiDocument.java:2327)
+	at com.xpn.xwiki.doc.XWikiDocument.getXMLContent(XWikiDocument.java:2143)
+	at gjdk.com.xpn.xwiki.doc.XWikiDocument_GroovyReflector.invoke(Unknown Source)
+	at groovy.lang.MetaMethod.invoke(MetaMethod.java:111)
+	at org.codehaus.groovy.runtime.MetaClassHelper.doMethodInvoke(MetaClassHelper.java:657)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:363)
+	at org.codehaus.groovy.runtime.Invoker.invokeMethod(Invoker.java:146)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:104)
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.invokeMethod(ScriptBytecodeAdapter.java:85)
+	at SVNSave.savePage(script1219945422570.groovy:26)
+	at gjdk.SVNSave_GroovyReflector.invoke(Unknown Source)
+	at groovy.lang.MetaMethod.invoke(MetaMethod.java:111)
+	at org.codehaus.groovy.runtime.MetaClassHelper.doMethodInvoke(MetaClassHelper.java:657)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:363)
+	at org.codehaus.groovy.runtime.Invoker.invokeMethod(Invoker.java:158)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:104)
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.invokeMethod(ScriptBytecodeAdapter.java:85)
+	at SVNSave.notify(script1219945422570.groovy:76)
+	at com.xpn.xwiki.notify.XWikiPageNotification.notifyPage(XWikiPageNotification.java:41)
+	at com.xpn.xwiki.notify.XWikiPageNotification.notify(XWikiPageNotification.java:20)
+	at com.xpn.xwiki.notify.XWikiActionRule.verify(XWikiActionRule.java:62)
+	at com.xpn.xwiki.notify.XWikiNotificationManager.verify(XWikiNotificationManager.java:245)
+	at com.xpn.xwiki.web.XWikiAction.execute(XWikiAction.java:311)
+	at com.xpn.xwiki.web.XWikiAction.execute(XWikiAction.java:115)
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196)
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:803)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:269)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:188)
+	at com.xpn.xwiki.web.SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:112)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:215)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:188)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:213)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:174)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:117)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:108)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:151)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:874)
+	at org.apache.coyote.http11.Http11BaseProtocol$Http11ConnectionHandler.processConnection(Http11BaseProtocol.java:665)
+	at org.apache.tomcat.util.net.PoolTcpEndpoint.processSocket(PoolTcpEndpoint.java:528)
+	at org.apache.tomcat.util.net.LeaderFollowerWorkerThread.runIt(LeaderFollowerWorkerThread.java:81)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:689)
+	at java.lang.Thread.run(Thread.java:613)&lt;p/&gt;
+Wrapped Exception:&lt;p/&gt;
+org.apache.velocity.exception.MethodInvocationException: Invocation of method 'use' in  class com.xpn.xwiki.plugin.skinx.SkinExtensionPluginApi threw exception java.lang.NullPointerException @ XWiki.XWikiPreferences&lt;a class="wikicreatelink" href="/xwiki/bin/edit/XWiki/26%2C16?parent=XWiki.XWikiPreferences"&gt;&lt;span class="wikicreatelinktext"&gt;26,16&lt;/span&gt;&lt;span class="wikicreatelinkqm"&gt;?&lt;/span&gt;&lt;/a&gt;
+	at org.apache.velocity.runtime.parser.node.ASTMethod.execute(ASTMethod.java:286)
+	at org.apache.velocity.runtime.parser.node.ASTReference.execute(ASTReference.java:203)
+	at org.apache.velocity.runtime.parser.node.ASTReference.render(ASTReference.java:294)
+	at org.apache.velocity.runtime.parser.node.ASTBlock.render(ASTBlock.java:74)
+	at org.apache.velocity.runtime.parser.node.SimpleNode.render(SimpleNode.java:318)
+	at org.apache.velocity.runtime.parser.node.ASTIfStatement.render(ASTIfStatement.java:107)
+	at org.apache.velocity.runtime.parser.node.SimpleNode.render(SimpleNode.java:318)
+	at org.xwiki.velocity.DefaultVelocityEngine.evaluate(DefaultVelocityEngine.java:178)
+	at org.xwiki.velocity.DefaultVelocityEngine.evaluate(DefaultVelocityEngine.java:143)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.evaluate(XWikiVelocityRenderer.java:107)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.render(XWikiVelocityRenderer.java:87)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:272)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:202)
+	at com.xpn.xwiki.XWiki.include(XWiki.java:3621)
+	at com.xpn.xwiki.api.XWiki.includeForm(XWiki.java:1372)
+	at com.xpn.xwiki.api.XWiki.includeForm(XWiki.java:1338)
+	at sun.reflect.GeneratedMethodAccessor510.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.apache.velocity.util.introspection.UberspectImpl$VelMethodImpl.invoke(UberspectImpl.java:295)
+	at org.apache.velocity.runtime.parser.node.ASTMethod.execute(ASTMethod.java:245)
+	at org.apache.velocity.runtime.parser.node.ASTReference.execute(ASTReference.java:203)
+	at org.apache.velocity.runtime.parser.node.ASTReference.render(ASTReference.java:294)
+	at org.apache.velocity.runtime.parser.node.SimpleNode.render(SimpleNode.java:318)
+	at org.apache.velocity.runtime.directive.VelocimacroProxy.render(VelocimacroProxy.java:194)
+	at org.apache.velocity.runtime.parser.node.ASTDirective.render(ASTDirective.java:170)
+	at org.apache.velocity.runtime.parser.node.SimpleNode.render(SimpleNode.java:318)
+	at org.xwiki.velocity.DefaultVelocityEngine.evaluate(DefaultVelocityEngine.java:178)
+	at org.xwiki.velocity.DefaultVelocityEngine.evaluate(DefaultVelocityEngine.java:143)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.evaluate(XWikiVelocityRenderer.java:107)
+	at com.xpn.xwiki.render.XWikiVelocityRenderer.render(XWikiVelocityRenderer.java:87)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:272)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:202)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderText(DefaultXWikiRenderingEngine.java:170)
+	at com.xpn.xwiki.render.DefaultXWikiRenderingEngine.renderDocument(DefaultXWikiRenderingEngine.java:159)
+	at com.xpn.xwiki.doc.XWikiDocument.getRenderedContent(XWikiDocument.java:430)
+	at com.xpn.xwiki.doc.XWikiDocument.toXMLDocument(XWikiDocument.java:2327)
+	at com.xpn.xwiki.doc.XWikiDocument.getXMLContent(XWikiDocument.java:2143)
+	at gjdk.com.xpn.xwiki.doc.XWikiDocument_GroovyReflector.invoke(Unknown Source)
+	at groovy.lang.MetaMethod.invoke(MetaMethod.java:111)
+	at org.codehaus.groovy.runtime.MetaClassHelper.doMethodInvoke(MetaClassHelper.java:657)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:363)
+	at org.codehaus.groovy.runtime.Invoker.invokeMethod(Invoker.java:146)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:104)
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.invokeMethod(ScriptBytecodeAdapter.java:85)
+	at SVNSave.savePage(script1219945422570.groovy:26)
+	at gjdk.SVNSave_GroovyReflector.invoke(Unknown Source)
+	at groovy.lang.MetaMethod.invoke(MetaMethod.java:111)
+	at org.codehaus.groovy.runtime.MetaClassHelper.doMethodInvoke(MetaClassHelper.java:657)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:363)
+	at org.codehaus.groovy.runtime.Invoker.invokeMethod(Invoker.java:158)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:104)
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.invokeMethod(ScriptBytecodeAdapter.java:85)
+	at SVNSave.notify(script1219945422570.groovy:76)
+	at com.xpn.xwiki.notify.XWikiPageNotification.notifyPage(XWikiPageNotification.java:41)
+	at com.xpn.xwiki.notify.XWikiPageNotification.notify(XWikiPageNotification.java:20)
+	at com.xpn.xwiki.notify.XWikiActionRule.verify(XWikiActionRule.java:62)
+	at com.xpn.xwiki.notify.XWikiNotificationManager.verify(XWikiNotificationManager.java:245)
+	at com.xpn.xwiki.web.XWikiAction.execute(XWikiAction.java:311)
+	at com.xpn.xwiki.web.XWikiAction.execute(XWikiAction.java:115)
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196)
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:803)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:269)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:188)
+	at com.xpn.xwiki.web.SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:112)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:215)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:188)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:213)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:174)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:117)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:108)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:151)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:874)
+	at org.apache.coyote.http11.Http11BaseProtocol$Http11ConnectionHandler.processConnection(Http11BaseProtocol.java:665)
+	at org.apache.tomcat.util.net.PoolTcpEndpoint.processSocket(PoolTcpEndpoint.java:528)
+	at org.apache.tomcat.util.net.LeaderFollowerWorkerThread.runIt(LeaderFollowerWorkerThread.java:81)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:689)
+	at java.lang.Thread.run(Thread.java:613)
+Caused by: java.lang.NullPointerException
+	at com.xpn.xwiki.plugin.skinx.SkinExtensionPlugin.use(SkinExtensionPlugin.java:95)
+	at com.xpn.xwiki.plugin.skinx.SkinExtensionPluginApi.use(SkinExtensionPluginApi.java:47)
+	at sun.reflect.GeneratedMethodAccessor452.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.apache.velocity.util.introspection.UberspectImpl$VelMethodImpl.invoke(UberspectImpl.java:295)
+	at org.apache.velocity.runtime.parser.node.ASTMethod.execute(ASTMethod.java:245)
+	&amp;#8230; 82 more&lt;p/&gt;
+&lt;/pre&gt;&lt;/div&gt;</renderedcontent>
 </xwikidoc>

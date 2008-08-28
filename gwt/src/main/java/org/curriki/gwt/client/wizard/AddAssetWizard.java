@@ -21,7 +21,7 @@
  */
 package org.curriki.gwt.client.wizard;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
+import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
