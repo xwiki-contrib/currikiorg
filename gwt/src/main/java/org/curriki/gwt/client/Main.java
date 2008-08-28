@@ -554,10 +554,12 @@ public class Main implements EntryPoint
     }
 
     public static int getAbsoluteTop(ScrollPanel panel) {
-        if (isMSIE())
+       return panel.getAbsoluteTop();
+       /*  if (isMSIE())
             return panel.getAbsoluteTop();
         else
             return panel.getAbsoluteTop() + panel.getScrollPosition();
+       */
     }
 
     /**
