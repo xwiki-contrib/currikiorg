@@ -1394,7 +1394,8 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
  #end ## }
  #if ($request.sourceDoc) ## {
  $response.sendRedirect($request.sourceDoc)
- #else ## } {
+ #end
+#else ## } {
   #if($message) ## {
 <div id="xwikimessage">
 $message
@@ -2078,4 +2079,4 @@ function toggle_desc(){
 #end
 #end ## buttonmacro
 
-## End of MyCurriki Macros ## }
+## End of MyCurriki Macros 
