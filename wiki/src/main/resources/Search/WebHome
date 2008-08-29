@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+<web>Search</web>
+<name>WebHome</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.dward</creator>
+<author>XWiki.dward</author>
+<customClass></customClass>
+<contentAuthor>XWiki.dward</contentAuthor>
+<creationDate>1218122305000</creationDate>
+<date>1219950326000</date>
+<contentUpdateDate>1219950326000</contentUpdateDate>
+<version>11.1</version>
+<title>Search</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>a</comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Search.WebHome</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>{pre}
+&lt;script type="text/javascript"&gt;
+Ext.ns('Curriki.userinfo');
+Curriki.userinfo = {
+	isAdmin: #if($hasGlobalAdmin)true#{else}false#end
+};
+&lt;/script&gt;
+&lt;script type="text/javascript" src="/xwiki/bin/view/Search/SearchJS?xpage=plain"&gt;&lt;/script&gt;
+&lt;style&gt;
+#searchResultsGrid .x-grid3-cell-inner {
+	white-space: normal;
+}
+.x-fieldset legend { display: block; }
+.x-menu .x-menu-list .x-menu-list-item a.xg-hmenu-sort-desc {display: none; }
+.x-grid3-td-ict { background-repeat: no-repeat; }
+
+.assettype-icon { width: 16px; height: 17px; background-repeat:no-repeat; }
+.assettype-icon + .asset-title { padding-left: 5px; }
+
+.ict-icon { width: 16px; height: 16px; background-repeat:no-repeat; }
+.ict-icon + .ict-title { padding-left: 5px; }
+.ict-activity .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Activity.gif); }
+.ict-book .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Book.gif); }
+.ict-curriculum .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Curriculum.gif); }
+.ict-multiple .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Multiple.gif); }
+.ict-other .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Other.gif); }
+.ict-resource .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Resource.gif); }
+
+.ict-icon-combo-icon {
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	width: 16px;
+	height: 16px;
+}
+input[type="text"] .ict-icon-combo-input {
+	padding-left: 21px;
+}
+.x-form-field-wrap .ict-icon-combo-icon {
+	top: 3px;
+	left: 5px;
+}
+.ict-icon-combo-item {
+	background-repeat: no-repeat ! important;
+	background-position: 3px 50% ! important;
+}
+
+
+.crs-icon { width:15px; height:15px; background-repeat:no-repeat; }
+.crs-icon + .crs-text { padding-left: 5px; }
+.crs-1 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
+.crs-2 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
+.crs-3 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
+.crs-P .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
+&lt;/style&gt;
+&lt;div id="search-div"&gt;&lt;/div&gt;
+&lt;form id="history-form" class="x-hidden"&gt;
+    &lt;input type="hidden" id="x-history-field" /&gt;
+    &lt;iframe id="x-history-frame"&gt;&lt;/iframe&gt;
+&lt;/form&gt;
+{/pre}
+</content></xwikidoc>

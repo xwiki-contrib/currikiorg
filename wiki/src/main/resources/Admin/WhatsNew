@@ -21,6 +21,7 @@
 <validationScript></validationScript>
 <comment></comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <content>1 What's New
 
 #set ($sql = "where doc.web not like 'Coll_%' and doc.web not in ('Project','AssetTemp','FW_masterFramework','Board','Advisory','Honorary') and doc.fullName not in (select doc2.fullName from XWikiDocument as doc2, BaseObject as obj where doc2.fullName=obj.name and obj.className='XWiki.XWikiUsers') and doc.date &gt; '2006-11-15' order by doc.date desc")

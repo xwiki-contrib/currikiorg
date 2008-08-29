@@ -12,15 +12,16 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1198091147000</creationDate>
-<date>1215191050000</date>
-<contentUpdateDate>1215191050000</contentUpdateDate>
-<version>2.1</version>
+<date>1219968085000</date>
+<contentUpdateDate>1219968085000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Fix macro names</comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -75,7 +76,7 @@
 &lt;div class="frame"&gt;
 &lt;form class="CreateNewGroup" action="#" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;"&gt;
 &lt;input type="hidden" name="action" value="editmasthead" /&gt;
-#mycurrikititlebar($msg.get("groups_home_editmasthead_title"), "", "", "blue")
+#mycurriki_titlebar($msg.get("groups_home_editmasthead_title"), "", "", "blue")
 &lt;div class="frame-content"&gt;
 &lt;div class="section"&gt;
 &lt;br /&gt;
@@ -102,7 +103,7 @@ $s.display("description","edit")
 #end
 &lt;div class="section"&gt;
 &lt;div class="frame-inset-logo"&gt;
-#groupLogo($s)
+#mycurriki_grouplogo($s)
 &lt;/div&gt;
 &lt;div class="frame-inset-description"&gt;
 #if($logofilename&amp;&amp;$logoattach)

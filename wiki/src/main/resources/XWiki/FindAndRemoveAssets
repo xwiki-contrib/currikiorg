@@ -21,6 +21,7 @@
 <validationScript></validationScript>
 <comment></comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <content>#set($sql = "")
 #set ($sql = ", BaseObject as obj where doc.fullName = obj.name and obj.className='XWiki.AssetClass' and (doc.web = 'AssetTemp' or doc.web like 'Coll_%') and (doc.fullName like '% %' or doc.fullName like '%?%' or doc.fullName like '%+%')")
 #set ($list = $xwiki.searchDocuments($sql , 20, 0))

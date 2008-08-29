@@ -6,21 +6,22 @@
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
-<parent></parent>
+<parent>Main.AboutContributing</parent>
 <creator>XWiki.NielsMayer</creator>
-<author>XWiki.NielsMayer</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.NielsMayer</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1215124816000</creationDate>
-<date>1215124864000</date>
-<contentUpdateDate>1215124864000</contentUpdateDate>
-<version>1.1</version>
+<date>1216839911000</date>
+<contentUpdateDate>1216839911000</contentUpdateDate>
+<version>4.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fresh upload of this due to weirdness w/ CurrikiStandardLessonPlan.en</comment>
+<comment>.value() should be .value</comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -108,7 +109,7 @@
       &lt;dt&gt;request.method&lt;/dt&gt;&lt;dd&gt;$!request.method&lt;/dd&gt;
       &lt;dt&gt;request.page&lt;/dt&gt;&lt;dd&gt;$!request.page&lt;/dd&gt;
       &lt;dt&gt;getParameter("pageName")&lt;/dt&gt;&lt;dd&gt;$!pageName&lt;/dd&gt;
-      &lt;dt&gt;getParameter("cameFrom")&lt;/dt&gt;&lt;dd&gt;$!cameFrom&lt;/dd&gt;
+      &lt;dt&gt;getParameter("cameFrom")&lt;/dt&gt;&lt;dd&gt;{pre}$!cameFrom{/pre}&lt;/dd&gt;
       &lt;dt&gt;getParameter("flow")&lt;/dt&gt;&lt;dd&gt;$!flow&lt;/dd&gt;
       &lt;dt&gt;getParameter("parentPage")&lt;/dt&gt;&lt;dd&gt;$!parentPage&lt;/dd&gt;
       &lt;dt&gt;getParameter("publishSpace")&lt;/dt&gt;&lt;dd&gt;$!publishSpace&lt;/dd&gt;
@@ -350,7 +351,7 @@ function getFieldContentStr(field_id_str) {
 function getWysiwygFieldContent(wysiwyg_id_str, textarea_fallback_id_str) {
   var wysiwyg_content_o = tinyMCE.getInstanceById(wysiwyg_id_str); // WYSIWYG Associated with "Content"
   if (wysiwyg_content_o == null) { // no WYSIWYG--&gt;falback to textarea contents...
-    var wysiwyg_content_txt  = $(textarea_fallback_id_str).value();
+    var wysiwyg_content_txt  = $(textarea_fallback_id_str).value;
     if ((wysiwyg_content_txt.length &lt;= 1) || (wysiwyg_content_txt.trim() == '')) {
       return null;	   // --&gt; return signal for empty fallback textarea contents
     }
@@ -513,7 +514,7 @@ function setAttachmentsIframeSize() {
   #if( "$!cameFrom"=="" )              ## {
    value="$msg.get('lesson.plan.url')" ## default cameFrom to this form
   #else                                ## } {
-   value="$!cameFrom"                  ## pass along cameFrom
+   value="{pre}$!cameFrom{/pre}"                  ## pass along cameFrom
   #end                                 ## }
   /&gt;
 #end                                   ## }
@@ -631,7 +632,7 @@ function setAttachmentsIframeSize() {
        #set( $cancelURL = $xwiki.getURL("Main.WebHome") ) ## cameFrom not set means go to WebHome
      #end ## }
      &lt;button class="cancel"
-      onclick="try { clearUnloadDialog(); window.location.href='$cancelURL'; return false; } catch(e) { alert('$msg.get("form.scratch.cancel.button") button onclick error: '+e+' ...'); return false; }"
+      onclick="try { clearUnloadDialog(); window.location.href='{pre}$cancelURL{/pre}'; return false; } catch(e) { alert('$msg.get("form.scratch.cancel.button") button onclick error: '+e+' ...'); return false; }"
       &gt;$msg.get("form.scratch.cancel.button")&lt;/button&gt;
   &lt;/p&gt;
   #curriki_formpart_end() ## }
@@ -682,5 +683,5 @@ tinyMCE.convertURL = function(url, node, on_save) { return url; };
 /* ]]&gt; */
 &lt;/script&gt;{/pre}
 #end ## } -- else, aka "$!newAsset"!="" 
-#end ## } -- $context.user=="XWiki.XWikiGuest"
-</content></xwikidoc>
+#end ## } -- $context.user=="XWiki.XWikiGuest"</content>
+</xwikidoc>

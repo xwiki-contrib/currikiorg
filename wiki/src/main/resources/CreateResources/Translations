@@ -12,15 +12,16 @@
 <customClass></customClass>
 <contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1210378529000</creationDate>
-<date>1215112024000</date>
-<contentUpdateDate>1215112024000</contentUpdateDate>
-<version>192.1</version>
+<date>1218560839000</date>
+<contentUpdateDate>1218560839000</contentUpdateDate>
+<version>235.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>tweaking title and description display</comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -57,9 +58,9 @@
 <content>## from http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/Translations?editor=wiki
 {pre}
 
-## If a string has the word placeholder after the = sign, it means text is coming. If it is blank after the = sign, then that means that that string can be ignored until further notice.
+## If a string has the word "placeholder" after the = sign, it means text is coming. If it is blank after the = sign, then that means that that string can be ignored until further notice.
 
-## TABLE OF CONTENTS FOR THIS DOCUMENT AS OF JUNE 5 2008:
+## TABLE OF CONTENTS FOR THIS DOCUMENT AS OF AUGUST 11 2008:
 
 ## FORM ACCESS WARNING
 ## GLOBAL ELEMENTS USED IN MORE THAN ONE FORM
@@ -68,12 +69,14 @@
 ## CREATE A RESOURCE FROM SCRATCH FORM
 ## CURRIKI LESSON PLAN FORM
 ## NORTEL LEARNIT LESSON PLAN FORM
+## ACE LESSON PLAN FORM
 ## FROM SCRATCH ERROR MESSAGES
 ## LESSON PLAN ERROR MESSAGES
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 ## ASSET CLASS
 ## ADD PATH SELECTION DIALOGS
 ## ADD PATH FINAL MESSAGE DIALOGS
+## ADD PATH ERROR MESSAGE
 
 
 
@@ -81,7 +84,7 @@
 
 
 ## FORM ACCESS WARNING
-createresources.needaccount=You must be a Curriki member and be &lt;a href="{0}"&gt;logged in&lt;/a&gt; to create new resources.
+createresources.needaccount=You must be a Curriki member and be &lt;a href="{0}"&gt;logged in&lt;/a&gt; to create a new resource.
 
 
 
@@ -91,7 +94,7 @@ createresources.needaccount=You must be a Curriki member and be &lt;a href="{0}"
 form.scratch.step3.header=Step 3. Confirm Rights &amp; Access Information
 form.scratch.step3.instruction=Whose content is this, who should be able to view or edit it, and how can it be used by others?
 
-## STEP 4
+## STEP 4 (used in From Scratch, CSLP, and NLLP forms; partial use in ACELP)
 form.scratch.step4.header=Step 4. Review &amp; Submit
 form.scratch.step4.instruction=Review your entries one last time before you click Submit. &lt;br /&gt; &lt;br /&gt;If your content is &lt;i&gt;not ready&lt;/i&gt; for others to see or use, remember to set the Access Privileges to "Private" above.
 
@@ -108,11 +111,11 @@ form.leaving.dialog=Navigating away from this page will cause you to lose your w
 form.leaving.dialog.ok.button=OK
 form.leaving.dialog.cancel.button=Cancel
 
-## DONE CREATING A RESOURCE FORM (part of CREATE A RESOURCE FROM SCRATCH FORM)
+## DONE CREATING A RESOURCE FORM 
 form.done.url=/xwiki/bin/view/CreateResources/AssetDone
 form.done.created.lessonplan=Lesson Plan Created!
 form.done.created.resource=Resource Created!
-## neednot be translated... if this is ever seen by user, a severe error has occurred
+## Next string need not be translated... if what follows is ever seen by user, a severe error has occurred: 
 form.done.wysiwyg.error.wikitext=1 Error: SLP Wysiwyg Badness!
 
 ## CREATE A RESOURCE FROM SCRATCH FORM
@@ -128,9 +131,19 @@ form.title.description.link2=Curriki Review System
 form.title.description.link2.url=/xwiki/bin/view/Coll_curriki/CurrikiReviewSystemCollection?bc=XWiki.curriki
 form.title.description.link2.thumbnail=/xwiki/skins/curriki8/icons/CRS.png
 
+## FROM SCRATCH STEP 1
 form.scratch.step1.header=Step 1. Enter Basic Information
 form.scratch.step1.instruction=What details will best describe and present this resource in search results &lt;br&gt;and other listings?
 
+form.scratch.title_title=Title:
+form.scratch.title_txt=Enter a title for your resource of no more than 250 characters (including spaces).
+form.scratch.title_tooltip=The resource title appears in search results and other listings, and helps others identify its utility or application.
+
+form.scratch.description_title=Description:
+form.scratch.description_txt=Enter a detailed description of the content and/or purpose of this resource. 
+form.scratch.description_tooltip=If this resource is part of a larger instructional context, you may wish to describe this relationship.
+
+## FROM SCRATCH STEP 2
 form.scratch.step2.header=Step 2. Enter &amp; Format Content
 form.scratch.step2.instruction=What content should appear in your resource?
 form.scratch.step2.content.title=Content:
@@ -138,8 +151,10 @@ form.scratch.step2.content.instruction=Enter content in the editing window below
 
 
 
-## CURRIKI LESSON PLAN FORM
-lesson.plan.output.title.wikimarkup=*title*
+## CURRIKI LESSON PLAN (CSLP) FORM
+
+## CSLP TITLE AREA
+
 lesson.plan.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
 lesson.plan.title=Create a Resource from a Template (Curriki Standard Lesson Plan)
 lesson.plan.title.description=Learn more:
@@ -152,11 +167,19 @@ lesson.plan.title.description.link2=Curriki Review System
 lesson.plan.title.description.link2.url=/xwiki/bin/view/Coll_curriki/CurrikiReviewSystemCollection?bc=XWiki.curriki
 lesson.plan.title.description.link2.thumbnail=/xwiki/skins/curriki8/icons/CRS.png
 
-## STEP 1
+## CSLP STEP 1
 lesson.plan.step1.header=Step 1. Enter Basic Information
 lesson.plan.step1.instruction=How would you describe and categorize this resource for yourself &lt;br&gt;and other educators?
 
-##STEP 2
+lesson.plan.title_title=Title:
+lesson.plan.title_txt=Enter a title for your lesson of no more than 250 characters (including spaces).
+lesson.plan.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify it.
+
+nortel.lesson.plan.description_title=Description:
+lesson.plan.description_txt=Describe the overall concepts and skills addressed by this lesson, and/or the lesson's objective and learning activities.
+lesson.plan.description_tooltip=If this lesson is part of a larger instructional context, you may wish to describe this relationship.
+
+##CSLP STEP 2
 lesson.plan.step2.header=Step 2. Enter &amp; Format Lesson Content
 lesson.plan.step2.instruction=What would another educator need to know to successfully put this lesson &lt;br&gt;into practice?
 
@@ -211,18 +234,12 @@ lesson.plan.standards.tooltip=What standards or expectations does the lesson add
 
 lesson.plan.required.attachments.title=Required Attachments:
 lesson.plan.required.attachments.instruction=Select and upload files from your computer. Attached files cannot exceed 20 MB in total. These will be offered as links in the published lesson plan.
-
 lesson.plan.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource.&lt;br /&gt;&lt;br /&gt;After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
 lesson.plan.attachments.title=Attached Files:
 lesson.plan.required.attachments.tooltip=Attach any files referenced in the lesson, such as a handout, rubric, worksheet, or quiz.
 lesson.plan.attachments.browse.button=Browse
 lesson.plan.attachments.attach.button=Attach This File
 lesson.plan.attachments.delete=Remove
-
-##Curriki Standard Lesson Plan Template
-lesson.plan.required.fields.dialog.overview=- Learning Objectives
-lesson.plan.required.fields.dialog.overview=- Procedures
-
 lesson.plan.file.size.maximum=20000000
 lesson.plan.file.size.label=Total size of all attachments:
 lesson.plan.file.size.oversize=Attachments to this resource cannot exceed 20 MB in total. To save this resource, you must use "remove" link in "Required Attachments" to reduce total size of attachments. Please upload any additional files as standalone Curriki contribution instead of attaching it to this resource.
@@ -230,14 +247,31 @@ lesson.plan.file.size.dialog=Attachments to this resource cannot exceed 20 MB in
 lesson.plan.file.size.dialog.button=OK
 
 
-##NORTEL LEARNIT LESSON PLAN FORM
+##NORTEL LEARNIT (NLLP) LESSON PLAN FORM
 
-nortel.lesson.plan.title=Create a Lesson Plan (Nortel LeariT 6E + S Template)
-nortel.lesson.plan.title.description=Learn more:
+##NLLP TITLE AREA
+
+nortel.lesson.plan.url=/xwiki/bin/view/CreateResources/NortelLearniTLessonPlan
+nortel.lesson.plan.title=Create a Lesson Plan (Nortel LearniT 6E + S Template)
+nortel.lesson.plan.title.description=&lt;br&gt;Learn more:
 
 nortel.form.title.description.link1=Models
-nortel.form.title.description.link2=Help
+nortel.form.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/ModelLessonsfromNortelLearniTs6ETemplate?bc=;Coll_NortelLearniT.NortelLearniT6ESForm
+nortel.form.title.description.link2=Detailed Help on Using the Form
+nortel.form.title.description.link2.url=http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniT6ESForm?bc
 nortel.form.title.description.link3=Nortel LearniT
+nortel.form.title.description.link3.url=http://www.curriki.org/xwiki/bin/view/Demo/nortellearnit
+
+##NLLP STEP 1
+nortel.lesson.plan.title_title=Title:
+nortel.lesson.plan.title_txt=placeholder
+nortel.lesson.plan.title_tooltip=placeholder
+
+nortel.lesson.plan.description_title=Description:
+nortel.lesson.plan.description_txt=placeholder
+nortel.lesson.plan.description_tooltip=placeholder
+
+##NLLP STEP 2
 
 nortel.lesson.plan.step2.title=Enter &amp; Format Lesson Content
 nortel.lesson.plan.step2.guidingquestion=What would another educator need to know to successfully put this lesson into practice?
@@ -275,7 +309,12 @@ nortel.lesson.plan.materials.tooltip=Enter supplies, handouts, equipment, softwa
 nortel.lesson.plan.project.title=Project:
 nortel.lesson.plan.project.instruction=
 nortel.lesson.plan.project.content=
-nortel.lesson.plan.project.tooltip=Describe student project(s) in some detail, including how they&amp;#39;ll pursue and present information.
+nortel.lesson.plan.project.tooltip=Describe student project(s) in some detail, including how they will pursue and present information.
+
+nortel.lesson.plan.timemanagement.title=Time Management Tips:
+nortel.lesson.plan.timemanagement.instruction=
+nortel.lesson.plan.timemanagement.content=
+nortel.lesson.plan.timemanagement.tooltip=Provide hints about how to pace the lesson.
 
 nortel.lesson.plan.assess.title=Assessment:
 nortel.lesson.plan.assess.instruction=
@@ -283,55 +322,177 @@ nortel.lesson.plan.assess.content=
 nortel.lesson.plan.assess.tooltip=Briefly indicate ongoing evaluation techniques for key student understandings. Note: Use Evaluate for detailed rubric(s).
 
 nortel.lesson.plan.engage.title=Engage:
-nortel.lesson.plan.engage.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.engage.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherIntroductionEngage" target="_blank"&gt;Engage&lt;/a&gt;. 
 nortel.lesson.plan.engage.content=
 nortel.lesson.plan.engage.tooltip=Indicate specific activities to capture student interest and encourage questioning leading to topic exploration.
 
 nortel.lesson.plan.explore.title=Explore:
-nortel.lesson.plan.explore.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.explore.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherExplore" target="_blank"&gt;Explore&lt;/a&gt;. 
 nortel.lesson.plan.explore.content=
 nortel.lesson.plan.explore.tooltip=Indicate activities and related technologies for student to perform/use to investigate the topic.
 
 nortel.lesson.plan.explain.title=Explain:
-nortel.lesson.plan.explain.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.explain.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherExplain" target="_blank"&gt;Explain&lt;/a&gt;. 
 nortel.lesson.plan.explain.content=
 nortel.lesson.plan.explain.tooltip=Indicate the presentations or outputs and formats students will make and use to demonstrate new knowledge, understandings, capabilities.
 
 nortel.lesson.plan.elaborate.title=Elaborate:
-nortel.lesson.plan.elaborate.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.elaborate.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherElaborate" target="_blank"&gt;Elaborate&lt;/a&gt;. 
 nortel.lesson.plan.elaborate.content=
 nortel.lesson.plan.elaborate.tooltip=Provide instructions on the specific project the student creates from the lesson plan activity.
 
 nortel.lesson.plan.evaluate.title=Evaluate:
-nortel.lesson.plan.evaluate.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.evaluate.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/Evaluate" target="_blank"&gt;Evaluate&lt;/a&gt;. 
 nortel.lesson.plan.evaluate.content=
-nortel.lesson.plan.evaluate.tooltip=Provide/describe the rubric/method for evaluating learning expressed in students\&amp;#39; activities/outputs.
+nortel.lesson.plan.evaluate.tooltip=Provide/describe the rubric/method for evaluating learning of students as expressed in their activities/outputs.
 
 nortel.lesson.plan.extend.title=Extend:
-nortel.lesson.plan.extend.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.extend.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherExtend" target="_blank"&gt;Extend&lt;/a&gt;. 
 nortel.lesson.plan.extend.content=
 nortel.lesson.plan.extend.tooltip=Frame some student-driven ways to expand existing investigations; communicate learning to others; apply knowledge in new circumstances.
 
 nortel.lesson.plan.standards.title=Standards:
-nortel.lesson.plan.standards.instruction=Enter content below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+nortel.lesson.plan.standards.instruction=Enter and format your material using the WYSIWYG toolbar. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/NortelLearniTUsingtheWhatYouSeeIsWhatYouGetWYSIWYGEditingToolbar?bc=;Coll_NortelLearniT.NortelLearniT6ESForm" target="_blank"&gt;Toolbar Help&lt;/a&gt;. View a video on &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_NortelLearniT/21eTeacherStandards" target="_blank"&gt;Standards&lt;/a&gt;. 
 nortel.lesson.plan.standards.content=
 nortel.lesson.plan.standards.tooltip=Indicate standards/frameworks the lesson addresses.
 
 nortel.lesson.plan.required.attachments.title=Required Attachments:
-nortel.lesson.plan.required.attachments.instruction=Select and upload files from your computer. You can attach up to six files, not to exceed 20 MB in total. These will be offered as links in the published lesson plan.
-
-nortel.lesson.lesson.plan.required.attachments.tooltip=Attach any files referenced in this lesson, such as a handout, rubric, worksheet, or quiz.
-
-nortel.lesson.plan.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource. 
-
-After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
-
+nortel.lesson.plan.required.attachments.instruction=Select and upload files from your computer. Attached files cannot exceed 20 MB in total. These will be offered as links in the published lesson plan.
+nortel.lesson.plan.required.attachments.tooltip=Attach any files referenced in this lesson, such as a handout, rubric, worksheet, or quiz.
+nortel.lesson.plan.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource.&lt;br /&gt;&lt;br /&gt;After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
 nortel.lesson.plan.required.attachments.browse.button=Browse
 nortel.lesson.plan.required.attachments.attach.button=Attach This File
 nortel.lesson.plan.required.attachments.delete=Remove
 
+## NLLP OUTPUT
 
+## see macros.vm: macro currikiNortelIcon()
+nortel.lesson.plan.output.heading.icon.url=/xwiki/bin/download/CreateResources/NortelLearniTLessonPlan/NlorgCurrikiHP.png
+nortel.lesson.plan.output.heading.icon.height=75
+nortel.lesson.plan.output.heading.icon.width=225
+nortel.lesson.plan.output.heading.content=This lesson was created using the Nortel LearniT 6E + S template for integrating technology within the curriculum.
 
+## ACE LESSON PLAN FORM
+
+## ACELP TITLE AREA
+ace.lesson.plan.url=/xwiki/bin/view/CreateResources/ACELessonPlan
+ace.lesson.plan.title=Create a Resource from a Template (ACE Lesson Plan)
+ace.lesson.plan.title.description=Learn more:
+
+ace.lesson.plan.title.description.link1=Models
+ace.lesson.plan.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/ModelLessonsfromCurrikisForm-BasedTemplate
+ace.lesson.plan.title.description.link3=Help
+ace.lesson.plan.title.description.link3.url=/xwiki/bin/view/Coll_curriki/CreatingResourceswithFormsTemplates?bc=;Coll_curriki.CurrikiHelp
+ace.lesson.plan.title.description.link2=ACE
+ace.lesson.plan.title.description.link2.url=
+ace.lesson.plan.title.description.link2.thumbnail=
+
+## ACELP STEP 1
+ace.lesson.plan.step1.header=Step 1. Enter Basic Information
+ace.lesson.plan.step1.instruction=How would you describe and categorize this lesson for yourself &lt;br&gt;and other educators?
+
+ace.lesson.plan.title_title=Title:
+ace.lesson.plan.title_txt=Enter a title for your lesson of no more than 250 characters (including spaces).
+ace.lesson.plan.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify it.
+
+ace.lesson.plan.description_title=Description:
+ace.lesson.plan.description_txt=Describe the overall concepts and skills addressed by this lesson, and/or the lesson's main learning activities.
+ace.lesson.plan.description_tooltip=If this lesson is part of a larger instructional unit, you may wish to describe this relationship.
+
+## ACELP STEP 2
+
+ace.lesson.plan.step2.header=Step 2. Enter &amp; Format Lesson Content
+ace.lesson.plan.step2.instruction=What would another educator need to know to successfully put this lesson &lt;br&gt;into practice?
+
+ace.lesson.plan.introduction.title=Number of Days:
+ace.lesson.plan.introduction.instruction=Enter the estimated number of class days it will take students to meet the lesson plan objective.
+ace.lesson.plan.introduction.content=
+ace.lesson.plan.introduction.tooltip=Lesson plans that are 2-4 days in length help students connect discrete ideas or skills into larger, more complex concepts.
+
+ace.lesson.plan.group.size.title=Prior Knowledge:
+ace.lesson.plan.group.size.instruction=Describe what students need to know and be able to do in order to participate in this lesson's learning tasks and methods.
+ace.lesson.plan.introduction.content=
+ace.lesson.plan.group.size.tooltip=placeholder
+
+ace.lesson.plan.learning.objectives.title=Lesson Objective:
+lesson.plan.learning.objectives.instruction=Articulate what students will know and be able to do by the end of the lesson.
+ace.lesson.plan.learning.objectives.content=
+ace.lesson.plan.learning.objectives.tooltip=Effective lesson plan objectives often ask students to connect ideas across several days, and build toward the unit goal.
+
+ace.lesson.plan.assessment.title=Lesson Assessment:
+ace.lesson.plan.assessment.instruction=Describe the individual and independent assessment for the lesson. Attach any required materials below.
+ace.lesson.plan.assessment.content=
+ace.lesson.plan.assessment.tooltip=Include quizzes or other formal, summative assessments for the whole lesson; informal, formative assessment for each lesson day could also be cited here.
+
+ace.lesson.plan.standards.title=Benchmark or Standards:
+ace.lesson.plan.standards.instruction=Cite benchmarks or standards addressed during the lesson.
+ace.lesson.plan.standards.content=
+ace.lesson.plan.standards.tooltip=placeholder 
+
+ace.lesson.plan.materials.title=Materials:
+ace.lesson.plan.materials.instruction=List all handouts, worksheets, presentation slides, lab equipment, etc. needed to carry out the lesson. Attach any supplemental files below.
+ace.lesson.plan.materials.content=
+ace.lesson.plan.materials.tooltip=placeholder
+
+ace.lesson.plan.enrichment.title=Enrichment:
+ace.lesson.plan.enrichment.instruction=Identify experiences that would allow students to probe concepts at a deeper level.
+ace.lesson.plan.enrichment.content=
+ace.lesson.plan.enrichment.tooltip=placeholder
+
+ace.lesson.plan.accommodations.title=Accommodations:
+ace.lesson.plan.accommodations.instruction=Identify modifications for specific students or groups of students that might be necessary to help them meet the lesson objective.
+ace.lesson.plan.accommodations.content=
+ace.lesson.plan.accommodations.tooltip=placeholder
+
+ace.lesson.plan.anticipatedproblems.title=Anticipated Problems:
+ace.lesson.plan.anticipatedproblems.instruction=Describe common challenges related to student learning that the instructor might encounter during the lesson (e.g., a relevant misconception) or other procedural pitfalls.
+ace.lesson.plan.anticipatedproblems.content=
+ace.lesson.plan.anticipatedproblems.tooltip=placeholder
+
+ace.lesson.plan.procedures.title=Procedures:
+ace.lesson.plan.procedures.instruction=Enter the details of how this lesson is carried out. In each row, include the time allotted for each task, the learning tasks that will take place during that time, and the methods or procedures utilized to accomplish that learning task.
+vlesson.plan.procedures.content=
+ace.lesson.plan.procedures.tooltip=What instructions can you supply to ensure that you and others successfully carry out the intended instruction during this lesson? 
+ace.lesson.plan.procedures.time.tooltip=Indicate the number of minutes or time interval for each day’s learning tasks. 
+ace.lesson.plan.procedures.learningtask.tooltip=Articulate student-centered goals, instructions, activity descriptions, and lecture questions. 
+ace.lesson.plan.procedures.methods.tooltip=State how the learning task will be accomplished, (e.g., individual/pair/group work, direct instruction, or by other teaching methods). 
+ace.lesson.plan.procedures.row1.time_sample=Day 1
+ace.lesson.plan.procedures.row2.time_sample=Sample:10 min
+ace.lesson.plan.procedures.row2.learningtask_sample=Sample: Students practice summarizing the plot of a story.
+ace.lesson.plan.procedures.row2.methodorprocedure_sample=Sample: Work in pairs.
+
+ace.lesson.plan.required.attachments.title=Required Attachments:
+ace.lesson.plan.required.attachments.instruction=Select and upload files from your computer. Attached files cannot exceed 20 MB in total. These will be offered as links in the published lesson plan.
+
+ace.lesson.plan.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource.&lt;br /&gt;&lt;br /&gt;After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
+ace.lesson.plan.attachments.title=Attached Files:
+ace.lesson.plan.required.attachments.tooltip=Attach any files referenced in the lesson, such as a handout, rubric, worksheet, or quiz.
+ace.lesson.plan.attachments.browse.button=Browse
+ace.lesson.plan.attachments.attach.button=Attach This File
+ace.lesson.plan.attachments.delete=Remove
+
+ace.lesson.plan.file.size.maximum=20000000
+ace.lesson.plan.file.size.label=Total size of all attachments:
+ace.lesson.plan.file.size.oversize=Attachments to this resource cannot exceed 20 MB in total. To save this resource, you must use "remove" link in "Required Attachments" to reduce total size of attachments. Please upload any additional files as standalone Curriki contribution instead of attaching it to this resource.
+ace.lesson.plan.file.size.dialog=Attachments to this resource cannot exceed 20 MB in total. You may want to upload this file as a standalone Curriki contribution instead of attaching it to this resource.
+ace.lesson.plan.file.size.dialog.button=OK
+
+## ACELP STEP 4
+
+form.scratch.step4.header=Step 4. Review &amp; Submit
+
+ace.lesson.plan.form.scratch.step4.instruction=Review your entries one last time before you click Submit. &lt;br /&gt; &lt;br /&gt;If your content is &lt;i&gt;not ready&lt;/i&gt; for others to see or use, remember to set the Access Privileges to "Private" above.&lt;br /&gt; &lt;br /&gt;Note that there are two fields, Changes for Next Time and What Worked Well, that will appear in your resource upon submission. These will appear with placeholder content that should be updated after you have implemented this lesson. When you're ready to make updates, click "Edit" for the resource.
+
+form.scratch.submit.button=Submit
+form.scratch.cancel.button=Cancel
+
+## ACELP OUTPUT ONLY
+
+ace.lesson.plan.changes_heading=Changes for Next Time:
+ace.lesson.plan.changes_content=Here the lesson author can reflect on changes for future years. After executing the lesson in the classroom, the member can edit this section of the wiki resource to describe changes for making the lesson more effective next time
+
+ace.lesson.plan.whatworked_heading=What Worked Well:
+ace.lesson.plan.whatworked_content=After executing the lesson in the classroom, edit the wiki resource to highlight particularly effective activities or assessments for reference in future years.
 
 ## FROM SCRATCH ERROR MESSAGES
 
@@ -359,39 +520,44 @@ lesson.plan.required.fields.dialog.title=- Title
 lesson.plan.required.fields.dialog.description=- Description
 lesson.plan.required.fields.dialog.subject=- Subject
 lesson.plan.required.fields.dialog.level=- Educational Level
-lesson.plan.required.fields.dialog.ict=- Instructional Component Type
 lesson.plan.required.fields.dialog.rights=- Rights Holder
 lesson.plan.required.fields.dialog.button=OK
 
 ## The following fields are required in specific forms, as per specs.
 
-## Curriki Standard Lesson Plan Form
+## CSLP Form
 lesson.plan.required.fields.dialog.learning.objectives=- Learning Objectives
 lesson.plan.required.fields.dialog.procedures=- Procedures
 
-##Nortel LearniT Lesson Plan Template
+## NLLP Form
 lesson.plan.required.fields.dialog.overview=- Overview
-lesson.plan.required.fields.dialog.overview=- Technology Integration
-lesson.plan.required.fields.dialog.overview=- Prerequisite Experience
-lesson.plan.required.fields.dialog.overview=- Teacher Prep Time
-lesson.plan.required.fields.dialog.overview=- Estimated Time for Completion
-lesson.plan.required.fields.dialog.overview=- Materials
-lesson.plan.required.fields.dialog.overview=- Project
-lesson.plan.required.fields.dialog.overview=- Assessment
-lesson.plan.required.fields.dialog.overview=- Engage
-lesson.plan.required.fields.dialog.overview=- Explore
-lesson.plan.required.fields.dialog.overview=- Explain
-lesson.plan.required.fields.dialog.overview=- Elaborate
-lesson.plan.required.fields.dialog.overview=- Evaluate
-lesson.plan.required.fields.dialog.overview=- Extend
+lesson.plan.required.fields.dialog.techinteg=- Technology Integration
+lesson.plan.required.fields.dialog.prereq=- Prerequisite Experience
+lesson.plan.required.fields.dialog.preptime=- Teacher Prep Time
+lesson.plan.required.fields.dialog.timecomplete=- Estimated Time for Completion
+lesson.plan.required.fields.dialog.materials=- Materials
+lesson.plan.required.fields.dialog.project=- Project
+lesson.plan.required.fields.dialog.timemanagement=- Time Management Tips
+lesson.plan.required.fields.dialog.assess=- Assessment
+lesson.plan.required.fields.dialog.engage=- Engage
+lesson.plan.required.fields.dialog.explore=- Explore
+lesson.plan.required.fields.dialog.explain=- Explain
+lesson.plan.required.fields.dialog.elaborate=- Elaborate
+lesson.plan.required.fields.dialog.evaluate=- Evaluate
+lesson.plan.required.fields.dialog.extend=- Extend
 
-
+## ACELP Form
+lesson.plan.required.fields.dialog.priorknowledge=- Prior Knowledge
+lesson.plan.required.fields.dialog.numberdays=- Number of Days
+lesson.plan.required.fields.dialog.lessonobjective=- Lesson Objective
+lesson.plan.required.fields.dialog.lessonassessment=- Lesson Assessment
+lesson.plan.required.fields.dialog.procedures=- Procedures
 
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 
 ## TITLE OF THE RESOURCE
 sri.title_title=Title:
-sri.title_txt=If you copied this resource, update the Title to indicate how it is different from the original.
+sri.title_txt=If you copied this resource, update this field to indicate how it is different from the original.
 
 ##Appears as default text in the text entry box.
 sri.title_content=
@@ -400,7 +566,7 @@ sri.title_tooltip=Name for this element, including display in search lists and a
 
 ## DESCRIPTION
 sri.description_title=Description:
-sri.description_txt=If you copied this resource, update the Description to indicate how it is different from the original.
+sri.description_txt=If you copied this resource, update this field to indicate how it is different from the original.
 
 ## To be used later when edit is implemented
 sri.copy_info_text=If you have copied this resource, update the Title and Description fields to indicate how it is different from the original.
@@ -479,209 +645,26 @@ sri.license_type_content=
 ## ASSET CLASS: Derived from the AssetClass
 
 ## SUBJECT
-
-XWiki.AssetClass_fw_items_FW_masterFramework.WebHome=Subject Index
-XWiki.AssetClass_fw_items_FW_masterFramework.Arts=Arts
-XWiki.AssetClass_fw_items_FW_masterFramework.Architecture=Architecture
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.Dance=Dance
-XWiki.AssetClass_fw_items_FW_masterFramework.DramaDramatics=Drama/Dramatics
-XWiki.AssetClass_fw_items_FW_masterFramework.Film=Film
-XWiki.AssetClass_fw_items_FW_masterFramework.History=History
-XWiki.AssetClass_fw_items_FW_masterFramework.Music=Music
-XWiki.AssetClass_fw_items_FW_masterFramework.Photography=Photography
-XWiki.AssetClass_fw_items_FW_masterFramework.PopularCulture=Popular Culture
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology=Technology
-XWiki.AssetClass_fw_items_FW_masterFramework.VisualArts=Visual Arts
-XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation=Career &amp; Technical Education
-XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture_0=Agriculture
-XWiki.AssetClass_fw_items_FW_masterFramework.Business=Business
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_6=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=Education &amp; Teaching
-XWiki.AssetClass_fw_items_FW_masterFramework.OccupationalHomeEconomics=Occupational Home Economics
-XWiki.AssetClass_fw_items_FW_masterFramework.School-to-work=School-to-work
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology_2=Technology
-XWiki.AssetClass_fw_items_FW_masterFramework.Trade&amp;Industrial=Trade &amp; Industrial
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology=Educational Technology
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_0=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.IntegratingTechnologyintotheClassroom=Integrating Technology into the Classroom
-XWiki.AssetClass_fw_items_FW_masterFramework.UsingMultimedia&amp;theInternet=Using Multimedia &amp; the Internet
-XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=Foreign Languages
-XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet=Alphabet
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_7=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=Cultural Awareness
-XWiki.AssetClass_fw_items_FW_masterFramework.Grammar=Grammar
-XWiki.AssetClass_fw_items_FW_masterFramework.InformalEducation=Informal Education
-XWiki.AssetClass_fw_items_FW_masterFramework.Linguistics=Linguistics
-XWiki.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=Listening Comprehension
-XWiki.AssetClass_fw_items_FW_masterFramework.Reading=Reading
-XWiki.AssetClass_fw_items_FW_masterFramework.Speaking=Speaking
-XWiki.AssetClass_fw_items_FW_masterFramework.Spelling=Spelling
-XWiki.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=Vocabulary Writing
-XWiki.AssetClass_fw_items_FW_masterFramework.Health=Health 
-XWiki.AssetClass_fw_items_FW_masterFramework.BodySystems&amp;Senses=Body Systems &amp; Senses
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_1=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.EnvironmentalHealth=Environmental Health
-XWiki.AssetClass_fw_items_FW_masterFramework.HumanSexuality=Human Sexuality
-XWiki.AssetClass_fw_items_FW_masterFramework.MentalEmotionalHealth=Mental/Emotional Health
-XWiki.AssetClass_fw_items_FW_masterFramework.Nutrition=Nutrition
-XWiki.AssetClass_fw_items_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=Safety/Smoking/Substance Abuse Prevention
-XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy=Information &amp; Media Literacy
-XWiki.AssetClass_fw_items_FW_masterFramework.EvaluatingSources=Evaluating Sources
-XWiki.AssetClass_fw_items_FW_masterFramework.MediaEthics=Media Ethics
-XWiki.AssetClass_fw_items_FW_masterFramework.OnlineSafety=Online Safety
-XWiki.AssetClass_fw_items_FW_masterFramework.ResearchMethods=Research Methods
-XWiki.AssetClass_fw_items_FW_masterFramework.LanguageArts=Language Arts
-XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet_0=Alphabet
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_2=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.Journalism=Journalism
-XWiki.AssetClass_fw_items_FW_masterFramework.Listening&amp;Speaking=Listening &amp; Speaking
-XWiki.AssetClass_fw_items_FW_masterFramework.Literature=Literature
-XWiki.AssetClass_fw_items_FW_masterFramework.Phonics=Phonics
-XWiki.AssetClass_fw_items_FW_masterFramework.ReadingComprehension=Reading Comprehension
-XWiki.AssetClass_fw_items_FW_masterFramework.Research=Research
-XWiki.AssetClass_fw_items_FW_masterFramework.Spelling_0=Spelling
-XWiki.AssetClass_fw_items_FW_masterFramework.StoryTelling=Story Telling
-XWiki.AssetClass_fw_items_FW_masterFramework.Vocabulary=Vocabulary
-XWiki.AssetClass_fw_items_FW_masterFramework.Writing=Writing
-XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics=Mathematics
-XWiki.AssetClass_fw_items_FW_masterFramework.Algebra=Algebra
-XWiki.AssetClass_fw_items_FW_masterFramework.Appliedmathematics=Applied Mathematics
-XWiki.AssetClass_fw_items_FW_masterFramework.Arithmetic=Arithmetic
-XWiki.AssetClass_fw_items_FW_masterFramework.Calculus=Calculus
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_3=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.DataAnalysis&amp;Probability=Data Analysis &amp; Probability
-XWiki.AssetClass_fw_items_FW_masterFramework.Equations=Equations
-XWiki.AssetClass_fw_items_FW_masterFramework.Estimation=Estimation
-XWiki.AssetClass_fw_items_FW_masterFramework.Geometry=Geometry
-XWiki.AssetClass_fw_items_FW_masterFramework.Graphing=Graphing
-XWiki.AssetClass_fw_items_FW_masterFramework.Measurement=Measurement
-XWiki.AssetClass_fw_items_FW_masterFramework.NumberSense&amp;Operations=Number Sense &amp; Operations
-XWiki.AssetClass_fw_items_FW_masterFramework.Patterns=Patterns
-XWiki.AssetClass_fw_items_FW_masterFramework.ProblemSolving=Problem Solving
-XWiki.AssetClass_fw_items_FW_masterFramework.Statistics=Statistics
-XWiki.AssetClass_fw_items_FW_masterFramework.Trigonometry=Trigonometry
-XWiki.AssetClass_fw_items_FW_masterFramework.Science=Science
-XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture=Agriculture
-XWiki.AssetClass_fw_items_FW_masterFramework.Astronomy=Astronomy
-XWiki.AssetClass_fw_items_FW_masterFramework.Biology=Biology
-XWiki.AssetClass_fw_items_FW_masterFramework.Botany=Botany
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_4=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.Chemistry=Chemistry
-XWiki.AssetClass_fw_items_FW_masterFramework.Earthscience=Earth Science
-XWiki.AssetClass_fw_items_FW_masterFramework.Ecology=Ecology
-XWiki.AssetClass_fw_items_FW_masterFramework.Engineering=Engineering
-XWiki.AssetClass_fw_items_FW_masterFramework.Generalscience=General Science
-XWiki.AssetClass_fw_items_FW_masterFramework.Geology=Geology
-XWiki.AssetClass_fw_items_FW_masterFramework.HistoryofScience=History of Science
-XWiki.AssetClass_fw_items_FW_masterFramework.LifeSciences=Life Sciences
-XWiki.AssetClass_fw_items_FW_masterFramework.Meteorology=Meteorology
-XWiki.AssetClass_fw_items_FW_masterFramework.NaturalHistory=Natural History
-XWiki.AssetClass_fw_items_FW_masterFramework.Oceanography=Oceanography
-XWiki.AssetClass_fw_items_FW_masterFramework.Paleontology=Paleontology
-XWiki.AssetClass_fw_items_FW_masterFramework.PhysicalSciences=Physical Sciences
-XWiki.AssetClass_fw_items_FW_masterFramework.Physics=Physics
-XWiki.AssetClass_fw_items_FW_masterFramework.ProcessSkills=Process Skills
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology_0=Technology
-XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies=Social Studies
-XWiki.AssetClass_fw_items_FW_masterFramework.Anthropology=Anthropology
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_5=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.Civics=Civics
-XWiki.AssetClass_fw_items_FW_masterFramework.CurrentEvents=Current Events
-XWiki.AssetClass_fw_items_FW_masterFramework.Economics=Economics
-XWiki.AssetClass_fw_items_FW_masterFramework.Entrepreneurship=Entrepreneurship
-XWiki.AssetClass_fw_items_FW_masterFramework.Geography=Geography
-XWiki.AssetClass_fw_items_FW_masterFramework.GlobalAwareness=Global Awareness
-XWiki.AssetClass_fw_items_FW_masterFramework.Government=Government
-XWiki.AssetClass_fw_items_FW_masterFramework.History\u0020Local=History (Local)
-XWiki.AssetClass_fw_items_FW_masterFramework.PoliticalSystems=Political Systems
-XWiki.AssetClass_fw_items_FW_masterFramework.Psychology=Psychology
-XWiki.AssetClass_fw_items_FW_masterFramework.Research_0=Research
-XWiki.AssetClass_fw_items_FW_masterFramework.Sociology=Sociology
-XWiki.AssetClass_fw_items_FW_masterFramework.StateHistory=State History
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology_1=Technology
-XWiki.AssetClass_fw_items_FW_masterFramework.Thinking&amp;ProblemSolving=Thinking &amp; Problem Solving
-XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesGovernment=United States Government
-XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesHistory=United States History
-XWiki.AssetClass_fw_items_FW_masterFramework.WorldHistory=World History
-
+## Moved to GlobalClassTranslation by Todd on 08-05-2008
 
 ## EDUCATIONAL LEVEL
+## Moved to GlobalClassTranslation by Todd on 08-05-2008
 
-XWiki.AssetClass_educational_level2_prek=Preschool / Ages 0-4
-XWiki.AssetClass_educational_level2_gr-k-2=Gr. K-2 / Ages 5-7
-XWiki.AssetClass_educational_level2_gr-3-5=Gr. 3-5 / Ages 8-10
-XWiki.AssetClass_educational_level2_gr-6-8=Gr. 6-8 / Ages 11-13
-XWiki.AssetClass_educational_level2_gr-9-10=Gr. 9-10 / Ages 14-16
-XWiki.AssetClass_educational_level2_gr-11-12=Gr. 11-12 / Ages 16-18
-XWiki.AssetClass_educational_level2_college_and_beyond=College and Beyond
-XWiki.AssetClass_educational_level2_professional_development=Professional Development
-XWiki.AssetClass_educational_level2_special_education=Special Education
-XWiki.AssetClass_educational_level2_na=Other
-
-### ICT
-
-XWiki.AssetClass_instructional_component2_activity_exercise=Activity: Exercise
-XWiki.AssetClass_instructional_component2_activity_lab=Activity: Experiment/Lab
-XWiki.AssetClass_instructional_component2_activity_worksheet=Activity: Graphic Organizer/Worksheet
-XWiki.AssetClass_instructional_component2_activity_problemset=Activity: Problem Set
-XWiki.AssetClass_instructional_component2_book_fiction=Book: Fiction
-XWiki.AssetClass_instructional_component2_book_nonfiction=Book: Non-Fiction
-XWiki.AssetClass_instructional_component2_book_readings=Book: Readings/Excerpts
-XWiki.AssetClass_instructional_component2_book_textbook=Book: Text Book
-XWiki.AssetClass_instructional_component2_curriculum_assessment=Curriculum: Assessment/Test
-XWiki.AssetClass_instructional_component2_curriculum_course=Curriculum: Full Course
-XWiki.AssetClass_instructional_component2_curriculum_unit=Curriculum: Unit
-XWiki.AssetClass_instructional_component2_curriculum_lp=Curriculum: Lesson Plan
-XWiki.AssetClass_instructional_component2_curriculum_scope=Curriculum: Scope &amp; Sequence
-XWiki.AssetClass_instructional_component2_curriculum_standards=Curriculum: Standards
-XWiki.AssetClass_instructional_component2_curriculum_syllabus=Curriculum: Syllabus
-XWiki.AssetClass_instructional_component2_curriculum_workbook=Curriulum: Workbook
-XWiki.AssetClass_instructional_component2_resource_animation=Resource: Animation/Simulation
-XWiki.AssetClass_instructional_component2_resource_diagram=Resource: Diagram/Illustration
-XWiki.AssetClass_instructional_component2_resource_index=Resource: Index/List
-XWiki.AssetClass_instructional_component2_resource_photograph=Resource: Photograph
-XWiki.AssetClass_instructional_component2_resource_presentation=Resource: Presentation/Slide Show
-XWiki.AssetClass_instructional_component2_resource_collection=Resource: Reference Collection
-XWiki.AssetClass_instructional_component2_resource_script=Resource: Script/Transcript
-XWiki.AssetClass_instructional_component2_resource_speech=Resource: Speech/Lecture/Song
-XWiki.AssetClass_instructional_component2_resource_table=Resource: Table/Graph/Chart
-XWiki.AssetClass_instructional_component2_other=Other
+## ICT
+## Moved to GlobalClassTranslation by Todd on 08-05-2008
 
 ## ACCESS RIGHTS
-XWiki.AssetClass_rights_public=Public: Available to anyone and any member can edit.
-XWiki.AssetClass_rights_members=Protected: Available to anyone but only you (or your group members) can edit this copy
-XWiki.AssetClass_rights_private=Private: Only you (or your group members) can view or edit.
+## Moved to GlobalClassTranslation by Todd on 08-05-2008
 
 ## LANGUAGE
-XWiki.AssetClass_language_eng=English
-XWiki.AssetClass_language_zho=Chinese
-XWiki.AssetClass_language_nld=Dutch
-XWiki.AssetClass_language_fra=French
-XWiki.AssetClass_language_deu=German
-XWiki.AssetClass_language_ita=Italian
-XWiki.AssetClass_language_jpn=Japanese
-XWiki.AssetClass_language_kor=Korean
-XWiki.AssetClass_language_por=Portuguese
-XWiki.AssetClass_language_rus=Russian
-XWiki.AssetClass_language_spa=Spanish
+## Moved to GlobalClassTranslation by Todd on 08-05-2008
 
 
 ## LICENSES
-XWiki.AssetLicenseClass_licenseType2_Licences.CurrikiLicense=Curriki License (Creative Commons Attributions 3.0)
-XWiki.AssetLicenseClass_licenseType2_Licences.PublicDomain=Public Domain
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-Commercial=Creative Commons Attribution Non-Commercial
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives=Creative Commons Attribution Non-Commercial No Derivatives
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNoDerivatives=Creative Commons Attribution No Derivatives
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionSharealike=Creative Commons Attribution Share Alike
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialShareAlike=Creative Commons Attribution Non-Commercial Share Alike
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsNon-Commercial=DEPRICATED: Creative Commons Non-Commercial
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsSharealike=DEPRICATED: Creative Commons Share Alike
-XWiki.AssetLicenseClass_licenseType2_Licences.GnuDocumentationLicense=DEPRICATED: Gnu Documentation License
+## Moved to the GlobalClassTranslation file by Todd Aug-05-2008
 
 
-
-
+##
 ## ADD PATH SELECTION DIALOGS
 
 ##Set Required Information, Part 1
@@ -723,24 +706,33 @@ add.contributemenu.option.video_capture=A video I&amp;#39;ll capture with my web
 add.contributemenu.option.folder=A folder where I&amp;#39;ll organize resources
 
 add.contributemenu.required.fields.dialog_file=Click Browse to select a file from your computer.
-add.contributemenu.required.fields.dialog_video_upload=Select a video to upload before clicking Next.
+add.contributemenu.required.fields.dialog_video_upload=Select a video to upload. Once uploaded, select Continue to complete the process.
 add.contributemenu.required.fields.dialog_link=Enter the URL for the web resource using the format http://www.website.com, then click Next.
-add.contributemenu.required.fields.dialog_video_capture=Capture a video with your webcam before clicking Next.
+add.contributemenu.required.fields.dialog_video_capture=Capture a video with your webcam. Once recorded, select Continue to complete the process.
 
 add.contributemenu.cancel.button=Cancel
 add.contributemenu.next.button=Next &gt;&gt;
 
-##Select a Template
+## SELECT A TEMPLATE DIALOG
+
 add.selecttemplate.title=Select a Template
 add.selecttemplate.guidingquestion=What kind of lesson plan would you like to create?
-add.selecttemplate.list1.header=Curriki Standard Lesson Plan
+
+add.selecttemplate.list1.header=&lt;b&gt;Curriki Standard Lesson Plan&lt;/&gt;
 add.selecttemplate.list1.description=The standard Curriki template offers the simplest lesson structure, with Learning Objectives and Procedures as the only required content.
 add.selecttemplate.list1.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/CurrikiStandardLessonPlanThumb.png
 add.selecttemplate.list1.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
-##add.selecttemplate.list2.header=Nortel LearniT Lesson Plan
-##add.selecttemplate.list2.description=Nortel LearniT provides a project-based, technology-integrated template incorporating experiences that Engage, Explore, Explain, Elaborate, Evaluate, and Extend learning, with the option to include Standards.
-##add.selecttemplate.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/NortelLessonPlanThumb.png
-##add.selecttemplate.list2.url=PLACEHOLDER: URL to template2 here
+
+add.selecttemplate.list2.header=&lt;b&gt;Nortel LearniT Lesson Plan&lt;/b&gt;
+add.selecttemplate.list2.description=Nortel LearniT provides a project-based, technology-integrated template incorporating experiences that Engage, Explore, Explain, Elaborate, Evaluate, and Extend learning, with the option to include Standards.
+add.selecttemplate.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/NortelLessonPlanThumb.png
+add.selecttemplate.list2.url=/xwiki/bin/view/CreateResources/NortelLearniTLessonPlan
+
+add.selecttemplate.list3.header=&lt;b&gt;ACE Lesson Plan&lt;/b&gt;
+add.selecttemplate.list3.description=ACE provides a template in which lesson procedures are formatted as a table showing time, learning task, and method.
+add.selecttemplate.list3.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/ACELessonPlanThumb.png
+add.selecttemplate.list3.url=/xwiki/bin/view/CreateResources/ACELessonPlan
+
 add.selecttemplate.cancel.button=Cancel
 add.selecttemplate.next.button=Next &gt;&gt;
 
@@ -810,5 +802,8 @@ add.finalmessage.continue.link=Continue &gt;&gt;
 add.finalmessage.openbuilder.link=Open in Currikulum Builder
 add.finalmessage.close.button=Close
 
+##Add Path Error Messages
+add.servertimedout.message=There was a problem accessing the server. Please try again.
+add.servertimedout.message.button=OK
 {/pre}
 </content></xwikidoc>

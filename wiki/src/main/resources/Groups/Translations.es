@@ -21,6 +21,7 @@
 <validationScript></validationScript>
 <comment>spanish translation</comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
