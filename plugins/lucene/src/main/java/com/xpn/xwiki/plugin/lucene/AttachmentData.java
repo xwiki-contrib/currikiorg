@@ -80,6 +80,7 @@ public class AttachmentData extends IndexData
         super.addDataToLuceneDocument(luceneDoc, doc, context);
         if (filename != null) {
             luceneDoc.add(new Field(IndexFields.FILENAME, filename, Field.Store.YES, Field.Index.TOKENIZED));
+            luceneDoc.add(new Field(IndexFields.FILENAME + IndexFields.UNTOKENIZED, filename, Field.Store.NO, Field.Index.UN_TOKENIZED));
         }
     }
 

@@ -131,6 +131,10 @@ public abstract class IndexData
                 documentTitle,
                 Field.Store.YES,
                 Field.Index.TOKENIZED));
+            luceneDoc.add(new Field(IndexFields.DOCUMENT_TITLE + IndexFields.UNTOKENIZED,
+                documentTitle,
+                Field.Store.NO,
+                Field.Index.UN_TOKENIZED));
         }
         luceneDoc.add(new Field(IndexFields.DOCUMENT_NAME,
             documentName,
@@ -149,12 +153,20 @@ public abstract class IndexData
                 author,
                 Field.Store.YES,
                 Field.Index.TOKENIZED));
+            luceneDoc.add(new Field(IndexFields.DOCUMENT_AUTHOR + IndexFields.UNTOKENIZED,
+                author,
+                Field.Store.NO,
+                Field.Index.UN_TOKENIZED));
         }
         if (creator != null) {
             luceneDoc.add(new Field(IndexFields.DOCUMENT_CREATOR,
                 creator,
                 Field.Store.YES,
                 Field.Index.TOKENIZED));
+            luceneDoc.add(new Field(IndexFields.DOCUMENT_CREATOR + IndexFields.UNTOKENIZED,
+                creator,
+                Field.Store.NO,
+                Field.Index.UN_TOKENIZED));
         }
 
         // UnStored fields: tokenized and indexed, but no reconstruction of

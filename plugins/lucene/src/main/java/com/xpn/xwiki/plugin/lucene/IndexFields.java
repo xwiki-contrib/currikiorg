@@ -115,6 +115,11 @@ public abstract class IndexFields
     public static final String KEYWORDS = "kw";
 
     /**
+     * Marker for untokenized version of fields indexed
+     */
+    public static final String UNTOKENIZED = ".untokenized";
+
+    /**
      * Format for date storage in the index, and therefore the format which has to be used for date-queries.
      */
     public static final String DATE_FORMAT = "yyyyMMddHHmm";
