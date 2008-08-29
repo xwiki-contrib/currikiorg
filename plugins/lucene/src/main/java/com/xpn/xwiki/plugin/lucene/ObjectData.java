@@ -111,7 +111,12 @@ public class ObjectData extends IndexData
                     BaseProperty baseProperty =
                         (BaseProperty) baseObject.getField((String) propertyNames[i]);
                     if ((baseProperty != null) && (baseProperty.getValue() != null)) {
-                        contentText.append(baseProperty.getValue().toString());
+                        PropertyInterface prop = baseObject.getxWikiClass(context).getField((String) propertyNames[i]);
+                        if (prop instanceof PasswordClass) {
+                            // Do not add passwords to the content
+                        } else {
+                            contentText.append(baseProperty.getValue().toString());
+                        }
                     }
                     contentText.append(" ");
                 }
