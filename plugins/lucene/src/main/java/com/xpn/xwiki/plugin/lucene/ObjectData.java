@@ -35,6 +35,7 @@ import com.xpn.xwiki.objects.PropertyInterface;
 import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.objects.classes.ListItem;
 import com.xpn.xwiki.objects.classes.StaticListClass;
+import com.xpn.xwiki.objects.classes.PasswordClass;
 
 /**
  * Hold the property values of the XWiki.ArticleClass Objects.
@@ -151,7 +152,9 @@ public class ObjectData extends IndexData
         BaseClass bClass = baseObject.getxWikiClass(context);
         PropertyInterface prop = bClass.getField(propertyName);
 
-        if (prop instanceof StaticListClass && ((StaticListClass) prop).isMultiSelect()) {
+        if (prop instanceof PasswordClass) {
+            // Do not index passwords
+        } else if (prop instanceof StaticListClass && ((StaticListClass) prop).isMultiSelect()) {
             indexStaticList(luceneDoc, baseObject, (StaticListClass) prop, propertyName, context);
         } else {
             final String ft = getContentAsText(baseObject, propertyName);
