@@ -1,0 +1,19 @@
+## lpattachfile.vm. Niels P. Mayer
+## Template for use by CurrikiStandardLessonPlan and other lesson plans that
+## use file attachments. The intent is to use something like
+## set($attachURL = $newAsset.getURL("view", "xpage=lpattachfile"))
+## to upload attachments to $newAsset. $newAsset being the asset being
+## populated, that resides in AssetTemp.
+
+<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+  <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+  <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
+  <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40" />
+  <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+  <script type="text/javascript">function updateXRedirect(formName, returnValue){var xredirect = document.forms[formName].xredirect;xredirect.value = '${doc.getURL("view", "xpage=lpattachfile")}';return returnValue;}</script>
+  <button
+    id="attach_this_file_button"
+##    onclick="try { var uplf_o=document.forms.attachmentAddForm['xwikiuploadfile']; var uplf=(uplf_o!=null)?uplf_o.value:''; if (uplf.trim() == '') { alert('$msg.get('lesson.plan.required.fields.dialog')\n\t\t- attachments filename cannot be empty'); return (false); } else {return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')'))} } catch(e) { alert('$msg.get('attachthisfile') button onclick error: '+e+' ...'); return false; }"
+    onclick="try { return updateXRedirect('attachmentAddForm', updateAttachName(document.forms.attachmentAddForm, '$msg.get('doyouwanttoreplace')')); } catch(e) { alert('$msg.get('attachthisfile') button onclick error: '+e+' ...'); return false; }"
+  >$msg.get("attachthisfile")</button>
+</form>
