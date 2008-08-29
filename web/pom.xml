@@ -211,7 +211,17 @@
               </includes>
             </resource>
           </webResources>
-          <dependentWarExcludes>WEB-INF/lib/xwiki-core-1.5.jar</dependentWarExcludes>   
+          <dependentWarExcludes>WEB-INF/lib/xwiki-core-1.5.jar</dependentWarExcludes>
+          <!-- We need to exclude Plexus Container Default version 1.0-alpha-30 which comes from XWiki Rendering Doxia
+               which itself uses Maven Doxia which uses it. We need to exclude it since XWiki itself uses that jar but
+               in version 1.0-alpha-31.
+
+               Note: Since we're using version 2.x of the WAR plugin we need to use the incorrectly named
+                     warSourceExcludes to exclude a dependent lib. In version 2.1.x of the plugin it's been renamed
+                     to packagingExcludes so we'll need to update this POM when we move to that version.
+                     However this is already fixed in XWiki Platform 1.5.1 and above so moving to those version will
+                     allow to remove this hack. -->
+          <warSourceExcludes>WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</warSourceExcludes>
         </configuration>
       </plugin>
     </plugins>
