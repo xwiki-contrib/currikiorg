@@ -216,11 +216,12 @@
                which itself uses Maven Doxia which uses it. We need to exclude it since XWiki itself uses that jar but
                in version 1.0-alpha-31.
 
-               Note: Since we're using version 2.x of the WAR plugin we need to use the incorrectly named
-                     warSourceExcludes to exclude a dependent lib. In version 2.1.x of the plugin it's been renamed
-                     to packagingExcludes so we'll need to update this POM when we move to that version.
-                     However this is already fixed in XWiki Platform 1.5.1 and above so moving to those version will
-                     allow to remove this hack. -->
+               Note 1: I think the problem is because we're using two different versions for XWiki Core
+                       (1.5-curriki) and XWiki Web (1.5) and this is dragging this invalid dependency for some reason.
+
+               Note 2: Since we're using version 2.x of the WAR plugin we need to use the incorrectly named
+                       warSourceExcludes to exclude a dependent lib. In version 2.1.x of the plugin it's been renamed
+                       to packagingExcludes so we'll need to update this POM when we move to that version. -->
           <warSourceExcludes>WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</warSourceExcludes>
         </configuration>
       </plugin>
