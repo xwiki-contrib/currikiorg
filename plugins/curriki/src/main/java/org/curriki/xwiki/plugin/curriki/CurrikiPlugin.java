@@ -1,5 +1,6 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
@@ -8,6 +9,8 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
+import com.xpn.xwiki.doc.XWikiDocument;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.curriki.xwiki.plugin.asset.Asset;
@@ -18,10 +21,12 @@ import org.curriki.xwiki.plugin.asset.CollectionSpace;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Vector;
 import java.lang.Object;
 import java.lang.Class;
 
@@ -183,7 +188,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return groups;
     }
-
+    
     protected Map<String,Object> getGroupInfo(String group, XWikiContext context) {
         Map<String,Object> groupInfo = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi("csm", context);
@@ -299,4 +304,31 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return userInfo;
     }
+    
+    /**
+     * Verificate if a user is in Group
+     * @param groupName
+     * @param context
+     * @return
+     * @throws XWikiException
+     */
+    public Boolean isMember(String groupName,XWikiContext context) throws XWikiException
+    { 
+    	XWikiDocument doc = context.getWiki().getDocument(groupName, context);
+    	Vector<BaseObject> groups = doc.getObjects("XWiki.XWikiGroups");
+    	if (groups!=null)
+    	{
+	    	for (Iterator iterator = groups.iterator(); iterator.hasNext();) {
+	    		BaseObject group = (BaseObject) iterator.next();
+	    		if (group!=null)
+	    		{
+					String groupMember = group.getStringValue("member");
+					if (groupMember!=null && context.getUser().equals(groupMember))
+						return true;
+	    		}
+			}
+    	}
+    	return false;
+    }
+
 }

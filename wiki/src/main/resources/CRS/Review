@@ -277,12 +277,25 @@ function clickPartnerCheckbox()
 		                }
 			&lt;/script&gt;
 
+			#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) ||($xwiki.curriki.isMember("XWiki.EditorGroup"))||($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
+
 			1.1 $msg.get("curriki.crs.review.managereviewstatus")
+
+#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) || ($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
+
 			&lt;input type="checkbox" id="unnominate" onclick="clickCheckbox()"&gt;$msg.get("curriki.crs.review.unnominate")
 			&lt;/input&gt;
-&lt;/p&gt;
+#end			
+
+#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) || ($xwiki.curriki.isMember("XWiki.EditorGroup")))
+			&lt;/p&gt;
 			&lt;input type="checkbox" id="partner" onclick="clickPartnerCheckbox()"&gt;$msg.get("curriki.crs.review.partner")
 			&lt;/input&gt;
+#end			
+#end
+
+#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) || ($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
+
 			1.1 $msg.get("curriki.crs.review.reviewthisresource")
 			
 			*$msg.get("curriki.crs.review.nominatorsnotes")*:
@@ -320,6 +333,7 @@ function clickPartnerCheckbox()
 return  Curriki.module.review.validateCRS('$appropriatepedagogyName','$contentaccuracyName','$technicalcompletnessName');
 			}
 			&lt;/script&gt;
+#end
 #end
 $xwiki.addTooltipJS()</content>
 </xwikidoc>

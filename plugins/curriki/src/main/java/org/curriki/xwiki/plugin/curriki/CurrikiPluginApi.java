@@ -98,4 +98,16 @@ public class CurrikiPluginApi extends Api {
     public Map<String, Object> fetchUserInfo() {
         return plugin.fetchUserInfo(context);
     }
+    
+    /**
+     * Verificate if a user is in Group
+     * @param groupName
+     * @param context
+     * @return
+     * @throws XWikiException
+     */
+    public Boolean isMember(String groupName) throws XWikiException
+    {
+    	return plugin.isMember(groupName, context);
+    }
 }
