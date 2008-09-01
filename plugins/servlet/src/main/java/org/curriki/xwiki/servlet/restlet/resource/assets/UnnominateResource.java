@@ -43,7 +43,7 @@ public class UnnominateResource extends BaseResource {
         asset.use("CRS.CurrikiReviewStatusClass");
         asset.set("reviewpending", 0);
         try {
-        	asset.save();
+        	asset.save(xwikiContext.getMessageTool().get("Resource un-nominated"));
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }

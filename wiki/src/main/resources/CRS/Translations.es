@@ -130,6 +130,7 @@ curriki.crs.review.information=Información
 curriki.crs.review.partnerconfirmtitle=ESTE ES UN RECURSO DE UN AFILIADO.
 curriki.crs.review.partnerconfirmmessage=Si tu quieres setear este recurso como de un Afiliado. click OK
 curriki.crs.review.partner=Este es un recurso de un Afiliado.
+curriki.comment.unnominateasset=Se sacó la nominación al recurso.
 
 
 ## use in GWT and in Wiki
