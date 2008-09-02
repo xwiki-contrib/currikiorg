@@ -46,7 +46,7 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
             String rnd = (new Integer (Random.nextInt(2000000000))).toString();
             final String divId = "viditalk_div_"+rnd;
-            // TODO GWT15 vPlayer.setId(divId);
+            // DONE GWT15 Upgrade Issue vPlayer.setId(divId);  - moved after .add using setElementProperty
             HTML msg = new HTML(Main.getTranslation("viditalk.loading_player"));
             vPlayer.add(msg);
 
@@ -55,6 +55,8 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
             panel.add(vPlayer);
             panel.add(dLink);
+
+            DOM.setElementProperty(vPlayer.getElement(), "id", divId);
 
             final String siteCode = Main.getTranslation(Constants.VIDITALK_SITECODE_VAR);
 
@@ -82,11 +84,13 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
         final String divId = "viditalk_div_"+rnd;
-        // TODO GWT15 vPlayer.setId(divId);
+        // DONE GWT15 Upgrade Issue vPlayer.setId(divId); - moved after .add using setElementProperty
         HTML msg = new HTML(Main.getTranslation("viditalk.loading_capture"));
         vPlayer.add(msg);
 
         panel.add(vPlayer);
+
+        DOM.setElementProperty(vPlayer.getElement(), "id", divId);
 
         final String siteCode = Main.getTranslation(Constants.VIDITALK_SITECODE_VAR);
 
