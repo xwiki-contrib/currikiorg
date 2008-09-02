@@ -1,6 +1,7 @@
 package org.curriki.gwt.client.widgets.currikiitem.display;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.DOM;
@@ -11,7 +12,6 @@ import org.curriki.gwt.client.Main;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.widgets.currikiitem.CurrikiItem;
-import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 public class VidiTalkItemDisplay extends AttachementItemDisplay {
 
@@ -41,7 +41,7 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
             panel.add(new HTML(doc.getFullName() + Main.getTranslation("asset.asset_corrupted")));
         } else {
             // Load Viditalk player
-            BasicPanel vPlayer = new BasicPanel();
+            VerticalPanel vPlayer = new VerticalPanel();
             vPlayer.addStyleName("cb-video-viditalk-player");
 
             String rnd = (new Integer (Random.nextInt(2000000000))).toString();
@@ -79,7 +79,7 @@ public class VidiTalkItemDisplay extends AttachementItemDisplay {
         // Viditalk Item
 
         // Load Viditalk capture
-        BasicPanel vPlayer = new BasicPanel();
+        VerticalPanel vPlayer = new VerticalPanel();
         vPlayer.addStyleName("cb-video-viditalk-capture");
 
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
