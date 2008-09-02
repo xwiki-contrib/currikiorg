@@ -469,53 +469,26 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         grid.setWidget(1, 0, bttLink);
         ((WhatToAddButton)bttLink).showDescription();
 
-        // New resource: Existing Resource
-        bttExistingResource = new WhatToAddButton("existing_resource", this);
-        grid.setWidget(2, 0, bttExistingResource);
-
-        /* Not in the spec anymore
-        bttSeparator = new WhatToAddButton("separator", this);
-        grid.setWidget(2, 0, bttSeparator);      */
-
         // Separator: New Element
         label = new HTML(Main.getTranslation("addasset.new_element"));
         label.addStyleName("curriki-subtitle");
-        grid.setWidget(3, 0, label);
+        grid.setWidget(2, 0, label);
 
         // New resource: Blank content block
         bttBlankContent = new WhatToAddButton("blank_content_block", this);
-        grid.setWidget(4, 0, bttBlankContent);
+        grid.setWidget(3, 0, bttBlankContent);
 
         // New resource: HTML content block
         bttHTMLContent = new WhatToAddButton("html_content_block", this);
-        grid.setWidget(5, 0, bttHTMLContent);
+        grid.setWidget(4, 0, bttHTMLContent);
 
         // New resource: Direction content block
         bttDirectionContent = new WhatToAddButton("direction_content_block", this);
-        grid.setWidget(6, 0, bttDirectionContent);
+        grid.setWidget(5, 0, bttDirectionContent);
 
         // New resource: Folder
         bttNewFolder = new WhatToAddButton("folder", this);
-        grid.setWidget(7, 0, bttNewFolder);
-
-        // Removed in EOU 1 (1.6)
-        /*
-        // New resource: Template
-        bttFromTemplate = new WhatToAddButton("template", this);
-        grid.setWidget(8, 0, bttFromTemplate);
-        */
-
-        // Removed in EOU 1 (1.6)
-        /*
-        // Separator: New Element
-        label = new HTML(Main.getTranslation("addasset.formatting_element"));
-        label.addStyleName("curriki-subtitle");
-        grid.setWidget(9, 0, label);
-
-        // Template is added a second time
-        grid.setWidget(10, 0, bttFromTemplate);
-        */
-
+        grid.setWidget(6, 0, bttNewFolder);
 
         panel.add(grid, DockPanel.CENTER);
         panel.add(helpGrid, DockPanel.EAST);
