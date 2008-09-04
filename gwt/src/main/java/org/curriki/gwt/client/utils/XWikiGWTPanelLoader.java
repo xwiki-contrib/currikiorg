@@ -25,6 +25,7 @@ package org.curriki.gwt.client.utils;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Window;
 import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.Main;

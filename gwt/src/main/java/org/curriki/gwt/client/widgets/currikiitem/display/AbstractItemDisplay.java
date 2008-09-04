@@ -24,6 +24,7 @@ package org.curriki.gwt.client.widgets.currikiitem.display;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.Window;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XObject;
 import org.curriki.gwt.client.AssetDocument;
@@ -43,6 +44,7 @@ public abstract class AbstractItemDisplay extends Composite {
 
 
     public AbstractItemDisplay(Document doc, CurrikiItem item) {
+        initWidget(panel);
         this.item = item;
         setDocument(doc);
         // panel.setWidth("100%");
@@ -52,7 +54,6 @@ public abstract class AbstractItemDisplay extends Composite {
             panel.addStyleName("item-display");
         }
         item.setItem(this);
-        initWidget(panel);
     }
 
     protected void setDocument(Document doc){
@@ -61,7 +62,10 @@ public abstract class AbstractItemDisplay extends Composite {
     }
 
     public AssetDocument getDocument() {
-        return (AssetDocument) doc;
+        if (doc==null)
+         return null;
+        else
+         return (AssetDocument) doc;
     }
 
     public String getDocumentFullName(){

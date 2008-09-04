@@ -77,6 +77,7 @@ public class AddFileDialog extends CurrikiDialog {
 
         BasicPanel text = new BasicPanel();
         text.addStyleName("dialog-addfile-text");
+
         XWikiGWTPanelLoader.loadWikiPage(Constants.DIALOG_ADD_FILE, text);
 
         Grid bottom = new Grid(2, 2);
@@ -95,6 +96,7 @@ public class AddFileDialog extends CurrikiDialog {
         fComputer = new RadioButton("from", Main.getTranslation("addfile.this_is_a_file_on_my_computer"));
         fWeb = new RadioButton("from", Main.getTranslation("addfile.this_is_a_web_link"));
         fVideo = new RadioButton("from", Main.getTranslation("addfile.record_a_video"));
+
 
         tFile = new UploadWidget("", false);
 
