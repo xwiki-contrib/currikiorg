@@ -73,14 +73,27 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
 
     public MetadataEdit(Document doc, boolean fullMode){
+        // moving init widget earlier
+        if (!fullMode) {
+            ScrollPanel sPanel = new ScrollPanel(form);
+
+            int width = (Window.getClientWidth() < 600 ? Window.getClientWidth() - 20 : 600);
+            int height = (Window.getClientHeight() < 500 ? Window.getClientHeight() - 50 : 500);
+
+            sPanel.setWidth(width + "px");
+            sPanel.setHeight(height + "px");
+            initWidget(sPanel);
+        }
+        else
+            initWidget(form);
+
         panel = new VerticalPanel();
         panel.addStyleName("metadata-edit-panel");
 
         form.setWidget(panel);
-
         form.setMethod(FormPanel.METHOD_POST);
         form.setEncoding(FormPanel.ENCODING_URLENCODED);
-        
+
         bttSend.addClickListener(new ClickListener(){
             public void onClick(Widget sender) {
                 MetadataEdit.this.submit();
@@ -101,24 +114,13 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         if(doc != null)
             init(doc, fullMode);
 
-        if (!fullMode) {
-            ScrollPanel sPanel = new ScrollPanel(form);
-
-            int width = (Window.getClientWidth() < 600 ? Window.getClientWidth() - 20 : 600);
-            int height = (Window.getClientHeight() < 500 ? Window.getClientHeight() - 50 : 500);
-
-            sPanel.setWidth(width + "px");
-            sPanel.setHeight(height + "px");
-            initWidget(sPanel);
-        }
-        else
-            initWidget(form);
         addStyleName("metadata-edit");
     }
 
     public void init(Document doc, boolean fullMode){
         if (doc == null)
             return;
+
         this.doc = doc;
         this.fullMode = fullMode;
         this.startFullMode = fullMode;
@@ -129,6 +131,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             startFullMode = true; // So that "Next" will work correctly
         } else {
             form.setAction(doc.getSaveURL());
+
             showEdit();
 
             // WARNING: This seems to break in certain cases in IE because of changes in the resizing algorythm
@@ -248,10 +251,10 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         hPanel.setCellWidth(hPanel.getWidget(1), "50%");
         panelStep1.add(hPanel);
 
+
         addEditor(assetObj, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, panelStep1, true, true);
 
         panel.add(panelStep1);
-
 
         addSubTitle(panelStep2, "review_and_update_fields");
         User user = Main.getSingleton().getUser();
@@ -273,10 +276,20 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addEditor(assetObj, "keywords", "keywords", panelStep2, false, true);
         addEditor(assetObj, "language", "language", panelStep2, false, true);
 
+        Window.alert("in metadata edit 1");
+
         addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panelStep2, true, true, forceViewMode);
+
+        Window.alert("in metadata edit 2");
+
+
         addEditor(rightObj, "licenseType2", "license_type", panelStep2, false, true, forceViewMode);
 
+        Window.alert("in metadata edit 3");
+
         panel.add(panelStep2);
+
+        Window.alert("in metadata edit 4");
     }
 
     private void addCRS(Document doc, Panel panel, boolean isPrivate) {

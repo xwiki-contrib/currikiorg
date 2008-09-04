@@ -126,11 +126,13 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         panel.clear();
         showParentDialog();
         setParentCaption(Main.getTranslation("addasset.set_required_metadata"));
+
         MetadataEdit meta = new MetadataEdit(newDoc, false);
+
         meta.setResizeListener(resizeListener);
 
         // Add an event handler to the form.
-        meta.addFormHandler(new FormHandler() {
+        FormHandler formHandler = new FormHandler() {
 
             public void onSubmit(FormSubmitEvent formSubmitEvent) {
                 Main.getSingleton().startLoading();
@@ -140,9 +142,8 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
                 Main.getSingleton().finishLoading();
                 finishWizard();
             }
-        });
-
-
+        };
+        meta.addFormHandler(formHandler);
         meta.SetHiddenCategoryValue(category);
         panel.add(meta, DockPanel.CENTER);
 
