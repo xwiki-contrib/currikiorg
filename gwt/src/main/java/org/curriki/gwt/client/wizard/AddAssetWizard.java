@@ -152,13 +152,11 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
         bttCancel.addStyleName("gwt-bttCancel");
 
-        BasicPanel bttPanel = new BasicPanel();
-        panel.add(bttPanel, DockPanel.SOUTH);
-
-
+        HorizontalPanel bttPanel = new HorizontalPanel();
         bttPanel.add(bttCancel);
         bttPanel.add(bttNext);
-                                                                    
+        panel.add(bttPanel, DockPanel.SOUTH);
+
         onResize();
     }
 
@@ -364,7 +362,8 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
         bttHTMLContent.removeStyleName("gwt-ButtonNav-active");
         bttDirectionContent.removeStyleName("gwt-ButtonNav-active");
         bttNewFolder.removeStyleName("gwt-ButtonNav-active");
-        bttExistingResource.removeStyleName("gwt-ButtonNav-active");
+        // Does not exist anymore ?
+        // bttExistingResource.removeStyleName("gwt-ButtonNav-active");
         // Removed from EOU1 (1.6)
         /*
         bttFromTemplate.removeStyleName("gwt-ButtonNav-active");

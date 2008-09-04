@@ -45,6 +45,9 @@ import org.curriki.gwt.client.search.Searcher;
 import org.curriki.gwt.client.search.editor.Viewer;
 import org.curriki.gwt.client.search.editor.SearchPanel;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class Main implements EntryPoint
 {
     private static Main singleton;
@@ -63,6 +66,10 @@ public class Main implements EntryPoint
     private CreateCollectionWizard addCollectionWizard;
     private SearchPanel findPopup;
     private AddFromTemplateWizard addFromTemplateWizard;
+
+
+    private static Map _metaPropertiesMap = null;
+
 
     public User getUser() {
         return user;
@@ -562,12 +569,39 @@ public class Main implements EntryPoint
        */
     }
 
+    private static native Map getMetaProperties(Map map) /*-{
+      var metas = $wnd.document.getElementsByTagName("meta");
+      var n = metas.length;
+      for (var i = 0; i < n; ++i) {
+         var meta = metas[i];
+         var name = meta.getAttribute("name");
+         if (name && name == "gwt:property") {
+            var content = meta.getAttribute("content");
+            if (content) {
+                var name = content;
+                var value = "";
+                var eq = content.indexOf("=");
+                if (eq != -1) {
+                    name  = content.substring(0, eq);
+                    value = content.substring(eq+1);
+                }
+                map.@java.util.Map::put(Ljava/lang/Object;Ljava/lang/Object;)(name,value);
+            }
+         }
+      }
+      return map;
+   }-*/;
+
     /**
      * Native method in JavaScript to access gwt:property
      */
-    public static native String getProperty(String name) /*-{
-        return $wnd.__gwt_getMetaProperty(name);
-    }-*/;
+    public static String getProperty(String name) {
+      if (_metaPropertiesMap == null) {
+          _metaPropertiesMap = getMetaProperties(new HashMap());
+      }
+      return (String) _metaPropertiesMap.get(name);
+    };
+
 
     /**
      * Native method in JavaScript to turn off the pre-GWT loading message
