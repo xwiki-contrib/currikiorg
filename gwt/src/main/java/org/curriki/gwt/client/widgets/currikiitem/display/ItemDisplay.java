@@ -224,7 +224,8 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
             }
         };
         XObject obj = doc.getObject(Constants.ASSET_CLASS);
-        caption.setText(obj.getViewProperty(Constants.ASSET_DESCRIPTION_PROPERTY));
+        if (obj!=null)
+         caption.setText(obj.getViewProperty(Constants.ASSET_DESCRIPTION_PROPERTY));
         caption.setStyleName("item-description");
         // caption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         if(panel.getWidgetIndex(caption) == -1)

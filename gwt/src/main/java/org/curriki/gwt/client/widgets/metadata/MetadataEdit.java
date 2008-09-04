@@ -276,20 +276,10 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addEditor(assetObj, "keywords", "keywords", panelStep2, false, true);
         addEditor(assetObj, "language", "language", panelStep2, false, true);
 
-        Window.alert("in metadata edit 1");
-
         addEditor(rightObj, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, "right_holder", panelStep2, true, true, forceViewMode);
-
-        Window.alert("in metadata edit 2");
-
-
         addEditor(rightObj, "licenseType2", "license_type", panelStep2, false, true, forceViewMode);
 
-        Window.alert("in metadata edit 3");
-
         panel.add(panelStep2);
-
-        Window.alert("in metadata edit 4");
     }
 
     private void addCRS(Document doc, Panel panel, boolean isPrivate) {
