@@ -2,6 +2,9 @@
   * View entry point. This is the main entry point of most of the Curriki site pages
   * @author XWiki
   *#
+## We need to no display content for AssetTemp otherwise posting in the CB GWT Editor
+## will fail in IE with JS errors. This is not a nice hack but is necessary
+#if($doc.web!="AssetTemp")
 ## Need to do this before xwikivars is called otherwise the data might be removed
 #if($request.method=="POST") ##{
   #set($fileuploadlist = $xwiki.fileupload.getFileItems())
@@ -35,4 +38,6 @@
   </div>## contentcontainer
   #template("htmlfooter.vm")
 #end ##}
-
+#else
+AssetTemp
+#end
