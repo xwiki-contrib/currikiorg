@@ -19,16 +19,18 @@ I18N="\
 cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 
 CURRIKI="\
+	ext/ExtJsOverride.js \
 	ext/DDView.js \
 	ext/Multiselect.js \
 	ext/pPageSize.js \
+	ext/Ext.grid.RowExpander.js \
+	\
 	curriki/curriki-base.js \
 	curriki/data/curriki-data-user.js \
 	curriki/data/curriki-data-metadata.js \
 	curriki/assets/curriki-assets.js \
 	curriki/ui/curriki-ui.js \
 	"
-#	ext/ExtJsOverride.js \
 
 cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
 
@@ -45,6 +47,8 @@ ADDPATH="\
 	"
 
 cat $ADDPATH | $COMPRESS_JS > ../webapp/js/curriki-module-addpath.js
+
+
 
 NOMINATE="\
 	curriki/crs/nominate-base.js \
@@ -69,3 +73,27 @@ PARTNER="\
 	"
 
 cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js
+
+SEARCH="\
+	curriki/search/search-global.js \
+	curriki/search/search-util.js \
+	\
+	curriki/search/search-resource-data.js \
+	curriki/search/search-resource-form.js \
+	\
+	curriki/search/search-group-data.js \
+	curriki/search/search-group-form.js \
+	\
+	curriki/search/search-member-data.js \
+	curriki/search/search-member-form.js \
+	\
+	curriki/search/search-blog-data.js \
+	curriki/search/search-blog-form.js \
+	\
+	curriki/search/search-curriki-data.js \
+	curriki/search/search-curriki-form.js \
+	\
+	curriki/search/search-form.js \
+	"
+
+cat $SEARCH | $COMPRESS_JS > ../webapp/js/curriki-module-search.js
