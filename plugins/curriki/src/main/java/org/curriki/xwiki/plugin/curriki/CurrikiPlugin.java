@@ -1,40 +1,39 @@
 package org.curriki.xwiki.plugin.curriki;
 
-import com.xpn.xwiki.objects.BaseObject;
-import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
-import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import com.xpn.xwiki.plugin.spacemanager.api.Space;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
+import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.CollectionSpace;
+import org.curriki.xwiki.plugin.asset.Constants;
+import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
+
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiDocument;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
-import org.curriki.xwiki.plugin.asset.Constants;
-import org.curriki.xwiki.plugin.asset.AssetException;
-import org.curriki.xwiki.plugin.asset.CollectionSpace;
-import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
-import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Vector;
-import java.lang.Object;
-import java.lang.Class;
+import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
+import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import com.xpn.xwiki.plugin.spacemanager.api.Space;
 
 /**
  */
 public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface {
     public static final String PLUGIN_NAME = "curriki";
-    
+
     private static final Log LOG = LogFactory.getLog(CurrikiPlugin.class);
 
     public CurrikiPlugin(String name, String className, XWikiContext context) {
@@ -188,7 +187,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return groups;
     }
-    
+
     protected Map<String,Object> getGroupInfo(String group, XWikiContext context) {
         Map<String,Object> groupInfo = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi("csm", context);
@@ -281,7 +280,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
 
-    
+
     public List<Property> fetchAssetMetadata(String assetName, XWikiContext context) throws XWikiException {
         Asset asset = fetchAsset(assetName, context);
         if (asset != null) {
@@ -304,8 +303,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return userInfo;
     }
-    
-    /**
+
+     /**
      * Verificate if a user is in Group
      * @param groupName
      * @param context
@@ -313,7 +312,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @throws XWikiException
      */
     public Boolean isMember(String groupName,XWikiContext context) throws XWikiException
-    { 
+    {
     	XWikiDocument doc = context.getWiki().getDocument(groupName, context);
     	Vector<BaseObject> groups = doc.getObjects("XWiki.XWikiGroups");
     	if (groups!=null)
@@ -331,4 +330,35 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     	return false;
     }
 
+
+
+    /**
+     * Returns a {@link java.util.List} containing the String names of each ICT of the asset
+     *
+     * @param assetName
+     * @param context
+     * @return
+     * @throws XWikiException
+     */
+    public List<String> getAssetICT(String assetName, XWikiContext context) throws XWikiException {
+       Asset asset = fetchAssetAs(assetName, null, context);
+       String ictStr = "";
+       List<String> listICT = new ArrayList<String>();
+
+       if (asset.getObject(Constants.ASSET_CLASS) != null){
+    	   asset.use(Constants.ASSET_CLASS);
+           if (asset.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY) != null){
+        	   ictStr = (String)asset.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
+        	   ictStr=ictStr.replaceAll("#--#", ",");
+        	   StringTokenizer elementos = new StringTokenizer(ictStr,",");
+        	    while(elementos.hasMoreTokens()){
+        	    	listICT.add(elementos.nextToken());
+        	    }
+
+           }
+       }
+
+       return listICT;
+
+    }
 }

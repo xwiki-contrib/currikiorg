@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>FileCheck</web>
@@ -19,7 +19,7 @@
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fix macro names</comment>
+<comment>added ICT column</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -56,122 +56,145 @@
 </property>
 </object>
 <content>1 $msg.fc_filecheck
-#set($excludeList = ["jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll", "KApatterson", "KAPatterson", "violet8877", "raketheater", "miranda", "NASA", "NortelLearniT", "taaschools", "LWL", "cmytko", "learnquebec", "Panwapa"])
+#set($excludeList = ["jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "ShermanTank", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll"])
 #set($startIndex = 0)
 #if($request.startIndex)
-  #set($startIndex = $xwiki.parseInt($request.startIndex))
+	#set($startIndex = $xwiki.parseInt($request.startIndex))
 #end
 #set($itemsPerPage = 20)
 #if( $request.ipp )
-#set($itemsPerPage = $xwiki.parseInt($request.ipp))
+	#set($itemsPerPage = $xwiki.parseInt($request.ipp))
 #end
 #set($qs = "type=$!request.type")
 #set($counter = 0)
 #set($fromsql = "")
 #set($wheresql = "and doc.creator not in (")
 #foreach($user in $excludeList)
-#if($velocityCount&gt;1)
-#set($wheresql = "$wheresql ,")
-#end
-#set($wheresql = "$wheresql 'XWiki.${user}'")
+	#if($velocityCount&gt;1)
+		#set($wheresql = "$wheresql ,")
+	#end
+	#set($wheresql = "$wheresql 'XWiki.${user}'")
 #end
 #set($wheresql = "$wheresql )")
 #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.className='XWiki.TextAssetClass' and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
 #if($request.from&amp;&amp;($request.from!="")&amp;&amp;($request.from!="YYYY/MM/DD"))
-#set($wheresql = "$wheresql and doc.creationDate&gt;'$request.from'")
-#set($from = $request.from)
-#set($qs = "${qs}&amp;from=$!request.from")
-#else
-#set($from = "YYYY/MM/DD")
+	#set($wheresql = "$wheresql and doc.creationDate&gt;'$request.from'")
+	#set($from = $request.from)
+	#set($qs = "${qs}&amp;from=$!request.from")
+	#else
+		#set($from = "YYYY/MM/DD")
 #end
 #if($request.to&amp;&amp;($request.to!=""))
-#set($wheresql = "$wheresql and doc.creationDate&lt;'$request.to'")
-#set($qs = "${qs}&amp;to=$!request.to")
+	#set($wheresql = "$wheresql and doc.creationDate&lt;'$request.to'")
+	#set($qs = "${qs}&amp;to=$!request.to")
 #end
 #if($request.type=="1")
-#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
-#elseif($request.type=="2")
-#set($fromsql = "$fromsql ,StringProperty as sprop")
-#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null and sprop.value &lt;&gt; '0'")
-#elseif($request.type=="3")
-#set($wheresql = "$wheresql and (doc.version='1.0' or doc.version='1.1' or doc.version='1.2')")
+	#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
+	#elseif($request.type=="2")
+		#set($fromsql = "$fromsql ,StringProperty as sprop")
+		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null and sprop.value &lt;&gt; '0'")
 #end
 #if($request.order=="fcstatus")
-#if($request.type!="2")
-#set($fromsql = "$fromsql ,StringProperty as sprop")
-#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
-#end
-#set($order = "sprop.value asc")
-#elseif($request.order=="fcdate")
-#set($fromsql = "$fromsql ,DateProperty as dprop")
-#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
-#set($order = "dprop.value asc")
-#else
-#set($order = "doc.creationDate desc")
+	#if($request.type!="2")
+		#set($fromsql = "$fromsql ,StringProperty as sprop")
+		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
+	#end
+	#set($order = "sprop.value asc")
+	#elseif($request.order=="fcdate")
+		#set($fromsql = "$fromsql ,DateProperty as dprop")
+		#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
+		#set($order = "dprop.value asc")
+		#else
+			#set($order = "doc.creationDate desc")
 #end
 #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%'  and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!wheresql order by $order")
 #set($countsql = "select count(*) from XWikiDocument as doc ${sql}")
 #set($totalCount = $xwiki.search($countsql).get(0))
 &lt;!-- $sql --&gt;
 &lt;form action=""&gt;
-1.1 $msg.fc_daterange
-
-$msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from" value="$!from" size="12" /&gt; $msg.fc_to &lt;input type="text" style="width: auto;" name="to" value="$!request.to" size="12" /&gt;
-
-1.1 $msg.fc_filterby
-
-&lt;input type="radio" name="type" value="0" #if(!$request.type||($request.type=="0")) checked #end /&gt; $msg.fc_all &lt;br /&gt;
-&lt;input type="radio" name="type" value="1" #if($request.type=="1") checked #end /&gt; $msg.fc_onlywithoutfcstatus &lt;br /&gt;
-&lt;input type="radio" name="type" value="2" #if($request.type=="2") checked #end /&gt; $msg.fc_onlywithfcstatus &lt;br /&gt;
-&lt;input type="radio" name="type" value="3" #if($request.type=="3") checked #end /&gt; $msg.fc_onlyincompleteassets &lt;br /&gt;
-&lt;br /&gt;
-&lt;input type="submit" value="$msg.fc_ok" /&gt;
+	1.1 $msg.fc_daterange
+	$msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from" value="$!from" size="12" /&gt;
+	$msg.fc_to &lt;input type="text" style="width: auto;" name="to" value="$!request.to" size="12" /&gt;
+	1.1 $msg.fc_filterby
+	&lt;input type="radio" name="type" value="0" #if(!$request.type||($request.type=="0")) checked #end /&gt;
+		$msg.fc_all &lt;br /&gt;
+		&lt;input type="radio" name="type" value="1" #if($request.type=="1") checked #end /&gt;
+			$msg.fc_onlywithoutfcstatus &lt;br /&gt;
+			&lt;input type="radio" name="type" value="2" #if($request.type=="2") checked #end /&gt;
+				$msg.fc_onlywithfcstatus &lt;br /&gt;
+					&lt;br /&gt;
+					&lt;input type="submit" value="$msg.fc_ok" /&gt;
 &lt;/form&gt;
-
 &lt;table class="filechecktable"&gt;
-&lt;tr&gt;
-&lt;th&gt; $msg.fc_resourcetitle &lt;/td&gt;
-&lt;th&gt; $msg.fc_dateadded &lt;/td&gt;
-&lt;th&gt; $msg.fc_contributor &lt;/td&gt;
-&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus] &lt;/td&gt;
-&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate] &lt;/td&gt;
-&lt;th&gt; $msg.fc_notes &lt;/td&gt;
-&lt;th&gt; $msg.fc_select &lt;/td&gt;
-&lt;/tr&gt;
-#foreach($fullname in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
-#set($counter = $counter+1)
-#set($itemdoc = $xwiki.getDocument($fullname))
-#set($ok = $itemdoc.use("XWiki.AssetClass"))
-#findCurrikiTitle($itemdoc)
-&lt;tr&gt;
-&lt;td&gt;&lt;div class="title"&gt;
-&lt;a href="$xwiki.getURL($fullname, "view")" target="_blank" /&gt;$currikiTitle&lt;/a&gt;
-&lt;/div&gt;&lt;/td&gt;
-&lt;td&gt;&lt;div class="date"&gt;
-$itemdoc.creationDate
-&lt;/div&gt;&lt;/td&gt;
-&lt;td&gt;&lt;div class="username"&gt;
-$xwiki.getLocalUserName($itemdoc.creator)
-&lt;/div&gt;&lt;/td&gt;
-&lt;td&gt;&lt;div class="fcstatus"&gt;
-$itemdoc.display("fcstatus")
-&lt;/div&gt;&lt;/td&gt;
-&lt;td&gt;&lt;div class="fcdate"&gt;
-$itemdoc.display("fcdate")
-&lt;/div&gt;&lt;/td&gt;
-&lt;td&gt;&lt;div class="fcnotes"&gt;
-$itemdoc.display("fcnotes")
-&lt;/div&gt;&lt;/td&gt;
-&lt;td&gt;&lt;div class="action"&gt;
-#set($qs2 = $xwiki.getURLEncoded($fullname))
-&lt;a href="$xwiki.getURL("FileCheck.Check", "view", "page=${qs2}")" target="_blank" /&gt;${msg.fc_action}&lt;/a&gt;
-&lt;/div&gt;&lt;/td&gt;
-&lt;/tr&gt;
-#end
+	&lt;tr&gt;
+		&lt;th&gt; $msg.fc_resourcetitle &lt;/td&gt;
+		&lt;th&gt; $msg.fc_dateadded &lt;/td&gt;
+		&lt;th&gt; $msg.fc_queueTableColheaderIct &lt;/td&gt;
+		&lt;th&gt; $msg.fc_contributor &lt;/td&gt;
+		&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus] &lt;/td&gt;
+		&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate] &lt;/td&gt;
+		&lt;th&gt; $msg.fc_notes &lt;/td&gt;
+		&lt;th&gt; $msg.fc_select &lt;/td&gt;
+	&lt;/tr&gt;
+	#foreach($fullname in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
+		#set($counter = $counter+1)
+		#set($itemdoc = $xwiki.getDocument($fullname))
+		#set($ok = $itemdoc.use("XWiki.AssetClass"))
+		#findCurrikiTitle($itemdoc)
+		&lt;tr&gt;
+			&lt;td&gt;
+				&lt;div class="title"&gt;
+					&lt;a href="$xwiki.getURL($fullname, "view")" target="_blank" /&gt;
+					$currikiTitle&lt;/a&gt;
+				&lt;/div&gt;
+			&lt;/td&gt;
+            &lt;td&gt;
+            	&lt;div class="date"&gt;
+            		$itemdoc.creationDate
+            	&lt;/div&gt;
+            &lt;/td&gt;
+			&lt;td&gt;
+            	&lt;div class="ict"&gt;
+            		#set($ict = $xwiki.curriki.getAssetICT($fullname))
+					#if($ict.size()==1)
+						$ict.get(0)
+						#elseif($ict.size()&gt;1)
+							$msg.fc_queueTableICTMultiple
+					#end
+            	&lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+            	&lt;div class="username"&gt;
+            		$xwiki.getLocalUserName($itemdoc.creator)
+            	&lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+            	&lt;div class="fcstatus"&gt;
+            		$itemdoc.display("fcstatus")
+            	&lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+            	&lt;div class="fcdate"&gt;
+            		$itemdoc.display("fcdate")
+            	&lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+            	&lt;div class="fcnotes"&gt;
+            		$itemdoc.display("fcnotes")
+            	&lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+            	&lt;div class="action"&gt;
+            		#set($qs2 = $xwiki.getURLEncoded($fullname))
+            		&lt;a href="$xwiki.getURL("FileCheck.Check", "view", "page=${qs2}")" target="_blank" /&gt;
+            		${msg.fc_action}&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;/td&gt;
+		&lt;/tr&gt;
+	#end
 &lt;/table&gt;
-
 #if($request.order)
-#set($qs = "${qs}&amp;${request.order}")
+	#set($qs = "${qs}&amp;${request.order}")
 #end
 #mycurriki_paginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)</content>
 </xwikidoc>

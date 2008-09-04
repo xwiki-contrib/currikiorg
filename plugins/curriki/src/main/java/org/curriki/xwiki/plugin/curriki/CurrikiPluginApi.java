@@ -1,17 +1,14 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import java.util.List;
+import java.util.Map;
+
+import org.curriki.xwiki.plugin.asset.Asset;
+
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Property;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.lang.Object;
-import java.lang.Class;
-
-import org.curriki.xwiki.plugin.asset.Asset;
 
 /**
  */
@@ -99,6 +96,7 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchUserInfo(context);
     }
     
+        
     /**
      * Verificate if a user is in Group
      * @param groupName
@@ -109,5 +107,10 @@ public class CurrikiPluginApi extends Api {
     public Boolean isMember(String groupName) throws XWikiException
     {
     	return plugin.isMember(groupName, context);
+    }
+    
+
+    public List<String> getAssetICT(String assetName) throws XWikiException {
+    	return plugin.getAssetICT(assetName,context);
     }
 }

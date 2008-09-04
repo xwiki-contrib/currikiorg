@@ -166,4 +166,6 @@ public interface Constants {
     String ASSET_BFCS_STATUS_IMPROVEMENTREQUIRED="3";
     String ASSET_BFCS_STATUS_DELETEDFROMMEMBERACCESS="4";
 
+    String ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY = "instructional_component2";
+
 }
