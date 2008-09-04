@@ -106,7 +106,7 @@ fc_updatemessage2=Este recurso ha sido marcado con un estado básico de chequeo 
 fc_updatemessage3=Este recurso ha sido marcado con un estado básico de chequeo de archivo de 'Mejora Solicitada'.
 fc_updatemessage4=Este contenido ha sido marcado con un estado básico de chequeo de archivo de 'Borrada de Acceso a Miembros'.
 fc_files=Archivos
-fc_queue.table.colheader.ict=Tipo Instruccional
-fc_queue.table.ict.multiple=Multiple
+fc_queueTableColheaderIct=Tipo Instruccional
+fc_queueTableICTMultiple=Multiple
 #&lt;/pre&gt;</content>
 </xwikidoc>
