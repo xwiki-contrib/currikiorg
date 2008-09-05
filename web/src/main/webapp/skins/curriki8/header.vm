@@ -68,7 +68,7 @@
 
 <!-- advanced search -->
 <div id="header-search"> ##{
-  <form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Main.GWTSearch")" onsubmit="if ($$('.gwt-Button.search-searchbutton').length>0 && $('curriki-searchbox').value!=='search') { $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } else {document.searchform.method='post'; if ($('curriki-searchbox').value!=='search') {document.searchform.action=document.searchform.action+'#__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');} document.location.href=document.searchform.action; } return false;"> ##{
+  <form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="if ($('curriki-searchbox').value!=='search') {document.location.href=document.searchform.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+$('curriki-searchbox').value.replace(/%/g, '%2525');} return false;"> ##{
   
     <input type="hidden" class="hidden" name="area" value=""/>
     #set($brsqry = $request.brsqry)
@@ -80,7 +80,7 @@
       
   </form> ##}
   <p> ##{
-    <a href="$xwiki.getURL("Main.GWTSearch")" onclick="if ($$('.gwt-Button.search-searchbutton').length>0) {if ($('curriki-searchbox').value!=='search'){ $$('.gwt-TextBox[name=__terms]')[0].value=$('curriki-searchbox').value; $$('.gwt-Button.search-searchbutton')[0].click(); } return false;} else {this.href=this.href+'#__advShow=1'; if ($('curriki-searchbox').value!=='search') {this.href=this.href+'&__terms='+$('curriki-searchbox').value.replace(/%/g, '%2525');}; return true;}">$msg.get("header.advanced_search")</a> |
+    <a href="$xwiki.getURL("Search.WebHome")" onclick="if ($('curriki-searchbox').value!=='search') {document.location.href=this.href+'#o%3As%3Ds%253Aresource%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+$('curriki-searchbox').value.replace(/%/g, '%2525');}; return false;">$msg.get("header.advanced_search")</a> |
     <a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
   </p> ##}
 </div> ##} ##member-search
