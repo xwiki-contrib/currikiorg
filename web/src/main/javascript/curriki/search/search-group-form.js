@@ -34,6 +34,7 @@ form.init = function(){
 			,{
 				xtype:'fieldset'
 				,title:_('search.advanced.search.button')
+				,id:'search-advanced-'+modName
 				,autoHeight:true
 				,collapsible:true
 				,collapsed:true
