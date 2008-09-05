@@ -56,7 +56,9 @@ Search.init = function(){
 				token['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
 				token['f'] = filterValues;
 				token['p'] = pagerValues;
-				token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
+				if (Ext.getCmp('search-tabPanel').getActiveTab) {
+					token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
+				}
 				var provider = new Ext.state.Provider();
 				Search.ignoreNextHistoryChange = true;
 				console.log('Saving History', {values: token});
