@@ -21,7 +21,10 @@ Search.init = function(){
 
 		Search.doSearch = function(searchTab){
 			var filterValues = {};
-			//filterValues['all'] = Ext.getCmp('search-termPanel').getForm().getValues(false);
+			if (Ext.getCmp('search-termPanel')
+			    && Ext.getCmp('search-termPanel').getForm) {
+				filterValues['all'] = Ext.getCmp('search-termPanel').getForm().getValues(false);
+			}
 
 			var pagerValues = {};
 
@@ -32,6 +35,7 @@ Search.init = function(){
 				,function(tab){
 					var module = forms[tab];
 					if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch)) {
+						// Get current values
 						var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
 						if (!Ext.isEmpty(filterPanel)) {
 							var filterForm = filterPanel.getForm();
@@ -54,6 +58,8 @@ Search.init = function(){
 							pagerInfo.s = pagerPanel.pageSize;
 							pagerValues[tab] = pagerInfo;
 						}
+
+						// Do the search
 						if (Ext.isEmpty(searchTab) || searchTab === tab) {
 							module.doSearch();
 						}
@@ -240,7 +246,9 @@ Search.history = function(){
 					console.log('Got History', {token: token, values: values});
 
 					var filterValues = values['f'];
-					//Ext.getCmp('search-termPanel').getForm().setValues(filterValues['all']);
+					if (filterValues['all'] && Ext.getCmp('search-termPanel') && Ext.getCmp('search-termPanel').getForm) {
+						Ext.getCmp('search-termPanel').getForm().setValues(filterValues['all']);
+					}
 
 					var pagerValues = values['p'];
 
@@ -322,10 +330,7 @@ Search.history = function(){
 						if (values['s'] === 'all') {
 							Search.doSearch();
 						} else {
-							var module = Search.form[values['s']];
-							if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch)) {
-								module.doSearch();
-							}
+							Search.doSearch(values['s']);
 						}
 					}
 				} else {
