@@ -258,6 +258,16 @@ Search.history = function(){
 									if (!Ext.isEmpty(filterForm)) {
 										try {
 											filterForm.setValues(filterValues[tab]);
+
+											// setValues does not trigger the visiblity change of the sub-lists
+											var list = Ext.getCmp('combo-subject-'+tab);
+											if (list) {
+												list.fireEvent("select", list, list.getValue());
+											}
+											list = Ext.getCmp('combo-ictprfx-'+tab);
+											if (list) {
+												list.fireEvent("select", list, list.getValue());
+											}
 										} catch(e) {
 											console.log('ERROR Updating '+tab, e);
 										}
