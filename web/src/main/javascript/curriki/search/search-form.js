@@ -25,6 +25,8 @@ Search.init = function(){
 
 			var pagerValues = {};
 
+			var panelSettings = {};
+
 			Ext.each(
 				Search.tabList
 				,function(tab){
@@ -37,6 +39,14 @@ Search.init = function(){
 								filterValues[tab] = filterForm.getValues(false);
 							}
 						}
+
+						var advancedSearch = Ext.getCmp('search-advanced-'+tab);
+						if (!Ext.isEmpty(advancedSearch)) {
+							if (!advancedSearch.collapsed) {
+								panelSettings[tab] = {a:true}; // Advanced open
+							}
+						}
+
 						var pagerPanel = Ext.getCmp('search-pager-'+tab);
 						if (!Ext.isEmpty(pagerPanel)) {
 							var pagerInfo = {};
@@ -59,6 +69,7 @@ Search.init = function(){
 				if (Ext.getCmp('search-tabPanel').getActiveTab) {
 					token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
 				}
+				token['a'] = panelSettings;
 				var provider = new Ext.state.Provider();
 				Search.ignoreNextHistoryChange = true;
 				console.log('Saving History', {values: token});
@@ -233,12 +244,14 @@ Search.history = function(){
 
 					var pagerValues = values['p'];
 
+					var panelSettings = values['a'];
+
 					Ext.each(
 						Search.tabList
 						,function(tab){
 							console.log('Updating '+tab);
 							var module = Search.form[tab];
-							if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues[tab])) {
+							if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
 								var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
 								if (!Ext.isEmpty(filterPanel)) {
 									var filterForm = filterPanel.getForm();
@@ -251,8 +264,15 @@ Search.history = function(){
 									}
 								}
 
+								if (!Ext.isEmpty(panelSettings) && !Ext.isEmpty(panelSettings[tab]) && !Ext.isEmpty(panelSettings[tab].a)) {
+									var advancedPanel = Ext.getCmp('search-advanced-'+tab);
+									if (!Ext.isEmpty(advancedPanel)) {
+										advancedPanel.expand(false);
+									}
+								}
+
 								var pagerPanel = Ext.getCmp('search-pager-'+tab);
-								if (!Ext.isEmpty(pagerPanel)) {
+								if (!Ext.isEmpty(pagerPanel) && !Ext.isEmpty(pagerValues)) {
 									if (pagerValues[tab]) {
 										try {
 											if (pagerValues[tab]['c']) {
