@@ -42,6 +42,23 @@ Ext.override(Ext.Component, {
     stateful : false
 }); 
 
+
+// Fix issues with combo boxes not hiding with correct method
+// Default uses display CSS method with no thought to what hideMode is
+Ext.override(Ext.form.TriggerField, {
+    // private
+    onShow : function(){
+        if(this.wrap){
+            this.wrap.show();
+        }
+    },
+
+    // private
+    onHide : function(){
+        this.wrap.hide();
+    }
+});
+
 /*
 Ext.override(Ext.Shadow.prototype, {
 	realign: function(l, t, w, h){
