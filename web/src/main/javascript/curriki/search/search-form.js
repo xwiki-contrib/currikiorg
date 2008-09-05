@@ -263,10 +263,20 @@ Search.history = function(){
 											var list = Ext.getCmp('combo-subject-'+tab);
 											if (list) {
 												list.fireEvent("select", list, list.getValue());
+												if (!Ext.isEmpty(filterValues[tab].subject)) {
+													if (Ext.getCmp('combo-subsubject-'+tab)) {
+														Ext.getCmp('combo-subsubject-'+tab).setValue(filterValues[tab].subject);
+													}
+												}
 											}
 											list = Ext.getCmp('combo-ictprfx-'+tab);
 											if (list) {
 												list.fireEvent("select", list, list.getValue());
+												if (!Ext.isEmpty(filterValues[tab].ict)) {
+													if (Ext.getCmp('combo-subICT-'+tab)) {
+														Ext.getCmp('combo-subICT-'+tab).setValue(filterValues[tab].ict);
+													}
+												}
 											}
 										} catch(e) {
 											console.log('ERROR Updating '+tab, e);
