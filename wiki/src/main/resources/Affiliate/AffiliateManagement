@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xwikidoc>
+<web>Affiliate</web>
+<name>AffiliateManagement</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
+<customClass></customClass>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1219557224000</creationDate>
+<date>1220068431000</date>
+<contentUpdateDate>1220851799000</contentUpdateDate>
+<version>1.1</version>
+<title>Affilate Partner Management Page</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<object>
+<class>
+<name>Affiliate.AffiliatePartnerClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<affiliateID>
+<customDisplay></customDisplay>
+<name>affiliateID</name>
+<number>1</number>
+<picker></picker>
+<prettyName>Affiliate ID</prettyName>
+<size>30</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</affiliateID>
+<email>
+<customDisplay></customDisplay>
+<name>email</name>
+<number>4</number>
+<picker></picker>
+<prettyName>E-mail</prettyName>
+<size>30</size>
+<tooltip>Please enter your email address.</tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage>You have not entered a valid email address</validationMessage>
+<validationRegExp>/.+/</validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</email>
+<groups>
+<customDisplay></customDisplay>
+<name>groups</name>
+<number>6</number>
+<picker></picker>
+<prettyName>Groups</prettyName>
+<size>200</size>
+<tooltip></tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</groups>
+<partnerName>
+<customDisplay></customDisplay>
+<name>partnerName</name>
+<number>3</number>
+<picker></picker>
+<prettyName>Partner Name</prettyName>
+<size>30</size>
+<tooltip>Enter pretty name</tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage>The name field cannot be empty</validationMessage>
+<validationRegExp>/.+/</validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</partnerName>
+<partnerReferenceURL>
+<customDisplay></customDisplay>
+<name>partnerReferenceURL</name>
+<number>2</number>
+<picker></picker>
+<prettyName>Partner Reference URL</prettyName>
+<size>200</size>
+<tooltip>Enter partner 's  reference url</tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage>The partner reference url field cannot be empty</validationMessage>
+<validationRegExp>/.+/</validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</partnerReferenceURL>
+<phone>
+<customDisplay></customDisplay>
+<name>phone</name>
+<number>5</number>
+<picker></picker>
+<prettyName>Phone</prettyName>
+<size>30</size>
+<tooltip>Enter phone</tooltip>
+<unmodifiable>0</unmodifiable>
+<validationMessage>The phone field cannot be empty</validationMessage>
+<validationRegExp>/.+/</validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</phone>
+</class>
+<name>Affiliate.AffiliateManagement</name>
+<number>0</number>
+<className>Affiliate.AffiliatePartnerClass</className>
+<property>
+<affiliateID>test1</affiliateID>
+</property>
+<property>
+<email></email>
+</property>
+<property>
+<groups>Group_test,test2</groups>
+</property>
+<property>
+<partnerName>Curriki dev</partnerName>
+</property>
+<property>
+<partnerReferenceURL>http://next.dev.curriki.org/xwiki/bin/view/Main/WebHome</partnerReferenceURL>
+</property>
+<property>
+<phone></phone>
+</property>
+</object>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Affiliate.AffiliateManagement</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
+</property>
+</object>
+<content>#set($pmode=$request.code)
+#if(!$pmode||($pmode!="add"&amp;&amp;$pmode!="modify"))
+    #set($pmode="view")
+#end
+#set($op=$request.op)
+#set($classname="Affiliate.AffiliatePartnerClass")
+#if($op=="add")
+    #set($obj=$doc.newObject($classname))
+    $obj.set("affiliateID",$request.affiliateID)
+    $obj.set("partnerReferenceURL",$request.partnerReferenceURL)
+    $obj.set("partnerName",$request.partnerName)
+    $obj.set("email",$request.email)
+    $obj.set("phone",$request.phone)
+    $obj.set("groups",$request.groups)
+    $doc.save()
+#end
+&lt;script type="text/javascript" language="javascript"&gt;
+function toMode(mode){
+    document.form1.code.value=mode;
+    document.form1.op.value='view';
+    document.form1.submit();
+}
+function commitToMode(mode,op){
+    if(checkCommit()){
+        document.form1.code.value=mode;
+        document.form1.op.value=op;
+        document.form1.submit();
+    }
+}
+function checkCommit(){
+    var affiliateID='';
+    var div_affiliate='';
+#if($pmode=="add")
+    affiliateID=document.getElementById("affiliateID");
+    if(affiliateID.value==""){
+        alert("The Affiliate ID field can't be empty!");
+        affiliateID.focus();
+        return false;
+    }
+#elseif($pmode=="modify")
+#set($objs=$doc.getObjects($classname))
+#foreach($obj in $objs)
+    affiliateID=document.getElementById("${classname}_${obj.number}_affiliateID");
+    if(affiliateID.value==""){
+        alert("The Affiliate ID field cann't be empty!");
+        div_affiliate=document.getElementById('div_${obj.number}');
+        if(div_affiliate.style.visibility=="hidden"||div_affiliate.style.display=="none"){
+            switchDivStatus(div_affiliate);
+        }
+        affiliateID.focus();
+        return false;
+    }
+#end
+#end
+  return true;
+}
+function switchDivStatus(show_div){
+    if(show_div.style.visibility == "visible" || show_div.style.display == "block"){
+        show_div.style.visibility = "hidden";
+        show_div.style.display = "none";
+    }else{
+        show_div.style.visibility = "visible";
+        show_div.style.display = "block";
+    }
+}
+&lt;/script&gt;
+#set($is_first=true)
+#set($class=$xwiki.getDocument($classname).getxWikiClass())
+#set($id_prop=$class.get("affiliateID"))
+#set($url_prop=$class.get("partnerReferenceURL"))
+#set($name_prop=$class.get("partnerName"))
+#set($email_prop=$class.get("email"))
+#set($phone_prop=$class.get("phone"))
+#set($groups_prop=$class.get("groups"))
+#set($page_title="Affilate Partner Management Page")
+#set($bar_title="Partner")
+1 $msg.get("Affilate Partner Management Page")
+&lt;form id="form1" name="form1" method="post" action="$doc.getURL("view")"&gt;
+&lt;input type="hidden" name="code" value=""&gt;
+&lt;input type="hidden" name="op" value=""&gt;
+#if($pmode=="add")
+    #titlebar($bar_title "" "" "purple")
+    &lt;div&gt;$id_prop.getPrettyName():&lt;/div&gt;&lt;div&gt;&lt;input type="text" id="affiliateID" name="affiliateID"/&gt;&lt;/div&gt;
+    &lt;div&gt;$url_prop.getPrettyName():&lt;/div&gt;&lt;div&gt;&lt;input type="text" id="partnerReferenceURL" name="partnerReferenceURL"/&gt;&lt;/div&gt;
+    &lt;div&gt;$name_prop.getPrettyName():&lt;/div&gt;&lt;div&gt;&lt;input type="text" id="partnerName" name="partnerName"/&gt;&lt;/div&gt;
+    &lt;div&gt;$email_prop.getPrettyName():&lt;/div&gt;&lt;div&gt;&lt;input type="text" id="email" name="email"/&gt;&lt;/div&gt;
+    &lt;div&gt;$phone_prop.getPrettyName():&lt;/div&gt;&lt;div&gt;&lt;input type="text" id="phone" name="phone"/&gt;&lt;/div&gt;
+    &lt;div&gt;$groups_prop.getPrettyName():&lt;/div&gt;&lt;div&gt;&lt;input type="text" id="groups" name="groups"/&gt;&lt;/div&gt;
+    &lt;center&gt;
+    &lt;div class="registration-button"&gt;
+    &lt;input class="button" type="button" name="Cancel" value="Cancel" onclick="toMode('view');"/&gt;
+    &lt;input class="button" type="button" name="continue" value="Save &amp; Continue" onclick="commitToMode('add','add');"/&gt;
+    &lt;input class="button" type="button" name="view" value="Save &amp; View" onclick="commitToMode('view','add');"/&gt;
+    &lt;/div&gt;
+    &lt;/center&gt;
+#elseif($pmode=="modify") ##end if($pmode=="add")
+    &lt;input type="hidden" name="xcontinue" value=""/&gt;
+    #set($objs=$doc.getObjects($classname))
+    #foreach($obj in $objs)
+        &lt;div onclick="switchDivStatus(document.getElementById('div_${obj.number}'))" style="cursor:pointer"&gt;
+        #set($partnerName=$doc.displayView($name_prop,"",$obj))
+        #if($partnerName&amp;&amp;$partnerName=="")
+            #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$doc.displayView($id_prop,"",$obj))
+        #else
+            #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$partnerName)
+        #end
+        #set($del_url=$doc.getURL("objectremove","classname=${classname}&amp;amp;classid=${obj.number}&amp;amp;xredirect=${doc.getURL('view','code=modify')}"))
+        #titlebar($obj_title "DEL" $del_url "purple")
+        &lt;/div&gt;
+        ## the first object's number maybe larger than 0
+        &lt;div id="div_${obj.number}" name="div_${obj.number}" #if($is_first)style="visibility:visible;display:block;" #else style="visibility:hidden;display:none;" #end&gt;
+        &lt;table border="0" cellspacing="0" width="100%"&gt;
+        &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$id_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayEdit($id_prop,"${classname}_${obj.number}_",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$url_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayEdit($url_prop,"${classname}_${obj.number}_",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$name_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayEdit($name_prop,"${classname}_${obj.number}_",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$email_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayEdit($email_prop,"${classname}_${obj.number}_",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$phone_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayEdit($phone_prop,"${classname}_${obj.number}_",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$groups_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayEdit($groups_prop,"${classname}_${obj.number}_",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+        &lt;/div&gt;
+        #set($is_first=false)
+    #end
+    &lt;center&gt;
+    &lt;div class="registration-button"&gt;
+    &lt;input class="button" type="button" name="Cancel" value="Cancel" onclick="document.form1.action='$doc.getURL("view")';toMode('view');"/&gt;
+    &lt;input class="button" type="button" name="continue" value="Save &amp; Continue" onclick="document.form1.action='$doc.getURL("saveandcontinue")';document.form1.xcontinue.value='$doc.getURL("view","code=modify")';commitToMode('modify','modify');"/&gt;
+    &lt;input class="button" type="button" name="view" value="Save &amp; View" onclick="document.form1.action='$doc.getURL("saveandcontinue")';document.form1.xcontinue.value='$doc.getURL("view")';commitToMode('view','modify');"/&gt;
+    &lt;/div&gt;
+    &lt;/center&gt;
+#else ##end elseif($pmode=="modify")
+    ## view mode
+    #set($objs=$doc.getObjects($classname))
+    #foreach($obj in $objs)
+        &lt;div onclick="switchDivStatus(document.getElementById('div_${obj.number}'))" style="cursor:pointer"&gt;
+        #set($partnerName=$doc.displayView($name_prop,"",$obj))
+        #if($partnerName&amp;&amp;$partnerName=="")
+            #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$doc.displayView($id_prop,"",$obj))
+        #else
+            #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$partnerName)
+        #end
+        #titlebar($obj_title "" "" "purple")
+        &lt;/div&gt;
+        ## the first object's number maybe larger than 0
+        &lt;div id="div_${obj.number}" name="div_${obj.number}" #if($is_first)style="visibility:visible;display:block;" #else style="visibility:hidden;display:none;" #end&gt;
+        &lt;table border="0" cellspacing="0" width="100%"&gt;
+        &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$id_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayView($id_prop,"",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$url_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayView($url_prop,"",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$name_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayView($name_prop,"",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$email_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayView($email_prop,"",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$phone_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayView($phone_prop,"",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$groups_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$doc.displayView($groups_prop,"",$obj)&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+        &lt;/div&gt;
+        #set($is_first=false)
+    #end
+    &lt;center&gt;
+    &lt;div class="registration-button"&gt;
+    &lt;input class="button" type="button" name="Add" value="Add" onclick="toMode('add');"/&gt;
+    &lt;input class="button" type="button" name="Modify" value="Modify" onclick="toMode('modify');"/&gt;
+    &lt;/div&gt;
+    &lt;/center&gt;
+#end
+&lt;/form&gt;</content>
+</xwikidoc>
