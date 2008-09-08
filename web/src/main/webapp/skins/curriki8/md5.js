@@ -265,6 +265,8 @@ function sendToRegister(formid){
             toencrypt+=thiselement.value;
         }
     }
-    document.getElementById("validkey").value=b64_md5(toencrypt)
-    document.getElementById(formid).submit();
+    document.getElementById("validkey").value=b64_md5(toencrypt);
+    var thisform=document.getElementById(formid);
+    thisform.action=thisform.action.replace(/http:/gi,"https:");
+    thisform.submit();
 }
