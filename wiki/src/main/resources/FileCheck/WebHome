@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1219968278000</date>
-<contentUpdateDate>1219968278000</contentUpdateDate>
-<version>21.1</version>
+<date>1220994254000</date>
+<contentUpdateDate>1220994254000</contentUpdateDate>
+<version>4.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>added ICT column</comment>
+<comment>Excluding Favorites from BFCS queue</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -107,9 +107,14 @@
 		#else
 			#set($order = "doc.creationDate desc")
 #end
-#set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%'  and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!wheresql order by $order")
+#set($notInFavoritesSQL = " and doc.fullName not in (select str3.value from BaseObject as obj4, StringProperty as str3 where obj4.id=str3.id and obj4.name like 'Coll_%.Favorites' and obj4.className='XWiki.SubAssetClass')")
+#set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!notInFavoritesSQL $!wheresql order by $order")
 #set($countsql = "select count(*) from XWikiDocument as doc ${sql}")
-#set($totalCount = $xwiki.search($countsql).get(0))
+#set($auxTotalCount = $xwiki.search($countsql))
+#set($totalCount = 0)
+#if($auxTotalCount.size()&gt;=0)
+	#set($totalCount = $auxTotalCount.get(0))
+#end
 &lt;!-- $sql --&gt;
 &lt;form action=""&gt;
 	1.1 $msg.fc_daterange
