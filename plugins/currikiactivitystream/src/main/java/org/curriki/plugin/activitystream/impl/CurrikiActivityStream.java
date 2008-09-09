@@ -440,7 +440,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl
 
         MailSenderPlugin mailSender =
             (MailSenderPlugin) context.getWiki().getPlugin("mailsender", context);
-        mailSender.prepareVelocityContext(mailFrom, mailTo, "", vContext, context);
+        mailSender.prepareVelocityContext(mailFrom, mailTo, "", "", vContext, context);
         Mail mail = new Mail(mailFrom, mailTo, null, null, mailSubject, mailContent, null);
         mailSender.sendMail(mail, context);
     }
