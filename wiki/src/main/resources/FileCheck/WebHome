@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1220994254000</date>
-<contentUpdateDate>1220994254000</contentUpdateDate>
-<version>4.1</version>
+<date>1221086241000</date>
+<contentUpdateDate>1221086241000</contentUpdateDate>
+<version>25.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Excluding Favorites from BFCS queue</comment>
+<comment>status and subject combo filters</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -88,12 +88,30 @@
 	#set($wheresql = "$wheresql and doc.creationDate&lt;'$request.to'")
 	#set($qs = "${qs}&amp;to=$!request.to")
 #end
-#if($request.type=="1")
+
+#if($request.type=="1")##without status
 	#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
-	#elseif($request.type=="2")
+	#elseif($request.type!="1" &amp;&amp; $request.type!="0")##with status
 		#set($fromsql = "$fromsql ,StringProperty as sprop")
-		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null and sprop.value &lt;&gt; '0'")
+		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null ")
+			#if($request.type=="2")##with any status
+				#set($wheresql = "$wheresql and sprop.value &lt;&gt; '0'")
+			#end
+			#if($request.type=="3")##with status ok
+				#set($wheresql = "$wheresql and sprop.value = '1'")
+			#end
+			#if($request.type=="4")##with status Special Check Required
+				#set($wheresql = "$wheresql and sprop.value = '2'")
+			#end
+			#if($request.type=="5")##with status Improvement Requested
+				#set($wheresql = "$wheresql and sprop.value = '3'")
+			#end
+			#if($request.type=="6")##with status Deleted
+				#set($wheresql = "$wheresql and sprop.value = '4'")
+			#end
+
 #end
+
 #if($request.order=="fcstatus")
 	#if($request.type!="2")
 		#set($fromsql = "$fromsql ,StringProperty as sprop")
@@ -107,7 +125,16 @@
 		#else
 			#set($order = "doc.creationDate desc")
 #end
+
+## Check which Subject was selected in the filter combo
+#if(($request.fw_item)&amp;&amp;($request.fw_item!=""))
+	#set($fromsql = "$fromsql ,DBStringListProperty as prop2 join prop2.list list ")
+	#set($wheresql = "$wheresql  and obj.id=prop2.id.id and prop2.id.name='fw_items' and list = '${request.fw_item}'")
+#end
+
+## Filter for excluding Favorites resources
 #set($notInFavoritesSQL = " and doc.fullName not in (select str3.value from BaseObject as obj4, StringProperty as str3 where obj4.id=str3.id and obj4.name like 'Coll_%.Favorites' and obj4.className='XWiki.SubAssetClass')")
+
 #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!notInFavoritesSQL $!wheresql order by $order")
 #set($countsql = "select count(*) from XWikiDocument as doc ${sql}")
 #set($auxTotalCount = $xwiki.search($countsql))
@@ -121,14 +148,33 @@
 	$msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" name="from" value="$!from" size="12" /&gt;
 	$msg.fc_to &lt;input type="text" style="width: auto;" name="to" value="$!request.to" size="12" /&gt;
 	1.1 $msg.fc_filterby
-	&lt;input type="radio" name="type" value="0" #if(!$request.type||($request.type=="0")) checked #end /&gt;
-		$msg.fc_all &lt;br /&gt;
-		&lt;input type="radio" name="type" value="1" #if($request.type=="1") checked #end /&gt;
-			$msg.fc_onlywithoutfcstatus &lt;br /&gt;
-			&lt;input type="radio" name="type" value="2" #if($request.type=="2") checked #end /&gt;
-				$msg.fc_onlywithfcstatus &lt;br /&gt;
-					&lt;br /&gt;
-					&lt;input type="submit" value="$msg.fc_ok" /&gt;
+
+	$msg.fc_queueFilterChooseFCStatus
+
+	&lt;select name="type"&gt;
+			&lt;option value="0" #if(!$request.type||($request.type=="0")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
+			&lt;option value="1" #if($request.type=="1") selected #end &gt;$msg.get("fc_onlywithoutfcstatus")&lt;/option&gt;
+			&lt;option value="2" #if($request.type=="2")) selected #end &gt;$msg.get("fc_onlywithfcstatus")&lt;/option&gt;
+			#foreach($status in [1..4])
+				#set($auxStatus = $status+2)
+				&lt;option value="$auxStatus" #if($auxStatus=="$request.type")  selected #end &gt;$msg.get("fc_statusFilter_${status}")&lt;/option&gt;
+			#end
+	&lt;/select&gt;
+
+	&lt;br /&gt;
+
+	$msg.fc_queueFilterChooseSubjectArea
+
+	&lt;select name="fw_item"&gt;
+			&lt;option value="" #if(!$request.fw_item||($request.fw_item=="")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
+        #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome'"))
+        #set($itemdoc = $xwiki.getDocument($item))
+    		&lt;option value="$item" #if($item==$request.fw_item) selected #end &gt;$itemdoc.title&lt;/option&gt;
+        #end
+	&lt;/select&gt;
+
+	&lt;input type="submit" value="$msg.fc_ok" /&gt;
+
 &lt;/form&gt;
 &lt;table class="filechecktable"&gt;
 	&lt;tr&gt;

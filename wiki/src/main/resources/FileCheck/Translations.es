@@ -94,9 +94,6 @@ fc_showresourcesfrom=Mostrar Recursos creados y agregados al Repositorio
 fc_to=to
 fc_daterange=Intervalo de Fecha
 fc_filterby=Filtrado por
-fc_onlywithoutfcstatus=Solo recursos sin Estado Básico de Chequeo de Archivo
-fc_onlywithfcstatus=Solo recursos revisados mostrando un Estado Básico de Chequeo de Archivo
-fc_onlyincompleteassets=Solo recursos compuestos de versiones 1.3 o anteriores
 fc_previous=Anterior
 fc_next=Siguiente
 fc_all=Todo
@@ -108,5 +105,13 @@ fc_updatemessage4=Este contenido ha sido marcado con un estado básico de cheque
 fc_files=Archivos
 fc_queueTableColheaderIct=Tipo Instruccional
 fc_queueTableICTMultiple=Multiple
+fc_onlywithoutfcstatus=Sin estado
+fc_onlywithfcstatus=En cualquier estado
+fc_queueFilterChooseSubjectArea=Elija Tema:
+fc_queueFilterChooseFCStatus=Solo Recursos:
+fc_statusFilter_1=En estado "OK"
+fc_statusFilter_2=En estado "Chequeo Especial"
+fc_statusFilter_3=En estado "Mejora Solicitada"
+fc_statusFilter_4=En estado "Borrado"
 #&lt;/pre&gt;</content>
 </xwikidoc>
