@@ -60,7 +60,7 @@ public class SpecialFilterSelector extends DropdownSingleSelector
                 filter = "XWiki.CompositeAssetClass.type:collection";
             }
             if (value.equals("reviewed")){
-                filter = "CRS.CurrikiReviewStatusClass.status:(1 OR 2 OR 3 OR P)";
+                filter = "CRS.CurrikiReviewStatusClass.status:(60 OR 40 OR 20 OR 10)";
             }
             if (value.equals("mine")){
                 filter = "creator:"+Main.getSingleton().getUser().getFullName(); // This is the full USERNAME, not realname

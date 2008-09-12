@@ -191,7 +191,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 rating = String.valueOf(doc.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS));
             }
         }
-        if (!(rating.equals("P") || rating.equals("3"))){
+        if (!(rating.equals("10") || rating.equals("20"))){
             // Only show Hide From Search if the CRS rating is not a P or 3
             addEditor(assetObj, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, panel, false, fullMode);
         }
@@ -268,7 +268,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 rating = String.valueOf(doc.getValue(Constants.CURRIKI_REVIEW_STATUS_STATUS));
             }
         }
-        if (!(rating.equals("P") || rating.equals("3"))){
+        if (!(rating.equals("10") || rating.equals("20"))){
             // Only show Hide From Search if the CRS rating is not a P or 3
             addEditor(assetObj, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, panelStep2, false, true);
         }
@@ -304,7 +304,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         crsPanel.add(image);
         FlowPanel crsRatingPanel = new FlowPanel();
         crsRatingPanel.setStyleName("crs_reviewrating");
-        if ((status==null)||(status.equals("0"))||(status.equals(""))) {
+        if ((status==null)||(status.equals("80"))||(status.equals(""))) {
             crsRatingPanel.setStyleName("crs_reviewnorating");
             HTMLPanel crsRatingTextPanel = new HTMLPanel(Main.getTranslation("curriki.crs.unrated"));
             crsRatingTextPanel.setStyleName("crs_reviewratingtext");
@@ -329,7 +329,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             crsRatingPanel.add(crsRatingImage);
         }
         crsPanel.add(crsRatingPanel);
-        if (!"P".equals(status)&&!isPrivate) {
+        if (!"10".equals(status)&&!isPrivate) {
             if ((reviewpending!=null)&&reviewpending.intValue()==1)  {
                 HTMLPanel crsReviewPendingPanel = new HTMLPanel(Main.getTranslation("curriki.crs.reviewpending"));
                 crsReviewPendingPanel.setStyleName("crs_reviewpending");
@@ -379,12 +379,12 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
         if ("admin".equals(role)) {
             final CheckBox setToPCheckBox = new CheckBox(Main.getTranslation("curriki.crs.settopartner"));
-            setToPCheckBox.setChecked("P".equals(currentCRSStatus));
+            setToPCheckBox.setChecked("10".equals(currentCRSStatus));
             setToPCheckBox.addClickListener(new ClickListener() {
                 public void onClick(Widget widget) {
                     String questionText;
                     String titleText;
-                    if ("P".equals(currentCRSStatus)) {
+                    if ("10".equals(currentCRSStatus)) {
                         questionText = Main.getTranslation("curriki.crs.confirmunsettopartner");
                         titleText = "curriki.crs.unsettopartner";
                     } else {
@@ -393,22 +393,22 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                     }
                     ncDialog = new NextCancelDialog(titleText, questionText, "crsconfirmsettopartner", new AsyncCallback() {
                         public void onFailure(Throwable throwable) {
-                            setToPCheckBox.setChecked("P".equals(currentCRSStatus));
+                            setToPCheckBox.setChecked("10".equals(currentCRSStatus));
                             ncDialog.hide();
                         }
                         public void onSuccess(Object object) {
                             Document currentAsset = Main.getSingleton().getEditor().getCurrentAsset();
-                            final String newCRSStatus =  "P".equals(currentCRSStatus) ? "0" : "P";
+                            final String newCRSStatus =  "10".equals(currentCRSStatus) ? "80" : "10";
                             ncDialog.hide();
                             CurrikiService.App.getInstance().updateProperty(currentAsset.getFullName(), Constants.CURRIKI_REVIEW_STATUS_CLASS, "status", newCRSStatus, new CurrikiAsyncCallback() {
                                 public void onFailure(Throwable caught) {
                                     super.onFailure(caught);
-                                    setToPCheckBox.setChecked("P".equals(currentCRSStatus));
+                                    setToPCheckBox.setChecked("10".equals(currentCRSStatus));
                                 }
 
                                 public void onSuccess(Object result) {
                                     super.onSuccess(result);
-                                    setToPCheckBox.setChecked("P".equals(newCRSStatus));
+                                    setToPCheckBox.setChecked("10".equals(newCRSStatus));
                                     currentCRSStatus = newCRSStatus;
                                 }
                             });

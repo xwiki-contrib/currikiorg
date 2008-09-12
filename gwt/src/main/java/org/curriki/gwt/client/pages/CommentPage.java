@@ -119,7 +119,7 @@ public class CommentPage extends AbstractPage {
 
         XObject crsStatusObj = currentAsset.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
         String status = (crsStatusObj==null) ? null : crsStatusObj.getViewProperty(Constants.CURRIKI_REVIEW_STATUS_STATUS);
-        if ((status!=null)&&(status.equals("P"))) {
+        if ((status!=null)&&(status.equals("10"))) {
             FlowPanel crsPanel = new FlowPanel();
             crsPanel.addStyleName("crs_reviews");
             FlowPanel crsTitlePanel = new FlowPanel();

@@ -48,14 +48,14 @@ public class PartnerResource extends BaseResource {
 	            obj.set("name",asset.getFullName());
 	            obj.set("number",0);
 	            obj.set("reviewpending", 0);
-	            obj.set("status", "P");
+	            obj.set("status", "10");
 	            asset.save();
 	        }
 	        else
 	        {
 		        asset.use("CRS.CurrikiReviewStatusClass");
 		        asset.set("reviewpending", 0);
-		        asset.set("status", "P");
+		        asset.set("status", "10");
 		        asset.save();
 	        }
         } catch (XWikiException e) {
