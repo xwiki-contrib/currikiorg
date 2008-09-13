@@ -97,3 +97,9 @@ SEARCH="\
 	"
 
 cat $SEARCH | $COMPRESS_JS > ../webapp/js/curriki-module-search.js
+
+ASTERIXREVIEW="\
+	curriki/crs/asterixReview-base.js \
+	"
+
+cat $ASTERIXREVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-asterixReview.js

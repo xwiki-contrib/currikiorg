@@ -183,7 +183,19 @@
 		#set($ok = $asset.set("user", $context.user))
 		#set($ok = $asset.set("date", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm:ss")))
 		#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-		#set($ok = $asset.set("status", $rating))
+
+#if ($rating==1)
+		#set($ok = $asset.set("status", "60"))
+#else
+		#if ($rating==2)
+				#set($ok = $asset.set("status", "40"))
+		#else
+				#if ($rating==3)
+						#set($ok = $asset.set("status", "20"))
+				#end
+		#end
+#end
+
 		#set($ok = $asset.set("lastreview_user", $context.user))
 		#set($ok = $asset.set("lastreview_date", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm:ss")))
 		#set($ok = $asset.set("reviewpending", 0))
@@ -256,6 +268,12 @@
 		#set($lastreview_date = $asset.display("lastreview_date"))
 		#set($lastreview_user = $asset.display("lastreview_user"))
 		#set($status = $asset.display("status"))
+
+               #set($ok= $asset.use("CRS.CurrikiReviewStatusClass"))
+               #set($statusValue = $asset.getValue("status"))
+
+&lt;input type="hidden" id="currentStatus" value="$statusValue"/&gt;
+
 		* $msg.get("curriki.crs.review.submittedby"): #if($nomuser!="") [$nomuser] #end $msg.get("curriki.crs.review.on") $nomdate
 			#if($status&amp;&amp;($status!="0")&amp;&amp;($status!=""))
 				* $msg.get("curriki.crs.review.currentrating"): $status
@@ -270,31 +288,77 @@
                 			Curriki.module.unnominate.confirm();
 		                	document.getElementById('unnominate').checked = false;
 		                }
-function clickPartnerCheckbox()
+				function clickPartnerCheckbox()
 		                {
                 			Curriki.module.partner.confirm();
 		                	document.getElementById('partner').checked = false;
 		                }
+
+				function clickIsChildCheckbox()
+		                {
+                			if (document.getElementById('isChild').checked == false)
+Curriki.module.asterixReview.removedConfirm();
+else
+document.getElementById('asterixReview').style.display='';
+		                }
+
+				function asterixReviewSelected()
+		                {
+if (document.getElementById('asterixReview').value=="")
+alert("$msg.get("curriki.crs.review.setas*")"); 
+else
+{
+Curriki.module.asterixReview.selectedConfirm(document.getElementById('asterixReview').value);
+}
+		                }
+
+				function initComponents()
+				{
+					document.getElementById('asterixReview').style.display='none';
+				}
+
 			&lt;/script&gt;
 
-			#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) ||($xwiki.curriki.isMember("XWiki.EditorGroup"))||($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
 
-			1.1 $msg.get("curriki.crs.review.managereviewstatus")
+			#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) ||($xwiki.curriki.isMember("XWiki.EditorGroup"))|| ($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
+1.1 $msg.get("curriki.crs.review.managereviewstatus")
 
-#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) || ($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
+#if(($xwiki.curriki.isMember("XWiki.ReviewerGroup")) || ($xwiki.curriki.isMember("XWiki.AdminGroup")))
 
 			&lt;input type="checkbox" id="unnominate" onclick="clickCheckbox()"&gt;$msg.get("curriki.crs.review.unnominate")
 			&lt;/input&gt;
 #end			
 
-#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) || ($xwiki.curriki.isMember("XWiki.EditorGroup")))
+#if(($xwiki.curriki.isMember("XWiki.EditorGroup")) || ($xwiki.curriki.isMember("XWiki.AdminGroup")))
 			&lt;/p&gt;
 			&lt;input type="checkbox" id="partner" onclick="clickPartnerCheckbox()"&gt;$msg.get("curriki.crs.review.partner")
 			&lt;/input&gt;
 #end			
+
+#if((!$statusValue) || ($statusValue!="20")&amp;&amp;($statusValue!="40")&amp;&amp;($statusValue!="60"))
+			&lt;/p&gt;
+			&lt;input type="checkbox" id="isChild" onclick="clickIsChildCheckbox()" 
+#if($statusValue&amp;&amp;($statusValue=="30")||($statusValue=="50")||($statusValue=="70"))
+checked
+#end
+&gt;$msg.get("curriki.crs.review.isChild")
+			&lt;/input&gt;
+
+			&lt;select id="asterixReview" onchange="asterixReviewSelected()"&gt;
+				&lt;option value=""&gt;$msg.get("curriki.crs.review.setas*")&lt;/option&gt;
+				&lt;option value="70"&gt;$msg.get("curriki.crs.review.setas70")&lt;/option&gt;
+				&lt;option value="50"&gt;$msg.get("curriki.crs.review.setas50")&lt;/option&gt;
+
+				&lt;option value="30"&gt;$msg.get("curriki.crs.review.setas30")&lt;/option&gt;
+			&lt;/select&gt;
+
+			&lt;script type="text/javascript"&gt;
+				initComponents();
+			&lt;/script&gt;
+#end
 #end
 
-#if(($xwiki.curriki.isMember("XWiki.AdminGroup")) || ($xwiki.curriki.isMember("XWiki.ReviewerGroup")))
+#if(($xwiki.curriki.isMember("XWiki.ReviewerGroup")) || ($xwiki.curriki.isMember("XWiki.AdminGroup")))
 
 			1.1 $msg.get("curriki.crs.review.reviewthisresource")
 			

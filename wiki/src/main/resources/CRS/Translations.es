@@ -55,11 +55,14 @@
 <tags/>
 </property>
 </object>
-<content>CRS.CurrikiReviewStatusClass_status_0=Sin Calificación/No Calificable 
-CRS.CurrikiReviewStatusClass_status_1=Básico
-CRS.CurrikiReviewStatusClass_status_2=Bueno
-CRS.CurrikiReviewStatusClass_status_3=Ejemplar
-CRS.CurrikiReviewStatusClass_status_P=Premium
+<content>CRS.CurrikiReviewStatusClass_status_80=Sin Calificación/No Calificable 
+CRS.CurrikiReviewStatusClass_status_70=Parte de un Recurso Básico
+CRS.CurrikiReviewStatusClass_status_60=Básico
+CRS.CurrikiReviewStatusClass_status_50=Parte de un Recurso Bueno
+CRS.CurrikiReviewStatusClass_status_40=Bueno
+CRS.CurrikiReviewStatusClass_status_30=Parte de un Recurso Ejemplar
+CRS.CurrikiReviewStatusClass_status_20=Ejemplar
+CRS.CurrikiReviewStatusClass_status_10=Premium
 CRS.CurrikiReviewClass_technicalcompletness_0=Sin Calificación/No Calificable
 CRS.CurrikiReviewClass_technicalcompletness_1=Básico
 CRS.CurrikiReviewClass_technicalcompletness_2=Bueno
@@ -131,6 +134,17 @@ curriki.crs.review.partnerconfirmtitle=ESTE ES UN RECURSO DE UN AFILIADO.
 curriki.crs.review.partnerconfirmmessage=Si tu quieres setear este recurso como de un Afiliado. click OK
 curriki.crs.review.partner=Este es un recurso de un Afiliado.
 curriki.comment.unnominateasset=Se sacó la nominación al recurso.
+curriki.crs.review.isChild=Este recurso es Hijo de un recurso Padre
+curriki.crs.review.setas*=Seleccione valor...
+curriki.crs.review.setas70=1*
+curriki.crs.review.setas50=2*
+curriki.crs.review.setas30=3*
+curriki.crs.review.asterixReview.selectedConfirm30=Para dar a este recurso el valor CRS de 3*, click OK.
+curriki.crs.review.asterixReview.selectedConfirm50=Para dar a este recurso el valor CRS de 2*, click OK.
+curriki.crs.review.asterixReview.selectedConfirm70=Para dar a este recurso el valor CRS de 1*, click OK.
+curriki.crs.review.asterixReview.removedConfirm30=Para remover el valor CRS de 3* a este recurso, click OK.
+curriki.crs.review.asterixReview.removedConfirm50=Para remover el valor CRS de 2* a este recurso, click OK.
+curriki.crs.review.asterixReview.removedConfirm70=Para remover el valor CRS de 1* a este recurso, click OK.
 
 
 ## use in GWT and in Wiki
@@ -138,11 +152,17 @@ curriki.crs.currikireview=Revisión Curriki
 curriki.crs.review=Revisión
 curriki.crs.review.tooltip=Recursos encontrados en Curriki pueden ser calificados como parte del Sistema de Revisión de Curriki.
 curriki.crs.unrated=Sin Calificación/No Calificable
-curriki.crs.rating0=Sin Calificación/No Calificable
+curriki.crs.rating80=Sin Calificación/No Calificable
+curriki.crs.rating70=Parte de un Recurso Básico
+curriki.crs.rating60=Básico
 curriki.crs.rating1=Básico
+curriki.crs.rating50=Parte de un Recurso Bueno
+curriki.crs.rating40=Bueno
 curriki.crs.rating2=Bueno
+curriki.crs.rating30=Parte de un Recurso Ejemplar
+curriki.crs.rating20=Ejemplar
 curriki.crs.rating3=Ejemplar
-curriki.crs.ratingP=Premium
+curriki.crs.rating10=Premium
 curriki.crs.asof=como de  
 curriki.crs.reviewpending=Revisar Pendientes
 curriki.crs.reviewnominate=Nominar
