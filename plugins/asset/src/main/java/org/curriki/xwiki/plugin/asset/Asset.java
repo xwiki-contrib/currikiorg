@@ -728,6 +728,6 @@ public class Asset extends CurrikiDocument {
      */
     public Integer getCommentNumbers()
     {
-    	return getComments().size() + getObjectNumbers(Constants.CURRIKI_REVIEW_CLASS);
+    	return getComments().size() + getObjectNumbers(Constants.ASSET_CURRIKI_REVIEW_CLASS);
     }
 }
