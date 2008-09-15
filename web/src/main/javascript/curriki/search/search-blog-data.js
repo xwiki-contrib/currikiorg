@@ -45,7 +45,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
-	data.store.results.setDefaultSort('name', 'asc');
+	data.store.results.setDefaultSort('updated', 'desc');
 
 
 
