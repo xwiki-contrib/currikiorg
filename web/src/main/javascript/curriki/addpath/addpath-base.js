@@ -1846,6 +1846,9 @@ console.log("Published CB: ", newAsset);
 				return;
 			}
 
+			var pageCreated = (Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName;
+			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.subPath+'/'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')+'/'+pageCreated.replace('.', '/'));
+
 			Curriki.init(function(){
 				var p = Ext.ComponentMgr.create({
 					 xtype:'apDone'+Curriki.current.flow+Curriki.current.flowFolder
@@ -2354,6 +2357,7 @@ console.log("Created Collection CB: ", assetInfo);
 				case 'toFavorites': // Only from start
 					// Curriki.assets.{parentAsset,assetName} need to be set
 					AddPath.AddFavorite(function(){
+						Curriki.logView('/features/resources/favorites/'+Curriki.current.assetName.replace('.', '/'));
 						AddPath.ShowDone();
 					});
 					return;
@@ -2421,6 +2425,14 @@ console.log('Not signed in:');
 			if (!Ext.isEmpty(path)) {
 				Curriki.current.flow = path;
 			}
+
+			var pathParts = window.location.pathname.split('/');
+			var pathSize = pathParts.size();
+			Curriki.current.subPath = "";
+			for (i = pathSize-2; i < pathSize; i++){
+				Curriki.current.subPath += "/"+pathParts[i];
+			}
+			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.subPath);
 
 			switch (Curriki.current.flow){
 				// Add a resource to unknown - no parent
