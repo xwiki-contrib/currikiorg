@@ -159,7 +159,7 @@ createCookie("Section${seccounter}Hidden", true, "");
  <img src="$xwiki.getSkinFile("noavatar.png")" width="${width}"/>
 #else
  #foreach ($attach in $creatorDoc.attachmentList)
-  <a href="$creatorDoc.getURL("view")" >
+  <a href="$creatorDoc.getURL("view")" onClick="javascript:Curriki.logView('/Download/attachment/${creatorDoc.space}/${creatorDoc.name}/${attach.filename}');">
   <img src="$creatorDoc.getAttachmentURL($attach.filename,"download")" width="${width}" /></a>
  #end
 #end
@@ -381,10 +381,10 @@ $objTxt.text
  </div>
  <hr class="my-curriki-hr" >
  <div class="asset-content-options">
-  <a href="$asset.getAttachmentURL("${attachedFile.filename}", "download")" title="$msg.get("downloadthisattachment")">
+  <a href="$asset.getAttachmentURL("${attachedFile.filename}", "download")" onClick="javascript:Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}');" title="$msg.get("downloadthisattachment")">
   $attachedFile.getFilename().toLowerCase()
   </a>&nbsp;&nbsp;
-  <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
+  <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}'); window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
  </div>
  <div class="clearfloats"></div>
 #else

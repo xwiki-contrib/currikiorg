@@ -89,6 +89,16 @@ Curriki.hideLoading = function(){
 	}
 }
 
+Curriki.logView = function(page){
+	// Usage in site example:
+	// <a onClick="javascript:Curriki.logView('/Download/attachment/${space}/${name}/${attach.filename}');"> .. </a>
+	if (window.pageTracker) {
+		pageTracker._trackPageview(page);
+	} else {
+		console.info('Would track: ', page);
+	}
+}
+
 Curriki.start = function(callback){
 console.log('Start Callback: ', callback);
 	var args = {};
@@ -139,4 +149,3 @@ console.log('Curriki.init: ', callback);
 		Curriki.start(callback);
 	}
 };
-

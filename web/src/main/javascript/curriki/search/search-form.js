@@ -298,6 +298,7 @@ Search.history = function(){
 									}
 								}
 
+								// Open advanced panel if specified
 								if (!Ext.isEmpty(panelSettings) && !Ext.isEmpty(panelSettings[tab]) && panelSettings[tab].a) {
 									var advancedPanel = Ext.getCmp('search-advanced-'+tab);
 									if (!Ext.isEmpty(advancedPanel)) {
@@ -305,6 +306,7 @@ Search.history = function(){
 									}
 								}
 
+								// Set page values
 								var pagerPanel = Ext.getCmp('search-pager-'+tab);
 								if (!Ext.isEmpty(pagerPanel) && !Ext.isEmpty(pagerValues)) {
 									if (pagerValues[tab]) {
