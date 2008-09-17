@@ -12,8 +12,7 @@ var forms = Search.form;
 Search.init = function(){
 	console.log('search: init');
 	if (Ext.isEmpty(Search.initialized)) {
-		Search.ignoreNextHistoryChange = false;
-		Search.ignoreNextSearchForHistory = false;
+		Search.lastHistoryToken = false;
 
 		if (Ext.isEmpty(Search.tabList)) {
 			Search.tabList = ['resource', 'group', 'member', 'blog', 'curriki'];
@@ -67,22 +66,17 @@ Search.init = function(){
 				}
 			);
 
-			if (!Search.ignoreNextSearchForHistory) {
-				var token = {};
-				token['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
-				token['f'] = filterValues;
-				token['p'] = pagerValues;
-				if (Ext.getCmp('search-tabPanel').getActiveTab) {
-					token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
-				}
-				token['a'] = panelSettings;
-				var provider = new Ext.state.Provider();
-				Search.ignoreNextHistoryChange = true;
-				console.log('Saving History', {values: token});
-				Ext.History.add(provider.encodeValue(token));
-			} else {
-				Search.ignoreNextSearchForHistory = false;
+			var token = {};
+			token['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
+			token['f'] = filterValues;
+			token['p'] = pagerValues;
+			if (Ext.getCmp('search-tabPanel').getActiveTab) {
+				token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
 			}
+			token['a'] = panelSettings;
+			var provider = new Ext.state.Provider();
+			console.log('Saving History', {values: token});
+			Ext.History.add(provider.encodeValue(token));
 		};
 
 /*
@@ -184,7 +178,6 @@ Search.init = function(){
 					var provider = new Ext.state.Provider();
 					var token = provider.decodeValue(URLtoken);
 					token['t'] = tabPanel.getActiveTab().id;
-					Search.ignoreNextHistoryChange = true;
 					console.log('Saving History', {values: token});
 					Ext.History.add(provider.encodeValue(token));
 				}
@@ -239,8 +232,10 @@ Search.history = function(){
 		// Handle this change event in order to restore the UI
 		// to the appropriate history state
 		Search.historyChange = function(token){
-			if (!Search.ignoreNextHistoryChange) {
-				if(token){
+			if(token){
+				if(token == Search.lastHistoryToken){
+					// Ignore duplicate tokens
+				} else {
 					var provider = new Ext.state.Provider();
 					var values = provider.decodeValue(token);
 					console.log('Got History', {token: token, values: values});
@@ -330,22 +325,21 @@ Search.history = function(){
 
 					if (values['s']) {
 						console.log('Starting search');
-						Search.ignoreNextSearchForHistory = true;
 						if (values['s'] === 'all') {
 							Search.doSearch();
 						} else {
 							Search.doSearch(values['s']);
 						}
 					}
-				} else {
-					// TODO:
-					// This is the initial default state.
-					// Necessary if you navigate starting from the
-					// page without any existing history token params
-					// and go back to the start state.
+
+					Search.lastHistoryToken = token;
 				}
 			} else {
-				Search.ignoreNextHistoryChange = false;
+				// TODO:
+				// This is the initial default state.
+				// Necessary if you navigate starting from the
+				// page without any existing history token params
+				// and go back to the start state.
 			}
 		};
 
