@@ -172,16 +172,20 @@ Search.init = function(){
 				,border:false
 			}
 			,listeners:{
-/*
 				tabchange:function(tabPanel, tab){
+					// Log changing to view a tab
+					var tabId = tab.id.replace(/(^search-|-tab$)/g, '');
+					Curriki.logView('/features/search/'+tabId);
+
+/*
 					var URLtoken = Ext.History.getToken();
 					var provider = new Ext.state.Provider();
 					var token = provider.decodeValue(URLtoken);
 					token['t'] = tabPanel.getActiveTab().id;
 					console.log('Saving History', {values: token});
 					Ext.History.add(provider.encodeValue(token));
-				}
 */
+				}
 			}
 			,items:[] // Filled in based on tabs available
 		};

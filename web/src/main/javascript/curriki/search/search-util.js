@@ -12,18 +12,56 @@ var module = Search.util;
 module.init = function(){
 	console.log('search util: init');
 
+	module.logFilterList = {
+		'resource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir']
+		,'group':['subject', 'level', 'language', 'policy', 'other', 'sort', 'dir']
+		,'member':['subject', 'member_type', 'country', 'other', 'sort', 'dir']
+		,'blog':['other', 'sort', 'dir']
+		,'curriki':['other', 'sort', 'dir']
+	};
+
 	// Register a listener that will update counts on the tab
 	module.registerTabTitleListener = function(modName){
 		// Adjust title with count
 		Ext.StoreMgr.lookup('search-store-'+modName).addListener(
 			'datachanged'
-			,function() {
+			,function(store) {
 				var tab = Ext.getCmp('search-'+modName+'-tab');
 				if (!Ext.isEmpty(tab)) {
-					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+Ext.StoreMgr.lookup('search-store-'+modName).getTotalCount()+')');
+					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+store.getTotalCount()+')');
 				}
 			}
 		);
+
+		Ext.StoreMgr.lookup('search-store-'+modName).addListener(
+			'load'
+			,function(store, data, options) {
+				var params = options.params||{};
+				var terms = escape(params.terms||'');
+				var advancedPanel = Ext.getCmp('search-advanced-'+modName);
+				var advanced = (advancedPanel&&!advancedPanel.collapsed)
+				               ?'advanced'
+				               :'simple';
+				var page = ''; // Only if not first page
+				if (params.start) {
+					if (params.start !== '0') {
+						page = '/start/'+params.start;
+					}
+				}
+				var filters = ''; // Need to construct
+				Ext.each(
+					module.logFilterList[modName]
+					,function(filter){
+						if (!Ext.isEmpty(params[filter], false)){
+							filters += '/'+filter+'/'+escape(params[filter]);
+						}
+					}
+				);
+
+				Curriki.logView('/features/search/'+modName+'/'+terms+'/'+advanced+filters+page);
+			}
+		);
+
 	};
 
 	// Perform a search for a module
@@ -180,6 +218,9 @@ module.init = function(){
 		    && !state.collapsed) {
 			panel.expand(false);
 		}
+	};
+
+	module.registerSearchLogging = function(tab){
 	};
 
 };
