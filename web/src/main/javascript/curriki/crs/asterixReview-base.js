@@ -1,5 +1,5 @@
 Ext.ns("Curriki.module.asterixReview");
-Curriki.module.asterixReview.selectedConfirm = function(asterixReviewValue) {
+Curriki.module.asterixReview.selectedConfirm = function(asterixReviewValue,redirectURL) {
 	Ext.Msg.show({
 		title : _('curriki.crs.review.information'),
 		msg : _('curriki.crs.review.asterixReview.selectedConfirm'+asterixReviewValue),
@@ -8,9 +8,7 @@ Curriki.module.asterixReview.selectedConfirm = function(asterixReviewValue) {
 			if (btn == "ok") {
 				var page = Ext.get('assetFullName').dom.value;
 				Curriki.assets.SetAsterixReview(page, function(D) {
-					document.getElementById('currentStatus').value=asterixReviewValue;
-	   				document.getElementById('asterixReview').style.display = 'none';
-					document.getElementById('isChild').checked = true;
+					window.location.pathname = redirectURL;
 				},asterixReviewValue);
 			}
 			else{
@@ -23,7 +21,7 @@ Curriki.module.asterixReview.selectedConfirm = function(asterixReviewValue) {
 	});
 }
 
-Curriki.module.asterixReview.removedConfirm = function() {
+Curriki.module.asterixReview.removedConfirm = function(redirectURL) {
 	if (document.getElementById('currentStatus').value != 80) {
 		Ext.Msg.show({
 			title: _('curriki.crs.review.information'),
@@ -33,9 +31,7 @@ Curriki.module.asterixReview.removedConfirm = function() {
 				if (btn == "ok") {
 					var page = Ext.get('assetFullName').dom.value;
 					Curriki.assets.RemoveAsterixReview(page, function(D){
-						document.getElementById('asterixReview').style.display = 'none';
-						document.getElementById('currentStatus').value = 80;
-						document.getElementById('asterixReview').value = "";
+						window.location.pathname = redirectURL;
 					});
 				}
 				else {
@@ -46,6 +42,7 @@ Curriki.module.asterixReview.removedConfirm = function() {
 			icon: Ext.MessageBox.QUESTION
 		});
 	}
-	else
+	else {
 		document.getElementById('asterixReview').style.display = 'none';
+	}
 }

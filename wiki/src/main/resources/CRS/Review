@@ -297,7 +297,7 @@
 				function clickIsChildCheckbox()
 		                {
                 			if (document.getElementById('isChild').checked == false)
-Curriki.module.asterixReview.removedConfirm();
+Curriki.module.asterixReview.removedConfirm('$asset.getURL("view")');
 else
 document.getElementById('asterixReview').style.display='';
 		                }
@@ -308,7 +308,7 @@ if (document.getElementById('asterixReview').value=="")
 alert("$msg.get("curriki.crs.review.setas*")"); 
 else
 {
-Curriki.module.asterixReview.selectedConfirm(document.getElementById('asterixReview').value);
+Curriki.module.asterixReview.selectedConfirm(document.getElementById('asterixReview').value,'$asset.getURL("view")');
 }
 		                }
 
