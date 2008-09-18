@@ -8,6 +8,10 @@
 
 	var Search = Curriki.module.search;
 
+	Search.settings = {
+		gridWidth:(Ext.isIE6?620:'auto')
+	};
+
 	Search.stateProvider = new Ext.state.CookieProvider({
 	});
 	Ext.state.Manager.setProvider(Search.stateProvider);

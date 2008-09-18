@@ -397,6 +397,7 @@ form.init = function(){
 		//,title:'Results'
 		,border:false
 		,autoHeight:true
+		,width:Search.settings.gridWidth
 		,autoExpandColumn:'title'
 		,frame:false
 		,stripeRows:true

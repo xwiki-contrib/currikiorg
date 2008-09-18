@@ -224,6 +224,7 @@ form.init = function(){
 		//,title:'Results'
 		,border:false
 		,autoHeight:true
+		,width:Search.settings.gridWidth
 		,autoExpandColumn:'description'
 		,frame:false
 		,viewConfig: {

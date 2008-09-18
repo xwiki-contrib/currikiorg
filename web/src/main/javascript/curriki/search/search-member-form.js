@@ -218,6 +218,7 @@ form.init = function(){
 		//,title:'Results'
 		,border:false
 		,autoHeight:true
+		,width:Search.settings.gridWidth
 		,autoExpandColumn:'bio'
 		,frame:false
 		,viewConfig: {
