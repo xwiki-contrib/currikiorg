@@ -35,6 +35,7 @@ form.init = function(){
 			,header:_('search.blog.column.header.name')
 			//,width: 17
 			,dataIndex: 'name'
+			,sortable:true
 			,renderer: data.renderer.name
 			,tooltip:_('search.blog.column.header.name')
 		},{
