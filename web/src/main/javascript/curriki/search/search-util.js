@@ -37,8 +37,9 @@ module.init = function(){
 			'load'
 			,function(store, data, options) {
 				var params = options.params||{};
+				var tab = params.module;
 				var terms = escape(params.terms||'');
-				var advancedPanel = Ext.getCmp('search-advanced-'+modName);
+				var advancedPanel = Ext.getCmp('search-advanced-'+tab);
 				var advanced = (advancedPanel&&!advancedPanel.collapsed)
 				               ?'advanced'
 				               :'simple';
@@ -50,7 +51,7 @@ module.init = function(){
 				}
 				var filters = ''; // Need to construct
 				Ext.each(
-					module.logFilterList[modName]
+					module.logFilterList[tab]
 					,function(filter){
 						if (!Ext.isEmpty(params[filter], false)){
 							filters += '/'+filter+'/'+escape(params[filter]);
@@ -58,14 +59,18 @@ module.init = function(){
 					}
 				);
 
-				Curriki.logView('/features/search/'+modName+'/'+terms+'/'+advanced+filters+page);
+				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
+
+				// Add to history
+				Search.doSearch(tab, false, true);
 			}
 		);
 
 	};
 
 	// Perform a search for a module
-	module.doSearch = function(modName){
+	module.doSearch = function(modName, start){
+		console.log('Doing search', modName, start);
 		var filters = {};
 
 		// Global panel (if exists)
@@ -92,14 +97,16 @@ module.init = function(){
 			filters.terms = '';
 		}
 
-		console.log('Searching', filters);
+		console.log('Applying search filters', filters);
 
 		Ext.apply(Ext.StoreMgr.lookup('search-store-'+modName).baseParams || {}, filters);
 
 		var pager = Ext.getCmp('search-pager-'+modName)
 		if (!Ext.isEmpty(pager)) {
-			pager.doLoad(0); // Reset to first page if the tab is shown
+			console.log('Searching', filters);
+			pager.doLoad(Ext.num(start, 0)); // Reset to first page if the tab is shown
 		}
+		console.log('Done util.doSearch', filters);
 	};
 
 	// General term panel (terms and search button)
@@ -126,7 +133,7 @@ module.init = function(){
 							specialkey:{
 								fn:function(field, e){
 									if (e.getKey() === Ext.EventObject.ENTER) {
-										Search.doSearch(modName);
+										Search.doSearch(modName, true);
 									}
 								}
 							}
@@ -145,7 +152,7 @@ module.init = function(){
 						,listeners:{
 							click:{
 								fn: function(){
-									Search.doSearch(modName);
+									Search.doSearch(modName, true);
 								}
 							}
 						}

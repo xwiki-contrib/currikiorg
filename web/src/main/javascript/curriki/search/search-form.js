@@ -12,13 +12,11 @@ var forms = Search.form;
 Search.init = function(){
 	console.log('search: init');
 	if (Ext.isEmpty(Search.initialized)) {
-		Search.lastHistoryToken = false;
-
 		if (Ext.isEmpty(Search.tabList)) {
 			Search.tabList = ['resource', 'group', 'member', 'blog', 'curriki'];
 		}
 
-		Search.doSearch = function(searchTab){
+		Search.doSearch = function(searchTab, resetPage /* default false */, onlyHistory /* default false */){
 			var filterValues = {};
 			if (Ext.getCmp('search-termPanel')
 			    && Ext.getCmp('search-termPanel').getForm) {
@@ -53,14 +51,15 @@ Search.init = function(){
 						var pagerPanel = Ext.getCmp('search-pager-'+tab);
 						if (!Ext.isEmpty(pagerPanel)) {
 							var pagerInfo = {};
-							pagerInfo.c = 0;
+							pagerInfo.c = (("undefined" === typeof resetPage) || (resetPage !== true))?pagerPanel.cursor:0;
 							pagerInfo.s = pagerPanel.pageSize;
 							pagerValues[tab] = pagerInfo;
 						}
 
 						// Do the search
-						if (Ext.isEmpty(searchTab) || searchTab === tab) {
-							module.doSearch();
+						if ((("undefined" === typeof onlyHistory) || (onlyHistory = false)) && (Ext.isEmpty(searchTab) || searchTab === tab)) {
+console.log('now util.doSearch', tab, pagerValues);
+							Search.util.doSearch(tab, (("undefined" !== typeof pagerValues[tab])?pagerValues[tab].c:0));
 						}
 					}
 				}
@@ -74,88 +73,13 @@ Search.init = function(){
 				token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
 			}
 			token['a'] = panelSettings;
+
 			var provider = new Ext.state.Provider();
+			var encodedToken = provider.encodeValue(token);
 			console.log('Saving History', {values: token});
-			Ext.History.add(provider.encodeValue(token));
+			Search.history.setLastToken(encodedToken);
+			Ext.History.add(encodedToken);
 		};
-
-/*
-		Search.termPanel = {
-			xtype:'form'
-			,labelAlign:'top'
-			,id:'search-termPanel'
-			,formId:'search-termForm'
-			,items:[{
-				layout:'column'
-				,border:false
-				,defaults:{border:false}
-				,items:[{
-					columnWidth:0.8
-					,layout:'form'
-					,items:[{
-						xtype:'textfield'
-						,fieldLabel:_('search.text.entry.label')
-						,name:'terms'
-						,listeners:{
-							specialkey:{
-								fn:function(field, e){
-									if (e.getKey() === Ext.EventObject.ENTER) {
-										Search.doSearch();
-									}
-								}
-							}
-						}
-					}]
-				},{
-					columnWidth:0.15
-					,layout:'form'
-					,items:[{
-						xtype:'button'
-						,id:'search-termPanel-searchButton'
-						,text:_('search.text.entry.button')
-						,listeners:{
-							click:{
-								fn: function(){
-									Search.doSearch();
-								}
-							}
-						}
-					}]
-				}]
-			},{
-				xtype:'hidden'
-				,name:'since'
-				,value:(new Date()).add(Date.DAY, -_('search.resource.special.selector.updated.days')).format('Ymd')
-			},{
-				xtype:'hidden'
-				,name:'other'
-				,value:''
-			}]
-		};
-*/
-
-/*
-		Search.helpPanel = {
-			xtype:'panel'
-			,id:'search-helpPanel'
-			,title:_('search.text.entry.help.button')
-			,collapsible:true
-			,collapsed:((Search.sessionProvider.get('search_help', 0)===0)?true:false)
-			,listeners:{
-				collapse:{
-					fn:function(panel){
-						Search.sessionProvider.clear('search_help');
-					}
-				}
-				,expand:{
-					fn:function(panel){
-						Search.sessionProvider.set('search_help', 1);
-					}
-				}
-			}
-			,html:_('search.text.entry.help.text')
-		};
-*/
 
 		Search.tabPanel = {
 			xtype:(Search.tabList.size()>1?'tab':'')+'panel'
@@ -196,14 +120,6 @@ Search.init = function(){
 					title: _('search.'+tab+'.tab.title')
 					,id:'search-'+tab+'-tab'
 					,autoHeight:true
-//					,closable:true
-//					,listeners:{
-//						close:{
-//							fn:function(tabPanel){
-//								// TODO: Mark tab as not shown in future
-//							}
-//						}
-//					}
 				};
 				module = forms[tab];
 				if (!Ext.isEmpty(module) && !Ext.isEmpty(module.mainPanel)) {
@@ -220,123 +136,25 @@ Search.init = function(){
 			,height:'600px'
 			,defaults:{border:false}
 			,items:[
-//				Search.termPanel
-//				,Search.helpPanel
 				Search.tabPanel
 			]
 		};
 
-		Search.initialized = true;
-		console.log('search: init done');
-	}
-};
 
-Search.history = function(){
-	if (!Ext.isEmpty(Ext.History)) {
+
+
+		Ext.ns('Curriki.module.search.history');
+		var History = Search.history;
+		History.lastHistoryToken = false;
+
 		// Handle this change event in order to restore the UI
 		// to the appropriate history state
-		Search.historyChange = function(token){
+		History.historyChange = function(token){
 			if(token){
-				if(token == Search.lastHistoryToken){
+				if(token == History.lastHistoryToken){
 					// Ignore duplicate tokens
 				} else {
-					var provider = new Ext.state.Provider();
-					var values = provider.decodeValue(token);
-					console.log('Got History', {token: token, values: values});
-
-					var filterValues = values['f'];
-					if (!Ext.isEmpty(filterValues) && filterValues['all'] && Ext.getCmp('search-termPanel') && Ext.getCmp('search-termPanel').getForm) {
-						Ext.getCmp('search-termPanel').getForm().setValues(filterValues['all']);
-					}
-
-					var pagerValues = values['p'];
-
-					var panelSettings = values['a'];
-
-					if (values['t']) {
-						if (Ext.getCmp('search-tabPanel').setActiveTab) {
-							Ext.getCmp('search-tabPanel').setActiveTab(values['t']);
-						}
-					}
-
-					Ext.each(
-						Search.tabList
-						,function(tab){
-							console.log('Updating '+tab);
-							var module = Search.form[tab];
-							if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
-								var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
-								if (!Ext.isEmpty(filterPanel)) {
-									var filterForm = filterPanel.getForm();
-									if (!Ext.isEmpty(filterForm)) {
-										try {
-											filterForm.setValues(filterValues[tab]);
-
-											// setValues does not trigger the visiblity change of the sub-lists
-											var list = Ext.getCmp('combo-subject-'+tab);
-											if (list) {
-												list.fireEvent("select", list, list.getValue());
-												if (!Ext.isEmpty(filterValues[tab].subject)) {
-													if (Ext.getCmp('combo-subsubject-'+tab)) {
-														Ext.getCmp('combo-subsubject-'+tab).setValue(filterValues[tab].subject);
-													}
-												}
-											}
-											list = Ext.getCmp('combo-ictprfx-'+tab);
-											if (list) {
-												list.fireEvent("select", list, list.getValue());
-												if (!Ext.isEmpty(filterValues[tab].ict)) {
-													if (Ext.getCmp('combo-subICT-'+tab)) {
-														Ext.getCmp('combo-subICT-'+tab).setValue(filterValues[tab].ict);
-													}
-												}
-											}
-										} catch(e) {
-											console.log('ERROR Updating '+tab, e);
-										}
-									}
-								}
-
-								// Open advanced panel if specified
-								if (!Ext.isEmpty(panelSettings) && !Ext.isEmpty(panelSettings[tab]) && panelSettings[tab].a) {
-									var advancedPanel = Ext.getCmp('search-advanced-'+tab);
-									if (!Ext.isEmpty(advancedPanel)) {
-										advancedPanel.expand(false);
-									}
-								}
-
-								// Set page values
-								var pagerPanel = Ext.getCmp('search-pager-'+tab);
-								if (!Ext.isEmpty(pagerPanel) && !Ext.isEmpty(pagerValues)) {
-									if (pagerValues[tab]) {
-										try {
-											if (pagerValues[tab]['c']) {
-												pagerPanel.cursor = pagerValues[tab]['c'];
-											}
-											if (pagerValues[tab]['s']) {
-												if (pagerPanel.pageSize != pagerValues[tab]['s']) {
-													pagerPanel.setPageSize(pagerValues[tab]['s']);
-												}
-											}
-										} catch(e) {
-											console.log('ERROR Updating '+tab, e);
-										}
-									}
-								}
-							}
-						}
-					);
-
-					if (values['s']) {
-						console.log('Starting search');
-						if (values['s'] === 'all') {
-							Search.doSearch();
-						} else {
-							Search.doSearch(values['s']);
-						}
-					}
-
-					Search.lastHistoryToken = token;
+					History.updateFromHistory(token);
 				}
 			} else {
 				// TODO:
@@ -347,16 +165,130 @@ Search.history = function(){
 			}
 		};
 
-		var URLtoken = Ext.History.getToken(); // Get BEFORE init'd
-		Ext.History.init(
-			function(){
-				Ext.History.on('change', Search.historyChange);
+		History.setLastToken = function(token){
+			History.lastHistoryToken = token;
+		};
 
-				if (URLtoken) {
-					Search.historyChange(URLtoken);
+		History.updateFromHistory = function(token){
+			var provider = new Ext.state.Provider();
+			var values = provider.decodeValue(token);
+			console.log('Got History', {token: token, values: values});
+
+			var filterValues = values['f'];
+			if (!Ext.isEmpty(filterValues) && filterValues['all'] && Ext.getCmp('search-termPanel') && Ext.getCmp('search-termPanel').getForm) {
+				Ext.getCmp('search-termPanel').getForm().setValues(filterValues['all']);
+			}
+
+			var pagerValues = values['p'];
+
+			var panelSettings = values['a'];
+
+			if (values['t']) {
+				if (Ext.getCmp('search-tabPanel').setActiveTab) {
+					Ext.getCmp('search-tabPanel').setActiveTab(values['t']);
 				}
 			}
-		);
+
+			Ext.each(
+				Search.tabList
+				,function(tab){
+					console.log('Updating '+tab);
+					var module = Search.form[tab];
+					if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
+						var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
+						if (!Ext.isEmpty(filterPanel)) {
+							var filterForm = filterPanel.getForm();
+							if (!Ext.isEmpty(filterForm)) {
+								try {
+									filterForm.setValues(filterValues[tab]);
+
+									// setValues does not trigger the visiblity change of the sub-lists
+									var list = Ext.getCmp('combo-subject-'+tab);
+									if (list) {
+										list.fireEvent("select", list, list.getValue());
+										if (!Ext.isEmpty(filterValues[tab].subject)) {
+											if (Ext.getCmp('combo-subsubject-'+tab)) {
+												Ext.getCmp('combo-subsubject-'+tab).setValue(filterValues[tab].subject);
+											}
+										}
+									}
+									list = Ext.getCmp('combo-ictprfx-'+tab);
+									if (list) {
+										list.fireEvent("select", list, list.getValue());
+										if (!Ext.isEmpty(filterValues[tab].ict)) {
+											if (Ext.getCmp('combo-subICT-'+tab)) {
+												Ext.getCmp('combo-subICT-'+tab).setValue(filterValues[tab].ict);
+											}
+										}
+									}
+								} catch(e) {
+									console.log('ERROR Updating '+tab, e);
+								}
+							}
+						}
+
+						// Open advanced panel if specified
+						if (!Ext.isEmpty(panelSettings) && !Ext.isEmpty(panelSettings[tab]) && panelSettings[tab].a) {
+							var advancedPanel = Ext.getCmp('search-advanced-'+tab);
+							if (!Ext.isEmpty(advancedPanel)) {
+								advancedPanel.expand(false);
+							}
+						}
+
+						// Set pager values
+						var pagerPanel = Ext.getCmp('search-pager-'+tab);
+						if (!Ext.isEmpty(pagerPanel) && !Ext.isEmpty(pagerValues)) {
+							if (pagerValues[tab]) {
+								try {
+									if (pagerValues[tab]['c']) {
+										pagerPanel.cursor = pagerValues[tab]['c'];
+									}
+									if (pagerValues[tab]['s']) {
+										if (pagerPanel.pageSize != pagerValues[tab]['s']) {
+											pagerPanel.setPageSize(pagerValues[tab]['s']);
+										}
+									}
+								} catch(e) {
+									console.log('ERROR Updating '+tab, e);
+								}
+							}
+						}
+					}
+				}
+			);
+
+			if (values['s']) {
+				console.log('Starting search');
+				if (values['s'] === 'all') {
+					Search.doSearch();
+				} else {
+					Search.doSearch(values['s']);
+				}
+			}
+
+			History.setLastToken(token);
+		};
+
+
+		History.init = function(){
+			if (Ext.isEmpty(History.initialized)) {
+				var URLtoken = Ext.History.getToken(); // Get BEFORE init'd
+				Ext.History.init(
+					function(){
+						Ext.History.on('change', History.historyChange);
+
+						if (URLtoken) {
+							History.historyChange(URLtoken);
+						}
+					}
+				);
+
+				History.initialized = true;
+			};
+		};
+
+		Search.initialized = true;
+		console.log('search: init done');
 	}
 };
 
@@ -369,7 +301,7 @@ Search.display = function(){
 	var s = new Ext.Panel(Search.mainPanel);
 	s.render();
 
-	Search.history();
+	Search.history.init();
 };
 
 Search.start = function(){
