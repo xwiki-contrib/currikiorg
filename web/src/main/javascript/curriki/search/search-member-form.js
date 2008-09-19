@@ -16,7 +16,7 @@ form.init = function(){
 	console.log('form.member: init');
 
 	var comboWidth = 160;
-	var comboListWidth = comboWidth+17;
+	var comboListWidth = 250;
 
 	form.termPanel = Search.util.createTermPanel(modName, form);
 //	form.helpPanel = Search.util.createHelpPanel(modName, form);

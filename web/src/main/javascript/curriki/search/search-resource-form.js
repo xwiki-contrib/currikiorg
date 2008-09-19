@@ -17,7 +17,7 @@ form.init = function(){
 	console.log('form.'+modName+': init');
 
 	var comboWidth = 160;
-	var comboListWidth = comboWidth+17;
+	var comboListWidth = 250;
 
 	// Plugin to add icons to ICT combo box
 	form.ictCombo = function(config) {
