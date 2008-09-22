@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1221567711000</creationDate>
-<date>1221655320000</date>
-<contentUpdateDate>1221655320000</contentUpdateDate>
-<version>11.1</version>
+<date>1222095527000</date>
+<contentUpdateDate>1222095527000</contentUpdateDate>
+<version>20.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -82,19 +82,51 @@ use this url '/xwiki/bin/admin/XWiki/XWikiPreferences', the 'Internationalizatio
 Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then copy the contents below into the page you just created:
 
 {code}
+
 #set($keyword="free worksheets")
-#set($subject="Mathematics")
+#set($subject="UnitedStatesHistory")
+#set($subjectparent="SocialStudies")
 #set($btn_value = "Find Worksheet")
-#set($title_value="Free Worksheets")
+
+#set($left_title_1="&lt;p style='font-size:30px;'&gt;Created by Teachers for You&lt;/p&gt;")
+#set($left_title_1_desc="We believe that access to knowledge and learning tools is a basic right for every child. Our goal is to make curricula and learning resources available to everyone.")
+#set($left_title_2="Feautured Examples")
+
 #includeForm("AdWordsJump.LandingPageTemplate")
+
+#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;Thousands of&lt;/p&gt;")
+#pageTitle("$title")
+#set($title = "&lt;p style='font-weight:bold;font-size:55px;'&gt;Free Worksheets&lt;/p&gt;")
+#pageTitle("$title")
+#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;For Math,English,and Science&lt;/p&gt;")
+#pageTitle("$title")
+
+#set($title = "Word Problems for grades 3 to 5")
+#set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
+#set($desc = "Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more, I use these for my daily math review in my classroom")
+#sampleLink("$title" "$link" "$desc")
+
+#set($title = "A complete introductory Biology course")
+#set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
+#set($desc = "A set of digital video clips with worksheets, powerpoint presentations, online activities, and online tests.")
+#sampleLink("$title" "$link" "$desc")
+
+#set($title = "English unit for \"Death of a Salesman\" by Arthur Miller")
+#set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
+#set($desc = "Includes prereading activities, complete vocabulary activities, complete reading guides, writing activities, target skills, supplementary reading, and assignments.")
+#sampleLink("$title" "$link" "$desc")
 {code}
 
 Notes:
 1. The "$keyword" indicate the type of the Landing page.
-1. The ''$subject" is the subject you will search.
+1. The "$subject" is the subject you will search, if you set this variable, it will search the special subject, otherwise, it will search all subjects.
+1. The "$subjectparent" is the subject's parent you will search, If you have not set \$subjectparent, it will serch in all subjects and subjectparents. If you have set \$subjectparent and \$subject, it will search in the selected subject and subjectparent. If you have set \$subjectparent but not set \$subject, it will search in the selected subjectparent and all the subjects."
 1. The "$btn_value" is the text show on the search button.
-1. The "$title_value" is the text show in the middle of title bar.
-You need to change them to your self's.
+1. The "$left_title_1", "$left_title_1_desc", "$left_title_2" define the title and description at the left top, and may be you need not to change it.
+1. The "\#pageTitle" is the macro that add the title at the top green area, it is defined as "\#macro(pageTitle \$title)". You can set the size of the word as the sample code.
+1. The "\#sampleLink" is the macro that add the aample link title and description at the left, it is defined as "\#macro(sampleLink \$title \$link \$desc)".
+
+You need to change some of them to your self's.
 
 #warning("Because we need create and store log page, and this landing page is visited by guest, please make sure this landing page's author has programming rights")
 
@@ -105,5 +137,4 @@ Now you can view the new Landing page from the url "/xwiki/bin/view/AdWordsJump/
 1.1.1.1 Step 5
 
 You can view search records in the log page with the url "/xwiki/bin/view/AdWordsJump/LandingPageLog". This page contains all the Landing page logs, you can click into one to view each Landing page log.
-
 </content></xwikidoc>

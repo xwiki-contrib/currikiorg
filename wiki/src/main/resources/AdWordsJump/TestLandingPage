@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1220617056000</creationDate>
-<date>1221655290000</date>
-<contentUpdateDate>1221655290000</contentUpdateDate>
-<version>8.1</version>
+<date>1222095466000</date>
+<contentUpdateDate>1222095466000</contentUpdateDate>
+<version>25.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -56,8 +56,36 @@
 </object>
 <content>
 #set($keyword="free worksheets")
-#set($subject="Mathematics")
+#set($subject="UnitedStatesHistory")
+#set($subjectparent="SocialStudies")
+
 #set($btn_value = "Find Worksheet")
-#set($title_value="Free Worksheets")
+
+#set($left_title_1="&lt;p style='font-size:30px;'&gt;Created by Teachers for You&lt;/p&gt;")
+#set($left_title_1_desc="We believe that access to knowledge and learning tools is a basic right for every child. Our goal is to make curricula and learning resources available to everyone.")
+#set($left_title_2="Feautured Examples")
+
 #includeForm("AdWordsJump.LandingPageTemplate")
-</content></xwikidoc>
+
+#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;Thousands of&lt;/p&gt;")
+#pageTitle("$title")
+#set($title = "&lt;p style='font-weight:bold;font-size:55px;'&gt;Free Worksheets&lt;/p&gt;")
+#pageTitle("$title")
+#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;For Math,English,and Science&lt;/p&gt;")
+#pageTitle("$title")
+
+#set($title = "Word Problems for grades 3 to 5")
+#set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
+#set($desc = "Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more, I use these for my daily math review in my classroom")
+#sampleLink("$title" "$link" "$desc")
+
+#set($title = "A complete introductory Biology course")
+#set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
+#set($desc = "A set of digital video clips with worksheets, powerpoint presentations, online activities, and online tests.")
+#sampleLink("$title" "$link" "$desc")
+
+#set($title = "English unit for \"Death of a Salesman\" by Arthur Miller")
+#set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
+#set($desc = "Includes prereading activities, complete vocabulary activities, complete reading guides, writing activities, target skills, supplementary reading, and assignments.")
+#sampleLink("$title" "$link" "$desc")</content>
+</xwikidoc>

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1220366621000</creationDate>
-<date>1221655264000</date>
-<contentUpdateDate>1221655264000</contentUpdateDate>
-<version>123.1</version>
-<title></title>
+<date>1222095398000</date>
+<contentUpdateDate>1222095398000</contentUpdateDate>
+<version>156.1</version>
+<title>AdWordsJump.LandingPageTemplate</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
 <attachment>
 <filename>boxbg.gif</filename>
@@ -155,8 +155,36 @@
 </object>
 <content>
 ##================================ get search params and do search
+
+#template("analytics.vm")
+
+#macro(pageTitle $title)
+	&lt;script language="javascript" type="text/javascript"&gt;
+	Element.insert("page_titles", {bottom : "$title&lt;br/&gt;"});
+	&lt;/script&gt;
+#end
+#macro(sampleLink $title $link $desc)
+	&lt;script language="javascript" type="text/javascript"&gt;
+var trStr = '&lt;tr&gt;&lt;td width="20"&gt;&lt;/td&gt;&lt;td colspan="2" align="left" height="22" style="font-size:16px;"&gt;&lt;img src="$imgdoc.getAttachmentURL('tl.gif')"&gt;  ';
+trStr += '&lt;a href="$link" class="a_blue"&gt;$title&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;';
+trStr += '&lt;tr&gt;&lt;td width="20"&gt;&lt;/td&gt;&lt;td width="10"&gt;&lt;/td&gt;&lt;td align="left"&gt;$desc&lt;/td&gt;&lt;/tr&gt;';
+	Element.insert("sample_links", {bottom : trStr});
+	&lt;/script&gt;
+#end
+
+
 #set($box_title = "It's free and easy!")
+#set($box_title_desc="Just enter the search term and email address and you are ready to discover Curriki!")
+#set($box_search_for="Search for:")
+#set($box_email_addr="Email address:")
+#set($box_inform_txt="Keep me informed about new Curriki content.")
+#set($box_notices="By using this search tool, you expressly agree to be bound by Curriki's Term of Use and Privacy Policy, as specified at www.curriki.org")
+
 #set($txt = $request.txt)
+#set($txt_escaped = $request.txt_escaped)
+#set($subject_escaped = $request.subject_escaped)
+#set($subjectparent_escaped = $request.subjectparent_escaped)
+
 #if($txt)
     #set($inform = 0)
     #set($email = "No e-mail")
@@ -181,11 +209,19 @@
     ##$logdoc.getDocument().setAuthor($context.getUser())
     $xwiki.getXWiki().saveDocument($logdoc.getDocument(),$context.getContext())
     #set($informstr = "No")
-    #if($!inform == 1) #set($informstr  = "Yes") #end)
-    #set($rurl = "/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A"+$txt)
-    #if($subject)
-        #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080818%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subject+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subject+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253ASearch%25252520Terms%25255Esince%25253Ds%2525253A20080818%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253ASearch%25252520Terms%25255Esince%25253Ds%2525253A20080818%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253ASearch%25252520Terms%25255Esince%25253Ds%2525253A20080818%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253ASearch%25252520Terms%25255Esince%25253Ds%2525253A20080818%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
-    #end
+    #if($!inform == 1) #set($informstr  = "Yes") #end
+    #set($rurl = "/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A"+$txt_escaped)
+
+#if($subjectparent)
+  #if($subject)
+ #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subject_escaped+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
+
+#else
+ #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
+
+#end
+#end
+
 	$response.sendRedirect($rurl)
 #end
 ##================================ show the input page
@@ -221,6 +257,11 @@ function validate_form(){
 			noerror = false;
 		}
 	}
+
+document.search_form.txt_escaped.value = escape(escape(escape(escape(document.search_form.txt.value))));
+document.search_form.subject_escaped.value = escape(escape(escape(escape("$subject"))));
+document.search_form.subjectparent_escaped.value = escape(escape(escape(escape("$subjectparent"))));
+
 	return noerror;
 }
 function hightLightEl(elName){
@@ -249,44 +290,41 @@ function switch_informed(){
 			&lt;!-- title begin --&gt;
 			&lt;tr&gt;&lt;td bgcolor="#67ac41" height="190"&gt;
 				&lt;table border="0" cellspacing="0" cellpadding="0"  width="100%" height="100%" style="color:white;"&gt;
-					&lt;tr&gt;&lt;td height="50" align="center"&gt;&lt;p style="font-weight:bold;font-size:35px;"&gt;Thousands of&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-					&lt;tr&gt;&lt;td height="75" align="center"&gt;&lt;p style="font-weight:bold;font-size:55px;"&gt;$!title_value&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-					&lt;tr&gt;&lt;td align="center"&gt;&lt;p style="font-weight:bold;font-size:35px;"&gt;For Math,English,and Science&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+					&lt;tr&gt;&lt;td align="center" id="page_titles"&gt;&lt;/td&gt;&lt;/tr&gt;
 				&lt;/table&gt;
 			&lt;/td&gt;&lt;/tr&gt;
 			&lt;!-- title end --&gt;
 			&lt;!-- content begin --&gt;
 			&lt;tr&gt;&lt;td&gt;
 				&lt;table border="0" cellspacing="0" width="100%" height="100%" align="left" style="font-size:14px"&gt;
-					&lt;tr&gt;&lt;td width="55%" align="right"&gt;
+					&lt;tr&gt;&lt;td width="55%" align="right" valign="top"&gt;
 						&lt;table border="0" cellspacing="0" width="96%" height="100%" align="right" style="font-size:14px"&gt;
 							&lt;tr&gt;&lt;td&gt;
 							&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left"&gt;
-								&lt;tr&gt;&lt;td align="left"&gt;&lt;p style="font-size:30px;"&gt;Created by Teachers for You&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-								&lt;tr&gt;&lt;td align="left"&gt;We believe that access to knowledge and learning tools is a basic right for every child. Our goal is to make curricula and learning resources available to everyone.&lt;/td&gt;&lt;/tr&gt;
+								&lt;tr&gt;&lt;td align="left"&gt;$!left_title_1&lt;/td&gt;&lt;/tr&gt;
+								&lt;tr&gt;&lt;td align="left"&gt;$!left_title_1_desc&lt;/td&gt;&lt;/tr&gt;
 							&lt;/table&gt;
 							&lt;/td&gt;&lt;/tr&gt;
 							&lt;tr&gt;&lt;td&gt;
 							&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left"&gt;
-								&lt;tr&gt;&lt;td width="10"&gt;&lt;/td&gt;&lt;td align="left" height="32" style="color:#5b8395; font-size:25px;"&gt;Feautured Examples&lt;/td&gt;&lt;/tr&gt;
+								&lt;tr&gt;&lt;td width="10"&gt;&lt;/td&gt;&lt;td align="left" height="32" style="color:#5b8395; font-size:25px;"&gt;$!left_title_2&lt;/td&gt;&lt;/tr&gt;
 							&lt;/table&gt;
 							&lt;/td&gt;&lt;/tr&gt;
 							&lt;tr&gt;&lt;td&gt;
-							&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left"&gt;
-								&lt;tr&gt;&lt;td width="20"&gt;&lt;/td&gt;&lt;td colspan="2" align="left" height="22" style="font-size:16px;"&gt;&lt;img src="$imgdoc.getAttachmentURL('tl.gif')"&gt;  
-								&lt;a href="#" class="a_blue"&gt;Word Problems for grades 3 to 5&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-								&lt;tr&gt;&lt;td width="20"&gt;&lt;/td&gt;&lt;td width="10"&gt;&lt;/td&gt;&lt;td align="left"&gt;Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more, I use these for my daily math review in my classroom&lt;/td&gt;&lt;/tr&gt;
-								&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="2" align="left" height="22" style="font-size:16px;"&gt;&lt;img src="$imgdoc.getAttachmentURL('tl.gif')"&gt;  
-								&lt;a href="#" class="a_blue"&gt;A complete introductory Biology course&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-								&lt;tr&gt;&lt;td colspan="2"&gt;&lt;/td&gt;&lt;td align="left"&gt;A set of digital video clips with worksheets, powerpoint presentations, online activities, and online tests.&lt;/td&gt;&lt;/tr&gt;
-								&lt;tr&gt;&lt;td &gt;&lt;/td&gt;&lt;td colspan="2" align="left" height="22" style="font-size:16px;"&gt;&lt;img src="$imgdoc.getAttachmentURL('tl.gif')"&gt;  
-								&lt;a href="#" class="a_blue"&gt;English unit for "Death of a Salesman" by Arthur Miller&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-								&lt;tr&gt;&lt;td colspan="2"&gt;&lt;/td&gt;&lt;td align="left"&gt;Includes prereading activities, complete vocabulary activities, complete reading guides, writing activities, target skills, supplementary reading, and assignments.&lt;/td&gt;&lt;/tr&gt;
+
+
+							&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" id="sample_links"&gt;
+
 							&lt;/table&gt;&lt;br/&gt;
+
+
 							&lt;/td&gt;&lt;/tr&gt;
 						&lt;/table&gt;
 					&lt;/td&gt;&lt;td align="center"&gt;
 						&lt;form name="search_form" method="post" action="${doc.getURL('view','xpage=popup')}"&gt;
+						&lt;input type="hidden" name="subject_escaped" value=""&gt;
+						&lt;input type="hidden" name="subjectparent_escaped" value=""&gt;
+						&lt;input type="hidden" name="txt_escaped" value=""&gt;
 						&lt;br&gt;
 						&lt;table border="0" cellspacing="0" cellpadding="0" width="277" style="font-size:12px"&gt;
 							&lt;tr&gt;&lt;td colspan="3" style="background:url($imgdoc.getAttachmentURL('boxtop.gif'))" height="16"&gt;&lt;/td&gt;&lt;/tr&gt;
@@ -295,20 +333,20 @@ function switch_informed(){
 				&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-size:11px"&gt;	
 				&lt;tr&gt;&lt;td width="5px"&gt;&lt;/td&gt;&lt;td&gt;
 				&lt;p style="font-weight:bold; color:#67ac41; font-size:28px;" align="center"&gt;$box_title&lt;/p&gt;
-				&lt;p style="font-size:12px;" align="left"&gt;  Just enter the search term and email address and you are ready to discover Curriki!&lt;/p&gt;
+				&lt;p style="font-size:12px;" align="left"&gt;  $box_title_desc&lt;/p&gt;
 				&lt;div name="div_searchfor" id="div_searchfor" class="font_12" style="margin-left:10;  height:29px;" align="left"&gt;
 					&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" style="font-size:12px"&gt;
 						&lt;tr&gt;&lt;td width="100"&gt;
-					Search for:&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="txt" size="15"&gt;
+					$box_search_for&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="txt" size="15"&gt;
 					&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 				&lt;/div&gt;
 				&lt;div name="div_email" id="div_email" class="font_12" style="margin-left:10;  height:29px;" align="left"&gt;
 					&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" style="font-size:12px"&gt;
 						&lt;tr&gt;&lt;td width="100"&gt;
-					Email address:&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="email" size="15"&gt;
+					$box_email_addr&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="email" size="15"&gt;
 					&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 				&lt;/div&gt;
-				&lt;input type="checkbox" name="inform" checked value="1" onclick="switch_informed();"&gt; Keep me informed about new Curriki content.
+				&lt;input type="checkbox" name="inform" checked value="1" onclick="switch_informed();"&gt; $box_inform_txt
 				&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 							&lt;/td&gt;
 							&lt;td bgcolor="#666699" width="2"&gt;&lt;/td&gt;&lt;/tr&gt;
@@ -326,10 +364,10 @@ function switch_informed(){
 							&lt;tr&gt;&lt;td colspan="3"&gt;&lt;/td&gt;&lt;/tr&gt;
 						&lt;/table&gt;
 						&lt;table border="0" cellspacing="0" cellpadding="0" width="277" style="font-size:10px"&gt;
-							&lt;tr&gt;&lt;td colspan="3" align="left"&gt;By using this search tool, you expressly agree to be bound by Curriki's Term of Use and Privacy Policy, as specified at www.curriki.org&lt;/td&gt;&lt;/tr&gt;
+							&lt;tr&gt;&lt;td colspan="3" align="left"&gt;$!box_notices&lt;/td&gt;&lt;/tr&gt;
 						&lt;/table&gt;
 						&lt;/form&gt;
-						
+
 					&lt;/td&gt;&lt;/tr&gt;
 				&lt;/table&gt;
 				

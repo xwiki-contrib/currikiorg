@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1220537389000</creationDate>
-<date>1220676455000</date>
-<contentUpdateDate>1220676455000</contentUpdateDate>
-<version>27.1</version>
+<date>1222095422000</date>
+<contentUpdateDate>1222095422000</contentUpdateDate>
+<version>36.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -54,7 +54,14 @@
 <tags/>
 </property>
 </object>
-<content>#macro(pageViewLinks $itemsPerPage $totalPages $crtPageNumber)
+<content>
+#if($request.flag &amp;&amp; $request.flag == "clear")
+#set($classname="AdWordsJump.AdWordsInfoClass")
+#set($ok=$doc.removeObjects($classname))
+$doc.save()
+#end
+
+#macro(pageViewLinks $itemsPerPage $totalPages $crtPageNumber)
 	#if($totalPages &gt; 0)
 	&lt;div class="pagedNavigation" align="right"&gt;
 	#if($crtPageNumber &gt; 0)
@@ -137,7 +144,9 @@ function switchDivStatus(show_div){
  #set($searchTime=$obj.searchTime)
     #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$searchTime)
 &lt;div onclick="switchDivStatus(document.getElementById('div_${doc.name}_${obj.number}'))" style="cursor:pointer"&gt;
-    #titlebar($obj_title "" "" "purple")
+    #set($del_url=$doc.getURL("objectremove","classname=${classname}&amp;amp;classid=${obj.number}&amp;amp;xredirect=${doc.getURL('view')}"))
+    #set($del_url="javascript:if(window.confirm('Are you sure to delete it?')) location.href='$del_url';")
+    #titlebar($obj_title "DEL" $del_url "purple")
 &lt;/div&gt;
 
 &lt;div id="div_${doc.name}_${obj.number}" name="div_${doc.name}_${obj.number}" #if($counter == $startAt)style="visibility:visible;display:block;" #else style="visibility:hidden;display:none;" #end&gt;
@@ -152,5 +161,10 @@ function switchDivStatus(show_div){
  #end
  #set($counter = $counter+1)
 #end
+&lt;div style="float:left;"&gt;
+&lt;a href="$xwiki.getURL("AdWordsJump.LandingPageLogExport", "view","docname=${doc.fullName}&amp;xpage=popup")" target="_blank"&gt;Export&lt;/a&gt;
+&lt;span&gt; | &lt;/span&gt;
+&lt;a href="javascript:if(window.confirm('Are you sure to clear logs?')) location.href='$doc.getURL($context.action, "flag=clear")';"&gt;Clear&lt;/a&gt;
+&lt;/div&gt;
 #pageViewLinks($itemsPerPage $totalPages $crtPageNumber)
 </content></xwikidoc>
