@@ -55,7 +55,23 @@
 <tags/>
 </property>
 </object>
-<content>1 $msg.fc_filecheck
+<content>##----------------Indicate if order ascending or descending
+#if($request.directionOrder)
+	#if($request.directionOrder=="asc")
+		#set($directionOrder="desc")
+	#else
+		#set($directionOrder="asc")
+	#end
+	#set($currentDirectionOrder=$directionOrder)
+#else
+        #if($request.currentDirectionOrder)
+                #set($currentDirectionOrder=$request.currentDirectionOrder)
+        #else
+                #set($currentDirectionOrder="asc")
+        #end
+#end
+
+1 $msg.fc_filecheck
 #set($excludeList = ["jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "ShermanTank", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll"])
 #set($startIndex = 0)
 #if($request.startIndex)
@@ -148,13 +164,21 @@
 		#set($fromsql = "$fromsql ,StringProperty as sprop")
 		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
 	#end
-	#set($order = "sprop.value asc")
+	#set($order = "sprop.value $currentDirectionOrder")
 	#elseif($request.order=="fcdate")
 		#set($fromsql = "$fromsql ,DateProperty as dprop")
 		#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
-		#set($order = "dprop.value asc")
-		#else
-			#set($order = "doc.creationDate desc")
+		#set($order = "dprop.value $currentDirectionOrder")
+		#elseif($request.order=="contributor")
+			#set($fromsql = "$fromsql ,BaseObject as userObj,StringProperty as userSprop")
+			#set($wheresql = "$wheresql and doc.creator=userObj.name and userObj.className='XWiki.XWikiUsers' and userObj.id=userSprop.id.id and userSprop.id.name='first_name'")
+			#set($order = "userSprop.value $currentDirectionOrder")
+			#elseif($request.order=="resourcetitle")
+				#set($fromsql = "$fromsql ,StringProperty as dprop")
+				#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='title'")
+				#set($order = "dprop.value $currentDirectionOrder")
+			#else
+				#set($order = "doc.creationDate desc")
 #end
 
 ## Check which Subject was selected in the filter combo
@@ -225,12 +249,12 @@
 
 &lt;table class="filechecktable" style="table-layout:fixed;width:100%;overflow:hidden;word-wrap:break-word;"&gt;
 	&lt;tr&gt;
-		&lt;th&gt; $msg.fc_resourcetitle &lt;/td&gt;
+&lt;th&gt; [$msg.fc_resourcetitle&gt;$doc.fullName?$qs&amp;order=resourcetitle&amp;directionOrder=$currentDirectionOrder]&lt;/td&gt;
 		&lt;th&gt; $msg.fc_dateadded &lt;/td&gt;
 		&lt;th&gt; $msg.fc_queueTableColheaderIct &lt;/td&gt;
-		&lt;th&gt; $msg.fc_contributor &lt;/td&gt;
-		&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus] &lt;/td&gt;
-		&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate] &lt;/td&gt;
+&lt;th&gt; [$msg.fc_contributor&gt;$doc.fullName?$qs&amp;order=contributor&amp;directionOrder=$currentDirectionOrder]&lt;/td&gt;
+		&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus&amp;directionOrder=$currentDirectionOrder] &lt;/td&gt;
+		&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate&amp;directionOrder=$currentDirectionOrder] &lt;/td&gt;
 		&lt;th&gt; $msg.fc_notes &lt;/td&gt;
 		&lt;th&gt; $msg.fc_select &lt;/td&gt;
 	&lt;/tr&gt;
@@ -292,7 +316,8 @@
 	#end
 &lt;/table&gt;
 #if($request.order)
-	#set($qs = "${qs}&amp;${request.order}")
+	#set($qs = "${qs}&amp;order=${request.order}&amp;directionOrder=${request.currentDirectionOrder}")
 #end
+
 #mycurriki_paginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)</content>
 </xwikidoc>
