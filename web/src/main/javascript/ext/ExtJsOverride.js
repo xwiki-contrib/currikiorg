@@ -105,12 +105,13 @@ Ext.override(Ext.PagingToolbar, {
         });
 /* Removed for CURRIKI-2724
         this.addSeparator();
+*/
         this.loading = this.addButton({
+            hidden: true, // Added for CURRIKI-2724 - We can't actually remove this item as it is referred to elsewhere
             tooltip: this.refreshText,
             iconCls: "x-tbar-loading",
             handler: this.onClick.createDelegate(this, ["refresh"])
         });
-*/
 
         if(this.displayInfo){
             this.displayEl = Ext.fly(this.el.dom).createChild({cls:'x-paging-info'});
