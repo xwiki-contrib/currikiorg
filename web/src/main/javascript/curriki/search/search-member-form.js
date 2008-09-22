@@ -221,11 +221,15 @@ form.init = function(){
 		,width:Search.settings.gridWidth
 		,autoExpandColumn:'bio'
 		,frame:false
+		,stripeRows:true
 		,viewConfig: {
 			forceFit:true
 			,enableRowBody:true
 			,showPreview:true
 		}
+		,columnsText:_('search.columns.menu.columns')
+		,sortAscText:_('search.columns.menu.sort_ascending')
+		,sortDescText:_('search.columns.menu.sort_descending')
 		,store: data.store.results
 		,sm: new Ext.grid.RowSelectionModel({selectRow:Ext.emptyFn})
 		,cm: form.columnModel
@@ -233,19 +237,32 @@ form.init = function(){
 		,plugins: form.rowExpander
 		,bbar: new Ext.PagingToolbar({
 			id: 'search-pager-'+modName
-			,plugins:new Ext.ux.Andrie.pPageSize({variations: [10, 25, 50]})
+			,plugins:new Ext.ux.Andrie.pPageSize({
+				 variations: [10, 25, 50]
+				,beforeText: _('search.pagination.pagesize.before')
+				,afterText: _('search.pagination.pagesize.after')
+				,addBefore: _('search.pagination.pagesize.addbefore')
+				,addAfter: _('search.pagination.pagesize.addafter')
+			})
 			,pageSize: 25
 			,store: data.store.results
 			,displayInfo: true
-			,displayMsg: _('search.pagination.count.displayed')
+			,displayMsg: _('search.pagination.displaying.'+modName)
 			,emptyMsg: _('search.find.no.results')
-			,afterPageText: _('search.pagination.count.total')
+			,beforePageText: _('search.pagination.beforepage')
+			,afterPageText: _('search.pagination.afterpage')
+			,firstText: _('search.pagination.first')
+			,prevText: _('search.pagination.prev')
+			,nextText: _('search.pagination.next')
+			,lastText: _('search.pagination.last')
+			,refreshText: _('search.pagination.refresh')
 		})
 	};
 
 	form.mainPanel = {
 		xtype:'panel'
 		,id:'search-panel-'+modName
+		,autoHeight:true
 		,items:[
 			form.filterPanel
 			,form.resultsPanel
