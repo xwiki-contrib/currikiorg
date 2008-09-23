@@ -58,11 +58,13 @@
 <content>##----------------Indicate if order ascending or descending
 #if($request.directionOrder)
 	#if($request.directionOrder=="asc" &amp;&amp; $request.previousOrderColumn &amp;&amp; $request.previousOrderColumn==$request.order)
-               entro1
 		#set($directionOrder="desc")
 	#else
-               entro2
-		#set($directionOrder="asc")
+               #if ($request.previousOrderColumn)
+               		#set($directionOrder="asc")
+               #else
+               		#set($directionOrder=$request.directionOrder)
+               #end
 	#end
 	#set($currentDirectionOrder=$directionOrder)
 #else
@@ -144,6 +146,7 @@
 	#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
 	#elseif($assetFilterFileCheckStatus!="1" &amp;&amp; $assetFilterFileCheckStatus!="0")##with status
 		#set($fromsql = "$fromsql ,StringProperty as sprop")
+
 		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null ")
 			#if($assetFilterFileCheckStatus=="2")##with any status
 				#set($wheresql = "$wheresql and sprop.value &lt;&gt; '0'")
@@ -320,7 +323,7 @@
 	#end
 &lt;/table&gt;
 #if($request.order)
-	#set($qs = "${qs}&amp;order=${request.order}&amp;directionOrder=${request.currentDirectionOrder}")
+	#set($qs = "${qs}&amp;order=${request.order}&amp;directionOrder=${currentDirectionOrder}")
 #end
 
 #mycurriki_paginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)</content>
