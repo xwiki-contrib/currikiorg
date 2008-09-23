@@ -126,20 +126,19 @@
 #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.className='XWiki.TextAssetClass' and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
 
 
-#if($assetFilterCreationDateFrom&amp;&amp;($assetFilterCreationDateFrom!="")&amp;&amp;($assetFilterCreationDateFrom!="YYYY/MM/DD"))
+#if($assetFilterCreationDateFrom&amp;&amp;($assetFilterCreationDateFrom!="")&amp;&amp;($assetFilterCreationDateFrom!="MM/DD/YYYY"))
 	#set($wheresql = "$wheresql and doc.creationDate&gt;'$assetFilterCreationDateFrom'")
 	#set($from = $assetFilterCreationDateFrom)
 	#set($qs = "${qs}&amp;from=$!$assetFilterCreationDateFrom")
 	#else
-		#set($from = "YYYY/MM/DD")
+		#set($from = "MM/DD/YYYY")
 #end
-
 #if($assetFilterCreationDateTo&amp;&amp;($assetFilterCreationDateTo!=""))
 	#set($wheresql = "$wheresql and doc.creationDate&lt;'$assetFilterCreationDateTo'")
 	#set($to = $assetFilterCreationDateTo)
 	#set($qs = "${qs}&amp;to=$!$assetFilterCreationDateTo")
 	#else
-	 	#set($to = "")
+	 	#set($to = "MM/DD/YYYY")
 #end
 
 #if($assetFilterFileCheckStatus=="1")##without status
@@ -222,8 +221,14 @@
 	{/pre}
 &lt;form action="" onsubmit="return saveFilterParameters(this);"&gt;
 	1.1 $msg.fc_daterange
-	$msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" id="from" name="from" value="$!from" size="12" /&gt;
-	$msg.fc_to &lt;input type="text" style="width: auto;" id="to" name="to" value="$!to" size="12" /&gt;
+#if($from == "")
+	#set($!from = "MM/DD/YYYY")
+#end
+	$msg.fc_showresourcesfrom &lt;input type="text" style="width: auto;" id="from" name="from" value="$!from" size="12" onclick="if(this.value=='MM/DD/YYYY'){this.value='';}" /&gt;
+#if($to == "")
+	#set($!to = "MM/DD/YYYY")
+#end
+	$msg.fc_to &lt;input type="text" style="width: auto;" id="to" name="to" value="$!to" size="12" onclick="if (this.value=='MM/DD/YYYY'){this.value='';}" /&gt;
 	1.1 $msg.fc_filterby
 
 	$msg.fc_queueFilterChooseFCStatus
@@ -279,8 +284,8 @@
 			&lt;/td&gt;
             &lt;td&gt;
             	&lt;div class="date"&gt;
-            		$itemdoc.creationDate
-            	&lt;/div&gt;
+            		$itemdoc.formatDate($itemdoc.creationDate,"MM/dd/yyyy")
+          	&lt;/div&gt;
             &lt;/td&gt;
 			&lt;td&gt;
             	&lt;div class="ict"&gt;

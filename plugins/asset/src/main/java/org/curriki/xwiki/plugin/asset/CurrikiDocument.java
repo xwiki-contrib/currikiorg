@@ -8,6 +8,8 @@ import com.xpn.xwiki.objects.PropertyInterface;
 import com.xpn.xwiki.objects.BaseElement;
 import com.xpn.xwiki.doc.XWikiDocument;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -83,5 +85,17 @@ public class CurrikiDocument extends Document {
         rightsInfo.put("delete", hasAccessLevel("delete"));
 
         return rightsInfo;
+    }
+    
+    public String formatDate(Date date,String pattern)
+    {
+    	if (date!=null && date instanceof Date)
+			try {
+				return (new SimpleDateFormat(pattern)).format(date);
+			} catch (RuntimeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	return ""+date;
     }
 }
