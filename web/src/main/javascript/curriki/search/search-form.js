@@ -174,99 +174,101 @@ console.log('now util.doSearch', tab, pagerValues);
 			var values = provider.decodeValue(token);
 			console.log('Got History', {token: token, values: values});
 
-			var filterValues = values['f'];
-			if (!Ext.isEmpty(filterValues) && filterValues['all'] && Ext.getCmp('search-termPanel') && Ext.getCmp('search-termPanel').getForm) {
-				Ext.getCmp('search-termPanel').getForm().setValues(filterValues['all']);
-			}
-
-			var pagerValues = values['p'];
-
-			var panelSettings = values['a'];
-
-			if (values['t']) {
-				if (Ext.getCmp('search-tabPanel').setActiveTab) {
-					Ext.getCmp('search-tabPanel').setActiveTab(values['t']);
+			if (!Ext.isEmpty(values)) {
+				var filterValues = values['f'];
+				if (!Ext.isEmpty(filterValues) && filterValues['all'] && Ext.getCmp('search-termPanel') && Ext.getCmp('search-termPanel').getForm) {
+					Ext.getCmp('search-termPanel').getForm().setValues(filterValues['all']);
 				}
-			}
 
-			Ext.each(
-				Search.tabList
-				,function(tab){
-					console.log('Updating '+tab);
-					var module = Search.form[tab];
-					if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
-						var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
-						if (!Ext.isEmpty(filterPanel)) {
-							var filterForm = filterPanel.getForm();
-							if (!Ext.isEmpty(filterForm)) {
-								try {
-									filterForm.setValues(filterValues[tab]);
+				var pagerValues = values['p'];
 
-									// setValues does not trigger the visiblity change of the sub-lists
-									var list = Ext.getCmp('combo-subject-'+tab);
-									if (list) {
-										list.fireEvent("select", list, list.getValue());
-										if (!Ext.isEmpty(filterValues[tab].subject)) {
-											if (Ext.getCmp('combo-subsubject-'+tab)) {
-												Ext.getCmp('combo-subsubject-'+tab).setValue(filterValues[tab].subject);
+				var panelSettings = values['a'];
+
+				if (values['t']) {
+					if (Ext.getCmp('search-tabPanel').setActiveTab) {
+						Ext.getCmp('search-tabPanel').setActiveTab(values['t']);
+					}
+				}
+
+				Ext.each(
+					Search.tabList
+					,function(tab){
+						console.log('Updating '+tab);
+						var module = Search.form[tab];
+						if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
+							var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
+							if (!Ext.isEmpty(filterPanel)) {
+								var filterForm = filterPanel.getForm();
+								if (!Ext.isEmpty(filterForm)) {
+									try {
+										filterForm.setValues(filterValues[tab]);
+
+										// setValues does not trigger the visiblity change of the sub-lists
+										var list = Ext.getCmp('combo-subject-'+tab);
+										if (list) {
+											list.fireEvent("select", list, list.getValue());
+											if (!Ext.isEmpty(filterValues[tab].subject)) {
+												if (Ext.getCmp('combo-subsubject-'+tab)) {
+													Ext.getCmp('combo-subsubject-'+tab).setValue(filterValues[tab].subject);
+												}
 											}
 										}
-									}
-									list = Ext.getCmp('combo-ictprfx-'+tab);
-									if (list) {
-										list.fireEvent("select", list, list.getValue());
-										if (!Ext.isEmpty(filterValues[tab].ict)) {
-											if (Ext.getCmp('combo-subICT-'+tab)) {
-												Ext.getCmp('combo-subICT-'+tab).setValue(filterValues[tab].ict);
+										list = Ext.getCmp('combo-ictprfx-'+tab);
+										if (list) {
+											list.fireEvent("select", list, list.getValue());
+											if (!Ext.isEmpty(filterValues[tab].ict)) {
+												if (Ext.getCmp('combo-subICT-'+tab)) {
+													Ext.getCmp('combo-subICT-'+tab).setValue(filterValues[tab].ict);
+												}
 											}
 										}
+									} catch(e) {
+										console.log('ERROR Updating '+tab, e);
 									}
-								} catch(e) {
-									console.log('ERROR Updating '+tab, e);
 								}
 							}
-						}
 
-						// Open advanced panel if specified
-						if (!Ext.isEmpty(panelSettings) && !Ext.isEmpty(panelSettings[tab]) && panelSettings[tab].a) {
-							var advancedPanel = Ext.getCmp('search-advanced-'+tab);
-							if (!Ext.isEmpty(advancedPanel)) {
-								advancedPanel.expand(false);
+							// Open advanced panel if specified
+							if (!Ext.isEmpty(panelSettings) && !Ext.isEmpty(panelSettings[tab]) && panelSettings[tab].a) {
+								var advancedPanel = Ext.getCmp('search-advanced-'+tab);
+								if (!Ext.isEmpty(advancedPanel)) {
+									advancedPanel.expand(false);
+								}
 							}
-						}
 
-						// Set pager values
-						var pagerPanel = Ext.getCmp('search-pager-'+tab);
-						if (!Ext.isEmpty(pagerPanel) && !Ext.isEmpty(pagerValues)) {
-							if (pagerValues[tab]) {
-								try {
-									if (pagerValues[tab]['c']) {
-										pagerPanel.cursor = pagerValues[tab]['c'];
-									}
-									if (pagerValues[tab]['s']) {
-										if (pagerPanel.pageSize != pagerValues[tab]['s']) {
-											pagerPanel.setPageSize(pagerValues[tab]['s']);
+							// Set pager values
+							var pagerPanel = Ext.getCmp('search-pager-'+tab);
+							if (!Ext.isEmpty(pagerPanel) && !Ext.isEmpty(pagerValues)) {
+								if (pagerValues[tab]) {
+									try {
+										if (pagerValues[tab]['c']) {
+											pagerPanel.cursor = pagerValues[tab]['c'];
 										}
+										if (pagerValues[tab]['s']) {
+											if (pagerPanel.pageSize != pagerValues[tab]['s']) {
+												pagerPanel.setPageSize(pagerValues[tab]['s']);
+											}
+										}
+									} catch(e) {
+										console.log('ERROR Updating '+tab, e);
 									}
-								} catch(e) {
-									console.log('ERROR Updating '+tab, e);
 								}
 							}
 						}
 					}
-				}
-			);
+				);
 
-			if (values['s']) {
-				console.log('Starting search');
-				if (values['s'] === 'all') {
-					Search.doSearch();
-				} else {
-					Search.doSearch(values['s']);
+				if (values['s']) {
+					console.log('Starting search');
+					if (values['s'] === 'all') {
+						Search.doSearch();
+					} else {
+						Search.doSearch(values['s']);
+					}
 				}
+
+				History.setLastToken(token);
 			}
-
-			History.setLastToken(token);
 		};
 
 
