@@ -57,19 +57,23 @@
 </object>
 <content>##----------------Indicate if order ascending or descending
 #if($request.directionOrder)
-	#if($request.directionOrder=="asc")
+	#if($request.directionOrder=="asc" &amp;&amp; $request.previousOrderColumn &amp;&amp; $request.previousOrderColumn==$request.order)
+               entro1
 		#set($directionOrder="desc")
 	#else
+               entro2
 		#set($directionOrder="asc")
 	#end
 	#set($currentDirectionOrder=$directionOrder)
 #else
-        #if($request.currentDirectionOrder)
+        #if($request.currentDirectionOrder &amp;&amp; $request.order==$previousOrderColumn)
                 #set($currentDirectionOrder=$request.currentDirectionOrder)
         #else
                 #set($currentDirectionOrder="asc")
         #end
 #end
+
+#set($previousOrderColumn=$request.order)
 
 1 $msg.fc_filecheck
 #set($excludeList = ["jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "ShermanTank", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll"])
@@ -249,12 +253,12 @@
 
 &lt;table class="filechecktable" style="table-layout:fixed;width:100%;overflow:hidden;word-wrap:break-word;"&gt;
 	&lt;tr&gt;
-&lt;th&gt; [$msg.fc_resourcetitle&gt;$doc.fullName?$qs&amp;order=resourcetitle&amp;directionOrder=$currentDirectionOrder]&lt;/td&gt;
+&lt;th&gt; [$msg.fc_resourcetitle&gt;$doc.fullName?$qs&amp;order=resourcetitle&amp;directionOrder=$currentDirectionOrder&amp;previousOrderColumn=$previousOrderColumn]&lt;/td&gt;
 		&lt;th&gt; $msg.fc_dateadded &lt;/td&gt;
 		&lt;th&gt; $msg.fc_queueTableColheaderIct &lt;/td&gt;
-&lt;th&gt; [$msg.fc_contributor&gt;$doc.fullName?$qs&amp;order=contributor&amp;directionOrder=$currentDirectionOrder]&lt;/td&gt;
-		&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus&amp;directionOrder=$currentDirectionOrder] &lt;/td&gt;
-		&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate&amp;directionOrder=$currentDirectionOrder] &lt;/td&gt;
+&lt;th&gt; [$msg.fc_contributor&gt;$doc.fullName?$qs&amp;order=contributor&amp;directionOrder=$currentDirectionOrder&amp;previousOrderColumn=$previousOrderColumn]&lt;/td&gt;
+		&lt;th&gt; [$msg.fc_status&gt;$doc.fullName?$qs&amp;order=fcstatus&amp;directionOrder=$currentDirectionOrder&amp;previousOrderColumn=$previousOrderColumn] &lt;/td&gt;
+		&lt;th&gt; [$msg.fc_datechecked&gt;$doc.fullName?$qs&amp;order=fcdate&amp;directionOrder=$currentDirectionOrder&amp;previousOrderColumn=$previousOrderColumn] &lt;/td&gt;
 		&lt;th&gt; $msg.fc_notes &lt;/td&gt;
 		&lt;th&gt; $msg.fc_select &lt;/td&gt;
 	&lt;/tr&gt;
