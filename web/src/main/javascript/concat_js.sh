@@ -103,3 +103,8 @@ ASTERIXREVIEW="\
 	"
 
 cat $ASTERIXREVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-asterixReview.js
+
+REORDER="\
+	curriki/reorder/base.js
+	"
+cat $REORDER | $COMPRESS_JS > ../webapp/js/curriki-module-reorder.js
