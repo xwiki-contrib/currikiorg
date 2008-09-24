@@ -11,28 +11,15 @@ Ext.Ajax.defaultHeaders = {
 Ext.Ajax.disableCaching=false;
 
 
-try {
-	console.log('init');
-} catch(e) {
-	console = {
-		 log: Ext.emptyFn
-		,debug: Ext.emptyFn
-		,info: Ext.emptyFn
-		,warn: Ext.emptyFn
-		,error: Ext.emptyFn
-		,assert: Ext.emptyFn
-		,dir: Ext.emptyFn
-		,dirxml: Ext.emptyFn
-		,trace: Ext.emptyFn
-		,group: Ext.emptyFn
-		,groupEnd: Ext.emptyFn
-		,time: Ext.emptyFn
-		,timeEnd: Ext.emptyFn
-		,profile: Ext.emptyFn
-		,profileEnd: Ext.emptyFn
-		,count: Ext.emptyFn
-	};
+if (!('console' in window) || !('firebug' in console)){
+	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
+	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
+	             "trace", "profile", "profileEnd"];
+	window.console = {};
+	for (var i = 0; i < names.length; ++i)
+		window.console[names[i]] = Ext.emptyFn
 }
+console.log('initing Curriki');
 
 Ext.onReady(function(){
 	Ext.QuickTips.init();

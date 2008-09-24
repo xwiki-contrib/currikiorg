@@ -184,13 +184,14 @@ form.init = function(){
 
 	form.columnModel = new Ext.grid.ColumnModel([{
 			id: 'policy'
-			,header: ''
+			,header: _('search.group.column.header.policy')
 //			,width: 17
 			,dataIndex: 'policy'
 			,sortable:true
 			,resizable:false
 			,menuDisabled:true
 			,renderer: data.renderer.policy
+			,tooltip: _('search.group.column.header.policy')
 		},{
 			id: 'title'
 			,header: _('search.group.column.header.name')
