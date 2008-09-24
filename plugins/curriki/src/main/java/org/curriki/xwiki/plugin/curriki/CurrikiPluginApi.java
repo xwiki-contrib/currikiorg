@@ -1,5 +1,6 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -112,5 +113,22 @@ public class CurrikiPluginApi extends Api {
 
     public List<String> getAssetICT(String assetName) throws XWikiException {
     	return plugin.getAssetICT(assetName,context);
+    }
+    
+    /**
+     * change the date format from a date string.
+     * @param date
+     * @param currentPattern
+     * @param newPattern
+     * @param delim
+     * @return
+     */
+    public String changeFormatDate(String date,String currentPattern,String newPattern,String delim)throws XWikiException {
+    	return plugin.changeFormatDate(date,currentPattern,newPattern,delim);
+    }
+
+    public String formatDate(Date date,String pattern) throws XWikiException
+    {
+    	return plugin.formatDate(date,pattern);
     }
 }

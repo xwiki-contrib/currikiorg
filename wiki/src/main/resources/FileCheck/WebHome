@@ -125,16 +125,19 @@
 #set($wheresql = "$wheresql )")
 #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.className='XWiki.TextAssetClass' and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
 
-
 #if($assetFilterCreationDateFrom&amp;&amp;($assetFilterCreationDateFrom!="")&amp;&amp;($assetFilterCreationDateFrom!="MM/DD/YYYY"))
-	#set($wheresql = "$wheresql and doc.creationDate&gt;'$assetFilterCreationDateFrom'")
+#set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/"))
+	#set($wheresql = "$wheresql and doc.creationDate&gt;'$date'")
 	#set($from = $assetFilterCreationDateFrom)
 	#set($qs = "${qs}&amp;from=$!$assetFilterCreationDateFrom")
 	#else
 		#set($from = "MM/DD/YYYY")
 #end
-#if($assetFilterCreationDateTo&amp;&amp;($assetFilterCreationDateTo!=""))
-	#set($wheresql = "$wheresql and doc.creationDate&lt;'$assetFilterCreationDateTo'")
+
+#if($assetFilterCreationDateTo&amp;&amp;($assetFilterCreationDateTo!="")&amp;&amp;($assetFilterCreationDateTo!="MM/DD/YYYY"))
+#set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateTo,"MM/DD/YYYY","YYYY/MM/DD","/"))
+	#set($wheresql = "$wheresql and 
+doc.creationDate&lt;'$date'")
 	#set($to = $assetFilterCreationDateTo)
 	#set($qs = "${qs}&amp;to=$!$assetFilterCreationDateTo")
 	#else
@@ -284,7 +287,7 @@
 			&lt;/td&gt;
             &lt;td&gt;
             	&lt;div class="date"&gt;
-            		$itemdoc.formatDate($itemdoc.creationDate,"MM/dd/yyyy")
+            		$xwiki.curriki.formatDate($itemdoc.creationDate,"MM/dd/yyyy")
           	&lt;/div&gt;
             &lt;/td&gt;
 			&lt;td&gt;

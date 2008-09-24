@@ -1,6 +1,8 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -360,5 +362,46 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
        return listICT;
 
+    }
+    
+    /**
+     * change the date format from a date string.
+     * @param date
+     * @param currentPattern
+     * @param newPattern
+     * @param delim
+     * @return
+     */
+    public String changeFormatDate(String date,String currentPattern,String newPattern,String delim)
+    {
+    	StringTokenizer tokenDate = new StringTokenizer(date,delim);
+    	StringTokenizer tokenPattern = new StringTokenizer(currentPattern,delim);
+    	Map hashData = new HashMap();
+    	int count = tokenPattern.countTokens();
+    	for (int i = 0; i < count; i++) {
+			hashData.put(tokenPattern.nextToken(), tokenDate.nextToken());
+		}
+    	
+    	tokenPattern = new StringTokenizer(newPattern,delim);
+    	String result = "";
+    	count = tokenPattern.countTokens();
+    	for (int i = 0; i < count; i++) {
+    		result += hashData.get(tokenPattern.nextToken());
+    		if (i<count-1)
+    			result += delim;
+    	}
+    	return result;
+    }
+    
+    public String formatDate(Date date,String pattern)
+    {
+    	if (date!=null && date instanceof Date)
+			try {
+				return (new SimpleDateFormat(pattern)).format(date);
+			} catch (RuntimeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	return ""+date;
     }
 }
