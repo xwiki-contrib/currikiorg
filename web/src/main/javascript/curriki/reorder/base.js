@@ -162,6 +162,7 @@ Reorder.init = function(){
 	Ext.reg('reorderDialog', Reorder.mainDlg);
 
 	Reorder.msgComplete = function(){
+		Curriki.logView('/features/reorder/'+(Data.place==='groups'?'groups':'mycurriki')+'/saved');
 		alert(_(msgPfx+'set.confirm'));
 	};
 
@@ -193,6 +194,7 @@ Reorder.display = function(){
 
 	if (Reorder.init()) {
 		UI.show('reorderDialog');
+		Curriki.logView('/features/reorder/'+(Data.place==='groups'?'groups':'mycurriki')+'/started');
 	}
 };
 
