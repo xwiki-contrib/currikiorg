@@ -632,6 +632,10 @@ public class Asset extends CurrikiDocument {
     }
 
     public Asset publish(String space, String name, boolean checkSpace) throws XWikiException {
+        if (isPublished()) {
+            throw new AssetException("This resource is already published");
+        }
+
         assertCanEdit();
         if (!space.startsWith(Constants.COLLECTION_PREFIX)) {
             throw new AssetException("You cannot publish to the space "+space);
@@ -654,6 +658,11 @@ public class Asset extends CurrikiDocument {
         List<String> params = new ArrayList<String>();
         params.add(doc.getStringValue(Constants.ASSET_CLASS_CATEGORY));
         save(context.getMessageTool().get("curriki.comment.finishcreatingsubasset", params));
+
+        if (isCollection()) {
+            RootCollectionCompositeAsset root = CollectionSpace.getRootCollection(space, context);
+            root.addSubasset(this.getFullName());
+        }
 
         return this;
     }

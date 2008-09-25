@@ -99,7 +99,11 @@ public class MetadataResource extends BaseResource {
         // SRI2
         // rights
         if (json.has("rights")) {
-            assetObj.set(Constants.ASSET_CLASS_RIGHT,  json.getString("rights"));
+            try {
+                asset.applyRightsPolicy(json.getString("rights"));
+            } catch (XWikiException e) {
+                throw error(Status.SERVER_ERROR_INTERNAL, e.getMessage());
+            }
         }
         // keywords
         if (json.has("keywords")) {

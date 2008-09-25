@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
+import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 public class CollectionSpace {
     private String spaceName;
@@ -73,6 +74,19 @@ public class CollectionSpace {
 
         return context.getWiki().exists(rootPage, context);
     }
+
+    public RootCollectionCompositeAsset getRootCollection() throws XWikiException {
+        String rootPage = spaceName+"."+Constants.ROOT_COLLECTION_PAGE;
+
+        return Asset.fetchAsset(rootPage, context).as(RootCollectionCompositeAsset.class);
+    }
+
+    static public RootCollectionCompositeAsset getRootCollection(String space, XWikiContext context) throws XWikiException {
+        CollectionSpace cSpace = new CollectionSpace(space, context);
+
+        return cSpace.getRootCollection();
+    }
+
 
     protected void createRootCollection() throws XWikiException {
         Map<String,String> ownerMap = getOwner();

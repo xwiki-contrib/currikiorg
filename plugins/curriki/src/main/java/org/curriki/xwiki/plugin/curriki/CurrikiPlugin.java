@@ -1,25 +1,5 @@
 package org.curriki.xwiki.plugin.curriki;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
-import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.AssetException;
-import org.curriki.xwiki.plugin.asset.CollectionSpace;
-import org.curriki.xwiki.plugin.asset.Constants;
-import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
-
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
@@ -30,6 +10,28 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.CollectionSpace;
+import org.curriki.xwiki.plugin.asset.Constants;
+import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import java.lang.Class;
+import java.lang.Object;
+import java.text.SimpleDateFormat;
 
 /**
  */
@@ -60,6 +62,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         super.flushCache();
     }
 
+
+
     public Asset createAsset(String parent, String publishSpace, XWikiContext context) throws XWikiException {
         return Asset.createTempAsset(parent, publishSpace, context);
     }
@@ -82,6 +86,31 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         throw new AssetException("Asset "+assetName+" could not be found");
     }
 
+    public List<Property> fetchAssetMetadata(String assetName, XWikiContext context) throws XWikiException {
+        Asset asset = fetchAsset(assetName, context);
+        if (asset != null) {
+            return asset.getMetadata();
+        }
+
+        return null;
+    }
+
+
+
+    public Map<String, Object> fetchUserInfo(XWikiContext context) {
+        Map<String,Object> userInfo = new HashMap<String,Object>();
+
+        userInfo.put("username", context.getUser());
+
+        if (Constants.GUEST_USER.equals(context.getUser())) {
+            userInfo.put("fullname", "");
+        } else {
+            userInfo.put("fullname", context.getWiki().getUserName(context.getUser(), null, false, context));
+        }
+
+        return userInfo;
+    }
+
     /**
      * Get a list of all viewable collections owned by a specific user with extra info
      *
@@ -90,23 +119,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @return A list of collections with information about each
      */
     public Map<String,Object> fetchUserCollectionsInfo(String forUser, XWikiContext context) {
-        Map<String,Object> colInfo = new HashMap<String,Object>();
-        List<String> collections = fetchUserCollectionsList(forUser, context);
-
-        for (String collection : collections) {
-            try {
-                Asset doc = fetchAsset(collection, context);
-                if (doc != null) {
-                    CollectionCompositeAsset cAsset = doc.as(CollectionCompositeAsset.class);
-                    colInfo.put(collection, cAsset.getCollectionInfo());
-                }
-            } catch (Exception e) {
-                // If we can't get the document then skip it
-                LOG.error("Error fetching document", e);
-            }
-        }
-
-        return colInfo;
+        String shortName = forUser.replaceFirst("XWiki.", "");
+        return fetchCollectionsInfo(shortName, context);
     }
 
     /**
@@ -118,49 +132,10 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      */
    public List<String> fetchUserCollectionsList(String forUser, XWikiContext context) {
         String shortName = forUser.replaceFirst("XWiki.", "");
-
-        try {
-            CollectionSpace.ensureExists("Coll_"+shortName, context);
-        } catch (XWikiException e) {
-            // Ignore any error, will just return 0 results
-        }
-
-        String qry = ", BaseObject as obj, StringProperty as props "
-            + "where obj.id=props.id.id and doc.fullName=obj.name "
-            + "and obj.className='"+ Constants.COMPOSITE_ASSET_CLASS+"' "
-            + "and doc.creator=? "
-            + "and doc.web=? "
-            + "and doc.name != '"+ Constants.FAVORITES_COLLECTION_PAGE+"' "
-            + "and doc.name != '"+ Constants.ROOT_COLLECTION_PAGE+"' "
-            + "and props.id.name='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE+"' "
-            + "and props.value='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE_COLLECTION+"' "
-            + "order by doc.name";
-
-        List<String> params = new ArrayList<String>();
-        params.add(forUser);
-        params.add("Coll_"+shortName);
-
-        return fetchCollectionsList(qry, params, context);
+        return fetchCollectionsList(shortName, context);
     }
 
-    protected List<String> filterViewablePages(List<String> pageList, XWikiContext context) {
-        List<String> results = new ArrayList<String>();
 
-        if (pageList!=null) {
-            for (Object page : pageList) {
-                try {
-                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), (String) page, context)) {
-                        results.add((String) page);
-                    }
-                } catch (XWikiException e) {
-                    // Ignore exception -- just don't add to result list
-                    LOG.error("Error filtering collections", e);
-                }
-            }
-        }
-
-        return results;
-    }
 
     /**
      * Obtain a list of all groups a user is in
@@ -219,102 +194,24 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
     public List<String> fetchGroupCollectionsList(String forGroup, XWikiContext context) {
         String shortName = forGroup.replaceFirst(".WebHome$", "");
-
-        try {
-            CollectionSpace.ensureExists("Coll_"+shortName, context);
-        } catch (XWikiException e) {
-            // Ignore any error, will just return 0 results
-        }
-
-        String qry = ", BaseObject as obj, StringProperty as props "
-            + "where obj.id=props.id.id and doc.fullName=obj.name "
-            + "and obj.className='"+ Constants.COMPOSITE_ASSET_CLASS+"' "
-            + "and doc.web=? "
-            + "and doc.name != '"+ Constants.ROOT_COLLECTION_PAGE+"' "
-            + "and props.id.name='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE+"' "
-            + "and props.value='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE_COLLECTION+"' "
-            + "order by doc.date desc";
-
-        List<String> params = new ArrayList<String>();
-        params.add("Coll_"+shortName);
-
-        return fetchCollectionsList(qry, params, context);
+        return fetchCollectionsList(shortName, context);
     }
 
     public Map<String, Object> fetchGroupCollectionsInfo(String forGroup, XWikiContext context) {
-        Map<String,Object> colInfo = new HashMap<String,Object>();
-        List<String> collections = fetchGroupCollectionsList(forGroup, context);
-
-        for (String collection : collections) {
-            try {
-                Asset doc = fetchAsset(collection, context);
-                if (doc != null) {
-                    if (doc.isCollection()) {
-                        CollectionCompositeAsset cAsset = doc.as(CollectionCompositeAsset.class);
-                        colInfo.put(collection,  cAsset.getCollectionInfo());
-                    }
-                }
-            } catch (Exception e) {
-                // If we can't get the document then skip it
-                LOG.error("Error fetching document", e);
-            }
-        }
-
-        return colInfo;
-    }
-
-    protected List<String> fetchCollectionsList(String qry, XWikiContext context) {
-        return fetchCollectionsList(qry, null, context);
-    }
-
-    protected List<String> fetchCollectionsList(String qry, List params, XWikiContext context) {
-        List<String> results = new ArrayList<String>();
-        try {
-            List list = context.getWiki().getStore().searchDocumentsNames(qry, 0, 0, params, context);
-
-            results = filterViewablePages(list, context);
-        } catch (Exception e) {
-            // Ignore exception, but will end up returning empty list
-            LOG.error("Error fetching collections", e);
-        }
-
-        return results;
+        String shortName = forGroup.replaceFirst(".WebHome$", "");
+        return fetchCollectionsInfo(shortName, context);
     }
 
 
 
-    public List<Property> fetchAssetMetadata(String assetName, XWikiContext context) throws XWikiException {
-        Asset asset = fetchAsset(assetName, context);
-        if (asset != null) {
-            return asset.getMetadata();
-        }
-
-        return null;
-    }
-
-    public Map<String, Object> fetchUserInfo(XWikiContext context) {
-        Map<String,Object> userInfo = new HashMap<String,Object>();
-
-        userInfo.put("username", context.getUser());
-
-        if (Constants.GUEST_USER.equals(context.getUser())) {
-            userInfo.put("fullname", "");
-        } else {
-            userInfo.put("fullname", context.getWiki().getUserName(context.getUser(), null, false, context));
-        }
-
-        return userInfo;
-    }
-
-     /**
+    /**
      * Verificate if a user is in Group
      * @param groupName
      * @param context
      * @return
      * @throws XWikiException
      */
-    public Boolean isMember(String groupName,XWikiContext context) throws XWikiException
-    {
+    public Boolean isMember(String groupName,XWikiContext context) throws XWikiException { 
     	XWikiDocument doc = context.getWiki().getDocument(groupName, context);
     	Vector<BaseObject> groups = doc.getObjects("XWiki.XWikiGroups");
     	if (groups!=null)
@@ -330,6 +227,32 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 			}
     	}
     	return false;
+    }
+
+
+
+    protected List<String> fetchCollectionsList(String entity, XWikiContext context) {
+        RootCollectionCompositeAsset root;
+        try {
+            root = CollectionSpace.getRootCollection("Coll_"+entity, context);
+        } catch (XWikiException e) {
+            // Ignore any error, will just return 0 results
+            return new ArrayList<String>();
+        }
+
+        return root.fetchCollectionsList();
+    }
+
+    protected Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) {
+        RootCollectionCompositeAsset root;
+        try {
+            root = CollectionSpace.getRootCollection("Coll_"+entity, context);
+        } catch (XWikiException e) {
+            // Ignore any error, will just return 0 results
+            return new HashMap<String,Object>();
+        }
+
+        return root.fetchCollectionsInfo();
     }
 
 

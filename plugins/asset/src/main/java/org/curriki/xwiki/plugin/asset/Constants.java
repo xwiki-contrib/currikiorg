@@ -93,6 +93,12 @@ public interface Constants {
     String SUBASSET_CLASS_ORDER = "order";
 
     /**
+     * Class CollectionReorderedClass
+     */
+    String COLLECTION_REORDERED_CLASS = "XWiki.CollectionReorderedClass";
+    String COLLECTION_REORDERED_CLASS_REORDERD = "reordered";
+
+    /**
      * Class TextAssetClass
      */
     String TEXT_ASSET_CLASS = "XWiki.TextAssetClass";
