@@ -115,5 +115,6 @@ fc_statusFilter_3=En estado "Mejora Solicitada"
 fc_statusFilter_4=En estado "Borrado"
 fc_charactersRemaining=caracteres restantes
 fc_commentsSizeExceeded=Los comentarios no pueden exceder los 400 caracteres
+fc_seeCounts=Ver cantidad segun estados
 #&lt;/pre&gt;</content>
 </xwikidoc>

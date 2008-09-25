@@ -96,8 +96,8 @@ public class CurrikiPluginApi extends Api {
     public Map<String, Object> fetchUserInfo() {
         return plugin.fetchUserInfo(context);
     }
-    
-        
+
+
     /**
      * Verificate if a user is in Group
      * @param groupName
@@ -109,13 +109,13 @@ public class CurrikiPluginApi extends Api {
     {
     	return plugin.isMember(groupName, context);
     }
-    
+
 
     public List<String> getAssetICT(String assetName) throws XWikiException {
     	return plugin.getAssetICT(assetName,context);
     }
-    
-    /**
+
+        /**
      * change the date format from a date string.
      * @param date
      * @param currentPattern
@@ -130,5 +130,14 @@ public class CurrikiPluginApi extends Api {
     public String formatDate(Date date,String pattern) throws XWikiException
     {
     	return plugin.formatDate(date,pattern);
+    }
+
+
+    public String getBFCSHql(String directionOrder,boolean ordered) throws XWikiException {
+    	return plugin.getBFCSHql(directionOrder,ordered,context);
+    }
+
+    public Map getSeeCountsByStatus() throws XWikiException {
+    	return plugin.getSeeCountsByStatus(context);
     }
 }
