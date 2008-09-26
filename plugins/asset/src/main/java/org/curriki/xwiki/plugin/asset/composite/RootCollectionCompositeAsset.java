@@ -45,6 +45,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
         return insertSubassetAt(page, (long) 0);
     }
 
+    @Override
     public List<String> getSubassetList() {
         // Default to ordering by name
         return getSubassetList("name");
@@ -72,7 +73,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
             reordered = assetObj.getIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 0);
             if (reordered == 1) {
                 // If ordered give the ordered list
-                List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+                List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
                 if (objs != null) {
                     Collections.sort(objs, new Comparator<BaseObject>(){
                         public int compare(BaseObject s1, BaseObject s2){
@@ -102,6 +103,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     /**
      * Get a list of all viewable collections owned by a specific user
      *
+     * @param order Return results in either "date" or "name" order
      * @return A list of collections
      */
     public List<String> fetchCollectionsList(String order) {
@@ -130,31 +132,12 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     protected List<String> fetchCollectionsList(String qry, List params) {
         List<String> results = new ArrayList<String>();
         try {
-            List list = context.getWiki().getStore().searchDocumentsNames(qry, 0, 0, params, context);
+            List<String> list = context.getWiki().getStore().searchDocumentsNames(qry, 0, 0, params, context);
 
             results = filterViewablePages(list);
         } catch (Exception e) {
             // Ignore exception, but will end up returning empty list
             LOG.error("Error fetching collections", e);
-        }
-
-        return results;
-    }
-
-    protected List<String> filterViewablePages(List<String> pageList) {
-        List<String> results = new ArrayList<String>();
-
-        if (pageList!=null) {
-            for (Object page : pageList) {
-                try {
-                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), (String) page, context)) {
-                        results.add((String) page);
-                    }
-                } catch (XWikiException e) {
-                    // Ignore exception -- just don't add to result list
-                    LOG.error("Error filtering collections", e);
-                }
-            }
         }
 
         return results;

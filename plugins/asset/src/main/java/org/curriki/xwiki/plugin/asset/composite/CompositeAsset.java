@@ -1,5 +1,7 @@
 package org.curriki.xwiki.plugin.asset.composite;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -17,6 +19,8 @@ import java.util.*;
 /**
  */
 abstract class CompositeAsset extends Asset {
+    private static final Log LOG = LogFactory.getLog(RootCollectionCompositeAsset.class);
+
     public CompositeAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }
@@ -127,6 +131,28 @@ abstract class CompositeAsset extends Asset {
         }
 
         return new ArrayList<Map<String,Object>>(1);
+    }
+
+    public List<String> getSubassetList() {
+        List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        if (objs != null) {
+            Collections.sort(objs, new Comparator<BaseObject>(){
+                public int compare(BaseObject s1, BaseObject s2){
+                    Long c1 = s1.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    Long c2 = s2.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    return (c1.compareTo(c2));
+                }
+            });
+
+            List<String> list = new ArrayList<String>();
+            for (Object obj: objs){
+                list.add(((BaseObject) obj).getStringValue(Constants.SUBASSET_CLASS_PAGE));
+            }
+
+            return filterViewablePages(list);
+        }
+
+        return new ArrayList<String>();
     }
 
     public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
@@ -271,7 +297,33 @@ abstract class CompositeAsset extends Asset {
         }
     }
 
-    protected long getLastPosition(){
+    public void reorder(List<String> orig, List<String> want) throws XWikiException {
+        List<String> cur = getSubassetList();
+
+        // Check that the original list matches the current list
+        int i = 0;
+        for (String page : cur){
+            if (!page.equals(orig.get(i))){
+                throw new AssetException("Original list does not match current list");
+            }
+            ++i;
+        }
+
+        // Delete all subassets
+        XWikiDocument assetDoc = getDoc();
+        assetDoc.removeObjects(Constants.SUBASSET_CLASS);
+
+        // Add all from want
+        i = 0;
+        for (String page : want){
+            BaseObject sub = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
+            sub.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
+            sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, i);
+            ++i;
+        }
+    }
+
+    protected long getLastPosition() {
         List objs = doc.getObjects(Constants.SUBASSET_CLASS);
         long highestOrder = (long) -1;
         if (objs != null) {
@@ -287,5 +339,24 @@ abstract class CompositeAsset extends Asset {
         }
 
         return highestOrder;
+    }
+
+    protected List<String> filterViewablePages(List<String> pageList) {
+        List<String> results = new ArrayList<String>();
+
+        if (pageList!=null) {
+            for (Object page : pageList) {
+                try {
+                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), (String) page, context)) {
+                        results.add((String) page);
+                    }
+                } catch (XWikiException e) {
+                    // Ignore exception -- just don't add to result list
+                    LOG.error("Error filtering collections", e);
+                }
+            }
+        }
+
+        return results;
     }
 }

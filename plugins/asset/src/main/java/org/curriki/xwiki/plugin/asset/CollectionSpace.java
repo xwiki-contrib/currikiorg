@@ -78,7 +78,21 @@ public class CollectionSpace {
     public RootCollectionCompositeAsset getRootCollection() throws XWikiException {
         String rootPage = spaceName+"."+Constants.ROOT_COLLECTION_PAGE;
 
-        return Asset.fetchAsset(rootPage, context).as(RootCollectionCompositeAsset.class);
+        if (!isRootCollectionExists()) {
+            throw new AssetException("Page "+rootPage+" does not exist");
+        }
+
+        RootCollectionCompositeAsset root;
+
+        try {
+            root = Asset.fetchAsset(rootPage, context).as(RootCollectionCompositeAsset.class);
+        } catch (XWikiException ex) {
+            // The page exists, but must not be a root collection -- fix it
+            createRootCollection();
+            root = Asset.fetchAsset(rootPage, context).as(RootCollectionCompositeAsset.class);
+        }
+
+        return root;
     }
 
     static public RootCollectionCompositeAsset getRootCollection(String space, XWikiContext context) throws XWikiException {
@@ -93,20 +107,35 @@ public class CollectionSpace {
 
         XWikiDocument doc = context.getWiki().getDocument(spaceName, Constants.ROOT_COLLECTION_PAGE, context);
 
-        BaseObject CompObj = doc.newObject(Constants.COMPOSITE_ASSET_CLASS, context);
-        CompObj.set(Constants.COMPOSITE_ASSET_CLASS_TYPE, Constants.COMPOSITE_ASSET_CLASS_TYPE_ROOT_COLLECTION, context);
-
+        doc.setCustomClass(Asset.class.getName());
         doc.setCreator(context.getUser());
         doc.setContent(Constants.COMPOSITE_ASSET_ROOT_COLLECTION_CONTENT);
         doc.setParent(context.getUser());
 
+        if (!doc.isNew()) {
+            // Update page - Remove objects to re-create
+            doc.removeObjects(Constants.ASSET_CLASS);
+            doc.removeObjects(Constants.COMPOSITE_ASSET_CLASS);
+            doc.removeObjects(Constants.RIGHTS_CLASS);
+            doc.removeObjects(Constants.ASSET_LICENCE_CLASS);
+        }
+
+        BaseObject assetObj = doc.newObject(Constants.ASSET_CLASS, context);
+        assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, Constants.ASSET_CLASS_RIGHT_MEMBERS);
+
+        BaseObject compObj = doc.newObject(Constants.COMPOSITE_ASSET_CLASS, context);
+        compObj.set(Constants.COMPOSITE_ASSET_CLASS_TYPE, Constants.COMPOSITE_ASSET_CLASS_TYPE_ROOT_COLLECTION, context);
+
         String owner = ownerMap.get("owner");
         String ownerType = ownerMap.get("ownerType");
 
-        BaseObject obj = doc.newObject("XWiki.XWikiRights", context);
+        BaseObject obj = doc.newObject(Constants.RIGHTS_CLASS, context);
         obj.setStringValue(ownerType, owner);
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
+
+        BaseObject newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
+        newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT);
 
         context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.createrootcollection"), context);
     }

@@ -357,19 +357,12 @@ public class Asset extends CurrikiDocument {
         if (doc instanceof Asset){
             return ((Asset) doc).as(null);
         } else {
-            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset could not be found");
+            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset "+assetName+" could not be found");
         }
     }
 
     static public Asset fetchAsset(String web, String page, XWikiContext context) throws XWikiException {
-        com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
-        Document doc = xwikiApi.getDocument(web, page);
-
-        if (doc instanceof Asset){
-            return ((Asset) doc).as(null);
-        } else {
-            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset could not be found");
-        }
+        return Asset.fetchAsset(web+"."+page, context);
     }
 
     public List<Property> getMetadata() {
@@ -523,8 +516,8 @@ public class Asset extends CurrikiDocument {
                 throw new AssetException(AssetException.MODULE_PLUGIN_ASSET, AssetException.ERROR_ASSET_NOT_FOUND, "Parent asset not found");
             }
         }
-        // the Root collection does not have an asset class so we can't inherit from it
-        if (parentDoc != null && parentDoc.getObject(Constants.ASSET_CLASS) != null) {
+        // the Root collection does not have a proper asset class so we can't inherit from it
+        if (parentDoc != null && parentDoc.getObject(Constants.ASSET_CLASS) != null && !parentDoc.getName().equals(Constants.ROOT_COLLECTION_PAGE)) {
             BaseObject parentAssetObj = (BaseObject) parentDoc.getObject(Constants.ASSET_CLASS).clone();
 
             copyProperty(parentAssetObj, assetObj, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL);

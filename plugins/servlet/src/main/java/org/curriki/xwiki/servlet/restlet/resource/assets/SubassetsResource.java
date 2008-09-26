@@ -131,4 +131,55 @@ public class SubassetsResource extends BaseResource {
             getResponse().redirectSeeOther(getChildReference(getRequest().getResourceRef(), order.toString()));
         }
     }
+
+    @Override public void storeRepresentation(Representation representation) throws ResourceException {
+        setupXWiki();
+
+        Request request = getRequest();
+        String assetName = (String) request.getAttributes().get("assetName");
+
+        JSONObject json = representationToJSONObject(representation);
+
+        Asset asset;
+        try {
+            asset = plugin.fetchAsset(assetName);
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
+        if (asset == null) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
+        }
+
+        JSONArray orig;
+        try {
+            orig = json.getJSONArray("original");
+            if (orig.isEmpty()){
+                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.");
+            }
+        } catch (JSONException e) {
+            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.");
+        }
+
+        JSONArray want;
+        try {
+            want = json.getJSONArray("wanted");
+            if (want.isEmpty()){
+                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
+            }
+        } catch (JSONException e) {
+            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
+        }
+
+        if (asset instanceof FolderCompositeAsset) {
+            try {
+                FolderCompositeAsset fAsset = asset.as(FolderCompositeAsset.class);
+                fAsset.reorder(orig, want);
+                fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.addsubasset"));
+            } catch (XWikiException e) {
+                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
+            }
+        }
+
+        getResponse().redirectSeeOther(getRequest().getResourceRef());
+    }
 }

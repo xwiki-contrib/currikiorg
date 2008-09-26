@@ -23,7 +23,6 @@ import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
-import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
@@ -76,6 +75,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public Asset fetchAssetAs(String assetName, Class<? extends Asset> classType, XWikiContext context) throws XWikiException {
+        return Asset.fetchAsset(assetName, context).as(classType);
+        /*
         com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
         Document doc = xwikiApi.getDocument(assetName);
         if (doc instanceof Asset) {
@@ -83,6 +84,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
 
         throw new AssetException("Asset "+assetName+" could not be found");
+        */
     }
 
     public List<Property> fetchAssetMetadata(String assetName, XWikiContext context) throws XWikiException {
@@ -192,12 +194,12 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public List<String> fetchGroupCollectionsList(String forGroup, XWikiContext context) {
-        String shortName = forGroup.replaceFirst(".WebHome$", "");
+        String shortName = forGroup.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", "");
         return fetchCollectionsList(shortName, context);
     }
 
     public Map<String, Object> fetchGroupCollectionsInfo(String forGroup, XWikiContext context) {
-        String shortName = forGroup.replaceFirst(".WebHome$", "");
+        String shortName = forGroup.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", "");
         return fetchCollectionsInfo(shortName, context);
     }
 
