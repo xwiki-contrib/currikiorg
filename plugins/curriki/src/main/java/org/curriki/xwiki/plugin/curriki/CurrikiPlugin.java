@@ -345,7 +345,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 		}
     	wheresql += ")";
 
-    	wheresql += " and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.className='XWiki.TextAssetClass' and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)";
+    	wheresql += " and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)";
 
     	if(assetFilterCreationDateFrom!=null && !assetFilterCreationDateFrom.equals("") && !assetFilterCreationDateFrom.equals("MM/DD/YYYY")){
         	String date = changeFormatDate(assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/");
@@ -412,7 +412,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     	}
 
     	// Filter for excluding Favorites Collections
-    	String notFavoritesFoldersSQL = " and doc.fullName not like 'Coll_%.Favorites' ";
+    	String notFavoritesFoldersSQL = " and doc.name != 'Favorites' ";
 
     	sql += ", BaseObject as obj "+fromsql+" where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' "+notFavoritesFoldersSQL+" "+wheresql+" "+order;
 
