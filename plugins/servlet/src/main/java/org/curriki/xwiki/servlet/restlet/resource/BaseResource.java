@@ -24,6 +24,7 @@ import net.sf.json.JSONException;
 import net.sf.json.util.JSONUtils;
 
 import java.util.Map;
+import java.util.List;
 import java.io.IOException;
 
 /**
@@ -106,6 +107,22 @@ public class BaseResource extends Resource {
         JSONArray json = new JSONArray();
 
         for (String item : map.keySet()) {
+            JSONObject o = new JSONObject();
+            o.put(itemName, item);
+            Map<String,Object> info = (Map<String,Object>) map.get(item);
+            for (String infoItem : info.keySet()) {
+                o.put(infoItem, info.get(infoItem));
+            }
+            json.add(o);
+        }
+
+        return json;
+    }
+
+    protected JSONArray flattenMapToJSONArray(Map<String,Object> map, List<String> items, String itemName) {
+        JSONArray json = new JSONArray();
+
+        for (String item : items) {
             JSONObject o = new JSONObject();
             o.put(itemName, item);
             Map<String,Object> info = (Map<String,Object>) map.get(item);

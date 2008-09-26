@@ -9,6 +9,7 @@ import org.restlet.data.Response;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 
 import java.util.Map;
+import java.util.List;
 
 import net.sf.json.JSONArray;
 
@@ -27,9 +28,10 @@ public class GroupCollectionsResource extends BaseResource {
         Request request = getRequest();
         String forGroup = (String) request.getAttributes().get("groupName");
 
+        List<String> resultList = plugin.fetchUserCollectionsList(forGroup);
         Map<String,Object> results = plugin.fetchGroupCollectionsInfo(forGroup);
 
-        JSONArray json = flattenMapToJSONArray(results, "collectionPage");
+        JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
 
         return formatJSON(json, variant);
     }
