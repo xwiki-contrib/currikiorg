@@ -96,6 +96,10 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchUserInfo(context);
     }
 
+    public RootCollectionCompositeAsset fetchRootCollection() {
+        return fetchRootCollection(context.getUser());
+    }
+
     public RootCollectionCompositeAsset fetchRootCollection(String forEntity) {
         return plugin.fetchRootCollection(forEntity, context);
     }
@@ -104,7 +108,6 @@ public class CurrikiPluginApi extends Api {
     /**
      * Verificate if a user is in Group
      * @param groupName
-     * @param context
      * @return
      * @throws XWikiException
      */
@@ -139,7 +142,6 @@ public class CurrikiPluginApi extends Api {
     /**
      * Builds a map with the number of resources in each status given the criteria used in the BFCS queue filter
      * @param baseHql
-     * @param context
      * @return
      * @throws XWikiException
      */

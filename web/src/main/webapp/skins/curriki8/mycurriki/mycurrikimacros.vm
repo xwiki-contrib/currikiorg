@@ -2030,9 +2030,8 @@ Curriki.data.reorder = {
 {/pre}
 #end ##}
 #end ##}
-## Do query for contributions
-#set($sql = ", BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CompositeAssetClass' and doc.creator='${userdoc.fullName}' and doc.web='Coll_${shortname}' and doc.name != 'Favorites' and props.id.name='type' and props.value='collection' order by doc.date desc")
-#set($assetList = $xwiki.searchDocuments($sql))
+## Get collections
+#set($assetList = $xwiki.getPlugin("curriki").fetchRootCollection($shortname).getSubassetList("date"))
 #set($nbToDisplay = 20)
 #set($startIndex = 0)
 #set($Integer = 0)
