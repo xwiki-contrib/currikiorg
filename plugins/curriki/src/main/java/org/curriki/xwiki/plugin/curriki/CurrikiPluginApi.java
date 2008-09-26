@@ -133,6 +133,13 @@ public class CurrikiPluginApi extends Api {
     }
 
 
+    /**
+     * Builds a map with the number of resources in each status given the criteria used in the BFCS queue filter
+     * @param baseHql
+     * @param context
+     * @return
+     * @throws XWikiException
+     */
     public Map getSeeCountsByStatus(String baseHql) throws XWikiException {
     	return plugin.getSeeCountsByStatus(baseHql,context);
     }

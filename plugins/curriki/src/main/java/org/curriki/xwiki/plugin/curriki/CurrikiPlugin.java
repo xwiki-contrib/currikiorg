@@ -15,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.AssetException;
 import org.curriki.xwiki.plugin.asset.CollectionSpace;
 import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
@@ -330,6 +329,13 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
 
+    /**
+     * Builds a map with the number of resources in each status given the criteria used in the BFCS queue filter
+     * @param baseHql
+     * @param context
+     * @return
+     * @throws XWikiException
+     */
     public Map getSeeCountsByStatus(String baseHql, XWikiContext context) throws XWikiException {
     	// Add the first part of the query for getting the number of docs with each status
     	String sql = baseHql;
