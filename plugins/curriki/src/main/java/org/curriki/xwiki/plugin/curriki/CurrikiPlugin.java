@@ -111,30 +111,6 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         return userInfo;
     }
 
-    /**
-     * Get a list of all viewable collections owned by a specific user with extra info
-     *
-     * @param forUser Owner of collections to search for
-     * @param context Standard XWikiContext object
-     * @return A list of collections with information about each
-     */
-    public Map<String,Object> fetchUserCollectionsInfo(String forUser, XWikiContext context) {
-        String shortName = forUser.replaceFirst("XWiki.", "");
-        return fetchCollectionsInfo(shortName, context);
-    }
-
-    /**
-     * Get a list of all viewable collections owned by a specific user
-     *
-     * @param forUser Owner of collections to search for
-     * @param context Standard XWikiContext object
-     * @return A list of collections
-     */
-   public List<String> fetchUserCollectionsList(String forUser, XWikiContext context) {
-        String shortName = forUser.replaceFirst("XWiki.", "");
-        return fetchCollectionsList(shortName, context);
-    }
-
 
 
     /**
@@ -173,7 +149,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             Space space = sm.getSpace(group);
             groupInfo.put("displayTitle", space.getDisplayTitle());
             groupInfo.put("description", space.getDescription());
-            Map<String,Object> collections = fetchGroupCollectionsInfo(group, context);
+            Map<String,Object> collections = fetchCollectionsInfo(group, context);
             groupInfo.put("collectionCount", collections.size());
             int editableCount = 0;
             for (String collection : collections.keySet()) {
@@ -190,16 +166,6 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
 
         return groupInfo;
-    }
-
-    public List<String> fetchGroupCollectionsList(String forGroup, XWikiContext context) {
-        String shortName = forGroup.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", "");
-        return fetchCollectionsList(shortName, context);
-    }
-
-    public Map<String, Object> fetchGroupCollectionsInfo(String forGroup, XWikiContext context) {
-        String shortName = forGroup.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", "");
-        return fetchCollectionsInfo(shortName, context);
     }
 
 
@@ -231,11 +197,9 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
 
 
-    protected List<String> fetchCollectionsList(String entity, XWikiContext context) {
-        RootCollectionCompositeAsset root;
-        try {
-            root = CollectionSpace.getRootCollection("Coll_"+entity, context);
-        } catch (XWikiException e) {
+    public List<String> fetchCollectionsList(String entity, XWikiContext context) {
+        RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
+        if (root == null) {
             // Ignore any error, will just return 0 results
             return new ArrayList<String>();
         }
@@ -243,16 +207,28 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         return root.fetchCollectionsList();
     }
 
-    protected Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) {
-        RootCollectionCompositeAsset root;
-        try {
-            root = CollectionSpace.getRootCollection("Coll_"+entity, context);
-        } catch (XWikiException e) {
+    public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) {
+        RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
+        if (root == null) {
             // Ignore any error, will just return 0 results
             return new HashMap<String,Object>();
         }
 
         return root.fetchCollectionsInfo();
+    }
+
+    public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) {
+        entity = entity.replaceFirst("XWiki.", ""); // For users
+        entity = entity.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
+
+        RootCollectionCompositeAsset root = null;
+        try {
+            root = CollectionSpace.getRootCollection("Coll_"+entity, context);
+        } catch (XWikiException e) {
+            // Ignore any error, will just return null value
+        }
+
+        return root;
     }
 
 

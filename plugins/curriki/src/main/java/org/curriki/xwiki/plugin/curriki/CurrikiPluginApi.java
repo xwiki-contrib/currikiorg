@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -32,19 +33,19 @@ public class CurrikiPluginApi extends Api {
     */
 
     public List<String> fetchUserCollectionsList() {
-        return plugin.fetchUserCollectionsList(context.getUser(), context);
+        return plugin.fetchCollectionsList(context.getUser(), context);
     }
 
     public List<String> fetchUserCollectionsList(String forUser) {
-        return plugin.fetchUserCollectionsList(forUser, context);
+        return plugin.fetchCollectionsList(forUser, context);
     }
 
     public Map<String,Object> fetchUserCollectionsInfo() {
-        return plugin.fetchUserCollectionsInfo(context.getUser(), context);
+        return plugin.fetchCollectionsInfo(context.getUser(), context);
     }
 
     public Map<String,Object> fetchUserCollectionsInfo(String forUser) {
-        return plugin.fetchUserCollectionsInfo(forUser, context);
+        return plugin.fetchCollectionsInfo(forUser, context);
     }
 
     public Map<String,Object> fetchUserGroups() {
@@ -56,11 +57,11 @@ public class CurrikiPluginApi extends Api {
     }
 
     public List<String> fetchGroupCollectionsList(String forGroup) {
-        return plugin.fetchGroupCollectionsList(forGroup, context);
+        return plugin.fetchCollectionsList(forGroup, context);
     }
 
     public Map<String,Object> fetchGroupCollectionsInfo(String forGroup) {
-        return plugin.fetchGroupCollectionsInfo(forGroup, context);
+        return plugin.fetchCollectionsInfo(forGroup, context);
     }
 
     public Asset createAsset(String parentAsset) throws XWikiException {
@@ -87,8 +88,6 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchAssetAs(assetName, classType, context);
     }
 
-
-
     public List<Property> fetchAssetMetadata(String assetName) throws XWikiException {
         return plugin.fetchAssetMetadata(assetName, context);
     }
@@ -97,7 +96,11 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchUserInfo(context);
     }
 
-
+    public RootCollectionCompositeAsset fetchRootCollection(String forEntity) {
+        return plugin.fetchRootCollection(forEntity, context);
+    }
+    
+        
     /**
      * Verificate if a user is in Group
      * @param groupName
@@ -114,8 +117,8 @@ public class CurrikiPluginApi extends Api {
     public List<String> getAssetICT(String assetName) throws XWikiException {
     	return plugin.getAssetICT(assetName,context);
     }
-
-        /**
+    
+    /**
      * change the date format from a date string.
      * @param date
      * @param currentPattern
