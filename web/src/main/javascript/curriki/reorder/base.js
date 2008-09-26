@@ -173,11 +173,11 @@ Reorder.init = function(){
 
 Reorder.confirmMsg = {
 	first:function(){
-		return confirm(msgPfx+'checkfirst.dialog');
+		return confirm(_(msgPfx+'checkfirst.dialog'));
 	}
 
 	,after:function(){
-		return confirm(msgPfx+'checkafter.dialog');
+		return confirm(_(msgPfx+'checkafter.dialog'));
 	}
 
 	,display:function(){
