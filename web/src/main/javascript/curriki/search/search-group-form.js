@@ -188,8 +188,6 @@ form.init = function(){
 //			,width: 17
 			,dataIndex: 'policy'
 			,sortable:true
-			,resizable:false
-			,menuDisabled:true
 			,renderer: data.renderer.policy
 			,tooltip: _('search.group.column.header.policy')
 		},{
