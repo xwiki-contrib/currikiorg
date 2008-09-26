@@ -120,7 +120,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
                 + "and props.value='"+ Constants.COMPOSITE_ASSET_CLASS_TYPE_COLLECTION+"' "
                 + (order.equals("name")
                    ?"order by doc.name"       // For lists like Choose Location Dialogue
-                   :"order by date.doc desc"  // For lists like user collection list in MyCurriki
+                   :"order by doc.date desc"  // For lists like user collection list in MyCurriki
                   );
 
         List<String> params = new ArrayList<String>();
