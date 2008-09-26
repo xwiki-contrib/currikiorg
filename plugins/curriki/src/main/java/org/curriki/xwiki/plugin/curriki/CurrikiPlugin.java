@@ -1,5 +1,25 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
+import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
+import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.CollectionSpace;
+import org.curriki.xwiki.plugin.asset.Constants;
+import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
+
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
@@ -11,28 +31,6 @@ import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.web.XWikiRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
-import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.AssetException;
-import org.curriki.xwiki.plugin.asset.CollectionSpace;
-import org.curriki.xwiki.plugin.asset.Constants;
-import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Vector;
-import java.lang.Class;
-import java.lang.Object;
-import java.text.SimpleDateFormat;
 
 /**
  */
@@ -212,7 +210,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @return
      * @throws XWikiException
      */
-    public Boolean isMember(String groupName,XWikiContext context) throws XWikiException { 
+    public Boolean isMember(String groupName,XWikiContext context) throws XWikiException {
     	XWikiDocument doc = context.getWiki().getDocument(groupName, context);
     	Vector<BaseObject> groups = doc.getObjects("XWiki.XWikiGroups");
     	if (groups!=null)
@@ -385,7 +383,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 	    	if(req.get("order")!=null){
 		    	if(req.get("order").equals("fcstatus")){
 		    		if(assetFilterFileCheckStatus!=null && !assetFilterFileCheckStatus.equals("2")){
-		    			wheresql = " and obj.id=sprop.id.id and sprop.id.name='fcstatus'";
+		    			wheresql += " and obj.id=sprop.id.id and sprop.id.name='fcstatus'";
 		    		}
 		    		order += "sprop.value "+directionOrder;
 		    		}else if(req.get("order").equals("fcdate")){
