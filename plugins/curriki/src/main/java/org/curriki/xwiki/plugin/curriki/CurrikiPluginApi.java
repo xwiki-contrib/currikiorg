@@ -133,11 +133,7 @@ public class CurrikiPluginApi extends Api {
     }
 
 
-    public String getBFCSHql(String directionOrder,boolean ordered) throws XWikiException {
-    	return plugin.getBFCSHql(directionOrder,ordered,context);
-    }
-
-    public Map getSeeCountsByStatus() throws XWikiException {
-    	return plugin.getSeeCountsByStatus(context);
+    public Map getSeeCountsByStatus(String baseHql) throws XWikiException {
+    	return plugin.getSeeCountsByStatus(baseHql,context);
     }
 }

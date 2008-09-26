@@ -329,103 +329,17 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     	return ""+date;
     }
 
-    public String getBFCSHql(String directionOrder,boolean ordered, XWikiContext context) throws XWikiException {
-    	XWikiRequest req = context.getRequest();
-    	String assetFilterCreationDateFrom = req.getCookie("assetFilterCreationDateFrom")!=null?req.getCookie("assetFilterCreationDateFrom").getValue():null;
-    	String assetFilterCreationDateTo = req.getCookie("assetFilterCreationDateTo")!=null?req.getCookie("assetFilterCreationDateTo").getValue():null;
-    	String assetFilterFileCheckStatus = req.getCookie("assetFilterFileCheckStatus")!=null?req.getCookie("assetFilterFileCheckStatus").getValue():null;
-    	String assetFilterSubjectArea = req.getCookie("assetFilterSubjectArea")!=null?req.getCookie("assetFilterSubjectArea").getValue():null;
 
-    	String sql ="";
-    	String [] excludeList = {"jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "ShermanTank", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll"};
-
-    	String wheresql = "and doc.creator not in (";
-
-    	for (int i = 0; i < excludeList.length; i++) {
-    		wheresql += "'XWiki."+excludeList[i]+"'";
-    		wheresql += i==excludeList.length-1?"":",";
-		}
-    	wheresql += ")";
-
-    	wheresql += " and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)";
-
-    	if(assetFilterCreationDateFrom!=null && !assetFilterCreationDateFrom.equals("") && !assetFilterCreationDateFrom.equals("MM/DD/YYYY")){
-        	String date = changeFormatDate(assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/");
-    		wheresql += " and doc.creationDate >= '"+date+"'";
-    	}
-
-    	if(assetFilterCreationDateTo!=null && !assetFilterCreationDateTo.equals("") && assetFilterCreationDateTo.equals("MM/DD/YYYY")){
-    		String date = changeFormatDate(assetFilterCreationDateTo,"MM/DD/YYYY","YYYY/MM/DD","/");
-    		wheresql += " and doc.creationDate <= '"+date+"'";
-    	}
-
-    	String fromsql = " ,StringProperty as sprop";
-
-    	if(assetFilterFileCheckStatus!=null){
-	    	if(assetFilterFileCheckStatus.equals("1")){//without status
-	    		wheresql += " and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)";
-	    	}else if(!assetFilterFileCheckStatus.equals("1") && !assetFilterFileCheckStatus.equals("0")){//with status
-	    				wheresql += " and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null ";
-	    				if(assetFilterFileCheckStatus.equals("2"))//with any status
-	    					wheresql += " and sprop.value <> '0'";
-	    				if(assetFilterFileCheckStatus.equals("3"))//with status ok
-	    					wheresql += " and sprop.value = '1'";
-	    				if(assetFilterFileCheckStatus.equals("4"))//with status Special Check Required
-	    					wheresql += " and sprop.value = '2'";
-	    				if(assetFilterFileCheckStatus.equals("5"))//with status Improvement Requested
-	    					wheresql += " and sprop.value = '3'";
-	    				if(assetFilterFileCheckStatus.equals("6"))//with status Deleted
-	    					wheresql += " and sprop.value = '4'";
-	    			}
-    	}
-
-    	String order="";
-    	if(ordered){
-	    	order="	order by ";
-	    	if(req.get("order")!=null){
-		    	if(req.get("order").equals("fcstatus")){
-		    		if(assetFilterFileCheckStatus!=null && !assetFilterFileCheckStatus.equals("2")){
-		    			wheresql += " and obj.id=sprop.id.id and sprop.id.name='fcstatus'";
-		    		}
-		    		order += "sprop.value "+directionOrder;
-		    		}else if(req.get("order").equals("fcdate")){
-		    			fromsql += " ,DateProperty as dprop";
-		    			wheresql += " and obj.id=dprop.id.id and dprop.id.name='fcdate'";
-		    			order += "dprop.value "+directionOrder;
-		    		}else if(req.get("order").equals("contributor")){
-								fromsql += " ,BaseObject as userObj,StringProperty as userSprop";
-								wheresql += " and doc.creator=userObj.name and userObj.className='XWiki.XWikiUsers' and userObj.id=userSprop.id.id and userSprop.id.name='first_name'";
-								order += "userSprop.value "+directionOrder;
-		    					}
-								else if(req.get("order").equals("resourcetitle")){
-										fromsql += " ,StringProperty as dprop";
-										wheresql += " and obj.id=dprop.id.id and dprop.id.name='title'";
-										order += "dprop.value "+directionOrder;
-									}
-
-	    	}else
-	    		order += "doc.creationDate desc";
-    	}
-
-    	// Check which Subject was selected in the filter combo
-    	if((assetFilterSubjectArea!=null)&&(!assetFilterSubjectArea.equals(""))){
-    		fromsql += " ,DBStringListProperty as prop2 join prop2.list list ";
-    		wheresql += "  and obj.id=prop2.id.id and prop2.id.name='fw_items' and list = '"+assetFilterSubjectArea+"'";
-    	}
-
-    	// Filter for excluding Favorites Collections
-    	String notFavoritesFoldersSQL = " and doc.name != 'Favorites' ";
-
-    	sql += ", BaseObject as obj "+fromsql+" where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' "+notFavoritesFoldersSQL+" "+wheresql+" "+order;
-
-
-    	return sql;
-
-    }
-
-    public Map getSeeCountsByStatus(XWikiContext context) throws XWikiException {
+    public Map getSeeCountsByStatus(String baseHql, XWikiContext context) throws XWikiException {
     	// Add the first part of the query for getting the number of docs with each status
-    	String sql = getBFCSHql("",false,context);
+    	String sql = baseHql;
+    	XWikiRequest req = context.getRequest();
+    	String assetFilterFileCheckStatus = req.getCookie("assetFilterFileCheckStatus")!=null?req.getCookie("assetFilterFileCheckStatus").getValue():null;
+    	if(assetFilterFileCheckStatus==null || assetFilterFileCheckStatus.equals("1")||assetFilterFileCheckStatus.equals("0")){
+    		//the user has not search by status but we need the corresponding table in the "from"
+    		sql= ", StringProperty as sprop "+sql;
+    	}
+
     	String hqlPart1 = "select sprop.value, count(doc.id) from XWikiDocument as doc "+sql+"  and obj.id=sprop.id.id and sprop.id.name='fcstatus' group by sprop.value";
     	// Add the second part of the query for getting the number of docs without status
     	String hqlPart2 = "select '0', count(distinct doc.id) from XWikiDocument as doc "+sql+" and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null or sprop.value = '0')";
