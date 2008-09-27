@@ -323,7 +323,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     		//the user has not search by status but we need the corresponding table in the "from" for hqlPart1
     		auxHqlPart1= ", StringProperty as sprop ";
     	}
-    	auxHqlPart1+=auxHqlPart1+sql;
+    	auxHqlPart1+=sql;
     	String hqlPart1 = "select sprop.value, count(doc.id) from XWikiDocument as doc "+auxHqlPart1+"  and obj.id=sprop.id.id and sprop.id.name='fcstatus' group by sprop.value";
     	// Add the second part of the query for getting the number of docs without status
     	String hqlPart2 = "select '0', count(distinct doc.id) from XWikiDocument as doc "+sql+" and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and (sprop2.value is not null or sprop2.value = '0'))";
