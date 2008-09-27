@@ -243,7 +243,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      */
     public List<String> getAssetICT(String assetName, XWikiContext context) throws XWikiException {
     	List<String> listICT = new ArrayList<String>();
-    	if(assetName!=null && assetName.lastIndexOf("'")>-1){
+    	if(assetName!=null && (assetName.lastIndexOf("'")>-1 || assetName.lastIndexOf("’")>-1)){
     		return listICT;
     	}
        Asset asset = fetchAssetAs(assetName, null, context);
