@@ -25,6 +25,7 @@ public class GroupCollectionsResource extends BaseResource {
     public GroupCollectionsResource(Context context, Request request, Response response) {
         super(context, request, response);
         setReadable(true);
+        setModifiable(true);
         defaultVariants();
     }
 

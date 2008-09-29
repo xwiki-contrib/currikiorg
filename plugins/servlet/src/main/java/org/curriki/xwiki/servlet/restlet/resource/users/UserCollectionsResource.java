@@ -25,6 +25,7 @@ public class UserCollectionsResource extends BaseResource {
     public UserCollectionsResource(Context context, Request request, Response response) {
         super(context, request, response);
         setReadable(true);
+        setModifiable(true);
         defaultVariants();
     }
 
