@@ -172,4 +172,21 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
 
         return colInfo;
     }
+
+    public void defaultOrder() throws XWikiException {
+        // Flag as not reordered (Only root collection needs this, others are always ordered
+        XWikiDocument assetDoc = getDoc();
+        assetDoc.removeObjects(Constants.COLLECTION_REORDERED_CLASS);
+    }
+
+    public void reorder(List<String> orig, List<String> want) throws XWikiException {
+        // Do reorder
+        super.reorder(orig, want);
+
+        // Flag as reordered (Only root collection needs this, others are always ordered
+        XWikiDocument assetDoc = getDoc();
+        assetDoc.removeObjects(Constants.COLLECTION_REORDERED_CLASS);
+        BaseObject sub = assetDoc.newObject(Constants.COLLECTION_REORDERED_CLASS, context);
+        sub.setIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 1);
+    }
 }

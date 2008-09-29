@@ -32,24 +32,32 @@ public class CurrikiPluginApi extends Api {
    }
     */
 
+    public List<String> fetchCollectionsList(String forEntity) {
+        return plugin.fetchCollectionsList(forEntity, context);
+    }
+
+    public Map<String,Object> fetchCollectionsInfo(String forEntity) {
+        return plugin.fetchCollectionsInfo(forEntity, context);
+    }
+
     public List<String> fetchUserCollectionsList() {
-        return plugin.fetchCollectionsList(context.getUser(), context);
+        return fetchUserCollectionsList(context.getUser());
     }
 
     public List<String> fetchUserCollectionsList(String forUser) {
-        return plugin.fetchCollectionsList(forUser, context);
+        return fetchCollectionsList(forUser);
     }
 
     public Map<String,Object> fetchUserCollectionsInfo() {
-        return plugin.fetchCollectionsInfo(context.getUser(), context);
+        return fetchUserCollectionsInfo(context.getUser());
     }
 
     public Map<String,Object> fetchUserCollectionsInfo(String forUser) {
-        return plugin.fetchCollectionsInfo(forUser, context);
+        return fetchCollectionsInfo(forUser);
     }
 
     public Map<String,Object> fetchUserGroups() {
-        return plugin.fetchUserGroups(context.getUser(), context);
+        return fetchUserGroups(context.getUser());
     }
 
     public Map<String,Object> fetchUserGroups(String forUser) {
@@ -57,11 +65,11 @@ public class CurrikiPluginApi extends Api {
     }
 
     public List<String> fetchGroupCollectionsList(String forGroup) {
-        return plugin.fetchCollectionsList(forGroup, context);
+        return fetchCollectionsList(forGroup);
     }
 
     public Map<String,Object> fetchGroupCollectionsInfo(String forGroup) {
-        return plugin.fetchCollectionsInfo(forGroup, context);
+        return fetchCollectionsInfo(forGroup);
     }
 
     public Asset createAsset(String parentAsset) throws XWikiException {

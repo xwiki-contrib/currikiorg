@@ -7,14 +7,12 @@ import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.data.Reference;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
 
 import java.util.Map;
 import java.util.List;
-import java.util.HashMap;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
@@ -174,10 +172,12 @@ public class SubassetsResource extends BaseResource {
             try {
                 FolderCompositeAsset fAsset = asset.as(FolderCompositeAsset.class);
                 fAsset.reorder(orig, want);
-                fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.addsubasset"));
+                fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.reordered"));
             } catch (XWikiException e) {
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
+        } else {
+            throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a folder.");
         }
 
         getResponse().redirectSeeOther(getRequest().getResourceRef());
