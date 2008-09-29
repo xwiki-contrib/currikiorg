@@ -73,12 +73,22 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
             reordered = assetObj.getIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 0);
             if (reordered == 1) {
                 // If ordered give the ordered list
-                List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
-                if (objs != null) {
+                List<BaseObject> objs = assetDoc.getObjects(Constants.SUBASSET_CLASS);
+                if (objs != null && objs.size() > 0) {
                     Collections.sort(objs, new Comparator<BaseObject>(){
                         public int compare(BaseObject s1, BaseObject s2){
+                            if (s1 == null) {
+                                return s2 == null ? 0 : -1;
+                            } else if (s2 == null) {
+                                return 1;
+                            }
                             Long c1 = s1.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                             Long c2 = s2.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                            if (c1 == null) {
+                                return c2 == null ? 0 : -1;
+                            } else if (c2 == null) {
+                                return 1;
+                            }
                             return (c1.compareTo(c2));
                         }
                     });
