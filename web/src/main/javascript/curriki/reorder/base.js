@@ -33,18 +33,24 @@ Reorder.init = function(){
 		// Required values not passed
 		return false;
 	}
-/*
-	Reorder.store = new Ext.data.SimpleStore({
-		fields: ['id', 'title']
-		,data:[['1', 'one'], ['2', 'two'], ['3', 'three'], ['4', 'four']]
-		,id: 0
-	});
-*/
+
+	Data.orig = [];
+
 	Reorder.store = new Ext.data.JsonStore({
 		storeId:'CollectionsStore'
 		,url: '/xwiki/curriki/'+Data.place+'/'+Data.which+'/collections'
 		,fields: ['displayTitle', 'collectionPage']
 		,autoLoad:true
+		,listeners: {
+			load:{
+				fn: function(store, records, options){
+					var list = [];
+					store.each(function(rec){list.push(rec.data.collectionPage);});
+					Data.orig = list;
+					console.log('Fetched list', list);
+				}
+			}
+		}
 	});
 
 	Reorder.mainDlg = Ext.extend(UI.dialog.Messages, {
@@ -101,12 +107,17 @@ Reorder.init = function(){
 								 	var list = [];
 									Ext.getCmp('reorderCollectionsMS').store.each(function(rec){list.push(rec.data.collectionPage);});
 									console.log('Reordering', list);
-									//TODO: Send request to server
-									//TODO: Have callback to tell user results
 
-									Reorder.msgComplete();
-									//TODO: Refresh the page
-									window.location.reload();
+									var callback = function(o){
+										console.log('Reorder callback', o);
+
+										//TODO: Tell user results
+										Reorder.msgComplete();
+
+										window.location.reload();
+									};
+
+									Curriki.assets.ReorderRootCollection(Data.place, Data.which, Data.orig, list, callback);
 								 }
 								,scope:this
 							}

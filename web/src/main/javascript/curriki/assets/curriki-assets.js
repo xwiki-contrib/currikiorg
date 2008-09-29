@@ -277,8 +277,33 @@ Curriki.assets = {
 				alert('Error: '+(response.responseText||('Server error publishing resource.  '+(response.statusText||''))));
 			}
 		});
-	},
-	UnnominateAsset:function(assetPage, callback){
+	}
+	,ReorderRootCollection:function(place, which, original, wanted, callback){
+		Ext.Ajax.request({
+			url: '/xwiki/curriki/'+place+'/'+which+'/collections'
+			,method:'PUT'
+			,headers: {
+				'Accept':'application/json'
+				,'Content-type':'application/json'
+			}
+			,jsonData:{original:original, wanted:wanted}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot reorder', response.responseText, options);
+				} else {
+					callback(o);
+				}
+			}
+			,failure:function(response, options){
+				console.error('Cannot reorder', response, options);
+				alert('Error: '+(response.responseText||('Server error reordering collection.  '+(response.statusText||''))));
+			}
+		});
+	}
+	,UnnominateAsset:function(assetPage, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/unnominate'
 			,method:'PUT'
@@ -331,8 +356,8 @@ Curriki.assets = {
 				alert('Error: '+(response.responseText||('Server error nominating resource.  '+(response.statusText||''))));
 			}
 		});
-	},
-	PartnerAsset : function(assetPage, callback) {
+	}
+	,PartnerAsset : function(assetPage, callback) {
 		Ext.Ajax.request({
 			url : this.json_prefix + '/' + assetPage + '/partner',
 			method : 'PUT',
@@ -360,8 +385,8 @@ Curriki.assets = {
 						+ (response.responseText || ('Server error set as Partner resource.  ' + (response.statusText || ''))));
 			}
 		});
-	},
-	SetAsterixReview : function(assetPage, callback, asterixReviewValue) {
+	}
+	,SetAsterixReview : function(assetPage, callback, asterixReviewValue) {
 		Ext.Ajax.request({
 			url : this.json_prefix+'/'+assetPage,
 			method : 'PUT',
@@ -393,8 +418,8 @@ Curriki.assets = {
 						+ (response.responseText || ('Server error executing the action.  ' + (response.statusText || ''))));
 			}
 		});
-	},
-	RemoveAsterixReview : function(assetPage, callback) {
+	}
+	,RemoveAsterixReview : function(assetPage, callback) {
 		Ext.Ajax.request({
 			url : this.json_prefix + '/' + assetPage,
 			method : 'PUT',
