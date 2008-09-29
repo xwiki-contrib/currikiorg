@@ -70,20 +70,18 @@ abstract class CompositeAsset extends Asset {
     }
 
     public List<Map<String, Object>> getSubassetsInfo() {
-        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
 
         if (objs != null ) {
             List<Map<String,Object>> subList = new ArrayList<Map<String,Object>>(objs.size());
 
-            for (Object obj : objs) {
-                if (obj instanceof BaseObject) {
-                    BaseObject xObj = (BaseObject) obj;
-
-                    String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+            for (BaseObject obj : objs) {
+                if (obj != null) {
+                    String subPage = obj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
 
                     Map<String,Object> subInfo = new HashMap<String, Object>(6);
                     subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
-                    subInfo.put(Constants.SUBASSET_CLASS_ORDER, xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER));
+                    subInfo.put(Constants.SUBASSET_CLASS_ORDER, obj.getLongValue(Constants.SUBASSET_CLASS_ORDER));
 
                     com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
                     try {
@@ -138,15 +136,27 @@ abstract class CompositeAsset extends Asset {
         if (objs != null) {
             Collections.sort(objs, new Comparator<BaseObject>(){
                 public int compare(BaseObject s1, BaseObject s2){
+                    if (s1 == null) {
+                        return s2 == null ? 0 : -1;
+                    } else if (s2 == null) {
+                        return 1;
+                    }
                     Long c1 = s1.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                     Long c2 = s2.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    if (c1 == null) {
+                        return c2 == null ? 0 : -1;
+                    } else if (c2 == null) {
+                        return 1;
+                    }
                     return (c1.compareTo(c2));
                 }
             });
 
             List<String> list = new ArrayList<String>();
-            for (Object obj: objs){
-                list.add(((BaseObject) obj).getStringValue(Constants.SUBASSET_CLASS_PAGE));
+            for (BaseObject obj : objs){
+                if (obj != null) {
+                    list.add(obj.getStringValue(Constants.SUBASSET_CLASS_PAGE));
+                }
             }
 
             return filterViewablePages(list);

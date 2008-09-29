@@ -94,8 +94,10 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
                     });
 
                     List<String> list = new ArrayList<String>();
-                    for (Object obj: objs){
-                        list.add(((BaseObject) obj).getStringValue(Constants.SUBASSET_CLASS_PAGE));
+                    for (BaseObject obj : objs){
+                        if (obj != null) {
+                            list.add(obj.getStringValue(Constants.SUBASSET_CLASS_PAGE));
+                        }
                     }
 
                     return filterViewablePages(list);
