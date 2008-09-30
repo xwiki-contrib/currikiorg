@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1222467616000</date>
-<contentUpdateDate>1222467616000</contentUpdateDate>
-<version>2.1</version>
+<date>1222806799000</date>
+<contentUpdateDate>1222806799000</contentUpdateDate>
+<version>17.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -108,6 +108,11 @@
 	#set($assetFilterSubjectArea = $assetFilterSubjectArea.getValue())
 #end
 
+#set($assetAccessPrivileges = $request.getCookie("assetAccessPrivileges"))
+#if($assetAccessPrivileges)
+	#set($assetAccessPrivileges = $assetAccessPrivileges.getValue())
+#end
+
 
 ##----------------End Get filters from cookies
 
@@ -152,6 +157,8 @@
 	 				createCookie("assetFilterFileCheckStatus",fileCheckStatusSelect.value, "");
 	 				var subjectAreaSelect=document.getElementById('fw_item');
 	 				createCookie("assetFilterSubjectArea",subjectAreaSelect.value, "");
+	 				var accessPrivilegesSelect=document.getElementById('accessPrivilegesSelect');
+	 				createCookie("assetAccessPrivileges",accessPrivilegesSelect.value, "");
 					return true;
 				}
 	&lt;/script&gt;
@@ -168,29 +175,54 @@
 	$msg.fc_to &lt;input type="text" style="width: auto;" id="to" name="to" value="$!to" size="12" onclick="if (this.value=='MM/DD/YYYY'){this.value='';}" /&gt;
 	1.1 $msg.fc_filterby
 
-	$msg.fc_queueFilterChooseFCStatus
+	&lt;table class="filechecktable" style="table-layout:fixed;width:100%;overflow:hidden;word-wrap:break-word;"&gt;
+		&lt;tr&gt;
+			&lt;td align="left"&gt;
+				$msg.fc_queueFilterChooseFCStatus
 
-	&lt;select name="type" id="type"&gt;
-			&lt;option value="0" #if(!$assetFilterFileCheckStatus||($assetFilterFileCheckStatus=="0")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
-			&lt;option value="1" #if($assetFilterFileCheckStatus=="1") selected #end &gt;$msg.get("fc_onlywithoutfcstatus")&lt;/option&gt;
-			&lt;option value="2" #if($assetFilterFileCheckStatus=="2")) selected #end &gt;$msg.get("fc_onlywithfcstatus")&lt;/option&gt;
-			#foreach($status in [1..4])
-				#set($auxStatus = $status+2)
-				&lt;option value="$auxStatus" #if($auxStatus=="$assetFilterFileCheckStatus")  selected #end &gt;$msg.get("fc_statusFilter_${status}")&lt;/option&gt;
-			#end
-	&lt;/select&gt;
+				&lt;select name="type" id="type"&gt;
+						&lt;option value="0" #if(!$assetFilterFileCheckStatus||($assetFilterFileCheckStatus=="0")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
+						&lt;option value="1" #if($assetFilterFileCheckStatus=="1") selected #end &gt;$msg.get("fc_onlywithoutfcstatus")&lt;/option&gt;
+						&lt;option value="2" #if($assetFilterFileCheckStatus=="2")) selected #end &gt;$msg.get("fc_onlywithfcstatus")&lt;/option&gt;
+						#foreach($status in [1..4])
+							#set($auxStatus = $status+2)
+							&lt;option value="$auxStatus" #if($auxStatus=="$assetFilterFileCheckStatus")  selected #end &gt;$msg.get("fc_statusFilter_${status}")&lt;/option&gt;
+						#end
+				&lt;/select&gt;
+			&lt;/td&gt;
+			&lt;td align="left"&gt;
+				$msg.fc_queueFilterChooseSubjectArea
 
-	&lt;br /&gt;
+				&lt;select name="fw_item" id="fw_item"&gt;
+						&lt;option value="" #if(!$assetFilterSubjectArea||($assetFilterSubjectArea=="")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
+			        #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome'"))
+			        #set($itemdoc = $xwiki.getDocument($item))
+			    		&lt;option value="$item" #if($item==$assetFilterSubjectArea) selected #end &gt;$itemdoc.title&lt;/option&gt;
+			        #end
+				&lt;/select&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td align="left"&gt;
+				$msg.fc_withAccessPrivilegesOf
 
-	$msg.fc_queueFilterChooseSubjectArea
+				&lt;select name="accessPrivilegesSelect" id="accessPrivilegesSelect"&gt;
+					&lt;option value="" #if(!$assetAccessPrivileges||($assetAccessPrivileges=="")) selected #end &gt;$msg.get("fc_withAccessPrivilegesOf_All")&lt;/option&gt;
+					#foreach($item in $xwiki.curriki.getValues("XWiki.AssetClass","rights"))
+			    	&lt;option value="$item" #if($item==$assetAccessPrivileges) selected #end &gt;$msg.get("fc_withAccessPrivilegesOf_$item")&lt;/option&gt;
+					#end
+					&lt;option value="protectedAndPublic" #if($assetAccessPrivileges=="protectedAndPublic") selected #end &gt;$msg.get("fc_withAccessPrivilegesOf_protectedAndPublic")&lt;/option&gt;
 
-	&lt;select name="fw_item" id="fw_item"&gt;
-			&lt;option value="" #if(!$assetFilterSubjectArea||($assetFilterSubjectArea=="")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
-        #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome'"))
-        #set($itemdoc = $xwiki.getDocument($item))
-    		&lt;option value="$item" #if($item==$assetFilterSubjectArea) selected #end &gt;$itemdoc.title&lt;/option&gt;
-        #end
-	&lt;/select&gt;
+				&lt;/select&gt;
+
+			&lt;/td&gt;
+			&lt;td align="left"&gt;
+
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+
+
 
 	&lt;input type="submit" value="$msg.fc_ok" /&gt;
 

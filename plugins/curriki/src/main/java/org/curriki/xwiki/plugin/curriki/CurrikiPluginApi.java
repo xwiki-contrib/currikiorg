@@ -111,8 +111,8 @@ public class CurrikiPluginApi extends Api {
     public RootCollectionCompositeAsset fetchRootCollection(String forEntity) {
         return plugin.fetchRootCollection(forEntity, context);
     }
-    
-        
+
+
     /**
      * Verificate if a user is in Group
      * @param groupName
@@ -128,7 +128,7 @@ public class CurrikiPluginApi extends Api {
     public List<String> getAssetICT(String assetName) throws XWikiException {
     	return plugin.getAssetICT(assetName,context);
     }
-    
+
     /**
      * change the date format from a date string.
      * @param date
@@ -155,5 +155,18 @@ public class CurrikiPluginApi extends Api {
      */
     public Map getSeeCountsByStatus(String baseHql) throws XWikiException {
     	return plugin.getSeeCountsByStatus(baseHql,context);
+    }
+
+    /**
+     * Get class property values as a list. This code was extracted from FieldResource.represent
+     * @param className
+     * @param fieldName
+     * @param xwikiContext
+     * @return
+     * @throws XWikiException
+     */
+    public List getValues(String className, String fieldName) throws XWikiException{
+    	return plugin.getValues(className, fieldName,context);
+
     }
 }

@@ -22,8 +22,12 @@
         	#set($assetFilterSubjectArea = $assetFilterSubjectArea.getValue())
         #end
 
+        #set($assetAccessPrivileges = $request.getCookie("assetAccessPrivileges"))
+        #if($assetAccessPrivileges)
+        	#set($assetAccessPrivileges = $assetAccessPrivileges.getValue())
+        #end
 
-        ##----------------End Get filters from cookies
+    ##----------------End Get filters from cookies
 
         #set($fromsql = "")
         #set($wheresql = "and doc.creator not in (")
@@ -100,7 +104,18 @@
         #if(($assetFilterSubjectArea)&&($assetFilterSubjectArea!=""))
         	#set($fromsql = "$fromsql ,DBStringListProperty as prop2 join prop2.list list ")
         	#set($wheresql = "$wheresql  and obj.id=prop2.id.id and prop2.id.name='fw_items' and list = '${assetFilterSubjectArea}'")
+		#end
+
+		## Check which Access Privilege was selected in the filter combo
+        #if(($assetAccessPrivileges)&&($assetAccessPrivileges!=""))
+			#set($fromsql = "$fromsql ,StringProperty as spropRights ")
+			#if($assetAccessPrivileges=="protectedAndPublic")
+				#set($wheresql = "$wheresql  and obj.id=spropRights.id.id and spropRights.id.name='rights' and (spropRights.value = 'members' or spropRights.value = 'public')")
+				#else
+					#set($wheresql = "$wheresql  and obj.id=spropRights.id.id and spropRights.id.name='rights' and spropRights.value = '$assetAccessPrivileges'")
+			#end
         #end
+
 
         ## Filter for excluding Favorites Collections
         #set($notFavoritesFoldersSQL = " and doc.name != 'Favorites' ")

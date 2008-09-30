@@ -25,6 +25,8 @@ import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.objects.PropertyInterface;
+import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
@@ -358,5 +360,31 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     		}
     	}
     	return results;
+    }
+
+
+    /**
+     * Get class property values as a list. This code was extracted from FieldResource.represent
+     * @param className
+     * @param fieldName
+     * @param xwikiContext
+     * @return
+     * @throws XWikiException
+     */
+    public List getValues(String className, String fieldName, XWikiContext xwikiContext)throws XWikiException{
+    	List result = new ArrayList();
+    	PropertyInterface field = null;
+    	BaseClass xwikiClass = xwikiContext.getWiki().getDocument(className, xwikiContext).getxWikiClass();
+    	field = xwikiClass.get(fieldName);
+    	String fieldType = field.getClass().getCanonicalName();
+    	String shortFieldType = fieldType.replaceFirst("com.xpn.xwiki.objects.classes.", "");
+    	shortFieldType = shortFieldType.replaceFirst("Class$", "");
+    	if (shortFieldType.equals("DBList")) {
+    		result.addAll(((com.xpn.xwiki.objects.classes.DBListClass) field).getList(xwikiContext));
+    	}  else if (shortFieldType.equals("StaticList")) {
+    		result.addAll(((com.xpn.xwiki.objects.classes.StaticListClass) field).getList(xwikiContext));
+    	}
+
+    	return result;
     }
 }

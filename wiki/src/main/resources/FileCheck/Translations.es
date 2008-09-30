@@ -116,5 +116,12 @@ fc_statusFilter_4=En estado "Borrado"
 fc_charactersRemaining=caracteres restantes
 fc_commentsSizeExceeded=Los comentarios no pueden exceder los 400 caracteres
 fc_seeCounts=Ver cantidad segun estados
+fc_withAccessPrivilegesOf=Con privilegios de acceso
+fc_withAccessPrivilegesOf_All=Todos
+fc_withAccessPrivilegesOf_public=Publico
+fc_withAccessPrivilegesOf_members=Protegido
+fc_withAccessPrivilegesOf_private=Privado
+fc_withAccessPrivilegesOf_protectedAndPublic=Protegido & Publico
+
 #&lt;/pre&gt;</content>
 </xwikidoc>
