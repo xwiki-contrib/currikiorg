@@ -712,10 +712,10 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         else if (rights != null && rights.equals(Constants.RIGHT_PROTECTED)) {
 
         }else if(rights != null && rights.equals(Constants.RIGHT_PRIVATE)){
-            //remove from review queue
-        	BaseObject crsObj = assetDoc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
-            Integer reviewpending = crsObj.getIntValue("reviewpending");
-    		if(reviewpending!=null && reviewpending.equals(1)){
+            // remove from review queue
+            BaseObject crsObj = assetDoc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
+            Integer reviewpending = (crsObj==null) ? null : crsObj.getIntValue("reviewpending");
+         	if (reviewpending!=null && reviewpending.equals(1)){
     			crsObj.setIntValue("reviewpending", 0);
     		}
         }else {
