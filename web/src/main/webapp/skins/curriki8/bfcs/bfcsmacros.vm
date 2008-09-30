@@ -1,6 +1,7 @@
 	#macro(buildBFCSHql $ordered) ##{
 
-	#set($excludeList = ["jmarks", "LudovicDubost", "rmlucas", "RoadofLife", "BobandGeorge", "jkl1231", "Templates", "curriki", "demo", "Entrepreneurship1", "PopTech", "NROCscience", "NROCMath", "Athabasca", "mopsyhop", "ShermanTank", "TravelsWithMusic", "Panwapa", "ALTEC", "Wyoming", "nextvista", "Norteltest", "NortelLearniTTwentyFirstCenturyeLearning", "LearniT", "TestingTodd", "cybersmart", "smarthinkingMath", "dward", "GBelvins", "msutro", "HeyMath", "passandr", "noahk", "katprince", "bobbi", "aschreiber", "rdang", "driscoll"])
+	##Set excludeList variable from ExcludeList page content
+	#includeInContext("FileCheck.ExcludeList")
 
 	##----------------Begin Get filters from cookies
         #set($assetFilterCreationDateFrom = $request.getCookie("assetFilterCreationDateFrom"))
