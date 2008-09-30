@@ -204,7 +204,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             return new ArrayList<String>();
         }
 
-        return root.fetchCollectionsList();
+        return root.getSubassetList();
     }
 
     public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) {

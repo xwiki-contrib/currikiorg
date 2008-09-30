@@ -47,8 +47,8 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
 
     @Override
     public List<String> getSubassetList() {
-        // Default to ordering by name
-        return getSubassetList("name");
+        // Default to ordering by date
+        return getSubassetList("date");
     }
     /**
      * Get a list of subassets
