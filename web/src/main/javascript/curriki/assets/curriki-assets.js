@@ -299,7 +299,17 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot reorder', response, options);
-				alert(_('add.servertimedout.message.text'));
+				if (response.status == 412){
+					if (response.responseText.search(/ 107 [^ ]+ 101:/) !== -1){
+						var msgPfx = 'mycurriki.collections.reorder.';
+						if (place === 'groups'){
+							msgPfx = 'groups_curriculum_collections_reorder.';
+						}
+						alert(_(msgPfx+'error'));
+					}
+				} else {
+					alert(_('add.servertimedout.message.text'));
+				}
 			}
 		});
 	}

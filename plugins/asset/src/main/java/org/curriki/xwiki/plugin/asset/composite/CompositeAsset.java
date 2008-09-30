@@ -314,7 +314,7 @@ abstract class CompositeAsset extends Asset {
         int i = 0;
         for (String page : cur){
             if (!page.equals(orig.get(i))){
-                throw new AssetException("Original list does not match current list");
+                throw new AssetException(AssetException.ERROR_ASSET_REORDER_NOTMATCH, "Original list does not match current list");
             }
             ++i;
         }
