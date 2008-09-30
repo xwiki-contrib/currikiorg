@@ -33,7 +33,7 @@ Curriki.data.user = {
 						this.GetUserinfo(callback);
 					} else {
 						console.error('Cannot get user information', response, options);
-						alert('Error: '+(response.responseText||'Unknown server error getting user information.'));
+						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.user_try = 0;
@@ -43,7 +43,7 @@ Curriki.data.user = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot get user information', response, options);
-				alert('Error: '+(response.responseText||('Server error getting user information.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -68,7 +68,7 @@ Curriki.data.user = {
 						this.GetCollections(callback);
 					} else {
 						console.error('Cannot get user\'s collection information', response, options);
-						alert('Error: '+(response.responseText||'Unknown server error getting user collections.'));
+						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.collection_try = 0;
@@ -80,7 +80,7 @@ console.log('Collections: ', this.collectionChildren);
 			}
 			,failure:function(response, options){
 				console.error('Cannot get user\'s collection information', response, options);
-				alert('Error: '+(response.responseText||('Server error getting user collections.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 				this.collections = [];
 				this.GetGroups(callback);
 			}
@@ -107,7 +107,7 @@ console.log('Collections: ', this.collectionChildren);
 					} else {
 						throw {message: "GetUserinfo: Json object not found"};
 						console.error('Cannot get user\'s group information', response, options);
-						alert('Error: '+(response.responseText||'Unknown server error getting user groups.'));
+						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.group_try = 0;
@@ -118,7 +118,7 @@ console.log('Collections: ', this.collectionChildren);
 			}
 			,failure:function(response, options){
 				console.error('Cannot get user\'s group information', response, options);
-				alert('Error: '+(response.responseText||('Server error getting user groups.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 				this.groups = [];
 				callback();
 			}

@@ -25,14 +25,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o || !o.assetPage) {
 					console.warn('Cannot create resource', response.responseText, options);
-					alert('Error creating resource: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot create resource', response, options);
-				alert('Error: '+(response.responseText||('Server error creating resource.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -51,14 +51,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot get resource metadata', response.responseText, options);
-					alert('Error getting resource information: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot get resource metadata', response, options);
-				alert('Error: '+(response.responseText||('Server error getting resource information.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -77,14 +77,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot get resource metadata', response.responseText, options);
-					alert('Error getting resource metadata: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot get resource metadata', response, options);
-				alert('Error: '+(response.responseText||('Server error getting resource metadata.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -104,14 +104,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot set resource metadata', response.responseText, options);
-					alert('Error setting resource metadata: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot set resource metadata', response, options);
-				alert('Error: '+(response.responseText||('Server error setting resource metadata.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -131,14 +131,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot create external link', response.responseText, options);
-					alert('Error creating external link: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot create external link', response, options);
-				alert('Error: '+(response.responseText||('Server error creating external resource.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -158,7 +158,7 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot add subasset', response.responseText, options);
-					alert('Error adding subasset: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					// We need to refresh the collections for the user
 					Curriki.data.user.GetCollections(function(){callback(o);});
@@ -166,7 +166,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot add subasset', response, options);
-				alert('Error: '+(response.responseText||('Server error adding resource to folder.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -186,14 +186,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot create folder', response.responseText, options);
-					alert('Error creating folder: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot create folder', response, options);
-				alert('Error: '+(response.responseText||('Server error creating folder.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -213,14 +213,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot create collection', response.responseText, options);
-					alert('Error creating collection: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot create collection', response, options);
-				alert('Error: '+(response.responseText||('Server error creating collection.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -240,14 +240,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot add video', response.responseText, options);
-					alert('Error adding video: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot add video', response, options);
-				alert('Error: '+(response.responseText||('Server error creating VIDITalk resource.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -267,14 +267,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot publish resource', response.responseText, options);
-					alert('Error publishing resource: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot publish resource', response, options);
-				alert('Error: '+(response.responseText||('Server error publishing resource.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -299,7 +299,7 @@ Curriki.assets = {
 			}
 			,failure:function(response, options){
 				console.error('Cannot reorder', response, options);
-				alert('Error: '+(response.responseText||('Server error reordering collection.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -319,14 +319,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot unnominate resource', response.responseText, options);
-					alert('Error unnominating resource: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot unnominate resource', response, options);
-				alert('Error: '+(response.responseText||('Server error unnominating resource.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -346,14 +346,14 @@ Curriki.assets = {
 				var o = json.evalJSON(true);
 				if(!o) {
 					console.warn('Cannot nominate resource', response.responseText, options);
-					alert('Error nominating resource: '+(response.responseText||'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			}
 			,failure:function(response, options){
 				console.error('Cannot nominate resource', response, options);
-				alert('Error: '+(response.responseText||('Server error nominating resource.  '+(response.statusText||''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -373,16 +373,14 @@ Curriki.assets = {
 				if (!o) {
 					console.warn('Cannot set as Partner resource',
 							response.responseText, options);
-					alert('Error set as Partner resource: '
-							+ (response.responseText || 'Unknown server error'));
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			},
 			failure : function(response, options) {
 				console.error('Cannot set as Partner resource', response, options);
-				alert('Error: '
-						+ (response.responseText || ('Server error set as Partner resource.  ' + (response.statusText || ''))));
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -403,19 +401,15 @@ Curriki.assets = {
 				var json = response.responseText;
 				var o = json.evalJSON(true);
 				if (!o) {
-					console.warn('Cannot set as Partner resource',
-							response.responseText, options);
-					alert('Error executing the action: '
-							+ (response.responseText || 'Unknown server error'));
+					console.warn('Cannot set as Partner resource', response.responseText, options);
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			},
 			failure : function(response, options) {
-				console.error('Cannot execute the action', response,
-						options);
-				alert('Error: '
-						+ (response.responseText || ('Server error executing the action.  ' + (response.statusText || ''))));
+				console.error('Cannot execute the action', response, options);
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}
@@ -435,19 +429,15 @@ Curriki.assets = {
 				var json = response.responseText;
 				var o = json.evalJSON(true);
 				if (!o) {
-					console.warn('Cannot set as Partner resource',
-							response.responseText, options);
-					alert('Error executing the action: '
-							+ (response.responseText || 'Unknown server error'));
+					console.warn('Cannot set as Partner resource', response.responseText, options);
+					alert(_('add.servertimedout.message.text'));
 				} else {
 					callback(o);
 				}
 			},
 			failure : function(response, options) {
-				console.error('Cannot execute the action', response,
-						options);
-				alert('Error: '
-						+ (response.responseText || ('Server error executing the action.  ' + (response.statusText || ''))));
+				console.error('Cannot execute the action', response, options);
+				alert(_('add.servertimedout.message.text'));
 			}
 		});
 	}

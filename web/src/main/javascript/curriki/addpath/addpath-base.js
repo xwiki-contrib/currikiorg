@@ -2164,7 +2164,7 @@ console.log("Published CB: ", newAsset);
 							callback(asset);
 						} else {
 							console.log('Upload failed', options, response);
-							alert('Error: '+(response.responseText||('Server error uploading file.  '+(response.statusText||''))));
+							alert(_('add.servertimedout.message.text'));
 						}
 					}
 				});
