@@ -1,5 +1,6 @@
 package org.curriki.xwiki.servlet.restlet.router;
 
+import org.curriki.xwiki.servlet.restlet.resource.assets.AssetManagerResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.AssetResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.AssetsResource;
 import org.curriki.xwiki.servlet.restlet.resource.assets.ExternalResource;
@@ -39,5 +40,6 @@ public class AssetsRouter extends Router {
         attach("/{assetName}/nominate", NominateResource.class);
         attach("/{assetName}/unnominate", UnnominateResource.class);
         attach("/{assetName}/partner", PartnerResource.class);
+        attach("/{assetName}/assetManager", AssetManagerResource.class);
     }
 }
