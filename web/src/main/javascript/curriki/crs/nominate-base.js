@@ -36,8 +36,7 @@ Curriki.module.nominate.init = function() {
 							cls : 'crs_nominate_title',
 							autoEl : { // autoEl: for inserting html code
 								tag : 'div',
-								html : _('curriki.crs.nominate.nominatefollowingresourceforreview')
-										+ ' ' + Curriki.current.assetTitle,
+								html : _('curriki.crs.nominate.nominatefollowingresourceforreview'),
 								cls : 'crs_nominate_title'
 							}
 						}
