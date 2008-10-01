@@ -37,8 +37,6 @@ public class FolderCompositeAsset extends CompositeAsset {
     }
 
     public Map<String,Object> getFolderInfo() {
-        Map<String,Object> docInfo = getCompositeInfo();
-
-        return docInfo;
+        return getCompositeInfo();
     }
 }

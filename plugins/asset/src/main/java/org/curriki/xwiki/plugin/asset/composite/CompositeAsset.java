@@ -14,7 +14,12 @@ import org.curriki.xwiki.plugin.asset.AssetException;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
 
 /**
  */
@@ -30,8 +35,7 @@ abstract class CompositeAsset extends Asset {
         BaseObject obj = doc.newObject(Constants.COMPOSITE_ASSET_CLASS, context);
         obj.setStringValue(Constants.COMPOSITE_ASSET_CLASS_TYPE, compositeAssetType());
 
-        obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_COLLECTION);
+        determineCategory();
 
         setDefaultContent();
     }
@@ -133,7 +137,7 @@ abstract class CompositeAsset extends Asset {
 
     public List<String> getSubassetList() {
         List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
-        if (objs != null) {
+        if (objs != null && objs.size() > 0) {
             Collections.sort(objs, new Comparator<BaseObject>(){
                 public int compare(BaseObject s1, BaseObject s2){
                     if (s1 == null) {
@@ -166,17 +170,15 @@ abstract class CompositeAsset extends Asset {
     }
 
     public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
-        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
         Map<String,Object> subInfo = new HashMap<String, Object>(5);
 
         if (objs != null) {
-            for (Object obj : objs){
-                if (obj instanceof BaseObject) {
-                    BaseObject xObj = (BaseObject) obj;
+            for (BaseObject obj : objs){
+                if (obj != null) {
+                    String subPage = obj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
 
-                    String subPage = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
-
-                    Long order = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                    Long order = obj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                     if (order.equals(subassetId)) {
                         subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
                         subInfo.put(Constants.SUBASSET_CLASS_ORDER, order);
@@ -209,15 +211,14 @@ abstract class CompositeAsset extends Asset {
             return addSubasset(page);
         }
 
-        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
         Long beforePosition = null;
         if (objs != null) {
-            for (Object obj : objs) {
-                if (obj instanceof BaseObject) {
-                    BaseObject xObj = (BaseObject) obj;
-                    String objName = xObj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+            for (BaseObject obj : objs) {
+                if (obj != null) {
+                    String objName = obj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
                     if (objName.equals(beforePage)){
-                        beforePosition = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                        beforePosition = obj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                     }
                 }
             }
@@ -239,16 +240,15 @@ abstract class CompositeAsset extends Asset {
     }
 
     protected void relocateAssets(long freePosition) throws XWikiException {
-        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
         if (objs == null) {
             return ;
         }
-        for (Object obj : objs) {
-            if (obj instanceof BaseObject) {
-                BaseObject xObj = (BaseObject) obj;
-                long objPos = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+        for (BaseObject obj : objs) {
+            if (obj != null) {
+                long objPos = obj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                 if (objPos >= freePosition) {
-                    xObj.setLongValue(Constants.SUBASSET_CLASS_ORDER, objPos + 1);
+                    obj.setLongValue(Constants.SUBASSET_CLASS_ORDER, objPos + 1);
                 }
             }
         }
@@ -319,28 +319,33 @@ abstract class CompositeAsset extends Asset {
             ++i;
         }
 
-        // Delete all subassets
-        XWikiDocument assetDoc = getDoc();
-        assetDoc.removeObjects(Constants.SUBASSET_CLASS);
-
-        // Add all from want
-        i = 0;
+        Map<String,Long> wantMap = new HashMap<String,Long>(want.size());
+        long j = 0;
         for (String page : want){
-            BaseObject sub = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
-            sub.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
-            sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, i);
-            ++i;
+            wantMap.put(page, j);
+            j += 1;
+        }
+
+        List<BaseObject> subassets = getDoc().getObjects(Constants.SUBASSET_CLASS);
+        for (BaseObject sub : subassets){
+            if (sub != null){
+                String subPage = sub.getStringValue(Constants.SUBASSET_CLASS_PAGE);
+                long oldOrder = sub.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+                long newOrder = wantMap.get(subPage);
+                if (oldOrder != newOrder){
+                    sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, newOrder);
+                }
+            }
         }
     }
 
     protected long getLastPosition() {
-        List objs = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
         long highestOrder = (long) -1;
         if (objs != null) {
-            for (Object obj : objs) {
-                if (obj instanceof BaseObject) {
-                    BaseObject xObj = (BaseObject) obj;
-                    long objOrder = xObj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
+            for (BaseObject obj : objs) {
+                if (obj != null) {
+                    long objOrder = obj.getLongValue(Constants.SUBASSET_CLASS_ORDER);
                     if (objOrder > highestOrder) {
                         highestOrder = objOrder;
                     }
@@ -355,10 +360,10 @@ abstract class CompositeAsset extends Asset {
         List<String> results = new ArrayList<String>();
 
         if (pageList!=null) {
-            for (Object page : pageList) {
+            for (String page : pageList) {
                 try {
-                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), (String) page, context)) {
-                        results.add((String) page);
+                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), page, context)) {
+                        results.add(page);
                     }
                 } catch (XWikiException e) {
                     // Ignore exception -- just don't add to result list
@@ -368,5 +373,12 @@ abstract class CompositeAsset extends Asset {
         }
 
         return results;
+    }
+
+    protected void determineCategory() throws XWikiException {
+        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj != null) {
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_COLLECTION);
+        }
     }
 }

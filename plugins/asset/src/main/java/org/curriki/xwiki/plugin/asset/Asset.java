@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +40,8 @@ import org.curriki.xwiki.plugin.asset.external.VIDITalkAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
 import org.curriki.xwiki.plugin.asset.text.TextAsset;
+import org.curriki.xwiki.plugin.mimetype.MimeType;
+import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -51,6 +51,7 @@ import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
+import com.xpn.xwiki.plugin.image.ImagePlugin;
 
 public class Asset extends CurrikiDocument {
     private static final Log LOG = LogFactory.getLog(Asset.class);
@@ -315,19 +316,14 @@ public class Asset extends CurrikiDocument {
         } else {
             // Work around a bug XWIKI-1624
             // TODO: Remove the work-around once XWIKI-1624 is fixed
-            List subAssets = doc.getObjects(Constants.COMPOSITE_ASSET_CLASS);
-            Iterator i = subAssets.iterator();
-            int count = 0;
-            while (i.hasNext() && count == 0){
-                if (i.next() != null){
-                    count++;
+            List<BaseObject> subAssets = doc.getObjects(Constants.COMPOSITE_ASSET_CLASS);
+            for (BaseObject sub : subAssets){
+                if (sub != null){
+                    return true;
                 }
             }
-            if (count == 0){
-                return false;
-            }
         }
-        return true;
+        return false;
     }
 
     public boolean isCollection() {
@@ -606,6 +602,58 @@ public class Asset extends CurrikiDocument {
         return asset;
     }
 
+    public AttachmentAsset processAttachment() throws XWikiException {
+        assertCanEdit();
+        AttachmentAsset asset = subclassAs(AttachmentAsset.class);
+
+        if (doc.getAttachmentList().size() > 0) {
+            XWikiAttachment attach = doc.getAttachmentList().get(0);
+            determineCategory(attach.getFilename());
+            saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"));
+        }
+
+        return asset;
+    }
+
+    protected void determineCategory(String filename) throws XWikiException {
+        String extension = (filename.lastIndexOf(".") != -1 ? filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(): null);
+        MimeTypePlugin mimePlugin = (MimeTypePlugin) context.getWiki().getPlugin(MimeTypePlugin.PLUGIN_NAME, context);
+        MimeType mimeType = (mimePlugin==null) ? null : mimePlugin.getCategoryByExtension(extension, context);
+        if (mimeType == null) {
+            return;
+        }
+
+        String category = mimeType.getCategoryName();
+        String mimeTypeName = mimeType.getFullName();
+
+        if (category.equals(Constants.CATEGORY_IMAGE)) {
+            ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin(ImagePlugin.PLUGIN_NAME, context);
+
+            BaseObject mimeObj = doc.getObject(mimeTypeName);
+            if (mimeObj == null){
+                doc.createNewObject(mimeTypeName, context);
+                mimeObj = doc.getObject(mimeTypeName);
+            }
+
+            if (imgPlugin != null && doc.getAttachmentList().size() > 0) {
+                XWikiAttachment att = doc.getAttachmentList().get(0);
+                try {
+                    int height = imgPlugin.getHeight(att, context);
+                    int width = imgPlugin.getWidth(att, context);
+                    mimeObj.setIntValue("height", height);
+                    mimeObj.setIntValue("width", width);
+                } catch (InterruptedException ie) {
+                    // Ignore exception
+                }
+            }
+        }
+
+        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj != null && !category.equals(Constants.CATEGORY_UNKNOWN)) {
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);
+        }
+    }
+
     public Boolean isPublished() {
         return !getSpace().equals("AssetTemp");
     }
@@ -630,6 +678,16 @@ public class Asset extends CurrikiDocument {
         }
 
         assertCanEdit();
+
+        // Be sure we have a category first -- attachments can't get them automatically yet
+        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj != null) {
+            String category = obj.getStringValue(Constants.ASSET_CLASS_CATEGORY);
+            if (category == null || category.isEmpty() || category.equals(Constants.CATEGORY_UNKNOWN)) {
+                processAttachment();
+            }
+        }
+
         if (!space.startsWith(Constants.COLLECTION_PREFIX)) {
             throw new AssetException("You cannot publish to the space "+space);
         }
@@ -644,7 +702,7 @@ public class Asset extends CurrikiDocument {
 
         // Let's choose a nice name for the page
         String prettyName = context.getWiki().clearName(name, true, true, context);
-        doc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList(), context);
+        doc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>(), context);
 
         applyRightsPolicy();
 

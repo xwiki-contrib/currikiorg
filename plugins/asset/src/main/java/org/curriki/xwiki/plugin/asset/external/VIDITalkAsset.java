@@ -29,11 +29,7 @@ public class VIDITalkAsset extends Asset {
             throw new AssetException("This asset already has video.");
         }
 
-        BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
-        obj.setStringValue(Constants.VIDITALK_CLASS_VIDEO_ID, videoId);
-
-        obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_VIDITALK_VIDEO);
+        setVideoId(videoId);
     }
 
     public void setVideoId(String videoId) throws XWikiException {
@@ -42,7 +38,13 @@ public class VIDITalkAsset extends Asset {
         BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
         obj.setStringValue(Constants.VIDITALK_CLASS_VIDEO_ID, videoId);
 
-        obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_VIDITALK_VIDEO);
+        determineCategory();
+    }
+
+    protected void determineCategory() throws XWikiException {
+        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj != null) {
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_VIDITALK_VIDEO);
+        }
     }
 }

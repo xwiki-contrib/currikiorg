@@ -23,8 +23,6 @@ public class CollectionCompositeAsset extends FolderCompositeAsset {
     }
 
     public Map<String,Object> getCollectionInfo() {
-        Map<String,Object> docInfo = getFolderInfo();
-
-        return docInfo;
+        return getFolderInfo();
     }
 }

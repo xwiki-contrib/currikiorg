@@ -11,8 +11,6 @@ import org.apache.commons.logging.LogFactory;
 import org.curriki.xwiki.plugin.asset.Asset;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,41 +65,12 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
 
     public List<String> fetchOrderedCollectionsList() {
         XWikiDocument assetDoc = getDoc();
-        BaseObject assetObj = assetDoc.getObject(Constants.COLLECTION_REORDERED_CLASS);
-        Integer reordered;
-        if (assetObj != null) {
-            reordered = assetObj.getIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 0);
+        BaseObject reorderedObj = assetDoc.getObject(Constants.COLLECTION_REORDERED_CLASS);
+        if (reorderedObj != null) {
+            int reordered = reorderedObj.getIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 0);
             if (reordered == 1) {
                 // If ordered give the ordered list
-                List<BaseObject> objs = assetDoc.getObjects(Constants.SUBASSET_CLASS);
-                if (objs != null && objs.size() > 0) {
-                    Collections.sort(objs, new Comparator<BaseObject>(){
-                        public int compare(BaseObject s1, BaseObject s2){
-                            if (s1 == null) {
-                                return s2 == null ? 0 : -1;
-                            } else if (s2 == null) {
-                                return 1;
-                            }
-                            Long c1 = s1.getLongValue(Constants.SUBASSET_CLASS_ORDER);
-                            Long c2 = s2.getLongValue(Constants.SUBASSET_CLASS_ORDER);
-                            if (c1 == null) {
-                                return c2 == null ? 0 : -1;
-                            } else if (c2 == null) {
-                                return 1;
-                            }
-                            return (c1.compareTo(c2));
-                        }
-                    });
-
-                    List<String> list = new ArrayList<String>();
-                    for (BaseObject obj : objs){
-                        if (obj != null) {
-                            list.add(obj.getStringValue(Constants.SUBASSET_CLASS_PAGE));
-                        }
-                    }
-
-                    return filterViewablePages(list);
-                }
+                return super.getSubassetList();
             }
         }
 
@@ -192,13 +161,19 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     }
 
     public void reorder(List<String> orig, List<String> want) throws XWikiException {
-        // Do reorder
         super.reorder(orig, want);
 
-        // Flag as reordered (Only root collection needs this, others are always ordered
+        // Flag as reordered (Only root collection needs this, others are always ordered)
         XWikiDocument assetDoc = getDoc();
-        assetDoc.removeObjects(Constants.COLLECTION_REORDERED_CLASS);
-        BaseObject sub = assetDoc.newObject(Constants.COLLECTION_REORDERED_CLASS, context);
-        sub.setIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 1);
+        BaseObject reorderObj = assetDoc.getObject(Constants.COLLECTION_REORDERED_CLASS);
+        if (reorderObj != null) {
+            // We need to use {get,set}IntValue() even though the value is actually a boolean
+            if (1 != reorderObj.getIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 0)) {
+                reorderObj.setIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 1);
+            }
+        } else {
+            BaseObject sub = assetDoc.newObject(Constants.COLLECTION_REORDERED_CLASS, context);
+            sub.setIntValue(Constants.COLLECTION_REORDERED_CLASS_REORDERD, 1);
+        }
     }
 }

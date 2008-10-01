@@ -42,7 +42,13 @@ public class TextAsset extends Asset {
         obj.setStringValue(Constants.TEXT_ASSET_CLASS_TEXT, content);
         obj.setLongValue(Constants.TEXT_ASSET_CLASS_TYPE, type);
 
-        obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_TEXT);
+        determineCategory();
+    }
+
+    protected void determineCategory() throws XWikiException {
+        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj != null) {
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_TEXT);
+        }
     }
 }

@@ -8,6 +8,9 @@ import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.AssetException;
 
+import java.net.URL;
+import java.net.MalformedURLException;
+
 /**
  */
 public class ExternalAsset extends Asset {
@@ -44,11 +47,7 @@ public class ExternalAsset extends Asset {
             throw new AssetException("This asset already has alink.");
         }
 
-        BaseObject obj = doc.newObject(Constants.EXTERNAL_ASSET_CLASS, context);
-        obj.setStringValue(Constants.EXTERNAL_ASSET_LINK, link);
-
-        obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_LINK);
+        setLink(link);
     }
 
     public void setLink(String link) throws XWikiException {
@@ -57,8 +56,7 @@ public class ExternalAsset extends Asset {
         BaseObject obj = doc.newObject(Constants.EXTERNAL_ASSET_CLASS, context);
         obj.setStringValue(Constants.EXTERNAL_ASSET_LINK, link);
         
-        obj = doc.getObject(Constants.ASSET_CLASS);
-        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_LINK);
+        determineCategory();
     }
 
     public String getLink() throws XWikiException {
@@ -68,5 +66,12 @@ public class ExternalAsset extends Asset {
 
         BaseObject obj = doc.getObject(Constants.EXTERNAL_ASSET_CLASS);
         return obj.getStringValue(Constants.EXTERNAL_ASSET_LINK);
+    }
+
+    protected void determineCategory() throws XWikiException {
+        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj != null) {
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_LINK);
+        }
     }
 }
