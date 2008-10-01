@@ -93,7 +93,7 @@ console.log('createNode: parent',parent);
 			}
 
 			if (attr.rights && !attr.rights.view){
-				childInfo.text = _('TODO: Translation string about not viewable here');
+				childInfo.text = _('add.chooselocation.resource_unavailable');
 				childInfo.qtip = undefined;
 				childInfo.disabled = true;
 				childInfo.allowDrop = false;
