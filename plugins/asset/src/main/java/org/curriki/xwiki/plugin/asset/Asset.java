@@ -683,7 +683,7 @@ public class Asset extends CurrikiDocument {
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
             String category = obj.getStringValue(Constants.ASSET_CLASS_CATEGORY);
-            if (category == null || category.isEmpty() || category.equals(Constants.CATEGORY_UNKNOWN)) {
+            if (category == null || category.length() == 0 || category.equals(Constants.CATEGORY_UNKNOWN)) {
                 processAttachment();
             }
         }
