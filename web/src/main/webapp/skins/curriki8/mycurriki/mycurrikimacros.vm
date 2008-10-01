@@ -1615,12 +1615,19 @@ $msg.get("deleted")
   #end ## }
   ##
   ## Order by reverse last updated
+  #set($baseWhere = "where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' AND doc.fullName NOT IN (SELECT cbobj.name FROM BaseObject as cbobj, IntegerProperty as cbprop WHERE cbobj.className='XWiki.TextAssetClass' AND cbobj.name = doc.fullName AND cbobj.id=cbprop.id.id AND cbprop.id.name='type' AND cbprop.value=2)")
+  #set($globalView = " 0=1 ")
+  #if($!hasGlobalAdmin)
+    #set($globalView = " 1=1 ")
+  #end
+  #set($rightsWhere = " AND (${globalView} OR '${userdoc.fullName}'='${context.user}' OR doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='XWiki.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) ")
+  #set($baseWhere = "${baseWhere} ${rightsWhere}")
   #if($sortBy=="title") ## {
-    #set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
+    #set($sql = ", BaseObject as obj, StringProperty as prop1 ${baseWhere} and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
   #elseif($sortBy=="access") ## Default sort by rights ## } {
-    #set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
+    #set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 ${baseWhere} and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
   #else ## Default sort by date ## } {
-    #set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by doc.date $sortDir")
+    #set($sql = ", BaseObject as obj ${baseWhere} order by doc.date $sortDir")
   #end ## }
   ## Order by property ascending
   ## How can we sort by
@@ -1649,16 +1656,11 @@ $msg.get("deleted")
     ## row per item -- number of rows configurable
     #set($showcount = 0)
     #foreach($assetPage in $assetList)
-      #if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
+      #set($showcount = 1 + $showcount)
+      #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
         #set($asset = $xwiki.getDocument($assetPage))
-        #set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
-        #if("$type"!="2")
-          #set($showcount = 1 + $showcount)
-          #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
-            #mycurriki_contributionsasset($asset $allcols)
-          #end ## showcount > startIndex && showcount < endIndex
-        #end ## type != 2
-      #end  ## if has view access
+        #mycurriki_contributionsasset($asset $allcols)
+      #end ## showcount > startIndex && showcount < endIndex
     #end ## foreach assetPage in list
     #if($showcount == 0)
       <tr><td colspan="6">$msg.get("mycurriki.contributions.noresults")</td></tr>
