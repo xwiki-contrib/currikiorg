@@ -306,6 +306,8 @@ Curriki.assets = {
 							msgPfx = 'groups_curriculum_collections_reorder.';
 						}
 						alert(_(msgPfx+'error'));
+					} else {
+						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					alert(_('add.servertimedout.message.text'));
