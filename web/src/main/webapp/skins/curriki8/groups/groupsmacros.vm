@@ -116,8 +116,7 @@
         });
 function editWelcomeBlock(spaceName,pageName,divid) {
   var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
-  alert("hi");
-  $("groups-members-welcomeblock").innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+  $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
   // call url to get the edit html to edit the profile
   var myAjax = new Ajax.XWikiRequest( "Groups", "EditWelcomeBlockService", {method: 'get', parameters: pars, onComplete: editWelcomeBlockCallback, divid: divid });
 }
