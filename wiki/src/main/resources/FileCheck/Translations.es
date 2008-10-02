@@ -121,7 +121,7 @@ fc_withAccessPrivilegesOf_All=Todos
 fc_withAccessPrivilegesOf_public=Publico
 fc_withAccessPrivilegesOf_members=Protegido
 fc_withAccessPrivilegesOf_private=Privado
-fc_withAccessPrivilegesOf_protectedAndPublic=Protegido & Publico
+fc_withAccessPrivilegesOf_protectedAndPublic=Protegido y Publico
 
 #&lt;/pre&gt;</content>
 </xwikidoc>
