@@ -278,23 +278,28 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      */
     public String changeFormatDate(String date,String currentPattern,String newPattern,String delim)
     {
-    	StringTokenizer tokenDate = new StringTokenizer(date,delim);
-    	StringTokenizer tokenPattern = new StringTokenizer(currentPattern,delim);
-    	Map hashData = new HashMap();
-    	int count = tokenPattern.countTokens();
-    	for (int i = 0; i < count; i++) {
-			hashData.put(tokenPattern.nextToken(), tokenDate.nextToken());
-		}
+    	try {
+			StringTokenizer tokenDate = new StringTokenizer(date,delim);
+			StringTokenizer tokenPattern = new StringTokenizer(currentPattern,delim);
+			Map hashData = new HashMap();
+			int count = tokenPattern.countTokens();
+			for (int i = 0; i < count; i++) {
+				hashData.put(tokenPattern.nextToken(), tokenDate.nextToken());
+			}
 
-    	tokenPattern = new StringTokenizer(newPattern,delim);
-    	String result = "";
-    	count = tokenPattern.countTokens();
-    	for (int i = 0; i < count; i++) {
-    		result += hashData.get(tokenPattern.nextToken());
-    		if (i<count-1)
-    			result += delim;
-    	}
-    	return result;
+			tokenPattern = new StringTokenizer(newPattern,delim);
+			String result = "";
+			count = tokenPattern.countTokens();
+			for (int i = 0; i < count; i++) {
+				result += hashData.get(tokenPattern.nextToken());
+				if (i<count-1)
+					result += delim;
+			}
+			return result;
+		} catch (Exception e) {
+			LOG.debug(e.getMessage(),e);
+			return "";
+		}
     }
 
     public String formatDate(Date date,String pattern)
@@ -302,9 +307,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     	if (date!=null && date instanceof Date)
 			try {
 				return (new SimpleDateFormat(pattern)).format(date);
-			} catch (RuntimeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				LOG.debug(e.getMessage(),e);
 			}
     	return ""+date;
     }
