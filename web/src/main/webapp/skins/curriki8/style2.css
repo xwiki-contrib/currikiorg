@@ -388,4 +388,275 @@ form em, .header em { font-style: normal; }
 #mini_player_mp3 { display: none; }
 .flash-control-newwindow { display: none; }
 }
-/*** Adding a test message ***/
+/*** Adding Search styles for extjs Overrides ***/
+#search-div {
+	margin-top:10px;
+}
+
+.x-panel-body {
+	background:transparent;
+}
+
+.x-form-element {
+	padding-left:25px;
+}
+
+#searchResultsGrid .x-grid3-cell-inner {
+	white-space: normal;
+}
+.x-fieldset legend { display: block; }
+
+#content ul.x-tab-strip>li { list-style-type: none; margin-left:0; padding-left:0; }
+
+.assettype-icon { width: 16px; height: 17px; background-repeat:no-repeat; }
+.assettype-icon + .asset-title { padding-left: 5px; }
+
+.ict-icon { width: 16px; height: 16px; background-repeat:no-repeat; }
+.ict-icon + .ict-title { padding-left: 5px; }
+.ict-activity .ict-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Activity.gif); }
+.ict-book .ict-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Book.gif); }
+.ict-curriculum .ict-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Curriculum.gif); }
+.ict-multiple .ict-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Multiple.gif); }
+.ict-other .ict-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Other.gif); }
+.ict-resource .ict-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Resource.gif); }
+
+.ict-icon-combo-icon {
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	width: 16px;
+	height: 16px;
+}
+input[type="text"] .ict-icon-combo-input {
+	padding-left: 21px;
+}
+.x-form-field-wrap .ict-icon-combo-icon {
+	top: 3px;
+	left: 5px;
+}
+.ict-icon-combo-item {
+	background-repeat: no-repeat ! important;
+	background-position: 3px 50% ! important;
+}
+
+
+.crs-icon { width:15px; height:15px; background-repeat:no-repeat; }
+.crs-icon + .crs-text { padding-left: 5px; }
+/* Old CRS Values */
+.crs-1 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
+.crs-2 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
+.crs-3 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
+.crs-P .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
+
+/* New CRS Values */
+.crs-10 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
+.crs-60 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
+.crs-70 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/ministarCRS1.gif) }
+.crs-40 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
+.crs-50 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/ministarCRS2.gif) }
+.crs-20 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
+.crs-30 .crs-icon { background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/icons/CRS/ministarCRS3.gif) }
+
+
+/*** SEARCH OVERRIDES ***/
+
+.x-btn-center, .x-btn-left, .x-btn-right {
+	background-image:none;
+}
+
+#search-filterPanel-resource, .x-panel, .x-tab-panel-body, ul.x-tab-strip-top {
+	border:none;
+}
+.x-panel-body-noheader, .x-panel-mc, .x-panel-body {
+	border:none;
+}
+.x-tab-panel-header {
+	z-index:100;
+}
+.x-tab-panel-bwrap {
+	margin-top:-1px;
+}
+/* Fix list style so it doesn't display bullets */
+/* This shouldn't have to deal with "#content", but there is another style
+ * which sets the style for all "#content ul li" for some reason
+ */
+#content ul.x-tab-strip { margin:0 0 0 10px; padding:0; }
+#content ul.x-tab-strip > li { list-style-type: none; margin-right:3px; }
+
+/* Fix tab text font and color */
+.x-tab-strip span.x-tab-strip-text { color:#000000; font-family:arial;
+font-size:12px; font-weight:bold;}
+.x-tab-strip-active span.x-tab-strip-text { color:#000000; }
+.x-tab-strip-over span.x-tab-strip-text { color:#000000;
+text-decoration: underline; }
+
+/* Fix tab background and edge colors */
+.x-tab-strip-top .x-tab-right { background-image:none; }
+.x-tab-strip-top .x-tab-left { background-image:none; }
+.x-tab-strip-top .x-tab-strip-inner { background-image:none;
+background-color: #FFFFFF; border-color: #C9C9C9 #C9C9C9;
+-moz-use-text-color; border-style: solid solid none; border-width: 1px
+1px medium; -moz-border-radius-topleft: 3px;
+-moz-border-radius-topright: 3px; }
+.x-tab-strip-top .x-tab-strip-active .x-tab-strip-inner {
+background-color: #F2F2F2; }
+ul.x-tab-strip-top { border-bottom: none; }
+
+/* Fix spacing between tabs */
+.x-tab-strip-top .x-tab-right { padding-left: 0; }
+.x-tab-strip-top .x-tab-left { padding-right: 1px; }
+
+/* Remove extra space at bottom caused by a setting of
+ * margins for all "ul" in elements.css
+ */
+.x-tab-panel-header-plain .x-tab-strip-top { margin-bottom:0; }
+
+.x-tab-strip-top .x-tab-strip-active .x-tab-right span.x-tab-strip-text {
+ padding:6px;
+}
+.x-tab-strip a:hover {
+ text-decoration:underline;
+}
+.x-tab-strip a em span span {
+ text-decoration:auto;
+}
+.x-tab-strip span.x-tab-strip-text {
+ padding:6px;
+ border-bottom:1px solid #e5e5e5;
+}
+.x-tab-strip-active a.x-tab-right span.x-tab-strip-text {
+padding-bottom:10px;
+z-index:100;
+border-bottom:1px solid #f2f2f2;
+}
+.x-tab-panel-header-plain .x-tab-strip-spacer, .x-tab-panel-footer-plain .x-tab-strip-spacer {
+display:none;
+}
+fieldset#search-advanced-resource {
+	display:none;
+}
+#search-filterPanel-resource {
+	padding:10px;
+	background:#f2f2f2;
+	border:1px solid #e5e5e5;
+}
+#ext-comp-1006 {
+	display:none;
+}
+
+.ext-gecko .x-form-text {
+	color:#000;
+	font-size:12px;
+}
+
+#x-form-el-ext-comp-1005 {
+	margin-right:-90px;
+}
+
+.x-grid3-header {
+	background:#ff4100;
+	color:#fff;
+}
+.x-grid3-body .x-grid3-td-expander {
+background:transparent;
+}
+td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner {
+background:transparent;
+}
+
+.x-grid3-hd-row {
+	text-transform:uppercase;
+}
+
+.x-grid3-hd-row td, .x-grid3-row td, .x-grid3-summary-row td {
+	font-size:12px;
+}
+td.x-grid3-hd-over .x-grid3-hd-inner,td.sort-desc .x-grid3-hd-inner,td.sort-asc .x-grid3-hd-inner,td.x-grid3-hd-menu-open .x-grid3-hd-inner {
+	background-color:#ff4100;
+}
+.x-grid3-hd-btn {
+	display:none;
+	position:absolute;
+	width:14px;
+	background:#c3daf9 url(images/grid3-hd-btn.gif) no-repeat left center;
+	right:0;
+	top:0;
+	z-index:2;
+	cursor:pointer;
+	}
+.x-grid3-row-expanded {
+	background-color:#ffffcf;
+}
+.x-tree-node-icon {
+	float:left;
+	margin-right:5px;
+}
+.ict-icon {
+	float:left;
+	margin-right:5px;
+}
+.ict-title {
+	float:none;
+}
+.x-grid3-col-ict {
+	clear:both;
+}
+
+.x-tip {
+	font-family:arial, sans-serif;
+	text-align:left;
+	background:none;
+	background-color:#FFFECE;
+	border: 1px solid #FFBB00;
+	padding: 1px;
+	font-size:12px;
+	color:#000;
+}
+.x-tip .x-tip-tl, .x-tip .x-tip-tr, .x-tip .x-tip-tc, .x-tip .x-tip-ml, .x-tip .x-tip-mr, .x-tip .x-tip-mc, .x-tip .x-tip-bl, .x-tip .x-tip-br, .x-tip .x-tip-bc {
+	text-align:left;
+	background:transparent;
+}
+
+.x-tip .x-tip-header-text, .x-tip .x-tip-body {
+	color:#000;
+	font-family:arial,helvetica,sans-serif;
+	font-size:12px;
+	background:none;
+}
+.x-panel-bbar .x-toolbar {
+	border:none;
+	overflow:hidden;
+	padding:2px;
+}
+.x-toolbar {
+	background:none;
+	border:none;
+	display:block;
+	padding:2px;
+	position:relative;
+	text-align:center;
+}
+.x-toolbar table {
+	margin:35px auto 0 auto;
+	text-align:center;
+}
+.x-toolbar table td table {
+	margin:0;
+}
+.x-toolbar table td span#ext-gen119 {
+	margin:0 10px;
+}
+.x-toolbar td, .x-toolbar span, .x-toolbar input, .x-toolbar div, .x-toolbar select, .x-toolbar label {
+	font-family:arial,helvetica,sans-serif;
+	font-size:10px;
+}
+.x-paging-info {ext%2Dall.css (line 318)
+	color:#444444;
+	position:absolute;
+	left:0px;
+	top:10px;
+	padding:2px 0;
+	background-color:#F1F1F1;
+	border-top:2px solid #FA4240;
+	text-align:center;
+	z-index:100;
+}
