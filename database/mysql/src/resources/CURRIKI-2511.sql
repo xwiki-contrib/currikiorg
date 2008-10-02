@@ -1,7 +1,7 @@
 --
 --Update old status values by the new values
 --
-﻿SET AUTOCOMMIT=0;
+SET AUTOCOMMIT=0;
 START TRANSACTION;
 
 UPDATE xwikistrings x
