@@ -11,6 +11,9 @@
 						window.location.pathname = 'xwiki/bin/view/CRS/Reviews';
 					});
 				}
+				else{
+					document.getElementById('partner').checked = false;
+				}
 			},
    			icon: Ext.MessageBox.QUESTION
 			});
