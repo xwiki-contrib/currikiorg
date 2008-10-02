@@ -62,8 +62,6 @@ public class NominateResource extends BaseResource {
 
         try {
         com.xpn.xwiki.api.Object obj = asset.getObject("CRS.CurrikiReviewStatusClass");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String sdate = formatter.format(new Date());
         String suser =  this.xwikiContext.getUser();
         if (obj==null) {
             obj = asset.newObject("CRS.CurrikiReviewStatusClass");
@@ -71,7 +69,7 @@ public class NominateResource extends BaseResource {
             obj.set("number",0);
         } 
         obj.set("nomination_user", suser);
-        obj.set("nomination_date", sdate);
+        obj.set("nomination_date", new Date());
         String comments = json.getString("comments");
         obj.set("nomination_comment", comments);
         obj.set("reviewpending", "1");
