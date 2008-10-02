@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
-<creationDate>1199214117000</creationDate>
-<date>1216143017000</date>
-<contentUpdateDate>1216143017000</contentUpdateDate>
-<version>5.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199210517000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>13.1</version>
+<title>Documentation</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -56,6 +56,90 @@
 </property>
 </object>
 <content>1 Groups Documentation
+
+1.1 Refactored pages
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@refactored%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Non refactored pages
+
+#set($sql = "where doc.web='Groups' and doc.content not like '%@refactored%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Content pages with translations
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@type content%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Translations
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@type translation%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Sheets
+#**
+  *  Documentation of the Groups Section
+  * @type content
+  * @refactored ludovic 
+  *#
+#set($sql = "where doc.web='Groups' and doc.content like '%@type sheet%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Scripts
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@type script%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Services
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@type ajaxservice%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Templates
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@type template%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Mail Templates
+
+#set($sql = "where doc.web='Groups' and doc.content like '%@type mailtemplate%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+
+1.1 Pages with no type
+
+#set($sql = "where doc.web='Groups' and doc.content not like '%@type%' and doc.content not like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+1.1 Pages to delete
+
+#set($sql = "where doc.web='Groups' and doc.content like '%TODO DELETE%' order by doc.name")
+#foreach($page in $xwiki.searchDocuments($sql))
+* [$page]
+#end
+
+#info("Old doc")
 
 This explains where editable pages are for customizations of groups:
 

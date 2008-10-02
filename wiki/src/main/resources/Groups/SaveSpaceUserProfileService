@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199045543000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>3.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199041943000</creationDate>
+<date>1222967621000</date>
+<contentUpdateDate>1222967621000</contentUpdateDate>
+<version>6.1</version>
+<title>SaveSpaceUserProfileService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,41 +55,11 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#set($sm = $xwiki.csm)
-#set($spaceName = $request.space)
-#set($memberName = $request.user)
-#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
-#if($isGroupAdmin||$memberName==$context.user)
-#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
-#set($ok = $uprofile.updateProfileFromRequest())
-#set($ok = $uprofile.saveWithProgrammingRights())
-#set($wantedRoles = $!request.getParameterValues('roles'))
-#set($hasRoles = $!request.getParameterValues('hasrole'))
-#groupGetRoles($spaceName false)
-#foreach($role in $ret_groupRoleNames) ## {
-#set($hasRole = false)
-#set($wantsRole = false)
-#foreach($has in $hasRoles) ## {
-  #if($role == $has) ##{
-    #set($hasRole = true)
-  #end ## }
-#end ## }
-#foreach($wanted in $wantedRoles) ## {
-  #if($role == $wanted) ##{
-    #set($wantsRole = true)
-  #end ## }
-#end ## }
-#if($hasRole &amp;&amp; !$wantsRole) ## {
-  #removeUserFromRole($role $memberName)
-#elseif(!$hasRole &amp;&amp; $wantsRole) ## } {
-  #addUserToRole($role $memberName)
-#end ## }
-#end ## }
-&lt;div class="groups-members-member-saveinfo"&gt;
-$msg.get("groups_members_membersettings_savedone")
-&lt;/div&gt;
-#groupsdisplaymemberinfo($memberName,$spaceName,$request.divid)#else
-$msg.groups_needsadminrights
-#end</content>
-</xwikidoc>
+<content>#**
+  * Groups Save User Profile service
+  * This handles the call to save the user profile
+  * @type ajaxservice
+  * @refactored ludovic
+  *#
+#groups_saveuserprofile_service()
+</content></xwikidoc>

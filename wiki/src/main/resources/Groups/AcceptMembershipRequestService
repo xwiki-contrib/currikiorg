@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199045106000</creationDate>
-<date>1215191050000</date>
-<contentUpdateDate>1215191050000</contentUpdateDate>
-<version>4.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199041506000</creationDate>
+<date>1222967619000</date>
+<contentUpdateDate>1222967619000</contentUpdateDate>
+<version>6.1</version>
+<title>AcceptMembershipRequestService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,7 +55,14 @@
 <tags/>
 </property>
 </object>
-<content>#set($sm = $xwiki.csm)
+<content>#**
+ * Service for responding to accepting membershipt request in AJAX
+ * @param request.space Space to accept the user in
+ * @param request.user User to accept
+ * @type ajaxservice
+ * @refactored ludovic
+ *#
+#set($sm = $xwiki.csm)
 ##Loading invitation manager
 #set($im = $xwiki.invitationmanager)
 #set($spaceName = $request.space)

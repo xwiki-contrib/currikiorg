@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199201364000</creationDate>
-<date>1215191050000</date>
-<contentUpdateDate>1215191050000</contentUpdateDate>
-<version>3.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199197764000</creationDate>
+<date>1222967621000</date>
+<contentUpdateDate>1222967621000</contentUpdateDate>
+<version>5.1</version>
+<title>SaveWelcomeBlockService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,14 +55,12 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#set($spaceName = $request.space)
-#set($pageName = $request.page)
-#set($wdoc = $xwiki.getDocument("${spaceName}.${pageName}"))
-#set($ok = $wdoc.updateObjectFromRequest("XWiki.CurrikiWelcomeBlockClass"))
-#set($ok = $wdoc.save())
-##&lt;div class="groups-members-saveinfo"&gt;
-##$msg.get("groups_welcomeblock_savedone")
-##&lt;/div&gt;
-#groupsdisplaywelcomeblock($wdoc)</content>
-</xwikidoc>
+<content>#**
+  * Groups Save Welcome block service
+  * This handles the call to save a welcome block
+  * @type ajaxservice
+  * @refactored ludovic
+  *#
+#groups_savewelcomeblock_service()
+
+</content></xwikidoc>

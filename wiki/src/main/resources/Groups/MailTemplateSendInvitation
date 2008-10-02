@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1198511573000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1198507973000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>6.1</version>
 <title>Invitation to Join $space.displayTitle on Curriki</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -55,7 +55,14 @@
 <tags/>
 </property>
 </object>
-<content>#if($space)
+<content>#**
+  * Message invitation to join group
+  *
+  * @type mailtemplate
+  * @translate this page requires full translation
+  * @refactored ludovic   
+  *#
+#if($space)
 #set($groupName=$space.displayTitle)
 #set($groupDescription=$space.description)
 #set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199656481000</creationDate>
-<date>1215191051000</date>
-<contentUpdateDate>1215191051000</contentUpdateDate>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199652881000</creationDate>
+<date>1222967619000</date>
+<contentUpdateDate>1222967619000</contentUpdateDate>
 <version>6.1</version>
-<title></title>
+<title>CreateMessageSheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,86 +55,11 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#groupsinit()
-#groupsheader("messages")
-#if(!$isGroupMember)
-$msg.get("groups_documentation_onlyaccessibletomembers")
-#else
-#groupsdisplaywelcome($msg.get("groups_messages_create_about_title") $spaceName $doc.name $isGroupAdmin)
-#if($request.page)
-## saving article
-#set($space = "Messages_${spaceName}")
-#set($mytitle = $request.get("XWiki.ArticleClass_0_title"))
-#set($pagename= $xwiki.getUniquePageName($space, $xwiki.clearName($mytitle)))
-#set($pagefullname = "$space.${pagename}")
-#set($tdoc = $xwiki.getDocument($request.page))
-#set($ok = $xwiki.renamePage($tdoc, $pagefullname))
-#set($newdoc = $xwiki.getDocument($pagefullname))
-#set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
-$newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
-$newdoc.setParent("${spaceName}.Messages")
-## Update rights
-#messageUpdateRightsFromRequest($newdoc)
-## Send notification mail
-#messageSendNotificationMail($newdoc)
-## Redirect to message
-$response.sendRedirect($newdoc.getURL())
-#else
-#begingroupsection($msg.get("groups_messages_create_title"), "", "", "blue",false)
-&lt;div class="groups-edit-message"&gt;
-$msg.get("groups_messages_create_about_infotxt")
-#set($bentrydoc = $xwiki.getDocument("Temp", $xwiki.getUniquePageName("Temp","Article")))
-#set($ok = $bentrydoc.save())
-#set($bentryobj = $bentrydoc.newObject("XWiki.ArticleClass"))
-#set($junk = $bentrydoc.use($bentryobj))
-#set($cancelAction = $xwiki.getURL("${doc.space}.Messages", "view"))
-#set($saveAction = "")
-&lt;form action="$saveAction" id="inline" method="post"&gt;
-&lt;input type="hidden" name="page" value="$bentrydoc.fullName" /&gt;
-&lt;div class="fields"&gt;
-*$msg.get("groups_messages_create_messagetitle_instruction")*
-&lt;br /&gt;
-$bentrydoc.display("title", "edit", $bentryobj)
-
-*$msg.get("groups_messages_create_messagecontent_instruction")*
-&lt;br /&gt;
-$bentrydoc.display("content", "edit", $bentryobj)
-&lt;/div&gt;
-#set($editors = $context.getEditorWysiwyg())
-#if($editors)
-{pre}
-&lt;script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"&gt;&lt;/script&gt;
-&lt;script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"&gt;&lt;/script&gt;
-&lt;script language="javascript" type="text/javascript"&gt;
-	wikiEditor.init({
-		elements : "$editors",
-	        language: "en",
-		mode: "exact",
-		content_css: "$xwiki.getSkinFile("style.css", true)",
-		debug : false,
-		remove_linebreaks : false,
-		plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
-        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
-        wiki_use_style: 'true',    
-        wiki_plugins: 'core,attachments'
-	});
-&lt;/script&gt;
-{/pre}
-#end
-#messageIncludeCreateJs()
-#messageAddSendToFormFields($spaceName, true, [], [])
-&lt;div class="righttext"&gt;
-{pre}
-&lt;input class="button button-orange floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm('inline') == false) return false; document.forms.inline.submit(); return false;"/&gt;
-&lt;input class="button button-grey floatright" type="submit" name="formactioncancel" value="$msg.get("groups_messages_create_cancel_btt")" onclick="history.go(-1); return false;"/&gt;
-{/pre}
-&lt;/div&gt;
-&lt;/form&gt;
-&lt;/div&gt;
-#endgroupsection()
-#end
-#end
-#groupsfooter()</content>
+<content>#**
+  * Displays the create message form
+  *
+  * @type sheet
+  * @refactored ludovic
+  *#
+#groups_message_create()</content>
 </xwikidoc>

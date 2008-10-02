@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1198534336000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1198530736000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>5.1</version>
+<title>JoinGroupSheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,132 +55,10 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#macro(confirmjoinform $spaceTitle)
-#set($userprofile = $sm.getSpaceUserProfile($spaceName,$context.user))
-#set($userprofilePage = $sm.getSpaceUserProfilePageName($spaceName,$context.user))
-## Set defaults CURRIKI-1681
-#set($junk = $userprofile.set("allowNotifications", 1))
-#set($junk = $userprofile.set("allowNotificationsFromSelf", 1))
-&lt;form action="" method="post"&gt;
-&lt;p&gt;
-&lt;input type="hidden" name="confirm" value="1" /&gt;
-&lt;input type="hidden" name="code" value="$!request.code" /&gt;
-&lt;input type="hidden" name="user" value="$!request.user" /&gt;
-$msg.get("groups_members_join_infotxt",[$spaceTitle])
-#tooltip("bio_tooltip",$msg.get("groups_members_join_bio_tooltip"))
-&lt;br /&gt;
-$userprofile.display("profile","edit")
-
-#if($sm.getRoles($spaceName).size() &gt; 0) ## {
-&lt;br /&gt;
-&lt;strong&gt;$msg.get("groups.members.selectroles")&lt;/strong&gt;&lt;br /&gt;
-&lt;span class="instruction"&gt;$msg.get("groups.members.join.selectroles.info")&lt;/span&gt;&lt;br /&gt;
-&lt;select name="roles" multiple size=4&gt;
-#groupRoleSelector($spaceName false false false)
-&lt;/select&gt;
-#end ## }
-
-&lt;br /&gt;
-$userprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
-#tooltip("email_tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))
-&lt;br /&gt;
-$userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
-&lt;br /&gt;
-##{pre}
-##&lt;textarea name="profile" cols="80" rows="7"&gt;&lt;/textarea&gt;
-##{/pre}
-##&lt;br /&gt;
-##&lt;input type="checkbox" name="allowNotifications" value="1" checked /&gt; $msg.get("groups_members_create_membersettings_email") &lt;br /&gt;
-##&lt;input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /&gt; $msg.get("groups_members_create_membersettings_changenotice") 
-&lt;div class="button-right"&gt;&lt;input type="submit" class="button button-orange" value="$msg.get("groups_members_join_btt",[$spaceTitle])" /&gt;&lt;/div&gt;
-&lt;/p&gt;
-&lt;/form&gt;
-#end
-#groupsheader("members")
-##Loading spacemanager
-#set($sm = $xwiki.csm)
-##Loading invitation manager
-#set($im = $xwiki.invitationmanager)
-#set($spaceName = $doc.space)
-#set($space = $sm.getSpace($spaceName))
-#set($spaceTitle = $space.displayTitle)
-#set($spacePolicy = $space.policy)
-#begingroupsection($msg.get("groups_members_join_title",[$spaceTitle]),"", "","blue",false)
-#if($context.user=="XWiki.XWikiGuest")
-## begin user is guest we need to ask him to login or create an account
-{pre}
-#set($redirurl= $logredir.replaceAll("&amp;#38;", "-"))
-#set($regurl = $xwiki.getURL("Main.JoinCurriki", "view", "xredirect=${redirurl}"))
-$msg.get("groups_members_join_needaccount",[$regurl])
-#loginbox($logredir)
-{pre} 
-## end user is guest
-## if user is already a member there is no need to join
-#elseif($sm.isMember($spaceName,$context.user))
-$msg.get("groups_members_join_alreadymember")
-## user is not a member so we can continue
-#else
- ## we need to verify the invitation code
- #set($code = $request.code)
- #set($user = $request.user)
- #set($verInv = false)
- #if($code&amp;&amp;($code!=""))
-  ## we verify if the user is presenting a valid invitation (using the code and user)
-  ## Verify code
-  #set($verInv = $im.verifyInvitation($spaceName, $user, $code))
- #else
-  ## we verify if the logged-in user is really invited
-  ## Verify is invited
-  #set($verInv = $im.verifyInvitation($spaceName))
- #end
-## if the group is open and user did not present a valid invitation
-## then we can still show the join form
-#if(($spacePolicy=="open")&amp;&amp;($verInv==false))
- #if($request.confirm=="1")
-  #if($sm.joinSpace($spaceName))
-    #set($wantedRoles = $!request.getParameterValues('roles'))
-    #foreach($role in $wantedRoles) ## {
-      #addUserToRole($role $context.user)
-    #end ## }
-   $msg.get("groups_members_join_success") 
-  #else
-   $msg.get("groups_members_join_failure")
-  #end
- #else
-  ## Confirm (open group)
-  #confirmjoinform($spaceTitle)
- #end 
-## if the user presented a valid invitation 
-#elseif(($spacePolicy=="open")||($verInv==true))
- #if($request.confirm=="1")
-  #if($code&amp;&amp;($code!=""))
-   #set($acceptInv = $im.acceptInvitation($spaceName, $user, $code))
-  #else
-   #set($acceptInv = $im.acceptInvitation($spaceName))
-  #end
-  #if($acceptInv)
-    #set($wantedRoles = $!request.getParameterValues('roles'))
-    #foreach($role in $wantedRoles) ## {
-      #addUserToRole($role $context.user)
-    #end ## }
-    $msg.get("groups_members_join_success")
-   #else
-    $msg.get("groups_members_join_failure")
-  #end
- #else
-  ## Confirm (invitation)
-  #confirmjoinform($spaceTitle)
- #end    
-## if the user did not present a valid invitation 
-## it also means the group is closed
-#else
-   $msg.get("groups_members_join_invitationinvalid")
-#end ## end if spacePolicy==open
-#end ## end if guest
-#endgroupsection()
-#groupsfooter()
-&lt;div class="tooltips"&gt;
-$xwiki.addTooltipJS()
-&lt;/div&gt;</content>
-</xwikidoc>
+<content>#**
+  * Join Group Sheet
+  * @type sheet
+  * @refactored ludovic 
+  *#
+#groups_joingroup()
+</content></xwikidoc>

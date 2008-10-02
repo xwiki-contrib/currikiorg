@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199716478000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199712878000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>7.1</version>
 <title>Congratulations on Creating a Group on Curriki!</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -55,7 +55,13 @@
 <tags/>
 </property>
 </object>
-<content>#set($memberName=$xwiki.getUserName($context.user, false))
+<content>#**
+ * Follow-up page after creating a group
+ * @type content
+ * @translate This page requires full translation
+ * @refactored ludovic
+ *#
+#set($memberName=$xwiki.getUserName($context.user, false))
 #set($groupTitle=$space.displayTitle)
 #set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
 #set($serverURL=$serverURL.replaceAll("www.", ""))
@@ -68,7 +74,7 @@ Remember that as the group leader, you see an "administrative" view of your grou
 
 As a group leader, you have some important next steps:
 
-(1) First, you have the option to edit multiple instructional messages within the tabs that make up the $!groupTitle area on Curriki. These include the Welcome section on the Home tab and the About sections on the Messages, Curriculum, and Members tabs. You can leave these areas as they are, or update and edit them frequently. In the case of the Welcome section on the Home tab, this will not appear on the $!groupTitle Home tab at all unless you click the "Edit" link and update the content to focus on your group. 
+(1) First, you have the option to edit multiple messages within the tabs that make up the $!groupTitle area on Curriki. These include the Welcome section on the Home tab and the About sections on the Messages, Curriculum, Members, and Documentation tabs. You can leave these areas as they are, or update and edit them frequently. In the case of the Welcome section on the Home tab, this will not appear on the $!groupTitle Home tab at all unless you click the "Edit" link and update the content to focus on your group. 
 
 (2) You also need to invite members!
 

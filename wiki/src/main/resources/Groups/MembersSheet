@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1198515040000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1198511440000</creationDate>
+<date>1222967621000</date>
+<contentUpdateDate>1222967621000</contentUpdateDate>
+<version>8.1</version>
+<title>MembersSheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,48 +55,11 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#groupinit()
-#groupsheader("members")
-#if(!$isGroupMember &amp;&amp; ($s.policy=="closed") &amp;&amp; !$hasGlobalAdmin)
-$msg.get("groups_members_onlyaccessibletomembers")
-#else
-#set($im = $xwiki.invitationmanager)
-#set($spacePolicy = $s.policy)
-#groupsdisplaywelcome($msg.get("groups_members_about_title") $spaceName $doc.name $isGroupAdmin)
-#groupsmembershipinfo($spaceName)
-#if(!$xwiki.exists("${spaceName}.ManageRoles")) ## {
-  #set($discard = $xwiki.copyDocument("Groups_TemplateSpace.ManageRoles", "${spaceName}.ManageRoles"))
-#end ## }
-#begingroupsection($msg.get("groups_members_list_title"),$msg.get("groups_members_manage_roles"), $xwiki.getURL("${spaceName}.ManageRoles", "view"), "blue", $isGroupAdmin)
-#if(!$request.type)
-#set($type = "0")
-#else
-#set($type = $request.type)
-#end
-#if(!$isGroupAdmin)
-&lt;div id="groups-members-list-$type" class="groups-members-list"&gt;
-#groupsdisplaymembers($spaceName)
-&lt;/div&gt;
-#else
-#groupsdisplaymembersfilters($type)
-&lt;div id="groups-members-list-$type" class="groups-members-list"&gt;
-## show members
-#if($type=="0")
-#groupsdisplaymembers($spaceName)
-## show membershiprequests
-#elseif($type=="1")
-#groupsdisplayopenmembershiprequests($spaceName)
-## show denied membershiprequests
-#elseif($type=="2")
-#groupsdisplaydeniedmembershiprequests($spaceName)
-#elseif($type=="3")
-#groupsdisplayinvitations($spaceName)
-#end
-##
-&lt;/div&gt;
-#end
-#endgroupsection()
-#end
-#groupsfooter()</content>
+<content>#**
+  * Group Members Sheet
+  *
+  * @type sheet
+  * @refactored ludovic
+  *#
+#groups_members()</content>
 </xwikidoc>

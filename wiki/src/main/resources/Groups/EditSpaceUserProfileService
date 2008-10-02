@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,29 +8,27 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199045520000</creationDate>
-<date>1215191051000</date>
-<contentUpdateDate>1215191051000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199041920000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>4.1</version>
+<title>EditSpaceUserProfileService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
 <comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
-<content>#includeMacros("Groups.Macros")
-#set($sm = $xwiki.csm)
-#set($spaceName = $request.space)
-#set($user = $request.user)
-#set($divid = $!request.divid)
-#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
-#if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
-#groupsdisplayeditmemberinfo($user,$spaceName,$divid)
-#else
-$msg.groups_needsadminrights
-#end</content>
-</xwikidoc>
+<content>#**
+ * Service for showing the edit member info form
+ * @param request.space Space to accept the user in
+ * @param request.user User to edit
+ * @param request.divid DIV name to pass through
+ * @type ajaxservice
+ * @refactored ludovic
+ *#
+#groups_editmemberinfoform()
+</content></xwikidoc>

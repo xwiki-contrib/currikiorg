@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1199045123000</creationDate>
-<date>1215191050000</date>
-<contentUpdateDate>1215191050000</contentUpdateDate>
-<version>3.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1199041523000</creationDate>
+<date>1222967621000</date>
+<contentUpdateDate>1222967621000</contentUpdateDate>
+<version>7.1</version>
+<title>RejectMembershipRequestService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,7 +55,20 @@
 <tags/>
 </property>
 </object>
-<content>#set($sm = $xwiki.csm)
+<content>#**
+  * Groups Reject Membership Request service
+  * This handles the call to reject a membership request
+  * @type ajaxservice
+  * @refactored ludovic
+  *#
+#groups_rejectmembership_service()
+
+#**
+  * Groups Reject Membership Request service
+  * This handles the call to reject a membership request
+  *#
+#macro(groups_rejectmembership_service)
+#set($sm = $xwiki.csm)
 ##Loading invitation manager
 #set($im = $xwiki.invitationmanager)
 #set($spaceName = $request.space)
@@ -75,6 +88,7 @@ $msg.groups_needsadminrights
 SUCCESS
 #else
 $msg.groups_members_reject_request_error
+#end
 #end
 #end</content>
 </xwikidoc>

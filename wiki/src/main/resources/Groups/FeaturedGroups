@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,18 +8,20 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
-<creationDate>1196195191000</creationDate>
-<date>1202754494000</date>
-<contentUpdateDate>1202754494000</contentUpdateDate>
-<version>1.4</version>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1196191591000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>8.1</version>
 <title>Featured Groups</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -53,20 +55,21 @@
 <tags/>
 </property>
 </object>
-<content>#titlebar("Featured Groups" "" "" "blue")
+<content>#**
+ * TO DELETE
+ *#
+#titlebar("Featured Groups" "" "" "blue")
 &lt;p&gt;$msg.get("featuredGroups.intro")&lt;/p&gt;
 &lt;div class="tab-container" id="tab-container-browsegroups"&gt;
-
       &lt;div class="group-by-subject"&gt;
         ## Change the group listed in the macro to change the group shown
-        #mycurrikiGroupInfo("Group_AllAboutPDAs" "")
+        #mycurriki_groupinfo("Group_AllAboutPDAs" "")
       &lt;/div&gt;
 
       &lt;div class="group-by-subject"&gt;
         ## Change the group listed in the macro to change the group shown
-        #mycurrikiGroupInfo("Group_FavesandRaves" "")
+        #mycurriki_groupinfo("Group_FavesandRaves" "")
       &lt;/div&gt;
-
 &lt;/div&gt;
 ##
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.cristi</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1202412594000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1202408994000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>4.1</version>
+<title>DocumentationViewPageSheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,46 +55,7 @@
 <tags/>
 </property>
 </object>
-<content>#if( $request.pagename )
-
-#set( $docdoc = $xwiki.getDocument( $request.pagename ) )
-#if( $request.vers )
-  #set( $docdoc = $xwiki.getDocument( $docdoc, $request.vers ) )
-#end
-
-#if( $docdoc )
-
-#set($editURL = $doc.getURL())
-#set($editURL = $editURL + "?action=editdoc&amp;pagename=")
-#set($editURL = $editURL + $request.pagename)
-
-#set($tit = $docdoc.title)
-#if($request.vers)
-  #set($tit = $tit + " ( version " )
-  #set($tit = $tit + $request.vers)
-  #set($tit = $tit + " )" )
-#end
-
-#begingroupsection("${tit}" "${msg.groups_documentation_documents_edit}" "$editURL" "blue" true)
-&lt;span class="date"&gt;
-      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  $xwiki.formatDate($docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))&lt;/span&gt;
-&lt;br /&gt;
-#if($request.vers)
-This is the revision ${request.vers} of the ducument
-&lt;br /&gt;
-#end
-&lt;br /&gt;
-
-&lt;div class="doccontent"&gt;
-$docdoc.getRenderedContent()
-&lt;/div&gt;
-#endgroupsection()
-
-#set($stopRender = "ok")
-#else
-  $msg.groups_documentation_documents_nopage
-#end
-#else
-  $msg.groups_documentation_documents_nopage
-#end</content>
-</xwikidoc>
+<content>#* 
+ * TODO DELETE 
+ *#
+</content></xwikidoc>

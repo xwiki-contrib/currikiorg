@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1200243725000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>6.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1200240125000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>4.1</version>
+<title>EditMessageService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,61 +55,13 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#groupsinit()
-#set($pageName = $request.page)
-#set($spaceName = $request.space)
-#set($groupName = $spaceName)
-#if(!$groupName.startsWith("Group_"))
-#set($pos = 1 + $groupName.indexOf("_"))
-#set($groupName = $groupName.substring($pos))
-#end
-#set($divid = $request.divid)
-#set($adoc = $xwiki.getDocument("${spaceName}.${pageName}"))
-#set($ok = $adoc.use("XWiki.ArticleClass"))
-{pre}
-&lt;form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{update:'${divid}', onComplete:onAfterSave}); return false;"&gt;
-{/pre}
-&lt;p&gt;
-&lt;input type="hidden" name="xpage" value="plain" /&gt;
-&lt;input type="hidden" name="space" value="$spaceName" /&gt;
-&lt;input type="hidden" name="page" value="$pageName" /&gt;
-&lt;br /&gt;
-*$msg.get("groups_messages_create_messagetitle_instruction")*
-$adoc.display("title", "edit")
-&lt;br /&gt;
-&lt;br /&gt;
-*$msg.get("groups_messages_create_messagecontent_instruction")*
-$adoc.display("content", "edit")
-&lt;br /&gt;
-## The JavaScript needed is included in Groups.MessageSheet
-#set($viewRightObj = $adoc.getObject("XWiki.XWikiRights", "levels", "view"))
-#set($toGroup = true)
-#set($selectedRoles = [])
-#set($selectedMembers = [])
-#if($viewRightObj)
-$adoc.use($viewRightObj)
-#if(!$adoc.groups.contains("${groupName}.MemberGroup"))
-#set($toGroup = false)
-#end
-#foreach($role in $adoc.groups.split(","))
-#if($role.length()&gt;0 &amp;&amp; !$role.equals("XWiki.XWikiAllGroup") &amp;&amp; !$role.equals("${groupName}.MemberGroup"))
-#set($ok = $selectedRoles.add($role))
-#end
-#end
-#foreach($member in $adoc.users.split(","))
-#if($member.length()&gt;0)
-#set($ok = $selectedMembers.add($member))
-#end
-#end
-#end
-#messageAddSendToFormFields($groupName, $toGroup, $selectedRoles, $selectedMembers)
-{pre}
-&lt;div class="button-right"&gt; 
-&lt;input type="button" class="button button-grey" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" /&gt;
-&lt;input type="submit" class="button button-orange" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" /&gt;
-&lt;/div&gt;
-{/pre}
-&lt;/p&gt;
-&lt;/form&gt;
+<content>#**
+ * Service for showing the edit message form
+ * @param request.space Space to accept the user in
+ * @param request.page Page to edit
+ * @param request.divid DIV name to pass through
+ * @type ajaxservice
+ * @refactored ludovic
+ *#
+#groups_editmessageform()
 </content></xwikidoc>

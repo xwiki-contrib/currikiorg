@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.superadmin</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1197567777000</creationDate>
-<date>1215191050000</date>
-<contentUpdateDate>1215191050000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1197564177000</creationDate>
+<date>1222967619000</date>
+<contentUpdateDate>1222967619000</contentUpdateDate>
+<version>9.1</version>
+<title>CreateNewGroup</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,151 +55,10 @@
 <tags/>
 </property>
 </object>
-<content>#if($context.user=="XWiki.XWikiGuest")
-#set($url = $xwiki.getURL("XWiki.XWikiLogin","login","xredirect=$logredir"))
-$msg.get("groups_creategroup_needaccount", [$url])
-#else
-#includeMacros("Groups.Macros")
-
-##Loading spacemanager
-#set($sm = $xwiki.csm)
-
-## check if the user email is validated and if not goto validation page
-
-##Creating a fake space
-#set($valid = 0)
-#if($request.method=="POST")	
-  #set($newspace = $sm.createSpaceFromRequest("Groups_TemplateSpace"))
-  #if($newspace)
-    ##$response.sendRedirect($xwiki.getURL("${newspace.space}.WebHome", "view", "firsttime=1"))
-    #includeInContext("Groups.CreateNewGroupDone")    
-    #set($valid = 1)
-  #else
-    #if( $context.validation )
-       #set( $valid = 0 )
-    #else
-      space creation error
-    #end
-  #end
-  
-#end
-
-#if( $valid == 0 )
-  
-  #set($newspace = $sm.getSpace(""))
-  #set($ok = $sm.updateSpaceFromRequest($newspace))
-  #if(!($request.method=="POST"))	
-    #set($ok = $context.validation.clear())
-    $newspace.setPolicy("open")
-    $newspace.set("accessprivileges", "open")
-  #end
-  
-  ##Show the inputs for form
-  &lt;form action="CreateNewGroup" class="CreateNewGroup" method="post"&gt;
-  &lt;h1&gt;$msg.get("groups_creategroup_pagename")&lt;/h1&gt;
-  
-  #titlebar($msg.get("groups_creategroup_about_title"), "", "", "blue")
-  &lt;div class="section"&gt;
-    $msg.get("groups_creategroup_about_infotxt")
-  &lt;/div&gt;  ##endsection
-
-  #titlebar($msg.get("groups_creategroup_namedescribe_title"), "", "", "blue")
-  &lt;div class="section"&gt;
-    &lt;span id="label-group-name"&gt;$msg.get("groups_creategroup_namedescribe_groupname"):&lt;/span&gt; &lt;br /&gt;
-    $newspace.display("displayTitle","edit")
-	#tooltip("group-name",$msg.get("groups_creategroup_namedescribe_groupname_tooltip"))
-
-    #validateGroup( "title-exists" "" $msg.groups_validation_title_exists)    
-    #validateGroup( "title-short" "" $msg.groups_validation_title_short)    
-    #validateGroup("title-long"  "" $msg.groups_validation_title_long)
-    #validateGroup("title-invalid"  "" $msg.groups_validation_title_invalid)
-    #validateGroup( "space-exists" "" $msg.groups_validation_space_exists)
-
-    &lt;span id="label-group-description"&gt;$msg.get("groups_creategroup_namedescribe_groupdescription")&lt;/span&gt; &lt;br /&gt;
-     &lt;div id="form-info-top"&gt; 
-    $newspace.display("description","edit")
-#tooltip("group-description",$msg.groups_creategroup_namedescribe_groupdescription_tooltip)
-
-    #validateGroup( "desc-short" "" $msg.groups_validation_desc_short)  
-    #validateGroup( "desc-long" "" $msg.groups_validation_desc_long)
-     &lt;/div&gt;
-
-    &lt;span id="label-group-webaddress"&gt;$msg.get("groups_creategroup_namedescribe_webaddress_instruction")&lt;/span&gt; &lt;br /&gt;
-    http:&amp;#47;&amp;#47;  $newspace.display("urlshortcut","edit") .groups.curriki.org
-    
-    #validateGroup( "url-short" "" $msg.groups_validation_url_short)
-    #validateGroup( "url-long" "" $msg.groups_validation_url_long)
-    #validateGroup( "url-exists" "" $msg.groups_validation_url_exists)
-    #validateGroup( "url-invalid" "" $msg.groups_validation_url_invalid)
-
-  &lt;/div&gt; ##endsection
-
-  #titlebar($msg.groups_creategroup_member_policy_title,"","","blue")
-  &lt;div class="section"&gt;
-    $newspace.display("policy","edit")
-    
-    ##validateGroup( "policy-required" "" $msg.groups_validation_policy_required)
-  &lt;/div&gt; ##endsection
-
-  #titlebar($msg.get("groups_creategroup_select_subjectlevel_title"),"","","blue")
-  &lt;div class="section"&gt;
-    &lt;table border="0" width="100%"&gt;&lt;tr&gt;
-    &lt;th width="50%"&gt;$msg.groups_creategroup_select_subjectlevel_subject_title #tooltip("subject-level",$msg.groups_creategroup_select_subjectlevel_subject_tooltip)&lt;/th&gt;
-    &lt;th width="50%"&gt;$msg.groups_creategroup_select_subjectlevel_level_title
-#tooltip("educational-level",$msg.groups_creategroup_select_subjectlevel_level_tooltip)&lt;/th&gt;
-    &lt;/tr&gt;&lt;tr&gt;
-    &lt;td width="50%"&gt; 
-		$newspace.display("topic","edit")
-    &lt;/td&gt;
-    &lt;td width="50%"&gt; 
-	        $newspace.display("educationLevel","edit")
-    &lt;/td&gt;
-    &lt;/tr&gt;&lt;/table&gt;
-   
-    #validateGroup( "subject-required" "" $msg.groups_validation_subject_required)
-    #validateGroup( "education-required" "" $msg.groups_validation_education_required)
-  &lt;/div&gt; ##endsection
-
-  #titlebar($msg.get("groups_creategroup_select_language_title"),"","","blue")
-  &lt;div class="section"&gt;
-    $newspace.display("language","edit")
-#tooltip("language",$msg.get("groups_creategroup_select_language_infotxt"))
-  &lt;/div&gt; ##endsection
-
-  #titlebar($msg.get("groups_creategroup_select_license_title"),"","","blue")
-  &lt;div class="section"&gt;
-  $msg.get("groups_creategroup_select_license_infotxt")
-  $newspace.display("licence","edit")
-
-    #validateGroup( "licence-long" "" $msg.groups_validation_licence_required)
-  &lt;/div&gt; ##endsection
-
-  #titlebar($msg.get("groups_creategroup_select_access_title"),"","","blue")
-  &lt;div class="section"&gt;
-    
-    &lt;div class="infotext"&gt; 
-      $msg.groups_creategroup_select_access_infotxt 
-    &lt;/div&gt;
-    $newspace.display("accessprivileges","edit")
-    #validateGroup( "privacy-required" "" $msg.groups_validation_privacy)
-
-  &lt;/div&gt;  ##endsection
-
-  #titlebar($msg.get("groups_creategroup_create_title"),"","","blue")
-  &lt;div class="section"&gt;
-  &lt;div class="infotext"&gt;
-    $msg.get("groups_creategroup_create_infotxt")
-  &lt;/div&gt;
-   &lt;table align="center"&gt;&lt;tr&gt;
-  &lt;td&gt;&lt;input type="submit" class="button button-orange" value="$msg.get("groups_creategroup_create_btt")" /&gt;&lt;/td&gt;
-  &lt;td&gt;#set($homelink=$xwiki.getURL("Main.WebHome"))
-  #button(  "$msg.groups_creategroup_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_creategroup_cancel_confirm')) window.location='$homelink';" )&lt;/td&gt;
-  &lt;/tr&gt;&lt;/table&gt;
-  &lt;/div&gt;
-  &lt;/form&gt;
-#end
-#end
-&lt;div class="tooltips"&gt;
-$xwiki.addTooltipJS()
-&lt;/div&gt;</content>
-</xwikidoc>
+<content>#**
+  * Create New Group Page
+  * @type sheet
+  * @refactored ludovic
+  *#
+#groups_createnewgroupform()
+</content></xwikidoc>

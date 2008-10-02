@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1202834406000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1202830806000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>7.1</version>
+<title>Feed</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,19 +55,10 @@
 <tags/>
 </property>
 </object>
-<content>#set($spaceName = $request.space)
-#if(!$spaceName)
-#set($spaceName = "Group_ludotest")
-#end
-#set($as = $xwiki.activitystream)
-#set($list = $as.getEvents($spaceName, true, 0, 0))
-##foreach($event in $list)
-##$event.date $event.page: $event.displayTitle &lt;br /&gt;
-###end
-#if($request.type)
-#set($type = $request.type)
-#else
-#set($type = "atom_0.3")
-#end
-{pre}$as.getFeedOutput($list, "Curriki", "Curriki Group Feed", "Curriki Group Feed", "Copyright", $xwiki.encoding, "http://www.curriki.org/", $type){/pre}</content>
-</xwikidoc>
+<content>#**
+  * Groups feed page
+  * @type script
+  * @refactored ludovic
+  *#
+#groups_feed()
+</content></xwikidoc>

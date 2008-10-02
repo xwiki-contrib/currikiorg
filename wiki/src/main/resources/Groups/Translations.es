@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.albertobuffagni</creator>
-<author>XWiki.albertobuffagni</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.albertobuffagni</contentAuthor>
-<creationDate>1213306576000</creationDate>
-<date>1213307944000</date>
-<contentUpdateDate>1213307944000</contentUpdateDate>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1213302976000</creationDate>
+<date>1222697830000</date>
+<contentUpdateDate>1222697830000</contentUpdateDate>
 <version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>spanish translation</comment>
+<comment>test</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,7 +55,10 @@
 <tags/>
 </property>
 </object>
-<content>## &lt;pre&gt;
+<content>## Groups Translations
+## @type translation
+## @refactored ludovic 
+## &lt;pre&gt;
 datetime=Date/Time
 action=Action
 

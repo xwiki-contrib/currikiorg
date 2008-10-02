@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.cristi</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1198091297000</creationDate>
-<date>1219967967000</date>
-<contentUpdateDate>1219967967000</contentUpdateDate>
-<version>6.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1198087697000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>5.1</version>
+<title>EditInfoSheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix macro names</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,123 +55,8 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-
-##Loading spacemanager
-#set($sm = $xwiki.csm)
-#set($spaceName = $doc.space)
-#set($s = $sm.getSpace($spaceName))
-
-#if($request.method=="POST")
-  #set($oldPolicy = $s.policy)
-  #set($ok = $sm.updateSpaceFromRequest($s))
-#end
-
-#if($ok)
-  $s.save($xwiki.getContext())
-  #if($oldPolicy!=$s.policy)
-    ## we need to update the rights
-   ## TODO fix the SpaceManager plugin api and call this API instead
-   ## this makes programming rights necessary for this page
-    $sm.plugin.updateSpaceRights($s, $oldPolicy, $s.policy, $context.context)
-  #end
-  $response.sendRedirect($s.getHomeURL())
-#else
-&lt;form class="CreateNewGroup" action="#" method="post"&gt;
-
-############# membership policy ################
-&lt;div class="frame"&gt;
-#mycurriki_titlebar($msg.groups_home_editinformation_member_policy_title,"","","blue")
-&lt;div class="section frame-content"&gt;
-
-$s.display("policy","edit")
-
-&lt;/div&gt;
-&lt;/div&gt;
-##endgroupsection()
-
-############# subject - level #################
-&lt;div class="frame"&gt;
-#mycurriki_titlebar($msg.groups_home_editinformation_subjectlevel_title,"","","blue")
-&lt;div class="section frame-content"&gt;
-
-&lt;table border="0"&gt;
-&lt;tr&gt;
-&lt;th&gt;$msg.groups_home_editinformation_subject_title&lt;/th&gt;
-&lt;th&gt;$msg.groups_home_editinformation_level_title&lt;/th&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td width="50%"&gt; $s.display("topic","edit") &lt;/td&gt;
-&lt;td width="50%"&gt; $s.display("educationLevel","edit") &lt;/td&gt;
-&lt;/tr&gt;&lt;/table&gt;
-
-   #validateGroup( "subject-required" "" $msg.groups_validation_subject_required)
-   #validateGroup( "education-required" "" $msg.groups_validation_education_required)
-
-&lt;/div&gt;
-&lt;/div&gt;
-##endgroupsection()
-
-############### language ###################
-&lt;div class="frame"&gt;
-#mycurriki_titlebar($msg.groups_home_editinformation_language_title,"","","blue")
-&lt;div class="section frame-content"&gt;
-
-$s.display("language","edit")
-
-&lt;/div&gt;
-&lt;/div&gt;
-##endgroupsection()
-
-############## licence ##############
-&lt;div class="frame"&gt;
-#mycurriki_titlebar($msg.groups_home_editinformation_license_title,"","","blue")
-&lt;div class="section frame-content"&gt;
-
-$s.display("licence","edit")
-#validateGroup( "licence-required" "" $msg.groups_validation_licence_required)
-
-&lt;/div&gt;
-&lt;/div&gt;
-##endgroupsection()
-
-################ information access #####
-&lt;div class="frame"&gt;
-#mycurriki_titlebar($msg.groups_home_editinformation_access_title,"","","blue")
-&lt;div class="section frame-content"&gt;
-
-$s.display("accessprivileges","edit")
-
-&lt;/div&gt;
-&lt;/div&gt;
-##endgroupsection()
-
-
-############## webadress ###########
-&lt;div class="frame"&gt;
-#mycurriki_titlebar($msg.groups_home_editinformation_webaddress_title,"","","blue")
-&lt;div class="section frame-content"&gt;
-
-$msg.groups_home_editinformation_webaddress_instruction &lt;br /&gt;
-#set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
-#set($serverURL=$serverURL.replaceAll("www.", ""))
-#set($groupURL=".groups."+$serverURL)
-http:&amp;#47;&amp;#47; $s.display("urlshortcut","edit") $groupURL
-
-#validateGroup( "url-short" "" $msg.groups_validation_url_short)
-#validateGroup( "url-long" "" $msg.groups_validation_url_long)
-#validateGroup( "url-exists" "" $msg.groups_validation_url_exists)
-#validateGroup( "url-invalid" "" $msg.groups_validation_url_invalid)
-
-&lt;/div&gt;
-&lt;/div&gt;
-##endgroupsection()
-
-&lt;div class="button-center"&gt;&lt;input class="button button-orange" type="submit" value="$msg.groups_home_editinformation_submit_btt" /&gt; #button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )&lt;/div&gt;
-
-&lt;/form&gt;
-#end
-&lt;div class="tooltips"&gt;
-$xwiki.addTooltipJS()
-&lt;/div&gt;</content>
+<content>#**
+  * TODO DELETE 
+  * Replaced with macros 
+  *#</content>
 </xwikidoc>

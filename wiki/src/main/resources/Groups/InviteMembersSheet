@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,14 +8,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1198492265000</creationDate>
-<date>1215191052000</date>
-<contentUpdateDate>1215191052000</contentUpdateDate>
-<version>2.1</version>
-<title></title>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1198488665000</creationDate>
+<date>1222967620000</date>
+<contentUpdateDate>1222967620000</contentUpdateDate>
+<version>5.1</version>
+<title>InviteMembersSheet</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -55,82 +55,11 @@
 <tags/>
 </property>
 </object>
-<content>#includeMacros("Groups.Macros")
-#groupinit()
-#groupsheader("members")
-#if(!$isGroupMember)
-$msg.get("groups_invitation_onlyaccessibletomembers")
-#else
-#set($spaceTitle = $s.displayTitle)
-#set($spaceURL="http://"+$s.homeShortcutURL+".groups.curriki.org")
-#if($request.method.toLowerCase()=="post")
-#begingroupsection($msg.get("groups_members_invite_title"),"","","blue",false)
-#set($im = $xwiki.invitationmanager)
-#set($invitees = $request.getParameter("invitees").split(","))
-#set($text = $request.getParameter("text"))
-#set($open = ($request.getParameter("open")=="open"))
-#set($roles = $xwiki.arrayList)
-#set($roleArray = $!request.getParameterValues('roles'))
-#foreach($role in $roleArray) ## {
-#set($discard = $roles.add($role))
-#end ## }
-#set($map = $xwiki.hashMap)
-#set($oldMessage = $map.put("message", $text))
-#set($invitationSentCount = 0)
-#set($invitationCount = 0)
-#foreach($invitee in $invitees)
-#set($invitationCount = $invitationCount+1)
-#set($invitee = $invitee.trim())
-#if($im.inviteUser($invitee,$spaceName,$open,$roles,null,$map)==false)
-#set($errCode = $context.get("InvitationManagerException").code)
-#if($errCode==101001)
-#error($msg.get("groups_members_invite_inviteemissing"))
-#elseif($errCode==101002)
-#error($msg.get("groups_members_invite_emailinvalid", [$invitee]))
-#elseif($errCode==101003)
-#error($msg.get("groups_members_invite_alreadyinvited", [$invitee, $spaceTitle]))
-#elseif($errCode==101004)
-#error($msg.get("groups_members_invite_alreadymember", [$invitee, $spaceTitle]))
-#else
-#error($msg.get("groups_members_invite_failed", [$invitee]))
-#end
-#else
-#info($msg.get("groups_members_invite_sent",[$invitee]))
-#set($invitationSentCount = $invitationSentCount + 1)
-#end
-#end
+<content>#**
+  * Invite Member Sheet
+  * @type sheet
+  * @refactored ludovic 
+  *#
+#groups_invitemember()
 
-$msg.get("groups_members_invite_report",[$invitationSentCount,$invitationCount])
-#if($invitationSentCount &gt; 0)
-$msg.get("groups_members_invite_statuslink")
-#end
-$msg.get("groups_members_invite_backlink")
-#endgroupsection()
-#else
-#begingroupsection($msg.get("groups_members_invite_title"),"","","blue",false)
-&lt;form action="" method="post"&gt;
-$msg.get("groups_members_invite_list_instruction",[$spaceTitle])
-
-&lt;input type="text" name="invitees" value="" /&gt;
-
-$msg.get("groups_members_invite_note_instruction")
-#tooltip("invite_note_instruction",$msg.get("groups_members_invite_note_instruction_tooltip"))
-{pre}
-&lt;textarea name="text" rows="7"&gt;
-$msg.get("groups_members_invite_invitefieldtxt", [$spaceTitle, $spaceURL, $xwiki.getUserName($context.user, false)])
-&lt;/textarea&gt;
-{/pre}
-
-&lt;input id="openInvitationCheckbox" type="checkbox" name="open" value="open" /&gt;
-&lt;label for="openInvitationCheckbox"&gt;$msg.get("groups_members_invite_openinvitation")&lt;/label&gt;
-
-&lt;p class="paragraph button-right"&gt;&lt;input type="submit" class="button button-orange" value="$msg.get("groups_members_invite_btt")" /&gt;&lt;/p&gt;
-&lt;/form&gt;
-#endgroupsection()
-#end
-#end
-#groupsfooter()
-&lt;div class="tooltips"&gt;
-$xwiki.addTooltipJS()
-&lt;/div&gt;</content>
-</xwikidoc>
+</content></xwikidoc>
