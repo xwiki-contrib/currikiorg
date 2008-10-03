@@ -147,11 +147,13 @@
 #macro(groups_managerole_editroleline $role) ## {
   <div id="groups-manage-role-line-${role.name}">
 <div class="lefttext">
+{pre}
 <div class="righttext floatright hidebuttons">
-<a href="javascript:void()" onclick="{pre}$('groups-manage-role-line-{/pre}${role.name}{pre}').hide(); $('groups-manage-roles-edit-{/pre}${role.name}{pre}').show(); $$('.hidebuttons').invoke('hide'); return false;{/pre}">$msg.get("groups.roles.manage.edit")</a>
+<a href="javascript:void()" onclick="$('groups-manage-role-line-${role.name}').hide(); $('groups-manage-roles-edit-${role.name}').show(); $$('.hidebuttons').invoke('hide'); return false;">$msg.get("groups.roles.manage.edit")</a>
 #sep()
 <a href="$xwiki.getURL("${spaceName}.ManageRoles", "view", "delete=${role.name}")" onclick="return confirm('$msg.get("groups.roles.manage.delete.confirm")');">$msg.get("groups.roles.manage.delete")</a>
 </div>
+{/pre}
 $role.title
 </div>
 </div>

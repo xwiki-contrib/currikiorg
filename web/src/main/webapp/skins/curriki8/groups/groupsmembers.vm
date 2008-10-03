@@ -933,6 +933,7 @@ $xwiki.addTooltipJS()
   *  Cancel invitation
   *#
 #macro(groups_members_service)
+{pre}
 #set($sm=$xwiki.csm)
 #set($spaceName=$request.space)
 #set($memberName=$request.user)
@@ -973,14 +974,48 @@ $msg.groups_cannotcancelinvitation
 #end
 #end
 #end
+{/pre}
 #end
 
+#**
+  * Groups Accept Membership Request service
+  * This handles the call to accept a membership request
+  *#
+#macro(groups_acceptmembership_service)
+{pre}
+#set($sm = $xwiki.csm)
+##Loading invitation manager
+#set($im = $xwiki.invitationmanager)
+#set($spaceName = $request.space)
+#set($space = $sm.getSpace($spaceName))
+#set($spaceTitle = $space.displayTitle)
+#set($spacePolicy = $space.policy)
+#if($context.user=="XWiki.XWikiGuest")
+$msg.groups_members_accept_request_needtobeloggedin
+## if user is not member he cannot accept users
+#elseif(!$hasGlobalAdmin && !$sm.isAdmin($spaceName,$context.user))
+$msg.groups_needsadminrights
+#else
+## we need to verify there is a request fron this user
+#set($user = $request.user)
+## accept invitation
+#set($acceptInv = $im.acceptMembership($spaceName, $user))
+#if($acceptInv)
+## we also need to update the space profile with the data in the Map
+SUCCESS
+#else
+$msg.groups_members_accept_request_error
+#end
+#end
+{/pre}
+#end
 
 #**
   * Groups Reject Membership Request service
   * This handles the call to reject a membership request
   *#
 #macro(groups_rejectmembership_service)
+{pre}
 #set($sm = $xwiki.csm)
 ##Loading invitation manager
 #set($im = $xwiki.invitationmanager)
@@ -1003,6 +1038,7 @@ SUCCESS
 $msg.groups_members_reject_request_error
 #end
 #end
+{/pre}
 #end
 
 

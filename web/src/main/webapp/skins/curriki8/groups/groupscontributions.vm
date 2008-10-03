@@ -356,6 +356,10 @@ Curriki.module.search.start();
   * @param $asset Asset to show collections for
   *#
 #macro(groups_curriculum_collectionactions $asset)
+<a href="$asset.getURL("view")" class="button-link">$msg.get("groups.curriculum.collections.view")</a>
+#if($asset.hasAccessLevel("edit"))
+<a target="_blank" href="#gwtEditUrl(${asset.fullName})" class="button-link-table">$msg.get("groups.curriculum.collections.edit")</a>
+##
 #escapeForJS($asset.fullName)
 #set($escapedFullName = $ret_escaped)
 #findCurrikiTitle($asset)
@@ -364,6 +368,12 @@ Curriki.module.search.start();
 {pre}
 <a class="button-link-table" onclick="Curriki.module.addpath.startPath('N', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle', publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.buildup")" title="$msg.get("groups.curriculum.collections.buildup_tooltip")">$msg.get("groups.curriculum.collections.buildup")</a>
 {/pre}
+#end
+#if($sm.isAdmin($spaceName, $context.user))
+#set($deleteMsg = $msg.get('groups.curriculum.collections.actions.delete.confirm'))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
+<a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table">$msg.get("groups.curriculum.collections.delete")</a>
+#end
 #end
 
 #macro(groups_curriculum_collectionasset $asset)
@@ -393,12 +403,6 @@ Curriki.module.search.start();
   * Displays the collections list for this group
   *#
 #macro(groups_curriculum)
-##
-#if($sm.isAdmin($spaceName, $context.user))
-#set($deleteMsg = $msg.get('groups.curriculum.collections.actions.delete.confirm'))
-#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-<a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table">$msg.get("groups.curriculum.collections.delete")</a>
-#end
 #groupinit()
 #groupsheader("curriculum")
 #groupsdisplaywelcomecolour($msg.get("groups.curriculum.about.title") $spaceName $doc.name "red" $isGroupAdmin)
@@ -521,7 +525,7 @@ $msg.get("groups.curriculum.collections.about")
 #set($showcount = 1 + $showcount)
 #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
 #set($asset = $xwiki.getDocument($assetPage))
-#groups_currikiculum_collectionasset($asset)
+#groups_curriculum_collectionasset($asset)
 #end ## showcount > startIndex && showcount < endIndex
 #end  ## if has view access
 #end ## foreach assetPage in list
