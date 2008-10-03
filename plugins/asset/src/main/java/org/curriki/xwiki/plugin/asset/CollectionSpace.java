@@ -208,9 +208,9 @@ public class CollectionSpace {
         String ownerType;
 
         if (isGroupSpace()){
-            owner = spaceName.replaceFirst(Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "") + ".MemberGroup";
+            owner = spaceName.replaceFirst("^"+Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "") + ".MemberGroup";
         } else if (isUserSpace()){
-            owner = "XWiki."+spaceName.replaceFirst(Constants.COLLECTION_PREFIX, "");
+            owner = "XWiki."+spaceName.replaceFirst("^"+Constants.COLLECTION_PREFIX, "");
         } else {
             throw new AssetException("Cannot determine owner for collection space: "+spaceName);
         }
@@ -259,9 +259,9 @@ public class CollectionSpace {
         obj.setIntValue("allow", 1);
 
         if (isGroupSpace()){
-            doc.setStringValue("XWiki.XWikiPreferences", "parent", spaceName.replaceFirst(Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, ""));
+            doc.setStringValue("XWiki.XWikiPreferences", "parent", spaceName.replaceFirst("^"+Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, ""));
             obj = doc.newObject("XWiki.XWikiGlobalRights", context);
-            obj.setStringValue("groups", spaceName.replaceFirst(Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "") + ".AdminGroup");
+            obj.setStringValue("groups", spaceName.replaceFirst("^"+Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "") + ".AdminGroup");
             obj.setStringValue("levels", "admin");
             obj.setIntValue("allow", 1);
         }

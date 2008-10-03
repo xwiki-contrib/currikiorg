@@ -481,7 +481,7 @@ public class Asset extends CurrikiDocument {
 
         // CURRIKI-2451 - Make sure group rights are used by default
         if (publishSpace != null && publishSpace.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
-            String groupSpace = publishSpace.replaceFirst(Constants.GROUP_COLLECTION_SPACE_PREFIX, Constants.GROUP_SPACE_PREFIX);
+            String groupSpace = publishSpace.replaceFirst("^"+Constants.GROUP_COLLECTION_SPACE_PREFIX, Constants.GROUP_SPACE_PREFIX);
             String rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
 
             // TODO: This should probably be using the SpaceManager extension

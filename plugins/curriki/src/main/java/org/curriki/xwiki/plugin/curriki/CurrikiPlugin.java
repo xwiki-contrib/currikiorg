@@ -220,8 +220,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) throws XWikiException {
-        entity = entity.replaceFirst("XWiki.", ""); // For users
-        entity = entity.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
+        entity = entity.replaceFirst("^XWiki\\.", ""); // For users
+        entity = entity.replaceFirst("\\."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
 
         RootCollectionCompositeAsset root = null;
         root = CollectionSpace.getRootCollection("Coll_"+entity, context);
@@ -377,7 +377,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     	BaseClass xwikiClass = xwikiContext.getWiki().getDocument(className, xwikiContext).getxWikiClass();
     	field = xwikiClass.get(fieldName);
     	String fieldType = field.getClass().getCanonicalName();
-    	String shortFieldType = fieldType.replaceFirst("com.xpn.xwiki.objects.classes.", "");
+    	String shortFieldType = fieldType.replaceFirst("^com\\.xpn\\.xwiki\\.objects\\.classes\\.", "");
     	shortFieldType = shortFieldType.replaceFirst("Class$", "");
     	if (shortFieldType.equals("DBList")) {
     		result.addAll(((com.xpn.xwiki.objects.classes.DBListClass) field).getList(xwikiContext));

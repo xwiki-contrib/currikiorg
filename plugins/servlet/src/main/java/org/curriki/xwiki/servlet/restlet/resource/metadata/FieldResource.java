@@ -45,7 +45,7 @@ public class FieldResource extends BaseResource {
                 throw error(Status.CLIENT_ERROR_NOT_FOUND, "Class Field Not Found.");
             }
             String fieldType = field.getClass().getCanonicalName();
-            String shortFieldType = fieldType.replaceFirst("com.xpn.xwiki.objects.classes.", "");
+            String shortFieldType = fieldType.replaceFirst("^com\\.xpn\\.xwiki\\.objects\\.classes\\.", "");
             shortFieldType = shortFieldType.replaceFirst("Class$", "");
             json.put("className", className);
             json.put("fieldName", fieldName);
