@@ -644,7 +644,7 @@ function acceptRequestCallback(ajaxreq) {
     var result = ajaxreq.transport.responseText;
     // alert(result);
     var divid = ajaxreq.options.divid;
-    if (result=="SUCCESS")
+    if (result.strip()=="SUCCESS")
      $(divid).innerHTML = "<p>${msg.groups_members_accept_done}</p>";
     else
      $(divid).innerHTML = "<p>${msg.groups_members_accept_failed}</p>" + "<p>" + result + "</p>";
@@ -676,7 +676,7 @@ function rejectRequestCallback(ajaxreq) {
     var result = ajaxreq.transport.responseText;
     // alert(result);
     var divid = ajaxreq.options.divid;
-    if (result=="SUCCESS")
+    if (result.strip()=="SUCCESS")
      $(divid).innerHTML = "<p>${msg.groups_members_reject_done}</p>";
     else
      $(divid).innerHTML = "<p>${msg.groups_members_reject_failed}</p>" + "<p>" + result + "</p>";
@@ -1031,7 +1031,7 @@ $msg.groups_needsadminrights
 #else
 ## we need to verify there is a request for this user
 #set($user = $request.user)
-## accept invitation
+## reject invitation
 #if($im.rejectMembership($spaceName, $user))
 SUCCESS
 #else
