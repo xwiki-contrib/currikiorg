@@ -17,7 +17,11 @@ public class CollectionSpace {
     private String spaceName;
     private XWikiContext context;
 
-    public CollectionSpace(String spaceName, XWikiContext context) {
+    public CollectionSpace(String spaceName, XWikiContext context) throws AssetException {
+        if (!spaceName.startsWith(Constants.COLLECTION_PREFIX)) {
+            throw new AssetException("Space is not a collection space");
+        }
+
         this.spaceName = spaceName;
         this.context = context;
     }
@@ -49,7 +53,12 @@ public class CollectionSpace {
     }
 
     static public boolean isExists(String space, XWikiContext context) {
-        CollectionSpace cSpace = new CollectionSpace(space, context);
+        CollectionSpace cSpace;
+        try {
+            cSpace = new CollectionSpace(space, context);
+        } catch (AssetException e) {
+            return false;
+        }
         return cSpace.isExists();
     }
 
