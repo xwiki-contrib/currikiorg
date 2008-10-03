@@ -386,7 +386,7 @@ form.init = function(){
 			,header: _('search.resource.column.header.updated')
 			,dataIndex:'updated'
 			,hidden:true
-			,sortable:false
+			,sortable:true
 			,renderer: data.renderer.updated
 			,tooltip: _('search.resource.column.header.updated')
 	}]);
