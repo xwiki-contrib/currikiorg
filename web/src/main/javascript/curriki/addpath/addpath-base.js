@@ -278,6 +278,7 @@ Curriki.module.addpath.init = function(){
 								,id:'link-entry-box'
 								,name:'link'
 								,emptyText:_('add.contributemenu.link.empty_msg')
+								,value:'http://'
 								,disabled:true
 								,hidden:true
 								,allowBlank:false
