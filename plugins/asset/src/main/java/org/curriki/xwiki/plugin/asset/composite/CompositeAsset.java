@@ -319,23 +319,17 @@ abstract class CompositeAsset extends Asset {
             ++i;
         }
 
-        Map<String,Long> wantMap = new HashMap<String,Long>(want.size());
+        // Delete all subassets
+        XWikiDocument assetDoc = getDoc();
+        assetDoc.removeObjects(Constants.SUBASSET_CLASS);
+
+        // Add all from want
         long j = 0;
         for (String page : want){
-            wantMap.put(page, j);
-            j += 1;
-        }
-
-        List<BaseObject> subassets = getDoc().getObjects(Constants.SUBASSET_CLASS);
-        for (BaseObject sub : subassets){
-            if (sub != null){
-                String subPage = sub.getStringValue(Constants.SUBASSET_CLASS_PAGE);
-                long oldOrder = sub.getLongValue(Constants.SUBASSET_CLASS_ORDER);
-                long newOrder = wantMap.get(subPage);
-                if (oldOrder != newOrder){
-                    sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, newOrder);
-                }
-            }
+            BaseObject sub = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
+            sub.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
+            sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
+            ++j;
         }
     }
 
