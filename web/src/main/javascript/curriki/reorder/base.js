@@ -201,8 +201,6 @@ Reorder.confirmMsg = {
 };
 
 Reorder.display = function(){
-	Ext.QuickTips.init();
-
 	if (Reorder.init()) {
 		UI.show('reorderDialog');
 		Curriki.logView('/features/reorder/'+(Data.place==='groups'?'groups':'mycurriki')+'/started');

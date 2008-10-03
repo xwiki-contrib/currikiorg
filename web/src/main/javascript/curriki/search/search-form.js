@@ -295,9 +295,6 @@ console.log('now util.doSearch', tab, pagerValues);
 };
 
 Search.display = function(){
-	//Init the qtip singleton
-	Ext.QuickTips.init();
-
 	Search.init();
 
 	var s = new Ext.Panel(Search.mainPanel);
