@@ -856,7 +856,7 @@ $xwiki.addTooltipJS()
   $s.save($xwiki.getContext())
   #if($oldPolicy!=$s.policy)
     ## we need to update the rights
-    $sm.getProtectedPlugin().updateSpaceRights($s, $oldPolicy, $s.policy, $context.context)
+    $sm.internalPlugin.updateSpaceRights($s, $oldPolicy, $s.policy, $context.context)
   #end
   $response.sendRedirect($s.getHomeURL())
 #else
