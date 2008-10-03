@@ -75,7 +75,7 @@
 #end ## }
 ##
 ##
-#macro(renameGroupRole $groupDoc $newRoleName) ## {
+#macro(renameGroupRole $groupDoc $newRoleName $oldRoleName) ## {
 #set($ret_err = false)
 #set($newRoleName = $newRoleName.trim())
 #checkForUniqueRole($groupDoc.space $newRoleName)
@@ -160,6 +160,7 @@ $role.title
 <div id="groups-manage-roles-edit-${role.name}" style="display:none;" class="frame-inset">
 <form method="post">
 <input name="rename" type="hidden" value="${role.name}" />
+<input name="from" type="hidden" value="${role.title}" />
 <input name="to" type="text" size=32 maxlength=32 value="${role.title.replace('"', '\"')}" />
 <input class="button button-grey" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
 <input type="submit" class="button button-orange" value="$msg.get("groups.roles.manage.save")" />
@@ -184,7 +185,7 @@ $msg.get("groups_admins_onlyaccessibletoadmins")
 #elseif($!request.rename && $!request.to) ## } {
   #set($roleDoc = $xwiki.getDocument("${spaceName}.${request.rename}"))
   #if($roleDoc.name.startsWith("Role_") && $roleDoc.name.endsWith("Group")) ## {
-    #renameGroupRole($roleDoc $request.to)
+    #renameGroupRole($roleDoc $request.to $request.from)
   #end ## }
 #elseif($!request.delete) ## } {
   #set($roleDoc = $xwiki.getDocument("${spaceName}.${request.delete}"))
