@@ -119,6 +119,7 @@ console.log('now util.doSearch', tab, pagerValues);
 				panel = {
 					title: _('search.'+tab+'.tab.title')
 					,id:'search-'+tab+'-tab'
+					,cls:'search-'+tab
 					,autoHeight:true
 				};
 				module = forms[tab];
@@ -135,6 +136,7 @@ console.log('now util.doSearch', tab, pagerValues);
 			,border:false
 			,height:'600px'
 			,defaults:{border:false}
+			,cls:'search-module'
 			,items:[
 				Search.tabPanel
 			]

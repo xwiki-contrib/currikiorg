@@ -115,6 +115,7 @@ module.init = function(){
 			xtype:'panel'
 			,labelAlign:'left'
 			,id:'search-termPanel-'+modName
+			,cls:'term-panel'
 			,border:false
 			,items:[{
 				layout:'column'

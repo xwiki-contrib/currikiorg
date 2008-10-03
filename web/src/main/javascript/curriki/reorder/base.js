@@ -38,7 +38,7 @@ Reorder.init = function(){
 
 	Reorder.store = new Ext.data.JsonStore({
 		storeId:'CollectionsStore'
-		,url: '/xwiki/curriki/'+Data.place+'/'+Data.which+'/collections'
+		,url: '/xwiki/curriki/'+Data.place+'/'+Data.which+'/collections?_dc='+(new Date().getTime())
 		,fields: ['displayTitle', 'collectionPage']
 		,autoLoad:true
 		,listeners: {
