@@ -78,6 +78,8 @@ form.init = function(){
 			forceFit:true
 			,enableRowBody:true
 			,showPreview:true
+			// Remove the blank space on right of grid (reserved for scrollbar)
+			,scrollOffset:0
 		}
 		,columnsText:_('search.columns.menu.columns')
 		,sortAscText:_('search.columns.menu.sort_ascending')
