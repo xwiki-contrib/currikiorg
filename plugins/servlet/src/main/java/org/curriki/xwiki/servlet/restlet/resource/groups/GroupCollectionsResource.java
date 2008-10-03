@@ -35,8 +35,14 @@ public class GroupCollectionsResource extends BaseResource {
         Request request = getRequest();
         String forGroup = (String) request.getAttributes().get("groupName");
 
-        List<String> resultList = plugin.fetchGroupCollectionsList(forGroup);
-        Map<String,Object> results = plugin.fetchGroupCollectionsInfo(forGroup);
+        List<String> resultList;
+        Map<String,Object> results;
+        try {
+            resultList = plugin.fetchGroupCollectionsList(forGroup);
+            results = plugin.fetchGroupCollectionsInfo(forGroup);
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
 
         JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
 
@@ -51,7 +57,12 @@ public class GroupCollectionsResource extends BaseResource {
 
         JSONObject json = representationToJSONObject(representation);
 
-        Asset asset = plugin.fetchRootCollection(forGroup);
+        Asset asset;
+        try {
+            asset = plugin.fetchRootCollection(forGroup);
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
         if (asset == null) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Collection for "+forGroup+" not found.");
         }

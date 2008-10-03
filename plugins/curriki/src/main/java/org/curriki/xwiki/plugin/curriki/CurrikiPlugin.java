@@ -199,7 +199,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
 
 
-    public List<String> fetchCollectionsList(String entity, XWikiContext context) {
+    public List<String> fetchCollectionsList(String entity, XWikiContext context) throws XWikiException {
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
@@ -209,7 +209,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         return root.getSubassetList();
     }
 
-    public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) {
+    public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) throws XWikiException {
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
@@ -219,16 +219,12 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         return root.fetchCollectionsInfo();
     }
 
-    public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) {
+    public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) throws XWikiException {
         entity = entity.replaceFirst("XWiki.", ""); // For users
         entity = entity.replaceFirst("."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
 
         RootCollectionCompositeAsset root = null;
-        try {
-            root = CollectionSpace.getRootCollection("Coll_"+entity, context);
-        } catch (XWikiException e) {
-            // Ignore any error, will just return null value
-        }
+        root = CollectionSpace.getRootCollection("Coll_"+entity, context);
 
         return root;
     }

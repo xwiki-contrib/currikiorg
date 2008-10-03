@@ -35,8 +35,14 @@ public class UserCollectionsResource extends BaseResource {
         Request request = getRequest();
         String forUser = (String) request.getAttributes().get("userName");
 
-        List<String> resultList = plugin.fetchUserCollectionsList(forUser);
-        Map<String,Object> results = plugin.fetchUserCollectionsInfo(forUser);
+        List<String> resultList;
+        Map<String,Object> results;
+        try {
+            resultList = plugin.fetchUserCollectionsList(forUser);
+            results = plugin.fetchUserCollectionsInfo(forUser);
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
 
         JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
 
@@ -51,7 +57,12 @@ public class UserCollectionsResource extends BaseResource {
 
         JSONObject json = representationToJSONObject(representation);
 
-        Asset asset = plugin.fetchRootCollection(forUser);
+        Asset asset;
+        try {
+            asset = plugin.fetchRootCollection(forUser);
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
         if (asset == null) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Collection for "+forUser+" not found.");
         }

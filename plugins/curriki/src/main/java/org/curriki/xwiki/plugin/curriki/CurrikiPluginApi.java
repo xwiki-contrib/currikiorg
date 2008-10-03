@@ -32,27 +32,27 @@ public class CurrikiPluginApi extends Api {
    }
     */
 
-    public List<String> fetchCollectionsList(String forEntity) {
+    public List<String> fetchCollectionsList(String forEntity) throws XWikiException {
         return plugin.fetchCollectionsList(forEntity, context);
     }
 
-    public Map<String,Object> fetchCollectionsInfo(String forEntity) {
+    public Map<String,Object> fetchCollectionsInfo(String forEntity) throws XWikiException {
         return plugin.fetchCollectionsInfo(forEntity, context);
     }
 
-    public List<String> fetchUserCollectionsList() {
+    public List<String> fetchUserCollectionsList() throws XWikiException {
         return fetchUserCollectionsList(context.getUser());
     }
 
-    public List<String> fetchUserCollectionsList(String forUser) {
+    public List<String> fetchUserCollectionsList(String forUser) throws XWikiException {
         return fetchCollectionsList(forUser);
     }
 
-    public Map<String,Object> fetchUserCollectionsInfo() {
+    public Map<String,Object> fetchUserCollectionsInfo() throws XWikiException {
         return fetchUserCollectionsInfo(context.getUser());
     }
 
-    public Map<String,Object> fetchUserCollectionsInfo(String forUser) {
+    public Map<String,Object> fetchUserCollectionsInfo(String forUser) throws XWikiException {
         return fetchCollectionsInfo(forUser);
     }
 
@@ -64,11 +64,11 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchUserGroups(forUser, context);
     }
 
-    public List<String> fetchGroupCollectionsList(String forGroup) {
+    public List<String> fetchGroupCollectionsList(String forGroup) throws XWikiException {
         return fetchCollectionsList(forGroup);
     }
 
-    public Map<String,Object> fetchGroupCollectionsInfo(String forGroup) {
+    public Map<String,Object> fetchGroupCollectionsInfo(String forGroup) throws XWikiException {
         return fetchCollectionsInfo(forGroup);
     }
 
@@ -104,11 +104,11 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchUserInfo(context);
     }
 
-    public RootCollectionCompositeAsset fetchRootCollection() {
+    public RootCollectionCompositeAsset fetchRootCollection() throws XWikiException {
         return fetchRootCollection(context.getUser());
     }
 
-    public RootCollectionCompositeAsset fetchRootCollection(String forEntity) {
+    public RootCollectionCompositeAsset fetchRootCollection(String forEntity) throws XWikiException {
         return plugin.fetchRootCollection(forEntity, context);
     }
 
