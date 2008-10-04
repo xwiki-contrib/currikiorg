@@ -242,12 +242,14 @@ function getFileExtension() {
          #set($editURL = $editURL + $docName )
    <a href="$editURL" >${msg.groups_documentation_documents_edit}</a> |
       #end
-      #if( $docdoc.tags.contains("documentation-wiki") )
+      #if($docdoc.hasAccessLevel("delete"))
+       #if( $docdoc.tags.contains("documentation-wiki") )
         #set($delConfirm = ${msg.groups_documentation_documents_del_wiki_confirm})
-      #else
+       #else
         #set($delConfirm = ${msg.groups_documentation_documents_del_doc_confirm})
-      #end
+       #end
       <a href=" $docdoc.getURL( "delete" )?confirm=1&xredirect=$doc.getURL()" onclick="if(!confirm('${delConfirm}')) return false;" >${msg.groups_documentation_documents_del}</a>
+      #end
 #end  ## isMember
       </div>
      </div>
