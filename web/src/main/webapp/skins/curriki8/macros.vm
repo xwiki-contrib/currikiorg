@@ -847,7 +847,54 @@ $memberdoc.getRenderedContent("$!content")</div>
 
   #end
  #end
- 
+
+#**
+  * Subject breadcrumb
+  *
+  * @param $bcParam status parameter
+  * @param $bcCurrentDoc current doc to check in the breadcrumb
+  * @author dward@curriki.org
+  *#
+#macro(subjectbreadcrumb $bcParam $bcCurrentDoc)
+ ##Preparation de la liste
+ #set($bcParent = $bcParam)
+ #if($bcParam && $!bcParam != "")
+  #if($bcParam.endsWith($bcCurrentDoc.fullName))
+   #set($bcLocal = $bcParam)
+  #else
+   #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
+  #end
+ #else
+  #set($bcLocal = $bcCurrentDoc.fullName)
+ #end
+ #if(!$bcParam || $!bcParam == "")
+  #parentsBreadcrumb($bcCurrentDoc 0)
+ #end
+ #set($bcLocal = $bcLocal.replace("FW_masterFramework.WebHome;", ''))
+ ##Deroulage de la liste
+ #set($isFirst = true)
+ #set($previousBc = "")
+ #foreach($bcItem in $bcLocal.split(";"))
+  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+   #if(!$isFirst)
+    &gt;
+   #end
+   #set($isFirst = false)
+   #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
+   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+    #set($bcDoc = $xwiki.getDocument($request.editArticle))
+   #end
+   #findCurrikiTitle($bcDoc)
+   #set($userArg = "")
+   #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+    #set($userArg="&user=$request.user")
+   #end
+   <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
+   #set($previousBc = "${previousBc};${bcItem}")
+  #end
+ #end
+#end 
+
 #end
 ##
 ## End from space.vm
