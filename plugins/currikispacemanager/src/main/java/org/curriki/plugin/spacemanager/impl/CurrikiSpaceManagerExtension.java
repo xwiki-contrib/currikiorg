@@ -92,12 +92,19 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 	public void postCreateSpace(String spaceName, XWikiContext context) throws SpaceManagerException{
 		try{
 			Space s = sm.getSpace(spaceName, context);
-			sm.addMember( LEADERS_GROUP_NAME, s.getCreator(), context);
             // we want to set default settings of admin
-            SpaceUserProfile adminUserProfile = sm.getSpaceUserProfile(LEADERS_GROUP_NAME, s.getCreator(), context);
+            SpaceUserProfile adminUserProfile = sm.getSpaceUserProfile(spaceName, s.getCreator(), context);
             adminUserProfile.setAllowNotifications(true);
             adminUserProfile.setAllowNotificationsFromSelf(true);
-            adminUserProfile.saveWithProgrammingRights();            
+            adminUserProfile.saveWithProgrammingRights();
+
+            // Adding user to leaders group
+            sm.addMember( LEADERS_GROUP_NAME, s.getCreator(), context);
+            // we want to set default settings of leadersgroup
+            SpaceUserProfile leadersGroupUserProfile = sm.getSpaceUserProfile(LEADERS_GROUP_NAME, s.getCreator(), context);
+            leadersGroupUserProfile.setAllowNotifications(true);
+            leadersGroupUserProfile.setAllowNotificationsFromSelf(true);
+            leadersGroupUserProfile.saveWithProgrammingRights();
         }catch(XWikiException e){
 			throw new SpaceManagerException(e);
 		}
