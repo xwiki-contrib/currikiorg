@@ -613,7 +613,7 @@ $msg.get("groups_creategroup_needaccount", [$url])
      </div>
 
     <span id="label-group-webaddress">$msg.get("groups_creategroup_namedescribe_webaddress_instruction")</span> <br />
-    http:&#47;&#47;  $newspace.display("urlshortcut","edit") .groups.curriki.org
+    http:&#47;&#47; $newspace.display("urlshortcut","edit") #groups_groupsuffixurl()
 
     #validateGroup( "url-short" "" $msg.groups_validation_url_short)
     #validateGroup( "url-long" "" $msg.groups_validation_url_long)
@@ -842,6 +842,15 @@ $xwiki.addTooltipJS()
 #end
 
 #**
+  * Group suffix URL. Built from hostname
+  *#
+#macro(groups_groupsuffixurl)
+#set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
+#set($serverURL=$serverURL.replaceAll("www.", ""))
+#set($groupURL=".groups."+$serverURL)
+${groupURL}#end
+
+#**
   * Groups Home Page Edit Info Block
   *
   *#
@@ -912,10 +921,7 @@ $s.display("accessprivileges","edit")
 #mycurriki_titlebar($msg.groups_home_editinformation_webaddress_title,"","","blue")
 <div class="section frame-content">
 $msg.groups_home_editinformation_webaddress_instruction <br />
-#set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
-#set($serverURL=$serverURL.replaceAll("www.", ""))
-#set($groupURL=".groups."+$serverURL)
-http:&#47;&#47; $s.display("urlshortcut","edit") $groupURL
+http:&#47;&#47; $s.display("urlshortcut","edit") #groups_groupsuffixurl()
 #validateGroup( "url-short" "" $msg.groups_validation_url_short)
 #validateGroup( "url-long" "" $msg.groups_validation_url_long)
 #validateGroup( "url-exists" "" $msg.groups_validation_url_exists)
@@ -1026,6 +1032,10 @@ $s.display("accessprivileges","view")
 </div>
 <div class="group-creation-date">
 <strong class="caption">$msg.get("groups_home_information_creationdate")</strong> $xwiki.formatDate($s.getCreationDate(), $msg.get("mycurriki.dateFormat"))
+</div>
+<div class="group-url">
+<strong class="caption">$msg.get("groups_home_information_urlshortcut")</strong>
+http:&#47;&#47;$s.display("urlshortcut","view")#groups_groupsuffixurl()
 </div>
 <div class="group-subject-education-level">
 <table width="100%" border="0">
@@ -1176,7 +1186,7 @@ $s.display("accessprivileges","edit")
 ############## webadress ###########
 #begingroupsection($msg.groups_home_editinformation_webaddress_title,"","","blue", false)
 $msg.groups_home_editinformation_webaddress_instruction <br />
-http:&#47;&#47; $s.display("urlshortcut","edit") .groups.curriki.org
+http:&#47;&#47; $s.display("urlshortcut","edit") #groups_groupsuffixurl()
 #endgroupsection()
 <table><tr>
 <td><input type="submit" value="$msg.groups_home_editinformation_submit_btt" /></td>
