@@ -697,7 +697,8 @@ $xwiki.addTooltipJS()
 
 #**
   * Groups Home Page
-  *
+  * @programming
+  * @internalapi
   *#
 #macro(groups_homepage)
 #groupinit()
@@ -707,6 +708,7 @@ $xwiki.addTooltipJS()
 #if($action=="editmasthead")
  #groups_homepage_editmasthead()
 #elseif($action=="editinfo")
+ ## this call requires programming rights
  #groups_homepage_editinfo()
 #else
  #groups_homepage_viewinfo()
@@ -852,7 +854,8 @@ ${groupURL}#end
 
 #**
   * Groups Home Page Edit Info Block
-  *
+  * @programming
+  * @internalapi
   *#
 #macro(groups_homepage_editinfo)
 #set($spaceName = $doc.space)
