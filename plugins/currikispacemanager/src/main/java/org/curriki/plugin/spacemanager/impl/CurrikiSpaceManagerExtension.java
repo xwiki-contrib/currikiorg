@@ -8,6 +8,7 @@ import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile;
 import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerExtensionImpl;
 
 public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
@@ -92,8 +93,12 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 		try{
 			Space s = sm.getSpace(spaceName, context);
 			sm.addMember( LEADERS_GROUP_NAME, s.getCreator(), context);
-			
-		}catch(XWikiException e){
+            // we want to set default settings of admin
+            SpaceUserProfile adminUserProfile = sm.getSpaceUserProfile(LEADERS_GROUP_NAME, s.getCreator(), context);
+            adminUserProfile.setAllowNotifications(true);
+            adminUserProfile.setAllowNotificationsFromSelf(true);
+            adminUserProfile.saveWithProgrammingRights();            
+        }catch(XWikiException e){
 			throw new SpaceManagerException(e);
 		}
 	}
