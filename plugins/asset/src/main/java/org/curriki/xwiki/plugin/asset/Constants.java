@@ -20,6 +20,9 @@
 package org.curriki.xwiki.plugin.asset;
 
 public interface Constants {
+    String USER_PREFIX = "XWiki.";
+    String USER_PREFIX_REGEX = "^XWiki\\.";
+    
     String GUEST_USER = "XWiki.XWikiGuest";
 
     String ASSET_TEMPORARY_SPACE = "AssetTemp";

@@ -220,11 +220,15 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) throws XWikiException {
-        entity = entity.replaceFirst("^XWiki\\.", ""); // For users
+        entity = entity.replaceFirst(Constants.USER_PREFIX_REGEX, ""); // For users
         entity = entity.replaceFirst("\\."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
 
-        RootCollectionCompositeAsset root = null;
-        root = CollectionSpace.getRootCollection("Coll_"+entity, context);
+        if (Constants.GUEST_USER.replaceFirst(Constants.USER_PREFIX_REGEX, "").equals(entity)) {
+            return null;
+        }
+
+        RootCollectionCompositeAsset root;
+        root = CollectionSpace.getRootCollection(Constants.COLLECTION_PREFIX+entity, context);
 
         return root;
     }

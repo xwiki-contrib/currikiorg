@@ -92,7 +92,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
                 + "where obj.id=props.id.id and doc.fullName=obj.name "
                 + "and obj.className='"+ Constants.COMPOSITE_ASSET_CLASS+"' "
                 + "and doc.web=? "
-                + (this.getSpace().startsWith("Coll_Group_")
+                + (this.getSpace().startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)
                    ?""
                    :"and doc.name != '"+ Constants.FAVORITES_COLLECTION_PAGE+"' " // Only exclude for users
                   )

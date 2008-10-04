@@ -85,6 +85,10 @@ public class CollectionSpace {
     }
 
     public RootCollectionCompositeAsset getRootCollection() throws XWikiException {
+        if (spaceName.equals(Constants.COLLECTION_PREFIX+Constants.GUEST_USER.replaceFirst(Constants.USER_PREFIX_REGEX, ""))) {
+            return null;
+        }
+        
         String rootPage = spaceName+"."+Constants.ROOT_COLLECTION_PAGE;
 
         if (!isRootCollectionExists()) {
