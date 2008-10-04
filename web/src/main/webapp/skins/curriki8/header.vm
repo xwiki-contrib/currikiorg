@@ -57,7 +57,7 @@
   #if($hasGlobalAdmin)
     <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
   #end
-  #set($logredir = $xwiki.getURL("Main.WebHome"))
+  ##set($logredir = $xwiki.getURL("Main.WebHome"))
   #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
   <a href="$logouturl" class="logout">$msg.get("header.logout")</a>
   
