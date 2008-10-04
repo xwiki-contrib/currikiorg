@@ -550,7 +550,7 @@ Edit
           <td>$xwiki.getLocalUserName($newdoc.author)</td>
           <td>$xwiki.formatDate($newdoc.date, $msg.get("mycurriki.datetimeFormat"))</td>
 #end
-#if($hasedit || $hasadmin)
+#if($docdoc.hasAccessLevel("edit") || $hasadmin)
    #set($bURL = $docdoc.getURL())
    #set($rollURL = $docdoc.getURL("rollback","rev=$nextversion") )
    #set($rollURL = $rollURL + "&xredirect=")
