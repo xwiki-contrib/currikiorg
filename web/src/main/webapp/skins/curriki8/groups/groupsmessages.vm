@@ -708,7 +708,8 @@ function updateSectionTitle(ajaxreq){
 #set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
 $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDate</span>
 #if(($comment.author == $context.user) || $isGroupAdmin || $xwiki.hasAdminRights()) ##{
-<a class="right" href="MessageDeleteCommentService?deletecomment=1&date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return updateHref(this, confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'));">$msg.get('mycurriki.blog.comment.delete')</a> ## Link to delete -- use XWikiComments.author and date to get unique specification
+#set($qs = "docname=${doc.fullName}&date=${doc.getValue('date', $comment).time}")
+<a class="right" href="$xwiki.getURL("Groups.MessageDeleteCommentService", "view", $qs)" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return updateHref(this, confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'));">$msg.get('mycurriki.blog.comment.delete')</a> ## Link to delete -- use XWikiComments.author and date to get unique specification
 #end ## }
 </span></p>
 </div>
@@ -820,6 +821,7 @@ function updateHref(anchor, returnValue){
 if (isEditMode()){
 anchor.href += '&edit=1';
 }
+anchor.href += '&confirm=1';
 return returnValue;
 }
 </script>
@@ -985,25 +987,32 @@ $adoc.use($viewRightObj)
  *#
 #macro(groups_messages_deletecomment_service)
 <!-- Message Start -->
-#if("$!request.deletecomment" == "1") ## {
+#if("$!request.confirm" == "1") ## {
+#set($deletedoc = $xwiki.getDocument($request.docname))
 #if("$!request.date" != "") ## {
-#set($comments = $doc.getComments())
-#set($findDate = $request.date.replace("%20", " "))
+#set($comments = $deletedoc.getComments())
 #foreach($comment in $comments) ## {
-#if(("$findDate" == "${doc.getValue('date', $comment)}") && ( ($comment.author == $context.user) || $isGroupAdmin || $xwiki.hasAdminRights())) ## {
-#set($junk = $doc.removeObject($comment))
-#set($junk = $doc.saveWithProgrammingRights())
-#end ## }
-#end ## }
-#end ## }
+#set($time = $deletedoc.getValue('date', $comment).time)
+#if(($request.date == "$time") && ( ($comment.author == $context.user) || $isGroupAdmin || $xwiki.hasAdminRights())) ## {
+#set($junk = $deletedoc.removeObject($comment))
+#set($junk = $deletedoc.saveWithProgrammingRights())
+DELETED
+#end ## }  ## if
+#end ## }  ## foreach
 #if($request.edit=="1")
-$response.sendRedirect($xwiki.getURL($doc.fullName, "view", "edit=1"))
+$response.sendRedirect($xwiki.getURL($deletedoc.fullName, "view", "edit=1"))
 #else
-$xwiki.getURL($doc.fullName)
-$response.sendRedirect($xwiki.getURL($doc.fullName))
+#$xwiki.getURL($deletedoc.fullName)
+$response.sendRedirect($xwiki.getURL($deletedoc.fullName))
 #end
-#end
-#end
+#else
+#warning("Request invalid: comment date was not provided.")
+#end ## end if date
+#else
+#warning("Request invalid: call was not made from a javascript link.")
+#end ## end if confirm
+#end ## end macro
+
 
 #**
   * Groups View message service
