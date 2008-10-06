@@ -23,7 +23,7 @@ import java.util.Collections;
 
 /**
  */
-abstract class CompositeAsset extends Asset {
+public abstract class CompositeAsset extends Asset {
     private static final Log LOG = LogFactory.getLog(RootCollectionCompositeAsset.class);
 
     public CompositeAsset(XWikiDocument doc, XWikiContext context) {
