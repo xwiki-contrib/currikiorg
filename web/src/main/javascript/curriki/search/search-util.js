@@ -141,10 +141,6 @@ module.init = function(){
 						}
 					}]
 				},{
-					columnWidth:0.15
-					,xtype:'box'
-					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips">'+_('search.text.entry.help.button')+'</a>'}
-				},{
 					columnWidth:0.10
 					,layout:'form'
 					,items:[{
@@ -158,6 +154,10 @@ module.init = function(){
 							}
 						}
 					}]
+				},{
+					columnWidth:0.15
+					,xtype:'box'
+					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips">'+_('search.text.entry.help.button')+'</a>'}
 				}]
 			},{
 				xtype:'hidden'

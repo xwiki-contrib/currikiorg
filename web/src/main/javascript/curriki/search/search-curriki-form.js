@@ -35,6 +35,7 @@ form.init = function(){
 			,header:_('search.curriki.column.header.name')
 			//,width: 17
 			,dataIndex: 'name'
+			,sortable:true
 			,renderer: data.renderer.name
 			,tooltip:_('search.curriki.column.header.name')
 /*
