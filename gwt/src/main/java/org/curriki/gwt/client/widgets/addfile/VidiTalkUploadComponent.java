@@ -22,8 +22,8 @@
  */
 package org.curriki.gwt.client.widgets.addfile;
 
-import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.DOM;
@@ -33,7 +33,7 @@ import org.curriki.gwt.client.CurrikiService;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.utils.ClickListenerDocument;
 
-public class VidiTalkUploadComponent extends BasicPanel
+public class VidiTalkUploadComponent extends FlowPanel
 {
     ClickListenerDocument nextCallback;
     ClickListener cancelCallback;
@@ -55,6 +55,7 @@ public class VidiTalkUploadComponent extends BasicPanel
         String rnd = (new Integer (Random.nextInt(2000000000))).toString();
         divId = "viditalk_capture_div"+rnd;
         // TODO GWT15 setId(divId);
+        DOM.setElementProperty(getElement(), "id", divId);
         addStyleName("dialog-addfile-text");
         addStyleName("dialog-viditalk-capture");
 
