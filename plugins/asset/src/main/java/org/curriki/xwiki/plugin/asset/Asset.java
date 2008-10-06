@@ -713,6 +713,7 @@ public class Asset extends CurrikiDocument {
         if (isCollection()) {
             RootCollectionCompositeAsset root = CollectionSpace.getRootCollection(space, context);
             root.addSubasset(this.getFullName());
+            root.saveDocument(context.getMessageTool().get("curriki.comment.addtocollectionasset"));
         }
 
         return this;
