@@ -228,7 +228,11 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
 
         RootCollectionCompositeAsset root;
-        root = CollectionSpace.getRootCollection(Constants.COLLECTION_PREFIX+entity, context);
+        try {
+            root = CollectionSpace.getRootCollection(Constants.COLLECTION_PREFIX+entity, context);
+        } catch (XWikiException e) {
+            root = null;
+        }
 
         return root;
     }
