@@ -124,8 +124,12 @@ module.init = function(){
 				,items:[{
 					columnWidth:0.7
 					,layout:'form'
+					,id:'search-termPanel-'+modName+'-form'
+					,cls:'search-termPanel-form'
 					,items:[{
 						xtype:'textfield'
+						,id:'search-termPanel-'+modName+'-terms'
+						,cls:'search-termPanel-terms'
 						,fieldLabel:_('search.text.entry.label')
 						,name:'terms'
 						,hideLabel:true
@@ -145,6 +149,8 @@ module.init = function(){
 					,layout:'form'
 					,items:[{
 						xtype:'button'
+						,id:'search-termPanel-button-'+modName
+						,cls:'search-termPanel-button'
 						,text:_('search.text.entry.button')
 						,listeners:{
 							click:{
@@ -157,15 +163,19 @@ module.init = function(){
 				},{
 					columnWidth:0.15
 					,xtype:'box'
+					,id:'search-termPanel-tips-'+modName
+					,cls:'search-termPanel-tips'
 					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips">'+_('search.text.entry.help.button')+'</a>'}
 				}]
 			},{
 				xtype:'hidden'
 				,name:'since'
+				,id:'search-termPanel-since-'+modName
 				,value:(new Date()).add(Date.DAY, -_('search.resource.special.selector.updated.days')).format('Ymd')
 			},{
 				xtype:'hidden'
 				,name:'other'
+				,id:'search-termPanel-other-'+modName
 				,value:(!Ext.isEmpty(Search.restrictions)?Search.restrictions:'')
 			}]
 		};
