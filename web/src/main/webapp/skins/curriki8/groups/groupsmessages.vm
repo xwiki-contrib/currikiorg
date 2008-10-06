@@ -987,6 +987,7 @@ $adoc.use($viewRightObj)
  *#
 #macro(groups_messages_deletecomment_service)
 <!-- Message Start -->
+#groupsinit()
 #if("$!request.confirm" == "1") ## {
 #set($deletedoc = $xwiki.getDocument($request.docname))
 #if("$!request.date" != "") ## {
