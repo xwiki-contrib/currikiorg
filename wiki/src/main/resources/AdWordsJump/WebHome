@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1221567711000</creationDate>
-<date>1222095527000</date>
-<contentUpdateDate>1222095527000</contentUpdateDate>
-<version>20.1</version>
+<date>1223297904000</date>
+<contentUpdateDate>1223297904000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>undefined</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -58,10 +58,10 @@
 1.1 $msg.get("This is the Documentation for the AdWordsJump Landing Page")
 
 1.1.1 The AdWordsJump module contains these resources
-the TestLandingPage is a sample page for Landing page
 
 1. AdWordsJump/AdWordsInfoClass
 1. AdWordsJump/LandingPageLog
+1. AdWordsJump/LandingPageLogExport
 1. AdWordsJump/LandingPageLogTemplate
 1. AdWordsJump/LandingPageTemplate
 1. AdWordsJump/TestLandingPage
@@ -69,14 +69,15 @@ the TestLandingPage is a sample page for Landing page
 1. AdWordsJump/WebPreferences
 &lt;br/&gt;&lt;br/&gt;
 
+The TestLandingPage is a sample page for Landing page
+
 1.1.1 How to create new AdWordsJump Landing page?
-If you are first create new AdWordsJump Landing page, please follow the steps below. 
-1.1.1.1 Step 1
+ 
+1.1.1.1 Step 1 (Engineering Only)
 First, import the resources above into the system. 
 
-1.1.1.1 Step 2
-Add AdWordsJump Translation file 'AdWordsJump.Translations' to 'Internationalization Document Bundles'&lt;br/&gt;
-use this url '/xwiki/bin/admin/XWiki/XWikiPreferences', the 'Internationalization Document Bundles' is under chapter 'Advanced' or 'Programming'.
+1.1.1.1 Step 2 (Engineering Only)
+Add AdWordsJump Translation file 'AdWordsJump.Translations' to 'Internationalization Document Bundles. Use this url '/xwiki/bin/admin/XWiki/XWikiPreferences', the 'Internationalization Document Bundles' is under 'Programming'.
 
 1.1.1.1 Step 3
 Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then copy the contents below into the page you just created:
@@ -86,7 +87,14 @@ Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then
 #set($keyword="free worksheets")
 #set($subject="UnitedStatesHistory")
 #set($subjectparent="SocialStudies")
+
 #set($btn_value = "Find Worksheet")
+
+##set($logpic = $imgdoc.getAttachmentURL('log.gif'))
+#set($loglink = "http://www.curriki.com")
+
+#set($btn2_value = "Join the Curriki Community")
+#set($btn2_link = "http://www.curriki.com")
 
 #set($left_title_1="&lt;p style='font-size:30px;'&gt;Created by Teachers for You&lt;/p&gt;")
 #set($left_title_1_desc="We believe that access to knowledge and learning tools is a basic right for every child. Our goal is to make curricula and learning resources available to everyone.")
@@ -115,13 +123,16 @@ Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then
 #set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
 #set($desc = "Includes prereading activities, complete vocabulary activities, complete reading guides, writing activities, target skills, supplementary reading, and assignments.")
 #sampleLink("$title" "$link" "$desc")
+
 {code}
 
 Notes:
-1. The "$keyword" indicate the type of the Landing page.
-1. The "$subject" is the subject you will search, if you set this variable, it will search the special subject, otherwise, it will search all subjects.
-1. The "$subjectparent" is the subject's parent you will search, If you have not set \$subjectparent, it will serch in all subjects and subjectparents. If you have set \$subjectparent and \$subject, it will search in the selected subject and subjectparent. If you have set \$subjectparent but not set \$subject, it will search in the selected subjectparent and all the subjects."
+1. The "$keyword" indicate the name or type of the Landing page (E.g., Free Worksheet)
+1. The "$subject" is the child subject you will search, if you set this variable, it will search the specific subject, otherwise, it will search all subjects. (E.g, History which is under Art.) (Note: Use the [Framework Chart&gt;AdWordsJump.SubjectFrameWorks] for variable names.)
+1. The "$subjectparent" is the subject's parent you will search, If you have not set \$subjectparent, it will serch in all subjects and subjectparents. If you have set \$subjectparent and \$subject, it will search in the selected subject and subjectparent. If you have set \$subjectparent but not set \$subject, it will search in the selected subjectparent and all the subjects." (E.g, Arts) (Note: Use the [Framework Chart&gt;AdWordsJump.SubjectFrameWorks] for variable names.)
 1. The "$btn_value" is the text show on the search button.
+1. The "$logpic" and "$loglink" define the log pic and its link on the top of the page. The "$logpic" will be default to '/xwiki/skins/curriki8/logo.gif' if you not defined. and you need to define "$loglink".
+1. The "$btn2_value" and "$btn2_link" is about the second button's text and link in the search box. If there is only one button, you must not define these two variables. 
 1. The "$left_title_1", "$left_title_1_desc", "$left_title_2" define the title and description at the left top, and may be you need not to change it.
 1. The "\#pageTitle" is the macro that add the title at the top green area, it is defined as "\#macro(pageTitle \$title)". You can set the size of the word as the sample code.
 1. The "\#sampleLink" is the macro that add the aample link title and description at the left, it is defined as "\#macro(sampleLink \$title \$link \$desc)".
@@ -132,9 +143,9 @@ You need to change some of them to your self's.
 
 1.1.1.1 Step 4
 
-Now you can view the new Landing page from the url "/xwiki/bin/view/AdWordsJump/FreeWorksheet?xpage=popup", and do some search. The search content will be record in the system.
+Now you can view the new Landing page from the url "/xwiki/bin/view/AdWordsJump/FreeWorksheet?xpage=popup", where FreeWorksheet is the replaced with the name of page you created. Remember, to view your Ad correctly, add '?xpage=popup' at the end of you URL. The search content will be record in the system automatically.
 
 1.1.1.1 Step 5
 
-You can view search records in the log page with the url "/xwiki/bin/view/AdWordsJump/LandingPageLog". This page contains all the Landing page logs, you can click into one to view each Landing page log.
+You can view search records in the log page with the url "/xwiki/bin/view/AdWordsJump/LandingPageLog" or click here [Google Ad Reports&gt;AdWordsJump.LandingPageLog]. This page contains all the Landing page logs, you can click each Landing page to its log.
 </content></xwikidoc>
