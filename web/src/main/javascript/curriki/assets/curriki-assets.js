@@ -398,7 +398,7 @@ Curriki.assets = {
 	}
 	,SetAsterixReview : function(assetPage, callback, asterixReviewValue) {
 		Ext.Ajax.request({
-			url : this.json_prefix + "/" + A + "/assetManager",
+			url : this.json_prefix + "/" + assetPage + "/assetManager",
 			method : 'PUT',
 			headers : {
 				'Accept' : 'application/json',
@@ -427,7 +427,7 @@ Curriki.assets = {
 	}
 	,RemoveAsterixReview : function(assetPage, callback) {
 		Ext.Ajax.request({
-			url : this.json_prefix + "/" + A + "/assetManager",
+			url : this.json_prefix + "/" + assetPage + "/assetManager",
 			method : 'PUT',
 			headers : {
 				'Accept' : 'application/json',
