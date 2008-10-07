@@ -77,6 +77,8 @@ import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
 import org.curriki.gwt.client.widgets.browseasset.AssetItem;
 import org.curriki.gwt.client.widgets.template.TemplateInfo;
 import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.CollectionSpace;
+import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 import org.curriki.xwiki.plugin.mimetype.MimeType;
 import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
@@ -1795,23 +1797,43 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         }
         parent.setText(title);
 
-        List objs_old = doc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> objs_old;
+        if (doc.getName().equals(Constants.ROOT_COLLECTION_PAGE)) {
+            RootCollectionCompositeAsset root;
+            try {
+                root = Asset.fetchAsset(doc.getFullName(), context).as(RootCollectionCompositeAsset.class);
+            } catch (XWikiException e) {
+                throw getXWikiGWTException(e);
+            }
+            List<String> list = root.getSubassetList();
+            objs_old = new ArrayList<BaseObject>(list.size());
+
+            long i = 0;
+            for (String page : list) {
+                BaseObject bo = new BaseObject();
+                bo.setStringValue(Constants.SUBASSET_ASSETPAGE_PROPERTY, page);
+                bo.setLongValue(Constants.SUBASSET_ORDER_PROPERTY, i);
+                i++;
+                objs_old.add(bo);
+            }
+        } else {
+            objs_old = doc.getObjects(Constants.SUBASSET_CLASS);
+        }
+
         if (objs_old == null || objs_old.size() == 0){
             return parent;
         }
 
-        List objs = new ArrayList(objs_old);
-        List items = new ArrayList();
+        List<BaseObject> objs = new ArrayList<BaseObject>(objs_old);
+        List<AssetItem> items = new ArrayList<AssetItem>();
         while(objs.size() > 0) {
             BaseObject smallerObj = null;
             long smaller_pos = -100;
-            Iterator it = objs.iterator();
-            while(it.hasNext()) {
-                BaseObject currObj = (BaseObject) it.next();
-                if(currObj == null){
+            for (BaseObject currObj : objs) {
+                if (currObj == null) {
                     continue;
                 }
-                long currPos = currObj.getLongValue("order");
+                long currPos = currObj.getLongValue(Constants.SUBASSET_ORDER_PROPERTY);
                 if ((smaller_pos == -100) || (currPos < smaller_pos)) {
                     smaller_pos = currPos;
                     smallerObj = currObj;
