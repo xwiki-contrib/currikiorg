@@ -70,7 +70,7 @@ public class AssetManagerResource extends BaseResource {
         
         asset.use("CRS.CurrikiReviewStatusClass");
         String asterixReviewValue = (String) asset.getValue("status");
-        asset.set("status", "80");
+        asset.set("status", "100");
         try {
         	asset.save(xwikiContext.getMessageTool().get("Resource value of ")+xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue)+" "+xwikiContext.getMessageTool().get("removed"));
         } catch (XWikiException e) {
@@ -108,7 +108,7 @@ public class AssetManagerResource extends BaseResource {
 	            obj.set("name",asset.getFullName());
 	            obj.set("number",0);
 	            obj.set("reviewpending", 0);
-	            obj.set("status", "80");
+	            obj.set("status", "100");
 	            asset.save();
 	        }
         } catch (XWikiException e) {

@@ -184,13 +184,13 @@
 		#set($ok = $asset.set("date", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm:ss")))
 		#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
 		#if ($rating==1)
-			#set($ok = $asset.set("status", "60"))
+			#set($ok = $asset.set("status", "400"))
 			#else
 				#if ($rating==2)
-					#set($ok = $asset.set("status", "40"))
+					#set($ok = $asset.set("status", "600"))
 					#else
 						#if ($rating==3)
-							#set($ok = $asset.set("status", "20"))
+							#set($ok = $asset.set("status", "800"))
 						#end
 				#end
 		#end
@@ -319,9 +319,9 @@
 &lt;/p&gt;
 				#end			
 
-				#if((!$statusValue) || ($statusValue!="20")&amp;&amp;($statusValue!="40")&amp;&amp;($statusValue!="60"))
+				#if((!$statusValue) || ($statusValue!="800")&amp;&amp;($statusValue!="600")&amp;&amp;($statusValue!="400"))
 &lt;input type="checkbox" id="isChild" onclick="clickIsChildCheckbox()" 
-	#if($statusValue&amp;&amp;($statusValue=="30")||($statusValue=="50")||($statusValue=="70"))
+	#if($statusValue&amp;&amp;($statusValue=="700")||($statusValue=="500")||($statusValue=="300"))
 		checked
 	#end
 	&gt;$msg.get("curriki.crs.review.isChild")
@@ -329,9 +329,9 @@
 &lt;/p&gt;
 &lt;select id="asterixReview" onchange="asterixReviewSelected()"&gt;
 	&lt;option value=""&gt;$msg.get("curriki.crs.review.setas*")&lt;/option&gt;
-	&lt;option value="70"&gt;$msg.get("curriki.crs.review.setas70")&lt;/option&gt;
-	&lt;option value="50"&gt;$msg.get("curriki.crs.review.setas50")&lt;/option&gt;
-	&lt;option value="30"&gt;$msg.get("curriki.crs.review.setas30")&lt;/option&gt;
+	&lt;option value="300"&gt;$msg.get("curriki.crs.review.setas300")&lt;/option&gt;
+	&lt;option value="500"&gt;$msg.get("curriki.crs.review.setas500")&lt;/option&gt;
+	&lt;option value="700"&gt;$msg.get("curriki.crs.review.setas700")&lt;/option&gt;
 &lt;/select&gt;
 &lt;script type="text/javascript"&gt;
 	initComponents();

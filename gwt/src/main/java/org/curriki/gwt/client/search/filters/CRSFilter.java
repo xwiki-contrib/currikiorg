@@ -27,10 +27,10 @@ public class CRSFilter implements Selectable, KeepsState {
 
         if (value.length() > 0){
             if (value.equals("partners")){
-                filter = "CRS.CurrikiReviewStatusClass.status:10";
+                filter = "CRS.CurrikiReviewStatusClass.status:200";
             }
             if (value.equals("topreviewed")){
-                filter = "CRS.CurrikiReviewStatusClass.status:(40 OR 20)";
+                filter = "CRS.CurrikiReviewStatusClass.status:(600 OR 800)";
             }
         }
 

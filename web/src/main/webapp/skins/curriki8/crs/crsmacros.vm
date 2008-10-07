@@ -25,7 +25,7 @@
 				#else
 					#set($status = "")
 			#end
-			#if((!$status)||($status=="80")||($status==""))
+			#if((!$status)||($status=="100")||($status==""))
 				<div class="crs_reviewrating">
 					<div class="crs_reviewratingtext">
 						$msg.get("curriki.crs.unrated")
@@ -73,7 +73,7 @@
 	#macro(displayCRSReviews $asset)
 		#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
 		#set($status = $asset.getValue("status"))
-		#if($status&&($status=="10"))
+		#if($status&&($status=="200"))
 			<div class="crs_reviews">
 				<div class="crs_reviewstitle">
 					$msg.get("curriki.crs.reviewlist.currikireview")
