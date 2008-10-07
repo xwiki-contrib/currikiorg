@@ -99,6 +99,6 @@ public class UserCollectionsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a root collection.");
         }
 
-        getResponse().redirectSeeOther(getRequest().getResourceRef());
+        getResponse().setEntity(represent(getPreferredVariant()));
     }
 }
