@@ -277,7 +277,7 @@ Curriki.module.addpath.init = function(){
 								 xtype:'textfield'
 								,id:'link-entry-box'
 								,name:'link'
-								,emptyText:_('add.contributemenu.link.empty_msg')
+								//,emptyText:_('add.contributemenu.link.empty_msg')
 								,value:'http://'
 								,disabled:true
 								,hidden:true
