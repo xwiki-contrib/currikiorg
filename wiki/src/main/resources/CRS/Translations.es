@@ -55,7 +55,7 @@
 <tags/>
 </property>
 </object>
-<content>CRS.CurrikiReviewStatusClass_status_80=Sin Calificación/No Calificable 
+<content>CRS.CurrikiReviewStatusClass_status_100=Sin Calificación/No Calificable 
 CRS.CurrikiReviewStatusClass_status_300=Parte de un Recurso Básico
 CRS.CurrikiReviewStatusClass_status_400=Básico
 CRS.CurrikiReviewStatusClass_status_500=Parte de un Recurso Bueno
