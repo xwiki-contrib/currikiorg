@@ -81,6 +81,7 @@ public class HelpDialog extends CurrikiDialog {
         setHeight((height) + "px");
 
         BasicPanel main = new BasicPanel();
+        main.add(caption);
         main.setWidth((width) + "px");
         main.setHeight((height - 20) + "px");
         main.addStyleName(getCSSName("content"));
