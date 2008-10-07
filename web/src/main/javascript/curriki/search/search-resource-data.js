@@ -29,6 +29,10 @@ data.init = function(){
 	f.data.subject.mapping.each(function(value){
 		f.data.subject.list.push(value.id);
 	});
+
+	// CURRIKI-2872
+	f.data.subject.list.push('UNCATEGORIZED');
+
 	f.data.subject.list.each(function(value){
 		f.data.subject.data.push([
 			value
