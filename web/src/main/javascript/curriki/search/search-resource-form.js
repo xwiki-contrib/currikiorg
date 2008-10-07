@@ -124,6 +124,13 @@ form.init = function(){
 										if (combo.getValue() === '') {
 											subSubject.clearValue();
 											subSubject.hide();
+										// Special case - UNCATEGORIZED does not show sub-items
+										} else if (combo.getValue() === 'UNCATEGORIZED') {
+											subSubject.show();
+											subSubject.clearValue();
+											subSubject.store.filter('parentItem', combo.getValue());
+											subSubject.setValue(combo.getValue());
+											subSubject.hide();
 										} else {
 											subSubject.show();
 											subSubject.clearValue();
