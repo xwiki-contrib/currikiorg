@@ -333,6 +333,8 @@ $objTxt.text
     #set($type = $!embeddedDoc.getValue("type", $embeddedDoc.getObject("XWiki.TextAssetClass")))
     #if("$type"=="2")
 ## We are not showing direction block assets
+    #elseif(!$xwiki.exists($assetPage))
+## We are not showing items that do not exist
     #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
 ## We are not showing protected assets
 ##     $msg.get("asset.contentNotAllowed")
