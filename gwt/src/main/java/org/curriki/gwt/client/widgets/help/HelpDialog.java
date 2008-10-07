@@ -89,7 +89,7 @@ public class HelpDialog extends CurrikiDialog {
         frame = new Frame(url);
         frame.setStyleName(getCSSName("frame"));
         frame.setWidth((width - 10) + "px");
-        frame.setHeight((height - 20) + "px");
+        frame.setHeight((height - 20 - 60) + "px");
         main.add(frame);
         add(main);
         show();
