@@ -165,7 +165,7 @@ module.init = function(){
 					,xtype:'box'
 					,id:'search-termPanel-tips-'+modName
 					,cls:'search-termPanel-tips'
-					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips">'+_('search.text.entry.help.button')+'</a>'}
+					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips" onclick="window.open(this.href, \"search_tips\", \"width=400,status=no,toolbar=no,menubar=no,location=no,resizable=yes\"); return false;">'+_('search.text.entry.help.button')+'</a>'}
 				}]
 			},{
 				xtype:'hidden'
