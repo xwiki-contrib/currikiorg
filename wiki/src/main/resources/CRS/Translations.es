@@ -142,12 +142,12 @@ curriki.crs.review.setas*=Seleccione valor...
 curriki.crs.review.setas300=1*
 curriki.crs.review.setas500=2*
 curriki.crs.review.setas700=3*
-curriki.crs.review.asterixReview.selectedConfirm700=Para dar a este recurso el valor CRS de 3*, click OK.
-curriki.crs.review.asterixReview.selectedConfirm500=Para dar a este recurso el valor CRS de 2*, click OK.
-curriki.crs.review.asterixReview.selectedConfirm300=Para dar a este recurso el valor CRS de 1*, click OK.
-curriki.crs.review.asterixReview.removedConfirm700=Para remover el valor CRS de 3* a este recurso, click OK.
-curriki.crs.review.asterixReview.removedConfirm500=Para remover el valor CRS de 2* a este recurso, click OK.
-curriki.crs.review.asterixReview.removedConfirm300=Para remover el valor CRS de 1* a este recurso, click OK.
+curriki.crs.review.asterixReview.selectedConfirm_700=Para dar a este recurso el valor CRS de 3*, click OK.
+curriki.crs.review.asterixReview.selectedConfirm_500=Para dar a este recurso el valor CRS de 2*, click OK.
+curriki.crs.review.asterixReview.selectedConfirm_300=Para dar a este recurso el valor CRS de 1*, click OK.
+curriki.crs.review.asterixReview.removedConfirm_700=Para remover el valor CRS de 3* a este recurso, click OK.
+curriki.crs.review.asterixReview.removedConfirm_500=Para remover el valor CRS de 2* a este recurso, click OK.
+curriki.crs.review.asterixReview.removedConfirm_300=Para remover el valor CRS de 1* a este recurso, click OK.
 
 
 ## use in GWT and in Wiki

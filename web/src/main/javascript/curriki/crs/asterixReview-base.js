@@ -2,7 +2,7 @@ Ext.ns("Curriki.module.asterixReview");
 Curriki.module.asterixReview.selectedConfirm = function(asterixReviewValue,redirectURL) {
 	Ext.Msg.show({
 		title : _('curriki.crs.review.information'),
-		msg : _('curriki.crs.review.asterixReview.selectedConfirm'+asterixReviewValue),
+		msg : _('curriki.crs.review.asterixReview.selectedConfirm_'+asterixReviewValue),
 		buttons : Ext.Msg.OKCANCEL,
 		fn : function(btn) {
 			if (btn == "ok") {
@@ -25,7 +25,7 @@ Curriki.module.asterixReview.removedConfirm = function(redirectURL) {
 	if (document.getElementById('currentStatus').value != 80) {
 		Ext.Msg.show({
 			title: _('curriki.crs.review.information'),
-			msg: _('curriki.crs.review.asterixReview.removedConfirm' + document.getElementById('currentStatus').value),
+			msg: _('curriki.crs.review.asterixReview.removedConfirm_' + document.getElementById('currentStatus').value),
 			buttons: Ext.Msg.OKCANCEL,
 			fn: function(btn){
 				if (btn == "ok") {
