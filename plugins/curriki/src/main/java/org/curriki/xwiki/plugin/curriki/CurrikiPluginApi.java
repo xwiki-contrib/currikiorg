@@ -141,6 +141,10 @@ public class CurrikiPluginApi extends Api {
     	return plugin.changeFormatDate(date,currentPattern,newPattern,delim);
     }
 
+    public String formatDate(String pattern) throws XWikiException {
+        return formatDate(new Date(), pattern);
+    }
+
     public String formatDate(Date date,String pattern) throws XWikiException
     {
     	return plugin.formatDate(date,pattern);
