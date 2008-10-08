@@ -153,7 +153,7 @@ public class CurrikiPluginApi extends Api {
     }
 
     public Date getDateMinusDays(String days) {
-        return new Date((new Date()).getTime() - Long.getLong(days) * Timer.ONE_DAY);
+        return new Date((new Date()).getTime() - Long.parseLong(days) * Timer.ONE_DAY);
     }
 
 
