@@ -274,7 +274,9 @@ $wdoc.display("content", "edit")
 <div class="main layoutsubsection">
 <form id="loginForm" action="$xwiki.getURL("XWiki.XWikiLogin","loginsubmit")" method="post">
 <div class="hidden">
-<input type="hidden" name="xredirect" value="$logredir" /></div>
+<input type="hidden" name="xredirect" value="$logredir" />
+<input type="hidden" name="srid" value="$!request.srid"/>
+</div>
 #xwikimessageboxstart($msg.get("login") "")
 #set($message = $msg.get($xwiki.parseMessage()))
 #if($message)
