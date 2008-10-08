@@ -64,6 +64,7 @@ public class MoveModalBox extends CurrikiDialog {
     private class BoxWindowResizeListener  implements WindowResizeListener {
 
         public void onWindowResized(int width, int height) {
+        	dialog.center();
             // getController(ModalDialog.PositionDialogController.class).plugIn(dialog);
         }
     }
