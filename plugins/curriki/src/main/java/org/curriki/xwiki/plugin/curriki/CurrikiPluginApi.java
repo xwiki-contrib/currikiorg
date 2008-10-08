@@ -12,6 +12,8 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Property;
 
+import javax.management.timer.Timer;
+
 /**
  */
 public class CurrikiPluginApi extends Api {
@@ -148,6 +150,10 @@ public class CurrikiPluginApi extends Api {
     public String formatDate(Date date,String pattern) throws XWikiException
     {
     	return plugin.formatDate(date,pattern);
+    }
+
+    public Date getDateMinusDays(String days) {
+        return new Date((new Date()).getTime() - Long.getLong(days) * Timer.ONE_DAY);
     }
 
 
