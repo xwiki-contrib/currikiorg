@@ -384,6 +384,8 @@ public class Editor implements WindowResizeListener {
         wizard.setResizeListener(new WindowResizeListener() {
             public void onWindowResized(int width, int height) {
                 // TODO GWT15  dialog.getController(SizeDialogController.class).plugIn(dialog);
+            	// until then, make sure the dialog gets centered when it's resized:
+            	dialog.center();
             }
         });
         dialog.show();
@@ -408,6 +410,8 @@ public class Editor implements WindowResizeListener {
         wizard.setResizeListener(new WindowResizeListener() {
             public void onWindowResized(int width, int height) {
                 // TODO GWT15  dialog.getController(SizeDialogController.class).plugIn(dialog);
+            	//until then, make sure the dialog gets centered when resized
+            	dialog.center();
             }
         });
 

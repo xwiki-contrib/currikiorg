@@ -2267,6 +2267,12 @@ html>body .dialog-duplicate-confirm .gwt-bttCancel {
 .gwt-ModalDialog-Content {
   padding-bottom: 40px;
 }
+
+/*fix bottom padding for the addfile and collections dialog in which the actions are inside the content */
+.dialog-addfile .gwt-ModalDialog-Content, .collections-dialog .gwt-ModalDialog-Content {
+  padding-bottom: 8px;
+}
+
 .gwt-ModalDialog-Content .gwt-ButtonOrange,  .move-modal-box .gwt-Button {
   position: absolute;
   right: 5px;
@@ -2427,9 +2433,15 @@ html>body .metadata-edit {
 .gwt-Tree .asset-tree-item-insert-here .gwt-TreeItem {
   color: #FF4100;
 }
-.collections-dialog-actions {
+.collections-dialog-actions, .addfile-dialog-actions {
   text-align: right;
+  float: right;
 }
+
+.collections-dialog {
+  width: 430px;
+}
+
 .dialog-addfile-bottom {
   width: 100%;
 }

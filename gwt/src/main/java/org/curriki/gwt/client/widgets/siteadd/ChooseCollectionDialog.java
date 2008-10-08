@@ -25,6 +25,9 @@ package org.curriki.gwt.client.widgets.siteadd;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 import org.curriki.gwt.client.Constants;
 import org.curriki.gwt.client.CurrikiAsyncCallback;
 import org.curriki.gwt.client.Main;
@@ -72,7 +75,7 @@ public class ChooseCollectionDialog extends CurrikiDialog {
         // TODO GWT15 setContentMinWidth(634);
         // TODO GWT15 setContentMinHeight(450);
 
-        BasicPanel main = new BasicPanel();
+        VerticalPanel main = new VerticalPanel();
         main.addStyleName("collections-dialog-content");
 
         BasicPanel text = new BasicPanel();
@@ -92,7 +95,7 @@ public class ChooseCollectionDialog extends CurrikiDialog {
         chooser.add(myCollections);
         
 
-        BasicPanel actions = new BasicPanel();
+        HorizontalPanel actions = new HorizontalPanel();
         actions.addStyleName("collections-dialog-actions");
 
         Button cancel = new Button(Main.getTranslation("editor.btt_cancel"), cancelCallback);
@@ -108,10 +111,10 @@ public class ChooseCollectionDialog extends CurrikiDialog {
 
         bottom.setText(0, 0, " ");
         bottom.setWidget(0, 1, chooser);
-        bottom.setWidget(0, 2, actions);
 
         main.add(text);
         main.add(bottom);
+        main.add(actions);
 
         //while (collectionsCount == -1){
         // sleep();

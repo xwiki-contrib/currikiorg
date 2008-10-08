@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,7 +73,7 @@ public class AddFileDialog extends CurrikiDialog {
         // TODO GWT15 setContentMinWidth(579);
         // TODO GWT15 setContentMinHeight(468);
 
-        BasicPanel main = new BasicPanel();
+        VerticalPanel main = new VerticalPanel();
         main.addStyleName("dialog-addfile-content");
 
         BasicPanel text = new BasicPanel();
@@ -80,15 +81,12 @@ public class AddFileDialog extends CurrikiDialog {
 
         XWikiGWTPanelLoader.loadWikiPage(Constants.DIALOG_ADD_FILE, text);
 
-        Grid bottom = new Grid(2, 2);
+        Grid bottom = new Grid(1, 2);
         bottom.addStyleName("dialog-addfile-bottom");
         bottom.getColumnFormatter().addStyleName(0, "addfile-dialog-col1");
         bottom.getColumnFormatter().addStyleName(1, "addfile-dialog-col2");
         bottom.getCellFormatter().addStyleName(0, 0, "addfile-dialog-left-content");
         bottom.getCellFormatter().addStyleName(0, 1, "addfile-dialog-right-content");
-        bottom.getCellFormatter().addStyleName(1, 0, "addfile-dialog-left-action");
-        bottom.getCellFormatter().addStyleName(1, 1, "addfile-dialog-right-action");
-
 
         VerticalPanel chooser = new VerticalPanel();
         chooser.addStyleName("dialog-addfile-chooser");
@@ -153,7 +151,7 @@ public class AddFileDialog extends CurrikiDialog {
         bottom.setWidget(0, 1, tVideo);
 
 
-        BasicPanel actions = new BasicPanel();
+        HorizontalPanel actions = new HorizontalPanel();
         actions.addStyleName("addfile-dialog-actions");
 
         ClickListener cancelListener = new ClickListener(){
@@ -226,10 +224,10 @@ public class AddFileDialog extends CurrikiDialog {
 
 
         bottom.setWidget(0, 0, chooser);
-        bottom.setWidget(1, 1, actions);
 
         main.add(text);
         main.add(bottom);
+        main.add(actions);
 
         add(main);
         show();
