@@ -377,6 +377,9 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             }
         }
 
+        /*
+        // We are not putting the set to partner button anymore in the CB
+        // see CURRIKI-2781
         if ("admin".equals(role)) {
             final CheckBox setToPCheckBox = new CheckBox(Main.getTranslation("curriki.crs.settopartner"));
             setToPCheckBox.setChecked("200".equals(currentCRSStatus));
@@ -419,6 +422,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             });
             crsPanel.add(setToPCheckBox);
         }
+        */
         panel.add(crsPanel);
 
     }
