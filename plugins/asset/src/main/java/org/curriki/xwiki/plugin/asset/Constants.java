@@ -164,6 +164,8 @@ public interface Constants {
     String ASSET_CURRIKI_REVIEW_CLASS = "CRS.CurrikiReviewClass";
     String ASSET_CURRIKI_REVIEW_CLASS_STATUS = "status";
     String ASSET_CURRIKI_REVIEW_CLASS_STATUS_PARTNER="200";
+    String ASSET_CURRIKI_REVIEW_STATUS_CLASS="CRS.CurrikiReviewStatusClass";
+
 
     /**
      * BASIC FILE CHECK STATUS

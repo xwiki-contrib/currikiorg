@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -59,7 +60,7 @@ public class Asset extends CurrikiDocument {
     public Asset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }
-    
+
     public void saveDocument(String comment) throws XWikiException {
         saveDocument(comment, false);
     }
@@ -786,7 +787,7 @@ public class Asset extends CurrikiDocument {
 	    		}
     		}
 
-    	
+
     	//this is a special case, if pedagogy=N/R, CAccuracy=3 and TCompleteness=2
     	// return 3
     	if(weightAppropriatePedagogy==0 && valueContentAccuracy==3 && valueTechnicalCompletness==2){
@@ -795,7 +796,7 @@ public class Asset extends CurrikiDocument {
 
     	return String.valueOf(rating);
     }
-    
+
     /**
      * get the numbers of comments, the reviews are counted as a comment
      * @return comment numbers
@@ -870,6 +871,34 @@ public class Asset extends CurrikiDocument {
 		if(reviewpending!=null && reviewpending.equals(1)){
 			set("reviewpending", "0");
 		}
-    	
+
     }
+
+    /**
+     * Nominate a resource for review
+     * @param comments
+     * @return
+     * @throws XWikiException
+     */
+    public Asset nominate(String comments) throws XWikiException {
+        XWikiDocument assetDoc = getDoc();
+        BaseObject obj = assetDoc.getObject(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS);
+
+        String suser =  context.getUser();
+        if (obj==null) {
+            obj = assetDoc.newObject(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS, context);
+            obj.setIntValue("number",0);
+        }
+        obj.setStringValue("nomination_user", suser);
+        obj.setDateValue("nomination_date", new Date());
+        obj.setLargeStringValue("nomination_comment", comments);
+
+        obj.setIntValue("reviewpending", 1);
+
+        save("save CRS nomination");
+
+    	return this;
+    }
+
+
 }

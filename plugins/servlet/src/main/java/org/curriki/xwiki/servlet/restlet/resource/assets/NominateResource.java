@@ -1,8 +1,5 @@
 package org.curriki.xwiki.servlet.restlet.resource.assets;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import net.sf.json.JSONObject;
 
 import org.curriki.xwiki.plugin.asset.Asset;
@@ -61,21 +58,9 @@ public class NominateResource extends BaseResource {
         }
 
         try {
-        com.xpn.xwiki.api.Object obj = asset.getObject("CRS.CurrikiReviewStatusClass");
-        String suser =  this.xwikiContext.getUser();
-        if (obj==null) {
-            obj = asset.newObject("CRS.CurrikiReviewStatusClass");
-            obj.set("name",asset.getFullName());
-            obj.set("number",0);
-        } 
-        obj.set("nomination_user", suser);
-        obj.set("nomination_date", new Date());
-        String comments = json.getString("comments");
-        obj.set("nomination_comment", comments);
-        obj.set("reviewpending", "1");
-        
-        asset.save("save CRS nomination");
-        
+	        String comments = json.getString("comments");
+        	asset.nominate(comments);
+
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_BAD_REQUEST, e.getFullMessage());
         }
