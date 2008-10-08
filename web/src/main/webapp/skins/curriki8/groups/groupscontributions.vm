@@ -369,7 +369,7 @@ Curriki.module.search.start();
 <a class="button-link-table" onclick="Curriki.module.addpath.startPath('N', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle', publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.buildup")" title="$msg.get("groups.curriculum.collections.buildup_tooltip")">$msg.get("groups.curriculum.collections.buildup")</a>
 {/pre}
 #end
-#if($sm.isAdmin($spaceName, $context.user) || $context.user == $asset.creator)
+#if($sm.isAdmin($spaceName, $context.user) || $context.user == $asset.creator || $hasAdmin)
 #set($deleteMsg = $msg.get('groups.curriculum.collections.actions.delete.confirm'))
 #set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
 <a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table">$msg.get("groups.curriculum.collections.delete")</a>
