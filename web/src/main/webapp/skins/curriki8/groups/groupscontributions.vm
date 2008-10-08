@@ -71,11 +71,11 @@ $msg.get("groups.curriculum.contributions.about")
 ##
 ## Order by reverse last updated
 #if($sortBy=="title") ## {
-#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
+#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
 #elseif($sortBy=="access") ## Default sort by rights ## } {
-#set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
+#set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
 #else ## Default sort by date ## } {
-#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' order by doc.date $sortDir")
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and doc.name != 'WebHome' and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' order by doc.date $sortDir")
 #end ## }
 ## Order by property ascending
 ## How can we sort by
