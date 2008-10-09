@@ -277,7 +277,7 @@ data.init = function(){
 				rollover = _('search.resource.icon.Unknown.rollover');
 			}
 //			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-			return String.format('<img class="x-tree-node-icon assettype-icon" src="{4}" alt="{5}" ext:qtip="{5}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtitle="{3}" ext:qtip="{2}">{1}</a>', page, value, desc, _('search.resource.column.title.tooltip.title'), Ext.BLANK_IMAGE_URL, rollover);
+			return String.format('<img class="x-tree-node-icon assettype-icon" src="{4}" alt="{5}" ext:qtip="{5}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtitle="{3}" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, _('search.resource.column.title.tooltip.title'), Ext.BLANK_IMAGE_URL, rollover);
 		}
 
 		,ict: function(value, metadata, record, rowIndex, colIndex, store){
