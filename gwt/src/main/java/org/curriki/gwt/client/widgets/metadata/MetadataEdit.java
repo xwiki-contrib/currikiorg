@@ -77,8 +77,8 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         if (!fullMode) {
             ScrollPanel sPanel = new ScrollPanel(form);
 
-            int width = (Window.getClientWidth() < 600 ? Window.getClientWidth() - 20 : 600);
-            int height = (Window.getClientHeight() < 500 ? Window.getClientHeight() - 50 : 500);
+            int width = ((Window.getClientWidth() - 20) < 600 ? Window.getClientWidth() - 20 : 600);
+            int height = ((Window.getClientHeight() - 70) < 500 ? Window.getClientHeight() - 70 : 500);
 
             sPanel.setWidth(width + "px");
             sPanel.setHeight(height + "px");
