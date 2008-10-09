@@ -1566,7 +1566,7 @@ $msg.get("deleted")
   #end ## }
   ##
   ## Order by reverse last updated
-  #set($baseWhere = "where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' AND doc.fullName NOT IN (SELECT cbobj.name FROM BaseObject as cbobj, IntegerProperty as cbprop WHERE cbobj.className='XWiki.TextAssetClass' AND cbobj.name = doc.fullName AND cbobj.id=cbprop.id.id AND cbprop.id.name='type' AND cbprop.value=2)")
+  #set($baseWhere = "where doc.fullName=obj.name AND obj.className='XWiki.AssetClass' AND doc.creator='${userdoc.fullName}' AND doc.web != 'AssetTemp' AND doc.name != 'Favorites' AND doc.name != 'WebHome' AND doc.fullName NOT IN (SELECT cbobj.name FROM BaseObject as cbobj, IntegerProperty as cbprop WHERE cbobj.className='XWiki.TextAssetClass' AND cbobj.name = doc.fullName AND cbobj.id=cbprop.id.id AND cbprop.id.name='type' AND cbprop.value=2)")
   #set($globalView = " 0=1 ")
   #if($!hasGlobalAdmin)
     #set($globalView = " 1=1 ")
