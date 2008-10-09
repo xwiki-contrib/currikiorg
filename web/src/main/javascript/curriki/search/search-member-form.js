@@ -167,7 +167,7 @@ form.init = function(){
 
 	form.columnModelList = [{
 			id: 'picture'
-			,header: ''
+			,header: _('search.member.column.header.picture')
 			,width: 98
 			,dataIndex: 'picture'
 			,sortable:false
