@@ -406,6 +406,7 @@ form.init = function(){
 		,autoHeight:true
 		,width:Search.settings.gridWidth
 		,autoExpandColumn:'title'
+		,stateful:true
 		,frame:false
 		,stripeRows:true
 		,viewConfig: {
