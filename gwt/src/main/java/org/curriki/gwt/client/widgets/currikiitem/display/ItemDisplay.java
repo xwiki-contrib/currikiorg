@@ -124,7 +124,7 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
 
     public boolean saveUpload() {
         if (upload == null) {
-            return true;
+            return false; // return false to say it is not an upload
         }
         return upload.sendFile();
     }
