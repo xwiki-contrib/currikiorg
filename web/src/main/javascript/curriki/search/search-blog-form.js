@@ -72,6 +72,7 @@ form.init = function(){
 		,autoHeight:true
 		,width:Search.settings.gridWidth
 		,autoExpandColumn:'text'
+		,stateful:true
 		,frame:false
 		,stripeRows:true
 		,viewConfig: {

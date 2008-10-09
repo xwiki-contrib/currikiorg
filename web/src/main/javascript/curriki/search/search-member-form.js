@@ -220,6 +220,7 @@ form.init = function(){
 		,autoHeight:true
 		,width:Search.settings.gridWidth
 		,autoExpandColumn:'bio'
+		,stateful:true
 		,frame:false
 		,stripeRows:true
 		,viewConfig: {

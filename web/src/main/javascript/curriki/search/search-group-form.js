@@ -225,6 +225,7 @@ form.init = function(){
 		,autoHeight:true
 		,width:Search.settings.gridWidth
 		,autoExpandColumn:'description'
+		,stateful:true
 		,frame:false
 		,stripeRows:true
 		,viewConfig: {
