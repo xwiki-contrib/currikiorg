@@ -123,6 +123,9 @@ public abstract class ItemDisplay  extends AbstractItemDisplay {
     }
 
     public boolean saveUpload() {
+        if (upload == null) {
+            return true;
+        }
         return upload.sendFile();
     }
 
