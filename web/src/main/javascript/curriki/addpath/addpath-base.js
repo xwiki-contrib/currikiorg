@@ -1139,7 +1139,7 @@ console.log('Node ',fw_item,' does not exist but is set');
 										var md = Curriki.current.metadata;
 
 										if (!Ext.isEmpty(md.rights)){
-											Ext.getCmp(Ext.select('input[type="radio"][name="rights"][value="'+md.rights+'"]').first().dom.id).setValue(true);
+											Ext.getCmp(Ext.select('input[type="radio"][name="rights"][value="'+md.rights+'"]').first().dom.id).setValue(md.rights);
 										}
 
 										if (!Ext.isEmpty(md.keywords)){
@@ -1209,9 +1209,10 @@ console.log('Node ',fw_item,' does not exist but is set');
 									}
 								},{
 									 border:false
+									,xtype:'radiogroup'
+									,columns:1
 									,defaults:{
-										 xtype:'radio'
-										,name:'rights'
+										name:'rights'
 									}
 									,items:Curriki.data.rights.data
 								}]
