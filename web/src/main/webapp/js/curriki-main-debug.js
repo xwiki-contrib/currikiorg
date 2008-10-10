@@ -68,12 +68,14 @@ Ext.override(Ext.PagingToolbar, {
         this.first = this.addButton({
             tooltip: this.firstText,
             iconCls: "x-tbar-page-first",
+            text: "&lt;&lt;",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["first"])
         });
         this.prev = this.addButton({
             tooltip: this.prevText,
             iconCls: "x-tbar-page-prev",
+            text: "&lt;",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["prev"])
         });
@@ -94,12 +96,14 @@ Ext.override(Ext.PagingToolbar, {
         this.next = this.addButton({
             tooltip: this.nextText,
             iconCls: "x-tbar-page-next",
+            text: "&gt;",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["next"])
         });
         this.last = this.addButton({
             tooltip: this.lastText,
             iconCls: "x-tbar-page-last",
+            text: "&gt;&gt;",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["last"])
         });
