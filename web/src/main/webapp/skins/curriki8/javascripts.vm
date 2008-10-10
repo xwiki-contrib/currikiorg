@@ -2,11 +2,17 @@
   * Setup the external Javascript files loaded for the curriki pages
   * @author Curriki dev team
   *#
+#if($globalDebug)##{
+	#set($debugging = "-debug")
+#else##}{
+	#set($debugging = "")
+#end##}
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js')"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/ext/ext-base.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all-debug.js")"></script>
+
+<script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all${debugging}.js")"></script>
 
 #if("$!request.lang" != "")##{
 #set($lang = $request.lang)
@@ -28,13 +34,13 @@
 
 <script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
 <script src="$xwiki.getSkinFile('js/vidiembed_curiki.js')"></script>
-<script src="/xwiki/js/curriki-main.js"></script>
-<script src="/xwiki/js/curriki-module-addpath.js"></script>
-<script src="/xwiki/js/curriki-module-nominate.js"></script>
-<script src="/xwiki/js/curriki-module-review.js"></script>
-<script src="/xwiki/js/curriki-module-unnominate.js"></script>
-<script src="/xwiki/js/curriki-module-partner.js"></script>
-<script src="/xwiki/js/curriki-module-asterixReview.js"></script>
+<script src="/xwiki/js/curriki-main${debugging}.js"></script>
+<script src="/xwiki/js/curriki-module-addpath${debugging}.js"></script>
+<script src="/xwiki/js/curriki-module-nominate${debugging}.js"></script>
+<script src="/xwiki/js/curriki-module-review${debugging}.js"></script>
+<script src="/xwiki/js/curriki-module-unnominate${debugging}.js"></script>
+<script src="/xwiki/js/curriki-module-partner${debugging}.js"></script>
+<script src="/xwiki/js/curriki-module-asterixReview${debugging}.js"></script>
 
 #if($!headerfile == "html") ## {
 <script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>

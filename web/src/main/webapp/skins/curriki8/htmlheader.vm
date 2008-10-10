@@ -19,6 +19,7 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 ## For development only. Reading styles from XWiki.style
 <link rel="stylesheet" href="$xwiki.getURL("XWiki.Style","view", "xpage=plain")" type="text/css" />
 #template("onloadunloadjs.vm")
-<body $!onloadunload id="body"#if($hasGlobalAdmin) class='admin'#end>
+#set($pageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
+<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $pageName'>
 <div id="main">
  <div id="shadow-right">

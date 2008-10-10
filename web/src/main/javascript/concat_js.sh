@@ -8,8 +8,8 @@ COMPRESSOR="./compressor/yuicompressor-2.3.5.jar"
 COMPRESS_JS="java -jar $COMPRESSOR --type js "
 COMPRESS_CSS="java -jar $COMPRESSOR --type css "
 
-##COMPRESS_JS="cat"
-##COMPRESS_CSS="cat"
+UNCOMPRESS_JS="cat"
+UNCOMPRESS_CSS="cat"
 
 
 I18N="\
@@ -17,6 +17,7 @@ I18N="\
 	"
 
 cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
+cat $I18N | $UNCOMPRESS_JS > ../webapp/js/i18n-debug.js
 
 CURRIKI="\
 	ext/ExtJsOverride.js \
@@ -33,12 +34,14 @@ CURRIKI="\
 	"
 
 cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
+cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js
 
 
 CURRIKICSS="\
 	ext/Multiselect.css \
 	"
 cat $CURRIKICSS | $COMPRESS_CSS > ../webapp/js/curriki-js.css
+cat $CURRIKICSS | $UNCOMPRESS_CSS > ../webapp/js/curriki-js-debug.css
 
 
 
@@ -47,6 +50,7 @@ ADDPATH="\
 	"
 
 cat $ADDPATH | $COMPRESS_JS > ../webapp/js/curriki-module-addpath.js
+cat $ADDPATH | $UNCOMPRESS_JS > ../webapp/js/curriki-module-addpath-debug.js
 
 
 
@@ -55,24 +59,28 @@ NOMINATE="\
 	"
 
 cat $NOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-nominate.js
+cat $NOMINATE | $UNCOMPRESS_JS > ../webapp/js/curriki-module-nominate-debug.js
 
 REVIEW="\
 	curriki/crs/review-base.js \
 	"
 
 cat $REVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-review.js
+cat $REVIEW | $UNCOMPRESS_JS > ../webapp/js/curriki-module-review-debug.js
 
 UNNOMINATE="\
 	curriki/crs/unnominate-base.js \
 	"
 
 cat $UNNOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-unnominate.js
+cat $UNNOMINATE | $UNCOMPRESS_JS > ../webapp/js/curriki-module-unnominate-debug.js
 
 PARTNER="\
 	curriki/crs/partner-base.js \
 	"
 
 cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js
+cat $PARTNER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-partner-debug.js
 
 SEARCH="\
 	curriki/search/search-global.js \
@@ -97,14 +105,17 @@ SEARCH="\
 	"
 
 cat $SEARCH | $COMPRESS_JS > ../webapp/js/curriki-module-search.js
+cat $SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-module-search-debug.js
 
 ASTERIXREVIEW="\
 	curriki/crs/asterixReview-base.js \
 	"
 
 cat $ASTERIXREVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-asterixReview.js
+cat $ASTERIXREVIEW | $UNCOMPRESS_JS > ../webapp/js/curriki-module-asterixReview-debug.js
 
 REORDER="\
 	curriki/reorder/base.js
 	"
 cat $REORDER | $COMPRESS_JS > ../webapp/js/curriki-module-reorder.js
+cat $REORDER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-reorder-debug.js
