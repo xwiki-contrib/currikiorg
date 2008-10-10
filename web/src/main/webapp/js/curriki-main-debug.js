@@ -2226,7 +2226,7 @@ Curriki.assets = {
 					alert(_('add.servertimedout.message.text'));
 				} else {
 					// We need to refresh the collections for the user
-					Curriki.data.user.GetCollections(function(){callback(o);});
+					Curriki.data.user.GetCollections(function(){if ('function' === typeof callback) {callback(o);}});
 				}
 			}
 			,failure:function(response, options){
