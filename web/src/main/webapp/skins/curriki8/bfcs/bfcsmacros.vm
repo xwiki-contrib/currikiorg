@@ -79,7 +79,8 @@
 		#if($ordered ==true)
 			#set($order = "order by")
             #if($request.order=="fcstatus")
-            	#if($assetFilterFileCheckStatus!="2")
+            	#if(!$assetFilterFileCheckStatus || $assetFilterFileCheckStatus=="1" || $assetFilterFileCheckStatus=="0")
+					## "StringProperty as sprop" was not added in the from previously, add it now
             		#set($fromsql = "$fromsql ,StringProperty as sprop")
             		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
             	#end
