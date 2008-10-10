@@ -2100,9 +2100,9 @@ data.init = function(){
 			var desc = Ext.util.Format.htmlDecode(value); // Reverse conversion
 			desc = Ext.util.Format.stripScripts(value);
 			desc = Ext.util.Format.stripTags(desc);
-			desc = Ext.util.Format.ellipsis(desc, 128);
-			desc = Ext.util.Format.htmlEncode(desc);
 			desc = Ext.util.Format.trim(desc);
+			desc = Ext.util.Format.ellipsis(desc, 128);
+			//desc = Ext.util.Format.htmlEncode(desc);
 			return String.format('<a href="{2}" class="search-blog-title">{1}</a><br /><br />{0}', desc, record.data.title, record.data.blogUrl);
 		}
 
