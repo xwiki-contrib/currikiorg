@@ -696,18 +696,18 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         String rights = assetObj.getStringValue(Constants.ASSET_RIGHTS_PROPERTY);
 
         BaseObject rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-        rightObj.setStringValue("groups", "XWiki.XWikiAdminGroup");
+        rightObj.setLargeStringValue("groups", "XWiki.XWikiAdminGroup");
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
         rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-        rightObj.setStringValue(usergroupfield, usergroupvalue);
+        rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
         if (rights != null && rights.equals(Constants.RIGHT_PUBLIC)) {
             rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-            rightObj.setStringValue("groups", "XWiki.XWikiAllGroup");
+            rightObj.setLargeStringValue("groups", "XWiki.XWikiAllGroup");
             rightObj.setStringValue("levels", "edit");
             rightObj.setIntValue("allow", 1);
         }
@@ -722,7 +722,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
     		}
         }else {
             rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
-            rightObj.setStringValue(usergroupfield, usergroupvalue);
+            rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
             rightObj.setIntValue("allow", 1);
         }
@@ -743,17 +743,17 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         assetDoc.removeObjects("XWiki.XWikiRights");
 
         BaseObject obj = assetDoc.newObject("XWiki.XWikiRights", context);
-        obj.setStringValue("groups", "XWiki.XWikiAdminGroup");
+        obj.setLargeStringValue("groups", "XWiki.XWikiAdminGroup");
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
         obj = assetDoc.newObject("XWiki.XWikiRights", context);
-        obj.setStringValue("groups", "XWiki.XWikiAllGroup");
+        obj.setLargeStringValue("groups", "XWiki.XWikiAllGroup");
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
         obj = assetDoc.newObject("XWiki.XWikiRights", context);
-        obj.setStringValue(usergroupfield, usergroupvalue);
+        obj.setLargeStringValue(usergroupfield, usergroupvalue);
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
     }
@@ -770,7 +770,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         }
 
             BaseObject obj = assetDoc.newObject("XWiki.XWikiRights", context);
-            obj.setStringValue(usergroupfield, usergroupvalue);
+            obj.setLargeStringValue(usergroupfield, usergroupvalue);
             obj.setStringValue("levels", "edit");
             obj.setIntValue("allow", 1);
     }
@@ -805,15 +805,15 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         doc.removeObjects("XWiki.XWikiGlobalRights");
         BaseObject obj = doc.newObject("XWiki.XWikiGlobalRights", context);
 
-        obj.setStringValue("groups", "XWiki.XWikiAllGroup, XWiki.EditorGroup");
+        obj.setLargeStringValue("groups", "XWiki.XWikiAllGroup, XWiki.EditorGroup");
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
         obj = doc.newObject("XWiki.XWikiGlobalRights", context);
         if (ownerIsUser){
-            obj.setStringValue("users", owner);
+            obj.setLargeStringValue("users", owner);
         } else {
-            obj.setStringValue("groups", owner);
+            obj.setLargeStringValue("groups", owner);
         }
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
@@ -821,7 +821,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         if (spaceName.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)){
             doc.setStringValue("XWiki.XWikiPreferences", "parent", spaceName.substring(5));
             obj = doc.newObject("XWiki.XWikiGlobalRights", context);
-            obj.setStringValue("groups", spaceName.substring(5) + ".AdminGroup");
+            obj.setLargeStringValue("groups", spaceName.substring(5) + ".AdminGroup");
             obj.setStringValue("levels", "admin");
             obj.setIntValue("allow", 1);
         }

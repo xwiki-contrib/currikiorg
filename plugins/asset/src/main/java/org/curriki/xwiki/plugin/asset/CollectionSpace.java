@@ -143,7 +143,7 @@ public class CollectionSpace {
         String ownerType = ownerMap.get("ownerType");
 
         BaseObject obj = doc.newObject(Constants.RIGHTS_CLASS, context);
-        obj.setStringValue(ownerType, owner);
+        obj.setLargeStringValue(ownerType, owner);
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
@@ -253,19 +253,19 @@ public class CollectionSpace {
 
         BaseObject obj = doc.newObject("XWiki.XWikiGlobalRights", context);
 
-        obj.setStringValue("groups", "XWiki.XWikiAllGroup, XWiki.EditorGroup");
+        obj.setLargeStringValue("groups", "XWiki.XWikiAllGroup, XWiki.EditorGroup");
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
         obj = doc.newObject("XWiki.XWikiGlobalRights", context);
-        obj.setStringValue(ownerType, owner);
+        obj.setLargeStringValue(ownerType, owner);
         obj.setStringValue("levels", "edit");
         obj.setIntValue("allow", 1);
 
         if (isGroupSpace()){
             doc.setStringValue("XWiki.XWikiPreferences", "parent", spaceName.replaceFirst("^"+Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, ""));
             obj = doc.newObject("XWiki.XWikiGlobalRights", context);
-            obj.setStringValue("groups", spaceName.replaceFirst("^"+Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "") + ".AdminGroup");
+            obj.setLargeStringValue("groups", spaceName.replaceFirst("^"+Constants.GROUP_COLLECTION_PREFIX_SPACE_PREFIX, "") + ".AdminGroup");
             obj.setStringValue("levels", "admin");
             obj.setIntValue("allow", 1);
         }

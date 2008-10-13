@@ -207,7 +207,7 @@ public class Asset extends CurrikiDocument {
 
         // Always let the admin group have edit access
         rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
-        rightObj.setStringValue(Constants.RIGHTS_CLASS_GROUP, Constants.RIGHTS_ADMIN_GROUP);
+        rightObj.setLargeStringValue(Constants.RIGHTS_CLASS_GROUP, Constants.RIGHTS_ADMIN_GROUP);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
@@ -215,16 +215,16 @@ public class Asset extends CurrikiDocument {
         rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
         // CURRIKI-2468 - allow creator to always edit/view their creations
         if (usergroupfield.equals(Constants.RIGHTS_CLASS_GROUP)) {
-            rightObj.setStringValue(Constants.RIGHTS_CLASS_USER, uservalue);
+            rightObj.setLargeStringValue(Constants.RIGHTS_CLASS_USER, uservalue);
         }
-        rightObj.setStringValue(usergroupfield, usergroupvalue);
+        rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
         if (rights.equals(Constants.ASSET_CLASS_RIGHT_PUBLIC)) {
             // Viewable by all and any member can edit
             rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
-            rightObj.setStringValue(Constants.RIGHTS_CLASS_GROUP, Constants.RIGHTS_ALL_GROUP);
+            rightObj.setLargeStringValue(Constants.RIGHTS_CLASS_GROUP, Constants.RIGHTS_ALL_GROUP);
             rightObj.setStringValue("levels", "edit");
             rightObj.setIntValue("allow", 1);
         } else if (rights.equals(Constants.ASSET_CLASS_RIGHT_MEMBERS)) {
@@ -234,9 +234,9 @@ public class Asset extends CurrikiDocument {
             rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
             // CURRIKI-2468 - allow creator to always edit/view their creations
             if (usergroupfield.equals(Constants.RIGHTS_CLASS_GROUP)) {
-                rightObj.setStringValue(Constants.RIGHTS_CLASS_USER, uservalue);
+                rightObj.setLargeStringValue(Constants.RIGHTS_CLASS_USER, uservalue);
             }
-            rightObj.setStringValue(usergroupfield, usergroupvalue);
+            rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
             rightObj.setIntValue("allow", 1);
 	        //private assets must be removed from review queue
