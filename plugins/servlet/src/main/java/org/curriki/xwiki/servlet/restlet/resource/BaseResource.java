@@ -119,15 +119,20 @@ public class BaseResource extends Resource {
         return json;
     }
 
-    protected JSONArray flattenMapToJSONArray(Map<String,Object> map, List<String> items, String itemName) {
+    protected JSONArray flattenMapToJSONArray(Map<String,Object> map, List<String> items, String itemName) throws ResourceException {
         JSONArray json = new JSONArray();
 
         for (String item : items) {
             JSONObject o = new JSONObject();
             o.put(itemName, item);
             Map<String,Object> info = (Map<String,Object>) map.get(item);
-            for (String infoItem : info.keySet()) {
-                o.put(infoItem, info.get(infoItem));
+            if (!info.isEmpty()) {
+                for (String infoItem : info.keySet()) {
+                    o.put(infoItem, info.get(infoItem));
+                }
+            } else {
+                // Error:  Item in list is not in the map
+                throw error(Status.SERVER_ERROR_INTERNAL, "Map for "+itemName+": "+item+" cannot be found");
             }
             json.add(o);
         }
