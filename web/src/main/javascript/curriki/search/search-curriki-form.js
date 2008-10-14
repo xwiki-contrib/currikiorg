@@ -37,17 +37,7 @@ form.init = function(){
 			,dataIndex: 'name'
 			,sortable:true
 			,renderer: data.renderer.name
-			,tooltip:_('search.curriki.column.header.name')
-/*
-		},{
-			id: 'text'
-			,header: _('search.curriki.column.header.text')
-			//,width: 168
-			,dataIndex: 'text'
-			,sortable:false
-			,renderer: data.renderer.text
-			,tooltip:_('search.curriki.column.header.text')
-*/
+//			,tooltip:_('search.curriki.column.header.name')
 		},{
 			id: 'updated'
 			//,width: 169
@@ -55,7 +45,7 @@ form.init = function(){
 			,dataIndex:'updated'
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.curriki.column.header.updated')
+//			,tooltip: _('search.curriki.column.header.updated')
 	}]);
 
 	form.resultsPanel = {

@@ -940,22 +940,9 @@ form.init = function(){
 		Ext.apply(
 			form.rowExpander
 			,{
-				tooltip:_('search.resource.icon.plus.title')
+//				tooltip:_('search.resource.icon.plus.title')
 			}
 		)
-/*
-		,{
-			id: 'assetType'
-			,header: ''
-			,width: 17
-			,dataIndex: 'assetType'
-			,sortable:false
-			,resizable:false
-			,hideable:false
-			,menuDisabled:true
-			,renderer: data.renderer.assetType
-			,tooltip:_('search.resource.column.header.assetType')
-		}*/
 		,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
@@ -964,7 +951,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.title
-			,tooltip:_('search.resource.column.header.title')
+//			,tooltip:_('search.resource.column.header.title')
 		},{
 			id: 'ict'
 			,width: 169
@@ -972,7 +959,7 @@ form.init = function(){
 			,dataIndex:'ictText'
 			,sortable:true
 			,renderer: data.renderer.ict
-			,tooltip: _('search.resource.column.header.ict')
+//			,tooltip: _('search.resource.column.header.ict')
 		},{
 			id: 'contributor'
 			,width: 147
@@ -980,7 +967,7 @@ form.init = function(){
 			,dataIndex:'contributor'
 			,sortable:true
 			,renderer: data.renderer.contributor
-			,tooltip: _('search.resource.column.header.contributor')
+//			,tooltip: _('search.resource.column.header.contributor')
 		},{
 			id: 'rating'
 			,width: 74
@@ -988,7 +975,7 @@ form.init = function(){
 			,dataIndex:'rating'
 			,sortable:true
 			,renderer: data.renderer.rating
-			,tooltip: _('search.resource.column.header.rating')
+//			,tooltip: _('search.resource.column.header.rating')
 		},{
 			id: 'updated'
 			,width: 68
@@ -997,7 +984,7 @@ form.init = function(){
 			,hidden:true
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.resource.column.header.updated')
+//			,tooltip: _('search.resource.column.header.updated')
 	}]);
 
 	form.resultsPanel = {
@@ -1465,7 +1452,7 @@ form.init = function(){
 			,dataIndex: 'policy'
 			,sortable:true
 			,renderer: data.renderer.policy
-			,tooltip: _('search.group.column.header.policy')
+//			,tooltip: _('search.group.column.header.policy')
 		},{
 			id: 'title'
 			,header: _('search.group.column.header.name')
@@ -1474,7 +1461,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.title
-			,tooltip:_('search.group.column.header.name')
+//			,tooltip:_('search.group.column.header.name')
 		},{
 			id: 'description'
 //			,width: 169
@@ -1482,7 +1469,7 @@ form.init = function(){
 			,dataIndex:'description'
 			,sortable:false
 			,renderer: data.renderer.description
-			,tooltip: _('search.group.column.header.description')
+//			,tooltip: _('search.group.column.header.description')
 		},{
 			id: 'updated'
 //			,width: 147
@@ -1490,7 +1477,7 @@ form.init = function(){
 			,dataIndex:'updated'
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.group.column.header.updated')
+//			,tooltip: _('search.group.column.header.updated')
 	}]);
 
 	form.resultsPanel = {
@@ -1925,6 +1912,7 @@ form.init = function(){
 			,resizable:false
 			,menuDisabled:true
 			,renderer: data.renderer.picture
+//			,tooltip:_('search.member.column.header.picture')
 		},{
 			id: 'name1'
 			,header: _('search.member.column.header.name1')
@@ -1933,7 +1921,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.name1
-			,tooltip:_('search.member.column.header.name1')
+//			,tooltip:_('search.member.column.header.name1')
 		},{
 			id: 'name2'
 //			,width: 169
@@ -1942,7 +1930,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.name2
-			,tooltip: _('search.member.column.header.name2')
+//			,tooltip: _('search.member.column.header.name2')
 		},{
 			id: 'bio'
 //			,width: 147
@@ -1950,7 +1938,7 @@ form.init = function(){
 			,dataIndex:'bio'
 			,sortable:false
 			,renderer: data.renderer.bio
-			,tooltip: _('search.member.column.header.bio')
+//			,tooltip: _('search.member.column.header.bio')
 		},{
 			id: 'contributions'
 //			,width: 147
@@ -1958,7 +1946,7 @@ form.init = function(){
 			,dataIndex:'contributions'
 			,sortable:false
 			,renderer: data.renderer.contributions
-			,tooltip: _('search.member.column.header.contributions')
+//			,tooltip: _('search.member.column.header.contributions')
 	}];
 
 	form.columnModel = new Ext.grid.ColumnModel(form.columnModelList);
@@ -2160,7 +2148,7 @@ form.init = function(){
 			,dataIndex: 'name'
 			,sortable:true
 			,renderer: data.renderer.name
-			,tooltip:_('search.blog.column.header.name')
+//			,tooltip:_('search.blog.column.header.name')
 		},{
 			id: 'text'
 			,header: _('search.blog.column.header.text')
@@ -2168,7 +2156,7 @@ form.init = function(){
 			,dataIndex: 'text'
 			,sortable:false
 			,renderer: data.renderer.text
-			,tooltip:_('search.blog.column.header.text')
+//			,tooltip:_('search.blog.column.header.text')
 		},{
 			id: 'comments'
 			,header: _('search.blog.column.header.comments')
@@ -2176,7 +2164,7 @@ form.init = function(){
 			,dataIndex: 'comments'
 			,sortable:false
 			,renderer: data.renderer.comments
-			,tooltip:_('search.blog.column.header.comments')
+//			,tooltip:_('search.blog.column.header.comments')
 		},{
 			id: 'updated'
 			,width: 71
@@ -2184,7 +2172,7 @@ form.init = function(){
 			,dataIndex:'updated'
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.blog.column.header.updated')
+//			,tooltip: _('search.blog.column.header.updated')
 	}]);
 
 	form.resultsPanel = {
@@ -2376,17 +2364,7 @@ form.init = function(){
 			,dataIndex: 'name'
 			,sortable:true
 			,renderer: data.renderer.name
-			,tooltip:_('search.curriki.column.header.name')
-/*
-		},{
-			id: 'text'
-			,header: _('search.curriki.column.header.text')
-			//,width: 168
-			,dataIndex: 'text'
-			,sortable:false
-			,renderer: data.renderer.text
-			,tooltip:_('search.curriki.column.header.text')
-*/
+//			,tooltip:_('search.curriki.column.header.name')
 		},{
 			id: 'updated'
 			//,width: 169
@@ -2394,7 +2372,7 @@ form.init = function(){
 			,dataIndex:'updated'
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.curriki.column.header.updated')
+//			,tooltip: _('search.curriki.column.header.updated')
 	}]);
 
 	form.resultsPanel = {

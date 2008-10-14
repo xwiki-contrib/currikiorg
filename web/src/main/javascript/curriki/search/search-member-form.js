@@ -174,6 +174,7 @@ form.init = function(){
 			,resizable:false
 			,menuDisabled:true
 			,renderer: data.renderer.picture
+//			,tooltip:_('search.member.column.header.picture')
 		},{
 			id: 'name1'
 			,header: _('search.member.column.header.name1')
@@ -182,7 +183,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.name1
-			,tooltip:_('search.member.column.header.name1')
+//			,tooltip:_('search.member.column.header.name1')
 		},{
 			id: 'name2'
 //			,width: 169
@@ -191,7 +192,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.name2
-			,tooltip: _('search.member.column.header.name2')
+//			,tooltip: _('search.member.column.header.name2')
 		},{
 			id: 'bio'
 //			,width: 147
@@ -199,7 +200,7 @@ form.init = function(){
 			,dataIndex:'bio'
 			,sortable:false
 			,renderer: data.renderer.bio
-			,tooltip: _('search.member.column.header.bio')
+//			,tooltip: _('search.member.column.header.bio')
 		},{
 			id: 'contributions'
 //			,width: 147
@@ -207,7 +208,7 @@ form.init = function(){
 			,dataIndex:'contributions'
 			,sortable:false
 			,renderer: data.renderer.contributions
-			,tooltip: _('search.member.column.header.contributions')
+//			,tooltip: _('search.member.column.header.contributions')
 	}];
 
 	form.columnModel = new Ext.grid.ColumnModel(form.columnModelList);

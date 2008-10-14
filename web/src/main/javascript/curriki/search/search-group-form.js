@@ -189,7 +189,7 @@ form.init = function(){
 			,dataIndex: 'policy'
 			,sortable:true
 			,renderer: data.renderer.policy
-			,tooltip: _('search.group.column.header.policy')
+//			,tooltip: _('search.group.column.header.policy')
 		},{
 			id: 'title'
 			,header: _('search.group.column.header.name')
@@ -198,7 +198,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.title
-			,tooltip:_('search.group.column.header.name')
+//			,tooltip:_('search.group.column.header.name')
 		},{
 			id: 'description'
 //			,width: 169
@@ -206,7 +206,7 @@ form.init = function(){
 			,dataIndex:'description'
 			,sortable:false
 			,renderer: data.renderer.description
-			,tooltip: _('search.group.column.header.description')
+//			,tooltip: _('search.group.column.header.description')
 		},{
 			id: 'updated'
 //			,width: 147
@@ -214,7 +214,7 @@ form.init = function(){
 			,dataIndex:'updated'
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.group.column.header.updated')
+//			,tooltip: _('search.group.column.header.updated')
 	}]);
 
 	form.resultsPanel = {

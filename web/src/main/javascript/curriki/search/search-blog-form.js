@@ -37,7 +37,7 @@ form.init = function(){
 			,dataIndex: 'name'
 			,sortable:true
 			,renderer: data.renderer.name
-			,tooltip:_('search.blog.column.header.name')
+//			,tooltip:_('search.blog.column.header.name')
 		},{
 			id: 'text'
 			,header: _('search.blog.column.header.text')
@@ -45,7 +45,7 @@ form.init = function(){
 			,dataIndex: 'text'
 			,sortable:false
 			,renderer: data.renderer.text
-			,tooltip:_('search.blog.column.header.text')
+//			,tooltip:_('search.blog.column.header.text')
 		},{
 			id: 'comments'
 			,header: _('search.blog.column.header.comments')
@@ -53,7 +53,7 @@ form.init = function(){
 			,dataIndex: 'comments'
 			,sortable:false
 			,renderer: data.renderer.comments
-			,tooltip:_('search.blog.column.header.comments')
+//			,tooltip:_('search.blog.column.header.comments')
 		},{
 			id: 'updated'
 			,width: 71
@@ -61,7 +61,7 @@ form.init = function(){
 			,dataIndex:'updated'
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.blog.column.header.updated')
+//			,tooltip: _('search.blog.column.header.updated')
 	}]);
 
 	form.resultsPanel = {

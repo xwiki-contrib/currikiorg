@@ -338,22 +338,9 @@ form.init = function(){
 		Ext.apply(
 			form.rowExpander
 			,{
-				tooltip:_('search.resource.icon.plus.title')
+//				tooltip:_('search.resource.icon.plus.title')
 			}
 		)
-/*
-		,{
-			id: 'assetType'
-			,header: ''
-			,width: 17
-			,dataIndex: 'assetType'
-			,sortable:false
-			,resizable:false
-			,hideable:false
-			,menuDisabled:true
-			,renderer: data.renderer.assetType
-			,tooltip:_('search.resource.column.header.assetType')
-		}*/
 		,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
@@ -362,7 +349,7 @@ form.init = function(){
 			,sortable:true
 			,hideable:false
 			,renderer: data.renderer.title
-			,tooltip:_('search.resource.column.header.title')
+//			,tooltip:_('search.resource.column.header.title')
 		},{
 			id: 'ict'
 			,width: 169
@@ -370,7 +357,7 @@ form.init = function(){
 			,dataIndex:'ictText'
 			,sortable:true
 			,renderer: data.renderer.ict
-			,tooltip: _('search.resource.column.header.ict')
+//			,tooltip: _('search.resource.column.header.ict')
 		},{
 			id: 'contributor'
 			,width: 147
@@ -378,7 +365,7 @@ form.init = function(){
 			,dataIndex:'contributor'
 			,sortable:true
 			,renderer: data.renderer.contributor
-			,tooltip: _('search.resource.column.header.contributor')
+//			,tooltip: _('search.resource.column.header.contributor')
 		},{
 			id: 'rating'
 			,width: 74
@@ -386,7 +373,7 @@ form.init = function(){
 			,dataIndex:'rating'
 			,sortable:true
 			,renderer: data.renderer.rating
-			,tooltip: _('search.resource.column.header.rating')
+//			,tooltip: _('search.resource.column.header.rating')
 		},{
 			id: 'updated'
 			,width: 68
@@ -395,7 +382,7 @@ form.init = function(){
 			,hidden:true
 			,sortable:true
 			,renderer: data.renderer.updated
-			,tooltip: _('search.resource.column.header.updated')
+//			,tooltip: _('search.resource.column.header.updated')
 	}]);
 
 	form.resultsPanel = {
