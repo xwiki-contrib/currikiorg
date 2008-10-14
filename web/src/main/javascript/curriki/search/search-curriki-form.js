@@ -33,14 +33,14 @@ form.init = function(){
 		{
 			id: 'name'
 			,header:_('search.curriki.column.header.name')
-			//,width: 17
+			,width: 500
 			,dataIndex: 'name'
 			,sortable:true
 			,renderer: data.renderer.name
 //			,tooltip:_('search.curriki.column.header.name')
 		},{
 			id: 'updated'
-			//,width: 169
+			,width: 96
 			,header: _('search.curriki.column.header.updated')
 			,dataIndex:'updated'
 			,sortable:true

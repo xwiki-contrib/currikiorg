@@ -185,7 +185,7 @@ form.init = function(){
 	form.columnModel = new Ext.grid.ColumnModel([{
 			id: 'policy'
 			,header: _('search.group.column.header.policy')
-//			,width: 17
+			,width: 62
 			,dataIndex: 'policy'
 			,sortable:true
 			,renderer: data.renderer.policy
@@ -193,7 +193,7 @@ form.init = function(){
 		},{
 			id: 'title'
 			,header: _('search.group.column.header.name')
-//			,width: 168
+			,width: 213
 			,dataIndex: 'title'
 			,sortable:true
 			,hideable:false
@@ -201,7 +201,7 @@ form.init = function(){
 //			,tooltip:_('search.group.column.header.name')
 		},{
 			id: 'description'
-//			,width: 169
+			,width: 225
 			,header: _('search.group.column.header.description')
 			,dataIndex:'description'
 			,sortable:false
@@ -209,7 +209,7 @@ form.init = function(){
 //			,tooltip: _('search.group.column.header.description')
 		},{
 			id: 'updated'
-//			,width: 147
+			,width: 96
 			,header: _('search.group.column.header.updated')
 			,dataIndex:'updated'
 			,sortable:true

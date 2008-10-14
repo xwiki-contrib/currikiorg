@@ -33,7 +33,7 @@ form.init = function(){
 		{
 			id: 'name'
 			,header:_('search.blog.column.header.name')
-			//,width: 17
+			,width: 160
 			,dataIndex: 'name'
 			,sortable:true
 			,renderer: data.renderer.name
@@ -41,7 +41,7 @@ form.init = function(){
 		},{
 			id: 'text'
 			,header: _('search.blog.column.header.text')
-			//,width: 168
+			,width: 260
 			,dataIndex: 'text'
 			,sortable:false
 			,renderer: data.renderer.text
@@ -49,14 +49,14 @@ form.init = function(){
 		},{
 			id: 'comments'
 			,header: _('search.blog.column.header.comments')
-			,width: 56
+			,width: 80
 			,dataIndex: 'comments'
 			,sortable:false
 			,renderer: data.renderer.comments
 //			,tooltip:_('search.blog.column.header.comments')
 		},{
 			id: 'updated'
-			,width: 71
+			,width: 96
 			,header: _('search.blog.column.header.updated')
 			,dataIndex:'updated'
 			,sortable:true

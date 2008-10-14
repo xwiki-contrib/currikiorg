@@ -168,7 +168,7 @@ form.init = function(){
 	form.columnModelList = [{
 			id: 'picture'
 			,header: _('search.member.column.header.picture')
-			,width: 98
+			,width: 116
 			,dataIndex: 'picture'
 			,sortable:false
 			,resizable:false
@@ -178,7 +178,7 @@ form.init = function(){
 		},{
 			id: 'name1'
 			,header: _('search.member.column.header.name1')
-//			,width: 168
+			,width: 120
 			,dataIndex: 'name1'
 			,sortable:true
 			,hideable:false
@@ -186,7 +186,7 @@ form.init = function(){
 //			,tooltip:_('search.member.column.header.name1')
 		},{
 			id: 'name2'
-//			,width: 169
+			,width: 120
 			,header: _('search.member.column.header.name2')
 			,dataIndex:'name2'
 			,sortable:true
@@ -195,7 +195,7 @@ form.init = function(){
 //			,tooltip: _('search.member.column.header.name2')
 		},{
 			id: 'bio'
-//			,width: 147
+			,width: 120
 			,header: _('search.member.column.header.bio')
 			,dataIndex:'bio'
 			,sortable:false
@@ -203,7 +203,7 @@ form.init = function(){
 //			,tooltip: _('search.member.column.header.bio')
 		},{
 			id: 'contributions'
-//			,width: 147
+			,width: 120
 			,header: _('search.member.column.header.contributions')
 			,dataIndex:'contributions'
 			,sortable:false
