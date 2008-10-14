@@ -287,8 +287,12 @@
 				}
 				function clickIsChildCheckbox()
 				{
-				if (document.getElementById('isChild').checked == false)
-				Curriki.module.asterixReview.removedConfirm('$asset.getURL("view")');
+				if (document.getElementById('isChild').checked == false){if (document.getElementById('currentStatus').value=='300' || document.getElementById('currentStatus').value=='500' || document.getElementById('currentStatus').value=='700' )
+{				Curriki.module.asterixReview.removedConfirm('$asset.getURL("view")');
+}
+else
+	document.getElementById('asterixReview').style.display='none';
+}
 				else
 				document.getElementById('asterixReview').style.display='';
 				}
