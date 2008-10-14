@@ -506,7 +506,7 @@ data.init = function(){
 			url: '/xwiki/bin/view/Search/Resources'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain" }
+		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
@@ -1211,7 +1211,7 @@ data.init = function(){
 			url: '/xwiki/bin/view/Search/Groups'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain" }
+		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
@@ -1686,7 +1686,7 @@ data.init = function(){
 			url: '/xwiki/bin/view/Search/Members'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain" }
+		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
@@ -2063,7 +2063,7 @@ data.init = function(){
 			url: '/xwiki/bin/view/Search/Blogs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain" }
+		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
@@ -2283,7 +2283,7 @@ data.init = function(){
 			url: '/xwiki/bin/view/Search/Curriki'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain" }
+		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'

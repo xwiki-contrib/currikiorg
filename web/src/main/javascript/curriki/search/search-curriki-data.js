@@ -31,7 +31,7 @@ data.init = function(){
 			url: '/xwiki/bin/view/Search/Curriki'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain" }
+		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
