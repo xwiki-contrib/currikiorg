@@ -126,7 +126,7 @@ public class BaseResource extends Resource {
             JSONObject o = new JSONObject();
             o.put(itemName, item);
             Map<String,Object> info = (Map<String,Object>) map.get(item);
-            if (!info.isEmpty()) {
+            if (info != null) {
                 for (String infoItem : info.keySet()) {
                     o.put(infoItem, info.get(infoItem));
                 }
