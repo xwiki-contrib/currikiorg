@@ -704,6 +704,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     protected Map getFormMap() {
         HashMap formMap = new HashMap();
         // 9 properties from the asset class
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_DESCRIPTION_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_FW_ITEMS_PROPERTY));
