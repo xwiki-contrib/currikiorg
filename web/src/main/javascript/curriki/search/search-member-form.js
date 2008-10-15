@@ -249,6 +249,7 @@ form.init = function(){
 				,addAfter: _('search.pagination.pagesize.addafter')
 			})
 			,pageSize: 25
+			,stateful: true
 			,store: data.store.results
 			,displayInfo: true
 			,displayMsg: _('search.pagination.displaying.'+modName)

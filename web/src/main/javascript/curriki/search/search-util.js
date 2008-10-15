@@ -169,11 +169,6 @@ module.init = function(){
 				}]
 			},{
 				xtype:'hidden'
-				,name:'since'
-				,id:'search-termPanel-since-'+modName
-				,value:(new Date()).add(Date.DAY, -_('search.resource.special.selector.updated.days')).format('Ymd')
-			},{
-				xtype:'hidden'
 				,name:'other'
 				,id:'search-termPanel-other-'+modName
 				,value:(!Ext.isEmpty(Search.restrictions)?Search.restrictions:'')

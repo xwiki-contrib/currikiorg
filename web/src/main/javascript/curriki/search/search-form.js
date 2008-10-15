@@ -38,6 +38,12 @@ Search.init = function(){
 							var filterForm = filterPanel.getForm();
 							if (!Ext.isEmpty(filterForm)) {
 								filterValues[tab] = filterForm.getValues(false);
+								if ("undefined" !== typeof filterValues[tab]["terms"] && filterValues[tab]["terms"] === _('search.text.entry.label')) {
+									delete(filterValues[tab]["terms"]);
+								}
+								if ("undefined" !== typeof filterValues[tab]["other"] && filterValues[tab]["other"] === '') {
+									delete(filterValues[tab]["other"]);
+								}
 							}
 						}
 

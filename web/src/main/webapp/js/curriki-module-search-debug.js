@@ -191,11 +191,6 @@ module.init = function(){
 				}]
 			},{
 				xtype:'hidden'
-				,name:'since'
-				,id:'search-termPanel-since-'+modName
-				,value:(new Date()).add(Date.DAY, -_('search.resource.special.selector.updated.days')).format('Ymd')
-			},{
-				xtype:'hidden'
 				,name:'other'
 				,id:'search-termPanel-other-'+modName
 				,value:(!Ext.isEmpty(Search.restrictions)?Search.restrictions:'')
@@ -1023,6 +1018,7 @@ form.init = function(){
 				,addAfter: _('search.pagination.pagesize.addafter')
 			})
 			,pageSize: 25
+			,stateful: true
 			,store: data.store.results
 			,displayInfo: true
 			,displayMsg: _('search.pagination.displaying.'+modName)
@@ -1516,6 +1512,7 @@ form.init = function(){
 				,addAfter: _('search.pagination.pagesize.addafter')
 			})
 			,pageSize: 25
+			,stateful: true
 			,store: data.store.results
 			,displayInfo: true
 			,displayMsg: _('search.pagination.displaying.'+modName)
@@ -1987,6 +1984,7 @@ form.init = function(){
 				,addAfter: _('search.pagination.pagesize.addafter')
 			})
 			,pageSize: 25
+			,stateful: true
 			,store: data.store.results
 			,displayInfo: true
 			,displayMsg: _('search.pagination.displaying.'+modName)
@@ -2210,6 +2208,7 @@ form.init = function(){
 				,addAfter: _('search.pagination.pagesize.addafter')
 			})
 			,pageSize: 25
+			,stateful: true
 			,store: data.store.results
 			,displayInfo: true
 			,displayMsg: _('search.pagination.displaying.'+modName)
@@ -2410,6 +2409,7 @@ form.init = function(){
 				,addAfter: _('search.pagination.pagesize.addafter')
 			})
 			,pageSize: 25
+			,stateful: true
 			,store: data.store.results
 			,displayInfo: true
 			,displayMsg: _('search.pagination.displaying.'+modName)
@@ -2490,6 +2490,12 @@ Search.init = function(){
 							var filterForm = filterPanel.getForm();
 							if (!Ext.isEmpty(filterForm)) {
 								filterValues[tab] = filterForm.getValues(false);
+								if ("undefined" !== typeof filterValues[tab]["terms"] && filterValues[tab]["terms"] === _('search.text.entry.label')) {
+									delete(filterValues[tab]["terms"]);
+								}
+								if ("undefined" !== typeof filterValues[tab]["other"] && filterValues[tab]["other"] === '') {
+									delete(filterValues[tab]["other"]);
+								}
 							}
 						}
 
