@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1221565524000</creationDate>
-<date>1224075015000</date>
-<contentUpdateDate>1224075015000</contentUpdateDate>
-<version>13.1</version>
+<date>1224082415000</date>
+<contentUpdateDate>1224082415000</contentUpdateDate>
+<version>19.1</version>
 <title>CreateResources.ACELessonPlan</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -238,19 +238,6 @@ function formatTextareasIntoWikiText() {
     if (form_benchmark_standards != null) {
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.benchmark.standards.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_benchmark_standards"&gt;' + form_benchmark_standards + '&lt;/div&gt;';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
   } 
   {
@@ -470,6 +457,45 @@ Ext.apply(Ext.grid.GridView.prototype,{
             buf[buf.length] =  rt.apply(rp);
         }
         return buf.join("");
+    },
+    
+    // private
+    layout : function(){
+        if(!this.mainBody){
+            return; // not rendered
+        }
+        var g = this.grid;
+        var c = g.getGridEl();
+        var csize = c.getSize(true);
+        var vw = csize.width;
+
+        if(vw &lt; 20 || csize.height &lt; 20){ // display: none?
+            return;
+        }
+
+        if(g.autoHeight){
+            this.scroller.dom.style.overflow = 'hidden';
+        }else{
+            this.el.setSize(csize.width, csize.height);
+
+            var hdHeight = this.mainHd.getHeight();
+            var vh = csize.height - (hdHeight);
+
+            this.scroller.setSize(vw, vh);
+            if(this.innerHd){
+                this.innerHd.style.width = (vw)+'px';
+            }
+        }
+        if(this.forceFit){
+            if(this.lastViewWidth != vw){
+                this.fitColumns(false, false);
+                this.lastViewWidth = vw;
+            }
+        }else {
+            this.autoExpand();
+            this.syncHeaderScroll();
+        }
+        this.onLayout(vw, vh);
     }
 });
 Ext.apply(Ext.grid.EditorGridPanel.prototype,{
@@ -506,10 +532,10 @@ Ext.apply(Ext.grid.GridEditor.prototype, {
                     this.setSize(width,  "");
                 break;
                 case "height":
-                    this.setSize("",  height);
+                    this.setSize("",  height-1);
                 break;
                 default:
-                    this.setSize(width,  height);
+                    this.setSize(width,  height-1);
             }
             Ext.currentCellNode=parentNode;
         }
@@ -690,6 +716,7 @@ function afterEdit(obj, row, col, e){
 function addrow(){
 	data=[{id:1,time:'',task:'',method:''}];
 	store.loadData(data, true);
+	return false;
 }
 function chekcTableText(){
 	
@@ -868,7 +895,7 @@ function getTableText(){
   &lt;textarea id='slp_anticipated_problems' name='slp_anticipated_problems' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
 
   #curriki_formprompt($msg.get("ace.lesson.plan.procedures.title"), $msg.get("ace.lesson.plan.procedures.tooltip"), $msg.get("ace.lesson.plan.procedures.instruction"), true, "medium")
-  &lt;div id="procedures_div"&gt; &lt;/div&gt;  &lt;button class="button button-orange" onclick="addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
+  &lt;div id="procedures_div"&gt; &lt;/div&gt;  &lt;button class="button button-orange" onclick="return addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
 
 ## Required Resources (attachments) -- fileselection w/ buttons
   #curriki_formprompt($msg.get("lesson.plan.required.attachments.title"), $msg.get("lesson.plan.required.attachments.tooltip"), $msg.get("lesson.plan.required.attachments.instruction"), false, "")
