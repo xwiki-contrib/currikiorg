@@ -1181,14 +1181,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         try {
             XWikiContext context = getXWikiContext();
             XWikiDocument assetDoc = context.getWiki().getDocument(assetPage, context);
-
-            if (log.isErrorEnabled())
-             log.error("Got in updateMetaData");
-
             BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
-
-            if (log.isErrorEnabled())
-             log.error("Title: " + getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
             assetObj.set(Constants.ASSET_TITLE_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY), context);
             assetObj.set(Constants.ASSET_DESCRIPTION_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_DESCRIPTION_PROPERTY), context);
             assetObj.set(Constants.ASSET_FW_ITEMS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_FW_ITEMS_PROPERTY), context);
@@ -1199,21 +1192,11 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             assetObj.set(Constants.ASSET_KEYWORDS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_KEYWORDS_PROPERTY), context);
             assetObj.set(Constants.ASSET_LANGUAGE_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_LANGUAGE_PROPERTY), context);
 
-            if (log.isErrorEnabled())
-             log.error("updateMetaData: done asset");
-
-
             BaseObject licenceObj = assetDoc.getObject(Constants.ASSET_LICENCE_CLASS, true, context);
             licenceObj.set(Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY), context);
             licenceObj.set(Constants.ASSET_LICENCE_CLASS, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY), context);
 
-            if (log.isErrorEnabled())
-             log.error("updateMetaData: done asset licence");
-
             context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.updatemetadata"), context);
-
-            if (log.isErrorEnabled())
-             log.error("updateMetaData: saved");
 
         } catch (Exception e) {
             if (log.isErrorEnabled())
