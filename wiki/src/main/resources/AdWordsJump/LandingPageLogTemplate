@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1220537389000</creationDate>
-<date>1222095422000</date>
-<contentUpdateDate>1222095422000</contentUpdateDate>
-<version>36.1</version>
+<date>1224075062000</date>
+<contentUpdateDate>1224075062000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>undefined</comment>
 <minorEdit>false</minorEdit>
 <object>
 <class>
@@ -62,12 +62,26 @@ $doc.save()
 #end
 
 #macro(pageViewLinks $itemsPerPage $totalPages $crtPageNumber)
+	#set($rurl = $xwiki.getRequestURL())
+	#set($idx = $rurl.indexOf("?"))
+	#if($idx &gt; 0)
+	#set($rurl = ($rurl.substring(0, $idx)))
+	#end
+	
+	#set($params = '')
+	#if($request.ipp1)
+	#set($params = $params + '&amp;ipp1='+$request.ipp1)
+	#end
+	#if($request.page1)
+	#set($params = $params + '&amp;page1='+$request.page1)
+	#end
+
 	#if($totalPages &gt; 0)
 	&lt;div class="pagedNavigation" align="right"&gt;
 	#if($crtPageNumber &gt; 0)
 		#set($prevPage = $crtPageNumber - 1)
-		&lt;span class="pagedLink"&gt;&lt;a href="$doc.getURL($context.action, "page=0&amp;ipp=${itemsPerPage}")"&gt;&lt;&lt;&lt;/a&gt;&lt;/span&gt;
-		&lt;span class="pagedLink"&gt;&lt;a href="$doc.getURL($context.action, "page=${prevPage}&amp;ipp=${itemsPerPage}")"&gt;&lt;&lt;/a&gt;&lt;/span&gt;
+		&lt;span class="pagedLink"&gt;&lt;a href="${rurl}?docname=${doc.fullName}&amp;page=0&amp;ipp=${itemsPerPage}$!params"&gt;&lt;&lt;&lt;/a&gt;&lt;/span&gt;
+		&lt;span class="pagedLink"&gt;&lt;a href="${rurl}?docname=${doc.fullName}&amp;page=${prevPage}&amp;ipp=${itemsPerPage}$!params"&gt;&lt;&lt;/a&gt;&lt;/span&gt;
 	#else
 		&lt;span class="pagedLink inactive"&gt;&lt;&lt;&lt;/span&gt;
 		&lt;span class="pagedLink inactive"&gt;&lt;&lt;/span&gt;
@@ -77,8 +91,8 @@ $doc.save()
 		&lt;span class="pagedStatus"&gt;$displayCrtPageNumber / $displayTotalPages&lt;/span&gt;
 	#if($crtPageNumber &lt; $totalPages)
 		#set($nextPage = $crtPageNumber + 1)
-		&lt;span class="pagedLink"&gt;&lt;a href="$doc.getURL($context.action, "page=${nextPage}&amp;ipp=${itemsPerPage}")"&gt;&gt;&lt;/a&gt;&lt;/span&gt;
-		&lt;span class="pagedLink"&gt;&lt;a href="$doc.getURL($context.action, "page=${totalPages}&amp;ipp=${itemsPerPage}")"&gt;&gt;&gt;&lt;/a&gt;&lt;/span&gt;
+		&lt;span class="pagedLink"&gt;&lt;a href="${rurl}?docname=${doc.fullName}&amp;page=${nextPage}&amp;ipp=${itemsPerPage}$!params"&gt;&gt;&lt;/a&gt;&lt;/span&gt;
+		&lt;span class="pagedLink"&gt;&lt;a href="${rurl}?docname=${doc.fullName}&amp;page=${totalPages}&amp;ipp=${itemsPerPage}$!params"&gt;&gt;&gt;&lt;/a&gt;&lt;/span&gt;
 	#else
 		&lt;span class="pagedLink inactive"&gt;&gt;&lt;/span&gt;
 		&lt;span class="pagedLink inactive"&gt;&gt;&gt;&lt;/span&gt;
@@ -88,12 +102,16 @@ $doc.save()
 #end
 ##=================== get paging parameters
 #set($itemsPerPage = 5)
+#set($pageNumber = 0)
+
+#if($request.docname &amp;&amp; $request.docname == ${doc.fullName})
+
 #if($request.ipp)
   #set($itemsPerPage = $xwiki.parseInt($request.ipp))
 #end
-#set($pageNumber = 0)
 #if($request.page)
   #set($pageNumber = $xwiki.parseInt($request.page))
+#end
 #end
 #set($startAt = $itemsPerPage * $pageNumber)
 #if($startAt &lt; 0)
@@ -149,7 +167,7 @@ function switchDivStatus(show_div){
     #titlebar($obj_title "DEL" $del_url "purple")
 &lt;/div&gt;
 
-&lt;div id="div_${doc.name}_${obj.number}" name="div_${doc.name}_${obj.number}" #if($counter == $startAt)style="visibility:visible;display:block;" #else style="visibility:hidden;display:none;" #end&gt;
+&lt;div id="div_${doc.name}_${obj.number}" name="div_${doc.name}_${obj.number}" style="visibility:hidden;display:none;"&gt;
  &lt;table border="0" cellspacing="0" width="100%"&gt;
         &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$searchTime_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.searchTime&lt;/td&gt;&lt;/tr&gt;
         &lt;tr&gt;&lt;td&gt;&lt;b&gt;$searchText_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.searchText&lt;/td&gt;&lt;/tr&gt;       
@@ -167,4 +185,5 @@ function switchDivStatus(show_div){
 &lt;a href="javascript:if(window.confirm('Are you sure to clear logs?')) location.href='$doc.getURL($context.action, "flag=clear")';"&gt;Clear&lt;/a&gt;
 &lt;/div&gt;
 #pageViewLinks($itemsPerPage $totalPages $crtPageNumber)
+
 </content></xwikidoc>
