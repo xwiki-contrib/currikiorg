@@ -647,8 +647,10 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
     private native String getFieldValue(Element form, String fieldName) /*-{
            var field = form[fieldName];
-
-           return form[fieldName].value;
+           if (field==null)
+             return null;
+           else
+             return form[fieldName].value;
      }-*/;
 
     private void addFormField(Element form, Map map, String fieldName) {
@@ -704,10 +706,10 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     protected Map getFormMap() {
         HashMap formMap = new HashMap();
         // 9 properties from the asset class
-        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_DESCRIPTION_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_FW_ITEMS_PROPERTY));
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
 
         addCheckboxFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY));
         addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY));

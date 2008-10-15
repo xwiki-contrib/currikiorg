@@ -1191,6 +1191,9 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             assetObj.set(Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY), context);
             assetObj.set(Constants.ASSET_KEYWORDS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_KEYWORDS_PROPERTY), context);
             assetObj.set(Constants.ASSET_LANGUAGE_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_LANGUAGE_PROPERTY), context);
+
+            if (log.isErrorEnabled())
+             log.error("Category: " + getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
             assetObj.set(Constants.ASSET_CATEGORY_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY), context);
 
             BaseObject licenceObj = assetDoc.getObject(Constants.ASSET_LICENCE_CLASS, true, context);
