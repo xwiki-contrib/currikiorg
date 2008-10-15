@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  */
@@ -135,8 +136,8 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
      * @return A list of collections with information about each
      */
     public Map<String,Object> fetchCollectionsInfo(String order) {
-        Map<String,Object> colInfo = new HashMap<String,Object>();
         List<String> collections = getSubassetList(order);
+        Map<String,Object> colInfo = new LinkedHashMap<String,Object>(collections.size());
 
         for (String collection : collections) {
             try {
@@ -144,6 +145,10 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
                 if (doc != null) {
                     CollectionCompositeAsset cAsset = doc.as(CollectionCompositeAsset.class);
                     colInfo.put(collection, cAsset.getCollectionInfo());
+                } else {
+                    Map<String,Object> error = new HashMap<String, Object>();
+                    error.put("error", "Got null asset for '"+collection+"'");
+                    colInfo.put(collection, error);
                 }
             } catch (Exception e) {
                 //LOG.error("Error fetching document", e);
