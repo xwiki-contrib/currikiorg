@@ -146,8 +146,12 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
                     colInfo.put(collection, cAsset.getCollectionInfo());
                 }
             } catch (Exception e) {
-                // If we can't get the document then skip it
                 LOG.error("Error fetching document", e);
+
+                Map<String,Object> error = new HashMap<String, Object>();
+                error.put("error", e.getMessage());
+                error.put("errorFull", e.toString());
+                colInfo.put(collection, error);
             }
         }
 
