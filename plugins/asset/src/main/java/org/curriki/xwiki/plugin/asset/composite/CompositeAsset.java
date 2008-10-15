@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Iterator;
 
 /**
  */
@@ -138,7 +140,24 @@ public abstract class CompositeAsset extends Asset {
     public List<String> getSubassetList() {
         List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
         if (objs != null && objs.size() > 0) {
-            Collections.sort(objs, new Comparator<BaseObject>(){
+            objs = sortSubassetList(objs);
+
+            List<String> list = new ArrayList<String>();
+            for (BaseObject obj : objs){
+                if (obj != null) {
+                    list.add(obj.getStringValue(Constants.SUBASSET_CLASS_PAGE));
+                }
+            }
+
+            return filterViewablePages(list);
+        }
+
+        return new ArrayList<String>();
+    }
+
+    protected List<BaseObject> sortSubassetList(List<BaseObject> list) {
+        if (list != null && list.size() > 0) {
+            Collections.sort(list, new Comparator<BaseObject>(){
                 public int compare(BaseObject s1, BaseObject s2){
                     if (s1 == null) {
                         return s2 == null ? 0 : -1;
@@ -155,18 +174,9 @@ public abstract class CompositeAsset extends Asset {
                     return (c1.compareTo(c2));
                 }
             });
-
-            List<String> list = new ArrayList<String>();
-            for (BaseObject obj : objs){
-                if (obj != null) {
-                    list.add(obj.getStringValue(Constants.SUBASSET_CLASS_PAGE));
-                }
-            }
-
-            return filterViewablePages(list);
         }
 
-        return new ArrayList<String>();
+        return list;
     }
 
     public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
@@ -319,17 +329,47 @@ public abstract class CompositeAsset extends Asset {
             ++i;
         }
 
-        // Delete all subassets
-        XWikiDocument assetDoc = getDoc();
-        assetDoc.removeObjects(Constants.SUBASSET_CLASS);
+        // This may seem a bit convoluted, but a simple delete all subassets and add new list seems to sometimes get a
+        // "Error number 3211 in 3: Exception while saving object <pagename>
+        //  deleted instance passed to update(): [com.xpn.xwiki.objects.BaseObject#<null>]"
+        // exception from hibernate.
 
-        // Add all from want
+        XWikiDocument assetDoc = getDoc();
+
+        List<BaseObject> existing = assetDoc.getObjects(Constants.SUBASSET_CLASS);
+
         long j = 0;
-        for (String page : want){
-            BaseObject sub = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
-            sub.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
-            sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
-            ++j;
+        for (String page : want) {
+            // Set order for exisiting item or add a new item
+            boolean found = false;
+            for (Iterator<BaseObject> ei = existing.iterator(); ei.hasNext() && !found; ){
+                BaseObject b = ei.next();
+                if (b != null) {
+                    if (b.getStringValue(Constants.SUBASSET_CLASS_PAGE).equals(page)) {
+                        if (b.getLongValue(Constants.SUBASSET_CLASS_ORDER) != j) {
+                            // Put in new order location
+                            b.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
+                        }
+                        ei.remove();
+                        j += 1;
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                // Add as it doesn't already exist in the list
+                BaseObject sub = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
+                sub.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
+                sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
+                j += 1;
+            }
+        }
+
+        // Now remove anything left
+        for (BaseObject b : existing) {
+            if (b != null) {
+                assetDoc.removeObject(b);
+            }
         }
     }
 
