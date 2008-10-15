@@ -78,13 +78,10 @@ public class CreateCompositeAssetWizard extends Wizard {
 
             // Add an event handler to the form.
             meta.addFormHandler(new FormHandler() {
-
-                public void onSubmit(FormSubmitEvent formSubmitEvent) {
-                    Main.getSingleton().startLoading();
+            public void onSubmit(FormSubmitEvent event) {
                 }
 
-                public void onSubmitComplete(FormSubmitCompleteEvent event) {
-                    Main.getSingleton().finishLoading();
+            public void onSubmitComplete(FormSubmitCompleteEvent event) {
                     closeParent();
                     String editURL = Main.getTranslation("params.gwturl") + "page=" + newDoc.getFullName() + "&new=1";
                     Main.changeWindowHref(editURL);

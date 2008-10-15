@@ -133,13 +133,10 @@ public class AddAssetWizard extends Wizard implements ClickListener, ResourceAdd
 
         // Add an event handler to the form.
         FormHandler formHandler = new FormHandler() {
-
-            public void onSubmit(FormSubmitEvent formSubmitEvent) {
-                Main.getSingleton().startLoading();
-            }
+            public void onSubmit(FormSubmitEvent event) {
+               }
 
             public void onSubmitComplete(FormSubmitCompleteEvent event) {
-                Main.getSingleton().finishLoading();
                 finishWizard();
             }
         };

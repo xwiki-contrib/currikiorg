@@ -2,12 +2,14 @@ package org.curriki.gwt.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.xpn.xwiki.gwt.api.client.Document;
 import com.xpn.xwiki.gwt.api.client.XWikiService;
 import com.xpn.xwiki.gwt.api.client.XWikiGWTException;
 import org.curriki.gwt.client.widgets.browseasset.AssetItem;
 
 import java.util.List;
+import java.util.Map;
 
 /*
  * See the NOTICE file distributed with this work for additional
@@ -42,6 +44,7 @@ public interface CurrikiService extends XWikiService {
     public Document createTempCompositeAsset(String parent) throws XWikiGWTException;
     public Document createCompositeAsset(String space) throws XWikiGWTException;
     public void finishUpdateMetaData(String assetPage) throws XWikiGWTException;
+    public void updateAssetMetadata(String assetPage, Map formMap) throws XWikiGWTException;
     public Document updateMetadata(String fullName, boolean fromTemplate) throws XWikiGWTException;
     public Document finalizeAssetCreation(String assetPage, String compositeAssetPage, long position) throws XWikiGWTException;
     public Document updateViditalk(String fullName, String videoId) throws XWikiGWTException; 

@@ -30,6 +30,7 @@ import org.curriki.gwt.client.widgets.metadata.MetadataEdit;
 import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.Window;
 
 public class MetadataPage extends AbstractPage {
     MetadataEdit meta = new MetadataEdit(true);
@@ -40,11 +41,19 @@ public class MetadataPage extends AbstractPage {
 
         meta.addFormHandler(new FormHandler(){
             public void onSubmit(FormSubmitEvent event) {
-                Main.getSingleton().startLoading();
+                // nothing to do anymore
             }
 
             public void onSubmitComplete(FormSubmitCompleteEvent event) {
                 CurrikiService.App.getInstance().finishUpdateMetaData(Main.getSingleton().getEditor().getCurrentAssetPageName(), new CurrikiAsyncCallback(){
+                    public void onFailure(Throwable caught) {
+                        super.onFailure(caught);
+                        // let's refresh the state in case of error
+                        Editor editor = Main.getSingleton().getEditor();
+                        editor.setCurrentAssetInvalid(true);
+                        editor.refreshState();
+                    }
+
                     public void onSuccess(Object result) {
                         super.onSuccess(result);
                         Editor editor = Main.getSingleton().getEditor();
@@ -52,7 +61,6 @@ public class MetadataPage extends AbstractPage {
                         editor.refreshState();
                     }
                 });
-                Main.getSingleton().finishLoading();
             }
         });
 

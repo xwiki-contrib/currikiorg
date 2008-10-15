@@ -83,12 +83,10 @@ public class CreateCollectionWizard {
 
         // Add an event handler to the form.
         meta.addFormHandler(new FormHandler() {
-            public void onSubmit(FormSubmitEvent formSubmitEvent) {
-                Main.getSingleton().startLoading();
+            public void onSubmit(FormSubmitEvent event) {
             }
 
             public void onSubmitComplete(FormSubmitCompleteEvent event) {
-                Main.getSingleton().finishLoading();
                 metaPanel.hide();
 
                 // We need to move the asset to the root collection

@@ -44,6 +44,7 @@ import org.curriki.gwt.client.widgets.modaldialogbox.NominateDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MetadataEdit extends Composite implements MouseListener, ClickListener
@@ -51,6 +52,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     private VerticalPanel panel;
     private Document doc;
     private FormPanel form = new FormPanel();
+    private FormHandler formHandler;
     private boolean fullMode;
     private boolean startFullMode;
     private HashMap fieldMap = new HashMap();
@@ -130,7 +132,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             panel.add(new HTML(Main.getTranslation("metadata.directionblocks_have_no_metadata")));
             startFullMode = true; // So that "Next" will work correctly
         } else {
-            form.setAction(doc.getSaveURL());
+            form.setAction(doc.getSaveURL() + "?ajax=1");
 
             showEdit();
 
@@ -143,7 +145,8 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
 
     public void addFormHandler(FormHandler formHandler){
-        form.addFormHandler(formHandler);    
+        form.addFormHandler(formHandler);
+        this.formHandler = formHandler;
     }
 
     protected void showEdit(){
@@ -638,10 +641,109 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         }
     }
 
+    private String getFieldName(String className, String fieldName) {
+       return className + "_0_" + fieldName;
+    }
+
+    private native String getFieldValue(Element form, String fieldName) /*-{
+           var field = form[fieldName];
+
+           return form[fieldName].value;
+     }-*/;
+
+    private void addFormField(Element form, Map map, String fieldName) {
+        String value = getFieldValue(form, fieldName);
+        if (value!=null)
+          map.put(fieldName, value);
+    }
+
+
+    private native String getCheckboxFieldValue(Element form, String fieldName) /*-{
+        var checkboxes = form[fieldName];
+        var values = [];
+        var valuesnb = 0;
+        for (i=0; i < checkboxes.length; i++) {
+         if (checkboxes[i].checked){
+            values[valuesnb] = checkboxes[i].value;
+            valuesnb++;
+         }
+        }
+        return values.join("|");
+    }-*/;
+
+    private void addCheckboxFormField(Element form, Map map, String fieldName) {
+        String value = getCheckboxFieldValue(form, fieldName);
+        if (value!=null)
+          map.put(fieldName, value);
+    }
+
+    private native String getSelectFieldValue(Element form, String fieldName) /*-{
+        var options = form[fieldName][0].options;
+        if (options==null) {
+           return null;
+           return null;
+        }
+        var values = [];
+        var valuesnb = 0;
+        for (i=0; i < options.length; i++) {
+          if (options[i].selected){
+            values[valuesnb] = options[i].value;
+            valuesnb++;
+         }
+        }
+
+        return values.join("|");
+    }-*/;
+
+    private void addSelectFormField(Element form, Map map, String fieldName) {
+        String value = getSelectFieldValue(form, fieldName);
+        if (value!=null)
+          map.put(fieldName, value);
+    }
+    
+    protected Map getFormMap() {
+        HashMap formMap = new HashMap();
+        // 9 properties from the asset class
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_DESCRIPTION_PROPERTY));
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_FW_ITEMS_PROPERTY));
+
+        addCheckboxFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY));
+        addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY));
+        addCheckboxFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_RIGHTS_PROPERTY));
+
+        addCheckboxFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY));
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_KEYWORDS_PROPERTY));
+        addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_LANGUAGE_PROPERTY));
+        // 2 properties from the licence class
+        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY));
+        addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY));
+        return formMap;
+    }
+
     public void submit(){
         if (!hasMissing()){
-            form.submit();
-        }
+            // replacing form submit with a Curriki GWT API
+            // form.submit();
+
+            Map formMap = getFormMap();
+
+            CurrikiService.App.getInstance().updateAssetMetadata(doc.getFullName(), formMap, new CurrikiAsyncCallback() {
+                public void onFailure(Throwable caught) {
+                    super.onFailure(caught);
+                    // let's refresh the state in case of error
+                    Editor editor = Main.getSingleton().getEditor();
+                    editor.setCurrentAssetInvalid(true);
+                    editor.refreshState();
+                }
+
+                public void onSuccess(Object result) {
+                    super.onSuccess(result);
+                    // trigger the form submit complete handler to finish the wizard or save process
+                    formHandler.onSubmitComplete(new FormSubmitCompleteEvent(null, null));
+                }
+            });
+       }
     }
 
     public boolean hasMissing(){
@@ -706,6 +808,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
                 break;
             }
         }
+
         if (!selected) {
             if (!first)
                 missing += ",";
@@ -751,7 +854,6 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         switchVisibility(Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, fullMode);
         moreInfoText.setVisible(!fullMode);
         if (resizeListener != null) {
-            //Window.alert("plop");
             resizeListener.onWindowResized(panel.getOffsetHeight(), panel.getOffsetWidth());
         }
     }

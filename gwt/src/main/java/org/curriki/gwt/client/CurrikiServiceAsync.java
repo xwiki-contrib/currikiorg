@@ -2,6 +2,9 @@ package org.curriki.gwt.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.xpn.xwiki.gwt.api.client.XWikiServiceAsync;
+import com.xpn.xwiki.gwt.api.client.XWikiGWTException;
+
+import java.util.Map;
 
 /*
  * See the NOTICE file distributed with this work for additional
@@ -41,6 +44,8 @@ public interface CurrikiServiceAsync extends XWikiServiceAsync {
     void createCompositeAsset(String space, AsyncCallback async);
 
     void finishUpdateMetaData(String assetPage, AsyncCallback async);
+
+    void updateAssetMetadata(String assetPage, Map formMap, AsyncCallback async);
 
     void updateMetadata(String fullName, boolean fromTemplate, AsyncCallback async);
 

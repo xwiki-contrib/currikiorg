@@ -45,6 +45,7 @@ import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.util.Util;
 import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.gwt.api.client.Document;
@@ -56,31 +57,17 @@ import com.xpn.xwiki.objects.ListProperty;
 import com.xpn.xwiki.objects.LongProperty;
 import com.xpn.xwiki.objects.PropertyInterface;
 import com.xpn.xwiki.objects.classes.ListItem;
+import com.xpn.xwiki.objects.classes.BaseClass;
+import com.xpn.xwiki.objects.classes.PropertyClass;
 import com.xpn.xwiki.plugin.image.ImagePlugin;
 import com.xpn.xwiki.plugin.lucene.LucenePlugin;
 import com.xpn.xwiki.plugin.lucene.LucenePluginApi;
 import com.xpn.xwiki.plugin.lucene.SearchResult;
 import com.xpn.xwiki.plugin.lucene.SearchResults;
 import com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin;
-import com.xpn.xwiki.web.XWikiEngineContext;
-import com.xpn.xwiki.web.XWikiMessageTool;
-import com.xpn.xwiki.web.XWikiRequest;
-import com.xpn.xwiki.web.XWikiResponse;
+import com.xpn.xwiki.web.*;
 import com.google.gwt.user.client.rpc.RemoteService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.curriki.gwt.client.AssetDocument;
-import org.curriki.gwt.client.Constants;
-import org.curriki.gwt.client.CurrikiService;
-import org.curriki.gwt.client.TreeListItem;
-import org.curriki.gwt.client.search.queries.AssetDocumentWithOwnerName;
-import org.curriki.gwt.client.widgets.browseasset.AssetItem;
-import org.curriki.gwt.client.widgets.template.TemplateInfo;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.CollectionSpace;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
-import org.curriki.xwiki.plugin.mimetype.MimeType;
-import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiService, RemoteService {
     private static final Log log = LogFactory.getLog(CurrikiServiceImpl.class);
@@ -391,7 +378,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
 
     private boolean addCompositeAssetToDefaultCollection(String assetPageName, String space, XWikiContext context) throws XWikiGWTException {
-        if (!isDefaultCollectionExists(space)) {
+        if (!isDefaultCollectionExists(space)) {                    
             createDefaultCollection(space);
         }
 
@@ -1166,6 +1153,77 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         return true;
     }
+
+    private Map<String, String[]> getSubMap(Map<String, String> map, String prefix)
+    {
+        HashMap<String, String[]> result = new HashMap<String, String[]>();
+        for (String name : map.keySet()) {
+            if (name.startsWith(prefix + "_")) {
+                String newname = name.substring(prefix.length() + 1);
+                String[] values = new String[1];
+                values[0] = map.get(name);
+                result.put(newname, values);
+            } else if (name.equals(prefix)) {
+                String[] values = new String[1];
+                values[0] = map.get(name);
+                result.put("", values);
+            }
+        }
+        return result;
+    }
+
+
+    private Object getFieldValue(Map formMap, String className, String name) {
+        return formMap.get(className + "_0_" + name);
+    }
+
+    public void updateAssetMetadata(String assetPage, Map formMap) throws XWikiGWTException {
+        try {
+            XWikiContext context = getXWikiContext();
+            XWikiDocument assetDoc = context.getWiki().getDocument(assetPage, context);
+
+            if (log.isErrorEnabled())
+             log.error("Got in updateMetaData");
+
+            BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
+
+            if (log.isErrorEnabled())
+             log.error("Title: " + getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
+            assetObj.set(Constants.ASSET_TITLE_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY), context);
+            assetObj.set(Constants.ASSET_DESCRIPTION_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_DESCRIPTION_PROPERTY), context);
+            assetObj.set(Constants.ASSET_FW_ITEMS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_FW_ITEMS_PROPERTY), context);
+            assetObj.set(Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY), context);
+            assetObj.set(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY), context);
+            assetObj.set(Constants.ASSET_RIGHTS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_RIGHTS_PROPERTY), context);
+            assetObj.set(Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY), context);
+            assetObj.set(Constants.ASSET_KEYWORDS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_KEYWORDS_PROPERTY), context);
+            assetObj.set(Constants.ASSET_LANGUAGE_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_LANGUAGE_PROPERTY), context);
+
+            if (log.isErrorEnabled())
+             log.error("updateMetaData: done asset");
+
+
+            BaseObject licenceObj = assetDoc.getObject(Constants.ASSET_LICENCE_CLASS, true, context);
+            licenceObj.set(Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY), context);
+            licenceObj.set(Constants.ASSET_LICENCE_CLASS, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY), context);
+
+            if (log.isErrorEnabled())
+             log.error("updateMetaData: done asset licence");
+
+            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.updatemetadata"), context);
+
+            if (log.isErrorEnabled())
+             log.error("updateMetaData: saved");
+
+        } catch (Exception e) {
+            if (log.isErrorEnabled())
+             log.error("Failed to update meta data", e);
+
+            throw getXWikiGWTException(e);
+        }
+
+    }
+
 
     public void finishUpdateMetaData(String assetPage) throws XWikiGWTException {
         try {
