@@ -146,7 +146,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
                     colInfo.put(collection, cAsset.getCollectionInfo());
                 }
             } catch (Exception e) {
-                LOG.error("Error fetching document", e);
+                //LOG.error("Error fetching document", e);
 
                 Map<String,Object> error = new HashMap<String, Object>();
                 error.put("error", e.getMessage());
