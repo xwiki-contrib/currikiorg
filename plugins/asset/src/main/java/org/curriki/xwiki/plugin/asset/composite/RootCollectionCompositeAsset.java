@@ -79,7 +79,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     }
 
     public List<String> fetchCollectionsList() {
-        return fetchCollectionsList("name");
+        return fetchCollectionsList("date");
     }
 
     /**
@@ -126,7 +126,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     }
 
     public Map<String,Object> fetchCollectionsInfo() {
-        return fetchCollectionsInfo("name");
+        return fetchCollectionsInfo("date");
     }
     
     /**
