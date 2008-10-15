@@ -1198,7 +1198,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             BaseObject licenceObj = assetDoc.getObject(Constants.ASSET_LICENCE_CLASS, true, context);
             licenceObj.set(Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY), context);
-            licenceObj.set(Constants.ASSET_LICENCE_CLASS, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY), context);
+            licenceObj.set(Constants.ASSET_LICENCE_TYPE_PROPERTY, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY), context);
 
             context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.updatemetadata"), context);
 
