@@ -43,7 +43,7 @@ module.init = function(){
 						titleMsg = _('search.tab.count_resultsmax_exceeds');
 					}
 
-					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+String.format(titleMsg, resultCount)+')');
+					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+String.format(titleMsg, resultCount, totalCount)+')');
 
 				}
 
@@ -53,13 +53,13 @@ module.init = function(){
 					if (overmax && (_('search.pagination.afterpage_resultsmax_exceeds') !== 'search.pagination.afterpage_resultsmax_exceeds')) {
 						afterPageText = _('search.pagination.afterpage_resultsmax_exceeds');
 					}
-					pager.afterPageText = afterPageText;
+					pager.afterPageText = String.format(afterPageText, '{0}', totalCount);
 
 					var displayMsg = _('search.pagination.displaying.'+modName);
 					if (overmax && (_('search.pagination.displaying.'+modName+'_resultsmax_exceeds') !== 'search.pagination.displaying.'+modName+'_resultsmax_exceeds')) {
 						displayMsg = _('search.pagination.displaying.'+modName+'_resultsmax_exceeds');
 					}
-					pager.displayMsg = displayMsg;
+					pager.displayMsg = String.format(displayMsg, '{0}', totalCount);
 				}
 			}
 		);
