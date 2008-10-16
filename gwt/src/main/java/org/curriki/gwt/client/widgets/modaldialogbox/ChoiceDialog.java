@@ -22,10 +22,7 @@
  */
 package org.curriki.gwt.client.widgets.modaldialogbox;
 
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.curriki.gwt.client.widgets.basicpanel.BasicPanel;
 
 public class ChoiceDialog extends CurrikiDialog {
@@ -49,9 +46,9 @@ public class ChoiceDialog extends CurrikiDialog {
 
     public String getCSSName(String name) {
         if ((name==null)||name.equals(""))
-            return "dialog-" + cssDialogName + "-" + name;
-        else
             return "dialog-" + cssDialogName;
+        else
+            return "dialog-" + cssDialogName + "-" + name;
     }
 
     public void init(){
@@ -66,7 +63,7 @@ public class ChoiceDialog extends CurrikiDialog {
         text.add(new HTML(questionText));
         main.add(text);
 
-        BasicPanel actions = new BasicPanel();
+        HorizontalPanel actions = new HorizontalPanel();
         actions.addStyleName(getCSSName("actions"));
 
         final ChoiceDialog dialog = this;
