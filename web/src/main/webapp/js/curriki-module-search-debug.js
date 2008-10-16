@@ -49,7 +49,12 @@ module.init = function(){
 			'datachanged'
 			,function(store) {
 				var overmax = false;
-				if (!Ext.isEmpty(store.reader.jsonData) && !Ext.isEmpty(store.reader.jsonData.totalResults) && !Ext.isEmpty(store.reader.jsonData.resultCount) && (parseInt(store.reader.jsonData.totalResults) > parseInt(store.reader.jsonData.resultCount))) {
+				var totalCount = 0;
+				var resultCount = store.getTotalCount();
+				if (!Ext.isEmpty(store.reader.jsonData) && !Ext.isEmpty(store.reader.jsonData.totalResults)) {
+					totalCount = parseInt(store.reader.jsonData.totalResults);
+				}
+				if (totalCount > resultCount) {
 					overmax = true;
 				}
 
@@ -60,7 +65,7 @@ module.init = function(){
 						titleMsg = _('search.tab.count_resultsmax_exceeds');
 					}
 
-					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+String.format(titleMsg, store.getTotalCount())+')');
+					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+String.format(titleMsg, resultCount)+')');
 
 				}
 
