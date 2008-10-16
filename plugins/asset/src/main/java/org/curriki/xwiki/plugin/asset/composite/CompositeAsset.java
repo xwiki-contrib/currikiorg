@@ -337,23 +337,23 @@ public abstract class CompositeAsset extends Asset {
         XWikiDocument assetDoc = getDoc();
 
         List<BaseObject> existing = assetDoc.getObjects(Constants.SUBASSET_CLASS);
+        for (BaseObject b : existing) {
+            if (b != null) {
+                b.setLongValue(Constants.SUBASSET_CLASS_ORDER, -2);
+            }
+        }
 
         long j = 0;
         for (String page : want) {
             // Set order for exisiting item or add a new item
             boolean found = false;
-            for (Iterator<BaseObject> ei = existing.iterator(); ei.hasNext() && !found; ){
-                BaseObject b = ei.next();
-                if (b != null) {
-                    if (b.getStringValue(Constants.SUBASSET_CLASS_PAGE).equals(page)) {
-                        if (b.getLongValue(Constants.SUBASSET_CLASS_ORDER) != j) {
-                            // Put in new order location
-                            b.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
-                        }
-                        ei.remove();
-                        j += 1;
-                        found = true;
-                    }
+            for (BaseObject b : existing) {
+                if (b != null && b.getStringValue(Constants.SUBASSET_CLASS_PAGE).equals(page) && b.getLongValue(Constants.SUBASSET_CLASS_ORDER) == -2) {
+                    // Put in new order location
+                    b.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
+                    j += 1;
+                    found = true;
+                    break;
                 }
             }
             if (!found) {
@@ -366,9 +366,11 @@ public abstract class CompositeAsset extends Asset {
         }
 
         // Now remove anything left
-        for (BaseObject b : existing) {
-            if (b != null) {
-                assetDoc.removeObject(b);
+        for (Iterator<BaseObject> ei = existing.iterator(); ei.hasNext(); ) {
+            BaseObject b = ei.next();
+            if (b != null && b.getLongValue(Constants.SUBASSET_CLASS_ORDER) == -2) {
+                //assetDoc.removeObject(b);
+                ei.remove();
             }
         }
     }
