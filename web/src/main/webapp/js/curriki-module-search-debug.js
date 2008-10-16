@@ -49,14 +49,14 @@ module.init = function(){
 			'datachanged'
 			,function(store) {
 				var overmax = false;
-				if (store.reader.jsonData && store.reader.jsonData.totalResults && store.reader.jsonData.resultCount && (store.reader.jsonData.totalResults > store.reader.jsonData.resultCount)) {
+				if (!Ext.isEmpty(store.reader.jsonData) && !Ext.isEmpty(store.reader.jsonData.totalResults) && !Ext.isEmpty(store.reader.jsonData.resultCount) && (parseInt(store.reader.jsonData.totalResults) > parseInt(store.reader.jsonData.resultCount))) {
 					overmax = true;
 				}
 
 				var tab = Ext.getCmp('search-'+modName+'-tab');
 				if (!Ext.isEmpty(tab)) {
 					var titleMsg = "{0}";
-					if (overmax && (_('search.tab.count_resultsmax_exceeds') !=='search.tab.count_resultsmax_exceeds')) {
+					if (overmax && (_('search.tab.count_resultsmax_exceeds') !== 'search.tab.count_resultsmax_exceeds')) {
 						titleMsg = _('search.tab.count_resultsmax_exceeds');
 					}
 
@@ -67,13 +67,13 @@ module.init = function(){
 				var pager = Ext.getCmp('search-pager-'+modName);
 				if (!Ext.isEmpty(pager)) {
 					var afterPageText = _('search.pagination.afterpage');
-					if (overmax && (_('search.pagination.afterpage_resultsmax_exceeds') !=='search.pagination.afterpage_resultsmax_exceeds')) {
+					if (overmax && (_('search.pagination.afterpage_resultsmax_exceeds') !== 'search.pagination.afterpage_resultsmax_exceeds')) {
 						afterPageText = _('search.pagination.afterpage_resultsmax_exceeds');
 					}
 					pager.afterPageText = afterPageText;
 
 					var displayMsg = _('search.pagination.displaying.'+modName);
-					if (overmax && (_('search.pagination.displaying.'+modName+'_resultsmax_exceeds') !=='search.pagination.displaying.'+modName+'_resultsmax_exceeds')) {
+					if (overmax && (_('search.pagination.displaying.'+modName+'_resultsmax_exceeds') !== 'search.pagination.displaying.'+modName+'_resultsmax_exceeds')) {
 						displayMsg = _('search.pagination.displaying.'+modName+'_resultsmax_exceeds');
 					}
 					pager.displayMsg = displayMsg;
