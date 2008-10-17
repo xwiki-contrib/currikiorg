@@ -376,7 +376,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.rating')
 		},{
 			id: 'updated'
-			,width: 68
+			,width: 80
 			,header: _('search.resource.column.header.updated')
 			,dataIndex:'updated'
 			,hidden:true
