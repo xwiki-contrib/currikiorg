@@ -1627,8 +1627,10 @@ console.log("Published CB: ", newAsset);
 			switch(Curriki.current.flow){
 				case 'K':
 				case 'M':
-					msg += '<p>'+_('add.finalmessage.text_'+name+'_tip1')+'</p>';
-					msg += '<p>'+_('add.finalmessage.text_'+name+'_tip2')+'</p>';
+					msg += '<ul>';
+					msg += '<li>'+_('add.finalmessage.text_'+name+'_tip1')+'</li>';
+					msg += '<li>'+_('add.finalmessage.text_'+name+'_tip2')+'</li>';
+					msg += '</ul>';
 					break;
 			}
 
