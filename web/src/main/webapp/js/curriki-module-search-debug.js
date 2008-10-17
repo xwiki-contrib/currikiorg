@@ -81,7 +81,7 @@ module.init = function(){
 					if (overmax && (_('search.pagination.displaying.'+modName+'_resultsmax_exceeds') !== 'search.pagination.displaying.'+modName+'_resultsmax_exceeds')) {
 						displayMsg = _('search.pagination.displaying.'+modName+'_resultsmax_exceeds');
 					}
-					pager.displayMsg = String.format(displayMsg, '{0}', totalCount);
+					pager.displayMsg = String.format(displayMsg, '{0}', '{1}', '{2}', totalCount);
 				}
 			}
 		);
