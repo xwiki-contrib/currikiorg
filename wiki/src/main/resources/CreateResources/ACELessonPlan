@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1221565524000</creationDate>
-<date>1224082415000</date>
-<contentUpdateDate>1224082415000</contentUpdateDate>
-<version>19.1</version>
+<date>1224338368000</date>
+<contentUpdateDate>1224338368000</contentUpdateDate>
+<version>22.1</version>
 <title>CreateResources.ACELessonPlan</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -211,6 +211,7 @@ function formatTextareasIntoWikiText() {
   {
     var form_number_days = getFieldContentStr('slp_number_days');
     if (form_number_days != null) {
+      form_number_days = form_number_days.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.number.days.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_number_days"&gt;' + form_number_days + '&lt;/div&gt;';
     }
   } 
@@ -218,24 +219,28 @@ function formatTextareasIntoWikiText() {
   {
     var form_prior_knowledge = getFieldContentStr('slp_prior_knowledge');
     if (form_prior_knowledge != null) {
+      form_prior_knowledge = form_prior_knowledge.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.prior.knowledge.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_prior_knowledge"&gt;' + form_prior_knowledge + '&lt;/div&gt;';
     }
   } 
   {
     var form_lesson_objective = getFieldContentStr('slp_lesson_objective');
     if (form_lesson_objective != null) {
+      form_lesson_objective = form_lesson_objective.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.objective.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_lesson_objective"&gt;' + form_lesson_objective + '&lt;/div&gt;';
     }
   } 
   {
     var form_lesson_assessment = getFieldContentStr('slp_lesson_assessment');
     if (form_lesson_assessment != null) {
+      form_lesson_assessment = form_lesson_assessment.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.assessment.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_lesson_assessment"&gt;' + form_lesson_assessment + '&lt;/div&gt;';
     }
   } 
   {
     var form_benchmark_standards = getFieldContentStr('slp_benchmark_standards');
     if (form_benchmark_standards != null) {
+      form_benchmark_standards = form_benchmark_standards.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.benchmark.standards.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_benchmark_standards"&gt;' + form_benchmark_standards + '&lt;/div&gt;';
 
     }
@@ -243,24 +248,28 @@ function formatTextareasIntoWikiText() {
   {
     var form_materials_needed = getFieldContentStr('slp_materials_needed');
     if (form_materials_needed != null) {
+      form_materials_needed = form_materials_needed.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.materials.needed.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_materials_needed"&gt;' + form_materials_needed + '&lt;/div&gt;';
     }
   } 
   {
     var form_enrichment = getFieldContentStr('slp_enrichment');
     if (form_enrichment != null) {
+      form_enrichment = form_enrichment.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.enrichment.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_enrichment"&gt;' + form_enrichment + '&lt;/div&gt;';
     }
   } 
   {
     var form_accommodations = getFieldContentStr('slp_accommodations');
     if (form_accommodations != null) {
+      form_accommodations = form_accommodations.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.accommodations.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_accommodations"&gt;' + form_accommodations + '&lt;/div&gt;';
     }
   } 
   {
     var form_anticipated_problems = getFieldContentStr('slp_anticipated_problems');
     if (form_anticipated_problems != null) {
+      form_anticipated_problems = form_anticipated_problems.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
       slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.anticipated.problems.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_anticipated_problems"&gt;' + form_anticipated_problems + '&lt;/div&gt;';
     }
   } 
@@ -283,6 +292,12 @@ function formatTextareasIntoWikiText() {
       slp_str = slp_str + '#' + 'currikiattachmentEnd()\n' + vert_break_str;
     }
   }
+
+  {
+	slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.changes_heading")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_changes_content"&gt;' + '$msg.get("ace.lesson.plan.changes_content")' + '&lt;/div&gt;';
+	slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.whatworked_heading")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_whatworked_content"&gt;' + '$msg.get("ace.lesson.plan.whatworked_content")' + '&lt;/div&gt;';
+  }
+
   return (slp_str);
 }
 
