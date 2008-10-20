@@ -647,6 +647,21 @@ Curriki.module.addpath.init = function(){
 														break;
 												}
 												var title = Ext.get('metadata-'+item+'-title');
+												if (Ext.isEmpty(title)) {
+													switch (invalid){
+														case 'ict':
+															title = Ext.get('metadata-instructional_component2-title');
+															break;
+
+														case 'subject':
+															title = Ext.get('metadata-fw_items-title');
+															break;
+
+														case 'level':
+															title = Ext.get('metadata-educational_level2-title');
+															break;
+													}
+												}
 												if (!Ext.isEmpty(invalid)){
 													this.msg = this.msg+"\n\t"+_('form.scratch.required.fields.dialog.'+item);
 													if (title) {
@@ -1109,6 +1124,13 @@ console.log('Node ',fw_item,' does not exist but is set');
 														break;
 												}
 												var title = Ext.get('metadata-'+item+'-title');
+												if (Ext.isEmpty(title)) {
+													switch (invalid){
+														case 'rights':
+															title = Ext.get('metadata-rights_holder-title');
+															break;
+													}
+												}
 												if (!Ext.isEmpty(invalid)){
 													this.msg = this.msg+"\n\t"+_('form.scratch.required.fields.dialog.'+item);
 													if (title) {
