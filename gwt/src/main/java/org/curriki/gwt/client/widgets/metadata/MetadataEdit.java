@@ -64,6 +64,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     private Button bttSend = new Button(Main.getTranslation("editor.btt_save"));
     private HTML txtSend = new HTML();
     private FlowPanel sendContainer = new FlowPanel();
+    private String category;
     // CRS
     private String currentCRSStatus;
     private int step = 1;
@@ -454,9 +455,11 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
 
     public void SetHiddenCategoryValue(String value){
-        SetHiddenCategoryValue(panel, value);
+        this.category = value;
+        // SetHiddenCategoryValue(panel, value);
     }
 
+    /*
     public void SetHiddenCategoryValue(Panel panel, String value){
         XObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null){
@@ -464,6 +467,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             panel.add(hidden);
         }
     }
+    */
     
 
     public void addEditor(XObject obj, String name, String keyValue){
@@ -705,11 +709,14 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     
     protected Map getFormMap() {
         HashMap formMap = new HashMap();
+
+        // add category
+        formMap.put(getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY), category);
+
         // 9 properties from the asset class
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_DESCRIPTION_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_FW_ITEMS_PROPERTY));
-        addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
 
         addCheckboxFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_EDUCATIONAL_LEVEL_PROPERTY));
         addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY));
@@ -718,6 +725,7 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         addCheckboxFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_HIDE_FROM_SEARCH_PROPERTY));
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_KEYWORDS_PROPERTY));
         addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_LANGUAGE_PROPERTY));
+
         // 2 properties from the licence class
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY));
         addSelectFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY));
