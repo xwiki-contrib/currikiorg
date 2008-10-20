@@ -101,8 +101,8 @@ createCookie("Section${seccounter}Hidden", true, "");
  {pre}#set($sitems = $asset.fw_items.split("<br />")){/pre}
  #set($previousCat = "")
  #foreach($sitem in $sitems)
-  #if($sitem.trim().startsWith("Subject Index &gt;"))
-   #set($sitem = $sitem.trim().substring(18))
+  #if($sitem.trim().startsWith("Subject Index  &gt;"))
+   #set($sitem = $sitem.trim().substring(19))
   #end
   #set($gtIndex = $sitem.indexOf("&gt;"))
   #if($gtIndex != -1)
