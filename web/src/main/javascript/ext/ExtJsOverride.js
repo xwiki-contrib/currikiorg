@@ -126,6 +126,25 @@ Ext.override(Ext.PagingToolbar, {
     }
 });
 
+Ext.override(Ext.ux.Andrie.pPageSize, {
+	setPageSize:function(value, forced){
+		var pt = this.pagingToolbar;
+		this.combo.collapse();
+		value = parseInt(value) || parseInt(this.combo.getValue());
+		value = (value>0)?value:1;
+		if (value == pt.pageSize){
+			return;
+
+			/* CURRIKI-2665
+			 *  - Always force a reload so that the page size is remembered */
+		}else{
+			this.pagingToolbar.pageSize = value;
+			this.pagingToolbar.doLoad(Math.floor(this.pagingToolbar.cursor/this.pagingToolbar.pageSize) * this.pagingToolbar.pageSize);
+		}
+		this.updateStore();
+	}
+});
+
 /*
 Ext.override(Ext.Shadow.prototype, {
 	realign: function(l, t, w, h){
