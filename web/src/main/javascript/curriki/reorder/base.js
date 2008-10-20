@@ -108,11 +108,12 @@ Reorder.init = function(){
 									Ext.getCmp('reorderCollectionsMS').store.each(function(rec){list.push(rec.data.collectionPage);});
 									console.log('Reordering', list);
 
+									var dlg = this;
 									var callback = function(o){
 										console.log('Reorder callback', o);
 
 										Reorder.msgComplete();
-										this.close();
+										dlg.close();
 
 										window.location.reload();
 									};
