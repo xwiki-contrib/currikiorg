@@ -20,11 +20,11 @@ cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 cat $I18N | $UNCOMPRESS_JS > ../webapp/js/i18n-debug.js
 
 CURRIKI="\
-	ext/ExtJsOverride.js \
 	ext/DDView.js \
 	ext/Multiselect.js \
 	ext/pPageSize.js \
 	ext/Ext.grid.RowExpander.js \
+	ext/ExtJsOverride.js \
 	\
 	curriki/curriki-base.js \
 	curriki/data/curriki-data-user.js \
