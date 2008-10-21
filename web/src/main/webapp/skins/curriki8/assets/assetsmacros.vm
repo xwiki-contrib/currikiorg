@@ -32,6 +32,7 @@
 #end
 </div>
 <div class="clearfloats"></div>
+{pre}
 <script type="text/javascript">
 #if(!$togglesectionvisibility)
 #set($togglesectionvisibility = 1)
@@ -69,6 +70,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 createCookie("Section${seccounter}Hidden", true, "");
 #end
 </script>
+{/pre}
 <div id="section${seccounter}content" class="#if($doHide)hidden#end">
 #end
 ##
