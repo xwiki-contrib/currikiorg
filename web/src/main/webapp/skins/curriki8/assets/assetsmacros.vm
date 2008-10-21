@@ -41,7 +41,7 @@ function toggleSectionVisibility(seccounter, showhide){
   if(eltHasClass(seccontent, "hidden")){
     rmClass(seccontent, "hidden");
     // change icon
-    var imgElem = Ext.DomQuery.select("#${secContentName} .collapser")[0];
+    var imgElem = Ext.DomQuery.select("#${secContentName} img.collapser")[0];
     if ("undefined" !== typeof imgElem) {
 	imgElem.setAttribute("src", "$openedGif");
     }
@@ -51,7 +51,7 @@ function toggleSectionVisibility(seccounter, showhide){
   else{
     addClass(seccontent, "hidden");
     // Change icon
-    var imgElem = Ext.DomQuery.select("#${secContentName} .collapser")[0];
+    var imgElem = Ext.DomQuery.select("#${secContentName} img.collapser")[0];
     if ("undefined" !== typeof imgElem) {
 	imgElem.setAttribute("src", "$closedGif");
     }
