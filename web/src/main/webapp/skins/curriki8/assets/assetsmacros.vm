@@ -21,7 +21,7 @@
 <div class="righttext">
   <span id="section${seccounter}title">
     <div class="lefttext" style="width: 438px;">
-      <img src="$defaultGif"/>&nbsp;
+      <img class="collapser" src="$defaultGif"/>&nbsp;
       <strong class="strong">$currikiTitle</strong>
     </div>
   </span>
@@ -36,20 +36,25 @@
 #if(!$togglesectionvisibility)
 #set($togglesectionvisibility = 1)
 function toggleSectionVisibility(seccounter, showhide){
-  var seccontent = document.getElementById("section" + seccounter + "content");
+  var secContentName = "section"+seccounter+"content";
+  var seccontent = document.getElementById(secContentName);
   if(eltHasClass(seccontent, "hidden")){
     rmClass(seccontent, "hidden");
     // change icon
-    var imgElem = showhide.firstChild.firstChild;
-    imgElem.setAttribute("src", "$openedGif");
+    var imgElem = Ext.DomQuery.select("#${secContentName} .collapser")[0];
+    if ("undefined" !== typeof imgElem) {
+	imgElem.setAttribute("src", "$openedGif");
+    }
     // erase cookie
     eraseCookie("Section" + seccounter + "Hidden");
   }
   else{
     addClass(seccontent, "hidden");
     // Change icon
-    var imgElem = showhide.firstChild.firstChild;
-    imgElem.setAttribute("src", "$closedGif");
+    var imgElem = Ext.DomQuery.select("#${secContentName} .collapser")[0];
+    if ("undefined" !== typeof imgElem) {
+	imgElem.setAttribute("src", "$closedGif");
+    }
     // set cookie
     createCookie("Section" + seccounter + "Hidden", true, "");
   }
