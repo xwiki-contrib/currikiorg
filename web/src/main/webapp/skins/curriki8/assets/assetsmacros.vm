@@ -37,12 +37,13 @@
 #if(!$togglesectionvisibility)
 #set($togglesectionvisibility = 1)
 function toggleSectionVisibility(seccounter, showhide){
+  var secTitleName = "section"+seccounter+"title";
   var secContentName = "section"+seccounter+"content";
   var seccontent = document.getElementById(secContentName);
   if(eltHasClass(seccontent, "hidden")){
     rmClass(seccontent, "hidden");
     // change icon
-    var imgElem = Ext.DomQuery.select("#"+secContentName+" img.collapser")[0];
+    var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
     if ("undefined" !== typeof imgElem) {
 	imgElem.setAttribute("src", "$openedGif");
     }
@@ -52,7 +53,7 @@ function toggleSectionVisibility(seccounter, showhide){
   else{
     addClass(seccontent, "hidden");
     // Change icon
-    var imgElem = Ext.DomQuery.select("#"+secContentName+" img.collapser")[0];
+    var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
     if ("undefined" !== typeof imgElem) {
 	imgElem.setAttribute("src", "$closedGif");
     }
