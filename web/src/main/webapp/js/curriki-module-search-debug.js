@@ -60,12 +60,12 @@ module.init = function(){
 
 				var tab = Ext.getCmp('search-'+modName+'-tab');
 				if (!Ext.isEmpty(tab)) {
-					var titleMsg = "{0}";
-					if (overmax && (_('search.tab.count_resultsmax_exceeds') !== 'search.tab.count_resultsmax_exceeds')) {
-						titleMsg = _('search.tab.count_resultsmax_exceeds');
+					var titleMsg = _('search.tab.title.results');
+					if (overmax && (_('search.tab.title.resultsmax_exceeds') !== 'search.tab.title.resultsmax_exceeds')) {
+						titleMsg = _('search.tab.title.resultsmax_exceeds');
 					}
 
-					tab.setTitle(_('search.'+modName+'.tab.title')+' ('+String.format(titleMsg, resultCount, totalCount)+')');
+					tab.setTitle(String.format(titleMsg, _('search.'+modName+'.tab.title'), resultCount, totalCount));
 
 				}
 
@@ -218,7 +218,7 @@ module.init = function(){
 					,xtype:'box'
 					,id:'search-termPanel-tips-'+modName
 					,cls:'search-termPanel-tips'
-					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips" onclick="window.open(this.href, \'search_tips\', \'width=400,status=no,toolbar=no,menubar=no,location=no,resizable=yes\'); return false;">'+_('search.text.entry.help.button')+'</a>'}
+					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips" onclick="window.open(this.href, \'search_tips\', \'width=725,height=400,status=no,toolbar=no,menubar=no,location=no,resizable=yes\'); return false;">'+_('search.text.entry.help.button')+'</a>'}
 				}]
 			},{
 				xtype:'hidden'
