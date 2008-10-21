@@ -48,7 +48,7 @@
 
         #if($assetFilterCreationDateTo&&($assetFilterCreationDateTo!="")&&($assetFilterCreationDateTo!="MM/DD/YYYY"))
             #set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateTo,"MM/DD/YYYY","YYYY/MM/DD","/"))
-            	#set($wheresql = "$wheresql and doc.creationDate<=ADDDATE('$date',1)")
+            	#set($wheresql = "$wheresql and doc.creationDate<ADDDATE('$date',1)")
         #end
 
         #if($assetFilterFileCheckStatus=="1")##without status
