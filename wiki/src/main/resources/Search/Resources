@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1218122764000</creationDate>
-<date>1219972967000</date>
-<contentUpdateDate>1219972967000</contentUpdateDate>
-<version>31.1</version>
+<date>1224182238000</date>
+<contentUpdateDate>1224182238000</contentUpdateDate>
+<version>87.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -69,37 +69,52 @@
 	## Set start and limit for result list
 	##
 	#set($Integer = 0)
+	#set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
 	#set($start = 0)
-	#if($!request.start != "") ##{
+	#if("$!request.start" != "") ##{
 		#set($start = $Integer.parseInt($request.start))
 	#end ##}
 	#set($start = 1 + $start)
 	#set($start = "$start")
-	#set($limit = 25)
-	#if($!request.limit != "") ##{
+	#set($limit = "25")
+	#if("$!request.limit" != "") ##{
 		#set($limit = $request.limit)
 	#end ##}
 	##
 	## Set sort field
 	##
-	#set($sortField = 'XWiki.AssetClass.title')
+	#set($sortField1 = 'XWiki.AssetClass.title.untokenized')
+	#set($sortField2 = 'XWiki.AssetClass.instructional_component2.key.untokenized')
 	#if($!request.sort != "") ##{
 		#if($request.sort == "title") ##{
-			#set($sortField = 'XWiki.AssetClass.title')
+			#set($sortField1 = 'XWiki.AssetClass.title.untokenized')
+			#set($sortField2 = 'XWiki.AssetClass.instructional_component2.key.untokenized')
 		#end ##}
 		#if($request.sort == "ictText") ##{
-			#set($sortField = 'XWiki.AssetClass.instructional_component2')
+			#set($sortField1 = 'XWiki.AssetClass.instructional_component2.key.untokenized')
+			#set($sortField2 = 'XWiki.AssetClass.title.untokenized')
 		#end ##}
 		#if($request.sort == "contributor") ##{
-			#set($sortField = 'creator')
+			#set($sortField1 = 'creator.untokenized')
+			#set($sortField2 = 'XWiki.AssetClass.title.untokenized')
 		#end ##}
-		#if($request.sort == "review") ##{
-			#set($sortField = 'CRS.CurrikiReviewStatusClass.status')
+		#if($request.sort == "rating") ##{
+			#set($sortField1 = '-CRS.CurrikiReviewStatusClass.status.untokenized')
+			#set($sortField2 = 'XWiki.AssetClass.title.untokenized')
+		#end ##}
+		#if($request.sort == "updated") ##{
+			#set($sortField1 = 'date')
+			#set($sortField2 = 'XWiki.AssetClass.title.untokenized')
 		#end ##}
 	#end ##}
 	#if($!request.dir == "DESC") ##{
-		#set($sortField = "-${sortField}")
+		#set($sortField1 = "-${sortField1}")
+		#if($request.sort == "rating") ##{
+			#set($sortField1 = 'CRS.CurrikiReviewStatusClass.status.untokenized')
+		#end ##}
 	#end ##}
+	#set($sortFields = "${sortField1},${sortField2}")
+	#set($sortFields = $sortFields.split(","))
 	##
 	## Create query
 	##
@@ -112,7 +127,15 @@
 	##
 	## Subject
 	#if($!request.subject != "") ##{
-		#set($junk = $q.add("XWiki.AssetClass.fw_items:${request.subject}"))
+		#if($!request.subject != "UNCATEGORIZED") ##{
+			#set($junk = $q.add("XWiki.AssetClass.fw_items:${request.subject}"))
+		#else ##} {
+			#set($ucqry = "where doc.web='FW_masterFramework' and doc.parent='FW_masterFramework.WebHome' order by doc.title")
+			#set($topics = $xwiki.searchDocuments($ucqry))
+			#foreach($topic in $topics)##{
+				#set($junk = $q.add("-XWiki.AssetClass.fw_items:${topic}"))
+			#end ##}
+		#end ##}
 	#end ##}
 	##
 	## FileType
@@ -135,14 +158,19 @@
 		#set($junk = $q.add("XWiki.AssetClass.instructional_component2.key:${request.ict}"))
 	#end ##}
 	##
+	## Other
+	#if($!request.other != "") ##{
+		#set($junk = $q.add("(${request.other})"))
+	#end ##}
+	##
 	## Review
 	## partners, highest_rated
 	#if($!request.review != "") ##{
 		#if($request.review == "partners")##{
-			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:P"))
+			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:200"))
 		#end ##}
 		#if($request.review == "highest_rated")##{
-			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:3"))
+			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:(800 OR 700)"))
 		#end ##}
 	#end ##}
 	##
@@ -156,12 +184,12 @@
 			#set($junk = $q.add("XWiki.CompositeAssetClass.type:collection"))
 		#end ##}
 		#if($request.special == "reviewed")##{
-			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:(1 OR 2 OR 3 OR P)"))
+			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:(200 OR 300 OR 400 OR 500 OR 600 OR 700 OR 800)"))
 		#end ##}
 		#if($request.special == "updated")##{
-			#if($!request.since != "")##{
-				#set($junk = $q.add("date:[${request.since} TO 29991231]"))
-			#end ##}
+			#set($dt = $xwiki.curriki.formatDate($xwiki.curriki.getDateMinusDays($msg.get('search.resource.special.selector.updated.days')), "yyyyMMdd"))
+			#set($upq = "date:[$dt TO 29991231]")
+			#set($junk = $q.add($upq))
 		#end ##}
 		#if($request.special == "groups")##{
 			#set($junk = $q.add("web:Group_Coll_*"))
@@ -183,18 +211,22 @@
 	##
 	## Do query
 	##
-	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortField, $languages))
+	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
 	#set($results = $searchResults.getResults($start, $limit))
 	#set($resultCount = $searchResults.totalHitcount)
+	#set($modifiedCount = $resultCount)
+	#if($modifiedCount &gt; $maxResults) ##{
+	#set($modifiedCount = $maxResults)
+	#end ##}
+
 	##
 	## List out results
 	##
-	#if($!resultCount == "") ##{
+	#if("$!resultCount" == "") ##{
 		#set($resultCount = 0)
 	#end ##}
-	{
-'sortedby':'${sortField}',
-	'rows':[
+{
+'rows':[
 	#set($first = true)
 	#foreach($result in $results) ##{
 		##
@@ -216,10 +248,11 @@
 			## No ICT set -- nothing to do
 			#set($ictIcon = "")
 			#set($ictRaw = "")
+			#set($ictText = "")
 		#else ## } {
 			#if($ict.size() &gt; 1) ## {
 				##Multiple
-				#set($icon = $xwiki.getSkinFile("icons/ICTIcon-Multiple.gif"))
+				#set($ictIcon = $xwiki.getSkinFile("icons/ICTIcon-Multiple.gif"))
 				#set($text = $msg.get('search.results.col.ict.multiple'))
 				#set($ictRaw = "multiple")
 				#set($ictText = "search.selector.ict.${ictRaw}")
@@ -255,12 +288,18 @@
 		#set($desc = $desc.replace("'", "&amp;#39;"))
 		#set($desc = $desc.replaceAll("[\n|\r]+", "&lt;br /&gt;"))
 		##
+		## Get Contributor Name
+		#set($cname = "")
+		#set($cname = $xwiki.getUserName($d.creator, false))
+		#set($cname = $cname.replace("'", "&amp;#39;"))
+		#set($cname = $cname.replaceAll("[\n|\r]+", "&lt;br /&gt;"))
+		##
 		## Get Expanded Info
 		## TODO:  Get the proper expanded info here
 		#set($info = "")
 		#set($isComposite = $!d.getObject("XWiki.CompositeAssetClass"))
 		#if($!isComposite) ##{
-			#set($sql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and composite.name=doc.fullName and composite.className='XWiki.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='curriki_document') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='XWiki.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='${d.fullName}' order by doc.name")
+			#set($sql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='XWiki.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='curriki_document') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='XWiki.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='${d.fullName}' order by doc.name")
 			#set($parentList = $xwiki.searchDocuments($sql))
 			#if($parentList.size() &gt; 0) ##{
 				#set($info = "")
@@ -277,8 +316,13 @@
 					#set($parentDesc = $!parentAsset.getObject("XWiki.AssetClass").getProperty("description").getValue())
 					#set($parentDesc = $parentDesc.replace('"', "&amp;quot;"))
 					#set($parentUrl = $xwiki.getURL($parentPage))
+					#set($parentType = $!parentAsset.getObject("XWiki.CompositeAssetClass").getProperty("type").getValue())
+					#set($parentTypeClass="resource-FolderComposite")
+					#if($parentType == "collection") ##{
+						#set($parentTypeClass="resource-CollectionComposite")
+					#end ##}
 					#set($pinfo = '&lt;a href="'+$parentUrl+'" ext:qtitle="Description" ext:qtip="'+$parentDesc+'"&gt;'+$parentTitle+'&lt;/a&gt;')
-					#set($info = $info+'&lt;li&gt;'+$pinfo+'&lt;/li&gt;')
+					#set($info = $info+'&lt;li class="'+$parentTypeClass+'"&gt;'+$pinfo+'&lt;/li&gt;')
 				#end ##}
 				#if($info != "") ##{
 					#set($info = $msg.get('search.resource.resource.expanded.title')+'&lt;ul&gt;'+$info+'&lt;/ul&gt;')
@@ -292,26 +336,27 @@
 		#if($first) ##{
 			#set($first = false)
 		#else ##} {
-			,
+,
 		#end ##}
-		{
-		 'page':'${d.fullName}'
-		,'title':'${title}'
-		,'assetType':'${assetType}'
-		,'ict':'${ictRaw}'
-		,'ictText':'${ictText}'
-		,'ictIcon':'${ictIcon}'
-		,'contributor':'${d.creator}'
-		,'contributorName':'${xwiki.getUserName($d.creator, false)}'
-		,'review':'${review}'
-		,'description':'${desc}'
-		,'info':'${info}'
-		,'updated':'${d.date}'
-		}
+{
+'page':'${d.fullName}'
+,'title':'${title}'
+,'assetType':'${assetType}'
+,'ict':'${ictRaw}'
+,'ictText':'${ictText}'
+,'ictIcon':'${ictIcon}'
+,'contributor':'${d.creator}'
+,'contributorName':'${cname}'
+,'review':'${review}'
+,'description':'${desc}'
+,'info':'${info}'
+,'updated':'${d.date}'
+}
 	#end ##}
-	],
-	'resultCount':'${resultCount}'
-	}
+]
+,'resultCount':'${modifiedCount}'
+,'totalResults':'${resultCount}'
+}
 #end ## }
-{/pre}
-</content></xwikidoc>
+{/pre}</content>
+</xwikidoc>

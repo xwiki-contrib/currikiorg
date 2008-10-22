@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1184125355000</creationDate>
-<date>1214338003000</date>
-<contentUpdateDate>1214338003000</contentUpdateDate>
-<version>5.1</version>
+<date>1221515777000</date>
+<contentUpdateDate>1221515777000</contentUpdateDate>
+<version>6.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>Add some analytics</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -76,10 +76,10 @@ embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null,
 &lt;br /&gt;
 &lt;hr class="my-curriki-hr"&gt;
 &lt;br /&gt;
-&lt;a href="http://flashmedia.viditalk.com/10/active/${video_id}.mpg"&gt;$msg.get('viditalk.download_msg')&lt;/a&gt;
+&lt;a href="http://flashmedia.viditalk.com/10/active/${video_id}.mpg" onClick="javascript:Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');"&gt;$msg.get('viditalk.download_msg')&lt;/a&gt;
 #set($orig_video = $xwiki.getURLContent("http://components.viditalk.com/dl.asp?id=$video_id"))
 #if("$orig_video" != "") ##{
 #sep()
-&lt;a href="$orig_video"&gt;$msg.get('viditalk.download_original_msg')&lt;/a&gt;
+&lt;a href="$orig_video" onClick="javascript:Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');"&gt;$msg.get('viditalk.download_original_msg')&lt;/a&gt;
 #end ##}</content>
 </xwikidoc>

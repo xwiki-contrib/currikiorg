@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1173445381000</creationDate>
-<date>1219866477000</date>
-<contentUpdateDate>1219866477000</contentUpdateDate>
-<version>73.1</version>
+<date>1224693845000</date>
+<contentUpdateDate>1224693845000</contentUpdateDate>
+<version>85.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>Added Search.selector.ict strings. Fixes bug 3042.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -96,7 +96,7 @@ editor.btt_show=Show
 editor.btt_hide=Hide
 editor.btt_open=Open
 editor.btt_next=Next &gt;&gt;
-editor.btt_compEdit=Edit
+editor.btt_compEdit=Select
 editor.btt_finish=Next &gt;&gt;
 editor.btt_send=Send
 editor.btt_back=Back
@@ -341,6 +341,7 @@ viditalk.sitecode=8204167813
 viditalk.download_msg=Download Video
 viditalk.download_original_msg=Download Video (Original Format)
 comment.commentcannotbeempty=Please enter a comment. Empty comments are not allowed.
+viditalk.loading_player=Video player is loading. One moment please.
 edit.propose_duplication_title=Edit or Copy?
 edit.propose_duplication_text=Are you sure you want to change this resource created by {0}?&lt;br /&gt;&lt;br /&gt;To edit this resource for your own specific purpose, create a new version by clicking Copy below to save it as your own. (Next you will be prompted to save it into your My Curriki under a different title.)&lt;br /&gt;&lt;br /&gt;If you want to edit this resource for use by the whole Curriki community, click Continue to Edit. Your modifications will change the document of record and the previous version will be available under the Currikulum Builder's History tab.
 edit.propose_continue=Continue to Edit
@@ -462,10 +463,10 @@ curriki.crs.reviewlist.nocurrikireviews=This resource has not been reviewed.
 curriki.crs.generatedcomment=&lt;span class="crs_reviewscontenttext"&gt;This resource was reviewed using the rubric for {0} and received an overall CRS rating of &lt;/span&gt;{1}&lt;br /&gt;&lt;br /&gt; Its component ratings were:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;Technical Completeness: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Content Accuracy: {3}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Appropriate Pedagogy: {4}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{5}
 curriki.crs.generatedcommentunrated=This resource was reviewed using the rubric for {0} and could not receive a rating.&lt;br /&gt;&lt;br /&gt; Its component ratings were:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;Technical Completeness: {1}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Content Accuracy: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;Appropriate Pedagogy: {3}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{4}
 curriki.crs.nominate=Nominate
-curriki.crs.nominate.nominatefollowingresourceforreview=Nominate the following resource for review:
-curriki.crs.nominate.comments=Comments
+curriki.crs.nominate.nominatefollowingresourceforreview=&lt;strong&gt;You are nominating the following resource for review:&lt;/strong&gt;
+curriki.crs.nominate.comments=&lt;strong&gt;Enter optional comments:&lt;/strong&gt;
 curriki.crs.nominate.cannotnominatewithoutcomment=Please add a comment for your nomination.
-curriki.crs.nominate.commentstext=You may write an optional note to your Curriki Review System reviewer. For example, what should we pay particular attention to? How has the resource changed since its last review?
+curriki.crs.nominate.commentstext=Write a note to the Curriki Review System reviewers. For example, what should a reviewer pay particular attention to? If you are nominating a reviewed resource, how has the resource changed since its last review?
 curriki.crs.nominate.commentsfootertext=Your nomination will not be complete until you click Submit.
 curriki.crs.nominate.submit=Submit
 curriki.crs.nominate.cancel=Cancel
@@ -575,9 +576,10 @@ checkversion.versionhaschanged=Another Curriki member is also editing this colle
 
 ## INFORMATION TAB
 
+
 ## SUBJECT
 
-XWiki.AssetClass_fw_items_FW_masterFramework.WebHome=Subject Index
+XWiki.AssetClass_fw_items_FW_masterFramework.WebHome=Subject Index 
 XWiki.AssetClass_fw_items_FW_masterFramework.Arts=Arts
 XWiki.AssetClass_fw_items_FW_masterFramework.Architecture=Architecture
 XWiki.AssetClass_fw_items_FW_masterFramework.Careers=Careers
@@ -594,27 +596,29 @@ XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation=Career &amp; Te
 XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture_0=Agriculture
 XWiki.AssetClass_fw_items_FW_masterFramework.Business=Business
 XWiki.AssetClass_fw_items_FW_masterFramework.Careers_6=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=Education &amp; Teaching
 XWiki.AssetClass_fw_items_FW_masterFramework.OccupationalHomeEconomics=Occupational Home Economics
 XWiki.AssetClass_fw_items_FW_masterFramework.School-to-work=School-to-work
 XWiki.AssetClass_fw_items_FW_masterFramework.Technology_2=Technology
 XWiki.AssetClass_fw_items_FW_masterFramework.Trade&amp;Industrial=Trade &amp; Industrial
+XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=Education
+XWiki.AssetClass_fw_items_FW_masterFramework.Accessibility=Accessibility/Special Education 
+XWiki.AssetClass_fw_items_FW_masterFramework.AdultEducation=Adult Education 
+XWiki.AssetClass_fw_items_FW_masterFramework.BilingualEducation=Bilingual Education 
+XWiki.AssetClass_fw_items_FW_masterFramework.ClassroomManagement=Classroom Management 
+XWiki.AssetClass_fw_items_FW_masterFramework.EarlyChildhoodEducation=Early Childhood Education 
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationAdministration=Education Administration/Leadership 
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalFoundations=Educational Foundations/Research 
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalPsychology=Educational Psychology 
+XWiki.AssetClass_fw_items_FW_masterFramework.InstructionalDesign=Instructional Design 
+XWiki.AssetClass_fw_items_FW_masterFramework.MeasurementEvaluation=Measurement &amp; Evaluation 
+XWiki.AssetClass_fw_items_FW_masterFramework.Mentoring=Mentoring 
+XWiki.AssetClass_fw_items_FW_masterFramework.MulticulturalEducation=Multicultural Education 
+XWiki.AssetClass_fw_items_FW_masterFramework.StandardsAlignment=Standards Alignment 
+XWiki.AssetClass_fw_items_FW_masterFramework.TeachingTechniques=Teaching Techniques/Best Practices
 XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology=Educational Technology
 XWiki.AssetClass_fw_items_FW_masterFramework.Careers_0=Careers
 XWiki.AssetClass_fw_items_FW_masterFramework.IntegratingTechnologyintotheClassroom=Integrating Technology into the Classroom
 XWiki.AssetClass_fw_items_FW_masterFramework.UsingMultimedia&amp;theInternet=Using Multimedia &amp; the Internet
-XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=Foreign Languages
-XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet=Alphabet
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_7=Careers
-XWiki.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=Cultural Awareness
-XWiki.AssetClass_fw_items_FW_masterFramework.Grammar=Grammar
-XWiki.AssetClass_fw_items_FW_masterFramework.InformalEducation=Informal Education
-XWiki.AssetClass_fw_items_FW_masterFramework.Linguistics=Linguistics
-XWiki.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=Listening Comprehension
-XWiki.AssetClass_fw_items_FW_masterFramework.Reading=Reading
-XWiki.AssetClass_fw_items_FW_masterFramework.Speaking=Speaking
-XWiki.AssetClass_fw_items_FW_masterFramework.Spelling=Spelling
-XWiki.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=Vocabulary Writing
 XWiki.AssetClass_fw_items_FW_masterFramework.Health=Health 
 XWiki.AssetClass_fw_items_FW_masterFramework.BodySystems&amp;Senses=Body Systems &amp; Senses
 XWiki.AssetClass_fw_items_FW_masterFramework.Careers_1=Careers
@@ -690,9 +694,10 @@ XWiki.AssetClass_fw_items_FW_masterFramework.Entrepreneurship=Entrepreneurship
 XWiki.AssetClass_fw_items_FW_masterFramework.Geography=Geography
 XWiki.AssetClass_fw_items_FW_masterFramework.GlobalAwareness=Global Awareness
 XWiki.AssetClass_fw_items_FW_masterFramework.Government=Government
-XWiki.AssetClass_fw_items_FW_masterFramework.History\u0020Local=History (Local)
+XWiki.AssetClass_fw_items_FW_masterFramework.History\ Local=History (Local)
 XWiki.AssetClass_fw_items_FW_masterFramework.PoliticalSystems=Political Systems
 XWiki.AssetClass_fw_items_FW_masterFramework.Psychology=Psychology
+XWiki.AssetClass_fw_items_FW_masterFramework.Religion=Religion
 XWiki.AssetClass_fw_items_FW_masterFramework.Research_0=Research
 XWiki.AssetClass_fw_items_FW_masterFramework.Sociology=Sociology
 XWiki.AssetClass_fw_items_FW_masterFramework.StateHistory=State History
@@ -701,6 +706,19 @@ XWiki.AssetClass_fw_items_FW_masterFramework.Thinking&amp;ProblemSolving=Thinkin
 XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesGovernment=United States Government
 XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesHistory=United States History
 XWiki.AssetClass_fw_items_FW_masterFramework.WorldHistory=World History
+XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=World Languages
+XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet=Alphabet
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_7=Careers
+XWiki.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=Cultural Awareness
+XWiki.AssetClass_fw_items_FW_masterFramework.Grammar=Grammar
+XWiki.AssetClass_fw_items_FW_masterFramework.InformalEducation=Informal Education
+XWiki.AssetClass_fw_items_FW_masterFramework.Linguistics=Linguistics
+XWiki.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=Listening Comprehension
+XWiki.AssetClass_fw_items_FW_masterFramework.Reading=Reading
+XWiki.AssetClass_fw_items_FW_masterFramework.Speaking=Speaking
+XWiki.AssetClass_fw_items_FW_masterFramework.Spelling=Spelling
+XWiki.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=Vocabulary Writing
+
 
 
 ## EDUCATIONAL LEVEL
@@ -716,8 +734,9 @@ XWiki.AssetClass_educational_level2_professional_development=Professional Develo
 XWiki.AssetClass_educational_level2_special_education=Special Education
 XWiki.AssetClass_educational_level2_na=Other
 
-### ICT
 
+## ICT
+XWiki.AssetClass_instructional_component2_activity_assignment=Activity: Assignment/Homework
 XWiki.AssetClass_instructional_component2_activity_exercise=Activity: Exercise
 XWiki.AssetClass_instructional_component2_activity_lab=Activity: Experiment/Lab
 XWiki.AssetClass_instructional_component2_activity_worksheet=Activity: Graphic Organizer/Worksheet
@@ -730,30 +749,81 @@ XWiki.AssetClass_instructional_component2_curriculum_assessment=Curriculum: Asse
 XWiki.AssetClass_instructional_component2_curriculum_course=Curriculum: Full Course
 XWiki.AssetClass_instructional_component2_curriculum_unit=Curriculum: Unit
 XWiki.AssetClass_instructional_component2_curriculum_lp=Curriculum: Lesson Plan
+XWiki.AssetClass_instructional_component2_curriculum_rubric=Curriculum: Rubric
 XWiki.AssetClass_instructional_component2_curriculum_scope=Curriculum: Scope &amp; Sequence
 XWiki.AssetClass_instructional_component2_curriculum_standards=Curriculum: Standards
+XWiki.AssetClass_instructional_component2_curriculum_studyguide=Curriculum: Study Guide/Notes
 XWiki.AssetClass_instructional_component2_curriculum_syllabus=Curriculum: Syllabus
+XWiki.AssetClass_instructional_component2_curriculum_tutorial=Curriculum: Tutorial
 XWiki.AssetClass_instructional_component2_curriculum_workbook=Curriulum: Workbook
 XWiki.AssetClass_instructional_component2_resource_animation=Resource: Animation/Simulation
 XWiki.AssetClass_instructional_component2_resource_diagram=Resource: Diagram/Illustration
+XWiki.AssetClass_instructional_component2_resource_glossary=Resource: Glossary/Vocabulary List
 XWiki.AssetClass_instructional_component2_resource_index=Resource: Index/List
 XWiki.AssetClass_instructional_component2_resource_photograph=Resource: Photograph
-XWiki.AssetClass_instructional_component2_resource_presentation=Resource: Presentation/Slide Show
+XWiki.AssetClass_instructional_component2_resource_presentation=Resource: Video/Presentation/Slides
 XWiki.AssetClass_instructional_component2_resource_collection=Resource: Reference Collection
 XWiki.AssetClass_instructional_component2_resource_script=Resource: Script/Transcript
-XWiki.AssetClass_instructional_component2_resource_speech=Resource: Speech/Lecture/Song
+XWiki.AssetClass_instructional_component2_resource_speech=Resource: Audio/Speech/Lecture
 XWiki.AssetClass_instructional_component2_resource_table=Resource: Table/Graph/Chart
+XWiki.AssetClass_instructional_component2_resource_template=Resource: Template
+XWiki.AssetClass_instructional_component2_resource_webcast=Resource: Webcast/Podcast
 XWiki.AssetClass_instructional_component2_other=Other
+
+##ICT Used for Rollover on Icons
+search.selector.ict.activity=Activity
+search.selector.ict.activity.assignment=Assignment/Homework
+search.selector.ict.activity.exercise=Exercise
+search.selector.ict.activity.lab=Experiment/Lab
+search.selector.ict.activity.worksheet=Graphic Organizer/Worksheet
+search.selector.ict.activity.problemset=Problem Set
+search.selector.ict.book=Book
+search.selector.ict.book.fiction=Fiction
+search.selector.ict.book.nonfiction=Non-Fiction
+search.selector.ict.book.readings=Readings/Excerpts
+search.selector.ict.book.textbook=Text Book
+search.selector.ict.curriculum=Curriculum
+search.selector.ict.curriculum.assessment=Assessment/Test
+search.selector.ict.curriculum.course=Full Course
+search.selector.ict.curriculum.unit=Unit
+search.selector.ict.curriculum.lp=Lesson Plan
+search.selector.ict.curriculum.rubric=Rubric
+search.selector.ict.curriculum.scope=Scope &amp; Sequence
+search.selector.ict.curriculum.standards=Standards
+search.selector.ict.curriculum.studyguide=Study Guide/Notes
+search.selector.ict.curriculum.syllabus=Syllabus
+search.selector.ict.curriculum.tutorial=Tutorial
+search.selector.ict.curriculum.workbook=Workbook
+search.selector.ict.resource=Resource
+search.selector.ict.selector.animation=Animation/Simulation
+search.selector.ict.selector.diagram=Diagram/Illustration
+search.selector.ict.selector.glossary=Glossary/Vocabulary List
+search.selector.ict.selector.index=Index/List
+search.selector.ict.selector.photograph=Photograph
+search.selector.ict.selector.presentation=Video/Presentation/Slides
+search.selector.ict.selector.collection=Reference Collection
+search.selector.ict.selector.script=Script/Transcript
+search.selector.ict.selector.speech=Audio/Speech/Lecture
+search.selector.ict.selector.table=Table/Graph/Chart
+search.selector.ict.selector.template=Template
+search.selector.ict.selector.webcast=Webcast/Podcast
+search.selector.ict.other=Other
+search.selector.ict.multiple=Multiple
+search.selector.ict.unknown=
+
 
 ## LANGUAGE
 XWiki.AssetClass_language_eng=English
+XWiki.AssetClass_language_ind=Bahasa Indonesia
 XWiki.AssetClass_language_zho=Chinese
 XWiki.AssetClass_language_nld=Dutch
 XWiki.AssetClass_language_fra=French
 XWiki.AssetClass_language_deu=German
+XWiki.AssetClass_language_hin=Hindi
 XWiki.AssetClass_language_ita=Italian
 XWiki.AssetClass_language_jpn=Japanese
 XWiki.AssetClass_language_kor=Korean
+XWiki.AssetClass_language_nep=Nepali
 XWiki.AssetClass_language_por=Portuguese
 XWiki.AssetClass_language_rus=Russian
 XWiki.AssetClass_language_spa=Spanish

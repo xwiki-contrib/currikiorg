@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.NielsMayer</creator>
-<author>XWiki.NielsMayer</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.NielsMayer</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1212692135000</creationDate>
-<date>1214932778000</date>
-<contentUpdateDate>1214932778000</contentUpdateDate>
-<version>83.1</version>
+<date>1223314039000</date>
+<contentUpdateDate>1223314039000</contentUpdateDate>
+<version>92.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>x</comment>
+<comment>a</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -117,10 +117,11 @@
      #set( $ok = $newAsset.updateObjectFromRequest("XWiki.AssetLicenseClass") )
      #set( $save_success = $newAsset.saveWithProgrammingRights() )
      #if( $!save_success ) ## {
-       #set( $ok = $newAsset.publish($publishSpace) )
+       #set( $newAsset = $newAsset.publish($publishSpace) )
        #if("$!parentPage"!="") ## {
          #set( $parentAsset = $xwiki.curriki.fetchAsset($parentPage) )
          #set( $ok = $parentAsset.addSubasset($newAsset.fullName) )
+         #set( $ok = $parentAsset.save($msg.get("curriki.comment.addsubasset")) )
        #end ## }
    #end ## }
   #end ## } -- ("$!newAsset"!="")
@@ -215,5 +216,5 @@ Curriki.module.addpath.startDoneMessage();
    #end ## } -- end: noDialogs DISPLAY
   #end ## } -- "$!successMessage"!=""
 #end ## } -- request.method=="POST"
-#end ## } -- end:authorization
-</content></xwikidoc>
+#end ## } -- end:authorization</content>
+</xwikidoc>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.Admin</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.Admin</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1199041523000</creationDate>
-<date>1222967621000</date>
-<contentUpdateDate>1222967621000</contentUpdateDate>
-<version>7.1</version>
+<date>1223110224000</date>
+<contentUpdateDate>1223110224000</contentUpdateDate>
+<version>10.1</version>
 <title>RejectMembershipRequestService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -59,36 +59,6 @@
   * Groups Reject Membership Request service
   * This handles the call to reject a membership request
   * @type ajaxservice
-  * @refactored ludovic
-  *#
-#groups_rejectmembership_service()
-
-#**
-  * Groups Reject Membership Request service
-  * This handles the call to reject a membership request
-  *#
-#macro(groups_rejectmembership_service)
-#set($sm = $xwiki.csm)
-##Loading invitation manager
-#set($im = $xwiki.invitationmanager)
-#set($spaceName = $request.space)
-#set($space = $sm.getSpace($spaceName))
-#set($spaceTitle = $space.displayTitle)
-#set($spacePolicy = $space.policy)
-#if($context.user=="XWiki.XWikiGuest")
-$msg.groups_members_request_needtobeloggedin
-## if user is not member he cannot accept users
-#elseif(!$hasGlobalAdmin &amp;&amp; !$sm.isAdmin($spaceName,$context.user))
-$msg.groups_needsadminrights
-#else
-## we need to verify there is a request for this user
-#set($user = $request.user)
-## accept invitation
-#if($im.rejectMembership($spaceName, $user))
-SUCCESS
-#else
-$msg.groups_members_reject_request_error
-#end
-#end
-#end</content>
+  * @refactored ludovic *#
+#groups_rejectmembership_service()</content>
 </xwikidoc>

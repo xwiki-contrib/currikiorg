@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.moradaniel</author>
+<author>XWiki.albertobuffagni</author>
 <customClass></customClass>
-<contentAuthor>XWiki.moradaniel</contentAuthor>
+<contentAuthor>XWiki.albertobuffagni</contentAuthor>
 <creationDate>1212441677000</creationDate>
-<date>1219869550000</date>
-<contentUpdateDate>1219869550000</contentUpdateDate>
-<version>7.1</version>
+<date>1223422154000</date>
+<contentUpdateDate>1223422154000</contentUpdateDate>
+<version>12.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>crs jump page</comment>
+<comment>changed</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>

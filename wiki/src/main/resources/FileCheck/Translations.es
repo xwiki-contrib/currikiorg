@@ -8,13 +8,13 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.moradaniel</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.moradaniel</contentAuthor>
 <creationDate>1212441967000</creationDate>
-<date>1212441967000</date>
-<contentUpdateDate>1212441967000</contentUpdateDate>
-<version>1.1</version>
+<date>1222978845000</date>
+<contentUpdateDate>1222978845000</contentUpdateDate>
+<version>9.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -122,6 +122,5 @@ fc_withAccessPrivilegesOf_public=Publico
 fc_withAccessPrivilegesOf_members=Protegido
 fc_withAccessPrivilegesOf_private=Privado
 fc_withAccessPrivilegesOf_protectedAndPublic=Protegido y Publico
-
 #&lt;/pre&gt;</content>
 </xwikidoc>

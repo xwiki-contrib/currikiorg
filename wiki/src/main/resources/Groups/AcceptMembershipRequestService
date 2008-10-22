@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
 <web>Groups</web>
@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.Admin</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.Admin</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1199041506000</creationDate>
-<date>1222967619000</date>
-<contentUpdateDate>1222967619000</contentUpdateDate>
-<version>6.1</version>
+<date>1223110224000</date>
+<contentUpdateDate>1223110224000</contentUpdateDate>
+<version>4.1</version>
 <title>AcceptMembershipRequestService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -60,30 +60,6 @@
  * @param request.space Space to accept the user in
  * @param request.user User to accept
  * @type ajaxservice
- * @refactored ludovic
- *#
-#set($sm = $xwiki.csm)
-##Loading invitation manager
-#set($im = $xwiki.invitationmanager)
-#set($spaceName = $request.space)
-#set($space = $sm.getSpace($spaceName))
-#set($spaceTitle = $space.displayTitle)
-#set($spacePolicy = $space.policy)
-#if($context.user=="XWiki.XWikiGuest")
-$msg.groups_members_accept_request_needtobeloggedin
-## if user is not member he cannot accept users
-#elseif(!$hasGlobalAdmin &amp;&amp; !$sm.isAdmin($spaceName,$context.user))
-$msg.groups_needsadminrights
-#else
-## we need to verify there is a request fron this user
-#set($user = $request.user)
-## accept invitation
-#set($acceptInv = $im.acceptMembership($spaceName, $user))
-#if($acceptInv)
-## we also need to update the space profile with the data in the Map
-SUCCESS
-#else
-$msg.groups_members_accept_request_error
-#end
-#end</content>
+ * @refactored ludovic *#
+#groups_acceptmembership_service()</content>
 </xwikidoc>

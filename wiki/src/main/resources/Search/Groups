@@ -12,9 +12,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1218234233000</creationDate>
-<date>1218658216000</date>
-<contentUpdateDate>1218658216000</contentUpdateDate>
-<version>17.1</version>
+<date>1224182457000</date>
+<contentUpdateDate>1224182457000</contentUpdateDate>
+<version>21.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -69,34 +69,41 @@
 	## Set start and limit for result list
 	##
 	#set($Integer = 0)
+	#set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
 	#set($start = 0)
-	#if($!request.start != "") ##{
+	#if("$!request.start" != "") ##{
 		#set($start = $Integer.parseInt($request.start))
 	#end ##}
 	#set($start = 1 + $start)
 	#set($start = "$start")
-	#set($limit = 25)
-	#if($!request.limit != "") ##{
+	#set($limit = "25")
+	#if("$!request.limit" != "") ##{
 		#set($limit = $request.limit)
 	#end ##}
 	##
 	## Set sort field
 	##
-	#set($sortField = 'XWiki.SpaceClass.displayTitle')
+	#set($sortField1 = 'XWiki.SpaceClass.displayTitle.untokenized')
+	#set($sortField2 = 'date')
 	#if($!request.sort != "") ##{
 		#if($request.sort == "title") ##{
-			#set($sortField = 'XWiki.SpaceClass.displayTitle')
+			#set($sortField1 = 'XWiki.SpaceClass.displayTitle.untokenized')
+			#set($sortField2 = 'date')
 		#end ##}
 		#if($request.sort == "policy") ##{
-			#set($sortField = 'XWiki.SpaceClass.policy')
+			#set($sortField1 = 'XWiki.SpaceClass.policy.untokenized')
+			#set($sortField2 = 'XWiki.SpaceClass.displayTitle.untokenized')
 		#end ##}
 		#if($request.sort == "updated") ##{
-			#set($sortField = 'date')
+			#set($sortField1 = 'date')
+			#set($sortField2 = 'XWiki.SpaceClass.displayTitle.untokenized')
 		#end ##}
 	#end ##}
 	#if($!request.dir == "DESC") ##{
-		#set($sortField = "-${sortField}")
+		#set($sortField1 = "-${sortField1}")
 	#end ##}
+	#set($sortFields = "${sortField1},${sortField2}")
+	#set($sortFields = $sortFields.split(","))
 	##
 	## Create query
 	##
@@ -153,13 +160,18 @@
 	##
 	## Do query
 	##
-	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortField, $languages))
+	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
 	#set($results = $searchResults.getResults($start, $limit))
 	#set($resultCount = $searchResults.totalHitcount)
+	#set($modifiedCount = $resultCount)
+	#if($modifiedCount &gt; $maxResults) ##{
+	#set($modifiedCount = $maxResults)
+	#end ##}
+
 	##
 	## List out results
 	##
-	#if($!resultCount == "") ##{
+	#if("$!resultCount" == "") ##{
 		#set($resultCount = 0)
 	#end ##}
 	{
@@ -206,9 +218,10 @@
 		,'updated':'${d.date}'
 		}
 	#end ##}
-	],
-	'resultCount':'${resultCount}'
-	}
+]
+,'resultCount':'${modifiedCount}'
+,'totalResults':'${resultCount}'
+}
 #end ## }
-{/pre}
-</content></xwikidoc>
+{/pre}</content>
+</xwikidoc>

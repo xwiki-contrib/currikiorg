@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.AncaPaulaLuca</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.AncaPaulaLuca</contentAuthor>
 <creationDate>1190211387000</creationDate>
-<date>1214352092000</date>
-<contentUpdateDate>1214352092000</contentUpdateDate>
-<version>21.1</version>
+<date>1223454329000</date>
+<contentUpdateDate>1223454329000</contentUpdateDate>
+<version>26.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix bc issue</comment>
+<comment>commented out style element trying to debug / fix on ie6</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -100,13 +100,14 @@
 <property>
 <content>#set($assetObj = $doc.getObject("XWiki.AssetClass"))
 #if($assetObj) ##{
+&lt;!--
 &lt;style type="text/css"&gt;
 .collapsed ul {
   display: none;
 }
-&lt;/style&gt;
+&lt;/style&gt; --&gt;
 #macro(addli $assetDoc $istree $addbc) ## {
-#if($assetDoc) ## {
+#if($assetDoc&amp;&amp;$assetDoc!="") ## {
 #if($istree) ##{
 #set($cookiebase = "${startDoc.fullName}_")
 #if(!$navcatcounter) ##{
@@ -137,7 +138,7 @@
 &lt;li id="${id}" #if($doc.fullName==$assetDoc.fullName) class="treeitem selected #if($expanded) expanded #else collapsed #end" #else class="treeitem #if($expanded) expanded #else collapsed #end" #end onclick="${onclick}" &gt;
 &lt;img src="$xwiki.getSkinFile("pixel.gif")" width="14" height="14" /&gt;
 &lt;a onclick="event.cancelBubble = true;" href="$!{assetDoc.getURL("view", "bc=$!bc$!addbc")}"&gt;
-$currikiTitle
+{pre}$currikiTitle{/pre}
 &lt;/a&gt;
 #if(!$expanded) ##{
 &lt;script type="text/javascript"&gt;
@@ -147,7 +148,7 @@ togglePanelVisibility(document.getElementById("${id}"));
 #else ## }{
 &lt;li id="${id}" #if($doc.fullName==$assetDoc.fullName) class="selected" #end&gt;
 &lt;a onclick="event.cancelBubble = true;" href="$!{assetDoc.getURL("view", "bc=$!bc$!addbc")}"&gt;
-$currikiTitle
+{pre}$currikiTitle{/pre}
 &lt;/a&gt;
 #end ## }
 #end ## }
@@ -205,7 +206,9 @@ $currikiTitle
 &lt;ul&gt; ##{
 #foreach($assetPage in $assetList) ##{
 #if($assetPage!="") ##{
+#set($assetDoc = "") 
 #set($assetDoc = $xwiki.getDocument($assetPage))
+#if($assetDoc!="") ## {
 #set($ok = $assetDoc.use("XWiki.TextAssetClass"))
 #set($type = "")
 #set($type = $assetDoc.getValue("type"))
@@ -214,14 +217,13 @@ $currikiTitle
 #set($objs2 = $assetDoc.getObjects("XWiki.SubAssetClass"))
 #set($assetList2 = $xwiki.arrayList)
 #foreach($obj2 in $objs2) ##{
-
 #set($ok = $assetList2.add(""))
 #end ##}
 #foreach($obj2 in $objs2) ##{
 #set($ok = $assetDoc.use($obj2))
+
 #set($position2 = $assetDoc.getValue("order"))
 #set($assetPage2 = $assetDoc.getValue("assetpage"))
-
 #if($position2 &gt;= $assetList2.size()) ##{
 #set($ok = $assetList2.add($assetPage2))
 #else ##}{
@@ -238,7 +240,9 @@ $currikiTitle
 &lt;ul&gt; ##{
 #foreach($assetPage2 in $assetList2) ##{
 #if($assetPage2!="") ##{
+#set($assetDoc2 = "") 
 #set($assetDoc2 = $xwiki.getDocument($assetPage2))
+#if($assetDoc2 != "") ## {
 #set($ok = $assetDoc2.use("XWiki.TextAssetClass"))
 #set($type2 = "")
 #set($type2 = $assetDoc2.getValue("type"))
@@ -249,14 +253,16 @@ $currikiTitle
 &lt;/li&gt;
 #end ##}
 #end ##} end checktype level 2
-#end ##}
+#end ##} end if asset Doc2
+#end ##} end if asset Page2
 #end ##} end foreach
 &lt;/ul&gt; ##}
 #end ##} end ul
 &lt;/li&gt; 
 #end ##}
 #end ##} end checktype level 1
-#end ##}
+#end ##} end if asset Doc
+#end ##} end if asset Page
 #end ##} end foreach
 &lt;/ul&gt; ##}
 &lt;/li&gt;
