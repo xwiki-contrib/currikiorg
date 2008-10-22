@@ -456,19 +456,8 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
 
     public void SetHiddenCategoryValue(String value){
         this.category = value;
-        // SetHiddenCategoryValue(panel, value);
     }
 
-    /*
-    public void SetHiddenCategoryValue(Panel panel, String value){
-        XObject obj = doc.getObject(Constants.ASSET_CLASS);
-        if (obj != null){
-            Hidden hidden = new Hidden(obj.getEditPropertyFieldName("category"), value);
-            panel.add(hidden);
-        }
-    }
-    */
-    
 
     public void addEditor(XObject obj, String name, String keyValue){
         addEditor(obj, name, keyValue, panel, false, true);
@@ -706,12 +695,33 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         if (value!=null)
           map.put(fieldName, value);
     }
-    
+
+
+    // take the category given or get it from the doc
+    private String getCategory() {
+        if (category!=null)
+          return category;
+
+        if (doc==null)
+          return null;
+
+        XObject obj = doc.getObject(Constants.ASSET_CLASS);
+        if (obj!=null) {
+            String category = (String) obj.get(Constants.ASSET_CATEGORY_PROPERTY);
+            if ((category != null)&&(this.category==null)) {
+                return category;
+            }
+        }
+
+        return null;
+    }
     protected Map getFormMap() {
         HashMap formMap = new HashMap();
 
         // add category
-        formMap.put(getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY), category);
+        String cat = getCategory();
+        if (cat!=null)
+         formMap.put(getFieldName(Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY), cat);
 
         // 9 properties from the asset class
         addFormField(form.getElement(), formMap, getFieldName(Constants.ASSET_CLASS, Constants.ASSET_TITLE_PROPERTY));
