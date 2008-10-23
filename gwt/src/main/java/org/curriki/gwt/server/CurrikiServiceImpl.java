@@ -697,17 +697,17 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             rightObj.setLargeStringValue("groups", "XWiki.XWikiAllGroup");
             rightObj.setStringValue("levels", "edit");
             rightObj.setIntValue("allow", 1);
-        }
-        else if (rights != null && rights.equals(Constants.RIGHT_PROTECTED)) {
-
-        }else if(rights != null && rights.equals(Constants.RIGHT_PRIVATE)){
+        } else if (rights != null && rights.equals(Constants.RIGHT_PROTECTED)) {
+            // no rights set. This will make the collection rights apply
+        } else if(rights != null && rights.equals(Constants.RIGHT_PRIVATE)) {
             // remove from review queue
             BaseObject crsObj = assetDoc.getObject(Constants.CURRIKI_REVIEW_STATUS_CLASS);
             Integer reviewpending = (crsObj==null) ? null : crsObj.getIntValue("reviewpending");
-         	if (reviewpending!=null && reviewpending.equals(1)){
+         	if (reviewpending!=null && reviewpending.equals(1)) {
     			crsObj.setIntValue("reviewpending", 0);
     		}
-        }else {
+
+            // set rights
             rightObj = assetDoc.newObject("XWiki.XWikiRights", context);
             rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
