@@ -153,8 +153,7 @@ module.init = function(){
 				,border:false
 				,defaults:{border:false}
 				,items:[{
-					columnWidth:0.7
-					,layout:'form'
+					layout:'form'
 					,id:'search-termPanel-'+modName+'-form'
 					,cls:'search-termPanel-form'
 					,items:[{
@@ -176,8 +175,7 @@ module.init = function(){
 						}
 					}]
 				},{
-					columnWidth:0.10
-					,layout:'form'
+					layout:'form'
 					,items:[{
 						xtype:'button'
 						,id:'search-termPanel-button-'+modName
@@ -192,8 +190,7 @@ module.init = function(){
 						}
 					}]
 				},{
-					columnWidth:0.15
-					,xtype:'box'
+					xtype:'box'
 					,id:'search-termPanel-tips-'+modName
 					,cls:'search-termPanel-tips'
 					,autoEl:{html:'<a href="/xwiki/bin/view/Search/Tips?xpage=popup" target="search_tips" onclick="{var popup=window.open(this.href, \'search_tips\', \'width=725,height=400,status=no,toolbar=no,menubar=no,location=no,resizable=yes\'); popup.focus();} return false;">'+_('search.text.entry.help.button')+'</a>'}
