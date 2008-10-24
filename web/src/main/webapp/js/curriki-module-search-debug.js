@@ -198,6 +198,8 @@ module.init = function(){
 					}]
 				},{
 					layout:'form'
+					,id:'search-termPanel-button'
+					,cls:'search-termPanel-button'
 					,items:[{
 						xtype:'button'
 						,id:'search-termPanel-button-'+modName
