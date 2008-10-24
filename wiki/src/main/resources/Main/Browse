@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1191003289000</creationDate>
-<date>1224691362000</date>
-<contentUpdateDate>1224691362000</contentUpdateDate>
-<version>37.1</version>
+<date>1224714317000</date>
+<contentUpdateDate>1224714317000</contentUpdateDate>
+<version>38.1</version>
 <title>Browse Resources by Subject</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>Make uncategorized a link</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -197,9 +197,7 @@ ${searchpage}#${specificArg}
 #macro(subjectlink $subject $specificQuery $specificArg)
 &lt;div class="subject-link"&gt;
 {pre}
-#if($subject != $uncat)##{
 &lt;a href="#subjectlinkurl($subject $specificArg)"&gt;
-#end##}
 {/pre}
 &lt;span class="subject-title"&gt;
   #if($specificQuery == "" &amp;&amp; $subject != $uncat &amp;&amp; $subject != $nonasset &amp;&amp; $subject != $members &amp;&amp; $subject != $allres)
@@ -222,9 +220,7 @@ ${searchpage}#${specificArg}
 ($searchresults.totalHitcount)
 &lt;/span&gt;
 #end
-#if($subject != $uncat)##{
 &lt;/a&gt;
-#end##}
 &lt;/div&gt;
 #end
 ## end macro subjectlink

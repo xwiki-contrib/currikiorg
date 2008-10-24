@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1218241313000</creationDate>
-<date>1224182529000</date>
-<contentUpdateDate>1224182529000</contentUpdateDate>
-<version>18.1</version>
+<date>1224787264000</date>
+<contentUpdateDate>1224787264000</contentUpdateDate>
+<version>19.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>Names could have a '</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -187,9 +187,11 @@
 		##
 		## Get Name1
 		#set($name1 = $!d.getObject("XWiki.XWikiUsers").getProperty("first_name").getValue())
+		#set($name1 = $name1.replace("'", "&amp;#39;"))
 		##
 		## Get Name2
 		#set($name2 = $!d.getObject("XWiki.XWikiUsers").getProperty("last_name").getValue())
+		#set($name2 = $name2.replace("'", "&amp;#39;"))
 		##
 		## Get URL
 		#set($url = $xwiki.getURL($d.fullName))
