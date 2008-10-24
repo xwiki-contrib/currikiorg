@@ -198,8 +198,8 @@ module.init = function(){
 					}]
 				},{
 					layout:'form'
-					,id:'search-termPanel-button'
-					,cls:'search-termPanel-button'
+					,id:'search-termPanel-buttonColumn-'+modName
+					,cls:'search-termPanel-buttonColumn'
 					,items:[{
 						xtype:'button'
 						,id:'search-termPanel-button-'+modName
