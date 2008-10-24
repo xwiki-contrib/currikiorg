@@ -49,6 +49,16 @@ form.init = function(){
 					,'staterestore':{
 						fn:Search.util.fieldsetPanelRestore
 					}
+					,'collapse':{
+						fn:function(panel){
+							panel.ownerCt.syncSize();
+						}
+					}
+					,'expand':{
+						fn:function(panel){
+							panel.ownerCt.syncSize();
+						}
+					}
 				}
 				,items:[{
 					layout:'column'
