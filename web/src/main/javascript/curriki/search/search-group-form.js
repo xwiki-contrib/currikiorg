@@ -38,6 +38,7 @@ form.init = function(){
 				,autoHeight:true
 				,collapsible:true
 				,collapsed:true
+				,animCollapse:false
 				,border:true
 				,stateful:true
 				,stateEvents:['expand','collapse']
