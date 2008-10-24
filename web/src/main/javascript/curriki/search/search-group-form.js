@@ -16,7 +16,7 @@ var data = Search.data[modName];
 form.init = function(){
 	console.log('form.group: init');
 
-	var comboWidth = 160;
+	var comboWidth = 140;
 	var comboListWidth = 250;
 
 	form.termPanel = Search.util.createTermPanel(modName, form);

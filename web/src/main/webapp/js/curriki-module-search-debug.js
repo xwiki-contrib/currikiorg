@@ -641,7 +641,7 @@ var data = Search.data[modName];
 form.init = function(){
 	console.log('form.'+modName+': init');
 
-	var comboWidth = 160;
+	var comboWidth = 140;
 	var comboListWidth = 250;
 
 	// Plugin to add icons to ICT combo box
@@ -1302,7 +1302,7 @@ var data = Search.data[modName];
 form.init = function(){
 	console.log('form.group: init');
 
-	var comboWidth = 160;
+	var comboWidth = 140;
 	var comboListWidth = 250;
 
 	form.termPanel = Search.util.createTermPanel(modName, form);
@@ -1776,7 +1776,7 @@ var data = Search.data[modName];
 form.init = function(){
 	console.log('form.member: init');
 
-	var comboWidth = 160;
+	var comboWidth = 140;
 	var comboListWidth = 250;
 
 	form.termPanel = Search.util.createTermPanel(modName, form);
