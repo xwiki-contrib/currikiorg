@@ -246,16 +246,14 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            double initialVersion = 5.1;
-            if (newdoc.getObject("XWiki.CompositeAssetClass") != null) {
-                // curriculum collection
-                initialVersion = 6.1;
-            }
-            if (version == initialVersion) {
+            if (version==2.1) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
-            } else if (version < initialVersion) {
+            } else if (!newdoc.getVersion().endsWith(".1")||version==1.1) {
+                // we ignore minor version edits and the first version
                 return;
             }
+
+
         }
 
         List params = new ArrayList();

@@ -255,7 +255,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             obj.setDBStringListValue(Constants.ASSET_FW_ITEMS_PROPERTY, fwList);
         }
 
-        context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewcollection"), context);
+        context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewcollection"), true, context);
         return doc;
     }
 
@@ -282,7 +282,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 }
             }
 
-            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewasset"), context);
+            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.initmetadatafornewasset"), true, context);
 
             return newDocument(new Document(), doc, true, false, true, false, context);
         } catch (Exception e) {
@@ -479,7 +479,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             //protectPage(doc, context);
 
-            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.startcreatingcompositeasset"), context);
+            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.startcreatingcompositeasset"), true, context);
 
             insertSubAsset(parent, doc.getFullName(), position);
 
@@ -508,7 +508,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             protectPage(doc, context);
 
-            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.startcreatingcompositeasset"), context);
+            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.startcreatingcompositeasset"), true, context);
 
             return newDocument(new Document(), doc, true, false, true, false, context);
         } catch (Exception e) {
@@ -525,7 +525,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             addSubAsset(compositeAssetDoc, Constants.DIRECTION + directionObj.getNumber(), position, context);
             compositeAssetDoc.setAuthor(context.getUser());
-            context.getWiki().saveDocument(compositeAssetDoc, context.getMessageTool().get("curriki.comment.adddirectionblock"), context);
+            context.getWiki().saveDocument(compositeAssetDoc, context.getMessageTool().get("curriki.comment.adddirectionblock"), true, context);
 
         } catch (Exception e) {
             throw getXWikiGWTException(e);
@@ -660,7 +660,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             XWikiContext context = getXWikiContext();
             XWikiDocument assetDoc = context.getWiki().getDocument(assetName, context);
             applyRightsPolicy(assetDoc, context);
-            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.applyrights"), context);
+            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.applyrights"), true, context);
         } catch (Exception e) {
             throw getXWikiGWTException(e);
         }
@@ -813,7 +813,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             obj.setIntValue("allow", 1);
         }
 
-        context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.protectspace"), context);
+        context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.protectspace"), true, context);
     }
 
 
@@ -920,7 +920,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
         protectPage(assetDoc, context);
 
-        context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createnewsourceasset"), context);
+        context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createnewsourceasset"), true, context);
 
         return assetDoc;
     }
@@ -1046,7 +1046,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
         // Clear rights objects otherwise this will trigger a remove object although these have never been saved
         assetDoc.setObjects("XWiki.XWikiRights", new Vector());
         protectPage(assetDoc, context);
-        context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createnewsourceassetfromtemplate"), context);
+        context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createnewsourceassetfromtemplate"), true, context);
         return assetDoc;
     }
 
@@ -1072,7 +1072,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
                 params.add(newAssetDoc.getFullName());
                 params.add(prettyName);
                 String comment = context.getMessageTool().get("curriki.comment.duplicatetemplatesourceasset", params);
-                context.getWiki().saveDocument(compositeAssetDoc, comment, context);
+                context.getWiki().saveDocument(compositeAssetDoc, comment, true, context);
                 return newAssetDoc.getFullName();
             }
         } catch (Exception e) {
@@ -1192,15 +1192,16 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             assetObj.set(Constants.ASSET_KEYWORDS_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_KEYWORDS_PROPERTY), context);
             assetObj.set(Constants.ASSET_LANGUAGE_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_LANGUAGE_PROPERTY), context);
 
-            if (log.isErrorEnabled())
-             log.error("Category: " + getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
+            // if (log.isDebugEnabled())
+            //  log.debug("Category: " + getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY));
+
             assetObj.set(Constants.ASSET_CATEGORY_PROPERTY, getFieldValue(formMap, Constants.ASSET_CLASS, Constants.ASSET_CATEGORY_PROPERTY), context);
 
             BaseObject licenceObj = assetDoc.getObject(Constants.ASSET_LICENCE_CLASS, true, context);
             licenceObj.set(Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_RIGHT_HOLDER_PROPERTY), context);
             licenceObj.set(Constants.ASSET_LICENCE_TYPE_PROPERTY, getFieldValue(formMap, Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_TYPE_PROPERTY), context);
 
-            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.updatemetadata"), context);
+            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.updatemetadata"), true, context);
 
         } catch (Exception e) {
             if (log.isErrorEnabled())
@@ -1291,7 +1292,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             BaseObject obj = assetDoc.getObject(Constants.TEXTASSET_CLASS,assetDoc.createNewObject(Constants.TEXTASSET_CLASS, context));
             obj.setLongValue(Constants.TEXTASSET_TYPE_PROPERTY, type);
 
-            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createtextsourceasset"), context);
+            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createtextsourceasset"), true, context);
 
             return newDocument(new Document(), assetDoc, true, false, true, false, context);
 
@@ -1308,7 +1309,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
             BaseObject obj = assetDoc.getObject(Constants.EXTERNAL_ASSET_CLASS, assetDoc.createNewObject(Constants.EXTERNAL_ASSET_CLASS, context));
             obj.setStringValue(Constants.EXTERNAL_ASSET_LINK_PROPERTY, link);
 
-            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createlinksourceasset"), context);
+            context.getWiki().saveDocument(assetDoc, context.getMessageTool().get("curriki.comment.createlinksourceasset"), true, context);
 
             return newDocument(new Document(), assetDoc, true, false, true, false, context);
 
@@ -1973,7 +1974,7 @@ public class CurrikiServiceImpl extends XWikiServiceImpl implements CurrikiServi
 
             videoObj.setStringValue("video_id", videoId);
 
-            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.updatedviditalkid"), context);
+            context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.updatedviditalkid"), (videoObj==null), context);
 
             return newDocument(new Document(), doc, true, false, true, false, context);
         } catch (Exception e) {

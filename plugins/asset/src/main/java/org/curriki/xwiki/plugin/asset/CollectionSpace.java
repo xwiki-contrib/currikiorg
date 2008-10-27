@@ -270,6 +270,6 @@ public class CollectionSpace {
             obj.setIntValue("allow", 1);
         }
 
-        context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.protectspace"), context);
+        context.getWiki().saveDocument(doc, context.getMessageTool().get("curriki.comment.protectspace"), true, context);
     }
 }

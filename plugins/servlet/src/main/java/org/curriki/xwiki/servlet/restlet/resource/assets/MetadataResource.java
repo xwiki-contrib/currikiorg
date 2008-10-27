@@ -130,7 +130,7 @@ public class MetadataResource extends BaseResource {
         }
 
         try {
-            asset.save("Set Metadata");
+            asset.save("Set Metadata", true);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
         }

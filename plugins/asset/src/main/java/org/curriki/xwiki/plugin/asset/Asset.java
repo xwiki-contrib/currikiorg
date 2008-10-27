@@ -80,7 +80,7 @@ public class Asset extends CurrikiDocument {
 
         Asset assetDoc = new Asset(newDoc, context);
         assetDoc.init(parentAsset, publishSpace);
-        assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.createnewsourceasset"));
+        assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.createnewsourceasset"), true);
 
         return assetDoc;
     }
@@ -557,7 +557,7 @@ public class Asset extends CurrikiDocument {
         if (page != null) {
             asset.addSubasset(page);
         }
-        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"));
+        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"), true);
         return asset;
     }
 
@@ -572,7 +572,7 @@ public class Asset extends CurrikiDocument {
         if (page != null) {
             asset.addSubasset(page);
         }
-        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"));
+        saveDocument(context.getMessageTool().get("curriki.comment.createfoldersourceasset"), true);
         return asset;
     }
 
@@ -581,7 +581,7 @@ public class Asset extends CurrikiDocument {
         ExternalAsset asset = subclassAs(ExternalAsset.class);
 
         asset.addLink(link);
-        saveDocument(context.getMessageTool().get("curriki.comment.createlinksourceasset"));
+        saveDocument(context.getMessageTool().get("curriki.comment.createlinksourceasset"), true);
         return asset;
     }
 
@@ -590,7 +590,7 @@ public class Asset extends CurrikiDocument {
         VIDITalkAsset asset = subclassAs(VIDITalkAsset.class);
 
         asset.addVideoId(videoId);
-        saveDocument(context.getMessageTool().get("curriki.comment.createviditalksourceasset"));
+        saveDocument(context.getMessageTool().get("curriki.comment.createviditalksourceasset"), true);
         return asset;
     }
 
@@ -599,7 +599,7 @@ public class Asset extends CurrikiDocument {
         TextAsset asset = subclassAs(TextAsset.class);
 
         asset.addText(type, content);
-        saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"));
+        saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"), true);
         return asset;
     }
 
@@ -610,7 +610,7 @@ public class Asset extends CurrikiDocument {
         if (doc.getAttachmentList().size() > 0) {
             XWikiAttachment attach = doc.getAttachmentList().get(0);
             determineCategory(attach.getFilename());
-            saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"));
+            saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"), true);
         }
 
         return asset;
