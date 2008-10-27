@@ -7,6 +7,16 @@ Ext.override(Ext.layout.FormLayout, {
     }
 });
 
+/* CURRIKI-2989
+ * From https://extjs.com/forum/showthread.php?p=195381
+ */
+Ext.override(Ext.layout.FormLayout, {
+    getAnchorViewSize : function(ct, target)
+    {
+        return (ct.body || ct.el).getStyleSize();
+    }
+});
+
 Ext.override(Ext.layout.AnchorLayout, {
     getAnchorViewSize : function(ct, target){
         var el = ct.body||ct.el; 
@@ -144,33 +154,3 @@ Ext.override(Ext.ux.Andrie.pPageSize, {
 		this.updateStore();
 	}
 });
-
-/*
-Ext.override(Ext.Shadow.prototype, {
-	realign: function(l, t, w, h){
-		if(!this.el){
-		    return;
-		}
-		var a = this.adjusts, d = this.el.dom, s = d.style;
-		if (s.visibility === "hidden" || s.display === "none"){
-			return;
-		}
-		var iea = 0;
-		s.left = (l+a.l)+"px";
-		s.top = (t+a.t)+"px";
-		var sw = (w+a.w), sh = (h+a.h), sws = sw +"px", shs = sh + "px";
-		if(s.width != sws || s.height != shs){
-		    s.width = sws;
-		    s.height = shs;
-		    if(!Ext.isIE){
-			var cn = d.childNodes;
-			var sww = Math.max(0, (sw-12))+"px";
-			cn[0].childNodes[1].style.width = sww;
-			cn[1].childNodes[1].style.width = sww;
-			cn[2].childNodes[1].style.width = sww;
-			cn[1].style.height = Math.max(0, (sh-12))+"px";
-		    }
-		}
-    }
-});
-*/

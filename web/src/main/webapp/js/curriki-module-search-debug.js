@@ -717,10 +717,16 @@ form.init = function(){
 					}
 					,'expand':{
 						fn:function(panel){
+							// CURRIKI-2989
+							//  - Force a refresh of the grid view, as this
+							//    seems to make the advanced search fieldset
+							//    visible in IE7
+							Ext.getCmp('search-results-'+modName).getView().refresh();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
+							Ext.getCmp('search-results-'+modName).getView().refresh();
 						}
 					}
 				}
@@ -1348,10 +1354,16 @@ form.init = function(){
 					}
 					,'expand':{
 						fn:function(panel){
+							// CURRIKI-2989
+							//  - Force a refresh of the grid view, as this
+							//    seems to make the advanced search fieldset
+							//    visible in IE7
+							Ext.getCmp('search-results-'+modName).getView().refresh();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
+							Ext.getCmp('search-results-'+modName).getView().refresh();
 						}
 					}
 				}
@@ -1831,10 +1843,16 @@ form.init = function(){
 					}
 					,'expand':{
 						fn:function(panel){
+							// CURRIKI-2989
+							//  - Force a refresh of the grid view, as this
+							//    seems to make the advanced search fieldset
+							//    visible in IE7
+							Ext.getCmp('search-results-'+modName).getView().refresh();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
+							Ext.getCmp('search-results-'+modName).getView().refresh();
 						}
 					}
 				}
