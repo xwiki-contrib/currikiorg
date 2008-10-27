@@ -88,6 +88,16 @@ form.init = function(){
 					,'staterestore':{
 						fn:Search.util.fieldsetPanelRestore
 					}
+					,'expand':{
+						fn:function(panel){
+							panel.ownerCt.doLayout();
+						}
+					}
+					,'collapse':{
+						fn:function(panel){
+							panel.ownerCt.doLayout();
+						}
+					}
 				}
 				,items:[{
 					layout:'column'

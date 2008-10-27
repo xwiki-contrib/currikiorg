@@ -4,8 +4,7 @@
 /*global _ */
 
 (function(){
-var modName = 'group';
-
+var modName = 'member';
 Ext.ns('Curriki.module.search.form.'+modName);
 
 var Search = Curriki.module.search;
@@ -14,7 +13,7 @@ var form = Search.form[modName];
 var data = Search.data[modName];
 
 form.init = function(){
-	console.log('form.group: init');
+	console.log('form.member: init');
 
 	var comboWidth = 140;
 	var comboListWidth = 250;
@@ -49,6 +48,16 @@ form.init = function(){
 					,'staterestore':{
 						fn:Search.util.fieldsetPanelRestore
 					}
+					,'expand':{
+						fn:function(panel){
+							panel.ownerCt.doLayout();
+						}
+					}
+					,'collapse':{
+						fn:function(panel){
+							panel.ownerCt.doLayout();
+						}
+					}
 				}
 				,items:[{
 					layout:'column'
@@ -65,8 +74,8 @@ form.init = function(){
 						}
 						,items:[{
 							xtype:'combo'
-							,fieldLabel:'Subject'
 							,id:'combo-subject-'+modName
+							,fieldLabel:'Subject'
 							,hiddenName:'subjectparent'
 							,width:comboWidth
 							,listWidth:comboListWidth
@@ -76,7 +85,7 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.CurrikiSpaceClass_topic_FW_masterFramework.WebHome.UNSPECIFIED')
+							,emptyText:_('XWiki.XWikiUsers_topics_FW_masterFramework.WebHome.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 							,listeners:{
@@ -123,34 +132,18 @@ form.init = function(){
 						}
 						,items:[{
 							xtype:'combo'
-							,id:'combo-level-'+modName
-							,fieldLabel:'Level'
+							,id:'combo-member_type-'+modName
+							,fieldLabel:'Member Type'
 							,mode:'local'
 							,width:comboWidth
 							,listWidth:comboListWidth
-							,store:data.filter.store.level
-							,hiddenName:'level'
-							,displayField:'level'
+							,store:data.filter.store.member_type
+							,hiddenName:'member_type'
+							,displayField:'member_type'
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.CurrikiSpaceClass_educationLevel_UNSPECIFIED')
-							,selectOnFocus:true
-							,forceSelection:true
-						},{
-							xtype:'combo'
-							,id:'combo-language-'+modName
-							,fieldLabel:'Language'
-							,hiddenName:'language'
-							,mode:'local'
-							,width:comboWidth
-							,listWidth:comboListWidth
-							,store:data.filter.store.language
-							,displayField:'language'
-							,valueField:'id'
-							,typeAhead:true
-							,triggerAction:'all'
-							,emptyText:_('XWiki.CurrikiSpaceClass_language_UNSPECIFIED')
+							,emptyText:_('XWiki.XWikiUsers_member_type_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
@@ -162,18 +155,18 @@ form.init = function(){
 						}
 						,items:[{
 							xtype:'combo'
-							,id:'combo-policy-'+modName
-							,fieldLabel:'Membership Policy'
-							,hiddenName:'policy'
-							,mode:'local'
+							,id:'combo-country-'+modName
+							,fieldLabel:'Country'
+							,hiddenName:'country'
 							,width:comboWidth
 							,listWidth:comboListWidth
-							,store:data.filter.store.policy
-							,displayField:'policy'
+							,mode:'local'
+							,store:data.filter.store.country
+							,displayField:'country'
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('search.XWiki.SpaceClass_policy_UNSPECIFIED')
+							,emptyText:_('XWiki.XWikiUsers_country_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
@@ -183,40 +176,53 @@ form.init = function(){
 		]
 	}
 
-	form.columnModel = new Ext.grid.ColumnModel([{
-			id: 'policy'
-			,header: _('search.group.column.header.policy')
-			,width: 62
-			,dataIndex: 'policy'
-			,sortable:true
-			,renderer: data.renderer.policy
-//			,tooltip: _('search.group.column.header.policy')
+	form.columnModelList = [{
+			id: 'picture'
+			,header: _('search.member.column.header.picture')
+			,width: 116
+			,dataIndex: 'picture'
+			,sortable:false
+			,resizable:false
+			,menuDisabled:true
+			,renderer: data.renderer.picture
+//			,tooltip:_('search.member.column.header.picture')
 		},{
-			id: 'title'
-			,header: _('search.group.column.header.name')
-			,width: 213
-			,dataIndex: 'title'
+			id: 'name1'
+			,header: _('search.member.column.header.name1')
+			,width: 120
+			,dataIndex: 'name1'
 			,sortable:true
 			,hideable:false
-			,renderer: data.renderer.title
-//			,tooltip:_('search.group.column.header.name')
+			,renderer: data.renderer.name1
+//			,tooltip:_('search.member.column.header.name1')
 		},{
-			id: 'description'
-			,width: 225
-			,header: _('search.group.column.header.description')
-			,dataIndex:'description'
-			,sortable:false
-			,renderer: data.renderer.description
-//			,tooltip: _('search.group.column.header.description')
-		},{
-			id: 'updated'
-			,width: 96
-			,header: _('search.group.column.header.updated')
-			,dataIndex:'updated'
+			id: 'name2'
+			,width: 120
+			,header: _('search.member.column.header.name2')
+			,dataIndex:'name2'
 			,sortable:true
-			,renderer: data.renderer.updated
-//			,tooltip: _('search.group.column.header.updated')
-	}]);
+			,hideable:false
+			,renderer: data.renderer.name2
+//			,tooltip: _('search.member.column.header.name2')
+		},{
+			id: 'bio'
+			,width: 120
+			,header: _('search.member.column.header.bio')
+			,dataIndex:'bio'
+			,sortable:false
+			,renderer: data.renderer.bio
+//			,tooltip: _('search.member.column.header.bio')
+		},{
+			id: 'contributions'
+			,width: 120
+			,header: _('search.member.column.header.contributions')
+			,dataIndex:'contributions'
+			,sortable:false
+			,renderer: data.renderer.contributions
+//			,tooltip: _('search.member.column.header.contributions')
+	}];
+
+	form.columnModel = new Ext.grid.ColumnModel(form.columnModelList);
 
 	form.resultsPanel = {
 		xtype:'grid'
@@ -225,7 +231,7 @@ form.init = function(){
 		,border:false
 		,autoHeight:true
 		,width:Search.settings.gridWidth
-		,autoExpandColumn:'description'
+		,autoExpandColumn:'bio'
 		,stateful:true
 		,frame:false
 		,stripeRows:true

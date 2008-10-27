@@ -83,25 +83,25 @@ cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js
 cat $PARTNER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-partner-debug.js
 
 SEARCH="\
-	curriki/search/search-global.js \
-	curriki/search/search-util.js \
+	curriki/search/global.js \
+	curriki/search/util.js \
 	\
-	curriki/search/search-resource-data.js \
-	curriki/search/search-resource-form.js \
+	curriki/search/resource-data.js \
+	curriki/search/resource-form.js \
 	\
-	curriki/search/search-group-data.js \
-	curriki/search/search-group-form.js \
+	curriki/search/group-data.js \
+	curriki/search/group-form.js \
 	\
-	curriki/search/search-member-data.js \
-	curriki/search/search-member-form.js \
+	curriki/search/member-data.js \
+	curriki/search/member-form.js \
 	\
-	curriki/search/search-blog-data.js \
-	curriki/search/search-blog-form.js \
+	curriki/search/blog-data.js \
+	curriki/search/blog-form.js \
 	\
-	curriki/search/search-curriki-data.js \
-	curriki/search/search-curriki-form.js \
+	curriki/search/curriki-data.js \
+	curriki/search/curriki-form.js \
 	\
-	curriki/search/search-form.js \
+	curriki/search/form.js \
 	"
 
 cat $SEARCH | $COMPRESS_JS > ../webapp/js/curriki-module-search.js
