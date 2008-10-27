@@ -90,12 +90,10 @@ form.init = function(){
 					}
 					,'expand':{
 						fn:function(panel){
-							panel.doLayout();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
-							panel.doLayout();
 						}
 					}
 				}
