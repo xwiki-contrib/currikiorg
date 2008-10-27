@@ -14,7 +14,7 @@ var form = Search.form[modName];
 var data = Search.data[modName];
 
 form.init = function(){
-	console.log('form.group: init');
+	console.log('form.'+modName+': init');
 
 	var comboWidth = 140;
 	var comboListWidth = 250;
@@ -24,7 +24,7 @@ form.init = function(){
 
 	form.filterPanel = {
 		xtype:'form'
-		,labelAlign:'top'
+		,labelAlign:'left'
 		,id:'search-filterPanel-'+modName
 		,formId:'search-filterForm-'+modName
 		,border:false
@@ -51,12 +51,12 @@ form.init = function(){
 					}
 					,'expand':{
 						fn:function(panel){
-							panel.ownerCt.doLayout();
+							panel.doLayout();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
-							panel.ownerCt.doLayout();
+							panel.doLayout();
 						}
 					}
 				}

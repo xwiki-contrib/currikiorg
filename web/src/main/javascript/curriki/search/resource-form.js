@@ -90,12 +90,12 @@ form.init = function(){
 					}
 					,'expand':{
 						fn:function(panel){
-							panel.ownerCt.doLayout();
+							panel.doLayout();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
-							panel.ownerCt.doLayout();
+							panel.doLayout();
 						}
 					}
 				}
