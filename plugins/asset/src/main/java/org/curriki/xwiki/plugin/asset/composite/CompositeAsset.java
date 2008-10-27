@@ -365,13 +365,19 @@ public abstract class CompositeAsset extends Asset {
         }
 
         // Now remove anything left
+        /*
+        List removeList = new ArrayList();
         for (Iterator<BaseObject> ei = existing.iterator(); ei.hasNext(); ) {
             BaseObject b = ei.next();
             if (b != null && b.getLongValue(Constants.SUBASSET_CLASS_ORDER) == -2) {
-                //assetDoc.removeObject(b);
-                ei.remove();
+                removeList.add(b);
             }
         }
+        for (Iterator<BaseObject> eid = removeList.iterator(); eid.hasNext(); ) {
+            assetDoc.removeObject(eid.next());
+        }
+        */
+
     }
 
     protected long getLastPosition() {
