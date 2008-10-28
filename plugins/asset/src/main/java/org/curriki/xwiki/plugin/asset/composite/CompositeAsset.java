@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
-import java.util.Iterator;
 
 /**
  */
@@ -401,9 +400,10 @@ public abstract class CompositeAsset extends Asset {
         List<String> results = new ArrayList<String>();
 
         if (pageList!=null) {
+            String favorites = getSpace()+"."+ Constants.FAVORITES_COLLECTION_PAGE;
             for (String page : pageList) {
                 try {
-                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), page, context) && context.getWiki().exists(page, context)) {
+                    if (context.getWiki().getRightService().hasAccessLevel("view", context.getUser(), page, context) && context.getWiki().exists(page, context) && !favorites.equals(page)) {
                         results.add(page);
                     }
                 } catch (XWikiException e) {
