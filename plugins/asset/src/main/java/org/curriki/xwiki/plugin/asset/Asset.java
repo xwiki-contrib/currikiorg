@@ -239,8 +239,10 @@ public class Asset extends CurrikiDocument {
             rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
             rightObj.setStringValue("levels", "view");
             rightObj.setIntValue("allow", 1);
-	        //private assets must be removed from review queue
-	        removeFromReviewQueue();
+
+            // TODO: something here caused CURRIKI-3100 so the rest of the metadata could not get saved
+            //private assets must be removed from review queue
+            removeFromReviewQueue();
         }
     }
 
@@ -866,7 +868,9 @@ public class Asset extends CurrikiDocument {
      * Remove the asset from the review queue
      */
     public void removeFromReviewQueue(){
-    	use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+        // TODO:  Something here caused CURRIKI-3100 making the rest of the metadata not get saved
+        //        Could be the use of "use" as that is not being used elsewhere here
+        use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
         Integer reviewpending = (Integer)getValue("reviewpending");
 		if(reviewpending!=null && reviewpending.equals(1)){
 			set("reviewpending", "0");

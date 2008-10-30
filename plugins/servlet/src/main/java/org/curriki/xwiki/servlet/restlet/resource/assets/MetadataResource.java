@@ -97,14 +97,6 @@ public class MetadataResource extends BaseResource {
         }
 
         // SRI2
-        // rights
-        if (json.has("rights")) {
-            try {
-                asset.applyRightsPolicy(json.getString("rights"));
-            } catch (XWikiException e) {
-                throw error(Status.SERVER_ERROR_INTERNAL, e.getMessage());
-            }
-        }
         // keywords
         if (json.has("keywords")) {
             assetObj.set(Constants.ASSET_CLASS_KEYWORDS,  json.getString("keywords"));
@@ -127,6 +119,18 @@ public class MetadataResource extends BaseResource {
         // rights_holder
         if (json.has("right_holder")) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER,  json.getString("right_holder"));
+        }
+
+        // CURRIKI-3100
+        //   Moved last as something here was making the other SRI2 items not get saved.
+        //   TODO: Figure out why this was breaking things
+        // rights
+        if (json.has("rights")) {
+            try {
+                asset.applyRightsPolicy(json.getString("rights"));
+            } catch (XWikiException e) {
+                throw error(Status.SERVER_ERROR_INTERNAL, e.getMessage());
+            }
         }
 
         try {
