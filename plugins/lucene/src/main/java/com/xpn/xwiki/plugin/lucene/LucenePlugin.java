@@ -145,7 +145,17 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
 
     public synchronized int rebuildIndex(XWikiContext context)
     {
-        return indexRebuilder.startRebuildIndex(context);
+        return indexRebuilder.startRebuildIndex(null, true, false, context);
+    }
+
+    public synchronized int rebuildIndex(boolean clearIndex, boolean refresh, XWikiContext context)
+    {
+        return indexRebuilder.startRebuildIndex(null, clearIndex, refresh, context);
+    }
+
+    public synchronized int reindexFromQuery(String sql, boolean clearIndex, boolean refresh, XWikiContext context)
+    {
+        return indexRebuilder.startRebuildIndex(sql, clearIndex, refresh, context);
     }
 
     /**
@@ -638,5 +648,9 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
     public long getActiveQueueSize()
     {
         return indexUpdater.getActiveQueueSize();
+    }
+
+    public long getPreIndexQueueSize() {
+        return (indexRebuilder==null) ? 0 : indexRebuilder.getPreIndexQueueSize();
     }
 }

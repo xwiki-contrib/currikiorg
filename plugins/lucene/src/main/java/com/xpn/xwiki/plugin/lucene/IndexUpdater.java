@@ -34,12 +34,13 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.MDC;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.queryParser.QueryParser;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
@@ -146,7 +147,7 @@ public class IndexUpdater extends AbstractXWikiRunnable
                     openSearcher();
                     while (!this.queue.isEmpty()) {
                         IndexData data = this.queue.remove();
-                        List<Integer> oldDocs = getOldIndexDocIds(data);
+                        List<Integer> oldDocs = (data==null) ? null : getOldIndexDocIds(data);
                         if (oldDocs != null) {
                             for (Integer id : oldDocs) {
                                 if (LOG.isDebugEnabled()) {
@@ -579,8 +580,16 @@ public class IndexUpdater extends AbstractXWikiRunnable
     {
         if (writer != null)
             return writer.docCount();
-
-        return -1;
+        else {
+            try {
+                openWriter(false);
+                return writer.docCount();
+            } catch (Exception e) {
+                return -1;
+            } finally {
+                closeWriter();
+            }
+        }
     }
 
     /**
@@ -589,5 +598,47 @@ public class IndexUpdater extends AbstractXWikiRunnable
     public long getActiveQueueSize()
     {
         return this.activesIndexedDocs;
+    }
+
+    public boolean isIndexed(String wiki, String pagename) {
+        try {
+            openSearcher();
+            QueryParser qp = new QueryParser(IndexFields.DOCUMENT_FULLNAME, analyzer);
+            Query query = qp.parse(pagename);
+            Hits hits = searcher.search(query);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("search for document " + pagename + " in wiki " + wiki + " returned " + hits.length() + " hits");
+            }
+            if (hits==null || hits.length()==0)  {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("document " + pagename + " in wiki " + wiki + " is not indexed");
+                }
+                return false;
+            }
+
+            Iterator it = hits.iterator();
+            while (it.hasNext()) {
+                Hit hit = (Hit) it.next();
+                Document doc = hit.getDocument();
+                if (wiki.equals(doc.get(IndexFields.DOCUMENT_WIKI))&&pagename.equals(doc.get(IndexFields.DOCUMENT_FULLNAME))) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("document " + pagename + " in wiki " + wiki + " is already indexed");
+                    }
+                    return true;
+                }
+            }
+            if (LOG.isErrorEnabled()) {
+                LOG.error("document " + pagename + " in wiki " + wiki + " was not found in search result");
+            }
+            return false;
+        } catch (Exception e) {
+            if (LOG.isErrorEnabled()) {
+                LOG.debug("error checking if document " + pagename + " in wiki " + wiki + " is indexed", e);
+            }
+            return false;
+        } finally {
+            closeSearcher();
+        }
     }
 }

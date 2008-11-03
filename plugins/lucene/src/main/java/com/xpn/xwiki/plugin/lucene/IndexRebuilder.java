@@ -84,16 +84,28 @@ public class IndexRebuilder extends AbstractXWikiRunnable
     /** Variable used for indicating that a rebuild is already in progress. */
     private boolean rebuildInProgress = false;
 
+    /** sql query to reindex with */
+    private String sql = null;
+
+    /** clear index before rebuilding */
+    private boolean clearIndex = false;
+
+    /** only index if the page is not in the index */
+    private boolean refresh = false;
+
+    /** documents currently being checked **/
+    private long tocheck = 0;
+    
     public IndexRebuilder(IndexUpdater indexUpdater, XWikiContext context)
     {
         this.indexUpdater = indexUpdater;
         if (indexUpdater.needInitialBuild) {
-            this.startRebuildIndex(context);
+            this.startRebuildIndex(null, false, false, context);
             LOG.info("Launched initial lucene indexing");
         }
     }
 
-    public synchronized int startRebuildIndex(XWikiContext context)
+    public synchronized int startRebuildIndex(String sql, boolean clearIndex, boolean refresh, XWikiContext context)
     {
         if (rebuildInProgress) {
             LOG.warn("Cannot launch rebuild because a build is in progress");
@@ -101,6 +113,10 @@ public class IndexRebuilder extends AbstractXWikiRunnable
         } else {
             this.rebuildInProgress = true;
             this.context = context;
+            this.sql = sql;
+            this.clearIndex = clearIndex;
+            this.refresh = refresh;
+            
             Thread indexRebuilderThread = new Thread(this, "Lucene Index Rebuilder");
             // The JVM should be allowed to shutdown while this thread is running
             indexRebuilderThread.setDaemon(true);
@@ -184,7 +200,10 @@ public class IndexRebuilder extends AbstractXWikiRunnable
      */
     private int rebuildIndex(XWikiContext context)
     {
-        this.indexUpdater.cleanIndex();
+        // only clear index if it is asked
+        if (this.clearIndex)
+         this.indexUpdater.cleanIndex();
+
         int retval = 0;
         Collection<String> wikiServers;
         XWiki xwiki = context.getWiki();
@@ -213,6 +232,10 @@ public class IndexRebuilder extends AbstractXWikiRunnable
         return retval;
     }
 
+    public long getPreIndexQueueSize() {
+        return tocheck;
+    }
+
     /**
      * Adds the content of a given wiki to the indexUpdater's queue.
      * 
@@ -232,14 +255,32 @@ public class IndexRebuilder extends AbstractXWikiRunnable
             context.setDatabase(wikiName);
             Collection<String> docNames = null;
             try {
-                docNames = xwiki.getStore().searchDocumentsNames("", context);
+                docNames = xwiki.getStore().searchDocumentsNames((this.sql!=null) ? this.sql : "", context);
             } catch (XWikiException ex) {
                 LOG.warn(String.format(
                     "Error getting document names for wiki [%s]. Internal error is: $s",
                     wikiName, ex.getMessage()));
                 return -1;
             }
+
+            // update to check size
+            tocheck = (docNames==null) ? 0 : docNames.size();
+
             for (String docName : docNames) {
+                tocheck--;
+                
+                if (refresh) {
+                    // we should check if the page exists in the index
+                    if (this.indexUpdater.isIndexed(wikiName, docName))  {
+                        if (LOG.isDebugEnabled())
+                         LOG.debug("bypassing document " + wikiName + ":" + docName);
+                        continue;
+                    }
+                }
+
+                if (LOG.isDebugEnabled())
+                    LOG.debug("indexing document " + wikiName + ":" + docName);
+
                 XWikiDocument document;
                 try {
                     document = xwiki.getDocument(docName, context);

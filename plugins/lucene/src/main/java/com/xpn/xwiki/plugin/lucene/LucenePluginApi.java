@@ -23,7 +23,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.api.Context;
+import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.api.Attachment;
 import com.xpn.xwiki.plugin.PluginApi;
 
 /**
@@ -73,7 +77,7 @@ public class LucenePluginApi extends PluginApi<LucenePlugin>
 
     /**
      * Starts a rebuild of the whole index.
-     * 
+     *
      * @param wiki
      * @param context
      * @return Number of documents scheduled for indexing. -1 in case of errors
@@ -83,6 +87,75 @@ public class LucenePluginApi extends PluginApi<LucenePlugin>
     {
         if (wiki.hasAdminRights()) {
             return getProtectedPlugin().rebuildIndex(context.getContext());
+        }
+        return REBUILD_NOT_ALLOWED;
+    }
+
+    /**
+     * Starts a rebuild of the whole index.
+     *
+     * @return Number of documents scheduled for indexing. -1 in case of errors
+     */
+    public int rebuildIndex(boolean clearIndex)
+    {
+        if (hasAdminRights()) {
+            return getProtectedPlugin().rebuildIndex(clearIndex, false, context);
+        }
+        return REBUILD_NOT_ALLOWED;
+    }
+
+    /**
+     * Starts a rebuild of the whole index.
+     *
+     * @return Number of documents scheduled for indexing. -1 in case of errors
+     */
+    public int rebuildIndex(boolean clearIndex, boolean refresh)
+    {
+        if (hasAdminRights()) {
+            return getProtectedPlugin().rebuildIndex(clearIndex, refresh, context);
+        }
+        return REBUILD_NOT_ALLOWED;
+    }
+
+
+    /**
+     * Starts a rebuild of the whole index.
+     *
+     * @return Number of documents scheduled for indexing. -1 in case of errors
+     */
+    public int reindexFromQuery(String sql, boolean clearIndex, boolean refresh)
+    {
+        if (hasAdminRights()) {
+            return getProtectedPlugin().reindexFromQuery(sql, clearIndex, refresh, context);
+        }
+        return REBUILD_NOT_ALLOWED;
+    }
+
+
+    public int queueDocument(Document doc, XWikiContext context)
+    {
+        if (hasAdminRights()) {
+            getProtectedPlugin().queueDocument(doc.getDocument(), context);
+            getProtectedPlugin().queueAttachment(doc.getDocument(), context);
+            return 1;
+        }
+        return REBUILD_NOT_ALLOWED;
+    }
+
+    public int queueAttachment(Document doc, Attachment attach, XWikiContext context)
+    {
+        if (hasAdminRights()) {
+            getProtectedPlugin().queueAttachment(doc.getDocument(), attach.getAttachment(), context);
+            return 1;
+        }
+        return REBUILD_NOT_ALLOWED;
+    }
+
+    public int queueAttachment(Document doc, XWikiContext context)
+    {
+        if (hasAdminRights()) {
+            getProtectedPlugin().queueAttachment(doc.getDocument(), context);
+            return 1;
         }
         return REBUILD_NOT_ALLOWED;
     }
@@ -197,6 +270,11 @@ public class LucenePluginApi extends PluginApi<LucenePlugin>
     public long getLuceneDocCount()
     {
         return getProtectedPlugin().getLuceneDocCount();
+    }
+
+    public long getPreIndexQueueSize()
+    {
+        return getProtectedPlugin().getPreIndexQueueSize();       
     }
 
     /**
