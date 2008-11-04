@@ -2,7 +2,7 @@
 
 <xwikidoc>
 <web>Admin</web>
-<name>Lucene</name>
+<name>LuceneFullReindex</name>
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
@@ -11,15 +11,15 @@
 <author>XWiki.LudovicDubost</author>
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1163561465000</creationDate>
-<date>1225756527000</date>
-<contentUpdateDate>1225756527000</contentUpdateDate>
-<version>5.1</version>
+<creationDate>1225756197000</creationDate>
+<date>1225756494000</date>
+<contentUpdateDate>1225756494000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fix</comment>
+<comment>Fix</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -48,7 +48,7 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
-<name>Admin.Lucene</name>
+<name>Admin.LuceneFullReindex</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
 <property>
@@ -61,17 +61,22 @@
 #set($itemsPerPage = "10")
 #set($doRebuild = $request.getParameter("rebuild"))
 #if($doRebuild=="yes")
+#if($request.confirm &amp;&amp; $request.confirm=="1")
 #if($lucene)
-#set($documentCount = $lucene.rebuildIndex(false, true))
+#set($documentCount = $lucene.rebuildIndex())
 #if(${documentCount}&gt;=0)
-Started index refresh with $documentCount documents. Will take some time depending on the number of pages/attachments.
+Started index rebuild with $documentCount documents. Will take some time depending on the number of pages/attachments.
 #else
-Index refresh failed.
+Index rebuild failed.
 #end
+#end
+#else
+#warning("Are you really really sure you want to delete the current index and perform a full reindex. [Yes I'm sure. Do the reindex&gt;$doc.fullName?rebuild=yes&amp;confirm=1]")
 #end
 #else
 #if($xwiki.hasAdminRights())
-[Refresh Index&gt;${doc.web}.${doc.name}?rebuild=yes] - $lucene.getPreIndexQueueSize() documents in pre-queue - $lucene.getQueueSize() documents in queue - $lucene.getActiveQueueSize() documents in active queue - $lucene.getLuceneDocCount() documents in indexer queue
+#warning("This page allows a full reindex, deleting the current index. This can be very long")
+[Make a full reindex&gt;${doc.web}.${doc.name}?rebuild=yes] - $lucene.getPreIndexQueueSize() documents in pre-queue - $lucene.getQueueSize() documents in queue - $lucene.getActiveQueueSize() documents in active queue - $lucene.getLuceneDocCount() documents in indexer queue
 #end
 #end
 
