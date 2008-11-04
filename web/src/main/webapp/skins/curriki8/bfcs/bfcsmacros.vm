@@ -124,7 +124,10 @@
         ## Filter for excluding Favorites Collections
         #set($notFavoritesFoldersSQL = " and doc.name != 'Favorites' ")
 
-        #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!notFavoritesFoldersSQL $!wheresql $order")
+        ## Filter for excluding "Root" collection
+        #set($notRootSQL = " and doc.name != 'WebHome' ")
+
+        #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!notRootSQL $!notFavoritesFoldersSQL $!wheresql $order")
 
 
 	#end ##}
