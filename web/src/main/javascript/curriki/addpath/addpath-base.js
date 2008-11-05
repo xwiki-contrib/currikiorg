@@ -685,37 +685,7 @@ Curriki.module.addpath.init = function(){
 						}]
 						,monitorValid:true
 						,listeners:{
-							clientvalidation:function(panel, valid){
-								// TODO: This should be elsewhere -- but which event?
-								if (Ext.isEmpty(Curriki.current.sri1fillin)) {
-									if (!Ext.isEmpty(Curriki.current.metadata)) {
-										var md = Curriki.current.metadata;
-
-										if (!Ext.isEmpty(md.fw_items) && Ext.isArray(md.fw_items)){
-											Ext.getCmp('fw_items-tree').expandAll();
-											md.fw_items.each(function(fw_item){
-												var node = Ext.getCmp('fw_items-tree').getNodeById(fw_item);
-												if (node) {
-													node.attributes.checked = true;
-													node.getUI().toggleCheck(true);
-												} else {
-console.log('Node ',fw_item,' does not exist but is set');
-												}
-											});
-											Ext.getCmp('fw_items-tree').collapseAll();
-											Ext.getCmp('fw_items-tree').getNodeById('FW_masterFramework.WebHome').expand();
-										}
-
-										if (!Ext.isEmpty(md.educational_level2) && Ext.isArray(md.educational_level2)){
-											md.educational_level2.each(function(el){
-												Ext.getCmp(Ext.select('input[type="checkbox"][name="educational_level2"][value="'+el+'"]').first().dom.id).setValue(true);
-											});
-										}
-									}
-									Curriki.current.sri1fillin = true;
-								}
-							}
-							,render:function(fPanel){
+							render:function(fPanel){
 	//TODO: Try to generalize this (for different # of panels)
 								fPanel.ownerCt.on(
 									'bodyresize'
@@ -1039,6 +1009,37 @@ console.log('Node ',fw_item,' does not exist but is set');
 
 						}]
 					}]
+					,listeners:{
+						show:function(panel){
+							if (Ext.isEmpty(Curriki.current.sri1fillin)) {
+								if (!Ext.isEmpty(Curriki.current.metadata)) {
+									var md = Curriki.current.metadata;
+
+									if (!Ext.isEmpty(md.fw_items) && Ext.isArray(md.fw_items)){
+										Ext.getCmp('fw_items-tree').expandAll();
+										md.fw_items.each(function(fw_item){
+											var node = Ext.getCmp('fw_items-tree').getNodeById(fw_item);
+											if (node) {
+												node.attributes.checked = true;
+												node.getUI().toggleCheck(true);
+											} else {
+console.log('Node ',fw_item,' does not exist but is set');
+											}
+										});
+										Ext.getCmp('fw_items-tree').collapseAll();
+										Ext.getCmp('fw_items-tree').getNodeById('FW_masterFramework.WebHome').expand();
+									}
+
+									if (!Ext.isEmpty(md.educational_level2) && Ext.isArray(md.educational_level2)){
+										md.educational_level2.each(function(el){
+											Ext.getCmp(Ext.select('input[type="checkbox"][name="educational_level2"][value="'+el+'"]').first().dom.id).setValue(true);
+										});
+									}
+								}
+								Curriki.current.sri1fillin = true;
+							}
+						}
+					}
 				});
 
 				AddPath.Metadata1.superclass.initComponent.call(this);
@@ -1154,39 +1155,7 @@ console.log('Node ',fw_item,' does not exist but is set');
 						}]
 						,monitorValid:true
 						,listeners:{
-							clientvalidation:function(panel, valid){
-								// TODO: This should be elsewhere -- but which event?
-								if (Ext.isEmpty(Curriki.current.sri2fillin)) {
-									if (!Ext.isEmpty(Curriki.current.metadata)) {
-										var md = Curriki.current.metadata;
-
-										if (!Ext.isEmpty(md.rights)){
-											Ext.getCmp(Ext.select('input[type="radio"][name="rights"][value="'+md.rights+'"]').first().dom.id).setValue(md.rights);
-										}
-
-										if (!Ext.isEmpty(md.keywords)){
-											if (Ext.isArray(md.keywords)){
-												md.keywords = md.keywords.join(' ');
-											}
-											Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
-										}
-
-										if (!Ext.isEmpty(md.licenseType2)){
-											Ext.getCmp('metadata-license_type-entry').setValue(md.licenseType2);
-										}
-
-										if (!Ext.isEmpty(md.language)){
-											Ext.getCmp('metadata-language-entry').setValue(md.language);
-										}
-
-										if (!Ext.isEmpty(md.rightsHolder)){
-											Ext.getCmp('metadata-right_holder-entry').setValue(md.rightsHolder);
-										}
-									}
-									Curriki.current.sri2fillin = true;
-								}
-							}
-							,render:function(fPanel){
+							render:function(fPanel){
 	//TODO: Try to generalize this (for different # of panels)
 								fPanel.ownerCt.on(
 									'bodyresize'
@@ -1463,6 +1432,39 @@ console.log('Node ',fw_item,' does not exist but is set');
 
 						}]
 					}]
+					,listeners:{
+						show:function(panel){
+							if (Ext.isEmpty(Curriki.current.sri2fillin)) {
+								if (!Ext.isEmpty(Curriki.current.metadata)) {
+									var md = Curriki.current.metadata;
+
+									if (!Ext.isEmpty(md.rights)){
+										Ext.getCmp(Ext.select('input[type="radio"][name="rights"][value="'+md.rights+'"]').first().dom.id).setValue(md.rights);
+									}
+
+									if (!Ext.isEmpty(md.keywords)){
+										if (Ext.isArray(md.keywords)){
+											md.keywords = md.keywords.join(' ');
+										}
+										Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
+									}
+
+									if (!Ext.isEmpty(md.licenseType2)){
+										Ext.getCmp('metadata-license_type-entry').setValue(md.licenseType2);
+									}
+
+									if (!Ext.isEmpty(md.language)){
+										Ext.getCmp('metadata-language-entry').setValue(md.language);
+									}
+
+									if (!Ext.isEmpty(md.rightsHolder)){
+										Ext.getCmp('metadata-right_holder-entry').setValue(md.rightsHolder);
+									}
+								}
+								Curriki.current.sri2fillin = true;
+							}
+						}
+					}
 				});
 
 				AddPath.Metadata2.superclass.initComponent.call(this);
