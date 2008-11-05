@@ -76,7 +76,7 @@ public class AssetManagerResource extends BaseResource {
         try {
             List<String> crsvalue = new ArrayList<String>(1);
             crsvalue.add(xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
-            asset.save(xwikiContext.getMessageTool().get("curriki.coment.crsvalueremoved", crsvalue));
+            asset.save(xwikiContext.getMessageTool().get("curriki.comment.crsvalueremoved", crsvalue));
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
@@ -127,7 +127,7 @@ public class AssetManagerResource extends BaseResource {
         try {
             List<String> crsvalue = new ArrayList<String>(1);
             crsvalue.add(xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
-            asset.save(xwikiContext.getMessageTool().get("curriki.coment.crsvalueadded", crsvalue));
+            asset.save(xwikiContext.getMessageTool().get("curriki.comment.crsvalueadded", crsvalue));
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
