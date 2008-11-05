@@ -153,7 +153,7 @@ console.log('Collections: ', this.collectionChildren);
 					};
 
 					if ("undefined" === typeof child.rights || !child.rights.view){
-						childInfo.text = _('resource.unviewable');
+						childInfo.text = _('add.chooselocation.resource_unavailable');
 						childInfo.qtip = undefined;
 						childInfo.disabled = true;
 						childInfo.leaf = true;
