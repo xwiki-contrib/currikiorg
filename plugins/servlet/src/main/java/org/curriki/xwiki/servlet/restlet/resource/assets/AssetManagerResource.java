@@ -117,6 +117,7 @@ public class AssetManagerResource extends BaseResource {
         
         asset.use("CRS.CurrikiReviewStatusClass");
         asset.set("status", asterixReviewValue);
+        asset.set("reviewpending", 0);
         try {
         	asset.save(xwikiContext.getMessageTool().get("Resource set to CRS value of ")+xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
         } catch (XWikiException e) {
