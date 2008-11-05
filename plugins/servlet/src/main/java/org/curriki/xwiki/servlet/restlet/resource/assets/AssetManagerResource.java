@@ -15,6 +15,7 @@ import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.XWikiException;
 
 import java.util.List;
+import java.util.Date;
 
 /**
  */
@@ -118,6 +119,8 @@ public class AssetManagerResource extends BaseResource {
         asset.use("CRS.CurrikiReviewStatusClass");
         asset.set("status", asterixReviewValue);
         asset.set("reviewpending", 0);
+        asset.set("lastreview_user", xwikiContext.getUser());
+        asset.set("lastreview_date", xwikiContext.getWiki().formatDate(new Date(), "MM/dd/yyyy HH:mm:ss", xwikiContext));
         try {
         	asset.save(xwikiContext.getMessageTool().get("Resource set to CRS value of ")+xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
         } catch (XWikiException e) {
