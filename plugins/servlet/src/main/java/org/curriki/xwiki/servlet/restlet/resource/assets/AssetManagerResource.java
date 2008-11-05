@@ -16,6 +16,7 @@ import com.xpn.xwiki.XWikiException;
 
 import java.util.List;
 import java.util.Date;
+import java.util.ArrayList;
 
 /**
  */
@@ -73,7 +74,9 @@ public class AssetManagerResource extends BaseResource {
         String asterixReviewValue = (String) asset.getValue("status");
         asset.set("status", "100");
         try {
-        	asset.save(xwikiContext.getMessageTool().get("Resource value of ")+xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue)+" "+xwikiContext.getMessageTool().get("removed"));
+            List<String> crsvalue = new ArrayList<String>(1);
+            crsvalue.add(xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
+            asset.save(xwikiContext.getMessageTool().get("curriki.coment.crsvalueremoved", crsvalue));
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
@@ -122,7 +125,9 @@ public class AssetManagerResource extends BaseResource {
         asset.set("lastreview_user", xwikiContext.getUser());
         asset.set("lastreview_date", xwikiContext.getWiki().formatDate(new Date(), "MM/dd/yyyy HH:mm:ss", xwikiContext));
         try {
-        	asset.save(xwikiContext.getMessageTool().get("Resource set to CRS value of ")+xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
+            List<String> crsvalue = new ArrayList<String>(1);
+            crsvalue.add(xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
+            asset.save(xwikiContext.getMessageTool().get("curriki.coment.crsvalueadded", crsvalue));
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
