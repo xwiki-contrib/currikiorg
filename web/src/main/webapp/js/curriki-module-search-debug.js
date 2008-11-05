@@ -190,6 +190,7 @@ module.init = function(){
 							specialkey:{
 								fn:function(field, e){
 									if (e.getKey() === Ext.EventObject.ENTER) {
+										e.stopEvent();
 										Search.doSearch(modName, true);
 									}
 								}
