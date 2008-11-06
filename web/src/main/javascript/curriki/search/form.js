@@ -16,6 +16,8 @@ Search.init = function(){
 			Search.tabList = ['resource', 'group', 'member', 'blog', 'curriki'];
 		}
 
+		var comboWidth = 140;
+
 		Search.doSearch = function(searchTab, resetPage /* default false */, onlyHistory /* default false */){
 			var filterValues = {};
 			if (Ext.getCmp('search-termPanel')
@@ -107,6 +109,12 @@ console.log('now util.doSearch', tab, pagerValues);
 					var tabId = tab.id.replace(/(^search-|-tab$)/g, '');
 					Curriki.logView('/features/search/'+tabId);
 
+					var advancedPanel = Ext.getCmp('search-advanced-'+tabId);
+					if (!Ext.isEmpty(advancedPanel)) {
+						if (!advancedPanel.collapsed) {
+							Ext.select('.x-form-field-wrap', false, 'search-advanced-'+tabId).setWidth(comboWidth);
+						}
+					}
 /*
 					var URLtoken = Ext.History.getToken();
 					var provider = new Ext.state.Provider();
