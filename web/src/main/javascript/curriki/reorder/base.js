@@ -112,8 +112,8 @@ Reorder.init = function(){
 									var callback = function(o){
 										console.log('Reorder callback', o);
 
-										Reorder.msgComplete();
 										dlg.close();
+										Reorder.msgComplete();
 
 										window.location.reload();
 									};
