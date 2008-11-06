@@ -1367,6 +1367,9 @@ form.init = function(){
 							//    seems to make the advanced search fieldset
 							//    visible in IE7
 							Ext.getCmp('search-results-'+modName).getView().refresh();
+
+							Ext.select('.x-form-field-wrap', false, 'search-advanced-'+modName).setWidth(comboWidth);
+
 							// CURRIKI-2873
 							// - Force a repaint of the fieldset
 							Ext.getCmp('search-termPanel-'+modName).el.repaint();
@@ -1860,6 +1863,9 @@ form.init = function(){
 							//    seems to make the advanced search fieldset
 							//    visible in IE7
 							Ext.getCmp('search-results-'+modName).getView().refresh();
+
+							Ext.select('.x-form-field-wrap', false, 'search-advanced-'+modName).setWidth(comboWidth);
+
 							// CURRIKI-2873
 							// - Force a repaint of the fieldset
 							Ext.getCmp('search-termPanel-'+modName).el.repaint();
