@@ -171,7 +171,6 @@ public class CurrikiPluginApi extends Api {
      * Get class property values as a list. This code was extracted from FieldResource.represent
      * @param className
      * @param fieldName
-     * @param xwikiContext
      * @return
      * @throws XWikiException
      */

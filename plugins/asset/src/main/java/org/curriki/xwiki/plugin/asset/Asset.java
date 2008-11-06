@@ -818,10 +818,10 @@ public class Asset extends CurrikiDocument {
          return false;
         }
         //false if CRS.CurrikiReviewStatusClass.status == P (Partner)
-    	use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
-        String status = (String)getValue(Constants.ASSET_CURRIKI_REVIEW_CLASS_STATUS);
+    	use(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS);
+        String status = (String)getValue(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS_STATUS);
 
-        if (status!=null && status.equals(Constants.ASSET_CURRIKI_REVIEW_CLASS_STATUS_PARTNER)) {
+        if (status!=null && status.equals(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS_STATUS_PARTNER)) {
             return false;
         }
 
