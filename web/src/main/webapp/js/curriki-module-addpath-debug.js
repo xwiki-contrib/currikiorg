@@ -1232,7 +1232,8 @@ console.log('Node ',fw_item,' does not exist but is set');
 								},{
 									 border:false
 									,xtype:'radiogroup'
-									,columns:1
+									,columns:[.9]
+									,vertical:true
 									,defaults:{
 										name:'rights'
 									}
