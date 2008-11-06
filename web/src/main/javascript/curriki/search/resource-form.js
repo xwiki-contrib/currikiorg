@@ -95,11 +95,15 @@ form.init = function(){
 							//    seems to make the advanced search fieldset
 							//    visible in IE7
 							Ext.getCmp('search-results-'+modName).getView().refresh();
+							// CURRIKI-2873
+							// - Force a repaint of the fieldset
+							Ext.getCmp('search-termPanel-'+modName).el.repaint();
 						}
 					}
 					,'collapse':{
 						fn:function(panel){
 							Ext.getCmp('search-results-'+modName).getView().refresh();
+							Ext.getCmp('search-termPanel-'+modName).el.repaint();
 						}
 					}
 				}
