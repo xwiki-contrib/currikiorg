@@ -66,6 +66,28 @@ Ext.override(Ext.form.TriggerField, {
     // private
     onHide : function(){
         this.wrap.hide();
+    },
+
+	// CURRIKI-2873
+	// Width seems to end up being 0 for the wrapper when the element is
+	// not being displayed in Safari
+
+	// private
+	onRender : function(ct, position){
+		Ext.form.TriggerField.superclass.onRender.call(this, ct, position);
+		this.wrap = this.el.wrap({cls: "x-form-field-wrap"});
+		this.trigger = this.wrap.createChild(this.triggerConfig ||
+				{tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.triggerClass});
+		if(this.hideTrigger){
+			this.trigger.setDisplayed(false);
+		}
+		this.initTrigger();
+		if(!this.width){
+			this.wrap.setWidth(this.el.getWidth()+this.trigger.getWidth());
+		} else {
+			// Added this for CURRIKI-2873
+			this.wrap.setWidth(this.width);
+		}
     }
 });
 
