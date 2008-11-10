@@ -36,21 +36,21 @@ see http://www.gnu.org/copyleft/lesser.html
 
 ////////////////  GLOBAL TOOPTIP CONFIGURATION  /////////////////////
 var ttAbove       = false;        // tooltip above mousepointer? Alternative: true
-var ttBgColor     = "#e6ecff";
+var ttBgColor     = "#fffece";
 var ttBgImg       = "";           // path to background image;
-var ttBorderColor = "#003399";
+var ttBorderColor = "#ffbb00";
 var ttBorderWidth = 1;
 var ttClickClose  = false;
 var ttDelay       = 500;          // time span until tooltip shows up [milliseconds]
-var ttFontColor   = "#000066";
+var ttFontColor   = "#000000";
 var ttFontFace    = "arial,helvetica,sans-serif";
-var ttFontSize    = "11px";
+var ttFontSize    = "12px";
 var ttFontWeight  = "normal";     // alternative: "bold";
 var ttLeft        = false;        // tooltip on the left of the mouse? Alternative: true
 var ttOffsetX     = 12;           // horizontal offset of left-top corner from mousepointer
 var ttOffsetY     = 15;           // vertical offset                   "
 var ttOpacity     = 100;          // opacity of tooltip in percent (must be integer between 0 and 100)
-var ttPadding     = 3;            // spacing between border and content
+var ttPadding     = 5;            // spacing between border and content
 var ttShadowColor = "";
 var ttShadowWidth = 0;
 var ttStatic      = false;        // tooltip NOT move with the mouse? Alternative: true
@@ -156,7 +156,7 @@ function tt_Htm(tt, t_id, txt)
 	if(tt_n4 && (t_fsz == "10px" || t_fsz == "11px")) t_fsz = "12px";
 
 	var t_optx = (tt_n4? '' : tt_n6? ('-moz-opacity:'+(t_opa/100.0)) : tt_ie? ('filter:Alpha(opacity='+t_opa+')') : ('opacity:'+(t_opa/100.0))) + ';';
-	var t_y = '<div id="'+t_id+'" style="position:absolute;z-index:1010;';
+	var t_y = '<div id="'+t_id+'" class="tooltip" style="position:absolute;z-index:1010;';
 	t_y += 'left:0px;top:0px;width:'+(t_w+t_shw)+'px;visibility:'+(tt_n4? 'hide' : 'hidden')+';'+t_optx+'">' +
 		'<table border="0" cellpadding="0" cellspacing="0"'+(t_bc? (' bgcolor="'+t_bc+'" style="background:'+t_bc+';"') : '')+' width="'+t_w+'">';
 	if(t_tit)
@@ -499,6 +499,7 @@ function tt_Init()
 	else if(t_b && typeof t_b.innerHTML != tt_u && document.createElement && t_b.appendChild)
 	{
 		var t_el = document.createElement("div");
+		t_el.className = "tooltips";
 		t_b.appendChild(t_el);
 		t_el.innerHTML = htm;
 	}
