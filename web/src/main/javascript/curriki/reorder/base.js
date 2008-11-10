@@ -93,6 +93,9 @@ Reorder.init = function(){
 							click:{
 								 fn: function(){
 									this.close();
+									if (Ext.isIE) {
+										window.location.reload();
+									}
 								}
 								,scope:this
 							}
