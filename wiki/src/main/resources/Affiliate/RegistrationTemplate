@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>Affiliate</web>
@@ -8,20 +8,19 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.dward</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1219329123000</creationDate>
-<date>1225389900000</date>
-<contentUpdateDate>1225389900000</contentUpdateDate>
-<version>11.1</version>
+<date>1226405346000</date>
+<contentUpdateDate>1226405346000</contentUpdateDate>
+<version>3.1</version>
 <title>Register to Join Curriki</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
-<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>Affiliate.AffiliateIDClass</name>
@@ -111,7 +110,8 @@
 <tags/>
 </property>
 </object>
-<content>## from partner site
+<content>
+## from partner site
 #set($enc_tool=$xwiki.parseGroovyFromPage("Affiliate.PartnerEncryptGroovy"))
 #if($enc_tool=="groovy_missingrights")
     #set($enc_tool=$xwiki.parseGroovyFromString($xwiki.getDocument("Affiliate.PartnerEncryptGroovy").getContent()))
@@ -135,6 +135,22 @@
 ##check the affiliateID exist
 #set($is_partner_exist=false)
 #if($affiliateID)
+    #set($hql="select prop1.value as affiliateID, prop2.value as groups from StringProperty prop1,StringProperty prop2,BaseObject obj where obj.name='Affiliate.AffiliateManagement' and obj.className='Affiliate.AffiliatePartnerClass' and obj.id=prop1.id and prop1.name='affiliateID' and obj.id=prop2.id and prop2.name='groups' order by obj.number")
+    #set($affiliates=$xwiki.search($hql))
+    #foreach($affiliate in $affiliates)
+        #foreach($attribute in $affiliate)
+            #if($velocityCount==1)
+                #set($attr_id=$attribute)
+            #elseif($velocityCount==2)
+                #set($attr_groups=$attribute)
+            #end
+        #end
+        #if($attr_id == $affiliateID)
+            #set($is_partner_exist=true)
+            #set($groups=$attr_groups.split(","))
+        #end
+    #end
+#*
     #set($objs=$xwiki.getDocument("Affiliate.AffiliateManagement").getObjects("Affiliate.AffiliatePartnerClass"))
     #foreach($obj in $objs)
         #if($obj.affiliateID == $affiliateID)
@@ -142,6 +158,7 @@
             #set($groups=$obj.groups.split(","))
         #end
     #end
+*#
 #end
 #macro(formfield $fieldname $text $mandatory)
     &lt;div class="register_block" id="register_block_$fieldname"&gt;
