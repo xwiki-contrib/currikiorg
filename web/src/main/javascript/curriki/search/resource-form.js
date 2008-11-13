@@ -336,11 +336,11 @@ form.init = function(){
 			p.cellAttr = 'rowspan="2"';
 			cls = 'x-grid3-row-expander';
 //			return '<div class="x-grid3-row-expander">&#160;</div>';
-			return String.format('<img class="{0}" src="{1}" height="18px" width="18px" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover'));
+			return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover'));
 		} else {
 			cls = 'x-grid3-row-expander-empty';
 //			return '<div class="x-grid3-row-expander-empty">&#160;</div>';
-			return String.format('<img class="{0}" src="{1}" height="18px" width="18px" />', cls, Ext.BLANK_IMAGE_URL);
+			return String.format('<img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL);
 		}
 	};
 
