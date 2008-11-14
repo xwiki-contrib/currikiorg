@@ -163,7 +163,7 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_assettitle $asset) ## {
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #set($title = $currikiTitle)
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
@@ -179,7 +179,7 @@ $text
   *#
 #macro(mycurriki_assettitlewithmodesc $asset) ## {
 #set($descnb = $descnb + 1)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #set($title = $currikiTitle)
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
@@ -335,113 +335,6 @@ $xwiki.getUserName($asset.creator)
 
 
 #**
-  * My Curriki pagination macro with additional arguments
-  *
-  * @param $called Text to use in the pagination macro
-  * @param from start number
-  * @param $nbToDisplay number of elements to display
-  * @param $of Maximum number of elements
-  * @param $addargs Additional arguments for the url
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_paginatorargs $called $from $nbToDisplay $of $addargs) ## {
-<div id="mycurriki-paginator" class="table-results">
-## Make sure we have sane settings for $of
-#if($of < 0) ## {
-#set($of = 0)
-#end ## }
-## We dont show the paginator if nothing to paginate
-#if($of != 0) ## {
-## Make sure we have sane settings for $from
-#if($from < 0) ## {
-#set($from = 0)
-#end ## }
-#if($from >= $of) ## {
-#set($from = $of - 1)
-#end ## }
-## Make sure we have sane settings for $nbToDisplay
-#if($nbToDisplay < 1) ## {
-#set($nbToDisplay = 1)
-#end ## }
-#if("$called"=="") ## {
-#set($called = $msg.get("mycurriki.macro.paginate.results"))
-#end ## }
-## Determine what $to sould be
-#set($to = ($from + $nbToDisplay) - 1)
-#if($to >= $of) ## {
-#set($to = ($of - 1))
-#end ## }
-## Now figure out total, current, first, and last page
-#set($pages = (($of - 1) / $nbToDisplay) + 1)
-#set($cpage = ($from / $nbToDisplay) + 1)
-#set($fpage = ((($cpage - 1) / 10) * 10) + 1)
-#set($lpage = $fpage + 9)
-#if($lpage > $pages) ## {
-#set($lpage = $pages)
-#end ## }
-## Figure out if we need a user argument
-#if("$!request.user" == "") ## {
-#set($addarg="")
-#else ## } {
-#set($addarg="user=${request.user}&")
-#end ## }
-#if($addargs != "") ## {
-#set($addarg="${addarg}${addargs}&")
-#end ## }
-<div id="mycurriki-paginator-line1" class="table-results-title">
-## Display 1 -> X+1 instead of 0 -> X
-#set($dFrom = $from + 1)
-#set($dTo = $to + 1)
-$called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
-</div>
-<div id="mycurriki-paginator-line2" class="table-results-navigation">
-#if($cpage == 1) ## {
-#set($npage = 0)
-#else ## } {
-#set($npage = (($cpage - 2) * $nbToDisplay))
-#end ## }
-#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
-#if($cpage!=1) ## {
-#set($prvpage = $cpage - 1)
-#set($altprev = "Page "+${prvpage})
-<a href="${url}" class="table-results-previous#if($cpage==1) table-results-disabled" onclick="return false;#end" alt="${altprev}" title="${altprev}">$msg.get("mycurriki.macro.paginate.previous")</a>
-#end ## }
-#foreach ($pg in [${fpage}..${lpage}]) ## {
-#set($npage = (($pg - 1) * $nbToDisplay))
-#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
-<a href="${url}"#if($pg==$cpage) class="table-results-navigation-selected" onclick="return false;"#end>$pg</a>
-#end ## }
-#if($cpage==$pages) ## {
-#set($npage = (($pages - 1) * $nbToDisplay))
-#else ## } {
-#set($npage = ($cpage * $nbToDisplay))
-#end ## }
-#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
-#if($cpage!=$pages) ## {
-#set($nxtpage = $cpage + 1)
-#set($altnext = "Page "+${nxtpage})
-<a href="${url}" class="table-results-next#if($cpage==$pages) table-results-disabled" onclick="return false;#end" alt="${altnext}" title="${altnext}">$msg.get("mycurriki.macro.paginate.next")</a>
-#end ## }
-</div>
-#end ## if != 0 ## }
-</div>
-#end ## macro ## }
-
-#**
-  * My Curriki pagination macro
-  *
-  * @param $called Text to use in the pagination macro
-  * @param from start number
-  * @param $nbToDisplay number of elements to display
-  * @param $of Maximum number of elements
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_paginator $called $from $nbToDisplay $of) ## {
-#mycurriki_paginatorargs($called $from $nbToDisplay $of "")
-#end ## }
-
-
-#**
   * Display the description of a collection
   *
   * @param $asset Asset
@@ -452,114 +345,10 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 $!desc
 #end ## macro ## }
 
-
-#**
-  * Display the avatar of a user
-  *
-  * @param $userdoc User document
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_avatar $userdoc) ## {
-#if($userdoc.attachmentList.size()==0)  ## {
- <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
-#else ## } {
- #foreach ($attach in $userdoc.attachmentList) ## {
-  <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
- #end ## }
-#end ## }
-#end ## macro ## }
-
-
-#**
-  * Display the avatar of a user with a name
-  *
-  * @param $userdoc User document
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_avatarwithname $userdoc) ## {
-#if($userdoc.attachmentList.size()==0)  ## {
- <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
-#else ## } {
- #foreach ($attach in $userdoc.attachmentList) ## {
-  <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
- #end ## }
-#end  $xwiki.getUserName($userdoc.fullName) ## }
-#end ## macro ## }
-
-
-
-#**
-  * Display a title bar with link and js
-  *
-  * @param $lefttitle Title to show on the left
-  * @param $righttitle Title to show on the right
-  * @param $link Link to show
-  * @param $js Javascript to add to the link
-  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
-  * @param $idpfx unique ID to add to html tags
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_fulltitlebar $lefttitle $righttitle $link $js $color $idpfx) ## {
-#if("$!link" != "") ## {
-#normalizelink($link)
-#end ## }
-#set($righttitletrunc = $righttitle)
-#if ($righttitletrunc.length() > 35) ## {
-#set($righttitletrunc = $righttitle.substring(0, 34))
-#set($righttitletrunc = "${righttitletrunc}...")
-#end ## }
-#if("$!idpfx" != "") ## {
-#set($qt = '"')
-#set($tmp = "id=${qt}${idpfx}-")
-#set($dId = "${tmp}bar${qt}")
-#set($tId = "${tmp}title${qt}")
-#set($rdId = "${tmp}right${qt}")
-#set($lId = "${tmp}link${qt}")
-#else ## } {
-#set($dId = "")
-#set($tId = "")
-#set($rdId = "")
-#set($lId = "")
-#end ## }
-<div $dId class="titleheader titleheader-$color"><h3 $tId#if($link!="") class="titleheader-left"#end>$lefttitle</h3>#if($link!="" || $js!="")<div $rdId class="titleheader-right"><a $lId #if("$!link"!="") href="$link"#end#if("$!js"!="") onclick="$js"#end title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
-</div>
-#end ## macro ## }
-
-#**
-  * Display a simple title bar with js
-  *
-  * @param $lefttitle Title to show on the left
-  * @param $righttitle Title to show on the right
-  * @param $js js to add
-  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_jstitlebar $lefttitle $righttitle $js $color) ## {
-#mycurriki_fulltitlebar($lefttitle $righttitle "" $js $color "")
-#end ## macro ## }
-
-#**
-  * Display a simple title bar
-  *
-  * @param $lefttitle Title to show on the left
-  * @param $righttitle Title to show on the right
-  * @param $link Link to show
-  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_titlebar $lefttitle $righttitle $link $color) ## {
-#mycurriki_fulltitlebar($lefttitle $righttitle $link "" $color "")
-#end ## macro ## }
-
-
 ##
 ## My Curriki Profile
 ##
 ##
-
-
 #**
   * Display the user photo with a link to remove it
   *
@@ -724,7 +513,7 @@ $!desc
   #set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
   #set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
 
-  #mycurriki_titlebar($msg.get("mycurriki.editprofile.titlebar") "" "" "blue")
+  #curriki_titlebar($msg.get("mycurriki.editprofile.titlebar") "" "" "blue")
   <form id="inline" action="$userdoc.getURL("preview")" method="post">
     <input id="origemail" name="origemail" type="hidden" value="${userobj.getProperty('email').getValue()}" />
     {pre}
@@ -1115,7 +904,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   *#
 #macro(mycurriki_viewprofilebox $userdoc $userobj) ##{
   <!-- View Profile Box -->
-  #mycurriki_titlebar($msg.get("mycurriki.profile.titlebar") "" "" "blue")
+  #curriki_titlebar($msg.get("mycurriki.profile.titlebar") "" "" "blue")
   #if($context.user=="XWiki.XWikiGuest") ##{
     #set($logredir = $doc.getURL("view"))
     #set($loginurl = $xwiki.getURL("XWiki.XWikiLogin", "login", "xredirect=$logredir"))
@@ -1188,7 +977,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
           #checkForCollections()
           #escapeForJS($asset.fullName)
           #set($escapedFullName = $ret_escaped)
-          #findCurrikiTitle($asset)
+          #asset_findtitle($asset)
           #escapeForJS($currikiTitle)
           #set($escapedTitle = $ret_escaped)
           #if($g_userHasCollections && ($allcols || $hasGlobalAdmin))##{
@@ -1215,7 +1004,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   *#
 #macro(mycurriki_favoritespagination $startIndex $nbToDisplay $assetList) ##{
   <!-- MyCurriki Favorites Pagination -->
-  #mycurriki_paginator($msg.get("mycurriki.tab.favorites.label") $startIndex $nbToDisplay $assetList.size())
+  #curriki_paginator($msg.get("mycurriki.tab.favorites.label") $startIndex $nbToDisplay $assetList.size())
   <!-- End MyCurriki Favorites Pagination -->
 #end ## } end macro mycurriki_favoritespagination
 
@@ -1441,7 +1230,7 @@ $msg.get("deleted")
           #checkForCollections()
           #escapeForJS($asset.fullName)
           #set($escapedFullName = $ret_escaped)
-          #findCurrikiTitle($asset)
+          #asset_findtitle($asset)
           #escapeForJS($currikiTitle)
           #set($escapedTitle = $ret_escaped)
           #if($g_userHasCollections && ($asset.creator == $context.user || $hasGlobalAdmin))##{
@@ -1475,7 +1264,7 @@ $msg.get("deleted")
   *#
 #macro(mycurriki_contributionspagination $startIndex $nbToDisplay $showcount $sortArgs) ##{
   <!-- MyCurriki Contributions Pagination -->
-  #mycurriki_paginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
+  #curriki_paginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
   <!-- End MyCurriki Contributions Pagination -->
 #end ##} end macro
 
@@ -1631,7 +1420,7 @@ $msg.get("deleted")
   *#
 #macro(mycurriki_favassettitlewithmodesc $asset) ## {
 #set($descnb = $descnb + 1)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #set($title = $currikiTitle)
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
@@ -1680,211 +1469,6 @@ $msg.get("search.selector.level.${item}")<br />
 
 ##
 ##
-## My Curriki Groups Macros
-##
-##
-
-#**
-  * Displays the group list of the user
-  *
-  * @param $userdoc Document of the user
-  * @param $userobj Object of the user
-  *#
-#macro(mycurriki_grouplist $userdoc $userobj)
-##
-#set($nbToDisplay = 5)
-##
-#set($sm = $xwiki.csm)
-#set($spaceList = $sm.getSpaceNames($userdoc.fullName, $xwiki.null))
-#set($startIndex = 0)
-#set($Integer = 0)
-#if($request.startIndex)
- #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
-#end
-#if($startIndex > ($spaceList.size() - 1))
- #set($startIndex = $spaceList.size() - 1)
-#end
-#set($endIndex = $startIndex - 1 + $nbToDisplay)
-#if($endIndex > ($spaceList.size() - 1))
- #set($endIndex = $spaceList.size() - 1)
-#end
-##
-#set($first_frame_done = "yes")
-#set($showcount = 0)
-#foreach($space in $spaceList) ## {
-#set($showcount = 1 + $showcount)
-#if(($showcount > $startIndex) && ($showcount < ($endIndex + 2))) ## {
-#mycurriki_groupinfomessages($space "")
-#end ## }
-#end ## }
-#if($showcount != 0) ## {
-#set($sortArgs = "")
-<div class="frame">
-#mycurriki_paginatorargs($msg.get("mycurriki.tab.groups.label") $startIndex $nbToDisplay $spaceList.size() $sortArgs)
-#end ## }
-#end ## macro ## }
-
-#**
-  * Display a Group logo for a space
-  *
-  * @param $space Space/Group to display the logo of
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_grouplogo $space)
-  #set($logofilename = $space.display("logo","view"))
-  #set($attachLogo = "")
-  #if($logofilename != "")
-   #set($spacehome = $space.getSpaceName()+".WebHome")
-   #set($srcdoc = $xwiki.getDocument($spacehome))
-   #set($attachLogo = $srcdoc.getAttachment($logofilename))
-  #end
-  #if(($logofilename != "")&&$attachLogo&&($attachLogo!=""))
-    #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
-    #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
-    #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
-  #else
-    #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
-	#set($logowidth = 120)
-	#set($logoheight = 82)
-  #end
-#set( $image_resize = "" )
-#if($logowidth > 120 || $logoheight > 82)
-  ## find out wich dimmension overflows the most and computes scaled sizes
-  #set( $ratiox = $logowidth / 120)
-  #set( $ratioy = $logoheight / 82)
-  #if($ratiox>$ratioy)
-    #set($width = 120)
-    #set($height = $width * $logoheight /  $logowidth)
-    #set( $image_resize = "?width=120")
-  #else
-    #set($height = 82)
-    #set($width = $height * $logowidth / $logoheight)
-    #set( $image_resize = "?height=82")
-  #end
-#else
-  #set($height = $logoheight)
-  #set($width = $logowidth)
-#end
-  ##display logo
-  <div class="frame-inset-logo">
-    <a href="$space.getHomeURL()" title="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}" alt="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" alt="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" />
-    </a>
-  </div>
-#end
-
-#**
-  * Group masthead showing the group information for my curriki
-  *
-  * @param m_groupName group name to display messages for
-  * @param displayType display in view or edit mode
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_groupinfo $m_groupName $displayType) ## {
-#if(!$g_rowCount) ## {
-#set($g_rowCount = 0)
-#end ## }
-#set($g_rowCount = $g_rowCount + 1)
-#set($m_sm = $xwiki.csm)
-#set($s = $m_sm.getSpace($m_groupName))
-#if("$!first_frame_done" == "") ## {
-<div class="frame">
-#else ## } {
-#set($first_frame_done = "")
-#end ## }
-<div class="frame-inset-titlebar">
-#if($displayType == "edit")
-  #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #mycurriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
-#elseif($displayType == "view")
-  #mycurriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" "" "" "blue")
-#else
-  #mycurriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
-#end
-</div>
-#mycurriki_grouplogo( $s )
-<div class="frame-inset-description">
-$s.getDescription()
-</div>
-</div>
-#end ## }
-
-
-#**
-  * Group masthead showing messages viewable by the user for my curriki
-  *
-  * @param m_groupName group name to display messages for
-  * @param displayType display in view or edit mode
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_groupinfomessages $m_groupName $displayType) ## {
-#if(!$g_rowCount) ## {
-#set($g_rowCount = 0)
-#end ## }
-#set($g_rowCount = $g_rowCount + 1)
-#set($m_sm = $xwiki.csm)
-#set($s = $m_sm.getSpace($m_groupName))
-#if("$!first_frame_done" == "") ## {
-<div class="frame">
-#else ## } {
-#set($first_frame_done = "")
-#end ## }
-<div class="frame-inset-titlebar">
-#if($displayType == "edit")
-  #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #mycurriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
-#elseif($displayType == "view")
-  #mycurriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" "" "" "blue")
-#else
-  #mycurriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
-#end
-</div>
-#mycurriki_grouplogo( $s )
-<div class="frame-inset-description">
-$s.getDescription()
-</div>
-#if("$context.user" == "$!userdoc.fullName" ) ## {
-## Get last 5 messages
-#set($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.web='Messages_${m_groupName}' order by doc.creationDate desc")
-#set($messages = $xwiki.searchDocuments($sql, 100, 0))
-#if($messages.size() > 0) ## {
-<div id="mycurriki-groups-message-container">
-## Show messages
-<div id="mycurriki-group-mymessages-${m_groupName}" class="lefttext xwikicomment">
-<div class="righttext floatright">
-<a href="$xwiki.getURL("${m_groupName}.Messages", "view")">$msg.get("mycurriki.groups.viewmessages")</a>
-</div>
-<b>$msg.get("mycurriki.groups.mymessages")</b>
-</div>
-#set($showCount = 0)
-#foreach($messageName in $messages) ## {
-#if($showCount < 3) ## {
-#if($xwiki.hasAccessLevel("view", $context.user, $messageName)) ## {
-#set($showCount = 1 + $showCount)
-#set($message = $xwiki.getDocument($messageName))
-#set($msgContent = $message.getObject("XWiki.ArticleClass"))
-<div id="mycurriki-group-mymessages-${message.fullName}" class="lefttext xwikicomment">
-<div class="righttext floatright">
-$xwiki.formatDate($message.creationDate, $msg.get("mycurriki.datetimeFormat"))
-$msg.get("mycurriki.groups.message.by") <a href="$xwiki.getURL("${message.creator}", "view")">$xwiki.getUserName($message.creator)</a>
-</div>
-#set($showTitle = $msgContent.title)
-#if($showTitle.length() > 32) ## {
-#set($showTitle = $showTitle.substring(0, 32)+"...")
-#end ## }
-<a href="$xwiki.getURL($message.fullName, "view")"><b>$showTitle</b></a>
-</div>
-#end ## }
-#end ## }
-#end ## }
-</div>
-#end ## }
-#end ## }
-</div>
-#end ## }
-
-##
-##
 ##
 ## Collections Macros
 ##
@@ -1903,7 +1487,7 @@ $msg.get("mycurriki.groups.message.by") <a href="$xwiki.getURL("${message.creato
 #if($asset.hasAccessLevel("edit"))
 #escapeForJS($asset.fullName)
 #set($escapedFullName = $ret_escaped)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #escapeForJS($currikiTitle)
 #set($escapedTitle = $ret_escaped)
 {pre}
@@ -2021,7 +1605,7 @@ function toggle_desc(){
 }
 </script>
 {/pre}
-#mycurriki_fulltitlebar($msg.get("mycurriki.collections.titlebar") $msg.get("mycurriki.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
+#curriki_fulltitlebar($msg.get("mycurriki.collections.titlebar") $msg.get("mycurriki.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
 ## row per item -- number of rows configurable
 #set($showcount = 0)
 #foreach($assetPage in $assetList)
@@ -2036,7 +1620,7 @@ function toggle_desc(){
 #if($showcount == 0)
 <div class="centertext">$msg.get("mycurriki.collections.noresults")</div>
 #end ## showcount
-#mycurriki_paginator($msg.get("mycurriki.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
+#curriki_paginator($msg.get("mycurriki.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
 #end ## content macro
 
 #**

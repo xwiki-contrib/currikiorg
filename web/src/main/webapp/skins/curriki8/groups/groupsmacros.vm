@@ -252,9 +252,9 @@ $wdoc.display("content", "edit")
 
   <div class="frame" id="section_${counter}">
      #if($isGroupAdmin)
-     #mycurriki_titlebar($title $righttitle $link $color)
+     #curriki_titlebar($title $righttitle $link $color)
      #else
-     #mycurriki_titlebar($title "" "" $color)
+     #curriki_titlebar($title "" "" $color)
 	 #end
      <div class="frame-content" id="section${counter}content">
 
@@ -437,10 +437,9 @@ $headerTitle
 #end ##not all groups
 #if($groups)
   #if( $groups.size()>0 )
-    #includeMacros("MyCurriki.MyCurrikiMacros")
     #foreach($group in $groups)
       <div class="group-by-subject">
-      #mycurriki_groupinfo($group.spaceName "")
+      #groups_groupinfo($group.spaceName "")
       </div>
     #end
   #else
@@ -450,7 +449,7 @@ $headerTitle
   #if($totalcount.class.name == "java.lang.Long")
     #set($totalcount = $totalcount.intValue())
   #end
-  #mycurriki_paginatorargs( "" $startItem $itemsPerPage $totalcount $args  )
+  #curriki_paginatorargs( "" $startItem $itemsPerPage $totalcount $args  )
 #else
 bad request
 #end
@@ -492,7 +491,7 @@ bad request
 #if($rest>0)
   #set($rows=$rows+1)
 #end
-#mycurriki_titlebar( $msg.get("browseGroups.titlebar") "" "" "red" )
+#curriki_titlebar( $msg.get("browseGroups.titlebar") "" "" "red" )
 <div class="browse-groups-info">
 $msg.get("browseGroups.info")
 </div>
@@ -764,7 +763,7 @@ $msg.get("groups_home_firsttimewelcome_title")
 <div class="frame">
 <form class="CreateNewGroup" action="#" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
 <input type="hidden" name="action" value="editmasthead" />
-#mycurriki_titlebar($msg.get("groups_home_editmasthead_title"), "", "", "blue")
+#curriki_titlebar($msg.get("groups_home_editmasthead_title"), "", "", "blue")
 <div class="frame-content">
 <div class="section">
 <br />
@@ -789,7 +788,7 @@ $s.display("description","edit")
 #end
 <div class="section">
 <div class="frame-inset-logo">
-#mycurriki_grouplogo($s)
+#groups_grouplogo($s)
 </div>
 <div class="frame-inset-description">
 #if($logofilename&&$logoattach)
@@ -877,14 +876,14 @@ ${groupURL}#end
 <form class="CreateNewGroup" action="#" method="post">
 ############# membership policy ################
 <div class="frame">
-#mycurriki_titlebar($msg.groups_home_editinformation_member_policy_title,"","","blue")
+#curriki_titlebar($msg.groups_home_editinformation_member_policy_title,"","","blue")
 <div class="section frame-content">
 $s.display("policy","edit")
 </div>
 </div>
 ############# subject - level #################
 <div class="frame">
-#mycurriki_titlebar($msg.groups_home_editinformation_subjectlevel_title,"","","blue")
+#curriki_titlebar($msg.groups_home_editinformation_subjectlevel_title,"","","blue")
 <div class="section frame-content">
 <table border="0">
 <tr>
@@ -901,14 +900,14 @@ $s.display("policy","edit")
 </div>
 ############### language ###################
 <div class="frame">
-#mycurriki_titlebar($msg.groups_home_editinformation_language_title,"","","blue")
+#curriki_titlebar($msg.groups_home_editinformation_language_title,"","","blue")
 <div class="section frame-content">
 $s.display("language","edit")
 </div>
 </div>
 ############## licence ##############
 <div class="frame">
-#mycurriki_titlebar($msg.groups_home_editinformation_license_title,"","","blue")
+#curriki_titlebar($msg.groups_home_editinformation_license_title,"","","blue")
 <div class="section frame-content">
 $s.display("licence","edit")
 #validateGroup( "licence-required" "" $msg.groups_validation_licence_required)
@@ -916,14 +915,14 @@ $s.display("licence","edit")
 </div>
 ################ information access #####
 <div class="frame">
-#mycurriki_titlebar($msg.groups_home_editinformation_access_title,"","","blue")
+#curriki_titlebar($msg.groups_home_editinformation_access_title,"","","blue")
 <div class="section frame-content">
 $s.display("accessprivileges","edit")
 </div>
 </div>
 ############## webadress ###########
 <div class="frame">
-#mycurriki_titlebar($msg.groups_home_editinformation_webaddress_title,"","","blue")
+#curriki_titlebar($msg.groups_home_editinformation_webaddress_title,"","","blue")
 <div class="section frame-content">
 $msg.groups_home_editinformation_webaddress_instruction <br />
 http:&#47;&#47; $s.display("urlshortcut","edit") #groups_groupsuffixurl()
@@ -948,9 +947,9 @@ $xwiki.addTooltipJS()
 #macro(groups_homepage_viewinfo)
 <div class="head">
 #if($isGroupAdmin)
-#mycurriki_groupinfo($s.spaceName "edit")
+#groups_groupinfo($s.spaceName "edit")
 #else
-#mycurriki_groupinfo($s.spaceName "view")
+#groups_groupinfo($s.spaceName "view")
 #end
 </div>
 #end
@@ -1072,7 +1071,7 @@ http:&#47;&#47;$s.display("urlshortcut","view")#groups_groupsuffixurl()
 #macro(groups_homepage_contributions)
 <div class="groups-curriculum">
 <div id="groups-search" class="frame">
-#mycurriki_titlebar($msg.get("groups_home_contributions_title") "" "" "red")
+#curriki_titlebar($msg.get("groups_home_contributions_title") "" "" "red")
 <div class="frame-content">
 $msg.get("groups_home_contributions_infotxt")
 <div>

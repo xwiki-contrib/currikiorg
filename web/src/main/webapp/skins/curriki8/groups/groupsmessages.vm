@@ -102,7 +102,7 @@ $msg.get("groups_messages_createmessage_infotxt")
 #set($totalCount = 0)
 #end
 
-#mycurriki_paginator($msg.get("groups_messages_page"),$startIndex,$itemsPerPage,$totalCount)
+#curriki_paginator($msg.get("groups_messages_page"),$startIndex,$itemsPerPage,$totalCount)
 </div>
 #endgroupsection()
 #end
@@ -701,7 +701,7 @@ function updateSectionTitle(ajaxreq){
 #end
 <div id="comment${count}" class="blog-comment${odd}">
 <div class="blog-comment-avatar" "style=float:left;">
-#mycurriki_avatar($xwiki.getDocument($comment.author))
+#curriki_avatar($xwiki.getDocument($comment.author))
 </div>
 <div class="blog-comment-line">
 <p><span class="date">

@@ -1,7 +1,7 @@
 #**
   * Groups Contributions Macros
   *
-  *#
+  *#                m
 
 
 #**
@@ -148,7 +148,7 @@ $msg.get("groups.curriculum.contributions.about")
 #end
 </table>
 ## Pagination here
-#mycurriki_paginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
+#curriki_paginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
 </div>
 #groupsfooter()
 #end
@@ -162,7 +162,7 @@ $msg.get("groups.curriculum.contributions.about")
   *#
 #macro(groups_contributions_assettitlewithmodesc $asset) ## {
 #set($descnb = $descnb + 1)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #set($title = $currikiTitle)
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
@@ -220,7 +220,7 @@ $msg.get("search.selector.level.${item}")<br />
   *#
 #macro(groups_contributions_favassettitlewithmodesc $asset) ## {
 #set($descnb = $descnb + 1)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #set($title = $currikiTitle)
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
@@ -292,7 +292,7 @@ $msg.get("search.selector.level.${item}")<br />
 #checkForCollections()
 #escapeForJS($asset.fullName)
 #set($escapedFullName = $ret_escaped)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #escapeForJS($currikiTitle)
 #set($escapedTitle = $ret_escaped)
 #if($g_userHasCollections && ($isGroupMember || $hasGlobalAdmin))##{
@@ -362,7 +362,7 @@ Curriki.module.search.start();
 ##
 #escapeForJS($asset.fullName)
 #set($escapedFullName = $ret_escaped)
-#findCurrikiTitle($asset)
+#asset_findtitle($asset)
 #escapeForJS($currikiTitle)
 #set($escapedTitle = $ret_escaped)
 {pre}
@@ -407,7 +407,7 @@ Curriki.module.search.start();
 #groupsheader("curriculum")
 #groupsdisplaywelcomecolour($msg.get("groups.curriculum.about.title") $spaceName $doc.name "red" $isGroupAdmin)
 <div id="groups-search" class="frame">
-#mycurriki_titlebar($msg.get("groups.curriculum.contributions.title") "" "" "red")
+#curriki_titlebar($msg.get("groups.curriculum.contributions.title") "" "" "red")
 <div class="frame-content">
 $msg.get("groups.curriculum.contributions.about")
 <div>
@@ -482,7 +482,7 @@ Curriki.data.reorder = {
 #end ##}
 #end ##}
 
-#mycurriki_fulltitlebar($msg.get("groups.curriculum.collections.titlebar") $msg.get("groups.curriculum.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
+#curriki_fulltitlebar($msg.get("groups.curriculum.collections.titlebar") $msg.get("groups.curriculum.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
 <div class="frame-content">
 <div id="groups-collections-instructional">
 ## TODO: We need to know who can add to the collection here
@@ -529,7 +529,7 @@ $msg.get("groups.curriculum.collections.about")
 #if($showcount == 0)
 <div class="centertext">$msg.get("groups.curriculum.collections.noresults")</div>
 #end ## showcount
-#mycurriki_paginator($msg.get("groups.curriculum.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
+#curriki_paginator($msg.get("groups.curriculum.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
 </div>
 </div>
 #groupsfooter()

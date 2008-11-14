@@ -9,7 +9,7 @@
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_blogbox $userdoc $userobj)
-#mycurriki_titlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
+#curriki_titlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
 #set($shortname = $userdoc.fullName)
 #if($shortname.startsWith("XWiki."))
  #set($shortname = $shortname.substring(6))
@@ -115,9 +115,9 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_b
 #if($title == "") ## {
 #set($title = "&nbsp;")
 #end ## }
-#mycurriki_titlebar($title "" "" "blue")
+#curriki_titlebar($title "" "" "blue")
 <div class="cd-article">
-#mycurriki_avatarwithname($xwiki.getDocument($bentrydoc.creator))
+#curriki_avatarwithname($xwiki.getDocument($bentrydoc.creator))
 #mycurriki_blogarticle($bentrydoc, $bentryobj, true)
 <a name="comments" ></a>
 <hr class="my-curriki-solid-hr"/>
@@ -132,7 +132,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_b
 #end ## }
 <div id="comment${count}" class="blog-comment">
 <div class="blog-comment-avatar" "style=float:left;">
-#mycurriki_avatar($xwiki.getDocument($comment.author))
+#curriki_avatar($xwiki.getDocument($comment.author))
 </div>
 <div class="blog-comment-line-name">
 #set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
@@ -249,10 +249,10 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 #set($bentrydoc = $xwiki.getDocument($request.editArticle))
 #set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
 #set($junk = $bentrydoc.use($bentryobj))
-#findCurrikiTitle($bentrydoc)
+#asset_findtitle($bentrydoc)
 #set($title = $msg.get("myBlog.editEntry", [$currikiTitle]))
 #if($inmycurriki == 1) ## {
-#mycurriki_titlebar($title "" "" "blue")
+#curriki_titlebar($title "" "" "blue")
 #else ## } {
 1 $msg.get("myBlog.editEntry", [$currikiTitle])
 #end ## }
@@ -260,7 +260,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 <form action="$bentrydoc.getURL("save")" id="inline" method="post">
 #else
 #if($inmycurriki == 1) ## {
-#mycurriki_titlebar($msg.get("myBlog.createEntry") "" "" "blue")
+#curriki_titlebar($msg.get("myBlog.createEntry") "" "" "blue")
 #end ## }
 <div class="edit-blog">
 #set($space = "Blog_${context.user.substring(6)}")

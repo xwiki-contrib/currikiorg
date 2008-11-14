@@ -1,5 +1,5 @@
 #**
-  *    General Macros: skin, panels, other
+  *    General Macros: skin, panels, title bar, avatar, pagination
   *#
 
 
@@ -45,23 +45,22 @@ $prop.prettyName#else
 $msg.get($prop.name)#end
 #end
 
-##
-## GWT
-##
-##
+#**
+ * Macro to get the gwt editor url of a document
+ * docToEdit Curriki Document
+ *#
 #macro(gwtEditUrl $docToEdit)
 #set($m_gwtUrl = $gwtmainpath)
 #set($docToEdit2 = $xwiki.escapeURL($docToEdit))
 #set($m_editUrl = "${m_gwtUrl}page=${docToEdit2}&mode=edit")
 $m_editUrl#end
-##
-##
-##
-##
-## General
-##
-##
-##
+
+
+#**
+ * Truncates a text to a maximum number of chars
+ * text text to truncate
+ * maxChars maximum number of chars
+ *#
 #macro(truncatetext $text $maxChars)
 #if($text.length() > $maxChars)
 #set($i = $text.lastIndexOf(" ", $maxChars))
@@ -69,11 +68,13 @@ $m_editUrl#end
 #set($text = "${text.substring(0, $i)}")
 #end
 #end
-##
-##
-##
-##
-##
+
+#**
+ * Display a link on multiple lines with a maximum number of chars per line
+ * We switch to the next line only on a . or /
+ * linkToBreak URL to break in multiple lines
+ * size maximum number of chars in one line
+ *#
 #macro(breakLinkText $linkToBreak $size)
  #if($linkToBreak.length()<=$size)
 $linkToBreak
@@ -96,11 +97,15 @@ $linkToBreak.substring(0, $index)
  #end
 #end
 #end
-##
-##
-##
-##
-##
+
+#**
+ * Get an extract of a maximum number of chars of a content of a XWiki.ArticleClass
+ *
+ * fromObj XWiki Object
+ * fromDoc XWiki Document
+ * toStr string to output to
+ * maxChars maximum number of chars to display
+ *#
 #macro(getNewsExtract $fromObj $fromDoc $toStr $maxChars)
 #set($toStr = $fromDoc.display("extract", "view", $fromObj))
 #if($toStr=="")
@@ -112,10 +117,12 @@ $linkToBreak.substring(0, $index)
 #end
 #end
 #end
-##
-##
-##
-##
+
+#**
+ * Displays the mime icon of a file according to its extension
+ *
+ * p_fileName filename
+ *#
 #macro(mimeicon $p_fileName)
 #if($p_fileName.lastIndexOf(".") == -1)
  #set($m_fileExt = "Unknown")
@@ -131,11 +138,16 @@ $linkToBreak.substring(0, $index)
 #set($macro_iconUrl = "")
 #set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
 #end
-##
-##
-##
-##
-#macro(findUserPrefix $userShortName)
+
+
+#**
+ * Sets the userPrefix variable from the short name of a user
+ * For John Doe -> John's
+ * For James Doe -> James'
+ * If the user is the current user -> My
+ * userShortName short name of the user
+ *#
+#macro(curriki_finduserprefix $userShortName)
  #set($userdoc = $xwiki.getDocument("XWiki", $userShortName))
  #set($firstName = $!userdoc.display("first_name", "view"))
  #if($firstName && $firstName.length()>0)
@@ -148,76 +160,39 @@ $linkToBreak.substring(0, $index)
   #set($userPrefix = "My")
  #end
 #end
-##
-##
-##
-##
-#macro(findCurrikiTitle $currikiDoc)
- #if($currikiDoc.getObject("XWiki.FrameworkItemClass"))
-  #set($key = "XWiki.AssetClass_fw_items_${currikiDoc.fullName}")
-  #set($currikiTitle = $msg.get($key))
-  #if($currikiTitle == $key)
-   #set($currikiTitle = $!currikiDoc.displayTitle)
-  #end
- #else
- #set($currikiDoc = $currikiDoc.getTranslatedDocument())
- #set($currikiTitle = $!currikiDoc.displayTitle)
- #if($currikiDoc.space.startsWith("Coll_"))
-  #findUserPrefix($currikiDoc.space.substring(5))
-##  #if($currikiDoc.name == "Default")
-##   #set($currikiTitle = "${userPrefix} Default Collection")        
-##  #elseif($currikiDoc.name == "WebHome")
-  #if($currikiDoc.name == "WebHome")
-   #set($currikiTitle = "${userPrefix} Collections")
-  #end
- #elseif($currikiDoc.space.startsWith("Blog_"))
-  #if($currikiDoc.name == "WebHome")
-   #findUserPrefix($currikiDoc.space.substring(5))
-   #set($currikiTitle = "${userPrefix} Blog")
-  #elseif($currikiDoc.getObject("XWiki.ArticleClass"))
-   #set($currikiTitle = $!currikiDoc.display("title", "view", $currikiDoc.getObject("XWiki.ArticleClass")))
-  #end
- #elseif($currikiDoc.fullName == "MyCurriki.WebHome" && "$!request.user" != "")
-  #set($whofor = $request.user)
-  #if(!$whofor.startsWith("XWiki.")) ## {
-   #set($whofor = "XWiki.$whofor")
-  #end ## }
-  #set($userDoc = $xwiki.getDocument($whofor))
-  #set($currikiTitle = "$!userDoc.display('first_name', 'view') $!userDoc.display('last_name', 'view')")
- #elseif($currikiDoc.space == "XWiki" && $currikiDoc.getObject("XWiki.XWikiUsers"))
-  #findUserPrefix($currikiDoc.name)
-  #set($currikiTitle = "${userPrefix} Curriki")
- #end
- #end
-#end
-##
-##
-##
-##
+
+#**
+  * Display a popup link in javascript
+  *
+  * url url to link to
+  * text text to display
+  *#
 #macro(showpopup $url $text)
 <a href="javascript:void()" onclick="showpopup('${url}?xpage=popup'); return false;">${text}</a>
 #end
-##
-##
-##
-##
+
+#**
+  * Display a mandatory asterix
+  *
+  *#
 #macro(asterix)
 <span style="color: #ff0000; font-size: 16px">! </span>
 #end
-##
-##
-##
-##
+
+#**
+  * Display of a document property with the pretty name
+  *
+  *#
 #macro(displayPropName $prop)
 #if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
 $prop.prettyName#else
 $msg.get($prop.name)#end
 #end
-##
-##
-##
-## buttons
-##
+
+#**
+  * Display a button
+  *
+  *#
 #macro(button $text $color $type $id $onclick)
 #if($type != "reset" && $type != "submit")
 #set($type = "submit")
@@ -225,13 +200,12 @@ $msg.get($prop.name)#end
 ##<span class="btn-wrapper btn-wrapper-${color}">
 <button#if($id != "") id="${id}"#end class="button#if($color != "") button-${color}#end"#if($onclick != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
 #end
-##
-##
-##
-##  PARAGRAPHS
-##
-##
-##
+
+
+#**
+  * Display a paragraph with an image
+  *
+  *#
 #macro(paragraphimg $type $image $imagetitle $text $readmorelink $readmore_linktext $source)
 #set($paratypeclass = "withimg")
 #if($type == "logo")
@@ -256,7 +230,11 @@ $msg.get($prop.name)#end
 #if($source != "") <span class="infosource ${paratypeclass}">$source</span>#end
 </div>
 #end
-##
+
+#**
+  * Display a paragraph
+  *
+  *#
 #macro(paragraph $text $readmorelink $readmore_linktext)
 #normalizelink($readmorelink)
 #if($readmore_linktext == "")
@@ -266,21 +244,22 @@ $msg.get($prop.name)#end
 #end
 <div class="para">$text#if($readmorelink != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
 #end
-##
-##
-##
-##
-##  TITLES
-##
-##
+
+
+#**
+  * Display a title in a certain color
+  *
+  *#
 #macro(title $lefttitle $color)
 <div class="titlebar titelbar_$color">
 <h1 class="titlebar_left">$lefttitle</h1>
 </div>
 #end
-##
-##
-##
+
+#**
+  * Normalize a link
+  *
+  *#
 #macro(normalizelink $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
 #set($link = $xwiki.getURL($link))
@@ -288,15 +267,22 @@ $msg.get($prop.name)#end
 #set($link = $context.util.escapeURL($link))
 #end
 #end
-##
-##
+
+
+#**
+  * Normalize an attachment link
+  *
+  *#
 #macro(normalizeattachment $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
 #set($link = $doc.getAttachmentURL($link))
 #end
 #end
-##
-##
+
+#**
+  * Display a titlebar
+  *
+  *#
 #macro(titlebar $lefttitle $righttitle $link $color)
 #normalizelink($link)
 #set($righttitletrunc = $righttitle)
@@ -317,12 +303,12 @@ $msg.get($prop.name)#end
 <div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
 </div>
 #end
-##
-##
-##
-## Section
-##
-##
+
+
+#**
+  * Display a title bar of a section
+  *
+  *#
 #macro(beginsectionandshow $lefttitle $righttitle $link $color $show)
 #if(!$seccounter)
 #set($seccounter = 1)
@@ -392,27 +378,33 @@ linksDiv.appendChild(showhide${seccounter});
 <div id="section${seccounter}content" class="hidden">
 #end
 #end
-##
-##
+
+
+#**
+  * Display a titlebar of a section
+  * This needs to be closed by endsection
+  *
+  *#
 #macro(beginsection $lefttitle $righttitle $link $color)
 #beginsectionandshow($lefttitle, $righttitle, $link, $color, true)
 #end
-##
-##
-##
-##
+
+
+#**
+  * Ends a section
+  *
+  *#
 #macro(endsection)
 </div>
 <div class="clearfloats"></div>
 </div>
 #end
-##
-##
-##
-##
-##  PANEL Macros
-##
-##
+
+
+#**
+  * Display a panel content
+  *
+  *#
 #macro(displaypanelcontent $doc $obj)
 $doc.display("content", $obj)
 #end
@@ -424,11 +416,21 @@ $doc.display("content", $obj)
 <h5 class="xwikipaneltitle $color" onclick="if(eltHasClass(this.parentNode, 'expanded')) createCookie('$cookieName','collapsed', ''); else eraseCookie('$cookieName'); togglePanelVisibility(this.parentNode);">$title</h5>
 <div class="xwikipanelcontents">
 #end
+
+#**
+  * Display a panel header
+  *
+  *#
 #macro(panelheadercolornocollapse $title $color)
 <div class="panel expanded $color">
 <h5 class="xwikipaneltitle $color">$title</h5>
 <div class="xwikipanelcontents">
 #end
+
+#**
+  * Display a panel rounded header
+  *
+  *#
 #macro(panelrounded $lefttitle $righttitle $link)
 <div style="clear:both; width:670px;">
  <div class="titlebar rounded">
@@ -437,35 +439,75 @@ $doc.display("content", $obj)
  </div>
  <div class="panelroundedcontent">
 #end
+
+#**
+  * Display a panel rounded footer
+  *
+  *#
 #macro(panelroundedfooter)
  </div>
  <div class="panelroundedfooter"></div>
 </div>
 #end
+
+#**
+  * Display a panel footer
+  *
+  *#
 #macro(panelfooter)
 </div>
 </div>
 #end
+
+#**
+  * Display a panel custom header
+  *
+  *#
 #macro(panelheadercustom $color)
 <div class="custompanel custompanel_$color xwikipanelcontents">
 #end
+
+#**
+  * Display a panel custom footer
+  *
+  *#
 #macro(panelfootercustom)
 </div>
 #end
+
+#**
+  * Display a panel header
+  *
+  *#
 #macro(panelheader $title)
 <div class="panel expanded">
 <h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
 <div class="xwikipanelcontents">
 #end
+
+#**
+  * Display a large panel header
+  *
+  *#
 #macro(largepanelheader $title)
 <div class="large panel expanded">
 <h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
 <div class="xwikipanelcontents">
 #end
+
+#**
+  * Display a panel footer
+  *
+  *#
 #macro(panelfooter)
 </div>
 </div>
 #end
+
+#**
+  * Display an alternative panel rounder header
+  *
+  *#
 #macro(panelrounded2 $lefttitle $righttitle $link $color)
 <div class="panelrounded panelrounded_$color">
  <div class="panelroundedtitle">
@@ -475,25 +517,33 @@ $doc.display("content", $obj)
  <div class="panelroundedcontent2">
   <div class="panelroundedcontentinner">
 #end
+
+#**
+  * Display an alternative panel rounded footer
+  *
+  *#
 #macro(panelroundedfooter2)
   </div>
  </div>
  <div class="panelroundedfooter2"></div>
 </div>
 #end
+
+#**
+  * Display a large panel with color
+  *
+  *#
 #macro(largepanelcolor $title $color)
 <div class="largepanel largepanel_$color expanded">
 <h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
 <div class="xwikipanelcontents">
 #end
-##
-##
-#############################################
-##
-##  NAVIGATION Panel
-##
 
-##  Begin panel: includes link to HOME
+
+#**
+  * Begin the navigation panel
+  *
+  *#
 #macro(beginNavigationPanel $homerollovertext) ##{
 <div id="navigation" class="shadow-outer">
 <div class="shadow-middle">
@@ -512,15 +562,20 @@ $msg.get("navigationHome")
 #end ##}
 ##
 
-##  End panel
+#**
+  * End the navigation panel
+  *
+  *#
 #macro(endNavigationPanel) ##{
 </div> ## shadow-outer
 </div> ## shadow-middle
 </div> ## shadow-inner navigation-menu
 #end ##}
 
-##
-## Macro for verifying if an entry in the nav panel is active
+#**
+  * Macro for verifying if an entry in the nav panel is active
+  *
+  *#
 #macro(checkActive $docname $result) ##{
   #if($doc.fullName == $docname) ##{
     #if($doc.space == "MyCurriki" && "$!request.user" != "") ##{
@@ -531,8 +586,10 @@ $msg.get("navigationHome")
   #end ##}
 #end ##}
 	
-##
-## Displays a navigation category, with sub-elements
+#**
+  * Displays a navigation category, with sub-elements
+  *
+  *#
 #macro(navigationCategory $text $rollovertext $link $expanded $items) ##{
   #set($iniexp = $expanded)
   #if($doc.web.startsWith("Coll_")) ##{
@@ -610,9 +667,11 @@ $msg.get("navigationHome")
   </div> ##}
   #set($expanded=$iniexp) ##rolling back the parameter to initial value so it won't affect future calls to this macro
 #end  ##}
-	
-##
-## Displayes a navigation entry (without sub-elements)
+
+
+#**
+ * Displays a navigation entry (without sub-elements)
+ *#
 #macro(navigationTopLevelEntry $text $link)
 #set($active = false)
 #checkActive($link $active)
@@ -620,12 +679,10 @@ $msg.get("navigationHome")
 <div class="curriki-nav-header"><h4>[$text>$link]</h4></div>
 </div>
 #end
-##
-##
-#############################################
-##
-##  FEATURED MEMBERS Panel: Display a Memeber
-##
+
+#**
+ *  FEATURED MEMBERS Panel: Display a Memeber
+ *#
 #macro(displayMember $member)
 #if(!$member.startsWith("XWiki."))
 #set($member = "XWiki.${member}")
@@ -666,21 +723,19 @@ $memberdoc.getRenderedContent("$!content")</div>
 </div> ## vcard
 #end
 #end
-##
-## Adding this macro which does not seem to be loaded from albatross/macros.vm
+
+#**
+ * Adding this macro which does not seem to be loaded from albatross/macros.vm
+ *#
 #macro(xwikitopmenuentrystart $actionurl $linktext $id)
 <div class="topmenuentry" onmouseover="showsubmenu(this);" onmouseout="hidesubmenu(this);" id="$id"><a class="tme" href="$actionurl"><strong>$linktext</strong></a><span class="hidden menucolon">: </span><span class="submenu hidden">
 #end
 
 
-
-
-##
-##
-## From space.vm - as the macros loaded there don't seem to work from here any more
-##
+#**
+ * Parents Breadcrumb
+ *#
 #macro(parentsBreadcrumb $bcDoc $level)
-
 #set($sm = $xwiki.csm)
 #set($spaceName = $bcDoc.getSpace())
 #set($s = $sm.getSpace($spaceName))
@@ -736,14 +791,13 @@ $memberdoc.getRenderedContent("$!content")</div>
   #end
 
 #end  ## end group specifics
-
 #end ## end macro
-##
-##
-##
-##
-#macro(currikiBreadcrumb $bcParam $bcCurrentDoc)
 
+
+#**
+ * Parents Breadcrumb
+ *#
+#macro(currikiBreadcrumb $bcParam $bcCurrentDoc)
 #set($sm = $xwiki.csm)
 #set($spaceName = $bcCurrentDoc.getSpace())
 #set($s = $sm.getSpace($spaceName))
@@ -782,7 +836,7 @@ $memberdoc.getRenderedContent("$!content")</div>
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
 
-   #findCurrikiTitle($bcDoc)
+   #asset_findtitle($bcDoc)
 
    ##groups specific rules
    #if($!s=="") 
@@ -886,7 +940,7 @@ $memberdoc.getRenderedContent("$!content")</div>
    #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
-   #findCurrikiTitle($bcDoc)
+   #asset_findtitle($bcDoc)
    #set($userArg = "")
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
     #set($userArg="&user=$request.user")
@@ -907,8 +961,10 @@ $memberdoc.getRenderedContent("$!content")</div>
 @import "$doc.getAttachmentURL($filename)";
 </style>
 #end
-	
-## Macro to display the page title
+
+#**
+ * Macro to display the page title
+ *#
 #macro(pageTitle) ##{
   #if($doc.fullName=="GWT.Editor") ##{
     $msg.get("editor.app_full_name")
@@ -929,36 +985,56 @@ $memberdoc.getRenderedContent("$!content")</div>
 
 ## From Add Path spec in EOU1
 
-##
-## For CreateResources.Nortel6ELessonPlan output.
-## References translations from CreateResources.Translations.
-## This allows inclusion of Nortel Icon without hardcoding path to
-## image in each lesson plan output.
-##
+#**
+ * For CreateResources.Nortel6ELessonPlan output.
+ * References translations from CreateResources.Translations.
+ * This allows inclusion of Nortel Icon without hardcoding path to
+ * image in each lesson plan output.
+ *##
 #macro(currikiNortelIcon)        ##{
 <img src="$msg.get('nortel.lesson.plan.output.heading.icon.url')" height="$msg.get('nortel.lesson.plan.output.heading.icon.height')" width="$msg.get('nortel.lesson.plan.output.heading.icon.width')">
 #end                             ##}
 
-##
-## For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
-## formatTextareasIntoWikiText() ). Call sequence:
-## #currikiattachmentBegin()
-## #currikiattachment("file1.gif")
-## #currikiattachment("file2.gif")
-## ...
-## #currikiattachmentEnd()
+#**
+ * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+ * formatTextareasIntoWikiText() ). Call sequence:
+ *  macro currikiattachmentBegin()
+ *  macro currikiattachment("file1.gif")
+ *  macro currikiattachment("file2.gif")
+ *  macro currikiattachmentEnd()
+ *#
 #macro(currikiattachmentBegin)  ##{
   <table><tbody>
 #end                             ##}
+
+#**
+ * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+ * formatTextareasIntoWikiText() ). Call sequence:
+ *  macro currikiattachmentBegin()
+ *  macro currikiattachment("file1.gif")
+ *  macro currikiattachment("file2.gif")
+ *  macro currikiattachmentEnd()
+ *#
 #macro(currikiattachment $fname) ##{
   #mimeicon($fname)              ## sets $macro_iconUrl as side-effect
   <tr><td>&nbsp;<img src="${macro_iconUrl}"/>&nbsp;</td><td>&nbsp;{attach:${fname}}&nbsp;</td></tr>
 #end                             ##}
+
+#**
+ * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+ * formatTextareasIntoWikiText() ). Call sequence:
+ *  macro currikiattachmentBegin()
+ *  macro currikiattachment("file1.gif")
+ *  macro currikiattachment("file2.gif")
+ *  macro currikiattachmentEnd()
+ *#
 #macro(currikiattachmentEnd)    ##{
   </tbody></table>
 #end                             ##}
 
-## Check for editable collections (to know if we can show 'Add'
+#**
+ * Check for editable collections (to know if we can show 'Add'
+ *#
 #macro(checkForCollections) ##{
 #if("$!g_checkedForCollections" == "") ##{
 #set($g_userHasCollections = false)
@@ -981,9 +1057,217 @@ $memberdoc.getRenderedContent("$!content")</div>
 #end ##}
 #end ##}
 
+#**
+ * escape JS text
+ *#
 #macro(escapeForJS $value) ##{
 #set($ret_escaped = $value.replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
 #end ##}
 
-##
-## End of add from Add Path spec in EOU1
+
+#**
+  * Display a title bar with link and js
+  *
+  * @param $lefttitle Title to show on the left
+  * @param $righttitle Title to show on the right
+  * @param $link Link to show
+  * @param $js Javascript to add to the link
+  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
+  * @param $idpfx unique ID to add to html tags
+  * @author dward@curriki.org
+  *#
+#macro(curriki_fulltitlebar $lefttitle $righttitle $link $js $color $idpfx) ## {
+#if("$!link" != "") ## {
+#normalizelink($link)
+#end ## }
+#set($righttitletrunc = $righttitle)
+#if ($righttitletrunc.length() > 35) ## {
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end ## }
+#if("$!idpfx" != "") ## {
+#set($qt = '"')
+#set($tmp = "id=${qt}${idpfx}-")
+#set($dId = "${tmp}bar${qt}")
+#set($tId = "${tmp}title${qt}")
+#set($rdId = "${tmp}right${qt}")
+#set($lId = "${tmp}link${qt}")
+#else ## } {
+#set($dId = "")
+#set($tId = "")
+#set($rdId = "")
+#set($lId = "")
+#end ## }
+<div $dId class="titleheader titleheader-$color"><h3 $tId#if($link!="") class="titleheader-left"#end>$lefttitle</h3>#if($link!="" || $js!="")<div $rdId class="titleheader-right"><a $lId #if("$!link"!="") href="$link"#end#if("$!js"!="") onclick="$js"#end title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+</div>
+#end ## macro ## }
+
+#**
+  * Display a simple title bar with js
+  *
+  * @param $lefttitle Title to show on the left
+  * @param $righttitle Title to show on the right
+  * @param $js js to add
+  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
+  * @author dward@curriki.org
+  *#
+#macro(curriki_jstitlebar $lefttitle $righttitle $js $color) ## {
+#curriki_fulltitlebar($lefttitle $righttitle "" $js $color "")
+#end ## macro ## }
+
+#**
+  * Display a simple title bar
+  *
+  * @param $lefttitle Title to show on the left
+  * @param $righttitle Title to show on the right
+  * @param $link Link to show
+  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
+  * @author dward@curriki.org
+  *#
+#macro(curriki_titlebar $lefttitle $righttitle $link $color) ## {
+#curriki_fulltitlebar($lefttitle $righttitle $link "" $color "")
+#end ## macro ## }
+
+
+
+#**
+  * Curriki pagination macro with additional arguments
+  *
+  * @param $called Text to use in the pagination macro
+  * @param from start number
+  * @param $nbToDisplay number of elements to display
+  * @param $of Maximum number of elements
+  * @param $addargs Additional arguments for the url
+  * @author dward@curriki.org
+  *#
+#macro(curriki_paginatorargs $called $from $nbToDisplay $of $addargs) ## {
+<div id="mycurriki-paginator" class="table-results">
+## Make sure we have sane settings for $of
+#if($of < 0) ## {
+#set($of = 0)
+#end ## }
+## We dont show the paginator if nothing to paginate
+#if($of != 0) ## {
+## Make sure we have sane settings for $from
+#if($from < 0) ## {
+#set($from = 0)
+#end ## }
+#if($from >= $of) ## {
+#set($from = $of - 1)
+#end ## }
+## Make sure we have sane settings for $nbToDisplay
+#if($nbToDisplay < 1) ## {
+#set($nbToDisplay = 1)
+#end ## }
+#if("$called"=="") ## {
+#set($called = $msg.get("mycurriki.macro.paginate.results"))
+#end ## }
+## Determine what $to sould be
+#set($to = ($from + $nbToDisplay) - 1)
+#if($to >= $of) ## {
+#set($to = ($of - 1))
+#end ## }
+## Now figure out total, current, first, and last page
+#set($pages = (($of - 1) / $nbToDisplay) + 1)
+#set($cpage = ($from / $nbToDisplay) + 1)
+#set($fpage = ((($cpage - 1) / 10) * 10) + 1)
+#set($lpage = $fpage + 9)
+#if($lpage > $pages) ## {
+#set($lpage = $pages)
+#end ## }
+## Figure out if we need a user argument
+#if("$!request.user" == "") ## {
+#set($addarg="")
+#else ## } {
+#set($addarg="user=${request.user}&")
+#end ## }
+#if($addargs != "") ## {
+#set($addarg="${addarg}${addargs}&")
+#end ## }
+<div id="mycurriki-paginator-line1" class="table-results-title">
+## Display 1 -> X+1 instead of 0 -> X
+#set($dFrom = $from + 1)
+#set($dTo = $to + 1)
+$called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
+</div>
+<div id="mycurriki-paginator-line2" class="table-results-navigation">
+#if($cpage == 1) ## {
+#set($npage = 0)
+#else ## } {
+#set($npage = (($cpage - 2) * $nbToDisplay))
+#end ## }
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+#if($cpage!=1) ## {
+#set($prvpage = $cpage - 1)
+#set($altprev = "Page "+${prvpage})
+<a href="${url}" class="table-results-previous#if($cpage==1) table-results-disabled" onclick="return false;#end" alt="${altprev}" title="${altprev}">$msg.get("mycurriki.macro.paginate.previous")</a>
+#end ## }
+#foreach ($pg in [${fpage}..${lpage}]) ## {
+#set($npage = (($pg - 1) * $nbToDisplay))
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+<a href="${url}"#if($pg==$cpage) class="table-results-navigation-selected" onclick="return false;"#end>$pg</a>
+#end ## }
+#if($cpage==$pages) ## {
+#set($npage = (($pages - 1) * $nbToDisplay))
+#else ## } {
+#set($npage = ($cpage * $nbToDisplay))
+#end ## }
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+#if($cpage!=$pages) ## {
+#set($nxtpage = $cpage + 1)
+#set($altnext = "Page "+${nxtpage})
+<a href="${url}" class="table-results-next#if($cpage==$pages) table-results-disabled" onclick="return false;#end" alt="${altnext}" title="${altnext}">$msg.get("mycurriki.macro.paginate.next")</a>
+#end ## }
+</div>
+#end ## if != 0 ## }
+</div>
+#end ## macro ## }
+
+#**
+  * My Curriki pagination macro
+  *
+  * @param $called Text to use in the pagination macro
+  * @param from start number
+  * @param $nbToDisplay number of elements to display
+  * @param $of Maximum number of elements
+  * @author dward@curriki.org
+  *#
+#macro(curriki_paginator $called $from $nbToDisplay $of) ## {
+#curriki_paginatorargs($called $from $nbToDisplay $of "")
+#end ## }
+
+
+#**
+  * Display the avatar of a user
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatar $userdoc) ## {
+#if($userdoc.attachmentList.size()==0)  ## {
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+  <a href="$userdoc.getURL("view")" >
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
+ #end ## }
+#end ## }
+#end ## macro ## }
+
+
+#**
+  * Display the avatar of a user with a name
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatarwithname $userdoc) ## {
+#if($userdoc.attachmentList.size()==0)  ## {
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+  <a href="$userdoc.getURL("view")" >
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
+ #end ## }
+#end  $xwiki.getUserName($userdoc.fullName) ## }
+#end ## macro ## }

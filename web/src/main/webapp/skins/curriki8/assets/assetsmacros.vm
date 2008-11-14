@@ -1,9 +1,58 @@
-##
-##
-## AssetTemplate macros
-##
-##
-#macro(beginassetsection $lefttitle $link $showAllvar)
+#**
+  * Asset display macros
+  *
+  *#
+
+#**
+  * Finds the title of a curriki document
+  *
+  * currikiDoc Curriki Asset Document
+  *#
+#macro(asset_findtitle $currikiDoc)
+ #if($currikiDoc.getObject("XWiki.FrameworkItemClass"))
+  #set($key = "XWiki.AssetClass_fw_items_${currikiDoc.fullName}")
+  #set($currikiTitle = $msg.get($key))
+  #if($currikiTitle == $key)
+   #set($currikiTitle = $!currikiDoc.displayTitle)
+  #end
+ #else
+ #set($currikiDoc = $currikiDoc.getTranslatedDocument())
+ #set($currikiTitle = $!currikiDoc.displayTitle)
+ #if($currikiDoc.space.startsWith("Coll_"))
+  #curriki_finduserprefix($currikiDoc.space.substring(5))
+##  #if($currikiDoc.name == "Default")
+##   #set($currikiTitle = "${userPrefix} Default Collection")
+##  #elseif($currikiDoc.name == "WebHome")
+  #if($currikiDoc.name == "WebHome")
+   #set($currikiTitle = "${userPrefix} Collections")
+  #end
+ #elseif($currikiDoc.space.startsWith("Blog_"))
+  #if($currikiDoc.name == "WebHome")
+   #curriki_finduserprefix($currikiDoc.space.substring(5))
+   #set($currikiTitle = "${userPrefix} Blog")
+  #elseif($currikiDoc.getObject("XWiki.ArticleClass"))
+   #set($currikiTitle = $!currikiDoc.display("title", "view", $currikiDoc.getObject("XWiki.ArticleClass")))
+  #end
+ #elseif($currikiDoc.fullName == "MyCurriki.WebHome" && "$!request.user" != "")
+  #set($whofor = $request.user)
+  #if(!$whofor.startsWith("XWiki.")) ## {
+   #set($whofor = "XWiki.$whofor")
+  #end ## }
+  #set($userDoc = $xwiki.getDocument($whofor))
+  #set($currikiTitle = "$!userDoc.display('first_name', 'view') $!userDoc.display('last_name', 'view')")
+ #elseif($currikiDoc.space == "XWiki" && $currikiDoc.getObject("XWiki.XWikiUsers"))
+  #curriki_finduserprefix($currikiDoc.name)
+  #set($currikiTitle = "${userPrefix} Curriki")
+ #end
+ #end
+#end
+
+
+#**
+ * Begin an asset display section
+ *
+ *#
+#macro(asset_beginsection $lefttitle $link $showAllvar)
 #set($doHide = !$showAllvar)
 #if(!$seccounter)
 #set($seccounter = 1)
@@ -17,7 +66,7 @@
 #if($doHide)
  #set($defaultGif = $closedGif)
 #end
-#findCurrikiTitle($embeddedDoc)
+#asset_findtitle($embeddedDoc)
 <div class="righttext">
   <span id="section${seccounter}title">
     <div class="lefttext" style="width: 438px;">
@@ -78,9 +127,9 @@ createCookie("Section${seccounter}Hidden", true, "");
 ##
 ##
 ##
-#macro(displayassettitlebar $asset, $isPrint)
+#macro(asset_displaytitlebar $asset, $isPrint)
  <div class="asset-metadatas">
- #findCurrikiTitle($asset)
+ #asset_findtitle($asset)
  #if($request.rev)
  #set($currikiTitle = "$currikiTitle $msg.version $request.rev")
  #end
@@ -91,10 +140,10 @@ createCookie("Section${seccounter}Hidden", true, "");
 ##
 ##
 ##
-#macro(displayassetmetadatas $asset, $isPrint)
+#macro(asset_displaymetadatas $asset, $isPrint)
 #set($assetObj = $asset.getObject("XWiki.AssetClass"))
  <div class="asset-metadatas">
- #findCurrikiTitle($asset)
+ #asset_findtitle($asset)
  #titlebar($currikiTitle "" "" "red")
 <div class="asset-metadatas-block">
  *$msg.get("metadata.description_title"):* <br />
@@ -152,7 +201,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 #set($m_sm = $xwiki.csm)
 #set($s = $m_sm.getSpace($spacehome))
 #set($sUrl = $s.getHomeURL())
-#mycurriki_grouplogo( $s )
+#groups_grouplogo( $s )
 <div id="asset-metadatas-block-groupname">
 <span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
  <a href="${sUrl}">{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}</a>
@@ -249,11 +298,11 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 ##
 ##
 ##
-#macro(displaylinks $asset)
+#macro(asset_displaylinks $asset)
  #checkForCollections()
  #escapeForJS($asset.fullName)
  #set($escapedFullName = $ret_escaped)
- #findCurrikiTitle($asset)
+ #asset_findtitle($asset)
  #escapeForJS($currikiTitle)
  #set($escapedTitle = $ret_escaped)
 ## Favorite
@@ -290,7 +339,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 ##
 ##
 ##
-#macro(displayAssetContent $asset $develop $showAll)
+#macro(asset_displaycontent $asset $develop $showAll)
 #if(!$asset.hasAccessLevel("view"))
  $msg.get("asset.contentNotAllowed")
 #else
@@ -350,7 +399,7 @@ $objTxt.text
      #set($embeddedDoc = $xwiki.getDocument($assetPage))
      #if($embeddedDoc.getObject("XWiki.CompositeAssetClass"))
       <div class="asset-content-body-composite-composite">
-#findCurrikiTitle($embeddedDoc)
+#asset_findtitle($embeddedDoc)
       <div class="righttext"><div class="lefttext">
 <a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">*$currikiTitle*</a>
 </div>
@@ -359,11 +408,11 @@ $objTxt.text
       </div>
      #else
       <div class="asset-content-body-composite-source">
-#findCurrikiTitle($embeddedDoc)
-#beginassetsection($currikiTitle $embeddedDoc.fullName $showAll)
+#asset_findtitle($embeddedDoc)
+#asset_beginsection($currikiTitle $embeddedDoc.fullName $showAll)
        ##<div class="righttext"><div class="lefttext"> *$currikiTitle* </div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div>
        #set($objComp = "")
-       #displayAssetContent($embeddedDoc false $showAll)
+       #asset_displaycontent($embeddedDoc false $showAll)
 #endsection()
  	  </div>
      #end
@@ -419,11 +468,11 @@ $msg.get("asset.externallink")
 ##
 ##
 ##
-#macro(showCollection $subasset)
+#macro(asset_displaycollection $subasset)
 #set($collDoc = $xwiki.getDocument($subasset.assetpage))
 #if ($xwiki.getDocument($subasset.assetpage) && $collDoc.hasAccessLevel("view"))
 ## look for the title
-#findCurrikiTitle($collDoc)
+#asset_findtitle($collDoc)
 ## display the title
 #titlebar($currikiTitle "" "" "red")
 <div class="righttext"><div class="lefttext">
@@ -475,7 +524,7 @@ $msg.get("asset.externallink")
 ##
 
 
-#macro(displayMode)
+#macro(asset_findmode)
 #set($mode = "")
 #if($request.getParameter("viewer") && $request.getParameter("viewer").equals("print"))
 #set($mode = "print")
@@ -495,7 +544,8 @@ $msg.get("asset.externallink")
 #set($isPrint = false)
 #end
 #end
-#macro(displayAsset $currDoc)
+
+#macro(asset_display $currDoc)
 #if(!$isPrint)
 <div class="asset-tabs">
 <a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a>
@@ -507,15 +557,15 @@ $msg.get("asset.externallink")
 #if(!$isPrint)
 <div class="asset-links">
 <div class="righttext">
-#displaylinks($currDoc)
+#asset_displaylinks($currDoc)
 </div>
 </div>
 #end
 <div class="asset-contents $mode">
 #if(!$isPrint)
-#displayassetmetadatas($currDoc, $isPrint)
+#asset_displaymetadatas($currDoc, $isPrint)
 #else
-#displayassettitlebar($currDoc, $isPrint)
+#asset_displaytitlebar($currDoc, $isPrint)
 #end
 <div class="asset-display">
 ##
@@ -529,7 +579,7 @@ $msg.get("asset.externallink")
 ##
 #set($showAllvar = true)
 ##
- #displayAssetContent($currDoc true $showAllvar)
+ #asset_displaycontent($currDoc true $showAllvar)
 #if(!$isPrint)
 <hr class="my-curriki-solid-hr" >
 <div class="asset-content-footer">
@@ -540,7 +590,7 @@ $msg.get("asset.externallink")
 #else
 <a href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.linkToThePage")</a> #sep()
 #end
-#displaylinks($currDoc)
+#asset_displaylinks($currDoc)
 </div> ##content-footer-bordered
 </div> ##content-footer
 #end ## if ! print
