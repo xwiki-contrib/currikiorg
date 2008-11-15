@@ -62,10 +62,8 @@ $msg.get("groups_members_onlyaccessibletomembers")
 ##
 #macro(groupsmembershipinfo $spaceName)
 #begingroupsection($msg.get("groups_home_membership_title"),"","", "blue", false)
-
 #if($sm.isMember($spaceName,$context.user))
 $msg.get("groups_home_membership_group_infotxt")
-
 <div id="groups-members-invite-button" class="groups-members-button">
 <a href="$xwiki.getURL("${spaceName}.InviteMembers")" class="button button-orange">
 $msg.get("groups_home_membership_group_btt")
@@ -75,7 +73,6 @@ $msg.get("groups_home_membership_group_btt")
 #set($gpolicy = $sm.getSpace($spaceName).policy)
 #if($gpolicy=="open")
 $msg.get("groups_home_membership_open_visitor_infotxt")
-
 <div id="groups-members-join-button" class="groups-members-button">
 <a href="$xwiki.getURL("${spaceName}.JoinGroup")" class="button button-orange">
 $msg.get("groups_home_membership_open_visitor_btt")
@@ -83,7 +80,6 @@ $msg.get("groups_home_membership_open_visitor_btt")
 </div>
 #else
 $msg.get("groups_home_membership_closed_visitor_infotxt")
-
 <div id="groups-members-request-button" class="groups-members-button">
 <a href="$xwiki.getURL("${spaceName}.RequestMembership")" class="button button-orange">
 $msg.get("groups_home_membership_closed_visitor_btt")
@@ -582,10 +578,10 @@ $xwiki.getLocalUserName($memberName)
 <div class="groups-members-request-links">
 ## if group admin
 #set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
-<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
+<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$memberDisplayName.replaceAll("'","\\'")'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
 #if($msreq.status!=4)
 |
-<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$memberDisplayName'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
+<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$memberDisplayName.replaceAll("'","\\'")'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
 #end
 ## end
 </div>

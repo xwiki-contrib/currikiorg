@@ -1077,6 +1077,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   * @author dward@curriki.org
   *#
 #macro(curriki_fulltitlebar $lefttitle $righttitle $link $js $color $idpfx) ## {
+#if($link!="" || $js!="")
 #if("$!link" != "") ## {
 #normalizelink($link)
 #end ## }
@@ -1098,8 +1099,11 @@ $memberdoc.getRenderedContent("$!content")</div>
 #set($rdId = "")
 #set($lId = "")
 #end ## }
-<div $dId class="titleheader titleheader-$color"><h3 $tId#if($link!="") class="titleheader-left"#end>$lefttitle</h3>#if($link!="" || $js!="")<div $rdId class="titleheader-right"><a $lId #if("$!link"!="") href="$link"#end#if("$!js"!="") onclick="$js"#end title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+<div $dId class="titleheader titleheader-$color"><h3 $tId class="titleheader-left">$lefttitle</h3><div $rdId class="titleheader-right"><a $lId #if("$!link"!="") href="$link"#end#if("$!js"!="") onclick="$js"#end title="$righttitle">$righttitletrunc  &raquo;</a></div>
 </div>
+#else
+<h3 class="titleheader titleheader-$color">$lefttitle</h3>
+#end
 #end ## macro ## }
 
 #**

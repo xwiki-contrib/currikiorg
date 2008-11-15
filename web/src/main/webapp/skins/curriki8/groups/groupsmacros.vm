@@ -239,17 +239,14 @@ $wdoc.display("content", "edit")
   #else
     #set($counter = $counter + 1)
   #end
-
   ##normalizing link
   #normalizelink($link)
-
   ##if the right title is too big we truncate it
   #set($righttitletrunc = $righttitle)
   #if ($righttitletrunc.length() > 35)
     #set($righttitletrunc = $righttitle.substring(0, 34))
     #set($righttitletrunc = "${righttitletrunc}...")
   #end
-
   <div class="frame" id="section_${counter}">
      #if($isGroupAdmin)
      #curriki_titlebar($title $righttitle $link $color)
@@ -257,7 +254,6 @@ $wdoc.display("content", "edit")
      #curriki_titlebar($title "" "" $color)
 	 #end
      <div class="frame-content" id="section${counter}content">
-
 #end ##}
 
 ## ending macro for begingroupsection
@@ -720,6 +716,7 @@ $xwiki.addTooltipJS()
  #groupsmembershipinfo($spaceName)
 #end
 #groupsfooter()
+<br clear="all"/>
 #end
 
 #**
