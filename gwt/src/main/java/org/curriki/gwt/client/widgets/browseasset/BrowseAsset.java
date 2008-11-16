@@ -177,7 +177,13 @@ public class BrowseAsset  extends Tree implements SelectedAssetChangeListener {
             }
         }
         if (treeItem.getPageName().equals(assetPageName)) {
-            return ((AssetTreeItem)treeItem.getParentItem()).getPageName();
+            if (treeItem.getParentItem()!=null) {
+              String pageName = ((AssetTreeItem)treeItem.getParentItem()).getPageName();
+              if ((pageName!=null)&&(!pageName.equals("")))
+                return pageName;
+              else
+                return "";
+            }
         }
 
         for (int i = 0; i < treeItem.getChildCount(); i++){
@@ -185,7 +191,7 @@ public class BrowseAsset  extends Tree implements SelectedAssetChangeListener {
                 continue;
             AssetTreeItem child = (AssetTreeItem) treeItem.getChild(i);
             String parent = findParent(assetPageName, child);
-            if (!parent.equals(""))
+            if ((!parent.equals("")) && (parent!=null))
              return parent;
         }
         return "";
