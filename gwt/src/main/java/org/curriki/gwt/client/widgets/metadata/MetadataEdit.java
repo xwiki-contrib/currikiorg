@@ -680,7 +680,13 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     }
 
     private native String getSelectFieldValue(Element form, String fieldName) /*-{
+
+        if ((form[fieldName]==null)||(form[fieldName][0]==null)) {
+           return null;
+        }
+
         var options = form[fieldName][0].options;
+
         if (options==null) {
            return null;
         }
