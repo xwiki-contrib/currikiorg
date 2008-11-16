@@ -653,4 +653,9 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
     public long getPreIndexQueueSize() {
         return (indexRebuilder==null) ? 0 : indexRebuilder.getPreIndexQueueSize();
     }
+
+    public List getRefreshedDocuments() {
+        return (indexRebuilder==null) ? new ArrayList() : indexRebuilder.getRefreshedDocuments();
+    }
+
 }

@@ -95,6 +95,9 @@ public class IndexRebuilder extends AbstractXWikiRunnable
 
     /** documents currently being checked **/
     private long tocheck = 0;
+
+    /** documents that had to be refreshed **/
+    private List torefresh = new ArrayList();
     
     public IndexRebuilder(IndexUpdater indexUpdater, XWikiContext context)
     {
@@ -236,6 +239,10 @@ public class IndexRebuilder extends AbstractXWikiRunnable
         return tocheck;
     }
 
+    public List getRefreshedDocuments() {
+        return torefresh;
+    }
+
     /**
      * Adds the content of a given wiki to the indexUpdater's queue.
      * 
@@ -250,6 +257,9 @@ public class IndexRebuilder extends AbstractXWikiRunnable
         int retval = 0;
         XWiki xwiki = context.getWiki();
         String database = context.getDatabase();
+        if (refresh) {
+            torefresh.clear();
+        }
 
         try {
             context.setDatabase(wikiName);
@@ -275,6 +285,8 @@ public class IndexRebuilder extends AbstractXWikiRunnable
                         if (LOG.isDebugEnabled())
                          LOG.debug("bypassing document " + wikiName + ":" + docName);
                         continue;
+                    } else {
+                       torefresh.add(wikiName + ":" + docName);
                     }
                 }
 

@@ -30,6 +30,8 @@ import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Attachment;
 import com.xpn.xwiki.plugin.PluginApi;
 
+import java.util.List;
+
 /**
  * This plugin allows index based search in the contents of Wiki Pages and their attachments, as far
  * as any text can be extracted from them. Text can be extracted from OpenOffice Writer, MSWord,
@@ -265,16 +267,30 @@ public class LucenePluginApi extends PluginApi<LucenePlugin>
     }
 
     /**
-     * @return the number of documents Lucene index writer.
+     * Returns the number of documents in the lucene writer
+     * @return number of documents
      */
     public long getLuceneDocCount()
     {
         return getProtectedPlugin().getLuceneDocCount();
     }
 
+    /**
+     * Returns the number of document in the pre-indexing queue
+     * @return  number of documents
+     */
     public long getPreIndexQueueSize()
     {
         return getProtectedPlugin().getPreIndexQueueSize();       
+    }
+
+    /**
+     * Returns the list of documents that had to be refreshed in the last refresh
+     * @return list of document names
+     */
+    public List getRefreshedDocuments()
+    {
+        return getProtectedPlugin().getRefreshedDocuments();       
     }
 
     /**
