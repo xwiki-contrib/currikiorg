@@ -53,7 +53,7 @@
 
 #else ## }{ ## is logged in
   ## crtUserDoc is set in fudocs.vm
-  <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["${crtUserDoc.first_name}"])</a></span>
+  <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["${crtUserDoc.display("first_name","view")}"])</a></span>
   #if($hasGlobalAdmin)
     <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
   #end
