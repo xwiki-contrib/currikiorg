@@ -181,9 +181,8 @@ public class BrowseAsset  extends Tree implements SelectedAssetChangeListener {
               String pageName = ((AssetTreeItem)treeItem.getParentItem()).getPageName();
               if ((pageName!=null)&&(!pageName.equals("")))
                 return pageName;
-              else
-                return "";
             }
+            return "";
         }
 
         for (int i = 0; i < treeItem.getChildCount(); i++){
