@@ -659,6 +659,11 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
         var checkboxes = form[fieldName];
         var values = [];
         var valuesnb = 0;
+
+        if (checkboxes==null) {
+          return null;
+        }
+
         for (i=0; i < checkboxes.length; i++) {
          if (checkboxes[i].checked){
             values[valuesnb] = checkboxes[i].value;
@@ -677,7 +682,6 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
     private native String getSelectFieldValue(Element form, String fieldName) /*-{
         var options = form[fieldName][0].options;
         if (options==null) {
-           return null;
            return null;
         }
         var values = [];
