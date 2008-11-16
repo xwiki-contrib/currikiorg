@@ -381,6 +381,8 @@ public class MetadataEdit extends Composite implements MouseListener, ClickListe
             }
         }
 
+        crsPanel.add(new HTMLPanel("<br clear=\"all\" />"));
+
         /*
         // We are not putting the set to partner button anymore in the CB
         // see CURRIKI-2781
