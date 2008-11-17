@@ -578,109 +578,99 @@ $msg.get("groups_creategroup_needaccount", [$url])
     $newspace.setPolicy("open")
     $newspace.set("accessprivileges", "open")
   #end
-
   ##Show the inputs for form
   <form action="CreateNewGroup" class="CreateNewGroup" method="post">
   <h1>$msg.get("groups_creategroup_pagename")</h1>
-
   #titlebar($msg.get("groups_creategroup_about_title"), "", "", "blue")
-  <div class="section">
+  <p>
     $msg.get("groups_creategroup_about_infotxt")
-  </div>  ##endsection
-
+  </p>  ##endp
   #titlebar($msg.get("groups_creategroup_namedescribe_title"), "", "", "blue")
-  <div class="section">
+  <p>
     <span id="label-group-name">$msg.get("groups_creategroup_namedescribe_groupname"):</span> <br />
     $newspace.display("displayTitle","edit")
 	#tooltip("group-name",$msg.get("groups_creategroup_namedescribe_groupname_tooltip"))
-
     #validateGroup( "title-exists" "" $msg.groups_validation_title_exists)
     #validateGroup( "title-short" "" $msg.groups_validation_title_short)
     #validateGroup("title-long"  "" $msg.groups_validation_title_long)
     #validateGroup("title-invalid"  "" $msg.groups_validation_title_invalid)
     #validateGroup( "space-exists" "" $msg.groups_validation_space_exists)
-
     <span id="label-group-description">$msg.get("groups_creategroup_namedescribe_groupdescription")</span> <br />
      <div id="form-info-top">
     $newspace.display("description","edit")
 #tooltip("group-description",$msg.groups_creategroup_namedescribe_groupdescription_tooltip)
-
     #validateGroup( "desc-short" "" $msg.groups_validation_desc_short)
     #validateGroup( "desc-long" "" $msg.groups_validation_desc_long)
      </div>
-
     <span id="label-group-webaddress">$msg.get("groups_creategroup_namedescribe_webaddress_instruction")</span> <br />
     http:&#47;&#47; $newspace.display("urlshortcut","edit") #groups_groupsuffixurl()
-
     #validateGroup( "url-short" "" $msg.groups_validation_url_short)
     #validateGroup( "url-long" "" $msg.groups_validation_url_long)
     #validateGroup( "url-exists" "" $msg.groups_validation_url_exists)
     #validateGroup( "url-invalid" "" $msg.groups_validation_url_invalid)
-
-  </div> ##endsection
-
+  </p> ##endp
   #titlebar($msg.groups_creategroup_member_policy_title,"","","blue")
   <div class="section">
     $newspace.display("policy","edit")
-
     ##validateGroup( "policy-required" "" $msg.groups_validation_policy_required)
   </div> ##endsection
-
   #titlebar($msg.get("groups_creategroup_select_subjectlevel_title"),"","","blue")
-  <div class="section">
-    <table border="0" width="100%"><tr>
+  <p>
+    <table border="0" width="100%">
+    <thead>
+    <tr>
     <th width="50%">$msg.groups_creategroup_select_subjectlevel_subject_title #tooltip("subject-level",$msg.groups_creategroup_select_subjectlevel_subject_tooltip)</th>
     <th width="50%">$msg.groups_creategroup_select_subjectlevel_level_title
 #tooltip("educational-level",$msg.groups_creategroup_select_subjectlevel_level_tooltip)</th>
-    </tr><tr>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
     <td width="50%">
 		$newspace.display("topic","edit")
     </td>
     <td width="50%">
 	        $newspace.display("educationLevel","edit")
     </td>
-    </tr></table>
-
+    </tr>
+    </tbody>
+    </table>
     #validateGroup( "subject-required" "" $msg.groups_validation_subject_required)
     #validateGroup( "education-required" "" $msg.groups_validation_education_required)
-  </div> ##endsection
-
+  </p> ##endp
   #titlebar($msg.get("groups_creategroup_select_language_title"),"","","blue")
-  <div class="section">
+  <p>
     $newspace.display("language","edit")
 #tooltip("language",$msg.get("groups_creategroup_select_language_infotxt"))
-  </div> ##endsection
-
+  </p> ##endp
   #titlebar($msg.get("groups_creategroup_select_license_title"),"","","blue")
-  <div class="section">
+  <p>
   $msg.get("groups_creategroup_select_license_infotxt")
   $newspace.display("licence","edit")
-
     #validateGroup( "licence-long" "" $msg.groups_validation_licence_required)
-  </div> ##endsection
-
+  </p> ##endp
   #titlebar($msg.get("groups_creategroup_select_access_title"),"","","blue")
-  <div class="section">
-
-    <div class="infotext">
+  <p>
       $msg.groups_creategroup_select_access_infotxt
-    </div>
+  </p>
+  <p>
     $newspace.display("accessprivileges","edit")
     #validateGroup( "privacy-required" "" $msg.groups_validation_privacy)
-
-  </div>  ##endsection
-
+  </p>  ##endp
   #titlebar($msg.get("groups_creategroup_create_title"),"","","blue")
-  <div class="section">
-  <div class="infotext">
+  <p>
     $msg.get("groups_creategroup_create_infotxt")
-  </div>
-   <table align="center"><tr>
+  <br /><br />
+  <table align="center">
+  <tbody>
+  <tr>
   <td><input type="submit" class="button button-orange" value="$msg.get("groups_creategroup_create_btt")" /></td>
   <td>#set($homelink=$xwiki.getURL("Main.WebHome"))
   #button(  "$msg.groups_creategroup_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_creategroup_cancel_confirm')) window.location='$homelink';" )</td>
-  </tr></table>
-  </div>
+  </tr>
+  </tbody>
+  </table>
+  </p>
   </form>
 #end
 #end
@@ -788,6 +778,7 @@ $s.display("description","edit")
 #groups_grouplogo($s)
 </div>
 <div class="frame-inset-description">
+<p>
 #if($logofilename&&$logoattach)
 #set($redirect = $xwiki.requestURL)
 #set($url = $doc.getAttachmentURL($logofilename, "delattachment", "xredirect=${redirect}"))
@@ -795,6 +786,7 @@ $msg.get("groups_home_editmasthead_logo_infotxt_withlogo", [$url])
 #else
 $msg.groups_home_editmasthead_logo_infotxt_withoutlogo
 #end
+</p>
 </div>
 </div> ## end section
 <div class="section">

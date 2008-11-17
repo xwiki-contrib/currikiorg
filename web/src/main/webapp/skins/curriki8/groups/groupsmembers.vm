@@ -804,17 +804,16 @@ $msg.get("groups_members_join_infotxt",[$spaceTitle])
 #tooltip("bio_tooltip",$msg.get("groups_members_join_bio_tooltip"))
 <br />
 $userprofile.display("profile","edit")
-
+</p>
 #if($sm.getRoles($spaceName).size() > 0) ## {
-<br />
-<strong>$msg.get("groups.members.selectroles")</strong><br />
+<p>$msg.get("groups.members.selectroles")<br />
 <span class="instruction">$msg.get("groups.members.join.selectroles.info")</span><br />
 <select name="roles" multiple size=4>
 #groupRoleSelector($spaceName false false false)
 </select>
+</p>
 #end ## }
-
-<br />
+<p><br />
 $userprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
 #tooltip("email_tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))
 <br />
@@ -826,8 +825,8 @@ $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_membe
 ##<br />
 ##<input type="checkbox" name="allowNotifications" value="1" checked /> $msg.get("groups_members_create_membersettings_email") <br />
 ##<input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /> $msg.get("groups_members_create_membersettings_changenotice")
-<div class="button-right"><input type="submit" class="button button-orange" value="$msg.get("groups_members_join_btt",[$spaceTitle])" /></div>
 </p>
+<div class="button-right"><input type="submit" class="button button-orange" value="$msg.get("groups_members_join_btt",[$spaceTitle])" /></div>
 </form>
 #end
 
