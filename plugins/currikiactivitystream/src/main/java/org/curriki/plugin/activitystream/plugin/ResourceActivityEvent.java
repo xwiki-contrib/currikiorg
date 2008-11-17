@@ -43,7 +43,7 @@ public class ResourceActivityEvent extends ActivityEvent
 
         String assetTitle = event.getParam1();
         String assetLink = assetTitle;
-        XWikiDocument doc;
+        XWikiDocument doc = null;
         BaseObject asset;
         try {
             doc = context.getWiki().getDocument(event.getPage(), context);
@@ -71,7 +71,18 @@ public class ResourceActivityEvent extends ActivityEvent
 
         String eventTitle = "";
         if (ActivityEventType.UPDATE.equals(event.getType())) {
-            eventTitle = "groups_home_activity_res_edit";
+            if (doc != null && doc.getName().equals("WebHome")) {
+                // Do something about ROOT COLLECTION here
+
+                String rdr_comment = context.getMessageTool().get("curriki.comment.reordered");
+                if (doc.getComment().equals(rdr_comment)) {
+                     eventTitle = "groups_home_activity_res_rdr";
+                } else {
+                    eventTitle = "groups_home_activity_res_edit";
+                }
+            } else {
+                eventTitle = "groups_home_activity_res_edit";
+            }
         } else if (ActivityEventType.CREATE.equals(event.getType())) {
             eventTitle = "groups_home_activity_res_add";
         } else if (ActivityEventType.DELETE.equals(event.getType())) {
