@@ -53,6 +53,11 @@ public abstract class BaseServlet extends HttpServlet {
         context.setMode(XWikiContext.MODE_SERVLET);
         context.setDatabase("xwiki");
 
+        // Give the servlet "Programming" rights
+        XWikiDocument rightsDoc = new XWikiDocument();
+        rightsDoc.setAuthor("XWiki.dward"); //TODO: Change this to a special admin user
+        context.setDoc(rightsDoc);
+
         XWiki xwiki = XWiki.getXWiki(context);
         XWikiURLFactory urlf = xwiki.getURLFactoryService().createURLFactory(context.getMode(), context);
         context.setURLFactory(urlf);
