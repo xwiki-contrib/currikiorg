@@ -899,7 +899,7 @@ public class Asset extends CurrikiDocument {
 
         obj.setIntValue("reviewpending", 1);
 
-        save("save CRS nomination");
+        saveWithProgrammingRights("save CRS nomination");
 
     	return this;
     }
