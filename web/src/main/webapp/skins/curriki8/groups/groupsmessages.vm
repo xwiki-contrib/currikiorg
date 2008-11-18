@@ -988,6 +988,9 @@ $adoc.use($viewRightObj)
  *#
 #macro(groups_messages_deletecomment_service)
 <!-- Message Start -->
+## since this is called from the Groups.DeleteCommentServicePage we need to change the
+## $doc so that it finds the right space name
+#set($doc = $xwiki.getDocument($request.docname))
 #groupsinit()
 #if("$!request.confirm" == "1") ## {
 #set($deletedoc = $xwiki.getDocument($request.docname))
