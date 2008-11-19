@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1225389897000</date>
-<contentUpdateDate>1225389897000</contentUpdateDate>
-<version>63.1</version>
+<date>1226669588000</date>
+<contentUpdateDate>1226669588000</contentUpdateDate>
+<version>66.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Changed macro names</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -195,7 +195,7 @@
 
 				&lt;select name="fw_item" id="fw_item"&gt;
 						&lt;option value="" #if(!$assetFilterSubjectArea||($assetFilterSubjectArea=="")) selected #end &gt;$msg.get("fc_all")&lt;/option&gt;
-			        #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome'"))
+			        #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome' order by doc.title"))
 			        #set($itemdoc = $xwiki.getDocument($item))
 			    		&lt;option value="$item" #if($item==$assetFilterSubjectArea) selected #end &gt;$itemdoc.title&lt;/option&gt;
 			        #end
@@ -255,12 +255,13 @@
 		#set($counter = $counter+1)
 		#set($itemdoc = $xwiki.getDocument($fullname))
 		#set($ok = $itemdoc.use("XWiki.AssetClass"))
-		#findCurrikiTitle($itemdoc)
+		#asset_findtitle($itemdoc)
 		&lt;tr&gt;
 			&lt;td&gt;
+
 				&lt;div class="title"&gt;
 					&lt;a href="$xwiki.getURL($fullname, "view")" target="_blank" /&gt;
-					$currikiTitle&lt;/a&gt;
+					{pre}$currikiTitle{/pre}&lt;/a&gt;
 				&lt;/div&gt;
 			&lt;/td&gt;
             &lt;td&gt;
@@ -312,5 +313,5 @@
 	#set($qs = "${qs}&amp;order=${request.order}&amp;directionOrder=${currentDirectionOrder}")
 #end
 
-#mycurriki_paginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)</content>
+#curriki_paginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)</content>
 </xwikidoc>

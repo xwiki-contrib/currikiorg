@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1179244507000</creationDate>
-<date>1204929607000</date>
-<contentUpdateDate>1204929607000</contentUpdateDate>
-<version>2.1</version>
+<date>1227131987000</date>
+<contentUpdateDate>1227131987000</contentUpdateDate>
+<version>4.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Only logged in users can view the page</comment>
+<comment>Styles choice</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -163,7 +163,12 @@
     $xwiki.parseContent($!xwiki.getWebPreference("meta"))
     &lt;title&gt;$msg.get("ccb.title")&lt;/title&gt;
     &lt;meta name='gwt:module' content='/xwiki/gwt=org.curriki.gwt.Main'&gt;
-    &lt;link rel=stylesheet href="/xwiki/bin/skin/skins/curriki8/style.css"&gt;
+#if(!$request.style || $request.style=="1")
+   &lt;link rel=stylesheet href="/xwiki/bin/skin/skins/curriki8/style.css"&gt;
+#end
+#if(!$request.style || $request.style=="2")
+    &lt;link rel=stylesheet href="/xwiki/bin/skin/skins/curriki8/style2.css"&gt;
+#end
     &lt;style type="text/css"&gt;
 @import "/xwiki/yui/treeview/assets/tree.css";
 &lt;/style&gt;
