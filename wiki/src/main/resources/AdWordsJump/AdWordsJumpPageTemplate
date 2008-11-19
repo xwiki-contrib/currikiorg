@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xwikidoc>
 <web>AdWordsJump</web>
@@ -11,16 +11,17 @@
 <author>XWiki.Admin</author>
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
-<creationDate>1225117230000</creationDate>
-<date>1225617315000</date>
-<contentUpdateDate>1225617315000</contentUpdateDate>
-<version>18.1</version>
+<creationDate>1227074278000</creationDate>
+<date>1227074295000</date>
+<contentUpdateDate>1227074295000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -33,7 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
-<displayType>select</displayType>
+<displayType>input</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
 <number>1</number>
@@ -59,7 +60,6 @@
 {pre}
 #template("analytics.vm")
 {/pre}
-
 #set($box_title = $msg.get("AdWordsJump.AdWordsJumpPageTemplate.box.title"))
 #set($box_title_desc= $msg.get("AdWordsJump.AdWordsJumpPageTemplate.box.title.desc"))
 #set($box_search_for= $msg.get("AdWordsJump.AdWordsJumpPageTemplate.box.search.for"))
@@ -68,8 +68,6 @@
 #set($box_btn_title= $msg.get("AdWordsJump.AdWordsJumpPageTemplate.button.title"))
 #set($alert_txt= $msg.get("AdWordsJump.AdWordsJumpPageTemplate.validate.txt.alert"))
 #set($alert_email= $msg.get("AdWordsJump.AdWordsJumpPageTemplate.validate.email.alert"))
-
-
 #set($imgdoc = $xwiki.getDocument("AdWordsJump.LandingPageTemplate"))
 {pre}
 &lt;style type="text/css"&gt;
@@ -87,7 +85,6 @@ var hasTxt = false;
 var hasEmail = false;
 &lt;/script&gt;
 {/pre}
-
 #macro(searchformstart)
 {pre}
 	&lt;form name="search_form" method="post" action="${doc.getURL('view','xpage=popup')}"&gt;
@@ -258,49 +255,40 @@ if(hasFormStart){
 &lt;/script&gt;
 {/pre}
 #end
-
-
 ##================================ operate after submit
 #set($txt = $request.txt_hid)
 #set($txt_escaped = $request.txt_escaped)
 #set($subject_escaped = $request.subject_escaped)
 #set($subjectparent_escaped = $request.subjectparent_escaped)
-
 #if("$!txt" != "")
-    #set($inform = 0)
+    #set($inform = "No")
     #set($email = "No e-mail")
     #if($request.inform &amp;&amp; $request.inform == "1")
-        #set($inform = 1)
+        #set($inform = "Yes")
         #set($email = $request.email)
     #end
-    #set($searchTime = $util.date)
-    #set($logpage = "AdWordsJump." +$doc.name+"Log")
-    #set($logdoc = $xwiki.getDocument($logpage))
-    #if($logdoc.isNew())
-        $logdoc.setContent('#includeForm("AdWordsJump.LandingPageLogTemplate")')
-        $logdoc.setParent('AdWordsJump.LandingPageLog')
-        ##$logdoc.getDocument().setCreator($context.getUser())
+    #set($searchTime = $xwiki.formatDate($util.date,"yyyy-MM-dd HH:mm:ss.S"))
+    #set($log_page = "AdWordsJump." +$doc.name+"Log")
+    #set($log_doc = $xwiki.getDocument($log_page))
+    #if($log_doc.isNew())
+        $log_doc.setContent('#includeForm("AdWordsJump.LandingPageLogTemplate")')
+        $log_doc.setParent('AdWordsJump.LandingPageLog')
+        $log_doc.saveWithProgrammingRights()
     #end
-    #set($obj = $logdoc.newObject("AdWordsJump.AdWordsInfoClass"))
-    $obj.set("searchTime", $!searchTime)
-    $obj.set("searchText", $!txt)
-    $obj.set("email", $!email)
-    $obj.set("inform", $!inform)
-    ##$logdoc.saveWithProgrammingRights()
-    ##$logdoc.getDocument().setAuthor($context.getUser())
-    $xwiki.getXWiki().saveDocument($logdoc.getDocument(),$context.getContext())
-    #set($informstr = "No")
-    #if($!inform == 1) #set($informstr  = "Yes") #end
+    #set($log_infos=$util.getArrayList())
+    $log_infos.add($!searchTime);
+    $log_infos.add($!txt);
+    $log_infos.add($!inform);
+    $log_infos.add($!email);
+    $xwiki.activitystream.addDocumentActivityEvent("AdWordsJump",$log_doc,"Log",$log_doc.getName(),$log_infos)
     #set($rurl = "/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A"+$txt_escaped)
-
-#if("$!subjectparent" != "")
-  #if("$!subject" != "")
-    #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subject_escaped+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
-  #else
-    #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
-  #end
-#end
-
+    #if("$!subjectparent" != "")
+        #if("$!subject" != "")
+            #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subject_escaped+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
+        #else
+            #set($rurl = $rurl+"%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Esubject%25253Ds%2525253AFW_masterFramework."+$subjectparent_escaped+"%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080821%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1")
+        #end
+    #end
 	$response.sendRedirect($rurl)
 #end</content>
 </xwikidoc>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xwikidoc>
 <web>AdWordsJump</web>
@@ -11,16 +11,17 @@
 <author>XWiki.Admin</author>
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
-<creationDate>1220539613000</creationDate>
-<date>1225617640000</date>
-<contentUpdateDate>1225617640000</contentUpdateDate>
-<version>5.1</version>
+<creationDate>1227074185000</creationDate>
+<date>1227074195000</date>
+<contentUpdateDate>1227074195000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -33,7 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
-<displayType>select</displayType>
+<displayType>input</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
 <number>1</number>
@@ -54,58 +55,55 @@
 <tags/>
 </property>
 </object>
-<content>
-#set($itemsPerPage = 5)
-
-#if($request.flag &amp;&amp; $request.flag == "clear")
-#set($classname="AdWordsJump.AdWordsInfoClass")
-#set ($sql = " where doc.parent='AdWordsJump.LandingPageLog'")
-#set ($items = $xwiki.searchDocuments($sql))
-#foreach ($item in $items)
-
-	#set($bentrydoc = $xwiki.getDocument($item))
-	#set($ok=$bentrydoc.removeObjects($classname))
-	$xwiki.getXWiki().saveDocument($bentrydoc.getDocument(),$context.getContext())
-	#end
+<content>#set($stream_name="AdWordsJump")
+#if($request.flag)
+    #if($request.flag == "clear")
+        #if($request.logpage &amp;&amp; $request.logpage != "")
+            #set($log_infos=$xwiki.activitystream.searchEvents("act.stream='${stream_name}' and act.type='Log' and act.page='${request.logpage}'",false,0,0))
+        #else
+            #set($log_infos=$xwiki.activitystream.searchEvents("act.stream='${stream_name}' and act.type='Log'",false,0,0))
+        #end
+        $xwiki.activitystream.deleteActivityEvents($log_infos)
+    #elseif($request.flag == "delete" &amp;&amp; $request.eventId)
+        #set($log_infos=$xwiki.activitystream.searchEvents("act.eventId='${request.eventId}'",false,0,0))
+        #if($log_infos.size()==1)
+        $xwiki.activitystream.deleteActivityEvent($log_infos.get(0))
+        #end
+    #end
 #end
-
 #macro(pageViewLinks $pageN $totalP $pag)
-
-	#if($totalP &gt; 0)
-	&lt;div class="pagedNavigation" align="right"&gt;
-	&lt;div align="right"&gt;
-	#if($pag &gt; 0)
-		#set($prevPage = $pag - 1)
-		&lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '0');"&gt;&lt;&lt;&lt;/a&gt;&lt;/span&gt;
-		&lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '$prevPage');"&gt;&lt;&lt;/a&gt;&lt;/span&gt;
-	#else
-		&lt;span class="pagedLink inactive"&gt;&lt;&lt;&lt;/span&gt;
-		&lt;span class="pagedLink inactive"&gt;&lt;&lt;/span&gt;
-	#end
-	#set($displayCrtPageNumber = $pag + 1)
-	#set($displayTotalPages = $totalP + 1)
-		&lt;span class="pagedStatus"&gt;$displayCrtPageNumber / $displayTotalPages&lt;/span&gt;
-	#if($pag &lt; $totalP)
-		#set($nextPage = $pag + 1)
-		&lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '$nextPage');"&gt;&gt;&lt;/a&gt;&lt;/span&gt;
-		&lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '$totalP');"&gt;&gt;&gt;&lt;/a&gt;&lt;/span&gt;
-	#else
-		&lt;span class="pagedLink inactive"&gt;&gt;&lt;/span&gt;
-		&lt;span class="pagedLink inactive"&gt;&gt;&gt;&lt;/span&gt;
-	#end
-	&lt;/div&gt;
-	&lt;/div&gt;
-	#end
+    #if($totalP &gt; 0)
+    &lt;div class="pagedNavigation" align="right"&gt;
+    &lt;div align="right"&gt;
+    #if($pag &gt; 0)
+        #set($prevPage = $pag - 1)
+        &lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '0');"&gt;&lt;&lt;&lt;/a&gt;&lt;/span&gt;
+        &lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '$prevPage');"&gt;&lt;&lt;/a&gt;&lt;/span&gt;
+    #else
+        &lt;span class="pagedLink inactive"&gt;&lt;&lt;&lt;/span&gt;
+        &lt;span class="pagedLink inactive"&gt;&lt;&lt;/span&gt;
+    #end
+    #set($displayCrtPageNumber = $pag + 1)
+    #set($displayTotalPages = $totalP + 1)
+        &lt;span class="pagedStatus"&gt;$displayCrtPageNumber / $displayTotalPages&lt;/span&gt;
+    #if($pag &lt; $totalP)
+        #set($nextPage = $pag + 1)
+        &lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '$nextPage');"&gt;&gt;&lt;/a&gt;&lt;/span&gt;
+        &lt;span class="pagedLink"&gt;&lt;a href="#" onclick="javascript:goto('$pageN', '$totalP');"&gt;&gt;&gt;&lt;/a&gt;&lt;/span&gt;
+    #else
+        &lt;span class="pagedLink inactive"&gt;&gt;&lt;/span&gt;
+        &lt;span class="pagedLink inactive"&gt;&gt;&gt;&lt;/span&gt;
+    #end
+    &lt;/div&gt;
+    &lt;/div&gt;
+    #end
 #end
-
 {pre}
-&lt;script&gt;
-function goto(pageName, page){
-document.getElementById(pageName).value = page;
-document.pageForm.submit();
-}
-&lt;/script&gt;
 &lt;script type="text/javascript" language="javascript"&gt;
+function goto(pageName, page){
+    document.getElementById(pageName).value = page;
+    document.pageForm.submit();
+}
 function switchDivStatus(show_div){
     if(show_div.style.visibility == "visible" || show_div.style.display == "block"){
         show_div.style.visibility = "hidden";
@@ -120,26 +118,16 @@ function switchDivStatus(show_div){
 ##=================== get all log paging parameters
 #set($page = 0)
 #if($request.page)
-  #set($page = $xwiki.parseInt($request.page))
+  #set($page = $util.parseInt($request.page))
 #end
 ##=================== search all log count of pages
-
-#set ($sql = " where doc.parent='AdWordsJump.LandingPageLog'")
-#set ($count = $xwiki.getXWiki().search("select count(doc) from XWikiDocument doc ${sql}", $context.context).get(0))
-#set ($items = $xwiki.searchDocuments($sql))
+#set($hql_where = "where doc.parent='AdWordsJump.LandingPageLog'")
+#set($count = $xwiki.search("select count(*) from XWikiDocument doc $hql_where").get(0))
 &lt;form name='pageForm' mo='post'&gt;
 	&lt;input type='hidden' name='page' id='page' value='$!page'&gt;
-
-	#foreach ($item in $items)
-	#if($!{request.getParameter("${item}.page")} != "")
-	&lt;input type='hidden' name='${item}.page' id='${item}.page' value='$!{request.getParameter("${item}.page")}'&gt;
-	#else
-	&lt;input type='hidden' name='${item}.page' id='${item}.page' value='0'&gt;
-	#end
-	#end
 &lt;/form&gt;
-
 ##=================== set all log paging values
+#set($itemsPerPage = 5)
 #set($startAt = $itemsPerPage * $page)
 #if($startAt &lt; 0)
   #set($startAt = 0)
@@ -152,89 +140,45 @@ function switchDivStatus(show_div){
   #set($startAt = $endAt)
 #end
 #set($totalPages = ($count - 1) / $itemsPerPage)
-
 ##=================== show content
-
 &lt;div align="right"&gt;
 &lt;a href="$xwiki.getURL("AdWordsJump.LandingPageLogExport", "view","docname=all_log_docs&amp;xpage=popup")" target="_blank"&gt;Export All The Logs&lt;/a&gt;
 &lt;span&gt; | &lt;/span&gt;
-&lt;a href="javascript:if(window.confirm('Are you sure to clear all the logs?')) location.href='$doc.getURL($context.action, "flag=clear")';"&gt;Clear All The Logs&lt;/a&gt;
+&lt;a href="javascript:if(window.confirm('Are you sure to clear all the logs?')) location.href='$doc.getURL($context.action, "flag=clear&amp;amp;page=$page")';"&gt;Clear All The Logs&lt;/a&gt;
 &lt;/div&gt;
-
-#set ($items = $xwiki.searchDocuments($sql, $itemsPerPage, $startAt))
-
-#set($classname="AdWordsJump.AdWordsInfoClass")
-#set($class=$xwiki.getDocument($classname).getxWikiClass())
+#set ($items = $xwiki.searchDocuments($hql_where, $itemsPerPage, $startAt))
 #set($bar_title="Log")
-#set($searchTime_prop=$class.get("searchTime"))
-#set($searchText_prop=$class.get("searchText"))
-#set($email_prop=$class.get("email"))
-#set($inform=$class.get("inform"))
 ##=================== show sub log page content
 #foreach ($item in $items)
-
-	#set($bentrydoc = $xwiki.getDocument($item))
-
-	##=================== get paging parameters
-	#set($pageNumber = 0)
-	#if($!{request.getParameter("${item}.page")} != "")
-		#set($pageNumber = $xwiki.parseInt(${request.getParameter("${item}.page")}))
-	#end
-	##=================== search count of datas
-	#set($objs=$bentrydoc.getObjects($classname))
-	#set($cou = $objs.size())
-
-	#set($start = $itemsPerPage * $pageNumber)
-	#if($start &lt; 0)
-	  #set($start = 0)
-	#end
-	#set($end = $itemsPerPage * ($pageNumber + 1))
-
-	#if($end &gt; $cou)
-	  #set($end = $cou)
-	#end
-	#if($start &gt; $end)
-	  #set($start = $end)
-	#end
-	##=================== set paging values
-	#set($totalPage = ($cou - 1) / $itemsPerPage)
-	#set($counter = 0)
-
-	#subtitlebar(${bentrydoc.name} "View" ${xwiki.getURL("$item", "view", "")} "purple")
-
-	#foreach ($obj in $objs)
-	  #if($counter &lt; $end &amp;&amp; $counter &gt;= $start)
-
-	 #set($searchTime=$obj.searchTime)
-	    #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$searchTime)
-	&lt;div onclick="switchDivStatus(document.getElementById('div_${bentrydoc.name}_${obj.number}'))" style="cursor:pointer"&gt;
-	    #set($del_url=$bentrydoc.getURL("objectremove","classname=${classname}&amp;amp;classid=${obj.number}&amp;amp;xredirect=${bentrydoc.getURL('view')}"))
-	    #set($del_url="javascript:if(window.confirm('Are you sure to delete it?')) location.href='$del_url';")
-	    #titlebar($obj_title "DEL" $del_url "purple")
-	&lt;/div&gt;
-
-	&lt;div id="div_${bentrydoc.name}_${obj.number}" name="div_${bentrydoc.name}_${obj.number}" style="visibility:hidden;display:none;"&gt;
-	 &lt;table border="0" cellspacing="0" width="100%"&gt;
-		&lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$searchTime_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.searchTime&lt;/td&gt;&lt;/tr&gt;
-		&lt;tr&gt;&lt;td&gt;&lt;b&gt;$searchText_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.searchText&lt;/td&gt;&lt;/tr&gt;       
-	  &lt;tr&gt;&lt;td&gt;&lt;b&gt;$inform.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.inform&lt;/td&gt;&lt;/tr&gt;
-		&lt;tr&gt;&lt;td&gt;&lt;b&gt;$email_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.email&lt;/td&gt;&lt;/tr&gt;
-	 &lt;/table&gt;
-	&lt;/div&gt;
-
-	 #end
-	 #set($counter = $counter+1)
-	#end
-	&lt;div style="float:left;"&gt;
-	&lt;a href="$xwiki.getURL("AdWordsJump.LandingPageLogExport", "view","docname=${bentrydoc.fullName}&amp;xpage=popup")" target="_blank"&gt;Export&lt;/a&gt;
-	&lt;span&gt; | &lt;/span&gt;
-	&lt;a href="javascript:if(window.confirm('Are you sure to clear logs?')) location.href='$bentrydoc.getURL($context.action, "flag=clear")';"&gt;Clear&lt;/a&gt;
-	&lt;/div&gt;
-
-	#pageViewLinks("${item}.page" $totalPage $pageNumber)
-
+    #set($log_infos=$xwiki.search("from ActivityEventImpl as act where act.stream='${stream_name}' and act.type='Log' and act.page='${item}' order by param1",$itemsPerPage,0))
+    #set($bentrydoc = $xwiki.getDocument($item))
+    #subtitlebar(${bentrydoc.name} "View" ${bentrydoc.getURL()} "purple")
+    #foreach ($log_info in $log_infos)
+        #set($searchTime=$log_info.param1)
+        #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$searchTime)
+&lt;div onclick="switchDivStatus(document.getElementById('div_${bentrydoc.name}_${velocityCount}'))" style="cursor:pointer"&gt;
+        #set($del_url=$doc.getURL("view","flag=delete&amp;amp;eventId=${log_info.eventId}&amp;amp;page=$page"))
+        #set($del_url="javascript:if(window.confirm('Are you sure to delete it?')) location.href='$del_url';")
+        #titlebar($obj_title "DEL" $del_url "purple")
+&lt;/div&gt;
+&lt;div id="div_${bentrydoc.name}_${velocityCount}" name="div_${bentrydoc.name}_${velocityCount}" style="visibility:hidden;display:none;"&gt;
+&lt;table border="0" cellspacing="0" width="100%"&gt;
+    &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchTime"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$searchTime&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchText"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param2&lt;/td&gt;&lt;/tr&gt;       
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.inform"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param3&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.email"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param4&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+    #end
+    &lt;div style="float:left;"&gt;
+    &lt;a href="$xwiki.getURL("AdWordsJump.LandingPageLogExport", "view","docname=${bentrydoc.fullName}&amp;xpage=popup")" target="_blank"&gt;Export&lt;/a&gt;
+    &lt;span&gt; | &lt;/span&gt;
+    &lt;a href="javascript:if(window.confirm('Are you sure to clear logs?')) location.href='$doc.getURL($context.action, "flag=clear&amp;amp;logpage=$item&amp;amp;page=$page")';"&gt;Clear&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div style="float:right;"&gt;
+    &lt;a href="${bentrydoc.getURL()}" target="_blank"&gt;more...&lt;/a&gt;
+    &lt;/div&gt;
 &lt;br/&gt;
 #end
-
-#pageViewLinks("page" $totalPages $page)
-</content></xwikidoc>
+#pageViewLinks("page" $totalPages $page)</content>
+</xwikidoc>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xwikidoc>
 <web>AdWordsJump</web>
@@ -11,16 +11,17 @@
 <author>XWiki.Admin</author>
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
-<creationDate>1220537389000</creationDate>
-<date>1225616599000</date>
-<contentUpdateDate>1225616599000</contentUpdateDate>
-<version>13.1</version>
+<creationDate>1227074162000</creationDate>
+<date>1227074173000</date>
+<contentUpdateDate>1227074173000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -33,7 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
-<displayType>select</displayType>
+<displayType>input</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
 <number>1</number>
@@ -54,28 +55,32 @@
 <tags/>
 </property>
 </object>
-<content>
-#if($request.flag &amp;&amp; $request.flag == "clear")
-#set($classname="AdWordsJump.AdWordsInfoClass")
-#set($ok=$doc.removeObjects($classname))
-$doc.save()
+<content>#set($stream_name="AdWordsJump")
+#set($hql_from_where="from ActivityEventImpl as act where act.stream='${stream_name}' and act.type='Log' and act.page='${doc.getFullName()}'")
+#if($request.flag)
+    #if($request.flag == "clear")
+        #set($log_infos=$xwiki.activitystream.searchEvents("act.stream='${stream_name}' and act.type='Log' and act.page='${doc.getFullName()}'",false,0,0))
+        $xwiki.activitystream.deleteActivityEvents($log_infos)
+    #elseif($request.flag == "delete" &amp;&amp; $request.eventId)
+        #set($log_infos=$xwiki.activitystream.searchEvents("act.eventId='${request.eventId}'",false,0,0))
+        #if($log_infos.size()==1)
+        $xwiki.activitystream.deleteActivityEvent($log_infos.get(0))
+        #end
+    #end
 #end
-
 #macro(pageViewLinks $itemsPerPage $totalPages $crtPageNumber)
 	#set($rurl = $xwiki.getRequestURL())
 	#set($idx = $rurl.indexOf("?"))
 	#if($idx &gt; 0)
 	#set($rurl = ($rurl.substring(0, $idx)))
 	#end
-	
 	#set($params = '')
 	#if($request.ipp1)
-	#set($params = $params + '&amp;ipp1='+$request.ipp1)
+	    #set($params = $params + '&amp;ipp1='+$request.ipp1)
 	#end
 	#if($request.page1)
-	#set($params = $params + '&amp;page1='+$request.page1)
+	    #set($params = $params + '&amp;page1='+$request.page1)
 	#end
-
 	#if($totalPages &gt; 0)
 	&lt;div class="pagedNavigation" align="right"&gt;
 	#if($crtPageNumber &gt; 0)
@@ -103,25 +108,20 @@ $doc.save()
 ##=================== get paging parameters
 #set($itemsPerPage = 5)
 #set($pageNumber = 0)
-
 #if($request.docname &amp;&amp; $request.docname == ${doc.fullName})
-
-#if($request.ipp)
-  #set($itemsPerPage = $xwiki.parseInt($request.ipp))
-#end
-#if($request.page)
-  #set($pageNumber = $xwiki.parseInt($request.page))
-#end
+    #if($request.ipp)
+      #set($itemsPerPage = $xwiki.parseInt($request.ipp))
+    #end
+    #if($request.page)
+      #set($pageNumber = $xwiki.parseInt($request.page))
+    #end
 #end
 #set($startAt = $itemsPerPage * $pageNumber)
 #if($startAt &lt; 0)
   #set($startAt = 0)
 #end
-##=================== search count of datas
-#set($classname="AdWordsJump.AdWordsInfoClass")
-#set($objs=$doc.getObjects($classname))
-#set($count = $objs.size())
 ##=================== set paging values
+#set($count=$xwiki.search("select count(*) ${hql_from_where}").get(0))
 #set($endAt = $itemsPerPage * ($pageNumber + 1))
 #if($endAt &gt; $count)
   #set($endAt = $count)
@@ -131,9 +131,8 @@ $doc.save()
 #end
 #set($totalPages = ($count - 1) / $itemsPerPage)
 #set($crtPageNumber = $startAt / $itemsPerPage)
-
+#set($log_infos=$xwiki.search("${hql_from_where} order by param1",$itemsPerPage,$startAt))
 ##=================== show content
-
 &lt;script type="text/javascript" language="javascript"&gt;
 function switchDivStatus(show_div){
     if(show_div.style.visibility == "visible" || show_div.style.display == "block"){
@@ -145,17 +144,13 @@ function switchDivStatus(show_div){
     }
 }
 &lt;/script&gt;
-
-
 #set($docname = ${doc.fullName}) 
 #if($docname.endsWith("Log"))
-#set($len = $docname.length() - 3)
-#set($docname = $docname.substring(0, $len))
+    #set($len = $docname.length() - 3)
+    #set($docname = $docname.substring(0, $len))
 #end
 #set($inputurl = $xwiki.getURL("$docname", "view","xpage=popup"))
-
 #subtitlebar(${doc.name} "View" "$inputurl" "purple")
-
 #set($class=$xwiki.getDocument($classname).getxWikiClass())
 #set($bar_title="Log")
 #set($searchTime_prop=$class.get("searchTime"))
@@ -163,34 +158,28 @@ function switchDivStatus(show_div){
 #set($email_prop=$class.get("email"))
 #set($inform=$class.get("inform"))
 #set($counter = 0)
-
-#foreach ($obj in $objs)
-  #if($counter &lt; $endAt &amp;&amp; $counter &gt;= $startAt)
-
- #set($searchTime=$obj.searchTime)
-    #set($obj_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$searchTime)
-&lt;div onclick="switchDivStatus(document.getElementById('div_${doc.name}_${obj.number}'))" style="cursor:pointer"&gt;
-    #set($del_url=$doc.getURL("objectremove","classname=${classname}&amp;amp;classid=${obj.number}&amp;amp;xredirect=${doc.getURL('view')}"))
+#foreach ($log_info in $log_infos)
+    #set($searchTime=$log_info.param1)
+    #set($log_title=$bar_title+":&amp;nbsp;&amp;nbsp;"+$searchTime)
+&lt;div onclick="switchDivStatus(document.getElementById('div_${doc.name}_${velocityCount}'))" style="cursor:pointer"&gt;
+    #set($del_url=$doc.getURL("view","flag=delete&amp;amp;eventId=${log_info.eventId}"))
     #set($del_url="javascript:if(window.confirm('Are you sure to delete it?')) location.href='$del_url';")
-    #titlebar($obj_title "DEL" $del_url "purple")
+    #titlebar($log_title "DEL" $del_url "purple")
 &lt;/div&gt;
-
-&lt;div id="div_${doc.name}_${obj.number}" name="div_${doc.name}_${obj.number}" style="visibility:hidden;display:none;"&gt;
- &lt;table border="0" cellspacing="0" width="100%"&gt;
-        &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$searchTime_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.searchTime&lt;/td&gt;&lt;/tr&gt;
-        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$searchText_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.searchText&lt;/td&gt;&lt;/tr&gt;       
-  &lt;tr&gt;&lt;td&gt;&lt;b&gt;$inform.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.inform&lt;/td&gt;&lt;/tr&gt;
-        &lt;tr&gt;&lt;td&gt;&lt;b&gt;$email_prop.getPrettyName():&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$obj.email&lt;/td&gt;&lt;/tr&gt;
- &lt;/table&gt;
+&lt;div id="div_${doc.name}_${velocityCount}" name="div_${doc.name}_${velocityCount}" style="visibility:hidden;display:none;"&gt;
+&lt;table border="0" cellspacing="0" width="100%"&gt;
+    &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchTime"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$searchTime&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchText"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param2&lt;/td&gt;&lt;/tr&gt;       
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.inform"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param3&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.email"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param4&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
 &lt;/div&gt;
-
- #end
- #set($counter = $counter+1)
+    #set($counter = $counter+1)
 #end
 &lt;div style="float:left;"&gt;
 &lt;a href="$xwiki.getURL("AdWordsJump.LandingPageLogExport", "view","docname=${doc.fullName}&amp;xpage=popup")" target="_blank"&gt;Export&lt;/a&gt;
 &lt;span&gt; | &lt;/span&gt;
 &lt;a href="javascript:if(window.confirm('Are you sure to clear logs?')) location.href='$doc.getURL($context.action, "flag=clear")';"&gt;Clear&lt;/a&gt;
 &lt;/div&gt;
-#pageViewLinks($itemsPerPage $totalPages $crtPageNumber)
-</content></xwikidoc>
+#pageViewLinks($itemsPerPage $totalPages $crtPageNumber)</content>
+</xwikidoc>

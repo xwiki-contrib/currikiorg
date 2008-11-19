@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xwikidoc>
 <web>AdWordsJump</web>
@@ -11,16 +11,17 @@
 <author>XWiki.Admin</author>
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
-<creationDate>1221567711000</creationDate>
-<date>1224075141000</date>
-<contentUpdateDate>1224075141000</contentUpdateDate>
-<version>2.1</version>
+<creationDate>1227074109000</creationDate>
+<date>1227074270000</date>
+<contentUpdateDate>1227074270000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -33,7 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
-<displayType>select</displayType>
+<displayType>input</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
 <number>1</number>
@@ -59,7 +60,6 @@
 
 1.1.1 The AdWordsJump module contains these resources
 
-1. AdWordsJump/AdWordsInfoClass
 1. AdWordsJump/LandingPageLog
 1. AdWordsJump/LandingPageLogExport
 1. AdWordsJump/LandingPageLogTemplate
@@ -88,7 +88,7 @@ Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then
 #set($subject="UnitedStatesHistory")
 #set($subjectparent="SocialStudies")
 
-#set($btn_value = "Find Worksheet")
+#set($btn_value = "Find Worksheets")
 
 ##set($logpic = $imgdoc.getAttachmentURL('log.gif'))
 #set($loglink = "http://www.curriki.com")
@@ -106,12 +106,12 @@ Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then
 #pageTitle("$title")
 #set($title = "&lt;p style='font-weight:bold;font-size:55px;'&gt;Free Worksheets&lt;/p&gt;")
 #pageTitle("$title")
-#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;For Math,English,and Science&lt;/p&gt;")
+#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;For Math, English, and Science&lt;/p&gt;")
 #pageTitle("$title")
 
 #set($title = "Word Problems for grades 3 to 5")
 #set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
-#set($desc = "Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more, I use these for my daily math review in my classroom")
+#set($desc = "Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more. I use these for my daily math review in my classroom.")
 #sampleLink("$title" "$link" "$desc")
 
 #set($title = "A complete introductory Biology course")
@@ -149,7 +149,63 @@ Now you can view the new Landing page from the url "/xwiki/bin/view/AdWordsJump/
 
 You can view search records in the log page with the url "/xwiki/bin/view/AdWordsJump/LandingPageLog" or click here [Google Ad Reports&gt;AdWordsJump.LandingPageLog]. This page contains all the Landing page logs, you can click each Landing page to its log.
 
+
+1.1.1 How to create new AdWordsJump Landing page with the template only has search box?
+
+
+1.1.1.1 Step 1 (Engineering Only)
+First, import the template "AdWordsJump.AdWordsJumpPageTemplate" into the system. 
+
+1.1.1.1 Step 2 (Engineering Only)
+Create an AdWordsJump Landing page, for example, AdWordsJump.TestAdWordsJumpPage, then copy the contents below into the page you just created:
+
+{code}
+
+#includeForm("AdWordsJump.AdWordsJumpPageTemplate")
+...
+&lt;div&gt;
+#searchformstart()
+
+#set($subject="UnitedStatesHistory")
+#set($subjectparent="SocialStudies")
+#searchbox("$subject" "$subjectparent")
+
+#emailbox()
+
+#set($btn_value = "Find Worksheet")
+#searchbutton("$btn_value")
+
+#set($btn2_value = "Join the Curriki Community")
+#set($btn2_link = "http://www.curriki.com")
+#createaccountbutton("$btn2_value" "$btn2_link")
+
+#searchformend()
+&lt;/div&gt;
+...
+{code}
+
+Notes:
+1. The marco "\#searchformstart" and "\#searchformend" must be set, and the "\#searchformstart" must be called before "\#searchformend".
+1. the marco "\#searchbox", "\#emailbox", "\#searchbutton", "\#createaccountbutton" is optional. they must be called between "\#searchformstart" and "\#searchformend" 
+1. The "\#searchbox" has two parameters about subject and subject's parent. If this macro is called, the search text input will be showen in the page.
+1. The "\emailbox"  has none parameter, If this macro is called, the informed checkbox and email input will be showen in the page.
+1. The "\#searchbutton" has one paremeter which is the text show on the search button. It defines the form submit button.
+1. The "\#createaccountbutton" define the join curriki button, and it has two parameters ahout the text on the button and the link.
+
+You need to change some of them to your self's.
+
+#warning("Because we need create and store log page, and this landing page is visited by guest, please make sure this landing page's author has programming rights")
+
+1.1.1.1 Step 4
+
+Now you can view the new Landing page from the url "/xwiki/bin/view/AdWordsJump/TestAdWordsJumpPage?xpage=popup". Remember, to view your Ad correctly, add '?xpage=popup' at the end of you URL. The search content will be record in the system automatically.
+
+1.1.1.1 Step 5
+
+You can view search records in the log page with the url "/xwiki/bin/view/AdWordsJump/LandingPageLog" or click here [Google Ad Reports&gt;AdWordsJump.LandingPageLog]. This page contains all the Landing page logs, you can click each Landing page to its log.
+
+
 1.1.1 Page rights
-* AdWordsInfoClass and LandingPageTemplate should be visible by guests
-* LandingPageLog,LandingPageLogTemplate,LandingPageTemplate and LandingPageLogExport  should have programming rights
-</content></xwikidoc>
+* LandingPageTemplate should be visible by guests
+* LandingPageLog, LandingPageLogTemplate, LandingPageTemplate, LandingPageLogExport and AdWordsJumpPageTemplate should have programming rights</content>
+</xwikidoc>
