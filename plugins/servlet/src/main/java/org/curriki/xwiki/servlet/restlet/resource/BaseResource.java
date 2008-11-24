@@ -6,12 +6,7 @@ import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.Context;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
-import org.restlet.data.MediaType;
-import org.restlet.data.Status;
-import org.restlet.data.Reference;
-import org.restlet.data.Form;
+import org.restlet.data.*;
 import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi;
 import org.curriki.xwiki.plugin.curriki.CurrikiPlugin;
 import com.xpn.xwiki.XWikiContext;
@@ -90,6 +85,7 @@ public class BaseResource extends Resource {
             getResponse().setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
         }
 
+        r.setCharacterSet(CharacterSet.UTF_8);
         return r;
     }
 
