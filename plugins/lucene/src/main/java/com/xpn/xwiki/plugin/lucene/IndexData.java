@@ -132,7 +132,7 @@ public abstract class IndexData
                 Field.Store.YES,
                 Field.Index.TOKENIZED));
             luceneDoc.add(new Field(IndexFields.DOCUMENT_TITLE + IndexFields.UNTOKENIZED,
-                documentTitle,
+                documentTitle.toUpperCase(),
                 Field.Store.NO,
                 Field.Index.UN_TOKENIZED));
         }
@@ -154,7 +154,7 @@ public abstract class IndexData
                 Field.Store.YES,
                 Field.Index.TOKENIZED));
             luceneDoc.add(new Field(IndexFields.DOCUMENT_AUTHOR + IndexFields.UNTOKENIZED,
-                author,
+                author.toUpperCase(),
                 Field.Store.NO,
                 Field.Index.UN_TOKENIZED));
         }
@@ -164,7 +164,7 @@ public abstract class IndexData
                 Field.Store.YES,
                 Field.Index.TOKENIZED));
             luceneDoc.add(new Field(IndexFields.DOCUMENT_CREATOR + IndexFields.UNTOKENIZED,
-                creator,
+                creator.toUpperCase(),
                 Field.Store.NO,
                 Field.Index.UN_TOKENIZED));
         }
