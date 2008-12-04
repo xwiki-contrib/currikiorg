@@ -315,7 +315,6 @@ Curriki.module.addpath.init = function(){
 							 xtype:'radio'
 							,value:'template'
 							,inputValue:'template'
-	//						,checked:true
 							,boxLabel:_('add.contributemenu.option.template')
 
 		// Create "from scratch"
@@ -398,17 +397,19 @@ Curriki.module.addpath.init = function(){
 
 
 		AddPath.TemplateList = function() {
+			var pfx = 'add.select'+Curriki.current.templateType;
+
 			var retVal = [];
 
 			var i = 1;
-			while(_('add.selecttemplate.list'+i+'.header') !== 'add.selecttemplate.list'+i+'.header'){
+			while(_(pfx+'.list'+i+'.header') !== pfx+'.list'+i+'.header'){
 				var tpl = [];
 				tpl.push({
 					 xtype:'radio'
 					,name:'templateName'
 					,value:'list'+i
 					,checked:(i===1?true:false) // Default first as checked
-					,boxLabel:_('add.selecttemplate.list'+i+'.header')
+					,boxLabel:_(pfx+'.list'+i+'.header')
 					,listeners:{
 						check:AddPath.TemplateSelect
 					}
@@ -417,7 +418,7 @@ Curriki.module.addpath.init = function(){
 					 xtype:'box'
 					,autoEl:{
 						 tag:'div'
-						,html:_('add.selecttemplate.list'+i+'.description')
+						,html:_(pfx+'.list'+i+'.description')
 						,cls:'description'
 					}
 				});
@@ -437,29 +438,31 @@ Curriki.module.addpath.init = function(){
 			}
 
 			// Default to first item in the list
-			Curriki.current.submitToTemplate = _('add.selecttemplate.list1.url');
+			Curriki.current.submitToTemplate = _(pfx+'.list1.url');
 
 			return retVal;
 		};
 
 		AddPath.TemplateSelect = function(radio, selected) {
+			var pfx = 'add.select'+Curriki.current.templateType;
 			if (selected) {
 				// CURRIKI-2434
 				// - Gets called while dialogue is being created (before shown)
 				//   so need to check if item is shown yet
 				var img = Ext.get('selecttemplate-thumbnail-image');
 				if (!Ext.isEmpty(img)) {
-					img.set({'src': _('add.selecttemplate.'+radio.value+'.thumbnail')});
-					Curriki.current.submitToTemplate = _('add.selecttemplate.'+radio.value+'.url');
+					img.set({'src': _(pfx+'.'+radio.value+'.thumbnail')});
+					Curriki.current.submitToTemplate = _(pfx+'.'+radio.value+'.url');
 				}
 			}
 		};
 
 		AddPath.SelectTemplate = Ext.extend(Curriki.ui.dialog.Actions, {
 			  initComponent:function(){
+				var tmplPfx = Curriki.current.templatePrefix;
 				Ext.apply(this, {
 					 id:'SelectTemplateDialogueWindow'
-					,title:_('add.selecttemplate.title')
+					,title:_(tmplPfx+'.title')
 					,cls:'addpath addpath-templates resource resource-add'
 					,border:false
 					,bodyBorder:false
@@ -478,7 +481,7 @@ Curriki.module.addpath.init = function(){
 						}
 						,buttonAlign:'right'
 						,buttons:[{
-							 text:_('add.selecttemplate.cancel.button')
+							 text:_(tmplPfx+'.cancel.button')
 							,id:'cancelbutton'
 							,cls:'button cancel'
 							,listeners:{
@@ -488,7 +491,7 @@ Curriki.module.addpath.init = function(){
 								}
 							}
 						},{
-							 text:_('add.selecttemplate.next.button')
+							 text:_(tmplPfx+'.next.button')
 							,id:'nextbutton'
 							,cls:'button next'
 							,listeners:{
@@ -507,7 +510,7 @@ Curriki.module.addpath.init = function(){
 									 xtype:'box'
 									,autoEl:{
 										 tag:'div'
-										,html:_('add.selecttemplate.guidingquestion')
+										,html:_(tmplPfx+'.guidingquestion')
 										,cls:'guidingquestion'
 									}
 								},{
@@ -533,7 +536,7 @@ Curriki.module.addpath.init = function(){
 										,children:[{
 											 tag:'img'
 											,id:'selecttemplate-thumbnail-image'
-											,src:_('add.selecttemplate.list1.thumbnail')
+											,src:_(tmplPfx+'.list1.thumbnail')
 											,onLoad:"Ext.getCmp('SelectTemplateDialogueWindow').syncShadow();"
 										}]
 									}
@@ -547,6 +550,112 @@ Curriki.module.addpath.init = function(){
 			}
 		});
 		Ext.reg('apSelectTemplate', AddPath.SelectTemplate);
+
+
+
+
+		AddPath.ScratchFormatSelect = function(radio, selected) {
+			if (selected) {
+				var img = Ext.get('selectformat-thumbnail-image');
+				if (!Ext.isEmpty(img)) {
+					img.set({'src': _('add.selectformat.'+radio.value+'.thumbnail')});
+					Curriki.current.submitToTemplate = _('add.selectformat.'+radio.value+'.url');
+				}
+			}
+		};
+
+		AddPath.SelectScratchFormat = Ext.extend(Curriki.ui.dialog.Actions, {
+			  initComponent:function(){
+				Ext.apply(this, {
+					 id:'SelectFormatDialogueWindow'
+					,title:_('add.selectformat.title')
+					,cls:'addpath addpath-formats resource resource-add'
+					,border:false
+					,bodyBorder:false
+					,items:[{
+						 xtype:'form'
+						,id:'SelectFormatDialoguePanel'
+						,formId:'SelectFormatDialogueForm'
+						,border:false
+						,bodyBorder:false
+						,labelWidth:25
+						,autoScroll:true
+						,defaults:{
+							 labelSeparator:''
+							,border:false
+							,bodyBorder:false
+						}
+						,buttonAlign:'right'
+						,buttons:[{
+							 text:_('add.selectformat.cancel.button')
+							,id:'cancelbutton'
+							,cls:'button cancel'
+							,listeners:{
+								'click':function(e, ev){
+									Ext.getCmp(e.id).ownerCt.ownerCt.close();
+									window.location.href = Curriki.current.cameFrom;
+								}
+							}
+						},{
+							 text:_('add.selectformat.next.button')
+							,id:'nextbutton'
+							,cls:'button next'
+							,listeners:{
+								'click':function(e, ev){
+									AddPath.PostToTemplate(Curriki.current.submitToTemplate);
+									Ext.getCmp(e.id).ownerCt.ownerCt.close();
+								}
+							}
+						}]
+						,items:[{
+							 layout:'column'
+							,defaults:{border:false}
+							,items:[{
+								 columnWidth:0.55
+								,items:[{
+									 xtype:'box'
+									,autoEl:{
+										 tag:'div'
+										,html:_('add.selectformat.guidingquestion')
+										,cls:'guidingquestion'
+									}
+								},{
+									 xtype:'container'
+									,id:'selectformat-list'
+									,items:AddPath.ScratchFormatList()
+									,autoEl:{
+										 tag:'div'
+										,id:'selectformat-list-box'
+										,html:''
+									}
+								}]
+							},{
+								 columnWidth:0.35
+								,items:[{
+									 xtype:'box'
+									,id:'selectformat-thumbnail-container'
+									,anchor:''
+									,autoEl:{
+										 tag:'div'
+										,id:'selectformat-thumbnail'
+										,style:'margin:8px 0 8px 10px'
+										,children:[{
+											 tag:'img'
+											,id:'selectformat-thumbnail-image'
+											,src:_('add.selectformat.list1.thumbnail')
+											,onLoad:"Ext.getCmp('SelectFormatDialogueWindow').syncShadow();"
+										}]
+									}
+								}]
+							}]
+						}]
+					}]
+				});
+
+				AddPath.SelectScratchFormat.superclass.initComponent.call(this);
+			}
+		});
+		Ext.reg('apSelectScratchFormat', AddPath.SelectScratchFormat);
 
 
 
@@ -1619,14 +1728,6 @@ console.log("Published CB: ", newAsset);
 					}
 					break;
 
-				case 'openbuilder':
-					link = '/xwiki/bin/view/GWT/Editor?xpage=plain&page='+pageName+'&mode=edit';
-					handler = function(e,evt){
-						window.open(link, 'Currikulum');
-						window.location.href = Curriki.current.cameFrom;
-					};
-					break;
-
 				case 'viewtarget':
 					link = '/xwiki/bin/view/'+pageName.replace('.', '/');
 					text = _('add.finalmessage.viewtarget.link', (Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'));
@@ -1696,10 +1797,7 @@ console.log("Published CB: ", newAsset);
 			switch(Curriki.current.flow){
 				case 'K':
 				case 'M':
-					msg += '<ul>';
-					msg += '<li>'+_('add.finalmessage.text_'+name+'_tip1')+'</li>';
-					msg += '<li>'+_('add.finalmessage.text_'+name+'_tip2')+'</li>';
-					msg += '</ul>';
+					msg += _('add.finalmessage.text_'+name+'_tip1');
 					break;
 			}
 
@@ -1762,8 +1860,7 @@ console.log("Published CB: ", newAsset);
 					 title:_('add.finalmessage.title_collection')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
-						 AddPath.FinalLink('openbuilder'),'-'
-						,AddPath.FinalLink('collections'),'->'
+						AddPath.FinalLink('collections'),'->'
 						,AddPath.CloseDone(this)
 					]
 					,items:[
@@ -1824,8 +1921,7 @@ console.log("Published CB: ", newAsset);
 					 title:_('add.finalmessage.title_folder')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
-						 AddPath.FinalLink('openbuilder'),'->'
-						,AddPath.CloseDone(this)
+						'->',AddPath.CloseDone(this)
 					]
 					,items:[
 						// This needs arguments for "added {0} into {1}"
@@ -1864,7 +1960,7 @@ console.log("Published CB: ", newAsset);
 					 title:_('add.finalmessage.title_collection')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
-						 '->',AddPath.FinalLink('continue')
+						 '->',AddPath.CloseDone(this)
 					]
 					,items:[
 						 AddPath.DoneMessage('collection')
@@ -1881,7 +1977,7 @@ console.log("Published CB: ", newAsset);
 					 title:_('add.finalmessage.title_collection')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
-						 '->',AddPath.FinalLink('continue')
+						 '->',AddPath.CloseDone(this)
 					]
 					,items:[
 						 AddPath.DoneMessage('groupcollection')
@@ -2358,11 +2454,8 @@ console.log("Created Link CB: ", linkInfo);
 					return;
 					break;
 
-				case 'repository':
-					// TODO: This has deferred out of EOU1
-					break;
-
 				case 'template':
+					Curriki.current.templateType = 'template';
 					if (AddPath.TemplateList().size() > 1) {
 						next = 'apSelectTemplate';
 					} else {
@@ -2372,8 +2465,13 @@ console.log("Created Link CB: ", linkInfo);
 					break;
 
 				case 'scratch':
-					AddPath.PostToTemplate(_('form.scratch.url'));
-					return;
+					Curriki.current.templateType = 'format';
+					if (AddPath.TemplateList().size() > 1) {
+						next = 'apSelectTemplate';
+					} else {
+						AddPath.PostToTemplate(_('add.selectformat.list1.url'));
+						return;
+					}
 					break;
 
 				case 'folder':
@@ -2699,6 +2797,8 @@ Curriki.current = {
 			,sri2fillin:null
 
 			,submitToTemplate:null
+
+			,templateType:null
 
 			,drop:null
 		});
