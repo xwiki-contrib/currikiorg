@@ -459,7 +459,7 @@ Curriki.module.addpath.init = function(){
 
 		AddPath.SelectTemplate = Ext.extend(Curriki.ui.dialog.Actions, {
 			  initComponent:function(){
-				var tmplPfx = Curriki.current.templatePrefix;
+				var tmplPfx = 'add.select'+Curriki.current.templateType;
 				Ext.apply(this, {
 					 id:'SelectTemplateDialogueWindow'
 					,title:_(tmplPfx+'.title')
@@ -550,112 +550,6 @@ Curriki.module.addpath.init = function(){
 			}
 		});
 		Ext.reg('apSelectTemplate', AddPath.SelectTemplate);
-
-
-
-
-		AddPath.ScratchFormatSelect = function(radio, selected) {
-			if (selected) {
-				var img = Ext.get('selectformat-thumbnail-image');
-				if (!Ext.isEmpty(img)) {
-					img.set({'src': _('add.selectformat.'+radio.value+'.thumbnail')});
-					Curriki.current.submitToTemplate = _('add.selectformat.'+radio.value+'.url');
-				}
-			}
-		};
-
-		AddPath.SelectScratchFormat = Ext.extend(Curriki.ui.dialog.Actions, {
-			  initComponent:function(){
-				Ext.apply(this, {
-					 id:'SelectFormatDialogueWindow'
-					,title:_('add.selectformat.title')
-					,cls:'addpath addpath-formats resource resource-add'
-					,border:false
-					,bodyBorder:false
-					,items:[{
-						 xtype:'form'
-						,id:'SelectFormatDialoguePanel'
-						,formId:'SelectFormatDialogueForm'
-						,border:false
-						,bodyBorder:false
-						,labelWidth:25
-						,autoScroll:true
-						,defaults:{
-							 labelSeparator:''
-							,border:false
-							,bodyBorder:false
-						}
-						,buttonAlign:'right'
-						,buttons:[{
-							 text:_('add.selectformat.cancel.button')
-							,id:'cancelbutton'
-							,cls:'button cancel'
-							,listeners:{
-								'click':function(e, ev){
-									Ext.getCmp(e.id).ownerCt.ownerCt.close();
-									window.location.href = Curriki.current.cameFrom;
-								}
-							}
-						},{
-							 text:_('add.selectformat.next.button')
-							,id:'nextbutton'
-							,cls:'button next'
-							,listeners:{
-								'click':function(e, ev){
-									AddPath.PostToTemplate(Curriki.current.submitToTemplate);
-									Ext.getCmp(e.id).ownerCt.ownerCt.close();
-								}
-							}
-						}]
-						,items:[{
-							 layout:'column'
-							,defaults:{border:false}
-							,items:[{
-								 columnWidth:0.55
-								,items:[{
-									 xtype:'box'
-									,autoEl:{
-										 tag:'div'
-										,html:_('add.selectformat.guidingquestion')
-										,cls:'guidingquestion'
-									}
-								},{
-									 xtype:'container'
-									,id:'selectformat-list'
-									,items:AddPath.ScratchFormatList()
-									,autoEl:{
-										 tag:'div'
-										,id:'selectformat-list-box'
-										,html:''
-									}
-								}]
-							},{
-								 columnWidth:0.35
-								,items:[{
-									 xtype:'box'
-									,id:'selectformat-thumbnail-container'
-									,anchor:''
-									,autoEl:{
-										 tag:'div'
-										,id:'selectformat-thumbnail'
-										,style:'margin:8px 0 8px 10px'
-										,children:[{
-											 tag:'img'
-											,id:'selectformat-thumbnail-image'
-											,src:_('add.selectformat.list1.thumbnail')
-											,onLoad:"Ext.getCmp('SelectFormatDialogueWindow').syncShadow();"
-										}]
-									}
-								}]
-							}]
-						}]
-					}]
-				});
-
-				AddPath.SelectScratchFormat.superclass.initComponent.call(this);
-			}
-		});
-		Ext.reg('apSelectScratchFormat', AddPath.SelectScratchFormat);
 
 
 
