@@ -6,7 +6,7 @@
 
 Ext.ns('Curriki.data.ict');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/XWiki.AssetClass/fields/instructional_component2  OR  Get filled in JS created by xwiki
-Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_lab","activity_worksheet","activity_problemset","book_fiction","book_nonfiction","book_readings","book_textbook","curriculum_assessment","curriculum_course","curriculum_unit","curriculum_lp","curriculum_rubric","curriculum_scope","curriculum_standards","curriculum_studyguide","curriculum_syllabus","curriculum_tutorial","curriculum_workbook","resource_animation","resource_diagram","resource_glossary","resource_index","resource_photograph","resource_presentation","resource_collection","resource_script","resource_speech","resource_table","resource_template","resource_webcast","other"];
+Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_game","activity_lab","activity_webquest","activity_worksheet","activity_problemset","book_fiction","book_nonfiction","book_readings","book_textbook","curriculum_assessment","curriculum_course","curriculum_unit","curriculum_lp","curriculum_rubric","curriculum_scope","curriculum_standards","curriculum_studyguide","curriculum_syllabus","curriculum_tutorial","curriculum_workbook","resource_animation","resource_diagram","resource_glossary","resource_index","resource_photograph","resource_presentation","resource_collection","resource_script","resource_speech","resource_table","resource_template","resource_webcast","other"];
 Curriki.data.ict.data = [ ];
 Curriki.data.ict.list.each(function(ict){
 	Curriki.data.ict.data.push([
