@@ -411,7 +411,7 @@ $response.sendRedirect($xwiki.getURL($blogmain))
 #set($newspace = $xwiki.parseGroovyFromPage("MyCurriki.BlogGroovy"))
 $newspace.setObjects($xwiki, $context)
 $newspace.createSpace($space, $context.user)
-$response.sendRedirect($xwiki.getURL($blogmain))
+$response.sendRedirect($xwiki.getURL("MyCurriki.BlogCreateArticle",  "view", "space=${space}&xredirect=$xwiki.requestURL"))
  #end
 #else
 $msg.get("myBlog.onlyMemberCanCreate")
