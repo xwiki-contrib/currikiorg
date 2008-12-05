@@ -966,8 +966,8 @@ $memberdoc.getRenderedContent("$!content")</div>
  * Macro to display the page title
  *#
 #macro(pageTitle) ##{
-  #if($doc.fullName=="GWT.Editor") ##{
-    $msg.get("editor.app_full_name")
+  #if($doc.fullName=="Search.WebHome") ##{
+    $msg.get("main.curriki") - $msg.get("caption.search")
   #else ##}{
     #if(!$title) ##{
       #set( $title = $!xwiki.getWebPreference("title"))
