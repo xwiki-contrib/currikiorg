@@ -48,7 +48,7 @@ Curriki.data.rights.list.each(function(right){
 
 Ext.ns('Curriki.data.language');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/XWiki.AssetClass/fields/language  OR  Get filled in JS created by xwiki
-Curriki.data.language.list = ["eng","ind","zho","nld","fra","deu","hin","ita","jpn","kor","nep","por","rus","sin","spa","999"];
+Curriki.data.language.list = ["eng","ind","zho","nld","fra","deu","hin","ita","jpn","kor","nep","por","rus","sin","spa","tam","999"];
 Curriki.data.language.initial = Curriki.data.language.list[0];
 Curriki.data.language.data = [ ];
 Curriki.data.language.list.each(function(lang){
