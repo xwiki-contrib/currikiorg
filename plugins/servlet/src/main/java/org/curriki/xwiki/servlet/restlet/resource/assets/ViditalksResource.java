@@ -9,7 +9,7 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.external.VIDITalkAsset;
+import org.curriki.xwiki.plugin.asset.external.VideoAsset;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONException;
@@ -31,9 +31,9 @@ public class ViditalksResource extends BaseResource {
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
 
-        VIDITalkAsset asset = null;
+        VideoAsset asset = null;
         try {
-            asset = (VIDITalkAsset) plugin.fetchAssetAs(assetName, VIDITalkAsset.class);
+            asset = (VideoAsset) plugin.fetchAssetAs(assetName, VideoAsset.class);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }

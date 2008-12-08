@@ -16,39 +16,23 @@ public class TextAsset extends Asset {
     }
 
     public String getText() throws AssetException {
+        return doc.getContent();
+    }
+
+    public String getSyntax() throws AssetException {
         if (!hasA(Constants.TEXT_ASSET_CLASS)) {
-            throw new AssetException("This asset has no text.");
+            throw new AssetException("This asset is not a text asset.");
         }
 
         BaseObject obj = doc.getObject(Constants.TEXT_ASSET_CLASS);
-        return obj.getStringValue(Constants.TEXT_ASSET_CLASS_TEXT);
+        return obj.getStringValue(Constants.TEXT_ASSET_SYNTAX);
     }
 
-    public Long getType() throws AssetException {
-        if (!hasA(Constants.TEXT_ASSET_CLASS)) {
-            throw new AssetException("This asset has no text.");
-        }
-
-        BaseObject obj = doc.getObject(Constants.TEXT_ASSET_CLASS);
-        return obj.getLongValue(Constants.TEXT_ASSET_CLASS_TYPE);
-    }
-
-    public void addText(Long type, String content) throws XWikiException {
-        if (hasA(Constants.TEXT_ASSET_CLASS)) {
-            throw new AssetException("This asset already has text.");
-        }
-
-        BaseObject obj = doc.newObject(Constants.TEXT_ASSET_CLASS, context);
-        obj.setStringValue(Constants.TEXT_ASSET_CLASS_TEXT, content);
-        obj.setLongValue(Constants.TEXT_ASSET_CLASS_TYPE, type);
-
-        determineCategory();
-    }
-
-    protected void determineCategory() throws XWikiException {
-        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+    public void addText(String syntax, String content) throws XWikiException {
+        doc.setContent(content);
+        BaseObject obj = doc.getObject(Constants.TEXT_ASSET_CLASS, true, context);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_TEXT);
+            obj.setStringValue(Constants.TEXT_ASSET_SYNTAX, syntax);
         }
     }
 }

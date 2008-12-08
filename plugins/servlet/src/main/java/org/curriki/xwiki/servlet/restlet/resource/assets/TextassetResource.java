@@ -42,17 +42,21 @@ public class TextassetResource extends BaseResource {
         }
 
         String content = null;
+        String syntax = null;
+        String category = null;
         Long type = null;
         try {
             content = asset.getText();
-            type = asset.getType();
+            syntax = asset.getSyntax();
+            category = asset.getCategory();
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No texts found for "+assetName);
         }
 
         JSONObject json = new JSONObject();
         json.put("text", content);
-        json.put("type", type);
+        json.put("syntax", syntax);
+        json.put("category", category);
 
         return formatJSON(json, variant);
     }

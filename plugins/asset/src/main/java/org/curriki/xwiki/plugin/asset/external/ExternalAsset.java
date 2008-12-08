@@ -71,7 +71,7 @@ public class ExternalAsset extends Asset {
     protected void determineCategory() throws XWikiException {
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_LINK);
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_EXTERNAL);
         }
     }
 }

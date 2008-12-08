@@ -44,14 +44,10 @@ public class ResourceActivityEvent extends ActivityEvent
         String assetTitle = event.getParam1();
         String assetLink = assetTitle;
         XWikiDocument doc = null;
-        BaseObject asset;
         try {
             doc = context.getWiki().getDocument(event.getPage(), context);
-            asset = doc.getObject("XWiki.AssetClass");
-            if (asset != null) {
-                assetTitle = asset.getStringValue("title");
-                assetLink = "[" + assetTitle + ">" + asset.getName().replaceAll("@", "%40") + "]";
-            }
+            assetTitle = doc.getTitle();
+            assetLink = "[" + assetTitle + ">" + doc.getFullName().replaceAll("@", "%40") + "]";
         } catch (XWikiException e) {
         }
 

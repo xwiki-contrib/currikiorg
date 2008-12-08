@@ -10,22 +10,22 @@ import org.curriki.xwiki.plugin.asset.AssetException;
 
 /**
  */
-public class VIDITalkAsset extends Asset {
-    public VIDITalkAsset(XWikiDocument doc, XWikiContext context) {
+public class VideoAsset extends Asset {
+    public VideoAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }
 
     public String getVideoId() throws XWikiException {
-        if (!hasA(Constants.VIDITALK_CLASS)) {
+        if (!hasA(Constants.VIDEO_ASSET_CLASS)) {
             throw new AssetException("This asset has no video.");
         }
 
-        BaseObject obj = doc.getObject(Constants.VIDITALK_CLASS);
-        return obj.getStringValue(Constants.VIDITALK_CLASS_VIDEO_ID);
+        BaseObject obj = doc.getObject(Constants.VIDEO_ASSET_CLASS);
+        return obj.getStringValue(Constants.VIDEO_ASSET_ID);
     }
 
     public void addVideoId(String videoId) throws XWikiException {
-        if (hasA(Constants.VIDITALK_CLASS)) {
+        if (hasA(Constants.VIDEO_ASSET_CLASS)) {
             throw new AssetException("This asset already has video.");
         }
 
@@ -33,10 +33,10 @@ public class VIDITalkAsset extends Asset {
     }
 
     public void setVideoId(String videoId) throws XWikiException {
-        doc.removeObjects(Constants.VIDITALK_CLASS);
+        doc.removeObjects(Constants.VIDEO_ASSET_CLASS);
 
-        BaseObject obj = doc.newObject(Constants.VIDITALK_CLASS, context);
-        obj.setStringValue(Constants.VIDITALK_CLASS_VIDEO_ID, videoId);
+        BaseObject obj = doc.newObject(Constants.VIDEO_ASSET_CLASS, context);
+        obj.setStringValue(Constants.VIDEO_ASSET_ID, videoId);
 
         determineCategory();
     }
@@ -44,7 +44,7 @@ public class VIDITalkAsset extends Asset {
     protected void determineCategory() throws XWikiException {
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_VIDITALK_VIDEO);
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_VIDEO);
         }
     }
 }

@@ -8,15 +8,15 @@ import org.curriki.xwiki.plugin.asset.Constants;
 
 /**
  */
-public class AudioAsset extends DocumentAsset {
-    public AudioAsset(XWikiDocument doc, XWikiContext context) {
+public class InteractiveAsset extends DocumentAsset {
+    public InteractiveAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }
 
     protected void determineCategory() throws XWikiException {
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_VIDEO);
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_INTERACTIVE);
         }
     }
 

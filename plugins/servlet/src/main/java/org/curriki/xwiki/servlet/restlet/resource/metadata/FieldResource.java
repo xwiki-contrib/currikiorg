@@ -51,7 +51,7 @@ public class FieldResource extends BaseResource {
             json.put("fieldName", fieldName);
             json.put("fieldType", fieldType);
             json.put("shortFieldType", shortFieldType);
-            if (className.equals("XWiki.AssetClass") && fieldName.equals("category")) {
+            if (className.equals("CurrikiCode.AssetClass") && fieldName.equals("category")) {
                 // TODO: Fix this when the class is fixed
                 // We are not using valid values (as per the DBListClass list) for category for some reason
                 // So give the actual used values here

@@ -70,7 +70,7 @@ public class MetadataResource extends BaseResource {
         // SRI1
         // title
         if (json.has("title")) {
-            assetObj.set(Constants.ASSET_CLASS_TITLE,  json.getString("title"));
+            asset.setTitle(json.getString("title"));
         }
         // description
         if (json.has("description")) {

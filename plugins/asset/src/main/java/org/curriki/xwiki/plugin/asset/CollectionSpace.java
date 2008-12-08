@@ -122,7 +122,7 @@ public class CollectionSpace {
 
         doc.setCustomClass(Asset.class.getName());
         doc.setCreator(context.getUser());
-        doc.setContent(Constants.COMPOSITE_ASSET_ROOT_COLLECTION_CONTENT);
+        doc.setContent("");
         doc.setParent(context.getUser());
 
         if (!doc.isNew()) {
@@ -176,7 +176,7 @@ public class CollectionSpace {
 
         CollectionCompositeAsset fav = asset.makeCollection();
         fav.setTitle(Constants.FAVORITES_COLLECTION_TITLE);
-        fav.set(Constants.ASSET_CLASS_TITLE, Constants.FAVORITES_COLLECTION_TITLE);
+        fav.setTitle(Constants.FAVORITES_COLLECTION_TITLE);
         fav.set(Constants.ASSET_CLASS_DESCRIPTION, Constants.FAVORITES_COLLECTION_TITLE);
 
         // we select the "Resource: Reference Collection" ICT value

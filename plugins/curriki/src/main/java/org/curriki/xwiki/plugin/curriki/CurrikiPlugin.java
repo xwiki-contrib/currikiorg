@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,12 +23,21 @@ import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.XWiki;
+import com.xpn.xwiki.notify.XWikiNotificationRule;
+import com.xpn.xwiki.notify.XWikiActionRule;
+import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
+import com.xpn.xwiki.notify.DocChangeRule;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Property;
+import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.PropertyInterface;
 import com.xpn.xwiki.objects.classes.BaseClass;
+import com.xpn.xwiki.objects.classes.DBTreeListClass;
+import com.xpn.xwiki.objects.classes.StaticListClass;
+import com.xpn.xwiki.objects.classes.BooleanClass;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
@@ -34,7 +45,7 @@ import com.xpn.xwiki.web.XWikiRequest;
 
 /**
  */
-public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface {
+public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface, XWikiDocChangeNotificationInterface {
     public static final String PLUGIN_NAME = "curriki";
 
     private static final Log LOG = LogFactory.getLog(CurrikiPlugin.class);
@@ -47,6 +58,28 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
     @Override public void init(XWikiContext context) {
         super.init(context);
+        // Creating classes
+        try {
+            // we need to create the asset classes if they don't exist
+            initAssetClass(context);
+            initAssetLicenseClass(context);
+            initAssetTextClass(context);
+            initAssetDocumentClass(context);
+            initAssetVideoClass(context);
+            initAssetArchiveClass(context);
+            initAssetExternalClass(context);
+            initSubAssetClass(context);
+            initReorderAssetClass(context);
+            initCompositeAssetClass(context);
+        } catch (XWikiException e) {
+            if (LOG.isErrorEnabled())
+                LOG.error("Error generating asset classes", e);
+        }
+
+        // Insert a notification so that we can handle rollback and convert assets
+        // if we are reading an asset in the old format
+        context.getWiki().getNotificationManager(). addGeneralRule(new DocChangeRule(this, true, false));
+
     }
 
     @Override public String getName() {
@@ -114,7 +147,6 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
 
-
     /**
      * Obtain a list of all groups a user is in
      *
@@ -180,21 +212,21 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @throws XWikiException
      */
     public Boolean isMember(String groupName,XWikiContext context) throws XWikiException {
-    	XWikiDocument doc = context.getWiki().getDocument(groupName, context);
-    	Vector<BaseObject> groups = doc.getObjects("XWiki.XWikiGroups");
-    	if (groups!=null)
-    	{
-	    	for (Iterator iterator = groups.iterator(); iterator.hasNext();) {
-	    		BaseObject group = (BaseObject) iterator.next();
-	    		if (group!=null)
-	    		{
-					String groupMember = group.getStringValue("member");
-					if (groupMember!=null && context.getUser().equals(groupMember))
-						return true;
-	    		}
-			}
-    	}
-    	return false;
+        XWikiDocument doc = context.getWiki().getDocument(groupName, context);
+        Vector<BaseObject> groups = doc.getObjects("XWiki.XWikiGroups");
+        if (groups!=null)
+        {
+            for (Iterator iterator = groups.iterator(); iterator.hasNext();) {
+                BaseObject group = (BaseObject) iterator.next();
+                if (group!=null)
+                {
+                    String groupMember = group.getStringValue("member");
+                    if (groupMember!=null && context.getUser().equals(groupMember))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -248,27 +280,27 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @throws XWikiException
      */
     public List<String> getAssetICT(String assetName, XWikiContext context) throws XWikiException {
-    	List<String> listICT = new ArrayList<String>();
-    	if(assetName!=null && (assetName.lastIndexOf("'")>-1 || assetName.lastIndexOf("’")>-1)){
-    		return listICT;
-    	}
-       Asset asset = fetchAssetAs(assetName, null, context);
-       String ictStr = "";
+        List<String> listICT = new ArrayList<String>();
+        if(assetName!=null && (assetName.lastIndexOf("'")>-1 || assetName.lastIndexOf("’")>-1)){
+            return listICT;
+        }
+        Asset asset = fetchAssetAs(assetName, null, context);
+        String ictStr = "";
 
-       if (asset.getObject(Constants.ASSET_CLASS) != null){
-    	   asset.use(Constants.ASSET_CLASS);
-           if (asset.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY) != null){
-        	   ictStr = (String)asset.get(Constants.ASSET_INSTRUCTIONAL_COMPONENT_PROPERTY);
-        	   ictStr=ictStr.replaceAll("#--#", ",");
-        	   StringTokenizer elements = new StringTokenizer(ictStr,",");
-        	    while(elements.hasMoreTokens()){
-        	    	listICT.add(elements.nextToken());
-        	    }
+        if (asset.getObject(Constants.ASSET_CLASS) != null){
+            asset.use(Constants.ASSET_CLASS);
+            if (asset.get(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT) != null){
+                ictStr = (String)asset.get(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT);
+                ictStr=ictStr.replaceAll("#--#", ",");
+                StringTokenizer elements = new StringTokenizer(ictStr,",");
+                while(elements.hasMoreTokens()){
+                    listICT.add(elements.nextToken());
+                }
 
-           }
-       }
+            }
+        }
 
-       return listICT;
+        return listICT;
 
     }
 
@@ -282,39 +314,39 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      */
     public String changeFormatDate(String date,String currentPattern,String newPattern,String delim)
     {
-    	try {
-			StringTokenizer tokenDate = new StringTokenizer(date,delim);
-			StringTokenizer tokenPattern = new StringTokenizer(currentPattern,delim);
-			Map hashData = new HashMap();
-			int count = tokenPattern.countTokens();
-			for (int i = 0; i < count; i++) {
-				hashData.put(tokenPattern.nextToken(), tokenDate.nextToken());
-			}
+        try {
+            StringTokenizer tokenDate = new StringTokenizer(date,delim);
+            StringTokenizer tokenPattern = new StringTokenizer(currentPattern,delim);
+            Map hashData = new HashMap();
+            int count = tokenPattern.countTokens();
+            for (int i = 0; i < count; i++) {
+                hashData.put(tokenPattern.nextToken(), tokenDate.nextToken());
+            }
 
-			tokenPattern = new StringTokenizer(newPattern,delim);
-			String result = "";
-			count = tokenPattern.countTokens();
-			for (int i = 0; i < count; i++) {
-				result += hashData.get(tokenPattern.nextToken());
-				if (i<count-1)
-					result += delim;
-			}
-			return result;
-		} catch (Exception e) {
-			LOG.debug(e.getMessage(),e);
-			return "";
-		}
+            tokenPattern = new StringTokenizer(newPattern,delim);
+            String result = "";
+            count = tokenPattern.countTokens();
+            for (int i = 0; i < count; i++) {
+                result += hashData.get(tokenPattern.nextToken());
+                if (i<count-1)
+                    result += delim;
+            }
+            return result;
+        } catch (Exception e) {
+            LOG.debug(e.getMessage(),e);
+            return "";
+        }
     }
 
     public String formatDate(Date date,String pattern)
     {
-    	if (date!=null && date instanceof Date)
-			try {
-				return (new SimpleDateFormat(pattern)).format(date);
-			} catch (Exception e) {
-				LOG.debug(e.getMessage(),e);
-			}
-    	return ""+date;
+        if (date!=null && date instanceof Date)
+            try {
+                return (new SimpleDateFormat(pattern)).format(date);
+            } catch (Exception e) {
+                LOG.debug(e.getMessage(),e);
+            }
+        return ""+date;
     }
 
 
@@ -326,48 +358,48 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @throws XWikiException
      */
     public Map getSeeCountsByStatus(String baseHql, XWikiContext context) throws XWikiException {
-    	// Add the first part of the query for getting the number of docs with each status
-    	String sql = baseHql;
-    	XWikiRequest req = context.getRequest();
-    	String assetFilterFileCheckStatus = req.getCookie("assetFilterFileCheckStatus")!=null?req.getCookie("assetFilterFileCheckStatus").getValue():null;
+        // Add the first part of the query for getting the number of docs with each status
+        String sql = baseHql;
+        XWikiRequest req = context.getRequest();
+        String assetFilterFileCheckStatus = req.getCookie("assetFilterFileCheckStatus")!=null?req.getCookie("assetFilterFileCheckStatus").getValue():null;
 
-    	String auxHqlPart1="";
-    	if(assetFilterFileCheckStatus==null || assetFilterFileCheckStatus.equals("1")||assetFilterFileCheckStatus.equals("0")){
-    		//the user has not search by status but we need the corresponding table in the "from" for hqlPart1
-    		auxHqlPart1= ", StringProperty as sprop ";
-    	}
-    	auxHqlPart1+=sql;
-    	String hqlPart1 = "select sprop.value, count(doc.id) from XWikiDocument as doc "+auxHqlPart1+"  and obj.id=sprop.id.id and sprop.id.name='fcstatus' group by sprop.value";
-    	// Add the second part of the query for getting the number of docs without status
-    	String hqlPart2 = "select '0', count(distinct doc.id) from XWikiDocument as doc "+sql+" and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and (sprop2.value is not null or sprop2.value = '0'))";
+        String auxHqlPart1="";
+        if(assetFilterFileCheckStatus==null || assetFilterFileCheckStatus.equals("1")||assetFilterFileCheckStatus.equals("0")){
+            //the user has not search by status but we need the corresponding table in the "from" for hqlPart1
+            auxHqlPart1= ", StringProperty as sprop ";
+        }
+        auxHqlPart1+=sql;
+        String hqlPart1 = "select sprop.value, count(doc.id) from XWikiDocument as doc "+auxHqlPart1+"  and obj.id=sprop.id.id and sprop.id.name='fcstatus' group by sprop.value";
+        // Add the second part of the query for getting the number of docs without status
+        String hqlPart2 = "select '0', count(distinct doc.id) from XWikiDocument as doc "+sql+" and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='CurrikiCode.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and (sprop2.value is not null or sprop2.value = '0'))";
 
-    	com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
-    	List queryResults = new ArrayList();
-    	Map results = new HashMap();
+        com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
+        List queryResults = new ArrayList();
+        Map results = new HashMap();
 
 
-    	queryResults = xwikiApi.search(hqlPart1);
-    	if(queryResults!=null && queryResults.size()>0){
-    		Iterator iter = queryResults.iterator();
-    		while(iter.hasNext()){
-    			Object[] item = (Object[])(iter.next());
-    			//List itemResults = new ArrayList<String>();
-    			results.put((String)item[0],(Long)item[1]);
+        queryResults = xwikiApi.search(hqlPart1);
+        if(queryResults!=null && queryResults.size()>0){
+            Iterator iter = queryResults.iterator();
+            while(iter.hasNext()){
+                Object[] item = (Object[])(iter.next());
+                //List itemResults = new ArrayList<String>();
+                results.put((String)item[0],(Long)item[1]);
 
-    		}
-    	}
+            }
+        }
 
-    	queryResults = xwikiApi.search(hqlPart2);
-    	if(queryResults!=null && queryResults.size()>0){
-    		Iterator iter = queryResults.iterator();
-    		while(iter.hasNext()){
-    			Object[] item = (Object[])(iter.next());
-    			//List itemResults = new ArrayList<String>();
-    			results.put((String)item[0],(Long)item[1]);
+        queryResults = xwikiApi.search(hqlPart2);
+        if(queryResults!=null && queryResults.size()>0){
+            Iterator iter = queryResults.iterator();
+            while(iter.hasNext()){
+                Object[] item = (Object[])(iter.next());
+                //List itemResults = new ArrayList<String>();
+                results.put((String)item[0],(Long)item[1]);
 
-    		}
-    	}
-    	return results;
+            }
+        }
+        return results;
     }
 
 
@@ -380,19 +412,385 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @throws XWikiException
      */
     public List getValues(String className, String fieldName, XWikiContext xwikiContext)throws XWikiException{
-    	List result = new ArrayList();
-    	PropertyInterface field = null;
-    	BaseClass xwikiClass = xwikiContext.getWiki().getDocument(className, xwikiContext).getxWikiClass();
-    	field = xwikiClass.get(fieldName);
-    	String fieldType = field.getClass().getCanonicalName();
-    	String shortFieldType = fieldType.replaceFirst("^com\\.xpn\\.xwiki\\.objects\\.classes\\.", "");
-    	shortFieldType = shortFieldType.replaceFirst("Class$", "");
-    	if (shortFieldType.equals("DBList")) {
-    		result.addAll(((com.xpn.xwiki.objects.classes.DBListClass) field).getList(xwikiContext));
-    	}  else if (shortFieldType.equals("StaticList")) {
-    		result.addAll(((com.xpn.xwiki.objects.classes.StaticListClass) field).getList(xwikiContext));
-    	}
+        List result = new ArrayList();
+        PropertyInterface field = null;
+        BaseClass xwikiClass = xwikiContext.getWiki().getDocument(className, xwikiContext).getxWikiClass();
+        field = xwikiClass.get(fieldName);
+        String fieldType = field.getClass().getCanonicalName();
+        String shortFieldType = fieldType.replaceFirst("^com\\.xpn\\.xwiki\\.objects\\.classes\\.", "");
+        shortFieldType = shortFieldType.replaceFirst("Class$", "");
+        if (shortFieldType.equals("DBList")) {
+            result.addAll(((com.xpn.xwiki.objects.classes.DBListClass) field).getList(xwikiContext));
+        }  else if (shortFieldType.equals("StaticList")) {
+            result.addAll(((com.xpn.xwiki.objects.classes.StaticListClass) field).getList(xwikiContext));
+        }
 
-    	return result;
+        return result;
+    }
+
+
+    private void initAssetClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.ASSET_CLASS);
+        needsUpdate |= bclass.addTextAreaField(Constants.ASSET_CLASS_DESCRIPTION, Constants.ASSET_CLASS_DESCRIPTION, 60, 6);
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_KEYWORDS, Constants.ASSET_CLASS_KEYWORDS, 40, true, "", "input", " ,|");
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CLASS_CATEGORY, 1, false,
+                Constants.ASSET_CATEGORY_TEXT   + "|" + Constants.ASSET_CATEGORY_WIKI + "|" + Constants.ASSET_CATEGORY_HTML + "|" + Constants.ASSET_CATEGORY_XML + "|" + Constants.ASSET_CATEGORY_LATEX + "|" + Constants.ASSET_CATEGORY_IMAGE
+                        + "|" + Constants.ASSET_CATEGORY_AUDIO + "|" + Constants.ASSET_CATEGORY_VIDEO + "|" + Constants.ASSET_CATEGORY_INTERACTIVE + "|" + Constants.ASSET_CATEGORY_ARCHIVE  + "|" + Constants.ASSET_CATEGORY_DOCUMENT + "|" + Constants.ASSET_CATEGORY_EXTERNAL
+                        + "|" + Constants.ASSET_CATEGORY_COLLECTION  + "|" + Constants.ASSET_CATEGORY_UNKNOWN);
+        needsUpdate |= bclass.addDBTreeListField(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, Constants.ASSET_CLASS_FRAMEWORK_ITEMS, 10, true, Constants.ASSET_CLASS_FRAMEWORK_ITEMS_QUERY);
+        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setCache(true);
+        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparators("|");
+        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparator(" ");
+        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setPicker(true);                
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, 5, true, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL_VALUES);
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setSeparators(" ,|");
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setSeparator("#--#");
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setCache(true);
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT, Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT, 5, true, Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT_VALUES);
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT)).setSeparators(" ,|");
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT)).setSeparator("#--#");
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT)).setCache(true);
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_RIGHT, Constants.ASSET_CLASS_RIGHT, 1, false, Constants.ASSET_CLASS_RIGHT_VALUES, "radio");
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_RIGHT)).setCache(true);
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_LANGUAGE, Constants.ASSET_CLASS_LANGUAGE, 1, false, Constants.ASSET_CLASS_LANGUAGE_VALUES);
+        ((StaticListClass)bclass.get(Constants.ASSET_CLASS_LANGUAGE)).setCache(true);
+        needsUpdate |= bclass.addBooleanField(Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH, Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH, "checkbox");
+        ((BooleanClass)bclass.get(Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH)).setDefaultValue(0);
+        needsUpdate |= bclass.addTextField(Constants.ASSET_CLASS_TRACKING, Constants.ASSET_CLASS_TRACKING, 60);
+
+        // file check fields
+        needsUpdate |= bclass.addTextField(Constants.ASSET_CLASS_FCREVIEWER, Constants.ASSET_CLASS_FCREVIEWER, 30);
+        needsUpdate |= bclass.addDateField(Constants.ASSET_CLASS_FCDATE, Constants.ASSET_CLASS_FCDATE, Constants.ASSET_CLASS_FCDATE_FORMAT, 0);
+        needsUpdate |= bclass.addTextAreaField(Constants.ASSET_CLASS_FCNOTES, Constants.ASSET_CLASS_FCNOTES, 80, 10);
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_FCSTATUS, Constants.ASSET_CLASS_FCSTATUS, 1, false, Constants.ASSET_CLASS_FCSTATUS_VALUES);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initAssetLicenseClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.ASSET_LICENCE_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.ASSET_LICENCE_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.ASSET_LICENCE_CLASS);
+
+        needsUpdate |= bclass.addTextField(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, 60);
+        needsUpdate |= bclass.addTextField(Constants.ASSET_LICENCE_ITEM_EXTERNAL_RIGHTS_HOLDER, Constants.ASSET_LICENCE_ITEM_EXTERNAL_RIGHTS_HOLDER, 60);
+        needsUpdate |= bclass.addDateField(Constants.ASSET_LICENCE_ITEM_EXPIRY_DATE, Constants.ASSET_LICENCE_ITEM_EXPIRY_DATE, Constants.ASSET_LICENCE_ITEM_EXPIRY_DATE_FORMAT);
+        needsUpdate |= bclass.addStaticListField(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, 1, false, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE_VALUES);
+        ((StaticListClass)bclass.get(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE)).setCache(true);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.ASSET_LICENCE_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initAssetDocumentClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.DOCUMENT_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.DOCUMENT_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.DOCUMENT_ASSET_CLASS);
+
+        needsUpdate |= bclass.addTextAreaField(Constants.DOCUMENT_ASSET_ALT_TEXT, Constants.DOCUMENT_ASSET_ALT_TEXT, 40, 5);
+        needsUpdate |= bclass.addTextAreaField(Constants.DOCUMENT_ASSET_CAPTION_TEXT, Constants.DOCUMENT_ASSET_CAPTION_TEXT, 40, 5);
+        needsUpdate |= bclass.addTextField(Constants.DOCUMENT_ASSET_FILE_TYPE, Constants.DOCUMENT_ASSET_FILE_TYPE, 10);
+        needsUpdate |= bclass.addNumberField(Constants.DOCUMENT_ASSET_FILE_SIZE, Constants.DOCUMENT_ASSET_FILE_SIZE, 10, "long");
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.DOCUMENT_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initAssetVideoClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.VIDEO_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.VIDEO_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.VIDEO_ASSET_CLASS);
+
+        needsUpdate |= bclass.addTextField(Constants.VIDEO_ASSET_ID, Constants.VIDEO_ASSET_ID, 30);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.VIDEO_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initAssetArchiveClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.ARCHIVE_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.ARCHIVE_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.ARCHIVE_ASSET_CLASS);
+
+        needsUpdate |= bclass.addTextField(Constants.ARCHIVE_ASSET_START_FILE, Constants.ARCHIVE_ASSET_START_FILE, 60);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.ARCHIVE_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initAssetExternalClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.EXTERNAL_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.EXTERNAL_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.EXTERNAL_ASSET_CLASS);
+
+        needsUpdate |= bclass.addTextField(Constants.EXTERNAL_ASSET_LINK, Constants.EXTERNAL_ASSET_LINK, 80);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.EXTERNAL_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+    private void initAssetTextClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.TEXT_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.TEXT_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.TEXT_ASSET_CLASS);
+
+        needsUpdate |= bclass.addTextField(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX, 30);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.TEXT_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initSubAssetClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.SUBASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.SUBASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.SUBASSET_CLASS);
+
+        needsUpdate |= bclass.addTextField(Constants.SUBASSET_CLASS_PAGE, Constants.SUBASSET_CLASS_PAGE, 40);
+        needsUpdate |= bclass.addNumberField(Constants.SUBASSET_CLASS_ORDER, Constants.SUBASSET_CLASS_ORDER, 10, "long");
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.SUBASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+    private void initReorderAssetClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.COLLECTION_REORDERED_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.COLLECTION_REORDERED_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.COLLECTION_REORDERED_CLASS);
+
+        needsUpdate |= bclass.addBooleanField(Constants.COLLECTION_REORDERED_CLASS_REORDERD, Constants.COLLECTION_REORDERED_CLASS_REORDERD, "select");
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.COLLECTION_REORDERED_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    private void initCompositeAssetClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.COMPOSITE_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.COMPOSITE_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.COMPOSITE_ASSET_CLASS);
+
+        needsUpdate |= bclass.addStaticListField(Constants.COMPOSITE_ASSET_CLASS_TYPE, Constants.COMPOSITE_ASSET_CLASS_TYPE, 1, false,
+                Constants.COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER + "|" + Constants.COMPOSITE_ASSET_CLASS_TYPE_COLLECTION+ "|" + Constants.COMPOSITE_ASSET_CLASS_TYPE_ROOT_COLLECTION);
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.COMPOSITE_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
+    
+    /**
+     * Notification to handle a rollback and check the result
+     */
+    public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc, int event, XWikiContext context) {
+        try {
+            // we are called in pre saving and we are modifying the document directly
+            // we need to take the document from the context
+            // because the previous one is a copy
+            Document apidoc = newdoc.newDocument(context);
+
+            System.out.println("Action " + context.getAction() + " " + newdoc.getFullName());
+            if (context.getAction().equals("rollback")&&(apidoc instanceof Asset)) {
+                Asset asset = (Asset) apidoc;
+                if (!asset.isLatestVersion()) {
+                    // We need to convert this document
+                    if (LOG.isInfoEnabled())
+                        LOG.info("CURRIKI ASSET CONVERTER: asset Needs to be converted: " + newdoc.getFullName());
+
+                    LOG.error("Converting " + newdoc.getFullName());
+
+                    // This is a very big hack allowing to bypass the cloning performed by Document
+                    // and therefore allowing to modify the right document that will then be saved
+                    try {
+                        Method method = Asset.class.getDeclaredMethod("setAlreadyCloned");
+                        method.setAccessible(true);
+                        method.invoke(apidoc);
+                    } catch (Exception e) {
+                        if (LOG.isErrorEnabled())
+                            LOG.error("CURRIKI ASSET CONVERTER: could not overide clone field for asset: " + newdoc.getFullName(), e);
+                        return;
+                    }
+
+                    // run the actual conversion without saving
+                    asset.convertWithoutSave();
+
+                    LOG.error("Converted " + newdoc.getFullName());
+
+                    if (LOG.isInfoEnabled())
+                        LOG.info("CURRIKI ASSET CONVERTER: asset has been converted: " + newdoc.getFullName());
+                }
+            }
+        } catch (Exception e) {
+            if (LOG.isErrorEnabled())
+                LOG.error("CURRIKI ASSET CONVERTER: Error evaluating asset conversion or converting asset for asset: " + newdoc.getFullName(), e);
+        }
     }
 }

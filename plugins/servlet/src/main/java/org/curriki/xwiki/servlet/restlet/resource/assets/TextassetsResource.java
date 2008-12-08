@@ -41,11 +41,13 @@ public class TextassetsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
         }
 
-        Long type = null;
+        String category = null;
+        String syntax = null;
         String content = null;
         try {
             content = asset.getText();
-            type = asset.getType();
+            syntax = asset.getSyntax();
+            category = asset.getCategory();
         } catch (AssetException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" does not contain any texts.");
         }
@@ -54,7 +56,8 @@ public class TextassetsResource extends BaseResource {
 
         JSONObject json = new JSONObject();
         json.put("href", getChildReference(getRequest().getResourceRef(), "0"));
-        json.put("type", type);
+        json.put("syntax", syntax);
+        json.put("category", category);
         json.put("text", content);
 
         jsonArray.add(json);
@@ -75,11 +78,18 @@ public class TextassetsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide text.");
         }
 
-        Long type = null;
+        String syntax = null;
         try {
-            type = new Long(json.getString("type"));
+            syntax = json.getString("syntax");
         } catch (NumberFormatException e) {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the text type.");
+        }
+
+        String category = null;
+        try {
+            syntax = json.getString("category");
+        } catch (NumberFormatException e) {
+            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the category.");
         }
 
         Asset asset = null;
@@ -93,7 +103,7 @@ public class TextassetsResource extends BaseResource {
         }
 
         try {
-            asset.makeTextAsset(type, content);
+            asset.makeTextAsset(category, syntax, content);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add text");
         }

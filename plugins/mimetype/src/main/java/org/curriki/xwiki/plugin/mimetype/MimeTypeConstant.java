@@ -21,13 +21,6 @@ package org.curriki.xwiki.plugin.mimetype;
 
 public interface MimeTypeConstant {
     public final static String PLUGIN_NAME = "mime_type";
-
-    public final static String MIMETYPE_SPACE = "MimeType";
-
-    public final static String MIMETYPE_CLASS_FULLNAME = "XWiki.MimeTypeClass";
-    public final static String MIMETYPE_CLASS_NAME = "MimeTypeClass";
-    public final static String MIMETYPE_ITEM_MIME_TYPE = "mimeType";
-    public final static String MIMETYPE_ITEM_CATEGORY = "category";
-    public final static String MIMETYPE_ITEM_EXTENSION = "extension";
-    public final static String MIMETYPE_ITEM_ICON = "icon";
+    public final static String MIMETYPE_CONFIG = "CurrikiCode.MimeTypeConfig";
+    public final static String MIMETYPE_CATEGORY_UNKNOWN = "unknown";
 }

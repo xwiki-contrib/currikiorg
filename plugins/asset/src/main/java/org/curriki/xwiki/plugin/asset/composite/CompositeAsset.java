@@ -419,7 +419,7 @@ public abstract class CompositeAsset extends Asset {
     protected void determineCategory() throws XWikiException {
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.CATEGORY_COLLECTION);
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_COLLECTION);
         }
     }
 }

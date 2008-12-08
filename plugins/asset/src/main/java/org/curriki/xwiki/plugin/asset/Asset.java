@@ -28,20 +28,17 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.curriki.xwiki.plugin.asset.attachment.AnimationAsset;
-import org.curriki.xwiki.plugin.asset.attachment.ArchiveAsset;
-import org.curriki.xwiki.plugin.asset.attachment.AttachmentAsset;
-import org.curriki.xwiki.plugin.asset.attachment.AudioAsset;
-import org.curriki.xwiki.plugin.asset.attachment.ImageAsset;
+import org.curriki.xwiki.plugin.asset.attachment.*;
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
 import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 import org.curriki.xwiki.plugin.asset.external.ExternalAsset;
-import org.curriki.xwiki.plugin.asset.external.VIDITalkAsset;
+import org.curriki.xwiki.plugin.asset.external.VideoAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
 import org.curriki.xwiki.plugin.asset.text.TextAsset;
-import org.curriki.xwiki.plugin.mimetype.MimeType;
+import org.curriki.xwiki.plugin.asset.text.WikiTextAsset;
+import org.curriki.xwiki.plugin.asset.text.HTMLTextAsset;
 import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import com.xpn.xwiki.XWikiContext;
@@ -53,12 +50,27 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
 import com.xpn.xwiki.plugin.image.ImagePlugin;
+import com.xpn.xwiki.api.Object;
 
 public class Asset extends CurrikiDocument {
     private static final Log LOG = LogFactory.getLog(Asset.class);
 
     public Asset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
+    }
+
+    public String getCategory() {
+        if (hasA(Constants.ASSET_CLASS)) {
+            Object obj = getObject(Constants.ASSET_CLASS);
+            return (String) obj.get(Constants.ASSET_CLASS_CATEGORY);
+        } else {
+            return Constants.ASSET_CATEGORY_UNKNOWN;
+        }
+    }
+
+    public void setCategory(String category) {
+        BaseObject obj = getDoc().getObject(Constants.ASSET_CLASS, true, context);
+        obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);
     }
 
     public void saveDocument(String comment) throws XWikiException {
@@ -91,21 +103,21 @@ public class Asset extends CurrikiDocument {
 
     protected void init(String parentAsset, String publishSpace) throws XWikiException {
         assertCanEdit();
-        doc.setCreator(context.getUser());
+        getDoc().setCreator(context.getUser());
 
         inheritMetadata(parentAsset, publishSpace);
 
-        doc.setCustomClass(getClass().getName());
+        getDoc().setCustomClass(getClass().getName());
         setDefaultContent();
 
-        String rights = doc.getObject(Constants.ASSET_CLASS).getStringValue(Constants.ASSET_CLASS_RIGHT);
+        String rights = (String) getObject(Constants.ASSET_CLASS).get(Constants.ASSET_CLASS_RIGHT);
 
         applyRightsPolicy(rights);
     }
 
     protected void setDefaultContent() throws XWikiException {
         assertCanEdit();
-        doc.setContent("#includeForm(\"XWiki.AssetTemplate\")");
+        getDoc().setContent("");
     }
 
     protected void initSubType() throws XWikiException {
@@ -116,19 +128,11 @@ public class Asset extends CurrikiDocument {
     public void addAttachment(InputStream iStream, String name) throws XWikiException, IOException {
         assertCanEdit();
         XWikiAttachment att = addAttachment(name, iStream);
-        doc.saveAttachmentContent(att, context);
+        getDoc().saveAttachmentContent(att, context);
     }
 
     public String getDisplayTitle() {
-        String className = getActiveClass();
-
-        use(Constants.ASSET_CLASS);
-        String title = (String) getValue(Constants.ASSET_CLASS_TITLE);
-
-        if (className != null) {
-            use(className);
-        }
-
+        String title = getTitle();
         return (title == null || title.length() == 0) ? Constants.ASSET_DISPLAYTITLE_UNTITLED : title;
     }
 
@@ -260,54 +264,44 @@ public class Asset extends CurrikiDocument {
                 }
             }
 
-            // If category is empty then must be an attachment
-            BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
-            if (obj == null) {
+            String category = getCategory();
+            if (category == null) {
                 return InvalidAsset.class;
             }
 
             // Check specific objects to find displayer
-            if (getObject(Constants.TEXT_ASSET_CLASS) != null){
-                return TextAsset.class; // 3 sub-types  HTMLText, WikiText, CBOEText
-            }
-            if (getObject(Constants.EXTERNAL_ASSET_CLASS) != null){
-                return ExternalAsset.class; // Link
-            }
-            if (getObject(Constants.MIMETYPE_PICTURE_CLASS) != null){
-                return ImageAsset.class;
-            }
-            if (getObject(Constants.VIDITALK_CLASS) != null){ // category == AUDIO at the moment
-                return VIDITalkAsset.class;
-            }
-            if (getObject(Constants.MIMETYPE_ARCHIVE_CLASS) != null){
-                return ArchiveAsset.class;
-            }
+            if (category.equals(Constants.ASSET_CATEGORY_WIKI)) {
+                return WikiTextAsset.class;
 
-            // Check category
-            String category = obj.getStringValue(Constants.ASSET_CLASS_CATEGORY);
-            if (category.equals(Constants.CATEGORY_IMAGE)) {
+            } else  if (category.equals(Constants.ASSET_CATEGORY_HTML)) {
+                return HTMLTextAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_TEXT)) {
+                return TextAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_XML)) {
+                return TextAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_LATEX)) {
+                return TextAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_EXTERNAL)) {
+                return ExternalAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_IMAGE)) {
                 return ImageAsset.class;
-            } else if (category.equals(Constants.CATEGORY_AUDIO)) {
+            }  else  if (category.equals(Constants.ASSET_CATEGORY_AUDIO)) {
                 return AudioAsset.class;
-            } else if (category.equals(Constants.CATEGORY_ANIMATION)) {
-                return AnimationAsset.class;
-            } else if (category.equals(Constants.CATEGORY_TEXT)) {
-                return TextAsset.class; // ?? But no text class exists
-            } else if (category.equals(Constants.CATEGORY_COLLECTION)) {
-                return FolderCompositeAsset.class; // ?? But no collection class exists
-            } else if (category.equals(Constants.CATEGORY_LINK)) {
-                return ExternalAsset.class; // ?? But no external asset class exists
-            } else if (category.equals(Constants.CATEGORY_ARCHIVE)) {
-                return ArchiveAsset.class; // ?? But no mimetype archive class exists
+            } else  if (category.equals(Constants.ASSET_CATEGORY_VIDEO)) {
+                return VideoAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_INTERACTIVE)) {
+                return InteractiveAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_ARCHIVE)) {
+                return ArchiveAsset.class;
+            } else  if (category.equals(Constants.ASSET_CATEGORY_DOCUMENT)) {
+                return DocumentAsset.class;
+            } else {
+                // Last is just an attachment item
+                if (doc.getAttachmentList().size() > 0) {
+                    return DocumentAsset.class;
+                }
+                return Asset.class;
             }
-
-            // Last is just an attachment item
-            if (doc.getAttachmentList().size() > 0) {
-                return AttachmentAsset.class;
-            }
-
-            // Otherwise is non-specific yet
-            return Asset.class;
         } else {
             return ProtectedAsset.class;
         }
@@ -319,9 +313,9 @@ public class Asset extends CurrikiDocument {
         } else {
             // Work around a bug XWIKI-1624
             // TODO: Remove the work-around once XWIKI-1624 is fixed
-            List<BaseObject> subAssets = doc.getObjects(Constants.COMPOSITE_ASSET_CLASS);
-            for (BaseObject sub : subAssets){
-                if (sub != null){
+            List<BaseObject> compObjs = doc.getObjects(Constants.COMPOSITE_ASSET_CLASS);
+            for (BaseObject compObj : compObjs){
+                if (compObj != null){
                     return true;
                 }
             }
@@ -349,6 +343,7 @@ public class Asset extends CurrikiDocument {
         return false;
     }
 
+
     static public Asset fetchAsset(String assetName, XWikiContext context) throws XWikiException {
         com.xpn.xwiki.api.XWiki xwikiApi = new com.xpn.xwiki.api.XWiki(context.getWiki(), context);
         Document doc = xwikiApi.getDocument(assetName);
@@ -368,13 +363,13 @@ public class Asset extends CurrikiDocument {
         List<Property> md = new ArrayList<Property>();
 
         com.xpn.xwiki.api.Object assetObj = getObject(Constants.ASSET_CLASS);
-        for (Object prop : assetObj.getPropertyNames()) {
+        for (java.lang.Object prop : assetObj.getPropertyNames()) {
             LOG.debug("Adding "+prop+" to metadata list");
             md.add(assetObj.getProperty((String) prop));
         }
 
         com.xpn.xwiki.api.Object licenseObj = getObject(Constants.ASSET_LICENCE_CLASS);
-        for (Object prop : licenseObj.getPropertyNames()) {
+        for (java.lang.Object prop : licenseObj.getPropertyNames()) {
             LOG.debug("Adding "+prop+" to metadata list");
             md.add(licenseObj.getProperty((String) prop));
         }
@@ -448,7 +443,7 @@ public class Asset extends CurrikiDocument {
         parameterTypes[0] = XWikiDocument.class;
         parameterTypes[1] = XWikiContext.class;
 
-        Object[] initargs = new Object[2];
+        java.lang.Object[] initargs = new java.lang.Object[2];
         initargs[0] = doc;
         initargs[1] = context;
 
@@ -476,10 +471,11 @@ public class Asset extends CurrikiDocument {
 
     public void inheritMetadata(String parentAsset, String publishSpace) throws XWikiException {
         assertCanEdit();
+        XWikiDocument assetDoc = getDoc();
 
-        BaseObject assetObj = doc.getObject(Constants.ASSET_CLASS);
+        BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS);
         if (assetObj == null) {
-            assetObj = doc.newObject(Constants.ASSET_CLASS, context);
+            assetObj = assetDoc.newObject(Constants.ASSET_CLASS, context);
         }
 
         // CURRIKI-2451 - Make sure group rights are used by default
@@ -581,80 +577,82 @@ public class Asset extends CurrikiDocument {
     public ExternalAsset makeExternal(String link) throws XWikiException {
         assertCanEdit();
         ExternalAsset asset = subclassAs(ExternalAsset.class);
-
         asset.addLink(link);
         saveDocument(context.getMessageTool().get("curriki.comment.createlinksourceasset"), true);
         return asset;
     }
 
-    public VIDITalkAsset makeVIDITalk(String videoId) throws XWikiException {
+    public VideoAsset makeVIDITalk(String videoId) throws XWikiException {
         assertCanEdit();
-        VIDITalkAsset asset = subclassAs(VIDITalkAsset.class);
+        VideoAsset asset = subclassAs(VideoAsset.class);
 
-        asset.addVideoId(videoId);
+        asset.addVideoId("viditalk:" + videoId);
         saveDocument(context.getMessageTool().get("curriki.comment.createviditalksourceasset"), true);
         return asset;
     }
 
-    public TextAsset makeTextAsset(Long type, String content) throws XWikiException {
+    public TextAsset makeTextAsset(String category, String syntax, String content) throws XWikiException {
         assertCanEdit();
         TextAsset asset = subclassAs(TextAsset.class);
 
-        asset.addText(type, content);
+        asset.addText(syntax, content);
+        asset.setCategory(category);
         saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"), true);
         return asset;
     }
 
-    public AttachmentAsset processAttachment() throws XWikiException {
+    public DocumentAsset processAttachment() throws XWikiException {
         assertCanEdit();
-        AttachmentAsset asset = subclassAs(AttachmentAsset.class);
+        DocumentAsset asset = subclassAs(DocumentAsset.class);
 
         if (doc.getAttachmentList().size() > 0) {
             XWikiAttachment attach = doc.getAttachmentList().get(0);
-            determineCategory(attach.getFilename());
+            determineFileTypeAndCategory(attach);
             saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"), true);
         }
 
         return asset;
     }
 
-    protected void determineCategory(String filename) throws XWikiException {
+    protected void determineFileTypeAndCategory(XWikiAttachment attachment) throws XWikiException {
+        String filename = attachment.getFilename();
         String extension = (filename.lastIndexOf(".") != -1 ? filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(): null);
         MimeTypePlugin mimePlugin = (MimeTypePlugin) context.getWiki().getPlugin(MimeTypePlugin.PLUGIN_NAME, context);
-        MimeType mimeType = (mimePlugin==null) ? null : mimePlugin.getCategoryByExtension(extension, context);
-        if (mimeType == null) {
-            return;
-        }
+        String filetype =  mimePlugin.getFileType(extension, context);
+        String category = mimePlugin.getCategory(filetype, context);
+        XWikiDocument assetDoc = getDoc();
 
-        String category = mimeType.getCategoryName();
-        String mimeTypeName = mimeType.getFullName();
+        BaseObject documentObject = assetDoc.getObject(Constants.DOCUMENT_ASSET_CLASS, true, context);
+        documentObject.setStringValue(Constants.DOCUMENT_ASSET_FILE_TYPE, filetype);
+        documentObject.setLongValue(Constants.DOCUMENT_ASSET_FILE_SIZE, attachment.getFilesize());
 
-        if (category.equals(Constants.CATEGORY_IMAGE)) {
+        // We need to add the class for certain asset types if they do not exist yet
+        if (category.equals(Constants.ASSET_CATEGORY_ARCHIVE))
+                getObject(Constants.ARCHIVE_ASSET_CLASS, true);
+        
+        /*
+       if (category.equals(Constants.ASSET_CATEGORY_IMAGE)) {
+            getObject(Constants.IMAGE_ASSET_CLASS, true);
+
             ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin(ImagePlugin.PLUGIN_NAME, context);
 
-            BaseObject mimeObj = doc.getObject(mimeTypeName);
-            if (mimeObj == null){
-                doc.createNewObject(mimeTypeName, context);
-                mimeObj = doc.getObject(mimeTypeName);
-            }
+            BaseObject imageObject = assetDoc.getObject(Constants.IMAGE_ASSET_CLASS, true, context);
 
-            if (imgPlugin != null && doc.getAttachmentList().size() > 0) {
-                XWikiAttachment att = doc.getAttachmentList().get(0);
+            if (imgPlugin != null) {
                 try {
-                    int height = imgPlugin.getHeight(att, context);
-                    int width = imgPlugin.getWidth(att, context);
-                    mimeObj.setIntValue("height", height);
-                    mimeObj.setIntValue("width", width);
+                    int height = imgPlugin.getHeight(attachment, context);
+                    int width = imgPlugin.getWidth(attachment, context);
+                    imageObject.setIntValue("height", height);
+                    imageObject.setIntValue("width", width);
                 } catch (InterruptedException ie) {
                     // Ignore exception
                 }
             }
-        }
+        } */
 
-        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
-        if (obj != null && !category.equals(Constants.CATEGORY_UNKNOWN)) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);
-        }
+
+        BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
+        assetObj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);
     }
 
     public Boolean isPublished() {
@@ -670,7 +668,7 @@ public class Asset extends CurrikiDocument {
     }
 
     public Asset publish(String space, boolean checkSpace) throws XWikiException {
-        String prettyName = context.getWiki().clearName(doc.getStringValue(Constants.ASSET_CLASS_TITLE), true, true, context);
+        String prettyName = context.getWiki().clearName(getTitle(), true, true, context);
 
         return publish(space, prettyName, checkSpace);
     }
@@ -682,11 +680,12 @@ public class Asset extends CurrikiDocument {
 
         assertCanEdit();
 
+        XWikiDocument assetDoc = getDoc();
         // Be sure we have a category first -- attachments can't get them automatically yet
-        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+        BaseObject obj = assetDoc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
             String category = obj.getStringValue(Constants.ASSET_CLASS_CATEGORY);
-            if (category == null || category.length() == 0 || category.equals(Constants.CATEGORY_UNKNOWN)) {
+            if (category == null || category.length() == 0 || category.equals(Constants.ASSET_CATEGORY_UNKNOWN)) {
                 processAttachment();
             }
         }
@@ -705,12 +704,12 @@ public class Asset extends CurrikiDocument {
 
         // Let's choose a nice name for the page
         String prettyName = context.getWiki().clearName(name, true, true, context);
-        doc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>(), context);
+        assetDoc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>(), context);
 
         applyRightsPolicy();
 
         List<String> params = new ArrayList<String>();
-        params.add(doc.getStringValue(Constants.ASSET_CLASS_CATEGORY));
+        params.add(assetDoc.getStringValue(Constants.ASSET_CLASS_CATEGORY));
         save(context.getMessageTool().get("curriki.comment.finishcreatingsubasset", params));
 
         if (isCollection()) {
@@ -904,5 +903,295 @@ public class Asset extends CurrikiDocument {
     	return this;
     }
 
+
+   /** 
+    * Determines if an asset is in the latest format 
+    * @return boolean true if latest format
+    */
+   public boolean isLatestVersion() throws XWikiException {     
+     if (getObject(Constants.OLD_ASSET_CLASS)!=null)
+      return false;
+
+     return true;
+   }
+
+
+    private void updateObject(Object newAssetObject, Object oldAssetObject, String propname) {
+        updateObject(newAssetObject, oldAssetObject, propname, propname);
+    }
+
+    private void updateObject(Object newAssetObject, Object oldAssetObject, String newpropname, String oldpropname) {
+        use(oldAssetObject);
+        java.lang.Object value = getValue(oldpropname);
+        use(newAssetObject);
+        set(newpropname, value);
+    }
+
+    /**
+     * Check if the asset in old format is a video
+     * @return true if video
+     */
+    private boolean isOldAssetVideo() {
+       if (getObject(Constants.OLD_VIDITALK_CLASS)!=null)
+            return true;
+       else
+            return false;
+    }
+
+    private void setNewCategoryAndClass() throws XWikiException {
+        // Get Asset objects
+        Object oldAssetObject = getObject(Constants.OLD_ASSET_CLASS);
+        Object newAssetObject = getObject(Constants.ASSET_CLASS, true);
+        // get old category
+        String oldCategory = oldAssetObject.get(Constants.ASSET_CLASS_CATEGORY).toString();
+        String newCategory = "";
+
+        // transforming category of type text
+        if (oldCategory.equals(Constants.OLD_CATEGORY_COLLECTION)||(getObject(Constants.OLD_COMPOSITE_ASSET_CLASS)!=null)) {
+
+            newCategory = Constants.ASSET_CATEGORY_COLLECTION;
+            // we don't need the composite asset object
+            Object oldCompositeAssetObject = getObject(Constants.OLD_COMPOSITE_ASSET_CLASS);
+            Object newCompositeAssetObject = getObject(Constants.COMPOSITE_ASSET_CLASS, true);
+
+            if (oldCompositeAssetObject!=null) {
+                removeObject(oldCompositeAssetObject);
+                updateObject(newCompositeAssetObject, oldCompositeAssetObject, Constants.COMPOSITE_ASSET_CLASS_TYPE);
+            } else {
+                if (LOG.isErrorEnabled())
+                    LOG.error("CURRIKI ASSET CONVERTER ERROR: asset declared collection has no composite class for asset " + getFullName());
+            }
+
+            // convert sub-assets
+            List subassets = getObjects(Constants.OLD_SUBASSET_CLASS);
+            if ((subassets!=null) && (subassets.size()>0)) {
+                for (int i=0; i<subassets.size();i++) {
+                    Object oldSubasset = (Object) subassets.get(i);
+                    Object newSubasset = newObject(Constants.SUBASSET_CLASS);
+                    updateObject(newSubasset, oldSubasset, Constants.SUBASSET_CLASS_ORDER);
+                    updateObject(newSubasset, oldSubasset, Constants.SUBASSET_CLASS_PAGE);
+                }
+                removeObjects(Constants.OLD_SUBASSET_CLASS);
+            }
+
+            // convert reorder info
+            List reorderedlist = getObjects(Constants.OLD_COLLECTION_REORDERED_CLASS);
+            if ((reorderedlist!=null) && (reorderedlist.size()>0)) {
+                for (int i=0; i<reorderedlist.size();i++) {
+                    Object oldReorderdObject = (Object) reorderedlist.get(i);
+                    Object newReorderdObject = newObject(Constants.COLLECTION_REORDERED_CLASS);
+                    updateObject(newReorderdObject, oldReorderdObject, Constants.COLLECTION_REORDERED_CLASS_REORDERD);
+                }
+                removeObjects(Constants.OLD_COLLECTION_REORDERED_CLASS);
+            }
+
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_TEXT)||(getObject(Constants.OLD_TEXT_ASSET_CLASS)!=null)) {
+            Object newTextAssetObject = getObject(Constants.TEXT_ASSET_CLASS, true);
+            set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
+            Object oldTextAssetObject = getObject(Constants.OLD_TEXT_ASSET_CLASS);
+            if (oldTextAssetObject!=null) {
+                String type = oldTextAssetObject.get(Constants.OLD_TEXT_ASSET_CLASS_TYPE).toString();
+                use(newTextAssetObject);
+                setContent(oldTextAssetObject.get(Constants.OLD_TEXT_ASSET_CLASS_TEXT).toString());
+
+                if (type.equals("0")) {
+                    newCategory = Constants.ASSET_CATEGORY_WIKI;
+                    set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XWIKI1);
+                } else if (type.equals("1")) {
+                    newCategory = Constants.ASSET_CATEGORY_HTML;
+                    set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XHTML1);
+                } else {
+                    newCategory = Constants.ASSET_CATEGORY_TEXT;
+                    set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
+                }
+                removeObject(oldTextAssetObject);
+            }
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_ARCHIVE)||(getObject(Constants.OLD_MIMETYPE_ARCHIVE_CLASS)!=null)) {
+            newCategory = Constants.ASSET_CATEGORY_ARCHIVE;
+            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            Object oldArchiveAssetObject = getObject(Constants.OLD_MIMETYPE_ARCHIVE_CLASS);
+            Object newArchiveAssetObject = getObject(Constants.ARCHIVE_ASSET_CLASS, true);
+            updateObject(newArchiveAssetObject, oldArchiveAssetObject, Constants.ARCHIVE_ASSET_START_FILE, Constants.OLD_MIMETYPE_ARCHIVE_CLASS_DEFAULT_FILE);
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_ANIMATION)) {
+            newCategory = Constants.ASSET_CATEGORY_INTERACTIVE;
+            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_IMAGE)) {
+            newCategory = Constants.ASSET_CATEGORY_IMAGE;
+            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_VIDITALK_VIDEO)||(getObject(Constants.OLD_VIDITALK_CLASS)!=null)) {
+            newCategory = Constants.ASSET_CATEGORY_VIDEO;
+            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+
+            // transfer video id
+            Object newVideoAssetObject = getObject(Constants.VIDEO_ASSET_CLASS, true);
+            Object oldVideoAssetObject = getObject(Constants.OLD_VIDITALK_CLASS);
+            if (oldVideoAssetObject!=null) {
+                use(oldVideoAssetObject);
+                String videoId = (String) getValue(Constants.OLD_VIDITALK_CLASS_VIDEO_ID);
+                use(newVideoAssetObject);
+                set(Constants.VIDEO_ASSET_ID, "viditalk:" + videoId);
+                removeObject(oldVideoAssetObject);
+            }
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_AUDIO)) {
+            // we cannot determine type between audio and video
+            newCategory = null;
+            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_LINK)||(getObject(Constants.OLD_EXTERNAL_ASSET_CLASS)!=null)) {
+            newCategory = Constants.ASSET_CATEGORY_EXTERNAL;
+            Object newExternalAssetObject = getObject(Constants.EXTERNAL_ASSET_CLASS, true);
+            Object oldExternalAssetObject = getObject(Constants.OLD_EXTERNAL_ASSET_CLASS);
+            if (oldExternalAssetObject!=null) {
+                updateObject(newExternalAssetObject, oldExternalAssetObject, Constants.EXTERNAL_ASSET_LINK, Constants.OLD_EXTERNAL_ASSET_LINK);
+                removeObject(oldExternalAssetObject);
+            }
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_DOCUMENT)) {
+            newCategory = Constants.ASSET_CATEGORY_DOCUMENT;
+            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+        }
+
+        // update document (attachment) assets.
+        // We need to do this either because the document use to be declared as a Document
+        // We also need to do this if the document is not a text asset and there is an attachment
+        Object newDocumentAssetObject = getObject(Constants.DOCUMENT_ASSET_CLASS);
+        if ((!newCategory.equals(Constants.ASSET_CATEGORY_WIKI)&&!newCategory.equals(Constants.ASSET_CATEGORY_HTML)
+                && getAttachmentList().size() > 0) || (newDocumentAssetObject!=null))
+        {
+            updateObject(newDocumentAssetObject, oldAssetObject, Constants.DOCUMENT_ASSET_ALT_TEXT, Constants.OLD_ASSET_CLASS_ALT_TEXT);
+            updateObject(newDocumentAssetObject, oldAssetObject, Constants.DOCUMENT_ASSET_CAPTION_TEXT, Constants.OLD_ASSET_CLASS_CAPTION_TEXT);
+            XWikiAttachment attachment = (doc.getAttachmentList().size()>0) ? doc.getAttachmentList().get(0) : null;
+            if (attachment!=null)
+             determineFileTypeAndCategory(attachment);
+            else {
+                if (LOG.isErrorEnabled())
+                   LOG.error("CURRIKI ASSET CONVERTER ERROR: attachment missing in document asset " + getFullName());
+            }
+
+            // temporary log for debugging
+            if (LOG.isErrorEnabled()) {
+                LOG.error("CURRIKI ASSET CONVERTER: detected category is " + getCategory()); 
+            }
+
+            // we should have found the same category through conversion
+            if (newCategory!=null) {
+                if (!newCategory.equals(getCategory())) {
+                    if (LOG.isErrorEnabled())
+                        LOG.error("CURRIKI ASSET CONVERTER ERROR: newCategory " + getCategory() + " different than converted category " + newCategory + " for asset " + getFullName());
+                }
+
+                // let's fallback to the new Category
+                if (getCategory()==Constants.ASSET_CATEGORY_UNKNOWN)
+                     setCategory(newCategory);                
+            }
+
+
+            // make sure we don't have this object anymore
+            Object oldArchiveAssetObject = getObject(Constants.OLD_MIMETYPE_ARCHIVE_CLASS);
+            if (oldArchiveAssetObject!=null)
+             removeObject(oldArchiveAssetObject);
+        } else {
+            // for text, collection, external, collection assets
+            setCategory(newCategory);
+        }
+    }
+
+    /**
+     * Convert an asset from the old format to the new format
+     *
+     */
+    public boolean convert() throws Exception {
+        if (!hasProgrammingRights()) {
+            java.lang.Object[] args = { getFullName() };
+            throw new XWikiException(XWikiException.MODULE_XWIKI_ACCESS, XWikiException.ERROR_XWIKI_ACCESS_DENIED,
+                    "Access denied with no programming rights document {0}", null, args);
+        }
+        
+        if (convertWithoutSave()) {
+            try {
+                // Saving as a minor edit
+                // We bypass the public api so that the author is not updated
+                // We reset setContentDirty so that the content date does not change
+                getDoc().setContentDirty(false);
+                context.getWiki().saveDocument(getDoc(), context.getMessageTool().get("curriki.comment.datamodelmigration"), true, context);
+                return true;
+            } catch (Exception e) {
+                if (LOG.isErrorEnabled())
+                    LOG.error("CURRIKI ASSET CONVERTER ERROR: error saving converted asset " + getFullName(), e);
+                throw e;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Hacked function needed by the Curriki Plugin
+     */
+    protected void setAlreadyCloned() {
+        cloned = true;
+    }
+    
+    /**
+     * Convert an asset from the old format to the new format
+     *
+     */
+    public boolean convertWithoutSave() throws Exception {
+        if (isLatestVersion())
+            return false;
+
+        try {
+            // Convert Asset Class
+            Object oldAssetObject = getObject(Constants.OLD_ASSET_CLASS);
+            Object newAssetObject = getObject(Constants.ASSET_CLASS, true);
+
+            // set title
+            setTitle(oldAssetObject.get(Constants.OLD_ASSET_CLASS_TITLE).toString());
+            setContent("");
+
+            // transfer unchanged fields
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_DESCRIPTION);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FRAMEWORK_ITEMS);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_KEYWORDS);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_LANGUAGE);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_RIGHT);
+
+            // transfer tracking field
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_TRACKING);
+            // transfer file check fields
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCSTATUS);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCREVIEWER);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCDATE);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCNOTES);
+
+            // transfer changed fields
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT, Constants.OLD_ASSET_CLASS_INSTRUCTIONAL_COMPONENT);
+            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, Constants.OLD_ASSET_CLASS_EDUCATIONAL_LEVEL);
+
+            // create new category field
+            setNewCategoryAndClass();
+
+            // remove old asset object
+            removeObject(oldAssetObject);
+
+            // Convert License Class
+            Object oldLicenseObject = getObject(Constants.OLD_ASSET_LICENCE_CLASS);
+            Object newLicenseObject = getObject(Constants.ASSET_LICENCE_CLASS, true);
+            if (oldLicenseObject!=null) {
+                updateObject(newLicenseObject, oldLicenseObject, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.OLD_ASSET_LICENCE_ITEM_LICENCE_TYPE);
+                updateObject(newLicenseObject, oldLicenseObject, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER);
+                updateObject(newLicenseObject, oldLicenseObject, Constants.ASSET_LICENCE_ITEM_EXTERNAL_RIGHTS_HOLDER);
+                updateObject(newLicenseObject, oldLicenseObject, Constants.ASSET_LICENCE_ITEM_EXPIRY_DATE);
+
+                // remove old asset license object
+                removeObject(oldLicenseObject);
+            }
+
+            return true;
+        } catch (Exception e) {
+            if (LOG.isErrorEnabled())
+                LOG.error("CURRIKI ASSET CONVERTER ERROR: error converting asset " + getFullName(), e);
+            throw e;
+        }
+    }
 
 }

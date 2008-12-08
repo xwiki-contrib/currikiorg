@@ -234,12 +234,12 @@ public class CurrikiActivityStream extends ActivityStreamImpl
             return;
         }
 
-        BaseObject asset = newdoc.getObject("XWiki.AssetClass");
+        BaseObject asset = newdoc.getObject("CurrikiCode.AssetClass");
         if (asset == null) {
             if (olddoc == null) {
                 return;
             }
-            asset = olddoc.getObject("XWiki.AssetClass");
+            asset = olddoc.getObject("CurrikiCode.AssetClass");
             if (asset == null) {
                 return;
             }
@@ -257,7 +257,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         }
 
         List params = new ArrayList();
-        params.add(asset.getStringValue("title"));
+        params.add(newdoc.getTitle());
         params.add(getUserName(context.getUser(), context));
 
         try {

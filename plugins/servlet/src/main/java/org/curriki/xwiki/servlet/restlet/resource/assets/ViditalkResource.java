@@ -8,7 +8,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
-import org.curriki.xwiki.plugin.asset.external.VIDITalkAsset;
+import org.curriki.xwiki.plugin.asset.external.VideoAsset;
 import net.sf.json.JSONObject;
 import com.xpn.xwiki.XWikiException;
 
@@ -31,9 +31,9 @@ public class ViditalkResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "An asset may only have one viditalk movie");
         }
 
-        VIDITalkAsset asset = null;
+        VideoAsset asset = null;
         try {
-            asset = (VIDITalkAsset) plugin.fetchAssetAs(assetName, VIDITalkAsset.class);
+            asset = (VideoAsset) plugin.fetchAssetAs(assetName, VideoAsset.class);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }

@@ -35,31 +35,33 @@ public class MimeTypePluginAPI  extends Api {
         this.plugin = plugin;
     }
 
-    public void add(String mimeType, String category, String extension) throws XWikiException {
-        plugin.add(mimeType, category, extension, context);
+    /**
+     * Returns the filetype corresponding to the mimetype or the extension
+     * The mimetype is checked first, then the extension
+     * @param extension
+     * @param mimetype
+     * @return filetype code
+     */
+    public String getFileType(String extension, String mimetype) {
+         return plugin.getFileType(extension, mimetype, context);
     }
 
-    public MimeType getCategoryByMimetype(String mimeType) throws XWikiException {
-        return plugin.getCategoryByMimetype(mimeType, context);
+    /**
+       * Returns the filetype corresponding to the extension
+       * @param extension
+       * @return filetype code
+       */
+      public String getFileType(String extension) {
+           return plugin.getFileType(extension, context);
+      }
+
+    /**
+     * Returns the category corresponding to the filetype
+     * @param filetype
+     * @return category
+     */
+    public String getCategory(String filetype) {
+        return plugin.getCategory(filetype, context);
     }
 
-    public MimeType getCategoryByExtension(String mimeType) throws XWikiException {
-        return plugin.getCategoryByExtension(mimeType, context);
-    }
-
-    public List getCategories() throws XWikiException {
-        return plugin.getCategories(context);   
-    }
-
-    public void importMimeType(String fileName) throws XWikiException, IOException {
-        plugin.importMimeType(fileName, context);
-    }
-
-    public String getCategoryPageName(String category) throws XWikiException {
-        return plugin.getCategoryPageName(category, context);
-    }
-
-    public Map getCategoriesMap() throws XWikiException {
-        return plugin.getCategoriesMap(context);
-    }
 }
