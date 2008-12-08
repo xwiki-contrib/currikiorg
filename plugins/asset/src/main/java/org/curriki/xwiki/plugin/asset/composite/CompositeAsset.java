@@ -42,7 +42,7 @@ public abstract class CompositeAsset extends Asset {
 
     protected void setDefaultContent() throws XWikiException {
         assertCanEdit();
-        doc.setContent(Constants.COMPOSITE_ASSET_COMPOSITE_CONTENT);
+        doc.setContent("");
     }
 
     abstract protected String compositeAssetType();
