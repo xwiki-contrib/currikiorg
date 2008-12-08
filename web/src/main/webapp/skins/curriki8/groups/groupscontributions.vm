@@ -71,17 +71,17 @@ $msg.get("groups.curriculum.contributions.about")
 ##
 ## Order by reverse last updated
 #if($sortBy=="title") ## {
-#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
+#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
 #elseif($sortBy=="access") ## Default sort by rights ## } {
-#set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
+#set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
 #else ## Default sort by date ## } {
-#set($sql = ", BaseObject as obj where doc.fullName=obj.name and doc.name != 'WebHome' and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' order by doc.date $sortDir")
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and doc.name != 'WebHome' and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' order by doc.date $sortDir")
 #end ## }
 ## Order by property ascending
 ## How can we sort by
 ## filetype (determined in a macro)
 ## instructional_component (if not exists how do we act as blank)
-##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web='Coll_${spaceName}' order by prop1.value $sortDir")
+##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' order by prop1.value $sortDir")
 ##
 ##
 #set($assetList = $xwiki.searchDocuments($sql))
@@ -134,7 +134,7 @@ $msg.get("groups.curriculum.contributions.about")
 #if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
 #set($asset = $xwiki.getDocument($assetPage))
 #set($type = 0)
-#set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
+#set($type = $!asset.getValue("type", $asset.getObject("CurrikiCode.TextAssetClass")))
 #if("$!type"!="2")
 #set($showcount = 1 + $showcount)
 #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
@@ -174,7 +174,7 @@ $msg.get("groups.contributions.mouseover.contributed")<br />
 $xwiki.getUserName($asset.creator)<br />
 <br />
 $msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("XWiki.AssetClass").getProperty("description").getValue() <br />
+$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
 <br />
 $msg.get('mycurriki.favorites.mouseover.subject') <br />
 #set($subj = $!asset.getValue('fw_items'))
@@ -229,7 +229,7 @@ $msg.get("search.selector.level.${item}")<br />
 <div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
 {pre}
 $msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("XWiki.AssetClass").getProperty("description").getValue() <br />
+$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
 <br />
 $msg.get('mycurriki.favorites.mouseover.subject') <br />
 #set($subj = $!asset.getValue('fw_items'))
@@ -462,7 +462,7 @@ function toggle_desc(){
 {/pre}
 
 #if($sm.isMember($spaceName, $context.user) || $hasGlobalAdmin) ##{
-#set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
+#set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
 #set($multiple = ($cnt > 1))
 #if($multiple) ##{
 #set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))

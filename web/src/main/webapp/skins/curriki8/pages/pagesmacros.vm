@@ -41,11 +41,11 @@
 #else
 #set($rightsstr="(rights.value = 'public' or rights.value = 'members')")
 #end
-#set($sql = ", BaseObject obj, StringProperty status, StringProperty rights where doc.web <> 'AssetTemp' and doc.fullName = obj.name and obj.className = 'XWiki.AssetClass' and status.id.id = obj.id and status.id.name = 'status' and (status.value = 'final' or status.value='revised') and rights.id.id = obj.id and rights.id.name = 'rights' and ${rightsstr} order by doc.creationDate desc")
+#set($sql = ", BaseObject obj, StringProperty status, StringProperty rights where doc.web <> 'AssetTemp' and doc.fullName = obj.name and obj.className = 'CurrikiCode.AssetClass' and status.id.id = obj.id and status.id.name = 'status' and (status.value = 'final' or status.value='revised') and rights.id.id = obj.id and rights.id.name = 'rights' and ${rightsstr} order by doc.creationDate desc")
 <div class="hlastresources">
 #foreach($asset in $xwiki.searchDocuments($sql, $number, 0))
 #set($assetdoc = $xwiki.getDocument($asset))
-#set($assetobj = $assetdoc.getObject("XWiki.AssetClass"))
+#set($assetobj = $assetdoc.getObject("CurrikiCode.AssetClass"))
 #set($assettitle = $assetdoc.display("title", "view", $assetobj))
 #set($assetdesc = $assetdoc.display("description", "view", $assetobj))
 #set($assetcat = $assetdoc.display("fw_items", "view", $assetobj))

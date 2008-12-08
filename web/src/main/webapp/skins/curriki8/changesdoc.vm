@@ -56,7 +56,7 @@ $msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocommen
 #end
 #foreach($objdiffs in $doc.getObjectDiff($origdoc, $newdoc))
 #foreach($objdiff in $objdiffs)
-#if($objdiff.getClassName().equals("XWiki.AssetClass"))
+#if($objdiff.getClassName().equals("CurrikiCode.AssetClass"))
 #set($hasmetadatachanges = 1)
 #set($propname = $objdiff.getPropName())
 <tr>
@@ -80,15 +80,15 @@ $value
 </div>
 
 <div id="changes-content">
-#if($origdoc.get("XWiki.TextAssetClass"))
-#set($ok = $origdoc.use("XWiki.TextAssetClass"))
+#if($origdoc.get("CurrikiCode.TextAssetClass"))
+#set($ok = $origdoc.use("CurrikiCode.TextAssetClass"))
 #set($origcontent = $!origdoc.getValue("text").trim())
 #if(!$origcontent)
 #set($text1 = "")
 #else
 #set($text1 = $origcontent)
 #end
-#set($ok = $newdoc.use("XWiki.TextAssetClass"))
+#set($ok = $newdoc.use("CurrikiCode.TextAssetClass"))
 #set($newcontent = $!newdoc.getValue("text").trim())
 #if(!$newcontent)
 #set($text2 = "")

@@ -53,7 +53,7 @@
 
 		#if($assetFilterFileCheckStatus)
 	        #if($assetFilterFileCheckStatus=="1")##without status
-	        	#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='XWiki.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
+	        	#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='CurrikiCode.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
 	        	#elseif($assetFilterFileCheckStatus!="1" && $assetFilterFileCheckStatus!="0")##with status
 	        		#set($fromsql = "$fromsql ,StringProperty as sprop")
 	
@@ -127,7 +127,7 @@
         ## Filter for excluding "Root" collection
         #set($notRootSQL = " and doc.name != 'WebHome' ")
 
-        #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='XWiki.AssetClass' $!notRootSQL $!notFavoritesFoldersSQL $!wheresql $order")
+        #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' $!notRootSQL $!notFavoritesFoldersSQL $!wheresql $order")
 
 
 	#end ##}

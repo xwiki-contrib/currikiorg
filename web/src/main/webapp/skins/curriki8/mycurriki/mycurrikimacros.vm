@@ -188,7 +188,7 @@ $text
 <div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
 {pre}
 $msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("XWiki.AssetClass").getProperty("description").getValue() <br />
+$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
 <br />
 $msg.get('mycurriki.favorites.mouseover.subject') <br />
 #set($subj = $!asset.getValue('fw_items'))
@@ -211,7 +211,7 @@ $msg.get('mycurriki.favorites.mouseover.subject') <br />
 #end ## }
 <br />
 $msg.get('mycurriki.favorites.mouseover.level')<br />
-#set($levl = $!asset.getValue('educational_level2'))
+#set($levl = $!asset.getValue('educational_level'))
 #set($c = 0)
 #foreach($item in $levl) ## {
 #set($c = $c + 1)
@@ -233,7 +233,7 @@ $msg.get("search.selector.level.${item}")<br />
   * @author dward@curriki.org
   *#
 #macro(mycurriki_access $asset) ## {
-#set($access = $!asset.getObject("XWiki.AssetClass").getProperty("rights").getValue())
+#set($access = $!asset.getObject("CurrikiCode.AssetClass").getProperty("rights").getValue())
 $msg.get("mycurriki.macro.access.${access}")
 #end ## macro ## }
 
@@ -246,7 +246,7 @@ $msg.get("mycurriki.macro.access.${access}")
   *#
 #macro(mycurriki_ict $asset) ## {
 #set($ict = "")
-#set($ict = $!asset.getObject("XWiki.AssetClass").getProperty("instructional_component2").getValue())
+#set($ict = $!asset.getObject("CurrikiCode.AssetClass").getProperty("instructional_component").getValue())
 #if($ict == "" || $ict.size() == 0) ## {
 ## No ICT set -- nothing to do
 #else ## } {
@@ -284,10 +284,10 @@ $msg.get("mycurriki.macro.access.${access}")
   #set($mime = $asset.attachmentList.get(0).mimeType)
   #set($rowType="mime")
 #end ## }
-#if($asset.getObject("XWiki.TextAssetClass")) ## {
+#if($asset.getObject("CurrikiCode.TextAssetClass")) ## {
   #set($rowType="currikulum")
 #else ## } {
-#if($asset.getObject("XWiki.ExternalAssetClass")) ## {
+#if($asset.getObject("CurrikiCode.ExternalAssetClass")) ## {
   #set($rowType="URL")
 #end ## }
 #end ## }
@@ -341,7 +341,7 @@ $xwiki.getUserName($asset.creator)
   * @author dward@curriki.org
   *#
 #macro(mycurriki_collectiondescription $asset) ## {
-#set($desc = $!asset.getObject("XWiki.AssetClass").getProperty("description").getValue())
+#set($desc = $!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue())
 $!desc
 #end ## macro ## }
 
@@ -1025,7 +1025,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
     #set($favPage = "Coll_${shortname}.Favorites")
     #if($xwiki.exists($favPage)) ## {
       #set($favDoc = $xwiki.getDocument("Coll_${shortname}.Favorites"))
-      #set($assetList = $favDoc.getObjects('XWiki.SubAssetClass'))
+      #set($assetList = $favDoc.getObjects('CurrikiCode.SubAssetClass'))
       #if($assetList.size() > 0) ## {
         #if("$!breadcrumb" == "") ## {
           #set($breadcrumb=$userdoc.fullName)
@@ -1063,7 +1063,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   #end ## }
   ## Do query for favorites
   #set($favDoc = $xwiki.getDocument("Coll_${shortname}.Favorites"))
-  #set($assetList = $favDoc.getObjects('XWiki.SubAssetClass'))
+  #set($assetList = $favDoc.getObjects('CurrikiCode.SubAssetClass'))
   #set($nbToDisplay = 20)
   #set($startIndex = 0)
   #set($Integer = 0)
@@ -1087,7 +1087,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
       #set($assetPage = $assetPointer.get('assetpage'))
       #if($xwiki.hasAccessLevel("view", $context.user, $assetPage)) ## {
         #set($asset = $xwiki.getDocument($assetPage))
-        #set($type = $!asset.getValue("type", $asset.getObject("XWiki.TextAssetClass")))
+        #set($type = $!asset.getValue("type", $asset.getObject("CurrikiCode.TextAssetClass")))
         #if("$type"!="2") ## {
           #set($showcount = 1 + $showcount)
           #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2))) ## {
@@ -1122,7 +1122,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   #set($done = false)
   #if($xwiki.exists($favPage)) ## {
    #set($favDoc = $xwiki.getDocument("Coll_${shortname}.Favorites"))
-   #set($assetList = $favDoc.getObjects('XWiki.SubAssetClass'))
+   #set($assetList = $favDoc.getObjects('CurrikiCode.SubAssetClass'))
    #foreach($assetPointer in $assetList) ## {
     #if($request.docName == $assetPointer.get('assetpage')) ## {
      #set($junk = $favDoc.removeObject($assetPointer))
@@ -1355,12 +1355,12 @@ $msg.get("deleted")
   #end ## }
   ##
   ## Order by reverse last updated
-  #set($baseWhere = "where doc.fullName=obj.name AND obj.className='XWiki.AssetClass' AND doc.creator='${userdoc.fullName}' AND doc.web != 'AssetTemp' AND doc.name != 'Favorites' AND doc.name != 'WebHome' AND doc.fullName NOT IN (SELECT cbobj.name FROM BaseObject as cbobj, IntegerProperty as cbprop WHERE cbobj.className='XWiki.TextAssetClass' AND cbobj.name = doc.fullName AND cbobj.id=cbprop.id.id AND cbprop.id.name='type' AND cbprop.value=2)")
+  #set($baseWhere = "where doc.fullName=obj.name AND obj.className='CurrikiCode.AssetClass' AND doc.creator='${userdoc.fullName}' AND doc.web != 'AssetTemp' AND doc.name != 'Favorites' AND doc.name != 'WebHome' AND doc.fullName NOT IN (SELECT cbobj.name FROM BaseObject as cbobj, IntegerProperty as cbprop WHERE cbobj.className='CurrikiCode.TextAssetClass' AND cbobj.name = doc.fullName AND cbobj.id=cbprop.id.id AND cbprop.id.name='type' AND cbprop.value=2)")
   #set($globalView = " 0=1 ")
   #if($!hasGlobalAdmin)
     #set($globalView = " 1=1 ")
   #end
-  #set($rightsWhere = " AND (${globalView} OR '${userdoc.fullName}'='${context.user}' OR doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='XWiki.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) ")
+  #set($rightsWhere = " AND (${globalView} OR '${userdoc.fullName}'='${context.user}' OR doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='CurrikiCode.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) ")
   #set($baseWhere = "${baseWhere} ${rightsWhere}")
   #if($sortBy=="title") ## {
     #set($sql = ", BaseObject as obj, StringProperty as prop1 ${baseWhere} and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
@@ -1373,7 +1373,7 @@ $msg.get("deleted")
   ## How can we sort by
   ## filetype (determined in a macro)
   ## instructional_component (if not exists how do we act as blank)
-  ##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by prop1.value $sortDir")
+  ##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.creator='${userdoc.fullName}' and doc.web != 'AssetTemp' and doc.name != 'Favorites' order by prop1.value $sortDir")
   ##
   ##
   #set($assetList = $xwiki.searchDocuments($sql))
@@ -1429,7 +1429,7 @@ $msg.get("deleted")
 <div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
 {pre}
 $msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("XWiki.AssetClass").getProperty("description").getValue() <br />
+$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
 <br />
 $msg.get('mycurriki.favorites.mouseover.subject') <br />
 #set($subj = $!asset.getValue('fw_items'))
@@ -1452,7 +1452,7 @@ $msg.get('mycurriki.favorites.mouseover.subject') <br />
 #end ## }
 <br />
 $msg.get('mycurriki.favorites.mouseover.level')<br />
-#set($levl = $!asset.getValue('educational_level2'))
+#set($levl = $!asset.getValue('educational_level'))
 #set($c = 0)
 #foreach($item in $levl) ## {
 #set($c = $c + 1)
@@ -1551,7 +1551,7 @@ $msg.get("search.selector.level.${item}")<br />
 #set($cnt = $xwiki.getPlugin("curriki").fetchUserCollectionsList().size())
 #set($multiple = ($cnt > 1))
 #if($multiple) ##{
-#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CollectionReorderedClass' and doc.fullName='Coll_${shortname}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
+#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${shortname}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
 #set($reordered = ($reorder > 0))
 {pre}
 <script type="text/javascript">

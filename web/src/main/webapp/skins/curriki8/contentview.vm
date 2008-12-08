@@ -2,7 +2,19 @@
 #if($doc.space.startsWith("Documentation_") && $doc.name != "WebPreferences" && $doc.name != "WebHome" && $doc.name != "AboutDocumentation")
 #groups_documentationview()
 #else
-$cdoc.getRenderedContent()
+#if($doc.getObject("CurrikiCode.AssetClass"))
+ #if($doc.getObject("CurrikiCode.CompositeAssetClass"))
+  #if($doc.isRootCollection())
+   #compositeasset_display($doc)
+  #else
+   #asset_display($doc)
+  #end
+ #else
+   #asset_display($doc)
+ #end
+#else
+ $cdoc.getRenderedContent()
+#end
 #end
 </div>
 

@@ -10,7 +10,7 @@
   *#
 #macro(asset_findtitle $currikiDoc)
  #if($currikiDoc.getObject("XWiki.FrameworkItemClass"))
-  #set($key = "XWiki.AssetClass_fw_items_${currikiDoc.fullName}")
+  #set($key = "CurrikiCode.AssetClass_fw_items_${currikiDoc.fullName}")
   #set($currikiTitle = $msg.get($key))
   #if($currikiTitle == $key)
    #set($currikiTitle = $!currikiDoc.displayTitle)
@@ -141,7 +141,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 ##
 ##
 #macro(asset_displaymetadatas $asset, $isPrint)
-#set($assetObj = $asset.getObject("XWiki.AssetClass"))
+#set($assetObj = $asset.getObject("CurrikiCode.AssetClass"))
  <div class="asset-metadatas">
  #asset_findtitle($asset)
  #titlebar($currikiTitle "" "" "red")
@@ -179,7 +179,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 </select>
 </td><td width="61"> </td><td width="263">
  *$msg.get("metadata.educational_level_title"):* <br />
-#set($levels = $!asset.educational_level2)
+#set($levels = $!asset.educational_level)
 <select name="levels" multiple size="3">
 #if($levels == "Choose from list...")
  <option>All</option>
@@ -247,8 +247,8 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 
  *$msg.get("metadata.language_title"):* $!asset.display("language", "view", $assetObj)
 
- *$msg.get("metadata.instructional_component_title2"):* <br />
-#set($instrComponent = $!asset.display("instructional_component2","view", $assetObj))
+ *$msg.get("metadata.instructional_component_title"):* <br />
+#set($instrComponent = $!asset.display("instructional_component","view", $assetObj))
 <select name="componentType" multiple size="3">
 #if($instrComponent != "Choose from list...")
  #set($icitems = $instrComponent.split("#--#"))
@@ -258,7 +258,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 #end
 </select>
 
-#set($rightsObject = $asset.getObject("XWiki.AssetLicenseClass"))
+#set($rightsObject = $asset.getObject("CurrikiCode.AssetLicenseClass"))
 #set($holder = $!asset.display("rightsHolder", "view", $rightsObject))
 #if($xwiki.getDocument($holder).isNew() == false)
  #set($holder = $xwiki.getLocalUserName($holder))
@@ -270,7 +270,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 
  *$msg.get("metadata.rights_title"):* $!asset.display("rights", "view", $assetObj)
 
- *$msg.get("metadata.license_type_title"):* $!asset.display("licenseType2", "view", $rightsObject)
+ *$msg.get("metadata.license_type_title"):* $!asset.display("licenseType", "view", $rightsObject)
 
 #set($hidden = $!asset.display("hidden_from_search", "view", $assetObj))
 #if($hidden == "")
@@ -321,7 +321,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
  #end##}
 ## Build Up
  #if($asset.hasAccessLevel("edit")) ##{
-  #if($asset.getObject("XWiki.CompositeAssetClass")) ##{
+  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
 {pre}
    <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
 {/pre}
@@ -343,9 +343,9 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 #if(!$asset.hasAccessLevel("view"))
  $msg.get("asset.contentNotAllowed")
 #else
-#set($objTxt = $asset.getObject("XWiki.TextAssetClass"))
-#set($objComp = $asset.getObject("XWiki.CompositeAssetClass"))
-#if($asset.getObject("XWiki.TextAssetClass"))
+#set($objTxt = $asset.getObject("CurrikiCode.TextAssetClass"))
+#set($objComp = $asset.getObject("CurrikiCode.CompositeAssetClass"))
+#if($asset.getObject("CurrikiCode.TextAssetClass"))
 <div class="asset-content-body">
 #if($objTxt.type == 1)
 {pre}$asset.getValue("text",$objTxt){/pre}
@@ -354,17 +354,18 @@ $objTxt.text
 #end
 <div class="clearfloats"></div>
 </div>
-#elseif ($asset.getObject("XWiki.VIDITalkAssetClass"))
- #set($objVT = $asset.getObject("XWiki.VIDITalkAssetClass"))
+#elseif ($asset.getObject("CurrikiCode.VideoAssetClass"))
+ #set($objVT = $asset.getObject("XWiki.VideoAssetClass"))
  #set($video_id = $objVT.video_id)
 <div class="asset-content-body" style="text-align:center;">
+ ## TODO Viditalk not as GWT
  #includeForm("GWT.ViditalkPlayback")
 <div class="clearfloats"></div>
 </div>
 #elseif ($objComp && $objComp != "")
  #if($develop)
  <div class="asset-content-body">
-#set($objs = $asset.getObjects("XWiki.SubAssetClass"))
+#set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
 #set($assetList = $xwiki.arrayList)
 #foreach($obj in $objs)
 #set($ok = $assetList.add(""))
@@ -379,7 +380,7 @@ $objTxt.text
 #set($ok = $assetList.set($position.intValue(), $assetPage))
 #end
 #end
-##set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='XWiki.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetpage' and lg.name='order' order by lg.value ")
+##set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='CurrikiCode.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetpage' and lg.name='order' order by lg.value ")
 ##set($assetList = $xwiki.search($hql))
   #foreach($assetPage in $assetList)
    #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
@@ -387,7 +388,7 @@ $objTxt.text
    #else
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
     #set($type = "")
-    #set($type = $!embeddedDoc.getValue("type", $embeddedDoc.getObject("XWiki.TextAssetClass")))
+    #set($type = $!embeddedDoc.getValue("type", $embeddedDoc.getObject("CurrikiCode.TextAssetClass")))
     #if("$type"=="2")
 ## We are not showing direction block assets
     #elseif(!$xwiki.exists($assetPage))
@@ -397,7 +398,7 @@ $objTxt.text
 ##     $msg.get("asset.contentNotAllowed")
     #else
      #set($embeddedDoc = $xwiki.getDocument($assetPage))
-     #if($embeddedDoc.getObject("XWiki.CompositeAssetClass"))
+     #if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
       <div class="asset-content-body-composite-composite">
 #asset_findtitle($embeddedDoc)
       <div class="righttext"><div class="lefttext">
@@ -448,9 +449,9 @@ $objTxt.text
  <div class="clearfloats"></div>
 #else
 <div class="asset-content-body">
- #set($objExt = $asset.getObject("XWiki.ExternalAssetClass", true))
+ #set($objExt = $asset.getObject("CurrikiCode.ExternalAssetClass", true))
 $msg.get("asset.externallink")
- #set($url = $asset.display("link", "view", $asset.getObject("XWiki.ExternalAssetClass")))
+ #set($url = $asset.display("link", "view", $asset.getObject("CurrikiCode.ExternalAssetClass")))
  #if($url.endsWith("jpg") || $url.endsWith("gif"))
 
   <div align="center"><a href="$url" onclick="window.open('$url'); return false;"><img src="$url" align="middle" width="200" /></a></div>
@@ -546,6 +547,7 @@ $msg.get("asset.externallink")
 #end
 
 #macro(asset_display $currDoc)
+#asset_findmode()
 #if(!$isPrint)
 <div class="asset-tabs">
 <a class="asset-tab-selected" href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a>
@@ -553,7 +555,7 @@ $msg.get("asset.externallink")
 </div> ## tabs
 #end
 <div id="wizzard" class="asset-page">
-#set($obj = $currDoc.getObject("XWiki.AssetClass", true))
+#set($obj = $currDoc.getObject("CurrikiCode.AssetClass", true))
 #if(!$isPrint)
 <div class="asset-links">
 <div class="righttext">
@@ -597,6 +599,103 @@ $msg.get("asset.externallink")
 </div> ##display
 </div> ##contents
 </div>
+$xwiki.addTooltipJS()
 #end
 
+#macro(compositeasset_display $doc)
+#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome") ## {
+#set($user = $context.user)
+#if($user.startsWith("XWiki.")) ## {
+#set($user = $user.substring(6))
+#end ## }
+#if($doc.web.startsWith("Coll_")) ## {
+#set($shortname = $doc.web.substring(5))
+#else ## } {
+#set($shortname = $user)
+#end ## }
+#if($user == $shortname) ## {
+$response.sendRedirect($xwiki.getURL('MyCurriki.Collections'))
+#else ## } {
+#set($userarg = "user=${shortname}")
+$response.sendRedirect($xwiki.getURL('MyCurriki.Collections', 'view', "$userarg"))
+#end ## }
+#else ## } {
+#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome")
+ #set($user=$doc.space.substring(5))
+#elseif($request.user)
+ #set($user = $request.user)
+#else
+ #set($user=$context.user)
+#end
+#set($shortname = $user)
+#if($user.startsWith("XWiki."))
+ #set($shortname = $user.substring(6))
+#end
+#curriki_finduserprefix($shortname)
+#if(!$userPrefix || $userPrefix == "")
+1 Collection List
+#else
+1 $userPrefix Collections
+#end
+#set($usercoll = "Coll_${shortname}")
+#set($collectionsHome = $xwiki.getDocument($usercoll, "WebHome"))
+#set($collectionsList = $collectionsHome.getObjects("CurrikiCode.SubAssetClass"))
+#set($nbToDisplay = 5)
+#set($Integer = 0)
+#set($startIndex = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex > ($collectionsList.size() - 1))
+ #set($startIndex = $collectionsList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex > ($collectionsList.size() - 1))
+ #set($endIndex = $collectionsList.size() - 1)
+#end
+#set($deleteMsg = $msg.get("confirmdelete"))
+#set($localUrl = $doc.getURL("view"))
 
+$msg.get("colls.infos")
+
+#if($collectionsList.size() >0)
+ #foreach ($index in [$startIndex..$endIndex])
+  #asset_displaycollection($collectionsList.get($index))
+ #end
+#end
+<hr class="my-curriki-hr">
+
+#if($context.user=="XWiki.${shortname}" || $xwiki.hasAdminRights())
+<div style="float:right;"><span class="righttext"><a class="buttonred" onclick="addCollection2(); return false;" href="#" title="$msg.get("colls.createCollection")">$msg.get("colls.createCollection")</a></span></div>
+#end
+<div align="center"><div class="my-curriki-nav">
+#set($nbDisplayed = ($endIndex - $startIndex + 1))
+#if($collectionsList.size() == 0)
+ #set($nbDisplayed = 0)
+#end
+#set($hasPrev = $startIndex > 0)
+#set($hasNext = $endIndex < ($collectionsList.size() - 1))
+#set($startDisplayed = $startIndex + 1)
+#set($endDisplayed = $endIndex + 1)
+#set($elemsDisplayed = "${startDisplayed}-${endDisplayed}")
+{pre}
+$msg.get("colls.numberOfCollsDisplayed", [$elemsDisplayed, $collectionsList.size()]) 
+<span class="navitems">
+#if($hasPrev)
+#set($prevIndex = $startIndex - $nbToDisplay)
+<a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${prevIndex}")" >$msg.get("caption.prev")</a>
+#else
+$msg.get("caption.prev")
+#end
+#sep()
+#if($hasNext)
+#set($nextIndex = $startIndex + $nbToDisplay)
+<a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${nextIndex}")" >$msg.get("caption.next")</a>
+#else
+$msg.get("caption.next")
+#end
+</span>
+{/pre}
+</div></div>
+#end ## }
+#end

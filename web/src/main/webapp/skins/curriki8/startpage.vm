@@ -10,6 +10,8 @@
 #template("header.vm")
 #template("menuview.vm")
 <div id="panels" class="expanded">
+#if($context.action!="admin")
 #template("leftpanels.vm")
 ###template("rightpanels.vm")	
+#end
 <div id="right-panel">

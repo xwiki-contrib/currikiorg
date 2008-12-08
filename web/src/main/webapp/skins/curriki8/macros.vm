@@ -759,7 +759,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #set($level = $level + 1)
   #parentsBreadcrumb($xwiki.getDocument($parent) $level)
 #else
-  #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='XWiki.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}'")
+  #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}'")
   #foreach($bcItem in $xwiki.search($hql, 1, 0))
    #set($bcLocal = "${bcItem.name};${bcLocal}")
    #set($level = $level + 1)
