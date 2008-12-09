@@ -475,7 +475,7 @@ public class Asset extends CurrikiDocument {
 
         BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS);
         if (assetObj == null) {
-            assetObj = assetDoc.newObject(Constants.ASSET_CLASS, context);
+            assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
         }
 
         // CURRIKI-2451 - Make sure group rights are used by default
@@ -921,10 +921,17 @@ public class Asset extends CurrikiDocument {
     }
 
     private void updateObject(Object newAssetObject, Object oldAssetObject, String newpropname, String oldpropname) {
+        if (LOG.isDebugEnabled())
+         LOG.debug("CURRIKI CONVERTER: updating property " + newpropname);
+
         use(oldAssetObject);
         java.lang.Object value = getValue(oldpropname);
         use(newAssetObject);
         set(newpropname, value);
+
+        if (LOG.isDebugEnabled())
+         LOG.debug("CURRIKI CONVERTER: updated property value is " + newAssetObject.get(newpropname));
+
     }
 
     /**
@@ -939,9 +946,14 @@ public class Asset extends CurrikiDocument {
     }
 
     private void setNewCategoryAndClass() throws XWikiException {
+
+
+        if (LOG.isDebugEnabled())
+         LOG.debug("CURRIKI CONVERTER: running setNewCategoryAndClass");
+
         // Get Asset objects
         Object oldAssetObject = getObject(Constants.OLD_ASSET_CLASS);
-        Object newAssetObject = getObject(Constants.ASSET_CLASS, true);
+
         // get old category
         String oldCategory = oldAssetObject.get(Constants.ASSET_CLASS_CATEGORY).toString();
         String newCategory = "";
@@ -1067,8 +1079,8 @@ public class Asset extends CurrikiDocument {
             }
 
             // temporary log for debugging
-            if (LOG.isErrorEnabled()) {
-                LOG.error("CURRIKI ASSET CONVERTER: detected category is " + getCategory()); 
+            if (LOG.isInfoEnabled()) {
+                LOG.info("CURRIKI ASSET CONVERTER: detected category is " + getCategory());
             }
 
             // we should have found the same category through conversion
@@ -1110,7 +1122,7 @@ public class Asset extends CurrikiDocument {
                 // Saving as a minor edit
                 // We bypass the public api so that the author is not updated
                 // We reset setContentDirty so that the content date does not change
-                getDoc().setContentDirty(false);
+                // getDoc().setContentDirty(false);
                 context.getWiki().saveDocument(getDoc(), context.getMessageTool().get("curriki.comment.datamodelmigration"), true, context);
                 return true;
             } catch (Exception e) {
@@ -1140,8 +1152,15 @@ public class Asset extends CurrikiDocument {
 
         try {
             // Convert Asset Class
+            // we need to make sure we are working on the modified object
+            // because getObject(classname, boolean) does not do the job right
+            getDoc();
+
             Object oldAssetObject = getObject(Constants.OLD_ASSET_CLASS);
             Object newAssetObject = getObject(Constants.ASSET_CLASS, true);
+
+            if (LOG.isDebugEnabled())
+             LOG.debug("CURRIKI CONVERTER: running convert on asset " + getFullName());
 
             // set title
             setTitle(oldAssetObject.get(Constants.OLD_ASSET_CLASS_TITLE).toString());
