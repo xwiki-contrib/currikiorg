@@ -1122,7 +1122,7 @@ public class Asset extends CurrikiDocument {
                 // Saving as a minor edit
                 // We bypass the public api so that the author is not updated
                 // We reset setContentDirty so that the content date does not change
-                // getDoc().setContentDirty(false);
+                getDoc().setContentDirty(false);
                 context.getWiki().saveDocument(getDoc(), context.getMessageTool().get("curriki.comment.datamodelmigration"), true, context);
                 return true;
             } catch (Exception e) {
