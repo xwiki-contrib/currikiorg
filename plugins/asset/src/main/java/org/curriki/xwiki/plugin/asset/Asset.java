@@ -62,7 +62,8 @@ public class Asset extends CurrikiDocument {
     public String getCategory() {
         if (hasA(Constants.ASSET_CLASS)) {
             Object obj = getObject(Constants.ASSET_CLASS);
-            return (String) obj.get(Constants.ASSET_CLASS_CATEGORY);
+            use(obj);
+            return getValue(Constants.ASSET_CLASS_CATEGORY).toString();
         } else {
             return Constants.ASSET_CATEGORY_UNKNOWN;
         }
@@ -955,7 +956,8 @@ public class Asset extends CurrikiDocument {
         Object oldAssetObject = getObject(Constants.OLD_ASSET_CLASS);
 
         // get old category
-        String oldCategory = oldAssetObject.get(Constants.ASSET_CLASS_CATEGORY).toString();
+        use(oldAssetObject);
+        String oldCategory = getValue(Constants.ASSET_CLASS_CATEGORY).toString();
         String newCategory = "";
 
         // transforming category of type text
@@ -1002,9 +1004,12 @@ public class Asset extends CurrikiDocument {
             set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
             Object oldTextAssetObject = getObject(Constants.OLD_TEXT_ASSET_CLASS);
             if (oldTextAssetObject!=null) {
-                String type = oldTextAssetObject.get(Constants.OLD_TEXT_ASSET_CLASS_TYPE).toString();
+                use(oldTextAssetObject);
+                String type = getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE).toString();
+                use(oldTextAssetObject);
+                String content = getValue(Constants.OLD_TEXT_ASSET_CLASS).toString();
                 use(newTextAssetObject);
-                setContent(oldTextAssetObject.get(Constants.OLD_TEXT_ASSET_CLASS_TEXT).toString());
+                setContent(content);
 
                 if (type.equals("0")) {
                     newCategory = Constants.ASSET_CATEGORY_WIKI;
@@ -1163,7 +1168,8 @@ public class Asset extends CurrikiDocument {
              LOG.debug("CURRIKI CONVERTER: running convert on asset " + getFullName());
 
             // set title
-            setTitle(oldAssetObject.get(Constants.OLD_ASSET_CLASS_TITLE).toString());
+            use(oldAssetObject);
+            setTitle(getValue(Constants.OLD_ASSET_CLASS_TITLE).toString());
             setContent("");
 
             // transfer unchanged fields
