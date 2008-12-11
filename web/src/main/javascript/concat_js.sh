@@ -115,7 +115,13 @@ cat $ASTERIXREVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-asterixReview.js
 cat $ASTERIXREVIEW | $UNCOMPRESS_JS > ../webapp/js/curriki-module-asterixReview-debug.js
 
 REORDER="\
-	curriki/reorder/base.js
+	curriki/reorder/base.js \
 	"
 cat $REORDER | $COMPRESS_JS > ../webapp/js/curriki-module-reorder.js
 cat $REORDER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-reorder-debug.js
+
+TOC="\
+	curriki/toc/base.js \
+	"
+cat $TOC | $COMPRESS_JS > ../webapp/js/curriki-module-toc.js
+cat $TOC | $UNCOMPRESS_JS > ../webapp/js/curriki-module-toc-debug.js
