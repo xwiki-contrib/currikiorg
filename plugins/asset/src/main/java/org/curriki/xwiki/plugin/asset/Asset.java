@@ -1222,7 +1222,7 @@ public class Asset extends CurrikiDocument {
         } catch (Exception e) {
             if (LOG.isErrorEnabled())
                 LOG.error("CURRIKI ASSET CONVERTER ERROR: error converting asset " + getFullName(), e);
-            throw e;
+            throw new XWikiException(XWikiException.MODULE_XWIKI_PLUGINS, XWikiException.ERROR_XWIKI_UNKNOWN, "Curriki asset conversion exception", e);
         }
     }
 
