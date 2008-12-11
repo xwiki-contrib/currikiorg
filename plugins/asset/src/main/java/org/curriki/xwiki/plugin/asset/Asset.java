@@ -49,7 +49,6 @@ import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
-import com.xpn.xwiki.plugin.image.ImagePlugin;
 import com.xpn.xwiki.api.Object;
 
 public class Asset extends CurrikiDocument {
@@ -63,7 +62,11 @@ public class Asset extends CurrikiDocument {
         if (hasA(Constants.ASSET_CLASS)) {
             Object obj = getObject(Constants.ASSET_CLASS);
             use(obj);
-            return getValue(Constants.ASSET_CLASS_CATEGORY).toString();
+            String category = (String) getValue(Constants.ASSET_CLASS_CATEGORY);
+            if (category==null)
+                return Constants.ASSET_CATEGORY_UNKNOWN;
+            else
+                return category;
         } else {
             return Constants.ASSET_CATEGORY_UNKNOWN;
         }
@@ -957,7 +960,7 @@ public class Asset extends CurrikiDocument {
 
         // get old category
         use(oldAssetObject);
-        String oldCategory = getValue(Constants.ASSET_CLASS_CATEGORY).toString();
+        String oldCategory = (String) getValue(Constants.ASSET_CLASS_CATEGORY);
         String newCategory = "";
 
         // transforming category of type text
@@ -1007,9 +1010,12 @@ public class Asset extends CurrikiDocument {
                 use(oldTextAssetObject);
                 String type = getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE).toString();
                 use(oldTextAssetObject);
-                String content = getValue(Constants.OLD_TEXT_ASSET_CLASS).toString();
+                String content = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS);
+                if (content==null)
+                 setContent("");
+                else
+                 setContent(content);
                 use(newTextAssetObject);
-                setContent(content);
 
                 if (type.equals("0")) {
                     newCategory = Constants.ASSET_CATEGORY_WIKI;
@@ -1046,7 +1052,8 @@ public class Asset extends CurrikiDocument {
                 use(oldVideoAssetObject);
                 String videoId = (String) getValue(Constants.OLD_VIDITALK_CLASS_VIDEO_ID);
                 use(newVideoAssetObject);
-                set(Constants.VIDEO_ASSET_ID, "viditalk:" + videoId);
+                if (videoId!=null)
+                 set(Constants.VIDEO_ASSET_ID, "viditalk:" + videoId);
                 removeObject(oldVideoAssetObject);
             }
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_AUDIO)) {
@@ -1169,7 +1176,7 @@ public class Asset extends CurrikiDocument {
 
             // set title
             use(oldAssetObject);
-            setTitle(getValue(Constants.OLD_ASSET_CLASS_TITLE).toString());
+            setTitle((String) getValue(Constants.OLD_ASSET_CLASS_TITLE));
             setContent("");
 
             // transfer unchanged fields
