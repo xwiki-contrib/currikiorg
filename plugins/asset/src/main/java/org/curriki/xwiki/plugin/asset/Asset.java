@@ -1014,7 +1014,7 @@ public class Asset extends CurrikiDocument {
                 String type = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE);
                 if (type==null)  type = "";
                 use(oldTextAssetObject);
-                String content = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS);
+                String content = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS_TEXT);
                 if (content==null)
                  setContent("");
                 else
