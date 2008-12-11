@@ -1011,8 +1011,7 @@ public class Asset extends CurrikiDocument {
             Object oldTextAssetObject = getObject(Constants.OLD_TEXT_ASSET_CLASS);
             if (oldTextAssetObject!=null) {
                 use(oldTextAssetObject);
-                String type = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE);
-                if (type==null)  type = "";
+                Long type = (Long) getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE);
                 use(oldTextAssetObject);
                 String content = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS_TEXT);
                 if (content==null)
@@ -1021,10 +1020,10 @@ public class Asset extends CurrikiDocument {
                  setContent(content);
                 use(newTextAssetObject);
 
-                if (type.equals("0")) {
+                if ((type==null)||type==0) {
                     newCategory = Constants.ASSET_CATEGORY_WIKI;
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XWIKI1);
-                } else if (type.equals("1")) {
+                } else if (type==1) {
                     newCategory = Constants.ASSET_CATEGORY_HTML;
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XHTML1);
                 } else {
