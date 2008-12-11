@@ -963,6 +963,9 @@ public class Asset extends CurrikiDocument {
         String oldCategory = (String) getValue(Constants.ASSET_CLASS_CATEGORY);
         String newCategory = "";
 
+        if (oldCategory==null)
+           oldCategory = "";
+        
         // transforming category of type text
         if (oldCategory.equals(Constants.OLD_CATEGORY_COLLECTION)||(getObject(Constants.OLD_COMPOSITE_ASSET_CLASS)!=null)) {
 
@@ -1008,7 +1011,8 @@ public class Asset extends CurrikiDocument {
             Object oldTextAssetObject = getObject(Constants.OLD_TEXT_ASSET_CLASS);
             if (oldTextAssetObject!=null) {
                 use(oldTextAssetObject);
-                String type = getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE).toString();
+                String type = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE);
+                if (type==null)  type = "";
                 use(oldTextAssetObject);
                 String content = (String) getValue(Constants.OLD_TEXT_ASSET_CLASS);
                 if (content==null)
@@ -1176,7 +1180,9 @@ public class Asset extends CurrikiDocument {
 
             // set title
             use(oldAssetObject);
-            setTitle((String) getValue(Constants.OLD_ASSET_CLASS_TITLE));
+            String title = (String) getValue(Constants.OLD_ASSET_CLASS_TITLE);
+            if (title!=null)
+               setTitle(title);
             setContent("");
 
             // transfer unchanged fields
