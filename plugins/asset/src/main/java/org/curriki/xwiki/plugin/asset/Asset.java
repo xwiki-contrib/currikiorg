@@ -1081,7 +1081,7 @@ public class Asset extends CurrikiDocument {
         // We also need to do this if the document is not a text asset and there is an attachment
         Object newDocumentAssetObject = getObject(Constants.DOCUMENT_ASSET_CLASS);
         if ((!newCategory.equals(Constants.ASSET_CATEGORY_WIKI)&&!newCategory.equals(Constants.ASSET_CATEGORY_HTML)
-                && getAttachmentList().size() > 0) || (newDocumentAssetObject!=null))
+                && (getAttachmentList().size() > 0) || (newDocumentAssetObject!=null)))
         {
             updateObject(newDocumentAssetObject, oldAssetObject, Constants.DOCUMENT_ASSET_ALT_TEXT, Constants.OLD_ASSET_CLASS_ALT_TEXT);
             updateObject(newDocumentAssetObject, oldAssetObject, Constants.DOCUMENT_ASSET_CAPTION_TEXT, Constants.OLD_ASSET_CLASS_CAPTION_TEXT);
