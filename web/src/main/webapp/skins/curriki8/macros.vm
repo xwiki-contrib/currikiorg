@@ -46,17 +46,6 @@ $msg.get($prop.name)#end
 #end
 
 #**
- * Macro to get the gwt editor url of a document
- * docToEdit Curriki Document
- *#
-#macro(gwtEditUrl $docToEdit)
-#set($m_gwtUrl = $gwtmainpath)
-#set($docToEdit2 = $xwiki.escapeURL($docToEdit))
-#set($m_editUrl = "${m_gwtUrl}page=${docToEdit2}&mode=edit")
-$m_editUrl#end
-
-
-#**
  * Truncates a text to a maximum number of chars
  * text text to truncate
  * maxChars maximum number of chars
@@ -624,10 +613,6 @@ $msg.get("navigationHome")
   #end ##}	  
   #set($theCategLink = $link)
   #normalizelink($theCategLink)
-  <!--<div class="curriki-nav-header" onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); ${cookiemagic} togglePanelVisibility(this.parentNode)" #if(!$active) onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed')" #end> ##{
-    <img src="$xwiki.getSkinFile("pixel.gif")" width="20" height="15" />
-    <h4>#if($link != "")<a href="$theCategLink" onclick="event.cancelBubble = true;">$text</a>#else $text#end </h4>
-  </div> -->    
 <div class="expanded" id="${id}"> ##{
   <a onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); 
   		${cookiemagic}

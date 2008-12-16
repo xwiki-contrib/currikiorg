@@ -38,7 +38,7 @@ Toc.init = function(){
 
 			if (attr.rights && !attr.rights.view){
 				childInfo.text = _('add.chooselocation.resource_unavailable');
-				childInfo.qtip = undefined;
+				childInfo.qtip = _('add.chooselocation.resource_unavailable_tooltip');
 				childInfo.disabled = true;
 				childInfo.leaf = true;
 				childInfo.cls = childInfo.cls+' rights-unviewable';
