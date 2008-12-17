@@ -1044,7 +1044,7 @@ public class Asset extends CurrikiDocument {
             }
             // we need to remove the old image object
             removeObject(oldImageAssetObject);
-        } else if (oldCategory.equals(Constants.OLD_CATEGORY_VIDITALK_VIDEO)||(getObject(Constants.OLD_VIDITALK_CLASS)!=null)) {
+        } else if (getObject(Constants.OLD_VIDITALK_CLASS)!=null) {
             newCategory = Constants.ASSET_CATEGORY_VIDEO;
             getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
 
