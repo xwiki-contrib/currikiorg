@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.apache.commons.logging.Log;
@@ -25,7 +24,6 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.notify.XWikiNotificationRule;
-import com.xpn.xwiki.notify.XWikiActionRule;
 import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
 import com.xpn.xwiki.notify.DocChangeRule;
 import com.xpn.xwiki.api.Api;
@@ -65,6 +63,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             initAssetLicenseClass(context);
             initAssetTextClass(context);
             initAssetDocumentClass(context);
+            initAssetImageClass(context);
             initAssetVideoClass(context);
             initAssetArchiveClass(context);
             initAssetExternalClass(context);
@@ -447,7 +446,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         needsUpdate |= bclass.addTextAreaField(Constants.ASSET_CLASS_DESCRIPTION, Constants.ASSET_CLASS_DESCRIPTION, 60, 6);
         needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_KEYWORDS, Constants.ASSET_CLASS_KEYWORDS, 40, true, "", "input", " ,|");
         needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CLASS_CATEGORY, 1, false,
-                Constants.ASSET_CATEGORY_TEXT   + "|" + Constants.ASSET_CATEGORY_WIKI + "|" + Constants.ASSET_CATEGORY_HTML + "|" + Constants.ASSET_CATEGORY_XML + "|" + Constants.ASSET_CATEGORY_LATEX + "|" + Constants.ASSET_CATEGORY_IMAGE
+                Constants.ASSET_CATEGORY_TEXT  + "|" + Constants.ASSET_CATEGORY_IMAGE
                         + "|" + Constants.ASSET_CATEGORY_AUDIO + "|" + Constants.ASSET_CATEGORY_VIDEO + "|" + Constants.ASSET_CATEGORY_INTERACTIVE + "|" + Constants.ASSET_CATEGORY_ARCHIVE  + "|" + Constants.ASSET_CATEGORY_DOCUMENT + "|" + Constants.ASSET_CATEGORY_EXTERNAL
                         + "|" + Constants.ASSET_CATEGORY_COLLECTION  + "|" + Constants.ASSET_CATEGORY_UNKNOWN);
         needsUpdate |= bclass.addDBTreeListField(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, Constants.ASSET_CLASS_FRAMEWORK_ITEMS, 10, true, Constants.ASSET_CLASS_FRAMEWORK_ITEMS_QUERY);
@@ -525,25 +524,25 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         boolean needsUpdate = false;
 
         try {
-            doc = xwiki.getDocument(Constants.DOCUMENT_ASSET_CLASS, context);
+            doc = xwiki.getDocument(Constants.ATTACHMENT_ASSET_CLASS, context);
         } catch (Exception e) {
             doc = new XWikiDocument();
-            doc.setFullName(Constants.DOCUMENT_ASSET_CLASS);
+            doc.setFullName(Constants.ATTACHMENT_ASSET_CLASS);
             needsUpdate = true;
         }
 
         BaseClass bclass = doc.getxWikiClass();
-        bclass.setName(Constants.DOCUMENT_ASSET_CLASS);
+        bclass.setName(Constants.ATTACHMENT_ASSET_CLASS);
 
-        needsUpdate |= bclass.addTextAreaField(Constants.DOCUMENT_ASSET_ALT_TEXT, Constants.DOCUMENT_ASSET_ALT_TEXT, 40, 5);
-        needsUpdate |= bclass.addTextAreaField(Constants.DOCUMENT_ASSET_CAPTION_TEXT, Constants.DOCUMENT_ASSET_CAPTION_TEXT, 40, 5);
-        needsUpdate |= bclass.addTextField(Constants.DOCUMENT_ASSET_FILE_TYPE, Constants.DOCUMENT_ASSET_FILE_TYPE, 10);
-        needsUpdate |= bclass.addNumberField(Constants.DOCUMENT_ASSET_FILE_SIZE, Constants.DOCUMENT_ASSET_FILE_SIZE, 10, "long");
+        needsUpdate |= bclass.addTextAreaField(Constants.ATTACHMENT_ASSET_ALT_TEXT, Constants.ATTACHMENT_ASSET_ALT_TEXT, 40, 5);
+        needsUpdate |= bclass.addTextAreaField(Constants.ATTACHMENT_ASSET_CAPTION_TEXT, Constants.ATTACHMENT_ASSET_CAPTION_TEXT, 40, 5);
+        needsUpdate |= bclass.addTextField(Constants.ATTACHMENT_ASSET_FILE_TYPE, Constants.ATTACHMENT_ASSET_FILE_TYPE, 10);
+        needsUpdate |= bclass.addNumberField(Constants.ATTACHMENT_ASSET_FILE_SIZE, Constants.ATTACHMENT_ASSET_FILE_SIZE, 10, "long");
 
         String content = doc.getContent();
         if ((content==null)||(content.equals(""))) {
             needsUpdate = true;
-            doc.setContent("1 " + Constants.DOCUMENT_ASSET_CLASS);
+            doc.setContent("1 " + Constants.ATTACHMENT_ASSET_CLASS);
         }
 
         if (needsUpdate)
@@ -606,6 +605,35 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             xwiki.saveDocument(doc, context);
     }
 
+    private void initAssetImageClass(XWikiContext context) throws XWikiException {
+        XWikiDocument doc;
+        XWiki xwiki = context.getWiki();
+        boolean needsUpdate = false;
+
+        try {
+            doc = xwiki.getDocument(Constants.IMAGE_ASSET_CLASS, context);
+        } catch (Exception e) {
+            doc = new XWikiDocument();
+            doc.setFullName(Constants.IMAGE_ASSET_CLASS);
+            needsUpdate = true;
+        }
+
+        BaseClass bclass = doc.getxWikiClass();
+        bclass.setName(Constants.IMAGE_ASSET_CLASS);
+
+        needsUpdate |= bclass.addNumberField(Constants.IMAGE_ASSET_WIDTH, Constants.IMAGE_ASSET_WIDTH, 5, "integer");
+        needsUpdate |= bclass.addNumberField(Constants.IMAGE_ASSET_HEIGHT, Constants.IMAGE_ASSET_HEIGHT, 5, "integer");
+
+        String content = doc.getContent();
+        if ((content==null)||(content.equals(""))) {
+            needsUpdate = true;
+            doc.setContent("1 " + Constants.IMAGE_ASSET_CLASS);
+        }
+
+        if (needsUpdate)
+            xwiki.saveDocument(doc, context);
+    }
+
     private void initAssetExternalClass(XWikiContext context) throws XWikiException {
         XWikiDocument doc;
         XWiki xwiki = context.getWiki();
@@ -649,7 +677,9 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         BaseClass bclass = doc.getxWikiClass();
         bclass.setName(Constants.TEXT_ASSET_CLASS);
 
-        needsUpdate |= bclass.addTextField(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX, 30);
+        needsUpdate |= bclass.addStaticListField(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX, 1, false,
+                Constants.TEXT_ASSET_SYNTAX_TEXT  + "|" + Constants.TEXT_ASSET_SYNTAX_XHTML1
+                        + "|" + Constants.TEXT_ASSET_SYNTAX_XWIKI1 + "|" + Constants.TEXT_ASSET_SYNTAX_XWIKI2 + "|" + Constants.TEXT_ASSET_SYNTAX_CBOE);
 
         String content = doc.getContent();
         if ((content==null)||(content.equals(""))) {

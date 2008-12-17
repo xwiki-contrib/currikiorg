@@ -37,12 +37,11 @@ import org.curriki.xwiki.plugin.asset.external.VideoAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
 import org.curriki.xwiki.plugin.asset.text.TextAsset;
-import org.curriki.xwiki.plugin.asset.text.WikiTextAsset;
-import org.curriki.xwiki.plugin.asset.text.HTMLTextAsset;
 import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.plugin.image.ImagePlugin;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiAttachment;
@@ -274,16 +273,7 @@ public class Asset extends CurrikiDocument {
             }
 
             // Check specific objects to find displayer
-            if (category.equals(Constants.ASSET_CATEGORY_WIKI)) {
-                return WikiTextAsset.class;
-
-            } else  if (category.equals(Constants.ASSET_CATEGORY_HTML)) {
-                return HTMLTextAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_TEXT)) {
-                return TextAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_XML)) {
-                return TextAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_LATEX)) {
+            if (category.equals(Constants.ASSET_CATEGORY_TEXT)) {
                 return TextAsset.class;
             } else  if (category.equals(Constants.ASSET_CATEGORY_EXTERNAL)) {
                 return ExternalAsset.class;
@@ -626,16 +616,16 @@ public class Asset extends CurrikiDocument {
         String category = mimePlugin.getCategory(filetype, context);
         XWikiDocument assetDoc = getDoc();
 
-        BaseObject documentObject = assetDoc.getObject(Constants.DOCUMENT_ASSET_CLASS, true, context);
-        documentObject.setStringValue(Constants.DOCUMENT_ASSET_FILE_TYPE, filetype);
-        documentObject.setLongValue(Constants.DOCUMENT_ASSET_FILE_SIZE, attachment.getFilesize());
+        BaseObject documentObject = assetDoc.getObject(Constants.ATTACHMENT_ASSET_CLASS, true, context);
+        documentObject.setStringValue(Constants.ATTACHMENT_ASSET_FILE_TYPE, filetype);
+        documentObject.setLongValue(Constants.ATTACHMENT_ASSET_FILE_SIZE, attachment.getFilesize());
 
         // We need to add the class for certain asset types if they do not exist yet
         if (category.equals(Constants.ASSET_CATEGORY_ARCHIVE))
                 getObject(Constants.ARCHIVE_ASSET_CLASS, true);
-        
-        /*
-       if (category.equals(Constants.ASSET_CATEGORY_IMAGE)) {
+
+
+        if (category.equals(Constants.ASSET_CATEGORY_IMAGE)) {
             getObject(Constants.IMAGE_ASSET_CLASS, true);
 
             ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin(ImagePlugin.PLUGIN_NAME, context);
@@ -652,7 +642,7 @@ public class Asset extends CurrikiDocument {
                     // Ignore exception
                 }
             }
-        } */
+        }
 
 
         BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
@@ -1010,6 +1000,7 @@ public class Asset extends CurrikiDocument {
             set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
             Object oldTextAssetObject = getObject(Constants.OLD_TEXT_ASSET_CLASS);
             if (oldTextAssetObject!=null) {
+                newCategory = Constants.ASSET_CATEGORY_TEXT;
                 use(oldTextAssetObject);
                 Long type = (Long) getValue(Constants.OLD_TEXT_ASSET_CLASS_TYPE);
                 use(oldTextAssetObject);
@@ -1021,32 +1012,41 @@ public class Asset extends CurrikiDocument {
                 use(newTextAssetObject);
 
                 if ((type==null)||type==0) {
-                    newCategory = Constants.ASSET_CATEGORY_WIKI;
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XWIKI1);
                 } else if (type==1) {
-                    newCategory = Constants.ASSET_CATEGORY_HTML;
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XHTML1);
+                } else if (type==2) {
+                    set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_CBOE);
                 } else {
-                    newCategory = Constants.ASSET_CATEGORY_TEXT;
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
                 }
                 removeObject(oldTextAssetObject);
             }
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_ARCHIVE)||(getObject(Constants.OLD_MIMETYPE_ARCHIVE_CLASS)!=null)) {
             newCategory = Constants.ASSET_CATEGORY_ARCHIVE;
-            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
             Object oldArchiveAssetObject = getObject(Constants.OLD_MIMETYPE_ARCHIVE_CLASS);
             Object newArchiveAssetObject = getObject(Constants.ARCHIVE_ASSET_CLASS, true);
             updateObject(newArchiveAssetObject, oldArchiveAssetObject, Constants.ARCHIVE_ASSET_START_FILE, Constants.OLD_MIMETYPE_ARCHIVE_CLASS_DEFAULT_FILE);
+            // we need to remove the old archive object
+            removeObject(oldArchiveAssetObject);
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_ANIMATION)) {
             newCategory = Constants.ASSET_CATEGORY_INTERACTIVE;
-            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_IMAGE)) {
             newCategory = Constants.ASSET_CATEGORY_IMAGE;
-            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
+            Object oldImageAssetObject = getObject(Constants.OLD_MIMETYPE_PICTURE_CLASS);
+            Object newImageAssetObject = getObject(Constants.IMAGE_ASSET_CLASS, true);
+            if (oldImageAssetObject!=null) {
+                updateObject(newImageAssetObject, oldImageAssetObject, Constants.IMAGE_ASSET_WIDTH);
+                updateObject(newImageAssetObject, oldImageAssetObject, Constants.IMAGE_ASSET_HEIGHT);
+            }
+            // we need to remove the old image object
+            removeObject(oldImageAssetObject);
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_VIDITALK_VIDEO)||(getObject(Constants.OLD_VIDITALK_CLASS)!=null)) {
             newCategory = Constants.ASSET_CATEGORY_VIDEO;
-            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
 
             // transfer video id
             Object newVideoAssetObject = getObject(Constants.VIDEO_ASSET_CLASS, true);
@@ -1062,7 +1062,7 @@ public class Asset extends CurrikiDocument {
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_AUDIO)) {
             // we cannot determine type between audio and video
             newCategory = null;
-            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_LINK)||(getObject(Constants.OLD_EXTERNAL_ASSET_CLASS)!=null)) {
             newCategory = Constants.ASSET_CATEGORY_EXTERNAL;
             Object newExternalAssetObject = getObject(Constants.EXTERNAL_ASSET_CLASS, true);
@@ -1073,18 +1073,18 @@ public class Asset extends CurrikiDocument {
             }
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_DOCUMENT)) {
             newCategory = Constants.ASSET_CATEGORY_DOCUMENT;
-            getObject(Constants.DOCUMENT_ASSET_CLASS, true);
+            getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
         }
 
         // update document (attachment) assets.
         // We need to do this either because the document use to be declared as a Document
         // We also need to do this if the document is not a text asset and there is an attachment
-        Object newDocumentAssetObject = getObject(Constants.DOCUMENT_ASSET_CLASS);
-        if ((!newCategory.equals(Constants.ASSET_CATEGORY_WIKI)&&!newCategory.equals(Constants.ASSET_CATEGORY_HTML)
+        Object newDocumentAssetObject = getObject(Constants.ATTACHMENT_ASSET_CLASS);
+        if ((!newCategory.equals(Constants.ASSET_CATEGORY_TEXT)
                 && (getAttachmentList().size() > 0) || (newDocumentAssetObject!=null)))
         {
-            updateObject(newDocumentAssetObject, oldAssetObject, Constants.DOCUMENT_ASSET_ALT_TEXT, Constants.OLD_ASSET_CLASS_ALT_TEXT);
-            updateObject(newDocumentAssetObject, oldAssetObject, Constants.DOCUMENT_ASSET_CAPTION_TEXT, Constants.OLD_ASSET_CLASS_CAPTION_TEXT);
+            updateObject(newDocumentAssetObject, oldAssetObject, Constants.ATTACHMENT_ASSET_ALT_TEXT, Constants.OLD_ASSET_CLASS_ALT_TEXT);
+            updateObject(newDocumentAssetObject, oldAssetObject, Constants.ATTACHMENT_ASSET_CAPTION_TEXT, Constants.OLD_ASSET_CLASS_CAPTION_TEXT);
             XWikiAttachment attachment = (doc.getAttachmentList().size()>0) ? doc.getAttachmentList().get(0) : null;
             if (attachment!=null)
              determineFileTypeAndCategory(attachment);

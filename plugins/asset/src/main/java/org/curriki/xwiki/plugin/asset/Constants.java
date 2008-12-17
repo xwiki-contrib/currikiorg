@@ -61,18 +61,14 @@ public interface Constants {
     String ASSET_CLASS_EDUCATIONAL_LEVEL_VALUES = "prek=Preschool / Ages 0-4|gr-k-2=Gr. K-2 / Ages 5-7|gr-3-5=Gr. 3-5 / Ages 8-10|gr-6-8=Gr. 6-8 / Ages 11-13|gr-9-10=Gr. 9-10 / Ages 14-16|gr-11-12=Gr. 11-12 / Ages 16-18|college_and_beyond=College and Beyond|professional_development=Professional Development|special_education=Special Education|na=Other";
 
     String ASSET_CLASS_INSTRUCTIONAL_COMPONENT = "instructional_component";
-    String ASSET_CLASS_INSTRUCTIONAL_COMPONENT_VALUES = "activity_exercise=Activity: Exercise|activity_lab=Activity: Experiment/Lab|activity_worksheet=Activity: Graphic Organizer/Worksheet|activity_problemset=Activity: Problem Set|book_fiction=Book: Fiction|book_nonfiction=Book: Non-Fiction|book_readings=Book: Readings/Excerpts|book_textbook=Book: Text Book|curriculum_assessment=Curriculum: Assessment/Test|curriculum_course=Curriculum: Full Course|curriculum_unit=Curriculum: Unit|curriculum_lp=Curriculum: Lesson Plan|curriculum_scope=Curriculum: Scope & Sequence|curriculum_standards=Curriculum: Standards|curriculum_syllabus=Curriculum: Syllabus|curriculum_workbook=Curriulum: Workbook|resource_animation=Resource: Animation/Simulation|resource_diagram=Resource: Diagram/Illustration|resource_index=Resource: Index/List|resource_photograph=Resource: Photograph|resource_presentation=Resource: Presentation/Slide Show|resource_collection=Resource: Reference Collection|resource_script=Resource: Script/Transcript|resource_speech=Resource: Speech/Lecture/Song|resource_table=Resource: Table/Graph/Chart|other=Other";
-    
+    String ASSET_CLASS_INSTRUCTIONAL_COMPONENT_VALUES = "choose=Choose from list...|activity=Activity|animation=Animation/Simulation|application=Application|assesment=Assessment/Test|audio=Audio/Voice/Song|book=Book|textbook=Book Text Book|course=Course/Curriculum|collection=Collection (of related assets)|diagram=Diagram/Illustration|exercise=Exercise/Problem Set|experiment=Experiment/Lab|graph=Graph/Table|graphic=Graphic/Image|index=Index|image=Image/Photograph|learningobject=Learning Object (SCORM)|lessonplan=Lesson Plan|lecture=Lecture|presentation=Presentation/Slide Show|professionaldevelopment=Professional Development|resourceslist=Resource List/Link(s)|text=Text/Notes/Transcript|video=Video|website=Web Site|worksheet=Worksheet/Graphic Organizer|other=Other";
+ 
     String ASSET_CLASS_LANGUAGE = "language";
-    String ASSET_CLASS_LANGUAGE_VALUES = "eng=English|zho=Chinese|nld=Dutch|fra=French|deu=German|ita=Italian|jpn=Japanese|kor=Korean|por=Portuguese|rus=Russian|spa=Spanish";
+    String ASSET_CLASS_LANGUAGE_VALUES = "eng=English|ind=Bahasa Indonesia|zho=Chinese|nld=Dutch|fra=French|deu=German|hin=Hindi|ita=Italian|jpn=Japanese|kor=Korean|nep=Nepali|por=Portuguese|rus=Russian|sin=Sinhalese|spa=Spanish|tam=Tamil|---=Other";
     String ASSET_CLASS_HIDDEN_FROM_SEARCH = "hidden_from_search";
 
     String ASSET_CATEGORY_UNKNOWN = "unknown";
     String ASSET_CATEGORY_TEXT = "text";
-    String ASSET_CATEGORY_WIKI = "wiki";
-    String ASSET_CATEGORY_HTML = "html";
-    String ASSET_CATEGORY_XML = "xml";
-    String ASSET_CATEGORY_LATEX = "latex";
     String ASSET_CATEGORY_DOCUMENT = "document";
     String ASSET_CATEGORY_IMAGE = "image";
     String ASSET_CATEGORY_AUDIO= "audio";
@@ -133,6 +129,7 @@ public interface Constants {
 
     String TEXT_ASSET_SYNTAX = "syntax";
     String TEXT_ASSET_SYNTAX_TEXT = "text";
+    String TEXT_ASSET_SYNTAX_CBOE = "cboe";
     String TEXT_ASSET_SYNTAX_XWIKI1 = "xwiki/1.0";
     String TEXT_ASSET_SYNTAX_XWIKI2 = "xwiki/2.0";
     String TEXT_ASSET_SYNTAX_XHTML1 = "xhtml/1.0";
@@ -140,18 +137,19 @@ public interface Constants {
     /**
      * Class TextAssetClass
      */
-    String DOCUMENT_ASSET_CLASS = "CurrikiCode.DocumentAssetClass";
-    String DOCUMENT_ASSET_ALT_TEXT = "alt_text";
-    String DOCUMENT_ASSET_CAPTION_TEXT = "caption_text";
-    String DOCUMENT_ASSET_FILE_TYPE = "file_type";
-    String DOCUMENT_ASSET_FILE_SIZE = "file_size";
+    String ATTACHMENT_ASSET_CLASS = "CurrikiCode.AttachmentAssetClass";
+    String ATTACHMENT_ASSET_ALT_TEXT = "alt_text";
+    String ATTACHMENT_ASSET_CAPTION_TEXT = "caption_text";
+    String ATTACHMENT_ASSET_FILE_TYPE = "file_type";
+    String ATTACHMENT_ASSET_FILE_SIZE = "file_size";
 
 
     /**
      * Class ImageAssetClass
      */
-    // No data in class, so no class needed
-    // String IMAGE_ASSET_CLASS = "CurrikiCode.ImageAssetClass";
+    String IMAGE_ASSET_CLASS = "CurrikiCode.ImageAssetClass";
+    String IMAGE_ASSET_WIDTH = "width";
+    String IMAGE_ASSET_HEIGHT = "height";
 
     /**
      * Class AudioAssetClass
@@ -283,6 +281,6 @@ public interface Constants {
     String OLD_CATEGORY_UNKNOWN = "unknown";
     String OLD_CATEGORY_VIDITALK_VIDEO = OLD_CATEGORY_AUDIO;
     // TODO: What about the list used by GWT:  audio, text, image, link ?
-    
+
 
 }
