@@ -1043,6 +1043,7 @@ public class Asset extends CurrikiDocument {
                 updateObject(newImageAssetObject, oldImageAssetObject, Constants.IMAGE_ASSET_HEIGHT);
             }
             // we need to remove the old image object
+
             removeObject(oldImageAssetObject);
         } else if (getObject(Constants.OLD_VIDITALK_CLASS)!=null) {
             newCategory = Constants.ASSET_CATEGORY_VIDEO;
@@ -1080,8 +1081,8 @@ public class Asset extends CurrikiDocument {
         // We need to do this either because the document use to be declared as a Document
         // We also need to do this if the document is not a text asset and there is an attachment
         Object newDocumentAssetObject = getObject(Constants.ATTACHMENT_ASSET_CLASS);
-        if ((!newCategory.equals(Constants.ASSET_CATEGORY_TEXT)
-                && (getAttachmentList().size() > 0) || (newDocumentAssetObject!=null)))
+        if ((!Constants.ASSET_CATEGORY_TEXT.equals(newCategory)
+                && (getAttachmentList().size() > 0)) || (newDocumentAssetObject!=null))
         {
             updateObject(newDocumentAssetObject, oldAssetObject, Constants.ATTACHMENT_ASSET_ALT_TEXT, Constants.OLD_ASSET_CLASS_ALT_TEXT);
             updateObject(newDocumentAssetObject, oldAssetObject, Constants.ATTACHMENT_ASSET_CAPTION_TEXT, Constants.OLD_ASSET_CLASS_CAPTION_TEXT);
