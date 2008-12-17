@@ -16,6 +16,18 @@ var Data = Curriki.data.toc;
 Toc.init = function(){
 	Toc.vars = {};
 
+	Toc.getQueryParam = function(name) {
+		name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+		var regexS = "[\\?&]"+name+"=([^&#]*)";
+		var regex = new RegExp(regexS);
+		var results = regex.exec(window.location.href);
+		if (results == null) {
+			return "";
+		} else {
+			return results[1];
+		}
+	};
+
 	Curriki.ui.treeLoader.TOC = function(config){
 		Curriki.ui.treeLoader.TOC.superclass.constructor.call(this);
 	};
@@ -86,7 +98,11 @@ console.log('createNodeTOC: End ',childInfo);
 				'beforeclick':{
 					fn:function(node, e){
 						var bc = node.getPath().replace(/\//g, ';');
-						window.location.href = '/xwiki/bin/view/'+node.id.replace('.', '/')+'?bc='+bc;
+						var viewer = Toc.getQueryParam('viewer');
+						if (viewer !== "") {
+							viewer = '&viewer='+viewer;
+						}
+						window.location.href = '/xwiki/bin/view/'+node.id.replace('.', '/')+'?bc='+bc+viewer;
 						return false;
 					}
 				}
