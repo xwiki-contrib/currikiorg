@@ -98,7 +98,7 @@ console.log('createNodeTOC: End ',childInfo);
 				'beforeclick':{
 					fn:function(node, e){
 						var bc = node.getPath().replace(/\//g, ';');
-						var viewer = Toc.getQueryParam('viewer');
+						var viewer = Curriki.module.toc.getQueryParam('viewer');
 						if (viewer !== "") {
 							viewer = '&viewer='+viewer;
 						}
