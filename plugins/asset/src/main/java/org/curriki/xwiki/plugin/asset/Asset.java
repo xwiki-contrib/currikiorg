@@ -1056,8 +1056,10 @@ public class Asset extends CurrikiDocument {
                 use(oldVideoAssetObject);
                 String videoId = (String) getValue(Constants.OLD_VIDITALK_CLASS_VIDEO_ID);
                 use(newVideoAssetObject);
-                if (videoId!=null)
-                 set(Constants.VIDEO_ASSET_ID, "viditalk:" + videoId);
+                if (videoId!=null) {
+                    set(Constants.VIDEO_ASSET_ID, videoId);
+                    set(Constants.VIDEO_ASSET_PARTNER, Constants.VIDEO_ASSET_PARTNER_VIDITALK);
+                }          
                 removeObject(oldVideoAssetObject);
             }
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_AUDIO)) {

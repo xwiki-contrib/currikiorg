@@ -565,6 +565,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         BaseClass bclass = doc.getxWikiClass();
         bclass.setName(Constants.VIDEO_ASSET_CLASS);
 
+        needsUpdate |= bclass.addStaticListField(Constants.VIDEO_ASSET_PARTNER, Constants.VIDEO_ASSET_PARTNER, 1, false,
+                      Constants.VIDEO_ASSET_PARTNER_VALUES);        
         needsUpdate |= bclass.addTextField(Constants.VIDEO_ASSET_ID, Constants.VIDEO_ASSET_ID, 30);
 
         String content = doc.getContent();
@@ -594,6 +596,9 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         bclass.setName(Constants.ARCHIVE_ASSET_CLASS);
 
         needsUpdate |= bclass.addTextField(Constants.ARCHIVE_ASSET_START_FILE, Constants.ARCHIVE_ASSET_START_FILE, 60);
+        needsUpdate |= bclass.addStaticListField(Constants.ARCHIVE_ASSET_TYPE, Constants.ARCHIVE_ASSET_TYPE, 1, false,
+                      Constants.ARCHIVE_ASSET_TYPE_VALUES);
+
 
         String content = doc.getContent();
         if ((content==null)||(content.equals(""))) {
@@ -651,6 +656,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         bclass.setName(Constants.EXTERNAL_ASSET_CLASS);
 
         needsUpdate |= bclass.addTextField(Constants.EXTERNAL_ASSET_LINK, Constants.EXTERNAL_ASSET_LINK, 80);
+        needsUpdate |= bclass.addTextField(Constants.EXTERNAL_ASSET_LINKTEXT, Constants.EXTERNAL_ASSET_LINKTEXT, 80);
 
         String content = doc.getContent();
         if ((content==null)||(content.equals(""))) {
@@ -679,7 +685,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         needsUpdate |= bclass.addStaticListField(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX, 1, false,
                 Constants.TEXT_ASSET_SYNTAX_TEXT  + "|" + Constants.TEXT_ASSET_SYNTAX_XHTML1
-                        + "|" + Constants.TEXT_ASSET_SYNTAX_XWIKI1 + "|" + Constants.TEXT_ASSET_SYNTAX_XWIKI2 + "|" + Constants.TEXT_ASSET_SYNTAX_CBOE);
+                        + "|" + Constants.TEXT_ASSET_SYNTAX_XWIKI1 + "|" + Constants.TEXT_ASSET_SYNTAX_XWIKI2);
 
         String content = doc.getContent();
         if ((content==null)||(content.equals(""))) {

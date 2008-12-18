@@ -61,7 +61,7 @@ public interface Constants {
     String ASSET_CLASS_EDUCATIONAL_LEVEL_VALUES = "prek=Preschool / Ages 0-4|gr-k-2=Gr. K-2 / Ages 5-7|gr-3-5=Gr. 3-5 / Ages 8-10|gr-6-8=Gr. 6-8 / Ages 11-13|gr-9-10=Gr. 9-10 / Ages 14-16|gr-11-12=Gr. 11-12 / Ages 16-18|college_and_beyond=College and Beyond|professional_development=Professional Development|special_education=Special Education|na=Other";
 
     String ASSET_CLASS_INSTRUCTIONAL_COMPONENT = "instructional_component";
-    String ASSET_CLASS_INSTRUCTIONAL_COMPONENT_VALUES = "other=Choose from list|activity_assignment=Activity: Assignment/Homework|activity_exercise=Activity: Exercise|activity_lab=Activity: Experiment/Lab|activity_game=Activity: Game|activity_worksheet=Activity: Graphic Organizer/Worksheet|activity_problemset=Activity: Problem Set|activity_webquest=Activity: WebQuest|book_fiction=Book: Fiction|book_nonfiction=Book: Non-Fiction|book_readings=Book: Readings/Excerpts|book_textbook=Book: Text Book|curriculum_assessment=Curriculum: Assessment/Test|curriculum_course=Curriculum: Full Course|curriculum_unit=Curriculum: Unit|curriculum_lp=Curriculum: Lesson Plan|curriculum_rubric=Curriculum: Rubric|curriculum_scope=Curriculum: Scope & Sequence|curriculum_standards=Curriculum: Standards|curriculum_studyguide=Curriculum: Study Guide/Notes|curriculum_syllabus=Curriculum: Syllabus|curriculum_tutorial=Curriculum: Tutorial|curriculum_workbook=Curriulum: Workbook|resource_animation=Resource: Animation/Simulation|resource_diagram=Resource: Diagram/Illustration|resource_glossary=Resource: Glossary/Vocabulary List|resource_index=Resource: Index/List|resource_photograph=Resource: Photograph|resource_presentation=Resource: Presentation/Slide Show|resource_collection=Resource: Reference Collection|resource_script=Resource: Script/Transcript|resource_speech=Resource: Speech/Lecture/Song|resource_table=Resource: Table/Graph/Chart|resource_template=Resource: Template|resource_webcast=Resource: Webcast/Podcast|other=Other";
+    String ASSET_CLASS_INSTRUCTIONAL_COMPONENT_VALUES = "other=Choose from list|activity_assignment=Activity: Assignment/Homework|activity_exercise=Activity: Exercise|activity_lab=Activity: Experiment/Lab|activity_game=Activity: Game|activity_worksheet=Activity: Graphic Organizer/Worksheet|activity_problemset=Activity: Problem Set|activity_webquest=Activity: WebQuest|book_fiction=Book: Fiction|book_nonfiction=Book: Non-Fiction|book_readings=Book: Readings/Excerpts|book_textbook=Book: Text Book|curriculum_assessment=Curriculum: Assessment/Test|curriculum_course=Curriculum: Full Course|curriculum_unit=Curriculum: Unit|curriculum_lp=Curriculum: Lesson Plan|curriculum_rubric=Curriculum: Rubric|curriculum_scope=Curriculum: Scope & Sequence|curriculum_standards=Curriculum: Standards|curriculum_studyguide=Curriculum: Study Guide/Notes|curriculum_syllabus=Curriculum: Syllabus|curriculum_tutorial=Curriculum: Tutorial|curriculum_workbook=Curriulum: Workbook|resource_animation=Resource: Animation/Simulation|resource_diagram=Resource: Diagram/Illustration|resource_glossary=Resource: Glossary/Vocabulary List|resource_index=Resource: Index/List|resource_photograph=Resource: Photograph|resource_presentation=Resource: Video/Presentation/Slides|resource_collection=Resource: Reference Collection|resource_script=Resource: Script/Transcript|resource_speech=Resource: Audio/Speech/Lecture|resource_table=Resource: Table/Graph/Chart|resource_template=Resource: Template|resource_webcast=Resource: Webcast/Podcast";
  
     String ASSET_CLASS_LANGUAGE = "language";
     String ASSET_CLASS_LANGUAGE_VALUES = "eng=English|ind=Bahasa Indonesia|zho=Chinese|nld=Dutch|fra=French|deu=German|hin=Hindi|ita=Italian|jpn=Japanese|kor=Korean|nep=Nepali|por=Portuguese|rus=Russian|sin=Sinhalese|spa=Spanish|tam=Tamil|---=Other";
@@ -162,12 +162,17 @@ public interface Constants {
      */
     String VIDEO_ASSET_CLASS = "CurrikiCode.VideoAssetClass";
     String VIDEO_ASSET_ID = "id";
+    String VIDEO_ASSET_PARTNER = "partner";
+    String VIDEO_ASSET_PARTNER_VIDITALK = "viditalk";
+    String VIDEO_ASSET_PARTNER_VALUES = "other=Other|viditalk=Viditalk";
 
     /**
      * Class ArchiveAssetClass
      */
     String ARCHIVE_ASSET_CLASS = "CurrikiCode.ArchiveAssetClass";
     String ARCHIVE_ASSET_START_FILE = "startfile";
+    String ARCHIVE_ASSET_TYPE = "type";
+    String ARCHIVE_ASSET_TYPE_VALUES = "zip=Zip: Generic Archive|zipweb=Zip: Web Site Archive|scoims=SCO/IMS Content Package|imscc=IMS Common Cartridge|xo=XO Content Bunder";
 
     /**
      * Class InteractiveAssetClass
@@ -180,7 +185,8 @@ public interface Constants {
      */
     String EXTERNAL_ASSET_CLASS = "CurrikiCode.ExternalAssetClass";
     String EXTERNAL_ASSET_LINK = "link";
- 
+    String EXTERNAL_ASSET_LINKTEXT = "linktext";
+
     /**
      * Groups
      */
