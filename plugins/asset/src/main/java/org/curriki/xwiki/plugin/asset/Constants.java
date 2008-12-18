@@ -142,6 +142,7 @@ public interface Constants {
     String ATTACHMENT_ASSET_CAPTION_TEXT = "caption_text";
     String ATTACHMENT_ASSET_FILE_TYPE = "file_type";
     String ATTACHMENT_ASSET_FILE_SIZE = "file_size";
+    String ATTACHMENT_ASSET_FILE_TYPE_XO = "xo";
 
 
     /**
@@ -173,6 +174,12 @@ public interface Constants {
     String ARCHIVE_ASSET_START_FILE = "startfile";
     String ARCHIVE_ASSET_TYPE = "type";
     String ARCHIVE_ASSET_TYPE_VALUES = "zip=Zip: Generic Archive|zipweb=Zip: Web Site Archive|scoims=SCO/IMS Content Package|imscc=IMS Common Cartridge|xo=XO Content Bunder";
+    String ARCHIVE_ASSET_TYPE_ZIP = "zip";
+    String ARCHIVE_ASSET_TYPE_ZIPWEB = "zipweb";
+    String ARCHIVE_ASSET_TYPE_SCOIMS = "scoims";
+    String ARCHIVE_ASSET_TYPE_IMSCC = "imscc";
+    String ARCHIVE_ASSET_TYPE_XO = "xo";
+
 
     /**
      * Class InteractiveAssetClass
