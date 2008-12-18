@@ -129,7 +129,6 @@ public interface Constants {
 
     String TEXT_ASSET_SYNTAX = "syntax";
     String TEXT_ASSET_SYNTAX_TEXT = "text";
-    String TEXT_ASSET_SYNTAX_CBOE = "cboe";
     String TEXT_ASSET_SYNTAX_XWIKI1 = "xwiki/1.0";
     String TEXT_ASSET_SYNTAX_XWIKI2 = "xwiki/2.0";
     String TEXT_ASSET_SYNTAX_XHTML1 = "xhtml/1.0";

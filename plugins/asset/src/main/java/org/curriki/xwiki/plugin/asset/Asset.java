@@ -1027,7 +1027,7 @@ public class Asset extends CurrikiDocument {
                 } else if (type==1) {
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XHTML1);
                 } else if (type==2) {
-                    set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_CBOE);
+                    set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_XWIKI1);
                 } else {
                     set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
                 }
