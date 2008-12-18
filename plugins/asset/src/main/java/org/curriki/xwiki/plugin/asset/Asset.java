@@ -967,6 +967,9 @@ public class Asset extends CurrikiDocument {
             if (oldCompositeAssetObject!=null) {
                 removeObject(oldCompositeAssetObject);
                 updateObject(newCompositeAssetObject, oldCompositeAssetObject, Constants.COMPOSITE_ASSET_CLASS_TYPE);
+                use(newCompositeAssetObject);
+                if (Constants.OLD_COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER.equals(getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE)))
+                    set(Constants.COMPOSITE_ASSET_CLASS_TYPE, Constants.COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER);
             } else {
                 if (LOG.isErrorEnabled())
                     LOG.error("CURRIKI ASSET CONVERTER ERROR: asset declared collection has no composite class for asset " + getFullName());

@@ -112,7 +112,7 @@ public interface Constants {
       */
     String COMPOSITE_ASSET_CLASS = "CurrikiCode.CompositeAssetClass";
     String COMPOSITE_ASSET_CLASS_TYPE = "type";
-    String COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER = "curriki_document";
+    String COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER = "folder";
     String COMPOSITE_ASSET_CLASS_TYPE_COLLECTION = "collection";
     String COMPOSITE_ASSET_CLASS_TYPE_ROOT_COLLECTION = "root_collection";
 
@@ -243,6 +243,7 @@ public interface Constants {
     String OLD_ASSET_CLASS_CAPTION_TEXT = "caption_text";
 
     String OLD_COMPOSITE_ASSET_CLASS = "XWiki.CompositeAssetClass";
+    String OLD_COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER = "curriki_document";    
 
     String OLD_SUBASSET_CLASS = "XWiki.SubAssetClass";
 
