@@ -27,9 +27,9 @@ public class TextassetResource extends BaseResource {
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
         String textId = (String) request.getAttributes().get("textId");
-        if (!textId.equals("0")) {
-            throw error(Status.CLIENT_ERROR_NOT_FOUND, "An asset may only have one viditalk movie");
-        }
+        // if (!textId.equals("0")) {
+        //    throw error(Status.CLIENT_ERROR_NOT_FOUND, "An asset may only have one viditalk movie");
+        // }
 
         TextAsset asset = null;
         try {
@@ -38,17 +38,14 @@ public class TextassetResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
-            throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset " + assetName + " not found.");
         }
 
         String content = null;
         String syntax = null;
-        String category = null;
-        Long type = null;
         try {
             content = asset.getText();
             syntax = asset.getSyntax();
-            category = asset.getCategory();
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No texts found for "+assetName);
         }
@@ -56,7 +53,6 @@ public class TextassetResource extends BaseResource {
         JSONObject json = new JSONObject();
         json.put("text", content);
         json.put("syntax", syntax);
-        json.put("category", category);
 
         return formatJSON(json, variant);
     }

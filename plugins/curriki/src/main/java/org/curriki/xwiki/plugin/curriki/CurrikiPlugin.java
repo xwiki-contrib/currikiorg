@@ -18,6 +18,7 @@ import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.CollectionSpace;
 import org.curriki.xwiki.plugin.asset.Constants;
+import org.curriki.xwiki.plugin.asset.DefaultAssetManager;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 import com.xpn.xwiki.XWikiContext;
@@ -56,6 +57,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
     @Override public void init(XWikiContext context) {
         super.init(context);
+
         // Creating classes
         try {
             // we need to create the asset classes if they don't exist
@@ -73,6 +75,14 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         } catch (XWikiException e) {
             if (LOG.isErrorEnabled())
                 LOG.error("Error generating asset classes", e);
+        }
+
+        try {
+            // init the asset type managers
+            DefaultAssetManager.initAssetSubTypes(context);
+        } catch (Exception e) {
+            if (LOG.isErrorEnabled())
+                LOG.error("Error initing sub asset type classes", e);
         }
 
         // Insert a notification so that we can handle rollback and convert assets
@@ -118,6 +128,10 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         throw new AssetException("Asset "+assetName+" could not be found");
         */
+    }
+
+    public Asset fetchAssetSubclassAs(String assetName, Class<? extends Asset> classType, XWikiContext context) throws XWikiException {
+        return Asset.fetchAsset(assetName, context).subclassAs(classType);
     }
 
     public List<Property> fetchAssetMetadata(String assetName, XWikiContext context) throws XWikiException {
@@ -448,7 +462,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CLASS_CATEGORY, 1, false,
                 Constants.ASSET_CATEGORY_TEXT  + "|" + Constants.ASSET_CATEGORY_IMAGE
                         + "|" + Constants.ASSET_CATEGORY_AUDIO + "|" + Constants.ASSET_CATEGORY_VIDEO + "|" + Constants.ASSET_CATEGORY_INTERACTIVE + "|" + Constants.ASSET_CATEGORY_ARCHIVE  + "|" + Constants.ASSET_CATEGORY_DOCUMENT + "|" + Constants.ASSET_CATEGORY_EXTERNAL
-                        + "|" + Constants.ASSET_CATEGORY_COLLECTION  + "|" + Constants.ASSET_CATEGORY_UNKNOWN);
+                        + "|" + Constants.ASSET_CATEGORY_COLLECTION  + "|" + Constants.ASSET_CATEGORY_ATTACHMENT + "|" + Constants.ASSET_CATEGORY_UNKNOWN);
         needsUpdate |= bclass.addDBTreeListField(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, Constants.ASSET_CLASS_FRAMEWORK_ITEMS, 10, true, Constants.ASSET_CLASS_FRAMEWORK_ITEMS_QUERY);
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setCache(true);
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparators("|");

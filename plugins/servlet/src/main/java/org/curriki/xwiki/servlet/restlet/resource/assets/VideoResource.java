@@ -14,8 +14,8 @@ import com.xpn.xwiki.XWikiException;
 
 /**
  */
-public class ViditalkResource extends BaseResource {
-    public ViditalkResource(Context context, Request request, Response response) {
+public class VideoResource extends BaseResource {
+    public VideoResource(Context context, Request request, Response response) {
         super(context, request, response);
         setReadable(true);
         defaultVariants();

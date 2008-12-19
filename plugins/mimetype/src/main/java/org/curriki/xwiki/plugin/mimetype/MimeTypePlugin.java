@@ -136,5 +136,25 @@ public class MimeTypePlugin  extends XWikiDefaultPlugin implements XWikiPluginIn
         return category;
     }
 
+    public String getDisplayer(String category, String filetype, XWikiContext context) {
+        String key;
+        String displayer = null;
+
+        if (filetype!=null) {
+            key = "displayer_" + filetype;
+            displayer = mimetypeConfig.getProperty(key);
+        }
+
+        if ((displayer==null||displayer.equals(""))&&(category!=null)) {
+            key = "displayer_" + category;
+            displayer = mimetypeConfig.getProperty(key);
+        }
+
+        if ((displayer==null||displayer.equals(""))) {
+            displayer = category;
+        }
+
+        return displayer;
+    }
 
 }

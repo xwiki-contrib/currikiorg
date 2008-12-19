@@ -22,5 +22,5 @@ package org.curriki.xwiki.plugin.mimetype;
 public interface MimeTypeConstant {
     public final static String PLUGIN_NAME = "mime_type";
     public final static String MIMETYPE_CONFIG = "CurrikiCode.MimeTypeConfig";
-    public final static String MIMETYPE_CATEGORY_UNKNOWN = "unknown";
+    public final static String MIMETYPE_CATEGORY_UNKNOWN = "attachment";
 }

@@ -68,6 +68,7 @@ public interface Constants {
     String ASSET_CLASS_HIDDEN_FROM_SEARCH = "hidden_from_search";
 
     String ASSET_CATEGORY_UNKNOWN = "unknown";
+    String ASSET_CATEGORY_ATTACHMENT = "attachment";
     String ASSET_CATEGORY_TEXT = "text";
     String ASSET_CATEGORY_DOCUMENT = "document";
     String ASSET_CATEGORY_IMAGE = "image";

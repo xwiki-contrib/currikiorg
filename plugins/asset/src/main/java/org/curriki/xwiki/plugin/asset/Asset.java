@@ -22,26 +22,23 @@ package org.curriki.xwiki.plugin.asset;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.VelocityContext;
 import org.curriki.xwiki.plugin.asset.attachment.*;
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
 import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
-import org.curriki.xwiki.plugin.asset.external.ExternalAsset;
-import org.curriki.xwiki.plugin.asset.external.VideoAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
+import org.curriki.xwiki.plugin.asset.text.TextAssetManager;
 import org.curriki.xwiki.plugin.asset.text.TextAsset;
 import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
-import com.xpn.xwiki.plugin.image.ImagePlugin;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiAttachment;
@@ -52,6 +49,7 @@ import com.xpn.xwiki.api.Object;
 
 public class Asset extends CurrikiDocument {
     private static final Log LOG = LogFactory.getLog(Asset.class);
+
 
     public Asset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
@@ -76,6 +74,61 @@ public class Asset extends CurrikiDocument {
         obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);
     }
 
+    /**
+     * This functions will display the asset including a fallback system
+     * For a specific mode. This function can be overidden for a specific asset type
+     * Otherwise it will use a default rule system to find the appropriate template
+     * @return
+     */
+    public String displayAsset(String mode) {
+        String result = "";
+        Asset asset = null;
+
+        // we should subclass the asset to have access
+        // to more functions
+        try {
+            asset = subclassAs(getAssetClass());
+        } catch (XWikiException e) {
+            asset = this;
+        }
+
+        java.lang.Object previousAsset = null;
+        VelocityContext vcontext = null;
+        try {
+            vcontext = (VelocityContext) context.get("vcontext");
+            previousAsset = vcontext.get("asset");
+            vcontext.put("asset", asset);
+            // run the displayer
+            result = asset.displayAssetTemplate(mode);
+        } finally {
+            if (vcontext !=null) {
+                if (previousAsset==null)
+                    vcontext.remove("asset");
+                else
+                    vcontext.put("asset", previousAsset);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * This functions will display the asset including a fallback system
+     * For a specific mode. This function can be overidden for a specific asset type
+     * Otherwise it will use a default rule system to find the appropriate template
+     * @return
+     */
+    protected String displayAssetTemplate(String mode) {
+        MimeTypePlugin mimePlugin = getMimeTypePlugin();
+        String category = getCategory();
+        String displayer = mimePlugin.getDisplayer(category, null, context);
+        String result = context.getWiki().parseTemplate("assets/displayers/" + displayer  + "_" + mode + ".vm", context);
+        if (result.equals(""))
+           result =  context.getWiki().parseTemplate("assets/displayers/" + category + "_" + mode + ".vm", context);
+        if (result.equals(""))
+           result =  context.getWiki().parseTemplate("assets/displayers/" + mode + ".vm", context);
+        return result;
+    }
+        
     public void saveDocument(String comment) throws XWikiException {
         saveDocument(comment, false);
     }
@@ -253,7 +306,7 @@ public class Asset extends CurrikiDocument {
         }
     }
 
-    public Class<? extends Asset> determineAssetSubtype() {
+    public Class<? extends Asset> getAssetClass() {
         if (hasAccessLevel("view")) {
             if (isFolder()){
                 if (isRootCollection()){
@@ -272,27 +325,14 @@ public class Asset extends CurrikiDocument {
                 return InvalidAsset.class;
             }
 
-            // Check specific objects to find displayer
-            if (category.equals(Constants.ASSET_CATEGORY_TEXT)) {
-                return TextAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_EXTERNAL)) {
-                return ExternalAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_IMAGE)) {
-                return ImageAsset.class;
-            }  else  if (category.equals(Constants.ASSET_CATEGORY_AUDIO)) {
-                return AudioAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_VIDEO)) {
-                return VideoAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_INTERACTIVE)) {
-                return InteractiveAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_ARCHIVE)) {
-                return ArchiveAsset.class;
-            } else  if (category.equals(Constants.ASSET_CATEGORY_DOCUMENT)) {
-                return DocumentAsset.class;
+            // call the sub type asset manager to get more details
+            AssetManager assetManager = (AssetManager) DefaultAssetManager.getAssetSubTypeManager(category);
+            if (assetManager!=null) {
+                return assetManager.getAssetClass();
             } else {
                 // Last is just an attachment item
                 if (doc.getAttachmentList().size() > 0) {
-                    return DocumentAsset.class;
+                    return AttachmentAsset.class;
                 }
                 return Asset.class;
             }
@@ -369,7 +409,7 @@ public class Asset extends CurrikiDocument {
         }
 
         // Add assetType to metadata
-        Class assetType = determineAssetSubtype();
+        Class assetType = getAssetClass();
         String fullAssetType = assetType.getCanonicalName();
         BaseStringProperty baseProp = new BaseStringProperty();
         baseProp.setName("fullAssetType");
@@ -408,7 +448,7 @@ public class Asset extends CurrikiDocument {
         Class returnClass;
 
         // Make sure the determined type is a subclass of the wanted type
-        Class<? extends Asset> assetType = determineAssetSubtype();
+        Class<? extends Asset> assetType = getAssetClass();
         if (!moreSpecific) {
             if (wantedClass == null) {
                 // Return as whatever subtype it is
@@ -538,10 +578,21 @@ public class Asset extends CurrikiDocument {
         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, context.getWiki().getLocalUserName(context.getUser(), null, false, context));
     }
 
+    /**
+     * Make a folder in the current asset
+     * @return
+     * @throws XWikiException
+     */
     public FolderCompositeAsset makeFolder() throws XWikiException {
         return makeFolder(null);
     }
 
+    /**
+     * Make a folder in the current asset
+     * @param page
+     * @return
+     * @throws XWikiException
+     */
     public FolderCompositeAsset makeFolder(String page) throws XWikiException {
         assertCanEdit();
         FolderCompositeAsset asset = subclassAs(FolderCompositeAsset.class);
@@ -553,10 +604,21 @@ public class Asset extends CurrikiDocument {
         return asset;
     }
 
+    /**
+     * Make a collection in the current asset
+     * @return
+     * @throws XWikiException
+     */
     public CollectionCompositeAsset makeCollection() throws XWikiException {
         return makeCollection(null);
     }
 
+    /**
+     * Make a composite collection in the current asset
+     * @param page
+     * @return
+     * @throws XWikiException
+     */
     public CollectionCompositeAsset makeCollection(String page) throws XWikiException {
         assertCanEdit();
         CollectionCompositeAsset asset = subclassAs(CollectionCompositeAsset.class);
@@ -568,36 +630,15 @@ public class Asset extends CurrikiDocument {
         return asset;
     }
 
-    public ExternalAsset makeExternal(String link) throws XWikiException {
+    /**
+     * Make an attachment asset based on the type of attachment
+     * This will call the appropriate subtype asset manager for further processing
+     * @return an AttachmentAsset object
+     * @throws XWikiException
+     */
+    public AttachmentAsset processAttachment() throws XWikiException {
         assertCanEdit();
-        ExternalAsset asset = subclassAs(ExternalAsset.class);
-        asset.addLink(link);
-        saveDocument(context.getMessageTool().get("curriki.comment.createlinksourceasset"), true);
-        return asset;
-    }
-
-    public VideoAsset makeVIDITalk(String videoId) throws XWikiException {
-        assertCanEdit();
-        VideoAsset asset = subclassAs(VideoAsset.class);
-
-        asset.addVideoId("viditalk:" + videoId);
-        saveDocument(context.getMessageTool().get("curriki.comment.createviditalksourceasset"), true);
-        return asset;
-    }
-
-    public TextAsset makeTextAsset(String category, String syntax, String content) throws XWikiException {
-        assertCanEdit();
-        TextAsset asset = subclassAs(TextAsset.class);
-
-        asset.addText(syntax, content);
-        asset.setCategory(category);
-        saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"), true);
-        return asset;
-    }
-
-    public DocumentAsset processAttachment() throws XWikiException {
-        assertCanEdit();
-        DocumentAsset asset = subclassAs(DocumentAsset.class);
+        AttachmentAsset asset = subclassAs(AttachmentAsset.class);
 
         if (doc.getAttachmentList().size() > 0) {
             XWikiAttachment attach = doc.getAttachmentList().get(0);
@@ -608,53 +649,38 @@ public class Asset extends CurrikiDocument {
         return asset;
     }
 
+    /**
+     * This functions determines the file type and the category based on an attachment
+     * @param attachment
+     * @throws XWikiException
+     */
     protected void determineFileTypeAndCategory(XWikiAttachment attachment) throws XWikiException {
         String filename = attachment.getFilename();
         String extension = (filename.lastIndexOf(".") != -1 ? filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(): null);
-        MimeTypePlugin mimePlugin = (MimeTypePlugin) context.getWiki().getPlugin(MimeTypePlugin.PLUGIN_NAME, context);
+        MimeTypePlugin mimePlugin = getMimeTypePlugin();
         String filetype =  mimePlugin.getFileType(extension, context);
         String category = mimePlugin.getCategory(filetype, context);
         XWikiDocument assetDoc = getDoc();
 
+        // set the attachment information
         BaseObject documentObject = assetDoc.getObject(Constants.ATTACHMENT_ASSET_CLASS, true, context);
         documentObject.setStringValue(Constants.ATTACHMENT_ASSET_FILE_TYPE, filetype);
         documentObject.setLongValue(Constants.ATTACHMENT_ASSET_FILE_SIZE, attachment.getFilesize());
 
-        // We need to add the class for certain asset types if they do not exist yet
-        if (category.equals(Constants.ASSET_CATEGORY_ARCHIVE)) {
-            // We need to set the archive type for the cases we can
-            // TODO: auto detection of knows package types.
-            BaseObject archiveObject = assetDoc.getObject(Constants.ARCHIVE_ASSET_CLASS, true, context);
-             String archiveType = Constants.ARCHIVE_ASSET_TYPE_ZIP;
-             if ((filetype!=null) && filetype.equals(Constants.ATTACHMENT_ASSET_FILE_TYPE_XO))
-              archiveType = Constants.ARCHIVE_ASSET_TYPE_XO;
-
-             archiveObject.setStringValue(Constants.ARCHIVE_ASSET_TYPE, archiveType);
-        }
-
-
-        if (category.equals(Constants.ASSET_CATEGORY_IMAGE)) {
-            getObject(Constants.IMAGE_ASSET_CLASS, true);
-
-            ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin(ImagePlugin.PLUGIN_NAME, context);
-
-            BaseObject imageObject = assetDoc.getObject(Constants.IMAGE_ASSET_CLASS, true, context);
-
-            if (imgPlugin != null) {
-                try {
-                    int height = imgPlugin.getHeight(attachment, context);
-                    int width = imgPlugin.getWidth(attachment, context);
-                    imageObject.setIntValue("height", height);
-                    imageObject.setIntValue("width", width);
-                } catch (InterruptedException ie) {
-                    // Ignore exception
-                }
-            }
-        }
-
-
+        // set the category
         BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
         assetObj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);
+
+        // call the sub type asset manager to get more details
+        AssetManager assetManager = DefaultAssetManager.getAssetSubTypeManager(category);
+        if (assetManager!=null) {
+            assetManager.updateSubAssetClass(assetDoc, filetype, category, attachment, context);
+        }
+    }
+
+    protected MimeTypePlugin getMimeTypePlugin() {
+        MimeTypePlugin mimePlugin = (MimeTypePlugin) context.getWiki().getPlugin(MimeTypePlugin.PLUGIN_NAME, context);
+        return mimePlugin;
     }
 
     public Boolean isPublished() {
@@ -725,7 +751,7 @@ public class Asset extends CurrikiDocument {
 
     public boolean validate() throws XWikiException {
         // Has the asset been subtyped ?
-        if (determineAssetSubtype().equals(Asset.class)) {
+        if (getAssetClass().equals(Asset.class)) {
             throw new AssetException("This asset is not complete.");
         }
 
@@ -906,7 +932,8 @@ public class Asset extends CurrikiDocument {
     }
 
 
-   /** 
+   /**
+    * Data Model migration code
     * Determines if an asset is in the latest format 
     * @return boolean true if latest format
     */
@@ -917,11 +944,23 @@ public class Asset extends CurrikiDocument {
      return true;
    }
 
-
+    /**
+     * Data Model Migration Code
+     * @param newAssetObject
+     * @param oldAssetObject
+     * @param propname
+     */
     private void updateObject(Object newAssetObject, Object oldAssetObject, String propname) {
         updateObject(newAssetObject, oldAssetObject, propname, propname);
     }
 
+    /**
+     * Data Model Migration Code
+     * @param newAssetObject
+     * @param oldAssetObject
+     * @param newpropname
+     * @param oldpropname
+     */
     private void updateObject(Object newAssetObject, Object oldAssetObject, String newpropname, String oldpropname) {
         if (LOG.isDebugEnabled())
          LOG.debug("CURRIKI CONVERTER: updating property " + newpropname);
@@ -937,19 +976,10 @@ public class Asset extends CurrikiDocument {
     }
 
     /**
-     * Check if the asset in old format is a video
-     * @return true if video
+     * Conversion of the category and sub type classes
+     * @throws XWikiException
      */
-    private boolean isOldAssetVideo() {
-       if (getObject(Constants.OLD_VIDITALK_CLASS)!=null)
-            return true;
-       else
-            return false;
-    }
-
     private void setNewCategoryAndClass() throws XWikiException {
-
-
         if (LOG.isDebugEnabled())
          LOG.debug("CURRIKI CONVERTER: running setNewCategoryAndClass");
 
@@ -1136,6 +1166,15 @@ public class Asset extends CurrikiDocument {
     }
 
     /**
+     * Hacked function needed by the Curriki Plugin
+     * This is needed for the data model migration in case of a rollback item
+     */
+    protected void setAlreadyCloned() {
+        cloned = true;
+    }
+
+    /**
+     * Data Model Migration Code
      * Convert an asset from the old format to the new format
      *
      */
@@ -1165,15 +1204,8 @@ public class Asset extends CurrikiDocument {
     }
 
     /**
-     * Hacked function needed by the Curriki Plugin
-     */
-    protected void setAlreadyCloned() {
-        cloned = true;
-    }
-    
-    /**
+     * Data Model Migration Code
      * Convert an asset from the old format to the new format
-     *
      */
     public boolean convertWithoutSave() throws Exception {
         if (isLatestVersion())

@@ -10,6 +10,9 @@ import org.curriki.xwiki.plugin.asset.Constants;
 /**
  */
 public class CollectionCompositeAsset extends FolderCompositeAsset {
+
+    public final static String CATEGORY_NAME = "collection";
+
     public CollectionCompositeAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }

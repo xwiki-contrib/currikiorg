@@ -14,6 +14,9 @@ import java.net.MalformedURLException;
 /**
  */
 public class ExternalAsset extends Asset {
+
+    public final static String CATEGORY_NAME = Constants.ASSET_CATEGORY_EXTERNAL;
+
     public ExternalAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }
@@ -42,23 +45,6 @@ public class ExternalAsset extends Asset {
         return title;
     }
 
-    public void addLink(String link) throws XWikiException {
-        if (hasA(Constants.EXTERNAL_ASSET_CLASS)) {
-            throw new AssetException("This asset already has alink.");
-        }
-
-        setLink(link);
-    }
-
-    public void setLink(String link) throws XWikiException {
-        doc.removeObjects(Constants.EXTERNAL_ASSET_CLASS);
-
-        BaseObject obj = doc.newObject(Constants.EXTERNAL_ASSET_CLASS, context);
-        obj.setStringValue(Constants.EXTERNAL_ASSET_LINK, link);
-        
-        determineCategory();
-    }
-
     public String getLink() throws XWikiException {
         if (!hasA(Constants.EXTERNAL_ASSET_CLASS)) {
             throw new AssetException("This asset has no link.");
@@ -68,10 +54,25 @@ public class ExternalAsset extends Asset {
         return obj.getStringValue(Constants.EXTERNAL_ASSET_LINK);
     }
 
-    protected void determineCategory() throws XWikiException {
-        BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
+    public String getLinkText() throws XWikiException {
+         if (!hasA(Constants.EXTERNAL_ASSET_CLASS)) {
+             return "";
+         }
+
+         BaseObject obj = doc.getObject(Constants.EXTERNAL_ASSET_CLASS);
+         return obj.getStringValue(Constants.EXTERNAL_ASSET_LINKTEXT);
+     }
+
+    public void makeExternalAsset(String link, String linktext) throws XWikiException {
+        assertCanEdit();
+
+        BaseObject obj = doc.getObject(Constants.EXTERNAL_ASSET_CLASS, true, context);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_EXTERNAL);
-        }
+            obj.setStringValue(Constants.EXTERNAL_ASSET_LINK, link);
+            obj.setStringValue(Constants.EXTERNAL_ASSET_LINKTEXT, linktext);
+             }
+        setCategory(Constants.ASSET_CATEGORY_EXTERNAL);
+        saveDocument(context.getMessageTool().get("curriki.comment.createlinksourceasset"), true);
     }
+
 }

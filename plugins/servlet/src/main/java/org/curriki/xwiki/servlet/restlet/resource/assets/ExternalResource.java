@@ -47,9 +47,16 @@ public class ExternalResource extends BaseResource {
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName);
         }
+        String linktext;
+        try {
+            linktext = asset.getLinkText();
+        } catch (XWikiException e) {
+            linktext = "";
+        }
 
         JSONObject json = new JSONObject();
         json.put("link", link);
+        json.put("linktext", (linktext==null) ? "" : linktext);
 
         return formatJSON(json, variant);
     }

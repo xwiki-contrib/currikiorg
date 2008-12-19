@@ -24,6 +24,7 @@ import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
 /**
  */
 public class FolderCompositeAsset extends CompositeAsset {
+
     public FolderCompositeAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }

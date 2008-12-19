@@ -7,6 +7,7 @@ import com.xpn.xwiki.objects.BaseObject;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.external.VideoAsset;
 
 /**
  */
@@ -28,11 +29,15 @@ public class TextAsset extends Asset {
         return obj.getStringValue(Constants.TEXT_ASSET_SYNTAX);
     }
 
-    public void addText(String syntax, String content) throws XWikiException {
+    public void makeTextAsset(String syntax, String content) throws XWikiException {
+        assertCanEdit();
         doc.setContent(content);
         BaseObject obj = doc.getObject(Constants.TEXT_ASSET_CLASS, true, context);
         if (obj != null) {
             obj.setStringValue(Constants.TEXT_ASSET_SYNTAX, syntax);
         }
+        setCategory(Constants.ASSET_CATEGORY_TEXT);
+        saveDocument(context.getMessageTool().get("curriki.comment.createtextsourceasset"), true);
     }
+
 }

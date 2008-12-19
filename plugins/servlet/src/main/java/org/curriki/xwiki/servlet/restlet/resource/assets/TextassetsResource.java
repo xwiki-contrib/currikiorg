@@ -8,9 +8,9 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.AssetException;
+import org.curriki.xwiki.plugin.asset.*;
 import org.curriki.xwiki.plugin.asset.text.TextAsset;
+import org.curriki.xwiki.plugin.asset.text.TextAssetManager;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import com.xpn.xwiki.XWikiException;
@@ -41,13 +41,11 @@ public class TextassetsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
         }
 
-        String category = null;
         String syntax = null;
         String content = null;
         try {
             content = asset.getText();
             syntax = asset.getSyntax();
-            category = asset.getCategory();
         } catch (AssetException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" does not contain any texts.");
         }
@@ -57,7 +55,6 @@ public class TextassetsResource extends BaseResource {
         JSONObject json = new JSONObject();
         json.put("href", getChildReference(getRequest().getResourceRef(), "0"));
         json.put("syntax", syntax);
-        json.put("category", category);
         json.put("text", content);
 
         jsonArray.add(json);
@@ -84,17 +81,10 @@ public class TextassetsResource extends BaseResource {
         } catch (NumberFormatException e) {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the text type.");
         }
-
-        String category = null;
-        try {
-            syntax = json.getString("category");
-        } catch (NumberFormatException e) {
-            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the category.");
-        }
-
+       
         Asset asset = null;
         try {
-            asset = plugin.fetchAsset(assetName);
+            asset = plugin.fetchAssetSubclassAs(assetName, TextAsset.class);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
@@ -103,7 +93,11 @@ public class TextassetsResource extends BaseResource {
         }
 
         try {
-            asset.makeTextAsset(category, syntax, content);
+            // call the sub type asset manager to get more details
+            TextAssetManager assetManager = (TextAssetManager) DefaultAssetManager.getAssetSubTypeManager(Constants.ASSET_CATEGORY_TEXT);
+            if (assetManager!=null) {
+                assetManager.makeTextAsset(asset, syntax, content);
+            }
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add text");
         }

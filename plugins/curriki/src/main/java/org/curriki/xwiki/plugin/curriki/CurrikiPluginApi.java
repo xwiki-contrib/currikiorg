@@ -98,6 +98,10 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchAssetAs(assetName, classType, context);
     }
 
+    public Asset fetchAssetSubclassAs(String assetName, Class<? extends Asset> classType) throws XWikiException {
+        return plugin.fetchAssetSubclassAs(assetName, classType, context);
+    }
+
     public List<Property> fetchAssetMetadata(String assetName) throws XWikiException {
         return plugin.fetchAssetMetadata(assetName, context);
     }

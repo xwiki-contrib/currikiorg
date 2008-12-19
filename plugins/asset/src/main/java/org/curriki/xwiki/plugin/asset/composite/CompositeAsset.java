@@ -26,6 +26,8 @@ import java.util.Collections;
 public abstract class CompositeAsset extends Asset {
     private static final Log LOG = LogFactory.getLog(RootCollectionCompositeAsset.class);
 
+    public final static String CATEGORY_NAME = Constants.ASSET_CATEGORY_COLLECTION;
+
     public CompositeAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
     }
@@ -59,7 +61,7 @@ public abstract class CompositeAsset extends Asset {
         // collection type
         use(Constants.COMPOSITE_ASSET_CLASS);
         docInfo.put("collectionType", getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE));
-        docInfo.put("assetType", determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
+        docInfo.put("assetType", getAssetClass().getSimpleName().replaceAll("Asset$", ""));
 
         // access rights
         docInfo.put("rights", getRightsList());
@@ -93,7 +95,7 @@ public abstract class CompositeAsset extends Asset {
                         if (doc instanceof Asset) {
                             subInfo.put("displayTitle", doc.getDisplayTitle());
                             subInfo.put("description", ((Asset) doc).getDescription());
-                            subInfo.put("assetType", ((Asset) doc).determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
+                            subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
                             subInfo.put("rights", ((Asset) doc).getRightsList());
                         } else if (doc == null) {
                             // getDocument returns null if the page is not viewable by the user
@@ -197,7 +199,7 @@ public abstract class CompositeAsset extends Asset {
                             if (doc instanceof Asset) {
                                 subInfo.put("displayTitle", doc.getDisplayTitle());
                                 subInfo.put("description", ((Asset) doc).getDescription());
-                                subInfo.put("assetType", ((Asset) doc).determineAssetSubtype().getSimpleName().replaceAll("Asset$", ""));
+                                subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
                             } else {
                                 subInfo.put("error", "Subasset does not exist");
                             }
@@ -419,7 +421,7 @@ public abstract class CompositeAsset extends Asset {
     protected void determineCategory() throws XWikiException {
         BaseObject obj = doc.getObject(Constants.ASSET_CLASS);
         if (obj != null) {
-            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, Constants.ASSET_CATEGORY_COLLECTION);
+            obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, CATEGORY_NAME);
         }
     }
 }

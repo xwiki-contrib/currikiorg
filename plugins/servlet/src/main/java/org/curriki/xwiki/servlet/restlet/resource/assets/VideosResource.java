@@ -9,7 +9,10 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.DefaultAssetManager;
+import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.external.VideoAsset;
+import org.curriki.xwiki.plugin.asset.external.VideoAssetManager;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONException;
@@ -17,8 +20,8 @@ import com.xpn.xwiki.XWikiException;
 
 /**
  */
-public class ViditalksResource extends BaseResource {
-    public ViditalksResource(Context context, Request request, Response response) {
+public class VideosResource extends BaseResource {
+    public VideosResource(Context context, Request request, Response response) {
         super(context, request, response);
         setReadable(true);
         setModifiable(true);
@@ -52,7 +55,8 @@ public class ViditalksResource extends BaseResource {
 
         JSONObject json = new JSONObject();
         json.put("href", getChildReference(getRequest().getResourceRef(), "0"));
-        json.put("video_id", link);
+        json.put("videoId", link);
+        json.put("partner", link);
 
         jsonArray.add(json);
 
@@ -67,16 +71,18 @@ public class ViditalksResource extends BaseResource {
 
         JSONObject json = representationToJSONObject(representation);
 
-        String link;
+        String videoId;
+        String partner;
         try {
-            link = json.getString("videoId");
+            videoId = json.getString("videoId");
+            partner = json.getString("partner");
         } catch (JSONException e) {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a video id.");
         }
 
         Asset asset = null;
         try {
-            asset = plugin.fetchAsset(assetName);
+            asset = plugin.fetchAssetSubclassAs(assetName, VideoAsset.class);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
@@ -85,7 +91,11 @@ public class ViditalksResource extends BaseResource {
         }
 
         try {
-            asset.makeVIDITalk(link);
+            // call the sub type asset manager to get more details
+            VideoAssetManager assetManager = (VideoAssetManager) DefaultAssetManager.getAssetSubTypeManager(Constants.ASSET_CATEGORY_VIDEO);
+            if (assetManager!=null) {
+                assetManager.makeVideoAsset(asset, videoId, partner);
+            }
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add video");
         }

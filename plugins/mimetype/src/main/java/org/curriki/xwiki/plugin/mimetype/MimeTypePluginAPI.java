@@ -64,4 +64,14 @@ public class MimeTypePluginAPI  extends Api {
         return plugin.getCategory(filetype, context);
     }
 
+    /**
+     * Returns the displayer corresponding to the filetype or the category
+     * @param filetype
+     * @param category
+     * @return displayer
+     */
+    public String getDisplayer(String category, String filetype) {
+        return plugin.getDisplayer(category, filetype, context);
+    }
+
 }
