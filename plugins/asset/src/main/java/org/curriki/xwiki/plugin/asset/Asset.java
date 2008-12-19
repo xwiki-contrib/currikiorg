@@ -1068,9 +1068,11 @@ public class Asset extends CurrikiDocument {
             getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
             Object oldArchiveAssetObject = getObject(Constants.OLD_MIMETYPE_ARCHIVE_CLASS);
             Object newArchiveAssetObject = getObject(Constants.ARCHIVE_ASSET_CLASS, true);
-            updateObject(newArchiveAssetObject, oldArchiveAssetObject, Constants.ARCHIVE_ASSET_START_FILE, Constants.OLD_MIMETYPE_ARCHIVE_CLASS_DEFAULT_FILE);
-            // we need to remove the old archive object
-            removeObject(oldArchiveAssetObject);
+            if (oldArchiveAssetObject!=null) {
+                updateObject(newArchiveAssetObject, oldArchiveAssetObject, Constants.ARCHIVE_ASSET_START_FILE, Constants.OLD_MIMETYPE_ARCHIVE_CLASS_DEFAULT_FILE);
+                // we need to remove the old archive object
+                removeObject(oldArchiveAssetObject);
+            }
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_ANIMATION)) {
             newCategory = Constants.ASSET_CATEGORY_INTERACTIVE;
             getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
