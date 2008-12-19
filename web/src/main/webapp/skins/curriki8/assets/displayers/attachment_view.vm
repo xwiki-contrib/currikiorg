@@ -1,0 +1,19 @@
+#**
+  * Asset Archive Displayer in View mode
+  *
+  *#
+ATTACHMENT DISPLAYER
+#asset_displaycontentheader()
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($mimedoc=$asset)
+<p>
+$!mimedoc.description
+</p>
+#set($fileName = $mimedoc.attachmentList.get(0).filename)
+#mimeicon($fileName)
+#set($url = $mimedoc.getAttachmentURL("$fileName"))
+<a href="$url" ><img src="$macro_iconUrl" /></a>
+#end
+#asset_displaycontentfooterattachment($asset)

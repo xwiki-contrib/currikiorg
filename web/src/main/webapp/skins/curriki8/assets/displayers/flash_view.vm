@@ -1,0 +1,35 @@
+#asset_displaycontentheader("text-align:center;")
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($mimedoc=$asset)
+#if($mimedoc.attachmentList.size() > 0)
+#set($fileName = $mimedoc.attachmentList.get(0).filename)
+#set($flashurl = $mimedoc.getAttachmentURL("$fileName"))
+$!mimedoc.description
+#if(! $flashDisplay)
+ #set($flashDisplay=true)
+ #set($flashNum=0)
+{pre}
+<script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/flash.js"></script>
+<script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/swfobject.js"></script>
+{/pre}
+#end
+#set($flashNum= (1+$flashNum))
+<center>
+<div id="flashContent${flashNum}">
+  $msg.get('mimetype.flashdisplay.flashcontenttext')
+</div>
+<script type="text/javascript">
+  displayFlash("${flashurl}", ${flashNum});
+</script>
+<script type="text/javascript">
+var mObj${flashNum} = getFlashMovieObject("flashItem${flashNum}");
+mObj${flashNum}.StopPlay();
+</script>
+<button id="flashControl${flashNum}" class="flash-control-button flash-control-button-play" title="$msg.get('mimetype.flashdisplay.play')" onclick="playFlash(${flashNum}, this);">$msg.get('mimetype.flashdisplay.play')</button><br />
+<a href="$flashurl" class="flash-control-newwindow" target="_blank">$msg.get('mimetype.flashdisplay.newwindow')</a>
+</center>
+#end
+#end
+#asset_displaycontentfooterattachment($asset)

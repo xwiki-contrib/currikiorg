@@ -1,0 +1,22 @@
+#**
+  * Asset Text Displayer in View mode
+  *
+  *#
+TEXT DISPLAYER
+#asset_displaycontentheader()
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($objTxt = $asset.getObject("CurrikiCode.TextAssetClass"))
+#if($asset.getObject("CurrikiCode.TextAssetClass"))
+ #if(($objTxt.syntax == "xwiki/1.0") || ($objTxt.syntax == "xwiki/2.0"))
+$asset.getRenderedContent()
+ #else
+$asset.content
+ #end
+#else
+$asset.content
+#end
+#end
+#asset_displaycontentfooter()
+

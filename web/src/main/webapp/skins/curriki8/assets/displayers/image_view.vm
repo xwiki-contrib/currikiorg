@@ -1,0 +1,28 @@
+#asset_displaycontentheader()
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($mimedoc=$asset)
+#if($mimedoc.attachmentList.size() > 0)
+#set($fileName = $mimedoc.attachmentList.get(0).filename)
+#set($url = $mimedoc.getAttachmentURL("$fileName"))
+#set($pictSize = "Medium")
+#set($pictSize = $!mimedoc.display("display_size", "view", $mimedoc.getObject("MimeType.picture")))
+#if($pictSize == "small")
+ #set($pictWidth = "300")
+#elseif($pictSize == "large")
+## #set($pictWidth = "600") ## reduced due to style issues
+ #set($pictWidth = "570")
+#else
+ #set($pictWidth = "450")
+#end
+<a href="$url"><img src="$mimedoc.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!mimedoc.alt_desc" /></a>
+#set($caption = "")
+#set($caption = $!mimedoc.caption_desc)
+#if($!caption == "")
+ #set($caption = $!mimedoc.description)
+#end
+$caption
+#end
+#end
+#asset_displaycontentfooterattachment($asset)

@@ -1,0 +1,39 @@
+#asset_displaycontentfooter("text-align:center;")
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
+#set($video_id = $objVT.video_id)
+ #if($viditalk_counter)
+  #set($viditalk_counter = $viditalk_counter + 1)
+ #else
+  #set($viditalk_counter = 1)
+#end
+#set($vidDiv = "div_vidiplayback_${viditalk_counter}")
+## Set $video_id if not already set
+#if(!$video_id)
+#if(!$request.vid)
+## Just a test code for now
+#set($video_id = "FbLBbkGm5dORWYOQ")
+#else
+#set($video_id = $request.vid)
+#end
+#end
+<div style="height:280px; width:320px; margin: 0 auto;" id="$vidDiv">
+Viditalk Playback Window - Loading components from VIDITalk
+</div>
+<script language="javascript" type="text/javascript">
+// embedVidiPlayback(div_id, sc, mediaId, autoplay, width, height, stretchPlayer, skinLoc, shareUrl, allowFullScreen)
+embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null, null, null, null, null, null, true);
+</script>
+<br />
+<hr class="my-curriki-hr">
+<br />
+<a href="http://flashmedia.viditalk.com/10/active/${video_id}.mpg" onClick="javascript:Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');">$msg.get('viditalk.download_msg')</a>
+#set($orig_video = $xwiki.getURLContent("http://components.viditalk.com/dl.asp?id=$video_id"))
+#if("$orig_video" != "") ##{
+#sep()
+<a href="$orig_video" onClick="javascript:Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');">$msg.get('viditalk.download_original_msg')</a>
+#end ##}
+#end
+#asset_displaycontentfooter()

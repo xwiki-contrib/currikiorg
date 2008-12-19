@@ -81,7 +81,6 @@
 #end
 </div>
 <div class="clearfloats"></div>
-{pre}
 <script type="text/javascript">
 #if(!$togglesectionvisibility)
 #set($togglesectionvisibility = 1)
@@ -120,7 +119,6 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 createCookie("Section${seccounter}Hidden", true, "");
 #end
 </script>
-{/pre}
 <div id="section${seccounter}content" class="#if($doHide)hidden#end">
 #end
 ##
@@ -155,7 +153,7 @@ createCookie("Section${seccounter}Hidden", true, "");
  <option>All</option>
 #else
  #set($subjects = "")
- {pre}#set($sitems = $asset.fw_items.split("<br />")){/pre}
+ #set($sitems = $asset.fw_items.split("<br />"))
  #set($previousCat = "")
  #foreach($sitem in $sitems)
   #if($sitem.trim().startsWith("Subject Index  &gt;"))
@@ -184,7 +182,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 #if($levels == "Choose from list...")
  <option>All</option>
 #else
- {pre}#set($litems = $levels.split("#--#")){/pre}
+ #set($litems = $levels.split("#--#"))
  #set($levels = "")
  #foreach($litem in $litems)
   <option>${litem}</option>
@@ -204,7 +202,7 @@ createCookie("Section${seccounter}Hidden", true, "");
 #groups_grouplogo( $s )
 <div id="asset-metadatas-block-groupname">
 <span style="font-size: 90%; color: #919179;">$msg.get("asset.groupfrom")</span>
- <a href="${sUrl}">{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}</a>
+ <a href="${sUrl}">$xwiki.escapeText($s.getDisplayTitle())</a>
 </div>
 <div id="asset-metadatas-block-username">
 <span style="font-size: 90%; color: #919179 ;">$msg.get("asset.createdby")</span> $!xwiki.getUserName($asset.creator)
@@ -307,24 +305,18 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
  #set($escapedTitle = $ret_escaped)
 ## Favorite
  #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
-{pre}
    <a onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
-{/pre}
   #sep()
  #end ##}
 ## Add
  #if($g_userHasCollections)##{
-{pre}
    <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
-{/pre}
    #sep()
  #end##}
 ## Build Up
  #if($asset.hasAccessLevel("edit")) ##{
   #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
-{pre}
    <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
-{/pre}
    #sep()
   #end ##}
  #end ##}
@@ -348,7 +340,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 #if($asset.getObject("CurrikiCode.TextAssetClass"))
 <div class="asset-content-body">
 #if($objTxt.type == 1)
-{pre}$asset.getValue("text",$objTxt){/pre}
+ $asset.getValue("text",$objTxt)
 #else
 $objTxt.text
 #end
@@ -492,7 +484,7 @@ $msg.get("asset.externallink")
  #set($subjects = "All")
 #else
  #set($subjects = "")
- {pre}#set($items = $collDoc.fw_items.split("<br />")){/pre}
+ #set($items = $collDoc.fw_items.split("<br />"))
  #foreach($item in $items)
   #if($item.trim().startsWith("Subject Index &gt;"))
    #set($item = $item.trim().substring(18))
@@ -507,7 +499,7 @@ $msg.get("asset.externallink")
 #if($levels == "Choose from list...")
  #set($levels = "All")
 #else
- {pre}#set($litems = $levels.split("<br />")){/pre}
+ #set($litems = $levels.split("<br />"))
  #set($levels = "")
  #foreach($litem in $litems)
   #set($levels = "${litem}, ${levels}")
@@ -581,7 +573,8 @@ $msg.get("asset.externallink")
 ##
 #set($showAllvar = true)
 ##
- #asset_displaycontent($currDoc true $showAllvar)
+##asset_displaycontent($currDoc true $showAllvar)
+$currDoc.displayAsset("view")
 #if(!$isPrint)
 <hr class="my-curriki-solid-hr" >
 <div class="asset-content-footer">
@@ -678,7 +671,6 @@ $msg.get("colls.infos")
 #set($startDisplayed = $startIndex + 1)
 #set($endDisplayed = $endIndex + 1)
 #set($elemsDisplayed = "${startDisplayed}-${endDisplayed}")
-{pre}
 $msg.get("colls.numberOfCollsDisplayed", [$elemsDisplayed, $collectionsList.size()]) 
 <span class="navitems">
 #if($hasPrev)
@@ -695,7 +687,34 @@ $msg.get("caption.prev")
 $msg.get("caption.next")
 #end
 </span>
-{/pre}
 </div></div>
 #end ## }
+#end
+
+
+#macro(asset_displaycontentheader $style)
+#if($style)
+<div class="asset-content-body" style="${style}">
+#else
+<div class="asset-content-body">    
+#end
+#end
+
+#macro(asset_displaycontentfooter)
+<div class="clearfloats"></div>
+</div>
+#end
+
+#macro(asset_displaycontentfooterattachment $asset)
+ #set($attachedFile = $mimedoc.attachmentList.get(0))
+ <div class="clearfloats"></div>
+ </div>
+ <hr class="my-curriki-hr" >
+ <div class="asset-content-options">
+  <a href="$asset.getAttachmentURL("${attachedFile.filename}", "download")" onClick="javascript:Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}');" title="$msg.get("downloadthisattachment")">
+  $attachedFile.getFilename().toLowerCase()
+  </a>&nbsp;&nbsp;
+  <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}'); window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
+ </div>
+ <div class="clearfloats"></div>
 #end

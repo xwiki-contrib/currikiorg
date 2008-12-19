@@ -1,0 +1,87 @@
+#**
+  * Asset Archive Displayer in View mode
+  *
+  *#
+ARCHIVE DISPLAYER
+#asset_displaycontentheader("text-align:center;")
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else
+#set($mimedoc=$asset)
+#if(!$treeviewid)
+#set($treeviewid = 1)
+#else
+#set($treeviewid = 1 + $treeviewid)
+#end
+<style type="text/css">
+@import "/xwiki/yui/treeview/assets/tree.css";
+</style>
+<script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
+<script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
+<script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+<div class="xmblabel"></div>
+<div class="xmbfield">
+#set($attach = $mimedoc.attachmentList.get(0).filename)
+#set($tmpActiveClass = $mimedoc.getActiveClass())
+$mimedoc.use("CurrikiCode.ArchiveAssetClass")
+#if ($mimedoc.getValue("startfile"))
+  <a href="#" onclick="window.open('$mimedoc.getAttachmentURL("$attach")$mimedoc.getValue("startfile")');return false;">Open the main document</a>
+#end
+<div id="treeview${treeviewid}">
+TEST   
+</div>
+<script type="text/javascript">
+	var tree${treeviewid};
+	var nodes${treeviewid} = {};
+	var nodeIndex${treeviewid};
+        var baseUrl${treeviewid} = "";
+
+    function addTreeElement${treeviewid}(id, text, parent) {
+        var parent2;
+	    if (parent=="")
+	     parent2 = tree${treeviewid}.getRoot();
+	    else
+	     parent2 = nodes${treeviewid}[parent];
+        nodes${treeviewid}[id] = new YAHOO.widget.TextNode(text, parent2, false)
+ //     nodes${treeviewid}[id] = new YAHOO.widget.CheckNode(id, text,  parent2, false, false);
+        nodes${treeviewid}[id].onLabelClick = onLabelClick${treeviewid};
+        nodes${treeviewid}[id].labelElId = id;
+    }
+
+	var callback = null;
+    
+    function onLabelClick${treeviewid}(node) {
+       var path = node.labelElId;
+       if (!(path[path.length - 1] == "/"))
+         window.open(baseUrl${treeviewid} + "/" + path);
+    }
+
+	function treeInit${treeviewid}() {
+		tree${treeviewid} = new YAHOO.widget.TreeView("treeview${treeviewid}");
+	    //var tree = tree${treeviewid};
+        //var nodes = nodes${treeviewid};
+#set($zipexp = $xwiki.getPlugin("zipexplorer"))
+#set($treelist = $zipexp.getFileTreeList($mimedoc, $attach))
+        baseUrl${treeviewid} = "$mimedoc.getAttachmentURL("$attach")";
+        #foreach($item in $treelist)
+        #set($checked = $selectlist.contains($item.getId()))
+        #if ($item.value.length() > 80)
+         #set($title_item = $item.value.substring(0, 80))
+        #else
+         #set($title_item = $item.value)
+        #end
+        #set($title_item = $title_item.replaceAll("[\r\n]"," "))
+        addTreeElement${treeviewid}("$item.id", "$title_item", "$item.parent");
+        #end
+    tree${treeviewid}.draw();
+	}
+
+    // Init the tree
+    treeInit${treeviewid}();
+</script>
+#if($tmpActiveClass)
+$mimedoc.use($tmpActiveClass)
+#end
+</div>
+#end
+#asset_displaycontentfooterattachment($asset)
