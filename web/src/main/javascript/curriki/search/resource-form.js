@@ -234,7 +234,7 @@ form.init = function(){
 							,plugins:new form.categoryCombo()
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('search.resource.category.selector.UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_category_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
