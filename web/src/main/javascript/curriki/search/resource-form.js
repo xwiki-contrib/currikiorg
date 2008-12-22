@@ -67,7 +67,7 @@ form.init = function(){
 			Ext.apply(combo, {
 				tpl:  '<tpl for=".">'
 					+ '<div class="x-combo-list-item category-icon-combo-item '
-					+ 'ict-{' + combo.valueField + '}">'
+					+ 'category-{' + combo.valueField + '}">'
 					+ '<img class="category-icon" src="'+Ext.BLANK_IMAGE_URL+'"/>'
 					+ '<span class="category-title">{' + combo.displayField + '}</span>'
 					+ '</div></tpl>',
