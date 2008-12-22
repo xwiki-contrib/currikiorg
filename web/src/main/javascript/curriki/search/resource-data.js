@@ -215,6 +215,7 @@ data.init = function(){
 
 		,category: new Ext.data.SimpleStore({
 			fields: ['id', 'category']
+			,sortInfo: {field:'category', direction:'ASC'}
 			,data: f.data.category.data
 			,id: 0
 		})
