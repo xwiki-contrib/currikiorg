@@ -320,7 +320,7 @@ data.init = function(){
 		mapping: Curriki.data.fw_item.fwMap['FW_masterFramework.WebHome']
 		,list: []
 		,data: [
-			['', _('XWiki.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')]
 		]
 	};
 	f.data.subject.mapping.each(function(value){
@@ -333,7 +333,7 @@ data.init = function(){
 	f.data.subject.list.each(function(value){
 		f.data.subject.data.push([
 			value
-			,_('XWiki.AssetClass_fw_items_'+value)
+			,_('CurrikiCode.AssetClass_fw_items_'+value)
 		]);
 	});
 
@@ -345,13 +345,13 @@ data.init = function(){
 	f.data.subject.mapping.each(function(parentItem){
 		f.data.subsubject.data.push([
 			parentItem.id
-			,_('XWiki.AssetClass_fw_items_'+parentItem.id+'.UNSPECIFIED')
+			,_('CurrikiCode.AssetClass_fw_items_'+parentItem.id+'.UNSPECIFIED')
 			,parentItem.id
 		]);
 		f.data.subsubject.mapping[parentItem.id].each(function(subject){
 			f.data.subsubject.data.push([
 				subject.id
-				,_('XWiki.AssetClass_fw_items_'+subject.id)
+				,_('CurrikiCode.AssetClass_fw_items_'+subject.id)
 				,parentItem.id
 			]);
 		});
@@ -360,13 +360,13 @@ data.init = function(){
 	f.data.level =  {
 		list: Curriki.data.el.list
 		,data: [
-			['', _('XWiki.AssetClass_educational_level2_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_educational_level_UNSPECIFIED')]
 		]
 	};
 	f.data.level.list.each(function(value){
 		f.data.level.data.push([
 			value
-			,_('XWiki.AssetClass_educational_level2_'+value)
+			,_('CurrikiCode.AssetClass_educational_level_'+value)
 		]);
 	});
 
@@ -375,7 +375,7 @@ data.init = function(){
 		,parentList: {}
 		,list: []
 		,data: [
-			['', _('XWiki.AssetClass_instructional_component2_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED')]
 		]
 	};
 	f.data.ict.fullList.each(function(value){
@@ -385,7 +385,7 @@ data.init = function(){
 	Object.keys(f.data.ict.parentList).each(function(value){
 		f.data.ict.data.push([
 			value
-			,_('XWiki.AssetClass_instructional_component2_'+value)
+			,_('CurrikiCode.AssetClass_instructional_component_'+value)
 		]);
 	});
 
@@ -401,14 +401,14 @@ data.init = function(){
 			if (Ext.isEmpty(f.data.subict.parents[parentICT])) {
 				f.data.subict.data.push([
 					parentICT+'*'
-					,_('XWiki.AssetClass_instructional_component2_'+parentICT+'_UNSPECIFIED')
+					,_('CurrikiCode.AssetClass_instructional_component_'+parentICT+'_UNSPECIFIED')
 					,parentICT
 				]);
 				f.data.subict.parents[parentICT] = parentICT;
 			}
 			f.data.subict.data.push([
 				value
-				,_('XWiki.AssetClass_instructional_component2_'+value)
+				,_('CurrikiCode.AssetClass_instructional_component_'+value)
 				,parentICT
 			]);
 		}
@@ -417,14 +417,29 @@ data.init = function(){
 	f.data.language =  {
 		list: Curriki.data.language.list
 		,data: [
-			['', _('XWiki.AssetClass_language_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_language_UNSPECIFIED')]
 		]
 	};
 	f.data.language.list.each(function(value){
 		f.data.language.data.push([
 			value
-			,_('XWiki.AssetClass_language_'+value)
+			,_('CurrikiCode.AssetClass_language_'+value)
 		]);
+	});
+
+	f.data.category =  {
+		list: Curriki.data.category.list
+		,data: [
+			['', _('CurrikiCode.AssetClass_category_UNSPECIFIED')]
+		]
+	};
+	f.data.category.list.each(function(value){
+		if (value !== 'collection') {
+			f.data.category.data.push([
+				value
+				,_('CurrikiCode.AssetClass_category_'+value)
+			]);
+		}
 	});
 
 	f.data.review = {
@@ -456,6 +471,7 @@ data.init = function(){
 			,_('search.resource.special.selector.'+special)
 		]);
 	});
+
 
 	f.store = {
 		subject: new Ext.data.SimpleStore({
@@ -494,6 +510,12 @@ data.init = function(){
 			,id: 0
 		})
 
+		,category: new Ext.data.SimpleStore({
+			fields: ['id', 'category']
+			,data: f.data.category.data
+			,id: 0
+		})
+
 		,review: new Ext.data.SimpleStore({
 			fields: ['id', 'review']
 			,data: f.data.review.data
@@ -515,6 +537,7 @@ data.init = function(){
 	data.store.record = new Ext.data.Record.create([
 		{ name: 'title' }
 		,{ name: 'assetType' }
+		,{ name: 'category' }
 		,{ name: 'ict' }
 		,{ name: 'ictText' }
 		,{ name: 'ictIcon' }
@@ -686,6 +709,45 @@ form.init = function(){
 		}
 	});
 
+	// Plugin to add icons to Category combo box
+	form.categoryCombo = function(config) {
+		Ext.apply(this, config);
+	};
+	Ext.extend(form.categoryCombo, Ext.util.Observable, {
+		init:function(combo){
+			Ext.apply(combo, {
+				tpl:  '<tpl for=".">'
+					+ '<div class="x-combo-list-item category-icon-combo-item '
+					+ 'ict-{' + combo.valueField + '}">'
+					+ '<img class="category-icon" src="'+Ext.BLANK_IMAGE_URL+'"/>'
+					+ '<span class="category-title">{' + combo.displayField + '}</span>'
+					+ '</div></tpl>',
+
+				onRender:combo.onRender.createSequence(function(ct, position) {
+					// adjust styles
+					this.wrap.applyStyles({position:'relative'});
+					this.el.addClass('category-icon-combo-input');
+
+					// add div for icon
+					this.icon = Ext.DomHelper.append(this.el.up('div.x-form-field-wrap'), {
+						tag: 'div', style:'position:absolute'
+					});
+				}), // end of function onRender
+
+				setIconCls:function() {
+					var rec = this.store.query(this.valueField, this.getValue()).itemAt(0);
+					if(rec) {
+						this.icon.className = 'category-icon-combo-icon category-'+rec.get(this.valueField)+' category-icon';
+					}
+				}, // end of function setIconCls
+
+				setValue:combo.setValue.createSequence(function(value) {
+					this.setIconCls();
+				})
+			});
+		}
+	});
+
 	form.termPanel = Search.util.createTermPanel(modName, form);
 //	form.helpPanel = Search.util.createHelpPanel(modName, form);
 
@@ -764,7 +826,7 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 							,listeners:{
@@ -811,18 +873,19 @@ form.init = function(){
 							,hideMode:'visibility'
 						},{
 							xtype:'combo'
-							,id:'combo-review-'+modName
-							,fieldLabel:'Review'
-							,hiddenName:'review'
+							,id:'combo-category-'+modName
+							,fieldLabel:'Category'
+							,hiddenName:'category'
 							,width:comboWidth
 							,listWidth:comboListWidth
 							,mode:'local'
-							,store:data.filter.store.review
-							,displayField:'review'
+							,store:data.filter.store.category
+							,displayField:'category'
 							,valueField:'id'
+							,plugins:new form.categoryCombo()
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('search.resource.review.selector.UNSPECIFIED')
+							,emptyText:_('search.resource.category.selector.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
@@ -845,7 +908,7 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_educational_level2_UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_educational_level_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						},{
@@ -861,23 +924,23 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_language_UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_language_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						},{
 							xtype:'combo'
-							,id:'combo-special-'+modName
-							,fieldLabel:'Special Filters'
-							,hiddenName:'special'
+							,id:'combo-review-'+modName
+							,fieldLabel:'Review'
+							,hiddenName:'review'
 							,width:comboWidth
 							,listWidth:comboListWidth
 							,mode:'local'
-							,store:data.filter.store.special
-							,displayField:'special'
+							,store:data.filter.store.review
+							,displayField:'review'
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('search.resource.special.selector.UNSPECIFIED')
+							,emptyText:_('search.resource.review.selector.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
@@ -901,7 +964,7 @@ form.init = function(){
 							,plugins:new form.ictCombo()
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_instructional_component2_UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 							,listeners:{
@@ -945,6 +1008,22 @@ form.init = function(){
 							,lastQuery:''
 							,hidden:true
 							,hideMode:'visibility'
+						},{
+							xtype:'combo'
+							,id:'combo-special-'+modName
+							,fieldLabel:'Special Filters'
+							,hiddenName:'special'
+							,width:comboWidth
+							,listWidth:comboListWidth
+							,mode:'local'
+							,store:data.filter.store.special
+							,displayField:'special'
+							,valueField:'id'
+							,typeAhead:true
+							,triggerAction:'all'
+							,emptyText:_('search.resource.special.selector.UNSPECIFIED')
+							,selectOnFocus:true
+							,forceSelection:true
 						}]
 					}]
 				}]

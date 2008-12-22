@@ -58,6 +58,45 @@ form.init = function(){
 		}
 	});
 
+	// Plugin to add icons to Category combo box
+	form.categoryCombo = function(config) {
+		Ext.apply(this, config);
+	};
+	Ext.extend(form.categoryCombo, Ext.util.Observable, {
+		init:function(combo){
+			Ext.apply(combo, {
+				tpl:  '<tpl for=".">'
+					+ '<div class="x-combo-list-item category-icon-combo-item '
+					+ 'ict-{' + combo.valueField + '}">'
+					+ '<img class="category-icon" src="'+Ext.BLANK_IMAGE_URL+'"/>'
+					+ '<span class="category-title">{' + combo.displayField + '}</span>'
+					+ '</div></tpl>',
+
+				onRender:combo.onRender.createSequence(function(ct, position) {
+					// adjust styles
+					this.wrap.applyStyles({position:'relative'});
+					this.el.addClass('category-icon-combo-input');
+
+					// add div for icon
+					this.icon = Ext.DomHelper.append(this.el.up('div.x-form-field-wrap'), {
+						tag: 'div', style:'position:absolute'
+					});
+				}), // end of function onRender
+
+				setIconCls:function() {
+					var rec = this.store.query(this.valueField, this.getValue()).itemAt(0);
+					if(rec) {
+						this.icon.className = 'category-icon-combo-icon category-'+rec.get(this.valueField)+' category-icon';
+					}
+				}, // end of function setIconCls
+
+				setValue:combo.setValue.createSequence(function(value) {
+					this.setIconCls();
+				})
+			});
+		}
+	});
+
 	form.termPanel = Search.util.createTermPanel(modName, form);
 //	form.helpPanel = Search.util.createHelpPanel(modName, form);
 
@@ -136,7 +175,7 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 							,listeners:{
@@ -183,18 +222,19 @@ form.init = function(){
 							,hideMode:'visibility'
 						},{
 							xtype:'combo'
-							,id:'combo-review-'+modName
-							,fieldLabel:'Review'
-							,hiddenName:'review'
+							,id:'combo-category-'+modName
+							,fieldLabel:'Category'
+							,hiddenName:'category'
 							,width:comboWidth
 							,listWidth:comboListWidth
 							,mode:'local'
-							,store:data.filter.store.review
-							,displayField:'review'
+							,store:data.filter.store.category
+							,displayField:'category'
 							,valueField:'id'
+							,plugins:new form.categoryCombo()
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('search.resource.review.selector.UNSPECIFIED')
+							,emptyText:_('search.resource.category.selector.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
@@ -217,7 +257,7 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_educational_level2_UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_educational_level_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						},{
@@ -233,23 +273,23 @@ form.init = function(){
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_language_UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_language_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						},{
 							xtype:'combo'
-							,id:'combo-special-'+modName
-							,fieldLabel:'Special Filters'
-							,hiddenName:'special'
+							,id:'combo-review-'+modName
+							,fieldLabel:'Review'
+							,hiddenName:'review'
 							,width:comboWidth
 							,listWidth:comboListWidth
 							,mode:'local'
-							,store:data.filter.store.special
-							,displayField:'special'
+							,store:data.filter.store.review
+							,displayField:'review'
 							,valueField:'id'
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('search.resource.special.selector.UNSPECIFIED')
+							,emptyText:_('search.resource.review.selector.UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 						}]
@@ -273,7 +313,7 @@ form.init = function(){
 							,plugins:new form.ictCombo()
 							,typeAhead:true
 							,triggerAction:'all'
-							,emptyText:_('XWiki.AssetClass_instructional_component2_UNSPECIFIED')
+							,emptyText:_('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED')
 							,selectOnFocus:true
 							,forceSelection:true
 							,listeners:{
@@ -317,6 +357,22 @@ form.init = function(){
 							,lastQuery:''
 							,hidden:true
 							,hideMode:'visibility'
+						},{
+							xtype:'combo'
+							,id:'combo-special-'+modName
+							,fieldLabel:'Special Filters'
+							,hiddenName:'special'
+							,width:comboWidth
+							,listWidth:comboListWidth
+							,mode:'local'
+							,store:data.filter.store.special
+							,displayField:'special'
+							,valueField:'id'
+							,typeAhead:true
+							,triggerAction:'all'
+							,emptyText:_('search.resource.special.selector.UNSPECIFIED')
+							,selectOnFocus:true
+							,forceSelection:true
 						}]
 					}]
 				}]

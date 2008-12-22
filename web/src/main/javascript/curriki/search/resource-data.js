@@ -23,7 +23,7 @@ data.init = function(){
 		mapping: Curriki.data.fw_item.fwMap['FW_masterFramework.WebHome']
 		,list: []
 		,data: [
-			['', _('XWiki.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED')]
 		]
 	};
 	f.data.subject.mapping.each(function(value){
@@ -36,7 +36,7 @@ data.init = function(){
 	f.data.subject.list.each(function(value){
 		f.data.subject.data.push([
 			value
-			,_('XWiki.AssetClass_fw_items_'+value)
+			,_('CurrikiCode.AssetClass_fw_items_'+value)
 		]);
 	});
 
@@ -48,13 +48,13 @@ data.init = function(){
 	f.data.subject.mapping.each(function(parentItem){
 		f.data.subsubject.data.push([
 			parentItem.id
-			,_('XWiki.AssetClass_fw_items_'+parentItem.id+'.UNSPECIFIED')
+			,_('CurrikiCode.AssetClass_fw_items_'+parentItem.id+'.UNSPECIFIED')
 			,parentItem.id
 		]);
 		f.data.subsubject.mapping[parentItem.id].each(function(subject){
 			f.data.subsubject.data.push([
 				subject.id
-				,_('XWiki.AssetClass_fw_items_'+subject.id)
+				,_('CurrikiCode.AssetClass_fw_items_'+subject.id)
 				,parentItem.id
 			]);
 		});
@@ -63,13 +63,13 @@ data.init = function(){
 	f.data.level =  {
 		list: Curriki.data.el.list
 		,data: [
-			['', _('XWiki.AssetClass_educational_level2_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_educational_level_UNSPECIFIED')]
 		]
 	};
 	f.data.level.list.each(function(value){
 		f.data.level.data.push([
 			value
-			,_('XWiki.AssetClass_educational_level2_'+value)
+			,_('CurrikiCode.AssetClass_educational_level_'+value)
 		]);
 	});
 
@@ -78,7 +78,7 @@ data.init = function(){
 		,parentList: {}
 		,list: []
 		,data: [
-			['', _('XWiki.AssetClass_instructional_component2_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED')]
 		]
 	};
 	f.data.ict.fullList.each(function(value){
@@ -88,7 +88,7 @@ data.init = function(){
 	Object.keys(f.data.ict.parentList).each(function(value){
 		f.data.ict.data.push([
 			value
-			,_('XWiki.AssetClass_instructional_component2_'+value)
+			,_('CurrikiCode.AssetClass_instructional_component_'+value)
 		]);
 	});
 
@@ -104,14 +104,14 @@ data.init = function(){
 			if (Ext.isEmpty(f.data.subict.parents[parentICT])) {
 				f.data.subict.data.push([
 					parentICT+'*'
-					,_('XWiki.AssetClass_instructional_component2_'+parentICT+'_UNSPECIFIED')
+					,_('CurrikiCode.AssetClass_instructional_component_'+parentICT+'_UNSPECIFIED')
 					,parentICT
 				]);
 				f.data.subict.parents[parentICT] = parentICT;
 			}
 			f.data.subict.data.push([
 				value
-				,_('XWiki.AssetClass_instructional_component2_'+value)
+				,_('CurrikiCode.AssetClass_instructional_component_'+value)
 				,parentICT
 			]);
 		}
@@ -120,14 +120,29 @@ data.init = function(){
 	f.data.language =  {
 		list: Curriki.data.language.list
 		,data: [
-			['', _('XWiki.AssetClass_language_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_language_UNSPECIFIED')]
 		]
 	};
 	f.data.language.list.each(function(value){
 		f.data.language.data.push([
 			value
-			,_('XWiki.AssetClass_language_'+value)
+			,_('CurrikiCode.AssetClass_language_'+value)
 		]);
+	});
+
+	f.data.category =  {
+		list: Curriki.data.category.list
+		,data: [
+			['', _('CurrikiCode.AssetClass_category_UNSPECIFIED')]
+		]
+	};
+	f.data.category.list.each(function(value){
+		if (value !== 'collection') {
+			f.data.category.data.push([
+				value
+				,_('CurrikiCode.AssetClass_category_'+value)
+			]);
+		}
 	});
 
 	f.data.review = {
@@ -159,6 +174,7 @@ data.init = function(){
 			,_('search.resource.special.selector.'+special)
 		]);
 	});
+
 
 	f.store = {
 		subject: new Ext.data.SimpleStore({
@@ -197,6 +213,12 @@ data.init = function(){
 			,id: 0
 		})
 
+		,category: new Ext.data.SimpleStore({
+			fields: ['id', 'category']
+			,data: f.data.category.data
+			,id: 0
+		})
+
 		,review: new Ext.data.SimpleStore({
 			fields: ['id', 'review']
 			,data: f.data.review.data
@@ -218,6 +240,7 @@ data.init = function(){
 	data.store.record = new Ext.data.Record.create([
 		{ name: 'title' }
 		,{ name: 'assetType' }
+		,{ name: 'category' }
 		,{ name: 'ict' }
 		,{ name: 'ictText' }
 		,{ name: 'ictIcon' }
