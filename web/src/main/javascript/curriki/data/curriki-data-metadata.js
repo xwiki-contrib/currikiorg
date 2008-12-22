@@ -66,7 +66,7 @@ Ext.ns('Curriki.data.category');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/category  OR  Get filled in JS created by xwiki
 Curriki.data.category.list = ["text","image","audio","video","interactive","archive","document","external","collection","unknown"];
 Curriki.data.category.data = [ ];
-Curriki.data.category.list.each(function(el){
+Curriki.data.category.list.each(function(category){
 	Curriki.data.el.data.push({
 		 inputValue:category
 		,boxLabel:_('CurrikiCode.AssetClass_category_'+category)
