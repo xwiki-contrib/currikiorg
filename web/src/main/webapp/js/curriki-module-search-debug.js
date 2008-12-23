@@ -585,18 +585,23 @@ data.init = function(){
 		,title: function(value, metadata, record, rowIndex, colIndex, store){
 			// Title
 			var page = record.id.replace(/\./, '/');
+
+			//TODO: The format of the description is changing in EOU3
 			var desc = Ext.util.Format.stripTags(record.data.description);
 			desc = Ext.util.Format.ellipsis(desc, 300);
 			desc = Ext.util.Format.htmlEncode(desc);
-//			return String.format('<a href="/xwiki/bin/view/{0}" ext:qtitle="{3}" ext:qtip="{2}">{1}</a>', page, value, desc, _('search.resource.column.title.tooltip.title'));
 
 			// Asset Type icon
 			var assetType = record.data.assetType;
-			metadata.css = String.format('resource-{0}', assetType); // Added to <td>
+			var category = record.data.category;
+			metadata.css = String.format('resource-{0} category-{1}', assetType, category); // Added to <td>
+
+			//TODO: This is going to become more complicated with category + mime type
 			var rollover = _('search.resource.icon.'+assetType+'.rollover');
 			if (rollover === 'search.resource.icon.'+assetType+'.rollover') {
 				rollover = _('search.resource.icon.Unknown.rollover');
 			}
+
 //			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
 			return String.format('<img class="x-tree-node-icon assettype-icon" src="{4}" alt="{5}" ext:qtip="{5}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtitle="{3}" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, _('search.resource.column.title.tooltip.title'), Ext.BLANK_IMAGE_URL, rollover);
 		}
@@ -692,14 +697,16 @@ form.init = function(){
 
 					// add div for icon
 					this.icon = Ext.DomHelper.append(this.el.up('div.x-form-field-wrap'), {
-						tag: 'div', style:'position:absolute'
+						tag:'div'
+						,style:'position:absolute'
+						,children:{tag:'div', cls:'ict-icon'}
 					});
 				}), // end of function onRender
 
 				setIconCls:function() {
 					var rec = this.store.query(this.valueField, this.getValue()).itemAt(0);
 					if(rec) {
-						this.icon.className = 'ict-icon-combo-icon ict-'+rec.get(this.valueField)+' ict-icon';
+						this.icon.className = 'ict-icon-combo-icon ict-'+rec.get(this.valueField);
 					}
 				}, // end of function setIconCls
 
@@ -731,14 +738,16 @@ form.init = function(){
 
 					// add div for icon
 					this.icon = Ext.DomHelper.append(this.el.up('div.x-form-field-wrap'), {
-						tag: 'div', style:'position:absolute'
+						tag:'div'
+						,style:'position:absolute'
+						,children:{tag:'div', cls:'category-icon'}
 					});
 				}), // end of function onRender
 
 				setIconCls:function() {
 					var rec = this.store.query(this.valueField, this.getValue()).itemAt(0);
 					if(rec) {
-						this.icon.className = 'category-icon-combo-icon category-'+rec.get(this.valueField)+' category-icon';
+						this.icon.className = 'category-icon-combo-icon category-'+rec.get(this.valueField);
 					}
 				}, // end of function setIconCls
 

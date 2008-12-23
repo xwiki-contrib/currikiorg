@@ -40,14 +40,16 @@ form.init = function(){
 
 					// add div for icon
 					this.icon = Ext.DomHelper.append(this.el.up('div.x-form-field-wrap'), {
-						tag: 'div', style:'position:absolute'
+						tag:'div'
+						,style:'position:absolute'
+						,children:{tag:'div', cls:'ict-icon'}
 					});
 				}), // end of function onRender
 
 				setIconCls:function() {
 					var rec = this.store.query(this.valueField, this.getValue()).itemAt(0);
 					if(rec) {
-						this.icon.className = 'ict-icon-combo-icon ict-'+rec.get(this.valueField)+' ict-icon';
+						this.icon.className = 'ict-icon-combo-icon ict-'+rec.get(this.valueField);
 					}
 				}, // end of function setIconCls
 
@@ -79,14 +81,16 @@ form.init = function(){
 
 					// add div for icon
 					this.icon = Ext.DomHelper.append(this.el.up('div.x-form-field-wrap'), {
-						tag: 'div', style:'position:absolute'
+						tag:'div'
+						,style:'position:absolute'
+						,children:{tag:'div', cls:'category-icon'}
 					});
 				}), // end of function onRender
 
 				setIconCls:function() {
 					var rec = this.store.query(this.valueField, this.getValue()).itemAt(0);
 					if(rec) {
-						this.icon.className = 'category-icon-combo-icon category-'+rec.get(this.valueField)+' category-icon';
+						this.icon.className = 'category-icon-combo-icon category-'+rec.get(this.valueField);
 					}
 				}, // end of function setIconCls
 
