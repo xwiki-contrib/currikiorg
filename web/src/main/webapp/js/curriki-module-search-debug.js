@@ -430,14 +430,19 @@ data.init = function(){
 	f.data.category =  {
 		list: Curriki.data.category.list
 		,data: [
-			['', _('CurrikiCode.AssetClass_category_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_category_UNSPECIFIED'), '   ']
 		]
 	};
 	f.data.category.list.each(function(value){
+		var sort = value;
+		if (value === 'unknown') {
+			sort = 'zzz';
+		}
 		if (value !== 'collection') {
 			f.data.category.data.push([
 				value
 				,_('CurrikiCode.AssetClass_category_'+value)
+				,sort
 			]);
 		}
 	});
@@ -511,8 +516,8 @@ data.init = function(){
 		})
 
 		,category: new Ext.data.SimpleStore({
-			fields: ['id', 'category']
-			,sortInfo: {field:'category', direction:'ASC'}
+			fields: ['id', 'category', 'sortValue']
+			,sortInfo: {field:'sortValue', direction:'ASC'}
 			,data: f.data.category.data
 			,id: 0
 		})
