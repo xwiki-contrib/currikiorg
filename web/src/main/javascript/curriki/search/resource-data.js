@@ -254,6 +254,8 @@ data.init = function(){
 		,{ name: 'contributorName' }
 		,{ name: 'rating', mapping: 'review' }
 		,{ name: 'description' }
+		,{ name: 'fwItems' }
+		,{ name: 'levels' }
 		,{ name: 'info' }
 		,{ name: 'updated' }
 	]);
@@ -301,7 +303,7 @@ data.init = function(){
 
 			var fws = record.data.fwItems;
 			var fw = "";
-			if ("undefined" !== typeof fws[0]) {
+			if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
 				var fwD = "";
 				var fwi = fws[0];
 				var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
@@ -329,7 +331,7 @@ data.init = function(){
 
 			var lvls = record.data.levels;
 			var lvl = "";
-			if ("undefined" !== typeof lvls[0]) {
+			if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
 				lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
 				if ("undefined" !== typeof lvls[1]) {
 					lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
