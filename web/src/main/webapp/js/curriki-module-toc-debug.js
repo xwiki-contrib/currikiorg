@@ -47,24 +47,38 @@ console.log('TOC createNode: ',attr);
 
 				var fws = attr.fwItems||[];
 				var fw = "";
+				var fwMap = Curriki.data.fw_item.fwMap;
+
 				if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
 					var fwD = "";
 					var fwi = fws[0];
-					var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
-					if (fwParent === fwi) {
-						fwD = f.store.subject.getById(fwParent).get('subject');
+					var fwParent = fwMap['FW_masterFramework.WebHome'].find(function(item){
+						return (fwMap[item.id].find(function(sub){
+							return sub.id==fwi;
+						}));
+					});
+
+					if (!Ext.type(fwParent)) {
+						fwD = _('CurrikiCode.AssetClass_fw_items_'+fwi);
 					} else {
-						fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+						fwParent = fwParent.id;
+						fwD = _('CurrikiCode.AssetClass_fw_items_'+fwParent) + " > "+_('CurrikiCode.AssetClass_fw_items_'+fwi);
 					}
 					fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
 					if ("undefined" !== typeof fws[1]) {
 						var fwD = "";
 						var fwi = fws[1];
-						var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
-						if (fwParent === fwi) {
-							fwD = f.store.subject.getById(fwParent).get('subject');
+						var fwParent = fwMap['FW_masterFramework.WebHome'].find(function(item){
+							return (fwMap[item.id].find(function(sub){
+								return sub.id==fwi;
+							}));
+						});
+
+						if (!Ext.type(fwParent)) {
+							fwD = _('CurrikiCode.AssetClass_fw_items_'+fwi);
 						} else {
-							fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+							fwParent = fwParent.id;
+							fwD = _('CurrikiCode.AssetClass_fw_items_'+fwParent) + " > "+_('CurrikiCode.AssetClass_fw_items_'+fwi);
 						}
 						fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
 						if ("undefined" !== typeof fws[2]) {
