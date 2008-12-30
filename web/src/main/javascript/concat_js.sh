@@ -16,8 +16,8 @@ I18N="\
 	curriki/i18n.js \
 	"
 
-cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 cat $I18N | $UNCOMPRESS_JS > ../webapp/js/i18n-debug.js
+cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 
 CURRIKI="\
 	ext/DDView.js \
@@ -33,15 +33,15 @@ CURRIKI="\
 	curriki/ui/curriki-ui.js \
 	"
 
-cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
 cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js
+cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
 
 
 CURRIKICSS="\
 	ext/Multiselect.css \
 	"
-cat $CURRIKICSS | $COMPRESS_CSS > ../webapp/js/curriki-js.css
 cat $CURRIKICSS | $UNCOMPRESS_CSS > ../webapp/js/curriki-js-debug.css
+cat $CURRIKICSS | $COMPRESS_CSS > ../webapp/js/curriki-js.css
 
 
 
@@ -49,8 +49,8 @@ ADDPATH="\
 	curriki/addpath/addpath-base.js \
 	"
 
-cat $ADDPATH | $COMPRESS_JS > ../webapp/js/curriki-module-addpath.js
 cat $ADDPATH | $UNCOMPRESS_JS > ../webapp/js/curriki-module-addpath-debug.js
+cat $ADDPATH | $COMPRESS_JS > ../webapp/js/curriki-module-addpath.js
 
 
 
@@ -58,29 +58,29 @@ NOMINATE="\
 	curriki/crs/nominate-base.js \
 	"
 
-cat $NOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-nominate.js
 cat $NOMINATE | $UNCOMPRESS_JS > ../webapp/js/curriki-module-nominate-debug.js
+cat $NOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-nominate.js
 
 REVIEW="\
 	curriki/crs/review-base.js \
 	"
 
-cat $REVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-review.js
 cat $REVIEW | $UNCOMPRESS_JS > ../webapp/js/curriki-module-review-debug.js
+cat $REVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-review.js
 
 UNNOMINATE="\
 	curriki/crs/unnominate-base.js \
 	"
 
-cat $UNNOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-unnominate.js
 cat $UNNOMINATE | $UNCOMPRESS_JS > ../webapp/js/curriki-module-unnominate-debug.js
+cat $UNNOMINATE | $COMPRESS_JS > ../webapp/js/curriki-module-unnominate.js
 
 PARTNER="\
 	curriki/crs/partner-base.js \
 	"
 
-cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js
 cat $PARTNER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-partner-debug.js
+cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js
 
 SEARCH="\
 	curriki/search/global.js \
@@ -104,24 +104,24 @@ SEARCH="\
 	curriki/search/form.js \
 	"
 
-cat $SEARCH | $COMPRESS_JS > ../webapp/js/curriki-module-search.js
 cat $SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-module-search-debug.js
+cat $SEARCH | $COMPRESS_JS > ../webapp/js/curriki-module-search.js
 
 ASTERIXREVIEW="\
 	curriki/crs/asterixReview-base.js \
 	"
 
-cat $ASTERIXREVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-asterixReview.js
 cat $ASTERIXREVIEW | $UNCOMPRESS_JS > ../webapp/js/curriki-module-asterixReview-debug.js
+cat $ASTERIXREVIEW | $COMPRESS_JS > ../webapp/js/curriki-module-asterixReview.js
 
 REORDER="\
 	curriki/reorder/base.js \
 	"
-cat $REORDER | $COMPRESS_JS > ../webapp/js/curriki-module-reorder.js
 cat $REORDER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-reorder-debug.js
+cat $REORDER | $COMPRESS_JS > ../webapp/js/curriki-module-reorder.js
 
 TOC="\
 	curriki/toc/base.js \
 	"
-cat $TOC | $COMPRESS_JS > ../webapp/js/curriki-module-toc.js
 cat $TOC | $UNCOMPRESS_JS > ../webapp/js/curriki-module-toc-debug.js
+cat $TOC | $COMPRESS_JS > ../webapp/js/curriki-module-toc.js

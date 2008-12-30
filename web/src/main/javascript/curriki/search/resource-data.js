@@ -296,8 +296,54 @@ data.init = function(){
 
 			//TODO: The format of the description is changing in EOU3
 			var desc = Ext.util.Format.stripTags(record.data.description);
-			desc = Ext.util.Format.ellipsis(desc, 300);
+			desc = Ext.util.Format.ellipsis(desc, 256);
 			desc = Ext.util.Format.htmlEncode(desc);
+
+			var fws = record.data.fwItems;
+			var fw = "";
+			if ("undefined" !== typeof fws[0]) {
+				var fwD = "";
+				var fwi = fws[0];
+				var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+				if (fwParent === fwi) {
+					fwD = f.store.subject.getById(fwParent).get('subject');
+				} else {
+					fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+				}
+				fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+				if ("undefined" !== typeof fws[1]) {
+					var fwD = "";
+					var fwi = fws[1];
+					var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+					if (fwParent === fwi) {
+						fwD = f.store.subject.getById(fwParent).get('subject');
+					} else {
+						fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+					}
+					fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+					if ("undefined" !== typeof fws[2]) {
+						fw += "...<br />";
+					}
+				}
+			}
+
+			var lvls = record.data.levels;
+			var lvl = "";
+			if ("undefined" !== typeof lvls[0]) {
+				lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
+				if ("undefined" !== typeof lvls[1]) {
+					lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
+					if ("undefined" !== typeof lvls[2]) {
+						lvl += "...<br />";
+					}
+				}
+			}
+			
+			desc = String.format("{1}<br />{0}{3}<br />{2}{5}<br />{4}"
+				,desc,_('mycurriki.favorites.mouseover.description')
+				,fw,_('mycurriki.favorites.mouseover.subject')
+				,lvl,_('mycurriki.favorites.mouseover.level')
+			);
 
 			// Asset Type icon
 			var assetType = record.data.assetType;
@@ -311,7 +357,7 @@ data.init = function(){
 			}
 
 //			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-			return String.format('<img class="x-tree-node-icon assettype-icon" src="{4}" alt="{5}" ext:qtip="{5}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtitle="{3}" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, _('search.resource.column.title.tooltip.title'), Ext.BLANK_IMAGE_URL, rollover);
+			return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" alt="{4}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
 		}
 
 		,ict: function(value, metadata, record, rowIndex, colIndex, store){
