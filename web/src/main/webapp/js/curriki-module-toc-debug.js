@@ -49,6 +49,10 @@ console.log('TOC createNode: ',attr);
 				var fw = "";
 				var fwMap = Curriki.data.fw_item.fwMap;
 
+				if (fws[0] === 'FW_masterFramework.WebHome') {
+					fws.shift();
+				}
+
 				if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
 					var fwD = "";
 					var fwi = fws[0];

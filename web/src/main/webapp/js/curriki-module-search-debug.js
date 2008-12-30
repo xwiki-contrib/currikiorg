@@ -593,7 +593,6 @@ data.init = function(){
 			// Title
 			var page = record.id.replace(/\./, '/');
 
-			//TODO: The format of the description is changing in EOU3
 			var desc = Ext.util.Format.stripTags(record.data.description);
 			desc = Ext.util.Format.ellipsis(desc, 256);
 			desc = Ext.util.Format.htmlEncode(desc);
