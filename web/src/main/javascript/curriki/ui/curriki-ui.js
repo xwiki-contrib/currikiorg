@@ -74,9 +74,9 @@ Curriki.ui.treeLoader.Base = function(config){
 
 Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		dataUrl:'DYNAMICALLY DETERMINED'
+		,setChildHref:false
 		,createNode:function(attr){
 console.log('createNode: ',attr);
-
 			if ('string' === typeof attr.id) {
 				var parent = Curriki.ui.treeLoader.Base.superclass.createNode.call(this, attr);
 console.log('createNode: parent',parent);
@@ -86,10 +86,13 @@ console.log('createNode: parent',parent);
 			var childInfo = {
 				 id:attr.assetpage||attr.collectionPage
 				,text:attr.displayTitle
-				,qtip:attr.description
+				,qtip:attr.qtip||attr.description
 				,cls:'resource-'+attr.assetType
 				,allowDrag:false
 				,allowDrop:false
+			}
+			if (this.setChildHref) {
+				childInfo.href = '/xwiki/bin/view/'+childInfo.id.replace('.', '/');
 			}
 
 			if (attr.rights && !attr.rights.view){
@@ -122,8 +125,8 @@ console.log('createNode: parent',parent);
 
 console.log('createNode: End ',childInfo);
 			return(childInfo.leaf
-			       ? new Ext.tree.TreeNode(childInfo)
-			       : new Ext.tree.AsyncTreeNode(childInfo));
+				   ? new Ext.tree.TreeNode(childInfo)
+				   : new Ext.tree.AsyncTreeNode(childInfo));
 		}
 
 		,requestData:function(node, callback){

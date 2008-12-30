@@ -33,17 +33,80 @@ Toc.init = function(){
 	};
 
 	Ext.extend(Curriki.ui.treeLoader.TOC, Curriki.ui.treeLoader.Base, {
-		createNode:function(attr){
+		setChildHref:true
+		,createNode:function(attr){
+console.log('TOC createNode: ',attr);
+			if ('string' !== Ext.type(attr.qtip)
+			    && 'string' === Ext.type(attr.description)
+			    && 'array' === Ext.type(attr.fwItems)
+			    && 'array' === Ext.type(attr.levels)
+			) {
+				var desc = attr.description||'';
+				desc = Ext.util.Format.ellipsis(desc, 256);
+				desc = Ext.util.Format.htmlEncode(desc);
+
+				var fws = attr.fwItems||[];
+				var fw = "";
+				if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
+					var fwD = "";
+					var fwi = fws[0];
+					var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+					if (fwParent === fwi) {
+						fwD = f.store.subject.getById(fwParent).get('subject');
+					} else {
+						fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+					}
+					fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+					if ("undefined" !== typeof fws[1]) {
+						var fwD = "";
+						var fwi = fws[1];
+						var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+						if (fwParent === fwi) {
+							fwD = f.store.subject.getById(fwParent).get('subject');
+						} else {
+							fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+						}
+						fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+						if ("undefined" !== typeof fws[2]) {
+							fw += "...<br />";
+						}
+					}
+				}
+
+				var lvls = attr.levels||[];
+				var lvl = "";
+				if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
+					lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
+					if ("undefined" !== typeof lvls[1]) {
+						lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
+						if ("undefined" !== typeof lvls[2]) {
+							lvl += "...<br />";
+						}
+					}
+				}
+				
+				attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
+					,desc,_('mycurriki.favorites.mouseover.description')
+					,fw,_('mycurriki.favorites.mouseover.subject')
+					,lvl,_('mycurriki.favorites.mouseover.level')
+				);
+			}
 
 			if ('string' === typeof attr.id) {
 				var parent = Curriki.ui.treeLoader.TOC.superclass.createNode.call(this, attr);
+console.log('TOC createNode: parent',parent);
 				return parent;
 			}
 
+			var parent = Curriki.ui.treeLoader.TOC.superclass.createNode.call(this, attr);
+console.log('TOC createNode: call super',parent);
+			return parent;
+
+/*
 			var childInfo = {
 				 id:attr.assetpage||attr.collectionPage
 				,text:attr.displayTitle
-				,qtip:attr.description
+				,qtip:attr.qtip||attr.description
 				,cls:'resource-'+attr.assetType
 			}
 			childInfo.href = '/xwiki/bin/view/'+childInfo.id.replace('.', '/');
@@ -76,6 +139,7 @@ console.log('createNodeTOC: End ',childInfo);
 			return(childInfo.leaf
 				   ? new Ext.tree.TreeNode(childInfo)
 				   : new Ext.tree.AsyncTreeNode(childInfo));
+*/
 		}
 	});
 
