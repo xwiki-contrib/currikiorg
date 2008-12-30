@@ -95,12 +95,16 @@ public abstract class CompositeAsset extends Asset {
                         if (doc instanceof Asset) {
                             subInfo.put("displayTitle", doc.getDisplayTitle());
                             subInfo.put("description", ((Asset) doc).getDescription());
+                            subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
+                            subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
                             subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
                             subInfo.put("rights", ((Asset) doc).getRightsList());
                         } else if (doc == null) {
                             // getDocument returns null if the page is not viewable by the user
                             subInfo.put("displayTitle", "");
                             subInfo.put("description", "");
+                            subInfo.put("fwItems", new String[]{});
+                            subInfo.put("levels", new String[]{});
                             subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
 
                             Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
@@ -112,6 +116,8 @@ public abstract class CompositeAsset extends Asset {
                     } catch (Exception e) {
                         subInfo.put("displayTitle", "");
                         subInfo.put("description", "");
+                        subInfo.put("fwItems", new String[]{});
+                        subInfo.put("levels", new String[]{});
                         subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
 
                         Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
