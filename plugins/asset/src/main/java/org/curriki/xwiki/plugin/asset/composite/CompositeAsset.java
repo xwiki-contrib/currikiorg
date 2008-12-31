@@ -58,6 +58,12 @@ public abstract class CompositeAsset extends Asset {
         // description
         docInfo.put("description", getDescription());
 
+        // other metadata
+        docInfo.put("fwItems", getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
+        docInfo.put("levels", getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
+        docInfo.put("category", getValue(Constants.ASSET_CLASS_CATEGORY));
+        docInfo.put("ict", getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
+
         // collection type
         use(Constants.COMPOSITE_ASSET_CLASS);
         docInfo.put("collectionType", getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE));
@@ -97,6 +103,8 @@ public abstract class CompositeAsset extends Asset {
                             subInfo.put("description", ((Asset) doc).getDescription());
                             subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
                             subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
+                            subInfo.put("category", ((Asset) doc).getValue(Constants.ASSET_CLASS_CATEGORY));
+                            subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
                             subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
                             subInfo.put("rights", ((Asset) doc).getRightsList());
                         } else if (doc == null) {
@@ -105,6 +113,8 @@ public abstract class CompositeAsset extends Asset {
                             subInfo.put("description", "");
                             subInfo.put("fwItems", new String[]{});
                             subInfo.put("levels", new String[]{});
+                            subInfo.put("category", "");
+                            subInfo.put("ict", "");
                             subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
 
                             Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
@@ -118,6 +128,8 @@ public abstract class CompositeAsset extends Asset {
                         subInfo.put("description", "");
                         subInfo.put("fwItems", new String[]{});
                         subInfo.put("levels", new String[]{});
+                        subInfo.put("category", "");
+                        subInfo.put("ict", "");
                         subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
 
                         Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
@@ -205,7 +217,12 @@ public abstract class CompositeAsset extends Asset {
                             if (doc instanceof Asset) {
                                 subInfo.put("displayTitle", doc.getDisplayTitle());
                                 subInfo.put("description", ((Asset) doc).getDescription());
+                                subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
+                                subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
+                                subInfo.put("category", ((Asset) doc).getValue(Constants.ASSET_CLASS_CATEGORY));
+                                subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
                                 subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
+                                subInfo.put("rights", ((Asset) doc).getRightsList());
                             } else {
                                 subInfo.put("error", "Subasset does not exist");
                             }
@@ -302,7 +319,7 @@ public abstract class CompositeAsset extends Asset {
                         }
                     }
 
-                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.SubAssetClass' and prop.id.id = obj.id and prop.name='assetpage' and prop.value in (" + sql + ")";
+                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='"+Constants.SUBASSET_CLASS+"' and prop.id.id = obj.id and prop.name='"+Constants.SUBASSET_CLASS_PAGE+"' and prop.value in (" + sql + ")";
                     List<String> list = context.getWiki().getStore().searchDocumentsNames(sql, context);
                     if ((list==null)||(list.size()==0)){
                         done = true;
