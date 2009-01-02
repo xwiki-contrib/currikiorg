@@ -67,7 +67,7 @@ Ext.ns('Curriki.data.category');
 Curriki.data.category.list = ["text","image","audio","video","interactive","archive","document","external","collection","unknown"];
 Curriki.data.category.data = [ ];
 Curriki.data.category.list.each(function(category){
-	Curriki.data.el.data.push({
+	Curriki.data.category.data.push({
 		 inputValue:category
 		,boxLabel:_('CurrikiCode.AssetClass_category_'+category)
 	});
