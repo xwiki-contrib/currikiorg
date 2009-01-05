@@ -1099,7 +1099,7 @@ form.init = function(){
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category}">',
-					'<a href="/xwiki/bin/view/{[page.replace(/\./, \'/\')]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a href="/xwiki/bin/view/{[page.replace(/\\./, '/')]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
