@@ -1099,23 +1099,27 @@ form.init = function(){
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category}">',
-					'<a href="{[this.getParentURL(page)]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a href="{[this.getParentURL(page||"")]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
 			'</tpl>',
 			'</ul>', {
 				getParentURL: function(page){
-					return "/xwiki/bin/view/"+page.replace(/\./, '/');
+					if (page) {
+						return '/xwiki/bin/view/'+page.replace(/\./, '/');
+					} else {
+						return '';
+					}
 				},
 				getQtip: function(values){
 					var f = Curriki.module.search.data.resource.filter;
 
-					var desc = Ext.util.Format.stripTags(values.description);
+					var desc = Ext.util.Format.stripTags(values.description||'');
 					desc = Ext.util.Format.ellipsis(desc, 256);
 					desc = Ext.util.Format.htmlEncode(desc);
 
-					var fws = values.fwItems;
+					var fws = values.fwItems||'';
 					var fw = "";
 					if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
 						var fwD = "";
@@ -1143,7 +1147,7 @@ form.init = function(){
 						}
 					}
 
-					var lvls = values.levels;
+					var lvls = values.levels||'';
 					var lvl = "";
 					if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
 						lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
