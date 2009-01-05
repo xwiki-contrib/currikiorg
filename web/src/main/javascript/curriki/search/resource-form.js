@@ -443,12 +443,11 @@ form.init = function(){
 						}
 					}
 			
-					desc = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
+					return String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
 						,desc,_('mycurriki.favorites.mouseover.description')
 						,fw,_('mycurriki.favorites.mouseover.subject')
 						,lvl,_('mycurriki.favorites.mouseover.level')
 					);
-
 				}
 			}
 		)
