@@ -1099,12 +1099,15 @@ form.init = function(){
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category}">',
-					'<a href="/xwiki/bin/view/{[page.replace(/\\./, '/')]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a href="{[this.getParentURL(page)]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
 			'</tpl>',
 			'</ul>', {
+				getParentURL: function(page){
+					return "/xwiki/bin/view/"+page.replace(/\./, '/');
+				},
 				getQtip: function(values){
 					var f = Curriki.module.search.data.resource.filter;
 
