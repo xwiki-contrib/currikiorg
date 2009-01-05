@@ -553,7 +553,7 @@ data.init = function(){
 		,{ name: 'description' }
 		,{ name: 'fwItems' }
 		,{ name: 'levels' }
-		,{ name: 'info' }
+		,{ name: 'parents' }
 		,{ name: 'updated' }
 	]);
 
@@ -1094,14 +1094,78 @@ form.init = function(){
 	}
 
 	form.rowExpander = new Ext.grid.RowExpander({
-		tpl: new Ext.Template(
-			'{info}'
+		tpl: new Ext.XTemplate(
+			_('search.resource.resource.expanded.title'),
+			'<ul>',
+			'<tpl for="parents">',
+				'<li class="resource-{assetType} category-{category}">',
+					'<a href="/xwiki/bin/view/{[page.replace(/\./, \'/\')]}" ext:qtip="{[this.getQtip(values)]}">',
+						'{title}',
+					'</a>',
+				'</li>',
+			'</tpl>',
+			'</ul>', {
+				getQtip: function(values){
+					var f = Curriki.module.search.data.resource.filter;
+
+					var desc = Ext.util.Format.stripTags(values.description);
+					desc = Ext.util.Format.ellipsis(desc, 256);
+					desc = Ext.util.Format.htmlEncode(desc);
+
+					var fws = values.fwItems;
+					var fw = "";
+					if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
+						var fwD = "";
+						var fwi = fws[0];
+						var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+						if (fwParent === fwi) {
+							fwD = f.store.subject.getById(fwParent).get('subject');
+						} else {
+							fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+						}
+						fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+						if ("undefined" !== typeof fws[1]) {
+							var fwD = "";
+							var fwi = fws[1];
+							var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+							if (fwParent === fwi) {
+								fwD = f.store.subject.getById(fwParent).get('subject');
+							} else {
+								fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+							}
+							fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+							if ("undefined" !== typeof fws[2]) {
+								fw += "...<br />";
+							}
+						}
+					}
+
+					var lvls = values.levels;
+					var lvl = "";
+					if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
+						lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
+						if ("undefined" !== typeof lvls[1]) {
+							lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
+							if ("undefined" !== typeof lvls[2]) {
+								lvl += "...<br />";
+							}
+						}
+					}
+			
+					desc = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
+						,desc,_('mycurriki.favorites.mouseover.description')
+						,fw,_('mycurriki.favorites.mouseover.subject')
+						,lvl,_('mycurriki.favorites.mouseover.level')
+					);
+
+				}
+			}
 		)
 	});
 
 	form.rowExpander.renderer = function(v, p, record){
 		var cls;
-		if (record.data.info !== '') {
+		if (record.data.parents && record.data.parents.size() > 1) {
 			p.cellAttr = 'rowspan="2"';
 			cls = 'x-grid3-row-expander';
 //			return '<div class="x-grid3-row-expander">&#160;</div>';

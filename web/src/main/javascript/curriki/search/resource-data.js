@@ -256,7 +256,7 @@ data.init = function(){
 		,{ name: 'description' }
 		,{ name: 'fwItems' }
 		,{ name: 'levels' }
-		,{ name: 'info' }
+		,{ name: 'parents' }
 		,{ name: 'updated' }
 	]);
 
