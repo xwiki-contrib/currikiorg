@@ -416,26 +416,38 @@ form.init = function(){
 					if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
 						var fwD = "";
 						var fwi = fws[0];
-						var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
-						if (fwParent === fwi) {
-							fwD = f.store.subject.getById(fwParent).get('subject');
-						} else {
-							fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
-						}
-						fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
-						if ("undefined" !== typeof fws[1]) {
-							var fwD = "";
-							var fwi = fws[1];
-							var fwParent = f.store.subsubject.getById(fwi).get('parentItem');
+						var fwiNode = f.store.subsubject.getById(fwi)||false;
+						var fwParent = '';
+						if (fwiNode) {
+							fwParent = fwiNode.get('parentItem');
 							if (fwParent === fwi) {
 								fwD = f.store.subject.getById(fwParent).get('subject');
 							} else {
 								fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
 							}
 							fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
-							if ("undefined" !== typeof fws[2]) {
-								fw += "...<br />";
+							if ("undefined" !== typeof fws[1]) {
+								var fwD = "";
+								var fwi = fws[1];
+								var fwiNode = f.store.subsubject.getById(fwi)||false;
+								var fwParent = '';
+								if (fwiNode) {
+									var fwParent = fwiNode.get('parentItem');
+									if (fwParent === fwi) {
+										fwD = f.store.subject.getById(fwParent).get('subject');
+									} else {
+										fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
+									}
+									fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+									if ("undefined" !== typeof fws[2]) {
+										fw += "...<br />";
+									}
+								} else {
+									fw += 'Unknown Framework: '+Ext.util.Format.htmlEncode(fwi) + "<br />";
+								}
 							}
+						} else {
+							fw += 'Unknown Framework: '+Ext.util.Format.htmlEncode(fwi) + "<br />";
 						}
 					}
 
