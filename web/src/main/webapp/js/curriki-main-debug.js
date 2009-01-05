@@ -1963,6 +1963,22 @@ Curriki.data.el.list.each(function(el){
 	});
 });
 
+Curriki.data.el.getRolloverDisplay = function(el_array){
+	var lvls = el_array||undefined;
+	var lvl = "";
+	if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
+		lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
+		if ("undefined" !== typeof lvls[1]) {
+			lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
+			if ("undefined" !== typeof lvls[2]) {
+				lvl += "...<br />";
+			}
+		}
+	}
+
+	return lvl;
+};
+
 
 Ext.ns('Curriki.data.rights');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/rights  OR  Get filled in JS created by xwiki
@@ -2073,6 +2089,58 @@ Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 	return nodeInfo;
 };
 Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
+
+Curriki.data.fw_item.getRolloverDisplay = function(fw_array){
+	var fws = fw_array||[];
+	var fw = "";
+	var fwMap = Curriki.data.fw_item.fwMap;
+
+	if (fws[0] === 'FW_masterFramework.WebHome') {
+		fws.shift();
+	}
+
+	if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
+		var fwD = "";
+		var fwi = fws[0];
+		var fwParent = fwMap['FW_masterFramework.WebHome'].find(function(item){
+			return (fwMap[item.id].find(function(sub){
+				return sub.id==fwi;
+			}));
+		});
+
+		if (!Ext.type(fwParent)) {
+			fwD = _('CurrikiCode.AssetClass_fw_items_'+fwi);
+		} else {
+			fwParent = fwParent.id;
+			fwD = _('CurrikiCode.AssetClass_fw_items_'+fwParent) + " > "+_('CurrikiCode.AssetClass_fw_items_'+fwi);
+		}
+		fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+		if ("undefined" !== typeof fws[1]) {
+			var fwD = "";
+			var fwi = fws[1];
+			var fwParent = fwMap['FW_masterFramework.WebHome'].find(function(item){
+				return (fwMap[item.id].find(function(sub){
+					return sub.id==fwi;
+				}));
+			});
+
+			if (!Ext.type(fwParent)) {
+				fwD = _('CurrikiCode.AssetClass_fw_items_'+fwi);
+			} else {
+				fwParent = fwParent.id;
+				fwD = _('CurrikiCode.AssetClass_fw_items_'+fwParent) + " > "+_('CurrikiCode.AssetClass_fw_items_'+fwi);
+			}
+			fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
+			if ("undefined" !== typeof fws[2]) {
+				fw += "...<br />";
+			}
+		}
+	}
+
+	return fw;
+};
+
+
 Ext.ns('Curriki.ui.component.asset');
 Curriki.ui.component.asset.getFwTree = function(){
 	return {

@@ -411,57 +411,8 @@ form.init = function(){
 					desc = Ext.util.Format.ellipsis(desc, 256);
 					desc = Ext.util.Format.htmlEncode(desc);
 
-					var fws = values.fwItems||'';
-					var fw = "";
-					if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
-						var fwD = "";
-						var fwi = fws[0];
-						var fwiNode = f.store.subsubject.getById(fwi)||false;
-						var fwParent = '';
-						if (fwiNode) {
-							fwParent = fwiNode.get('parentItem');
-							if (fwParent === fwi) {
-								fwD = f.store.subject.getById(fwParent).get('subject');
-							} else {
-								fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
-							}
-							fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
-							if ("undefined" !== typeof fws[1]) {
-								var fwD = "";
-								var fwi = fws[1];
-								var fwiNode = f.store.subsubject.getById(fwi)||false;
-								var fwParent = '';
-								if (fwiNode) {
-									var fwParent = fwiNode.get('parentItem');
-									if (fwParent === fwi) {
-										fwD = f.store.subject.getById(fwParent).get('subject');
-									} else {
-										fwD = f.store.subject.getById(fwParent).get('subject') +" > "+ f.store.subsubject.getById(fwi).get('subject');
-									}
-									fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
-									if ("undefined" !== typeof fws[2]) {
-										fw += "...<br />";
-									}
-								} else {
-									fw += 'Unknown Framework: '+Ext.util.Format.htmlEncode(fwi) + "<br />";
-								}
-							}
-						} else {
-							fw += 'Unknown Framework: '+Ext.util.Format.htmlEncode(fwi) + "<br />";
-						}
-					}
-
-					var lvls = values.levels||'';
-					var lvl = "";
-					if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
-						lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
-						if ("undefined" !== typeof lvls[1]) {
-							lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
-							if ("undefined" !== typeof lvls[2]) {
-								lvl += "...<br />";
-							}
-						}
-					}
+					var fw = Curriki.data.fw_item.getRolloverDisplay(values.fwItems||[]);
+					var lvl = Curriki.data.el.getRolloverDisplay(values.levels||[]);
 			
 					return String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
 						,desc,_('mycurriki.favorites.mouseover.description')
