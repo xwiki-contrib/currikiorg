@@ -25,9 +25,13 @@ Curriki.data.ict.getRolloverDisplay = function(el_ict){
 
 	var wrap = '<div class="ict-{0}"><img class="ict-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
 
-	icts.each(function(i){
-		ict += String.format(wrap, i.replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+i));
-	});
+	if (icts.size() == 0) {
+		ict += String.format(wrap, 'none', _('global.title.popup.none.selected'));
+	} else {
+		icts.each(function(i){
+			ict += String.format(wrap, i.replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+i));
+		});
+	}
 
 	return ict;
 };
@@ -48,6 +52,7 @@ Curriki.data.el.list.each(function(el){
 Curriki.data.el.getRolloverDisplay = function(el_array){
 	var lvls = el_array||undefined;
 	var lvl = "";
+
 	if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
 		lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
 		if ("undefined" !== typeof lvls[1]) {
@@ -56,6 +61,8 @@ Curriki.data.el.getRolloverDisplay = function(el_array){
 				lvl += "...<br />";
 			}
 		}
+	} else {
+		lvl += _('global.title.popup.none.selected');
 	}
 
 	return lvl;
@@ -217,6 +224,8 @@ Curriki.data.fw_item.getRolloverDisplay = function(fw_array){
 				fw += "...<br />";
 			}
 		}
+	} else {
+		fw += _('global.title.popup.none.selected');
 	}
 
 	return fw;
