@@ -50,11 +50,11 @@ console.log('TOC createNode: ',attr);
 				var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
 				var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
 				
-				attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br /><br />{7}<br />{6}"
-					,desc,_('mycurriki.favorites.mouseover.description')
-					,fw,_('mycurriki.favorites.mouseover.subject')
-					,lvl,_('mycurriki.favorites.mouseover.level')
-					,ict,_('mycurriki.favorites.mouseover.ict')
+				attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
+					,desc,_('global.title.popup.description')
+					,fw,_('global.title.popup.subject')
+					,lvl,_('global.title.popup.level')
+					,ict,_('global.title.popup.ict')
 				);
 			}
 

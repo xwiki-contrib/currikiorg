@@ -601,9 +601,9 @@ data.init = function(){
 			var lvl = Curriki.data.el.getRolloverDisplay(record.data.levels||[]);
 
 			desc = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
-				,desc,_('mycurriki.favorites.mouseover.description')
-				,fw,_('mycurriki.favorites.mouseover.subject')
-				,lvl,_('mycurriki.favorites.mouseover.level')
+				,desc,_('global.title.popup.description')
+				,fw,_('global.title.popup.subject')
+				,lvl,_('global.title.popup.level')
 			);
 
 			// Asset Type icon
@@ -1087,9 +1087,9 @@ form.init = function(){
 					var lvl = Curriki.data.el.getRolloverDisplay(values.levels||[]);
 			
 					return String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
-						,desc,_('mycurriki.favorites.mouseover.description')
-						,fw,_('mycurriki.favorites.mouseover.subject')
-						,lvl,_('mycurriki.favorites.mouseover.level')
+						,desc,_('global.title.popup.description')
+						,fw,_('global.title.popup.subject')
+						,lvl,_('global.title.popup.level')
 					);
 				}
 			}
