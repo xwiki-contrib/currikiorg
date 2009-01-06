@@ -53,7 +53,7 @@ console.log('TOC createNode: ',attr);
 				attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
 					,desc,_('global.title.popup.description')
 					,fw,_('global.title.popup.subject')
-					,lvl,_('global.title.popup.level')
+					,lvl,_('global.title.popup.educationlevel')
 					,ict,_('global.title.popup.ict')
 				);
 			}
