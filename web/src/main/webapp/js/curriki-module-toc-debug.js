@@ -40,6 +40,7 @@ console.log('TOC createNode: ',attr);
 			    && 'string' === Ext.type(attr.description)
 			    && 'array' === Ext.type(attr.fwItems)
 			    && 'array' === Ext.type(attr.levels)
+			    && 'array' === Ext.type(attr.ict)
 			) {
 				var desc = attr.description||'';
 				desc = Ext.util.Format.ellipsis(desc, 256);
@@ -47,11 +48,13 @@ console.log('TOC createNode: ',attr);
 
 				var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
 				var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
+				var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
 				
-				attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
+				attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br /><br />{7}<br />{6}"
 					,desc,_('mycurriki.favorites.mouseover.description')
 					,fw,_('mycurriki.favorites.mouseover.subject')
 					,lvl,_('mycurriki.favorites.mouseover.level')
+					,ict,_('mycurriki.favorites.mouseover.ict')
 				);
 			}
 

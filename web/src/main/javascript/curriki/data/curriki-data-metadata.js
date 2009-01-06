@@ -19,6 +19,20 @@ Curriki.data.ict.store = new Ext.data.SimpleStore({
 	data: Curriki.data.ict.data
 });
 
+Curriki.data.ict.getRolloverDisplay = function(el_ict){
+	var icts = el_ict||[];
+	var ict = "";
+
+	var wrap = '<div class="ict-{0}"><img class="ict-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
+
+	icts.each(function(i){
+		ict += String.format(wrap, i, _('CurrikiCode.AssetClass_instructioal_component_'+i));
+	});
+
+	return ict;
+};
+
+
 
 Ext.ns('Curriki.data.el');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/educational_level  OR  Get filled in JS created by xwiki
