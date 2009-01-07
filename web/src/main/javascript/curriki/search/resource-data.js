@@ -247,6 +247,7 @@ data.init = function(){
 		{ name: 'title' }
 		,{ name: 'assetType' }
 		,{ name: 'category' }
+		,{ name: 'subcategory' }
 		,{ name: 'ict' }
 		,{ name: 'ictText' }
 		,{ name: 'ictIcon' }
@@ -283,16 +284,7 @@ data.init = function(){
 
 	// Set up renderers
 	data.renderer = {
-		assetType: function(value, metadata, record, rowIndex, colIndex, store){
-			metadata.css = String.format('resource-{0}', value); // Added to <td>
-			var rollover = _('search.resource.icon.'+value+'.rollover');
-			if (rollover === 'search.resource.icon.'+value+'.rollover') {
-				rollover = _('search.resource.icon.Unknown.rollover');
-			}
-			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-		}
-
-		,title: function(value, metadata, record, rowIndex, colIndex, store){
+		title: function(value, metadata, record, rowIndex, colIndex, store){
 			// Title
 			var page = record.id.replace(/\./, '/');
 
@@ -312,11 +304,11 @@ data.init = function(){
 			// Asset Type icon
 			var assetType = record.data.assetType;
 			var category = record.data.category;
-			metadata.css = String.format('resource-{0} category-{1}', assetType, category); // Added to <td>
+			var subcategory = record.data.subcategory;
+			metadata.css = String.format('resource-{0} category-{1} subcategory-{1}_{2}', assetType, category, subcategory); // Added to <td>
 
-			//TODO: This is going to become more complicated with category + mime type
-			var rollover = _('search.resource.icon.'+assetType+'.rollover');
-			if (rollover === 'search.resource.icon.'+assetType+'.rollover') {
+			var rollover = _('CurrikiCode.AssetClass_category_'+category, _(category+'.'+subcategory));
+			if (rollover === 'CurrikiCode.AssetClass_category_'+category) {
 				rollover = _('search.resource.icon.Unknown.rollover');
 			}
 

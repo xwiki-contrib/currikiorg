@@ -66,7 +66,8 @@ public abstract class CompositeAsset extends Asset {
         // other metadata
         docInfo.put("fwItems", getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
         docInfo.put("levels", getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-        docInfo.put("category", getValue(Constants.ASSET_CLASS_CATEGORY));
+        docInfo.put("category", getCategory());
+        docInfo.put("subcategory", getCategorySubtype());
         docInfo.put("ict", getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
 
         // collection type
@@ -108,7 +109,8 @@ public abstract class CompositeAsset extends Asset {
                             subInfo.put("description", ((Asset) doc).getDescription());
                             subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
                             subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-                            subInfo.put("category", ((Asset) doc).getValue(Constants.ASSET_CLASS_CATEGORY));
+                            subInfo.put("category", ((Asset) doc).getCategory());
+                            subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
                             subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
                             subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
                             subInfo.put("rights", ((Asset) doc).getRightsList());
@@ -119,6 +121,7 @@ public abstract class CompositeAsset extends Asset {
                             subInfo.put("fwItems", new String[]{});
                             subInfo.put("levels", new String[]{});
                             subInfo.put("category", "");
+                            subInfo.put("subcategory", "");
                             subInfo.put("ict", "");
                             subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
 
@@ -134,6 +137,7 @@ public abstract class CompositeAsset extends Asset {
                         subInfo.put("fwItems", new String[]{});
                         subInfo.put("levels", new String[]{});
                         subInfo.put("category", "");
+                        subInfo.put("subcategory", "");
                         subInfo.put("ict", "");
                         subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
 
@@ -224,7 +228,8 @@ public abstract class CompositeAsset extends Asset {
                                 subInfo.put("description", ((Asset) doc).getDescription());
                                 subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
                                 subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-                                subInfo.put("category", ((Asset) doc).getValue(Constants.ASSET_CLASS_CATEGORY));
+                                subInfo.put("category", ((Asset) doc).getCategory());
+                                subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
                                 subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
                                 subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
                                 subInfo.put("rights", ((Asset) doc).getRightsList());

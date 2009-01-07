@@ -389,7 +389,7 @@ form.init = function(){
 			_('search.resource.resource.expanded.title'),
 			'<ul>',
 			'<tpl for="parents">',
-				'<li class="resource-{assetType} category-{category}">',
+				'<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">',
 					'<a href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
