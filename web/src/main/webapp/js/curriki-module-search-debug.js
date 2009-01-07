@@ -438,7 +438,7 @@ data.init = function(){
 		if (value === 'unknown') {
 			sort = 'zzz';
 		}
-		if (value !== 'collection') {
+		if (value !== 'collection') { //collection should not be in the list
 			f.data.category.data.push([
 				value
 				,_('CurrikiCode.AssetClass_category_'+value)
@@ -604,8 +604,8 @@ data.init = function(){
 			var subcategory = record.data.subcategory;
 			metadata.css = String.format('resource-{0} category-{1} subcategory-{1}_{2}', assetType, category, subcategory); // Added to <td>
 
-			var rollover = _('CurrikiCode.AssetClass_category_'+category, _(category+'.'+subcategory));
-			if (rollover === 'CurrikiCode.AssetClass_category_'+category) {
+			var rollover = _(category+'.'+subcategory);
+			if (rollover === category+'.'+subcategory) {
 				rollover = _('search.resource.icon.Unknown.rollover');
 			}
 
