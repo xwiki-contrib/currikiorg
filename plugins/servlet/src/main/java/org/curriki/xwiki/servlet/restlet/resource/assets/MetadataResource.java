@@ -64,18 +64,27 @@ public class MetadataResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
-        Object assetObj = asset.getObject(Constants.ASSET_CLASS);
-        Object licenseObj = asset.getObject(Constants.ASSET_LICENCE_CLASS);
-
         // SRI1
         // title
         if (json.has("title")) {
             asset.setTitle(json.getString("title"));
+        } else {
+            // we need to force the write mode on the asset
+            // otherwise the objects retrieved won't be cloned versions
+            asset.setTitle(asset.getTitle());
         }
+
+        // We need to be carefull when interacting with assets in write mode like that
+        // getObject does not retrieve the object in write mode if the asset has not been
+        // switched to write mode first. We might need a function to switch to write mode
+        Object assetObj = asset.getObject(Constants.ASSET_CLASS);
+        Object licenseObj = asset.getObject(Constants.ASSET_LICENCE_CLASS);
+
         // description
         if (json.has("description")) {
             assetObj.set(Constants.ASSET_CLASS_DESCRIPTION,  json.getString("description"));
         }
+        
         // fw_items (array)
         List fw_items;
         if (json.has("fw_items")) {
