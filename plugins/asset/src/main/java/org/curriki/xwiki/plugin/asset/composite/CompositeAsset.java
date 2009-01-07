@@ -47,6 +47,11 @@ public abstract class CompositeAsset extends Asset {
         doc.setContent("");
     }
 
+    @Override
+    public String getCategorySubtype() {
+        return compositeAssetType();
+    }
+
     abstract protected String compositeAssetType();
 
     public Map<String,Object> getCompositeInfo() {

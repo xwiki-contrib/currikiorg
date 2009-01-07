@@ -44,6 +44,26 @@ public class VideoAsset extends Asset {
         saveDocument(context.getMessageTool().get("curriki.comment.createvideosourceasset"), true);
     }
 
+    @Override
+    public String getCategorySubtype() {
+        String partner = "";
+        try {
+            partner = getVideoPartner();
+        } catch (XWikiException e) {
+            partner = "";
+        }
+        String result = "";
+        if (Constants.VIDEO_ASSET_PARTNER_VIDITALK.equals(partner)) {
+            return Constants.VIDEO_ASSET_CATEGORY_SUBTYPE_VIDITALK;
+        }
+
+        if (hasA(Constants.ATTACHMENT_ASSET_CLASS)) {
+            use(getObject(Constants.ATTACHMENT_ASSET_CLASS));
+            return (String) getValue(Constants.ATTACHMENT_ASSET_FILE_TYPE);
+        }
+
+        return Constants.ASSET_CATEGORY_SUBTYPE_UNKNOWN;
+    }
 
     /**
      * This functions will display the asset including a fallback system

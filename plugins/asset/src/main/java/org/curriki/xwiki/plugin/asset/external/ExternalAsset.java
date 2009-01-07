@@ -21,6 +21,11 @@ public class ExternalAsset extends Asset {
         super(doc, context);
     }
 
+    @Override
+    public String getCategorySubtype() {
+        return Constants.EXTERNAL_ASSET_CATEGORY_SUBTYPE_DEFAULT;
+    }
+
     public String getDisplayTitle() {
         String title = super.getDisplayTitle();
 

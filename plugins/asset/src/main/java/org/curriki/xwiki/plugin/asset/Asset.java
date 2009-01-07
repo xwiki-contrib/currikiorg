@@ -75,6 +75,24 @@ public class Asset extends CurrikiDocument {
     }
 
     /**
+     * Gets the category sub-type (file type in the case of attachments)
+     *
+     * This should be overridden in each of the sub-classes of Asset
+     *
+     * @return category sub-type
+     */
+    public String getCategorySubtype() {
+        Asset asset;
+
+        try {
+            asset = subclassAs(getAssetClass());
+            return asset.getCategorySubtype();
+        } catch (XWikiException e) {
+            return Constants.ASSET_CATEGORY_SUBTYPE_UNKNOWN;
+        }
+    }
+
+    /**
      * This functions will display the asset including a fallback system
      * For a specific mode. This function can be overidden for a specific asset type
      * Otherwise it will use a default rule system to find the appropriate template

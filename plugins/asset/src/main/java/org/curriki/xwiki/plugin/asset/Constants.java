@@ -79,6 +79,10 @@ public interface Constants {
     String ASSET_CATEGORY_EXTERNAL = "external";
     String ASSET_CATEGORY_COLLECTION = "collection";
 
+    String ASSET_CATEGORY_SUBTYPE_UNKNOWN = "unknown";
+    String ASSET_CATEGORY_SUBTYPE_PROTECTED = "protected";
+    String ASSET_CATEGORY_SUBTYPE_INVALID = "invalid";
+
     String ASSET_CLASS_TRACKING = "tracking";
 
     // File check fields
@@ -167,6 +171,8 @@ public interface Constants {
     String VIDEO_ASSET_PARTNER_VIDITALK = "viditalk";
     String VIDEO_ASSET_PARTNER_VALUES = "other=Other|viditalk=Viditalk";
 
+    String VIDEO_ASSET_CATEGORY_SUBTYPE_VIDITALK = "viditalk";
+
     /**
      * Class ArchiveAssetClass
      */
@@ -193,6 +199,8 @@ public interface Constants {
     String EXTERNAL_ASSET_CLASS = "CurrikiCode.ExternalAssetClass";
     String EXTERNAL_ASSET_LINK = "link";
     String EXTERNAL_ASSET_LINKTEXT = "linktext";
+
+    String EXTERNAL_ASSET_CATEGORY_SUBTYPE_DEFAULT = "url";
 
     /**
      * Groups

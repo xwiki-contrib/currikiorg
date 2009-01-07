@@ -29,6 +29,19 @@ public class TextAsset extends Asset {
         return obj.getStringValue(Constants.TEXT_ASSET_SYNTAX);
     }
 
+    @Override
+    public String getCategorySubtype() {
+        String syntax = "";
+        try {
+            syntax = getSyntax();
+        } catch (AssetException e) {
+            syntax = Constants.ASSET_CATEGORY_SUBTYPE_UNKNOWN;
+        }
+
+        // Turn html/1.0, xwiki/1.0, xwiki/2.0 into just the first portion (no /x.0)
+        return syntax.replaceAll("/.*$", "");
+    }
+
     public void makeTextAsset(String syntax, String content) throws XWikiException {
         assertCanEdit();
         doc.setContent(content);

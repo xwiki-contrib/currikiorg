@@ -23,6 +23,11 @@ public class AttachmentAsset extends Asset {
         return (String) getValue(Constants.ATTACHMENT_ASSET_FILE_TYPE);
     }
 
+    @Override
+    public String getCategorySubtype() {
+        return getFileType();
+    }
+
     /**
      * This functions will display the asset including a fallback system
      * For a specific mode. This function can be overidden for a specific asset type
