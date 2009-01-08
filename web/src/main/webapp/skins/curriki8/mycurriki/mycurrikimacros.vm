@@ -988,7 +988,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   #end ## }
   #set($g_rowCount = $g_rowCount + 1)
   <tr class="table-row#if(($g_rowCount % 2) == 0) table-odds#end">
-    <td class="table-col-title">#mycurriki_favassettitlewithmodesc($asset)</td>
+    <td class="table-col-title">#mycurriki_assettitlewithmodesc($asset)</td>
     <td class="table-col-contributor">#mycurriki_contributor($asset)</td>
     <td class="table-col-ict">#mycurriki_ict($asset)</td>
     <td class="table-col-filetype">#mycurriki_filetype($asset)</td>
@@ -1432,61 +1432,6 @@ $msg.get("deleted")
   <!-- End MyCurriki Contributions Box -->
 #end ##} end macro
 
-
-
-#**
-  * Displays an asset title with mouseover description
-  *
-  * @param $asset Asset to display the title
-  *#
-#macro(mycurriki_favassettitlewithmodesc $asset) ## {
-#set($descnb = $descnb + 1)
-#asset_findtitle($asset)
-#set($title = $currikiTitle)
-#if(!$title || $title.length() == 0) ## {
- #set($title = $msg.get("caption.untitled"))
-#end ## }
-<a class="curriki-link" href="$asset.getURL("view")" onmouseover="$('mycurriki-description-${descnb}').show();" onmouseout="$('mycurriki-description-${descnb}').hide();">{pre}$title{/pre}</a>
-<div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
-{pre}
-$msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
-<br />
-$msg.get('mycurriki.favorites.mouseover.subject') <br />
-#set($subj = $!asset.getValue('fw_items'))
-#set($c = 0)
-#foreach($item in $subj) ## {
-#if($item == "FW_masterFramework.WebHome") ## {
-## Don't count WebHome
-#else ## } {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-#set($fw = $xwiki.getDocument($item))
-## $fw.displayTitle <br />
-## #set($bcLocal = $item)
-#subjectbreadcrumb("" $fw) <br />
-#end ## }
-#end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-<br />
-$msg.get('mycurriki.favorites.mouseover.level')<br />
-#set($levl = $!asset.getValue('educational_level'))
-#set($c = 0)
-#foreach($item in $levl) ## {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-$msg.get("search.selector.level.${item}")<br />
-#end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-{/pre}
-</div>
-#end ## macro ## }
 
 ##
 ##

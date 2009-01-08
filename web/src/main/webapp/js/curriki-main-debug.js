@@ -2157,7 +2157,7 @@ Curriki.data.fw_item.getRolloverDisplay = function(fw_array){
 			}
 		}
 	} else {
-		fw += _('global.title.popup.none.selected');
+		fw += _('global.title.popup.none.selected')+'<br />';
 	}
 
 	return fw;
