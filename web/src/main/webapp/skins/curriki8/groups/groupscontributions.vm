@@ -161,55 +161,7 @@ $msg.get("groups.curriculum.contributions.about")
   * @param $asset Asset to disply bloc for
   *#
 #macro(groups_contributions_assettitlewithmodesc $asset) ## {
-#set($descnb = $descnb + 1)
-#asset_findtitle($asset)
-#set($title = $currikiTitle)
-#if(!$title || $title.length() == 0) ## {
- #set($title = $msg.get("caption.untitled"))
-#end ## }
-<a class="curriki-link" href="$asset.getURL("view")" onmouseover="$('mycurriki-description-${descnb}').show();" onmouseout="$('mycurriki-description-${descnb}').hide();">{pre}$title{/pre}</a>
-<div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
-{pre}
-$msg.get("groups.contributions.mouseover.contributed")<br />
-$xwiki.getUserName($asset.creator)<br />
-<br />
-$msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
-<br />
-$msg.get('mycurriki.favorites.mouseover.subject') <br />
-#set($subj = $!asset.getValue('fw_items'))
-#set($c = 0)
-#foreach($item in $subj) ## {
-#if($item == "FW_masterFramework.WebHome") ## {
-## Don't count WebHome
-#else ## } {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-#set($fw = $xwiki.getDocument($item))
-## $fw.displayTitle <br />
-## #set($bcLocal = $item)
-#subjectbreadcrumb("" $fw) <br />
-#end ## }
-#end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-<br />
-$msg.get('mycurriki.favorites.mouseover.level')<br />
-#set($levl = $!asset.getValue('educational_level2'))
-#set($c = 0)
-#foreach($item in $levl) ## {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-$msg.get("search.selector.level.${item}")<br />
-#end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-{/pre}
-</div>
+#mycurriki_assettitlewithmodesc($asset)
 #end ## macro ## }
 
 
@@ -219,52 +171,7 @@ $msg.get("search.selector.level.${item}")<br />
   * @param $asset Asset to disply bloc for
   *#
 #macro(groups_contributions_favassettitlewithmodesc $asset) ## {
-#set($descnb = $descnb + 1)
-#asset_findtitle($asset)
-#set($title = $currikiTitle)
-#if(!$title || $title.length() == 0) ## {
- #set($title = $msg.get("caption.untitled"))
-#end ## }
-<a class="curriki-link" href="$asset.getURL("view")" onmouseover="$('mycurriki-description-${descnb}').show();" onmouseout="$('mycurriki-description-${descnb}').hide();">{pre}$title{/pre}</a>
-<div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
-{pre}
-$msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
-<br />
-$msg.get('mycurriki.favorites.mouseover.subject') <br />
-#set($subj = $!asset.getValue('fw_items'))
-#set($c = 0)
-#foreach($item in $subj) ## {
-#if($item == "FW_masterFramework.WebHome") ## {
-## Don't count WebHome
-#else ## } {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-#set($fw = $xwiki.getDocument($item))
-## $fw.displayTitle <br />
-## #set($bcLocal = $item)
-#subjectbreadcrumb("" $fw) <br />
-#end ## }
-#end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-<br />
-$msg.get('mycurriki.favorites.mouseover.level')<br />
-#set($levl = $!asset.getValue('educational_level2'))
-#set($c = 0)
-#foreach($item in $levl) ## {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-$msg.get("search.selector.level.${item}")<br />
-#end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-{/pre}
-</div>
+#mycurriki_assettitlewithmodesc($asset)
 #end ## macro ## }
 
 
