@@ -359,6 +359,10 @@ public class Asset extends CurrikiDocument {
         }
     }
 
+    public String getAssetType() {
+        return getAssetClass().getSimpleName().replaceAll("Asset$", "");
+    }
+
     public boolean isFolder() {
         if (doc.getObjectNumbers(Constants.COMPOSITE_ASSET_CLASS) == 0){
             return false;
@@ -438,7 +442,7 @@ public class Asset extends CurrikiDocument {
         // And add shortAssetType to metadata
         String shortAssetType = assetType.getSimpleName();
         if (!shortAssetType.equals("Asset")) {
-            shortAssetType = shortAssetType.replaceAll("Asset$", "");
+            shortAssetType = getAssetType();
         }
         baseProp = new BaseStringProperty();
         baseProp.setName("assetType");

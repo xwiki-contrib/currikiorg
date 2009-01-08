@@ -73,7 +73,7 @@ public abstract class CompositeAsset extends Asset {
         // collection type
         use(Constants.COMPOSITE_ASSET_CLASS);
         docInfo.put("collectionType", getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE));
-        docInfo.put("assetType", getAssetClass().getSimpleName().replaceAll("Asset$", ""));
+        docInfo.put("assetType", getAssetType());
 
         // access rights
         docInfo.put("rights", getRightsList());
@@ -112,7 +112,7 @@ public abstract class CompositeAsset extends Asset {
                             subInfo.put("category", ((Asset) doc).getCategory());
                             subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
                             subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
-                            subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
+                            subInfo.put("assetType", ((Asset) doc).getAssetType());
                             subInfo.put("rights", ((Asset) doc).getRightsList());
                         } else if (doc == null) {
                             // getDocument returns null if the page is not viewable by the user
@@ -231,7 +231,7 @@ public abstract class CompositeAsset extends Asset {
                                 subInfo.put("category", ((Asset) doc).getCategory());
                                 subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
                                 subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
-                                subInfo.put("assetType", ((Asset) doc).getAssetClass().getSimpleName().replaceAll("Asset$", ""));
+                                subInfo.put("assetType", ((Asset) doc).getAssetType());
                                 subInfo.put("rights", ((Asset) doc).getRightsList());
                             } else {
                                 subInfo.put("error", "Subasset does not exist");

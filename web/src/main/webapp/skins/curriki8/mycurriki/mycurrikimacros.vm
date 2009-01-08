@@ -184,46 +184,90 @@ $text
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
 #end ## }
-<a class="curriki-link" href="$asset.getURL("view")" onmouseover="$('mycurriki-description-${descnb}').show();" onmouseout="$('mycurriki-description-${descnb}').hide();">{pre}$title{/pre}</a>
-<div id="mycurriki-description-${descnb}" class="popup" style="display: none;">
+<a id="mycurriki-title-${descnb}" class="curriki-link" href="$asset.getURL("view")">{pre}$title{/pre}</a>
 {pre}
-$msg.get("mycurriki.favorites.mouseover.description")<br />
-$!asset.getObject("CurrikiCode.AssetClass").getProperty("description").getValue() <br />
-<br />
-$msg.get('mycurriki.favorites.mouseover.subject') <br />
+<script type="text/javascript">
+/* <![CDATA[ */
+#if("$!descpopupjs" == "") ##{
+#set($descpopupjs=1)
+Ext.ns('Curriki.mycurriki.util.title');
+Curriki.mycurriki.util.title.popup = function(title_id, attr){
+	if ('string' === Ext.type(attr.description)
+	    && 'array' === Ext.type(attr.fwItems)
+	    && 'array' === Ext.type(attr.levels)
+	    && 'array' === Ext.type(attr.ict)
+	) {
+		var desc = attr.description||'';
+		desc = Ext.util.Format.ellipsis(desc, 256);
+		desc = Ext.util.Format.htmlEncode(desc);
+
+		var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
+		var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
+		var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
+		
+		var qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
+			,desc,_('global.title.popup.description')
+			,fw,_('global.title.popup.subject')
+			,lvl,_('global.title.popup.educationlevel')
+			,ict,_('global.title.popup.ict')
+		);
+
+		Ext.QuickTips.getQuickTip().register({
+			target:title_id
+			,text:qtip
+		});
+	}
+};
+#end ##}
+Ext.onReady(function(){
+## Get description
+#set($curDesc = $!asset.getDescription().replaceAll('\\', '\\\\').replace("'", "&#39;").replaceAll("[\n|\r]+", "<br />"))
+## Get Framework items
+#set($curFW = "")
 #set($subj = $!asset.getValue('fw_items'))
-#set($c = 0)
+#set($isFirst = true)
 #foreach($item in $subj) ## {
-#if($item == "FW_masterFramework.WebHome") ## {
-## Don't count WebHome
-#else ## } {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-#set($fw = $xwiki.getDocument($item))
-## $fw.displayTitle <br />
-## #set($bcLocal = $item)
-#subjectbreadcrumb("" $fw) <br />
+#if($item != "FW_masterFramework.WebHome") ## {
+#if($isFirst) ##{
+#set($isFirst = false)
+#else ##}{
+#set($curFW = "$curFW, ")
+#end ## }
+#set($curFW = "$curFW'$item'")
 #end ## }
 #end ## }
-#end ## }
-#if($c > 2) ## {
-...<br />
-#end ## }
-<br />
-$msg.get('mycurriki.favorites.mouseover.level')<br />
+#set($curFW = "[ $curFW ]")
+## Get educational levels
+#set($curLvl = "")
 #set($levl = $!asset.getValue('educational_level'))
-#set($c = 0)
+#set($isFirst = true)
 #foreach($item in $levl) ## {
-#set($c = $c + 1)
-#if($c <= 2) ## {
-$msg.get("search.selector.level.${item}")<br />
+#if($isFirst) ##{
+#set($isFirst = false)
+#else ##}{
+#set($curLvl = "$curLvl, ")
 #end ## }
+#set($curLvl = "$curLvl'$item'")
 #end ## }
-#if($c > 2) ## {
-...<br />
+#set($curLvl = "[ $curLvl ]")
+## Get icts
+#set($curICT = "")
+#set($ict = $!asset.getValue('instructional_component'))
+#set($isFirst = true)
+#foreach($item in $ict) ## {
+#if($isFirst) ##{
+#set($isFirst = false)
+#else ##}{
+#set($curICT = "$curICT, ")
 #end ## }
+#set($curICT = "$curICT'$item'")
+#end ## }
+#set($curICT = "[ $curICT ]")
+Curriki.mycurriki.util.title.popup("mycurriki-title-${descnb}", {'description':'$curDesc' , 'fwItems':$curFW , 'levels':$curLvl , 'ict':$curICT});
+});
+/* ]]> */
+</script>
 {/pre}
-</div>
 #end ## macro ## }
 
 #**
@@ -264,7 +308,7 @@ $msg.get("mycurriki.macro.access.${access}")
 #set($text = "search.selector.ict.${text}")
 #set($text = $msg.get($text))
 #end ## if not multiple ## }
-<img src="${icon}" alt="${text}" title="${text}" />
+<img src="${icon}" alt="${text}" ext:qtip="${text}" />
 #end ## if not empty ## }
 #end ## Macro ## }
 
@@ -276,41 +320,18 @@ $msg.get("mycurriki.macro.access.${access}")
   * @author dward@curriki.org
   *#
 #macro(mycurriki_filetype $asset) ## {
-#if($asset.attachmentList.size() == 0) ## {
-  #set($mime = "")
-  #set($rowType="currikulum")
-#else ## } {
-  #mimeicon($asset.attachmentList.get(0).getFilename())
-  #set($mime = $asset.attachmentList.get(0).mimeType)
-  #set($rowType="mime")
-#end ## }
-#if($asset.getObject("CurrikiCode.TextAssetClass")) ## {
-  #set($rowType="currikulum")
-#else ## } {
-#if($asset.getObject("CurrikiCode.ExternalAssetClass")) ## {
-  #set($rowType="URL")
-#end ## }
-#end ## }
-#if($rowType == "URL") ## {
-#set($text = $msg.get("mycurriki.macro.filetype.URL"))
-{pre}<img src="$xwiki.getSkinFile("mimetypes/HTM.gif")" alt="[${text}]" title="[${text}]"/>{/pre}
-#end ## }
-#if($rowType == "mime") ## {
-#if(!$m_fileExt || $m_fileExt == "Unknown") ## {
-  #set($text = $msg.get("mycurriki.macro.filetype.unknown"))
-#else ## } {
-  #set($text = $m_fileExt)
-#end ## if ext ## }
-{pre}<img src="$macro_iconUrl" alt="[${text}]" title="[${text}]"/>{/pre}
-#end ## if mime ## }
-#if($rowType == "curriki-link") ## {
-#set($text = $msg.get("mycurriki.macro.filetype.curriki"))
-{pre}<img src="$xwiki.getSkinFile("mimetypes/Curriki.gif")" alt="[${text}]" title="[${text}]"/>{/pre}
-#end ## }
-#if($rowType == "currikulum") ## {
-#set($text = $msg.get("mycurriki.macro.filetype.currikulum"))
-{pre}<img src="$xwiki.getSkinFile("mimetypes/Curriki.gif")" alt="[${text}]" title="[${text}]"/>{/pre}
-#end ## }
+#if("$!ftnb" == "") ##{
+#set($ftnb = 0)
+#end ##}
+#set($ftnb = $ftnb + 1)
+#set($assetType = $!asset.getAssetType())
+#set($category = $!asset.getCategory())
+#set($subcategory = $!asset.getCategorySubtype())
+#set($rollover = $msg.get("${category}.${subcategory}"))
+#if($!rollover == "${category}.${subcategory}") ##{
+#set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
+#end ##}
+{pre}<img id="favorites-filetype-${ftnb}" class="resource-${assetType} category-${category} subcategory-${category}_${subcategory}" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="${rollover}" ext:qtip="${rollover}"/>{/pre}
 #end ## Macro ## }
 
 #**
