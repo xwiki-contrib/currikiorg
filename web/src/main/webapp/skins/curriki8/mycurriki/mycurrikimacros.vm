@@ -1,3 +1,4 @@
+## vim: ts=4:sw=4
 #**
   *
   * My Curriki Macros
@@ -973,13 +974,9 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 
 #**
   * Displays the a favorite item
-  * TODO: I'm not sure why ret_escaped and currikiTitle are needed
   *
   * @param $asset Asset to display
   * @param $allcols True if we show the action column of the favorites
-  * @param $ret_escaped Impl param The asset escaped title to be usable in Javascript
-  * @param $currikiTitle Impl param The asset Title
-  * @param $g_userHasCollections Impl param True if the user has collections
   *#
 #macro(mycurriki_favoritesasset $asset $allcols)
   <!-- MyCurriki Favorites Asset -->
@@ -995,20 +992,8 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
     #if($allcols) ## {
       <td class="table-col-action">
         <div class="button-links">
-          #checkForCollections()
-          #escapeForJS($asset.fullName)
-          #set($escapedFullName = $ret_escaped)
-          #asset_findtitle($asset)
-          #escapeForJS($currikiTitle)
-          #set($escapedTitle = $ret_escaped)
-          #if($g_userHasCollections && ($allcols || $hasGlobalAdmin))##{
-            {pre}
-            <a class="button-link" onclick="Curriki.module.addpath.startPath('H', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')">$msg.get('mycurriki.contributions.add')</a>
-            {/pre}
-          #end##}
-          #set($removeMsg = $msg.get('mycurriki.favorites.table.action.remove.confirm'))
-          #set($deleteUrl = $xwiki.getURL("MyCurriki.RemoveFavorite", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-          <a class="button-link#if($g_userHasCollections && ($allcols || $hasGlobalAdmin))-table#end" onclick="return confirm('$removeMsg')" href="$deleteUrl">$msg.get("mycurriki.favorites.table.action.remove")</a>
+          #mycurriki_action_add($asset 'H')
+          #mycurriki_action_remove($asset)
         </div>
       </td>
     #end ## if allcols ## }
@@ -1225,6 +1210,185 @@ $msg.get("deleted")
 #end ##} end macro mycurrikicontributionsheader
 
 
+
+#**
+  * Determine if the user is in the group owning the resource
+  *
+  * @param $asset Asset
+  * @returns $ret_assetGroupAdmin
+  *#
+#macro(assets_userIsGroupAdmin $asset) ##{
+#set($sm = $xwiki.csm)
+#set($ret_assetGroupAdmin = false)
+#if($asset.creator == $context.user || $sm.isAdmin($asset.web.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin) ##{
+	#set($ret_assetGroupAdmin = true)
+#end ##}
+#end ##}
+
+#**
+  * Determine if the user is in the group owning the resource
+  *
+  * @param $asset Asset
+  * @returns $ret_assetGroupMember
+  *#
+#macro(assets_userInGroup $asset) ##{
+#set($sm = $xwiki.csm)
+#set($ret_userInAssetGroup = false)
+#if($asset.creator == $context.user || $sm.isMember($asset.web.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin) ##{
+	#set($ret_assetGroupMember = true)
+#end ##}
+#end ##}
+
+#**
+  * Displays the "Add" action if available
+  *
+  * @param $asset Asset
+  * @param $addpath Add path to follow
+  * @param $g_userHasCollections Impl param True if the user has collections
+  *#
+#macro(mycurriki_action_add $asset $addpath) ##{
+	## Not available on "Favorites" page except for owner/admin
+	#checkForCollections()
+	#if($g_userHasCollections) ##{
+		#escapeForJS($asset.fullName)
+		#set($escapedFullName = $ret_escaped)
+		#asset_findtitle($asset)
+		#escapeForJS($currikiTitle)
+		#set($escapedTitle = $ret_escaped)
+		#if($asset.creator == $context.user || $hasGlobalAdmin || $doc.name != 'Favorites')##{
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')">$msg.get('mycurriki.contributions.add')</a>{/pre}
+		#end##}
+	#end##}
+#end ##}
+
+#**
+  * Displays the "Remove" action if available
+  *
+  * @param $asset Asset
+  *#
+#macro(mycurriki_action_remove $asset) ##{
+	## ONLY on Favorites page (removes from Favorites list)
+	## ONLY for owner + admin
+	#if($doc.name == 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin)) ##{
+		#set($removeMsg = $msg.get('mycurriki.favorites.table.action.remove.confirm'))
+		#set($deleteUrl = $xwiki.getURL("MyCurriki.RemoveFavorite", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
+		<a class="button-link#if($g_userHasCollections && ($allcols || $hasGlobalAdmin))-table#end" onclick="return confirm('$removeMsg')" href="$deleteUrl">$msg.get("mycurriki.favorites.table.action.remove")</a>
+	#end ##}
+#end ##}
+
+#**
+  * Displays the "Delete" action if available
+  *
+  * @param $asset Asset
+  *#
+#macro(mycurriki_action_delete $asset) ##{
+	## ONLY for owner + admin
+	#assets_userIsGroupAdmin($asset)
+	#if($ret_assetGroupAdmin || $hasGlobalAdmin) ##{
+		#set($deleteMsg = $msg.get('mycurriki.contributions.actions.delete.confirm'))
+		#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
+		{pre}<a class="button-link-table" onclick="return confirm('$deleteMsg')" href="$deleteUrl">$msg.get("caption.delete")</a>{/pre}
+	#end ##}
+#end ##}
+
+#**
+  * Displays the "Copy" action if available
+  *
+  * @param $asset Asset
+  * @param $addpath Add path to follow
+  * @param $g_userHasCollections Impl param True if the user has collections
+  *#
+#macro(mycurriki_action_copy $asset $addpath) ##{
+	## Not available on "Favorites" page
+	## File Resources only (not Collections/Folders)
+	#checkForCollections()
+	#if($g_userHasCollections && $asset.getCategory() != 'collection') ##{
+		#escapeForJS($asset.fullName)
+		#set($escapedFullName = $ret_escaped)
+		#asset_findtitle($asset)
+		#escapeForJS($currikiTitle)
+		#set($escapedTitle = $ret_escaped)
+		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
+		{pre}<a class="button-link" onclick="alert('TODO: Link only right now - Not yet functional'); return false; Curriki.module.addpath.startPath(${addpath}, {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.copy_tooltip')">$msg.get('mycurriki.contributions.copy')</a>{/pre}
+		#end##}
+	#end##}
+#end ##}
+
+#**
+  * Displays the "Edit Content" action if available
+  *
+  * @param $asset Asset
+  *#
+#macro(mycurriki_action_editcontent $asset) ##{
+	## ONLY for owner + admin
+	## ONLY for File Resources (not Collections)
+	#assets_userIsGroupAdmin($asset)
+	#if($asset.getCategory == 'collection' && ($ret_assetGroupAdmin || $hasGlobalAdmin)) ##{
+		#set($editUrl = $asset.getURL('view'))
+		{pre}<a class="button-link-table" onclick="alert('TODO: Where does this URL go?');" href="$editUrl">$msg.get("caption.editcontent")</a>{/pre}
+	#end ##}
+#end ##}
+
+#**
+  * Displays the "Edit Info" action if available
+  *
+  * @param $asset Asset
+  *#
+#macro(mycurriki_action_editinfo $asset) ##{
+	## ONLY for owner + admin
+	#assets_userIsGroupAdmin($asset)
+	#if($ret_assetGroupAdmin || $hasGlobalAdmin) ##{
+		#set($editUrl = $asset.getURL('view'))
+		{pre}<a class="button-link-table" onclick="alert('TODO: Where does this URL go?');" href="$editUrl">$msg.get("caption.editinfo")</a>{/pre}
+	#end ##}
+#end ##}
+
+#**
+  * Displays the "Build Up" action if available
+  *
+  * @param $asset Asset
+  * @param $addpath Add path to follow
+  *#
+#macro(mycurriki_action_buildup $asset $addpath) ##{
+	## Not available on "Favorites" page
+	## ONLY for owner + admin
+	## ONLY Collections
+	#if($asset.getCategory() == 'collection') ##{
+		#escapeForJS($asset.fullName)
+		#set($escapedFullName = $ret_escaped)
+		#asset_findtitle($asset)
+		#escapeForJS($currikiTitle)
+		#set($escapedTitle = $ret_escaped)
+		#assets_userInGroup($asset)
+		#if($doc.name != 'Favorites' && ($ret_assetGroupMember || $hasGlobalAdmin))##{
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.buildup_tooltip')">$msg.get('mycurriki.contributions.buildup')</a>{/pre}
+		#end##}
+	#end##}
+#end ##}
+
+#**
+  * Displays the "Organize" action if available
+  *
+  * @param $asset Asset
+  *#
+#macro(mycurriki_action_organize $asset) ##{
+	## Not available on "Favorites" page
+	## ONLY for owner + admin
+	## ONLY Collections
+	#if($asset.getCategory() == 'collection') ##{
+		#escapeForJS($asset.fullName)
+		#set($escapedFullName = $ret_escaped)
+		#asset_findtitle($asset)
+		#escapeForJS($currikiTitle)
+		#set($escapedTitle = $ret_escaped)
+		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
+		{pre}<a class="button-link" onclick="alert('TODO: Link only for now - implementation coming.'); return false; Curriki.module.organize.start({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.organize_tooltip')">$msg.get('mycurriki.contributions.organize')</a>{/pre}
+		#end##}
+	#end##}
+#end ##}
+
+
+
 #**
   * Displays a contributions asset
   *
@@ -1248,25 +1412,13 @@ $msg.get("deleted")
     #if($allcols)
       <td class="table-col-action">
         <div class="button-links">
-          #checkForCollections()
-          #escapeForJS($asset.fullName)
-          #set($escapedFullName = $ret_escaped)
-          #asset_findtitle($asset)
-          #escapeForJS($currikiTitle)
-          #set($escapedTitle = $ret_escaped)
-          #if($g_userHasCollections && ($asset.creator == $context.user || $hasGlobalAdmin))##{
-            {pre}
-            <a class="button-link" onclick="Curriki.module.addpath.startPath('J', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')">$msg.get('mycurriki.contributions.add')</a>
-            {/pre}
-          #end##}
-          #if($asset.hasAccessLevel("edit"))
-            <a class="button-link-table" target="_blank" href="#gwtEditUrl(${asset.fullName})">$msg.get("caption.edit")</a>
-          #end
-          #if($asset.creator == $context.user || $hasGlobalAdmin || $xwiki.checkAccess($asset.fullName, "delete"))
-            #set($deleteMsg = $msg.get('mycurriki.contributions.actions.delete.confirm'))
-            #set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-            <a class="button-link-table" onclick="return confirm('$deleteMsg')" href="$deleteUrl">$msg.get("caption.delete")</a>
-          #end
+          #mycurriki_action_add($asset 'J')
+          #mycurriki_action_copy($asset 'TODO')
+          #mycurriki_action_buildup($asset 'L')
+          #mycurriki_action_editcontent($asset)
+          #mycurriki_action_editinfo($asset)
+          #mycurriki_action_organize($asset)
+          #mycurriki_action_delete($asset)
         </div>
       </td>
     #end ## if allcols

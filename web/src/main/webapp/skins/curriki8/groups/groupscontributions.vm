@@ -196,25 +196,13 @@ $msg.get("groups.curriculum.contributions.about")
 #if($allcols)
 <td class="table-col-action">
 <div class="button-links">
-#checkForCollections()
-#escapeForJS($asset.fullName)
-#set($escapedFullName = $ret_escaped)
-#asset_findtitle($asset)
-#escapeForJS($currikiTitle)
-#set($escapedTitle = $ret_escaped)
-#if($g_userHasCollections && ($isGroupMember || $hasGlobalAdmin))##{
-{pre}
-<a class="button-link" onclick="Curriki.module.addpath.startPath('P', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('groups.curriculum.contributions.add_tooltip')">$msg.get('groups.curriculum.contributions.add')</a>
-{/pre}
-#end##}
-#if($asset.hasAccessLevel("edit"))
-<a class="button-link#if($g_userHasCollections && ($isGroupMember || $hasGlobalAdmin))-table#end" target="_blank" href="#gwtEditUrl(${asset.fullName})">$msg.get("caption.edit")</a>
-#end
-#if($asset.creator == $context.user || $sm.isAdmin($asset.web.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin)
-#set($deleteMsg = $msg.get('groups.contributions.actions.delete.confirm'))
-#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-<a class="button-link-table" onclick="return confirm('$deleteMsg')" href="$deleteUrl">$msg.get("caption.delete")</a>
-#end
+#mycurriki_action_add($asset 'P')
+#mycurriki_action_copy($asset 'TODO')
+#mycurriki_action_buildup($asset 'N')
+#mycurriki_action_editcontent($asset)
+#mycurriki_action_editinfo($asset)
+#mycurriki_action_organize($asset)
+#mycurriki_action_delete($asset)
 </div>
 </td>
 #end ## if allcols
