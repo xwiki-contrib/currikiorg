@@ -86,6 +86,10 @@ public class Asset extends CurrikiDocument {
 
         try {
             asset = subclassAs(getAssetClass());
+            // If we didn't get a subtype then return unknown subtype
+            if (asset.getClass().getSimpleName().equals("Asset")) {
+                return Constants.ASSET_CATEGORY_SUBTYPE_UNKNOWN;
+            }
             return asset.getCategorySubtype();
         } catch (XWikiException e) {
             return Constants.ASSET_CATEGORY_SUBTYPE_UNKNOWN;
