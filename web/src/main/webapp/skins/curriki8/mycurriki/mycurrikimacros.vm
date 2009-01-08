@@ -1597,27 +1597,11 @@ $msg.get("deleted")
   *  @param $asset Asset to display actions for
   *#
 #macro(mycurriki_collectionactions $asset)
-<a href="$asset.getURL("view")" class="button-link">$msg.get("mycurriki.collections.view")</a>
-#if($asset.hasAccessLevel("edit"))
-<a target="_blank" href="#gwtEditUrl(${asset.fullName})" class="button-link-table">$msg.get("mycurriki.collections.edit")</a>
-#end
-
-#if($asset.hasAccessLevel("edit"))
-#escapeForJS($asset.fullName)
-#set($escapedFullName = $ret_escaped)
-#asset_findtitle($asset)
-#escapeForJS($currikiTitle)
-#set($escapedTitle = $ret_escaped)
-{pre}
-<a class="button-link-table" onclick="Curriki.module.addpath.startPath('L', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" alt="$msg.get("mycurriki.collections.buildup")" title="$msg.get("mycurriki.collections.buildup_tooltip")">$msg.get("mycurriki.collections.buildup")</a>
-{/pre}
-#end
-
-#if($asset.creator == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($asset.fullName, "delete"))
-#set($deleteMsg = $msg.get('mycurriki.collections.actions.delete.confirm'))
-#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-<a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table">$msg.get("mycurriki.collections.delete")</a>
-#end
+#mycurriki_action_add($asset 'J')
+#mycurriki_action_buildup($asset 'L')
+#mycurriki_action_editinfo($asset)
+#mycurriki_action_organize($asset)
+#mycurriki_action_delete($asset)
 #end
 ##
 ##

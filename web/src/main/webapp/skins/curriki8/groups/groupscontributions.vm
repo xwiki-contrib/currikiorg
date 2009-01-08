@@ -251,24 +251,11 @@ Curriki.module.search.start();
   * @param $asset Asset to show collections for
   *#
 #macro(groups_curriculum_collectionactions $asset)
-<a href="$asset.getURL("view")" class="button-link">$msg.get("groups.curriculum.collections.view")</a>
-#if($asset.hasAccessLevel("edit"))
-<a target="_blank" href="#gwtEditUrl(${asset.fullName})" class="button-link-table">$msg.get("groups.curriculum.collections.edit")</a>
-##
-#escapeForJS($asset.fullName)
-#set($escapedFullName = $ret_escaped)
-#asset_findtitle($asset)
-#escapeForJS($currikiTitle)
-#set($escapedTitle = $ret_escaped)
-{pre}
-<a class="button-link-table" onclick="Curriki.module.addpath.startPath('N', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle', publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.buildup")" title="$msg.get("groups.curriculum.collections.buildup_tooltip")">$msg.get("groups.curriculum.collections.buildup")</a>
-{/pre}
-#end
-#if($sm.isAdmin($spaceName, $context.user) || $context.user == $asset.creator || $hasAdmin)
-#set($deleteMsg = $msg.get('groups.curriculum.collections.actions.delete.confirm'))
-#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-<a onclick="return confirm('$deleteMsg')" href="$deleteUrl" class="button-link-table">$msg.get("groups.curriculum.collections.delete")</a>
-#end
+#mycurriki_action_add($asset 'P')
+#mycurriki_action_buildup($asset 'N')
+#mycurriki_action_editinfo($asset)
+#mycurriki_action_organize($asset)
+#mycurriki_action_delete($asset)
 #end
 
 #macro(groups_curriculum_collectionasset $asset)
