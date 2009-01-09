@@ -197,7 +197,7 @@ public class Asset extends CurrikiDocument {
         Asset assetDoc = new Asset(newDoc, context);
         //assetDoc.init(copyOf, publishSpace);
         assetDoc.getDoc().setCreator(context.getUser());
-        assetDoc.getDoc().setCustomClass(Asset.class.getClass().getName());
+        assetDoc.getDoc().setCustomClass(assetDoc.getClass().getName());
 
         // Remove comments from copied asset
         assetDoc.removeObjects("XWiki.XWikiComments");
