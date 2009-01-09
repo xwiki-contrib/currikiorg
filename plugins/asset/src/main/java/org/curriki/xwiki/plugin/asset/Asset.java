@@ -231,7 +231,8 @@ public class Asset extends CurrikiDocument {
         String rights = (String) assetDoc.getObject(Constants.ASSET_CLASS).get(Constants.ASSET_CLASS_RIGHT);
         assetDoc.applyRightsPolicy(rights);
 
-        assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.copiedsourceasset"), true);
+        //assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.copiedsourceasset"), true);
+        context.getWiki().saveDocument(assetDoc.getDoc(), context.getMessageTool().get("curriki.comment.copiedsourceasset"), true, context);
         return assetDoc;
     }
 

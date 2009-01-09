@@ -1305,11 +1305,8 @@ $msg.get("deleted")
 	#if($g_userHasCollections && $asset.getCategory() != 'collection') ##{
 		#escapeForJS($asset.fullName)
 		#set($escapedFullName = $ret_escaped)
-		#asset_findtitle($asset)
-		#escapeForJS($currikiTitle)
-		#set($escapedTitle = $ret_escaped)
 		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
-		{pre}<a class="button-link" onclick="alert('TODO: Link only right now - Not yet functional'); return false; Curriki.module.addpath.startPath(${addpath}, {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.copy_tooltip')">$msg.get('mycurriki.contributions.copy')</a>{/pre}
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {parentAsset:'${escapedFullName}'});" title="$msg.get('mycurriki.contributions.copy_tooltip')">$msg.get('mycurriki.contributions.copy')</a>{/pre}
 		#end##}
 	#end##}
 #end ##}
@@ -1413,7 +1410,7 @@ $msg.get("deleted")
       <td class="table-col-action">
         <div class="button-links">
           #mycurriki_action_add($asset 'J')
-          #mycurriki_action_copy($asset 'TODO')
+          #mycurriki_action_copy($asset 'Copy')
           #mycurriki_action_buildup($asset 'L')
           #mycurriki_action_editcontent($asset)
           #mycurriki_action_editinfo($asset)
