@@ -1902,6 +1902,26 @@ console.log("Published CB: ", newAsset);
 		Ext.reg('apDoneI', AddPath.DoneI);
 		Ext.reg('apDoneO', AddPath.DoneI);
 
+		AddPath.DoneCopy = Ext.extend(Curriki.ui.dialog.Messages, {
+			  initComponent:function(){
+				Ext.apply(this, {
+					 title:_('add.finalmessage.title_copied')
+					,cls:'addpath addpath-done resource resource-add'
+					,bbar:[
+						 AddPath.FinalLink('view'),'-'
+						,AddPath.FinalLink('add'),'-'
+						,AddPath.FinalLink('contributions'),'->'
+						,AddPath.CloseDone(this)
+					]
+					,items:[
+						 AddPath.DoneMessage('copy')
+					]
+				});
+				AddPath.DoneCopy.superclass.initComponent.call(this);
+			}
+		});
+		Ext.reg('apDoneCopy', AddPath.DoneCopy);
+
 
 
 		AddPath.ShowDone = function(){
@@ -2428,6 +2448,25 @@ console.log("Created Collection CB: ", assetInfo);
 					return;
 					break;
 
+				case 'copy':
+					next = 'apSRI1';
+					Curriki.assets.CopyAsset(
+						Curriki.current.parentAsset,
+						Curriki.current.publishSpace,
+						function(asset){
+console.log("CopyAsset CB: ", asset);
+								Curriki.current.asset = asset;
+								callback = function(){AddPath.ShowNextDialogue(next);};
+								Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+									Curriki.current.metadata = metadata;
+									callback();
+								});
+						}
+					);
+					return;
+					break;
+
+
 				default:
 					// Should never get here
 					next = 'apSRI1';
@@ -2573,6 +2612,11 @@ console.log('Starting path:', Curriki.current.flow);
 				// Add Template (choice already made)
 				case 'R': // "Add From Template" in About Creating page
 					AddPath.SourceSelected('template', {});
+					return;
+					break;
+
+				case 'Copy': // Copy an existing resource and allow metadata change
+					AddPath.SourceSelected('copy', {});
 					return;
 					break;
 			}

@@ -36,6 +36,37 @@ Curriki.assets = {
 			}
 		});
 	}
+	,CopyAsset:function(copyOf, publishSpace, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix
+			,method:'POST'
+			,headers: {
+				'Accept':'application/json'
+				,'Content-type':'application/json'
+			}
+			,jsonData: {
+				'copyOf':copyOf||''
+				,'publishSpace':publishSpace||''
+			}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object with
+				//   assetPage, assetType, and fullAssetType items
+				var o = json.evalJSON(true);
+				if(!o || !o.assetPage) {
+					console.warn('Cannot copy resource', response.responseText, options);
+					alert(_('add.servertimedout.message.text'));
+				} else {
+					callback(o);
+				}
+			}
+			,failure:function(response, options){
+				console.error('Cannot copy resource', response, options);
+				alert(_('add.servertimedout.message.text'));
+			}
+		});
+	}
 	,GetAssetInfo:function(assetPage, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage
