@@ -1306,7 +1306,7 @@ $msg.get("deleted")
 		#escapeForJS($asset.fullName)
 		#set($escapedFullName = $ret_escaped)
 		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
-		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {parentAsset:'${escapedFullName}'});" title="$msg.get('mycurriki.contributions.copy_tooltip')">$msg.get('mycurriki.contributions.copy')</a>{/pre}
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {copyOf:'${escapedFullName}'});" title="$msg.get('mycurriki.contributions.copy_tooltip')">$msg.get('mycurriki.contributions.copy')</a>{/pre}
 		#end##}
 	#end##}
 #end ##}

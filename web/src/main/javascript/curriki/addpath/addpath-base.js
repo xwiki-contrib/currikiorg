@@ -952,8 +952,8 @@ Curriki.module.addpath.init = function(){
 												if (!Ext.isEmpty(Curriki.current.metadata)) {
 													var md = Curriki.current.metadata;
 
-													if (!Ext.isEmpty(md.educational_level2) && Ext.isArray(md.educational_level2)){
-														md.educational_level2.each(function(el){
+													if (!Ext.isEmpty(md.educational_level) && Ext.isArray(md.educational_level)){
+														md.educational_level.each(function(el){
 															Ext.getCmp(Ext.select('input[type="checkbox"][name="educational_level2"][value="'+el+'"]').first().dom.id).setValue(true);
 														});
 													}
@@ -1502,8 +1502,8 @@ Curriki.module.addpath.init = function(){
 												if (!Ext.isEmpty(Curriki.current.metadata)) {
 													var md = Curriki.current.metadata;
 
-													if (!Ext.isEmpty(md.licenseType2)){
-														Ext.getCmp('metadata-license_type-entry').setValue(md.licenseType2);
+													if (!Ext.isEmpty(md.licenseType)){
+														Ext.getCmp('metadata-license_type-entry').setValue(md.licenseType);
 													}
 												}
 											})
@@ -1679,6 +1679,14 @@ console.log("Published CB: ", newAsset);
 					var msgArgs = [
 						Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'
 						,Curriki.current.parentTitle||'UNKNOWN'
+					];
+					msg = '<p>'+_('add.finalmessage.text_'+name+'_success', msgArgs)+'</p>';
+					break;
+
+				case 'Copy':
+					var msgArgs = [
+						Curriki.current.copyOfTitle||'UNKNOWN'
+						,Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'
 					];
 					msg = '<p>'+_('add.finalmessage.text_'+name+'_success', msgArgs)+'</p>';
 					break;
@@ -2451,7 +2459,7 @@ console.log("Created Collection CB: ", assetInfo);
 				case 'copy':
 					next = 'apSRI1';
 					Curriki.assets.CopyAsset(
-						Curriki.current.parentAsset,
+						Curriki.current.copyOf,
 						Curriki.current.publishSpace,
 						function(asset){
 console.log("CopyAsset CB: ", asset);
@@ -2652,6 +2660,7 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 		current.assetTitle = options.assetTitle||current.assetTitle;
 		current.assetType = options.assetType||current.assetType;
 		current.parentTitle = options.parentTitle||current.parentTitle;
+		current.copyOfTitle = options.copyOfTitle||current.copyOfTitle;
 	}
 
 	Curriki.init(function(){
@@ -2682,6 +2691,22 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 			};
 		}
 
+		var copyOfFn;
+		if (!Ext.isEmpty(current.copyOf)
+		    && Ext.isEmpty(current.copyOfTitle)) {
+			// Get parent asset info
+			copyOfFn = function(){
+				Curriki.assets.GetAssetInfo(current.copyOf, function(info){
+					Curriki.current.copyOfTitle = info.title;
+					parentFn();
+				});
+			}
+		} else {
+			copyOfFn = function(){
+				parentFn();
+			};
+		}
+
 		var currentFn;
 		if (!Ext.isEmpty(current.assetName)
 		    && (Ext.isEmpty(current.assetTitle)
@@ -2691,12 +2716,12 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 				Curriki.assets.GetAssetInfo(current.assetName, function(info){
 					Curriki.current.assetTitle = info.title;
 					Curriki.current.assetType = info.assetType;
-					parentFn();
+					copyOfFn();
 				});
 			}
 		} else {
 			currentFn = function(){
-				parentFn();
+				copyOfFn();
 			};
 		}
 
@@ -2714,6 +2739,7 @@ Curriki.current = {
 			 assetName:null
 			,parentAsset:null
 			,publishSpace:null
+			,copyOf:null
 			,cameFrom:null
 			,flow:null
 			,flowFolder:''
