@@ -192,7 +192,7 @@ public class Asset extends CurrikiDocument {
 
         String pageName = context.getWiki().getUniquePageName(Constants.ASSET_TEMPORARY_SPACE, context);
 
-        XWikiDocument newDoc = copyDoc.getDoc().copyDocument(pageName, context);
+        XWikiDocument newDoc = copyDoc.getDoc().copyDocument(Constants.ASSET_TEMPORARY_SPACE+"."+pageName, context);
 
         Asset assetDoc = new Asset(newDoc, context);
         //assetDoc.init(copyOf, publishSpace);
