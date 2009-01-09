@@ -2655,6 +2655,7 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 		current.assetName = options.assetName||current.assetName;
 		current.parentAsset = options.parentAsset||current.parentAsset;
 		current.publishSpace = options.publishSpace||current.publishSpace;
+		current.copyOf = options.copyOf||current.copyOf;
 		current.cameFrom = options.cameFrom||current.cameFrom;
 
 		current.assetTitle = options.assetTitle||current.assetTitle;
@@ -2747,6 +2748,7 @@ Curriki.current = {
 			,assetTitle:null
 			,assetType:null
 			,parentTitle:null
+			,copyOfTitle:null
 
 			,asset:null
 			,metadata:null
