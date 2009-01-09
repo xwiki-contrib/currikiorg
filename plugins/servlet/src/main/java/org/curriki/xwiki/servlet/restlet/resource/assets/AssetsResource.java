@@ -38,7 +38,7 @@ public class AssetsResource extends BaseResource {
 
         String copyOf = null;
         try {
-            parent = json.getString("copyOf");
+            copyOf = json.getString("copyOf");
             if (copyOf.length() < 1){
                 copyOf = null;
             }
