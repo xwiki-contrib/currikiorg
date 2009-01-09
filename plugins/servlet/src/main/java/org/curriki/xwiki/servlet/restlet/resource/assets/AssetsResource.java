@@ -36,6 +36,16 @@ public class AssetsResource extends BaseResource {
             // No parent key to get
         }
 
+        String copyOf = null;
+        try {
+            parent = json.getString("copyOf");
+            if (copyOf.length() < 1){
+                copyOf = null;
+            }
+        } catch (JSONException e) {
+            // No parent key to get
+        }
+
         String publishSpace = null;
         try {
             publishSpace = json.getString("publishSpace");
@@ -48,7 +58,11 @@ public class AssetsResource extends BaseResource {
 
         Asset createdPage;
         try {
-            createdPage = plugin.createAsset(parent, publishSpace);
+            if (copyOf != null) {
+                createdPage = plugin.copyAsset(copyOf, publishSpace);
+            } else {
+                createdPage = plugin.createAsset(parent, publishSpace);
+            }
         } catch (XWikiException e) {
             if (e instanceof AssetException) {
                 if (e.getCode() == AssetException.ERROR_ASSET_NOT_FOUND) {

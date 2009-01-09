@@ -112,6 +112,16 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     public Asset createAsset(String parent, XWikiContext context) throws XWikiException {
         return Asset.createTempAsset(parent, context);
     }
+    
+
+    public Asset copyAsset(String copyOf, String publishSpace, XWikiContext context) throws XWikiException {
+        return Asset.copyTempAsset(copyOf, publishSpace, context);
+    }
+
+    public Asset copyAsset(String copyOf, XWikiContext context) throws XWikiException {
+        return Asset.copyTempAsset(copyOf, context);
+    }
+
 
     public Asset fetchAsset(String assetName, XWikiContext context) throws XWikiException {
         return fetchAssetAs(assetName, null, context);

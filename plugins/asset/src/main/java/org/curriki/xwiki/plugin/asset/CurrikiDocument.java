@@ -37,6 +37,21 @@ public class CurrikiDocument extends Document {
         }
     }
 
+    protected boolean assertCanDuplicate() throws XWikiException {
+        if (getCreator().equals(context.getUser()))
+            return true;
+
+        BaseObject obj = getDoc().getObject(Constants.ASSET_LICENCE_CLASS, true, context);
+        if (obj != null){
+            String licence = obj.getStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE);
+            if (licence.contains("NoDerivatives"))
+                return false;
+        }
+
+        return true;
+    }
+
+
     protected boolean copyProperty(BaseObject fromObj, BaseObject destObj, String key) throws XWikiException {
         PropertyInterface prop = fromObj.get(key);
 

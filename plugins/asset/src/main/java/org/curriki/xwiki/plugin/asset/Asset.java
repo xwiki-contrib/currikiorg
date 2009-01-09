@@ -175,6 +175,66 @@ public class Asset extends CurrikiDocument {
         return assetDoc;
     }
 
+    public static Asset copyTempAsset(String copyOf, XWikiContext context) throws XWikiException {
+        return createTempAsset(copyOf, null, context);
+    }
+
+    public static Asset copyTempAsset(String copyOf, String publishSpace, XWikiContext context) throws XWikiException {
+        if (Constants.GUEST_USER.equals(context.getUser())) {
+            throw new AssetException(AssetException.ERROR_ASSET_FORBIDDEN, "XWikiGuest cannot create assets.");
+        }
+
+        Asset copyDoc = fetchAsset(copyOf, context);
+        if (!copyDoc.assertCanDuplicate()) {
+            throw new AssetException(AssetException.ERROR_ASSET_FORBIDDEN, "Source resource cannot be copied");
+        }
+
+
+        String pageName = context.getWiki().getUniquePageName(Constants.ASSET_TEMPORARY_SPACE, context);
+
+        XWikiDocument newDoc = copyDoc.getDoc().copyDocument(pageName, context);
+
+        Asset assetDoc = new Asset(newDoc, context);
+        //assetDoc.init(copyOf, publishSpace);
+        assetDoc.getDoc().setCreator(context.getUser());
+        assetDoc.getDoc().setCustomClass(Asset.class.getClass().getName());
+
+        // Remove comments from copied asset
+        assetDoc.removeObjects("XWiki.XWikiComments");
+
+        // Remove inherited CRS-reviews from copied asset
+        assetDoc.removeObjects(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+        assetDoc.removeObjects(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS);
+
+        BaseObject newLicenceObj = assetDoc.getDoc().getObject(Constants.ASSET_LICENCE_CLASS);
+        if (newLicenceObj==null) {
+            newLicenceObj = assetDoc.getDoc().newObject(Constants.ASSET_LICENCE_CLASS, context);
+        }
+        // Rights Holder should be by default the pretty name of the user added with the current rights holder
+        String newRightsHolder = context.getWiki().getLocalUserName(context.getUser(), null, false, context);
+        String origRightsHolder = copyDoc.getDoc().getStringValue(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER);
+        if (!newRightsHolder.equals(origRightsHolder))
+         newRightsHolder += ", " + origRightsHolder;
+        newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, newRightsHolder);
+
+        BaseObject newObjAsset = assetDoc.getDoc().getObject(Constants.ASSET_CLASS);
+        if (newObjAsset==null) {
+            newObjAsset = assetDoc.getDoc().newObject(Constants.ASSET_CLASS, context);
+        }
+        // Keep the information allowing to track where that asset came from
+        newObjAsset.setStringValue(Constants.ASSET_CLASS_TRACKING, copyOf);
+
+
+        // Clear rights objects otherwise this will trigger a remove object although these have never been saved
+        assetDoc.getDoc().setObjects("XWiki.XWikiRights", new Vector<BaseObject>());
+
+        String rights = (String) assetDoc.getObject(Constants.ASSET_CLASS).get(Constants.ASSET_CLASS_RIGHT);
+        assetDoc.applyRightsPolicy(rights);
+
+        assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.copiedsourceasset"), true);
+        return assetDoc;
+    }
+
     protected void init(String parentAsset) throws XWikiException {
         init(parentAsset, null);
     }
