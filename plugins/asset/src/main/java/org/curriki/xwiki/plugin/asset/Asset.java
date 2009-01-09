@@ -495,13 +495,21 @@ public class Asset extends CurrikiDocument {
             md.add(licenseObj.getProperty((String) prop));
         }
 
+        // Add title now that it isn't in the asset object
+        String title = getTitle();
+        BaseStringProperty baseProp = new BaseStringProperty();
+        baseProp.setName("title");
+        baseProp.setValue(title);
+        Property prop = new Property(baseProp, context);
+        md.add(prop);
+
         // Add assetType to metadata
         Class assetType = getAssetClass();
         String fullAssetType = assetType.getCanonicalName();
-        BaseStringProperty baseProp = new BaseStringProperty();
+        baseProp = new BaseStringProperty();
         baseProp.setName("fullAssetType");
         baseProp.setValue(fullAssetType);
-        Property prop = new Property(baseProp, context);
+        prop = new Property(baseProp, context);
         md.add(prop);
 
         // And add shortAssetType to metadata
