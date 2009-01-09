@@ -1256,7 +1256,7 @@ $msg.get("deleted")
 		#escapeForJS($currikiTitle)
 		#set($escapedTitle = $ret_escaped)
 		#if($asset.creator == $context.user || $hasGlobalAdmin || $doc.name != 'Favorites')##{
-		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')">$msg.get('mycurriki.contributions.add')</a>{/pre}
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath('${addpath}', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.add_tooltip')">$msg.get('mycurriki.contributions.add')</a>{/pre}
 		#end##}
 	#end##}
 #end ##}
@@ -1358,7 +1358,7 @@ $msg.get("deleted")
 		#set($escapedTitle = $ret_escaped)
 		#assets_userInGroup($asset)
 		#if($doc.name != 'Favorites' && ($ret_assetGroupMember || $hasGlobalAdmin))##{
-		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath(${addpath}, {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.buildup_tooltip')">$msg.get('mycurriki.contributions.buildup')</a>{/pre}
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath('${addpath}', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('mycurriki.contributions.buildup_tooltip')">$msg.get('mycurriki.contributions.buildup')</a>{/pre}
 		#end##}
 	#end##}
 #end ##}
