@@ -2766,7 +2766,7 @@ console.log('createNode: parent',parent);
 				 id:attr.assetpage||attr.collectionPage
 				,text:attr.displayTitle
 				,qtip:attr.qtip||attr.description
-				,cls:'resource-'+attr.assetType
+				,cls:String.format('resource-{0} category-{1} subcategory-{1}_{2}', attr.assetType, attr.category, attr.subcategory)
 				,allowDrag:false
 				,allowDrop:false
 			}
