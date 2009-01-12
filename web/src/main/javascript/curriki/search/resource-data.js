@@ -309,7 +309,7 @@ data.init = function(){
 
 			var rollover = _(category+'.'+subcategory);
 			if (rollover === category+'.'+subcategory) {
-				rollover = _('search.resource.icon.Unknown.rollover');
+				rollover = _('unknown.unknown');
 			}
 
 //			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
