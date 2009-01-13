@@ -525,9 +525,19 @@ public class Asset extends CurrikiDocument {
         md.add(prop);
 
         // Add rights List
+        Map<String,Boolean> rightsList = getRightsList();
+        String rightsListString = "{";
+        for (String right : rightsList.keySet()) {
+            if (rightsListString.length()>1) {
+                rightsListString += ",";
+            }
+            rightsListString += "\""+right+"\":"+(rightsList.get(right)?"true":"false");
+        }
+        rightsListString += "}";
+
         baseProp = new BaseStringProperty();
         baseProp.setName("rightsList");
-        baseProp.setValue(getRightsList());
+        baseProp.setValue(rightsListString);
         prop = new Property(baseProp, context);
         md.add(prop);
 
