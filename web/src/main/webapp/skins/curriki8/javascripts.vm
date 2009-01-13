@@ -72,5 +72,13 @@
 #end ##}
 #end ## }
 
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.ns('Curriki.global');
+Curriki.global.username = "${context.user}";
+Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+/* ]]> */
+</script>
+
 ## Hook for inserting JavaScript skin extensions
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
