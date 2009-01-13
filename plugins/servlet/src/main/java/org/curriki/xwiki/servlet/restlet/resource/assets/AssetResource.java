@@ -44,6 +44,8 @@ public class AssetResource extends BaseResource {
                 String propName = prop.getName();
                 if (propName.equals("title")
                     || propName.equals("description")
+                    || propName.equals("creator")
+                    || propName.equals("creatorName")
                     || propName.equals("assetType")
                     || propName.equals("fullAssetType")) {
                     json.put(prop.getName(), prop.getValue());

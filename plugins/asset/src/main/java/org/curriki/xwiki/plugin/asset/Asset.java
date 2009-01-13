@@ -503,6 +503,22 @@ public class Asset extends CurrikiDocument {
         Property prop = new Property(baseProp, context);
         md.add(prop);
 
+        // Add creator
+        String creator = getCreator();
+        baseProp = new BaseStringProperty();
+        baseProp.setName("creator");
+        baseProp.setValue(creator);
+        prop = new Property(baseProp, context);
+        md.add(prop);
+
+        // Add creator's name
+        String creatorName =  context.getWiki().getLocalUserName(context.getUser(), null, false, context);
+        baseProp = new BaseStringProperty();
+        baseProp.setName("creatorName");
+        baseProp.setValue(creatorName);
+        prop = new Property(baseProp, context);
+        md.add(prop);
+
         // Add assetType to metadata
         Class assetType = getAssetClass();
         String fullAssetType = assetType.getCanonicalName();
