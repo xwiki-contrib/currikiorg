@@ -87,6 +87,41 @@ public abstract class CompositeAsset extends Asset {
         return docInfo;
     }
 
+    protected Map<String,Object> addEmptySubinfo(Map<String,Object> subInfo, String assetType) {
+        subInfo.put("displayTitle", "");
+        subInfo.put("description", "");
+        subInfo.put("fwItems", new String[]{});
+        subInfo.put("levels", new String[]{});
+        subInfo.put("category", "");
+        subInfo.put("subcategory", "");
+        subInfo.put("ict", "");
+        subInfo.put("assetType", assetType);
+
+        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>(3);
+        rightsInfo.put("view", false);
+        rightsInfo.put("edit", false);
+        rightsInfo.put("delete", false);
+        subInfo.put("rights", rightsInfo);
+
+        return subInfo;
+    }
+
+    protected Map<String,Object> addSubinfo(Map<String,Object> subInfo, Document doc) {
+        if (doc instanceof Asset) {
+            subInfo.put("displayTitle", doc.getDisplayTitle());
+            subInfo.put("description", ((Asset) doc).getDescription());
+            subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
+            subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
+            subInfo.put("category", ((Asset) doc).getCategory());
+            subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
+            subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
+            subInfo.put("assetType", ((Asset) doc).getAssetType());
+            subInfo.put("rights", ((Asset) doc).getRightsList());
+        }
+
+        return subInfo;
+    }
+
     public List<Map<String, Object>> getSubassetsInfo() {
         List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
 
@@ -97,7 +132,7 @@ public abstract class CompositeAsset extends Asset {
                 if (obj != null) {
                     String subPage = obj.getStringValue(Constants.SUBASSET_CLASS_PAGE);
 
-                    Map<String,Object> subInfo = new HashMap<String, Object>(6);
+                    Map<String,Object> subInfo = new HashMap<String, Object>(11);
                     subInfo.put(Constants.SUBASSET_CLASS_PAGE, subPage);
                     subInfo.put(Constants.SUBASSET_CLASS_ORDER, obj.getLongValue(Constants.SUBASSET_CLASS_ORDER));
 
@@ -105,47 +140,13 @@ public abstract class CompositeAsset extends Asset {
                     try {
                         Document doc = xwikiApi.getDocument(subPage);
                         if (doc instanceof Asset) {
-                            subInfo.put("displayTitle", doc.getDisplayTitle());
-                            subInfo.put("description", ((Asset) doc).getDescription());
-                            subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
-                            subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-                            subInfo.put("category", ((Asset) doc).getCategory());
-                            subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
-                            subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
-                            subInfo.put("assetType", ((Asset) doc).getAssetType());
-                            subInfo.put("rights", ((Asset) doc).getRightsList());
+                            subInfo = addSubinfo(subInfo, doc);
                         } else if (doc == null) {
                             // getDocument returns null if the page is not viewable by the user
-                            subInfo.put("displayTitle", "");
-                            subInfo.put("description", "");
-                            subInfo.put("fwItems", new String[]{});
-                            subInfo.put("levels", new String[]{});
-                            subInfo.put("category", "");
-                            subInfo.put("subcategory", "");
-                            subInfo.put("ict", "");
-                            subInfo.put("assetType", ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
-
-                            Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
-                            rightsInfo.put("view", false);
-                            rightsInfo.put("edit", false);
-                            rightsInfo.put("delete", false);
-                            subInfo.put("rights", rightsInfo);
+                            subInfo = addEmptySubinfo(subInfo, ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
                         }
                     } catch (Exception e) {
-                        subInfo.put("displayTitle", "");
-                        subInfo.put("description", "");
-                        subInfo.put("fwItems", new String[]{});
-                        subInfo.put("levels", new String[]{});
-                        subInfo.put("category", "");
-                        subInfo.put("subcategory", "");
-                        subInfo.put("ict", "");
-                        subInfo.put("assetType", InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
-
-                        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>();
-                        rightsInfo.put("view", false);
-                        rightsInfo.put("edit", false);
-                        rightsInfo.put("delete", false);
-                        subInfo.put("rights", rightsInfo);
+                        subInfo = addEmptySubinfo(subInfo, InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
                     }
 
                     subList.add(subInfo);
@@ -208,7 +209,7 @@ public abstract class CompositeAsset extends Asset {
 
     public Map<String,Object> getSubassetInfo(long subassetId) throws AssetException {
         List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
-        Map<String,Object> subInfo = new HashMap<String, Object>(5);
+        Map<String,Object> subInfo = new HashMap<String, Object>(11);
 
         if (objs != null) {
             for (BaseObject obj : objs){
@@ -224,15 +225,7 @@ public abstract class CompositeAsset extends Asset {
                         try {
                             Document doc = xwikiApi.getDocument(subPage);
                             if (doc instanceof Asset) {
-                                subInfo.put("displayTitle", doc.getDisplayTitle());
-                                subInfo.put("description", ((Asset) doc).getDescription());
-                                subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
-                                subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-                                subInfo.put("category", ((Asset) doc).getCategory());
-                                subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
-                                subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
-                                subInfo.put("assetType", ((Asset) doc).getAssetType());
-                                subInfo.put("rights", ((Asset) doc).getRightsList());
+                                subInfo = addSubinfo(subInfo, doc);
                             } else {
                                 subInfo.put("error", "Subasset does not exist");
                             }

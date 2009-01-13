@@ -496,18 +496,16 @@ public class Asset extends CurrikiDocument {
         }
 
         // Add title now that it isn't in the asset object
-        String title = getTitle();
         BaseStringProperty baseProp = new BaseStringProperty();
         baseProp.setName("title");
-        baseProp.setValue(title);
+        baseProp.setValue(getTitle());
         Property prop = new Property(baseProp, context);
         md.add(prop);
 
         // Add creator
-        String creator = getCreator();
         baseProp = new BaseStringProperty();
         baseProp.setName("creator");
-        baseProp.setValue(creator);
+        baseProp.setValue(getCreator());
         prop = new Property(baseProp, context);
         md.add(prop);
 
@@ -519,12 +517,32 @@ public class Asset extends CurrikiDocument {
         prop = new Property(baseProp, context);
         md.add(prop);
 
+        // Add page's name
+        baseProp = new BaseStringProperty();
+        baseProp.setName("assetpage");
+        baseProp.setValue(getFullName());
+        prop = new Property(baseProp, context);
+        md.add(prop);
+
+        // Add rights List
+        baseProp = new BaseStringProperty();
+        baseProp.setName("rightsList");
+        baseProp.setValue(getRightsList());
+        prop = new Property(baseProp, context);
+        md.add(prop);
+
+        // Add subcategory
+        baseProp = new BaseStringProperty();
+        baseProp.setName("subcategory");
+        baseProp.setValue(getCategorySubtype());
+        prop = new Property(baseProp, context);
+        md.add(prop);
+
         // Add assetType to metadata
         Class assetType = getAssetClass();
-        String fullAssetType = assetType.getCanonicalName();
         baseProp = new BaseStringProperty();
         baseProp.setName("fullAssetType");
-        baseProp.setValue(fullAssetType);
+        baseProp.setValue(assetType.getCanonicalName());
         prop = new Property(baseProp, context);
         md.add(prop);
 
