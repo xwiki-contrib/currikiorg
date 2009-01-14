@@ -253,40 +253,16 @@ Organize.init = function(){
 	});
 	Ext.reg('confirmOrganizeDialog', Organize.confirmDlg);
 
-	return true;
-};
-
-Organize.display = function(){
-	if (Organize.init()) {
+	Organize.display = function(){
 		if (Data.creator == Curriki.global.username || Curriki.global.isAdmin) {
 			UI.show('organizeDialog');
 		} else {
 			UI.show('confirmOrganizeDialog');
 		}
-	}
-};
+	};
 
-Organize.start = function(resourceInfo){
-	if (undefined === resourceInfo || undefined === resourceInfo.assetPage) {
-		alert('No resource to organize given.');
-		return false;
-	}
-	Data.resource = resourceInfo.assetPage;
-
-	if(undefined === resourceInfo.title
-	   || undefined == resourceInfo.creator
-	   || undefined == resourceInfo.creatorName) {
-		// Fetch resource info if not provided
-		Curriki.assets.GetAssetInfo(Data.resource, function(cbInfo){
-			Organize.start(cbInfo);
-		});
-		return false;
-	} else {
-		Data.title = resourceInfo.title;
-		Data.creator = resourceInfo.creator;
-		Data.creatorName = resourceInfo.creatorName;
-
-		Curriki.assets.GetMetadata(Data.resource, function(o){
+	Organize.startMetadata = function(resource) {
+		Curriki.assets.GetMetadata(resource, function(o){
 console.log('returned', o);
 			o.fwItems = o.fw_items;
 			o.levels = o.educational_level;
@@ -298,17 +274,48 @@ console.log('returned', o);
 			o.allowDrag = false;
 			o.allowDrop = true;
 			o.expanded = true;
-Curriki.global.temp = o;
 
 			var treeLoader = new UI.treeLoader.Organize();
 			Data.root = treeLoader.createNode(o);
 console.log('created', Data.root);
 			Data.root.addListener('beforecollapse', function(){return false;});
+			Data.resource = resource;
 
 			Ext.onReady(function(){
 				Organize.display();
 			});
 		});
+	}
+
+
+	return true;
+};
+
+Organize.start = function(resourceInfo){
+	if (Organize.init()) {
+		if (undefined === resourceInfo || undefined === resourceInfo.assetPage) {
+			alert('No resource to organize given.');
+			return false;
+		}
+		Data.resource = resourceInfo.assetPage;
+
+		if(undefined === resourceInfo.title
+		   || undefined == resourceInfo.creator
+		   || undefined == resourceInfo.creatorName) {
+			// Fetch resource info if not provided
+			Curriki.assets.GetAssetInfo(Data.resource, function(cbInfo){
+				Organize.start(cbInfo);
+			});
+			return false;
+		} else {
+			Data.title = resourceInfo.title;
+			Data.creator = resourceInfo.creator;
+			Data.creatorName = resourceInfo.creatorName;
+
+			Organize.startMetadata(Data.resource);
+		}
+	} else {
+		alert('ERROR: Could not start Organize.');
 	}
 };
 
