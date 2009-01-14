@@ -125,3 +125,9 @@ TOC="\
 	"
 cat $TOC | $UNCOMPRESS_JS > ../webapp/js/curriki-module-toc-debug.js
 cat $TOC | $COMPRESS_JS > ../webapp/js/curriki-module-toc.js
+
+ORGANIZE="\
+	curriki/organize/base.js \
+	"
+cat $ORGANIZE | $UNCOMPRESS_JS > ../webapp/js/curriki-module-organize-debug.js
+cat $ORGANIZE | $COMPRESS_JS > ../webapp/js/curriki-module-organize.js

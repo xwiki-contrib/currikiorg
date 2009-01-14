@@ -110,6 +110,9 @@ Curriki.assets = {
 					console.warn('Cannot get resource metadata', response.responseText, options);
 					alert(_('add.servertimedout.message.text'));
 				} else {
+					if ('string' === typeof o.rightsList) {
+						o.rightsList = o.rightsList.evalJSON(true);
+					}
 					callback(o);
 				}
 			}

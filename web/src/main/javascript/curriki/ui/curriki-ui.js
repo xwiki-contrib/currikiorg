@@ -75,8 +75,34 @@ Curriki.ui.treeLoader.Base = function(config){
 Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		dataUrl:'DYNAMICALLY DETERMINED'
 		,setChildHref:false
+		,setFullRollover:false
+		,setAllowDrag:false
 		,createNode:function(attr){
 console.log('createNode: ',attr);
+			if (this.setFullRollover) {
+				if ('string' !== Ext.type(attr.qtip)
+					&& 'string' === Ext.type(attr.description)
+					&& 'array' === Ext.type(attr.fwItems)
+					&& 'array' === Ext.type(attr.levels)
+					&& 'array' === Ext.type(attr.ict)
+				) {
+					var desc = attr.description||'';
+					desc = Ext.util.Format.ellipsis(desc, 256);
+					desc = Ext.util.Format.htmlEncode(desc);
+
+					var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
+					var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
+					var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
+					
+					attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
+						,desc,_('global.title.popup.description')
+						,fw,_('global.title.popup.subject')
+						,lvl,_('global.title.popup.educationlevel')
+						,ict,_('global.title.popup.ict')
+					);
+				}
+			}
+
 			if ('string' === typeof attr.id) {
 				var parent = Curriki.ui.treeLoader.Base.superclass.createNode.call(this, attr);
 console.log('createNode: parent',parent);
@@ -85,10 +111,10 @@ console.log('createNode: parent',parent);
 
 			var childInfo = {
 				 id:attr.assetpage||attr.collectionPage
-				,text:attr.displayTitle
+				,text:attr.displayTitle||attr.title
 				,qtip:attr.qtip||attr.description
 				,cls:String.format('resource-{0} category-{1} subcategory-{1}_{2}', attr.assetType, attr.category, attr.subcategory)
-				,allowDrag:false
+				,allowDrag:('boolean' == typeof attr.allowDrag)?attr.allowDrag:this.setAllowDrag
 				,allowDrop:false
 			}
 			if (this.setChildHref) {
