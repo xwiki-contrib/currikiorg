@@ -567,6 +567,12 @@ public class Asset extends CurrikiDocument {
         prop = new Property(baseProp, context);
         md.add(prop);
 
+        baseProp = new BaseStringProperty();
+        baseProp.setName("revision");
+        baseProp.setValue(getVersion());
+        prop = new Property(baseProp, context);
+        md.add(prop);
+
         return md;
     }
 

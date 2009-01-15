@@ -57,26 +57,7 @@ public abstract class CompositeAsset extends Asset {
     public Map<String,Object> getCompositeInfo() {
         Map<String,Object> docInfo = new HashMap<String, Object>();
 
-        // displayTitle
-        docInfo.put("displayTitle", getDisplayTitle());
-
-        // description
-        docInfo.put("description", getDescription());
-
-        // other metadata
-        docInfo.put("fwItems", getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
-        docInfo.put("levels", getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-        docInfo.put("category", getCategory());
-        docInfo.put("subcategory", getCategorySubtype());
-        docInfo.put("ict", getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
-
-        // collection type
-        use(Constants.COMPOSITE_ASSET_CLASS);
-        docInfo.put("collectionType", getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE));
-        docInfo.put("assetType", getAssetType());
-
-        // access rights
-        docInfo.put("rights", getRightsList());
+        addSubinfo(docInfo, this);
 
         // Children
         List<Map<String,Object>> subList = getSubassetsInfo();
@@ -90,6 +71,7 @@ public abstract class CompositeAsset extends Asset {
     protected Map<String,Object> addEmptySubinfo(Map<String,Object> subInfo, String assetType) {
         subInfo.put("displayTitle", "");
         subInfo.put("description", "");
+        subInfo.put("revision", "");
         subInfo.put("fwItems", new String[]{});
         subInfo.put("levels", new String[]{});
         subInfo.put("category", "");
@@ -108,15 +90,20 @@ public abstract class CompositeAsset extends Asset {
 
     protected Map<String,Object> addSubinfo(Map<String,Object> subInfo, Document doc) {
         if (doc instanceof Asset) {
-            subInfo.put("displayTitle", doc.getDisplayTitle());
-            subInfo.put("description", ((Asset) doc).getDescription());
-            subInfo.put("fwItems", ((Asset) doc).getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
-            subInfo.put("levels", ((Asset) doc).getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
-            subInfo.put("category", ((Asset) doc).getCategory());
-            subInfo.put("subcategory", ((Asset) doc).getCategorySubtype());
-            subInfo.put("ict", ((Asset) doc).getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
-            subInfo.put("assetType", ((Asset) doc).getAssetType());
-            subInfo.put("rights", ((Asset) doc).getRightsList());
+            Asset aDoc = (Asset) doc;
+            subInfo.put("displayTitle", aDoc.getDisplayTitle());
+            subInfo.put("description", aDoc.getDescription());
+            subInfo.put("revision", aDoc.getVersion());
+            subInfo.put("fwItems", aDoc.getValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS));
+            subInfo.put("levels", aDoc.getValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL));
+            subInfo.put("category", aDoc.getCategory());
+            subInfo.put("subcategory", aDoc.getCategorySubtype());
+            subInfo.put("ict", aDoc.getValue(Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT));
+            if (aDoc instanceof CompositeAsset) {
+                subInfo.put("collectionType", ((CompositeAsset) aDoc).compositeAssetType());
+            }
+            subInfo.put("assetType", aDoc.getAssetType());
+            subInfo.put("rights", aDoc.getRightsList());
         }
 
         return subInfo;
