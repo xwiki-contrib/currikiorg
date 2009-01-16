@@ -132,7 +132,7 @@ console.log('createNode: parent',parent);
 				childInfo.leaf = true;
 			} else if (attr.assetType){
 				childInfo.leaf = false;
-				childInfo.allowDrop = (attr.rights && attr.rights.edit);
+				childInfo.allowDrop = (attr.rights && attr.rights.edit)||false;
 			}
 
 			// ?? = attr.order;

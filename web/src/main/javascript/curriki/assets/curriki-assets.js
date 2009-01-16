@@ -349,6 +349,41 @@ Curriki.assets = {
 			}
 		});
 	}
+	,SetSubassets:function(assetPage, revision, wanted, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage+'/subassets'
+			,method:'PUT'
+			,headers: {
+				'Accept':'application/json'
+				,'Content-type':'application/json'
+			}
+			,jsonData: {previousRevision:revision, want:wanted}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object for the current asset
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot save subassets', response.responseText, options);
+					alert(_('add.servertimedout.message.text'));
+				} else {
+					callback(o);
+				}
+			}
+			,failure:function(response, options){
+				console.error('Cannot save subassets', response, options);
+				if (response.status == 412){
+					if (response.responseText.search(/ 107 [^ ]+ 101:/) !== -1){
+						alert(_('error: Collision while saving -- only some changes saved'));
+					} else {
+						alert(_('add.servertimedout.message.text'));
+					}
+				} else {
+					alert(_('add.servertimedout.message.text'));
+				}
+			}
+		});
+	}
 	,UnnominateAsset:function(assetPage, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/unnominate'

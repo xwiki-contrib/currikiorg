@@ -1626,6 +1626,7 @@ Ext.ns('Curriki');
 Ext.ns('Curriki.module');
 
 Ext.onReady(function(){
+	Curriki.loadingCount = 0;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
@@ -1648,6 +1649,7 @@ Curriki.id = function(prefix){
 };
 
 Curriki.showLoading = function(msg){
+	Curriki.loadingCount++;
 	if (!Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
@@ -1657,7 +1659,8 @@ Curriki.showLoading = function(msg){
 }
 
 Curriki.hideLoading = function(){
-	if (!Ext.isEmpty(Curriki.loadingMask)){
+	Curriki.loadingCount--;
+	if (Curriki.loadingCount == 0 && !Ext.isEmpty(Curriki.loadingMask)){
 		Curriki.loadingMask.hide();
 		Curriki.loadingMask.disable();
 	}
@@ -2541,6 +2544,41 @@ Curriki.assets = {
 			}
 		});
 	}
+	,SetSubassets:function(assetPage, revision, wanted, callback){
+		Ext.Ajax.request({
+			 url: this.json_prefix+'/'+assetPage+'/subassets'
+			,method:'PUT'
+			,headers: {
+				'Accept':'application/json'
+				,'Content-type':'application/json'
+			}
+			,jsonData: {previousRevision:revision, want:wanted}
+			,scope:this
+			,success:function(response, options){
+				var json = response.responseText;
+				// Should return an object for the current asset
+				var o = json.evalJSON(true);
+				if(!o) {
+					console.warn('Cannot save subassets', response.responseText, options);
+					alert(_('add.servertimedout.message.text'));
+				} else {
+					callback(o);
+				}
+			}
+			,failure:function(response, options){
+				console.error('Cannot save subassets', response, options);
+				if (response.status == 412){
+					if (response.responseText.search(/ 107 [^ ]+ 101:/) !== -1){
+						alert(_('error: Collision while saving -- only some changes saved'));
+					} else {
+						alert(_('add.servertimedout.message.text'));
+					}
+				} else {
+					alert(_('add.servertimedout.message.text'));
+				}
+			}
+		});
+	}
 	,UnnominateAsset:function(assetPage, callback){
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/unnominate'
@@ -2814,7 +2852,7 @@ console.log('createNode: parent',parent);
 				childInfo.leaf = true;
 			} else if (attr.assetType){
 				childInfo.leaf = false;
-				childInfo.allowDrop = (attr.rights && attr.rights.edit);
+				childInfo.allowDrop = (attr.rights && attr.rights.edit)||false;
 			}
 
 			// ?? = attr.order;

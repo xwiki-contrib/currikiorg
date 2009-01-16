@@ -44,6 +44,7 @@ Ext.ns('Curriki');
 Ext.ns('Curriki.module');
 
 Ext.onReady(function(){
+	Curriki.loadingCount = 0;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
@@ -66,6 +67,7 @@ Curriki.id = function(prefix){
 };
 
 Curriki.showLoading = function(msg){
+	Curriki.loadingCount++;
 	if (!Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
@@ -75,7 +77,8 @@ Curriki.showLoading = function(msg){
 }
 
 Curriki.hideLoading = function(){
-	if (!Ext.isEmpty(Curriki.loadingMask)){
+	Curriki.loadingCount--;
+	if (Curriki.loadingCount == 0 && !Ext.isEmpty(Curriki.loadingMask)){
 		Curriki.loadingMask.hide();
 		Curriki.loadingMask.disable();
 	}
