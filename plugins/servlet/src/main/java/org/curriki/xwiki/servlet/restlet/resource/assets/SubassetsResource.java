@@ -148,14 +148,35 @@ public class SubassetsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
         }
 
-        JSONArray orig;
-        try {
-            orig = json.getJSONArray("original");
-            if (orig.isEmpty()){
-                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.");
+        JSONArray orig = null;
+        if (json.containsKey("original")) {
+            try {
+                orig = json.getJSONArray("original");
+                if (orig.isEmpty()){
+                    throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.");
+                }
+            } catch (JSONException e) {
+                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.");
             }
-        } catch (JSONException e) {
-            throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.");
+        }
+
+        String rev = "";
+        if (json.containsKey("previousRevision")) {
+            try {
+                rev = json.getString("previousRevision");
+                if (rev.isEmpty()){
+                    throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.");
+                }
+            } catch (JSONException e) {
+                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.");
+            }
+        }
+
+        String logMsg;
+        if (json.containsKey("logMessage")) {
+            logMsg = json.getString("logMessage");
+        } else {
+            logMsg = xwikiContext.getMessageTool().get("curriki.comment.reordered");
         }
 
         JSONArray want;
@@ -171,8 +192,14 @@ public class SubassetsResource extends BaseResource {
         if (asset instanceof FolderCompositeAsset) {
             try {
                 FolderCompositeAsset fAsset = asset.as(FolderCompositeAsset.class);
-                fAsset.reorder(orig, want);
-                fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.reordered"));
+                if (json.containsKey("original")) {
+                    fAsset.reorder(orig, want);
+                } else if (json.containsKey("original")) {
+                    fAsset.reorder(rev, want);
+                } else {
+                    throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "You must provide previous revision information.");
+                }
+                fAsset.save(logMsg);
             } catch (XWikiException e) {
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }

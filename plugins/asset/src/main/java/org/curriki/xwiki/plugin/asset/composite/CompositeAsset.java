@@ -330,6 +330,51 @@ public abstract class CompositeAsset extends Asset {
         }
     }
 
+    public void setSubassets(List<String> want) throws XWikiException {
+        XWikiDocument assetDoc = getDoc();
+        List<BaseObject> existing = assetDoc.getObjects(Constants.SUBASSET_CLASS);
+
+        int wSize = want.size();
+        int eSize = existing.size();
+
+        int e = 0;
+        int w = 0;
+        
+        while (w < wSize) {
+            BaseObject b = null;
+            while (b == null && e < eSize) {
+                b = existing.get(e);
+                e++;
+            }
+            if (b == null) {
+                b = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
+            }
+
+            b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want.get(w));
+            b.setLongValue(Constants.SUBASSET_CLASS_ORDER, w);
+            w++;
+        }
+
+        while (e < eSize) {
+            BaseObject b = null;
+            while (b == null && e < eSize) {
+                b = existing.get(e);
+                e++;
+            }
+            if (b != null) {
+                assetDoc.removeObject(b);
+            }
+        }
+    }
+
+    public void reorder(String previousRevision, List<String> want) throws XWikiException {
+        if (!getVersion().equals(previousRevision)){
+            throw new AssetException(AssetException.ERROR_ASSET_REORDER_NOTMATCH, "This resource has been updated since originally checked");
+        }
+
+        setSubassets(want);
+    }
+
     public void reorder(List<String> orig, List<String> want) throws XWikiException {
         List<String> cur = getSubassetList();
 
