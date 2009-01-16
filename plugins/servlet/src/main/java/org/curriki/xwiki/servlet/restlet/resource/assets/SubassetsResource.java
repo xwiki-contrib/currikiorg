@@ -164,7 +164,7 @@ public class SubassetsResource extends BaseResource {
         if (json.containsKey("previousRevision")) {
             try {
                 rev = json.getString("previousRevision");
-                if (rev.isEmpty()){
+                if (rev.length() == 0){
                     throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.");
                 }
             } catch (JSONException e) {
