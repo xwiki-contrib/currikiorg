@@ -1,129 +1,151 @@
+
+
 ## Macro to display the CRS rating image
-	##
-	#macro(displayCRSIcon $name $status) ##{
-	#set($__crsIcon = $xwiki.getSkinFile("crs${status}.gif"))
-	#set($__crsRating = $msg.get("curriki.crs.rating${status}"))
-	<span class="tooltip-generator">$xwiki.addTooltip("<img src='${__crsIcon}' id='tooltip-image-${name}' class='tooltip-image' />
+
+
+## <div id="asset-rating">
+## <a href="" class="icon-crs"><img src="images/CRS3new.gif"/></a><a href="" class="link-crs">Exemplary</a>
+## </div>
+
+#**
+ * Displays the CRS icon
+ *
+ *#
+#macro(crs_displayCRSIcon $name $status) ##{
+#set($__crsIcon = $xwiki.getSkinFile("crs${status}.gif"))
+#set($__crsRating = $msg.get("curriki.crs.rating${status}"))
+<span class="tooltip-generator">$xwiki.addTooltip("<img src='${__crsIcon}' id='tooltip-image-${name}' class='tooltip-image' />
 		", $__crsRating, "ttWidth='auto'")</span>
-	#end ##}
-	##
-	## Curriki Review Status Macros
-	## This macro displays the current review status
-	## in the asset view page
-	#macro(displayCRS $asset)
-		<div class="crs_review">
-			<div class="crs_reviewtitle">
-				<a href="$msg.get("curriki.crs.review.CRSJumpPage.url")">
-					$msg.get("curriki.crs.currikireview"):
-				</a>
-			</div>
-			#set($ok = $asset.use("CurrikiCode.AssetClass"))
-			#set($rights = $!asset.getValue("rights"))
-			#if($asset.getObject("CRS.CurrikiReviewStatusClass"))
-				#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-				#set($status = $asset.getValue("status"))
-				#else
-					#set($status = "")
-			#end
-			#if((!$status)||($status=="100")||($status==""))
-				<div class="crs_reviewrating">
-					<div class="crs_reviewratingtext">
-						$msg.get("curriki.crs.unrated")
-					</div>
-				</div>
-				#else
-					#set($lastreview_date = $asset.getValue("lastreview_date"))
-					<div class="crs_reviewrating">
-						<div class="crs_reviewimage">
-							<a href="$asset.getURL("view", "viewer=comments")">
-								#displayCRSIcon("review" $status)
-							</a>
-						</div>
-						<div class="crs_reviewratingtext">
-							$msg.get("curriki.crs.rating${status}")
-						</div>
-						#if($lastreview_date)
-							<div class="crs_reviewratingdate">
-								$msg.get("curriki.crs.asof") $xwiki.formatDate($lastreview_date, $msg.get("dateFormat"))
-							</div>
-						#end
-					</div>
-			#end
-			#if($asset.canBeNominatedOrReviewed())
-				#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-				#set($nomination = $asset.getValue("reviewpending"))
-				<div class="crs_reviewpending">
-					#if($nomination=="1")
-						$msg.get("curriki.crs.reviewpending")
-						#else
-							#if($context.user!="XWiki.XWikiGuest")
-								<a href="javascript:Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});">$msg.get("curriki.crs.nominate")</a>
-							#end
-					#end
-				</div>
-				#if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
-					<div class="crs_reviewreview">
-						[$msg.get("curriki.crs.review")>CRS.Review?page=${asset.fullName}]
-					</div>
-				#end
-			#end
-		</div>
-	#end
-	## this macro diplays all the reviews in ante-chronological order
-	#macro(displayCRSReviews $asset)
-		#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-		#set($status = $asset.getValue("status"))
-		#if($status&&($status=="200"))
-			<div class="crs_reviews">
-				<div class="crs_reviewstitle">
-					$msg.get("curriki.crs.reviewlist.currikireview")
-				</div>
-				<div class="crs_reviewscontent crs_reviewscontentpartner">
-					<div class="crs_reviewscontent">
-						$msg.get("curriki.crs.reviewlist.currikihaspartnered")
-					</div>
-				</div>
-			</div>
-			#else
-				#set($reviewlist = $xwiki.arrayList)
-				#set($ok = $asset.use("CurrikiCode.AssetClass"))
-				#set($ict = $asset.display("instructional_component").replaceAll("#--#",","))
-				#foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
-					#if($obj)
-						#set($ok = $reviewlist.add(0, $obj))
-					#end
-				#end
-				#if($reviewlist.size()>0)
-					<div class="crs_reviews">
-						<div class="crs_reviewstitle">
-							$msg.get("curriki.crs.reviewlist.currikireview")
-						</div>
-						<div class="crs_reviewslist">
-							#foreach($obj in $reviewlist)
-								<div class="crs_reviewsreview">
-									#set($ok = $asset.use($obj))
-									#set($vtc = $asset.getValue("technicalcompletness"))
-									#set($vca = $asset.getValue("contentaccuracy"))
-									#set($vap = $asset.getValue("appropriatepedagogy"))
-									#set($rating = $asset.getValue("rating"))
-									#set($comment = $asset.display("comment"))
-									#set($date = $asset.getValue("date"))
-									#set($user = $asset.display("user"))
-									<div class="crs_reviewsdate">
-										$xwiki.formatDate($date, $msg.get("dateFormat"))
-									</div>
-									<div class="crs_reviewscomment">
-										#if($rating&&($rating!="0"))
-											$msg.get("curriki.crs.generatedcomment", [$ict, "#displayCRSIcon(${date.time}, ${rating})", $vtc, $vca, $vap, $comment])
-											#else
-												$msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $comment])
-										#end
-									</div>
-								</div>
-							#end
-						</div>
-					</div>
-					$xwiki.addTooltipJS()
-				#end
-		#end
-	#end
+#end ##}
+
+
+#**
+ * OLD MACRO
+ *
+	*
+	* Curriki Review Status Macros
+	* This macro displays the current review status
+	* in the asset view page
+ *#
+
+#macro(displayCRS $asset)
+<div class="crs_review">
+    <div class="crs_reviewtitle">
+        <a href="$msg.get("curriki.crs.review.CRSJumpPage.url")">
+            $msg.get("curriki.crs.currikireview"):
+        </a>
+    </div>
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #set($rights = $!asset.getValue("rights"))
+    #if($asset.getObject("CRS.CurrikiReviewStatusClass"))
+    #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+    #set($status = $asset.getValue("status"))
+    #else
+    #set($status = "")
+    #end
+    #if((!$status)||($status=="100")||($status==""))
+    <div class="crs_reviewrating">
+        <div class="crs_reviewratingtext">
+            $msg.get("curriki.crs.unrated")
+        </div>
+    </div>
+    #else
+    #set($lastreview_date = $asset.getValue("lastreview_date"))
+    <div class="crs_reviewrating">
+        <div class="crs_reviewimage">
+            <a href="$asset.getURL("view", "viewer=comments")">
+                #displayCRSIcon("review" $status)
+            </a>
+        </div>
+        <div class="crs_reviewratingtext">
+            $msg.get("curriki.crs.rating${status}")
+        </div>
+        #if($lastreview_date)
+        <div class="crs_reviewratingdate">
+            $msg.get("curriki.crs.asof") $xwiki.formatDate($lastreview_date, $msg.get("dateFormat"))
+        </div>
+        #end
+    </div>
+    #end
+    #if($asset.canBeNominatedOrReviewed())
+    #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+    #set($nomination = $asset.getValue("reviewpending"))
+    <div class="crs_reviewpending">
+        #if($nomination=="1")
+        $msg.get("curriki.crs.reviewpending")
+        #else
+        #if($context.user!="XWiki.XWikiGuest")
+        <a href="javascript:Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});">$msg.get("curriki.crs.nominate")</a>
+        #end
+        #end
+    </div>
+    #if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
+    <div class="crs_reviewreview">
+        <a href="$xwiki.getURL("CRS.Review", "view", "page=${asset.fullName}")">$msg.get("curriki.crs.review")</a>
+    </div>
+    #end
+    #end
+</div>
+#end
+
+
+#**
+* This macro diplays all the reviews in ante-chronological order
+**#
+#macro(displayCRSReviews $asset)
+#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+#set($status = $asset.getValue("status"))
+#if($status&&($status=="200"))
+<div class="crs_reviews">
+    <div class="crs_reviewstitle">
+        $msg.get("curriki.crs.reviewlist.currikireview")
+    </div>
+    <div class="crs_reviewscontent crs_reviewscontentpartner">
+        <div class="crs_reviewscontent">
+            $msg.get("curriki.crs.reviewlist.currikihaspartnered")
+        </div>
+    </div>
+</div>
+#else
+#set($reviewlist = $xwiki.arrayList)
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($ict = $asset.display("instructional_component").replaceAll("#--#",","))
+#foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
+#if($obj)
+#set($ok = $reviewlist.add(0, $obj))
+#end
+#end
+#if($reviewlist.size()>0)
+<div class="crs_reviews">
+    <div class="crs_reviewstitle">
+        $msg.get("curriki.crs.reviewlist.currikireview")
+    </div>
+    <div class="crs_reviewslist">
+        #foreach($obj in $reviewlist)
+        <div class="crs_reviewsreview">
+            #set($ok = $asset.use($obj))
+            #set($vtc = $asset.getValue("technicalcompletness"))
+            #set($vca = $asset.getValue("contentaccuracy"))
+            #set($vap = $asset.getValue("appropriatepedagogy"))
+            #set($rating = $asset.getValue("rating"))
+            #set($comment = $asset.display("comment"))
+            #set($date = $asset.getValue("date"))
+            #set($user = $asset.display("user"))
+            <div class="crs_reviewsdate">
+                $xwiki.formatDate($date, $msg.get("dateFormat"))
+            </div>
+            <div class="crs_reviewscomment">
+                #if($rating&&($rating!="0"))
+                $msg.get("curriki.crs.generatedcomment", [$ict, "#displayCRSIcon(${date.time}, ${rating})", $vtc, $vca, $vap, $comment])
+                #else
+                $msg.get("curriki.crs.generatedcommentunrated", [$ict, $vtc, $vca, $vap, $comment])
+                #end
+            </div>
+        </div>
+        #end
+    </div>
+</div>
+$xwiki.addTooltipJS()
+#end
+#end
+#end

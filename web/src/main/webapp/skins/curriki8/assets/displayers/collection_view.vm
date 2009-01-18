@@ -1,67 +1,52 @@
-COLLECTION DISPLAYER
-#asset_displaycontentheader()
 #if(!$asset.hasAccessLevel("view"))
  $msg.get("asset.contentNotAllowed")
 #else
-#set($objComp = $asset.getObject("CurrikiCode.CompositeAssetClass"))
- #if ($objComp && $objComp != "")
- #if($develop || 0==0) ## this if seems to be not used
-#set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
-#set($assetList = $xwiki.arrayList)
-#foreach($obj in $objs)
-#set($ok = $assetList.add(""))
-#end
-#foreach($obj in $objs)
-#set($ok = $asset.use($obj))
-#set($position = $asset.getValue("order"))
-#set($assetPage = $asset.getValue("assetpage"))
-#if($position >= $assetList.size())
-#set($ok = $assetList.add($assetPage))
-#else
-#set($ok = $assetList.set($position.intValue(), $assetPage))
-#end
-#end
-##set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='CurrikiCode.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetpage' and lg.name='order' order by lg.value ")
-##set($assetList = $xwiki.search($hql))
-  #foreach($assetPage in $assetList)
-   #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
- <hr />
+ #set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
+ #set($assetList = $xwiki.arrayList)
+ #foreach($obj in $objs)
+  #set($ok = $assetList.add(""))
+ #end ## foreach
+ #foreach($obj in $objs)
+  #set($ok = $asset.use($obj))
+  #set($position = $asset.getValue("order"))
+  #set($assetPage = $asset.getValue("assetpage"))
+  #if($position >= $assetList.size())
+   #set($ok = $assetList.add($assetPage))
+  #else
+   #set($ok = $assetList.set($position.intValue(), $assetPage))
+  #end
+ #end ## foreach
+ #foreach($assetPage in $assetList)
+  #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
+   ## Do nothing <hr />
+  #else
+   #set($embeddedDoc = $xwiki.getDocument($assetPage))
+   #if(!$xwiki.exists($assetPage))
+    ## We are not showing items that do not exist
+   #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
+    ## We are not showing protected assets
+    ## $msg.get("asset.contentNotAllowed")
    #else
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
-    #if(!$xwiki.exists($assetPage))
-## We are not showing items that do not exist
-    #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
-## We are not showing protected assets
-## $msg.get("asset.contentNotAllowed")
-    #else
-     #set($embeddedDoc = $xwiki.getDocument($assetPage))
      #if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
-      <div class="asset-content-body-composite-composite">
-#asset_findtitle($embeddedDoc)
-      <div class="righttext"><div class="lefttext">
-<a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">*$currikiTitle*</a>
+<div class="sub-asset-wrapper source-type-collection">
+    <div class="sub-asset-wrapper-inner">
+        #asset_beginsection($embeddedDoc false)
+        #endsection()
+    </div>
 </div>
-<a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a>
-</div>
-      </div>
      #else
-       <div class="asset-content-body-composite-source">
-#asset_findtitle($embeddedDoc)
-#asset_beginsection($currikiTitle $embeddedDoc.fullName true)
-       ##<div class="righttext"><div class="lefttext"> *$currikiTitle* </div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div>
-       #set($objComp = "")
-       $embeddedDoc.displayAsset("view")
-       ##asset_displaycontent($embeddedDoc false $showAll)
-#endsection()
- 	  </div>
-     #end
-    #end ## content view right
-   #end
-  #end
- #else
-## This text should be never displayed !!!!
-  Composite (not developed) : $!asset.displayTitle [$msg.get("asset.openToView")>$asset.fullName]
+#set($assetFiletype = $embeddedDoc.getValue("filetype"))
+#set($assetCategory = $embeddedDoc.getCategory())
+<div class="sub-asset-wrapper category-type-$assetCategory">
+    <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
+        #asset_beginsection($embeddedDoc true)
+        $embeddedDoc.displayAsset("view")
+        #endsection()
+    </div>
+</div>
+     #end ## composite or source
+    #end ## existing or viewable asset
+   #end ## not empty or pagebreak
+  #end ## foreach
  #end
-#end
-#end
-#asset_displaycontentfooter()

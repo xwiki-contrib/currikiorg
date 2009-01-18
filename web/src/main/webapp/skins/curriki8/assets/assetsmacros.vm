@@ -3,6 +3,248 @@
   *
   *#
 
+
+#**
+ * Macro for resources functions of asset
+ *#
+#macro(asset_resourcefunctions $asset)
+##set($assetHasView = $asset.hasAccessLevel("view"))
+#set($assetHasFlag = $asset.canBeNominatedOrReviewed())
+<ul id="function-tabs">
+   #if(!$isguest)
+     <li class="tab-first" id="tab-favorite"><a href="javascript:void()" onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+     <li id="tab-email"><a href="javascript:void()" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
+   #if($assetHasFlag)
+     <li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+    #end
+   #end
+     <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
+</ul>
+#end
+
+
+#**
+ * Macro displaying the asset icon and title
+ *#
+#macro(asset_icontitle $asset)
+<div id="asset-header">
+ <!--<img src="images/collectionmedium.gif">-->
+ <h2><a href="$asset.getURL("view")" title="$asset.displayTitle">$asset.displayTitle</a></h2>
+</div>
+#end
+
+
+#**
+ * Macro displaying the asset attribution and detals
+ *#
+#macro(asset_attribution $asset)
+#set($assetAuthorDoc = $xwiki.getDocument($asset.creator))
+#set($assetAuthorLink = $assetAuthorDoc.getURL())
+#set($assetAuthorDisplayName = $!xwiki.getUserName($asset.creator, false))
+#if($asset.space.startsWith("Coll_Group_")) ## {
+#set($assetGroupName = $asset.space.replaceFirst("Coll_", ""))
+#set($assetIsFromGroup = true)
+#set($assetGroup = $xwiki.csm.getSpace($assetGroupName))
+#set($assetGroupUrl = $assetGroup.getHomeURL())
+#else
+#set($assetIsFromGroup = false)
+#end
+<ul id="asset-attribution">
+ <li id="asset-avatar">
+     #if($assetIsFromGroup)
+     #groups_grouplogo( $assetGroup )
+     #else
+     ## TODO what is javascript:Curriki.logView('/Download/attachment/${creatorDoc.space}/${creatorDoc.name}/${attach.filename}
+     #curriki_avatar($assetAuthorDoc)
+     #end
+ </li>
+    #if($assetIsFromGroup)
+    #set($assetGroupDisplayName = $xwiki.escapeText($s.getDisplayTitle()))
+ <li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroupDisplayName</a></li>
+    #end
+ <li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $assetAuthorDisplayName">$assetAuthorDisplayName</a></li>
+</ul>
+#end
+
+#**
+ * Macro displaying the asset rating
+ *#
+#macro(asset_rating $asset)
+<div id="asset-rating">
+#displayCRS($asset)
+</div>
+#end
+
+#**
+ * Macro for resources tabs
+ *#
+#macro(asset_tabs $asset)
+<ul id="asset-tabs">
+<li  class="current"><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a></li>
+<li><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">Comments ($asset.commentNumbers)</a></li>
+<li><a href="$asset.getURL("view","bc=$!request.bc&viewer=information")">Information</a></li>
+</ul> ## tabs
+#end
+
+#**
+ * Macro for resources links
+ *#
+#macro(asset_links $asset)
+<ul id="asset-links">
+## Build Up
+ #if($asset.hasAccessLevel("edit")) ##{
+  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
+<li>
+   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+</li>
+  #end ##}
+ #end ##}
+## Organize
+<li>
+   Organize
+</li>
+## Add
+##if($g_userHasCollections)##{
+<li>
+   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+</li>
+##end##}
+</ul>
+#end
+
+#macro(asset_display $asset)
+<div id="asset-wrapper">
+#asset_findmode()
+#asset_resourcefunctions($asset)
+#asset_icontitle($asset)
+#asset_attribution($asset)
+#asset_rating($asset)
+#if(!$isPrint)
+#asset_tabs($asset)
+#end
+<div id="asset-wrapper-inner">
+#if(!$isPrint)
+ #asset_links($asset)
+#end
+$asset.displayAsset("view")
+</div> ##asset-wrapper-inner
+</div> ##asset-wrapper
+$xwiki.addTooltipJS()
+#end
+
+
+#**
+ * Begin an asset display section
+ *
+ *#
+#macro(asset_beginsection $assetDoc $withcollapse)
+#set($category = $assetDoc.category)
+#set($assetLink = $assetDoc.getURL())
+#set($assetTitle = $assetDoc.displayTitle)
+#if(!$seccounter)
+#set($seccounter = 1)
+#else
+#set($seccounter = $seccounter + 1)
+#end
+<div id="section_${seccounter}" class="section-wrapper">
+#set($closedGif = $xwiki.getSkinFile("icons/collapse.png"))
+#set($openedGif = $xwiki.getSkinFile("icons/collapse_down.png"))
+#set($defaultGif = $openedGif)
+###if($doHide)
+## #set($defaultGif = $closedGif)
+###end
+<div class="asset-display-title">
+    <div class="arrow-icon-wrapper">
+#if($withcollapse)
+      <span id="section${seccounter}collapser" class="collapser" onclick="toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;">
+        <img class="collapser" src="$defaultGif"/>
+      </span>
+#end
+      <a class="icon-mini" href="$assetLink" ext:qtip="$msg.get("rvw.content.section.icon.tooltip.${category}")">$msg.get("rvw.content.section.icon.${category}")</a>
+    </div>
+    <h3>
+        <a href="$assetLink" ext:qtitle="$msg.get("rvw.content.section.title")" ext:qtip="$msg.get("rvw.content.section.title.tooltip.${category}")">$assetTitle</a>
+    </h3>
+</div>
+#if($withcollapse)
+<script type="text/javascript">
+#if(!$togglesectionvisibility)
+#set($togglesectionvisibility = 1)
+function toggleSectionVisibility(seccounter, showhide){
+  var secTitleName = "section"+seccounter+"collapser";
+  var secContentName = "asset-display-"+seccounter;
+  var seccontent = document.getElementById(secContentName);
+  if(eltHasClass(seccontent, "hidden")){
+    rmClass(seccontent, "hidden");
+    // change icon
+    var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
+    if ("undefined" !== typeof imgElem) {
+	imgElem.setAttribute("src", "images/collapse_down.png");
+    }
+    // erase cookie
+    // eraseCookie("Section" + seccounter + "Hidden");
+  }
+  else{
+    addClass(seccontent, "hidden");
+    // Change icon
+    var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
+    if ("undefined" !== typeof imgElem) {
+	imgElem.setAttribute("src", "images/collapse.png");
+    }
+    // set cookie
+    // createCookie("Section" + seccounter + "Hidden", true, "");
+  }
+  return false;
+}
+#end
+addClass(document.getElementById("section${seccounter}collapser"), "collapser");
+var showhide${seccounter} = document.getElementById("section${seccounter}collapser");
+showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+##if($doHide)
+##createCookie("Section${seccounter}Hidden", true, "");
+###end
+</script>
+#end
+<div id="asset=display-${seccounter}" class="section-wrapper-content">
+#end
+
+## previous macros
+##
+##
+#macro(asset_displaylinks $asset)
+ #checkForCollections()
+ #escapeForJS($asset.fullName)
+ #set($escapedFullName = $ret_escaped)
+ #asset_findtitle($asset)
+ #escapeForJS($currikiTitle)
+ #set($escapedTitle = $ret_escaped)
+## Favorite
+ #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
+   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
+  #sep()
+ #end ##}
+## Add
+ #if($g_userHasCollections)##{
+   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+   #sep()
+ #end##}
+## Build Up
+ #if($asset.hasAccessLevel("edit")) ##{
+  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
+   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+   #sep()
+  #end ##}
+ #end ##}
+ #if($asset.hasAccessLevel("view"))
+  <a href="$asset.getURL("view", "viewer=print")" onclick="window.open('$asset.getURL("view", "viewer=print")');return false;">$msg.get("caption.print")</a>
+ #end
+ #if($asset.hasAccessLevel("edit"))
+  #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
+ #end
+#end
+
+
 #**
   * Finds the title of a curriki document
   *
@@ -48,79 +290,7 @@
 #end
 
 
-#**
- * Begin an asset display section
- *
- *#
-#macro(asset_beginsection $lefttitle $link $showAllvar)
-#set($doHide = !$showAllvar)
-#if(!$seccounter)
-#set($seccounter = 1)
-#else
-#set($seccounter = $seccounter + 1)
-#end
-<div id="section_${seccounter}">
-#set($closedGif = $xwiki.getSkinFile("icons/collapse.png"))
-#set($openedGif = $xwiki.getSkinFile("icons/collapse_down.png"))
-#set($defaultGif = $openedGif)
-#if($doHide)
- #set($defaultGif = $closedGif)
-#end
-#asset_findtitle($embeddedDoc)
-<div class="righttext">
-  <span id="section${seccounter}title">
-    <div class="lefttext" style="width: 438px;">
-      <img class="collapser" src="$defaultGif"/>&nbsp;
-      <strong class="strong">$currikiTitle</strong>
-    </div>
-  </span>
-#if(!$isPrint)
-  <div>
-    <a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a>
-  </div>
-#end
-</div>
-<div class="clearfloats"></div>
-<script type="text/javascript">
-#if(!$togglesectionvisibility)
-#set($togglesectionvisibility = 1)
-function toggleSectionVisibility(seccounter, showhide){
-  var secTitleName = "section"+seccounter+"title";
-  var secContentName = "section"+seccounter+"content";
-  var seccontent = document.getElementById(secContentName);
-  if(eltHasClass(seccontent, "hidden")){
-    rmClass(seccontent, "hidden");
-    // change icon
-    var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
-    if ("undefined" !== typeof imgElem) {
-	imgElem.setAttribute("src", "$openedGif");
-    }
-    // erase cookie
-    eraseCookie("Section" + seccounter + "Hidden");
-  }
-  else{
-    addClass(seccontent, "hidden");
-    // Change icon
-    var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
-    if ("undefined" !== typeof imgElem) {
-	imgElem.setAttribute("src", "$closedGif");
-    }
-    // set cookie
-    createCookie("Section" + seccounter + "Hidden", true, "");
-  }
-  return false;
-}
-#end
-addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
-var showhide${seccounter} = document.getElementById("section${seccounter}title");
-showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
-showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
-#if($doHide)
-createCookie("Section${seccounter}Hidden", true, "");
-#end
-</script>
-<div id="section${seccounter}content" class="#if($doHide)hidden#end">
-#end
+
 ##
 ##
 ##
@@ -296,40 +466,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 ##
 ##
 ##
-#macro(asset_displaylinks $asset)
- #checkForCollections()
- #escapeForJS($asset.fullName)
- #set($escapedFullName = $ret_escaped)
- #asset_findtitle($asset)
- #escapeForJS($currikiTitle)
- #set($escapedTitle = $ret_escaped)
-## Favorite
- #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
-   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
-  #sep()
- #end ##}
-## Add
- #if($g_userHasCollections)##{
-   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
-   #sep()
- #end##}
-## Build Up
- #if($asset.hasAccessLevel("edit")) ##{
-  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
-   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
-   #sep()
-  #end ##}
- #end ##}
- #if($asset.hasAccessLevel("view"))
-  <a href="$asset.getURL("view", "viewer=print")" onclick="window.open('$asset.getURL("view", "viewer=print")');return false;">$msg.get("caption.print")</a>
- #end
- #if($asset.hasAccessLevel("edit"))
-  #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
- #end
-#end
-##
-##
-##
+##  DEPRECATED
 ##
 #macro(asset_displaycontent $asset $develop $showAll)
 #if(!$asset.hasAccessLevel("view"))
@@ -538,7 +675,7 @@ $msg.get("asset.externallink")
 #end
 #end
 
-#macro(asset_display $currDoc)
+#macro(asset_display_old $currDoc)
 #asset_findmode()
 #if(!$isPrint)
 <div class="asset-tabs">
@@ -589,9 +726,9 @@ $currDoc.displayAsset("view")
 </div> ##content-footer-bordered
 </div> ##content-footer
 #end ## if ! print
-</div> ##display
-</div> ##contents
-</div>
+</div> ##asset-display
+</div> ##asset-contents
+</div> ##asset-page
 $xwiki.addTooltipJS()
 #end
 
@@ -693,28 +830,27 @@ $msg.get("caption.next")
 
 
 #macro(asset_displaycontentheader $style)
-#if($style)
-<div class="asset-content-body" style="${style}">
-#else
-<div class="asset-content-body">    
-#end
+##if($style)
+##<div class="asset-content-body" style="${style}">
+###else
+##<div class="asset-content-body">
+###end
 #end
 
 #macro(asset_displaycontentfooter)
 <div class="clearfloats"></div>
-</div>
+##<div class="clearfloats"></div>
+##</div>
 #end
 
 #macro(asset_displaycontentfooterattachment $asset)
  #set($attachedFile = $mimedoc.attachmentList.get(0))
  <div class="clearfloats"></div>
- </div>
- <hr class="my-curriki-hr" >
+ <hr class="my-curriki-hr" />
  <div class="asset-content-options">
   <a href="$asset.getAttachmentURL("${attachedFile.filename}", "download")" onClick="javascript:Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}');" title="$msg.get("downloadthisattachment")">
   $attachedFile.getFilename().toLowerCase()
   </a>&nbsp;&nbsp;
   <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}'); window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
  </div>
- <div class="clearfloats"></div>
 #end
