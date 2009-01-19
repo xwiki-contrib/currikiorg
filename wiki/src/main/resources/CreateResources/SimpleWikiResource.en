@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>CreateResources</web>
@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1222442696000</creationDate>
-<date>1223476977000</date>
-<contentUpdateDate>1223476977000</contentUpdateDate>
-<version>5.1</version>
+<date>1231922375000</date>
+<contentUpdateDate>1231922375000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>undefined</comment>
+<comment>modify instructional type</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -103,12 +103,12 @@
     &lt;/dl&gt;
   #else ## } ----- $newAsset defined for entire branch below ----- {
   ## create or get newTextAsset -- used to display WYSIWYG editor
-  #if( !$newAsset.getObject("XWiki.TextAssetClass") ) ## {
+  #if( !$newAsset.getObject("CurrikiCode.TextAssetClass") ) ## {
     ## create TextAssetClass for use by WYSIWYG
-    #set( $newTextAsset = $newAsset.newObject("XWiki.TextAssetClass") )
+    #set( $newTextAsset = $newAsset.newObject("CurrikiCode.TextAssetClass") )
   #else ## } {
     ## fetch existing TextAssetClass for use by WYSIWYG
-    #set( $newTextAsset = $newAsset.getObject("XWiki.TextAssetClass") )
+    #set( $newTextAsset = $newAsset.getObject("CurrikiCode.TextAssetClass") )
   #end ## }
 ## DEBUG DEBUG DEBUG
 ## &lt;p&gt;( '$!request.page $request.method ): newTextAsset: '$!newTextAsset' , newAsset: '$!newAsset' , pageName: '$!pageName' , cameFrom: '$!cameFrom' , flow: '$!flow' , parentPage: '$!parentPage' , publishSpace: '$!publishSpace'&lt;/p&gt;
@@ -116,28 +116,103 @@
 ##
 ## ---------- JAVASCRIPT SPECIFICALLY FOR THIS FORM ----------
 ##
-{pre}&lt;script language="javascript" type="text/javascript"&gt;
+{pre}
+&lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"&gt;&lt;/script&gt;
+&lt;script language="javascript" type="text/javascript"&gt;
+
+// ----------------------------------- override YUI checknode method -------------------
+/**
+ * jsj add
+ *Invoked when the user press space key
+ */
+YAHOO.widget.CheckNode.prototype.getKeyCheck = function() {
+    return " if( 32 == (window.event ? event.keyCode : event.which) ){ "+"YAHOO.widget.TreeView.getNode(\'" + this.tree.id + "\'," +
+        this.index + ").checkClick();"+"if (event.preventDefault) event.preventDefault( ); else event.returnValue = false;}";
+};
+
+// Overrides YAHOO.widget.TextNode
+YAHOO.widget.CheckNode.prototype.getNodeHtml = function() {
+    // this.logger.log("Generating html");
+    var sb = new Array();
+
+    sb[sb.length] = '&lt;table border="0" cellpadding="0" cellspacing="0"&gt;';
+    sb[sb.length] = '&lt;tr&gt;';
+
+    for (i=0;i&lt;this.depth;++i) {
+        sb[sb.length] = '&lt;td class="' + this.getDepthStyle(i) + '"&gt;&amp;#160;&lt;/td&gt;';
+    }
+
+    sb[sb.length] = '&lt;td';
+    sb[sb.length] = ' id="' + this.getToggleElId() + '"';
+    sb[sb.length] = ' class="' + this.getStyle() + '"';
+    if (this.hasChildren(true)) {
+        sb[sb.length] = ' onmouseover="this.className=';
+        sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+        sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
+        sb[sb.length] = ' onmouseout="this.className=';
+        sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+        sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
+    }
+    sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '"&gt;&amp;#160;';
+    sb[sb.length] = '&lt;/td&gt;';
+
+    // check box
+    sb[sb.length] = '&lt;td';
+    sb[sb.length] = ' id="' + this.getCheckElId() + '"';
+    sb[sb.length] = ' class="' + this.getCheckStyle() + '"';
+    sb[sb.length] = ' onclick="javascript:' + this.getCheckLink() + '"&gt;';
+    sb[sb.length] = '&amp;#160;&lt;/td&gt;';
+
+
+    sb[sb.length] = '&lt;td&gt;';
+    sb[sb.length] = '&lt;a';
+    sb[sb.length] = ' id="' + this.labelElId + '"';
+    sb[sb.length] = ' class="' + this.labelStyle + '"';
+    sb[sb.length] = ' href="' + this.href + '"';
+    sb[sb.length] = ' target="' + this.target + '"';
+    if (this.hasChildren(true)) {
+        sb[sb.length] = ' onmouseover="document.getElementById(\'';
+        sb[sb.length] = this.getToggleElId() + '\').className=';
+        sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+        sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
+        sb[sb.length] = ' onmouseout="document.getElementById(\'';
+        sb[sb.length] = this.getToggleElId() + '\').className=';
+        sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+        sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
+    }
+    sb[sb.length] = ' onkeypress="javascript:' + this.getKeyCheck(this.event)+'"&gt;';
+    //sb[sb.length] = '&gt;';
+    sb[sb.length] = this.label;
+    sb[sb.length] = '&lt;/a&gt;';
+    sb[sb.length] = '&lt;/td&gt;';
+    sb[sb.length] = '&lt;/tr&gt;';
+    sb[sb.length] = '&lt;/table&gt;';
+
+    return sb.join("");
+};
 /* &lt;![CDATA[ */
 //
 //
 //
 function checkSimpleResourceForm() {
   var missed_fields_str = '';
-  if (getFieldContentStr('XWiki.AssetClass_0_title') == null) {
+  if (getFieldContentStr('CurrikiCode.AssetClass_0_title') == null) {
     missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.title')');
   }
-  if (getFieldContentStr('XWiki.AssetClass_0_description') == null) {
+  if (getFieldContentStr('CurrikiCode.AssetClass_0_description') == null) {
     missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.description')');
   }
   {
-    var form_fw_items = getFieldContentStr('XWiki.AssetClass_0_fw_items');
+    var form_fw_items = getFieldContentStr('CurrikiCode.AssetClass_0_fw_items');
     if ((form_fw_items == null) || (form_fw_items == 'FW_masterFramework.WebHome')) {
       missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.subject')');
     }
   }
   { // Eductional-Level -- for validation, must look at "checked" on each button.
     var one_checked = false;
-    for (var idx = 0, form_checkboxes = document.forms.inline['XWiki.AssetClass_0_educational_level2'];
+    for (var idx = 0, form_checkboxes = document.forms.inline['CurrikiCode.AssetClass_0_educational_level'];
 	 ((idx &lt; form_checkboxes.length) &amp;&amp; !one_checked);
 	 idx++) {
       if (form_checkboxes[idx].checked) {
@@ -146,15 +221,15 @@ function checkSimpleResourceForm() {
     }
     if (!one_checked) {
       missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.level')');
-    } 
+    }
   }
-  if ($('XWiki.AssetClass_0_instructional_component2').value.length &lt;= 1) {
+  if ($('CurrikiCode.AssetClass_0_instructional_component').value.length &lt;= 1) {
     missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.ict')');
   }
-  if (getWysiwygFieldContent('mce_editor_0', 'XWiki.TextAssetClass_0_text') == null) {
+  if (getWysiwygFieldContent('mce_editor_0', 'slp_text') == null) {
     missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.content')');
   }
-  if (getFieldContentStr('XWiki.AssetLicenseClass_0_rightsHolder') == null) {
+  if (getFieldContentStr('CurrikiCode.AssetLicenseClass_0_rightsHolder') == null) {
     missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('form.scratch.required.fields.dialog.rights')');
   }
 
@@ -162,7 +237,7 @@ function checkSimpleResourceForm() {
   if(missed_fields_str != ''){
 	error_msg = '$msg.get('form.scratch.required.fields.dialog')' + missed_fields_str;
   }else{
-    if (getFieldContentStr('XWiki.AssetClass_0_title').length &gt; 250) {
+    if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; 250) {
       error_msg = '$msg.get("form.scratch.title.more.250")';
     }
   }
@@ -174,6 +249,7 @@ function checkSimpleResourceForm() {
     return false;
   }
   else { 			 // SUCCESS!
+    setTextAssetToWikiText(formatTextareasIntoWikiText());
     setSuccessMessage('$msg.get('form.done.created.resource')');
     return true;
   }
@@ -182,10 +258,10 @@ function checkSimpleResourceForm() {
 //
 //
 function checkSimpleResourceDirty() {
-  if (getFieldContentStr('XWiki.AssetClass_0_title') != null) {
+  if (getFieldContentStr('CurrikiCode.AssetClass_0_title') != null) {
     return true;
   }
-  if (getFieldContentStr('XWiki.AssetClass_0_description') != null) {
+  if (getFieldContentStr('CurrikiCode.AssetClass_0_description') != null) {
     return true;
   }
   {
@@ -197,13 +273,41 @@ function checkSimpleResourceDirty() {
   return false;
 }
 //
+// To be called after validation of all required fields, this function
+// concatenates all the textarea and wysiwyg fields in the form
+//
+function formatTextareasIntoWikiText() { 			
+  var slp_str = '';		// the string we concat into the TextAssetClass contents
+  var title_markup_str = '*';
+  var vert_break_str = '\\\\\n\n'
+  {
+    var form_content = getWysiwygFieldContent('mce_editor_0', 'slp_text');
+    if (form_content != null) {
+      slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("form.scratch.step2.content.title")' + title_markup_str +  vert_break_str + form_content;
+    }
+  } 
+ 
+  return (slp_str);
+}
+// set value POSTed via form hidden field w/
+// id="XWiki.TextAssetClass_0_text" and default
+// value="$msg.get('form.done.wysiwyg.error.wikitext')" (which if received
+// on POST, indicates an unexpected error condition has occurred).
+function setTextAssetToWikiText(str) {
+  var input_field_TextAssetClass_o = $('CurrikiCode.TextAssetClass_0_text');
+  if (input_field_TextAssetClass_o != null) {
+    input_field_TextAssetClass_o.value = str;
+  }
+  else { alert('error in setTextAssetToWikiText()'); }
+}
+//
 // return field's contents as string. returns null if field is empty or in case of 
 // lookup error.
 //
 function getFieldContentStr(field_id_str) {
   var field_content_o   = $(field_id_str);
   var field_content_str = (field_content_o==null) ? "" : field_content_o.value;
-  if ((field_content_str.length &lt;= 1) || (field_content_str.trim() == '')) {
+  if ((field_content_str.length &lt; 1) || (field_content_str.trim() == '')) {
     return (null);
   }
   else {
@@ -302,7 +406,8 @@ function setUnloadDialog() {
   ## XWiki.AssetClass_0_category is a "fake" property named "category" in XWiki.AssetClass.
   ## This is forced here to value "text". This hidden field is passed to AssetDone 
   ## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
-  &lt;input type="hidden"  name="XWiki.AssetClass_0_category" id="XWiki.AssetClass_0_category" value="text" /&gt; 
+  &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" /&gt;
+  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt; 
   ## successMessage is a hidden field that is set to a string in validation javascript
   ## after successful validation. If AssetDone gets a POST with the default value of "" set here
   ## it will ignore the post as it means it's not validated.
@@ -315,6 +420,7 @@ function setUnloadDialog() {
   &lt;input type="hidden"	name="noDialogs"	value="$noDialogs"		/&gt;
 #else                                   ## } {  -- ?noDialogs... not set, pass parameters used for add-path dialogs
   &lt;input type="hidden"	name="flow"		value="$!flow"			/&gt;
+  &lt;input type="hidden"	name="createLessonURL"		value="$msg.get('form.scratch.url')"	/&gt; ## for ICT
   &lt;input type="hidden"	name="cameFrom"
   #if( "$!cameFrom"=="" )              ## {
    value="$msg.get('form.scratch.url')" ## default cameFrom to this form
@@ -327,7 +433,8 @@ function setUnloadDialog() {
   #curriki_formpart_begin($msg.get("form.scratch.step1.header")) ## {
   #curriki_forminstructions($msg.get("form.scratch.step1.instruction"))
   #curriki_formprompt($msg.get("sri.title_title"), $msg.get("form.scratch.title_tooltip"), $msg.get("form.scratch.title_txt"), true, "medium")
-  $newAsset.display("title","edit")
+  ##$newAsset.display("title","edit")
+  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" /&gt;
   #curriki_formprompt($msg.get("sri.description_title"), $msg.get("form.scratch.description_tooltip"), $msg.get("form.scratch.description_txt"), true, "medium")
   $newAsset.display("description","edit")
   &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
@@ -335,10 +442,10 @@ function setUnloadDialog() {
   $newAsset.display("fw_items","edit")
   &lt;/td&gt;&lt;td&gt;
   #curriki_formprompt($msg.get("sri.educational_level_title"), $msg.get("sri.educational_level_tooltip"), $msg.get("sri.educational_level_txt"), true, "medium")
-  $newAsset.display("educational_level2","edit")
+  $newAsset.display("educational_level","edit")
   &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt; ##class="subject-educational"
   #curriki_formprompt($msg.get("sri.instructional_component2_title"), $msg.get("sri.instructional_component2_tooltip"), $msg.get("sri.instructional_component2_txt"), true, "medium")
-  $newAsset.display("instructional_component2","edit")
+  $newAsset.display("instructional_component","edit")
   #curriki_formprompt($msg.get("sri.keywords_title"), $msg.get("sri.keywords_tooltip"), $msg.get("sri.keywords_txt"), false, "medium")
   $newAsset.display("keywords","edit")
   #curriki_formprompt($msg.get("sri.language_title"), $msg.get("sri.language_tooltip"), $msg.get("sri.language_txt"), false, "medium")
@@ -348,7 +455,8 @@ function setUnloadDialog() {
   #curriki_formpart_begin($msg.get("form.scratch.step2.header")) ## {
   #curriki_forminstructions($msg.get("form.scratch.step2.instruction"))
   #curriki_formprompt($msg.get("form.scratch.step2.content.title"), "", $msg.get("form.scratch.step2.content.instruction"), true, "medium")
-  $newTextAsset.display("text", "edit") ##WYSIWYG editor
+  ##$newTextAsset.display("text", "edit") ##WYSIWYG editor
+  &lt;textarea id='slp_text' name='slp_text'&gt;&lt;/textarea&gt; 
   #curriki_formpart_end() ## }
 #####################################################################
   #curriki_formpart_begin($msg.get("form.scratch.step3.header")) ## {
@@ -362,7 +470,7 @@ function setUnloadDialog() {
   $newAsset.display("rights","edit")
   #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
   &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		##special case where additional text is needed as prompt before display()
-  $newAsset.display("licenseType2","edit")
+  $newAsset.display("licenseType","edit")
   #curriki_formpart_end() ## }
 #####################################################################
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
@@ -389,7 +497,19 @@ function setUnloadDialog() {
 #set( $noWYSIWYG  = $request.getParameter("noWYSIWYG") ) ##For testing,etc, add parameter ?noWYSIWYG=1 to force WYSIWYG editors to not display, and use TEXTAREA instead
 #if( "$!noWYSIWYG" == "" ) ## {
 #curriki_wysiwyg_loader_preamble()
-#curriki_wysiwyg_loader_editor($context.getEditorWysiwyg(), $newAsset) ## aka "mce_editor_0"
+##curriki_wysiwyg_loader_editor($context.getEditorWysiwyg(), $newAsset) ## aka "mce_editor_0"
+#if( "$!publishSpace"=="" )            ## {
+ #set( $user = $context.user )
+  #if( $user.startsWith("XWiki.") )    ## {
+    #set( $shortname = $user.substring(6) )
+  #else                                ## } {
+    #set( $shortname = $user )
+  #end                                 ## }
+  #set( $wysi_publishSpace = "Coll_${shortname}" )
+#else ## } {
+  #set( $wysi_publishSpace = $publishSpace )
+#end  
+#curriki_SLP_wysiwyg_loader_editor("slp_text", $newAsset, $wysi_publishSpace) ## id="mce_editor_0"
 #end ## } -- if "$!noWYSIWYG"==""
 {pre}&lt;script language="javascript" type="text/javascript"&gt;
 /* &lt;![CDATA[ */
