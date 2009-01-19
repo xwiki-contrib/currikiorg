@@ -72,6 +72,8 @@ Organize.init = function(){
 					,listeners:{
 						click:{
 							 fn: function(btn, e){
+								var page = Data.resource.replace('.', '/');
+								Curriki.logView('/features/resources/organize/'+page+'/cancelled');
 								this.close();
 								if (Ext.isIE) {
 									window.location.reload();
@@ -101,6 +103,8 @@ Organize.init = function(){
 
 								var checkFolders = function(){
 									var saveFolders = function(){
+										var page = Data.resource.replace('.', '/');
+										Curriki.logView('/features/resources/organize/'+page+'/completed');
 										Curriki.hideLoading();
 										window.location.reload();
 									}
@@ -296,6 +300,8 @@ console.log('inserted node', node, newParent, tree, refNode);
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
+								var page = Data.resource.replace('.', '/');
+								Curriki.logView('/features/resources/organize/'+page+'/cancelled');
 								this.close();
 							}
 							,scope:this
@@ -360,6 +366,8 @@ console.log('inserted node', node, newParent, tree, refNode);
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
+								var page = Data.resource.replace('.', '/');
+								Curriki.logView('/features/resources/organize/'+page+'/cancelled');
 								this.close();
 							}
 							,scope:this
