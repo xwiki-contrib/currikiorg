@@ -341,17 +341,20 @@ public abstract class CompositeAsset extends Asset {
         int w = 0;
         
         while (w < wSize) {
-            BaseObject b = null;
-            while (b == null && e < eSize) {
-                b = existing.get(e);
-                e++;
-            }
-            if (b == null) {
-                b = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
-            }
+            if (context.getWiki().exists(want.get(w), context)) {
+                // Only add the asset if it still exists
+                BaseObject b = null;
+                while (b == null && e < eSize) {
+                    b = existing.get(e);
+                    e++;
+                }
+                if (b == null) {
+                    b = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
+                }
 
-            b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want.get(w));
-            b.setLongValue(Constants.SUBASSET_CLASS_ORDER, w);
+                b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want.get(w));
+                b.setLongValue(Constants.SUBASSET_CLASS_ORDER, w);
+            }
             w++;
         }
 
