@@ -194,8 +194,10 @@ public class SubassetsResource extends BaseResource {
                 FolderCompositeAsset fAsset = asset.as(FolderCompositeAsset.class);
                 if (json.containsKey("original")) {
                     fAsset.reorder(orig, want);
-                } else if (json.containsKey("original")) {
+                } else if (json.containsKey("previousRevision")) {
                     fAsset.reorder(rev, want);
+                } else if (json.containsKey("ignorePreviousRevision")) {
+                    fAsset.setSubassets(want);
                 } else {
                     throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "You must provide previous revision information.");
                 }
