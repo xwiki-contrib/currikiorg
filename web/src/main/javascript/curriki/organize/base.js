@@ -128,7 +128,10 @@ console.log('saving folder', n.id, wanted);
 											if (o.revision != n.attributes.revision) {
 												// Doesn't match
 												Curriki.hideLoading();
-												UI.show('concurrencyOrganizeDlg');
+												alert(_('organize.error.concurrency_text'));
+												this.close();
+												Ext.getCmp('OrganizeDialogueWindow').close();
+												Organize.start(Data.startInfo);
 											} else {
 												// Matches -- check next
 												if ("function" == typeof pCF) {
@@ -329,41 +332,6 @@ console.log('inserted node', node, newParent, tree, refNode);
 		}
 	});
 	Ext.reg('confirmOrganizeDlg', Organize.confirmDlg);
-
-	Organize.concurrencyDlg = Ext.extend(UI.dialog.Messages, {
-		  initComponent:function(){
-			Ext.apply(this, {
-				 id:'IntentionOrganizeDialogueWindow'
-				,title:_('organize.dialog_header')
-				,cls:'organize resource resource-edit'
-				,autoScroll:false
-				,bbar:[{
-					 text:_('organize.dialog.ok_button')
-					,id:'organize-concurrency-ok-button'
-					,cls:'button ok'
-					,listeners:{
-						'click':{
-							fn:function(e,evt){
-								this.close();
-								Ext.getCmp('OrganizeDialogueWindow').close();
-								Organize.start(Data.startInfo);
-							}
-							,scope:this
-						}
-					}
-				}]
-				,items:[{
-					xtype:'box'
-					,autoEl:{
-						tag:'div'
-						,html:_('organize.error.concurrency_text')
-					}
-				}]
-			});
-			Organize.concurrencyDlg.superclass.initComponent.call(this);
-		}
-	});
-	Ext.reg('concurrencyOrganizeDlg', Organize.concurrencyDlg);
 
 	Organize.intentionDlg = Ext.extend(UI.dialog.Messages, {
 		  initComponent:function(){
