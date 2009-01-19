@@ -3,11 +3,12 @@
 /*global Curriki */
 /*global _ */
 
-// Some variables need to be defined before this script is loaded
+// Some variables need to be defined and passed to this script (start method)
 //
-// ? = Top level folder to organize
-// ? = Creator of the folder (for intention message)
-// ? = Owner or Admin user
+// assetPage = Top level folder to organize
+// title = Creator of the folder (for intention message)
+// creator = Owner or Admin user
+// creatorName = Owner or Admin user name
 
 (function(){
 Ext.ns('Curriki.module.organize');
@@ -22,7 +23,7 @@ Organize.init = function(){
 	Data.removed = [];
 	Data.moved = [];
 	Data.changedFolders = [];
-	Data.selected = false;
+	Data.selected = null;
 	Data.confirmedCallback = Ext.emptyFn;
 
 	UI.treeLoader.Organize = function(config){
@@ -57,10 +58,10 @@ Organize.init = function(){
 					,cls:'button remove'
 					,disabled:true
 					,listeners:{
-						click:function(){
-							if (Data.selected !== false) {
-								Data.selected.remove();
-								Data.selected = false;
+						click:function(btn, e){
+							if (Data.selected !== null) {
+								Data.removed.push(Data.selected.remove());
+								btn.disable();
 							}
 						}
 					}
@@ -70,7 +71,7 @@ Organize.init = function(){
 					,cls:'button cancel'
 					,listeners:{
 						click:{
-							 fn: function(){
+							 fn: function(btn, e){
 								this.close();
 								if (Ext.isIE) {
 									window.location.reload();
@@ -86,37 +87,21 @@ Organize.init = function(){
 					,disabled:true
 					,listeners:{
 						click:{
-							 fn: function(){
+							 fn: function(btn, e){
 								var list = [];
-//									Ext.getCmp('reorderCollectionsMS').store.each(function(rec){list.push(rec.data.collectionPage);});
 								console.log('Organizing', list);
 
 								Ext.getCmp('organize-tree-cmp').getRootNode().eachChild(Organize.getMovedList);
-
-console.log('Removed Items', Data.removed);
-console.log('Moved Items', Data.moved);
-
-//TODO: Display confirm message, then save changes on acceptance
-//TODO: Now, it is really the parents of these items that are changing (new and old)
-// so, get the list of changing parents
-// - then check revisions of them (one step or many?)
-// - then save changes to them (one step or many?)
-//   - Need to log message appropriately for the changes on that folder
 
 								Data.changedFolders = Data.moved.concat(Data.removed).collect(function(n){
 									return n.attributes.origLocation.parentNode;
 								}).concat(Data.moved.collect(function(n){
 									return n.parentNode;
 								})).uniq();
-console.log('Changed folders', Data.changedFolders);
 
 								var checkFolders = function(){
-console.log('All folders checked');
 									var saveFolders = function(){
-//TODO: Show final dialogue
-console.log('save folders complete');
 										Curriki.hideLoading();
-//TODO: Reload the page
 										window.location.reload();
 									}
 
@@ -125,11 +110,11 @@ console.log('save folders complete');
 										saveFolders = function() {
 											var wanted = n.childNodes.collect(function(c){return c.id;});
 console.log('saving folder', n.id, wanted);
-//Curriki.assets.SetSubassets(n.id, n.attributes.revision, wanted, function(o){
-											if ("function" == typeof pSF) {
-												pSF();
-											}
-//});
+//											Curriki.assets.SetSubassets(n.id, n.attributes.revision, wanted, function(o){
+												if ("function" == typeof pSF) {
+													pSF();
+												}
+//											});
 										};
 									});
 
@@ -139,12 +124,11 @@ console.log('saving folder', n.id, wanted);
 								Data.changedFolders.each(function(n){
 									var pCF = checkFolders;
 									checkFolders = function() {
-console.log('checking folder', n);
 										Curriki.assets.GetMetadata(n.id, function(o){
-console.log('checking folder in callback', n.id);
 											if (o.revision != n.attributes.revision) {
 												// Doesn't match
-console.log('revision didnt match', n, o);
+												Curriki.hideLoading();
+												UI.show('concurrencyOrganizeDlg');
 											} else {
 												// Matches -- check next
 												if ("function" == typeof pCF) {
@@ -218,96 +202,21 @@ console.log('revision didnt match', n, o);
 						,containerScroll:true
 						,rootVisible:true
 						,listeners:{
-/*
-							nodedragover:{
-								fn: function(dragOverEvent){
-									var draggedNodeId = dragOverEvent.dropNode.attributes.assetName;
-									var parentNode = dragOverEvent.target;
-									if (dragOverEvent.point !== 'append') {
-										parentNode = parentNode.parentNode;
-										if (Ext.isEmpty(parentNode)) {
-											return false;
-										}
-									}
-
-									if (!Ext.isEmpty(parentNode.attributes.disallowDropping) && (parentNode.attributes.disallowDropping === true)) {
-										dragOverEvent.cancel = true;
-										return false;
-									}
-
-									var cancel = false;
-									while (!Ext.isEmpty(parentNode) && !cancel){
-										if (parentNode.id === draggedNodeId) {
-											cancel = true;
-											dragOverEvent.cancel = true;
-											return false;
-										} else {
-											parentNode = parentNode.parentNode;
-										}
-									}
-								}
-								,scope:this
-							}
-							,nodedrop:{
-								fn: function(dropEvent){
-									var targetNode = Ext.getCmp('ctv-to-tree-cmp').getNodeById('ctv-target-node');
-									var parentNode = targetNode.parentNode;
-									var parentNodeId = parentNode.id;
-									var nextSibling = targetNode.nextSibling;
-									var targetIndex = -1;
-									if (nextSibling){
-										targetIndex = nextSibling.attributes.order||-1;
-									}
-									Curriki.current.drop = {
-										 parentPage:parentNodeId
-										,targetIndex:targetIndex
-									};
-									Curriki.current.parentTitle = parentNode.text;
-									AddPath.EnableNext();
-								}
-								,scope:this
-							}
-							,render:function(tPanel){
-//TODO: Try to generalize this (for different # of panels)
-								tPanel.ownerCt.ownerCt.on(
-									'bodyresize'
-									,function(wPanel, width, height){
-										if (height === 'auto') {
-											tPanel.setHeight('auto');
-										} else {
-											tPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+wPanel.findByType('panel')[0].el.getMargins('tb')+wPanel.findByType('panel')[1].getBox().height+wPanel.items.get(1).getFrameHeight()+wPanel.findByType('panel')[1].el.getMargins('tb')+(Ext.isIE?AddPath.ie_size_shift:0)+(Ext.isMac?(2*AddPath.ie_size_shift):0)));
-										}
-									}
-								);
-							}
-							,expandnode:{
-								fn: function(node){
-									var wnd = this;
-									wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
-								}
-								,scope:this
-							}
-*/
-
-/*
 							render:function(tPanel){
-								tPanel.getSelectionModel().on('selectionchange', function(tree, node){
-console.log('selection change', node, e);
+console.log('set up selectionchange', tPanel);
+								tPanel.getSelectionModel().on('selectionchange', function(selMod, node){
+console.log('selection change', node, selMod);
 									Data.selected = node;
-									Ext.getCmp('organize-remove-btn').enable();
+									if (node !== null) {
+										Ext.getCmp('organize-remove-btn').enable();
+									} else {
+										Ext.getCmp('organize-remove-btn').disable();
+									}
 								});
 							}
-*/
-
-							beforeclick:function(node, e){
+/*
+							,beforeclick:function(node, e){
 console.log('before click', node, e);
-								node.select();
-								Data.selected = node;
-								Ext.getCmp('organize-remove-btn').enable();
-
-								if (!node.isLeaf()) {
-									node.toggle();
-								}
 
 								e.cancel = true;
 								e.stopEvent();
@@ -317,15 +226,18 @@ console.log('before click', node, e);
 							}
 							,click:function(node, e){
 console.log('click', node, e);
-
-								return false;
+// default behaviour ?
+//								node.select();
 							}
 
 							,dblclick:function(node, e){
 console.log('dblclick', node, e);
-								return false;
+// default behaviour
+//								if (!node.isLeaf()) {
+//									node.toggle();
+//								}
 							}
-
+*/
 							,beforemovenode:function(tree, node, oldParent, newParent, index){
 console.log('beforemove node', node, oldParent, newParent, index, tree);
 								Data.isMoving = true;
@@ -334,36 +246,29 @@ console.log('beforemove node', node, oldParent, newParent, index, tree);
 								// Note that both a remove and insert have already occurred here for this node
 console.log('moved node', node, oldParent, newParent, index, tree);
 								Data.isMoving = false;
+								//node.select();
 							}
 
 							,beforeremove:function(tree, oldParent, node){
 console.log('before remove node', node, oldParent, tree);
 								Data.removeFrom = oldParent.indexOf(node)+1;
-								if (node.isSelected()){
-									node.unselect();
-								}
 								if ('undefined' == typeof node.attributes.origLocation) {
 									node.attributes.origLocation = { parentResource: oldParent.id, index: Data.removeFrom, parentNode: oldParent };
 								}
 							}
 							,remove:function(tree, oldParent, node){
 console.log('removed node', node, oldParent, tree);
-								if (!Data.isMoving) {
-									Data.removed.push(node);
-
-									Data.selected = false;
-									Ext.getCmp('organize-remove-btn').disable();
-								}
-
 								Ext.getCmp('organize-done-btn').enable();
 							}
 
+/*
 							,beforeinsert:function(tree, newParent, node, refNode){
 console.log('before insert node', node, newParent, tree, refNode);
 							}
 							,insert:function(tree, newParent, node, refNode){
 console.log('inserted node', node, newParent, tree, refNode);
 							}
+*/
 						}
 						,root:Data.root
 					}]
@@ -373,10 +278,6 @@ console.log('inserted node', node, newParent, tree, refNode);
 		}
 	});
 	Ext.reg('organizeDlg', Organize.mainDlg);
-
-	Organize.msgComplete = Ext.extend(UI.dialog.Messages, {
-//TODO: Fill in
-	});
 
 	Organize.confirmDlg = Ext.extend(UI.dialog.Messages, {
 		  initComponent:function(){
@@ -428,6 +329,41 @@ console.log('inserted node', node, newParent, tree, refNode);
 		}
 	});
 	Ext.reg('confirmOrganizeDlg', Organize.confirmDlg);
+
+	Organize.concurrencyDlg = Ext.extend(UI.dialog.Messages, {
+		  initComponent:function(){
+			Ext.apply(this, {
+				 id:'IntentionOrganizeDialogueWindow'
+				,title:_('organize.dialog_header')
+				,cls:'organize resource resource-edit'
+				,autoScroll:false
+				,bbar:[{
+					 text:_('organize.dialog.ok_button')
+					,id:'organize-concurrency-ok-button'
+					,cls:'button ok'
+					,listeners:{
+						'click':{
+							fn:function(e,evt){
+								this.close();
+								Ext.getCmp('OrganizeDialogueWindow').close();
+								Organize.start(Data.startInfo);
+							}
+							,scope:this
+						}
+					}
+				}]
+				,items:[{
+					xtype:'box'
+					,autoEl:{
+						tag:'div'
+						,html:_('organize.error.concurrency_text')
+					}
+				}]
+			});
+			Organize.concurrencyDlg.superclass.initComponent.call(this);
+		}
+	});
+	Ext.reg('concurrencyOrganizeDlg', Organize.concurrencyDlg);
 
 	Organize.intentionDlg = Ext.extend(UI.dialog.Messages, {
 		  initComponent:function(){
@@ -530,6 +466,7 @@ Organize.start = function(resourceInfo){
 			});
 			return false;
 		} else {
+			Data.startInfo = resourceInfo;
 			Data.title = resourceInfo.title;
 			Data.creator = resourceInfo.creator;
 			Data.creatorName = resourceInfo.creatorName;

@@ -2552,7 +2552,7 @@ Curriki.assets = {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
 			}
-			,jsonData: {previousRevision:revision, want:wanted}
+			,jsonData: {ignorePreviousRevision:true, wanted:wanted}
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;
