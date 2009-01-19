@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <xwikidoc>
 <web>CreateResources</web>
@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.NielsMayer</creator>
-<author>XWiki.dward</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1212692135000</creationDate>
-<date>1225389898000</date>
-<contentUpdateDate>1225389898000</contentUpdateDate>
-<version>93.1</version>
+<date>1232328149000</date>
+<contentUpdateDate>1232328149000</contentUpdateDate>
+<version>5.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>synchronized to next</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -78,7 +78,11 @@
   #set( $noDialogs	    = $request.getParameter("noDialogs") )
 #if( ("$!noDialogs"=="") || ("$!noDialogs"=="0") )  ## { ?noDialogs... not set, get parameters used for add-path dialogs
   #set( $cameFrom	    = $request.getParameter("cameFrom") )
-  #set( $flow		    = $request.getParameter("flow") )
+  #set( $flow		    = $request.getParameter("flow") ) 
+  #set( $content            = $request.getParameter("CurrikiCode.TextAssetClass_0_text"))
+  #set( $title              = $request.getParameter("CurrikiCode.AssetClass_0_title"))
+  #set( $createLessonURL = $request.getParameter("createLessonURL"))
+  #set( $category        = $request.getParameter("CurrikiCode.AssetClass_0_category"))
 #end                                     ## }
   ## if publish space is empty, then we get the space from user's collection space Coll_&lt;user&gt;
   ## if the value is set, then it was passed in via POST as "Coll_Group_&lt;group&gt;" or from this form
@@ -111,19 +115,63 @@
   #if( "$!successMessage"!="" ) ## {
    #if( "$!newAsset" != "" ) ## {
      ## NOTE: "category" aka ASSET_CATEGORY_PROPERTY is set via hidden field in posting form:
-     ## NOTE: &lt;input type="hidden"  name="XWiki.AssetClass_0_category" id="XWiki.AssetClass_0_category" value="WikiText"&gt;
-     #set( $ok = $newAsset.updateObjectFromRequest("XWiki.AssetClass") )
-     #set( $ok = $newAsset.updateObjectFromRequest("XWiki.TextAssetClass") )
-     #set( $ok = $newAsset.updateObjectFromRequest("XWiki.AssetLicenseClass") )
+     ## NOTE: &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="WikiText"&gt;
+     #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.AssetClass") )
+     #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.TextAssetClass") )
+     #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.AssetLicenseClass") )
+     $newAsset.setCategory($category)
+     #if($createLessonURL== $msg.get('form.html.scratch.url')) ##{
+         $newAsset.set("syntax", "xhtml/1.0") ##}
+     #else ##{
+         $newAsset.set("syntax", "xwiki/1.0")
+     #end##}
+     $newAsset.setContent("$content")
+     $newAsset.setTitle($title)
+	 #if( $createLessonURL== $msg.get('ace.lesson.plan.url') ) ##{
+	   #set( $formname = "ACELP" ) ##}
+	 #elseif( $createLessonURL == $msg.get('lesson.plan.url') ) ##{
+	   #set( $formname = "CSLP" ) ##}
+	 #elseif( $createLessonURL == $msg.get('nortel.lesson.plan.url') ) ##{
+	   #set( $formname = "NLLP" ) ##}
+	 #elseif( $createLessonURL == $msg.get('form.scratch.url') ) ##{
+	   #set( $formname = "SWR" ) ##}
+	 #elseif( $createLessonURL == $msg.get('form.html.scratch.url') ) ##{
+	   #set( $formname = "SHR" ) ##}
+	 #elseif( $createLessonURL == $msg.get('wq.url') ) ##{
+	   #set( $formname = "WQ" ) ##}
+	 #end ##}
+     #if( $createLessonURL== $msg.get('ace.lesson.plan.url') || $createLessonURL== $msg.get('lesson.plan.url') || $createLessonURL== $msg.get('nortel.lesson.plan.url') ) ##{
+         $newAsset.set("instructional_component", "curriculum_lp")
+     #end ##}
+     #if($createLessonURL == $msg.get('wq.url')) ##{
+         $newAsset.set("instructional_component", "activity_webquest")
+     #end ##}
      #set( $save_success = $newAsset.saveWithProgrammingRights() )
      #if( $!save_success ) ## {
+
        #set( $newAsset = $newAsset.publish($publishSpace) )
        #if("$!parentPage"!="") ## {
          #set( $parentAsset = $xwiki.curriki.fetchAsset($parentPage) )
          #set( $ok = $parentAsset.addSubasset($newAsset.fullName) )
          #set( $ok = $parentAsset.save($msg.get("curriki.comment.addsubasset")) )
        #end ## }
-   #end ## }
+
+       ## add google-analytics
+       #if( "$!formname" != "") ##{
+         {pre}
+         &lt;script type="text/javascript"&gt;
+           //&lt;![CDATA[
+           var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+           document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+           var pageTracker = _gat._getTracker("$GA_uacct");
+           pageTracker._initData();
+           pageTracker._setVar('$formname');
+           pageTracker._trackPageview();
+           //]]&gt;
+          &lt;/script&gt;
+          {/pre}
+       #end ##}
+     #end ## }
   #end ## } -- ("$!newAsset"!="")
   ##
   ## -------------------- ERROR DISPLAY --------------------
