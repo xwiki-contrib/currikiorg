@@ -71,7 +71,7 @@
  *#
 #macro(asset_rating $asset)
 <div id="asset-rating">
-#displayCRS($asset)
+#crs_icon($asset)
 </div>
 #end
 
@@ -455,7 +455,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 #if($status.trim() == "Choose from list...")
  #set($status = " ")
 #end
-#displayCRS($asset)
+#crs_icon($asset)
 </div>
 </td></tr></table>
 </div>

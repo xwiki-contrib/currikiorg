@@ -1,11 +1,50 @@
 
 
-## Macro to display the CRS rating image
-
-
-## <div id="asset-rating">
-## <a href="" class="icon-crs"><img src="images/CRS3new.gif"/></a><a href="" class="link-crs">Exemplary</a>
-## </div>
+#**
+  * Macro to display the CRS rating image
+  *#
+#macro(crs_icon $asset)
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($rights = $!asset.getValue("rights"))
+#if($asset.getObject("CRS.CurrikiReviewStatusClass"))
+#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+#set($status = $asset.getValue("status"))
+#else
+#set($status = "")
+#end
+#set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+#set($nomination = $asset.getValue("reviewpending"))
+#if($nomination=="1")
+## asset is in review pending status. we override the text
+#set($crsText = $msg.get("curriki.crs.reviewpending"))
+#set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#elseif((!$status)||($status=="100")||($status==""))
+## no crs rating has been set
+#if($isguest)
+#set($crsText = $msg.get("curriki.crs.reviewbackground"))
+#set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#else
+#set($crsText = $msg.get("curriki.crs.reviewnominate"))
+#set($crsTextUrl = "javascript:Curriki.module.nominate.nominateResource({assetName:'$asset.getJSFullName()', assetTitle:'$asset.getJSTitle()'});")
+#end
+#else
+#set($crsText = $msg.get("curriki.crs.rating${status}"))
+#set($crsTextUrl = $asset.getURL("view", "viewer=comments"))
+#end
+#if((!$status)||($status=="100")||($status==""))
+#set($crsIcon = $xwiki.getSkinFile("crs/crs.png"))
+##set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#else
+#set($crsIcon = $xwiki.getSkinFile("crs/crs${status.toLowerCase()}.png"))
+##set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
+#end
+<div id="asset-rating">
+<a class="icon-crs" href="$crsTextUrl">
+<img src="$crsIcon"/>
+</a>
+<a class="link-crs" href="$crsTextUrl">$crsText</a>
+</div>
+#end
 
 #**
  * Displays the CRS icon
