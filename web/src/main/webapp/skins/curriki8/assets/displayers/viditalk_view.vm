@@ -1,7 +1,4 @@
 #asset_displaycontentfooter("text-align:center;")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
 #set($video_id = $objVT.id)
  #if($viditalk_counter)
@@ -34,6 +31,5 @@ embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null,
 #if("$orig_video" != "") ##{
 #sep()
 <a href="$orig_video" onClick="javascript:Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');">$msg.get('viditalk.download_original_msg')</a>
-#end ##}
 #end
 #asset_displaycontentfooter()

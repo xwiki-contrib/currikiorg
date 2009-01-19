@@ -113,7 +113,9 @@
 #end
 
 #macro(asset_display $asset)
-<div id="asset-wrapper">
+#set($assetFiletype = $asset.getValue("file_type"))
+#set($assetCategory = $asset.getCategory())
+<div id="asset-wrapper" class="asset-category-$assetCategory">
 #asset_findmode()
 #asset_resourcefunctions($asset)
 #asset_icontitle($asset)
@@ -122,11 +124,15 @@
 #if(!$isPrint)
 #asset_tabs($asset)
 #end
-<div id="asset-wrapper-inner">
+<div id="asset-wrapper-inner" class="asset-filetype-$assetFiletype">
 #if(!$isPrint)
  #asset_links($asset)
 #end
+#if(!$asset.hasAccessLevel("view"))
+ $msg.get("asset.contentNotAllowed")
+#else  
 $asset.displayAsset("view")
+#end
 </div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 $xwiki.addTooltipJS()
@@ -208,6 +214,53 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #end
 <div id="asset=display-${seccounter}" class="section-wrapper-content">
 #end
+
+
+
+#macro(asset_attachments $asset)
+<div class="asset-display-content">
+#if($asset.getAttachmentList().size()==1)
+#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
+#else
+#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_file"))
+#end
+<p><strong>$msgtext</strong>
+    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" src="icons/TooltipIcon.gif" alt="" border="0" height="16" width="16"></p>
+#foreach($attachment in $asset.getAttachmentList())
+#asset_attachment($asset $attachment)
+#end
+</div>
+#end
+
+#macro(asset_attachment $asset $attachment)
+#set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
+#set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
+<div class="resource-download">
+    <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
+    <p class="text-link">
+        <a href="$assetAttachmentURL">$assetAttachmentFilename</a>(16k)
+    </p>
+    <a class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); window.open('${assetAttachmentURL}?force%2Ddownload=1');return false;" href="${assetAttachmentURL}?force%2Ddownload=1">$msg.get("rve.content.view.download.download_button")</a>
+</div>
+#end
+
+
+
+#macro(asset_displaycontentheader $style)
+##if($style)
+##<div class="asset-content-body" style="${style}">
+###else
+##<div class="asset-content-body">
+###end
+#end
+
+#macro(asset_displaycontentfooter)
+<div class="clearfloats"></div>
+##<div class="clearfloats"></div>
+##</div>
+#end
+
+
 
 ## previous macros
 ##
@@ -829,28 +882,3 @@ $msg.get("caption.next")
 #end
 
 
-#macro(asset_displaycontentheader $style)
-##if($style)
-##<div class="asset-content-body" style="${style}">
-###else
-##<div class="asset-content-body">
-###end
-#end
-
-#macro(asset_displaycontentfooter)
-<div class="clearfloats"></div>
-##<div class="clearfloats"></div>
-##</div>
-#end
-
-#macro(asset_displaycontentfooterattachment $asset)
- #set($attachedFile = $mimedoc.attachmentList.get(0))
- <div class="clearfloats"></div>
- <hr class="my-curriki-hr" />
- <div class="asset-content-options">
-  <a href="$asset.getAttachmentURL("${attachedFile.filename}", "download")" onClick="javascript:Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}');" title="$msg.get("downloadthisattachment")">
-  $attachedFile.getFilename().toLowerCase()
-  </a>&nbsp;&nbsp;
-  <a class="button" href="$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${attachedFile.filename}'); window.open('$asset.getAttachmentURL("${attachedFile.filename}", "download", "force-download=1")');return false;" title="$msg.get("downloadthisattachment")">$msg.get("caption.download")</a>
- </div>
-#end

@@ -3,9 +3,6 @@
   *
   *#
 #asset_displaycontentheader("text-align:center;")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($mimedoc=$asset)
 $!mimedoc.description
 #foreach ($attach in $mimedoc.attachmentList)
@@ -20,5 +17,5 @@ pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="mini_player_mp3" align
 <embed src="$playerUrl?my_mp3=${mp3Url}&my_text=$attach.filename" quality="high" bgcolor="#ffffff" name="mini_player_mp3" allowscriptaccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" align="middle" height="25" width="331">
 </object>
 #end
-#end
-#asset_displaycontentfooterattachment($asset)
+#asset_attachments($asset)
+#asset_displaycontentfooter($asset)

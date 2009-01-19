@@ -1,7 +1,4 @@
 #asset_displaycontentheader("")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($mimedoc=$asset)
 #if($mimedoc.attachmentList.size() > 0)
 #set($fileName = $mimedoc.attachmentList.get(0).filename)
@@ -24,5 +21,5 @@
 #end
 $caption
 #end
-#end
-#asset_displaycontentfooterattachment($asset)
+#asset_attachments($asset)
+#asset_displaycontentfooter($asset)

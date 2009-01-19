@@ -1,7 +1,4 @@
 #asset_displaycontentheader("text-align:center;")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($mimedoc=$asset)
 #if($mimedoc.attachmentList.size() > 0)
 #set($fileName = $mimedoc.attachmentList.get(0).filename)
@@ -31,5 +28,5 @@ mObj${flashNum}.StopPlay();
 <a href="$flashurl" class="flash-control-newwindow" target="_blank">$msg.get('mimetype.flashdisplay.newwindow')</a>
 </center>
 #end
-#end
-#asset_displaycontentfooterattachment($asset)
+#asset_attachments($asset)
+#asset_displaycontentfooter($asset)

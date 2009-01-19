@@ -1,7 +1,4 @@
 #asset_displaycontentheader("")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($objExt = $asset.getObject("CurrikiCode.ExternalAssetClass", true))
 $msg.get("asset.externallink")
  #set($url = $asset.display("link", "view", $asset.getObject("CurrikiCode.ExternalAssetClass")))
@@ -9,7 +6,6 @@ $msg.get("asset.externallink")
   <div align="center"><a href="$url" onclick="window.open('$url'); return false;"><img src="$url" align="middle" width="200" /></a></div>
  #end
   <a href="$url" onclick="window.open('$url'); return false;">#breakLinkText($url, 90)</a>
-#end
 #asset_displaycontentfooter()
 
 

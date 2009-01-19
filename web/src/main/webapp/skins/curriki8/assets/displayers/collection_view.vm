@@ -36,12 +36,16 @@
     </div>
 </div>
      #else
-#set($assetFiletype = $embeddedDoc.getValue("filetype"))
+#set($assetFiletype = $embeddedDoc.getValue("file_type"))
 #set($assetCategory = $embeddedDoc.getCategory())
-<div class="sub-asset-wrapper category-type-$assetCategory">
+<div class="sub-asset-wrapper category-$assetCategory">
     <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
         #asset_beginsection($embeddedDoc true)
+        #if(!$embeddedDoc.hasAccessLevel("view"))
+         $msg.get("asset.contentNotAllowed")
+        #else
         $embeddedDoc.displayAsset("view")
+        #end
         #endsection()
     </div>
 </div>

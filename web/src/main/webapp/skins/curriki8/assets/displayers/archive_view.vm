@@ -4,9 +4,6 @@
   *#
 ARCHIVE DISPLAYER
 #asset_displaycontentheader("text-align:center;")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($mimedoc=$asset)
 #if(!$treeviewid)
 #set($treeviewid = 1)
@@ -83,5 +80,5 @@ TEST
 $mimedoc.use($tmpActiveClass)
 #end
 </div>
-#end
-#asset_displaycontentfooterattachment($asset)
+#asset_attachments($asset)
+#asset_displaycontentfooter($asset)

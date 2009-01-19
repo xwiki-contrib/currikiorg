@@ -1,7 +1,4 @@
 #asset_displaycontentheader("")
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else
 #set($mimedoc=$asset)
 #set($fileName = $mimedoc.attachmentList.get(0).filename)
 #set($url = $mimedoc.getAttachmentURL("$fileName"))
@@ -24,5 +21,5 @@
         src="$url" autostart="true" designtimesp='5311' loop="true">
       </EMBED>
       </OBJECT>
-#end
-#asset_displaycontentfooterattachment($asset)
+#asset_attachments($asset)
+#asset_displaycontentfooter($asset)
