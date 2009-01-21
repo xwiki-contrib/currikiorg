@@ -3,19 +3,21 @@
   *
   *#
 #asset_displaycontentheader("text-align:center;")
-#set($mimedoc=$asset)
-$!mimedoc.description
-#foreach ($attach in $mimedoc.attachmentList)
+<div class="asset-display-media">
+<div class="asset-display-media-inner">
+<p>$!asset.description</p>
+#foreach ($attach in $asset.attachmentList)
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/
 pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="mini_player_mp3" align="middle" height="25" width="331">
 <param name="allowScriptAccess" value="sameDomain">
 #set($playerUrl = $xwiki.getDocument("MimeType.audio_mp3").getAttachmentURL("mini_player_mp3.swf"))
-#set($mp3Url = $mimedoc.getAttachmentURL($attach.filename))
+#set($mp3Url = $asset.getAttachmentURL($attach.filename))
 <param name="movie" value="${playerUrl}?my_mp3=${mp3Url}&my_text=$attach.filename">
 <param name="quality" value="high">
 <param name="bgcolor" value="#ffffff">
 <embed src="$playerUrl?my_mp3=${mp3Url}&my_text=$attach.filename" quality="high" bgcolor="#ffffff" name="mini_player_mp3" allowscriptaccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" align="middle" height="25" width="331">
 </object>
 #end
+</div></div>
 #asset_attachments($asset)
 #asset_displaycontentfooter($asset)

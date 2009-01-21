@@ -85,13 +85,13 @@ ul#asset-attribution {
 }
 
 ul#asset-attribution li {
-	margin: 0 0 0 55px;
+	margin: 0;
 	padding: 0;
 }
 
 ul#asset-attribution li#asset-avatar {
 	float: left;
-	margin-left: 0;
+	margin-right: 5px;
 }
 
 #asset-rating {
@@ -182,7 +182,7 @@ ul#asset-tabs li a:hover {
 	background: #fff;
  	border: 1px solid #f5bd80;
 	clear: right; 
-	margin: 0 10px 5px 10px;
+	margin: 0 10px 8px 10px;
 }
 
 .category-collection, .category-folder {
@@ -196,10 +196,11 @@ ul#asset-tabs li a:hover {
 .sub-asset-wrapper h3 {
 	font-size: 12px;
 	line-height: 1.5em;
+	margin: 0 40px;
 }
 
 .asset-display-media {
-	margin-top: 10px;
+	margin: 10px 0;
 	text-align: center;
 }
 
@@ -211,48 +212,37 @@ ul#asset-tabs li a:hover {
 	background: #FFFFCF;
 	border: 1px solid #000;
 	float: left;
+	padding-bottom: 10px;
 	width: 100%;
 }
-/**
-#asset-wrapper-inner-inner {
-	margin: 0 10px;
-}**/
 
-.asset-content-body-composite-source h3 {
-	display: inline;
-	font-size: 12px;
-	line-height: 1.5em;
+.mode-edit #asset-wrapper-inner {
+	padding-top: 10px;
 }
 
-.section-wrapper {
-/**	float: left;
-**/	width: 100%;
-}
-
-.section-wrapper hr {
+.sub-asset-wrapper hr {
 	height: 0;
     border: 0;
     border-top: 1px dashed #ccc;
 	margin: 1em 0;
 }
 
-.section-content-wrapper {
-/** 	float: left;**/
-}
-
-.asset-display-content {
+.asset-display-download, .asset-display-text {
 	margin: 0 10px 0 40px;
-	text-align: left;
 }
 
-.category-text .asset-display-content {
+.asset-display-text-inner, .asset-display-download-inner {
+	width: 100%;
+}
+
+.category-text .asset-display-text {
 	margin-left: 10px;
 }
 
-.category-wiki .asset-display-content {
+.category-wiki .asset-display-text {
 	margin-right: 10px;	
 }
-
+/**
 .section-content-wrapper p.download {
 	height: 32px;
 }
@@ -272,12 +262,17 @@ ul#asset-tabs li a:hover {
 	padding-left:35px;
 	position:relative;
 }
-
+**/
 .sub-asset-wrapper img.tooltip { 	
 	margin: 0 0 -3px 3px;
 }
 
-.asset-display-content a.icon-link {
+.category-external p.text-link a {
+	background: url(images/externallink.gif) top right no-repeat;
+	padding-right: 15px;
+}
+
+.asset-display-download a.icon-link {
 	background:transparent url(images/sprite_filetype.gif) no-repeat scroll left top;
 	background-repeat: no-repeat;
 	display:block;
@@ -316,22 +311,22 @@ ul#asset-tabs li a:hover {
 	background-position: 0 -270px;
 }
 
-.resource-download {
-	width: 100%;
-}
-
-.category-video .resource-download {
+.category-video .asset-display-download-inner {
 	margin-bottom: 5px;
 }
 
-.resource-download p.text-link {
+.asset-display-download p.text-link {
 	float: left;
 	margin: 0;
 	width: 70%;
 }
 
-.resource-download p.text-link a {
+.asset-display-download p.text-link a {
 	margin-right: 5px;
+}
+
+.sub-asset-wrapper.category-interactive a.button-link-play, .sub-asset-wrapper.category-archive a.button-link-hide {
+	margin-right: 10px;
 }
 
 .sub-asset-wrapper a.button-link, button.button-link {
@@ -339,9 +334,11 @@ ul#asset-tabs li a:hover {
 	border:1px solid #FF0000;
 	color:#FFFFFF;
 	cursor:pointer;
+	display: inline-block;
 	font-size: 11px;
-	height: auto;
-	padding: 2px 5px;
+	height: 23px;
+	line-height: 23px;
+	padding: 0 12px;
 }
 
 .sub-asset-wrapper a.button-link-download {
@@ -350,6 +347,7 @@ ul#asset-tabs li a:hover {
 
 .sub-asset-wrapper a.button-link:hover {
 	background: #ffb808;
+	color: #000;
 	text-decoration: none;
 }
 
@@ -417,7 +415,6 @@ ul#asset-tabs li a:hover {
 
 span.collapser {
 	float: left;
-	margin-right: 2px;
 }
 
 
@@ -440,6 +437,7 @@ embed#flashItem1 {
 
 .asset-display-edit {
 	clear: both;
+	padding: 0 0 0 10px;
 }
 
 .asset-display-edit label {
@@ -465,17 +463,17 @@ embed#flashItem1 {
 
 .asset-display-edit input.button-cancel {
 	background: #ccc;
-	border: 1px solid #777;
+	border: 1px solid #a5a5a5;
 	color: #000;
-	margin-right: 10px;
 }
 
 .asset-display-edit input.button-cancel, .asset-display-edit input.button-save {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	height: 23px;	
+	margin-right: 10px;
 	overflow:visible;
-	padding:1px 16px;
+	padding: 0 12px;
 	width:auto;
 }
 
@@ -490,23 +488,20 @@ embed#flashItem1 {
 	top: 2px;
 }
 
-.asset-display-edit .input-text, .asset-display-edit .input-textarea, .asset-display-edit .input-file, .asset-display-edit .input-select {
-	margin-left: 20px;
-}
-
 .asset-display-edit input.button-cancel:hover {
 	background: #aaa;
 }
 
 .asset-display-edit input.button-save:hover {
 	background: #FFB808;
+	color: #000;
 }
 
 .asset-display-edit ul li {
-	margin: 0 0 10px 10px;
+	margin: 0 0 15px 0;
 }
 
-.input-text input, .input-textarea textarea, .input-file input, .input-select select {
+.input-text input, .input-textarea textarea, .input-file input, .input-select select, .input-file-tree {
 	margin-top: 5px;
 }
 
@@ -558,7 +553,7 @@ body.page-embed h1#curriki-powered a {
  
  
 body.view-print #left-panel, body.view-print ul#asset-tabs, body.view-print ul#asset-links, body.view-print .asset-display-title, body.view-print ul#function-tabs, body.view-print #asset-rating,
-body.view-print ul#asset-attribution, body.view-print #breadcrumb, body.view-print #header-search, body.view-print #header-member, body.view-print .asset-display-content a.icon-link { 
+body.view-print ul#asset-attribution, body.view-print #breadcrumb, body.view-print #header-search, body.view-print #header-member, body.view-print .asset-display-text a.icon-link { 
 	display: none;
 }
 
@@ -566,7 +561,7 @@ body.view-print #asset-wrapper-inner {
 	padding-top: 10px;
 }
 
-body.view-print .asset-display-content {
+body.view-print .asset-display-text {
 	margin: 0 10px;
 }
 

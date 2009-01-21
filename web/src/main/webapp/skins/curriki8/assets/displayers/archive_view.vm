@@ -2,9 +2,7 @@
   * Asset Archive Displayer in View mode
   *
   *#
-ARCHIVE DISPLAYER
 #asset_displaycontentheader("text-align:center;")
-#set($mimedoc=$asset)
 #if(!$treeviewid)
 #set($treeviewid = 1)
 #else
@@ -16,16 +14,18 @@ ARCHIVE DISPLAYER
 <script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
 <script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
 <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
-<div class="xmblabel"></div>
-<div class="xmbfield">
-#set($attach = $mimedoc.attachmentList.get(0).filename)
-#set($tmpActiveClass = $mimedoc.getActiveClass())
-$mimedoc.use("CurrikiCode.ArchiveAssetClass")
-#if ($mimedoc.getValue("startfile"))
-  <a href="#" onclick="window.open('$mimedoc.getAttachmentURL("$attach")$mimedoc.getValue("startfile")');return false;">Open the main document</a>
+<div class="asset-display-text">
+<div class="asset-display-text-inner">
+<p>$!asset.description</p>
+#set($attach = $asset.attachmentList.get(0).filename)
+#set($tmpActiveClass = $asset.getActiveClass())
+$asset.use("CurrikiCode.ArchiveAssetClass")
+<a class="button-link button-link-hide" href="javascript:alert('not implemented')" title="$msg.get("rve.content.view.hide_button")">$msg.get("rve.content.view.hide_button")</a>
+#if ($asset.getValue("startfile"))
+  <a class="button-link button-link-start" href="#" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</a>
 #end
+<div style="margin: 5px 0pt;">
 <div id="treeview${treeviewid}">
-TEST   
 </div>
 <script type="text/javascript">
 	var tree${treeviewid};
@@ -58,8 +58,8 @@ TEST
 	    //var tree = tree${treeviewid};
         //var nodes = nodes${treeviewid};
 #set($zipexp = $xwiki.getPlugin("zipexplorer"))
-#set($treelist = $zipexp.getFileTreeList($mimedoc, $attach))
-        baseUrl${treeviewid} = "$mimedoc.getAttachmentURL("$attach")";
+#set($treelist = $zipexp.getFileTreeList($asset, $attach))
+        baseUrl${treeviewid} = "$asset.getAttachmentURL("$attach")";
         #foreach($item in $treelist)
         #set($checked = $selectlist.contains($item.getId()))
         #if ($item.value.length() > 80)
@@ -77,8 +77,10 @@ TEST
     treeInit${treeviewid}();
 </script>
 #if($tmpActiveClass)
-$mimedoc.use($tmpActiveClass)
+$asset.use($tmpActiveClass)
 #end
+</div>
+</div>
 </div>
 #asset_attachments($asset)
 #asset_displaycontentfooter($asset)

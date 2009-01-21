@@ -152,7 +152,6 @@ $xwiki.addTooltipJS()
 #else
 #set($seccounter = $seccounter + 1)
 #end
-<div id="section_${seccounter}" class="section-wrapper">
 #set($closedGif = $xwiki.getSkinFile("icons/collapse.png"))
 #set($openedGif = $xwiki.getSkinFile("icons/collapse_down.png"))
 #set($defaultGif = $openedGif)
@@ -160,6 +159,7 @@ $xwiki.addTooltipJS()
 ## #set($defaultGif = $closedGif)
 ###end
 <div class="asset-display-title">
+ <div class="asset-display-title-inner">
     <div class="arrow-icon-wrapper">
 #if($withcollapse)
       <span id="section${seccounter}collapser" class="collapser" onclick="toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;">
@@ -171,6 +171,7 @@ $xwiki.addTooltipJS()
     <h3>
         <a href="$assetLink" ext:qtitle="$msg.get("rvw.content.section.title")" ext:qtip="$msg.get("rvw.content.section.title.tooltip.${category}")">$assetTitle</a>
     </h3>
+ </div>
 </div>
 #if($withcollapse)
 <script type="text/javascript">
@@ -209,16 +210,26 @@ showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccoun
 showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
 ##if($doHide)
 ##createCookie("Section${seccounter}Hidden", true, "");
-###end
+e###end
 </script>
 #end
 <div id="asset=display-${seccounter}" class="section-wrapper-content">
 #end
 
+#**
+  * Ends a section
+  *
+  *#
+#macro(asset_endsection)
+<div class="clearfloats"></div>
+</div>
+#end
+
 
 
 #macro(asset_attachments $asset)
-<div class="asset-display-content">
+<div class="asset-display-download">
+ <div class="asset-display-download-inner">
 #if($asset.getAttachmentList().size()==1)
 #set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
 #else
@@ -229,19 +240,18 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #foreach($attachment in $asset.getAttachmentList())
 #asset_attachment($asset $attachment)
 #end
+ </div>
 </div>
 #end
 
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
-<div class="resource-download">
-    <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
-    <p class="text-link">
-        <a href="$assetAttachmentURL">$assetAttachmentFilename</a>(16k)
-    </p>
-    <a class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); window.open('${assetAttachmentURL}?force%2Ddownload=1');return false;" href="${assetAttachmentURL}?force%2Ddownload=1">$msg.get("rve.content.view.download.download_button")</a>
-</div>
+ <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
+ <p class="text-link">
+     <a href="$assetAttachmentURL">$assetAttachmentFilename</a>(16k)
+ </p>
+ <a class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); window.open('${assetAttachmentURL}?force%2Ddownload=1');return false;" href="${assetAttachmentURL}?force%2Ddownload=1">$msg.get("rve.content.view.download.download_button")</a>
 #end
 
 
@@ -596,7 +606,7 @@ $objTxt.text
        ##<div class="righttext"><div class="lefttext"> *$currikiTitle* </div><a href="$xwiki.getURL($embeddedDoc.fullName, "view", "bc=$!{bcLocal}")">$msg.get("asset.openToView")</a></div>
        #set($objComp = "")
        #asset_displaycontent($embeddedDoc false $showAll)
-#endsection()
+#asset_endsection()
  	  </div>
      #end
     #end ## content view right

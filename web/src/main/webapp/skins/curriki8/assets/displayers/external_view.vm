@@ -1,11 +1,25 @@
 #asset_displaycontentheader("")
 #set($objExt = $asset.getObject("CurrikiCode.ExternalAssetClass", true))
-$msg.get("asset.externallink")
- #set($url = $asset.display("link", "view", $asset.getObject("CurrikiCode.ExternalAssetClass")))
- #if($url.endsWith("jpg") || $url.endsWith("gif"))
-  <div align="center"><a href="$url" onclick="window.open('$url'); return false;"><img src="$url" align="middle" width="200" /></a></div>
- #end
-  <a href="$url" onclick="window.open('$url'); return false;">#breakLinkText($url, 90)</a>
+#set($url = $asset.display("link", "view", $asset.getObject("CurrikiCode.ExternalAssetClass")))
+##if($url.endsWith("jpg") || $url.endsWith("gif"))
+##
+##
+##<div align="center"><a href="$url" onclick="window.open('$url'); return false;"><img src="$url" align="middle" width="200" /></a></div>
+<div class="asset-display-text">
+<div class="asset-display-text-inner">
+<p>$!asset.description</p>
+</div>
+</div>
+<div class="asset-display-download">
+<div class="asset-display-download-inner">
+<p>
+<strong>$msg.get("rve.content.view.link.instruction_title")</strong>
+<img class="tooltip" width="16" height="16" border="0" alt="" src="icons/TooltipIcon.gif" ext:qtip="$msg.get("rve.content.view.link.instruction_tooltip")"/>
+</p>
+<p class="text-link">
+<a href="$url">#breakLinkText($url, 90)</a>
+</p>
+<a class="button-link button-link-download" href="$url" onclick="Curriki.logView('/Download/link/$url'); window.open('$url');return false;" title="$msg.get("rve.content.view.go_button")">$msg.get("rve.content.view.go_button")</a>
+</div>
+</div>
 #asset_displaycontentfooter()
-
-

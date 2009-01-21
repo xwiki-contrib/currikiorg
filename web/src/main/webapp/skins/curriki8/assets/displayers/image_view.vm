@@ -1,10 +1,9 @@
 #asset_displaycontentheader("")
-#set($mimedoc=$asset)
-#if($mimedoc.attachmentList.size() > 0)
-#set($fileName = $mimedoc.attachmentList.get(0).filename)
-#set($url = $mimedoc.getAttachmentURL("$fileName"))
+#if($asset.attachmentList.size() > 0)
+#set($fileName = $asset.attachmentList.get(0).filename)
+#set($url = $asset.getAttachmentURL("$fileName"))
 #set($pictSize = "Medium")
-#set($pictSize = $!mimedoc.display("display_size", "view", $mimedoc.getObject("MimeType.picture")))
+#set($pictSize = $!asset.display("display_size", "view", $asset.getObject("CurrikiCode.ImageAssetClass")))
 #if($pictSize == "small")
  #set($pictWidth = "300")
 #elseif($pictSize == "large")
@@ -13,13 +12,17 @@
 #else
  #set($pictWidth = "450")
 #end
-<a href="$url"><img src="$mimedoc.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!mimedoc.alt_desc" /></a>
 #set($caption = "")
-#set($caption = $!mimedoc.caption_desc)
+#set($caption = $!asset.caption_desc)
 #if($!caption == "")
- #set($caption = $!mimedoc.description)
+ #set($caption = $!asset.description)
 #end
-$caption
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+        <a href="$url"><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!asset.alt_desc" /></a>
+        <p>$caption</p>
+    </div>
+</div>
 #end
 #asset_attachments($asset)
 #asset_displaycontentfooter($asset)
