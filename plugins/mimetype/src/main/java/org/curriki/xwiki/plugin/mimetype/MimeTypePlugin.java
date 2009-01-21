@@ -120,6 +120,8 @@ public class MimeTypePlugin  extends XWikiDefaultPlugin implements XWikiPluginIn
     public String getCategory(String filetype, XWikiContext context) {
         String category = null;
 
+        loadMimeTypeConfig(context);
+        
         if (mLogger.isErrorEnabled())
          mLogger.error("Checking for filetype " + filetype);
 
@@ -139,6 +141,8 @@ public class MimeTypePlugin  extends XWikiDefaultPlugin implements XWikiPluginIn
     public String getDisplayer(String category, String filetype, XWikiContext context) {
         String key;
         String displayer = null;
+
+        loadMimeTypeConfig(context);
 
         if (filetype!=null) {
             key = "displayer_" + filetype;
