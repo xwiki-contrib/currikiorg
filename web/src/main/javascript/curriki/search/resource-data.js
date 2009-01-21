@@ -137,7 +137,7 @@ data.init = function(){
 		]
 	};
 	f.data.category.list.each(function(value){
-		var sort = value;
+		var sort = _('CurrikiCode.AssetClass_category_'+value);
 		if (value === 'unknown') {
 			sort = 'zzz';
 		}

@@ -33,6 +33,16 @@ Organize.init = function(){
 		,setAllowDrag:true
 	});
 
+	Organize.logCancelled = function(){
+		var page = Data.resource.replace('.', '/');
+		Curriki.logView('/features/resources/organize/'+page+'/cancelled');
+	}
+
+	Organize.logCompleted = function(){
+		var page = Data.resource.replace('.', '/');
+		Curriki.logView('/features/resources/organize/'+page+'/completed');
+	}
+
 	Organize.getMovedList = function(node){
 		if ('undefined' != typeof node.attributes.origLocation) {
 			Data.moved.push(node);
@@ -71,8 +81,7 @@ Organize.init = function(){
 					,listeners:{
 						click:{
 							 fn: function(btn, e){
-								var page = Data.resource.replace('.', '/');
-								Curriki.logView('/features/resources/organize/'+page+'/cancelled');
+								Organize.logCancelled();
 								this.close();
 								if (Ext.isIE) {
 									window.location.reload();
@@ -102,8 +111,7 @@ Organize.init = function(){
 
 								var checkFolders = function(){
 									var saveFolders = function(){
-										var page = Data.resource.replace('.', '/');
-										Curriki.logView('/features/resources/organize/'+page+'/completed');
+										Organize.logCompleted();
 										Curriki.hideLoading();
 //TODO: Reload page when completed
 //										window.location.reload();
@@ -266,34 +274,6 @@ console.log('selection change', node, selMod);
 									}
 								}
 							}
-/*
-							,beforeclick:function(node, e){
-console.log('before click', node, e);
-
-								e.cancel = true;
-								e.stopEvent();
-								e.preventDefault();
-
-								return false;
-							}
-							,click:function(node, e){
-console.log('click', node, e);
-// default behaviour ?
-//								node.select();
-							}
-
-							,dblclick:function(node, e){
-console.log('dblclick', node, e);
-// default behaviour
-//								if (!node.isLeaf()) {
-//									node.toggle();
-//								}
-							}
-
-							,beforemovenode:function(tree, node, oldParent, newParent, index){
-console.log('beforemove node', node, oldParent, newParent, index, tree);
-							}
-*/
 							,movenode:function(tree, node, oldParent, newParent, index){
 								// Note that both a remove and insert have already occurred here for this node
 console.log('moved node', node, oldParent, newParent, index, tree);
@@ -322,15 +302,6 @@ console.log('removed node', node, oldParent, tree);
 								node.attributes.origLocation.parentNode.attributes.removedNodes.push(node);
 								Ext.getCmp('organize-done-btn').enable();
 							}
-
-/*
-							,beforeinsert:function(tree, newParent, node, refNode){
-console.log('before insert node', node, newParent, tree, refNode);
-							}
-							,insert:function(tree, newParent, node, refNode){
-console.log('inserted node', node, newParent, tree, refNode);
-							}
-*/
 						}
 						,root:Data.root
 					}]
@@ -355,8 +326,7 @@ console.log('inserted node', node, newParent, tree, refNode);
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
-								var page = Data.resource.replace('.', '/');
-								Curriki.logView('/features/resources/organize/'+page+'/cancelled');
+								Organize.logCancelled();
 								this.close();
 							}
 							,scope:this
@@ -421,8 +391,7 @@ console.log('inserted node', node, newParent, tree, refNode);
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
-								var page = Data.resource.replace('.', '/');
-								Curriki.logView('/features/resources/organize/'+page+'/cancelled');
+								Organize.logCancelled();
 								this.close();
 							}
 							,scope:this
@@ -488,32 +457,33 @@ Organize.start = function(resourceInfo){
 		}
 		Data.resource = resourceInfo.assetPage;
 
-		if('undefined' == typeof resourceInfo.title
-		   || 'undefined' == typeof resourceInfo.creator
-		   || 'undefined' == typeof resourceInfo.creatorName) {
+		if('undefined' == typeof resourceInfo.creator
+		   || ((resourceInfo.creator != Curriki.global.username
+		        && !Curriki.global.isAdmin)
+		       && ('undefined' == typeof resourceInfo.title
+		           || 'undefined' == typeof resourceInfo.creatorName))) {
 			// Fetch resource info if not provided
 			Curriki.assets.GetAssetInfo(Data.resource, function(cbInfo){
 				Organize.start(cbInfo);
 			});
-			return false;
 		} else {
 			Data.startInfo = resourceInfo;
-			Data.title = resourceInfo.title;
 			Data.creator = resourceInfo.creator;
-			Data.creatorName = resourceInfo.creatorName;
+			Data.title = resourceInfo.title||'No Title Given';
+			Data.creatorName = resourceInfo.creatorName||'No Username Given';
 
 			Organize.startMetadata(Data.resource);
 		}
 	} else {
 		alert('ERROR: Could not start Organize.');
+		return false;
 	}
 };
 
 /*
-Ext.onReady(function(){
-// Curriki.module.organize.start({assetPage:'Coll_dward.Collection20080624c-IE', title:'Testing Resource Title', creator:'XWiki.dward', creatorName:'Testing Creator'});
-Curriki.module.organize.start({assetPage:'Coll_jmarks.UsingtheCurrikulumBuildertomakeLearningResourceCollections'});
-});
+ * Usage:
+ *
+ * Curriki.module.organize.start({assetPage:'web.page', title:'Resource Title', creator:'creator.id', creatorName:'Creator Name'});
 */
 
 })();
