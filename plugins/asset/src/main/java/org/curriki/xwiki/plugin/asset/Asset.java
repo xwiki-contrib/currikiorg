@@ -55,6 +55,21 @@ public class Asset extends CurrikiDocument {
         super(doc, context);
     }
 
+
+
+    public String getJSTitle() {
+        return getEscapedForJS(getDisplayTitle());
+    }
+
+    public String getJSFullName() {
+        return getEscapedForJS(getFullName());
+    }
+
+    protected String getEscapedForJS(String value) {
+       return value.replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+    }
+
+
     public String getCategory() {
         if (hasA(Constants.ASSET_CLASS)) {
             Object obj = getObject(Constants.ASSET_CLASS);
