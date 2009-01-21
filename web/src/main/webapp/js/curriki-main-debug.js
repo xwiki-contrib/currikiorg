@@ -1941,7 +1941,7 @@ console.log('Collections: ', this.collectionChildren);
 
 Ext.ns('Curriki.data.ict');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrkiCode.AssetClass/fields/instructional_component  OR  Get filled in JS created by xwiki
-Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_lab", "activity_game","activity_worksheet","activity_problemset","activity_webquest","book_fiction","book_nonfiction","book_readings","book_textbook","curriculum_assessment","curriculum_course","curriculum_unit","curriculum_lp","curriculum_rubric","curriculum_scope","curriculum_standards","curriculum_studyguide","curriculum_syllabus","curriculum_tutorial","curriculum_workbook","resource_animation","resource_diagram","resource_glossary","resource_index","resource_photograph","resource_presentation","resource_collection","resource_script","resource_speech","resource_table","resource_template","resource_webcast","other"];
+Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_lab","activity_game","activity_worksheet","activity_problemset","activity_webquest","book_fiction","book_nonfiction","book_readings","book_textbook","curriculum_assessment","curriculum_course","curriculum_unit","curriculum_lp","curriculum_rubric","curriculum_scope","curriculum_standards","curriculum_studyguide","curriculum_syllabus","curriculum_tutorial","curriculum_workbook","resource_animation","resource_article","resource_diagram","resource_glossary","resource_index","resource_photograph","resource_presentation","resource_collection","resource_script","resource_speech","resource_study","resource_table","resource_template","resource_webcast","other"];
 Curriki.data.ict.data = [ ];
 Curriki.data.ict.list.each(function(ict){
 	Curriki.data.ict.data.push([
@@ -2544,7 +2544,17 @@ Curriki.assets = {
 			}
 		});
 	}
-	,SetSubassets:function(assetPage, revision, wanted, callback){
+	,SetSubassets:function(assetPage, revision, wanted, logMsg, callback){
+		var jsData = {wanted:wanted};
+		if (!Ext.isEmpty(revision)) {
+			jsData.previousRevision = revision;
+		} else {
+			jsData.ignorePreviousRevision = true;
+		}
+		if (!Ext.isEmpty(logMsg)) {
+			jsData.logMessage = logMsg;
+		}
+
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/subassets'
 			,method:'PUT'
@@ -2552,7 +2562,7 @@ Curriki.assets = {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
 			}
-			,jsonData: {ignorePreviousRevision:true, wanted:wanted}
+			,jsonData:jsData
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;

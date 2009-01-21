@@ -349,7 +349,17 @@ Curriki.assets = {
 			}
 		});
 	}
-	,SetSubassets:function(assetPage, revision, wanted, callback){
+	,SetSubassets:function(assetPage, revision, wanted, logMsg, callback){
+		var jsData = {wanted:wanted};
+		if (!Ext.isEmpty(revision)) {
+			jsData.previousRevision = revision;
+		} else {
+			jsData.ignorePreviousRevision = true;
+		}
+		if (!Ext.isEmpty(logMsg)) {
+			jsData.logMessage = logMsg;
+		}
+
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/subassets'
 			,method:'PUT'
@@ -357,7 +367,7 @@ Curriki.assets = {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
 			}
-			,jsonData: {ignorePreviousRevision:true, wanted:wanted}
+			,jsonData:jsData
 			,scope:this
 			,success:function(response, options){
 				var json = response.responseText;
