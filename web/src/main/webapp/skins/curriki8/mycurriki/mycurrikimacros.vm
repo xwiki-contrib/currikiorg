@@ -1378,8 +1378,10 @@ $msg.get("deleted")
 		#asset_findtitle($asset)
 		#escapeForJS($currikiTitle)
 		#set($escapedTitle = $ret_escaped)
+		#escapeForJS(${xwiki.getUserName($asset.creator, false)})
+		#set($escapedCreatorName = $ret_escaped)
 		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
-		{pre}<a class="button-link" onclick="Curriki.module.organize.start({assetPage:'$escapedFullName', title:'$escapedTitle', creator:'${asset.creator}', creatorName:'${xwiki.getUserName($asset.creator, false)}'});" ext:qtip="$msg.get('mycurriki.link.organize.tooltip')">$msg.get('mycurriki.link.organize')</a>{/pre}
+		{pre}<a class="button-link" onclick="Curriki.module.organize.start({assetPage:'$escapedFullName', title:'$escapedTitle', creator:'${asset.creator}', creatorName:'${escapedCreatorName}'});" ext:qtip="$msg.get('mycurriki.link.organize.tooltip')">$msg.get('mycurriki.link.organize')</a>{/pre}
 		#end##}
 	#end##}
 #end ##}
