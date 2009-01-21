@@ -19,7 +19,6 @@ var Data = Curriki.data.organize;
 var UI = Curriki.ui;
 
 Organize.init = function(){
-	Data.isMoving = false;
 	Data.removed = [];
 	Data.moved = [];
 	Data.changedFolders = [];
@@ -106,15 +105,38 @@ Organize.init = function(){
 										var page = Data.resource.replace('.', '/');
 										Curriki.logView('/features/resources/organize/'+page+'/completed');
 										Curriki.hideLoading();
-										window.location.reload();
+//TODO: Reload page when completed
+//										window.location.reload();
 									}
 
 									Data.changedFolders.each(function(n){
 										var pSF = saveFolders;
 										saveFolders = function() {
 											var wanted = n.childNodes.collect(function(c){return c.id;});
-console.log('saving folder', n.id, wanted);
-//											Curriki.assets.SetSubassets(n.id, n.attributes.revision, wanted, function(o){
+											var logMessage = '';
+console.log('saving folder', n.id, wanted, n);
+											var added = [];
+											if ('undefined' != typeof n.attributes.addedNodes) {
+												n.attributes.addedNodes.uniq().each(function(n){
+													added.push(n);
+												});
+											};
+											if ('undefined' != typeof n.attributes.removedNodes) {
+												n.attributes.removedNodes.uniq().each(function(n){
+													if (added.indexOf(n) == -1) {
+														logMessage += _('organize.history.removed_note', n.id, n.attributes.order+1)+' ';
+													} else {
+														added.remove(n);
+													}
+												});
+											}
+											if ('undefined' != typeof n.attributes.addedNodes) {
+												added.each(function(n){
+													logMessage += _('organize.history.inserted_note', n.id, wanted.indexOf(n.id)+1)+' ';
+												});
+											}
+console.log('logging', logMessage);
+//											Curriki.assets.SetSubassets(n.id, null, wanted, logMessage, function(o){
 												if ("function" == typeof pSF) {
 													pSF();
 												}
@@ -198,6 +220,7 @@ console.log('saving folder', n.id, wanted);
 						,loader: new UI.treeLoader.Organize()
 						,id:'organize-tree-cmp'
 						,autoScroll:true
+						,maxHeight:390
 						,useArrows:true
 						,border:false
 						,hlColor:'93C53C'
@@ -220,6 +243,28 @@ console.log('selection change', node, selMod);
 										Ext.getCmp('organize-remove-btn').disable();
 									}
 								});
+							}
+							,expandnode:{
+								fn:function(node){
+									var cmp = this.findById('organize-tree-cmp');
+									if (!Ext.isEmpty(cmp)) {
+										cmp.fireEvent('afterlayout', cmp, cmp.getLayout());
+									}
+								}
+								,scope:this
+							}
+							,afterlayout:function(cmp, layout){
+								if (this.afterlayout_maxheight) {
+									// Don't collapse again
+								} else {
+									if (cmp.getBox().height > cmp.maxHeight){
+										cmp.setHeight(cmp.maxHeight);
+										cmp.findParentByType('organizeDlg').center();
+										this.afterlayout_maxheight = true;
+									} else {
+										cmp.setHeight('auto');
+									}
+								}
 							}
 /*
 							,beforeclick:function(node, e){
@@ -244,27 +289,37 @@ console.log('dblclick', node, e);
 //									node.toggle();
 //								}
 							}
-*/
+
 							,beforemovenode:function(tree, node, oldParent, newParent, index){
 console.log('beforemove node', node, oldParent, newParent, index, tree);
-								Data.isMoving = true;
 							}
+*/
 							,movenode:function(tree, node, oldParent, newParent, index){
 								// Note that both a remove and insert have already occurred here for this node
 console.log('moved node', node, oldParent, newParent, index, tree);
-								Data.isMoving = false;
+								if ('undefined' === typeof newParent.attributes.addedNodes) {
+									newParent.attributes.addedNodes = [];
+								}
+								newParent.attributes.addedNodes.push(node);
 								//node.select();
 							}
 
 							,beforeremove:function(tree, oldParent, node){
 console.log('before remove node', node, oldParent, tree);
-								Data.removeFrom = oldParent.indexOf(node)+1;
 								if ('undefined' == typeof node.attributes.origLocation) {
-									node.attributes.origLocation = { parentResource: oldParent.id, index: Data.removeFrom, parentNode: oldParent };
+									var removeFrom = oldParent.indexOf(node)+1;
+									node.attributes.origLocation = { parentResource: oldParent.id, index: removeFrom, parentNode: oldParent };
 								}
 							}
 							,remove:function(tree, oldParent, node){
 console.log('removed node', node, oldParent, tree);
+								if ('undefined' != typeof oldParent.attributes.addedNodes) {
+									oldParent.attributes.addedNodes.remove(node);
+								}
+								if ('undefined' === typeof node.attributes.origLocation.parentNode.attributes.removedNodes) {
+									node.attributes.origLocation.parentNode.attributes.removedNodes = [];
+								}
+								node.attributes.origLocation.parentNode.attributes.removedNodes.push(node);
 								Ext.getCmp('organize-done-btn').enable();
 							}
 
