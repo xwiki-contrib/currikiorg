@@ -31,6 +31,10 @@ Organize.init = function(){
 	Ext.extend(UI.treeLoader.Organize, UI.treeLoader.Base, {
 		setFullRollover:true
 		,setAllowDrag:true
+		,setUniqueId:true
+		,disableUnviewable:false
+		,unviewableText:_('organize.dialog.resource.unavailable.indicator_node')
+		,unviewableQtip:_('organize.dialog.resource.unavailable.indicator_rollover')
 	});
 
 	Organize.logCancelled = function(){
@@ -99,7 +103,7 @@ Organize.init = function(){
 						click:{
 							 fn: function(btn, e){
 								var list = [];
-								console.log('Organizing', list);
+								console.log('Start Organizing');
 
 								Ext.getCmp('organize-tree-cmp').getRootNode().eachChild(Organize.getMovedList);
 
@@ -120,35 +124,41 @@ Organize.init = function(){
 									Data.changedFolders.each(function(n){
 										var pSF = saveFolders;
 										saveFolders = function() {
-											var wanted = n.childNodes.collect(function(c){return c.id;});
-											var logMessage = '';
-console.log('saving folder', n.id, wanted, n);
-											var added = [];
-											if ('undefined' != typeof n.attributes.addedNodes) {
-												n.attributes.addedNodes.uniq().each(function(n){
-													added.push(n);
-												});
-											};
-											if ('undefined' != typeof n.attributes.removedNodes) {
-												n.attributes.removedNodes.uniq().each(function(n){
-													if (added.indexOf(n) == -1) {
-														logMessage += _('organize.history.removed_note', n.id, n.attributes.order+1)+' ';
-													} else {
-														added.remove(n);
+											if (n.attributes.rights.edit) {
+												var wanted = n.childNodes.collect(function(c){return c.attributes.pageName;});
+												var logMessage = '';
+	console.log('saving folder', n.attributes.pageName, wanted, n);
+												var added = [];
+												if ('undefined' != typeof n.attributes.addedNodes) {
+													n.attributes.addedNodes.uniq().each(function(n){
+														added.push(n);
+													});
+												};
+												if ('undefined' != typeof n.attributes.removedNodes) {
+													n.attributes.removedNodes.uniq().each(function(n){
+														if (added.indexOf(n) == -1) {
+															logMessage += _('organize.history.removed_note', n.attributes.pageName, n.attributes.order+1)+' ';
+														} else {
+															added.remove(n);
+														}
+													});
+												}
+												if ('undefined' != typeof n.attributes.addedNodes) {
+													added.each(function(n){
+														logMessage += _('organize.history.inserted_note', n.attributes.pageName, wanted.indexOf(n.attributes.pageName)+1)+' ';
+													});
+												}
+	console.log('logging', logMessage);
+	//											Curriki.assets.SetSubassets(n.attributes.pageName, null, wanted, logMessage, function(o){
+													if ("function" == typeof pSF) {
+														pSF();
 													}
-												});
-											}
-											if ('undefined' != typeof n.attributes.addedNodes) {
-												added.each(function(n){
-													logMessage += _('organize.history.inserted_note', n.id, wanted.indexOf(n.id)+1)+' ';
-												});
-											}
-console.log('logging', logMessage);
-//											Curriki.assets.SetSubassets(n.id, null, wanted, logMessage, function(o){
+	//											});
+											} else {
 												if ("function" == typeof pSF) {
 													pSF();
 												}
-//											});
+											}
 										};
 									});
 
@@ -158,7 +168,7 @@ console.log('logging', logMessage);
 								Data.changedFolders.each(function(n){
 									var pCF = checkFolders;
 									checkFolders = function() {
-										Curriki.assets.GetMetadata(n.id, function(o){
+										Curriki.assets.GetMetadata(n.attributes.pageName, function(o){
 											if (o.revision != n.attributes.revision) {
 												// Doesn't match
 												Curriki.hideLoading();
@@ -245,12 +255,29 @@ console.log('set up selectionchange', tPanel);
 								tPanel.getSelectionModel().on('selectionchange', function(selMod, node){
 console.log('selection change', node, selMod);
 									Data.selected = node;
-									if (node !== null) {
+									if ((node != null) && (node != tPanel.getRootNode()) && node.parentNode.attributes.rights.edit) {
 										Ext.getCmp('organize-remove-btn').enable();
 									} else {
 										Ext.getCmp('organize-remove-btn').disable();
 									}
 								});
+							}
+							,nodedragover:function(evt){
+								var node = evt.dropNode;
+								var target = evt.target;
+								if (evt.point !== 'append') {
+									target = target.parentNode;
+								}
+
+								// Check if this is an internal move
+								if (node.parentNode != target) {
+									if (target.findChild('pageName', node.attributes.pageName) != null) {
+console.log('dragover - no', evt, node, target);
+										evt.cancel = true;
+										return false;
+									}
+console.log('dragover - okay', evt, node, target);
+								}
 							}
 							,expandnode:{
 								fn:function(node){
@@ -288,18 +315,65 @@ console.log('moved node', node, oldParent, newParent, index, tree);
 console.log('before remove node', node, oldParent, tree);
 								if ('undefined' == typeof node.attributes.origLocation) {
 									var removeFrom = oldParent.indexOf(node)+1;
-									node.attributes.origLocation = { parentResource: oldParent.id, index: removeFrom, parentNode: oldParent };
+									node.attributes.origLocation = { parentResource: oldParent.pageName, index: removeFrom, parentNode: oldParent };
 								}
 							}
 							,remove:function(tree, oldParent, node){
 console.log('removed node', node, oldParent, tree);
-								if ('undefined' != typeof oldParent.attributes.addedNodes) {
-									oldParent.attributes.addedNodes.remove(node);
+								if (oldParent.attributes.rights.edit) {
+									if ('undefined' != typeof oldParent.attributes.addedNodes) {
+										oldParent.attributes.addedNodes.remove(node);
+									}
+									if ('undefined' === typeof node.attributes.origLocation.parentNode.attributes.removedNodes) {
+										node.attributes.origLocation.parentNode.attributes.removedNodes = [];
+									}
+									node.attributes.origLocation.parentNode.attributes.removedNodes.push(node);
+								} else {
+									// Put it back if we can't remove it due to rights
+									var attr = node.attributes;
+									var o = {
+										assetpage:attr.assetpage
+
+										,assetType:attr.assetType
+										,category:attr.category
+										,creator:attr.creator
+										,creatorName:attr.creatorName
+										,description:attr.description
+										,displayTitle:attr.displayTitle
+										,educational_level:attr.educational_level
+										,externalRightsHolder:attr.externalRightsHolder
+										,fcnodes:attr.fcnodes
+										,fcreviewer:attr.fcreviewer
+										,fcstatus:attr.fcstatus
+										,fullAssetType:attr.fullAssetType
+										,fwItems:attr.fwItems
+										,fw_items:attr.fw_items
+										,ict:attr.ict
+										,instructional_component:attr.instructional_component
+										,keywords:attr.keywords
+										,language:attr.language
+										,levels:attr.levels
+										,licenseType:attr.licenseType
+										,qtip:attr.qtip
+										,revision:attr.revision
+										,rights:attr.rights
+										,rightsHolder:attr.rightsHolder
+										,rightsList:attr.rightsList
+										,subcategory:attr.subcategory
+										,text:attr.text
+										,title:attr.title
+										,tracking:attr.tracking
+
+										,leaf:attr.leaf
+										,allowDrag:attr.allowDrag
+										,allowDrop:attr.allowDrop
+										,expanded:false
+									};
+
+									var treeLoader = new UI.treeLoader.Organize();
+									var newNode = treeLoader.createNode(o);
+									oldParent.insertBefore(newNode, oldParent.item(attr.origLocation.index-1));
 								}
-								if ('undefined' === typeof node.attributes.origLocation.parentNode.attributes.removedNodes) {
-									node.attributes.origLocation.parentNode.attributes.removedNodes = [];
-								}
-								node.attributes.origLocation.parentNode.attributes.removedNodes.push(node);
 								Ext.getCmp('organize-done-btn').enable();
 							}
 						}
@@ -483,7 +557,7 @@ Organize.start = function(resourceInfo){
 /*
  * Usage:
  *
- * Curriki.module.organize.start({assetPage:'web.page', title:'Resource Title', creator:'creator.id', creatorName:'Creator Name'});
+ * Curriki.module.organize.start({assetPage:'web.page', title:'Resource Title', creator:'creator.username', creatorName:'Creator Name'});
 */
 
 })();

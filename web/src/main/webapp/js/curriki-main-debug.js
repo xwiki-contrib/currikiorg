@@ -2807,6 +2807,10 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,setChildHref:false
 		,setFullRollover:false
 		,setAllowDrag:false
+		,setUniqueId:false
+		,disableUnviewable:true
+		,unviewableText:_('add.chooselocation.resource_unavailable')
+		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
 console.log('createNode: ',attr);
 			if (this.setFullRollover) {
@@ -2839,8 +2843,15 @@ console.log('createNode: parent',parent);
 				return parent;
 			}
 
+			attr.pageName = attr.assetpage||attr.collectionPage;
+
+			if (attr.assetType == 'Protected') {
+				attr.category = 'unknown';
+				attr.subcategory = 'protected';
+			}
+
 			var childInfo = {
-				 id:attr.assetpage||attr.collectionPage
+				 id:this.setUniqueId?Curriki.id(attr.pageName):attr.pageName
 				,text:attr.displayTitle||attr.title
 				,qtip:attr.qtip||attr.description
 				,cls:String.format('resource-{0} category-{1} subcategory-{1}_{2}', attr.assetType, attr.category, attr.subcategory)
@@ -2848,21 +2859,35 @@ console.log('createNode: parent',parent);
 				,allowDrop:false
 			}
 			if (this.setChildHref) {
-				childInfo.href = '/xwiki/bin/view/'+childInfo.id.replace('.', '/');
+				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
 			}
 
 			if (attr.rights && !attr.rights.view){
-				childInfo.text = _('add.chooselocation.resource_unavailable');
-				childInfo.qtip = _('add.chooselocation.resource_unavailable_tooltip');
-				childInfo.disabled = true;
+				childInfo.text = this.unviewableText;
+				childInfo.qtip = this.unviewableQtip;
+				if (this.disableUnviewable) {
+					childInfo.disabled = this.disableUnviewable;
+				}
 				childInfo.allowDrop = false;
 				childInfo.leaf = true;
-				childInfo.cls = childInfo.cls+' rights-unviewable';
 			} else if (attr.assetType && attr.assetType.search(/Composite$/) === -1){
 				childInfo.leaf = true;
 			} else if (attr.assetType){
 				childInfo.leaf = false;
 				childInfo.allowDrop = (attr.rights && attr.rights.edit)||false;
+			}
+
+			if (attr.rights){
+				if (attr.rights.view){
+					childInfo.cls = childInfo.cls+' rights-viewable';
+				} else {
+					childInfo.cls = childInfo.cls+' rights-unviewable';
+				}
+				if (attr.rights.edit){
+					childInfo.cls = childInfo.cls+' rights-editable';
+				} else {
+					childInfo.cls = childInfo.cls+' rights-uneditable';
+				}
 			}
 
 			// ?? = attr.order;
@@ -2887,9 +2912,9 @@ console.log('createNode: End ',childInfo);
 
 		,requestData:function(node, callback){
 			if (node.attributes.currikiNodeType === 'group'){
-				this.dataUrl = '/xwiki/curriki/groups/'+node.attributes.id+'/collections';
+				this.dataUrl = '/xwiki/curriki/groups/'+node.attributes.pageName+'/collections';
 			} else {
-				this.dataUrl = '/xwiki/curriki/assets/'+node.attributes.id+'/subassets';
+				this.dataUrl = '/xwiki/curriki/assets/'+node.attributes.pageName+'/subassets';
 			}
 
 			// From parent
