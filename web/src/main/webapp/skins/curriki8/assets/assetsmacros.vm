@@ -9,16 +9,16 @@
  *#
 #macro(asset_resourcefunctions $asset)
 ##set($assetHasView = $asset.hasAccessLevel("view"))
-#set($assetHasFlag = $asset.canBeNominatedOrReviewed())
 <ul id="function-tabs">
    #if(!$isguest)
      <li class="tab-first" id="tab-favorite"><a href="javascript:void()" onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
      <li id="tab-email"><a href="javascript:void()" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
-   #if($assetHasFlag)
-     <li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
-    #end
+##    #set($assetHasFlag = $asset.canBeNominatedOrReviewed())
+##   #if($assetHasFlag)
+##     <li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+##    #end
    #end
-     <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
+     <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
 </ul>
 #end
 
@@ -81,8 +81,8 @@
 #macro(asset_tabs $asset)
 <ul id="asset-tabs">
 <li  class="current"><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a></li>
-<li><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">Comments ($asset.commentNumbers)</a></li>
 <li><a href="$asset.getURL("view","bc=$!request.bc&viewer=information")">Information</a></li>
+<li><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">Comments ($asset.commentNumbers)</a></li>
 </ul> ## tabs
 #end
 
@@ -91,11 +91,16 @@
  *#
 #macro(asset_links $asset)
 <ul id="asset-links">
-## Build Up
+ #set($assetHasNominate = $asset.canBeNominatedOrReviewed())
+ #if($assetHasNominate)
+<li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("resource.view.nominate.icon.rollover")">$msg.get("resource.view.nominate")</a></li>
+ #end
+ #if($asset.category=="collection")
+ ## Build Up
  #if($asset.hasAccessLevel("edit")) ##{
   #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
 <li>
-   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+   <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
 </li>
   #end ##}
  #end ##}
@@ -103,10 +108,11 @@
 <li>
    Organize
 </li>
+    #end
 ## Add
 ##if($g_userHasCollections)##{
 <li>
-   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+   <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
 </li>
 ##end##}
 </ul>
@@ -186,20 +192,20 @@ function toggleSectionVisibility(seccounter, showhide){
     // change icon
     var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
     if ("undefined" !== typeof imgElem) {
-	imgElem.setAttribute("src", "images/collapse_down.png");
+	imgElem.setAttribute("src", "$openedGif");
     }
     // erase cookie
-    // eraseCookie("Section" + seccounter + "Hidden");
+    eraseCookie("Section" + seccounter + "Hidden");
   }
   else{
     addClass(seccontent, "hidden");
     // Change icon
     var imgElem = Ext.DomQuery.select("#"+secTitleName+" img.collapser")[0];
     if ("undefined" !== typeof imgElem) {
-	imgElem.setAttribute("src", "images/collapse.png");
+	imgElem.setAttribute("src", "$closedGif");
     }
     // set cookie
-    // createCookie("Section" + seccounter + "Hidden", true, "");
+    createCookie("Section" + seccounter + "Hidden", true, "");
   }
   return false;
 }
@@ -210,10 +216,10 @@ showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccoun
 showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
 ##if($doHide)
 ##createCookie("Section${seccounter}Hidden", true, "");
-e###end
+###end
 </script>
 #end
-<div id="asset=display-${seccounter}" class="section-wrapper-content">
+<div id="asset-display-${seccounter}" class="section-wrapper-content">
 #end
 
 #**
