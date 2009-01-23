@@ -515,6 +515,7 @@ Curriki.module.addpath.init = function(){
 									}
 								},{
 									 xtype:'box'
+									,hidden:(Curriki.current.templateType != 'format')
 									,autoEl:{
 										 tag:'div'
 										,html:_('add.selectformat.instruction')
