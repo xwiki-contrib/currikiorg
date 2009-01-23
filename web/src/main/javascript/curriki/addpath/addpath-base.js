@@ -1945,7 +1945,7 @@ console.log("Published CB: ", newAsset);
 			}
 
 			var pageCreated = (Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName;
-			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.subPath+'/'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')+'/'+pageCreated.replace('.', '/'));
+			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.flowFolder+'/'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')+'/'+pageCreated.replace('.', '/'));
 
 			Curriki.init(function(){
 				var p = Ext.ComponentMgr.create({

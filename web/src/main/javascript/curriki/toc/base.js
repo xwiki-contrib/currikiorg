@@ -69,6 +69,7 @@ Toc.init = function(){
 							var node = root.findChild('id', Data.selected);
 							if (!Ext.isEmpty(node)) {
 								node.select();
+								node.ensureVisible();
 								Toc.vars.foundSelect = true;
 							}
 						}

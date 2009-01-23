@@ -182,9 +182,9 @@ console.log('createNode: End ',childInfo);
 
 		,requestData:function(node, callback){
 			if (node.attributes.currikiNodeType === 'group'){
-				this.dataUrl = '/xwiki/curriki/groups/'+node.attributes.pageName+'/collections';
+				this.dataUrl = '/xwiki/curriki/groups/'+(node.attributes.pageName||node.id)+'/collections';
 			} else {
-				this.dataUrl = '/xwiki/curriki/assets/'+node.attributes.pageName+'/subassets';
+				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
 
 			// From parent
