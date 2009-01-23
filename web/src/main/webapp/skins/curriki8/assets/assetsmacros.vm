@@ -121,7 +121,7 @@
 #macro(asset_display $asset)
 #set($assetFiletype = $asset.getValue("file_type"))
 #set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="asset-category-$assetCategory">
+<div id="asset-wrapper" class="asset-category-$assetCategory asset-mode-$!viewer">
 #asset_findmode()
 #asset_resourcefunctions($asset)
 #asset_icontitle($asset)
@@ -256,7 +256,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
  <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
  <p class="text-link">
-     <a href="$assetAttachmentURL">$assetAttachmentFilename</a>(16k)
+     #set($filesize = $attachement.filesize / 1024)
+     <a href="$assetAttachmentURL">$assetAttachmentFilename</a> (${attachment.filesize} bytes)
  </p>
  <a class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); window.open('${assetAttachmentURL}?force%2Ddownload=1');return false;" href="${assetAttachmentURL}?force%2Ddownload=1">$msg.get("rve.content.view.download.download_button")</a>
 #end
