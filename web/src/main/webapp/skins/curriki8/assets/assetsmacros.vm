@@ -121,7 +121,7 @@
 #macro(asset_display $asset)
 #set($assetFiletype = $asset.getValue("file_type"))
 #set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="asset-category-$assetCategory asset-mode-$!viewer">
+<div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
 #asset_findmode()
 #asset_resourcefunctions($asset)
 #asset_icontitle($asset)
@@ -130,7 +130,7 @@
 #if(!$isPrint)
 #asset_tabs($asset)
 #end
-<div id="asset-wrapper-inner" class="asset-filetype-$assetFiletype">
+<div id="asset-wrapper-inner" class="filetype-$assetFiletype">
 #if(!$isPrint)
  #asset_links($asset)
 #end
