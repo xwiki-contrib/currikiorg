@@ -68,7 +68,7 @@ Organize.init = function(){
 				,bbar:[{
 					 text:_('organize.dialog.remove_button')
 					,id:'organize-remove-btn'
-					,cls:'button remove'
+					,cls:'button btn-remove'
 					,disabled:true
 					,listeners:{
 						click:function(btn, e){
@@ -81,7 +81,7 @@ Organize.init = function(){
 				},'->',{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-cancel-btn'
-					,cls:'button cancel'
+					,cls:'button btn-cancel'
 					,listeners:{
 						click:{
 							 fn: function(btn, e){
@@ -97,7 +97,7 @@ Organize.init = function(){
 				},{
 					 text:_('organize.dialog.done_button')
 					,id:'organize-done-btn'
-					,cls:'button done'
+					,cls:'button btn-done'
 					,disabled:true
 					,listeners:{
 						click:{
@@ -117,8 +117,7 @@ Organize.init = function(){
 									var saveFolders = function(){
 										Organize.logCompleted();
 										Curriki.hideLoading();
-//TODO: Reload page when completed
-//										window.location.reload();
+										window.location.reload();
 									}
 
 									Data.changedFolders.each(function(n){
@@ -149,11 +148,11 @@ Organize.init = function(){
 													});
 												}
 	console.log('logging', logMessage);
-	//											Curriki.assets.SetSubassets(n.attributes.pageName, null, wanted, logMessage, function(o){
+												Curriki.assets.SetSubassets(n.attributes.pageName, null, wanted, logMessage, function(o){
 													if ("function" == typeof pSF) {
 														pSF();
 													}
-	//											});
+												});
 											} else {
 												if ("function" == typeof pSF) {
 													pSF();
@@ -393,10 +392,18 @@ console.log('removed node', node, oldParent, tree);
 				,title:_('organize.confirmation.dialog_header')
 				,cls:'organize resource resource-edit'
 				,autoScroll:false
+				,listeners:{
+					'render':{
+						fn:function(wnd){
+							Ext.get('organize-confirm-cancel-button').focus();
+						}
+						,scope:this
+					}
+				}
 				,bbar:['->',{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-confirm-cancel-button'
-					,cls:'button cancel'
+					,cls:'button btn-cancel'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -409,7 +416,7 @@ console.log('removed node', node, oldParent, tree);
 				},{
 					 text:_('organize.dialog.ok_button')
 					,id:'organize-confirm-ok-button'
-					,cls:'button next'
+					,cls:'button btn-next'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -445,10 +452,18 @@ console.log('removed node', node, oldParent, tree);
 				,title:_('organize.intention.dialog_title')
 				,cls:'organize resource resource-edit'
 				,autoScroll:false
+				,listeners:{
+					'render':{
+						fn:function(wnd){
+							Ext.get('organize-intention-continue-button').focus();
+						}
+						,scope:this
+					}
+				}
 				,bbar:[{
 					 text:_('organize.intention.message.continue_button')
 					,id:'organize-intention-continue-button'
-					,cls:'button continue'
+					,cls:'button continue-btn'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -461,7 +476,7 @@ console.log('removed node', node, oldParent, tree);
 				},{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-intention-cancel-button'
-					,cls:'button cancel'
+					,cls:'button cancel-btn'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -511,6 +526,12 @@ console.log('returned', o);
 			Data.root = treeLoader.createNode(o);
 console.log('created', Data.root);
 			Data.root.addListener('beforecollapse', function(){return false;});
+			Data.root.addListener('beforechildrenrendered', function(n){
+				if ('undefined' == typeof Data.initialFocus) {
+					Ext.Element.fly(n.getUI().getAnchor()).focus();
+					Data.initialFocus = true;
+				}
+			});
 			Data.resource = resource;
 
 			Ext.onReady(function(){

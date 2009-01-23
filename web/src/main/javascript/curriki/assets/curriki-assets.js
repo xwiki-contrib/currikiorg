@@ -71,6 +71,7 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage
 			,method:'GET'
+			,disableCaching:true
 			,headers: {
 				'Accept':'application/json'
 				,'Content-type':'application/json'
@@ -97,6 +98,7 @@ Curriki.assets = {
 		Ext.Ajax.request({
 			 url: this.json_prefix+'/'+assetPage+'/metadata'
 			,method:'GET'
+			,disableCaching:true
 			,headers: {
 				'Accept':'application/json'
 				,'Content-type':'application/json'

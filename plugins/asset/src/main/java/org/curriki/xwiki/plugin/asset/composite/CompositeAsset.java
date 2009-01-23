@@ -390,56 +390,7 @@ public abstract class CompositeAsset extends Asset {
             ++i;
         }
 
-        // This may seem a bit convoluted, but a simple delete all subassets and add new list seems to sometimes get a
-        // "Error number 3211 in 3: Exception while saving object <pagename>
-        //  deleted instance passed to update(): [com.xpn.xwiki.objects.BaseObject#<null>]"
-        // exception from hibernate.
-
-        XWikiDocument assetDoc = getDoc();
-
-        List<BaseObject> existing = assetDoc.getObjects(Constants.SUBASSET_CLASS);
-        for (BaseObject b : existing) {
-            if (b != null) {
-                b.setLongValue(Constants.SUBASSET_CLASS_ORDER, -2);
-            }
-        }
-
-        long j = 0;
-        for (String page : want) {
-            // Set order for exisiting item or add a new item
-            boolean found = false;
-            for (BaseObject b : existing) {
-                if (b != null && b.getStringValue(Constants.SUBASSET_CLASS_PAGE).equals(page) && b.getLongValue(Constants.SUBASSET_CLASS_ORDER) == -2) {
-                    // Put in new order location
-                    b.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
-                    j += 1;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                // Add as it doesn't already exist in the list
-                BaseObject sub = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
-                sub.setStringValue(Constants.SUBASSET_CLASS_PAGE, page);
-                sub.setLongValue(Constants.SUBASSET_CLASS_ORDER, j);
-                j += 1;
-            }
-        }
-
-        // Now remove anything left
-        /*
-        List removeList = new ArrayList();
-        for (Iterator<BaseObject> ei = existing.iterator(); ei.hasNext(); ) {
-            BaseObject b = ei.next();
-            if (b != null && b.getLongValue(Constants.SUBASSET_CLASS_ORDER) == -2) {
-                removeList.add(b);
-            }
-        }
-        for (Iterator<BaseObject> eid = removeList.iterator(); eid.hasNext(); ) {
-            assetDoc.removeObject(eid.next());
-        }
-        */
-
+        setSubassets(want);
     }
 
     protected long getLastPosition() {
