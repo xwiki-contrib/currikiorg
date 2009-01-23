@@ -514,6 +514,13 @@ Curriki.module.addpath.init = function(){
 										,cls:'guidingquestion'
 									}
 								},{
+									 xtype:'box'
+									,autoEl:{
+										 tag:'div'
+										,html:_('add.selectformat.instruction')
+										,cls:'instruction'
+									}
+								},{
 									 xtype:'container'
 									,id:'selecttemplate-list'
 									,items:AddPath.TemplateList()
