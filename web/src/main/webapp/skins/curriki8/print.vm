@@ -1,5 +1,12 @@
-#template("printheader.vm")
-<div id="printcontainer">
-#template("contentview.vm")
-<div class="clearfloats"></div>
-</div>## printcontainer
+#asset_findtitle($doc)
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#set($showLeftPanels = "0")
+#set($showRightPanels = "0")
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#template("htmlheader.vm")
+#asset_display($doc)
+#template("footer.vm")
+</body>
+</html>

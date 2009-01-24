@@ -13,6 +13,13 @@
 #if(!$request.style || $request.style=="2")
 <link href="$xwiki.getSkinFile("style2.css", true)" rel="stylesheet" type="text/css"  />
 <link href="$xwiki.getSkinFile("views.css", true)" rel="stylesheet" type="text/css"  />
+<link href="$xwiki.getSkinFile("print.css", true)" rel="stylesheet" type="text/css" media="print" />
+#if($request.viewer=="embed")
+<link href="$xwiki.getSkinFile("embed.css", true)" rel="stylesheet" type="text/css"  />
+#end
+#if($request.viewer=="print")
+<link href="$xwiki.getSkinFile("print_preview.css", true)" rel="stylesheet" type="text/css"  />
+#end
 #end
 #set( $defaultstyle = $xwiki.getWebPreference("stylesheet"))
 #set( $stylesheets = $xwiki.getWebPreference("stylesheets"))
