@@ -9,17 +9,16 @@
 #if($request.method=="POST") ##{
   #set($fileuploadlist = $xwiki.fileupload.getFileItems())
 #end ##}
-## In Print Mode we don't want the standard header
-#if(!$request.getParameter("viewer").equals("print")) ##{
-  #template("startpage.vm")
-#end ##}
-	
-#if((!$viewer) || ($viewer == "")) ##{
+	#if((!$viewer) || ($viewer == "")) ##{
   #set($viewer = $request.getParameter("viewer"))
 #end ##}
 #if((!$viewer) || ($viewer == "")) ##{
   #set($viewer = "view")
 #end ##}
+## In Print Mode we don't want the standard header
+#if(($viewer!="print")&&($viewer!="embed")) ##{
+  #template("startpage.vm")
+#end
 #if($viewer == "view") ##{
   #template("space.vm")
   #template("contentview.vm")
@@ -28,7 +27,7 @@
 #end ##}
 <div class="clearfloats"></div>
 </div>## main
-#if(!$request.getParameter("viewer").equals("print")) ##{
+#if(($viewer!="print")&&($viewer!="embed")) ##{
   #template("endpage.vm")
 #else ##}{
   </div>## contentcolumn

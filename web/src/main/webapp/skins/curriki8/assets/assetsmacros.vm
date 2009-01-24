@@ -78,11 +78,11 @@
 #**
  * Macro for resources tabs
  *#
-#macro(asset_tabs $asset)
+#macro(asset_tabs $asset $viewer)
 <ul id="asset-tabs">
-<li  class="current"><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a></li>
-<li><a href="$asset.getURL("view","bc=$!request.bc&viewer=information")">Information</a></li>
-<li><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">Comments ($asset.commentNumbers)</a></li>
+<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a></li>
+<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=info")">Information</a></li>
+<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">Comments ($asset.commentNumbers)</a></li>
 </ul> ## tabs
 #end
 
@@ -128,7 +128,7 @@
 #asset_attribution($asset)
 #asset_rating($asset)
 #if(!$isPrint)
-#asset_tabs($asset)
+#asset_tabs($asset "view")
 #end
 <div id="asset-wrapper-inner" class="filetype-$assetFiletype">
 #if(!$isPrint)

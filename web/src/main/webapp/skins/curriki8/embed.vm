@@ -1,0 +1,14 @@
+#asset_findtitle($doc)
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#set($showLeftPanels = "0")
+#set($showRightPanels = "0")
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#template("htmlheader.vm")
+$context.setLinksQueryString("viewer=embed")
+#asset_display($doc)
+$context.unsetLinksQueryString()
+#template("footer.vm")
+</body>
+</html>
