@@ -11,11 +11,11 @@
 ##set($assetHasView = $asset.hasAccessLevel("view"))
 <ul id="function-tabs">
    #if(!$isguest)
-     <li class="tab-first" id="tab-favorite"><a href="javascript:void()" onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+     <li class="tab-first" id="tab-favorite"><a href="javascript:void()" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
      <li id="tab-email"><a href="javascript:void()" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
 ##    #set($assetHasFlag = $asset.canBeNominatedOrReviewed())
 ##   #if($assetHasFlag)
-##     <li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+##     <li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
 ##    #end
    #end
      <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
@@ -93,14 +93,14 @@
 <ul id="asset-links">
  #set($assetHasNominate = $asset.canBeNominatedOrReviewed())
  #if($assetHasNominate)
-<li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get("resource.view.nominate.icon.rollover")">$msg.get("resource.view.nominate")</a></li>
+<li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("resource.view.nominate.icon.rollover")">$msg.get("resource.view.nominate")</a></li>
  #end
  #if($asset.category=="collection")
  ## Build Up
  #if($asset.hasAccessLevel("edit")) ##{
   #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
 <li>
-   <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+   <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
 </li>
   #end ##}
  #end ##}
@@ -112,7 +112,7 @@
 ## Add
 ##if($g_userHasCollections)##{
 <li>
-   <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+   <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
 </li>
 ##end##}
 </ul>
@@ -285,25 +285,20 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 ##
 #macro(asset_displaylinks $asset)
  #checkForCollections()
- #escapeForJS($asset.fullName)
- #set($escapedFullName = $ret_escaped)
- #asset_findtitle($asset)
- #escapeForJS($currikiTitle)
- #set($escapedTitle = $ret_escaped)
-## Favorite
+ # Favorite
  #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
-   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
+   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
   #sep()
  #end ##}
 ## Add
  #if($g_userHasCollections)##{
-   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
    #sep()
  #end##}
 ## Build Up
  #if($asset.hasAccessLevel("edit")) ##{
   #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
-   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
    #sep()
   #end ##}
  #end ##}
