@@ -66,7 +66,7 @@ public class Asset extends CurrikiDocument {
     }
 
     protected String getEscapedForJS(String value) {
-       return value.replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+       return value.replaceAll("\\\\", "\\\\").replaceAll("'", "\\'");
     }
 
 
