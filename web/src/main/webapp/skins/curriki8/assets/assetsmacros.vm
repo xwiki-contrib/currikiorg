@@ -70,9 +70,7 @@
  * Macro displaying the asset rating
  *#
 #macro(asset_rating $asset)
-<div id="asset-rating">
 #crs_icon($asset)
-</div>
 #end
 
 #**
@@ -126,7 +124,7 @@
 #macro(asset_display $asset $mode)
 #set($assetFiletype = $asset.getValue("file_type"))
 #set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="category-$!assetCategory mode-$mode">
+<div id="asset-wrapper" class="view-$!assetCategory mode-$mode">
     #asset_findmode()
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
