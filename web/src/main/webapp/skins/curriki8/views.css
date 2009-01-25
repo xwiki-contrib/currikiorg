@@ -37,6 +37,7 @@ pre.htmlview {
 }
 
 #asset-wrapper {display: inline-block;}  /* for IE/Mac */
+
  
 p {margin: 1em 0;}
 
@@ -45,11 +46,12 @@ p {margin: 1em 0;}
 	width: 100%;
 }
 
+
 a:hover {
 	text-decoration: underline;
 }
 
-/** [BEGIN] FUNCTION TABS, ASSET HEADER, ASSET TABS, ASSET ATTRIBUTION **/
+/** FUNCTION TABS, ASSET HEADER, ASSET TABS, ASSET ATTRIBUTION **/
 
 ul#function-tabs {
 	float: right;
@@ -58,7 +60,6 @@ ul#function-tabs {
 ul#function-tabs li {
 	border-right: 1px solid #999;
 	float: left;
-	margin: 0;
 	padding: 3px 8px 3px 8px;
 }
 
@@ -102,10 +103,47 @@ li#tab-print a {
 }
 
 #asset-header h2 a {
-	background-position: 0 0;
 	display: block;
 	padding: 3px 0 0 40px;
 }
+
+.view-image #asset-header a {
+	background-position: 0 -270px;
+}
+
+.view-document #asset-header a, .view-text #asset-header a {
+	background-position: 0 -180px;
+}
+
+.view-folder #asset-header a {
+	background-position: 0 -90px;
+}
+
+.view-archive #asset-header a {
+	background-position: 0 -540px;
+}
+
+.view-collection #asset-header a {
+	background-position: 0 0px;
+}
+
+.view-video #asset-header a {
+	background-position: 0 -450px;
+}
+
+.view-audio #asset-header a {
+	background-position: 0 -630px;
+}
+
+.view-external #asset-header a {
+	background-position: 0 -720px;
+}
+
+.view-interactive #asset-header a {
+	background-position: 0 -360px;
+}
+
+
 
 ul#asset-attribution {
 	clear: left;
@@ -129,15 +167,7 @@ ul#asset-attribution li#asset-avatar {
 	display: inline;
 	float: right;
 	margin: 0 5px 0 0;
-}
-
-#asset-rating a.icon-crs {
-	float: left;
-}
-
-#asset-rating a.link-crs {
-	line-height: 3em;
-	margin: 0 0 0 5px;
+	width: 250px;
 }
 
 ul#asset-links {
@@ -452,7 +482,21 @@ span.collapser {
 
 /** [END] ASSET PAGE **/
 
+/** [BEGIN] FLASH EMBEDS **/
 
+#flashContent1 {
+	text-align: center;
+}
+
+embed#flashItem1 {
+	height: 310px !important;
+	width: 450px !important;
+}
+
+/** [END] FLASH EMBEDS
+
+
+ 
  
 /** AVATAR CONSTRAINTS **/
 
@@ -476,7 +520,6 @@ span.collapser {
  	margin: 0 5px 15px 5px;
 	padding: 10px; 
 }
-
 
 .mode-comments ul.crs-rating {
 	padding-bottom: 0;
@@ -520,7 +563,6 @@ ul.crs-rating li {
 
 li.crs-rating-components ul {
 	margin-top: 5px;
-	padding: 0;
 }
 
 .mode-info .sub-asset-wrapper ul li {
@@ -564,28 +606,6 @@ li.comment-text {
 	clear: left;
 }
 
-.comment-submit-form label {
-	font-weight: bold;
-}
-
-.mode-info form p {
-	margin: .5em 0;
-	font-size: 11px;
-}
-
-.mode-info form em {
-	color: red;
-	font-weight: bold;
-	margin-right: 3px;
-}
-
-.mode-info form span {
-	display: block;
-}
-
-.mode-info form label {
-	font-weight: bold;
-}
 
 .mode-info .sub-asset-wrapper, .mode-comments .sub-asset-wrapper, .mode-version .sub-asset-wrapper, .mode-history .sub-asset-wrapper {
 	border-color: #dcdcdc;
@@ -650,8 +670,6 @@ li.comment-text {
 	padding: 0 10px;
 }
 
-
-
 li#info-basic-subject, li#info-basic-education, li#info-edit-subject, li#info-edit-education {
 	float: left;
 	width: 49%;
@@ -676,10 +694,9 @@ li#info-basic-ict, li#info-basic-tags, li#info-edit-ict {
 	clear: left;
 }
 
-li#info-basic-ict li, li#crs-rating-crs3, li.crs-rating-crs2, li#crs-rating-crs1 {
+li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a {
 	background-image: url(images/sprite_crs_ict_group.gif);
 	background-repeat: no-repeat;
-
 }
 
 li#info-basic-ict li {
@@ -711,21 +728,31 @@ li#info-basic-ict li#ict-multiple {
 	background-position: 0 -3240px;
 }
 
-li#crs-rating-crs3, li#crs-rating-crs2, li#crs-rating-crs1 {
+li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a {
 	margin: 0;
 	padding: 5px 0 5px 40px;
 }
 
-li#crs-rating-crs3 {
+li.crs-rating-crs3, #asset-rating a.crs-rating-crs3 {
 	background-position: 0 -180px;
 }
 
-li#crs-rating-crs2 {
+li.crs-rating-crs2, #asset-rating a.crs-rating-crs2 {
 	background-position: 0 -90px;
 }
 
-li#crs-rating-crs1 {
+li.crs-rating-crs1, #asset-rating a.crs-rating-crs1 {
 	background-position: 0 0px;
+}
+
+li.crs-rating-crsp, #asset-rating a.crs-rating-crsp {
+	background-position: 0 -270px;
+}
+
+#asset-rating a {
+	display: block;
+	float: right;
+	padding: 10px 0 15px 40px;
 }
 
 /** VIEWS FORM RELATED **/
@@ -741,7 +768,7 @@ li#crs-rating-crs1 {
 
 
 
-/** FORM INPUTS **/
+/** FORM ELEMENTS **/
 
 
 input.button-cancel, input.button-save {
@@ -776,8 +803,6 @@ input.button-save:hover {
 }
 
 
-
-
 li.input-text input, form li.input-textarea input {
 	width: 80%;
 }
@@ -798,8 +823,8 @@ li.input-select select {
 	top: 2px; 
 } 
 
-.mode-edit form ul li {
-	margin: 0 0 15px 0; 
+.mode-edit form li {
+	margin-bottom: 15px; 
 }
 
 .asset-display-edit {
@@ -807,13 +832,24 @@ li.input-select select {
 	padding: 0 0 0 10px;
 }
 
-.mode-edit label {
-	font-weight: bold;
-}
-
-.mode-edit form span {
+.mode-edit form span, .mode-info form span {
 	display: block;
 	margin-bottom: 3px;
+}
+
+.mode-info form p {
+	margin: .5em 0;
+	font-size: 11px;
+}
+
+.mode-info form em {
+	color: red;
+	font-weight: bold;
+	margin-right: 3px;
+}
+
+.mode-info label, .mode-comments label, .mode-edit label {
+	font-weight: bold;
 }
 
 
@@ -837,19 +873,3 @@ li.input-select select {
 }
 
 
-
-/** FLASH EMBEDS **/
-
-#flashContent1 {
-	text-align: center;
-}
-
-embed#flashItem1 {
-	height: 310px !important;
-	width: 450px !important;
-}
-
-/** [END] FLASH EMBEDS
-
-
- 
