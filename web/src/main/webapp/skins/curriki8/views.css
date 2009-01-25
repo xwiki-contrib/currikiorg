@@ -42,7 +42,7 @@ pre.htmlview {
 
  
  
-/** BEGIN Marvasti Additions **/
+ 
 p {margin: 1em 0;}
 
 #asset-wrapper { 
@@ -471,93 +471,6 @@ embed#flashItem1 {
 
 /** [END] FLASH EMBEDS
 
-/** EDIT FORM RELATED **/
-
-.asset-display-edit {
-	clear: both;
-	padding: 0 0 0 10px;
-}
-
-.mode-edit label {
-	font-weight: bold;
-}
- 
-.mode-edit input.checkbox {
-	height: 15px;
-	width: 15px;
-    margin-right: 4px;
-	position: relative;
-	top: 2px; 
-} 
-
-#asset-wrapper ul li {
-	list-style: none;
-	list-style-type: none;
-	list-style-image:none;
-}
-
-.mode-edit ul {
-	margin: 0;
-	padding: 0;
-}
-
-.mode-edit form span {
-	display: block;
-	margin-bottom: 3px;
- 
-}
-
-
-.mode-edit .input-text input, .mode-edit .input-select select {
-	width: 50%;
-}
-
-.mode-edit .input-text input.checkbox, .mode-edit .input-select input.checkbox {
-	height: 15px;
-	width: 15px;
-}
-
-.mode-edit fieldset.buttons {
-	text-align: center;
-}
-
-input.button-cancel {
-	background: #ccc;
-	border: 1px solid #a5a5a5;
-	color: #000;
-}
-
-input.button-cancel, input.button-save {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	height: 23px;	
-	margin-right: 10px;
-	overflow:visible;
-	padding: 0 12px;
-	width:auto;
-}
-
-input.button-save {
-	background: #FF7F00;
-	border: 1px solid #FF0000;
-	color: #fff;
-}
-
-input.button-cancel:hover {
-	background: #aaa;
-}
-
-input.button-save:hover {
-	background: #FFB808;
-	color: #000;
-}
-
-.mode-edit form ul li {
-	margin: 0 0 15px 0; 
-	padding: 0;
-	list-style:none;
-}
- 
 
  
  
@@ -577,15 +490,6 @@ input.button-save:hover {
 
 
 /** INFO MODULES * COMMENT MODULES * **/
-
-
-.mode-info ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-
 
 .mode-comments ul.crs-rating, .mode-comments li.comment ul, .mode-comments li.no-comment ul, .comment-submit-form {
 	border: 1px solid #999;
@@ -647,14 +551,14 @@ li.crs-rating-components ul {
 	margin-bottom: 5px;
 }
 
-.mode-info h3, .mode-comments h3 {
+.mode-info h3, .mode-comments h3, .mode-history h3, .mode-version h3 {
 	color: #fff;
 	line-height: 1.2em;
 	margin: 0;
 	padding: 2px 8px;
 }
 
-.mode-info h3 {
+.mode-info h3, .mode-version h3 {
 	background: #FF4100;
 }
 
@@ -695,8 +599,6 @@ li.comment-text {
 	margin-right: 3px;
 }
 
-
-
 .mode-info form span {
 	display: block;
 }
@@ -705,101 +607,253 @@ li.comment-text {
 	font-weight: bold;
 }
 
-.mode-info .sub-asset-wrapper {
+.mode-info .sub-asset-wrapper, .mode-comments .sub-asset-wrapper, .mode-version .sub-asset-wrapper, .mode-history .sub-asset-wrapper {
 	border-color: #dcdcdc;
 }
 
-.mode-info fieldset.buttons, .mode-comments fieldset.buttons {
-	text-align: right;
-}
-
-.mode-comments fieldset.buttons {
-	margin: 5px 15px 0 0;
-}
-
-
-form li.input-text input, form li.input-textarea input {
-	width: 80%;
-}
-
-form li.input-select select {
-	width: 40%;
+.mode-history table, .mode-version table  {
+	clear: left;
+	margin-bottom: 15px;
+	width: 100%;
 }
 
 
-li.info-basic-subject, li.info-basic-education, li.info-edit-subject, li.info-edit-education {
+.mode-version h4 {
+	font-size:20px;
+	line-height:1.3em;
+	margin-bottom:15px;
+}
+
+#version-change {
+	margin: 0 auto;
+	text-align: center;
+	width: 90%;
+	
+}
+
+#version-change p {
+	clear: both;
+}
+ 
+.mode-version #version-from, .mode-version #version-to {
+	border: 1px solid #000;
+	display: inline;
+	float: left;
+	margin: 0 0 10px 0;
+	padding: 5px;
+	text-align: left;
+	width: 45%;
+} 
+
+.mode-version #version-to {
+	float: right;
+}
+
+.mode-history table.col-3 td {
+	width: 30%;
+}
+
+.mode-history table.col-2 td {
+	width: 45%;
+}
+
+.mode-history td {
+	padding: 10px;
+}
+
+.mode-history th, .mode-version th {
+	font-weight: bold;
+	padding: 0 10px;
+}
+
+.mode-version td {
+	padding: 0 10px;
+}
+
+
+
+li#info-basic-subject, li#info-basic-education, li#info-edit-subject, li#info-edit-education {
 	float: left;
 	width: 49%;
 }
 
-li.info-basic-subject div, li.info-basic-education div {
+li#info-basic-subject div, li#info-basic-education div {
 	border-bottom: 1px solid #e5e5e5;
 	border-right: 1px solid #e5e5e5;
 	border-top: 1px solid #c5c5c5;
 	border-left: 1px solid #c5c5c5;
 }
 
-li.info-basic-subject div, li.info-basic-education div {
+li#info-basic-subject div, li#info-basic-education div {
 	padding: 7px;
 }
 
-li.info-basic-subject, li.info-edit-subject {
+li#info-basic-subject, li#info-edit-subject {
 	margin-right: 1%;
 }
 
-li.info-basic-ict, li.info-basic-tags, li.info-edit-ict {
+li#info-basic-ict, li#info-basic-tags, li#info-edit-ict {
 	clear: left;
 }
 
-li.info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1 {
+li#info-basic-ict li, li#crs-rating-crs3, li.crs-rating-crs2, li#crs-rating-crs1 {
 	background-image: url(images/sprite_crs_ict_group.gif);
 	background-repeat: no-repeat;
 
 }
 
-li.info-basic-ict li {
+li#info-basic-ict li {
 	margin: 0;
 	padding: 10px 0 10px 40px;
 }
 
-li.info-basic-ict li.ict-activity {
+li#info-basic-ict li#ict-activity {
 	background-position: 0 -3330px;
 }
 
-li.info-basic-ict li.ict-resource {
+li#info-basic-ict li#ict-resource {
 	background-position: 0 -2880px;
 }
 
-li.info-basic-ict li.ict-book {
+li#info-basic-ict li#ict-book {
 	background-position: 0 -2970px;
 }
 
-li.info-basic-ict li.ict-curriculum {
+li#info-basic-ict li#ict-curriculum {
 	background-position: 0 -3060px;
 }
 
-li.info-basic-ict li.ict-other {
+li#info-basic-ict li#ict-other {
 	background-position: 0 -3150px;
 }
 
-li.info-basic-ict li.ict-multiple {
+li#info-basic-ict li#ict-multiple {
 	background-position: 0 -3240px;
 }
 
-li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1 {
+li#crs-rating-crs3, li#crs-rating-crs2, li#crs-rating-crs1 {
 	margin: 0;
 	padding: 5px 0 5px 40px;
 }
 
-li.crs-rating-crs3 {
+li#crs-rating-crs3 {
 	background-position: 0 -180px;
 }
 
-li.crs-rating-crs2 {
+li#crs-rating-crs2 {
 	background-position: 0 -90px;
 }
 
-li.crs-rating-crs1 {
+li#crs-rating-crs1 {
 	background-position: 0 0px;
 }
- 
+
+/** VIEWS FORM RELATED **/
+
+/** ASSET WRAPPER LISTS **/
+
+
+#asset-wrapper ul li {
+	list-style: none;
+	list-style-type: none;
+	list-style-image:none;
+}
+
+
+
+/** FORM INPUTS **/
+
+
+input.button-cancel, input.button-save {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	height: 23px;	
+	margin-right: 10px;
+	overflow:visible;
+	padding: 0 12px;
+	width:auto;
+}
+
+input.button-cancel {
+	background: #ccc;
+	border: 1px solid #a5a5a5;
+	color: #000;
+}
+
+input.button-save {
+	background: #FF7F00;
+	border: 1px solid #FF0000;
+	color: #fff;
+}
+
+input.button-cancel:hover {
+	background: #aaa;
+}
+
+input.button-save:hover {
+	background: #FFB808;
+	color: #000;
+}
+
+
+
+
+li.input-text input, form li.input-textarea input {
+	width: 80%;
+}
+
+li.input-select select {
+	width: 40%;
+}
+
+.mode-edit .input-text input, .mode-edit select {
+	width: 50%;
+}
+
+.mode-edit input.checkbox {
+	height: 15px;
+	width: 15px;
+    margin-right: 4px;
+	position: relative;
+	top: 2px; 
+} 
+
+.mode-edit form ul li {
+	margin: 0 0 15px 0; 
+}
+
+.asset-display-edit {
+	clear: both;
+	padding: 0 0 0 10px;
+}
+
+.mode-edit label {
+	font-weight: bold;
+}
+
+.mode-edit form span {
+	display: block;
+	margin-bottom: 3px;
+}
+
+
+/** FORM BUTTON POSITIONING **/
+
+
+.mode-edit fieldset.buttons {
+	text-align: center;
+}
+
+.mode-history fieldset.buttons {
+	text-align: left;
+}
+
+.mode-comments fieldset.buttons {
+	margin: 5px 15px 0 0;
+}
+
+.mode-info fieldset.buttons, .mode-comments fieldset.buttons {
+	text-align: right;
+}
+
+
