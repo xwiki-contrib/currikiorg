@@ -15,22 +15,20 @@
     #asset_tabs($asset "info")
     <div id="asset-wrapper-inner">
         <ul id="asset-links">
-            <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}}&viewer=info")" title="$msg.get("rve.information.back_to_information_rollover")">$msg.get("rve.information.back_to_information_link")</a></li>           
+            <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}}&viewer=info")" title="$msg.get("rve.information.back_to_history_rollover")">$msg.get("rve.information.back_to_history_link")</a></li>
         </ul>
         <div class="sub-asset-wrapper">
             <h3>
                 $msg.get("rve.information.history")
             </h3>
             <div class="sub-asset-wrapper-inner">
-                #template("historyinline.vm")
+                #template("changesinline.vm")
             </div>
         </div>
     </div>
 </div>
 #else
 <div id="content">
-    <h2>$xwiki.parseMessage("viewhistorytitle")</h2>
-    #template("historyinline.vm")
+    #template("changesinline.vm")
 </div>
 #end
-

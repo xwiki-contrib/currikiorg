@@ -620,6 +620,22 @@ $response.sendRedirect($request.xredirect)
 #end ## end macro
 
 
+#macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent)
+<li class="input-${fieldtype}">
+    <span><input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
+        <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="images/px.gif" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
+    <div  id="${fieldname}">
+    #if($fieldcontent!="")
+    $fieldcontent
+    #else
+    $asset.use($classname)
+    $asset.display($fieldname, "edit", true)
+    #end
+    </div>
+</li>
+#end
+
+
 ## previous macros
 ##
 ##

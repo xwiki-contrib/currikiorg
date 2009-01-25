@@ -7,8 +7,7 @@
             <input  type="hidden" name="xredirect" value="$xredirect" />
             <fieldset>
                 <ul>
-                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "")
-                    #asset_edit_field($asset "" "file" "replace_file" "file" "<input id='file' name='file' type='file' class='hidden' />")
+                    #asset_edit_field($asset "CurrikiCode.AssetClass" "content" "content" "textarea" $xwiki.getTextArea($asset.content))
                     #asset_edit_field($asset "" "comment" "revision" "text" "<input id='comment' name='comment' />")
                 </ul>
             </fieldset>
@@ -21,3 +20,22 @@
     </div>
 </div>
 #asset_displaycontentfooter()
+<script language="javascript" type="text/javascript">
+    if ( browser.isIE || browser.isMozilla || browser.isGecko) {
+        wikiEditor.init({
+            language: "en",
+            elements : "content",
+            mode: "exact",
+            content_css: "$xwiki.getSkinFile("style.css", true)",
+            debug : false,
+            remove_linebreaks : false,
+            plugins: 'table, contextmenu, paste, searchreplace',
+            wiki_images_path : '${request.contextPath}/bin/download/$asset.web/$asset.name/',
+            wiki_attach_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
+            wiki_macro_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
+            wiki_plugins: 'core,attachments'
+        });
+    } else {
+        alert("$msg.get('browsernoncompatible')");
+    }
+</script>
