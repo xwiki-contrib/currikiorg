@@ -21,6 +21,8 @@
 #end
 #if($viewer == "view") ##{
   #template("contentview.vm")
+#elseif($viewer == "edit") ##{
+  #template("assetedit.vm")
 #else ##}{
   #template("${viewer}.vm")
 #end ##}

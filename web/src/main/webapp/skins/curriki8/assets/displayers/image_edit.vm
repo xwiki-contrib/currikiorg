@@ -1,0 +1,62 @@
+#asset_displaycontentheader("")
+#if($asset.attachmentList.size() > 0)
+#set($fileName = $asset.attachmentList.get(0).filename)
+#set($url = $asset.getAttachmentURL("$fileName"))
+#set($pictSize = "Medium")
+#set($pictSize = $!asset.display("display_size", "view", $asset.getObject("CurrikiCode.ImageAssetClass")))
+#if($pictSize == "small")
+ #set($pictWidth = "300")
+#elseif($pictSize == "large")
+ #set($pictWidth = "570")
+#else
+ #set($pictWidth = "450")
+#end
+#set($caption = "")
+#set($caption = $!asset.caption_desc)
+#if($!caption == "")
+ #set($caption = $!asset.description)
+#end
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+        <a href="$url"><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!asset.alt_desc" /></a>
+        <p>$caption</p>
+    </div>
+</div>
+#end
+#macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent)
+<li class="input-${fieldtype}">
+    <span><input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
+        <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="images/px.gif" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
+    <div  id="${fieldname}">
+    #if($fieldcontent!="")
+    $fieldcontent
+    #else
+    $asset.use($classname)
+    $asset.display($fieldname, "edit", true)
+    #end
+    </div>
+</li>
+#end
+<div class="asset-display-edit">
+    <div class="asset-display-edit-inner">
+        <form action="" onsubmit="alert('not implemented yet'); return false;">
+            #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString)))
+            <input  type="hidden" name="viewer" value="edit" />
+            <input  type="hidden" name="xredirect" value="$xredirect" />
+            <fieldset>
+                <ul>
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "")
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "alt_text" "alt_text" "textarea" "")
+                    #asset_edit_field($asset "" "file" "replace_file" "file" "<input id='file' name='file' type='file' class='hidden' />")
+                    #asset_edit_field($asset "" "comment" "revision" "text" "<input id='comment' name='comment' />")
+                </ul>
+            </fieldset>
+            <hr>
+            <fieldset class="buttons">
+                <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")">
+                <input class="button-save" type="submit" name="save" value="$msg.get("rve.content.edit.save_button")">
+            </fieldset>
+        </form>
+    </div>
+</div>
+#asset_displaycontentfooter()

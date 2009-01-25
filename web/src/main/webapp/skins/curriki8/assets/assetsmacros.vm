@@ -127,24 +127,32 @@
 #set($assetFiletype = $asset.getValue("file_type"))
 #set($assetCategory = $asset.getCategory())
 <div id="asset-wrapper" class="category-$!assetCategory mode-$mode">
-#asset_findmode()
-#asset_resourcefunctions($asset)
-#asset_icontitle($asset)
-#asset_attribution($asset)
-#asset_rating($asset)
-#if(!$isPrint)
-#asset_tabs($asset "view")
-#end
-<div id="asset-wrapper-inner" class="filetype-$!assetFiletype">
-#if(!$isPrint&&$mode!="edit")
- #asset_links($asset)
-#end
-#if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
-#else  
-$asset.displayAsset($mode)
-#end
-</div> ##asset-wrapper-inner
+    #asset_findmode()
+    #asset_resourcefunctions($asset)
+    #asset_icontitle($asset)
+    #asset_attribution($asset)
+    #asset_rating($asset)
+    #if(!$isPrint)
+    #asset_tabs($asset "view")
+    #end
+    <div id="asset-wrapper-inner" class="filetype-$!assetFiletype">
+        #if(!$isPrint&&$mode!="edit")
+        #asset_links($asset)
+        #end
+        #if(!$asset.hasAccessLevel("view"))
+        $msg.get("asset.contentNotAllowed")
+        #else
+        #if($assetCategory!="collection")
+        <div class="sub-asset-wrapper category-$assetCategory">
+          <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
+        #end
+        $asset.displayAsset($mode)
+        #if($assetCategory!="collection")
+          </div>
+        </div>
+        #end
+        #end
+    </div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 $xwiki.addTooltipJS()
 #end
@@ -307,17 +315,17 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
             </h3>
             <div class="sub-asset-wrapper-inner">
                 <ul>
-                    <li class="info-basic-title">
+                    <li id="info-basic-title">
                         <strong>$msg.get("rve.information.subject_title")</strong>
                         <p>$asset.getDisplayTitle()</p>
                     </li>
 
-                    <li class="info-basic-description">
+                    <li id="info-basic-description">
                         <strong>$msg.get("rve.information.description_title")</strong>
                         <p>$asset.display("description")</p>
                     </li>
 
-                    <li class="info-basic-subject">
+                    <li id="info-basic-subject">
                         <strong>$msg.get("rve.information.subject_title")</strong>
                         <div>
                             <ul>
@@ -331,7 +339,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                             </ul>
                         </div>
                     </li>
-                    <li class="info-basic-education">
+                    <li id="info-basic-education">
                         <strong>$msg.get("rve.information.edlevel_title")</strong>
                         <div>
                             #set($educlevels = $!asset.getValue("educational_level"))
@@ -342,17 +350,17 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                             </ul>
                         </div>
                     </li>
-                    <li class="info-basic-ict">
+                    <li id="info-basic-ict">
                         <strong>$msg.get("rve.information.ict_title")</strong>
                         #set($ict = $!asset.getValue("instructional_component"))
                         <ul>
                             #foreach($ictitem in $ict)
-                            <li class="ict-${ictitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
+                            <li id="ict-${ictitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
                             #end
                         </ul>
                     </li>
-                    <li class="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong>$!asset.display("keywords")</li>
-                    <li class="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong>$!asset.display("language")</li>
+                    <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong>$!asset.display("keywords")</li>
+                    <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong>$!asset.display("language")</li>
                 </ul>
             </div>
         </div>
@@ -362,22 +370,20 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
             </h3>
             <div class="sub-asset-wrapper-inner">
                 <ul>
-                    <li class="info-rights-access">
+                    <li id="info-rights-access">
                         <strong>$msg.get("rve.information.accessprivileges_title")</strong>
                         $!asset.display("rights")
                     </li>
-
-                    <li class="info-rights-hidden">
+                   <li id="info-rights-hidden">
                         <strong>$msg.get("rve.information.hidefromsearch_title")</strong>
                         $!asset.display("hidden_from_search")
                     </li>
                     $asset.use("CurrikiCode.AssetLicenseClass")
-                    <li class="info-rights-holder">
+                    <li id="info-rights-holder">
                         <strong>$msg.get("rve.information.rightsholder_title")</strong>
                         $!asset.display("rightsHolder")
                     </li>
-
-                    <li class="info-rights-license">
+                    <li id="info-rights-license">
                         <strong>$msg.get("rve.information.licensedeed_title")</strong>
                         $!asset.display("licenseType")
                     </li>
@@ -418,61 +424,60 @@ $asset.use("CurrikiCode.AssetClass")
 <fieldset>
     <ul>
         $asset.use("CurrikiCode.AssetClass")
-        <li class="info-edit-title field-important input-text">
+        <li id="info-edit-title" class="field-important input-text">
             <span><em>!</em><label for="edit-title">$msg.get("rve.information.title.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.title.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.title.edit_txt")</p>
             <input id="edit-title" name="title" value="$xwiki.getFormEncoded($asset.getTitle())" type="text">
         </li>
-        <li class="info-edit-description field-important input-textarea">
+        <li id="info-edit-description" class="field-important input-textarea">
             <span><em>!</em><label for="edit-description">$msg.get("rve.information.description.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.description.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.description.edit_txt")</p>
             $asset.display("description", "edit", true)
         </li>
-        <li class="info-edit-subject field-important input-tree">
+        <li id="info-edit-subject" class="field-important input-tree">
             <span><em>!</em><label for="edit-subject">$msg.get("rve.information.subject.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.subject.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.subject.edit_txt")</p>
             $asset.display("fw_items", "edit", true)
         </li>
-        <li class="info-edit-education field-important input-tree">
+        <li id="info-edit-education" class="field-important input-tree">
             <span><em>!</em><label for="edit-subject">$msg.get("rve.information.edlevel.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.edlevel.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.edlevel.edit_txt")</p>
             $asset.display("educational_level", "edit", true)
         </li>
-
-        <li class="info-edit-ict field-important input-select">
+        <li id="info-edit-ict" class="field-important input-select">
             <span><em>!</em><label for="edit-ict">$msg.get("rve.information.ict.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.ict.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.ict.edit_txt")</p>
             $asset.display("instructional_component", "edit", true)
         </li>
 
-        <li class="info-edit-tags input-text">
+        <li id="info-edit-tags" class="input-text">
             <span><label for="edit-tags">$msg.get("rve.information.keywords.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.keywords.edit_tooltip")" src="images/px.gif" alt="" /></span>
             $asset.display("keywords", "edit", true)
         </li>
 
-        <li class="info-edit-language input-select">
+        <li id="info-edit-language" class="input-select">
             <span><label for="edit-language">$msg.get("rve.information.language.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.language.edit_tooltip")" src="images/px.gif" alt="" /></span>
             $asset.display("language", "edit", true)
         </li>
 
-        <li class="info-edit-hide input-checkbox">
+        <li id="info-edit-hide" class="input-checkbox">
             <span><label for="edit-hide">$msg.get("rve.information.hidefromsearch.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.hidefromsearch.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
             $asset.display("hidden_from_search", "edit", true) $msg.get("rve.information.hidefromsearch.edit_instruction")
         </li>
 $asset.use("CurrikiCode.AssetLicenseClass")
-        <li class="info-edit-rights field-important input-text">
+        <li id="info-edit-rights" class="field-important input-text">
             <span><em>!</em><label for="edit-rights">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="images/px.gif" alt="" /></span>
             $asset.display("rightsHolder", "edit", true)
         </li>
 $asset.use("CurrikiCode.AssetClass")
-        <li class="info-edit-access input-radio">
+        <li id="info-edit-access" class="input-radio">
             <span><label for="edit-access">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.accessprivileges.edit_txt")</p>
             $asset.display("rights", "edit", true)
         </li>
 $asset.use("CurrikiCode.AssetLicenseClass")
-        <li class="info-edit-license input-select">
+        <li id="info-edit-license" class="input-select">
             <span><label for="edit-license">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
