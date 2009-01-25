@@ -4,14 +4,17 @@
   * or the standard XWiki view 
   *#
 #template("space.vm")
-<div id="content">
 #if($doc.space.startsWith("Documentation_") && $doc.name != "WebPreferences" && $doc.name != "WebHome" && $doc.name != "AboutDocumentation")
+<div id="content">
 #groups_documentationview()
+</div>
 #else
 #if($doc.getObject("CurrikiCode.AssetClass"))
  #if($doc.getObject("CurrikiCode.CompositeAssetClass"))
   #if($doc.isRootCollection())
+<div id="content">
    #compositeasset_display($doc)
+</div>
   #else
    #asset_display($doc "view")
   #end
@@ -19,8 +22,9 @@
    #asset_display($doc "view")
  #end
 #else
+<div id="content">
  $cdoc.getRenderedContent()
-#end
-#end
 </div>
+#end
+#end
 

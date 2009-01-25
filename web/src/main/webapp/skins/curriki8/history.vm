@@ -1,0 +1,35 @@
+#**
+  * History entry point. It is called from view.vm
+  * It displays either a specific Asset view
+  * or the standard XWiki view
+  *#
+#template("space.vm")
+#if($doc.getObject("CurrikiCode.AssetClass"))
+#set($assetCategory = $asset.getCategory())
+<div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
+    #asset_resourcefunctions($asset)
+    #asset_icontitle($asset)
+    #asset_attribution($asset)
+    #asset_rating($asset)
+    #asset_tabs($asset "info")
+    <div id="asset-wrapper-inner">
+        <ul id="asset-links">
+            <li><a href="$asset.getURL("view", "bc=$!{request.bc}}&viewer=info")" title="$msg.get("rve.information.back_to_information_rollover")">$msg.get("rve.information.back_to_information_link")</a></li>           
+        </ul>
+        <div class="sub-asset-wrapper">
+            <h3>
+                $msg.get("rve.information.history")
+            </h3>
+            <div class="sub-asset-wrapper-inner">
+                #template("historyinline.vm")
+            </div>
+        </div>
+    </div>
+</div>
+#else
+<div id="content">
+    <h2>$xwiki.parseMessage("viewhistorytitle")</h2>
+    #template("historyinline.vm")
+</div>
+#end
+
