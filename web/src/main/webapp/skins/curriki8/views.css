@@ -1,4 +1,46 @@
+/** CLEARFIX **/
 
+ 
+pre {
+    background:#222; color:#fff; padding:10px;margin-top:0px;font-family:courier;width:600px; height:400px; 
+}    
+pre.htmlview {
+    background:#ebebeb; color:#000; font-size:12px;
+}
+
+  .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    }
+
+.clearfix {display: inline-block;}  /* for IE/Mac */
+
+.asset-display-download-inner:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.asset-display-download-inner {display: inline-block;}  /* for IE/Mac */
+
+#asset-wrapper:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#asset-wrapper {display: inline-block;}  /* for IE/Mac */
+
+
+
+ 
  
 /** BEGIN Marvasti Additions **/
 p {margin: 1em 0;}
@@ -14,11 +56,6 @@ a:hover {
 }
 
 /** [BEGIN] FUNCTION TABS, ASSET HEADER, ASSET TABS, ASSET ATTRIBUTION **/
-
-ul#function-tabs, ul#asset-attribution {
-	margin: 0;
-	padding: 0;
-}
 
 ul#function-tabs {
 	float: right;
@@ -216,7 +253,7 @@ ul#asset-tabs li a:hover {
 	width: 100%;
 }
 
-.mode-edit #asset-wrapper-inner {
+.mode-edit #asset-wrapper-inner, .mode-info-edit #asset-wrapper-inner {
 	padding-top: 10px;
 }
 
@@ -242,27 +279,7 @@ ul#asset-tabs li a:hover {
 .category-wiki .asset-display-text {
 	margin-right: 10px;	
 }
-/**
-.section-content-wrapper p.download {
-	height: 32px;
-}
 
-.section-content-wrapper .document-medium {
-	background: transparent url(mimetypes/document_medium.gif) top left no-repeat;	
-}
-
-.section-content-wrapper p.download span, .section-content-wrapper p.download img, .section-content-wrapper p.download button { 
-	display:block;
-	float:left;
-}
-
-.section-content-wrapper p.download span { 
-	max-width:350px;
-	min-width:70px;
-	padding-left:35px;
-	position:relative;
-}
-**/
 
 .sub-asset-wrapper img.tooltip { 
 	background-image: url(images/sprite_general.gif);
@@ -454,31 +471,53 @@ embed#flashItem1 {
 
 /** [END] FLASH EMBEDS
 
-/** FORM RELATED **/
+/** EDIT FORM RELATED **/
 
 .asset-display-edit {
 	clear: both;
 	padding: 0 0 0 10px;
 }
 
-.asset-display-edit label {
+.mode-edit label {
 	font-weight: bold;
 }
+ 
+.mode-edit input.checkbox {
+	height: 15px;
+	width: 15px;
+    margin-right: 4px;
+	position: relative;
+	top: 2px; 
+} 
 
-.asset-display-edit span {
-	display: block;
+#asset-wrapper ul li {
+	list-style: none;
+	list-style-type: none;
+	list-style-image:none;
 }
 
-.asset-display-edit .input-text input, .asset-display-edit .input-select select {
-	width: 50%;
-}
-
-.asset-display-edit ul {
+.mode-edit ul {
 	margin: 0;
 	padding: 0;
 }
 
-.asset-display-edit fieldset.buttons {
+.mode-edit form span {
+	display: block;
+	margin-bottom: 3px;
+ 
+}
+
+
+.mode-edit .input-text input, .mode-edit .input-select select {
+	width: 50%;
+}
+
+.mode-edit .input-text input.checkbox, .mode-edit .input-select input.checkbox {
+	height: 15px;
+	width: 15px;
+}
+
+.mode-edit fieldset.buttons {
 	text-align: center;
 }
 
@@ -504,11 +543,6 @@ input.button-save {
 	color: #fff;
 }
 
-.asset-display-edit .input-checkbox input {
-	position: relative;
-	top: 2px;
-}
-
 input.button-cancel:hover {
 	background: #aaa;
 }
@@ -518,16 +552,13 @@ input.button-save:hover {
 	color: #000;
 }
 
-.asset-display-edit ul li {
-	margin: 0 0 15px 0;
+.mode-edit form ul li {
+	margin: 0 0 15px 0; 
+	padding: 0;
+	list-style:none;
 }
+ 
 
-.input-text input, .input-textarea textarea, .input-file input, .input-select select, .input-file-tree {
-	margin-top: 5px;
-}
-
-
-#asset-wrapper ul li { list-style-type: none; }
  
  
 /** AVATAR CONSTRAINTS **/
@@ -545,11 +576,66 @@ input.button-save:hover {
 }
 
 
-/** INFO MODULES **/
+/** INFO MODULES * COMMENT MODULES * **/
 
 
-.mode-info .sub-asset-wrapper ul {
+.mode-info ul {
 	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+
+
+.mode-comments ul.crs-rating, .mode-comments li.comment ul, .mode-comments li.no-comment ul, .comment-submit-form {
+	border: 1px solid #999;
+ 	margin: 0 5px 15px 5px;
+	padding: 10px; 
+}
+
+
+.mode-comments ul.crs-rating {
+	padding-bottom: 0;
+}
+
+.mode-comments li.no-review ul{
+	padding: 20px 10px 0 60px;
+}
+
+.mode-comments ul.crs-rating ul li {
+	float: left;
+	margin-right: 1%;
+	width: 32%;
+}
+ 
+.mode-comments li.comment ul {
+	position: relative;
+} 
+
+.mode-comments li.no-comment ul {
+	padding: 20px 10px 0 60px;
+}
+
+.mode-comments li.comment-action {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.mode-comments li.comment-action a {
+	padding: 0 5px;
+}
+
+.mode-comments a.comment-edit {
+	border-right: 1px solid #999;
+} 
+
+ul.crs-rating li {
+	margin-bottom: 15px;
+}
+
+li.crs-rating-components ul {
+	margin-top: 5px;
 	padding: 0;
 }
 
@@ -561,12 +647,41 @@ input.button-save:hover {
 	margin-bottom: 5px;
 }
 
-.mode-info h3 {
-	background: #FF4100;
+.mode-info h3, .mode-comments h3 {
 	color: #fff;
 	line-height: 1.2em;
 	margin: 0;
 	padding: 2px 8px;
+}
+
+.mode-info h3 {
+	background: #FF4100;
+}
+
+.mode-comments .crs-wrapper h3 {
+	background: #8897cc;
+}
+
+.mode-comments .member-comments-wrapper h3 {
+	background: #398AC9;
+}
+
+li.comment-avatar {
+	display: inline;
+	float: left;
+	margin: 0 5px 10px 0;
+}
+
+li.comment-username {
+	padding-top: 3px;
+}
+
+li.comment-text {
+	clear: left;
+}
+
+.comment-submit-form label {
+	font-weight: bold;
 }
 
 .mode-info form p {
@@ -576,8 +691,11 @@ input.button-save:hover {
 
 .mode-info form em {
 	color: red;
+	font-weight: bold;
 	margin-right: 3px;
 }
+
+
 
 .mode-info form span {
 	display: block;
@@ -591,8 +709,21 @@ input.button-save:hover {
 	border-color: #dcdcdc;
 }
 
-.mode-info fieldset.buttons {
+.mode-info fieldset.buttons, .mode-comments fieldset.buttons {
 	text-align: right;
+}
+
+.mode-comments fieldset.buttons {
+	margin: 5px 15px 0 0;
+}
+
+
+form li.input-text input, form li.input-textarea input {
+	width: 80%;
+}
+
+form li.input-select select {
+	width: 40%;
 }
 
 
@@ -620,9 +751,13 @@ li.info-basic-ict, li.info-basic-tags, li.info-edit-ict {
 	clear: left;
 }
 
-li.info-basic-ict li {
+li.info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1 {
 	background-image: url(images/sprite_crs_ict_group.gif);
 	background-repeat: no-repeat;
+
+}
+
+li.info-basic-ict li {
 	margin: 0;
 	padding: 10px 0 10px 40px;
 }
@@ -647,9 +782,24 @@ li.info-basic-ict li.ict-other {
 	background-position: 0 -3150px;
 }
 
-li.info-basic-ict li.ict-multiple, #foootest {
+li.info-basic-ict li.ict-multiple {
 	background-position: 0 -3240px;
 }
 
+li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1 {
+	margin: 0;
+	padding: 5px 0 5px 40px;
+}
 
-/** SVN TEST **/
+li.crs-rating-crs3 {
+	background-position: 0 -180px;
+}
+
+li.crs-rating-crs2 {
+	background-position: 0 -90px;
+}
+
+li.crs-rating-crs1 {
+	background-position: 0 0px;
+}
+ 

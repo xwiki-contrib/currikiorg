@@ -8,15 +8,11 @@
  * Macro for resources functions of asset
  *#
 #macro(asset_resourcefunctions $asset)
-##set($assetHasView = $asset.hasAccessLevel("view"))
 <ul id="function-tabs">
    #if(!$isguest)
      <li class="tab-first" id="tab-favorite"><a href="javascript:void()" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
      <li id="tab-email"><a href="javascript:void()" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
-##    #set($assetHasFlag = $asset.canBeNominatedOrReviewed())
-##   #if($assetHasFlag)
-##     <li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
-##    #end
+##     <li id="tab-flag"><a href="javascript:void()" onclick="" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
    #end
      <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
 </ul>
@@ -80,9 +76,9 @@
  *#
 #macro(asset_tabs $asset $viewer)
 <ul id="asset-tabs">
-<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("caption.view")</a></li>
-<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=info")">Information</a></li>
-<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">Comments ($asset.commentNumbers)</a></li>
+<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("rve.tab.1.heading")</a></li>
+<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=info")">$msg.get("rve.tab.2.heading")</a></li>
+<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">$msg.get("rve.tab.3.heading")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
 </ul> ## tabs
 #end
 
@@ -93,7 +89,7 @@
 <ul id="asset-links">
  #set($assetHasNominate = $asset.canBeNominatedOrReviewed())
  #if($assetHasNominate)
-<li id="tab-flag"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("resource.view.nominate.icon.rollover")">$msg.get("resource.view.nominate")</a></li>
+<li id="tab-nominate"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("resource.view.nominate.icon.rollover")">$msg.get("resource.view.nominate")</a></li>
  #end
  #if($asset.category=="collection")
  ## Build Up
@@ -484,6 +480,133 @@ $asset.use("CurrikiCode.AssetLicenseClass")
 </div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 #end
+
+
+#**
+ * Display one asset comment
+ *#
+#macro(asset_comment $asset $comment)
+$asset.use($comment)
+<li id="comment${comment.number}" class="comment">
+    <ul>
+        #set($authorDoc = $xwiki.getDocument($asset.getValue("author")))
+        <li class="comment-avatar">
+            #if($authorDoc.attachmentList.size()==0)
+            <img src="$xwiki.getSkinFile("noavatar.png")"/>
+            #else
+            #foreach ($attach in $creatorDoc.attachmentList)
+            <a href="$authorDoc.getURL("view")" >
+                <img src="$authorDoc.getAttachmentURL($attach.filename,"download")" /></a>
+            #end
+            #end
+        </li>
+        <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
+        <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
+        <li class="comment-text">
+            <p>
+                ## TODO: check this. It has been taken from groups
+                $asset.getValue("comment", $comment).replaceAll("\n","<br />")
+            </p>
+        </li>
+        <li class="comment-action">
+            ## this does not exist
+            <a class="comment-edit">Edit</a>
+            #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
+            #set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", "comment-delete"))
+            #set($xredirect = $util.encodeURI($asset.getURL('view', $!request.queryString)))
+            #set($qs = "")
+            #set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
+            #set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", $qs))
+            <a class="comment-delete" href="javascript:void()"  title="${msg.get('mycurriki.blog.comment.delete')}" onclick="if (confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'))  location='$deleteCommentUrl'; return false;">$msg.get('mycurriki.blog.comment.delete')</a>
+            #end
+        </li>
+    </ul>
+</li>
+#end
+
+
+#**
+ * Display the asset comments
+ *#
+#macro(asset_comments $asset)
+<div class="sub-asset-wrapper member-comments-wrapper">
+    <h3>$msg.get("rve.comments.comment.header")</h3>
+    <div class="sub-asset-wrapper-inner">
+        <ul class="comment-list">
+            #if($asset.getComments().size()>0)
+            #foreach($comment in $asset.getComments())
+            #asset_comment($asset $comment)
+            #end
+            #else
+            <li class="no-comment">
+                <ul>
+                    <li>
+                        <p>
+                            #if($isguest)
+                            $msg.get("rve.comments.comment.empty.notloggedin_message")
+                            #else
+                            $msg.get("rve.comments.comment.empty.loggedin_message")
+                            #end
+                        </p>
+                    </li>
+                </ul>
+            </li>
+            #end
+        </ul>
+        <div id="comment-submit-form" class="comment-submit-form" style="display: none;">
+            #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
+            #set($comment = $cclass.newObject())
+            #set($qs = "")
+            #set($qs = $request.queryString)
+            #set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
+            <form action="$asset.getURL("commentadd")" method="post">
+                <input type="hidden" name="xredirect" value="${xredirect}" />
+                <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+                <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+                <fieldset>
+                    <label>$msg.get("rve.comments.comment.add_title")</label>
+                    <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
+                </fieldset>
+                <fieldset class="buttons">
+                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" onclick="document.getElementById('comment-submit-form').style.display = 'none' ;"/>
+                    <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+#end
+
+
+#**
+ * Delete Comment Service
+ *#
+#macro(asset_deletecomment_service)
+<!-- Message Start -->
+## since this is called from the Groups.DeleteCommentServicePage we need to change the
+## $doc so that it finds the right space name
+#set($doc = $xwiki.getDocument($request.docname))
+#if("$!request.confirm" == "1") ## {
+#set($deletedoc = $xwiki.getDocument($request.docname))
+#if("$!request.date" != "") ## {
+#set($comments = $deletedoc.getComments())
+#foreach($comment in $comments) ## {
+#set($time = $deletedoc.getValue('date', $comment).time)
+#if(($request.date == "$time") && ( ($comment.author == $context.user) || $xwiki.hasAdminRights())) ## {
+#set($junk = $deletedoc.removeObject($comment))
+#set($junk = $deletedoc.saveWithProgrammingRights())
+DELETED
+#end ## }  ## if
+#end ## }  ## foreach
+$response.sendRedirect($request.xredirect)
+#else
+#warning("Request invalid: comment date was not provided.")
+#end ## end if date
+#else
+#warning("Request invalid: call was not made from a javascript link.")
+#end ## end if confirm
+#end ## end macro
+
 
 ## previous macros
 ##

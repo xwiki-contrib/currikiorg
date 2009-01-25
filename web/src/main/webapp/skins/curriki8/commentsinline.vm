@@ -1,17 +1,6 @@
-#if($doc.getObject("CurrikiCode.AssetClass"))
-#if("$!request.xpage"!="commentsinline")
-#set($assetCategory = $asset.getCategory())
-#set($asset = $doc)
-<div  id="content">
-<div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
-#asset_resourcefunctions($asset)
-#asset_icontitle($asset)
-#asset_attribution($asset)
-#asset_rating($asset)
-#asset_tabs($asset "comments")
-<div id="asset-wrapper-inner">
-#end
-#end
+#**
+  * Comments display. It is used for blogs and for assets
+  *#
 #if($context.user=="XWiki.XWikiGuest")
 #set($joinurl = $xwiki.getURL("Main.JoinCurriki"))
 #set($logredir = $doc.getURL("view"))
@@ -114,9 +103,4 @@ document.getElementById("commentform").className = "collapsed";
 <div class="righttext"><a class="buttonred" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #end
 #end ##guest
-#if($doc.getObject("CurrikiCode.AssetClass"))
-</div> ##asset-wrapper-inner
-</div> ##asset-wrapper
-</div> ##content
-#end
 #end

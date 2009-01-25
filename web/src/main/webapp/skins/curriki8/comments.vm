@@ -3,11 +3,11 @@
  *  It calls commentsinline for non asset pages for compatibility
  *#
 #template("space.vm")
-#if(!$doc.getObject("CurrikiCode.AssetClass"))
+#set($asset = $doc)
+#if(!$asset.getObject("CurrikiCode.AssetClass"))
 #template("commentsinline.vm")
 #else
 #set($assetCategory = $asset.getCategory())
-#set($asset = $doc)
 <div  id="content">
     <div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
         #asset_resourcefunctions($asset)
@@ -17,45 +17,22 @@
         #asset_tabs($asset "comments")
         <div id="asset-wrapper-inner">
             <ul id="asset-links">
-                <li><a href="#">Nominate for Review</a></li>
-                <li class="last-item"><a href="#">Add a Comment</a></li>
+                #if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
+                <li id="tab-review">
+                    <a href="$xwiki.getURL("CRS.Review", "view", "page=${asset.fullName}")" title="$msg.get("rve.comments.review.review_rollover")" target="_blank">$msg.get("rve.comments.review.review_link")</a>
+                </li>
+                #end
+                #set($assetHasNominate = $asset.canBeNominatedOrReviewed())
+                #if($assetHasNominate)
+                <li id="tab-nominate"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("rve.comments.review.nominate_rollover")">$msg.get("rve.comments.review.nominate_link")</a></li>
+                #end
+                #if($asset.hasAccessLevel("comment"))
+                <li class="last-item"><a href="javascript:void()" onclick="document.getElementById('comment-submit-form').style.display = 'block' ; location = '#comment-submit-form'; return false;" title="$msg.get("rve.comments.comment.addcomment_rollover")">$msg.get("rve.comments.comment.addcomment_link")</a></li>
+                #end
             </ul>
-
-            <div class="sub-asset-wrapper crs-wrapper">
-
-                <h3>CURRIKI REVIEW</h3>
-
-                <div class="sub-asset-wrapper-inner">
-
-
-
-
-                    #macro(asset_crsrrating $asset $ratingobj)
-                    <ul class="crs-rating">
-                        <li class="crs-rating-crs3">This resource was reviewed using the rubric for Activity:  Exercise and received an overall <a href="">Curriki Review System</a> rating of <strong>3-Exemplary, as of July-10-2008.</strong></li>
-
-                        <li class="crs-rating-components">
-                            <strong>Component Ratings:</strong>
-                            <ul>
-                                <li>Technical Completeness: <strong>3</strong></li>
-                                <li>Content Accuracy: <strong>3</strong></li>
-                                <li>Appropriate Pedagogy: <strong>3</strong></li>
-                            </ul>
-                        </li>
-
-                        <li class="crs-rating-comments">
-                            <strong>Reviewer Comments:</strong>
-                            <p>This resource is designed as an alternative format to a book report.  It appears as a restaurant menu, elicitying thoughtful responses to a book.  The appetizer ection, for exmample, asks questions about the beginnign of thebook, the cover, etc.. By responding to this menu, the student is offered an opporunity to review a book in a personally meaningful way.</p>
-                        </li>
-
-                        <li><a href="">Update This Review</a></li>
-                    </ul>
-                    #end
-
-
-
-
-                </div> ##asset-wrapper-inner
+            #crs_display_reviews($asset)
+            #asset_comments($asset)
+        </div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 </div> ##content
 #end
