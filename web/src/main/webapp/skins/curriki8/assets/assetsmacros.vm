@@ -25,7 +25,7 @@
 #macro(asset_icontitle $asset)
 <div id="asset-header">
  <!--<img src="images/collectionmedium.gif">-->
- <h2><a href="$asset.getURL("view")" title="$asset.displayTitle">$asset.displayTitle</a></h2>
+ <h2><a href="$asset.getURL("view", "bc=$!{request.bc}")" title="$asset.displayTitle">$asset.displayTitle</a></h2>
 </div>
 #end
 
@@ -78,9 +78,9 @@
  *#
 #macro(asset_tabs $asset $viewer)
 <ul id="asset-tabs">
-<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!request.bc")">$msg.get("rve.tab.1.heading")</a></li>
-<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=info")">$msg.get("rve.tab.2.heading")</a></li>
-<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!request.bc&viewer=comments")">$msg.get("rve.tab.3.heading")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
+<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.1.heading")</a></li>
+<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.2.heading")</a></li>
+<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.3.heading")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
 </ul> ## tabs
 #end
 
@@ -115,7 +115,7 @@
 ##end##}
 #if($asset.hasAccessLevel("edit"))
     <li>
-       <a href="$asset.getURL("view", "viewer=assetedit&bc=$!request.bc")" title="$msg.get('resource.view.edit_tooltip')">$msg.get('resource.view.edit')</a>
+       <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('resource.view.edit_tooltip')">$msg.get('resource.view.edit')</a>
     </li>
 #end
     </ul>
@@ -162,7 +162,7 @@ $xwiki.addTooltipJS()
  *#
 #macro(asset_beginsection $assetDoc $withcollapse)
 #set($category = $assetDoc.category)
-#set($assetLink = $assetDoc.getURL())
+#set($assetLink = $assetDoc.getURL("view", "bc=$!{request.bc}"))
 #set($assetTitle = $assetDoc.displayTitle)
 #if(!$seccounter)
 #set($seccounter = 1)
@@ -303,8 +303,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #asset_tabs($asset "info")
     <div id="asset-wrapper-inner">
         <ul id="asset-links">
-            <li><a href="$asset.getURL("view", "viewer=infoedit")">$msg.get("rve.information.edit_link")</a></li>
-            <li class="last-item"><a href="$asset.getURL("view", "viewer=history")">$msg.get("rve.information.history")</a></li>
+            <li><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=infoedit")">$msg.get("rve.information.edit_link")</a></li>
+            <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=history")">$msg.get("rve.information.history")</a></li>
         </ul>
         $asset.use("CurrikiCode.AssetClass")
         <div class="sub-asset-wrapper">
@@ -406,7 +406,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 <div id="asset-wrapper-inner">
 <ul id="asset-links">
     <li><a href="#">Edit</a></li>
-    <li class="last-item"><a href="$asset.getURL("view", "viewer=history")">Revision History</a></li>
+    <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=history")">Revision History</a></li>
 </ul>
 $asset.use("CurrikiCode.AssetClass")
 <div class="sub-asset-wrapper">
@@ -643,7 +643,7 @@ $response.sendRedirect($request.xredirect)
   #end ##}
  #end ##}
  #if($asset.hasAccessLevel("view"))
-  <a href="$asset.getURL("view", "viewer=print")" onclick="window.open('$asset.getURL("view", "viewer=print")');return false;">$msg.get("caption.print")</a>
+  <a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=print")" onclick="window.open('$asset.getURL("view", "bc=$!{request.bc}&viewer=print")');return false;">$msg.get("caption.print")</a>
  #end
  #if($asset.hasAccessLevel("edit"))
   #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
