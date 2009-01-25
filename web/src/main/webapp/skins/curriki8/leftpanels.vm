@@ -1,3 +1,6 @@
+#**
+  *  Displays the left panels unless they have been disabled
+  *#
 #if($showLeftPanels == "1" || $request.getParameter("forceLeftPanels"))
 <div id="left-panel" #if($showLeftPanels != "1" && $request.getParameter("forceLeftPanels")) style="display: none;"#end>
 #foreach($panel in $leftPanels)

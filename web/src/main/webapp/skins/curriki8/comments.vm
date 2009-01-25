@@ -1,6 +1,66 @@
-###
-### Comments page in the "view" mode
-###
-###
+#**
+ *  Comments entry point. It is called from view.vm
+ *  It calls commentsinline for non asset pages for compatibility
+ *#
 #template("space.vm")
+#if(!$doc.getObject("CurrikiCode.AssetClass"))
 #template("commentsinline.vm")
+#else
+#set($assetCategory = $asset.getCategory())
+#set($asset = $doc)
+<div  id="content">
+    <div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
+        #asset_resourcefunctions($asset)
+        #asset_icontitle($asset)
+        #asset_attribution($asset)
+        #asset_rating($asset)
+        #asset_tabs($asset "comments")
+        <div id="asset-wrapper-inner">
+            <ul id="asset-links">
+                <li><a href="#">Nominate for Review</a></li>
+                <li class="last-item"><a href="#">Add a Comment</a></li>
+            </ul>
+
+            <div class="sub-asset-wrapper crs-wrapper">
+
+                <h3>CURRIKI REVIEW</h3>
+
+                <div class="sub-asset-wrapper-inner">
+
+
+
+
+                    #macro(asset_crsrrating $asset $ratingobj)
+                    <ul class="crs-rating">
+                        <li class="crs-rating-crs3">This resource was reviewed using the rubric for Activity:  Exercise and received an overall <a href="">Curriki Review System</a> rating of <strong>3-Exemplary, as of July-10-2008.</strong></li>
+
+                        <li class="crs-rating-components">
+                            <strong>Component Ratings:</strong>
+                            <ul>
+                                <li>Technical Completeness: <strong>3</strong></li>
+                                <li>Content Accuracy: <strong>3</strong></li>
+                                <li>Appropriate Pedagogy: <strong>3</strong></li>
+                            </ul>
+                        </li>
+
+                        <li class="crs-rating-comments">
+                            <strong>Reviewer Comments:</strong>
+                            <p>This resource is designed as an alternative format to a book report.  It appears as a restaurant menu, elicitying thoughtful responses to a book.  The appetizer ection, for exmample, asks questions about the beginnign of thebook, the cover, etc.. By responding to this menu, the student is offered an opporunity to review a book in a personally meaningful way.</p>
+                        </li>
+
+                        <li><a href="">Update This Review</a></li>
+                    </ul>
+                    #end
+
+
+
+
+                </div> ##asset-wrapper-inner
+</div> ##asset-wrapper
+</div> ##content
+#end
+
+
+
+
+

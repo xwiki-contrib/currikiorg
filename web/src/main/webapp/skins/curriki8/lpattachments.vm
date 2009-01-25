@@ -1,17 +1,17 @@
-## lpattachments.vm by Niels P. Mayer
-##
-## Template for use by CurrikiStandardLessonPlan and other lesson plans
-## that create new resources and allow for file attachments to those
-## resources. The intent is to use something like
-## <iframe src="$newAsset.getURL("view", "xpage=lpattachments")"
-##         onload="try { setAttachmentsIframeSize(); } catch(e) { alert('iframe onload error: '+e+' ...'); return false; }" ></iframe>
-## embedded in the lesson plan. (where $newAsset is the asset being
-## populated, that resides in AssetTemp).
-##
-
-## taken from
-## xwiki-product-enterprise/web/target/xwiki-enterprise-web-1.3-SNAPSHOT/skins/albatross/attachmentsinline.vm
-## prints filesize in human readable format
+#**
+ * lpattachments.vm by Niels P. Mayer
+ *
+ * Template for use by CurrikiStandardLessonPlan and other lesson plans
+ * that create new resources and allow for file attachments to those
+ * resources. The intent is to use something like
+ * <iframe src="$newAsset.getURL("view", "xpage=lpattachments")"
+ *         onload="try { setAttachmentsIframeSize(); } catch(e) { alert('iframe onload error: '+e+' ...'); return false; }" ></iframe>
+ * embedded in the lesson plan. (where $newAsset is the asset being
+ * populated, that resides in AssetTemp).
+ *
+ * taken from
+ * xwiki-product-enterprise/web/target/xwiki-enterprise-web-1.3-SNAPSHOT/skins/albatross/attachmentsinline.vm
+ **# prints filesize in human readable format
 #macro(dynamicsize $sz) ## {
 #if($sz < 1024)         ## {
 $sz bytes

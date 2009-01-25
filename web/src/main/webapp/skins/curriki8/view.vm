@@ -20,7 +20,6 @@
   #template("startpage.vm")
 #end
 #if($viewer == "view") ##{
-  #template("space.vm")
   #template("contentview.vm")
 #else ##}{
   #template("${viewer}.vm")
@@ -38,5 +37,6 @@
   #template("htmlfooter.vm")
 #end ##}
 #else
+## Forcing temporary asset to not be displayed
 AssetTemp
 #end

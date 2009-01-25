@@ -1,8 +1,13 @@
+#**
+  * User inactive page. This page has it's own template to strip it from content
+  * that would not be inaccessible to an inactive user.
+  * TODO: verify curriki styles
+  *#
 #template("xwiki.vm")
-#template("httpheader.vm")
+#template("htmlheader.vm")
 #template("header.vm")
 #template("baseheader.vm")
-<div id="xwikicontent">
+<div id="content">
 #if ($cause == "disabled") ## {
 $msg.get("accountdisabled")
 #else ## }{
@@ -39,4 +44,4 @@ $msg.get("accountnotactive_email")
 </div>
 #template("basefooter.vm")
 #template("footer.vm")
-#template("httpfooter.vm")
+#template("htmlfooter.vm")
