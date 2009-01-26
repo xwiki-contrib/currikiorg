@@ -1361,7 +1361,7 @@ $msg.get("deleted")
 		#set($escapedTitle = $ret_escaped)
 		#assets_userInGroup($asset)
 		#if($doc.name != 'Favorites' && ($ret_assetGroupMember || $hasGlobalAdmin))##{
-		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath('${addpath}', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'});" ext:qtip="$msg.get('mycurriki.link.buildup.tooltip')">$msg.get('mycurriki.link.buildup')</a>{/pre}
+		{pre}<a class="button-link" onclick="Curriki.module.addpath.startPath('${addpath}', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'});" ext:qtip="$msg.get('mycurriki.link.buildup.tooltip')">$msg.get('mycurriki.link.buildup')</a>{/pre}
 		#end##}
 	#end##}
 #end ##}
