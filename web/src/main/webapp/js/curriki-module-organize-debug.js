@@ -117,6 +117,7 @@ Organize.init = function(){
 									var saveFolders = function(){
 										Organize.logCompleted();
 										Curriki.hideLoading();
+										Ext.getCmp('OrganizeDialogueWindow').close();
 										window.location.reload();
 									}
 
