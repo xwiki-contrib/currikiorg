@@ -179,6 +179,9 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_assettitlewithmodesc $asset) ## {
+#if("$!descnb" == "") ##{
+#set($descnb=0)
+#end ##}
 #set($descnb = $descnb + 1)
 #asset_findtitle($asset)
 #set($title = $currikiTitle)
