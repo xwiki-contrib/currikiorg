@@ -2194,10 +2194,6 @@ console.log("Published CB: ", newAsset);
 											}
 										);
 									}
-									,beforeclick:function(node, e){
-											node.toggle();
-											return false;
-									}
 								}
 								,root: new Ext.tree.AsyncTreeNode({
 									 text:_('add.chooselocation.drop_root')
