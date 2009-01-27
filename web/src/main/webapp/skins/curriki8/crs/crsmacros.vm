@@ -31,15 +31,16 @@
 #set($crsText = $msg.get("curriki.crs.rating${status}"))
 #set($crsTextUrl = $asset.getURL("view", "viewer=comments"))
 #end
-##if((!$status)||($status=="100")||($status==""))
+#if((!$status)||($status=="100")||($status==""))
 ##set($crsIcon = $xwiki.getSkinFile("crs/crs.png"))
-##set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
-##else
+#set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#else
 ##set($crsIcon = $xwiki.getSkinFile("crs/crs${status.toLowerCase()}.png"))
-##set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
-##end
+#set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
+#end
 <div id="asset-rating">
-<a class="crs-rating-crs${status.toLowerCase()}" href="$crsTextUrl">$crsText</a>
+    <a class="icon-link crs-rating-crs${status.toLowerCase()}" href="$crsIconUrl"></a>
+    <a class="text-link" href="crsTextUrl">$crsText</a>
 </div>
 #end
 
