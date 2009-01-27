@@ -116,9 +116,9 @@
 #end
 
 #macro(asset_display $asset $mode)
-#set($assetFiletype = $asset.getValue("file_type"))
-#set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="view-$!assetCategory mode-$mode">
+#set($mainAssetFiletype = $asset.getValue("file_type"))
+#set($mainAssetCategory = $asset.getCategory())
+<div id="asset-wrapper" class="view-$!mainAssetCategory mode-$mode">
     #asset_findmode()
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
@@ -127,19 +127,19 @@
     #if(!$isPrint)
     #asset_tabs($asset "view")
     #end
-    <div id="asset-wrapper-inner" class="filetype-$!assetFiletype">
+    <div id="asset-wrapper-inner" class="filetype-$!mainAssetFiletype">
         #if(!$isPrint&&$mode!="edit")
         #asset_links($asset)
         #end
         #if(!$asset.hasAccessLevel("view"))
         $msg.get("asset.contentNotAllowed")
         #else
-        #if($assetCategory!="collection")
-        <div class="sub-asset-wrapper category-$assetCategory">
-          <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
+        #if($mainAssetCategory!="collection")
+        <div class="sub-asset-wrapper category-$mainAssetCategory">
+          <div class="sub-asset-wrapper-inner filetype-$mainAssetFiletype">
         #end
         $asset.displayAsset($mode)
-        #if($assetCategory!="collection")
+        #if($mainAssetCategory!="collection")
           </div>
         </div>
         #end
