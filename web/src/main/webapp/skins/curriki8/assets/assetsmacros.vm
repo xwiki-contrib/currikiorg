@@ -251,7 +251,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_file"))
 #end
 <p><strong>$msgtext</strong>
-    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" src="images/px.gif" alt="" border="0" height="16" width="16">
+    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
 </p>
 #foreach($attachment in $asset.getAttachmentList())
 #asset_attachment($asset $attachment)
@@ -421,60 +421,60 @@ $asset.use("CurrikiCode.AssetClass")
     <ul>
         $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-title" class="field-important input-text">
-            <span><em>!</em><label for="edit-title">$msg.get("rve.information.title.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.title.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><em>!</em><label for="edit-title">$msg.get("rve.information.title.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.title.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.title.edit_txt")</p>
             <input id="edit-title" name="title" value="$xwiki.getFormEncoded($asset.getTitle())" type="text">
         </li>
         <li id="info-edit-description" class="field-important input-textarea">
-            <span><em>!</em><label for="edit-description">$msg.get("rve.information.description.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.description.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><em>!</em><label for="edit-description">$msg.get("rve.information.description.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.description.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.description.edit_txt")</p>
             $asset.display("description", "edit", true)
         </li>
         <li id="info-edit-subject" class="field-important input-tree">
-            <span><em>!</em><label for="edit-subject">$msg.get("rve.information.subject.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.subject.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><em>!</em><label for="edit-subject">$msg.get("rve.information.subject.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.subject.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.subject.edit_txt")</p>
             $asset.display("fw_items", "edit", true)
         </li>
         <li id="info-edit-education" class="field-important input-tree">
-            <span><em>!</em><label for="edit-subject">$msg.get("rve.information.edlevel.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.edlevel.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><em>!</em><label for="edit-subject">$msg.get("rve.information.edlevel.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.edlevel.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.edlevel.edit_txt")</p>
             $asset.display("educational_level", "edit", true)
         </li>
         <li id="info-edit-ict" class="field-important input-select">
-            <span><em>!</em><label for="edit-ict">$msg.get("rve.information.ict.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.ict.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><em>!</em><label for="edit-ict">$msg.get("rve.information.ict.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.ict.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.ict.edit_txt")</p>
             $asset.display("instructional_component", "edit", true)
         </li>
 
         <li id="info-edit-tags" class="input-text">
-            <span><label for="edit-tags">$msg.get("rve.information.keywords.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.keywords.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><label for="edit-tags">$msg.get("rve.information.keywords.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.keywords.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("keywords", "edit", true)
         </li>
 
         <li id="info-edit-language" class="input-select">
-            <span><label for="edit-language">$msg.get("rve.information.language.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.language.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><label for="edit-language">$msg.get("rve.information.language.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.language.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("language", "edit", true)
         </li>
 
         <li id="info-edit-hide" class="input-checkbox">
-            <span><label for="edit-hide">$msg.get("rve.information.hidefromsearch.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.hidefromsearch.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><label for="edit-hide">$msg.get("rve.information.hidefromsearch.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.hidefromsearch.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
             $asset.display("hidden_from_search", "edit", true) $msg.get("rve.information.hidefromsearch.edit_instruction")
         </li>
 $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-rights" class="field-important input-text">
-            <span><em>!</em><label for="edit-rights">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><em>!</em><label for="edit-rights">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("rightsHolder", "edit", true)
         </li>
 $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-access" class="input-radio">
-            <span><label for="edit-access">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><label for="edit-access">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.accessprivileges.edit_txt")</p>
             $asset.display("rights", "edit", true)
         </li>
 $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-license" class="input-select">
-            <span><label for="edit-license">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="images/px.gif" alt="" /></span>
+            <span><label for="edit-license">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
        </li>
@@ -621,7 +621,7 @@ $response.sendRedirect($request.xredirect)
 #macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent)
 <li class="input-${fieldtype}">
     <span><input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
-        <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="images/px.gif" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
+        <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
     <div  id="${fieldname}">
     #if($fieldcontent!="")
     $fieldcontent
