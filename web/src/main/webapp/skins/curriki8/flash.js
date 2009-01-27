@@ -28,16 +28,16 @@ function playFlash(flashItem, button){
   var mObj = getFlashMovieObject("flashItem"+flashItem);
   mObj.Play();
   button.onclick=function(){stopFlash(flashItem, button);};
-  button.title="$msg.get('mimetype.flashdisplay.pause')";
-  button.innerHTML="$msg.get('mimetype.flashdisplay.pause')";
-  button.className="flash-control-button flash-control-button-pause";
+  button.title="$msg.get('rve.content.view.pause_button')";
+  button.innerHTML="$msg.get('rve.content.view.pause_button')";
+  button.className="button-link button-link-pause";
 }
 
 function stopFlash(flashItem, button){
   var mObj = getFlashMovieObject("flashItem"+flashItem);
   mObj.StopPlay();
   button.onclick=function(){playFlash(flashItem, button);};
-  button.title="$msg.get('mimetype.flashdisplay.play')";
-  button.innerHTML="$msg.get('mimetype.flashdisplay.play')";
-  button.className="flash-control-button flash-control-button-play";
+  button.title="$msg.get('rve.content.view.play_button')";
+  button.innerHTML="$msg.get('rve.content.view.play_button')";
+  button.className="button-link button-link-play";
 }
