@@ -17,9 +17,9 @@
     <img class="tooltip" width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" ext:qtip="$msg.get("rve.content.view.link.instruction_tooltip")"/>
 </p>
 <p class="text-link">
-<a href="$url">#breakLinkText($url, 90)</a>
+<a href="$url" onclick="Curriki.logView('/Download/link/$url');" target="_blank" >#breakLinkText($url, 90)</a>
 </p>
-<a class="button-link button-link-download" href="$url" onclick="Curriki.logView('/Download/link/$url'); window.open('$url');return false;" title="$msg.get("rve.content.view.go_button")">$msg.get("rve.content.view.go_button")</a>
+<a class="button-link button-link-download" href="$url" target="_blank" onclick="Curriki.logView('/Download/link/$url');" title="$msg.get("rve.content.view.go_button")">$msg.get("rve.content.view.go_button")</a>
 </div>
 </div>
 #asset_displaycontentfooter()
