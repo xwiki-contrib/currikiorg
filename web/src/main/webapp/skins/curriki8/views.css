@@ -43,7 +43,7 @@ p {margin: 1em 0;}
 
 #asset-wrapper { 
 	padding: 8px 0;
- 	width: auto;
+ /**	width: auto;**/ width: 100%;
 }
 
 
@@ -164,8 +164,9 @@ ul#asset-attribution {
 	font-size: 11px;
 	margin-bottom: 10px;
 	padding: 0;
-	width: 300px;
+	width: 360px;
 }
+
 
 ul#asset-attribution li {
 	margin: 0;
@@ -205,8 +206,8 @@ ul#asset-links li.last-item {
 
 ul#asset-tabs {
 	clear: both;
-	display: inline;
-	float: left;
+/**	display: inline;
+	float: left;**/
 	margin: 0 0 0 10px;
 	padding: 0;
  	width: 80%; 
@@ -285,10 +286,12 @@ ul#asset-tabs li a:hover {
 
 #asset-wrapper-inner {
 	background: #FFFFCF;
-	border: 1px solid #000;
- 	float: left;  
+ /**	float: left;  **/
 	padding-bottom: 10px;
-/**	width: 100%; **/
+	border: 1px solid #000;
+ /**	width: 100%;  **/
+ 	clear: both; 
+ 
 }
 
 .mode-edit #asset-wrapper-inner, .mode-info-edit #asset-wrapper-inner {
@@ -512,16 +515,16 @@ embed#flashItem1 {
  
  
 /** AVATAR CONSTRAINTS **/
-
+/**
 #asset-avatar a {
 	display: block;
 	float: left;
 	margin-bottom: 5px;
 	overflow: hidden;
-}
+}**/
 
-#asset-avatar a {
-	max-width:300px;
+#asset-avatar img {
+	max-width:200px;
 	max-height:100px;
 }
 
@@ -918,3 +921,6 @@ li.input-select select {
 	padding: 0 0 0 0px;
 	
 }
+
+
+
