@@ -65,6 +65,14 @@ public class Asset extends CurrikiDocument {
         return getEscapedForJS(getFullName());
     }
 
+    public String display(String fieldname, String mode, boolean nopre) {
+        String result = super.display(fieldname, mode);
+        if (nopre) {
+            return result.replaceAll("\\{/?pre\\}","");
+        } else
+            return result;
+    }
+
     protected String getEscapedForJS(String value) {
        return value.replaceAll("\\\\", "\\\\").replaceAll("'", "\\'");
     }
