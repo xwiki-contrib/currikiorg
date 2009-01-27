@@ -90,30 +90,28 @@
 #macro(asset_links $asset)
 <ul id="asset-links">
  #set($assetHasNominate = $asset.canBeNominatedOrReviewed())
- #if($assetHasNominate)
+ #if($assetHasNominate&&!$isguest)
 <li id="tab-nominate"><a href="javascript:void()" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("resource.view.nominate.icon.rollover")">$msg.get("resource.view.nominate")</a></li>
  #end
- #if($asset.category=="collection")
+ #if($asset.category=="collection")&&$asset.hasAccessLevel("edit")) ##{
  ## Build Up
- #if($asset.hasAccessLevel("edit")) ##{
-  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
 <li>
    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
 </li>
-  #end ##}
- #end ##}
 ## Organize
 <li>
    Organize
 </li>
-    #end
+ #end
 ## Add
 ##if($g_userHasCollections)##{
+#if(!$isguest)
 <li>
    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
 </li>
+    #end
 ##end##}
-#if($asset.hasAccessLevel("edit"))
+#if($asset.hasAccessLevel("edit")&&$asset.category!="collection"))
     <li>
        <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('resource.view.edit_tooltip')">$msg.get('resource.view.edit')</a>
     </li>
