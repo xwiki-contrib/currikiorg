@@ -13,13 +13,13 @@
  #set($pictWidth = "450")
 #end
 #set($caption = "")
-#set($caption = $!asset.caption_desc)
+#set($caption = $!asset.caption_text)
 #if($!caption == "")
  #set($caption = $!asset.description)
 #end
 <div class="asset-display-media">
     <div class="asset-display-media-inner">
-        <a href="$url"><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!asset.alt_desc" /></a>
+        <a href="$url"><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!asset.alt_text" alt="$!asset.alt_text" /></a>
         <p>$caption</p>
     </div>
 </div>
