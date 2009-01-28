@@ -20,9 +20,9 @@
 #set($attach = $asset.attachmentList.get(0).filename)
 #set($tmpActiveClass = $asset.getActiveClass())
 $asset.use("CurrikiCode.ArchiveAssetClass")
-<a class="button-link button-link-hide" href="javascript:alert('not implemented')" title="$msg.get("rve.content.view.hide_button")">$msg.get("rve.content.view.hide_button")</a>
+<button class="button-link button-link-hide" href="javascript:alert('not implemented')" title="$msg.get("rve.content.view.hide_button")">$msg.get("rve.content.view.hide_button")</button>
 #if ($asset.getValue("startfile"))
-  <a class="button-link button-link-start" href="#" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</a>
+  <button class="button-link button-link-start" href="#" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
 #end
 <div style="margin: 5px 0pt;">
 <div id="treeview${treeviewid}">
