@@ -116,7 +116,7 @@ Organize.init = function(){
 								var checkFolders = function(){
 									var saveFolders = function(){
 										Organize.logCompleted();
-										Curriki.hideLoading();
+										Curriki.hideLoading(true);
 										Ext.getCmp('OrganizeDialogueWindow').close();
 										window.location.reload();
 									}
@@ -171,7 +171,7 @@ Organize.init = function(){
 										Curriki.assets.GetMetadata(n.attributes.pageName, function(o){
 											if (o.revision != n.attributes.revision) {
 												// Doesn't match
-												Curriki.hideLoading();
+												Curriki.hideLoading(true);
 												alert(_('organize.error.concurrency_text'));
 												this.close();
 												Ext.getCmp('OrganizeDialogueWindow').close();
@@ -188,7 +188,7 @@ Organize.init = function(){
 
 								var afterCheck = checkFolders;
 								checkFolders = function() {
-										Curriki.showLoading();
+										Curriki.showLoading(null, true);
 										afterCheck();
 								};
 

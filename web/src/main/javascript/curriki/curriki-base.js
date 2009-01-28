@@ -57,7 +57,7 @@ console.log('requestcomplete', conn, response, options);
 	});
     Ext.Ajax.on('requestexception', function(conn, response, options){
 console.log('requestexception', conn, response, options);
-		Curriki.hideLoading();
+		Curriki.hideLoading(true);
 	});
 });
 
@@ -66,8 +66,10 @@ Curriki.id = function(prefix){
 	return Ext.id('', prefix+':');
 };
 
-Curriki.showLoading = function(msg){
-	Curriki.loadingCount++;
+Curriki.showLoading = function(msg, multi){
+	if (multi === true) {
+		Curriki.loadingCount++;
+	}
 	if (!Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
@@ -76,11 +78,15 @@ Curriki.showLoading = function(msg){
 	}
 }
 
-Curriki.hideLoading = function(){
-	Curriki.loadingCount--;
+Curriki.hideLoading = function(multi){
+	if (multi === true) {
+		Curriki.loadingCount--;
+	}
 	if (Curriki.loadingCount == 0 && !Ext.isEmpty(Curriki.loadingMask)){
 		Curriki.loadingMask.hide();
 		Curriki.loadingMask.disable();
+	} else if (Curriki.loadingCount < 0) {
+		Curriki.loadingCount = 0;
 	}
 }
 
