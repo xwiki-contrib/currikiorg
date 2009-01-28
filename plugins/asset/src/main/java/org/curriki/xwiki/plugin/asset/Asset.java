@@ -340,6 +340,7 @@ public class Asset extends CurrikiDocument {
         BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS);
         String rights;
 
+        LOG.info("applyRightsPolicy:  passed"+right);
         if (right == null) {
             // Use existing rights value
             rights = assetObj.getStringValue(Constants.ASSET_CLASS_RIGHT);
@@ -353,6 +354,7 @@ public class Asset extends CurrikiDocument {
             || !(rights.equals(Constants.ASSET_CLASS_RIGHT_PUBLIC)
                  || rights.equals(Constants.ASSET_CLASS_RIGHT_MEMBERS)
                  || rights.equals(Constants.ASSET_CLASS_RIGHT_PRIVATE))) {
+            LOG.warn("Rights is being defaulted.  Got: "+rights);
             rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
         }
