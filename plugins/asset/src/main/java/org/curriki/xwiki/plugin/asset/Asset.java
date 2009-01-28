@@ -1070,10 +1070,12 @@ public class Asset extends CurrikiDocument {
         XWikiDocument assetDoc = getDoc();
         BaseObject obj = assetDoc.getObject(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS);
 
-        Integer reviewpending = obj.getIntValue("reviewpending");
-		if(reviewpending!=null && reviewpending.equals(1)){
-			obj.setIntValue("reviewpending", 0);
-		}
+        if (obj != null) {
+            Integer reviewpending = obj.getIntValue("reviewpending");
+            if(reviewpending!=null && reviewpending.equals(1)){
+                obj.setIntValue("reviewpending", 0);
+            }
+        }
 
     }
 
