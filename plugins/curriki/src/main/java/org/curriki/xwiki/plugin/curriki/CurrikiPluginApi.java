@@ -102,6 +102,14 @@ public class CurrikiPluginApi extends Api {
         return plugin.fetchAsset(assetName, context);
     }
 
+    public Asset fetchAssetOrNull(String assetName) {
+        try {
+            return plugin.fetchAsset(assetName, context);
+        } catch (XWikiException e) {
+            return null;
+        }
+    }
+
     public Asset fetchAssetAs(String assetName, Class<? extends Asset> classType) throws XWikiException {
         return plugin.fetchAssetAs(assetName, classType, context);
     }
