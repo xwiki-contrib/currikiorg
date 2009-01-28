@@ -209,6 +209,8 @@ public class SubassetsResource extends BaseResource {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a folder.");
         }
 
-        getResponse().redirectSeeOther(getRequest().getResourceRef());
+        // IE7 has a bug where a redirect still tries to use PUT
+        //getResponse().redirectSeeOther(getRequest().getResourceRef());
+        getResponse().setEntity(represent(getPreferredVariant()));
     }
 }
