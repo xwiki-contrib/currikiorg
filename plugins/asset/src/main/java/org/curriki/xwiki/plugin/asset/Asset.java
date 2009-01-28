@@ -251,8 +251,7 @@ public class Asset extends CurrikiDocument {
         // Clear rights objects otherwise this will trigger a remove object although these have never been saved
         assetDoc.getDoc().setObjects("XWiki.XWikiRights", new Vector<BaseObject>());
 
-        String rights = (String) assetDoc.getObject(Constants.ASSET_CLASS).get(Constants.ASSET_CLASS_RIGHT);
-        assetDoc.applyRightsPolicy(rights);
+        assetDoc.applyRightsPolicy();
 
         //assetDoc.saveDocument(context.getMessageTool().get("curriki.comment.copiedsourceasset"), true);
         context.getWiki().saveDocument(assetDoc.getDoc(), context.getMessageTool().get("curriki.comment.copiedsourceasset"), true, context);
@@ -272,9 +271,7 @@ public class Asset extends CurrikiDocument {
         getDoc().setCustomClass(getClass().getName());
         setDefaultContent();
 
-        String rights = (String) getObject(Constants.ASSET_CLASS).get(Constants.ASSET_CLASS_RIGHT);
-
-        applyRightsPolicy(rights);
+        applyRightsPolicy();
     }
 
     protected void setDefaultContent() throws XWikiException {
@@ -340,11 +337,12 @@ public class Asset extends CurrikiDocument {
         BaseObject assetObj = assetDoc.getObject(Constants.ASSET_CLASS);
         String rights;
 
-        LOG.info("applyRightsPolicy:  passed"+right);
         if (right == null) {
             // Use existing rights value
             rights = assetObj.getStringValue(Constants.ASSET_CLASS_RIGHT);
+            LOG.debug("applyRightsPolicy:  retrieved: '"+right+"'");
         } else {
+            LOG.debug("applyRightsPolicy:  passed: '"+right+"'");
             rights = right;
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, right);
         }
@@ -354,7 +352,7 @@ public class Asset extends CurrikiDocument {
             || !(rights.equals(Constants.ASSET_CLASS_RIGHT_PUBLIC)
                  || rights.equals(Constants.ASSET_CLASS_RIGHT_MEMBERS)
                  || rights.equals(Constants.ASSET_CLASS_RIGHT_PRIVATE))) {
-            LOG.warn("Rights is being defaulted.  Got: "+rights);
+            LOG.warn("Rights is being defaulted.  Got: '"+rights+"'");
             rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
         }
