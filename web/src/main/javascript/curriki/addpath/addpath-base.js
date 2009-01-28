@@ -2581,7 +2581,7 @@ console.log('Not signed in:');
 					break;
 				case 'D2':
 					// D.2   - Make a Lesson Plan from a Template
-					Curriki.current.flow = 'D';
+					Curriki.current.flow = 'R';
 					AddPath.SourceSelected('template', {});
 					return;
 					break;
@@ -2627,7 +2627,7 @@ console.log('Starting path:', Curriki.current.flow);
 
 				// CURRIKI-2423
 				// Add Template (choice already made)
-				case 'R': // "Add From Template" in About Creating page
+				case 'R': // "Add From Template" in About Contributing page
 					AddPath.SourceSelected('template', {});
 					return;
 					break;

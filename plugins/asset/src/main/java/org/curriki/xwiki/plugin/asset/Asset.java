@@ -199,7 +199,7 @@ public class Asset extends CurrikiDocument {
     }
 
     public static Asset copyTempAsset(String copyOf, XWikiContext context) throws XWikiException {
-        return createTempAsset(copyOf, null, context);
+        return copyTempAsset(copyOf, null, context);
     }
 
     public static Asset copyTempAsset(String copyOf, String publishSpace, XWikiContext context) throws XWikiException {
@@ -1064,11 +1064,15 @@ public class Asset extends CurrikiDocument {
      */
     public void removeFromReviewQueue(){
         // TODO:  Something here caused CURRIKI-3100 making the rest of the metadata not get saved
-        //        Could be the use of "use" as that is not being used elsewhere here
-        use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
-        Integer reviewpending = (Integer)getValue("reviewpending");
+        //        Could be the use of "use" as that is not being used elsewhere here ?
+        //use(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+
+        XWikiDocument assetDoc = getDoc();
+        BaseObject obj = assetDoc.getObject(Constants.ASSET_CURRIKI_REVIEW_STATUS_CLASS);
+
+        Integer reviewpending = obj.getIntValue("reviewpending");
 		if(reviewpending!=null && reviewpending.equals(1)){
-			set("reviewpending", "0");
+			obj.setIntValue("reviewpending", 0);
 		}
 
     }
