@@ -237,7 +237,7 @@ public class Asset extends CurrikiDocument {
         // Rights Holder should be by default the pretty name of the user added with the current rights holder (only if not already in the list)
         String newRightsHolder = context.getWiki().getLocalUserName(context.getUser(), null, false, context);
         String origRightsHolder = copyDoc.getDoc().getStringValue(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER);
-	if (!orgRightsHolder.matches("\\b"+newRightsHolder+"\\b")) {
+	if (!origRightsHolder.matches("\\b"+newRightsHolder+"\\b")) {
 		newRightsHolder += ", " + origRightsHolder;
 		newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, newRightsHolder);
 	} else {
