@@ -317,31 +317,37 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                         <p>$asset.display("description")</p>
                     </li>
 
-                    <li id="info-basic-subject">
-                        <strong>$msg.get("rve.information.subject_title")</strong>
-                        <div>
-                            <ul>
-                                #set($subjects = $!asset.getValue("fw_items"))
-                                <ul>
-                                    #foreach($subject in $subjects)
-                                    <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
-                                    #end
-                                </ul>
+                    <li id="info-basic-subject-education">
+                        <table cellspacing="5">
+                            <tr>
+                                <th>
+                                    <strong>$msg.get("rve.information.subject_title")</strong>
+                                </th>
+                                <th>
+                                    <strong>$msg.get("rve.information.edlevel_title")</strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ul>
+                                        #set($subjects = $!asset.getValue("fw_items"))
+                                        #foreach($subject in $subjects)
+                                        <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
+                                        #end
+                                    </ul>
+                                </td>
+                                <td>
+                                    #set($educlevels = $!asset.getValue("educational_level"))
+                                    <ul>
+                                        #foreach($educlevel in $educlevels)
+                                        <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
+                                        #end
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
 
-                            </ul>
-                        </div>
-                    </li>
-                    <li id="info-basic-education">
-                        <strong>$msg.get("rve.information.edlevel_title")</strong>
-                        <div>
-                            #set($educlevels = $!asset.getValue("educational_level"))
-                            <ul>
-                                #foreach($educlevel in $educlevels)
-                                <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
-                                #end
-                            </ul>
-                        </div>
-                    </li>
                     <li id="info-basic-ict">
                         <strong>$msg.get("rve.information.ict_title")</strong>
                         #set($ict = $!asset.getValue("instructional_component"))
