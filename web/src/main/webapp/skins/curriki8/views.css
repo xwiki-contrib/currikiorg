@@ -897,7 +897,7 @@ li.comment-text {
 .mode-version td {
 	padding: 0 10px;
 }
-
+/**
 li#info-basic-subject, li#info-basic-education, li#info-edit-subject, li#info-edit-education {
 	float: left;
 	width: 49%;
@@ -916,13 +916,28 @@ li#info-basic-subject div, li#info-basic-education div {
 
 li#info-basic-subject, li#info-edit-subject {
 	margin-right: 1%;
+}**/
+
+#info-basic-subject-education th {
+	font-weight: bold;
+}
+#info-basic-subject-education td {
+	border: 1px solid #ccc;
+	padding: 5px;
+	vertical-align: top;
+	width: 45%;
+}
+
+#info-basic-subject-education table {
+	border-collapse:separate;
+	width: 100%;
 }
 
 li#info-basic-ict, li#info-basic-tags, li#info-edit-ict {
 	clear: left;
 }
 
-li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a.icon-link, li.crs-rating-crs3-star, li.crs-rating-crs2-star, li.crs-rating-crs1-star, li.crs-rating-crsp-star{
+li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a.icon-link, li.crs-rating-crs3-star, li.crs-rating-crs2-star, li.crs-rating-crs1-star, li.crs-rating-crsp-star, ul#popup-ict li{
 	background-image: url(images/sprite_crs_ict_group.gif);
 	background-repeat: no-repeat;
 }
@@ -932,27 +947,27 @@ li#info-basic-ict li {
 	padding: 10px 0 10px 40px;
 }
 
-li#info-basic-ict li#ict-activity {
+li#info-basic-ict li#ict-activity, ul#popup-ict li#ict-activity {
 	background-position: 0 -3330px;
 }
 
-li#info-basic-ict li#ict-resource {
+li#info-basic-ict li#ict-resource, ul#popup-ict li#ict-resource {
 	background-position: 0 -2880px;
 }
 
-li#info-basic-ict li#ict-book {
+li#info-basic-ict li#ict-book, ul#popup-ict li#ict-book {
 	background-position: 0 -2970px;
 }
 
-li#info-basic-ict li#ict-curriculum {
+li#info-basic-ict li#ict-curriculum, ul#popup-ict li#ict-curriculum {
 	background-position: 0 -3060px;
 }
 
-li#info-basic-ict li#ict-other {
+li#info-basic-ict li#ict-other, ul#popup-ict li#ict-other {
 	background-position: 0 -3150px;
 }
 
-li#info-basic-ict li#ict-multiple {
+li#info-basic-ict li#ict-multiple, ul#popup-ict li#ict-multiple {
 	background-position: 0 -3240px;
 }
 
@@ -1148,5 +1163,23 @@ width:205px;
 display:none;
 }
 
+/** ROLLOVER DIV **/
 
+.popup { 
+	background:#FFFECE;
+	border:1px solid #FFBB00;
+	float:left;
+	overflow:visible;
+	padding:5px 5px 5px 10px;
+	position:absolute;
+	z-index:10000;
+	width: 300px;
+}
 
+.popup strong {
+	display: block;
+}
+
+.popup ul {
+	margin-bottom: 1em;
+}
