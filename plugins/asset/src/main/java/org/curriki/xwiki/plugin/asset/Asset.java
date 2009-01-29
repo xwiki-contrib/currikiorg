@@ -233,12 +233,16 @@ public class Asset extends CurrikiDocument {
         if (newLicenceObj==null) {
             newLicenceObj = assetDoc.getDoc().newObject(Constants.ASSET_LICENCE_CLASS, context);
         }
-        // Rights Holder should be by default the pretty name of the user added with the current rights holder
+
+        // Rights Holder should be by default the pretty name of the user added with the current rights holder (only if not already in the list)
         String newRightsHolder = context.getWiki().getLocalUserName(context.getUser(), null, false, context);
         String origRightsHolder = copyDoc.getDoc().getStringValue(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER);
-        if (!newRightsHolder.equals(origRightsHolder))
-         newRightsHolder += ", " + origRightsHolder;
-        newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, newRightsHolder);
+	if (!orgRightsHolder.matches("\\b"+newRightsHolder+"\\b")) {
+		newRightsHolder += ", " + origRightsHolder;
+		newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, newRightsHolder);
+	} else {
+		newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, origRightsHolder);
+	}
 
         BaseObject newObjAsset = assetDoc.getDoc().getObject(Constants.ASSET_CLASS);
         if (newObjAsset==null) {
