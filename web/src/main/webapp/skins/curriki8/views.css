@@ -937,12 +937,12 @@ li#info-basic-ict, li#info-basic-tags, li#info-edit-ict {
 	clear: left;
 }
 
-li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a.icon-link, li.crs-rating-crs3-star, li.crs-rating-crs2-star, li.crs-rating-crs1-star, li.crs-rating-crsp-star, ul#popup-ict li{
+li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a.icon-link, li.crs-rating-crs3-star, li.crs-rating-crs2-star, li.crs-rating-crs1-star, li.crs-rating-crsp-star, ul#popup-ict li {
 	background-image: url(images/sprite_crs_ict_group.gif);
 	background-repeat: no-repeat;
 }
 
-li#info-basic-ict li {
+li#info-basic-ict li, ul#popup-ict li {
 	margin: 0;
 	padding: 10px 0 10px 40px;
 }
@@ -1157,10 +1157,8 @@ li.input-select select {
 
 .resource { 
 float:left;
-overflow:hidden;
 padding:0;
 width:205px;
-display:none;
 }
 
 /** ROLLOVER DIV **/
@@ -1173,7 +1171,7 @@ display:none;
 	padding:5px 5px 5px 10px;
 	position:absolute;
 	z-index:10000;
-	width: 300px;
+	width: 430px;
 }
 
 .popup strong {
@@ -1182,4 +1180,61 @@ display:none;
 
 .popup ul {
 	margin-bottom: 1em;
+}
+
+
+/** TOC **/
+
+.resource {
+background-color: #eaeaf4 !important;
+border-left: 1px solid #cccde7 !important;
+border-top: 1px solid #cccde7 !important;
+border-right: 3px solid #d3d3d3 !important;
+border-bottom: 3px solid #d3d3d3 !important;
+display: block !important;
+left: -3px !important;
+top: -2px !important;
+position: relative !important;
+}
+
+.resource ul.x-tree-root-ct {
+overflow: scroll !important;
+overflow-y: hidden !important;
+}
+
+.resource .x-panel-noborder .x-panel-header-noborder {
+width: auto !important;
+}
+
+.resource div.x-panel-body {
+background: #e5e5f1 !important;
+}
+
+.resource .x-panel-header {
+color: #fff !important;
+background: #ff7400 !important;
+font-size: 12px !important;
+line-height: 1em !important;
+text-transform: uppercase !important;
+
+}
+
+
+.resource .x-tree-icon, .resource .x-tree-ec-icon, .resource .x-tree-elbow-line, .resource .x-tree-elbow, .resource .x-tree-elbow-end, .resource .x-tree-elbow-plus, .resource .x-tree-elbow-minus, .resource .x-tree-elbow-end-plus, .resource .x-tree-elbow-end-minus {
+height: 23px !important;
+}
+
+.resource div.toc-selected {
+background: #f2f1bd !important;
+border-bottom: 1px solid #777 !important;
+border-top: 1px solid #777 !important;
+}
+
+.resource .x-tree-node-el {
+line-height: 21px !important;
+}
+
+.resource .x-tree-node-icon, .resource .x-tree-node-leaf .x-tree-node-icon {
+position: relative !important;
+top: 2px !important;
 }
