@@ -301,15 +301,14 @@ $msg.get("mycurriki.macro.access.${access}")
 #if($ict.size() > 1) ## {
 ##Multiple
 #set($icon = $xwiki.getSkinFile("icons/ICTIcon-Multiple.gif"))
-#set($text = $msg.get('search.results.col.ict.multiple'))
+#set($text = $msg.get('CurrikiCode.AssetClass_instructional_component_multiple'))
 #else ## } {
 ##Single
 #set($ict = $ict.get(0))
 #set($icon = "${ict.substring(0,1).toUpperCase()}${ict.substring(1)}")
 #set($icon = $icon.replaceFirst("_.*", ""))
 #set($icon = $xwiki.getSkinFile("icons/ICTIcon-${icon}.gif"))
-#set($text = $ict.replaceFirst("_", "."))
-#set($text = "search.selector.ict.${text}")
+#set($text = "CurrikiCode.AssetClass_instructional_component_${ict}")
 #set($text = $msg.get($text))
 #end ## if not multiple ## }
 <img src="${icon}" ext:qtip="${text}" />
