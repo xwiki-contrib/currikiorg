@@ -369,21 +369,17 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
             <div class="sub-asset-wrapper-inner">
                 <ul>
                     <li id="info-rights-access">
-                        <strong>$msg.get("rve.information.accessprivileges_title")</strong>
-                        $!asset.display("rights")
+                        <strong>$msg.get("rve.information.accessprivileges_title")</strong>$!asset.display("rights")
                     </li>
-                   <li id="info-rights-hidden">
-                        <strong>$msg.get("rve.information.hidefromsearch_title")</strong>
-                        $!asset.display("hidden_from_search")
+                    <li id="info-rights-hidden">
+                        <strong>$msg.get("rve.information.hidefromsearch_title")</strong>$!asset.display("hidden_from_search")
                     </li>
                     $asset.use("CurrikiCode.AssetLicenseClass")
                     <li id="info-rights-holder">
-                        <strong>$msg.get("rve.information.rightsholder_title")</strong>
-                        $!asset.display("rightsHolder")
+                        <strong>$msg.get("rve.information.rightsholder_title")</strong>$!asset.display("rightsHolder")
                     </li>
                     <li id="info-rights-license">
-                        <strong>$msg.get("rve.information.licensedeed_title")</strong>
-                        $!asset.display("licenseType")
+                        <strong>$msg.get("rve.information.licensedeed_title")</strong>$!asset.display("licenseType")
                     </li>
                 </ul>
             </div>
