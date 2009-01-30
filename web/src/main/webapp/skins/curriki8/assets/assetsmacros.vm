@@ -122,15 +122,22 @@
 #set($mainAssetCategory = $asset.getCategory())
 <div id="asset-wrapper" class="view-$!mainAssetCategory mode-$mode">
     #asset_findmode()
-    #asset_resourcefunctions($asset)
-    #asset_icontitle($asset)
-    #asset_attribution($asset)
-    #asset_rating($asset)
-    #if(!$isPrint)
-    #asset_tabs($asset "view")
+    #if(!$isEmbed)
+     #asset_resourcefunctions($asset)
+     #asset_icontitle($asset)
+     #asset_attribution($asset)
+     #asset_rating($asset)
+     #if(!$isPrint)
+      #asset_tabs($asset "view")
+     #end
     #end
     <div id="asset-wrapper-inner" class="filetype-$!mainAssetFiletype">
-        #if(!$isPrint&&$mode!="edit")
+        #if($isEmbed)
+         #asset_icontitle($asset)
+         #asset_attribution($asset)
+         <a id="powered-by-curriki">$msg.get("mode.embed.powered_txt")</a>
+        #end
+        #if(!$isPrint&&!$isEmbed&&$mode!="edit")
         #asset_links($asset)
         #end
         #if(!$asset.hasAccessLevel("view"))
@@ -145,6 +152,9 @@
           </div>
         </div>
         #end
+        #end
+        #if($isEmbed)
+        <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
         #end
     </div> ##asset-wrapper-inner
 </div> ##asset-wrapper
@@ -634,37 +644,6 @@ $response.sendRedirect($request.xredirect)
 #end
 
 
-## previous macros
-##
-##
-#macro(asset_displaylinks $asset)
- #checkForCollections()
- # Favorite
- #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
-   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
-  #sep()
- #end ##}
-## Add
- #if($g_userHasCollections)##{
-   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
-   #sep()
- #end##}
-## Build Up
- #if($asset.hasAccessLevel("edit")) ##{
-  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
-   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
-   #sep()
-  #end ##}
- #end ##}
- #if($asset.hasAccessLevel("view"))
-  <a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=print")" onclick="window.open('$asset.getURL("view", "bc=$!{request.bc}&viewer=print")');return false;">$msg.get("caption.print")</a>
- #end
- #if($asset.hasAccessLevel("edit"))
-  #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
- #end
-#end
-
-
 #**
   * Finds the title of a curriki document
   *
@@ -708,6 +687,62 @@ $response.sendRedirect($request.xredirect)
  #end
  #end
 #end
+
+
+
+#macro(asset_findmode)
+#set($mode = "")
+#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("print"))
+#set($mode = "print")
+#end
+#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("embed"))
+#set($mode = "embed")
+#end
+#if($request.rev)
+#set($mode = "rev")
+#end
+#if($mode=="print")
+#set($isPrint = true)
+#else
+#set($isPrint = false)
+#end
+#if($mode=="embed")
+#set($isEmbed = true)
+#else
+#set($isEmbed = false)
+#end
+#end
+
+## previous macros
+##
+##
+#macro(asset_displaylinks $asset)
+ #checkForCollections()
+ # Favorite
+ #if(($asset.hasAccessLevel("view"))&&!$isguest) ##{
+   <a onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.favorite_tooltip')">$msg.get('resource.view.favorite')</a>
+  #sep()
+ #end ##}
+## Add
+ #if($g_userHasCollections)##{
+   <a onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.add_tooltip')">$msg.get('resource.view.add')</a>
+   #sep()
+ #end##}
+## Build Up
+ #if($asset.hasAccessLevel("edit")) ##{
+  #if($asset.getObject("CurrikiCode.CompositeAssetClass")) ##{
+   <a onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('resource.view.buildup_tooltip')">$msg.get('resource.view.buildup')</a>
+   #sep()
+  #end ##}
+ #end ##}
+ #if($asset.hasAccessLevel("view"))
+  <a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=print")" onclick="window.open('$asset.getURL("view", "bc=$!{request.bc}&viewer=print")');return false;">$msg.get("caption.print")</a>
+ #end
+ #if($asset.hasAccessLevel("edit"))
+  #sep() <a href="#gwtEditUrl(${asset.fullName})" onclick="window.open('#gwtEditUrl(${asset.fullName})');return false;">$msg.get("caption.edit")</a>
+ #end
+#end
+
 
 
 
@@ -1072,28 +1107,6 @@ $msg.get("asset.externallink")
 
 #end
 ##
-
-
-#macro(asset_findmode)
-#set($mode = "")
-#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("print"))
-#set($mode = "print")
-#end
-#if($request.getParameter("xpage") && $request.getParameter("xpage").equals("assetpreview"))
-#set($mode = "preview")
-#end
-#if($request.getParameter("xpage") && $request.getParameter("xpage").equals("help"))
-#set($mode = "help")
-#end
-#if($request.rev)
-#set($mode = "rev")
-#end
-#if($mode!="")
-#set($isPrint = true)
-#else
-#set($isPrint = false)
-#end
-#end
 
 #macro(asset_display_old $currDoc)
 #asset_findmode()

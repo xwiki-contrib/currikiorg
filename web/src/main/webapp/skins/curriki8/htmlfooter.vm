@@ -2,8 +2,10 @@
   * HTML Footer: this will close the open tags in htmlheader.vm
   * @author Curriki dev team
   *#
+#if($request.viewer!="embed")
     </div> ##currikimaincontainer
   </div> ## dropshadow
+#end
 #if("$!footerJScript" != "")
 <div id="footerjs" style="display: none;">$footerJScript</div>
 #end

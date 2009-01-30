@@ -8,9 +8,10 @@
 <!-- logo -->
 ## TODO: Add translation for title and alt
 #set($altinfo = $msg.get("header.altinfo"))
+#set($logourl = $xwiki.getSkinFile("images/curriki-logo.gif"))
 <div id="header-logo"> ##{
   <a href="$xwiki.getURL("Main.WebHome", "view")" title="$altinfo">
-    <img src="$xwiki.getSkinFile("logo.gif")" title="$altinfo" alt="$altinfo" />
+    <img src="$logourl" title="$altinfo" alt="$altinfo" />
   </a>
 </div> ##}
 

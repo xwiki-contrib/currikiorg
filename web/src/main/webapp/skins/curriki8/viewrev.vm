@@ -3,10 +3,11 @@
   *  This is used for Assets and for Documentation pages in groups
   *  Also used by admins for other pages
   *#
-#set($mode="viewrev")
-#set($linkurl = $doc.getURL("view"))
+#asset_findtitle($doc)
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#template("htmlheader.vm")
 #template("printheader.vm")
-<div id="printcontainer">
 #template("contentview.vm")
-<div class="clearfloats"></div>
-</div>## printcontainer
+#template("footer.vm")
+#template("htmlfooter.vm")
