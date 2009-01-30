@@ -182,9 +182,6 @@ public class SubassetsResource extends BaseResource {
         JSONArray want;
         try {
             want = json.getJSONArray("wanted");
-            if (want.isEmpty()){
-                throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
-            }
         } catch (JSONException e) {
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
         }
