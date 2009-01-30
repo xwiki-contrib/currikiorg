@@ -104,7 +104,7 @@
     #end
     ## Add
 ##if($g_userHasCollections)##{
-<li #if((!$asset.hasAccessLevel("edit"))||($asset.category=="collection")) #end >
+<li #if((!$asset.hasAccessLevel("edit"))||($asset.category=="collection"))  class="last-item" #end >
     <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.add_tooltip')">$msg.get('rve.content.add_link')</a>
 </li>
 ##end##}
