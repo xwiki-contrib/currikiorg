@@ -1,5 +1,5 @@
 #if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
+#asset_collectionemptyornorights()
 #else
  #set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
  #set($assetList = $xwiki.arrayList)
@@ -16,6 +16,7 @@
    #set($ok = $assetList.set($position.intValue(), $assetPage))
   #end
  #end ## foreach
+ #set($counter = 0)
  #foreach($assetPage in $assetList)
   #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
    ## Do nothing <hr />
@@ -27,6 +28,7 @@
     ## We are not showing protected assets
     ## $msg.get("asset.contentNotAllowed")
    #else
+    #set($counter = $counter + 1)
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
      #if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
 <div class="sub-asset-wrapper category-collection">
@@ -53,4 +55,7 @@
     #end ## existing or viewable asset
    #end ## not empty or pagebreak
   #end ## foreach
+ #if($counter==0)
+#asset_collectionemptyornorights()
  #end
+#end

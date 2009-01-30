@@ -717,6 +717,24 @@ $response.sendRedirect($request.xredirect)
 #end
 #end
 
+
+#macro(asset_collectionemptyornorights)
+<div class="sub-asset-wrapper">
+<div class="sub-asset-wrapper-inner">
+<div class="asset-display-text">
+<div class="asset-display-text-inner">
+#if($isguest)
+    $msg.get("rve.content.empty.notloggedin")
+#else
+    $msg.get("rve.content.empty.loggedin")
+#end
+</div>
+</div>
+</div>
+</div>
+#end
+
+
 ## previous macros
 ##
 ##
