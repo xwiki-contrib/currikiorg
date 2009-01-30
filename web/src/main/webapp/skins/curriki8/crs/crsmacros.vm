@@ -18,11 +18,14 @@
 ## asset is in review pending status. we override the text
 #set($crsText = $msg.get("curriki.crs.reviewpending"))
 #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#set($crsTarget = "")
+#set($crsIconTarget = "")
 #elseif((!$status)||($status=="100")||($status==""))
 ## no crs rating has been set
 #if($isguest)
 #set($crsText = $msg.get("curriki.crs.reviewbackground"))
 #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#set($crsTarget = "target='_blank'")
 #else
 #set($crsText = $msg.get("curriki.crs.reviewnominate"))
 #set($crsTextUrl = "javascript:Curriki.module.nominate.nominateResource({assetName:'$asset.getJSFullName()', assetTitle:'$asset.getJSTitle()'});")
@@ -33,14 +36,19 @@
 #end
 #if((!$status)||($status=="100")||($status==""))
 #set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#set($crsIconTarget = "target='_blank'")
 #set($crsClass = "crs-rating-unrated")
+#elseif($status=="200")
+#set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
+#set($crsIconTarget = "target='_blank'")
+#set($crsClass = "crs-rating-crsp")
 #else
 #set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
 #set($crsClass = "crs-rating-crs${status.toLowerCase()}")
 #end
 <div id="asset-rating">
-    <a class="text-link" href="crsTextUrl">$crsText</a>
-    <a class="icon-link "$crsClass" href="$crsIconUrl"></a>
+    <a class="text-link" href="crsTextUrl" $crsTarget >$crsText</a>
+    <a class="icon-link $crsClass" href="$crsIconUrl" $crsIconTarget ></a>
 </div>
 #end
 
