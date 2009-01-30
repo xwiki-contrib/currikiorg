@@ -93,24 +93,24 @@
     #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
     ## Build Up
 <li>
-    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.buildup_tooltip')">$msg.get('rve.content.buildup_link')</a>
+    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
 </li>
     ## Organize
 <li>
     #escapeForJS(${xwiki.getUserName($asset.creator, false)})
     #set($escapedCreatorName = $ret_escaped)
-    <a href="javascript:void()" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'});" title="$msg.get('rve.content.organize_tooltip')">$msg.get('rve.content.organize_link')</a>
+    <a href="javascript:void()" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'});" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
 </li>
     #end
     ## Add
 ##if($g_userHasCollections)##{
 <li #if((!$asset.hasAccessLevel("edit"))||($asset.category=="collection"))  class="last-item" #end >
-    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.add_tooltip')">$msg.get('rve.content.add_link')</a>
+    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
 </li>
 ##end##}
     #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
 <li class="last-item">
-    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_tooltip')">$msg.get('rve.content.edit_link')</a>
+    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
 </li>
     #end
   #end
