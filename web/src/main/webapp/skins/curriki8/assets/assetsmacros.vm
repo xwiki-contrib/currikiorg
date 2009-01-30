@@ -301,7 +301,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  *#
 #macro(asset_info $asset)
 #set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
+<div id="asset-wrapper" class="view-$assetCategory mode-$!viewer">
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
     #asset_attribution($asset)
@@ -320,7 +320,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
             <div class="sub-asset-wrapper-inner">
                 <ul>
                     <li id="info-basic-title">
-                        <strong>$msg.get("rve.information.subject_title")</strong>
+                        <strong>$msg.get("rve.information.title_title")</strong>
                         <p>$asset.getDisplayTitle()</p>
                     </li>
 
@@ -405,7 +405,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  *#
 #macro(asset_infoedit $asset)
 #set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="category-$assetCategory mode-info mode-info-edit">
+<div id="asset-wrapper" class="view-$assetCategory mode-info mode-info-edit">
 #asset_resourcefunctions($asset)
 #asset_icontitle($asset)
 #asset_attribution($asset)
