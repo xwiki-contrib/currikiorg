@@ -1537,9 +1537,9 @@ $msg.get("deleted")
   #set($rightsWhere = " AND (${globalView} OR '${userdoc.fullName}'='${context.user}' OR doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='CurrikiCode.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) ")
   #set($baseWhere = "${baseWhere} ${rightsWhere}")
   #if($sortBy=="title") ## {
-    #set($sql = ", BaseObject as obj, StringProperty as prop1 ${baseWhere} and obj.id=prop1.id.id and prop1.id.name='title' order by prop1.value $sortDir")
+    #set($sql = ", BaseObject as obj ${baseWhere} order by doc.title $sortDir")
   #elseif($sortBy=="access") ## Default sort by rights ## } {
-    #set($sql = ", BaseObject as obj, StringProperty as prop1, StringProperty as prop2 ${baseWhere} and obj.id=prop1.id.id and prop1.id.name='rights' and obj.id=prop2.id.id and prop2.id.name='title' order by prop1.value $sortDir, prop2.value asc")
+    #set($sql = ", BaseObject as obj, StringProperty as prop1 ${baseWhere} and obj.id=prop1.id.id and prop1.id.name='rights' order by prop1.value $sortDir, doc.title asc")
   #else ## Default sort by date ## } {
     #set($sql = ", BaseObject as obj ${baseWhere} order by doc.date $sortDir")
   #end ## }
