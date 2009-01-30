@@ -59,6 +59,17 @@
 <div class="sub-asset-wrapper crs-wrapper">
     <h3>$msg.get("rve.comments.review.header")</h3>
     <div class="sub-asset-wrapper-inner">
+        #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+        #set($status = $asset.getValue("status"))
+        #if($status&&($status=="200"))
+        <ul class="crs-rating no-review">
+            <li>
+                <p>
+                    $msg.get("curriki.crs.reviewlist.currikihaspartnered")
+                </p>
+            </li>
+        </ul>
+        #else        
         #set($reviewlist = $util.arrayList)
         #foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
         #if($obj)
@@ -81,6 +92,7 @@
                 </p>
             </li>
         </ul>
+        #end
         #end
     </div> ##sub-asset-wrapper-inner
 </div> ##crs-wrapper
