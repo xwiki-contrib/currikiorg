@@ -1234,11 +1234,11 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   *#
 #macro(curriki_avatar $userdoc) ## {
 #if($userdoc.attachmentList.size()==0)  ## {
- <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
+ <img src="$xwiki.getSkinFile("noavatar.png")" />
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" /></a>
  #end ## }
 #end ## }
 #end ## macro ## }
@@ -1252,11 +1252,11 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   *#
 #macro(curriki_avatarwithname $userdoc) ## {
 #if($userdoc.attachmentList.size()==0)  ## {
- <img src="$xwiki.getSkinFile("noavatar.png")" width="48px"/>
+ <img src="$xwiki.getSkinFile("noavatar.png")" />
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" width="48px" /></a>
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")"  /></a>
  #end ## }
 #end  $xwiki.getUserName($userdoc.fullName) ## }
 #end ## macro ## }
