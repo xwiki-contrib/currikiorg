@@ -97,7 +97,9 @@
 </li>
     ## Organize
 <li>
-    <a href="javascript:void()" onclick="" title="$msg.get('rve.content.organize_tooltip')">$msg.get('rve.content.organize_link')</a>
+    #escapeForJS(${xwiki.getUserName($asset.creator, false)})
+    #set($escapedCreatorName = $ret_escaped)
+    <a href="javascript:void()" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'});" title="$msg.get('rve.content.organize_tooltip')">$msg.get('rve.content.organize_link')</a>
 </li>
     #end
     ## Add
