@@ -2,7 +2,7 @@
   * HTML Footer: this will close the open tags in htmlheader.vm
   * @author Curriki dev team
   *#
-#if($request.viewer!="embed")
+#if(!$request.viewer || ($request.viewer!="embed"))
     </div> ##currikimaincontainer
   </div> ## dropshadow
 #end
