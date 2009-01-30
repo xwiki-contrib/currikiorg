@@ -10,9 +10,9 @@
 #macro(asset_resourcefunctions $asset)
 <ul id="function-tabs">
    #if(!$isguest)
-     <li class="tab-first" id="tab-favorite"><a href="javascript:void()" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
-     <li id="tab-email"><a href="javascript:void()" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
-##     <li id="tab-flag"><a href="javascript:void()" onclick="" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+     <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+     <li id="tab-email"><a href="javascript:void(0)" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
+##     <li id="tab-flag"><a href="javascript:void(0)" onclick="return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
    #end
      <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
 </ul>
@@ -93,19 +93,19 @@
     #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
     ## Build Up
 <li>
-    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
+    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
 </li>
     ## Organize
 <li>
     #escapeForJS(${xwiki.getUserName($asset.creator, false)})
     #set($escapedCreatorName = $ret_escaped)
-    <a href="javascript:void()" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'});" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
+    <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
 </li>
     #end
     ## Add
 ##if($g_userHasCollections)##{
 <li #if((!$asset.hasAccessLevel("edit"))||($asset.category=="collection"))  class="last-item" #end >
-    <a href="javascript:void()" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'});" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
+    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
 </li>
 ##end##}
     #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
@@ -538,7 +538,7 @@ $asset.use($comment)
             #set($qs = "")
             #set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
             #set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", $qs))
-            <a class="comment-delete" href="javascript:void()"  title="${msg.get('mycurriki.blog.comment.delete')}" onclick="if (confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'))  location='$deleteCommentUrl'; return false;">$msg.get('mycurriki.blog.comment.delete')</a>
+            <a class="comment-delete" href="javascript:void(0)"  title="${msg.get('mycurriki.blog.comment.delete')}" onclick="if (confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'))  location='$deleteCommentUrl'; return false;">$msg.get('mycurriki.blog.comment.delete')</a>
             #end
         </li>
     </ul>
@@ -1072,7 +1072,7 @@ $msg.get("asset.externallink")
 #end
 #if("XWiki.${shortname}" == $context.user || $xwiki.hasAdminRights() || $xwiki.checkAccess($collDoc.fullName, "delete"))
 #set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${collDoc.fullName}&sourceDoc=${localUrl}"))
-#sep() <a onclick="this.href='$deleteUrl'; return confirm('$deleteMsg')" href="javascript:void()">$msg.get("caption.delete")</a>
+#sep() <a onclick="this.href='$deleteUrl'; return confirm('$deleteMsg')" href="javascript:void(0)">$msg.get("caption.delete")</a>
 #end
 </div>
 *$msg.get("colls.last_edited")* $!xwiki.formatDate($collDoc.date, $msg.get("dateFormat"))<br />
