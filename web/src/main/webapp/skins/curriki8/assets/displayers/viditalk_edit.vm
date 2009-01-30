@@ -1,13 +1,28 @@
 #asset_displaycontentheader("")
+#set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
+#set($video_id = $objVT.id)
 <div class="asset-display-edit">
     <div class="asset-display-edit-inner">
+
         <form action="" onsubmit="alert('not implemented yet'); return false;" method="post" content-type="multipart/form-data">
             #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString)))
             <input  type="hidden" name="viewer" value="edit" />
             <input  type="hidden" name="xredirect" value="$xredirect" />
             <fieldset>
                 <ul>
-                    #asset_edit_field($asset "" "comment" "revision" "text" "<input id='comment' name='comment' />")
+					#asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "")
+					#set($vdiv="<div style='height:280px; width:320px; margin: 0 auto;' id='vidiCaptureDiv'>Viditalk Record Window - Loading components from VIDITalk</div><input type='hidden' id='videoId' name='videoId' value='"+$video_id"+' />")
+					#asset_edit_field($asset "CurrikiCode.VideoAssetClass" "id" "replace_video" "text" $vdiv)
+					<script language="javascript" type="text/javascript">
+						window.uploadComplete = function(videoId) {
+							Ext.get('videoId').dom.setValue(videoId);
+						};
+						window.capture_div='';
+						window.flashLoaded = false;
+						window.called_once=false;
+						embedVidiCapture('vidiCaptureDiv', "$msg.get('viditalk.sitecode')", null, null, false);
+					</script>
+                    #asset_edit_field($asset "" "comment" "revision" "text" "<input id='comment_input' name='comment' />")
                 </ul>
             </fieldset>
             <hr>
