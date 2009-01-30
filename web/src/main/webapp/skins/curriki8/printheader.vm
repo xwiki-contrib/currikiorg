@@ -1,44 +1,31 @@
 #**
   *  Special header for print
   *#
-#if(!$mode)
-#set($mode="print")
-#set($linkurl = $doc.getURL("view"))
-#end
-#asset_findtitle($doc)
-#template("xwikivars.vm")
-#template("layoutvars.vm")
-#set($showLeftPanels = "0")
-#set($showRightPanels = "0")
-#set($printss = true)
-#template("xwikivars.vm")
-#template("layoutvars.vm")
-#template("htmlheader.vm")
-<div id="printheader" class="layoutsection">
- <div id="header-logo">
-    <a href="$xwiki.getURL("Main.WebHome", "view")" title="Home">
-#set($logourl = $xwiki.getSkinFile("curriki-logo.png"))
-      <img src="$logourl" alt="Curriki logo"/>
-    </a>
- </div>
- <div id="header-banner">
-  <div id="header-title-zone">
-    <div id="header-title">
-       $msg.get("${mode}.title")
+<!-- logo -->
+#set($altinfo = $msg.get("header.altinfo"))
+#set($logourl = $xwiki.getSkinFile("images/curriki-logo-print.gif"))
+<div id="header">
+    <div id="header-logo">
+        <a href="$xwiki.getURL("Main.WebHome", "view")" title="$altinfo">
+            <img src="$logourl" title="$altinfo" alt="$altinfo" />
+        </a>
     </div>
-    <div id="header-subtitle">
-       $xwiki.parseMessage("${mode}.subtitle")
+    <div id="print-banner-wrapper">
+        <div id="print-meta">
+            <div id="print-meta-inner">
+                <h4>$msg.get("mode.print.header_title")</h4>
+                <p>$msg.get("mode.print.header_txt", [$doc.displayTitle])</p>
+                <a href="$linkurl">$msg.get("mode.print.header.view_link")</a>
+            </div>
+        </div>
+        <div id="print-close">
+            <div id="print-close-inner">
+                <button class="button-link button-link-cancel" onclick="window.close();">$msg.get("mode.print.header.close_button")</button>
+                <button class="button-link button-link-print" onclick="document.getElementById('print-banner-wrapper').style.display='none'; window.print(); ">$msg.get("mode.print.header.print_button")</button>
+            </div>
+        </div>
     </div>
-    <div id="header-title-link">
-       <a href="$linkurl">$msg.get("${mode}.linktext")</a>
-    </div>
-  </div>
-  <div id="header-closebutton">
-#if($mode=="print")
-      <button type="button" class="gwt-Button close-btt" onClick="document.getElementById('header-banner').style.display='none'; window.print();">$msg.get("header.print")</button>
-#end
-      <button type="button" class="gwt-Button close-btt" onClick="window.close();">$msg.get("header.close")</button>
-  </div>
- </div>
 </div>
-<div class="clearfloats"></div>
+
+
+
