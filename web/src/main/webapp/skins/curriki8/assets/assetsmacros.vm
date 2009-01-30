@@ -56,7 +56,7 @@
  </li>
     #if($assetIsFromGroup)
     #if($assetGroup.getDisplayTitle())
-    #set($assetGroupDisplayName = $xwiki.escapeText())
+    #set($assetGroupDisplayName = $xwiki.escapeText($assetGroup.getDisplayTitle()))
     #else
     #set($assetGroupDisplayName = "")
     #end
