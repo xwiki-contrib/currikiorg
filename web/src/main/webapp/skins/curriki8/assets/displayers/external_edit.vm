@@ -1,7 +1,7 @@
 #asset_displaycontentheader("")
 <div class="asset-display-edit">
     <div class="asset-display-edit-inner">
-        <form action="" onsubmit="alert('not implemented yet'); return false;" method="post">
+        <form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="post" >
             #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString)))
             <input  type="hidden" name="viewer" value="edit" />
             <input  type="hidden" name="xredirect" value="$xredirect" />
@@ -9,7 +9,7 @@
                 <ul>
                     #asset_edit_field($asset "CurrikiCode.ExternalAssetClass" "linktext" "linktext" "text" "")
                     #asset_edit_field($asset "CurrikiCode.ExternalAssetClass" "link" "link" "text" "")
-                    #asset_edit_field($asset "" "comment" "revision" "text" "<input id='comment' name='comment' />")
+                    #asset_edit_revision()
                 </ul>
             </fieldset>
             <hr>
