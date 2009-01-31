@@ -97,15 +97,15 @@
    </li>
   #end
   ## Copy
-  #if($asset.category!="collection"))
+  #if($asset.category!="collection")
    <li>
-    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
+    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')">$msg.get('rve.content.copy_link')</a>
    </li>
   #end
   ## Add
 ##if($g_userHasCollections)##{
   <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
-   <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')">$msg.get('rve.content.copy_link')</a>
+   <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
   </li>
 ##end##}
   ## Build Up
