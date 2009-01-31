@@ -695,7 +695,7 @@ $response.sendRedirect($request.xredirect)
 /**
  * Standard buttons in asset edit
  */
-#macro("asset_edit_buttons" $asset)
+#macro(asset_edit_buttons $asset)
 #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "bc=$!request.bc")))
 <fieldset class="buttons">
     <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="location='${cancelurl}'; return false;">
