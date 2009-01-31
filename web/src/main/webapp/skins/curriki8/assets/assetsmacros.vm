@@ -175,7 +175,7 @@ $xwiki.addTooltipJS()
  *#
 #macro(asset_beginsection $assetDoc $withcollapse)
 #set($category = $assetDoc.category)
-#set($assetLink = $assetDoc.getURL("view", "bc=$!{request.bc}"))
+#set($assetLink = $assetDoc.getURL("view", "bc=$!{request.bc};$asset.fullName"))
 #set($assetTitle = $assetDoc.displayTitle)
 #if(!$seccounter)
 #set($seccounter = 1)
@@ -372,7 +372,13 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                         #set($ict = $!asset.getValue("instructional_component"))
                         <ul>
                             #foreach($ictitem in $ict)
-                            <li id="ict-${ictitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
+                             #set($hyphenpos = $ictitem.indexOf("_"))
+                             #if($hyphenpos==-1)
+                              #set($ictcategoryitem = $ictitem)
+                             #else
+                              #set($ictcategoryitem = $ictitem.substring(0, $hyphenpos))
+                             #end
+                            <li id="ict-${ictitem.replace('_','-')} ict-${ictcategoryitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
                             #end
                         </ul>
                     </li>
