@@ -660,10 +660,18 @@ $response.sendRedirect($request.xredirect)
     <span>
         <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
     <div  id="revision">
-        #set($revnote = $msg.get("rve.content.edit.revision.entry_sample"))
-        <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$xwiki.escapeText($revnote)') this.value='';" />
+        #set($revnote = $xwiki.escapteText($msg.get("rve.content.edit.revision.entry_sample")))
+        <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$revnote') { this.value ='' };" />
     </div>
 </li>
+<script type="text/javascript">
+    function beforeAssetSubmit(form) {
+        if (form.comment.value=='$revnote') {
+            form.comment.value='';
+        }
+        return true;
+    }
+</script>
 #end
 
 
@@ -753,6 +761,40 @@ $response.sendRedirect($request.xredirect)
 </div>
 </div>
 </div>
+#end
+
+
+#macro(asset_saveinfo)
+#if($request.page && $request.page!="")
+#set($asset = $xwiki.getDocument($request.page))
+#if($asset.hasAccessLevel("edit"))
+## let's read data
+$asset.updateObjectFromRequest("CurrikiCode.AssetClass")
+#if($asset.getObject("CurrikiCode.AttachmentAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.AttachmentAssetClass")
+#end
+#if($asset.getObject("CurrikiCode.ImageAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.ImageAssetClass")
+#end
+#if($asset.getObject("CurrikiCode.ArchiveAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.ImageAssetClass")
+#end
+#if($asset.getObject("CurrikiCode.ImageAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.ImageAssetClass")
+#end
+#if($asset.getObject("CurrikiCode.VideoAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.VideoAssetClass")
+#end
+#if($asset.getObject("CurrikiCode.TextAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
+#end
+## todo handle file upload
+$asset.save($!request.comment)
+$response.sendRedirect($asset.getURL())
+#else
+$msg.get("notallowed")
+#end
+#end
 #end
 
 
