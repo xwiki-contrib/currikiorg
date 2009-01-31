@@ -382,8 +382,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                             #end
                         </ul>
                     </li>
-                    <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong>$!asset.display("keywords")</li>
-                    <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong>$!asset.display("language")</li>
+                    <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span>$!asset.display("keywords")</span></li>
+                    <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span>$!asset.display("language")</span></li>
                 </ul>
             </div>
         </div>
@@ -394,18 +394,18 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
             <div class="sub-asset-wrapper-inner">
                 <ul>
                     <li id="info-rights-access">
-                        <strong>$msg.get("rve.information.accessprivileges_title")</strong>$!asset.display("rights")
+                        <strong>$msg.get("rve.information.accessprivileges_title")</strong><span>$!asset.display("rights")</span>
                     </li>
                     <li id="info-rights-hidden">
-                        <strong>$msg.get("rve.information.hidefromsearch_title")</strong>#if($!asset.getValue("hidden_from_search")=="1")$msg.get("rve.information.hidefromsearch_yes")#else$msg.get("rve.information.hidefromsearch_no")
-                        #end        
+                        <strong>$msg.get("rve.information.hidefromsearch_title")</strong><span>#if($!asset.getValue("hidden_from_search")=="1")$msg.get("rve.information.hidefromsearch_yes")#else$msg.get("rve.information.hidefromsearch_no")
+                        #end</span>
                     </li>
                     $asset.use("CurrikiCode.AssetLicenseClass")
                     <li id="info-rights-holder">
-                        <strong>$msg.get("rve.information.rightsholder_title")</strong>$!asset.display("rightsHolder")
+                        <strong>$msg.get("rve.information.rightsholder_title")</strong><span>$!asset.display("rightsHolder")</span>
                     </li>
                     <li id="info-rights-license">
-                        <strong>$msg.get("rve.information.licensedeed_title")</strong>$!asset.display("licenseType")
+                        <strong>$msg.get("rve.information.licensedeed_title")</strong><span>$!asset.display("licenseType")</span>
                     </li>
                 </ul>
             </div>
