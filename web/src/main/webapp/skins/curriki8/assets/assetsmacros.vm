@@ -660,7 +660,7 @@ $response.sendRedirect($request.xredirect)
     <span>
         <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
     <div  id="revision">
-        #set($revnote = $xwiki.escapteText($msg.get("rve.content.edit.revision.entry_sample")))
+        #set($revnote = $xwiki.escapeText($msg.get("rve.content.edit.revision.entry_sample")))
         <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$revnote') { this.value ='' };" />
     </div>
 </li>
@@ -791,13 +791,13 @@ $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
 ## handling file upload
 #set($updateGroovy = $xwiki.parseGroovyFromPage("CurrikiCode.UpdateAttachmentGroovy"))
 #set($updateResult = $updateGroovy.replaceAttachment($asset,$context))
-#if(!$updateResult)
-## we should not save since the save already happened
-$asset.save($!request.comment)
-## done without attach
+## saving with the user comment
+#if($request.comment && $request.comment!="")
+#set($note = $request.comment)
 #else
-## done with attach
+#set($note = $msg.get("rve.content.edit.revision.defaultnote"))
 #end
+$asset.save($!note)
 $response.sendRedirect($asset.getURL())
 #else
 $msg.get("notallowed")
