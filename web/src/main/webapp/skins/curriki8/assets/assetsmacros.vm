@@ -432,7 +432,7 @@ $asset.use("CurrikiCode.AssetClass")
 <div class="sub-asset-wrapper-inner">
 <form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST">
 <fieldset class="buttons">
-    #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString)))
+    #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "viewer=info&bc=$!request.bc")))
     #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "viewer=info&bc=$!request.bc")))
     <input  type="hidden" name="page" value="$asset.fullName" />
     <input  type="hidden" name="xredirect" value="$xredirect" />
@@ -806,6 +806,7 @@ $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
 #else
 #set($note = $msg.get("rve.content.edit.revision.defaultnote"))
 #end
+$asset.applyRightsPolicy()
 $asset.save($!note)
 $response.sendRedirect($asset.getURL())
 #else

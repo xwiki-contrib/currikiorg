@@ -7,7 +7,7 @@
 #if($doc.getObject("CurrikiCode.AssetClass"))
 #set($asset = $doc)
 #set($assetCategory = $asset.getCategory())
-<div id="asset-wrapper" class="category-$assetCategory mode-$!viewer mode-info">
+<div id="asset-wrapper" class="category-$assetCategory mode-version mode-vesion-compare">
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
     #asset_attribution($asset)
@@ -15,11 +15,11 @@
     #asset_tabs($asset "info")
     <div id="asset-wrapper-inner">
         <ul id="asset-links">
-            <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}}&viewer=info")" title="$msg.get("rve.information.back_to_history_rollover")">$msg.get("rve.information.back_to_history_link")</a></li>
+            <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=info")" title="$msg.get("rve.information.back_to_history_rollover")">$msg.get("rve.information.back_to_history_link")</a></li>
         </ul>
         <div class="sub-asset-wrapper">
             <h3>
-                $msg.get("rve.information.history")
+                $msg.get("rve.information.compare.versions.header")
             </h3>
             <div class="sub-asset-wrapper-inner">
                 #template("changesinline.vm")
