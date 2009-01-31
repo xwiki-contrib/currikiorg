@@ -808,7 +808,11 @@ $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
 #end
 $asset.applyRightsPolicy()
 $asset.save($!note)
+#if($request.xredirect && $request.xredirect!="")
+$response.sendRedirect($request.xredirect)
+#else
 $response.sendRedirect($asset.getURL())
+#end
 #else
 $msg.get("notallowed")
 #end
