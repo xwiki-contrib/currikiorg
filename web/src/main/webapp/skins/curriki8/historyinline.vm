@@ -60,7 +60,13 @@
             <td width="5%"><input type="radio" name="rev1" value="$version" #if ($velocityCount==2) checked="checked" #end/></td>
             <td width="5%"><input type="radio" name="rev2" value="$version" #if ($velocityCount==1) checked="checked" #end/></td>
             #end
-            <td width="10%"><a href="$tdoc.getURL("viewrev","rev=$version")">$version</a></td>
+            <td width="10%">
+            #if(($asset.category=="collection")||(!$doc.hasAccessLevel("edit")))
+                $version
+            #else
+                <a href="$doc.getURL("viewrev","rev=$version")" target="_blank">$version</a>
+            #end
+            </td>
             <td width="10%">$xwiki.getLocalUserName($revinfo.author)</td>
             #if($xwiki.hasEditComment())
             <td width="15%">$!{revinfo.comment}</td>
