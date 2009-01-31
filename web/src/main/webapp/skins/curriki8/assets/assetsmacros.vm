@@ -413,6 +413,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  *#
 #macro(asset_infoedit $asset)
 #set($assetCategory = $asset.getCategory())
+## two fields are restricted from editing
+#set($canEditLicense = ($context.user==$asset.creator) || $isGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
 <div id="asset-wrapper" class="view-$assetCategory mode-info mode-info-edit">
 #asset_resourcefunctions($asset)
 #asset_icontitle($asset)
@@ -483,23 +485,27 @@ $asset.use("CurrikiCode.AssetClass")
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
             $asset.display("hidden_from_search", "edit", true) $msg.get("rve.information.hidefromsearch.edit_instruction")
         </li>
-$asset.use("CurrikiCode.AssetLicenseClass")
+        #if($canEditLicense)
+        $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-rights" class="field-important input-text">
             <span><em>!</em><label for="edit-rights">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("rightsHolder", "edit", true)
         </li>
-$asset.use("CurrikiCode.AssetClass")
+        #end
+        $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-access" class="input-radio">
             <span><label for="edit-access">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.accessprivileges.edit_txt")</p>
             $asset.display("rights", "edit", true)
         </li>
-$asset.use("CurrikiCode.AssetLicenseClass")
+        #if($canEditLicense)
+        $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-license" class="input-select">
             <span><label for="edit-license">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
        </li>
+       #end
     </ul>
 </fieldset>
 <fieldset class="buttons">
