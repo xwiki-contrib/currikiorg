@@ -262,7 +262,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  <div class="asset-display-download-inner">
 #if($asset.getAttachmentList().size()==1)
 #set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
-#else
+#elseif($asset.getAttachmentList().size()>1)
 #set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_file"))
 #end
 <p><strong>$msgtext</strong>
@@ -788,15 +788,22 @@ $asset.updateObjectFromRequest("CurrikiCode.VideoAssetClass")
 #if($asset.getObject("CurrikiCode.TextAssetClass"))
 $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
 #end
-## todo handle file upload
+## handling file upload
+#set($updateGroovy = $xwiki.parseGroovyFromPage("CurrikiCode.UpdateAttachmentGroovy"))
+#set($updateResult = $updateGroovy.replaceAttachment($asset,$context))
+#if(!$updateResult)
+## we should not save since the save already happened
 $asset.save($!request.comment)
+## done without attach
+#else
+## done with attach
+#end
 $response.sendRedirect($asset.getURL())
 #else
 $msg.get("notallowed")
 #end
 #end
 #end
-
 
 ## previous macros
 ##

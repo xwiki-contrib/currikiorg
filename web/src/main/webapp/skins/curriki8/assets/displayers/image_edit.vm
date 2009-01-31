@@ -25,7 +25,7 @@
 #end
 <div class="asset-display-edit">
     <div class="asset-display-edit-inner">
-        <form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" content-type="multipart/form-data">
+        <form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" enctype="multipart/form-data">
             #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString)))
             <input  type="hidden" name="page" value="$asset.fullName" />
             <input  type="hidden" name="xredirect" value="$xredirect" />
