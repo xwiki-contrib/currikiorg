@@ -89,31 +89,38 @@
  *#
 #macro(asset_links $asset)
 <ul id="asset-links">
-  #if(!$isguest)
-    #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
-    ## Build Up
-<li>
-    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
-</li>
-    ## Organize
-<li>
-    #escapeForJS(${xwiki.getUserName($asset.creator, false)})
-    #set($escapedCreatorName = $ret_escaped)
-    <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
-</li>
-    #end
-    ## Add
-##if($g_userHasCollections)##{
-<li #if((!$asset.hasAccessLevel("edit"))||($asset.category=="collection"))  class="last-item" #end >
-    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
-</li>
-##end##}
-    #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
-<li class="last-item">
+ #if(!$isguest)
+  #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
+   ## Edit
+   <li>
     <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
-</li>
-    #end
+   </li>
   #end
+  ## Copy
+  #if($asset.category!="collection"))
+   <li>
+    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
+   </li>
+  #end
+  ## Add
+##if($g_userHasCollections)##{
+  <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
+   <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')">$msg.get('rve.content.copy_link')</a>
+  </li>
+##end##}
+  ## Build Up
+  #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
+  <li>
+   <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
+  </li>
+  ## Organize
+  <li class="last-item">
+   #escapeForJS(${xwiki.getUserName($asset.creator, false)})
+   #set($escapedCreatorName = $ret_escaped)
+   <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
+  </li>
+  #end
+ #end   
 </ul>
 #end
 
@@ -632,11 +639,9 @@ $response.sendRedirect($request.xredirect)
 #macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent)
 <li class="input-${fieldtype}">
     <span>
-        #if($transname!="revision")
         <input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
-        #end
         <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
-    <div  id="${fieldname}" #if($transname!="revision") style="display: none" #end >
+    <div  id="${fieldname}" style="display: none">
     #if($fieldcontent!="")
     $fieldcontent
     #else
@@ -646,6 +651,22 @@ $response.sendRedirect($request.xredirect)
     </div>
 </li>
 #end
+
+#**
+ * Revision note field
+ *#
+#macro(asset_edit_revision)
+<li class="input-text">
+    <span>
+        <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
+    <div  id="revision">
+        #set($revnote = $msg.get("rve.content.edit.revision.entry_sample"))
+        <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$xwiki.escapeText($revnote)') this.value='';" />
+    </div>
+</li>
+#end
+
+
 
 
 #**
