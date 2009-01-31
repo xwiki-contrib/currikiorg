@@ -9,9 +9,9 @@
             <input  type="hidden" name="xredirect" value="$xredirect" />
             <fieldset>
                 <ul>
-					#asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "")
+					#asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
 					#set($vdiv="<div style='height:280px; width:320px; margin: 0 auto;' id='vidiCaptureDiv'>Viditalk Record Window - Loading components from VIDITalk</div><input type='hidden' id='videoId' name='videoId' value='"+$video_id+"' />")
-					#asset_edit_field($asset "CurrikiCode.VideoAssetClass" "id" "replace_video" "text" $vdiv)
+					#asset_edit_field($asset "CurrikiCode.VideoAssetClass" "id" "replace_video" "text" $vdiv true)
 					<script language="javascript" type="text/javascript">
 						window.uploadComplete = function(videoId) {
 							Ext.get('videoId').dom.setValue(videoId);

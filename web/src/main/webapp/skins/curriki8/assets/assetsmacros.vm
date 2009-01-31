@@ -430,9 +430,13 @@ $asset.use("CurrikiCode.AssetClass")
     $msg.get("rve.information.edit.header")
 </h3>
 <div class="sub-asset-wrapper-inner">
-<form>
+<form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST">
 <fieldset class="buttons">
-    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel"/>
+    #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString)))
+    #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "viewer=info&bc=$!request.bc")))
+    <input  type="hidden" name="page" value="$asset.fullName" />
+    <input  type="hidden" name="xredirect" value="$xredirect" />
+    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="location='${cancelurl}'; return false;"/>
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
 <fieldset>
@@ -636,12 +640,14 @@ $response.sendRedirect($request.xredirect)
 #end ## end macro
 
 
-#macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent)
+#macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent $hidebydefault)
 <li class="input-${fieldtype}">
     <span>
+        #if($hidebydefault)
         <input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
+        #end
         <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
-    <div  id="${fieldname}" style="display: none">
+    <div  id="${fieldname}" #if($hidebydefault) style="display: none" #end >
     #if($fieldcontent!="")
     $fieldcontent
     #else
@@ -770,6 +776,9 @@ $response.sendRedirect($request.xredirect)
 #if($asset.hasAccessLevel("edit"))
 ## let's read data
 $asset.updateObjectFromRequest("CurrikiCode.AssetClass")
+#if($asset.getObject("CurrikiCode.AssetLicenseClass"))
+$asset.updateObjectFromRequest("CurrikiCode.AssetLicenseClass")
+#end
 #if($asset.getObject("CurrikiCode.AttachmentAssetClass"))
 $asset.updateObjectFromRequest("CurrikiCode.AttachmentAssetClass")
 #end
