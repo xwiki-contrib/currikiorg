@@ -837,6 +837,12 @@ $response.sendRedirect($request.xredirect)
 #set($asset = $xwiki.getDocument($request.page))
 #if($asset.hasAccessLevel("edit"))
 ## let's read data
+#if($request.content)
+$asset.setContent($request.content)
+#end
+#if($request.title)
+$asset.setContent($request.title)
+#end
 $asset.updateObjectFromRequest("CurrikiCode.AssetClass")
 #if($asset.getObject("CurrikiCode.AssetLicenseClass"))
 $asset.updateObjectFromRequest("CurrikiCode.AssetLicenseClass")
