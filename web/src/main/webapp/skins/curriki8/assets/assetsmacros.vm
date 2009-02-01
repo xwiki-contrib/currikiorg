@@ -168,6 +168,25 @@
 $xwiki.addTooltipJS()
 #end
 
+#**
+ * Rollover information div about an asset
+ *#
+#macro(asset_info_rollover $asset $seccounter)
+<div id="mycurriki-description-${seccounter}" class="popup" style="display: none;">
+    <p>
+        <strong>$msg.get("rve.title.attribution.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
+    </p>
+    <p>
+        <strong>$msg.get("rve.infodiv.description")</strong><span>$!asset.display("description")</span>
+    </p>
+    <strong>$msg.get("rve.infodiv.subject")</strong>
+    #asset_info_subject($asset)
+    <strong>$msg.get("rve.infodiv.edlevel")</strong>
+    #asset_info_edlevel($asset)
+    <strong>$msg.get("rve.infodiv.ict")</strong>
+    #asset_info_ict($asset)
+</div>
+#end
 
 #**
  * Begin an asset display section
@@ -199,8 +218,9 @@ $xwiki.addTooltipJS()
       <a class="icon-mini" href="$assetLink" ext:qtip="$msg.get("rvw.content.section.icon.tooltip.${category}")">$msg.get("rvw.content.section.icon.${category}")</a>
     </div>
     <h3>
-        <a href="$assetLink" ext:qtitle="$msg.get("rvw.content.section.title")" ext:qtip="$msg.get("rvw.content.section.title.tooltip.${category}")">$assetTitle</a>
+        <a href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
     </h3>
+    #asset_info_rollover($assetDoc $seccounter)
  </div>
 </div>
 #if($withcollapse)
@@ -302,6 +322,48 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 ##</div>
 #end
 
+#**
+  * Displays the subjects of an asset for the information areas
+  *#
+#macro(asset_info_subject $asset)
+<ul>
+    #set($subjects = $!asset.getValue("fw_items"))
+    #foreach($subject in $subjects)
+    <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
+    #end
+</ul>
+#end
+
+#**
+  * Displays the education level of an asset for the information areas
+  *#
+#macro(asset_info_edlevel $asset)
+#set($educlevels = $!asset.getValue("educational_level"))
+<ul>
+    #foreach($educlevel in $educlevels)
+    <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
+    #end
+</ul>
+#end
+
+#**
+  * Displays the instructional component of an asset for the information areas
+  *#
+#macro(asset_info_ict $asset)
+#set($ict = $!asset.getValue("instructional_component"))
+<ul>
+    #foreach($ictitem in $ict)
+     #set($hyphenpos = $ictitem.indexOf("_"))
+     #if($hyphenpos==-1)
+      #set($ictcategoryitem = $ictitem)
+     #else
+      #set($ictcategoryitem = $ictitem.substring(0, $hyphenpos))
+     #end
+    <li class="ict-${ictitem.replace('_','-')} ict-${ictcategoryitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
+    #end
+</ul>
+#end
+
 
 #**
  * Macro to display info tab
@@ -348,39 +410,17 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                             </tr>
                             <tr>
                                 <td>
-                                    <ul>
-                                        #set($subjects = $!asset.getValue("fw_items"))
-                                        #foreach($subject in $subjects)
-                                        <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
-                                        #end
-                                    </ul>
+                                    #asset_info_subject($asset)
                                 </td>
                                 <td>
-                                    #set($educlevels = $!asset.getValue("educational_level"))
-                                    <ul>
-                                        #foreach($educlevel in $educlevels)
-                                        <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
-                                        #end
-                                    </ul>
+                                    #asset_info_edlevel($asset)
                                 </td>
                             </tr>
                         </table>
                     </li>
-
                     <li id="info-basic-ict">
                         <strong>$msg.get("rve.information.ict_title")</strong>
-                        #set($ict = $!asset.getValue("instructional_component"))
-                        <ul>
-                            #foreach($ictitem in $ict)
-                             #set($hyphenpos = $ictitem.indexOf("_"))
-                             #if($hyphenpos==-1)
-                              #set($ictcategoryitem = $ictitem)
-                             #else
-                              #set($ictcategoryitem = $ictitem.substring(0, $hyphenpos))
-                             #end
-                            <li class="ict-${ictitem.replace('_','-')} ict-${ictcategoryitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
-                            #end
-                        </ul>
+                        #asset_info_ict($asset)
                     </li>
                     <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span>$!asset.display("keywords")</span></li>
                     <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span>$!asset.display("language")</span></li>
