@@ -9,6 +9,11 @@
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_blogbox $userdoc $userobj)
+#if($request.user)
+#set($blogqs = "&user=$!request.user")
+#else
+#set($blogqs = "")
+#end
 #curriki_titlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
 #set($shortname = $userdoc.fullName)
 #if($shortname.startsWith("XWiki."))
@@ -59,10 +64,10 @@ $msg.get("mycurriki.blog.noblog")
 <div style="float: right; margin-right: 30px">
 #if ($inbstart!=0)
 #set($iprev = $inbstart - $inbitems)
-[$prev>$doc.name?nbstart=${iprev}]
+[$prev>$doc.name?nbstart=${iprev}&${blogqs}]
 #end
 #set($inext = $inbstart + $inbitems)
-[$next>$doc.name?nbstart=${inext}]
+[$next>$doc.name?nbstart=${inext}&${blogqs}]
 </div>
 #end
 </div>
