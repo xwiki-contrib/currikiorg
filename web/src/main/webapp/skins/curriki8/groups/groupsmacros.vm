@@ -693,10 +693,18 @@ $xwiki.addTooltipJS()
 #groups_homepage_aftercreate()
 #set($action = $request.get("action"))
 #if($action=="editmasthead")
- #groups_homepage_editmasthead()
+ #if($isGroupAdmin)
+  #groups_homepage_editmasthead()
+ #else
+  #template("accessdenied.vm")
+ #end
 #elseif($action=="editinfo")
  ## this call requires programming rights
- #groups_homepage_editinfo()
+ #if($isGroupAdmin)
+  #groups_homepage_editinfo()
+ #else
+  #template("accessdenied.vm")
+ #end
 #else
  #groups_homepage_viewinfo()
  #groupsdisplaywelcome($msg.groups_home_welcome $spaceName $doc.name $isGroupAdmin)
