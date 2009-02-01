@@ -61,7 +61,11 @@
   ##includeInContext( "Groups.DocumentationViewPageSheet" )
 #end
 #if( $request.action == "editdoc")
+#if( $sm.isMember( $s.spaceName, $context.user ) )
   #groups_documentation_editpage()
+#else
+ #template("accessdenied.vm")
+#end
   ##includeInContext( "Groups.DocumentationEditPageSheet" )
 #end
 #if( $request.action == "history")
@@ -73,8 +77,11 @@
   ##includeInContext( "Groups.DocumentationCompareSheet" )
 #end
 #if( $request.action == "editabout")
+#if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
   #groups_documentation_editabout()
-  ##includeInContext( "Groups.DocumentationEditAboutSheet" )
+#else
+  #template("accessdenied.vm")
+#end
 #end
 #if( $stopRender )
   ##do nothing
