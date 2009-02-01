@@ -425,6 +425,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     </li>
                     <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span>$!asset.display("keywords")</span></li>
                     <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span>$!asset.display("language")</span></li>
+                    #if($xwiki.getDocument("FileCheck.WebHome").hasAccessLevel("view"))
+                    <li id="info-basic-check"><strong>$msg.get("rve.information.bfcs_title")</strong>
+                        #set($fcstatus = $!asset.getValue("fcstatus"))
+                        <span>#if("$fcstatus"!="0"&&"$fcstatus"!="") $!asset.display("fcstatus") #end #if("$fcstatus"!="1")<a href="$xwiki.getDocument("FileCheck.Check", "page=${asset.fullName}")">$msg.get("rve.information.bfcs_apply_link")</a></span>  #end
+                    </li>
+                    #end
                 </ul>
             </div>
         </div>
