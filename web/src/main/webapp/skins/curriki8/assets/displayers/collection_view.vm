@@ -26,7 +26,6 @@
     ## We are not showing items that do not exist
    #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
     ## We are not showing protected assets
-    ## $msg.get("asset.contentNotAllowed")
    #else
     #set($counter = $counter + 1)
     #set($embeddedDoc = $xwiki.getDocument($assetPage))
@@ -43,11 +42,7 @@
 <div class="sub-asset-wrapper category-$assetCategory">
     <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
         #asset_beginsection($embeddedDoc true)
-        #if(!$embeddedDoc.hasAccessLevel("view"))
-         $msg.get("asset.contentNotAllowed")
-        #else
         $embeddedDoc.displayAsset("view")
-        #end
         #asset_endsection()
     </div>
 </div>

@@ -149,7 +149,7 @@
         #asset_links($asset)
         #end
         #if(!$asset.hasAccessLevel("view"))
-        $msg.get("asset.contentNotAllowed")
+         #curriki_noaccess()
         #else
         #if($mainAssetCategory!="collection")
         <div class="sub-asset-wrapper category-$mainAssetCategory">
@@ -1099,7 +1099,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
 ##
 #macro(asset_displaycontent $asset $develop $showAll)
 #if(!$asset.hasAccessLevel("view"))
- $msg.get("asset.contentNotAllowed")
+ #curriki_noaccess()
 #else
 #set($objTxt = $asset.getObject("CurrikiCode.TextAssetClass"))
 #set($objComp = $asset.getObject("CurrikiCode.CompositeAssetClass"))

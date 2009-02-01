@@ -1260,3 +1260,43 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
  #end ## }
 #end  $xwiki.getUserName($userdoc.fullName) ## }
 #end ## macro ## }
+
+
+#**
+ *  Macro to display an access denied message
+ *#
+#macro(curriki_noaccess)
+ #curriki_message("noaccess")
+#end
+
+
+#**
+ *  Macro to display a non existing document message
+ *#
+#macro(curriki_notfound)
+ #curriki_message("notfound")
+#end
+
+#**
+ *  Macro to display a message with links based on a key
+ *#
+#macro(curriki_message $key)
+<div id="message-wrapper mode-message mode-message-${key}">
+    <div id="message-wrapper-inner">
+        <ul id="message-links">
+            <li><a href="$msg.get('rve.${key}.goback_url')">$msg.get("rve.${key}.goback_link")</a></li>
+            <li><a href="$msg.get('rve.${key}.login_url')">$msg.get("rve.${key}.login_link")</a></li>
+            <li><a href="$msg.get('rve.${key}.home_url')">$msg.get("rve.${key}.home_link")</a></li>
+            <li class="last-item"><a href="$msg.get('rve.${key}.help_url')">$msg.get("rve.${key}.help_link")</a></li>
+        </ul>
+        <div class="message-content-wrapper">
+            <h3>
+                $msg.get("rve.${key}.header")
+            </h3>
+            <div class="message-content-wrapper-inner">
+                <p>$msg.get("rve.${key}.message")</p>
+            </div>
+        </div>
+    </div>
+</div>
+#end

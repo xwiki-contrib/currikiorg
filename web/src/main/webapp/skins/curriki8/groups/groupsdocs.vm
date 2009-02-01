@@ -64,7 +64,7 @@
 #if( $sm.isMember( $s.spaceName, $context.user ) )
   #groups_documentation_editpage()
 #else
- #template("accessdenied.vm")
+ #curriki_noaccess()
 #end
   ##includeInContext( "Groups.DocumentationEditPageSheet" )
 #end
@@ -80,7 +80,7 @@
 #if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
   #groups_documentation_editabout()
 #else
-  #template("accessdenied.vm")
+ #curriki_noaccess()
 #end
 #end
 #if( $stopRender )

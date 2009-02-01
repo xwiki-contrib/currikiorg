@@ -696,14 +696,14 @@ $xwiki.addTooltipJS()
  #if($isGroupAdmin)
   #groups_homepage_editmasthead()
  #else
-  #template("accessdenied.vm")
+  #curriki_noaccess()
  #end
 #elseif($action=="editinfo")
  ## this call requires programming rights
  #if($isGroupAdmin)
   #groups_homepage_editinfo()
  #else
-  #template("accessdenied.vm")
+  #curriki_noaccess()
  #end
 #else
  #groups_homepage_viewinfo()
