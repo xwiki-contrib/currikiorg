@@ -25,7 +25,8 @@
 #macro(asset_icontitle $asset)
 <div id="asset-header">
  <!--<img src="images/collectionmedium.gif">-->
- <h2><a href="$asset.getURL("view", "bc=$!{request.bc}")" title="$asset.displayTitle">$asset.displayTitle</a></h2>
+ <h2><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$asset.displayTitle</a></h2>
+ #asset_info_rollover($asset 0)
 </div>
 #end
 
