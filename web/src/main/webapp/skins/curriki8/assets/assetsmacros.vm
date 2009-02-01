@@ -428,7 +428,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     #if($xwiki.getDocument("FileCheck.WebHome").hasAccessLevel("view"))
                     <li id="info-basic-check"><strong>$msg.get("rve.information.bfcs_title")</strong>
                         #set($fcstatus = $!asset.getValue("fcstatus"))
-                        <span>#if("$fcstatus"!="0"&&"$fcstatus"!="") $!asset.display("fcstatus") #end #if("$fcstatus"!="1")<a href="$xwiki.getDocument("FileCheck.Check", "page=${asset.fullName}")">$msg.get("rve.information.bfcs_apply_link")</a></span>  #end
+                        <span>#if("$fcstatus"!="0"&&"$fcstatus"!="") $!asset.display("fcstatus") #end #if("$fcstatus"!="1")<a href="$xwiki.getDocument("FileCheck.Check").getURL("view", "page=${asset.fullName}")">$msg.get("rve.information.bfcs_apply_link")</a></span>  #end
                     </li>
                     #end
                 </ul>
