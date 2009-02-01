@@ -582,14 +582,7 @@ $asset.use($comment)
     <ul>
         #set($authorDoc = $xwiki.getDocument($asset.getValue("author")))
         <li class="comment-avatar">
-            #if($authorDoc.attachmentList.size()==0)
-            <img src="$xwiki.getSkinFile("noavatar.png")"/>
-            #else
-            #foreach ($attach in $creatorDoc.attachmentList)
-            <a href="$authorDoc.getURL("view")" >
-                <img src="$authorDoc.getAttachmentURL($attach.filename,"download")" /></a>
-            #end
-            #end
+            #curriki_avatar($authorDoc)
         </li>
         <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
         <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
