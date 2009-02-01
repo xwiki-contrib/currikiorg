@@ -404,7 +404,9 @@ wikiEditor.init({
 #set( $docName = $request.pagename )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
 #if( $request.method == "POST" )
-     $editDoc.setTitle( $request.doctitle )
+     #if($request.doctitle && $request.doctitle!="")
+      $editDoc.setTitle( $request.doctitle )
+     #end
      $editDoc.setContent( $request.doctext )
      $editDoc.saveWithProgrammingRights()
      #if( $request.gotodoc == "true" )
