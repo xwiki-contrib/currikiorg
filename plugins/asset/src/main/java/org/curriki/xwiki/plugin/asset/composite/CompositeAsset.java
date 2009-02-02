@@ -131,6 +131,9 @@ public abstract class CompositeAsset extends Asset {
                         } else if (doc == null) {
                             // getDocument returns null if the page is not viewable by the user
                             subInfo = addEmptySubinfo(subInfo, ProtectedAsset.class.getSimpleName().replaceAll("Asset$", ""));
+                        } else if (doc.isNew()) {
+                            // Document does not exist -- ignore it
+                            continue;
                         }
                     } catch (Exception e) {
                         subInfo = addEmptySubinfo(subInfo, InvalidAsset.class.getSimpleName().replaceAll("Asset$", ""));
