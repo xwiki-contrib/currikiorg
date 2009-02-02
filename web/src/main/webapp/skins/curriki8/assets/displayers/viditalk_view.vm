@@ -35,7 +35,21 @@
         #if(!$orig_video||$orig_video=="")
          #set($orig_video = $viditalkURL)
         #end
-        <button class="icon-link" href="$viditalkURL">$msg.get("rve.content.view.download.download_button")</button>
+	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_file"))
+	<p><strong>$msgtext</strong>
+	    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
+	</p>
+        <a class="icon-link" href="$viditalkURL">$msg.get("rve.content.view.download.download_button")</a>
+	<p class="text-link">
+		<a href="$viditalkURL">$msg.get("rve.content.view.download.download_button")</a>
+	</p>
+        <button class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}'); window.open('$viditalkURL');return false;" href="${viditalkURL}">$msg.get("rve.content.view.download.download_button")</button>
+    </div>
+    <div class="asset-display-download-inner">
+        <a class="icon-link" href="$orig_video">$msg.get("rve.content.view.download.download_button")</a>
+	<p class="text-link">
+		<a href="$viditalkURL">$msg.get("rve.content.view.download.download_button")</a>
+	</p>
         <button class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}'); window.open('$orig_video');return false;" href="${orig_video}">$msg.get("rve.content.view.download.download_button")</button>
     </div>
 </div>
