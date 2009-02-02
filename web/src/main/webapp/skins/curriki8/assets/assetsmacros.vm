@@ -173,7 +173,7 @@ $xwiki.addTooltipJS()
  * Rollover information div about an asset
  *#
 #macro(asset_info_rollover $asset $seccounter)
-<div id="mycurriki-description-${seccounter}" class="popup" style="display: none;">
+<div id="mycurriki-description-${seccounter}" class="popup popup-info-rollover" style="display: none;">
     <p>
         <strong>$msg.get("rve.title.attribution.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
     </p>
@@ -330,7 +330,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
   * Displays the subjects of an asset for the information areas
   *#
 #macro(asset_info_subject $asset)
-<ul>
+<ul class="asset-info-subject">
     #set($subjects = $!asset.getValue("fw_items"))
     #foreach($subject in $subjects)
     <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
@@ -343,7 +343,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
   *#
 #macro(asset_info_edlevel $asset)
 #set($educlevels = $!asset.getValue("educational_level"))
-<ul>
+<ul class="asset-info-edlevel">
     #foreach($educlevel in $educlevels)
     <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
     #end
@@ -355,7 +355,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
   *#
 #macro(asset_info_ict $asset)
 #set($ict = $!asset.getValue("instructional_component"))
-<ul>
+<ul class="asset-info-ict">
     #foreach($ictitem in $ict)
      #set($hyphenpos = $ictitem.indexOf("_"))
      #if($hyphenpos==-1)
