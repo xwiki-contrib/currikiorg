@@ -912,37 +912,37 @@ li#info-basic-ict, li#info-basic-tags, li#info-edit-ict {
 	clear: left;
 }
 
-li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a.icon-link, li.crs-rating-crs3-star, li.crs-rating-crs2-star, li.crs-rating-crs1-star, li.crs-rating-crsp-star, ul#popup-ict li {
+li#info-basic-ict li, li.crs-rating-crs3, li.crs-rating-crs2, li.crs-rating-crs1, li.crs-rating-crsp, #asset-rating a.icon-link, li.crs-rating-crs3-star, li.crs-rating-crs2-star, li.crs-rating-crs1-star, li.crs-rating-crsp-star, ul.asset-info-ict li {
 	background-image: url(images/sprite_crs_ict_group.gif);
 	background-repeat: no-repeat;
 }
 
-li#info-basic-ict li, ul#popup-ict li {
+li#info-basic-ict li, ul.asset-info-ict li {
 	margin: 0;
 	padding: 10px 0 10px 40px;
 }
 
-li#info-basic-ict li.ict-activity, ul#popup-ict li.ict-activity {
+li#info-basic-ict li.ict-activity, .popup-info-rollover li.ict-activity {
 	background-position: 0 -3330px;
 }
 
-li#info-basic-ict li.ict-resource, ul#popup-ict li.ict-resource {
+li#info-basic-ict li.ict-resource, .popup-info-rollover li.ict-resource {
 	background-position: 0 -2880px;
 }
 
-li#info-basic-ict li.ict-book, ul#popup-ict li.ict-book {
+li#info-basic-ict li.ict-book, .popup-info-rollover li.ict-book {
 	background-position: 0 -2970px;
 }
 
-li#info-basic-ict li.ict-curriculum, ul#popup-ict li.ict-curriculum {
+li#info-basic-ict li.ict-curriculum, .popup-info-rollover li.ict-curriculum {
 	background-position: 0 -3060px;
 }
 
-li#info-basic-ict li.ict-other, ul#popup-ict li.ict-other {
+li#info-basic-ict li.ict-other, .popup-info-rollover li.ict-other {
 	background-position: 0 -3150px;
 }
 
-li#info-basic-ict li.ict-multiple, ul#popup-ict li.ict-multiple {
+li#info-basic-ict li.ict-multiple, .popup-info-rollover li.ict-multiple {
 	background-position: 0 -3240px;
 }
 
@@ -1128,9 +1128,11 @@ li.input-select select {
 
 /** FORM mceEDITOR **/
 
-#input-wiki-wysiwyg .mceEditor span {display:inline;}
+.mode-edit form .mceEditor span {display:inline;}
 
-#input-wiki-wysiwyg select {width: auto;}
+.mode-edit .mceEditor select {width: auto;}
+
+
 
 
 /** RIGHT PANEL **/
@@ -1148,7 +1150,6 @@ li.input-select select {
 .popup { 
 	background:#FFFECE;
 	border:1px solid #FFBB00;
-	float:left;
 	overflow:visible;
 	padding:5px 5px 5px 10px;
 	position:absolute;
