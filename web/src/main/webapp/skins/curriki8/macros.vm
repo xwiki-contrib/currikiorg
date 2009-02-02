@@ -1293,7 +1293,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" /></a>
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end /></a>
  #end ## }
 #end ## }
 #end ## macro ## }
@@ -1320,7 +1320,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")"  /></a>
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end /></a>
  #end ## }
 #end  $xwiki.getUserName($userdoc.fullName) ## }
 #end ## macro ## }
