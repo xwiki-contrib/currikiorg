@@ -142,7 +142,7 @@
       #asset_tabs($asset "view")
      #end
     #end
-    <div id="asset-wrapper-inner" class="filetype-$!mainAssetFiletype">
+    <div id="asset-wrapper-inner" #if($mainAssetCategory!="collection") class="filetype-$!mainAssetFiletype" #end >
         #if($isEmbed)
          #asset_icontitle($asset)
          #asset_attribution($asset)
