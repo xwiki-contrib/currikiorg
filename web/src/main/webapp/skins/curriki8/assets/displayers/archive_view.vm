@@ -7,7 +7,9 @@
     <div class="asset-display-text-inner">
         <p>$!asset.description</p>
         ## if archive is not zip to not display the tree
-        #if(1==1)
+        #set($attach = $asset.attachmentList.get(0).filename)
+        #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
+        #if($filelist && $filelist.size()>0)
         #if(!$treeviewid)
         #set($treeviewid = 1)
         #else
@@ -19,7 +21,6 @@
         <script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
         <script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
         <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
-        #set($attach = $asset.attachmentList.get(0).filename)
         #set($tmpActiveClass = $asset.getActiveClass())
         $asset.use("CurrikiCode.ArchiveAssetClass")
         <button class="button-link button-link-show" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
