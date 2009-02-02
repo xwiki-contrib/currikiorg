@@ -1287,9 +1287,9 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @param $userdoc User document
   * @author dward@curriki.org
   *#
-#macro(curriki_avatar $userdoc) ## {
+#macro(curriki_avatar_width $userdoc $width) ## {
 #if($userdoc.attachmentList.size()==0)  ## {
- <img src="$xwiki.getSkinFile("noavatar.png")" />
+ <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" >
@@ -1298,6 +1298,15 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end ## }
 #end ## macro ## }
 
+#**
+  * Display the avatar of a user for the asset area
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatar $userdoc) ## {
+#curriki_avatar_width($userdoc "48")
+#end ## macro ## }
 
 #**
   * Display the avatar of a user with a name
@@ -1305,9 +1314,9 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @param $userdoc User document
   * @author dward@curriki.org
   *#
-#macro(curriki_avatarwithname $userdoc) ## {
+#macro(curriki_avatarwithname_width $userdoc) ## {
 #if($userdoc.attachmentList.size()==0)  ## {
- <img src="$xwiki.getSkinFile("noavatar.png")" />
+ <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" >
@@ -1316,6 +1325,15 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end  $xwiki.getUserName($userdoc.fullName) ## }
 #end ## macro ## }
 
+#**
+  * Display the avatar of a user with a name
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatarwithname $userdoc) ## {
+#curriki_avatarwithname_width($userdoc "48")
+#end ## macro ## }
 
 #**
  *  Macro to display an access denied message

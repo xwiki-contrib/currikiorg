@@ -52,7 +52,7 @@
      #groups_grouplogo( $assetGroup )
      #else
      ## TODO what is javascript:Curriki.logView('/Download/attachment/${creatorDoc.space}/${creatorDoc.name}/${attach.filename}
-     #curriki_avatar($assetAuthorDoc)
+     #curriki_avatar($assetAuthorDoc "")
      #end
  </li>
     #if($assetIsFromGroup)
@@ -589,7 +589,7 @@ $asset.use($comment)
     <ul>
         #set($authorDoc = $xwiki.getDocument($asset.getValue("author")))
         <li class="comment-avatar">
-            #curriki_avatar($authorDoc)
+            #curriki_avatar($authorDoc "")
         </li>
         <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
         <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
