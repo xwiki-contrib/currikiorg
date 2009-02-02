@@ -39,6 +39,8 @@
      #else
 #set($assetFiletype = $embeddedDoc.getValue("file_type"))
 #set($assetCategory = $embeddedDoc.getCategory())
+#if($assetFiletype || $assetFiletype=="") #set($assetFiletype = "unknown") #end
+#if($assetCategory || $assetCategory=="") #set($assetCategory = "unknown") #end
 <div class="sub-asset-wrapper category-$assetCategory">
     <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
         #asset_beginsection($embeddedDoc true)

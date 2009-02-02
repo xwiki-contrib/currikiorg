@@ -128,6 +128,8 @@
 #macro(asset_display $asset $mode)
 #set($mainAssetFiletype = $asset.getValue("file_type"))
 #set($mainAssetCategory = $asset.getCategory())
+#if($mainAssetFiletype || $mainAssetFiletype=="") #set($mainAssetFiletype = "unknown") #end
+#if($mainAssetCategory || $mainAssetCategory=="") #set($mainAssetCategory = "unknown") #end
 <div id="asset-wrapper" class="view-$!mainAssetCategory mode-$mode">
     #asset_findmode()
     #if(!$isEmbed)
@@ -152,8 +154,8 @@
          #curriki_noaccess()
         #else
         #if($mainAssetCategory!="collection")
-        <div class="sub-asset-wrapper category-$mainAssetCategory">
-          <div class="sub-asset-wrapper-inner filetype-$mainAssetFiletype">
+        <div class="sub-asset-wrapper category-$!mainAssetCategory">
+          <div class="sub-asset-wrapper-inner filetype-$!mainAssetFiletype">
         #end
         $asset.displayAsset($mode)
         #if($mainAssetCategory!="collection")
