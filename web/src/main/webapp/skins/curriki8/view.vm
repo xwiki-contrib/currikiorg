@@ -16,7 +16,7 @@
   #set($viewer = "view")
 #end ##}
 ## In Print Mode we don't want the standard header
-#if(($viewer!="print")&&($viewer!="embed")) ##{
+#if(($viewer!="print")&&($viewer!="embed")&&($viewer!="viewrev")) ##{
   #template("startpage.vm")
 #end
 #if($viewer == "view") ##{
@@ -28,7 +28,7 @@
 #end ##}
 <div class="clearfloats"></div>
 </div>## main
-#if(($viewer!="print")&&($viewer!="embed")) ##{
+#if(($viewer!="print")&&($viewer!="embed")&&($viewer!="viewrev")) ##{
   #template("endpage.vm")
 #else ##}{
   </div>## contentcolumn

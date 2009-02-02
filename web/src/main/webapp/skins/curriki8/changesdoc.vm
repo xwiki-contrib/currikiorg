@@ -1,6 +1,14 @@
 #**
   * Displays document changes. It is used for groups wiki and for assets
   *#
+## If asset revisions are in old format
+## we need to convert them on the fly
+#if($origdoc.getObject("XWiki.AssetClass"))
+#set($ok = $origdoc.convertWithoutSave())
+#end
+#if($newdoc.getObject("XWiki.AssetClass"))
+#set($ok = $newdoc.convertWithoutSave())
+#end
 <div id="changes-title">
 <h1>$msg.get("changes.changesofpage") $doc.name $msg.get("changes.in") $msg.get("changes.space") $doc.web</h1>
 </div>

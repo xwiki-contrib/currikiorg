@@ -803,9 +803,6 @@ $response.sendRedirect($request.xredirect)
 #if($request.getParameter("viewer") && $request.getParameter("viewer").equals("embed"))
 #set($mode = "embed")
 #end
-#if($request.rev)
-#set($mode = "rev")
-#end
 #if($mode=="print")
 #set($isPrint = true)
 #else

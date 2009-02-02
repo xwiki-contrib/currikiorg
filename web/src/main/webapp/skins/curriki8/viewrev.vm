@@ -3,11 +3,13 @@
   *  This is used for Assets and for Documentation pages in groups
   *  Also used by admins for other pages
   *#
+## we need to convert old assets on the fly
+#if($request.rev && $doc.getObject("XWiki.AssetClass"))
+#set($ok = $doc.convertWithoutSave())
+#end
 #asset_findtitle($doc)
 #template("xwikivars.vm")
 #template("layoutvars.vm")
 #template("htmlheader.vm")
-#template("printheader.vm")
-#template("contentview.vm")
-#template("footer.vm")
+#asset_display($doc "view")
 #template("htmlfooter.vm")

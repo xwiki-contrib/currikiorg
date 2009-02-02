@@ -64,7 +64,7 @@
             #if(($asset.category=="collection")||(!$doc.hasAccessLevel("edit")))
                 $version
             #else
-                <a href="$doc.getURL("viewrev","rev=$version")" target="_blank">$version</a>
+                <a href="$doc.getURL("viewrev","rev=${version}&viewer=viewrev")" target="_blank">$version</a>
             #end
             </td>
             <td width="10%">$xwiki.getLocalUserName($revinfo.author)</td>
