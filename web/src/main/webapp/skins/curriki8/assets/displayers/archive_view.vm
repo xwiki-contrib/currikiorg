@@ -3,102 +3,104 @@
   *
   *#
 #asset_displaycontentheader("text-align:center;")
-#if(!$treeviewid)
-#set($treeviewid = 1)
-#else
-#set($treeviewid = 1 + $treeviewid)
-#end
-<style type="text/css">
-@import "/xwiki/yui/treeview/assets/tree.css";
-</style>
-<script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
 <div class="asset-display-text">
-<div class="asset-display-text-inner">
-<p>$!asset.description</p>
-#set($attach = $asset.attachmentList.get(0).filename)
-#set($tmpActiveClass = $asset.getActiveClass())
-$asset.use("CurrikiCode.ArchiveAssetClass")
-<button class="button-link button-link-show" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
-#if ($asset.getValue("startfile"))
-  <button class="button-link button-link-start" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
-#end
-<div style="margin: 5px 0pt;">
-<div id="treeview${treeviewid}" style="display: none;">
-</div>
-<script type="text/javascript">
-    function showTree(treeId, button) {
-      var treediv = document.getElementById("treeview" + treeId);
-      treediv.style.display = 'block';  
-      button.onclick=function(){ hideTree(treeId, button);};
-      button.title="$msg.get('rve.content.view.hide_button')";
-      button.innerHTML="$msg.get('rve.content.view.hide_button')";
-      button.className="button-link button-link-hide";
-    }
-
-    function hideTree(treeId, button){
-        var treediv = document.getElementById("treeview" + treeId);
-        treediv.style.display = 'none';
-        button.onclick=function(){ showTree(treeId, button);};
-        button.title="$msg.get('rve.content.view.show_button')";
-        button.innerHTML="$msg.get('rve.content.view.show_button')";
-        button.className="button-link button-link-show";
-    }
-
-	var tree${treeviewid};
-	var nodes${treeviewid} = {};
-	var nodeIndex${treeviewid};
-        var baseUrl${treeviewid} = "";
-
-    function addTreeElement${treeviewid}(id, text, parent) {
-        var parent2;
-	    if (parent=="")
-	     parent2 = tree${treeviewid}.getRoot();
-	    else
-	     parent2 = nodes${treeviewid}[parent];
-        nodes${treeviewid}[id] = new YAHOO.widget.TextNode(text, parent2, false)
- //     nodes${treeviewid}[id] = new YAHOO.widget.CheckNode(id, text,  parent2, false, false);
-        nodes${treeviewid}[id].onLabelClick = onLabelClick${treeviewid};
-        nodes${treeviewid}[id].labelElId = id;
-    }
-
-	var callback = null;
-    
-    function onLabelClick${treeviewid}(node) {
-       var path = node.labelElId;
-       if (!(path[path.length - 1] == "/"))
-         window.open(baseUrl${treeviewid} + "/" + path);
-    }
-
-	function treeInit${treeviewid}() {
-		tree${treeviewid} = new YAHOO.widget.TreeView("treeview${treeviewid}");
-	    //var tree = tree${treeviewid};
-        //var nodes = nodes${treeviewid};
-#set($zipexp = $xwiki.getPlugin("zipexplorer"))
-#set($treelist = $zipexp.getFileTreeList($asset, $attach))
-        baseUrl${treeviewid} = "$asset.getAttachmentURL("$attach")";
-        #foreach($item in $treelist)
-        #set($checked = $selectlist.contains($item.getId()))
-        #if ($item.value.length() > 80)
-         #set($title_item = $item.value.substring(0, 80))
+    <div class="asset-display-text-inner">
+        <p>$!asset.description</p>
+        ## if archive is not zip to not display the tree
+#if(!$treeviewid)
+        #set($treeviewid = 1)
         #else
-         #set($title_item = $item.value)
+        #set($treeviewid = 1 + $treeviewid)
         #end
-        #set($title_item = $title_item.replaceAll("[\r\n]"," "))
-        addTreeElement${treeviewid}("$item.id", "$title_item", "$item.parent");
+        <style type="text/css">
+            @import "/xwiki/yui/treeview/assets/tree.css";
+        </style>
+        <script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
+        <script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
+        <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+        #set($attach = $asset.attachmentList.get(0).filename)
+        #set($tmpActiveClass = $asset.getActiveClass())
+        $asset.use("CurrikiCode.ArchiveAssetClass")
+        <button class="button-link button-link-show" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
+        #if ($asset.getValue("startfile"))
+        <button class="button-link button-link-start" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
         #end
-    tree${treeviewid}.draw();
-	}
+        <div style="margin: 5px 0pt;">
+            <div id="treeview${treeviewid}" style="display: none;">
+            </div>
+            <script type="text/javascript">
+                function showTree(treeId, button) {
+                    var treediv = document.getElementById("treeview" + treeId);
+                    treediv.style.display = 'block';
+                    button.onclick=function(){ hideTree(treeId, button);};
+                    button.title="$msg.get('rve.content.view.hide_button')";
+                    button.innerHTML="$msg.get('rve.content.view.hide_button')";
+                    button.className="button-link button-link-hide";
+                }
 
-    // Init the tree
-    treeInit${treeviewid}();
-</script>
-#if($tmpActiveClass)
-$asset.use($tmpActiveClass)
-#end
-</div>
-</div>
+                function hideTree(treeId, button){
+                    var treediv = document.getElementById("treeview" + treeId);
+                    treediv.style.display = 'none';
+                    button.onclick=function(){ showTree(treeId, button);};
+                    button.title="$msg.get('rve.content.view.show_button')";
+                    button.innerHTML="$msg.get('rve.content.view.show_button')";
+                    button.className="button-link button-link-show";
+                }
+
+                var tree${treeviewid};
+                var nodes${treeviewid} = {};
+                var nodeIndex${treeviewid};
+                var baseUrl${treeviewid} = "";
+
+                function addTreeElement${treeviewid}(id, text, parent) {
+                    var parent2;
+                    if (parent=="")
+                        parent2 = tree${treeviewid}.getRoot();
+                    else
+                        parent2 = nodes${treeviewid}[parent];
+                    nodes${treeviewid}[id] = new YAHOO.widget.TextNode(text, parent2, false)
+                    //     nodes${treeviewid}[id] = new YAHOO.widget.CheckNode(id, text,  parent2, false, false);
+                    nodes${treeviewid}[id].onLabelClick = onLabelClick${treeviewid};
+                    nodes${treeviewid}[id].labelElId = id;
+                }
+
+                var callback = null;
+
+                function onLabelClick${treeviewid}(node) {
+                    var path = node.labelElId;
+                    if (!(path[path.length - 1] == "/"))
+                        window.open(baseUrl${treeviewid} + "/" + path);
+                }
+
+                function treeInit${treeviewid}() {
+                    tree${treeviewid} = new YAHOO.widget.TreeView("treeview${treeviewid}");
+                    //var tree = tree${treeviewid};
+                    //var nodes = nodes${treeviewid};
+                #set($zipexp = $xwiki.getPlugin("zipexplorer"))
+                #set($treelist = $zipexp.getFileTreeList($asset, $attach))
+                    baseUrl${treeviewid} = "$asset.getAttachmentURL("$attach")";
+                #foreach($item in $treelist)
+                #set($checked = $selectlist.contains($item.getId()))
+                #if ($item.value.length() > 80)
+                #set($title_item = $item.value.substring(0, 80))
+                #else
+                #set($title_item = $item.value)
+                #end
+                #set($title_item = $title_item.replaceAll("[\r\n]"," "))
+                    addTreeElement${treeviewid}("$item.id", "$title_item", "$item.parent");
+                #end
+                    tree${treeviewid}.draw();
+                }
+
+                // Init the tree
+                treeInit${treeviewid}();
+            </script>
+            #if($tmpActiveClass)
+            $asset.use($tmpActiveClass)
+            #end
+        </div>
+        #end ## end show tree
+ </div>
 </div>
 #asset_attachments($asset)
 #asset_displaycontentfooter()

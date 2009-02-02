@@ -123,6 +123,7 @@
   #end
  #end   
 </ul>
+<div class="clear-right"></div>
 #end
 
 #macro(asset_display $asset $mode)
@@ -387,6 +388,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
             <li><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=infoedit")">$msg.get("rve.information.edit_link")</a></li>
             <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=history")">$msg.get("rve.information.history")</a></li>
         </ul>
+        <div class="clear-right"></div>        
         $asset.use("CurrikiCode.AssetClass")
         <div class="sub-asset-wrapper">
             <h3>
