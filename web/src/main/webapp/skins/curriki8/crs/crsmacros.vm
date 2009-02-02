@@ -13,8 +13,8 @@
 #set($status = "")
 #end
 #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-#set($nomination = $asset.getValue("reviewpending"))
-#if($nomination=="1")
+#set($nomination = $!asset.getValue("reviewpending"))
+#if("$!nomination"=="1")
 ## asset is in review pending status. we override the text
 #set($crsText = $msg.get("curriki.crs.reviewpending"))
 #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
@@ -270,9 +270,9 @@ $xwiki.addTooltipJS()
     #end
     #if($asset.canBeNominatedOrReviewed())
     #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
-    #set($nomination = $asset.getValue("reviewpending"))
+    #set($nomination = $!asset.getValue("reviewpending"))
     <div class="crs_reviewpending">
-        #if($nomination=="1")
+        #if("$!nomination"=="1")
         $msg.get("curriki.crs.reviewpending")
         #else
         #if($context.user!="XWiki.XWikiGuest")

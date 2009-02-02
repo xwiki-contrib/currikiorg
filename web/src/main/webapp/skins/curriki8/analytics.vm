@@ -2,8 +2,8 @@
   * Setup the Google Analytics used for the pages. 
   * @author Curriki dev team
   *#
-#set($GA_uacct = $xwiki.getXWiki().Param('curriki.system.GA', '0'))
-#if($GA_uacct != "0") ## {
+#set($GA_uacct = $!xwiki.getXWiki().Param('curriki.system.GA', '0'))
+#if("$!GA_uacct" != "0") ## {
 <script type="text/javascript">
 //<![CDATA[
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

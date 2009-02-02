@@ -15,11 +15,11 @@
 #if($doc.getObject("CurrikiCode.AssetClass"))
 <link href="$xwiki.getSkinFile("views.css", false)" rel="stylesheet" type="text/css"  />
 <link href="$xwiki.getSkinFile("print.css", false)" rel="stylesheet" type="text/css" media="print" />
-#if($request.viewer=="embed")
+#if("$!request.viewer"=="embed")
 <link href="$xwiki.getSkinFile("embed.css", false)" rel="stylesheet" type="text/css"  />
 #end
 #end
-#if($request.viewer=="print")
+#if("$!request.viewer"=="print")
 <link href="$xwiki.getSkinFile("print_preview.css", false)" rel="stylesheet" type="text/css"  />
 #end
 #end

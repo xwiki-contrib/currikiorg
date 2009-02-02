@@ -718,71 +718,19 @@ $memberdoc.getRenderedContent("$!content")</div>
 
 
 #**
- * Parents Breadcrumb
+ * Curriki breadcrumb entry point
  *#
-#macro(parentsBreadcrumb $bcDoc $level)
-#set($sm = $xwiki.csm)
-#set($spaceName = $bcDoc.getSpace())
-#set($s = $sm.getSpace($spaceName))
-#if( $s ) #if( $s.isNew() || $s.isDeleted() )
-  #set( $s = "" )
-#end #end
-
-##groups specifics
-###group creation page
-#if($bcDoc.fullName == "Groups.CreateNewGroup")
-  #set($usr = $context.user)
-  $xwiki.getUserName($usr,true) &gt;
+#macro(curriki_breadcrumb)
+<div id="breadcrumb">
+  #curriki_breadcrumb_bc($request.bc $doc)
+</div>
 #end
-###group home
-
-#if($!s=="") ## NOT groups specific
-
-#set($parent = $bcDoc.parent) 
-#if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
-  #set($bcLocal = "${parent};${bcLocal}")
-  #set($level = $level + 1)
-  #parentsBreadcrumb($xwiki.getDocument($parent) $level)
-#else
-  #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}'")
-  #foreach($bcItem in $xwiki.search($hql, 1, 0))
-   #set($bcLocal = "${bcItem.name};${bcLocal}")
-   #set($level = $level + 1)
-   #parentsBreadcrumb($xwiki.getDocument(${bcItem.name}) $level)
-  #end
-#end
-
-#if($bcDoc.space.startsWith("Documentation_")) ## documentation space
-  #set($grName = $bcDoc.space.substring( 14 ))
-  #set($s = $sm.getSpace($grName))
-  #if( $s )
-    #if( $s.isNew() || $s.isDeleted() )
-      #set( $s = "" )
-    #end
-  #end
-  #if($!s=="") #else
-  		  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name 
-  		  #set($docPageName = $grName+".Documentation") 
-  		  #set($docPage = $xwiki.getDocument( $docPageName ) ) 
-  		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
-  #end  
-#end ## end of documentation space
-  
-#else ##GROUP SPECIFIC
-  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
- 
-  #if($bcDoc.name == "Contributions" || $bcDoc.name == "ContributionsSearch")
-    <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
-  #end
-
-#end  ## end group specifics
-#end ## end macro
-
 
 #**
  * Parents Breadcrumb
  *#
-#macro(currikiBreadcrumb $bcParam $bcCurrentDoc)
+#macro(curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
+## prepare group data
 #set($sm = $xwiki.csm)
 #set($spaceName = $bcCurrentDoc.getSpace())
 #set($s = $sm.getSpace($spaceName))
@@ -790,106 +738,214 @@ $memberdoc.getRenderedContent("$!content")</div>
   #set( $s = "" )
 #end #end
 
- ##Preparation de la liste
+#if($bcDoc.fullName == "Groups.CreateNewGroup")
+ ## special breadcrumb parent for groups creation page
+ #set($usr = $context.user)
+ $xwiki.getUserName($usr,true) &gt;
+ #set($bcLocal = $bcCurrentDoc.fullName)
+#elseif($bcCurrentDoc.space.startsWith("Documentation_"))
+ ## special breadcrumb parent for groups documentation space
+  #set($grName = $bcCurrentDoc.space.substring( 14 ))
+  #set($s = $sm.getSpace($grName))
+  #if( $s )
+    #if( $s.isNew() || $s.isDeleted() )
+      #set( $s = "" )
+    #end
+  #end
+  #if($!s=="") #else
+  		  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name
+  		  #set($docPageName = $grName+".Documentation")
+  		  #set($docPage = $xwiki.getDocument( $docPageName ) )
+  		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
+  #end
+  #set($bcLocal = $bcCurrentDoc.fullName)
+#elseif ($s && $s != "")
+  ## special breadcrumb parent for groups space
+  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
+
+  #if($bcCurrentDoc.name == "Contributions" || $bcCurrentDoc.name == "ContributionsSearch")
+    <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
+  #end
+  #set($bcLocal = $bcCurrentDoc.fullName)
+#else 
+ ## prepare bcParent breadcrumb info of the parent page
+ ## prepare bcLocal breadcrum info of the current page
  #set($bcParent = $bcParam)
  #if($bcParam && $!bcParam != "")
-  #if($bcParam.endsWith($doc.fullName))
+  #if($bcParam.endsWith($bcCurrentDoc.fullName))
    #set($bcLocal = $bcParam)
   #else
-   #set($bcLocal = "${bcParam};${doc.fullName}")
+   #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
   #end
  #else
-  #set($bcLocal = $doc.fullName)
+  #set($bcLocal = $bcCurrentDoc.fullName)
  #end
- #if(!$bcParam || $!bcParam == "")
-  #parentsBreadcrumb($bcCurrentDoc, 0)
+
+ ## find the top parent in the bcParam that is valid
+ #set($topParentDoc = $bcCurrentDoc)
+ #if($bcParam && $bcParam != "")
+  #set($topParentDone = false)
+  #foreach($bcItem in $bcLocal.split(";"))
+   ## ignoring empty elements and the XWiki.XWikiUsers parent page
+   #if(!$topParentDone && $bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+     #set($topParentDone = true)
+     #set($topParentDoc = $xwiki.getDocument($bcItem))
+   #end
+  #end
  #end
- ##Deroulage de la liste
+
+ ## enhance bcLocal from this top Parent
+ #curriki_breadcrumb_parent($topParentDoc, 0)
+#end
+ ## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
  #set($isFirst = true)
  #set($previousBc = "")
+ ## loop on each element of the breadcrumb
  #foreach($bcItem in $bcLocal.split(";"))
+  ## ignoring empty elements and the XWiki.XWikiUsers parent page
   #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
-   
    #if(!$isFirst)
-    &gt; 
+    &gt;
    #end
-
    #set($isFirst = false)
-   #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
-   
+   #curriki_breadcrumb_display($bcItem.replace('/', '.') $previousBc)
+  #end
+ #end
+#end
+
+#**
+  * Breadcrumb display of a page
+  *#
+#macro(curriki_breadcrumb_display $bcItem $previousBc)
+#set($bcDoc = $xwiki.getDocument($bcItem))
+   ## custom handling of EditArticle action
    #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
-
+   ## find the page title
    #asset_findtitle($bcDoc)
-
-   ##groups specific rules
-   #if($!s=="") 
-     ##don't fix anything
-   #else
-     #if($bcDoc.name==$msg.groups_home_page) ##home page
-       #set($currikiTitle = $msg.groups_home_tabname)
-       #if($request.action)
-         #if($request.action=="editmasthead")
-           #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
-	         #end
-         #if($request.action=="editinfo")
-           #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
-         #end
-       #end
-     #end ##end home page
-     #if($bcDoc.name=="Documentation") ##documentation page
-     	  #if(	$request.action)
-     	  	  #if($request.action == "newdoc")
-     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
-     	  	  #end
-     	  	  #if($request.action == "editdoc")
-     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
-     	  	  #end
-     	  	  #if($request.action == "history")
-     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
-     	  	  #end
-     	  	  #if($request.action == "compare")
-     	  	  	  #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_compare_title}</a>")
-     	  	  #end
-     	  #end
-     #end  ##end documentation page
-   ###else
-   ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
-   ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
-   ##  #end
-   #end
-   ##end of groups specific rules
-
+   ## custom title for groups
+   #curriki_breadcrumb_groups_fixtitle()
+   ## custom arguments for My Curriki
    #set($userArg = "")
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
     #set($userArg="&user=$request.user")
    #end
-
+   ## Display the breacrumb
    <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
    #set($previousBc = "${previousBc};${bcItem}")
-   
-   #set($more = "")
-   #if($bcDoc.fullName == "Groups.Browse")
+   ## Display additional groups breadcrumb
+   #curriki_breadcrumb_groups_addbrowseinfo()
+#end
+
+#**
+  * Breadcrumb title change for groups features
+  *#
+#macro(curriki_breadcrumb_groups_fixtitle)
+  ## groups specific rules
+  #if($!s=="")
+    ##don't fix anything
+  #else
+    #if($bcDoc.name==$msg.groups_home_page) ##home page
+      #set($currikiTitle = $msg.groups_home_tabname)
+      #if($request.action)
+        #if($request.action=="editmasthead")
+          #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
+            #end
+        #if($request.action=="editinfo")
+          #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
+        #end
+      #end
+    #end ##end home page
+    #if($bcDoc.name=="Documentation") ##documentation page
+          #if(	$request.action)
+                #if($request.action == "newdoc")
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
+                #end
+                #if($request.action == "editdoc")
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
+                #end
+                #if($request.action == "history")
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
+                #end
+                #if($request.action == "compare")
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_compare_title}</a>")
+                #end
+          #end
+    #end  ##end documentation page
+  ###else
+  ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
+  ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
+  ##  #end
+  #end
+  ##end of groups specific rules
+#end
+
+#**
+  * This method adds one more level of breadcrumb for the browse groups page
+  * depending on which category is browsed
+  *#
+#macro(curriki_breadcrumb_groups_addbrowseinfo)
+#set($more = "")
+#if($bcDoc.fullName == "Groups.Browse")
      #if( $request.subject )
 		#set($sdoc = $xwiki.getDocument($request.subject))
 		#set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
 		#set($more_href = "${doc.getURL()}?subject=${request.subject}")
      #end
    #end
-
- 
-   #if($more != "")
-     &gt; <a href="$more_href">$more</a>
+#if($more != "")
+    &gt; <a href="$more_href">$more</a>
    #end
-   
-
-  #end
- #end
 #end
 
 
+
 #**
+ * Builds the Parents Breadcrumb in bcLocal
+ *#
+#macro(curriki_breadcrumb_parent $bcDoc $level)
+## prepare group info
+#set($sm = $xwiki.csm)
+#set($spaceName = $bcDoc.getSpace())
+#set($s = $sm.getSpace($spaceName))
+#if( $s ) #if( $s.isNew() || $s.isDeleted() )
+  #set( $s = "" )
+#end #end
+
+#if($!s=="")
+ ## handling breadcrumb if it is not a group
+ #set($parentList = $util.arrayList)
+ #if($bcDoc.getObject("CurrikiCode.AssetClass"))
+  ## handling of breadcrumb for an Asset. Taking the first one.
+  ## TODO: setup a cache
+  #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' order by doc.creationDate")
+  #set($parentList = $xwiki.searchDocuments($hql, 1, 0))
+ #end
+ #set($parent = "")
+ #if($parentList && $parentList.size()>0)
+   #foreach($par in $parentList)
+    #set($parent = $par)
+   #end
+ #end
+ #if(!$parent || ($!parent == ""))
+  #set($parent = $bcDoc.parent)
+ #else
+ #end
+ #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
+  #set($bcLocal = "${parent};${bcLocal}")
+  #set($level = $level + 1)
+  #set($parentDoc = $xwiki.getDocument($parent))
+  #curriki_breadcrumb_parent($parentDoc,$level)
+ #else
+ #end
+#end ## end check groups
+#end ## end macro
+
+
+
+#**
+  * TODO: check if it is still used
   * Subject breadcrumb
   *
   * @param $bcParam status parameter
@@ -937,10 +993,9 @@ $memberdoc.getRenderedContent("$!content")</div>
 #end
 
 
-##
-## End from space.vm
-##
-## allows to insert a style sheet
+#*
+ * allows to insert a style sheet
+ *#
 #macro(css $filename)
 <style type="text/css">
 @import "$doc.getAttachmentURL($filename)";
