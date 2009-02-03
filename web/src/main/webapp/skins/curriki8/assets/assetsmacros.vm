@@ -177,18 +177,18 @@ $xwiki.addTooltipJS()
  *#
 #macro(asset_info_rollover $asset $seccounter)
 <div id="mycurriki-description-${seccounter}" class="popup popup-info-rollover" style="display: none;">
+    ##<p>
+    ##    <strong>$msg.get("global.title.popup.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
+    ##</p>
     <p>
-        <strong>$msg.get("rve.title.attribution.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
+        <strong>$msg.get("global.title.popup.description")</strong><span>$!asset.display("description")</span>
     </p>
-    <p>
-        <strong>$msg.get("rve.infodiv.description")</strong><span>$!asset.display("description")</span>
-    </p>
-    <strong>$msg.get("rve.infodiv.subject")</strong>
-    #asset_info_subject($asset)
-    <strong>$msg.get("rve.infodiv.edlevel")</strong>
-    #asset_info_edlevel($asset)
-    <strong>$msg.get("rve.infodiv.ict")</strong>
-    #asset_info_ict($asset)
+    <strong>$msg.get("global.title.popup.subject")</strong>
+    #asset_info_subject($asset true)
+    <strong>$msg.get("global.title.popup.educationlevel")</strong>
+    #asset_info_edlevel($asset true)
+    <strong>$msg.get("global.title.popup.ict")</strong>
+    #asset_info_ict($asset true)
 </div>
 #end
 
@@ -332,11 +332,16 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #**
   * Displays the subjects of an asset for the information areas
   *#
-#macro(asset_info_subject $asset)
+#macro(asset_info_subject $asset $popup)
 <ul class="asset-info-subject">
     #set($subjects = $!asset.getValue("fw_items"))
     #foreach($subject in $subjects)
     <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
+    #end
+    #if($popup)
+    #if(!$subjects || $subjects.size()==0)
+     <li>$msg.get("global.title.popup.none.selected")</li>
+    #end
     #end
 </ul>
 #end
@@ -344,11 +349,16 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #**
   * Displays the education level of an asset for the information areas
   *#
-#macro(asset_info_edlevel $asset)
+#macro(asset_info_edlevel $asset $popup)
 #set($educlevels = $!asset.getValue("educational_level"))
 <ul class="asset-info-edlevel">
     #foreach($educlevel in $educlevels)
     <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
+    #end
+    #if($popup)
+    #if(!$educlevels || $educlevels.size()==0)
+     <li>$msg.get("global.title.popup.none.selected")</li>
+    #end
     #end
 </ul>
 #end
@@ -356,7 +366,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #**
   * Displays the instructional component of an asset for the information areas
   *#
-#macro(asset_info_ict $asset)
+#macro(asset_info_ict $asset $popup_)
 #set($ict = $!asset.getValue("instructional_component"))
 <ul class="asset-info-ict">
     #foreach($ictitem in $ict)
@@ -367,6 +377,11 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
       #set($ictcategoryitem = $ictitem.substring(0, $hyphenpos))
      #end
     <li class="ict-${ictitem.replace('_','-')} ict-${ictcategoryitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
+    #end
+    #if($popup)
+    #if(!$ict || $ict.size()==0)
+     <li>$msg.get("global.title.popup.none.selected")</li>
+    #end
     #end
 </ul>
 #end
@@ -418,17 +433,18 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                             </tr>
                             <tr>
                                 <td>
-                                    #asset_info_subject($asset)
+                                    #asset_info_subject($asset false)
                                 </td>
                                 <td>
-                                    #asset_info_edlevel($asset)
+                                    #asset_info_edlevel($asset false)
+                                    #asset_info_edlevel($asset false)
                                 </td>
                             </tr>
                         </table>
                     </li>
                     <li id="info-basic-ict">
                         <strong>$msg.get("rve.information.ict_title")</strong>
-                        #asset_info_ict($asset)
+                        #asset_info_ict($asset false)
                     </li>
                     <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span>$!asset.display("keywords")</span></li>
                     <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span>$!asset.display("language")</span></li>
