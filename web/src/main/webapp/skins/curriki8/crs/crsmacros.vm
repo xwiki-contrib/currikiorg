@@ -16,6 +16,8 @@
 #set($nomination = $!asset.getValue("reviewpending"))
 #set($crsTarget = "")
 #set($crsIconTarget = "")
+#set($crsClass = "")
+#set($crsIconText = $msg.get("curriki.crs.rating${status}"))
 #if("$!nomination"=="1")
 ## asset is in review pending status. we override the text
 #set($crsText = $msg.get("curriki.crs.reviewpending"))
@@ -50,11 +52,14 @@
   #set($crsClass = "crs-rating-crs2")
  #elseif($status=="800")
   #set($crsClass = "crs-rating-crs3")
+ #else
+  ## compatiblity with previous behavior of crs 1 2 3
+  #set($crsClass = "crs-rating-crs${status}")
  #end
 #end
 <div id="asset-rating">
-    <a class="text-link" href="$crsTextUrl" $!crsTarget >$crsText</a>
-    <a class="icon-link $crsClass" href="$crsIconUrl" $!crsIconTarget ></a>
+    <a class="text-link" href="$crsTextUrl" $!crsTarget title="$crsText">$crsText</a>
+    <a class="icon-link ${crsClass}" href="$crsIconUrl" $!crsIconTarget title="$crsIconText"></a>
 </div>
 #end
 
