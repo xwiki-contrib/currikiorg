@@ -79,6 +79,8 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,setAllowDrag:false
 		,setUniqueId:false
 		,disableUnviewable:true
+		,hideUnviewable:false
+		,hideInvalid:false
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
@@ -152,7 +154,7 @@ console.log('createNode: parent',parent);
 				if (attr.rights.view){
 					childInfo.cls = childInfo.cls+' rights-viewable';
 				} else {
-					childInfo.cls = childInfo.cls+' rights-unviewable';
+					childInfo.cls = childInfo.cls+' rights-unviewable'+((this.hideUnviewable || (this.hideInvalid && attr.assetType && attr.assetType.search(/Invalid/) !== -1))?' hidden':'');
 				}
 				if (attr.rights.edit){
 					childInfo.cls = childInfo.cls+' rights-editable';
