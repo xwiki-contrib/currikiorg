@@ -56,12 +56,12 @@ Toc.init = function(){
 			,listeners:{
 				'beforeclick':{
 					fn:function(node, e){
-						var bc = node.getPath().replace(/\//g, ';');
+						var bc = node.getPath().replace(/:\d+(\/|$)/g, '$1').replace(/\//g, ';');
 						var viewer = Curriki.module.toc.getQueryParam('viewer');
 						if (viewer !== "") {
 							viewer = '&viewer='+viewer;
 						}
-						window.location.href = '/xwiki/bin/view/'+node.id.replace('.', '/')+'?bc='+bc+viewer;
+						window.location.href = '/xwiki/bin/view/'+(node.attributes.pageName||node.id).replace('.', '/')+'?bc='+bc+viewer;
 						return false;
 					}
 				}
