@@ -226,6 +226,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 </div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 #if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
+#set($g_enable_STAF = true)
 <a class="curriki-link" href="$bentrydoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a>
 #else
 ## #sep()

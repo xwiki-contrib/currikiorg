@@ -11,6 +11,7 @@
 <ul id="function-tabs">
    #if(!$isguest)
      <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+     #set($g_enable_STAF = true)
      <li id="tab-email"><a href="javascript:void(0)" onclick="stafShow(this.href); return false;" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
 ##     <li id="tab-flag"><a href="javascript:void(0)" onclick="return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
    #end
@@ -1508,6 +1509,7 @@ $currDoc.displayAsset("view")
 <div class="asset-content-footer-bordered">
 <a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.commentNumbers])</a> #sep()
 #if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $currDoc.fullName))
+#set($g_enable_STAF = true)
 <a href="$currDoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a> #sep()
 #else
 <a href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.linkToThePage")</a> #sep()
