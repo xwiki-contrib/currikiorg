@@ -948,6 +948,105 @@ $msg.get("notallowed")
 #end
 #end
 
+#**
+  *  Macro to display root collections
+  *#
+#macro(compositeasset_display $doc)
+#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome") ## {
+#set($user = $context.user)
+#if($user.startsWith("XWiki.")) ## {
+#set($user = $user.substring(6))
+#end ## }
+#if($doc.web.startsWith("Coll_")) ## {
+#set($shortname = $doc.web.substring(5))
+#else ## } {
+#set($shortname = $user)
+#end ## }
+#if($user == $shortname) ## {
+$response.sendRedirect($xwiki.getURL('MyCurriki.Collections'))
+#else ## } {
+#set($userarg = "user=${shortname}")
+$response.sendRedirect($xwiki.getURL('MyCurriki.Collections', 'view', "$userarg"))
+#end ## }
+#else ## } {
+#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome")
+ #set($user=$doc.space.substring(5))
+#elseif($request.user)
+ #set($user = $request.user)
+#else
+ #set($user=$context.user)
+#end
+#set($shortname = $user)
+#if($user.startsWith("XWiki."))
+ #set($shortname = $user.substring(6))
+#end
+#curriki_finduserprefix($shortname)
+#if(!$userPrefix || $userPrefix == "")
+1 Collection List
+#else
+1 $userPrefix Collections
+#end
+#set($usercoll = "Coll_${shortname}")
+#set($collectionsHome = $xwiki.getDocument($usercoll, "WebHome"))
+#set($collectionsList = $collectionsHome.getObjects("CurrikiCode.SubAssetClass"))
+#set($nbToDisplay = 5)
+#set($Integer = 0)
+#set($startIndex = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex > ($collectionsList.size() - 1))
+ #set($startIndex = $collectionsList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex > ($collectionsList.size() - 1))
+ #set($endIndex = $collectionsList.size() - 1)
+#end
+#set($deleteMsg = $msg.get("confirmdelete"))
+#set($localUrl = $doc.getURL("view"))
+
+$msg.get("colls.infos")
+
+#if($collectionsList.size() >0)
+ #foreach ($index in [$startIndex..$endIndex])
+  #asset_displaycollection($collectionsList.get($index))
+ #end
+#end
+<hr class="my-curriki-hr">
+
+#if($context.user=="XWiki.${shortname}" || $xwiki.hasAdminRights())
+<div style="float:right;"><span class="righttext"><a class="buttonred" onclick="addCollection2(); return false;" href="#" title="$msg.get("colls.createCollection")">$msg.get("colls.createCollection")</a></span></div>
+#end
+<div align="center"><div class="my-curriki-nav">
+#set($nbDisplayed = ($endIndex - $startIndex + 1))
+#if($collectionsList.size() == 0)
+ #set($nbDisplayed = 0)
+#end
+#set($hasPrev = $startIndex > 0)
+#set($hasNext = $endIndex < ($collectionsList.size() - 1))
+#set($startDisplayed = $startIndex + 1)
+#set($endDisplayed = $endIndex + 1)
+#set($elemsDisplayed = "${startDisplayed}-${endDisplayed}")
+$msg.get("colls.numberOfCollsDisplayed", [$elemsDisplayed, $collectionsList.size()])
+<span class="navitems">
+#if($hasPrev)
+#set($prevIndex = $startIndex - $nbToDisplay)
+<a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${prevIndex}")" >$msg.get("caption.prev")</a>
+#else
+$msg.get("caption.prev")
+#end
+#sep()
+#if($hasNext)
+#set($nextIndex = $startIndex + $nbToDisplay)
+<a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${nextIndex}")" >$msg.get("caption.next")</a>
+#else
+$msg.get("caption.next")
+#end
+</span>
+</div></div>
+#end ## }
+#end
+
 
 #*
 ## previous macros
@@ -1404,102 +1503,6 @@ $currDoc.displayAsset("view")
 </div> ##asset-contents
 </div> ##asset-page
 $xwiki.addTooltipJS()
-#end
-
-#macro(compositeasset_display $doc)
-#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome") ## {
-#set($user = $context.user)
-#if($user.startsWith("XWiki.")) ## {
-#set($user = $user.substring(6))
-#end ## }
-#if($doc.web.startsWith("Coll_")) ## {
-#set($shortname = $doc.web.substring(5))
-#else ## } {
-#set($shortname = $user)
-#end ## }
-#if($user == $shortname) ## {
-$response.sendRedirect($xwiki.getURL('MyCurriki.Collections'))
-#else ## } {
-#set($userarg = "user=${shortname}")
-$response.sendRedirect($xwiki.getURL('MyCurriki.Collections', 'view', "$userarg"))
-#end ## }
-#else ## } {
-#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome")
- #set($user=$doc.space.substring(5))
-#elseif($request.user)
- #set($user = $request.user)
-#else
- #set($user=$context.user)
-#end
-#set($shortname = $user)
-#if($user.startsWith("XWiki."))
- #set($shortname = $user.substring(6))
-#end
-#curriki_finduserprefix($shortname)
-#if(!$userPrefix || $userPrefix == "")
-1 Collection List
-#else
-1 $userPrefix Collections
-#end
-#set($usercoll = "Coll_${shortname}")
-#set($collectionsHome = $xwiki.getDocument($usercoll, "WebHome"))
-#set($collectionsList = $collectionsHome.getObjects("CurrikiCode.SubAssetClass"))
-#set($nbToDisplay = 5)
-#set($Integer = 0)
-#set($startIndex = 0)
-#if($request.startIndex)
- #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
-#end
-#if($startIndex > ($collectionsList.size() - 1))
- #set($startIndex = $collectionsList.size() - 1)
-#end
-#set($endIndex = $startIndex - 1 + $nbToDisplay)
-#if($endIndex > ($collectionsList.size() - 1))
- #set($endIndex = $collectionsList.size() - 1)
-#end
-#set($deleteMsg = $msg.get("confirmdelete"))
-#set($localUrl = $doc.getURL("view"))
-
-$msg.get("colls.infos")
-
-#if($collectionsList.size() >0)
- #foreach ($index in [$startIndex..$endIndex])
-  #asset_displaycollection($collectionsList.get($index))
- #end
-#end
-<hr class="my-curriki-hr">
-
-#if($context.user=="XWiki.${shortname}" || $xwiki.hasAdminRights())
-<div style="float:right;"><span class="righttext"><a class="buttonred" onclick="addCollection2(); return false;" href="#" title="$msg.get("colls.createCollection")">$msg.get("colls.createCollection")</a></span></div>
-#end
-<div align="center"><div class="my-curriki-nav">
-#set($nbDisplayed = ($endIndex - $startIndex + 1))
-#if($collectionsList.size() == 0)
- #set($nbDisplayed = 0)
-#end
-#set($hasPrev = $startIndex > 0)
-#set($hasNext = $endIndex < ($collectionsList.size() - 1))
-#set($startDisplayed = $startIndex + 1)
-#set($endDisplayed = $endIndex + 1)
-#set($elemsDisplayed = "${startDisplayed}-${endDisplayed}")
-$msg.get("colls.numberOfCollsDisplayed", [$elemsDisplayed, $collectionsList.size()]) 
-<span class="navitems">
-#if($hasPrev)
-#set($prevIndex = $startIndex - $nbToDisplay)
-<a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${prevIndex}")" >$msg.get("caption.prev")</a>
-#else
-$msg.get("caption.prev")
-#end
-#sep()
-#if($hasNext)
-#set($nextIndex = $startIndex + $nbToDisplay)
-<a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${nextIndex}")" >$msg.get("caption.next")</a>
-#else
-$msg.get("caption.next")
-#end
-</span>
-</div></div>
-#end ## }
 #end
 
 
