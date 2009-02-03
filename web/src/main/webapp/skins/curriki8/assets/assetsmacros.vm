@@ -90,40 +90,76 @@
  *#
 #macro(asset_links $asset)
 <ul id="asset-links">
- #if(!$isguest)
-  #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
-   ## Edit
+    #if(!$isguest)
+    #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
+    ## Edit
    <li>
     <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
-   </li>
-  #end
-  ## Copy
+</li>
+    #end
+    ## Copy
   #if($asset.category!="collection")
-   <li>
-    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')">$msg.get('rve.content.copy_link')</a>
-   </li>
-  #end
-  ## Add
+    <li>
+        <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')">$msg.get('rve.content.copy_link')</a>
+    </li>
+    #end
+    ## Add
 ##if($g_userHasCollections)##{
   <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
-   <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
-  </li>
-##end##}
+    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
+</li>
+    ##end##}
   ## Build Up
   #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
-  <li>
-   <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
-  </li>
-  ## Organize
-  <li class="last-item">
-   #escapeForJS(${xwiki.getUserName($asset.creator, false)})
-   #set($escapedCreatorName = $ret_escaped)
-   <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
-  </li>
-  #end
- #end   
+  ## checking if we have organize. This sets the variable $subAssetList also used in collection_view.vm
+  #set($subAssetList = $util.arrayList)
+  #asset_preparesubassetlist($asset $subAssetList)
+    <li #if($subAssetList.size()==0) class="last-item" #end >
+        <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
+    </li>
+    ## Organize
+   #if($subAssetList.size()!=0)
+    <li class="last-item">
+        #escapeForJS(${xwiki.getUserName($asset.creator, false)})
+        #set($escapedCreatorName = $ret_escaped)
+        <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
+    </li>
+    #end
+    #end
+    #end
 </ul>
 <div class="clear-right"></div>
+#end
+
+#**
+ *  This macro prepares the sub asset list for a collection
+ *#
+#macro(asset_preparesubassetlist $asset $subAssetList)
+#set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
+#foreach($obj in $objs)
+ #set($ok = $subAssetList.add(""))
+#end ## foreach
+#foreach($obj in $objs)
+ #set($ok = $asset.use($obj))
+ #set($position = $asset.getValue("order"))
+ #set($assetPage = $asset.getValue("assetpage"))
+ #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
+## do not add
+ #else
+  #set($embeddedDoc = $xwiki.getDocument($assetPage))
+  #if(!$xwiki.exists($assetPage))
+## We are not showing items that do not exist
+  #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
+## We are not showing protected assets
+  #else
+   #if($position >= $subAssetList.size())
+    #set($ok = $subAssetList.add($assetPage))
+   #else
+    #set($ok = $subAssetList.set($position.intValue(), $assetPage))
+   #end
+  #end
+ #end
+#end ## foreach
 #end
 
 #macro(asset_display $asset $mode)
@@ -336,11 +372,15 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_info_subject $asset $popup)
 <ul class="asset-info-subject">
     #set($subjects = $!asset.getValue("fw_items"))
+    #set($subjectCounter = 0)
     #foreach($subject in $subjects)
-    <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
+     #if($subject!="FW_masterFramework.WebHome")
+      #set($subjectCounter = $subjectCounter + 1)
+         <li>$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
+      #end
     #end
     #if($popup)
-    #if(!$subjects || $subjects.size()==0)
+    #if($subjectCounter==0)
      <li>$msg.get("global.title.popup.none.selected")</li>
     #end
     #end

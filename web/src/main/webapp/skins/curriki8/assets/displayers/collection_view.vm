@@ -1,42 +1,21 @@
 #if(!$asset.hasAccessLevel("view"))
 #asset_collectionemptyornorights()
 #else
- #set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
- #set($assetList = $xwiki.arrayList)
- #foreach($obj in $objs)
-  #set($ok = $assetList.add(""))
- #end ## foreach
- #foreach($obj in $objs)
-  #set($ok = $asset.use($obj))
-  #set($position = $asset.getValue("order"))
-  #set($assetPage = $asset.getValue("assetpage"))
-  #if($position >= $assetList.size())
-   #set($ok = $assetList.add($assetPage))
-  #else
-   #set($ok = $assetList.set($position.intValue(), $assetPage))
-  #end
- #end ## foreach
- #set($counter = 0)
- #foreach($assetPage in $assetList)
-  #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
-   ## Do nothing <hr />
-  #else
-   #set($embeddedDoc = $xwiki.getDocument($assetPage))
-   #if(!$xwiki.exists($assetPage))
-    ## We are not showing items that do not exist
-   #elseif(!$xwiki.hasAccessLevel("view", $context.user, $assetPage))
-    ## We are not showing protected assets
-   #else
-    #set($counter = $counter + 1)
-    #set($embeddedDoc = $xwiki.getDocument($assetPage))
-     #if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
+ ## The subAssetList property has already been prepared
+ ## in asset_tabs so that we can determine if we need an organize link
+#if($subAssetList.size()!=0)
+#set($counter = 0)
+#foreach($assetPage in $subAssetList)
+#set($counter = $counter + 1)
+#set($embeddedDoc = $xwiki.getDocument($assetPage))
+#if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
 <div class="sub-asset-wrapper category-collection">
     <div class="sub-asset-wrapper-inner">
         #asset_beginsection($embeddedDoc false)
         #asset_endsection()
     </div>
 </div>
-     #else
+#else
 #set($assetFiletype = $embeddedDoc.getValue("file_type"))
 #set($assetCategory = $embeddedDoc.getCategory())
 #if(!$assetFiletype || $assetFiletype=="") #set($assetFiletype = "unknown") #end
@@ -48,11 +27,9 @@
         #asset_endsection()
     </div>
 </div>
-     #end ## composite or source
-    #end ## existing or viewable asset
-   #end ## not empty or pagebreak
+#end ## composite or source
   #end ## foreach
- #if($counter==0)
+#else
 #asset_collectionemptyornorights()
- #end
+#end
 #end
