@@ -23,7 +23,7 @@
  * Macro displaying the asset icon and title
  *#
 #macro(asset_icontitle $asset)
-<div id="asset-header">
+<!-- #* Hack: HTML comment to fix bug CURRIKI-3568 Do not remove *# --><div id="asset-header">
  <!--<img src="images/collectionmedium.gif">-->
  <h2><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$asset.displayTitle</a></h2>
  #asset_info_rollover($asset 0)
@@ -865,6 +865,9 @@ $asset.updateObjectFromRequest("CurrikiCode.VideoAssetClass")
 #end
 #if($asset.getObject("CurrikiCode.TextAssetClass"))
 $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
+#end
+#if($asset.getObject("CurrikiCode.ExternalAssetClass"))
+$asset.updateObjectFromRequest("CurrikiCode.ExternalAssetClass")
 #end
 ## handling file upload
 #set($updateGroovy = $xwiki.parseGroovyFromPage("CurrikiCode.UpdateAttachmentGroovy"))
