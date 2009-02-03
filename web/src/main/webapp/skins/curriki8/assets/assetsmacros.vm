@@ -605,7 +605,7 @@ $asset.use($comment)
     <ul>
         #set($authorDoc = $xwiki.getDocument($asset.getValue("author")))
         <li class="comment-avatar">
-            #curriki_avatar_width($authorDoc "")
+            #curriki_avatar($authorDoc)
         </li>
         <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
         <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
