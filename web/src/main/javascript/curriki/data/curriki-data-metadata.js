@@ -25,12 +25,16 @@ Curriki.data.ict.getRolloverDisplay = function(el_ict){
 
 	var wrap = '<div class="ict-{0}"><img class="ict-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
 
-	if (icts.size() == 0) {
-		ict += String.format(wrap, 'none', _('global.title.popup.none.selected'));
+	if ("undefined" !== typeof icts && "undefined" !== typeof icts[0]) {
+		ict += String.format(wrap, icts[0].replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+icts[0]));
+		if ("undefined" !== typeof icts[1]) {
+			ict += String.format(wrap, icts[1].replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+icts[1]));
+			if ("undefined" !== typeof icts[2]) {
+				ict += "...<br />";
+			}
+		}
 	} else {
-		icts.each(function(i){
-			ict += String.format(wrap, i.replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+i));
-		});
+		ict += String.format(wrap, 'none', _('global.title.popup.ict.missing'));
 	}
 
 	return ict;
