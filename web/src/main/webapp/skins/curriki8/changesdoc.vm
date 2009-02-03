@@ -91,36 +91,6 @@ $value
 </div>
 
 <div id="changes-content">
-#if($origdoc.get("CurrikiCode.TextAssetClass"))
-#set($ok = $origdoc.use("CurrikiCode.TextAssetClass"))
-#set($origcontent = $!origdoc.getValue("text").trim())
-#if(!$origcontent)
-#set($text1 = "")
-#else
-#set($text1 = $origcontent)
-#end
-#set($ok = $newdoc.use("CurrikiCode.TextAssetClass"))
-#set($newcontent = $!newdoc.getValue("text").trim())
-#if(!$newcontent)
-#set($text2 = "")
-#else
-#set($text2 = $newcontent)
-#end
-<table class="changes-table">
-<tr class="changes-table-title">
-<th>$msg.get("changes.contentchanges")</th>
-</tr>
-<tr>
-<td>
-#if($text1.equals($text2))
-$msg.get("changes.nocontentchanges")
-#else
-$xwiki.diff.getDifferencesAsHTML($text1, $text2 ,false)
-#end
-</td>
-</tr>
-</table>
-#else
 #set($origcontent = $!origdoc.content.trim())
 #if(!$origcontent)
 #set($text1 = "")
@@ -147,7 +117,6 @@ $xwiki.diff.getDifferencesAsHTML($text1, $text2 ,false)
 </td>
 </tr>
 </table>
-#end
 </div>
 
 <div id="changes-attachments">
