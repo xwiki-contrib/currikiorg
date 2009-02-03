@@ -93,7 +93,9 @@ Toc.init = function(){
 			}
 		};
 
-		root = new Ext.tree.AsyncTreeNode(root);
+		//root = new Ext.tree.AsyncTreeNode(root);
+		var tl = new Curriki.ui.treeLoader.TOC();
+		root = tl.createNode(root);
 
 		return root;
 	}
