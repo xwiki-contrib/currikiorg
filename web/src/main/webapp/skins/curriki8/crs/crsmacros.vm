@@ -124,7 +124,8 @@
 #set($textrating = $msg.get("CRS.CurrikiReviewStatusClass_status_${rating}"))
 #set($formattedrating = "${rating}-${textrating}")
 #set($ratinguser = $asset.display("user"))
-#set($crsparams = [$!asset.display("instructional_component"), $formattedrating, $formattedratingdate])
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($crsparams = [$!asset.display("instructional_component").replaceAll("#--#",","), $formattedrating, $formattedratingdate])
 <ul class="crs-rating">
     <li class="crs-rating-crs${rating}">
         $msg.get("rve.comments.review.reviewed.default_text", $crsparams)
