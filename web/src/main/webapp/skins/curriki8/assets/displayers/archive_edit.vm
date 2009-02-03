@@ -8,6 +8,10 @@
             <fieldset>
                 <ul>
                     #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
+                    ## if archive is not zip to not display the tree
+                    #set($attach = $asset.attachmentList.get(0).filename)
+                    #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
+                    #if($filelist && $filelist.size()>0)
                     <li class="input-text">
                         #set($currentstartfile = $asset.getValue("startfile"))
                         <span>
@@ -17,10 +21,6 @@
                             #set($tmpActiveClass = $asset.getActiveClass())
                             $asset.use("CurrikiCode.ArchiveAssetClass")
                             $asset.display("startfile", "hidden", true)
-                            ## if archive is not zip to not display the tree
-                            #set($attach = $asset.attachmentList.get(0).filename)
-                            #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
-                            #if($filelist && $filelist.size()>0)
                             #if(!$treeviewid)
                             #set($treeviewid = 1)
                             #else
