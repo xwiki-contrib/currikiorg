@@ -2833,6 +2833,7 @@ console.log('createNode: ',attr);
 					&& 'array' === Ext.type(attr.ict)
 				) {
 					var desc = attr.description||'';
+					desc = Ext.util.Format.stripTags(desc);
 					desc = Ext.util.Format.ellipsis(desc, 256);
 					desc = Ext.util.Format.htmlEncode(desc);
 
