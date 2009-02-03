@@ -305,11 +305,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
  <p class="text-link">
      #if($attachement.filesize)
-     #set($filesize = $attachement.filesize / 1024)
+     ##set($filesize = $attachement.filesize / 1024)
+     #set($filesize = $attachement.filesize)
      #else
      #set($filesize = 0)
      #end
-     <a href="$assetAttachmentURL">$assetAttachmentFilename</a> (${filesize} kbytes)
+     <a href="$assetAttachmentURL">$assetAttachmentFilename</a> (${filesize} bytes)
  </p>
  <button class="button-link button-link-download" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); window.open('${assetAttachmentURL}?force%2Ddownload=1');return false;" href="${assetAttachmentURL}?force%2Ddownload=1">$msg.get("rve.content.view.download.download_button")</button>
 #end
