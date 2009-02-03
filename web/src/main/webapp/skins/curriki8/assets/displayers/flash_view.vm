@@ -4,7 +4,14 @@
 #set($flashurl = $asset.getAttachmentURL("$fileName"))
 <div class="asset-display-media">
 <div class="asset-display-media-inner">
- <p>$!asset.description</p>
+    #set($caption = "")
+    #set($caption = $!asset.caption_text)
+    #if($!caption == "")
+    #set($caption = $!asset.description)
+    #end
+    <p>
+        $caption
+    </p>
 #if(! $flashDisplay)
  #set($flashDisplay=true)
  #set($flashNum=0)

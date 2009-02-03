@@ -24,7 +24,14 @@
             </EMBED>
         </OBJECT>
 #end
-        <p>$!asset.description</p>
+        #set($caption = "")
+        #set($caption = $!asset.caption_text)
+        #if($!caption == "")
+        #set($caption = $!asset.description)
+        #end
+        <p>
+            $caption
+        </p>
     </div>
 </div>
 #asset_attachments($asset)

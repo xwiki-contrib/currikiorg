@@ -4,11 +4,16 @@
   *#
 #asset_displaycontentheader("")
 <div class="asset-display-text">
-<div class="asset-display-text-inner">
-<p>
-$!asset.description
-</p>
-</div>
+    <div class="asset-display-text-inner">
+        #set($caption = "")
+        #set($caption = $!asset.caption_text)
+        #if($!caption == "")
+        #set($caption = $!asset.description)
+        #end
+        <p>
+            $caption
+        </p>
+    </div>
 </div>
 #asset_attachments($asset)
 #asset_displaycontentfooter()

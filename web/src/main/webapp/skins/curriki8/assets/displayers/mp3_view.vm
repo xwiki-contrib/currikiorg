@@ -5,7 +5,14 @@
 #asset_displaycontentheader("text-align:center;")
 <div class="asset-display-media">
 <div class="asset-display-media-inner">
-<p>$!asset.description</p>
+    #set($caption = "")
+    #set($caption = $!asset.caption_text)
+    #if($!caption == "")
+    #set($caption = $!asset.description)
+    #end
+    <p>
+        $caption
+    </p>
 #foreach ($attach in $asset.attachmentList)
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/
 pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="mini_player_mp3" align="middle" height="25" width="331">

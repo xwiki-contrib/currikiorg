@@ -18,7 +18,14 @@
 #end
 <div class="asset-display-media">
     <div class="asset-display-media-inner">
-        <p>$!asset.description</p>
+        #set($caption = "")
+        #set($caption = $!asset.caption_text)
+        #if($!caption == "")
+        #set($caption = $!asset.description)
+        #end
+        <p>
+            $caption
+        </p>
         <div style="height:280px; width:320px; margin: 0 auto;" id="$vidDiv">
             Viditalk Playback Window - Loading components from VIDITalk
         </div>
