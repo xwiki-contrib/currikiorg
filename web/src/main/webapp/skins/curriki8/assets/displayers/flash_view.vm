@@ -21,8 +21,8 @@
 var mObj${flashNum} = getFlashMovieObject("flashItem${flashNum}");
 mObj${flashNum}.StopPlay();
 </script>
-<button class="button-link button-link-play" onclick="playFlash(${flashNum}, this); return false;" title="$msg.get("rve.content.view.play_button")" href="javascript:void()">$msg.get("rve.content.view.play_button")</button>
-<button class="button-link button-link-launch" target="_blank" href="$flashurl">$msg.get("rve.content.view.launch_button")</button>
+<button class="button-link button-link-play" onclick="playFlash(${flashNum}, this); return false;" title="$msg.get("rve.content.view.play_button")">$msg.get("rve.content.view.play_button")</button>
+<button class="button-link button-link-launch" onclick="Curriki.logView('/Download/link/$url');  window.open('${flashurl}');">$msg.get("rve.content.view.launch_button")</button>
 #end
 </div>
 </div>
