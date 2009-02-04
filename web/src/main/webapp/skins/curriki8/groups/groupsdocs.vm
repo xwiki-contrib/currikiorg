@@ -23,7 +23,7 @@
 
   #begingroupsection("${tit}" "${editTxt}" "${editURL}" "blue" true)
   <span class="date">
-      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($doc.author, true) ${msg.groups_documentation_documents_on}    $xwiki.formatDate($doc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span>
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($doc.author, true) ${msg.groups_documentation_documents_on} #if($doc.contentUpdateDate) $!xwiki.formatDate($!doc.contentUpdateDate, $msg.get("mycurriki.dateFormat")) #end</span>
      <br />
     #if($request.vers)
       This is the revision ${request.vers} of the ducument
@@ -261,7 +261,7 @@ function getFileExtension() {
       </div>
      </div>
      <span class="date">
-      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  $xwiki.formatDate($docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span>
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  #if($docdoc.contentUpdateDate) $!xwiki.formatDate($!docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")) #end</span>
   </div>
 #end  ##end foreach
   #set($args = "")
@@ -559,7 +559,7 @@ Edit
           <td>&ndash;</td>
 #else
           <td>$xwiki.getLocalUserName($newdoc.author)</td>
-          <td>$xwiki.formatDate($newdoc.date, $msg.get("mycurriki.datetimeFormat"))</td>
+          <td>#if($newdoc.date) $xwiki.formatDate($newdoc.date, $msg.get("mycurriki.datetimeFormat")) #end</td>
 #end
 #if($docdoc.hasAccessLevel("edit") || $hasadmin)
    #set($bURL = $docdoc.getURL())
@@ -606,7 +606,7 @@ Edit
 #end
 #begingroupsection("${tit}" "${msg.groups_documentation_documents_edit}" "$editURL" "blue" true)
 <span class="date">
-      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  $xwiki.formatDate($docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span>
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  #if($docdoc.contentUpdateDate) $!xwiki.formatDate($!docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")) #end</span>
 <br />
 #if($request.vers)
 This is the revision ${request.vers} of the ducument
