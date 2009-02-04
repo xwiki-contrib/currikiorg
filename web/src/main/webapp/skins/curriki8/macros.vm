@@ -1351,7 +1351,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end
 
 #**
- *  Macro to display a message with links based on a key
+ *  Macro to display a message with links based con a key
  *#
 #macro(curriki_message $key $withlogin)
 <div id="message-wrapper mode-message mode-message-${key}">
@@ -1382,7 +1382,6 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 <script type="text/javascript">
 var clickAwayForm = document.forms.${formname};
 var clickAwayFormStatus1 = getFormStatus(clickAwayForm);
-// alert(clickAwayFormStatus1);
 
 function getFormStatus(form) {
  var str = "";
@@ -1401,7 +1400,7 @@ function checkFormStatus(form) {
  if (clickAwayFormStatus1!=clickAwayFormStatus2)
   return '${message}';
  else
-  return null;
+  return;
 }
 
 clickAwayForm.clickAwayFormOnSubmit = clickAwayForm.onsubmit;
@@ -1411,11 +1410,12 @@ clickAwayForm.onsubmit = function() {
    return false;
 
   clickAwayByPass = true;
+  return true;
 }
 
 window.onbeforeunload = function() {
  if (clickAwayByPass)
-  return null;
+  return;
  clickAwayByPass = false;
  return checkFormStatus(clickAwayForm)
 }
