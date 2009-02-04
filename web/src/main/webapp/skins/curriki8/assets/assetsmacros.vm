@@ -173,10 +173,14 @@
 <div id="asset-wrapper" class="view-$!mainAssetCategory mode-$mode">
     #asset_findmode()
     #if(!$isEmbed)
-     #asset_resourcefunctions($asset)
+     #if($mode!="edit")
+      #asset_resourcefunctions($asset)
+     #end
      #asset_icontitle($asset)
      #asset_attribution($asset)
-     #asset_rating($asset)
+     #if($mode!="edit")
+      #asset_rating($asset)
+     #end
      #if(!$isPrint)
       #asset_tabs($asset "view")
      #end
@@ -553,10 +557,10 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 ## two fields are restricted from editing
 #set($canEditLicense = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
 <div id="asset-wrapper" class="view-$assetCategory mode-info mode-info-edit">
-#asset_resourcefunctions($asset)
+##asset_resourcefunctions($asset)
 #asset_icontitle($asset)
 #asset_attribution($asset)
-#asset_rating($asset)
+##asset_rating($asset)
 #asset_tabs($asset "info")
 <div id="asset-wrapper-inner">
 ##<ul id="asset-links">
