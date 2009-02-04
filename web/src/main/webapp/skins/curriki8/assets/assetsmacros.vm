@@ -343,9 +343,9 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
  <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
  <p class="text-link">
-     #if($attachement.filesize)
-     ##set($filesize = $attachement.filesize / 1024)
-     #set($filesize = $attachement.filesize)
+     #if($attachment.filesize)
+     #set($filesize = $attachment.filesize / 1024)
+     ##set($filesize = $attachment.filesize)
      #else
      #set($filesize = 0)
      #end
@@ -827,10 +827,11 @@ $response.sendRedirect($request.xredirect)
 /**
  * Standard buttons in asset edit
  */
-#macro(asset_edit_buttons $asset)
+#macro(asset_edit_buttons $asset $withsaveandcontinue)
 #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "bc=$!request.bc")))
 <fieldset class="buttons">
     <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
+    <input class="button-save button-saveandcontinue" type="submit" name="saveandcontinue" value="$msg.get("rve.content.edit.save_continue_button")">
     <input class="button-save" type="submit" name="save" value="$msg.get("rve.content.edit.save_button")">
 </fieldset>
 #end
@@ -966,7 +967,11 @@ $asset.updateObjectFromRequest("CurrikiCode.ExternalAssetClass")
 $asset.applyRightsPolicy()
 $asset.save($!note)
 #if($request.xredirect && $request.xredirect!="")
-$response.sendRedirect($request.xredirect)
+ #if($request.saveandcontinue)
+  $response.sendRedirect("${request.xredirect}&viewer=assetedit")
+ #else
+  $response.sendRedirect($request.xredirect)
+ #end
 #else
 $response.sendRedirect($asset.getURL())
 #end
