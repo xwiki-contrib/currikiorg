@@ -15,11 +15,13 @@
     #asset_rating($asset)
     #asset_tabs($asset "comments")
     <div id="asset-wrapper-inner">
+        #set($addedItems = false)
         <ul id="asset-links">
             #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
             #set($status = $asset.getValue("status"))
             #if(!$status||($status!="200"))
              #if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
+             #set($addedItems = true)
              <li id="tab-review">
                 <a href="$xwiki.getURL("CRS.Review", "view", "page=${asset.fullName}")" title="$msg.get("rve.comments.review.review_rollover")" target="_blank">$msg.get("rve.comments.review.review_link")</a>
              </li>
@@ -27,12 +29,17 @@
             #if(!$isguest)
              #set($assetHasNominate = $asset.canBeNominatedOrReviewed())
               #if($assetHasNominate)
+              #set($addedItems = true)
               <li id="tab-nominate"><a href="javascript:void(0)" onclick="Curriki.module.nominate.nominateResource({assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.comments.review.nominate_rollover")">$msg.get("rve.comments.review.nominate_link")</a></li>
               #end
             #end
             #end
             #if($asset.hasAccessLevel("comment"))
+            #set($addedItems = true)
             <li class="last-item"><a href="javascript:void(0)" onclick="document.getElementById('comment-submit-form').style.display = 'block' ; location = '#comment-submit-form'; return false;" title="$msg.get("rve.comments.comment.addcomment_rollover")">$msg.get("rve.comments.comment.addcomment_link")</a></li>
+            #end
+            #if($addedItems == false)
+            <li class="last-item"></li>
             #end
         </ul>
         <div class="clear-right"></div>

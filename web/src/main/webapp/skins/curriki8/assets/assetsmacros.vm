@@ -94,9 +94,9 @@
     #if(!$isguest)
     #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
     ## Edit
-   <li>
-    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
-</li>
+    <li>
+     <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
+    </li>
     #end
     ## Copy
   #if($asset.category!="collection")
@@ -127,6 +127,8 @@
     </li>
     #end
     #end
+    #else
+    <li class="last-item"></li>
     #end
 </ul>
 <div class="clear-right"></div>
