@@ -81,6 +81,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,disableUnviewable:true
 		,hideUnviewable:false
 		,hideInvalid:false
+		,setTitleInRollover:false
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
@@ -97,16 +98,28 @@ console.log('createNode: ',attr);
 					desc = Ext.util.Format.ellipsis(desc, 256);
 					desc = Ext.util.Format.htmlEncode(desc);
 
+					var title = attr.displayTitle||attr.title;
+
 					var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
 					var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
 					var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
 					
-					attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
-						,desc,_('global.title.popup.description')
-						,fw,_('global.title.popup.subject')
-						,lvl,_('global.title.popup.educationlevel')
-						,ict,_('global.title.popup.ict')
-					);
+					if (!this.setTitleInRollover) {
+						attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
+							,desc,_('global.title.popup.description')
+							,fw,_('global.title.popup.subject')
+							,lvl,_('global.title.popup.educationlevel')
+							,ict,_('global.title.popup.ict')
+						);
+					} else {
+						attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}"
+							,title,_('global.title.popup.title')
+							,desc,_('global.title.popup.description')
+							,fw,_('global.title.popup.subject')
+							,lvl,_('global.title.popup.educationlevel')
+							,ict,_('global.title.popup.ict')
+						);
+					}
 				}
 			}
 

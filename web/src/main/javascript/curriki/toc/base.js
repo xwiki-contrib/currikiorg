@@ -34,6 +34,7 @@ Toc.init = function(){
 	Ext.extend(Curriki.ui.treeLoader.TOC, Curriki.ui.treeLoader.Base, {
 		setChildHref:true
 		,setFullRollover:true
+		,setTitleInRollover:true
 		,setUniqueId:true
 		,hideInvalid:true
 	});
