@@ -1402,10 +1402,10 @@ function checkFormStatus(form) {
   return null;
 }
 
-clickAwayFormOnSubmit = clickAwayForm.onsubmit;
+clickAwayForm.clickAwayFormOnSubmit = clickAwayForm.onsubmit;
 clickAwayByPass = false;
 clickAwayForm.onsubmit = function() {
-  if (clickAwayFormOnSubmit && (clickAwayFormOnSubmit()==false))
+  if (clickAwayForm.clickAwayFormOnSubmit && (clickAwayForm.clickAwayFormOnSubmit()==false))
    return false;
 
   clickAwayByPass = true;

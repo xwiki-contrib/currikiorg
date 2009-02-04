@@ -1,7 +1,7 @@
 #asset_displaycontentheader("")
 <div class="asset-display-edit">
     <div class="asset-display-edit-inner">
-        <form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" >
+        <form name="text" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" >
             #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
             <input  type="hidden" name="page" value="$asset.fullName" />
             <input  type="hidden" name="xredirect" value="$xredirect" />
@@ -85,6 +85,8 @@
             <hr>
             #asset_edit_buttons($asset)
         </form>
+        ## this allows to check for changes
+        #curriki_clickawayjs("text" $xwiki.escapeText($msg.get("rve.information.edit.warning.message")))        
     </div>
 </div>
 #asset_displaycontentfooter()

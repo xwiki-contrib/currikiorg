@@ -7,7 +7,7 @@
             <input  type="hidden" name="xredirect" value="$xredirect" />
             <fieldset>
                 <ul>
-                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" ""))
                     ## if archive is not zip to not display the tree
                     #set($attach = $asset.attachmentList.get(0).filename)
                     #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
@@ -133,6 +133,8 @@
             <hr>
             #asset_edit_buttons($asset)
         </form>
+        ## this allows to check for changes
+        #curriki_clickawayjs("archive" $xwiki.escapeText($msg.get("rve.information.edit.warning.message")))
     </div>
 </div>
 #asset_displaycontentfooter()

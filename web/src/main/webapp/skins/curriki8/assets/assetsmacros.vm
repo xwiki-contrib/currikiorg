@@ -781,6 +781,12 @@ $response.sendRedirect($request.xredirect)
 #macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent $hidebydefault)
 <li class="input-${fieldtype}">
     <span>
+        #if($fieldtype=="text"||$fieldtype=="textarea")
+         #set($fieldValue = $asset.getValue($fieldname))
+         #if($fieldValue && $fieldValue!="")
+          #set($hidebydefault = false)
+         #end 
+        #end
         #if($hidebydefault)
         <input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
         #end
@@ -824,7 +830,7 @@ $response.sendRedirect($request.xredirect)
 #macro(asset_edit_buttons $asset)
 #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "bc=$!request.bc")))
 <fieldset class="buttons">
-    <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="location='${cancelurl}'; return false;">
+    <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
     <input class="button-save" type="submit" name="save" value="$msg.get("rve.content.edit.save_button")">
 </fieldset>
 #end
