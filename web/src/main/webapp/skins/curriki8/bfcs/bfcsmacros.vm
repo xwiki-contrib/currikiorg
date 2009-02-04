@@ -96,9 +96,7 @@
             			#set($wheresql = "$wheresql and doc.creator=userObj.name and userObj.className='XWiki.XWikiUsers' and userObj.id=userSprop.id.id and userSprop.id.name='first_name'")
             			#set($order = "$order userSprop.value $currentDirectionOrder")
             			#elseif($request.order=="resourcetitle")
-            				#set($fromsql = "$fromsql ,StringProperty as dprop")
-            				#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='title'")
-            				#set($order = "$order dprop.value $currentDirectionOrder")
+            				#set($order = "$order doc.title $currentDirectionOrder")
             			#else
             				#set($order = "$order doc.creationDate desc")
 			#end
