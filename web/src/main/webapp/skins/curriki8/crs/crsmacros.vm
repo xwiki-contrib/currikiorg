@@ -22,6 +22,7 @@
 ## asset is in review pending status. we override the text
 #set($crsText = $msg.get("curriki.crs.reviewpending"))
 #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+#set($crsIconText = $msg.get("curriki.crs.rating.pending"))
 #elseif((!$status)||($status=="100")||($status==""))
 ## no crs rating has been set
 #if($isguest)
@@ -40,6 +41,7 @@
 #set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
 #set($crsIconTarget = "target='_blank'")
 #set($crsClass = "crs-rating-unrated")
+#set($crsIconText = $msg.get("curriki.crs.rating.unrated"))
 #elseif($status=="200")
 #set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
 #set($crsIconTarget = "target='_blank'")
