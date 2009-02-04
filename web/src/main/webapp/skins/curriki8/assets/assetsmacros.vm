@@ -831,7 +831,9 @@ $response.sendRedirect($request.xredirect)
 #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "bc=$!request.bc")))
 <fieldset class="buttons">
     <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
+#if($withsaveandcontinue)
     <input class="button-save button-saveandcontinue" type="submit" name="saveandcontinue" value="$msg.get("rve.content.edit.save_continue_button")">
+#end
     <input class="button-save" type="submit" name="save" value="$msg.get("rve.content.edit.save_button")">
 </fieldset>
 #end
@@ -956,8 +958,8 @@ $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
 $asset.updateObjectFromRequest("CurrikiCode.ExternalAssetClass")
 #end
 ## handling file upload
-#set($updateGroovy = $xwiki.parseGroovyFromPage("CurrikiCode.UpdateAttachmentGroovy"))
-#set($updateResult = $updateGroovy.replaceAttachment($asset,$context))
+#set($updateResult = $asset.replaceAttachment())
+$asset $updateResult
 ## saving with the user comment
 #if($request.comment && $request.comment!="")
 #set($note = $request.comment)
