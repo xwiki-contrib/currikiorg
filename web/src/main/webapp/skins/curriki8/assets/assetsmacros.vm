@@ -567,13 +567,13 @@ $asset.use("CurrikiCode.AssetClass")
     $msg.get("rve.information.edit.header")
 </h3>
 <div class="sub-asset-wrapper-inner">
-<form action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST">
+<form name="infoedit" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST">
 <fieldset class="buttons">
     #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "viewer=info&bc=$!request.bc")))
     #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "viewer=info&bc=$!request.bc")))
     <input  type="hidden" name="page" value="$asset.fullName" />
     <input  type="hidden" name="xredirect" value="$xredirect" />
-    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="location='${cancelurl}'; return false;"/>
+    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
 <fieldset>
@@ -644,10 +644,12 @@ $asset.use("CurrikiCode.AssetClass")
     </ul>
 </fieldset>
 <fieldset class="buttons">
-    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel"/>
+    <input type="button" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;" />
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
 </form>
+## this allows to check for changes
+#curriki_clickawayjs("infoedit" $xwiki.escapeText($msg.get("rve.information.edit.warning.message")))
 </div>
 </div>
 </div> ##asset-wrapper-inner

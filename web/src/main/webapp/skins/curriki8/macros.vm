@@ -1374,3 +1374,48 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
     </div>
 </div>
 #end
+
+
+#macro(curriki_clickawayjs $formname $message)
+<script type="text/javascript">
+var clickAwayForm = document.forms.${formname};
+var clickAwayFormStatus1 = getFormStatus(clickAwayForm);
+// alert(clickAwayFormStatus1);
+
+function getFormStatus(form) {
+ var str = "";
+ for (i=0;i<form.length;i++) {
+   var formel = form[i];
+   if (formel.type) {
+     if (((formel.type!="radio")&&(formel.type!="checkbox"))||(formel.checked))
+      str += "-" + formel.value;
+   }
+ }
+ return str;
+}
+
+function checkFormStatus(form) {
+ var clickAwayFormStatus2 = getFormStatus(form);
+ if (clickAwayFormStatus1!=clickAwayFormStatus2)
+  return '${message}';
+ else
+  return null;
+}
+
+clickAwayFormOnSubmit = clickAwayForm.onsubmit;
+clickAwayByPass = false;
+clickAwayForm.onsubmit = function() {
+  if (clickAwayFormOnSubmit && (clickAwayFormOnSubmit()==false))
+   return false;
+
+  clickAwayByPass = true;
+}
+
+window.onbeforeunload = function() {
+ if (clickAwayByPass)
+  return null;
+ clickAwayByPass = false;
+ return checkFormStatus(clickAwayForm)
+}
+</script>
+#end
