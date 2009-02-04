@@ -859,14 +859,14 @@ ${groupURL}#end
 #set($spaceName = $doc.space)
 #set($s = $sm.getSpace($spaceName))
 #if($request.method=="POST")
-  #set($oldPolicy = $s.policy)
+  #set($oldPolicy = $s.getValue("policy"))
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
   $s.save($xwiki.getContext())
-  #if($oldPolicy!=$s.policy)
+  #if($oldPolicy!=$s.getValue("policy"))
     ## we need to update the rights
-    $sm.internalPlugin.updateSpaceRights($s, $oldPolicy, $s.policy, $context.context)
+    $sm.updateSpaceRights($s, $oldPolicy, $s.getValue("policy"))
   #end
   $response.sendRedirect($s.getHomeURL())
 #else
