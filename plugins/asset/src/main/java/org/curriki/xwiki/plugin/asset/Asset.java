@@ -1482,7 +1482,9 @@ public class Asset extends CurrikiDocument {
 
         if (LOG.isDebugEnabled())
             LOG.debug("Getting first attachment");
-        XWikiAttachment attachment = getFirstAttachment().getAttachment();
+
+        Attachment attach = getFirstAttachment();
+        XWikiAttachment attachment = (attach==null) ? null : attach.getAttachment();
 
         FileUploadPlugin fileupload = (FileUploadPlugin) context.getWiki().getPlugin("fileupload",context);
         String name = "file";
