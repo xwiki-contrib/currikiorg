@@ -97,7 +97,10 @@
         <ul class="crs-rating no-review">
             <li>
                 <p>
-                    #if($isguest)
+                    #set($nomination = $!asset.getValue("reviewpending"))
+                    #if("$!nomination"=="1")
+                    $msg.get("rve.comments.review.empty.nominated_message")
+                    #elseif($isguest)
                     $msg.get("rve.comments.review.empty.notloggedin_message")
                     #else
                     $msg.get("rve.comments.review.empty.loggedin_message")
