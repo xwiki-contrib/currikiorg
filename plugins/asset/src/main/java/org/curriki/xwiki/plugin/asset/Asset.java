@@ -39,6 +39,7 @@ import org.curriki.xwiki.plugin.mimetype.MimeTypePlugin;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.plugin.fileupload.FileUploadPlugin;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiAttachment;
@@ -46,6 +47,7 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
 import com.xpn.xwiki.api.Object;
+import com.xpn.xwiki.api.Attachment;
 
 public class Asset extends CurrikiDocument {
     private static final Log LOG = LogFactory.getLog(Asset.class);
@@ -1456,5 +1458,95 @@ public class Asset extends CurrikiDocument {
             throw new XWikiException(XWikiException.MODULE_XWIKI_PLUGINS, XWikiException.ERROR_XWIKI_UNKNOWN, "Curriki asset conversion exception", e);
         }
     }
+
+    /**
+       * Returns the first attachment in the list
+       * @return
+       */
+      protected Attachment getFirstAttachment() {
+          List list = getAttachmentList();
+          if (list.size()==0)
+              return null;
+          Attachment attach = (Attachment) list.get(0);
+          return attach;
+      }
+
+    /**
+     * This function allows to replace the attachment from a file upload
+     * It also reruns the determine filetype and category function
+     * @return
+     */
+    public boolean replaceAttachment() {
+        if (!hasProgrammingRights())
+            return false;
+
+        if (LOG.isDebugEnabled())
+            LOG.debug("Getting first attachment");
+        XWikiAttachment attachment = getFirstAttachment().getAttachment();
+
+        FileUploadPlugin fileupload = (FileUploadPlugin) context.getWiki().getPlugin("fileupload",context);
+        String name = "file";
+        boolean newFileName = false;
+        byte[] data = new byte[0];
+        try {
+            data = fileupload.getFileItemData(name, context);
+            if ((data!=null)&&(data.length>0)) {
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Found data for attachment");
+                String fname = fileupload.getFileName(name, context);
+                int i = fname.lastIndexOf("\\");
+                if (i==-1)
+                    i = fname.lastIndexOf("/");
+                String filename = fname.substring(i+1);
+                filename = filename.replaceAll("\\+"," ");
+
+                if (attachment==null) {
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("Creating attachment from scratch attachment");
+                    newFileName = true;
+                    attachment = new XWikiAttachment();
+                    doc.getAttachmentList().add(attachment);
+                    // Add the attachment to the document
+                    attachment.setDoc(doc);
+                } else if (attachment.getFilename()!=filename) {
+                    // filename is different we need to delete the previous attachment
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("Deleting previous attachment");
+                    newFileName = true;
+                    doc.deleteAttachment(attachment, context);
+                    attachment.setFilename(filename);
+                    doc.getAttachmentList().add(attachment);
+                    // Add the attachment to the document
+                    attachment.setDoc(doc);
+                }
+
+                // now save the attachment under the new name
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Saving attachment");
+                attachment.setContent(data);
+                attachment.setFilename(filename);
+                attachment.setAuthor(context.getUser());
+                doc.setAuthor(context.getUser());
+                doc.setCreator(context.getUser());
+                doc.saveAttachmentContent(attachment, context);
+
+                // if it's a new file name we should run the category updater
+                if (newFileName)
+                    determineFileTypeAndCategory(attachment);
+
+                return true;
+            } else {
+                // no attachment
+                if (LOG.isDebugEnabled())
+                    LOG.debug("No attachment found");
+                return false;
+            }
+        } catch (XWikiException e) {
+            e.printStackTrace();
+            context.put("exception", e);
+            return false;
+        }
+    }
+    
 
 }
