@@ -337,8 +337,8 @@ public abstract class CompositeAsset extends Asset {
         XWikiDocument assetDoc = getDoc();
         List<BaseObject> existing = assetDoc.getObjects(Constants.SUBASSET_CLASS);
 
-        int wSize = want.size();
-        int eSize = existing.size();
+        int wSize = (want != null)?want.size():0;
+        int eSize = (existing != null)?existing.size():0;
 
         int e = 0;
         int w = 0;
