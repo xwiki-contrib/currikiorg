@@ -2854,7 +2854,7 @@ console.log('createNode: ',attr);
 							,ict,_('global.title.popup.ict')
 						);
 					} else {
-						attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}"
+						attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br /><br />{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}"
 							,title,_('global.title.popup.title')
 							,desc,_('global.title.popup.description')
 							,fw,_('global.title.popup.subject')
