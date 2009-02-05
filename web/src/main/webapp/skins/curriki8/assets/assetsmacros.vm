@@ -141,6 +141,7 @@
 #set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
 #foreach($obj in $objs)
  #set($ok = $subAssetList.add(""))
+ #set($ok = $subAssetList.add(""))
 #end ## foreach
 #foreach($obj in $objs)
  #set($ok = $asset.use($obj))
@@ -944,7 +945,7 @@ $response.sendRedirect($request.xredirect)
 $asset.setContent($request.content)
 #end
 #if($request.title)
-$asset.setContent($request.title)
+$asset.setTitle($request.title)
 #end
 $asset.updateObjectFromRequest("CurrikiCode.AssetClass")
 #if($asset.getObject("CurrikiCode.AssetLicenseClass"))
