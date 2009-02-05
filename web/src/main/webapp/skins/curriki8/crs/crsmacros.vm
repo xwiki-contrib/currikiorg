@@ -30,7 +30,7 @@
 #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
 #set($crsTarget = "target='_blank'")
 #else
-#set($crsText = $msg.get("curriki.crs.reviewnominate"))
+#set($crsText = $msg.get("rve.title.rating.function.nominate"))
 #set($crsTextUrl = "javascript:Curriki.module.nominate.nominateResource({assetName:'$asset.getJSFullName()', assetTitle:'$asset.getJSTitle()'});")
 #end
 #else
@@ -245,7 +245,7 @@ $xwiki.addTooltipJS()
 	* This macro displays the current review status
 	* in the asset view page
  *#
-
+#*
 #macro(displayCRS $asset)
 <div class="crs_review">
     <div class="crs_reviewtitle">
@@ -305,5 +305,6 @@ $xwiki.addTooltipJS()
     #end
 </div>
 #end
+*#
 
 
