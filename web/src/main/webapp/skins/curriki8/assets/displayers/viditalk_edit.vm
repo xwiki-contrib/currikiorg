@@ -13,15 +13,15 @@
 					#set($vdiv="<div style='height:280px; width:320px; margin: 0 auto;' id='vidiCaptureDiv'>Viditalk Record Window - Loading components from VIDITalk</div><input type='hidden' id='videoId' name='CurrikiCode.VideoAssetClass_0_id' value='"+$video_id+"' />")
 					#asset_edit_field($asset "CurrikiCode.VideoAssetClass" "id" "replace_video" "text" $vdiv true)
 					<script language="javascript" type="text/javascript">
+						var videoSaveButton;
 						Ext.onReady(function(){
-							Ext.fly(Ext.query('input.button-save')[0]).addClass('disabled');
-							Ext.fly(Ext.query('input.button-save')[0]).dom.disable();
+							videoSaveButton = new Ext.form.Field(Ext.get(Ext.query('input.button-save')[0]));
+							videoSaveButton.disable();
 						});
 
 						window.uploadComplete = function(videoId) {
 							Ext.get('videoId').dom.setValue(videoId);
-							Ext.fly(Ext.query('input.button-save')[0]).dom.enable();
-							Ext.fly(Ext.query('input.button-save')[0]).removeClass('disabled');
+							videoSaveButton.enable();
 						};
 						window.capture_div='';
 						window.flashLoaded = false;
