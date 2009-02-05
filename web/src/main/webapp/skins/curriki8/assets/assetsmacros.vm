@@ -141,7 +141,6 @@
 #set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
 #foreach($obj in $objs)
  #set($ok = $subAssetList.add(""))
- #set($ok = $subAssetList.add(""))
 #end ## foreach
 #foreach($obj in $objs)
  #set($ok = $asset.use($obj))
@@ -165,10 +164,12 @@
  #end
 #end ## foreach
 ## cleanup the empty asset
-#foreach($subasset in $subAssetList)
- #if($subasset=="")
-  $subAssetList.remove($subasset)
- #end
+#set($count = $subAssetList.size())
+#set($count = $count - 1)
+#foreach($assetid in [${count}..0])
+  #if($subAssetList.get($assetid).equals(""))
+   $subAssetList.remove($assetid)
+  #end
 #end
 #end
 

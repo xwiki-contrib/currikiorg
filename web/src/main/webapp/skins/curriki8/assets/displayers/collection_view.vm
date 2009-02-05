@@ -3,6 +3,10 @@
 #else
  ## The subAssetList property has already been prepared
  ## in asset_tabs so that we can determine if we need an organize link
+#if(!$subAssetList)
+#set($subAssetList = $util.arrayList)
+#asset_preparesubassetlist($asset $subAssetList)
+#end
 #if($subAssetList.size()!=0)
 #set($counter = 0)
 #foreach($assetPage in $subAssetList)
