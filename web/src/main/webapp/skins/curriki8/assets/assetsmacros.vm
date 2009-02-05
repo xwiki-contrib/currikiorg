@@ -165,11 +165,13 @@
 #end ## foreach
 ## cleanup the empty asset
 #set($count = $subAssetList.size())
+#if($count>0)
 #set($count = $count - 1)
 #foreach($assetid in [${count}..0])
   #if($subAssetList.get($assetid).equals(""))
    $subAssetList.remove($assetid)
   #end
+#end
 #end
 #end
 
