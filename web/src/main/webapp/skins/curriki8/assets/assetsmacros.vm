@@ -163,6 +163,13 @@
   #end
  #end
 #end ## foreach
+## cleanup the empty asset
+#foreach($subasset in $subAssetList)
+ #if($subasset=="")
+  $subAssetList.remove($subasset)
+ #end
+#end
+#end ## foreach
 #end
 
 #macro(asset_display $asset $mode)
