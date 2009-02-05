@@ -1101,7 +1101,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  * escape JS text
  *#
 #macro(escapeForJS $value) ##{
-#set($ret_escaped = $value.replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+#set($ret_escaped = $value.replaceAll('\\', '\\\\').replaceAll("'", "\\u0027").replaceAll('"', "\\u0022"))
 #end ##}
 
 
