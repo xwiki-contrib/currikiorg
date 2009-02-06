@@ -684,17 +684,14 @@ $asset.use($comment)
         </li>
         <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
         <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
-        <li class="comment-text">
+        <li id="comment-text-${comment.number}" class="comment-text">
             <p>
-                ## TODO: check this. It has been taken from groups
                 $asset.getValue("comment", $comment).replaceAll("\n","<br />")
             </p>
         </li>
         <li class="comment-action">
-            ## this does not exist
-            <a class="comment-edit">Edit</a>
             #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
-            #set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", "comment-delete"))
+            <a class="comment-edit" href="javascript:void(0)" onclick="editComment('${asset.getJSFullName()}','${comment.number}','comment-text-${comment.number}'); return false;">$msg.get("rve.comments.comment.edit_link")</a>
             #set($xredirect = $util.encodeURI($asset.getURL('view', $!request.queryString)))
             #set($qs = "")
             #set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
@@ -706,7 +703,6 @@ $asset.use($comment)
 </li>
 #end
 
-
 #**
  * Display the asset comments
  *#
@@ -716,7 +712,7 @@ $asset.use($comment)
     <div class="sub-asset-wrapper-inner">
         <ul class="comment-list">
             #if($asset.getComments().size()>0)
-            #foreach($comment in $asset.getComments())
+            #foreach($comment in $asset.getCommentsByDate())
             #asset_comment($asset $comment)
             #end
             #else
@@ -741,7 +737,7 @@ $asset.use($comment)
             #set($qs = "")
             #set($qs = $request.queryString)
             #set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
-            <form action="$asset.getURL("commentadd")" method="post">
+            <form name="comment-add" action="$asset.getURL("commentadd")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment']);">
                 <input type="hidden" name="xredirect" value="${xredirect}" />
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
                 <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
@@ -755,13 +751,16 @@ $asset.use($comment)
                 </fieldset>
             </form>
         </div>
+        <div id="comment-edit-form" class="comment-submit-form" style="display: none;">
+        </div>
     </div>
 </div>
+#asset_editcomment_js()
 #end
 
 
 #**
- * Delete Comment Service
+ * Delete Comment Service called from CurrikiCode.DeleteCommentService
  *#
 #macro(asset_deletecomment_service)
 <!-- Message Start -->
@@ -776,7 +775,7 @@ $asset.use($comment)
 #set($time = $deletedoc.getValue('date', $comment).time)
 #if(($request.date == "$time") && ( ($comment.author == $context.user) || $xwiki.hasAdminRights())) ## {
 #set($junk = $deletedoc.removeObject($comment))
-#set($junk = $deletedoc.saveWithProgrammingRights())
+#set($junk = $deletedoc.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.delete")))
 DELETED
 #end ## }  ## if
 #end ## }  ## foreach
@@ -789,6 +788,158 @@ $response.sendRedirect($request.xredirect)
 #end ## end if confirm
 #end ## end macro
 
+#**
+  * Javascript added to the comments display page
+  * To managet the comment editing ajax functions
+  *#
+#macro(asset_editcomment_js)
+<script type="text/javascript">
+Ajax.XWikiRequest = Class.create(Ajax.Request, {
+    initialize: function($super, space, docName, options, action) {
+    this.transport = Ajax.getTransport();
+    if (action)
+      this.action = action;
+    else
+      this.action = "view";
+    this.baseUrl = "/xwiki/bin/" + this.action;
+
+    options = Object.clone(options);
+    var onComplete = options.onComplete || Prototype.emptyFunction;
+    options.onComplete = (function() {
+       this.returnValue(onComplete);
+       //onComplete(this.transport);
+    }).bind(this);
+
+    $super(this.generateUrl(space, docName), options);
+  },
+    generateUrl: function(space, docName){
+        return this.baseUrl + "/" + space + "/" + docName;
+  },
+  returnValue: function(callBack) {
+    if (callBack)
+        callBack(this);
+    else
+        alert("error, callback");
+  }
+});
+
+function refreshPage(ajaxreq) {
+  alert(ajaxreq.transport.responseText);
+  window.location.href = window.location.href;
+}
+
+function checkComment(field) {
+  if (field.value.length<5) {
+    #set($message = $xwiki.escapeText($msg.get("rve.comments.comment.error.message.min")))
+    alert('${message}');
+    return false;
+  }
+  clickAwayActive = false;
+  return true;
+}
+
+function editComment(pageName,nb,divid) {
+  var pars = "page=" + pageName + "&nb=" + nb + "&divid=" + divid + "&xpage=plain&xredirect=" + escape(location);
+  var myAjax = new Ajax.XWikiRequest( "CurrikiCode", "EditCommentService", {method: 'get', parameters: pars, onComplete: editCommentCallback, divid: divid });
+  return false;
+}
+function editCommentCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+ clickAwayActive  = true;
+}
+function cancelEditComment(pageName,nb,divid) {
+  var pars = "page=" + pageName + "&nb=" + nb + "&divid=" + divid + "&xpage=plain&xredirect=" + location;
+  var myAjax = new Ajax.XWikiRequest( "CurrikiCode", "ViewCommentService", {method: 'get', parameters: pars, onComplete: cancelEditCommentCallback, divid: divid });
+  return false;
+}
+function cancelEditCommentCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+}
+
+clickAwayActive = false;
+
+window.onbeforeunload = function() {
+ if (clickAwayActive==false)
+  return;
+
+ return "$msg.get("rve.comments.comment.warning.message.add_edit")";
+}
+
+
+</script>
+#end
+
+
+#**
+ * Edit comment service called from CurrikiCode.EditCommentService
+ * This allows to display the edit form for an edited comment
+ *#
+#macro(asset_editcomment_service)
+{pre}
+#set($page = $request.page)
+#set($asset = $xwiki.getDocument($page))
+#set($commentnb = $xwiki.parseInt($request.nb))
+#set($ok = $asset.use("XWiki.XWikiComments", $commentnb))
+#set($xredirect= $xwiki.getFormEncoded($request.xredirect))
+<form name="comment-edit" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment']);">
+    <input type="hidden" name="page" value="${page}" />
+    <input type="hidden" name="nb" value="${commentnb}" />
+    <input type="hidden" name="xredirect" value="${xredirect}" />
+    <fieldset>
+{/pre}
+        $asset.display("comment", "edit")
+{pre}
+    </fieldset>
+    <fieldset class="buttons">
+        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditComment('${page}','${commentnb}','${request.divid}');"/>
+        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
+    </fieldset>
+</form>
+{/pre}
+#end
+
+
+#**
+ * View comment service called from CurrikiCode.ViewCommentService
+ * This allows to reload the view of a comment on a cancel edit comment
+ *#
+#macro(asset_viewcomment_service)
+{pre}
+#set($page = $request.page)
+#set($asset = $xwiki.getDocument($page))
+#set($commentnb = $xwiki.parseInt($request.nb))
+#set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
+<p>
+ $asset.getValue("comment", $comment).replaceAll("\n","<br />")
+</p>
+{/pre}
+#end
+
+
+#**
+ * Save comment service called from CurrikiCode.SaveCommentService
+ * This allows to save the actual edited comment and redirect to the comments page
+ *#
+#macro(asset_savecomment_service)
+{pre}
+#set($page = $request.page)
+#set($asset = $xwiki.getDocument($page))
+#set($commentnb = $xwiki.parseInt($request.nb))
+#set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
+#set($ok = $asset.use($comment))
+#set($author = $asset.getValue("author"))
+#if($author==$context.user)
+$asset.set("comment", $request.get("XWiki.XWikiComments_${commentnb}_comment"))
+$asset.set("date", $xwiki.date)
+$asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
+$response.sendRedirect($request.xredirect)
+#else
+#curriki_noaccess()
+#end
+{/pre}
+#end
 
 #macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent $hidebydefault)
 $asset.use($classname)
