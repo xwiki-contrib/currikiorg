@@ -787,7 +787,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #set($topParentDone = false)
   #foreach($bcItem in $bcLocal.split(";"))
    ## ignoring empty elements and the XWiki.XWikiUsers parent page
-   #if(!$topParentDone && $bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+   #if(!$topParentDone && $bcItem != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
      #set($topParentDone = true)
      #set($topParentDoc = $xwiki.getDocument($bcItem))
    #end
@@ -803,7 +803,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  ## loop on each element of the breadcrumb
  #foreach($bcItem in $bcLocal.split(";"))
   ## ignoring empty elements and the XWiki.XWikiUsers parent page
-  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
    #if(!$isFirst)
     &gt;
    #end
@@ -914,6 +914,15 @@ $memberdoc.getRenderedContent("$!content")</div>
 #end #end
 
 #if($!s=="")
+ #set($collType = "")
+ #set($category = $bcDoc.getValue("category"))
+ #if($category=="collection")
+  #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
+  #set($collType = $bcDoc.getValue("type"))
+ #end
+ #if($collType!="" && $collType != "folder")
+  ## do nothing because we have a collection or root collection
+ #else
  ## handling breadcrumb if it is not a group
  #set($parentList = $util.arrayList)
  #if($bcDoc.getObject("CurrikiCode.AssetClass"))
@@ -939,6 +948,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #curriki_breadcrumb_parent($parentDoc,$level)
  #else
  #end
+ #end ## end check collection or root collection
 #end ## end check groups
 #end ## end macro
 
