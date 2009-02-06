@@ -93,9 +93,10 @@
 <ul id="asset-links">
     #if(!$isguest)
     #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
+    #asset_edit_isoriginalauthorjs($asset true)
     ## Edit
     <li>
-     <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')">$msg.get('rve.content.edit_link')</a>
+     <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')" #if(!$isOriginalAuthorOrAdmin) onclick="return checkEditOrCopy();" #end>$msg.get('rve.content.edit_link')</a>
     </li>
     #end
     ## Copy
@@ -133,6 +134,35 @@
 </ul>
 <div class="clear-right"></div>
 #end
+
+#**
+ * Checks if the user is the original author or an admin
+ * and adds the appropriate JS
+ *#
+#macro(asset_edit_isoriginalauthorjs $asset $contentOrInfoTab)
+#set($isOriginalAuthorOrAdmin = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
+#if(!$isOriginalAuthorOrAdmin)
+<script type="text/javascript">
+    #set($author = $xwiki.getUserName($asset.creator, false))
+    #if($contentOrInfoTab)
+    #set($message = $xwiki.escapeText($msg.get("rve.content.edit.intention.message_text", [ $author ])).replaceAll("<br>", "%0A"))
+    #else
+    #set($message = $xwiki.escapeText($msg.get("rve.information.edit.intention.message_text", [ $asset.displayTitle, $author ])).replaceAll("<br>", "%0A"))    
+    #end
+
+    // this Javascripts ask the user if he wants to edit or copy
+    function checkEditOrCopy() {
+     if (confirm(unescape('$message'))) {
+        return true;
+     } else {
+        // Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'});
+        return false;
+     }
+    }
+</script>
+#end
+#end
+
 
 #**
  *  This macro prepares the sub asset list for a collection
@@ -471,10 +501,11 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #asset_attribution($asset)
     #asset_rating($asset)
     #asset_tabs($asset "info")
+    #asset_edit_isoriginalauthorjs($asset false)    
     <div id="asset-wrapper-inner">
         <ul id="asset-links">
             #if($asset.hasAccessLevel("edit"))
-            <li><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=infoedit")">$msg.get("rve.information.edit_link")</a></li>
+            <li><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=infoedit")" #if(!$isOriginalAuthorOrAdmin) onclick="return checkEditOrCopy();" #end>$msg.get("rve.information.edit_link")</a></li>
             #end
             <li class="last-item"><a href="$asset.getURL("view", "bc=$!{request.bc}&viewer=history")">$msg.get("rve.information.history")</a></li>
         </ul>
@@ -565,7 +596,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_infoedit $asset)
 #set($assetCategory = $asset.getCategory())
 ## two fields are restricted from editing
-#set($canEditLicense = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
+#set($isOriginalAuthorOrAdmin = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
 <div id="asset-wrapper" class="view-$assetCategory mode-info mode-info-edit">
 ##asset_resourcefunctions($asset)
 #asset_icontitle($asset)
@@ -636,7 +667,7 @@ $asset.use("CurrikiCode.AssetClass")
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
             $asset.display("hidden_from_search", "edit", true) $msg.get("rve.information.hidefromsearch.edit_instruction")
         </li>
-        #if($canEditLicense)
+        #if($isOriginalAuthorOrAdmin)
         $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-rights" class="field-important input-text">
             <span><em>!</em><label for="edit-rights">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
