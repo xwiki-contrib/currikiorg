@@ -48,14 +48,20 @@
 #set($crsClass = "crs-rating-crsp")
 #else
 #set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
- #if($status=="400"||$status=="300")
+ #if($status=="400")
   #set($crsClass = "crs-rating-crs1")
- #elseif($status=="600"||$status=="500")
+ #elseif($status=="600")
   #set($crsClass = "crs-rating-crs2")
- #elseif($status=="800"||$status=="700")
+ #elseif($status=="800")
   #set($crsClass = "crs-rating-crs3")
+ #elseif($status=="300")
+  #set($crsClass = "crs-rating-crs1-star")
+ #elseif($status=="500")
+  #set($crsClass = "crs-rating-crs2-star")
+ #elseif($status=="700")
+  #set($crsClass = "crs-rating-crs3-star")
  #else
-  ## compatiblity with previous behavior of crs 1 2 3
+## compatiblity with previous behavior of crs 1 2 3
   #set($crsClass = "crs-rating-crs${status}")
  #end
 #end
