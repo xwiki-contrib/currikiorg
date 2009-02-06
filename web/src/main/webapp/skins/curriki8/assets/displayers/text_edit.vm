@@ -10,34 +10,42 @@
                     $asset.use("CurrikiCode.TextAssetClass")
                     #set($syntax = $asset.getValue("syntax"))
                     #if($syntax=="xwiki/1.0")
+                    #set($useWikiMode = $asset.isAdvancedContent() && !$request.force)
                     <li class="input-textarea">
+                        #if($useWikiMode)
+                        ## are not setting up the wysiwyg but instead stay in wiki mode adding a message and a button to switch
+                        <p>$msg.get("rve.content.edit.text.instruction_text.wiki_text")</p>
+                        #else
                         <p>$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
+                        #end
                         <div id="input-wiki-wysiwyg">
                           $asset.getTextArea()
                         </div>
                     </li>
+                    #if(!$useWikiMode)
                     <script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
                     <script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
                     <script language="javascript" type="text/javascript">
-                        if ( browser.isIE || browser.isMozilla || browser.isGecko) {
-                            wikiEditor.init({
-                                language: "en",
-                                elements : "content",
-                                mode: "exact",
-                                content_css: "$xwiki.getSkinFile("style.css", true)",
-                                debug : false,
-                                remove_linebreaks : false,
-                                plugins: 'table, contextmenu, paste, searchreplace',
-                                wiki_images_path : '${request.contextPath}/bin/download/$asset.web/$asset.name/',
-                                wiki_attach_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
-                                wiki_macro_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
-                                wiki_plugins: 'core,attachments'
-                            });
-                        } else {
-                            alert("$msg.get('browsernoncompatible')");
-                        }
-                    </script>
-                    #elseif($syntax=="xhtml/1.0")
+                            if ( browser.isIE || browser.isMozilla || browser.isGecko) {
+                                wikiEditor.init({
+                                    language: "en",
+                                    elements : "content",
+                                    mode: "exact",
+                                    content_css: "$xwiki.getSkinFile("style.css", true)",
+                                    debug : false,
+                                    remove_linebreaks : false,
+                                    plugins: 'table, contextmenu, paste, searchreplace',
+                                    wiki_images_path : '${request.contextPath}/bin/download/$asset.web/$asset.name/',
+                                    wiki_attach_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
+                                    wiki_macro_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
+                                    wiki_plugins: 'core,attachments'
+                                });
+                            } else {
+                                alert("$msg.get('browsernoncompatible')");
+                            }
+                      </script>
+                      #end
+                      #elseif($syntax=="xhtml/1.0")
                     <li class="input-textarea">
                         <p>$msg.get("rve.content.edit.text.instruction_text.html_wysiwyg")</p>
                         <div id="input-html-wysiwyg">
