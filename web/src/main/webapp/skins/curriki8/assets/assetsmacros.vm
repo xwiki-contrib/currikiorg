@@ -614,7 +614,7 @@ $asset.use("CurrikiCode.AssetClass")
     $msg.get("rve.information.edit.header")
 </h3>
 <div class="sub-asset-wrapper-inner">
-<form name="infoedit" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST">
+<form name="infoedit" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST" onsubmit="return checkEditForm(this);">
 <fieldset class="buttons">
     #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "viewer=info&bc=$!request.bc")))
     #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "viewer=info&bc=$!request.bc")))
@@ -695,6 +695,45 @@ $asset.use("CurrikiCode.AssetClass")
 </form>
 ## this allows to check for changes
 #curriki_clickawayjs("infoedit" $xwiki.escapeText($msg.get("rve.information.edit.warning.message")))
+    <script type="text/javascript">
+     function checkEditForm(form) {
+         var message = "";
+         var title = form.title.value;
+         var desc = form["CurrikiCode.AssetClass_0_description"].value;
+         var subject = form["CurrikiCode.AssetClass_0_fw_items"].value;
+         var ict = form["CurrikiCode.AssetClass_0_instructional_component"][0].value;
+         var rightsholder = form["CurrikiCode.AssetLicenseClass_0_rightsHolder"].value;
+         var edlevels = form["CurrikiCode.AssetClass_0_educational_level"];
+         var edlevelchecked = false;
+         for (var i=0;i<edlevels.length;i++) {
+             var el = edlevels[i];
+             if (el.checked)
+              edlevelchecked = true;
+         }
+
+         if (title=="")
+          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.title"))";
+         if (desc=="")
+          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.description"))";
+         if (subject=="FW_masterFramework.WebHome")
+          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.subject"))";
+         if (!edlevelchecked)
+          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.edlevel"))";
+         if (ict=="")
+          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.ict"))";
+         if (rightsholder=="")
+          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.rightsholder"))";
+
+
+         if (message=="")
+          return true;
+         else {
+             message = "$xwiki.escapeText($msg.get("rve.information.required.fields.dialog"))" + "%0A%0A" + message;
+             alert(unescape(message));
+             return false;
+         }
+     }
+    </script>
 </div>
 </div>
 </div> ##asset-wrapper-inner
@@ -880,7 +919,7 @@ function editCommentCallback(ajaxreq) {
  clickAwayActive  = true;
 }
 function cancelEditComment(pageName,nb,divid) {
-  var pars = "page=" + pageName + "&nb=" + nb + "&divid=" + divid + "&xpage=plain&xredirect=" + location;
+  var pars = "page=" + pageName + "&nb=" + nb + "&divid=" + divid + "&xpage=plain&xredirect=" + escape(location);
   var myAjax = new Ajax.XWikiRequest( "CurrikiCode", "ViewCommentService", {method: 'get', parameters: pars, onComplete: cancelEditCommentCallback, divid: divid });
   return false;
 }
