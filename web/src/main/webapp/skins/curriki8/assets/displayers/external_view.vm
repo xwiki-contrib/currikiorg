@@ -8,7 +8,9 @@
 <div class="asset-display-text">
 <div class="asset-display-text-inner">
     #set($caption = "")
+    #set($ok = $asset.use("CurrikiCode.ExternalAssetClass"))
     #set($caption = $!asset.caption_text)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
     #if($!caption == "")
     #set($caption = $!asset.description)
     #end

@@ -5,7 +5,13 @@
 #asset_displaycontentheader("text-align:center;")
 <div class="asset-display-text">
     <div class="asset-display-text-inner">
-        <p>$!asset.description</p>
+        #set($caption = "")
+        #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+        #set($caption = $!asset.caption_text)
+        #set($ok = $asset.use("CurrikiCode.AssetClass"))
+        #if($!caption == "")
+        #set($caption = $!asset.description)
+        #end
         ## if archive is not zip to not display the tree
         #set($attach = $asset.attachmentList.get(0).filename)
         #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))

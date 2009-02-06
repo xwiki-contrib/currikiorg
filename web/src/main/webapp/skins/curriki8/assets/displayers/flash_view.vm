@@ -5,7 +5,9 @@
 <div class="asset-display-media">
 <div class="asset-display-media-inner">
     #set($caption = "")
+    #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
     #set($caption = $!asset.caption_text)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
     #if($!caption == "")
     #set($caption = $!asset.description)
     #end

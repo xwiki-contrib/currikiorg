@@ -13,12 +13,14 @@
  #set($pictWidth = "450")
 #end
 #set($caption = "")
-#set($caption = $!asset.caption_text)
-#if($!caption == "")
- #set($caption = $!asset.description)
-#end
 #set($alt_text = "")
+#set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+#set($caption = $!asset.caption_text)
 #set($alt_text = $!asset.alt_text)
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#if($!caption == "")
+#set($caption = $!asset.description)
+#end
 #if($!alt_text == "")
  #set($alt_text = $!asset.title)
 #end
