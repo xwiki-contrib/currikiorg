@@ -5,7 +5,7 @@ $response.setStatus(404)
 #template("startpage.vm")
 <div class="main layoutsubsection">
 #curriki_notfound()
-#if($hasEdit)
+#if($hasGlobalAdmin)
 #set($url = $doc.getURL("edit", $editparams))
 <p>$xwiki.parseMessage("youcanclicktoedit")</p>
 #end
