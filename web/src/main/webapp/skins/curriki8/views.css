@@ -644,7 +644,7 @@ ul#asset-tabs li a:hover {
 	text-decoration: none;
 }
 
-.asset-display-title a.icon-mini, #asset-header h2 a, ul#function-tabs li a, #resource-toc .x-tree-node-icon {
+.asset-display-title a.icon-mini, #asset-header h2 a, ul#function-tabs li a, #resource-toc .x-tree-node-icon, td.table-col-filetype img {
 	background-image: url(images/sprite_mediatype.gif);
 	background-repeat: no-repeat;
 }
@@ -657,6 +657,19 @@ ul#asset-tabs li a:hover {
 	text-indent: -9999px;
 	width: 17px;
 }
+
+td.table-col-filetype img {
+	padding: 38px 0 0 38px;
+}
+
+td.table-col-filetype img.resource-CollectionComposite {background-position: 0 0 !important;}
+td.table-col-filetype img.resource-FolderComposite {background-position: 0 -90px !important;}
+td.table-col-filetype img.resource-Document, td.table-col-filetype img.resource-Text, td.table-col-filetype img.resource-Unknown {background-position: 0 -180px;}
+td.table-col-filetype img.resource-Image {background-position: 0 -270px !important;}
+td.table-col-filetype img.resource-Interactive {background-position: 0 -360px !important;}
+td.table-col-filetype img.resource-Archive {background-position: 0 -540px !important;}
+td.table-col-filetype img.resource-Audio {background-position: 0 -630px !important;}
+td.table-col-filetype img.resource-External {background-position: 0 -730px !important;}
 
 .category-image a.icon-mini { 
 	background-position: 0 -3870px;
@@ -1244,11 +1257,12 @@ background-position: 0 -3600px}
 
 .resource-FolderComposite .x-tree-node-icon {
 background-position: 0 -3690px}
+
 .resource-External .x-tree-node-icon {
-background-position: 0 -3870px}
+background-position: 0 -4320px}
 
 .resource-Image .x-tree-node-icon {
-background-position: 0 -4320px}
+background-position: 0 -3870px}
 
 .resource-Interactive .x-tree-node-icon {
 background-position: 0 -3960px}
