@@ -48,11 +48,11 @@
 #set($crsClass = "crs-rating-crsp")
 #else
 #set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
- #if($status=="400")
+ #if($status=="400"||$status=="300")
   #set($crsClass = "crs-rating-crs1")
- #elseif($status=="600")
+ #elseif($status=="600"||$status=="500")
   #set($crsClass = "crs-rating-crs2")
- #elseif($status=="800")
+ #elseif($status=="800"||$status=="700")
   #set($crsClass = "crs-rating-crs3")
  #else
   ## compatiblity with previous behavior of crs 1 2 3
@@ -105,6 +105,15 @@
                     #else
                     $msg.get("rve.comments.review.empty.loggedin_message")
                     #end
+                </p>
+            </li>
+        </ul>
+        #end
+        #if($status=="300"||$status=="500"||$status=="700")
+        <ul class="crs-rating no-review">
+            <li>
+                <p>
+                    $msg.get("rve.comments.review.asterix.rating_message")
                 </p>
             </li>
         </ul>
