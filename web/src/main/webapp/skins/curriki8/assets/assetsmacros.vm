@@ -522,7 +522,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     </li>
                     <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span>$!asset.display("keywords")</span></li>
                     <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span>$!asset.display("language")</span></li>
-                    #if($xwiki.getDocument("FileCheck.WebHome").hasAccessLevel("view"))
+                    #set($rights = $!asset.getValue("rights"))
+                    #if($xwiki.getDocument("FileCheck.WebHome").hasAccessLevel("view") && "$!rights" != "private")
                     <li id="info-basic-check"><strong>$msg.get("rve.information.bfcs_title")</strong>
                         #set($fcstatus = $!asset.getValue("fcstatus"))
                         <span>#if("$fcstatus"!="0"&&"$fcstatus"!="") $!asset.display("fcstatus") #end #if("$fcstatus"!="1")<a href="$xwiki.getDocument("FileCheck.Check").getURL("view", "page=${asset.fullName}")">$msg.get("rve.information.bfcs_apply_link")</a></span>  #end
@@ -641,14 +642,12 @@ $asset.use("CurrikiCode.AssetClass")
             <span><em>!</em><label for="edit-rights">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("rightsHolder", "edit", true)
         </li>
-        #end
         $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-access" class="input-radio">
             <span><label for="edit-access">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.accessprivileges.edit_txt")</p>
             $asset.display("rights", "edit", true)
         </li>
-        #if($canEditLicense)
         $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-license" class="input-select">
             <span><label for="edit-license">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
