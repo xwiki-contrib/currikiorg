@@ -1408,7 +1408,7 @@ function getFormStatus(form) {
 function checkFormStatus(form) {
  var clickAwayFormStatus2 = getFormStatus(form);
  if (clickAwayFormStatus1!=clickAwayFormStatus2)
-  return '${message}';
+  return unescape('${message}');
  else
   return;
 }
