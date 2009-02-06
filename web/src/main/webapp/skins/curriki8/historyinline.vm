@@ -39,9 +39,9 @@
         <th>$msg.get("rve.information.revision.list.version_title")</th>
         <th>$msg.get("rve.information.revision.list.author_title")</th>
           ## Might be disabled in certain wikis.
-    #if($xwiki.hasEditComment())
+   ##if($xwiki.hasEditComment())
           <th>$msg.get("rve.information.revision.list.note_title")</th>
-          #end
+   ##end
         <th>$msg.get("rve.information.revision.list.datetime_title")</th>
         ## Editors see the Revert button.
   #if($hasEdit && !$hasAdmin)
@@ -69,9 +69,9 @@
             #end
             </td>
             <td width="10%">$xwiki.getLocalUserName($revinfo.author)</td>
-            #if($xwiki.hasEditComment())
+    ##if($xwiki.hasEditComment())
             <td width="15%">$!{revinfo.comment}</td>
-            #end
+    ##end
             <td width="30%">$xwiki.formatDate($revinfo.date, "dd/MM/yyyy HH:mm")</td>
             #if($hasEdit || $hasAdmin)
             <td width="15%"><button class="button-link" onclick="if (confirm('$xwiki.escapeText($msg.get("rve.information.revision.list.rollback_confirmation")) $version')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
