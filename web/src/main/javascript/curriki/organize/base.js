@@ -33,6 +33,7 @@ Organize.init = function(){
 		,setAllowDrag:true
 		,setUniqueId:true
 		,disableUnviewable:false
+		,hideInvalid:true
 		,unviewableText:_('organize.dialog.resource.unavailable.indicator_node')
 		,unviewableQtip:_('organize.dialog.resource.unavailable.indicator_rollover')
 	});
