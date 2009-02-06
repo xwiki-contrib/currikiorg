@@ -26,6 +26,7 @@ import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.collections.ListUtils;
 import org.apache.velocity.VelocityContext;
 import org.curriki.xwiki.plugin.asset.attachment.*;
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
@@ -1009,6 +1010,12 @@ public class Asset extends CurrikiDocument {
     	return getComments().size() + getObjectNumbers(Constants.ASSET_CURRIKI_REVIEW_CLASS);
     }
 
+    public List getCommentsByDate() {
+        List comments = getComments();
+        Collections.sort(comments, new CommentsSorter());
+        return comments;
+    }
+
 
     public boolean canBeNominatedOrReviewed(){
     	use(Constants.ASSET_CLASS);
@@ -1550,5 +1557,27 @@ public class Asset extends CurrikiDocument {
         }
     }
     
+
+    public class CommentsSorter implements Comparator {
+
+
+        public int compare(java.lang.Object o1, java.lang.Object o2) {
+            com.xpn.xwiki.api.Object o1a = (com.xpn.xwiki.api.Object) o1;
+            com.xpn.xwiki.api.Object o2a = (com.xpn.xwiki.api.Object) o2;
+            if (o1==null)
+             return 1;
+            if (o2==null)
+             return -1;
+
+            Date d1 = (Date) o1a.getProperty("date").getValue();
+            Date d2 = (Date) o2a.getProperty("date").getValue();
+            if (d1 == null)
+             return 1;
+            if (d2 == null)
+             return -1;
+                     
+            return d1.compareTo(d2);
+        }
+    }
 
 }
