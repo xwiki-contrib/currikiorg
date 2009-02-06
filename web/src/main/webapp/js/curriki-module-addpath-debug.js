@@ -331,7 +331,13 @@ Curriki.module.addpath.init = function(){
 							,inputValue:'video_capture'
 							,boxLabel:_('add.contributemenu.option.video_capture')
 							,listeners:{
-								check:AddPath.RadioSelect
+								check:{
+									fn:function(e, checked){
+										AddPath.RadioSelect(e, checked);
+										Ext.fly('video_capture-container').scrollIntoView('addDialogueForm');
+									}
+									,scope:this
+								}
 							}
 						},{
 							 xtype:'container'
