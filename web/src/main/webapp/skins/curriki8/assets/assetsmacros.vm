@@ -792,6 +792,7 @@ $response.sendRedirect($request.xredirect)
 
 
 #macro(asset_edit_field $asset $classname $fieldname $transname $fieldtype $fieldcontent $hidebydefault)
+$asset.use($classname)
 <li class="input-${fieldtype}">
     <span>
         #if($fieldtype=="text"||$fieldtype=="textarea")
@@ -808,7 +809,6 @@ $response.sendRedirect($request.xredirect)
     #if($fieldcontent!="")
     $fieldcontent
     #else
-    $asset.use($classname)
     $asset.display($fieldname, "edit", true)
     #end
     </div>
