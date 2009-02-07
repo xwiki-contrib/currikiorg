@@ -617,7 +617,7 @@ $asset.use("CurrikiCode.AssetClass")
 <form name="infoedit" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST" onsubmit="return checkEditForm(this);">
 <fieldset class="buttons">
     #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "viewer=info&bc=$!request.bc")))
-    #set($cancelurl = $xwiki.escapeText($asset.getURL('view', "viewer=info&bc=$!request.bc")))
+    #set($cancelurl = $xwiki.escapeText($asset.getURL('cancel'))
     <input  type="hidden" name="page" value="$asset.fullName" />
     <input  type="hidden" name="xredirect" value="$xredirect" />
     <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
@@ -1061,8 +1061,10 @@ $asset.use($classname)
  * Standard buttons in asset edit
  */
 #macro(asset_edit_buttons $asset $withsaveandcontinue)
-#set($cancelurl = $xwiki.escapeText($asset.getURL('view', "bc=$!request.bc")))
+#set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "bc=$!request.bc")))
+#set($cancelurl = $xwiki.escapeText($asset.getURL('cancel'))
 <fieldset class="buttons">
+    <input  type="hidden" name="xredirect" value="$xredirect" />
     <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
 #if($withsaveandcontinue)
     <input class="button-save button-saveandcontinue" type="submit" name="saveandcontinue" value="$msg.get("rve.content.edit.save_continue_button")">
@@ -1201,6 +1203,7 @@ $asset $updateResult
 #end
 $asset.applyRightsPolicy()
 $asset.save($!note)
+$asset.unLock()
 #if($request.xredirect && $request.xredirect!="")
  #if($request.saveandcontinue)
   $response.sendRedirect("${request.xredirect}&viewer=assetedit")

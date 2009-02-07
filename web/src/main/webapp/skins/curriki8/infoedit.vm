@@ -6,7 +6,13 @@
 #else
 #curriki_breadcrumb()
 #if($doc.getObject("CurrikiCode.AssetClass"))
+## check locking of asset
+#set($force = $!request.get("force"))
+#if (($doc.getLocked()==true)&&(!$force))
+#curriki_locked($doc)
+#else
 #asset_infoedit($doc)
+#end
 #else
 $msg.get("rve.information.pageisnotanasset")
 #end

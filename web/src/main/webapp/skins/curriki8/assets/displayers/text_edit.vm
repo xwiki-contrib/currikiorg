@@ -10,7 +10,7 @@
                     $asset.use("CurrikiCode.TextAssetClass")
                     #set($syntax = $asset.getValue("syntax"))
                     #if($syntax=="xwiki/1.0")
-                    #set($useWikiMode = $asset.isAdvancedContent() && !$request.force)
+                    #set($useWikiMode = $asset.isAdvancedContent() && !$request.forcewysiwyg)
                     <li class="input-textarea">
                         #if($useWikiMode)
                         ## are not setting up the wysiwyg but instead stay in wiki mode adding a message and a button to switch

@@ -1388,6 +1388,17 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end
 
 
+#macro(curriki_locked $asset)
+<div id="message-wrapper" class="mode-message mode-message-locked">
+    <div id="message-wrapper-inner">
+#set($lockingUser = $xwiki.getLocalUserName($asset.getLockingUser()))
+#set($forceURL = $tdoc.getURL("view", "$!{request.getQueryString()}&force=1"))
+       $msg.get("rve.content.edit.force.message_text", [ $lockingUser, $forceURL ])
+    </div>
+</div>
+#end
+
+
 #macro(curriki_clickawayjs $formname $message)
 <script type="text/javascript">
 var clickAwayForm = document.forms.${formname};
