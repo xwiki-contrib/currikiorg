@@ -45,6 +45,7 @@ import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.doc.XWikiLock;
 import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
 import com.xpn.xwiki.api.Object;
@@ -1556,7 +1557,20 @@ public class Asset extends CurrikiDocument {
             return false;
         }
     }
-    
+
+
+    public boolean unLock() {
+        try {
+            XWikiLock lock = doc.getLock(context);
+            if (lock != null )
+                doc.removeLock(context);
+
+            return true;
+        } catch (XWikiException e) {
+            return false;
+        }
+    }
+
 
     public class CommentsSorter implements Comparator {
 
