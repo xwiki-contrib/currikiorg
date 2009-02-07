@@ -7,7 +7,7 @@
             <input  type="hidden" name="xredirect" value="$xredirect" />
             <fieldset>
                 <ul>
-                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" ""))
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
                     ## if archive is not zip to not display the tree
                     #set($attach = $asset.attachmentList.get(0).filename)
                     #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))

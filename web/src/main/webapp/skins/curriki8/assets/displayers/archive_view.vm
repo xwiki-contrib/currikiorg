@@ -12,6 +12,7 @@
         #if($!caption == "")
         #set($caption = $!asset.description)
         #end
+        <p>$!caption</p>
         ## if archive is not zip to not display the tree
         #set($attach = $asset.attachmentList.get(0).filename)
         #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
