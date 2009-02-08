@@ -116,7 +116,7 @@ em, em strong { font-style: italic; }
 #navigation-inner { background: #f2f2f2; }
 #navigation-inner a { color: #5051a3; }
 #navigation-inner .titles { background-color: #cccde7; display: block; font-size: 1em; font-weight: bold; margin-top: 1px; padding: 2px 10px !important; position: relative; text-decoration: none; text-transform: uppercase; height: auto !important; height: 1%; padding-bottom: 0; }
-#navigation-inner .titles:hover { background-color: #5051a3; color: #fff; }
+#navigation-inner .titles:hover { background-color: #A3A4D2; color: #282974; }
 #navigation-inner .titles:hover span.expanded, #navigation-inner .selected span.expanded { background-image: url("menu-expanded-hover.gif"); }
 #navigation-inner .titles:hover span.collapsed, #navigation-inner .selected span.collapsed { background-image: url("menu-collapsed-hover.gif"); }
 #navigation-inner .home a { margin: 0;  }
@@ -1408,6 +1408,29 @@ a.last-item {
 	border-color: #A5A5A5;
 	color:#000000;
 }
+
+/** LEFT PANEL NAVIGATION **/
+
+
+#navigation-inner .titles:hover span.collapsed, #navigation-inner span.collapsed, #navigation-inner span.expanded, #navigation-inner .titles:hover span.expanded, 
+#navigation-inner .selected span.collapsed {
+	background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/images/sprite_general.gif);
+	background-repeat: no-repeat;
+} 
+
+#navigation-inner .titles:hover span.collapsed {background-position: 0 -1260px !important;}
+#navigation-inner span.collapsed {background-position: 0 -1080px !important;}
+#navigation-inner span.expanded {background-position: 0 -990px !important;}
+#navigation-inner .titles:hover span.expanded {background-position: 0 -1170px !important;}
+#navigation-inner .selected span.collapsed {background-position: 0 -900px !important;}
+#navigation-inner .selected:hover img {display:none !important;}
+#navigation-inner .selected span.expanded {background-position: 0 -810px !important;}
+
+#navigation-inner .titles:hover {
+	background-color: #a3a4d2
+	color: #282974;
+}
+
 
 /** CLEARING **/
 
