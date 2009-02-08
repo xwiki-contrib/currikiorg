@@ -84,3 +84,20 @@ body#body {
 	display:none;
 }
 
+
+/** CLEAR FIX PANELS **/
+
+div#panels:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+div#panels {display: inline-block;}  /* for IE/Mac */
+
+div#panels {
+    zoom: 1;     /* triggers hasLayout */
+    display: block;     /* resets display for IE/Win */
+}
