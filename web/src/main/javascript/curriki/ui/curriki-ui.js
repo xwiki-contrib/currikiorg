@@ -167,7 +167,7 @@ console.log('createNode: parent',parent);
 				if (attr.rights.view){
 					childInfo.cls = childInfo.cls+' rights-viewable';
 				} else {
-					childInfo.cls = childInfo.cls+' rights-unviewable'+((this.hideUnviewable || (this.hideInvalid && attr.assetType && attr.assetType.search(/Invalid/) !== -1))?' hidden':'');
+					childInfo.cls = childInfo.cls+' rights-unviewable';
 					childInfo.hidden = (this.hideUnviewable || (this.hideInvalid && attr.assetType && attr.assetType.search(/Invalid/) !== -1));
 				}
 				if (attr.rights.edit){
@@ -195,7 +195,10 @@ console.log('createNode: End ',childInfo);
 			var retNode = (childInfo.leaf
 				   ? new Ext.tree.TreeNode(childInfo)
 				   : new Ext.tree.AsyncTreeNode(childInfo));
+
+			// hidden seems to need to be applied after node is created
 			retNode.hidden = childInfo.hidden;
+
 			return retNode;
 		}
 
