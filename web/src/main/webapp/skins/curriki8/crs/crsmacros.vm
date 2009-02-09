@@ -95,15 +95,15 @@
         #set($ok = $reviewlist.add(0, $obj))
         #end
         #end
+        #set($nomination = $!asset.getValue("reviewpending"))
         #if($reviewlist.size()>0)
         #foreach($review in $reviewlist)
         #crs_display_review($asset $review)
         #end
-        #else
+        #elseif(("$!nomination"=="1") || ($status!="300" && $status!="500" && $status!="700"))
         <ul class="crs-rating no-review">
             <li>
                 <p>
-                    #set($nomination = $!asset.getValue("reviewpending"))
                     #if("$!nomination"=="1")
                     $msg.get("rve.comments.review.empty.nominated_message")
                     #elseif($isguest)
