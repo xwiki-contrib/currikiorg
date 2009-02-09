@@ -370,7 +370,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #if($asset.getAttachmentList().size()==1)
 #set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
 #elseif($asset.getAttachmentList().size()>1)
-#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_file"))
+#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_files))
 #end
 <p><strong>$msgtext</strong>
     <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
