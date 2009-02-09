@@ -33,22 +33,22 @@
         ## Print the table header
         <tr>
         #if ($totalVersions > 1)
-        <th>$msg.get("rve.information.revision.list.from_title")</th>
+        <th class="revision-col-from">$msg.get("rve.information.revision.list.from_title")</th>
         <th>$msg.get("rve.information.revision.list.to_title")</th>
         #end
-        <th>$msg.get("rve.information.revision.list.version_title")</th>
-        <th>$msg.get("rve.information.revision.list.author_title")</th>
+        <th class="revision-col-to">$msg.get("rve.information.revision.list.version_title")</th>
+        <th class="revision-col-author">$msg.get("rve.information.revision.list.author_title")</th>
           ## Might be disabled in certain wikis.
    ##if($xwiki.hasEditComment())
-          <th>$msg.get("rve.information.revision.list.note_title")</th>
+        <th class="revision-col-note">$msg.get("rve.information.revision.list.note_title")</th>
    ##end
-        <th>$msg.get("rve.information.revision.list.datetime_title")</th>
+        <th class="revision-col-date">$msg.get("rve.information.revision.list.datetime_title")</th>
         ## Editors see the Revert button.
   #if($hasEdit && !$hasAdmin)
-        <th>$msg.get("rve.information.revision.list.action_title")</th>
+        <th class="revision-col-action">$msg.get("rve.information.revision.list.action_title")</th>
         ## Admins see the Revert and Delete buttons.
   #elseif($hasAdmin)
-        <th colspan="2">$msg.get("rve.information.revision.list.action_title")</th>
+        <th class="revision-col-action" colspan="2">$msg.get("rve.information.revision.list.action_title")</th>
         #end
     </tr>
         ##
@@ -58,23 +58,23 @@
         #set($revinfo = $tdoc.getRevisionInfo($version))
         <tr class="row  #* #if($velocityCount % 2 == 0) even #else odd #end *#">
             #if ($totalVersions > 1)
-            <td width="5%"><input type="radio" name="rev1" value="$version" #if ($velocityCount==2) checked="checked" #end/></td>
-            <td width="5%"><input type="radio" name="rev2" value="$version" #if ($velocityCount==1) checked="checked" #end/></td>
+            <td class="revision-col-from"><input type="radio" name="rev1" value="$version" #if ($velocityCount==2) checked="checked" #end/></td>
+            <td class="revision-col-to"><input type="radio" name="rev2" value="$version" #if ($velocityCount==1) checked="checked" #end/></td>
             #end
-            <td width="10%">
+            <td class="revision-col-version">
             #if(($asset.category=="collection")||(!$doc.hasAccessLevel("edit")))
                 $version
             #else
                 <a href="$doc.getURL("viewrev","rev=${version}&viewer=viewrev")" target="_blank">$version</a>
             #end
             </td>
-            <td width="10%">$xwiki.getLocalUserName($revinfo.author)</td>
+            <td class="revision-col-author" width="10%">$xwiki.getLocalUserName($revinfo.author)</td>
     ##if($xwiki.hasEditComment())
-            <td width="15%">$!{revinfo.comment}</td>
+            <td class="revision-col-note">$!{revinfo.comment}</td>
     ##end
-            <td width="30%">$xwiki.formatDate($revinfo.date, "dd/MM/yyyy HH:mm")</td>
+            <td class="revision-col-date">$xwiki.formatDate($revinfo.date, "dd/MM/yyyy HH:mm")</td>
             #if($hasEdit || $hasAdmin)
-            <td width="15%"><button class="button-link" onclick="if (confirm('$xwiki.escapeText($msg.get("rve.information.rollback.confirm.message")) $version')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
+            <td class="revision-col-action" ><button class="button-link" onclick="if (confirm('$xwiki.escapeText($msg.get("rve.information.rollback.confirm.message")) $version')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
             #end
         </tr>
         #end ## foreach
