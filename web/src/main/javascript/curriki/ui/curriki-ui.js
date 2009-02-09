@@ -168,6 +168,7 @@ console.log('createNode: parent',parent);
 					childInfo.cls = childInfo.cls+' rights-viewable';
 				} else {
 					childInfo.cls = childInfo.cls+' rights-unviewable'+((this.hideUnviewable || (this.hideInvalid && attr.assetType && attr.assetType.search(/Invalid/) !== -1))?' hidden':'');
+					childInfo.hidden = (this.hideUnviewable || (this.hideInvalid && attr.assetType && attr.assetType.search(/Invalid/) !== -1));
 				}
 				if (attr.rights.edit){
 					childInfo.cls = childInfo.cls+' rights-editable';
@@ -191,9 +192,11 @@ console.log('createNode: parent',parent);
 			}
 
 console.log('createNode: End ',childInfo);
-			return(childInfo.leaf
+			var retNode = (childInfo.leaf
 				   ? new Ext.tree.TreeNode(childInfo)
 				   : new Ext.tree.AsyncTreeNode(childInfo));
+			retNode.hidden = childInfo.hidden;
+			return retNode;
 		}
 
 		,requestData:function(node, callback){
