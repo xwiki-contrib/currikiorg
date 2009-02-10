@@ -220,6 +220,24 @@ public class CurrikiPluginApi extends Api {
         }
     }
 
+    /**
+     * Wrapping the getFileTreeList call to manage exception thrown on corrupt assets
+     * @param document
+     * @param filename
+     * @return List of files
+     */
+    public List getFileTreeList(Document document, String filename) {
+        ZipExplorerPlugin zeplugin = (ZipExplorerPlugin) context.getWiki().getPlugin("zipexplorer", context);
+        if (zeplugin==null)
+            return null;
+        try {
+            return zeplugin.getFileTreeList(document, filename, context);
+        } catch (Exception e) {
+            context.put("exception", e);
+            return null;
+        }
+    }
+
     public String escapeForJS(String origtext) {
         return Util.escapeForJS(origtext);
     }
