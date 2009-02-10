@@ -84,6 +84,15 @@
 <li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.2.heading")</a></li>
 <li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.3.heading")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
 </ul> ## tabs
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.onReady(function(){
+Ext.select('ul#asset-tabs li a', true).hover(function(){Ext.get('asset-tabs').addClass('asset-tabs-position');},function(){Ext.get('asset-tabs').removeClass('asset-tabs-position');});
+});
+/* ]]> */
+</script>
+{/pre}
 #end
 
 #**
