@@ -824,7 +824,8 @@ $asset.use($comment)
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
                 </fieldset>
                 <fieldset class="buttons">
-                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" onclick="document.getElementById('comment-submit-form').style.display = 'none' ;"/>
+                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" 
+                           onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
                     <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
                 </fieldset>
             </form>
@@ -918,13 +919,15 @@ function checkComment(field) {
 
 function editComment(pageName,nb,divid) {
   var pars = "page=" + pageName + "&nb=" + nb + "&divid=" + divid + "&xpage=plain&xredirect=" + escape(location);
-  var myAjax = new Ajax.XWikiRequest( "CurrikiCode", "EditCommentService", {method: 'get', parameters: pars, onComplete: editCommentCallback, divid: divid });
+  var myAjax = new Ajax.XWikiRequest( "CurrikiCode", "EditCommentService", {method: 'get', parameters: pars, onComplete: editCommentCallback, divid: divid, nb: nb });
   return false;
 }
 function editCommentCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
  clickAwayActive  = true;
+ clickAwayCounter++;
+ document.forms['comment-edit-' + ajaxreq.options.nb]['XWiki.XWikiComments_' + ajaxreq.options.nb +  '_comment'].focus();
 }
 function cancelEditComment(pageName,nb,divid) {
   var pars = "page=" + pageName + "&nb=" + nb + "&divid=" + divid + "&xpage=plain&xredirect=" + escape(location);
@@ -934,8 +937,12 @@ function cancelEditComment(pageName,nb,divid) {
 function cancelEditCommentCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
+ clickAwayCounter--;
+ if (clickAwayCounter==0)
+  clickAwayActive = false;
 }
 
+clickAwayCounter = 0;
 clickAwayActive = false;
 
 window.onbeforeunload = function() {
@@ -961,7 +968,7 @@ window.onbeforeunload = function() {
 #set($commentnb = $xwiki.parseInt($request.nb))
 #set($ok = $asset.use("XWiki.XWikiComments", $commentnb))
 #set($xredirect= $xwiki.getFormEncoded($request.xredirect))
-<form name="comment-edit" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment']);">
+<form name="comment-edit-${commentnb}" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment']);">
     <input type="hidden" name="page" value="${page}" />
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />

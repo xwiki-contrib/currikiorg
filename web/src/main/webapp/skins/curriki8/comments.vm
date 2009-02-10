@@ -36,7 +36,7 @@
             #end
             #if($asset.hasAccessLevel("comment"))
             #set($addedItems = true)
-            <li class="last-item"><a href="javascript:void(0)" onclick="document.getElementById('comment-submit-form').style.display = 'block' ; clickAwayActive = true; location = '#comment-submit-form'; return false;" title="$msg.get("rve.comments.comment.addcomment_rollover")">$msg.get("rve.comments.comment.addcomment_link")</a></li>
+            <li class="last-item"><a href="javascript:void(0)" onclick="document.getElementById('comment-submit-form').style.display = 'block' ;  clickAwayCounter++; clickAwayActive = true; location = '#comment-submit-form'; document.forms['comment-add']['XWiki.XWikiComments_comment'].focus(); return false;" title="$msg.get("rve.comments.comment.addcomment_rollover")">$msg.get("rve.comments.comment.addcomment_link")</a></li>
             #end
             #if($addedItems == false)
             <li class="last-item"></li>
