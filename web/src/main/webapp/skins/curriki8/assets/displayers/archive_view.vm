@@ -19,7 +19,7 @@
         #else
          #set($attach = "")
         #end
-        #set($treelist = $xwiki.zipexplorer.getFileTreeList($asset, $attach))
+        #set($treelist = $xwiki.curriki.getFileTreeList($asset, $attach))
         #if($treelist && $treelist.size()>0)
         #if(!$treeviewid)
         #set($treeviewid = 1)
