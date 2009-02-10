@@ -75,7 +75,7 @@
             <td class="revision-col-date">$xwiki.formatDate($revinfo.date, "dd/MM/yyyy HH:mm")</td>
             #if($hasEdit || $hasAdmin)
             #set($rollbackMessage = $msg.get("rve.information.rollback.confirm.message", ["$!version"]))
-            <td class="revision-col-action" ><button class="button-link" onclick="if (confirm('$xwiki.escapeText($rollbackMessage)')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
+            <td class="revision-col-action" ><button class="button-link" onclick="if (confirm('$xwiki.curriki.escapeForJS($rollbackMessage)')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
             #end
         </tr>
         #end ## foreach

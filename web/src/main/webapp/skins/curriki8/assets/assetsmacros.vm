@@ -58,7 +58,7 @@
  </li>
     #if($assetIsFromGroup)
     #if($assetGroup.getDisplayTitle())
-    #set($assetGroupDisplayName = $xwiki.escapeText($assetGroup.getDisplayTitle()))
+    #set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
     #else
     #set($assetGroupDisplayName = "")
     #end
@@ -152,9 +152,9 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 <script type="text/javascript">
     #set($author = $xwiki.getUserName($asset.creator, false))
     #if($contentOrInfoTab)
-    #set($message = $xwiki.escapeText($msg.get("rve.content.edit.intention.message_text", [ $author ])).replaceAll("<br>", "%0A"))
+    #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.intention.message_text", [ $author ])).replaceAll("<br>", "%0A"))
     #else
-    #set($message = $xwiki.escapeText($msg.get("rve.information.edit.intention.message_text", [ $asset.displayTitle, $author ])).replaceAll("<br>", "%0A"))    
+    #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.information.edit.intention.message_text", [ $asset.displayTitle, $author ])).replaceAll("<br>", "%0A"))
     #end
 
     // this Javascripts ask the user if he wants to edit or copy
@@ -624,7 +624,7 @@ $asset.use("CurrikiCode.AssetClass")
 <form name="infoedit" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST" onsubmit="return checkEditForm(this);">
 <fieldset class="buttons">
     #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "viewer=info&bc=$!request.bc")))
-    #set($cancelurl = $xwiki.escapeText($asset.getURL('cancel')))
+    #set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel')))
     <input  type="hidden" name="page" value="$asset.fullName" />
     <input  type="hidden" name="xredirect" value="$xredirect" />
     <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
@@ -701,7 +701,7 @@ $asset.use("CurrikiCode.AssetClass")
 </fieldset>
 </form>
 ## this allows to check for changes
-#curriki_clickawayjs("infoedit" $xwiki.escapeText($msg.get("rve.information.edit.warning.message")))
+#curriki_clickawayjs("infoedit" $xwiki.curriki.escapeForJS($msg.get("rve.information.edit.warning.message")))
     <script type="text/javascript">
      function checkEditForm(form) {
          var message = "";
@@ -718,24 +718,25 @@ $asset.use("CurrikiCode.AssetClass")
               edlevelchecked = true;
          }
 
+         // hack to add line breaks
          if (title=="")
-          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.title"))";
+          message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.title"))";
          if (desc=="")
-          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.description"))";
+          message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.description"))";
          if (subject=="FW_masterFramework.WebHome")
-          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.subject"))";
+          message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.subject"))";
          if (!edlevelchecked)
-          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.edlevel"))";
+          message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.edlevel"))";
          if (ict=="")
-          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.ict"))";
+          message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.ict"))";
          if (rightsholder=="")
-          message += "%0A" + "$xwiki.escapeText($msg.get("rve.information.error.required.rightsholder"))";
+          message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.rightsholder"))";
 
 
          if (message=="")
           return true;
          else {
-             message = "$xwiki.escapeText($msg.get("rve.information.required.fields.dialog"))" + "%0A%0A" + message;
+             message = "$xwiki.curriki.escapeForJS($msg.get("rve.information.required.fields.dialog"))" + "%0A%0A" + message;
              alert(unescape(message));
              return false;
          }
@@ -907,7 +908,7 @@ function refreshPage(ajaxreq) {
 
 function checkComment(field) {
   if (field.value.length<5) {
-    #set($message = $xwiki.escapeText($msg.get("rve.comments.comment.error.message.min")))
+    #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.comments.comment.error.message.min")))
     alert('${message}');
     return false;
   }
@@ -1052,7 +1053,7 @@ $asset.use($classname)
     <span>
         <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
     <div  id="revision">
-        #set($revnote = $xwiki.escapeText($msg.get("rve.content.edit.revision.entry_sample")))
+        #set($revnote = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.revision.entry_sample")))
         <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$revnote') { this.value ='' };" />
     </div>
 </li>
@@ -1071,7 +1072,7 @@ $asset.use($classname)
  */
 #macro(asset_edit_buttons $asset $withsaveandcontinue)
 #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "bc=$!request.bc")))
-#set($cancelurl = $xwiki.escapeText($asset.getURL('cancel')))
+#set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel')))
 <fieldset class="buttons">
     <input  type="hidden" name="xredirect" value="$xredirect" />
     <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
