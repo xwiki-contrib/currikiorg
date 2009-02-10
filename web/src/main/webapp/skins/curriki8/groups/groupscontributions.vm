@@ -196,7 +196,7 @@ $msg.get("groups.curriculum.contributions.about")
 #if($allcols)
 <td class="table-col-action">
 <div class="button-links">
-set($g_actionFirst = true)
+#set($g_actionFirst = true)
 #mycurriki_action_add($asset 'P')
 #mycurriki_action_copy($asset 'Copy')
 #mycurriki_action_buildup($asset 'N')
@@ -252,7 +252,7 @@ Curriki.module.search.start();
   * @param $asset Asset to show collections for
   *#
 #macro(groups_curriculum_collectionactions $asset)
-set($g_actionFirst = true)
+#set($g_actionFirst = true)
 #mycurriki_action_add($asset 'P')
 #mycurriki_action_buildup($asset 'N')
 #mycurriki_action_editinfo($asset)
