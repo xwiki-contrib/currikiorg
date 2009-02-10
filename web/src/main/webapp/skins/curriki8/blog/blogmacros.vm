@@ -60,6 +60,8 @@ $msg.get("mycurriki.blog.noblog")
 #set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
 #mycurriki_blogarticle($bentrydoc, $bentryobj, false)
 <br/>
+</div>
+#end
 <div style="float: right; margin-right: 30px">
 #if ($inbstart!=0)
 #set($iprev = $inbstart - $inbitems)
@@ -70,8 +72,6 @@ $msg.get("mycurriki.blog.noblog")
 [$next>$doc.name?nbstart=${inext}${blogqs}]
 #end
 </div>
-</div>
-#end
 #end ## }
 #end ## content macro
 
