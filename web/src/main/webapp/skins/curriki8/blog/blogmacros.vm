@@ -60,16 +60,16 @@ $msg.get("mycurriki.blog.noblog")
 #set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
 #mycurriki_blogarticle($bentrydoc, $bentryobj, false)
 <br/>
-#if($counter==$inbitems)
 <div style="float: right; margin-right: 30px">
 #if ($inbstart!=0)
 #set($iprev = $inbstart - $inbitems)
-[$prev>$doc.name?nbstart=${iprev}&${blogqs}]
+[$prev>$doc.name?nbstart=${iprev}${blogqs}]
 #end
+#if($counter==$inbitems)
 #set($inext = $inbstart + $inbitems)
-[$next>$doc.name?nbstart=${inext}&${blogqs}]
-</div>
+[$next>$doc.name?nbstart=${inext}${blogqs}]
 #end
+</div>
 </div>
 #end
 #end ## }
