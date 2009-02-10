@@ -44,6 +44,7 @@
 #end ## }
 #end ## macro ## }
 
+
 #**
   * Display a Group logo for a space
   *
@@ -51,6 +52,16 @@
   * @author dward@curriki.org
   *#
 #macro(groups_grouplogo $space)
+#groups_grouplogo2($space true)
+#end
+
+#**
+  * Display a Group logo for a space
+  *
+  * @param $space Space/Group to display the logo of
+  * @author dward@curriki.org
+  *#
+#macro(groups_grouplogo2 $space $withpre)
   #set($logofilename = $space.display("logo","view"))
   #set($attachLogo = "")
   #if($logofilename != "")
@@ -87,9 +98,15 @@
 #end
   ##display logo
   <div class="frame-inset-logo">
+    #if($withpre)
     <a href="$space.getHomeURL()" title="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}" alt="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}">
       <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" alt="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" />
+    </a>    
+    #else
+    <a href="$space.getHomeURL()" title="$xwiki.escapeText($space.getDisplayTitle())" alt="$xwiki.escapeText($space.getDisplayTitle())">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="$xwiki.escapeText(${space.getDisplayTitle()})" alt="$xwiki.escapeText(${space.getDisplayTitle()})" />
     </a>
+    #end
   </div>
 #end
 
