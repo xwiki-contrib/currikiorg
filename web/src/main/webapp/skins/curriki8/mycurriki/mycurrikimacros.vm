@@ -1258,7 +1258,7 @@ $msg.get("deleted")
 		#asset_findtitle($asset)
 		#escapeForJS($currikiTitle)
 		#set($escapedTitle = $ret_escaped)
-		#if($asset.creator == $context.user || $hasGlobalAdmin || $doc.name != 'Favorites')##{
+		#if($userdoc.fullName == $context.user || $hasGlobalAdmin || $doc.name != 'Favorites')##{
 		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'}); return false;" ext:qtip="$msg.get('mycurriki.link.add.tooltip')">$msg.get('mycurriki.link.add')</a>{/pre}
 		#end##}
 	#end##}
@@ -1272,7 +1272,7 @@ $msg.get("deleted")
 #macro(mycurriki_action_remove $asset) ##{
 	## ONLY on Favorites page (removes from Favorites list)
 	## ONLY for owner + admin
-	#if($doc.name == 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin)) ##{
+	#if($doc.name == 'Favorites' && ($userdoc.fullName == $context.user || $hasGlobalAdmin)) ##{
 		#set($removeMsg = $msg.get('mycurriki.favorites.table.action.remove.confirm'))
 		#set($deleteUrl = $xwiki.getURL("MyCurriki.RemoveFavorite", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
 		<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" onclick="return confirm('$removeMsg')" href="$deleteUrl" ext:qtip="$msg.get('mycurriki.favorites.table.action.remove_tooltip')">$msg.get("mycurriki.favorites.table.action.remove")</a>
