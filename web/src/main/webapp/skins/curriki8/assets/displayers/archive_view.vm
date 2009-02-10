@@ -15,8 +15,8 @@
         <p>$!caption</p>
         ## if archive is not zip to not display the tree
         #set($attach = $asset.attachmentList.get(0).filename)
-        #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
-        #if($filelist && $filelist.size()>0)
+        #set($treelist = $xwiki.zipexplorer.getFileTreeList($asset, $attach))
+        #if($treelist && $treelist.size()>0)
         #if(!$treeviewid)
         #set($treeviewid = 1)
         #else
@@ -85,8 +85,7 @@
                     tree${treeviewid} = new YAHOO.widget.TreeView("treeview${treeviewid}");
                     //var tree = tree${treeviewid};
                     //var nodes = nodes${treeviewid};
-                #set($zipexp = $xwiki.getPlugin("zipexplorer"))
-                #set($treelist = $zipexp.getFileTreeList($asset, $attach))
+                ## we are using a call to curriki to wrap zip explorer and catch exception
                     baseUrl${treeviewid} = "$asset.getAttachmentURL("$attach")";
                 #foreach($item in $treelist)
                 #set($checked = $selectlist.contains($item.getId()))

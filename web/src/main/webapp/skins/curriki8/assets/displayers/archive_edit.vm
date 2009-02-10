@@ -10,8 +10,8 @@
                     #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
                     ## if archive is not zip to not display the tree
                     #set($attach = $asset.attachmentList.get(0).filename)
-                    #set($filelist = $xwiki.zipexplorer.getFileList($asset, $attach))
-                    #if($filelist && $filelist.size()>0)
+                    #set($treelist = $xwiki.zipexplorer.getFileTreeList($asset, $attach))
+                    #if($treelist && $treelist.size()>0)
                     <li class="input-text">
                         #set($currentstartfile = $asset.getValue("startfile"))
                         <span>
@@ -98,8 +98,6 @@
                                         tree${treeviewid} = new YAHOO.widget.TreeView("treeview${treeviewid}");
                                         //var tree = tree${treeviewid};
                                         //var nodes = nodes${treeviewid};
-                                    #set($zipexp = $xwiki.getPlugin("zipexplorer"))
-                                    #set($treelist = $zipexp.getFileTreeList($asset, $attach))
                                         baseUrl${treeviewid} = "$asset.getAttachmentURL("$attach")";
                                     #foreach($item in $treelist)
                                     #set($checked = $selectlist.contains($item.getId()))
