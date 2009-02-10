@@ -9,8 +9,10 @@ import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Property;
+import com.xpn.xwiki.api.Document;
 
 import javax.management.timer.Timer;
 
@@ -197,5 +199,23 @@ public class CurrikiPluginApi extends Api {
     public List getValues(String className, String fieldName) throws XWikiException{
     	return plugin.getValues(className, fieldName,context);
 
+    }
+
+    /**
+     * Wrapping the getFileList call to manage exception thrown on corrupt assets
+     * @param document
+     * @param filename
+     * @return List of files
+     */
+    public List getFileList(Document document, String filename) {
+        ZipExplorerPlugin zeplugin = (ZipExplorerPlugin) context.getWiki().getPlugin("zipexplorer", context);
+        if (zeplugin==null)
+            return null;
+        try {
+            return zeplugin.getFileList(document, filename, context);
+        } catch (Exception e) {
+            context.put("exception", e);
+            return null;
+        }
     }
 }
