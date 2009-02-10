@@ -62,11 +62,11 @@ public class Asset extends CurrikiDocument {
 
 
     public String getJSTitle() {
-        return getEscapedForJS(getDisplayTitle());
+        return Util.escapeForJS(getDisplayTitle());
     }
 
     public String getJSFullName() {
-        return getEscapedForJS(getFullName());
+        return Util.escapeForJS(getFullName());
     }
 
     public String display(String fieldname, String mode, boolean nopre) {
@@ -76,11 +76,6 @@ public class Asset extends CurrikiDocument {
         } else
             return result;
     }
-
-    protected String getEscapedForJS(String value) {
-       return value.replaceAll("\\\\", "\\\\").replaceAll("'", "\\\\'").replaceAll("\"", "&dquote;");
-    }
-
 
     public String getCategory() {
         if (hasA(Constants.ASSET_CLASS)) {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.curriki.xwiki.plugin.asset.Asset;
+import org.curriki.xwiki.plugin.asset.Util;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 import com.xpn.xwiki.XWikiContext;
@@ -218,4 +219,9 @@ public class CurrikiPluginApi extends Api {
             return null;
         }
     }
+
+    public String escapeForJS(String origtext) {
+        return Util.escapeForJS(origtext);
+    }
+
 }
