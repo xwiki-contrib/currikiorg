@@ -172,6 +172,7 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 </tr>
 #end
 #set($propname = $objdiff.getPropName())
+#if($objdiff.getPrevValue().toString()!=$objdiff.getNewValue().toString())
 <tr>
 <td>$msg.get("changes.comment.${propname}")</td>
 <td>
@@ -195,6 +196,7 @@ $objdiff.getNewValue().toString()
 #end
 </td>
 </tr>
+#end 
 #end
 #end
 #end
