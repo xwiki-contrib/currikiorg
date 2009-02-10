@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1231485269000</creationDate>
-<date>1232330802000</date>
-<contentUpdateDate>1232330802000</contentUpdateDate>
-<version>37.1</version>
+<date>1234267716000</date>
+<contentUpdateDate>1234267716000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>change references trans for error message</comment>
+<comment>sync to next</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -80,39 +80,12 @@
   #set( $parentPage = $request.getParameter("parentPage") )
   #set( $publishSpace = $request.getParameter("publishSpace") )
     #set( $reqparas = $request.getParameterNames() )
-###################################   If through a “Build Up” path
+
   #if( "$!pageName" != "" ) 
 	 #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
   #else
 	 #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
   #end 
-
-  #if( "$!parentPage" != "" ) ##{
-	 #set( $parentAsset  = $xwiki.curriki.fetchAsset($parentPage) )
-	 $newAsset.set("language", $parentAsset.getValue("language"))
-	 $newAsset.set("rights", $parentAsset.getValue("rights"))
-	 $newAsset.set("fw_items", $parentAsset.getValue("fw_items"))
-	 $newAsset.set("educational_level", $parentAsset.getValue("educational_level"))
-  #end ##}
-###################################   If from the “Add a Resource” button within a group’s Curriculum tab
-  #set( $sm = $xwiki.csm )
-  #set( $spaceName = $publishSpace )
-  #if( $spaceName.startsWith("Coll_Group_") ) ##{
-    #set( $pos = 1 + $spaceName.indexOf("_") )
-    #set( $spaceName = $spaceName.substring($pos) )
-    #set( $s = $sm.getSpace($spaceName) )
-	$newAsset.set("language", $s.getValue("language"))
-	$newAsset.set("licenseType", $s.getValue("licence"))
-	## Group's value convert to AssetClass's value
-	#set( $accessPrivileges = $s.getValue("accessprivileges") )
-	#if( $!accessPrivileges == "open" ) 
-	  $newAsset.set("rights", "public")
-	#elseif( $!accessPrivileges == "protected" ) 
-	  $newAsset.set("rights", "members") 
-	#elseif(  $!accessPrivileges == "private" ) 
-	  $newAsset.set("rights", "private") 
-	#end  
-  #end ##}
 
 ####################################	If newAsset is null, show error message
   #if( "$!newAsset"=="" ) 
@@ -414,21 +387,26 @@ function setAttachmentsIframeSize() {
 &lt;/script&gt;
 
 &lt;style type="text/css"&gt;
-body.p-CreateResources-WebQuest .x-grid3-header {text-align:center;background:#93c53c;}
+body.p-CreateResources-WebQuest .x-grid3-header {background:#93c53c;}
 body.p-CreateResources-WebQuest .x-grid3-header span img {margin: -4px 0 -4px 4px;}
 body.p-CreateResources-WebQuest .x-grid3-scroller .x-grid3-row {border-color: #ccc; border-top:none;}
 body.p-CreateResources-WebQuest .x-grid3-scroller {margin-bottom:5px;}
 body.p-CreateResources-WebQuest input[type="button"] {font-weight:normal;}
+.x-grid3-hd-0{text-align:center;}
+.x-grid3-hd-1{text-align:center;}
+.x-grid3-hd-2{text-align:center;}
+.x-grid3-hd-3{text-align:center;}
+.x-grid3-hd-4{text-align:center;}
 .x-grid3-td-0{border-right: 1px solid lightgrey; padding-left: 0px !important;padding-right: 0px !important}
 .x-grid3-td-1{border-right: 1px solid lightgrey; padding-left: 0px !important;padding-right: 0px !important}
 .x-grid3-td-2{border-right: 1px solid lightgrey; padding-left: 0px !important;padding-right: 0px !important}
 .x-grid3-td-3{border-right: 1px solid lightgrey; padding-left: 0px !important;padding-right: 0px !important}
 .x-grid3-td-4{padding-left: 0px !important;padding-right: 0px !important}
-.x-grid3-col-0{white-space: normal; word-break: break-all;}
-.x-grid3-col-1{white-space: normal; word-break: break-all;}
-.x-grid3-col-2{white-space: normal; word-break: break-all;}
-.x-grid3-col-3{white-space: normal; word-break: break-all;}
-.x-grid3-col-4{white-space: normal; word-break: break-all;}
+.x-grid3-col-0{white-space: normal; word-wrap:break-word;}
+.x-grid3-col-1{white-space: normal; word-wrap:break-word;}
+.x-grid3-col-2{white-space: normal; word-wrap:break-word;}
+.x-grid3-col-3{white-space: normal; word-wrap:break-word;}
+.x-grid3-col-4{white-space: normal; word-wrap:break-word;}
 .x-form-field-ace{overflow:hidden}
 
 /* Curriki-form */
@@ -1005,6 +983,15 @@ function getTableText(){
 			str += col1 + ' | ' + beginning + ' | ' + developing + ' | ' + accomplished + ' | ' + exemplary + ' \r\n';
 		//}
 	}
+
+
+
+
+
+
+
+
+
 	str += '\{table\}';
 
 	return str;
@@ -1015,9 +1002,9 @@ function getTableText(){
 ####################################	JS end , title
 #set( $noDialogs = $request.getParameter("noDialogs") )  ## ?noDialogs=1 turns off add-path dialogs, for testing, or to enable "edit-again"
 
-  &lt;div class="header"&gt;
+  &lt;div class="header" style="margin-left: 10px"&gt;
   #curriki_formtitle($msg.get("wq.plan.title"))
-  $msg.get("wq.title.description") &lt;a href="$msg.get('wq.title.description.link1.url')" target="_blank"&gt;$msg.get("wq.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link3.url')" target="_blank"&gt;$msg.get("wq.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link2.url')" target="_blank"&gt;$msg.get("wq.title.description.link2")&lt;/a&gt;&lt;a href="$msg.get('wq.title.description.link4.url')"&gt;&lt;img src="$msg.get('wq.title.description.link4.thumbnail')" align="middle"&gt;&lt;/a&gt;
+  $msg.get("wq.title.description") &lt;a href="$msg.get('wq.title.description.link1.url')" target="_blank"&gt;$msg.get("wq.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link3.url')" target="_blank"&gt;$msg.get("wq.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link2.url')" target="_blank"&gt;$msg.get("wq.title.description.link2")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link4.url')"&gt;&lt;img src="$msg.get('wq.title.description.link4.thumbnail')" align="middle"&gt;$msg.get("wq.title.description.link4")&lt;/a&gt;
   &lt;br /&gt;$msg.get("form.required.fields.instruction")
   &lt;/div&gt;
 
@@ -1063,8 +1050,8 @@ function getTableText(){
   $newAsset.display("language","edit")
   #curriki_formpart_end() 
 ####################################	step2
-  #curriki_formpart_begin($msg.get("lesson.plan.step2.header")) ## {
-  #curriki_forminstructions($msg.get("lesson.plan.step2.instruction"))
+  #curriki_formpart_begin($msg.get("wq.step2.header")) ## {
+  #curriki_forminstructions($msg.get("wq.step2.instruction"))
 
   ##Introduction:
   #curriki_formprompt($msg.get("wq.intro.title"), $msg.get("wq.intro.tooltip"), $msg.get("wq.intro.instruction"), true, "medium")
