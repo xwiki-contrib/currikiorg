@@ -14,7 +14,11 @@
         #end
         <p>$!caption</p>
         ## if archive is not zip to not display the tree
-        #set($attach = $asset.attachmentList.get(0).filename)
+        #if($asset.attachmentList.size()>0)
+         #set($attach = $asset.attachmentList.get(0).filename)
+        #else
+         #set($attach = "")
+        #end
         #set($treelist = $xwiki.zipexplorer.getFileTreeList($asset, $attach))
         #if($treelist && $treelist.size()>0)
         #if(!$treeviewid)
