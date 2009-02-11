@@ -98,13 +98,14 @@
 #end
   ##display logo
   <div class="frame-inset-logo">
+    #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
     #if($withpre)
-    <a href="$space.getHomeURL()" title="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}" alt="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" alt="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" />
+    <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
     </a>    
     #else
-    <a href="$space.getHomeURL()" title="$xwiki.escapeText($space.getDisplayTitle())" alt="$xwiki.escapeText($space.getDisplayTitle())">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="$xwiki.escapeText(${space.getDisplayTitle()})" alt="$xwiki.escapeText(${space.getDisplayTitle()})" />
+    <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="${jstitle}" alt="${jstitle}" />
     </a>
     #end
   </div>
