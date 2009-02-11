@@ -1532,7 +1532,6 @@ public class Asset extends CurrikiDocument {
                 attachment.setFilename(filename);
                 attachment.setAuthor(context.getUser());
                 doc.setAuthor(context.getUser());
-                doc.setCreator(context.getUser());
                 doc.saveAttachmentContent(attachment, context);
 
                 // if it's a new file name we should run the category updater
