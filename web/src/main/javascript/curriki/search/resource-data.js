@@ -313,7 +313,7 @@ data.init = function(){
 			}
 
 //			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-			return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" alt="{4}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
 		}
 
 		,ict: function(value, metadata, record, rowIndex, colIndex, store){
