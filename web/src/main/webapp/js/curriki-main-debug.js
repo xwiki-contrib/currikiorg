@@ -2888,10 +2888,6 @@ console.log('createNode: parent',parent);
 				,allowDrop:false
 			}
 
-			if (this.truncateTitle !== false) {
-				childInfo.text = Ext.util.Format.ellipsis(childInfo.text, Ext.num(this.truncateTitle, 125));
-			}
-
 			if (this.setChildHref) {
 				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
 			}
@@ -2928,6 +2924,10 @@ console.log('createNode: parent',parent);
 			// ?? = attr.order;
 
 			Ext.apply(childInfo, attr);
+
+			if (this.truncateTitle !== false) {
+				childInfo.text = Ext.util.Format.ellipsis(childInfo.text, Ext.num(this.truncateTitle, 125));
+			}
 
 			if(this.baseAttrs){
 				Ext.applyIf(childInfo, this.baseAttrs);
