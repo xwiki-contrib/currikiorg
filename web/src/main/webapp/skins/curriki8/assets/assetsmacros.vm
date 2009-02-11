@@ -215,9 +215,18 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 #macro(asset_display $asset $mode)
 #set($mainAssetFiletype = $asset.getValue("file_type"))
 #set($mainAssetCategory = $asset.getCategory())
+#set($mainAssetView = $mainAssetCategory)
+#if($mainAssetCategory=="collection")
+#set($ok = $asset.use("CurrikiCode.CompositeAssetClass"))
+#set($colltype = $asset.getValue("type"))
+#if($colltype=="folder")
+ #set($mainAssetView = "folder")
+#end
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#end
 #if(!$mainAssetFiletype || $mainAssetFiletype=="") #set($mainAssetFiletype = "unknown") #end
 #if(!$mainAssetCategory || $mainAssetCategory=="") #set($mainAssetCategory = "unknown") #end
-<div id="asset-wrapper" class="view-$!mainAssetCategory mode-$mode">
+<div id="asset-wrapper" class="view-$!mainAssetView mode-$mode">
     #asset_findmode()
     #if(!$isEmbed)
      #if($mode!="edit")

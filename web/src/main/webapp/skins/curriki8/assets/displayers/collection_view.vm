@@ -13,7 +13,14 @@
 #set($counter = $counter + 1)
 #set($embeddedDoc = $xwiki.getDocument($assetPage))
 #if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
-<div class="sub-asset-wrapper category-collection">
+#set($ok = $embeddedDoc.use("CurrikiCode.CompositeAssetClass"))
+#set($colltype = $embeddedDoc.getValue("type"))
+#if($colltype=="folder")
+ #set($colltype = "folder")
+#else
+ #set($colltype = "collection")
+#end
+<div class="sub-asset-wrapper category-${colltype}">
     <div class="sub-asset-wrapper-inner">
         #asset_beginsection($embeddedDoc false)
         #asset_endsection()
