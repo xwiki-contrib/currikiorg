@@ -1090,7 +1090,7 @@ form.init = function(){
 
 	form.rowExpander.renderer = function(v, p, record){
 		var cls;
-		if (record.data.parents && record.data.parents.size() > 1) {
+		if (record.data.parents && record.data.parents.size() > 0) {
 			p.cellAttr = 'rowspan="2"';
 			cls = 'x-grid3-row-expander';
 //			return '<div class="x-grid3-row-expander">&#160;</div>';
