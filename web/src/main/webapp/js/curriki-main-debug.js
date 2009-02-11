@@ -2895,6 +2895,10 @@ console.log('createNode: parent', p);
 				,allowDrop:false
 			}
 
+			if (!Ext.isEmpty(attr.addCls)) {
+				childInfo.cls += ' '+attr.addCls;
+			}
+
 			if (this.setChildHref) {
 				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
 			}
