@@ -2867,9 +2867,12 @@ console.log('createNode: ',attr);
 			}
 
 			if ('string' === typeof attr.id) {
-				var parent = Curriki.ui.treeLoader.Base.superclass.createNode.call(this, attr);
-console.log('createNode: parent',parent);
-				return parent;
+				var p = Curriki.ui.treeLoader.Base.superclass.createNode.call(this, attr);
+				if (this.truncateTitle !== false) {
+					p.setText(Ext.util.Format.ellipsis(p.text, Ext.num(this.truncateTitle, 125)));
+				}
+console.log('createNode: parent', p);
+				return p;
 			}
 
 			attr.pageName = attr.assetpage||attr.collectionPage;
