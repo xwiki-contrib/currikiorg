@@ -129,7 +129,12 @@ Toc.init = function(){
 	Toc.buildTree = function(){
 		var root = Data.tocData;
 
-		root.cls = root.cls+' toc-top';
+		if (!Ext.isEmpty(root.addCls)) {
+			root.addCls = root.addCls+' toc-top';
+		} else {
+			root.addCls = ' toc-top';
+		}
+
 		root.listeners = {
 			'beforecollapse':{
 				fn:function(){
