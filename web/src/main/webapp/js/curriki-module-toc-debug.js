@@ -38,6 +38,7 @@ Toc.init = function(){
 		,setTitleInRollover:true
 		,setUniqueId:true
 		,hideInvalid:true
+		,truncateTitle:125
 	});
 
 	// private -- overridden to change tabIndex from the default "1"

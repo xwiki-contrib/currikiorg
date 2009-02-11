@@ -82,6 +82,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,hideUnviewable:false
 		,hideInvalid:false
 		,setTitleInRollover:false
+		,truncateTitle:false
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
@@ -144,6 +145,11 @@ console.log('createNode: parent',parent);
 				,allowDrag:('boolean' == typeof attr.allowDrag)?attr.allowDrag:this.setAllowDrag
 				,allowDrop:false
 			}
+
+			if (this.truncateTitle !== false) {
+				childInfo.text = Ext.util.Format.ellipsis(childInfo.text, Ext.num(this.truncateTitle, 125));
+			}
+
 			if (this.setChildHref) {
 				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
 			}
