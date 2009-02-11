@@ -721,7 +721,9 @@ $asset.use("CurrikiCode.AssetClass")
          var desc = form["CurrikiCode.AssetClass_0_description"].value;
          var subject = form["CurrikiCode.AssetClass_0_fw_items"].value;
          var ict = form["CurrikiCode.AssetClass_0_instructional_component"][0].value;
+#if($isOriginalAuthorOrAdmin)
          var rightsholder = form["CurrikiCode.AssetLicenseClass_0_rightsHolder"].value;
+#end
          var edlevels = form["CurrikiCode.AssetClass_0_educational_level"];
          var edlevelchecked = false;
          for (var i=0;i<edlevels.length;i++) {
@@ -741,9 +743,10 @@ $asset.use("CurrikiCode.AssetClass")
           message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.edlevel"))";
          if (ict=="")
           message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.ict"))";
+#if($isOriginalAuthorOrAdmin)
          if (rightsholder=="")
           message += "%0A" + "$xwiki.curriki.escapeForJS($msg.get("rve.information.error.required.rightsholder"))";
-
+#end
 
          if (message=="")
           return true;
