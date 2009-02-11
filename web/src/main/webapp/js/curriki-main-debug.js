@@ -2882,6 +2882,10 @@ console.log('createNode: parent', p);
 				attr.subcategory = 'protected';
 			}
 
+			// Make sure we have a category and subcategory
+			attr.category = Ext.value(attr.category, "unknown");
+			attr.subcategory = Ext.value(attr.subcategory, "unknown");
+
 			var childInfo = {
 				 id:this.setUniqueId?Curriki.id(attr.pageName):attr.pageName
 				,text:attr.displayTitle||attr.title
