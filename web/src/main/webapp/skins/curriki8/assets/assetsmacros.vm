@@ -626,7 +626,8 @@ $asset.use("CurrikiCode.AssetClass")
 <form name="infoedit" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" method="POST" onsubmit="return checkEditForm(this);">
 <fieldset class="buttons">
     #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', "viewer=info&bc=$!request.bc")))
-    #set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel')))
+    #set($xredirecturi = $util.encodeURI($xredirect))
+    #set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel', "xredirect=${xredirecturi}")))
     <input  type="hidden" name="page" value="$asset.fullName" />
     <input  type="hidden" name="xredirect" value="$xredirect" />
     <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
