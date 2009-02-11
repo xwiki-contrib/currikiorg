@@ -1307,7 +1307,7 @@ $msg.get("deleted")
 	## Not available on "Favorites" page
 	## File Resources only (not Collections/Folders)
 	#checkForCollections()
-	#if($g_userHasCollections && $asset.getCategory() != 'collection') ##{
+	#if($asset.getCategory() != 'collection') ##{
 		#escapeForJS($asset.fullName)
 		#set($escapedFullName = $ret_escaped)
 		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
