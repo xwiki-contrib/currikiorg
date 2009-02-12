@@ -1276,7 +1276,7 @@ td.table-col-filetype img {
 	width: 17px;
 }
 
-td.table-col-filetype img.resource-CollectionComposite, td.table-col-filetype img.resource-FolderComposite, #resource-toc .x-tree-node-icon, #organize-panel .x-tree-node-icon, #search-panel-resource .x-tree-node-icon, .category-icon-combo-item img.category-icon, #ChooseLocationDialoguePanel .x-tree-node-icon, #resource-pickup .x-tree-node-icon, #ReorderDialoguePanel .x-tree-node-icon {
+td.table-col-filetype img.resource-CollectionComposite, td.table-col-filetype img.resource-FolderComposite, #resource-toc .x-tree-node-icon, #organize-panel .x-tree-node-icon, #search-panel-resource .x-tree-node-icon, #ChooseLocationDialoguePanel .x-tree-node-icon, #resource-pickup .x-tree-node-icon, #ReorderDialoguePanel .x-tree-node-icon, .category-icon-combo-item img.category-icon, #x-form-el-combo-category-resource div.category-icon-combo-icon {
 	background-image: url(images/sprite_mediatype.gif);
 	background-repeat: no-repeat;
 }
@@ -1377,17 +1377,29 @@ img.subcategory-external_url {background-position: 0 0;}
 .resource-CollectionComposite .x-tree-node-icon {background-position: 0 -3600px;}
 .resource-FolderComposite .x-tree-node-icon {background-position: 0 -3690px;}
 #ReorderDialoguePanel .curriki-group .x-tree-node-icon {background-position: 0 -3690px;}
-.resource-External .x-tree-node-icon, .category-external img.category-icon {background-position: 0 -4320px;}
-.resource-Image .x-tree-node-icon, .category-image img.category-icon {background-position: 0 -3870px;}
-.resource-Interactive .x-tree-node-icon, .category-interactive img.category-icon {background-position: 0 -3960px;}
-.resource-Video .x-tree-node-icon, .category-video img.category-icon {background-position: 0 -4050px;}
-.resource-Archive .x-tree-node-icon, .category-archive img.category-icon {background-position: 0 -4140px;}
-.resource-Audio .x-tree-node-icon, .category-audio img.category-icon {background-position: 0 -4230px;}
+.resource-External .x-tree-node-icon, .category-external img.category-icon, #x-form-el-combo-category-resource div.category-external {background-position: 0 -4320px;}
+.resource-Image .x-tree-node-icon, .category-image img.category-icon, #x-form-el-combo-category-resource div.category-image {background-position: 0 -3870px;}
+.resource-Interactive .x-tree-node-icon, .category-interactive img.category-icon, #x-form-el-combo-category-resource div.category-interactive {background-position: 0 -3960px;}
+.resource-Video .x-tree-node-icon, .category-video img.category-icon, #x-form-el-combo-category-resource div.category-video {background-position: 0 -4050px;}
+.resource-Archive .x-tree-node-icon, .category-archive img.category-icon, #x-form-el-combo-category-resource div.category-archive {background-position: 0 -4140px;}
+.resource-Audio .x-tree-node-icon, .category-audio img.category-icon, #x-form-el-combo-category-resource div.category-audio {background-position: 0 -4230px;}
 .resource-Document .x-tree-node-icon, .resource-Attachment .x-tree-node-icon, 
-.category-document img.category-icon {background-position: 0 -3780px;}
-.category- img.category-icon {background-image: none;}
-.resource-Text .x-tree-node-icon, .category-text img.category-icon {background-position: 0 -4410px;}
-.category-unknown img.category-icon {background-position: 0 -4500px;}
+.category-document img.category-icon, #x-form-el-combo-category-resource div.category-document {background-position: 0 -3780px;}
+.category- img.category-icon, #x-form-el-combo-category-resource div.category- {background-image: none;}
+.resource-Text .x-tree-node-icon, .category-text img.category-icon, #x-form-el-combo-category-resource div.category-text {background-position: 0 -4410px;}
+.category-unknown img.category-icon, #x-form-el-combo-category-resource div.category-unknown {background-position: 0 -4500px;}
+
+#x-form-el-combo-category-resource div.category-icon-combo-icon { 
+    height:17px !important;
+    left: 2px !important;
+    top: 4px !important;
+    width:17px !important;
+}
+
+#x-form-el-combo-category-resource input#combo-category-resource {padding-left: 20px; width: 100px;}
+#x-form-el-combo-category-resource input#combo-category-resource.x-form-empty-field {padding-left: 0; width: 120px;}
+
+
 
 /** MY COLLECTIONS LINK PIPES **/
 
