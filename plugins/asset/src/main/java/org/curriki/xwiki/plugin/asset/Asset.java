@@ -60,15 +60,54 @@ public class Asset extends CurrikiDocument {
     }
 
 
-
+    /**
+     * Provide a title valid to insert in a javascript call in a tag onclick
+     * @return
+     */
     public String getJSTitle() {
         return Util.escapeForJS(getDisplayTitle());
     }
 
+    /**
+     * Provide a title valid to insert in a javascript call in a tag onclick
+     * with a title length limitation
+     * @param length
+     * @return
+     */
+    public String getJSTitle(int length) {
+        return Util.escapeForJS(getDisplayTitle(length));
+    }
+
+    /**
+     * Provide the document fullname escaped for inclusing in a js call in a tab onclick
+     * @return
+     */
     public String getJSFullName() {
         return Util.escapeForJS(getFullName());
     }
 
+    /**
+     * Provided a truncated title to the length specified
+     * @param length
+     * @return
+     */
+    public String getDisplayTitle(int length) {
+        String title = getDisplayTitle();
+        if (title.length()>length) {
+         title = title.substring(0,length);
+         title = title + "...";
+        }
+        return title;
+    }
+
+
+    /**
+     * Return a display call without the {pre} tags to be usable in plain vm templates
+     * @param fieldname
+     * @param mode
+     * @param nopre
+     * @return
+     */
     public String display(String fieldname, String mode, boolean nopre) {
         String result = super.display(fieldname, mode);
         if (nopre) {
