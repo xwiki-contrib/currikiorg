@@ -159,13 +159,13 @@
     </li>
     <li class="crs-rating-comments">
         <strong>$msg.get("rve.comments.review.reviewed.reviewtext_title")</strong>
-        <p>
+        <div id="review-text-${review.number}" class="review-text">
             $ratingcomment
-        </p>
+        </div>
     </li>
     #if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
     ## TODO: this should display the specific review but this will not be the case at this point
-    <li><a href="$xwiki.getURL("CRS.Review", "view", "page=${asset.fullName}&nb=${review.number}}")" target="_blank">$msg.get("rve.comments.review.update_link")</a></li>
+    <li><a href="javascript:void(0)" onclick="editReview('${asset.getJSFullName()}','${review.number}','review-text-${review.number}'); return false;">$msg.get("rve.comments.review.update_link")</a></li>
     #end
 </ul>
 #end
