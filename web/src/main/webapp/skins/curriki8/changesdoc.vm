@@ -167,12 +167,12 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 #set($commentchangetitledone = 0)
 #foreach($objdiff in $objdiffs)
 #if($objdiff.getClassName().equals("XWiki.XWikiComments"))
+#if($objdiff.getPrevValue().toString().trim()!=$objdiff.getNewValue().toString().trim())
 #if($commentchangetitledone==0)
 #set($commentchanges = 1 + $commentchanges)
 #set($commentchangetitledone = 1)
 #end
 #set($propname = $objdiff.getPropName())
-#if($objdiff.getPrevValue().toString()!=$objdiff.getNewValue().toString())
 <tr>
 <td>$msg.get("changes.comment.${propname}")</td>
 <td>
