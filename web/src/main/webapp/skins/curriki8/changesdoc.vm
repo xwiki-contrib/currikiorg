@@ -21,7 +21,7 @@
 #if($origdoc)
 $msg.get("changes.editedby") $xwiki.renderText($xwiki.getLocalUserName($origdoc.author),$doc)
 <br />
-$msg.get("changes.on") $xwiki.formatDate($origdoc.date)
+$msg.get("changes.on") $xwiki.formatDate($origdoc.date,$msg.get("mycurriki.datetimeFormat"))
 #end
 </div>
 </div>
@@ -31,7 +31,7 @@ $msg.get("changes.on") $xwiki.formatDate($origdoc.date)
 #if($newdoc)
 $msg.get("changes.editedby") $xwiki.renderText($xwiki.getLocalUserName($newdoc.author),$doc)
 <br />
-$msg.get("changes.on") $xwiki.formatDate($newdoc.date)
+$msg.get("changes.on") $xwiki.formatDate($newdoc.date,$msg.get("mycurriki.datetimeFormat"))
 #end
 </div>
 </div>
