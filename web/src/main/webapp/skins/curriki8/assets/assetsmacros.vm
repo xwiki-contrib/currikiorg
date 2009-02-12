@@ -228,7 +228,7 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 #end
 #if(!$mainAssetFiletype || $mainAssetFiletype=="") #set($mainAssetFiletype = "unknown") #end
 #if(!$mainAssetCategory || $mainAssetCategory=="") #set($mainAssetCategory = "unknown") #end
-<div id="asset-wrapper" class="view-$!mainAssetView mode-$mode">
+<div id="asset-wrapper" class="view-$!mainAssetView #if($mainAssetCategory == "attachment" && $mainAssetFiletype=="unknown") view-attachment-unknown #end mode-$mode">
     #asset_findmode()
     #if(!$isEmbed)
      #if($mode!="edit")
