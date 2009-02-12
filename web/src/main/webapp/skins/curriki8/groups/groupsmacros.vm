@@ -173,7 +173,8 @@ $welcomeContent
 #set($ok = $wdoc.use("XWiki.CurrikiWelcomeBlockClass"))
 #set($welcomeContent = $!wdoc.display("content"))
 #if($welcomeContent=="")
-$xwiki.getDocument("Groups.${wdoc.name}Welcome").getRenderedContent()
+## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+$xwiki.getDocument("Groups.${wdoc.name}Welcome").getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
 #else
 $welcomeContent
 #end

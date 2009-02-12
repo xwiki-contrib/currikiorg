@@ -215,7 +215,8 @@ document.getElementById("commentform").className = "collapsed";
   #end
  #end
 #end
-$bentrydoc.getRenderedContent($content) #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
+$bentrydoc.getRenderedContent($content).replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+#if($bentrydoc.fullName != $doc.fullName || !$displayFully)
 <div class="clearfloats"></div>
 
 <a href="$bentrydoc.getURL("view", "bc=$!request.bc")" class="curriki-link">$msg.get("caption.readmore")</a>#end
