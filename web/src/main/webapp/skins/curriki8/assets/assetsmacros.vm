@@ -1132,7 +1132,6 @@ $response.sendRedirect($request.xredirect)
 #set($ok = $asset.use($review))
 #if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
 $asset.set("comment", $request.get("CRS.CurrikiReviewClass_${reviewnb}_comment"))
-$asset.set("date", $xwiki.date)
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
 #else
