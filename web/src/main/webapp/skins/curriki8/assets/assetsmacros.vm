@@ -97,6 +97,7 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
  * Macro for resources links
  *#
 #macro(asset_links $asset)
+#checkForCollections()
 <ul id="asset-links">
     #if(!$isguest)
     #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
@@ -108,16 +109,16 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
     #end
     ## Copy
   #if($asset.category!="collection")
-    <li>
+    <li #if ((($asset.category!="collection")||!$asset.hasAccessLevel("edit"))&&!$g_userHasCollections) class="last-item" #end>
         <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')">$msg.get('rve.content.copy_link')</a>
     </li>
     #end
     ## Add
-##if($g_userHasCollections)##{
-  <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
-    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
-</li>
-    ##end##}
+  #if($g_userHasCollections)##{
+    <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
+        <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')">$msg.get('rve.content.add_link')</a>
+    </li>
+  #end##}
   ## Build Up
   #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
   ## checking if we have organize. This sets the variable $subAssetList also used in collection_view.vm
