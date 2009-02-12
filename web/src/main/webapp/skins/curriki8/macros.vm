@@ -1311,12 +1311,16 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author dward@curriki.org
   *#
 #macro(curriki_avatar_width $userdoc $width) ## {
+#set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #if($userdoc.attachmentList.size()==0)  ## {
+ <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
+ </a>
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
-  <a href="$userdoc.getURL("view")" >
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end /></a>
+  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end />
+  </a>
  #end ## }
 #end ## }
 #end ## macro ## }
@@ -1339,10 +1343,12 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   *#
 #macro(curriki_avatarwithname_width $userdoc) ## {
 #if($userdoc.attachmentList.size()==0)  ## {
+<a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
+</a>
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
-  <a href="$userdoc.getURL("view")" >
+  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
   <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end /></a>
  #end ## }
 #end  $xwiki.getUserName($userdoc.fullName) ## }
