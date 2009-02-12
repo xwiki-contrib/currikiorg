@@ -465,8 +465,10 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_info_edlevel $asset $popup)
 #set($educlevels = $!asset.getValue("educational_level"))
 <ul class="asset-info-edlevel">
+    #set($edlevelCounter = 0)
     #foreach($educlevel in $educlevels)
-    #if(!$popup || $velocityCount<3)
+    #set($edlevelCounter = $edlevelCounter + 1)
+    #if(!$popup || $edlevelCounter<3)
     <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
     #end
     #end
@@ -474,7 +476,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #if(!$educlevels || $educlevels.size()==0)
      <li>$msg.get("global.title.popup.none.selected")</li>
     #end
-    #if($velocityCount>2)
+    #if($edlevelCounter>2)
      <li>...</li>
     #end
     #end
@@ -487,7 +489,9 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_info_ict $asset $popup)
 #set($ict = $!asset.getValue("instructional_component"))
 <ul class="asset-info-ict">
+    #set($ictCounter = 0)
     #foreach($ictitem in $ict)
+     #set($ictCounter = $ictCounter + 1)
      #if(!$popup || $velocityCount<3)
      #set($hyphenpos = $ictitem.indexOf("_"))
      #if($hyphenpos==-1)
@@ -502,7 +506,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #if(!$ict || $ict.size()==0)
      <li class="ict-null">$msg.get("global.title.popup.none.selected")</li>
     #end
-    #if($velocityCount>2)
+    #if($ictCounter>2)
      <li class="ict-null">...</li>
     #end
     #end
