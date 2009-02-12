@@ -195,7 +195,8 @@ showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${secco
 #if($adoc.hasAccessLevel("view"))
 #set($obj = $adoc.getObject("XWiki.ArticleClass",0))
 #set($msgtitle = $adoc.display("title", "view"))
-#set($msgcontent = $adoc.display("content", "view"))
+## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+#set($msgcontent = $adoc.display("content", "view").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
 ## CURRIKI-1860: we display the modification date and the last author
 #set($modificationDate = $xwiki.formatDate($adoc.date,$msg.get("mycurriki.datetimeFormat")))
 <p><span class="date">$modificationDate</span>, by <a>$xwiki.getLocalUserName($adoc.creator)</a></p>
@@ -547,7 +548,7 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 #groupsheader("messages")
 #set($obj = $doc.getObject("XWiki.ArticleClass",0))
 #set($msgtitle = $doc.display("title", "view"))
-#set($msgcontent = $doc.display("content", "view"))
+##set($msgcontent = $doc.display("content", "view"))
 #set($divid = "groups-message-edit")
 #if($request.xredirect)
 #set($redirect = $request.xredirect)
