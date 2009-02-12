@@ -55,7 +55,10 @@ $msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocommen
 </tr>
 #set($hasmetadatachanges = 0)
 #foreach($item in $doc.getMetaDataDiff($origdoc, $newdoc))
-#set($hasmetadatachanges = 1)
+ #set($prevValue = $objdiff.getPrevValue().toString().trim())
+ #set($newValue = $objdiff.getNewValue().toString().trim())
+ #if(!$prevValue.equals($newValue))
+ #set($hasmetadatachanges = 1)
 <tr>
 #if($item.field=="author")
 <td>$msg.get("changes.metadata.author")</td><td>$xwiki.getLocalUserName($item.getPrevValue())</td><td>$xwiki.getLocalUserName($item.getNewValue())</td>
@@ -73,14 +76,13 @@ $msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocommen
 <tr>
 <td>$msg.get("changes.asset.${propname}")</td>
 <td>
-#set($value = $objdiff.getPrevValue().toString())
-$value
+$prevValue
 </td>
 <td>
-#set($value = $objdiff.getNewValue().toString())
-$value
+$newValue
 </td>
 </tr>
+#end
 #end
 #end
 #end
@@ -167,7 +169,7 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 #set($commentchangetitledone = 0)
 #foreach($objdiff in $objdiffs)
 #if($objdiff.getClassName().equals("XWiki.XWikiComments"))
-#if($objdiff.getPrevValue().toString().trim()!=$objdiff.getNewValue().toString().trim())
+    #if(!$objdiff.getPrevValue().toString().trim().equals($objdiff.getNewValue().toString().trim()))
 #if($commentchangetitledone==0)
 #set($commentchanges = 1 + $commentchanges)
 #set($commentchangetitledone = 1)
