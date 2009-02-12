@@ -195,6 +195,11 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 <tr class="changes-table-title">
 <th colspan="3">$msg.get("changes.commentchanges")</th>
 </tr>
+    <tr class="changes-table-title changes-table-comment-subtitle">
+        <th>$msg.get("changes.comment.property")</th>
+        <th>$msg.get("changes.comment.previousvalue")</th>
+        <th>$msg.get("changes.comment.newvalue")</th>
+    </tr>
 #set($commentchanges = 0)
 #foreach($objdiffs in $doc.getObjectDiff($origdoc, $newdoc))
 #set($commentchangetitledone = 0)
@@ -203,11 +208,6 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 #if($commentchangetitledone==0)
 #set($commentchanges = 1 + $commentchanges)
 #set($commentchangetitledone = 1)
-<tr class="changes-table-title changes-table-comment-subtitle">
-<th>$msg.get("changes.comment.property")</th>
-<th>$msg.get("changes.comment.previousvalue")</th>
-<th>$msg.get("changes.comment.newvalue")</th>
-</tr>
 #end
 #set($propname = $objdiff.getPropName())
 #if($objdiff.getPrevValue().toString()!=$objdiff.getNewValue().toString())
