@@ -1950,14 +1950,21 @@ Ext.ns('Curriki.data.ict');
 Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_lab","activity_game","activity_worksheet","activity_problemset","activity_webquest","book_fiction","book_nonfiction","book_readings","book_textbook","curriculum_assessment","curriculum_course","curriculum_unit","curriculum_lp","curriculum_rubric","curriculum_scope","curriculum_standards","curriculum_studyguide","curriculum_syllabus","curriculum_tutorial","curriculum_workbook","resource_animation","resource_article","resource_diagram","resource_glossary","resource_index","resource_photograph","resource_presentation","resource_collection","resource_script","resource_speech","resource_study","resource_table","resource_template","resource_webcast","other"];
 Curriki.data.ict.data = [ ];
 Curriki.data.ict.list.each(function(ict){
+	var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
+	if (value === 'other') {
+		sort = 'zzz';
+	}
 	Curriki.data.ict.data.push([
 		 ict
 		,_('CurrikiCode.AssetClass_instructional_component_'+ict)
+		,sort
 	]);
 });
 Curriki.data.ict.store = new Ext.data.SimpleStore({
-	fields: ['id', 'ict'],
-	data: Curriki.data.ict.data
+	fields: ['id', 'ict', 'sortValue']
+	,sortInfo: {field:'sortValue', direction:'ASC'}
+	,data: Curriki.data.ict.data
+	,id: 0
 });
 
 Curriki.data.ict.getRolloverDisplay = function(el_ict){
