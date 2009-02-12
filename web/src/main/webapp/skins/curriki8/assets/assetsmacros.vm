@@ -962,12 +962,14 @@ function cancelEditCommentCallback(ajaxreq) {
 }
 
 function checkReview(field) {
+#*
   if (field.value.length<5) {
     #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.comments.comment.error.message.min")))
     alert('${message}');
     return false;
   }
   clickAwayActive = false;
+*#
   return true;
 }
 
@@ -980,8 +982,8 @@ function editReview(pageName,nb,divid) {
 function editReviewCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
- clickAwayActive  = true;
- clickAwayCounter++;
+## clickAwayActive  = true;
+## clickAwayCounter++;
  document.forms['review-edit-' + ajaxreq.options.nb]['CRS.CurrikiReviewClass_' + ajaxreq.options.nb +  '_comment'].focus();
 }
 function cancelEditReview(pageName,nb,divid) {
@@ -992,9 +994,9 @@ function cancelEditReview(pageName,nb,divid) {
 function cancelEditReviewCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
- clickAwayCounter--;
- if (clickAwayCounter==0)
-  clickAwayActive = false;
+## clickAwayCounter--;
+## if (clickAwayCounter==0)
+##  clickAwayActive = false;
 }
 
 
