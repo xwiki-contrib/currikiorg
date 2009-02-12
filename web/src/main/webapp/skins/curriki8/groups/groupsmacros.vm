@@ -126,12 +126,18 @@ function editWelcomeBlockCallback(ajaxreq) {
  tinyMCE.addMCEControl(document.getElementById("XWiki.CurrikiWelcomeBlockClass_0_content"), "XWiki.CurrikiWelcomeBlockClass_0_content");
 }
 function cancelEditWelcomeBlock(spaceName,pageName,divid) {
-  if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
-   var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
-   $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
-   // call url to get the edit html to edit the profile
-   var myAjax = new Ajax.XWikiRequest( "Groups", "ViewWelcomeBlockService", {method: 'get', parameters: pars, onComplete: cancelEditWelcomeBlockCallback, divid: divid });
-  }
+ if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
+ ## CURRIKI-3174 in IE we need to refresh because of CSS issue
+ #set($ua = $request.getHeader("user-agent"))
+ #if($ua.indexOf("MSIE")!=-1) ##{
+    history.go(0); 
+ #else
+    var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
+    $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+    // call url to get the edit html to edit the profile
+    var myAjax = new Ajax.XWikiRequest( "Groups", "ViewWelcomeBlockService", {method: 'get', parameters: pars, onComplete: cancelEditWelcomeBlockCallback, divid: divid });
+ #end
+ }
 }
 function cancelEditWelcomeBlockCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
