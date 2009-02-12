@@ -1081,9 +1081,9 @@ $response.sendRedirect($request.xredirect)
 #set($page = $request.page)
 #set($asset = $xwiki.getDocument($page))
 #set($reviewnb = $xwiki.parseInt($request.nb))
-#set($ok = $asset.use("CRS.CRSReviewClass", $reviewnb))
+#set($ok = $asset.use("CRS.CurrikiReviewClass", $reviewnb))
 #set($xredirect= $xwiki.getFormEncoded($request.xredirect))
-<form name="review-edit-${reviewnb}" action="$xwiki.getURL("CurrikiCode.SaveReviewService")" method="post" onsubmit="return checkReview(this['CRS.CRSReviewClass_${reviewnb}_comment']);">
+<form name="review-edit-${reviewnb}" action="$xwiki.getURL("CurrikiCode.SaveReviewService")" method="post" onsubmit="return checkReview(this['CRS.CurrikiReviewClass_${reviewnb}_comment']);">
     <input type="hidden" name="page" value="${page}" />
     <input type="hidden" name="nb" value="${reviewnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
@@ -1110,7 +1110,7 @@ $response.sendRedirect($request.xredirect)
 #set($page = $request.page)
 #set($asset = $xwiki.getDocument($page))
 #set($reviewnb = $xwiki.parseInt($request.nb))
-#set($review = $asset.getObject("CRS.CRSReviewClass", $reviewnb))
+#set($review = $asset.getObject("CRS.CurrikiReviewClass", $reviewnb))
 <p>
  $asset.display("comment", $review)
 </p>
@@ -1127,10 +1127,10 @@ $response.sendRedirect($request.xredirect)
 #set($page = $request.page)
 #set($asset = $xwiki.getDocument($page))
 #set($reviewnb = $xwiki.parseInt($request.nb))
-#set($review = $asset.getObject("CRS.CRSReviewClass", $reviewnb))
+#set($review = $asset.getObject("CRS.CurrikiReviewClass", $reviewnb))
 #set($ok = $asset.use($review))
 #if($xwiki.hasAccessLevel("view", "CRS.Reviews"))
-$asset.set("comment", $request.get("CRS.CRSReviewClass_${reviewnb}_comment"))
+$asset.set("comment", $request.get("CRS.CurrikiReviewClass_${reviewnb}_comment"))
 $asset.set("date", $xwiki.date)
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
