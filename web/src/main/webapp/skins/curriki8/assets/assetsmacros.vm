@@ -1111,8 +1111,9 @@ $response.sendRedirect($request.xredirect)
 #set($asset = $xwiki.getDocument($page))
 #set($reviewnb = $xwiki.parseInt($request.nb))
 #set($review = $asset.getObject("CRS.CurrikiReviewClass", $reviewnb))
+#set($ok = $asset.use($review))
 <p>
- $asset.display("comment", $review)
+ $asset.display("comment")
 </p>
 {/pre}
 #end
