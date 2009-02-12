@@ -180,7 +180,8 @@ showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${secco
 #else
      <div id="msgsection${seccounter}content" class="messages-content hidden">
 #end
-	 $messageDoc.display("content")
+     ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+	 $messageDoc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
 	 <div class="clearfloats"></div>
 	 <p class="date">
 	  <a href="$messageDoc.getURL("view")#attachments">$msg.get("groups_messages_message_attachments", [$messageDoc.attachmentList.size()])</a>
