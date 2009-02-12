@@ -26,7 +26,8 @@
 #macro(asset_icontitle $asset)
 <!-- #* Hack: HTML comment to fix bug CURRIKI-3568 Do not remove *# --><div id="asset-header">
  <!--<img src="images/collectionmedium.gif">-->
- <h2><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$asset.displayTitle</a></h2>
+ #set($assetTitle = $asset.getDisplayTitle(125))
+ <h2><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
  #asset_info_rollover($asset 0)
 </div>
 #end
@@ -299,7 +300,7 @@ $xwiki.addTooltipJS()
 #macro(asset_beginsection $assetDoc $withcollapse)
 #set($category = $assetDoc.category)
 #set($assetLink = $assetDoc.getURL("view", "bc=$!{request.bc};$asset.fullName"))
-#set($assetTitle = $assetDoc.displayTitle)
+#set($assetTitle = $assetDoc.getDisplayTitle(125))
 #if(!$seccounter)
 #set($seccounter = 1)
 #else
