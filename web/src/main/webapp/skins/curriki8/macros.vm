@@ -831,6 +831,10 @@ $memberdoc.getRenderedContent("$!content")</div>
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
     #set($userArg="&user=$request.user")
    #end
+   #if($currikiTitle.length()>125)
+    #set($currikiTitle = $currikiTitle.substring(0,125))
+    #set($currikiTitle = "${currikiTitle}...")
+   #end
    ## Display the breacrumb
    <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
    #set($previousBc = "${previousBc};${bcItem}")
@@ -997,6 +1001,10 @@ $memberdoc.getRenderedContent("$!content")</div>
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    #asset_findtitle($bcDoc)
+   #if($currikiTitle.length()>125)
+    #set($currikiTitle = $currikiTitle.substring(0,125))
+    #set($currikiTitle = "${currikiTitle}...")
+   #end
    #set($userArg = "")
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
     #set($userArg="&user=$request.user")
