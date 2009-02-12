@@ -1951,7 +1951,7 @@ Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_lab
 Curriki.data.ict.data = [ ];
 Curriki.data.ict.list.each(function(ict){
 	var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
-	if (value === 'other') {
+	if (ict === 'other') {
 		sort = 'zzz';
 	}
 	Curriki.data.ict.data.push([
