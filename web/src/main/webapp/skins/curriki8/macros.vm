@@ -1059,6 +1059,16 @@ $memberdoc.getRenderedContent("$!content")</div>
 #end                             ##}
 
 #**
+ * For CreateResources.ACELessonPlan output.
+ * References translations from CreateResources.Translations.
+ * This allows inclusion of ACELP Icon without hardcoding path to
+ * image in each lesson plan output.
+ *#
+#macro(currikiACELPIcon)         ##{
+<img src="$msg.get('ace.lesson.plan.output.heading.icon.url')" height="$msg.get('ace.lesson.plan.output.heading.icon.height')" width="$msg.get('ace.lesson.plan.output.heading.icon.width')">
+#end                             ##}
+
+#**
  * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
  * formatTextareasIntoWikiText() ). Call sequence:
  *  macro currikiattachmentBegin()
