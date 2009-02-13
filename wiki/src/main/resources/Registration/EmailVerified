@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1204054013000</creationDate>
-<date>1215187629000</date>
-<contentUpdateDate>1215187629000</contentUpdateDate>
-<version>11.1</version>
+<date>1233953266000</date>
+<contentUpdateDate>1233953266000</contentUpdateDate>
+<version>13.1</version>
 <title>Email Verified</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-2398  - Now go to Main.WebHome</comment>
+<comment>Get right URL for home page</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -71,10 +71,16 @@
 #end ##}
 ##
 #if("$!username" == "" || $username.length() == 0) ## {
+	#if($context.user != "XWiki.Guest") ## {
+		$response.sendRedirect($xwiki.getURL("Main.WebHome"))
+	#end ##}
 	## No username given...  Error or Bounce to somewhere
 	#set($err = $msg.get("emailValidation.step2.errNoUser"))
 #else ## }{
 	#if("$!vkey" == "" || $vkey.length() == 0) ## {
+		#if($context.user != "XWiki.Guest") ## {
+			$response.sendRedirect($xwiki.getURL("Main.WebHome"))
+		#end ##}
 		#set($err = $msg.get("emailValidation.step2.errNoVkey"))
 	#else ## }{
 		## We first need to get the the right user

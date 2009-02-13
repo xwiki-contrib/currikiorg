@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1217614529000</creationDate>
-<date>1227131840000</date>
-<contentUpdateDate>1227131840000</contentUpdateDate>
-<version>148.1</version>
+<date>1234466628000</date>
+<contentUpdateDate>1234466628000</contentUpdateDate>
+<version>159.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Changed About to Available under resources.</comment>
+<comment>Removed word results.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -92,7 +92,7 @@ search.columns.menu.sort_descending=Sort Descending
 
 search.pagination.pagesize.addbefore=-
 search.pagination.pagesize.before=Show
-search.pagination.pagesize.after=Results
+search.pagination.pagesize.after=
 search.pagination.pagesize.addafter=
 
 search.pagination.displaying.resource=Displaying {0} - {1} Available Resources of About {2}
@@ -136,36 +136,49 @@ search.resource.tab.title=Resources
 ##SUBJECT
 ## The naming convention follows the asset class names but is NOT part of the asset class
 
-XWiki.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED=Subject: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED=Subject: Any
 
 
-XWiki.AssetClass_fw_items_UNCATEGORIZED=Uncategorized
+CurrikiCode.AssetClass_fw_items_UNCATEGORIZED=Uncategorized
 
 ##SUBJECT SUB SELECTION
 ## The naming convention follows the asset class names but is NOT part of the asset class
 
-XWiki.AssetClass_fw_items_FW_masterFramework.Arts.UNSPECIFIED=Arts: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation.UNSPECIFIED=Career &amp; Technical Education: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED=Education: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology.UNSPECIFIED=Educational Technology: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.Health.UNSPECIFIED=Health: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED=Information &amp; Media Literacy: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.LanguageArts.UNSPECIFIED=Language Arts: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics.UNSPECIFIED=Mathematics: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.Science.UNSPECIFIED=Science: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies.UNSPECIFIED=Social Studies: Any
-XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages.UNSPECIFIED=World Languages: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Arts.UNSPECIFIED=Arts: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.VocationalEducation.UNSPECIFIED=Career &amp; Technical Education: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED=Education: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EducationalTechnology.UNSPECIFIED=Educational Technology: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Health.UNSPECIFIED=Health: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED=Information &amp; Media Literacy: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.LanguageArts.UNSPECIFIED=Language Arts: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Mathematics.UNSPECIFIED=Mathematics: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Science.UNSPECIFIED=Science: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.SocialStudies.UNSPECIFIED=Social Studies: Any
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ForeignLanguages.UNSPECIFIED=World Languages: Any
 
 ##EDUCATIONAL LEVEL
 ## The naming convention follows the asset class names but is NOT part of the asset class. 
 
-
-XWiki.AssetClass_educational_level2_UNSPECIFIED=Education Level: Any
+CurrikiCode.AssetClass_educational_level_UNSPECIFIED=Education Level: Any
 
 ##ICT
 ## The naming convention follows the asset class names but is NOT part of the asset class
 
-XWiki.AssetClass_instructional_component2_UNSPECIFIED=Instructional Type: Any
+
+CurrikiCode.AssetClass_instructional_component_UNSPECIFIED=Instructional Type: Any
+CurrikiCode.AssetClass_instructional_component_activity=Activity
+CurrikiCode.AssetClass_instructional_component_book=Book
+CurrikiCode.AssetClass_instructional_component_curriculum=Curriculum
+CurrikiCode.AssetClass_instructional_component_resource=Resource
+
+##ICT SUB SELECTIONS
+## The naming convention follows the asset class names but is NOT part of the asset class. 
+
+CurrikiCode.AssetClass_instructional_component_activity_UNSPECIFIED=Activity: Any
+CurrikiCode.AssetClass_instructional_component_book_UNSPECIFIED=Book: Any
+CurrikiCode.AssetClass_instructional_component_curriculum_UNSPECIFIED=Curriculum: Any
+CurrikiCode.AssetClass_instructional_component_resource_UNSPECIFIED=Resource: Any
+
 
 ##The ICT used in the columns are different than what is used in the drop down. These are from GWT with updated keys.
 
@@ -173,10 +186,11 @@ XWiki.AssetClass_instructional_component2_UNSPECIFIED=Instructional Type: Any
 search.resource.ict.activity=Activity
 search.resource.ict.activity.assignment=Assignment/Homework
 search.resource.ict.activity.exercise=Exercise
-
 search.resource.ict.activity.lab=Experiment/Lab
+search.resource.ict.activity.game=Game
 search.resource.ict.activity.worksheet=Graphic Organizer/Worksheet
 search.resource.ict.activity.problemset=Problem Set
+search.resource.ict.activity.webquest=WebQuest
 search.resource.ict.book=Book
 search.resource.ict.book.fiction=Fiction
 search.resource.ict.book.nonfiction=Non-Fiction
@@ -201,37 +215,30 @@ search.resource.ict.resource.glossary=Glossary/Vocabulary List
 search.resource.ict.resource.index=Index/List
 search.resource.ict.resource.photograph=Photograph
 search.resource.ict.resource.presentation=Video/Presentation/Slides
-search.resource.ict.resource.collection=Reference Collection
+search.resource.ict.resource.collection=Reference
 search.resource.ict.resource.script=Script/Transcript
 search.resource.ict.resource.speech=Audio/Speech/Lecture
 search.resource.ict.resource.table=Table/Graph/Chart
 search.resource.ict.resource.template=Template
 search.resource.ict.resource.webcast=Webcast/Podcast
+search.resource.ict.resource.study=Study/Data/Research
+search.resource.ict.resource.article=Article/Essay
 search.resource.ict.other=Other
 search.resource.ict.multiple=Multiple
 search.resource.ict.unknown=
 
 
-
-
-##ICT SUB SELECTIONS
-## The naming convention follows the asset class names but is NOT part of the asset class. 
-
-XWiki.AssetClass_instructional_component2_activity=Activity
-XWiki.AssetClass_instructional_component2_book=Book
-XWiki.AssetClass_instructional_component2_curriculum=Curriculum
-XWiki.AssetClass_instructional_component2_resource=Resource
-
-XWiki.AssetClass_instructional_component2_activity_UNSPECIFIED=Activity: Any
-XWiki.AssetClass_instructional_component2_book_UNSPECIFIED=Book: Any
-XWiki.AssetClass_instructional_component2_curriculum_UNSPECIFIED=Curriculum: Any
-XWiki.AssetClass_instructional_component2_resource_UNSPECIFIED=Resource: Any
-
-
 ##LANGUAGE
 ## The naming convention follows the asset class names but is NOT part of the asset class. 
 
-XWiki.AssetClass_language_UNSPECIFIED=Language: Any
+CurrikiCode.AssetClass_language_UNSPECIFIED=Language: Any
+
+
+##MEDIA TYPE
+## The naming convention follows the asset class names but is NOT part of the asset class. 
+
+CurrikiCode.AssetClass_category_UNSPECIFIED=Media Type: Any
+
 
 ##REVIEW
 ## Dave not sure if you want to follow the CRS.CurrikiReviewStatusClass naming convention.
@@ -279,23 +286,23 @@ search.resource.column.header.updated=Updated
 search.resource.icon.plus.rollover=This resource is part of a collection or folder. Click to expand.
 search.resource.icon.minus.rollover=Click to collapse
 
-search.resource.icon.CollectionComposite.rollover=Collection
-search.resource.icon.FolderComposite.rollover=Folder
+##search.resource.icon.CollectionComposite.rollover=Collection
+##search.resource.icon.FolderComposite.rollover=Folder
 
-search.resource.icon.Text.rollover=File
-search.resource.icon.Image.rollover=File
-search.resource.icon.Attachment.rollover=File
-search.resource.icon.External.rollover=File
-search.resource.icon.VIDITalk.rollover=File
-search.resource.icon.Animation.rollover=File
-search.resource.icon.CBOEText.rollover=File
-search.resource.icon.HTMLText.rollover=File
-search.resource.icon.WikiText.rollover=File
-search.resource.icon.Archive.rollover=File
-search.resource.icon.Audio.rollover=File
-search.resource.icon.Invalid.rollover=File
-search.resource.icon.Protected.rollover=File
-search.resource.icon.Unknown.rollover=File
+##search.resource.icon.Text.rollover=File
+##search.resource.icon.Image.rollover=File
+##search.resource.icon.Attachment.rollover=File
+##search.resource.icon.External.rollover=File
+##search.resource.icon.VIDITalk.rollover=File
+##search.resource.icon.Animation.rollover=File
+##search.resource.icon.CBOEText.rollover=File
+##search.resource.icon.HTMLText.rollover=File
+##search.resource.icon.WikiText.rollover=File
+##search.resource.icon.Archive.rollover=File
+##search.resource.icon.Audio.rollover=File
+##search.resource.icon.Invalid.rollover=File
+##search.resource.icon.Protected.rollover=File
+##search.resource.icon.Unknown.rollover=File
 
 search.resource.resource.expanded.title=This resource is part of:
 

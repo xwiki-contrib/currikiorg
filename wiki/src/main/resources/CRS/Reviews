@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ludovic</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1189370470000</creationDate>
-<date>1225839563000</date>
-<contentUpdateDate>1225839563000</contentUpdateDate>
-<version>7.1</version>
+<date>1231421539000</date>
+<contentUpdateDate>1231421539000</contentUpdateDate>
+<version>9.1</version>
 <title>Reviews</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Order subject list</comment>
+<comment>FIx data model</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -171,7 +171,7 @@ $msg.get("curriki.crs.reviews.viewnominated"): &lt;select name="fw_item" onchang
 &lt;/form&gt;
 
 #if(($request.fw_item)&amp;&amp;($request.fw_item!=""))
-	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate, BaseObject as obj2, DBStringListProperty as prop2 join prop2.list list where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and prop.id.name='reviewpending' and propDate.id.name='nomination_date' and prop.value=1 and doc.fullName=obj2.name and obj2.className='XWiki.AssetClass' and obj2.id=prop2.id.id and prop2.id.name='fw_items' and list = '${request.fw_item}' order by propDate.value desc")
+	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate, BaseObject as obj2, DBStringListProperty as prop2 join prop2.list list where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and prop.id.name='reviewpending' and propDate.id.name='nomination_date' and prop.value=1 and doc.fullName=obj2.name and obj2.className='CurrikiCode.AssetClass' and obj2.id=prop2.id.id and prop2.id.name='fw_items' and list = '${request.fw_item}' order by propDate.value desc")
 #else
 	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and propDate.id.name='nomination_date' and prop.id.name='reviewpending' and prop.value=1 order by propDate.value desc")
 #end
@@ -179,8 +179,8 @@ $msg.get("curriki.crs.reviews.viewnominated"): &lt;select name="fw_item" onchang
 $msg.get("curriki.crs.reviews.assetname")  | $msg.get("curriki.crs.reviews.ict") | $msg.get("curriki.crs.reviews.educlevel")  | $msg.get("curriki.crs.reviews.lastreviewed")  | $msg.get("curriki.crs.reviews.currentrating")  | $msg.get("curriki.crs.reviews.actions")
 #foreach($assetdocname in $xwiki.searchDocuments($sql))
 #set($asset = $xwiki.getDocument($assetdocname))
-#set($ok = $asset.use("XWiki.AssetClass"))
-#set($ict = $asset.display("instructional_component2").replaceAll("#--#", ", "))
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($ict = $asset.display("instructional_component").replaceAll("#--#", ", "))
 #set($educlevel = $asset.display("educational_level2"))
 #set($ok= $asset.use("CRS.CurrikiReviewStatusClass"))
 #set($nomdate = $asset.display("nomination_date"))

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1191003289000</creationDate>
-<date>1224714317000</date>
-<contentUpdateDate>1224714317000</contentUpdateDate>
-<version>38.1</version>
+<date>1230739016000</date>
+<contentUpdateDate>1230739016000</contentUpdateDate>
+<version>39.1</version>
 <title>Browse Resources by Subject</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Make uncategorized a link</comment>
+<comment>New data model</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -137,18 +137,18 @@ $msg.get("browseSearch.rebuilding", [$documentCount])
  #set($search = "")
  ##
 #if(!$sa || $sa == "" || $sa == $allres)
- #set($sa = "(XWiki.AssetClass.fw_items:FW_masterFramework.WebHome)")
+ #set($sa = "(CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome)")
 #end
 #if($sa == $nonasset)
  #set($sa = "$sitewebs")
 #end
 #if($sa == $uncat)
- #set($sa = "XWiki.AssetClass.fw_items:FW_masterFramework.WebHome")
+ #set($sa = "CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome")
  #set($uncatqry = "")
  #set($ucqry = "where doc.web='FW_masterFramework' and doc.parent='FW_masterFramework.WebHome' order by doc.title")
  #set($topics = $xwiki.searchDocuments($ucqry))
  #foreach($topic in $topics)##{
-  #set($uncatqry = "${uncatqry} -XWiki.AssetClass.fw_items:${topic}")
+  #set($uncatqry = "${uncatqry} -CurrikiCode.AssetClass.fw_items:${topic}")
  #end##}
  #set($sa = "$sa $uncatqry")
 #end
@@ -159,7 +159,7 @@ $msg.get("browseSearch.rebuilding", [$documentCount])
  #set($sa = "")
 #end
 #if($sa.startsWith("FW_masterFramework"))
- #set($sa = "XWiki.AssetClass.fw_items:$sa")
+ #set($sa = "CurrikiCode.AssetClass.fw_items:$sa")
 #end
  #if($sq)
   #set($search = $sq)
@@ -171,7 +171,7 @@ $msg.get("browseSearch.rebuilding", [$documentCount])
 #if($request.debug)
 Searching: $search
 #end
-#set($luceneQuery = "$search AND NOT XWiki.TextAssetClass.type:2 AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp AND NOT XWiki.AssetClass.hidden_from_search:1")
+#set($luceneQuery = "$search AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp AND NOT CurrikiCode.AssetClass.hidden_from_search:1")
 #if ($!request.getParameter("debug"))
 Query: $luceneQuery
 #end
@@ -207,7 +207,7 @@ ${searchpage}#${specificArg}
     $msg.get("browse.subject.title.$subject")
   #end
   #if($subject == $uncat)
-    #set($uncatqry = "XWiki.AssetClass.fw_items:(FW_masterFramework.WebHome $uncatqry)")
+    #set($uncatqry = "CurrikiCode.AssetClass.fw_items:(FW_masterFramework.WebHome $uncatqry)")
   #end
 #if($subject != $members &amp;&amp; $subject != $nonasset)
   #if($specificQuery != "")

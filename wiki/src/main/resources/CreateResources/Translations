@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1210378529000</creationDate>
-<date>1224266600000</date>
-<contentUpdateDate>1224266600000</contentUpdateDate>
-<version>299.1</version>
+<date>1234553770000</date>
+<contentUpdateDate>1234553770000</contentUpdateDate>
+<version>357.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>updated title area links for Models and Help</comment>
+<comment>chanegd URL target for ICT </comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -60,23 +60,49 @@
 
 ## If a string has the word "placeholder" after the = sign, it means text is coming. If it is blank after the = sign, then that means that that string can be ignored until further notice.
 
-## TABLE OF CONTENTS FOR THIS DOCUMENT AS OF AUGUST 11 2008:
+## If you are adding a tooltip that uses JS you cannot use quotes or apostrophes. Use this instead " = &amp;#34; and ' = &amp;#39; 
+
+## TABLE OF CONTENTS FOR THIS DOCUMENT AS OF DECEMBER 2008:
 
 ## FORM ACCESS WARNING
 ## GLOBAL ELEMENTS USED IN MORE THAN ONE FORM
-## GLOBAL REQUIRED FIELDS WARNING
-## LEAVING FORM DIALOG
-## CREATE A RESOURCE FROM SCRATCH FORM
+##    STEP 3
+##    STEP 4
+##    REQUIRED FIELDS WARNING
+##    LEAVING FORM DIALOG
+## SIMPLE WIKI RESOURCE FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
+## SIMPLE HTML RESOURCE FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
 ## CURRIKI LESSON PLAN FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
 ## NORTEL LEARNIT LESSON PLAN FORM
-## ACE LESSON PLAN FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
+## ACE LESSON PLAN FORM - NEEDS CLEAN-UP
+## WEBQUEST FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
 ## FROM SCRATCH ERROR MESSAGES
 ## LESSON PLAN ERROR MESSAGES
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 ## ASSET CLASS
 ## ADD PATH SELECTION DIALOGS
+##    SELECT A TEMPLATE
+##    SELECT A FORMAT
+##    SRI PART 1
+##    SRI PART 2
 ## ADD PATH FINAL MESSAGE DIALOGS
-## ADD PATH ERROR MESSAGE
+##    FINAL MESSAGE NAVIGATION OPTIONS
+## ADD PATH ERROR MESSAGES
 
 
 
@@ -90,19 +116,19 @@ createresources.needaccount=You must be a Curriki member and be &lt;a href="{0}"
 
 ## GLOBAL ELEMENTS USED IN MORE THAN ONE FORM
 
-## STEP 3
+## STEP 3 (used in most forms)
 form.scratch.step3.header=Step 3. Confirm Rights &amp; Access Information
 form.scratch.step3.instruction=Whose content is this, who should be able to view or edit it, and how can it be used by others?
 
-## STEP 4 (used in From Scratch, CSLP, and NLLP forms; partial use in ACELP)
+## STEP 4 (used in SWR, SHR, CSLP, and NLLP forms; partial use in ACELP)
 form.scratch.step4.header=Step 4. Review &amp; Submit
 form.scratch.step4.instruction=Review your entries one last time before you click Submit. &lt;br /&gt; &lt;br /&gt;If your content is &lt;i&gt;not ready&lt;/i&gt; for others to see or use, remember to set the Access Privileges to "Private" above.
 
 form.scratch.submit.button=Submit
 form.scratch.cancel.button=Cancel
 
-## GENERIC REQUIRED FIELDS WARNING
-form.required.fields.instruction=Fields with &lt;em style="color: red;"&gt;!&lt;/em&gt; are required.
+## GENERIC REQUIRED FIELDS WARNING USED IN SRI DIALOGS AND FORMS
+form.required.fields.instruction=Fields with &lt;em class="required-indicator"&gt;!&lt;/em&gt; are required.
 form.required.fields.indicator=!
 
 
@@ -113,13 +139,14 @@ form.leaving.dialog.cancel.button=Cancel
 
 ## DONE CREATING A RESOURCE FORM 
 form.done.url=/xwiki/bin/view/CreateResources/AssetDone
-form.done.created.lessonplan=Lesson Plan Created!
-form.done.created.resource=Resource Created!
+form.done.created.lessonplan=The resource was successfully created.
+form.done.created.resource=The resource was successfully created.
 ## Next string need not be translated... if what follows is ever seen by user, a severe error has occurred: 
 form.done.wysiwyg.error.wikitext=1 Error: SLP Wysiwyg Badness!
 
-## CREATE A RESOURCE FROM SCRATCH FORM
+## SIMPLE WIKI RESOURCE (SWR) FORM
 
+## SWR TITLE AREA
 form.scratch.url=/xwiki/bin/view/CreateResources/SimpleWikiResource
 form.scratch.title=Create a Resource from "Scratch" (Simple Wiki Document)
 form.scratch.title.description=Not sure what this is or can be? Learn more:
@@ -129,9 +156,9 @@ form.title.description.link3=Help
 form.title.description.link3.url=/xwiki/bin/view/Coll_curriki/CreatingResourceswithFormsTemplates?bc=;Coll_curriki.CurrikiHelp
 form.title.description.link2=Curriki Review System
 form.title.description.link2.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
-form.title.description.link2.thumbnail=/xwiki/skins/curriki8/icons/CRS.png
+form.title.description.link2.thumbnail=/xwiki/skins/curriki8/crs/crs.png
 
-## FROM SCRATCH STEP 1
+## SWR STEP 1
 form.scratch.step1.header=Step 1. Enter Basic Information
 form.scratch.step1.instruction=What details will best describe and present this resource in search results &lt;br&gt;and other listings?
 
@@ -143,11 +170,45 @@ form.scratch.description_title=Description:
 form.scratch.description_txt=Enter a detailed description of the content and/or purpose of this resource. 
 form.scratch.description_tooltip=This description appears when people find your resource in listings. If this resource is part of a larger instructional context, you may wish to describe this relationship.
 
-## FROM SCRATCH STEP 2
+##SWR STEP 2
 form.scratch.step2.header=Step 2. Enter &amp; Format Content
 form.scratch.step2.instruction=What content should appear in your resource?
 form.scratch.step2.content.title=Content:
-form.scratch.step2.content.instruction=Enter content in the editing window below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+form.scratch.step2.content.instruction=Enter content in the editing window below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+
+############################
+## SIMPLE HTML RESOURCE (SHR) FORM
+
+## SHR FORM TITLE AREA
+
+form.html.scratch.url=/xwiki/bin/view/CreateResources/SimpleHTMLResource
+form.html.scratch.title=Create a Resource from "Scratch" (Simple HTML Document)
+form.html.scratch.title.description=Not sure what this is or can be? Learn more:
+form.html.title.description.link1=Samples
+form.html.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/SampleHTMLResources?bc=;Coll_curriki.SampleModelResourcesCreatedUsingForms
+form.html.title.description.link3=Help
+form.html.title.description.link3.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheHTMLResourcefromScratchForm?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.CreatingResourceswithFormsTemplates
+form.html.title.description.link2=Curriki Review System
+form.html.title.description.link2.url=http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem
+form.html.title.description.link2.thumbnail=/xwiki/skins/curriki8/crs/crs.png
+
+## SHR STEP 1
+form.html.scratch.step1.header=Step 1. Enter Basic Information
+form.html.scratch.step1.instruction=What details will best describe and present this resource in search results &lt;br&gt;and other listings?
+
+form.html.scratch.title_title=Title:
+form.html.scratch.title_txt=Enter a title of no more than 250 characters (including spaces) for your resource.
+form.html.scratch.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify this resource.
+
+form.html.scratch.description_title=Description:
+form.html.scratch.description_txt=Enter a detailed description of the content and/or purpose of this resource. 
+form.html.scratch.description_tooltip=This description appears when people find your resource in listings. If this resource is part of a larger instructional context, you may wish to describe this relationship.
+
+## SHR STEP 2
+form.html.scratch.step2.header=Step 2. Enter &amp; Format Content
+form.html.scratch.step2.instruction=What content should appear in your resource?
+form.html.scratch.step2.content.title=Content:
+form.html.scratch.step2.content.instruction=Enter content in the editing window below.
 
 
 
@@ -165,7 +226,7 @@ lesson.plan.title.description.link3=Help
 lesson.plan.title.description.link3.url=/xwiki/bin/view/Coll_curriki/CreatingResourceswithFormsTemplates?bc=;Coll_curriki.CurrikiHelp
 lesson.plan.title.description.link2=Curriki Review System
 lesson.plan.title.description.link2.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
-lesson.plan.title.description.link2.thumbnail=/xwiki/skins/curriki8/icons/CRS.png
+lesson.plan.title.description.link2.thumbnail=/xwiki/skins/curriki8/crs/crs.png
 
 ## CSLP STEP 1
 lesson.plan.step1.header=Step 1. Enter Basic Information
@@ -177,6 +238,7 @@ lesson.plan.title_tooltip=This title will be displayed in listings (such as sear
 
 lesson.plan.description_title=Description:
 lesson.plan.description_txt=Provide a high-level description of this lesson's purpose, concepts and skills it addresses, and/or the lesson's learning activities, methods, or procedures.
+
 lesson.plan.description_tooltip=This description appears when people find your resource in listings. If this lesson is part of a larger instructional context, you may wish to describe this relationship.
 
 ##CSLP STEP 2
@@ -198,7 +260,7 @@ lesson.plan.group.size.content5=Independent learners
 lesson.plan.group.size.tooltip=What is the ideal composition of students for this lesson?
 
 lesson.plan.learning.objectives.title=Learning Objectives:
-lesson.plan.learning.objectives.instruction=Enter the lesson&amp;#39;s learning objectives in the editing window below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+lesson.plan.learning.objectives.instruction=Enter the lesson&amp;#39;s learning objectives in the editing window below. Format and develop your material with the buttons on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;.
 lesson.plan.learning.objectives.content=
 lesson.plan.learning.objectives.tooltip=What should students know and be able to do after completing this lesson?
 
@@ -213,7 +275,7 @@ lesson.plan.materials.content=
 lesson.plan.materials.tooltip=What supplies, books, special equipment, software, or other materials are required for this lesson?
 
 lesson.plan.procedures.title=Procedures:
-lesson.plan.procedures.instruction=Enter the lesson procedures in the editing window below. Format your material or attach files using the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+lesson.plan.procedures.instruction=Enter the lesson procedures in the editing window below. Format your material or attach files using the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;.
 lesson.plan.procedures.content=
 lesson.plan.procedures.tooltip=What instructions can you supply to ensure that you and others successfully carry out the intended instruction during this lesson? 
 
@@ -223,7 +285,7 @@ lesson.plan.assessment.content=
 lesson.plan.assessment.tooltip=How can you assess the new knowledge and skills of students?
 
 lesson.plan.answer.key.title=Answer Key or Rubric:
-lesson.plan.answer.key.instruction=List answers in the space below, or develop a rubric by creating a table with the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+lesson.plan.answer.key.instruction=List answers in the space below, or develop a rubric by creating a table with the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;.
 lesson.plan.answer.key.content=
 lesson.plan.answer.key.tooltip=What criteria can be used to clarify expectations with students or quantify the assessment?
 
@@ -479,7 +541,7 @@ ace.lesson.plan.procedures.title=Procedures:
 ace.lesson.plan.procedures.instruction=Enter the details of how this lesson is carried out. In each row, include the time allotted for each task, the learning tasks that will take place during that time, and the methods or procedures utilized to accomplish that learning task.
 ace.lesson.plan.procedures.content=
 ace.lesson.plan.procedures.tooltip=What instructions can you supply to ensure that you and others successfully carry out the intended instruction during this lesson? 
-ace.lesson.plan.procedures.time.tooltip=Indicate the number of minutes or time interval for each day’s learning tasks. 
+ace.lesson.plan.procedures.time.tooltip=Indicate the number of minutes or time interval for each day\\\\s learning tasks. 
 ace.lesson.plan.procedures.learningtask.tooltip=Articulate student-centered goals, instructions, activity descriptions, and lecture questions. 
 ace.lesson.plan.procedures.methods.tooltip=State how the learning task will be accomplished, (e.g., individual/pair/group work, direct instruction, or by other teaching methods). 
 ace.lesson.plan.procedures.row1.time_sample=Day 1
@@ -528,7 +590,111 @@ ace.lesson.plan.changes_content=Here the lesson author can reflect on changes fo
 ace.lesson.plan.whatworked_heading=What Worked Well:
 ace.lesson.plan.whatworked_content=After executing the lesson in the classroom, edit the wiki resource to highlight particularly effective activities or assessments for reference in future years.
 
-## FROM SCRATCH ERROR MESSAGES
+##WEBQUEST (WQ) FORM
+
+##WEBQUEST TITLE AREA
+wq.url=/xwiki/bin/view/CreateResources/WebQuest
+wq.plan.title=Create a WebQuest from a Template
+wq.title.description=Learn more:
+
+wq.title.description.link1=Models
+wq.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/ModelsCreatedUsingtheWebQuestTemplate
+wq.title.description.link2=Help
+wq.title.description.link2.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheWebquestForm
+wq.title.description.link3=WebQuest Background
+wq.title.description.link3.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/WebQuestBackgroundInstructionalDesign
+wq.title.description.link4=Curriki Review System
+wq.title.description.link4.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
+wq.title.description.link4.thumbnail=/xwiki/skins/curriki8/crs/crs.png
+
+##WEBQUEST STEP 1
+wq.step1.header=Step 1. Enter Basic Information
+wq.step1.instruction=What details will best describe and present this WebQuest in search results &lt;br&gt;and other listings?
+
+wq.info.title_title=Title:
+wq.info.title_txt=Enter a title of no more than 250 characters (including spaces) for your WebQuest.
+wq.info.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify this WebQuest.
+
+wq.info.description_title=Description:
+wq.info.description_txt=Enter a detailed description of the content and/or purpose of this WebQuest. 
+wq.info.description_tooltip=This description appears when people find your WebQuest in listings. If this WebQuest is part of a larger instructional context, you may wish to describe this relationship.
+
+##WEBQUEST STEP 2
+wq.step2.header=Step 2. Enter Content
+wq.step2.instruction=What content should students see as they interact with this WebQuest?
+wq.intro.title=Introduction:
+wq.intro.instruction=Write a short paragraph here to introduce the activity to students and communicate the Big Question (Essential Question, Guiding Question) around which the whole WebQuest is centered.
+wq.intro.content=
+wq.intro.tooltip=The purpose of this section is to both prepare and hook the learner. If there is a role or scenario involved (e.g., \\&amp;#34;You are a detective trying to identify the mysterious poet...\\&amp;#34;), here is where you\\&amp;#39;ll set the stage. Otherwise, use this section to provide a short advance organizer or overview. 
+
+wq.task.title=The Task:
+wq.task.instruction=Describe crisply and clearly what the end result of the learners' activities will be, directing your words to your students. If the final product involves using some tool (e.g., HyperStudio, the Web, video), mention it here. Try functions on the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt; to format your text, add images, etc.
+wq.task.content=
+wq.task.tooltip=The Task could be a problem or mystery to be solved, a position to be formulated and defended, a product to be designed, a creative work, a journalistic account -- anything that requires the learners to process and transform the information they find. Do not use this section to list the steps that students will go through to get to the end point; that belongs in the Process section below.
+
+wq.process.title=The Process:
+wq.process.instruction=Addressing the student, describe the steps s/he should take to accomplish the task described above. You may wish to use the numbered list format in the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;. Upload any additional materials you've created to support steps of The Process using the Required Attachments section below, and reference use of these in the relevant step.
+wq.process.content=
+wq.process.tooltip=Learners will access the online resources that you have identified as they go through The Process, so embed each link within the relevant step. (You can find out more about hyperlinking text by clicking the \\&amp;#34;editing toolbar\\&amp;#34; link in the instructions for this section.) 
+
+wq.eval.title=Evaluation:
+wq.eval.instruction=Click in an active cell to insert your own text. Describe to learners how their performance will be evaluated. Specify whether there will be a common grade for group work vs. individual grades, etc.
+wq.eval.content=
+wq.eval.tooltip=If you want to update inactive cell text, you will need to edit this resource after submitting this form.
+
+wq.evaluation.row1.col2_header=Beginning
+wq.evaluation.row1.col3_header=Developing
+wq.evaluation.row1.col4_header=Accomplished
+wq.evaluation.row1.col5_header=Exemplary
+
+wq.evaluation.row2.col2_sample=Description of identifiable performance characteristics reflecting a beginning level of performance.
+wq.evaluation.row2.col3_sample=Description of identifiable performance characteristics reflecting development and movement toward mastery.
+wq.evaluation.row2.col4_sample=Description of identifiable performance characteristics reflecting mastery.
+wq.evaluation.row2.col5_sample=Description of identifiable performance characteristics reflecting the highest level of performance.
+
+
+
+
+
+
+wq.evaluation.row2.col1_sample=Stated Objective or Performance
+wq.evaluation.row3.col1_sample=Stated Objective or Performance
+wq.evaluation.row4.col1_sample=Stated Objective or Performance
+wq.evaluation.row5.col1_sample=Stated Objective or Performance
+
+wq.conclusion.title=Conclusion:
+wq.conclusion.instruction=Enter a few sentences here that summarize what students will have accomplished or learned by completing this activity or lesson. 
+wq.conclusion.content=
+wq.conclusion.tooltip=You might also include some rhetorical questions or additional links to encourage them to extend their thinking into other content beyond this lesson.
+
+wq.cred.title=Credits &amp; References:
+wq.cred.instruction=List here the sources of any images, music, or text that you're using. Provide links back to the original source. Say thanks to anyone who provided resources or help. 
+wq.cred.content=
+wq.cred.tooltip=List any books and other analog media that you used as information sources as well. You can attach a bibliography or other reference file using the Required Attachments section below.
+
+wq.standards.title=Standards:
+wq.standards.instruction=List any standards or benchmarks addressed through use of this WebQuest.
+wq.standards.content=
+wq.standards.tooltip=If you wish to attach a formatted document citing specific standards, use the Required Attachments section below.
+
+wq.required.attachments.title=Required Attachments:
+wq.required.attachments.instruction=Select and upload files from your computer. Attached files cannot exceed 20 MB in total. These will be offered as links in the published lesson plan.
+
+wq.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource.&lt;br /&gt;&lt;br /&gt;After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
+wq.attachments.title=Attached Files:
+wq.required.attachments.tooltip=Attach any files referenced in the lesson, such as a handout, rubric, worksheet, or quiz.
+wq.attachments.browse.button=Browse
+wq.attachments.attach.button=Attach This File
+wq.attachments.delete=Remove
+
+wq.file.size.maximum=20000000
+wq.file.size.label=Total size of all attachments:
+wq.file.size.oversize=Attachments to this resource cannot exceed 20 MB in total. To save this resource, you must use "remove" link in "Required Attachments" to reduce total size of attachments. Please upload any additional files as standalone Curriki contribution instead of attaching it to this resource.
+wq.file.size.dialog=Attachments to this resource cannot exceed 20 MB in total. You may want to upload this file as a standalone Curriki contribution instead of attaching it to this resource.
+ace.lesson.plan.file.size.dialog.button=OK
+
+
+## FROM SCRATCH ERROR MESSAGES (ALSO USED IN OTHER FORMS)
 form.scratch.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
 form.scratch.required.fields.dialog=Please complete the following required field(s):
 form.scratch.required.fields.dialog.title=- Title
@@ -548,7 +714,7 @@ form.scratch.required.fields.dialog.button=OK
 
 lesson.plan.required.fields.dialog=Please complete the following required field(s):
 
-## The following fields are required metadata for all lesson plan forms.
+## The following fields are required metadata for all forms.
 
 lesson.plan.required.fields.dialog.title=- Title
 lesson.plan.required.fields.dialog.description=- Description
@@ -592,6 +758,17 @@ lesson.plan.required.fields.dialog.lessonobjective=- Lesson Objective
 lesson.plan.required.fields.dialog.lessonassessment=- Lesson Assessment
 lesson.plan.required.fields.dialog.procedures=- Procedures
 
+## WQ Form
+wq.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
+wq.required.fields.dialog.introduction=- Introduction
+wq.required.fields.dialog.task=- The Task
+wq.required.fields.dialog.process=- The Process
+wq.required.fields.dialog.evaluation=- Evaluation
+wq.required.fields.dialog.conclusion=- Conclusion
+
+
+
+
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 
 ## TITLE OF THE RESOURCE
@@ -611,7 +788,7 @@ sri.description_txt=If you copied this resource, update this field to indicate h
 
 sri.copy_info_text=If you have copied this resource, update the Title and Description fields to indicate how it is different from the original.
 
-sri.description_tooltip=When people read this description they should know what your resource is. The more detail the better!
+sri.description_tooltip=When people read this description they should know what your resource is. The more detailed the better!
 
 ## SUBJECT
 sri.fw_items_title=Subject:
@@ -634,7 +811,7 @@ sri.educational_level2_tooltip=Level(s) for which your resource is appropriate
 
 ## INSTRUCTIONAL COMPONENT TYPE
 sri.instructional_component2_title=Instructional Component Type:
-sri.instructional_component2_txt=Scroll to find the best option. You can select multiple options by hitting the Ctrl (PC) or Apple (Mac) key as you click to select. Click &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.AboutLearningResources" target="_blank"&gt;here&lt;/a&gt; for definitions.
+sri.instructional_component2_txt=Scroll to find the best option. You can select multiple options by hitting the Ctrl (PC) or Apple (Mac) key as you click to select. Click &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT" target="_blank"&gt;here&lt;/a&gt; for definitions.
 sri.instructional_component2_content=
 sri.instructional_component2_tooltip=Type or format of content that best matches your resource
 
@@ -650,7 +827,7 @@ sri.keywords_tooltip=Words to help people find your resource when searching Curr
 sri.language_title=Language:
 sri.language_txt=
 sri.language_content=
-sri.language_tooltip=The language for this resource
+sri.language_tooltip=Select a language for this resource. If you select &amp;#34;Other&amp;#34; please add the language in the Key Words field above. (You may wish to enter it in both the native and English alphabets, if applicable.)
 ##Language choices are located below.
 
 ## HIDE FROM SEARCH
@@ -723,7 +900,7 @@ add.setrequiredinfo.part2.cancel.button=Cancel
 add.setrequiredinfo.part2.next.button=Next &gt;&gt;
 
 
-##Contribute Menu
+##CONTRIBUTE MENU
 add.contributemenu.title_addto_site=Add to Curriki
 add.contributemenu.title_addto_composite=Add to Collection or Folder
 add.contributemenu.guidingquestion_addto_site=What would you like to add?
@@ -740,7 +917,7 @@ add.contributemenu.option.link=A link for a great web resource
 add.contributemenu.link.empty_msg=http://
 add.contributemenu.option.repository=A resource I can find by searching Curriki
 add.contributemenu.subtitle_make=Something I want to make on Curriki:
-add.contributemenu.option.template=A lesson plan I&amp;#39;ll create using a template
+add.contributemenu.option.template=A resource I&amp;#39;ll create using a template
 add.contributemenu.option.scratch=A resource I&amp;#39;ll create from "scratch"
 add.contributemenu.option.video_capture=A video I&amp;#39;ll capture with my webcam
 add.contributemenu.option.folder=A folder where I&amp;#39;ll organize resources
@@ -756,10 +933,10 @@ add.contributemenu.next.button=Next &gt;&gt;
 ## SELECT A TEMPLATE DIALOG
 
 add.selecttemplate.title=Select a Template
-add.selecttemplate.guidingquestion=What kind of lesson plan would you like to create?
+add.selecttemplate.guidingquestion=What kind of resource would you like to create?
 
-add.selecttemplate.list1.header=&lt;b&gt;Curriki Standard Lesson Plan&lt;/&gt;
-add.selecttemplate.list1.description=The standard Curriki template offers the simplest lesson structure, with Learning Objectives and Procedures as the only required content.
+add.selecttemplate.list1.header=&lt;b&gt;Curriki Standard Lesson Plan&lt;/b&gt;
+add.selecttemplate.list1.description=This Curriki template offers the simplest lesson structure, with Learning Objectives and Procedures as the only required content.
 add.selecttemplate.list1.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/CurrikiStandardLessonPlanThumb.png
 add.selecttemplate.list1.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
 
@@ -770,20 +947,44 @@ add.selecttemplate.list2.url=/xwiki/bin/view/CreateResources/NortelLearniTLesson
 
 add.selecttemplate.list3.header=&lt;b&gt;ACE Lesson Plan&lt;/b&gt;
 add.selecttemplate.list3.description=The Alliance for Catholic Education provides a template in which lesson details are formatted in a table showing time, learning task, and methods or procedures.
-add.selecttemplate.list3.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/ACELessonPlanThumb.PNG
+add.selecttemplate.list3.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/ACELessonPlanThumb.png
 add.selecttemplate.list3.url=/xwiki/bin/view/CreateResources/ACELessonPlan
 
 
+add.selecttemplate.list4.header=&lt;b&gt;WebQuest&lt;/b&gt;
+add.selecttemplate.list4.description=This Curriki template offers the structure for creating a student-directed learning activity that requires students to engage with online resources; includes an evaluation rubric.
+add.selecttemplate.list4.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/WebQuestThumb.png
+add.selecttemplate.list4.url=/xwiki/bin/view/CreateResources/WebQuest
 
 add.selecttemplate.cancel.button=Cancel
 add.selecttemplate.next.button=Next &gt;&gt;
 
-##Choose a Location
+## SELECT A FORMAT DIALOG
+
+add.selectformat.title=Select a Format
+add.selectformat.guidingquestion=What kind of resource would you like to create?
+
+add.selectformat.instruction=If you're not sure, leave "Wiki Resource" selected and click Next.&lt;br&gt;&lt;br&gt;
+
+add.selectformat.list1.header=&lt;b&gt;Wiki Resource&lt;/b&gt;
+add.selectformat.list1.description=No special skills required -- simple "what you see is what you get" format makes creating content easy!
+add.selectformat.list1.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/WIKIThumb.png
+add.selectformat.list1.url=/xwiki/bin/view/CreateResources/SimpleWikiResource
+
+add.selectformat.list2.header=&lt;b&gt;HTML Resource&lt;/b&gt;
+add.selectformat.list2.description=Use for pasting in existing HTML or formatted text from MS Word
+add.selectformat.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/HTMLThumb.png
+add.selectformat.list2.url=/xwiki/bin/view/CreateResources/SimpleHTMLResource
+
+add.selectformat.cancel.button=Cancel
+add.selectformat.next.button=Next &gt;&gt;
+
+##CHOOSE A LOCATION DIALOG
 add.chooselocation.title=Choose a Location
 add.chooselocation.guidingquestion=Where do you want to add this?
-add.chooselocation.instruction=Drag the resource to drop it in the correct location. Hover over a folder or collection to open its contents and place the resource in a specific spot.
+add.chooselocation.instruction=Drag the resource and drop it into a collection or folder. If you want to add it to a specific location, first click the arrow to expand that collection and then drag the resource into the correct spot.&lt;br&gt;&lt;br&gt;You can also drag the resource and hover over a folder or collection to open it, then drop the resource to place it.
 add.chooselocation.instruction_short=Click to drag and drop this:
-add.chooselocation.resource_unavailable= -- resource unavailable --
+add.chooselocation.resource_unavailable= -- Resource Unavailable --
 add.chooselocation.cancel.button=Cancel
 add.chooselocation.next.button=Next &gt;&gt;
 
@@ -792,20 +993,25 @@ add.chooselocation.next.button=Next &gt;&gt;
 
 ##ADD PATH FINAL MESSAGE DIALOGS
 
-##Dialog Titles
+##DIALOG TITLES
 
 add.finalmessage.title_successful=Successfully Added
 add.finalmessage.title_resource=Resource Added
 add.finalmessage.title_folder=Folder Added
 add.finalmessage.title_collection=Collection Added
+add.finalmessage.title_copied=Resource Copied
 
-##Operation Successful Messages
+##OPERATION SUCCESSFUL MESSAGES
 
 add.finalmessage.text_resource_success=You have successfully contributed a resource. You can now find this resource in My Contributions.
 
 add.finalmessage.text_resource_simple_success=You have successfully contributed a resource.
 
 add.finalmessage.text_collection_success=You have successfully added a new collection.
+
+##Note the dynamic content in the link below where {0} is the file resource from which the copy was made and {1} is the new file resource:
+
+add.finalmessage.text_copy_success=You have successfully copied &lt;strong&gt;{0}&lt;/strong&gt; to create &lt;strong&gt;{1}&lt;/strong&gt; and can now find your version in My Contributions.
 
 ##Note the dynamic content in the link below where {0} is the title of the newly added resource and {1} is the title of the folder or collection into which {0} was added:
 
@@ -817,19 +1023,24 @@ add.finalmessage.text_addto_folder_success=You have successfully added &lt;stron
 
 add.finalmessage.text_favorites_success=You have successfully added this to My Favorites.
 
+## ADD COLLECTIONS
+
 add.finalmessage.text_collection_success=You have successfully added a new collection.
 
 add.finalmessage.text_collection_tip1=Click "Build Up" by the listing on My Collections to add resources into the collection.
 
-add.finalmessage.text_collection_tip2=Click "Edit" to open the Currikulum Builder, where you can build up and organize this collection.
+add.finalmessage.text_collection_tip2=
 
 add.finalmessage.text_groupcollection_success=You have successfully added a new group collection.
 
 add.finalmessage.text_groupcollection_tip1=Click "Build Up" by the listing under Group Collections to add resources into the collection.
 
-add.finalmessage.text_groupcollection_tip2=Click "Edit" to open the Currikulum Builder, where you can build up and organize this collection.
+add.finalmessage.text_groupcollection_tip2=
 
-##Navigation Options
+
+
+
+##FINAL MESSAGE NAVIGATION OPTIONS
 
 add.finalmessage.add.link=Add
 add.finalmessage.favorites.link=Go to My Favorites
@@ -840,12 +1051,13 @@ add.finalmessage.view.link=View
 
 ##Note the dynamic content in the link below where {0} is the title of the folder or collection to which the member has just added the resource:
 
+
 add.finalmessage.viewtarget.link=View {0}
 add.finalmessage.continue.link=Continue &gt;&gt;
-add.finalmessage.openbuilder.link=Open in Currikulum Builder
+add.finalmessage.openbuilder.link=
 add.finalmessage.close.button=Close
 
-##Add Path Error Messages
+##ADD PATH ERROR MESSAGES
 add.servertimedout.message.title=Server Error
 add.servertimedout.message.text=There was a problem accessing the server. Please try again.
 add.servertimedout.message.button=OK

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.thimel</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1176334713000</creationDate>
-<date>1225211040000</date>
-<contentUpdateDate>1225211040000</contentUpdateDate>
-<version>20.1</version>
+<date>1233848068000</date>
+<contentUpdateDate>1233848068000</contentUpdateDate>
+<version>21.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix</comment>
+<comment>Now CurrikiCode.SubAssetClass, not XWiki.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -59,7 +59,7 @@
  #if("1" == $request.confirm)
   #set($fullName = $request.docName)
   Searching for $fullName
-  #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='XWiki.SubAssetClass' and props.id.name='assetpage' and props.value='$fullName'")
+  #set($hql = "select obj from BaseObject as obj, StringProperty as props where obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='$fullName'")
   #set($items = $xwiki.search($hql))
 
   #set($deletedAsset = $xwiki.getDocument($fullName))

@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.moradaniel</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.moradaniel</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1212441967000</creationDate>
-<date>1222978845000</date>
-<contentUpdateDate>1222978845000</contentUpdateDate>
-<version>9.1</version>
+<date>1231420555000</date>
+<contentUpdateDate>1231420555000</contentUpdateDate>
+<version>11.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>Fix data model</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -56,71 +56,71 @@
 </property>
 </object>
 <content>#&lt;pre&gt;
-fc_filecheck=Chequeo de Archivo
-fc_resourcetitle=Título del Recurso
-fc_dateadded=Fecha de Creación/Inserción en Curriki
-fc_contributor=Colaborador
-fc_status=Estado Básico de Chequeo de Archivo
-fc_datechecked=Fecha de la Acción Básica del Chequeo de Archivo
-fc_notes=Notas de Verificador de Archivo
-fc_select=Seleccionar
-fc_action=Acción
-fc_chooseaction=Seleccione la acción apropiada para el recurso.
-fc_statusmessage1=Marcar este recurso con un estado básico de chequeo de archivo de 'OK' como esta fecha.
-fc_statusmessage2=Marcar este recurso con un estado básico de chequeo de archivo de 'Se Requiere Chequeo Especial'.
-fc_statusmessage3=Marcar este recurso con un estado básico de chequeo de archivo de 'Mejora Solicitada' como esta fecha.
-fc_statusmessage4=Marcar este contenido con un estado básico de chequeo de archivo de 'Borrada de Acceso a Miembros'.
-fc_filechecknote=Proporcione cualquier Nota del Verificador de Archivo que sea necesaria para este recurso:
-fc_ok=Enviar
-fc_cancel=Cancelar
-fc_noactionchecked=No se ha seleccionado ninguna acción
-fc_confirmmessage1=Quiere marcar este recurso como OK?
-fc_confirmmessage2=Quiere marcar este recurso como que requiere un chequeo especial de la editorial de Curriki o del staff técnico?
-fc_confirmmessage3=Quiere cambiar los privilegios de acceso de este recurso a “Privado” y enviar al creador del recurso un email con la “Solicitud de Mejora de Recurso”?
-fc_confirmmessage4=Quiere cambiar este recurso a “Borrado del Acceso a Miembros” y enviar al creador del recurso el email de “Recurso Borrado”?
-fc_noassetselected=No asset has been select for file check
-XWiki.AssetClass_fcstatus_0=Ninguno
-XWiki.AssetClass_fcstatus_1=OK
-XWiki.AssetClass_fcstatus_2=Se Requiere Chequeo Especial
-XWiki.AssetClass_fcstatus_3=Mejora Solicitada
-XWiki.AssetClass_fcstatus_4=Borrado del Acceso a Miembros
-fc_filecheckddone=Chequeo de Archivo completo
-fc_document=Recurso Chequeado
-fc_or=o
-fc_mailsentto=Email enviado a
-fc_returnto=Volver a
-fc_fchomepage=Cola Básica de Chequeo de Archivo
-fc_showresourcesfrom=Mostrar Recursos creados y agregados al Repositorio
-fc_to=to
-fc_daterange=Intervalo de Fecha
-fc_filterby=Filtrado por
-fc_previous=Anterior
-fc_next=Siguiente
-fc_all=Todo
-fc_nominate=Quiere nominar este recurso para revision por el Sistema de Revisión de Curriki?
-fc_updatemessage1=Este recurso ha sido marcado con un estado básico de chequeo de archivo de 'OK'.
-fc_updatemessage2=Este recurso ha sido marcado con un estado básico de chequeo de archivo de 'Se Requiere Chequeo Especial'.
-fc_updatemessage3=Este recurso ha sido marcado con un estado básico de chequeo de archivo de 'Mejora Solicitada'.
-fc_updatemessage4=Este contenido ha sido marcado con un estado básico de chequeo de archivo de 'Borrada de Acceso a Miembros'.
-fc_files=Archivos
-fc_queueTableColheaderIct=Tipo Instruccional
-fc_queueTableICTMultiple=Multiple
-fc_onlywithoutfcstatus=Sin estado
-fc_onlywithfcstatus=En cualquier estado
-fc_queueFilterChooseSubjectArea=Elija Tema:
-fc_queueFilterChooseFCStatus=Solo Recursos:
-fc_statusFilter_1=En estado "OK"
-fc_statusFilter_2=En estado "Chequeo Especial"
-fc_statusFilter_3=En estado "Mejora Solicitada"
-fc_statusFilter_4=En estado "Borrado"
-fc_charactersRemaining=caracteres restantes
-fc_commentsSizeExceeded=Los comentarios no pueden exceder los 400 caracteres
-fc_seeCounts=Ver cantidad segun estados
-fc_withAccessPrivilegesOf=Con privilegios de acceso
-fc_withAccessPrivilegesOf_All=Todos
-fc_withAccessPrivilegesOf_public=Publico
-fc_withAccessPrivilegesOf_members=Protegido
-fc_withAccessPrivilegesOf_private=Privado
-fc_withAccessPrivilegesOf_protectedAndPublic=Protegido y Publico
-#&lt;/pre&gt;</content>
-</xwikidoc>
+fc_filecheck= Comprobación de Archivo
+fc_resourcetitle= Título del Recurso
+fc_dateadded= Fecha de Creación/Inserción en Curriki
+fc_contributor= Contribuidor
+fc_status= Estado de Comprobación Básica de Archivo
+fc_datechecked= Fecha de la Comprobación Básica de Archivo
+fc_notes= Notas de Comprobador de Archivo
+fc_select= Seleccionar
+fc_action= Acción
+fc_chooseaction= Seleccione la acción apropiada para el recurso.
+fc_statusmessage1= Marcar este recurso con un estado de comprobación básica de archivo de 'OK' con esta fecha.
+fc_statusmessage2= Marcar este recurso con un estado de comprobación básica de archivo de 'Se Requiere Comprobación Especial'.
+fc_statusmessage3= Marcar este recurso con un estado de comprobación básica de archivo de 'Mejora Solicitada' con esta fecha.
+fc_statusmessage4= Marcar este recuros con un estado de comprobación básica de archivo de 'Eliminado de Acceso de Miembros'.
+fc_filechecknote= Proporcione cualquier Nota para el Comprobador de Archivo que sea necesaria para este recurso:
+fc_ok= Enviar
+fc_cancel= Cancelar
+fc_noactionchecked= No se ha seleccionado ninguna acción
+fc_confirmmessage1= ¿Quiere marcar este recurso como OK?
+fc_confirmmessage2= ¿Quiere marcar este recurso como que requiere una comprobación especial del personal técnico o editorial de Curriki?
+fc_confirmmessage3= ¿Quiere cambiar los privilegios de acceso de este recurso a “Privado” y enviar al creador del recurso un email con la “Solicitud de Mejora de Recurso”?
+fc_confirmmessage4= ¿Quiere cambiar este recurso a “Eliminado del Acceso de Miembros” y enviar al creador del recurso el email de “Recurso Eliminado”?
+fc_noassetselected= No se ha seleccionado ningún recurso para ser comprobado
+CurrikiCode.AssetClass_fcstatus_0= Ninguno
+CurrikiCode.AssetClass_fcstatus_1= OK
+CurrikiCode.AssetClass_fcstatus_2= Se Requiere Comprobación Especial
+CurrikiCode.AssetClass_fcstatus_3= Mejora Solicitada
+CurrikiCode.AssetClass_fcstatus_4= Eliminado del Acceso de Miembros
+fc_filecheckddone= Comprobación del Archivo completada
+fc_document= Recurso Comprobado
+fc_or= o
+fc_mailsentto= Email enviado a
+fc_returnto= Volver a
+fc_fchomepage= Cola de Comprobación Básica de Archivos
+fc_showresourcesfrom= Mostrar Recursos creados y añadidos al Repositorio
+fc_to= a
+fc_daterange= Intervalo de Fecha
+fc_filterby= Filtrar por
+fc_previous= Anterior
+fc_next= Siguiente
+fc_all= Todo
+fc_nominate= ¿Quiere nominar este recurso para revisión por el Sistema de Revisión de Curriki?
+fc_updatemessage1= Este recurso ha sido marcado con un estado de comprobación básica de archivo de 'OK'.
+fc_updatemessage2= Este recurso ha sido marcado con un estado de comprobación básica de archivo de 'Se Requiere Comprobación Especial'.
+fc_updatemessage3= Este recurso ha sido marcado con un estado de comprobación básica de archivo de 'Mejora Solicitada'.
+fc_updatemessage4= Este recurso ha sido marcado con un estado de comprobación básica de archivo de 'Eliminado de Acceso de Miembros'.
+fc_files= Archivos
+fc_queueTableColheaderIct= Tipo de instrucción
+fc_queueTableICTMultiple= Múltiple
+fc_onlywithoutfcstatus= Sin un estado
+fc_onlywithfcstatus= Con cualquier estado
+fc_queueFilterChooseSubjectArea= Escoger un tema:
+fc_queueFilterChooseFCStatus= Sólo recursos:
+fc_statusFilter_1= Con estado "OK"
+fc_statusFilter_2= Con estado "Requiere comprobación especial"
+fc_statusFilter_3= With status "Mejora Solicitada"
+fc_statusFilter_4= With status "Eliminado"
+fc_charactersRemaining= caracteres sin usar
+fc_commentsSizeExceeded= Los comentarios no pueden exceder 400 caracteres
+fc_seeCounts= Ver contadores
+fc_withAccessPrivilegesOf= Mostrar sólo los recursos con Privilegio de Acceso de:
+fc_withAccessPrivilegesOf_All= Todos
+fc_withAccessPrivilegesOf_public= Público
+fc_withAccessPrivilegesOf_members= Protegido
+fc_withAccessPrivilegesOf_private= Privado
+fc_withAccessPrivilegesOf_protectedAndPublic= Protegido y Público
+#&lt;/pre&gt;
+</content></xwikidoc>

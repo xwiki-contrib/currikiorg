@@ -7,19 +7,19 @@
 <defaultLanguage></defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.LudovicDubost</creator>
-<author>XWiki.ShermanTank</author>
+<creator></creator>
+<author>XWiki.jkl1231</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
-<creationDate>1223108849000</creationDate>
-<date>1225837212000</date>
-<contentUpdateDate>1225837212000</contentUpdateDate>
-<version>5.1</version>
-<title></title>
+<contentAuthor>XWiki.jkl1231</contentAuthor>
+<creationDate>1198488679000</creationDate>
+<date>1233936227000</date>
+<contentUpdateDate>1233936227000</contentUpdateDate>
+<version>11.1</version>
+<title>Translations</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Added groups_home_activity_res_rdr=Curriculum collections reordered – by {1}</comment>
+<comment>changed Subject and Level to show paren-s and added strong tags</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -116,11 +116,11 @@ groups_creategroup_member_policy_closed=Closed - Curriki members must be invited
 
 groups_creategroup_select_subjectlevel_title=Select a Subject and Level
 
-groups_creategroup_select_subjectlevel_subject_title=Subject:
+groups_creategroup_select_subjectlevel_subject_title=&lt;strong&gt;Subject(s):&lt;/strong&gt;
 
 groups_creategroup_select_subjectlevel_subject_tooltip=Select the primary subject area for your group; if your group is interdisciplinary, check multiple subjects.
 
-groups_creategroup_select_subjectlevel_level_title=Educational Level:
+groups_creategroup_select_subjectlevel_level_title=&lt;strong&gt;Educational Level(s):&lt;/strong&gt;
 
 groups_creategroup_select_subjectlevel_level_tooltip=Select the educational level for your group; if your group is for multiple levels, check all that apply.
 
@@ -176,13 +176,25 @@ groups_validation_licence_required=Please choose a default license for your grou
 groups_validation_privacy_required=
 groups_validation_title-exists=There is already a group with that name. Please choose another.
 
+
+####################
+
+##GROUP PAGE LINKS - DO NOT TRANSLATE THESE
+groups_home_page=WebHome
+groups_messages_page=Messages
+groups_curriculum_page=Curriculum
+groups_members_page=Members
+groups_documentation_page=Documentation
+##
+
+
+
 ## GROUP WELCOME BLOCK
 groups_welcomeblock_confirmcancel=Are you sure you want to cancel editing of the welcome section? 
 groups_welcomeblock_savedone=Your welcome section has been saved.
 
 ## GROUP HOME
 groups_home_tabname=Home
-groups_home_page=WebHome
 
 ## GROUP HOME -- MASTHEAD
 groups_home_masthead_title=Group Title
@@ -244,11 +256,11 @@ groups_home_information_member_policy=Membership Policy:
 groups_home_information_license=Default License Policy:
 groups_home_information_language=Language:
 groups_home_information_access=Default Access Privileges:
-groups_home_information_subject=Subject:
-groups_home_information_level=Educational Level:
+groups_home_information_subject=&lt;strong&gt;Subject(s):&lt;/strong&gt;
+groups_home_information_level=&lt;strong&gt;Educational Level(s):&lt;/strong&gt;
 groups_home_information_creationdate=Creation Date:
 groups_home_information_subject_index=Subject Index
-groups_home_information_webaddress=Web Address
+groups_home_information_webaddress=Web Address:
 
 ## GROUP HOME -- EDIT INFORMATION
 groups_home_editinformation_title=Edit Group Information
@@ -261,10 +273,10 @@ groups_home_editinformation_member_policy_closed=Closed - Curriki members must b
 
 groups_home_editinformation_subjectlevel_title=Edit Subject and/or Educational Level
 
-groups_home_editinformation_subject_title=Subject:
+groups_home_editinformation_subject_title=&lt;strong&gt;Subject(s):&lt;/strong&gt;
 groups_home_editinformation_subject_tooltip=Select the primary subject area for your group; if your group is interdisciplinary, check multiple subjects.
 
-groups_home_editinformation_level_title=Educational Level:
+groups_home_editinformation_level_title=&lt;strong&gt;Educational Level(s):&lt;/strong&gt;
 groups_home_editinformation_level_tooltip=Select the educational level for your group; if your group is for multiple levels, check all that apply.
 
 groups_home_editinformation_language_title=Edit Language
@@ -290,12 +302,6 @@ groups_home_contributions_title=Group Contributions
 
 groups_home_contributions_infotxt=Here you can find any contributions from the group.
 groups_home_contributions_view_btt=View All
-groups.curriculum.contributions.addButton=Add a Resource
-groups.curriculum.contributions.addButton_tooltip=Provide your best learning resource or create something new
-
-groups.curriculum.collections.buildup=Build Up
-groups.curriculum.collections.buildup_tooltip=Add something to build up this collection
-
 groups_home_contributions_or=OR
 groups_home_contributions_searchfieldtxt=enter search terms
 groups_home_contributions_find_btt=Search
@@ -319,8 +325,6 @@ groups_home_membership_invite=Invite Members
 
 ## MESSAGES TAB
 groups_messages_tabname=Messages
-
-groups_messages_page=Messages
 groups_messages_about_title=About Messages
 
 groups_messages_about_link_show=Show
@@ -428,7 +432,6 @@ groups_messages_view_message_delete_done=This message has been deleted.
 
 ## CURRICULUM TAB
 groups_curriculum_tabname=Curriculum
-groups_curriculum_page=Curriculum
 groups_curriculum_about_title=About Curriculum
 groups.curriculum.collections.addButton=Add a Group Collection
 groups.curriculum.collections.addButton_tooltip=Add a new collection for organizing and presenting group resources
@@ -446,17 +449,37 @@ groups_home_contributions_find_btt=Search
 groups_curriculum_collections_title=Curriculum Collections from {0}
 
 groups_curriculum_collections_show_link=Show Descriptions
-
 groups_curriculum_collections_hide_link=Hide Descriptions
 
 groups_curriculum_collections_infotxt=This section displays a listing of any collections created by {0}. Links available to the right of each collection depend on your rights for this group.
 
 groups_curriculum_collections_btt=Add a Group Collection
-groups_curriculum_collections_view_link=View
-groups_curriculum_collections_edit_link=Edit
-groups_curriculum_collections_add_link=Add
-groups_curriculum_collections_delete_link=Delete
 groups_curriculum_collections_paging diff=Collections
+
+groups.curriculum.contributions.addButton=Add a Resource
+groups.curriculum.contributions.addButton_tooltip=Provide your best learning resource or create something new
+
+##To create macros that work in both Groups and My Curriki, the translations have to be identical. Thus the following link translations can be found in the My Curriki Translation file. Todd Jan-20-2009
+##Add
+##Copy
+##Edit
+##Edit Info
+##Build Up
+##Organize
+##Delete
+
+
+##I think these can be deleted Todd Jan-20-2009
+##groups.curriculum.contributions.add=Add
+##groups.curriculum.contributions.add_tooltip=Add this resource to another collection or folder
+##groups_curriculum_collections_view_link=View
+##groups_curriculum_collections_edit_link=Edit
+##groups_curriculum_collections_add_link=Add
+##groups_curriculum_collections_delete_link=Delete
+##groups.curriculum.collections.buildup=Build Up
+##groups.curriculum.collections.buildup_tooltip=Add a resource to build up this collection
+
+
 
 ##CURRICULUM -- REORDER COLLECTIONS
 
@@ -502,15 +525,11 @@ groups_curriculum_contributions_table_filetype=File Type
 
 groups_curriculum_contributions_table_action=Action
 
-groups.curriculum.contributions.add=Add
-groups.curriculum.contributions.add_tooltip=Add this to a collection or folder
 
 groups_curriculum_contributions_viewall_paging_diff=Contributions
 
 ## MEMBERS TAB
 groups_members_tabname=Members
-
-groups_members_page=Members
 groups_members_about_title= About Membership
 
 
@@ -632,6 +651,8 @@ groups_members_invite_statuslink=Group leaders can view open invitation(s) on th
 groups_members_invite_backlink=If you want to invite more people to the group, [click here&gt;InviteMembers] to return to the invitation form.
 groups_members_invite_openinvitation=This is an open invitation to a mailing list. (By checking this box, you make it possible for multiple parties to use the acceptance link provided within the emailed invitation.)
 
+groups_members_accept_request_error=If you continue to encounter an error, please &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/HowtoReportaProblem?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.GettingStarted"&gt;report the problem&lt;/a&gt;.
+
 ## JOIN THIS GROUP
 groups_members_join_title=Join This Group
 groups_members_join_infotxt=In order to become a member of this group, please provide biographical information about yourself in the field below, then adjust the member settings based on your preferences. Finally, click &amp;quot;Join&amp;quot; to submit your new membership. You will be added to the list on the Members tab for this group; also, this group will be added to My Groups in My Curriki.
@@ -676,7 +697,7 @@ browseGroups.promo_card_2=&lt;div class="subject-card custom-subject-card"&gt;&l
 
 ## GROUPS DOCUMENTATION
 groups_documentation_tabname=Documentation
-groups_documentation_page=Documentation
+
 
 groups_documentation_about_title=About Documentation
 groups_documentation_create_wiki_page_title=Create a New Page

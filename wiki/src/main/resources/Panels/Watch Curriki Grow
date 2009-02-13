@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.superadmin</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1213887120000</creationDate>
-<date>1215449281000</date>
-<contentUpdateDate>1215449281000</contentUpdateDate>
-<version>27.1</version>
+<date>1233683433000</date>
+<contentUpdateDate>1233683433000</contentUpdateDate>
+<version>30.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Changed wiki to xwiki</comment>
+<comment>Logic reversed on which panel is shown</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -98,50 +98,13 @@
 <category>Information</category>
 </property>
 <property>
-<content>#if($doc.fullName=="Main.WebHome" || $doc.web=="Panels")
-&lt;div id="watch-curriki-grow" class="shadow-outer"&gt; ##{
-  &lt;div class="shadow-middle"&gt; ##{
-    &lt;div class="shadow-inner information"&gt; ##{
-      &lt;div class="headerbar"&gt;$msg.get("panel.watchgrow.title")&lt;/div&gt;
-         &lt;div class="frame-content"&gt; ##{
-   	   	&lt;table class="stats"&gt;
-   	   	 &lt;tbody&gt;
-   	   	  &lt;tr&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("Main.Browse")"&gt;$msg.get("panel.watchgrow.resources")&lt;/a&gt;&lt;/td&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("Main.Browse")"&gt;
-#set($lucene = $xwiki.getPlugin("lucene"))
-#if(!$lucene)
- #error("Error loading Lucene search")
-#end
-#set($luceneQuery = "(XWiki.AssetClass.fw_items:FW_masterFramework.WebHome) AND NOT XWiki.TextAssetClass.type:2 AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp")
-#set($wikinames = "xwiki")
-#set($langs = "default,en,de")
-#set($searchresults = $lucene.getSearchResults($luceneQuery, $wikinames, $langs, $xwiki))
-$searchresults.totalHitcount
-&lt;/a&gt;&lt;/td&gt;
-   	   	  &lt;/tr&gt;
-   	   	  &lt;tr&gt;
-   	   	   &lt;td&gt;&lt;a href="#if($context.user=="XWiki.XWikiGuest") $xwiki.getURL("XWiki.XWikiLogin","login") #else $xwiki.getURL("MyCurriki.Profile")  #end"&gt;$msg.get("panel.watchgrow.members")&lt;/a&gt;&lt;/td&gt;
-                   &lt;td&gt;&lt;a href="#if($context.user=="XWiki.XWikiGuest") $xwiki.getURL("XWiki.XWikiLogin","login") #else $xwiki.getURL("MyCurriki.Profile")  #end"&gt;$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.XWikiUsers'").get(0) &lt;/a&gt;   	                        
-                   &lt;/td&gt;
-   	   	  &lt;/tr&gt;
-   	   	  &lt;tr&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("Groups.Browse")"&gt;$msg.get("panel.watchgrow.groups")&lt;/a&gt;&lt;/td&gt;
-   	   	   &lt;td&gt; 
-                     &lt;a href="$xwiki.getURL("Groups.Browse")"&gt;$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.CurrikiSpaceClass'").get(0)&lt;/a&gt;
-                   &lt;/td&gt;
-   	   	  &lt;/tr&gt;
-   	   	 &lt;/tbody&gt;
-
-   	   	&lt;/table&gt;
-                #if($context.user=="XWiki.XWikiGuest")
-   	   	&lt;p class="links"&gt;&lt;a href="$xwiki.getURL("Main.JoinCurriki")"&gt;$msg.get("panel.watchgrow.join")&lt;/a&gt;#else&lt;/p&gt;
-                #end
-      &lt;/div&gt; ##}
-    &lt;/div&gt; ##}
-  &lt;/div&gt;##}
-&lt;/div&gt; ##}
-#end</content>
+<content>#if($doc.fullName=="Main.WebHome" || $doc.web=="Panels") ##{
+	#if($context.user!="XWiki.XWikiGuest") ##{
+		#includeTopic('PanelIncludes.WatchCurrikiGrowMember')
+	#else ##}{
+		#includeTopic('PanelIncludes.WatchCurrikiGrowGuest')
+	#end ##}
+#end ##}</content>
 </property>
 <property>
 <description>Watch Curriki Grow</description>

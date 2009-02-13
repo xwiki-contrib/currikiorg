@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1194209149000</creationDate>
-<date>1226669588000</date>
-<contentUpdateDate>1226669588000</contentUpdateDate>
-<version>66.1</version>
+<date>1233829660000</date>
+<contentUpdateDate>1233829660000</contentUpdateDate>
+<version>75.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Changed macro names</comment>
+<comment>fix</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -208,7 +208,7 @@
 
 				&lt;select name="accessPrivilegesSelect" id="accessPrivilegesSelect"&gt;
 					&lt;option value="" #if(!$assetAccessPrivileges||($assetAccessPrivileges=="")) selected #end &gt;$msg.get("fc_withAccessPrivilegesOf_All")&lt;/option&gt;
-					#foreach($item in $xwiki.curriki.getValues("XWiki.AssetClass","rights"))
+					#foreach($item in $xwiki.curriki.getValues("CurrikiCode.AssetClass","rights"))
 			    	&lt;option value="$item" #if($item==$assetAccessPrivileges) selected #end &gt;$msg.get("fc_withAccessPrivilegesOf_$item")&lt;/option&gt;
 					#end
 					&lt;option value="protectedAndPublic" #if($assetAccessPrivileges=="protectedAndPublic") selected #end &gt;$msg.get("fc_withAccessPrivilegesOf_protectedAndPublic")&lt;/option&gt;
@@ -254,7 +254,7 @@
 	#foreach($fullname in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
 		#set($counter = $counter+1)
 		#set($itemdoc = $xwiki.getDocument($fullname))
-		#set($ok = $itemdoc.use("XWiki.AssetClass"))
+		#set($ok = $itemdoc.use("CurrikiCode.AssetClass"))
 		#asset_findtitle($itemdoc)
 		&lt;tr&gt;
 			&lt;td&gt;
@@ -271,9 +271,11 @@
             &lt;/td&gt;
 			&lt;td&gt;
             	&lt;div class="ict"&gt;
-            		#set($ict = $xwiki.curriki.getAssetICT($fullname))
+            		#set($ict = $util.arrayList)
+	 		#set($ict = $itemdoc.getValue("instructional_component"))
+                        ## xwiki.curriki.getAssetICT($fullname))
 					#if($ict.size()==1)
-						$ict.get(0)
+						$msg.get("CurrikiCode.AssetClass_instructional_component_${ict.get(0)}")
 						#elseif($ict.size()&gt;1)
 							$msg.fc_queueTableICTMultiple
 					#end
