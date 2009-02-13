@@ -2,6 +2,8 @@ package org.curriki.plugin.spacemanager.impl;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.objects.BaseObject;
+import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
@@ -9,6 +11,8 @@ import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerExtension;
 import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -163,6 +167,167 @@ public class CurrikiSpaceManager extends SpaceManagerImpl {
         }
 
         return roles;
+    }
+
+    /**
+     * Gives a group certain rights over a space
+     * This function is overridden from standard space manager
+     * which currently has a bug that needs to be fixed
+     *
+     * @param spaceName Name of the space
+     * @param groupName Name of the group that will have the value
+     * @param level Access level
+     * @param allow True if the right is allow, deny if not
+     */
+    protected boolean addRightToGroup(String spaceName, String groupName, String level,
+        boolean allow, boolean global, XWikiContext context) throws XWikiException
+    {
+        final String rightsClass = global ? "XWiki.XWikiGlobalRights" : "XWiki.XWikiRights";
+        final String prefDocName = spaceName + ".WebPreferences";
+        final String groupsField = "groups";
+        final String levelsField = "levels";
+        final String allowField = "allow";
+
+        XWikiDocument prefDoc;
+        prefDoc = context.getWiki().getDocument(prefDocName, context);
+
+        // checks to see if the right is not already given
+        boolean exists = false;
+        boolean isUpdated = false;
+        int indx = -1;
+        boolean foundlevel = false;
+        int allowInt;
+        if (allow)
+            allowInt = 1;
+        else
+            allowInt = 0;
+        List objs = prefDoc.getObjects(rightsClass);
+        if (objs != null) {
+            for (int i = 0; i < objs.size(); i++) {
+                BaseObject bobj = (BaseObject) objs.get(i);
+                if (bobj == null)
+                    continue;
+                String groups = bobj.getLargeStringValue(groupsField);
+                String levels = bobj.getStringValue(levelsField);
+                int allowDeny = bobj.getIntValue(allowField);
+                boolean allowdeny = (bobj.getIntValue(allowField) == 1);
+                String[] levelsarray = StringUtils.split(levels, " ,|");
+                String[] groupsarray = StringUtils.split(groups, " ,|");
+                if (ArrayUtils.contains(groupsarray, groupName)) {
+                    exists = true;
+                    if (!foundlevel)
+                        indx = i;
+                    if (ArrayUtils.contains(levelsarray, level)) {
+                        foundlevel = true;
+                        if (allowInt == allowDeny) {
+                            isUpdated = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // sets the rights. the aproach is to break rules/levels in as many
+        // XWikiRigts elements so
+        // we don't have to handle lots of situation when we change rights
+        if (!exists) {
+            BaseObject bobj = new BaseObject();
+            bobj.setClassName(rightsClass);
+            bobj.setName(prefDoc.getFullName());
+            bobj.setLargeStringValue(groupsField, groupName);
+            bobj.setStringValue(levelsField, level);
+            bobj.setIntValue(allowField, allowInt);
+            prefDoc.addObject(rightsClass, bobj);
+            context.getWiki().saveDocument(prefDoc, context);
+            return true;
+        } else {
+            if (isUpdated) {
+                return true;
+            } else {
+                BaseObject bobj = (BaseObject) objs.get(indx);
+                String groups = bobj.getLargeStringValue(groupsField);
+                String levels = bobj.getStringValue(levelsField);
+                String[] levelsarray = StringUtils.split(levels, " ,|");
+                String[] groupsarray = StringUtils.split(groups, " ,|");
+
+                if (levelsarray.length == 1 && groupsarray.length == 1 && levelsarray[0] == level) {
+                    // if there is only this group and this level in the rule
+                    // update this rule
+                } else {
+                    // if there are more groups/levels, extract this one(s)
+                    bobj = new BaseObject();
+                    bobj.setName(prefDoc.getFullName());
+                    bobj.setClassName(rightsClass);
+                    bobj.setStringValue(levelsField, level);
+                    bobj.setIntValue(allowField, allowInt);
+                    bobj.setLargeStringValue(groupsField, groupName);
+                }
+
+                prefDoc.addObject(rightsClass, bobj);
+                context.getWiki().saveDocument(prefDoc, context);
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Gives a group certain rights over a space
+     * This function is overridden from standard space manager
+     * which currently has a bug that needs to be fixed
+     *
+     * @param spaceName Name of the space
+     * @param groupName Name of the group that will have the value
+     * @param level Access level
+     * @param allow True if the right is allow, deny if not
+     */
+    protected boolean removeRightFromGroup(String spaceName, String groupName, String level,
+        boolean allow, boolean global, XWikiContext context) throws XWikiException
+    {
+        final String rightsClass = global ? "XWiki.XWikiGlobalRights" : "XWiki.XWikiRights";
+        final String prefDocName = spaceName + ".WebPreferences";
+        final String groupsField = "groups";
+        final String levelsField = "levels";
+        final String allowField = "allow";
+
+        XWikiDocument prefDoc;
+        prefDoc = context.getWiki().getDocument(prefDocName, context);
+
+        boolean foundlevel = false;
+        int allowInt;
+        if (allow)
+            allowInt = 1;
+        else
+            allowInt = 0;
+        List objs = prefDoc.getObjects(rightsClass);
+        if (objs != null) {
+            for (int i = 0; i < objs.size(); i++) {
+                BaseObject bobj = (BaseObject) objs.get(i);
+                if (bobj == null)
+                    continue;
+                String groups = bobj.getLargeStringValue(groupsField);
+                String levels = bobj.getStringValue(levelsField);
+                int allowDeny = bobj.getIntValue(allowField);
+                boolean allowdeny = (bobj.getIntValue(allowField) == 1);
+                String[] levelsarray = StringUtils.split(levels, " ,|");
+                String[] groupsarray = StringUtils.split(groups, " ,|");
+                if (ArrayUtils.contains(groupsarray, groupName)) {
+                        if (ArrayUtils.contains(levelsarray, level)) {
+                            foundlevel = true;
+                            if (allowInt == allowDeny) {
+                                prefDoc.removeObject(bobj);
+                            }
+                        }
+                }
+            }
+        }
+
+        if (foundlevel) {
+            context.getWiki().saveDocument(prefDoc, context);
+            return true;
+        }
+
+        return false;
     }
 
 }
