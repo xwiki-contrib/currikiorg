@@ -70,7 +70,7 @@ $msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocommen
 #end
 #foreach($objdiffs in $doc.getObjectDiff($origdoc, $newdoc))
 #foreach($objdiff in $objdiffs)
-#if($objdiff.getClassName().equals("CurrikiCode.AssetClass"))
+#if($objdiff.getClassName().startsWith("CurrikiCode"))
 #set($hasmetadatachanges = 1)
 #set($propname = $objdiff.getPropName())
 <tr>
