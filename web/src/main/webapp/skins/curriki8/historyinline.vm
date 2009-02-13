@@ -70,7 +70,11 @@
             </td>
             <td class="revision-col-author">$xwiki.getLocalUserName($revinfo.author)</td>
     ##if($xwiki.hasEditComment())
-            <td class="revision-col-note">$!{revinfo.comment}</td>
+            #set($note = $!revinfo.comment)
+            #if($note == "")
+             #set($note = "curriki.comment.no.note")
+            #end
+            <td class="revision-col-note">$msg.get($note)</td>
     ##end
             <td class="revision-col-date">$xwiki.formatDate($revinfo.date, $msg.get("mycurriki.datetimeFormat"))</td>
             #if($hasEdit || $hasAdmin)
