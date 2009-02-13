@@ -79,7 +79,11 @@
                                         if (id==currentStartFile) {
                                              nodes${treeviewid}[id].labelStyle = "ygtvlabel archive-startfile-checked";
                                         };
-                                        nodes${treeviewid}[id].onLabelClick = onLabelClick${treeviewid};
+                                        if (!id.endsWith("/"))
+                                             nodes${treeviewid}[id].onLabelClick = onLabelClick${treeviewid};
+                                        else
+                                             nodes${treeviewid}[id].labelStyle = "ygtvlabel archive-folder";
+
                                         nodes${treeviewid}[id].labelElId = id;
                                     }
 
@@ -87,7 +91,9 @@
 
                                     function onLabelClick${treeviewid}(node) {
                                         var path = node.labelElId;
-                                        node.getLabelEl().className = this.labelStyle + " archive-startfile-checked";
+                                        var labelEl = node.getLabelEl();
+                                        if (labelEl)
+                                           labelEl.className = this.labelStyle + " archive-startfile-checked";
                                         document.forms.archive["CurrikiCode.ArchiveAssetClass_0_startfile"].value = path;
                                         for (var i in tree${treeviewid}._nodes) {
                                           var nodeel = tree${treeviewid}._nodes[i];
@@ -96,6 +102,7 @@
                                               if (el) el.className = "ygtvlabel";
                                           }
                                         }
+                                        return false;
                                     }
 
                                    function treeInit${treeviewid}() {
