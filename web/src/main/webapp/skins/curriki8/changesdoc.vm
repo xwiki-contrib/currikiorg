@@ -66,13 +66,17 @@ $msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocommen
 #set($propname = $item.getField())
 <td>$msg.get("changes.metadata.${propname}")</td><td> $!item.getPrevValue() </td><td> $!item.getNewValue() </td>
 #end
+ #end   
 </tr>
 #end
 #foreach($objdiffs in $doc.getObjectDiff($origdoc, $newdoc))
 #foreach($objdiff in $objdiffs)
 #if($objdiff.getClassName().startsWith("CurrikiCode"))
-#set($hasmetadatachanges = 1)
-#set($propname = $objdiff.getPropName())
+ #set($prevValue = $!objdiff.getPrevValue().toString().trim())
+ #set($newValue = $!objdiff.getNewValue().toString().trim())
+ #if(!$prevValue.equals($newValue))
+  #set($hasmetadatachanges = 1)
+  #set($propname = $objdiff.getPropName())
 <tr>
 <td>$msg.get("changes.asset.${propname}")</td>
 <td>
@@ -82,10 +86,10 @@ $!prevValue
 $!newValue
 </td>
 </tr>
-#end
-#end
-#end
-#end
+ #end ## end if values diff
+#end ## end if curriki class
+#end ## end foreach diff
+#end ## end foreach objects diff
 #if($hasmetadatachanges==0)
 <tr><td colspan="3">$msg.get("changes.nometadatachanges")</td></tr>
 #end
