@@ -1,7 +1,7 @@
 	Ext.ns("Curriki.module.unnominate");
 	Curriki.module.unnominate.confirm =	function(){
 		Ext.Msg.show({
-   			title: _('curriki.crs.review.information'),
+   			title: _('curriki.crs.form.dialog.confirm_header'),
    			msg: _('curriki.crs.review.unnominateconfirm'),
    			buttons: Ext.Msg.OKCANCEL,
    			fn: function(btn){
