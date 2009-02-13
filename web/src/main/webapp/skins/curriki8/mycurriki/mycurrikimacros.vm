@@ -331,7 +331,13 @@ $msg.get("mycurriki.macro.access.${access}")
 #set($ftnb = $ftnb + 1)
 #set($assetType = $!asset.getAssetType())
 #set($category = $!asset.getCategory())
+#if("$!category" == "") ##{
+	#set($category = "unknown")
+#end ##}
 #set($subcategory = $!asset.getCategorySubtype())
+#if("$!subcategory" == "") ##{
+	#set($subcategory = "unknown")
+#end ##}
 #set($rollover = $msg.get("${category}.${subcategory}"))
 #if($!rollover == "${category}.${subcategory}") ##{
 #set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
