@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1215124816000</creationDate>
-<date>1231922319000</date>
-<contentUpdateDate>1231922319000</contentUpdateDate>
-<version>2.1</version>
+<date>1234518301000</date>
+<contentUpdateDate>1234518301000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>modify instructional type</comment>
+<comment>fix bug CURRIKI-3471</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -122,11 +122,12 @@
 ## ---------- JAVASCRIPT SPECIFICALLY FOR THIS FORM ----------
 ##
 {pre}
+&lt;style type="text/css"&gt;
+input {	width:expression(this.type=="text" ? "83%" : "style"); }
+&lt;/style&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"&gt;&lt;/script&gt;
-
-
 &lt;script language="javascript" type="text/javascript"&gt;
 // ----------------------------------- override YUI checknode method -------------------
 /**

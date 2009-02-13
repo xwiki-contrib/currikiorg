@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1222442464000</creationDate>
-<date>1234267381000</date>
-<contentUpdateDate>1234267381000</contentUpdateDate>
-<version>2.1</version>
+<date>1234518232000</date>
+<contentUpdateDate>1234518232000</contentUpdateDate>
+<version>7.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>sync to next</comment>
+<comment>fix bug CURRIKI-3471</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -224,13 +224,13 @@ function formatTextareasIntoWikiText() {
   var title_markup_str = '*';
   var vert_break_str = '\\\\\n\n'
 
-  slp_str = title_markup_str + '$msg.get("ace.lesson.plan.output.heading.content")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_title_img"&gt;&lt;img src="$msg.get("ace.lesson.plan.output.heading.icon.url")" width="$msg.get("ace.lesson.plan.output.heading.icon.width")" height="$msg.get("ace.lesson.plan.output.heading.icon.height")"/&gt;&lt;/div&gt;';
+  slp_str = title_markup_str + '$msg.get("ace.lesson.plan.output.heading.content")' + title_markup_str +  vert_break_str + '#' + 'currikiACELPIcon()';
 
   {
 	var form_number_days = getFieldContentStr('slp_number_days');
 	if (form_number_days != null) {
 	  form_number_days = form_number_days.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.number.days.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_number_days"&gt;' + form_number_days + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.number.days.title")' + title_markup_str +  vert_break_str + form_number_days;
 	}
   } 
 
@@ -238,28 +238,28 @@ function formatTextareasIntoWikiText() {
 	var form_prior_knowledge = getFieldContentStr('slp_prior_knowledge');
 	if (form_prior_knowledge != null) {
 	  form_prior_knowledge = form_prior_knowledge.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.prior.knowledge.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_prior_knowledge"&gt;' + form_prior_knowledge + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.prior.knowledge.title")' + title_markup_str +  vert_break_str + form_prior_knowledge;
 	}
   } 
   {
 	var form_lesson_objective = getFieldContentStr('slp_lesson_objective');
 	if (form_lesson_objective != null) {
 	  form_lesson_objective = form_lesson_objective.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.objective.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_lesson_objective"&gt;' + form_lesson_objective + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.objective.title")' + title_markup_str +  vert_break_str + form_lesson_objective;
 	}
   } 
   {
 	var form_lesson_assessment = getFieldContentStr('slp_lesson_assessment');
 	if (form_lesson_assessment != null) {
 	  form_lesson_assessment = form_lesson_assessment.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.assessment.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_lesson_assessment"&gt;' + form_lesson_assessment + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.assessment.title")' + title_markup_str +  vert_break_str + form_lesson_assessment;
 	}
   } 
   {
 	var form_benchmark_standards = getFieldContentStr('slp_benchmark_standards');
 	if (form_benchmark_standards != null) {
 	  form_benchmark_standards = form_benchmark_standards.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.benchmark.standards.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_benchmark_standards"&gt;' + form_benchmark_standards + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.benchmark.standards.title")' + title_markup_str +  vert_break_str + form_benchmark_standards;
 
 	}
   } 
@@ -267,28 +267,28 @@ function formatTextareasIntoWikiText() {
 	var form_materials_needed = getFieldContentStr('slp_materials_needed');
 	if (form_materials_needed != null) {
 	  form_materials_needed = form_materials_needed.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.materials.needed.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_materials_needed"&gt;' + form_materials_needed + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.materials.needed.title")' + title_markup_str +  vert_break_str + form_materials_needed;
 	}
   } 
   {
 	var form_enrichment = getFieldContentStr('slp_enrichment');
 	if (form_enrichment != null) {
 	  form_enrichment = form_enrichment.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.enrichment.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_enrichment"&gt;' + form_enrichment + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.enrichment.title")' + title_markup_str +  vert_break_str + form_enrichment;
 	}
   } 
   {
 	var form_accommodations = getFieldContentStr('slp_accommodations');
 	if (form_accommodations != null) {
 	  form_accommodations = form_accommodations.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.accommodations.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_accommodations"&gt;' + form_accommodations + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.accommodations.title")' + title_markup_str +  vert_break_str + form_accommodations;
 	}
   } 
   {
 	var form_anticipated_problems = getFieldContentStr('slp_anticipated_problems');
 	if (form_anticipated_problems != null) {
 	  form_anticipated_problems = form_anticipated_problems.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
-	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.anticipated.problems.title")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_anticipated_problems"&gt;' + form_anticipated_problems + '&lt;/div&gt;';
+	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.anticipated.problems.title")' + title_markup_str +  vert_break_str + form_anticipated_problems;
 	}
   } 
 
@@ -312,8 +312,8 @@ function formatTextareasIntoWikiText() {
   }
 
   {
-	slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.changes_heading")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_changes_content"&gt;' + '$msg.get("ace.lesson.plan.changes_content")' + '&lt;/div&gt;';
-	slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.whatworked_heading")' + title_markup_str +  vert_break_str + '&lt;div id="div_form_whatworked_content"&gt;' + '$msg.get("ace.lesson.plan.whatworked_content")' + '&lt;/div&gt;';
+	slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.changes_heading")' + title_markup_str +  vert_break_str + '$msg.get("ace.lesson.plan.changes_content")';
+	slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.whatworked_heading")' + title_markup_str +  vert_break_str + '$msg.get("ace.lesson.plan.whatworked_content")';
   }
 
   return (slp_str);
@@ -451,6 +451,7 @@ function setAttachmentsIframeSize() {
 .curriki-form1 #attachment_iframe { padding: 10px; width: 100%; }
 
 .curriki-form1_textarea { width: 99.5% !important; width: 95%; }
+input {	width:expression(this.type=="text" ? "83%" : "style"); }
 &lt;/style&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
@@ -537,6 +538,8 @@ Ext.apply(Ext.grid.GridView.prototype,{
 		var ts = this.templates, ct = ts.cell, rt = ts.row, last = colCount-1;
 		var tstyle = 'width:'+this.getTotalWidth()+';';
 		var buf = [], cb, c, p = {}, rp = {tstyle: tstyle}, r;
+
+
 		for(var j = 0, len = rs.length; j &lt; len; j++){
 			r = rs[j]; cb = [];
 			var rowIndex = (j+startRow);
@@ -1109,6 +1112,7 @@ function getTableText(){
   &lt;/p&gt;
   #curriki_formpart_end() 
 &lt;!--
+
   &lt;div class="tooltips"&gt;
 	{pre} ##$xwiki.addTooltipJS() {/pre}
   &lt;/div&gt;
