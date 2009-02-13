@@ -27,6 +27,17 @@
                     <script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
                     <script language="javascript" type="text/javascript">
                             if ( browser.isIE || browser.isMozilla || browser.isGecko) {
+                                // NLLP Icon
+                                var nortelIconHtmlSrc = '<img src="' + '$msg.get("nortel.lesson.plan.output.heading.icon.url")' + '" alt="" width="' + '$msg.get("nortel.lesson.plan.output.heading.icon.width")' + '" height="' + '$msg.get("nortel.lesson.plan.output.heading.icon.height")' + '" />';
+                                wikiEditor.addExternalProcessor((/\u0023currikiNortelIcon\(\)/g), nortelIconHtmlSrc);
+                                var reg = new RegExp(nortelIconHtmlSrc.replace('/xwiki/bin/', '../../').replace('/', '\/'),"g");
+                                wikiEditor.addInternalProcessor(reg, '\u0023currikiNortelIcon()');
+                                // ACELP Icon
+                                var aceIconHtmlSrc = '<img src="' + '$msg.get("ace.lesson.plan.output.heading.icon.url")' + '" alt="" width="' + '$msg.get("ace.lesson.plan.output.heading.icon.width")' + '" height="' + '$msg.get("ace.lesson.plan.output.heading.icon.height")' + '" />';  
+                                wikiEditor.addExternalProcessor((/\u0023currikiACELPIcon\(\)/g), aceIconHtmlSrc);
+                                var aceReg = new RegExp(aceIconHtmlSrc.replace('/xwiki/bin/', '../../').replace('/', '\/'),"g");
+                                wikiEditor.addInternalProcessor(aceReg, '\u0023currikiACELPIcon()');
+                                // wiki editor init
                                 wikiEditor.init({
                                     language: "en",
                                     elements : "content",
