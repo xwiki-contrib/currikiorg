@@ -215,6 +215,7 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 #end
 
 #macro(asset_display $asset $mode)
+#set($mainAssetFiletype = "")
 #set($mainAssetFiletype = $asset.getValue("file_type"))
 #set($mainAssetCategory = $asset.getCategory())
 #set($mainAssetView = $mainAssetCategory)
