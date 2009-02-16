@@ -27,7 +27,9 @@
     </div>
 </div>
 #else
+#set($assetFiletype = "")
 #set($assetFiletype = $embeddedDoc.getValue("file_type"))
+#set($assetCategory = "")
 #set($assetCategory = $embeddedDoc.getCategory())
 #if(!$assetFiletype || $assetFiletype=="") #set($assetFiletype = "unknown") #end
 #if(!$assetCategory || $assetCategory=="") #set($assetCategory = "unknown") #end
