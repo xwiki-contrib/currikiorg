@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1222442464000</creationDate>
-<date>1234506564000</date>
-<contentUpdateDate>1234506564000</contentUpdateDate>
-<version>74.1</version>
+<date>1234838986000</date>
+<contentUpdateDate>1234838986000</contentUpdateDate>
+<version>75.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fix bug CURRIKI-3471</comment>
+<comment>fix bug CURRIKI-3475</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -394,7 +394,11 @@ function setAttachmentsIframeSize() {
 	// nb: iframe_o.style.height only works in IE, does nothing in FF.
 	// do em both for good measure?!
 	if (iframe_o != null) {
-	  iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight + 5;
+	   if (Ext.isIE6) {
+	     iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight * 2 + 5;
+	   } else {
+	     iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight + 5;
+	   }
 	}
   }
   catch(e) {
@@ -1112,6 +1116,7 @@ function getTableText(){
   &lt;/p&gt;
   #curriki_formpart_end() 
 &lt;!--
+
   &lt;div class="tooltips"&gt;
 	{pre} ##$xwiki.addTooltipJS() {/pre}
   &lt;/div&gt;
