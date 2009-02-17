@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1229719826000</creationDate>
-<date>1229720160000</date>
-<contentUpdateDate>1229720160000</contentUpdateDate>
-<version>3.1</version>
+<date>1234876169000</date>
+<contentUpdateDate>1234876169000</contentUpdateDate>
+<version>20.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>status</comment>
+<comment>fix typo</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -59,29 +59,60 @@
 &lt;%
 import com.xpn.xwiki.*;
 
+
+totalunconverted = xwiki.search("select count(*) from XWikiDocument as doc,BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web not in ('AssetTemp')").get(0)
+
 econtext = context.context.getEngineContext()
+
+if (request.cancel=="1") {
+ econtext.setAttribute("migration_cancel", "1")
+ println "* Migration has been canceled"
+}
+
 totalnb = econtext.getAttribute("migration_totalnb")
 nb = econtext.getAttribute("migration_nb")
 faillist = econtext.getAttribute("migration_faillist")
 sdate = econtext.getAttribute("migration_startdate")
 edate = econtext.getAttribute("migration_enddate")
-if (edate==null) {
- finished = true
- edate = new Date()
-} else
- finished = false 
-duration = edate.getTime() - sdate.getTime()
-avg = (nb==0) ? 0 : duration / nb
+isrunning = econtext.getAttribute("migration_isrunning")
+edate2 = new Date();
+sdate2 = new Date();
 
+if (sdate==null) {
+ sdate2 = new Date();
+} else {
+ sdate2 = sdate;
+}
+
+if (edate==null) {
+ finished = false
+ edate2 = new Date();
+} else {
+ finished = true
+ edate2 = edate;
+} 
+
+
+try {
+ duration = edate2.getTime() - sdate2.getTime()
+} catch (Exception e) {
+ duration = 0
+}
+avg = (nb==null || nb==0) ? 0 : duration / nb
 println "* Total: ${totalnb}"
 println "* Nb: ${nb}"
+println "* Is Runnning: ${isrunning}"
 println "* Finished: ${finished}"
 println "* Start date: ${sdate}"
 println "* End date: ${edate}"
 println "* Duration: ${duration}"
 println "* Average duration: ${avg}"
+println "* Unconverted documents: ${totalunconverted}"
+println "* Faillist: {pre} ${faillist} {/pre}"
 
-println "* Faillist: ${faillist}"
+if (isrunning=="1") {
+  println "&lt;br/&gt;&lt;br/&gt;[Cancel migration&gt;${doc.fullName}?cancel=1] (this will cancel after the next document migrated)"
+}
 
 %&gt;</content>
 </xwikidoc>
