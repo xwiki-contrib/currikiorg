@@ -90,6 +90,12 @@ public class ObjectData extends IndexData
     private String getContentAsText(XWikiDocument doc, XWikiContext context)
     {
         StringBuffer contentText = new StringBuffer();
+
+        contentText.append(doc.getTitle());
+        contentText.append(" ");
+        contentText.append(doc.getContent());
+        contentText.append(" ");
+
         try {
             LOG.info(doc.getFullName());
             for (String className : doc.getxWikiObjects().keySet()) {
