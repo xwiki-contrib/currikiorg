@@ -91,10 +91,10 @@ public class ObjectData extends IndexData
     {
         StringBuffer contentText = new StringBuffer();
 
-        contextText.append(doc.getTitle());
-        contextText.append(" ");
-        contextText.append(doc.getContent());
-        contextText.append(" ");
+        contentText.append(doc.getTitle());
+        contentText.append(" ");
+        contentText.append(doc.getContent());
+        contentText.append(" ");
 
         try {
             LOG.info(doc.getFullName());
