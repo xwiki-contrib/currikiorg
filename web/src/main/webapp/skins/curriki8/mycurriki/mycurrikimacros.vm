@@ -227,7 +227,7 @@ Curriki.mycurriki.util.title.popup = function(title_id, attr){
 #end ##}
 Ext.onReady(function(){
 ## Get description
-#set($curDesc = $!asset.getDescription().replaceAll('\\', '\\\\').replace("'", "\\u0027"))
+#set($curDesc = $!asset.getDescription().replaceAll('\\', '\\\\').replace("'", "\\'"))
 ## Get Framework items
 #set($curFW = "")
 #set($subj = $!asset.getValue('fw_items'))
