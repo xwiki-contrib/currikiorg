@@ -202,8 +202,14 @@ document.getElementById("commentform").className = "collapsed";
 1 $title
 #end ## }
 #set($extract = $!bentrydoc.display("extract","view", $bentryobj))
+#if("$!extract" == "") ##{
+#set($extract = "")
+#end ##}
 <div class="article_content" >
 #set($content = $bentrydoc.display("content", "view", $bentryobj))
+#if("$!content" == "") ##{
+#set($content = "")
+#end ##}
 #if(!$displayFully)
  #if($!extract != "")
   #set($content = $extract)
