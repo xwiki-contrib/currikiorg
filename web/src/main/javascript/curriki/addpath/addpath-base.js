@@ -879,13 +879,14 @@ Curriki.module.addpath.init = function(){
 									if (md) {
 										var fw = md.fw_items;
 										Ext.isArray(fw) && (function(ca){
+											var childrenFn = arguments.callee;
 											Ext.each(ca, function(c){
 												if (c.id) {
 													if (c.checked = (fw.indexOf(c.id) !== -1)) {
 														checkedCount++;
 													}
 													if (c.children) {
-														arguments.callee(c.children);
+														childrenFn(c.children);
 													}
 												}
 											});
