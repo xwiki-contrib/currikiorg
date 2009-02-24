@@ -361,6 +361,9 @@ function checkForm() {
  #set($space = $request.space)
 #end
 #set($mytitle = $request.get("XWiki.ArticleClass_0_title"))
+#if($mytitle.length()>100) ##{
+#set($mytitle = "${mytitle.substring(0,100)}")
+#end ##}
 #set($pagename= $xwiki.getUniquePageName($space, $xwiki.clearName($mytitle)))
 #set($pagefullname = "$space.${pagename}")
 #set($tdoc = $xwiki.getDocument($request.page))
