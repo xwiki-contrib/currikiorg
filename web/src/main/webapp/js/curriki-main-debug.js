@@ -1609,6 +1609,7 @@ Ext.onReady(function(){
 	Ext.apply(Ext.QuickTips.getQuickTip(), {
 		showDelay: 1000
 		,hideDelay: 0
+		,interceptTitles: true
 	});
 });
 

@@ -157,7 +157,7 @@ Reorder.init = function(){
 								,legend:' '
 								,store:Reorder.store
 								,valueField:'collectionPage'
-								,displayField:'[""]}<span class="resource-CollectionComposite"><img style="width:16px; height:13px;" class="x-tree-node-icon assettype-icon" src="'+Ext.BLANK_IMAGE_URL+'" /></span> {displayTitle'
+								,displayField:'[""]}<span class="resource-CollectionComposite"><img class="x-tree-node-icon assettype-icon" src="'+Ext.BLANK_IMAGE_URL+'" /></span> {displayTitle'
 								,width:600
 								,height:200
 								,allowBlank:false
