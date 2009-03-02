@@ -11,7 +11,7 @@
 #set ($hasAdminWikiRights = $xwiki.hasAccessLevel("admin", "XWiki.XWikiPreferences"))
 #if($hasAdminWikiRights || $hasAdminSpaceRights)
   #set ($adminwikiaction = $!xwiki.getURL("XWiki.XWikiPreferences","admin"))
-  #set ($importaction = $!xwiki.getURL("XWiki.XWikiPreferences","import"))
+  #set ($importaction = $!xwiki.getURL("XWiki.Import","import"))
   #set ($adminspaceaction = $!xwiki.getURL("${doc.space}.WebPreferences","admin"))
   #set ($adminapppresent = $xwiki.exists("XWiki.AdminSheet"))
   #if(!$hasAdminWikiRights && $adminapppresent)
