@@ -81,6 +81,7 @@ $context.setLinksQueryString("skin=toucan")
   #xwikimessageboxend()
 #else
   #if($xwiki.exists("XWiki.AdminSheet"))
+    #set($importaction = "")
     $xwiki.getDocument("XWiki.AdminSheet").getTranslatedDocument().getRenderedContent()
   #else
     ## Admin app not installed, display only Import
