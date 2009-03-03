@@ -101,6 +101,32 @@
     <servlet-class>org.curriki.xwiki.servlet.RestletServlet</servlet-class>
   </servlet>
 
+  <!-- This is the entry pointy for the new WYSIWYG's GWT services -->
+  <servlet>
+    <servlet-name>WysiwygService</servlet-name>
+    <servlet-class>com.xpn.xwiki.wysiwyg.server.DefaultWysiwygService</servlet-class>
+  </servlet>
+
+  <!-- WebDAV servlet -->
+  <servlet>
+   <servlet-name>webdav</servlet-name>
+   <servlet-class>com.xpn.xwiki.plugin.webdav.XWikiDavServlet</servlet-class>
+  </servlet>
+
+  <!-- RESTful API Restlet servlet -->
+  <servlet>
+    <servlet-name>XWikiRestletServlet</servlet-name>
+    <servlet-class>
+      org.xwiki.rest.XWikiRestletServlet
+    </servlet-class>
+  </servlet>
+
+  <!-- RESTful API mapping -->
+  <servlet-mapping>
+    <servlet-name>XWikiRestletServlet</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+
   <!-- Unused mapping for now. In the future the correct mapping will be /* when the action servlet
        will be decommissioned in favor of the XWiki Action component --> 
   <servlet-mapping>
@@ -141,6 +167,16 @@
   <servlet-mapping>
     <servlet-name>CurrikiRestlet</servlet-name>
     <url-pattern>/curriki/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>WysiwygService</servlet-name>
+    <url-pattern>/WysiwygService</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+   <servlet-name>webdav</servlet-name>
+   <url-pattern>/webdav/*</url-pattern>
   </servlet-mapping>
 
   <!-- We override the mime type definition for javascript and css files, as some containers don't
