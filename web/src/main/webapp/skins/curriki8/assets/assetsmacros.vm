@@ -1061,7 +1061,7 @@ window.onbeforeunload = function() {
 #set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
 #set($ok = $asset.use($comment))
 #set($author = $asset.getValue("author"))
-#if($author==$context.user)
+#if(($author==$context.user)||$hasGlobalAdmin)
 $asset.set("comment", $request.get("XWiki.XWikiComments_${commentnb}_comment"))
 $asset.set("date", $xwiki.date)
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
