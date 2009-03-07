@@ -978,9 +978,11 @@ $xwiki.addTooltipJS()
   #if($velocityCount == 1)
     #set($cls = "spacedoc-first")
   #end
+  #set($displayBody = "")
+  #set($displayBody = $!event.displayBody)
 <div class="${cls}">
   <span class="spacedoc-date">$xwiki.formatDate($event.date, $msg.get("mycurriki.datetimeFormat"))</span>
-  <span class="spacedoc-title">$event.displayBody</span>
+  <span class="spacedoc-title">$displayBody</span>
 ##  <span class="spacedoc-editor">$xwiki.getUserName($event.user)</span>
 </div>
 #end
