@@ -7,6 +7,14 @@
 #if($doc.getObject("CurrikiCode.AssetClass"))
 #set($asset = $doc)
 #set($assetCategory = $asset.getCategory())
+#if($assetCategory=="collection")
+#set($ok = $asset.use("CurrikiCode.CompositeAssetClass"))
+#set($colltype = $asset.getValue("type"))
+#if($colltype=="folder")
+ #set($assetCategory = "folder")
+#end
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#end
 <div id="asset-wrapper" class="category-$assetCategory mode-version mode-vesion-compare">
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
