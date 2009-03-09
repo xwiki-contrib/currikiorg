@@ -35,6 +35,7 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent;
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEventPriority;
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEventType;
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStreamException;
 import com.xpn.xwiki.plugin.activitystream.impl.ActivityEventImpl;
 import com.xpn.xwiki.plugin.activitystream.impl.ActivityStreamImpl;
 import com.xpn.xwiki.plugin.mailsender.Mail;
