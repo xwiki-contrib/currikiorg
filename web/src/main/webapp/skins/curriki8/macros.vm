@@ -929,40 +929,46 @@ $memberdoc.getRenderedContent("$!content")</div>
  #if($collType!="" && $collType != "folder")
   ## do nothing because we have a collection or root collection
  #else
- ## handling breadcrumb if it is not a group
- #set($parentList = $util.arrayList)
- #if($bcDoc.getObject("CurrikiCode.AssetClass"))
-  ## handling of breadcrumb for an Asset. Taking the first one.
-  ## TODO: setup a cache
-  #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' order by doc.creationDate")
-  #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
- #end
- #set($parent = "")
- ## if the parent list has more than 1 then we should
- ## not follow the parent path
- #if(!$parentList || $parentList.size() < 2)
-  #if($parentList && $parentList.size()>0)
-   #foreach($par in $parentList)
-    #set($parent = $par)
+  ## handling breadcrumb if it is not a group
+  #set($parentList = $util.arrayList)
+  #set($parent = "")
+  #if($bcDoc.getObject("CurrikiCode.AssetClass"))
+   ## handling of breadcrumb for an Asset. Taking the first one.
+   ## TODO: setup a cache
+   #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' order by doc.creationDate")
+   #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
+  #end
+
+  ## if the parent list has more than 1 then we should
+  ## not follow the parent path
+  #if(!$parentList || $parentList.size() < 2)
+   #if($parentList && $parentList.size()>0)
+    #foreach($par in $parentList)
+     #set($parent = $par)
+    #end
+   #end
+  #else
+   #if(!$parent || ($!parent == ""))
+    #set($parent = $bcDoc.parent)
    #end
   #end
- #else
- #if(!$parent || ($!parent == ""))
-  #set($parent = $bcDoc.parent)
- #else
- #end
- #end
- #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
-  #set($bcLocal = "${parent};${bcLocal}")
-  #set($level = $level + 1)
-  #set($parentDoc = $xwiki.getDocument($parent))
-  #curriki_breadcrumb_parent($parentDoc,$level)
- #else
- #end
+
+  #if(!$parentList || $parentList.size() == 0)
+   #if(!$parent || ($!parent == ""))
+    #set($parent = $bcDoc.parent)
+   #else
+   #end
+  #end
+
+  #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
+   #set($bcLocal = "${parent};${bcLocal}")
+   #set($level = $level + 1)
+   #set($parentDoc = $xwiki.getDocument($parent))
+   #curriki_breadcrumb_parent($parentDoc,$level)
+  #end
  #end ## end check collection or root collection
 #end ## end check groups
 #end ## end macro
-
 
 
 #**
