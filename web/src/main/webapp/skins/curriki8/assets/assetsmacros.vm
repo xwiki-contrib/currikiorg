@@ -215,21 +215,8 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 #end
 
 #macro(asset_display $asset $mode)
-#set($mainAssetFiletype = "")
-#set($mainAssetFiletype = $asset.getValue("file_type"))
-#set($mainAssetCategory = $asset.getCategory())
-#set($mainAssetView = $mainAssetCategory)
-#if($mainAssetCategory=="collection")
-#set($ok = $asset.use("CurrikiCode.CompositeAssetClass"))
-#set($colltype = $asset.getValue("type"))
-#if($colltype=="folder")
- #set($mainAssetView = "folder")
-#end
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
-#end
-#if(!$mainAssetFiletype || $mainAssetFiletype=="") #set($mainAssetFiletype = "unknown") #end
-#if(!$mainAssetCategory || $mainAssetCategory=="") #set($mainAssetCategory = "unknown") #end
-<div id="asset-wrapper" class="view-$!mainAssetView #if($mainAssetCategory == "attachment" && $mainAssetFiletype=="unknown") view-attachment-unknown #end mode-$mode">
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
     #asset_findmode()
     #if(!$isEmbed)
      #if($mode!="edit")
@@ -244,7 +231,7 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
       #asset_tabs($asset "view")
      #end
     #end
-    <div id="asset-wrapper-inner" #if($mainAssetCategory!="collection") class="filetype-$!mainAssetFiletype" #end >
+    <div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
         #if($isEmbed)
          #asset_icontitle($asset)
          #asset_attribution($asset)
@@ -256,12 +243,12 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
         #if(!$asset.hasAccessLevel("view"))
          #curriki_noaccess()
         #else
-        #if($mainAssetCategory!="collection")
-        <div class="sub-asset-wrapper category-$!mainAssetCategory">
-          <div class="sub-asset-wrapper-inner filetype-$!mainAssetFiletype">
+        #if($asset.category!="collection")
+        <div class="sub-asset-wrapper category-${asset.categoryClass}">
+          <div class="sub-asset-wrapper-inner filetype-${asset.filetypeClass}">
         #end
         $asset.displayAsset($mode)
-        #if($mainAssetCategory!="collection")
+        #if($asset.category!="collection")
           </div>
         </div>
         #end
@@ -519,16 +506,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  * Macro to display info tab
  *#
 #macro(asset_info $asset)
-#set($assetCategory = $asset.getCategory())
-#if($assetCategory=="collection")
-#set($ok = $asset.use("CurrikiCode.CompositeAssetClass"))
-#set($colltype = $asset.getValue("type"))
-#if($colltype=="folder")
- #set($assetCategory = "folder")
-#end
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
-#end
-<div id="asset-wrapper" class="view-$assetCategory mode-$!viewer">
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-$!viewer">
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
     #asset_attribution($asset)
@@ -627,18 +606,10 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  * Macro to display info tab in edit mode
  *#
 #macro(asset_infoedit $asset)
-#set($assetCategory = $asset.getCategory())
-#if($assetCategory=="collection")
-#set($ok = $asset.use("CurrikiCode.CompositeAssetClass"))
-#set($colltype = $asset.getValue("type"))
-#if($colltype=="folder")
- #set($assetCategory = "folder")
-#end
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
-#end
 ## two fields are restricted from editing
 #set($isOriginalAuthorOrAdmin = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
-<div id="asset-wrapper" class="view-$assetCategory mode-info mode-info-edit">
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-info mode-info-edit">
 ##asset_resourcefunctions($asset)
 #asset_icontitle($asset)
 #asset_attribution($asset)
