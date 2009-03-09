@@ -642,7 +642,7 @@ $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-title" class="field-important input-text">
             <span><em>!</em><label for="edit-title">$msg.get("rve.information.title.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.title.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.title.edit_txt")</p>
-            <input id="edit-title" name="title" value="$xwiki.getFormEncoded($asset.getTitle())" type="text">
+            <input id="edit-title" name="title" value="$xwiki.getFormEncoded($asset.getTitle())" type="text" maxlength="250">
         </li>
         <li id="info-edit-description" class="field-important input-textarea">
             <span><em>!</em><label for="edit-description">$msg.get("rve.information.description.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.description.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
@@ -1288,7 +1288,11 @@ $asset.use($classname)
 $asset.setContent($request.content)
 #end
 #if($request.title)
-$asset.setTitle($request.title)
+ #if($request.title.length()>250)
+  $asset.setTitle($!request.title.substring(0,250))
+ #else
+  $asset.setTitle($!request.title)
+ #end
 #end
 $asset.updateObjectFromRequest("CurrikiCode.AssetClass")
 #if($asset.getObject("CurrikiCode.AssetLicenseClass"))
