@@ -68,14 +68,9 @@ public class ResourceActivityEvent extends ActivityEvent
         String eventTitle = "";
         if (ActivityEventType.UPDATE.equals(event.getType())) {
             if (doc != null && doc.getName().equals("WebHome")) {
-                // Do something about ROOT COLLECTION here
-
-                String rdr_comment = context.getMessageTool().get("curriki.comment.reordered");
-                if (doc.getComment().equals(rdr_comment)) {
-                     eventTitle = "groups_home_activity_res_rdr";
-                } else {
-                    eventTitle = "groups_home_activity_res_edit";
-                }
+                // Coll_*.WebHome activities should now only be fetched if there is no create/delete
+                // with the same requestID -- Means it was edited, and only edits to WebHome is reorder
+                 eventTitle = "groups_home_activity_res_rdr";
             } else {
                 eventTitle = "groups_home_activity_res_edit";
             }
