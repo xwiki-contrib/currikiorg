@@ -130,6 +130,55 @@ public class Asset extends CurrikiDocument {
         }
     }
 
+    public String getFiletype() {
+        String className = getActiveClass();
+        try {
+            use(Constants.ATTACHMENT_ASSET_CLASS);
+            return (String) getValue(Constants.ATTACHMENT_ASSET_FILE_TYPE);
+        } finally {
+            if (className!=null)
+                use(className);
+        }
+    }
+
+    public String getFiletypeClass() {
+        String filetype = getFiletype();
+        if ((filetype==null)||("".equals(filetype)))
+            return "unknown";
+        else
+            return filetype;
+    }
+
+    public String getCategoryClass() {
+        String className = getActiveClass();
+        String category = getCategory();
+
+        if (Constants.ASSET_CATEGORY_COLLECTION.equals(category)) {
+            try {
+                use(Constants.COMPOSITE_ASSET_CLASS);
+                String colltype = (String) getValue(Constants.COMPOSITE_ASSET_CLASS_TYPE);
+                // in case it is a folder we want folder and not collection
+                if (Constants.COMPOSITE_ASSET_CLASS_TYPE_SUBFOLDER.equals(colltype)) {
+                    return "folder";
+                }
+            } finally {
+                if (className!=null)
+                    use(className);
+            }
+        }
+
+        if (Constants.ASSET_CATEGORY_ATTACHMENT.equals(category)) {
+            // it the attachment is unknown or empty we want "attachment-unknown" and not "attachment"
+            if ("unknown".equals(getFiletypeClass()))
+                return "attachment-unknown";
+        }
+
+        if ((category==null)||("".equals(category)))
+            return "unknown";
+        else
+            return category;
+    }
+
     public void setCategory(String category) {
         BaseObject obj = getDoc().getObject(Constants.ASSET_CLASS, true, context);
         obj.setStringValue(Constants.ASSET_CLASS_CATEGORY, category);

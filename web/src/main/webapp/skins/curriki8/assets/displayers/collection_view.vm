@@ -13,28 +13,15 @@
 #set($counter = $counter + 1)
 #set($embeddedDoc = $xwiki.getDocument($assetPage))
 #if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
-#set($ok = $embeddedDoc.use("CurrikiCode.CompositeAssetClass"))
-#set($colltype = $embeddedDoc.getValue("type"))
-#if($colltype=="folder")
- #set($colltype = "folder")
-#else
- #set($colltype = "collection")
-#end
-<div class="sub-asset-wrapper category-${colltype}">
+<div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
     <div class="sub-asset-wrapper-inner">
         #asset_beginsection($embeddedDoc false)
         #asset_endsection()
     </div>
 </div>
 #else
-#set($assetFiletype = "")
-#set($assetFiletype = $embeddedDoc.getValue("file_type"))
-#set($assetCategory = "")
-#set($assetCategory = $embeddedDoc.getCategory())
-#if(!$assetFiletype || $assetFiletype=="") #set($assetFiletype = "unknown") #end
-#if(!$assetCategory || $assetCategory=="") #set($assetCategory = "unknown") #end
-<div class="sub-asset-wrapper category-$assetCategory">
-    <div class="sub-asset-wrapper-inner filetype-$assetFiletype">
+<div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
+    <div class="sub-asset-wrapper-inner filetype-${embeddedDoc.filetypeClass}">
         #asset_beginsection($embeddedDoc true)
         $embeddedDoc.displayAsset("view")
         #asset_endsection()

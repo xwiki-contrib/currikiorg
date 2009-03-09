@@ -7,16 +7,8 @@
 #if(!$asset.getObject("CurrikiCode.AssetClass"))
 #template("commentsinline.vm")
 #else
-#set($assetCategory = $asset.getCategory())
-#if($assetCategory=="collection")
-#set($ok = $asset.use("CurrikiCode.CompositeAssetClass"))
-#set($colltype = $asset.getValue("type"))
-#if($colltype=="folder")
- #set($assetCategory = "folder")
-#end
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
-#end
-<div id="asset-wrapper" class="category-$assetCategory mode-$!viewer">
+<div id="asset-wrapper" class="category-${asset.categoryClass} mode-$!viewer">
     #asset_resourcefunctions($asset)
     #asset_icontitle($asset)
     #asset_attribution($asset)
