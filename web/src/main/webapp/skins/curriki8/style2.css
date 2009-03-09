@@ -117,8 +117,6 @@ em, em strong { font-style: italic; }
 #navigation-inner a { color: #5051a3; }
 #navigation-inner .titles { background-color: #cccde7; display: block; font-size: 1em; font-weight: bold; margin-top: 1px; padding: 2px 10px !important; position: relative; text-decoration: none; text-transform: uppercase; height: auto !important; height: 1%; padding-bottom: 0; }
 #navigation-inner .titles:hover { background-color: #A3A4D2; color: #282974; }
-/**#navigation-inner .titles:hover span.expanded, #navigation-inner .selected span.expanded { background-image: url("menu-expanded-hover.gif"); }
-#navigation-inner .titles:hover span.collapsed, #navigation-inner .selected span.collapsed { background-image: url("menu-collapsed-hover.gif"); }**/
 #navigation-inner .home a { margin: 0; padding-left: 5px !important; }
 #navigation-inner span { display: block; float: left; height: 18px; width: 20px; cursor: pointer; }
 #navigation-inner span.expanded { background: transparent url("menu-expanded.gif") no-repeat scroll 2px 4px; }
@@ -204,8 +202,6 @@ form#inline span.xwiki-form-listclass input { margin: 0 2px 0 0; }
 .curriki-form #XWiki\.AssetClass_0_title { width: 99% !important; width: 95%; }
 #XWiki\.AssetClass_0_description, .curriki-form textarea { width: 99.5% !important; width: 95%; }
 .curriki-form textarea { height: 120px; }
-/*#XWiki\.AssetClass_0_keywords, #XWiki\.AssetLicenseClass_0_rightsHolder { width: 60%; }
-#XWiki\.AssetClass_0_language, #XWiki\.AssetLicenseClass_0_licenseType2 { width: 61%; }*/
 .curriki-form textarea { padding: 1px 0; }
 .curriki-form .mceEditorIframe { height: 18em !important; width: 100%  !important; }
 .curriki-form .subject-educational .xwiki-form-listclass { padding-bottom: 1px !important; padding-bottom: 0; }
@@ -295,11 +291,69 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 .x-shadow * { background-image: none; visibility: hidden; }
 .x-dd-drag-proxy { opacity: 0.80;}
 .x-dd-drag-proxy * { background-color: transparent; }
+
+
+/**
 .x-tree-node-icon, .x-tree-node-leaf .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/ResourceGenericYellow.gif); }
-.ctv-groups .x-tree-node-icon, .ctv-top .x-tree-node-icon { display: none; } 
 .curriki-group .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/GroupsIcon.gif); }  
 .resource-CollectionComposite .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/FolderCollectionRed.gif); }  
 .resource-FolderComposite .x-tree-node-icon { background-image: url(/xwiki/bin/skin/icons/ctv/FolderResourceOrange.gif); }
+
+
+#content ul.x-tab-strip>li { list-style-type: none; margin-left:0; padding-left:0; }
+.assettype-icon + .asset-title { padding-left: 5px; }
+.ict-icon { width: 16px; height: 16px; background-repeat:no-repeat; }
+.ict-icon + .ict-title { padding-left: 5px; }
+.ict-activity .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Activity.gif); }
+.ict-book .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Book.gif); }
+.ict-curriculum .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Curriculum.gif); }
+.ict-multiple .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Multiple.gif); }
+.ict-other .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Other.gif); }
+.ict-resource .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Resource.gif); }
+
+
+
+.assettype-icon { width: 17px; height: 17px; background-repeat:no-repeat; }
+.assettype-icon + .asset-title { padding-left: 5px; }
+
+.ict-icon { width: 16px; height: 16px; background-repeat:no-repeat; }
+.ict-icon + .ict-title { padding-left: 5px; }
+.ict-activity .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Activity.gif); }
+.ict-book .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Book.gif); }
+.ict-curriculum .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Curriculum.gif); }
+.ict-multiple .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Multiple.gif); }
+.ict-other .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Other.gif); }
+.ict-resource .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Resource.gif); }
+
+
+
+
+.ict-icon-combo-item {
+	background-repeat: no-repeat ! important;
+	background-position: 3px 50% ! important;
+}
+
+
+.crs-icon { width:15px; height:15px; background-repeat:no-repeat; }
+.crs-icon + .crs-text { padding-left: 5px; }
+ 
+.crs-1 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
+.crs-2 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
+.crs-3 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
+.crs-P .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
+ 
+.crs-100 .crs-icon { display:none; }
+.crs-200 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
+.crs-400 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
+.crs-300 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS1.gif) }
+.crs-600 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
+.crs-500 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS2.gif) }
+.crs-800 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
+.crs-700 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS3.gif) }
+**/
+
+.ctv-groups .x-tree-node-icon, .ctv-top .x-tree-node-icon { display: none; } 
+
 .x-tree-node div.x-tree-drag-insert-above  { border-top: 1px dashed #93c53c; }
 .x-tree-node div.x-tree-drag-insert-below  { border-bottom: 1px dashed #93c53c; }
 .done-message { font: 13px Arial; padding: 1em 0; }
@@ -411,9 +465,6 @@ form em, .header em { font-style: normal; }
 height:auto;
 }
 
-/* CURRIKI-2416 - Add spacing in NortelLearniTLessonPlan header */
-/* .lesson-plan-learn-line { padding-top: 8px; } */
-
 /* CURRIKI-2770 - Removing some spacing in NortelLearniTLessonPlan header */
 .lesson-plan-learn-line {
     padding:0;
@@ -450,18 +501,6 @@ height:auto;
 }
 .x-fieldset legend { display: block; }
 
-#content ul.x-tab-strip>li { list-style-type: none; margin-left:0; padding-left:0; }
-
-.assettype-icon + .asset-title { padding-left: 5px; }
-
-.ict-icon { width: 16px; height: 16px; background-repeat:no-repeat; }
-.ict-icon + .ict-title { padding-left: 5px; }
-.ict-activity .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Activity.gif); }
-.ict-book .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Book.gif); }
-.ict-curriculum .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Curriculum.gif); }
-.ict-multiple .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Multiple.gif); }
-.ict-other .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Other.gif); }
-.ict-resource .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Resource.gif); }
 
 .ict-icon-combo-icon {
 	background-repeat: no-repeat;
@@ -476,31 +515,9 @@ input[type="text"] .ict-icon-combo-input {
 	top: 3px;
 	left: 5px;
 }
-.ict-icon-combo-item {
-	background-repeat: no-repeat ! important;
-	background-position: 3px 50% ! important;
-}
 
 
-.crs-icon { width:15px; height:15px; background-repeat:no-repeat; }
-.crs-icon + .crs-text { padding-left: 5px; }
-/* Old CRS Values */
-.crs-1 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
-.crs-2 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
-.crs-3 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
-.crs-P .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
-
-/* CRS Values */
-.crs-100 .crs-icon { display:none; }
-.crs-200 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
-.crs-400 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
-.crs-300 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS1.gif) }
-.crs-600 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
-.crs-500 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS2.gif) }
-.crs-800 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
-.crs-700 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS3.gif) }
-
-/* NEW CRS Values See Iconography */
+ 
 
 
 
@@ -525,17 +542,7 @@ input[type="text"] .ict-icon-combo-input {
 
 #content ul.x-tab-strip>li { list-style-type: none; margin-left:0; padding-left:0; }
 
-.assettype-icon { width: 17px; height: 17px; background-repeat:no-repeat; }
-.assettype-icon + .asset-title { padding-left: 5px; }
 
-.ict-icon { width: 16px; height: 16px; background-repeat:no-repeat; }
-.ict-icon + .ict-title { padding-left: 5px; }
-.ict-activity .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Activity.gif); }
-.ict-book .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Book.gif); }
-.ict-curriculum .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Curriculum.gif); }
-.ict-multiple .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Multiple.gif); }
-.ict-other .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Other.gif); }
-.ict-resource .ict-icon { background-image: url(/xwiki/skins/curriki8/icons/ICT/mini/ICTIcon-Resource.gif); }
 
 .ict-icon-combo-icon {
 	background-repeat: no-repeat;
