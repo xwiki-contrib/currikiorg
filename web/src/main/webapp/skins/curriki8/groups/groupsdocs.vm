@@ -420,6 +420,10 @@ wikiEditor.init({
      $editDoc.saveWithProgrammingRights()
      #if( $request.gotodoc == "true" )
        $response.sendRedirect( $editDoc.getURL() )
+     #else
+       ## this should send us back to the right view URL
+       ## and fix bug CURRIKI-3924
+       $response.sendRedirect( $doc.getURL() )
      #end
      #set( $editDocSaved = $request.doctitle )
 #else
