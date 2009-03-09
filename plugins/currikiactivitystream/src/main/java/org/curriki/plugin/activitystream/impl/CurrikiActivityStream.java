@@ -442,4 +442,30 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         Mail mail = new Mail(mailFrom, mailTo, null, null, mailSubject, mailContent, null);
         mailSender.sendMail(mail, context);
     }
+
+
+    /* Override searchEvents to change group by behavior for filter (give create items intead of update items)
+     */
+    public List<ActivityEvent> searchEvents(String hql, boolean filter, int nb, int start, XWikiContext context) throws ActivityStreamException
+    {
+        String searchHql;
+
+        if (filter) {
+            searchHql =
+                "select act from ActivityEventImpl as act, ActivityEventImpl as act2 where act.eventId=act2.eventId and "
+                    + hql
+                    + " group by (act.requestId having (act.priority)=max(act2.priority) and (act.type)=min(act2.type)) order by act.date desc";
+        } else {
+            searchHql =
+                "select act from ActivityEventImpl as act where " + hql
+                    + " order by act.date desc";
+        }
+
+        try {
+            return context.getWiki().search(searchHql, nb, start, context);
+        } catch (XWikiException e) {
+            throw new ActivityStreamException(e);
+        }
+    }
+
 }
