@@ -15,21 +15,6 @@ textarea, .x-form-text, textarea.x-form-field { background-image: none; border-s
 p { margin: 0.5em 0; padding: 0; }
 
 
-button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange, #attachmentAddForm .button-orange, #nextbutton button.x-btn-text { 
-	background-color: #ff7f00; 
-	border-style: solid; 
-	border-width: 1px; 
-	border-color: #ff0000; 
-	color: #FFF; 
-	cursor: pointer; 
-	font-size: 11px; 
-	height: 23px; 
-	margin: 0; 
-	padding: 0 0.5em; 
-	overflow: visible; 
-	width: auto;  
-}
-
 /** ALSO MOVE TO 1.9 **/
 
 button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange, #attachmentAddForm .button-orange, #nextbutton button.x-btn-text, input[type="submit"], input[type="button"] { 
@@ -41,7 +26,8 @@ button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange,
 	font-family:Helvetica;
 	font-size:11px;
 	height:auto;
-	padding:4px 10px 3px;
+	padding:4px 10px 3px !important;
+	width: auto;
 }
 
 button:hover, a.button:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-orange:hover, #attachmentAddForm .button-orange:hover, input[type="submit"]:hover { 
@@ -282,9 +268,9 @@ table.instruction { margin: 10px 0; }
 .x-window .x-panel-body { padding: 6px 6px 0; }
 #MetadataDialogueForm .x-panel-body { padding-left: 0; }
 .x-window #resource-drop .x-panel-body { padding-top: 0; }
-.x-btn button { display: inline; padding: 0; width: auto !important; }
-.x-toolbar .x-btn-over .x-btn-right, .x-toolbar .x-btn-over .x-btn-left { background-image: none; }
-.x-window-mc, .x-form-item, .x-btn button { font: 13px Arial,sans-serif; }
+.x-btn button { display: inline; width: auto !important; }  /** 1.9  **/
+.x-toolbar .x-btn-over .x-btn-right, .x-toolbar .x-btn-over .x-btn-left { background-image: none; } 
+.x-window-mc, .x-form-item { font: 13px Arial,sans-serif; } /** 1.9 **/
 .x-window .guidingquestion { font-size: 1.2em; font-weight: bold; padding: 0.5em 0; }
 .x-window .subtitle { font-size: 1em; font-weight: bold; padding: 0.5em 0; }
 input.x-form-radio { margin-bottom: -2px }
