@@ -137,6 +137,94 @@ $linkToBreak.substring(0, $index)
 #set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
 #end
 
+#**
+ * Displays the mime icon of a file according to its extension
+ *
+ * p_fileName filename
+ *#
+#macro(mimeiconimg $p_fileName)
+#if($p_fileName.lastIndexOf(".") == -1)
+ #set($m_fileExt = "Unknown")
+#else
+ #set($m_fileExt = $p_fileName.substring($p_fileName.lastIndexOf(".")))
+ #set($m_fileExt = $m_fileExt.substring(1).toLowerCase())
+#end
+#set($m_map = $xwiki.hashMap)
+#set($junk = $m_map.put("xml", "document_xml"))
+#set($junk = $m_map.put("xlsx", "document_xlsx"))
+#set($junk = $m_map.put("xls", "document_xls"))
+#set($junk = $m_map.put("xwiki", "text_xwiki"))
+#set($junk = $m_map.put("txt", "document_txt"))
+#set($junk = $m_map.put("rtf", "document_rtf"))
+#set($junk = $m_map.put("ps", "document_ps"))
+#set($junk = $m_map.put("pptx", "document_pptx"))
+#set($junk = $m_map.put("ppt", "document_ppt"))
+#set($junk = $m_map.put("php", "document_php"))
+#set($junk = $m_map.put("pdf", "document_pdf"))
+#set($junk = $m_map.put("odt", "document_odt"))
+#set($junk = $m_map.put("ods", "document_ods"))
+#set($junk = $m_map.put("odp", "document_odp"))
+#set($junk = $m_map.put("odi", "document_odi"))
+#set($junk = $m_map.put("odg", "document_odg"))
+#set($junk = $m_map.put("odf", "document_odf"))
+#set($junk = $m_map.put("odc", "document_odc"))
+#set($junk = $m_map.put("odb", "document_odb"))
+#set($junk = $m_map.put("jar", "document_jar"))
+#set($junk = $m_map.put("izh", "document_izh"))
+#set($junk = $m_map.put("iha", "document_iha"))
+#set($junk = $m_map.put("html", "document_html"))
+#set($junk = $m_map.put("xhtml", "text_xhtml"))
+#set($junk = $m_map.put("exe", "document_exe"))
+#set($junk = $m_map.put("docx", "document_docx"))
+#set($junk = $m_map.put("doc", "document_doc"))
+#set($junk = $m_map.put("dir", "document_dir"))
+#set($junk = $m_map.put("css", "document_css"))
+#set($junk = $m_map.put("class", "document_class"))
+#set($junk = $m_map.put("cdcr", "document_cdcr"))
+#set($junk = $m_map.put("bin", "document_bin"))
+#set($junk = $m_map.put("tif", "image_tif"))
+#set($junk = $m_map.put("svg", "image_svg"))
+#set($junk = $m_map.put("psd", "image_psd"))
+#set($junk = $m_map.put("png", "image_png"))
+#set($junk = $m_map.put("jpg", "image_jpg"))
+#set($junk = $m_map.put("gif", "image_gif"))
+#set($junk = $m_map.put("bmp", "image_bmp"))
+#set($junk = $m_map.put("wmv", "video_wmv"))
+#set($junk = $m_map.put("qt", "video_qt"))
+#set($junk = $m_map.put("vidi", "video_vidi"))
+#set($junk = $m_map.put("mov", "video_mov"))
+#set($junk = $m_map.put("avi", "video_avi"))
+#set($junk = $m_map.put("asf", "video_asf"))
+#set($junk = $m_map.put("zip", "archive_zip"))
+#set($junk = $m_map.put("xo", "archive_xo"))
+#set($junk = $m_map.put("tar", "archive_tar"))
+#set($junk = $m_map.put("sit", "archive_sit"))
+#set($junk = $m_map.put("sco", "archive_sco"))
+#set($junk = $m_map.put("gz", "archive_gz"))
+#set($junk = $m_map.put("gtar", "archive_gtar"))
+#set($junk = $m_map.put("swf", "interactive_swf"))
+#set($junk = $m_map.put("wav", "audio_wav"))
+#set($junk = $m_map.put("mp3", "audio_mp3"))
+#if($m_fileExt == "lha")
+ #set($m_fileExt = "iha")
+#elseif($m_fileExt == "lzh")
+ #set($m_fileExt = "izh")
+#end
+#set($m_subcat = "")
+#set($m_subcat = $!m_map.get($m_fileExt))
+#if("" == "$m_subcat") ##{
+#set($m_subcat = "unknown_unknown")
+#end ##}
+#set($m_cat = $m_subcat.replaceAll("_.*", ""))
+#set($m_icat = $m_cat.substring(0,1).toUpperCase()+$m_cat.substring(1))
+#set($rollover = $msg.get($m_subcat.replaceAll('_', '.')))
+#if($!rollover == "${m_subcat}") ##{
+#set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
+#end ##}
+#set($macro_iconUrl = "/xwiki/skins/curriki8/extjs/resources/images/default/s.gif")
+#set($macro_img = "<img class='resource-${m_icat} category-${m_cat} subcategory-${m_subcat}' src='${macro_iconUrl}' ext:qtip='${rollover}' />")
+#end
+
 
 #**
  * Sets the userPrefix variable from the short name of a user
@@ -299,6 +387,16 @@ $msg.get($prop.name)#end
 #set($righttitletrunc = "${righttitletrunc}...")
 #end
 <div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+</div>
+#end
+#macro(subtitlebartarget $text $righttitle $link $color $target)
+#normalizelink($link)
+#set($righttitletrunc = $righttitle)
+#if ($righttitle.length() > 35)
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end
+<div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle" target="$target">$righttitletrunc  &raquo;</a></div>#end
 </div>
 #end
 
