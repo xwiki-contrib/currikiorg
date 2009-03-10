@@ -1212,6 +1212,9 @@ public class Asset extends CurrikiDocument {
      if (getObject(Constants.OLD_ASSET_CLASS)!=null)
       return false;
 
+     if (getObject(Constants.OLD_EXTERNAL_ASSET_CLASS)!=null)
+      return false;
+
      return true;
    }
 
@@ -1258,7 +1261,9 @@ public class Asset extends CurrikiDocument {
         Object oldAssetObject = getObject(Constants.OLD_ASSET_CLASS);
 
         // get old category
-        use(oldAssetObject);
+        if (oldAssetObject!=null)
+           use(oldAssetObject);
+
         String oldCategory = (String) getValue(Constants.ASSET_CLASS_CATEGORY);
         String newCategory = "";
 
@@ -1306,7 +1311,27 @@ public class Asset extends CurrikiDocument {
                 }
                 removeObjects(Constants.OLD_COLLECTION_REORDERED_CLASS);
             }
+        } else if (oldCategory.equals(Constants.OLD_CATEGORY_LINK)||(getObject(Constants.OLD_EXTERNAL_ASSET_CLASS)!=null)) {
+            newCategory = Constants.ASSET_CATEGORY_EXTERNAL;
+            Object newExternalAssetObject = getObject(Constants.EXTERNAL_ASSET_CLASS, true);
+            Object oldExternalAssetObject = getObject(Constants.OLD_EXTERNAL_ASSET_CLASS);
+            if (oldExternalAssetObject!=null) {
+                updateObject(newExternalAssetObject, oldExternalAssetObject, Constants.EXTERNAL_ASSET_LINK, Constants.OLD_EXTERNAL_ASSET_LINK);
+                removeObject(oldExternalAssetObject);
+            }
 
+            // make sure we don't have this object anymore since a bad previous migration could have caused it
+            Object attachmentAssetObject = getObject(Constants.ATTACHMENT_ASSET_CLASS);
+            if (attachmentAssetObject!=null)
+                removeObject(attachmentAssetObject);
+            // make sure we don't have this object anymore since a bad previous migration could have caused it
+            Object imageAssetObject = getObject(Constants.IMAGE_ASSET_CLASS);
+            if (imageAssetObject!=null)
+                removeObject(imageAssetObject);
+            // make sure we don't have this object anymore since it could exist previously for external assets
+            Object oldImageAssetObject = getObject(Constants.OLD_MIMETYPE_PICTURE_CLASS);
+            if (oldImageAssetObject!=null)
+                removeObject(oldImageAssetObject);
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_TEXT)||(getObject(Constants.OLD_TEXT_ASSET_CLASS)!=null)) {
             Object newTextAssetObject = getObject(Constants.TEXT_ASSET_CLASS, true);
             set(Constants.TEXT_ASSET_SYNTAX, Constants.TEXT_ASSET_SYNTAX_TEXT);
@@ -1380,14 +1405,6 @@ public class Asset extends CurrikiDocument {
             // we cannot determine type between audio and video
             newCategory = null;
             getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
-        } else if (oldCategory.equals(Constants.OLD_CATEGORY_LINK)||(getObject(Constants.OLD_EXTERNAL_ASSET_CLASS)!=null)) {
-            newCategory = Constants.ASSET_CATEGORY_EXTERNAL;
-            Object newExternalAssetObject = getObject(Constants.EXTERNAL_ASSET_CLASS, true);
-            Object oldExternalAssetObject = getObject(Constants.OLD_EXTERNAL_ASSET_CLASS);
-            if (oldExternalAssetObject!=null) {
-                updateObject(newExternalAssetObject, oldExternalAssetObject, Constants.EXTERNAL_ASSET_LINK, Constants.OLD_EXTERNAL_ASSET_LINK);
-                removeObject(oldExternalAssetObject);
-            }
         } else if (oldCategory.equals(Constants.OLD_CATEGORY_DOCUMENT)) {
             newCategory = Constants.ASSET_CATEGORY_DOCUMENT;
             getObject(Constants.ATTACHMENT_ASSET_CLASS, true);
@@ -1481,8 +1498,11 @@ public class Asset extends CurrikiDocument {
      * Convert an asset from the old format to the new format
      */
     public boolean convertWithoutSave() throws Exception {
-        if (isLatestVersion())
+        if (isLatestVersion()) {
+            if (LOG.isDebugEnabled())
+                    LOG.debug("CURRIKI CONVERTER: asset already converted " + getFullName());
             return false;
+        }
 
         try {
             // Convert Asset Class
@@ -1496,38 +1516,42 @@ public class Asset extends CurrikiDocument {
             if (LOG.isDebugEnabled())
              LOG.debug("CURRIKI CONVERTER: running convert on asset " + getFullName());
 
-            // set title
-            use(oldAssetObject);
-            String title = (String) getValue(Constants.OLD_ASSET_CLASS_TITLE);
-            if (title!=null)
-               setTitle(title);
-            setContent("");
+            if (oldAssetObject!=null) {
+                // set title
+                use(oldAssetObject);
+                String title = (String) getValue(Constants.OLD_ASSET_CLASS_TITLE);
+                if (title!=null)
+                    setTitle(title);
+                setContent("");
 
-            // transfer unchanged fields
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_DESCRIPTION);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FRAMEWORK_ITEMS);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_KEYWORDS);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_LANGUAGE);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_RIGHT);
+                // transfer unchanged fields
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_DESCRIPTION);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FRAMEWORK_ITEMS);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_KEYWORDS);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_LANGUAGE);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_RIGHT);
 
-            // transfer tracking field
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_TRACKING);
-            // transfer file check fields
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCSTATUS);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCREVIEWER);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCDATE);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCNOTES);
+                // transfer tracking field
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_TRACKING);
+                // transfer file check fields
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCSTATUS);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCREVIEWER);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCDATE);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_FCNOTES);
 
-            // transfer changed fields
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT, Constants.OLD_ASSET_CLASS_INSTRUCTIONAL_COMPONENT);
-            updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, Constants.OLD_ASSET_CLASS_EDUCATIONAL_LEVEL);
-
+                // transfer changed fields
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_INSTRUCTIONAL_COMPONENT, Constants.OLD_ASSET_CLASS_INSTRUCTIONAL_COMPONENT);
+                updateObject(newAssetObject, oldAssetObject, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, Constants.OLD_ASSET_CLASS_EDUCATIONAL_LEVEL);
+            }
+            
             // create new category field
             setNewCategoryAndClass();
 
-            // remove old asset object
-            removeObject(oldAssetObject);
+            if (oldAssetObject!=null) {
+                // remove old asset object
+                removeObject(oldAssetObject);
+            }
 
             // Convert License Class
             Object oldLicenseObject = getObject(Constants.OLD_ASSET_LICENCE_CLASS);
