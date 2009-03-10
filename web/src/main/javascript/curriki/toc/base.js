@@ -101,7 +101,7 @@ Toc.init = function(){
 			,listeners:{
 				'beforeclick':{
 					fn:function(node, e){
-						var bc = node.getPath().replace(/:\d+(\/|$)/g, '$1').replace(/\//g, ';');
+						var bc = node.getPath().replace(/:\d+(\/|$)/g, '$1').replace(/\//g, ';').replace(/;[^;]*$/, '');
 						var viewer = Curriki.module.toc.getQueryParam('viewer');
 						if (viewer !== "") {
 							viewer = '&viewer='+viewer;
