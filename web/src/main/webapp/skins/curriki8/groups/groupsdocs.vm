@@ -234,14 +234,15 @@ function getFileExtension() {
         #set( $icon = $xwiki.getSkinFile("mimetypes/WIKI.png") )
       #else
         #if( $docdoc.getAttachmentList().size() > 0 )
-           #mimeicon($docdoc.getAttachmentList().get(0).filename)
+           #mimeiconimg($docdoc.getAttachmentList().get(0).filename)
            #set( $icon=$macro_iconUrl)
         #else
-           #set( $icon = $xwiki.getSkinFile("mimetypes/unknown.png") )
+           #mimeiconimg('unknown')
+           #set( $icon=$macro_iconUrl)
         #end
       #end
     #set($viewURL = $docdoc.getURL())
-      <div class="document-icon"><a href="${viewURL}"><img src="$icon" /></a></div>
+      <div class="document-icon"><a href="${viewURL}">$icon</a></div>
   <a href="${viewURL}"><b>$doctitle</b></a>
    <div class="button-link">
 #if( $sm.isMember( $s.spaceName, $context.user ) )
