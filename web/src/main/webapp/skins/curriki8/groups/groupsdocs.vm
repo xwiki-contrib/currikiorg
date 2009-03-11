@@ -235,10 +235,10 @@ function getFileExtension() {
       #else
         #if( $docdoc.getAttachmentList().size() > 0 )
            #mimeiconimg($docdoc.getAttachmentList().get(0).filename)
-           #set( $icon=$macro_iconUrl)
+           #set( $icon=$macro_img)
         #else
            #mimeiconimg('unknown')
-           #set( $icon=$macro_iconUrl)
+           #set( $icon=$macro_img)
         #end
       #end
     #set($viewURL = $docdoc.getURL())
