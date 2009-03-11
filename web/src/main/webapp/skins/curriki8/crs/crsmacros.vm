@@ -88,7 +88,7 @@
                 </p>
             </li>
         </ul>
-        #else        
+        #else
         #set($reviewlist = $util.arrayList)
         #foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
         #if($obj)
@@ -100,7 +100,7 @@
         #foreach($review in $reviewlist)
         #crs_display_review($asset $review)
         #end
-        #elseif(("$!nomination"=="1") || ($status!="300" && $status!="500" && $status!="700"))
+        #elseif(("$!nomination"=="1") || ("$!status" == "") || ($status!="300" && $status!="500" && $status!="700"))
         <ul class="crs-rating no-review">
             <li>
                 <p>
