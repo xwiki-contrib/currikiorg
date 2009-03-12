@@ -231,7 +231,8 @@ function getFileExtension() {
     <div class="headlines">
       ##determining the icon to display
       #if( $docdoc.tags.contains("documentation-wiki") )
-        #set( $icon = $xwiki.getSkinFile("mimetypes/WIKI.png") )
+         #mimeiconimg('document.xwiki')
+         #set( $icon=$macro_img)
       #else
         #if( $docdoc.getAttachmentList().size() > 0 )
            #mimeiconimg($docdoc.getAttachmentList().get(0).filename)
