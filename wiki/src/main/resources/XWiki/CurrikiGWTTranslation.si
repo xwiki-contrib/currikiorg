@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1226786001000</creationDate>
-<date>1226864059000</date>
-<contentUpdateDate>1226864059000</contentUpdateDate>
-<version>2.1</version>
+<date>1236622591000</date>
+<contentUpdateDate>1236622591000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>null</comment>
+<comment>Based Upon 1.7</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,5 +55,752 @@
 <tags/>
 </property>
 </object>
-<content>##</content>
+<content>#&lt;pre&gt;
+
+## Params
+params.gwturl=/xwiki/bin/view/GWT/Editor?xpage=plain&amp;
+params.iconsurl=/xwiki/skins/curriki8/icons/
+params.template.defaultimageurl=templatedefault.gif
+## Translations
+main.curriki=කුරිකි
+main.login_first=එම විශේෂාංග ය භාවිතා කිරීමට ඔබ පුරලා ආ යුතුයි. කරුණාකර පුරන්න හෝ ලියාපදිංචි වීමට 'සාමාජිකයෙක් බවට පත්වීම' ක්ලික් කරන්න.
+main.missing_rights=ඔබට මෙම ක්‍රියාව සඳහා අත්‍යාවශ්‍ය හිමිකම් නැත.
+main.error=දොස
+menu.table_of_content=පටුන
+menu.add=ගොඩනැගුම
+header.editor_title=විෂය මාලා ගොඩනැගුම
+header.editor_subtitle=ඔබ දැන් සිටින්නේ කුරිකිහි විෂය මාලා ගොඩනැගුමේය, මෙහිදී නුඹට ඉගෙනුම් සම්පත්, විෂයමාලා සහ එකතුවන් නිර්මාණය, සැකසීම, සහ අන්තර් සබඳනය කළ හැක.
+header.print=මුද්‍රණය
+header.close=වසන්න
+loading.loading_msg=ප්‍රවේශනය වෙමින් පවතී, කරුණාකර මඳක් සිටින්න...
+error.could_not_get_wiki_document=විකි ලිපි ගොනුව ලබාගත නොහැක
+error.no_close_listener_set=ආසන්න පොරොත්තුවෙන් සිටින්නන් කුලකය නැත
+editor.app_full_name=විෂය මාලා ගොඩනැගුම
+editor.specify_a_space=කරුණාකර එකතුවක් සඳහන් කරන්න.
+editor.cbdirections=විෂය මාලා ගොඩනැගුමේ දිසාවන්
+editor.edit_tab=සකසන්න
+editor.metadata_tab=තොරතුරු
+editor.btt_cancel=අවලංගුකරන්න
+editor.btt_save=සුරකින්න
+editor.btt_edit=සකසන්න
+editor.btt_edit_tt=මෙම සම්පත විවෘත කරන්න හෝ එහි පටුන සැකසීමට එකතු කරන්න.
+editor.btt_dupl=පිටපත් කරන්න
+editor.btt_dupl_tt=මූලික පිටපත වෙනස් නොකර සැකසීමට මෙම සම්පතෙන් පිටපතක් කරන්න.
+editor.btt_remove=ඉවත් කරන්න
+editor.btt_remove_tt=මෙම එකතුව සඳහා පටුනෙන් මෙම සම්පත ගන්න.
+editor.btt_move=Move
+editor.btt_move_tt=මෙම සම්පත මෙම එකතුව තුළ වෙනත් ස්ථානයකට ගෙනයන්න.
+editor.btt_metadata=තොරතුරු
+editor.btt_metadata_tt=මෙම සම්පත සඳහා සිටුවීම් දක්වන්න සහ තොරතුරු අලුත් කරන්න.
+editor.btt_show=පෙන්වන්න
+editor.btt_hide=සඟවන්න
+editor.btt_open=විවෘත කරන්න
+editor.btt_next=ඊළඟ &gt;&gt;
+editor.btt_compEdit=තෝරන්න
+editor.btt_finish=ඊළඟ &gt;&gt;
+editor.btt_send=යවන්න
+editor.btt_back=ආපසු
+editor.btt_add=ගොඩනැගුම
+editor.btt_view=පෙන්වන්න
+editor.btt_find=සොයන්න
+editor.btt_go=ඊළඟ &gt;&gt;
+editor.btt_comment=සටහන්
+editor.btt_savecomment=සටහන සුරකින්න
+editor.do_you_want_to_save=ඔබට සුරකින්න අවශ්‍යද?
+editor.youareeditinganassetsaveyourworkfirst=ඔබ දැනට  සම්පතක් සකසමින් සිටී. කරුණාකර ඔබගේ කාර්ය සුරකින්න හෝ මෙම ක්‍රියාව කිරීමට පෙර සැකසීම අවලංගුකරන්න.
+editor.help.openinnewwindow=අලුත් කවුළුවකින් විවෘත කරන්න
+editor.help.close=වසන්න
+addfile.add_a_learning_resource=සම්පතක් එක්කරන්න
+addfile.select_file_or_link=මෙම එකතුවට හෝ ෆෝල්ඩරයට එක් කිරීමට ගොනුවක් හෝ සබැඳියක් තෝරන්න.
+addfile.this_is_a_file_on_my_computer=මගේ පරිගණකයෙන් ගොනුවක් ගන්න.
+addfile.this_is_a_web_link=වෙබ් සබැඳියක් ඇතුළු කරන්න.
+addfile.record_a_video=වීඩියෝවක් උඩුගත කරන්න හෝ පටිගත කරන්න.
+addfile.next_for_viditalk=ඔබගේ වීඩියෝවක් උඩුගත කිරීමට හෝ පටිගත  කිරීමට ඊළඟ ක්ලික් කරන්න.
+addfile.invalid_url=කරුණාකර URL එකක් සඳහන් කරන්න.
+addfile.please_make_a_selection=කරුණාකර තේරීමක් කරන්න.
+asset.title=සිරැසිය
+asset.subject=විෂය
+asset.level=මට්ටම
+asset.type=වර්ගය
+asset.this_asset_is_not_editable=මෙම සම්පත සැකසිය නොහැක.
+asset.asset_corrupted=මෙම සම්පත සදොස්ය; කරුණාකර ඔබගේ එකතුවෙන් ඉවත් කරන්න.
+asset.noderivatives=අවකල නැත
+asset.description=විස්තරය:
+asset.asset_locked_force_edit=දැනට මෙම වත්කම අගුළුලා ඇත. සැකසීම බලකරන්න?
+asset.externallink=මෙම සම්පත පරි භාහිර සබැඳියකි. ගොනුව භාගත කිරීමට හෝ අඩවියට මං සෙවීමට සබැඳිය භාවිතා කරන්න.
+asset.invalid_url=කරුණාකර වලංගු URL එකක් සඳහන් කරන්න.
+asset.assetprivate=මෙම සම්පත දැක්විය නොහැක.
+asset.page_break=පිටු කැඩුම
+asset.image.broken_image_link=රූපය සේවාදායකයේ ඉතිරි නැත.
+asset.image.small_size=කුඩා (300px, 72 dpi)
+asset.image.medium_size=මධ්‍යම (450px, 72 dpi)
+asset.image.large_size=විශාල (600px, 72 dpi)
+asset.image.caption_text=කැප්ෂනය:
+asset.image.alt_desc_text=විකල්ප පෙළ:
+asset.image.resize_image_text=රූප පෙළ ප්‍රතිප්‍රමාණය  කරන්න:
+asset.download=බාගන්න
+asset.archive.showtree=Files පෙන්වන්න
+asset.archive.hidetree=Files සඟවන්න
+asset.archive.launcharchive=ආරම්භය
+asset.archive.uploadfile=ගොනුවේ නව සංස්කරණය උඩුගත කරන්න
+asset.archive.launchfilehelp=සටහන: නව ආරම්භක ගොනුවක් තැබීමට, කරුණාකර පටුන විවෘත කරන්න සය ඔබගේ නව ආරම්භක ගොනුව ක්ලික් කරන්න. ඔබ සුරැකූ පසු  මෙම ගොනුව නව ආරම්භක ගොනුව බවට පත්වේ.
+find.find_resource_by=සම්පත් මූලාශ්‍රයේ සොයන්න
+find.first=පළමු
+find.prev=පෙර
+find.next=ඊළඟ &gt;&gt;
+find.last=අන්තිම
+find.page=පිටුව
+find.results=ප්‍රතිඵල
+find.learning_resource=සිරැසිය
+find.type=උපදේශමය සංරචකය
+find.published_date=පළකළ දිනය
+find.contributor=දායකයා
+find.action=ක්‍රියාව
+find.matchterms=ගලපන කොන්දේසි
+find.subject=විෂය
+find.level=මට්ටම
+find.preview=පෙර දසුන
+find.no_results=ඔබේ සෙවුමට ගැලපෙන ප්‍රතිඵල නැත. කරුණාකර නැවත උත්සාහ කරන්න.
+login.login=පුරන්න
+login.loginfailed=පිරීම අසාර්ථක විය
+login.username=පුරන නම
+login.password=මුරපදය
+template.describethelearningresource=සම්පත් හෝ එකතුව විස්තර කරන්න
+metadata.directionblocks_have_no_metadata="විෂයමාලා ගොඩනැගුමේ දිසාවන්" ගේ තොරතුරු අවශ්‍ය නැති තාක් කල් දිසා බාධක සඳහාවූ තොරතුරු පටිත්තෙහි ලක්ෂණ සක්‍රිය වන්නේ නැත . දිසා බාධක කුරිකි ගබඩාවේ සෙවිය නොහැක.
+metadata.add_resource_metadata_desc=&lt;ul&gt;&lt;li&gt;ඔබ මූලික තොරතුරු විස්තර කිරීමට සැපයිය යුතුයි.&lt;/li&gt;&lt;li&gt;ඔබ සැපයූ තොරතුරු සම්පත් හෝ එකතුව සෙවීමට පහසුවක් ඇතිකරයි.&lt;/li&gt;&lt;/ul&gt;
+metadata.complete_required_fields=&lt;strong&gt;(&lt;span class="අවශ්‍ය_ක්ෂේත්‍ර"&gt;!&lt;/span&gt;)පහත අවශ්‍ය ක්ෂේත්‍ර සම්පූර්ණ කරන්න .&lt;/strong&gt;
+metadata.review_and_update_fields=&lt;strong&gt;අවශ්‍ය ලෙසට විශ්ලේෂණය හා ක්ෂේත්‍ර 6 අලුත් කිරීම සිදුවිය.&lt;/strong&gt;
+metadata.required_information=අවශ්‍ය තොරතුරු
+metadata.more_info_false=වැඩිදුර තොරතුරු විවෘත කරන්න
+metadata.more_info_true=වැඩිදුර තොරතුරු වසා දමන්න
+metadata.more_info_text=කුරිකි ඉබේම ඔබගේ වරපත් වර්ගය හා ප්‍රවේශ වරප්‍රසාද යනාදී වූ සම්පත හෝ එකතුව පිළිබඳ අතිරේක තොරතුරු සපයයි. ඊළඟට ක්ලික් කිරීමෙන්,ඔබ කුරිකි-ගැළපෙන වරපත සම්පතට හෝ එකතුවට යෙදීමට එකඟවේ.&lt;br /&gt;&lt;br /&gt;ඔබගේ සම්පත හෝ එකතුව සඳහා ඔබ වරපත හෝ  වෙනයම් අනෙකුත් තොරතුරු අනුකූලනය කිරීමට අවශ්‍ය නම්, වැඩිදුර තොරතුරු ක්ලික් කරන්න.
+metadata.error_displaying_subject_field=විෂය ක්ෂේත්‍රය දර්ශනය කිරීමේ දොසක් ඇත.
+metadata.required_fields=අවශ්‍ය වන තොරතුරු
+metadata.required_information=අවශ්‍ය වන තොරතුරු
+metadata.general_metadata=සාමාන්‍ය පාර-දත්ත
+metadata.general_information=සාමාන්‍ය තොරතුරු
+metadata.educational_information=අධ්‍යාපනික තොරතුරු
+metadata.title_title=සිරැසිය
+metadata.title_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt; එය මුල් පතෙන් වෙනස් වන්නේ කෙසේදැයි දැක්වීමට මෙම සම්පත,  සිරැසිය අලුත් කරන්න.&lt;/span&gt;
+metadata.title_content=ඔබගේ සිරැසිය මෙතැන ඇතුලත් කරන්න.
+metadata.title_tooltip=සෙවුම් ලැයිස්තු හා රූපවල කැප්ෂණය ලෙසින් සංදර්ශනය කිරීමට මෙම අංගය සඳහා නම් කරන්න.
+metadata.copy_info_text=ඔබ මෙම සම්පත පිටපත් කළේනම් , එය මුල් පතෙන් වෙනස් වන්නේ කෙසේදැයි දැක්වීමට සිරැසිය හා විස්තරාත්මක ක්ෂේත්‍ර අලුත් කරන්න.
+metadata.description_title=විස්තරය
+metadata.description_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt;ඔබ මෙම සම්පත පිටපත් කළේනම්, එය මුල් පතෙන් වෙනස් වන්නේ කෙසේදැයි දැක්වීමට විස්තරය අලුත් කරන්න.&lt;/span&gt;
+metadata.description_content=
+metadata.description_tooltip=අන්‍යයන් මෙම විස්තරය කියවන විට ඔවුහු ඔබගේ සම්පත කුමක්දැයි දැනගත යුතුයි. තොරතුරු වැඩි තරමට හොඳයි!
+metadata.keywords_title=මූල පද
+metadata.keywords_txt=
+metadata.keywords_content=
+metadata.keywords_tooltip=කුරිකි හෝ අන්තර් ජාලය තුළ සොයන විට අන්‍යයන් ඔබගේ සම්පත සොයා ගැනීමට වචන උපකාරී වේ
+metadata.language_title=භාෂාව
+metadata.language_txt=
+metadata.language_content=
+metadata.language_tooltip=මෙම සම්පත සඳහා භාෂාව
+metadata.review_status=ඉක්මනින්ම පැමිණේ
+metadata.review_status_title=කුරිකි විශ්ලේෂණ තත්වය
+metadata.review_status_txt=
+metadata.review_status_content=
+metadata.review_status_tooltip=කුරිකි'හි කැපකළ අධ්‍යාපනඥයින්ගේ කණ්ඩායමක් නම් කළ විෂය මාලා විශ්ලේෂණය කරයි.
+metadata.fw_items_title=විෂය
+metadata.fw_items_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt;විෂයයන් ප්‍රසාරණය කරන්න හෝ අවුරන්න ඊතල යොදන්න.&lt;/span&gt;
+metadata.fw_items_content=
+metadata.fw_items_tooltip=ඔබගේ සම්පතට යොදන්න මාතෘකා(ව) 
+metadata.educational_level_title=අධ්‍යාපනික මට්ටම
+metadata.educational_level_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt;මට්ටම් එකක් හෝ කීපයක් තෝරන්න.&lt;/span&gt;
+metadata.educational_level_content=
+metadata.educational_level_tooltip=ඔබගේ  සම්පතට වඩා සුදුසු වන මට්ටම
+metadata.educational_level2_title=අධ්‍යාපනික මට්ටම
+metadata.educational_level2_txt=මට්ටම් එකක් හෝ කීපයක් තෝරන්න..
+metadata.educational_level2_content=
+metadata.educational_level2_tooltip=ඔබගේ  සම්පතට වඩා සුදුසු වන මට්ටම
+metadata.instructional_component2_title=උපදේශමය අංග වර්ගය
+metadata.instructional_component2_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt;හොඳම විකල්පය සෙවීමට රෝල් කරන්න. ඔබට බහු විකල්ප තේරිය හැක&lt;br/&gt;by තෝරා ගැනීමට Ctrl (PC) තද කිරීමෙන් හෝ Apple (Mac) යතුර ක්ලික් කරන්න. &lt;br&gt;ක්ලික් කරන්න &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ඉගෙනුම් සම්පත් ගැන" target="_blank"&gt;මෙතන&lt;/a&gt; අර්ථ දැක්වීම සඳහා.
+metadata.instructional_component2_content=
+metadata.instructional_component2_tooltip=ඔබගේ සම්පතට හොඳින්ම ගැලපෙන අන්තර්ගතයේ වර්ගය හෝ හැඩතලය
+metadata.right_section=හිමිකම වරපත හා හිමිකාරත්වය තොරතුරු
+metadata.right_holder_title=හිමිකම දරන්නා
+metadata.right_holder_txt=
+metadata.right_holder_content=
+metadata.right_holder_tooltip=මෙම වත්කම සඳහා කතු හිමිකම දරන්නා නන්ගේ නම්
+metadata.rights_title=ප්‍රවේශ වරප්‍රසාද
+metadata.rights_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt; තෝරන්න &lt;strong&gt;පෞද්ගලික&lt;/strong&gt;ඔබගේ ද්‍රව්‍ය "කෙටුම්පත"ක් ලෙස නිකුත් කිරීම සඳහා සූදානම් වන තුරු තබා ගැනීමට&lt;br /&gt;සාමාන්‍ය භාවිතය සඳහා ගබඩාව තුලට.&lt;/span&gt;
+metadata.rights_tooltip=ඕනෑම සම්පතක් දර්ශනය කිරීමට හෝ සැකසීමට හිමිකම ඇත්තේ කාටදැයි මෙම සිටුවීම් තීරණය කරයි.
+metadata.rights_content=
+metadata.rightsHolder_tooltip=මෙම සම්පත -- අයිතිවන මෙම බුද්ධිමය දේපල මෙම පුද්ගලයා හෝ සංවිධානය හිමිකම් දරයි.
+metadata.license_type_title=වරපත් ඔප්පුව
+metadata.license_type_txt=කරුණාකර ඔබ කියවා හා තේරුම් කරගෙන ඇතිබව සහතික වන්න&lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;භාවිතය සඳහා කොන්දේසි&lt;/a&gt; හා මෙම අන්තර්ගතයට දායකවීමට ඔබට හිමිකම් ඇත.&lt;br /&gt;&lt;br /&gt;කුරිකි-ගැළපෙන වරපත් ජන ප්‍රජාවට උපරිම නම්‍යතාවයක් සපයයි, එඔනිසා සාමාජිකයන්ට අනෙකුත් අයගේ දායකත්වයන් භාවිතයට හා සැකසීමට පුලුවන .  කුරිකි වරපත පුලුල් ලෙස භාවිතාවේ. නිර්මාණශීලී පොදු වරපත් ලක්ෂණ&lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open('http://creativecommons.org/licenses/by/3.0/', 'CC30'); return false;"&gt;3.0&lt;/a&gt;. තවත්  ඔබ වරපතක් නියම කරන්න බලාපොරොත්තු  වනවා නම්, පහත  පතන ලැයිස්තුවෙන් කරුණාකර තෝරන්න.  කරුණාකර නිර්මාණශීලී පොදු වරපත් ලක්ෂණ ඉගෙනගන්නට&lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open('http://creativecommons.org/about/licenses/meet-the-licenses', 'CCmeet'); return false;"&gt;මෙතන ක්ලික් කරන්න&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;වරපත් ගිවිසුම තබන්න:
+metadata.license_type_content=
+metadata.licenseType2_tooltip=මෙම අන්තර්ගතය ආරක්ෂා කිරීමේ වරපත
+metadata.field_missing=පහත ක්ෂේත්‍ර පෙළ අනිවාර්යය.
+metadata.fields_missing=මෙම පියවරේ සියලුම පේළි අවශ්‍යයි. කරුණාකර පේළි සම්පූර්ණ කරන්න
+metadata.when_you_add_a_resource=ඔබ සම්පතක් එක්කළ වීට හෝ සම්පතක් නිර්මාණය කළවිට හෝ එකතුව...
+metadata.hidden_from_search=Hidden from සෙවුම
+metadata.hidden_from_search_title=from සෙවුම සඟවන්න
+metadata.hidden_from_search_txt=&lt;span class="ක්ෂේත්‍ර_උපදෙස්"&gt;යම් අන්තර්ගතයක් ප්‍රතිඵල වල දර්ශනයට සුදුසු වූයේ නම් සෙවුම, එය ලබා දෙන්නේ නැති නිසා&lt;br /&gt;තනි අංගයක් ලෙසින්  ප්‍රජාවට වටිනාකමක්.&lt;br /&gt;&lt;br /&gt;මෙය එවැනි අංගයක් නම්(වගුවක් වැනි) ප්‍රකරණය තුලදීම තේරුමක් පමණක් ගෙන දෙන&lt;br /&gt;විශාල සම්පත (පාඩම් සැලැස්මක් වැනි), කරුණාකර මෙම අංගය පෙන්නුම් නොකරන නිසා පහත ක්ලික් කරන්න &lt;br /&gt;සෙවුම් ප්‍රතිඵල.&lt;/span&gt;
+metadata.hidden_from_search_tooltip=සෙවුම් සැඟවීමේ මෙම අංග.
+metadata.hidden_from_search_after=මෙම සෙවුම් ප්‍රතිඵලවල අංග පෙන්වන්න එපා.
+metadata.save_button_text=ක්ලික් කළවිට සුරකින්න, "ප්‍රවේශනය වේ" පණිවිඩය ඔබ දකිනවිට පද්ධතිය මඟින් ඕනෑම වෙනස්කම්  සකසයි.&lt;br /&gt;&lt;br /&gt;පටිත්තක් ක්ලික් කරන්න සකසන්න මෙම සම්පත සඳහා තවත් මාධ්‍යයක් චලනය කිරීමට, හෝ ක්ලික් කරන්න තිරයේ ඉහළදීම විෂය මාලා ගොඩනැගුම තුල මෙම සැසිය අවසන් කිරීමට වසා දමන්න.
+template.template=අච්චු
+template.error_while_getting_templates=අච්චු ලබා ගැනීමේදී දෝසයක්
+template.create_a_learning_resource=ඉගෙනුම් සම්පතක් නිර්මාණය කරන්න.
+template.select_a_template_style=අච්චු විලාසිතාවක්  තෝරන්න.
+template.select_a_template_style_subtitle=
+template.propose_duplication_title=වත්කම් අනුපිටපත් අච්චුව
+template.propose_duplication_text_editable=අචචුවකින් මෙම ප්‍රාරම්භක වත්කම අනු පිටපත් කිරීමට හා තවමත් අනු පිටපත් නොකළ ඔබගේ එකතුව. ඊළඟට ඔබගේ එකතුවෙහි අනු පිටපත්  ලබාගැනීමට ක්ලික් කරන්න හෝ අච්චු වත්කම තුලම සැකසීමට.
+template.propose_duplication_text_noneditable=මෙම ප්‍රාරම්භක වත්කම අනු පිටපත් කිරීමට හා තවමත් අනු පිටපත් නොකළ ඔබගේ එකතුව. ඊළඟට ඔබගේ එකතුවෙහි අනු පිටපත්  ලබාගැනීමට ක්ලික් කරන්න හෝ අච්චු වත්කම තුලම සැකසීම අවලංගුකරන්න.
+template.selectcollection=ඔබ සම්පත නිර්මාණය කිරීමට එකතුව තෝරන්න.
+template.describelearningresource=ඉගෙනුම්  සම්පත විස්තර කරන්න
+browseasset.insert_here=මෙතැන ඇතුලත් කරන්න
+moveasset.move=චලනය 
+moveasset.select_asset_to_move=චලනය කළයුතු ඔබගේ සම්පත තෝරන්න.
+choosecollection.add_a_learning_resource=සම්පතක් එකතු කරන්න
+choosecollection.create_a_learning_resource=ඉගෙනුම් සම්පතක් නිර්මාණය කරන්න 
+mycollections.title=මගේ එකතුව
+mycollections.no_collections_found=කිසිම එකතුව සොයාගත නොහැක.
+dialog.GWT.ThankYouAddCurrikiDialog.caption=ස්තූතියි
+dialog.GWT.ThankYouAddCurrikiDialog.continue=ඉදිරියට යෑමට &gt;&gt;
+dialog.GWT.ThankYouAddCollectionDialog.caption=ස්තූතියි
+dialog.GWT.ThankYouAddCollectionDialog.continue=ඉදිරියට යෑමට &gt;&gt;
+dialog.GWT.ThankYouCreateCollectionDialog.caption=එකතුවක නිර්මාණය කළාට ස්තූතියි
+dialog.GWT.ThankYouCreateCollectionDialog.continue=ඔබගේ එකතුව ඇතුලු කරන්න &gt;&gt;
+## comments for history
+curriki.comment.initmetadatafornewcollection=නව එකතුව සඳහා තොරතුරු අරඹමින්...
+curriki.comment.initmetadatafornewasset=නව සම්පත සඳහා තොරතුරු අරඹමින් සම්පත...
+curriki.comment.createrootcollection=මූල එකතුව නිර්මාණය කරමින් ...
+curriki.comment.startcreatingcompositeasset=සම්පත නිර්මාණය කරමින්...
+curriki.comment.adddirectionblock=දිසා ඒකකයක් එක් කිරීම...
+curriki.comment.applyrights=ව්‍යවහාරික හිමිකම්
+curriki.comment.protectspace=ආරක්ෂිත අවකාශය
+curriki.comment.createnewsourceasset=අලුත් සම්පතක් නිර්මාණය විය.
+curriki.comment.insertsubassetincompositeasset=අනු වත්කම {0} ({1})  ප්‍රවර්ගයේ{2} හි එකතුව ස්ථානයේදී {3} ඇතුලත් කරන්න.
+curriki.comment.removesubassetincompositeasset=අනු වත්කම {0} ({1}) සිට එකතුව ස්ථානයේදී {2} ඉවත් කරන්න
+curriki.comment.addingsubassettocompositeasset=ඇතුලත් කළ අනු වත්කම {0} ({1}) ප්‍රවර්ගයේ {2} හි එකතුව ස්ථානයේදී {3}
+curriki.comment.finishcreatingsubasset=අනු වත්කම ප්‍රවර්ගයේ {0} නිර්මාණය කිරීම අවසාන කළ
+curriki.comment.createlinksourceasset=පෙළ ප්‍රභව වත්කම නිර්මාණය කරන්න
+curriki.comment.createlinksourceasset=සබැඳි ප්‍රභව වත්කම නිර්මාණය කරන්න
+curriki.comment.updatemetadata=තොරතුරු අලුත් කරන්න
+addasset.title=විෂය මාලා ගොඩනැගුමේ එක් කරන්න
+addasset.set_required_metadata=අවශ්‍ය තොරතුරු තැබීම
+addasset.desc_link=නියම වෙබ් සම්පතක් ඇතුලු කරන්න.
+addasset.desc_new_file= ඔබගේ පරිගණකයෙන් රූප, ලිපිගොනු, හා  තවත් දේ එක් කරන්න.
+addasset.desc_file_or_link=ඔබගේ පරිගණකයෙන් ගොනුවක් උඩුගත කරන්න, වෙබ් සබැඳියක් එක් කරන්න, හෝ වීඩියෝවක් ඇතුලත් කරන්න/ග්‍රහණය කරන්න.
+addasset.desc_separator=
+addasset.direction_content_block=දිසා අංගය
+addasset.desc_direction_content_block=විෂය මාලා ගොඩ නැගුමේ පමණක් අනෙකුත් ලියන්නන්ට/කතුවරයින්ට පෙනෙන සේ අංගයක් එක් කරන්න. 
+addasset.desc_blank_content_block="හිස් අන්තර්ගත ඒකකය" තුල ද්‍රව්‍යයක් සකසන්න සරල විකි සම්පත නිර්මාණය කරන්න.
+addasset.desc_html_content_block=සම්පතක් නිර්මාණය කිරීමට මෙම "හිස් HTML ඒකකය" තුල කතෘ හෝ HTML අන්තර්ගතය අලවන්න .
+addasset.desc_folder=ෆෝල්ඩරයක් නිර්මාණය කිරීම සංවිධානයට හා සම්පත් අනු බෙදීම් කරන්න.
+addasset.desc_existing_resource=කුරිකි’කුරිකි'හි ගබඩාවේ දැනටමත් පවතින සම්පත සොයන්න හා මෙතන ඇතුලත් කරන්න.
+addasset.desc_template=
+addasset.enter_link=කරුණාකර URL ඇතුලත් කරන්න .
+addasset.select_file=the file to උඩුගත කරන්න තෝරන්න.
+addasset.what_would_you_like_to_add=ඔබ එක් කිරීමට කැමති කුමක්ද?
+addasset.link=සබැඳිය
+addasset.new_file=අලුත් ගොනුව
+addasset.file_or_link=ගොනුව හෝ වෙබ් සම්පත
+addasset.separator=වෙන්කරනය
+addasset.blank_content_block=මුල සිට සම්පත
+addasset.html_content_block=HTML සම්පත
+addasset.template=
+addasset.page_break=--------පිටු කැඩුම----------
+addasset.folder=Folder
+addasset.existing_resource=කුරිකි ගේන් සම්පත
+addasset.existing_element=ඔබ එකතු කිරීමට කැමති කුමකටද? &lt;br&gt;ඔබගේ කර්සරය එකින් එක මතට ගෙන යන්න&lt;br&gt;තව දුරටත් ඉගෙන ගැනීමට විකල්පය, පසුව &lt;br&gt;ඔබගේ තේරීම තෝරන්න ක්ලික් කරන්න.
+addasset.new_element=
+addasset.formatting_element=
+addexistingasset.selectcollection=සම්පත එකතු කරන්නට ඔබ එකතුවක් තේරිය යුතුයි.
+addexistingasset.couldnotaddtocollection={0} එකතුවට එකතු කළ නොහැක: {1}
+addexistingasset.failedtoaddtocollection={0} එකතුවට එකතු කිරීම අසාර්ථක වේ.
+addfile.selectcollection=ගොනුව හෝ සබැඳිය දැමීමට ඔබ එකතුවක් තේරිය යුතුයි.
+addfile.describelearningresource=ඉගෙනුම් සම්පත විස්තර කරන්න
+addresource.add_a_learning_resource=ගොනුවක් හෝ සම්පතක් එක් කරන්න.
+addresource.what_type_of_resource=කුමන විදියේ සම්පතක් ඔබ එක් කරනවාද?
+addresource.from_repository=කුරිකි'හි ගබඩාවෙන් සම්පතක්
+addresource.from_file_or_link=ඔබගේ පරිගණකයෙන් ගොනුවක් හෝ වෙබ්න් සබැඳියක්
+addresource.from_template=කුරිකි'හි අච්චුව භාවිතයෙන් නව සම්පතක් නිර්මාණය වේ
+addresource.please_make_a_selection=කරුණාකර තෝරන්න
+createcollection.describelearningresource=ඉගෙනුම් සම්පත  විස්තර කරන්න.
+createcollection.couldnotaddcolection=එකතුවට එකතු කළ නොහැක.
+createcollection.failedtoaddtocollection=එකතුව එක්කිරීම අසාර්ථක විය.
+duplicateasset.selectcollection=ඔබ සම්පත අනුපිටපත් කිරීමට එකතුවක් තේරිය යුතුයි.
+duplicateasset.describelearningresource=ඉගෙනුම් සම්පත විස්තර කරන්න
+duplicateasset.title=ඔබගේ අනුපිටපත් සම්පත ගැන
+duplicateasset.confirmredirect=වෙනත් එකතුවක ඔබ මෙම සම්පත පිටපත්කර හා  ගබඩා කරන්න.දැන් ඔබට පිටපත් සංස්කරණය සැකසිය හැක.&lt;br /&gt;&lt;ul&gt;&lt;li&gt;සැකසීම සඳහා අනුපිටපත් සංස්කරණ විවෘත කරන්නට "ඊළඟ" ක්ලික් කරන්න.&lt;/li&gt;&lt;li&gt;වත්මන් එකතුවට ආපසු යාමට "අවලංගුකරන්න" ක්ලික් කරන්න .&lt;/li&gt;&lt;/ul&gt;&lt;br/&gt;
+editor.btt_addcomment=සටහන එක් කරන්න
+editor.preview_tab=පෙර දසුන
+editor.history_tab=ඉතිහාසය
+editor.comment_tab=සටහන්
+comment.loadingcomments=Loading සටහන්
+comment.errorgettingcomments=සටහන් ලබාගැනීමේදී ඇති වරදකි
+history.loadinghistory=ඉතිහාසය ප්‍රවේශනය වේ
+comment.errorgettinghistory=ඉතිහාසය ලබාගැනීමේදී ඇති වරදකි
+preview.loadingpreview=පෙර දසුන ප්‍රවේශනය වේ.
+preview.errorgettingpreview=පෙර දසුන ගැනීමේ දෝසය
+viditalk.sitecode=8204167813
+viditalk.download_msg=වීඩියෝ බාගන්න
+viditalk.download_original_msg=වීඩියෝ බාගන්න (මුල් විදියටම)
+comment.commentcannotbeempty=කරුණාකර සටහනක් එක්කරන්න. හිස් සටහන් වලට අවසර නැත.
+viditalk.loading_player=වීඩියෝ ධාවකය ප්‍රවේශනය වේ. කරුණාකර පොඩි මොහොතක් දෙන්න.
+edit.propose_duplication_title=සකසන්න හෝ පිටපත් කරන්න?
+edit.propose_duplication_text=මෙම සම්පත වෙනස් කරන්න අවශ්‍යයැයි කියා ඔබට විශ්වාසද{0}?&lt;br /&gt;&lt;br /&gt;ඔබගේම විශේෂිත අවශ්‍යතාවය සඳහා මෙම සම්පත සැකසීමට, අලුත් සංස්කරණයක් නිර්මාණය කරන්නට පහතින්වු පිටපත් කරන්න ක්ලික් කරන්න  ඔබට අයිති දේ සුරකින්න. (ඊළඟට ඔබට ඔබගේ මගේ කුරිකි තුල වෙනස් සිරැසියක් සහිතව සුරකින්නට ඉඟිකරයි.)&lt;br /&gt;&lt;br /&gt;මුලු කුරිකි ප්‍රජාව මඟින් භාවිතා කිරීම සඳහා ඔබට මෙම සම්පත සකසන්න අවශ්‍යද ,ඉදිරියටත් සැකසීමට ක්ලික් කරන්න .ඔබගේ වෙනස්කිරීම්   මඟින් ලිපි ගොනුවේ රෙකෝඩ වෙනස් කර හා විෂයමාලා ගොඩ නැගුමේ ඉතිහාස පටිත්ත යට පෙර අනුවාදනය ඉතිරිව නැත .
+edit.propose_continue=සැකසීමට දිගටම යන්න
+edit.propose_copy=පිටපත් කරන්න
+edit.propose_cancel=අවලංගුකරන්න
+duplicate.copy_of=න් පිටපත් කරන්න
+
+mimetype.flashdisplay.play=මෙම කවුලුවෙන් ධාවනය වේ
+mimetype.flashdisplay.pause=විරාමය
+mimetype.flashdisplay.newwindow=කවුලුවකින් ක්‍රියාත්මක වේ
+mimetype.flashdisplay.flashcontenttext=මෙය ෆ්ලෑෂ් අන්තර්ගත සඳහා තැන් දරණුවකි.
+## history in CB
+history.errorgettinghistory=ඉතිහාස තොරතුරු සේවාදායකයෙන් ලබාගැනීමේදී ඇති වරදකි
+history.to=දක්වා
+history.from=සිට
+history.version=සංස්කරණය
+history.author=කතුවරයා
+history.date=දිනය
+history.comment=සටහන
+history.rollback=ප්‍රතිලෝම කරන්න
+history.rollback.cancel=ප්‍රතිලෝම කිරීම අවලංගුකරන්න
+history.rollback.confirm=ප්‍රතිලෝම කිරීම තහවුරු කරන්න
+history.rollback.exception=කුරිකි වත්කම් ප්‍රතිලෝම කරන විට ව්‍යතිරේක
+history.rollback.confirm.message=මෙම වත්කම් සංස්කරණය {0} ප්‍රතිලෝම කරන්න අවශ්‍යද
+history.compare=වෙනස්කම් සංසන්දනය කරන්න
+## compare page
+changes.changesofpage=වත්කමේ වෙනස්කම්
+changes.in=තුල
+changes.space=ඉඩකඩ
+changes.from=සිට
+changes.to=දක්වා
+changes.comment=සටහන වෙනස්කරන්න
+changes.nocomment=මෙම සංස්කරණය සඳහා සටහනක් නැත
+changes.version=සංස්කරණය
+changes.editedby=සැකසුවේ
+changes.on=අරින්න
+changes.metadatachanges=පාර-දත්තවල වෙනස්කම්
+changes.property=දේපල
+changes.nometadatachanges=පාර-දත්තවල වෙනස්කම් නැත
+changes.contentchanges=අන්තර්ගතයේ වෙනස්කම්
+changes.nocontentchanges=අන්තර්ගතයේ වෙනස්කම් නැත
+changes.attachmentchanges=ඈඳුමේ වෙනස්කම්
+changes.noattachmentchanges=ඈඳුමේ වෙනස්කම් නැත
+changes.filename=ගොනු නාමය
+changes.action=ක්‍රියාව
+changes.commentchanges=සටහන වෙනස්කම්
+changes.nocommentchanges=සටහන වෙනස්කම් නැත
+changes.metadata.parent=මූලකාරණය
+changes.metadata.web=අවකාශය
+changes.metadata.name=පිටුවේ නම
+changes.metadata.author=කතෘ
+changes.metadata.language=භාෂාව
+changes.metadata.defaultLanguage=පෙරනිමි භාෂාව
+changes.asset.title=සිරැසිය
+changes.asset.description=විස්තරය
+changes.asset.keywords=මූලපද
+changes.asset.aggregation_level=සමූහන මට්ටම
+changes.asset.difficulty=අපහසුතාවය
+changes.asset.status=තත්වය
+changes.asset.fw_items=විෂයන්
+changes.asset.instructional_component=උපදේශමය අංගය
+changes.asset.category=ප්‍රවර්ගය
+changes.asset.rights=හිමිකම්
+changes.asset.educational_level=අධ්‍යාපනික මට්ටම
+changes.asset.educational_level2=අධ්‍යාපනික මට්ටම
+changes.asset.language=භාෂාව
+changes.asset.instructional_component2=උපදේශමය අංගය
+changes.asset.caption_desc=සිරැසි විස්තරය
+changes.asset.alt_desc=විකල්ප විස්තරය
+changes.asset.tracking=ප්‍රභව වත්කම
+changes.attachmentadded=ඈඳුම එක් කර ඇත 
+changes.attachmentdeleted=ඈඳුම මකා ඇත
+changes.attachmentupdatedfromversion=ඈඳූම  සංස්කරණයෙන් අලුත් කර ඇත
+changes.toversion=සංස්කරණයට
+changes.commentchange=සටහන වෙනස්කම
+changes.comment.property=දේපල
+changes.comment.previousvalue=පෙර අගය
+changes.comment.newvalue=අලුත් අගය
+changes.comment.author=කතෘ
+changes.comment.date=දිනය
+changes.comment.comment=සටහන
+## headers
+print.title=මුද්‍රණ පෙර දසුන
+print.subtitle=ඔබ දැන් දර්ශනය කරන්නේ $කුරිකිසිරැසිය
+print.linktext=දර්ශනය කිරීමට යන්න
+viewrev.title=පුනරීක්ෂණය දර්ශනය කරන්න
+viewrev.subtitle=ඔබ දැන් දර්ශනය කරන්නේ සංස්කරණය $request.rev of $කුරිකිසිරැසිය
+viewrev.linktext=දර්ශනය කිරීමට යන්න
+compare.title=වෙනස්කම් සංසන්දනය කරන්න
+compare.subtitle=ඔබ දැන් දර්ශනය කරන්නේ සංස්කරණ අතර වෙනස්කම්ය $request.rev1 හා $request.rev2 න් $කුරිකිසිරැසිය
+compare.linktext=දසුනට යන්න
+## editor
+editor.print=මුද්‍රණ පෙර දසුන
+editor.view=වෙබ් දසුන
+editor.help=උදව්ව
+curriki.editor.confirmremovetitle=සම්පත ඉවත් කරන්න
+curriki.editor.confirmremovetext=මෙම සම්පත ඉවත් කිරීමට මෙම ස්ථානයේ සිට ඊළඟ ක්ලික් කරන්න . (මෙම සම්පත නිර්මාණය කළේ නම් හෝ  එකතු කළේ නම් , ඔබට තවමත් මගේ දායකත්වයන් සොයා ගත හැක, හා ඔබගේ කණ්ඩායමේ දායකත්වයන් කණ්ඩායමේ කොටසක් ලෙස එක් කළේනම්ද.)
+
+## CRS use in GWT and in Wiki
+curriki.crs.currikireview=කුරිකි සමාලෝචනය
+curriki.crs.review=සමාලෝචනය
+curriki.crs.review.tooltip=කුරිකි තුල ඇති සම්පත් තක්සේරු කළ හැකි කුරිකි සමාලෝචනයේ පද්ධතිය කොටසක් ලෙස.
+curriki.crs.unrated=තක්සේරු නොකළ/තක්සේරු කළ නොහැකි
+curriki.crs.rating0=තක්සේරු නොකළ/තක්සේරු කළ නොහැකි
+curriki.crs.rating1=මූලික
+curriki.crs.rating2=හොඳයි
+curriki.crs.rating3=ආදර්ශවත්
+curriki.crs.ratingP=සහකරු
+curriki.crs.asof=ලෙසින්
+curriki.crs.reviewpending=කළයුතු සමාලෝචනය
+curriki.crs.reviewnominate=නාම යෝජනා කිරීම
+curriki.crs.reviewreview=සමාලෝචනය
+curriki.crs.settopartner=මෙය සහකරු සම්පතක් වේ.
+curriki.crs.unsettopartner=මෙය සහකරු සම්පතක් නොවේ.
+curriki.crs.confirmsettopartner=මෙම සහකරුවාට සැකසීමට ඔබට අවශ්‍ය නම්, ඊළඟ ක්ලික් කරන්න.
+curriki.crs.confirmunsettopartner=සහකරු සැකසීම් ඉවත් කිරීමට අවශ්‍ය නම්, ඊළඟ ක්ලික් කරන්න.
+curriki.crs.reviewlist.currikireview=කුරිකි සමාලෝචනය
+curriki.crs.reviewlist.nocurrikireviews=මෙම සම්පත සමාලෝචනය කර නැත.
+curriki.crs.generatedcomment=&lt;span class="crs_reviewscontenttext"&gt;මාතෘකා පාඨය යොදාගෙන මෙම සම්පත් සමාලෝචනය කර ඇත {0} හා මුලුමනින්ම තක්සේරුව ලබා ඇත &lt;/span&gt;{1}&lt;br /&gt;&lt;br /&gt;එම අංගවල තක්සේරුව වන්නේ:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;තාක්ෂණික සම්පූර්ණත්වය: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;අන්තර්ගතයේ නිරවද්‍යතාවය: {3}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;වඩා සුදුසු  ශික්ෂණ ශාස්ත්‍රය: {4}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{5}
+curriki.crs.generatedcommentunrated=මාතෘකා පාඨය යොදාගෙන මෙම සම්පත් සමාලෝචනය කර ඇත {0}සඳහා හා තක්සේරුවක් ලබාගත නොහැක.&lt;br /&gt;&lt;br /&gt;එම අංගවල තක්සේරුව වන්නේ:&lt;br /&gt;&lt;br /&gt;&lt;table width="100%" border="0"&gt;&lt;tr&gt;&lt;td&gt;&lt;li&gt;තාක්ෂණික සම්පූර්ණත්වය: {1}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;අන්තර්ගතයේ නිරවද්‍යතාවය: {2}&lt;/li&gt;&lt;/td&gt;&lt;td&gt;&lt;li&gt;වඩා සුදුසු  ශික්ෂණ ශාස්ත්‍රය: {3}&lt;/li&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;{4}
+curriki.crs.nominate=නාම යෝජනය
+curriki.crs.nominate.nominatefollowingresourceforreview=සමාලෝචනය සඳහා පහත සම්පත් නාම යෝජනය :
+curriki.crs.nominate.comments=සටහන්
+curriki.crs.nominate.cannotnominatewithoutcomment=ඔබගේ නාම යෝජනය සඳහා  කරුණාකර සටහනක් එක් කරන්න.
+curriki.crs.nominate.commentstext=ඔබගේ කුරිකි සමාලෝචනයට ඔබ යම් විටෙක අතිරේක සටහනක් ලියයි.පද්ධති සමාලෝචකය. උදාහරණයක් වශයෙන්, අප යම්කිසි අවධානයක් දැක්විය යුත්තේ කුමටද? අවසාන සමාලෝචනය සිට සම්පත් වෙනස්වී ඇත්තේ කෙසේද?
+curriki.crs.nominate.commentsfootertext=ඔබ බාර දෙන්න ක්ලික් කරන තුරු ඔබගේ නාම යෝජනා කිරීම සම්පූර්ණ නොවේ.
+curriki.crs.nominate.submit=බාර දෙන්න
+curriki.crs.nominate.cancel=අවලංගුකරන්න
+params.crs.nominateurl=/xwiki/bin/view/CRS/Nominate
+params.crs.reviewurl=/xwiki/bin/view/CRS/Review
+
+#Search 
+search.top_titlebar=තොරතුරු ගබඩාවේ සම්පත් සොයන්න 
+search.cancel_button=අවලංගුකරන්න
+search.results_title=ප්‍රතිඵල
+search.selector.terms=සෙවුම කොන්දේසි: 
+search.selector.terms_tooltip=සෙවුම කොන්දේසි
+search.search_button=සොයන්න  
+search.search_dialog_title=තොරතුරු ගබඩාවේ සම්පත් සොයන්න
+
+search.selector.subject=විෂය:
+search.selector.subject.any=කුමක් හෝ
+
+search.selector.level=මට්ටම:
+search.selector.level.any=කුමක් හෝ
+search.selector.level.prek=පෙර පාසල් / වයස් 0-4
+search.selector.level.gr-k-2=කණ්. K-2 / වයස් 5-7
+search.selector.level.gr-3-5=කණ්. 3-5 / වයස්  8-10
+search.selector.level.gr-6-8=කණ්. 6-8 / වයස් 11-13
+search.selector.level.gr-9-10=කණ්. 9-10 / වයස් 14-16
+search.selector.level.gr-11-12=කණ්. 11-12 / වයස් 16-18
+search.selector.level.college_and_beyond=පාසල් හා එපිට
+search.selector.level.professional_development=වෘත්තීයමය සංවර්ධනය
+search.selector.level.special_education=විශේෂ අධ්‍යාපනය
+search.selector.level.na=අනෙකුත්
+
+search.selector.ict=උපදේශක වර්ගය:
+search.selector.ict_tooltip=සෙවුම සඳහා උපදේශක අංග වර්ගය
+search.selector.ict.any=කුමක් හෝ
+search.selector.ict.activity=ක්‍රියාකාරකම
+search.selector.ict.activity.exercise=වැඩය
+search.selector.ict.activity.lab=පරීක්ෂණය/විද්‍යාගාරය
+search.selector.ict.activity.worksheet=ග්‍රැෆික් සංවිධායකය/වැඩ වාර්ථා සටහන
+search.selector.ict.activity.problemset=ප්‍රශ්න කුලකය
+search.selector.ict.book=පොත
+search.selector.ict.book.fiction=ප්‍රබන්ධ
+search.selector.ict.book.nonfiction=ප්‍රබන්ධ-නොවන
+search.selector.ict.book.readings=කියවීම්/උපුටා ගැනීම්
+search.selector.ict.book.textbook=අච්චු පොත
+search.selector.ict.curriculum=විෂය මාලා
+search.selector.ict.curriculum.assessment=ඇගයීම්/විභාගය
+search.selector.ict.curriculum.course=සම්පූර්ණ පාඨමාලාව
+search.selector.ict.curriculum.unit=ඒකකය
+search.selector.ict.curriculum.lp=පාඩම් සැලැස්ම
+search.selector.ict.curriculum.scope=පරාසය හා ශ්‍රේණිය
+search.selector.ict.curriculum.standards=සම්මතයන්
+search.selector.ict.curriculum.syllabus=විෂය නිර්දේශය
+search.selector.ict.curriculum.workbook=වැඩපොත
+search.selector.ict.resource=සම්පත
+search.selector.ict.resource.animation=සජීවනය/ව්‍යංගකරණය
+search.selector.ict.resource.diagram=රූප සටහන/පින්තූරය
+search.selector.ict.resource.index=දර්ශකය/ලැයිස්තුව
+search.selector.ict.resource.photograph=ඡායාරූපය
+search.selector.ict.resource.presentation=ඉදිරිපත් කිරීම්/විනිවිදක
+search.selector.ict.resource.collection=යොමු එකතුව
+search.selector.ict.resource.script=විධානාවලිය/පිටපත
+search.selector.ict.resource.speech=කථාව/දේශනය/සිංදුව
+search.selector.ict.resource.table=වගුව/ප්‍රස්ථාරය/ප්‍රස්ථාර සටහන
+search.selector.ict.other=අනෙකුත්
+search.selector.ict.multiple=බහු
+
+search.selector.filetype=ගොනු වර්ගය:
+search.selector.filetype.any=කුමක් හෝ
+search.selector.filetype.audio=ශ්‍රව්‍ය/දෘශ්‍ය
+search.selector.filetype.text=කුරිකි
+search.selector.filetype.image=රූපය
+search.selector.filetype.link=වෙබ්
+
+search.selector.language=භාෂාව:
+search.selector.language.any=කුමක් හෝ
+
+search.selector.filters=විශේෂ පෙරහන්:
+search.selector.filters_tooltip=ඔබට යම් යම් වර්ගයේ දේවල් සොයා ගැනීමට ඉඩ ලබාදෙයි
+search.selector.filters.none=කිසිවක් නැත
+search.selector.filters.mine=මගේ දායකත්වයන් පමණි
+search.selector.filters.collections=එකතුව පමණි
+search.selector.filters.reviewed=සමාලෝචිත සම්පත් පමණි
+search.selector.filters.reviewed.top=හොඳම සමාලෝචිත සම්පත් පමණි
+search.selector.filters.reviewed.partners=සහකරු සම්පත් පමණි
+
+search.results.col.title=සිරැසිය
+search.results.col.review=සමාලෝචනය
+search.results.col.ict=උපදෙස් වර්ගය
+search.results.col.ict.multiple=බහු
+search.results.col.creator=දායකයා
+search.results.col.action=ක්‍රියාව
+search.nav.first=පළමු
+search.nav.prev=පෙර
+search.nav.page=පිටුව
+search.nav.next=ඊළඟ
+search.nav.last=අවසාන
+search.nav.summary=ප්‍රතිඵල {0} - {1} න් {2}
+search.crs.tooltip.1=මූලික
+search.crs.tooltip.2=හොඳයි
+search.crs.tooltip.3=ආදර්ශවත්
+search.crs.tooltip.P=සහකරු
+search.instruction.adv.open=අධි සෙවුම විවෘත කරන්න.
+search.instruction.adv.close=අධි සෙවුම වසාදමන්න.
+search.noresults=ඔබගේ සෙවුම මඟින් ගැලපෙන සම්පත් ලබා දුන්නේ නැත.
+search.noshowableresults=ඔබගේ සෙවුම මඟින් ගැලපෙන සම්පත් ලබා දුන්නේ නැත.
+checkversion.versionhaschanged=තවත් කුරිකි සාමාජිකයෙක්ද මෙම එකතුව හෝ ෆෝල්ඩරය සකසමින් සිටී. ඉදිරියට යෑමට හරි තෝරන්න.
+
+## INFORMATION TAB
+
+
+## SUBJECT
+
+XWiki.AssetClass_fw_items_FW_masterFramework.WebHome=විෂය දර්ශකය 
+XWiki.AssetClass_fw_items_FW_masterFramework.Arts=කලා
+XWiki.AssetClass_fw_items_FW_masterFramework.Architecture=ගෘහ නිර්මාන ශිල්පය
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers=ජීවන චරිත
+XWiki.AssetClass_fw_items_FW_masterFramework.Dance=නැටුම්
+XWiki.AssetClass_fw_items_FW_masterFramework.DramaDramatics=නාට්‍ය / නාටිකාංග
+XWiki.AssetClass_fw_items_FW_masterFramework.Film=චිත්‍රපටි
+XWiki.AssetClass_fw_items_FW_masterFramework.History=ඉතිහාසය
+XWiki.AssetClass_fw_items_FW_masterFramework.Music=සංගීතය
+XWiki.AssetClass_fw_items_FW_masterFramework.Photography=ඡායාරූප ශිල්පය
+XWiki.AssetClass_fw_items_FW_masterFramework.PopularCulture=ප්‍රසිද්ධ සංස්කෘතිය
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology=තාක්ෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.VisualArts=දෘශ්‍ය කලා
+XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation=ජීවන චරිතය &amp; තාක්ෂණික අධ්‍යාපනය
+XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture_0=කෘෂිකර්මාන්තය
+XWiki.AssetClass_fw_items_FW_masterFramework.Business=ව්‍යාපාරය
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_6=ජීවන චරිත
+XWiki.AssetClass_fw_items_FW_masterFramework.OccupationalHomeEconomics=වෘත්තීයමය ගෘහ ආර්ථිකය
+XWiki.AssetClass_fw_items_FW_masterFramework.School-to-work=පාසලේ-සිට-වැඩට
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology_2=තාක්ෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.Trade&amp;Industrial=වෙළඳ හා කාර්මික
+XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=අධ්‍යාපනය
+XWiki.AssetClass_fw_items_FW_masterFramework.Accessibility=ප්‍රවේශ හැකියාව/විශේෂ අධ්‍යාපනය 
+XWiki.AssetClass_fw_items_FW_masterFramework.AdultEducation=වැඩිහිටි අධ්‍යාපනය
+XWiki.AssetClass_fw_items_FW_masterFramework.BilingualEducation=ද්වි භාෂා අධ්‍යාපනය 
+XWiki.AssetClass_fw_items_FW_masterFramework.ClassroomManagement=පන්ති කාමර කළමනාකරණය 
+XWiki.AssetClass_fw_items_FW_masterFramework.EarlyChildhoodEducation=පෙර ළමා අවධි අධ්‍යාපනය 
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationAdministration=අධ්‍යාපන පරිපාලනය/නායකත්වය 
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalFoundations=අධ්‍යාපනික අත්තිවාරම/පර්යේෂණය 
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalPsychology=අධ්‍යාපනික මනෝ විද්‍යාව 
+XWiki.AssetClass_fw_items_FW_masterFramework.InstructionalDesign=උපදේශකමය සැලැස්ම 
+XWiki.AssetClass_fw_items_FW_masterFramework.MeasurementEvaluation=මිනුම &amp; වටිනාකම විනිශ්චය 
+XWiki.AssetClass_fw_items_FW_masterFramework.Mentoring=උපදේශකත්වය 
+XWiki.AssetClass_fw_items_FW_masterFramework.MulticulturalEducation=බහු සංස්කෘතික අධ්‍යාපනය 
+XWiki.AssetClass_fw_items_FW_masterFramework.StandardsAlignment=සම්මතයන් පෙළගැස්ම 
+XWiki.AssetClass_fw_items_FW_masterFramework.TeachingTechniques=ඉගැන්වීම් තාක්ෂණ/හොඳම කටයුතු කිරීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology=අධ්‍යාපනික තාක්ෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_0=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.IntegratingTechnologyintotheClassroom=පන්ති කාමරය තුළට තාක්ෂණය එක් කිරීම
+XWiki.AssetClass_fw_items_FW_masterFramework.UsingMultimedia&amp;theInternet=බහුමාධ්‍ය &amp; අන්තර්ජාලය භාවිතය
+XWiki.AssetClass_fw_items_FW_masterFramework.Health=සෞඛ්‍යය 
+XWiki.AssetClass_fw_items_FW_masterFramework.BodySystems&amp;Senses=ශරීර පද්ධති හා සංවේදන
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_1=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.EnvironmentalHealth=පාරිසරික සෞඛ්‍යය
+XWiki.AssetClass_fw_items_FW_masterFramework.HumanSexuality=මානව ලිංගිකත්වය
+XWiki.AssetClass_fw_items_FW_masterFramework.MentalEmotionalHealth=මානසික/සංවේදී සෞඛ්‍යය
+XWiki.AssetClass_fw_items_FW_masterFramework.Nutrition=පෝෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=ආරක්ෂාව/දුම්පානය/ද්‍රව්‍ය අනිසි ලෙස පාවිච්චිය වැලැක්වීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy=තොරතුරු &amp; මාධ්‍ය සාක්ෂරතාවය
+XWiki.AssetClass_fw_items_FW_masterFramework.EvaluatingSources=ප්‍රභව වටිනාකම විනිශ්චය 
+XWiki.AssetClass_fw_items_FW_masterFramework.MediaEthics=මාධ්‍ය සාරධර්ම
+XWiki.AssetClass_fw_items_FW_masterFramework.OnlineSafety=සබැඳි ආරක්ෂාව
+XWiki.AssetClass_fw_items_FW_masterFramework.ResearchMethods=පර්යේෂණ විධි
+XWiki.AssetClass_fw_items_FW_masterFramework.LanguageArts=භාෂා කලාවන්
+XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet_0=හෝඩිය
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_2=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.Journalism=ලේඛන කලාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Listening&amp;Speaking=ඇසීම &amp; කථාකිරීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Literature=සාහිත්‍යය
+XWiki.AssetClass_fw_items_FW_masterFramework.Phonics=ශබ්ද විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.ReadingComprehension=අවබෝධයෙන් කියවීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Research=පර්යේෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.Spelling_0=අකුරු
+XWiki.AssetClass_fw_items_FW_masterFramework.StoryTelling=කථාන්දර පැවසීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Vocabulary=ශබ්ද සංග්‍රහය
+XWiki.AssetClass_fw_items_FW_masterFramework.Writing=ලිවීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics= ගණිතය
+XWiki.AssetClass_fw_items_FW_masterFramework.Algebra=වීජ ගණිතය
+XWiki.AssetClass_fw_items_FW_masterFramework.Appliedmathematics=ව්‍යවහාරික ගණිතය
+XWiki.AssetClass_fw_items_FW_masterFramework.Arithmetic=අංක ගණිතය
+XWiki.AssetClass_fw_items_FW_masterFramework.Calculus=ආකලනය
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_3=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.DataAnalysis&amp;Probability=දත්ත විශ්ලේෂණය හා සම්භාවිතාවය
+XWiki.AssetClass_fw_items_FW_masterFramework.Equations=සමීකරණ
+XWiki.AssetClass_fw_items_FW_masterFramework.Estimation=ඇස්තමේන්තුකරණය
+XWiki.AssetClass_fw_items_FW_masterFramework.Geometry=ජ්‍යාමිතිය
+XWiki.AssetClass_fw_items_FW_masterFramework.Graphing=ප්‍රස්ථාර ඇඳීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Measurement=මිනුම
+XWiki.AssetClass_fw_items_FW_masterFramework.NumberSense&amp;Operations=අංක බුද්ධිය &amp; මෙහෙයුම
+XWiki.AssetClass_fw_items_FW_masterFramework.Patterns=රටා
+XWiki.AssetClass_fw_items_FW_masterFramework.ProblemSolving=ගැටලු විසඳීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Statistics=සංඛ්‍යානය
+XWiki.AssetClass_fw_items_FW_masterFramework.Trigonometry=ත්‍රිකෝණමිතිය
+XWiki.AssetClass_fw_items_FW_masterFramework.Science=විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture=කෘෂිකර්මය
+XWiki.AssetClass_fw_items_FW_masterFramework.Astronomy=තාරකා විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Biology=ජීව විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Botany=උද්භිද විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_4=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.Chemistry=රසායන විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Earthscience=පෘථිවි විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Ecology=පරිසර විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Engineering=ඉංජිනේරු විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Generalscience=සාමාන්‍ය විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Geology=භූ විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.HistoryofScience=විද්‍යා ඉතිහාසය
+XWiki.AssetClass_fw_items_FW_masterFramework.LifeSciences=ජීවන විද්‍යා
+XWiki.AssetClass_fw_items_FW_masterFramework.Meteorology=සෘතු ලක්ෂණ විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.NaturalHistory=ස්වාභාවික ඉතිහාසය
+XWiki.AssetClass_fw_items_FW_masterFramework.Oceanography=සාගර විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Paleontology=පාෂාණි භූත ශාස්ත්‍රය
+XWiki.AssetClass_fw_items_FW_masterFramework.PhysicalSciences=භෞතික විද්‍යා
+XWiki.AssetClass_fw_items_FW_masterFramework.Physics=භෞතික විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.ProcessSkills=ක්‍රියාවලි කුසලතා
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology_0=තාක්ෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies=සමාජ අධ්‍යනය
+XWiki.AssetClass_fw_items_FW_masterFramework.Anthropology=මානව විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_5=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.Civics=ප්‍රජා පාලන විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.CurrentEvents=පවත්නා සිදුවීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.Economics=ආර්ථික විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Entrepreneurship=ව්‍යවසායකත්වය
+XWiki.AssetClass_fw_items_FW_masterFramework.Geography=භූගෝල විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.GlobalAwareness=ගෝලීය දැනුම
+XWiki.AssetClass_fw_items_FW_masterFramework.Government=රජය
+XWiki.AssetClass_fw_items_FW_masterFramework.History Local=ඉතිහාසය (දේශීය)
+XWiki.AssetClass_fw_items_FW_masterFramework.PoliticalSystems=දේශපාලන පද්ධති
+XWiki.AssetClass_fw_items_FW_masterFramework.Psychology=මනෝ විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Religion=ආගම
+XWiki.AssetClass_fw_items_FW_masterFramework.Research_0=පර්යේෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.Sociology=සමාජ විද්‍යාව
+XWiki.AssetClass_fw_items_FW_masterFramework.StateHistory=ජනපද ඉතිහාසය
+XWiki.AssetClass_fw_items_FW_masterFramework.Technology_1=තාක්ෂණය
+XWiki.AssetClass_fw_items_FW_masterFramework.Thinking&amp;ProblemSolving=සිතීම හා ගැටලු විසඳීම
+XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesGovernment=එක්සත් ජනපද රජය
+XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesHistory=එක්සත් ජනපද ඉතිහාසය
+XWiki.AssetClass_fw_items_FW_masterFramework.WorldHistory=ලෝක ඉතිහාසය
+XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=ලෝක භාෂා
+XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet=හෝඩිය
+XWiki.AssetClass_fw_items_FW_masterFramework.Careers_7=ජීවන අත්දැකීම්
+XWiki.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=සංස්කෘතික දැනුම
+XWiki.AssetClass_fw_items_FW_masterFramework.Grammar=ව්‍යාකරණ
+XWiki.AssetClass_fw_items_FW_masterFramework.InformalEducation=රාජකාරී නොවන අධ්‍යාපනය
+XWiki.AssetClass_fw_items_FW_masterFramework.Linguistics=භාෂා
+XWiki.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=අවබෝධයෙන් ඇසීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Reading=කියවීම
+XWiki.AssetClass_fw_items_FW_masterFramework.Speaking=කථාව
+XWiki.AssetClass_fw_items_FW_masterFramework.Spelling=අකුරු
+XWiki.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=පාරිභාෂික ලිවීම
+
+
+
+## EDUCATIONAL LEVEL
+
+XWiki.AssetClass_educational_level2_prek=පෙර පාසල් / වයස් 0-4
+XWiki.AssetClass_educational_level2_gr-k-2=කණ්. K-2 / වයස් 5-7
+XWiki.AssetClass_educational_level2_gr-3-5=කණ්. 3-5 / වයස් 8-10
+XWiki.AssetClass_educational_level2_gr-6-8=කණ්. 6-8 / වයස් 11-13
+XWiki.AssetClass_educational_level2_gr-9-10=කණ්. 9-10 / වයස් 14-16
+XWiki.AssetClass_educational_level2_gr-11-12=කණ්. 11-12 / වයස් 16-18
+XWiki.AssetClass_educational_level2_college_and_beyond=පාසල් හා එපිට
+XWiki.AssetClass_educational_level2_professional_development=වෘත්තීයමය සංවර්ධනය
+XWiki.AssetClass_educational_level2_special_education=විශේෂ අධ්‍යාපනය
+XWiki.AssetClass_educational_level2_na=අනෙකුත්
+
+
+## ICT
+XWiki.AssetClass_instructional_component2_activity_assignment=ක්‍රියාකාරකම: ඇගයීම/ගෙදර වැඩ
+XWiki.AssetClass_instructional_component2_activity_exercise=ක්‍රියාකාරකම: වැඩය
+XWiki.AssetClass_instructional_component2_activity_lab=ක්‍රියාකාරකම: පරීක්ෂණය/විද්‍යාගාරය
+XWiki.AssetClass_instructional_component2_activity_worksheet=ක්‍රියාකාරකම: ග්‍රැෆික් සංවිධායකය/වැඩ වාර්ථා සටහන
+XWiki.AssetClass_instructional_component2_activity_problemset=ක්‍රියාකාරකම: ප්‍රශ්න කුලකය
+XWiki.AssetClass_instructional_component2_book_fiction=පොත: ප්‍රබන්ධය
+XWiki.AssetClass_instructional_component2_book_nonfiction=පොත: ප්‍රබන්ධ-නොවන
+XWiki.AssetClass_instructional_component2_book_readings=පොත: කියවීම්/උපුටා ගැනීම්
+XWiki.AssetClass_instructional_component2_book_textbook=පොත: අච්චු පොත
+XWiki.AssetClass_instructional_component2_curriculum_assessment=විෂය මාලාව: ඇගයීම්/විභාගය
+XWiki.AssetClass_instructional_component2_curriculum_course=විෂය මාලාව: සම්පූර්ණ පාඨමාලාව
+XWiki.AssetClass_instructional_component2_curriculum_unit=විෂය මාලාව: ඒකකය
+XWiki.AssetClass_instructional_component2_curriculum_lp=විෂය මාලාව: පාඩම් සැලැස්ම
+XWiki.AssetClass_instructional_component2_curriculum_rubric=විෂය මාලාව: නිර්දේශය
+XWiki.AssetClass_instructional_component2_curriculum_scope=විෂය මාලාව: පරාසය හා ශ්‍රේණිය
+XWiki.AssetClass_instructional_component2_curriculum_standards=විෂය මාලාව: සම්මතයන්
+XWiki.AssetClass_instructional_component2_curriculum_studyguide=විෂය මාලාව: අධ්‍යයන උපදේශන/සටහන්
+XWiki.AssetClass_instructional_component2_curriculum_syllabus=විෂය මාලාව: විෂය නිර්දේශය
+XWiki.AssetClass_instructional_component2_curriculum_tutorial=විෂය මාලාව: ඉගැන්වීම් වැඩ
+XWiki.AssetClass_instructional_component2_curriculum_workbook=විෂය මාලාව: වැඩපොත
+XWiki.AssetClass_instructional_component2_resource_animation=සම්පත: සජීවනය/ව්‍යංගකරණය
+XWiki.AssetClass_instructional_component2_resource_diagram=සම්පත: රූප සටහන/පින්තූරය
+XWiki.AssetClass_instructional_component2_resource_glossary=සම්පත: ගැටපද විවරණය/පාරිභාෂා ලැයිස්තුව
+XWiki.AssetClass_instructional_component2_resource_index=සම්පත: දර්ශකය/ලැයිස්තුව
+XWiki.AssetClass_instructional_component2_resource_photograph=සම්පත: ඡායාරූපය
+XWiki.AssetClass_instructional_component2_resource_presentation=සම්පත: දෘශ්‍ය/ඉදිරිපත් කිරීම්/විනිවිදක
+XWiki.AssetClass_instructional_component2_resource_collection=සම්පත: යොමු එකතුව
+XWiki.AssetClass_instructional_component2_resource_script=සම්පත: විධානාවලිය/පිටපත
+XWiki.AssetClass_instructional_component2_resource_speech=සම්පත: ශ්‍රව්‍ය/කථාව/දේශනය
+XWiki.AssetClass_instructional_component2_resource_table=සම්පත: වගුව/ප්‍රස්ථාරය/ප්‍රස්ථාර සටහන
+XWiki.AssetClass_instructional_component2_resource_template=සම්පත: අච්චුව
+XWiki.AssetClass_instructional_component2_resource_webcast=සම්පත: Webcast/Podcast
+XWiki.AssetClass_instructional_component2_other=අනෙකුත්
+
+
+## LANGUAGE
+XWiki.AssetClass_language_eng=ඉංග්‍රීසි
+XWiki.AssetClass_language_ind=බහසා ඉන්දුනීසියා
+XWiki.AssetClass_language_zho=චීන
+XWiki.AssetClass_language_nld=ලංදේසි
+XWiki.AssetClass_language_fra=ප්‍රංශ
+XWiki.AssetClass_language_deu=ජර්මානු
+XWiki.AssetClass_language_hin=හිංදි
+XWiki.AssetClass_language_ita=ඉතාලි
+XWiki.AssetClass_language_jpn=ජපන්
+XWiki.AssetClass_language_kor=කොරියානු
+XWiki.AssetClass_language_nep=නේපාල
+XWiki.AssetClass_language_por=පෘතුගීසි
+XWiki.AssetClass_language_rus=රුසියානු
+XWiki.AssetClass_language_spa=ස්පාඤ්ඤ
+
+
+## LICENSES
+XWiki.AssetLicenseClass_licenseType2_Licences.CurrikiLicense=කුරිකි වරපත (නිර්මාණ ශීලී පොදු උප ලක්ෂණ 3.0)
+XWiki.AssetLicenseClass_licenseType2_Licences.PublicDomain=පොදු වසම
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-Commercial=නිර්මාණ ශීලී පොදු උප ලක්ෂණ වාණිජ-නොවන
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives=නිර්මාණ ශීලී පොදු උප ලක්ෂණ වාණිජ-නොවන ව්‍යාකලනයක් නොමැති
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNoDerivatives=නිර්මාණ ශීලී පොදු උප ලක්ෂණ ව්‍යාකලනයක් නොමැති
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionSharealike=නිර්මාණ ශීලී පොදු උප ලක්ෂණ එක ලෙස බෙදා ගැනීම
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialShareAlike=නිර්මාණ ශීලී පොදු උප ලක්ෂණ වාණිජ-නොවන එක ලෙස බෙදා ගැනීම
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsNon-Commercial=DEPRICATED: නිර්මාණ ශීලී පොදු දේ වාණිජ-නොවන
+XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsSharealike=DEPRICATED: නිර්මාණ ශීලී පොදු දේ එක ලෙස බෙදා ගැනීම
+XWiki.AssetLicenseClass_licenseType2_Licences.GnuDocumentationLicense=DEPRICATED: Gnu ලේඛන වරපත
+
+
+
+&lt;/pre&gt;</content>
 </xwikidoc>

@@ -13,13 +13,13 @@
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1229981021000</creationDate>
 <date>1229981021000</date>
-<contentUpdateDate>1229981021000</contentUpdateDate>
+<contentUpdateDate>1234891123000</contentUpdateDate>
 <version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Updating to the lastest Spanish.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>

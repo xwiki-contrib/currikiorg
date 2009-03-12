@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.ShermanTank</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1222442696000</creationDate>
-<date>1234507094000</date>
-<contentUpdateDate>1234507094000</contentUpdateDate>
-<version>12.1</version>
+<date>1236363729000</date>
+<contentUpdateDate>1236363729000</contentUpdateDate>
+<version>6.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fix bug CURRIKI-3471</comment>
+<comment>null</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -287,7 +287,8 @@ function formatTextareasIntoWikiText() {
   {
     var form_content = getWysiwygFieldContent('mce_editor_0', 'slp_text');
     if (form_content != null) {
-      slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("form.scratch.step2.content.title")' + title_markup_str +  vert_break_str + form_content;
+      //slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("form.scratch.step2.content.title")' + title_markup_str +  vert_break_str + form_content;
+    slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + form_content;
     }
   } 
  

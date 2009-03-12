@@ -8,18 +8,18 @@
 <translation>1</translation>
 <parent></parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.KApatterson</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.KApatterson</contentAuthor>
 <creationDate>1221902289000</creationDate>
-<date>1227230418000</date>
-<contentUpdateDate>1227230418000</contentUpdateDate>
-<version>18.1</version>
+<date>1231533966000</date>
+<contentUpdateDate>1231533966000</contentUpdateDate>
+<version>15.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>AdWordsLog jump page</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -60,15 +60,19 @@
 
 1.1.1 The AdWordsJump module contains these resources
 
+1. AdWordsJump/AdWordsInfoClass
 1. AdWordsJump/LandingPageLog
 1. AdWordsJump/LandingPageLogExport
 1. AdWordsJump/LandingPageLogTemplate
-1. AdWordsJump/LandingPageLogWriter
 1. AdWordsJump/LandingPageTemplate
 1. AdWordsJump/TestLandingPage
 1. AdWordsJump/Translations
 1. AdWordsJump/WebPreferences
 &lt;br/&gt;&lt;br/&gt;
+
+*A complete list of AdWords Landing Pages can be found at AdWordsJump/URLindex*
+
+&lt;br&gt;
 
 The TestLandingPage is a sample page for Landing page
 
@@ -89,7 +93,7 @@ Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then
 #set($subject="UnitedStatesHistory")
 #set($subjectparent="SocialStudies")
 
-#set($btn_value = "Find Worksheets")
+#set($btn_value = "Find Worksheet")
 
 ##set($logpic = $imgdoc.getAttachmentURL('log.gif'))
 #set($loglink = "http://www.curriki.com")
@@ -107,12 +111,12 @@ Create an AdWordsJump Landing page, for example, AdWordsJump.FreeWorksheet, then
 #pageTitle("$title")
 #set($title = "&lt;p style='font-weight:bold;font-size:55px;'&gt;Free Worksheets&lt;/p&gt;")
 #pageTitle("$title")
-#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;For Math, English, and Science&lt;/p&gt;")
+#set($title = "&lt;p style='font-weight:bold;font-size:35px;'&gt;For Math,English,and Science&lt;/p&gt;")
 #pageTitle("$title")
 
 #set($title = "Word Problems for grades 3 to 5")
 #set($link = "/xwiki/bin/view/AdWordsJump/TestLandingPage?xpage=popup")
-#set($desc = "Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more. I use these for my daily math review in my classroom.")
+#set($desc = "Covers a variety of topics,including addition, subtraction, multiplication, division, graphs, place value, writing big numbers, and more, I use these for my daily math review in my classroom")
 #sampleLink("$title" "$link" "$desc")
 
 #set($title = "A complete introductory Biology course")
@@ -140,7 +144,7 @@ Notes:
 
 You need to change some of them to your self's.
 
-#warning("All Jump Pages should be created under space AdWordsJump.")
+#warning("Because we need create and store log page, and this landing page is visited by guest, please make sure this landing page's author has programming rights")
 
 1.1.1.1 Step 4
 
@@ -195,7 +199,7 @@ Notes:
 
 You need to change some of them to your self's.
 
-#warning("All Jump Pages should be created under space AdWordsJump.")
+#warning("Because we need create and store log page, and this landing page is visited by guest, please make sure this landing page's author has programming rights")
 
 1.1.1.1 Step 4
 
@@ -207,6 +211,6 @@ You can view search records in the log page with the url "/xwiki/bin/view/AdWord
 
 
 1.1.1 Page rights
-* LandingPageTemplate should be visible by guests
-* LandingPageLog, LandingPageLogTemplate, LandingPageTemplate, LandingPageLogExport and AdWordsJumpPageTemplate should have programming rights</content>
+* AdWordsInfoClass and LandingPageTemplate should be visible by guests
+* LandingPageLog,LandingPageLogTemplate,LandingPageTemplate, LandingPageLogExport and AdWordsJumpPageTemplate  should have programming rights</content>
 </xwikidoc>

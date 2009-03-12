@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1229719215000</creationDate>
-<date>1234885210000</date>
-<contentUpdateDate>1234885210000</contentUpdateDate>
-<version>17.1</version>
+<date>1236729227000</date>
+<contentUpdateDate>1236729227000</contentUpdateDate>
+<version>18.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fix</comment>
+<comment>Fix external asset classes</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -81,14 +81,14 @@ try {
 
  nb = 0
 cancel = false
-totalnb = xwiki.search("select count(*) from XWikiDocument as doc,BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web not in ('AssetTemp')").get(0)
+totalnb = xwiki.search("select count(*) from XWikiDocument as doc,BaseObject as obj where doc.fullName=obj.name and (obj.className='XWiki.AssetClass' or obj.className='XWiki.ExternalAssetClass') and doc.web not in ('AssetTemp')").get(0)
 
 econtext.setAttribute("migration_totalnb", totalnb)
 
 println "${totalnb} docs to convert"
 System.out.println("&lt;strong&gt;${totalnb} docs to convert&lt;/strong&gt; &lt;br /&gt;&lt;br /&gt;")
 
-for(item in xwiki.searchDocuments(",BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.AssetClass' and doc.web not in ('AssetTemp')")) {
+for(item in xwiki.searchDocuments(",BaseObject as obj where doc.fullName=obj.name and (obj.className='XWiki.AssetClass' or obj.className='XWiki.ExternalAssetClass') and doc.web not in ('AssetTemp')")) {
 if (!cancel) { 
  nb = nb + 1
  
@@ -147,7 +147,10 @@ if (request.prepare=="1" || request.confirm=="1")  {
 
    // run the real conversion
    try {
-     xwiki.getDocument(item).convert()
+     println "&lt;br /&gt;&lt;ul&gt;&lt;li&gt;Converting&lt;/li&gt;&lt;/ul&gt;"
+     toconvertdoc = xwiki.getDocument(item)
+     println toconvertdoc
+     println toconvertdoc.convert()
    } catch (XWikiException e) {
     System.out.println("CONVERT FAIL: ${nb} ${item}")
     faillist.add(item)
