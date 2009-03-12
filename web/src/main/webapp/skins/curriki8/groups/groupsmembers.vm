@@ -578,10 +578,10 @@ $xwiki.getLocalUserName($memberName)
 <div class="groups-members-request-links">
 ## if group admin
 #set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
-<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$memberDisplayName.replaceAll("'","\\'")'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
+<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$xwiki.curriki.escapeForJS($memberDisplayName)'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
 #if($msreq.status!=4)
 |
-<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$memberDisplayName.replaceAll("'","\\'")'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
+<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$xwiki.curriki.escapeForJS($memberDisplayName)'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
 #end
 ## end
 </div>
