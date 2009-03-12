@@ -349,6 +349,11 @@ wikiEditor.init({
     $newDoc.set("allow","1")
 
      $newDoc.save()
+
+     ## this should send us back to the right view URL
+     ## and fix bug CURRIKI-3924
+     $response.sendRedirect( $doc.getURL() )
+
      #set( $newDocSaved = $request.doctitle )
  #else
    #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
