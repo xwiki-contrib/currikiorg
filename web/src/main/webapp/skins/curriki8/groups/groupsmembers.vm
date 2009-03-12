@@ -577,12 +577,14 @@ $xwiki.getLocalUserName($memberName)
 <div id="${divid}" class="groups-members-request-info">
 <div class="groups-members-request-links">
 ## if group admin
+{pre}
 #set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
 <a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$xwiki.curriki.escapeForJS($memberDisplayName)'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
 #if($msreq.status!=4)
 |
 <a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$xwiki.curriki.escapeForJS($memberDisplayName)'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
 #end
+{/pre}
 ## end
 </div>
 <div class="groups-members-request-date">
