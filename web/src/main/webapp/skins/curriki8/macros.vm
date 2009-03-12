@@ -973,10 +973,10 @@ $memberdoc.getRenderedContent("$!content")</div>
                 #if($request.action == "newdoc")
                       #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
                 #end
-                #if($request.action == "editdoc")
+                #if($request.action == "editdoc" && $request.method != "POST" )
                       #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
                 #end
-                #if($request.action == "history")
+                #if($request.action == "history" && $request.method != "POST" )
                       #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
                 #end
                 #if($request.action == "compare")
