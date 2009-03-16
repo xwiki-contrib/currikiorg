@@ -12,16 +12,17 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1231836370000</creationDate>
-<date>1234839708000</date>
-<contentUpdateDate>1234839708000</contentUpdateDate>
-<version>13.1</version>
+<date>1237209506000</date>
+<contentUpdateDate>1237209506000</contentUpdateDate>
+<version>14.1</version>
 <title>WebQuest Form</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fix bug CURRIKI-3475</comment>
+<comment>attach scroll</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -51,6 +52,7 @@
 <name>CreateResources.WebQuest</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
+<guid>6480f01e-93b9-4b48-b37a-bd7e0d44c932</guid>
 <property>
 <tags/>
 </property>
@@ -360,7 +362,7 @@ function getAttachmentsNames() {
 function setAttachmentsIframeSize() {
   var iframe_o = document.getElementById('attachment_iframe');
   try {
-	if (iframe_o != null) {
+	if (iframe_o != null &amp;&amp; !Ext.isIE6) {
 	  iframe_o.height = iframe_o.style.height = 50;  // attempt reset because FF behavior is grow-only
 	}
 	// this is portable way of getting at iframe DOM content per
@@ -376,13 +378,12 @@ function setAttachmentsIframeSize() {
 	// do em both for good measure?!
 	if (iframe_o != null) {
 	   if (Ext.isIE6) {
-	     iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight * 2 + 5;
+         iframe_o.height = doc_o.body.scrollHeight + 30;
 	   } else {
 	     iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight + 5;
 	   }
 	}
-  }
-  catch(e) {
+  } catch(e) {
 	if (iframe_o != null) {
 	  iframe_o.height = iframe_o.style.height = 300; // bigger default height value if things go wrong
 	}

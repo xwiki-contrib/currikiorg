@@ -12,16 +12,17 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1215124816000</creationDate>
-<date>1234839163000</date>
-<contentUpdateDate>1234839163000</contentUpdateDate>
-<version>13.1</version>
+<date>1237209251000</date>
+<contentUpdateDate>1237209251000</contentUpdateDate>
+<version>14.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>fix bug CURRIKI-3475</comment>
+<comment>attach scroll</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -51,6 +52,7 @@
 <name>CreateResources.CurrikiStandardLessonPlan</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
+<guid>fcfe2218-b946-456e-9b55-59434ae91f93</guid>
 <property>
 <tags/>
 </property>
@@ -515,32 +517,31 @@ function getAttachmentsNames() {
 function setAttachmentsIframeSize() {
   var iframe_o = document.getElementById('attachment_iframe');
   try {
-    if (iframe_o != null) {
-      iframe_o.height = iframe_o.style.height = 50;  // attempt reset because FF behavior is grow-only
-    }
-    // this is portable way of getting at iframe DOM content per
-    // http://www.mabaloo.com/Web-Development/Creating-controlling-and-manipulating-an-Iframe-through-JavaScript.html
-    var doc_o = (iframe_o.contentWindow || iframe_o.contentDocument);  
-    if (doc_o.document) {
-      doc_o = doc_o.document;
-    }
-    // the iframe needs more space than 'scrollHeight' says, or we get
-    // scrollbars. 5 seems to accomodate the inner and outer margin, and
-    // inner and outer border, with one pixel for the margin itself.
-    // nb: iframe_o.style.height only works in IE, does nothing in FF.
-    // do em both for good measure?!
-    if (iframe_o != null) {
+	if (iframe_o != null &amp;&amp; !Ext.isIE6) {
+	  iframe_o.height = iframe_o.style.height = 50;  // attempt reset because FF behavior is grow-only
+	}
+	// this is portable way of getting at iframe DOM content per
+	// http://www.mabaloo.com/Web-Development/Creating-controlling-and-manipulating-an-Iframe-through-JavaScript.html
+	var doc_o = (iframe_o.contentWindow || iframe_o.contentDocument);  
+	if (doc_o.document) {
+	  doc_o = doc_o.document;
+	}
+	// the iframe needs more space than 'scrollHeight' says, or we get
+	// scrollbars. 5 seems to accomodate the inner and outer margin, and
+	// inner and outer border, with one pixel for the margin itself.
+	// nb: iframe_o.style.height only works in IE, does nothing in FF.
+	// do em both for good measure?!
+	if (iframe_o != null) {
 	   if (Ext.isIE6) {
-	     iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight * 2 + 5;
+         iframe_o.height = doc_o.body.scrollHeight + 30;
 	   } else {
 	     iframe_o.height = iframe_o.style.height = doc_o.body.scrollHeight + 5;
 	   }
-    }
-  }
-  catch(e) {
-    if (iframe_o != null) {
-      iframe_o.height = iframe_o.style.height = 300; // bigger default height value if things go wrong
-    }
+	}
+  } catch(e) {
+	if (iframe_o != null) {
+	  iframe_o.height = iframe_o.style.height = 300; // bigger default height value if things go wrong
+	}
   } 
 }
 /* ]]&gt; */
