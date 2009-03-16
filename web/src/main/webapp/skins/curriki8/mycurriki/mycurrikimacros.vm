@@ -299,22 +299,23 @@ $msg.get("mycurriki.macro.access.${access}")
 #set($ict = $!asset.getObject("CurrikiCode.AssetClass").getProperty("instructional_component").getValue())
 #if($ict == "" || $ict.size() == 0) ## {
 ## No ICT set -- nothing to do
+#set($icon = "ict-null")
+#set($text = "")
 #else ## } {
 #if($ict.size() > 1) ## {
 ##Multiple
-#set($icon = $xwiki.getSkinFile("icons/ICTIcon-Multiple.gif"))
+#set($icon = "ict-multiple")
 #set($text = $msg.get('CurrikiCode.AssetClass_instructional_component_multiple'))
 #else ## } {
 ##Single
 #set($ict = $ict.get(0))
-#set($icon = "${ict.substring(0,1).toUpperCase()}${ict.substring(1)}")
 #set($icon = $icon.replaceFirst("_.*", ""))
-#set($icon = $xwiki.getSkinFile("icons/ICTIcon-${icon}.gif"))
+#set($icon = "ict-${icon}")
 #set($text = "CurrikiCode.AssetClass_instructional_component_${ict}")
 #set($text = $msg.get($text))
 #end ## if not multiple ## }
-<img src="${icon}" ext:qtip="${text}" />
 #end ## if not empty ## }
+<img class="${icon}" ext:qtip="${text}" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" />
 #end ## Macro ## }
 
 
