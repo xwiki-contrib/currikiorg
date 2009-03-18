@@ -2,8 +2,12 @@
   * Setup the external stylesheets loaded by the curriki pages used by the curriki pages
   * @author Curriki dev team
   *#
-##<link href="$xwiki.getSkinFile('extjs/resources/css/ext-all.css')" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-2.2/resources/css/ext-all.css" />
+<script type="text/javascript">
+//<![CDATA[
+var ejcLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+document.write(unescape("%3Clink rel='stylesheet' type='text/css' href='" + ejcLoc + "resources/css/ext-all.css' /%3E"));
+//]]>
+</script>
 
 <link href="/xwiki/js/curriki-js.css" type="text/css" rel="stylesheet" type="text/css" />
 #if(!$request.style || $request.style=="1")

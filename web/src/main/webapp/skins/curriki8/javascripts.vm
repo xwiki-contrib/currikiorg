@@ -8,13 +8,21 @@
 	#set($debugging = "")
 #end##}
 ## <script type="text/javascript" src="$xwiki.getSkinFile('skin.js')"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects"></script>
+<script type="text/javascript">
+//<![CDATA[
+var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js' type='text/javascript'%3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
 
-##<script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/ext/ext-base.js")"></script>
-<script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2/adapter/ext/ext-base.js"></script>
-##<script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all${debugging}.js")"></script>
-<script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2/ext-all${debugging}.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
 
