@@ -10,11 +10,13 @@
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js')"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects"></script>
+
 ##<script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/ext/ext-base.js")"></script>
 <script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2/adapter/ext/ext-base.js"></script>
-
 ##<script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all${debugging}.js")"></script>
 <script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2/ext-all${debugging}.js"></script>
+
+#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
 
 #if("$!request.lang" != "")##{
 #set($lang = $request.lang)
@@ -48,8 +50,12 @@
 #if($!headerfile == "html") ## {
 <script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
 #end ## }
-<script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
+#end ##}
+
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/xwiki.js")"></script>
+
+#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
+## <script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
 
 #if($!headerfile == "http") ## {
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
@@ -81,5 +87,8 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 /* ]]> */
 </script>
 
+#end ##}
+
 ## Hook for inserting JavaScript skin extensions
+## Use $xwiki.jsfx.use("jsfile.js", true)
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
