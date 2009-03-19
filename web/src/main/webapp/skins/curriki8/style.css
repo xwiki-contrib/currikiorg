@@ -1693,14 +1693,14 @@ div.errormessage {
 /* ---- Copy XWiki.style into the main style.css file ---- */
 /*  *** NOTE: This should be merged in better              */
 
- 
+/** 
 .gwt-ModalDialog {
   background-color: white;
   padding: 0px;
   border: 0;
   z-index: 100;
 }
-.gwt-ModalDialog .Caption, .selector-mycollections-caption, .edit-panel-title, .find-results-table-title {
+.gwt-ModalDialog .Caption, **/.selector-mycollections-caption, .edit-panel-title, .find-results-table-title {
   border: 1px solid #FF4100;
   border-bottom: 0;
   font: 12px  Helvetica, sans-serif;
@@ -1712,17 +1712,23 @@ div.errormessage {
   margin: 0px;
   padding: 1px 10px;
 }
+
+/**
 .gwt-ModalDialog-Content {
   border: 1px solid #E5E5E5;
   background-color:#FFF;
   border-top: 0;
   text-align: center;
   padding: 8px 10px;
-}
+}**/
+
+
 .selector-mycollections-tree {
   background: #F5F8CA;
 }
-.curriki-title, .gwt-ModalDialog-Content .gwt-HTML h2, .find-results-title {
+
+/**
+.curriki-title, .gwt-ModalDialog-Content .gwt-HTML h2, **/.find-results-title {
   font: 12px Helvetica, sans-serif;
   font-weight: regular;
   background: #FFF;
@@ -1732,42 +1738,47 @@ div.errormessage {
   padding: 0;
   border-bottom: 1px solid #FF4100;
 }
-.curriki-subtitle,  .move-modal-box .gwt-Label {
+.curriki-subtitle/**,  .move-modal-box .gwt-Label **/{
   font: 13px Arial;
   font-weight: bold;
   margin: 10px 0 5px;
 }
+/**
 .move-modal-box .gwt-Label {
   margin: 10px 0;
-}
+}**/
 .move-modal-box-scroller {
   height: 300px;
 }
+/**
 .gwt-HTML {
   margin-bottom: 10px;
   font: 13px Arial;
   text-align: left;
-}
+}**/
 .subject-level-panel span, .field-panel span {
   display: block;
   white-space: nowrap
 }
+/**
 .metadata-edit-panel .gwt-Image {
   padding: 8px 0 0 3px;
 }
 .subject-level-table .gwt-Image {
   padding: 0 0 0 3px;
 }
+**/
 .subject-level-table .curriki-subtitle {
   margin: 0;
 }
+/**
 .gwt-RadioButton {
   font: 13px Arial;
 }
 .gwt-HTML ul {
   margin-left: 14px;
   padding-left: 0;
-}
+}**/
 textarea {
   background: #FFF;
   border: 1px solid #B2B2B2;
@@ -1791,9 +1802,11 @@ input[type=text] {
   font: 13px Arial;
   width: 80%;
 }
+
+/**
 .gwt-ModalDialog-Content input[type=text] {
   width: 400px;
-}
+}**/
 input:focus, textarea:focus {
 background: #FFF;
 }
@@ -1827,13 +1840,12 @@ color: #999;
 button {
   cursor: pointer;
 }
-.gwt-ButtonOrange, .collections-dialog-next, .addfile-dialog-next, .metadata-save, .thankyou-dialog-continue, .login-Button, .addresource-dialog-next, .gwt-ModalDialog-Content .dialog-proposedduplication-continue,
-.gwt-ModalDialog-Content .dialog-proposedduplication-copy, .menu-add, .layoutsubsection input[type="submit"] {
+.collections-dialog-next, .addfile-dialog-next, .metadata-save, .thankyou-dialog-continue, .login-Button, .addresource-dialog-next, .gwt-ModalDialog-Content .dialog-proposedduplication-continue,.menu-add, .layoutsubsection input[type="submit"] {
   background: #FF7F00;
   color: #FFF;
   border: 1px solid #FF4100;
 }
-.gwt-ButtonGrey, .collections-dialog-cancel, .addfile-dialog-cancel, .dialog-metadata-button-cancel, .move-modal-box .gwt-Button, .find-selector-cancel, .dialog-choosetemplate-cancel, .find-results-table-result .gwt-Button,  .addresource-dialog-cancel, .gwt-ModalDialog-Content .dialog-proposedduplication-cancel, .history-rollback-button {
+.collections-dialog-cancel, .addfile-dialog-cancel, .dialog-metadata-button-cancel, .move-modal-box .gwt-Button, .find-selector-cancel, .dialog-choosetemplate-cancel,.addresource-dialog-cancel, .history-rollback-button {
   background: #DCDCDC;
   border: 1px solid #A5A5A5;
   color: #3F3F3F;
@@ -1844,6 +1856,9 @@ button:hover, .x-btn button:hover, .menu-add:hover { background-color: #ffb808; 
 .addfile-dialog-cancel, .collections-dialog-cancel, .addresource-dialog-cancel {
   margin-right: 8px;
 }
+
+/**
+
 .dialog-duplicate-confirm .gwt-bttCancel {
   margin-right: 25px;
 }
@@ -1876,7 +1891,7 @@ html>body .dialog-duplicate-confirm .gwt-bttCancel {
 .gwt-ModalDialog-Content {
   padding-bottom: 40px;
 }
-
+**/
 /*fix bottom padding for the addfile and collections dialog in which the actions are inside the content */
 
 /**
@@ -2023,6 +2038,8 @@ html>body .metadata-edit {
   width: 0%;
 }
 
+/**
+
 .gwt-Tree .gwt-TreeItem {
   font: 12px Arial;
   background: none;
@@ -2047,6 +2064,9 @@ html>body .metadata-edit {
 .gwt-Tree .asset-tree-item-insert-here .gwt-TreeItem {
   color: #FF4100;
 }
+
+**/
+
 .collections-dialog-actions, .addfile-dialog-actions {
   text-align: right;
   float: right;
@@ -2126,20 +2146,28 @@ html>body .browse-asset-tree {
   height: 150px;
   overflow-y: scroll;
 }
+/**
+
 .selector-mycollections-tree-list .gwt-TreeItem-selected, .selector-mycollections-tree-list .gwt-TreeItem {
   white-space: nowrap;
   padding: 0px;
   margin: 0;
 }
-.asset-tree-Item td {
-  width: 0px;
-}
+
 .gwt-TabPanelBottom {
   background-color: #F2F2F2;
 }
 .gwt-TabPanelBottom a {
   color: #1963AA;
 }
+
+**/
+
+
+.asset-tree-Item td {
+  width: 0px;
+}
+
 .items-panel {
   background: #FFF;
   border: 1px solid #E5E5E5;
@@ -2179,6 +2207,8 @@ div.item-panel {
 .item-panel td {
   padding: 0px;
 }
+
+/**
 .item-panel .item-header-panel .gwt-HTML {
   font-weight: bold;
 }
@@ -2187,6 +2217,8 @@ div.item-panel {
   color: #3F3F3F;
   margin-right: 30px;
 }
+
+
 .item-panel .item-header-buttons .gwt-Button, .item-composite-panel .gwt-Button, .gwt-Hyperlink a {
   background-color: transparent;
   border: 0;
@@ -2200,10 +2232,15 @@ div.item-panel {
   width: auto;
   overflow: visible;
 }
+**/
+
 .edit-panel-links {
   float: right;
   padding: 10px 15px 0;
 }
+
+/**
+
 .gwt-Hyperlink {
   float: left;
   text-align: center;
@@ -2221,6 +2258,10 @@ div.item-panel {
   border: 0;
   padding-right: 0;
 }
+
+
+**/
+
 .items-panel .item-composite-panel {
  border: 0;
  padding: 0;
@@ -2231,21 +2272,26 @@ div.item-panel {
 .item-composite-panel .item-header td{
   padding: 0px;
 }
+/**
+
 .item-composite-panel .gwt-HTML {
   text-transform: uppercase;
   text-decoration: none;
   color: #ff4204;
 }
+
+**/
+
 .item-composite-panel .item-header-panel {
   border-bottom: 0px solid #ff4204;
   height: 30px;
 }
 .item-composite-panel .item-header-panel .item-header-title {
   padding-top: 3px;
-}
+}/**
 .gwt-TabPanelBottom .gwt-Image {
   margin-bottom: 0px;
-}
+}**/
 .item-header-panel td {
   text-align: left;
   padding: 0;
@@ -2277,6 +2323,7 @@ div.item-panel {
 .header-block td {
   width: 0px;
 }
+/**
 .header-block .gwt-Image {
   border: 10px solid #FFF;
   border-top: 0;
@@ -2285,7 +2332,7 @@ div.item-panel {
 .header-block .gwt-Button {
   margin: 40px 50px 0 50px;
 }
-.header-block .gwt-Button, /**#printheader .gwt-Button,**/ .find-selector-find, .bbt-AddComment, .bbt-SaveComment, .history-compare-button {
+.header-block .gwt-Button, #printheader .gwt-Button,**/ .find-selector-find, .bbt-AddComment, .bbt-SaveComment, .history-compare-button {
   background-color: #FD0F0D;
   color: #FFF;
   border: 1px solid #B70009;
@@ -2376,9 +2423,13 @@ html > body #printcontainer table {
 
   font-size: 12px;
 }
+
+/**
 .find-results-table-result .gwt-Label {
   color: #1963AA;
 }
+**/
+
 .find-results-pagination td {
   height: 10px;
 }
@@ -2395,12 +2446,15 @@ html > body #printcontainer table {
 .find-results a {
   text-decoration: none;
 }
+
+/**
 .find-results .gwt-Hyperlink a {
   font-size: 10px;
   color: #7F7F7F;
   padding: 0 3px;
   cursor: pointer;
 }
+**/
 .find-results .pagination-item-disabled a {
   text-decoration: none;
   color: #CCC;
@@ -2409,19 +2463,26 @@ html > body #printcontainer table {
 .dialog-addfile-chooser form td {
   padding-top: 30px;
 }
+
+/**
 .dialog-addfile-chooser .gwt-textBox {
   margin-top: 30px;
 }
 .dialog-addfile-chooser .gwt-HTML {
   font-weight: bold;
 }
+**/
 .collections-dialog-text ul li {
   margin-bottom: 30px;
 }
+
+/**
 .dialog-choosetemplate-bottom .dialog-choosetemplate-chooser  .gwt-HTML {
   font-weight: bold;
   margin-top: 15px;
 }
+**/
+
 .thankyou-dialog-text div {
     margin: 10px 0 0;
 }
@@ -2445,7 +2506,7 @@ asset-contents p {
   margin: 0;
   padding: 0;
 }
-.item-description, .login-LoginPanel .gwt-Label, .item-panel .item-link {
+.item-description, /**.login-LoginPanel .gwt-Label**/, .item-panel .item-link {
   font: 13px Arial;
 }
 .item-panel .item-link {
@@ -2547,10 +2608,13 @@ asset-contents p {
 .items-panel td table.ItemPanel_selected td {
   vertical-align: top;
 }
+
+
+/**
 table.ItemPanel_selected .gwt-Image {
   margin: 10px 0 10px 200px;
 }
-html>body table.ItemPanel_selected .gwt-Image, html>body  table.ItemPanel_selected div.item-description {
+html>body table.ItemPanel_selected .gwt-Image,**/html>body  table.ItemPanel_selected div.item-description {
   margin-left: 220px;
 }
 table.ItemPanel_selected div {
@@ -2558,11 +2622,14 @@ table.ItemPanel_selected div {
   margin: 0;
   padding: 0 10px 10px 10px;
 }
+
+/**
 table.ItemPanel_selected textarea.gwt-TextArea {
   margin-bottom: 10px;
   height: 50px;
   width: 450px;
-}
+}**/
+
 table.ItemPanel_selected div.item-description {
   margin-left: 200px;
   width: 450px;
@@ -2572,9 +2639,13 @@ table.ItemPanel_selected div.attachment-upload-title {
   padding-top: 20px;
   font-weight: bold;
 }
+
+/**
 table.ItemPanel_selected .gwt-FileUpload {
   margin: 0 10px 10px 10px;
-}
+}**/
+
+
 .xwikiintracontent {
   margin: 0 10px;
 }
@@ -2688,20 +2759,19 @@ table.item-panel, .item-panel table.item-panel, .item-panel table.item-panel2, .
 .item-panel table.item-panel2 td table, .item-panel table.item-panel2 td table td, .item-panel table, .item-panel table.item-panel td table, .item-panel table.item-panel td table td  {
   width: auto;
 }
-.item-panel .item-download-zone-button, .item-panel .gwt-bttLaunchArchive {
+.item-panel .item-download-zone-button/**, .item-panel .gwt-bttLaunchArchive **/ {
   margin-left: 15px;
-}
+}/**
 .item-panel textarea.gwt-TextArea {
   margin-bottom: 10px;
   height: 50px;
   width: 450px;
-}
+}**/
+
 .item-panel .curriki-subtitle {
   margin: 0 10px 0 0;
-}
-.gwt-ModalDialog-Content {
+} 
 
-}
 .find-results-pagination-wrapper {
   text-align: center;
   margin-top: 27px;
@@ -2764,10 +2834,14 @@ body#mceSpanFonts {
   height: 1.5em !important;
   height: 18px;
 }
+
+/**
 .gwt-ModalDialog {
   height: auto;
   background-color: #FFF;
 }
+**/
+
 #loginremember INPUT {
   border: 0 solid #FFF;
   background: transparent;
@@ -2840,11 +2914,11 @@ body#mceSpanFonts {
 
 .find-results-panel .find-results .find-results-scroller {
   width: 790px;
-}
+}/**
 .find-results-table-title .gwt-Label {
   white-space: nowrap;
   margin: 0 5px;
-}
+}**/
 div#leftflash{
 width: 340px;
 height: 313px;
@@ -2863,7 +2937,7 @@ height: 313px;
 .editor-menupanel .asset-tree-item {
   max-width: 200px;
 }
-.item-panel .item-header-buttons .gwt-Button, .item-panel .item-header-buttons .edit-btt-edit {
+/**.item-panel .item-header-buttons .gwt-Button,**/.item-panel .item-header-buttons .edit-btt-edit {
   border-color: #e5e5e5;
 }
 .wiki-table {
@@ -3215,10 +3289,12 @@ table.comment-page td {
   text-decoration: none;
   font-style: normal;
 }
+
+/**
 .metadata-edit-panel span.gwt-CheckBox {
   display: block;
   margin-top: 20px;
-}
+}**/
 
 /*CRS for the comments tab in the builder */
 table.comment-page td table td {
@@ -3239,11 +3315,11 @@ table.comment-page td table td td {
 }
 .comment-page .crs_reviewscontent table {
   width: 90%;
-}
+}/**
 .comment-page .crs_reviewsdate .gwt-HTML {
   padding: 0;
   position: relative,
-}
+}**/
 .comment-page .crs_reviewscontenttext {
   float: left;
   display: block;
@@ -3260,14 +3336,19 @@ table.comment-page td table td td {
 div.item-direction-panel2 {
   padding: 0;
 }
+
+/**
 .item-direction-panel2 .gwt-HTML, .item-direction-panel2 .item-header-buttons .gwt-Button {
   color: #65659B;
-}
+} 
+
 .item-direction-panel2 .item-header-buttons .gwt-Button {
   border-color: #65659B;
   padding: 0 4px;
   border-width: 0;
-}
+}**/
+
+
 .item-direction-panel2 .item-header-buttons .edit-btt-edit,  .item-direction-panel2 .item-header-buttons .edit-btt-dupl, .item-direction-panel2 .item-header-buttons .edit-btt-remove, .item-direction-panel2 .item-header-buttons .edit-btt-cancel {
   border-right-width: 1px;
 }
@@ -3291,7 +3372,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   white-space: nowrap;
 }
 
-.item-direction-panel2 .item-header-collapse, .item-direction-panel2 .item-header-title .gwt-HTML  {
+.item-direction-panel2 .item-header-collapse /**.item-direction-panel2 .item-header-title .gwt-HTML  **/  {
   padding: 10px;
   padding-right: 0px;
   background-color: #65659B;
@@ -3300,6 +3381,8 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
 .item-direction-panel2 .item-header-title {
   text-align: left;
 }
+
+/**
 .item-direction-panel2 .item-header-title .gwt-HTML  {
   padding: 10px;
   padding-left: 0px;
@@ -3307,6 +3390,8 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   -moz-border-radius-bottomright: 11px;
   -webkit-border-bottom-right-radius: 11px;
 }
+**/
+
 .item-direction-panel2 .item-header-buttons {
   padding: 10px 0;
 }
@@ -3400,7 +3485,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   margin-bottom: 10px;
 }
 /* ADD */
-.curriki-title, .gwt-ModalDialog-Content .gwt-HTML h2, .find-results-title, .crs_nominate_title .gwt-HTML {
+.curriki-title, /**.gwt-ModalDialog-Content .gwt-HTML h2**/, .find-results-title, /**.crs_nominate_title .gwt-HTML **/{
   background:#FFFFFF none repeat scroll 0%;
   border-bottom:1px solid #FF4100;
   color:#FF4100;
@@ -3419,7 +3504,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
 
 /* Search on the main site */
 /* ADD */
-.gwt-ModalDialog .Caption, .selector-mycollections-caption, .edit-panel-title, .find-results-table-title, #searchElement table table.search-top-titlebar {
+/**.gwt-ModalDialog .Caption,**/ .selector-mycollections-caption, .edit-panel-title, .find-results-table-title, #searchElement table table.search-top-titlebar {
   border: 1px solid #FF4100;
   border-bottom: 0;
   font: 12px  Helvetica, sans-serif;
@@ -3450,6 +3535,8 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   padding: 0px;
   width: auto;
 }
+
+/**
 #searchElement .gwt-TextBox {
   margin-bottom: 10px;
   width: 350px;
@@ -3462,10 +3549,11 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   font-size: 12px;
   white-space: nowrap;
 
-}
+}**/
 
 /* ADD */
-.header-block .gwt-Button, #printheader .gwt-Button, .find-selector-find, .bbt-AddComment, .bbt-SaveComment, .history-compare-button, .search-searchbutton {
+
+/** .header-block .gwt-Button, #printheader .gwt-Button,**/.find-selector-find, .bbt-AddComment, .bbt-SaveComment, .history-compare-button, .search-searchbutton {
   background-color:#FD0F0D;
   border:1px solid #B70009;
   color: #FFFFFF;
@@ -3491,21 +3579,26 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   margin: 10px -10px 0;
   padding: 3px 0;
 }
+
+/**
 #searchElement table table.search-selector-bottom .gwt-HTML {
   text-align: center;
   cursor: pointer;
   margin: 0;
   font-size: 10px;
-}
+}**/
+
 #searchElement table table.search-results-title, #searchElement table table.find-results-table {
   background-color: #FFF;
   padding: 0;
 }
+
+/**
 #searchElement table table.search-results-title .gwt-Label {
   color: #FF4300;
   margin-top: 20px;
   text-transform: uppercase;
-}
+}**/
 #searchElement table table.find-results-table td.results-title-cell {
   width: 170px;
 }
@@ -3518,6 +3611,8 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
 #searchElement table table.find-results-table td.results-review-cell {
   width: 65px;
 }
+
+/**
 #searchElement table table.find-results-table .gwt-HTML {
   white-space: normal;
 }
@@ -3527,6 +3622,8 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
 #searchElement table table.find-results-table .find-results-table-result td.results-ict-cell .gwt-HTML {
   text-align: center;
 }
+**/
+
 #searchElement table table.find-results-table .find-results-table-result td {
   vertical-align: top;
   padding: 4px 0;
@@ -3585,11 +3682,14 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   padding: 5px 0 30px;
   margin: 0 auto;
 }
+
+/**
 #searchElement table table.search-pagination .search-pagination-nav .gwt-Label {
   color: #336699;
   cursor: pointer;
   font-size: 11px;
-}
+}**/
+
 #searchElement table table.search-pagination .search-pagination-nav .pagination-item-current {
   color: #F6797F;
 }
@@ -3609,12 +3709,14 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   vertical-align: bottom !important;
   padding-right: 0;
 }
+
+/**
 .search-selector-main .gwt-TextBox {
   margin-bottom: 3px;
 }
 .search-selector-main .gwt-Label, .search-selector-main .gwt-Image {
   margin-bottom: 8px;
-}
+}**/
 .search-selector-main .search-searchbutton {
   float: right;
   margin-right: 0;
@@ -3634,6 +3736,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
 .search-selector-filters table table {
   width: auto;
 }
+/**
 .search-selector-main .gwt-Label, .search-selector-filters .gwt-Label {
   color: #FFF;
   font-size: 12px;
@@ -3642,7 +3745,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   font-size: 12px;
   margin-bottom: 10px;
   z-index: 2;
-}
+}**/
 .search-selector-bottom {
   background-color: #333365;
   color: #6E6E92;
@@ -3650,6 +3753,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   padding: 3px 0pt;
   width: 675px;
 }
+/**
 .search-selector-bottom .gwt-HTML {
   cursor: pointer;
   font-size: 10px;
@@ -3661,7 +3765,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   margin-top: 20px;
   text-transform: uppercase;
   font-size: 12px;
-}
+}**/
 .find-results-table {
   width: 655px;
 }
@@ -3690,10 +3794,12 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   color: #1963AA;
   cursor: pointer;
 }
+
+/**
 .find-results-table-result .results-ict-cell .gwt-Label {
   color: #000;
-}
-.find-results-table-result a, .find-results-table-result .results-title-cell .gwt-HTML {
+}**/
+.find-results-table-result a, /**.find-results-table-result .results-title-cell .gwt-HTML**/ {
   text-decoration: none;
   color: #336699;
   cursor: pointer;
@@ -3702,10 +3808,11 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   text-decoration: underline;
   color: #333366;
 }
+/**
 .find-results-table-result .results-title-cell .gwt-HTML {
   width: 170px;
   overflow: hidden;
-}
+}**/
 .search-pagination td {
   text-align: center;
 }
@@ -3715,12 +3822,16 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   background-color: #F2F2F2;
   width: 675px;
 }
+
+/**
 .search-pagination-results .gwt-HTML {
   text-align: center;
   font-size: 11px;
   margin: 0;
   padding: 3px 0;
 }
+**/
+
 .search-pagination-nav {
   margin: 0 auto;
 }
@@ -3737,13 +3848,15 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   cursor: pointer !important;
   text-decoration: underline;
 }
+
+/**
 .gwt-ModalDialog-Content .find-results-scroller-simple {
   height: 350px;
 }
 .gwt-ModalDialog-Content .find-results-scroller-advanced {
   height: 227px;
 }
-
+**/
 
 /* Browse */
 .browse-subject-table {
@@ -3796,6 +3909,7 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
 }
 
 /* CB view mode after a search */
+/**
 .gwt-ModalDialog-Content .view-main, .gwt-ModalDialog-Content .view-rendered {
   width: 600px;
   height: auto;
@@ -3845,12 +3959,13 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   padding: 0;
   margin: 0;
 }
-
+**/
 /* Fix the long words issue */
+/**
 .item-panel .item-panel2 .item-text-panel-content .gwt-HTML {
   float: left;
 }
-
+**/
 /* Search orange box on main site */
 #curriki-header-right {
   padding-top: 12px !important;
@@ -3864,11 +3979,11 @@ div.item-direction-panel2 table.item-panel2 .item-header-title {
   padding-top: 1px;
 }
 
-/* CB add same color for the selected li in toc */
+/* CB add same color for the selected li in toc *//**
 .gwt-Tree .asset-tree-item .asset-tree-item .gwt-TreeItem-selected {
   background-color: #F6F8C9;
 }
-
+**/
 /* Fixing the resize on the html editor in the CB */
 .Editor-Toolbar td div img, .Editor-Toolbar td div select {
   float: left;
