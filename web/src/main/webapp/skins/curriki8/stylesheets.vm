@@ -10,11 +10,6 @@ document.write(unescape("%3Clink rel='stylesheet' type='text/css' href='" + ejcL
 </script>
 
 <link href="/xwiki/js/curriki-js.css" type="text/css" rel="stylesheet" type="text/css" />
-#if(!$request.style || $request.style=="1")
-<link href="$xwiki.getSkinFile("style.css", true)" rel="stylesheet" type="text/css"  />
-#end
-##secondary (new) skin
-#if(!$request.style || $request.style=="2")
 <link href="$xwiki.getSkinFile("style2.css", false)" rel="stylesheet" type="text/css"  />
 #if($doc.getObject("CurrikiCode.AssetClass"))
 <link href="$xwiki.getSkinFile("views.css", false)" rel="stylesheet" type="text/css"  />
@@ -25,7 +20,6 @@ document.write(unescape("%3Clink rel='stylesheet' type='text/css' href='" + ejcL
 #end
 #if("$!request.viewer"=="print")
 <link href="$xwiki.getSkinFile("print_preview.css", false)" rel="stylesheet" type="text/css"  />
-#end
 #end
 #set( $defaultstyle = $xwiki.getWebPreference("stylesheet"))
 #set( $stylesheets = $xwiki.getWebPreference("stylesheets"))
