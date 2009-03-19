@@ -969,12 +969,15 @@ form em, .header em { font-style: normal; }
 #mycurriki-main-content form table table td strong { display: block; padding-top: 5px; }
 
 /* Print */
+
+/**
+
 #printheader { background-color: #E3E4F6; }
 #header-banner { width: 600px; }
 #printheader #header-logo { background-color: #fff; padding-right: 10px; }
 #printcontainer_compare table { border: none; width: 98%; }
 #printcontainer .asset-contents, #printcontainer .titlebar { margin-bottom: 0; }
-
+**/
 /* CB */
 .gwt-Tree .asset-tree-item .gwt-TreeItem { display: block !important; }
 .gwt-ButtonNav {
@@ -991,6 +994,8 @@ height:auto;
 
 
 /* CURRIKI-2444 - Printing needs overflow to be visible */
+
+/**
 @media print {
 #content, .asset-content-body { overflow: visible; }
 #header-title-zone, #header-closebutton { display: none; }
@@ -998,40 +1003,7 @@ height:auto;
 #mini_player_mp3 { display: none; }
 .flash-control-newwindow { display: none; }
 }
-/*** Adding Search styles for extjs Overrides ***/
-
-#search-div {
-	margin-top:10px;
-}
-
-.x-panel-body {
-	background:transparent;
-}
-
-.x-form-element {
-	padding-left:25px;
-}
-
-#searchResultsGrid .x-grid3-cell-inner {
-	white-space: normal;
-}
-.x-fieldset legend { display: block; }
-
-
-.ict-icon-combo-icon {
-	background-repeat: no-repeat;
-	background-position: 0 50%;
-	width: 16px;
-	height: 16px;
-}
-input[type="text"] .ict-icon-combo-input {
-	padding-left: 21px;
-}
-.x-form-field-wrap .ict-icon-combo-icon { 
-	top: 3px;
-	left: 5px;
-}
-
+**/
 /** XWIKI STUFF **/
 
 h2.heading-1,.heading-1{
@@ -1082,6 +1054,39 @@ h6, h6.heading-1-1-1-1-1,,.heading-1-1-1-1-1{
 }
  
 
+/*** Adding Search styles for extjs Overrides ***/
+
+#search-div {
+	margin-top:10px;
+}
+
+.x-panel-body {
+	background:transparent;
+}
+
+.x-form-element {
+	padding-left:25px;
+}
+
+#searchResultsGrid .x-grid3-cell-inner {
+	white-space: normal;
+}
+.x-fieldset legend { display: block; }
+
+
+.ict-icon-combo-icon {
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	width: 16px;
+	height: 16px;
+}
+input[type="text"] .ict-icon-combo-input {
+	padding-left: 21px;
+}
+.x-form-field-wrap .ict-icon-combo-icon { 
+	top: 3px;
+	left: 5px;
+}
 
 
 
@@ -1130,12 +1135,14 @@ input[type="text"] .ict-icon-combo-input {
 .crs-icon + .crs-text { padding-left: 5px; }
 
 /* Old CRS Values */
+/*
 .crs-1 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
 .crs-2 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS2.gif) }
 .crs-3 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
 .crs-P .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
-
+*/
 /* New CRS Values */
+/*
 .crs-10 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRSP.gif) }
 .crs-60 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS1.gif) }
 .crs-70 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS1.gif) }
@@ -1143,7 +1150,7 @@ input[type="text"] .ict-icon-combo-input {
 .crs-50 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS2.gif) }
 .crs-20 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/miniCRS3.gif) }
 .crs-30 .crs-icon { background-image: url(/xwiki/skins/curriki8/icons/CRS/ministarCRS3.gif) }
-
+*/
 
 /*** SEARCH OVERRIDES ***/
 
@@ -1278,27 +1285,18 @@ td.x-grid3-hd-over .x-grid3-hd-inner,td.sort-desc .x-grid3-hd-inner,td.sort-asc 
 	background-color:#ff4100;
 	text-decoration:underline;
 }
-td.x-grid3-hd-over .x-grid3-hd-contributions,td.sort-desc .x-grid3-hd-contributions,td.sort-asc .x-grid3-hd-contributions,td.x-grid3-hd-menu-open .x-grid3-hd-contributions {
-	text-decoration:none!important;
-}
-td.x-grid3-hd-over .x-grid3-hd-description,td.sort-desc .x-grid3-hd-description,td.sort-asc .x-grid3-hd-description,td.x-grid3-hd-menu-open .x-grid3-hd-description {
-	text-decoration:none!important;
-}
-td.x-grid3-hd-over .x-grid3-hd-description a,td.sort-desc .x-grid3-hd-description a,td.sort-asc .x-grid3-hd-description a,td.x-grid3-hd-menu-open .x-grid3-hd-description a {
-	background-image:none!important;
-}
-td.x-grid3-hd-over .x-grid3-hd-bio,td.sort-desc .x-grid3-hd-bio,td.sort-asc .x-grid3-hd-bio,td.x-grid3-hd-menu-open .x-grid3-hd-bio {
-	text-decoration:none!important;
-}
-td.x-grid3-hd-over .x-grid3-hd-bio a,td.sort-desc .x-grid3-hd-bio a,td.sort-asc .x-grid3-hd-bio a,td.x-grid3-hd-menu-open .x-grid3-hd-bio a {
-	background-image:none!important;
-}
-td.x-grid3-hd-over .x-grid3-hd-text,td.sort-desc .x-grid3-hd-text,td.sort-asc .x-grid3-hd-text,td.x-grid3-hd-menu-open .x-grid3-hd-text {
-	text-decoration:none!important;
-}
+td.x-grid3-hd-over .x-grid3-hd-contributions,td.sort-desc .x-grid3-hd-contributions,td.sort-asc .x-grid3-hd-contributions,td.x-grid3-hd-menu-open .x-grid3-hd-contributions,
+td.x-grid3-hd-over .x-grid3-hd-description,td.sort-desc .x-grid3-hd-description,td.sort-asc .x-grid3-hd-description,td.x-grid3-hd-menu-open .x-grid3-hd-description,
+td.x-grid3-hd-over .x-grid3-hd-bio,td.sort-desc .x-grid3-hd-bio,td.sort-asc .x-grid3-hd-bio,td.x-grid3-hd-menu-open .x-grid3-hd-bio,
+td.x-grid3-hd-over .x-grid3-hd-text,td.sort-desc .x-grid3-hd-text,td.sort-asc .x-grid3-hd-text,td.x-grid3-hd-menu-open .x-grid3-hd-text
+{text-decoration:none!important;}
+
+td.x-grid3-hd-over .x-grid3-hd-description a,td.sort-desc .x-grid3-hd-description a,td.sort-asc .x-grid3-hd-description a,td.x-grid3-hd-menu-open .x-grid3-hd-description a,
+td.x-grid3-hd-over .x-grid3-hd-bio a,td.sort-desc .x-grid3-hd-bio a,td.sort-asc .x-grid3-hd-bio a,td.x-grid3-hd-menu-open .x-grid3-hd-bio a,
 td.x-grid3-hd-over .x-grid3-hd-text a,td.sort-desc .x-grid3-hd-text a,td.sort-asc .x-grid3-hd-text a,td.x-grid3-hd-menu-open .x-grid3-hd-text a {
 	background-image:none!important;
 }
+ 
 .x-grid3-hd-text {
 	color:#fff;
 }
