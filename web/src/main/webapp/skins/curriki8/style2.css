@@ -514,6 +514,32 @@ button:hover, .x-btn button:hover, .menu-add:hover { background-color: #ffb808; 
 .x-btn-right { background-image: none; }
 
 
+
+/** TABS **/
+
+.tabs { padding: 15px 10px 4px; }
+.tab {
+ background-color: #FFF;
+ border: 1px solid #C9C9C9;
+ border-bottom: none;
+ color: #000000;
+ cursor: pointer;
+ font-family: Arial 12px;
+ font-weight: bold;
+ padding: 5px 10px;
+ text-decoration: none;
+ -moz-border-radius-topleft: 3px;
+ -moz-border-radius-topright: 3px;
+}
+.tab-selected { background-color: #F2F2F2; padding-bottom: 6px; }
+a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
+
+.tab-container { background-color: #F2F2F2; border: 1px solid #E5E5E5; padding: 10px 10px 0; margin: 0 0 10px; }
+
+
+
+
+
 /* Groups */
 #groups-curriculum #groups-main-header .button { float: right; }
 .subject-card { margin: 5px; }
@@ -2182,6 +2208,30 @@ td.table-col-filetype img.subcategory-attachment_unknown {background-position: 0
 }
 
 
+/** LEFT PANEL NAVIGATION ICONOGRAPHY **/
+
+#navigation-inner .titles:hover span.collapsed, #navigation-inner span.collapsed, #navigation-inner span.expanded, #navigation-inner .titles:hover span.expanded, 
+#navigation-inner .selected span.collapsed {
+	background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/images/sprite_general.gif);
+	background-repeat: no-repeat;
+} 
+
+#navigation-inner .titles:hover span.collapsed {background-position: 0 -1260px !important;}
+#navigation-inner span.collapsed {background-position: 0 -1080px !important;}
+#navigation-inner span.expanded {background-position: 0 -990px !important;}
+#navigation-inner .titles:hover span.expanded {background-position: 0 -1170px !important;}
+#navigation-inner .selected span.collapsed {background-position: 0 -900px !important;}
+#navigation-inner .selected:hover img {display:none !important;}
+#navigation-inner .selected span.expanded {background-position: 0 -810px !important;}
+
+#navigation-inner .titles:hover {
+	background-color: #a3a4d2
+	color: #282974;
+}
+
+#navigation-inner .home span {width: 18px;}
+
+
 /** MY COLLECTIONS LINK PIPES **/
 
 .mycurriki-collections a.button-link, #groups-collections a.button-link {
@@ -2223,29 +2273,6 @@ a.last-item {
 	color:#000000;
 }
 
-/** LEFT PANEL NAVIGATION **/
-
-
-#navigation-inner .titles:hover span.collapsed, #navigation-inner span.collapsed, #navigation-inner span.expanded, #navigation-inner .titles:hover span.expanded, 
-#navigation-inner .selected span.collapsed {
-	background-image: url(http://next.dev.curriki.org/xwiki/skins/curriki8/images/sprite_general.gif);
-	background-repeat: no-repeat;
-} 
-
-#navigation-inner .titles:hover span.collapsed {background-position: 0 -1260px !important;}
-#navigation-inner span.collapsed {background-position: 0 -1080px !important;}
-#navigation-inner span.expanded {background-position: 0 -990px !important;}
-#navigation-inner .titles:hover span.expanded {background-position: 0 -1170px !important;}
-#navigation-inner .selected span.collapsed {background-position: 0 -900px !important;}
-#navigation-inner .selected:hover img {display:none !important;}
-#navigation-inner .selected span.expanded {background-position: 0 -810px !important;}
-
-#navigation-inner .titles:hover {
-	background-color: #a3a4d2
-	color: #282974;
-}
-
-#navigation-inner .home span {width: 18px;}
 
 /** WEBQUEST INPUT - IE NOT GETTING WIDTH SINCE EARLIER CSS WAS WRITTEN WITH attr selectors **/
 
