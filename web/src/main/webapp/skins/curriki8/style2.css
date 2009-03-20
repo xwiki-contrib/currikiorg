@@ -360,7 +360,19 @@ em, em strong { font-style: italic; }
 .green, .ressource .create, .ressource .edit, .curriki-form .headerbar { background-color: #93c53c; }
 .blue, .members .headerbar, .groups .headerbar { background-color: #4e83c6; }
 
-.frame { border: 1px solid #dcdcdc; }
+
+/** FRAME **/
+
+.frame { 
+	background-color:#FFFFFF;
+	border:1px solid #dcdcdc;
+	margin:10px 0 20px;
+	padding:0;
+	position:relative;
+}
+
+.frame a
+
 .links { padding: 1em 0; }
 .frame-content { padding: 0.5em; }
 .instruction { color: #3f3f3f; font-size: 10px; }
@@ -1227,9 +1239,88 @@ Overwrites for style1
 ul.star, ol { margin: 1em 0; padding-left: 30px; }
 ol { list-style-type: decimal; }
 
+/** TABLE RELATED **/
+
+.table-header {
+	background-color:#FF4100;
+	border-right:1px solid #FFFFFF;
+	color:#FFFFFF;
+	font-size:12px;
+	line-height:12px;
+	padding:3px 5px 4px;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+.table-header a {  
+	color: #FFF;
+	text-transform: uppercase;
+}
+
+.table-contributions .table-col-title {width:186px;}
+.table .table-col-title {text-align:left;}
+
+
+.table th a:hover { text-decoration: underline; }
+.table-contributions th.table-header-sorted a, .table-contributions th.table-col-title a:hover { text-decoration: underline; }
+.table-contributions th a:hover { color: #FFF; }
+
+.table-favorites .table-col-title { width: 193px; }
+.table-favorites .table-col-contributor { width: 146px; }
+.table-favorites .table-col-ict { width: 67px; }
+.table-favorites .table-col-filetype { width: 112px; }
+.table-favorites .table-col-action { width: 90px; }
+
+.table-contributions .table-col-title { width: 186px; }
+.table-contributions .table-col-ict { width: 48px; }
+.table-contributions .table-col-lastupdated { width: 121px; }
+.table-contributions .table-col-access{ width: 78px; }
+.table-contributions .table-col-filetype { width: 85px; }
+.table-contributions .table-col-action { width: 90px; }
+
+.table .table-col-title {
+ text-align: left;
+}
+.table .table-col-contributor {
+ text-align: left;
+ padding-left: 10px;
+}
+.table .table-col-action { border-right: none; }
+
+.table tr { margin: 0 5px; }
+.table td {
+ font-size: 12px;
+ padding: 5px;
+ text-align: center;
+}
+.table-odds td {
+ background-color: #F1F1F1;
+}
+.table-results {
+ border-top: 2px solid #FA4240;
+ font-size: 11px;
+ margin: 10px 0;
+}
+.table-results-title {
+ background-color: #F1F1F1;
+ text-align: center;
+}
+.table-results-navigation {
+ padding: 5px 0;
+ text-align: center;
+}
+.table-results-navigation a {
+ text-decoration: none;
+}
+a.table-results-navigation-selected {
+ color: #FF8D90;
+}
+
+
 .table .button-links a { display: block; padding-left: 20px; text-align: left; }
 .table .button-links a:hover, .frame-inset .button-links a:hover { color: #282974; text-decoration: underline; }
 .table .button-links a.button-link-table  { border: none; }
+.table {border-collapse:collapse;}
 .frame-inset .button-links { margin-bottom: 15px; padding-left: 17px; font-size: 0; }
 .frame-inset .button-links a { font-size: 12px; padding: 0 4px; }
 .frame-inset-ict { margin-bottom: 5px; }
@@ -1267,6 +1358,9 @@ form em, .header em { font-style: normal; }
 .edit-profile .userpic, #mycurriki-main-content form td .userpic { margin-right: 15px; }
 .edit-profile table table td { padding-bottom: 5px; }
 #mycurriki-main-content form table table td strong { display: block; padding-top: 5px; }
+#mycurriki-main-header .button-orange {float:right;}
+
+#mycurriki-main-content {clear:both;}
 
 /* Print */
 
@@ -1278,11 +1372,11 @@ form em, .header em { font-style: normal; }
 #printcontainer_compare table { border: none; width: 98%; }
 #printcontainer .asset-contents, #printcontainer .titlebar { margin-bottom: 0; }
 **/
-/* CB */
+/* CB *//**
 .gwt-Tree .asset-tree-item .gwt-TreeItem { display: block !important; }
 .gwt-ButtonNav {
 height:auto;
-}
+}**/
 
 /* CURRIKI-2770 - Removing some spacing in NortelLearniTLessonPlan header */
 .lesson-plan-learn-line {
