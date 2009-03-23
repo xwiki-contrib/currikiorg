@@ -65,7 +65,7 @@ Curriki.module.nominate.init = function() {
 						bbar : ['->', {
 							text : _('curriki.crs.nominate.cancel'),
 							id : 'cancelbutton',
-							cls : 'button cancel',
+							cls : 'button button-cancel',
 							listeners : {
 								click : {
 									fn : function() {
@@ -78,7 +78,7 @@ Curriki.module.nominate.init = function() {
 						}, {
 							text : _('curriki.crs.nominate.submit'),
 							id : 'submitbutton',
-							cls : 'submitbutton button next',
+							cls : 'submitbutton button button-confirm',
 							listeners : {
 								click : {
 									fn : function() {

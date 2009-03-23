@@ -405,7 +405,7 @@ console.log('removed node', node, oldParent, tree);
 				,bbar:['->',{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-confirm-cancel-button'
-					,cls:'button btn-cancel'
+					,cls:'button button-cancel'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -418,7 +418,7 @@ console.log('removed node', node, oldParent, tree);
 				},{
 					 text:_('organize.dialog.ok_button')
 					,id:'organize-confirm-ok-button'
-					,cls:'button btn-next'
+					,cls:'button button-confirm'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -465,7 +465,7 @@ console.log('removed node', node, oldParent, tree);
 				,bbar:[{
 					 text:_('organize.intention.message.continue_button')
 					,id:'organize-intention-continue-button'
-					,cls:'button continue-btn'
+					,cls:'button button-confirm'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -478,7 +478,7 @@ console.log('removed node', node, oldParent, tree);
 				},{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-intention-cancel-button'
-					,cls:'button cancel-btn'
+					,cls:'button button-cancel'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){

@@ -88,7 +88,7 @@ Reorder.init = function(){
 					,bbar:['->',{
 						 text:_(msgPfx+'cancel.btt')
 						,id:'cancelbutton'
-						,cls:'button cancel'
+						,cls:'button button-cancel'
 						,listeners:{
 							click:{
 								 fn: function(){
@@ -103,7 +103,7 @@ Reorder.init = function(){
 					},{
 						 text:_(msgPfx+'next.btt')
 						,id:'nextbutton'
-						,cls:'button next'
+						,cls:'button button-confirm'
 						,listeners:{
 							click:{
 								 fn: function(){

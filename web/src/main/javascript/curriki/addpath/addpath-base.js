@@ -96,7 +96,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.contributemenu.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button cancel'
+							,cls:'button button-cancel'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -109,7 +109,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_('add.contributemenu.next.button')
 							,id:'nextbutton'
-							,cls:'button next'
+							,cls:'button button-confirm'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -489,7 +489,7 @@ Curriki.module.addpath.init = function(){
 						,buttons:[{
 							 text:_(tmplPfx+'.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button cancel'
+							,cls:'button button-cancel'
 							,listeners:{
 								'click':function(e, ev){
 									Ext.getCmp(e.id).ownerCt.ownerCt.close();
@@ -499,7 +499,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_(tmplPfx+'.next.button')
 							,id:'nextbutton'
-							,cls:'button next'
+							,cls:'button button-confirm'
 							,listeners:{
 								'click':function(e, ev){
 									AddPath.PostToTemplate(Curriki.current.submitToTemplate);
@@ -604,7 +604,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.setrequiredinfo.part1.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button cancel'
+							,cls:'button button-cancel'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -617,7 +617,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_('add.setrequiredinfo.part1.next.button')
 							,id:'nextbutton'
-							,cls:'button next'
+							,cls:'button button-confirm'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -1112,7 +1112,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.setrequiredinfo.part2.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button cancel'
+							,cls:'button button-cancel'
 							,listeners:{
 								'click':function(e, ev){
 									Ext.WindowMgr.get('MetadataDialogueWindow').close();
@@ -1122,7 +1122,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_('add.setrequiredinfo.part2.next.button')
 							,id:'nextbutton'
-							,cls:'button next'
+							,cls:'button button-confirm'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -1733,7 +1733,7 @@ console.log("Published CB: ", newAsset);
 			return {
 					 text:_('add.finalmessage.close.button')
 					,id:'closebutton'
-					,cls:'button cancel'
+					,cls:'button button-cancel'
 					,listeners:{
 						'click':{
 							 fn:function(e,evt){
@@ -2037,7 +2037,7 @@ console.log("Published CB: ", newAsset);
 						,bbar:['->',{
 							 text:_('add.chooselocation.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button cancel'
+							,cls:'button button-cancel'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -2050,7 +2050,7 @@ console.log("Published CB: ", newAsset);
 						},{
 							 text:_('add.chooselocation.next.button')
 							,id:'nextbutton'
-							,cls:'button next'
+							,cls:'button button-confirm'
 							,disabled:true
 							,listeners:{
 								click:{
