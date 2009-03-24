@@ -65,7 +65,7 @@ body.admin {
 
 
 
-button, input.button, button.button, a.button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange, #attachmentAddForm .button-orange, #nextbutton button.x-btn-text, input[type="submit"], input[type="button"], .sub-asset-wrapper button.button-link, #print-banner-wrapper button.button-link { 
+button, input.button, button.button, a.button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-confirm, #attachmentAddForm .button-confirm, #nextbutton button.x-btn-text, input[type="submit"], input[type="button"], .sub-asset-wrapper button.button-link, #print-banner-wrapper button.button-link { 
 	background-color:#FF7F00;
 	border:1px solid #FF0000;
 	color:#FFFFFF;
@@ -79,7 +79,7 @@ button, input.button, button.button, a.button, .x-btn button, .menu-add, #groups
 	width: auto;
 }
 
-button:hover, a.button:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-orange:hover, #attachmentAddForm .button-orange:hover, input[type="submit"]:hover, #nextbutton button.x-btn-text:hover { 
+button:hover, a.button:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-confirm:hover, #attachmentAddForm .button-confirm:hover, input[type="submit"]:hover, #nextbutton button.x-btn-text:hover { 
 	background-color: #ffb808; 
 	color: #fff;
 }
@@ -88,13 +88,13 @@ button:hover, a.button:hover, .x-btn button:hover, .menu-add:hover, #groups-crea
 	margin-right:10px;
 }
 
-button.cancel, .button-grey, #cancelbutton .x-btn-text, #ext-comp-1073 .x-btn-text, #closebutton button {
+button.cancel, .button-cancel, .button-cancel .x-btn-text, #ext-comp-1073 .x-btn-text, .button-cancel button {
 	background-color: #dcdcdc;
 	border-color: #A5A5A5;
 	color: #3f3f3f;
 }
 
-button.cancel:hover, button.button-grey:hover, #cancelbutton .x-btn-text:hover, #ext-comp-1073 #cancelbutton .x-btn-text:hover, #closebutton button:hover, input.button-grey[type="submit"]:hover, input.button-grey[type="button"]:hover  {
+button.cancel:hover, button.button-cancel:hover,.button-cancel .x-btn-text:hover,.button-cancel button:hover, input.button-cancel[type="submit"]:hover, input.button-cancel[type="button"]:hover  {
 	background-color: #b4b4b4; 
 	color: #3f3f3f;
 }
@@ -968,8 +968,8 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 .CreateNewGroup .frame-content #XWiki\.SpaceClass_0_displayTitle,  .CreateNewGroup .frame-content #XWiki\.SpaceClass_0_description { width: 536px; }
 .CreateNewGroup .frame-content #form-info-top { margin-top: 15px; }
 .button-masthead { padding: 0 0 15px; }
-.CreateNewGroup  .button-masthead input.button-orange { font-weight: normal; margin: 0 7px; }
-.CreateNewGroup .button-masthead button.button-grey,  { margin: 0 7px; }
+.CreateNewGroup  .button-masthead input.button-confirm { font-weight: normal; margin: 0 7px; }
+.CreateNewGroup .button-masthead button.button-cancel,  { margin: 0 7px; }
 
 /* VIEW MESSAGES */ 
 .comments { border-bottom: 1px dotted #B3B3B3; padding: 10px; }
@@ -1042,19 +1042,19 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 .CreateNewGroup #XWiki.SpaceClass_0_description { width: 90%; }
 
 
-.CreateNewGroup input.button-orange { margin: 15px; /** 1.9 Removal  padding: 5px; font-weight: normal; **/ } 
+.CreateNewGroup input.button-confirm { margin: 15px; /** 1.9 Removal  padding: 5px; font-weight: normal; **/ } 
 .CreateNewGroup #form-info-top { position: relative; }
 
 /** 1.9 Removal .CreateNewGroup #form-info-top img { position: absolute; top: 0; right: 3px; }  **/
 
-.CreateNewGroup button.button-grey { margin-top: 15px; }
-.CreateNewGroup button.button-grey:hover { color: #000000; }
+.CreateNewGroup button.button-cancel { margin-top: 15px; }
+.CreateNewGroup button.button-cancel:hover { color: #000000; }
 .CreateNewGroup #XWiki\.SpaceClass_0_urlshortcut { width: 160px !important; }
 .CreateNewGroup #XWiki\.SpaceClass_0_displayTitle, #XWiki\.SpaceClass_0_description { width: 580px; }
 .CreateNewGroup .validation-error { color: #FF4100 !important; background-color: #FFF !important; }
 
-.CreateNewGroup  .button-center input.button-orange { font-weight: normal; margin: 0 7px; }
-.CreateNewGroup .button-center button.button-grey,  { margin: 0 7px; }
+.CreateNewGroup  .button-center input.button-confirm { font-weight: normal; margin: 0 7px; }
+.CreateNewGroup .button-center button.button-cancel,  { margin: 0 7px; }
 /* End of Create new group */
 
 /* GROUP CREATE CONFIRM */
@@ -1101,7 +1101,7 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 .groups-members-memberinfo form textarea, .groups-members form textarea { width: 99%; } 
 .groups-members-member-buttons { padding-bottom: 15px; text-align: right; }
 .groups-members-member-buttons input.button { border: none; background-color: transparent; color: #336699; display: inline; margin: 3px 0 0 0; padding: 0 4px; width: auto !important; }
-.groups-members-member-buttons input.button-grey { border-right: 1px solid #cccccc; }
+.groups-members-member-buttons input.button-cancel { border-right: 1px solid #cccccc; }
 .groups-members-request .groups-members-request-links { top: 10px; }
 .groups-members .group-members-edited .userpic { display: block; }
 .groups-members .group-members-edited .groups-members-member-buttons { position: absolute; right: 3px; top: 5px; }
@@ -1125,7 +1125,7 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 .group-members-request-confirm .groups-members-request-info form { padding-top: 90px; }
 .group-members-request-confirm form .button-right { position: absolute; top: 10px; right: 3px; padding: 0; }
 .group-members-request-confirm form .button-right input.button { background-color: transparent; border: none; color: #336699; font-size: 12px; text-decoration:none; margin: 0; padding: 0 3px;  }
-.group-members-request-confirm form .button-right input.button-grey { border-right: 1px solid #ccc; } 
+.group-members-request-confirm form .button-right input.button-cancel { border-right: 1px solid #ccc; } 
 .groups-members-request-confirm-box p { padding: 5px 0; }
 .groups-members-request-date { font-style:italic }
 .groups-members-request-status { padding-top: 10px; }
@@ -1156,7 +1156,7 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 .groups-curriculum .frame-inset { margin:10px 0 0; }
 #groups-members-welcomeblock .button { display: inline; }
 .groups-curriculum #groups-collections-instructional { position: relative; padding-bottom: 15px; zoom: 1; }
-.groups-curriculum #groups-collections-instructional .button-orange { position: absolute; right: 0px; }
+.groups-curriculum #groups-collections-instructional .button-confirm { position: absolute; right: 0px; }
 
 /* JIRA 1550 */
 #register_block_opt_out { position: relative; }
@@ -1232,7 +1232,7 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 #mycurriki-blog .frame .mceToolbar img { margin: 0; }
 #mycurriki-blog .frame .cd-article img { margin: 0; }
 #commentAddForm #commentform button.button { display: inline; }
-#commentAddForm #commentform button.button-grey { margin-left: 15px; }
+#commentAddForm #commentform button.button-cancel { margin-left: 15px; }
 #mycurriki-blog .edit-blog { width: auto; padding-right: 10px; }
 
 
@@ -1264,7 +1264,7 @@ a.tab, a.tab:visited, a.tab:hover {  color: #000000; }
 #groups-manage-role-line-Role_AffiliateGroup .lefttext { float: none; padding: 5px 0; }
 #groups-main-content-frame input[type="text"], #groups-manage-roles-edit-Role_AffiliateGroup input[type="text"] { width: 60%; }
 #groups-main-content-frame .frame-inset  .button  { display: inline; margin: 0 0 0 15px;  }
-#groups-main-content-frame .frame-inset  .button-grey { color: #000; }
+#groups-main-content-frame .frame-inset  .button-cancel { color: #000; }
 #groups-main-content-frame .lefttext { float: none; padding: 6px 0; }
 #groups-main-content-frame #groups-manage-roles-add-button { padding: 10px 0 50px; }
 #groups-main-content-frame .frame-inset { margin: 0; }
@@ -1579,9 +1579,8 @@ form em, .header em { font-style: normal; }
 .edit-profile .userpic, #mycurriki-main-content form td .userpic { margin-right: 15px; }
 .edit-profile table table td { padding-bottom: 5px; }
 #mycurriki-main-content form table table td strong { display: block; padding-top: 5px; }
-#mycurriki-main-header .button-orange {float:right;}
+#mycurriki-main-header .button-confirm {float:right;}
 
-#mycurriki-main-header .button-orange { float: right; }
 #mycurriki-main-header { padding-bottom: 10px; }
 #mycurriki-main-content { clear: both; }
 
