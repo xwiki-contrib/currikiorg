@@ -79,7 +79,7 @@
             <td class="revision-col-date">$xwiki.formatDate($revinfo.date, $msg.get("mycurriki.datetimeFormat"))</td>
             #if($hasEdit || $hasAdmin)
             #set($rollbackMessage = $msg.get("rve.information.rollback.confirm.message", ["$!version"]))
-            <td class="revision-col-action" ><button class="button-link" onclick="if (confirm('$xwiki.curriki.escapeForJS($rollbackMessage)')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
+            <td class="revision-col-action" ><button class="button button-confirm" onclick="if (confirm('$xwiki.curriki.escapeForJS($rollbackMessage)')){ location = '$tdoc.getURL("rollback","rev=${version}${lang}&amp;confirm=1&amp;xredirect=${historyurl}")';} return false;">$msg.get("rve.information.revision.list.rollback_button")</button></td>
             #end
         </tr>
         #end ## foreach
@@ -89,7 +89,7 @@
         ## Print the page navigation links, if needed.
             #printPagedViewLinks($itemsPerPage $totalPages $currentPageNumber "viewer=history&amp;showminor=${minorVersions}" false)
         #if ($totalVersions > 1)
-        <input class="button-save" type="submit" accesskey="c" value="$msg.get("rve.information.revision.list.compare_button")" />
+        <input class="button button-confirm" type="submit" accesskey="c" value="$msg.get("rve.information.revision.list.compare_button")" />
         #end
     </fieldset>
     </form>

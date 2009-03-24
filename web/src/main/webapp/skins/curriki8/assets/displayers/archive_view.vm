@@ -34,9 +34,9 @@
         <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
         #set($tmpActiveClass = $asset.getActiveClass())
         $asset.use("CurrikiCode.ArchiveAssetClass")
-        <button class="button-link button-link-show" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
+        <button class="button button-confirm" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
         #if ($asset.getValue("startfile") && $asset.getValue("startfile")!="")
-        <button class="button-link button-link-start" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
+        <button class="button button-confirm" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
         #end
         <div style="margin: 5px 0pt;">
             <div id="treeview${treeviewid}" style="display: none;">
@@ -48,7 +48,7 @@
                     button.onclick=function(){ hideTree(treeId, button);};
                     button.title="$msg.get('rve.content.view.hide_button')";
                     button.innerHTML="$msg.get('rve.content.view.hide_button')";
-                    button.className="button-link button-link-hide";
+                    button.className="button button-confirm";
                 }
 
                 function hideTree(treeId, button){
@@ -57,7 +57,7 @@
                     button.onclick=function(){ showTree(treeId, button);};
                     button.title="$msg.get('rve.content.view.show_button')";
                     button.innerHTML="$msg.get('rve.content.view.show_button')";
-                    button.className="button-link button-link-show";
+                    button.className="button button-confirm";
                 }
 
                 var tree${treeviewid};
