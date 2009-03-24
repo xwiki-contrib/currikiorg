@@ -88,9 +88,9 @@ $msg.get("mycurriki.blog.noblog")
 #end
 #set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
 #if(!$hasBlog) ## {
-<a class="button button-orange" href="$xwiki.getURL("MyCurriki.BlogCreateBlog", "view", "xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createBlog")">$msg.get("mycurriki.blog.createBlog")</a>
+<a class="button button-confirm" href="$xwiki.getURL("MyCurriki.BlogCreateBlog", "view", "xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createBlog")">$msg.get("mycurriki.blog.createBlog")</a>
 #else ## } {
-<a class="button button-orange" href="$xwiki.getURL("MyCurriki.BlogCreateArticle", "view", "space=Blog_${shortname}&xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createEntry")">$msg.get("mycurriki.blog.createEntry")</a>
+<a class="button button-confirm" href="$xwiki.getURL("MyCurriki.BlogCreateArticle", "view", "space=Blog_${shortname}&xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createEntry")">$msg.get("mycurriki.blog.createEntry")</a>
 #end ## }
 #end
 #end ## button macro
@@ -155,7 +155,7 @@ $comment.comment
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 <div id="commentscontent" class="xwikiintracontent">
-<div class="righttext"><a class="button button-orange" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="righttext"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
       <form id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
@@ -167,8 +167,8 @@ $comment.comment
         <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
         <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
         <div>
-	<button class="button button-orange" type="submit" id="button-comment-save" onclick="if ($F('XWiki.XWikiComments_comment').length == 0){alert('$msg.get("mycurriki.blog.comment.empty")'); return false;} else {return true;}">$msg.get("caption.saveComment")</button>
-	<button class="button button-grey" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
+	<button class="button button-confirm" type="submit" id="button-comment-save" onclick="if ($F('XWiki.XWikiComments_comment').length == 0){alert('$msg.get("mycurriki.blog.comment.empty")'); return false;} else {return true;}">$msg.get("caption.saveComment")</button>
+	<button class="button button-cancel" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
         </div>
         </fieldset>
       </form>
@@ -350,8 +350,8 @@ function checkForm() {
 ")
 #end
 <div class="righttext">
-<input class="button button-orange floatright" type="submit" name="formactionsave" value="$msg.get("save")" onclick="if(checkForm() == false) return false; document.forms.inline.submit(); return false;"/>
-<input class="button button-grey floatright" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="history.go(-1); return false;"/>
+<input class="button button-confirm floatright" type="submit" name="formactionsave" value="$msg.get("save")" onclick="if(checkForm() == false) return false; document.forms.inline.submit(); return false;"/>
+<input class="button button-cancel floatright" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="history.go(-1); return false;"/>
 </div>
 </form>
 {/pre}

@@ -518,8 +518,8 @@ $!desc
 #macro(mycurriki_editprofilebuttons $xredirect) ##{
   <!-- Edit Profile Buttons -->
   <div class="button-right">
-    <input class="button button-grey" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
-    <input class="button button-orange" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/>
+    <input class="button button-cancel" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
+    <input class="button button-confirm" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/>
   </div>
   <!-- End Edit Profile Buttons -->
 #end ##}
@@ -672,7 +672,7 @@ $!desc
 #macro(mycurriki_editprofilebutton $userdoc) ##{
   <!-- My Curriki edit profile button -->
   #if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights())) ##{
-    <a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("mycurriki.profile.editButton")">$msg.get("mycurriki.profile.editButton")</a></span>
+    <a class="button button-confirm" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("mycurriki.profile.editButton")">$msg.get("mycurriki.profile.editButton")</a></span>
   #end ##}
   <!-- End My Curriki edit profile button -->
 #end ## } end macro
@@ -881,7 +881,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
                   <div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="20"/></div>
                   <div> ##{
                     {pre} ##{
-                      <input type="submit" value="$msg.get("attachthisfile")" onclick="if (!checkFileExtension()) return false; return updateAttachName(document.forms.profilImageAttach, '$msg.get("doyouwanttoreplace")')" class="button button-orange"/>
+                      <input type="submit" value="$msg.get("attachthisfile")" onclick="if (!checkFileExtension()) return false; return updateAttachName(document.forms.profilImageAttach, '$msg.get("doyouwanttoreplace")')" class="button button-confirm"/>
                     {/pre} ##}
                     {pre} ##{
                       <script type="text/javascript"> ##{
@@ -1048,7 +1048,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
         #if("$!breadcrumb" == "") ## {
           #set($breadcrumb=$userdoc.fullName)
         #end ## }
-        <a class="button button-orange" href="$xwiki.getURL("${favPage}", "view", "bc=${breadcrumb}")" title="$msg.get("mycurriki.favorites.viewButton")">$msg.get("mycurriki.favorites.viewButton")</a></span>
+        <a class="button button-confirm" href="$xwiki.getURL("${favPage}", "view", "bc=${breadcrumb}")" title="$msg.get("mycurriki.favorites.viewButton")">$msg.get("mycurriki.favorites.viewButton")</a></span>
       #end ## }
     #end ## }
   #end ## }
@@ -1466,7 +1466,7 @@ $msg.get("deleted")
   <!-- MyCurriki Contributions Buttons -->
   #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))##{
     {pre}
-    <a class="button button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
+    <a class="button button-confirm" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
     {/pre}
   #end ##}
   <!-- End MyCurriki Contributions Buttons -->
@@ -1748,7 +1748,7 @@ function toggle_desc(){
 #macro(mycurriki_collectionbutton $userobj)
 #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))
 {pre}
-<a class="button button-orange" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")">$msg.get("mycurriki.collections.addButton")</a>
+<a class="button button-confirm" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")">$msg.get("mycurriki.collections.addButton")</a>
 {/pre}
 #end
 #end ## buttonmacro

@@ -65,7 +65,7 @@ $msg.get("groups_members_onlyaccessibletomembers")
 #if($sm.isMember($spaceName,$context.user))
 $msg.get("groups_home_membership_group_infotxt")
 <div id="groups-members-invite-button" class="groups-members-button">
-<a href="$xwiki.getURL("${spaceName}.InviteMembers")" class="button button-orange">
+<a href="$xwiki.getURL("${spaceName}.InviteMembers")" class="button button-confirm">
 $msg.get("groups_home_membership_group_btt")
 </a>
 </div>
@@ -74,14 +74,14 @@ $msg.get("groups_home_membership_group_btt")
 #if($gpolicy=="open")
 $msg.get("groups_home_membership_open_visitor_infotxt")
 <div id="groups-members-join-button" class="groups-members-button">
-<a href="$xwiki.getURL("${spaceName}.JoinGroup")" class="button button-orange">
+<a href="$xwiki.getURL("${spaceName}.JoinGroup")" class="button button-confirm">
 $msg.get("groups_home_membership_open_visitor_btt")
 </a>
 </div>
 #else
 $msg.get("groups_home_membership_closed_visitor_infotxt")
 <div id="groups-members-request-button" class="groups-members-button">
-<a href="$xwiki.getURL("${spaceName}.RequestMembership")" class="button button-orange">
+<a href="$xwiki.getURL("${spaceName}.RequestMembership")" class="button button-confirm">
 $msg.get("groups_home_membership_closed_visitor_btt")
 </a>
 </div>
@@ -319,7 +319,7 @@ $profile
 </div>
 <form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;">
 <div class="groups-members-member-buttons">
-<input type="button"  class="button button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+<input type="button"  class="button button-cancel" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button button-confirm" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
 </div>
 <input type="hidden" name="user" value="$!memberName" />
 <input type="hidden" name="space" value="$!spaceName" />
@@ -620,9 +620,9 @@ $msreq.text
 function acceptRequest(divid, memberName, displayName) {
       $(divid).oldInnerHTML = $(divid).innerHTML;
       $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box \"><form><p>${msg.groups_members_accept_confirm}</p><br />"
-                                                 + "<div class=\"button-right\"><input type=\"button\" class=\"button button-grey\" value=\"${msg.groups_members_cancel_btt}\""
+                                                 + "<div class=\"button-right\"><input type=\"button\" class=\"button button-cancel\" value=\"${msg.groups_members_cancel_btt}\""
                                                  + " onclick=\"acceptRequestCancel('" + divid + "','" + memberName + "');\" />"
-                                                + "<input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_accept_confirm_btt}\""
+                                                + "<input type=\"button\" class=\"button button-confirm\" value=\"${msg.groups_members_accept_confirm_btt}\""
                                                 + " onclick=\"acceptRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
                                                 + "</form></div>";
       $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
@@ -651,9 +651,9 @@ function acceptRequestCallback(ajaxreq) {
 function rejectRequest(divid, memberName) {
       $(divid).oldInnerHTML = $(divid).innerHTML;
       $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box\"><form><p>${msg.groups_members_reject_confirm}</p><textarea id=\"" + divid + "-reason\" cols=\"60\" rows=\"7\"></textarea><br />"
-                                                + "<div class=\"button-right\"><input type=\"button\" class=\"button button-grey\" value=\"${msg.groups_members_cancel_btt}\""
+                                                + "<div class=\"button-right\"><input type=\"button\" class=\"button button-cancel\" value=\"${msg.groups_members_cancel_btt}\""
                                                 + " onclick=\"rejectRequestCancel('" + divid + "','" + memberName + "');\" />"
-                                                + "<input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_reject_confirm_btt}\""
+                                                + "<input type=\"button\" class=\"button button-confirm\" value=\"${msg.groups_members_reject_confirm_btt}\""
                                                 + " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
                                                 + "</form></div>";
       $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
@@ -775,7 +775,7 @@ $msg.get("groups_members_invite_invitefieldtxt", [$spaceTitle, $spaceURL, $xwiki
 <input id="openInvitationCheckbox" type="checkbox" name="open" value="open" />
 <label for="openInvitationCheckbox">$msg.get("groups_members_invite_openinvitation")</label>
 
-<p class="paragraph button-right"><input type="submit" class="button button-orange" value="$msg.get("groups_members_invite_btt")" /></p>
+<p class="paragraph button-right"><input type="submit" class="button button-confirm" value="$msg.get("groups_members_invite_btt")" /></p>
 </form>
 #endgroupsection()
 #end
@@ -828,7 +828,7 @@ $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_membe
 ##<input type="checkbox" name="allowNotifications" value="1" checked /> $msg.get("groups_members_create_membersettings_email") <br />
 ##<input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /> $msg.get("groups_members_create_membersettings_changenotice")
 </p>
-<div class="button-right"><input type="submit" class="button button-orange" value="$msg.get("groups_members_join_btt",[$spaceTitle])" /></div>
+<div class="button-right"><input type="submit" class="button button-confirm" value="$msg.get("groups_members_join_btt",[$spaceTitle])" /></div>
 </form>
 #end
 
@@ -1103,7 +1103,7 @@ $msg.get("groups.members.selectroles")
 <br />
 <input type="checkbox" name="allowNotifications" value="1" checked /> $msg.get("groups_members_create_membersettings_email") #tooltip("email-tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))<br />
 <input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /> $msg.get("groups_members_create_membersettings_changenotice") <br />
-<p class="paragraph button-right"><input type="submit" class="button button-orange" value="$msg.get("groups_members_request_request_btt")" /></p>
+<p class="paragraph button-right"><input type="submit" class="button button-confirm" value="$msg.get("groups_members_request_request_btt")" /></p>
 </p>
 </form>
 #end
