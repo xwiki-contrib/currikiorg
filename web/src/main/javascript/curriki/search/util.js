@@ -182,7 +182,7 @@ module.init = function(){
 					,items:[{
 						xtype:'button'
 						,id:'search-termPanel-button-'+modName
-						,cls:'search-termPanel-button'
+						,cls:'button button-confirm'
 						,text:_('search.text.entry.button')
 						,listeners:{
 							click:{
