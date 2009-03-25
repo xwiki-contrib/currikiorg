@@ -69,7 +69,7 @@ Organize.init = function(){
 				,bbar:[{
 					 text:_('organize.dialog.remove_button')
 					,id:'organize-remove-btn'
-					,cls:'button btn-remove'
+					,cls:'button btn-remove button-confirm'
 					,disabled:true
 					,listeners:{
 						click:function(btn, e){
@@ -82,7 +82,7 @@ Organize.init = function(){
 				},'->',{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-cancel-btn'
-					,cls:'button btn-cancel'
+					,cls:'button button-cancel'
 					,listeners:{
 						click:{
 							 fn: function(btn, e){
@@ -98,7 +98,7 @@ Organize.init = function(){
 				},{
 					 text:_('organize.dialog.done_button')
 					,id:'organize-done-btn'
-					,cls:'button btn-done'
+					,cls:'button btn-done button-confirm'
 					,disabled:true
 					,listeners:{
 						click:{

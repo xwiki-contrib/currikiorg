@@ -633,8 +633,8 @@ $asset.use("CurrikiCode.AssetClass")
     #set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel', "xredirect=${xredirecturi}")))
     <input  type="hidden" name="page" value="$asset.fullName" />
     <input  type="hidden" name="xredirect" value="$xredirect" />
-    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
-    <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
+    <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
+    <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button button-confirm"/>
 </fieldset>
 <fieldset>
     <ul>
@@ -702,8 +702,8 @@ $asset.use("CurrikiCode.AssetClass")
     </ul>
 </fieldset>
 <fieldset class="buttons">
-    <input type="button" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;" />
-    <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
+    <input type="button" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;" />
+    <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button button-confirm"/>
 </fieldset>
 </form>
 ## this allows to check for changes
@@ -833,9 +833,9 @@ $asset.use($comment)
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
                 </fieldset>
                 <fieldset class="buttons">
-                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" 
+                    <input type="button" class="button button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" 
                            onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
-                    <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
+                    <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
                 </fieldset>
             </form>
         </div>
@@ -1011,8 +1011,8 @@ window.onbeforeunload = function() {
 {pre}
     </fieldset>
     <fieldset class="buttons">
-        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditComment('${page}','${commentnb}','${request.divid}');"/>
-        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
+        <input type="button" class="button button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditComment('${page}','${commentnb}','${request.divid}');"/>
+        <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
     </fieldset>
 </form>
 {/pre}
@@ -1081,8 +1081,8 @@ $response.sendRedirect($request.xredirect)
 {pre}
     </fieldset>
     <fieldset class="buttons">
-        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditReview('${page}','${reviewnb}','${request.divid}');"/>
-        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
+        <input type="button" class="button button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditReview('${page}','${reviewnb}','${request.divid}');"/>
+        <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
     </fieldset>
 </form>
 {/pre}
@@ -1185,11 +1185,11 @@ $asset.use($classname)
 #set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel')))
 <fieldset class="buttons">
     <input  type="hidden" name="xredirect" value="$xredirect" />
-    <input class="button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
+    <input class="button button-cancel" type="submit" name="cancel" value="$msg.get("rve.content.edit.cancel_button")" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">
 #if($withsaveandcontinue)
-    <input class="button-save button-saveandcontinue" type="submit" name="saveandcontinue" value="$msg.get("rve.content.edit.save_continue_button")">
+    <input class="button button-confirm button-saveandcontinue" type="submit" name="saveandcontinue" value="$msg.get("rve.content.edit.save_continue_button")">
 #end
-    <input class="button-save" type="submit" name="save" value="$msg.get("rve.content.edit.save_button")">
+    <input class="button button-confirm" type="submit" name="save" value="$msg.get("rve.content.edit.save_button")">
 </fieldset>
 #end
 
