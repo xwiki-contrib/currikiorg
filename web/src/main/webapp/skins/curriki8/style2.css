@@ -248,19 +248,20 @@ html > body .subtitlebarRight{
   color: #644299;
 }
 
-
-
 .titlebar{
- text-align: right;
- line-height: 1.2em;
- margin: 8px 0px;
+	text-align: right;
+	line-height: 1.2em;
+	margin: 8px 0px;
+	position: relative;
 }
+
 .titlebar *{
-  color: #FFF !important;
-  font-size: 12px;
-  font-family: Helvetica, sans-serif;
-  line-height: 1.2em;
+	color: #FFF !important;
+	font-size: 12px;
+	font-family: Helvetica, sans-serif;
+	line-height: 1.2em;
 }
+
 .titlebar a{
   text-decoration: none;
   padding: 2px 8px;
@@ -269,9 +270,25 @@ html > body .titlebar a{
   display: block;
   float: right;
 }
+
 html > body .titlebarRight{
   overflow: hidden;
 }
+
+.titlebar_left { 
+	float:none;
+	overflow:hidden;
+	padding-right:120px;
+}
+
+.titlebarRight { 
+	float:none;
+  	overflow: hidden;
+	position:absolute;
+	right:0;
+	top:0;
+}
+
 
 .titlebar h3{
   font-weight: bold;
@@ -281,10 +298,6 @@ html > body .titlebarRight{
   padding: 2px 8px;
   margin: 0px;
   text-align: left;
-}
-
-.titlebarRight{
-  overflow: hidden;
 }
 
 .titlebar_red{
@@ -315,6 +328,11 @@ html > body .titlebarRight{
 .titlebar_green .titlebarRight a{
   background-color: #161;
 }
+
+
+
+
+
 * html .titlebarRight a{
   display: block;
   float: right;
