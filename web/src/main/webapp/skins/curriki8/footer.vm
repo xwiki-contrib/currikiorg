@@ -24,3 +24,11 @@ All content licensed <a href="http://creativecommons.org/about/licenses/meet-the
 #if("$!g_enable_STAF" != "" && $g_enable_STAF) ##{
 #template('staf.vm')
 #end ##}
+## Load addthis.com code
+#if("$!g_enable_ADDTHIS" != "" && $g_enable_ADDTHIS) ##{
+#set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
+#if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
+<script type="text/javascript">var addthis_pub="${ADDTHIS_acct}";</script>
+<script type="text/javascript" src="http://s7.addthis.com/js/200/addthis_widget.js"></script>
+#end ##}
+#end ##}
