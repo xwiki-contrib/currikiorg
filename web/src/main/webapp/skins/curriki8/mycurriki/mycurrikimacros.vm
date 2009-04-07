@@ -47,16 +47,16 @@ $text
   *#
 #macro(mycurriki_tabs $curtab $whofor) ## {
   #set($tabs = ["profile","favorites","contributions","collections","blog","groups"])
-  <div id="mycurriki-tabs" class="tabs">
+  <ul id="mycurriki-tabs" class="tabs">
   #foreach($tab in $tabs) ## {
     #if("$!whofor" == "" || $whofor == $context.user) ## {
       #set($url=$xwiki.getURL($msg.get("mycurriki.tab.${tab}.page"), "view"))
     #else ## } {
       #set($url=$xwiki.getURL($msg.get("mycurriki.tab.${tab}.page"), "view", "user=${whofor}"))
     #end ## }
-    <a class="tab#if($curtab==$tab) tab-selected#end" href="$url">$msg.get("mycurriki.tab.${tab}.label")</a>
+    <li#if($curtab==$tab) class="current"#end><a href="$url">$msg.get("mycurriki.tab.${tab}.label")</a></li>
   #end ## foreach ## }
-  </div>
+  </ul>
 #end ## macro ## }
 
 #**

@@ -28,17 +28,17 @@
 ## Groups tab macro
 #macro(groupstabs $curtab) ## {
 #set($tabs = ["home","messages", "curriculum", "members", "documentation"])
-<div id="groups-tabs" class="tabs">
+<ul id="groups-tabs" class="tabs">
 #foreach($tab in $tabs) ## {
 #set($tabpage = $msg.get("groups_${tab}_page"))
 #set($url=$xwiki.getURL("${spaceName}.${tabpage}", "view"))
 #if(!$hasGlobalAdmin && !$isGroupMember && ($s.policy=="closed") && ($tab=="messages" || $tab=="members" || $tab=="documentation"))
-<a class="tab tabgreyed#if($curtab==$tab) tab-selected#end" href="javascript:void()" onclick="alert('$msg.get("groups_onlyaccessibletomembers")'); return false;">$msg.get("groups_${tab}_tabname")</a>
+<li class="tabgreyed#if($curtab==$tab) current#end"><a href="javascript:void()" onclick="alert('$msg.get("groups_onlyaccessibletomembers")'); return false;">$msg.get("groups_${tab}_tabname")</a></li>
 #else
-<a class="tab#if($curtab==$tab) tab-selected#end" href="$url">$msg.get("groups_${tab}_tabname")</a>
+<li#if($curtab==$tab) class="current"#end><a href="$url">$msg.get("groups_${tab}_tabname")</a></li>
 #end
 #end ## foreach ## }
-</div>
+</ul>
 #end ## macro ## }
 ##
 ##
