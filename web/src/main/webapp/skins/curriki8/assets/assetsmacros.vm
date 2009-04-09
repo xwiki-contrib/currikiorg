@@ -80,7 +80,7 @@
  * Macro for resources tabs
  *#
 #macro(asset_tabs $asset $viewer)
-<ul id="asset-tabs">
+<ul id="asset-tabs" class="tabs">
 <li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.1.heading")</a></li>
 <li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.2.heading")</a></li>
 <li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.3.heading")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
