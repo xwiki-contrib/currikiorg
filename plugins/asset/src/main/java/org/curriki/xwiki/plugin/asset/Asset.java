@@ -1047,40 +1047,18 @@ public class Asset extends CurrikiDocument {
     		throw new AssetException(context.getMessageTool().get("curriki.crs.review.notValidNotRatedCategorySelection"));
     	}
 
-    	int weightAppropriatePedagogy=2;
-    	int weightContentAccuracy=2;
-    	int weightTechnicalCompletness=1;
-
     	int valueAppropriatePedagogy=Integer.parseInt(appropriatePedagogy);
     	int valueContentAccuracy=Integer.parseInt(contentAccuracy);
     	int valueTechnicalCompletness=Integer.parseInt(technicalCompletness);
 
-    	//weights are zero if the criteria value is zero
-    	weightAppropriatePedagogy=valueAppropriatePedagogy==0?0:weightAppropriatePedagogy;
-    	weightContentAccuracy=valueContentAccuracy==0?0:weightContentAccuracy;
-    	weightTechnicalCompletness=valueTechnicalCompletness==0?0:weightTechnicalCompletness;
-
-    	float numerator = weightAppropriatePedagogy*valueAppropriatePedagogy+weightContentAccuracy*valueContentAccuracy+weightTechnicalCompletness*valueTechnicalCompletness;
-    	float denominator= weightAppropriatePedagogy+weightContentAccuracy+weightTechnicalCompletness;
-
+    	float numerator = valueAppropriatePedagogy+valueContentAccuracy+valueTechnicalCompletness;
 
     	int rating;
-    	if(weightAppropriatePedagogy==0 && weightContentAccuracy==0 && weightTechnicalCompletness==0){
-    		rating=0;
-    	}else{
-    		if(weightAppropriatePedagogy!=0){
-	    			rating=Math.round(numerator/denominator);
-	    		}else{
-	    			rating=(int)Math.floor(numerator/denominator);
-	    		}
-    		}
-
-
-    	//this is a special case, if pedagogy=N/R, CAccuracy=3 and TCompleteness=2
-    	// return 3
-    	if(weightAppropriatePedagogy==0 && valueContentAccuracy==3 && valueTechnicalCompletness==2){
-    		rating=3;
-    	}
+	if(valueAppropriatePedagogy!=0){
+		rating=Math.round(numerator/3);
+	} else {
+		rating=Math.round(numerator/2);
+	}
 
     	return String.valueOf(rating);
     }
