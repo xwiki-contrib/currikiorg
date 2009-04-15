@@ -93,13 +93,18 @@
         #foreach($obj in $asset.getObjects("CRS.CurrikiReviewClass"))
         #if($obj)
         #set($ok = $reviewlist.add(0, $obj))
+        #set($lastReview = $obj)
         #end
         #end
         #set($nomination = $!asset.getValue("reviewpending"))
         #if($reviewlist.size()>0)
-        #foreach($review in $reviewlist)
-        #crs_display_review($asset $review)
-        #end
+		#if($hasGlobalAdmin) ##{
+			#foreach($review in $reviewlist)
+				#crs_display_review($asset $review)
+			#end
+		#else ##}{
+			#crs_display_review($asset $lastReview)
+		#endif ##}
         #elseif(("$!nomination"=="1") || ("$!status" == "") || ($status!="300" && $status!="500" && $status!="700"))
         <ul class="crs-rating no-review">
             <li>
