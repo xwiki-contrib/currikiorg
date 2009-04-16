@@ -98,13 +98,9 @@
         #end
         #set($nomination = $!asset.getValue("reviewpending"))
         #if($reviewlist.size()>0)
-		#if($hasGlobalAdmin) ##{
-			#foreach($review in $reviewlist)
-				#crs_display_review($asset $review)
-			#end
-		#else ##}{
-			#crs_display_review($asset $lastReview)
-		#end ##}
+		#foreach($review in $reviewlist)
+			#crs_display_review($asset $review)
+		#end
         #elseif(("$!nomination"=="1") || ("$!status" == "") || ($status!="300" && $status!="500" && $status!="700"))
         <ul class="crs-rating no-review">
             <li>
