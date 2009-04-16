@@ -26,8 +26,8 @@ function checkDocumentContent() {
  return true;
 }
 
-function cancelEdit() {
-  document.forms.${formname}.action='$doc.getURL("cancel", "ajax=1")';
+function cancelEditing() {
+  document.forms.${formname}.action='$doc.getURL("cancel")';
   if (document.forms.${formname}.onsubmit) {
     if (document.forms.${formname}.onsubmit() == false) {
       return false;
@@ -83,7 +83,7 @@ $msg.get("core.comment"): <input type="text" name="comment" value="" size="80" /
 #end
 
 <div>
-  <span class="buttonwrapper"><input class="button" type="submit" name="formactioncancel" #if ($keyboardShortcutsEnabled)title="$msg.get("core.shortcuts.edit.cancel")"#end value="$msg.get("cancel")" onclick="cancelEdit();"/></span>
+  <span class="buttonwrapper"><input class="button" type="submit" name="formactioncancel" #if ($keyboardShortcutsEnabled)title="$msg.get("core.shortcuts.edit.cancel")"#end value="$msg.get("cancel")" onclick="cancelEditing();"/></span>
 #if($previewenabled)  <span class="buttonwrapper"><input class="button" type="submit" name="formactionpreview" #if ($keyboardShortcutsEnabled)title="$msg.get("core.shortcuts.edit.preview")"#end value="$msg.get("preview")" onclick="preview(); return false;"/></span>
 #end
   <span class="buttonwrapper"><input class="button" type="submit" name="formactionsac" #if ($keyboardShortcutsEnabled)title="$msg.get("core.shortcuts.edit.saveandcontinue")"#end value="$msg.get("saveandcontinue")" onclick="saveAndContinue(); return false;"/></span>
@@ -91,7 +91,7 @@ $msg.get("core.comment"): <input type="text" name="comment" value="" size="80" /
   #if($keyboardShortcutsEnabled)
     <script type="text/javascript">
     //<![CDATA[
-      shortcut.add("$msg.get("core.shortcuts.edit.cancel")",function() { cancelEdit(); }, {'propagate':false} );
+      shortcut.add("$msg.get("core.shortcuts.edit.cancel")",function() { cancelEditing(); }, {'propagate':false} );
       #if($previewenabled) shortcut.add("$msg.get("core.shortcuts.edit.preview")",function() { preview(); }, {'propagate':false} ); #end
       shortcut.add("$msg.get("core.shortcuts.edit.saveandcontinue")",function() { saveAndContinue(); }, {'propagate':false} );
       shortcut.add("$msg.get("core.shortcuts.edit.saveandview")",function() { saveAndView(); }, {'propagate':false} );
