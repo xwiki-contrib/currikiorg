@@ -1,14 +1,29 @@
 package org.curriki.xwiki.servlet;
 
-import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.XWikiException;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.user.api.XWikiUser;
+import com.xpn.xwiki.render.XWikiVelocityRenderer;
+import com.xpn.xwiki.web.XWikiResponse;
+import com.xpn.xwiki.web.XWikiRequest;
+import com.xpn.xwiki.web.XWikiEngineContext;
+import com.xpn.xwiki.web.XWikiServletRequest;
 import com.xpn.xwiki.web.Utils;
+import com.xpn.xwiki.web.XWikiURLFactory;
+import com.xpn.xwiki.web.XWikiServletContext;
+import com.xpn.xwiki.web.XWikiServletResponse;
 import com.noelios.restlet.ext.servlet.ServletConverter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import org.curriki.xwiki.servlet.restlet.router.BaseRouter;
 import org.apache.commons.logging.Log;
@@ -31,8 +46,6 @@ public class RestletServlet extends BaseServlet {
             converter.getContext().getAttributes().put("XWikiContext", context);
 
             try {
-                // We need to initialize the new components for Velocity to work
-                initializeContainerComponent(context);
                 converter.setTarget(new BaseRouter(converter.getContext()));
                 converter.service(req, res);
             } finally {
@@ -41,6 +54,67 @@ public class RestletServlet extends BaseServlet {
         } catch (XWikiException e) {
             throw new ServletException(e);
         }
+    }
+
+    private Object generateDummy(Class someClass) {
+        ClassLoader loader = someClass.getClassLoader();
+        InvocationHandler handler = new InvocationHandler() {
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    return null;
+                }
+            };
+        Class[] interfaces = new Class[] {someClass};
+        return Proxy.newProxyInstance(loader, interfaces, handler);
+    }
+
+    protected XWikiContext getXWikiContext(HttpServletRequest req, HttpServletResponse res) throws XWikiException, ServletException {
+        XWikiEngineContext engine;
+
+        ServletContext sContext = null;
+        try {
+            sContext = getServletContext();
+        } catch (Exception ignore) { }
+        if (sContext != null) {
+            engine = new XWikiServletContext(sContext);
+        } else {
+            // use fake server context (created as dynamic proxy)
+            ServletContext contextDummy = (ServletContext)generateDummy(ServletContext.class);
+            engine = new XWikiServletContext(contextDummy);
+        }
+
+        XWikiRequest  request = new XWikiServletRequest(req);
+        XWikiResponse response = new XWikiServletResponse(res);
+        XWikiContext context = Utils.prepareContext("", request, response, engine);
+        context.setMode(XWikiContext.MODE_SERVLET);
+        context.setDatabase("xwiki");
+
+        // We need to initialize the new components for Velocity to work
+        initializeContainerComponent(context);
+
+        XWiki xwiki = XWiki.getXWiki(context);
+        XWikiURLFactory urlf = xwiki.getURLFactoryService().createURLFactory(context.getMode(), context);
+        context.setURLFactory(urlf);
+        // TODO: Fix velocity init in servlet
+        // XWikiVelocityRenderer.prepareContext(context);
+        xwiki.prepareResources(context);
+
+        String username = "XWiki.XWikiGuest";
+        XWikiUser user = context.getWiki().checkAuth(context);
+        if (user != null) {
+            username = user.getUser();
+        }
+        context.setUser(username);
+
+        // Give servlet "programming" rights
+        XWikiDocument rightsDoc = context.getWiki().getDocument("XWiki.XWikiPreferences", context);
+        context.put("sdoc", rightsDoc);
+
+        if (context.getDoc() == null) {
+            context.setDoc(new XWikiDocument("Fake", "Document"));
+        }
+
+        context.put("ajax", new Boolean(true));
+        return context;
     }
 
     protected void initializeContainerComponent(XWikiContext context)
