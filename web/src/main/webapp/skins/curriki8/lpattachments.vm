@@ -76,8 +76,8 @@ ${Msz}Mb
   #set( $Integer = 0 )                      ## need to use $Integer.parseInt()
   #foreach ($attach in $doc.attachmentList) ## {
       <tr><td class="attachments_icon">
-        #mimeicon($attach.filename)         ## this hack-macro sets $macro_iconUrl as side-effect
-        &nbsp;<img src="$macro_iconUrl" alt="[${m_fileExt}]" title="[${m_fileExt}]"/>&nbsp;
+        #mimeiconimg($attach.filename)         ## this hack-macro sets $macro_img as side-effect
+        &nbsp;${macro_img}&nbsp;
       </td><td class="attachments_file">
         &nbsp;${attach.filename}&nbsp;
       </td><td class="attachments_version">
