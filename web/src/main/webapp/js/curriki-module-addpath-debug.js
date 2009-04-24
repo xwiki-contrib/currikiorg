@@ -1857,7 +1857,7 @@ console.log("Published CB: ", newAsset);
 		AddPath.DoneG = Ext.extend(Curriki.ui.dialog.Messages, {
 			  initComponent:function(){
 				Ext.apply(this, {
-					 title:_('add.finalmessage.title_folder')
+					 title:_('add.finalmessage.title_successful')
 					,cls:'addpath addpath-done resource resource-add'
 					,bbar:[
 						 AddPath.FinalLink('favorites'),'->'
