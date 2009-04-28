@@ -30,7 +30,7 @@ function playFlash(flashItem, button){
   button.onclick=function(){stopFlash(flashItem, button);};
   button.title="$msg.get('rve.content.view.pause_button')";
   button.innerHTML="$msg.get('rve.content.view.pause_button')";
-  button.className="button button-confirm";
+  button.className="button button-confirm mgn-rt";
 }
 
 function stopFlash(flashItem, button){
@@ -39,5 +39,5 @@ function stopFlash(flashItem, button){
   button.onclick=function(){playFlash(flashItem, button);};
   button.title="$msg.get('rve.content.view.play_button')";
   button.innerHTML="$msg.get('rve.content.view.play_button')";
-  button.className="button button-confirm";
+  button.className="button button-confirm mgn-rt";
 }
