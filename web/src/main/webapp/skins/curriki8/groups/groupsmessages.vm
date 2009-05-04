@@ -105,7 +105,7 @@ $msg.get("groups_messages_createmessage_infotxt")
 #if($request.role)
 #set($args = "${args}&role=${request.role}")
 #end
-#curriki_paginator($msg.get("groups_messages_page"),$startIndex,$itemsPerPage,$totalCount,$args)
+#curriki_paginatorargs($msg.get("groups_messages_page"),$startIndex,$itemsPerPage,$totalCount,$args)
 </div>
 #endgroupsection()
 #end
