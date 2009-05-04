@@ -464,7 +464,7 @@ em, em strong { font-style: italic; }
 
 .frame { 
 	background-color:#FFFFFF;
-	border:1px solid #F5BD80;
+	border:1px solid #dcdcdc;
 	margin:10px 0 20px;
 	padding:0;
 	position:relative;
@@ -610,10 +610,9 @@ display:none;
 #watch-curriki-grow p { margin-top: 0; padding-top: 0.5em; }
 
 /* RIGHT PANEL */
-.expanded #right-panel { margin-left: 210px; padding-left: 10px; }
+.expanded #right-panel { margin-left: 220px; padding: 0; }
 #breadcrumb { padding-bottom: 0.3em; border-bottom: 1px solid #999; font-size: 11px; }
 #content, #attachmentscontent { padding: 2em 0 1em; overflow: hidden; height: 1%; }
-
 
 /** VARIOUS CONTAINERS **/
 
@@ -823,9 +822,17 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 .x-btn-center { background-image: none; }
 .x-btn-right { background-image: none; }
 
-
-
 /** TABS **/
+
+.tab-container {
+	background-color: #f2f2f2; 
+	border: 1px solid #000; 
+	clear: left;
+	margin: 0 0 10px; 
+	padding: 10px; 
+}
+
+.mycurriki .tab-container {background: #f2f2f2;}
 
 ul.tabs {
 	clear:none;
@@ -833,8 +840,6 @@ ul.tabs {
 	margin:0 0 0 10px;
 	padding:0;
 }
-
-.tab-container {clear: left;}
 
 ul.tabs li { 
 	float:left; 
@@ -868,13 +873,15 @@ ul.tabs li.current a {
 	color:#333;
 }
 
-/** MERGE TAB-CONTAINER and ASSET-WRAPPER-INNER **/
-
-.tab-container { background-color: #FFFFCF; border: 1px solid #000; padding: 10px; margin: 0 0 10px; }
+.mycurriki ul.tabs li.current a {
+	background: #f2f2f2;
+	border-color:#000 #000 #f2f2f2;
+}
 
 /* Groups */
-#groups-curriculum #groups-main-header .button { float: right; }
-.subject-card { margin: 5px; }
+
+#groups-curriculum #groups-main-header .button {float: right;}
+.subject-card {margin: 5px; }
 
 .subject-card {
 	width: 132px;
@@ -891,20 +898,22 @@ ul.tabs li.current a {
 }
 
 .browse-subject-table-row .subject-link {
-  padding: 0 0 5px 0;
-  height: 2.5em;
+	padding: 0 0 5px 0;
+	height: 2.5em;
 }
+
 .subject-link a, .subject-card a {
-  color: #1963AA;
-  text-decoration: none;
+	color: #1963AA;
+	text-decoration: none;
+  
 }
 .browse-subject-table-row .subject-link a span {
-  padding: 0;
-  font-size: 12px;
+	padding: 0;
+	font-size: 12px;
 }
-.subject-link a span.subject-title-count {
-  color: #FF4100;
-}
+
+.subject-link a span.subject-title-count {color: #FF4100;}
+
 .subject-card-promo {
   background-color: #E3E4F6;
   font-weight: bold;
