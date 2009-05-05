@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1226863063000</creationDate>
-<date>1226863063000</date>
-<contentUpdateDate>1227292656000</contentUpdateDate>
-<version>1.1</version>
+<date>1239396066000</date>
+<contentUpdateDate>1239396066000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>new 1.8.1 trans</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -60,23 +60,49 @@
 
 ## If a string has the word "placeholder" after the = sign, it means text is coming. If it is blank after the = sign, then that means that that string can be ignored until further notice.
 
-## TABLE OF CONTENTS FOR THIS DOCUMENT AS OF AUGUST 11 2008:
+## If you are adding a tooltip that uses JS you cannot use quotes or apostrophes. Use this instead " = &amp;#34; and ' = &amp;#39; 
+
+## TABLE OF CONTENTS FOR THIS DOCUMENT AS OF DECEMBER 2008:
 
 ## FORM ACCESS WARNING
 ## GLOBAL ELEMENTS USED IN MORE THAN ONE FORM
-## GLOBAL REQUIRED FIELDS WARNING
-## LEAVING FORM DIALOG
-## CREATE A RESOURCE FROM SCRATCH FORM
+##    STEP 3
+##    STEP 4
+##    REQUIRED FIELDS WARNING
+##    LEAVING FORM DIALOG
+## SIMPLE WIKI RESOURCE FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
+## SIMPLE HTML RESOURCE FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
 ## CURRIKI LESSON PLAN FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
 ## NORTEL LEARNIT LESSON PLAN FORM
-## ACE LESSON PLAN FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
+## ACE LESSON PLAN FORM - NEEDS CLEAN-UP
+## WEBQUEST FORM
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
 ## FROM SCRATCH ERROR MESSAGES
 ## LESSON PLAN ERROR MESSAGES
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 ## ASSET CLASS
 ## ADD PATH SELECTION DIALOGS
+##    SELECT A TEMPLATE
+##    SELECT A FORMAT
+##    SRI PART 1
+##    SRI PART 2
 ## ADD PATH FINAL MESSAGE DIALOGS
-## ADD PATH ERROR MESSAGE
+##    FINAL MESSAGE NAVIGATION OPTIONS
+## ADD PATH ERROR MESSAGES
 
 
 
@@ -90,7 +116,7 @@ createresources.needaccount=Anda harus menjadi anggota Curriki dan sudah &lt;a h
 
 ## GLOBAL ELEMENTS USED IN MORE THAN ONE FORM
 
-## STEP 3
+## STEP 3 (used in most forms)
 form.scratch.step3.header=Langkah 3. Konfirmasikan Hak-Hak &amp; Akses Informasi
 form.scratch.step3.instruction=Milik siapa konten ini, siapa yang dapat melihat atau meng-editnya dan bagaimana orang lain bisa menggunakannya?
 
@@ -102,7 +128,7 @@ form.scratch.submit.button=Kumpulkan
 form.scratch.cancel.button=Batalkan
 
 ## GENERIC REQUIRED FIELDS WARNING
-form.required.fields.instruction=Isian dengan simbol &lt;em style="color: red;"&gt;!&lt;/em&gt; wajib diisi.
+form.required.fields.instruction=Isian dengan simbol &lt;em class="required-indicator"&gt;!&lt;/em&gt;  wajib diisi.
 form.required.fields.indicator=!
 
 
@@ -113,13 +139,14 @@ form.leaving.dialog.cancel.button=Batalkan
 
 ## DONE CREATING A RESOURCE FORM 
 form.done.url=/xwiki/bin/view/CreateResources/AssetDone
-form.done.created.lessonplan=Rencana Pelajran Sudah Dibuat!
+form.done.created.lessonplan=Rencana Pelajaran Sudah Dibuat!
 form.done.created.resource=Bahan Ajar Sudah Dibuat!
 ## Next string need not be translated... if what follows is ever seen by user, a severe error has occurred: 
 form.done.wysiwyg.error.wikitext=1 Error: SLP Wysiwyg Badness!
 
-## CREATE A RESOURCE FROM SCRATCH FORM
+## SIMPLE WIKI RESOURCE (SWR) FORM
 
+## SWR TITLE AREA
 form.scratch.url=/xwiki/bin/view/CreateResources/SimpleWikiResource
 form.scratch.title=Membuat Bahan Ajar Dari "Scratch" (Dokumen Wiki Sederhana)
 form.scratch.title.description=Tidak yakin apa yang bisa dilakukan? Pelajari lebih jauh:
@@ -131,7 +158,7 @@ form.title.description.link2=Sistem Tinjauan Curriki
 form.title.description.link2.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
 form.title.description.link2.thumbnail=/xwiki/skins/curriki8/icons/CRS.png
 
-## FROM SCRATCH STEP 1
+## SWR STEP 1
 form.scratch.step1.header=Langkah 1. Masukan Informasi Dasar
 form.scratch.step1.instruction=Detil-detil apa yang paling baik menjelaskan bahan ajar ini di hasil pencarian&lt;br&gt;dan daftar lainnya?
 
@@ -143,11 +170,45 @@ form.scratch.description_title=Deskripsi:
 form.scratch.description_txt=Berikan deskripsi yang mendetil dari isi dan/atau tujuan dari bahan ajar ini. 
 form.scratch.description_tooltip=Deskripsi ini akan muncul ketika orang menemukan bahan ajar ini pada daftar. Jika bahan ajar ini adalah bagian dari konteks pelajaran yang lebih besar, Anda mungkin ingin menjelaskan hubungan ini.
 
-## FROM SCRATCH STEP 2
+##SWR STEP 2
 form.scratch.step2.header=Langkah 2. Masukkan &amp; Format Konten
 form.scratch.step2.instruction=Konten apa yang harus muncul dalam bahan ajar Anda?
 form.scratch.step2.content.title=Konten:
 form.scratch.step2.content.instruction=Masukkan konten ke dalam jendela editing di bawah ini. Format dan kembangkan materi Anda dengan menggunakan tombol-tombol pada &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.TheCurrikulumBuilder" target="_blank"&gt;toolbar pengeditan&lt;/a&gt;.
+
+############################
+## SIMPLE HTML RESOURCE (SHR) FORM
+
+## SHR FORM TITLE AREA
+
+form.html.scratch.url=/xwiki/bin/view/CreateResources/SimpleHTMLResource
+form.html.scratch.title=Membuat Bahan Ajar Dari "Scratch" (Dokumen HTML Sederhana)
+form.html.scratch.title.description=Tidak yakin apa yang bisa dilakukan? Pelajari lebih jauh:
+form.html.title.description.link1=Sampel
+form.html.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/SampleHTMLResources?bc=;Coll_curriki.SampleModelResourcesCreatedUsingForms
+form.html.title.description.link3=Bantuan
+form.html.title.description.link3.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheHTMLResourcefromScratchForm?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.CreatingResourceswithFormsTemplates
+form.html.title.description.link2=Sistem Tinjauan Curriki
+form.html.title.description.link2.url=http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem
+form.html.title.description.link2.thumbnail=/xwiki/skins/curriki8/crs/crs.png
+
+## SHR STEP 1
+form.html.scratch.step1.header=Langkah 1. Masukan Informasi Dasar
+form.html.scratch.step1.instruction=Detil-detil apa yang paling baik menjelaskan bahan ajar ini di hasil pencarian&lt;br&gt;dan daftar lainnya?
+
+form.html.scratch.title_title=Judul:
+form.html.scratch.title_txt=Berikan judul yang tidak lebih dari 250 karakter (termasuk spasi) untuk bahan ajar Anda.
+form.html.scratch.title_tooltip=Judul ini akan ditampikan di daftar-daftar (seperti hasil pencarian) dan menolong Anda atau orang lain untuk dengan cepat mengenali bahan ajar ini.
+
+form.html.scratch.description_title=Deskripsi:
+form.html.scratch.description_txt=Berikan deskripsi yang mendetil dari isi dan/atau tujuan dari bahan ajar ini. 
+form.html.scratch.description_tooltip=Deskripsi ini akan muncul ketika orang menemukan bahan ajar ini pada daftar. Jika bahan ajar ini adalah bagian dari konteks pelajaran yang lebih besar, Anda mungkin ingin menjelaskan hubungan ini.
+
+## SHR STEP 2
+form.html.scratch.step2.header=Langkah 2. Masukkan &amp; Format Konten
+form.html.scratch.step2.instruction=Konten apa yang harus muncul dalam bahan ajar Anda?
+form.html.scratch.step2.content.title=Konten:
+form.html.scratch.step2.content.instruction=Masukkan konten ke dalam jendela editing di bawah ini.
 
 
 
@@ -156,7 +217,7 @@ form.scratch.step2.content.instruction=Masukkan konten ke dalam jendela editing 
 ## CSLP TITLE AREA
 
 lesson.plan.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
-lesson.plan.title=Membuat Bahan Ajar dari sebuah TemplateCreate a Resource from a Template (Rencana Pengajaran Standar Curriki/CSLP)
+lesson.plan.title=Membuat Bahan Ajar dari sebuah Template (Rencana Pengajaran Standar Curriki/CSLP)
 lesson.plan.title.description=Pelajari lebih jauh:
 
 lesson.plan.title.description.link1=Model
@@ -177,6 +238,7 @@ lesson.plan.title_tooltip=Judul ini akan ditampikan di daftar-daftar (seperti ha
 
 lesson.plan.description_title=Deskripsi:
 lesson.plan.description_txt=Berikan deskripsi tingkat tinggi atas tujuan dari pelajaran ini, konsep dan keterampilan yang dibahas, dan/atau kegiatan pembelajaran, metode, atau prosedur dari pelajaran ini.
+
 lesson.plan.description_tooltip=Deskripsi ini akan muncul ketika orang menemukan bahan ajar ini pada daftar. Jika bahan ajar ini adalah bagian dari konteks pelajaran yang lebih besar, Anda mungkin ingin menjelaskan hubungan ini.
 
 ##CSLP STEP 2
@@ -364,9 +426,7 @@ nortel.lesson.plan.standards.tooltip=Menunjukkan standar/kerangka yang ditujukan
 nortel.lesson.plan.required.attachments.title=Memerlukan Lampiran:
 nortel.lesson.plan.required.attachments.instruction=Pilih dan upload berkas dari komputer Anda. Total berkas lampiran tidak dapat melebihi 20 MB. Ini akan ditawarkan sebagai link yang dipublikasikan dalam rencana pelajaran.
 nortel.lesson.plan.required.attachments.tooltip=Melampirkan berkas apapun yang direferensikan dalam pelajaran ini, seperti handout, rubrik, worksheet, atau kuis.
-nortel.lesson.plan.required.attachments.file.attached=
-
-Berkas yang Anda lampirkan pada bahan ajar ini tidak muncul sebagai kontribusi independen pada Curriki; berkas ini hanya disajikan sebagai hyperlink dalam bahan ajar ini, dan dilindungi oleh lisensi akan bahan ajar ini.&lt;br /&gt;&lt;br /&gt;Setelah mengirimkan form ini, silahkan pertimbangkan untuk menambahkan bahan kurikuler ke Curriki sebagai sumber ajar mandiri, sehingga kontribusi ini dapat diketahui dan dipakai ulang dengan lebih mudah.
+nortel.lesson.plan.required.attachments.file.attached=Berkas yang Anda lampirkan pada bahan ajar ini tidak muncul sebagai kontribusi independen pada Curriki; berkas ini hanya disajikan sebagai hyperlink dalam bahan ajar ini, dan dilindungi oleh lisensi akan bahan ajar ini.&lt;br /&gt;&lt;br /&gt;Setelah mengirimkan form ini, silahkan pertimbangkan untuk menambahkan bahan kurikuler ke Curriki sebagai sumber ajar mandiri, sehingga kontribusi ini dapat diketahui dan dipakai ulang dengan lebih mudah.
 nortel.lesson.plan.required.attachments.browse.button=Cari
 nortel.lesson.plan.required.attachments.attach.button=Lampirkan berkas ini
 nortel.lesson.plan.required.attachments.delete=Keluarkan
@@ -424,7 +484,7 @@ ace.lesson.plan.number.days.title=Jumlah Hari:
 ace.lesson.plan.group.size.title=Prior Knowledge:
 ace.lesson.plan.group.size.instruction=Describe what students need to know and be able to do in order to participate in this lesson's learning tasks and methods.
 ace.lesson.plan.group.size.content=
-ace.lesson.plan.group.size.tooltip=This may include, for instance, subject matter understanding or technology skills.
+ace.lesson.plan.group.size.tooltip=This may include concepts and skills covered in previous lessons, units, or grades.
 
 ace.lesson.plan.prior.knowledge.title=Pengetahuan Sebelumnya:
 
@@ -510,7 +570,7 @@ ace.lesson.plan.file.size.dialog.button=OK
 
 form.scratch.step4.header=Langkah 4. Tinjau &amp; Kumpulkan
 
-##CORRECT TRANS FOR STEP 4
+##CORRECT DISPLAY FOR STEP 4
 ace.form.scratch.step4.instruction=Tinjau kembali entry Anda sebelum mengklik Kumpulkan. &lt;br /&gt; &lt;br /&gt;Jika kontent Anda &lt;i&gt;belum siap&lt;/i&gt; untuk diperlihatkan pada orang lain, ingat untuk mengset Hak Akses diatas menjadi "Pribadi".&lt;br /&gt; &lt;br /&gt;Perlu dicatat bahwa terdapat dua field, Perubahan Untuk Berikutnya dan Apakah Yang Berjalan Dengan Baik, yang akan muncul pada bahan ajar anda setelah pengiriman. Ini akan muncul dengan placeholder konten yang harus diperbarui setelah Anda melakukan pelajaran ini. Bila Anda siap untuk memperbarui konten ini, klik "Edit" untuk bahan ajar ini.
 
 form.scratch.submit.button=Kumpulkan
@@ -529,8 +589,113 @@ ace.lesson.plan.changes_content=Disini, pengarang pelajaran dapat merenungkan pe
 ace.lesson.plan.whatworked_heading=Apakah Yang Berjalan Dengan Baik:
 ace.lesson.plan.whatworked_content=Setelah menjalankan pembelajaran ini pada ruang kelas, edit sumber wiki untuk menerangkan bagian aktifitas yang efektif atau penilaian untuk referensi tahun-tahun mendatang.
 
-## FROM SCRATCH ERROR MESSAGES
+##WEBQUEST (WQ) FORM
 
+##WEBQUEST TITLE AREA
+wq.url=/xwiki/bin/view/CreateResources/WebQuest
+wq.plan.title=Create a WebQuest from a Template
+wq.title.description=Learn more:
+
+wq.title.description.link1=Model
+wq.title.description.link1.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/ModelsCreatedUsingtheWebQuestTemplate
+wq.title.description.link2=Bantuan
+wq.title.description.link2.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/UsingtheWebquestForm
+wq.title.description.link3=Latar Belakang WebQuest
+wq.title.description.link3.url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/WebQuestBackgroundInstructionalDesign
+wq.title.description.link4=Sistem Tinjauan Curriki
+wq.title.description.link4.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
+wq.title.description.link4.thumbnail=/xwiki/skins/curriki8/crs/crs.png
+
+##WEBQUEST STEP 1
+wq.step1.header=Langkah 1. Masukan Informasi Dasar
+wq.step1.instruction=Detil-detil apa yang paling baik menjelaskan WebQuest ini di hasil pencarian&lt;br&gt;dan daftar lainnya?
+
+wq.info.title_title=Judul:
+wq.info.title_txt=Berikan judul yang tidak lebih dari 250 karakter (termasuk spasi) untuk WebQuest Anda.
+wq.info.title_tooltip=Judul ini akan ditampikan di daftar-daftar (seperti hasil pencarian) dan menolong Anda atau orang lain untuk dengan cepat mengenali WebQuest ini..
+
+wq.info.description_title=Deskripsi:
+wq.info.description_txt=Berikan deskripsi yang mendetil dari isi dan/atau tujuan dari WebQuest ini. 
+wq.info.description_tooltip=Deskripsi ini akan muncul ketika orang menemukan WebQuest ini pada daftar. Jika WebQuest ini adalah bagian dari konteks pelajaran yang lebih besar, Anda mungkin ingin menjelaskan hubungan ini.
+
+##WEBQUEST STEP 2
+wq.step2.header=Langkah 2. Masukkan &amp; Format Konten
+wq.step2.instruction=Konten apa yang para siswa seharusnya lihat ketika mereka berinteraksi dengan WebQuest ini?
+wq.intro.title=Introduksi:
+wq.intro.instruction=Tuliskan sebuah paragraf yang pendek di sini untuk memperkenalkan aktifitas tersebut kepada para siswa dan mengkomunikasikan kepada mereka Pertanyaan Besar (Pertanyaan Esensi, Pertanyaan Penunjuk) yang merupakan pusat dari seluruh WebQuest.
+wq.intro.content=
+wq.intro.tooltip=Tujuan dari bagian ini adalah untuk mempersiapkan serta menarik perhatian pelajar. Jika ada sebuah peran atau skenario (misalnya, Anda adalah seorang detektif yang sedang mencoba untuk mengidentifikasi penulis puisi yang misterius..), di sini adalah tempat dimana Anda menentukan panggungnya. Jika tidak ada, gunakan bagian ini untuk sebagai overview atau organizer pendek. 
+
+wq.task.title=Tugas:
+wq.task.instruction=Jelaskan dengan jelas apa yang akan menjadi hasil akhir dari aktifitas pembelajaran, memberikan petunjuk Anda kepada sisw Anda. Jika produk akhir melibatkan penggunaan beberapa tool (misalnya, HyperStudio, Situs, video), sebutkanlah itu di sini. Cobalah fungsi pada &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;toolbar pengeditan&lt;/a&gt; untuk memformat teks Anda, menambah gambar, dll.
+wq.task.content=
+wq.task.tooltip=Tugas bisa merupakan sebuah masalah atau misteri yang harus dipecahkan, posisi yang harus diformulasikan dan dipertahankan, sebuah produk untuk dirancang, sebuah pekerjaan yang kreatif, sebuah tulisan jurnalistik -- apapun yang membutuhkan para pelajarnya untuk memproses dan mengubah informasi yang mereka dapatkan. Jangan gunakan bagian ini untuk menuliskan langkah-langkah yang harus diikuti oleh para siswa untuk sampai pada hasil akhir; hal itu ditulis di bagian Proses di bawah ini.
+
+wq.process.title=Proses:
+wq.process.instruction=Ditujukan kepada para siswa, jelaskan langkah-langkah yang harus diambil oleh mereka untuk menyelesaikan tugas yang dijelaskan di atas. Anda mungkin ingin menggunakan format daftar dengan nomor yang ada pada &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;toolbar pengeditan&lt;/a&gt;. Unduhlah materi-materi tambahan yang Anda buat untuk mendukung langkah-langkah pada Proses menggunakan bagian Lampiran Yang Dibutuhkan di bawah ini, dan referensikan penggunaan lampiran tersebut pada langkah yang relevan.
+wq.process.content=
+wq.process.tooltip= Pelajar akan mengakses bahan ajar online yang Anda identifiasikan sejelan dengan Proses yang mereka lalui, jadi masukan setiap link pada langkah yang relevan. (Anda dapat mencari lebih jauh mengenai membuat teks hyperlink dengan mengklik link  \\&amp;#34;toolbar pengeditan\\&amp;#34; pada instruksi dari bagian ini.)
+
+wq.eval.title=Evaluasi:
+wq.eval.instruction=Klik paa sel yang sedang aktif untuk memasukkan teks Anda sendiri. Jelaskan kepada para pelajar bagaimana performa mereka akan dievaluasi. Spesifikasikan apakah akan ada nilai umum untuk pekerjaan grup atau nilai individu, dll.
+wq.eval.content=
+wq.eval.tooltip=Jika Anda ingin mengupdate teks sel yang tidak aktif, Anda harus mengedit bahan ajar ini setalah mengumpulkan form ini.
+
+wq.evaluation.row1.col2_header=Pemula
+wq.evaluation.row1.col3_header=Berkembang
+wq.evaluation.row1.col4_header=Baik
+wq.evaluation.row1.col5_header=Sangat Baik
+
+wq.evaluation.row2.col2_sample=Deskripsi dari karakteristik performa yang bisa diidentifikasikan yang merefleksikan performa dengan level pemula.
+wq.evaluation.row2.col3_sample=Deskripsi dari karakteristik performa yang bisa diidentifikasikan yang merefleksikan perkembangan serta pergerakan menuju arah penguasaan yang baik.
+wq.evaluation.row2.col4_sample=Deskripsi dari karakteristik performa yang bisa diidentifikasikan yang merefleksikan penguasaan yang sudah baik.
+wq.evaluation.row2.col5_sample=Deskripsi dari karakteristik performa yang bisa diidentifikasikan yang merefleksikan performa dengan level tertinggi.
+
+
+
+
+
+
+wq.evaluation.row2.col1_sample=Tujuan atau Peforma yang Dinyatakan 
+wq.evaluation.row3.col1_sample=Tujuan atau Peforma yang Dinyatakan 
+wq.evaluation.row4.col1_sample=Tujuan atau Peforma yang Dinyatakan 
+wq.evaluation.row5.col1_sample=Tujuan atau Peforma yang Dinyatakan 
+
+wq.conclusion.title=Kesimpulan:
+wq.conclusion.instruction=Masukan beberapa kalimat untuk merangkum apa yang siswa telah capai atau pelajari dengan menyelesaikan aktifitas atau pelajaran ini.
+wq.conclusion.content=
+wq.conclusion.tooltip=Anda mungkin ingin menyertakan pekerjaan retoris atau link-link tambahan untuk mendorong mereka untuk memperluas pemikiran mereka kepada konten lain yang di luar dari pelajaran ini.
+
+wq.cred.title=Credits &amp; Referensi:
+wq.cred.instruction=Tuliskan di sini sumber-sumber dari gambar, musik, atau teks apapun yang Anda gunakan. Sediakan link menuju sumber yang asli. Ucapkan terima kasih kepada siapapun yang telah menyediakan sumber daya atau bantuan.
+wq.cred.content=
+wq.cred.tooltip=Tuliskan buku apapun atau media analog lainnya yang Anda gunakan sebagai sumber informasi. Anda dapat melampirkan seubah bibliografi atau berkas referensi apapun menggunakan bagian Lampiran yang Dibutuhkan di bawah ini.
+
+wq.standards.title=Standar:
+wq.standards.instruction=Tuliskan standar ataupun benchmark apapun yang digunakan melalui penggunaan WebQuest ini.
+wq.standards.content=
+wq.standards.tooltip=Jika Anda ingin menlampirkan dokumen tertentu yang mengutip standar yang spesifik, gunakan bagian Lampiran yang Dibutuhkan dibawah ini.
+
+wq.required.attachments.title=Lampiran yang Dibutuhkan:
+wq.required.attachments.instruction=Pilih dan unduh berkas-berkas dari komputer Anda. Berkas yang dilampirkan tidak boleh melebihi total 20 MB. Ini akan ditampilkan sebagai link di rencana pelajaran yang dipublikasikan.
+
+wq.required.attachments.file.attached=Berkas yang Anda lampirkan pada bahan ajar ini tidak tampil sebagai kontribusi yang independen pada Curriki; mereka akan ditampilkan hanya sebagai hyperlink di dalam bahan ajar, dan mereka akan dilindungi oleh lisensi untuk bahan ajar ini.&lt;br /&gt;&lt;br /&gt;Setelah mengumpulkan form, silahkan pertimbangkan untuk menambahkan materi-mater kurikula kepada Curriki sebagai bahan ajar yang berdidir sendiri, sehingga kontribusi ini bisa ditemukan dan digunakan lagi dengan lebih mudah.
+wq.attachments.title=Berkas Terlampir:
+wq.required.attachments.tooltip=Lampirkan berkas apapun yang direferensikan pada pelajaran ini, seperti handout, rubrik, lembar kerja, atau kuis.
+wq.attachments.browse.button=Browse
+wq.attachments.attach.button=Lampirkan Berkas Ini
+wq.attachments.delete=Hapuskan
+
+wq.file.size.maximum=20000000
+wq.file.size.label=Ukuran total dari seluruh lampiran:
+wq.file.size.oversize=Lampiran pada bahan ajar ini tidak boleh melebihi 20 MB secara keseluruhan. Untuk menyimpan bahan ajar ini, Anda harus menggunakan link "hapuskan" pada "Lampiran yang Dibutuhkan" untuk mengurangi ukuran total dari lampiran. Silahkan unduh berkas tambahan apapun sebagai kontribusi Curriki yang berdiri sendiri daripada melampirkannya pada bahan ajar ini.
+wq.file.size.dialog=Lampiran pada bahan ajar ini tidak boleh melebihi 20 MB secara keseluruhan. Anda mungkin ingin mengunduh berkas ini sebagai kontribusi Curriki yang berdiri sendiri daripada melampirkannya pada bahan ajar ini.
+ace.lesson.plan.file.size.dialog.button=OK
+
+
+
+## FROM SCRATCH ERROR MESSAGES (ALSO USED IN OTHER FORMS)
+form.scratch.title.more.250=Anda telah memasukkan lebih dari 250 karakter pada field judul pada Langkah 1. Silahkan memendekkan teks pada field ini.
 form.scratch.required.fields.dialog=Silahkan melengkapi field yang dibutuhkan berikut.
 form.scratch.required.fields.dialog.title=- Judul
 form.scratch.required.fields.dialog.description=- Deskripsi
@@ -592,6 +757,13 @@ lesson.plan.required.fields.dialog.numberdays=- Jumlah Hari
 lesson.plan.required.fields.dialog.lessonobjective=- Tujuan Pembelajaran
 lesson.plan.required.fields.dialog.lessonassessment=- Penilaian Pembelajaran
 lesson.plan.required.fields.dialog.procedures=- Prosedur
+## WQ Form
+wq.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
+wq.required.fields.dialog.introduction=- Introduction
+wq.required.fields.dialog.task=- The Task
+wq.required.fields.dialog.process=- The Process
+wq.required.fields.dialog.evaluation=- Evaluation
+wq.required.fields.dialog.conclusion=- Conclusion
 
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 
@@ -724,7 +896,7 @@ add.setrequiredinfo.part2.cancel.button=Batalkan
 add.setrequiredinfo.part2.next.button=Selanjutnya &gt;&gt;
 
 
-##Contribute Menu
+##CONTRIBUTE MENU
 add.contributemenu.title_addto_site=Tambahkan ke Curriki
 add.contributemenu.title_addto_composite=Tambahkan ke Koleksi atau Folder
 add.contributemenu.guidingquestion_addto_site=Apa yang Anda ingin tambahkan?
@@ -775,11 +947,35 @@ add.selecttemplate.list3.thumbnail=/xwiki/bin/download/CreateResources/TemplateT
 add.selecttemplate.list3.url=/xwiki/bin/view/CreateResources/ACELessonPlan
 
 
+add.selecttemplate.list4.header=&lt;b&gt;WebQuest&lt;/b&gt;
+add.selecttemplate.list4.description=This Curriki template offers the structure for creating a student-directed learning activity that requires students to engage with online resources; includes an evaluation rubric.
+add.selecttemplate.list4.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/WebQuestThumb.png
+add.selecttemplate.list4.url=/xwiki/bin/view/CreateResources/WebQuest
 
 add.selecttemplate.cancel.button=Batalkan
 add.selecttemplate.next.button=Selanjutnya &gt;&gt;
 
-##Choose a Location
+## SELECT A FORMAT DIALOG
+
+add.selectformat.title=Select a Format
+add.selectformat.guidingquestion=What kind of resource would you like to create?
+
+add.selectformat.instruction=If you're not sure, leave "Wiki Resource" selected and click Next.&lt;br&gt;&lt;br&gt;
+
+add.selectformat.list1.header=&lt;b&gt;Wiki Resource&lt;/b&gt;
+add.selectformat.list1.description=No special skills required -- simple "what you see is what you get" format makes creating content easy!
+add.selectformat.list1.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/WIKIThumb.png
+add.selectformat.list1.url=/xwiki/bin/view/CreateResources/SimpleWikiResource
+
+add.selectformat.list2.header=&lt;b&gt;HTML Resource&lt;/b&gt;
+add.selectformat.list2.description=Use for pasting in existing HTML or formatted text from MS Word
+add.selectformat.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/HTMLThumb.png
+add.selectformat.list2.url=/xwiki/bin/view/CreateResources/SimpleHTMLResource
+
+add.selectformat.cancel.button=Cancel
+add.selectformat.next.button=Next &gt;&gt;
+
+##CHOOSE A LOCATION DIALOG
 add.chooselocation.title=Pilih Lokasi
 add.chooselocation.guidingquestion=Di mana Anda ingin menambahkan ini?
 add.chooselocation.instruction=Drag bahan ajar untuk meletakkannya di lokasi yang diinginkan. Tahan cursor diatas folder atau koleksi untuk membuka isinya dan meletakkan bahan ajar di lokasi tertentu.
@@ -793,44 +989,40 @@ add.chooselocation.next.button=Selanjutnya &gt;&gt;
 
 ##ADD PATH FINAL MESSAGE DIALOGS
 
-##Dialog Titles
+##DIALOG TITLES
 
 add.finalmessage.title_successful=Berhasil Ditambahkan
 add.finalmessage.title_resource=Bahan Ajar Ditambahkan
 add.finalmessage.title_folder=Folder Ditambahkan
 add.finalmessage.title_collection=Koleksi Ditambahkan
+add.finalmessage.title_copied=Resource Copied
 
-##Operation Successful Messages
+##OPERATION SUCCESSFUL MESSAGES
 
 add.finalmessage.text_resource_success=Anda berhasil mengkontribusikan bahan ajar. Anda dapat menemukannya di Kontribusi Saya.
-
 add.finalmessage.text_resource_simple_success=Anda berhasil mengkontribusikan bahan ajar.
-
 add.finalmessage.text_collection_success=Anda berhasil menambahkan koleksi baru.
+##Note the dynamic content in the link below where {0} is the file resource from which the copy was made and {1} is the new file resource:
+
+add.finalmessage.text_copy_success=You have successfully copied &lt;strong&gt;{0}&lt;/strong&gt; to create &lt;strong&gt;{1}&lt;/strong&gt; and can now find your version in My Contributions.
 
 ##Note the dynamic content in the link below where {0} is the title of the newly added resource and {1} is the title of the folder or collection into which {0} was added:
 
 add.finalmessage.text_addto_success=Anda berhasil menambahkan &lt;strong&gt;{0}&lt;/strong&gt; ke &lt;strong&gt;{1}&lt;/strong&gt;.
 
 ##Note the dynamic content in the link below where {0} is the title of the newly added folder and {1} is the title of the folder or collection into which {1} was added:
-
 add.finalmessage.text_addto_folder_success=Anda berhasil menambahkan &lt;strong&gt;{0}&lt;/strong&gt; ke &lt;strong&gt;{1}&lt;/strong&gt;. Sekarang Anda dapat menambahkan dan mengatur bahan ajar dalam folder ini.
-
 add.finalmessage.text_favorites_success=Anda berhasil menambahkan ini ke Favorit Saya.
 
+## ADD COLLECTIONS
 add.finalmessage.text_collection_success=Anda berhasil menambahkan koleksi baru.
-
 add.finalmessage.text_collection_tip1=Klik "Membangun" di daftar pada Koleksi Saya untuk menambahkan bahan ajar ke dalam koleksi tersebut.
-
 add.finalmessage.text_collection_tip2=Klik "Edit" untuk membuka Pembangun Currikulum, tempat untuk membangun dan mengorganisir koleksi ini.
-
 add.finalmessage.text_groupcollection_success=Anda berhasil menambahkan grup koleksi baru.
-
 add.finalmessage.text_groupcollection_tip1=Klik "Membangun" di daftar pada Grup Koleksi untuk menambahkan bahan ajar ke dalam koleksi tersebut.
-
 add.finalmessage.text_groupcollection_tip2=Klik "Edit" untuk membuka Pembangun Currikulum, tempat untuk membangun dan mengorganisir koleksi ini.
 
-##Navigation Options
+##FINAL MESSAGE NAVIGATION OPTIONS
 
 add.finalmessage.add.link=Tambahkan
 add.finalmessage.favorites.link=Ke Favorit Saya
@@ -846,7 +1038,7 @@ add.finalmessage.continue.link=Selanjutnya &gt;&gt;
 add.finalmessage.openbuilder.link=Buka di Pembangun Currikulum
 add.finalmessage.close.button=Tutup
 
-##Add Path Error Messages
+##ADD PATH ERROR MESSAGES
 add.servertimedout.message.title=Error Server
 add.servertimedout.message.text=Ada masalah mengakses server. Coba kembali.
 add.servertimedout.message.button=OK

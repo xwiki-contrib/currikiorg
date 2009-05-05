@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1226863497000</creationDate>
-<date>1226863497000</date>
-<contentUpdateDate>1227292655000</contentUpdateDate>
-<version>1.1</version>
+<date>1239396318000</date>
+<contentUpdateDate>1239396318000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>new 1.8.1 trans</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -57,227 +57,331 @@
 </object>
 <content>## GLOBAL CLASS TRANSLATIONS
 
-##I am pulling out many of the keys that are class based from individual translation files, such as Groups and Forms, and pulling them into this translation file. This is being done to avoid duplicate lookup strings across translation files. 
+##I am pulling out many of the keys that are class based from individual translation files, such as Groups and Forms, and pulling them into this translation file. This is being done to avoid duplicate lookup strings across translation files.
 
 ## To view the different classes, go here.  http://next.dev.curriki.org/xwiki/bin/edit/XWiki/CurrikiSpaceClass?editor=class
 
+## I am also adding to this trans file elements that are used globally but not in class. Media Type roll over text for example.
+
+##FROM GWT or XWIKI CORE
+loading.loading_msg=Sedang memuat, silakan tunggu...
+problemoccured=Sebuah error terjadi saat memroses permintaan Anda. Silakan mengirim email ke webmaster@curriki.org jika error ini terjadi kembail.
 
 ##
 ##ASSET CLASS USED IN RESOURCES
 
+## CATEGORIES / MEDIA TYPES PLUS COLLECTIONS AND FOLDERS
+
+
+CurrikiCode.AssetClass_category_document=Berkas Lampiran
+CurrikiCode.AssetClass_category_archive=Arsip
+CurrikiCode.AssetClass_category_audio=Audio
+CurrikiCode.AssetClass_category_image=Gambar
+CurrikiCode.AssetClass_category_interactive=Interaktif
+CurrikiCode.AssetClass_category_external=Web Link
+CurrikiCode.AssetClass_category_unknown=Lain-lain
+CurrikiCode.AssetClass_category_text=Teks
+CurrikiCode.AssetClass_category_video=Video
+CurrikiCode.AssetClass_category_collection={0}
+collection.collection=Koleksi
+collection.folder=Folder
+
+##CATEGORY AND / OR FILE TYPE
+##Although the below are not taken from the Assets, that is, these most of these values are NOT stored in the classes, I am adding them to this file because they are global. Todd December 31, 2008.
+
+archive.sco=Arsip: sco
+archive.zip=Arsip: zip
+archive.gz=Arsip: gz
+archive.xo=Arsip: xo
+archive.sit=Arsip: sit
+archive.gtar=Arsip: gtar
+archive.tar=Arsip: tar
+audio.wav=Audio: wav
+audio.mp3=Audio: mp3
+##The next two are duplicates from above. Should be able to remove these once the above are approved. If the above changes, then these will need stay.
+collection.collection=Koleksi
+collection.folder=Folder
+document.notebook=Attached File: notebook
+document.odt=Berkas Lampiran: odt
+document.odg=Berkas Lampiran: odg
+document.odp=Berkas Lampiran: odp
+document.ods=Berkas Lampiran: ods
+document.odc=Berkas Lampiran: odc
+document.odf=Berkas Lampiran: odf
+document.odb=Berkas Lampiran: odb
+document.odi=Berkas Lampiran: odi
+document.ppt=Berkas Lampiran: ppt
+document.pptx=Berkas Lampiran: pptx
+document.doc=Berkas Lampiran: doc
+document.docx=Berkas Lampiran: docx
+document.pdf=Berkas Lampiran: pdf
+document.xls=Berkas Lampiran: xls
+document.xlsx=Berkas Lampiran: xlsx
+document.txt=Berkas Lampiran: txt
+document.xml=Berkas Lampiran: xml
+document.css=Berkas Lampiran: css
+document.rtf =Berkas Lampiran: rtf
+document.dcr=Berkas Lampiran: cdcr
+document.dir=Berkas Lampiran: dir
+document.exe=Berkas Lampiran: exe
+document.bin=Berkas Lampiran: bin
+document.iha=Berkas Lampiran: iha
+document.izh=Berkas Lampiran: izh
+document.class=Berkas Lampiran: class
+document.php=Berkas Lampiran: php
+document.jar=Berkas Lampiran: jar
+document.ps=Berkas Lampiran: ps
+unknown.unknown=Tidak dikenal
+##I added the below string as the one above is not working. This trans needs to be fixed so the above one works.
+search.resource.icon.Unknown.rollover=Unknown
+document.htm=Berkas Lampiran: htm
+document.html=Berkas Lampiran: html
+image.svg=Gambar: svg
+image.gif=Gambar: gif
+image.jpg=Gambar: jpg
+image.tif=Gambar: tif
+image.bmp=Gambar: bmp
+image.jpe=Gambar: jpg
+image.jpeg=Gambar: jpg
+image.png=Gambar: png
+image.psd=Gambar: psd
+interactive.swf=Interaktif: swf
+text.xhtml=Teks: html
+text.xwiki=Teks: wiki
+video.qt=Video: qt
+video.wmv=Video: wmv
+video.asf=Video: asf
+video.avi=Video: avi
+video.mpg=Video: mpg
+video.mov=Video: mov
+video.viditalk=Video: vidi
+external.url=Web Link: www
+## The next two external are included for completeness but are not used and cannot be tested at this time. Todd Jan-07-2009
+external.www=Web Link: www
+external.http=Web Link: www
+
+
 
 ## SUBJECT
 
-XWiki.AssetClass_fw_items_FW_masterFramework.WebHome=Indeks Mata Pelajaran
-XWiki.AssetClass_fw_items_FW_masterFramework.Arts=Kesenian
-XWiki.AssetClass_fw_items_FW_masterFramework.Architecture=Arsitektur
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.Dance=Tarian
-XWiki.AssetClass_fw_items_FW_masterFramework.DramaDramatics=Sandiwara/seni drama
-XWiki.AssetClass_fw_items_FW_masterFramework.Film=Film
-XWiki.AssetClass_fw_items_FW_masterFramework.History=Sejarah
-XWiki.AssetClass_fw_items_FW_masterFramework.Music=Musik
-XWiki.AssetClass_fw_items_FW_masterFramework.Photography=Fotografi
-XWiki.AssetClass_fw_items_FW_masterFramework.PopularCulture=Budaya Populer
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology=Teknologi
-XWiki.AssetClass_fw_items_FW_masterFramework.VisualArts=Seni Visual
-XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation=Pendidikan Karir dan Teknis
-XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture_0=Pertanian
-XWiki.AssetClass_fw_items_FW_masterFramework.Business=Bisnis
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_6=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.OccupationalHomeEconomics=Ilmu Kesejahteraan Keluarga
-XWiki.AssetClass_fw_items_FW_masterFramework.School-to-work=Sekolah-ke-pekerjaan
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology_2=Technology
-XWiki.AssetClass_fw_items_FW_masterFramework.Trade&amp;Industrial=Perdagangan dan Industri
-XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=Pendidikan
-XWiki.AssetClass_fw_items_FW_masterFramework.Accessibility=Akses/Pendidikan Khusus
-XWiki.AssetClass_fw_items_FW_masterFramework.AdultEducation=Pendidikan Dewasa
-XWiki.AssetClass_fw_items_FW_masterFramework.BilingualEducation=Pendidikan Dwibahasa
-XWiki.AssetClass_fw_items_FW_masterFramework.ClassroomManagement=Manajemen Ruang Kelas
-XWiki.AssetClass_fw_items_FW_masterFramework.EarlyChildhoodEducation=Pendidikan Dini Anak
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationAdministration=Administrasi/Kepemimpinan Pendidikan
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationalFoundations=Dasar/Penelitian Pendidikan
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationalPsychology=Psikologi Pendidikan
-XWiki.AssetClass_fw_items_FW_masterFramework.InstructionalDesign=Rancangan Pengajaran
-XWiki.AssetClass_fw_items_FW_masterFramework.MeasurementEvaluation=Pengukuran &amp; Evaluasi
-XWiki.AssetClass_fw_items_FW_masterFramework.Mentoring=Mentoring
-XWiki.AssetClass_fw_items_FW_masterFramework.MulticulturalEducation=Pendidikan Multikultural
-XWiki.AssetClass_fw_items_FW_masterFramework.StandardsAlignment=Pengarahan Standar
-XWiki.AssetClass_fw_items_FW_masterFramework.TeachingTechniques=Teknik/Praktek Terbaik Pengajaran
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology=Technology Pendidikan
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_0=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.IntegratingTechnologyintotheClassroom=Mengintegrasikan Teknologi ke Dalam Ruang Kelas
-XWiki.AssetClass_fw_items_FW_masterFramework.UsingMultimedia&amp;theInternet=Menggunakan multimedia &amp; Internet
-XWiki.AssetClass_fw_items_FW_masterFramework.Health=Kesehatan
-XWiki.AssetClass_fw_items_FW_masterFramework.BodySystems&amp;Senses=Sistem Tubuh &amp; Indera
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_1=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.EnvironmentalHealth=Kesehatan Lingkungan
-XWiki.AssetClass_fw_items_FW_masterFramework.HumanSexuality=Seksualitas Manusia
-XWiki.AssetClass_fw_items_FW_masterFramework.MentalEmotionalHealth=Kesehatan Mental/Emosional
-XWiki.AssetClass_fw_items_FW_masterFramework.Nutrition=Gizi
-XWiki.AssetClass_fw_items_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=Pencegahan Penyalahgunaan Keamaan/Merokok/Substansi
-XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy=Melek Informasi dan Media
-XWiki.AssetClass_fw_items_FW_masterFramework.EvaluatingSources=Mengevaluasi Sumber
-XWiki.AssetClass_fw_items_FW_masterFramework.MediaEthics=Etika Media
-XWiki.AssetClass_fw_items_FW_masterFramework.OnlineSafety=Keamanan Online
-XWiki.AssetClass_fw_items_FW_masterFramework.ResearchMethods=Metode Penelitian
-XWiki.AssetClass_fw_items_FW_masterFramework.LanguageArts=Kesenian Bahasa
-XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet_0=Alfabet
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_2=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.Journalism=Jurnalistik
-XWiki.AssetClass_fw_items_FW_masterFramework.Listening&amp;Speaking=Pendengaran &amp; Pembicaraan
-XWiki.AssetClass_fw_items_FW_masterFramework.Literature=Kesusasteraan
-XWiki.AssetClass_fw_items_FW_masterFramework.Phonics=Phonics
-XWiki.AssetClass_fw_items_FW_masterFramework.ReadingComprehension=Pemahaman Bacaan
-XWiki.AssetClass_fw_items_FW_masterFramework.Research=Penelitian
-XWiki.AssetClass_fw_items_FW_masterFramework.Spelling_0=Mengeja
-XWiki.AssetClass_fw_items_FW_masterFramework.StoryTelling=Bercerita/Mendongeng
-XWiki.AssetClass_fw_items_FW_masterFramework.Vocabulary=Kosa Kata
-XWiki.AssetClass_fw_items_FW_masterFramework.Writing=Menulis
-XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics=Matematika
-XWiki.AssetClass_fw_items_FW_masterFramework.Algebra=Aljabar
-XWiki.AssetClass_fw_items_FW_masterFramework.Appliedmathematics=Matematika Terapan
-XWiki.AssetClass_fw_items_FW_masterFramework.Arithmetic=Aritmetika
-XWiki.AssetClass_fw_items_FW_masterFramework.Calculus=Kalkulus
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_3=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.DataAnalysis&amp;Probability=Analisis Data &amp; Probabilitas
-XWiki.AssetClass_fw_items_FW_masterFramework.Equations=Persamaan
-XWiki.AssetClass_fw_items_FW_masterFramework.Estimation=Penaksiran
-XWiki.AssetClass_fw_items_FW_masterFramework.Geometry=Geometri
-XWiki.AssetClass_fw_items_FW_masterFramework.Graphing=Membuat Grafik
-XWiki.AssetClass_fw_items_FW_masterFramework.Measurement=Pengukuran
-XWiki.AssetClass_fw_items_FW_masterFramework.NumberSense&amp;Operations=Pengertian Bilangan &amp; Operasi
-XWiki.AssetClass_fw_items_FW_masterFramework.Patterns=Pola
-XWiki.AssetClass_fw_items_FW_masterFramework.ProblemSolving=Pemecahan Masalah
-XWiki.AssetClass_fw_items_FW_masterFramework.Statistics=Statistika
-XWiki.AssetClass_fw_items_FW_masterFramework.Trigonometry=Trigonometri
-XWiki.AssetClass_fw_items_FW_masterFramework.Science=Ilmu Alam
-XWiki.AssetClass_fw_items_FW_masterFramework.Agriculture=Pertanian
-XWiki.AssetClass_fw_items_FW_masterFramework.Astronomy=Astronomi
-XWiki.AssetClass_fw_items_FW_masterFramework.Biology=Biologi
-XWiki.AssetClass_fw_items_FW_masterFramework.Botany=Botani
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_4=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.Chemistry=Kima
-XWiki.AssetClass_fw_items_FW_masterFramework.Earthscience=Ilmu Bumi
-XWiki.AssetClass_fw_items_FW_masterFramework.Ecology=Ekologi
-XWiki.AssetClass_fw_items_FW_masterFramework.Engineering=Teknik
-XWiki.AssetClass_fw_items_FW_masterFramework.Generalscience=Ilmu Alam Umum
-XWiki.AssetClass_fw_items_FW_masterFramework.Geology=Geologi
-XWiki.AssetClass_fw_items_FW_masterFramework.HistoryofScience=Sejarah Ilmu Pengetahuan
-XWiki.AssetClass_fw_items_FW_masterFramework.LifeSciences=Life Sciences
-XWiki.AssetClass_fw_items_FW_masterFramework.Meteorology=Meteorologi
-XWiki.AssetClass_fw_items_FW_masterFramework.NaturalHistory=Sejarah Alam
-XWiki.AssetClass_fw_items_FW_masterFramework.Oceanography=Ilmu Samudera
-XWiki.AssetClass_fw_items_FW_masterFramework.Paleontology=Paleontologi
-XWiki.AssetClass_fw_items_FW_masterFramework.PhysicalSciences=Ilmu Eksakta
-XWiki.AssetClass_fw_items_FW_masterFramework.Physics=Fisika
-XWiki.AssetClass_fw_items_FW_masterFramework.ProcessSkills=Keterampilan Proses
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology_0=Teknologi
-XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies=Ilmu Sosial
-XWiki.AssetClass_fw_items_FW_masterFramework.Anthropology=Antropologi
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_5=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.Civics=Kewarganegaraan
-XWiki.AssetClass_fw_items_FW_masterFramework.CurrentEvents=Peristiwa Kini
-XWiki.AssetClass_fw_items_FW_masterFramework.Economics=Ekonomi
-XWiki.AssetClass_fw_items_FW_masterFramework.Entrepreneurship=Kewirausahaan
-XWiki.AssetClass_fw_items_FW_masterFramework.Geography=Geografi
-XWiki.AssetClass_fw_items_FW_masterFramework.GlobalAwareness=Kesadaran Global
-XWiki.AssetClass_fw_items_FW_masterFramework.Government=Pemerintahan
-XWiki.AssetClass_fw_items_FW_masterFramework.History Local=Sejarah (Lokal)
-XWiki.AssetClass_fw_items_FW_masterFramework.PoliticalSystems=Sistem Politik
-XWiki.AssetClass_fw_items_FW_masterFramework.Psychology=Psikologi
-XWiki.AssetClass_fw_items_FW_masterFramework.Religion=Agama
-XWiki.AssetClass_fw_items_FW_masterFramework.Research_0=Penelitian
-XWiki.AssetClass_fw_items_FW_masterFramework.Sociology=Sosiologi
-XWiki.AssetClass_fw_items_FW_masterFramework.StateHistory=Sejarah Negara
-XWiki.AssetClass_fw_items_FW_masterFramework.Technology_1=Teknologi
-XWiki.AssetClass_fw_items_FW_masterFramework.Thinking&amp;ProblemSolving=Pemikiran &amp; Pemecahan Masalah
-XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesGovernment=Pemerintah Amerika Serikat
-XWiki.AssetClass_fw_items_FW_masterFramework.UnitedStatesHistory=Sejarah Amerika Serikat
-XWiki.AssetClass_fw_items_FW_masterFramework.WorldHistory=Sejarah Dunia
-XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=Bahasa-bahasa Dunia
-XWiki.AssetClass_fw_items_FW_masterFramework.Alphabet=Alfabet
-XWiki.AssetClass_fw_items_FW_masterFramework.Careers_7=Karir
-XWiki.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=Kesadaran Budaya
-XWiki.AssetClass_fw_items_FW_masterFramework.Grammar=Tatabahasa
-XWiki.AssetClass_fw_items_FW_masterFramework.InformalEducation=Pendidikan Informal
-XWiki.AssetClass_fw_items_FW_masterFramework.Linguistics=Ilmu Bahasa
-XWiki.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=Pemahaman Mendengar
-XWiki.AssetClass_fw_items_FW_masterFramework.Reading=Membaca
-XWiki.AssetClass_fw_items_FW_masterFramework.Speaking=Berbicara
-XWiki.AssetClass_fw_items_FW_masterFramework.Spelling=Mengeja
-XWiki.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=Penulisan dengan Kosa kata
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.WebHome=Indeks Mata Pelajaran
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Arts=Kesenian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Architecture=Arsitektur
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Dance=Tarian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.DramaDramatics=Sandiwara/seni drama
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Film=Film
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.History=Sejarah
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Music=Musik
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Photography=Fotografi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.PopularCulture=Budaya Populer
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Technology=Teknologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.VisualArts=Seni Visual
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.VocationalEducation=Pendidikan Karir dan Teknis
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Agriculture_0=Pertanian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Business=Bisnis
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_6=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.OccupationalHomeEconomics=Ilmu Kesejahteraan Keluarga
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.School-to-work=Sekolah-ke-pekerjaan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Technology_2=Technology
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Trade&amp;Industrial=Perdagangan dan Industri
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching=Pendidikan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Accessibility=Akses/Pendidikan Khusus
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.AdultEducation=Pendidikan Dewasa
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.BilingualEducation=Pendidikan Dwibahasa
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ClassroomManagement=Manajemen Ruang Kelas
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EarlyChildhoodEducation=Pendidikan Dini Anak
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EducationAdministration=Administrasi/Kepemimpinan Pendidikan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EducationalFoundations=Dasar/Penelitian Pendidikan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EducationalPsychology=Psikologi Pendidikan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.InstructionalDesign=Rancangan Pengajaran
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.MeasurementEvaluation=Pengukuran &amp; Evaluasi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Mentoring=Mentoring
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.MulticulturalEducation=Pendidikan Multikultural
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.StandardsAlignment=Pengarahan Standar
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.TeachingTechniques=Teknik/Praktek Terbaik Pengajaran
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EducationalTechnology=Technology Pendidikan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_0=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.IntegratingTechnologyintotheClassroom=Mengintegrasikan Teknologi ke Dalam Ruang Kelas
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.UsingMultimedia&amp;theInternet=Menggunakan multimedia &amp; Internet
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Health=Kesehatan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.BodySystems&amp;Senses=Sistem Tubuh &amp; Indera
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_1=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EnvironmentalHealth=Kesehatan Lingkungan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.HumanSexuality=Seksualitas Manusia
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.MentalEmotionalHealth=Kesehatan Mental/Emosional
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Nutrition=Gizi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=Pencegahan Penyalahgunaan Keamanan/Merokok/Substansi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy=Melek Informasi dan Media
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.EvaluatingSources=Mengevaluasi Sumber
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.MediaEthics=Etika Media
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.OnlineSafety=Keamanan Online
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ResearchMethods=Metode Penelitian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.LanguageArts=Kesenian Bahasa
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Alphabet_0=Alfabet
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_2=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Journalism=Jurnalistik
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Listening&amp;Speaking=Pendengaran &amp; Pembicaraan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Literature=Kesusasteraan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Phonics=Phonics
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ReadingComprehension=Pemahaman Bacaan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Research=Penelitian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Spelling_0=Mengeja
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.StoryTelling=Bercerita/Mendongeng
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Vocabulary=Kosa Kata
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Writing=Menulis
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Mathematics=Matematika
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Algebra=Aljabar
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Appliedmathematics=Matematika Terapan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Arithmetic=Aritmetika
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Calculus=Kalkulus
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_3=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.DataAnalysis&amp;Probability=Analisis Data &amp; Probabilitas
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Equations=Persamaan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Estimation=Penaksiran
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Geometry=Geometri
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Graphing=Membuat Grafik
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Measurement=Pengukuran
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.NumberSense&amp;Operations=Pengertian Bilangan &amp; Operasi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Patterns=Pola
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ProblemSolving=Pemecahan Masalah
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Statistics=Statistika
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Trigonometry=Trigonometri
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Science=Ilmu Alam
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Agriculture=Pertanian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Astronomy=Astronomi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Biology=Biologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Botany=Botani
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_4=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Chemistry=Kima
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Earthscience=Ilmu Bumi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Ecology=Ekologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Engineering=Teknik
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Generalscience=Ilmu Alam Umum
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Geology=Geologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.HistoryofScience=Sejarah Ilmu Pengetahuan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.LifeSciences=Life Sciences
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Meteorology=Meteorologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.NaturalHistory=Sejarah Alam
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Oceanography=Ilmu Samudera
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Paleontology=Paleontologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.PhysicalSciences=Ilmu Eksakta
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Physics=Fisika
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ProcessSkills=Keterampilan Proses
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Technology_0=Teknologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.SocialStudies=Ilmu Sosial
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Anthropology=Antropologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_5=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Civics=Kewarganegaraan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.CurrentEvents=Peristiwa Kini
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Economics=Ekonomi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Entrepreneurship=Kewirausahaan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Geography=Geografi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.GlobalAwareness=Kesadaran Global
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Government=Pemerintahan
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.History\ Local=Sejarah (Lokal)
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.PoliticalSystems=Sistem Politik
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Psychology=Psikologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Religion=Agama
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Research_0=Penelitian
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Sociology=Sosiologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.StateHistory=Sejarah Negara
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Technology_1=Teknologi
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Thinking&amp;ProblemSolving=Pemikiran &amp; Pemecahan Masalah
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.UnitedStatesGovernment=Pemerintah Amerika Serikat
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.UnitedStatesHistory=Sejarah Amerika Serikat
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.WorldHistory=Sejarah Dunia
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ForeignLanguages=Bahasa-bahasa Dunia
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Alphabet=Alfabet
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Careers_7=Karir
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.CulturalAwareness=Kesadaran Budaya
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Grammar=Tatabahasa
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.InformalEducation=Pendidikan Informal
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Linguistics=Ilmu Bahasa
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.ListeningComprehension=Pemahaman Mendengar
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Reading=Membaca
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Speaking=Berbicara
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.Spelling=Mengeja
+CurrikiCode.AssetClass_fw_items_FW_masterFramework.VocabularyWriting=Penulisan dengan Kosa kata
 
 
 ## EDUCATIONAL LEVEL
 
-XWiki.AssetClass_educational_level2_prek=Prasekolah / Umur 0-4
-XWiki.AssetClass_educational_level2_gr-k-2=Kls. TK-2 / Umur 5-7
-XWiki.AssetClass_educational_level2_gr-3-5=Kls. 3-5 / Umur 8-10
-XWiki.AssetClass_educational_level2_gr-6-8=Kls. 6-8 / Umur 11-13
-XWiki.AssetClass_educational_level2_gr-9-10=Kls. 9-10 / Umur 14-16
-XWiki.AssetClass_educational_level2_gr-11-12=Kls. 11-12 / Umur 16-18
-XWiki.AssetClass_educational_level2_college_and_beyond=Perguruan Tinggi dan Lanjutan
-XWiki.AssetClass_educational_level2_professional_development=Pengembangan Profesi
-XWiki.AssetClass_educational_level2_special_education=Pendidikan Khusus
-XWiki.AssetClass_educational_level2_na=Lainnya
+CurrikiCode.AssetClass_educational_level_prek=Prasekolah / Umur 0-4
+CurrikiCode.AssetClass_educational_level_gr-k-2=Kls. TK-2 / Umur 5-7
+CurrikiCode.AssetClass_educational_level_gr-3-5=Kls. 3-5 / Umur 8-10
+CurrikiCode.AssetClass_educational_level_gr-6-8=Kls. 6-8 / Umur 11-13
+CurrikiCode.AssetClass_educational_level_gr-9-10=Kls. 9-10 / Umur 14-16
+CurrikiCode.AssetClass_educational_level_gr-11-12=Kls. 11-12 / Umur 16-18
+CurrikiCode.AssetClass_educational_level_college_and_beyond=Perguruan Tinggi dan Lanjutan
+CurrikiCode.AssetClass_educational_level_professional_development=Pengembangan Profesi
+CurrikiCode.AssetClass_educational_level_special_education=Pendidikan Khusus
+CurrikiCode.AssetClass_educational_level_na=Lainnya
 
 ## ICT
-XWiki.AssetClass_instructional_component2_activity_assignment=Aktivitas: Tugas/Pekerjaan Rumah
-XWiki.AssetClass_instructional_component2_activity_exercise=Aktivitas: Latihan
-XWiki.AssetClass_instructional_component2_activity_lab=Aktivitas: Percobaan/Lab
-XWiki.AssetClass_instructional_component2_activity_worksheet=Aktivitas: Pengorganisasian Grafis/Lembar Kerja
-XWiki.AssetClass_instructional_component2_activity_problemset=Aktivitas: Kumpulan
-XWiki.AssetClass_instructional_component2_book_fiction=Buku: Fiksi
-XWiki.AssetClass_instructional_component2_book_nonfiction=Buku: Non-Fiksi
-XWiki.AssetClass_instructional_component2_book_readings=Buku: Bacaan/Kutipan
-XWiki.AssetClass_instructional_component2_book_textbook=Buku: Buku Teks
-XWiki.AssetClass_instructional_component2_curriculum_assessment=Kurikulum: Penilaian/Ujian
-XWiki.AssetClass_instructional_component2_curriculum_course=Kurikulum: Mata Pelajaran Lengkap
-XWiki.AssetClass_instructional_component2_curriculum_unit=Kurikulum: Unit
-XWiki.AssetClass_instructional_component2_curriculum_lp=Kurikulum: Rencana Pelajaran
-XWiki.AssetClass_instructional_component2_curriculum_rubric=Kurikulum: Rubrik
-XWiki.AssetClass_instructional_component2_curriculum_scope=Kurikulum: Jangkauan &amp; Rangkaian
-XWiki.AssetClass_instructional_component2_curriculum_standards=Kurikulum: Standar
-XWiki.AssetClass_instructional_component2_curriculum_studyguide=Kurikulum: Petunjuk Pelajaran/Catatan
-XWiki.AssetClass_instructional_component2_curriculum_syllabus=Kurikulum: Sillabus
-XWiki.AssetClass_instructional_component2_curriculum_tutorial=Kurikulum: Tutorial
-XWiki.AssetClass_instructional_component2_curriculum_workbook=Kurikulum: Buku Catatan
-XWiki.AssetClass_instructional_component2_resource_animation=Bahan Ajar: Animasi/Simulasi
-XWiki.AssetClass_instructional_component2_resource_diagram=Bahan Ajar: Diagram/Illustrasi
-XWiki.AssetClass_instructional_component2_resource_glossary=Bahan Ajar: Daftar Istilah/Kosa kata
-XWiki.AssetClass_instructional_component2_resource_index=Bahan Ajar: Indeks/Daftar
-XWiki.AssetClass_instructional_component2_resource_photograph=Bahan Ajar: Foto
-XWiki.AssetClass_instructional_component2_resource_presentation=Bahan Ajar: Video/Presentasi/Slides
-XWiki.AssetClass_instructional_component2_resource_collection=Bahan Ajar: Koleksi Referensi
-XWiki.AssetClass_instructional_component2_resource_script=Bahan Ajar: Skrip/Transkrip
-XWiki.AssetClass_instructional_component2_resource_speech=Bahan Ajar: Audio/Pidato/Kuliah
-XWiki.AssetClass_instructional_component2_resource_table=Bahan Ajar: Tabel/Grafik/Chart
-XWiki.AssetClass_instructional_component2_resource_template=Bahan Ajar: Template
-XWiki.AssetClass_instructional_component2_resource_webcast=Bahan Ajar: Webcast/Podcast
-XWiki.AssetClass_instructional_component2_other=Lainnya
-
+CurrikiCode.AssetClass_instructional_component_activity_assignment=Aktivitas: Tugas/Pekerjaan Rumah
+CurrikiCode.AssetClass_instructional_component_activity_exercise=Aktivitas: Latihan
+CurrikiCode.AssetClass_instructional_component_activity_lab=Aktivitas: Percobaan/Lab
+CurrikiCode.AssetClass_instructional_component_activity_game=Activity: Permainan
+CurrikiCode.AssetClass_instructional_component_activity_worksheet=Aktivitas: Pengorganisasian Grafis/Lembar Kerja
+CurrikiCode.AssetClass_instructional_component_activity_problemset=Aktivitas: Kumpulan
+CurrikiCode.AssetClass_instructional_component_activity_webquest=Activity: WebQuest
+CurrikiCode.AssetClass_instructional_component_book_fiction=Buku: Fiksi
+CurrikiCode.AssetClass_instructional_component_book_nonfiction=Buku: Non-Fiksi
+CurrikiCode.AssetClass_instructional_component_book_readings=Buku: Bacaan/Kutipan
+CurrikiCode.AssetClass_instructional_component_book_textbook=Buku: Buku Teks
+CurrikiCode.AssetClass_instructional_component_curriculum_assessment=Kurikulum: Penilaian/Ujian
+CurrikiCode.AssetClass_instructional_component_curriculum_course=Kurikulum: Mata Pelajaran Lengkap
+CurrikiCode.AssetClass_instructional_component_curriculum_lp=Kurikulum: Rencana Pelajaran
+CurrikiCode.AssetClass_instructional_component_curriculum_rubric=Kurikulum: Rubrik
+CurrikiCode.AssetClass_instructional_component_curriculum_scope=Kurikulum: Jangkauan &amp; Rangkaian
+CurrikiCode.AssetClass_instructional_component_curriculum_standards=Kurikulum: Standar
+CurrikiCode.AssetClass_instructional_component_curriculum_studyguide=Kurikulum: Petunjuk Pelajaran/Catatan
+CurrikiCode.AssetClass_instructional_component_curriculum_syllabus=Kurikulum: Sillabus
+CurrikiCode.AssetClass_instructional_component_curriculum_tutorial=Kurikulum: Tutorial
+CurrikiCode.AssetClass_instructional_component_curriculum_unit=Kurikulum: Unit
+CurrikiCode.AssetClass_instructional_component_curriculum_workbook=Kurikulum: Buku Catatan
+CurrikiCode.AssetClass_instructional_component_resource_animation=Bahan Ajar: Animasi/Simulasi
+CurrikiCode.AssetClass_instructional_component_resource_article=Resource: Article/Essay
+CurrikiCode.AssetClass_instructional_component_resource_speech=Bahan Ajar: Audio/Pidato/Kuliah
+CurrikiCode.AssetClass_instructional_component_resource_diagram=Bahan Ajar: Diagram/Illustrasi
+CurrikiCode.AssetClass_instructional_component_resource_glossary=Bahan Ajar: Daftar Istilah/Kosa kata
+CurrikiCode.AssetClass_instructional_component_resource_index=Bahan Ajar: Indeks/Daftar
+CurrikiCode.AssetClass_instructional_component_resource_photograph=Bahan Ajar: Foto
+CurrikiCode.AssetClass_instructional_component_resource_collection=Bahan Ajar: Koleksi Referensi
+CurrikiCode.AssetClass_instructional_component_resource_script=Bahan Ajar: Skrip/Transkrip
+CurrikiCode.AssetClass_instructional_component_resource_study=Resource: Study/Data/Research
+CurrikiCode.AssetClass_instructional_component_resource_table=Bahan Ajar: Tabel/Grafik/Chart
+CurrikiCode.AssetClass_instructional_component_resource_template=Bahan Ajar: Template
+CurrikiCode.AssetClass_instructional_component_resource_presentation=Bahan Ajar: Video/Presentasi/Slides
+CurrikiCode.AssetClass_instructional_component_resource_webcast=Bahan Ajar: Webcast/Podcast
+CurrikiCode.AssetClass_instructional_component_other=Lainnya
+#This one below is not a value in the class but we need for several location, such as My Contributions
+CurrikiCode.AssetClass_instructional_component_multiple=Multiple
 
 ## ACCESS RIGHTS
-XWiki.AssetClass_rights_public=Publik: Tersedia untuk semua orang dan setiap anggota dapat melakukan edit.
-XWiki.AssetClass_rights_members=Terlindungi: Tersedia untuk semua orang tetap hanya Anda (atau grup Anda) yang dapat meng-edit kopian ini.
-XWiki.AssetClass_rights_private=Pribadi: Hanya Anda (atau grup Anda) yang bisa melihat atau melakukan edit.
+CurrikiCode.AssetClass_rights_public=Publik: Tersedia untuk semua orang dan setiap anggota dapat melakukan edit.
+CurrikiCode.AssetClass_rights_members=Terlindungi: Tersedia untuk semua orang tetap hanya Anda (atau grup Anda) yang dapat meng-edit kopian ini.
+CurrikiCode.AssetClass_rights_private=Pribadi: Hanya Anda (atau grup Anda) yang bisa melihat atau melakukan edit.
 
 ## LANGUAGE
-XWiki.AssetClass_language_eng=English
-XWiki.AssetClass_language_ind=Bahasa Indonesia
-XWiki.AssetClass_language_zho=Chinese
-XWiki.AssetClass_language_nld=Dutch
-XWiki.AssetClass_language_fra=French
-XWiki.AssetClass_language_deu=German
-XWiki.AssetClass_language_hin=Hindi
-XWiki.AssetClass_language_ita=Italian
-XWiki.AssetClass_language_jpn=Japanese
-XWiki.AssetClass_language_kor=Korean
-XWiki.AssetClass_language_nep=Nepali
-XWiki.AssetClass_language_por=Portuguese
-XWiki.AssetClass_language_rus=Russian
-XWiki.AssetClass_language_spa=Spanish
+CurrikiCode.AssetClass_language_eng=English
+CurrikiCode.AssetClass_language_ind=Bahasa Indonesia
+CurrikiCode.AssetClass_language_zho=Chinese
+CurrikiCode.AssetClass_language_nld=Dutch
+CurrikiCode.AssetClass_language_fra=French
+CurrikiCode.AssetClass_language_deu=German
+CurrikiCode.AssetClass_language_hin=Hindi
+CurrikiCode.AssetClass_language_ita=Italian
+CurrikiCode.AssetClass_language_jpn=Japanese
+CurrikiCode.AssetClass_language_kor=Korean
+CurrikiCode.AssetClass_language_nep=Nepali
+CurrikiCode.AssetClass_language_por=Portuguese
+CurrikiCode.AssetClass_language_rus=Russian
+CurrikiCode.AssetClass_language_sin=Sinhalese
+CurrikiCode.AssetClass_language_spa=Spanish
+CurrikiCode.AssetClass_language_tam=Tamil
+CurrikiCode.AssetClass_language_999=Other
 
 ## LICENSES
 XWiki.AssetLicenseClass_licenseType2_Licences.CurrikiLicense=Curriki License (Creative Commons Attributions 3.0)
@@ -287,14 +391,11 @@ XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-Comm
 XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNoDerivatives=Creative Commons Attribution No Derivatives
 XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionSharealike=Creative Commons Attribution Share Alike
 XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsAttributionNon-CommercialShareAlike=Creative Commons Attribution Non-Commercial Share Alike
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsNon-Commercial=DEPRICATED: Creative Commons Non-Commercial
-XWiki.AssetLicenseClass_licenseType2_Licences.CreativeCommonsSharealike=DEPRICATED: Creative Commons Share Alike
-XWiki.AssetLicenseClass_licenseType2_Licences.GnuDocumentationLicense=DEPRICATED: Gnu Documentation License
 
 ##
 ##
-## CURRIKI SPACE CLASS Used by GROUPS 
-## Note that Gropus also uses other classes.
+## CURRIKI SPACE CLASS Used by GROUPS
+## Note that Groups also uses other classes.
 
 ## SUBJECT
 
@@ -320,17 +421,17 @@ XWiki.CurrikiSpaceClass_topic_FW_masterFramework.School-to-work=Sekolah-ke-peker
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Technology_2=Teknologi
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Trade&amp;Industrial=Perdagangan dan Industri
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Education&amp;Teaching=Pendidikan
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Accessibility=Akses/Pendidikan Khusus 
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.AdultEducation=Pendidikan Dewasa	 
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Accessibility=Akses/Pendidikan Khusus
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.AdultEducation=Pendidikan Dewasa
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.BilingualEducation=Pendidikan Dwibahasa
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.ClassroomManagement=Manajemen Ruang Kelas
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EarlyChildhoodEducation=Pendidikan Dini Anak
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationAdministration=Administrasi/Kepemimpinan Pendidikan
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalFoundations=Dasar/Penelitian Pendidikan 
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalPsychology=Psikologi Pendidikan 
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalFoundations=Dasar/Penelitian Pendidikan
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalPsychology=Psikologi Pendidikan
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.InstructionalDesign=Rancangan Pengajaran
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.MeasurementEvaluation=Pengukuran &amp; Evaluasi
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Mentoring=Mentoring 
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Mentoring=Mentoring
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.MulticulturalEducation=Pendidikan Multikultural
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.StandardsAlignment=Pengarahan Standar
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.TeachingTechniques=Teknik/Praktek Terbaik Pengajaran
@@ -338,7 +439,7 @@ XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalTechnology=Teknologi
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Careers_0=Karir
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.IntegratingTechnologyintotheClassroom=Mengintegrasikan Teknologi ke Dalam Ruang Kelas
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.UsingMultimedia&amp;theInternet=Menggunakan multimedia &amp; Internet
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Health=Kesehatan 
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Health=Kesehatan
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.BodySystems&amp;Senses=Sistem Tubuh &amp; Indera
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Careers_1=Karir
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EnvironmentalHealth=Kesehatan Lingkungan
@@ -413,7 +514,7 @@ XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Entrepreneurship=Kewirausahaan
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Geography=Geografi
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.GlobalAwareness=Kesadaran Global
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Government=Pemerintahan
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.History Local=Sejarah (Lokal)
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.History\ Local=Sejarah (Lokal)
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.PoliticalSystems=Sistem Politik
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Psychology=Psikologi
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Religion=Agama
@@ -467,7 +568,10 @@ XWiki.CurrikiSpaceClass_language_kor=Korean
 XWiki.CurrikiSpaceClass_language_nep=Nepali
 XWiki.CurrikiSpaceClass_language_por=Portuguese
 XWiki.CurrikiSpaceClass_language_rus=Russian
+XWiki.CurrikiSpaceClass_language_sin=Sinhalese
 XWiki.CurrikiSpaceClass_language_spa=Spanish
+XWiki.CurrikiSpaceClass_language_tam=Tamil
+XWiki.CurrikiSpaceClass_language_999=Other
 
 ## LICENSES
 
@@ -478,16 +582,12 @@ XWiki.CurrikiSpaceClass_licence_Licences.CreativeCommonsAttributionNon-Commercia
 XWiki.CurrikiSpaceClass_licence_Licences.CreativeCommonsAttributionNoDerivatives=Creative Commons Attribution No Derivatives
 XWiki.CurrikiSpaceClass_licence_Licences.CreativeCommonsAttributionSharealike=Creative Commons Attribution Share Alike
 XWiki.CurrikiSpaceClass_licence_Licences.CreativeCommonsAttributionNon-CommercialShareAlike=Creative Commons Attribution Non-Commercial Share Alike
-XWiki.CurrikiSpaceClass_licence_Licences.CreativeCommonsNon-Commercial=DEPRICATED: Creative Commons Non-Commercial
-XWiki.CurrikiSpaceClass_licence_Licences.CreativeCommonsSharealike=DEPRICATED: Creative Commons Share Alike
-XWiki.CurrikiSpaceClass_licence_Licences.GnuDocumentationLicense=DEPRICATED: Gnu Documentation License
-
 ##
 ##
 ## MEMBERS
 
 ## MEMBER TYPE
-XWiki.XWikiUsers_member_type_student=Murid
+XWiki.XWikiUsers_member_type_student=Pelajar
 XWiki.XWikiUsers_member_type_teacher=Guru
 XWiki.XWikiUsers_member_type_professional=Professional
 XWiki.XWikiUsers_member_type_parent=Orang Tua
@@ -742,6 +842,7 @@ XWiki.XWikiUsers_country_ZW=Zimbabwe
 
 
 ## TOPICS
+
 XWiki.XWikiUsers_topics_FW_masterFramework.WebHome=Indeks Mata Pelajaran
 XWiki.XWikiUsers_topics_FW_masterFramework.Arts=Kesenian
 XWiki.XWikiUsers_topics_FW_masterFramework.Architecture=Arsitektur
@@ -866,6 +967,7 @@ XWiki.XWikiUsers_topics_FW_masterFramework.Sociology=Sosiologi
 XWiki.XWikiUsers_topics_FW_masterFramework.StateHistory=Sejarah Negara
 XWiki.XWikiUsers_topics_FW_masterFramework.Technology_1=Teknologi
 XWiki.XWikiUsers_topics_FW_masterFramework.Thinking&amp;ProblemSolving=Pemikiran &amp; Pemecahan Masalah
+
 XWiki.XWikiUsers_topics_FW_masterFramework.UnitedStatesGovernment=Pemerintah Amerika Serikat
 XWiki.XWikiUsers_topics_FW_masterFramework.UnitedStatesHistory=Sejarah Amerika Serikat
 XWiki.XWikiUsers_topics_FW_masterFramework.WorldHistory=Sejarah Dunia
@@ -907,6 +1009,238 @@ XWiki.SpaceClass_language_kor=Korean
 XWiki.SpaceClass_language_nep=Nepali
 XWiki.SpaceClass_language_por=Portuguese
 XWiki.SpaceClass_language_rus=Russian
+XWiki.SpaceClass_language_sin=Sinhalese
 XWiki.SpaceClass_language_spa=Spanish
+XWiki.SpaceClass_language_tam=Tamil
+XWiki.SpaceClass_language_999=Other
+
+##GLOBAL TRANSLATIONS
+
+##PAGE NOT FOUND
+
+global.notfound.header=Bahan Ajar atau Halaman Tidak Ditemukan
+global.notfound.message=Bahan Ajar atau Halaman yang Diminta Tidak Ditemukan.
+global.notfound.goback_link=Kembali
+global.notfound.goback_url=
+global.notfound.home_link=Halaman utamaCurriki
+global.notfound.home_url=/xwiki/bin/view/Main/WebHome
+global.notfound.help_link=Bantuan
+global.notfound.help_url=/xwiki/bin/view/Coll_curriki/CurrikiHelp
+
+
+##TITLE ROLLOVER POPUP
+
+global.title.popup.title=&lt;strong&gt;Judul:&lt;/strong&gt;
+global.title.popup.description=&lt;strong&gt;Deskripsi:&lt;/strong&gt;
+global.title.popup.subject=&lt;strong&gt;Mata Pelajaran:&lt;/strong&gt;
+global.title.popup.educationlevel=&lt;strong&gt;Tingkatan Pendidikan:&lt;/strong&gt;
+global.title.popup.ict=&lt;strong&gt;Jenis Komponen Pengajaran:&lt;/strong&gt;
+global.title.popup.none.selected=-- Tidak Ada yang Terpilih --
+##Used in left TOC for no ICT value:
+global.title.popup.ict.missing=-- Tidak Ada yang Terpilih  --
+
+##COMPARE VERSIONS
+## Jen is seeing if we still need this.
+changes.changesofpage=Perubahan
+changes.in=di
+changes.space=space
+changes.from=Dari
+changes.to=Kepada
+changes.comment=Change comment
+changes.nocomment=Tidak ada komentar untuk versi ini
+changes.version=versi
+changes.editedby=Diedit oleh
+changes.on=pada
+changes.metadatachanges=Perubahan metadata
+changes.property=Sifat
+changes.nometadatachanges=Tidak ada perubahan metadata
+changes.contentchanges=Perubahan Konten
+changes.nocontentchanges=Tidak ada perubahan konten
+changes.attachmentchanges=Perubahan Lampiran
+changes.noattachmentchanges=Tidak ada perubahan Lampiran
+changes.filename=Nama berkas
+changes.action=Tindakan
+changes.commentchanges=Perubahan Komentar
+changes.nocommentchanges=Tidak ada perubahan komentar
+changes.metadata.parent=Parent
+changes.metadata.web=Space
+changes.metadata.name=Nama Halaman
+changes.metadata.author=Penulis
+changes.metadata.language=Bahasa
+changes.metadata.defaultLanguage=Bahasa Default
+changes.attachmentadded=Lampiran telah ditambahkan
+changes.attachmentdeleted=Lampiran telah dihapus
+changes.attachmentupdatedfromversion=Lampiran telah dibaharui dari versi
+changes.toversion=ke versi
+changes.commentchange=Perubahan Komentar
+changes.commentAdded=Komentar nomor {0} ditambahkan
+changes.commentRemoved=Komentar nomor {0} dihapus
+changes.comment.property=Sifat
+changes.comment.previousvalue=Nilai sebelumnya
+changes.comment.newvalue=Nilai baru
+changes.comment.author=Penulis
+changes.comment.date=Tanggal
+changes.comment.comment=Komentar
+changes.comment.highlight=Teks ditandai
+changes.comment.replyto=Kirim ke
+changes.blog.title=Judul
+changes.blog.extract=Ringkasan
+changes.blog.category=Kategori
+changes.blog.editcategories=Edit kategori
+
+
+changes.blog.addnewcategory=Tambahkan Kategori
+changes.tag.tags=Tag
+changes.objectchanges=Perubahan Objek
+changes.objectAdded=Obyek ditambahkan
+changes.objectRemoved=Objek dihapus
+changes.ofclass=dari kelas
+changes.noobjectchanges=Tidak Ada Perubahan Objek
+changes.classeschanges=Perubahan Kelas
+changes.noclasseschanges=Tidak Ada Perubahan Kelas
+
+history.errorgettinghistory=Error menampilkan informasi sejarah dari server
+history.to=Ke
+
+history.rollback.exception=Error terjadi saat mengembalikan bahan ke keadaan sebelumnya. Silakan mencoba kembali.
+history.rollback.confirm.message=Anda yakin ingin mengembalikan aset ini ke versi {0}
+
+## compare page
+changes.changesofpage=Perubahan untuk Bahan Ajar atau Halaman
+changes.in=di
+changes.space=space
+changes.from=Dari
+changes.to=Kepada
+changes.comment=&lt;strong&gt;Catatan Revisi&lt;/strong&gt;
+changes.nocomment=Tidak ada catatan revisi untuk versi ini.
+changes.version=Versi
+changes.editedby=diedit oleh
+changes.on=pada
+changes.metadatachanges=Perubahan Informasi
+changes.property=Sifat
+changes.nometadatachanges=Tidak ada perubahan informasi.
+changes.contentchanges=Perubahan Konten
+changes.nocontentchanges=Tidak ada perubahan konten.
+changes.attachmentchanges=Perubahan Lampiran
+changes.noattachmentchanges=Tidak ada perubahan lampiran.
+changes.filename=Nama berkas
+changes.action=Tindakan
+changes.commentchanges=Perubahan Komentar
+changes.nocommentchanges=Tidak ada perubahan komentar.
+changes.metadata.parent=Parent
+changes.metadata.web=Space
+changes.metadata.name=Nama Halaman
+changes.metadata.author=Penulis
+changes.metadata.language=Bahasa
+changes.metadata.defaultLanguage=Bahasa Default
+
+
+changes.asset.assetpage=Tersusun / Diurutkan kembali
+changes.asset.title=Judul
+changes.asset.description=Deskripsi
+changes.asset.keywords=Kata kunci
+changes.asset.aggregation_level=Tingkat agregasi
+changes.asset.difficulty=Tingkat Kesulitan
+changes.asset.status=Status
+changes.asset.fw_items=Mata Pelajaran
+changes.asset.instructional_component=Jenis Komponen Pengajaran
+changes.asset.category=Kategori
+changes.asset.rights=Hak-hak
+changes.asset.educational_level=Tingkatan Pendidikan
+changes.asset.educational_level2=Tingkatan Pendidikan
+changes.asset.language=Bahasa
+changes.asset.instructional_component2=Komponen Pengajaran
+changes.asset.caption_desc=Deskripsi Caption
+changes.asset.caption_text=Deskripsi Caption
+changes.asset.alt_desc=Deskripsi Alternate
+changes.asset.tracking=Berkas Bahan Ajar
+changes.asset.fcdate=Cek Tanggal Berkas
+changes.asset.link=Web Link
+changes.asset.hidden_from_search=Tersembunyi dari Pencarian
+changes.attachmentadded=Lampiran ditambahkan
+changes.attachmentdeleted=Lampiran dihapus
+changes.attachmentupdatedfromversion=Lampiran dibaharui dari versi
+changes.toversion=ke versi
+changes.asset.file_type=Tipe Berkas
+changes.commentchange=Perubahan Komentar
+changes.comment.property=Sifat
+changes.comment.previousvalue=Nilai Sebelumnya
+changes.comment.newvalue=Nilai Baru
+changes.comment.author=Penulis
+changes.comment.date=Tanggal
+changes.comment.comment=Komentar
+
+##
+
+
+
+## COMMENTS FOR HISTORY
+
+curriki.comment.no.note=No revision note
+
+##HISTORY: INFRASTRUCTURE
+curriki.comment.initmetadatafornewcollection=Membuat informasi untuk koleksi baru...
+curriki.comment.initmetadatafornewasset=Membuat informasi untuk bahan ajar baru...
+curriki.comment.datamodelmigration=Bahan ajar secara otomatis dipindahkan ke model data baru Curriki
+
+HITORY: CREATE NEW
+curriki.comment.createrootcollection=Koleksi Dibuat
+curriki.comment.startcreatingcompositeasset=Bahan Ajar Dibuat
+curriki.comment.createnewsourceasset=Bahan Ajar baru dibuat
+curriki.comment.createtextsourceasset=Bahan teks dibuat
+curriki.comment.createlinksourceasset=Bahan web link dibuat
+curriki.comment.finishcreatingsubasset=Sub-bahan ajar dari kategori {0} dibuat
+
+##HISTORY: PRIOR MOVE &amp; REMOVE AND ADD, MAY STILL BE IN USE
+curriki.comment.insertsubassetincompositeasset=Sub-bahan ajar {0} ({1}) dari kategori {2} disisipkan di {3}
+curriki.comment.removesubassetincompositeasset=Sub-bahan ajar {0} ({1}) dihapus pada posisi {2}
+curriki.comment.addingsubassettocompositeasset=Sub-bahan ajar {0} ({1}) dihapus dari kategori {2} pada posisi {3}
+
+## HISTORY: ORGANIZE
+organize.history.removed_note=Sub-bahan ajar dihapus {0} dari posisi {1};
+organize.history.inserted_note=Disisipkan {0} pada posisi {1};
+
+##HISTORY: INFO EDITING
+curriki.comment.updatemetadata=Informasi bahan dibaharuiUpdated resource information
+curriki.comment.updatemetadata.nochange=Informasi bahan ajar disimpan tanpa perubahan
+curriki.comment.applyrights=Hak-hak yang diterapkanApplied rights
+curriki.comment.protectspace=Ruang terproteksi
+
+##HISTORY: CONTENT EDITING
+rve.content.edit.revision.defaultnote=Bahan Ajar telah diedit
+curriki.comment.reordered=Diurutkan kembali
+curriki.comment.addsubasset=Sub-bahan ajar ditambahkan
+curriki.comment.createfoldersourceasset=Folder sub-bahan ajar dibuat
+core.comment.uploadAttachmentComment=Lampiran baru diupload
+core.comment.uploadImageComment=Gambar baru diupload
+core.comment.deleteAttachmentComment=Lampiran dihapus
+core.comment.deleteImageComment=Gambar dihapus
+
+##HISTORY: CRS
+curriki.comment.unnominateasset=Bahan ajar tidak dinominasi
+curriki.comment.crsvalueadded=Bahan ajar diberikan nilai CRS {0}
+curriki.comment.crsvalueremoved=Bahan ajar bernilai {0} dihapus
+
+
+## FUTURE HISTORY: FLAG
+
+flag.revision.history.note=Bahan ajar ditandai oleh {0}, yang mengirim bahan ajar tersebut untuk evaluasi karena dinilai {1}.
+
+flag.revision.history.note.alt_reason=Bahan ajar ditandai oleh {0}, yang mengirim bahan ajar tersebut untuk evaluasi karena alasan yang diketahui oleh Curriki.
+
+
+
+##TBD if we need these
+comment.loadingcomments=Memuat komentar
+comment.errorgettingcomments=Error memuat komentar
+history.loadinghistory=Memuat sejarah
+comment.errorgettinghistory=Error memuat sejarah
+preview.loadingpreview=Memuat preview
+preview.errorgettingpreview=Error memuat preview
+
+##Todd added the below strings. Currently the old ones are hard coded. Nov-5-2008 - I have no recollection added this. Todd
+
+
+
 
 </content></xwikidoc>

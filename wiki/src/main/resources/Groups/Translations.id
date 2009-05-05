@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1226863330000</creationDate>
-<date>1232569537000</date>
-<contentUpdateDate>1232569537000</contentUpdateDate>
-<version>2.1</version>
+<date>1239396193000</date>
+<contentUpdateDate>1239396193000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>new 1.8.1 trans</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,8 +55,12 @@
 <tags/>
 </property>
 </object>
-<content>datetime=Tanggal/Waktu
-action=Tindakan
+<content>## Groups Translations
+## @type translation
+## @refactored ludovic 
+## &lt;pre&gt;
+datetime=Date/Time
+action=Action
 
 ## FIELD LABELS 
 XWiki.SpaceClass_policy_open=Keanggotaan Terbuka - Setiap anggota Curriki dapat bergabung tanpa persetujuan atau undangan.
@@ -168,9 +172,9 @@ groups_validation_url_invalid=URL Anda harus dimulai dengan huruf, dan hanya dap
 groups_validation_education_required=Silakan memilih salah satu tingkat pendidikan. Field ini diperlukan.
 groups_validation_type_required=
 groups_validation_subject_required=Silakan memilih subjek. Field ini diperlukan.
-groups_validation_licence_required=Silakan memilih standar lisensi untuk kontribusi kurikulum grup Anda kepada Curriki repositori.
+groups_validation_licence_required=Silakan memilih standar lisensi untuk kontribusi kurikulum grup Anda kepada repositori Curriki.
 groups_validation_privacy_required=
-groups_validation_title-exists=Sudah ada grup dengan nama itu. Silahkan memilih yang lain.
+groups_validation_title-exists=Grup dengan nama tersebut sudah ada. Silahkan pilih nama yang lain.
 
 
 ####################
@@ -191,7 +195,6 @@ groups_welcomeblock_savedone=Bagian Selamat datang Anda telah disimpan.
 
 ## GROUP HOME
 groups_home_tabname=Halaman Utama
-
 
 ## GROUP HOME -- MASTHEAD
 groups_home_masthead_title=Judul Grup
@@ -232,6 +235,9 @@ groups_home_activity_mem_upd=Profil anggota diperbarui – {0}
 groups_home_activity_res_add=Bahan ajar kurikulum ditambahkan – "{0}" by {1}
 groups_home_activity_res_edit=Bahan ajar kurikulum dieditkan – "{0}" by {1}
 groups_home_activity_res_del=Bahan ajar kurikulum dihapuskan – "{0}" by {1}
+
+groups_home_activity_res_rdr=Koleksi kurikulum yang tersusun kembali – by {1}
+
 groups_home_activity_mes_add=Pesan terbaru – "{0}" from {1}
 groups_home_activity_mes_edit=Pesan diedit – "{0}" from {1}
 groups_home_activity_mes_del=Pesan dihapus – "{0}" from {1}
@@ -296,12 +302,6 @@ groups_home_contributions_title=Kontribusi Grup
 
 groups_home_contributions_infotxt=Di sini anda dapat menemukan kontribusi apapun dari grup.
 groups_home_contributions_view_btt=Lihat Semua
-groups.curriculum.contributions.addButton=Tambahkan Bahan Ajar
-groups.curriculum.contributions.addButton_tooltip=Sediakan bahan pembelajaran terbaik Anda atau membuat sesuatu yang baru
-
-groups.curriculum.collections.buildup=Membangun
-groups.curriculum.collections.buildup_tooltip=Tambahkan sesuatu untuk membangun koleksi ini
-
 groups_home_contributions_or=ATAU
 groups_home_contributions_searchfieldtxt=masukkan pencarian
 groups_home_contributions_find_btt=Mencari
@@ -316,7 +316,7 @@ groups_home_membership_closed_visitor_infotxt=Karena ini adalah grup tertutup, c
 
 groups_home_membership_closed_visitor_btt= Mohon Keanggotaan
 
-groups_home_membership_group_infotxt=Jika Anda mengetahui orang-orang yang berpotensi besar untuk grup ini, klik click &amp;quot;Undang Anggota Baru&amp;quot; di bawah ini untuk mengirimkan undangan.
+groups_home_membership_group_infotxt=Jika Anda mengetahui orang-orang yang berpotensi besar untuk grup ini, klik&amp;quot;Undang Anggota Baru&amp;quot; di bawah ini untuk mengirimkan undangan.
 
 groups_home_membership_group_btt=Undang Anggota Baru
 
@@ -325,8 +325,6 @@ groups_home_membership_invite=Undang Anggota
 
 ## MESSAGES TAB
 groups_messages_tabname=Perpesanan
-
-
 groups_messages_about_title=Mengenai Perpesanan
 
 groups_messages_about_link_show=Tampilkan
@@ -434,35 +432,49 @@ groups_messages_view_message_delete_done=Pesan ini telah dihapus.
 
 ## CURRICULUM TAB
 groups_curriculum_tabname=Kurikulum
-
 groups_curriculum_about_title=Mengenai Kurikulum
 groups.curriculum.collections.addButton=Tambahkan Koleksi Grup
 groups.curriculum.collections.addButton_tooltip=Tambahkan koleksi untuk mengatur dan membawakan bahan ajar yang dimiliki oleh grup
 groups_curriculum_about_linkedit=Edit
 
-
 groups_curriculum_contributions_title=Kontribusi dari {0}
 
 groups_home_contributions_view_btt=Lihat Semua
-
 groups_home_contributions_view_or=ATAU
 groups_home_contributions_searchfieldtxt=masukkan pencarian
 groups_home_contributions_find_btt=Cari
-
 groups_curriculum_collections_title=Koleksi Kurikulum dari {0}
-
 groups_curriculum_collections_show_link=Tampikan Deskripsi
-
 groups_curriculum_collections_hide_link=Sembunyikan Deskripsi
-
 groups_curriculum_collections_infotxt=Bagian ini menampikan daftar dari koleksi yang dibuat oleh {0}. Links tersedia di sebelah kanan dari setiap koleksi, tergantung dari hak Anda untuk grup ini
-
 groups_curriculum_collections_btt=Tambahkan Koleksi Grup
-groups_curriculum_collections_view_link=Lihat
-groups_curriculum_collections_edit_link=Edit
-groups_curriculum_collections_add_link=Tambahkan
-groups_curriculum_collections_delete_link=Hapus
 groups_curriculum_collections_paging diff=Koleksi
+
+
+groups.curriculum.contributions.addButton=Add a Resource
+groups.curriculum.contributions.addButton_tooltip=Provide your best learning resource or create something new
+
+##To create macros that work in both Groups and My Curriki, the translations have to be identical. Thus the following link translations can be found in the My Curriki Translation file. Todd Jan-20-2009
+##Add
+##Copy
+##Edit
+##Edit Info
+##Build Up
+##Organize
+##Delete
+
+
+##I think these can be deleted Todd Jan-20-2009
+##groups.curriculum.contributions.add=Add
+##groups.curriculum.contributions.add_tooltip=Add this resource to another collection or folder
+##groups_curriculum_collections_view_link=View
+##groups_curriculum_collections_edit_link=Edit
+##groups_curriculum_collections_add_link=Tambahkan
+##groups_curriculum_collections_delete_link=Hapus
+##groups.curriculum.collections.buildup=Build Up
+##groups.curriculum.collections.buildup_tooltip=Add a resource to build up this collection
+
+
 
 ##CURRICULUM -- REORDER COLLECTIONS
 
@@ -493,7 +505,7 @@ groups_curriculum_collections_reorder.checkafter.next.btt=Batalkan
 ## CURRICULUM -- VIEW ALL CONTRIBUTIONS
 groups_curriculum_contributions_infotxt=Disini Anda dapat menemukan daftar semua kontribusi dari [GroupName], termasuk koleksi dan bahan ajar dari semua ukuran. Anda dapat mengurutkan kolom dengan judul: Judul, Dibarui Terakhir Kali, dan Akses. Link tersedia pada judul &amp;quot;Action&amp;quot; tergantung dari hak pengeditan/penghapusan Anda untuk bahan ajar terkait.
 
-groups.curriculum.contributions.AddButton=Tambahkan Bahan AjarAdd a Resource
+groups.curriculum.contributions.AddButton=Tambahkan Bahan Ajar
 groups.curriculum.contributions.AddButton_tooltip=Sediakan bahan ajar pembelajaran terbaik Anda atau buat sesuatu yang baru
 
 groups_curriculum_contributions_table_title=Judul
@@ -508,15 +520,11 @@ groups_curriculum_contributions_table_filetype=Jenis Berkas
 
 groups_curriculum_contributions_table_action=Tindakan
 
-groups.curriculum.contributions.add=Tambahkan
-groups.curriculum.contributions.add_tooltip=Tambahkan ini ke koleksi atau folder
 
 groups_curriculum_contributions_viewall_paging_diff=Kontribusi
 
 ## MEMBERS TAB
 groups_members_tabname=Anggota
-
-
 groups_members_about_title= Mengenai Keanggotaan
 
 
@@ -612,7 +620,7 @@ groups_members_reject_inprogress=Sedang memuat, mohon menunggu...
 
 groups_members_create_membersettings_email=Izinkan anggota grup untuk mengemail saya ketika pesan dibuat.
 groups_members_create_membersettings_email_tooltip=Jika Anda ingin dihubungi melalui email ketika menerima pesan untuk grup ini, klik untuk memilih opsi ini.
-groups_members_create_membersettings_changenotice=Beritahu saya ketitak kontribusi atau pesan saya diubah.
+groups_members_create_membersettings_changenotice=Beritahu saya ketika kontribusi atau pesan saya diubah.
 groups_members_cancel_btt=Batalkan
 groups_members_request_sent=Permintaan keanggotaaan Anda untuk {0} telah dikirim. Anda akan diberitahukan melalui email ketika telah diproses pemimpin grup.
 groups_members_request_needaccount=Anda harus memiliki akun Curriki dan telah log in untuk meminta keanggotaan grup.
@@ -638,11 +646,13 @@ groups_members_invite_statuslink=Pemimpin grup dapat melihat undangan terbuka di
 groups_members_invite_backlink=Jika Anda ingin mengundang lebih banyak orang ke grup, [click here&gt;InviteMembers] untuk kembali ke isian undangan.
 groups_members_invite_openinvitation=Ini adalah undangan terbuka ke mailing list. (Dengan menandai kotak ini, Anda membuatnya mungkin untuk beberapa pihak menggunakan link penerimaan yang disediakan dalam undangan yang terkirim.)
 
+groups_members_accept_request_error=Jika anda tetap menemui error, silahkan&lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/HowtoReportaProblem?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.GettingStarted"&gt;laporkan masalah ini&lt;/a&gt;.
+
 ## JOIN THIS GROUP
 groups_members_join_title=Bergabung dengan Grup Ini
-groups_members_join_infotxt=Untuk menjadi anggota grup ini, mohon berikan informasi biografis tentang diri Anda pada isian di bawah, kemudian tentukan pengaturan keanggotaan berdasarkan keinginan Anda. Terakhir, klik &amp;quot;Join&amp;quot; untuk mengikirim keanggotaan baru Anda. Anda akan ditambahkan ke daftar di bagian Anggota untuk grup ini; grup ini juga akan ditambahkan ke Grup Saya di Curriki Saya.
-groups_members_join_bio_tooltip=Anda dapat mengubah pengaturan keanggotaan Anda untuk grup ini kapan saja dengan mengunjungi bagian Anggota grup itu dan mengklik &amp;quot;Edit Settings&amp;quot; di sebelah nama Anda.
-groups_members_create_membersettings_email=Izinkan anggota grup mengirim email ke saya ketika pesan dibuat.
+groups_members_join_infotxt=Untuk menjadi anggota grup ini, mohon berikan informasi biografis tentang diri Anda pada isian di bawah, kemudian tentukan pengaturan keanggotaan berdasarkan keinginan Anda. Terakhir, klik &amp;quot;Gabung&amp;quot; untuk mengirim keanggotaan baru Anda. Anda akan ditambahkan ke daftar di bagian Anggota untuk grup ini; grup ini juga akan ditambahkan ke Grup Saya di Curriki Saya.
+groups_members_join_bio_tooltip=Anda dapat mengubah pengaturan keanggotaan Anda untuk grup ini kapan saja dengan mengunjungi bagian Anggota grup itu dan mengklik &amp;quot;Edit Pengaturan&amp;quot; di sebelah nama Anda.
+groups_members_create_membersettings_email=Izinkan anggota grup mengirim email kepada saya ketika pesan dibuat.
 groups_members_create_membersettings_email_tooltip=Jika Anda ingin dihubungi melalui email ketika Anda menerima pesan untuk grup ini, klik untuk memilih opsi ini.
 
 groups_members_create_membersettings_changenotice=Hubungi saya ketika kontribusi kurrikulum, pesan,atau dokumen wiki saya diubah.
@@ -682,7 +692,7 @@ browseGroups.promo_card_2=&lt;div class="subject-card custom-subject-card"&gt;&l
 
 ## GROUPS DOCUMENTATION
 groups_documentation_tabname=Dokumentasi
-
+groups_documentation_page=Dokumentasi
 
 groups_documentation_about_title=Tentang Dokumentasi
 groups_documentation_create_wiki_page_title=Buat Halaman Baru
@@ -710,7 +720,6 @@ groups_documentation_documents_modified=Ditambahkan atau dimodifikasi oleh
 groups_documentation_documents_on=on
 
 groups_documentation_documents_nopage=Tidak ada halaman yang cocok.
-
 groups_documentation_update_title=Judul:
 groups_documentation_enter_content=Isi:
 
@@ -722,6 +731,22 @@ groups_documentation_edit_wiki_title=Edit Halaman Wiki
 groups_documentation_edit_wiki_cancel=Batalkan
 groups_documentation_edit_wiki_save=Simpan
 groups_documentation_edit_wiki_cancel_confirm=Anda yakin ingin batalkan?
+
+## History - Added from CB Translation by Todd 2/27/09
+history.errorgettinghistory=Error ketika meminta informasi sejarah dari server
+history.to=Ke
+history.from=Dari
+history.version=Versi
+history.author=Penulis
+history.date=Tanggal
+history.comment=Komentar
+history.rollback=Kembalikan Ke Keadaan Sebelumnya
+history.rollback.cancel=Gagalkan Pengembalian
+history.rollback.confirm=Konfirmasi Pengembalian
+history.rollback.exception=Pengecualian terjadi ketika mengembalikan Aset Curriki
+history.rollback.confirm.message=Apakah anda yakin ingin mengembalikan aset ini ke versi {0}
+history.compare=Bandingkan Perubahan
+
 
 ## Interstitial page
 
@@ -757,7 +782,7 @@ groups.curriculum.tab.collections.label=Koleksi
 groups.contributions.actions.delete.confirm=Ini tidak dapat dibalik. Anda yakin ingin menghapus?
 
 groups_needsadminrights=Aksi ini memerlukan status sebagai pemimpin grup.
-groups_adminremoved=Anggota ini bukan grup leader lagi.
+groups_adminremoved=Anggota ini bukan pemimpin grup lagi.
 groups_cannotremovelastadmin=Setiap grup harus memiliki satu pemimpin; tidak bisa menghapus pemimpin terakhir.
 groups_adminadded=Anggota ini adalah pemimpin grup sekarang.
 groups_memberremoved=Anggota ini telah dikeluarkan dari grup ini.
@@ -765,11 +790,11 @@ groups_cannotremovemember=Operasi ini gagal. Mohon mencoba kembali.
 groups_invitationcancelled=Undangan ini telah dibatalkan.
 groups_cannotcancelinvitation=Operasi in gagal. Mohon mencoba kembali.
 
-groups_loadinginprogress=Loading, please wait...
-groups_onlyaccessibletomembers=This area is only available to group members.
-groups_messages_onlyaccessibletomembers=Messages are only available to group members.
-groups_members_onlyaccessibletomembers=Member lists are only available to group members.
-groups_documentation_onlyaccessibletomembers=Documentation is only available to group members.
+groups_loadinginprogress=Sedang memuat, silahkan tunggu...
+groups_onlyaccessibletomembers=Area ini hanya tersedia bagi anggota grup.
+groups_messages_onlyaccessibletomembers=Pesan hanya tersedia bagi anggota grup.
+groups_members_onlyaccessibletomembers=Daftar anggota hanya tersedia bagi anggota grup.
+groups_documentation_onlyaccessibletomembers=Dokumentasi hanya tersedia bagi anggota grup.
 
 groups.roles.admin.title=Pemimpin Grup
 groups.roles.comment.created=Telah dibuat peran {0}

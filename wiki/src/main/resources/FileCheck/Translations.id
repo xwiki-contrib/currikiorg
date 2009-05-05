@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1226863267000</creationDate>
-<date>1226863267000</date>
-<contentUpdateDate>1227292655000</contentUpdateDate>
-<version>1.1</version>
+<date>1239396158000</date>
+<contentUpdateDate>1239396158000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>new 1.8.1 trans</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,7 +55,14 @@
 <tags/>
 </property>
 </object>
-<content>11#&lt;pre&gt;
+<content>#&lt;pre&gt;
+
+## CONTENTS OF THIS PAGE:
+## FILE CHECK
+## FLAG FEATURE
+
+## FILE CHECK TRANS KEYS AND STRINGS
+
 fc_filecheck=Pemeriksa Berkas
 fc_resourcetitle=Judul Bahan Ajar
 fc_dateadded=Tanggal Pembuatan/Penambahan pada Curriki
@@ -79,11 +86,16 @@ fc_confirmmessage2=Inginkah anda menandai bahan ajar ini sebagai membutuhkan pem
 fc_confirmmessage3=Inginkah anda menetapkan Hak Akses bahan ajar ini sebagai "Pribadi" dan mengirimkan email "Permohonan Perbaikan Bahan Ajar" kepada pembuat bahan ajar.
 fc_confirmmessage4=Inginkah anda menetapkan bahan ajar ini sebagai "Dihapus Dari Akses Anggota" dan mengirimkan email "Permohonan Penghapusan Bahan Ajar" kepada pembuat bahan ajar.
 fc_noassetselected=Tidak terdapat pemilihan aset untuk dilakukan pemeriksaan Berkas
-XWiki.AssetClass_fcstatus_0=Tak Satupun
-XWiki.AssetClass_fcstatus_1=OK
-XWiki.AssetClass_fcstatus_2=Dibutuhkan Pemeriksaan Khusus
-XWiki.AssetClass_fcstatus_3=Permohonan Perbaikan
-XWiki.AssetClass_fcstatus_4=Dihapus Dari Akses Anggota
+
+
+## These are coming from the new class. The values in the class are: 0=none|1=ok|2=specialcheck|3=improvementrequested|4=deleted. TBD will be added later when Flagged / Star Rating is specified.
+
+CurrikiCode.AssetClass_fcstatus_0=Tak Satupun
+CurrikiCode.AssetClass_fcstatus_TBD=Flagged
+CurrikiCode.AssetClass_fcstatus_1=OK
+CurrikiCode.AssetClass_fcstatus_2=Dibutuhkan Pemeriksaan Khusus
+CurrikiCode.AssetClass_fcstatus_3=Permohonan Perbaikan
+CurrikiCode.AssetClass_fcstatus_4=Dihapus Dari Akses Anggota
 fc_filecheckddone=Peneriksaan Berkas Sempurna
 fc_document=Bahan Ajar Yang Telah Diperiksa
 fc_or=atau
@@ -99,16 +111,22 @@ fc_next=Berikutnya
 fc_all=Semua
 fc_nominate=Inginkah anda mencalonkan bahan ajar ini untuk ditinjau oleh CRD?
 fc_updatemessage1=Telah menandai bahan ajar ini dengan status pemeriksaan dasar Berkas berupa 'OK'.
+fc_updatemessage_1=Telah menandai bahan ajar ini dengan status pemeriksaan dasar Berkas berupa 'OK'.
 fc_updatemessage2=Telah menandai bahan ajar ini dengan status pemeriksaan dasar Berkas berupa 'Dibutuhkan Pemeriksaan Khusus'.
+fc_updatemessage_2=Telah menandai bahan ajar ini dengan status pemeriksaan dasar Berkas berupa 'Dibutuhkan Pemeriksaan Khusus'.
 fc_updatemessage3=Telah menandai bahan ajar ini dengan status pemeriksaan dasar Berkas berupa 'Terpenuhinya Perbaikan'.
+fc_updatemessage_3=Telah menandai bahan ajar ini dengan status pemeriksaan dasar Berkas berupa 'Terpenuhinya Perbaikan'.
 fc_updatemessage4=Telah menandai isi ini dengan status pemeriksaan dasar Berkas berupa 'Dihapus oleh Anggota Akses'
+fc_updatemessage_4=Telah menandai isi ini dengan status pemeriksaan dasar Berkas berupa 'Dihapus oleh Anggota Akses'
 fc_files=Berkas
 fc_queueTableColheaderIct=Tipe Bahan Pelajaran
 fc_queueTableICTMultiple=Perkalian
-fc_onlywithoutfcstatus=Tanpa sebuah status
-fc_onlywithfcstatus=Dengan status apapun
+
 fc_queueFilterChooseSubjectArea=Pilihlah sebuah :
 fc_queueFilterChooseFCStatus=Hanya Bahan Ajar:
+fc_statusFilter_TBD=Dengan status "Flagged"
+fc_onlywithoutfcstatus=Tanpa sebuah status
+fc_onlywithfcstatus=Dengan status apapun
 fc_statusFilter_1=Dengan status "OK"
 fc_statusFilter_2=Dengan status "Pemeriksaan Khusus"
 fc_statusFilter_3=Dengan status "Permohonan Perbaikan"
@@ -122,5 +140,58 @@ fc_withAccessPrivilegesOf_public=Terbuka
 fc_withAccessPrivilegesOf_members=Diproteksi
 fc_withAccessPrivilegesOf_private=Pribadi
 fc_withAccessPrivilegesOf_protectedAndPublic=Terproteksi dan Terbuka
+
+
+## FLAG FEATURE TRANS KEYS AND STRINGS
+
+## REASONS FOR FLAGGING - USE IN FILE CHECK LIST
+
+flag.dialog.reason.1.filecheck=menampilkan kebencian atau kekerasan:
+flag.dialog.reason.2.filecheck=menampilkan pornografi:
+flag.dialog.reason.3.filecheck=kosong:
+flag.dialog.reason.4.filecheck=jelas bersifat komersial, tanpa relevansi pendidikan:
+flag.dialog.reason.5.filecheck=rusak atau memiliki virus:
+flag.dialog.reason.6.filecheck=nampaknya memiliki hak-cipta dan salah dibagikan sebagai “open source”:
+flag.dialog.reason.alt.filecheck=tidak dapat diterima karena alasan lainnya yang akan dijelaskan di bawah ini:
+
+
+## FLAG DIALOG
+
+flag.dialog.header=FLAG BAHAN AJAR INI
+flag.dialog.guidingquestion1.txt=Apakah yang akan terjadi jika anda flag sebuah bahan ajar?
+flag.dialog.instruction1.txt=Anda kirimkan bahan ajar untuk segera dievaluasi oleh Curriki.
+flag.dialog.guidingquestion2.txt=Kenapa Anda flag bahan ajar ini?
+flag.dialog.required.field.icon=!
+flag.dialog.instruction2.txt=Saya flag bahan ajar ini karena
+flag.dialog.instruction3.txt=.
+flag.dialog.instruction4.txt=Masukkan sebuah catatan (tidak lebih dari 300 karakter) menjelaskan apa yang menjadikan bahan ajar ini tidak dapat diterima:
+flag.dialog.instruction5.txt=Review &lt;a href="http://www.curriki.org"&gt;Panduan Komunitas&lt;/a&gt; Curriki.
+flag.dialog.cancel.btt=Batalkan
+flag.dialog.submit.btt=Kirim
+
+## REASONS FOR FLAGGING - USE IN FLAG DIALOG
+
+flag.dialog.reason.1=menampilkan kebencian atau kekerasan
+flag.dialog.reason.2=menampilkan pornografi
+flag.dialog.reason.3=kosong
+flag.dialog.reason.4=jelas bersifat komersial, tanpa relevansi pendidikan
+flag.dialog.reason.5=rusak atau memiliki virus
+flag.dialog.reason.6=nampaknya memiliki hak-cipta dan salah dibagikan sebagai “open source”
+flag.dialog.reason.alt=tidak dapat diterima karena alasan lainnya yang akan dijelaskan di bawah ini
+
+## FLAG SUCCESS MESSAGE
+
+flag.success.dialog.heading=BAHAN AJAR DI FLAG
+flag.success.dialog.message=Anda telah berhasil flag bahan ajar ini.
+flag.success.dialog.button=Tutup
+
+
+## FLAG ERROR MESSAGES
+flag.dialog.error.reason_req=Anda harus memilih salah satu alasan dari menu drop-down untuk flag bahan ajar ini.
+flag.dialog.error.note_req=Jika Anda memilih untuk menjelaskan sendiri alasan kenapa flag bahan ajar ini, Anda harus memasukkan catatan.
+flag.dialog.error.note_max=Catatan Anda tidak dapat melebihi 300 karakter.
+flag.dialog.error.note_min=Catatan Anda harus terdiri dari 4 atau lebih karakter.
+flag.dialog.error.note_btt=OK
+
 #&lt;/pre&gt;</content>
 </xwikidoc>
