@@ -7,32 +7,40 @@ BASIC ELEMENTS STYLES
 
 
 
-a{
-  text-decoration: none;
-  color: #1663AA;
+a {
+	text-decoration: none;
+	color: #1663AA;
 }
+
 a:visited{
-  color: #666698;
+	color: #666698;
 }
+
 a:hover{
-  text-decoration: underline;
-  color: #336;
+	text-decoration: underline;
+	color: #336;
 }
 
+a img {border: none;}
 
- 
-a img { border: none; }
+fieldset {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
 
-fieldset { border: none; padding: 0; margin: 0; }
-form { margin: 0; padding: 0; }
-input.input { border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 0.9em; margin: 0; padding: 0.4em 0.2em !important; height: auto !important; height: 24px; }
+form {
+	margin: 0;
+	padding: 0;
+}
+
 input.checkbox, input[type="checkbox"], input[type="radio"] { border: 0; height: 15px; margin: 0px 2px 1px 0; padding: 0; width: 15px; }
 textarea, .x-form-text, textarea.x-form-field { background-image: none; border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 13px; padding: 0.4em 0.2em; white-space: pre; }
-p { margin: 0.5em 0; padding: 0; }
 
-
-
-
+p {
+	margin: 0.5em 0;
+	padding: 0;
+}
 
 /* Admin Styles needed for the XWiki 1.5 admin to display properly in the Curriki skin  */
 body.admin {
@@ -40,20 +48,11 @@ body.admin {
 	padding-top:20px;
 }
 
-#admin-page {
-	margin-top: 20px;
-}
+#admin-page {margin-top: 20px;}
+.admin-page-header-spacer, #admin-page-menu  {clear: none;}
+#change-context {float: none;}
 
-.admin-page-header-spacer, #admin-page-menu  {
-	clear: none;
-}
-
-#change-context {
-	float: none;
-}
 /* End admin styles */
-
-
 
 input.button, button.button, a.button, table.button button { 
 	background-color:#FF7F00;
@@ -88,7 +87,6 @@ input.button-cancel:hover, button.button-cancel:hover, a.button-cancel:hover, ta
 }
 
 form input {margin-top: 0;}
-
 .asset-display-download button.button {float: right;}
 
 .x-item-disabled button {
@@ -105,7 +103,6 @@ form input {margin-top: 0;}
 .x-toolbar .x-item-disabled {
 	opacity: 1 !important;
 }
-
 
 .righttext a.button, .asset-page a.button, .edit-profile input.button, .edit-blog input.button, .flash-control-newwindow, .asset-page a.flash-control-newwindow, .flash-control-button-play, .flash-control-button-pause {
 -moz-border-radius-bottomleft:0;
@@ -173,27 +170,29 @@ h3 { font-size: 15px; }
 /** TITLEBAR **/
 
 .subtitlebar{
-  text-align: right;
-  line-height: 1.2em;
-  border-bottom: 1px solid;
- margin: 5px 0px;
+	text-align: right;
+	line-height: 1.2em;
+	border-bottom: 1px solid;	
+	margin: 5px 0px;
 }
+
 .subtitlebar *{
-  font-size: 12px;
-  font-family: Helvetica, sans-serif;
-  line-height: 1.2em;
+	font-size: 12px;
+	font-family: Helvetica, sans-serif;
+	line-height: 1.2em;
 }
+
 .subtitlebar a{
-  text-decoration: none;
-  padding: 2px 0px;
+	text-decoration: none;
+	padding: 2px 0px;
 }
+
 html > body .subtitlebar a{
   display: block;
   float: right;
 }
-html > body .subtitlebarRight{
-  overflow: hidden;
-}
+
+html > body .subtitlebarRight{overflow: hidden;}
 
 .subtitlebar h4{
   font-weight: normal;
@@ -203,6 +202,7 @@ html > body .subtitlebarRight{
   margin: 0px;
   text-align: left;
 }
+
 .subtitlebar_left{
   float: left;
 }
@@ -3006,6 +3006,28 @@ img.image-left {position: absolute;}
 .mgn-rt-5 { margin-right: 5px; }
 .mgn-rt-15 { margin-right: 15px; }
 .mgn-rt-20 { margin-right: 20px; }
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
 
 /** REVIEW SPECIFIC **/
 
