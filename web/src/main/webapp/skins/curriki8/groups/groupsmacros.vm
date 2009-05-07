@@ -22,7 +22,7 @@
 #set($isGroupMember = ($isGroupAdmin || $sm.isMember($spaceName, $context.getUser())))
 #set($isGroupAdmin = $isGroupAdmin || $hasGlobalAdmin)
 #end
-
+ 
 ##
 ## page: all pages in the groups space
 ## Groups tab macro
@@ -200,7 +200,7 @@ $msg.get("groups_home_editwelcome_direction")
 $wdoc.display("content", "edit")
 <br />
 {pre}
-<div class="button-right">
+<div class="center">
 <input type="button" class="button button-cancel" value="$msg.get("groups_home_editwelcome_cancel_btt")" onclick="cancelEditWelcomeBlock('${spaceName}','${pageName}','${divid}');" />
 <input type="submit" class="button button-confirm" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();" />
 </div>
