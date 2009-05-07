@@ -333,29 +333,48 @@ public abstract class CompositeAsset extends Asset {
         }
     }
 
-    public void setSubassets(List<String> want) throws XWikiException {
+    public void setSubassets(List<String> wantedList) throws XWikiException {
         XWikiDocument assetDoc = getDoc();
-        List<BaseObject> existing = assetDoc.getObjects(Constants.SUBASSET_CLASS);
+        List<BaseObject> existingList = assetDoc.getObjects(Constants.SUBASSET_CLASS);
 
-        int wSize = (want != null)?want.size():0;
-        int eSize = (existing != null)?existing.size():0;
+        String[] want = new String[0];
+        if (wantedList != null) {
+            want = wantedList.toArray(want);
+        }
+
+        BaseObject[] existing = new BaseObject[0];
+        if (existingList != null) {
+            existing = existingList.toArray(existing);
+        }
+
+// TODO: Remove
+// DEBUGGING CODE for CURRIKI-4238
+System.out.println("REORDER "+assetDoc.getFullName()+" want: "+want.toString());
+System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+existing.toString());
+
+        int wSize = (wantedList != null)?want.length:0;
+        int eSize = (existingList != null)?existing.length:0;
 
         int e = 0;
         int w = 0;
         
         while (w < wSize) {
-            if (context.getWiki().exists(want.get(w), context)) {
+            if (want[w] != null && context.getWiki().exists(want[w], context)) {
                 // Only add the asset if it still exists
                 BaseObject b = null;
                 while (b == null && e < eSize) {
-                    b = existing.get(e);
+                    b = existing[e];
                     e++;
                 }
                 if (b == null) {
+System.out.println("REORDER "+assetDoc.getFullName()+" Adding object w="+w+" e="+e);
                     b = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
                 }
+else {
+System.out.println("REORDER "+assetDoc.getFullName()+" Updating object w="+w+" e="+e);
+}
 
-                b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want.get(w));
+                b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want[w]);
                 b.setLongValue(Constants.SUBASSET_CLASS_ORDER, w);
             }
             w++;
@@ -364,10 +383,11 @@ public abstract class CompositeAsset extends Asset {
         while (e < eSize) {
             BaseObject b = null;
             while (b == null && e < eSize) {
-                b = existing.get(e);
+                b = existing[e];
                 e++;
             }
             if (b != null) {
+System.out.println("REORDER "+assetDoc.getFullName()+" Removing object w="+w+" e="+e);
                 assetDoc.removeObject(b);
             }
         }
