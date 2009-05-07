@@ -200,7 +200,7 @@ $msg.get("groups_home_editwelcome_direction")
 $wdoc.display("content", "edit")
 <br />
 {pre}
-<div class="center mgn-vrt">
+<div class="center mgn-vrt-15">
 <input type="button" class="button button-cancel mgn-rt" value="$msg.get("groups_home_editwelcome_cancel_btt")" onclick="cancelEditWelcomeBlock('${spaceName}','${pageName}','${divid}');" />
 <input type="submit" class="button button-confirm" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();" />
 </div>
@@ -938,7 +938,7 @@ http:&#47;&#47; $s.display("urlshortcut","edit") #groups_groupsuffixurl()
 #validateGroup( "url-invalid" "" $msg.groups_validation_url_invalid)
 </div>
 </div>
-<div class="button-center"><input class="button button-confirm" type="submit" value="$msg.groups_home_editinformation_submit_btt" /> #button(  "$msg.groups_home_editinformation_cancel_btt"  "cancel"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
+<div class="center mgn-vrt-15"><input class="button button-confirm mgn-rt" type="submit" value="$msg.groups_home_editinformation_submit_btt" /> #button(  "$msg.groups_home_editinformation_cancel_btt"  "cancel"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
 </form>
 #end
 <div class="tooltips">
