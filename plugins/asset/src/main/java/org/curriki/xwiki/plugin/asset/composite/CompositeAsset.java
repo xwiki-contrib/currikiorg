@@ -349,8 +349,8 @@ public abstract class CompositeAsset extends Asset {
 
 // TODO: Remove
 // DEBUGGING CODE for CURRIKI-4238
-System.out.println("REORDER "+assetDoc.getFullName()+" want: "+want.toString());
-System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+existing.toString());
+System.out.println("REORDER "+assetDoc.getFullName()+" want: "+(wantedList==null?"NULL":wantedList.toString()));
+System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+(existingList==null?"NULL":existingList.toString()));
 
         int wSize = (wantedList != null)?want.length:0;
         int eSize = (existingList != null)?existing.length:0;
