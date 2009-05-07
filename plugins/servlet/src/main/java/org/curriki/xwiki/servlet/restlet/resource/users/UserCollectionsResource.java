@@ -93,7 +93,7 @@ public class UserCollectionsResource extends BaseResource {
                 fAsset.reorder(orig, want);
                 fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.reordered"));
             } catch (XWikiException e) {
-                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
+                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Reorder failed: "+e.getMessage(), e);
             }
         } else {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a root collection.");
