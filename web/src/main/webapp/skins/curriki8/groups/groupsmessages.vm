@@ -978,9 +978,9 @@ $adoc.use($viewRightObj)
 #end
 #messageAddSendToFormFields($groupName, $toGroup, $selectedRoles, $selectedMembers)
 {pre}
-<div class="center">
-<input type="button" class="button button-cancel mgn-rt mgn-top" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
-<input type="submit" class="button button-confirm mgn-top" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" />
+<div class="center mgn-vrt">
+<input type="button" class="button button-cancel mgn-rt" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
+<input type="submit" class="button button-confirm" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" />
 </div>
 {/pre}
 </p>
