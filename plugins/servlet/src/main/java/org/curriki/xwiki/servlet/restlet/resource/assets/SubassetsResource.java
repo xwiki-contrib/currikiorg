@@ -200,7 +200,7 @@ public class SubassetsResource extends BaseResource {
                 }
                 fAsset.save(logMsg);
             } catch (XWikiException e) {
-                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage()+"Wrapped Exception: "+e.toString());
+                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Save failed: "+e.getMessage(), e);
             }
         } else {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a folder.");

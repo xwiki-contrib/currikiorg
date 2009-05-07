@@ -61,6 +61,16 @@ public class BaseResource extends Resource {
         return new ResourceException(status, message);
     }
 
+    protected ResourceException error(Status status, String message, Throwable cause) {
+        getResponse().setEntity(message, MediaType.TEXT_PLAIN);
+        return new ResourceException(status, message, cause);
+    }
+
+    protected ResourceException error(Status status, Throwable cause) {
+        getResponse().setEntity("Exception Thrown", MediaType.TEXT_PLAIN);
+        return new ResourceException(status, cause);
+    }
+
     protected Representation formatJSON(JSON json, Variant variant) {
         Representation r = null;
         // TODO: Firefox 2 seems to not send the specified application/json header
