@@ -67,7 +67,10 @@ public class BaseResource extends Resource {
         StringWriter sw = new StringWriter();
         cause.printStackTrace(new PrintWriter(sw));
         String st = sw.toString();
-        getResponse().setEntity(message+ " Stacktrace: "+st, MediaType.TEXT_PLAIN);
+        getResponse().setEntity(message+" Stacktrace: "+st, MediaType.TEXT_PLAIN);
+// TODO: Remove
+// DEBUGGING CODE for CURRIKI-4238
+System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
         return new ResourceException(status, message+" Stacktrace: "+st, cause);
     }
 
