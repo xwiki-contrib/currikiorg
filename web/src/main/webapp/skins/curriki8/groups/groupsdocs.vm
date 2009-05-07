@@ -307,7 +307,7 @@ wikiEditor.init({
 });
 </script>
 {/pre}
-<textarea name="doctext" id="doctext" rows="20">${editDoc.renderedContent}</textarea>
+<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.renderedContent)</textarea>
 
         <div class="button-right">
           <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}"  class="button button-grey" />
@@ -468,7 +468,7 @@ wikiEditor.init({
         wiki_attach_path : '/xwiki/bin/view/${editDoc.space}/${editDoc.name}'
 });
 </script>
-<textarea name="doctext" id="doctext" rows="20">${editDoc.content}</textarea>
+<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
 {/pre}
         <div class="button-right">
           <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}"  class="button button-grey" />
