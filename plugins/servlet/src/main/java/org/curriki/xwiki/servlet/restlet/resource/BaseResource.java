@@ -21,6 +21,8 @@ import net.sf.json.util.JSONUtils;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 /**
  */
@@ -62,12 +64,18 @@ public class BaseResource extends Resource {
     }
 
     protected ResourceException error(Status status, String message, Throwable cause) {
-        getResponse().setEntity(message, MediaType.TEXT_PLAIN);
-        return new ResourceException(status, message, cause);
+        StringWriter sw = new StringWriter();
+        cause.printStackTrace(new PrintWriter(sw));
+        String st = sw.toString();
+        getResponse().setEntity(message+ " Stacktrace: "+st, MediaType.TEXT_PLAIN);
+        return new ResourceException(status, message+" Stacktrace: "+st, cause);
     }
 
     protected ResourceException error(Status status, Throwable cause) {
-        getResponse().setEntity("Exception Thrown", MediaType.TEXT_PLAIN);
+        StringWriter sw = new StringWriter();
+        cause.printStackTrace(new PrintWriter(sw));
+        String st = sw.toString();
+        getResponse().setEntity("Exception Thrown: "+cause.getMessage()+" Stacktrace: "+st, MediaType.TEXT_PLAIN);
         return new ResourceException(status, cause);
     }
 
