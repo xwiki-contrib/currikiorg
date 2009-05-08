@@ -1223,8 +1223,12 @@ $memberdoc.getRenderedContent("$!content")</div>
  *  macro currikiattachmentEnd()
  *#
 #macro(currikiattachment $fname) ##{
-  #mimeicon($fname)              ## sets $macro_iconUrl as side-effect
-  <tr><td>&nbsp;<img src="${macro_iconUrl}"/>&nbsp;</td><td>&nbsp;{attach:${fname}}&nbsp;</td></tr>
+  <tr><td class="table-col-filetype">
+    #mimeiconimg($fname) ## sets $macro_img as side-effect
+    &nbsp;${macro_img}&nbsp;
+  </td><td class="attachments_file">
+    &nbsp;{attach:${fname}}&nbsp;
+  </td></tr>
 #end                             ##}
 
 #**
