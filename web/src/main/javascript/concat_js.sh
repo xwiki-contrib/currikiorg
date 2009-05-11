@@ -131,3 +131,9 @@ ORGANIZE="\
 	"
 cat $ORGANIZE | $UNCOMPRESS_JS > ../webapp/js/curriki-module-organize-debug.js
 cat $ORGANIZE | $COMPRESS_JS > ../webapp/js/curriki-module-organize.js
+
+FLAG="\
+	curriki/flag/base.js \
+	"
+cat $FLAG | $UNCOMPRESS_JS > ../webapp/js/curriki-module-flag-debug.js
+cat $FLAG | $COMPRESS_JS > ../webapp/js/curriki-module-flag.js
