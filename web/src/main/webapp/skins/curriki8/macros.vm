@@ -959,7 +959,7 @@ $memberdoc.getRenderedContent("$!content")</div>
    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
     #set($userArg="&user=$request.user")
    #end
-   #if($currikiTitle.length()>125)
+   #if(($currikiTitle.length()>125) && ($bcDoc.name!="Documentation") && ($bcDoc.name!=$msg.groups_home_page))
     #set($currikiTitle = $currikiTitle.substring(0,125))
     #set($currikiTitle = "${currikiTitle}...")
    #end
@@ -1135,7 +1135,7 @@ $memberdoc.getRenderedContent("$!content")</div>
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    #asset_findtitle($bcDoc)
-   #if (($currikiTitle.length()>125) && ($bcDoc.name!="Documentation") && ($bcDoc.name!=$msg.groups_home_page)) 
+   #if($currikiTitle.length()>125)
     #set($currikiTitle = $currikiTitle.substring(0,125))
     #set($currikiTitle = "${currikiTitle}...")
    #end
