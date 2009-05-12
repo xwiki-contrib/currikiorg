@@ -73,6 +73,9 @@
 	        			#if($assetFilterFileCheckStatus=="6")##with status Deleted
 	        				#set($wheresql = "$wheresql and sprop.value = '4'")
 	        			#end
+	        			#if($assetFilterFileCheckStatus=="7")##with status Flagged
+	        				#set($wheresql = "$wheresql and sprop.value = '5'")
+	        			#end
 	
 	        #end
 	   	#end    
