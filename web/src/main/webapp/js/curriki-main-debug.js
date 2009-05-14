@@ -2746,6 +2746,46 @@ Curriki.assets = {
 			}
 		});
 	}
+	,Flag : function(assetPage, reason, altReason, callback) {
+		Ext.Ajax.request({
+			url: '/xwiki/bin/view/FileCheck/Flag?xpage=plain&page='+(assetPage||'')+'&reason='+(reason||'')+'&altreason='+(altReason||'')+'&_dc='+(new Date().getTime())
+			,method: 'POST'
+			,headers: {
+				'Accept' : 'application/json',
+				'Content-type' : 'application/json'
+			}
+			,params: {
+				page: assetPage||''
+				,reason: reason||''
+				,altreason: altReason||''
+			}
+			,scope: this
+			,success: function(response, options) {
+				var json = response.responseText;
+				var o = {};
+				try {
+					o = json.evalJSON(true);
+				} catch (e) {
+					o = null;
+				}
+				if (!o) {
+					console.warn('Could not flag resource', response.responseText, options);
+					alert(_('add.servertimedout.message.text'));
+				} else {
+					if (o.success) {
+						callback(o);
+					} else {
+						console.warn('Could not flag resource', response.responseText, options);
+						alert('Flagging Failed');
+					}
+				}
+			}
+			,failure: function(response, options) {
+				console.error('Cannot execute the action', response, options);
+				alert(_('add.servertimedout.message.text'));
+			}
+		});
+	}
 }
 // vim: ts=4:sw=4
 /*global Ext */

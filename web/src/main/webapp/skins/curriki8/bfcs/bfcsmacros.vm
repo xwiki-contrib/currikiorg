@@ -73,32 +73,34 @@
 	        			#if($assetFilterFileCheckStatus=="6")##with status Deleted
 	        				#set($wheresql = "$wheresql and sprop.value = '4'")
 	        			#end
+	        			#if($assetFilterFileCheckStatus=="7")##with status Flagged
+	        				#set($wheresql = "$wheresql and sprop.value = '5'")
+	        			#end
 	
 	        #end
 	   	#end    
 
  		#set($order = "")
 		#if($ordered ==true)
-			#set($order = "order by")
-            #if($request.order=="fcstatus")
-            	#if(!$assetFilterFileCheckStatus || $assetFilterFileCheckStatus=="1" || $assetFilterFileCheckStatus=="0")
-					## "StringProperty as sprop" was not added in the from previously, add it now
-            		#set($fromsql = "$fromsql ,StringProperty as sprop")
-            		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
-            	#end
-            	#set($order = "$order sprop.value $currentDirectionOrder")
-            	#elseif($request.order=="fcdate")
-            		#set($fromsql = "$fromsql ,DateProperty as dprop")
-            		#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
-            		#set($order = "$order dprop.value $currentDirectionOrder")
-            		#elseif($request.order=="contributor")
-            			#set($fromsql = "$fromsql ,BaseObject as userObj,StringProperty as userSprop")
-            			#set($wheresql = "$wheresql and doc.creator=userObj.name and userObj.className='XWiki.XWikiUsers' and userObj.id=userSprop.id.id and userSprop.id.name='first_name'")
-            			#set($order = "$order userSprop.value $currentDirectionOrder")
-            			#elseif($request.order=="resourcetitle")
-            				#set($order = "$order doc.title $currentDirectionOrder")
-            			#else
-            				#set($order = "$order doc.creationDate desc")
+			#if($request.order=="fcstatus")
+				#if(!$assetFilterFileCheckStatus || $assetFilterFileCheckStatus=="1" || $assetFilterFileCheckStatus=="0")
+				## "StringProperty as sprop" was not added in the from previously, add it now
+					#set($fromsql = "$fromsql ,StringProperty as sprop")
+					#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
+				#end
+				#set($order = "order by sprop.value $currentDirectionOrder, doc.creationDate desc")
+			#elseif($request.order=="fcdate")
+				#set($fromsql = "$fromsql ,DateProperty as dprop")
+				#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
+				#set($order = "order by dprop.value $currentDirectionOrder, doc.creationDate desc")
+			#elseif($request.order=="contributor")
+				#set($fromsql = "$fromsql ,BaseObject as userObj,StringProperty as userSprop")
+				#set($wheresql = "$wheresql and doc.creator=userObj.name and userObj.className='XWiki.XWikiUsers' and userObj.id=userSprop.id.id and userSprop.id.name='first_name'")
+				#set($order = "order by userSprop.value $currentDirectionOrder, doc.creationDate desc")
+			#elseif($request.order=="resourcetitle")
+				#set($order = "order by doc.title $currentDirectionOrder, doc.creationDate desc")
+			#else
+				#set($order = "order by doc.creationDate desc")
 			#end
 		#end
 
