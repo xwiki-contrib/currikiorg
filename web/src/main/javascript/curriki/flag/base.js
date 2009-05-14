@@ -16,18 +16,19 @@ Flag.init = function(){
 	 * We need to get the list of reasons to display
 	 */
 	var pfx = 'flag.dialog.reason.';
-	Data.list = [];
+	Data.reasonList = [];
 	var i = 1;
 	while (_(pfx+i) !== pfx+i){
-		Data.list.push([i, _(pfx+i), i]);
+		Data.reasonList.push([i, _(pfx+i), i]);
 		++i;
 	}
-	Data.list.push(['alt', _(pfx+'alt'), i]);
+	// Add "alt" reason at end
+	Data.reasonList.push(['alt', _(pfx+'alt'), i]);
 
-	Flag.store = new Ext.data.SimpleStore({
+	Flag.reasonStore = new Ext.data.SimpleStore({
 			fields: ['id', 'text', 'sortValue']
 			,sortInfo: {field:'sortValue', direction:'ASC'}
-			,data: Data.list
+			,data: Data.reasonList
 			,id: 0
 	});
 
@@ -37,7 +38,7 @@ Flag.init = function(){
 			Ext.apply(this, {
 				 id:'FlagDialogueWindow'
 				,title:_('flag.dialog.header')
-				,cls:'flag resource'
+				,cls:'flag resource resource-view'
 				,autoScroll:false
 				,items:[{
 					 xtype:'form'
@@ -59,6 +60,7 @@ Flag.init = function(){
 						,listeners:{
 							click:{
 								 fn: function(){
+									Curriki.logView('/features/flag/cancelled');
 									this.close();
 									if (Ext.isIE) {
 										window.location.reload();
@@ -80,6 +82,7 @@ Flag.init = function(){
 									var dlg = this;
 									var callback = function(o){
 										console.log('Flag callback', o);
+										Curriki.logView('/features/flag/flagged/'+Data.resourcePage.replace('.', '/'));
 
 										dlg.close();
 										Flag.msgComplete();
@@ -87,8 +90,7 @@ Flag.init = function(){
 
 									var reason = Ext.getCmp('flag-reason').getValue();
 									var altReason = Ext.getCmp('flag-alt-reason')?Ext.getCmp('flag-alt-reason').getValue():'';
-//									Curriki.assets.Flag(Data.resourcePage, reason, altReason, callback);
-									callback('TODO: REMOVE');
+									Curriki.assets.Flag(Data.resourcePage, reason, altReason, callback);
 								 }
 								,scope:this
 							}
@@ -120,10 +122,10 @@ Flag.init = function(){
 						,id:'flag-reason'
 						,hiddenName:'flagReason'
 						,mode:'local'
-						,store:Flag.store
+						,store:Flag.reasonStore
 						,displayField:'text'
 						,valueField:'id'
-						,emptyText:_('flag.dialog.reason.unselected') // Shown in spec, but nothing in translations
+						,emptyText:_('flag.dialog.reason.unselected')
 						,width:400
 						,selectOnFocus:true
 						,forceSelection:true
@@ -135,7 +137,7 @@ Flag.init = function(){
 						,labelStyle:'instruction'
 						,labelClass:'instructionClass'
 						,labelCls:'instructionCls'
-						,fieldLabel:_('flag.dialog.required.field.icon')+_('flag.dialog.instruction2.txt') // The ! should really have the required-indicator item in it
+						,fieldLabel:_('flag.dialog.required.field.icon')+_('flag.dialog.instruction2.txt')
 						,clearCls:''
 						,listeners:{
 							select:{
@@ -207,7 +209,7 @@ Flag.init = function(){
 			Ext.apply(this, {
 				 id:'FlagDialogueWindow'
 				,title:_('flag.success.dialog.header')
-				,cls:'flag resource'
+				,cls:'flag resource resource-view'
 				,autoScroll:false
 				,buttonAlign:'right'
 				,buttons:[{
@@ -231,7 +233,6 @@ Flag.init = function(){
 					,autoEl:{
 						 tag:'div'
 						,html:_('flag.success.dialog.message')
-						//,cls:'instruction'
 					}
 				}]
 			});
@@ -241,13 +242,12 @@ Flag.init = function(){
 	Ext.reg('flagCompleteDialog', Flag.completeDlg);
 
 	Flag.msgComplete = function(){
-//		Curriki.logView('/features/flag/'+'saved');
 		UI.show('flagCompleteDialog');
 	};
 
 	Flag.initialized = true;
 
-	return true;
+	return Flag.initialized;
 };
 
 Flag.display = function(options){
@@ -255,7 +255,7 @@ Flag.display = function(options){
 		Data.resourcePage = options.resourcePage||null;
 		if (Data.resourcePage) {
 			UI.show('flagDialog');
-//			Curriki.logView('/features/flag/'+'started');
+			Curriki.logView('/features/flag/started');
 		}
 	}
 };
@@ -265,21 +265,6 @@ Flag.start = function(options){
 		Flag.display(options);
 	});
 };
-
-Ext.onReady(function(){
-	// Add Flag link to page (with separator)
-	// Currently both pages use a headerbar with a "Hide Descriptions" link
-	// using 'hider-link' as the id where we want this link added in front of
-	// - Groups.CurriculumSheet
-	// - MyCurriki.Collections
-/*
-	var hiderNode = Ext.DomQuery.selectNode('#hider-link');
-	if (hiderNode) {
-		Ext.DomHelper.insertBefore(hiderNode, {id: 'flag-link', tag: 'a', cls: 'flag-link', onclick:'Curriki.module.flag.start(); return false;', html:_('flag.dialog.link')})
-		Ext.DomHelper.insertBefore(hiderNode, {id: 'flag-sep', tag:'span', cls:'separator', html:'|'})
-	}
-*/
-});
 })();
 
-//Curriki.module.flag.start({resourcePage: 'test.test'});
+//Curriki.module.flag.start({resourcePage: 'Coll_space.page'});
