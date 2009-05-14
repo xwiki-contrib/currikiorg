@@ -228,10 +228,10 @@ $bentrydoc.getRenderedContent($content).replaceAll("<br/><p/>","<br/>&nbsp;<p/>"
 <a href="$bentrydoc.getURL("view", "bc=$!request.bc")" class="curriki-link">$msg.get("caption.readmore")</a>#end
 </div>
 <div class="clearfloats"></div>
-<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 5px; margin-bottom: 5px;">
 $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
 </div>
-<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 5px; margin-bottom: 5px;">
 #if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
 #set($g_enable_STAF = true)
 <a class="curriki-link" href="$bentrydoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a>
