@@ -128,7 +128,7 @@ $text
 </div>
 <div class="clearfloats"></div>
 </div>
-<div id="mycurriki-main-content" class="frame">
+<div id="mycurriki-main-content" class="frame pad-btm">
 ## This is a call back to the local macro of the page including this macro
 #mycurriki_pagecontent($userdoc $userobj)
 </div>
@@ -517,8 +517,8 @@ $!desc
   *#
 #macro(mycurriki_editprofilebuttons $xredirect) ##{
   <!-- Edit Profile Buttons -->
-  <div class="button-right">
-    <input class="button button-cancel" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
+  <div class="right mgn-rt">
+    <input class="button button-cancel mgn-rt" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
     <input class="button button-confirm" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/>
   </div>
   <!-- End Edit Profile Buttons -->
