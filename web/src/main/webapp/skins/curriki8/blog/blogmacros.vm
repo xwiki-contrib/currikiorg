@@ -135,7 +135,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_b
 #if(!$isFirst) ## {
  <hr class="my-curriki-hr"/>
 #end ## }
-<div id="comment${count}" class="blog-comment">
+<div id="comment${count}" class="blog-comment clearfix">
 <div class="blog-comment-avatar" "style=float:left;">
 #curriki_avatar($xwiki.getDocument($comment.author))
 </div>
@@ -155,11 +155,11 @@ $comment.comment
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 <div id="commentscontent" class="xwikiintracontent">
-<div class="righttext"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="right"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
       <form id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
-        <hr class="my-curriki-hr"/>
+         
 
         <fieldset class="expanded" id="commentform">
         <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
