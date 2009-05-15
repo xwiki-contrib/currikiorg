@@ -126,7 +126,7 @@ Flag.init = function(){
 						,displayField:'text'
 						,valueField:'id'
 						,emptyText:_('flag.dialog.reason.unselected')
-						,width:400
+						,width:440
 						,selectOnFocus:true
 						,forceSelection:true
 						,triggerAction:'all'
