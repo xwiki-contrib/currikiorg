@@ -170,6 +170,7 @@ Flag.init = function(){
 						,labelStyle:'instruction'
 						,labelClass:'instructionClass'
 						,fieldLabel:_('flag.dialog.required.field.icon')+_('flag.dialog.instruction4.txt')
+						,enableKeyEvents:true
 						,listeners:{
 							hide:{
 								fn:function(cmp){
@@ -186,6 +187,31 @@ Flag.init = function(){
 							,render:{
 								fn:function(cmp){
 									cmp.getEl().up('.x-form-item').down('label').addClass('instruction');
+								}
+							}
+							,keypress:{
+								fn:function(cmp, e){
+									console.log('keypress', cmp, e);
+									if (cmp.getValue().length >= 300) {
+										var k = e.getKey();
+										if(!Ext.isIE && (e.isNavKeyPress() || k == e.BACKSPACE || (k == e.DELETE && e.button == -1))){
+											return;
+										}
+										if(Ext.isIE && (k == e.BACKSPACE || k == e.DELETE || e.isNavKeyPress() || k == e.HOME || k == e.END)){
+											return;
+										}
+
+										e.preventDefault();
+										e.stopPropagation();
+										e.stopEvent();
+									}
+								}
+							}
+							,invalid:{
+								fn:function(cmp, msg){
+									if (cmp.getValue().length > 300) {
+										cmp.setValue(cmp.getValue().substring(0,300));
+									}
 								}
 							}
 						}
