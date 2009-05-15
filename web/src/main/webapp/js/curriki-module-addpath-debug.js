@@ -96,7 +96,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.contributemenu.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel'
+							,cls:'button button-cancel mgn-rt'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -489,7 +489,7 @@ Curriki.module.addpath.init = function(){
 						,buttons:[{
 							 text:_(tmplPfx+'.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel'
+							,cls:'button button-cancel mgn-rt'
 							,listeners:{
 								'click':function(e, ev){
 									Ext.getCmp(e.id).ownerCt.ownerCt.close();
@@ -604,7 +604,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.setrequiredinfo.part1.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel'
+							,cls:'button button-cancel mgn-rt'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -1112,7 +1112,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.setrequiredinfo.part2.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel'
+							,cls:'button button-cancel mgn-rt'
 							,listeners:{
 								'click':function(e, ev){
 									Ext.WindowMgr.get('MetadataDialogueWindow').close();
@@ -1672,7 +1672,7 @@ console.log("Published CB: ", newAsset);
 
 			return {
 				 text:text
-				,cls:'button link'
+				,cls:'link'
 				,handler:handler
 				,hidden:disabled
 			};
@@ -1733,7 +1733,7 @@ console.log("Published CB: ", newAsset);
 			return {
 					 text:_('add.finalmessage.close.button')
 					,id:'closebutton'
-					,cls:'button button-cancel'
+					,cls:'button button-confirm'
 					,listeners:{
 						'click':{
 							 fn:function(e,evt){
@@ -2037,7 +2037,7 @@ console.log("Published CB: ", newAsset);
 						,bbar:['->',{
 							 text:_('add.chooselocation.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel'
+							,cls:'button button-cancel mgn-rt'
 							,listeners:{
 								click:{
 									 fn: function(){
