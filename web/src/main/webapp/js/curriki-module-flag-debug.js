@@ -191,7 +191,6 @@ Flag.init = function(){
 							}
 							,keypress:{
 								fn:function(cmp, e){
-									console.log('keypress', cmp, e);
 									if (cmp.getValue().length >= 300) {
 										var k = e.getKey();
 										if(!Ext.isIE && (e.isNavKeyPress() || k == e.BACKSPACE || (k == e.DELETE && e.button == -1))){
