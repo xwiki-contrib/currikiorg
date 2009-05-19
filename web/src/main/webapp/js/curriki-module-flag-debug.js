@@ -257,6 +257,7 @@ Flag.init = function(){
 					 xtype:'box'
 					,autoEl:{
 						 tag:'div'
+						,cls:'mgn-top'
 						,html:_('flag.success.dialog.message')
 					}
 				}]
