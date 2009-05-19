@@ -154,6 +154,7 @@ Flag.init = function(){
 							,render:{
 								fn:function(cmp){
 									cmp.getEl().up('.x-form-item').down('label').addClass('instruction');
+									cmp.getEl().dom.focus();
 								}
 							}
 						}
