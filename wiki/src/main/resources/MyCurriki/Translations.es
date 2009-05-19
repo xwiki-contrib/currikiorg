@@ -62,20 +62,20 @@ mycurriki.timeFormat= hh:mm a z
 
 mycurriki.tab.blog.label= Blog
 
-mycurriki.tab.blog.subtitle= Encontrar todas las entradas de blogs escritas por {0}. Los miembros de Curriki pueden a帽adir comentarios a cualquier entrada en un blog.
-mycurriki.tab.blog.noblog.subtitle= Encontrar todas las entradas de blogs escritas por {0}. Los miembros de Curriki pueden a帽adir comentarios a cualquier entrada en un blog.
+mycurriki.tab.blog.subtitle= Encontrar todas las entradas de blogs escritas por {0}. Los miembros de Curriki pueden a饊儽adir comentarios a cualquier entrada en un blog.
+mycurriki.tab.blog.noblog.subtitle= Encontrar todas las entradas de blogs escritas por {0}. Los miembros de Curriki pueden a饊儽adir comentarios a cualquier entrada en un blog.
 mycurriki.tab.collections.label= Colecciones
 
 mycurriki.tab.collections.subtitle= Encontrar todas las colecciones de planes de estudio en la lista que sigue.
 mycurriki.tab.contributions.label= Contribuciones
 
-mycurriki.tab.contributions.subtitle= Encontrar todas las contribuciones en la lista siguiente. Se puede ordenar por T铆tulo, 脷ltima Actualizaci贸n, y Acceso. (S贸lo ver谩 Acceso para sus propias contribuciones.)
+mycurriki.tab.contributions.subtitle= Encontrar todas las contribuciones en la lista siguiente. Se puede ordenar por T饊儹tulo, 饊儦ltima Actualizaci饊兂n, y Acceso. (S饊兂lo ver饊儭 Acceso para sus propias contribuciones.)
 mycurriki.tab.favorites.label= Favoritos
 
 mycurriki.tab.favorites.subtitle= Esta es la lista de sus favoritos.
 mycurriki.tab.groups.label= Grupos
 
-mycurriki.tab.groups.subtitle= Encontrar todos los grupos en la lista a continuaci贸n
+mycurriki.tab.groups.subtitle= Encontrar todos los grupos en la lista a continuaci饊兂n
 mycurriki.tab.profile.label= Perfil
 
 
@@ -90,100 +90,100 @@ mycurriki.tab.profile.page= Mi Curriki.Perfil
 
 ##PROFILE TAB
 
-mycurriki.profile.titlebar= Informaci贸n de miembro
+mycurriki.profile.titlebar= Informaci饊兂n de miembro
 mycurriki.profile.editButton= Editar Perfil
 mycurriki.profile.needPicture= Por favor, selecciones un fichero (debe ser una imagen).
 
-mycurriki.editprofile.titlebar= Editar la informaci贸n de miembro
+mycurriki.editprofile.titlebar= Editar la informaci饊兂n de miembro
 mycurriki.editprofile.saveButton= Guardar
-mycurriki.editprofile.confirmLeave= Est谩 saliendo de la p谩gina de edici贸n de perfil sin guardar sus cambios. 驴Seguro que quiere salir y perder sus cambios?
+mycurriki.editprofile.confirmLeave= Est饊儭 saliendo de la p饊儭gina de edici饊兂n de perfil sin guardar sus cambios. 饊偪Seguro que quiere salir y perder sus cambios?
 
 ##FAVORITES TAB
 
 mycurriki.favorites.collection.title= Favoritos
 mycurriki.favorites.collection.description= Favoritos
 mycurriki.favorites.viewButton= Ver todos
-mycurriki.favorites.table.title= T铆tulos
+mycurriki.favorites.table.title= T饊儹tulos
 mycurriki.favorites.table.contributor= Contribuido por
 mycurriki.favorites.table.ict= ICT
 mycurriki.favorites.table.filetype= Tipo de fichero
-mycurriki.favorites.table.action= Acci贸n
+mycurriki.favorites.table.action= Acci饊兂n
 mycurriki.favorites.table.action.remove= Eliminar
 
-mycurriki.favorites.table.action.remove.confirm= 驴Seguro que quiere eliminar esto?
+mycurriki.favorites.table.action.remove.confirm= 饊偪Seguro que quiere eliminar esto?
 mycurriki.favorites.removed.comment= Se ha eliminado {0} de los favoritos.
 mycurriki.favorites.noresults= 
-mycurriki.favorites.mouseover.description= &lt;strong&gt;Descripci贸n:&lt;/strong&gt;
+mycurriki.favorites.mouseover.description= &lt;strong&gt;Descripci饊兂n:&lt;/strong&gt;
 mycurriki.favorites.mouseover.subject= &lt;strong&gt;Tema:&lt;/strong&gt;
 mycurriki.favorites.mouseover.level= &lt;strong&gt;Nivel educativo:&lt;/strong&gt;
 
 ##CONTRIBUTIONS TAB
 
-mycurriki.contributions.addButton= A帽adir un recurso
+mycurriki.contributions.addButton= A饊儽adir un recurso
 mycurriki.contributions.addButton_tooltip= Comparta sus mejores recursos educativos o cree algo nuevo
-mycurriki.contributions.table.title= T铆tulo
+mycurriki.contributions.table.title= T饊儹tulo
 mycurriki.contributions.table.ict= ICT
-mycurriki.contributions.table.lastupdated= 脷ltima Actualizaci贸n
+mycurriki.contributions.table.lastupdated= 饊儦ltima Actualizaci饊兂n
 mycurriki.contributions.table.access= Acceso
 mycurriki.contributions.table.filetype= Tipo de fichero
-mycurriki.contributions.table.action= Acci贸n
-mycurriki.contributions.add= A帽adir
-mycurriki.contributions.add_tooltip= A帽adir esto a una carpeta o colecci贸n
+mycurriki.contributions.table.action= Acci饊兂n
+mycurriki.contributions.add= A饊儽adir
+mycurriki.contributions.add_tooltip= A饊儽adir esto a una carpeta o colecci饊兂n
 mycurriki.contributions.noresults= 
-mycurriki.contributions.actions.delete.confirm= 驴Seguro que quiere borrar esta contribuci贸n?
+mycurriki.contributions.actions.delete.confirm= 饊偪Seguro que quiere borrar esta contribuci饊兂n?
 
 ##COLLECTIONS TAB
 
 mycurriki.collections.titlebar= Colecciones de planes de estudio
 mycurriki.collections.buildup= Construir
-mycurriki.collections.buildup_tooltip= a帽adir algo a esta colecci贸n
+mycurriki.collections.buildup_tooltip= a饊儽adir algo a esta colecci饊兂n
 mycurriki.collections.titlebarbutton= Ocultar descripciones
 mycurriki.collections.titlebarbuttonalt= Mostrar descripciones
-mycurriki.collections.addButton= A帽adir una colecci贸n
-mycurriki.collections.addButton_tooltip= A帽adir una nueva colecci贸n para organizar o mostrar recursos
+mycurriki.collections.addButton= A饊儽adir una colecci饊兂n
+mycurriki.collections.addButton_tooltip= A饊儽adir una nueva colecci饊兂n para organizar o mostrar recursos
 mycurriki.collections.view= Ver
 mycurriki.collections.edit= Editar
-mycurriki.collections.add= A帽adir
+mycurriki.collections.add= A饊儽adir
 mycurriki.collections.delete= Borrar
-mycurriki.collections.actions.delete.confirm= 驴Seguro que quiere borrar esta colecci贸n?
+mycurriki.collections.actions.delete.confirm= 饊偪Seguro que quiere borrar esta colecci饊兂n?
 mycurriki.collections.noresults= 
 
 ##REORDER FEATURE
 
 mycurriki.collections.reorder.link= Reordenar
 
-mycurriki.collections.reorder.checkfirst.dialog= Por defecto, sus colecciones se muestran poniendo arriba la de actualizaci贸n m谩s reciente.&lt;br&gt;&lt;br&gt;驴Quiere usar otro orden?&lt;br&gt;&lt;br&gt;Haga clic en OK para continuar.
+mycurriki.collections.reorder.checkfirst.dialog= Por defecto, sus colecciones se muestran poniendo arriba la de actualizaci饊兂n m饊儭s reciente.&lt;br&gt;&lt;br&gt;饊偪Quiere usar otro orden?&lt;br&gt;&lt;br&gt;Haga clic en OK para continuar.
 mycurriki.collections.reorder.checkfirst.cancel.btt= OK
 mycurriki.collections.reorder.checkfirst.next.btt= Cancelar
 
 mycurriki.collections.reorder.dialog_title= Reordenar sus colecciones
-mycurriki.collections.reorder.guidingquestion= 驴En qu茅 orden le gustar铆a mostrar sus colecciones de planes de estudios?
+mycurriki.collections.reorder.guidingquestion= 饊偪En qu饊儵 orden le gustar饊儹a mostrar sus colecciones de planes de estudios?
 mycurriki.collections.reorder.instruction= Arrastre y suelte sus colecciones para colocarlas en el orden deseado; cuando haya acabado, haga clic en Siguiente.
 mycurriki.collections.reorder.listheader= Colecciones
 mycurriki.collections.reorder.cancel.btt= Cancelar
 mycurriki.collections.reorder.next.btt= Siguiente
 
-mycurriki.collections.reorder.error= Mientras usted estaba reordenando su colecci贸n, una nueva colecci贸n ha sido a帽adida o sus colecciones han sido reordenadas. Dado que esta acci贸n ha ocurrido mientras usted estaba trabajando, y antes de que guardase su orden preferido, tiene prioridad; el reordenamiento que usted ha enviado no ser谩 aplicado. (Puede volver a hacer clic en el enlace para reordenar para empezar de nuevo.)
+mycurriki.collections.reorder.error= Mientras usted estaba reordenando su colecci饊兂n, una nueva colecci饊兂n ha sido a饊儽adida o sus colecciones han sido reordenadas. Dado que esta acci饊兂n ha ocurrido mientras usted estaba trabajando, y antes de que guardase su orden preferido, tiene prioridad; el reordenamiento que usted ha enviado no ser饊儭 aplicado. (Puede volver a hacer clic en el enlace para reordenar para empezar de nuevo.)
 mycurriki.collections.reorder.error.ok.btt= OK
 
 mycurriki.collections.reorder.set.confirm= Se ha guardado el nuevo orden.
 mycurriki.collections.reorder.set.confirm.btt= OK
 
-mycurriki.collections.reorder.checkafter.dialog= Ya ha establecido un orden especial para sus colecciones.&lt;br&gt;&lt;br&gt;驴Quiere cambiarlo?&lt;br&gt;&lt;br&gt;Haga clic en Continuar.
+mycurriki.collections.reorder.checkafter.dialog= Ya ha establecido un orden especial para sus colecciones.&lt;br&gt;&lt;br&gt;饊偪Quiere cambiarlo?&lt;br&gt;&lt;br&gt;Haga clic en Continuar.
 mycurriki.collections.reorder.checkafter.cancel.btt= OK
 mycurriki.collections.reorder.checkafter.next.btt= Cancelar
 
 ##BLOG TAB
 
 mycurriki.blog.titlebar= Entradas de blog
-mycurriki.blog.createEntry= A帽adir una entrada
+mycurriki.blog.createEntry= A饊儽adir una entrada
 mycurriki.blog.createBlog= Crear un blog
 mycurriki.blog.noblog= 
 mycurriki.blog.postedBy= Escrito por {0} el {1} a las {2}
 mycurriki.blog.comment.delete= Borrar
-mycurriki.blog.comment.delete.confirm= 驴Seguro que quiere borrar el comentario?
+mycurriki.blog.comment.delete.confirm= 饊偪Seguro que quiere borrar el comentario?
 mycurriki.blog.comment.empty= Por favor, introduzca un comentario para guardarlo.
-mycurriki.blog.actions.delete.confirm= 驴Seguro que quiere borrar esta entrada de blog?
+mycurriki.blog.actions.delete.confirm= 饊偪Seguro que quiere borrar esta entrada de blog?
 
 ##GROUPS TAB
 
@@ -194,10 +194,10 @@ mycurriki.groups.message.by= por
 
 mycurriki.macro.filetype.URL= URL
 mycurriki.macro.filetype.unknown= Desconocido
-mycurriki.macro.filetype.curriki= P谩gina en Curriki
+mycurriki.macro.filetype.curriki= P饊儭gina en Curriki
 mycurriki.macro.filetype.currikulum= Plan de estudio
 
-mycurriki.macro.access.public= P煤blico
+mycurriki.macro.access.public= P饊兒blico
 
 mycurriki.macro.access.members= Protegido
 mycurriki.macro.access.private= Privado

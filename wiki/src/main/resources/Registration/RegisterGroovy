@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1193332613000</creationDate>
-<date>1234891233000</date>
-<contentUpdateDate>1234891233000</contentUpdateDate>
-<version>14.1</version>
+<date>1241727204000</date>
+<contentUpdateDate>1241727204000</contentUpdateDate>
+<version>15.1</version>
 <title>Groovy Script for Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>CURRIKI-738 - Remove addToAllGroup()</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -234,7 +234,7 @@ public class register {
    if (userdoc.validate()) {
      //userdoc.saveWithProgrammingRights();
      xwiki.xWiki.saveDocument(userdoc.getDoc(), "", context.getContext());
-     xwiki.addToAllGroup(request.xwikiname);
+     // CURRIKI-738 - removed - xwiki.addToAllGroup(request.xwikiname);
      if (withValidation) {
        xwiki.xWiki.sendValidationEmail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), validkey, "validation_email_content", context.getContext());
      } else {
