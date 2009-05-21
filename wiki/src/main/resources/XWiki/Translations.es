@@ -64,7 +64,7 @@ panel.navigation.bysubject=Por tema
 panel.navigation.contributeresources=Contribuir con Recursos
 panel.navigation.add_learning_resource=Agregar Recurso Educativo
 panel.navigation.create_learning_resource=Crear Recurso Educativo
-panel.navigation.build_collection=Construir una Coleccið€ƒ³n
+panel.navigation.build_collection=Construir una ColecciÃ³n
 panel.navigation.myfavorites=Mis Favoritos
 panel.navigation.mycurriki=Mi Curriki
 panel.navigation.mycollection=Mis Colecciones
@@ -79,16 +79,16 @@ panel.navigation.createGroup=Crear un Nuevo Grupo
 panel.navigation.about_curriki=Acerca de Curriki
 panel.navigation.News=Noticias
 panel.navigation.guidedtour=Tour Guiado
-panel.navigation.board=Comisið€ƒ³n de Directores
+panel.navigation.board=ComisiÃ³n de Directores
 panel.navigation.leadership_team=Equipo Lider
-panel.navigation.donate=Realizar Donacið€ƒ³n
+panel.navigation.donate=Realizar DonaciÃ³n
 panel.navigation.partners_sponsers=Socios y Sponsors
 panel.navigation.features_partners=Socios Destacados
 panel.navigation.help=Ayuda
 panel.navigation.faqs=Preguntas Frecuentes(FAQs)
-panel.navigation.contact_us=Contð€ƒ¡ctenos
+panel.navigation.contact_us=ContÃ¡ctenos
 
-panel.donate.title=ð€‚¡Apoye la educacið€ƒ³n global y la comunidad de aprendizaje!
+panel.donate.title=Â¡Apoye la educaciÃ³n global y la comunidad de aprendizaje!
 
 panel.featuredmembers.members.count=miembros
 #general captions
@@ -108,7 +108,7 @@ caption.worldOfEducationalResourcesAndCurriculum=Curriki es Tu Mundo de Recursos
 caption.worldOfEducationalResources=Curriki es Tu Mundo de Recursos Educativos
 
 caption.member=Miembro
-caption.title=Tð€ƒ­tulo
+caption.title=TÃ­tulo
 caption.resources=Recursos
 
 caption.results=Resultados
@@ -131,10 +131,10 @@ caption.edit=Editar
 caption.print=Imprimir
 caption.add=Agregar
 caption.addToCollection=Agregar a Mi Curriki
-caption.addResourceToThisCollection=Agregar a Esta Coleccið€ƒ³n
+caption.addResourceToThisCollection=Agregar a Esta ColecciÃ³n
 caption.delete=Borrar
 caption.sendToAFriend=Enviar a un Amigo
-caption.linkToThePage=Link a Esta Pð€ƒ¡gina
+caption.linkToThePage=Link a Esta PÃ¡gina
 caption.NComments={0} comentario(s)
 caption.readmore=Leer Mas...
 caption.download=Download
@@ -193,30 +193,30 @@ eventCalendar.next=Mes Siguiente
 eventCalendar.eventList=Lista de Eventos
 eventCalendar.eventList.useEditObject=Use [edit object&amp;gt;{0}] para modificar o remover eventos existentes.
 eventCalendar.newEvent=Nuevo Evento
-eventCalendar.newEvent.location=Ubicacið€ƒ³n:
+eventCalendar.newEvent.location=UbicaciÃ³n:
 eventCalendar.newEvent.startDate=Fecha Inicio inclusive (dd/mm/yyyy):
 eventCalendar.newEvent.endDate=Fecha Fin inclusive (dd/mm/yyyy):
-eventCalendar.newEvent.decription=Descripcið€ƒ³n:
+eventCalendar.newEvent.decription=DescripciÃ³n:
 eventCalendar.newEvent.button=Agregar este evento
 
 
 #Main.Search
 
-search.overload=La bð€ƒºsqueda no estð€ƒ¡ disponible en este momento debido a que el ð€ƒ©xito del web de Curriki ha saturado nuestros servidores.
+search.overload=La bÃºsqueda no estÃ¡ disponible en este momento debido a que el Ã©xito del web de Curriki ha saturado nuestros servidores.
 
 
 #Main.SearchResources
 
-searchResources.rebuilding=Se ha iniciado la reconstruccion de ð€ƒ­ndices con {0} documentos. Esto tomarð€ƒ¡ algun tiempo dependiendo del nð€ƒºmero de pð€ƒ¡ginas/attachments
-searchResources.rebuildFailed=Ha fallado la reconstruccion de ð€ƒ­ndices.
+searchResources.rebuilding=Se ha iniciado la reconstruccion de Ã­ndices con {0} documentos. Esto tomarÃ¡ algun tiempo dependiendo del nÃºmero de pÃ¡ginas/attachments
+searchResources.rebuildFailed=Ha fallado la reconstruccion de Ã­ndices.
 
 searchResources.searchTable.course=Curso
-searchResources.searchTable.publishedDate=Fecha de Publicacið€ƒ³n
+searchResources.searchTable.publishedDate=Fecha de PublicaciÃ³n
 searchResources.searchTable.contributor=Colaborador
 searchResources.searchTable.actions=Acciones
 
-searchResources.noResult=Su bð€ƒºsqueda no ha encontrado resultados coincidentes.
-searchResources.error=Error realizando bð€ƒºsqueda
+searchResources.noResult=Su bÃºsqueda no ha encontrado resultados coincidentes.
+searchResources.error=Error realizando bÃºsqueda
 
 
 
@@ -230,7 +230,7 @@ docs.browseSearch=Navegar por Tema
 docs.news=Noticias Curriki
 docs.blogs=Blogs del Staff
 docs.members=Home de Miembros
-docs.donate=Realizar Donacið€ƒ³n
+docs.donate=Realizar DonaciÃ³n
 
 panels.welcomeToCurriki.info=Bienvenido a Curriki, tu mundo de recursos educativos opensource y curricula
 
@@ -259,7 +259,7 @@ myColls.info=Crear y compartir colecciones con la comunidad.
 
 #XWiki.MyCurrikiTemplate
 
-myColls.create=Crear una Nueva Coleccið€ƒ³n
+myColls.create=Crear una Nueva ColecciÃ³n
 myCurriki.assets.published=Recursos Educativos Publicados
 myCurriki.assets.create=Crear Recurso Educativo
 myCurriki.assets.unpublished=Recursos Educativos No Publicados
@@ -268,9 +268,9 @@ myCurriki.collections=Mis Colecciones
 myCurriki.blogs=Mis Blogs
 
 myCurriki.collections.intro=Encontrar colecciones creadas y vinculadas aqui.
-myCurriki.collection.create=Crear una Coleccið€ƒ³n
+myCurriki.collection.create=Crear una ColecciÃ³n
 
-myCurriki.contributions.intro=Encontrar y mostrar hasta 20 recursos contribuidos, si hay mð€ƒ¡s de 20, hacer click en 'Ver Todo' para una lista completa 
+myCurriki.contributions.intro=Encontrar y mostrar hasta 20 recursos contribuidos, si hay mÃ¡s de 20, hacer click en 'Ver Todo' para una lista completa 
 myCurriki.contributions.viewAll=Ver todas las Contribuciones
 
 #XWiki.MyCurrikiBlogs
@@ -282,9 +282,9 @@ myBlogs.title=Mis Blogs ({0})
 
 myBlogs.usage=Encontrar entradas de blog aqui.
 myBlogs.addArticle=Agregar Entrada
-myBlogs.addArticle.details=Ingrese el tð€ƒ­tulo de su entrada, haga click en 'Agregar una Entrada', y siga las instrucciones.
-myBlogs.articleTitle=Tð€ƒ­tulo de la Entrada
-myBlogs.noTitle=Sin Tð€ƒ­tulo
+myBlogs.addArticle.details=Ingrese el tÃ­tulo de su entrada, haga click en 'Agregar una Entrada', y siga las instrucciones.
+myBlogs.articleTitle=TÃ­tulo de la Entrada
+myBlogs.noTitle=Sin TÃ­tulo
 
 
 #Members.MyBlog
@@ -316,13 +316,13 @@ myBlog.editEntry=Editar "{0}"
 
 #XWiki.MyBlogArticleClassSheet
 
-blogArticle.field.title=Tð€ƒ­tulo:
+blogArticle.field.title=TÃ­tulo:
 blogArticle.field.keywords=Palabras Claves:
 blogArticle.field.content=Contenido:
 blogArticle.field.extract=Extraer:
 
-blogArticle.field.title.mandatory=El Tð€ƒ­tulo no puede estar vacð€ƒ­o.
-blogArticle.field.content.mandatory=El Contenido no puede estar vacð€ƒ­o.
+blogArticle.field.title.mandatory=El TÃ­tulo no puede estar vacÃ­o.
+blogArticle.field.content.mandatory=El Contenido no puede estar vacÃ­o.
 
 blogArticle.commentsto={0} comentario(s) hasta "{1}"
 blogArticle.authorsays={0} Dice:
@@ -335,11 +335,11 @@ blog.staffInfo=Aqui hay algunas entradas de blog recientes del staff de Curriki.
 
 #XWiki.AssetTemplate
 
-asset.lastupdated=ð€ƒšltima Actualizacið€ƒ³n
+asset.lastupdated=Ãšltima ActualizaciÃ³n
 asset.groupfrom=Desde
 asset.createdby=Creado/Provisto Por
-asset.moreInformation=Ver Informacið€ƒ³n Detallada
-asset.closeMoreInformation=Cerrar Informacið€ƒ³n Detallada
+asset.moreInformation=Ver InformaciÃ³n Detallada
+asset.closeMoreInformation=Cerrar InformaciÃ³n Detallada
 asset.openToView=Vista Detallada
 asset.commentNotAllowed=No tiene permiso para comentar sobre este recurso
 asset.contentNotAllowed=Esta contenido esta marcado como Privado.
@@ -353,13 +353,13 @@ mycontribs.title=Contribuciones
 
 colls.infos=Encontrar colecciones creadas y vinculadas aqui.
 
-colls.description=Descripcið€ƒ³n:
-colls.last_edited=ð€ƒšltima Edicið€ƒ³n:
+colls.description=DescripciÃ³n:
+colls.last_edited=Ãšltima EdiciÃ³n:
 colls.subjects=Tema(s):
 colls.levels=Nivel(es) Educativos:
 
 colls.addResource=Agregar un Recurso
-colls.createCollection=Crear una Coleccið€ƒ³n
+colls.createCollection=Crear una ColecciÃ³n
 
 colls.numberOfCollsDisplayed={0} de {1} Colecciones Mostradas
 
@@ -390,7 +390,7 @@ metadata.instructional_component_title2=Tipo de Componente Instruccional
 emailoptout.pleasepass=Lo sentimos, debe ingresar una direccion de email para evitar emails.
 emailoptout.norecord=Lo sentimos, no tenemos registro de esa direccion de email.
 emailoptout.errormultiple=Error.  Esta direccion de email esta asociada a multiples cuentas.
-emailoptout.removed=La direccið€ƒ³n de email {0} ha sido removida de la lista de emails de Curriki. En el futuro, si quiere revertir esto, envie una peticion a info@curriki.org.   
+emailoptout.removed=La direcciÃ³n de email {0} ha sido removida de la lista de emails de Curriki. En el futuro, si quiere revertir esto, envie una peticion a info@curriki.org.   
 
 # Errors if attempting to do a recursive add
 addsubasset.recursive_add=No puede agregar un activo a si mismo.
@@ -408,13 +408,13 @@ curriki.toc.title=Tabla de Contenidos
 # Header section for search and browse
 header.find_resource=Buscar o Navegar en Curriki
 header.browse_subjects=Navegar Temas
-header.advanced_search=Bð€ƒºsqueda Avanzada
+header.advanced_search=BÃºsqueda Avanzada
 header.search_go=Ir &amp;amp;#xBB;
 
 # Browse page
 browse.titlebar=Navegar Recursos por Temas
-browse.info=Seleccione un tema para ver una lista de todos los recursos educativos en esa categoria. El nð€ƒºmero entre parentesis muestra cuantos resultados hay en el sitio ahora.
-browse.subject.title.Uncategorized=Sin Categorð€ƒ­a
+browse.info=Seleccione un tema para ver una lista de todos los recursos educativos en esa categoria. El nÃºmero entre parentesis muestra cuantos resultados hay en el sitio ahora.
+browse.subject.title.Uncategorized=Sin CategorÃ­a
 browse.subject.image.Uncategorized=/xwiki/bin/download/Main/Browse/SubjectAreaImages.zip/Uncategorized.png
 browse.subject.description.Uncategorized=-
 browse.subject.title.All_Resources=Todos los Recursos
@@ -448,11 +448,11 @@ browse.subject.title.promo_1=Ejemplo: Romeo y Julieta
 browse.subject.image.promo_1=/xwiki/bin/download/XWiki/rmlucas/timespicturelargecropped.jpg
 browse.subject.description.promo_1=Ejemplo: Texto para Romeo y Julieta.
 
-featuredGroups.intro=Curriki destaca dos grupos por mes. Quiere saber mas acerca de crear un grupo y las caracteristicas grupales? Visite &amp;lt;a href="/xwiki/bin/view/Groups/AboutCreatingGroups"&amp;gt;Acerca de Crear un Grupo&amp;lt;/a&amp;gt; y &amp;lt;a href="/xwiki/bin/view/Coll_curriki/Groups?bc=;Coll_curriki.CurrikiHelp"&amp;gt;Ayuda Colleccið€ƒ³n ð‚€“ Grupos&amp;lt;/a&amp;gt;.&amp;lt;br /&amp;gt;
+featuredGroups.intro=Curriki destaca dos grupos por mes. Quiere saber mas acerca de crear un grupo y las caracteristicas grupales? Visite &amp;lt;a href="/xwiki/bin/view/Groups/AboutCreatingGroups"&amp;gt;Acerca de Crear un Grupo&amp;lt;/a&amp;gt; y &amp;lt;a href="/xwiki/bin/view/Coll_curriki/Groups?bc=;Coll_curriki.CurrikiHelp"&amp;gt;Ayuda CollecciÃ³n â€“ Grupos&amp;lt;/a&amp;gt;.&amp;lt;br /&amp;gt;
 
 # 404 Error Page
-err_404_previous_page=Ir a la pð€ƒ¡gina previa
-err_404_home_page=Ir a la pð€ƒ¡gina de inicio
+err_404_previous_page=Ir a la pÃ¡gina previa
+err_404_home_page=Ir a la pÃ¡gina de inicio
 
 #Class fields
 XWiki.XWikiUsers_member_type_student=Estudiante
@@ -475,7 +475,7 @@ XWiki.XWikiUsers_country_AS=American Samoa
 XWiki.XWikiUsers_country_AT=Austria
 XWiki.XWikiUsers_country_AU=Australia
 XWiki.XWikiUsers_country_AW=Aruba
-XWiki.XWikiUsers_country_AX=Islas ð€ƒ…land
+XWiki.XWikiUsers_country_AX=Islas Ã…land
 XWiki.XWikiUsers_country_AZ=Azerbaijan
 XWiki.XWikiUsers_country_BA=Bosnia y Herzegovina
 XWiki.XWikiUsers_country_BB=Barbados
@@ -498,11 +498,11 @@ XWiki.XWikiUsers_country_BY=Belarus
 XWiki.XWikiUsers_country_BZ=Belize
 XWiki.XWikiUsers_country_CA=Canada
 XWiki.XWikiUsers_country_CC=Islands Cocos (Keeling)
-XWiki.XWikiUsers_country_CD=Republica democrð€ƒ¡tica del Congo
+XWiki.XWikiUsers_country_CD=Republica democrÃ¡tica del Congo
 XWiki.XWikiUsers_country_CF=Republica Africana Central
 XWiki.XWikiUsers_country_CG=Congo
 XWiki.XWikiUsers_country_CH=Suiza
-XWiki.XWikiUsers_country_CI=Cð€ƒ´te d'Ivoire
+XWiki.XWikiUsers_country_CI=CÃ´te d'Ivoire
 XWiki.XWikiUsers_country_CK=Islas Cook
 XWiki.XWikiUsers_country_CL=Chile
 XWiki.XWikiUsers_country_CM=Camerun
@@ -525,7 +525,7 @@ XWiki.XWikiUsers_country_EE=Estonia
 XWiki.XWikiUsers_country_EG=Egipto
 XWiki.XWikiUsers_country_EH=Sahara Occidental
 XWiki.XWikiUsers_country_ER=Eritrea
-XWiki.XWikiUsers_country_ES=Espað€ƒ±a
+XWiki.XWikiUsers_country_ES=EspaÃ±a
 XWiki.XWikiUsers_country_ET=Etiopia
 XWiki.XWikiUsers_country_FI=Finlandia
 XWiki.XWikiUsers_country_FJ=Fiji
@@ -570,7 +570,7 @@ XWiki.XWikiUsers_country_IT=Italia
 XWiki.XWikiUsers_country_JE=Jersey
 XWiki.XWikiUsers_country_JM=Jamaica
 XWiki.XWikiUsers_country_JO=Jordan
-XWiki.XWikiUsers_country_JP=Japð€ƒ³n
+XWiki.XWikiUsers_country_JP=JapÃ³n
 XWiki.XWikiUsers_country_KE=Kenia
 XWiki.XWikiUsers_country_KG=Kyrgyzstan
 XWiki.XWikiUsers_country_KH=Cambodia
@@ -718,13 +718,13 @@ XWiki.XWikiUsers_topics_FW_masterFramework.Photography=Fotografia
 XWiki.XWikiUsers_topics_FW_masterFramework.PopularCulture=Cultura Popular
 XWiki.XWikiUsers_topics_FW_masterFramework.Technology=Tecnologia
 XWiki.XWikiUsers_topics_FW_masterFramework.VisualArts=Artes Visuales
-XWiki.XWikiUsers_topics_FW_masterFramework.VocationalEducation=Carrera &amp;amp; Educacið€ƒ³n Tecnica
+XWiki.XWikiUsers_topics_FW_masterFramework.VocationalEducation=Carrera &amp;amp; EducaciÃ³n Tecnica
 XWiki.XWikiUsers_topics_FW_masterFramework.Agriculture_0=Agricultura
 XWiki.XWikiUsers_topics_FW_masterFramework.Business=Negocios
 XWiki.XWikiUsers_topics_FW_masterFramework.Careers_6=Carreras
-XWiki.XWikiUsers_topics_FW_masterFramework.Education&amp;amp;Teaching=Educacion &amp;amp; Enseð€ƒ±anza
+XWiki.XWikiUsers_topics_FW_masterFramework.Education&amp;amp;Teaching=Educacion &amp;amp; EnseÃ±anza
 XWiki.XWikiUsers_topics_FW_masterFramework.OccupationalHomeEconomics=Economia Ocupacional del Hogar
-XWiki.XWikiUsers_topics_FW_masterFramework.School-to-work=Transicið€ƒ³n Escuela-Trabajo
+XWiki.XWikiUsers_topics_FW_masterFramework.School-to-work=TransiciÃ³n Escuela-Trabajo
 XWiki.XWikiUsers_topics_FW_masterFramework.Technology_2=Tecnologia
 XWiki.XWikiUsers_topics_FW_masterFramework.Trade&amp;amp;Industrial=Comercio &amp;amp; Industria
 XWiki.XWikiUsers_topics_FW_masterFramework.EducationalTechnology=Tecnology Educacional
@@ -735,13 +735,13 @@ XWiki.XWikiUsers_topics_FW_masterFramework.ForeignLanguages=Languajes Extranjero
 XWiki.XWikiUsers_topics_FW_masterFramework.Alphabet=Alfabeto
 XWiki.XWikiUsers_topics_FW_masterFramework.Careers_7=Carreras
 XWiki.XWikiUsers_topics_FW_masterFramework.CulturalAwareness=Conciencia Cultural
-XWiki.XWikiUsers_topics_FW_masterFramework.Grammar=Gramð€ƒ¡tica
-XWiki.XWikiUsers_topics_FW_masterFramework.InformalEducation=Educacið€ƒ³n Informal
+XWiki.XWikiUsers_topics_FW_masterFramework.Grammar=GramÃ¡tica
+XWiki.XWikiUsers_topics_FW_masterFramework.InformalEducation=EducaciÃ³n Informal
 XWiki.XWikiUsers_topics_FW_masterFramework.Linguistics=Linguistica
 XWiki.XWikiUsers_topics_FW_masterFramework.ListeningComprehension=Escuchar y Comprender
 XWiki.XWikiUsers_topics_FW_masterFramework.Reading=Lectura
-XWiki.XWikiUsers_topics_FW_masterFramework.Speaking=Conversacið€ƒ³n
-XWiki.XWikiUsers_topics_FW_masterFramework.Spelling=Ortografð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Speaking=ConversaciÃ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.Spelling=OrtografÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.VocabularyWriting=Vocabulario Escrito
 XWiki.XWikiUsers_topics_FW_masterFramework.Health=Salud 
 XWiki.XWikiUsers_topics_FW_masterFramework.BodySystems&amp;amp;Senses=Sistemas del Cuerpo Humano y Sentidos
@@ -750,22 +750,22 @@ XWiki.XWikiUsers_topics_FW_masterFramework.EnvironmentalHealth=Salud Ambiental
 XWiki.XWikiUsers_topics_FW_masterFramework.HumanSexuality=Sexualidad Humana
 XWiki.XWikiUsers_topics_FW_masterFramework.MentalEmotionalHealth=Salud Mental y Emocional
 XWiki.XWikiUsers_topics_FW_masterFramework.Nutrition=Nutricion
-XWiki.XWikiUsers_topics_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=Seguridad/Tabaquismo/Prevensið€ƒ³n de Drogadiccið€ƒ³n
-XWiki.XWikiUsers_topics_FW_masterFramework.Information&amp;amp;MediaLiteracy=Information y Medios Alfabetizacið€ƒ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.SafetySmokingSubstanceAbusePrevention=Seguridad/Tabaquismo/PrevensiÃ³n de DrogadicciÃ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.Information&amp;amp;MediaLiteracy=Information y Medios AlfabetizaciÃ³n
 XWiki.XWikiUsers_topics_FW_masterFramework.EvaluatingSources=Evaluando Fuentes
-XWiki.XWikiUsers_topics_FW_masterFramework.MediaEthics=Medios ð€ƒ‰ticos
+XWiki.XWikiUsers_topics_FW_masterFramework.MediaEthics=Medios Ã‰ticos
 XWiki.XWikiUsers_topics_FW_masterFramework.OnlineSafety=Seguridad Online
-XWiki.XWikiUsers_topics_FW_masterFramework.ResearchMethods=Metodos de Investigacið€ƒ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.ResearchMethods=Metodos de InvestigaciÃ³n
 XWiki.XWikiUsers_topics_FW_masterFramework.LanguageArts=Artes del Lenguaje
 XWiki.XWikiUsers_topics_FW_masterFramework.Alphabet_0=Alfabeto
 XWiki.XWikiUsers_topics_FW_masterFramework.Careers_2=Carreras
 XWiki.XWikiUsers_topics_FW_masterFramework.Journalism=Periodismo
 XWiki.XWikiUsers_topics_FW_masterFramework.Listening&amp;amp;Speaking=Escuchar y Hablar
 XWiki.XWikiUsers_topics_FW_masterFramework.Literature=Literatura
-XWiki.XWikiUsers_topics_FW_masterFramework.Phonics=Fonologð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Phonics=FonologÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.ReadingComprehension=Leer y Comprender
-XWiki.XWikiUsers_topics_FW_masterFramework.Research=Investigacið€ƒ³n
-XWiki.XWikiUsers_topics_FW_masterFramework.Spelling_0=Ortografð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Research=InvestigaciÃ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.Spelling_0=OrtografÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.StoryTelling=Contar una historia
 XWiki.XWikiUsers_topics_FW_masterFramework.Vocabulary=Vocabulario
 XWiki.XWikiUsers_topics_FW_masterFramework.Writing=Escritura
@@ -780,52 +780,52 @@ XWiki.XWikiUsers_topics_FW_masterFramework.Equations=Ecuacions
 XWiki.XWikiUsers_topics_FW_masterFramework.Estimation=Estimacion
 XWiki.XWikiUsers_topics_FW_masterFramework.Geometry=Geometria
 XWiki.XWikiUsers_topics_FW_masterFramework.Graphing=Graphing
-XWiki.XWikiUsers_topics_FW_masterFramework.Measurement=Medicið€ƒ³n
-XWiki.XWikiUsers_topics_FW_masterFramework.NumberSense&amp;amp;Operations=Nð€ƒºmeros y Operaciones
+XWiki.XWikiUsers_topics_FW_masterFramework.Measurement=MediciÃ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.NumberSense&amp;amp;Operations=NÃºmeros y Operaciones
 XWiki.XWikiUsers_topics_FW_masterFramework.Patterns=Patrones
-XWiki.XWikiUsers_topics_FW_masterFramework.ProblemSolving=Resolucið€ƒ³n de Problemas
-XWiki.XWikiUsers_topics_FW_masterFramework.Statistics=Estadð€ƒ­sticas
-XWiki.XWikiUsers_topics_FW_masterFramework.Trigonometry=Trigonometrð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.ProblemSolving=ResoluciÃ³n de Problemas
+XWiki.XWikiUsers_topics_FW_masterFramework.Statistics=EstadÃ­sticas
+XWiki.XWikiUsers_topics_FW_masterFramework.Trigonometry=TrigonometrÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.Science=Ciencia
 XWiki.XWikiUsers_topics_FW_masterFramework.Agriculture=Agricultura
-XWiki.XWikiUsers_topics_FW_masterFramework.Astronomy=Astronomð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.Biology=Biologð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.Botany=Botð€ƒ¡nica
+XWiki.XWikiUsers_topics_FW_masterFramework.Astronomy=AstronomÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Biology=BiologÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Botany=BotÃ¡nica
 XWiki.XWikiUsers_topics_FW_masterFramework.Careers_4=Carreras
-XWiki.XWikiUsers_topics_FW_masterFramework.Chemistry=Quð€ƒ­mica
+XWiki.XWikiUsers_topics_FW_masterFramework.Chemistry=QuÃ­mica
 XWiki.XWikiUsers_topics_FW_masterFramework.Earthscience=Ciencias de La Tierra
-XWiki.XWikiUsers_topics_FW_masterFramework.Ecology=Ecologð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.Engineering=Ingenierð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Ecology=EcologÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Engineering=IngenierÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.Generalscience=Ciencia General
-XWiki.XWikiUsers_topics_FW_masterFramework.Geology=Geologð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Geology=GeologÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.HistoryofScience=Historia de la Ciencia
 XWiki.XWikiUsers_topics_FW_masterFramework.LifeSciences=Ciencias de la Vida
-XWiki.XWikiUsers_topics_FW_masterFramework.Meteorology=Meteorologð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Meteorology=MeteorologÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.NaturalHistory=Historia Natural
-XWiki.XWikiUsers_topics_FW_masterFramework.Oceanography=Oceanografð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.Paleontology=Paleontologð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.PhysicalSciences=Ciencias Fð€ƒ­sicas
-XWiki.XWikiUsers_topics_FW_masterFramework.Physics=Fð€ƒ­sica
+XWiki.XWikiUsers_topics_FW_masterFramework.Oceanography=OceanografÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Paleontology=PaleontologÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.PhysicalSciences=Ciencias FÃ­sicas
+XWiki.XWikiUsers_topics_FW_masterFramework.Physics=FÃ­sica
 XWiki.XWikiUsers_topics_FW_masterFramework.ProcessSkills=Desarrollo de Habilidades
-XWiki.XWikiUsers_topics_FW_masterFramework.Technology_0=Tecnologð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Technology_0=TecnologÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.SocialStudies=Estudios Sociales
-XWiki.XWikiUsers_topics_FW_masterFramework.Anthropology=Antropologð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Anthropology=AntropologÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.Careers_5=Carreras
-XWiki.XWikiUsers_topics_FW_masterFramework.Civics=Edicacið€ƒ³n Cð€ƒ­vica
+XWiki.XWikiUsers_topics_FW_masterFramework.Civics=EdicaciÃ³n CÃ­vica
 XWiki.XWikiUsers_topics_FW_masterFramework.CurrentEvents=Eventos Actuales
 XWiki.XWikiUsers_topics_FW_masterFramework.Economics=Economia
 XWiki.XWikiUsers_topics_FW_masterFramework.Entrepreneurship=Iniciativa Empresarial
-XWiki.XWikiUsers_topics_FW_masterFramework.Geography=Geografð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Geography=GeografÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.GlobalAwareness=Conciencia Global
 XWiki.XWikiUsers_topics_FW_masterFramework.Government=Gobierno
 XWiki.XWikiUsers_topics_FW_masterFramework.History\u0020Local=Historia (Local)
 XWiki.XWikiUsers_topics_FW_masterFramework.PoliticalSystems=Sistemas Politicos
-XWiki.XWikiUsers_topics_FW_masterFramework.Psychology=Psicologð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.Research_0=Investigacið€ƒ³n
-XWiki.XWikiUsers_topics_FW_masterFramework.Sociology=Sociologð€ƒ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Psychology=PsicologÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Research_0=InvestigaciÃ³n
+XWiki.XWikiUsers_topics_FW_masterFramework.Sociology=SociologÃ­a
 XWiki.XWikiUsers_topics_FW_masterFramework.StateHistory=Historia del Estado
-XWiki.XWikiUsers_topics_FW_masterFramework.Technology_1=Tecnologð€ƒ­a
-XWiki.XWikiUsers_topics_FW_masterFramework.Thinking&amp;amp;ProblemSolving=Razonamiento y Resolucið€ƒ³n de Problemas
+XWiki.XWikiUsers_topics_FW_masterFramework.Technology_1=TecnologÃ­a
+XWiki.XWikiUsers_topics_FW_masterFramework.Thinking&amp;amp;ProblemSolving=Razonamiento y ResoluciÃ³n de Problemas
 XWiki.XWikiUsers_topics_FW_masterFramework.UnitedStatesGovernment=Gobierno de Los EEUU
 XWiki.XWikiUsers_topics_FW_masterFramework.UnitedStatesHistory=Historia de los EEUU
 XWiki.XWikiUsers_topics_FW_masterFramework.WorldHistory=Historia Mundial

@@ -67,7 +67,7 @@ search.results.max= 500
 
 ## SEARCH ENTRY BOX AND OVERALL ITEMS
 
-search.text.entry.label= Escriba los t饊儵rminos de b饊兒squeda
+search.text.entry.label= Escriba los t茅rminos de b煤squeda
 search.text.entry.button= Buscar &amp;raquo;
 search.text.entry.help.link= Sugerencias para buscar
 search.text.entry.help.title= Sugerencias para buscar
@@ -82,9 +82,9 @@ search.tab.title.resultsmax_exceeds= {0} ({2})
 search.text.entry.help.text= 
 
 search.text.entry.help.button= Sugerencias para buscar
-search.find.no.results= No hay resultados que se ajusten a su b饊兒squeda. Vuelva a intentarlo.
+search.find.no.results= No hay resultados que se ajusten a su b煤squeda. Vuelva a intentarlo.
 search.find.no.results.button= OK
-search.advanced.search.button= B饊兒squeda Avanzada
+search.advanced.search.button= B煤squeda Avanzada
 
 search.columns.menu.columns= Columnas
 search.columns.menu.sort_ascending= Orden ascendiente
@@ -107,23 +107,23 @@ search.pagination.displaying.member_resultsmax_exceeds= Mostrando miembros {0} -
 search.pagination.displaying.blog= Mostrando Blogs {0} - {1} de aproximadamente {2}
 search.pagination.displaying.blog_resultsmax_exceeds= Mostrando Blogs {0} - {1} de los primeros {2}
 
-search.pagination.displaying.curriki= Mostrando p饊儭ginas {0} - {1} de aproximadamente {2}
-search.pagination.displaying.curriki_resultsmax_exceeds= Mostrando p饊儭ginas {0} - {1} de los primeros {2}
+search.pagination.displaying.curriki= Mostrando p谩ginas {0} - {1} de aproximadamente {2}
+search.pagination.displaying.curriki_resultsmax_exceeds= Mostrando p谩ginas {0} - {1} de los primeros {2}
 
 ## Pagination Buttons
 search.pagination.first.button= &amp;lt;&amp;lt;Primero
 search.pagination.prev.button= &amp;lt;Anterior
 search.pagination.next.button= Siguiente&amp;gt; 
-search.pagination.last.button= 饊儦ltimo&amp;gt;&amp;gt; 
+search.pagination.last.button= 脷ltimo&amp;gt;&amp;gt; 
 
 ## Pagination Buttons Rollovers
-search.pagination.beforepage= P饊儭gina
+search.pagination.beforepage= P谩gina
 search.pagination.afterpage= de aproximadamente {0}
 search.pagination.afterpage_resultsmax_exceeds= de {0}
-search.pagination.first= Primera p饊儭gina
-search.pagination.prev= P饊儭gina anterior
-search.pagination.next= Siguiente p饊儭gina
-search.pagination.last= 饊儦ltima p饊儭gina
+search.pagination.first= Primera p谩gina
+search.pagination.prev= P谩gina anterior
+search.pagination.next= Siguiente p谩gina
+search.pagination.last= 脷ltima p谩gina
 search.pagination.refresh= Refrescar
 
 
@@ -145,13 +145,13 @@ XWiki.AssetClass_fw_items_UNCATEGORIZED= Sin categorizar
 ## The naming convention follows the asset class names but is NOT part of the asset class
 
 XWiki.AssetClass_fw_items_FW_masterFramework.Arts.UNSPECIFIED= Artes: Cualquiera
-XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation.UNSPECIFIED= Carreras y Educaci饊兂n T饊儵cnica: Cualquiera
-XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED= Educaci饊兂n: Cualquiera
-XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology.UNSPECIFIED= Tecnolog饊儹a Educacional: Cualquiera
+XWiki.AssetClass_fw_items_FW_masterFramework.VocationalEducation.UNSPECIFIED= Carreras y Educaci贸n T茅cnica: Cualquiera
+XWiki.AssetClass_fw_items_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED= Educaci贸n: Cualquiera
+XWiki.AssetClass_fw_items_FW_masterFramework.EducationalTechnology.UNSPECIFIED= Tecnolog铆a Educacional: Cualquiera
 XWiki.AssetClass_fw_items_FW_masterFramework.Health.UNSPECIFIED= Salud: Cualquiera
-XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED= Conocimiento de los Medios e Informaci饊兂n: Cualquiera
+XWiki.AssetClass_fw_items_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED= Conocimiento de los Medios e Informaci贸n: Cualquiera
 XWiki.AssetClass_fw_items_FW_masterFramework.LanguageArts.UNSPECIFIED= Artes del Lenguage: Cualquiera
-XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics.UNSPECIFIED= Matem饊儭ticas: Cualquiera
+XWiki.AssetClass_fw_items_FW_masterFramework.Mathematics.UNSPECIFIED= Matem谩ticas: Cualquiera
 XWiki.AssetClass_fw_items_FW_masterFramework.Science.UNSPECIFIED= Ciencia: Cualquiera
 XWiki.AssetClass_fw_items_FW_masterFramework.SocialStudies.UNSPECIFIED= Estudios Sociales: Cualquiera
 XWiki.AssetClass_fw_items_FW_masterFramework.ForeignLanguages.UNSPECIFIED= Lenguas Extranajeras: Cualquiera
@@ -175,40 +175,40 @@ search.resource.ict.activity.assignment= Deberes
 search.resource.ict.activity.exercise= Ejercicio
 
 search.resource.ict.activity.lab= Experimento/Laboratorio
-search.resource.ict.activity.worksheet= Organizador Gr饊儭fico/Tabla
+search.resource.ict.activity.worksheet= Organizador Gr谩fico/Tabla
 search.resource.ict.activity.problemset= Serie de Problemas
 search.resource.ict.book= Libro
-search.resource.ict.book.fiction= Ficci饊兂n
-search.resource.ict.book.nonfiction= No Ficci饊兂n
+search.resource.ict.book.fiction= Ficci贸n
+search.resource.ict.book.nonfiction= No Ficci贸n
 search.resource.ict.book.readings= Lecturas/Pasajes
 search.resource.ict.book.textbook= Libro de Texto
 search.resource.ict.curriculum= Plan de Estudios
-search.resource.ict.curriculum.assessment= Evaluaci饊兂n/Examen
+search.resource.ict.curriculum.assessment= Evaluaci贸n/Examen
 search.resource.ict.curriculum.course= Curso Completo
 search.resource.ict.curriculum.unit= Unidad
-search.resource.ict.curriculum.lp= Plan de Lecci饊兂n
-search.resource.ict.curriculum.rubric= Gu饊儹a de Evaluaci饊兂n
+search.resource.ict.curriculum.lp= Plan de Lecci贸n
+search.resource.ict.curriculum.rubric= Gu铆a de Evaluaci贸n
 search.resource.ict.curriculum.scope= Alcance y Secuencia
-search.resource.ict.curriculum.standards= Est饊儭ndares
-search.resource.ict.curriculum.studyguide= Gu饊儹a de Estudio/Notas
+search.resource.ict.curriculum.standards= Est谩ndares
+search.resource.ict.curriculum.studyguide= Gu铆a de Estudio/Notas
 search.resource.ict.curriculum.syllabus= Programa de Curso
 search.resource.ict.curriculum.tutorial= Tutorial
 search.resource.ict.curriculum.workbook= Cuaderno de Trabajo
 search.resource.ict.resource= Recurso
-search.resource.ict.resource.animation= Animaci饊兂n/Simulaci饊兂n
-search.resource.ict.resource.diagram= Diagrama/Ilustraci饊兂n
+search.resource.ict.resource.animation= Animaci贸n/Simulaci贸n
+search.resource.ict.resource.diagram= Diagrama/Ilustraci贸n
 search.resource.ict.resource.glossary= Glosario/Vocabulario
-search.resource.ict.resource.index= 饊儘ndice/Lista
-search.resource.ict.resource.photograph= Fotograf饊儹a
-search.resource.ict.resource.presentation= Video/Presentaci饊兂n/Diapositivas
-search.resource.ict.resource.collection= Colecci饊兂n de Referencia
-search.resource.ict.resource.script= Gui饊兂n/Transcripci饊兂n
-search.resource.ict.resource.speech= Audio/Discurso/Lecci饊兂n
-search.resource.ict.resource.table= Tabla/Gr饊儭fico
+search.resource.ict.resource.index= 脥ndice/Lista
+search.resource.ict.resource.photograph= Fotograf铆a
+search.resource.ict.resource.presentation= Video/Presentaci贸n/Diapositivas
+search.resource.ict.resource.collection= Colecci贸n de Referencia
+search.resource.ict.resource.script= Gui贸n/Transcripci贸n
+search.resource.ict.resource.speech= Audio/Discurso/Lecci贸n
+search.resource.ict.resource.table= Tabla/Gr谩fico
 search.resource.ict.resource.template= Plantilla
 search.resource.ict.resource.webcast= Webcast/Podcast
 search.resource.ict.other= Otros
-search.resource.ict.multiple= M饊兒ltiple
+search.resource.ict.multiple= M煤ltiple
 search.resource.ict.unknown= 
 
 
@@ -242,7 +242,7 @@ XWiki.AssetClass_language_UNSPECIFIED= Idioma: Cualquiera
 
 search.resource.review.selector.UNSPECIFIED= Revisiones: cualquiera
 search.resource.review.selector.partners= Socios
-search.resource.review.selector.highest_rated= Los mejores en la clasificaci饊兂n
+search.resource.review.selector.highest_rated= Los mejores en la clasificaci贸n
 
 ##For Review column
 
@@ -250,36 +250,36 @@ search.resource.review.800= Ejemplar
 search.resource.review.700= Parte de un recurso ejemplar
 search.resource.review.600= Bueno
 search.resource.review.500= Parte de un recurso bueno
-search.resource.review.400= B饊儭sico
-search.resource.review.300= Parte de un recurso B饊儭sico
+search.resource.review.400= B谩sico
+search.resource.review.300= Parte de un recurso B谩sico
 search.resource.review.200= Socio
 search.resource.review.100= No Evaluado/No Evaluable
-search.resource.review.0= Revisi饊兂n Pendiente
+search.resource.review.0= Revisi贸n Pendiente
 
 
 ##SPECIAL FILTERS
 ## I don't think there is a Class I can model after here.
 search.resource.special.selector.UNSPECIFIED= Filtros especiales: ninguno
-search.resource.special.selector.contributions= S饊兂lo mis contribuciones
-search.resource.special.selector.collections= S饊兂lo colecciones
-search.resource.special.selector.resources= S饊兂lo ficheros de recursos
-search.resource.special.selector.updated= S饊兂lo los recientemente actualizados
+search.resource.special.selector.contributions= S贸lo mis contribuciones
+search.resource.special.selector.collections= S贸lo colecciones
+search.resource.special.selector.resources= S贸lo ficheros de recursos
+search.resource.special.selector.updated= S贸lo los recientemente actualizados
 search.resource.special.selector.updated.days= 30
 
 ##COLUMNS
 search.resource.column.header.assetType= Tipo de recurso
-search.resource.column.header.title= T饊儹tulo
-search.resource.column.title.tooltip.title= Descripci饊兂n
+search.resource.column.header.title= T铆tulo
+search.resource.column.title.tooltip.title= Descripci贸n
 search.resource.column.header.ict= Tipo Instruccional
 search.resource.column.header.contributor= Contribuidor
-search.resource.column.header.rating= Puntuaci饊兂n
-search.resource.column.header.updated= Actualizaci饊兂n
+search.resource.column.header.rating= Puntuaci贸n
+search.resource.column.header.updated= Actualizaci贸n
 
 
-search.resource.icon.plus.rollover= Este recurso es parte de una colecci饊兂n o carpeta. Haga clic aqu饊儹 para expandirlo.
+search.resource.icon.plus.rollover= Este recurso es parte de una colecci贸n o carpeta. Haga clic aqu铆 para expandirlo.
 search.resource.icon.minus.rollover= Haga clic para ocultar
 
-search.resource.icon.CollectionComposite.rollover= colecci饊兂n
+search.resource.icon.CollectionComposite.rollover= colecci贸n
 search.resource.icon.FolderComposite.rollover= Carpeta
 
 search.resource.icon.Text.rollover= Fichero
@@ -317,13 +317,13 @@ XWiki.CurrikiSpaceClass_topic_FW_masterFramework.WebHome.UNSPECIFIED= Tema: Cual
 ## The naming convention follows the class names but is NOT part of the class
 
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Arts.UNSPECIFIED= Artes: Cualquiera
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.VocationalEducation.UNSPECIFIED= Carreras y Educaci饊兂n T饊儵cnica: Cualquiera
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED= Educaci饊兂n: Cualquiera
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalTechnology.UNSPECIFIED= Tecnolog饊儹a Educacional: Cualquiera
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.VocationalEducation.UNSPECIFIED= Carreras y Educaci贸n T茅cnica: Cualquiera
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED= Educaci贸n: Cualquiera
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.EducationalTechnology.UNSPECIFIED= Tecnolog铆a Educacional: Cualquiera
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Health.UNSPECIFIED= Salud: Cualquiera
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED= Conocimiento de los Medios e Informaci饊兂n: Cualquiera
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED= Conocimiento de los Medios e Informaci贸n: Cualquiera
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.LanguageArts.UNSPECIFIED= Artes del Lenguage: Cualquiera
-XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Mathematics.UNSPECIFIED= Matem饊儭ticas: Cualquiera
+XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Mathematics.UNSPECIFIED= Matem谩ticas: Cualquiera
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.Science.UNSPECIFIED= Ciencia: Cualquiera
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.SocialStudies.UNSPECIFIED= Estudios Sociales: Cualquiera
 XWiki.CurrikiSpaceClass_topic_FW_masterFramework.ForeignLanguages.UNSPECIFIED= Lenguas Extranajeras: Cualquiera
@@ -349,7 +349,7 @@ XWiki.CurrikiSpaceClass_language_UNSPECIFIED= Idioma: Cualquiera
 ## XWiki.SpaceClass_policy_open=Open Membership 
 ## XWiki.SpaceClass_policy_closed=Closed Membership
 
-search.XWiki.SpaceClass_policy_UNSPECIFIED= Pol饊儹tica de Asociaci饊兂n: Ninguna
+search.XWiki.SpaceClass_policy_UNSPECIFIED= Pol铆tica de Asociaci贸n: Ninguna
 search.XWiki.SpaceClass_policy_open= Abierto
 search.XWiki.SpaceClass_policy_closed= Cerrado
 
@@ -360,9 +360,9 @@ search.group.icon.open= Abierto
 search.group.icon.closed= Cerrado
 search.group.icon.open.rollover= Grupo Abierto
 search.group.icon.closed.rollover= Grupo Cerrado
-search.group.column.header.policy= Pol饊儹tica
+search.group.column.header.policy= Pol铆tica
 search.group.column.header.name= Nombre
-search.group.column.header.description= Descripci饊兂n
+search.group.column.header.description= Descripci贸n
 search.group.column.header.updated= Actualizado
 
 
@@ -383,13 +383,13 @@ XWiki.XWikiUsers_topics_FW_masterFramework.WebHome.UNSPECIFIED= Tema: Cualquiera
 
 
 XWiki.XWikiUsers_topics_FW_masterFramework.Arts.UNSPECIFIED= Arts: Cualquiera
-XWiki.XWikiUsers_topics_FW_masterFramework.VocationalEducation.UNSPECIFIED= Carreras y Educaci饊兂n T饊儵cnica: Cualquiera
-XWiki.XWikiUsers_topics_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED= Educaci饊兂n: Cualquiera
-XWiki.XWikiUsers_topics_FW_masterFramework.EducationalTechnology.UNSPECIFIED= Tecnolog饊儹a Educacional: Cualquiera
+XWiki.XWikiUsers_topics_FW_masterFramework.VocationalEducation.UNSPECIFIED= Carreras y Educaci贸n T茅cnica: Cualquiera
+XWiki.XWikiUsers_topics_FW_masterFramework.Education&amp;Teaching.UNSPECIFIED= Educaci贸n: Cualquiera
+XWiki.XWikiUsers_topics_FW_masterFramework.EducationalTechnology.UNSPECIFIED= Tecnolog铆a Educacional: Cualquiera
 XWiki.XWikiUsers_topics_FW_masterFramework.Health.UNSPECIFIED= Salud: Cualquiera
-XWiki.XWikiUsers_topics_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED= Conocimiento de los Medios e Informaci饊兂n: Cualquiera
+XWiki.XWikiUsers_topics_FW_masterFramework.Information&amp;MediaLiteracy.UNSPECIFIED= Conocimiento de los Medios e Informaci贸n: Cualquiera
 XWiki.XWikiUsers_topics_FW_masterFramework.LanguageArts.UNSPECIFIED= Artes del Lenguage: Cualquiera
-XWiki.XWikiUsers_topics_FW_masterFramework.Mathematics.UNSPECIFIED= Matem饊儭ticas: Cualquiera
+XWiki.XWikiUsers_topics_FW_masterFramework.Mathematics.UNSPECIFIED= Matem谩ticas: Cualquiera
 XWiki.XWikiUsers_topics_FW_masterFramework.Science.UNSPECIFIED= Ciencia: Cualquiera
 XWiki.XWikiUsers_topics_FW_masterFramework.SocialStudies.UNSPECIFIED= Estudios Sociales: Cualquiera
 XWiki.XWikiUsers_topics_FW_masterFramework.ForeignLanguages.UNSPECIFIED= Lenguas Extranajeras: Cualquiera
@@ -401,15 +401,15 @@ XWiki.XWikiUsers_member_type_UNSPECIFIED= Tipo de Miembro: Cualquiera
 ##COUNTRY
 ## The naming convention follows the class names but is NOT part of the class
 
-XWiki.XWikiUsers_country_UNSPECIFIED= Pa饊儹s: Cualquiera
+XWiki.XWikiUsers_country_UNSPECIFIED= Pa铆s: Cualquiera
 
 
 ##COLUMNS
 
-search.member.column.header.picture= Fotograf饊儹a
+search.member.column.header.picture= Fotograf铆a
 search.member.column.header.name1= Nombre 1
 search.member.column.header.name2= Nombre 2
-search.member.column.header.bio= Biograf饊儹a
+search.member.column.header.bio= Biograf铆a
 search.member.column.header.contributions= Contribuciones
 search.member.column.picture.alt.text= 
 
@@ -432,7 +432,7 @@ search.blog.column.header.updated= Actualizado
 ##
 ##CURRIKI PAGE
 
-search.curriki.tab.title= P饊儭ginas de Curriki
+search.curriki.tab.title= P谩ginas de Curriki
 
 ##PAGES OR SPACES TO SEARCH
 
@@ -443,7 +443,7 @@ search.curriki.space.page.4= Licencias
 
 ##COLUMNS
 
-search.curriki.column.header.name= P饊儭gina
+search.curriki.column.header.name= P谩gina
 search.curriki.column.header.text= Texto
 search.curriki.column.header.updated= Actualizado
 

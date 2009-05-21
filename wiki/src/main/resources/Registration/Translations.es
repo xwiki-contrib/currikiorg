@@ -57,44 +57,44 @@
 </object>
 <content>#&lt;pre&gt;
 #Main.ForgotPassword
-forgotPassword.title= Contrase饊儽a olvidada
-forgotPassword.forgotUnameLink= 饊偪Ha olvidado su nombre de usuario?
-forgotPassword.infos= 饊偪Ha olvidado su contrase饊儽a? Nos ha pasado a todos. Escriba la direcci饊兂n de correo con la que se registr饊兂 y le enviaremos un e-mail con ayuda.
-forgotPassword.enterEmail= Escriba su direcci饊兂n de e-mail:
-forgotPassword.noUser= Lo siento, no hay ning饊兒n usuario con direcci饊兂n {0}
-forgotPassword.multipleUsers= Parece que hay varios nombres de usuario registrados con esta direcci饊兂n. 
+forgotPassword.title= Contrase帽a olvidada
+forgotPassword.forgotUnameLink= 驴Ha olvidado su nombre de usuario?
+forgotPassword.infos= 驴Ha olvidado su contrase帽a? Nos ha pasado a todos. Escriba la direcci贸n de correo con la que se registr贸 y le enviaremos un e-mail con ayuda.
+forgotPassword.enterEmail= Escriba su direcci贸n de e-mail:
+forgotPassword.noUser= Lo siento, no hay ning煤n usuario con direcci贸n {0}
+forgotPassword.multipleUsers= Parece que hay varios nombres de usuario registrados con esta direcci贸n. 
 forgotPassword.emailSent= El password  de {0} ha sido enviado.
-forgotPassword.invalidLink= Lo siento, el enlace que ha intentado visitar no es v饊儭lido.
-forgotPassword.passwordChanged= La contrase饊儽a de {0} ha sido modificada.
+forgotPassword.invalidLink= Lo siento, el enlace que ha intentado visitar no es v谩lido.
+forgotPassword.passwordChanged= La contrase帽a de {0} ha sido modificada.
 forgotPassword.youCanLogIn= Ahora ya puede &lt;a href="{0}"&gt;entrar&lt;/a&gt;.
-forgotPassword.passwordsDoesNotMatch= El nombre de usuario y contrase饊儽a que ha introducido no encajan. Por favor, vuelva a intentarlo.
-forgotPassword.enterPassword= Ahora puede introducir una nueva contrase饊儽a:
-forgotPassword.enterPassword.prompt= Por favor, introduzca una nueva contrase饊儽a:
-forgotPassword.enterPasswordConfirm.prompt= Por favor, confirme la nueva contrase饊儽a:
-forgotPassword.Go= 饊偂Entre!
-forgotPassword.email.mandatory= La direcci饊兂n de correo electr饊兂nico es necesaria.
-forgotPassword.email.invalid= Se necesita una direcci饊兂n de correo electr饊兂nico v饊儭lida.
+forgotPassword.passwordsDoesNotMatch= El nombre de usuario y contrase帽a que ha introducido no encajan. Por favor, vuelva a intentarlo.
+forgotPassword.enterPassword= Ahora puede introducir una nueva contrase帽a:
+forgotPassword.enterPassword.prompt= Por favor, introduzca una nueva contrase帽a:
+forgotPassword.enterPasswordConfirm.prompt= Por favor, confirme la nueva contrase帽a:
+forgotPassword.Go= 隆Entre!
+forgotPassword.email.mandatory= La direcci贸n de correo electr贸nico es necesaria.
+forgotPassword.email.invalid= Se necesita una direcci贸n de correo electr贸nico v谩lida.
 
 
 
 #Main.ForgotPasswordEmail
 
-forgotPasswordEmail.header= From: {0}To: {1}Subject: Su contrase饊儽a en curriki.org
+forgotPasswordEmail.header= From: {0}To: {1}Subject: Su contrase帽a en curriki.org
 forgotPasswordEmail.part1= Estimado {0} {1},
-forgotPasswordEmail.part2= 饊偪Ha olvidado su contrase饊儽a? Nos ha ocurrido a todos. Por razones de seguridad, s饊兂lo guardamos una copia cifrada de su contrase饊儽a, y por tanto no podemos decirle cu饊儭l era, pero puede establecer una nueva contrase饊儽a visitando el enlace {0}
-forgotPasswordEmail.part3= Su contrase饊儽a ser饊儭 modificada y entonces usted podr饊儭 volver a entrar normalmente en el sistema usando su nueva contrase饊儽a.
+forgotPasswordEmail.part2= 驴Ha olvidado su contrase帽a? Nos ha ocurrido a todos. Por razones de seguridad, s贸lo guardamos una copia cifrada de su contrase帽a, y por tanto no podemos decirle cu谩l era, pero puede establecer una nueva contrase帽a visitando el enlace {0}
+forgotPasswordEmail.part3= Su contrase帽a ser谩 modificada y entonces usted podr谩 volver a entrar normalmente en el sistema usando su nueva contrase帽a.
 
 
 
 #Main.ForgotUsername
 forgotUsername.title= Nombre de usuario olvidado
-forgotUsername.forgotPwdLink= 饊偪Ha olvidado su nombre de usuario?
-forgotUsername.infos= 饊偪Ha olvidado su nombre de usuario? Nos ha ocurrido a todos. Escriba la direcci饊兂n de correo con la que se registr饊兂 y le enviaremos un e-mail que le ayudar饊儭 a entrar.
-forgotUsername.enterEmail= Por favor, escriba su direcci饊兂n de correo:
-forgotUsername.noUser= Lo siento, no hay ning饊兒n usuario con la direcci饊兂n de correo {0}
-forgotUsername.emailSent= El nombre de usuario de {0} ha sido enviado por correo electr饊兂nico.
-forgotUsername.email.mandatory= Es necesario introducir la direcci饊兂n de correo electr饊兂nico.
-forgotUsername.email.invalid= Se necesita una direcci饊兂n v饊儭lida de correo electr饊兂nico.
+forgotUsername.forgotPwdLink= 驴Ha olvidado su nombre de usuario?
+forgotUsername.infos= 驴Ha olvidado su nombre de usuario? Nos ha ocurrido a todos. Escriba la direcci贸n de correo con la que se registr贸 y le enviaremos un e-mail que le ayudar谩 a entrar.
+forgotUsername.enterEmail= Por favor, escriba su direcci贸n de correo:
+forgotUsername.noUser= Lo siento, no hay ning煤n usuario con la direcci贸n de correo {0}
+forgotUsername.emailSent= El nombre de usuario de {0} ha sido enviado por correo electr贸nico.
+forgotUsername.email.mandatory= Es necesario introducir la direcci贸n de correo electr贸nico.
+forgotUsername.email.invalid= Se necesita una direcci贸n v谩lida de correo electr贸nico.
 
 
 
@@ -102,73 +102,73 @@ forgotUsername.email.invalid= Se necesita una direcci饊兂n v饊儭lida de correo e
 
 forgotUsernameEmail.header= From: {0}To: {1}Subject: Su nombre de usuario en curriki.org
 forgotUsernameEmail.part1= Estimado {0} {1},
-forgotUsernameEmail.part2= 饊偪Ha olvidado su nombre de usuario? Nos ha ocurrido a todos. Usted seleccion饊兂 '{0}' cuando se registr饊兂. Si ha olvidado su contrase饊儽a, haga click en "contrase饊儽a olvidada" en la parte superior de cualquier p饊儭gina de curriki.org y le enviaremos un mensaje de correo electr饊兂nico con ayuda para reestablecer su contrase饊儽a.
+forgotUsernameEmail.part2= 驴Ha olvidado su nombre de usuario? Nos ha ocurrido a todos. Usted seleccion贸 '{0}' cuando se registr贸. Si ha olvidado su contrase帽a, haga click en "contrase帽a olvidada" en la parte superior de cualquier p谩gina de curriki.org y le enviaremos un mensaje de correo electr贸nico con ayuda para reestablecer su contrase帽a.
 
 
 
 #Main.ForgotUsernamesEmail
 
 forgotUsernamesEmail.part1= Querido usuario de curriki.org,
-forgotUsernamesEmail.part2= 饊偪Ha olvidado su nombre de usuario? Nos ha ocurrido a todos. En realidad, usted se ha registrado con varios nombres de usuario diferentes: '${names}'. Si ha olvidado su contrase饊儽a, haga click en "contrase饊儽a olvidada" en la p饊儭gina de entrada, y le enviaremos un mensaje de correo electr饊兂nico con ayuda para reestablecer su contrase饊儽a.
+forgotUsernamesEmail.part2= 驴Ha olvidado su nombre de usuario? Nos ha ocurrido a todos. En realidad, usted se ha registrado con varios nombres de usuario diferentes: '${names}'. Si ha olvidado su contrase帽a, haga click en "contrase帽a olvidada" en la p谩gina de entrada, y le enviaremos un mensaje de correo electr贸nico con ayuda para reestablecer su contrase帽a.
 
 
 
 #Main.JoinCurriki
 
-joincurriki.first_name.text= Escoja un nombre por el que los miembros de Curriki le reconocer饊儭n (por ejemplo, Nombre, t饊儹tulo, apodo). 
-joincurriki.last_name.text= Escoja otro nombre para tener un nombre 饊兒nico (puede usar su apellido, compa饊儽饊儹a o ciudad)
+joincurriki.first_name.text= Escoja un nombre por el que los miembros de Curriki le reconocer谩n (por ejemplo, Nombre, t铆tulo, apodo). 
+joincurriki.last_name.text= Escoja otro nombre para tener un nombre 煤nico (puede usar su apellido, compa帽铆a o ciudad)
 
 
 
 joincurriki.fileds.xwikiname= Nombre de usuario
-joincurriki.xwikiname.badchars= Este nombre de usuario es inv饊儭lido. Por favor, introduzca un nombre de usuario sin espacios ni caracteres especiales.
+joincurriki.xwikiname.badchars= Este nombre de usuario es inv谩lido. Por favor, introduzca un nombre de usuario sin espacios ni caracteres especiales.
 joincurriki.repeat= repetir
-joincurriki.registerToJoinCurriki= Reg饊儹strese para hacerse miembro de Curriki.
-joincurriki.infos= Gracias por unirse a la comunidad de Curriki. Unirse a Curriki es su primer paso para acceder y crear recursos docentes de alta calidad. &lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Por favor, recuerde:&lt;/strong&gt; Seg饊兒n los &lt;a href="javascript:void()" onclick="showpopup('/xwiki/bin/view/Main/TOS?xpage=popup'); return false;"&gt;T饊儵rminos de Servicio&lt;/a&gt; de Curriki, usted tiene que tener al menos 13 a饊儽os de edad para poder registrarse. Ninguna persona con menos de 13 a饊儽os puede ser miembro de Curriki.
+joincurriki.registerToJoinCurriki= Reg铆strese para hacerse miembro de Curriki.
+joincurriki.infos= Gracias por unirse a la comunidad de Curriki. Unirse a Curriki es su primer paso para acceder y crear recursos docentes de alta calidad. &lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Por favor, recuerde:&lt;/strong&gt; Seg煤n los &lt;a href="javascript:void()" onclick="showpopup('/xwiki/bin/view/Main/TOS?xpage=popup'); return false;"&gt;T茅rminos de Servicio&lt;/a&gt; de Curriki, usted tiene que tener al menos 13 a帽os de edad para poder registrarse. Ninguna persona con menos de 13 a帽os puede ser miembro de Curriki.
 
-joincurriki.letsKnowWhoYouAre= Perm饊儹tanos saber qui饊儵n es usted
-joincurriki.enterRequestedInfo= Introduzca toda la informaci饊兂n solicitada si quiere hacerse un miembro con perfil p饊兒blico. Los datos marcados con un signo de admiraci饊兂n (!) son obligatorios.
+joincurriki.letsKnowWhoYouAre= Perm铆tanos saber qui茅n es usted
+joincurriki.enterRequestedInfo= Introduzca toda la informaci贸n solicitada si quiere hacerse un miembro con perfil p煤blico. Los datos marcados con un signo de admiraci贸n (!) son obligatorios.
 
-joincurriki.enterPassword= Introduzca su contrase饊儽a.
-joincurriki.enterPasswordConfirm= Confirme su contrase饊儽a.
-joincurriki.enterValidEmail= Por favor, introduzca una direcci饊兂n v饊儭lida de correo electr饊兂nico. Se enviar饊儭n a esta direcci饊兂n instrucciones para completar el proceso de registro.
+joincurriki.enterPassword= Introduzca su contrase帽a.
+joincurriki.enterPasswordConfirm= Confirme su contrase帽a.
+joincurriki.enterValidEmail= Por favor, introduzca una direcci贸n v谩lida de correo electr贸nico. Se enviar谩n a esta direcci贸n instrucciones para completar el proceso de registro.
 joincurriki.ifApplicable= (si es preciso)
-joincurriki.showContact= Esto permite a otros miembros de Curriki ver su informaci饊兂n personal. 
+joincurriki.showContact= Esto permite a otros miembros de Curriki ver su informaci贸n personal. 
 joincurriki.fileds.age= Edad
-joincurriki.iAm13YearsOld= Tengo al menos 13 a饊儽os.
-joincurriki.privacyAndTOS= Privacidad y t饊儵rminos de uso.
-joincurriki.privacyAndTOS.read.part1= He le饊儹do, entendido, y estoy de acuerdo con 
+joincurriki.iAm13YearsOld= Tengo al menos 13 a帽os.
+joincurriki.privacyAndTOS= Privacidad y t茅rminos de uso.
+joincurriki.privacyAndTOS.read.part1= He le铆do, entendido, y estoy de acuerdo con 
 joincurriki.privacyAndTOS.read.part2= y el
 joincurriki.iAgree= Estoy de acuerdo
-joincurriki.emailWillBeSent= Cuando haga click sobre Guardar y Registrar, Curriki le enviar饊儭 un mensaje de confirmaci饊兂n a la direcci饊兂n de correo electr饊兂nico escrita arriba
+joincurriki.emailWillBeSent= Cuando haga click sobre Guardar y Registrar, Curriki le enviar谩 un mensaje de confirmaci贸n a la direcci贸n de correo electr贸nico escrita arriba
 
-joincurriki.password.noSpaces= No se permiten espacios en la contrase饊儽a.
-joincurriki.password.tooShort= La contrase饊儽a es demasiado corta.
-joincurriki.password.noMatch= La contrase饊儽a no coincide.
-joincurriki.email.invalidFormat= El formato de la direcci饊兂n de correo electr饊兂nico es inv饊儭lido.
-joincurriki.someDataMissing= Faltan algunos datos; mire las 饊儭reas destacadas.
-joincurriki.email.alreadyUsed= Su direcci饊兂n de correo electr饊兂nico ya ha sido usada.
+joincurriki.password.noSpaces= No se permiten espacios en la contrase帽a.
+joincurriki.password.tooShort= La contrase帽a es demasiado corta.
+joincurriki.password.noMatch= La contrase帽a no coincide.
+joincurriki.email.invalidFormat= El formato de la direcci贸n de correo electr贸nico es inv谩lido.
+joincurriki.someDataMissing= Faltan algunos datos; mire las 谩reas destacadas.
+joincurriki.email.alreadyUsed= Su direcci贸n de correo electr贸nico ya ha sido usada.
 joincurriki.login.alreadyUsed= Su nombre de usuario ya ha sido usado.
-joincurriki.saveMyInfoAndRegister= Guardar Informaci饊兂n y Registrar
+joincurriki.saveMyInfoAndRegister= Guardar Informaci贸n y Registrar
 joincurriki.accountCreated= Su cuenta ha sido creada. Ya puede entrar.
-joincurriki.chooseOptOut= No quiero recibir correo sobre formas de participaci饊兂n en Curriki. 
+joincurriki.chooseOptOut= No quiero recibir correo sobre formas de participaci贸n en Curriki. 
 joincurriki.topics= 
 
 joincurriki.fields.xwikiname= Nombre de usuario
-joincurriki.chooseYourCommunityName= Usar饊儭 este nombre para acceder a su cuenta.
+joincurriki.chooseYourCommunityName= Usar谩 este nombre para acceder a su cuenta.
 joincurriki.fields.age= Edad
 joincurriki.fields.first_name= Nombre:
 joincurriki.fields.last_name= Apellido:
-joincurriki.fields.password= Contrase饊儽a:
-joincurriki.fields.password2= Contrase饊儽a (repetici饊兂n):
-joincurriki.fields.email= Direcci饊兂n de correo electr饊兂nico:
-joincurriki.fields.opt_out= No recibir correo electr饊兂nico:
-joincurriki.fields.topics= 饊儊reas de inter饊儵s:
+joincurriki.fields.password= Contrase帽a:
+joincurriki.fields.password2= Contrase帽a (repetici贸n):
+joincurriki.fields.email= Direcci贸n de correo electr贸nico:
+joincurriki.fields.opt_out= No recibir correo electr贸nico:
+joincurriki.fields.topics= 脕reas de inter茅s:
 joincurriki.fields.member_type= Tipo de miembro:
-joincurriki.fields.country= Pa饊儹s:
+joincurriki.fields.country= Pa铆s:
 joincurriki.fields.state= Estado/provincia:
 joincurriki.fields.city= Ciudad:
-joincurriki.fields.affiliation= Organizaci饊兂n de afiliaci饊兂n:
+joincurriki.fields.affiliation= Organizaci贸n de afiliaci贸n:
 joincurriki.fields.show_contact= Mostrar su perfil:
 
 #XWiki.XWikiUserSheet
@@ -176,63 +176,63 @@ joincurriki.fields.show_contact= Mostrar su perfil:
 profile.edit= Editar perfil
 profile.accessDenied= Debe estar registrado como miembro de Curriki para ver perfiles de miembros.
 profile.userNotVisible= Este miembro prefiere no mostrar su perfil.
-profile.removePhoto.confirmation= 饊偪Seguro que quiere borrar su foto?
+profile.removePhoto.confirmation= 驴Seguro que quiere borrar su foto?
 profile.removePhoto= Borrar foto
 profile.removeYourPhoto= Borrar su foto
 profile.modifyYourPhoto= Cambiar su foto
 profile.changeMyPhoto= Cambiar mi foto
-profile.changeMyPhoto.needToRemove= Antes tiene que borrar su foto. 饊偪Seguro que quiere hacerlo?
+profile.changeMyPhoto.needToRemove= Antes tiene que borrar su foto. 驴Seguro que quiere hacerlo?
 profile.field.firstName= Nombre:
 profile.field.lastName= Apellido:
 profile.field.display.firstName= Nombre:
 profile.field.display.lastName= Apellido:
 profile.field.memberType= Tipo de miembro:
-profile.field.affiliation= Organizaci饊兂n de afiliaci饊兂n:
-profile.field.country= Pa饊儹s:
+profile.field.affiliation= Organizaci贸n de afiliaci贸n:
+profile.field.country= Pa铆s:
 profile.field.state= Estado/provincia:
 profile.field.city= Ciudad:
 profile.field.showContact= Permitir que los miembros de Curriki vean mi perfil:
-profile.field.email= Direcci饊兂n de correo electr饊兂nico:
-profile.field.opt_out= No recebir mensajes de correo electr饊兂nico:
-profile.field.opt_out.checkbox_text= No quiero recibir correo sobre c饊兂mo participar en la comunidad de Curriki.
-profile.field.password= Contrase饊儽a:
-profile.field.passwordConfirm= Confirmar contrase饊儽a:
-profile.field.topics= 饊儊reas de inter饊儵s:
-profile.field.bio= Biograf饊儹a:
+profile.field.email= Direcci贸n de correo electr贸nico:
+profile.field.opt_out= No recebir mensajes de correo electr贸nico:
+profile.field.opt_out.checkbox_text= No quiero recibir correo sobre c贸mo participar en la comunidad de Curriki.
+profile.field.password= Contrase帽a:
+profile.field.passwordConfirm= Confirmar contrase帽a:
+profile.field.topics= 脕reas de inter茅s:
+profile.field.bio= Biograf铆a:
 profile.emptyField= &amp;ndash;
 
-profile.chooseAPhoto= Escoja una fotograf饊儹a:
+profile.chooseAPhoto= Escoja una fotograf铆a:
 
-profile.field.password.nospaces= No se permiten espacio en la contrase饊儽a.
-profile.field.password.tooShort= La contrase饊儽a es demasiado corta.
-profile.field.password.mustMatch= La contrase饊儽a no coincide.
+profile.field.password.nospaces= No se permiten espacio en la contrase帽a.
+profile.field.password.tooShort= La contrase帽a es demasiado corta.
+profile.field.password.mustMatch= La contrase帽a no coincide.
 profile.field.firstName.mandatory= El nombre es un dato necesario.
 profile.field.lastName.mandatory= El apellido es un dato necesario.
-profile.field.email.mandatory= La direcci饊兂n del correo electr饊兂nico es un dato necesario.
-profile.field.email.invalid= La direcci饊兂n de correo electr饊兂nica no es v饊儭lida.
+profile.field.email.mandatory= La direcci贸n del correo electr贸nico es un dato necesario.
+profile.field.email.invalid= La direcci贸n de correo electr贸nica no es v谩lida.
 
 # Registration pages information
 registration.email= webmaster@curriki.org
-registration.validate.validated= 饊偂Ya se ha completado el proceso de registro!&lt;br /&gt;
+registration.validate.validated= 隆Ya se ha completado el proceso de registro!&lt;br /&gt;
 registration.login_button= OK
-registration.validate.failed.bad_key_or_loginname= Lo siento, o el nombre de usuario o la clave de validaci饊兂n es incorrecto. Por favor, vuelva a intentarlo.
-registration.validate.failed.no_info= La informaci饊兂n requerida no ha sido aceptada.
+registration.validate.failed.bad_key_or_loginname= Lo siento, o el nombre de usuario o la clave de validaci贸n es incorrecto. Por favor, vuelva a intentarlo.
+registration.validate.failed.no_info= La informaci贸n requerida no ha sido aceptada.
 
 # Registration.EmailNotReceived
-email_not_received.title= Direcci饊兂n de correo electr饊兂nico no recibida
-email_not_received.info= Por favor, rellene la informaci饊兂n solicitada a continuaci饊兂n, cuando haya acabado pulse ENVIAR.
-email_not_received.required= Los datos marcados con un signo de exclamaci饊兂n (!) son necesarios.
+email_not_received.title= Direcci贸n de correo electr贸nico no recibida
+email_not_received.info= Por favor, rellene la informaci贸n solicitada a continuaci贸n, cuando haya acabado pulse ENVIAR.
+email_not_received.required= Los datos marcados con un signo de exclamaci贸n (!) son necesarios.
 email_not_received.login= Nombre de usuario:
-email_not_received.email= Direcci饊兂n de correo electr饊兂nico:
-email_not_received.phone= N饊兒mero de tel饊儵fono:
-email_not_received.client= Cliente de correo electr饊兂nico (por ejemplo, Outlook)
+email_not_received.email= Direcci贸n de correo electr贸nico:
+email_not_received.phone= N煤mero de tel茅fono:
+email_not_received.client= Cliente de correo electr贸nico (por ejemplo, Outlook)
 email_not_received.button= ENVIAR
 email_not_received.missing= Por favor, rellene todos los datos necesarios.
 email_not_received.error.need_login= Por favor, introduzca un nombre de usuario
-email_not_received.error.need_email= Por favor, introduzca su direcci饊兂n de correo electr饊兂nico
-email_not_received.error.need_phone= Por favor, introduzca su n饊兒mero de tel饊儵fono
+email_not_received.error.need_email= Por favor, introduzca su direcci贸n de correo electr贸nico
+email_not_received.error.need_phone= Por favor, introduzca su n煤mero de tel茅fono
 
-email_not_received.email_sent= Gracias por ponerse en contacto con Curriki. Un representante se podr饊儭 en contacto con usted.&lt;br /&gt;&lt;br /&gt;&lt;a href="/xwiki/bin/view/Main/" class="button button-orange"&gt;OK&lt;/a&gt;
+email_not_received.email_sent= Gracias por ponerse en contacto con Curriki. Un representante se podr谩 en contacto con usted.&lt;br /&gt;&lt;br /&gt;&lt;a href="/xwiki/bin/view/Main/" class="button button-orange"&gt;OK&lt;/a&gt;
 email_not_received_sent.title= Enviado mensaje de correo no recibido
 
 #Header
@@ -244,52 +244,52 @@ username= Nombre de usuario
 ## Email Validation
 emailValidation.step1.errNoUser= No se ha proporcionado un nombre de usuario.
 emailValidation.step1.errNotFound= Usuario no encontrado.
-emailValidation.step1.errNotBounced= El correo no est饊儭 rebotando.
-emailValidation.step1.errNoEmail= Por favor, introduzca una direcci饊兂n de correo electr饊兂nico.
-emailValidation.step1.errBadEmail= Por favor, introduzca una direcci饊兂n v饊儭lida de correo electr饊兂nico.
-emailValidation.step1.errDupEmail= Esa direcci饊兂n de correo electr饊兂nico est饊儭 siendo usada por otro usuario.
+emailValidation.step1.errNotBounced= El correo no est谩 rebotando.
+emailValidation.step1.errNoEmail= Por favor, introduzca una direcci贸n de correo electr贸nico.
+emailValidation.step1.errBadEmail= Por favor, introduzca una direcci贸n v谩lida de correo electr贸nico.
+emailValidation.step1.errDupEmail= Esa direcci贸n de correo electr贸nico est谩 siendo usada por otro usuario.
 
-emailValidation.step1.title= Comprobaci饊兂n de correo - Paso 1 de 2
-emailValidation.step1.intro= La seguridad de nuestros miembros es la m饊儭xima preocupaci饊兂n de Curriki. Para mantener la seguridad, Curriki comprueba todas las direcciones de correo electr饊兂nico.
+emailValidation.step1.title= Comprobaci贸n de correo - Paso 1 de 2
+emailValidation.step1.intro= La seguridad de nuestros miembros es la m谩xima preocupaci贸n de Curriki. Para mantener la seguridad, Curriki comprueba todas las direcciones de correo electr贸nico.
 emailValidation.step1.weHave= Para {0} {1} nuestro registros muestran {2}.
-emailValidation.step1.pleaseSubmit= Apriete el bot饊兂n Enviar para enviar un mensaje de comprobaci饊兂n a esta direcci饊兂n. O modifique su direcci饊兂n de correo electr饊兂nico (su perfil se actualizar饊儭 autom饊儭ticamente) y entonces apriete Enviar.
+emailValidation.step1.pleaseSubmit= Apriete el bot贸n Enviar para enviar un mensaje de comprobaci贸n a esta direcci贸n. O modifique su direcci贸n de correo electr贸nico (su perfil se actualizar谩 autom谩ticamente) y entonces apriete Enviar.
 emailValidation.step1.submit= Enviar
 
-emailValidation.step1.goElsewhere= Cualquier cambio hecho en la p饊儭gina se perder饊儭. Seleccione OK para terminar la sesi饊兂n y volver a la p饊儭gina inicial. Podr饊儭 volver a este formulario al entrar en su cuenta. Seleccione Cancelar para volver al formulario y enviar sus cambios.
+emailValidation.step1.goElsewhere= Cualquier cambio hecho en la p谩gina se perder谩. Seleccione OK para terminar la sesi贸n y volver a la p谩gina inicial. Podr谩 volver a este formulario al entrar en su cuenta. Seleccione Cancelar para volver al formulario y enviar sus cambios.
 
-emailValidation.sent.title= Mensaje de verificaci饊兂n enviado
-emailValidation.sent.text= &lt;p&gt;Se ha completado el primer paso de verificaci饊兂n de su direcci饊兂n de correo electr饊兂nico. &lt;/p&gt;&lt;p&gt;Para completar el segundo paso, compruebe por favor si ha llegado a su bandeja de entrada un mensaje de webmaster@curriki.org&lt;/p&gt;&lt;p&gt;Si no ve este correo, puede ser debido a su filtro anti-spam. Mire tambi饊儵n en su carpeta de spam, y aseg饊兒rese de a饊儽adir curriki.org a su lista o agenda de "remitentes seguros".&lt;/p&gt; 
-emailValidation.sent.notreceived= Si no ha recibido un mensaje dentro de 10 minutos, por favor, p饊兂ngase en contacto con Curriki usando el formulario de &lt;a href="/xwiki/bin/view/Registration/EmailNotReceived"&gt;Email no recibido&lt;/a&gt;.
+emailValidation.sent.title= Mensaje de verificaci贸n enviado
+emailValidation.sent.text= &lt;p&gt;Se ha completado el primer paso de verificaci贸n de su direcci贸n de correo electr贸nico. &lt;/p&gt;&lt;p&gt;Para completar el segundo paso, compruebe por favor si ha llegado a su bandeja de entrada un mensaje de webmaster@curriki.org&lt;/p&gt;&lt;p&gt;Si no ve este correo, puede ser debido a su filtro anti-spam. Mire tambi茅n en su carpeta de spam, y aseg煤rese de a帽adir curriki.org a su lista o agenda de "remitentes seguros".&lt;/p&gt; 
+emailValidation.sent.notreceived= Si no ha recibido un mensaje dentro de 10 minutos, por favor, p贸ngase en contacto con Curriki usando el formulario de &lt;a href="/xwiki/bin/view/Registration/EmailNotReceived"&gt;Email no recibido&lt;/a&gt;.
 
-emailValidation.step2.title= Correo electr饊兂nico verificado - Paso 2 de 2 completado.
-emailValidation.step2.text= &lt;p&gt;Su direcci饊兂n de correo electr饊兂nico ha sido confirmada.&lt;/p&gt;&lt;p&gt;Gracias.&lt;/p&gt;
+emailValidation.step2.title= Correo electr贸nico verificado - Paso 2 de 2 completado.
+emailValidation.step2.text= &lt;p&gt;Su direcci贸n de correo electr贸nico ha sido confirmada.&lt;/p&gt;&lt;p&gt;Gracias.&lt;/p&gt;
 emailValidation.step2.ok= OK
 
-emailValidation.step2.errNoUser= Usuario inv饊儭lido.
-emailValidation.step2.errNoVkey= Clave inv饊儭lida.
-emailValidation.step2.errBadVkey= Clave inv饊儭lida.
+emailValidation.step2.errNoUser= Usuario inv谩lido.
+emailValidation.step2.errNoVkey= Clave inv谩lida.
+emailValidation.step2.errBadVkey= Clave inv谩lida.
 emailValidation.step2.errNotFound= Usuario no encontrado.
-emailValidation.step2.errNotBounced= El correo no est饊儭 rebotando.
+emailValidation.step2.errNotBounced= El correo no est谩 rebotando.
 
 staf.dialog.title= Enviar a un amigo
-staf.dialog.recipients= Direccion(es) de correo electr饊兂nico de el(los) destinatario(s):
-staf.dialog.recipients.comments= Separe las direcciones de correo electr饊兂nico con comas.
+staf.dialog.recipients= Direccion(es) de correo electr贸nico de el(los) destinatario(s):
+staf.dialog.recipients.comments= Separe las direcciones de correo electr贸nico con comas.
 staf.dialog.customize= Personalizar mensaje (opcional):
-staf.dialog.customize.default= Aqu饊儹 hay un recurso estupendo que he encontrado en Curriki (una comunidad global de educaci饊兂n y aprendizaje) que creo que te va a gustar.
+staf.dialog.customize.default= Aqu铆 hay un recurso estupendo que he encontrado en Curriki (una comunidad global de educaci贸n y aprendizaje) que creo que te va a gustar.
 staf.dialog.yourname= Tu nombre:
-staf.dialog.ccme= Env饊儹ame una copia
-staf.dialog.youremail= Tu direcci饊兂n de correo electr饊兂nico:
-staf.dialog.privacy= Tu direcci饊兂n de correo electr饊兂nico se usa para indicarle a tus amigos qui饊儵n les env饊儹a este mensaje. Las direcciones de correo electr饊兂nico de sus amigos se usar饊儭n 饊兒nicamente para enviar este mensaje, y no ser饊儭n guardadas en ning饊兒n sitio. Si tiene dudas, lea por favor la &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Pol饊儹tica de Privacidad&lt;/a&gt; para conocer m饊儭s detalles.
+staf.dialog.ccme= Env铆ame una copia
+staf.dialog.youremail= Tu direcci贸n de correo electr贸nico:
+staf.dialog.privacy= Tu direcci贸n de correo electr贸nico se usa para indicarle a tus amigos qui茅n les env铆a este mensaje. Las direcciones de correo electr贸nico de sus amigos se usar谩n 煤nicamente para enviar este mensaje, y no ser谩n guardadas en ning煤n sitio. Si tiene dudas, lea por favor la &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Pol铆tica de Privacidad&lt;/a&gt; para conocer m谩s detalles.
 staf.dialog.cancel= Cancelar
 staf.dialog.send= Enviar
-staf.dialog.shouldcancel= La informaci饊兂n introducida se perder饊儭. 饊偪Seguro que quiere salir? 
+staf.dialog.shouldcancel= La informaci贸n introducida se perder谩. 驴Seguro que quiere salir? 
 
 staf.from= sendtoafriend@curriki.org
 
 staf.sent.okaymsg= Mensaje enviado.
-staf.err.emptyto= Por favor, introduzca una direcci饊兂n electr饊兂nica.
-staf.err.invalidemail= Por favor, introduzca una direcci饊兂n v饊儭lida de correo electr饊兂nico.
-staf.err.isguest= S饊兂lo los miembros de Curriki pueden enviar recursos a amigos. Por favor, entre en su cuenta o h饊儭gase miembro.
+staf.err.emptyto= Por favor, introduzca una direcci贸n electr贸nica.
+staf.err.invalidemail= Por favor, introduzca una direcci贸n v谩lida de correo electr贸nico.
+staf.err.isguest= S贸lo los miembros de Curriki pueden enviar recursos a amigos. Por favor, entre en su cuenta o h谩gase miembro.
 staf.sent.errored= Se ha producido un error desconocido.
 
 ##AFFILIATE REGISTRATION ERROR MESSAGES
