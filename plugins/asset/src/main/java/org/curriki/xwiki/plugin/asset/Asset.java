@@ -801,19 +801,19 @@ public class Asset extends CurrikiDocument {
                     // CURRIKI-4377 - inherit grade level, topic, language, and licence from group
                     if (parentAsset == null || parentAsset.length() == 0) {
                         // educationLevel
-                        List edLevels = rObj.getListValue(Contants.GROUP_DEFAULT_GRADE_PROPERTY);
+                        List edLevels = rObj.getListValue(Constants.GROUP_DEFAULT_GRADE_PROPERTY);
                         assetObj.setDBStringListValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, edLevels);
 
                         // topic
-                        List topics = rObj.getListValue(Contants.GROUP_DEFAULT_TOPIC_PROPERTY);
+                        List topics = rObj.getListValue(Constants.GROUP_DEFAULT_TOPIC_PROPERTY);
                         assetObj.setDBStringListValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, topics);
 
                         // language
-                        String lang = rObj.getStringValue(Contants.GROUP_DEFAULT_LANGUAGE_PROPERTY);
+                        String lang = rObj.getStringValue(Constants.GROUP_DEFAULT_LANGUAGE_PROPERTY);
                         assetObj.setStringValue(Constants.ASSET_CLASS_LANGUAGE, lang);
 
                         // licence
-                        String licence = rObj.getStringValue(Contants.GROUP_DEFAULT_LICENCE_PROPERTY);
+                        String licence = rObj.getStringValue(Constants.GROUP_DEFAULT_LICENCE_PROPERTY);
                         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, licence);
                     }
                 }
