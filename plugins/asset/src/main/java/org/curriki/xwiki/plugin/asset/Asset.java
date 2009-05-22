@@ -771,6 +771,11 @@ public class Asset extends CurrikiDocument {
             assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
         }
 
+        BaseObject newLicenceObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
+        if (newLicenceObj == null) {
+            newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
+        }
+
         // CURRIKI-2451 - Make sure group rights are used by default
         if (publishSpace != null && publishSpace.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
             String groupSpace = publishSpace.replaceFirst("^"+Constants.GROUP_COLLECTION_SPACE_PREFIX, Constants.GROUP_SPACE_PREFIX);
@@ -790,6 +795,26 @@ public class Asset extends CurrikiDocument {
                         rights = Constants.ASSET_CLASS_RIGHT_MEMBERS;
                     } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PUBLIC)){
                         rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
+                    }
+
+
+                    // CURRIKI-4377 - inherit grade level, topic, language, and licence from group
+                    if (parentAsset == null || parentAsset.length() == 0) {
+                        // educationLevel
+                        List edLevels = rObj.getListValue(Contants.GROUP_DEFAULT_GRADE_PROPERTY);
+                        assetObj.setDBStringListValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, edLevels);
+
+                        // topic
+                        List topics = rObj.getListValue(Contants.GROUP_DEFAULT_TOPIC_PROPERTY);
+                        assetObj.setDBStringListValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, topics);
+
+                        // language
+                        String lang = rObj.getStringValue(Contants.GROUP_DEFAULT_LANGUAGE_PROPERTY);
+                        assetObj.setStringValue(Constants.ASSET_CLASS_LANGUAGE, lang);
+
+                        // licence
+                        String licence = rObj.getStringValue(Contants.GROUP_DEFAULT_LICENCE_PROPERTY);
+                        newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, licence);
                     }
                 }
             }
@@ -821,10 +846,6 @@ public class Asset extends CurrikiDocument {
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, Constants.ASSET_CLASS_RIGHT_PUBLIC);
         }
 
-        BaseObject newLicenceObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
-        if (newLicenceObj == null) {
-            newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
-        }
         // the Root collection does not have an asset Licence class
         if (parentDoc != null && parentDoc.getObject(Constants.ASSET_LICENCE_CLASS) != null) {
             BaseObject parentLicenceObjAsset = parentDoc.getObject(Constants.ASSET_LICENCE_CLASS);
