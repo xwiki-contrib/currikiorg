@@ -215,6 +215,11 @@ public interface Constants {
     String GROUP_RIGHT_PROTECTED = "protected";
     String GROUP_RIGHT_PRIVATE = "private";
 
+    String GROUP_DEFAULT_LICENCE_PROPERTY = "licence";
+    String GROUP_DEFAULT_TOPIC_PROPERTY = "topic";
+    String GROUP_DEFAULT_LANGUAGE_PROPERTY = "language";
+    String GROUP_DEFAULT_GRADE_PROPERTY = "educationLevel";
+
     /**
      * Rights
      */
