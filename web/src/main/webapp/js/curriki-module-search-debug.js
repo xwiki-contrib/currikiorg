@@ -449,7 +449,7 @@ data.init = function(){
 
 	f.data.review = {
 		list: [
-			'partners', 'highest_rated'
+			'partners', 'highest_rated', 'members.highest_rated'
 		]
 		,data: [
 			['', _('search.resource.review.selector.UNSPECIFIED')]
@@ -551,6 +551,8 @@ data.init = function(){
 		,{ name: 'contributor' }
 		,{ name: 'contributorName' }
 		,{ name: 'rating', mapping: 'review' }
+		,{ name: 'memberRating', mapping: 'rating' }
+		,{ name: 'ratingCount' }
 		,{ name: 'description' }
 		,{ name: 'fwItems' }
 		,{ name: 'levels' }
@@ -646,6 +648,17 @@ data.init = function(){
 				metadata.css = String.format('crs-{0}', value); // Added to <td>
 				//metadata.attr = String.format('title="{0}"', _('curriki.crs.rating'+value)); // Added to <div> around the returned HTML
 				return String.format('<img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL);
+			} else {
+				return String.format('');
+			}
+		}
+
+		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
+			if (value != "") {
+				var page = record.id.replace(/\./, '/');
+				var ratingCount = record.data.rating_count;
+
+				return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" ext:qtip="{4}">Rated {0} ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value));
 			} else {
 				return String.format('');
 			}
@@ -1124,7 +1137,7 @@ form.init = function(){
 		,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
-			,width: 181
+			,width: 141
 			,dataIndex: 'title'
 			,sortable:true
 			,hideable:false
@@ -1132,7 +1145,7 @@ form.init = function(){
 //			,tooltip:_('search.resource.column.header.title')
 		},{
 			id: 'ict'
-			,width: 171
+			,width: 131
 			,header: _('search.resource.column.header.ict')
 			,dataIndex:'ictText'
 			,sortable:true
@@ -1140,7 +1153,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.ict')
 		},{
 			id: 'contributor'
-			,width: 141
+			,width: 137
 			,header: _('search.resource.column.header.contributor')
 			,dataIndex:'contributor'
 			,sortable:true
@@ -1154,6 +1167,14 @@ form.init = function(){
 			,sortable:true
 			,renderer: data.renderer.rating
 //			,tooltip: _('search.resource.column.header.rating')
+		},{
+			id: 'memberRating'
+			,width: 84
+			,header: _('search.resource.column.header.member.rating')
+			,dataIndex:'memberRating'
+			,sortable:true
+			,renderer: data.renderer.memberRating
+//			,tooltip: _('search.resource.column.header.member.rating')
 		},{
 			id: 'updated'
 			,width: 80
