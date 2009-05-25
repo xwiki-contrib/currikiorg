@@ -359,7 +359,7 @@ data.init = function(){
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
 			if (value != "") {
 				var page = record.id.replace(/\./, '/');
-				var ratingCount = record.data.rating_count;
+				var ratingCount = record.data.ratingCount;
 
 				return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" ext:qtip="{4}">Rated {0} ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value));
 			} else {
