@@ -361,7 +361,7 @@ data.init = function(){
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
 
-				return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" ext:qtip="{4}">Rated {0} ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value));
+				return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}">Rated {0} ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value));
 			} else {
 				return String.format('');
 			}
