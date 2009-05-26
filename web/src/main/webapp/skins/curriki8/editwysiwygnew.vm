@@ -1,3 +1,17 @@
+## Smartclient
+$xwiki.jsfx.use("js/smartclient/initsc.js", true)
+$xwiki.jsfx.use("js/smartclient/modules/ISC_Core.js")
+## TODO: remove this line   
+## when http://forums.smartclient.com/showthread.php?t=3097 will be fixed
+$xwiki.jsfx.use("js/smartclient/overwritesc.js")
+$xwiki.jsfx.use("js/smartclient/modules/ISC_Foundation.js")
+$xwiki.jsfx.use("js/smartclient/modules/ISC_Containers.js")
+$xwiki.jsfx.use("js/smartclient/modules/ISC_Grids.js")
+$xwiki.jsfx.use("js/smartclient/modules/ISC_Forms.js")
+$xwiki.jsfx.use("js/smartclient/modules/ISC_DataBinding.js")
+$xwiki.jsfx.use("js/smartclient/skins/Enterprise/load_skin.js")
+## XWikiExplorer
+$xwiki.jsfx.use("js/xwiki/xwikiexplorer/xwikiexplorer.js", true)
 #set($formname = "edit")
 #set($saveaction = "save")
 #set($previewenabled = true)
@@ -56,7 +70,7 @@ $request.getSession().setAttribute("com.xpn.xwiki.wysiwyg.input", $wysiwygInput)
 ##
 #set($inputURLQueryString = "xpage=wysiwyginput&key=${wysiwygKey}")
 #if(!($request.sync || $reuseKey))
-#set($inputURLQueryString = $inputURLQueryString + "&render")
+#set($inputURLQueryString = $inputURLQueryString + "&render=true")
 #end
 ##
 ## Determine the initial content of the editor.
@@ -80,41 +94,46 @@ $request.getSession().setAttribute("com.xpn.xwiki.wysiwyg.input", $wysiwygInput)
 #end
 #end
 ##
-## The editor will replace the following text area with its own widget.
-## If JavaScript is disabled the user will still be able to edit the document using this HTML text area.
-##
-$xwiki.getTextArea($tdoc.content)
-##
 ## Configure the WYSIWYG editor.
 ##
 <script type="text/javascript">
 //<![CDATA[
     // Global configuration.
     var Wysiwyg = {
-      xwikiservice: '${request.contextPath}/XWikiService',
-      wysiwygServiceURL: '${request.contextPath}/WysiwygService'
+        xwikiservice: '${request.contextPath}/XWikiService',
+        wysiwygServiceURL: '${request.contextPath}/WysiwygService'        
     };
+    var WysiwygConfigurations = new Array();
+
     // Instance configuration.
-    var Wysiwyg0 = {
-      hookId: 'content',
-      inputURL: "${tdoc.getExternalURL("view", $inputURLQueryString)}",
+    WysiwygConfigurations.push({
+        hookId: "content",        
+        displayTabs: false,
+        defaultEditor: "wysiwyg",
+        inputURL: "${tdoc.getExternalURL("view", $inputURLQueryString)}",
+        plugins: 'submit line separator text valign list indent history format symbol link image table macro importer#if($request.sync) sync#end font color justify',
+        syntax: "$doc.syntaxId",
+        menu: 'link image table macro',
+        toolbar: 'bold italic underline strikethrough | subscript superscript | justifyleft justifycenter justifyright justifyfull | forecolor backcolor fontname fontsize |  unorderedlist orderedlist | outdent indent | undo redo | format | hr symbol | link unlink | importer',
+        wiki: '${doc.wiki.replace("'", "\'")}',
+        space: '${doc.space.replace("'", "\'")}',
+        page: '${doc.name.replace("'", "\'")}',
+        debug: #if($request.debug)'true'#else'false'#end        
 #if($request.sync)
-      syncPage: '$doc.fullName',
-      plugins: 'separator text valign list indent undo format symbol link image table macro importer font color justify sync',
- #if($request.reset=="1")
-      syncReset: 1,
- #end
-#else
-      plugins: 'separator text valign list indent undo format symbol link image table macro importer font color justify',
-#end 
-      syntax: "$doc.syntaxId",
-      toolbar: 'bold italic underline strikethrough | subscript superscript | justifyleft justifycenter justifyright justifyfull | forecolor backcolor fontname fontsize |  unorderedlist orderedlist | outdent indent | undo redo | format | hr symbol | link unlink | importer | image | inserttable deletetable | insertrowbefore insertrowafter deleterow | insertcolbefore insertcolafter deletecol',
-      space: '${doc.space}',
-      page: '${doc.name}',
-      debug: #if($request.debug)'true'#else'false'#end
-    };
+        // Additional configuration for the real-time editing feature.
+        syncPage: '${doc.fullName.replace("'", "\'")}',       
+#if($request.reset=="1")
+        syncReset: 1
+#end
+#end
+    });
 //]]>
 </script>
+##
+## The editor will replace the following text area with its own widget.
+## If JavaScript is disabled the user will still be able to edit the document using this HTML text area.
+##
+$xwiki.getTextArea($tdoc.content)
 #else
 #warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$doc.syntaxId</em>.")
 #end
