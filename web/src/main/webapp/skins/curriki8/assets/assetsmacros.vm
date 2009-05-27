@@ -757,6 +757,29 @@ $asset.use("CurrikiCode.AssetClass")
 </div> ##asset-wrapper
 #end
 
+#**
+ * Display comment text
+ #*
+#macro(asset_comment_text $asset $comment) ##{
+#set($r = $!asset.getValue("rating", $comment))
+#if("$!r" != "" && "$!r" != "0") ##{
+<div class="comment-rating rating-${r}">
+<strong>$msg.get("rve.comments.commentrating.rating.display_header")</strong>
+<p>
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" />
+</p>
+</div>
+##}
+#set($c = $!asset.getValue("comment", $comment).replaceAll("\n","<br />"))
+#if("$!c" != "") ##{
+<div class="comment-text">
+<strong>$msg.get("rve.comments.commentrating.comment.display_header")</strong>
+<p>
+$c
+</p>
+</div>
+#end ##}
+#end ##}
 
 #**
  * Display one asset comment
@@ -772,9 +795,7 @@ $asset.use($comment)
         <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
         <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
         <li id="comment-text-${comment.number}" class="comment-text">
-            <p>
-                $asset.getValue("comment", $comment).replaceAll("\n","<br />")
-            </p>
+	    #asset_comment_text($asset $comment)
         </li>
         <li class="comment-action">
             #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
@@ -831,12 +852,23 @@ $asset.use($comment)
                 <fieldset>
                     <label>$msg.get("rve.comments.comment.add_title")</label>
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
+                    <br />
+                    <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
+                    <input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
                 </fieldset>
                 <fieldset class="buttons">
                     <input type="button" class="button button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" 
                            onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
                     <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
                 </fieldset>
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+var nr = new Curriki.ui.Rating();
+nr.applyToMarkup('XWiki.XWikiComments_rating');
+/* ]]> */
+</script>
+{/pre}
             </form>
         </div>
     </div>
@@ -999,15 +1031,34 @@ window.onbeforeunload = function() {
 #set($page = $request.page)
 #set($asset = $xwiki.getDocument($page))
 #set($commentnb = $xwiki.parseInt($request.nb))
-#set($ok = $asset.use("XWiki.XWikiComments", $commentnb))
+#set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
+#set($ok = $asset.use($comment))
 #set($xredirect= $xwiki.getFormEncoded($request.xredirect))
 <form name="comment-edit-${commentnb}" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment']);">
     <input type="hidden" name="page" value="${page}" />
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
     <fieldset>
+<label for="XWiki.XWikiComments_0_comment">
+#if("$!{comment.comment}" != "") ##{
+$msg.get("rve.comments.commentrating.comment.edit_title")
+#else ##}{
+$msg.get("rve.comments.commentrating.comment.add_title")
+#end ##}
+</label>
 {/pre}
         $asset.display("comment", "edit")
+{pre}
+<br />
+<label for="XWiki.XWikiComments_0_rating">
+#if("$!{comment.rating}" != "" && "$!{comment.rating}" != "0") ##{
+$msg.get("rve.comments.commentrating.rating.edit_title")
+#else ##}{
+$msg.get("rve.comments.commentrating.rating.add_title")
+#end ##}
+</label>
+{/pre}
+        $asset.display("rating", "edit")
 {pre}
     </fieldset>
     <fieldset class="buttons">
@@ -1015,6 +1066,12 @@ window.onbeforeunload = function() {
         <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
     </fieldset>
 </form>
+<script type="text/javascript">
+/* <![CDATA[ */
+var r = new Curriki.ui.Rating();
+r.applyToMarkup('XWiki.XWikiComments_${commentnb}_rating');
+/* ]]> */
+</script>
 {/pre}
 #end
 
@@ -1029,9 +1086,7 @@ window.onbeforeunload = function() {
 #set($asset = $xwiki.getDocument($page))
 #set($commentnb = $xwiki.parseInt($request.nb))
 #set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
-<p>
- $asset.getValue("comment", $comment).replaceAll("\n","<br />")
-</p>
+#asset_comment_text($asset $comment)
 {/pre}
 #end
 
@@ -1050,6 +1105,7 @@ window.onbeforeunload = function() {
 #set($author = $asset.getValue("author"))
 #if(($author==$context.user)||$hasGlobalAdmin)
 $asset.set("comment", $request.get("XWiki.XWikiComments_${commentnb}_comment"))
+$asset.set("rating", $request.get("XWiki.XWikiComments_${commentnb}_rating"))
 $asset.set("date", $xwiki.date)
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
