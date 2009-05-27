@@ -720,12 +720,16 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 </div>
 {pre}$doc.getValue("comment", $comment).replaceAll("\n","<br />"){/pre}
 </div>
-#set($count = 1 - $count)
+#set($count = 1 - $count) 
 #set($isFirst = false)
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 <div id="commentscontent" class="xwikiintracontent">
+<<<<<<< .mine
+<div class="button-right mgn-btm"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
+=======
 <div class="right"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
+>>>>>>> .r20563
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
       <form id="commentAddForm" action="$doc.getURL("commentadd")" method="post">
@@ -738,7 +742,7 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
         <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
         <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
         <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
-        <div>
+        <div class="mgn-vrt-15">
 	<button class="button button-confirm" type="submit" onclick="return updateXRedirect('commentAddForm', true);">$msg.get("caption.saveComment")</button>
 	<button class="button button-cancel" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
         </div>
@@ -787,7 +791,7 @@ document.getElementById("commentform").className = "collapsed";
 <div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
 <div>
 
-<span><input class="button button-confirm" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /></span>
+<div class="mgn-vrt-15"><input class="button button-confirm" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /></div>
 ##<span class="button button-confirm"><input type="reset" value="$msg.get("cancel")" onclick="hideForm(this.form);" class="button"/></span>
 </div>
 </fieldset>
