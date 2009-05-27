@@ -586,7 +586,7 @@ em, em strong { font-style: italic; }
 #shadow-right { background: #fff /**url("images/shadow-right.jpg") repeat-y right**/; padding-right: 10px; }
 
 /* header */
-#header { border-bottom: 1px solid #999; font-size: 12px; height: 70px; padding: 5px 0 5px 0; }
+#header { border-bottom: 1px solid #999; font-size: 12px;/** height: 70px; **/ float: left; padding: 5px 0 5px 0; }
 #header div { float: left; width: 33%; padding: 0 1em; height: 100%; }
 #header #header-logo { padding-left: 0; width: 195px !important; width: 205px; }
 #header-member { border-left: 1px solid #999; }
@@ -608,10 +608,15 @@ em, em strong { font-style: italic; }
 #header-search p { margin: 0; padding: 0; text-align: right; }
 #header-search p a { font-size: 0.9em; }
 #header-search .search-box .input { font-size: 1.2em; padding: 0.3em 0.2em; }
+#fieldset-remember input {
+	float: left;
+	border: 0 !important;
+	margin-top: -2px !important;
+}
 
 fieldset#fieldset-remember span {
 	float: left;
-	margin-top: 4px;
+	margin-top: 7px;
 }
 
 fieldset#fieldset-remember a {
@@ -622,7 +627,11 @@ div.register_title {font-weight:bold;}
 div.register_block {padding:6px 0;}
 
 /* Left panel menu */
-#panels { padding: 0.3em 0 0; }
+#panels {
+	clear: left;
+	padding: 0.3em 0 0;
+}
+
 #left-panel { font-size: 12px; float: left; height: 100%; margin: 0; padding: 0.5em 0 0 0.3em; width: 205px; }
 #left-panel .shadow-outer { margin-bottom: 1em;  width: 205px; }
 #left-panel .links { font-size: 0.8em; padding: 0.5em 0 0; text-align: right; }
