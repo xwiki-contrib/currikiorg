@@ -10,6 +10,12 @@
 
 (function(){
 Ext.ns('Curriki.ui.Rating');
+var rating_list = [];
+
+for (var i=0; i<5; i++){
+	rating_list.push(_('CurrikiCode.AssetClass_member_rating_'+(i+1)));
+}
+
 Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 	fieldClass : 'x-form-field x-form-rating-field',
 
@@ -28,7 +34,8 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 	hoverClass : 'ux-form-rater-hover',
 	voteClass : 'ux-form-rater-vote',
 	votedClass : 'ux-form-rater-voted',
-	hoverText: undefined,
+	textRightClass : 'ux-form-rater-text-right',
+	hoverText: rating_list,
 
 	// private config
 	displayValue : undefined,
@@ -60,6 +67,8 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 		this.el.addClass('x-hidden');
 
 		this.createStars();
+		this.createTextContainers();
+
 		this.displayValue = (this.displayValue > this.maxValue) ? this.maxValue : this.displayValue;
 
 		if (this.displayValue > 0 || this.getValue() > 0){
@@ -94,6 +103,11 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 		while (stars.item(i) != null){
 			if (stars.item(i) == target) {
 				this.hoverValue = this.maxValue - i;
+				if (this.hoverText instanceof Array){
+					if (!Ext.isEmpty(this.hoverText[i-1])) {
+						this.setRightText(this.hoverText[i-1]);
+					}
+				}
 				return;
 			}
 			i++;
@@ -109,6 +123,8 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 
 		var el = e.getTarget();
 		Ext.fly(el).removeClass(this.hoverClass);
+
+		this.setRightText('');
 	},
 
 	// private
@@ -146,14 +162,32 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 		for (var i=this.maxValue; i>0; i--){
 			var star = tpls.append(ul, [], true);
 			star.setSize(this.unit*i, this.unit);
-			if (this.hoverText instanceof Array){
-				if (!Ext.isEmpty(this.hoverText[i-1])) {
-					Ext.QuickTips.register({target:star, text:this.hoverText[i-1]});
-				}
-			}
 		}
 
 		this.alignStars();
+	},
+
+	// private
+	createTextContainers: function() {
+		var ct = this.getStarsContainer();
+
+		if (!this.textRightContainer) {
+			this.textRightContainer = Ext.DomHelper.insertAfter(ct, {tag:"span", cls:this.textRightClass}, true);
+			this.textRightContainer.addClass('x-hidden');
+		}
+	},
+
+	setRightText: function(t){
+		this.textRightContainer.dom.innerHTML = t;
+		if (t == null || t == '') {
+			this.textRightContainer.addClass('x-hidden');
+		} else {
+			this.textRightContainer.removeClass('x-hidden');
+		}
+	},
+
+	getRightText: function(){
+		return this.textRightContainer.dom.innerHTML;
 	},
 
 	displayRating: function(v, finalRating) {
