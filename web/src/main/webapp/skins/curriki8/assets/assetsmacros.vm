@@ -769,7 +769,7 @@ $asset.use("CurrikiCode.AssetClass")
 <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" />
 </p>
 </div>
-##}
+#end ##}
 #set($c = $!asset.getValue("comment", $comment).replaceAll("\n","<br />"))
 #if("$!c" != "") ##{
 <div class="comment-text">
@@ -1041,7 +1041,7 @@ window.onbeforeunload = function() {
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
     <fieldset>
-<label for="XWiki.XWikiComments_0_comment">
+<label for="XWiki.XWikiComments_${commentnb}_comment">
 #if("$!{comment.comment}" != "") ##{
 $msg.get("rve.comments.commentrating.comment.edit_title")
 #else ##}{
@@ -1052,7 +1052,7 @@ $msg.get("rve.comments.commentrating.comment.add_title")
         $asset.display("comment", "edit")
 {pre}
 <br />
-<label for="XWiki.XWikiComments_0_rating">
+<label for="XWiki.XWikiComments_${commentnb}_rating">
 #if("$!{comment.rating}" != "" && "$!{comment.rating}" != "0") ##{
 $msg.get("rve.comments.commentrating.rating.edit_title")
 #else ##}{
@@ -1960,6 +1960,3 @@ $currDoc.displayAsset("view")
 </div> ##asset-page
 $xwiki.addTooltipJS()
 #end
-
-
-*#
