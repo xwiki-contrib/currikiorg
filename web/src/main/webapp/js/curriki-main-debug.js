@@ -3189,8 +3189,8 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 			if (stars.item(i) == target) {
 				this.hoverValue = this.maxValue - i;
 				if (this.hoverText instanceof Array){
-					if (!Ext.isEmpty(this.hoverText[i-1])) {
-						this.setRightText(this.hoverText[i-1]);
+					if (!Ext.isEmpty(this.hoverText[this.hoverValue])) {
+						this.setRightText(this.hoverText[this.hoverValue]);
 					}
 				}
 				return;
