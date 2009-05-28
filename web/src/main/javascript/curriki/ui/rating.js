@@ -205,7 +205,7 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 
 		var isInForm = (ct.findParent('.x-form-item', 5))?true:false;
 
-		if (!isInForm){
+		if (false && !isInForm){
 			var leftOffset = Ext.fly(document.body).getAlignToXY(ct)[0];
 			rating.setLeft(leftOffset);
 			stars.setLeft(leftOffset);
