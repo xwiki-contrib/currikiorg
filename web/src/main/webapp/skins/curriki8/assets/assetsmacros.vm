@@ -861,16 +861,16 @@ $asset.use($comment)
                            onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
                     <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
                 </fieldset>
-{pre}
 <script type="text/javascript">
 /* <![CDATA[ */
 Ext.onReady(function(){
-var nr = new Curriki.ui.Rating();
+if (Ext.get('XWiki.XWikiComments_rating') && !Ext.get('XWiki.XWikiComments_rating').hasClass('x-hidden')) {
+var nr = new Curriki.ui.Rating({id:'XWikiComments_rating'});
 nr.applyToMarkup('XWiki.XWikiComments_rating');
+}
 });
 /* ]]> */
 </script>
-{/pre}
             </form>
         </div>
     </div>
@@ -966,6 +966,8 @@ function editComment(pageName,nb,divid) {
 function editCommentCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
+ var r = new Curriki.ui.Rating({id:'XWikiComments_'+ajaxreq.options.nb+'_rating'});
+ r.applyToMarkup('XWiki.XWikiComments_'+ajaxreq.options.nb+'_rating');
  clickAwayActive  = true;
  clickAwayCounter++;
  document.forms['comment-edit-' + ajaxreq.options.nb]['XWiki.XWikiComments_' + ajaxreq.options.nb +  '_comment'].focus();
@@ -1068,14 +1070,6 @@ $msg.get("rve.comments.commentrating.rating.add_title")
         <input type="submit" class="button button-confirm" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
     </fieldset>
 </form>
-<script type="text/javascript">
-/* <![CDATA[ */
-Ext.onReady(function(){
-var r = new Curriki.ui.Rating();
-r.applyToMarkup('XWiki.XWikiComments_${commentnb}_rating');
-});
-/* ]]> */
-</script>
 {/pre}
 #end
 
