@@ -1166,8 +1166,21 @@ $asset.set("date", $xwiki.date)
 #set($rating = $!comment.rating)
 #if("$!rating" != "" && "$!rating" != "0") ##{
 #set($resource = $asset.getObject("CurrikiCode.CompositeAssetClass"))
-#set($rating_count = $resource.rating_count + 1)
-#set($rating_sum = $resource.rating_sum + $rating)
+##
+#set($rating_count = 0)
+#set($rating_count = $!resource.rating_count)
+#if("$!rating_count" == "" || "$!rating_count" == "0") ##{
+#set($rating_count = 0)
+#end ##}
+#set($rating_count = $rating_count + 1)
+##
+#set($rating_sum = 0)
+#set($rating_sum = $!resource.rating_sum)
+#if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
+#set($rating_sum = 0)
+#end ##}
+#set($rating_sum = $rating_sum + $rating)
+##
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
