@@ -932,15 +932,35 @@ nr.applyToMarkup('XWiki.XWikiComments_rating');
 #set($deletedoc = $xwiki.getDocument($request.docname))
 #if("$!request.date" != "") ## {
 #set($comments = $deletedoc.getComments())
-#set($resource = $deletedoc.getObject("CurrikiCode.CompositeAssetClass"))
+#set($resource = $deletedoc.getObject("CurrikiCode.AssetClass"))
 #foreach($comment in $comments) ## {
 #set($time = $deletedoc.getValue('date', $comment).time)
 #if(($request.date == "$time") && ( ($comment.author == $context.user) || $xwiki.hasAdminRights())) ## {
+#set($Integer = 0)
 #set($rating = "")
 #set($rating = $!comment.rating)
 #if("$!rating" != "" && "$!rating" != "0") ##{
-#set($rating_count = $resource.rating_count - 1)
-#set($rating_sum = $resource.rating_sum - $rating)
+#set($rating = $Integer.parseInt($rating))
+##
+#set($rating_count = 0)
+#set($rating_count = $!resource.rating_count)
+#if("$!rating_count" == "" || "$!rating_count" == "0") ##{
+#set($rating_count = 0)
+#else ##}{
+#set($rating_count = $Integer.parseInt($resource.rating_count))
+#set($rating_count = $rating_count - 1)
+#end ##}
+##
+#set($rating_sum = 0)
+#set($rating_sum = $!resource.rating_sum)
+#if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
+#set($rating_sum = 0)
+#else ##}{
+#set($rating_sum = $Integer.parseInt($resource.rating_sum))
+#set($rating_sum = $rating_sum - $rating)
+#end ##}
+##
+#if($rating_count != 0) ##{
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
@@ -950,6 +970,11 @@ nr.applyToMarkup('XWiki.XWikiComments_rating');
 $resource.set("rating_count", $rating_count)
 $resource.set("rating_sum", $rating_sum)
 $resource.set("rating", $res_rating)
+#else ##}{
+$resource.set("rating_count", 0)
+$resource.set("rating_sum", 0)
+$resource.set("rating", 0)
+#end ##}
 #end ##}
 #set($junk = $deletedoc.removeObject($comment))
 #set($junk = $deletedoc.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.delete")))
@@ -1159,18 +1184,22 @@ $msg.get("rve.comments.commentrating.rating.add_title")
 #set($ok = $asset.use($comment))
 $asset.set("author", $context.user)
 $asset.set("comment", $request.get("XWiki.XWikiComments_comment"))
-$asset.set("rating", $request.get("XWiki.XWikiComments_rating"))
 $asset.set("date", $xwiki.date)
+#set($cRating = "")
+#set($cRating = $request.get("XWiki.XWikiComments_rating"))
+#if("$!cRating" != "" && "$!cRating" != 0) ##{
+$asset.set("rating", $cRating)
 ## Add any new rating
-#set($rating = "")
-#set($rating = $!comment.rating)
-#if("$!rating" != "" && "$!rating" != "0") ##{
-#set($resource = $asset.getObject("CurrikiCode.CompositeAssetClass"))
+#set($Integer = 0)
+#set($rating = $Integer.parseInt($cRating))
+#set($resource = $asset.getObject("CurrikiCode.AssetClass"))
 ##
 #set($rating_count = 0)
 #set($rating_count = $!resource.rating_count)
 #if("$!rating_count" == "" || "$!rating_count" == "0") ##{
 #set($rating_count = 0)
+#else ##}{
+#set($rating_count = $Integer.parseInt($resource.rating_count))
 #end ##}
 #set($rating_count = $rating_count + 1)
 ##
@@ -1178,13 +1207,15 @@ $asset.set("date", $xwiki.date)
 #set($rating_sum = $!resource.rating_sum)
 #if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
 #set($rating_sum = 0)
+#else ##}{
+#set($rating_sum = $Integer.parseInt($resource.rating_sum))
 #end ##}
 #set($rating_sum = $rating_sum + $rating)
 ##
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
-#if($res_rating_rem >= $rating_count_half) ##{
+#if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
 $resource.set("rating_count", $rating_count)
@@ -1212,32 +1243,52 @@ $response.sendRedirect($request.xredirect)
 #set($ok = $asset.use($comment))
 #set($author = $asset.getValue("author"))
 #if(($author==$context.user)||$hasGlobalAdmin) ##{
-#set($resource = $asset.getObject("CurrikiCode.CompositeAssetClass"))
-## Remove any old rating
-#set($rating = "")
-#set($rating = $!comment.rating)
-#if("$!rating" != "" && "$!rating" != "0") ##{
-#set($rating_count = $resource.rating_count - 1)
-#set($rating_sum = $resource.rating_sum - $rating)
-#set($res_rating = $rating_sum / $rating_count)
-#set($res_rating_rem = $rating_sum % $rating_count)
-#set($rating_count_half = $rating_count / 2)
-#if($res_rating_rem >= $rating_count_half) ##{
-#set($res_rating = $res_rating + 1)
+## Update summary rating
+#set($resource = $asset.getObject("CurrikiCode.AssetClass"))
+#set($Integer = 0)
+##
+## Remove any old rating values
+#set($oldRating = "")
+#set($oldRating = $!comment.rating)
+#if("$!oldRating" != "" && "$!oldRating" != "0") ##{
+#set($oldRating = $Integer.parseInt($oldRating))
+#else ##}{
+#set($oldRating = 0)
 #end ##}
-$resource.set("rating_count", $rating_count)
-$resource.set("rating_sum", $rating_sum)
-$resource.set("rating", $res_rating)
+##
+#set($rating_count = 0)
+#set($rating_count = $!resource.rating_count)
+#if("$!rating_count" == "" || "$!rating_count" == "0") ##{
+#set($rating_count = 0)
+#else ##}{
+#set($rating_count = $Integer.parseInt($resource.rating_count))
+#set($rating_count = $rating_count - 1)
 #end ##}
+##
+#set($rating_sum = 0)
+#set($rating_sum = $!resource.rating_sum)
+#if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
+#set($rating_sum = 0)
+#else ##}{
+#set($rating_sum = $Integer.parseInt($resource.rating_sum))
+#set($rating_sum = $rating_sum - $oldRating)
+#end ##}
+##
+## Update comment
 $asset.set("comment", $request.get("XWiki.XWikiComments_${commentnb}_comment"))
 $asset.set("rating", $request.get("XWiki.XWikiComments_${commentnb}_rating"))
 $asset.set("date", $xwiki.date)
-## Then add any new rating
-#set($rating = "")
-#set($rating = $!comment.rating)
-#if("$!rating" != "" && "$!rating" != "0") ##{
-#set($rating_count = $resource.rating_count + 1)
-#set($rating_sum = $resource.rating_sum + $rating)
+##
+## Add any new rating
+#set($newRating = "")
+#set($newRating = $request.get("XWiki.XWikiComments_${commentnb}_rating"))
+#if("$!newRating" != "" && "$!newRating" != "0") ##{
+#set($newRating = $Integer.parseInt($newRating))
+#set($rating_count = $rating_count + 1)
+#set($rating_sum = $rating_sum + $newRating)
+#end ##}
+##
+#if($rating_count != 0) ##{
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
@@ -1247,6 +1298,10 @@ $asset.set("date", $xwiki.date)
 $resource.set("rating_count", $rating_count)
 $resource.set("rating_sum", $rating_sum)
 $resource.set("rating", $res_rating)
+#else ##}{
+$resource.set("rating_count", 0)
+$resource.set("rating_sum", 0)
+$resource.set("rating", 0)
 #end ##}
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
