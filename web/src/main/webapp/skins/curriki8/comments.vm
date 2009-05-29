@@ -54,6 +54,12 @@ function showCommentBlock(){
 		}
 	}
 }
+
+#if("$!request.addcomment" != "" && "$!request.addcomment" == "true") ##{
+Ext.onReady(function(){
+  showCommentBlock();
+});
+#end ##}
 /* ]]> */
 </script>
             #end
