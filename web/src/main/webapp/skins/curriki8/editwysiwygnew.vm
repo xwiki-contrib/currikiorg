@@ -108,13 +108,13 @@ $request.getSession().setAttribute("com.xpn.xwiki.wysiwyg.input", $wysiwygInput)
     // Instance configuration.
     WysiwygConfigurations.push({
         hookId: "content",        
-        displayTabs: false,
+        displayTabs: true,
         defaultEditor: "wysiwyg",
         inputURL: "${tdoc.getExternalURL("view", $inputURLQueryString)}",
         plugins: 'submit line separator text valign list indent history format symbol link image table macro importer#if($request.sync) sync#end font color justify',
         syntax: "$doc.syntaxId",
         menu: 'link image table macro',
-        toolbar: 'bold italic underline strikethrough | subscript superscript | justifyleft justifycenter justifyright justifyfull | forecolor backcolor fontname fontsize |  unorderedlist orderedlist | outdent indent | undo redo | format | hr symbol | link unlink | importer',
+        toolbar: 'bold italic underline strikethrough | subscript superscript | justifyleft justifycenter justifyright justifyfull | forecolor backcolor fontname fontsize |  unorderedlist orderedlist | outdent indent | undo redo | format | hr removeformat symbol | link unlink | importer',
         wiki: '${doc.wiki.replace("'", "\'")}',
         space: '${doc.space.replace("'", "\'")}',
         page: '${doc.name.replace("'", "\'")}',
