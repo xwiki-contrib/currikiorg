@@ -362,7 +362,7 @@ data.init = function(){
 				var ratingCount = record.data.ratingCount;
 
 				metadata.css = String.format('rating-{0}', value);
-				return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"><img class="rating-icon" alt="" src="{4}" /> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+				return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
 			} else {
 				return String.format('');
 			}
