@@ -476,7 +476,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.ict')
 		},{
 			id: 'contributor'
-			,width: 137
+			,width: 110
 			,header: _('search.resource.column.header.contributor')
 			,dataIndex:'contributor'
 			,sortable:true
@@ -484,7 +484,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.contributor')
 		},{
 			id: 'rating'
-			,width: 84
+			,width: 110
 			,header: _('search.resource.column.header.rating')
 			,dataIndex:'rating'
 			,sortable:true
