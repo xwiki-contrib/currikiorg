@@ -885,7 +885,8 @@ $asset.use($comment)
             #set($qs = "")
             #set($qs = $request.queryString)
             #set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
-            <form name="comment-add" action="$asset.getURL("commentadd")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment']);">
+            <form name="comment-add" action="$xwiki.getURL("CurrikiCode.CreateCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment']);">
+		<input type="hidden" name="page" value="${asset.fullName}" />
                 <input type="hidden" name="xredirect" value="${xredirect}" />
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
                 <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
@@ -931,9 +932,25 @@ nr.applyToMarkup('XWiki.XWikiComments_rating');
 #set($deletedoc = $xwiki.getDocument($request.docname))
 #if("$!request.date" != "") ## {
 #set($comments = $deletedoc.getComments())
+#set($resource = $deletedoc.getObject("CurrikiCode.CompositeAssetClass"))
 #foreach($comment in $comments) ## {
 #set($time = $deletedoc.getValue('date', $comment).time)
 #if(($request.date == "$time") && ( ($comment.author == $context.user) || $xwiki.hasAdminRights())) ## {
+#set($rating = "")
+#set($rating = $!comment.rating)
+#if("$!rating" != "" && "$!rating" != "0") ##{
+#set($rating_count = $resource.rating_count - 1)
+#set($rating_sum = $resource.rating_sum - $rating)
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+$resource.set("rating_count", $rating_count)
+$resource.set("rating_sum", $rating_sum)
+$resource.set("rating", $res_rating)
+#end ##}
 #set($junk = $deletedoc.removeObject($comment))
 #set($junk = $deletedoc.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.delete")))
 DELETED
@@ -1130,6 +1147,46 @@ $msg.get("rve.comments.commentrating.rating.add_title")
 
 
 #**
+ * Create comment service called from CurrikiCode.CreateCommentService
+ * This allows to save the actual edited comment and redirect to the comments page
+ *#
+#macro(asset_createcomment_service)
+{pre}
+#set($page = $request.page)
+#set($asset = $xwiki.getDocument($page))
+#if($xwiki.hasAccessLevel("comment", "$page")) ##{
+#set($comment = $asset.newObject("XWiki.XWikiComments"))
+#set($ok = $asset.use($comment))
+$asset.set("author", $context.user)
+$asset.set("comment", $request.get("XWiki.XWikiComments_comment"))
+$asset.set("rating", $request.get("XWiki.XWikiComments_rating"))
+$asset.set("date", $xwiki.date)
+## Add any new rating
+#set($rating = "")
+#set($rating = $!comment.rating)
+#if("$!rating" != "" && "$!rating" != "0") ##{
+#set($resource = $asset.getObject("CurrikiCode.CompositeAssetClass"))
+#set($rating_count = $resource.rating_count + 1)
+#set($rating_sum = $resource.rating_sum + $rating)
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+$resource.set("rating_count", $rating_count)
+$resource.set("rating_sum", $rating_sum)
+$resource.set("rating", $res_rating)
+#end ##}
+$asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.add"))
+$response.sendRedirect($request.xredirect)
+#else ##}{
+#curriki_noaccess()
+#end ##}
+{/pre}
+#end
+
+#**
  * Save comment service called from CurrikiCode.SaveCommentService
  * This allows to save the actual edited comment and redirect to the comments page
  *#
@@ -1141,15 +1198,48 @@ $msg.get("rve.comments.commentrating.rating.add_title")
 #set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
 #set($ok = $asset.use($comment))
 #set($author = $asset.getValue("author"))
-#if(($author==$context.user)||$hasGlobalAdmin)
+#if(($author==$context.user)||$hasGlobalAdmin) ##{
+#set($resource = $asset.getObject("CurrikiCode.CompositeAssetClass"))
+## Remove any old rating
+#set($rating = "")
+#set($rating = $!comment.rating)
+#if("$!rating" != "" && "$!rating" != "0") ##{
+#set($rating_count = $resource.rating_count - 1)
+#set($rating_sum = $resource.rating_sum - $rating)
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+$resource.set("rating_count", $rating_count)
+$resource.set("rating_sum", $rating_sum)
+$resource.set("rating", $res_rating)
+#end ##}
 $asset.set("comment", $request.get("XWiki.XWikiComments_${commentnb}_comment"))
 $asset.set("rating", $request.get("XWiki.XWikiComments_${commentnb}_rating"))
 $asset.set("date", $xwiki.date)
+## Then add any new rating
+#set($rating = "")
+#set($rating = $!comment.rating)
+#if("$!rating" != "" && "$!rating" != "0") ##{
+#set($rating_count = $resource.rating_count + 1)
+#set($rating_sum = $resource.rating_sum + $rating)
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+$resource.set("rating_count", $rating_count)
+$resource.set("rating_sum", $rating_sum)
+$resource.set("rating", $res_rating)
+#end ##}
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
-#else
+#else ##}{
 #curriki_noaccess()
-#end
+#end ##}
 {/pre}
 #end
 
