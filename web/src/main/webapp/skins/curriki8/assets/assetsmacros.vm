@@ -967,13 +967,13 @@ nr.applyToMarkup('XWiki.XWikiComments_rating');
 #if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
-$resource.set("rating_count", $rating_count.longValue())
-$resource.set("rating_sum", $rating_sum.longValue())
-$resource.set("rating", $res_rating)
+#set($ok = $resource.set("rating_count", $rating_count.longValue()))
+#set($ok = $resource.set("rating_sum", $rating_sum.longValue()))
+#set($ok = $resource.set("rating", $res_rating))
 #else ##}{
-$resource.set("rating_count", "0")
-$resource.set("rating_sum", "0")
-$resource.set("rating", "0")
+#set($ok = $resource.set("rating_count", "0"))
+#set($ok = $resource.set("rating_sum", "0"))
+#set($ok = $resource.set("rating", "0"))
 #end ##}
 #end ##}
 #set($junk = $deletedoc.removeObject($comment))
@@ -1218,9 +1218,9 @@ $asset.set("rating", $cRating)
 #if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
-$resource.set("rating_count", $rating_count.longValue())
-$resource.set("rating_sum", $rating_sum.longValue())
-$resource.set("rating", $res_rating)
+#set($ok = $resource.set("rating_count", $rating_count.longValue()))
+#set($ok = $resource.set("rating_sum", $rating_sum.longValue()))
+#set($ok = $resource.set("rating", $res_rating))
 #end ##}
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.add"))
 #set($redirect = "")
@@ -1298,13 +1298,13 @@ $asset.set("date", $xwiki.date)
 #if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
-$resource.set("rating_count", $rating_count.longValue())
-$resource.set("rating_sum", $rating_sum.longValue())
-$resource.set("rating", $res_rating)
+#set($ok = $resource.set("rating_count", $rating_count.longValue()))
+#set($ok = $resource.set("rating_sum", $rating_sum.longValue()))
+#set($ok = $resource.set("rating", $res_rating))
 #else ##}{
-$resource.set("rating_count", "0")
-$resource.set("rating_sum", "0")
-$resource.set("rating", "0")
+#set($ok = $resource.set("rating_count", "0"))
+#set($ok = $resource.set("rating_sum", "0"))
+#set($ok = $resource.set("rating", "0"))
 #end ##}
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
