@@ -74,6 +74,7 @@
  *#
 #macro(asset_rating $asset)
 #crs_icon($asset)
+#member_rating_icon($asset)
 #end
 
 #**
@@ -84,11 +85,34 @@
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
 #set($rating = $!asset.getValue("rating"))
 #set($rateCount = $!asset.getValue("rating_count"))
-#if("$!rateCount" == "" || "$!rateCount" == "0") ##{
-#end ##}
 <div id="member-rating">
-##TODO: Show correct value for logged in user and logged out user if rated and not
-## Search has .rating-# <a qtip:"text"> img.rating-icon (#)</a>
+#if("$!rateCount" == "" || "$!rateCount" == "0" || "$!rating" == "" || "$!rating" == "0") ##{
+#if($context.user != "XWiki.XWikiGuest") ##{ No rating and member
+<div class="rating-0">
+<a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="" />
+(0)<br />
+$msg.get("rve.title.member.rating.function.add_rating")
+</a>
+</div>
+#else ##}{ No rating and guest
+<div class="rating-0">
+<a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="" />
+(0)<br />
+$msg.get("rve.title.member.rating.info")
+</a>
+</div>
+#end ##}
+##
+#else ##}{ Has rating
+<div class="rating-${rating}">
+<a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="" />
+(${rateCount})
+</a>
+</div>
+#end ##}
 </div>
 #end
 
