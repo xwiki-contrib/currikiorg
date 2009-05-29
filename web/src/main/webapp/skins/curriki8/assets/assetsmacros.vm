@@ -1223,7 +1223,10 @@ $resource.set("rating_sum", $rating_sum)
 $resource.set("rating", $res_rating)
 #end ##}
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.add"))
-$response.sendRedirect($request.xredirect)
+#set($redirect = "")
+#set($redirect = $!request.xredirect)
+#set($redirect = $redirect.replace('addcomment=true', ''))
+$response.sendRedirect($redirect)
 #else ##}{
 #curriki_noaccess()
 #end ##}
