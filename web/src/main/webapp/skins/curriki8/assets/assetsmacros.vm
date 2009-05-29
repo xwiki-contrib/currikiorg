@@ -79,8 +79,13 @@
 #**
  * Macro displaying the asset member rating
  *#
-#macro(asset_member_rating $asset)
+#macro(member_rating_icon $asset)
 ## TODO: Get the values needed here
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($rating = $!asset.getValue("rating"))
+#set($rateCount = $!asset.getValue("rating_count"))
+#if("$!rateCount" == "" || "$!rateCount" == "0") ##{
+#end ##}
 <div id="member-rating">
 ##TODO: Show correct value for logged in user and logged out user if rated and not
 ## Search has .rating-# <a qtip:"text"> img.rating-icon (#)</a>

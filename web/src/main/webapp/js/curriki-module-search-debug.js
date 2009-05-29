@@ -1162,7 +1162,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.contributor')
 		},{
 			id: 'rating'
-			,width: 110
+			,width: 84
 			,header: _('search.resource.column.header.rating')
 			,dataIndex:'rating'
 			,sortable:true
@@ -1170,7 +1170,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.rating')
 		},{
 			id: 'memberRating'
-			,width: 84
+			,width: 110
 			,header: _('search.resource.column.header.member.rating')
 			,dataIndex:'memberRating'
 			,sortable:true
