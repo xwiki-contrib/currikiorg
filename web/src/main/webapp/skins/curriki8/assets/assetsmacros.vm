@@ -839,7 +839,7 @@ $asset.use($comment)
         </li>
         <li class="comment-action">
             #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
-            <a class="comment-edit" href="javascript:void(0)" onclick="editComment('${asset.getJSFullName()}','${comment.number}','comment-text-${comment.number}'); return false;">$msg.get("rve.comments.comment.edit_link")</a>
+            <a class="comment-edit" href="javascript:void(0)" onclick="editComment('${asset.getJSFullName()}','${comment.number}','comment-text-${comment.number}'); return false;">$msg.get("rve.comments.commentrating.display.edit_link")</a>
             #set($xredirect = $util.encodeURI($asset.getURL('view', $!request.queryString)))
             #set($qs = "")
             #set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
@@ -891,16 +891,16 @@ $asset.use($comment)
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
                 <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
                 <fieldset>
-                    <label>$msg.get("rve.comments.comment.add_title")</label>
+                    <label>$msg.get("rve.comments.commentrating.rating.add_title")</label>
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
                     <br />
                     <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
                     <input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
                 </fieldset>
                 <fieldset class="buttons">
-                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" 
+                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.commentrating.add.cancel_button")" 
                            onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
-                    <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
+                    <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.commentrating.add.submit_button")"/>
                 </fieldset>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -1098,7 +1098,7 @@ window.onbeforeunload = function() {
  if (clickAwayActive==false)
   return;
 
- return "$msg.get("rve.comments.comment.warning.message.add_edit")";
+ return "$msg.get("rve.comments.commentrating.warning.message.add_edit")";
 }
 
 
@@ -1146,8 +1146,8 @@ $msg.get("rve.comments.commentrating.rating.add_title")
 {pre}
     </fieldset>
     <fieldset class="buttons">
-        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditComment('${page}','${commentnb}','${request.divid}');"/>
-        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
+        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.commentrating.edit.cancel_button")" onclick="cancelEditComment('${page}','${commentnb}','${request.divid}');"/>
+        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.commentrating.edit.savechanges_button")"/>
     </fieldset>
 </form>
 {/pre}
@@ -1334,8 +1334,8 @@ $response.sendRedirect($request.xredirect)
 {pre}
     </fieldset>
     <fieldset class="buttons">
-        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.edit.cancel_button")" onclick="cancelEditReview('${page}','${reviewnb}','${request.divid}');"/>
-        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.edit.savechanges_button")"/>
+        <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.commentrating.edit.cancel_button")" onclick="cancelEditReview('${page}','${reviewnb}','${request.divid}');"/>
+        <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.commentrating.edit.savechanges_button")"/>
     </fieldset>
 </form>
 {/pre}
