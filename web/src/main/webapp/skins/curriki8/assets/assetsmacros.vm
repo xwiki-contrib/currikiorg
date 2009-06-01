@@ -74,6 +74,46 @@
  *#
 #macro(asset_rating $asset)
 #crs_icon($asset)
+#member_rating_icon($asset)
+#end
+
+#**
+ * Macro displaying the asset member rating
+ *#
+#macro(member_rating_icon $asset)
+## TODO: Get the values needed here
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($rating = $!asset.getValue("rating"))
+#set($rateCount = $!asset.getValue("rating_count"))
+<div id="member-rating">
+#if("$!rateCount" == "" || "$!rateCount" == "0" || "$!rating" == "" || "$!rating" == "0") ##{
+#if($context.user != "XWiki.XWikiGuest") ##{ No rating and member
+<div class="rating-0">
+<a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="" />
+(0)<br />
+$msg.get("rve.title.member.rating.function.add_rating")
+</a>
+</div>
+#else ##}{ No rating and guest
+<div class="rating-0">
+<a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="" />
+(0)<br />
+$msg.get("rve.title.member.rating.info")
+</a>
+</div>
+#end ##}
+##
+#else ##}{ Has rating
+<div class="rating-${rating}">
+<a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" alt="" />
+(${rateCount})
+</a>
+</div>
+#end ##}
+</div>
 #end
 
 #**
@@ -757,6 +797,29 @@ $asset.use("CurrikiCode.AssetClass")
 </div> ##asset-wrapper
 #end
 
+#**
+ * Display comment text
+ *#
+#macro(asset_comment_text $asset $comment) ##{
+#set($r = $!asset.getValue("rating", $comment))
+#if("$!r" != "" && "$!r" != "0") ##{
+<div class="comment-rating rating-${r}">
+<strong>$msg.get("rve.comments.commentrating.rating.display_header")</strong>
+<p>
+<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" />
+</p>
+</div>
+#end ##}
+#set($c = $!asset.getValue("comment", $comment).replaceAll("\n","<br />"))
+#if("$!c" != "") ##{
+<div class="comment-text">
+<strong>$msg.get("rve.comments.commentrating.comment.display_header")</strong>
+<p>
+$c
+</p>
+</div>
+#end ##}
+#end ##}
 
 #**
  * Display one asset comment
@@ -772,9 +835,7 @@ $asset.use($comment)
         <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
         <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
         <li id="comment-text-${comment.number}" class="comment-text">
-            <p>
-                $asset.getValue("comment", $comment).replaceAll("\n","<br />")
-            </p>
+	    #asset_comment_text($asset $comment)
         </li>
         <li class="comment-action">
             #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
@@ -824,19 +885,33 @@ $asset.use($comment)
             #set($qs = "")
             #set($qs = $request.queryString)
             #set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
-            <form name="comment-add" action="$asset.getURL("commentadd")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment']);">
+            <form name="comment-add" action="$xwiki.getURL("CurrikiCode.CreateCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment']);">
+		<input type="hidden" name="page" value="${asset.fullName}" />
                 <input type="hidden" name="xredirect" value="${xredirect}" />
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
                 <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
                 <fieldset>
                     <label>$msg.get("rve.comments.comment.add_title")</label>
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
+                    <br />
+                    <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
+                    <input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
                 </fieldset>
                 <fieldset class="buttons">
                     <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.comment.add.cancel_button")" 
                            onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
                     <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.comment.add.submit_button")"/>
                 </fieldset>
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.onReady(function(){
+if (Ext.get('XWiki.XWikiComments_rating') && !Ext.get('XWiki.XWikiComments_rating').hasClass('x-hidden')) {
+var nr = new Curriki.ui.Rating({id:'XWikiComments_rating'});
+nr.applyToMarkup('XWiki.XWikiComments_rating');
+}
+});
+/* ]]> */
+</script>
             </form>
         </div>
     </div>
@@ -857,9 +932,50 @@ $asset.use($comment)
 #set($deletedoc = $xwiki.getDocument($request.docname))
 #if("$!request.date" != "") ## {
 #set($comments = $deletedoc.getComments())
+#set($resource = $deletedoc.getObject("CurrikiCode.AssetClass"))
 #foreach($comment in $comments) ## {
 #set($time = $deletedoc.getValue('date', $comment).time)
 #if(($request.date == "$time") && ( ($comment.author == $context.user) || $xwiki.hasAdminRights())) ## {
+#set($Integer = 0)
+#set($rating = "")
+#set($rating = $!comment.rating)
+#if("$!rating" != "" && "$!rating" != "0") ##{
+#set($rating = $Integer.parseInt($rating))
+##
+#set($rating_count = 0)
+#set($rating_count = $!resource.rating_count)
+#if("$!rating_count" == "" || "$!rating_count" == "0") ##{
+#set($rating_count = 0)
+#else ##}{
+#set($rating_count = $Integer.parseInt($resource.rating_count))
+#set($rating_count = $rating_count - 1)
+#end ##}
+##
+#set($rating_sum = 0)
+#set($rating_sum = $!resource.rating_sum)
+#if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
+#set($rating_sum = 0)
+#else ##}{
+#set($rating_sum = $Integer.parseInt($resource.rating_sum))
+#set($rating_sum = $rating_sum - $rating)
+#end ##}
+##
+#if($rating_count != 0) ##{
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+#set($ok = $resource.set("rating_count", $rating_count.longValue()))
+#set($ok = $resource.set("rating_sum", $rating_sum.longValue()))
+#set($ok = $resource.set("rating", $res_rating))
+#else ##}{
+#set($ok = $resource.set("rating_count", "0"))
+#set($ok = $resource.set("rating_sum", "0"))
+#set($ok = $resource.set("rating", "0"))
+#end ##}
+#end ##}
 #set($junk = $deletedoc.removeObject($comment))
 #set($junk = $deletedoc.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.delete")))
 DELETED
@@ -999,15 +1115,34 @@ window.onbeforeunload = function() {
 #set($page = $request.page)
 #set($asset = $xwiki.getDocument($page))
 #set($commentnb = $xwiki.parseInt($request.nb))
-#set($ok = $asset.use("XWiki.XWikiComments", $commentnb))
+#set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
+#set($ok = $asset.use($comment))
 #set($xredirect= $xwiki.getFormEncoded($request.xredirect))
 <form name="comment-edit-${commentnb}" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment']);">
     <input type="hidden" name="page" value="${page}" />
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
     <fieldset>
+<label for="XWiki.XWikiComments_${commentnb}_comment">
+#if("$!{comment.comment}" != "") ##{
+$msg.get("rve.comments.commentrating.comment.edit_title")
+#else ##}{
+$msg.get("rve.comments.commentrating.comment.add_title")
+#end ##}
+</label>
 {/pre}
         $asset.display("comment", "edit")
+{pre}
+<br />
+<label for="XWiki.XWikiComments_${commentnb}_rating">
+#if("$!{comment.rating}" != "" && "$!{comment.rating}" != "0") ##{
+$msg.get("rve.comments.commentrating.rating.edit_title")
+#else ##}{
+$msg.get("rve.comments.commentrating.rating.add_title")
+#end ##}
+</label>
+{/pre}
+        $asset.display("rating", "edit")
 {pre}
     </fieldset>
     <fieldset class="buttons">
@@ -1029,12 +1164,72 @@ window.onbeforeunload = function() {
 #set($asset = $xwiki.getDocument($page))
 #set($commentnb = $xwiki.parseInt($request.nb))
 #set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
-<p>
- $asset.getValue("comment", $comment).replaceAll("\n","<br />")
-</p>
+#asset_comment_text($asset $comment)
 {/pre}
 #end
 
+
+#**
+ * Create comment service called from CurrikiCode.CreateCommentService
+ * This allows to save the actual edited comment and redirect to the comments page
+ *#
+#macro(asset_createcomment_service)
+{pre}
+#set($page = $request.page)
+#set($asset = $xwiki.getDocument($page))
+#if($xwiki.hasAccessLevel("comment", "$page")) ##{
+#set($comment = $asset.newObject("XWiki.XWikiComments"))
+#set($ok = $asset.use($comment))
+$asset.set("author", $context.user)
+$asset.set("comment", $request.get("XWiki.XWikiComments_comment"))
+$asset.set("date", $xwiki.date)
+#set($cRating = "")
+#set($cRating = $request.get("XWiki.XWikiComments_rating"))
+#if("$!cRating" != "" && "$!cRating" != 0) ##{
+$asset.set("rating", $cRating)
+## Add any new rating
+#set($Integer = 0)
+#set($rating = $Integer.parseInt($cRating))
+#set($resource = $asset.getObject("CurrikiCode.AssetClass"))
+##
+#set($rating_count = 0)
+#set($rating_count = $!resource.rating_count)
+#if("$!rating_count" == "" || "$!rating_count" == "0") ##{
+#set($rating_count = 0)
+#else ##}{
+#set($rating_count = $Integer.parseInt($resource.rating_count))
+#end ##}
+#set($rating_count = $rating_count + 1)
+##
+#set($rating_sum = 0)
+#set($rating_sum = $!resource.rating_sum)
+#if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
+#set($rating_sum = 0)
+#else ##}{
+#set($rating_sum = $Integer.parseInt($resource.rating_sum))
+#end ##}
+#set($rating_sum = $rating_sum + $rating)
+##
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+#set($ok = $resource.set("rating_count", $rating_count.longValue()))
+#set($ok = $resource.set("rating_sum", $rating_sum.longValue()))
+#set($ok = $resource.set("rating", $res_rating))
+#end ##}
+$asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.add"))
+#set($redirect = "")
+#set($redirect = $!request.xredirect)
+#set($redirect = $redirect.replace('addcomment=true', ''))
+$response.sendRedirect($redirect)
+#else ##}{
+#curriki_noaccess()
+#end ##}
+{/pre}
+#end
 
 #**
  * Save comment service called from CurrikiCode.SaveCommentService
@@ -1048,14 +1243,72 @@ window.onbeforeunload = function() {
 #set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
 #set($ok = $asset.use($comment))
 #set($author = $asset.getValue("author"))
-#if(($author==$context.user)||$hasGlobalAdmin)
+#if(($author==$context.user)||$hasGlobalAdmin) ##{
+## Update summary rating
+#set($resource = $asset.getObject("CurrikiCode.AssetClass"))
+#set($Integer = 0)
+##
+## Remove any old rating values
+#set($oldRating = "")
+#set($oldRating = $!comment.rating)
+#if("$!oldRating" != "" && "$!oldRating" != "0") ##{
+#set($oldRating = $Integer.parseInt($oldRating))
+#else ##}{
+#set($oldRating = 0)
+#end ##}
+##
+#set($rating_count = 0)
+#set($rating_count = $!resource.rating_count)
+#if("$!rating_count" == "" || "$!rating_count" == "0") ##{
+#set($rating_count = 0)
+#else ##}{
+#set($rating_count = $Integer.parseInt($resource.rating_count))
+#set($rating_count = $rating_count - 1)
+#end ##}
+##
+#set($rating_sum = 0)
+#set($rating_sum = $!resource.rating_sum)
+#if("$!rating_sum" == "" || "$!rating_sum" == "0") ##{
+#set($rating_sum = 0)
+#else ##}{
+#set($rating_sum = $Integer.parseInt($resource.rating_sum))
+#set($rating_sum = $rating_sum - $oldRating)
+#end ##}
+##
+## Update comment
 $asset.set("comment", $request.get("XWiki.XWikiComments_${commentnb}_comment"))
+$asset.set("rating", $request.get("XWiki.XWikiComments_${commentnb}_rating"))
 $asset.set("date", $xwiki.date)
+##
+## Add any new rating
+#set($newRating = "")
+#set($newRating = $request.get("XWiki.XWikiComments_${commentnb}_rating"))
+#if("$!newRating" != "" && "$!newRating" != "0") ##{
+#set($newRating = $Integer.parseInt($newRating))
+#set($rating_count = $rating_count + 1)
+#set($rating_sum = $rating_sum + $newRating)
+#end ##}
+##
+#if($rating_count != 0) ##{
+#set($res_rating = $rating_sum / $rating_count)
+#set($res_rating_rem = $rating_sum % $rating_count)
+#set($rating_count_half = $rating_count / 2)
+#if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
+#set($res_rating = $res_rating + 1)
+#end ##}
+#set($ok = $resource.set("rating_count", $rating_count.longValue()))
+#set($ok = $resource.set("rating_sum", $rating_sum.longValue()))
+#set($ok = $resource.set("rating", $res_rating))
+#else ##}{
+#set($ok = $resource.set("rating_count", "0"))
+#set($ok = $resource.set("rating_sum", "0"))
+#set($ok = $resource.set("rating", "0"))
+#end ##}
 $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 $response.sendRedirect($request.xredirect)
-#else
+#else ##}{
 #curriki_noaccess()
-#end
+#end ##}
 {/pre}
 #end
 
@@ -1900,6 +2153,3 @@ $currDoc.displayAsset("view")
 </div> ##asset-page
 $xwiki.addTooltipJS()
 #end
-
-
-*#

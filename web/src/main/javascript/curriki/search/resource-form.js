@@ -460,7 +460,7 @@ form.init = function(){
 		,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
-			,width: 181
+			,width: 141
 			,dataIndex: 'title'
 			,sortable:true
 			,hideable:false
@@ -468,7 +468,7 @@ form.init = function(){
 //			,tooltip:_('search.resource.column.header.title')
 		},{
 			id: 'ict'
-			,width: 171
+			,width: 131
 			,header: _('search.resource.column.header.ict')
 			,dataIndex:'ictText'
 			,sortable:true
@@ -476,7 +476,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.ict')
 		},{
 			id: 'contributor'
-			,width: 141
+			,width: 110
 			,header: _('search.resource.column.header.contributor')
 			,dataIndex:'contributor'
 			,sortable:true
@@ -490,6 +490,14 @@ form.init = function(){
 			,sortable:true
 			,renderer: data.renderer.rating
 //			,tooltip: _('search.resource.column.header.rating')
+		},{
+			id: 'memberRating'
+			,width: 110
+			,header: _('search.resource.column.header.member.rating')
+			,dataIndex:'memberRating'
+			,sortable:true
+			,renderer: data.renderer.memberRating
+//			,tooltip: _('search.resource.column.header.member.rating')
 		},{
 			id: 'updated'
 			,width: 80

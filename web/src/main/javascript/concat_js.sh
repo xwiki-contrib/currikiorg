@@ -31,6 +31,7 @@ CURRIKI="\
 	curriki/data/curriki-data-metadata.js \
 	curriki/assets/curriki-assets.js \
 	curriki/ui/curriki-ui.js \
+	curriki/ui/rating.js \
 	"
 
 cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js
