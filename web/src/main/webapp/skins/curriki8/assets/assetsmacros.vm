@@ -895,7 +895,7 @@ $asset.use($comment)
             #set($qs = "")
             #set($qs = $request.queryString)
             #set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
-            <form name="comment-add" action="$xwiki.getURL("CurrikiCode.CreateCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment']);">
+            <form name="comment-add" action="$xwiki.getURL("CurrikiCode.CreateCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment'], this['XWiki.XWikiComments_rating']);">
 		<input type="hidden" name="page" value="${asset.fullName}" />
                 <input type="hidden" name="xredirect" value="${xredirect}" />
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
@@ -1040,8 +1040,8 @@ function refreshPage(ajaxreq) {
   window.location.href = window.location.href;
 }
 
-function checkComment(field) {
-  if (field.value.length<5) {
+function checkComment(comment, rating) {
+  if ((rating.value.length<1 || rating.value == "0") && comment.value.length<1) {
     #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.comments.comment.error.message.min")))
     alert('${message}');
     return false;
@@ -1130,7 +1130,7 @@ window.onbeforeunload = function() {
 #set($comment = $asset.getObject("XWiki.XWikiComments", $commentnb))
 #set($ok = $asset.use($comment))
 #set($xredirect= $xwiki.getFormEncoded($request.xredirect))
-<form name="comment-edit-${commentnb}" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment']);">
+<form name="comment-edit-${commentnb}" action="$xwiki.getURL("CurrikiCode.SaveCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_${commentnb}_comment'], this['XWiki.XWikiComments_${commentnb}_rating']);">
     <input type="hidden" name="page" value="${page}" />
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
