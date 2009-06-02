@@ -30,7 +30,7 @@
       <br />
     #end
     <br />
-  <div class="doccontent">
+  <div class="doccontent xwikicontent">
    ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
    $cdoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
   </div>
@@ -115,7 +115,9 @@
     #set( $aboutCreateDoc = $xwiki.getDocument("Groups.DocumentationWelcome"))
   #end
   ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+  <div class="xwikicontent">
   $aboutCreateDoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+  </div>
 #endgroupsection()
 #end
 
@@ -626,7 +628,7 @@ This is the revision ${request.vers} of the ducument
 <br />
 #end ## request
 <br />
-<div class="doccontent">
+<div class="doccontent xwikicontent">
 ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content    
 $docdoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
 </div>

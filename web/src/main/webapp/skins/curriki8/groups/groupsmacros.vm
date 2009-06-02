@@ -176,7 +176,9 @@ $welcomeContent
 #set($welcomeContent = $!wdoc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
 #if($welcomeContent=="")
 ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+<div class="xwikicontent">
 $xwiki.getDocument("Groups.${wdoc.name}Welcome").getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+</div>
 #else
 $welcomeContent
 #end

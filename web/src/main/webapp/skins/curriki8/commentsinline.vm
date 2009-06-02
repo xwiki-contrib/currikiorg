@@ -59,7 +59,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 ## #if($hasedit) <span class="commentdelete"><a class="commentremove" href="$doc.getURL("objectremove" , "classname=XWiki.XWikiComments&amp;classid=${comment.number}&amp;xredirect=${delredir}")"
 ##    onclick="return confirm('$msg.get("confirmcommentremove")')">$msg.get("removethiscomment")</a></span>#end ## endif hasedit
       </div>## commentheader
-      <div class="commentcontent">$doc.getRenderedContent($doc.display("comment","view",$comment))      </div>## xwikicomment
+      <div class="commentcontent"><div class="xwikicontent">$doc.getRenderedContent($doc.display("comment","view",$comment))</div></div>## xwikicomment
     </div>## commentscontent
 #end  ## end foreach 
 ## #else
