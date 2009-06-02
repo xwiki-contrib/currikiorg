@@ -1061,6 +1061,7 @@ function editCommentCallback(ajaxreq) {
  r.applyToMarkup('XWiki.XWikiComments_'+ajaxreq.options.nb+'_rating');
  clickAwayActive  = true;
  clickAwayCounter++;
+ Ext.get(ajaxreq.options.divid).next('.comment-action').hide();
  document.forms['comment-edit-' + ajaxreq.options.nb]['XWiki.XWikiComments_' + ajaxreq.options.nb +  '_comment'].focus();
 }
 function cancelEditComment(pageName,nb,divid) {
@@ -1074,6 +1075,7 @@ function cancelEditCommentCallback(ajaxreq) {
  clickAwayCounter--;
  if (clickAwayCounter==0)
   clickAwayActive = false;
+ Ext.get(ajaxreq.options.divid).next('.comment-action').show();
 }
 
 function checkReview(field) {
