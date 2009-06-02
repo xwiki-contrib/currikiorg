@@ -22,8 +22,7 @@
    #asset_display($doc "view")
  #end
 #else
-#if(!$doc.web.startsWith("Coll_") && !$doc.web.startsWith("Group_") && !$doc.web.startsWith("Messages_Group_") && !$doc.web.startsWith("Documentation_Group_") && !$doc.web.startsWith("Members_Group_")
-    && $doc.web != "MyCurriki" &&  && !$doc.web.startsWith("Blog_")  && $doc.web != "CurrikiBlog"  && $doc.web != "News")
+#if(!$doc.web.startsWith("Coll_") && !$doc.web.startsWith("Group_") && !$doc.web.startsWith("Messages_Group_") && !$doc.web.startsWith("Documentation_Group_") && !$doc.web.startsWith("Members_Group_") && $doc.web != "MyCurriki" && !$doc.web.startsWith("Blog_")  && $doc.web != "CurrikiBlog"  && $doc.web != "News")
 #set($wikicontent = true)
 #else
 #set($wikicontent = false)
