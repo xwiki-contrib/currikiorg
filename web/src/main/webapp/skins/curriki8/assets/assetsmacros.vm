@@ -812,7 +812,9 @@ $asset.use("CurrikiCode.AssetClass")
  *#
 #macro(asset_comment_text $asset $comment) ##{
 #set($r = $!asset.getValue("rating", $comment))
+#set($ret_hasRating = false)
 #if("$!r" != "" && "$!r" != "0") ##{
+#set($ret_hasRating = true)
 <div class="comment-rating rating-${r}">
 <strong>$msg.get("rve.comments.commentrating.rating.display_header")</strong>
 <p>
@@ -821,7 +823,9 @@ $asset.use("CurrikiCode.AssetClass")
 </div>
 #end ##}
 #set($c = $!asset.getValue("comment", $comment).replaceAll("\n","<br />"))
+#set($ret_hasComment = false)
 #if("$!c" != "") ##{
+#set($ret_hasComment = true)
 <div class="comment-text">
 <strong>$msg.get("rve.comments.commentrating.comment.display_header")</strong>
 <p>
@@ -849,12 +853,22 @@ $asset.use($comment)
         </li>
         <li class="comment-action">
             #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
-            <a class="comment-edit" href="javascript:void(0)" onclick="editComment('${asset.getJSFullName()}','${comment.number}','comment-text-${comment.number}'); return false;">$msg.get("rve.comments.commentrating.display.edit_link")</a>
+            <a class="comment-edit" href="javascript:void(0)" onclick="editComment('${asset.getJSFullName()}','${comment.number}','comment-text-${comment.number}'); return false;">
+#if($ret_hasRating && $ret_hasComment) ##{
+$msg.get("rve.comments.commentrating.display.edit_link")
+#elseif($ret_hasRating) ##}{
+$msg.get("rve.comments.commentrating.display.edit_comment_link")
+#elseif($ret_hasComment) ##}{
+$msg.get("rve.comments.commentrating.display.edit_rate_link")
+#else ##}{ ## Shouldn't happen
+$msg.get("rve.comments.commentrating.display.edit_link")
+#end ##}
+</a>
             #set($xredirect = $util.encodeURI($asset.getURL('view', $!request.queryString)))
             #set($qs = "")
             #set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
             #set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", $qs))
-            <a class="comment-delete" href="javascript:void(0)"  title="${msg.get('mycurriki.blog.comment.delete')}" onclick="if (confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'))  location='$deleteCommentUrl'; return false;">$msg.get('mycurriki.blog.comment.delete')</a>
+            <a class="comment-delete" href="javascript:void(0)"  title="${msg.get('rve.comments.commentrating.display.delete_link')}" onclick="if (confirm('${msg.get("rve.comments.comment.delete.confirm.message")}'))  location='$deleteCommentUrl'; return false;">$msg.get('rve.comments.commentrating.display.delete_link')</a>
             #end
         </li>
     </ul>
@@ -901,7 +915,7 @@ $asset.use($comment)
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
                 <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
                 <fieldset>
-                    <label>$msg.get("rve.comments.commentrating.rating.add_title")</label>
+                    <label>$msg.get("rve.comments.commentrating.comment.add_title")</label>
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
                     <br />
                     <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
