@@ -974,6 +974,10 @@ nr.applyToMarkup('XWiki.XWikiComments_rating');
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
+#set($rating_count_half_rem = $rating_count % 2)
+#if($rating_count_half_rem == 1) ##{
+#set($rating_count_half = $rating_count_half + 1)
+#end ##}
 #if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
@@ -1228,6 +1232,10 @@ $asset.set("rating", $cRating)
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
+#set($rating_count_half_rem = $rating_count % 2)
+#if($rating_count_half_rem == 1) ##{
+#set($rating_count_half = $rating_count_half + 1)
+#end ##}
 #if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
@@ -1337,6 +1345,10 @@ $asset.set("date", $xwiki.date)
 #set($res_rating = $rating_sum / $rating_count)
 #set($res_rating_rem = $rating_sum % $rating_count)
 #set($rating_count_half = $rating_count / 2)
+#set($rating_count_half_rem = $rating_count % 2)
+#if($rating_count_half_rem == 1) ##{
+#set($rating_count_half = $rating_count_half + 1)
+#end ##}
 #if($res_rating_rem != 0 && $res_rating_rem >= $rating_count_half) ##{
 #set($res_rating = $res_rating + 1)
 #end ##}
