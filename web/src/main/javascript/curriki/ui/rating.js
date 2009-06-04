@@ -86,6 +86,7 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 		stars.on('mouseover', this.displayHover, this);
 		stars.on('mouseout', this.removeHover, this);
 		stars.on('click', this.rate, this);
+		stars.on('mouseup', this.rate, this);
 	},
 
 	// private
