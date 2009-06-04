@@ -919,8 +919,8 @@ $msg.get("rve.comments.commentrating.display.edit_link")
                 <fieldset>
                     <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
                     <input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
-                    <br />
-                    <label>$msg.get("rve.comments.commentrating.comment.add_title")</label>
+ 
+                    <label style="clear: left; display: block; margin-top: 20px;">$msg.get("rve.comments.commentrating.comment.add_title")</label>
                     <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
                 </fieldset>
                 <fieldset class="buttons">
@@ -1150,7 +1150,7 @@ window.onbeforeunload = function() {
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
     <fieldset>
-<label for="XWiki.XWikiComments_${commentnb}_rating">
+<label style="clear: left; display: block; margin-top: 20px;" for="XWiki.XWikiComments_${commentnb}_rating">
 #if("$!{comment.rating}" != "" && "$!{comment.rating}" != "0") ##{
 $msg.get("rve.comments.commentrating.rating.edit_title")
 #else ##}{
