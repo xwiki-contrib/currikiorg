@@ -347,10 +347,11 @@ data.init = function(){
 
 		,rating: function(value, metadata, record, rowIndex, colIndex, store){
 			if (value != "") {
-				// TODO: This should use CSS
+				var page = record.id.replace(/\./, '/');
+
 				metadata.css = String.format('crs-{0}', value); // Added to <td>
 				//metadata.attr = String.format('title="{0}"', _('curriki.crs.rating'+value)); // Added to <div> around the returned HTML
-				return String.format('<img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL);
+				return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
 			} else {
 				return String.format('');
 			}
