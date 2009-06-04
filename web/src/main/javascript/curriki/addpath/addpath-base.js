@@ -510,6 +510,7 @@ Curriki.module.addpath.init = function(){
 						,items:[{
 							 layout:'column'
 							,defaults:{border:false}
+							,style:'overflow:auto;height:420px'
 							,items:[{
 								 columnWidth:0.55
 								,items:[{
