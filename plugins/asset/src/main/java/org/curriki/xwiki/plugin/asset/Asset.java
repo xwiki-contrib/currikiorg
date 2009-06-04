@@ -771,6 +771,7 @@ public class Asset extends CurrikiDocument {
             assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
         }
 
+	boolean licenceSet = false;
         BaseObject newLicenceObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
         if (newLicenceObj == null) {
             newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
@@ -815,6 +816,7 @@ public class Asset extends CurrikiDocument {
                         // licence
                         String licence = rObj.getStringValue(Constants.GROUP_DEFAULT_LICENCE_PROPERTY);
                         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, licence);
+			licenceSet = true;
                     }
                 }
             }
@@ -850,7 +852,7 @@ public class Asset extends CurrikiDocument {
         if (parentDoc != null && parentDoc.getObject(Constants.ASSET_LICENCE_CLASS) != null) {
             BaseObject parentLicenceObjAsset = parentDoc.getObject(Constants.ASSET_LICENCE_CLASS);
             copyProperty(parentLicenceObjAsset, newLicenceObj, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE);
-        } else {
+        } else if (!licenceSet) {
             newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT);
         }
 
