@@ -725,11 +725,9 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 <div id="commentscontent" class="xwikiintracontent">
-<<<<<<< .mine
-<div class="button-right mgn-btm"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
-=======
+ 
 <div class="right"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
->>>>>>> .r20563
+ 
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
       <form id="commentAddForm" action="$doc.getURL("commentadd")" method="post">
