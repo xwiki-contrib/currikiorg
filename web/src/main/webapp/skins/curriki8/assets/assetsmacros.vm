@@ -1303,21 +1303,12 @@ $response.sendRedirect($redirect)
 #set($Integer = 0)
 ##
 ## Remove any old rating values
-#set($oldRating = "")
-#set($oldRating = $!comment.rating)
-#if("$!oldRating" != "" && "$!oldRating" != "0") ##{
-#set($oldRating = $Integer.parseInt($oldRating))
-#else ##}{
-#set($oldRating = 0)
-#end ##}
-##
 #set($rating_count = 0)
 #set($rating_count = $!resource.rating_count)
 #if("$!rating_count" == "" || "$!rating_count" == "0") ##{
 #set($rating_count = 0)
 #else ##}{
 #set($rating_count = $Integer.parseInt($resource.rating_count))
-#set($rating_count = $rating_count - 1)
 #end ##}
 ##
 #set($rating_sum = 0)
@@ -1326,7 +1317,16 @@ $response.sendRedirect($redirect)
 #set($rating_sum = 0)
 #else ##}{
 #set($rating_sum = $Integer.parseInt($resource.rating_sum))
+#end ##}
+##
+#set($oldRating = "")
+#set($oldRating = $!comment.rating)
+#if("$!oldRating" != "" && "$!oldRating" != "0") ##{
+#set($oldRating = $Integer.parseInt($oldRating))
+#set($rating_count = $rating_count - 1)
 #set($rating_sum = $rating_sum - $oldRating)
+#else ##}{
+#set($oldRating = 0)
 #end ##}
 ##
 ## Update comment
