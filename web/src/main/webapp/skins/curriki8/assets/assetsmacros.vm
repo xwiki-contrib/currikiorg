@@ -917,11 +917,11 @@ $msg.get("rve.comments.commentrating.display.edit_link")
                 <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
                 <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
                 <fieldset>
-                    <label>$msg.get("rve.comments.commentrating.comment.add_title")</label>
-                    <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
-                    <br />
                     <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
                     <input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
+                    <br />
+                    <label>$msg.get("rve.comments.commentrating.comment.add_title")</label>
+                    <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
                 </fieldset>
                 <fieldset class="buttons">
                     <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.commentrating.add.cancel_button")" 
@@ -1150,17 +1150,6 @@ window.onbeforeunload = function() {
     <input type="hidden" name="nb" value="${commentnb}" />
     <input type="hidden" name="xredirect" value="${xredirect}" />
     <fieldset>
-<label for="XWiki.XWikiComments_${commentnb}_comment">
-#if("$!{comment.comment}" != "") ##{
-$msg.get("rve.comments.commentrating.comment.edit_title")
-#else ##}{
-$msg.get("rve.comments.commentrating.comment.add_title")
-#end ##}
-</label>
-{/pre}
-        $asset.display("comment", "edit")
-{pre}
-<br />
 <label for="XWiki.XWikiComments_${commentnb}_rating">
 #if("$!{comment.rating}" != "" && "$!{comment.rating}" != "0") ##{
 $msg.get("rve.comments.commentrating.rating.edit_title")
@@ -1170,6 +1159,17 @@ $msg.get("rve.comments.commentrating.rating.add_title")
 </label>
 {/pre}
         $asset.display("rating", "edit")
+{pre}
+<br />
+<label for="XWiki.XWikiComments_${commentnb}_comment">
+#if("$!{comment.comment}" != "") ##{
+$msg.get("rve.comments.commentrating.comment.edit_title")
+#else ##}{
+$msg.get("rve.comments.commentrating.comment.add_title")
+#end ##}
+</label>
+{/pre}
+        $asset.display("comment", "edit")
 {pre}
     </fieldset>
     <fieldset class="buttons">
