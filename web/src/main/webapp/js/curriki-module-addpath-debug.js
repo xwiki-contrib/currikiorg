@@ -476,6 +476,7 @@ Curriki.module.addpath.init = function(){
 						 xtype:'form'
 						,id:'SelectTemplateDialoguePanel'
 						,formId:'SelectTemplateDialogueForm'
+						,style:'overflow:auto !important; height:480px'
 						,border:false
 						,bodyBorder:false
 						,labelWidth:25
@@ -510,7 +511,6 @@ Curriki.module.addpath.init = function(){
 						,items:[{
 							 layout:'column'
 							,defaults:{border:false}
-							,style:'overflow:auto;height:420px'
 							,items:[{
 								 columnWidth:0.55
 								,items:[{
