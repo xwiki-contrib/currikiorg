@@ -476,7 +476,7 @@ Curriki.module.addpath.init = function(){
 						 xtype:'form'
 						,id:'SelectTemplateDialoguePanel'
 						,formId:'SelectTemplateDialogueForm'
-						,style:'overflow:auto !important; height:480px'
+						,style:'overflow:auto; height:480px'
 						,border:false
 						,bodyBorder:false
 						,labelWidth:25
