@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1218122764000</creationDate>
-<date>1234809389000</date>
-<contentUpdateDate>1234891124000</contentUpdateDate>
-<version>111.1</version>
+<date>1244143755000</date>
+<contentUpdateDate>1244143755000</contentUpdateDate>
+<version>113.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Add secondary sort on member ratings for rating count</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -116,6 +116,24 @@
 #macro(searchResourceReview $resource) ##{
 	#set($ret_review = "")
 	#set($ret_review = $!resource.getObject("CRS.CurrikiReviewStatusClass").getProperty("status").getValue())
+#end ##}
+#**
+  * Get the rating for a resource
+  *
+  * resource   Curriki Asset Document
+  *#
+#macro(searchResourceRating $resource) ##{
+	#set($ret_rating = "")
+	#set($ret_rating = $!resource.getObject("CurrikiCode.AssetClass").getProperty("rating").getValue())
+#end ##}
+#**
+  * Get the rating for a resource
+  *
+  * resource   Curriki Asset Document
+  *#
+#macro(searchResourceRatingCount $resource) ##{
+	#set($ret_rating_count = "")
+	#set($ret_rating_count = $!resource.getObject("CurrikiCode.AssetClass").getProperty("rating_count").getValue())
 #end ##}
 #**
   * Get the asset type for a resource
@@ -221,7 +239,7 @@
 				#if($xwiki.hasAccessLevel("view", $parentPage)) ##{
 					#set($parentAsset = $xwiki.getDocument($parentPage))
 					#searchResourceInfo($parentAsset false)
-					#set($pJSON = "{ 'page':'${parentAsset.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}' ,'ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${parentAsset.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'updated':'${parentAsset.date}' }")
+					#set($pJSON = "{ 'page':'${parentAsset.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}' ,'ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${parentAsset.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'rating':'${ret_rating}' ,'ratingCount':'${ret_rating_count}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'updated':'${parentAsset.date}' }")
 					#if($isFirstParent) ##{
 						#set($isFirstParent = false)
 					#else ##}{
@@ -248,13 +266,15 @@
 #searchResourceTitle($resource)
 #searchResourceICT($resource)
 #searchResourceReview($resource)
+#searchResourceRating($resource)
+#searchResourceRatingCount($resource)
 #searchResourceAssetType($resource)
 #searchResourceCategory($resource)
 #searchResourceDescription($resource)
 #searchResourceFWItems($resource)
 #searchResourceEL($resource)
 #searchResourceContributorName($resource)
-#set($ret_info = "{ 'page':'${resource.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}','ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${resource.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'parents':${ret_parents} ,'updated':'${resource.date}' } ")
+#set($ret_info = "{ 'page':'${resource.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}','ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${resource.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'rating':'${ret_rating}' ,'ratingCount':'${ret_rating_count}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'parents':${ret_parents} ,'updated':'${resource.date}' } ")
 #end ##}
 ##
 ##
@@ -282,6 +302,7 @@
 	##
 	#set($sortField1 = 'title.untokenized')
 	#set($sortField2 = 'CurrikiCode.AssetClass.instructional_component.key.untokenized')
+	#set($sortField3 = '')
 	#if($!request.sort != "") ##{
 		#if($request.sort == "title") ##{
 			#set($sortField1 = 'title.untokenized')
@@ -303,14 +324,26 @@
 			#set($sortField1 = 'date')
 			#set($sortField2 = 'title.untokenized')
 		#end ##}
+		#if($request.sort == "memberRating") ##{
+			#set($sortField1 = '-CurrikiCode.AssetClass.rating.untokenized')
+			#set($sortField2 = '-CurrikiCode.AssetClass.rating_count.untokenized')
+			#set($sortField3 = 'title.untokenized')
+		#end ##}
 	#end ##}
 	#if($!request.dir == "DESC") ##{
 		#set($sortField1 = "-${sortField1}")
 		#if($request.sort == "rating") ##{
 			#set($sortField1 = 'CRS.CurrikiReviewStatusClass.status.untokenized')
 		#end ##}
+		#if($request.sort == "memberRating") ##{
+			#set($sortField1 = 'CurrikiCode.AssetClass.rating.untokenized')
+			#set($sortField2 = 'CurrikiCode.AssetClass.rating_count.untokenized')
+		#end ##}
 	#end ##}
 	#set($sortFields = "${sortField1},${sortField2}")
+	#if($sortField3 != "") ##{
+	#set($sortFields = "${sortField1},${sortField2},${sortField3}")
+	#end ##}
 	#set($sortFields = $sortFields.split(","))
 	##
 	## Create query
@@ -378,6 +411,9 @@
 		#if($request.review == "highest_rated")##{
 			#set($junk = $q.add("CRS.CurrikiReviewStatusClass.status:(800 OR 700)"))
 		#end ##}
+		#if($request.review == "members.highest_rated")##{
+			#set($junk = $q.add("CurrikiCode.AssetClass.rating:(4 OR 5)"))
+		#end ##}
 	#end ##}
 	##
 	## Special
@@ -419,6 +455,7 @@
 	##
 	## Do query
 	##
+## // Query: $luceneQuery
 	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
 	#set($results = $searchResults.getResults($start, $limit))
 	#set($resultCount = $searchResults.totalHitcount)

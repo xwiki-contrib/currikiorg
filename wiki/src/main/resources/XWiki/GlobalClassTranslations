@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.jkl1231</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1217886586000</creationDate>
-<date>1242843221000</date>
-<contentUpdateDate>1242843221000</contentUpdateDate>
-<version>112.1</version>
+<date>1243967864000</date>
+<contentUpdateDate>1243967864000</contentUpdateDate>
+<version>118.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>I just removed the bad Flag strings. They are not back in FileCheck.</comment>
+<comment>copied and pasted from Next for Mem Rating changes</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -57,7 +57,9 @@
 </object>
 <content>## GLOBAL CLASS TRANSLATIONS
 
-##I am pulling out many of the keys that are class based from individual translation files, such as Groups and Forms, and pulling them into this translation file. This is being done to avoid duplicate lookup strings across translation files. 
+##I am pulling out many of the keys that are class based from individual translation files, such as Groups and Forms, and pulling them into this translation file. This is being done to 
+
+avoid duplicate lookup strings across translation files. 
 
 ## To view the different classes, go here.  http://next.dev.curriki.org/xwiki/bin/edit/XWiki/CurrikiSpaceClass?editor=class
 
@@ -87,7 +89,9 @@ collection.collection=Collection
 collection.folder=Folder
 
 ##CATEGORY AND / OR FILE TYPE 
-##Although the below are not taken from the Assets, that is, these most of these values are NOT stored in the classes, I am adding them to this file because they are global. Todd December 31, 2008.
+##Although the below are not taken from the Assets, that is, these most of these values are NOT stored in the classes, I am adding them to this file because they are global. Todd 
+
+December 31, 2008.
 
 archive.gtar=Archive: gtar
 archive.gz=Archive: gz
@@ -381,6 +385,13 @@ CurrikiCode.AssetClass_instructional_component_resource_webcast=Asset: Webcast/P
 CurrikiCode.AssetClass_instructional_component_other=Other
 #This one below is not a value in the class but we need for several location, such as My Contributions
 CurrikiCode.AssetClass_instructional_component_multiple=Multiple
+
+##MEMBER RATING
+CurrikiCode.AssetClass_member_rating_1=Unusable
+CurrikiCode.AssetClass_member_rating_2=Weak
+CurrikiCode.AssetClass_member_rating_3=Satisfactory
+CurrikiCode.AssetClass_member_rating_4=Strong
+CurrikiCode.AssetClass_member_rating_5=Outstanding
 
 ## ACCESS RIGHTS
 CurrikiCode.AssetClass_rights_public=Public: Available to anyone and any member can edit
@@ -1010,7 +1021,7 @@ XWiki.XWikiUsers_topics_FW_masterFramework.Speaking=Speaking
 XWiki.XWikiUsers_topics_FW_masterFramework.Spelling=Spelling
 XWiki.XWikiUsers_topics_FW_masterFramework.VocabularyWriting=Vocabulary Writing
 
-##CRS
+##CRS THESE ARE NO LONGER USED - TODD
 
 ##CRS.CurrikiReviewStatusClass_status_1=curriki.crs.basic
 ##CRS.CurrikiReviewStatusClass_status_2=curriki.crs.good
@@ -1064,6 +1075,10 @@ global.title.popup.ict=&lt;strong&gt;Instructional Component Type(s):&lt;/strong
 global.title.popup.none.selected=-- None Selected --
 ##Used in left TOC for no ICT value:
 global.title.popup.ict.missing=-- None Selected --
+global.title.popup.CRS=&lt;strong&gt;Curriki Review:&lt;/strong&gt;
+global.title.popup.CRS.none=-- None --
+global.title.popup.memrating=&lt;strong&gt;Member Rating:&lt;/strong&gt;
+global.title.popup.memrating.none=-- None --
 
 ##COMPARE VERSIONS
 ## Jen is seeing if we still need this.
@@ -1168,12 +1183,12 @@ changes.asset.keywords=Keywords
 changes.asset.aggregation_level=Aggregation Level
 changes.asset.difficulty=Difficulty
 changes.asset.status=Status
-changes.asset.fw_items=Subject(s)
-changes.asset.instructional_component=Instructional Component Type(s)
+changes.asset.fw_items=Subjects
+changes.asset.instructional_component=Instructional Component Type
 changes.asset.category=Category
 changes.asset.rights=Rights
-changes.asset.educational_level=Educational Level(s)
-changes.asset.educational_level2=Educational Level(s)
+changes.asset.educational_level=Educational Level
+changes.asset.educational_level2=Educational Level
 changes.asset.language=Language
 changes.asset.instructional_component2=Instructional Component
 changes.asset.caption_desc=Caption Description
@@ -1204,12 +1219,17 @@ changes.comment.comment=Comment
 
 curriki.comment.no.note=No revision note
 
+##HISTORY: MEMBER RATING
+rve.comments.comment.revision.edit=Member comment and/or rating updated
+rve.comments.comment.revision.add=Member comment and/or rating added
+rve.comments.comment.revision.delete=Member comment and/or rating deleted
+
 ##HISTORY: INFRASTRUCTURE
 curriki.comment.initmetadatafornewcollection=Initializing information for new collection...
 curriki.comment.initmetadatafornewasset=Initializing information for new resource...
 curriki.comment.datamodelmigration=Resource automatically migrated to new Curriki data model
 
-HITORY: CREATE NEW
+HISTORY: CREATE NEW
 curriki.comment.createrootcollection=Created collection
 curriki.comment.startcreatingcompositeasset=Created resource
 curriki.comment.createnewsourceasset=Created new resource
@@ -1267,6 +1287,5 @@ history.loadinghistory=Loading history
 comment.errorgettinghistory=Error getting history
 preview.loadingpreview=Loading preview
 preview.errorgettingpreview=Error getting preview
-
 
 </content></xwikidoc>

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.NielsMayer</creator>
-<author>XWiki.dward</author>
+<author>XWiki.panjl</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1212692135000</creationDate>
-<date>1234891233000</date>
-<contentUpdateDate>1234891233000</contentUpdateDate>
-<version>9.1</version>
+<date>1243731988000</date>
+<contentUpdateDate>1243731988000</contentUpdateDate>
+<version>10.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>CELP</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -72,13 +72,13 @@
   #includeMacros("CreateResources.StyledMacros")
   ##  parameters passed by other forms or itself
   #set( $successMessage     = $request.getParameter("successMessage") ) ##trigger special actions after POST from form.scratch.url
-  #set( $pageName	    = $request.getParameter("pageName") )
-  #set( $publishSpace	    = $request.getParameter("publishSpace") )
-  #set( $parentPage	    = $request.getParameter("parentPage") )
-  #set( $noDialogs	    = $request.getParameter("noDialogs") )
+  #set( $pageName           = $request.getParameter("pageName") )
+  #set( $publishSpace       = $request.getParameter("publishSpace") )
+  #set( $parentPage         = $request.getParameter("parentPage") )
+  #set( $noDialogs          = $request.getParameter("noDialogs") )
 #if( ("$!noDialogs"=="") || ("$!noDialogs"=="0") )  ## { ?noDialogs... not set, get parameters used for add-path dialogs
-  #set( $cameFrom	    = $request.getParameter("cameFrom") )
-  #set( $flow		    = $request.getParameter("flow") ) 
+  #set( $cameFrom           = $request.getParameter("cameFrom") )
+  #set( $flow               = $request.getParameter("flow") ) 
   #set( $content            = $request.getParameter("CurrikiCode.TextAssetClass_0_text"))
   #set( $title              = $request.getParameter("CurrikiCode.AssetClass_0_title"))
   #set( $createLessonURL = $request.getParameter("createLessonURL"))
@@ -99,20 +99,19 @@
 ## &lt;p&gt;( after munging for publishSpace $!request.page $!request.method ): newAsset: $!newAsset , pageName: $!pageName , cameFrom: $!cameFrom , flow: $!flow , parentPage: $!parentPage , publishSpace: $!publishSpace&lt;/p&gt;
 ## DEBUG DEBUG DEBUG
   #if( "$!pageName" != "" ) ## {
-     ## pageName is name of previously created asset (from other forms); get it and use it.
-     #set( $newAsset  = $xwiki.curriki.fetchAssetOrNull($pageName) )
-	#if(!$newAsset) ##{
-		#set( $redirect = $request.getParameter("xredirect"))
-		#if("$!redirect" != "") ##{
-		$response.sendRedirect($redirect)
-		#else ## } {
-			#if("$!createLessonURL" != "") ##{
-				$response.sendRedirect($createlessonURL)
-			#end ## }
-		#end ## }
-	#end ## }
+    ## pageName is name of previously created asset (from other forms); get it and use it.
+    #set( $newAsset  = $xwiki.curriki.fetchAssetOrNull($pageName) )
+    #if(!$newAsset) ##{
+      #set( $redirect = $request.getParameter("xredirect"))
+      #if("$!redirect" != "") ##{
+        $response.sendRedirect($redirect)
+      #else ## } {
+        #if("$!createLessonURL" != "") ##{
+          $response.sendRedirect($createlessonURL)
+        #end ## }
+      #end ## }
+    #end ## }
   #end ## }
-
   ##
   ## -------------------- POST PROCESSING --------------------
   ## (nb. called from form in SimpleWikiResource and CurrikiStandardLessonPlan)
@@ -137,28 +136,28 @@
      #end##}
      $newAsset.setContent("$content")
      $newAsset.setTitle($title)
-	 #if( $createLessonURL== $msg.get('ace.lesson.plan.url') ) ##{
-	   #set( $formname = "ACELP" ) ##}
-	 #elseif( $createLessonURL == $msg.get('lesson.plan.url') ) ##{
-	   #set( $formname = "CSLP" ) ##}
-	 #elseif( $createLessonURL == $msg.get('nortel.lesson.plan.url') ) ##{
-	   #set( $formname = "NLLP" ) ##}
-	 #elseif( $createLessonURL == $msg.get('form.scratch.url') ) ##{
-	   #set( $formname = "SWR" ) ##}
-	 #elseif( $createLessonURL == $msg.get('form.html.scratch.url') ) ##{
-	   #set( $formname = "SHR" ) ##}
-	 #elseif( $createLessonURL == $msg.get('wq.url') ) ##{
-	   #set( $formname = "WQ" ) ##}
-	 #end ##}
-     #if( $createLessonURL== $msg.get('ace.lesson.plan.url') || $createLessonURL== $msg.get('lesson.plan.url') || $createLessonURL== $msg.get('nortel.lesson.plan.url') ) ##{
-         $newAsset.set("instructional_component", "curriculum_lp")
+     #if( $createLessonURL== $msg.get('ace.lesson.plan.url') ) ##{
+       #set( $formname = "ACELP" ) ##}
+     #elseif( $createLessonURL == $msg.get('lesson.plan.url') ) ##{
+       #set( $formname = "CSLP" ) ##}
+     #elseif( $createLessonURL == $msg.get('nortel.lesson.plan.url') ) ##{
+       #set( $formname = "NLLP" ) ##}
+     #elseif( $createLessonURL == $msg.get('form.scratch.url') ) ##{
+       #set( $formname = "SWR" ) ##}
+     #elseif( $createLessonURL == $msg.get('form.html.scratch.url') ) ##{
+       #set( $formname = "SHR" ) ##}
+     #elseif( $createLessonURL == $msg.get('wq.url') ) ##{
+       #set( $formname = "WQ" ) ##}
+     #elseif( $createLessonURL == $msg.get('celp.url') ) ##{
+       #set( $formname = "CELP" ) ##}
      #end ##}
-     #if($createLessonURL == $msg.get('wq.url')) ##{
-         $newAsset.set("instructional_component", "activity_webquest")
+     #if( $createLessonURL== $msg.get('ace.lesson.plan.url') || $createLessonURL== $msg.get('lesson.plan.url') || $createLessonURL== $msg.get('nortel.lesson.plan.url') ) ##{
+       $newAsset.set("instructional_component", "curriculum_lp")
+     #elseif($createLessonURL == $msg.get('wq.url')) ##{
+       $newAsset.set("instructional_component", "activity_webquest")
      #end ##}
      #set( $save_success = $newAsset.saveWithProgrammingRights() )
      #if( $!save_success ) ## {
-
        #set( $newAsset = $newAsset.publish($publishSpace) )
        #if("$!parentPage"!="") ## {
          #set( $parentAsset = $xwiki.curriki.fetchAsset($parentPage) )
@@ -247,15 +246,15 @@ Curriki.module.addpath.startDoneMessage();
    &lt;button 
         onclick="try {if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); document.forms.inline.action='$msg.get("form.scratch.url")'; document.forms.inline.submit(); return false;} catch(e) {alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+'...');return false;}"
         &gt;Edit Again&lt;/button&gt;
-   &lt;input type="hidden" name="page"		value="$!request.page"		/&gt;
-   &lt;input type="hidden"	name="pageName"		value="$newAsset.fullName"	/&gt;
-   &lt;input type="hidden"	name="publishSpace"	value="$!publishSpace"	        /&gt;
-   &lt;input type="hidden"	name="parentPage"	value="$!parentPage"		/&gt;
+   &lt;input type="hidden" name="page"             value="$!request.page"          /&gt;
+   &lt;input type="hidden" name="pageName"         value="$newAsset.fullName"      /&gt;
+   &lt;input type="hidden" name="publishSpace"     value="$!publishSpace"          /&gt;
+   &lt;input type="hidden" name="parentPage"       value="$!parentPage"            /&gt;
 #if( "$!noDialogs"!="" )   ## { when ?noDialogs=... argument set, pass it on to SimpleWikiResource for "edit-again"
-   &lt;input type="hidden"	name="noDialogs"	value="$!noDialogs"		/&gt;
+   &lt;input type="hidden" name="noDialogs"        value="$!noDialogs"             /&gt;
 #else                      ## } {  -- ?noDialogs... not set, pass parameters used for add-path dialogs
-   &lt;input type="hidden"	name="cameFrom"		value="$!cameFrom"		/&gt;
-   &lt;input type="hidden"	name="flow"		value="$!flow"			/&gt;
+   &lt;input type="hidden" name="cameFrom"         value="$!cameFrom"              /&gt;
+   &lt;input type="hidden" name="flow"             value="$!flow"                  /&gt;
 #end                       ## }
    &lt;/form&gt;
  &lt;dl&gt;
