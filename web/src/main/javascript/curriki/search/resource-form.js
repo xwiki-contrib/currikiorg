@@ -460,7 +460,7 @@ form.init = function(){
 		,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
-			,width: 141
+			,width: 164
 			,dataIndex: 'title'
 			,sortable:true
 			,hideable:false
@@ -468,7 +468,7 @@ form.init = function(){
 //			,tooltip:_('search.resource.column.header.title')
 		},{
 			id: 'ict'
-			,width: 131
+			,width: 108
 			,header: _('search.resource.column.header.ict')
 			,dataIndex:'ictText'
 			,sortable:true
@@ -484,7 +484,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.contributor')
 		},{
 			id: 'rating'
-			,width: 84
+			,width: 88
 			,header: _('search.resource.column.header.rating')
 			,dataIndex:'rating'
 			,sortable:true
@@ -492,7 +492,7 @@ form.init = function(){
 //			,tooltip: _('search.resource.column.header.rating')
 		},{
 			id: 'memberRating'
-			,width: 110
+			,width: 105
 			,header: _('search.resource.column.header.member.rating')
 			,dataIndex:'memberRating'
 			,sortable:true
