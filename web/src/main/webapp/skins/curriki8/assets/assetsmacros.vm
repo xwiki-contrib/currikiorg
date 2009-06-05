@@ -85,7 +85,9 @@
  *#
 #macro(member_rating_icon $asset)
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($rating = 0)
 #set($rating = $!asset.getValue("rating"))
+#set($rateCount = 0)
 #set($rateCount = $!asset.getValue("rating_count"))
 <div id="member-rating">
 #if("$!rateCount" == "" || "$!rateCount" == "0" || "$!rating" == "" || "$!rating" == "0") ##{
@@ -813,6 +815,7 @@ $asset.use("CurrikiCode.AssetClass")
  * Display comment text
  *#
 #macro(asset_comment_text $asset $comment) ##{
+#set($r = 0)
 #set($r = $!asset.getValue("rating", $comment))
 #set($ret_hasRating = false)
 #if("$!r" != "" && "$!r" != "0") ##{
@@ -824,6 +827,7 @@ $asset.use("CurrikiCode.AssetClass")
 </p>
 </div>
 #end ##}
+#set($c = "")
 #set($c = $!asset.getValue("comment", $comment).replaceAll("\n","<br />"))
 #set($ret_hasComment = false)
 #if("$!c" != "") ##{
