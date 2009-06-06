@@ -27,11 +27,11 @@
         #set($treeviewid = 1 + $treeviewid)
         #end
         <style type="text/css">
-            @import "/xwiki/yui/treeview/assets/tree.css";
+            @import "$xwiki.getSkinFile("js/yui/treeview/assets/tree.css"");
         </style>
-        <script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-        <script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-        <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+        <script type="text/javascript" src="$xwiki.getSkinFile("js/yui/yahoo/yahoo-min.js")" ></script>
+        <script type="text/javascript" src="$xwiki.getSkinFile("js/yui/treeview/treeview-min.js")" ></script>
+        <script type="text/javascript" src="$xwiki.getSkinFile("js/yui/treeview/checknode.js")"></script>
         #set($tmpActiveClass = $asset.getActiveClass())
         $asset.use("CurrikiCode.ArchiveAssetClass")
         <button class="button button-confirm" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
