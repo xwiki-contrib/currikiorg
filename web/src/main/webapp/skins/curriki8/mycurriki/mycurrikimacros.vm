@@ -1665,7 +1665,7 @@ $msg.get("deleted")
  #set($shortname = $shortname.substring(6))
 #end
 #if(($userdoc.fullName == $context.user || $hasGlobalAdmin)) ##{
-#set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${shortname}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
+#set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${shortname}' and doc.name != 'WebHome' and doc.name != 'Favorites' and props.id.name='type' and props.value='collection'").get(0))
 #set($multiple = ($cnt > 1))
 #if($multiple) ##{
 #set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${shortname}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
