@@ -473,13 +473,28 @@ Curriki.module.addpath.init = function(){
 					,border:false
 					,bodyBorder:false
 					,items:[{
+						 xtype:'box'
+						,autoEl:{
+							 tag:'div'
+							,html:_(tmplPfx+'.guidingquestion')
+							,cls:'guidingquestion'
+						}
+					},{
+						 xtype:'box'
+						,hidden:!(Curriki.current.templateType == 'format')
+						,autoEl:{
+							 tag:'div'
+							,html:_('add.selectformat.instruction')
+							,cls:'instruction'
+							,hidden:!(Curriki.current.templateType == 'format')
+						}
+					},{
 						 xtype:'form'
 						,id:'SelectTemplateDialoguePanel'
 						,formId:'SelectTemplateDialogueForm'
 						,border:false
 						,bodyBorder:false
 						,labelWidth:25
-						,autoScroll:true
 						,defaults:{
 							 labelSeparator:''
 							,border:false
@@ -508,58 +523,38 @@ Curriki.module.addpath.init = function(){
 							}
 						}]
 						,items:[{
-							 xtype:'box'
-							,autoEl:{
-								 tag:'div'
-								,html:_(tmplPfx+'.guidingquestion')
-								,cls:'guidingquestion'
-							}
-						},{
-							 xtype:'box'
-							,hidden:!(Curriki.current.templateType == 'format')
-							,autoEl:{
-								 tag:'div'
-								,html:_('add.selectformat.instruction')
-								,cls:'instruction'
-								,hidden:!(Curriki.current.templateType == 'format')
-							}
-						},{
-							 xtype:'container'
-							,id:'selecttemplate-form-container'
-							,autoEl:{}
+							id:'selecttemplate-form-container'
+							,layout:'column'
+							,defaults:{border:false}
 							,items:[{
-								 layout:'column'
-								,defaults:{border:false}
+								 columnWidth:0.55
 								,items:[{
-									 columnWidth:0.55
-									,items:[{
-										 xtype:'container'
-										,id:'selecttemplate-list'
-										,items:AddPath.TemplateList()
-										,autoEl:{
-											 tag:'div'
-											,id:'selecttemplate-list-box'
-											,html:''
-										}
-									}]
-								},{
-									 columnWidth:0.35
-									,items:[{
-										 xtype:'box'
-										,id:'selecttemplate-thumbnail-container'
-										,anchor:''
-										,autoEl:{
-											 tag:'div'
-											,id:'selecttemplate-thumbnail'
-											,style:'margin:8px 0 8px 10px'
-											,children:[{
-												 tag:'img'
-												,id:'selecttemplate-thumbnail-image'
-												,src:_(tmplPfx+'.list1.thumbnail')
-												,onLoad:"Ext.getCmp('SelectTemplateDialogueWindow').syncShadow();"
-											}]
-										}
-									}]
+									 xtype:'container'
+									,id:'selecttemplate-list'
+									,items:AddPath.TemplateList()
+									,autoEl:{
+										 tag:'div'
+										,id:'selecttemplate-list-box'
+										,html:''
+									}
+								}]
+							},{
+								 columnWidth:0.35
+								,items:[{
+									 xtype:'box'
+									,id:'selecttemplate-thumbnail-container'
+									,anchor:''
+									,autoEl:{
+										 tag:'div'
+										,id:'selecttemplate-thumbnail'
+										,style:'margin:8px 0 8px 10px'
+										,children:[{
+											 tag:'img'
+											,id:'selecttemplate-thumbnail-image'
+											,src:_(tmplPfx+'.list1.thumbnail')
+											,onLoad:"Ext.getCmp('SelectTemplateDialogueWindow').syncShadow();"
+										}]
+									}
 								}]
 							}]
 						}]
