@@ -1817,10 +1817,25 @@ img.rating-icon {
 
 /** EDITORIAL **/
 
-img.editorial.crs {
-	background-image: url(images/sprite_crs_ict_group.gif);
+
+.panel-editorial a {font-weight: normal;}
+
+img.editorial.crs, .panel-mod div.crs li {
+	background-image: url(images/sprite_crs_ict_group.gif); 
 	background-position: 100px 100px;
-	background-repeat: none;
+	background-repeat: no-repeat;
+}
+
+img.editorial.media {
+	background-image: url(images/sprite_mediatype.gif); 
+	background-position: 100px 100px;
+	background-repeat: no-repeat;
+}
+
+img.editorial.rating, .panel-mod div.media li a {
+	background-image: url(images/sprite_stars.gif);  
+	background-position: 100px 100px;
+	background-repeat: no-repeat;
 }
 
 img.editorial.crs.mini-1 {background-position: 0 -1440px; height: 16px; width: 16px;}
@@ -1833,17 +1848,12 @@ img.editorial.crs.medium-3 {background-position: 0 -180px; height: 36px; width: 
 
 img.editorial.crs.generic {width: 36px; height: 36px; background-position: 0 -5940px}
 
-img.editorial.media {
-	background-image: url(images/sprite_mediatype.gif); 
-	background-position: 100px 100px;
-	background-repeat: none;
-}
-
 img.editorial.media.mini-collection {background-position: 0 -3600px; height: 17px; width: 17px;}
-img.editorial.media.mini-folder {background-position: 0 -3690px; height: 17px; width: 17px;}
+img.editorial.media.mini-folder {background-position: 0 -3690px; height: 17px; width: 27px;}
 img.editorial.media.mini-text {background-position: 0 -4410px; height: 17px; width: 17px;}
 img.editorial.media.mini-document {background-position: 0 -3780px; height: 17px; width: 17px;}
 img.editorial.media.mini-image {background-position: 0 -3870px;height: 17px; width: 17px;}
+img.editorial.media.mini-archive {background-position: 0 -4140px; height: 17px; width: 17px;}
 img.editorial.media.mini-audio {background-position: 0 -4230px; height: 17px; width: 17px;}
 img.editorial.media.mini-video {background-position: 0 -4050px; height: 17px; width: 17px;}
 img.editorial.media.mini-interactive {background-position: 0 -3960px; height: 17px; width: 17px;}
@@ -1855,29 +1865,129 @@ img.editorial.media.medium-folder {background-position: 0 -90px;  height:32px; w
 img.editorial.media.medium-text {background-position: 0 -810px;  height:32px; width: 32px;}
 img.editorial.media.medium-document {background-position: 0 -180px;  height:32px; width: 32px;}
 img.editorial.media.medium-image {background-position: 0 -270px;  height:32px; width: 32px;}
+img.editorial.media.medium-archive {background-position: 0 -540px;  height:32px; width: 32px;}
 img.editorial.media.medium-audio {background-position: 0 -630px;  height:32px; width: 32px;}
 img.editorial.media.medium-video {background-position: 0 -450px;  height:32px; width: 32px;}
 img.editorial.media.medium-interactive {background-position: 0 -360px;  height:32px; width: 32px;}
 img.editorial.media.medium-link {background-position: 0 -720px;  height:32px; width: 32px;}
 img.editorial.media.medium-unknown {background-position: 0 -900px; height:32px; width: 32px;}
 
+img.editorial.rating.large-5star {background-position: 0 0; height:17px; width: 17px;}
+img.editorial.rating.large-4star {background-position: 0 -25px; height:17px; width: 17px;}
+img.editorial.rating.small-4star {background-position: 0 -175px; height:13px; width: 13px;}
+img.editorial.rating.small-5star {background-position: 0 -150px; height:13px; width: 13px;}
 
-img.editorial.rating {
-	background-image: url(images/sprite_stars.gif);
-	background-position: 100px 100px;
-	background-repeat: none;
-}
-
-img.editorial.rating.large-5star {background-position: 0 0; height:17px; width: 85px;}
-img.editorial.rating.large-4star {background-position: 0 -25px; height:17px; width: 85px;}
-
-img.editorial.rating.small-4star {background-position: 0 -175px; height:13px; width: 65px;}
-img.editorial.rating.small-5star {background-position: 0 -150px; height:13px; width: 65px;}
-
-img.editorial.tutorial {
+img.editorial.tutorial, .panel-mod div.tutorial a  {
 	background-image: url(images/sprite_general.gif);
 	background-position: 0 -1710px;
-	background-repeat: none;
+	background-repeat: no-repeat;
+}
+
+img.editorial.tutorial {
 	width: 41px;
 	height: 33px;
 }
+
+.panel-mod div.tutorial a {
+	display: block;
+	padding-left: 50px;
+}
+
+.panel-mod .frame-content  {
+	color: #666;
+	font-size: 14px;
+}
+
+.panel-mod div.mod {
+	margin: 5px 0;
+	padding: 5px 0;
+	border-bottom: 1px solid #999;
+}
+
+.panel-mod div.mod.last {border: 0;}
+.panel-mod ul {margin: 0; padding: 5px 0 0 0;}
+.panel-mod ul li {margin-bottom: 5px; padding-bottom: 3px;}
+.panel-mod a {font-weight: normal;}
+.panel-mod strong {color: #777;}
+
+.panel-mod div.bulleted ul {
+	list-style:disc;
+	list-style-position: inside;
+	padding: 5px;
+}
+
+.panel-mod div.media.medium li a {
+	display: block;
+	padding: 9px 0 10px 37px;
+}
+
+.panel-mod div.media.mini li a {
+	display: block;
+	padding: 0px 0 5px 20px;
+}
+
+.panel-mod div.crs.medium li {padding: 10px 0 10px 39px;}
+.panel-mod div.crs.mini li {padding: 2px 0 5px 19px;}
+.panel-mod div.media li {padding: 0;}
+.panel-mod div.crs.media li {padding: 0;}
+.panel-mod div.crs.mini li {padding-left: 19px;}
+.panel-mod div.crs.medium li {padding-left: 39px;}
+
+.panel-mod .mini li.crs-1 {background-position: 0 -1439px;}
+.panel-mod .mini li.crs-2 {background-position: 0 -1529px;}
+.panel-mod .mini li.crs-3 {background-position: 0 -1619px;}
+
+.panel-mod .medium li.crs-1 {background-position: 0 0;}
+.panel-mod .medium li.crs-2  {background-position: 0 -90px;}
+.panel-mod .medium li.crs-3  {background-position: 0 -180px;}
+
+.panel-mod .mini li.collection a {background-position: 0 -3600px;}
+.panel-mod .mini li.folder a {background-position: 0 -3690px;}
+.panel-mod .mini li.text a {background-position: 0 -4410px;}
+.panel-mod .mini li.document a {background-position: 0 -3780px;}
+.panel-mod .mini li.image a {background-position: 0 -3870px;}
+.panel-mod .mini li.archive a {background-position: 0 -4140px;}
+.panel-mod .mini li.audio a {background-position: 0 -4230px;}
+.panel-mod .mini li.video a {background-position: 0 -4050px;}
+.panel-mod .mini li.interactive a {background-position: 0 -3960px;}
+.panel-mod .mini li.link a {background-position: 0 -4320px;}
+.panel-mod .mini li.unknown a {background-position: 0 -4500px;}
+
+.panel-mod .medium li.collection a {background-position: 0 0; }
+.panel-mod .medium li.folder a {background-position: 0 -90px; }
+.panel-mod .medium li.text a {background-position: 0 -810px; }
+.panel-mod .medium li.document a {background-position: 0 -180px; }
+.panel-mod .medium li.image a {background-position: 0 -270px; }
+.panel-mod .medium li.archive a {background-position: 0 -540px;}
+.panel-mod .medium li.audio a {background-position: 0 -630px; }
+.panel-mod .medium li.video a {background-position: 0 -450px; }
+.panel-mod .medium li.interactive a {background-position: 0 -360px; }
+.panel-mod .medium li.link a {background-position: 0 -720px;}
+.panel-mod .medium li.unknown a {background-position: 0 -900px;}
+
+.panel-mod div.custom img {
+	float: left;
+	padding-right: 5px;
+}
+
+.panel-mod div.custom li:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.panel-mod div.custom li {
+	display: inline-block;
+}
+ 
+html[xmlns] .panel-mod div.custom li {
+	display: block;
+}
+ 
+* html .panel-mod div.custom li {
+	height: 1%;
+}
+
