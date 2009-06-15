@@ -13,7 +13,20 @@ body {
     text-align: center;
 }
  
-a img { border: none; }
+a, a:link, a:visited {
+	text-decoration: none;
+	color: #369;
+}
+
+a:visited {color: #5051a3;}
+ 
+a:hover{
+	text-decoration: underline;
+	color: #336;
+}
+
+a img {border: none;}
+
 
 fieldset { border: none; padding: 0; margin: 0; }
 form { margin: 0; padding: 0; }
@@ -1820,19 +1833,19 @@ img.rating-icon {
 
 .panel-editorial a {font-weight: normal;}
 
-img.editorial.crs, .panel-mod div.crs li {
+img.editorial.crs, .panel-mod div.crs a.crs img {
 	background-image: url(images/sprite_crs_ict_group.gif); 
 	background-position: 100px 100px;
 	background-repeat: no-repeat;
 }
 
-img.editorial.media, .panel-mod div.media li a {
+img.editorial.media, .panel-mod div.media li a.resource {
 	background-image: url(images/sprite_mediatype.gif); 
 	background-position: 100px 100px;
 	background-repeat: no-repeat;
 }
 
-img.editorial.rating {
+img.editorial.rating, .panel-mod .stars img.stars  {
 	background-image: url(images/sprite_stars.gif);  
 	background-position: 100px 100px;
 	background-repeat: no-repeat;
@@ -1872,10 +1885,10 @@ img.editorial.media.medium-interactive {background-position: 0 -360px;  height:3
 img.editorial.media.medium-link {background-position: 0 -720px;  height:32px; width: 32px;}
 img.editorial.media.medium-unknown {background-position: 0 -900px; height:32px; width: 32px;}
 
-img.editorial.rating.large-5star {background-position: 0 0; height:17px; width: 17px;}
-img.editorial.rating.large-4star {background-position: 0 -25px; height:17px; width: 17px;}
-img.editorial.rating.small-4star {background-position: 0 -175px; height:13px; width: 13px;}
-img.editorial.rating.small-5star {background-position: 0 -150px; height:13px; width: 13px;}
+img.editorial.rating.large-5star {background-position: 0 0; height:17px; width: 85px;}
+img.editorial.rating.large-4star {background-position: 0 -25px; height:17px; width: 85px;}
+img.editorial.rating.small-4star {background-position: 0 -175px; height:13px; width: 65px;}
+img.editorial.rating.small-5star {background-position: 0 -150px; height:13px; width: 65px;}
 
 img.editorial.tutorial, .panel-mod div.tutorial a  {
 	background-image: url(images/sprite_general.gif);
@@ -1916,61 +1929,117 @@ img.editorial.tutorial {
 	padding: 5px;
 }
 
-.panel-mod div.media.medium li a {
+.panel-mod div.media.medium li a.resource {
 	display: block;
 	padding: 9px 0 10px 37px;
 }
 
-.panel-mod div.media.mini li a {
+.panel-mod div.media.mini li a.resource {
 	display: block;
 	padding: 0px 0 5px 20px;
 }
 
-.panel-mod div.crs.medium li {padding: 10px 0 10px 39px;}
-.panel-mod div.crs.mini li {padding: 2px 0 5px 19px;}
+/**.panel-mod div.crs.medium li {padding: 10px 0 10px 39px;}
+.panel-mod div.crs.mini li {padding: 2px 0 5px 19px;}**/
 .panel-mod div.media li {padding: 0;}
+
+/**
+
 .panel-mod div.crs.media li {padding: 0;}
 .panel-mod div.crs.mini li {padding-left: 19px;}
 .panel-mod div.crs.medium li {padding-left: 39px;}
 
-.panel-mod .mini li.crs-1 {background-position: 0 -1439px;}
-.panel-mod .mini li.crs-2 {background-position: 0 -1529px;}
-.panel-mod .mini li.crs-3 {background-position: 0 -1619px;}
+**/
 
-.panel-mod .medium li.crs-1 {background-position: 0 0;}
-.panel-mod .medium li.crs-2  {background-position: 0 -90px;}
-.panel-mod .medium li.crs-3  {background-position: 0 -180px;}
 
-.panel-mod .mini li.collection a {background-position: 0 -3600px;}
-.panel-mod .mini li.folder a {background-position: 0 -3690px;}
-.panel-mod .mini li.text a {background-position: 0 -4410px;}
-.panel-mod .mini li.document a {background-position: 0 -3780px;}
-.panel-mod .mini li.image a {background-position: 0 -3870px;}
-.panel-mod .mini li.archive a {background-position: 0 -4140px;}
-.panel-mod .mini li.audio a {background-position: 0 -4230px;}
-.panel-mod .mini li.video a {background-position: 0 -4050px;}
-.panel-mod .mini li.interactive a {background-position: 0 -3960px;}
-.panel-mod .mini li.link a {background-position: 0 -4320px;}
-.panel-mod .mini li.unknown a {background-position: 0 -4500px;}
+.panel-mod a.crs {display:none;}
+.panel-mod div.crs a.crs {display: block; float: left; padding-right: 3px;}
 
-.panel-mod .medium li.collection a {background-position: 0 0; }
-.panel-mod .medium li.folder a {background-position: 0 -90px; }
-.panel-mod .medium li.text a {background-position: 0 -810px; }
-.panel-mod .medium li.document a {background-position: 0 -180px; }
-.panel-mod .medium li.image a {background-position: 0 -270px; }
-.panel-mod .medium li.archive a {background-position: 0 -540px;}
-.panel-mod .medium li.audio a {background-position: 0 -630px; }
-.panel-mod .medium li.video a {background-position: 0 -450px; }
-.panel-mod .medium li.interactive a {background-position: 0 -360px; }
-.panel-mod .medium li.link a {background-position: 0 -720px;}
-.panel-mod .medium li.unknown a {background-position: 0 -900px;}
+.panel-mod div.crs.mini a.crs img {height: 17px; width: 17px;}
+.panel-mod div.crs.medium a.crs img {height: 36px; width: 36px;}
+
+
+.panel-mod div.crs.medium.media li a.resource {margin-left: 40px;}
+.panel-mod div.crs.mini.media li a.resource {margin-left: 20px;}
+
+.panel-mod img.stars {display:none;}
+.panel-mod div.stars img.stars {clear: left; display: block;}
+
+.panel-mod div.stars.crs.mini img.stars {margin: 0 0 0 17px;}
+.panel-mod div.stars.crs.medium img.stars {margin: 0 0 0 39px;}
+
+.panel-mod div.stars.media.mini img.stars {margin: 0 0 0 20px;}
+.panel-mod div.stars.media.medium img.stars {margin: 0 0 0 37px;}
+
+.panel-mod div.stars.crs.media.mini img.stars {margin: 0 0 0 40px;}
+.panel-mod div.stars.crs.media.medium img.stars {margin: 0 0 0 77px;}
+
+
+.panel-mod .mini li.crs-1 .crs img {background-position: 0 -1439px;}
+.panel-mod .mini li.crs-2 .crs img {background-position: 0 -1529px;}
+.panel-mod .mini li.crs-3 .crs img {background-position: 0 -1619px;}
+
+.panel-mod .medium li.crs-1 .crs img {background-position: 0 0;}
+.panel-mod .medium li.crs-2 .crs img {background-position: 0 -90px;}
+.panel-mod .medium li.crs-3 .crs img {background-position: 0 -180px;}
+
+.panel-mod .mini li.collection a.resource {background-position: 0 -3600px;}
+.panel-mod .mini li.folder a.resource {background-position: 0 -3690px;}
+.panel-mod .mini li.text a.resource {background-position: 0 -4410px;}
+.panel-mod .mini li.document a.resource {background-position: 0 -3780px;}
+.panel-mod .mini li.image a.resource {background-position: 0 -3870px;}
+.panel-mod .mini li.archive a.resource {background-position: 0 -4140px;}
+.panel-mod .mini li.audio a.resource {background-position: 0 -4230px;}
+.panel-mod .mini li.video a.resource {background-position: 0 -4050px;}
+.panel-mod .mini li.interactive a.resource {background-position: 0 -3960px;}
+.panel-mod .mini li.link a.resource {background-position: 0 -4320px;}
+.panel-mod .mini li.unknown a.resource {background-position: 0 -4500px;}
+
+.panel-mod .medium li.collection a.resource {background-position: 0 0; }
+.panel-mod .medium li.folder a.resource {background-position: 0 -90px; }
+.panel-mod .medium li.text a.resource {background-position: 0 -810px; }
+.panel-mod .medium li.document a.resource {background-position: 0 -180px; }
+.panel-mod .medium li.image a.resource {background-position: 0 -270px; }
+.panel-mod .medium li.archive a.resource {background-position: 0 -540px;}
+.panel-mod .medium li.audio a.resource {background-position: 0 -630px; }
+.panel-mod .medium li.video a.resource {background-position: 0 -450px; }
+.panel-mod .medium li.interactive a.resource {background-position: 0 -360px; }
+.panel-mod .medium li.link a.resource {background-position: 0 -720px;}
+.panel-mod .medium li.unknown a.resource {background-position: 0 -900px;}
+
+.panel-mod .medium.stars img.stars {
+	display: block;
+	height: 17px;   
+	width: 85px;
+}
+
+.panel-mod .mini.stars img.stars {
+	display: block;
+	height: 13px;   
+	width: 65px;
+}
+
+
+.panel-mod div.medium.stars .five img.stars {background-position: 0 0;}
+.panel-mod div.medium.stars .four img.stars {background-position: 0 -25px;}
+.panel-mod div.medium.stars .three img.stars {background-position: 0 -50px;}
+.panel-mod div.medium.stars .two img.stars {background-position: 0 -75px;}
+.panel-mod div.medium.stars .one img.stars {background-position: 0 -100px;}
+.panel-mod div.medium.stars .zero img.stars {background-position: 0 -125px;}
+
+.panel-mod div.mini.stars .five img.stars {background-position: 0 -150px;}
+.panel-mod div.mini.stars .four img.stars {background-position: 0 -175px;}
+.panel-mod div.mini.stars .three img.stars {background-position: 0 -200px;}
+.panel-mod div.mini.stars .two img.stars {background-position: 0 -225px;}
+.panel-mod div.mini.stars .one img.stars {background-position: 0 -250px;}
+.panel-mod div.mini.stars .zero img.stars {background-position: 0 -275px;}
 
 .panel-mod div.custom img {
 	float: left;
 	padding-right: 5px;
 }
 
-.panel-mod div.custom li:after {
+.panel-mod div.custom li:after, .panel-mod div.crs ul li:after  {
 	content: ".";
 	display: block;
 	clear: both;
@@ -1979,15 +2048,21 @@ img.editorial.tutorial {
 	height: 0;
 }
  
-.panel-mod div.custom li {
+.panel-mod div.custom li, .panel-mod div.crs ul li {
 	display: inline-block;
 }
  
-html[xmlns] .panel-mod div.custom li {
+html[xmlns] .panel-mod div.custom li, html[xmlns] .panel-mod div.crs ul li {
 	display: block;
 }
  
 * html .panel-mod div.custom li {
 	height: 1%;
 }
+
+* html .panel-mod div.crs ul li {
+	height: 1%;
+}
+
+
 
