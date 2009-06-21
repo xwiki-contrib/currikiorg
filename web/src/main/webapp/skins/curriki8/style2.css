@@ -48,6 +48,9 @@ p {
 	padding: 0;
 }
 
+pre {background:#222; color:#fff; padding:10px;margin-top:0px;font-family:courier;width:600px; height:400px;}    
+pre.htmlview {background:#ebebeb; color:#000; font-size:12px;}
+ 
 /* Admin Styles needed for the XWiki 1.5 admin to display properly in the Curriki skin  */
 body.admin {margin-top: 25px;}
 #admin-page {margin-top: 20px;}
@@ -468,12 +471,12 @@ em, em strong { font-style: italic; }
 .search-box button { border: none; font-size: 1.1em; padding: 0.1em 0 0.1em 0 !important; }
 
 /* header bars */
-.headerbar { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
+.headerbar, .form-wrp h3  { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
 .headerbar a { color: #fff; }
 .violet, .sponsors .headerbar, .partners .headerbar, .information .headerbar { background-color: #8a91cb; }
 .orange, .ressource .search, .ressource .view, .ressource .featured { background-color: #E7793B;}
 .green, .ressource .create, .ressource .edit, .curriki-form .headerbar { background-color: #93c53c; }
-.blue, .members .headerbar, .groups .headerbar { background-color: #4e83c6; }
+.blue, .members .headerbar, .groups .headerbar, #register h3  { background-color: #4e83c6; }
 
 
 /** FRAME **/
@@ -3376,5 +3379,74 @@ html[xmlns] .panel-mod div.custom li {
 body.p-Test-TestWysiwyg .main ul, .xwikicontent ul {list-style:circle;}
 body.p-Test-TestWysiwyg .main ul ul, .xwikicontent ul ul {list-style:disc;}
 
- 
 
+
+/** REGISTER FORMS **/
+
+fieldset .fields-wrp ul {list-style:none;margin:0;padding:0;}
+
+.form-wrp {
+	background-color:#F2F2F2;
+	border:1px solid #E5E5E5;
+	margin:0 0 10px;
+	padding:10px 10px 0;
+}	
+
+.form-wrp fieldset {
+	background: #fff;
+	margin-bottom: 10px;
+}
+
+fieldset .fields-wrp {padding: 5px;}
+fieldset.optional .fields-wrp {padding: 10px;}
+
+fieldset.required .fields-wrp li {
+	margin-bottom: 7px;
+	padding: 5px 5px 15px 5px
+}
+
+fieldset.optional .fields-wrp li {
+	margin-bottom: 7px;
+	padding: 5px 5px 5px 5px;
+}
+
+fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
+ 
+ 
+fieldset .fields-wrp .inactive {color: #bbb;} 
+ 
+fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 10px;}
+.form-wrp p {margin: 1em 0;}
+.form-wrp span label {font-weight: bold;}
+.form-wrp span {display: block; margin-bottom:3px;}
+.form-wrp ul p {
+	margin: 0 0 .5em 0;
+	font-size: 11px;
+}
+
+.form-wrp em.required { 
+	color:red;
+	font-size: 15px;
+	font-weight:bold;
+	margin-right:3px;
+}
+ 
+#register input.input-text {width: 205px;}
+
+fieldset.required ul p, fieldset.required ul span {width: 350px;}
+
+
+li#item-login-name {background: url(images/example_member_login.jpg) top right no-repeat;}
+li#item-display-name1 {background: url(images/example_display_name1.jpg) top right no-repeat;}
+li#item-display-name2 {background: url(images/example_display_name2.jpg) top right no-repeat;}
+
+a.toggler {
+	background-image: url(images/sprite_general.gif);
+	background-repeat: no-repeat;
+	display: block;
+	margin: 15px 15px 0;
+	padding: 1px 0 5px 23px;
+}
+
+a.toggler.expanded {background-position: 0 -1620px;}
+a.toggler.collapsed {background-position: 0 -1530px;}
