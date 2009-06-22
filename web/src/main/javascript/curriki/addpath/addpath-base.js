@@ -466,6 +466,8 @@ Curriki.module.addpath.init = function(){
 		AddPath.SelectTemplate = Ext.extend(Curriki.ui.dialog.Actions, {
 			  initComponent:function(){
 				var tmplPfx = 'add.select'+Curriki.current.templateType;
+				var dlgType = (Curriki.current.templateType === 'format')?'Format':'Template';
+
 				Ext.apply(this, {
 					 id:'SelectTemplateDialogueWindow'
 					,title:_(tmplPfx+'.title')
@@ -491,7 +493,7 @@ Curriki.module.addpath.init = function(){
 					},{
 						 xtype:'form'
 						,id:'SelectTemplateDialoguePanel'
-						,formId:'SelectTemplateDialogueForm'
+						,formId:'Select'+dlgType+'DialogueForm'
 						,border:false
 						,bodyBorder:false
 						,labelWidth:25
