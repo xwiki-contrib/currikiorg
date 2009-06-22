@@ -322,9 +322,11 @@ $('XWiki.ArticleClass_0_title').setAttribute('maxlength', '80');
 </script>
 #set($editors = $context.getEditorWysiwyg())
 #if($editors)
+#set($tinymce = $xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js"))
+#set($wikieditor = $xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js"))
 #set($footerJScript= "
-<script language='javascript' type='text/javascript' src='/xwiki/tiny_mce/tiny_mce.js'></script>
-<script language='javascript' type='text/javascript' src='/xwiki/wiki_editor/wiki_editor.js'></script>
+<script language='javascript' type='text/javascript' src='${tinymce}'></script>
+<script language='javascript' type='text/javascript' src='${wikieditor}'></script>
 <script language='javascript' type='text/javascript'>
 	wikiEditor.init({
 		elements : '$editors',
