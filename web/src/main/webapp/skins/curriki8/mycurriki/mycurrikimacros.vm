@@ -71,6 +71,90 @@ $text
 
 
 #**
+  * My Curriki Main Page Header
+  * This macro is called by every my curriki page
+  *
+  * @param $pageref Page Name to use in call back
+  * @param $whofor User to display the page for
+  * @author dward@curriki.org
+  *#
+#macro(mycurriki_pageheader $pageref $whofor) ## {
+## Determine whofor
+#if("$!whofor" == "") ## {
+#if("$!request.user" != "") ## {
+#set($whofor = $request.user)
+#else ## } {
+#if($doc.web.startsWith("Blog_")) ## {
+#set($whofor = $doc.web.substring(5))
+#else ## } {
+#if("$!whofor" == "") ## {
+#set($whofor = $context.user)
+#end ## }
+#end ## }
+#end ## }
+#end ## }
+#if(!$whofor.startsWith("XWiki.")) ## {
+#set($whofor = "XWiki.$whofor")
+#end ## }
+## Now know whofor
+#set($userdoc = $xwiki.getDocument($whofor))
+#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+#set($g_userdoc = $userdoc)
+#set($g_userobj = $userobj)
+<div id="mycurriki-$pageref" class="mycurriki mycurriki-$pageref">
+#mycurriki_header($userobj)
+#mycurriki_tabs($pageref $whofor)
+<div id="mycurriki-main" class="tab-container">
+<div id="mycurriki-main-header">
+#end ##macro ## }
+##
+
+#**
+  * My Curriki Main Page Content Header
+  * This macro is called by every my curriki page
+  *
+  * @param $pageref Page Name to use in call back
+  * @param $whofor User to display the page for
+  * @author dward@curriki.org
+  *#
+#macro(mycurriki_pagecontentheader $pageref $whofor) ## {
+#if("$!pageref" == "blog") ## {
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+#set($subtitle = $msg.get("mycurriki.tab.${pageref}.noblog.subtitle", ["$userobj.first_name $userobj.last_name"]))
+#else ## }{
+#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle", ["$userobj.first_name $userobj.last_name"]))
+#end ## }
+#else ## } {
+#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
+#end ## }
+<div id="mycurriki-main-header-left">
+#if($subtitle != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ## {
+<div id="mycurriki-main-header-subtitle" class="tab-deck">$subtitle</div>
+#end ## }
+</div>
+<div class="clearfloats"></div>
+</div>
+<div id="mycurriki-main-content" class="frame pad-btm">
+#end ##macro ## }
+##
+#**
+  * My Curriki Main Page Footer
+  * This macro is called by every my curriki page
+  *
+  * @param $pageref Page Name to use in call back
+  * @param $whofor User to display the page for
+  * @author dward@curriki.org
+  *#
+#macro(mycurriki_pagefooter) ## {
+</div>
+</div>
+</div>
+#end ##macro ## }
+##
+
+## OBSOLETE
+#**
   * My Curriki Main Page Generation
   * This macro is called by every my curriki page and uses callbacks defined as macro in the wiki page
   *
@@ -137,6 +221,8 @@ $text
 #end ##macro ## }
 ##
 
+
+## OBSOLETE
 #**
   * My Curriki callback function
   *
@@ -148,6 +234,7 @@ $text
 #mycurriki_pagefull($pageref "" 0)
 #end ##macro ## }
 
+## OBSOLETE
 #**
   * My Curriki callback function with a button
   *
