@@ -587,8 +587,8 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 #groupsajaxjs()
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
  wikiEditor.init({
 		elements : "",
@@ -890,8 +890,8 @@ $bentrydoc.display("content", "edit", $bentryobj)
 #set($editors = $context.getEditorWysiwyg())
 #if($editors)
 {pre}
-<script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
-<script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
+<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script language="javascript" type="text/javascript">
 	wikiEditor.init({
 		elements : "$editors",
