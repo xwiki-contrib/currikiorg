@@ -246,7 +246,7 @@ function getFileExtension() {
       #end
     #set($viewURL = $docdoc.getURL())
       <div class="document-icon"><a href="${viewURL}">$icon</a></div>
-  <a href="${viewURL}"><b>$doctitle</b></a>
+   <div class="document-title"><a href="${viewURL}"><strong>$doctitle</strong></a></div>
    <div class="button-link">
 #if( $sm.isMember( $s.spaceName, $context.user ) )
       #if( $docdoc.tags.contains("documentation-wiki") )
