@@ -1360,7 +1360,7 @@ padding:3px 0 0 5px;
 	background-color:#FFF;
 	border-top: 20px solid #FFF;
 }
- 
+  
 /* JIRA  1212 */
 #leftPanels .curriki-donate { padding: 0; }
 .curriki-navigation { margin-bottom: 3px; }
@@ -2595,6 +2595,10 @@ td.table-col-filetype img, td.table-col-ict img, #mycurriki-collections .frame-i
 
 #groups-documentation-main .document-icon img.subcategory-document_notebook {width: 54px;}
 #groups-documentation-main .document-icon img.subcategory-document_prproj {width: 38px;}
+#groups-documentation-main .document-title {
+	margin-bottom: 10px;
+	width: 450px;
+}
 
 #ReorderDialoguePanel .x-tree-node-icon {
 	height: 17px;
@@ -2813,6 +2817,12 @@ a.last-item {border: 0;}
 /** CELP **/
 
 form#SelectTemplateDialogueForm #ext-comp-1017 {overflow: visible !important;}
+
+form#SelectTemplateDialogueForm { 
+	height:430px !important;
+	overflow:auto !important;
+	width:610px !important;
+}
 
 /** WEBQUEST INPUT - IE NOT GETTING WIDTH SINCE EARLIER CSS WAS WRITTEN WITH attr selectors **/
 
@@ -3411,10 +3421,7 @@ fieldset.optional .fields-wrp li {
 }
 
 fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
- 
- 
 fieldset .fields-wrp .inactive {color: #bbb;} 
- 
 fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 10px;}
 .form-wrp p {margin: 1em 0;}
 .form-wrp span label {font-weight: bold;}
@@ -3424,21 +3431,25 @@ fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 10px;}
 	font-size: 11px;
 }
 
-.form-wrp em.required { 
+div#intro-register p {padding: .5em 0;}
+
+em.required { 
 	color:red;
 	font-size: 15px;
 	font-weight:bold;
-	margin-right:3px;
+	font-style: normal;
 }
- 
-#register input.input-text {width: 205px;}
 
+.form-wrp em.required {margin-right:3px;}
+#register input.input-text {width: 205px;}
 fieldset.required ul p, fieldset.required ul span {width: 350px;}
 
 
 li#item-login-name {background: url(images/example_member_login.jpg) top right no-repeat;}
 li#item-display-name1 {background: url(images/example_display_name1.jpg) top right no-repeat;}
 li#item-display-name2 {background: url(images/example_display_name2.jpg) top right no-repeat;}
+
+div#intro-register {background: url(images/registration_placeholder.jpg) top right no-repeat; padding-right: 200px;}
 
 a.toggler {
 	background-image: url(images/sprite_general.gif);
