@@ -23,8 +23,8 @@
                         </div>
                     </li>
                     #if(!$useWikiMode)
-                    <script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-                    <script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
+                    <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+                    <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
                     <script language="javascript" type="text/javascript">
                             if ( browser.isIE || browser.isMozilla || browser.isGecko) {
                                 // NLLP Icon
@@ -63,7 +63,7 @@
                           $asset.getTextArea()
                         </div>
                     </li>
-                    <script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
+                    <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce32/tiny_mce.js")"></script>
                     <script type="text/javascript">
                         tinyMCE.init({
                             // General options
