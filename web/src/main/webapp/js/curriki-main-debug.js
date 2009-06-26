@@ -1588,7 +1588,7 @@ Ext.BLANK_IMAGE_URL = '/xwiki/skins/curriki8/extjs/resources/images/default/s.gi
 
 Ext.Ajax.defaultHeaders = {
 	 'Accept': 'application/json'
-	,'Content-Type': 'application/json; charset=utf-8;'
+	,'Content-Type': 'application/json; charset=utf-8'
 };
 Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
