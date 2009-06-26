@@ -141,6 +141,8 @@
               com.xpn.xwiki.plugin.calendar.CalendarPlugin,\
               com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin,\
               com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin,\
+              com.xpn.xwiki.plugin.skinx.JsSkinFileExtensionPlugin,\
+              com.xpn.xwiki.plugin.skinx.CssSkinFileExtensionPlugin,\
               com.xpn.xwiki.plugin.packaging.PackagePlugin,\
               com.xpn.xwiki.plugin.query.QueryPlugin,\
               com.xpn.xwiki.plugin.fileupload.FileUploadPlugin,\
@@ -159,32 +161,33 @@
               org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
               com.xpn.xwiki.plugin.invitationmanager.plugin.InvitationManagerPlugin,\
               com.xpn.xwiki.plugin.mailsender.MailSenderPlugin,\
+              com.xpn.xwiki.wysiwyg.server.plugin.WysiwygPlugin, \
               org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
             </xwikiCfgPlugins>
             <xwikiCfgAdditionalProperties>
-	      ## Spacemanager settings
-	      # Configure the spacemanager extension
-	      xwiki.spacemanager.extension=org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension
-	      # Set the groupname prefix
-              xwiki.spacemanager.prefix=Group_
+## Spacemanager settings
+# Configure the spacemanager extension
+xwiki.spacemanager.extension=org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension
+# Set the groupname prefix
+xwiki.spacemanager.prefix=Group_
 
-              ## Lucene settings
-              # Configure the index location
-              xwiki.plugins.lucene.indexdir=c:\\lucene
-              # Configure the analyzer used for indexing and searching.
-              xwiki.plugins.lucene.analyzer=org.apache.lucene.analysis.standard.StandardAnalyzer
-              # Setting index interval
-              xwiki.plugins.lucene.indexinterval=30
+## Lucene settings
+# Configure the index location
+xwiki.plugins.lucene.indexdir=c:\\lucene
+# Configure the analyzer used for indexing and searching.
+xwiki.plugins.lucene.analyzer=org.apache.lucene.analysis.standard.StandardAnalyzer
+# Setting index interval
+xwiki.plugins.lucene.indexinterval=30
 
-              # set the skin
-              xwiki.defaultbaseskin=albatross
-              xwiki.defaultskin=curriki8
+# set the skin
+xwiki.defaultbaseskin=albatross
+xwiki.defaultskin=curriki8
 
-              #set superadmin pass
-              ## xwiki.superadminpassword=system
+#set superadmin pass
+## xwiki.superadminpassword=system
 
-              # override the macro list
-              xwiki.render.velocity.macrolist=/templates/macros.vm,/skins/albatross/macros.vm,\
+# override the macro list
+xwiki.render.velocity.macrolist=/templates/macros.vm,/skins/albatross/macros.vm,\
                 /skins/curriki8/macros.vm,/skins/curriki8/blog/blogmacros.vm,\
                 /skins/curriki8/assets/assetsmacros.vm,/skins/curriki8/pages/pagesmacros.vm,\
                 /skins/curriki8/mycurriki/mycurrikimacros.vm,\
@@ -197,10 +200,17 @@
                 /skins/curriki8/groups/groupsmycurriki.vm,\
                 /skins/curriki8/crs/crsmacros.vm,\
                 /skins/curriki8/bfcs/bfcsmacros.vm
+
+#-# [Since 1.6RC1] Defines the list of supported syntaxes
+#-# Available syntaxes are:
+#-#    xwiki/1.0, xwiki/2.0, confluence/1.0, jspwiki/1.0, creole/1.0,  mediawiki/1.0, twiki/1.0, xhtml/1.0, html/4.01
+xwiki.rendering.syntaxes = xwiki/1.0, xwiki/2.0
             </xwikiCfgAdditionalProperties>
-<xwikiCfgDefaultSkin>albatross</xwikiCfgDefaultSkin>
-<xwikiCfgDefaultBaseSkin>albatross</xwikiCfgDefaultBaseSkin>
-<xwikiCfgEncoding>utf-8</xwikiCfgEncoding>
+            <xwikiCfgDefaultSkin>curriki8</xwikiCfgDefaultSkin>
+            <xwikiCfgVirtual>0</xwikiCfgVirtual>
+            <xwikiCfgExo>0</xwikiCfgExo>
+            <xwikiCfgDefaultBaseSkin>albatross</xwikiCfgDefaultBaseSkin>
+            <xwikiCfgEncoding>UTF-8</xwikiCfgEncoding>
           </properties>
         </configuration>
       </plugin>
@@ -217,18 +227,7 @@
               </includes>
             </resource>
           </webResources>
-          <dependentWarExcludes>WEB-INF/lib/xwiki-core-1.5.jar</dependentWarExcludes>
-          <!-- We need to exclude Plexus Container Default version 1.0-alpha-30 which comes from XWiki Rendering Doxia
-               which itself uses Maven Doxia which uses it. We need to exclude it since XWiki itself uses that jar but
-               in version 1.0-alpha-31.
-
-               Note 1: I think the problem is because we're using two different versions for XWiki Core
-                       (1.5-curriki) and XWiki Web (1.5) and this is dragging this invalid dependency for some reason.
-
-               Note 2: Since we're using version 2.x of the WAR plugin we need to use the incorrectly named
-                       warSourceExcludes to exclude a dependent lib. In version 2.1.x of the plugin it's been renamed
-                       to packagingExcludes so we'll need to update this POM when we move to that version. -->
-          <warSourceExcludes>WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</warSourceExcludes>
+          <dependentWarExcludes>WEB-INF/lib/*restlet*-1.1.2.jar,WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</dependentWarExcludes>
         </configuration>
       </plugin>
     </plugins>
