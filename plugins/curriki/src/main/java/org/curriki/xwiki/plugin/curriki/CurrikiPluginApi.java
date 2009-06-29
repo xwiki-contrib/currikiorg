@@ -239,7 +239,10 @@ public class CurrikiPluginApi extends Api {
     }
 
     public String escapeForJS(String origtext) {
-        return Util.escapeForJS(origtext);
+        if (origtext==null)
+          return "";
+        else
+          return Util.escapeForJS(origtext);
     }
 
 }
