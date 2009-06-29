@@ -251,21 +251,21 @@ html > body .subtitlebarRight{overflow: hidden;}
 .subtitlebar_left{float: left;}
 .subtitlebarRight{overflow: hidden;}
 
-.subtitlebar_red{
+.subtitlebar_red, .subtitlebar_red h4 {
   	color: #FF4100;
   	border-bottom-color: #FF4100;
 }
 
 .subtitlebar_red .subtitlebarRight a{color: #C84100;}
 
-.subtitlebar_blue {
+.subtitlebar_blue, .subtitlebar_blue h4 {
   	color: #069;
   	border-bottom-color: #069;
 }
 
 .subtitlebar_blue .subtitlebarRight a{color: #1C4E95;}
 
-.subtitlebar_green {
+.subtitlebar_green, .subtitlebar_green h4 {
   	color: #393;
   	border-bottom-color: #393;
 }
@@ -450,12 +450,12 @@ em, em strong { font-style: italic; }
 .search-box button { border: none; font-size: 1.1em; padding: 0.1em 0 0.1em 0 !important; }
 
 /* header bars */
-.headerbar, .form-wrp h3  { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
+.headerbar, .form-wrp h3, .content-wrp h3  { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
 .headerbar a { color: #fff; }
 .violet, .sponsors .headerbar, .partners .headerbar, .information .headerbar { background-color: #8a91cb; }
 .orange, .ressource .search, .ressource .view, .ressource .featured { background-color: #E7793B;}
 .green, .ressource .create, .ressource .edit, .curriki-form .headerbar { background-color: #93c53c; }
-.blue, .members .headerbar, .groups .headerbar, #register h3  { background-color: #4e83c6; }
+.blue, .members .headerbar, .groups .headerbar /**, #register h3, .mycurriki .content-wrp h3, .mycurriki .form-wrp h3 **/ { background-color: #4e83c6; }
 
 
 /** FRAME **/
@@ -674,7 +674,7 @@ display:none;
 .curriki-form .entry { padding: 2em 0 0; }
 .curriki-form .entry h5 { font-size: 1.1em; }
 .curriki-form .entry h5 em { font-weight: normal; }
-.curriki-form .entry h5 em.required-indicator {font-weight: bold;}
+.curriki-form .entry h5 em.required-indicator {font-weight: bold !important;}
 .curriki-form .entry h5 img { margin-bottom: -5px; }
 h5.instruction {font-weight: bold;}
 .curriki-form .entry p.instruction { line-height: 130%; padding-bottom: 7px; }
@@ -893,6 +893,8 @@ ul.tabs li.current a {
 	background: #f2f2f2;
 	border-color: #ABABAB #ABABAB #F2F2F2
 }
+
+.mycurriki ul.tabs {clear: left; padding-top: 10px;}
 
 /* Groups */
 
@@ -3118,7 +3120,7 @@ body.p-Test-TestWysiwyg .main ul, .xwikicontent ul {list-style:circle;}
 body.p-Test-TestWysiwyg .main ul ul, .xwikicontent ul ul {list-style:disc;}
 
 /** REGISTER FORMS **/
-
+/**
 fieldset .fields-wrp ul {list-style:none;margin:0;padding:0;}
 
 .form-wrp {
@@ -3128,8 +3130,9 @@ fieldset .fields-wrp ul {list-style:none;margin:0;padding:0;}
 	padding:10px 10px 0;
 }	
 
-.form-wrp fieldset {
+.form-wrp fieldset, .mycurriki .content-wrp {
 	background: #fff;
+	border: 1px solid #ccc;
 	margin-bottom: 10px;
 }
 
@@ -3137,16 +3140,16 @@ fieldset .fields-wrp {padding: 5px;}
 fieldset.optional .fields-wrp {padding: 10px;}
 
 fieldset.required .fields-wrp li {
-	margin-bottom: 7px;
+	margin-bottom: 5px;
 	padding: 5px 5px 15px 5px
 }
 
 fieldset.optional .fields-wrp li {
-	margin-bottom: 7px;
+	margin-bottom: 5px;
 	padding: 5px 5px 5px 5px;
 }
 
-fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
+fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 3px 0;}
 fieldset .fields-wrp .inactive {color: #bbb;} 
 fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 10px;}
 .form-wrp p {margin: 1em 0;}
@@ -3168,12 +3171,12 @@ em.required {
 }
 
 .form-wrp em.required {margin-right:3px;}
-#register input.input-text {width: 205px;}
+#register input.input-text, #mycurriki-profile .form-wrp input.input-text {width: 205px;}
 fieldset.required ul p, fieldset.required ul span {width: 350px;}
 
-li#item-login-name {background: url(images/example_member_login.jpg) top right no-repeat;}
-li#item-display-name1 {background: url(images/example_display_name1.jpg) top right no-repeat;}
-li#item-display-name2 {background: url(images/example_display_name2.jpg) top right no-repeat;}
+.form-wrp li#item-login-name {background: url(images/example_member_login.jpg) top right no-repeat;}
+.form-wrp li#item-display-name1 {background: url(images/example_display_name1.jpg) top right no-repeat;}
+.form-wrp li#item-display-name2 {background: url(images/example_display_name2.jpg) top right no-repeat;}
 
 div#intro-register {background: url(images/registration_placeholder.jpg) top right no-repeat; padding-right: 200px;}
 
@@ -3187,3 +3190,22 @@ a.toggler {
 
 a.toggler.expanded {background-position: 0 -1620px;}
 a.toggler.collapsed {background-position: 0 -1530px;}
+**/
+/** MY CURRIKI **/ /**
+#asset-avatar img { 
+max-height:80px;
+max-width:200px;
+}
+
+.mycurriki-profile #asset-attribution {float: left; margin-right: 5px;}
+
+.mycurriki-profile #mycurriki-main-header .button {float:none;}
+.mycurriki .form-wrp {border: 0; padding: 0;}
+
+.mycurriki .content-wrp .fields-wrp {padding: 10px 20px;}
+.mycurriki .content-wrp .fields-wrp li {margin-bottom: 10px;}
+.mycurriki .content-wrp .fields-wrp table li {margin-bottom: 1px;}
+
+.mycurriki .fields-wrp li#item-interest-areas table {border-collapse: inherit; width: 100%;}
+.mycurriki .fields-wrp li#item-interest-areas td {border: 1px solid #ccc; margin-left: 5px; padding: 5px; width: 45%;}
+.mycurriki .fields-wrp li#item-interest-areas th {background: none;}**/
