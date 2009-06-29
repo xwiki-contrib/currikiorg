@@ -1490,6 +1490,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author dward@curriki.org
   *#
 #macro(curriki_avatarwithname_width $userdoc) ## {
+#set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #if($userdoc.attachmentList.size()==0)  ## {
 <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
