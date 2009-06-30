@@ -1610,3 +1610,43 @@ window.onbeforeunload = function() {
 }
 </script>
 #end
+
+#**
+  * Stores the WYSIWYG configuration in a JavaScript variable. Overwrites the default XWiki configuration!
+  *
+  * @param $jsVarName the name of the JavaScript variable to store the WYSIWYG configuration
+  * @param $editedDocument the document being edited
+  * @param $fieldId identifies the form field to be replaced by the WYSIWYG editor
+  * @param $full {@code true} to use a fully-fledged editor, {@code false} to use the compact editor
+  *#
+#macro(wysiwyg_storeConfig $jsVarName $editedDocument $fieldId $full)
+<script type="text/javascript">
+//<![CDATA[
+var $jsVarName = {
+  hookId: '${fieldId}',
+  syntax: '${editedDocument.syntaxId}',
+#if("$!wysiwyg_inputURLQueryString" != "")
+  inputURL: '${editedDocument.getExternalURL("view", $wysiwyg_inputURLQueryString)}',
+#end
+#if($full)
+  displayTabs: true,
+  defaultEditor: "wysiwyg",
+#end
+  plugins: 'submit line separator text valign justify list indent history format font color symbol link image table macro importer#if($full && $request.sync) sync#end',
+  menu: 'link image table macro',
+  toolbar: 'bold italic underline strikethrough teletype | subscript superscript | justifyleft justifycenter justifyright justifyfull | unorderedlist orderedlist | outdent indent | undo redo | format | fontname fontsize forecolor backcolor | hr symbol removeformat | importer',
+  wiki: '${editedDocument.wiki.replace("'", "\'")}',
+  space: '${editedDocument.space.replace("'", "\'")}',
+  page: '${editedDocument.name.replace("'", "\'")}',
+#if($full && $request.sync)
+  // Additional configuration for the real-time editing feature.
+  syncPage: '${editedDocument.fullName.replace("'", "\'")}',
+#if($request.reset=="1")
+  syncReset: 1,
+#end
+#end
+  debug: #if($request.debug)'true'#else'false'#end
+};
+//]]>
+</script>
+#end

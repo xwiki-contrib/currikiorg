@@ -283,6 +283,9 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
  #set($space = $request.space)
 #end
 #set($bentrydoc = $xwiki.getDocument("Temp", $xwiki.getUniquePageName("Temp","Article")))
+#if("$!request.xwiki2" == "true")
+$bentrydoc.setSyntaxId("xwiki/2.0")
+#end
 #set($ok = $bentrydoc.save())
 #set($bentryobj = $bentrydoc.newObject("XWiki.ArticleClass"))
 #set($junk = $bentrydoc.use($bentryobj))
@@ -318,10 +321,20 @@ $bentrydoc.display("extract", "edit", $bentryobj)
 Ext.onReady(function(){
 $('XWiki.ArticleClass_0_title').setAttribute('maxlength', '80');
 });
+function checkForm() {
+   var isValid = true;
+   var title = document.forms.inline['XWiki.ArticleClass_0_title'].value;
+   if (title.length <= 1) {
+     alert('$msg.get('blogArticle.field.title.mandatory')');
+     isValid = false;
+   }
+   return isValid;
+}
 //]]>
 </script>
 #set($editors = $context.getEditorWysiwyg())
 #if($editors)
+#if($bentrydoc.syntaxId == "xwiki/1.0")
 #set($tinymce = $xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js"))
 #set($wikieditor = $xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js"))
 #set($footerJScript= "
@@ -341,17 +354,11 @@ $('XWiki.ArticleClass_0_title').setAttribute('maxlength', '80');
         wiki_use_style: '$xwiki.getWysiwygToolbars()',
         wiki_plugins: 'core,attachments,macros'
 	});
-function checkForm() {
-   var isValid = true;
-   var title = document.forms.inline['XWiki.ArticleClass_0_title'].value;
-   if (title.length <= 1) {
-     alert('$msg.get('blogArticle.field.title.mandatory')');
-     isValid = false;
-   }
-   return isValid;
-}
 </script>
 ")
+#elseif($xwiki.wysiwyg.isSyntaxSupported($bentrydoc.syntaxId))
+#wysiwyg_editProperties($bentrydoc $editors false)
+#end
 #end
 <div class="righttext">
 <input class="button button-confirm" type="submit" name="formactionsave" value="$msg.get("save")" onclick="if(checkForm() == false) return false; document.forms.inline.submit(); return false;"/>
@@ -382,7 +389,11 @@ function checkForm() {
 #set($newdoc = $xwiki.getDocument($pagefullname))
 #set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
 ##set($ok = $newdoc.addObjectFromRequest("XWiki.TagClass"))
+#if($newdoc.syntaxId == "xwiki/2.0")
+$newdoc.setContent('{{velocity}}{{html}}#includeForm("XWiki.ArticleClassTemplate"){{/html}}{{/velocity}}')
+#else
 $newdoc.setContent($xwiki.getDocument("XWiki.ArticleClassTemplate").getContent())
+#end
 $newdoc.setParent("${space}.WebHome")
 $newdoc.save()
 $newdoc.use("XWiki.ArticleClass")
