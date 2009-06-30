@@ -281,6 +281,9 @@ function getFileExtension() {
 #macro(groups_documentation_editabout)
 #set( $docName = $docsSpaceName + ".AboutDocumentation" )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
+#if("$!request.xwiki2" == "true")
+$editDoc.setSyntaxId("xwiki/2.0")
+#end
 #if( $request.method == "POST" )
      $editDoc.setContent( $request.doctext )
      $editDoc.save()
@@ -288,9 +291,12 @@ function getFileExtension() {
    #set($stopRender = "ok")
    #begingroupsection("Edit about documentation" "" "" "blue" true)
     <form action="#" method="post">
+## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
+<input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
 <label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($editDoc.syntaxId == "xwiki/1.0")
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
@@ -308,6 +314,16 @@ wikiEditor.init({
         wiki_attach_path : '/xwiki/bin/view/${doc.space}/${doc.name}'
 });
 </script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($editDoc.syntaxId))
+## Import required JavaScript files (lazy=false).
+#wysiwyg_import(false)
+## Set the input value for the editor.
+#wysiwyg_input("doctext" $editDoc.content)
+## Display conversion errors, if present.
+#wysiwyg_displayConversionError("doctext")
+## Create the editor UI.
+#wysiwyg_createEditor($editDoc "doctext" false)
+#end
 {/pre}
 <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.renderedContent)</textarea>
 
@@ -366,6 +382,9 @@ wikiEditor.init({
        #set( $newDocName = $xwiki.getUniquePageName( "Temp", $dctitle))
        #set( $newDocName = "Temp.${newDocName}")
        #set( $newDoc = $xwiki.getDocument( $newDocName))
+       #if("$!request.xwiki2" == "true")
+       $newDoc.setSyntaxId("xwiki/2.0")
+       #end
        #set( $ok = $newDoc.save() )
 
 <label for="doctitle">${msg.groups_documentation_update_title}</label>
@@ -380,6 +399,7 @@ wikiEditor.init({
 
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($newDoc.syntaxId == "xwiki/1.0")
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
@@ -398,6 +418,16 @@ wikiEditor.init({
         wiki_attach_path : '/xwiki/bin/view/${newDoc.space}/${newDoc.name}'
 });
 </script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($newDoc.syntaxId))
+## Import required JavaScript files (lazy=false).
+#wysiwyg_import(false)
+## Set the input value for the editor.
+#wysiwyg_input("doctext" "")
+## Display conversion errors, if present.
+#wysiwyg_displayConversionError("doctext")
+## Create the editor UI.
+#wysiwyg_createEditor($newDoc "doctext" false)
+#end
 {/pre}
 <textarea name="doctext" id="doctext" rows="20"></textarea>
         <div class="right mgn-vrt-15">
@@ -453,6 +483,7 @@ History
 <label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($editDoc.syntaxId == "xwiki/1.0")
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
@@ -470,6 +501,16 @@ wikiEditor.init({
         wiki_attach_path : '/xwiki/bin/view/${editDoc.space}/${editDoc.name}'
 });
 </script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($editDoc.syntaxId))
+## Import required JavaScript files (lazy=false).
+#wysiwyg_import(false)
+## Set the input value for the editor.
+#wysiwyg_input("doctext" $editDoc.content)
+## Display conversion errors, if present.
+#wysiwyg_displayConversionError("doctext")
+## Create the editor UI.
+#wysiwyg_createEditor($editDoc "doctext" false)
+#end
 <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
 {/pre}
         <div class="right mgn-vrt-15">

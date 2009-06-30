@@ -199,7 +199,7 @@ showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${secco
 #set($obj = $adoc.getObject("XWiki.ArticleClass",0))
 #set($msgtitle = $adoc.display("title", "view"))
 ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
-#set($msgcontent = $adoc.display("content", "view").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
+#set($msgcontent = $adoc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
 ## CURRIKI-1860: we display the modification date and the last author
 #set($modificationDate = $xwiki.formatDate($adoc.date,$msg.get("mycurriki.datetimeFormat")))
 <p><span class="date">$modificationDate</span>, by <a>$xwiki.getLocalUserName($adoc.creator)</a></p>
@@ -587,6 +587,7 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 #groupsajaxjs()
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($doc.syntaxId == "xwiki/1.0")
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
@@ -603,6 +604,14 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
         wiki_images_path : '/xwiki/bin/download/${doc.space}/${doc.name}/',
         wiki_attach_path : '/xwiki/bin/view/${doc.space}/${doc.name}'
         });
+</script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($doc.syntaxId))
+## Import the JavaScript files required by the WYSIWYG editor (lazy=false).
+#wysiwyg_import(false)
+## Store the WYSIWYG editor configuration in a JavaScript variable which will be used later to create the editor.
+#wysiwyg_storeConfig("messageWysiwygConfig" $doc "XWiki.ArticleClass_0_content" false)
+#end
+<script type="text/javascript">
 function editMessage(spaceName,pageName,divid) {
   var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
   $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
@@ -612,7 +621,16 @@ function editMessage(spaceName,pageName,divid) {
 function editMessageCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
  $(divid).innerHTML = ajaxreq.transport.responseText;
- var scripts = $(divid).getElementsByTagName('script');
+ evalInlineScripts($(divid));
+ if (typeof tinyMCE != 'undefined') {
+  tinyMCE.addMCEControl(document.getElementById("XWiki.ArticleClass_0_content"), "XWiki.ArticleClass_0_content");
+ } else {
+  createWysiwygEditor('messageWysiwyg', 'messageInputURL', messageWysiwygConfig);
+ }
+ setViewMode(false);
+}
+function evalInlineScripts(container) {
+ var scripts = container.getElementsByTagName('script');
  for(var i=0; i<scripts.length; i++){
   var script = scripts[i];
   try{
@@ -621,14 +639,17 @@ function editMessageCallback(ajaxreq) {
    // ignore
   }
  }
- tinyMCE.addMCEControl(document.getElementById("XWiki.ArticleClass_0_content"), "XWiki.ArticleClass_0_content");
- setViewMode(false);
 }
 function cancelEditMessage(spaceName,pageName,divid) {
-  var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
-  $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
-  // call url to get the edit html to edit the profile
-  var myAjax = new Ajax.XWikiRequest( "Groups", "ViewMessageService", {method: 'get', parameters: pars, onComplete: cancelEditMessageCallback, divid: divid });
+  releaseWysiwygEditor('messageWysiwyg');
+  // We give the WYSIWYG editor a chance to execute its deferred updates before removing it from the document. This
+  // timeout shouldn't be necessary and will be removed in the future.
+  setTimeout(function() {
+    var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
+    $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+    // call url to get the edit html to edit the profile
+    var myAjax = new Ajax.XWikiRequest( "Groups", "ViewMessageService", {method: 'get', parameters: pars, onComplete: cancelEditMessageCallback, divid: divid });
+  }, 100);
 }
 function cancelEditMessageCallback(ajaxreq) {
  var divid = ajaxreq.options.divid;
@@ -658,10 +679,6 @@ function setViewMode(viewMode){
  // show / hide edit link
  document.getElementById('editLinkContainer').style.display = viewMode ? 'inline':'none';
 }
-function onAfterSave(ajaxreq){
- setViewMode(true);
- updateSectionTitle(ajaxreq);
-}
 function updateSectionTitle(ajaxreq){
   var h3s = document.getElementById('section_1').getElementsByTagName('h3');
   if (h3s.length == 0){
@@ -676,6 +693,49 @@ function updateSectionTitle(ajaxreq){
       sectionTitle.innerHTML = ps[i].innerHTML;
     }
   }
+}
+function beforeSubmitEditMessage() {
+ if (checkForm('editform') == false) {
+  return false;
+ }
+ if (typeof tinyMCE != 'undefined') {
+  document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent();
+ } else {
+  // We have to release the editor before submitting the form. The editor will be replaced by the response.
+  releaseWysiwygEditor('messageWysiwyg');
+ }
+ return true;
+}
+// With the new WYSIWYG editor it is possible to experience conversion exceptions (from HTML to wiki syntax) in which 
+// case we must reopen the editor to prevent the user from loosing unsaved changes.
+function afterSubmitEditMessage(transport, divid) {
+ $(divid).innerHTML = transport.responseText;
+ // Check if the save failed. This test is not bullet proof: the user can add the specified form in the message body.
+ if (document.forms['editform']) {
+  evalInlineScripts($(divid));
+  createWysiwygEditor('messageWysiwyg', 'messageInputURL', messageWysiwygConfig);
+ } else {
+  setViewMode(true);
+  updateSectionTitle(transport);
+ }
+}
+// Creates a new WYSIWYG editor based on the given configuration and stores it in a window property with the specified name.
+function createWysiwygEditor(name, inputURLId, config) {
+ if (typeof Wysiwyg != 'undefined') {
+  Wysiwyg.onModuleLoad(function() {
+   // We have to update the input URL because the user can edit/save multiple times without reloading the page.
+   // The input URL is taken from the edit form.
+   config.inputURL = document.getElementById(inputURLId).value;
+   window[name] = new WysiwygEditor(config);
+  });
+ }
+}
+// Release the JavaScript objects and the event listeners used by the WYSIWYG editor to prevent memory leaks.
+function releaseWysiwygEditor(name) {
+ if (window[name]) {
+  window[name].release();
+  window[name] = undefined;
+ }
 }
 </script>
 {/pre}
@@ -857,7 +917,11 @@ $msg.get("groups_documentation_onlyaccessibletomembers")
 #set($ok = $xwiki.renamePage($tdoc, $pagefullname))
 #set($newdoc = $xwiki.getDocument($pagefullname))
 #set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
+#if($newdoc.syntaxId == "xwiki/2.0")
+$newdoc.setContent('{{velocity}}{{html}}#includeForm("Groups.MessageTemplate"){{/html}}{{/velocity}}')
+#else
 $newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
+#end
 $newdoc.setParent("${spaceName}.Messages")
 ## Update rights
 #messageUpdateRightsFromRequest($newdoc)
@@ -870,6 +934,9 @@ $response.sendRedirect($newdoc.getURL())
 <div class="groups-edit-message">
 $msg.get("groups_messages_create_about_infotxt")
 #set($bentrydoc = $xwiki.getDocument("Temp", $xwiki.getUniquePageName("Temp","Article")))
+#if("$!request.xwiki2" == "true")
+$bentrydoc.setSyntaxId("xwiki/2.0")
+#end
 #set($ok = $bentrydoc.save())
 #set($bentryobj = $bentrydoc.newObject("XWiki.ArticleClass"))
 #set($junk = $bentrydoc.use($bentryobj))
@@ -890,6 +957,7 @@ $bentrydoc.display("content", "edit", $bentryobj)
 #set($editors = $context.getEditorWysiwyg())
 #if($editors)
 {pre}
+#if($bentrydoc.syntaxId == "xwiki/1.0")
 <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
 <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script language="javascript" type="text/javascript">
@@ -907,6 +975,9 @@ $bentrydoc.display("content", "edit", $bentryobj)
         wiki_plugins: 'core,attachments'
 	});
 </script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($bentrydoc.syntaxId))
+#wysiwyg_editProperties($bentrydoc $editors false)
+#end
 {/pre}
 #end
 #messageIncludeCreateJs()
@@ -943,7 +1014,7 @@ $bentrydoc.display("content", "edit", $bentryobj)
 #set($adoc = $xwiki.getDocument("${spaceName}.${pageName}"))
 #set($ok = $adoc.use("XWiki.ArticleClass"))
 {pre}
-<form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{update:'${divid}', onComplete:onAfterSave}); return false;">
+<form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{onComplete:function(t){afterSubmitEditMessage(t,'${divid}')}}); return false;">
 {/pre}
 <p>
 <input type="hidden" name="xpage" value="plain" />
@@ -955,6 +1026,14 @@ $adoc.display("title", "edit")
 <br />
 <br />
 *$msg.get("groups_messages_create_messagecontent_instruction")*
+#if($xwiki.wysiwyg.isSyntaxSupported($adoc.syntaxId))
+#wysiwyg_inputProperty($adoc "XWiki.ArticleClass_0_content")
+#wysiwyg_displayConversionError("XWiki.ArticleClass_0_content")
+<input type="hidden" id="messageInputURL" value="${adoc.getExternalURL("view", $wysiwyg_inputURLQueryString)}" disabled="disabled" />
+## In case of a conversion exception the conversion filter sould redirect us back to the edit form (by default it redirects
+## to the referer, which in our case is the page where the edit form is included).
+<input type="hidden" name="xerror" value="$!{request.requestURL}?$!{request.queryString}" />
+#end
 $adoc.display("content", "edit")
 <br />
 ## The JavaScript needed is included in Groups.MessageSheet
@@ -982,7 +1061,7 @@ $adoc.use($viewRightObj)
 {pre}
 <div class="right mgn-vrt">
 <input type="button" class="button button-cancel mgn-rt" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
-<input type="submit" class="button button-confirm" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" />
+<input type="submit" class="button button-confirm" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="return beforeSubmitEditMessage();" />
 </div>
 {/pre}
 </p>
