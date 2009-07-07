@@ -218,7 +218,7 @@
 Ext.onReady(function(){
 Curriki.current.assetName='$newAsset.fullName';
 Curriki.current.assetType='WikiText';
-Curriki.current.assetTitle='${newAsset.getDisplayTitle().replaceAll("\\","\\\\").replaceAll("'","\\'")}';
+Curriki.current.assetTitle='${newAsset.getDisplayTitle().replaceAll('\\','\\\\').replaceAll("'","\\'")}';
 #if("$!cameFrom"!="") ## {
   Curriki.current.cameFrom='$cameFrom';
 #else  ## } { -- set default cameFrom back to this form as neither it nor SLP set it currently (TODO?)
@@ -231,7 +231,7 @@ Curriki.current.assetTitle='${newAsset.getDisplayTitle().replaceAll("\\","\\\\")
 #end ## }
 #if("$!parentAsset"!="") ## { -- note that this is only set on successful save AND existence of parentPage
   Curriki.current.parentAsset='$parentAsset';
-  Curriki.current.parentTitle='${parentAsset.getDisplayTitle().replaceAll("\\","\\\\").replaceAll("'","\\'")}';
+  Curriki.current.parentTitle='${parentAsset.getDisplayTitle().replaceAll('\\','\\\\').replaceAll("'","\\'")}';
 #end ## }
 Curriki.module.addpath.startDoneMessage();
 });
