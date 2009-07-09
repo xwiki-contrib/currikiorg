@@ -487,7 +487,7 @@ Curriki.module.addpath.init = function(){
 						,autoEl:{
 							 tag:'div'
 							,html:_('add.selectformat.instruction')
-							,cls:'instruction'
+							,cls:'instructionTxt'
 							,hidden:!(Curriki.current.templateType == 'format')
 						}
 					},{
