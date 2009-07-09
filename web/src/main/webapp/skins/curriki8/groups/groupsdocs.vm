@@ -164,7 +164,7 @@
   #end
 #end
   $msg.groups_documentation_add_document_choose
-  <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
+  <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) {this.upload.disabled = false; return false;} else return true;">
 <input id="xwikiuploadname" type="hidden" name="filename" value="" />
 <input id="xwikiuploadfile" type="file" name="filepath" value=""  size="40" />
 {pre}
@@ -202,7 +202,9 @@ function getFileExtension() {
 }
 </script>
 {/pre}
-<button type="submit" class="button button-confirm">${msg.groups_documentation_add_document_upload}</button>
+## We disable the upload button after it is clicked and re-enable it if the form is not submitted.
+## This is required to prevent duplicate uploads caused by repeated clicks.
+<button type="submit" name="upload" class="button button-confirm" onclick="this.disabled = true;">${msg.groups_documentation_add_document_upload}</button>
   </form>
 #endgroupsection()
 #end ## }
