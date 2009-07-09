@@ -2012,38 +2012,21 @@ Curriki.data.ict.store = new Ext.data.SimpleStore({
 });
 
 Curriki.data.ict.getRolloverDisplay = function(el_ict){
-	var icts = Curriki.data.ict.getRolloverList(el_ict);
-	var ret = '';
+	var icts = el_ict||[];
+	var ict = "";
 
 	var wrap = '<div class="ict-{0}"><img class="ict-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
 
-	Ext.each(icts, function(ict){
-		if (ict === 'ict_more') {
-			ret += '...<br />';
-		} else if (ict === 'none') {
-			ret += String.format(wrap, 'none', _('global.title.popup.ict.missing'));
-		} else {
-			ret += String.format(wrap, ict.replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+ict));
-		}
-	});
-
-	return ret;
-};
-
-Curriki.data.ict.getRolloverList = function(el_ict){
-	var icts = el_ict||[];
-	var ict = [];
-
 	if ("undefined" !== typeof icts && "undefined" !== typeof icts[0]) {
-		ict.push(icts[0]);
+		ict += String.format(wrap, icts[0].replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+icts[0]));
 		if ("undefined" !== typeof icts[1]) {
-			ict.push(icts[1]);
+			ict += String.format(wrap, icts[1].replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+icts[1]));
 			if ("undefined" !== typeof icts[2]) {
-				ict.push('ict_more');
+				ict += "...<br />";
 			}
 		}
 	} else {
-		ict.push('none');
+		ict += String.format(wrap, 'none', _('global.title.popup.ict.missing'));
 	}
 
 	return ict;
@@ -2063,36 +2046,19 @@ Curriki.data.el.list.each(function(el){
 });
 
 Curriki.data.el.getRolloverDisplay = function(el_array){
-	var lvls = Curriki.data.el.getRolloverList(el_array);
-	var ret = '';
-
-	Ext.each(lvls, function(lvl){
-		if (lvl === 'more') {
-			ret += '...<br />';
-		} else if (lvl === 'none') {
-			ret += _('global.title.popup.none.selected')+'<br />';
-		} else {
-			ret += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvl))+'<br />';
-		}
-	});
-
-	return ret;
-};
-
-Curriki.data.el.getRolloverList = function(el_array){
 	var lvls = el_array||undefined;
-	var lvl = [];
+	var lvl = "";
 
 	if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
-		lvl.push(Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0])));
+		lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[0]))+"<br />";
 		if ("undefined" !== typeof lvls[1]) {
-			lvl.push(Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1])));
+			lvl += Ext.util.Format.htmlEncode(_('CurrikiCode.AssetClass_educational_level_'+lvls[1]))+"<br />";
 			if ("undefined" !== typeof lvls[2]) {
-				lvl.push('more');
+				lvl += "...<br />";
 			}
 		}
 	} else {
-		lvl.push('none');
+		lvl += _('global.title.popup.none.selected');
 	}
 
 	return lvl;
@@ -2210,31 +2176,8 @@ Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
 
 Curriki.data.fw_item.getRolloverDisplay = function(fw_array){
-	var fwl = Curriki.data.fw_item.getRolloverList(fw_array);
-	var ret = '';
-
-	Ext.each(fwl, function(fw){
-		if (fw === 'none') {
-			ret += _('global.title.popup.none.selected')+'<br />';
-		} else if (fw === 'more') {
-			ret += '...<br />';
-		} else {
-			var combined = [];
-			Ext.each(fw, function(fwi){
-				combined.push(_('CurrikiCode.AssetClass_fw_items_'+fwi));
-			});
-			var fwD = combined.join(' > ');
-			ret += Ext.util.Format.htmlEncode(fwD)+'<br />';
-		}
-	});
-	
-
-	return ret;
-};
-
-Curriki.data.fw_item.getRolloverList = function(fw_array){
 	var fws = fw_array||[];
-	var fw = [];
+	var fw = "";
 	var fwMap = Curriki.data.fw_item.fwMap;
 
 	if (fws[0] === 'FW_masterFramework.WebHome') {
@@ -2242,7 +2185,7 @@ Curriki.data.fw_item.getRolloverList = function(fw_array){
 	}
 
 	if ("undefined" !== typeof fws && "undefined" !== typeof fws[0]) {
-		var fwD = [];
+		var fwD = "";
 		var fwi = fws[0];
 		var fwParent = fwMap['FW_masterFramework.WebHome'].find(function(item){
 			return (fwMap[item.id].find(function(sub){
@@ -2251,14 +2194,14 @@ Curriki.data.fw_item.getRolloverList = function(fw_array){
 		});
 
 		if (!Ext.type(fwParent)) {
-			fwD = [fwi];
+			fwD = _('CurrikiCode.AssetClass_fw_items_'+fwi);
 		} else {
 			fwParent = fwParent.id;
-			fwD = [fwParent, fwi];
+			fwD = _('CurrikiCode.AssetClass_fw_items_'+fwParent) + " > "+_('CurrikiCode.AssetClass_fw_items_'+fwi);
 		}
-		fw.push(fwD);
+		fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
 		if ("undefined" !== typeof fws[1]) {
-			var fwD = [];
+			var fwD = "";
 			var fwi = fws[1];
 			var fwParent = fwMap['FW_masterFramework.WebHome'].find(function(item){
 				return (fwMap[item.id].find(function(sub){
@@ -2267,18 +2210,18 @@ Curriki.data.fw_item.getRolloverList = function(fw_array){
 			});
 
 			if (!Ext.type(fwParent)) {
-				fwD = [fwi];
+				fwD = _('CurrikiCode.AssetClass_fw_items_'+fwi);
 			} else {
 				fwParent = fwParent.id;
-				fwD = [fwParent, fwi];
+				fwD = _('CurrikiCode.AssetClass_fw_items_'+fwParent) + " > "+_('CurrikiCode.AssetClass_fw_items_'+fwi);
 			}
-			fw.push(fwD);
+			fw += Ext.util.Format.htmlEncode(fwD) + "<br />";
 			if ("undefined" !== typeof fws[2]) {
-				fw.push('more');
+				fw += "...<br />";
 			}
 		}
 	} else {
-		fw.push('none');
+		fw += _('global.title.popup.none.selected')+'<br />';
 	}
 
 	return fw;
@@ -3147,35 +3090,6 @@ Curriki.ui.util.getTitleRollover = function(attr, hasTitle) {
 			,ict,_('global.title.popup.ict')
 		);
 	}
-
-/*
- * From Dave on new rollover
-<div id="mycurriki-description-0" class="popup popup-info-rollover">
-<div class="popup-info-rollover-description">
-<p>Description...</p>
-</div>
-<div class="popup-info-rollover-curtype">
-<strong>Subjects</strong>
-<ul class="asset-info-subject">
-...
-</ul>
-
-<strong>EdLevel</strong>
-<ul class="asset-info-edlevel">
-...
-</ul>
-
-<strong>ICT</strong>
-<ul class="asset-info-ict">
-<li class="ict-activity-exercise ict-activity">Activity...</li>
-...
-</ul>
-
-</div>
-<div class="popup-info-rollover-rating">
-</div>
-</div>
-*/
 
 	return qtip;
 };
