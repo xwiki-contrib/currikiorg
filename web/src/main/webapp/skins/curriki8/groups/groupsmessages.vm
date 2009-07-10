@@ -573,10 +573,10 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
    <div class="titleheader titleheader-blue"><h3 class="titleheader-left">$msgtitle</h3>
     <div class="titleheader-right">
      <span id="editLinkContainer" style="padding:0px;">
-      <a href="javascript:editMessage('$doc.space','$doc.name','$divid')" title="$editText">$editText</a>
+      {pre}<a href="javascript:editMessage('$doc.space','$doc.name','$divid')" title="$editText">$editText</a>{/pre}
       #sep()
      </span>
-     <a href="javascript:deleteMessage('$doc.space','$doc.name')" title="$deleteText">$deleteText</a>
+     {pre}<a href="javascript:deleteMessage('$doc.space','$doc.name')" title="$deleteText">$deleteText</a>{/pre}
     </div>
   </div>
   <div class="frame-content" id="section${counter}content">
@@ -1013,13 +1013,11 @@ $bentrydoc.display("content", "edit", $bentryobj)
 #set($divid = $request.divid)
 #set($adoc = $xwiki.getDocument("${spaceName}.${pageName}"))
 #set($ok = $adoc.use("XWiki.ArticleClass"))
-{pre}
-<form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{onComplete:function(t){afterSubmitEditMessage(t,'${divid}')}}); return false;">
-{/pre}
+<form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{onComplete:function(t){afterSubmitEditMessage(t,'{pre}${divid}{/pre}')}}); return false;">
 <p>
 <input type="hidden" name="xpage" value="plain" />
-<input type="hidden" name="space" value="$spaceName" />
-<input type="hidden" name="page" value="$pageName" />
+<input type="hidden" name="space" value="{pre}$spaceName{/pre}" />
+<input type="hidden" name="page" value="{pre}$pageName{/pre}" />
 <br />
 *$msg.get("groups_messages_create_messagetitle_instruction")*
 $adoc.display("title", "edit")
@@ -1029,10 +1027,10 @@ $adoc.display("title", "edit")
 #if($xwiki.wysiwyg.isSyntaxSupported($adoc.syntaxId))
 #wysiwyg_inputProperty($adoc "XWiki.ArticleClass_0_content")
 #wysiwyg_displayConversionError("XWiki.ArticleClass_0_content")
-<input type="hidden" id="messageInputURL" value="${adoc.getExternalURL("view", $wysiwyg_inputURLQueryString)}" disabled="disabled" />
+<input type="hidden" id="messageInputURL" value="{pre}${adoc.getExternalURL("view", $wysiwyg_inputURLQueryString)}{/pre}" disabled="disabled" />
 ## In case of a conversion exception the conversion filter sould redirect us back to the edit form (by default it redirects
 ## to the referer, which in our case is the page where the edit form is included).
-<input type="hidden" name="xerror" value="$!{request.requestURL}?$!{request.queryString}" />
+<input type="hidden" name="xerror" value="{pre}$!{request.requestURL}?$!{request.queryString}{/pre}" />
 #end
 $adoc.display("content", "edit")
 <br />
