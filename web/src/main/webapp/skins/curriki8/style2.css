@@ -372,7 +372,13 @@ button:hover, .x-btn button:hover, .menu-add:hover { background-color: #ffb808; 
 #done-dialogue #closebutton button:hover { background-color: #ffb808; color: #fff; }
 .x-toolbar .x-btn-over td.x-btn-center { background-image: none !important; text-decoration: none; }
 .x-window .ux-mselect-selected, .x-combo-list .x-combo-list-inner .x-combo-selected { background-color: #3399ff; color: #fff; }
-.required-indicator { color: #fb0f0c; margin-right: 3px;font-style:normal;font-weight:bold; }
+.required-indicator {
+	color: #fb0f0c;
+	font-size: 15px;
+	font-style:normal;
+	font-weight:bold;
+	margin-right: 3px;
+}
 .x-toolbar .ytb-sep { margin: 0; padding: 0; width: 1px; }
 .x-fieldset legend { display: none; }
 #link-entry-box { width: 80%; }
@@ -2054,32 +2060,31 @@ img.editorial.tutorial {
 
 .form-wrp {
 	background-color:#F2F2F2;
-	border:1px solid #E5E5E5;
+	border:1px solid #ababab;
 	margin:0 0 10px;
 	padding:10px 10px 0;
 }	
 
 .form-wrp fieldset {
 	background: #fff;
+	border:1px solid #CCCCCC;
 	margin-bottom: 10px;
 }
 
-fieldset .fields-wrp {padding: 5px;}
+#content fieldset .fields-wrp {padding: 5px;}
 fieldset.optional .fields-wrp {padding: 10px;}
 
-fieldset.required .fields-wrp li {
+#content fieldset.required .fields-wrp li,
+#content fieldset.optional .fields-wrp li {
 	margin-bottom: 7px;
-	padding: 5px 5px 15px 5px
+	padding: 5px;
 }
 
-fieldset.optional .fields-wrp li {
-	margin-bottom: 7px;
-	padding: 5px 5px 5px 5px;
+#content fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
+#content fieldset .fields-wrp .inactive {color: #bbb;}
+#content fieldset .fields-wrp ul ul ul {
+	margin: 3px 10px 0 10px;
 }
-
-fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
-fieldset .fields-wrp .inactive {color: #bbb;} 
-fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 10px;}
 .form-wrp p {margin: 1em 0;}
 .form-wrp span label {font-weight: bold;}
 .form-wrp span {display: block; margin-bottom:3px;}
@@ -2093,12 +2098,11 @@ div#intro-register p {padding: .5em 0;}
 
 em.required { 
 	color:red;
-	font-size: 15px;
+	font-size: 13px;
 	font-weight:bold;
 	font-style: normal;
 }
 
-.form-wrp em.required {margin-right:3px;}
 #register input.input-text, #mycurriki-profile .form-wrp input.input-text {width: 205px;}
 fieldset.required ul p, fieldset.required ul span {width: 350px;}
 
