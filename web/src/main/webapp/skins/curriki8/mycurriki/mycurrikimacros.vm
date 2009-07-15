@@ -65,7 +65,20 @@ $text
   * @param $userobj User object to display the form for
   * @author dward@curriki.org
   *#
-#macro(mycurriki_header $userobj) ## {
+#macro(mycurriki_header $userobj $userdoc) ## {
+<ul id="asset-attribution">
+<li id="asset-avatar">
+<a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name">
+#if($userdoc.attachmentList.size()==0) ##{
+	<img src="$xwiki.getSkinFile("noavatar.png")" />
+#else ##}{
+	#foreach ($attach in $userdoc.attachmentList) ## {
+		<img src="$userdoc.getAttachmentURL($attach.filename,"download")" />
+	#end ##}
+#end ##}
+</a>
+</li>
+</ul>
 <h2>$userobj.first_name $userobj.last_name</h2>
 #end ## macro ## }
 
@@ -103,7 +116,7 @@ $text
 #set($g_userdoc = $userdoc)
 #set($g_userobj = $userobj)
 <div id="mycurriki-$pageref" class="mycurriki mycurriki-$pageref">
-#mycurriki_header($userobj)
+#mycurriki_header($userobj $userdoc)
 #mycurriki_tabs($pageref $whofor)
 <div id="mycurriki-main" class="tab-container">
 <div id="mycurriki-main-header">
