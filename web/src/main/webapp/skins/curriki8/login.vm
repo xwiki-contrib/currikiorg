@@ -24,6 +24,16 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 ###
 #template("startpage.vm")
 #set($logredir = $!request.xredirect)
-#loginbox($logredir)
+##loginbox($logredir)
+#set($message = $msg.get($xwiki.parseMessage()))
+#if($message) ##{
+<div class="main layoutsubsection">
+## errors for the previous login
+#error($message)
+</div>
+#end ##}
+<div id="whyjoin">
+$xwiki.getDocument("Main.WhyJoin").getTranslatedDocument().getRenderedContent()
+</div>
 #template("endpage.vm")
 #end
