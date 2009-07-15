@@ -126,7 +126,11 @@ em, em strong { font-style: italic; }
 .green, .ressource .create, .ressource .edit, .curriki-form .headerbar { background-color: #93c53c; }
 .blue, .members .headerbar, .groups .headerbar, .form-wrp h3 { background-color: #4e83c7; }
 
-.frame { border: 1px solid #dcdcdc; }
+.frame {
+	border-left:1px solid #dcdcdc;
+	border-right:1px solid #dcdcdc;
+	border-bottom:1px solid #dcdcdc;
+}
 .links { padding: 1em 0; }
 .frame-content { padding: 0.5em; }
 .instruction { color: #3f3f3f; font-size: 10px; }
@@ -2062,18 +2066,18 @@ img.editorial.tutorial {
 	background-color:#F2F2F2;
 	border:1px solid #ababab;
 	margin:0 0 10px;
-	padding:10px 10px 0;
+	padding:10px;
 }	
 
 .form-wrp fieldset {
 	background: #fff;
-	border:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
 	margin-bottom: 10px;
 }
 
-#content fieldset .fields-wrp {padding: 5px;}
-fieldset.optional .fields-wrp {padding: 10px;}
-
+#content fieldset .fields-wrp {padding: 0 10px;}
 #content fieldset.required .fields-wrp li,
 #content fieldset.optional .fields-wrp li {
 	margin-bottom: 7px;
@@ -2088,6 +2092,7 @@ fieldset.optional .fields-wrp {padding: 10px;}
 .form-wrp p {margin: 1em 0;}
 .form-wrp span label {font-weight: bold;}
 .form-wrp span {display: block; margin-bottom:3px;}
+.form-wrp .highlight {border:2px solid red;}
 
 .form-wrp ul p {
 	margin: 0 0 .5em 0;
