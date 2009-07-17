@@ -684,22 +684,24 @@ $!desc
 #macro(mycurriki_editprofilebutton $userdoc) ##{
 <!-- My Curriki edit profile button -->
 	#if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights())) ##{
-		<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
+		<div class="button-right">
 		#if("$!request.mode"=="") ##{
 			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view", "mode=public")" title="$msg.get("view_profile.intro.public_button")">$msg.get("view_profile.intro.public_button")</a></span>
 		#elseif("$!request.mode"=="public") ##}{
 			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view")" title="$msg.get("view_profile.intro.return_button")">$msg.get("view_profile.intro.return_button")</a></span>
 		#end ##}
+		<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
+		</div>
+		<div id="profile-push">
+		$msg.get('view_profile.intro.percent_complete', ['X%'])
+		</div>
+		#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
+		#if($!highlights) ##{
+		<div class="clearfloats" />
+		<div id="profile-highlighted">
+		$highlights.getTranslatedDocument().getRenderedContent()
+		</div>
 	#end ##}
-<div id="profile-push">
-$msg.get('view_profile.intro.percent_complete', ['X%'])
-</div>
-#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
-#if($!highlights) ##{
-<div class="clearfloats" />
-<div id="profile-highlighted">
-$highlights.getTranslatedDocument().getRenderedContent()
-</div>
 #end ##}
   <!-- End My Curriki edit profile button -->
 #end ## } end macro
