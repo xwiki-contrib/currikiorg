@@ -843,7 +843,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   *#
 #macro(mycurriki_viewprofile $userdoc $userobj) ##{
 <!-- Curriki View Profile -->
-<fieldset class="required">
+<fieldset>
 <h3>$msg.get('view_profile.account_info.header')</h3>
 <div class="fields-wrp">
 <ul>
@@ -891,7 +891,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 
 ##Only show when not a public profile
 #if(!$public_profile) ##{
-<fieldset class="required">
+<fieldset>
 <h3>$msg.get('view_profile.privacy.header')</h3>
 <div class="fields-wrp">
 <ul>
@@ -974,7 +974,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #set($all = "${member_type}${affiliation}${city}${state}${country}${language}${comment}${contact}${websites}${litems}")
 #if("$all" == "") ##{
 	#if(!$public_profile) ##{
-		<fieldset class="required">
+		<fieldset>
 		<h3>$msg.get('view_profile.interests.header')</h3>
 		<div class="fields-wrp">
 			$msg.get('view_profile.interests.no_info')
@@ -982,7 +982,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		</fieldset>
 	#end ##}
 #else ##}{
-<fieldset class="required">
+<fieldset>
 <h3>$msg.get('view_profile.interests.header')</h3>
 <div class="fields-wrp">
 <ul>
