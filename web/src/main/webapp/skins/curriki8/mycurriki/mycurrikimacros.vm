@@ -118,7 +118,7 @@ $text
 <div id="mycurriki-$pageref" class="mycurriki mycurriki-$pageref">
 #mycurriki_header($userobj $userdoc)
 #mycurriki_tabs($pageref $whofor)
-<div id="mycurriki-main" class="tab-container">
+<div id="mycurriki-main" class="form-wrp tab-container">
 <div id="mycurriki-main-header">
 #if($hasbutton == 1) ## {
 ## This is a call back to the local macro of the page including this macro
@@ -843,7 +843,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   *#
 #macro(mycurriki_viewprofile $userdoc $userobj) ##{
 <!-- Curriki View Profile -->
-<div class="content-wrp">
+<fieldset class="required">
 <h3>$msg.get('view_profile.account_info.header')</h3>
 <div class="fields-wrp">
 <ul>
@@ -887,11 +887,11 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 	</li>
 </ul>
 </div>
-</div>
+</fieldset>
 
 ##Only show when not a public profile
 #if(!$public_profile) ##{
-<div class="content-wrp">
+<fieldset class="required">
 <h3>$msg.get('view_profile.privacy.header')</h3>
 <div class="fields-wrp">
 <ul>
@@ -942,7 +942,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 	</li>
 </ul>
 </div>
-</div>
+</fieldset>
 #end ##}
 
 #set($member_type = "")
@@ -974,15 +974,15 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #set($all = "${member_type}${affiliation}${city}${state}${country}${language}${comment}${contact}${websites}${litems}")
 #if("$all" == "") ##{
 	#if(!$public_profile) ##{
-		<div class="content-wrp">
+		<fieldset class="required">
 		<h3>$msg.get('view_profile.interests.header')</h3>
 		<div class="fields-wrp">
 			$msg.get('view_profile.interests.no_info')
 		</div>
-		</div>
+		</fieldset>
 	#end ##}
 #else ##}{
-<div class="content-wrp">
+<fieldset class="required">
 <h3>$msg.get('view_profile.interests.header')</h3>
 <div class="fields-wrp">
 <ul>
@@ -1080,7 +1080,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #end ##}
 </ul>
 </div>
-</div>
+</fieldset>
 #end ##}
 <!-- End Curriki View Profile -->
 #end ##} end macro
