@@ -697,12 +697,12 @@ $!desc
 		</div>
 		#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
 		#if($!highlights) ##{
-		<div class="clearfloats" />
-		<div id="profile-highlighted">
-		$highlights.getTranslatedDocument().getRenderedContent()
-		</div>
+			<div class="clearfloats" />
+			<div id="profile-highlighted">
+			$highlights.getTranslatedDocument().getRenderedContent()
+			</div>
+		#end ##}
 	#end ##}
-#end ##}
   <!-- End My Curriki edit profile button -->
 #end ## } end macro
 
@@ -902,7 +902,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		<tr>
 		<td>
 			<ul>
-			#set($titems = $!userobj.getValue("topics"))
+			#set($titems = $!userobj.getProperty("topics").getValue())
 			#foreach($titem in $titems)
 				#if($titem!="FW_masterFramework.WebHome")
 					<li>$msg.get("CurrikiCode.AssetClass_fw_items_${titem}")</li>
@@ -912,7 +912,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		</td>
 		<td>
 			<ul>
-			#set($eitems = $!userobj.getValue("education_level"))
+			#set($eitems = $!userobj.getProperty("education_level").getValue())
 			#foreach($eitem in $eitems)
 				<li>$msg.get("CurrikiCode.AssetClass_education_level_${eitem}")</li>
 			#end
