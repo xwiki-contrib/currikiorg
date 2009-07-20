@@ -693,14 +693,71 @@ $!desc
 		<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
 		</div>
 		<div id="profile-push">
-		$msg.get('view_profile.intro.percent_complete', ['X%'])
+## Calculate %complete
+#set($c = 3) ## login name, password, email address have to exist
+##
+#set($x = "")#set($x = $!userobj.getProperty('first_name').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('last_name').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('show_contact').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('show_email').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('opt_out').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('member_type').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('affiliation').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('topics').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('educational_level').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('country').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('state').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('city').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('language').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('comment').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('contact').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('websites').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#if($userdoc.attachmentList.size()==0)#set($c = 1 + $c)#end
+##
+#set($c = 100 * $c)
+#set($c = $c / 20)
+#set($c = "${c}%")
+##
+		$msg.get('view_profile.intro.percent_complete', [$c])
 		</div>
 		#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
 		#if($!highlights) ##{
-			<div class="clearfloats" />
-			<div id="profile-highlighted">
-			$highlights.getTranslatedDocument().getRenderedContent()
-			</div>
+		<div class="clearfloats" />
+		<div id="profile-highlighted">
+		$highlights.getTranslatedDocument().getRenderedContent()
+		</div>
 		#end ##}
 	#end ##}
   <!-- End My Curriki edit profile button -->
@@ -792,14 +849,22 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 <ul>
 	##Do not show in all PUBLIC views
 	#if(!$public_profile) ##{
-		<li>
-			*$msg.get("view_profile.account_info.name1.title")*
-			#mycurriki_dashifempty($userdoc.display("first_name", $userobj))
-		</li>
-		<li>
-			*$msg.get("view_profile.account_info.name2.title")*
-			#mycurriki_dashifempty($userdoc.display("last_name", $userobj))
-		</li>
+		#set($first_name = "")
+		#set($first_name = $!userobj.getProperty("first_name").getValue())
+		#if($first_name != "") ##{
+			<li>
+				*$msg.get("view_profile.account_info.name1.title")*
+				#mycurriki_dashifempty($userdoc.display("first_name", $userobj))
+			</li>
+		#end ##}
+		#set($last_name = "")
+		#set($last_name = $!userobj.getProperty("last_name").getValue())
+		#if($last_name != "") ##{
+			<li>
+				*$msg.get("view_profile.account_info.name2.title")*
+				#mycurriki_dashifempty($userdoc.display("last_name", $userobj))
+			</li>
+		#end ##}
 		<li>
 			*$msg.get("view_profile.account_info.login.title")*
 			#mycurriki_dashifempty($userdoc.name)
@@ -880,79 +945,143 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 </div>
 #end ##}
 
+#set($member_type = "")
+#set($member_type = $!userobj.getProperty("member_type").getValue())
+#set($affiliation = "")
+#set($affiliation = $!userobj.getProperty("affiliation").getValue())
+#set($city = "")
+#set($city = $!userobj.getProperty("city").getValue())
+#set($state = "")
+#set($state = $!userobj.getProperty("state").getValue())
+#set($country = "")
+#set($country = $!userobj.getProperty("country").getValue())
+#set($language = "")
+#set($language = $!userobj.getProperty("language").getValue())
+#set($comment = "")
+#set($comment = $!userobj.getProperty("comment").getValue())
+#set($contact = "")
+#set($contact = $!userobj.getProperty("contact").getValue())
+#set($websites = "")
+#set($websites = $!userobj.getProperty("websites").getValue())
+#set($litems = "")
+#set($titems = "")
+#set($titems = $!userobj.getProperty("topics").getValue())
+#set($eitems = "")
+#set($eitems = $!userobj.getProperty("education_level").getValue())
+#if(("$titems" != "" && $titems.size() > 0) || ("$eitems" != "" && $eitems.size() > 0)) ##{
+#set($litems = "YES")
+#end ##}
+#set($all = "${member_type}${affiliation}${city}${state}${country}${language}${comment}${contact}${websites}${litems}")
+#if("$all" == "") ##{
+	#if(!$public_profile) ##{
+		<div class="content-wrp">
+		<h3>$msg.get('view_profile.interests.header')</h3>
+		<div class="fields-wrp">
+			$msg.get('view_profile.interests.no_info')
+		</div>
+		</div>
+	#end ##}
+#else ##}{
 <div class="content-wrp">
 <h3>$msg.get('view_profile.interests.header')</h3>
 <div class="fields-wrp">
 <ul>
+#if($member_type != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.member_type.title")*
 		#mycurriki_dashifempty($userdoc.display("member_type", $userobj))
 	</li>
+#end ##}
+#if($affiliation != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.affiliation.title")*
 		#mycurriki_dashifempty($userdoc.display("affiliation", $userobj))
 	</li>
+#end ##}
+#if(("$titems" != "" && $titems.size() > 0) || ("$eitems" != "" && $eitems.size() > 0)) ##{
 	<li id="item-interest-areas">
 		<table>
 		<tbody>
 		<tr>
+		#if("$titems" != "" && $titems.size() > 0) ##{
 			<th>*$msg.get("view_profile.interests.subject.title")*</th>
+		#end ##}
+		#if("$eitems" != "" && $eitems.size() > 0) ##{
 			<th>*$msg.get("view_profile.interests.ed_level.title")*</th>
+		#end ##}
 		</tr>
 		<tr>
-		<td>
-			<ul>
-			#set($titems = $!userobj.getProperty("topics").getValue())
-			#foreach($titem in $titems)
-				#if($titem!="FW_masterFramework.WebHome")
-					<li>$msg.get("CurrikiCode.AssetClass_fw_items_${titem}")</li>
+		#if("$titems" != "" && $titems.size() > 0) ##{
+			<td>
+				<ul>
+				#foreach($titem in $titems)
+					#if($titem!="FW_masterFramework.WebHome")
+						<li>$msg.get("CurrikiCode.AssetClass_fw_items_${titem}")</li>
+					#end
 				#end
-			#end
-			</ul>
-		</td>
-		<td>
-			<ul>
-			#set($eitems = $!userobj.getProperty("education_level").getValue())
-			#foreach($eitem in $eitems)
-				<li>$msg.get("CurrikiCode.AssetClass_education_level_${eitem}")</li>
-			#end
-			</ul>
-		</td>
+				</ul>
+			</td>
+		#end ##}
+		#if("$eitems" != "" && $eitems.size() > 0) ##{
+			<td>
+				<ul>
+				#foreach($eitem in $eitems)
+					<li>$msg.get("CurrikiCode.AssetClass_education_level_${eitem}")</li>
+				#end
+				</ul>
+			</td>
+		#end ##}
 		</tr>
 		</tbody>
 		</table>
 	</li>
+#end ##}
+#if($city != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.city.title")*
 		#mycurriki_dashifempty($userdoc.display("city", $userobj))
 	</li>
+#end ##}
+#if($state != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.state.title")*
 		#mycurriki_dashifempty($userdoc.display("state", $userobj))
 	</li>
+#end ##}
+#if($country != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.country.title")*
 		#mycurriki_dashifempty($userdoc.display("country", $userobj))
 	</li>
+#end ##}
+#if($language != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.language.title")*
 		#mycurriki_dashifempty($userdoc.display("language", $userobj))
 	</li>
+#end ##}
+#if($comment != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.bio.title")*
 		#mycurriki_dashifempty($userdoc.display("comment", $userobj))
 	</li>
+#end ##}
+#if($contact != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.contact.title")*
 		#mycurriki_dashifempty($userdoc.display("contact", $userobj))
 	</li>
+#end ##}
+#if($websites != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.websites.title")*
 		#mycurriki_dashifempty($userdoc.display("websites", $userobj))
 	</li>
+#end ##}
 </ul>
 </div>
 </div>
+#end ##}
 <!-- End Curriki View Profile -->
 #end ##} end macro
 
