@@ -1476,7 +1476,7 @@ img.subcategory-interactive_swf, .filetype-swf a.icon-link  {background-position
 img.subcategory-audio_wav, .filetype-wav a.icon-link {background-position: 0 -180px;}
 img.subcategory-audio_mp3, .filetype-mp3 a.icon-link {background-position: 0 -90px;}
 img.subcategory-external_url, .filetype-www a.icon-link {background-position: 0 0;}
-td.table-col-filetype img.subcategory-unknown_unknown {background-position: 0 -4770px;}
+img.subcategory-unknown_unknown {background-position: 0 -4770px;}
 
 
 #search-panel-resource img.crs-icon, #ChooseLocationDialoguePanel .curriki-group .x-tree-node-icon {
@@ -1547,6 +1547,30 @@ td.table-col-filetype img.subcategory-unknown_unknown {background-position: 0 -4
 }
 
 
+/** LEFT PANEL NAVIGATION **/
+
+#navigation-inner .titles:hover span.collapsed, #navigation-inner span.collapsed, #navigation-inner span.expanded, #navigation-inner .titles:hover span.expanded, 
+#navigation-inner .selected span.collapsed {
+	background-image: url(/xwiki/skins/curriki8/images/sprite_general.gif);
+	background-repeat: no-repeat;
+} 
+
+#navigation-inner .titles:hover span.collapsed {background-position: 0 -1260px !important;}
+#navigation-inner span.collapsed {background-position: 0 -1080px !important;}
+#navigation-inner span.expanded {background-position: 0 -990px !important;}
+#navigation-inner .titles:hover span.expanded {background-position: 0 -1170px !important;}
+#navigation-inner .selected span.collapsed {background-position: 0 -900px !important;}
+#navigation-inner .selected:hover img {display:none !important;}
+#navigation-inner .selected span.expanded {background-position: 0 -810px !important;}
+
+#navigation-inner .titles:hover {
+	background-color: #a3a4d2
+	color: #282974;
+}
+
+#navigation-inner .home span {width: 18px;}
+
+
 /** MY COLLECTIONS LINK PIPES **/
 
 .mycurriki-collections a.button-link, #groups-collections a.button-link {
@@ -1588,39 +1612,7 @@ img.tooltip {
 
 form#SelectTemplateDialogueForm {height: 430px !important; width: 610px !important; overflow: auto !important;}
 
- 
-
 #selecttemplate-form-container .x-window .x-panel-body {padding: 6px 2px 0;}
-
-
-/** XWIKIEDITOR **/
-
-.wikimodel-emptyline {height:1em;}
-
-
-/** LEFT PANEL NAVIGATION **/
-
-
-#navigation-inner .titles:hover span.collapsed, #navigation-inner span.collapsed, #navigation-inner span.expanded, #navigation-inner .titles:hover span.expanded, 
-#navigation-inner .selected span.collapsed {
-	background-image: url(/xwiki/skins/curriki8/images/sprite_general.gif);
-	background-repeat: no-repeat;
-} 
-
-#navigation-inner .titles:hover span.collapsed {background-position: 0 -1260px !important;}
-#navigation-inner span.collapsed {background-position: 0 -1080px !important;}
-#navigation-inner span.expanded {background-position: 0 -990px !important;}
-#navigation-inner .titles:hover span.expanded {background-position: 0 -1170px !important;}
-#navigation-inner .selected span.collapsed {background-position: 0 -900px !important;}
-#navigation-inner .selected:hover img {display:none !important;}
-#navigation-inner .selected span.expanded {background-position: 0 -810px !important;}
-
-#navigation-inner .titles:hover {
-	background-color: #a3a4d2
-	color: #282974;
-}
-
-#navigation-inner .home span {width: 18px;}
 
 /** WEBQUEST INPUT - IE NOT GETTING WIDTH SINCE EARLIER CSS WAS WRITTEN WITH attr selectors **/
 
@@ -1638,6 +1630,11 @@ form#SelectTemplateDialogueForm {height: 430px !important; width: 610px !importa
 /** ADDRESS .archive-startfile-checked  **/
 
 .archive-startfile-checked {display: inline-block;}
+
+
+/** XWIKIEDITOR **/
+
+.wikimodel-emptyline {height:1em;}
 
 
 /** GROUP BUTTON FIX **/
@@ -2119,11 +2116,14 @@ a.toggler {
 	background-repeat: no-repeat;
 	display: block;
 	margin: 13px 0 0 10px;
-	padding: 1px 0 5px 23px;
+	padding: 1px 0 2px 23px;
 }
 
 a.toggler.expanded {background-position: 0 -1620px;}
 a.toggler.collapsed {background-position: 0 -1530px;}
+
+
+/** MY CURRIKI **/
 
 #mycurriki-main-header .button-right {
 	float:right;
@@ -2134,3 +2134,10 @@ a.toggler.collapsed {background-position: 0 -1530px;}
 	font-size:1.1em;
 	padding-bottom:10px 0;
 }
+
+.mycurriki .tabs a {border-color: #C9C9C9 #C9C9C9 #ABABAB;}
+.mycurriki .tabs a .current {
+	background: #f2f2f2;
+	border-color: #ABABAB #ABABAB #F2F2F2
+}
+.mycurriki .tabs {clear: left; padding-top: 10px;}
