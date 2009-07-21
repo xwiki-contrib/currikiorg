@@ -528,12 +528,12 @@ $!desc
   * @author dward@curriki.org
   *#
 #macro(mycurriki_editprofilebuttons $xredirect) ##{
-  <!-- Edit Profile Buttons -->
-  <div class="button-right">
-    <input class="button button-grey" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
-    <input class="button button-orange" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/>
-  </div>
-  <!-- End Edit Profile Buttons -->
+<!-- Edit Profile Buttons -->
+<div class="button-right">
+	<input class="button button-grey" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.inline.action='$userdoc.getURL("cancel", "xredirect=$xredirect")'; document.forms.inline.submit(); return false;"/>
+	<input class="button button-orange" type="submit" name="formactionsave" value="$msg.get("mycurriki.editprofile.saveButton")" onclick="document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirect")'; if(document.forms.inline.onsubmit() == false) return false; document.forms.inline.submit(); return false;"/>
+</div>
+<!-- End Edit Profile Buttons -->
 #end ##}
 
 #**
@@ -690,9 +690,8 @@ $!desc
 		#elseif("$!request.mode"=="public") ##}{
 			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view")" title="$msg.get("view_profile.intro.return_button")">$msg.get("view_profile.intro.return_button")</a></span>
 		#end ##}
-		<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
+			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
 		</div>
-		<div id="profile-push">
 ## Calculate %complete
 #set($c = 3) ## login name, password, email address have to exist
 ##
@@ -750,8 +749,7 @@ $!desc
 #set($c = $c / 20)
 #set($c = "${c}%")
 ##
-		$msg.get('view_profile.intro.percent_complete', [$c])
-		</div>
+		<div class="profile-push">$msg.get('view_profile.intro.percent_complete', [$c])</div>
 		#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
 		#if($!highlights) ##{
 		<div class="clearfloats" />
@@ -870,7 +868,6 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 			#mycurriki_dashifempty($userdoc.name)
 		</li>
 	#end ##}
-
 	## Only show if the member has allowed email to be shared, or is a private profile viewing
 	#set($show_email = 0)
 	#set($show_email = $!userobj.getProperty('show_email').value)
@@ -880,7 +877,6 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 			#mycurriki_dashifempty($userdoc.display("email", $userobj))
 		</li>
 	#end ##}
-
 	<li>
 		*$msg.get("view_profile.account_info.member_since")*
 		$xwiki.formatDate($userdoc.date,$msg.get("mycurriki.dateFormat"))
