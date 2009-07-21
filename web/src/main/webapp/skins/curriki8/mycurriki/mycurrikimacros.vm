@@ -559,7 +559,7 @@ $!desc
   #set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
 
   #curriki_titlebar($msg.get("mycurriki.editprofile.titlebar") "" "" "blue")
-  <form id="inline" action="$userdoc.getURL("preview")" method="post">
+  <form action="$userdoc.getURL("preview")" name="inline" id="inline" method="post">
     <input id="origemail" name="origemail" type="hidden" value="${userobj.getProperty('email').getValue()}" />
     {pre}
     <input id="origpw" name="origpw" type="hidden" value="********" />{/pre}
@@ -578,97 +578,90 @@ $!desc
     </table>
   </form>
   #mycurriki_editprofilebuttons($xredirect)
-  {pre}
-  <script type="text/javascript">
-  function checkInlineForm() {
-  var isValid = true;
-   if(document.forms.inline['XWiki.XWikiUsers_0_password'].value.indexOf(" ") >= 0){
-     alert("$msg.get("profile.field.password.nospaces")");
-     isValid = false;
-   }
+{pre}
+<script type="text/javascript">
+function checkEmailResponse(originalRequest){
+	var text = originalRequest.responseText;
+	var res = eval('[' + text + '][0]');
+	if(!res.email){
+		CurrikiJS.errMsgAdd("$msg.get("joincurriki.email.alreadyUsed")");
+		CurrikiJS.errMsgShow();
+		return false;
+	}
+	document.forms.inline.onSubmit = "";
+	if (($F("XWiki.XWikiUsers_0_email") != $F("origemail")) && (document.forms.inline['XWiki.XWikiUsers_0_password'].value != $F("origpw"))){
+		var ia=document.createElement('input');
+		ia.setAttribute('id', "XWiki.XWikiUsers_0_active");
+		ia.setAttribute('name', "XWiki.XWikiUsers_0_active");
+		ia.setAttribute('type', "hidden");
+		ia.setAttribute('value', "0");
+		$('inline').appendChild(ia);
+	
+		var eu=document.createElement('input');
+		eu.setAttribute('id', "XWiki.XWikiUsers_0_email_undeliverable");
+		eu.setAttribute('name', "XWiki.XWikiUsers_0_email_undeliverable");
+		eu.setAttribute('type', "hidden");
+		eu.setAttribute('value', "1");
+		$('inline').appendChild(eu);
 
-   if (document.forms.inline['XWiki.XWikiUsers_0_password'].value.length < 5) {
-     alert("$msg.get("profile.field.password.tooShort")");
-     isValid = false;
-   }
-
-   if (document.forms.inline['XWiki.XWikiUsers_0_first_name'].value.length == 0) {
-     alert("$msg.get("profile.field.firstName.mandatory")");
-     isValid = false;
-   }
-
-   if (document.forms.inline['XWiki.XWikiUsers_0_last_name'].value.length == 0) {
-     alert("$msg.get("profile.field.lastName.mandatory")");
-     isValid = false;
-   }
-
-   var emailStr = document.forms.inline['XWiki.XWikiUsers_0_email'].value;
-   if (emailStr.length <= 1) {
-     alert("$msg.get("profile.field.email.mandatory")");
-     isValid = false;
-   } else {
-     var atIndex = emailStr.indexOf("@");
-     if ((atIndex < 1) || (emailStr.lastIndexOf(".") <= (atIndex+1)) || (emailStr.length <= (emailStr.lastIndexOf(".") + 1)) || (emailStr.lastIndexOf("@") != atIndex)) {
-       alert("$msg.get("profile.field.email.invalid")");
-       isValid = false;
-     }
-   }
-
-   if (document.forms.inline['XWiki.XWikiUsers_0_password_repeat'].value != document.forms.inline['XWiki.XWikiUsers_0_password'].value){
-       alert("$msg.get("profile.field.password.mustMatch")");
-       isValid = false;
-  }
-
-  if (document.forms.inline['origemail'].value != document.forms.inline['XWiki.XWikiUsers_0_email'].value) {
-    document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirectemail")';
-  }
-
-  if (isValid) {
-    checkEmail();
-  }
-  return false;
+		document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirectemail2")';
+	}
+	document.forms.inline.submit();
 }
 
-  function checkEmail(){
-    var email = $F("XWiki.XWikiUsers_0_email");
-    var account = "${userdoc.fullName}";
-    var url= "$xwiki.getURL("XWiki.CheckAccountCreation").replaceAll("http","https")";
-    var pars = 'xpage=plain&email=' + email + '&account=' + account;
-    var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
-    return false;
-  }
+function checkInlineForm() {
+	$$('#inline .highlight').invoke('removeClassName', 'highlight');
+	CurrikiJS.errMsg = '';
+	CurrikiJS.trimFields(document.inline);
 
-  function checkEmailResponse(originalRequest){
-    var text = originalRequest.responseText;
-    var res = eval('[' + text + '][0]');
-    if(!res.email){
-      alert("$msg.get("joincurriki.email.alreadyUsed")");
-      return false;
-    }
-    document.forms.inline.onSubmit = "";
-    if (($F("XWiki.XWikiUsers_0_email") != $F("origemail"))
-     && (document.forms.inline['XWiki.XWikiUsers_0_password'].value != $F("origpw"))){
-	var ia=document.createElement('input');
-	ia.setAttribute('id', "XWiki.XWikiUsers_0_active");
-	ia.setAttribute('name', "XWiki.XWikiUsers_0_active");
-	ia.setAttribute('type', "hidden");
-	ia.setAttribute('value', "0");
-	$('inline').appendChild(ia);
+	if(document.forms.inline['XWiki.XWikiUsers_0_password'].value.indexOf(" ") >= 0){
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.password.nospaces")");
+	}
 
-	var eu=document.createElement('input');
-	eu.setAttribute('id', "XWiki.XWikiUsers_0_email_undeliverable");
-	eu.setAttribute('name', "XWiki.XWikiUsers_0_email_undeliverable");
-	eu.setAttribute('type', "hidden");
-	eu.setAttribute('value', "1");
-	$('inline').appendChild(eu);
+	if (document.forms.inline['XWiki.XWikiUsers_0_password'].value.length < 5) {
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.password.tooShort")");
+	}
 
-        document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirectemail2")';
-      }
-      document.forms.inline.submit();
-    }
-    document.forms.inline.onsubmit=checkInlineForm;
-  </script>
-  {/pre}
+	if (document.forms.inline['XWiki.XWikiUsers_0_first_name'].value.length == 0) {
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.firstName.mandatory")");
+	}
+
+	if (document.forms.inline['XWiki.XWikiUsers_0_last_name'].value.length == 0) {
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.lastName.mandatory")");
+	}
+
+	var emailStr = document.forms.inline['XWiki.XWikiUsers_0_email'].value;
+	if (emailStr.length <= 1) {
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.email.mandatory")");
+	}
+	else if (!CurrikiJS.validEmail(emailStr)) {
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.email.invalid")");
+	}
+
+	if (document.forms.inline['XWiki.XWikiUsers_0_password_repeat'].value != document.forms.inline['XWiki.XWikiUsers_0_password'].value){
+		CurrikiJS.errMsgAdd("$msg.get("profile.field.password.mustMatch")");
+	}
+
+	if (document.forms.inline['origemail'].value != document.forms.inline['XWiki.XWikiUsers_0_email'].value) {
+		document.forms.inline.action='$userdoc.getURL("save", "xredirect=$xredirectemail")';
+	}
+
+	if (CurrikiJS.errMsg) {
+		CurrikiJS.errMsgShow();
+	}
+	else {
+		var email = $F("XWiki.XWikiUsers_0_email");
+		var account = "${userdoc.fullName}";
+		var url= "$xwiki.getURL("XWiki.CheckAccountCreation").replaceAll("http","https")";
+		var pars = 'xpage=plain&email=' + email + '&account=' + account;
+		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
+	}
+	return false;
+}
+
+document.forms.inline.onsubmit=checkInlineForm;
+</script>
+{/pre}
   #if("$!footerJScript" == "")
     #set($footerJScript = "")
   #end
