@@ -468,6 +468,7 @@ em, em strong { font-style: italic; }
 
 /* header bars */
 .headerbar, .form-wrp h3, .content-wrp h3  { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
+.form-wrp h3 {margin-bottom:5px;}
 .currikicontent h3.headerbar {color: #fff;}
 .headerbar a { color: #fff; }
 .violet, .sponsors .headerbar, .partners .headerbar, .information .headerbar { background-color: #8a91cb; }
@@ -480,7 +481,9 @@ em, em strong { font-style: italic; }
 
 .frame { 
 	background-color:#FFFFFF;
-	border:1px solid #dcdcdc;
+	border-left:1px solid #dcdcdc;
+	border-right:1px solid #dcdcdc;
+	border-bottom:1px solid #dcdcdc;
 	margin:10px 0 20px;
 	padding:0;
 	position:relative;
@@ -839,7 +842,13 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 #header-search button:hover {text-decoration: underline !important;}
 .x-toolbar .x-btn-over td.x-btn-center { background-image: none !important; text-decoration: none; }
 .x-window .ux-mselect-selected, .x-combo-list .x-combo-list-inner .x-combo-selected { background-color: #3399ff; color: #fff; }
-.required-indicator { color: #fb0f0c; margin-right: 3px;font-style:normal;font-weight:bold; }
+.required-indicator {
+	color: #fb0f0c;
+	font-size: 15px;
+	font-style:normal;
+	font-weight:bold;
+	margin-right: 3px;
+}
 .x-toolbar .ytb-sep { margin: 0; padding: 0; width: 1px; }
 .x-fieldset legend { display: none; }
 #link-entry-box { width: 80%; }
@@ -2517,7 +2526,7 @@ img.subcategory-interactive_swf, .filetype-swf a.icon-link  {background-position
 img.subcategory-audio_wav, .filetype-wav a.icon-link {background-position: 0 -180px;}
 img.subcategory-audio_mp3, .filetype-mp3 a.icon-link {background-position: 0 -90px;}
 img.subcategory-external_url, .filetype-www a.icon-link {background-position: 0 0;}
-td.table-col-filetype img.subcategory-attachment_unknown {background-position: 0 -4770px;}
+td.table-col-filetype img.subcategory-unknown_unknown {background-position: 0 -4770px;}
 
 #search-panel-resource img.crs-icon, #ChooseLocationDialoguePanel .curriki-group .x-tree-node-icon {
 	background-image: url(images/sprite_crs_ict_group.gif); 
@@ -3156,83 +3165,98 @@ body.p-Test-TestWysiwyg .main ul ul, .xwikicontent ul ul {list-style:disc;}
 
 
 /** REGISTER FORMS **/
-/**
-fieldset .fields-wrp ul {list-style:none;margin:0;padding:0;}
+
+#content fieldset .fields-wrp ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+#content fieldset .fields-wrp ul li { list-style-type: none; }
 
 .form-wrp {
 	background-color:#F2F2F2;
-	border:1px solid #E5E5E5;
+	border:1px solid #ababab;
 	margin:0 0 10px;
-	padding:10px 10px 0;
+	padding:10px;
 }	
 
-.form-wrp fieldset, .mycurriki .content-wrp {
+.form-wrp fieldset {
 	background: #fff;
-	border: 1px solid #ccc;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
 	margin-bottom: 10px;
+	padding-bottom: 10px;
 }
 
-fieldset .fields-wrp {padding: 5px;}
-fieldset.optional .fields-wrp {padding: 10px;}
+#content fieldset .fields-wrp {padding: 0 10px;}
+#content fieldset .fields-wrp li {padding: 5px;}
+#content form fieldset .fields-wrp li {margin-bottom: 7px;}
 
-fieldset.required .fields-wrp li {
-	margin-bottom: 5px;
-	padding: 5px 5px 15px 5px
-}
-
-fieldset.optional .fields-wrp li {
-	margin-bottom: 5px;
-	padding: 5px 5px 5px 5px;
-}
-
-fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 3px 0;}
-fieldset .fields-wrp .inactive {color: #bbb;} 
-fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 10px;}
+#content fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
+#content fieldset .fields-wrp .inactive {color: #bbb;}
+#content fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 16px;}
 .form-wrp p {margin: 1em 0;}
 .form-wrp span label {font-weight: bold;}
 .form-wrp span {display: block; margin-bottom:3px;}
+.form-wrp .highlight {border:2px solid red;}
 
 .form-wrp ul p {
 	margin: 0 0 .5em 0;
 	font-size: 11px;
 }
 
+#item-interest-areas TABLE TH {padding-right:20px;}
+
 div#intro-register p {padding: .5em 0;}
 
 em.required { 
 	color:red;
-	font-size: 15px;
+	font-size: 13px;
 	font-weight:bold;
 	font-style: normal;
 }
 
-.form-wrp em.required {margin-right:3px;}
-#register input.input-text, #mycurriki-profile .form-wrp input.input-text {width: 205px;}
+.form-wrp input.input-text {width: 205px;}
 fieldset.required ul p, fieldset.required ul span {width: 350px;}
 
-.form-wrp li#item-login-name {background: url(images/example_member_login.jpg) top right no-repeat;}
-.form-wrp li#item-display-name1 {background: url(images/example_display_name1.jpg) top right no-repeat;}
-.form-wrp li#item-display-name2 {background: url(images/example_display_name2.jpg) top right no-repeat;}
+li#block-xwikiname {background: url(/xwiki/skins/curriki8/images/joinmemberlogin.gif) top right no-repeat;}
+li#block-XWiki-XWikiUsers_0_first_name {background: url(/xwiki/skins/curriki8/images/joindisplayname1.gif) top right no-repeat;}
+li#block-XWiki-XWikiUsers_0_last_name {background: url(/xwiki/skins/curriki8/images/joindisplayname2.gif) top right no-repeat;}
 
-div#intro-register {background: url(images/registration_placeholder.jpg) top right no-repeat; padding-right: 200px;}
+div#intro-register {background: url(/xwiki/skins/curriki8/images/jointop.gif) top right no-repeat; padding-right: 200px;}
 
 a.toggler {
-	background-image: url(images/sprite_general.gif);
+	background-image: url(/xwiki/skins/curriki8/images/sprite_general.gif);
 	background-repeat: no-repeat;
 	display: block;
-	margin: 15px 15px 0;
+	margin: 13px 0 0 10px;
 	padding: 1px 0 5px 23px;
 }
 
 a.toggler.expanded {background-position: 0 -1620px;}
 a.toggler.collapsed {background-position: 0 -1530px;}
-**/
-/** MY CURRIKI **/ /**
+
+
+/** MY CURRIKI **/
+
+#mycurriki-main-header .button-right {
+	float:right;
+	padding: 0 0 10px 10px;
+}
+#mycurriki-main-header .profile-push {
+	font-weight:normal;
+	font-size:1.1em;
+	padding-bottom:10px 0;
+}
 #asset-avatar img { 
-max-height:80px;
-max-width:200px;
+	max-height:80px;
+	max-width:200px;
 }
 
+/**
 .mycurriki-profile #asset-attribution {float: left; margin-right: 5px;}
 
 .mycurriki-profile #mycurriki-main-header .button {float:none;}
@@ -3244,4 +3268,5 @@ max-width:200px;
 
 .mycurriki .fields-wrp li#item-interest-areas table {border-collapse: inherit; width: 100%;}
 .mycurriki .fields-wrp li#item-interest-areas td {border: 1px solid #ccc; margin-left: 5px; padding: 5px; width: 45%;}
-.mycurriki .fields-wrp li#item-interest-areas th {background: none;}**/
+.mycurriki .fields-wrp li#item-interest-areas th {background: none;}
+**/
