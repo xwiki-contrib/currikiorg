@@ -1607,8 +1607,7 @@ console.log('initing Curriki');
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	Ext.apply(Ext.QuickTips.getQuickTip(), {
-		True: false
-		,Delay:10000
+		dismissDelay:10000
 		,hideDelay: 0
 	});
 });
