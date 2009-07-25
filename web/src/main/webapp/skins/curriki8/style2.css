@@ -28,6 +28,8 @@ a:hover{
 
 a img {border: none;}
 
+IMG {behavior: url(/xwiki/skins/curriki8/iepngfix.htc)} /* IE6 fix for PNG-24 */
+
 fieldset {
 	border: none;
 	padding: 0;
@@ -3176,14 +3178,16 @@ body.p-Test-TestWysiwyg .main ul ul, .xwikicontent ul ul {list-style:disc;}
 }
 #content fieldset .fields-wrp ul li { list-style-type: none; }
 
-.form-wrp {
+.form-wrp,
+form#inline {
 	background-color:#F2F2F2;
 	border:1px solid #ababab;
 	margin:0 0 10px;
 	padding:10px;
 }	
 
-.form-wrp fieldset {
+.form-wrp fieldset,
+fieldset .frame {
 	background: #fff;
 	border-left:1px solid #CCCCCC;
 	border-right:1px solid #CCCCCC;
@@ -3193,12 +3197,18 @@ body.p-Test-TestWysiwyg .main ul ul, .xwikicontent ul ul {list-style:disc;}
 }
 
 #content fieldset .fields-wrp {padding: 0 10px;}
+#content fieldset .fields-wrp .inactive {color: #bbb;}
 #content fieldset .fields-wrp li {padding: 5px;}
 #content form fieldset .fields-wrp li {margin-bottom: 7px;}
-
 #content fieldset.optional .fields-wrp li ul li {margin-bottom: 0; padding: 5px 0;}
-#content fieldset .fields-wrp .inactive {color: #bbb;}
-#content fieldset .fields-wrp ul ul ul {margin: 3px 10px 0 16px;}
+#content fieldset .fields-wrp ul ul li {
+	text-indent:-20px;
+	margin-left: 26px;
+}
+#content fieldset .fields-wrp ul ul ul li {
+	text-indent:-17px;
+	margin-left: 19px;
+}
 .form-wrp p {margin: 1em 0;}
 .form-wrp span label {font-weight: bold;}
 .form-wrp span {display: block; margin-bottom:3px;}
@@ -3209,7 +3219,14 @@ body.p-Test-TestWysiwyg .main ul ul, .xwikicontent ul ul {list-style:disc;}
 	font-size: 11px;
 }
 
-#item-interest-areas TABLE TH {padding-right:20px;}
+#item-interest-areas TABLE TH.item-interest-areas-th {
+	padding-right:20px;
+	background:none;
+}
+#item-interest-areas TABLE TD.item-interest-areas-td {
+	vertical-align: top;
+	padding-top:5px;
+}
 
 div#intro-register p {padding: .5em 0;}
 
@@ -3220,7 +3237,7 @@ em.required {
 	font-style: normal;
 }
 
-.form-wrp input.input-text {width: 205px;}
+.form-wrp input[type=text] {width: 205px;}
 fieldset.required ul p, fieldset.required ul span {width: 350px;}
 
 li#block-xwikiname {background: url(/xwiki/skins/curriki8/images/joinmemberlogin.gif) top right no-repeat;}
@@ -3234,7 +3251,7 @@ a.toggler {
 	background-repeat: no-repeat;
 	display: block;
 	margin: 13px 0 0 10px;
-	padding: 1px 0 5px 23px;
+	padding: 1px 0 4px 23px;
 }
 
 a.toggler.expanded {background-position: 0 -1620px;}
