@@ -2161,9 +2161,65 @@ a.toggler.collapsed {background-position: 0 -1530px;}
 	padding-bottom:10px 0;
 }
 
-.mycurriki .tabs a {border-color: #C9C9C9 #C9C9C9 #ABABAB;}
-.mycurriki .tabs a .current {
+/** TABS **/
+
+.tab-container {
+	background-color: #f2f2f2; 
+	border: 1px solid #000; 
+	clear: left;
+	margin: 0 0 10px; 
+	padding: 10px; 
+}
+
+.mycurriki .tab-container {
+	background: #f2f2f2;
+	border: 1px solid #ababab;
+}
+
+ul.tabs {
+	clear:none;
+	float:left;
+	margin:0 0 0 10px;
+	padding:0;
+}
+
+ul.tabs li { 
+	float:left; 
+	margin:0 5px -1px 0;
+	padding:0;
+	position:relative;
+}
+
+#content ul.tabs li, #content ul.tabs {list-style: none;}
+
+ul.tabs a { 
+	-moz-border-radius-bottomleft:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-topleft:3px;
+	-moz-border-radius-topright:3px;
+	background: #fff;
+	border-color:#ccc #ccc #000;
+	border-style:solid;
+	border-width:1px;
+	color:#555;
+	display:block;
+	font-weight:bold;
+	padding:5px 10px;
+}
+
+ul.tabs li.current a { 
+	background:#FFFFCF none repeat scroll 0 0;
+	border-color:#000 #000 #FFFFCF;
+	border-style:solid;
+	border-width:1px;
+	color:#333;
+}
+
+.mycurriki ul.tabs a {border-color: #C9C9C9 #C9C9C9 #ABABAB;}
+
+.mycurriki ul.tabs li.current a {
 	background: #f2f2f2;
 	border-color: #ABABAB #ABABAB #F2F2F2
 }
-.mycurriki .tabs {clear: left; padding-top: 10px;}
+
+.mycurriki ul.tabs {clear: left; padding-top: 10px;}
