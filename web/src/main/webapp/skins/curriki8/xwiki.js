@@ -384,16 +384,15 @@ var CurrikiJS = {
 		}
 	},
 
-	hightLightEl: function (elName) {
-		var elm = document.getElementById(elName);
-		$(elm).addClassName('highlight');
-		if (CurrikiJS.errMsg == '') elm.focus();
+	hightLightEl: function (elName, elmFocus) {
+		$(elName).addClassName('highlight');
+		if (elmFocus && (CurrikiJS.errMsg == '')) elmFocus.focus();
 	},
 
 	errMsg: '',
 
 	errMsgAdd: function(msg) {
-		CurrikiJS.errMsg += msg + "\n";
+		CurrikiJS.errMsg += "\t- " + msg + "\n";
 	},
 
 	errMsgShow: function() {
