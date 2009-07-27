@@ -384,12 +384,29 @@ var CurrikiJS = {
 		}
 	},
 
-	hightLightEl: function (elName, elmFocus) {
+	jt_scrollTop: function() {
+		if (window.pageYOffset) {return window.pageYOffset;}
+		else if (document.documentElement && (document.documentElement.scrollTop > 0)) {return document.documentElement.scrollTop;}
+		else {return document.body.scrollTop;}
+	},
+
+	errFocusOn: false,
+
+	hightLightEl: function(elName, elmFocus) {
 		$(elName).addClassName('highlight');
-		if (elmFocus && (CurrikiJS.errMsg == '')) elmFocus.focus();
+		if (elmFocus && !CurrikiJS.errFocusOn) {
+			CurrikiJS.errFocusOn = true;
+			elmFocus.focus();
+			window.scrollTo(0, CurrikiJS.jt_scrollTop() - 100);
+		}
 	},
 
 	errMsg: '',
+
+	errMsgReset: function() {
+		CurrikiJS.errMsg = '';
+		CurrikiJS.errFocusOn = false;
+	},
 
 	errMsgAdd: function(msg) {
 		CurrikiJS.errMsg += "\t- " + msg + "\n";
