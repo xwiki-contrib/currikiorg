@@ -392,7 +392,7 @@ var CurrikiJS = {
 
 	errFocusOn: false,
 
-	hightLightEl: function(elName, elmFocus) {
+	errHighlight: function(elName, elmFocus) {
 		$(elName).addClassName('highlight');
 		if (elmFocus && !CurrikiJS.errFocusOn) {
 			CurrikiJS.errFocusOn = true;
