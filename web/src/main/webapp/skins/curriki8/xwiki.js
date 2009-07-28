@@ -409,7 +409,7 @@ var CurrikiJS = {
 	},
 
 	errMsgAdd: function(msg) {
-		CurrikiJS.errMsg += "\t- " + msg + "\n";
+		CurrikiJS.errMsg += " - " + msg + "\n";
 	},
 
 	errMsgShow: function() {
