@@ -338,6 +338,11 @@ public class Asset extends CurrikiDocument {
         // Keep the information allowing to track where that asset came from
         newObjAsset.setStringValue(Constants.ASSET_CLASS_TRACKING, copyOf);
 
+	// Clear the rating
+        newObjAsset.setIntValue(Constants.ASSET_CLASS_RATING, 0);
+        newObjAsset.setLongValue(Constants.ASSET_CLASS_RATING_COUNT, 0);
+        newObjAsset.setLongValue(Constants.ASSET_CLASS_RATING_SUM, 0);
+
 
         // Clear rights objects otherwise this will trigger a remove object although these have never been saved
         assetDoc.getDoc().setObjects("XWiki.XWikiRights", new Vector<BaseObject>());

@@ -93,6 +93,11 @@ public interface Constants {
     String ASSET_CLASS_FCDATE_FORMAT =  "MM/dd/yyyy HH:mm";
     String ASSET_CLASS_FCNOTES = "fcnotes";
 
+    // Rating fields
+    String ASSET_CLASS_RATING = "rating";
+    String ASSET_CLASS_RATING_COUNT = "rating_count";
+    String ASSET_CLASS_RATING_SUM = "rating_sum";
+
     /**
      *    Class AssetLicenseClass
      */
