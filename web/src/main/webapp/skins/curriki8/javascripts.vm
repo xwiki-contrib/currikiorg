@@ -61,6 +61,13 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 #end ## }
 #end ##}
 
+$xwiki.jsfx.use('js/xwiki/widgets/modalPopup.js', true)
+$xwiki.ssfx.use('js/xwiki/widgets/modalPopup.css', true)
+$xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js', true)
+$xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
+$xwiki.jsfx.use('uicomponents/widgets/confirmedAjaxRequest.js', true)
+$xwiki.jsfx.use('uicomponents/widgets/notification.js', true)
+$xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/xwiki.js", true)"></script>
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
