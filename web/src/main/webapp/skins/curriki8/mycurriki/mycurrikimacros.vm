@@ -956,7 +956,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #set($titems = "")
 #set($titems = $!userobj.getProperty("topics").getValue())
 #set($eitems = "")
-#set($eitems = $!userobj.getProperty("education_level").getValue())
+#set($eitems = $!userobj.getProperty("educational_level").getValue())
 #if(("$titems" != "" && $titems.size() > 0) || ("$eitems" != "" && $eitems.size() > 0)) ##{
 #set($litems = "YES")
 #end ##}
