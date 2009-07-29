@@ -1,4 +1,6 @@
 #macro(registrationinit $type) ##{
+#set($g_RegReq = $msg.get('flag.dialog.required.field.icon'))
+#set($g_ClearPx = "/xwiki/skins/curriki8/images/px.gif")
 #set($g_RegType = 'register')
 #if($!type && ($type != 'register')) ##{
 #set($g_RegType = $type)
@@ -94,9 +96,6 @@ $userdoc.use("XWiki.XWikiUsers")
 		$response.sendRedirect($userdoc.getURL("view"))
 	#end ##}
 #end ##}
-
-#set($g_RegReq = $msg.get('flag.dialog.required.field.icon'))
-#set($g_ClearPx = "/xwiki/skins/curriki8/images/px.gif")
 
 #**
   * Macro to display the registration info module
