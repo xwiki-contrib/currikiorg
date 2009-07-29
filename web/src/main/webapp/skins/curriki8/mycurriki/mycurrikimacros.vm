@@ -141,7 +141,11 @@ $text
 			</div>
 			<div class="clearfloats"></div>
 		</div>
-		<div id="mycurriki-main-content">
+		<div id="mycurriki-main-content"
+#if($pageref == "blog" || $pageref == "groups") ## {
+			class="frame"
+#end ## }
+		>
 ## This is a call back to the local macro of the page including this macro
 #mycurriki_pagecontent($userdoc $userobj)
 		</div>
