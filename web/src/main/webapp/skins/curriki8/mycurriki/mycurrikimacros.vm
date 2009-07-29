@@ -666,7 +666,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		#elseif($opt_out == 2) ##}{
 			$msg.get("view_profile.privacy.email_options.some")
 			#set($show_options = "")
-			#set($show_options = $!userobj.getProperty('email_options'))
+			#set($show_options = $!userobj.getProperty('email_options').value)
 			<ul class="pad-5" sytle="list-style-type: disc; list-style-position: inside;">
 				#foreach($option in $show_options) ##{
 					<li>$msg.get("view_profile.privacy.email_options.${option}")</li>
