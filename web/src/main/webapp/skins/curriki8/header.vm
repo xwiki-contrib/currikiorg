@@ -30,7 +30,7 @@
 <!-- login area -->
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post"> ##{
   <input type="hidden" name="srid" value="$!request.srid" />
-  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="$msg.get("header.login_username")" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
+  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="#if("$!request.j_username" != "")$request.j_username#else${msg.get("header.login_username")}#end" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
   <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="if(window.ActiveXObject || this.type == 'password'){this.select();} else {this.type='password'; this.value=''; this.focus();}" onblur="if ((!window.ActiveXObject) && this.value==''){this.value='$msg.get("header.login_password")'; this.type='text';}"/>
 
   <script type="text/javascript">
