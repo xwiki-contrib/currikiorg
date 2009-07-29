@@ -449,7 +449,7 @@ $!desc
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
 #set($x = "")#set($x = $!userobj.getProperty('member_type').value)
-#if("$x" != "")#set($c = 1 + $c)#end
+#if("$x" != "" && "$x" != '---')#set($c = 1 + $c)#end
 ##
 #set($x = "")#set($x = $!userobj.getProperty('affiliation').value)
 #if("$x" != "")#set($c = 1 + $c)#end
@@ -461,7 +461,7 @@ $!desc
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
 #set($x = "")#set($x = $!userobj.getProperty('country').value)
-#if("$x" != "")#set($c = 1 + $c)#end
+#if("$x" != "" && "$x" != '---')#set($c = 1 + $c)#end
 ##
 #set($x = "")#set($x = $!userobj.getProperty('state').value)
 #if("$x" != "")#set($c = 1 + $c)#end
@@ -681,6 +681,9 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 
 #set($member_type = "")
 #set($member_type = $!userobj.getProperty("member_type").getValue())
+#if($member_type == '---') ##{
+#set($member_type = "")
+#end ##}
 #set($affiliation = "")
 #set($affiliation = $!userobj.getProperty("affiliation").getValue())
 #set($city = "")
@@ -689,6 +692,9 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #set($state = $!userobj.getProperty("state").getValue())
 #set($country = "")
 #set($country = $!userobj.getProperty("country").getValue())
+#if($country == '---') ##{
+#set($country = "")
+#end ##}
 #set($language = "")
 #set($language = $!userobj.getProperty("language").getValue())
 #set($comment = "")
