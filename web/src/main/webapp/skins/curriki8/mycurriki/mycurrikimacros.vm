@@ -659,9 +659,9 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		*$msg.get("view_profile.privacy.email_options.title")*
 		#set($opt_out = "")
 		#set($opt_out = $!userobj.getProperty('opt_out').value)
-		#if($opt_out == 1) ##{
+		#if($opt_out == 0) ##{
 			$msg.get("view_profile.privacy.email_options.all")
-		#elseif($opt_out == 0) ##}{
+		#elseif($opt_out == 1) ##}{
 			$msg.get("view_profile.privacy.email_options.none")
 		#elseif($opt_out == 2) ##}{
 			$msg.get("view_profile.privacy.email_options.some")
