@@ -121,13 +121,20 @@ H5 em strong { color: red; }
 .search-box button { border: none; font-size: 1.1em; padding: 0.1em 0 0.1em 0 !important; } 
 
 /* header bars */
-.headerbar, .form-wrp h3 { color: #fff; font-size: 1em; font-weight: bold; padding: 0.2em 0.5em; text-transform: uppercase; }
+.headerbar,
+.form-wrp fieldset h3 {
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 2px 8px;
+	text-transform: uppercase;
+}
 .form-wrp h3 {margin-bottom:5px;}
 .headerbar a { color: #fff; }
 .violet, .sponsors .headerbar, .partners .headerbar, .information .headerbar { background-color: #8a91cb; }
 .orange, .ressource .search, .ressource .view, .ressource .featured { background-color: #e7793b; }
 .green, .ressource .create, .ressource .edit, .curriki-form1 .headerbar { background-color: #93c53c; }
-.blue, .members .headerbar, .groups .headerbar, .form-wrp h3 { background-color: #4e83c7; }
+.blue, .members .headerbar, .groups .headerbar, .form-wrp fieldset h3 { background-color: #4e83c7; }
 
 .links { padding: 1em 0; }
 .frame-content { padding: 0.5em; }
@@ -430,8 +437,10 @@ button:hover, .x-btn button:hover, .menu-add:hover { background-color: #ffb808; 
 	text-transform: uppercase;
 }
 
-H3.titleheader-blue { background-color: #006699; }
-H3.titleheader-red { background-color:#FF4100; }
+.titleheader-blue { background-color: #006699; }
+.titleheader-red { background-color:#FF4100; }
+
+.titleheader H3 {background:transparent;} /* ??? Joseph ??? */
 
 .titleheader-right {
 	position: absolute; 
