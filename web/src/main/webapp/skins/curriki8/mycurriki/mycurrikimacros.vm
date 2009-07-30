@@ -66,7 +66,9 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_header $userobj $userdoc) ## {
-<a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
+<ul id="asset-attribution">
+	<li id="asset-avatar">
+		<a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
 #if($userdoc.attachmentList.size()==0) ##{
 	<img src="$xwiki.getSkinFile("noavatar.png")" />
 #else ##}{
@@ -75,6 +77,8 @@ $text
 	#end ##}
 #end ##}
 </a>
+	</li>
+</ul>
 <h2>$userobj.first_name $userobj.last_name</h2>
 #end ## macro ## }
 
@@ -130,11 +134,11 @@ $text
 #else ## } {
 #set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
 #end ## }
-			<div id="mycurriki-main-header-left">
 #if($subtitle != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ## {
+			<div id="mycurriki-main-header-left">
 				<div id="mycurriki-main-header-subtitle" class="tab-deck">$subtitle</div>
-#end ## }
 			</div>
+#end ## }
 			<div class="clearfloats"></div>
 		</div>
 		<div id="mycurriki-main-content"
