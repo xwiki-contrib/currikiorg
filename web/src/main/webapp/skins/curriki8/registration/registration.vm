@@ -532,12 +532,16 @@ document.observe('dom:loaded', function(){
 		<p>$msg.get("${pfx}.intro")</p>
 		<ul>
 			<li>
-				<span><label for="XWiki.XWikiUsers_0_member_type">$msg.get("${pfx}.member_type.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.member_type.tooltip")"/></span><br />
-				$userdoc.display('member_type', "edit")
+				<span><label for="XWiki.XWikiUsers_0_member_type">$msg.get("${pfx}.member_type.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.member_type.tooltip")"/></span>
+				<ul class="fieldList">
+					<li>$userdoc.display('member_type', "edit")</li>
+				</ul>
 			</li>
 			<li>
-				<span><label for="XWiki.XWikiUsers_0_affiliation">$msg.get("${pfx}.affiliation.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.affiliation.tooltip")"/></span><br />
-				$userdoc.display('affiliation', "edit")
+				<span><label for="XWiki.XWikiUsers_0_affiliation">$msg.get("${pfx}.affiliation.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.affiliation.tooltip")"/></span>
+				<ul class="fieldList">
+					<li>$userdoc.display('affiliation', "edit")</li>
+				</ul>
 			</li>
 			<li id="item-interest-areas">
 				<table>
@@ -577,8 +581,10 @@ document.observe('dom:loaded', function(){
 				</ul>
 			</li>
 			<li>
-				<span><label for="XWiki.XWikiUsers_0_language">$msg.get("${pfx}.language.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.language.tooltip")"/></span><br/>
-				$userdoc.display('language', "edit")
+				<span><label for="XWiki.XWikiUsers_0_language">$msg.get("${pfx}.language.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.language.tooltip")"/></span>
+				<ul class="fieldList">
+					<li>$userdoc.display('language', "edit")</li>
+				</ul>
 			</li>
 		#if($g_RegType == 'edit_profile') ##{
 {pre}
