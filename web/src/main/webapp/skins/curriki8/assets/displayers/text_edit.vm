@@ -37,6 +37,11 @@
                                 wikiEditor.addExternalProcessor((/\u0023currikiACELPIcon\(\)/g), aceIconHtmlSrc);
                                 var aceReg = new RegExp(aceIconHtmlSrc.replace('/xwiki/bin/', '../../').replace('/', '\/'),"g");
                                 wikiEditor.addInternalProcessor(aceReg, '\u0023currikiACELPIcon()');
+                                // EfSLP Icon
+                                var efsIconHtmlSrc = '<img src="' + '$msg.get("efs.title.learn.link4.thumbnail")' + '" alt="" width="68" height="64" align="middle" />';  
+                                wikiEditor.addExternalProcessor((/\u0023currikiEfSLPIcon\(\)/g), efsIconHtmlSrc);
+                                var efsReg = new RegExp(efsIconHtmlSrc.replace('/xwiki/bin/', '../../').replace('/', '\/'),"g");
+                                wikiEditor.addInternalProcessor(efsReg, '\u0023currikiEfSLPIcon()');
                                 // wiki editor init
                                 wikiEditor.init({
                                     language: "en",
