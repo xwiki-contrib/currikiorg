@@ -1203,6 +1203,16 @@ $msg.get("panel.navigation.home")
 #end                             ##}
 
 #**
+ * For CreateResources.EducateforSustainabilityLessonPlan output.
+ * References translations from CreateResources.Translations.
+ * This allows inclusion of Nortel Icon without hardcoding path to
+ * image in each lesson plan output.
+ *##
+#macro(currikiEfSLPIcon)        ##{
+<img src="$msg.get('efs.title.learn.link4.thumbnail')" height="68" width="64" align="middle">
+#end                            ##}
+
+#**
  * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
  * formatTextareasIntoWikiText() ). Call sequence:
  *  macro currikiattachmentBegin()
