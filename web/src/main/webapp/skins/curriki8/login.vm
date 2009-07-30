@@ -2,22 +2,22 @@
   *  Displays a login box
   *  TODO: style to curriki styles
   *#
-#if($context.user!="XWiki.XWikiGuest")
-#if(!$request.srid)
-#if($request.xredirect)
+#if($context.user!="XWiki.XWikiGuest") ##{
+#if(!$request.srid) ##{
+#if($request.xredirect) ##{
 $response.sendRedirect($request.xredirect)
-#else
+#else ##}{
 $response.sendRedirect($xwiki.getURL("MyCurriki.Profile"))
-#end
-#end 
-#elseif($doc.fullName != "XWiki.XWikiLogin")
+#end ##}
+#end  ##}
+#elseif($doc.fullName != "XWiki.XWikiLogin") ##}{
 #set($qs = "")
 #set($qs = $request.queryString)
-#if(!$request.getParameter("xredirect"))
+#if(!$request.getParameter("xredirect")) ##{
 #set($qs = "xredirect=$util.encodeURI($doc.getURL('view'))&${qs}")
-#end
+#end ##}
 $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
-#else
+#else ##}{
 ###
 ### Login page
 ###
@@ -29,6 +29,9 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 #if($message) ##{
 <div class="main layoutsubsection">
 ## errors for the previous login
+#if(("$!request.j_username" == "")&&("$!request.j_password" == "")) ##{
+#set($message = $msg.get('redirect.error.no_info'))
+#end ##}
 #error($message)
 </div>
 #end ##}
@@ -36,4 +39,4 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 $xwiki.getDocument("Main.WhyJoin").getTranslatedDocument().getRenderedContent()
 </div>
 #template("endpage.vm")
-#end
+#end ##}
