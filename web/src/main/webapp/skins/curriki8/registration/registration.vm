@@ -59,6 +59,7 @@ $userdoc.use("XWiki.XWikiUsers")
 		#set($xredirect = $xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 		#set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
 		#set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
+		#set($xredirectdelphoto = $xwiki.getURL("MyCurriki.EditProfile", "view", "$userarg"))
 
 		## Avatar Upload
 		#set($filename = $xwiki.fileupload.getFileName("filepath"))
@@ -673,8 +674,7 @@ tinyMCE.addMCEControl($("XWiki.XWikiUsers_0_websites"), "XWiki.XWikiUsers_0_webs
 #if($userdoc.attachmentList.size()>0) ##{
 	#set($attach = $userdoc.attachmentList.get(0))
 	#if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin) ## {
-		#set($deleteredir = $userdoc.getURL("view"))
-		#set($dellink = $userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}"))
+		#set($dellink = $userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${xredirectdelphoto}"))
 	#end  ## } is same user
 <script type="text/javascript">
 {pre}
