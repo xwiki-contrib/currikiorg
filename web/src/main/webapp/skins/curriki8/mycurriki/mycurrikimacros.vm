@@ -485,7 +485,7 @@ $!desc
 #set($x = "")#set($x = $!userobj.getProperty('websites').value)
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
-#if($userdoc.attachmentList.size()==0)#set($c = 1 + $c)#end
+#if($userdoc.attachmentList.size()>0)#set($c = 1 + $c)#end
 ##
 #set($c = 100 * $c)
 #set($c = $c / 20)
