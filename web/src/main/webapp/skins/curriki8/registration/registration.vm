@@ -566,13 +566,15 @@ document.observe('dom:loaded', function(){
 				</table>
 			</li>
 			<li>
-				<span><label>$msg.get("${pfx}.location.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.location.tooltip")"/></span><br />
-				<label for="XWiki.XWikiUsers_0_country">$msg.get("${pfx}.country.title")</label><br/>
-				$userdoc.display('country', "edit")<br/>
-				<label for="XWiki.XWikiUsers_0_state">$msg.get("${pfx}.state.title")</label><br/>
-				$userdoc.display('state', "edit")<br/>
-				<label for="XWiki.XWikiUsers_0_city">$msg.get("${pfx}.city.title")</label><br/>
-				$userdoc.display('city', "edit")<br/>
+				<span><label>$msg.get("${pfx}.location.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.location.tooltip")"/></span>
+				<ul class="fieldList">
+					<li><label for="XWiki.XWikiUsers_0_country">$msg.get("${pfx}.country.title")</label>
+						$userdoc.display('country', "edit")</li>
+					<li><label for="XWiki.XWikiUsers_0_state">$msg.get("${pfx}.state.title")</label>
+						$userdoc.display('state', "edit")</li>
+					<li><label for="XWiki.XWikiUsers_0_city">$msg.get("${pfx}.city.title")</label>
+						$userdoc.display('city', "edit")</li>
+				</ul>
 			</li>
 			<li>
 				<span><label for="XWiki.XWikiUsers_0_language">$msg.get("${pfx}.language.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.language.tooltip")"/></span><br/>
