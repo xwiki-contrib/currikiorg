@@ -712,7 +712,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #set($titems = $!userobj.getProperty("topics").getValue())
 #set($eitems = "")
 #set($eitems = $!userobj.getProperty("educational_level").getValue())
-#if(("$titems" != "" && $titems.size() > 0) || ("$eitems" != "" && $eitems.size() > 0)) ##{
+#if(("$titems" != "" && $titems.size() > 1) || ("$eitems" != "" && $eitems.size() > 0)) ##{
 #set($litems = "YES")
 #end ##}
 #set($all = "${member_type}${affiliation}${city}${state}${country}${language}${comment}${contact}${websites}${litems}")
@@ -742,12 +742,12 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		#mycurriki_dashifempty($userdoc.display("affiliation", $userobj))
 	</li>
 #end ##}
-#if(("$titems" != "" && $titems.size() > 0) || ("$eitems" != "" && $eitems.size() > 0)) ##{
+#if(("$titems" != "" && $titems.size() > 1) || ("$eitems" != "" && $eitems.size() > 0)) ##{
 	<li id="item-interest-areas">
 		<table>
 		<tbody>
 		<tr>
-		#if("$titems" != "" && $titems.size() > 0) ##{
+		#if("$titems" != "" && $titems.size() > 1) ##{
 			<th class="item-interest-areas-th">*$msg.get("view_profile.interests.subject.title")*</th>
 		#end ##}
 		#if("$eitems" != "" && $eitems.size() > 0) ##{
@@ -755,7 +755,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		#end ##}
 		</tr>
 		<tr>
-		#if("$titems" != "" && $titems.size() > 0) ##{
+		#if("$titems" != "" && $titems.size() > 1) ##{
 			<td class="item-interest-areas-td">
 				<ul>
 				#foreach($titem in $titems)
