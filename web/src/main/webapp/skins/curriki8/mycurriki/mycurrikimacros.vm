@@ -748,15 +748,15 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		<tbody>
 		<tr>
 		#if("$titems" != "" && $titems.size() > 0) ##{
-			<th>*$msg.get("view_profile.interests.subject.title")*</th>
+			<th class="item-interest-areas-th">*$msg.get("view_profile.interests.subject.title")*</th>
 		#end ##}
 		#if("$eitems" != "" && $eitems.size() > 0) ##{
-			<th>*$msg.get("view_profile.interests.ed_level.title")*</th>
+			<th class="item-interest-areas-th">*$msg.get("view_profile.interests.ed_level.title")*</th>
 		#end ##}
 		</tr>
 		<tr>
 		#if("$titems" != "" && $titems.size() > 0) ##{
-			<td>
+			<td class="item-interest-areas-td">
 				<ul>
 				#foreach($titem in $titems)
 					#if($titem!="FW_masterFramework.WebHome")
@@ -767,7 +767,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 			</td>
 		#end ##}
 		#if("$eitems" != "" && $eitems.size() > 0) ##{
-			<td>
+			<td class="item-interest-areas-td">
 				<ul>
 				#foreach($eitem in $eitems)
 					<li>$msg.get("XWiki.XWikiUsers_educational_level_${eitem}")</li>
