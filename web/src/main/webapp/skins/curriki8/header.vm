@@ -27,18 +27,31 @@
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post"> ##{
   <input type="hidden" name="srid" value="$!request.srid" />
   <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="$msg.get("header.login_username")" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
-  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="if(window.ActiveXObject || this.type == 'password'){this.select();} else {this.type='password'; this.value=''; this.focus();}" onblur="if ((!window.ActiveXObject) && this.value==''){this.value='$msg.get("header.login_password")'; this.type='text';}"/>
+  <input class="input password" id="j_loginpwd_placeholder" tabindex="2" type="text" value="$msg.get("header.login_password")" onfocus="showLoginPasswordInput.apply(this)"/>
+  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="this.select()" onblur="hideLoginPasswordInput.apply(this)" style="display:none;"/>
 
   <script type="text/javascript">
-   if(!window.ActiveXObject){
-     pwdInput = document.getElementById('j_loginpwd');
-     if(pwdInput.value == '') {
-       pwdInput.setAttribute('type', 'text');
-       pwdInput.value = '$msg.get("header.login_password")';
-     }
-   }
+    // In IE we can't change the type of a password input (we can't toggle between text and password type) so we have to
+    // use a place holder in order to display the password label when the password field is empty.
+    function showLoginPasswordInput() {
+      // Hide the place holder.
+      this.style.display = 'none';
+      // Show the password input.
+      var pwd = document.getElementById('j_loginpwd');
+      pwd.style.display = '';
+      pwd.focus();
+    }
+    function hideLoginPasswordInput() {
+      // Hide the password input if it's empty.
+      if (this.value == '') {
+        this.style.display = 'none';
+        // Show the place holder.
+        var placeHolder = document.getElementById('j_loginpwd_placeholder');
+        placeHolder.style.display = '';
+      }
+    }
   </script>
-  
+
   <button type="submit" id="loginbtn" class="button button-confirm" tabindex="4">$msg.get("header.login_go")</button>
 
   <!-- remember me -->
