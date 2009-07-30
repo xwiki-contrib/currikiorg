@@ -414,7 +414,7 @@ $!desc
 	#registrationinterests()
 	#endregistrationform()
 
-	#set($footerJScript = "$!footerJScript" + '<script>$$("a").invoke("observe", "click", function(event){ var el = Event.element(event); if (((typeof el.id == "undefined") || (el.id != "profile-removephoto")) && !confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });</script>')
+	#set($footerJScript = "$!footerJScript" + '<script>var warna = $$('a');$$('#mycurriki-main a').each(function(a){warna=warna.without(a);});warna.invoke("observe", "click", function(event){ var el = Event.element(event); if (!confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });</script>')
 	<!-- End Profile Box -->
 #end ##}
 
