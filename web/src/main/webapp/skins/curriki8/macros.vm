@@ -1061,7 +1061,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #if($bcDoc.getObject("CurrikiCode.AssetClass"))
    ## handling of breadcrumb for an Asset. Taking the first one.
    ## TODO: setup a cache
-   #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' order by doc.creationDate")
+   #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate")
    #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
   #end
 
