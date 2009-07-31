@@ -28,17 +28,19 @@
 ## Groups tab macro
 #macro(groupstabs $curtab) ## {
 #set($tabs = ["home","messages", "curriculum", "members", "documentation"])
-<div id="groups-tabs" class="tabs">
+<ul id="groups-tabs" class="tabs">
 #foreach($tab in $tabs) ## {
+	<li#if($curtab==$tab) class="current"#end>
 #set($tabpage = $msg.get("groups_${tab}_page"))
 #set($url=$xwiki.getURL("${spaceName}.${tabpage}", "view"))
 #if(!$hasGlobalAdmin && !$isGroupMember && ($s.policy=="closed") && ($tab=="messages" || $tab=="members" || $tab=="documentation"))
-<a class="tab tabgreyed#if($curtab==$tab) tab-selected#end" href="javascript:void()" onclick="alert('$msg.get("groups_onlyaccessibletomembers")'); return false;">$msg.get("groups_${tab}_tabname")</a>
+		<a href="javascript:void()" onclick="alert('$msg.get("groups_onlyaccessibletomembers")'); return false;">$msg.get("groups_${tab}_tabname")</a>
 #else
-<a class="tab#if($curtab==$tab) tab-selected#end" href="$url">$msg.get("groups_${tab}_tabname")</a>
+		<a href="$url">$msg.get("groups_${tab}_tabname")</a>
 #end
+	</li>
 #end ## foreach ## }
-</div>
+</ul>
 #end ## macro ## }
 ##
 ##
@@ -49,7 +51,7 @@
 <h1>{pre}$s.getDisplayTitle(){/pre}</h1>
 <div id="groups-$curtab" class="groups groups-$curtab">
 #groupstabs($curtab)
-<div id="groups-${curtab}-main" class="tab-container">
+<div id="groups-${curtab}-main" class="form-wrp tab-container">
 #end ## macro ## }
 ##
 ##
@@ -61,7 +63,7 @@
 <h1>$s.getDisplayTitle()</h1>
 <div id="groups-$curtab" class="groups groups-$curtab">
 #groupstabs($curtab)
-<div id="groups-${curtab}-main" class="tab-container">
+<div id="groups-${curtab}-main" class="form-wrp tab-container">
 #end ## macro ## }
 ##
 ## page: all pages in the groups space
@@ -70,7 +72,7 @@
 #macro(groupsheader2 $curtab) ## {
 <div id="groups-$curtab" class="groups groups-$curtab">
 #groupstabs($curtab)
-<div id="groups-${curtab}-main" class="tab-container">
+<div id="groups-${curtab}-main" class="form-wrp tab-container">
 #end ## macro ## }
 ##
 ##
@@ -406,7 +408,7 @@ $xwiki.getDocument("Main.WhyJoin").getTranslatedDocument().getRenderedContent()
 <div id="browsegroups-header-title" class="heading-1">
 $headerTitle
 </div>
-<div class="tab-container" id="tab-container-browsegroups">
+<div class="form-wrp tab-container" id="tab-container-browsegroups">
 #set($itemsPerPage = 5)
 #if( $ipp )
   #set($itemsPerPage = $xwiki.parseInt($ipp))
