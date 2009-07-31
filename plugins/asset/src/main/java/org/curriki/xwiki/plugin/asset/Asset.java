@@ -591,7 +591,16 @@ public class Asset extends CurrikiDocument {
         if (doc instanceof Asset){
             return ((Asset) doc).as(null);
         } else {
-            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset "+assetName+" could not be found");
+            // Check to be sure the space exists (for add to Favorites)
+            String space = assetName.replaceAll("\\..*$", "");
+            CollectionSpace.ensureExists(space, context);
+
+            doc = xwikiApi.getDocument(assetName);
+            if (doc instanceof Asset){
+                return ((Asset) doc).as(null);
+            } else {
+                throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset "+assetName+" could not be found");
+            }
         }
     }
 
