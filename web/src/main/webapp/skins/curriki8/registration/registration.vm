@@ -152,17 +152,17 @@ function validateRegisterForm(){
 	CurrikiJS.errMsgReset();
 	CurrikiJS.trimFields(document.register);
 
-	if (document.register.xwikiname.type != 'hidden') { // skip on edit profile
-		if (document.register.xwikiname.value.length < 1){
-			errorMissing = true;
-			CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
-		}
-		else if ($F('xwikiname').replace(/[A-Za-z0-9]/g, "") != ""){
-			hasError = true;
-			CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
-			CurrikiJS.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
-		}
+#if($g_RegType != 'edit_profile') ##{
+	if (document.register.xwikiname.value.length < 1){
+		errorMissing = true;
+		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
 	}
+	else if ($F('xwikiname').replace(/[A-Za-z0-9]/g, "") != ""){
+		hasError = true;
+		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
+		CurrikiJS.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
+	}
+#end ##}
 
 //## Passwords cannot be accessed via $F() or even $() directly
 
@@ -447,8 +447,6 @@ document.observe('dom:loaded', function(){
 		<ul>
 			#if($g_RegType == 'register') ##{
 				#set($i = $pfx+'.login')#registrationformtextfield($i 'xwikiname')
-			#else ##}{
-				#set($i = $pfx+'.login')#registrationformtextfieldro($i 'xwikiname')
 			#end ##}
 			#set($i = $pfx+'.password1')#registrationformtextfield($i 'password')
 			#set($i = $pfx+'.password2')#registrationformtextfielddup($i 'password')
