@@ -326,11 +326,11 @@ function initRTEs() {
 #end ##}
 
 Ext.onReady(function(){
-        Ext.QuickTips.init();
-        Ext.apply(Ext.QuickTips.getQuickTip(), {
-                showDelay: 500
-                ,hideDelay: 0
-        });
+	Ext.QuickTips.init();
+	Ext.apply(Ext.QuickTips.getQuickTip(), {
+		showDelay: 500
+		,hideDelay: 0
+	});
 
 	Event.observe('register', 'submit', function(event) {
 		if (!CurrikiJS.formOk) {
@@ -343,6 +343,10 @@ Ext.onReady(function(){
 			validateRegisterForm();
 		}
 	});
+
+#if($g_RegType == 'edit_profile') ##{
+	initRTEs();
+#end ##}
 });
 
 window.onbeforeunload = function () {
