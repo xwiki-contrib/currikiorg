@@ -414,7 +414,7 @@ $!desc
 	#registrationinterests()
 	#endregistrationform()
 
-	#set($footerJScript = "$!footerJScript" + '<script>var warna = $$("a"); $$("#mycurriki-main a").each(function(a){warna=warna.without(a);}); $$("#navigation-inner a.titles").each(function(a){warna=warna.without(a);}); warna.invoke("observe", "click", function(event){ var el = Event.element(event); if (!confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });</script>')
+	#set($footerJScript = "$!footerJScript" + '<script>var warna = $$("a"); $$("#mycurriki-main a").each(function(a){warna=warna.without(a);}); $$("#navigation-inner a.titles").each(function(a){warna=warna.without(a);}); var hmnav = $$("#navigation-inner .home a.titles"); if (hmnav.length > 0) {warna.push(hmnav[0])}; warna.invoke("observe", "click", function(event){ var el = Event.element(event); if (!confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });</script>')
 	<!-- End Profile Box -->
 #end ##}
 
