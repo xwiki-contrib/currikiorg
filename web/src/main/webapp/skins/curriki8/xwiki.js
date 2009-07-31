@@ -340,7 +340,64 @@ function createAccordion(params) {
 
 var CurrikiJS = {
 
-	formOk: false,
+	jt_scrollTop: function() {
+		if (window.pageYOffset) {return window.pageYOffset;}
+		else if (document.documentElement && (document.documentElement.scrollTop > 0)) {return document.documentElement.scrollTop;}
+		else {return document.body.scrollTop;}
+	},
+
+	jt_AddListener: function(obj, evType, fn) {
+		if (obj.addEventListener) {obj.addEventListener(evType, fn, false);}
+		else if (obj.attachEvent) {obj.attachEvent('on' + evType, fn);}
+	},
+
+	jt_RemListener: function(obj, evType, fn) {
+		if (obj.removeEventListener) {obj.removeEventListener(evType, fn, false);}
+		else if (obj.detachEvent) {obj.detachEvent('on' + evType, fn);}
+	},
+
+	jt_fixE: function(ev) {
+		var e = ev ? ev : window.event;
+		return e;
+	},
+
+	trimFields: function(aForm) {
+		for (var i=0; i<aForm.elements.length; i++) {
+			if ((aForm.elements[i].type == 'text') || (aForm.elements[i].type == 'textarea')) {
+				aForm.elements[i].value = aForm.elements[i].value.trim();
+			}
+		}
+	},
+
+	errFocusOn: false,
+
+	errHighlight: function(elName, elmFocus) {
+		$(elName).addClassName('highlight');
+		if (elmFocus && !CurrikiJS.errFocusOn) {
+			CurrikiJS.errFocusOn = true;
+			elmFocus.focus();
+			window.scrollTo(0, CurrikiJS.jt_scrollTop() - 100);
+		}
+	},
+
+	errMsg: '',
+
+	errMsgReset: function() {
+		CurrikiJS.errMsg = '';
+		CurrikiJS.errFocusOn = false;
+	},
+
+	errMsgAdd: function(msg) {
+		CurrikiJS.errMsg += " - " + msg + "\n";
+	},
+
+	errMsgShow: function() {
+		if (CurrikiJS.errMsg) {
+			var tmp = CurrikiJS.errMsg;
+			CurrikiJS.errMsg = '';
+			alert(tmp);
+		}
+	},
 
 	validEmail: function(emailStr) {
 		// return true if 'emailStr' has valid email address format; from jt_.js, wingo.com
@@ -376,48 +433,6 @@ var CurrikiJS = {
 		return true;
 	},
 
-	trimFields: function(aForm) {
-		for (var i=0; i<aForm.elements.length; i++) {
-			if ((aForm.elements[i].type == 'text') || (aForm.elements[i].type == 'textarea')) {
-				aForm.elements[i].value = aForm.elements[i].value.trim();
-			}
-		}
-	},
-
-	jt_scrollTop: function() {
-		if (window.pageYOffset) {return window.pageYOffset;}
-		else if (document.documentElement && (document.documentElement.scrollTop > 0)) {return document.documentElement.scrollTop;}
-		else {return document.body.scrollTop;}
-	},
-
-	errFocusOn: false,
-
-	errHighlight: function(elName, elmFocus) {
-		$(elName).addClassName('highlight');
-		if (elmFocus && !CurrikiJS.errFocusOn) {
-			CurrikiJS.errFocusOn = true;
-			elmFocus.focus();
-			window.scrollTo(0, CurrikiJS.jt_scrollTop() - 100);
-		}
-	},
-
-	errMsg: '',
-
-	errMsgReset: function() {
-		CurrikiJS.errMsg = '';
-		CurrikiJS.errFocusOn = false;
-	},
-
-	errMsgAdd: function(msg) {
-		CurrikiJS.errMsg += " - " + msg + "\n";
-	},
-
-	errMsgShow: function() {
-		if (CurrikiJS.errMsg) {
-			var tmp = CurrikiJS.errMsg;
-			CurrikiJS.errMsg = '';
-			alert(tmp);
-		}
-	}
+	formOk: false
 
 }

@@ -150,16 +150,18 @@ function validateRegisterForm(){
 	var errorMissing = false;
 	$$('#register .highlight').invoke('removeClassName', 'highlight');
 	CurrikiJS.errMsgReset();
-
 	CurrikiJS.trimFields(document.register);
-	if (document.register.xwikiname.value.length < 1){
-		errorMissing = true;
-		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
-	}
-	else if ($F('xwikiname').replace(/[A-Za-z0-9]/g, "") != ""){
-		hasError = true;
-		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
+
+	if (document.register.xwikiname.type != 'hidden') { // skip on edit profile
+		if (document.register.xwikiname.value.length < 1){
+			errorMissing = true;
+			CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
+		}
+		else if ($F('xwikiname').replace(/[A-Za-z0-9]/g, "") != ""){
+			hasError = true;
+			CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
+			CurrikiJS.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
+		}
 	}
 
 //## Passwords cannot be accessed via $F() or even $() directly
@@ -367,22 +369,24 @@ $errMsg
 <script type="text/javascript">
 /* <![CDATA[ */
 #if($g_RegType == 'edit_profile') ##{
-tinyMCE.init({
-	language: "en",
-	mode: "exact",
-	elements : "XWiki.XWikiUsers_0_comment,XWiki.XWikiUsers_0_contact,XWiki.XWikiUsers_0_websites",
-	theme : "advanced",
-	plugins: 'safari,table,save,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
-
-	// Theme options
-	theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,forecolor,backcolor",
-	theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,cleanup,help,code",
-	theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,fullscreen",
-	theme_advanced_toolbar_location : "top",
-	theme_advanced_toolbar_align : "left",
-	theme_advanced_statusbar_location : "",
-	theme_advanced_resizing : true
-});
+CurrikiJS.jt_AddListener(window, 'load', function() {
+	tinyMCE.init({
+		language: "en",
+		mode: "exact",
+		elements : "XWiki.XWikiUsers_0_comment,XWiki.XWikiUsers_0_contact,XWiki.XWikiUsers_0_websites",
+		theme : "advanced",
+		plugins: 'safari,table,save,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
+	
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,forecolor,backcolor",
+		theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,cleanup,help,code",
+		theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,fullscreen",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "",
+		theme_advanced_resizing : true
+	});
+};
 #end ##}
 
 document.observe('dom:loaded', function(){
@@ -418,7 +422,12 @@ document.observe('dom:loaded', function(){
 		<span>#if($req)$g_RegReq#end<label for="${field}">#set($title = $pfx+'.title')$msg.get($title)</label>#set($tt = $pfx+'.tooltip')<img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get($tt)"/></span>
 		<p>#set($desc = $pfx+'.description')$msg.get($desc)</p>
 #if($field == 'xwikiname') ##{
+	#if($ro!='0') ##{
+		$msg.get($title): $userdoc.name
+		<input type="hidden" value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end" id="${field}" name="${field}" autocomplete="off" />
+	#else ##}{
 		<input type="text" class="input-text" value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end" id="${field}" name="${field}" autocomplete="off"#if($ro!='0') READONLY#{end}/>
+	#end ##}
 #else ##}{
 	#if($dup!='0') ##{
 		$userdoc.display($fld, "edit", "2")
