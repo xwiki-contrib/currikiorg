@@ -301,7 +301,7 @@ function interestToggle(){
 
 #if($g_RegType == 'edit_profile') ##{
 function initRTEs() {
-	if (typeof tinyMCE == 'object') {
+	if (tinymce && typeof tinyMCE == 'object') {
 		tinyMCE.init({
 			language: "en",
 			mode: "exact",
