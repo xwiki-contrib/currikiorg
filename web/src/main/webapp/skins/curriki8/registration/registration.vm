@@ -524,7 +524,7 @@ document.observe('dom:loaded', function(){
 #set($options = "")
 #set($options = $!userobj.getProperty('email_options').value)
 #set($email_options = $xwiki.arrayList)
-#if("$!options" != "") ##{
+#if($opt_out == "2" && "$!options" != "" && $options.size() > 0) ##{
 #foreach($option in $!options) ##{
 #set($junk = $email_options.add($option))
 #end ##}
