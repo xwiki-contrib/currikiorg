@@ -29,7 +29,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 #if($message) ##{
 <div class="main layoutsubsection">
 ## errors for the previous login
-#if(("$!request.j_username" == "")&&("$!request.j_password" == "")) ##{
+#if(("$!request.j_username" == "$msg.get('header.login_username')") || (("$!request.j_username" == "")&&("$!request.j_password" == ""))) ##{
 #set($message = $msg.get('redirect.error.no_info'))
 #end ##}
 #error($message)
