@@ -691,25 +691,25 @@ document.observe('dom:loaded', function(){
 </fieldset>
 #if($userdoc.attachmentList.size()>0) ##{
 	#set($attach = $userdoc.attachmentList.get(0))
-	#if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin) ## {
+	#if ($context.user == $userdoc.fullName || $hasGlobalAdmin) ## {
 		#if($context.user == $userdoc.fullName) ##{
 			#set($userarg = "")
-		#else ## user == owner ##}{
+		#else ##}{
 			#set($userarg = "user=${userdoc.fullName}")
-		#end ## user == owner ##}
+		#end ##}
 		#set($xredirectdelphoto = $xwiki.getURL("MyCurriki.EditProfile", "view", "$userarg"))
 		#set($dellink = $userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${xredirectdelphoto}"))
-	#end  ## } is same user
 <script type="text/javascript">
 {pre}
 /* <![CDATA[ */
 $('profile-removephoto').observe('click', function(){
 	if (confirm('$msg.get('edit_profile.change_photo.remove_confirmation')')) {
-		window.location="$dellink";
+		window.location="${dellink}";
 	}
 });
 /* ]]> */
 {/pre}
 </script>
+	#end  ## } is same user
 #end  ## } has attachment
 #end ##}
