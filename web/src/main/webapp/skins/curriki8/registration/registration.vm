@@ -172,7 +172,7 @@ function validateRegisterForm(){
 		if (pos > 0){
 			ext = fileName.substring(pos + 1).toLowerCase();
 		}
-		if (!ext || (ext != "ok" && ext != "ai" && ext != "gif" && ext != "jpg" && ext != "tif" && ext != "bmp" && ext != "jpe" && ext != "jpeg" && ext != "psd" && ext != "png")) {
+		if (!ext || (ext != "gif" && ext != "jpg" && ext != "jpeg" && ext != "jpe" && ext != "png" && ext != "bmp")) {
 			hasError = true;
 			CurrikiJS.errHighlight("block-avatar", $('register')['xwikiuploadfile']);
 			CurrikiJS.errMsgAdd("$msg.get('edit_profile.change_photo.file_error')");
