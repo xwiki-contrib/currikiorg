@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1193332613000</creationDate>
-<date>1241727204000</date>
-<contentUpdateDate>1241727204000</contentUpdateDate>
-<version>15.1</version>
+<date>1248307925000</date>
+<contentUpdateDate>1248307925000</contentUpdateDate>
+<version>16.1</version>
 <title>Groovy Script for Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-738 - Remove addToAllGroup()</comment>
+<comment>a</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -67,7 +67,7 @@ import com.xpn.xwiki.api.Document;
 
 public class register {
  def msgmap = [ "email_notvalid": "This email is not valid", 
-"account_already_exists": "This account already exists", "empty_password": "You have not entered a password", "unmatched_password" : "The passwords are not matching", "account_notvalid" : "This community name is invalid. Please enter a name without spaces or special characters.", "validation_failed" : "Some fields are incorrectly completed"];
+"account_already_exists": "This account already exists", "email_already_exists": "This email address is already used", "empty_password": "You have not entered a password", "unmatched_password" : "The passwords are not matching", "account_notvalid" : "This community name is invalid. Please enter a name without spaces or special characters.", "validation_failed" : "Some fields are incorrectly completed"];
 
  def xmsgmap;
  def xwiki;
@@ -155,6 +155,14 @@ public class register {
  public boolean isValidEmail(request) {
    def email = request.get("XWiki.XWikiUsers_0_email");
    def atIndex = email.indexOf("@");
+
+   def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+
+   // Check to see if the email address is already used
+   if (xwiki.searchDocuments(query).size() &gt; 0) {
+     message = "email_already_exists";
+     return false;
+   }
 
    // We should make this a bit better...
    if ((atIndex &lt; 1) || (email.lastIndexOf(".") &lt;= (atIndex+1)) || (email.length() &lt;= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {

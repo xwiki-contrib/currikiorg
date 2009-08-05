@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-<web>MyCurriki</web>
-<name>Profile</name>
+<web>Registration</web>
+<name>Register</name>
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
-<parent>MyCurriki.WebHome</parent>
-<creator>XWiki.Admin</creator>
+<parent></parent>
+<creator>XWiki.dward</creator>
 <author>XWiki.dward</author>
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
-<creationDate>1202337443000</creationDate>
-<date>1247685149000</date>
-<contentUpdateDate>1247685149000</contentUpdateDate>
+<creationDate>1246036976000</creationDate>
+<date>1246999792000</date>
+<contentUpdateDate>1246999792000</contentUpdateDate>
 <version>9.1</version>
-<title>Profile</title>
+<title>Register to Join Curriki</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -48,32 +48,26 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
-<name>MyCurriki.Profile</name>
+<name>Registration.Register</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
 <property>
 <tags/>
 </property>
 </object>
-<content>#**
-  * MyCurriki Profile Page
-  *
-  *#
-#**
-  * MyCurriki Profile Page Content Call Back function
-  * @param $userdoc Document of the user
-  * @param $userobj Object of the user
-  *#
-#macro(mycurriki_pagecontent $userdoc $userobj) ##{
-  #mycurriki_viewprofilebox($userdoc $userobj)
-#end ##} content macro
-#**
-  * MyCurriki Profile Page Button Call Back function
-  * @param $userobj Object of the user
-  *#
-#macro(mycurriki_pagebutton $userobj)
-  #mycurriki_editprofilebutton($userdoc)
-#end ## button macro
-## Actual page display
-#mycurriki_pagewithbutton("profile")</content>
-</xwikidoc>
+<content>#includeMacros("Registration.FormMacros")
+
+#tryregister()
+#if($!result||($result==false)) ##{
+#registrationinit('register')
+#registrationinfo()
+#startregistrationform()
+#registrationaccountinfo()
+#registrationprivacysettings()
+#registrationinterests()
+#registrationterms()
+#endregistrationform()
+#else ##}{ Registration succeeded -- go to email sent page
+$response.sendRedirect($xwiki.getURL('Registration.EmailSent'))
+#end ##}
+</content></xwikidoc>

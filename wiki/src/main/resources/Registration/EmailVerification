@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1204046558000</creationDate>
-<date>1205338065000</date>
-<contentUpdateDate>1234891124000</contentUpdateDate>
-<version>20.1</version>
+<date>1248983683000</date>
+<contentUpdateDate>1248983683000</contentUpdateDate>
+<version>21.1</version>
 <title>Email Verification</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>a</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -172,7 +172,8 @@ $err
 #set($footerJScript = "")
 #end
 {pre}
-#set($footerJScript = $footerJScript + '&lt;script type="text/javascript"&gt;$$("a").invoke("observe", "click", function(event){ var item = Event.element(event); if (!item.href) {item = item.up("a"); } if ((item.href.indexOf("/xwiki/bin/view/") != -1) &amp;&amp; (item.href.indexOf("/xwiki/bin/logout") == -1)){ if (!confirm("'+"${msg.get('emailValidation.step1.goElsewhere')}"+'")){ event=event||window.event; if(typeof event.preventDefault != "undefined"){ event.preventDefault(); } else if (window.event){ event.returnValue = false; } } else { item.href = "/xwiki/bin/logout/XWiki/XWikiLogout?xredirect="+item.href; } } });&lt;/script&gt;')
+#set($homepage = $xwiki.getURL("Main.WebHome"))
+#set($footerJScript = $footerJScript + '&lt;script type="text/javascript"&gt;var warna = $$("a"); $$("#navigation-inner a.titles").each(function(a){warna=warna.without(a);}); $$("#header-member a.logout").each(function(a){warna=warna.without(a);}); warna.invoke("observe", "click", function(event){ if (!confirm("'+"${msg.get('emailValidation.step1.goElsewhere')}"+'")){ event=event||window.event; if(typeof event.preventDefault != "undefined"){ event.preventDefault(); } else if (window.event){ event.returnValue = false; } } else { item.href = "/xwiki/bin/logout/XWiki/XWikiLogout?xredirect='+"${homepage}"+'"; } });&lt;/script&gt;')
 {/pre}
 #end ## }
 #else ## } {

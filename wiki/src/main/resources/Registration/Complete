@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1192654245000</creationDate>
-<date>1205271978000</date>
-<contentUpdateDate>1234891124000</contentUpdateDate>
-<version>3.1</version>
+<date>1247243949000</date>
+<contentUpdateDate>1247243949000</contentUpdateDate>
+<version>4.1</version>
 <title>Registration Complete</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Remove login box</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -69,7 +69,6 @@ $msg.get("registration.validate.validated")
 #set($ok = $userdoc.use("XWiki.XWikiUsers"))
 #set($junk = $!userdoc.set("email_undeliverable", "0"))
 #set($logredir = $!userdoc.getValue("validredirect").replaceAll("-","&amp;"))
-#loginbox("$logredir")
 &lt;/div&gt;
 #else
 $msg.get("registration.validate.failed.bad_key_or_loginname")

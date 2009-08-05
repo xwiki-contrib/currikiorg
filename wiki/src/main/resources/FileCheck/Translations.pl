@@ -3,23 +3,23 @@
 <xwikidoc>
 <web>FileCheck</web>
 <name>Translations</name>
-<language></language>
-<defaultLanguage>en</defaultLanguage>
-<translation>0</translation>
+<language>pl</language>
+<defaultLanguage></defaultLanguage>
+<translation>1</translation>
 <parent></parent>
-<creator>XWiki.LudovicDubost</creator>
+<creator>XWiki.mzielinski</creator>
 <author>XWiki.mzielinski</author>
 <customClass></customClass>
 <contentAuthor>XWiki.mzielinski</contentAuthor>
-<creationDate>1194210594000</creationDate>
-<date>1249332798000</date>
-<contentUpdateDate>1249332798000</contentUpdateDate>
-<version>43.1</version>
+<creationDate>1249332845000</creationDate>
+<date>1249332845000</date>
+<contentUpdateDate>1249332845000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>back to english - file check &amp; fal</comment>
+<comment>Check &amp; Flag - polish, proper place</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -269,134 +269,131 @@
 
 ## FILE CHECK TRANS KEYS AND STRINGS
 
-fc_filecheck=File Check
-fc_resourcetitle=Resource Title
-fc_dateadded=Date Created/Added in Curriki
-fc_contributor=Contributor
-fc_status=Basic File Check Status
-fc_datechecked=Date of Basic File Check Action
-fc_notes=File Checker or Flag Notes
-fc_select=Select
-fc_action=Action
-fc_chooseaction=Select the appropriate action for the resource:
-fc_statusmessage1=Mark this resource with a basic file check status of OK as of this date.
-fc_statusmessage2=Mark this resource with the basic file check status of Special Check Required as of this date.
-fc_statusmessage3=Mark this resource with the basic file check status of Improvement Requested as of this date.
-fc_statusmessage4=Mark this content with the basic file check status of Deleted From Member Access as of this date.
-fc_filechecknote=Provide any necessary File Checker Notes for this resource:
-fc_ok=Submit
-fc_cancel=Cancel
-fc_noactionchecked=No action has been selected.
-fc_confirmmessage1=Do you want to mark this resource as OK?
-fc_confirmmessage2=Do you want to mark this resource as requiring a special check by Curriki's editorial or technical staff?
-fc_confirmmessage3=Do you want to set this resource's Access Privileges to Private and send the resource contributor the Resource Improvement Request email?
-fc_confirmmessage4=Do you want to set this resource to Deleted From Member Access and send the resource creator the Resource Deleted email?
-fc_noassetselected=No resource has been selected to be checked.
+fc_filecheck=Sprawdź Plik
+fc_resourcetitle=Nazwa Materiału
+fc_dateadded=Data powstania/dodania do Curriki
+fc_contributor=Twórca
+fc_status=Szybka ocena materiału 
+fc_datechecked=Data dokonania podstawowej oceny materiału
+fc_notes=Analizy dokonał/dodatkowe uwagi 
+fc_select=Wybierz
+fc_action=Czynność
+fc_chooseaction=Oceń:
+fc_statusmessage1=Podstawowa ocena materiału – brak uwag. 
+fc_statusmessage2=Podtsawowa ocena materiału – wymaga dodatkowej oceny.
+fc_statusmessage3=Podstawowa ocena materiału – wymaga usprawnień.
+fc_statusmessage4=Podstawowa ocean materiału – zablokuj dostęp.
+fc_filechecknote=Dodaj wszelkie swoje uwagi na temat tego materiału:
+fc_ok=Potwierdź
+fc_cancel=Anuluj
+fc_noactionchecked=Nie wybrano żadnej czynności.
+fc_confirmmessage1=Czy chcesz by oznaczono ten materiał jako niewymagający uwag?
+fc_confirmmessage2=Czy chcesz oznaczyć ten materiał jako wymagający dodatkowego sprawdzenia przez personel techniczny, lub redakcję Curriki?
+fc_confirmmessage3=Czy chcesz zmienić Zasady Dostępu dla tego materiału na “Prywatny” i wysłać do twórcy powiadomienie o konieczności poprawienia go?
+fc_confirmmessage4=Czy chcesz oznaczyć ten materiał jako “Niedostępny dla Użytkowników” i powiadomić o tym twórcę?
+fc_noassetselected=Nie wybrano żadnych materiałów do sprawdzenia.
 
 
 ## These are coming from the new class. The values in the class are: 0=none|1=ok|2=specialcheck|3=improvementrequested|4=deleted|5=flagged
 
-CurrikiCode.AssetClass_fcstatus_0=None
-CurrikiCode.AssetClass_fcstatus_1=OK
-CurrikiCode.AssetClass_fcstatus_2=Special Check Required
-CurrikiCode.AssetClass_fcstatus_3=Improvement Requested
-CurrikiCode.AssetClass_fcstatus_4=Deleted from Member Access
-CurrikiCode.AssetClass_fcstatus_5=Flagged
+CurrikiCode.AssetClass_fcstatus_0=Brak
+CurrikiCode.AssetClass_fcstatus_1=Brak uwag
+CurrikiCode.AssetClass_fcstatus_2=Wymaga Dodatkowej Oceny CurrikiCode.AssetClass_fcstatus_3=Wymaga Poprawy 
+CurrikiCode.AssetClass_fcstatus_4=Niedostępny dla Użytkowników
+CurrikiCode.AssetClass_fcstatus_5=Zgłoszony
 
-fc_filecheckddone=File Check complete
-fc_document=checked resource
-fc_or=or
-fc_mailsentto=Mail sent to
-fc_returnto=Return to
-fc_fchomepage=Basic File Check List
-fc_showresourcesfrom=Show resources created and added to the repository
-fc_to=to
-fc_daterange=Date Range
-fc_filterby=Filter by
-fc_previous=Previous
-fc_next=Next
-fc_all=All
-fc_nominate=Do you want to nominate this resource for review by CRS?
-fc_updatemessage1=Marked this resource with a Basic File Check Status of OK.
-fc_updatemessage_1=Marked this resource with a Basic File Check Status of OK.
-fc_updatemessage2=Marked this resource with the Basic File Check Status of Special Check Required.
-fc_updatemessage_2=Marked this resource with the Basic File Check Status of Special Check Required.
-fc_updatemessage3=Marked this resource with the Basic File Check Status of Improvement Requested.
-fc_updatemessage_3=Marked this resource with the Basic File Check Status of Improvement Requested.
-fc_updatemessage4=Marked this content with the Basic File Check Status of Deleted From Member Access.
-fc_updatemessage_4=Marked this content with the Basic File Check Status of Deleted From Member Access.
-fc_files=Files
-fc_queueTableColheaderIct=Instructional Type
-fc_queueTableICTMultiple=Multiple
+fc_filecheckddone=Zakończono sprawdzanie dokumentu
+fc_document=sprawdzony materiał 
+fc_or=lub
+fc_mailsentto=List wysłany do
+fc_returnto=Zwrot do
+fc_fchomepage=Lista materiałów wymagających podstawowej oceny
+fc_showresourcesfrom=Pokaż nowe materiały materiały dodane do repozytorium
+fc_to=do
+fc_daterange=w okresie
+fc_filterby=Segreguj według
+fc_previous=Poprzednia
+fc_next=Następna
+fc_all=Wszystkie
+fc_nominate=Czy chcesz nominować ten materiał do recenzji Curriki?
+fc_updatemessage1=Nie dodano uwag w trakcie podstawowej oceny materiału.
+fc_updatemessage_1=Nie dodano uwag w trakcie podstawowej oceny materiału.
+fc_updatemessage2=Po podstawowej ocenie materiału zgłoszono go do dodatkowej oceny przez personel Curriki.
+fc_updatemessage_2=Po podstawowej ocenie materiału zgłoszono go do dodatkowej oceny przez personel Curriki.
+fc_updatemessage3=Po podstawowej ocenie materiału stwierdzono, że ten materiał wymaga poprawy.
+fc_updatemessage_3=Po podstawowej ocenie materiału stwierdzono, że ten materiał wymaga poprawy.
+fc_updatemessage4=Po podstawowej ocenie materiału zablokowano dostęp do niego dla zwykłych użytkowników.
+fc_updatemessage_4= Po podstawowej ocenie materiału zablokowano dostęp do niego dla zwykłych użytkowników.
+fc_files=Pliki
+fc_queueTableColheaderIct=Rodzaj materiałów
+fc_queueTableICTMultiple=Różne 
 
-fc_queueFilterChooseSubjectArea=Choose a Subject:
-fc_queueFilterChooseFCStatus=Show only resources:
+fc_queueFilterChooseSubjectArea=Wybierz tematykę:
+fc_queueFilterChooseFCStatus=Pokazuj tylko materiały:
 
-fc_onlywithoutfcstatus=Without a status
-fc_onlywithfcstatus=With any status
-fc_statusFilter_1=With status "OK"
-fc_statusFilter_2=With status "Special Check"
-fc_statusFilter_3=With status "Improv. Req'd"
-fc_statusFilter_4=With status "Deleted"
-fc_statusFilter_5=With status "Flagged"
+fc_onlywithoutfcstatus=Bez oceny 
+fc_onlywithfcstatus=Z dowolną
+fc_statusFilter_1=Posiadające status “Brak uwag” 
+fc_statusFilter_2=Posiadające status "Wymaga Dodatkowej Oceny"
+fc_statusFilter_3=Posiadające status "Wymaga Poprawy"
+fc_statusFilter_4=Posiadające status "Niedostępny dla użytkowników"
+fc_statusFilter_5=Posiadające status "Zgłoszony"
 
-fc_charactersRemaining=characters remaining
-fc_commentsSizeExceeded=Comments cannot exceed 400 characters
+fc_charactersRemaining=pozostało znaków
+fc_commentsSizeExceeded=Komentarze nie mogą przekraczać 400 znaków
 fc_seeCounts=See Counts
-fc_withAccessPrivilegesOf=Show only resources with Access Privileges of:
-fc_withAccessPrivilegesOf_All=All
-fc_withAccessPrivilegesOf_public=Public
-fc_withAccessPrivilegesOf_members=Protected
-fc_withAccessPrivilegesOf_private=Private
-fc_withAccessPrivilegesOf_protectedAndPublic=Protected and Public
+fc_withAccessPrivilegesOf=Tylko materiały o statusie:
+fc_withAccessPrivilegesOf_All=Wszystkie
+fc_withAccessPrivilegesOf_public=Otwarte
+fc_withAccessPrivilegesOf_members=Chronione
+fc_withAccessPrivilegesOf_private=Prywatne
+fc_withAccessPrivilegesOf_protectedAndPublic=Chronione i Otwarte
 
 
 ## FLAG FEATURE TRANS KEYS AND STRINGS
 
 ## REASONS FOR FLAGGING - USE IN FILE CHECK LIST
 
-flag.dialog.reason.1.filecheck=promotes hate or violence:
-flag.dialog.reason.2.filecheck=displays pornography:
-flag.dialog.reason.3.filecheck=is empty or blank:
-flag.dialog.reason.4.filecheck=is obviously commercial in nature, without clear educational relevance:
-flag.dialog.reason.5.filecheck=is broken or has a virus:
-flag.dialog.reason.6.filecheck=appears to be copyrighted and incorrectly shared as "open source":
-flag.dialog.reason.alt.filecheck=is objectionable for another reason I'll describe below:
+flag.dialog.reason.1.filecheck=promuje nienawiść i przemoc: flag.dialog.reason.2.filecheck=zawiera pornografię:
+flag.dialog.reason.3.filecheck=jest pusty:
+flag.dialog.reason.4.filecheck=ma character jedynie komercyjny i nie posiada żadnego związku z nauczaniem:
+flag.dialog.reason.5.filecheck=nie działa, lub zawiera wirus:
+flag.dialog.reason.6.filecheck=złamano prawo autorskie, ten materiał nie ma “otwartego” charakteru:
+flag.dialog.reason.alt.filecheck=budzi wątpliwości z innego powodu, który opiszę poniżej:
 
 
 ## FLAG DIALOG
 
-flag.dialog.header=FLAG THIS RESOURCE
-flag.dialog.guidingquestion1.txt=What happens when you flag a resource?
-flag.dialog.instruction1.txt=You submit the resource for immediate evaluation by Curriki.
-flag.dialog.guidingquestion2.txt=Why are you flagging this resource?
+flag.dialog.header=ZGŁOŚ TEN MATERIAŁ
+flag.dialog.guidingquestion1.txt=Co się stanie, gdy zgłosisz materiał?
+flag.dialog.instruction1.txt=Zgłaszasz materiał to natychmiastowej analizy przez Curriki.
+flag.dialog.guidingquestion2.txt=Dlaczego zgłaszasz ten materiał?
 flag.dialog.required.field.icon=&lt;em class="required-indicator"&gt;! &lt;/em&gt;
-flag.dialog.instruction2.txt=I am flagging this resource because it
+flag.dialog.instruction2.txt=Zgłaszam ten materiał gdyż:
 flag.dialog.instruction3.txt=.
-flag.dialog.instruction4.txt=Enter a note (no more than 300 characters) describing what makes this resource objectionable:
+flag.dialog.instruction4.txt=Opisz (nie więcej niż 300 znaków) dlaczego ten materiał budzi Twoje wątpliwości:
 flag.dialog.instruction5.txt=
-flag.dialog.cancel.btt=Cancel
-flag.dialog.submit.btt=Submit
+flag.dialog.cancel.btt=Anuluj
+flag.dialog.submit.btt=Potwierdź
 
 ## REASONS FOR FLAGGING - USE IN FLAG DIALOG
 
-flag.dialog.reason.unselected=Select
-flag.dialog.reason.1=promotes hate or violence
-flag.dialog.reason.2=displays pornography
-flag.dialog.reason.3=is empty or blank
-flag.dialog.reason.4=is obviously commercial in nature, without clear educational relevance
-flag.dialog.reason.5=is broken or has a virus
-flag.dialog.reason.6=appears to be copyrighted and incorrectly shared as "open source"
-flag.dialog.reason.alt=is objectionable for another reason I'll describe below
-
+flag.dialog.reason.unselected=Wybierz
+flag.dialog.reason.1=promuje nienawiść i przemoc
+flag.dialog.reason.2=zawiera pornografię
+flag.dialog.reason.3=jest pusty
+flag.dialog.reason.4=ma character jedynie komercyjny i nie posiada żadnego związku z nauczaniem 
+flag.dialog.reason.5=nie działa, lub zawiera wirus 
+flag.dialog.reason.6=złamano prawo autorskie, ten materiał nie ma “otwartego” charakteru
+flag.dialog.reason.alt=budzi wątpliwości z innego powodu, który opiszę poniżej
 ## FLAG SUCCESS MESSAGE
-flag.success.dialog.header=RESOURCE FLAGGED
-flag.success.dialog.message=You have successfully flagged this resource.
-flag.success.dialog.button=Close
+flag.success.dialog.header=ZGŁOSZONO MATERIAŁ
+flag.success.dialog.message=Zgłosiłeś nam problemy z tym materiałem.
+flag.success.dialog.button=Zamknij
 
 ## FLAG REVISION HISTORY COMMENT
 
-## flag.revision.history.note=Resource flagged.
+## flag.revision.history.note=Zgłoszono materiał.
 
-#&lt;/pre&gt;</content>
-</xwikidoc>
+#&lt;/pre&gt;
+</content></xwikidoc>

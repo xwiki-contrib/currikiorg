@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.dward</author>
+<author>XWiki.panjl</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1221751859000</creationDate>
-<date>1234891233000</date>
-<contentUpdateDate>1234891233000</contentUpdateDate>
-<version>12.1</version>
+<date>1249034841000</date>
+<contentUpdateDate>1249034841000</contentUpdateDate>
+<version>19.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>fix width</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -255,30 +255,46 @@
 <users>XWiki.XWikiGuest</users>
 </property>
 </object>
-<content>#set($stream_name="AdWordsJump")
+<content>&lt;style type="text/css"&gt;
+.logemail{overflow-x:hidden;width:180px}
+.datecreated{overflow-x:hidden;width:150px}
+.ispermission{overflow-x:hidden;width:90px}
+.landingpage{overflow-x:hidden;width:180px}
+.logtitle{font-weight:bold;}
+&lt;/style&gt;
+#set($stream_name="AdWordsJump")
 #macro(logtable $docname)
-	#set($bentrydoc = $xwiki.getDocument($docname))
-    #set($log_infos=$xwiki.search("from ActivityEventImpl as act where act.stream='${stream_name}' and act.type='Log' and act.page='${docname}' order by param1"))
-	#subtitlebar(${bentrydoc.name} "" "" "purple")
-	&lt;table border="1" cellspacing="0" bgcolor="#000000" width="100%"&gt;
-		&lt;tr bgcolor="#CFCFCF" height="30"&gt;
-			&lt;td width="150"&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchTime")&lt;/b&gt;&lt;/td&gt;
-			&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchText")&lt;/b&gt;&lt;/td&gt;
-			&lt;td width="80"&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.inform")&lt;/b&gt;&lt;/td&gt;
-			&lt;td width="180"&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.email")&lt;/b&gt;&lt;/td&gt;
-		&lt;/tr&gt;
-	#foreach ($log_info in $log_infos)
-		&lt;tr bgcolor="#FFFFFF" height="25"&gt;&lt;td&gt;$log_info.param1&lt;/td&gt;&lt;td&gt;$log_info.param2&lt;/td&gt;&lt;td&gt;$log_info.param3&lt;/td&gt;&lt;td&gt;$log_info.param4&lt;/td&gt;&lt;/tr&gt;
-	 #end
-	&lt;/table&gt;
+  #set($bentrydoc = $xwiki.getDocument($docname))
+  #set($log_infos=$xwiki.search("from ActivityEventImpl as act where act.stream='${stream_name}' and act.type='Log' and act.page='${docname}' order by param1"))
+  #subtitlebar(${bentrydoc.name} "" "" "purple")
+  &lt;table border="1" cellspacing="0" bgcolor="#000000" width="100%"&gt;
+  &lt;tr bgcolor="#CFCFCF" height="30"&gt;
+  &lt;td width="180"&gt;&lt;div class="logemail logtitle"&gt;Email&lt;/div&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;div class="title"&gt;Search Term&lt;/div&gt;&lt;/td&gt;
+  &lt;td width="150"&gt;&lt;div class="datecreated logtitle"&gt;Date Created&lt;/div&gt;&lt;/td&gt;
+  &lt;td width="90"&gt;&lt;div class="ispermission logtitle"&gt;Is Permission&lt;/div&gt;&lt;/td&gt;
+  &lt;td width="180"&gt;&lt;div class="landingpage logtitle"&gt;Landing Page&lt;/div&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  #set($to_trim = $bentrydoc.name.length() - 3)
+  #set($lpagename = $bentrydoc.name.substring(0, $to_trim))
+  #foreach ($log_info in $log_infos)
+    &lt;tr bgcolor="#FFFFFF" height="25"&gt;
+    &lt;td&gt;&lt;div class="logemail"&gt;$!log_info.param4&lt;/div&gt;&lt;/td&gt;
+    &lt;td&gt;$!log_info.param2&lt;/td&gt;
+    &lt;td&gt;&lt;div class="datecreated"&gt;$!log_info.param1&lt;/div&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;div class="ispermission"&gt;$!log_info.param3&lt;/div&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;div class="landingpage"&gt;$!lpagename&lt;/div&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  #end
+  &lt;/table&gt;
 #end
 #if($request.docname &amp;&amp; $request.docname == "all_log_docs")
-    #set ($sql = " where doc.parent='AdWordsJump.LandingPageLog'")
-    #set ($items = $xwiki.searchDocuments($sql))
-    #foreach ($item in $items)
-        #logtable($item)
-    #end
+  #set ($sql = " where doc.parent='AdWordsJump.LandingPageLog'")
+  #set ($items = $xwiki.searchDocuments($sql))
+  #foreach ($item in $items)
+    #logtable($item)
+  #end
 #elseif($request.docname)
-	#logtable($request.docname)
+  #logtable($request.docname)
 #end</content>
 </xwikidoc>

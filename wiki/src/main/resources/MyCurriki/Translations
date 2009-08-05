@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1196365645000</creationDate>
-<date>1234891232000</date>
-<contentUpdateDate>1234891232000</contentUpdateDate>
-<version>47.1</version>
+<date>1249425062000</date>
+<contentUpdateDate>1249425062000</contentUpdateDate>
+<version>80.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Remove href from click here link (it's an anchor, not a link)</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -115,7 +115,166 @@ mycurriki.link.delete.tooltip=Permanently delete this resource
 mycurriki.link.delete.confirm=Are you sure you want to delete this resource?
 
 
-##PROFILE TAB
+##PROFILE TAB (NEW KEYS FOR 1.8.5 LOGIN RELEASE)
+##VIEW PROFILE PAGE
+##Selection values for the fields Subjects, Ed levels, Country, &amp; Language all use the global trans values.
+
+view_profile.not_shared_with_anyone=This member prefers not to display a profile.
+view_profile.not_shared_with_visitors=This member prefers to display a profile only to Curriki members. Please log in or &lt;a href="/xwiki/bin/view/Main/JoinCurriki"&gt;join now&lt;/a&gt;.
+
+view_profile.intro.percent_complete=Welcome back! Your profile is {0} &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/ProfileTab?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.MyCurriki_0" target=blank&gt;complete&lt;/a&gt;.
+view_profile.intro.edit_button=Edit Profile
+view_profile.intro.public_button=View My Public Profile
+view_profile.intro.return_button=Return to Profile
+
+view_profile.account_info.header=Account Information
+view_profile.account_info.name1.title=Display Name 1:
+view_profile.account_info.name2.title=Display Name 2:
+view_profile.account_info.login.title=Member Login:
+view_profile.account_info.email.title=Email Address:
+view_profile.account_info.member_since=Member Since:
+
+view_profile.privacy.header=Privacy Settings
+view_profile.privacy.show_profile.title=Show Your Profile:
+view_profile.privacy.show_profile.everyone=Everyone can see my profile
+view_profile.privacy.show_profile.members=Only allow Curriki members to see my profile
+view_profile.privacy.show_profile.noone=No one may see my profile
+view_profile.privacy.show_email.title=Show Your Email Address:
+view_profile.privacy.show_email.everyone=Always display
+view_profile.privacy.show_email.members=Display only to Curriki members
+view_profile.privacy.show_email.noone=Never display
+view_profile.privacy.email_options.title=Email Options:
+view_profile.privacy.email_options.all=I should receive emails about all Curriki activity.
+view_profile.privacy.email_options.some=I should currently receive emails about these specific types of Curriki activity:
+view_profile.privacy.email_options.newsletters=Periodic newsletters and announcements.
+view_profile.privacy.email_options.recommendations=Recommended content based on my settings. (Note: This feature is not yet available, but by selecting it now you will ensure you never miss out on recommendations.)
+view_profile.privacy.email_options.reviews=Notification when my curriculum contributions have been reviewed and rated by Curriki.
+view_profile.privacy.email_options.friend=Periodic requests for feedback on the site.
+view_profile.privacy.email_options.none=I should not receive any unrequested emails from Curriki, but I understand that I may still receive certain required communications about my account.
+
+view_profile.interests.no_info=No information available. Click the “Edit Profile” button above to complete your profile.
+view_profile.interests.header=Interests &amp; Affiliations
+view_profile.interests.member_type.title=Member Type:
+view_profile.interests.affiliation.title=Organization Affiliation:
+view_profile.interests.subject.title=Subjects of Interest:
+view_profile.interests.ed_level.title=Educational Levels of Interest:
+view_profile.interests.city.title=City:
+view_profile.interests.state.title=State/Province:
+view_profile.interests.country.title=Country:
+view_profile.interests.language.title=Primary Language:
+view_profile.interests.bio.title=Bio:
+view_profile.interests.contact.title=How to Contact Me:
+view_profile.interests.websites.title=Websites/Blogs:
+
+
+
+##EDIT PROFILE PAGE
+
+edit_profile.change_photo.header=Change Photo
+edit_profile.change_photo.choose_file.title=Choose a photo from your computer:
+edit_profile.change_photo.choose_file.tooltip=Your photo will appear next to your curriculum contributions, comments and ratings, and more.
+edit_profile.change_photo.choose_file.description=For guidelines about image sizes, see the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/ImagesandLogos?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.CommunityBestPracticesforCollaboratingonCurriki" target=blank&gt;Help Collection&lt;/a&gt;. If you want to return to using the default member image, &lt;a id="profile-removephoto" name="profile_removephoto"&gt;click here&lt;/a&gt; to remove the current image and the default image will appear.
+edit_profile.change_photo.attach_button=Attach This File
+edit_profile.change_photo.remove_confirmation=Are you sure you want to remove your current photo?
+edit_profile.change_photo.file_error=Please select a file (file must be an image).
+
+
+edit_profile.account_info.header=Update Account Information
+edit_profile.account_info.intro=For information on how these fields are used and why we collect them, visit the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
+edit_profile.account_info.login.title=Member Login:
+edit_profile.account_info.login.description=You will use this name to log in. Do not use spaces or special characters, and keep in mind that your member login is case-sensitive.
+edit_profile.account_info.login.tooltip=Login names must be unique and are used in the web address (URL) for any resources or collections you make.
+edit_profile.account_info.password1.title=Password:
+edit_profile.account_info.password1.description=Enter a password.
+edit_profile.account_info.password1.tooltip=Passwords must be at least five characters long and are case-sensitive.
+edit_profile.account_info.password2.title=Confirm Password:
+edit_profile.account_info.password2.description=Confirm your case-sensitive password.
+edit_profile.account_info.password2.tooltip=Reenter your password to make sure you typed it correctly.
+edit_profile.account_info.email1.title=Email Address:
+edit_profile.account_info.email1.description=Please enter a valid email address. Directions on how to complete the registration process will be sent to this address.
+edit_profile.account_info.email1.tooltip=Email addresses must contain a single “@” character, contain no spaces, and must be unique.
+edit_profile.account_info.email2.title=Confirm Email Address:
+edit_profile.account_info.email2.description=Confirm your email address to make sure you typed it correctly.
+edit_profile.account_info.email2.tooltip=Check that you typed the domain name correctly both times. For instance, “gmail.com” can easily be mistyped without noticing.
+edit_profile.account_info.name1.title=Display Name 1:
+edit_profile.account_info.name1.description=Enter the first part of the name that will display on the site to other Curriki users. For tips on entering names, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
+edit_profile.account_info.name1.tooltip=If you want to display your real name, use your first name here.
+edit_profile.account_info.name2.title=Display Name 2:
+edit_profile.account_info.name2.description=Enter the second part of the name that will display on the site to other Curriki users.
+edit_profile.account_info.name2.tooltip=If you want to display your real name, use your last name here.
+edit_profile.account_info.error.blank_field=Some required fields are missing; see highlighted areas.
+edit_profile.account_info.error.login_not_unique=The member login you entered has already been used; please enter another member login.
+edit_profile.account_info_error.login_invalid=The member login you entered is invalid; please enter a name without spaces or special characters.
+edit_profile.account_info.error.password_short=Passwords must be at least five characters.
+edit_profile.account_info.error.password_mismatch=Passwords do not match.
+edit_profile.account_info.error.password_invalid=Please enter a password without spaces.
+edit_profile.account_info.error.email_invalid=Please enter a valid email address.
+edit_profile.account_info.error.email_not_unique=The email you entered has already been used; please enter another email address.
+edit_profile.account_info.error.email_mismatch=Please check that both email entries match.
+edit_profile.account_info.error.name1_long=Display Name 1 is too long; please enter no more than 32 characters. 
+edit_profile.account_info.error.name2_long=Display Name 2 is too long; please enter no more than 32 characters. 
+
+edit_profile.privacy.header=Update Privacy Settings
+edit_profile.privacy.intro=Here you can edit your settings for showing your personal information and receiving notifications from Curriki.
+edit_profile.privacy.show_profile.title=Show Your Profile:
+edit_profile.privacy.show_profile.tooltip=Choose who can view your personal information.
+edit_profile.privacy.show_profile.everyone=Allow everyone to see my profile
+edit_profile.privacy.show_profile.members=Only allow Curriki members to see my profile
+edit_profile.privacy.show_profile.noone=Do not allow anyone to see my profile
+edit_profile.privacy.show_email.title=Show Your Email Address:
+edit_profile.privacy.show_email.tooltip=Even if you choose to show your profile, you can choose not to display your email address using this feature.
+edit_profile.privacy.show_email.everyone=Always display
+edit_profile.privacy.show_email.members=Display only to Curriki members
+edit_profile.privacy.show_email.noone=Never display
+edit_profile.privacy.email_options.title=Email Options:
+edit_profile.privacy.email_options.tooltip=Select which types of notifications you would like to receive from Curriki.
+edit_profile.privacy.email_options.all=I would like to receive emails about all Curriki activity.
+edit_profile.privacy.email_options.some=I would only like to receive emails about these specific types of Curriki activity:
+edit_profile.privacy.email_options.newsletters=Periodic newsletters and announcements
+edit_profile.privacy.email_options.recommendations=Recommended content based on my settings (Note: This feature is not yet available, but by selecting it now you will ensure you never miss out on recommendations.)
+edit_profile.privacy.email_options.reviews=Notification when my curriculum contributions have been reviewed and rated by Curriki.
+edit_profile.privacy.email_options.friend=Periodic requests for feedback on the site.
+edit_profile.privacy.email_options.none=I do not want to receive unrequested emails from Curriki, but I understand that I may still receive certain required communications about my account.
+edit_profile.privacy.error.no_suboptions_checked=If you choose to specify certain types of Curriki communications, you must choose at least one option.
+
+
+edit_profile.interests.header=Update Interests &amp; Affiliations
+edit_profile.interests.intro=The information in this section will help other Curriki members find you in order to collaborate on Curriki. In the future, Curriki will be able to send you customized recommendations or personalize your site experience based on the information you enter here.
+edit_profile.interests.member_type.title=Member Type:
+edit_profile.interests.member_type.tooltip=Select a matching member type; you can always edit this field later.
+edit_profile.interests.affiliation.title=Are you affiliated with any particular organization?
+edit_profile.interests.affiliation.tooltip=Enter an organization; you can always edit this field later.
+edit_profile.interests.subject.title=What subjects interest you?
+edit_profile.interests.subject.description=Click arrows to expand or collapse subjects.
+edit_profile.interests.subject.tooltip=Select as many or as few subjects as you like; you can always edit this field later.
+edit_profile.interests.ed_level.title=What educational levels interest you?
+edit_profile.interests.ed_level.description=Select one or more level(s).
+edit_profile.interests.ed_level.tooltip=Choose any matching levels; you can always edit this field later.
+edit_profile.interests.location.title=Where do you live?
+edit_profile.interests.location.tooltip=Provide information about your location; you can always edit these fields later.
+edit_profile.interests.country.title=Country:
+edit_profile.interests.state.title=State/Province:
+edit_profile.interests.city.title=City:
+edit_profile.interests.language.title=What is your preferred language?
+edit_profile.interests.language.tooltip=Choose a language; you can always edit this field later.
+edit_profile.interests.bio.title=Bio:
+edit_profile.interests.bio.description=Use the HTML editing toolbar to edit and format your content below. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/AbouttheHTMLEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.FormattingContentwiththeWYSIWYGEditingToolbar" target=blank&gt;help&lt;/a&gt; using the toolbar.
+edit_profile.interests.bio.tooltip=Share information about your professional career, such as your specialties and how long you have been in education.
+edit_profile.interests.contact.title=How to Contact Me:
+edit_profile.interests.contact.description=Use the HTML editing toolbar to edit and format your content below. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/AbouttheHTMLEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.FormattingContentwiththeWYSIWYGEditingToolbar" target=blank&gt;help&lt;/a&gt; using the toolbar.
+edit_profile.interests.contact.tooltip=If you like to network, this is the best place to enter any screennames for sites such as LinkedIn or Facebook, or for messaging services such as AIM or Skype.
+edit_profile.interests.websites.title=Websites/Blogs:
+edit_profile.interests.websites.description=Use the HTML editing toolbar to edit and format your content below. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/AbouttheHTMLEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.FormattingContentwiththeWYSIWYGEditingToolbar" target=blank&gt;help&lt;/a&gt; using the toolbar.
+edit_profile.interests.websites.tooltip=Share your own websites, or tell others about your favorite educational links.
+
+edit_profile.cancel_button=Cancel
+edit_profile.save_button=Save
+edit_profile.clickaway_message=Are you sure you want to move away from this page? Your changes will be lost. Click OK to continue, or Cancel to stay on the current page.
+
+
+
+
+##OLD PROFILE TAB KEYS (to be removed after 1.8.5 login release)
 
 mycurriki.profile.titlebar=Member Information
 mycurriki.profile.editButton=Edit Profile

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1189372362000</creationDate>
-<date>1234891233000</date>
-<contentUpdateDate>1234891233000</contentUpdateDate>
-<version>61.1</version>
+<date>1249497315000</date>
+<contentUpdateDate>1249497315000</contentUpdateDate>
+<version>62.1</version>
 <title>Review Form</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Change opt out check</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -205,8 +205,9 @@
 			#set($assetownerdoc = $xwiki.getDocument($assetowner))
 			#set($ok = $assetownerdoc.use("XWiki.XWikiUsers"))
 			#set($optout = $assetownerdoc.getValue("opt_out"))
+			#set($email_options = $assetownerdoc.getValue("email_options"))
 			#set($email = $assetownerdoc.getValue("email"))
-			#if("$!optout"!="1"&amp;&amp;$email!="")
+			#if(("$!optout"==""||"$!optout"=="0"||("$!optout"=="2"&amp;&amp;$email_options.contains('reviews')))&amp;&amp;$email!="")
 				#set($assettitle = $asset.displayTitle)
 				#set($adminemail = $xwiki.getXWikiPreference("admin_email"))
 				#set($assetrating = $msg.get("CRS.CurrikiReviewStatusClass_status_${rating}"))

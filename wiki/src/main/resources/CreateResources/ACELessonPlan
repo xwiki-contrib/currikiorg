@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1222442464000</creationDate>
-<date>1243903894000</date>
-<contentUpdateDate>1243903894000</contentUpdateDate>
-<version>76.1</version>
+<date>1249090780000</date>
+<contentUpdateDate>1249090780000</contentUpdateDate>
+<version>81.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Breadcrumb</comment>
+<comment>CURRIKI-4743</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -96,14 +96,14 @@
   #set( $flow       = $request.getParameter("flow") )
   #set( $parentPage = $request.getParameter("parentPage") )
   #set( $publishSpace = $request.getParameter("publishSpace") )
-  #if( "$!pageName" != "" ) 
+  #if( "$!pageName" != "" )
 	 #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
   #else
 	 #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
-  #end 
+  #end
 
 ####################################	If newAsset is null, show error message
-  #if( "$!newAsset"=="" ) 
+  #if( "$!newAsset"=="" )
 	#if( "$!pageName" != "" )&lt;p&gt;asset creation error:&lt;/p&gt;#else&lt;p&gt;asset lookup error:&lt;/p&gt;#end
 	&lt;dl&gt;
 	  &lt;dt&gt;request.method&lt;/dt&gt;&lt;dd&gt;$!request.method&lt;/dd&gt;
@@ -144,7 +144,7 @@ function checkStandardLessonPlanForm() {
 	}
 	if (!one_checked) {
 	  missed_fields_str = appendSeparatedErrorMessageStr(missed_fields_str, '$msg.get('lesson.plan.required.fields.dialog.level')');
-	} 
+	}
   }
 
   if (getFieldContentStr('slp_number_days') == null) {
@@ -185,8 +185,8 @@ if(!chekcTableText()){
 	setSuccessMessage('');     //not POSTing due to 'false' return below, so this should not matter -- reset in case of going "back" in browser after successful POST??
 	return false;
   }
-  else { 
-  
+  else {
+
 	setTextAssetToWikiText(formatTextareasIntoWikiText());
 	setSuccessMessage('$msg.get('form.done.created.lessonplan')');
 	return true;
@@ -219,7 +219,7 @@ function checkStandardLessonPlanDirty() {
   return false;
 }
 
-function formatTextareasIntoWikiText() { 			
+function formatTextareasIntoWikiText() {
   var slp_str = '';		// the string we concat into the TextAssetClass contents
   var title_markup_str = '*';
   var vert_break_str = '\\\\\n\n'
@@ -232,7 +232,7 @@ function formatTextareasIntoWikiText() {
 	  form_number_days = form_number_days.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.number.days.title")' + title_markup_str +  vert_break_str + form_number_days;
 	}
-  } 
+  }
 
   {
 	var form_prior_knowledge = getFieldContentStr('slp_prior_knowledge');
@@ -240,21 +240,21 @@ function formatTextareasIntoWikiText() {
 	  form_prior_knowledge = form_prior_knowledge.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.prior.knowledge.title")' + title_markup_str +  vert_break_str + form_prior_knowledge;
 	}
-  } 
+  }
   {
 	var form_lesson_objective = getFieldContentStr('slp_lesson_objective');
 	if (form_lesson_objective != null) {
 	  form_lesson_objective = form_lesson_objective.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.objective.title")' + title_markup_str +  vert_break_str + form_lesson_objective;
 	}
-  } 
+  }
   {
 	var form_lesson_assessment = getFieldContentStr('slp_lesson_assessment');
 	if (form_lesson_assessment != null) {
 	  form_lesson_assessment = form_lesson_assessment.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.lesson.assessment.title")' + title_markup_str +  vert_break_str + form_lesson_assessment;
 	}
-  } 
+  }
   {
 	var form_benchmark_standards = getFieldContentStr('slp_benchmark_standards');
 	if (form_benchmark_standards != null) {
@@ -262,42 +262,42 @@ function formatTextareasIntoWikiText() {
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.benchmark.standards.title")' + title_markup_str +  vert_break_str + form_benchmark_standards;
 
 	}
-  } 
+  }
   {
 	var form_materials_needed = getFieldContentStr('slp_materials_needed');
 	if (form_materials_needed != null) {
 	  form_materials_needed = form_materials_needed.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.materials.needed.title")' + title_markup_str +  vert_break_str + form_materials_needed;
 	}
-  } 
+  }
   {
 	var form_enrichment = getFieldContentStr('slp_enrichment');
 	if (form_enrichment != null) {
 	  form_enrichment = form_enrichment.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.enrichment.title")' + title_markup_str +  vert_break_str + form_enrichment;
 	}
-  } 
+  }
   {
 	var form_accommodations = getFieldContentStr('slp_accommodations');
 	if (form_accommodations != null) {
 	  form_accommodations = form_accommodations.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.accommodations.title")' + title_markup_str +  vert_break_str + form_accommodations;
 	}
-  } 
+  }
   {
 	var form_anticipated_problems = getFieldContentStr('slp_anticipated_problems');
 	if (form_anticipated_problems != null) {
 	  form_anticipated_problems = form_anticipated_problems.replace(/\r\n/g,'\\\\').replace(/\n/g,'\\\\');
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.anticipated.problems.title")' + title_markup_str +  vert_break_str + form_anticipated_problems;
 	}
-  } 
+  }
 
   {	//js table
 	var form_table_text = getTableText();
 	if (form_table_text != null) {
 	  slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("ace.lesson.plan.procedures.title")' + title_markup_str +  vert_break_str + form_table_text
 	}
-  } 
+  }
 
   {
 	var file_list = getAttachmentsNames();
@@ -364,7 +364,7 @@ function onWindowUnloading(e) {
 
 function setUnloadDialog() {
   // window.onbeforeunload = unloadDialog;
-  Ext.EventManager.on(window, 'beforeunload', onWindowUnloading); 
+  Ext.EventManager.on(window, 'beforeunload', onWindowUnloading);
   needUnloadDialog = true;
 }
 
@@ -384,7 +384,7 @@ function setAttachmentsIframeSize() {
 	}
 	// this is portable way of getting at iframe DOM content per
 	// http://www.mabaloo.com/Web-Development/Creating-controlling-and-manipulating-an-Iframe-through-JavaScript.html
-	var doc_o = (iframe_o.contentWindow || iframe_o.contentDocument);  
+	var doc_o = (iframe_o.contentWindow || iframe_o.contentDocument);
 	if (doc_o.document) {
 	  doc_o = doc_o.document;
 	}
@@ -405,7 +405,7 @@ function setAttachmentsIframeSize() {
 	if (iframe_o != null) {
 	  iframe_o.height = iframe_o.style.height = 300; // bigger default height value if things go wrong
 	}
-  } 
+  }
 }
 &lt;/script&gt;
 
@@ -418,49 +418,12 @@ function setAttachmentsIframeSize() {
 .x-grid3-col-2{white-space: normal; word-wrap:break-word;}
 .x-form-field-ace{overflow:hidden}
 
-/* Curriki-form */
-.curriki-form1 .headerbar { background-color: #93c53c; }
-.curriki-form1 .headerbar { padding-left: 0.95em; }
-.curriki-form1 em { font-style:normal; color: #fb0f0c; }
-.curriki-form1 .header p { padding: 0 0 1em; }
-.curriki-form1 .header p img { margin-bottom: -8px; height: 25px; width: 25px; }
-.curriki-form1 .frame{ margin-bottom: 2em; }
-.curriki-form1 .frame-content { padding: 0.5em 1em 1.5em; }
-.curriki-form1 h3 { padding-top: 1em; }
-.curriki-form1 .medium { width: 75%; }
-.curriki-form1 .small { font-size: 100%; width: 50%; }
-.curriki-form1 .entry { padding: 2em 0 0; }
-.curriki-form1 .entry h5 { font-size: 1.1em; }
-.curriki-form1 .entry h5 em { font-weight: normal; }
-.curriki-form1 .entry h5 img { margin-bottom: -5px; }
-.curriki-form1 .entry p.instruction { line-height: 130%; padding-bottom: 7px; }
-.curriki-form1 .entry input.input { width: 90%; }
-.curriki-form1 .entry textarea { height: 9em; width: 90%; }
-
-.curriki-form1 .entry label { display: block; }
-.curriki-form1 table.subject-educational { font-size: 1em; width: 95%; }
-.curriki-form1 table.subject-educational td { width: 50%; padding-right: 1em; }
-.curriki-form1 table.subject-educational td td { width: auto; }
-.curriki-form1 .links { padding-bottom: 0; text-align: center; }
-.curriki-form1 .links button { display: inline; margin-right: 1.5em; }
-.curriki-form1 table.subject-educational th { background-color: transparent; }
-.curriki-form1 table.subject-educational td { vertical-align: top; }
-.curriki-form1 span.xwiki-form-listclass { display: block; margin: 3px 0 !important; margin: 0 0 2px; }
-.curriki-form1 #XWiki\.AssetClass_0_title { width: 99% !important; width: 95%; }
-.curriki-form1 textarea { height: 120px; }
-.curriki-form1 textarea { padding: 1px 0; }
-.curriki-form1 .mceEditorIframe { height: 18em !important; width: 100%  !important; }
-.curriki-form1 .subject-educational .xwiki-form-listclass { padding-bottom: 1px !important; padding-bottom: 0; }
-.curriki-form1 .subject-educational .ygtvlabel { display: block; padding-top: 4px; }
-.curriki-form1 #attachment_iframe { padding: 10px; width: 100%; }
-
-.curriki-form1_textarea { width: 99.5% !important; width: 95%; }
 input {	width:expression(this.type=="text" ? "83%" : "style"); }
 &lt;/style&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"&gt;&lt;/script&gt;
-&lt;script&gt; 
+&lt;script&gt;
 // ----------------------------------- override YUI checknode method -------------------
 /**
  * jsj add
@@ -534,7 +497,7 @@ YAHOO.widget.CheckNode.prototype.getNodeHtml = function() {
 
 var grid;                      // table
 var isJumpToNext, isJumpToPre; // jump flag for table
-var clickTabToNextNum=0, clickTabToPreNum=0, clickTabInGridToNextNum=0, clickTabInGridToPreNum=0; 
+var clickTabToNextNum=0, clickTabToPreNum=0, clickTabInGridToNextNum=0, clickTabInGridToPreNum=0;
 // ------------------------------------ extend extjs ------------------------------------
 Ext.apply(Ext.grid.GridView.prototype,{
 	// remove red triangles
@@ -574,12 +537,12 @@ Ext.apply(Ext.grid.GridView.prototype,{
 		}
 		return buf.join("");
 	},
-	
+
 	focusCell : function(row, col, hscroll){
 		row = Math.min(row, Math.max(0, this.getRows().length-1));
 		var xy = this.ensureVisible(row, col, hscroll);
 		this.focusEl.setXY(xy||this.scroller.getXY());
-		
+
 		if(Ext.isGecko){
 		   // this.focusEl.focus();
 		}else{
@@ -675,7 +638,7 @@ Ext.apply(Ext.form.TextArea.prototype, {
 	onKeyUpBuffered : function(e){
 		if(!e.isNavKeyPress()||e.getKey()==e.ENTER){
 			this.autoSize();
-		} else if (e.isNavKeyPress()) {		
+		} else if (e.isNavKeyPress()) {
 			if (isJumpToNext) {
 				clickTabToNextNum = clickTabToNextNum + 1;
 				if (clickTabToNextNum == 2) {
@@ -692,7 +655,7 @@ Ext.apply(Ext.form.TextArea.prototype, {
 					document.getElementById("slp_anticipated_problems").focus();
 				}
 			}
-		} 
+		}
 	},
 	autoSize : function(){
 		if(!this.grow || !this.textSizeEl){
@@ -801,11 +764,11 @@ var data=[
 ];
 
 var store=new Ext.data.JsonStore(
-{data:data,fields:["id","time","task","method"]}); 
+{data:data,fields:["id","time","task","method"]});
 #set($info_img = '/xwiki/skins/curriki8/icons/exclamation.png')
-var tooltip1="&lt;span class=\"tooltip-generator\"&gt;&lt;span class=\"tooltip_span\" onmouseover=\"this.WIDTH='300'; return escape('$msg.get("ace.lesson.plan.procedures.time.tooltip")');\"&gt;&lt;img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/&gt;&lt;/span&gt;&lt;/span&gt;";
-var tooltip2="&lt;span class=\"tooltip-generator\"&gt;&lt;span class=\"tooltip_span\" onmouseover=\"this.WIDTH='300'; return escape('$msg.get("ace.lesson.plan.procedures.learningtask.tooltip")');\"&gt;&lt;img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/&gt;&lt;/span&gt;&lt;/span&gt;";
-var tooltip3="&lt;span class=\"tooltip-generator\"&gt;&lt;span class=\"tooltip_span\" onmouseover=\"this.WIDTH='300'; return escape('$msg.get("ace.lesson.plan.procedures.methods.tooltip")');\"&gt;&lt;img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/&gt;&lt;/span&gt;&lt;/span&gt;";
+var tooltip1="&lt;img class=\"tooltip\" alt=\"\" src=\"/xwiki/skins/curriki8/icons/exclamation.png\" ext:qtip=\"$msg.get("ace.lesson.plan.procedures.time.tooltip")\"/&gt;";
+var tooltip2="&lt;img class=\"tooltip\" alt=\"\" src=\"/xwiki/skins/curriki8/icons/exclamation.png\" ext:qtip=\"$msg.get("ace.lesson.plan.procedures.learningtask.tooltip")\"/&gt;";
+var tooltip3="&lt;img class=\"tooltip\" alt=\"\" src=\"/xwiki/skins/curriki8/icons/exclamation.png\" ext:qtip=\"$msg.get("ace.lesson.plan.procedures.methods.tooltip")\"/&gt;";
 
 var colM = new Ext.grid.ColumnModel([
 		{id:"0",header:"Time"+tooltip1,dataIndex:"time",sortable:false,fixed:true,width:100,menuDisabled:true,editor:new Ext.form.TextArea({grow:true,fieldClass:'x-form-field-ace'})},
@@ -814,8 +777,7 @@ var colM = new Ext.grid.ColumnModel([
 	]);
 
 
-
-function fn() { 
+function fn() {
 	grid = new Ext.grid.EditorGridPanel(
 {renderTo:"procedures_div",title:"",height:200,width:570, cm:colM,store:store,autoExpandColumn:2,clicksToEdit:1,autoHeight:true,autoEncode:true,
 	cls :' x-form-field-ace;',
@@ -825,7 +787,7 @@ function fn() {
 grid.on("cellclick", this.cellClick);
 grid.on("afteredit",this.afterEdit,this);
 grid.addListener("keyDown", function(e){
-    if (e.isNavKeyPress()) {		
+    if (e.isNavKeyPress()) {
 			if (isJumpToNext) {
 				clickTabInGridToNextNum = clickTabInGridToNextNum + 1;
 				if (clickTabInGridToNextNum == 2) {
@@ -841,7 +803,7 @@ grid.addListener("keyDown", function(e){
 					document.getElementById("slp_anticipated_problems").focus();
 				}
 			}
-		} 
+		}
 });
 grid.getSelectionModel().on("cellselect", function(sel, row, col) {
 	curRow = row;curCol = col;
@@ -858,9 +820,9 @@ grid.getSelectionModel().on("cellselect", function(sel, row, col) {
 });
 tt_Init2();
 
-} 
+}
 
-Ext.onReady(fn); 
+Ext.onReady(fn);
 
 function cellClick(obj, row, col, e){
 
@@ -878,7 +840,7 @@ function cellClick(obj, row, col, e){
 		if(record.get("method") == data12)
 			record.set("method", "");
 	}
-	//store.commitChanges(); 
+	//store.commitChanges();
 }
 
 
@@ -886,8 +848,8 @@ function afterEdit(obj, row, col, e){
 	var r=obj.record;
 	var id=r.get("id");
 	var name=r.get("name");
-	//store.commitChanges(); 
-	//Ext.MessageBox.alert("alertdiv","Hello,easyjf open source"); 
+	//store.commitChanges();
+	//Ext.MessageBox.alert("alertdiv","Hello,easyjf open source");
 }
 
 // insert new row
@@ -897,7 +859,7 @@ function addrow(){
 	return false;
 }
 function chekcTableText(){
-	
+
 	var arr = store.data;
 	for(i=0;i&lt;arr.length;i++){
 		var record = store.getAt(i);
@@ -906,7 +868,7 @@ function chekcTableText(){
 				return true;
 			}
 		}else if(i == 1){
-			if((record.get("time") != data10 &amp;&amp; record.get("time") != "") || (record.get("task") != data11 &amp;&amp; record.get("task") != "") 
+			if((record.get("time") != data10 &amp;&amp; record.get("time") != "") || (record.get("task") != data11 &amp;&amp; record.get("task") != "")
 				|| (record.get("method") != data12 &amp;&amp; record.get("method") != "")){
 				return true;
 			}
@@ -915,7 +877,7 @@ function chekcTableText(){
 		}
 	}
 	return false;
-}	
+}
 
 function formatTableString(str){
 	str = str.replace(/&lt;br\/&gt;/gi,'\r\n');
@@ -949,7 +911,7 @@ function formatTableString(str){
 }
 function formatString(str, reg, repls){
 	return str.replace(reg, repls)
-}	
+}
 
 function getTableText(){
 	var str = '\{table\}';
@@ -961,7 +923,7 @@ function getTableText(){
 		var time = record.get("time");
 		var task = record.get("task");
 		var method = record.get("method");
-		
+
 		if(i == 0 &amp;&amp; time == data00){
 			time = "";
 		}
@@ -994,22 +956,20 @@ function getTableText(){
 &lt;/script&gt;
 {/pre}
 ####################################	JS end , title
-#set( $noDialogs = $request.getParameter("noDialogs") )  ## ?noDialogs=1 turns off add-path dialogs, for testing, or to enable "edit-again"
-
+  #set( $noDialogs = $request.getParameter("noDialogs") )  ## ?noDialogs=1 turns off add-path dialogs, for testing, or to enable "edit-again"
   &lt;div class="header"&gt;
   #curriki_formtitle($msg.get("ace.lesson.plan.title"))
   $msg.get("ace.lesson.plan.title.description") &lt;a href="$msg.get('ace.lesson.plan.title.description.link1.url')" target="_blank"&gt;$msg.get("ace.lesson.plan.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('ace.lesson.plan.title.description.link3.url')" target="_blank"&gt;$msg.get("ace.lesson.plan.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('ace.lesson.plan.title.description.link2.url')" target="_blank"&gt;$msg.get("ace.lesson.plan.title.description.link2")&lt;/a&gt;&lt;a href="$msg.get('ace.lesson.plan.title.description.link2.thumbnail.url')"&gt;&lt;img src="$msg.get('ace.lesson.plan.title.description.link2.thumbnail')" align="middle"&gt;&lt;/a&gt;
   &lt;br /&gt;$msg.get("form.required.fields.instruction")
   &lt;/div&gt;
-
   &lt;form action="" class="curriki-form1" id="inline" method="post"&gt;
 	  &lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" /&gt;
 	  ##sign validation result, default is validate not passed
 	  &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" /&gt;
 	  &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_type" id="CurrikiCode.TextAssetClass_0_type" value="0" /&gt;
 	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_instructional_component2" id="CurrikiCode.AssetClass_0_instructional_component2" value="curriculum_lp" /&gt;
-	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_hidden_from_search" id="CurrikiCode.AssetClass_0_hidden_from_search" value="0" /&gt; 
-	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt; 
+	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_hidden_from_search" id="CurrikiCode.AssetClass_0_hidden_from_search" value="0" /&gt;
+	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt;
 	  ## successMessage is null, validation not passed
 	  &lt;input type="hidden" 	name="successMessage" id="successMessage" value=""      /&gt;
 	  &lt;input type="hidden" 	name="page"		value="$!request.page"		/&gt;
@@ -1018,12 +978,12 @@ function getTableText(){
 	  &lt;input type="hidden"	name="parentPage"	value="$!parentPage"		/&gt;
 	  #if( "$!noDialogs"!="" )
 		&lt;input type="hidden"	name="noDialogs"	value="$noDialogs"		/&gt;
-	  #else                                   
+	  #else
 		&lt;input type="hidden"	name="flow"		value="$!flow"			/&gt;
 			&lt;input type="hidden"	name="createLessonURL"		value="$msg.get('ace.lesson.plan.url')"	/&gt; ## for ICT
 		&lt;input type="hidden"	name="cameFrom"  #if( "$!cameFrom"=="" ) value="$msg.get('ace.lesson.plan.url')"  #else   value="$!cameFrom"   #end /&gt;
-	  #end             
-####################################	step1  
+	  #end
+####################################	step1
   #curriki_formpart_begin($msg.get("ace.lesson.plan.step1.header"))
   #curriki_forminstructions($msg.get("ace.lesson.plan.step1.instruction"))
   #curriki_formprompt($msg.get("ace.lesson.plan.title_title"), $msg.get("ace.lesson.plan.title_tooltip"), $msg.get("ace.lesson.plan.title_txt"), true, "medium")
@@ -1042,38 +1002,38 @@ function getTableText(){
   $newAsset.display("keywords","edit")
   #curriki_formprompt($msg.get("sri.language_title"), $msg.get("sri.language_tooltip"), $msg.get("sri.language_txt"), false, "medium")
   $newAsset.display("language","edit")
-  #curriki_formpart_end() 
+  #curriki_formpart_end()
 ####################################	step2
   #curriki_formpart_begin($msg.get("ace.lesson.plan.step2.header")) ## {
   #curriki_forminstructions($msg.get("ace.lesson.plan.step2.instruction"))
 
   #curriki_formprompt($msg.get("ace.lesson.plan.introduction.title"), $msg.get("ace.lesson.plan.introduction.tooltip"), $msg.get("ace.lesson.plan.introduction.instruction"), true, "medium")
-  &lt;textarea id='slp_number_days' name='slp_number_days' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_number_days' name='slp_number_days' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.group.size.title"), $msg.get("ace.lesson.plan.group.size.tooltip"), $msg.get("ace.lesson.plan.group.size.instruction"), true, "medium")
-  &lt;textarea id='slp_prior_knowledge' name='slp_prior_knowledge' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_prior_knowledge' name='slp_prior_knowledge' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.learning.objectives.title"), $msg.get("ace.lesson.plan.learning.objectives.tooltip"), $msg.get("ace.lesson.plan.learning.objectives.instruction"), true, "medium")
-  &lt;textarea id='slp_lesson_objective' name='slp_lesson_objective' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_lesson_objective' name='slp_lesson_objective' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.assessment.title"), $msg.get("ace.lesson.plan.assessment.tooltip"), $msg.get("ace.lesson.plan.assessment.instruction"), true, "medium")
-  &lt;textarea id='slp_lesson_assessment' name='slp_lesson_assessment' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_lesson_assessment' name='slp_lesson_assessment' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
 
   #curriki_formprompt($msg.get("ace.lesson.plan.standards.title"), $msg.get("ace.lesson.plan.standards.tooltip"), $msg.get("ace.lesson.plan.standards.instruction"), false, "medium")
-  &lt;textarea id='slp_benchmark_standards' name='slp_benchmark_standards' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_benchmark_standards' name='slp_benchmark_standards' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.materials.title"), $msg.get("ace.lesson.plan.materials.tooltip"), $msg.get("ace.lesson.plan.materials.instruction"), false, "medium")
-  &lt;textarea id='slp_materials_needed' name='slp_materials_needed' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_materials_needed' name='slp_materials_needed' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.enrichment.title"), $msg.get("ace.lesson.plan.enrichment.tooltip"), $msg.get("ace.lesson.plan.enrichment.instruction"), false, "medium")
-  &lt;textarea id='slp_enrichment' name='slp_enrichment' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_enrichment' name='slp_enrichment' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.accommodations.title"), $msg.get("ace.lesson.plan.accommodations.tooltip"), $msg.get("ace.lesson.plan.accommodations.instruction"), false, "medium")
-  &lt;textarea id='slp_accommodations' name='slp_accommodations' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_accommodations' name='slp_accommodations' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.anticipated.problems.title"), $msg.get("ace.lesson.plan.anticipated.problems.tooltip"), $msg.get("ace.lesson.plan.anticipated.problems.instruction"), false, "medium")
-  &lt;textarea id='slp_anticipated_problems' name='slp_anticipated_problems' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;  
+  &lt;textarea id='slp_anticipated_problems' name='slp_anticipated_problems' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.procedures.title"), $msg.get("ace.lesson.plan.procedures.tooltip"), $msg.get("ace.lesson.plan.procedures.instruction"), true, "medium")
   &lt;div id="procedures_div"&gt; &lt;/div&gt;  &lt;button class="button button-orange" id="addRowBtn" onclick="return addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
@@ -1083,11 +1043,11 @@ function getTableText(){
 &lt;iframe src="$newAsset.getURL("view", "xpage=lpattachments")"
 		onload="try { setAttachmentsIframeSize(); } catch(e) { alert('iframe onload error: '+e+' ...'); return false; }"
 		id="attachment_iframe" name="attachment_iframe" width="100%" scrolling="auto" marginheight="0" marginwidth="0"	frameborder="0" &gt;
-  &lt;h2&gt;Sorry, your browser doesn't support iframes. Attachment Uploading functionality disabled.&lt;/h2&gt; 
+  &lt;h2&gt;Sorry, your browser doesn't support iframes. Attachment Uploading functionality disabled.&lt;/h2&gt;
 &lt;/iframe&gt;
   #curriki_formpart_end() ## }
 ####################################	step3
-  #curriki_formpart_begin($msg.get("form.scratch.step3.header")) 
+  #curriki_formpart_begin($msg.get("form.scratch.step3.header"))
   #curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
   #curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "medium")
   $newAsset.display("rightsHolder","edit")
@@ -1095,26 +1055,26 @@ function getTableText(){
   $newAsset.display("rights","edit")
 
   #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
-  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		
+  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;
   $newAsset.display("licenseType","edit")
-  #curriki_formpart_end() 
+  #curriki_formpart_end()
 ####################################	step4
-  #curriki_formpart_begin($msg.get("form.scratch.step4.header")) 
+  #curriki_formpart_begin($msg.get("form.scratch.step4.header"))
   &lt;p&gt;&lt;label&gt;$msg.get("ace.form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
   &lt;p class="links"&gt;
 	 &lt;button
 	  onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkStandardLessonPlanForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
 	  &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
-	 #if( "$!cameFrom" != "" ) 
+	 #if( "$!cameFrom" != "" )
 	   #set( $cancelURL = $cameFrom )
-	 #else 
+	 #else
 	   #set( $cancelURL = $xwiki.getURL("Main.WebHome") ) ## cameFrom not set means go to WebHome
-	 #end 
+	 #end
 	 &lt;button class="cancel"
 	  onclick="try { clearUnloadDialog(); window.location.href='$cancelURL'; return false; } catch(e) { alert('$msg.get("form.scratch.cancel.button") button onclick error: '+e+' ...'); return false; }"
 	  &gt;$msg.get("form.scratch.cancel.button")&lt;/button&gt;
   &lt;/p&gt;
-  #curriki_formpart_end() 
+  #curriki_formpart_end()
 &lt;!--
 
   &lt;div class="tooltips"&gt;
@@ -1135,6 +1095,6 @@ setUnloadDialog();
 //tinyMCE.convertURL = function(url, node, on_save) { return url; };
 &lt;/script&gt;
 {/pre}
-#end ## } -- else, aka "$!newAsset"!="" 
+#end ## } -- else, aka "$!newAsset"!=""
 #end ## } -- $context.user=="XWiki.XWikiGuest"</content>
 </xwikidoc>

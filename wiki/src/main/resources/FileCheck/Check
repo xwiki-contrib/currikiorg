@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1194209262000</creationDate>
-<date>1242743420000</date>
-<contentUpdateDate>1242743420000</contentUpdateDate>
-<version>12.1</version>
+<date>1249058892000</date>
+<contentUpdateDate>1249058892000</contentUpdateDate>
+<version>13.1</version>
 <title>$msg.fc_filecheck</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Allow all to view the page</comment>
+<comment>Remove opt-out check</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -185,23 +185,20 @@
 			#if($assetowner&amp;&amp;($assetowner!=""))
 				#set($assetownerdoc = $xwiki.getDocument($assetowner))
 				#set($ok = $assetownerdoc.use("XWiki.XWikiUsers"))
-				#set($optout = $assetownerdoc.getValue("opt_out"))
 				#set($email = $assetownerdoc.getValue("email"))
-				#if("$!optout"!="1"&amp;&amp;$email!="")
-					#set($assettitle = $asset.displayTitle)
-					#set($membername = $assetownerdoc.name)
-					##set($adminemail = $xwiki.getXWikiPreference("admin_email"))
-					##set($asseturl = $asset.getExternalURL("view"))
-					##set($profileurl = $assetownerdoc.getExternalURL())
-					#set($mesg = $xwiki.parseContent($xwiki.getDocument($emailsource).getTranslatedContent()))
-					#set($junk = $xwiki.sendMessage("filecheck@curriki.org", $email, $mesg))
-					$msg.get("fc_mailsentto") [$email&gt;$assetowner]:
-					{pre}
-					&lt;pre&gt;
-					$mesg
-					&lt;/pre&gt;
-					{/pre}
-				#end
+				#set($assettitle = $asset.displayTitle)
+				#set($membername = $assetownerdoc.name)
+				##set($adminemail = $xwiki.getXWikiPreference("admin_email"))
+				##set($asseturl = $asset.getExternalURL("view"))
+				##set($profileurl = $assetownerdoc.getExternalURL())
+				#set($mesg = $xwiki.parseContent($xwiki.getDocument($emailsource).getTranslatedContent()))
+				#set($junk = $xwiki.sendMessage("filecheck@curriki.org", $email, $mesg))
+				$msg.get("fc_mailsentto") [$email&gt;$assetowner]:
+				{pre}
+				&lt;pre&gt;
+				$mesg
+				&lt;/pre&gt;
+				{/pre}
 			#end
 		#end
 		#else

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.jkl1231</author>
+<author>XWiki.creiswig</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jkl1231</contentAuthor>
+<contentAuthor>XWiki.creiswig</contentAuthor>
 <creationDate>1192830919000</creationDate>
-<date>1244229272000</date>
-<contentUpdateDate>1244229272000</contentUpdateDate>
-<version>36.1</version>
+<date>1249499052000</date>
+<contentUpdateDate>1249499052000</contentUpdateDate>
+<version>74.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>copied from Prod for case sensitive updates</comment>
+<comment>updating content</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -56,24 +56,54 @@
 </property>
 </object>
 <content>#&lt;pre&gt;
-#Main.ForgotPassword
-forgotPassword.title=Forgot password
-forgotPassword.forgotUnameLink=Forgot your login name?
-forgotPassword.infos=Forgot your password? Happens to the best of us. Enter the email address you registered with and we'll send an email that will help you log in. (Keep in mind that passwords are case sensitive.)
-forgotPassword.enterEmail=Please enter your email address:
-forgotPassword.noUser=Sorry, no user exists for the email address {0}
-forgotPassword.multipleUsers=There seem to be multiple login names for this email address. 
+
+#NEW FORGOT INFO KEYS (for 1.8.5 login release)
+
+forgot.title=Forgot Login Information
+forgot.description=Forgot your member login or password? Happens to the best of us. Enter the email address you registered with and we'll send an email that will help you log in. (Keep in mind that member logins and passwords are case-sensitive.)
+forgot.enter_email=Please enter your email address:
+forgot.select_info=Did you forget your member login or your password?
+forgot.login.title=Member Login
+forgot.login.titleBar=&amp;nbsp;
+forgot.password.title=Password
+forgot.submit_button=Submit
+forgot.error.email_mandatory=An email address is required.
+forgot.error.email_invalid=A valid email address is required.
+forgot.error.no_user=Sorry, no member exists for the email address {0}
+forgot.error.multiple_users=There seem to be multiple member logins for this email address. 
+
+
+#UN-CHANGED FORGOT INFO KEYS (remain the same for 1.8.5 login release)
+
 forgotPassword.emailSent=The password for {0} has been emailed.
-forgotPassword.invalidLink=Sorry, the link that you went to is not valid.
-forgotPassword.passwordChanged=The password for {0} has been changed.
-forgotPassword.youCanLogIn=You can now &lt;a href="{0}"&gt;log in&lt;/a&gt;.
-forgotPassword.passwordsDoesNotMatch=The login name and password you entered do not match. Please try again. (Keep in mind that passwords are case sensitive.)
+forgotUsername.emailSent=The login for {0} has been emailed.
 forgotPassword.enterPassword=You can now enter a new case-sensitive password:
 forgotPassword.enterPassword.prompt=Please enter a new case-sensitive password:
 forgotPassword.enterPasswordConfirm.prompt=Please confirm the new password:
-forgotPassword.Go=Go &amp;#xBB;
+forgotPassword.Go=Go »
+forgotPassword.passwordChanged=The password for {0} has been changed.
+forgotPassword.youCanLogIn=You can now log in.
+forgotPassword.invalidLink=Sorry, the link that you went to is not valid.
+forgotPassword.passwordsDoesNotMatch=The member login and password you entered do not match. Please try again. (Keep in mind that logins and passwords are case-sensitive.)
+
+
+#OLD FORGOT USERNAME/PASSWORD KEYS (to remove after 1.8.5 login release)
+
+forgotPassword.title=Forgot password
+forgotPassword.forgotUnameLink=Forgot your login name?
+forgotPassword.infos=Forgot your password? Happens to the best of us. Enter the email address you registered with and we'll send an email that will help you log in. (Keep in mind that passwords are case-sensitive.)
+forgotPassword.enterEmail=Please enter your email address:
+forgotPassword.noUser=Sorry, no user exists for the email address {0}
+forgotPassword.multipleUsers=There seem to be multiple login names for this email address. 
 forgotPassword.email.mandatory=An email address is required.
 forgotPassword.email.invalid=A valid email address is required.
+forgotUsername.title=Forgot login name 
+forgotUsername.forgotPwdLink=Forgot your password? 
+forgotUsername.infos=Forgot your login name? Happens to the best of us. Enter the email address you registered with and we'll send an email that will help you log in. (Keep in mind that login names and passwords are case-sensitive.)
+forgotUsername.enterEmail=Please enter your email address:
+forgotUsername.noUser=Sorry, no user exists for the email address {0}
+forgotUsername.email.mandatory=An email address is required.
+forgotUsername.email.invalid=A valid email address is required.
 
 
 
@@ -81,38 +111,228 @@ forgotPassword.email.invalid=A valid email address is required.
 
 forgotPasswordEmail.header=From: {0}To: {1}Subject: Your Curriki.org password
 forgotPasswordEmail.part1=Dear {0} {1},
-forgotPasswordEmail.part2=Forgot your password? It happens to the best of us. For security reasons, we only store an encrypted version of your password and thus cannot send it to you, but you can reset your password by going to the link {0}
-forgotPasswordEmail.part3=Your password will then be reset and you will be able to log in using the new password. (Keep in mind that passwords are case sensitive.)
-
-
-
-#Main.ForgotUsername
-forgotUsername.title=Forgot login name
-forgotUsername.forgotPwdLink=Forgot your password?
-forgotUsername.infos=Forgot your login name? Happens to the best of us. Enter the email address you registered with and we'll send an email that will help you log in. (Keep in mind that login names and passwords are case sensitive.)
-forgotUsername.enterEmail=Please enter your email address:
-forgotUsername.noUser=Sorry, no user exists for the email address {0}
-forgotUsername.emailSent=The login for {0} has been emailed.
-forgotUsername.email.mandatory=An email address is required.
-forgotUsername.email.invalid=A valid email address is required.
-
+forgotPasswordEmail.part2=Forgot your password? It happens to the best of us. For security reasons, we only store an encrypted version of your password and thus cannot send it to you, but you can reset your password by going to this link {0}
+forgotPasswordEmail.part3=Your password will then be reset and you will be able to log in using the new password. (Keep in mind that passwords are case-sensitive.)
 
 
 #Main.ForgotUsernameEmail{0}
 
 forgotUsernameEmail.header=From: {0}To: {1}Subject: Your Curriki.org login name
 forgotUsernameEmail.part1=Dear {0} {1},
-forgotUsernameEmail.part2=Forgot your login name? It happens to the best of us. You selected '{0}' when you registered. If you have forgotten your password, click "Forgot Login" at the top of any Curriki page and we'll send you an email with your password. (Keep in mind that login names and passwords are case sensitive.)
+forgotUsernameEmail.part2=Forgot your member login? It happens to the best of us. You selected '{0}' when you registered. If you have forgotten your password, click "Forgot Login" at the top of any Curriki page and we'll send you an email with your password. (Keep in mind that member logins and passwords are case-sensitive.)
 
 
 
 #Main.ForgotUsernamesEmail
 
-forgotUsernamesEmail.part1=Dear Curriki.org user,
-forgotUsernamesEmail.part2=Forgot your login name? It happens to the best of us. You actually have registered multiple usernames '${names}'. If you have forgotten your password, click the "I Forgot My Password" link on the login screen and we'll send you an email with your password. (Keep in mind that both login names and passwords are case sensitive.)
+forgotUsernamesEmail.part1=Dear Curriki.org member,
+forgotUsernamesEmail.part2=Forgot your member login? It happens to the best of us. You actually have registered multiple member logins: '${names}'. If you have forgotten your password, click the "I Forgot My Password" link on the login screen and we'll send you an email with your password. (Keep in mind that both member logins and passwords are case-sensitive.)
+
+#LOGIN REDIRECT (New keys for 1.8.5 Login release)
+
+redirect.message.title=Login Required
+redirect.message.description=You are trying to reach a page that is only available to Curriki members. Please log in to access this page using the login fields at the top of this page. (Note: if you were trying to add a resource or a collection, you will need to log in and start that action again.)
+redirect.error.no_info=No member login or password given.
+redirect.error.invalid_username=This member login does not exist.
+redirect.error.invalid_password=The password given does not match the member login.
 
 
 
+#REGISTRATION PAGE (new keys for 1.8.5 Login release)
+##Selection values for the fields Subjects, Ed levels, Country, &amp; Language all use the global trans values.
+
+register.curriki_intro.title=Join Curriki
+register.curriki_intro.description=Take a few moments to complete the registration form and become a part of the free online Curriki community.&lt;br&gt;&lt;br&gt;Find out:
+register.curriki_intro.link1_text=Why Curriki Matters
+register.curriki_intro.link1_rollover=Educators find, contribute, and collaborate on the best curricula.&lt;br&gt;&lt;br&gt;Teachers and students access free materials online.&lt;br&gt;&lt;br&gt;The global education community improves learning outcomes worldwide.
+register.curriki_intro.link1_url=/xwiki/bin/view/Main/About
+register.curriki_intro.link2_text=What Members Can Do
+register.curriki_intro.link2_rollover=FIND &amp; COLLECT: Locate your favorites and add them to themed collections.&lt;br&gt;&lt;br&gt;CONTRIBUTE: Add and create resources, or edit and organize existing content.&lt;br&gt;&lt;br&gt;CONNECT: Comment, rate, nominate, blog, flag, share, message, and collaborate.
+register.curriki_intro.link2_url=http://www.curriki.org/xwiki/bin/view/Coll_curriki/VideoTutorialWhatMembersCanDo?bc=;Coll_curriki.Tutorials;Coll_curriki.TutorialsAboutResources
+register.curriki_intro.note=&lt;b&gt;Please Note:&lt;/b&gt; As per Curriki’s &lt;a href="/xwiki/bin/view/Main/TOS" target=blank&gt;Terms of Use&lt;/a&gt;, you must be at least 13 years of age to register. 
+register.curriki_intro.required_fields_instruction=Fields with {0} are required.
+
+register.account_info.header=Enter Account Information (Required)
+register.account_info.intro=Enter required information to join. For information on how these fields are used and why we collect them, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
+register.account_info.login.title=Member Login:
+register.account_info.login.description=You will use this name to log in. Do not use spaces or special characters, and keep in mind that your member login is case-sensitive.
+register.account_info.login.tooltip=Login names must be unique and are used in the web address (URL) for any resources or collections you make.
+register.account_info.password1.title=Password:
+register.account_info.password1.description=Enter a password.
+register.account_info.password1.tooltip=Passwords must be at least five characters long and are case-sensitive.
+register.account_info.password2.title=Confirm Password:
+register.account_info.password2.description=Confirm your case-sensitive password.
+register.account_info.password2.tooltip=Reenter your password to make sure you typed it correctly.
+register.account_info.email1.title=Email Address:
+register.account_info.email1.description=Please enter a valid email address. Directions on how to complete the registration process will be sent to this address.
+register.account_info.email1.tooltip=Email addresses must contain a single “@” character, contain no spaces, and must be unique.
+register.account_info.email2.title=Confirm Email Address:
+register.account_info.email2.description=Confirm your email address to make sure you typed it correctly.
+register.account_info.email2.tooltip=Check that you typed the domain name correctly both times. For instance, “gmail.com” can easily be mistyped without noticing.
+register.account_info.name1.title=Display Name 1:
+register.account_info.name1.description=Enter the first part of the name that will display on the site to other Curriki users. For tips on entering names, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
+register.account_info.name1.tooltip=If you want to display your real name, use your first name here.
+register.account_info.name2.title=Display Name 2:
+register.account_info.name2.description=Enter the second part of the name that will display on the site to other Curriki users.
+register.account_info.name2.tooltip=If you want to display your real name, use your last name here.
+register.account_info.error.blank_field=Some required fields are missing; see highlighted areas.
+register.account_info.error.login_not_unique=The member login you entered has already been used; please enter another member login.
+register.account_info_error.login_invalid=The member login you entered is invalid; please enter a name without spaces or special characters.
+register.account_info.error.password_short=Passwords must be at least five characters.
+register.account_info.error.password_mismatch=Passwords do not match.
+register.account_info.error.password_invalid=Please enter a password without spaces.
+register.account_info.error.email_invalid=Please enter a valid email address.
+register.account_info.error.email_not_unique=The email you entered has already been used; please enter another email address.
+register.account_info.error.email_mismatch=Please check that both email entries match.
+register.account_info.error.name1_long=Display Name 1 is too long; please enter no more than 32 characters. 
+register.account_info.error.name2_long=Display Name 2 is too long; please enter no more than 32 characters. 
+
+register.module.expanded=Click to Collapse
+register.module.collapsed=Click to Expand
+
+register.privacy.header=Update Default Privacy Settings (Optional)
+register.privacy.intro=Here you can edit your settings for showing personal information and receiving notifications from Curriki. You can always edit these settings later in your My Curriki profile.
+register.privacy.show_profile.title=Show Your Profile:
+register.privacy.show_profile.tooltip=Choose who can view your personal information.
+register.privacy.show_profile.everyone=Allow everyone to see my profile
+register.privacy.show_profile.members=Only allow Curriki members to see my profile
+register.privacy.show_profile.noone=Do not allow anyone to see my profile
+register.privacy.show_email.title=Show Your Email Address:
+register.privacy.show_email.tooltip=Even if you choose to show your profile, you can choose not to display your email address using this feature.
+register.privacy.show_email.everyone=Always display
+register.privacy.show_email.members=Display only to Curriki members
+register.privacy.show_email.noone=Never display
+register.privacy.email_options.title=Email Options:
+register.privacy.email_options.tooltip=Select which types of notifications you would like to receive from Curriki.
+register.privacy.email_options.all=I would like to receive emails about all Curriki activity.
+register.privacy.email_options.some=I would only like to receive emails about these specific types of Curriki activity:
+register.privacy.email_options.newsletters=Periodic newsletters and announcements.
+register.privacy.email_options.recommendations=Recommended content based on my settings. (Note: This feature is not yet available, but by selecting it now you will ensure you never miss out on recommendations.)
+register.privacy.email_options.reviews=Notification when my curriculum contributions have been reviewed and rated by Curriki.
+register.privacy.email_options.friend=Periodic requests for feedback on the site.
+register.privacy.email_options.none=I do not want to receive unrequested emails from Curriki, but I understand that I may still receive certain required communications about my account.
+register.privacy.error.no_suboptions_checked=If you choose to specify certain types of Curriki communications, you must choose at least one option.
+
+register.interests.header=Enter Interests &amp; Affiliations (Optional)
+register.interests.intro=The information in this section will help other Curriki members find you in order to collaborate on Curriki. In the future, Curriki will be able to send you customized recommendations or personalize your site experience based on the information you enter here.
+register.interests.member_type.title=Member Type:
+register.interests.member_type.tooltip=Select a matching member type; you can always edit this field later in My Curriki.
+register.interests.affiliation.title=Are you affiliated with any particular organization?
+register.interests.affiliation.tooltip=Enter an organization; you can always edit this field later in My Curriki.
+register.interests.subject.title=What subjects interest you?
+register.interests.subject.description=Click arrows to expand or collapse subjects; you can always edit this field later in My Curriki.
+register.interests.subject.tooltip=Select as many or as few subjects as you like.
+register.interests.ed_level.title=What educational levels interest you?
+register.interests.ed_level.description=Select one or more level(s).
+register.interests.ed_level.tooltip=Choose any matching levels; you can always edit this field later in My Curriki.
+register.interests.location.title=Where do you live?
+register.interests.location.tooltip=Provide information about your location; you can always edit these fields later in My Curriki.
+register.interests.country.title=Country:
+register.interests.state.title=State/Province:
+register.interests.city.title=City:
+register.interests.language.title=What is your preferred language?
+register.interests.language.tooltip=Choose a language; you can always edit this field later in My Curriki.
+
+register.terms.header=Save Information &amp; Register
+register.terms.intro=Before you finish, please be sure that you have read and understand Curriki’s &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy" target=blank&gt;Privacy Policy&lt;/a&gt; and &lt;br&gt;&lt;a href="/xwiki/bin/view/Main/TOS" target=blank&gt;Terms of Use&lt;/a&gt;.
+register.terms.agreement=I agree to Curriki’s &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy" target=blank&gt;Privacy Policy&lt;/a&gt; and &lt;a href="/xwiki/bin/view/Main/TOS" target=blank&gt;Terms of Use&lt;/a&gt;.
+register.terms.notes=If you were invited to join a group, you must complete the registration process first, then return to your group invitation and join the group separately.&lt;br&gt;&lt;br&gt;Once you click &lt;b&gt;Save Information &amp; Register&lt;/b&gt;, Curriki will send a confirmation to the email address you entered above. Use the instructions in this email to verify your email address, then log in to get started.
+register.terms.save_button=Save Information &amp; Register
+register.terms.no_agreement=You must agree to Curriki’s Privacy and Terms of Use Policies in order to register.
+
+##END NEW REGISTRATION KEYS
+
+# Registration pages information
+registration.email=webmaster@curriki.org
+registration.validate.validated=Registration is now complete!&lt;br&gt;&lt;br&gt;Thank you for verifying your email address and completing the registration process.&lt;br&gt;&lt;br&gt;You are now a member of Curriki!&lt;br&gt;&lt;br&gt;Log in using the fields at the top of the page to get started.&lt;br /&gt;
+registration.login_button=OK
+registration.validate.failed.bad_key_or_loginname=Sorry, either the member login or validation key were incorrect. Please try again.
+registration.validate.failed.no_info=The required information was not passed.
+
+# Registration.EmailNotReceived
+email_not_received.title=Email Not Received
+email_not_received.info=Please fill in the information below, and when finished, click SEND.&lt;br&gt;&lt;br&gt;
+email_not_received.required=Items marked with an exclamation point (&lt;font style="color:#ff0000"&gt;&lt;b&gt;!&lt;/b&gt;&lt;/font&gt;) are required.
+email_not_received.login=Member Login:
+email_not_received.email=Email Address:
+email_not_received.phone=Phone Number:
+email_not_received.client=Email Client (e.g., Outlook):
+email_not_received.button=SEND
+email_not_received.missing=Please provide all the required information.
+email_not_received.error.need_login=Please enter a member login.
+email_not_received.error.need_email=Please enter your email address.
+email_not_received.error.need_phone=Please enter your phone number.
+
+email_not_received.email_sent=Thank you for contacting Curriki. A representative will get in touch with you shortly.&lt;br /&gt;&lt;br /&gt;&lt;a href="/xwiki/bin/view/Main/" class="button button-orange"&gt;OK&lt;/a&gt;
+email_not_received_sent.title=Email Not Received Message Sent
+
+#Header
+loginUsername=Member Login
+
+#Enter Login Name Again
+username=Member Login
+
+## Email Validation
+emailValidation.step1.errNoUser=Member Login not given.
+emailValidation.step1.errNotFound=Member not found.
+emailValidation.step1.errNotBounced=Email is not bouncing.
+emailValidation.step1.errNoEmail=Please enter an email address.
+emailValidation.step1.errBadEmail=Please enter a valid email address.
+emailValidation.step1.errDupEmail=That email address is already used by another account.
+
+emailValidation.step1.title=Email Verification - Step 1 of 2
+emailValidation.step1.intro=Our members' security is Curriki's top concern. To maintain security, Curriki requires that all email addresses be verified.
+emailValidation.step1.weHave=For {0} {1} our records show {2}.
+emailValidation.step1.pleaseSubmit=Please click the Submit button to send a verification email to this address. Or update the email address with a new address (your profile will be automatically updated) and then click Submit.
+emailValidation.step1.submit=Submit
+
+emailValidation.step1.goElsewhere=Any changes made to the page will be lost. Select OK to be logged out and returned to the home page. You can return to this form by logging in.  Click Cancel to return to the form and submit your changes.
+
+emailValidation.sent.title=Email Verification Sent
+emailValidation.sent.text=&lt;p&gt;The first step in verifying your email address is complete.&lt;/p&gt;&lt;p&gt;To complete the next step, please check your email inbox for a message from webmaster@curriki.org&lt;/p&gt;&lt;p&gt;If you do not see the email, it may be because of a SPAM filter. Check your SPAM folder and be sure to add curriki.org to your "safe senders" list or address book.&lt;/p&gt;
+emailValidation.sent.notreceived=If you have not received an email within 10 minutes, please contact Curriki by using the &lt;a href="/xwiki/bin/view/Registration/EmailNotReceived"&gt;Email Not Received&lt;/a&gt; form.
+
+emailValidation.step2.title=Email Verified - Step 2 of 2 Completed
+emailValidation.step2.text=&lt;p&gt;Your email address has been confirmed.&lt;/p&gt;&lt;p&gt;Thank you.&lt;/p&gt;
+emailValidation.step2.ok=OK
+
+emailValidation.step2.errNoUser=Invalid user.
+emailValidation.step2.errNoVkey=Invalid key.
+emailValidation.step2.errBadVkey=Invalid key.
+emailValidation.step2.errNotFound=User not found.
+emailValidation.step2.errNotBounced=Email is not bouncing.
+
+
+#SEND TO A FRIEND DIALOG
+
+staf.dialog.title=Send To a Friend
+staf.dialog.recipients=Email address(es) for recipient(s):
+staf.dialog.recipients.comments=Separate multiple email addresses with a comma.
+staf.dialog.customize=Customize message (optional):
+staf.dialog.customize.default=Here's a great resource I found at Curriki (a global education and learning community) that I thought you would enjoy.
+staf.dialog.yourname=Your name:
+staf.dialog.ccme=Send me a copy
+staf.dialog.youremail=Your email address:
+staf.dialog.privacy=Your email address is used to tell your friends who sent them this link. Email addresses for friends are only used to transmit this email. We do not store or use the email addresses entered or the data transmitted for any purpose. Please see the &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Privacy Policy&lt;/a&gt; for more information.
+staf.dialog.cancel=Cancel
+staf.dialog.send=Send
+staf.dialog.shouldcancel=Entered information will be lost. Are you sure you want to close?
+
+staf.from=sendtoafriend@curriki.org
+
+staf.sent.okaymsg=E-mail sent.
+staf.err.emptyto=Please enter an email address.
+staf.err.invalidemail=Please enter a valid email address.
+staf.err.isguest=Only Curriki members can send resources to a friend. Please log in or become a member.
+staf.sent.errored=An unknown error has occurred.
+
+##AFFILIATE REGISTRATION ERROR MESSAGES
+partnerrigestration.validkey.invalid=We were unable to validate your partner key. 
+
+partnerrigestration.parnter.notexist=The Affiliate Partner does not exist in our database. Please contact the webmaster.
+
+
+#OLD REGISTRATION/PROFILE TRANS KEYS TO BE REMOVED AFTER 1.8.5 LOGIN RELEASE
 
 #Main.JoinCurriki
 
@@ -122,10 +342,10 @@ joincurriki.last_name.text=Choose another name to make your name unique (e.g., L
 
 
 joincurriki.fileds.xwikiname=Login Name
-joincurriki.xwikiname.badchars=This login name is invalid. Please enter a name without spaces or special characters. This login name is case sensitive.
-joincurriki.repeat=repeat
+joincurriki.xwikiname.badchars=This login name is invalid. Please enter a name without spaces or special characters. This login name is case-sensitive.
+
 joincurriki.registerToJoinCurriki=Register to Join Curriki
-joincurriki.infos=Thanks for becoming a part of the Curriki Online Community. Joining Curriki is your first step towards accessing and creating high quality teaching resources.&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Please note:&lt;/strong&gt; As per Curriki's &lt;a href="javascript:void()" onclick="showpopup('/xwiki/bin/view/Main/TOS?xpage=popup'); return false;"&gt;Terms of Service&lt;/a&gt;, you must be at least 13 years of age to register. No persons under the age of 13 may register.
+joincurriki.infos=Thanks for becoming a part of the Curriki Online Community. Joining Curriki is your first step towards accessing and creating high quality teaching resources.&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Please note:&lt;/strong&gt; As per Curriki's &lt;a href="javascript:void()" onclick="showpopup('/xwiki/bin/view/Main/TOS?xpage=popup'); return false;"&gt;Terms of Use&lt;/a&gt;, you must be at least 13 years of age to register. No persons under the age of 13 may register.
 
 joincurriki.letsKnowWhoYouAre=Let Us Know Who You Are
 joincurriki.enterRequestedInfo=Enter the requested information to become a member and to create a profile. Items marked with an exclamation point (!) are required.
@@ -151,12 +371,12 @@ joincurriki.someDataMissing=Some fields are missing; see highlighted areas.
 joincurriki.email.alreadyUsed=Your email has already been used.
 joincurriki.login.alreadyUsed=Your login name has already been used.
 joincurriki.saveMyInfoAndRegister=Save Information &amp; Register
-joincurriki.accountCreated=Your account has been created. You can now log in. (Keep in mind that login names and passwords are case sensitive.)
+
 joincurriki.chooseOptOut=I do not want to receive email about participating in the Curriki community.
 joincurriki.topics=
 
 joincurriki.fields.xwikiname=Login Name
-joincurriki.chooseYourCommunityName=You will use this name to log into your account. Please note that it is case sensitive.
+joincurriki.chooseYourCommunityName=You will use this name to log into your account. Please note that it is case-sensitive.
 joincurriki.fields.age=Age
 joincurriki.fields.first_name=Display Name 1:
 joincurriki.fields.last_name=Display Name 2:
@@ -212,89 +432,9 @@ profile.field.lastName.mandatory=Display Name 2 is mandatory.
 profile.field.email.mandatory=Email is mandatory.
 profile.field.email.invalid=Email is not valid.
 
-# Registration pages information
-registration.email=webmaster@curriki.org
-registration.validate.validated=Registration is now complete!&lt;br /&gt;
-registration.login_button=OK
-registration.validate.failed.bad_key_or_loginname=Sorry, either the login name or validation key were incorrect. Please try again.
-registration.validate.failed.no_info=The required information was not passed.
 
-# Registration.EmailNotReceived
-email_not_received.title=Email Not Received
-email_not_received.info=Please fill in the information below, when finished click SEND.
-email_not_received.required=Items marked with an exclamation point(!) are required.
-email_not_received.login=Login Name:
-email_not_received.email=Email Address:
-email_not_received.phone=Phone Number:
-email_not_received.client=Email Client (e.g., Outlook)
-email_not_received.button=SEND
-email_not_received.missing=Please provide all the required information.
-email_not_received.error.need_login=Please enter a login name.
-email_not_received.error.need_email=Please enter your email address.
-email_not_received.error.need_phone=Please enter your phone number.
+#OLD REGISTRATION/LOGIN KEYS TO CHECK WHETHER THEY ARE STILL NEEDED (not sure there are replacements in new keys)
 
-email_not_received.email_sent=Thank you for contacting Curriki. A representative will contact you shortly.&lt;br /&gt;&lt;br /&gt;&lt;a href="/xwiki/bin/view/Main/" class="button button-orange"&gt;OK&lt;/a&gt;
-email_not_received_sent.title=Email Not Received Message Sent
-
-#Header
-loginUsername=login name
-
-#Enter Login Name Again
-username=Login Name
-
-## Email Validation
-emailValidation.step1.errNoUser=Username not given.
-emailValidation.step1.errNotFound=User not found.
-emailValidation.step1.errNotBounced=Email is not bouncing.
-emailValidation.step1.errNoEmail=Please enter an email address.
-emailValidation.step1.errBadEmail=Please enter a valid email address.
-emailValidation.step1.errDupEmail=That email address is already used by another account.
-
-emailValidation.step1.title=Email Verification - Step 1 of 2
-emailValidation.step1.intro=Our member's security is Curriki's top concern. To maintain security Curriki requires that all email addresses be verified.
-emailValidation.step1.weHave=For {0} {1} our records show {2}.
-emailValidation.step1.pleaseSubmit=Please select the Submit button to send a verification email to this address. Or update the email address with a new address (your profile will be automatically update) and then select Submit.
-emailValidation.step1.submit=Submit
-
-emailValidation.step1.goElsewhere=Any changes made to the page will be lost. Select OK to be logged out and returned to the home page. You can return to this form by logging in.  Select Cancel to return to the form to submit your changes.
-
-emailValidation.sent.title=Email Verification Sent
-emailValidation.sent.text=&lt;p&gt;The first step in verifying your email address is complete.&lt;/p&gt;&lt;p&gt;To complete step 2, please check your email inbox for a message from webmaster@curriki.org&lt;/p&gt;&lt;p&gt;If you do not see the email, it may be because of a SPAM filter. Check your SPAM folder and be sure to add curriki.org to your "safe senders" list or address book.&lt;/p&gt;
-emailValidation.sent.notreceived=If you have not received an email within 10 minutes, please contact Curriki by using the &lt;a href="/xwiki/bin/view/Registration/EmailNotReceived"&gt;Email Not Received&lt;/a&gt; form.
-
-emailValidation.step2.title=Email Verified - Step 2 of 2 Completed
-emailValidation.step2.text=&lt;p&gt;Your email address has been confirmed.&lt;/p&gt;&lt;p&gt;Thank you.&lt;/p&gt;
-emailValidation.step2.ok=OK
-
-emailValidation.step2.errNoUser=Invalid user.
-emailValidation.step2.errNoVkey=Invalid key.
-emailValidation.step2.errBadVkey=Invalid key.
-emailValidation.step2.errNotFound=User not found.
-emailValidation.step2.errNotBounced=Email is not bouncing.
-
-staf.dialog.title=Send To a Friend
-staf.dialog.recipients=Email address(es) for recipient(s):
-staf.dialog.recipients.comments=Separate multiple email addresses with a comma.
-staf.dialog.customize=Customize message (optional):
-staf.dialog.customize.default=Here's a great resource I found at Curriki (a global education and learning community) that I thought you would enjoy.
-staf.dialog.yourname=Your name:
-staf.dialog.ccme=Send me a copy
-staf.dialog.youremail=Your email address:
-staf.dialog.privacy=Your email address is used to tell your friends who sent them this link. Email addresses for friends are only used to transmit this email. We do not store or use the email addresses entered or the data transmitted for any purpose. Please see the &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Privacy Policy&lt;/a&gt; for more information.
-staf.dialog.cancel=Cancel
-staf.dialog.send=Send
-staf.dialog.shouldcancel=Entered information will be lost. Are you sure you want to close?
-
-staf.from=sendtoafriend@curriki.org
-
-staf.sent.okaymsg=E-mail sent.
-staf.err.emptyto=Please enter an email address.
-staf.err.invalidemail=Please enter a valid email address.
-staf.err.isguest=Only Curriki members can send resources to a friend. Please log in or become a member.
-staf.sent.errored=An unknown error has occurred.
-
-##AFFILIATE REGISTRATION ERROR MESSAGES
-partnerrigestration.validkey.invalid=We were unable to validate your partner key. 
-
-partnerrigestration.parnter.notexist=The Affiliate Partner does not exist in our database. Please contact the webmaster.</content>
+joincurriki.repeat=repeat
+joincurriki.accountCreated=Your account has been created. You can now log in. (Keep in mind that login names and passwords are case-sensitive.)</content>
 </xwikidoc>

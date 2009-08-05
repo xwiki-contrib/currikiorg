@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.dward</author>
+<author>XWiki.panjl</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1220539613000</creationDate>
-<date>1234891233000</date>
-<contentUpdateDate>1234891233000</contentUpdateDate>
-<version>22.1</version>
+<date>1248397885000</date>
+<contentUpdateDate>1248397885000</contentUpdateDate>
+<version>23.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>GAWLP check</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -323,7 +323,7 @@ function switchDivStatus(show_div){
 ##=================== search all log count of pages
 #set($hql_where = "where doc.parent='AdWordsJump.LandingPageLog'")
 #set($count = $xwiki.search("select count(*) from XWikiDocument doc $hql_where").get(0))
-&lt;form name='pageForm' mo='post'&gt;
+&lt;form name='pageForm' method='post'&gt;
 	&lt;input type='hidden' name='page' id='page' value='$!page'&gt;
 &lt;/form&gt;
 ##=================== set all log paging values
@@ -361,12 +361,14 @@ function switchDivStatus(show_div){
         #set($del_url="javascript:if(window.confirm('Are you sure to delete it?')) location.href='$del_url';")
         #titlebar($obj_title "DEL" $del_url "purple")
 &lt;/div&gt;
-&lt;div id="div_${bentrydoc.name}_${velocityCount}" name="div_${bentrydoc.name}_${velocityCount}" style="visibility:hidden;display:none;"&gt;
+&lt;div id="div_${bentrydoc.name}_${velocityCount}" style="visibility:hidden;display:none;"&gt;
 &lt;table border="0" cellspacing="0" width="100%"&gt;
-    &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchTime"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$searchTime&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.searchText"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param2&lt;/td&gt;&lt;/tr&gt;       
-    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.inform"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param3&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;&lt;b&gt;$msg.get("AdWordsJump.LandingPageLogTemplate.label.email"):&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$log_info.param4&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td width="150"&gt;&lt;b&gt;Email:&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$!log_info.param4&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;Search Term:&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$!log_info.param2&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;Date Created:&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$!searchTime&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;Is Permission:&lt;/b&gt;&lt;/td&gt;&lt;td&gt;$!log_info.param3&lt;/td&gt;&lt;/tr&gt;
+    #set($to_trim = $bentrydoc.name.length() - 3)
+    &lt;tr&gt;&lt;td&gt;&lt;b&gt;Landing Page:&lt;/b&gt;&lt;/td&gt;&lt;td&gt;${bentrydoc.name.substring(0, $to_trim)}&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;
 &lt;/div&gt;
     #end

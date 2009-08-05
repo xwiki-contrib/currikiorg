@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1231836370000</creationDate>
-<date>1243904047000</date>
-<contentUpdateDate>1243904047000</contentUpdateDate>
-<version>14.1</version>
+<date>1249095824000</date>
+<contentUpdateDate>1249095824000</contentUpdateDate>
+<version>18.1</version>
 <title>WebQuest Template</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Breadcrumb</comment>
+<comment>CURRIKI-4743</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -413,43 +413,6 @@ body.p-CreateResources-WebQuest input[type="button"] {font-weight:normal;}
 .x-grid3-col-4{white-space: normal; word-wrap:break-word;}
 .x-form-field-ace{overflow:hidden}
 
-/* Curriki-form */
-.curriki-form1 .headerbar { background-color: #93c53c; }
-.curriki-form1 .headerbar { padding-left: 0.95em; }
-.curriki-form1 em { font-style:normal; color: #fb0f0c; }
-.curriki-form1 .header p { padding: 0 0 1em; }
-.curriki-form1 .header p img { margin-bottom: -8px; height: 25px; width: 25px; }
-.curriki-form1 .frame{ margin-bottom: 2em; }
-.curriki-form1 .frame-content { padding: 0.5em 1em 1.5em; }
-.curriki-form1 h3 { padding-top: 1em; }
-.curriki-form1 .medium { width: 75%; }
-.curriki-form1 .small { font-size: 100%; width: 50%; }
-.curriki-form1 .entry { padding: 2em 0 0; }
-.curriki-form1 .entry h5 { font-size: 1.1em; }
-.curriki-form1 .entry h5 em { font-weight: normal; }
-.curriki-form1 .entry h5 img { margin-bottom: -5px; }
-.curriki-form1 .entry p.instruction { line-height: 130%; padding-bottom: 7px; }
-.curriki-form1 .entry input.input { width: 90%; }
-.curriki-form1 .entry textarea { height: 9em; width: 90%; }
-
-.curriki-form1 .entry label { display: block; }
-.curriki-form1 table.subject-educational { font-size: 1em; width: 95%; }
-.curriki-form1 table.subject-educational td { width: 50%; padding-right: 1em; }
-.curriki-form1 table.subject-educational td td { width: auto; }
-.curriki-form1 .links { padding-bottom: 0; text-align: center; }
-.curriki-form1 .links button { display: inline; margin-right: 1.5em; }
-.curriki-form1 table.subject-educational th { background-color: transparent; }
-.curriki-form1 table.subject-educational td { vertical-align: top; }
-.curriki-form1 span.xwiki-form-listclass { display: block; margin: 3px 0 !important; margin: 0 0 2px; }
-.curriki-form1 #XWiki\.AssetClass_0_title { width: 99% !important; width: 95%; }
-.curriki-form1 textarea { height: 120px; }
-.curriki-form1 textarea { padding: 1px 0; }
-.curriki-form1 .mceEditorIframe { height: 18em !important; width: 100%  !important; }
-.curriki-form1 .subject-educational .xwiki-form-listclass { padding-bottom: 1px !important; padding-bottom: 0; }
-.curriki-form1 .subject-educational .ygtvlabel { display: block; padding-top: 4px; }
-.curriki-form1 #attachment_iframe { padding: 10px; width: 100%; }
-
-.curriki-form1_textarea { width: 99.5% !important; width: 95%; }
 input {	width:expression(this.type=="text" ? "83%" : "style"); }
 &lt;/style&gt;
 &lt;script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
@@ -800,9 +763,9 @@ var store=new Ext.data.JsonStore({
     fields:["id","col1","Beginning","Developing","Accomplished","Exemplary"]
     }); 
 #set($info_img = '/xwiki/skins/curriki8/icons/exclamation.png')
-##var tooltip1="&lt;span class=\"tooltip-generator\"&gt;&lt;span class=\"tooltip_span\" onmouseover=\"this.WIDTH='300'; return escape('$msg.get("ace.lesson.plan.procedures.time.tooltip")');\"&gt;&lt;img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/&gt;&lt;/span&gt;&lt;/span&gt;";
-##var tooltip2="&lt;span class=\"tooltip-generator\"&gt;&lt;span class=\"tooltip_span\" onmouseover=\"this.WIDTH='300'; return escape('$msg.get("ace.lesson.plan.procedures.learningtask.tooltip")');\"&gt;&lt;img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/&gt;&lt;/span&gt;&lt;/span&gt;";
-##var tooltip3="&lt;span class=\"tooltip-generator\"&gt;&lt;span class=\"tooltip_span\" onmouseover=\"this.WIDTH='300'; return escape('$msg.get("ace.lesson.plan.procedures.methods.tooltip")');\"&gt;&lt;img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/&gt;&lt;/span&gt;&lt;/span&gt;";
+##var tooltip1="&lt;img class=\"tooltip\" alt=\"\" src=\"/xwiki/skins/curriki8/icons/exclamation.png\" ext:qtip=\"$msg.get("ace.lesson.plan.procedures.time.tooltip")\"/&gt;";
+##var tooltip2="&lt;img class=\"tooltip\" alt=\"\" src=\"/xwiki/skins/curriki8/icons/exclamation.png\" ext:qtip=\"$msg.get("ace.lesson.plan.procedures.learningtask.tooltip")\"/&gt;";
+##var tooltip3="&lt;img class=\"tooltip\" alt=\"\" src=\"/xwiki/skins/curriki8/icons/exclamation.png\" ext:qtip=\"$msg.get("ace.lesson.plan.procedures.methods.tooltip")\"/&gt;";
 
 var colM = new Ext.grid.ColumnModel([
 		{id:"0",header:" ",dataIndex:"col1",sortable:false,fixed:true,width:120,menuDisabled:true,editor:new Ext.form.TextArea({grow:true,fieldClass:'x-form-field-ace'})},
@@ -1007,13 +970,11 @@ function getTableText(){
 
 ####################################	JS end , title
 #set( $noDialogs = $request.getParameter("noDialogs") )  ## ?noDialogs=1 turns off add-path dialogs, for testing, or to enable "edit-again"
-
-  &lt;div class="header" style="margin-left: 10px"&gt;
+  &lt;div class="header"&gt;
   #curriki_formtitle($msg.get("wq.plan.title"))
   $msg.get("wq.title.description") &lt;a href="$msg.get('wq.title.description.link1.url')" target="_blank"&gt;$msg.get("wq.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link3.url')" target="_blank"&gt;$msg.get("wq.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link2.url')" target="_blank"&gt;$msg.get("wq.title.description.link2")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('wq.title.description.link4.url')"&gt;&lt;img src="$msg.get('wq.title.description.link4.thumbnail')" align="middle"&gt;$msg.get("wq.title.description.link4")&lt;/a&gt;
   &lt;br /&gt;$msg.get("form.required.fields.instruction")
   &lt;/div&gt;
-
   &lt;form action="" class="curriki-form1" id="inline" method="post"&gt;
 	  &lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" /&gt;
 	  ##sign validation result, default is validate not passed

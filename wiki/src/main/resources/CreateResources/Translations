@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.jkl1231</author>
+<author>XWiki.ShermanTank</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jkl1231</contentAuthor>
+<contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1210378529000</creationDate>
-<date>1244559591000</date>
-<contentUpdateDate>1244559591000</contentUpdateDate>
-<version>373.1</version>
+<date>1247091920000</date>
+<contentUpdateDate>1247091920000</contentUpdateDate>
+<version>394.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>updated CELP title area link to just Models</comment>
+<comment>removed &lt;br&gt; from 'efs.output.default.framework.attribution</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -97,6 +97,12 @@
 ##    TITLE AREA
 ##    STEP 1
 ##    STEP 2
+## EFS LESSON PLAN FORM (EFSLP)
+##    TITLE AREA
+##    STEP 1
+##    STEP 2
+##    STEP 3
+##    STEP 4
 ## FROM SCRATCH ERROR MESSAGES
 ## LESSON PLAN ERROR MESSAGES
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
@@ -135,8 +141,7 @@ form.scratch.cancel.button=Cancel
 
 ## GENERIC REQUIRED FIELDS WARNING USED IN SRI DIALOGS AND FORMS
 form.required.fields.instruction=Fields with &lt;em class="required-indicator"&gt;!&lt;/em&gt; are required.
-form.required.fields.indicator=!
-
+form.required.fields.indicator=&lt;b&gt;!&lt;/b&gt;
 
 ## LEAVING FORM DIALOG
 form.leaving.dialog=Navigating away from this page will cause you to lose your work.
@@ -332,7 +337,6 @@ celp.title.description.link1.url=/xwiki/bin/view/Coll_curriki/ModelLessonsfromCu
 celp.title.description.link2=Form Help
 
 celp.title.description.link2.url=/xwiki/bin/view/Coll_curriki/CreatingResourceswithFormsTemplates?bc=;Coll_curriki.CurrikiHelp
-
 celp.title.description.link3=Curriki Review System
 
 celp.title.description.link3.url=/xwiki/bin/view/Main/AboutCurrikiReviewSystem
@@ -366,7 +370,7 @@ celp.step2.summary.title=Summary:
 
 celp.step2.summary.tooltip=Your entry in this field may be the same as or similar to your entry in the Description field in Step 1 above.
 
-celp.step2.summary.instruction=Provide an overview of the lesson. Include a high-level synopsis of how long this lesson should take and its context within a larger unit of instruction
+celp.step2.summary.instruction=Provide an overview of the lesson. Include a high-level synopsis of how long this lesson should take and its context within a larger unit of instruction.
 
 celp.step2.lasting_ideas.title=Lasting Ideas &amp; Results:
 
@@ -392,11 +396,11 @@ celp.step2.outcomes.addrow=Add a Row
 
 celp.step2.standards.title=Standards:
 
-celp.step2.standards.instruction=List the specific benchmarks or performance indicators that are addressed by this lesson, formatting as desired with the &lt;a href=http://www.curriki.org&gt;editing toolbar&lt;/a&gt;..
+celp.step2.standards.instruction=List the specific benchmarks or performance indicators that are addressed by this lesson, formatting as desired with the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;.
 
 celp.step2.instruction2=What evidence can demonstrate increased student understanding and ability?
 
-celp.step2.assess.title=Summative Assessment(s):
+celp.step2.assess.title=Summative &lt;nobr&gt;Assessment(s)&lt;/nobr&gt;:
 
 celp.step2.assess.tooltip=You may wish to reference the specific learner outcome being measured by each type of assessment. Attach rubrics or other documents defining performance criteria below under "Required Attachments, and mention them here.
 
@@ -424,7 +428,7 @@ celp.step2.procedures.title=Procedures:
 
 celp.step2.procedures.tooltip=Instructions should be comprehensive enough that another educator could execute this learning plan. Upload any referenced files using the Required Attachments field below.
 
-celp.step2.procedures.instruction=Use this section to provide detailed teaching methods and steps for student participation, formatting as desired with the &lt;a href=http://www.curriki.org&gt;editing toolbar&lt;/a&gt;. Make sure you explicitly connect any planned learning activities to the intended outcomes for this lesson.
+celp.step2.procedures.instruction=Use this section to provide detailed teaching methods and steps for student participation, formatting as desired with the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;. Make sure you explicitly connect any planned learning activities to the intended outcomes for this lesson.
 
 celp.step2.materials.title=Materials:
 
@@ -527,7 +531,7 @@ nortel.form.title.description.link4.url=http://www.curriki.org/xwiki/bin/view/Co
 ##NLLP STEP 1
 nortel.lesson.plan.title_title=Title:
 nortel.lesson.plan.title_txt=Enter a title for your resource. Use no more than 250 characters (including spaces).
-nortel.lesson.plan.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify the resource.  Please observe proper spacing, capitalization, and punctuation to ensure a correct record display for users.
+nortel.lesson.plan.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify the resource. Please observe proper spacing, capitalization, and punctuation to ensure a correct record display for users.
 
 nortel.lesson.plan.description_title=Description:
 nortel.lesson.plan.description_txt=Provide a high-level description of the purpose of this lesson, concepts and skills it addresses, and/or the lesson's learning activities, methods, or procedures.
@@ -890,6 +894,255 @@ wq.file.size.dialog=Attachments to this resource cannot exceed 20 MB in total. Y
 ace.lesson.plan.file.size.dialog.button=OK
 
 
+## EFS LESSON PLAN FORM (EFSLP)
+
+efs.url=/xwiki/bin/view/CreateResources/EducateforSustainabilityLessonPlan
+
+##    TITLE AREA
+
+efs.title.title=Create a Lesson Plan from a Template (Educate for Sustainability Lesson Plan)
+
+efs.title.learn=Learn more:
+
+efs.title.learn.link1=Models
+
+efs.title.learn.link1.url=/xwiki/bin/view/Coll_CloudInstitute/ModelLessonsCreatedUsingtheEfSTemplate?bc=;Coll_CloudInstitute.EfSInstructionalDesign
+
+efs.title.learn.link2=Instructional Design
+
+efs.title.learn.link2.url=/xwiki/bin/view/Coll_CloudInstitute/EfSInstructionalDesign
+
+efs.title.learn.link3=Help
+
+efs.title.learn.link3.url=/xwiki/bin/view/Coll_curriki/UsingtheEducateforSustainabilityLessonPlan?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.CreatingResourceswithFormsTemplates
+
+efs.title.learn.link4.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/CloudInstituteLogo.gif
+
+efs.title.learn.link4=Cloud Institute
+
+efs.title.learn.link4.url=http://www.curriki.org/xwiki/bin/view/Demo/cloudinstitute
+
+##    STEP 1
+
+efs.step1.header=Step 1. Enter Basic Information
+
+efs.step1.instruction=How would you describe and categorize this lesson for yourself &lt;br&gt;and other educators?
+
+efs.step1.title_title=Title:
+
+efs.step1.title_txt=Enter a title of no more than 125 characters (including spaces) for your lesson.
+
+efs.step1.title_tooltip=This title will be displayed in listings (such as search results) and should help you and others quickly identify it.
+
+efs.step1.description_title=Description:
+
+efs.step1.description_txt=Provide an overall description of this lesson's purpose, the general concepts and skills it addresses, and/or the lesson's learning activities, methods, or procedures. If this lesson is part of a unit, indicate the unit goal and where this lesson falls chronologically in the unit.
+
+efs.step1.description_tooltip=This description appears when people find your resource in listings.
+
+##    STEP 2
+
+efs.step2.header=Step 2. Enter &amp; Format Lesson Content
+
+efs.step2.instruction= What would another educator need to successfully carry out this lesson?
+
+efs.step2.summary.title=Lesson Summary:
+
+efs.step2.summary.instruction=Enter text into each cell below.
+
+efs.step2.summary.grade=Grade
+
+efs.step2.summary.unit=Unit
+
+efs.step2.summary.number=Lesson Number
+
+efs.step2.summary.periods=Class Periods
+
+efs.step2.summary.grade.tooltip=What specific grade is this lesson for?
+
+efs.step2.summary.unit.tooltip=Which unit does this lesson fit into? Include the unit in the lesson description in Step 1 above.
+
+efs.step2.summary.number.tooltip=In the unit, where in the sequence does this lesson fit? Include the number in the lesson title in Step 1 above.
+
+efs.step2.summary.periods.tooltip=How many class periods are used for this lesson?
+
+efs.step2.standards.title=Standards:
+
+efs.step2.standards.instruction=Enter any &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_CloudInstitute/EfSStandards?bc=;Coll_CloudInstitute.EfSInstructionalDesign" target="_blank"&gt;standards&lt;/a&gt; addressed by this lesson. Learn about formatting options using the &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/FormattingContentwiththeWYSIWYGEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository" target="_blank"&gt;editing toolbar&lt;/a&gt;.
+
+
+efs.step2.standards.tooltip=Participating teachers should enter the EfS Standards accessible through the EfS Studio Group.
+
+efs.step2.overarching_question.title=Overarching Question:
+
+efs.step2.overarching_question.instruction=Input the single overarching question that supports inquiry into a central theme in your project, grade, or school, and that links all the components of this lesson together.
+
+efs.step2.essential_question.title=Essential Question:
+
+efs.step2.essential_question.instruction=Enter the essential question that will engage students in the learning process of this lesson.
+
+efs.step2.essential_question.tooltip=This open-ended question has no definitive answer and should provide a compelling and relevant \\&amp;#34;hook\\&amp;#34; into the students\\&amp;#39; own experience and knowledge base; it should stimulate further inquiry and maintain students\\&amp;#39; interest.
+
+efs.step2.guiding_question.title=Guiding Question(s):
+
+efs.step2.guiding_question.instruction=Enter any guiding questions (as many as you want) that contribute to the organization of your lesson.
+
+
+efs.step2.guiding_question.tooltip=Guiding questions should be curriculum-specific and bound to the discipline/subject.
+
+efs.step2.materials.title=Resources &amp; Materials:
+
+efs.step2.materials.instruction=Provide a list of resources or materials required for implementing this lesson.
+
+efs.step2.procedures.title=Learning Opportunities, Activities, &amp; Procedures:
+
+efs.step2.procedures.tooltip=If you are drafting the lesson, brainstorm around this question and capture all thoughts unfiltered below.
+
+efs.step2.procedures.instruction=Click in a cell to replace the sample text. Describe the lesson’s activities, which should engage students and enable the knowledge, essential understandings, process, and skills to meet the lesson objectives.
+
+efs.step2.procedures.row1.col1_header=Class Time
+
+efs.step2.procedures.row1.col2_header=Learning Activity
+
+efs.step2.procedures.row1.col3_header=Procedures
+
+efs.step2.procedures.row2.col1_sample=Sample: Day 1
+
+efs.step2.procedures.row3.col1_sample=Sample: 5 minutes
+
+efs.step2.procedures.row3.col2_sample=Sample: Introductory Discussion
+
+efs.step2.procedures.row3.col3_sample=Teacher introduces essential question; class brainstorms ideas
+
+efs.step2.procedures.addrow=Add a Row
+
+efs.step2.modifications.title=Instructional &amp; Environmental Modifications:
+
+efs.step2.modifications.instruction=Describe any accommodations for the range of abilities in the classroom, such as instructional modifications or physical changes to the classroom setting.
+
+efs.step2.modifications.tooltip=Modifications may be required for students with disabilities, limited English proficiency, or bilingual students.
+
+efs.step2.assessment.title=Assessment(s) &amp; Scoring Criteria:
+
+efs.step2.assessment.tooltip=Participating teachers should utilize the EfS Standards and Performance Indicators as per the EfS Studio Group.
+
+efs.step2.assessment.instruction=Describe here what the teacher should collect or administer to prove that students have grown towards and/or achieved desired outcomes/standards. Upload any referenced files using the Required Attachments field below.
+
+efs.step2.assessment.standard=Standard Being Addressed
+
+efs.step2.assessment.indicator=Specific Performance Indicator
+
+efs.step2.assessment.instrument=Assessment Instrument(s)
+
+efs.step2.assessment.criteria=Scoring Criteria
+
+efs.step2.assessment.standard.tooltip=Name or Statement
+
+efs.step2.assessment.indicator.tooltip=Letter and/or Number
+
+efs.step2.assessment.instrument.tooltip=e.g., Quiz, Journal Prompt
+
+efs.step2.assessment.criteria.tooltip=e.g., Answer Key, Rubric
+
+efs.step2.assessment.addrow=Add a Row
+
+efs.step2.glossary.title=Glossary:
+
+efs.step2.glossary.instruction=List any terms used in this lesson, along with their definitions.
+
+efs.step2.reflection.title=Reflection:
+
+efs.step2.reflection.tooltip=Feel free to create your own prompt for this field.
+
+efs.step2.reflection.instruction=Take a minute to reflect on how your community would be different if everyone had completed this unit. What are the behaviors you hope to see from your students today and in their adult life that demonstrate a deep integration of the learning from this unit?
+
+efs.step2.student_work.title=Student Work:
+
+efs.step2.student_work.instruction=Describe several pieces of student work that provide examples of differing performance levels, along with teacher comments from assessments. You may wish to upload the examples using the Required Attachments field below.
+
+efs.step2.required.attachments.title=Required Attachments:
+
+efs.step2.required.attachments.tooltip=If you referenced any files in the fields above (i.e. Materials and Resources or Assessment and Scoring Criteria), upload them here.
+
+efs.step2.required.attachments.instruction=Select and upload files from your computer to support the implementation of this lesson. Attached files cannot exceed 20 MB in total. These will be offered as links at the bottom of the published lesson plan.
+
+efs.step2.required.attachments.file.attached=Files that you attach to this resource do not appear as independent contributions on Curriki; they are presented only as hyperlinks within this resource, and they are covered by the license for this resource.&lt;br /&gt;&lt;br /&gt;After submitting this form, please consider adding curricular materials to Curriki as standalone resources, so these contributions can be discovered and reused more easily.
+
+efs.step2.attachments.title=Attached Files:
+
+efs.step2.attachments.browse.button=Browse
+
+efs.step2.attachments.attach.button=Attach This File
+
+efs.step2.attachments.delete=Remove
+
+efs.step2.file.size.maximum=20000000
+
+efs.step2.file.size.label=Total size of all attachments:
+
+efs.step2.file.size.oversize=Attachments to this resource cannot exceed 20 MB in total. To successfully submit this form, you must use the "Remove" link to reduce the total size of attachments uploaded as Required Attachments. (Please contribute additional files as standalone Curriki contributions instead of attaching them to this lesson. You can edit the lesson contents to include links to the additional Curriki resources, or organize them together in a folder or collection.)
+
+efs.step2.file.size.dialog=Attachments to this resource cannot exceed 20 MB in total. You may want to upload this file as a standalone Curriki contribution instead of attaching it to this resource.
+
+efs.step2.file.size.dialog.button=OK
+
+
+
+##  EFS  STEP 3
+
+efs.step3.header=Step 3. Confirm Rights &amp; Access Information
+
+efs.step3.instruction=Whose content is this, who should be able to view or edit it, and how can it be used by others?
+
+
+##  EFS STEP 4
+
+efs.step4.header=Step 4. Review &amp; Submit
+
+efs.step4.instruction=Review your entries one last time before you click Submit. &lt;br /&gt; &lt;br /&gt;If your content is &lt;i&gt;not ready&lt;/i&gt; for others to see or use, remember to set the Access Privileges to "Private" above.
+
+efs.submit.button=Submit
+
+efs.cancel.button=Cancel
+
+
+##  EFS OUTPUT
+
+efs.output.default.framework.attribution=This lesson was created using a framework developed by the Cloud Institute for Sustainability Education.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## FROM SCRATCH ERROR MESSAGES (ALSO USED IN OTHER FORMS)
 form.scratch.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
 form.scratch.required.fields.dialog=Please complete the following required field(s):
@@ -921,22 +1174,22 @@ lesson.plan.required.fields.dialog.button=OK
 
 ## The following fields are required in specific forms, as per specs.
 
-## CSLP Form
+## CSLP Form ERROR MESSAGES
 lesson.plan.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
 lesson.plan.required.fields.dialog.learning.objectives=- Learning Objectives
 lesson.plan.required.fields.dialog.procedures=- Procedures
 
-## CELP Form
+## CELP Form ERROR MESSAGES
 
 celp.title.more.125=You entered more than 125 characters into the Title field in Step 1. Please shorten the text in this field.
 
 celp.required.fields.dialog.outcomes=- Desired Learner Outcomes
 
-celp.required.fields.dialog.assessment=- Summative Assessment(s)
+celp.required.fields.dialog.assessment=- Summative &lt;nobr&gt;Assessment(s)&lt;/nobr&gt;
 
 celp.required.fields.dialog.procedures=- Procedures
 
-## NLLP Form
+## NLLP Form ERROR MESSAGES
 nortel.lesson.plan.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
 lesson.plan.required.fields.dialog.overview=- Overview
 lesson.plan.required.fields.dialog.techinteg=- Technology Integration
@@ -955,7 +1208,7 @@ lesson.plan.required.fields.dialog.elaborate=- Elaborate
 lesson.plan.required.fields.dialog.evaluate=- Evaluate
 lesson.plan.required.fields.dialog.extend=- Extend
 
-## ACELP Form
+## ACELP Form ERROR MESSAGES
 ace.lesson.plan.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
 lesson.plan.required.fields.dialog.priorknowledge=- Prior Knowledge
 lesson.plan.required.fields.dialog.numberdays=- Number of Days
@@ -964,7 +1217,7 @@ lesson.plan.required.fields.dialog.lessonobjective=- Lesson Objective
 lesson.plan.required.fields.dialog.lessonassessment=- Lesson Assessment
 lesson.plan.required.fields.dialog.procedures=- Procedures
 
-## WQ Form
+## WQ Form ERROR MESSAGES
 wq.title.more.250=You entered more than 250 characters into the Title field in Step 1. Please shorten the text in this field.
 wq.required.fields.dialog.introduction=- Introduction
 wq.required.fields.dialog.task=- The Task
@@ -972,6 +1225,28 @@ wq.required.fields.dialog.process=- The Process
 wq.required.fields.dialog.evaluation=- Evaluation
 wq.required.fields.dialog.conclusion=- Conclusion
 
+## EFSLP FORM ERROR MESSAGES
+efs.title.more.125=You entered more than 125 characters into the Title field in Step 1. Please shorten the text in this field.
+
+efs.required.fields.dialog.summary=- Lesson Summary
+
+efs.required.fields.dialog.standards=- Standards
+
+efs.required.fields.dialog.essential_questions=- Essential Questions
+
+efs.required.fields.dialog.guiding_questions=- Guiding Question
+
+efs.required.fields.dialog.materials=- Resources &amp; Materials
+
+efs.required.fields.dialog.procedures=- Learning Opportunities, Activities, &amp; Procedures
+
+efs.required.fields.dialog.modifications=- Instructional &amp; Environmental Modifications
+
+efs.required.fields.dialog.assessment=- Assessments &amp; Scoring Criteria
+
+efs.required.fields.dialog.glossary=- Glossary
+
+efs.required.fields.dialog.student_work=- Student Work
 
 
 
@@ -1058,7 +1333,7 @@ sri.rights_content=
 
 sri.license_type_title=License Deed:
 
-sri.license_type_txt=Please be sure you have read and understand the &lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;Terms of Use&lt;/a&gt; and that you have the rights to contribute this content.&lt;br /&gt;&lt;br /&gt;The Curriki-compatible license provides maximum flexibility to the community, so members can use and modify others&amp;#39; contributions.  The default Curriki license is a widely used Creative Commons license Attribution &lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open('http://creativecommons.org/licenses/by/3.0/', 'CC30'); return false;"&gt;3.0&lt;/a&gt;.  If you wish to assign another license, please select from the drop-down list below.  To learn about all the Creative Commons licenses, please &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open('http://creativecommons.org/about/licenses/meet-the-licenses', 'CCmeet'); return false;"&gt;click here&lt;/a&gt;.
+sri.license_type_txt=Please be sure you have read and understand the &lt;a href="/xwiki/bin/view/Main/TOS?xpage=popup" target="TOS"&gt;Terms of Use&lt;/a&gt; and that you have the rights to contribute this content.&lt;br /&gt;&lt;br /&gt;The Curriki-compatible license provides maximum flexibility to the community, so members can use and modify others&amp;#39; contributions. The default Curriki license is a widely used Creative Commons license Attribution &lt;a href="http://creativecommons.org/licenses/by/3.0/" target="CC30" onclick="window.open('http://creativecommons.org/licenses/by/3.0/', 'CC30'); return false;"&gt;3.0&lt;/a&gt;. If you wish to assign another license, please select from the drop-down list below. To learn about all the Creative Commons licenses, please &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses" target="CCmeet" onclick="window.open('http://creativecommons.org/about/licenses/meet-the-licenses', 'CCmeet'); return false;"&gt;click here&lt;/a&gt;.
 sri.license_type_heading=Set License Deed:
 
 sri.license_type_tooltip=License protecting this content
@@ -1155,7 +1430,7 @@ add.selecttemplate.list1.thumbnail=/xwiki/bin/download/CreateResources/TemplateT
 add.selecttemplate.list1.url=/xwiki/bin/view/CreateResources/CurrikiStandardLessonPlan
 
 add.selecttemplate.list2.header=&lt;b&gt;Extended Lesson Plan&lt;/b&gt;
-add.selecttemplate.list2.description=This Curriki template offers more content fields, with Desired Learner Outcomes, Summative Assessment(s), and Procedures all required.
+add.selecttemplate.list2.description=This Curriki template offers more content fields, with Desired Learner Outcomes, Summative &lt;nobr&gt;Assessment(s)&lt;/nobr&gt;, and Procedures all required.
 add.selecttemplate.list2.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/CurrikiExtendedLessonPlanThumb.png
 add.selecttemplate.list2.url=/xwiki/bin/view/CreateResources/CurrikiExtendedLessonPlan
 
@@ -1169,11 +1444,15 @@ add.selecttemplate.list4.description=The Alliance for Catholic Education provide
 add.selecttemplate.list4.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/ACELessonPlanThumb.png
 add.selecttemplate.list4.url=/xwiki/bin/view/CreateResources/ACELessonPlan
 
+add.selecttemplate.list5.header=&lt;b&gt;Cloud Institute Lesson Plan&lt;/b&gt;
+add.selecttemplate.list5.description=This template offers the "Educate for Sustainability" lesson framework, including ten required fields.
+add.selecttemplate.list5.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/EducateforSustainabilityLessonPlanThumb.png
+add.selecttemplate.list5.url=/xwiki/bin/view/CreateResources/EducateforSustainabilityLessonPlan
 
-add.selecttemplate.list5.header=&lt;b&gt;WebQuest&lt;/b&gt;
-add.selecttemplate.list5.description=This Curriki template offers the structure for creating a student-directed learning activity that requires students to engage with online resources; includes an evaluation rubric.
-add.selecttemplate.list5.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/WebQuestThumb.png
-add.selecttemplate.list5.url=/xwiki/bin/view/CreateResources/WebQuest
+add.selecttemplate.list6.header=&lt;b&gt;WebQuest&lt;/b&gt;
+add.selecttemplate.list6.description=This Curriki template offers the structure for creating a student-directed learning activity that requires students to engage with online resources; includes an evaluation rubric.
+add.selecttemplate.list6.thumbnail=/xwiki/bin/download/CreateResources/TemplateThumbnails/WebQuestThumb.png
+add.selecttemplate.list6.url=/xwiki/bin/view/CreateResources/WebQuest
 
 add.selecttemplate.cancel.button=Cancel
 add.selecttemplate.next.button=Next &gt;&gt;

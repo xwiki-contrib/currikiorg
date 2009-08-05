@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.NielsMayer</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.joster</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.joster</contentAuthor>
 <creationDate>1212692135000</creationDate>
-<date>1243731988000</date>
-<contentUpdateDate>1243731988000</contentUpdateDate>
-<version>10.1</version>
+<date>1248573079000</date>
+<contentUpdateDate>1248573079000</contentUpdateDate>
+<version>12.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CELP</comment>
+<comment>change className from curriki-form to curriki-form1</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -150,7 +150,10 @@
        #set( $formname = "WQ" ) ##}
      #elseif( $createLessonURL == $msg.get('celp.url') ) ##{
        #set( $formname = "CELP" ) ##}
+     #elseif( $createLessonURL == $msg.get('efs.url') ) ##{
+       #set( $formname = "EFSLP" ) ##}
      #end ##}
+     ## The ICT of CELP and EFSLP already be saved in Template
      #if( $createLessonURL== $msg.get('ace.lesson.plan.url') || $createLessonURL== $msg.get('lesson.plan.url') || $createLessonURL== $msg.get('nortel.lesson.plan.url') ) ##{
        $newAsset.set("instructional_component", "curriculum_lp")
      #elseif($createLessonURL == $msg.get('wq.url')) ##{
@@ -242,7 +245,7 @@ Curriki.module.addpath.startDoneMessage();
    #set( $asseturl = "http://next.dev.curriki.org/xwiki/bin/view/${newAsset.space}/${newAsset.name}" )
    #xwikimessageboxstart(" Created $asseturl ! ")
    Visit '${newAsset.getDisplayTitle()}' in '${newAsset.space}': &lt;a href='$asseturl' target='_blank'&gt;${newAsset.space}/${newAsset.name}&lt;/a&gt;
-   &lt;form action="" class="curriki-form" id="inline" method="post"&gt;
+   &lt;form action="" class="curriki-form1" id="inline" method="post"&gt;
    &lt;button 
         onclick="try {if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); document.forms.inline.action='$msg.get("form.scratch.url")'; document.forms.inline.submit(); return false;} catch(e) {alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+'...');return false;}"
         &gt;Edit Again&lt;/button&gt;
