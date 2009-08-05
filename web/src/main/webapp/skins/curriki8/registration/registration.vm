@@ -259,7 +259,7 @@ function validateRegisterForm(){
 		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.blank_field')");
 	}
 	else if (!hasError) {
-		CurrikiJS.msgOn("validating...<img src="/xwiki/skins/curriki8/icons/spinner.gif">");
+		CurrikiJS.msgOn('validating...<img src="/xwiki/skins/curriki8/icons/spinner.gif">');
 		var url = "/xwiki/bin/view/XWiki/CheckAccountCreation";
 		var pars = 'xpage=plain&email=' + $F("XWiki.XWikiUsers_0_email") + #if($g_RegType != 'edit_profile')'&login='#else'&account=XWiki.'#end + $F("xwikiname");
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
