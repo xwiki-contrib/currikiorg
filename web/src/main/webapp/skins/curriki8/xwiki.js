@@ -340,6 +340,37 @@ function createAccordion(params) {
 
 var CurrikiJS = {
 
+	jt_ShowNoneElm: function(elm, showIt, showStyle) {
+		if (elm) {elm.style.display = showIt ? (showStyle ? showStyle : 'block') : "none";}
+	},
+
+	jt_valPx: function(pixels) {
+		return isNaN(pixels) ? 0 : pixels + "px";
+	},
+
+	jt_moveTo: function(obj, x, y) {
+		obj.style.left = CurrikiJS.jt_valPx(x);
+		obj.style.top = CurrikiJS.jt_valPx(y);
+	},
+
+	jt_winW: function() {
+		if (document.documentElement && (document.documentElement.clientWidth > 0)) {return document.documentElement.clientWidth;}
+		else if (window.innerWidth) {return window.innerWidth;}
+		else {return document.body.clientWidth;}
+	},
+
+	jt_winH: function() {
+		if (window.innerHeight) {return window.innerHeight;}
+		else if (document.documentElement && (document.documentElement.clientHeight > 0)) {return document.documentElement.clientHeight;}
+		else {return document.body.clientHeight;}
+	},
+
+	jt_scrollLeft: function() {
+		if (window.pageXOffset) {return window.pageXOffset;}
+		else if (document.documentElement && (document.documentElement.scrollLeft > 0)) {return document.documentElement.scrollLeft;}
+		else {return document.body.scrollLeft;}
+	},
+
 	jt_scrollTop: function() {
 		if (window.pageYOffset) {return window.pageYOffset;}
 		else if (document.documentElement && (document.documentElement.scrollTop > 0)) {return document.documentElement.scrollTop;}
@@ -359,6 +390,23 @@ var CurrikiJS = {
 	jt_fixE: function(ev) {
 		var e = ev ? ev : window.event;
 		return e;
+	},
+
+	msgOn: function(msg) {
+		if (!CurrikiJS.msgDIV) {
+			CurrikiJS.msgDIV = document.createElement('div');
+			CurrikiJS.msgDIV.className = "Curriki_ScrnMsg";
+			CurrikiJS.msgDIV.style.display = 'none';
+			CurrikiJS.msgDIV.style.position = Ext.isIE6 ? 'absolute' : 'fixed';
+			document.body.appendChild(CurrikiJS.msgDIV);
+		}
+		CurrikiJS.msgDIV.innerHTML = msg;
+		var x = Math.round((CurrikiJS.jt_winW() - CurrikiJS.msgDIV.offsetWidth) / 2) + (Ext.isIE6 ? CurrikiJS.jt_scrollLeft() : 0);
+		var y = 40 + (Ext.isIE6 ? CurrikiJS.jt_scrollTop() : 0);
+		CurrikiJS.jt_moveTo(CurrikiJS.msgDIV, x, y);
+		CurrikiJS.jt_ShowNoneElm(CurrikiJS.msgDIV, true);
+        clearTimeout(CurrikiJS.msgOnTimer);
+	    CurrikiJS.msgOnTimer = setTimeout(function() {CurrikiJS.jt_ShowNoneElm(CurrikiJS.msgDIV);}, 5000);
 	},
 
 	trimFields: function(aForm) {
