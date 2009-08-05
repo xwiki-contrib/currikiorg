@@ -20,15 +20,18 @@
 #if($isguest) ##{
   #if ($request.xredirect) ##{
    #set($logredir = $request.xredirect)
-  #elseif($doc.web == "Registration")
+  #elseif($doc.web == "Registration") ##}{
    #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-  #elseif($doc.fullName == "Main.WebHome")
+  #elseif($doc.fullName == "Main.WebHome") ##}{
    #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-  #elseif($logredir.contains("/login"))
+  #elseif($logredir.contains("/login")) ##}{
    #set($logredir = "")
-  #end	  
+  #end ##}
+  #if("$!logredir"!="") ##{
+    #set($logredir = "xredirect=$logredir")
+  #end ##}
 <!-- login area -->
-<form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post"> ##{
+<form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "$logredir")" method="post"> ##{
   <input type="hidden" name="srid" value="$!request.srid" />
   <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="#if("$!request.j_username" != "")$request.j_username#else${msg.get("header.login_username")}#end" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
   <input class="input password" id="j_loginpwd_placeholder" tabindex="2" type="text" value="$msg.get("header.login_password")" onfocus="showLoginPasswordInput.apply(this)"/>
