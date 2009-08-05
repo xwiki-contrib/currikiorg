@@ -66,9 +66,8 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_header $userobj $userdoc) ## {
-<ul id="asset-attribution">
-	<li id="asset-avatar">
-		<a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
+<div id="mycurriki-img">
+	<a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
 #if($userdoc.attachmentList.size()==0) ##{
 	<img src="$xwiki.getSkinFile("noavatar.png")" />
 #else ##}{
@@ -76,9 +75,8 @@ $text
 		<img src="$userdoc.getAttachmentURL($attach.filename,"download")" />
 	#end ##}
 #end ##}
-</a>
-	</li>
-</ul>
+	</a>
+</div>
 <h2>$userobj.first_name $userobj.last_name</h2>
 #end ## macro ## }
 
