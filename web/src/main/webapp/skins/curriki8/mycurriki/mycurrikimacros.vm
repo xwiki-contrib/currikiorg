@@ -431,9 +431,12 @@ $!desc
 		#elseif("$!request.mode"=="public") ##}{
 			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view")" title="$msg.get("view_profile.intro.return_button")">$msg.get("view_profile.intro.return_button")</a></span>
 		#end ##}
+		#if("$!request.mode"=="") ##{
 			<!-- My Curriki edit profile button -->
 			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
+		#end ##}
 		</div>
+		#if("$!request.mode"=="") ##{
 ## Calculate %complete
 #set($c = 3) ## login name, password, email address have to exist
 ##
@@ -491,13 +494,14 @@ $!desc
 #set($c = $c / 20)
 #set($c = "${c}%")
 ##
-		<div class="profile-push">$msg.get('view_profile.intro.percent_complete', [$c])</div>
-		#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
-		#if($!highlights) ##{
-		<div class="clearfloats"></div>
-		<div id="profile-highlighted">
-		$highlights.getTranslatedDocument().getRenderedContent()
-		</div>
+			<div class="profile-push">$msg.get('view_profile.intro.percent_complete', [$c])</div>
+			#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
+			#if($!highlights) ##{
+			<div class="clearfloats"></div>
+			<div id="profile-highlighted">
+			$highlights.getTranslatedDocument().getRenderedContent()
+			</div>
+			#end ##}
 		#end ##}
 	#end ##}
   <!-- End My Curriki edit profile button -->
