@@ -321,7 +321,6 @@ $msg.get('groups.curriculum.contributions.viewORsearch')
 </div>
 </div>
 ##
-<div id="groups-collections" class="frame">
 {pre}
 <script type="text/javascript">
 var $hidden = false;
@@ -344,7 +343,6 @@ function toggle_desc(){
 }
 </script>
 {/pre}
-
 #if($sm.isMember($spaceName, $context.user) || $hasGlobalAdmin) ##{
 #set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
 #set($multiple = ($cnt > 1))
@@ -363,6 +361,7 @@ Curriki.data.reorder = {
 </script>
 <script type="text/javascript" src="/xwiki/js/curriki-module-reorder.js"></script>
 {/pre}
+<div id="groups-collections" class="frame">
 #end ##}
 #end ##}
 
