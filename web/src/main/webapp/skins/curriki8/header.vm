@@ -29,6 +29,8 @@
   #end ##}
   #if("$!logredir"!="") ##{
     #set($logredir = "xredirect=$logredir")
+  #elseif($request.srid) ##}{
+    #set($logredir = "srid=$request.srid")
   #end ##}
 <!-- login area -->
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "$logredir")" method="post"> ##{
