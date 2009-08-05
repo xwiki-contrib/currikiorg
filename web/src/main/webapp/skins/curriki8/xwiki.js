@@ -392,7 +392,7 @@ var CurrikiJS = {
 		return e;
 	},
 
-	msgOn: function(msg) {
+	msgOn: function(msg, numSecs) {
 		if (!CurrikiJS.msgDIV) {
 			CurrikiJS.msgDIV = document.createElement('div');
 			CurrikiJS.msgDIV.className = "Curriki_ScrnMsg";
@@ -406,7 +406,9 @@ var CurrikiJS = {
 		CurrikiJS.jt_moveTo(CurrikiJS.msgDIV, x, y);
 		CurrikiJS.jt_ShowNoneElm(CurrikiJS.msgDIV, true);
         clearTimeout(CurrikiJS.msgOnTimer);
-	    CurrikiJS.msgOnTimer = setTimeout(function() {CurrikiJS.jt_ShowNoneElm(CurrikiJS.msgDIV);}, 5000);
+	    if (numSecs) {
+			CurrikiJS.msgOnTimer = setTimeout(function() {CurrikiJS.jt_ShowNoneElm(CurrikiJS.msgDIV);}, Math.Round(numSecs * 1000));
+		}
 	},
 
 	trimFields: function(aForm) {

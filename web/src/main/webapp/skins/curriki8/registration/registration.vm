@@ -140,13 +140,15 @@ function checkEmailResponse(response){
 	}
 	else {
 		CurrikiJS.formOk = true;
-		document.register.onsubmit = null;
-		CurrikiJS.msgOn('saving...<img src="/xwiki/skins/curriki8/icons/spinner.gif">');
+		//document.register.onsubmit = null;
+		CurrikiJS.msgOn('saving... <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
 		document.register.submit();
 	}
 }
 
 function validateRegisterForm(){
+	if (CurrikiJS.formOk) return true;
+
 	var hasError = false;
 	var errorMissing = false;
 	$$('#register .highlight').invoke('removeClassName', 'highlight');
@@ -259,13 +261,14 @@ function validateRegisterForm(){
 		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.blank_field')");
 	}
 	else if (!hasError) {
-		CurrikiJS.msgOn('validating...<img src="/xwiki/skins/curriki8/icons/spinner.gif">');
+		CurrikiJS.msgOn('validating... <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
 		var url = "/xwiki/bin/view/XWiki/CheckAccountCreation";
 		var pars = 'xpage=plain&email=' + $F("XWiki.XWikiUsers_0_email") + #if($g_RegType != 'edit_profile')'&login='#else'&account=XWiki.'#end + $F("xwikiname");
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
 	}
 
 	CurrikiJS.errMsgShow();
+	return false;
 }
 
 function enableEmailDesired() {
@@ -325,6 +328,7 @@ Ext.onReady(function(){
 		,hideDelay: 0
 	});
 
+/*
 	Event.observe('register', 'submit', function(event) {
 		if (!CurrikiJS.formOk) {
 			event = event || window.event;
@@ -336,6 +340,7 @@ Ext.onReady(function(){
 			validateRegisterForm();
 		}
 	});
+*/
 });
 
 window.onbeforeunload = function () {
@@ -355,7 +360,7 @@ $errMsg
 #if($g_RegType != 'edit_profile') ##{
 <div class="form-wrp">
 #end ##}
-<form id="register" name="register" action="" method="POST" enctype="multipart/form-data">
+<form id="register" name="register" action="" method="POST" enctype="multipart/form-data" onsubmit="return validateRegisterForm();">
 #if($g_RegType == 'edit_profile') ##{
 <div class="button-right">
 	<button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button>
