@@ -459,11 +459,12 @@ $!desc
 #set($x = "")#set($x = $!userobj.getProperty('affiliation').value)
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
-#set($x = "")#set($x = $!userobj.getProperty('topics').value)
-#if("$x" != "")#set($c = 1 + $c)#end
-##
-#set($x = "")#set($x = $!userobj.getProperty('educational_level').value)
-#if("$x" != "")#set($c = 1 + $c)#end
+#set($x = "")
+#set($x = $!userobj.getProperty("topics").getValue())
+#if("$x" != "" && $x.size() > 1)#set($c = 1 + $c)#end
+#set($x = "")
+#set($x = $!userobj.getProperty("educational_level").getValue())
+#if("$x" != "" && $x.size() > 0)#set($c = 1 + $c)#end
 ##
 #set($x = "")#set($x = $!userobj.getProperty('country').value)
 #if("$x" != "" && "$x" != '---')#set($c = 1 + $c)#end
