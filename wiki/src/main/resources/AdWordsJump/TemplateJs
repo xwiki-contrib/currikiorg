@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1248397933000</creationDate>
-<date>1249351875000</date>
-<contentUpdateDate>1249351875000</contentUpdateDate>
-<version>17.1</version>
+<date>1249527219000</date>
+<contentUpdateDate>1249527219000</contentUpdateDate>
+<version>18.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>improvement</comment>
+<comment>CURRIKI-4794</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -71,12 +71,14 @@ var AdWordJumpPage=Class.create({
             subject:'',
             searchText:'',
             searchTextWrapper:'',
+            searchTextAutoButton:'',
             defaultSearchText:'',
             allowEmptySearchText:true,
             emailCheck:'',
             emailCheckWrapper:'',
             email:'',
             emailWrapper:'',
+            emailAutoButton:'',
             defaultEmailText:'',
             searchButton:'',
             emailButton:'',
@@ -130,17 +132,25 @@ var AdWordJumpPage=Class.create({
     attachEvents:function(){
         var caller=this;
         if(caller.options.searchText&amp;&amp;$(caller.options.searchText)){
-            $(caller.options.searchText).setValue(caller.options.defaultSearchText);
+            var search=$(caller.options.searchText);
+            search.setValue(caller.options.defaultSearchText);
             Event.observe(caller.options.searchText,'focus',function(){
                 if($F(caller.options.searchText)==caller.options.defaultSearchText){
-                    $(caller.options.searchText).setValue('');
+                    search.setValue('');
                 }
             });
             Event.observe(caller.options.searchText,'blur',function(){
                 if(!$F(caller.options.searchText)){
-                    $(caller.options.searchText).setValue(caller.options.defaultSearchText);
+                    search.setValue(caller.options.defaultSearchText);
                 }
             });
+            if(caller.options.searchTextAutoButton&amp;&amp;$(caller.options.searchTextAutoButton)){
+                Event.observe(caller.options.searchText,'keypress',function(event){
+                    if(event.keyCode==Event.KEY_RETURN){
+                        caller.getButtonFunction(caller.options.searchTextAutoButton).apply(caller);
+                    }
+                });
+            }
         }
         if(caller.options.email&amp;&amp;$(caller.options.email)){
             var email=$(caller.options.email);
@@ -160,6 +170,13 @@ var AdWordJumpPage=Class.create({
                 email_button.disabled=!$F(caller.options.emailCheck);
                 Event.observe(caller.options.emailCheck,'click',function(){
                     email_button.disabled=!$F(caller.options.emailCheck);
+                });
+            }
+            if(caller.options.emailAutoButton&amp;&amp;$(caller.options.emailAutoButton)){
+                Event.observe(caller.options.email,'keypress',function(event){
+                    if(event.keyCode==Event.KEY_RETURN){
+                        caller.getButtonFunction(caller.options.emailAutoButton).apply(caller);
+                    }
                 });
             }
         }
@@ -420,6 +437,21 @@ var AdWordJumpPage=Class.create({
                 }
             }
         }
+    },
+    getButtonFunction:function(buttonId){
+        if(buttonId==this.options.searchButton){
+            return this.searchSubmit;
+        }
+        if(buttonId==this.options.emailButton){
+            return this.emailSubmit;
+        }
+        if(buttonId==this.options.searchAndEmailButton){
+            return this.searchAndEmailSubmit;
+        }
+        if(buttonId==this.options.autoDecideButton){
+            return this.autoDecideSubmit;
+        }
+        return null;
     }
 });
 &lt;/script&gt;

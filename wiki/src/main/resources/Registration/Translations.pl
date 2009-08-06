@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.mzielinski</contentAuthor>
 <creationDate>1249077764000</creationDate>
-<date>1249077764000</date>
-<contentUpdateDate>1249077764000</contentUpdateDate>
-<version>1.1</version>
+<date>1249581654000</date>
+<contentUpdateDate>1249581654000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Polish -registration</comment>
+<comment>Registration - few fixes to polish</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -299,30 +299,30 @@ emailValidation.step2.errNotBounced=E-mail nie odpowiada.
 #SEND TO A FRIEND DIALOG
 
 staf.dialog.title=Powiadom znajomego.
-staf.dialog.recipients=Email address(es) for recipient(s):
-staf.dialog.recipients.comments=Separate multiple email addresses with a comma.
-staf.dialog.customize=Customize message (optional):
-staf.dialog.customize.default=Here's a great resource I found at Curriki (a global education and learning community) that I thought you would enjoy.
-staf.dialog.yourname=Your name:
-staf.dialog.ccme=Send me a copy
-staf.dialog.youremail=Your email address:
-staf.dialog.privacy=Your email address is used to tell your friends who sent them this link. Email addresses for friends are only used to transmit this email. We do not store or use the email addresses entered or the data transmitted for any purpose. Please see the &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Privacy Policy&lt;/a&gt; for more information.
-staf.dialog.cancel=Cancel
-staf.dialog.send=Send
-staf.dialog.shouldcancel=Entered information will be lost. Are you sure you want to close?
+staf.dialog.recipients=Komu chcesz wysłać powiadomienie?:
+staf.dialog.recipients.comments=Oddziel poszczególne adresy e-mail przecinkiem.
+staf.dialog.customize=Dostosuj wiadomość (opcjonalne):
+staf.dialog.customize.default=Te materiały znalazłem na Curriki (globalnym repozytorium materiałów edukacyjnych) i myślę, że mogą Ci się przydać.
+staf.dialog.yourname=Twoje imię:
+staf.dialog.ccme=Wyślij jedną kopię do mnie
+staf.dialog.youremail=Twój adres e-mail:
+staf.dialog.privacy=Twój e-mail jest wykorzystywany po to by Twoi znajomi wiedzieli, kto wysłał tę wiadomość. Podany tu adres e-mail nie zostanie przez nas zapisany ani wykorzystany przez nas, lub kogokolwiek innego w jakimkolwiek innym celu. Przejrzyj &lt;a href="/xwiki/bin/view/Main/PrivacyPolicy"&gt;Politykę Prywatności&lt;/a&gt; jeśli potrzebujesz dokładniejszych informacji.
+staf.dialog.cancel=Anuluj
+staf.dialog.send=Wyślij
+staf.dialog.shouldcancel=Wprowadzone informacje zostaną utracone. Czy na pewno chcesz opuścić tę stronę?
 
 staf.from=sendtoafriend@curriki.org
 
-staf.sent.okaymsg=E-mail sent.
-staf.err.emptyto=Please enter an email address.
-staf.err.invalidemail=Please enter a valid email address.
-staf.err.isguest=Only Curriki members can send resources to a friend. Please log in or become a member.
-staf.sent.errored=An unknown error has occurred.
+staf.sent.okaymsg=Wysłano e-mail.
+staf.err.emptyto=Proszę wprowadź adres e-mail.
+staf.err.invalidemail=Wprowadź poprawny adres e-mail.
+staf.err.isguest=Tylko członkowie Curriki mogą przesyłać materiały do znajomych. Zaloguj się lub dołącz do nas.
+staf.sent.errored=Wystąpił nieznany błąd.
 
 ##AFFILIATE REGISTRATION ERROR MESSAGES
-partnerrigestration.validkey.invalid=We were unable to validate your partner key. 
+partnerrigestration.validkey.invalid=Nie byliśmy w stanie potwierdzić kodu Twojego partnera. 
 
-partnerrigestration.parnter.notexist=The Affiliate Partner does not exist in our database. Please contact the webmaster.
+partnerrigestration.parnter.notexist=Załączony Partner nie funkcjonuje w naszej bazie danych. Skontaktuj się z administratorem strony.
 
 
 #OLD REGISTRATION/PROFILE TRANS KEYS TO BE REMOVED AFTER 1.8.5 LOGIN RELEASE
