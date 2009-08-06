@@ -358,12 +358,16 @@ data.init = function(){
 		}
 
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
-			if (value != "") {
+			if (value != "" && value != "0" && value != 0) {
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
 
-				metadata.css = String.format('rating-{0}', value);
-				return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+				if (ratingCount != "" && ratingCount != "0" && ratingCount != 0) {
+					metadata.css = String.format('rating-{0}', value);
+					return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+				} else {
+					return String.format('');
+				}
 			} else {
 				return String.format('');
 			}
