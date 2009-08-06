@@ -411,6 +411,11 @@ var CurrikiJS = {
 		}
 	},
 
+	msgOff: function() {
+		CurrikiJS.jt_ShowNoneElm(CurrikiJS.msgDIV);
+		CurrikiJS.msgDIV.innerHTML = '';
+	},
+
 	trimFields: function(aForm) {
 		for (var i=0; i<aForm.elements.length; i++) {
 			if ((aForm.elements[i].type == 'text') || (aForm.elements[i].type == 'textarea')) {
