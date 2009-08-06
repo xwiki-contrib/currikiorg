@@ -270,7 +270,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 1 $msg.get("myBlog.editEntry", [$currikiTitle])
 #end ## }
 <div class="edit-blog">
-<form action="$bentrydoc.getURL("save")" method="post">
+<form name="inline" action="$bentrydoc.getURL("save")" method="post">
 #else
 #if($inmycurriki == 1) ## {
 #curriki_titlebar($msg.get("myBlog.createEntry") "" "" "blue")
@@ -287,7 +287,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 #if($inmycurriki == 0) ## {
 1 $msg.get("myBlog.createEntry")
 #end ## }
-<form method="post">
+<form name="inline" method="post">
 <input type="hidden" name="page" value="$bentrydoc.fullName" />
 <input type="hidden" name="docspace" value="$space" />
 #end

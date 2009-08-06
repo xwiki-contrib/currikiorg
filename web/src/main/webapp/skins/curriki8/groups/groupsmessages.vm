@@ -873,7 +873,7 @@ $msg.get("groups_messages_create_about_infotxt")
 #set($junk = $bentrydoc.use($bentryobj))
 #set($cancelAction = $xwiki.getURL("${doc.space}.Messages", "view"))
 #set($saveAction = "")
-<form action="$saveAction" method="post">
+<form name="inline" action="$saveAction" method="post">
 <input type="hidden" name="page" value="$bentrydoc.fullName" />
 <div class="fields">
 *$msg.get("groups_messages_create_messagetitle_instruction")*
