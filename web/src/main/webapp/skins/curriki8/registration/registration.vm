@@ -142,7 +142,7 @@ function checkEmailResponse(response){
 	else {
 		CurrikiJS.formOk = true;
 		//document.register.onsubmit = null;
-		CurrikiJS.msgOn('saving... <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		CurrikiJS.msgOn('$msg.get('register.account.saving.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
 		document.register.submit();
 	}
 }
@@ -262,7 +262,7 @@ function validateRegisterForm(){
 		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.blank_field')");
 	}
 	else if (!hasError) {
-		CurrikiJS.msgOn('validating... <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		CurrikiJS.msgOn('$msg.get('register.account.validating.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
 		var url = "/xwiki/bin/view/XWiki/CheckAccountCreation";
 		var pars = 'xpage=plain&email=' + $F("XWiki.XWikiUsers_0_email") + #if($g_RegType != 'edit_profile')'&login='#else'&account=XWiki.'#end + $F("xwikiname");
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
@@ -412,6 +412,7 @@ function initRTEs() {
 		theme_advanced_resizing : true
 	});
 }
+
 if (Ext.isIE6) {
 	CurrikiJS.jt_AddListener(window, 'load', initRTEs);
 }
