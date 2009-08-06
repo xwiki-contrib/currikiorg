@@ -394,7 +394,7 @@ $errMsg
 <script type="text/javascript">
 /* <![CDATA[ */
 #if($g_RegType == 'edit_profile') ##{
-CurrikiJS.jt_AddListener(window, 'load', function() {
+function initRTEs() {
 	tinyMCE.init({
 		language: "en",
 		mode: "exact",
@@ -411,7 +411,11 @@ CurrikiJS.jt_AddListener(window, 'load', function() {
 		theme_advanced_statusbar_location : "",
 		theme_advanced_resizing : true
 	});
-});
+}
+if (Ext.isIE6) {
+	CurrikiJS.jt_AddListener(window, 'load', initRTEs);
+}
+else initRTEs();
 #end ##}
 
 document.observe('dom:loaded', function(){
