@@ -35,6 +35,12 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
 #error($message)
 </div>
 #end ##}
+#set($redirectnote = $xwiki.getDocument("Main.RedirectNote"))
+#if($!redirectnote) ##{
+<div id="redirect-note">
+$redirectnote.getTranslatedDocument().getRenderedContent()
+</div>
+#end ##}
 <div id="whyjoin">
 $xwiki.getDocument("Main.WhyJoin").getTranslatedDocument().getRenderedContent()
 </div>
