@@ -609,6 +609,14 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                                 </td>
                                 <td>
                                     #asset_info_edlevel($asset false)
+                                    #set($generated = $!asset.getValue("generated_keywords"))
+                                    #if("$!generated" != "") ##{
+                                        <ul id="info-edlevel-generated" style="display: none;">
+                                            #foreach($keyword in $generated.split(" ")) ##{
+                                                <li>$keyword</li>
+                                            #end ##}
+                                        </ul>
+                                    #end ##}
                                 </td>
                             </tr>
                         </table>
