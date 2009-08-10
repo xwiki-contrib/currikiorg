@@ -454,6 +454,14 @@ var CurrikiJS = {
 		}
 	},
 
+	<!-- AddThis Button BEGIN -->
+<a href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4a8086066c9ce99e" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()"></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?pub=xa-4a8086066c9ce99e"></script>
+<!-- AddThis Button END -->
+
+	addThisLink: function() {
+		document.writeln('<a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, \'\', \'[URL]\', \'[TITLE]\')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="' + _('rve.title.function.email.icon.rollover') + '" class="addThisLink"><img src="http://s7.addthis.com/static/btn/sm-share-en.gif" width="83" height="16" alt="Bookmark and Share" style="border:0"/></a>');
+	},
+
 	validEmail: function(emailStr) {
 		// return true if 'emailStr' has valid email address format; from jt_.js, wingo.com
 		var emailPat=/^(.+)@(.+)$/

@@ -24,3 +24,20 @@ All content licensed <a href="http://creativecommons.org/about/licenses/meet-the
 #if("$!g_enable_STAF" != "" && $g_enable_STAF) ##{
 #template('staf.vm')
 #end ##}
+#set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
+#if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
+<script type="text/javascript">
+var addthis_config = {
+	username: "${ADDTHIS_acct}",
+	ui_cobrand: 'Curriki',
+	services_exclude: 'print',
+	services_compact: 'email, digg, facebook, twitter, aim, delicious, google, linkedin, myspace, favorites, more',
+	ui_header_color: "#ffffff",
+	ui_header_background: "#4e83c7",
+	ui_delay:200,
+	ui_offset_top: 5,
+	ui_offset_left: 5
+}
+</script>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+#end ##}
