@@ -98,6 +98,10 @@ public interface Constants {
     String ASSET_CLASS_RATING_COUNT = "rating_count";
     String ASSET_CLASS_RATING_SUM = "rating_sum";
 
+    // Generated Keyword field
+    String ASSET_CLASS_GENERATED_KEYWORDS = "generated_keywords";
+    String ASSET_CLASS_GENERATED_KEYWORDS_TRANS_PREFIX = "curriki.tags.";
+
     /**
      *    Class AssetLicenseClass
      */

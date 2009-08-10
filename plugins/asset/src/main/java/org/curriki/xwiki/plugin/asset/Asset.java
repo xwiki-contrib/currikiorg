@@ -265,6 +265,42 @@ public class Asset extends CurrikiDocument {
         saveDocument(comment, false);
     }
 
+    protected void saveDocument(String comment, boolean minorEdit) throws XWikiException
+    {
+        //CURRIKI-4838 - hidden generated tags field for synonyms of educational levels
+        BaseObject assetObj = getDoc().getObject(Constants.ASSET_CLASS);
+        if (assetObj!=null) {
+            String keywords = "";
+
+            Map<String,Boolean> usedKeys = new HashMap<String,Boolean>();
+            List<String> edLevels = assetObj.getListValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL);
+
+            if (edLevels != null && !edLevels.isEmpty()) {
+                boolean first = true;
+                for (String level : edLevels) {
+                    String lookupKey = Constants.ASSET_CLASS_GENERATED_KEYWORDS_TRANS_PREFIX+level;
+                    String ed_keywords = context.getMessageTool().get(lookupKey);
+                    if (ed_keywords.length()>0 && !ed_keywords.equals(lookupKey)) {
+                        for (String word : ed_keywords.split(" ")) {
+                            if (word.length()>0 && !usedKeys.containsKey(word)) {
+                                usedKeys.put(word, true);
+                                keywords += (first?"":" ")+word;
+                                if (first) {
+                                    first = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Store generated keywords
+            assetObj.setStringValue(Constants.ASSET_CLASS_GENERATED_KEYWORDS, keywords);
+        } // else { ERROR: This doesn't seem to be an asset }
+
+        super.saveDocument(comment, minorEdit);
+    }
+
     public static Asset createTempAsset(String parentAsset, XWikiContext context) throws XWikiException {
         return createTempAsset(parentAsset, null, context);
     }
