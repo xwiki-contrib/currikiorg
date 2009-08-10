@@ -1039,7 +1039,7 @@ Curriki.module.addpath.init = function(){
 									,width:'60%'
 									,listeners:{
 										render:function(comp){
-											comp.findParentByType('apSRI2').on('show', function() {
+											comp.findParentByType('apSRI1').on('show', function() {
 												if (!Ext.isEmpty(Curriki.current.metadata)) {
 													var md = Curriki.current.metadata;
 
