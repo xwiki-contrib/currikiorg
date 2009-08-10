@@ -1001,6 +1001,60 @@ Curriki.module.addpath.init = function(){
 								}]
 							}]
 
+		// Keywords
+							},{
+								 border:false
+								,items:[{
+									 xtype:'box'
+									,autoEl:{
+										 tag:'div'
+										,id:'metadata-keywords'
+										,cls:'information-header'
+										,children:[{
+											 tag:'span'
+											,id:'metadata-keywords-title'
+											,cls:'metadata-title'
+											,html:_('sri.keywords_title')
+										},{
+											 tag:'img'
+											,id:'metadata-keywords-info'
+											,cls:'metadata-tooltip'
+											,src:Curriki.ui.InfoImg
+											,qtip:_('sri.keywords_tooltip')
+										}]
+									}
+								},{
+									 xtype:'box'
+									,autoEl:{
+										 tag:'div'
+										,html:_('sri.keywords_txt')
+										,cls:'directions'
+									}
+								},{
+									 xtype:'textfield'
+									,id:'metadata-keywords-entry'
+									,name:'keywords'
+									,emptyText:_('sri.keywords.empty_msg')
+									,hideLabel:true
+									,width:'60%'
+									,listeners:{
+										render:function(comp){
+											comp.findParentByType('apSRI2').on('show', function() {
+												if (!Ext.isEmpty(Curriki.current.metadata)) {
+													var md = Curriki.current.metadata;
+
+													if (!Ext.isEmpty(md.keywords)){
+														if (Ext.isArray(md.keywords)){
+															md.keywords = md.keywords.join(' ');
+														}
+														Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
+													}
+												}
+											})
+										}
+									}
+								}]
+
 		// Instructional Component Type
 						},{
 							 xtype:'box'
@@ -1285,60 +1339,6 @@ Curriki.module.addpath.init = function(){
 									 xtype:'checkbox'
 									,name:'hidden_from_search'
 									,boxLabel:_('sri.hidden_from_search_after')
-								}]
-
-		// Keywords
-							},{
-								 border:false
-								,items:[{
-									 xtype:'box'
-									,autoEl:{
-										 tag:'div'
-										,id:'metadata-keywords'
-										,cls:'information-header'
-										,children:[{
-											 tag:'span'
-											,id:'metadata-keywords-title'
-											,cls:'metadata-title'
-											,html:_('sri.keywords_title')
-										},{
-											 tag:'img'
-											,id:'metadata-keywords-info'
-											,cls:'metadata-tooltip'
-											,src:Curriki.ui.InfoImg
-											,qtip:_('sri.keywords_tooltip')
-										}]
-									}
-								},{
-									 xtype:'box'
-									,autoEl:{
-										 tag:'div'
-										,html:_('sri.keywords_txt')
-										,cls:'directions'
-									}
-								},{
-									 xtype:'textfield'
-									,id:'metadata-keywords-entry'
-									,name:'keywords'
-									,emptyText:_('sri.keywords.empty_msg')
-									,hideLabel:true
-									,width:'60%'
-									,listeners:{
-										render:function(comp){
-											comp.findParentByType('apSRI2').on('show', function() {
-												if (!Ext.isEmpty(Curriki.current.metadata)) {
-													var md = Curriki.current.metadata;
-
-													if (!Ext.isEmpty(md.keywords)){
-														if (Ext.isArray(md.keywords)){
-															md.keywords = md.keywords.join(' ');
-														}
-														Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
-													}
-												}
-											})
-										}
-									}
 								}]
 
 		// Language
