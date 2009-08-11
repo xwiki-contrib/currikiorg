@@ -234,7 +234,9 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 #if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
 #set($g_enable_STAF = true)
+{pre}
 <a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
+{/pre}
 #else
 ## #sep()
 <a class="curriki-link" href="$bentrydoc.getURL("view")" >$msg.get("myBlog.permalink")</a>
