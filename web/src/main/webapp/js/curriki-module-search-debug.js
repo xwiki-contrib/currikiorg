@@ -1248,7 +1248,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,{id: 'tempCURRIKI4826', layout: 'fit', items: [form.resultsPanel]}
+			,{cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
@@ -1763,7 +1763,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,form.resultsPanel
+			,{cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
@@ -2256,7 +2256,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,form.resultsPanel
+			,{cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
@@ -2479,7 +2479,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,form.resultsPanel
+			,{cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
@@ -2679,7 +2679,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,form.resultsPanel
+			,{cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
