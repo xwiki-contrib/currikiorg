@@ -565,7 +565,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,form.resultsPanel
+			,{layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
