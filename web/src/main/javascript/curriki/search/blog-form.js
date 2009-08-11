@@ -119,7 +119,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,{cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
+			,{xtype: 'panel', cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
