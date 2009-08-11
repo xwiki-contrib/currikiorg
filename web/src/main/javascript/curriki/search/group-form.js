@@ -295,7 +295,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,{xtype: 'panel', cls: 'searchResultsWrap', layout: 'fit', items: [form.resultsPanel]}
+			,form.resultsPanel
 		]
 	};
 
