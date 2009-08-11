@@ -1248,7 +1248,7 @@ form.init = function(){
 		,autoHeight:true
 		,items:[
 			form.filterPanel
-			,{layout: 'fit', items: [form.resultsPanel]}
+			,{id: 'tempCURRIKI4826', layout: 'fit', items: [form.resultsPanel]}
 		]
 	};
 
