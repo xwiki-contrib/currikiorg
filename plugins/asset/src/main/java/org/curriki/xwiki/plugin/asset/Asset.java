@@ -357,6 +357,32 @@ public class Asset extends CurrikiDocument {
             newLicenceObj = assetDoc.getDoc().newObject(Constants.ASSET_LICENCE_CLASS, context);
         }
 
+        // CURRIKI-4837 - Make sure group rights are used by default
+        if (publishSpace != null && publishSpace.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
+            String groupSpace = publishSpace.replaceFirst("^"+Constants.GROUP_COLLECTION_SPACE_PREFIX, Constants.GROUP_SPACE_PREFIX);
+            String rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
+
+            // TODO: This should probably be using the SpaceManager extension
+            XWikiDocument groupSpaceDoc = context.getWiki().getDocument(groupSpace+"."+Constants.GROUP_RIGHTS_PAGE, context);
+            if (groupSpaceDoc != null){
+                // Note that the values for the group access defaults
+                //  DO NOT MATCH the values that need to be applied to the collection
+                BaseObject rObj = groupSpaceDoc.getObject(Constants.GROUP_RIGHTS_CLASS);
+                if (rObj != null){
+                    String groupDefaultPrivs = rObj.getStringValue(Constants.GROUP_RIGHTS_PROPERTY);
+                    if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PRIVATE)){
+                        rights = Constants.ASSET_CLASS_RIGHT_PRIVATE;
+                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PROTECTED)){
+                        rights = Constants.ASSET_CLASS_RIGHT_MEMBERS;
+                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PUBLIC)){
+                        rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
+                    }
+                }
+            }
+
+            assetDoc.getDoc().getObject(Constants.ASSET_CLASS).setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
+        }
+
         // Rights Holder should be by default the pretty name of the user added with the current rights holder (only if not already in the list)
         String newRightsHolder = context.getWiki().getLocalUserName(context.getUser(), null, false, context);
         String origRightsHolder = copyDoc.getDoc().getStringValue(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER);
@@ -821,7 +847,7 @@ public class Asset extends CurrikiDocument {
             assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
         }
 
-	boolean licenceSet = false;
+        boolean licenceSet = false;
         BaseObject newLicenceObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
         if (newLicenceObj == null) {
             newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
