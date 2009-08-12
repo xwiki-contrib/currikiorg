@@ -1985,6 +1985,23 @@ Curriki.module.addpath.init = function(){
 			var pageCreated = (Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName;
 			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.flowFolder+'/'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')+'/'+pageCreated.replace('.', '/'));
 
+			Ext.ns('Curriki.settings');
+			switch (Curriki.current.flow) {
+				// If flow in [ABDRIO],Copy then fetch collections for add link
+				case 'A':
+				case 'B':
+				case 'D':
+				case 'R':
+				case 'I':
+				case 'O':
+				case 'Copy':
+					Curriki.settings.localCollectionFetch = false;
+					Curriki.data.user.gotCollections = false;
+					break;
+
+				default:
+					break;
+			}
 			Curriki.init(function(){
 				var p = Ext.ComponentMgr.create({
 					 xtype:'apDone'+Curriki.current.flow+Curriki.current.flowFolder
@@ -2781,27 +2798,29 @@ Curriki.module.addpath.init = function(){
 					// Check if the user has any personal or group collections
 					// If so, determine location to put the copy
 					// If not, then use old procedure
-					if (Curriki.data.user.collectionChildren.length > 0
-						|| Curriki.data.user.groupChildren.length > 0){
-						Curriki.current.flow = 'Copy2';
-						next = 'apCopyLocation';
-						AddPath.ShowNextDialogue(next);
-					} else {
-						next = 'apSRI1';
-						Curriki.assets.CopyAsset(
-							Curriki.current.copyOf,
-							Curriki.current.publishSpace,
-							function(asset){
-									console.log("CopyAsset CB: ", asset);
-									Curriki.current.asset = asset;
-									callback = function(){AddPath.ShowNextDialogue(next);};
-									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-										Curriki.current.metadata = metadata;
-										callback();
-									});
-							}
-						);
-					}
+					Curriki.data.user.GetCollections(function(){
+						if (Curriki.data.user.collectionChildren.length > 0
+							|| Curriki.data.user.groupChildren.length > 0){
+							Curriki.current.flow = 'Copy2';
+							next = 'apCopyLocation';
+							AddPath.ShowNextDialogue(next);
+						} else {
+							next = 'apSRI1';
+							Curriki.assets.CopyAsset(
+								Curriki.current.copyOf,
+								Curriki.current.publishSpace,
+								function(asset){
+										console.log("CopyAsset CB: ", asset);
+										Curriki.current.asset = asset;
+										callback = function(){AddPath.ShowNextDialogue(next);};
+										Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+											Curriki.current.metadata = metadata;
+											callback();
+										});
+								}
+							);
+						}
+					});
 					return;
 					break;
 
@@ -2926,7 +2945,9 @@ Curriki.module.addpath.init = function(){
 					// We should be getting the current one passed in
 					// Shows CTV
 					console.log('Starting path:', Curriki.current.flow);
-					Curriki.ui.show('apLocation');
+					Curriki.data.user.GetCollections(function(){
+						Curriki.ui.show('apLocation');
+					});
 					return;
 					break;
 
@@ -2996,8 +3017,8 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 		current.copyOfAssetType = options.copyOfAssetType||current.copyOfAssetType;
 	}
 
-//	Ext.ns('Curriki.settings');
-//	Curriki.settings.localCollectionFetch = true;
+	Ext.ns('Curriki.settings');
+	Curriki.settings.localCollectionFetch = true;
 
 	Curriki.init(function(){
 		if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){

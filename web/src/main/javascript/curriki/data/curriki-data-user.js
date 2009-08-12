@@ -12,16 +12,23 @@ Curriki.data.user = {
 	,collectionChildren:[]
 	,groupChildren:[]
 
+	,gotCollections:false
+
 	,json_prefix:'/xwiki/curriki/users/'
 	,user_try:0
 	,GetUserinfo:function(callback){
-		if (!Ext.isEmpty(Curriki.global.username)
+		if (!Ext.isEmpty(Curriki.global)
+		    && !Ext.isEmpty(Curriki.global.username)
 		    && !Ext.isEmpty(Curriki.global.fullname)) {
 			this.me = {
 				'username':Curriki.global.username
 				,'fullname':Curriki.global.fullname
 			};
-			this.GetCollections(callback);
+			if (Curriki.settings&&Curriki.settings.localCollectionFetch){
+				callback();
+			} else {
+				this.GetCollections(callback);
+			}
 		} else {
 			this.user_try++;
 			Ext.Ajax.request({
@@ -46,7 +53,11 @@ Curriki.data.user = {
 					} else {
 						this.user_try = 0;
 						this.me = o;
-						(Curriki.settings&&Curriki.settings.localCollectionFetch)||this.GetCollections(callback);
+						if (Curriki.settings&&Curriki.settings.localCollectionFetch){
+							callback();
+						} else {
+							this.GetCollections(callback);
+						}
 					}
 				}
 				,failure:function(response, options){
@@ -59,41 +70,47 @@ Curriki.data.user = {
 
 	,collection_try:0
 	,GetCollections:function(callback){
-		this.collection_try++;
-		Ext.Ajax.request({
-			 url: this.json_prefix+this.me.username+'/collections'
-			,method:'GET'
-			,disableCaching:true
-			,headers: {
-				'Accept':'application/json'
-			}
-			,scope:this
-			,success:function(response, options){
-				var json = response.responseText;
-				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot read user\'s collection information');
-					if (this.collection_try < 5){
-						this.GetCollections(callback);
+		if (Curriki.data.user.gotCollections){
+			// Already have collections
+			callback();
+		} else {
+			this.collection_try++;
+			Ext.Ajax.request({
+				 url: this.json_prefix+this.me.username+'/collections'
+				,method:'GET'
+				,disableCaching:true
+				,headers: {
+					'Accept':'application/json'
+				}
+				,scope:this
+				,success:function(response, options){
+					var json = response.responseText;
+					var o = json.evalJSON(true);
+					if(!o) {
+						console.warn('Cannot read user\'s collection information');
+						if (this.collection_try < 5){
+							this.GetCollections(callback);
+						} else {
+							console.error('Cannot get user\'s collection information', response, options);
+							alert(_('add.servertimedout.message.text'));
+						}
 					} else {
-						console.error('Cannot get user\'s collection information', response, options);
-						alert(_('add.servertimedout.message.text'));
+						this.collection_try = 0;
+						this.gotCollections = true;
+						this.collections = o;
+						this.collectionChildren = this.CreateCollectionChildren();
+	console.log('Collections: ', this.collectionChildren);
+						this.GetGroups(callback);
 					}
-				} else {
-					this.collection_try = 0;
-					this.collections = o;
-					this.collectionChildren = this.CreateCollectionChildren();
-console.log('Collections: ', this.collectionChildren);
+				}
+				,failure:function(response, options){
+					console.error('Cannot get user\'s collection information', response, options);
+					alert(_('add.servertimedout.message.text'));
+					this.collections = [];
 					this.GetGroups(callback);
 				}
-			}
-			,failure:function(response, options){
-				console.error('Cannot get user\'s collection information', response, options);
-				alert(_('add.servertimedout.message.text'));
-				this.collections = [];
-				this.GetGroups(callback);
-			}
-		});
+			});
+		}
 	}
 
 	,group_try:0
