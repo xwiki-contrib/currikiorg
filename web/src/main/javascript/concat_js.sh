@@ -143,6 +143,8 @@ cat $FLAG | $COMPRESS_JS > ../webapp/js/curriki-module-flag.js
 
 
 VIDITALK="\
+	../webapp/skins/curriki8/js/viditalk_stub.js \
+	../webapp/skins/curriki8/js/vidiembed_curiki.js \
 	"
 
 MERGED="$I18N $VIDITALK $CURRIKI $ADDPATH $ORGANIZE $NOMINATE $REVIEW $UNNOMINATE $PARTNER $ASTERIXREVIEW $FLAG"

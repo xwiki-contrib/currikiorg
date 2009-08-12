@@ -41,10 +41,10 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 ## If using xwiki standalone you need to uncomment the line
 ##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&lang=${lang}"></script>
 ## and comment the next one out instead
-<script src="/js/$gVersion/lang_${lang}.js"></script>
+<script src="/js/${gVersion}/lang_${lang}.js"></script>
 
 #if("$!debugging" == "") ##{
-<script src="/xwiki/js/$gVersion/curriki-merged.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-merged.js"></script>
 #else ##}{
 <script src="/xwiki/js/i18n.js"></script>
 <script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
