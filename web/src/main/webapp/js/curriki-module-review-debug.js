@@ -59,4 +59,4 @@ Curriki.module.review.validateCRS = function(appropriatepedagogyName,contentaccu
 	}
 
 	return true;
-}
+};
