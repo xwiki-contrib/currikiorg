@@ -1985,7 +1985,18 @@ Curriki.module.addpath.init = function(){
 			var pageCreated = (Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName;
 			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.flowFolder+'/'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')+'/'+pageCreated.replace('.', '/'));
 
+			var displayDone = function(){
+				var p = Ext.ComponentMgr.create({
+					 xtype:'apDone'+Curriki.current.flow+Curriki.current.flowFolder
+					,id:'done-dialogue'
+				});
+				p.show();
+				Ext.ComponentMgr.register(p);
+			};
+
 			Ext.ns('Curriki.settings');
+			Curriki.settings.localCollectionFetch = true;
+
 			switch (Curriki.current.flow) {
 				// If flow in [ABDRIO],Copy then fetch collections for add link
 				case 'A':
@@ -1995,21 +2006,19 @@ Curriki.module.addpath.init = function(){
 				case 'I':
 				case 'O':
 				case 'Copy':
-					Curriki.settings.localCollectionFetch = false;
-					Curriki.data.user.gotCollections = false;
+					Curriki.init(function(){
+						Curriki.data.user.GetCollections(function(){
+							displayDone();
+						});
+					});
 					break;
 
 				default:
+					Curriki.init(function(){
+						displayDone();
+					});
 					break;
 			}
-			Curriki.init(function(){
-				var p = Ext.ComponentMgr.create({
-					 xtype:'apDone'+Curriki.current.flow+Curriki.current.flowFolder
-					,id:'done-dialogue'
-				});
-				p.show();
-				Ext.ComponentMgr.register(p);
-			});
 		}
 
 
