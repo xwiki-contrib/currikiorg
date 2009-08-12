@@ -15,37 +15,46 @@ Curriki.data.user = {
 	,json_prefix:'/xwiki/curriki/users/'
 	,user_try:0
 	,GetUserinfo:function(callback){
-		this.user_try++;
-		Ext.Ajax.request({
-			 url: this.json_prefix+'me'
-			,method:'GET'
-			,disableCaching:true
-			,headers: {
-				'Accept':'application/json'
-			}
-			,scope:this
-			,success:function(response, options){
-				var json = response.responseText;
-				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot get user information');
-					if (this.user_try < 5){
-						this.GetUserinfo(callback);
-					} else {
-						console.error('Cannot get user information', response, options);
-						alert(_('add.servertimedout.message.text'));
-					}
-				} else {
-					this.user_try = 0;
-					this.me = o;
-					this.GetCollections(callback);
+		if (!Ext.isEmpty(Curriki.global.username)
+		    && !Ext.isEmpty(Curriki.global.fullname)) {
+			this.me = {
+				'username':Curriki.global.username
+				,'fullname':Curriki.global.fullname
+			};
+			this.GetCollections(callback);
+		} else {
+			this.user_try++;
+			Ext.Ajax.request({
+				 url: this.json_prefix+'me'
+				,method:'GET'
+				,disableCaching:true
+				,headers: {
+					'Accept':'application/json'
 				}
-			}
-			,failure:function(response, options){
-				console.error('Cannot get user information', response, options);
-				alert(_('add.servertimedout.message.text'));
-			}
-		});
+				,scope:this
+				,success:function(response, options){
+					var json = response.responseText;
+					var o = json.evalJSON(true);
+					if(!o) {
+						console.warn('Cannot get user information');
+						if (this.user_try < 5){
+							this.GetUserinfo(callback);
+						} else {
+							console.error('Cannot get user information', response, options);
+							alert(_('add.servertimedout.message.text'));
+						}
+					} else {
+						this.user_try = 0;
+						this.me = o;
+						(Curriki.settings&&Curriki.settings.localCollectionFetch)||this.GetCollections(callback);
+					}
+				}
+				,failure:function(response, options){
+					console.error('Cannot get user information', response, options);
+					alert(_('add.servertimedout.message.text'));
+				}
+			});
+		}
 	}
 
 	,collection_try:0

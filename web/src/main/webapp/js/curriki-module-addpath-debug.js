@@ -2409,7 +2409,7 @@ Curriki.module.addpath.init = function(){
 										 text:Curriki.current.copyOfTitle||'UNKNOWN'
 										,id:'ctv-target-node'
 										,assetName:Curriki.current.copyOf
-										,cls:'ctv-target ctv-resource resource-'+'UNKNOWN'
+										,cls:'ctv-target ctv-resource resource-'+(Curriki.current.copyOfAssetType||'UNKNOWN')
 										,leaf:true
 									}]
 								})
@@ -2993,7 +2993,11 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 		current.assetType = options.assetType||current.assetType;
 		current.parentTitle = options.parentTitle||current.parentTitle;
 		current.copyOfTitle = options.copyOfTitle||current.copyOfTitle;
+		current.copyOfAssetType = options.copyOfAssetType||current.copyOfAssetType;
 	}
+
+//	Ext.ns('Curriki.settings');
+//	Curriki.settings.localCollectionFetch = true;
 
 	Curriki.init(function(){
 		if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
@@ -3025,11 +3029,13 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 
 		var copyOfFn;
 		if (!Ext.isEmpty(current.copyOf)
-		    && Ext.isEmpty(current.copyOfTitle)) {
+		    && (Ext.isEmpty(current.copyOfTitle)
+		        || Ext.isEmpty(current.copyOfAssetType))) {
 			// Get parent asset info
 			copyOfFn = function(){
 				Curriki.assets.GetAssetInfo(current.copyOf, function(info){
 					Curriki.current.copyOfTitle = info.title;
+					Curriki.current.copyOfAssetType = info.assetType;
 					parentFn();
 				});
 			}
@@ -3080,6 +3086,7 @@ Curriki.current = {
 			,assetType:null
 			,parentTitle:null
 			,copyOfTitle:null
+			,copyOfAssetType:null
 
 			,asset:null
 			,metadata:null

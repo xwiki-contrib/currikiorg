@@ -92,6 +92,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 /* <![CDATA[ */
 Ext.ns('Curriki.global');
 Curriki.global.username = "${context.user}";
+Curriki.global.fullname = "$xwiki.getUserName($context.user)";
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 /* ]]> */
 </script>
