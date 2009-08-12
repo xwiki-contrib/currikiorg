@@ -2326,7 +2326,7 @@ Curriki.module.addpath.init = function(){
 							,listeners:{
 								click:{
 									 fn: function(){
-										if (Ext.isEmpty(Curriki.current.drop) || !confirm(_('add.chooselocation.copy.error'))) {
+										if (Ext.isEmpty(Curriki.current.drop) || confirm(_('add.chooselocation.copy.error'))) {
 											this.close();
 											window.location.href = Curriki.current.cameFrom;
 										}
@@ -2406,10 +2406,10 @@ Curriki.module.addpath.init = function(){
 									,allowDrop:false
 									,expanded:true
 									,children:[{
-										 text:(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle||'UNKNOWN'
+										 text:Curriki.current.copyOfTitle||'UNKNOWN'
 										,id:'ctv-target-node'
-										,assetName:(Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName
-										,cls:'ctv-target ctv-resource resource-'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')
+										,assetName:Curriki.current.copyOf
+										,cls:'ctv-target ctv-resource resource-'+'UNKNOWN'
 										,leaf:true
 									}]
 								})

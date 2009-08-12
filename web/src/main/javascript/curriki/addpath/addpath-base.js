@@ -2406,10 +2406,10 @@ Curriki.module.addpath.init = function(){
 									,allowDrop:false
 									,expanded:true
 									,children:[{
-										 text:(Curriki.current.asset&&Curriki.current.asset.title)||Curriki.current.assetTitle||'UNKNOWN'
+										 text:Curriki.current.copyOfTitle||'UNKNOWN'
 										,id:'ctv-target-node'
-										,assetName:(Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName
-										,cls:'ctv-target ctv-resource resource-'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')
+										,assetName:Curriki.current.copyOf
+										,cls:'ctv-target ctv-resource resource-'+'UNKNOWN'
 										,leaf:true
 									}]
 								})
