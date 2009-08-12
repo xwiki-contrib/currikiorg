@@ -19,6 +19,7 @@
 #else##}{
 #set($globalDebug = true)
 #end##}
+#set($gVersion = $xwiki.version.replaceAll('.*\.', ''))
 #set($spaceViewUrl = $spaceDoc.getURL("view"))
 #set($viewUrl = $doc.getURL("view"))
 #set($userObj = $!crtUserDoc.getObject("XWiki.XWikiUsers",0))
