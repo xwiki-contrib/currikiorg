@@ -7,7 +7,7 @@
 #else##}{
 	#set($debugging = "")
 #end##}
-<script type="text/javascript" src="$xwiki.getSkinFile('skin.js')"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile('skin.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script type="text/javascript">
 //<![CDATA[
 var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
@@ -18,7 +18,7 @@ document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/l
 
 <script type="text/javascript">
 //<![CDATA[
-var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
 document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
 //]]>
@@ -47,49 +47,49 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 #if("$!debugging" == "") ##{
 <script src="/xwiki/js/${gVersion}/curriki-merged.js"></script>
 #else ##}{
-<script src="/xwiki/js/i18n.js"></script>
-<script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
-<script src="$xwiki.getSkinFile('js/vidiembed_curiki.js')"></script>
-<script src="/xwiki/js/curriki-main${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-addpath${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-organize${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-nominate${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-review${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-unnominate${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-partner${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-asterixReview${debugging}.js"></script>
-<script src="/xwiki/js/curriki-module-flag${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/i18n.js"></script>
+<script src="$xwiki.getSkinFile('js/viditalk_stub.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script src="$xwiki.getSkinFile('js/vidiembed_curiki.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script src="/xwiki/js/${gVersion}/curriki-main${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-addpath${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-organize${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-nominate${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-review${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-unnominate${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-partner${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-asterixReview${debugging}.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-module-flag${debugging}.js"></script>
 #end ##}
 
 #if($!headerfile == "html") ## {
-<script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 #end ## }
 #end ##}
 
-<script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
-<script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
 #if($!headerfile == "http") ## {
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 #end ## }
 
 #if($!headerfile == "help") ## {
-<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
+<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 #end ## }
 
 #if($headerfile == "html") ##{
-<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
+<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
 #if($context.action=="admin") ##{
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 #end ##}
 #end ## }
 
