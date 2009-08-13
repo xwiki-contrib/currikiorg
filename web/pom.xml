@@ -139,8 +139,6 @@
             <xwikiCfgPlugins>\
               com.xpn.xwiki.monitor.api.MonitorPlugin,\
               com.xpn.xwiki.plugin.calendar.CalendarPlugin,\
-              com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin,\
-              com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin,\
               com.xpn.xwiki.plugin.packaging.PackagePlugin,\
               com.xpn.xwiki.plugin.query.QueryPlugin,\
               com.xpn.xwiki.plugin.fileupload.FileUploadPlugin,\
@@ -159,7 +157,9 @@
               org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
               com.xpn.xwiki.plugin.invitationmanager.plugin.InvitationManagerPlugin,\
               com.xpn.xwiki.plugin.mailsender.MailSenderPlugin,\
-              org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
+              org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin,\
+              com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin,\
+              com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin
             </xwikiCfgPlugins>
             <xwikiCfgAdditionalProperties>
 ## Spacemanager settings
@@ -167,14 +167,26 @@
 xwiki.spacemanager.extension=org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension
 # Set the groupname prefix
 xwiki.spacemanager.prefix=Group_
+xwiki.invitationmanager.resourcespace=Groups
+xwiki.spacemanager.resourcespace=Groups
+
+## Allowed pages when inactive
+xwiki.inactiveuser.allowedpages=\
+        XWiki.style,\
+        Registration.EmailVerification,\
+        Registration.EmailVerificationSent,\
+        Registration.EmailVerified,\
+        Registration.EmailNotReceived
 
 ## Lucene settings
 # Configure the index location
-xwiki.plugins.lucene.indexdir=c:\\lucene
+xwiki.plugins.lucene.indexdir=/appserv/lucene_index
 # Configure the analyzer used for indexing and searching.
-xwiki.plugins.lucene.analyzer=org.apache.lucene.analysis.standard.StandardAnalyzer
+xwiki.plugins.lucene.analyzer=org.curriki.xwiki.plugin.lucene.NoStopWordsAnalyze
+r
 # Setting index interval
 xwiki.plugins.lucene.indexinterval=30
+xwiki.tags=0
 
 # set the skin
 xwiki.defaultbaseskin=albatross
@@ -184,19 +196,26 @@ xwiki.defaultskin=curriki8
 ## xwiki.superadminpassword=system
 
 # override the macro list
-              xwiki.render.velocity.macrolist=/templates/macros.vm,/skins/albatross/macros.vm,\
-                /skins/curriki8/macros.vm,/skins/curriki8/blog/blogmacros.vm,\
-                /skins/curriki8/assets/assetsmacros.vm,/skins/curriki8/pages/pagesmacros.vm,\
-                /skins/curriki8/mycurriki/mycurrikimacros.vm,\
-                /skins/curriki8/groups/groupsmacros.vm,\
-                /skins/curriki8/groups/groupscontributions.vm,\
-                /skins/curriki8/groups/groupsdocs.vm,\
-                /skins/curriki8/groups/groupsmembers.vm,\
-                /skins/curriki8/groups/groupsmessages.vm,\
-                /skins/curriki8/groups/groupsroles.vm,\
-                /skins/curriki8/groups/groupsmycurriki.vm,\
-                /skins/curriki8/crs/crsmacros.vm,\
-                /skins/curriki8/bfcs/bfcsmacros.vm
+xwiki.render.velocity.macrolist=\
+        /templates/macros.vm,\
+        /skins/albatross/macros.vm,\
+        /skins/curriki8/macros.vm,\
+        /skins/curriki8/blog/blogmacros.vm,\
+        /skins/curriki8/assets/assetsmacros.vm,\
+        /skins/curriki8/pages/pagesmacros.vm,\
+        /skins/curriki8/registration/registration.vm,\
+        /skins/curriki8/mycurriki/mycurrikimacros.vm,\
+        /skins/curriki8/groups/groupsmacros.vm,\
+        /skins/curriki8/groups/groupscontributions.vm,\
+        /skins/curriki8/groups/groupsdocs.vm,\
+        /skins/curriki8/groups/groupsmembers.vm,\
+        /skins/curriki8/groups/groupsmessages.vm,\
+        /skins/curriki8/groups/groupsroles.vm,\
+        /skins/curriki8/groups/groupsmycurriki.vm,\
+        /skins/curriki8/crs/crsmacros.vm,\
+        /skins/curriki8/bfcs/bfcsmacros.vm
+
+xwiki.authentication.group.allgroupimplicit=1
             </xwikiCfgAdditionalProperties>
             <xwikiCfgDefaultSkin>curriki8</xwikiCfgDefaultSkin>
             <xwikiCfgVirtual>0</xwikiCfgVirtual>
