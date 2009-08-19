@@ -1709,7 +1709,7 @@ Curriki.module.addpath.init = function(){
 					msg = '<p>'+_('add.finalmessage.text_'+name+'_success', msgArgs)+'</p>';
 					break;
 
-				case 'copiedtolocation':
+				case 'Copy2':
 					var msgArgs = [
 						Curriki.current.copyOfTitle||'UNKNOWN'
 						,Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'
