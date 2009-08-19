@@ -1582,7 +1582,7 @@ Curriki.module.addpath.init = function(){
 								Curriki.assets.CreateSubasset(
 									 Curriki.current.parentAsset
 									,Curriki.current.assetName
-									,-1
+									,(Curriki.current.drop&&Curriki.current.drop.targetIndex)||-1
 									,AddPath.ShowDone()
 								);
 							} else {
