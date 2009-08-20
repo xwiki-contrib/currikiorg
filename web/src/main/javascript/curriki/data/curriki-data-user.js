@@ -164,8 +164,45 @@ Curriki.data.user = {
 				,allowDrop:true
 			};
 
-			colInfo.leaf = false;
-			colInfo.children = [];
+			if (Ext.isArray(collection.children) && collection.children.length > 0) {
+/* Removed for CURRIKI-4874
+				var children = [];
+
+				collection.children.each(function(child){
+					var childInfo = {
+						 id:child.assetpage
+						,order:child.order
+						,text:child.displayTitle
+						,qtip:child.description
+						,cls:'ctv-resource resource-'+child.assetType
+						,allowDrag:false
+						,allowDrop:false
+					};
+
+					if ("undefined" === typeof child.rights || !child.rights.view){
+						childInfo.text = _('add.chooselocation.resource_unavailable');
+						childInfo.qtip = undefined;
+						childInfo.disabled = true;
+						childInfo.leaf = true;
+						childInfo.cls = childInfo.cls+' rights-unviewable';
+					} else if (child.assetType.search(/Composite$/) === -1){
+						childInfo.leaf = true;
+					} else {
+						childInfo.leaf = false;
+						childInfo.allowDrop = true;
+						childInfo.disallowDropping = (child.rights.edit?null:true);
+					}
+
+					children.push(childInfo);
+				});
+
+				colInfo.children = children;
+*/
+				colInfo.leaf = false;
+			} else {
+				colInfo.leaf = false;
+				colInfo.children = [];
+			}
 
 			retVal.push(colInfo);
 		});
