@@ -454,10 +454,6 @@ var CurrikiJS = {
 		}
 	},
 
-	addThisLink: function() {
-		document.writeln('<a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, \'\', \'[URL]\', \'[TITLE]\')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="' + _('rve.title.function.email.icon.rollover') + '" class="addThisLink"><img src="http://s7.addthis.com/static/btn/sm-share-en.gif" width="83" height="16" alt="Bookmark and Share" style="border:0"/></a>');
-	},
-
 	validEmail: function(emailStr) {
 		// return true if 'emailStr' has valid email address format; from jt_.js, wingo.com
 		var emailPat=/^(.+)@(.+)$/
