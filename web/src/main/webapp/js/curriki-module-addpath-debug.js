@@ -1582,7 +1582,7 @@ Curriki.module.addpath.init = function(){
 								Curriki.assets.CreateSubasset(
 									 Curriki.current.parentAsset
 									,Curriki.current.assetName
-									,(Curriki.current.drop&&Curriki.current.drop.targetIndex)||-1
+									,(Curriki.current.drop&&(('undefined' != typeof Curriki.current.drop.targetIndex)?Curriki.current.drop.targetIndex:-1))
 									,AddPath.ShowDone()
 								);
 							} else {
@@ -2225,7 +2225,7 @@ Curriki.module.addpath.init = function(){
 											var nextSibling = targetNode.nextSibling;
 											var targetIndex = -1;
 											if (nextSibling){
-												targetIndex = nextSibling.attributes.order||-1;
+												targetIndex = ('undefined' != typeof nextSibling.attributes.order)?nextSibling.attributes.order:-1;
 											}
 											Curriki.current.drop = {
 												 parentPage:parentNodeId
@@ -2499,7 +2499,7 @@ Curriki.module.addpath.init = function(){
 											var nextSibling = targetNode.nextSibling;
 											var targetIndex = -1;
 											if (nextSibling){
-												targetIndex = nextSibling.attributes.order||-1;
+												targetIndex = ('undefined' != typeof nextSibling.attributes.order)?nextSibling.attributes.order:-1;
 											}
 											Curriki.current.drop = {
 												 parentPage:parentNodeId
