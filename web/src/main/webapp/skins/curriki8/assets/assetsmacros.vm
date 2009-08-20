@@ -2227,12 +2227,9 @@ $currDoc.displayAsset("view")
 <div class="asset-content-footer">
 <div class="asset-content-footer-bordered">
 <a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.commentNumbers])</a> #sep()
-#if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $currDoc.fullName))
-#set($g_enable_STAF = true)
-<a href="$currDoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a> #sep()
-#else
-<a href="$currDoc.getURL("view", "bc=$!request.bc")">$msg.get("caption.linkToThePage")</a> #sep()
-#end
+{pre}
+<a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
+{/pre}
 #asset_displaylinks($currDoc)
 </div> ##content-footer-bordered
 </div> ##content-footer

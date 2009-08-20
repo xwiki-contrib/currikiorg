@@ -3,27 +3,21 @@
   * @author Curriki dev team
   *#
 <div id="footerglobal">
-<div class="footer-left">
-<a href="$xwiki.getURL("Main.PrivacyPolicy")">Privacy Policy</a> |
-<a href="$xwiki.getURL("Coll_curriki.CurrikiHelp")">Help</a> |
-<a href="$xwiki.getURL("Main.Contact")">Contact Us</a> |
-All content licensed <a href="http://creativecommons.org/about/licenses/meet-the-licenses">Creative Commons</a> | 
-<a href="$xwiki.getURL("Main.TOS")">Terms of Use</a> |
-<a href="$xwiki.getURL("Main.TOS")">Copyright</a>
+	<div class="footer-left">
+		<a href="$xwiki.getURL("Main.PrivacyPolicy")">Privacy Policy</a> |
+		<a href="$xwiki.getURL("Coll_curriki.CurrikiHelp")">Help</a> |
+		<a href="$xwiki.getURL("Main.Contact")">Contact Us</a> |
+		All content licensed <a href="http://creativecommons.org/about/licenses/meet-the-licenses">Creative Commons</a> | 
+		<a href="$xwiki.getURL("Main.TOS")">Terms of Use</a> |
+		<a href="$xwiki.getURL("Main.TOS")">Copyright</a>
+	</div>
+	<div class="footer-right">
+		<a href="/xwiki/bin/view/Main/WebRss?xpage=rdf"><img src="$xwiki.getSkinFile("ico_rss.gif")" alt="RSS"/></a>
+		<a href="#"><img src="$xwiki.getSkinFile("ico_xhtml_valid.gif")" alt="XHTML Valid"/></a>
+		<a href="#"><img src="$xwiki.getSkinFile("ico_css_valid.gif")" alt="RSS Valid"/></a>
+		<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
+	</div>
 </div>
-<div class="footer-right">
-<a href="/xwiki/bin/view/Main/WebRss?xpage=rdf"><img src="$xwiki.getSkinFile("ico_rss.gif")" alt="RSS"/></a>
-<a href="#"><img src="$xwiki.getSkinFile("ico_xhtml_valid.gif")" alt="XHTML Valid"/></a>
-<a href="#"><img src="$xwiki.getSkinFile("ico_css_valid.gif")" alt="RSS Valid"/></a>
-<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
-</div>
-## TODO: check if we need this
-## <span class="clr">&nbsp;aaa</span>
-</div>
-## Additionnal Curriki Staf Footer
-#if("$!g_enable_STAF" != "" && $g_enable_STAF) ##{
-#template('staf.vm')
-#end ##}
 #set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
 #if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
 <script type="text/javascript">
