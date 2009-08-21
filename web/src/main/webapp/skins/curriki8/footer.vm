@@ -20,12 +20,14 @@
 </div>
 #set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
 #if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
+#end ##}
 <script type="text/javascript">
 var addthis_config = {
-	username: "${ADDTHIS_acct}",
+	//username: "${ADDTHIS_acct}",
+	username: "curriki",
 	ui_cobrand: 'Curriki',
-	services_exclude: 'print',
-	services_compact: 'email, digg, facebook, twitter, aim, delicious, google, linkedin, myspace, favorites, more',
+	services_exclude: 'print, favorites',
+	services_compact: 'email, digg, facebook, twitter, aim, delicious, google, linkedin, myspace, more',
 	ui_header_color: "#ffffff",
 	ui_header_background: "#4e83c7",
 	ui_delay:200,
@@ -37,4 +39,3 @@ var addthis_config = {
 }
 </script>
 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
-#end ##}
