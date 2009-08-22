@@ -329,16 +329,6 @@ Ext.onReady(function(){
 		,hideDelay: 0
 	});
 
-	// for IE6 - JS 'min-height'
-	var img_first_name = document.getElementById("block-XWiki-XWikiUsers_0_first_name");
-	CurrikiJS.jt_AddListener(img_first_name, 'load', function(){
-		img_first_name.style.width = jt_valPx(Math.min(parseInt(img_first_name.offsetHeight), 104 ));
-	});
-	var img_last_name = document.getElementById("block-XWiki-XWikiUsers_0_last_name");
-	CurrikiJS.jt_AddListener(img_last_name, 'load', function(){
-		img_first_name.style.width = jt_valPx(Math.min(parseInt(img_last_name.offsetHeight), 104 ));
-	});
-
 /*
 	Event.observe('register', 'submit', function(event) {
 		if (!CurrikiJS.formOk) {
