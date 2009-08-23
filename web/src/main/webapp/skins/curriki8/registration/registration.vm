@@ -113,11 +113,10 @@ $userdoc.use("XWiki.XWikiUsers")
 #end ##}
 
 #macro(startregistrationform) ##{
-{pre}
 #if($g_RegType == 'edit_profile') ##{
 <script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
 #end ##}
-<script type="text/javascript">
+{pre}<script type="text/javascript">
 /* <![CDATA[ */
 function checkEmailResponse(response){
 	var text = response.responseText;

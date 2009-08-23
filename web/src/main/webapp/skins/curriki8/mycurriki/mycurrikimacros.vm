@@ -117,20 +117,21 @@ $text
 #mycurriki_header($userobj $userdoc)
 #mycurriki_tabs($pageref $whofor)
 	<div id="mycurriki-main" class="form-wrp tab-container">
+#if("$!pageref" == "blog") ## {
+	#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+	#if(!$hasBlog) ## {
+		#set($subtitle = $msg.get("mycurriki.tab.${pageref}.noblog.subtitle", ["$userobj.first_name $userobj.last_name"]))
+	#else ## }{
+		#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle", ["$userobj.first_name $userobj.last_name"]))
+	#end ## }
+#else ## } {
+	#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
+#end ## }
+#if($hasbutton == 1 || ($subtitle != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ) ## {
 		<div id="mycurriki-main-header">
 #if($hasbutton == 1) ## {
-## This is a call back to the local macro of the page including this macro
-#mycurriki_pagebutton($userobj)
-#end ## }
-#if("$!pageref" == "blog") ## {
-#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
-#if(!$hasBlog) ## {
-#set($subtitle = $msg.get("mycurriki.tab.${pageref}.noblog.subtitle", ["$userobj.first_name $userobj.last_name"]))
-#else ## }{
-#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle", ["$userobj.first_name $userobj.last_name"]))
-#end ## }
-#else ## } {
-#set($subtitle = $msg.get("mycurriki.tab.${pageref}.subtitle"))
+	## This is a call back to the local macro of the page including this macro
+	#mycurriki_pagebutton($userobj)
 #end ## }
 #if($subtitle != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ## {
 			<div id="mycurriki-main-header-left">
@@ -139,6 +140,7 @@ $text
 #end ## }
 			<div class="clearfloats"></div>
 		</div>
+#end ## }
 		<div id="mycurriki-main-content"
 #if($pageref == "favorites" || $pageref == "contributions" || $pageref == "collections" || $pageref == "blog" || $pageref == "groups") ## {
 			class="frame"
