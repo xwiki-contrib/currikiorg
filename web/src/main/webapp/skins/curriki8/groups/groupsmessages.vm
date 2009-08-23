@@ -733,7 +733,7 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 
 
 
-        <fieldset class="expanded" id="commentform">
+        <fieldset id="commentform" class="collapsed">
         <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
         <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
         <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
@@ -745,11 +745,6 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
         </fieldset>
       </form>
 </div>
-      <script type="text/javascript">
-//<!--
-document.getElementById("commentform").className = "collapsed";
-//-->
-      </script>
 #end ## hasAccessLevel comments ## }
 #endgroupsection()
 <!-- end of COMMENTS FRAME -->
@@ -781,7 +776,7 @@ document.getElementById("commentform").className = "collapsed";
 <div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
 <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-<fieldset class="expanded" id="attachform">
+<fieldset id="attachform" class="collapsed">
 <div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
 <div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
 <div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
@@ -793,11 +788,6 @@ document.getElementById("commentform").className = "collapsed";
 </fieldset>
 </form>
 </div>
-      <script type="text/javascript">
-//<!--
-document.getElementById("attachform").className = "collapsed";
-//-->
-      </script>
 #end
 #endgroupsection()
  <!-- End of ATTACHMENTS FRAME -->
