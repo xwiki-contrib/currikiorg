@@ -17,7 +17,7 @@ function hideForm2(form) {
 }
 
 function toggleForm2(form) {
-	form.style.display = (form.style.display == "none") ? "block" : "none";
+	form.style.display = (form.style.display == "block") ? "none" : "block";
 }
 
 function togglePanelVisibility(element){
