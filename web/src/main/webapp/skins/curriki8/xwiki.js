@@ -12,6 +12,14 @@ function toggleForm(form){
   }
 }
 
+function hideForm2(form) {
+	form.style.display = "none";
+}
+
+function toggleForm2(form) {
+	form.style.display = (form.style.display == "none") ? "block" : "none";
+}
+
 function togglePanelVisibility(element){
   if(element.className.indexOf("expanded") >= 0){
     element.className = element.className.replace('expanded', 'collapsed');

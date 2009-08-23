@@ -725,25 +725,22 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 <div id="commentscontent" class="xwikiintracontent">
-<div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
+<div class="button-right"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
-      <form id="commentAddForm" action="$doc.getURL("commentadd")" method="post">
-        <hr class="my-curriki-hr"/>
-
-
-
-        <fieldset id="commentform" class="collapsed">
-        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
-        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
-        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
-        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
-        <div>
-	<button class="button button-orange" type="submit" onclick="return updateXRedirect('commentAddForm', true);">$msg.get("caption.saveComment")</button>
-	<button class="button button-grey" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
-        </div>
-        </fieldset>
-      </form>
+<form name="commentAddForm" id="commentAddForm" action="$doc.getURL("commentadd")" method="post">
+<hr class="my-curriki-hr"/>
+<fieldset id="commentform">
+	<input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
+	<input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+	<input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+	<div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
+	<div>
+		<button class="button button-orange" type="submit" onclick="return updateXRedirect('commentAddForm', true);">$msg.get("caption.saveComment")</button>
+		<button class="button button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
+	</div>
+</fieldset>
+</form>
 </div>
 #end ## hasAccessLevel comments ## }
 #endgroupsection()
@@ -773,18 +770,17 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 #end
 #if($hasedit || $hasadmin)
 <div id="attachmentscontent" class="xwikiintracontent">
-<div class="button-right"><a class="button button-orange" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
-<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+<div class="button-right"><a class="button button-orange" onclick="toggleForm2(document.attachmentAddForm)">$msg.get("addattachment")</a></div>
+<form name="attachmentAddForm" id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-<fieldset id="attachform" class="collapsed">
-<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
-<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
-<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
-<div>
-
-<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /></span>
-##<span class="button button-orange"><input type="reset" value="$msg.get("cancel")" onclick="hideForm(this.form);" class="button"/></span>
-</div>
+<fieldset id="attachform">
+	<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
+	<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
+	<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
+	<div>
+		<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /></span>
+		<button class="button button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
+	</div>
 </fieldset>
 </form>
 </div>
