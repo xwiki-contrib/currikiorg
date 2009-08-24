@@ -18,7 +18,7 @@
 		<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
 	</div>
 </div>
-#set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
+##set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
 #if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
 #end ##}
 <script type="text/javascript">
@@ -27,14 +27,16 @@ var addthis_config = {
 	username: "curriki",
 	ui_cobrand: 'Curriki',
 	services_exclude: 'print, favorites',
-	services_compact: 'email, digg, facebook, twitter, aim, delicious, google, linkedin, myspace, more',
+	services_compact: '$msg.get("addThis.services_compact")',
 	ui_header_color: "#ffffff",
 	ui_header_background: "#4e83c7",
 	ui_delay:200,
 	ui_offset_top: 5,
-	ui_offset_left: 5,
+	ui_offset_left: 5
+}
+var addthis_share = {
 	templates: {
-		twitter: 'check out {{url}} (from @curriki_dot_com)'
+		twitter: '$msg.get("addThis.templates.twitter")'
 	}
 }
 </script>
