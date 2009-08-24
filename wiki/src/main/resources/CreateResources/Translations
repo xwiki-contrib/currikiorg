@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.jkl1231</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.jkl1231</contentAuthor>
 <creationDate>1210378529000</creationDate>
-<date>1247091920000</date>
-<contentUpdateDate>1247091920000</contentUpdateDate>
-<version>394.1</version>
+<date>1250781870000</date>
+<contentUpdateDate>1250781870000</contentUpdateDate>
+<version>403.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>removed &lt;br&gt; from 'efs.output.default.framework.attribution</comment>
+<comment>took br tags out of browser error message for Cal for Your C dialog</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -112,6 +112,7 @@
 ##    SELECT A FORMAT
 ##    SRI PART 1
 ##    SRI PART 2
+## CHOOSE A LOCATION FOR COPY DIALOG
 ## ADD PATH FINAL MESSAGE DIALOGS
 ##    FINAL MESSAGE NAVIGATION OPTIONS
 ## ADD PATH ERROR MESSAGES
@@ -1302,7 +1303,7 @@ sri.instructional_component2_tooltip=Type or format of content that best matches
 sri.keywords_title=Key Words:
 sri.keywords_txt=
 sri.keywords_content=
-sri.keywords_tooltip=Words to help people find your resource when searching Curriki or the Internet
+sri.keywords_tooltip=Individual words to help people find your resource when searching Curriki or the Internet (Please note: The system will not read phrases, only single terms.)
 
 ## LANGUAGE
 sri.language_title=Language:
@@ -1411,14 +1412,6 @@ add.contributemenu.required.fields.dialog_video_capture=Capture a video with you
 add.contributemenu.cancel.button=Cancel
 add.contributemenu.next.button=Next &gt;&gt;
 
-##INSERT CURRIKI RESOURCE ADDRESS DIALOG
-add.insertcurrikiresource.title=Insert the Web Address for a Curriki Resource
-add.insertcurrikiresource.guidingquestion=Which resource from Curriki would you like to add?
-add.insertcurrikiresource.instruction=For the Curriki resource you would like to add, copy the URL from your browser and paste it into the field below, then click Next.
-add.insertcurrikiresource.empty_field=http://
-add.insertcurrikiresource.cancel.button=Cancel
-add.insertcurrikiresource.next.button=Next &gt;&gt;
-
 ## SELECT A TEMPLATE DIALOG
 
 add.selecttemplate.title=Select a Template
@@ -1487,8 +1480,17 @@ add.chooselocation.resource_unavailable_tooltip=This resource is unavailable to 
 add.chooselocation.cancel.button=Cancel
 add.chooselocation.next.button=Next &gt;&gt;
 
+##CHOOSE A LOCATION FOR COPY DIALOG
+add.chooselocation.copy.title=Choose a Location for Your Copy
+add.chooselocation.copy.guidingquestion=Where do you want to place this copy of {0}?
+add.chooselocation.copy.instruction=If you do &lt;strong&gt;not&lt;/strong&gt; want to place this copy in a specific collection or folder, just click the orange Next button.&lt;br&gt;&lt;br&gt; If you want to pick a location for the copy, drag the resource and drop it into a collection or folder. To place it in a specific position, first click the arrow to expand the target collection and then drag the resource into the correct spot.&lt;br&gt;&lt;br&gt;You can also drag the resource and hover over a folder or collection to open it, then drop the resource to place it.
+add.chooselocation.copy.instruction_short=Click to drag and drop this:
+add.chooselocation.copy.resource_unavailable= -- Resource Unavailable --
+add.chooselocation.copy.resource_unavailable_tooltip=This resource is unavailable to you because its Access Privileges are set to Private.
+add.chooselocation.copy.cancel.button=Cancel
+add.chooselocation.copy.next.button=Next &gt;&gt;
 
-
+add.chooselocation.copy.error=If you selected a location for your copy but then clicked Cancel, you did not create a copy. After starting the copy process, you must click Next and complete resource settings in order to create a copy of the resource.
 
 ##ADD PATH FINAL MESSAGE DIALOGS
 
@@ -1536,7 +1538,12 @@ add.finalmessage.text_groupcollection_tip1=Click "Build Up" by the listing under
 
 add.finalmessage.text_groupcollection_tip2=
 
+## COPY
 
+add.finalmessage.title_copiedtolocation=Resource Copied
+add.finalmessage.text_copiedtolocation_success=You have successfully copied &lt;strong&gt;{0}&lt;/strong&gt; to create &lt;strong&gt;{1}&lt;/strong&gt;, and placed your new resource in &lt;strong&gt;{2}&lt;/strong&gt;.
+add.finalmessage.view.link=View
+add.finalmessage.close.button=Close
 
 
 ##FINAL MESSAGE NAVIGATION OPTIONS
@@ -1560,5 +1567,7 @@ add.finalmessage.close.button=Close
 add.servertimedout.message.title=Server Error
 add.servertimedout.message.text=There was a problem accessing the server. Please try again.
 add.servertimedout.message.button=OK
+
+
 {/pre}
 </content></xwikidoc>
