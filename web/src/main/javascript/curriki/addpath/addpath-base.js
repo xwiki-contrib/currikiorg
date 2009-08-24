@@ -1036,7 +1036,6 @@ Curriki.module.addpath.init = function(){
 									,name:'keywords'
 									,emptyText:_('sri.keywords.empty_msg')
 									,hideLabel:true
-									,width:'60%'
 									,listeners:{
 										render:function(comp){
 											comp.findParentByType('apSRI1').on('show', function() {
