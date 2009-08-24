@@ -2370,6 +2370,8 @@ Curriki.module.addpath.init = function(){
 										if (!Ext.isEmpty(Curriki.current.drop)){
 											Curriki.current.publishSpace = Curriki.current.drop.parentPage.replace(/\..*/, '');
 											Curriki.current.parentAsset = Curriki.current.drop.parentPage;
+										} else {
+											Curriki.current.flow = 'Copy';
 										}
 										next = 'apSRI1';
 										Curriki.assets.CopyAsset(
