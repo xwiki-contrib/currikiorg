@@ -294,18 +294,18 @@ Curriki.module.search.start();
 #curriki_titlebar($msg.get("groups.curriculum.contributions.title") "" "" "red")
 <div class="frame-content">
 ##
-#if($isGroupMember || $hasGlobalAdmin)##{
+#if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
 {pre}
 	<a class="button button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
 {/pre}
 #end ##}
 $msg.get("groups.curriculum.contributions.about")
 	<div style="clear:both;">
-	{pre}
+{pre}
 		<form id="groupsearch" name="groupsearch" method="post"
 			onsubmit="if (document.groupsearch.brsqry.value!='$msg.get("groups.curriculum.search.default")') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
 			action="/xwiki/bin/view/${spaceName}/ContributionsSearch">
-		{/pre}
+{/pre}
 			<div class="groupcontribution-leftbutton">
 				<a class="button button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
 				$msg.get('groups.curriculum.contributions.viewORsearch')
