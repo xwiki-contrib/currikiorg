@@ -71,7 +71,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 #set($comment = $cclass.newObject())
 #set($afteradd = $doc.getURL("view", "bc=${bcLocal}"))
 #set($afteradd = "xredirect=${afteradd}")
-<form id="commentAddForm" action="$doc.getURL("commentadd", $afteradd)" method="post">
+<form name="commentAddForm" id="commentAddForm" action="$doc.getURL("commentadd", $afteradd)" method="post">
 <hr class="my-curriki-hr"/>
 
 <fieldset class="expanded" id="commentform">

@@ -158,7 +158,7 @@ $comment.comment
 <div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
-<form id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
+<form name="commentAddForm" id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
 <hr class="my-curriki-hr"/>
 
 <fieldset class="expanded" id="commentform">
