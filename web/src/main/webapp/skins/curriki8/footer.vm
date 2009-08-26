@@ -18,13 +18,10 @@
 		<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
 	</div>
 </div>
-##set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
 #if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
-#end ##}
 <script type="text/javascript">
 var addthis_config = {
-	//username: "${ADDTHIS_acct}",
-	username: "curriki",
+	username: "${ADDTHIS_acct}",
 	ui_cobrand: 'Curriki',
 	services_exclude: 'print, favorites',
 	services_compact: '$msg.get("addThis.services_compact")',
@@ -41,3 +38,4 @@ var addthis_share = {
 }
 </script>
 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+#end ##}
