@@ -99,28 +99,41 @@ console.log('createNode: ',attr);
 					desc = Ext.util.Format.ellipsis(desc, 256);
 					desc = Ext.util.Format.htmlEncode(desc);
 
+					var lastUpdated = attr.lastUpdated||'';
+
 					var title = attr.displayTitle||attr.title;
 
 					var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
 					var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
 					var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
 					
-					if (!this.setTitleInRollover) {
-						attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
-							,desc,_('global.title.popup.description')
-							,fw,_('global.title.popup.subject')
-							,lvl,_('global.title.popup.educationlevel')
-							,ict,_('global.title.popup.ict')
-						);
-					} else {
-						attr.qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br /><br />{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}"
-							,title,_('global.title.popup.title')
-							,desc,_('global.title.popup.description')
-							,fw,_('global.title.popup.subject')
-							,lvl,_('global.title.popup.educationlevel')
-							,ict,_('global.title.popup.ict')
-						);
+
+					var qTipFormat = '';
+
+					// Show Title if desired
+					if (this.setTitleInRollover) {
+						qTipFormat = '{1}<br />{0}<br /><br />';
 					}
+
+					// Add Description
+					qTipFormat = qTipFormat+'{3}<br />{2}<br /><br />';
+
+					// Add lastUpdated if available
+					if (lastUpdated !== '') {
+						qTipFormat = qTipFormat+'{11}<br />{10}<br /><br />';
+					}
+
+					// Base qTip (framework, ed levels, ict)
+					qTipFormat = qTipFormat+'{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}';
+
+					attr.qtip = String.format(qTipFormat
+						,title,_('global.title.popup.title')
+						,desc,_('global.title.popup.description')
+						,fw,_('global.title.popup.subject')
+						,lvl,_('global.title.popup.educationlevel')
+						,ict,_('global.title.popup.ict')
+						,lastUpdated,_('global.title.popup.last_updated')
+					);
 				}
 			}
 
