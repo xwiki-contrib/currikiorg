@@ -366,6 +366,65 @@ $errMsg
 	<button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button>
 	<button class="button-confirm" type="submit">$msg.get('edit_profile.save_button')</button>
 </div>
+## Calculate %complete
+#set($c = 3) ## login name, password, email address have to exist
+##
+#set($x = "")#set($x = $!userobj.getProperty('first_name').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('last_name').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('show_contact').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('show_email').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('opt_out').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('member_type').value)
+#if("$x" != "" && "$x" != '---' && "$x" != '0')#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('affiliation').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")
+#set($x = $!userobj.getProperty("topics").getValue())
+#if("$x" != "" && $x.size() > 1)#set($c = 1 + $c)#end
+#set($x = "")
+#set($x = $!userobj.getProperty("educational_level").getValue())
+#if("$x" != "" && $x.size() > 0)#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('country').value)
+#if("$x" != "" && "$x" != '---')#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('state').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('city').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('language').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('comment').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('contact').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('websites').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#if($userdoc.attachmentList.size()>0)#set($c = 1 + $c)#end
+##
+#set($c = 100 * $c)
+#set($c = $c / 20)
+#set($c = "${c}%")
+##
+<div class="profile-push">$msg.get('view_profile.intro.percent_complete', [$c])</div>
 #end ##}
 <input type="hidden" name="xredirect" value="" />
 #if($g_RegType != 'edit_profile') ##{
