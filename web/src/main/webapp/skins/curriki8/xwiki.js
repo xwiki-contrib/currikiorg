@@ -18,6 +18,9 @@ function hideForm2(form) {
 
 function toggleForm2(form) {
 	form.style.display = (form.style.display == "block") ? "none" : "block";
+	if (form.style.display == "block") {
+		form['XWiki.XWikiComments_comment'].focus();
+	}
 }
 
 function togglePanelVisibility(element){
