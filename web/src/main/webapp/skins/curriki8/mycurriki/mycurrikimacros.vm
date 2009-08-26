@@ -216,6 +216,7 @@ $text
 Ext.ns('Curriki.mycurriki.util.title');
 Curriki.mycurriki.util.title.popup = function(title_id, attr){
 	if ('string' === Ext.type(attr.description)
+	    && 'string' === Ext.type(attr.lastUpdated)
 	    && 'array' === Ext.type(attr.fwItems)
 	    && 'array' === Ext.type(attr.levels)
 	    && 'array' === Ext.type(attr.ict)
@@ -224,15 +225,18 @@ Curriki.mycurriki.util.title.popup = function(title_id, attr){
 		desc = Ext.util.Format.ellipsis(desc, 256);
 		desc = Ext.util.Format.htmlEncode(desc);
 
+		var lastUpdated = attr.lastUpdated||'';
+
 		var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
 		var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
 		var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
 		
-		var qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
+		var qtip = String.format("{1}<br />{0}<br /><br />{9}<br />{8}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
 			,desc,_('global.title.popup.description')
 			,fw,_('global.title.popup.subject')
 			,lvl,_('global.title.popup.educationlevel')
 			,ict,_('global.title.popup.ict')
+			,lastUpdated,_('global.title.popup.last_updated')
 		);
 
 		Ext.QuickTips.getQuickTip().register({
@@ -286,7 +290,7 @@ Ext.onReady(function(){
 #set($curICT = "$curICT'$item'")
 #end ## }
 #set($curICT = "[ $curICT ]")
-Curriki.mycurriki.util.title.popup("mycurriki-title-${descnb}", {'description':'$curDesc' , 'fwItems':$curFW , 'levels':$curLvl , 'ict':$curICT});
+Curriki.mycurriki.util.title.popup("mycurriki-title-${descnb}", {'description':'$curDesc' , 'lastUpdated':'$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))', 'fwItems':$curFW , 'levels':$curLvl , 'ict':$curICT});
 });
 /* ]]> */
 </script>
