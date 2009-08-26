@@ -94,7 +94,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 #end ## endif display anything about comments
 
 #if("$!request.xpage"!="commentsinline")
-#if($xwiki.hasAccessLevel("comment"))
+#if($xwiki.hasAccessLevel("comment") && ($comments.size()>10) )
 <div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #end
 #end ##guest
