@@ -9,7 +9,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 #else
 #if("$!request.xpage"!="commentsinline")
 #if($xwiki.hasAccessLevel("comment"))
-<div class="righttext"><a class="buttonred" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #else
  $msg.get("asset.commentNotAllowed")
 #end
@@ -81,8 +81,8 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 	<input type="hidden" name="XWiki.XWikiComments_date" value=""/>
 	<div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment' style="width: 100%;"></textarea></div>
 	<div>
-		#button($msg.get("caption.saveComment"), "red" "submit" "" "")
-		#button($msg.get("cancel"), "grey" "reset" "" "hideForm(this.form);")
+		#button($msg.get("caption.saveComment"), "button button-orange" "submit" "" "")
+		#button($msg.get("cancel"), "grey" "reset" "" "hideForm2(this.form);")
 ##<input type="submit" value="$msg.get("addcomment")" class="button"/>
 ##<input type="reset" value="$msg.get("cancel")" onclick="" class="button"/>
 	</div>
@@ -95,7 +95,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 
 #if("$!request.xpage"!="commentsinline")
 #if($xwiki.hasAccessLevel("comment"))
-<div class="righttext"><a class="buttonred" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #end
 #end ##guest
 #end
