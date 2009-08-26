@@ -767,11 +767,13 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		#if("$titems" != "" && $titems.size() > 1) ##{
 			<td class="item-interest-areas-td">
 				<ul>
-				#foreach($titem in $titems)
-					#if($titem!="FW_masterFramework.WebHome")
-						<li>$msg.get("XWiki.XWikiUsers_topics_${titem}")</li>
-					#end
-				#end
+				#set($fwMaster = "${msg.get('XWiki.XWikiUsers_topics_FW_masterFramework.WebHome')} +[^ ]+ +")
+					<li>$userobj.get('topics').replaceAll($fwMaster, '').replace('<br />', '</li><li>')</li>
+##				#foreach($titem in $titems) ##{
+##					#if($titem!="FW_masterFramework.WebHome") ##{
+##						<li>$msg.get("XWiki.XWikiUsers_topics_${titem}")</li>
+##					#end ##}
+##				#end ##}
 				</ul>
 			</td>
 		#end ##}
