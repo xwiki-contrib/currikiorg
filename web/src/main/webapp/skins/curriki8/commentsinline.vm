@@ -9,7 +9,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 #else
 #if("$!request.xpage"!="commentsinline")
 #if($xwiki.hasAccessLevel("comment"))
-<div class="righttext"><a class="buttonred" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="righttext"><a class="buttonred" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #else
  $msg.get("asset.commentNotAllowed")
 #end
@@ -71,28 +71,23 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 #set($comment = $cclass.newObject())
 #set($afteradd = $doc.getURL("view", "bc=${bcLocal}"))
 #set($afteradd = "xredirect=${afteradd}")
-      <form id="commentAddForm" action="$doc.getURL("commentadd", $afteradd)" method="post">
-    <hr class="my-curriki-hr"/>
+<form id="commentAddForm" action="$doc.getURL("commentadd", $afteradd)" method="post">
+<hr class="my-curriki-hr"/>
 
-        <fieldset class="expanded" id="commentform">
+<fieldset class="expanded" id="commentform">
 ##        <legend onclick="toggleForm(this.form)">$msg.get("addcomment")<span class="expands">...</span></legend>
-        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
-        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
-        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
-        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment' style="width: 100%;"></textarea></div>
-        <div>
-        #button($msg.get("caption.saveComment"), "red" "submit" "" "")
-        #button($msg.get("cancel"), "grey" "reset" "" "hideForm(this.form);")
+	<input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
+	<input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+	<input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+	<div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment' style="width: 100%;"></textarea></div>
+	<div>
+		#button($msg.get("caption.saveComment"), "red" "submit" "" "")
+		#button($msg.get("cancel"), "grey" "reset" "" "hideForm(this.form);")
 ##<input type="submit" value="$msg.get("addcomment")" class="button"/>
 ##<input type="reset" value="$msg.get("cancel")" onclick="" class="button"/>
-        </div>
-        </fieldset>
-      </form>
-      <script type="text/javascript">
-//<!--
-document.getElementById("commentform").className = "collapsed";
-//-->
-      </script>
+	</div>
+</fieldset>
+</form>
 #end ## endif can comment
 #end ## endif comment view mode only
 </div>
