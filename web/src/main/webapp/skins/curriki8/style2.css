@@ -34,7 +34,10 @@ input.checkbox, input[type="checkbox"], input[type="radio"] { border: 0; height:
 textarea, .x-form-text, textarea.x-form-field { background-image: none; border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 13px; padding: 0.4em 0.2em; white-space: pre; }
 p { margin: 0.5em 0; padding: 0; }
 
-button, A.button, button.button, input.button, .x-btn button, input.button, .menu-add, #groups-create-nextbutton input.button-orange, #attachmentAddForm .button-orange, #nextbutton button.x-btn-text, #closebutton.button-confirm button, input.button-orange { 
+button, A.button, button.button, input.button, input.button-orange, .x-btn button, .menu-add,
+#groups-create-nextbutton input.button-orange,
+#nextbutton button.x-btn-text,
+#closebutton.button-confirm button { 
 	background-color:#FF7F00;
 	border:1px solid #FF0000;
 	color:#FFFFFF;
@@ -45,14 +48,15 @@ button, A.button, button.button, input.button, .x-btn button, input.button, .men
 	font-weight: normal;
 	padding:4px 10px 3px;
 }
-button:hover, A.button:hover, button.button:hover, input.button:hover, #nextbutton button.x-btn-text:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-orange:hover, #attachmentAddForm .button-orange:hover, #closebutton.button-confirm button:hover { 
-	background-color: #ffb808; 
-	color: #fff;
-}
-/* these break IE when combined in list above */
+/* these break IE when combined in list below */
 input[type="submit"]:hover { 
 	background-color: #ffb808; 
 	color: #fff;
+}
+button:hover, A.button:hover, button.button:hover, input.button:hover, #nextbutton button.x-btn-text:hover, .x-btn button:hover, .menu-add:hover, #groups-create-nextbutton input.button-orange:hover, #closebutton.button-confirm button:hover { 
+	background-color: #ffb808; 
+	color: #fff;
+	text-decoration: none;
 }
 
 button.cancel, .button-grey, #cancelbutton .x-btn-text, #closebutton button, #organize-cancel-btn button, #organize-confirm-cancel-button button {
@@ -60,13 +64,13 @@ button.cancel, .button-grey, #cancelbutton .x-btn-text, #closebutton button, #or
 	border-color: #A5A5A5;
 	color: #3f3f3f;
 }
-button.cancel:hover, button.button-grey:hover, #cancelbutton .x-btn-text:hover, #closebutton button:hover, #organize-cancel-btn button:hover, #organize-confirm-cancel-button button:hover  {
-	background-color: #b4b4b4; 
-	color: #3f3f3f;
-}
 /* these break IE when combined in list above */
 input.button-grey[type="submit"]:hover,
 input.button-grey[type="button"]:hover  {
+	background-color: #b4b4b4; 
+	color: #3f3f3f;
+}
+button.cancel:hover, button.button-grey:hover, #cancelbutton .x-btn-text:hover, #closebutton button:hover, #organize-cancel-btn button:hover, #organize-confirm-cancel-button button:hover  {
 	background-color: #b4b4b4; 
 	color: #3f3f3f;
 }
@@ -392,7 +396,7 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 .x-toolbar .ytb-sep { background-image: none; border-left: 1px solid #999; }
 #done-dialogue button { background-color: transparent; font-size: 12px; border: none; color: #1963aa; }
 #done-dialogue #closebutton button { background-color: #ff7f00; border: 1px solid #ff0000; color: #FFF; font-size: 11px;}
-button:hover, .buttonHover, .x-btn button:hover, .menu-add:hover, #done-dialogue #closebutton button:hover { background-color: #ffb808; color: #fff; text-decoration: none; }
+#done-dialogue #closebutton button:hover { background-color: #ffb808; color: #fff; text-decoration: none; }
 .search-box button#searchbtn:hover {text-decoration: underline !important;}
 .x-toolbar .x-btn-over td.x-btn-center { background-image: none !important; text-decoration: none; }
 .x-window .ux-mselect-selected, .x-combo-list .x-combo-list-inner .x-combo-selected { background-color: #3399ff; color: #fff; }
