@@ -5,7 +5,7 @@
   *#
 #set($ua = $request.getHeader("user-agent"))
 #if($ua.indexOf("MSIE")!=-1) ##{
-<link href="$xwiki.getSkinFile("ie.css").replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css" title="default" />
+<link href="$xwiki.getSkinFile("ie.css")" rel="stylesheet" type="text/css" title="default" />
 <style type="text/css">
 * html #actionmenu{width: expression(document.body.clientWidth) !important;}
 .gwt-ModalDialog-Content .find-selector .gwt-TextBox {
@@ -19,11 +19,11 @@
 .tabs { padding: 15px 10px 5px; }
 #searchElement table table.search-selector-bottom { margin-top: -10px; }
 </style>
-#if(($ua.indexOf("MSIE 6")!=-1)||($ua.indexOf("MSIE 5")!=-1)) ##{
-<link href="$xwiki.getSkinFile("ie6.css", true)" rel="stylesheet" type="text/css" />
-#else ##}{
+	#if(($ua.indexOf("MSIE 6")!=-1)||($ua.indexOf("MSIE 5")!=-1)) ##{
+<link href="$xwiki.getSkinFile("ie6.css")" rel="stylesheet" type="text/css" />
+	#else ##}{
 <style type="text/css">
 #browse-btn{padding: 4px 0px !important;}
 </style>
-#end ##}
+	#end ##}
 #end ##}
