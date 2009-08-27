@@ -26,16 +26,24 @@ ${Msz}Mb
 #end                    ## }
 #end                    ## }
 
+<?xml version="1.0" encoding="$xwiki.encoding" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
 <link href="/xwiki/skins/curriki8/style2.css" rel="stylesheet" type="text/css"  />
+#template("ie.vm")
 <style type="text/css">
 body {background: #fff; text-align: left; min-width: 0; padding: 0;}
 </style>
-
-#if( $request.xredirect )                   ## {
+</head>
+<body>
+#if( $request.xredirect ) ## {
   #set( $redirect = $request.xredirect )
-#else			                    ## } {
+#else ## } {
   #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
-#end			                    ## }
+#end ## }
 ##
 ## Compute velocity vars for attachments that are made available to 
 ## framing app via javascript getAttachmentsSize() and getAttachmentsNames().
@@ -50,12 +58,12 @@ body {background: #fff; text-align: left; min-width: 0; padding: 0;}
 ## File upload area
 ##
 <form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
-  <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
-  <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
-  <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
-  <script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
-  <script type="text/javascript">function getAttachmentsNames() { return (${total_attachments_names}); } function getAttachmentsSize() { return (${total_attachments_size}); } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
-  <input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize() < $msg.get("lesson.plan.file.size.maximum")) { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } else { alert('$msg.get('lesson.plan.file.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+	<input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+	<input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
+	<input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
+	<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
+	<script type="text/javascript">function getAttachmentsNames() { return (${total_attachments_names}); } function getAttachmentsSize() { return (${total_attachments_size}); } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
+	<input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize() < $msg.get("lesson.plan.file.size.maximum")) { return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get('doyouwanttoreplace')')); } else { alert('$msg.get('lesson.plan.file.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
 </form>
 ##
 ## If there's attachments, display list of attachments and messages/headers
@@ -103,3 +111,5 @@ body {background: #fff; text-align: left; min-width: 0; padding: 0;}
   <span name="attachments_size" id="attachments_size">#dynamicsize(${total_attachments_size})</span>
   </div>
 #end                                        ## } -- if
+</body>
+</html>
