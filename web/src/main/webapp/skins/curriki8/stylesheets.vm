@@ -32,9 +32,5 @@ document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/c
 #end
 #set( $defaultstyle = $xwiki.getWebPreference("stylesheet"))
 #set( $stylesheets = $xwiki.getWebPreference("stylesheets"))
-## IE specific style sheet
-#if($request.getHeader("user-agent").indexOf("MSIE")!=-1)
-	<link href="$xwiki.getSkinFile("ie.css").replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css" title="default" />
-#end
 ## Hook for inserting CSS skin extensions
 <!-- com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin -->	
