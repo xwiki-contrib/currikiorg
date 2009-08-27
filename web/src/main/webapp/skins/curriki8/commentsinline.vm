@@ -30,7 +30,7 @@ $msg.get("comments.accessDenied", [$joinurl, $loginurl])
 #if($comments.size()>0 || $xwiki.hasAccessLevel("comment"))
 ## Only show comments area if there are comments or the user has the right to comment
 ##
-#if($comments.size()>5)
+#if($xwiki.hasAccessLevel("comment") && ($comments.size()>3) )
 <div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 #end
 <div id="commentscontent" class="xwikiintracontent">
