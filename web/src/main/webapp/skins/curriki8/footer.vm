@@ -18,7 +18,7 @@
 		<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
 	</div>
 </div>
-#if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
+#if($g_enable_ADDTHIS && ("$!ADDTHIS_acct" != "0") && ("$!ADDTHIS_acct" != "") ) ## {
 <script type="text/javascript">
 var addthis_config = {
 	username: "${ADDTHIS_acct}",

@@ -227,10 +227,8 @@ $bentrydoc.getRenderedContent($content).replaceAll("<br/><p/>","<br/>&nbsp;<p/>"
 $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
 </div>
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
-#if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
-#set($g_enable_STAF = true)
-#end
 {pre}
+#set($g_enable_ADDTHIS = true)
 <a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
 #if ($bentrydoc.hasAccessLevel("edit"))
 #sep()

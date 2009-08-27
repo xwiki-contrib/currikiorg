@@ -12,6 +12,7 @@
    #if(!$isguest)
      <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
    #end
+#set($g_enable_ADDTHIS = true)
      <li id="tab-email"><a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
    #if(!$isguest)
      <li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
@@ -2232,6 +2233,7 @@ $currDoc.displayAsset("view")
 <div class="asset-content-footer-bordered">
 <a href="$currDoc.getURL("view", "bc=$!request.bc&viewer=comments")">$msg.get("caption.NComments", [$currDoc.commentNumbers])</a> #sep()
 {pre}
+#set($g_enable_ADDTHIS = true)
 <a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
 {/pre}
 #asset_displaylinks($currDoc)
