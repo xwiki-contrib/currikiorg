@@ -1,3 +1,5 @@
+body { behavior:url( hover.htc ); }
+
 #resource-toc .x-panel-bwrap {
 	overflow: visible;
 	overflow-x: auto;
@@ -142,12 +144,4 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 #asset-wrapper {
 	zoom: 1;     /* triggers hasLayout */
 	display: block;     /* resets display for IE/Win */
-}
-
-input.button, button, .x-btn button, .menu-add, #groups-create-nextbutton input.button-orange, #attachmentAddForm .button-orange, #nextbutton button.x-btn-text, #closebutton.button-confirm button, input.button-orange {
-	behavior: expression(
-		this.onmouseover = new Function("this.className += ' buttonHover';"),
-		this.onmouseout = new Function("this.className = this.className.replace(' buttonHover', '');"),
-		this.style.behavior = null
-	);
 }
