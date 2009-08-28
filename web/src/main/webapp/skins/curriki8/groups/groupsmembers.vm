@@ -319,7 +319,7 @@ $profile
 </div>
 <form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;">
 <div class="groups-members-member-buttons">
-<input type="button"  class="button button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+<input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
 </div>
 <input type="hidden" name="user" value="$!memberName" />
 <input type="hidden" name="space" value="$!spaceName" />
@@ -651,9 +651,9 @@ function acceptRequestCallback(ajaxreq) {
 function rejectRequest(divid, memberName) {
       $(divid).oldInnerHTML = $(divid).innerHTML;
       $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box\"><form><p>${msg.groups_members_reject_confirm}</p><textarea id=\"" + divid + "-reason\" cols=\"60\" rows=\"7\"></textarea><br />"
-                                                + "<div class=\"button-right\"><input type=\"button\" class=\"button button-grey\" value=\"${msg.groups_members_cancel_btt}\""
+                                                + "<div class=\"button-right\"><input type=\"button\" class=\"button-grey\" value=\"${msg.groups_members_cancel_btt}\""
                                                 + " onclick=\"rejectRequestCancel('" + divid + "','" + memberName + "');\" />"
-                                                + "<input type=\"button\" class=\"button button-orange\" value=\"${msg.groups_members_reject_confirm_btt}\""
+                                                + "<input type=\"button\" class=\"button-orange\" value=\"${msg.groups_members_reject_confirm_btt}\""
                                                 + " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
                                                 + "</form></div>";
       $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
