@@ -408,7 +408,7 @@ var CurrikiJS = {
 		return e;
 	},
 
-	jt_cssClass = {
+	jt_cssClass: {
 
 		add: function(elm, className) {
 			if (elm) {
