@@ -408,6 +408,56 @@ var CurrikiJS = {
 		return e;
 	},
 
+	jt_cssClass = {
+
+		add: function(elm, className) {
+			if (elm) {
+				var obj = jt_cssClass.asObj(elm);
+				obj[className] = true;
+				elm.className = jt_cssClass.asStr(obj);
+			}
+		},
+
+		rem: function(elm, className) {
+			if (elm) {
+				var obj = jt_cssClass.asObj(elm);
+				delete obj[className];
+				elm.className = jt_cssClass.asStr(obj);
+			}
+		},
+
+		rpl: function(elm, remClassName, addClassName) {
+			if (elm) {
+				var obj = jt_cssClass.asObj(elm);
+				delete obj[remClassName];
+				obj[addClassName] = true;
+				elm.className = jt_cssClass.asStr(obj);
+			}
+		},
+
+		asObj: function(elm) {
+			var obj = {};
+			if (elm.className) {
+				var list = elm.className.split(' ');
+				for (var i=0; i<list.length; i++) {
+					obj[list[i]] = true;
+				}
+			}
+			return obj;
+		},
+
+		asStr: function(obj) {
+			var st = '';
+			var sep = '';
+			for (var prop in obj) {
+				st += sep + prop;
+				sep = ' ';
+			}
+			return st;
+		}
+
+	},
+
 	msgOn: function(msg, numSecs) {
 		if (!CurrikiJS.msgDIV) {
 			CurrikiJS.msgDIV = document.createElement('div');

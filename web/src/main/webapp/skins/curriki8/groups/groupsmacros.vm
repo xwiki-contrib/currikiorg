@@ -116,10 +116,8 @@ wikiEditor.init({
 	wiki_images_path : '/xwiki/bin/download/${spaceName}/${pageName}/',
 	wiki_attach_path : '/xwiki/bin/view/${spaceName}/${pageName}'
 });
-var editWelcomeBlockLink;
-function editWelcomeBlock(editLink, spaceName, pageName, divid) {
-	editWelcomeBlockLink = editLink;
-	CurrikiJS.jt_ShowHideElm(editWelcomeBlockLink);
+function editWelcomeBlock(spaceName, pageName, divid) {
+	CurrikiJS.jt_cssClass.add(document.getElementById('section_1'), 'hideRight');
 	var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
 	$(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
 	// call url to get the edit html to edit the profile
@@ -132,7 +130,7 @@ function editWelcomeBlockCallback(ajaxreq) {
 }
 function cancelEditWelcomeBlock(spaceName,pageName,divid) {
 	if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
-		CurrikiJS.jt_ShowHideElm(editWelcomeBlockLink, true);
+		CurrikiJS.jt_cssClass.rem(document.getElementById('section_1'), 'hideRight');
 ## CURRIKI-3174 in IE we need to refresh because of CSS issue
 #set($ua = $request.getHeader("user-agent"))
 #if($ua.indexOf("MSIE")!=-1) ##{
@@ -151,7 +149,7 @@ function cancelEditWelcomeBlockCallback(ajaxreq) {
 }
 </script>
 {/pre}
-#begingroupsection($title,"$msg.groups_home_welcome_link","javascript:editWelcomeBlock(this, '$spaceName', '$pageName', 'groups-members-welcomeblock')", $colour, true)
+#begingroupsection($title,"$msg.groups_home_welcome_link","javascript:editWelcomeBlock('$spaceName', '$pageName', 'groups-members-welcomeblock')", $colour, true)
 <div id="groups-members-welcomeblock">
 #groupsdisplaywelcomeblock($doc)
 </div>
