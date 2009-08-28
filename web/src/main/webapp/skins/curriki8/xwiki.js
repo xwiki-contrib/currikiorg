@@ -412,26 +412,26 @@ var CurrikiJS = {
 
 		add: function(elm, className) {
 			if (elm) {
-				var obj = jt_cssClass.asObj(elm);
+				var obj = CurrikiJS.jt_cssClass.asObj(elm);
 				obj[className] = true;
-				elm.className = jt_cssClass.asStr(obj);
+				elm.className = CurrikiJS.jt_cssClass.asStr(obj);
 			}
 		},
 
 		rem: function(elm, className) {
 			if (elm) {
-				var obj = jt_cssClass.asObj(elm);
+				var obj = CurrikiJS.jt_cssClass.asObj(elm);
 				delete obj[className];
-				elm.className = jt_cssClass.asStr(obj);
+				elm.className = CurrikiJS.jt_cssClass.asStr(obj);
 			}
 		},
 
 		rpl: function(elm, remClassName, addClassName) {
 			if (elm) {
-				var obj = jt_cssClass.asObj(elm);
+				var obj = CurrikiJS.jt_cssClass.asObj(elm);
 				delete obj[remClassName];
 				obj[addClassName] = true;
-				elm.className = jt_cssClass.asStr(obj);
+				elm.className = CurrikiJS.jt_cssClass.asStr(obj);
 			}
 		},
 
