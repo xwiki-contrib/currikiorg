@@ -119,7 +119,7 @@ wikiEditor.init({
 var editWelcomeBlockLink;
 function editWelcomeBlock(editLink, spaceName, pageName, divid) {
 	editWelcomeBlockLink = editLink;
-	editWelcomeBlockLink.hide();
+	$(editWelcomeBlockLink).hide();
 	var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
 	$(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
 	// call url to get the edit html to edit the profile
@@ -132,7 +132,7 @@ function editWelcomeBlockCallback(ajaxreq) {
 }
 function cancelEditWelcomeBlock(spaceName,pageName,divid) {
 	if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
-		editWelcomeBlockLink.show();
+		$(editWelcomeBlockLink).show();
 ## CURRIKI-3174 in IE we need to refresh because of CSS issue
 #set($ua = $request.getHeader("user-agent"))
 #if($ua.indexOf("MSIE")!=-1) ##{
