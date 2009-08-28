@@ -116,6 +116,10 @@ wikiEditor.init({
 	wiki_images_path : '/xwiki/bin/download/${spaceName}/${pageName}/',
 	wiki_attach_path : '/xwiki/bin/view/${spaceName}/${pageName}'
 });
+function saveWelcomeBlock() {
+	CurrikiJS.jt_cssClass.rem(document.getElementById('section_1'), 'hideRight');
+	document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();
+}
 function editWelcomeBlock(spaceName, pageName, divid) {
 	CurrikiJS.jt_cssClass.add(document.getElementById('section_1'), 'hideRight');
 	var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
@@ -204,7 +208,7 @@ $wdoc.display("content", "edit")
 {pre}
 <div class="button-right">
 <input type="button" class="button-grey" value="$msg.get("groups_home_editwelcome_cancel_btt")" onclick="cancelEditWelcomeBlock('${spaceName}','${pageName}','${divid}');" />
-<input type="submit" class="button-orange" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();" />
+<input type="submit" class="button-orange" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="saveWelcomeBlock()" />
 </div>
 {/pre}
 </form>
