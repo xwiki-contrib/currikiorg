@@ -103,51 +103,55 @@
 <script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
 <script type="text/javascript">
- wikiEditor.init({
-		elements : "",
-	    language: "en",
-		mode: "exact",
-		content_css: "$xwiki.getSkinFile("style.css", true)",
-		debug : false,
-		remove_linebreaks : false,
-		plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_use_style: 'true',
-        wiki_plugins: 'core,attachments',
-        wiki_images_path : '/xwiki/bin/download/${spaceName}/${pageName}/',
-        wiki_attach_path : '/xwiki/bin/view/${spaceName}/${pageName}'
-        });
-function editWelcomeBlock(spaceName,pageName,divid) {
-  var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
-  $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
-  // call url to get the edit html to edit the profile
-  var myAjax = new Ajax.XWikiRequest( "Groups", "EditWelcomeBlockService", {method: 'get', parameters: pars, onComplete: editWelcomeBlockCallback, divid: divid });
+wikiEditor.init({
+	elements : "",
+	language: "en",
+	mode: "exact",
+	content_css: "$xwiki.getSkinFile("style.css", true)",
+	debug : false,
+	remove_linebreaks : false,
+	plugins: 'table, contextmenu, paste, searchreplace',
+	wiki_use_style: 'true',
+	wiki_plugins: 'core,attachments',
+	wiki_images_path : '/xwiki/bin/download/${spaceName}/${pageName}/',
+	wiki_attach_path : '/xwiki/bin/view/${spaceName}/${pageName}'
+});
+var editWelcomeBlockLink;
+function editWelcomeBlock(editLink, spaceName, pageName, divid) {
+	editWelcomeBlockLink = editLink;
+	editWelcomeBlockLink.hide();
+	var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
+	$(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+	// call url to get the edit html to edit the profile
+	var myAjax = new Ajax.XWikiRequest( "Groups", "EditWelcomeBlockService", {method: 'get', parameters: pars, onComplete: editWelcomeBlockCallback, divid: divid });
 }
 function editWelcomeBlockCallback(ajaxreq) {
- var divid = ajaxreq.options.divid;
- $(divid).innerHTML = ajaxreq.transport.responseText;
- tinyMCE.addMCEControl(document.getElementById("XWiki.CurrikiWelcomeBlockClass_0_content"), "XWiki.CurrikiWelcomeBlockClass_0_content");
+	var divid = ajaxreq.options.divid;
+	$(divid).innerHTML = ajaxreq.transport.responseText;
+	tinyMCE.addMCEControl(document.getElementById("XWiki.CurrikiWelcomeBlockClass_0_content"), "XWiki.CurrikiWelcomeBlockClass_0_content");
 }
 function cancelEditWelcomeBlock(spaceName,pageName,divid) {
- if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
- ## CURRIKI-3174 in IE we need to refresh because of CSS issue
- #set($ua = $request.getHeader("user-agent"))
- #if($ua.indexOf("MSIE")!=-1) ##{
-    history.go(0); 
+	if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
+		editWelcomeBlockLink.show();
+## CURRIKI-3174 in IE we need to refresh because of CSS issue
+#set($ua = $request.getHeader("user-agent"))
+#if($ua.indexOf("MSIE")!=-1) ##{
+		history.go(0); 
  #else
-    var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
-    $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
-    // call url to get the edit html to edit the profile
-    var myAjax = new Ajax.XWikiRequest( "Groups", "ViewWelcomeBlockService", {method: 'get', parameters: pars, onComplete: cancelEditWelcomeBlockCallback, divid: divid });
+		var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
+		$(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+		// call url to get the edit html to edit the profile
+		var myAjax = new Ajax.XWikiRequest( "Groups", "ViewWelcomeBlockService", {method: 'get', parameters: pars, onComplete: cancelEditWelcomeBlockCallback, divid: divid });
  #end
- }
+	}
 }
 function cancelEditWelcomeBlockCallback(ajaxreq) {
- var divid = ajaxreq.options.divid;
- $(divid).innerHTML = ajaxreq.transport.responseText;
+	var divid = ajaxreq.options.divid;
+	$(divid).innerHTML = ajaxreq.transport.responseText;
 }
 </script>
 {/pre}
-#begingroupsection($title,"$msg.groups_home_welcome_link","javascript:editWelcomeBlock('$spaceName','$pageName','groups-members-welcomeblock')", $colour, true)
+#begingroupsection($title,"$msg.groups_home_welcome_link","javascript:editWelcomeBlock(this, '$spaceName', '$pageName', 'groups-members-welcomeblock')", $colour, true)
 <div id="groups-members-welcomeblock">
 #groupsdisplaywelcomeblock($doc)
 </div>
@@ -195,19 +199,16 @@ $msg.get("groups_home_editwelcome_direction")
 {pre}
 <form id="wblockform" action="$xwiki.getURL("Groups.SaveWelcomeBlockService")" method="post" onsubmit="new iframe(this,{update:'${divid}'}); return false;">
 {/pre}
-<p>
 <input type="hidden" name="xpage" value="plain" />
 <input type="hidden" name="space" value="$spaceName" />
 <input type="hidden" name="page" value="$pageName" />
 $wdoc.display("content", "edit")
-<br />
 {pre}
 <div class="button-right">
 <input type="button" class="button-grey" value="$msg.get("groups_home_editwelcome_cancel_btt")" onclick="cancelEditWelcomeBlock('${spaceName}','${pageName}','${divid}');" />
 <input type="submit" class="button-orange" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();" />
 </div>
 {/pre}
-</p>
 </form>
 #end
 
