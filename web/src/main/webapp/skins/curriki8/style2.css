@@ -40,6 +40,7 @@ A.cancel, button.cancel, input.cancel,
 #closebutton button,
 #organize-cancel-btn button,
 #nextbutton button.x-btn-text,
+.search-termPanel-button button,
 x-btn button, .menu-add {
 	background-color:#FF7F00;
 	border:1px solid #FF0000;
@@ -71,6 +72,7 @@ A.button:hover, button.button:hover, input.button:hover,
 A.button-orange:hover, button.button-orange:hover, input.button-orange:hover,
 x-btn button:hover, .menu-add:hover,
 #nextbutton button.x-btn-text:hover,
+.search-termPanel-button button:hover,
 #closebutton.button-confirm button:hover {
 	background-color: #ffb808; 
 	color: #fff;
@@ -135,11 +137,6 @@ H5 em strong { color: red; }
 .shadow-middle { background-color: #C3C3C3; position: relative; height: 1%; top: -2px; left: -2px; }
 .shadow-inner { background-color: #f2f2f2; border: 1px solid #e1e1e1; border-bottom-width: 0; border-right-width: 0; position: relative; height: 1%; top: -3px; left: -3px; }
 
-/* Orange search box */
-.search-box { border: 2px solid #ff0000; background-color: #ff7f00; padding: 1.1em 0.1em 1em 0.9em; }
-.search-box .input { border: none; color: #666; font-size: 1.1em; width: 75%; margin-right: 5px;  }
-.search-box button { border: none; font-size: 1.1em; padding: 0.1em 0 0.1em 0 !important; } 
-
 /* header bars */
 .headerbar,
 .form-wrp fieldset h3 {
@@ -168,6 +165,19 @@ H5 em strong { color: red; }
 #footerglobal { min-width: 850px; max-width: 850px; _width: expression((((document.body.clientWidth)) < 880 || ((document.body.clientWidth)) > 880 )? "870px": "auto" ); margin-left: -5px; }
 #shadow-right { background: #fff /**url("images/shadow-right.jpg") repeat-y right**/; padding-right: 10px; }
 
+/* Orange search box */
+#header-search .search-box { border: 2px solid #ff0000; background-color: #ff7f00; padding: 1.1em 0.1em 1em 0.9em; }
+#header-search .search-box .input { border: none; color: #666; font-size: 1.1em; width: 75%; margin-right: 5px;  }
+#header-search #searchbtn {
+	display:inline-block;
+	border: none;
+	color:#FFFFFF;
+	font-size: 1.1em;
+	background: transparent;
+	padding: 0.1em 0 0.1em 0 !important;
+} 
+#header-search #searchbtn:hover { text-decoration: underline; }
+
 /* header */
 #header { border-bottom: 1px solid #999; font-size: 12px; height: 70px; padding: 5px 0 5px 0; }
 #header div { float: left; width: 33%; padding: 0 1em; height: 100%; }
@@ -185,8 +195,8 @@ H5 em strong { color: red; }
 #header-member .logout { color: #fb0f0c; }
 #header-member .logout:hover { text-decoration: none; }
 #header-member .separator { color: #3f3f3f; }
+
 #header #header-search { border-left: 1px solid #999; float: right; padding: 0.1em 0 0 1em; width: 255px !important; width: 280px; }
-#header-search button:hover { background-color: #ff7f00; }
 #header-search p { margin: 0; padding: 0; text-align: right; }
 #header-search p a { font-size: 0.9em; }
 #header-search .search-box .input { font-size: 1.2em; padding: 0.3em 0.2em; }
@@ -427,7 +437,6 @@ ul.x-tree-root-ct, #educational_level2-set .x-form-item { margin: 0; }
 #done-dialogue button { background-color: transparent; font-size: 12px; border: none; color: #1963aa; }
 #done-dialogue #closebutton button { background-color: #ff7f00; border: 1px solid #ff0000; color: #FFF; font-size: 11px;}
 #done-dialogue #closebutton button:hover { background-color: #ffb808; color: #fff; text-decoration: none; }
-.search-box button#searchbtn:hover {text-decoration: underline !important;}
 .x-toolbar .x-btn-over td.x-btn-center { background-image: none !important; text-decoration: none; }
 .x-window .ux-mselect-selected, .x-combo-list .x-combo-list-inner .x-combo-selected { background-color: #3399ff; color: #fff; }
 .required-indicator {
