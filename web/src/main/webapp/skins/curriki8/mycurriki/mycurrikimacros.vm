@@ -431,13 +431,13 @@ $!desc
 	#if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights())) ##{
 		<div class="button-right">
 		#if("$!request.mode"=="") ##{
-			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view", "mode=public")" title="$msg.get("view_profile.intro.public_button")">$msg.get("view_profile.intro.public_button")</a></span>
+			<a class="button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view", "mode=public")" title="$msg.get("view_profile.intro.public_button")">$msg.get("view_profile.intro.public_button")</a></span>
 		#elseif("$!request.mode"=="public") ##}{
-			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view")" title="$msg.get("view_profile.intro.return_button")">$msg.get("view_profile.intro.return_button")</a></span>
+			<a class="button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view")" title="$msg.get("view_profile.intro.return_button")">$msg.get("view_profile.intro.return_button")</a></span>
 		#end ##}
 		#if("$!request.mode"=="") ##{
 			<!-- My Curriki edit profile button -->
-			<a class="button button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
+			<a class="button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
 		#end ##}
 		</div>
 		#if("$!request.mode"=="") ##{
@@ -973,7 +973,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
         #if("$!breadcrumb" == "") ## {
           #set($breadcrumb=$userdoc.fullName)
         #end ## }
-        <a class="button button-orange" href="$xwiki.getURL("${favPage}", "view", "bc=${breadcrumb}")" title="$msg.get("mycurriki.favorites.viewButton")">$msg.get("mycurriki.favorites.viewButton")</a></span>
+        <a class="button-orange" href="$xwiki.getURL("${favPage}", "view", "bc=${breadcrumb}")" title="$msg.get("mycurriki.favorites.viewButton")">$msg.get("mycurriki.favorites.viewButton")</a></span>
       #end ## }
     #end ## }
   #end ## }
@@ -1391,7 +1391,7 @@ $msg.get("deleted")
   <!-- MyCurriki Contributions Buttons -->
   #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))##{
     {pre}
-    <a class="button button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
+    <a class="button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
     {/pre}
   #end ##}
   <!-- End MyCurriki Contributions Buttons -->
@@ -1673,7 +1673,7 @@ function toggle_desc(){
 #macro(mycurriki_collectionbutton $userobj)
 #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))
 {pre}
-<a class="button button-orange" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")">$msg.get("mycurriki.collections.addButton")</a>
+<a class="button-orange" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")">$msg.get("mycurriki.collections.addButton")</a>
 {/pre}
 #end
 #end ## buttonmacro

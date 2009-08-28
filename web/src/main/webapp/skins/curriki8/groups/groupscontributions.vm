@@ -16,7 +16,7 @@
 <div id="groups-main-header">
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
 {pre}
-<a class="button button-orange" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
+<a class="button-orange" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
 {/pre}
 #end ##}
 <div id="groups-main-header-title" class="main-title">
@@ -296,7 +296,7 @@ Curriki.module.search.start();
 ##
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
 {pre}
-	<a class="button button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
+	<a class="button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
 {/pre}
 #end ##}
 $msg.get("groups.curriculum.contributions.about")
@@ -307,7 +307,7 @@ $msg.get("groups.curriculum.contributions.about")
 			action="/xwiki/bin/view/${spaceName}/ContributionsSearch">
 {/pre}
 			<div class="groupcontribution-leftbutton">
-				<a class="button button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
+				<a class="button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
 				$msg.get('groups.curriculum.contributions.viewORsearch')
 			</div>
 		##
@@ -376,7 +376,7 @@ Curriki.data.reorder = {
 #if($context.action == "view")
 #if($sm.isMember($spaceName, $context.user))
 {pre}
-<a class="button button-orange" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")">$msg.get("groups.curriculum.collections.addButton")</a>
+<a class="button-orange" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")">$msg.get("groups.curriculum.collections.addButton")</a>
 {/pre}
 #end
 #end

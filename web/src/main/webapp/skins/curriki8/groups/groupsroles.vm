@@ -162,8 +162,8 @@ $role.title
 <input name="rename" type="hidden" value="${role.name}" />
 <input name="from" type="hidden" value="${role.title}" />
 <input name="to" type="text" size=32 maxlength=32 value="${role.title.replace('"', '\"')}" />
-<input class="button button-grey" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
-<input type="submit" class="button button-orange" value="$msg.get("groups.roles.manage.save")" />
+<input class="button-grey" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
+<input type="submit" class="button-orange" value="$msg.get("groups.roles.manage.save")" />
 </form>
 </div>
 #end ## }
@@ -215,12 +215,12 @@ $msg.get("groups.roles.manage.intro")
 #end ## }
 ## Add role Button
 <div id="groups-manage-roles-add-button" class="lefttext">
-<div class="righttext floatright hidebuttons"><button type="button" class="button button-orange" onclick="{pre}$('groups-manage-roles-add-form').show(); $$('.hidebuttons').invoke('hide');{/pre}">$msg.get("groups.roles.manage.add")</button></div>
+<div class="righttext floatright hidebuttons"><button type="button" class="button-orange" onclick="{pre}$('groups-manage-roles-add-form').show(); $$('.hidebuttons').invoke('hide');{/pre}">$msg.get("groups.roles.manage.add")</button></div>
 </div>
 <div id="groups-manage-roles-add-form" style="display:none;" class="frame-inset">
 <form method="post">
 <input name="create" type="text" size=32 maxlength=32 />
-<input class="button button-grey" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
+<input class="button-grey" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
 <input type="submit" class="button button-orange" value="$msg.get("groups.roles.manage.save")" />
 </form>
 </div>

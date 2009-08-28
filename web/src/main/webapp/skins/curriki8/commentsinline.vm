@@ -27,7 +27,7 @@
 ## Only show comments area if there are comments or the user has the right to comment
 ##
 		#if($xwiki.hasAccessLevel("comment") && ($comments.size()>2) )
-<div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="righttext"><a class="button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 		#end
 <div id="commentscontent" class="xwikiintracontent">
 		#if($comments.size()>0)
@@ -72,12 +72,12 @@
 	<input type="hidden" name="XWiki.XWikiComments_date" value=""/>
 	<div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment' style="width:99%;"></textarea></div>
 	<div>
-		#button($msg.get("caption.saveComment"), "button button-orange" "submit" "" "")
-		#button($msg.get("cancel"), "grey" "reset" "" "hideForm2(this.form);")
+		<button class="button-orange" type="submit">$msg.get("caption.saveComment")</button>
+		<button class="button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
 	</div>
 </fieldset>
 </form>
-<div class="righttext"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+<div class="righttext"><a class="button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
 		#end
 </div>
 	#end ## endif display anything about comments

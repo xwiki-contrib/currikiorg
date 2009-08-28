@@ -725,7 +725,7 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 #end ## foreach on comments ## }
 #if($xwiki.hasAccessLevel("comment")) ## {
 <div id="commentscontent" class="xwikiintracontent">
-<div class="button-right"><a class="button button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
+<div class="button-right"><a class="button-orange" onclick="toggleForm2(document.commentAddForm); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
 #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
 #set($comment = $cclass.newObject())
 <form name="commentAddForm" id="commentAddForm" action="$doc.getURL("commentadd")" method="post">
@@ -736,8 +736,8 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 	<input type="hidden" name="XWiki.XWikiComments_date" value=""/>
 	<div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
 	<div>
-		<button class="button button-orange" type="submit" onclick="return updateXRedirect('commentAddForm', true);">$msg.get("caption.saveComment")</button>
-		<button class="button button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
+		<button class="button-orange" type="submit" onclick="return updateXRedirect('commentAddForm', true);">$msg.get("caption.saveComment")</button>
+		<button class="button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
 	</div>
 </fieldset>
 </form>
@@ -770,7 +770,7 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 #end
 #if($hasedit || $hasadmin)
 <div id="attachmentscontent" class="xwikiintracontent">
-<div class="button-right"><a class="button button-orange" onclick="toggleForm2(document.attachmentAddForm)">$msg.get("addattachment")</a></div>
+<div class="button-right"><a class="button-orange" onclick="toggleForm2(document.attachmentAddForm)">$msg.get("addattachment")</a></div>
 <form name="attachmentAddForm" id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
 <fieldset id="attachform">
@@ -778,8 +778,8 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 	<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
 	<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
 	<div>
-		<span><input class="button button-orange" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /></span>
-		<button class="button button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
+		<button class="button-orange" type="submit" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))">$msg.get("attachthisfile")</button>
+		<button class="button-grey" type="reset" onclick="hideForm2(this.form);">$msg.get("cancel")</button>
 	</div>
 </fieldset>
 </form>
@@ -897,8 +897,8 @@ $bentrydoc.display("content", "edit", $bentryobj)
 #messageAddSendToFormFields($spaceName, true, [], [])
 <div class="righttext">
 {pre}
-<input class="button button-orange floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm('inline') == false) return false; document.forms.inline.submit(); return false;"/>
-<input class="button button-grey floatright" type="submit" name="formactioncancel" value="$msg.get("groups_messages_create_cancel_btt")" onclick="history.go(-1); return false;"/>
+<input class="button-orange floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm('inline') == false) return false; document.forms.inline.submit(); return false;"/>
+<input class="button-grey floatright" type="submit" name="formactioncancel" value="$msg.get("groups_messages_create_cancel_btt")" onclick="history.go(-1); return false;"/>
 {/pre}
 </div>
 </form>
@@ -964,8 +964,8 @@ $adoc.use($viewRightObj)
 #messageAddSendToFormFields($groupName, $toGroup, $selectedRoles, $selectedMembers)
 {pre}
 <div class="button-right">
-<input type="button" class="button button-grey" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
-<input type="submit" class="button button-orange" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" />
+<input type="button" class="button-grey" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
+<input type="submit" class="button-orange" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" />
 </div>
 {/pre}
 </p>
