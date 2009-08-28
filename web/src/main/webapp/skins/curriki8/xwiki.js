@@ -16,10 +16,11 @@ function hideForm2(form) {
 	form.style.display = "none";
 }
 
-function toggleForm2(form) {
+function toggleForm2(form, focusField) {
+	focusField = focusField ? focusField : 'XWiki.XWikiComments_comment';
 	form.style.display = (form.style.display == "block") ? "none" : "block";
-	if (form.style.display == "block") {
-		form['XWiki.XWikiComments_comment'].focus();
+	if ( (form.style.display == "block") && form[focusField]) {
+		form[focusField].focus();
 	}
 }
 

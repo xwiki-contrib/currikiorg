@@ -128,11 +128,11 @@
   #if( $newDocSaved )
      $msg.get( "groups_documentation_wiki_page_save_confirm", [$newDocSaved] )
   #end
-  <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")">
-    <input type="hidden" name="action" value="newdoc" />
-    <input type="text" name="newdocname" value="${msg.groups_documentation_new_wiki_title}" />
-   <button type="submit" class="button button-orange">${msg.groups_documentation_new_wiki_submit}</button>
-  </form>
+<form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")">
+	<input type="hidden" name="action" value="newdoc" />
+	<input type="text" name="newdocname" value="${msg.groups_documentation_new_wiki_title}" />
+	<button type="submit" class="button-orange">${msg.groups_documentation_new_wiki_submit}</button>
+</form>
 #endgroupsection()
 #end ## }
 #end
@@ -200,8 +200,8 @@ function getFileExtension() {
 }
 </script>
 {/pre}
-<button type="submit" class="button button-orange">${msg.groups_documentation_add_document_upload}</button>
-  </form>
+<button type="submit" class="button-orange">${msg.groups_documentation_add_document_upload}</button>
+</form>
 #endgroupsection()
 #end ## }
 #end ## macro
@@ -581,7 +581,7 @@ Edit
    #set($rollURL = $rollURL + $xwiki.getURLEncoded( $bURL ) )
           <td>
 #if( $velocityCount> 1 )
-<a href="${rollURL}" onclick="if (confirm('$msg.get("readytorollback") $nextversion')){this.href += '&amp;confirm=1'; return true;} return false;" class="button button-orange">$msg.get("history.rollback")</a>
+<a href="${rollURL}" onclick="if (confirm('$msg.get("readytorollback") $nextversion')){this.href += '&amp;confirm=1'; return true;} return false;" class="button-orange">$msg.get("history.rollback")</a>
 #end
 </td>
 #end ## hasedit

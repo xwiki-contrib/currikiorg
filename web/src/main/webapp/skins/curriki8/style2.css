@@ -32,8 +32,8 @@ input.checkbox, input[type="checkbox"], input[type="radio"] { border: 0; height:
 textarea, .x-form-text, textarea.x-form-field { background-image: none; border-style: solid; border-width: 1px; border-color: #999 #dcdcdc #dcdcdc #999; font-size: 13px; padding: 0.4em 0.2em; white-space: pre; }
 p { margin: 0.5em 0; padding: 0; }
 
-A.button, button.button, input.button,
-A.button-orange, button.button-orange, input.button-orange,
+A.button, A.button:visited, button.button, input.button,
+A.button-orange, A.button-orange:visited, button.button-orange, input.button-orange,
 A.button-grey, button.button-grey, input.button-grey,
 A.cancel, button.cancel, input.cancel,
 x-btn button, .menu-add,
@@ -49,9 +49,9 @@ x-btn button, .menu-add,
 	font-weight: normal;
 	padding:4px 10px 3px;
 }
-A.button-grey, button.button-grey, input.button-grey,
-A.cancel, button.cancel, input.cancel,
-#cancelbutton .x-btn-text,
+A.button-grey, A.button-grey:visited, button.button-grey, input.button-grey,
+A.cancel, A.cancel:visited, button.cancel, input.cancel,
+#cancelbutton button,
 #closebutton button,
 #organize-cancel-btn button,
 #organize-confirm-cancel-button button {
@@ -75,20 +75,14 @@ x-btn button:hover, .menu-add:hover,
 	text-decoration: none;
 }
 
-/* these break IE when combined in list above */
-input.button-grey[type="submit"]:hover,
-input.button-grey[type="button"]:hover  {
-	background-color: #b4b4b4; 
-	color: #3f3f3f !important;
-}
 A.button-grey:hover, button.button-grey:hover, input.button-grey:hover,
 A.cancel:hover, button.cancel:hover, input.cancel:hover,
-#cancelbutton .x-btn-text:hover,
+#cancelbutton button:hover,
 #closebutton button:hover,
 #organize-cancel-btn button:hover,
 #organize-confirm-cancel-button button:hover {
-	background-color: #b4b4b4; 
-	color: #3f3f3f;
+	background-color: #b4b4b4 !important; 
+	color: #3f3f3f !important;
 	text-decoration: none;
 }
 

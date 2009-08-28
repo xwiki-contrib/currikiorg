@@ -770,7 +770,7 @@ $xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDa
 #end
 #if($hasedit || $hasadmin)
 <div id="attachmentscontent" class="xwikiintracontent">
-<div class="button-right"><a class="button-orange" onclick="toggleForm2(document.attachmentAddForm)">$msg.get("addattachment")</a></div>
+<div class="button-right"><a class="button-orange" onclick="toggleForm2(document.attachmentAddForm, 'filepath')">$msg.get("addattachment")</a></div>
 <form name="attachmentAddForm" id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
 <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
 <fieldset id="attachform">

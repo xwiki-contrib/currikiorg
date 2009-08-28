@@ -675,7 +675,7 @@ $msg.get("groups_creategroup_needaccount", [$url])
   <table align="center">
   <tbody>
   <tr>
-  <td><input type="submit" class="button button-orange" value="$msg.get("groups_creategroup_create_btt")" /></td>
+  <td><input type="submit" class="button-orange" value="$msg.get("groups_creategroup_create_btt")" /></td>
   <td>#set($homelink=$xwiki.getURL("Main.WebHome"))
   #button(  "$msg.groups_creategroup_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_creategroup_cancel_confirm')) window.location='$homelink';" )</td>
   </tr>
@@ -844,7 +844,7 @@ function getFileExtension() {
 {/pre}
 </div>
 </div>
-<div class="button-center button-masthead"><input class="button button-orange" type="submit" value="$msg.groups_home_editmasthead_submit_btt" />#button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editmasthead_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
+<div class="button-center button-masthead"><input class="button-orange" type="submit" value="$msg.groups_home_editmasthead_submit_btt" />#button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editmasthead_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
 </form>
 #end
 <div class="tooltips">
@@ -940,7 +940,7 @@ http:&#47;&#47; $s.display("urlshortcut","edit") #groups_groupsuffixurl()
 #validateGroup( "url-invalid" "" $msg.groups_validation_url_invalid)
 </div>
 </div>
-<div class="button-center"><input class="button button-orange" type="submit" value="$msg.groups_home_editinformation_submit_btt" /> #button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
+<div class="button-center"><input class="button-orange" type="submit" value="$msg.groups_home_editinformation_submit_btt" /> #button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editinformation_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
 </form>
 #end
 <div class="tooltips">
@@ -1086,7 +1086,7 @@ http:&#47;&#47;$s.display("urlshortcut","view")#groups_groupsuffixurl()
 ##
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
 {pre}
-	<a class="button button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
+	<a class="button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
 {/pre}
 #end ##}
 $msg.get("groups.curriculum.contributions.about")
@@ -1097,7 +1097,7 @@ $msg.get("groups.curriculum.contributions.about")
 	action="/xwiki/bin/view/${spaceName}/ContributionsSearch">
 {/pre}
 		<div class="groupcontribution-leftbutton">
-			<a class="button button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
+			<a class="button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
 			$msg.get('groups.curriculum.contributions.viewORsearch')
 		</div>
 ##
