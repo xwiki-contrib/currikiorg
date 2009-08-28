@@ -352,8 +352,12 @@ function createAccordion(params) {
 
 var CurrikiJS = {
 
+	jt_ShowHideElm: function(elm, showIt) {
+		if (elm) {elm.style.visibility = (showIt) ? 'visible' : 'hidden';}
+	},
+
 	jt_ShowNoneElm: function(elm, showIt, showStyle) {
-		if (elm) {elm.style.display = showIt ? (showStyle ? showStyle : 'block') : "none";}
+		if (elm) {elm.style.display = showIt ? (showStyle ? showStyle : 'block') : 'none';}
 	},
 
 	jt_valPx: function(pixels) {
