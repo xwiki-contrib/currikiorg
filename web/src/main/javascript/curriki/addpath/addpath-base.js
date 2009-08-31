@@ -1283,7 +1283,7 @@ Curriki.module.addpath.init = function(){
 								},{
 									 border:false
 									,xtype:'radiogroup'
-									,width:588
+									,width:'90%'
 									,columns:[.95]
 									,vertical:true
 									,defaults:{
