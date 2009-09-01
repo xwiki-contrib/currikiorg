@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.joster</contentAuthor>
 <creationDate>1243731696000</creationDate>
-<date>1248564529000</date>
-<contentUpdateDate>1248564529000</contentUpdateDate>
-<version>13.1</version>
+<date>1251478938000</date>
+<contentUpdateDate>1251478938000</contentUpdateDate>
+<version>15.1</version>
 <title>Curriki Extended Lesson Plan Template</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>remove CSS for .curriki-form, update latest in style2.css</comment>
+<comment>button:hover re-org</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -137,7 +137,7 @@
       if(missed_fields_str != ''){
         error_msg = '$msg.get('lesson.plan.required.fields.dialog')' + missed_fields_str;
       }else{
-        if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; 125) {
+        if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; $msg.get("resource.title.maxlength")) {
           error_msg = '$msg.get("celp.title.more.125")';
         }
       }
@@ -902,7 +902,7 @@
     #curriki_formpart_begin($msg.get("celp.step1.header"))
     #curriki_forminstructions($msg.get("celp.step1.instruction"))
     #curriki_formprompt($msg.get("celp.step1.title_title"), $msg.get("celp.step1.title_tooltip"), $msg.get("celp.step1.title_txt"), true, "medium")
-    &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" /&gt;
+    &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
     #curriki_formprompt($msg.get("celp.step1.description_title"), $msg.get("celp.step1.description_tooltip"), $msg.get("celp.step1.description_txt"), true, "medium")
     $newAsset.display("description","edit")
     &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
@@ -932,7 +932,7 @@
     ##Desired Learner Outcomes:
     #curriki_formprompt($msg.get("celp.step2.outcomes.title"), "", $msg.get("celp.step2.outcomes.instruction"), true, "medium")
     &lt;div id="outcomes_div"&gt;&lt;/div&gt;
-    &lt;button class="button button-orange" id="addRowBtn_0" onclick="return addrow(0);"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
+    &lt;button class="button-orange" id="addRowBtn_0" onclick="return addrow(0);"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
     ##Standards:
     #curriki_formprompt($msg.get("celp.step2.standards.title"), "", $msg.get("celp.step2.standards.instruction"), false, "medium")
     &lt;textarea id="nlp_standards" name="nlp_standards"&gt;&lt;/textarea&gt;  ## in JS, this is replaced w/ WYSIWYG
@@ -940,7 +940,7 @@
     ##Summative Assessment(s):
     #curriki_formprompt($msg.get("celp.step2.assess.title"), $msg.get("celp.step2.assess.tooltip").replaceAll("\"","\\\""), $msg.get("celp.step2.assess.instruction"), true, "medium")
     &lt;div id="assess_div"&gt;&lt;/div&gt;
-    &lt;button class="button button-orange" id="addRowBtn_1" onclick="return addrow(1);"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
+    &lt;button class="button-orange" id="addRowBtn_1" onclick="return addrow(1);"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
     #curriki_forminstructions($msg.get("celp.step2.instruction3"))
     ##Pre-Requisite Knowledge &amp; Skills:
     #curriki_formprompt($msg.get("celp.step2.prereq.title"), $msg.get("celp.step2.prereq.tooltip").replaceAll("\"","\\\""), $msg.get("celp.step2.prereq.instruction"), false, "medium")
@@ -979,7 +979,8 @@
     #curriki_formpart_begin($msg.get("celp.step4.header")) 
     &lt;p&gt;&lt;label&gt;$msg.get("celp.step4.instruction")&lt;/label&gt;&lt;/p&gt;
     &lt;p class="links"&gt;
-    &lt;button onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkWebQuestForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"&gt;$msg.get("celp.submit.button")&lt;/button&gt;
+    &lt;button class="button-orange"
+		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkWebQuestForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"&gt;$msg.get("celp.submit.button")&lt;/button&gt;
     #if( "$!cameFrom" != "" ) 
       #set( $cancelURL = $cameFrom )
     #else 

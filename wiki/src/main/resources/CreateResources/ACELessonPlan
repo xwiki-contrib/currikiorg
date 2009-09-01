@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.joster</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.joster</contentAuthor>
 <creationDate>1222442464000</creationDate>
-<date>1249090780000</date>
-<contentUpdateDate>1249090780000</contentUpdateDate>
-<version>81.1</version>
+<date>1251478950000</date>
+<contentUpdateDate>1251478950000</contentUpdateDate>
+<version>83.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-4743</comment>
+<comment>button:hover re-org</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -174,7 +174,7 @@ if(!chekcTableText()){
   if(missed_fields_str != ''){
 	error_msg = '$msg.get('lesson.plan.required.fields.dialog')' + missed_fields_str;
   }else{
-	if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; 250) {
+	if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; $msg.get("resource.title.maxlength")) {
 	  error_msg = '$msg.get("ace.lesson.plan.title.more.250")';
 	}
   }
@@ -988,7 +988,7 @@ function getTableText(){
   #curriki_forminstructions($msg.get("ace.lesson.plan.step1.instruction"))
   #curriki_formprompt($msg.get("ace.lesson.plan.title_title"), $msg.get("ace.lesson.plan.title_tooltip"), $msg.get("ace.lesson.plan.title_txt"), true, "medium")
   ##$newAsset.display("title","edit")
-  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" /&gt;
+  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
   #curriki_formprompt($msg.get("ace.lesson.plan.description_title"), $msg.get("ace.lesson.plan.description_tooltip"), $msg.get("ace.lesson.plan.description_txt"), true, "medium")
   $newAsset.display("description","edit")
   &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
@@ -1036,7 +1036,7 @@ function getTableText(){
   &lt;textarea id='slp_anticipated_problems' name='slp_anticipated_problems' class='curriki-form1_textarea'&gt;&lt;/textarea&gt;
 
   #curriki_formprompt($msg.get("ace.lesson.plan.procedures.title"), $msg.get("ace.lesson.plan.procedures.tooltip"), $msg.get("ace.lesson.plan.procedures.instruction"), true, "medium")
-  &lt;div id="procedures_div"&gt; &lt;/div&gt;  &lt;button class="button button-orange" id="addRowBtn" onclick="return addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
+  &lt;div id="procedures_div"&gt; &lt;/div&gt;  &lt;button class="button-orange" id="addRowBtn" onclick="return addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
 
 ## Required Resources (attachments) -- fileselection w/ buttons
   #curriki_formprompt($msg.get("lesson.plan.required.attachments.title"), $msg.get("lesson.plan.required.attachments.tooltip"), $msg.get("lesson.plan.required.attachments.instruction"), false, "")
@@ -1062,8 +1062,8 @@ function getTableText(){
   #curriki_formpart_begin($msg.get("form.scratch.step4.header"))
   &lt;p&gt;&lt;label&gt;$msg.get("ace.form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
   &lt;p class="links"&gt;
-	 &lt;button
-	  onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkStandardLessonPlanForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
+	&lt;button class="button-orange"
+		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkStandardLessonPlanForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
 	  &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
 	 #if( "$!cameFrom" != "" )
 	   #set( $cancelURL = $cameFrom )

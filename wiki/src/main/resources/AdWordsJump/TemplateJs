@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1248397933000</creationDate>
-<date>1249527219000</date>
-<contentUpdateDate>1249527219000</contentUpdateDate>
-<version>18.1</version>
+<date>1251775002000</date>
+<contentUpdateDate>1251775002000</contentUpdateDate>
+<version>19.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-4794</comment>
+<comment>emailAutoButton+autoDecideButton, CURRIKI-4909</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -86,44 +86,65 @@ var AdWordJumpPage=Class.create({
             autoDecideButton:'',
             highlight:'checkhighlight'
         };
-        this.defaultvalue={};
+        this.configCheck={};
         Object.extend(this.options,options||{});
         if(this.checkOptions()){
             this.attachEvents();
         }
     },
     checkOptions:function(){
-        if(this.options.searchButton&amp;&amp;$(this.options.searchButton)){
-            if(!this.options.searchText||!$(this.options.searchText)){
+        this.configCheck.hasSearchText=this.options.searchText&amp;&amp;$(this.options.searchText);
+        this.configCheck.hasSearchButton=this.options.searchButton&amp;&amp;$(this.options.searchButton);
+        this.configCheck.hasEmailCheck=this.options.emailCheck&amp;&amp;$(this.options.emailCheck);
+        this.configCheck.hasEmail=this.options.email&amp;&amp;$(this.options.email);
+        this.configCheck.hasEmailButton=this.options.emailButton&amp;&amp;$(this.options.emailButton);
+        this.configCheck.hasSearchAndEmailButton=this.options.searchAndEmailButton&amp;&amp;$(this.options.searchAndEmailButton);
+        this.configCheck.hasAutoDecideButton=this.options.autoDecideButton&amp;&amp;$(this.options.autoDecideButton);
+        this.configCheck.hasSearchTextAutoButton=this.options.searchTextAutoButton&amp;&amp;$(this.options.searchTextAutoButton);
+        this.configCheck.hasEmailAutoButton=this.options.emailAutoButton&amp;&amp;$(this.options.emailAutoButton);
+        if(this.configCheck.hasSearchButton){
+            if(!this.configCheck.hasSearchText){
                 alert('Search term field is missing');
                 return false;
             }
         }
-        if(this.options.emailButton&amp;&amp;$(this.options.emailButton)){
-            if(!this.options.email||!$(this.options.email)){
+        if(this.configCheck.hasEmailButton){
+            if(!this.configCheck.hasEmail){
                 alert('Email entry field is missing');
                 return false;
             }
         }
-        if(this.options.searchAndEmailButton&amp;&amp;$(this.options.searchAndEmailButton)){
-            if(!this.options.searchText||!$(this.options.searchText)){
+        if(this.configCheck.hasSearchAndEmailButton){
+            if(!this.configCheck.hasSearchText){
                 alert('Search term field is missing');
                 return false;
             }
-            if(!this.options.email||!$(this.options.email)){
-                alert('Email text field is missing');
-                return false;
-            }
-        }
-        if(this.options.emailButton&amp;&amp;$(this.options.emailButton)){
-            if((!this.options.email||!$(this.options.email))&amp;&amp;(!this.options.email||!$(this.options.email))){
-                alert('Search term field or email text field is missing');
-                return false;
-            }
-        }
-        if(this.options.emailCheck&amp;&amp;$(this.options.emailCheck)){
-            if(!this.options.email||!$(this.options.email)){
+            if(!this.configCheck.hasEmail){
                 alert('Email entry field is missing');
+                return false;
+            }
+        }
+        if(this.configCheck.hasEmailCheck){
+            if(!this.configCheck.hasEmail){
+                alert('Email entry field is missing');
+                return false;
+            }
+        }
+        if(this.configCheck.hasAutoDecideButton){
+            if(!this.configCheck.hasSearchText&amp;&amp;!this.configCheck.hasEmail){
+                alert('Both search term field and email entry field are missing');
+                return false;
+            }
+        }
+        if(this.configCheck.hasSearchTextAutoButton){
+            if(this.getButtonFunction(this.options.searchTextAutoButton)==null){
+                alert('Invalid searchTextAutoButton, please make it point to search/searchAndEmailButton/autoDecide button');
+                return false;
+            }
+        }
+        if(this.configCheck.hasEmailAutoButton){
+            if(this.getButtonFunction(this.options.emailAutoButton)==null){
+                alert('Invalid emailAutoButton, please make it point to email/searchAndEmailButton/autoDecide button');
                 return false;
             }
         }
@@ -131,7 +152,8 @@ var AdWordJumpPage=Class.create({
     },
     attachEvents:function(){
         var caller=this;
-        if(caller.options.searchText&amp;&amp;$(caller.options.searchText)){
+        if(caller.configCheck.hasSearchText){
+            // set search field default text
             var search=$(caller.options.searchText);
             search.setValue(caller.options.defaultSearchText);
             Event.observe(caller.options.searchText,'focus',function(){
@@ -144,7 +166,8 @@ var AdWordJumpPage=Class.create({
                     search.setValue(caller.options.defaultSearchText);
                 }
             });
-            if(caller.options.searchTextAutoButton&amp;&amp;$(caller.options.searchTextAutoButton)){
+            // check and set search text auto button
+            if(caller.configCheck.hasSearchTextAutoButton){
                 Event.observe(caller.options.searchText,'keypress',function(event){
                     if(event.keyCode==Event.KEY_RETURN){
                         caller.getButtonFunction(caller.options.searchTextAutoButton).apply(caller);
@@ -152,7 +175,8 @@ var AdWordJumpPage=Class.create({
                 });
             }
         }
-        if(caller.options.email&amp;&amp;$(caller.options.email)){
+        if(caller.configCheck.hasEmail){
+            // set email default text
             var email=$(caller.options.email);
             email.setValue(caller.options.defaultEmailText);
             Event.observe(caller.options.email,'focus',function(){
@@ -165,12 +189,27 @@ var AdWordJumpPage=Class.create({
                     email.setValue(caller.options.defaultEmailText);
                 }
             });
-            if(caller.options.emailCheck&amp;&amp;$(caller.options.emailCheck)&amp;&amp;caller.options.emailButton&amp;&amp;$(caller.options.emailButton)){
-                var email_button=$(caller.options.emailButton);
-                email_button.disabled=!$F(caller.options.emailCheck);
+            // set email checkbox events
+            if(caller.configCheck.hasEmailCheck){
+                var email_check=$(caller.options.emailCheck);
+                email.disabled=!email_check.getValue();
                 Event.observe(caller.options.emailCheck,'click',function(){
-                    email_button.disabled=!$F(caller.options.emailCheck);
+                    email.disabled=!email_check.getValue();
                 });
+                if(caller.configCheck.hasEmailButton){
+                    var email_button=$(caller.options.emailButton);
+                    email_button.disabled=!email_check.getValue();
+                    Event.observe(caller.options.emailCheck,'click',function(){
+                        email_button.disabled=!email_check.getValue();
+                    });
+                }
+                if(caller.configCheck.hasAutoDecideButton&amp;&amp;!caller.configCheck.hasSearchText){
+                    var auto_button=$(caller.options.autoDecideButton);
+                    auto_button.disabled=!email_check.getValue();
+                    Event.observe(caller.options.emailCheck,'click',function(){
+                        auto_button.disabled=!email_check.getValue();
+                    });
+                }
             }
             if(caller.options.emailAutoButton&amp;&amp;$(caller.options.emailAutoButton)){
                 Event.observe(caller.options.email,'keypress',function(event){
@@ -216,7 +255,10 @@ var AdWordJumpPage=Class.create({
         new Ajax.Request(caller.options.logurl,{
             method: 'get',
             parameters: pars,
-            onComplete: caller.submitToNextPage
+            onComplete: function(request){
+                Curriki.hideLoading();
+                caller.submitToNextPage(request);
+            }
         });
     },
     emailSubmit:function(){
@@ -277,7 +319,10 @@ var AdWordJumpPage=Class.create({
         new Ajax.Request(caller.options.logurl,{
             method: 'get',
             parameters: pars,
-            onComplete: caller.submitToNextPage
+            onComplete: function(request){
+                Curriki.hideLoading();
+                caller.submitToNextPage(request);
+            }
         });
     },
     autoDecideSubmit:function(){
@@ -310,8 +355,11 @@ var AdWordJumpPage=Class.create({
             method: 'get',
             parameters: pars,
             onComplete: function(request){
+                Curriki.hideLoading();
                 if(searchtxt){
                     caller.submitToNextPage(request);
+                }else if(!caller.configCheck.hasSearchText){
+                    alert('The information was successfully submitted.');
                 }
             }
         });

@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.joster</contentAuthor>
 <creationDate>1239225185000</creationDate>
-<date>1248572977000</date>
-<contentUpdateDate>1248572977000</contentUpdateDate>
-<version>2.1</version>
+<date>1251431269000</date>
+<contentUpdateDate>1251431269000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>change className from curriki-form to curriki-form1</comment>
+<comment>add test for resource.title.maxlength, assign CSS to save button</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -241,7 +241,7 @@ function checkSimpleResourceForm() {
   if(missed_fields_str != ''){
 	error_msg = '$msg.get('form.scratch.required.fields.dialog')' + missed_fields_str;
   }else{
-    if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; 250) {
+    if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; $msg.get("resource.title.maxlength")) {
       error_msg = '$msg.get("form.scratch.title.more.250")';
     }
   }
@@ -439,7 +439,7 @@ function setUnloadDialog() {
   #curriki_forminstructions($msg.get("form.scratch.step1.instruction"))
   #curriki_formprompt($msg.get("sri.title_title"), $msg.get("form.scratch.title_tooltip"), $msg.get("form.scratch.title_txt"), true, "medium")
   ##$newAsset.display("title","edit")
-  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" /&gt;
+  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
   #curriki_formprompt($msg.get("sri.description_title"), $msg.get("form.scratch.description_tooltip"), $msg.get("form.scratch.description_txt"), true, "medium")
   $newAsset.display("description","edit")
   &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
@@ -481,8 +481,8 @@ function setUnloadDialog() {
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
   &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
   &lt;p class="links"&gt;
-     &lt;button
-      onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkSimpleResourceForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
+	&lt;button class="button-orange"
+		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkSimpleResourceForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
       &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
      #if( "$!cameFrom" != "" ) ## { 
        #set( $cancelURL = $cameFrom )

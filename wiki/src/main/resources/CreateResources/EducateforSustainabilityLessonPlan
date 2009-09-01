@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.joster</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.joster</contentAuthor>
 <creationDate>1246470865000</creationDate>
-<date>1248937094000</date>
-<contentUpdateDate>1248937094000</contentUpdateDate>
-<version>26.1</version>
+<date>1251478944000</date>
+<contentUpdateDate>1251478944000</contentUpdateDate>
+<version>28.1</version>
 <title>Educate for Sustainability Lesson Plan Template</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>logo</comment>
+<comment>button:hover re-org</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -167,7 +167,7 @@
       if(missed_fields_str != ''){
         error_msg = '$msg.get('lesson.plan.required.fields.dialog')' + missed_fields_str;
       }else{
-        if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; 125) {
+        if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; $msg.get("resource.title.maxlength")) {
           error_msg = '$msg.get("efs.title.more.125")';
         }
       }
@@ -596,7 +596,7 @@
     #curriki_formpart_begin($msg.get("efs.step1.header"))
     #curriki_forminstructions($msg.get("efs.step1.instruction"))
     #curriki_formprompt($msg.get("efs.step1.title_title"), $msg.get("efs.step1.title_tooltip"), $msg.get("efs.step1.title_txt"), true, "medium")
-    &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" /&gt;
+    &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
     #curriki_formprompt($msg.get("efs.step1.description_title"), $msg.get("efs.step1.description_tooltip"), $msg.get("efs.step1.description_txt"), true, "medium")
     $newAsset.display("description","edit")
     &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
@@ -635,14 +635,14 @@
     ##Learning Opportunities, Activities, &amp; Procedures:
     #curriki_formprompt($msg.get("efs.step2.procedures.title"), $msg.get("efs.step2.procedures.tooltip"), $msg.get("efs.step2.procedures.instruction"), true, "medium")
     &lt;div id="procedures_div"&gt;&lt;/div&gt;
-    &lt;button class="button button-orange" id="addRowBtn_procedures" onclick="return addrow(1);"&gt;$msg.get("efs.step2.procedures.addrow")&lt;/button&gt;
+    &lt;button class="button-orange" id="addRowBtn_procedures" onclick="return addrow(1);"&gt;$msg.get("efs.step2.procedures.addrow")&lt;/button&gt;
     ##Instructional &amp; Environmental Modifications:
     #curriki_formprompt($msg.get("efs.step2.modifications.title"), $msg.get("efs.step2.modifications.tooltip"), $msg.get("efs.step2.modifications.instruction"), true, "medium")
     &lt;textarea id="nlp_modifications" name="nlp_modifications"&gt;&lt;/textarea&gt;
     ##Assessments &amp; Scoring Criteria:
     #curriki_formprompt($msg.get("efs.step2.assessment.title"), $msg.get("efs.step2.assessment.tooltip"), $msg.get("efs.step2.assessment.instruction"), true, "medium")
     &lt;div id="assessment_div"&gt;&lt;/div&gt;
-    &lt;button class="button button-orange" id="addRowBtn_assessment" onclick="return addrow(2);"&gt;$msg.get("efs.step2.assessment.addrow")&lt;/button&gt;
+    &lt;button class="button-orange" id="addRowBtn_assessment" onclick="return addrow(2);"&gt;$msg.get("efs.step2.assessment.addrow")&lt;/button&gt;
     ##Glossary:
     #curriki_formprompt($msg.get("efs.step2.glossary.title"), "", $msg.get("efs.step2.glossary.instruction"), true, "medium")
     &lt;textarea id="nlp_glossary" name="nlp_glossary"&gt;&lt;/textarea&gt;
@@ -674,7 +674,8 @@
     #curriki_formpart_begin($msg.get("efs.step4.header")) 
     &lt;p&gt;&lt;label&gt;$msg.get("efs.step4.instruction")&lt;/label&gt;&lt;/p&gt;
     &lt;p class="links"&gt;
-    &lt;button onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkTemplateForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"&gt;$msg.get("efs.submit.button")&lt;/button&gt;
+	&lt;button class="button-orange"
+		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkTemplateForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"&gt;$msg.get("efs.submit.button")&lt;/button&gt;
     #if( "$!cameFrom" != "" ) 
       #set( $cancelURL = $cameFrom )
     #else 

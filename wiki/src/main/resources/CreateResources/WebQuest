@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.panjl</author>
+<author>XWiki.joster</author>
 <customClass></customClass>
-<contentAuthor>XWiki.panjl</contentAuthor>
+<contentAuthor>XWiki.joster</contentAuthor>
 <creationDate>1231836370000</creationDate>
-<date>1249095824000</date>
-<contentUpdateDate>1249095824000</contentUpdateDate>
-<version>18.1</version>
+<date>1251478956000</date>
+<contentUpdateDate>1251478956000</contentUpdateDate>
+<version>20.1</version>
 <title>WebQuest Template</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-4743</comment>
+<comment>button:hover re-org</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -162,7 +162,7 @@ function checkWebQuestForm() {
   if(missed_fields_str != ''){
 	error_msg = '$msg.get('lesson.plan.required.fields.dialog')' + missed_fields_str;
   }else{
-	if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; 250) {
+	if (getFieldContentStr('CurrikiCode.AssetClass_0_title').length &gt; $msg.get("resource.title.maxlength")) {
 	  error_msg = '$msg.get("wq.title.more.250")';
 	}
   }
@@ -1001,7 +1001,7 @@ function getTableText(){
   #curriki_forminstructions($msg.get("wq.step1.instruction"))
   #curriki_formprompt($msg.get("wq.info.title_title"), $msg.get("wq.info.title_tooltip"), $msg.get("wq.info.title_txt"), true, "medium")
   ##$newAsset.display("title","edit")
-  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" /&gt;
+  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
   #curriki_formprompt($msg.get("wq.info.description_title"), $msg.get("wq.info.description_tooltip"), $msg.get("wq.info.description_txt"), true, "medium")
   $newAsset.display("description","edit")
   &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
@@ -1034,7 +1034,7 @@ function getTableText(){
 
   ##Evaluation:
   #curriki_formprompt($msg.get("wq.eval.title"), $msg.get("wq.eval.tooltip"), $msg.get("wq.eval.instruction"), true, "medium")
-  &lt;div id="evaluation_div"&gt; &lt;/div&gt;  &lt;button class="button button-orange" id="addRowBtn" onclick="return addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
+  &lt;div id="evaluation_div"&gt; &lt;/div&gt;  &lt;button class="button-orange" id="addRowBtn" onclick="return addrow();"&gt;$msg.get("ace.lesson.plan.procedures.addrow")&lt;/button&gt;
 
   ##Conclusion:
   #curriki_formprompt($msg.get("wq.conclusion.title"), $msg.get("wq.conclusion.tooltip"), $msg.get("wq.conclusion.instruction"), true, "medium")
@@ -1071,8 +1071,8 @@ function getTableText(){
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) 
   &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
   &lt;p class="links"&gt;
-	 &lt;button
-	  onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkWebQuestForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
+	&lt;button class="button-orange"
+		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkWebQuestForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
 	  &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
 	 #if( "$!cameFrom" != "" ) 
 	   #set( $cancelURL = $cameFrom )

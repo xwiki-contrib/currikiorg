@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1228767610000</creationDate>
-<date>1250174976000</date>
-<contentUpdateDate>1250174976000</contentUpdateDate>
-<version>97.1</version>
+<date>1251309309000</date>
+<contentUpdateDate>1251309309000</contentUpdateDate>
+<version>98.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>Add last updated date</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -112,6 +112,7 @@
 ## set Current asset information
 	#set($curTitle = $curDoc.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
 	#set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replace("'", "&amp;#39;").replaceAll("[\n|\r]+", "&lt;br /&gt;"))
+	#set($curDate = $!xwiki.formatDate($curDoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
 	#set($curHref = $xwiki.getURL($curDoc.fullName, 'view'))
 	#set($curSelected = "")
 	#if($curDoc.fullName == $doc.fullName) ##{
@@ -179,6 +180,7 @@
 					#tocAssetSubtype($subAsset)
 					#set($subTitle = $subAsset.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
 					#set($subDesc = $subAsset.getDescription().replaceAll('\\', '\\\\').replace("'", "&amp;#39;").replaceAll("[\n|\r]+", "&lt;br /&gt;"))
+					#set($subDate = $!xwiki.formatDate($subAsset.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
 					#set($subHref = $xwiki.getURL($subAsset.fullName, 'view'))
 					## Get Framework items
 					#set($subFW = "")
@@ -229,9 +231,9 @@
 					#end ##}
 					##
 					#if($subAsset.isFolder()) ##{
-						#set($curSubJSON = "$curSubJSON,{collectionPage:'$!{subAsset.fullName}', displayTitle: '$!{subTitle}', description:'$!{subDesc}', fwItems:$!{subFW}, levels:$!subLvl, ict:$!subICT, assetType:'$!{rType}', category:'$!{subAsset.category}', subcategory:'$!{subSubCategory}', addCls:'$!{subSelected}', href:'$!{subHref}', leaf:false}")
+						#set($curSubJSON = "$curSubJSON,{collectionPage:'$!{subAsset.fullName}', displayTitle: '$!{subTitle}', description:'$!{subDesc}', lastUpdated:'$!{subDate}', fwItems:$!{subFW}, levels:$!subLvl, ict:$!subICT, assetType:'$!{rType}', category:'$!{subAsset.category}', subcategory:'$!{subSubCategory}', addCls:'$!{subSelected}', href:'$!{subHref}', leaf:false}")
 					#else ##}{ Not isFolder()
-						#set($curSubJSON = "$curSubJSON,{assetpage:'$!{subAsset.fullName}', displayTitle: '$!{subTitle}', description:'$!{subDesc}', fwItems:$!{subFW}, levels:$!subLvl, ict:$!subICT, assetType:'$!{rType}', category:'$!{subAsset.category}', subcategory:'$!{subSubCategory}', addCls:'$!{subSelected}', href:'$!{subHref}', leaf:true}")
+						#set($curSubJSON = "$curSubJSON,{assetpage:'$!{subAsset.fullName}', displayTitle: '$!{subTitle}', description:'$!{subDesc}', lastUpdated:'$!{subDate}', fwItems:$!{subFW}, levels:$!subLvl, ict:$!subICT, assetType:'$!{rType}', category:'$!{subAsset.category}', subcategory:'$!{subSubCategory}', addCls:'$!{subSelected}', href:'$!{subHref}', leaf:true}")
 					#end ##}
 				#end ##}
 			#end ##}
@@ -244,14 +246,14 @@
 			#set($curSubCategory = "unknown")
 		#end ##}
 		##
-		#set($curJSON = "{collectionPage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', expanded: true, children:[$!{curSubJSON}]}")
+		#set($curJSON = "{collectionPage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', lastUpdated:'$!{curDate}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', expanded: true, children:[$!{curSubJSON}]}")
 	#else ##}{  Not isFolder()
 		#set($curSubCategory = "")
 		#set($curSubCategory = $curDoc.categorySubtype)
 		#if("$!curSubCategory" == "") ##{
 			#set($curSubCategory = "unknown")
 		#end ##}
-		#set($curJSON = "{assetpage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', leaf: true}")
+		#set($curJSON = "{assetpage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', lastUpdated:'$!{curDate}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', leaf: true}")
 	#end ##}
 #end ##}
 ## End macro
