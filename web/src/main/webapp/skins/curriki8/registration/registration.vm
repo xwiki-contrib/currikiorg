@@ -509,7 +509,7 @@ document.observe('dom:loaded', function(){
 #end ##}
 	<li id="block-${field}">
 		<span>#if($req)$g_RegReq#end<label for="${field}">#set($title = $pfx+'.title')$msg.get($title)</label>#set($tt = $pfx+'.tooltip')<img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get($tt)"/></span>
-		<p>#set($desc = $pfx+'.description')$msg.get($desc)</p>
+		<p class="entry label">#set($desc = $pfx+'.description')$msg.get($desc)</p>
 #if($field == 'xwikiname') ##{
 	#if($ro!='0') ##{
 		$msg.get($title): $userdoc.name
@@ -667,11 +667,11 @@ document.observe('dom:loaded', function(){
 						<tr>
 							<th class="item-interest-areas-th">
 								<span><label for="XWiki.XWikiUsers_0_topics">$msg.get("${pfx}.subject.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.subject.tooltip")"/></span>
-								<p>$msg.get("${pfx}.subject.description")</p>
+								<p class="entry label">$msg.get("${pfx}.subject.description")</p>
 							</th>
 							<th class="item-interest-areas-th">
 								<span><label for="XWiki.XWikiUsers_0_educational_level">$msg.get("${pfx}.ed_level.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.ed_level.tooltip")"/></span>
-								<p>$msg.get("${pfx}.ed_level.description")</p>
+								<p class="entry label">$msg.get("${pfx}.ed_level.description")</p>
 							</th>
 						</tr>
 					</thead>
@@ -707,17 +707,17 @@ document.observe('dom:loaded', function(){
 		#if($g_RegType == 'edit_profile') ##{
 				<li>
 					<span><label for="XWiki.XWikiUsers_0_comment">$msg.get("${pfx}.bio.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.bio.tooltip")"/></span>
-					<p>$msg.get("${pfx}.bio.description")</p>
+					<p class="entry label">$msg.get("${pfx}.bio.description")</p>
 					$userdoc.display('comment', "edit")
 				</li>
 				<li>
 					<span><label for="XWiki.XWikiUsers_0_contact">$msg.get("${pfx}.contact.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.contact.tooltip")"/></span>
-					<p>$msg.get("${pfx}.contact.description")</p>
+					<p class="entry label">$msg.get("${pfx}.contact.description")</p>
 					$userdoc.display('contact', "edit")
 				</li>
 				<li>
 					<span><label for="XWiki.XWikiUsers_0_websites">$msg.get("${pfx}.websites.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.websites.tooltip")"/></span>
-					<p>$msg.get("${pfx}.websites.description")</p>
+					<p class="entry label">$msg.get("${pfx}.websites.description")</p>
 					$userdoc.display('websites', "edit")
 				</li>
 		#end ##}
@@ -754,7 +754,7 @@ document.observe('dom:loaded', function(){
 		<ul>
 			<li id='block-avatar'>
 				<span><label for="change_photo">$msg.get("edit_profile.change_photo.choose_file.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("edit_profile.change_photo.choose_file.tooltip")"/></span>
-				<p>$msg.get("edit_profile.change_photo.choose_file.description")</p>
+				<p class="entry label">$msg.get("edit_profile.change_photo.choose_file.description")</p>
 				<input id="xwikiuploadname" type="hidden" name="filename" value="" />
 				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40"/>
 			</li>
