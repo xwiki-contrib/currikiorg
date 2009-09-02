@@ -308,12 +308,11 @@ wikiEditor.init({
 </script>
 {/pre}
 <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.renderedContent)</textarea>
-
-        <div class="button-right">
-          <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
-          <input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
-        </div>
-    </form>
+	<div class="button-right">
+		<input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
+		<input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
+	</div>
+</form>
 #endgroupsection()
 #end
 #end
@@ -470,11 +469,11 @@ wikiEditor.init({
 </script>
 <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
 {/pre}
-        <div class="button-right">
-          <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
-          <input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
-        </div>
-    </form>
+	<div class="button-right">
+		<input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
+		<input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
+	</div>
+</form>
 
 #set( $stopRender = "ok" )
 #endgroupsection()
