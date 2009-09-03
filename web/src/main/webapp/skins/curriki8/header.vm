@@ -106,7 +106,7 @@
 	#set($brsqry = $defaultsearchtext)
 #end
 		<input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='$defaultsearchtext') this.value=''; else this.select()" onblur="if (this.value=='') this.value='$defaultsearchtext'" />
-		<a href="" id="searchbtn" onclick="document.searchform.submit(); return false;">$msg.get("header.search_go")</a>
+		<a href="" id="searchbtn" onclick="document.location.href=document.searchform.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(($('curriki-searchbox').value!=='$defaultsearchtext')?$('curriki-searchbox').value:'')))); return false;">$msg.get("header.search_go")</a>
 	</form>
 	<p>
 		<a href="$xwiki.getURL("Search.WebHome")" onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape($('curriki-searchbox').value.replace(/^$defaultsearchtext/, ''))))); return true;">$msg.get("header.advanced_search")</a> |
