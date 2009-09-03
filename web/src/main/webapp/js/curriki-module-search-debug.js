@@ -593,7 +593,7 @@ data.init = function(){
 
 			var fw = Curriki.data.fw_item.getRolloverDisplay(record.data.fwItems||[]);
 			var lvl = Curriki.data.el.getRolloverDisplay(record.data.levels||[]);
-			var lastUpdated = record.data.updated||'';
+			var lastUpdated = record.data.lastUpdated||'';
 
 			var qTipFormat = '{1}<br />{0}<br /><br />';
 
