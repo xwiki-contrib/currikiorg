@@ -522,12 +522,12 @@ var CurrikiJS = {
 
 	submitOnEnter: function(aForm, onField, submitFunc) {
 		var func = submitFunc;
-		CurrikiJS.jt_AddListener(aForm[onField]), 'keydown', function(e) {
-			if (e.keyCode == Event.KEY_RETURN)
+		CurrikiJS.jt_AddListener(aForm[onField], 'keydown', function(e) {
+			if (e.keyCode == Event.KEY_RETURN) {
 				if (typeof func == 'function') submitFunc();
 				else aForm.submit();
-
-			});
+			}
+		});
 	},
 
 	validEmail: function(emailStr) {
