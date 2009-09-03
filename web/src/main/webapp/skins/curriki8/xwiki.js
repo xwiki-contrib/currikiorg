@@ -520,6 +520,16 @@ var CurrikiJS = {
 		}
 	},
 
+	submitOnEnter: function(aForm, onField, submitFunc) {
+		var func = submitFunc;
+		CurrikiJS.jt_AddListener(aForm[onField]), 'keydown', function(e) {
+			if (e.keyCode == Event.KEY_RETURN)
+				if (typeof func == 'function') submitFunc();
+				else aForm.submit();
+
+			});
+	},
+
 	validEmail: function(emailStr) {
 		// return true if 'emailStr' has valid email address format; from jt_.js, wingo.com
 		var emailPat=/^(.+)@(.+)$/

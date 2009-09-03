@@ -35,48 +35,46 @@
     #set($logredir = "srid=$request.srid")
   #end ##}
 <!-- login area -->
+<script type="text/javascript">
+// In IE we can't change the type of a password input (we can't toggle between text and password type) so we have to
+// use a place holder in order to display the password label when the password field is empty.
+function showLoginPasswordInput() {
+	// Hide the place holder.
+	this.style.display = 'none';
+	// Show the password input.
+	var pwd = document.getElementById('j_loginpwd');
+	pwd.style.display = '';
+	pwd.focus();
+}
+
+function hideLoginPasswordInput() {
+	// Hide the password input if it's empty.
+	if (this.value == '') {
+		this.style.display = 'none';
+		// Show the place holder.
+		var placeHolder = document.getElementById('j_loginpwd_placeholder');
+		placeHolder.style.display = '';
+	}
+}
+</script>
 <form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "$logredir")" method="post"> ##{
-  <input type="hidden" name="srid" value="$!request.srid" />
-  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="#if("$!request.j_username" != "")$request.j_username#else${msg.get("header.login_username")}#end" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
-  <input class="input password" id="j_loginpwd_placeholder" tabindex="2" type="text" value="$msg.get("header.login_password")" onfocus="showLoginPasswordInput.apply(this)"/>
-  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="this.select()" onblur="hideLoginPasswordInput.apply(this)" style="display:none;"/>
+	<input type="hidden" name="srid" value="$!request.srid" />
+	<input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="#if("$!request.j_username" != "")$request.j_username#else${msg.get("header.login_username")}#end" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
+	<input class="input password" id="j_loginpwd_placeholder" tabindex="2" type="text" value="$msg.get("header.login_password")" onfocus="showLoginPasswordInput.apply(this)"/>
+	<input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="this.select()" onblur="hideLoginPasswordInput.apply(this)" style="display:none;"/>
+	<button class="button-orange" type="submit" id="loginbtn" tabindex="4">$msg.get("header.login_go")</button>
 
-  <script type="text/javascript">
-    // In IE we can't change the type of a password input (we can't toggle between text and password type) so we have to
-    // use a place holder in order to display the password label when the password field is empty.
-    function showLoginPasswordInput() {
-      // Hide the place holder.
-      this.style.display = 'none';
-      // Show the password input.
-      var pwd = document.getElementById('j_loginpwd');
-      pwd.style.display = '';
-      pwd.focus();
-    }
-    function hideLoginPasswordInput() {
-      // Hide the password input if it's empty.
-      if (this.value == '') {
-        this.style.display = 'none';
-        // Show the place holder.
-        var placeHolder = document.getElementById('j_loginpwd_placeholder');
-        placeHolder.style.display = '';
-      }
-    }
-  </script>
+	<!-- remember me -->
+	<fieldset>
+		<input tabindex="3" type="checkbox" class="checkbox" name="j_rememberme" value="true"/>$msg.get("header.login_rememberme")</label>
+		<a href="$xwiki.getURL("Registration.ForgotLogin")" title="">$msg.get("header.login_forgot")</a>
+	</fieldset>
+	<!-- end of remember me -->
 
-  <button class="button-orange" type="submit" id="loginbtn" tabindex="4">$msg.get("header.login_go")</button>
-
-  <!-- remember me -->
-  <fieldset>
-    <input tabindex="3" type="checkbox" class="checkbox" name="j_rememberme" value="true"/>$msg.get("header.login_rememberme")</label>
-    <a href="$xwiki.getURL("Registration.ForgotLogin")" title="">$msg.get("header.login_forgot")</a>
-  </fieldset>
-  <!-- end of remember me -->
-  
-  <!-- registration -->
-  #set($regurl = $xwiki.getURL("Main.JoinCurriki"))
-  <a href="$regurl" class="register"><span>$msg.get("header.becomemember_part1")</span> $msg.get("header.becomemember_part2")</a>
-  <!-- end of registration -->
-  
+	<!-- registration -->
+#set($regurl = $xwiki.getURL("Main.JoinCurriki"))
+	<a href="$regurl" class="register"><span>$msg.get("header.becomemember_part1")</span> $msg.get("header.becomemember_part2")</a>
+	<!-- end of registration -->
 </form> ##}
 <!-- end of login area -->
 
@@ -90,7 +88,6 @@
   #set($logredir = $xwiki.getURL("Main.WebHome"))
   #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
   <a href="$logouturl" class="logout">$msg.get("header.logout")</a>
-  
 #end ##}
 	
 </div> ##} ##header-member
@@ -99,20 +96,37 @@
 <!-- advanced search -->
 #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))
 <div id="header-search"> ##{
-	<form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="document.location.href=document.searchform.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(($('curriki-searchbox').value!=='$defaultsearchtext')?$('curriki-searchbox').value:'')))); return false;"> ##{
+	<form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="searchbtnGo(); return false;"> ##{
 		<input type="hidden" class="hidden" name="area" value=""/>
 #set($brsqry = $request.brsqry)
 #if(!$brsqry || $brsqry == "")
 	#set($brsqry = $defaultsearchtext)
 #end
 		<input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='$defaultsearchtext') this.value=''; else this.select()" onblur="if (this.value=='') this.value='$defaultsearchtext'" />
-		<a href="" id="searchbtn" onclick="document.location.href=document.searchform.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(($('curriki-searchbox').value!=='$defaultsearchtext')?$('curriki-searchbox').value:'')))); return false;">$msg.get("header.search_go")</a>
+		<a href="" id="searchbtn" onclick="searchbtnGo(); return false;">$msg.get("header.search_go")</a>
 	</form>
 	<p>
 		<a href="$xwiki.getURL("Search.WebHome")" onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape($('curriki-searchbox').value.replace(/^$defaultsearchtext/, ''))))); return true;">$msg.get("header.advanced_search")</a> |
 		<a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
 	</p>
 </div> ##} ##member-search
+<script type="text/javascript">
+var searchbtnOnce = true;
+function searchbtnGo() {
+	if (searchbtnOnce) {
+		searchbtnOnce = false;
+		document.location.href = document.searchform.action + '#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A' + escape(escape(escape(escape(
+			($('curriki-searchbox').value! == '$defaultsearchtext') ? $('curriki-searchbox').value : ''
+		))));
+	}
+}
+
+Ext.onReady(function(){
+	if (Ext.isIE6) {
+		CurrikiJS.submitOnEnter(document.searchform, 'brsqry', searchbtnGo);
+	}
+});
+</script>
 <!-- end of advanced search -->  
 
 </div> ##} ##header
