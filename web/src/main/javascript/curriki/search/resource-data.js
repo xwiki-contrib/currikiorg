@@ -260,6 +260,7 @@ data.init = function(){
 		,{ name: 'fwItems' }
 		,{ name: 'levels' }
 		,{ name: 'parents' }
+		,{ name: 'lastUpdated' }
 		,{ name: 'updated' }
 	]);
 
