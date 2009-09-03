@@ -1743,7 +1743,6 @@ Curriki.module.addpath.init = function(){
 			return {
 					 text:_('add.finalmessage.close.button')
 					,id:'closebutton'
-					,cls:'button cancel'
 					,listeners:{
 						'click':{
 							 fn:function(e,evt){

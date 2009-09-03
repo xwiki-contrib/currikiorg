@@ -593,11 +593,24 @@ data.init = function(){
 
 			var fw = Curriki.data.fw_item.getRolloverDisplay(record.data.fwItems||[]);
 			var lvl = Curriki.data.el.getRolloverDisplay(record.data.levels||[]);
+			var lastUpdated = record.data.updated||'';
 
-			desc = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
+			var qTipFormat = '{1}<br />{0}<br /><br />';
+
+			// Add lastUpdated if available
+			if (lastUpdated !== '') {
+				qTipFormat = qTipFormat+'{7}<br />{6}<br /><br />';
+			}
+
+			// Base qTip (framework, ed levels)
+			qTipFormat = qTipFormat+'{3}<br />{2}<br />{5}<br />{4}';
+
+
+			desc = String.format(qTipFormat
 				,desc,_('global.title.popup.description')
 				,fw,_('global.title.popup.subject')
 				,lvl,_('global.title.popup.educationlevel')
+				,lastUpdated,_('global.title.popup.last_updated')
 			);
 
 			// Asset Type icon
