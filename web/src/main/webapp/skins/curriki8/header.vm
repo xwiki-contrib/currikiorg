@@ -18,22 +18,22 @@
 <!-- member area -->
 <div id="header-member"> ##{
 #if($isguest) ##{
-  #if ($request.xredirect) ##{
-   #set($logredir = $request.xredirect)
-  #elseif($doc.web == "Registration") ##}{
-   #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-  #elseif($doc.fullName == "Main.WebHome") ##}{
-   #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-  #elseif($doc.fullName == "Main.JoinCurriki") ##}{
-   #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-  #elseif($logredir.contains("/login")) ##}{
-   #set($logredir = "")
-  #end ##}
-  #if("$!logredir"!="") ##{
-    #set($logredir = "xredirect=$logredir")
-  #elseif($request.srid) ##}{
-    #set($logredir = "srid=$request.srid")
-  #end ##}
+	#if ($request.xredirect) ##{
+		#set($logredir = $request.xredirect)
+	#elseif($doc.web == "Registration") ##}{
+		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+	#elseif($doc.fullName == "Main.WebHome") ##}{
+		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+	#elseif($doc.fullName == "Main.JoinCurriki") ##}{
+		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+	#elseif($logredir.contains("/login")) ##}{
+		#set($logredir = "")
+	#end ##}
+	#if("$!logredir"!="") ##{
+		#set($logredir = "xredirect=$logredir")
+	#elseif($request.srid) ##}{
+		#set($logredir = "srid=$request.srid")
+	#end ##}
 <!-- login area -->
 <script type="text/javascript">
 // In IE we can't change the type of a password input (we can't toggle between text and password type) so we have to
@@ -72,24 +72,23 @@ function hideLoginPasswordInput() {
 	<!-- end of remember me -->
 
 	<!-- registration -->
-#set($regurl = $xwiki.getURL("Main.JoinCurriki"))
+	#set($regurl = $xwiki.getURL("Main.JoinCurriki"))
 	<a href="$regurl" class="register"><span>$msg.get("header.becomemember_part1")</span> $msg.get("header.becomemember_part2")</a>
 	<!-- end of registration -->
 </form> ##}
 <!-- end of login area -->
 
 #else ## }{ ## is logged in
-  ## crtUserDoc is set in fudocs.vm
-  #set($fname = $crtUserDoc.display("first_name","view"))
-  <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
-  #if($hasGlobalAdmin)
-    <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
-  #end
-  #set($logredir = $xwiki.getURL("Main.WebHome"))
-  #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
-  <a href="$logouturl" class="logout">$msg.get("header.logout")</a>
+	## crtUserDoc is set in fudocs.vm
+	#set($fname = $crtUserDoc.display("first_name","view"))
+	<span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+	#if($hasGlobalAdmin)
+	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
+	#end
+	#set($logredir = $xwiki.getURL("Main.WebHome"))
+	#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
+	<a href="$logouturl" class="logout">$msg.get("header.logout")</a>
 #end ##}
-	
 </div> ##} ##header-member
 <!-- end of member area -->
 
@@ -99,11 +98,10 @@ function hideLoginPasswordInput() {
 #if(!$brsqry || $brsqry == "")
 	#set($brsqry = $defaultsearchtext)
 #end
-<script type="text/javascript">CurrikiApp.defaultSearchText = '$defaultsearchtext';</script>
 <div id="header-search"> ##{
 	<form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="CurrikiApp.searchbtnGo(); return false;"> ##{
 		<input type="hidden" class="hidden" name="area" value=""/>
-		<input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='$defaultsearchtext') this.value=''; else this.select()" onblur="if (this.value=='') this.value='$defaultsearchtext'" />
+		<input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" Curriki:defTxt="$defaultsearchtext" />
 		<a href="" id="searchbtn" onclick="CurrikiApp.searchbtnGo(); return false;">$msg.get("header.search_go")</a>
 	</form>
 	<p>
