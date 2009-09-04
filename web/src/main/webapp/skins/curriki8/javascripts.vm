@@ -13,27 +13,23 @@
 var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
 document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects' type='text/javascript'%3E%3C/script%3E"));
-//]]>
-</script>
 
-<script type="text/javascript">
-//<![CDATA[
 var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
 document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
 //]]>
 </script>
 
-#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
+#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
 
-#if("$!request.lang" != "")##{
-#set($lang = $request.lang)
-#else##}{
-#set($lang = $xwiki.getLanguagePreference())
-#end##}
-#if("$!lang" == "")##{
-#set($lang = "en")
-#end##}
+	#if("$!request.lang" != "")##{
+		#set($lang = $request.lang)
+	#else##}{
+		#set($lang = $xwiki.getLanguagePreference())
+	#end##}
+	#if("$!lang" == "")##{
+		#set($lang = "en")
+	#end##}
 ##
 ## The xwiki translation files are converted for use with javascript
 ## and loaded via the /js/0/lang_${lang}.js URL using an apache rewrite rule
@@ -44,9 +40,9 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="/js/${gVersion}/lang_${lang}.js"></script>
 
 ## Similarily if using xwiki standalone you need to comment out the #if section and just use the #else section
-#if("$!debugging" == "") ##{
+	#if("$!debugging" == "")##{
 <script src="/xwiki/js/${gVersion}/curriki-merged.js"></script>
-#else ##}{
+	#else ##}{
 <script src="/xwiki/js/${gVersion}/i18n.js"></script>
 <script src="$xwiki.getSkinFile('js/viditalk_stub.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script src="/xwiki/js/${gVersion}/curriki-main${debugging}.js"></script>
@@ -58,39 +54,36 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="/xwiki/js/${gVersion}/curriki-module-partner${debugging}.js"></script>
 <script src="/xwiki/js/${gVersion}/curriki-module-asterixReview${debugging}.js"></script>
 <script src="/xwiki/js/${gVersion}/curriki-module-flag${debugging}.js"></script>
-#end ##}
+	#end ##}
+
 <script src="$xwiki.getSkinFile('js/vidiembed_curiki.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
-#if($!headerfile == "html") ## {
+	#if($!headerfile == "html")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
-#end ## }
+	#end ## }
 #end ##}
 
 <script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
-#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
+#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
-
-#if($!headerfile == "http") ## {
+	#if($!headerfile == "http")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
-#end ## }
-
-#if($!headerfile == "help") ## {
+	#end ## }
+	#if($!headerfile == "help")##{
 <script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
-#end ## }
-
-#if($headerfile == "html") ##{
+	#end ## }
+	#if($headerfile == "html")##{
 <script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
-
-#if($context.action=="admin") ##{
+		#if($context.action=="admin")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
-#end ##}
-#end ## }
+		#end ##}
+	#end ## }
 
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -100,7 +93,6 @@ Curriki.global.fullname = "$xwiki.getUserName($context.user, false).replaceAll('
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 /* ]]> */
 </script>
-
 #end ##}
 
 ## Hook for inserting JavaScript skin extensions
