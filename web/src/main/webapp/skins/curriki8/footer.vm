@@ -22,7 +22,10 @@ var addthis_share = {
 		twitter: '$msg.get("addThis.templates.twitter")'
 	}
 }
-document.write(unescape("%3Cscript src='" + document.location.protocol + "//s7.addthis.com/js/250/addthis_widget.js' type='text/javascript'%3E%3C/script%3E"));
+var addthis_curriki = document.createElement('script');
+addthis_curriki.setAttribute('type', 'text/javascript');
+document.getElementsByTagName('head')[0].appendChild(addthis_curriki);
+addthis_curriki.setAttribute('src', document.location.protocol + "//s7.addthis.com/js/250/addthis_widget.js");
 //]]>
 </script>
 #end ##}
