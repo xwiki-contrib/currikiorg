@@ -118,6 +118,8 @@ $userdoc.use("XWiki.XWikiUsers")
 #end ##}
 {pre}<script type="text/javascript">
 /* <![CDATA[ */
+var regFormOk = false;
+
 function checkEmailResponse(response){
 	var text = response.responseText;
 	var res = eval('[' + text + '][0]');
@@ -139,15 +141,14 @@ function checkEmailResponse(response){
 		CurrikiApp.errMsgShow();
 	}
 	else {
-		CurrikiApp.formOk = true;
-		//document.register.onsubmit = null;
 		CurrikiApp.msgOn('$msg.get('register.account.saving.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		regFormOk = true;
 		document.register.submit();
 	}
 }
 
 function validateRegisterForm(){
-	if (CurrikiApp.formOk) return true;
+	if (regFormOk) return true;
 
 	var hasError = false;
 	var errorMissing = false;
@@ -320,28 +321,6 @@ function interestToggle(){
 	}
 	return false;
 }
-
-Ext.onReady(function(){
-	Ext.QuickTips.init();
-	Ext.apply(Ext.QuickTips.getQuickTip(), {
-		showDelay: 500
-		,hideDelay: 0
-	});
-
-/*
-	Event.observe('register', 'submit', function(event) {
-		if (!CurrikiApp.formOk) {
-			event = event || window.event;
-			if (typeof event.preventDefault != "undefined") {
-				event.preventDefault();
-			} else if (window.event){
-				event.returnValue = false;
-			}
-			validateRegisterForm();
-		}
-	});
-*/
-});
 
 window.onbeforeunload = function () {
 // Check for nonsubmission and log (what format?)

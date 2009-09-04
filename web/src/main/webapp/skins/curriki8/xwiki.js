@@ -570,6 +570,29 @@ var CurrikiApp = {
 		});
 	},
 
-	formOk: false
+	searchbtnGo: function() {
+		if (!CurrikiApp.searchbtnOnce) {
+			CurrikiApp.searchbtnOnce = true;
+			document.location.href = document.searchform.action + '#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A' + escape(escape(escape(escape(
+				($('curriki-searchbox').value !== CurrikiApp.defaultSearchText) ? $('curriki-searchbox').value : ''
+			))));
+		}
+	},
+
+	init: function() {
+		if (Ext.isIE6) {
+			CurrikiApp.submitOnEnter(document.searchform, 'brsqry', CurrikiApp.searchbtnGo);
+		}
+	}
 
 }
+
+
+Ext.onReady(function(){
+	Ext.QuickTips.init();
+	Ext.apply(Ext.QuickTips.getQuickTip(), {
+		dismissDelay:10000
+		,hideDelay: 0
+	});
+	CurrikiApp.init();
+});

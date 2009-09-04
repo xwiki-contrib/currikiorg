@@ -95,38 +95,22 @@ function hideLoginPasswordInput() {
 
 <!-- advanced search -->
 #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))
-<div id="header-search"> ##{
-	<form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="searchbtnGo(); return false;"> ##{
-		<input type="hidden" class="hidden" name="area" value=""/>
 #set($brsqry = $request.brsqry)
 #if(!$brsqry || $brsqry == "")
 	#set($brsqry = $defaultsearchtext)
 #end
+<script type="text/javascript">CurrikiApp.defaultSearchText = '$defaultsearchtext';</script>
+<div id="header-search"> ##{
+	<form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="CurrikiApp.searchbtnGo(); return false;"> ##{
+		<input type="hidden" class="hidden" name="area" value=""/>
 		<input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='$defaultsearchtext') this.value=''; else this.select()" onblur="if (this.value=='') this.value='$defaultsearchtext'" />
-		<a href="" id="searchbtn" onclick="searchbtnGo(); return false;">$msg.get("header.search_go")</a>
+		<a href="" id="searchbtn" onclick="CurrikiApp.searchbtnGo(); return false;">$msg.get("header.search_go")</a>
 	</form>
 	<p>
 		<a href="$xwiki.getURL("Search.WebHome")" onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape($('curriki-searchbox').value.replace(/^$defaultsearchtext/, ''))))); return true;">$msg.get("header.advanced_search")</a> |
 		<a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
 	</p>
 </div> ##} ##member-search
-<script type="text/javascript">
-var searchbtnOnce = true;
-function searchbtnGo() {
-	if (searchbtnOnce) {
-		searchbtnOnce = false;
-		document.location.href = document.searchform.action + '#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A' + escape(escape(escape(escape(
-			($('curriki-searchbox').value !== '$defaultsearchtext') ? $('curriki-searchbox').value : ''
-		))));
-	}
-}
-
-Ext.onReady(function(){
-	if (Ext.isIE6) {
-		CurrikiApp.submitOnEnter(document.searchform, 'brsqry', searchbtnGo);
-	}
-});
-</script>
 <!-- end of advanced search -->  
 
 </div> ##} ##header

@@ -22,14 +22,6 @@ if (!('console' in window) || !('firebug' in console)){
 }
 console.log('initing Curriki');
 
-Ext.onReady(function(){
-	Ext.QuickTips.init();
-	Ext.apply(Ext.QuickTips.getQuickTip(), {
-		dismissDelay:10000
-		,hideDelay: 0
-	});
-});
-
 /*
  * Example of dynamically loading javascript
 function initLoader() {
