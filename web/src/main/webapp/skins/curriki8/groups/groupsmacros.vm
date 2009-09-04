@@ -117,11 +117,11 @@ wikiEditor.init({
 	wiki_attach_path : '/xwiki/bin/view/${spaceName}/${pageName}'
 });
 function saveWelcomeBlock() {
-	CurrikiJS.jt_cssClass.rem(document.getElementById('section_1'), 'hideRight');
+	jt_.cssClass.rem(document.getElementById('section_1'), 'hideRight');
 	document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();
 }
 function editWelcomeBlock(spaceName, pageName, divid) {
-	CurrikiJS.jt_cssClass.add(document.getElementById('section_1'), 'hideRight');
+	jt_.cssClass.add(document.getElementById('section_1'), 'hideRight');
 	var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
 	$(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
 	// call url to get the edit html to edit the profile
@@ -134,7 +134,7 @@ function editWelcomeBlockCallback(ajaxreq) {
 }
 function cancelEditWelcomeBlock(spaceName,pageName,divid) {
 	if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
-		CurrikiJS.jt_cssClass.rem(document.getElementById('section_1'), 'hideRight');
+		jt_.cssClass.rem(document.getElementById('section_1'), 'hideRight');
 ## CURRIKI-3174 in IE we need to refresh because of CSS issue
 #set($ua = $request.getHeader("user-agent"))
 #if($ua.indexOf("MSIE")!=-1) ##{

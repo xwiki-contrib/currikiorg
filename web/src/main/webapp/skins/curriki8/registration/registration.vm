@@ -124,46 +124,46 @@ function checkEmailResponse(response){
 
 #if($g_RegType != 'edit_profile') ##{
 	if(!res.login){
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.login_not_unique')");
-		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.login_not_unique')");
+		CurrikiApp.errHighlight("block-xwikiname", $('register')['xwikiname']);
 	}
 #end ##}
 
 	if(!res.email){
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.email_not_unique')");
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_email", $('register')['XWiki.XWikiUsers_0_email']);
-		CurrikiJS.errHighlight("block-2XWiki-XWikiUsers_0_email");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_not_unique')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_email", $('register')['XWiki.XWikiUsers_0_email']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email");
 	}  
-	if (CurrikiJS.errMsg) {
-		CurrikiJS.msgOff();
-		CurrikiJS.errMsgShow();
+	if (CurrikiApp.errMsg) {
+		CurrikiApp.msgOff();
+		CurrikiApp.errMsgShow();
 	}
 	else {
-		CurrikiJS.formOk = true;
+		CurrikiApp.formOk = true;
 		//document.register.onsubmit = null;
-		CurrikiJS.msgOn('$msg.get('register.account.saving.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		CurrikiApp.msgOn('$msg.get('register.account.saving.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
 		document.register.submit();
 	}
 }
 
 function validateRegisterForm(){
-	if (CurrikiJS.formOk) return true;
+	if (CurrikiApp.formOk) return true;
 
 	var hasError = false;
 	var errorMissing = false;
 	$$('#register .highlight').invoke('removeClassName', 'highlight');
-	CurrikiJS.errMsgReset();
-	CurrikiJS.trimFields(document.register);
+	CurrikiApp.errMsgReset();
+	CurrikiApp.trimFields(document.register);
 
 #if($g_RegType != 'edit_profile') ##{
 	if (document.register.xwikiname.value.length < 1){
 		errorMissing = true;
-		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
+		CurrikiApp.errHighlight("block-xwikiname", $('register')['xwikiname']);
 	}
 	else if ($F('xwikiname').replace(/[A-Za-z0-9]/g, "") != ""){
 		hasError = true;
-		CurrikiJS.errHighlight("block-xwikiname", $('register')['xwikiname']);
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
+		CurrikiApp.errHighlight("block-xwikiname", $('register')['xwikiname']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
 	}
 #end ##}
 
@@ -177,8 +177,8 @@ function validateRegisterForm(){
 		}
 		if (!ext || (ext != "gif" && ext != "jpg" && ext != "jpeg" && ext != "jpe" && ext != "png" && ext != "bmp")) {
 			hasError = true;
-			CurrikiJS.errHighlight("block-avatar", $('register')['xwikiuploadfile']);
-			CurrikiJS.errMsgAdd("$msg.get('edit_profile.change_photo.file_error')");
+			CurrikiApp.errHighlight("block-avatar", $('register')['xwikiuploadfile']);
+			CurrikiApp.errMsgAdd("$msg.get('edit_profile.change_photo.file_error')");
 		}
 	}
 #end ##}
@@ -187,56 +187,56 @@ function validateRegisterForm(){
 
 	if($('register')['XWiki.XWikiUsers_0_password'].value.indexOf(" ") >= 0){
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['XWiki.XWikiUsers_0_password']);
-		CurrikiJS.errHighlight("block-2XWiki-XWikiUsers_0_password");
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.password_invalid')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['XWiki.XWikiUsers_0_password']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_password");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.password_invalid')");
 	}
 
 	if ($('register')['XWiki.XWikiUsers_0_password'].value.length < 5) {
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['XWiki.XWikiUsers_0_password']);
-		CurrikiJS.errHighlight("block-2XWiki-XWikiUsers_0_password");
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.password_short')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['XWiki.XWikiUsers_0_password']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_password");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.password_short')");
 	}
 	else if ($('register')['2XWiki.XWikiUsers_0_password'].value != $('register')['XWiki.XWikiUsers_0_password'].value){
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['2XWiki.XWikiUsers_0_password']);
-		CurrikiJS.errHighlight("block-2XWiki-XWikiUsers_0_password");
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.password_mismatch')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['2XWiki.XWikiUsers_0_password']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_password");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.password_mismatch')");
 	}
 
-	if (!CurrikiJS.validEmail($('XWiki.XWikiUsers_0_email').value)) {
+	if (!jt_.validEmail($('XWiki.XWikiUsers_0_email').value)) {
 		hasError = true;
-		CurrikiJS.errHighlight('block-XWiki-XWikiUsers_0_email', $('register')['XWiki.XWikiUsers_0_email']);
-		CurrikiJS.errHighlight("block-2XWiki-XWikiUsers_0_email");
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.email_invalid')");
+		CurrikiApp.errHighlight('block-XWiki-XWikiUsers_0_email', $('register')['XWiki.XWikiUsers_0_email']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_invalid')");
 	}
 
 	if ($F('2XWiki.XWikiUsers_0_email') != $F('XWiki.XWikiUsers_0_email')){
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_email");
-		CurrikiJS.errHighlight("block-2XWiki-XWikiUsers_0_email", $('register')['2XWiki.XWikiUsers_0_email']);
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.email_mismatch')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_email");
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email", $('register')['2XWiki.XWikiUsers_0_email']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_mismatch')");
 	}
 
 	if ($F('XWiki.XWikiUsers_0_first_name').length < 1){
 		errorMissing = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_first_name", $('register')['XWiki.XWikiUsers_0_first_name']);
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_first_name", $('register')['XWiki.XWikiUsers_0_first_name']);
 	}
 	else if ($F('XWiki.XWikiUsers_0_first_name').length > 32){
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_first_name", $('register')['XWiki.XWikiUsers_0_first_name']);
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.name1_long')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_first_name", $('register')['XWiki.XWikiUsers_0_first_name']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.name1_long')");
 	}
 
 	if ($F('XWiki.XWikiUsers_0_last_name').length < 1){
 		errorMissing = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
 	}
 	else if ($F('XWiki.XWikiUsers_0_last_name').length > 32){
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.name2_long')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.name2_long')");
 	}
 
 	if ($('field-receive-email-some') && $('field-receive-email-some').checked){
@@ -245,29 +245,29 @@ function validateRegisterForm(){
 		   && !$('field-receive-email-reviews').checked
 		   && !$('field-receive-email-friend').checked) {
 			hasError = true;
-			CurrikiJS.errHighlight("email-desired-wrapper", $('field-receive-email-newsletters'));
-			CurrikiJS.errMsgAdd("$msg.get('register.privacy.error.no_suboptions_checked')");
+			CurrikiApp.errHighlight("email-desired-wrapper", $('field-receive-email-newsletters'));
+			CurrikiApp.errMsgAdd("$msg.get('register.privacy.error.no_suboptions_checked')");
 		}
 	}
 
 	if ($('XWiki.XWikiUsers_0_i_agree') && !$('XWiki.XWikiUsers_0_i_agree').checked){
 		hasError = true;
-		CurrikiJS.errHighlight("block-XWiki-XWikiUsers_0_i_agree", $('XWiki.XWikiUsers_0_i_agree'));
-		CurrikiJS.errMsgAdd("$msg.get('register.terms.no_agreement')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_i_agree", $('XWiki.XWikiUsers_0_i_agree'));
+		CurrikiApp.errMsgAdd("$msg.get('register.terms.no_agreement')");
 	}
 
 	if (errorMissing) {
 		hasError = true;
-		CurrikiJS.errMsgAdd("$msg.get('register.account_info.error.blank_field')");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.blank_field')");
 	}
 	else if (!hasError) {
-		CurrikiJS.msgOn('$msg.get('register.account.validating.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		CurrikiApp.msgOn('$msg.get('register.account.validating.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
 		var url = "/xwiki/bin/view/XWiki/CheckAccountCreation";
 		var pars = 'xpage=plain&email=' + $F("XWiki.XWikiUsers_0_email") + #if($g_RegType != 'edit_profile')'&login='#else'&account=XWiki.'#end + $F("xwikiname");
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
 	}
 
-	CurrikiJS.errMsgShow();
+	CurrikiApp.errMsgShow();
 	return false;
 }
 
@@ -330,7 +330,7 @@ Ext.onReady(function(){
 
 /*
 	Event.observe('register', 'submit', function(event) {
-		if (!CurrikiJS.formOk) {
+		if (!CurrikiApp.formOk) {
 			event = event || window.event;
 			if (typeof event.preventDefault != "undefined") {
 				event.preventDefault();
@@ -473,7 +473,7 @@ function initRTEs() {
 }
 
 if (Ext.isIE6) {
-	CurrikiJS.jt_AddListener(window, 'load', initRTEs);
+	jt_.AddListener(window, 'load', initRTEs);
 }
 else initRTEs();
 #end ##}
