@@ -581,7 +581,7 @@ var CurrikiApp = {
 
 	init: function() {
 		CurrikiApp.defaultSearchText = document.searchform.brsqry.getAttribute('Curriki:defTxt');
-		jt_.AddListener(, 'focus', function() {
+		jt_.AddListener(document.searchform.brsqry, 'focus', function() {
 			if (document.searchform.brsqry.value == CurrikiApp.defaultSearchText) document.searchform.brsqry.value = '';
 			else document.searchform.brsqry.select();
 		});
