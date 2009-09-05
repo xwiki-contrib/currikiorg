@@ -593,7 +593,7 @@ var CurrikiApp = {
 		}
 	},
 
-	init: function() { // called inline by footer.vm
+	init: function() { // called inline by htmlfooter.vm
 		CurrikiApp.initSearchForm();
 	}
 
