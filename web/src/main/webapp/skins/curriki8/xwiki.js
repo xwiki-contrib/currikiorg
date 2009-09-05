@@ -579,7 +579,7 @@ var CurrikiApp = {
 		}
 	},
 
-	init: function() {
+	initSearchForm: function() {
 		CurrikiApp.defaultSearchText = document.searchform.brsqry.getAttribute('Curriki:defTxt');
 		jt_.AddListener(document.searchform.brsqry, 'focus', function() {
 			if (document.searchform.brsqry.value == CurrikiApp.defaultSearchText) document.searchform.brsqry.value = '';
@@ -591,15 +591,18 @@ var CurrikiApp = {
 		if (Ext.isIE6) {
 			CurrikiApp.submitOnEnter(document.searchform, 'brsqry', CurrikiApp.searchbtnGo);
 		}
+	},
+
+	init: function() { // called inline by footer.vm
+		CurrikiApp.initSearchForm();
 	}
 
 }
 
-Ext.onReady(function(){
+Ext.onReady(function() {
 	Ext.QuickTips.init();
 	Ext.apply(Ext.QuickTips.getQuickTip(), {
 		dismissDelay:10000
 		,hideDelay: 0
 	});
-	CurrikiApp.init();
 });
