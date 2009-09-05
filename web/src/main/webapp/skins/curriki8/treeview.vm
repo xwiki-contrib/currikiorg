@@ -20,87 +20,87 @@
 #set($tviewid = $xwiki.getCounter("treeviewid"))
 <div id="treeview${tviewid}"></div>
 <script type="text/javascript">
-	var tree${tviewid};
-	var nodes${tviewid} = {};
-	var nodeIndex${tviewid};
+var tree${tviewid};
+var nodes${tviewid} = {};
+var nodeIndex${tviewid};
 	
-    function addTreeElement(tree, nodes, id, text, parent, checked) {
-	    var parent2;
-	    if (parent=="")
-	     parent2 = tree.getRoot();
-	    else
-	     parent2 = nodes[parent];
-	    nodes[id] = new YAHOO.widget.CheckNode(id, text,  parent2, checked, checked);
-        nodes[id].onCheckClick = onCheckClick;
-    }
+function addTreeElement(tree, nodes, id, text, parent, checked) {
+	var parent2;
+	if (parent=="")
+		parent2 = tree.getRoot();
+	else
+		parent2 = nodes[parent];
+	nodes[id] = new YAHOO.widget.CheckNode(id, text,  parent2, checked, checked);
+	nodes[id].onCheckClick = onCheckClick;
+}
 
-    function addTreeElementViewMode(tree, nodes, id, text, parent) {
-	    var parent2;
-	    if (parent=="")
-	     parent2 = tree.getRoot();
-	    else
-	     parent2 = nodes[parent];
-	    nodes[id] = new YAHOO.widget.TextNode(text, parent2, true);
-    }
+function addTreeElementViewMode(tree, nodes, id, text, parent) {
+	var parent2;
+	if (parent=="")
+		parent2 = tree.getRoot();
+	else
+		parent2 = nodes[parent];
+	nodes[id] = new YAHOO.widget.TextNode(text, parent2, true);
+}
 
-    function showTreeState() {
-        var out = [];
-        for (var i in tree${tviewid}._nodes) {
-            var n = tree${tviewid}._nodes[i];
-            if (n && "undefined" != typeof n.checkState) {
-                if (n.checkState>0) {
-                  out.push(n.data);
-                }
-            }
-        }
-        alert(out.join("|"));
-    }
-
-	function treeInit${tviewid}() {
-		tree${tviewid} = new YAHOO.widget.TreeView("treeview${tviewid}");
-	    var tree = tree${tviewid};
-        var nodes = nodes${tviewid};
-        #foreach($item in $treelist)
-        #set($checked = $selectlist.contains($item.getId()))
-        #if ($item.value.length() > 80)
-         #set($title_item = $item.value.substring(0, 80))
-        #else
-         #set($title_item = $item.value)
-        #end
-        #set($title_item = $title_item.replaceAll("[\r\n]"," "))
-        #if($mode == "view")
-         #if($checked)
-          addTreeElementViewMode(tree, nodes, "$item.id", "$title_item", "$item.parent")
-         #end
-        #else
-         addTreeElement(tree, nodes, "$item.id", "$title_item", "$item.parent", #if($checked) true #else false #end)
-        #end
-        #end
-   		tree.draw();
-        // tree.checkClickEvent.subscribe(onCheckClick);
-        tree.getRoot().children[0].check()
-        tree.getRoot().children[0].expand()
+function showTreeState() {
+	var out = [];
+	for (var i in tree${tviewid}._nodes) {
+		var n = tree${tviewid}._nodes[i];
+		if (n && "undefined" != typeof n.checkState) {
+			if (n.checkState>0) {
+				out.push(n.data);
+			}
+		}
 	}
+	alert(out.join("|"));
+}
 
-	var callback = null;
-    function onCheckClick(eventType, args, tree) {
-        var out = [];
+function treeInit${tviewid}() {
+	tree${tviewid} = new YAHOO.widget.TreeView("treeview${tviewid}");
+	var tree = tree${tviewid};
+	var nodes = nodes${tviewid};
+#foreach($item in $treelist)
+	#set($checked = $selectlist.contains($item.getId()))
+	#if ($item.value.length() > 80)
+		#set($title_item = $item.value.substring(0, 80))
+	#else
+		#set($title_item = $item.value)
+	#end
+	#set($title_item = $title_item.replaceAll("[\r\n]"," "))
+	#if($mode == "view")
+		#if($checked)
+addTreeElementViewMode(tree, nodes, "$item.id", "$title_item", "$item.parent")
+		#end
+	#else
+addTreeElement(tree, nodes, "$item.id", "$title_item", "$item.parent", #if($checked) true #else false #end)
+	#end
+#end
+	tree.draw();
+	// tree.checkClickEvent.subscribe(onCheckClick);
+	tree.getRoot().children[0].check()
+	tree.getRoot().children[0].expand()
+}
 
-        // Force checking again the main element
-        tree${tviewid}.getRoot().children[0].check()
-        tree${tviewid}.getRoot().children[0].expand()
+var callback = null;
+function onCheckClick(eventType, args, tree) {
+	var out = [];
 
-        for (var i in tree${tviewid}._nodes) {
-            var n = tree${tviewid}._nodes[i];
-            if (n && "undefined" != typeof n.checkState) {
-                if (n.checkState>0) {
-                  out.push(n.data);
-                }
-            }
-        }
-        document.getElementById("${fieldname}").value=out.join("|");
-    }
+	// Force checking again the main element
+	tree${tviewid}.getRoot().children[0].check()
+	tree${tviewid}.getRoot().children[0].expand()
 
-    // Init the tree
-    treeInit${tviewid}();
+	for (var i in tree${tviewid}._nodes) {
+		var n = tree${tviewid}._nodes[i];
+		if (n && "undefined" != typeof n.checkState) {
+			if (n.checkState>0) {
+				out.push(n.data);
+			}
+		}
+	}
+	document.getElementById("${fieldname}").value=out.join("|");
+}
+
+// Init the tree
+treeInit${tviewid}();
 </script>
