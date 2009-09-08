@@ -78,7 +78,7 @@ data.init = function(){
 		,parentList: {}
 		,list: []
 		,data: [
-			['', _('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED', '   ')]
 		]
 	};
 	f.data.ict.fullList.each(function(value){
@@ -86,9 +86,15 @@ data.init = function(){
 		f.data.ict.parentList[name] = name;
 	});
 	Object.keys(f.data.ict.parentList).each(function(value){
+        var sort = _('CurrikiCode.AssetClass_instructional_component_'+value);
+        if (ict === 'other') {
+                sort = 'zzz';
+        }
+
 		f.data.ict.data.push([
 			value
 			,_('CurrikiCode.AssetClass_instructional_component_'+value)
+			,sort
 		]);
 	});
 
@@ -106,13 +112,21 @@ data.init = function(){
 					parentICT+'*'
 					,_('CurrikiCode.AssetClass_instructional_component_'+parentICT+'_UNSPECIFIED')
 					,parentICT
+					,'   '
 				]);
 				f.data.subict.parents[parentICT] = parentICT;
 			}
+
+			var sort = _('CurrikiCode.AssetClass_instructional_component_'+value);
+			if (ict === 'other') {
+					sort = 'zzz';
+			}
+
 			f.data.subict.data.push([
 				value
 				,_('CurrikiCode.AssetClass_instructional_component_'+value)
 				,parentICT
+				,sort
 			]);
 		}
 	});
@@ -201,13 +215,15 @@ data.init = function(){
 		})
 
 		,ict: new Ext.data.SimpleStore({
-			fields: ['id', 'ict']
+			fields: ['id', 'ict', 'sortValue']
+			,sortInfo: {field:'sortValue', direction:'ASC'}
 			,data: f.data.ict.data
 			,id: 0
 		})
 
 		,subict: new Ext.data.SimpleStore({
-			fields: ['id', 'ict', 'parentICT']
+			fields: ['id', 'ict', 'parentICT', 'sortValue']
+			,sortInfo: {field:'sortValue', direction:'ASC'}
 			,data: f.data.subict.data
 			,id: 0
 		})
