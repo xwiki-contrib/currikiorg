@@ -384,7 +384,7 @@ data.init = function(){
 	});
 	Object.keys(f.data.ict.parentList).each(function(value){
         var sort = _('CurrikiCode.AssetClass_instructional_component_'+value);
-        if (ict === 'other') {
+        if (value === 'other') {
                 sort = 'zzz';
         }
 
