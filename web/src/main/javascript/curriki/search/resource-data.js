@@ -118,7 +118,7 @@ data.init = function(){
 			}
 
 			var sort = _('CurrikiCode.AssetClass_instructional_component_'+value);
-			if (ict === 'other') {
+			if (value === 'other') {
 					sort = 'zzz';
 			}
 
