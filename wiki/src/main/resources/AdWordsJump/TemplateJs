@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.panjl</contentAuthor>
 <creationDate>1248397933000</creationDate>
-<date>1251775002000</date>
-<contentUpdateDate>1251775002000</contentUpdateDate>
-<version>19.1</version>
+<date>1252671641000</date>
+<contentUpdateDate>1252671641000</contentUpdateDate>
+<version>20.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>emailAutoButton+autoDecideButton, CURRIKI-4909</comment>
+<comment>CURRIKI-4963</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -147,6 +147,10 @@ var AdWordJumpPage=Class.create({
                 alert('Invalid emailAutoButton, please make it point to email/searchAndEmailButton/autoDecide button');
                 return false;
             }
+        }
+        if(!this.configCheck.hasSearchText &amp;&amp; !this.configCheck.hasEmail){
+            alert('Both search term field and email entry field are missing');
+            return false;
         }
         return true;
     },
@@ -356,9 +360,9 @@ var AdWordJumpPage=Class.create({
             parameters: pars,
             onComplete: function(request){
                 Curriki.hideLoading();
-                if(searchtxt){
+                if(caller.configCheck.hasSearchText){
                     caller.submitToNextPage(request);
-                }else if(!caller.configCheck.hasSearchText){
+                }else if(caller.configCheck.hasEmail){
                     alert('The information was successfully submitted.');
                 }
             }
