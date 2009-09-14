@@ -353,8 +353,8 @@ var jt_ = { // from wingo.com/jt_
 	},
 
 	moveTo: function(obj, x, y) {
-		obj.style.left = CurrikiApp.valPx(x);
-		obj.style.top = CurrikiApp.valPx(y);
+		obj.style.left = jt_.valPx(x);
+		obj.style.top = jt_.valPx(y);
 	},
 
 	winW: function() {

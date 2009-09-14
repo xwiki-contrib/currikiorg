@@ -9,10 +9,15 @@
 	#asset_icontitle($doc)
 	#asset_attribution($doc)
 	#asset_rating($doc)
-	#asset_tabs($doc "info")
+	#asset_tabs($doc "standards")
 	#asset_edit_isoriginalauthorjs($doc false)    
     <div id="asset-wrapper-inner">
-		<iframe src="http://current.dev.curriki.org/ab/" name="abStandardsFrame" id="abStandardsFrame"></iframe>
+<script type="text/javascript">
+function abStandardsHeight(docBody) {
+	document.getElementById('abStandardsFrame').style.height = jt_.valPx(docBody.scrollHeight);
+}
+</script>
+		<iframe src="http://current.dev.curriki.org/ab/" name="abStandardsFrame" id="abStandardsFrame" frameborder="0"></iframe>
 	</div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 #else
