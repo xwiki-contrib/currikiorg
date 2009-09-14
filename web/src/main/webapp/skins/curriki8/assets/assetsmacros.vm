@@ -138,8 +138,7 @@ $msg.get("rve.title.member.rating.info")
 <ul id="asset-tabs">
 	<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.Content")</a></li>
 	<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.Information")</a></li>
-	#set($standardsTab=$xwiki.getXWiki().Param('curriki.system.standardstab', false))
-	#if(${standardsTab})
+	#if($xwiki.getXWiki().Param('curriki.system.standardstab', '0')==1)
 	<li #if($viewer=="standards") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=standards")">$msg.get("rve.tab.Standards")</a></li>
 	#end
 	<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.Comments")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
