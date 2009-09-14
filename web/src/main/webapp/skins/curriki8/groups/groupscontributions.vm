@@ -352,7 +352,7 @@ function toggle_desc(){
 #set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
 #set($multiple = ($cnt > 1))
 #if($multiple) ##{
-#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
+#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
 #set($reordered = ($reorder > 0))
 {pre}
 <script type="text/javascript">
