@@ -1,0 +1,20 @@
+#**
+ *  Asset standards tab view entry point. It is called from view.vm
+ *#
+#curriki_breadcrumb()
+#if($doc.getObject("CurrikiCode.AssetClass"))
+	#set($ok = $doc.use("CurrikiCode.AssetClass"))
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-$!viewer">
+	#asset_resourcefunctions($doc)
+	#asset_icontitle($doc)
+	#asset_attribution($doc)
+	#asset_rating($doc)
+	#asset_tabs($doc "info")
+	#asset_edit_isoriginalauthorjs($doc false)    
+    <div id="asset-wrapper-inner">
+		<iframe src="http://current.dev.curriki.org/ab/" name="abStandardsFrame" id="abStandardsFrame"></iframe>
+	</div> ##asset-wrapper-inner
+</div> ##asset-wrapper
+#else
+$msg.get("rve.information.pageisnotanasset")
+#end

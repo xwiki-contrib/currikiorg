@@ -9,14 +9,14 @@
  *#
 #macro(asset_resourcefunctions $asset)
 <ul id="function-tabs">
-   #if(!$isguest)
-     <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
-   #end
-#set($g_enable_ADDTHIS = true)
-     <li id="tab-email"><a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
-   #if(!$isguest)
-     <li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
-   #end
+	#if(!$isguest)
+	<li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+	#end
+	#set($g_enable_ADDTHIS = true)
+	<li id="tab-email"><a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="$msg.get("rve.title.function.email.icon.rollover")">$msg.get("rve.title.function.email")</a></li>
+	#if(!$isguest)
+	<li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+	#end
      <li class="last-item" id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")">$msg.get("rve.title.function.print")</a></li>
 </ul>
 #end
@@ -27,10 +27,10 @@
  *#
 #macro(asset_icontitle $asset)
 <!-- #* Hack: HTML comment to fix bug CURRIKI-3568 Do not remove *# --><div id="asset-header">
- <!--<img src="images/collectionmedium.gif">-->
- #set($assetTitle = $asset.getDisplayTitle(125))
- <h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
- #asset_info_rollover($asset 0)
+<!--<img src="images/collectionmedium.gif">-->
+	#set($assetTitle = $asset.getDisplayTitle(125))
+<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+	#asset_info_rollover($asset 0)
 </div>
 #end
 
@@ -43,34 +43,33 @@
 #set($assetAuthorLink = $assetAuthorDoc.getURL())
 #set($assetAuthorDisplayName = $!xwiki.getUserName($asset.creator, false))
 #if($asset.space.startsWith("Coll_Group_")) ## {
-#set($assetGroupName = $asset.space.replaceFirst("Coll_", ""))
-#set($assetIsFromGroup = true)
-#set($assetGroup = $xwiki.csm.getSpace($assetGroupName))
-#set($assetGroupUrl = $assetGroup.getHomeURL())
+	#set($assetGroupName = $asset.space.replaceFirst("Coll_", ""))
+	#set($assetIsFromGroup = true)
+	#set($assetGroup = $xwiki.csm.getSpace($assetGroupName))
+	#set($assetGroupUrl = $assetGroup.getHomeURL())
 #else
-#set($assetIsFromGroup = false)
+	#set($assetIsFromGroup = false)
 #end
 <ul id="asset-attribution">
- <li id="asset-avatar">
-     #if($assetIsFromGroup)
-     #groups_grouplogo2($assetGroup false)
-     #else
-     ## TODO what is javascript:Curriki.logView('/Download/attachment/${creatorDoc.space}/${creatorDoc.name}/${attach.filename}
-     #curriki_avatar_width($assetAuthorDoc "")
-     #end
- </li>
-    #if($assetIsFromGroup)
-    #if($assetGroup.getDisplayTitle())
-    #set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
-    #else
-    #set($assetGroupDisplayName = "")
-    #end
- <li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
-    #end
- <li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+	<li id="asset-avatar">
+#if($assetIsFromGroup)
+	#groups_grouplogo2($assetGroup false)
+#else
+	## TODO what is javascript:Curriki.logView('/Download/attachment/${creatorDoc.space}/${creatorDoc.name}/${attach.filename}
+	#curriki_avatar_width($assetAuthorDoc "")
+#end
+	</li>
+#if($assetIsFromGroup)
+	#if($assetGroup.getDisplayTitle())
+		#set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
+	#else
+		#set($assetGroupDisplayName = "")
+	#end
+	<li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+#end
+	<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 </ul>
 #end
-
 
 
 #**
@@ -81,6 +80,7 @@
 #member_rating_icon($asset)
 </div> ## End #rve-rating-wrapper started by crs_icon
 #end
+
 
 #**
  * Macro displaying the asset member rating
@@ -95,10 +95,10 @@
 #if("$!rateCount" == "" || "$!rateCount" == "0" || "$!rating" == "" || "$!rating" == "0") ##{
 #if($context.user != "XWiki.XWikiGuest") ##{ No rating and member
 <div class="rating-0">
-<a href="$asset.getURL("view", "viewer=comments&addcomment=true")">
+	<a href="$asset.getURL("view", "viewer=comments&addcomment=true")">
 <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}" />
 </a>
-<a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
+	<a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
 (0)<span>
 $msg.get("rve.title.member.rating.function.add_rating")
 </span>
@@ -106,10 +106,10 @@ $msg.get("rve.title.member.rating.function.add_rating")
 </div>
 #else ##}{ No rating and guest
 <div class="rating-0">
-<a href="${msg.get("rve.title.member.rating.info.url")}">
+	<a href="${msg.get("rve.title.member.rating.info.url")}">
 <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.info")}" />
 </a>
-<a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
+	<a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
 (0)<span>
 $msg.get("rve.title.member.rating.info")
 </span>
@@ -119,10 +119,10 @@ $msg.get("rve.title.member.rating.info")
 ##
 #else ##}{ Has rating
 <div class="rating-${rating}">
-<a href="$asset.getURL("view", "viewer=comments")">
+	<a href="$asset.getURL("view", "viewer=comments")">
 <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}" />
 </a>
-<a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
+	<a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
 (${rateCount})
 </a>
 </div>
@@ -131,24 +131,27 @@ $msg.get("rve.title.member.rating.info")
 #end
 
 
-
 #**
  * Macro for resources tabs
  *#
 #macro(asset_tabs $asset $viewer)
 <ul id="asset-tabs">
-<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.1.heading")</a></li>
-<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.2.heading")</a></li>
-<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.3.heading")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
+	<li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.Content")</a></li>
+	<li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.Information")</a></li>
+	#if($xwiki.getXWiki().Param('curriki.system.standardstab', false))
+	<li #if($viewer=="standards") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=standards")">$msg.get("rve.tab.Standards")</a></li>
+	#end
+	<li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.Comments")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
 </ul> ## tabs
 <script type="text/javascript">
 /* <![CDATA[ */
 Ext.onReady(function(){
-Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs li').addClass('asset-tabs-position');},function(){Ext.select('ul#asset-tabs li').removeClass('asset-tabs-position');});
+	Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs li').addClass('asset-tabs-position');},function(){Ext.select('ul#asset-tabs li').removeClass('asset-tabs-position');});
 });
 /* ]]> */
 </script>
 #end
+
 
 #**
  * Macro for resources links
@@ -200,6 +203,7 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 <div class="clear-right"></div>
 #end
 
+
 #**
  * Checks if the user is the original author or an admin
  * and adds the appropriate JS
@@ -208,22 +212,22 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 #set($isOriginalAuthorOrAdmin = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
 #if(!$isOriginalAuthorOrAdmin)
 <script type="text/javascript">
-    #set($author = $xwiki.getUserName($asset.creator, false))
-    #if($contentOrInfoTab)
-    #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.intention.message_text", [ $author ])).replaceAll("<br>", "%0A"))
-    #else
-    #set($message = $xwiki.curriki.escapeForJS($msg.get("rve.information.edit.intention.message_text", [ $asset.displayTitle, $author ])).replaceAll("<br>", "%0A"))
-    #end
+	#set($author = $xwiki.getUserName($asset.creator, false))
+	#if($contentOrInfoTab)
+		#set($message = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.intention.message_text", [ $author ])).replaceAll("<br>", "%0A"))
+	#else
+		#set($message = $xwiki.curriki.escapeForJS($msg.get("rve.information.edit.intention.message_text", [ $asset.displayTitle, $author ])).replaceAll("<br>", "%0A"))
+	#end
 
-    // this Javascripts ask the user if he wants to edit or copy
-    function checkEditOrCopy() {
-     if (confirm(unescape('$message'))) {
-        return true;
-     } else {
-        // Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'});
-        return false;
-     }
-    }
+// this Javascripts ask the user if he wants to edit or copy
+function checkEditOrCopy() {
+	if (confirm(unescape('$message'))) {
+		return true;
+	} else {
+		// Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'});
+		return false;
+	}
+}
 </script>
 #end
 #end
@@ -270,52 +274,54 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
 #end
 #end
 
+
 #macro(asset_display $asset $mode)
-#set($ok = $asset.use("CurrikiCode.AssetClass"))
+	#set($ok = $asset.use("CurrikiCode.AssetClass"))
 <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
-    #asset_findmode()
-    #if(!$isEmbed)
-     #if($mode!="edit")
-      #asset_resourcefunctions($asset)
-     #end
-     #asset_icontitle($asset)
-     #asset_attribution($asset)
-     #if($mode!="edit")
-      #asset_rating($asset)
-     #end
-     #if(!$isPrint)
-      #asset_tabs($asset "view")
-     #end
-    #end
-    <div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
-        #if($isEmbed)
-         #asset_icontitle($asset)
-         #asset_attribution($asset)
-         <a id="powered-by-curriki">$msg.get("mode.embed.powered_txt")</a>
-        #end
-        #if(!$isPrint&&!$isEmbed&&$mode!="edit")
-        #asset_links($asset)
-        #end
-        #if(!$asset.hasAccessLevel("view"))
-         #curriki_noaccess()
-        #else
-        #if($asset.category!="collection")
-        <div class="sub-asset-wrapper category-${asset.categoryClass}">
-          <div class="sub-asset-wrapper-inner filetype-${asset.filetypeClass}">
-        #end
-        $asset.displayAsset($mode)
-        #if($asset.category!="collection")
-          </div>
-        </div>
-        #end
-        #end
-        #if($isEmbed)
-        <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
-        #end
-    </div> ##asset-wrapper-inner
+	#asset_findmode()
+	#if(!$isEmbed)
+		#if($mode!="edit")
+			#asset_resourcefunctions($asset)
+		#end
+		#asset_icontitle($asset)
+		#asset_attribution($asset)
+		#if($mode!="edit")
+			#asset_rating($asset)
+		#end
+		#if(!$isPrint)
+			#asset_tabs($asset "view")
+		#end
+	#end
+	<div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
+	#if($isEmbed)
+		#asset_icontitle($asset)
+		#asset_attribution($asset)
+		<a id="powered-by-curriki">$msg.get("mode.embed.powered_txt")</a>
+	#end
+	#if(!$isPrint&&!$isEmbed&&$mode!="edit")
+		#asset_links($asset)
+	#end
+	#if(!$asset.hasAccessLevel("view"))
+		#curriki_noaccess()
+	#else
+		#if($asset.category!="collection")
+		<div class="sub-asset-wrapper category-${asset.categoryClass}">
+			<div class="sub-asset-wrapper-inner filetype-${asset.filetypeClass}">
+		#end
+		$asset.displayAsset($mode)
+		#if($asset.category!="collection")
+			</div>
+		</div>
+		#end
+	#end
+	#if($isEmbed)
+		<p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
+	#end
+	</div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 $xwiki.addTooltipJS()
 #end
+
 
 #**
  * Rollover information div about an asset
@@ -325,20 +331,17 @@ $xwiki.addTooltipJS()
     ##<p>
     ##    <strong>$msg.get("global.title.popup.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
     ##</p>
-    <p>
-        <strong>$msg.get("global.title.popup.description")</strong><span>$!asset.display("description")</span>
-    </p>
-    <p>
-        <strong>$msg.get("global.title.popup.last_updated")</strong><span>$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span>
-    </p>
-    <strong>$msg.get("global.title.popup.subject")</strong>
-    #asset_info_subject($asset true)
-    <strong>$msg.get("global.title.popup.educationlevel")</strong>
-    #asset_info_edlevel($asset true)
-    <strong>$msg.get("global.title.popup.ict")</strong>
-    #asset_info_ict($asset true)
+	<p><strong>$msg.get("global.title.popup.description")</strong><span>$!asset.display("description")</span></p>
+	<p><strong>$msg.get("global.title.popup.last_updated")</strong><span>$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span></p>
+	<strong>$msg.get("global.title.popup.subject")</strong>
+	#asset_info_subject($asset true)
+	<strong>$msg.get("global.title.popup.educationlevel")</strong>
+	#asset_info_edlevel($asset true)
+	<strong>$msg.get("global.title.popup.ict")</strong>
+	#asset_info_ict($asset true)
 </div>
 #end
+
 
 #**
  * Begin an asset display section
@@ -428,7 +431,6 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #end
 
 
-
 #macro(asset_attachments $asset)
 <div class="asset-display-download">
  <div class="asset-display-download-inner">
@@ -449,6 +451,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 </div>
 #end
 
+
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
@@ -466,7 +469,6 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #end
 
 
-
 #macro(asset_displaycontentheader $style)
 ##if($style)
 ##<div class="asset-content-body" style="${style}">
@@ -475,10 +477,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 ###end
 #end
 
+
 #macro(asset_displaycontentfooter)
 ##<div class="clearfloats"></div>
 ##</div>
 #end
+
 
 #**
   * Displays the subjects of an asset for the information areas
@@ -505,6 +509,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #end
 </ul>
 #end
+
 
 #**
   * Displays the education level of an asset for the information areas
@@ -537,6 +542,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 </ul>
 #end ##}
 #end
+
 
 #**
   * Displays the instructional component of an asset for the information areas
@@ -669,6 +675,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 </div> ##asset-wrapper
 #end
 
+
 #**
  * Macro to display info tab in edit mode
  *#
@@ -731,17 +738,14 @@ $asset.use("CurrikiCode.AssetClass")
             <p>$msg.get("rve.information.ict.edit_txt")</p>
             $asset.display("instructional_component", "edit", true)
         </li>
-
         <li id="info-edit-tags" class="input-text">
             <span><label for="edit-tags">$msg.get("rve.information.keywords.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.keywords.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("keywords", "edit", true)
         </li>
-
         <li id="info-edit-language" class="input-select">
             <span><label for="edit-language">$msg.get("rve.information.language.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.language.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             $asset.display("language", "edit", true)
         </li>
-
         <li id="info-edit-hide" class="input-checkbox">
             <span><label for="edit-hide">$msg.get("rve.information.hidefromsearch.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.hidefromsearch.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
@@ -824,6 +828,7 @@ $asset.use("CurrikiCode.AssetClass")
 </div> ##asset-wrapper
 #end
 
+
 #**
  * Display comment text
  *#
@@ -853,6 +858,7 @@ $c
 </div>
 #end ##}
 #end ##}
+
 
 #**
  * Display one asset comment
@@ -894,68 +900,69 @@ $msg.get("rve.comments.commentrating.display.edit_link")
 </li>
 #end
 
+
 #**
  * Display the asset comments
  *#
 #macro(asset_comments $asset)
 <div class="sub-asset-wrapper member-comments-wrapper">
-    <h3>$msg.get("rve.comments.comment.header")</h3>
-    <div class="sub-asset-wrapper-inner">
-        <ul class="comment-list">
-            #if($asset.getComments().size()>0)
-            #foreach($comment in $asset.getCommentsByDate())
-            #asset_comment($asset $comment)
-            #end
-            #else
-            <li class="no-comment">
-                <ul>
-                    <li>
-                        <p>
-                            #if($isguest)
-                            $msg.get("rve.comments.comment.empty.notloggedin_message")
-                            #else
-                            $msg.get("rve.comments.comment.empty.loggedin_message")
-                            #end
-                        </p>
-                    </li>
-                </ul>
-            </li>
-            #end
-        </ul>
-        <div id="comment-submit-form" class="comment-submit-form" style="display: none;">
-            #set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
-            #set($comment = $cclass.newObject())
-            #set($qs = "")
-            #set($qs = $request.queryString)
-            #set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
-            <form name="comment-add" action="$xwiki.getURL("CurrikiCode.CreateCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment'], this['XWiki.XWikiComments_rating']);">
-		<input type="hidden" name="page" value="${asset.fullName}" />
-                <input type="hidden" name="xredirect" value="${xredirect}" />
-                <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
-                <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
-                <fieldset>
-                    <label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
-                    <input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
+	<h3>$msg.get("rve.comments.comment.header")</h3>
+	<div class="sub-asset-wrapper-inner">
+		<ul class="comment-list">
+	#if($asset.getComments().size()>0)
+		#foreach($comment in $asset.getCommentsByDate())
+			#asset_comment($asset $comment)
+		#end
+	#else
+			<li class="no-comment">
+				<ul>
+					<li>
+						<p>
+		#if($isguest)
+			$msg.get("rve.comments.comment.empty.notloggedin_message")
+		#else
+			$msg.get("rve.comments.comment.empty.loggedin_message")
+		#end
+						</p>
+					</li>
+				</ul>
+			</li>
+	#end
+		</ul>
+		<div id="comment-submit-form" class="comment-submit-form" style="display: none;">
+	#set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
+	#set($comment = $cclass.newObject())
+	#set($qs = "")
+	#set($qs = $request.queryString)
+	#set($xredirect= $xwiki.getFormEncoded($asset.getURL('view', $qs)))
+<form name="comment-add" action="$xwiki.getURL("CurrikiCode.CreateCommentService")" method="post" onsubmit="return checkComment(this['XWiki.XWikiComments_comment'], this['XWiki.XWikiComments_rating']);">
+	<input type="hidden" name="page" value="${asset.fullName}" />
+	<input type="hidden" name="xredirect" value="${xredirect}" />
+	<input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+	<input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+	<fieldset>
+		<label for="XWiki.XWikiComments_rating">$msg.get("rve.comments.commentrating.rating.add_title")</label>
+		<input type="text" id="XWiki.XWikiComments_rating" name="XWiki.XWikiComments_rating" style="margin: 0;padding:0;" />
  
-                    <label style="clear: left; display: block; float: left; margin-top: 20px;">$msg.get("rve.comments.commentrating.comment.add_title")</label>
-                    <textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
-                </fieldset>
-                <fieldset class="buttons">
-                    <input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.commentrating.add.cancel_button")" 
-                           onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
-                    <input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.commentrating.add.submit_button")"/>
-                </fieldset>
+		<label style="clear: left; display: block; float: left; margin-top: 20px;">$msg.get("rve.comments.commentrating.comment.add_title")</label>
+		<textarea cols="35" rows="7" name="XWiki.XWikiComments_comment" style="margin: 0;padding:0;"></textarea>
+	</fieldset>
+	<fieldset class="buttons">
+		<input type="button" class="button-cancel" name="cancel" value="$msg.get("rve.comments.commentrating.add.cancel_button")" 
+			onclick="document.getElementById('comment-submit-form').style.display = 'none' ;  clickAwayCounter--; if (clickAwayCounter==0) clickAwayActive = false; "/>
+		<input type="submit" class="button-save" name="save" value="$msg.get("rve.comments.commentrating.add.submit_button")"/>
+	</fieldset>
 <script type="text/javascript">
 /* <![CDATA[ */
 Ext.onReady(function(){
-if (Ext.get('XWiki.XWikiComments_rating') && !Ext.get('XWiki.XWikiComments_rating').hasClass('x-hidden')) {
-var nr = new Curriki.ui.Rating({id:'XWikiComments_rating'});
-nr.applyToMarkup('XWiki.XWikiComments_rating');
-}
+	if (Ext.get('XWiki.XWikiComments_rating') && !Ext.get('XWiki.XWikiComments_rating').hasClass('x-hidden')) {
+		var nr = new Curriki.ui.Rating({id:'XWikiComments_rating'});
+		nr.applyToMarkup('XWiki.XWikiComments_rating');
+	}
 });
 /* ]]> */
 </script>
-            </form>
+</form>
         </div>
     </div>
 </div>
@@ -1139,13 +1146,9 @@ clickAwayCounter = 0;
 clickAwayActive = false;
 
 window.onbeforeunload = function() {
- if (clickAwayActive==false)
-  return;
-
- return "$msg.get("rve.comments.commentrating.warning.message.add_edit")";
+	if (clickAwayActive==false) return;
+	return "$msg.get("rve.comments.commentrating.warning.message.add_edit")";
 }
-
-
 </script>
 #end
 
@@ -1301,6 +1304,7 @@ $response.sendRedirect($redirect)
 #end ##}
 {/pre}
 #end
+
 
 #**
  * Save comment service called from CurrikiCode.SaveCommentService
@@ -1524,6 +1528,7 @@ $asset.use($classname)
 </script>
 #end
 
+
 /**
  * Standard buttons in asset edit
  */
@@ -1689,6 +1694,7 @@ $msg.get("notallowed")
 #end
 #end
 #end
+
 
 #**
   *  Macro to display root collections
@@ -2189,6 +2195,7 @@ $msg.get("asset.externallink")
 
 #end
 ##
+
 
 #macro(asset_display_old $currDoc)
 #asset_findmode()
