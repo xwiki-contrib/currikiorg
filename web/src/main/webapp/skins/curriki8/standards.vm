@@ -19,12 +19,16 @@
 var abStandardsFrame = document.getElementById('abStandardsFrame');
 abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/${doc.fullName}?ts=" + (new Date()).getMilliseconds();
 var abStandardsCurrHeight;
-function abStandardsHeight(docBody) {
+function abStandardsHeight(doc) {
 
 	function setHeight() {
-		if ( (abStandardsCurrHeight != docBody.scrollHeight) && (docBody.scrollHeight > 0) ) {
-			abStandardsCurrHeight = docBody.scrollHeight;
-			abStandardsFrame.style.height = jt_.valPx(abStandardsCurrHeight);
+		try {
+			if ( doc && doc.body && (doc.body.scrollHeight != abStandardsCurrHeight) && (doc.body.scrollHeight > 0) ) {
+				abStandardsCurrHeight = doc.body.scrollHeight;
+				abStandardsFrame.style.height = jt_.valPx(doc.body.scrollHeight);
+			}
+		}
+		catch(err) {
 		}
 	}
 
