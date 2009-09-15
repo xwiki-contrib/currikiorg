@@ -17,9 +17,15 @@
 </div> ##asset-wrapper
 <script type="text/javascript">
 var abStandardsFrame = document.getElementById('abStandardsFrame');
-abStandardsFrame.src = document.location.protocol + '//' + document.location.host + "/ab/alignments/${doc.fullName}?ts=" + (new Date()).getMilliseconds();
+abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/${doc.fullName}?ts=" + (new Date()).getMilliseconds();
 function abStandardsHeight(docBody) {
-	abStandardsFrame.style.height = jt_.valPx(docBody.scrollHeight);
+
+	function setHeight() {
+		abStandardsFrame.style.height = jt_.valPx(docBody.scrollHeight);
+	}
+
+	var timer = setTimeout(setHeight, 50);
+	var timer2 = setTimeout(setHeight, 100);
 }
 </script>
 #else
