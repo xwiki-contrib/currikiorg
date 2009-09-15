@@ -22,7 +22,7 @@ var abStandardsCurrHeight;
 function abStandardsHeight(docBody) {
 
 	function setHeight() {
-		if (abStandardsCurrHeight != docBody.scrollHeight) {
+		if ( (abStandardsCurrHeight != docBody.scrollHeight) && (docBody.scrollHeight > 0) ) {
 			abStandardsCurrHeight = docBody.scrollHeight;
 			abStandardsFrame.style.height = jt_.valPx(abStandardsCurrHeight);
 		}
