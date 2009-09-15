@@ -22,14 +22,14 @@ var abStandardsCurrHeight;
 function abStandardsHeight(docBody) {
 
 	function setHeight() {
-		if (docBody.scrollHeight != abStandardsCurrHeight) {
+		if (abStandardsCurrHeight != docBody.scrollHeight) {
 			abStandardsCurrHeight = docBody.scrollHeight;
 			abStandardsFrame.style.height = jt_.valPx(abStandardsCurrHeight);
 		}
 	}
 
 	setHeight();
-	var timer = setInterval(setHeight, 50);
+	var timer = setInterval(setHeight, 80);
 }
 </script>
 #else
