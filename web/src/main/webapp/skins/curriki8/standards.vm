@@ -18,14 +18,18 @@
 <script type="text/javascript">
 var abStandardsFrame = document.getElementById('abStandardsFrame');
 abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/${doc.fullName}?ts=" + (new Date()).getMilliseconds();
+var abStandardsCurrHeight;
 function abStandardsHeight(docBody) {
 
 	function setHeight() {
-		abStandardsFrame.style.height = jt_.valPx(docBody.scrollHeight);
+		if (docBody.scrollHeight != abStandardsCurrHeight) {
+			abStandardsCurrHeight = docBody.scrollHeight;
+			abStandardsFrame.style.height = jt_.valPx(abStandardsCurrHeight);
+		}
 	}
 
-	var timer = setTimeout(setHeight, 50);
-	var timer2 = setTimeout(setHeight, 100);
+	setHeight();
+	var timer = setInterval(setHeight, 50);
 }
 </script>
 #else
