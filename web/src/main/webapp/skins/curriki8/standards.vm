@@ -17,7 +17,7 @@
 </div> ##asset-wrapper
 <script type="text/javascript">
 var abStandardsFrame = document.getElementById('abStandardsFrame');
-abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/${doc.fullName}?ts=" + (new Date()).getMilliseconds();
+abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/${doc.fullName}" + (location.search ? location.search + '&' : '?') + "ts=" + (new Date()).getMilliseconds();
 var abStandardsCurrHeight;
 function abStandardsHeight(doc) {
 
