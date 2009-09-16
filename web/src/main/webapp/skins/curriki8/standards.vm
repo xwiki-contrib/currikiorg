@@ -23,15 +23,19 @@ function abStandardsHeight(doc) {
 
 	function setHeight() {
 		try {
-			if ( doc && doc.body && (doc.body.scrollHeight != abStandardsCurrHeight) && (doc.body.scrollHeight > 0) ) {
-				abStandardsCurrHeight = doc.body.scrollHeight;
-				abStandardsFrame.style.height = jt_.valPx(doc.body.scrollHeight);
+			if (doc && doc.body) {
+				var pageHeight = Math.max(doc.body.scrollHeight, pageWrapDIV.offsetHeight);
+				if ( (pageHeight != abStandardsCurrHeight) && (pageHeight > 0) ) {
+					abStandardsCurrHeight = pageHeight;
+					abStandardsFrame.style.height = jt_.valPx(pageHeight);
+				}
 			}
 		}
 		catch(err) {
 		}
 	}
 
+	var pageWrapDIV = doc.getElementById('pageWrap');
 	setHeight();
 	var timer = setInterval(setHeight, 75);
 }
