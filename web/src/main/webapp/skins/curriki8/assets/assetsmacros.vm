@@ -864,39 +864,38 @@ $c
  * Display one asset comment
  *#
 #macro(asset_comment $asset $comment)
-$asset.use($comment)
+	$asset.use($comment)
 <li id="comment${comment.number}" class="comment">
-    <ul>
-        #set($authorDoc = $xwiki.getDocument($asset.getValue("author")))
-        <li class="comment-avatar">
-            #curriki_avatar($authorDoc)
-        </li>
-        <li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
-        <li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
-        <li id="comment-text-${comment.number}" class="comment-text">
-	    #asset_comment_text($asset $comment)
-        </li>
-        <li class="comment-action">
-            #if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
+	<ul>
+	#set($authorDoc = $xwiki.getDocument($asset.getValue("author")))
+	#if(($comment.author == $context.user) || $xwiki.hasAdminRights()) ##{
+		#set($xredirect = $util.encodeURI($asset.getURL('view', $!request.queryString)))
+		#set($qs = "")
+		#set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
+		#set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", $qs))
+		<li class="comment-action">
             <a class="comment-edit" href="javascript:void(0)" onclick="editComment('${asset.getJSFullName()}','${comment.number}','comment-text-${comment.number}'); return false;">
-#if($ret_hasRating && $ret_hasComment) ##{
-$msg.get("rve.comments.commentrating.display.edit_link")
-#elseif($ret_hasRating) ##}{
-$msg.get("rve.comments.commentrating.display.edit_comment_link")
-#elseif($ret_hasComment) ##}{
-$msg.get("rve.comments.commentrating.display.edit_rate_link")
-#else ##}{ ## Shouldn't happen
-$msg.get("rve.comments.commentrating.display.edit_link")
-#end ##}
-</a>
-            #set($xredirect = $util.encodeURI($asset.getURL('view', $!request.queryString)))
-            #set($qs = "")
-            #set($qs = "docname=${asset.fullName}&date=${asset.getValue('date', $comment).time}&confirm=1&xredirect=${xredirect}")
-            #set($deleteCommentUrl = $xwiki.getURL("CurrikiCode.DeleteCommentService", "view", $qs))
-            <a class="comment-delete" href="javascript:void(0)"  title="${msg.get('rve.comments.commentrating.display.delete_link')}" onclick="if (confirm('${msg.get("rve.comments.comment.delete.confirm.message")}'))  location='$deleteCommentUrl'; return false;">$msg.get('rve.comments.commentrating.display.delete_link')</a>
-            #end
-        </li>
-    </ul>
+		#if($ret_hasRating && $ret_hasComment) ##{
+			$msg.get("rve.comments.commentrating.display.edit_link")
+		#elseif($ret_hasRating) ##}{
+			$msg.get("rve.comments.commentrating.display.edit_comment_link")
+		#elseif($ret_hasComment) ##}{
+			$msg.get("rve.comments.commentrating.display.edit_rate_link")
+		#else ##}{ ## Shouldn't happen
+			$msg.get("rve.comments.commentrating.display.edit_link")
+		#end ##}
+			</a><a class="comment-delete" href="javascript:void(0)" title="${msg.get('rve.comments.commentrating.display.delete_link')}" onclick="if (confirm('${msg.get("rve.comments.comment.delete.confirm.message")}')) location='$deleteCommentUrl'; return false;">$msg.get('rve.comments.commentrating.display.delete_link')</a>
+		</li>
+	#end
+		<li class="comment-avatar">
+			#curriki_avatar($authorDoc)
+		</li>
+		<li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
+		<li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
+		<li id="comment-text-${comment.number}" class="comment-text">
+			#asset_comment_text($asset $comment)
+		</li>
+	</ul>
 </li>
 #end
 
