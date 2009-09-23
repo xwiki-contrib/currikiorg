@@ -13,9 +13,8 @@
 	#asset_edit_isoriginalauthorjs($doc false)    
     <div id="asset-wrapper-inner">
 
-	<ul id="asset-links">
-        </ul>
-        <div class="clear-right"></div>        
+		<ul id="asset-links"></ul>
+		<div class="clear-right"></div>        
 
 		<div class="sub-asset-wrapper">
 			<h3>ALIGNMENTS</h3>
@@ -33,6 +32,7 @@
 var abStandardsFrame = document.getElementById('abStandardsFrame');
 abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/${doc.fullName}" + (location.search ? location.search + '&' : '?') + "ts=" + (new Date()).getMilliseconds();
 var abStandardsCurrHeight;
+var abStandardsTimer;
 function abStandardsHeight(doc) {
 
 	function setHeight() {
@@ -51,7 +51,8 @@ function abStandardsHeight(doc) {
 
 	var pageWrapDIV = doc.getElementById('pageWrap');
 	setHeight();
-	var timer = setInterval(setHeight, 75);
+	clearInterval(abStandardsTimer);
+	abStandardsTimer = setInterval(setHeight, 75);
 }
 </script>
 #else
