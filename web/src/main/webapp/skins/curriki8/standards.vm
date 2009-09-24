@@ -11,21 +11,8 @@
 	#asset_rating($doc)
 	#asset_tabs($doc "standards")
 	#asset_edit_isoriginalauthorjs($doc false)    
-    <div id="asset-wrapper-inner">
-
-		<ul id="asset-links"></ul>
-		<div class="clear-right"></div>        
-
-		<div class="sub-asset-wrapper">
-			<h3>ALIGNMENTS</h3>
-			<div class="sub-asset-wrapper-inner">
-				<div id="navWrap" style="display:none;"></div>
-				<div>
-					<iframe src="" name="abStandardsFrame" id="abStandardsFrame" frameborder="0"></iframe>
-				</div>
-			</div>
-		</div>
-
+	<div id="asset-wrapper-inner">
+		<iframe src="" name="abStandardsFrame" id="abStandardsFrame" frameborder="0"></iframe>
 	</div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 <script type="text/javascript">
@@ -34,7 +21,6 @@ abStandardsFrame.src = document.location.protocol + "//" + document.location.hos
 var abStandardsCurrHeight;
 var abStandardsTimer;
 function abStandardsHeight(doc) {
-
 	function setHeight() {
 		try {
 			if (doc && doc.body) {
