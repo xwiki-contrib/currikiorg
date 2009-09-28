@@ -15,9 +15,17 @@
 		<iframe src="" name="abStandardsFrame" id="abStandardsFrame" frameborder="0"></iframe>
 	</div> ##asset-wrapper-inner
 </div> ##asset-wrapper
+#if("$!request.lang" != "")##{
+#set($lang = $request.lang)
+#else##}{
+#set($lang = $xwiki.getLanguagePreference())
+#end##}
+#if("$!lang" == "")##{
+#set($lang = "en")
+#end##}
 <script type="text/javascript">
 var abStandardsFrame = document.getElementById('abStandardsFrame');
-abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/alignments/view/${doc.fullName}" + (location.search ? location.search + '&' : '?') + "ts=" + (new Date()).getMilliseconds();
+abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/${lang}/ab/alignments/view/${doc.fullName}" + (location.search ? location.search + '&' : '?') + "ts=" + (new Date()).getMilliseconds();
 var abStandardsCurrHeight;
 var abStandardsTimer;
 function abStandardsHeight(doc) {
