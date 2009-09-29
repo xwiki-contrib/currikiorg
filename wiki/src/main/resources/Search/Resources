@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1218122764000</creationDate>
-<date>1251146634000</date>
-<contentUpdateDate>1251146634000</contentUpdateDate>
-<version>119.1</version>
+<date>1253034220000</date>
+<contentUpdateDate>1253034220000</contentUpdateDate>
+<version>127.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>Back to orignal</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -239,7 +239,7 @@
 				#if($xwiki.hasAccessLevel("view", $parentPage)) ##{
 					#set($parentAsset = $xwiki.getDocument($parentPage))
 					#searchResourceInfo($parentAsset false)
-					#set($pJSON = "{ 'page':'${parentAsset.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}' ,'ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${parentAsset.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'rating':'${ret_rating}' ,'ratingCount':'${ret_rating_count}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'updated':'${parentAsset.date}' }")
+					#set($pJSON = "{ 'page':'${parentAsset.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}' ,'ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${parentAsset.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'rating':'${ret_rating}' ,'ratingCount':'${ret_rating_count}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'lastUpdated':'${xwiki.formatDate($parentAsset.date, $msg.get('mycurriki.dateFormat'))}' ,'updated':'${parentAsset.date}' }")
 					#if($isFirstParent) ##{
 						#set($isFirstParent = false)
 					#else ##}{
@@ -274,7 +274,7 @@
 #searchResourceFWItems($resource)
 #searchResourceEL($resource)
 #searchResourceContributorName($resource)
-#set($ret_info = "{ 'page':'${resource.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}','ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${resource.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'rating':'${ret_rating}' ,'ratingCount':'${ret_rating_count}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'parents':${ret_parents} ,'updated':'${resource.date}' } ")
+#set($ret_info = "{ 'page':'${resource.fullName}' ,'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,'category':'${ret_category}' ,'subcategory':'${ret_subcategory}','ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}' ,'contributor':'${resource.creator}' ,'contributorName':'${ret_cname}' ,'review':'${ret_review}' ,'rating':'${ret_rating}' ,'ratingCount':'${ret_rating_count}' ,'description':'${ret_desc}' ,'fwItems':${ret_FW} ,'levels':${ret_lvl} ,'parents':${ret_parents} ,'lastUpdated':'${xwiki.formatDate($resource.date, $msg.get('mycurriki.dateFormat'))}' ,'updated':'${resource.date}' } ")
 #end ##}
 ##
 ##
