@@ -598,12 +598,12 @@ var CurrikiApp = {
 	}
 
 }
-if (Ext) {
-Ext.onReady(function() {
-	Ext.QuickTips.init();
-	Ext.apply(Ext.QuickTips.getQuickTip(), {
-		dismissDelay:10000
-		,hideDelay: 0
+if ('undefined' !== typeof Ext) {
+	Ext.onReady(function() {
+		Ext.QuickTips.init();
+		Ext.apply(Ext.QuickTips.getQuickTip(), {
+			dismissDelay:10000
+			,hideDelay: 0
+		});
 	});
-});
 }
