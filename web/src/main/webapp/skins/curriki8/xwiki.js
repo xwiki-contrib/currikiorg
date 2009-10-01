@@ -598,7 +598,7 @@ var CurrikiApp = {
 	}
 
 }
-
+if (Ext) {
 Ext.onReady(function() {
 	Ext.QuickTips.init();
 	Ext.apply(Ext.QuickTips.getQuickTip(), {
@@ -606,3 +606,4 @@ Ext.onReady(function() {
 		,hideDelay: 0
 	});
 });
+}
