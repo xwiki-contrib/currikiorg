@@ -1168,7 +1168,18 @@ public class Asset extends CurrikiDocument {
      */
     public Integer getCommentNumbers()
     {
-    	return getComments().size() + getObjectNumbers(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+	// Fix count as getObjectNumbers() counts non-existant objects
+	int reviewCount = 0;
+	List reviews = getObjects(Constants.ASSET_CURRIKI_REVIEW_CLASS);
+	if ((reviews!=null) && (reviews.size()>0)) {
+		for (int i=0; i<reviews.size();i++) {
+			Object review = (Object) reviews.get(i);
+			if (review!=null) {
+				reviewCount++;
+			}
+		}
+	}
+    	return getComments().size() + reviewCount;
     }
 
     public List getCommentsByDate() {
