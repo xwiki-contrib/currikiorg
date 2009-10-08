@@ -32,12 +32,12 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 	#end##}
 ##
 ## The xwiki translation files are converted for use with javascript
-## and loaded via the /js/0/lang_${lang}.js URL using an apache rewrite rule
+## and loaded via the /xwiki/gen/js/0/lang_${lang}.js URL using an apache rewrite rule
 ##
 ## If using xwiki standalone you need to uncomment the line
 ##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&lang=${lang}"></script>
 ## and comment the next one out instead
-<script src="/js/${gVersion}/lang_${lang}.js"></script>
+<script src="/xwiki/gen/js/${gVersion}/lang_${lang}.js"></script>
 
 ## Similarily if using xwiki standalone you need to comment out the #if section and just use the #else section
 	#if("$!debugging" == "")##{
