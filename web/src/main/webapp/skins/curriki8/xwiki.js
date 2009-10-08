@@ -580,16 +580,18 @@ var CurrikiApp = {
 	},
 
 	initSearchForm: function() {
-		CurrikiApp.defaultSearchText = document.searchform.brsqry.getAttribute('Curriki:defTxt');
-		jt_.AddListener(document.searchform.brsqry, 'focus', function() {
-			if (document.searchform.brsqry.value == CurrikiApp.defaultSearchText) document.searchform.brsqry.value = '';
-			else document.searchform.brsqry.select();
-		});
-		jt_.AddListener(document.searchform.brsqry, 'blur', function() {
-			 if (document.searchform.brsqry.value == '') document.searchform.brsqry.value = CurrikiApp.defaultSearchText;
-		});
-		if (Ext.isIE6) {
-			CurrikiApp.submitOnEnter(document.searchform, 'brsqry', CurrikiApp.searchbtnGo);
+		if (document.searchform && document.searchform.brsqry) {
+			CurrikiApp.defaultSearchText = document.searchform.brsqry.getAttribute('Curriki:defTxt');
+			jt_.AddListener(document.searchform.brsqry, 'focus', function() {
+				if (document.searchform.brsqry.value == CurrikiApp.defaultSearchText) document.searchform.brsqry.value = '';
+				else document.searchform.brsqry.select();
+			});
+			jt_.AddListener(document.searchform.brsqry, 'blur', function() {
+				 if (document.searchform.brsqry.value == '') document.searchform.brsqry.value = CurrikiApp.defaultSearchText;
+			});
+			if (Ext.isIE6) {
+				CurrikiApp.submitOnEnter(document.searchform, 'brsqry', CurrikiApp.searchbtnGo);
+			}
 		}
 	},
 
