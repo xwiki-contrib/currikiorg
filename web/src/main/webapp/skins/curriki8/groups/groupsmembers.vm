@@ -845,7 +845,7 @@ $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_membe
 #set($redirurl= $logredir.replaceAll("&#38;", "-"))
 #set($regurl = $xwiki.getURL("Main.JoinCurriki", "view", "xredirect=${redirurl}"))
 $msg.get("groups_members_join_needaccount",[$regurl])
-#loginbox($logredir)
+## #loginbox($logredir)
 {pre}
 ## end user is guest
 ## if user is already a member there is no need to join
