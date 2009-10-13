@@ -203,6 +203,7 @@ Curriki.module.addpath.init = function(){
 							}]
 
 		// VIDITalk Video Upload
+/*
 						},{
 							 xtype:'radio'
 							,value:'video_upload'
@@ -254,6 +255,7 @@ Curriki.module.addpath.init = function(){
 									,height:'320px'
 								}
 							}]
+*/
 
 		// External Web Link
 						},{
@@ -325,6 +327,7 @@ Curriki.module.addpath.init = function(){
 							,boxLabel:_('add.contributemenu.option.scratch')
 
 		// Create with VIDITalk
+/*
 						},{
 							 xtype:'radio'
 							,value:'video_capture'
@@ -382,6 +385,7 @@ Curriki.module.addpath.init = function(){
 								,id:'video_capture-container'
 								,html:''
 							}
+*/
 
 		// Create folder
 						},{
