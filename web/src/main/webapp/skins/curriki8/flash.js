@@ -12,11 +12,16 @@ function getFlashMovieObject(movieName) {
 }
 
 function displayFlash(flashURL, flashNum){
-  var so = new SWFObject(flashURL, "flashItem"+flashNum, "450", "450", "6", "#ffffff");
-  so.addParam("wmode", "transparent");
-  so.addParam("play", "false");
-  so.addParam("quality", "autohigh");
-  so.write("flashContent"+flashNum);
+	var flashvars = {};
+	var params = {
+		'wmode': 'transparent'
+		,'play': 'false'
+		,'quality': 'autohigh'
+		,'bgcolor': '#FFFFFF'
+	};
+	var attributes = {};
+
+	swfobject.embedSWF(flashURL, 'flashItem'+flashNum, '450', '450', '6', 'expressInstall.swf', flashvars, params, attributes);
 }
 
 function initialStopFlashMovie(flashNum){
