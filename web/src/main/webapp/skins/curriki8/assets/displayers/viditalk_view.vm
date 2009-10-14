@@ -1,6 +1,11 @@
 #asset_displaycontentheader("text-align:center;")
 #set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
 #set($video_id = $objVT.id)
+#if($xwiki.getXWiki().Param('curriki.system.mediahost', '0')==0) ##{
+#set($mediahost = "media.dev.curriki.org")
+#else ##}{
+#set($mediahost = $xwiki.getXWiki().Param('curriki.system.mediahost', '0'))
+#end ##}
 #if($viditalk_counter)
 #set($viditalk_counter = $viditalk_counter + 1)
 #else
@@ -29,15 +34,15 @@
         <div style="height:280px; width:320px; margin: 0 auto;" id="$vidDiv">
             Viditalk Playback Window - Loading components from VIDITalk
         </div>
-	<script type="text/javascript" src="http://media.dev.curriki.org/video/js/video.js"></script>
+	<script type="text/javascript" src="http://$mediahost/video/js/video.js"></script>
         <script language="javascript" type="text/javascript">
             // embedVidiPlayback(div_id, sc, mediaId, autoplay, width, height, stretchPlayer, skinLoc, shareUrl, allowFullScreen)
             embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null, null, null, null, null, null, true);
         </script>
     </div>
 </div>
-#set($viditalkURL = "http://flashmedia.viditalk.com/10/active/${video_id}.mpg")
-#set($origVideo = $xwiki.getURLContent("http://components.viditalk.com/dl.asp?id=$video_id"))
+#set($viditalkURL = $xwiki.getURLContent("http://$mediahost/video/url/mpg/$video_id")
+#set($origVideo = $xwiki.getURLContent("http://$mediahost/video/url/orig/$video_id")
 #if(!$origVideo||$origVideo=="") ##{
 	#set($has_origVideo = false)
 	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
