@@ -41,8 +41,8 @@
         </script>
     </div>
 </div>
-#set($viditalkURL = $xwiki.getURLContent("http://$mediahost/video/url/mpg/$video_id")
-#set($origVideo = $xwiki.getURLContent("http://$mediahost/video/url/orig/$video_id")
+#set($viditalkURL = $xwiki.getURLContent("http://$mediahost/video/url/mpg/$video_id"))
+#set($origVideo = $xwiki.getURLContent("http://$mediahost/video/url/orig/$video_id"))
 #if(!$origVideo||$origVideo=="") ##{
 	#set($has_origVideo = false)
 	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
