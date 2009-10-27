@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1225203821000</creationDate>
-<date>1234891233000</date>
-<contentUpdateDate>1234891233000</contentUpdateDate>
-<version>8.1</version>
+<date>1255978194000</date>
+<contentUpdateDate>1255978194000</contentUpdateDate>
+<version>9.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Change where js comes from</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -86,11 +86,16 @@ td {font-family:sans-serif;}
 #if("$!lang" == "")
 #set($lang = "en")
 #end
-&lt;script type="text/javascript" src="$xwiki.getSkinFile("extjs/adapter/ext/ext-base.js")"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="$xwiki.getSkinFile("extjs/ext-all.js")"&gt;&lt;/script&gt;
-&lt;script src="/js/0/lang_${lang}.js"&gt;&lt;/script&gt;
-&lt;script src="/xwiki/js/i18n.js"&gt;&lt;/script&gt;
-&lt;script src="/xwiki/js/curriki-main.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+//&lt;![CDATA[
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + ejLoc + "ext-all.js' type='text/javascript'%3E%3C/script%3E"));
+//]]&gt;
+&lt;/script&gt;
+&lt;script src="/xwiki/gen/js/${gVersion}/lang_${lang}.js"&gt;&lt;/script&gt;
+&lt;script src="/xwiki/js/${gVersion}/i18n.js"&gt;&lt;/script&gt;
+&lt;script src="/xwiki/js/${gVersion}/curriki-main.js"&gt;&lt;/script&gt;
 &lt;script language="javascript" type="text/javascript"&gt;
 var hasFormStart = false;
 var hasBtn = false;
