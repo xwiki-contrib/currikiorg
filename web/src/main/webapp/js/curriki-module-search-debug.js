@@ -1885,7 +1885,7 @@ data.init = function(){
 	});
 
 	f.data.member_type =  {
-		list: ['parent', 'teacher', 'professional', 'student']
+		list: ['student', 'parent', 'professional', 'teacher', 'administration']
 		,data: [
 			['', _('XWiki.XWikiUsers_member_type_UNSPECIFIED')]
 		]
