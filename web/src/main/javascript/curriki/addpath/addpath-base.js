@@ -202,8 +202,43 @@ Curriki.module.addpath.init = function(){
 								,disabled:true
 							}]
 
-		// VIDITalk Video Upload
+		// Video upload
+						},{
+							 xtype:'radio'
+							,value:'video_upload'
+							,inputValue:'video_upload'
+							,boxLabel:_('add.contributemenu.option.video_upload')
+							,listeners:{
+								check:AddPath.RadioSelect
+							}
+						},{
+							 xtype:'container'
+							,id:'video_upload-container-cmp'
+							,hidden:true
+							,autoEl:{
+								 tag:'div'
+								,id:'video_upload-container'
+								,html:''
+							}
+							,items:[{
+								 xtype:'textfield'
+								,inputType:'file'
+								,id:'video_upload-entry-box'
+								,name:'upload[file]'
+								,allowBlank:false
+								,preventMark:true
+								,hideMode:'display'
+								,hideLabel:true
+		//						,hidden:true
+		//						,disabled:true
+								,listeners:{ // focus, invalid, blur, valid
+									focus:function(){
+									}
+								}
+							}]
+
 /*
+		// VIDITalk Video Upload
 						},{
 							 xtype:'radio'
 							,value:'video_upload'
@@ -326,8 +361,8 @@ Curriki.module.addpath.init = function(){
 							,inputValue:'scratch'
 							,boxLabel:_('add.contributemenu.option.scratch')
 
-		// Create with VIDITalk
 /*
+		// Create with VIDITalk
 						},{
 							 xtype:'radio'
 							,value:'video_capture'
@@ -2613,6 +2648,98 @@ Curriki.module.addpath.init = function(){
 			});
 		}
 
+		AddPath.PostVideo = function(callback){
+			Curriki.current.uuid = Math.uuid(21);
+			Curriki.hideLoadingMask = true;
+			Ext.Msg.progress(_('add.video_upload.dialog.progress.title'), _('add.video_upload.dialog.progress.body'), '0%');
+			Ext.Msg.getDialog().addClass('progress-dialog');
+
+			// Submit form to post file
+			Ext.Ajax.request({
+				url:'http://'+_('MEDIAHOST')+'/cgi/upload.cgi?key='+Curriki.current.uuid
+				,isUpload:true
+				,form:'addDialogueForm'
+				,headers: {
+					'Accept':'text/html'
+				}
+				,callback:function(options, success, response){
+					if (success) {
+						// Empty, taken care of via jsonp callback
+					} else {
+						console.log('Upload failed', options, response);
+						alert(_('add.servertimedout.message.text'));
+					}
+				}
+			});
+
+			// Watch status of uploaded file
+			Curriki.current.videoStatusRequest = function() {
+				Ext.ux.JSONP.request('http://'+_('MEDIAHOST')+'/upload', {
+					callbackKey: 'callback',
+					params: {
+						key: Curriki.current.uuid,
+						r: Math.uuid(21)
+					},
+					callback: Curriki.current.videoJsonCallback
+				});
+			};
+
+			Curriki.current.videoCompleteCallback = callback;
+
+			Curriki.current.videoSuccessCallback = function(success){
+				Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
+					Curriki.current.asset = asset;
+
+					Curriki.current.videoId = success.id;
+
+					Curriki.current.videoCompleteCallback(asset);
+				});
+			};
+
+			Curriki.current.videoErrorCallback = function(error){
+				//TODO: Present an error message here about the failure
+				alert(_('add.video_upload.error.'+error));
+			};
+
+			Curriki.current.videoJsonCallback = function(data){
+				if (data.complete) {
+					if (data.error) {
+						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+						Curriki.hideLoadingMask = false;
+						Ext.Msg.getDialog().removeClass('progress-dialog');
+						Ext.Msg.hide();
+						Curriki.current.videoErrorCallback(data.error);
+						return;
+					} else if (data.success) {
+						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+						Curriki.hideLoadingMask = false;
+						Ext.Msg.getDialog().removeClass('progress-dialog');
+						Ext.Msg.hide();
+						Curriki.current.videoSuccessCallback(data.success);
+						return;
+					}
+				} else {
+					//TODO: update progress bar
+					var current = data.current||0;
+					var total = data.total||0;
+					var percent = 0;
+					var ptext = '%';
+					if (total&&current) {
+						percent = current/total;
+					}
+					ptext = Math.floor(percent*100) + '%';
+					Ext.Msg.updateProgress(percent, ptext);
+				}
+			};
+
+			var task = {
+				run: Curriki.current.videoStatusRequest()
+				,interval: 3000
+			};
+
+			Curriki.current.videoStatusTask = Ext.TaskMgr.start(task);
+		}
+
 		AddPath.AddSubasset = function(callback){
 			Curriki.assets.CreateSubasset(
 				Curriki.current.drop.parentPage
@@ -2672,31 +2799,25 @@ Curriki.module.addpath.init = function(){
 					break;
 
 				case 'video_upload':
-				case 'video_capture':
-					Curriki.current.videoId = allValues[selected+'-entry-value'];
-
+				//case 'video_capture':
 					next = 'apSRI1';
-					Curriki.assets.CreateAsset(
-						Curriki.current.parentAsset,
-						Curriki.current.publishSpace,
-						function(asset){
-							console.log("CreateAsset (video) CB: ", asset);
-							Curriki.current.asset = asset;
+					AddPath.PostVideo(function(asset){
+						console.log("CreateAsset (video) CB: ", asset);
+						Curriki.current.asset = asset;
 
-							Curriki.assets.CreateVIDITalk(
-								asset.assetPage,
-								Curriki.current.videoId,
-								function(videoInfo){
-									console.log("Created viditalk CB: ", videoInfo);
-									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
-									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-										Curriki.current.metadata = metadata;
-										callback();
-									});
-								}
-							)
-						}
-					);
+						Curriki.assets.CreateVIDITalk(
+							asset.assetPage,
+							Curriki.current.videoId,
+							function(videoInfo){
+								console.log("Created viditalk CB: ", videoInfo);
+								callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+								Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+									Curriki.current.metadata = metadata;
+									callback();
+								});
+							}
+						)
+					});
 					return;
 					break;
 
@@ -3127,6 +3248,7 @@ Curriki.current = {
 
 			,selected:null
 			,fileName:null
+			,uuid:null
 			,videoId:null
 			,linkUrl:null
 

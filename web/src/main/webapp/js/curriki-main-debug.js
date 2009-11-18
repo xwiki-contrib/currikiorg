@@ -1,3 +1,167 @@
+/*!
+Math.uuid.js (v1.4)
+http://www.broofa.com
+mailto:robert@broofa.com
+
+Copyright (c) 2009 Robert Kieffer
+Dual licensed under the MIT and GPL licenses.
+*/
+
+/*
+ * Generate a random uuid.
+ *
+ * USAGE: Math.uuid(length, radix)
+ *   length - the desired number of characters
+ *   radix  - the number of allowable values for each character.
+ *
+ * EXAMPLES:
+ *   // No arguments  - returns RFC4122, version 4 ID
+ *   >>> Math.uuid()
+ *   "92329D39-6F5C-4520-ABFC-AAB64544E172"
+ * 
+ *   // One argument - returns ID of the specified length
+ *   >>> Math.uuid(15)     // 15 character ID (default base=62)
+ *   "VcydxgltxrVZSTV"
+ *
+ *   // Two arguments - returns ID of the specified length, and radix. (Radix must be <= 62)
+ *   >>> Math.uuid(8, 2)  // 8 character ID (base=2)
+ *   "01001010"
+ *   >>> Math.uuid(8, 10) // 8 character ID (base=10)
+ *   "47473046"
+ *   >>> Math.uuid(8, 16) // 8 character ID (base=16)
+ *   "098F4D35"
+ */
+Math.uuid = (function() {
+  // Private array of chars to use
+  var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''); 
+
+  return function (len, radix) {
+    var chars = CHARS, uuid = [];
+    radix = radix || chars.length;
+
+    if (len) {
+      // Compact form
+      for (var i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+    } else {
+      // rfc4122, version 4 form
+      var r;
+
+      // rfc4122 requires these characters
+      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+      uuid[14] = '4';
+
+      // Fill in random data.  At i==19 set the high bits of clock sequence as
+      // per rfc4122, sec. 4.1.5
+      for (var i = 0; i < 36; i++) {
+        if (!uuid[i]) {
+          r = 0 | Math.random()*16;
+          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        }
+      }
+    }
+
+    return uuid.join('');
+  };
+})();
+/*
+ * Ext Core Library Examples 3.0
+ * http://extjs.com/
+ * Copyright(c) 2006-2009, Ext JS, LLC.
+ * 
+ * The MIT License
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ */
+
+Ext.ns('Ext.ux');
+
+Ext.ux.JSONP = (function(){
+    var _queue = [],
+        _current = null,
+        _nextRequest = function() {
+            _current = null;
+            if(_queue.length) {
+                _current = _queue.shift();
+    			_current.script.src = _current.url + '?' + _current.params;
+    			document.getElementsByTagName('head')[0].appendChild(_current.script);
+            }
+        };
+
+    return {
+        request: function(url, o) {
+            if(!url) {
+                return;
+            }
+            var me = this;
+
+            o.params = o.params || {};
+            if(o.callbackKey) {
+                o.params[o.callbackKey] = 'Ext.ux.JSONP.callback';
+            }
+            var params = Ext.urlEncode(o.params);
+
+            var script = document.createElement('script');
+			script.type = 'text/javascript';
+
+            if(o.isRawJSON) {
+                if(Ext.isIE) {
+                    Ext.fly(script).on('readystatechange', function() {
+                        if(script.readyState == 'complete') {
+                            var data = script.innerHTML;
+                            if(data.length) {
+                                me.callback(Ext.decode(data));
+                            }
+                        }
+                    });
+                }
+                else {
+                     Ext.fly(script).on('load', function() {
+                        var data = script.innerHTML;
+                        if(data.length) {
+                            me.callback(Ext.decode(data));
+                        }
+                    });
+                }
+            }
+
+            _queue.push({
+                url: url,
+                script: script,
+                callback: o.callback || function(){},
+                scope: o.scope || window,
+                params: params || null
+            });
+
+            if(!_current) {
+                _nextRequest();
+            }
+        },
+
+        callback: function(json) {
+            _current.callback.apply(_current.scope, [json]);
+            Ext.fly(_current.script).removeAllListeners();
+            document.getElementsByTagName('head')[0].removeChild(_current.script);
+            _nextRequest();
+        }
+    }
+})();
 Array.prototype.contains = function(element) {
 	return this.indexOf(element) !== -1;
 };
@@ -1619,21 +1783,36 @@ Ext.ns('Curriki.module');
 
 Ext.onReady(function(){
 	Curriki.loadingCount = 0;
+	Curriki.hideLoadingMask = false;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
 console.log('beforerequest', conn, options);
-		Curriki.showLoading(options.waitMsg);
+		Curriki.Ajax.beforerequest(conn, options);
 	});
     Ext.Ajax.on('requestcomplete', function(conn, response, options){
 console.log('requestcomplete', conn, response, options);
-		Curriki.hideLoading();
+		Curriki.Ajax.requestcomplete(conn, response, options);
 	});
     Ext.Ajax.on('requestexception', function(conn, response, options){
 console.log('requestexception', conn, response, options);
-		Curriki.hideLoading(true);
+		Curriki.Ajax.requestexception(conn, response, options);
 	});
 });
+
+Curriki.Ajax = {
+	'beforerequest': function(conn, options) {
+		Curriki.showLoading(options.waitMsg);
+	}
+
+	,'requestcomplete': function(conn, response, options) {
+		Curriki.hideLoading();
+	}
+
+	,'requestexception': function(conn, response, options) {
+		Curriki.hideLoading(true);
+	}
+};
 
 
 Curriki.id = function(prefix){
@@ -1644,7 +1823,7 @@ Curriki.showLoading = function(msg, multi){
 	if (multi === true) {
 		Curriki.loadingCount++;
 	}
-	if (!Ext.isEmpty(Curriki.loadingMask)){
+	if (!Curriki.hideLoadingMask && !Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
 		Curriki.loadingMask.enable();

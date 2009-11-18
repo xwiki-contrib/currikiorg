@@ -37,21 +37,36 @@ Ext.ns('Curriki.module');
 
 Ext.onReady(function(){
 	Curriki.loadingCount = 0;
+	Curriki.hideLoadingMask = false;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
 console.log('beforerequest', conn, options);
-		Curriki.showLoading(options.waitMsg);
+		Curriki.Ajax.beforerequest(conn, options);
 	});
     Ext.Ajax.on('requestcomplete', function(conn, response, options){
 console.log('requestcomplete', conn, response, options);
-		Curriki.hideLoading();
+		Curriki.Ajax.requestcomplete(conn, response, options);
 	});
     Ext.Ajax.on('requestexception', function(conn, response, options){
 console.log('requestexception', conn, response, options);
-		Curriki.hideLoading(true);
+		Curriki.Ajax.requestexception(conn, response, options);
 	});
 });
+
+Curriki.Ajax = {
+	'beforerequest': function(conn, options) {
+		Curriki.showLoading(options.waitMsg);
+	}
+
+	,'requestcomplete': function(conn, response, options) {
+		Curriki.hideLoading();
+	}
+
+	,'requestexception': function(conn, response, options) {
+		Curriki.hideLoading(true);
+	}
+};
 
 
 Curriki.id = function(prefix){
@@ -62,7 +77,7 @@ Curriki.showLoading = function(msg, multi){
 	if (multi === true) {
 		Curriki.loadingCount++;
 	}
-	if (!Ext.isEmpty(Curriki.loadingMask)){
+	if (!Curriki.hideLoadingMask && !Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
 		Curriki.loadingMask.enable();

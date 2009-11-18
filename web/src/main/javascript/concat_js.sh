@@ -20,6 +20,8 @@ cat $I18N | $UNCOMPRESS_JS > ../webapp/js/i18n-debug.js
 cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 
 CURRIKI="\
+	ext/Math.uuid.js \
+	ext/jsonp.js \
 	ext/DDView.js \
 	ext/Multiselect.js \
 	ext/pPageSize.js \
