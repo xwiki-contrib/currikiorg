@@ -229,8 +229,8 @@ Curriki.module.addpath.init = function(){
 								,preventMark:true
 								,hideMode:'display'
 								,hideLabel:true
-		//						,hidden:true
-		//						,disabled:true
+								,hidden:true
+								,disabled:true
 								,listeners:{ // focus, invalid, blur, valid
 									focus:function(){
 									}
@@ -2733,7 +2733,7 @@ Curriki.module.addpath.init = function(){
 			};
 
 			var task = {
-				run: Curriki.current.videoStatusRequest()
+				run: Curriki.current.videoStatusRequest
 				,interval: 3000
 			};
 
