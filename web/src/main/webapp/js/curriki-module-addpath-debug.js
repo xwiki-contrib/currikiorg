@@ -2651,8 +2651,26 @@ Curriki.module.addpath.init = function(){
 		AddPath.PostVideo = function(callback){
 			Curriki.current.uuid = Math.uuid(21);
 			Curriki.hideLoadingMask = true;
-			Ext.Msg.progress(_('add.video_upload.dialog.progress.title'), _('add.video_upload.dialog.progress.body'), '0%');
+			Ext.Msg.progress(_('add.video.uploading.dialog.title'), _('add.video.uploading.dialog.sub.title'), '0%');
 			Ext.Msg.getDialog().addClass('progress-dialog');
+/*
+			Ext.Msg.show({
+				title: _('add.video.uploading.dialog.title')
+				,msg: _('add.video.uploading.dialog.sub.title')
+				,progress: true
+				,progressText: '0%'
+				,buttons:{cancel:'Cancel'}
+				,cls:'progress-dialog'
+				,fn:function(buttonId, text, opt){
+					if (buttonId == 'cancel'){
+						// Send cancel request to server
+						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+						Curriki.hideLoadingMask = false;
+						Ext.Msg.getDialog().removeClass('progress-dialog');
+					}
+				}
+			});
+*/
 
 			// Submit form to post file
 			Ext.Ajax.request({
@@ -2697,8 +2715,9 @@ Curriki.module.addpath.init = function(){
 			};
 
 			Curriki.current.videoErrorCallback = function(error){
-				//TODO: Present an error message here about the failure
-				alert(_('add.video_upload.error.'+error));
+				console.log('Video Upload Error', error);
+				Ext.Msg.alert(_('add.video.cannot.process.title'), _('add.video.cannot.process.txt'), function(){Ext.Msg.getDialog().removeClass('progress-dialog')});
+				Ext.Msg.getDialog().addClass('progress-dialog');
 			};
 
 			Curriki.current.videoJsonCallback = function(data){
