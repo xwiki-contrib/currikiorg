@@ -1063,9 +1063,25 @@ http:&#47;&#47;$s.display("urlshortcut","view")#groups_groupsuffixurl()
 <tr>
 <td>
     #if($context.action == "view")
-      #set($needle = $msg.groups_home_information_subject_index + " &gt; ")
-      #set($correctTopic = $s.get("topic").replace($needle,""))
-      $correctTopic
+     #set($subjects = $s.getValue("topic"))
+     #foreach($subject in $subjects)
+       #if($subject!="FW_masterFramework.WebHome")
+       #set($parentSubject = $xwiki.getDocument($subject).parent)
+       #if($parentSubject != "FW_masterFramework.WebHome")
+        #set($ps = $msg.get("CurrikiCode.AssetClass_fw_items_${parentSubject}"))
+        #set($ps = "${ps} &gt; ")
+       #else
+        #set($ps = "")
+       #end
+       $ps$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")<br />
+      #end
+     #end
+     ##set($needle = $msg.groups_home_information_subject_index + "  &gt; ")
+     ## For now we need to hardcode this part because the FWs are not translated
+     ## therefore we need to look for the english version of the text
+     ##set($needle = "Subject Index  &gt; ")
+     ##set($correctTopic = $s.get("topic").replaceAll($needle,""))
+     ##$correctTopic
     #else
      $s.display("topic")
     #end
