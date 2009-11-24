@@ -2651,26 +2651,28 @@ Curriki.module.addpath.init = function(){
 		AddPath.PostVideo = function(callback){
 			Curriki.current.uuid = Math.uuid(21);
 			Curriki.hideLoadingMask = true;
+/*
 			Ext.Msg.progress(_('add.video.uploading.dialog.title'), _('add.video.uploading.dialog.sub.title'), '0%');
 			Ext.Msg.getDialog().addClass('progress-dialog');
-/*
+*/
 			Ext.Msg.show({
 				title: _('add.video.uploading.dialog.title')
 				,msg: _('add.video.uploading.dialog.sub.title')
 				,progress: true
 				,progressText: '0%'
-				,buttons:{cancel:'Cancel'}
+				,buttons:{cancel:_('add.video.uploading.dialog.cancel.button')}
 				,cls:'progress-dialog'
 				,fn:function(buttonId, text, opt){
 					if (buttonId == 'cancel'){
-						// Send cancel request to server
+						// TODO: Try to send cancel request to server instead of just reloading (browser makes this hard, as it will still continue to upload)
+						// TODO: Add a confirmation dialogue upon cancel
 						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+						window.location.href = Curriki.current.cameFrom;
 						Curriki.hideLoadingMask = false;
 						Ext.Msg.getDialog().removeClass('progress-dialog');
 					}
 				}
 			});
-*/
 
 			// Submit form to post file
 			Ext.Ajax.request({
@@ -2738,7 +2740,6 @@ Curriki.module.addpath.init = function(){
 						return;
 					}
 				} else {
-					//TODO: update progress bar
 					var current = data.current||0;
 					var total = data.total||0;
 					var percent = 0;
@@ -2753,7 +2754,7 @@ Curriki.module.addpath.init = function(){
 
 			var task = {
 				run: Curriki.current.videoStatusRequest
-				,interval: 3000
+				,interval: 10000
 			};
 
 			Curriki.current.videoStatusTask = Ext.TaskMgr.start(task);
