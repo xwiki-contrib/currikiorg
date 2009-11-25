@@ -2756,7 +2756,7 @@ Curriki.module.addpath.init = function(){
 
 			var task = {
 				run: Curriki.current.videoStatusRequest
-				,interval: 10000
+				,interval: 5000
 			};
 
 			Curriki.current.videoStatusTask = Ext.TaskMgr.start(task);
