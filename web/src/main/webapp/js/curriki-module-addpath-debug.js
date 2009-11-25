@@ -2662,6 +2662,8 @@ Curriki.module.addpath.init = function(){
 				,progressText: '0%'
 				,buttons:{cancel:_('add.video.uploading.dialog.cancel.button')}
 				,cls:'progress-dialog'
+				,minWidth: 200
+				,minProgressWidth: 250
 				,fn:function(buttonId, text, opt){
 					if (buttonId == 'cancel'){
 						// TODO: Try to send cancel request to server instead of just reloading (browser makes this hard, as it will still continue to upload)
