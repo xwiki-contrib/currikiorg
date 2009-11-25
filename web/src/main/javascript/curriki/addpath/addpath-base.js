@@ -2651,6 +2651,8 @@ Curriki.module.addpath.init = function(){
 		AddPath.PostVideo = function(callback){
 			Curriki.current.uuid = Math.uuid(21);
 			Curriki.hideLoadingMask = true;
+			Curriki.current.uploading = true;
+			Curriki.current.vu_last_update = 0;
 /*
 			Ext.Msg.progress(_('add.video.uploading.dialog.title'), _('add.video.uploading.dialog.sub.title'), '0%');
 			Ext.Msg.getDialog().addClass('progress-dialog');
@@ -2725,8 +2727,13 @@ Curriki.module.addpath.init = function(){
 			};
 
 			Curriki.current.videoJsonCallback = function(data){
+				if (!Curriki.current.uploading) {
+					return;
+				}
+
 				if (data.complete) {
 					if (data.error) {
+						Curriki.current.uploading = false;
 						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
 						Curriki.hideLoadingMask = false;
 						Ext.Msg.getDialog().removeClass('progress-dialog');
@@ -2734,6 +2741,7 @@ Curriki.module.addpath.init = function(){
 						Curriki.current.videoErrorCallback(data.error);
 						return;
 					} else if (data.success) {
+						Curriki.current.uploading = false;
 						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
 						Curriki.hideLoadingMask = false;
 						Ext.Msg.getDialog().removeClass('progress-dialog');
@@ -2742,6 +2750,11 @@ Curriki.module.addpath.init = function(){
 						return;
 					}
 				} else {
+					var now = new Date().getTime();
+					if (now < Curriki.current.vu_last_update) {
+						return;
+					}
+					Curriki.current.vu_last_update = new Date().getTime();
 					var current = data.current||0;
 					var total = data.total||0;
 					var percent = 0;
@@ -2756,7 +2769,7 @@ Curriki.module.addpath.init = function(){
 
 			var task = {
 				run: Curriki.current.videoStatusRequest
-				,interval: 5000
+				,interval: 3000
 			};
 
 			Curriki.current.videoStatusTask = Ext.TaskMgr.start(task);
