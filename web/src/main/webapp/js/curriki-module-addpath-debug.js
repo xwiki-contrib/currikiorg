@@ -2754,7 +2754,7 @@ Curriki.module.addpath.init = function(){
 					if (now < Curriki.current.vu_last_update) {
 						return;
 					}
-					Curriki.current.vu_last_update = new Date().getTime();
+					Curriki.current.vu_last_update = now;
 					var current = data.current||0;
 					var total = data.total||0;
 					var percent = 0;
