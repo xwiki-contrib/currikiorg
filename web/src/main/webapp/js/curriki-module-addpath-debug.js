@@ -2841,7 +2841,7 @@ Curriki.module.addpath.init = function(){
 					var ext = /^.+\.([^.]+)$/.exec(pName);
 					ext = (ext == null)?"":ext[1];
 					if (! (ext && /^(asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg)$/.test(ext))) {
-						if (!confirm(__('add.video.uploading.unknown.file.txt'))) {
+						if (!confirm(_('add.video.uploading.unknown.file.txt'))) {
 							return false;
 						}
 					}
