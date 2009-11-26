@@ -2840,9 +2840,9 @@ Curriki.module.addpath.init = function(){
 					var pName = Ext.getCmp('video_upload-entry-box').getValue();
 					var ext = /^.+\.([^.]+)$/.exec(pName);
 					ext = (ext == null)?"":ext[1];
-					if (! /^(asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg)$/.exec(ext)) {
+					if (! (ext && /^(asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg)$/.test(ext))) {
 						if (!confirm(__('add.video.uploading.unknown.file.txt'))) {
-							return;
+							return false;
 						}
 					}
 
