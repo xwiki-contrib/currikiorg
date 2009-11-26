@@ -2836,6 +2836,16 @@ Curriki.module.addpath.init = function(){
 				case 'video_upload':
 				//case 'video_capture':
 					next = 'apSRI1';
+					// Check for "valid" extensions before continuing
+					var pName = Ext.getCmp('video_upload-entry-box').getValue();
+					var ext = /^.+\.([^.]+)$/.exec(pName);
+					ext = (ext == null)?"":ext[1];
+					if (! /^(asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg)$/.exec(ext)) {
+						if (!confirm(__('add.video.uploading.unknown.file.txt'))) {
+							return;
+						}
+					}
+
 					AddPath.PostVideo(function(asset){
 						console.log("CreateAsset (video) CB: ", asset);
 						Curriki.current.asset = asset;
