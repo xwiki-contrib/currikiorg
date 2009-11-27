@@ -2648,35 +2648,70 @@ Curriki.module.addpath.init = function(){
 			});
 		}
 
+		AddPath.UploadDlg = Ext.extend(Curriki.ui.dialog.Actions, {
+			initComponent:function(){
+				Ext.apply(this, {
+					title: _('add.video.uploading.dialog.title')
+					,cls:'addpath addpath-upload resource resource-add'
+					,id:'upload-dlg'
+					,items:[{
+						 xtype:'panel'
+						,html: _('add.video.uploading.dialog.sub.title')
+ 					},{
+						 xtype:'progress'
+						,id:'upload-progress-bar'
+						,text:'0%'
+					}]
+					,bbar:['->',{
+						 text:_('add.video.uploading.dialog.cancel.button')
+						,id:'upload-cancel-button'
+						,cls:'button cancel btn-cancel'
+						,listeners:{
+							click:{
+								 fn: function(){
+										Ext.Msg.show({
+											title:_('add.video.uploading.dialog.cancel.title')
+											,msg:_('add.video.uploading.dialog.cancel.txt')
+											,buttons:{
+												ok:_('add.video.uploading.dialog.ok.button')
+												,cancel:_('add.video.uploading.dialog.cancel.button')
+											}
+											,fn:function(buttonId){
+												if (buttonId == 'yes' || buttonId == 'ok') {
+													if (Curriki.current.videoStatusTask) {
+														Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+													}
+													window.location.href = Curriki.current.cameFrom;
+													this.close();
+													Curriki.hideLoadingMask = false;
+												}
+											}
+											,closable:false
+											,scope:this
+										});
+										var btns = Ext.Msg.getDialog().buttons;
+										btns[0].addClass('btn-next'); // OK
+										btns[1].addClass('btn-next'); // YES
+										btns[2].addClass('btn-cancel'); // NO
+										btns[3].addClass('btn-cancel'); // CANCEL
+										Ext.Msg.getDialog().body.findParent('div.x-window-mc', 2, true).setStyle('background-color', '#FFFFFF');
+									}
+								,scope:this
+							}
+						}
+					}]
+				});
+				AddPath.UploadDlg.superclass.initComponent.call(this);
+			}
+		});
+		Ext.reg('apUploadDlg', AddPath.UploadDlg);
+
 		AddPath.PostVideo = function(callback){
 			Curriki.current.uuid = Math.uuid(21);
 			Curriki.hideLoadingMask = true;
 			Curriki.current.uploading = true;
 			Curriki.current.vu_last_update = 0;
-/*
-			Ext.Msg.progress(_('add.video.uploading.dialog.title'), _('add.video.uploading.dialog.sub.title'), '0%');
-			Ext.Msg.getDialog().addClass('progress-dialog');
-*/
-			Ext.Msg.show({
-				title: _('add.video.uploading.dialog.title')
-				,msg: _('add.video.uploading.dialog.sub.title')
-				,progress: true
-				,progressText: '0%'
-				,buttons:{cancel:_('add.video.uploading.dialog.cancel.button')}
-				,cls:'progress-dialog'
-				,minWidth: 200
-				,minProgressWidth: 250
-				,fn:function(buttonId, text, opt){
-					if (buttonId == 'cancel'){
-						// TODO: Try to send cancel request to server instead of just reloading (browser makes this hard, as it will still continue to upload)
-						// TODO: Add a confirmation dialogue upon cancel
-						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
-						window.location.href = Curriki.current.cameFrom;
-						Curriki.hideLoadingMask = false;
-						Ext.Msg.getDialog().removeClass('progress-dialog');
-					}
-				}
-			});
+			Curriki.ui.show('apUploadDlg');
 
 			// Submit form to post file
 			Ext.Ajax.request({
@@ -2722,8 +2757,13 @@ Curriki.module.addpath.init = function(){
 
 			Curriki.current.videoErrorCallback = function(error){
 				console.log('Video Upload Error', error);
-				Ext.Msg.alert(_('add.video.cannot.process.title'), _('add.video.cannot.process.txt'), function(){Ext.Msg.getDialog().removeClass('progress-dialog')});
-				Ext.Msg.getDialog().addClass('progress-dialog');
+				Ext.Msg.alert(_('add.video.cannot.process.title'), _('add.video.cannot.process.txt'));
+				var btns = Ext.Msg.getDialog().buttons;
+				btns[0].addClass('btn-next'); // OK
+				btns[1].addClass('btn-next'); // YES
+				btns[2].addClass('btn-cancel'); // NO
+				btns[3].addClass('btn-cancel'); // CANCEL
+				Ext.Msg.getDialog().body.findParent('div.x-window-mc', 2, true).setStyle('background-color', '#FFFFFF');
 			};
 
 			Curriki.current.videoJsonCallback = function(data){
@@ -2732,22 +2772,19 @@ Curriki.module.addpath.init = function(){
 				}
 
 				if (data.complete) {
-					if (data.error) {
+					if (data.error || data.success) {
 						Curriki.current.uploading = false;
 						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
 						Curriki.hideLoadingMask = false;
-						Ext.Msg.getDialog().removeClass('progress-dialog');
-						Ext.Msg.hide();
-						Curriki.current.videoErrorCallback(data.error);
-						return;
-					} else if (data.success) {
-						Curriki.current.uploading = false;
-						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
-						Curriki.hideLoadingMask = false;
-						Ext.Msg.getDialog().removeClass('progress-dialog');
-						Ext.Msg.hide();
-						Curriki.current.videoSuccessCallback(data.success);
-						return;
+						Ext.getCmp('upload-dlg').hide();
+
+						if (data.error) {
+							Curriki.current.videoErrorCallback(data.error);
+							return;
+						} else if (data.success) {
+							Curriki.current.videoSuccessCallback(data.success);
+							return;
+						}
 					}
 				} else {
 					var now = new Date().getTime();
@@ -2763,7 +2800,7 @@ Curriki.module.addpath.init = function(){
 						percent = current/total;
 					}
 					ptext = Math.floor(percent*100) + '%';
-					Ext.Msg.updateProgress(percent, ptext);
+					Ext.getCmp('upload-progress-bar').updateProgress(percent, ptext);
 				}
 			};
 
@@ -2837,10 +2874,11 @@ Curriki.module.addpath.init = function(){
 				//case 'video_capture':
 					next = 'apSRI1';
 					// Check for "valid" extensions before continuing
+					// TODO: Move this list into a translation key value
+					var exts = "asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg";
+					var re = new RegExp("^.+\\.("+exts+")$", 'i');
 					var pName = Ext.getCmp('video_upload-entry-box').getValue();
-					var ext = /^.+\.([^.]+)$/.exec(pName);
-					ext = (ext == null)?"":ext[1];
-					if (! (ext && /^(asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg)$/.test(ext))) {
+					if (! re.test(pName)) {
 						if (!confirm(_('add.video.uploading.unknown.file.txt'))) {
 							return false;
 						}
