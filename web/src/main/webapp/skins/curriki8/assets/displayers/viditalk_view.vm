@@ -56,7 +56,7 @@
 #end ##}
 #if($has_streamVideo && $has_origVideo) ##{
 	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_files"))
-#else if ($has_streamVideo || $has_origVideo) ##}{
+#elseif ($has_streamVideo || $has_origVideo) ##}{
 	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
 #end ##}
 #if ($has_streamVideo || $has_origVideo) ##{
