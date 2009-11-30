@@ -56,6 +56,7 @@ uploadedCallback = function(success){
 	var videoIdInput = new Ext.form.Field(Ext.get('videoId'));
 	videoIdInput.setValue(success.id);
 	beforeAssetSubmit(Ext.get('viditalk-save'));
+	clickAwayByPass=true;
 	Ext.get('viditalk-save').dom.submit();
 };
 
@@ -78,6 +79,7 @@ Ext.onReady(function(){
 			Curriki.module.addpath.init();
 			Curriki.module.addpath.PostVideo(Ext.emptyFn, 'video-upload', uploadedCallback);
 		} else {
+			clickAwayByPass=true;
 			Ext.get('viditalk-save').dom.submit();
 		}
 		return false;
