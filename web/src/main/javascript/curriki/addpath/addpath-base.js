@@ -2706,7 +2706,25 @@ Curriki.module.addpath.init = function(){
 		});
 		Ext.reg('apUploadDlg', AddPath.UploadDlg);
 
-		AddPath.PostVideo = function(callback){
+		AddPath.PostVideo = function(callback, formId, uploadCompleteCallback){
+			Curriki.current.videoCompleteCallback = callback;
+			if (Ext.isEmpty(formId)) {
+				formId = 'addDialogueForm';
+			}
+			if (Ext.isEmpty(uploadCompleteCallback)) {
+				Curriki.current.uploadCompleteCallback = function(success) {
+					Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
+						Curriki.current.asset = asset;
+
+						Curriki.current.videoId = success.id;
+
+						Curriki.current.videoCompleteCallback(asset);
+					});
+				}
+			} else {
+				Curriki.current.uploadCompleteCallback = uploadCompleteCallback;
+			}
+
 			Curriki.current.uuid = Math.uuid(21);
 			Curriki.hideLoadingMask = true;
 			Curriki.current.uploading = true;
@@ -2717,7 +2735,7 @@ Curriki.module.addpath.init = function(){
 			Ext.Ajax.request({
 				url:'http://'+_('MEDIAHOST')+'/cgi/upload.cgi?key='+Curriki.current.uuid
 				,isUpload:true
-				,form:'addDialogueForm'
+				,form:formId
 				,headers: {
 					'Accept':'text/html'
 				}
@@ -2743,16 +2761,8 @@ Curriki.module.addpath.init = function(){
 				});
 			};
 
-			Curriki.current.videoCompleteCallback = callback;
-
 			Curriki.current.videoSuccessCallback = function(success){
-				Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
-					Curriki.current.asset = asset;
-
-					Curriki.current.videoId = success.id;
-
-					Curriki.current.videoCompleteCallback(asset);
-				});
+				Curriki.current.uploadCompleteCallback(success);
 			};
 
 			Curriki.current.videoErrorCallback = function(error){

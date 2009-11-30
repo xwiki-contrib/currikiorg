@@ -3,46 +3,77 @@
 #set($video_id = $objVT.id)
 <div class="asset-display-edit">
     <div class="asset-display-edit-inner">
-        <form name="viditalk" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" >
-            #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
-            <input  type="hidden" name="page" value="$asset.fullName" />
-            <input  type="hidden" name="xredirect" value="$xredirect" />
+{pre}
+	<form id='video-upload' name='upload'>
             <fieldset>
                 <ul>
-##					#asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
-##
-## Remove upload capabilities for now (VIDITalk is gone)
-## REMOVED FROM HERE vvv
-<li>$msg.get("rve.content.view.video.viditalk.unavailable")</li>
-##					#set($vdiv="<div style='height:280px; width:320px; margin: 0 auto;' id='vidiCaptureDiv'>Viditalk Record Window - Loading components from VIDITalk</div><input type='hidden' id='videoId' name='CurrikiCode.VideoAssetClass_0_id' value='"+$video_id+"' />")
-##					#asset_edit_field($asset "CurrikiCode.VideoAssetClass" "id" "replace_video" "text" $vdiv true)
-##					<script language="javascript" type="text/javascript">
-##						Ext.onReady(function(){
-##							var videoSaveButton = new Ext.form.Field(Ext.get(Ext.query('input.button-save')[0]));
-##							videoSaveButton.disable();
-##						});
-##
-##						window.uploadComplete = function(videoId) {
-##							var videoIdInput = new Ext.form.Field(Ext.get('videoId'));
-##							videoIdInput.setValue(videoId);
-##							var videoSaveButton = new Ext.form.Field(Ext.get(Ext.query('input.button-save')[0]));
-##							videoSaveButton.enable();
-##						};
-##						window.capture_div='';
-##						window.flashLoaded = false;
-##						window.called_once=false;
-##						embedVidiCapture('vidiCaptureDiv', "$msg.get('viditalk.sitecode')", null, null, false);
-##					</script>
-## REMOVED TO HERE ^^^
-##
+			<li class="input-text">
+				<span><label for="replace-video-file">$msg.get('rve.content.edit.replace_video.instruction_title')</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get('rve.content.edit.replace_video.instruction_tooltip')"/></span>
+<div>
+				<input id='replace-video-file' type='file' name='upload[file]' />
+</div>
+			</li>
+                </ul>
+            </fieldset>
+	</form>
+{/pre}
+        <form id='viditalk-save' name="viditalk" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" >
+		#set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
+		<input type="hidden" name="page" value="$asset.fullName" />
+		<input type="hidden" name="xredirect" value="$xredirect" />
+		<input type='hidden' id='videoId' name='CurrikiCode.VideoAssetClass_0_id' value='$video_id' />
+            <fieldset>
+                <ul>
                     #asset_edit_revision()
                 </ul>
             </fieldset>
             <hr>
-            #asset_edit_buttons($asset false)
+##            #asset_edit_buttons($asset false)
         </form>
+<fieldset class="buttons">
+    <input  type="hidden" name="xredirect" value="$xredirect" />
+#set($cancelurl = $xwiki.curriki.escapeForJS($asset.getURL('cancel')))
+    <button class="button cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">$msg.get("rve.content.edit.cancel_button")</button>
+    <button class="button button-save" id="viditalk-save-button">$msg.get("rve.content.edit.save_button")</button>
+</fieldset>
+{pre}
+<script type="text/javascript">
+// adjust input.button-save to do upload first
+uploadedCallback = function(success){
+	var videoIdInput = new Ext.form.Field(Ext.get('videoId'));
+	videoIdInput.setValue(success.id);
+	beforeAssetSubmit(Ext.get('viditalk-save'));
+	Ext.get('viditalk-save').dom.submit();
+};
+
+Ext.onReady(function(){
+	Ext.get('viditalk-save-button').on('click', function(ev, t, o) {
+		// do upload
+		ev.preventDefault();
+		ev.stopPropagation();
+		ev.stopEvent();
+
+		var exts = "asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg";
+		var re = new RegExp("^.+\\.("+exts+")$", 'i');
+		var pName = Ext.get('replace-video-file').dom.value;
+		if (pName) {
+			if (! re.test(pName)) {
+				if (!confirm(_('add.video.uploading.unknown.file.txt'))) {
+					return false;
+				}
+			}
+			Curriki.module.addpath.init();
+			Curriki.module.addpath.PostVideo(Ext.emptyFn, 'video-upload', uploadedCallback);
+		} else {
+			Ext.get('viditalk-save').dom.submit();
+		}
+		return false;
+	});
+});
+</script>
         ## this allows to check for changes
         #curriki_clickawayjs("viditalk" $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.warning.message_text")))
+{/pre}
     </div>
 </div>
 #asset_displaycontentfooter()
