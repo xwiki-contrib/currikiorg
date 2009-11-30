@@ -3,7 +3,6 @@
 #set($video_id = $objVT.id)
 <div class="asset-display-edit">
     <div class="asset-display-edit-inner">
-{pre}
 	<form id='video-upload' name='upload'>
             <fieldset>
                 <ul>
@@ -16,7 +15,6 @@
                 </ul>
             </fieldset>
 	</form>
-{/pre}
         <form id='viditalk-save' name="viditalk" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" >
 		#set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
 		<input type="hidden" name="page" value="$asset.fullName" />
@@ -24,7 +22,23 @@
 		<input type='hidden' id='videoId' name='CurrikiCode.VideoAssetClass_0_id' value='$video_id' />
             <fieldset>
                 <ul>
-                    #asset_edit_revision()
+<li class="input-text">
+    <span>
+        <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
+    <div  id="revision">
+        #set($revnote = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.revision.entry_sample")))
+        <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$revnote') { this.value ='' };" />
+    </div>
+</li>
+<script type="text/javascript">
+    function beforeAssetSubmit(form) {
+	var videoIdInput = new Ext.form.Field(Ext.get('comment'));
+	if (videoIdInput.getValue() == '$revnote') }
+		videoIdInput.setValue('');
+	}
+	return true;
+    }
+</script>
                 </ul>
             </fieldset>
             <hr>
@@ -36,7 +50,6 @@
     <button class="button cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;">$msg.get("rve.content.edit.cancel_button")</button>
     <button class="button button-save" id="viditalk-save-button">$msg.get("rve.content.edit.save_button")</button>
 </fieldset>
-{pre}
 <script type="text/javascript">
 // adjust input.button-save to do upload first
 uploadedCallback = function(success){
@@ -73,7 +86,6 @@ Ext.onReady(function(){
 </script>
         ## this allows to check for changes
         #curriki_clickawayjs("viditalk" $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.warning.message_text")))
-{/pre}
     </div>
 </div>
 #asset_displaycontentfooter()
