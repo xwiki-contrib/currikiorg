@@ -47,11 +47,9 @@
 #end ##}
 #if(!$origVideo||$origVideo=="") ##{
 	#set($has_origVideo = false)
-	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
 	#set($origVideo = $viditalkURL)
 #else ##}{
 	#set($has_origVideo = true)
-	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_files"))
 	#set($fileext = $origVideo.substring($origVideo.lastIndexOf(".")).substring(1).toLowerCase())
 #end ##}
 #if($has_streamVideo && $has_origVideo) ##{

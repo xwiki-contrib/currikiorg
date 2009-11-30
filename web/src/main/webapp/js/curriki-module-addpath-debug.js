@@ -2654,6 +2654,8 @@ Curriki.module.addpath.init = function(){
 					title: _('add.video.uploading.dialog.title')
 					,cls:'addpath addpath-upload resource resource-add'
 					,id:'upload-dlg'
+					,width:254
+					,minWidth:254
 					,items:[{
 						 xtype:'panel'
 						,html: _('add.video.uploading.dialog.sub.title')
