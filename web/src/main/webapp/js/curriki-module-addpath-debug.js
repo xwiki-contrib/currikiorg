@@ -2664,7 +2664,7 @@ Curriki.module.addpath.init = function(){
 						,id:'upload-progress-bar'
 						,text:'0%'
 					}]
-					,bbar:['->',{
+					,bbar:[{
 						 text:_('add.video.uploading.dialog.cancel.button')
 						,id:'upload-cancel-button'
 						,cls:'button cancel btn-cancel'
