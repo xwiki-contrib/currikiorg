@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1210378529000</creationDate>
-<date>1256236655000</date>
-<contentUpdateDate>1256236655000</contentUpdateDate>
-<version>408.1</version>
+<date>1259455656000</date>
+<contentUpdateDate>1259455656000</contentUpdateDate>
+<version>417.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Fixing apostrophe in day's &amp;#39;</comment>
+<comment>add.contributemenu.required.fields.dialog_video_upload=Click Browse to select a video from your computer.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -108,6 +108,7 @@
 ## GLOBAL SET REQUIRED INFORMATION MODULE CONTENT
 ## ASSET CLASS
 ## ADD PATH SELECTION DIALOGS
+##    VIDEO UPLOADING DIALOG
 ##    SELECT A TEMPLATE
 ##    SELECT A FORMAT
 ##    SRI PART 1
@@ -487,20 +488,6 @@ celp.step4.instruction=Review your entries one last time before you click Submit
 celp.submit.button=Submit
 
 celp.cancel.button=Cancel
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1363,7 +1350,11 @@ sri.license_type_content=
 ## Moved to the GlobalClassTranslation file by Todd Aug-05-2008
 
 
-##
+
+
+
+
+#############################################
 ## ADD PATH SELECTION DIALOGS
 
 ##Set Required Information, Part 1
@@ -1394,7 +1385,8 @@ add.contributemenu.guidingquestion_addto_composite=What would you like to add to
 add.contributemenu.subtitle_have=Something I already have or know about:
 add.contributemenu.option.file=A file from my computer
 add.contributemenu.option.file_browse_button=Browse
-add.contributemenu.option.video_upload=A video I want to upload
+add.contributemenu.option.video_upload=A video I want to play on Curriki
+add.contributemenu.option.video_upload_browse_button=Browse
 add.contributemenu.option.link=A link for a great web resource
 add.contributemenu.link.empty_msg=http://
 add.contributemenu.option.repository=A resource I can find in the Curriki repository
@@ -1405,12 +1397,34 @@ add.contributemenu.option.video_capture=A video I&amp;#39;ll capture with my web
 add.contributemenu.option.folder=A folder where I&amp;#39;ll organize resources
 
 add.contributemenu.required.fields.dialog_file=Click Browse to select a file from your computer.
-add.contributemenu.required.fields.dialog_video_upload=Select a video to upload. Once uploaded, select Continue to complete the process.
+
 add.contributemenu.required.fields.dialog_link=Enter the URL for the web resource using the format http://www.website.com, then click Next.
-add.contributemenu.required.fields.dialog_video_capture=Capture a video with your webcam. Once recorded, select Continue to complete the process.
+
+
+add.contributemenu.required.fields.dialog_video_upload=Click Browse to select a video from your computer.
+
+## No longer used
+add.contributemenu.required.fields.dialog_video_capture=Capture a ##video with your webcam. Once recorded, select Continue to complete the process.
 
 add.contributemenu.cancel.button=Cancel
 add.contributemenu.next.button=Next &gt;&gt;
+
+## VIDEO UPLOADING DIALOGS
+
+add.video.uploading.dialog.title=Uploading Your Video
+add.video.uploading.dialog.sub.title=File uploading progress...
+add.video.uploading.dialog.cancel.button=Cancel
+add.video.uploading.dialog.ok.button=OK
+
+add.video.uploading.dialog.cancel.title=Uploading Stopped
+add.video.uploading.dialog.cancel.txt=Are you sure you want to cancel uploading your video?
+
+add.video.cannot.process.title=Processing Stopped
+add.video.cannot.process.txt=Your movie uploaded but processing for playback could not be completed. &lt;p&gt;Please make sure your video file can play on your computer, then try uploading it again.
+
+add.video.uploading.unknown.file.title=File Not Recognized
+add.video.uploading.unknown.file.txt=The file selected for uploading is of an unknown file type. Processing and playback may not be successful. Do you want to upload this file?
+
 
 ## SELECT A TEMPLATE DIALOG
 
