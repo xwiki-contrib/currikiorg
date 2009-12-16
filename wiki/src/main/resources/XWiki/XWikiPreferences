@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1107744418000</creationDate>
-<date>1258583398000</date>
-<contentUpdateDate>1258583398000</contentUpdateDate>
-<version>70.1</version>
+<date>1260911486000</date>
+<contentUpdateDate>1260911486000</contentUpdateDate>
+<version>72.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Removed testing panel.</comment>
+<comment>testing new panel</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -1824,6 +1824,9 @@
 <authenticate_view>0</authenticate_view>
 </property>
 <property>
+<backlinks></backlinks>
+</property>
+<property>
 <comment_anonymous>---</comment_anonymous>
 </property>
 <property>
@@ -1958,7 +1961,7 @@ Curriki</confirmation_email_content>
 <ldap_validate_password></ldap_validate_password>
 </property>
 <property>
-<leftPanels>Panels.Navigation,Panels.Donate,Panels.TableOfContents,Panels.Sponsors,Panels.Watch Curriki Grow,Panels.FeaturedMembers,Panels.SearchTips,Panels.GroupTips,Panels.ResourceTips,Panels.MemberTips,Panels.TopRated,Panels.CreatingResourceTips</leftPanels>
+<leftPanels>Panels.Navigation,Panels.Donate,Panels.TableOfContents,Panels.MailingList,Panels.Sponsors,Panels.Watch Curriki Grow,Panels.FeaturedMembers,Panels.SearchTips,Panels.GroupTips,Panels.ResourceTips,Panels.MemberTips,Panels.TopRated,Panels.CreatingResourceTips</leftPanels>
 </property>
 <property>
 <logo></logo>
@@ -2003,7 +2006,8 @@ Curriki</confirmation_email_content>
 &lt;meta name="language" content="en" /&gt;
 &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
 &lt;link rel="alternate" type="application/rss+xml" title="Wiki RSS Feed" href="/xwiki/bin/view/Main/WebRss?xpage=rdf" /&gt;
-&lt;link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="http://blog.curriki.org/feed/" /&gt;</meta>
+&lt;link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="http://blog.curriki.org/feed/" /&gt;
+&lt;link rel="alternate" type="application/rss+xml" title="User Blog RSS Feed" href="/xwiki/bin/view/Main/BlogRss?xpage=rdf" /&gt;</meta>
 </property>
 <property>
 <multilingual>1</multilingual>
@@ -2064,6 +2068,9 @@ Curriki</confirmation_email_content>
 </property>
 <property>
 <upload_maxsize>50000000</upload_maxsize>
+</property>
+<property>
+<use_email_verification></use_email_verification>
 </property>
 <property>
 <validation_email_content>#set($nl = $xwiki.getNl())
@@ -2752,6 +2759,18 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 <admin_email></admin_email>
 </property>
 <property>
+<auth_active_check></auth_active_check>
+</property>
+<property>
+<authenticate_edit></authenticate_edit>
+</property>
+<property>
+<authenticate_view></authenticate_view>
+</property>
+<property>
+<backlinks></backlinks>
+</property>
+<property>
 <comment_anonymous></comment_anonymous>
 </property>
 <property>
@@ -2872,6 +2891,9 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 <meta></meta>
 </property>
 <property>
+<multilingual></multilingual>
+</property>
+<property>
 <notification_pages></notification_pages>
 </property>
 <property>
@@ -2902,6 +2924,12 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 <rightPanels></rightPanels>
 </property>
 <property>
+<showLeftPanels></showLeftPanels>
+</property>
+<property>
+<showRightPanels></showRightPanels>
+</property>
+<property>
 <skin></skin>
 </property>
 <property>
@@ -2921,6 +2949,9 @@ Please click this link to complete registration. http://$xwiki.getXWiki().Param(
 </property>
 <property>
 <upload_maxsize></upload_maxsize>
+</property>
+<property>
+<use_email_verification></use_email_verification>
 </property>
 <property>
 <validation_email_content></validation_email_content>
