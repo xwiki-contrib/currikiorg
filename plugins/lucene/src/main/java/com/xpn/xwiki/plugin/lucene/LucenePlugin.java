@@ -569,8 +569,8 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
                     // constructor will throw an exception and fail to initialize
                     new IndexWriter(dirs[i], analyzer).close();
                 }
-                IndexReader reader = IndexReader.open(dirs[i]);
-                searchersList.add(new IndexSearcher(reader));
+		// New way to open a searcher that does not have bug XPLUCENE-30
+                searchersList.add(new IndexSearcher(dirs[i], true));
             } catch (IOException e) {
                 LOG.error("cannot open index " + dirs[i], e);
             }
