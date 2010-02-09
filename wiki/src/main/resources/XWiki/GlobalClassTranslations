@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1217886586000</creationDate>
-<date>1260902991000</date>
-<contentUpdateDate>1260902991000</contentUpdateDate>
-<version>140.1</version>
+<date>1263423439000</date>
+<contentUpdateDate>1263423439000</contentUpdateDate>
+<version>162.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>curriki.comment.createvideosourceasset=Created video resource</comment>
+<comment>I think I found all the missing keys.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -1125,58 +1125,24 @@ global.title.popup.CRS.none=-- None --
 global.title.popup.memrating=&lt;strong&gt;Member Rating:&lt;/strong&gt;
 global.title.popup.memrating.none=-- None --
 
+##################################################
 ##COMPARE VERSIONS
 ## Jen is seeing if we still need this.
-changes.changesofpage=Changes
-changes.in=in
-changes.space=space
-changes.from=From
-changes.to=To
-changes.comment=Change comment
-changes.nocomment=There is no comment for this version
-changes.version=version
-changes.editedby=Edited by
-changes.on=on
-changes.metadatachanges=Metadata changes
-changes.property=Property
-changes.nometadatachanges=There are no metadata changes
-changes.contentchanges=Content changes
-changes.nocontentchanges=There are no content changes
-changes.attachmentchanges=Attachment changes
-changes.noattachmentchanges=There are no attachment changes
-changes.filename=Filename
-changes.action=Action
-changes.commentchanges=Comment changes
-changes.nocommentchanges=There are no comment changes
-changes.metadata.parent=Parent
-changes.metadata.web=Space
-changes.metadata.name=Page Name
-changes.metadata.author=Author
-changes.metadata.language=Language
-changes.metadata.defaultLanguage=Default Language
-changes.attachmentadded=Attachment has been added
-changes.attachmentdeleted=Attachment has been deleted
-changes.attachmentupdatedfromversion=Attachment has been updated from version
-changes.toversion=to version
-changes.commentchange=Comment change
+## Todd - I got rid of about 80% or more as they were duplicates. Unknown if we need the rest. 01/13/2010
+
 changes.commentAdded=Comment number {0} added
 changes.commentRemoved=Comment number {0} removed
-changes.comment.property=Property
-changes.comment.previousvalue=Previous value
-changes.comment.newvalue=New value
-changes.comment.author=Author
-changes.comment.date=Date
-changes.comment.comment=Comment
 changes.comment.highlight=Highlighted text
 changes.comment.replyto=Reply to
+
 changes.blog.title=Title
 changes.blog.extract=Extract
 changes.blog.category=Categories
 changes.blog.editcategories=Edit categories
-
-
 changes.blog.addnewcategory=Add a Category
+
 changes.tag.tags=Tags
+
 changes.objectchanges=Object Changes
 changes.objectAdded=Object added
 changes.objectRemoved=Object removed
@@ -1191,7 +1157,9 @@ history.to=To
 history.rollback.exception=An error occurred while rolling back this resource. Please try again.
 history.rollback.confirm.message=Are you sure you want to rollback this asset to version {0}
 
-## compare page
+######################################
+## COMPARE CHANGES
+
 changes.changesofpage=Changes for Resource or Page
 changes.in=in
 changes.space=space
@@ -1200,9 +1168,9 @@ changes.to=To
 changes.comment=&lt;strong&gt;Revision Note&lt;/strong&gt;
 changes.nocomment=There is no revision note for this version.
 changes.version=Version
-changes.editedby=edited by
-changes.on=on
-changes.metadatachanges=Information Changes
+changes.editedby=Edited by
+changes.on=On
+
 changes.property=Property
 changes.nometadatachanges=There are no information changes.
 changes.contentchanges=Content Changes
@@ -1213,6 +1181,8 @@ changes.filename=Filename
 changes.action=Action
 changes.commentchanges=Comment Changes
 changes.nocommentchanges=There are no comment changes.
+
+changes.metadatachanges=Information Changes
 changes.metadata.parent=Parent
 changes.metadata.web=Space
 changes.metadata.name=Page Name
@@ -1220,8 +1190,8 @@ changes.metadata.author=Author
 changes.metadata.language=Language
 changes.metadata.defaultLanguage=Default Language
 
-
 changes.asset.assetpage=Organized / Reordered
+changes.asset.order=Order / Position
 changes.asset.title=Title
 changes.asset.description=Description
 changes.asset.keywords=Keywords
@@ -1248,6 +1218,7 @@ changes.attachmentdeleted=Attachment deleted
 changes.attachmentupdatedfromversion=Attachment updated from version
 changes.toversion=to version
 changes.asset.file_type=File Type
+
 changes.commentchange=Comment Change
 changes.comment.property=Property
 changes.comment.previousvalue=Previous Value
@@ -1256,18 +1227,17 @@ changes.comment.author=Author
 changes.comment.date=Date
 changes.comment.comment=Comment
 
-##
-
-
-
-## COMMENTS FOR HISTORY
-
-curriki.comment.no.note=No revision note
 
 ##HISTORY: MEMBER RATING
 rve.comments.comment.revision.edit=Member comment and/or rating updated
 rve.comments.comment.revision.add=Member comment and/or rating added
 rve.comments.comment.revision.delete=Member comment and/or rating deleted
+
+changes.asset.rating_sum=Member Rating(s) Total
+changes.asset.rating_count=Number of Member Ratings
+changes.asset.rating=Mean Average Member Rating
+changes.comment.rating=Member Rating
+
 
 ##HISTORY: INFRASTRUCTURE
 curriki.comment.initmetadatafornewcollection=Initializing information for new collection...
@@ -1282,6 +1252,7 @@ curriki.comment.createtextsourceasset=Created text resource
 curriki.comment.createlinksourceasset=Created web link resource
 curriki.comment.finishcreatingsubasset=Created sub-resource of category {0}
 curriki.comment.createvideosourceasset=Created video resource
+curriki.comment.copiedsourceasset=Copied resource
 
 ##HISTORY: PRIOR MOVE &amp; REMOVE AND ADD, MAY STILL BE IN USE
 curriki.comment.insertsubassetincompositeasset=Inserted sub-resource {0} ({1}) of category {2} at position {3}
@@ -1292,27 +1263,38 @@ curriki.comment.addingsubassettocompositeasset=Added sub-resource {0} ({1}) of c
 organize.history.removed_note=Removed sub-resource {0} from position {1};
 organize.history.inserted_note=Inserted {0} at position {1};
 
-##HISTORY: INFO EDITING
+##HISTORY: CONTENT AND INFO EDITING
+
+rve.content.edit.revision.defaultnote=Edited resource
+
 curriki.comment.updatemetadata=Updated resource information
 curriki.comment.updatemetadata.nochange=Resource information saved with no changes
 curriki.comment.applyrights=Applied rights
 curriki.comment.protectspace=Protected space
-
-##HISTORY: CONTENT EDITING
-rve.content.edit.revision.defaultnote=Edited resource
 curriki.comment.reordered=Reordered
 curriki.comment.addsubasset=Added sub-resource
 curriki.comment.createfoldersourceasset=Created folder sub-resource
+curriki.comment.no.note=No revision note
+
 core.comment.uploadAttachmentComment=Uploaded new attachment
 core.comment.uploadImageComment=Uploaded new image
 core.comment.deleteAttachmentComment=Deleted attachment
 core.comment.deleteImageComment=Deleted image
 
+changes.asset.generated_keywords=Key Words
+changes.asset.expiryDate=Change Date
+changes.asset.rightsHolder=Rights Holder
+changes.asset.licenseType=License Deed
+changes.asset.linktext=Link Text
+changes.asset.id=Asset ID
+changes.asset.file_size=File Size
+changes.asset.syntax=Syntax
+
+
 ##HISTORY: CRS
 curriki.comment.unnominateasset=Resource un-nominated
 curriki.comment.crsvalueadded=Resource set to CRS value of {0}
 curriki.comment.crsvalueremoved=Resource value of {0} removed
-
 
 ##HISTORY: FLAG
 

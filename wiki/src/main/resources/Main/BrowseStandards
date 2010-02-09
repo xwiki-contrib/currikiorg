@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1260562846000</creationDate>
-<date>1260563240000</date>
-<contentUpdateDate>1260563240000</contentUpdateDate>
-<version>4.1</version>
+<date>1262805033000</date>
+<contentUpdateDate>1262805033000</contentUpdateDate>
+<version>8.1</version>
 <title>Browse Resources by Standard</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>No ts value</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -66,8 +66,32 @@
 &lt;iframe src="" name="abStandardsFrame" id="abStandardsFrame" frameborder="0"&gt;&lt;/iframe&gt;
 {pre}
 &lt;script type="text/javascript"&gt;
+var sVars = new Array();
+var qString = unescape(window.location.search.substring(1));
+var pairs = qString.split(/\&amp;/);
+for (var i in pairs) {
+	if ('function' !== typeof pairs[i]){
+		var pair = pairs[i].split(/\=/);
+		sVars[pair[0]] = pair[1];
+	}
+}
+var baseURL = '/ab/${lang}/browse';
+if (sVars['url']) {
+	baseURL = sVars['url'];
+	delete sVars['url'];
+}
+//sVars['ts'] = (new Date()).getMilliseconds();
+var sString = '';
+for (var i in sVars){
+	if (sVars[i] &amp;&amp; 'function' !== typeof sVars[i]) {
+		sString += '&amp;'+i+'='+sVars[i];
+	}
+}
+if (sString) {
+	sString = '?'+sString.substring(1);
+}
 var abStandardsFrame = document.getElementById('abStandardsFrame');
-abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/${lang}/browse" + (location.search ? location.search + '&amp;' : '?') + "ts=" + (new Date()).getMilliseconds();
+abStandardsFrame.src = document.location.protocol + "//" + document.location.host + baseURL + sString;
 var abStandardsCurrHeight;
 var abStandardsTimer;
 function abStandardsHeight(doc) {
