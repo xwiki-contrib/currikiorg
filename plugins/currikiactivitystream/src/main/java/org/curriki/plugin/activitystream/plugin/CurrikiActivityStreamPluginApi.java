@@ -71,18 +71,18 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
         }
         return result;
     }
-
+/*
     protected List unwrapEvents(List events)
     {
-        List result = super.unwrapEvents(events);
-        for (int i = 0; i < events.size(); i++) {
-            com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
-                (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) result.get(i);
-            com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent =
-                (com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent) events.get(i);
-            event.setTitle(wrappedEvent.getDisplayTitle());
-            event.setBody(wrappedEvent.getDisplayBody());
+        List result =
+            new ArrayList();
+        if (events != null) {
+            for (Object event : events) {
+                Object unwrappedEvent = ((com.xpn.xwiki.plugin.activitystream.api.ActivityEvent)event).getEvent();
+                result.add(unwrappedEvent);
+            }
         }
         return result;
     }
+*/
 }

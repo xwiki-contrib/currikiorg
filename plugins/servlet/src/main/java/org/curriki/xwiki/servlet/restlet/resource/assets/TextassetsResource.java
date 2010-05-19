@@ -45,7 +45,7 @@ public class TextassetsResource extends BaseResource {
         String content = null;
         try {
             content = asset.getText();
-            syntax = asset.getSyntax();
+            syntax = asset.getTextSyntax();
         } catch (AssetException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" does not contain any texts.");
         }

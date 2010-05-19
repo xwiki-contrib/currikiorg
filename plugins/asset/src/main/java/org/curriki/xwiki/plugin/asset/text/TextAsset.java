@@ -20,7 +20,7 @@ public class TextAsset extends Asset {
         return doc.getContent();
     }
 
-    public String getSyntax() throws AssetException {
+    public String getTextSyntax() throws AssetException {
         if (!hasA(Constants.TEXT_ASSET_CLASS)) {
             throw new AssetException("This asset is not a text asset.");
         }
@@ -33,7 +33,7 @@ public class TextAsset extends Asset {
     public String getCategorySubtype() {
         String syntax = "";
         try {
-            syntax = getSyntax();
+            syntax = getTextSyntax();
         } catch (AssetException e) {
             syntax = Constants.ASSET_CATEGORY_SUBTYPE_UNKNOWN;
         }
