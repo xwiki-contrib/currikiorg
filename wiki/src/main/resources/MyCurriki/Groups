@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xwikidoc>
 <web>MyCurriki</web>
 <name>Groups</name>
@@ -7,65 +6,27 @@
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent>MyCurriki.WebHome</parent>
-<creator>XWiki.dward</creator>
-<author>XWiki.LudovicDubost</author>
+<creator>XWiki.superadmin</creator>
+<author>XWiki.superadmin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1198008907000</creationDate>
-<date>1226672649000</date>
-<contentUpdateDate>1226672649000</contentUpdateDate>
-<version>8.1</version>
+<contentAuthor>XWiki.superadmin</contentAuthor>
+<creationDate>1262300400000</creationDate>
+<date>1262300400000</date>
+<contentUpdateDate>1262300400000</contentUpdateDate>
+<version>1.1</version>
 <title>Groups</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Changed macro name</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
-<object>
-<class>
-<name>XWiki.TagClass</name>
-<customClass></customClass>
-<customMapping></customMapping>
-<defaultViewSheet></defaultViewSheet>
-<defaultEditSheet></defaultEditSheet>
-<defaultWeb></defaultWeb>
-<nameField></nameField>
-<validationScript></validationScript>
-<tags>
-<cache>0</cache>
-<displayType>select</displayType>
-<multiSelect>1</multiSelect>
-<name>tags</name>
-<number>1</number>
-<prettyName>Tags</prettyName>
-<relationalStorage>1</relationalStorage>
-<separator> </separator>
-<separators> ,|</separators>
-<size>30</size>
-<unmodifiable>0</unmodifiable>
-<values></values>
-<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-</tags>
-</class>
-<name>MyCurriki.Groups</name>
-<number>0</number>
-<className>XWiki.TagClass</className>
-<property>
-<tags/>
-</property>
-</object>
+<hidden>false</hidden>
 <content>#**
   * MyCurriki Groups Page
   *
   *#
-#**
-  * MyCurriki Groups Page Content Call Back function
-  * @param $userdoc Document of the user
-  * @param $userobj Object of the user
-  *##macro(mycurriki_pagecontent $userdoc $userobj) ## {
+#mycurriki_pageheader("groups" "")
+#mycurriki_pagecontentheader("groups" "")
 #groups_mycurriki_grouplist($userdoc $userobj)
-#end ## }
-## Actual Display of page
-#mycurriki_page("groups")</content>
-</xwikidoc>
+#mycurriki_pagefooter("")</content></xwikidoc>

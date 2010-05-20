@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xwikidoc>
 <web>MyCurriki</web>
 <name>BlogEditArticle</name>
@@ -7,14 +6,14 @@
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.Admin</creator>
-<author>XWiki.dward</author>
+<creator>XWiki.superadmin</creator>
+<author>XWiki.superadmin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
-<creationDate>1218300627000</creationDate>
-<date>1225389897000</date>
-<contentUpdateDate>1225389897000</contentUpdateDate>
-<version>7.1</version>
+<contentAuthor>XWiki.superadmin</contentAuthor>
+<creationDate>1262300400000</creationDate>
+<date>1262300400000</date>
+<contentUpdateDate>1262300400000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -22,53 +21,11 @@
 <comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
-<object>
-<class>
-<name>XWiki.TagClass</name>
-<customClass></customClass>
-<customMapping></customMapping>
-<defaultViewSheet></defaultViewSheet>
-<defaultEditSheet></defaultEditSheet>
-<defaultWeb></defaultWeb>
-<nameField></nameField>
-<validationScript></validationScript>
-<tags>
-<cache>0</cache>
-<displayType>select</displayType>
-<multiSelect>1</multiSelect>
-<name>tags</name>
-<number>1</number>
-<prettyName>Tags</prettyName>
-<relationalStorage>1</relationalStorage>
-<separator> </separator>
-<separators> ,|</separators>
-<size>30</size>
-<unmodifiable>0</unmodifiable>
-<values></values>
-<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-</tags>
-</class>
-<name>MyCurriki.BlogEditArticle</name>
-<number>0</number>
-<className>XWiki.TagClass</className>
-<property>
-<tags/>
-</property>
-</object>
+<hidden>false</hidden>
 <content>#**
  * Blog Create or Edit Article Code
  *
 **#
-#**
-  * My Curriki Blog Page Content Callback
-  *
-  * @param $userdoc User document to display the form for
-  * @param $userobj User object to display the form for
-  * @author dward@curriki.org
-  *#
-#macro(mycurriki_pagecontent $userdoc $userobj) ## {
-#blog_editarticle(1)
-#end ## }
 ##
 ## Actual Page Display
 #if($request.page)
@@ -76,9 +33,11 @@
 #blog_savearticle()
 #else
 #if($doc.web.startsWith("Blog_") || ("$!request.editArticle" != "" &amp;&amp; $request.editArticle.startsWith("Blog_")) || ("$!request.space" != "" &amp;&amp; $request.space.startsWith("Blog_"))) ## {
-#mycurriki_page('blog')
+#mycurriki_pageheader("blog" "")
+#mycurriki_pagecontentheader("blog" "")
+#blog_editarticle(1)
+#mycurriki_pagefooter("")
 #else ## } {
 #blog_editarticle(0)
 #end ## }
-#end</content>
-</xwikidoc>
+#end</content></xwikidoc>
