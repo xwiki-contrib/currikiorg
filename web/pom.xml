@@ -35,8 +35,8 @@
   <description>The standard Curriki WAR</description>
   <dependencies>
     <dependency>
-      <groupId>com.xpn.xwiki.platform</groupId>
-      <artifactId>xwiki-web-standard</artifactId>
+      <groupId>com.xpn.xwiki.products</groupId>
+      <artifactId>xwiki-enterprise-web</artifactId>
       <version>${platform.web.version}</version>
       <type>war</type>
     </dependency>
@@ -192,11 +192,17 @@ xwiki.rendering.syntaxes = xwiki/2.0, xwiki/1.0
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <webResources>
+            <!-- Include License resources -->
+            <resource>
+              <directory>${project.build.directory}/maven-shared-archive-resources/META-INF</directory>
+              <targetPath>META-INF</targetPath>
+            </resource>
             <resource>
               <directory>${project.build.directory}/maven-shared-archive-resources</directory>
               <targetPath>WEB-INF</targetPath>
               <includes>
                 <include>xwiki.cfg</include>
+                <include>hibernate.cfg.xml</include>
               </includes>
             </resource>
           </webResources>
