@@ -38,10 +38,10 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 ## The xwiki translation files are converted for use with javascript
 ## and loaded via the /js/0/lang_${lang}.js URL using an apache rewrite rule
 ##
-## If using xwiki standalone you need to uncomment the line
-##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&lang=${lang}"></script>
-## and comment the next one out instead
-<script src="/js/1/lang_${lang}.js"></script>
+## If not using xwiki standalone you need to comment the following line
+<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&lang=${lang}"></script>
+## and uncomment the next one out instead
+##<script src="/js/1/lang_${lang}.js"></script>
 <script src="/xwiki/js/i18n.js"></script>
 
 <script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
