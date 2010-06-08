@@ -1020,8 +1020,14 @@ public class Asset extends CurrikiDocument {
 
         List<String> params = new ArrayList<String>();
         params.add(assetDoc.getStringValue(Constants.ASSET_CLASS_CATEGORY));
-        save(context.getMessageTool().get("curriki.comment.finishcreatingsubasset", params));
-
+        try {
+          save(context.getMessageTool().get("curriki.comment.finishcreatingsubasset", params));
+        } catch (Exception e) {
+          // THIS IS A HACK to fix creating an attachment based asset with core 2.x
+          // we need to find the real issue
+          // retry the saving as a temp workaround
+          save(context.getMessageTool().get("curriki.comment.finishcreatingsubasset", params));
+        }
         if (isCollection()) {
             RootCollectionCompositeAsset root = CollectionSpace.getRootCollection(space, context);
             root.addSubasset(this.getFullName());
