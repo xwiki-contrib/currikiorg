@@ -2744,7 +2744,7 @@ Search.init = function(){
 	console.log('search: init');
 	if (Ext.isEmpty(Search.initialized)) {
 		if (Ext.isEmpty(Search.tabList)) {
-			Search.tabList = ['resource', 'group', 'member', 'blog', 'curriki'];
+			Search.tabList = ['resource', 'group', 'member', 'curriki'];
 		}
 
 		var comboWidth = 140;

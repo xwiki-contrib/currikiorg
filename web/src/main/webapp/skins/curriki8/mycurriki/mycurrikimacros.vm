@@ -46,7 +46,7 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_tabs $curtab $whofor) ## {
-  #set($tabs = ["profile","favorites","contributions","collections","blog","groups"])
+  #set($tabs = ["profile","favorites","contributions","collections","groups"])
   <ul id="mycurriki-tabs" class="tabs">
   #foreach($tab in $tabs) ## {
     #if("$!whofor" == "" || $whofor == $context.user) ## {
