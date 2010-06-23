@@ -1,0 +1,701 @@
+#**
+ * This macro is called from the contentview.vm template when a page is a documentation page
+ * It adds the header and footer of the groups section to the pages
+ *#
+#macro(groups_documentationview)
+  #groupinit()
+  #groupsheaderdoc("documentation")
+  #set($editURL = "")
+  #set($editTxt = "")
+  #if( $sm.isMember( $s.spaceName, $context.user ) )
+    #set($editURL = $s.homeURL + "Documentation")
+    #set($editURL = $editURL + "?action=editdoc&pagename=")
+    #set($editURL = $editURL + $doc.getFullName())
+	#set($editTxt = ${msg.groups_documentation_documents_edit})
+  #end
+
+  #set($tit = $doc.title)
+  #if($request.vers)
+    #set($tit = $tit + " ( version " )
+    #set($tit = $tit + $request.vers)
+    #set($tit = $tit + " )" )
+  #end
+
+  #begingroupsection("${tit}" "${editTxt}" "${editURL}" "blue" true)
+  <span class="date">
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($doc.author, true) ${msg.groups_documentation_documents_on} #if($doc.contentUpdateDate) $!xwiki.formatDate($!doc.contentUpdateDate, $msg.get("mycurriki.dateFormat")) #end</span>
+     <br />
+    #if($request.vers)
+      This is the revision ${request.vers} of the ducument
+      <br />
+    #end
+    <br />
+  <div class="doccontent xwikicontent">
+   ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+   $cdoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+  </div>
+  #endgroupsection()
+  #groupsfooter()
+#end
+
+
+#**
+  * Show Documentation Home page
+  *#
+#macro(groups_documentation_home)
+#groupinit()
+#groupsheader("documentation")
+#if(!$isGroupMember && ($s.policy=="closed") && !$hasadmin)
+  $msg.get("groups_documentation_onlyaccessibletomembers")
+#else
+#set( $docsSpaceName = "Documentation_"+$doc.space )
+#if( $request.action == "newdoc")
+  #groups_documentation_newwikipage()
+  ##includeInContext( "Groups.DocumentationNewWikiPageSheet" )
+#end
+#if( $request.action == "viewdoc")
+  #groups_documentation_viewpage()
+  ##includeInContext( "Groups.DocumentationViewPageSheet" )
+#end
+#if( !${request.action} && $request.pagename )
+  #groups_documentation_viewpage()
+  ##includeInContext( "Groups.DocumentationViewPageSheet" )
+#end
+#if( $request.action == "editdoc")
+#if( $sm.isMember( $s.spaceName, $context.user ) )
+  #groups_documentation_editpage()
+#else
+ #curriki_noaccess()
+#end
+  ##includeInContext( "Groups.DocumentationEditPageSheet" )
+#end
+#if( $request.action == "history")
+  #groups_documentation_history()
+  ##includeInContext( "Groups.DocumentationHistorySheet" )
+#end
+#if( $request.action == "compare")
+  #groups_documentation_compare()
+  ##includeInContext( "Groups.DocumentationCompareSheet" )
+#end
+#if( $request.action == "editabout")
+#if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
+  #groups_documentation_editabout()
+#else
+ #curriki_noaccess()
+#end
+#end
+#if( $stopRender )
+  ##do nothing
+#else
+#groups_documentation_home_about()
+#groups_documentation_home_createwikipage()
+#groups_documentation_home_adddocument()
+#groups_documentation_home_list()
+#end ## end if sheets allow to continue render
+#end ## end if has right
+#groupsfooter()
+#end
+
+#**
+  * Show Documentation Home page About zone
+  *#
+#macro(groups_documentation_home_about)
+## if the sheets allow the page to continue render
+#set( $editLink = "" )
+#set( $editTitle = "" )
+#if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
+  #set( $editLink = $doc.getURL() + "?action=editabout" )
+  #set( $editTitle = "Edit" )
+#end
+#begingroupsection("${msg.groups_documentation_about_title}" "${editTitle}" "${editLink}" "blue" true)
+  #set( $customDocName = $docsSpaceName + ".AboutDocumentation" )
+  #if( $xwiki.exists( $customDocName ) )
+    #set( $aboutCreateDoc = $xwiki.getDocument( $customDocName ) )
+  #else
+    #set( $aboutCreateDoc = $xwiki.getDocument("Groups.DocumentationWelcome"))
+  #end
+  ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+  <div class="xwikicontent">
+  $aboutCreateDoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+  </div>
+#endgroupsection()
+#end
+
+#**
+  * Show Documentation Home page Create Wiki Page Zone
+  *#
+#macro(groups_documentation_home_createwikipage)
+#if( $sm.isMember( $s.spaceName, $context.user ) || $hasadmin ) ## {
+#begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
+  #if( $newDocSaved )
+     $msg.get( "groups_documentation_wiki_page_save_confirm", [$newDocSaved] )
+  #end
+  <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")">
+    <input type="hidden" name="action" value="newdoc" />
+    <input type="text" name="newdocname" value="${msg.groups_documentation_new_wiki_title}" />
+   <button type="submit" class="button button-confirm">${msg.groups_documentation_new_wiki_submit}</button>
+  </form>
+#endgroupsection()
+#end ## }
+#end
+
+#**
+  * Show Documentation Home page Add Document Zone
+  *#
+#macro(groups_documentation_home_adddocument)
+#if( $sm.isMember( $s.spaceName, $context.user ) || $hasadmin ) ## {
+#begingroupsection("${msg.groups_documentation_add_document_title}" "" "" "blue" true)
+#if($request.method=="POST")
+  #set($filename = $xwiki.fileupload.getFileName("filepath"))
+  #if($filename&&($filename!=""))
+    ## create a doc for the upload
+    #set( $attDocName = $xwiki.getUniquePageName( "doc" ) )
+    #set( $attDocName = "."+$attDocName )
+    #set( $attDocName = $docsSpaceName + $attDocName )
+    #set( $tmp = $xwiki.copyDocument( "Groups.DocumentationAttachmentTemplate", $attDocName ) )
+    #set( $attDoc = $xwiki.getDocument( $attDocName ) )
+    $attDoc.save()
+    #set( $tmp = $attDoc.addAttachments() )
+    $attDoc.setTitle( $context.addedAttachments.get(0).filename )
+    ## marks this as being file
+    #set( $tmp = $attDoc.tagList.add( "documentation-file" ) )
+   $attDoc.save()
+   <script type="text/javascript">window.location='$doc.getURL("view")';</script>
+  #end
+#end
+  $msg.groups_documentation_add_document_choose
+  <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) {this.upload.disabled = false; return false;} else return true;">
+<input id="xwikiuploadname" type="hidden" name="filename" value="" />
+<input id="xwikiuploadfile" type="file" name="filepath" value=""  size="40" />
+{pre}
+<script type="text/javascript">
+function checkFileExtension() {
+  var isValid = true;
+  var ext = getFileExtension();
+  if (ext) {
+    if (ext != "ok" && ext != "ai" && ext != "gif" && ext != "jpg" && ext != "tif" && ext != "bmp" && ext != "jpe" && ext != "psd" && ext != "png" && ext != "doc" && ext != "docx" && ext != "txt" && ext != "rtf") {
+      isValid = false;
+    }
+  } else {
+    isValid = false;
+  }
+
+  //remove this/////////////////////////
+  isValid = true;
+  //////////////////////////////////////////////
+
+  if (!isValid) {
+    alert("$msg.get("mycurriki.profile.needPicture")");
+  }
+  return isValid;
+}
+function getFileExtension() {
+  var fileName = document.getElementById("xwikiuploadfile").value;
+  if (fileName.length){
+   fileName = fileName.toLowerCase();
+   var pos = fileName.lastIndexOf(".");
+   if (pos > 0){
+     return fileName.substring(pos + 1);
+   }
+  }
+  return "ok";
+}
+</script>
+{/pre}
+## We disable the upload button after it is clicked and re-enable it if the form is not submitted.
+## This is required to prevent duplicate uploads caused by repeated clicks.
+<button type="submit" name="upload" class="button button-confirm" onclick="this.disabled = true;">${msg.groups_documentation_add_document_upload}</button>
+  </form>
+#endgroupsection()
+#end ## }
+#end ## macro
+
+#**
+  * Show Documentation Home page Document and Wiki Page list
+  *#
+#macro(groups_documentation_home_list)
+#begingroupsection("${msg.groups_documentation_documents_title}" "" "" "blue" true)
+#set($itemsPerPage = 5)
+#if( $request.ipp )
+   #set($itemsPerPage = $xwiki.parseInt($request.ipp))
+#end
+#set($startItem = 0)
+#if($request.startIndex)
+   #set($startItem = $xwiki.parseInt($request.startIndex))
+#end
+#set($allSpaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name<>'WebPreferences'" ))
+#set($totalcount = $allSpaceDocs.size())
+##set($spaceDocs = $xwiki.getSpaceDocsName( $docsSpaceName ))
+#set($spaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name<>'WebPreferences'  and doc.name<>'AboutDocumentation' order by doc.contentUpdateDate desc", $itemsPerPage, $startItem ))
+#foreach( $docName in  $spaceDocs)
+  #set( $docdoc = $xwiki.getDocument( $docName ) )
+  #set( $doctitle = $docdoc.title )
+  #if( $doctitle == "" ) #set( $doctitle = $docdoc.name )  #end
+  <div class="frame-inset document-content">
+    <div class="headlines">
+      ##determining the icon to display
+      #if( $docdoc.tags.contains("documentation-wiki") )
+         #mimeiconimg('document.xwiki')
+         #set( $icon=$macro_img)
+      #else
+        #if( $docdoc.getAttachmentList().size() > 0 )
+           #mimeiconimg($docdoc.getAttachmentList().get(0).filename)
+           #set( $icon=$macro_img)
+        #else
+           #mimeiconimg('unknown')
+           #set( $icon=$macro_img)
+        #end
+      #end
+    #set($viewURL = $docdoc.getURL())
+      <div class="document-icon"><a href="${viewURL}">$icon</a></div>
+   <div class="document-title"><a href="${viewURL}"><strong>{pre}$doctitle{/pre}</strong></a></div>
+   <div class="button-link">
+#if( $sm.isMember( $s.spaceName, $context.user ) )
+      #if( $docdoc.tags.contains("documentation-wiki") )
+         #set($editURL = $doc.getURL())
+         #set($editURL = $editURL + "?action=editdoc&pagename=")
+         #set($editURL = $editURL + $docName )
+   <a href="{pre}$editURL{/pre}" >${msg.groups_documentation_documents_edit}</a> |
+      #end
+      #if($docdoc.hasAccessLevel("delete"))
+       #if( $docdoc.tags.contains("documentation-wiki") )
+        #set($delConfirm = ${msg.groups_documentation_documents_del_wiki_confirm})
+       #else
+        #set($delConfirm = ${msg.groups_documentation_documents_del_doc_confirm})
+       #end
+      <a href=" $docdoc.getURL( "delete" )?confirm=1&xredirect=$doc.getURL()" onclick="if(!confirm('${delConfirm}')) return false;" >${msg.groups_documentation_documents_del}</a>
+      #end
+#end  ## isMember
+      </div>
+     </div>
+     <span class="date">
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  #if($docdoc.contentUpdateDate) $!xwiki.formatDate($!docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")) #end</span>
+  </div>
+#end  ##end foreach
+  #set($args = "")
+  #curriki_paginatorargs( "" $startItem $itemsPerPage $totalcount  $args  )
+#endgroupsection()
+#end ## macro
+
+#**
+  *  Documentation New Wiki Page edit about form and handling
+  *#
+#macro(groups_documentation_editabout)
+#set( $docName = $docsSpaceName + ".AboutDocumentation" )
+#set( $editDoc = $xwiki.getDocument( $docName ) )
+#if("$!request.xwiki2" == "true")
+$editDoc.setSyntaxId("xwiki/2.0")
+#end
+#if( $request.method == "POST" )
+     $editDoc.setContent( $request.doctext )
+     $editDoc.save()
+#else
+   #set($stopRender = "ok")
+   #begingroupsection("Edit about documentation" "" "" "blue" true)
+    <form action="#" method="post">
+## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
+<input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
+<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+{pre}
+<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($editDoc.syntaxId == "xwiki/1.0")
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script type="text/javascript">
+wikiEditor.init({
+  elements : "doctext",
+  language: "en",
+  mode: "exact",
+  content_css: "$xwiki.getSkinFile("style.css", true)",
+  debug : false,
+  remove_linebreaks : false,
+  plugins: 'table, contextmenu, paste, searchreplace',
+        wiki_use_style: 'true',
+        wiki_plugins: 'core,attachments',
+        wiki_images_path : '/xwiki/bin/download/${doc.space}/${doc.name}/',
+        wiki_attach_path : '/xwiki/bin/view/${doc.space}/${doc.name}'
+});
+</script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($editDoc.syntaxId))
+## Import required JavaScript files (lazy=false).
+#wysiwyg_import(false)
+## Set the input value for the editor.
+#wysiwyg_input("doctext" $editDoc.content)
+## Display conversion errors, if present.
+#wysiwyg_displayConversionError("doctext")
+## Create the editor UI.
+#wysiwyg_createEditor($editDoc "doctext" false)
+#end
+{/pre}
+<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.renderedContent)</textarea>
+
+        <div class="right mgn-vrt-15">
+          <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}"  class="button button-cancel mgn-rt" />
+          <input type="submit" value="${msg.groups_home_editwelcome_submit_btt}"  class="button button-confirm" />
+        </div>
+    </form>
+#endgroupsection()
+#end
+#end
+
+#**
+  *  Documentation New Wiki Page edit wiki page form and handling
+  *#
+#macro(groups_documentation_newwikipage)
+#if( $request.method == "POST" && $request.doctitle.trim() != "" )
+     ##getting where the attached images were
+     #set( $attachDocName = $request.olddoc)
+     #set( $attachDoc = $xwiki.getDocument( $attachDocName ) )
+
+     #set( $newDocName = $xwiki.getUniquePageName( $docsSpaceName, $request.doctitle))
+     #set( $newDocName = "${docsSpaceName}.${newDocName}")
+
+     ##renaming the old doc to the new title
+     #set($ok = $attachDoc.rename($newDocName))
+##$request.olddoc $attachDoc $attachDocName  $newDocName $ok
+
+     ##set( $newDoc = $xwiki.getDocument( $newDocName ) )
+     #set( $newDoc = $attachDoc )
+     $newDoc.setTitle( $request.doctitle )
+     $newDoc.setContent( $request.doctext )
+     $newDoc.save()
+
+     #set($tg = $newDoc.newObject("XWiki.TagClass"))
+     #set($tgok = $tg.set("tags","documentation-wiki"))
+
+    $newDoc.use($newDoc.newObject("XWiki.XWikiRights"))
+    $newDoc.set("users", $context.user)
+    $newDoc.set("levels", "delete")
+    $newDoc.set("allow","1")
+
+     $newDoc.save()
+
+     ## this should send us back to the right view URL
+     ## and fix bug CURRIKI-3924
+     $response.sendRedirect( $doc.getURL() )
+
+     #set( $newDocSaved = $request.doctitle )
+ #else
+   #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
+    <form action="#" method="post">
+       #set( $dctitle = $request.newdocname )
+
+       ##creating temporary doc so the wiki editor knows where to attaach stuff
+       #set( $newDocName = $xwiki.getUniquePageName( "Temp", $dctitle))
+       #set( $newDocName = "Temp.${newDocName}")
+       #set( $newDoc = $xwiki.getDocument( $newDocName))
+       #if("$!request.xwiki2" == "true")
+       $newDoc.setSyntaxId("xwiki/2.0")
+       #end
+       #set( $ok = $newDoc.save() )
+
+<label for="doctitle">${msg.groups_documentation_update_title}</label>
+<input type="hidden" name="olddoc" value="{pre}${newDocName}{/pre}" />
+
+#if( $request.doctitle.trim() == "" )
+  <div class="error">${msg.group_documentation_empty_title}</div>
+#end
+<input type="text" name="doctitle" value="{pre}${dctitle}{/pre}" />
+<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+
+
+{pre}
+<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($newDoc.syntaxId == "xwiki/1.0")
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script type="text/javascript">
+
+wikiEditor.init({
+  elements : "doctext",
+  language: "en",
+  mode: "exact",
+  content_css: "$xwiki.getSkinFile("style.css",true)",
+  debug : false,
+  remove_linebreaks : false,
+  plugins: 'table, contextmenu, paste, searchreplace',
+        wiki_use_style: 'true',
+        wiki_plugins: 'core,attachments',
+        wiki_images_path : '/xwiki/bin/download/${newDoc.space}/${newDoc.name}/',
+        wiki_attach_path : '/xwiki/bin/view/${newDoc.space}/${newDoc.name}'
+});
+</script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($newDoc.syntaxId))
+## Import required JavaScript files (lazy=false).
+#wysiwyg_import(false)
+## Set the input value for the editor.
+#wysiwyg_input("doctext" "")
+## Display conversion errors, if present.
+#wysiwyg_displayConversionError("doctext")
+## Create the editor UI.
+#wysiwyg_createEditor($newDoc "doctext" false)
+#end
+{/pre}
+<textarea name="doctext" id="doctext" rows="20"></textarea>
+        <div class="right mgn-vrt-15">
+          <input type="button" onclick="if(confirm('${msg.groups_documentation_new_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " class="button button-cancel mgn-rt" value="${msg.groups_documentation_new_wiki_cancel}" />
+          <input type="submit" class="button button-confirm" value="${msg.groups_documentation_new_wiki_save}" />
+
+      </div>
+    </form>
+
+#set( $stopRender = "ok" )
+#endgroupsection()
+#end ## post
+#end ## macro
+
+
+
+#**
+  *  Documentation New Wiki Page edit page form and handling
+  *#
+#macro(groups_documentation_editpage)
+#if($request.pagename && $sm.isMember( $s.spaceName, $context.user ) )
+#set( $docName = $request.pagename )
+#set( $editDoc = $xwiki.getDocument( $docName ) )
+#if( $request.method == "POST" )
+     #if($request.doctitle && $request.doctitle!="")
+      $editDoc.setTitle( $request.doctitle )
+     #end
+     $editDoc.setContent( $request.doctext )
+     $editDoc.saveWithProgrammingRights()
+     #if( $request.gotodoc == "true" )
+       $response.sendRedirect( $editDoc.getURL() )
+     #else
+       ## this should send us back to the right view URL
+       ## and fix bug CURRIKI-3924
+       $response.sendRedirect( $doc.getURL() )
+     #end
+     #set( $editDocSaved = $request.doctitle )
+#else
+   #set($stopRender = "ok")
+  <div class="edit-history">
+     <span class="inactive-link">Wiki</span>
+     <a href="{pre}${doc.uRL}?action=history&pagename=${request.pagename}{/pre}">
+History
+</a>
+   </div>
+<div class="documentation-edition">
+   #begingroupsection("${msg.groups_documentation_edit_wiki_title}" "" "" "blue" true)
+    <form action="#" method="post">
+      <input type="hidden" name="pagename" value="{pre}${request.pagename}{/pre}" />
+      #set( $titleField = $xwiki.getFormEncoded($editDoc.title))
+<label for="doctitle">${msg.groups_documentation_update_title}</label>
+<input type="text" name="doctitle" value="{pre}$titleField{/pre}" />
+<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+{pre}
+<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($editDoc.syntaxId == "xwiki/1.0")
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script type="text/javascript">
+wikiEditor.init({
+  elements : "doctext",
+  language: "en",
+  mode: "exact",
+  content_css: "$xwiki.getSkinFile("style.css", true)",
+  debug : false,
+  remove_linebreaks : false,
+  plugins: 'table, contextmenu, paste, searchreplace',
+        wiki_use_style: 'true',
+        wiki_plugins: 'core,attachments',
+        wiki_images_path : '/xwiki/bin/download/${editDoc.space}/${editDoc.name}/',
+        wiki_attach_path : '/xwiki/bin/view/${editDoc.space}/${editDoc.name}'
+});
+</script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($editDoc.syntaxId))
+## Import required JavaScript files (lazy=false).
+#wysiwyg_import(false)
+## Set the input value for the editor.
+#wysiwyg_input("doctext" $editDoc.content)
+## Display conversion errors, if present.
+#wysiwyg_displayConversionError("doctext")
+## Create the editor UI.
+#wysiwyg_createEditor($editDoc "doctext" false)
+#end
+<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
+{/pre}
+        <div class="right mgn-vrt-15">
+          <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}"  class="button button-cancel mgn-rt" />
+          <input type="submit" value="${msg.groups_documentation_edit_wiki_save}"  class="button button-confirm" />
+        </div>
+    </form>
+
+#set( $stopRender = "ok" )
+#endgroupsection()
+</div>
+#end ## post
+#end ## pagename
+#end ## macro
+
+
+#**
+  *  Documentation Wiki Page compare
+  *#
+#macro(groups_documentation_compare)  
+#set($stopRender = "ok")
+#begingroupsection("${msg.groups_documentation_documents_history_compare_title}" "" "" "blue" true)
+#set($comparedoc= $xwiki.getDocument( $request.pagename ) )
+#set($rev1= $request.get("rev1"))
+#set($rev2= $request.get("rev2"))
+#if($request.get("type"))
+#set($type= $request.get("type"))
+#else
+#set($type = "html")
+#end
+#if ($comparedoc.realLanguage!="")
+#set($lang = "&language=${comparedoc.realLanguage}")
+#else
+#set($lang = "")
+#end
+#set($origdoc = $xwiki.getDocument($comparedoc, $rev1))
+#set($newdoc = $xwiki.getDocument($comparedoc, $rev2))
+#template("changesdoc.vm")
+#endgroupsection()
+#end  ## macro
+
+
+
+#**
+  *  Documentation Wiki Page history
+  *#
+#macro(groups_documentation_history)
+#set($stopRender = "ok")
+ <div class="edit-history">
+     <a href="{pre}${doc.uRL}?action=editdoc&pagename=${request.pagename}{/pre}">
+Edit
+</a>
+  <span class="inactive-link">${msg.groups_documentation_documents_history}</span>
+   </div>
+   #begingroupsection("${msg.groups_documentation_documents_history_title}" "" "" "blue" true)
+
+#set($docdoc = $xwiki.getDocument($request.pagename))
+#if($docdoc.isNew())
+  No such doc
+#else
+<div id="historycontent" class="xwikiintracontent">
+    #set( $subaction = $doc.getURL() + "?action=compare" )
+    #set( $subaction = $subaction + "&pagename=${request.pagename}" )
+    <form action="{pre}${subaction}{/pre}" method="post">
+      <div id="history">
+      <div class="centered">
+      <table class="xwikidatatable" summary="$msg.get(document) ${doc.displayTitle} &mdash; $msg.get("history")" width="100%">
+        <tr>
+          <th>$msg.get("history.from")</th>
+          <th>$msg.get("history.to")</th>
+          <th>$msg.get("history.version")</th>
+          <th>$msg.get("history.author")</th>
+          <th>$msg.get("history.date")</th>
+#if($hasedit || $hasadmin)
+          <th>$msg.get("action")</th>
+#end
+        </tr>
+#if(!$revisionscount)
+#set($revisionscount = 0)
+#end
+#if ($docdoc.realLanguage!="")
+#set($lang = "&amp;language=${docdoc.realLanguage}")
+#else
+#set($lang = "")
+#end
+#foreach ($version in $docdoc.getRecentRevisions($revisionscount))
+#set($origdoc = "")
+#set($newdoc = "")
+#set($nextversion = $version)
+#set($newdoc = $xwiki.getDocument($docdoc, $nextversion))
+        <tr class="row">
+          <td><input type="radio" name="rev1" value="$nextversion" /></td>
+          <td><input type="radio" name="rev2" value="$nextversion" /></td>
+          <td>
+#set($revURL = $doc.getURL() + "?action=viewdoc&vers=")
+#set($revURL = $revURL + $nextversion)
+#set($revURL = $revURL + "&pagename=")
+#set($revURL = $revURL + $request.pagename)
+<a href="{pre}${revURL}{/pre}">$nextversion</a></td>
+#if($newdoc=="")
+          <td>&ndash;</td>
+          <td>&ndash;</td>
+#else
+          <td>$xwiki.getLocalUserName($newdoc.author)</td>
+          <td>#if($newdoc.date) $xwiki.formatDate($newdoc.date, $msg.get("mycurriki.datetimeFormat")) #end</td>
+#end
+#if($docdoc.hasAccessLevel("edit") || $hasadmin)
+   #set($bURL = $docdoc.getURL())
+   #set($rollURL = $docdoc.getURL("rollback","rev=$nextversion") )
+   #set($rollURL = $rollURL + "&xredirect=")
+   #set($rollURL = $rollURL + $xwiki.getURLEncoded( $bURL ) )
+          <td>
+#if( $velocityCount> 1 )
+<a href="${rollURL}" onclick="if (confirm('$msg.get("readytorollback") $nextversion')){this.href += '&amp;confirm=1'; return true;} return false;" class="button button-confirm">$msg.get("history.rollback")</a>
+#end
+</td>
+#end ## hasedit
+        </tr>
+#end ## foreach
+</table>
+      <div class="buttons"><input type="submit" accesskey="c" value="$msg.get("history.compare")" class="button"/></div>
+      </div>
+    </div>
+  </form>
+  </div>
+#end ## docdoc isNew
+#endgroupsection()
+#end ## macro
+
+
+#**
+  *  Documentation Wiki Page View Page
+  *#
+#macro(groups_documentation_viewpage)
+#if( $request.pagename )
+#set( $docdoc = $xwiki.getDocument( $request.pagename ) )
+#if( $request.vers )
+  #set( $docdoc = $xwiki.getDocument( $docdoc, $request.vers ) )
+#end
+#if( $docdoc )
+#set($editURL = $doc.getURL())
+#set($editURL = $editURL + "?action=editdoc&pagename=")
+#set($editURL = $editURL + $request.pagename)
+#set($tit = $docdoc.title)
+#if($request.vers)
+  #set($tit = $tit + " ( version " )
+  #set($tit = $tit + $request.vers)
+  #set($tit = $tit + " )" )
+#end
+#begingroupsection("${tit}" "${msg.groups_documentation_documents_edit}" "$editURL" "blue" true)
+<span class="date">
+      ${msg.groups_documentation_documents_modified} $xwiki.getUserName($docdoc.author, true) ${msg.groups_documentation_documents_on}  #if($docdoc.contentUpdateDate) $!xwiki.formatDate($!docdoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")) #end</span>
+<br />
+#if($request.vers)
+This is the revision ${request.vers} of the ducument
+<br />
+#end ## request
+<br />
+<div class="doccontent xwikicontent">
+## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content    
+$docdoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+</div>
+#endgroupsection()
+
+#set($stopRender = "ok")
+#else ## docdoc
+  $msg.groups_documentation_documents_nopage
+#end
+#else ## pagename
+  $msg.groups_documentation_documents_nopage
+#end
+#end  ## macro
+
+
+#**
+  *  Documentation Wiki Page Attachment
+  *#
+#macro(groups_documentation_attachment)
+#set( $atts = $doc.getAttachmentList() )
+#set( $at = $atts.get(0) )
+#if( $at )
+  $response.sendRedirect( $doc.getAttachmentURL($at.filename) )
+#else
+  No such document
+#end ## at
+#end ## macro

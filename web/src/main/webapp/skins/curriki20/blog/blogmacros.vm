@@ -1,0 +1,479 @@
+##
+##
+## My Curriki Blog Macros
+##
+##
+#**
+  * MyCurriki Blog Article List
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogbox $userdoc $userobj)
+#if($request.user)
+#set($blogqs = "&user=$!request.user")
+#else
+#set($blogqs = "")
+#end
+#curriki_titlebar($msg.get("mycurriki.blog.titlebar") "" "" "blue")
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+<div>
+$msg.get("mycurriki.blog.noblog")
+</div>
+#else ## } {
+##
+#set($category = "$!request.category")
+#set($nbitems = "10")
+#set($nbstart = $request.nbstart)
+#set($space = "Blog_${shortname}")
+#if(!$itemname)
+ #set($itemname = "Blog")
+#end
+#set($next = $msg.get("myBlog.nextArticle"))
+#set($prev = $msg.get("myBlog.previousArticle"))
+#set($readnext = $msg.get("myBlog.continueReading"))
+#set($addanews = $msg.get("myBlogs.addArticle"))
+#set($addanewsdetails = $msg.get("myBlogs.addArticle.details"))
+#set($newstitle = $msg.get("myBlogs.articleTitle"))
+#set($spacesql = " and doc.web='${space}'")
+#if($category=='')
+#set ($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' $spacesql order by doc.creationDate desc")
+#else
+#set ($sql = ", BaseObject as obj, DBStringListProperty as cat join cat.list list where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' $spacesql and obj.id=cat.id.id and cat.id.name='category' and list='$category' order by doc.creationDate desc")
+#end
+#set($cdate = "")
+#set($inbitems = $xwiki.parseInt($nbitems))
+#set($inbstart = $xwiki.parseInt($nbstart))
+#set($counter = 0)
+#foreach ($item in $xwiki.searchDocuments($sql, $inbitems, $inbstart))
+#if ($counter != 0)
+ <hr />
+#end
+<div class="cd-article">
+#set($counter = $counter+1)
+#set($bentrydoc = $xwiki.getDocument($item))
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.datetimeFormat")))
+#mycurriki_blogarticle($bentrydoc, $bentryobj, false)
+<br/>
+</div>
+#end
+<div style="float: right; margin-right: 30px">
+#if ($inbstart!=0)
+#set($iprev = $inbstart - $inbitems)
+[$prev>$doc.name?nbstart=${iprev}${blogqs}]
+#end
+#if($counter==$inbitems)
+#set($inext = $inbstart + $inbitems)
+[$next>$doc.name?nbstart=${inext}${blogqs}]
+#end
+</div>
+#end ## }
+#end ## content macro
+
+
+#**
+  * MyCurriki Blog Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogbutton $userobj)
+#if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights()))
+#set($shortname = $userdoc.fullName)
+#if($shortname.startsWith("XWiki."))
+ #set($shortname = $shortname.substring(6))
+#end
+#set($hasBlog=$xwiki.exists("Blog_${shortname}.WebHome"))
+#if(!$hasBlog) ## {
+<a class="button button-confirm" href="$xwiki.getURL("MyCurriki.BlogCreateBlog", "view", "xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createBlog")">$msg.get("mycurriki.blog.createBlog")</a>
+#else ## } {
+<a class="button button-confirm" href="$xwiki.getURL("MyCurriki.BlogCreateArticle", "view", "space=Blog_${shortname}&xredirect=$xwiki.requestURL")" title="$msg.get("mycurriki.blog.createEntry")">$msg.get("mycurriki.blog.createEntry")</a>
+#end ## }
+#end
+#end ## button macro
+
+#**
+  * MyCurriki Blog Article Content
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_blogarticlepagecontent $userdoc $userobj) ## {
+#set($bentrydoc = $doc)
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate,$msg.get('mycurriki.datetimeFormat')))
+#if($cdate!=$creationDate) ## {
+ #set($cdate = $creationDate)
+#end ## }
+#if($context.action == "inline") ## {
+#set($m_user = $context.user.substring(6))
+#if("$doc.web" == "Blog_${m_user}")
+#set($m_bc="bc=MyCurriki.WebHome;MyCurriki.Blog&")
+#else
+#set($m_bc="")
+#end
+$response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_bc}editArticle=${doc.fullName}"))
+#else ## } {
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "") ## {
+#set($title = "&nbsp;")
+#end ## }
+#curriki_titlebar($title "" "" "blue")
+<div class="cd-article">
+#curriki_avatarwithname($xwiki.getDocument($bentrydoc.creator))
+#mycurriki_blogarticle($bentrydoc, $bentryobj, true)
+<a name="comments" ></a>
+<hr class="my-curriki-solid-hr"/>
+#set($comments = $bentrydoc.getComments())
+<strong class="strong">$msg.get("blogArticle.commentsto", [$comments.size(), $bentrydoc.display("title", "view", $bentryobj)])</strong>
+<hr class="my-curriki-solid-hr"/>
+#set($count = 0)
+#set($isFirst = true)
+#foreach($comment in $comments) ## {
+#if(!$isFirst) ## {
+ <hr class="my-curriki-hr"/>
+#end ## }
+<div id="comment${count}" class="blog-comment clearfix">
+<div class="blog-comment-avatar" "style=float:left;">
+#curriki_avatar($xwiki.getDocument($comment.author))
+</div>
+<div class="blog-comment-line-name">
+#set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
+$xwiki.getUserName($comment.author) <span class="blog-comment-date">$commentDate</span>
+#if($comment.author == $context.user || $xwiki.hasAdminRights() || $doc.hasAccessLevel("edit")) ## {
+#sep()
+<a href="?deletecomment=1&date=${doc.getValue('date', $comment)}" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}');">$msg.get('mycurriki.blog.comment.delete')</a> ## Link to delete -- use XWikiComments.author and date to get unique specification
+#end ## }
+</div>
+<br />
+$comment.comment
+</div>
+#set($count = 1 - $count)
+#set($isFirst = false)
+#end ## foreach on comments ## }
+#if($xwiki.hasAccessLevel("comment")) ## {
+<div id="commentscontent" class="xwikiintracontent">
+<div class="right"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("addcomment")">$msg.get("addcomment")</a></div>
+#set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
+#set($comment = $cclass.newObject())
+      <form id="commentAddForm" action="$bentrydoc.getURL("commentadd")" method="post">
+         
+
+        <fieldset class="expanded" id="commentform">
+        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
+        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
+        <div>
+	<button class="button button-confirm" type="submit" id="button-comment-save" onclick="if ($F('XWiki.XWikiComments_comment').length == 0){alert('$msg.get("mycurriki.blog.comment.empty")'); return false;} else {return true;}">$msg.get("caption.saveComment")</button>
+	<button class="button button-cancel" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
+        </div>
+        </fieldset>
+      </form>
+      <script type="text/javascript">
+//<!--
+document.getElementById("commentform").className = "collapsed";
+//-->
+      </script>
+</div>
+#end ## hasAccessLevel comments ## }
+</div>
+#end ##else on $context.action ## }
+#end ## content macro ## }
+
+#**
+  * Displaying a blog article for the my curriki view
+  *
+  * @param $bentrydoc Article document to display the article for
+  * @param $bentryobj Article object to display the article for
+  * @param $displayFully Displaying the full article or only the extract
+  * @author dward@curriki.org
+  *#
+#macro(mycurriki_blogarticle $bentrydoc $bentryobj $displayFully) ## {
+#set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.dateFormat")))
+#set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
+#if($doc.web == "MyCurriki") ## {
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "") ## {
+#set($title = "&nbsp;")
+#end ## }
+1 $title
+#end ## }
+#set($extract = $!bentrydoc.display("extract","view", $bentryobj))
+#if("$!extract" == "") ##{
+#set($extract = "")
+#end ##}
+<div class="article_content" >
+#set($content = $bentrydoc.display("content", "view", $bentryobj))
+#if("$!content" == "") ##{
+#set($content = "")
+#end ##}
+#if(!$displayFully)
+ #if($!extract != "")
+  #set($content = $extract)
+ #else
+  #if($content.length()>400)
+   #set($i = $content.lastIndexOf(" ",400))
+   #set($i = $i + 1)
+   #set($content = "${content.substring(0,$i)}")
+  #end
+ #end
+#end
+<div class="xwikicontent">
+$bentrydoc.getRenderedContent($content).replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+</div>
+#if($bentrydoc.fullName != $doc.fullName || !$displayFully)
+<div class="clearfloats"></div>
+
+<a href="$bentrydoc.getURL("view", "bc=$!request.bc")" class="curriki-link">$msg.get("caption.readmore")</a>#end
+</div>
+<div class="clearfloats"></div>
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 5px; margin-bottom: 5px;">
+$msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator), $creationDay, $creationHour]) #sep() [$bentrydoc.comments.size() $msg.get("caption.comment")(s)>#if($bentrydoc.fullName != $doc.fullName)${bentrydoc.fullName}?bc=$!request.bc#end#comments]
+</div>
+<div class="article_footer" style="border: solid 1px #CDCDCD; padding: 5px; margin-bottom: 5px;">
+#if($context.user != "XWiki.XWikiGuest" && $xwiki.hasAccessLevel("view", "XWiki.XWikiGuest", $bentrydoc.fullName))
+#set($g_enable_STAF = true)
+<a class="curriki-link" href="$bentrydoc.getURL("view")" onclick="stafShow(this.href); return false;">$msg.get("caption.sendToAFriend")</a>
+#else
+## #sep()
+<a class="curriki-link" href="$bentrydoc.getURL("view")" >$msg.get("myBlog.permalink")</a>
+#end
+#sep() {pre}
+#if ($bentrydoc.hasAccessLevel("edit"))
+<a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a>
+#set($deleteMsg = $msg.get('mycurriki.blog.actions.delete.confirm'))
+#set($blogUrl = $xwiki.getURL("MyCurriki.Blog"))
+#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${bentrydoc.fullName}&sourceDoc=${blogUrl}"))
+#sep() <a class="curriki-link" onclick="this.href='$deleteUrl'; return confirm('$deleteMsg');" href="javascript:void()">$msg.get("caption.delete")</a>
+#end
+{/pre}
+</div>
+#end ## }
+##
+#**
+  * Display blog article in create or edit mode
+  *
+  * @param $ismycurriki Are we in My Curriki
+  * @author dward@curriki.org
+  *#
+#macro(blog_editarticle $inmycurriki) ## {
+#if($doc.fullName != "MyCurriki.BlogCreateArticle" && $request.editArticle)
+#set($bentrydoc = $xwiki.getDocument($request.editArticle))
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($junk = $bentrydoc.use($bentryobj))
+#asset_findtitle($bentrydoc)
+#set($title = $msg.get("myBlog.editEntry", [$currikiTitle]))
+#if($inmycurriki == 1) ## {
+#curriki_titlebar($title "" "" "blue")
+#else ## } {
+1 $msg.get("myBlog.editEntry", [$currikiTitle])
+#end ## }
+<div class="edit-blog">
+<form action="$bentrydoc.getURL("save")" id="inline" method="post">
+#else
+#if($inmycurriki == 1) ## {
+#curriki_titlebar($msg.get("myBlog.createEntry") "" "" "blue")
+#end ## }
+<div class="edit-blog">
+#set($space = "Blog_${context.user.substring(6)}")
+#if($request.space)
+ #set($space = $request.space)
+#end
+#set($bentrydoc = $xwiki.getDocument("Temp", $xwiki.getUniquePageName("Temp","Article")))
+#if("$!request.xwiki2" == "true")
+$bentrydoc.setSyntaxId("xwiki/2.0")
+#end
+#set($ok = $bentrydoc.save())
+#set($bentryobj = $bentrydoc.newObject("XWiki.ArticleClass"))
+#set($junk = $bentrydoc.use($bentryobj))
+#if($inmycurriki == 0) ## {
+1 $msg.get("myBlog.createEntry")
+#end ## }
+<form action="" id="inline" method="post">
+<input type="hidden" name="page" value="$bentrydoc.fullName" />
+<input type="hidden" name="docspace" value="$space" />
+#end
+
+<div class="fields">
+*$msg.get("blogArticle.field.title")*
+<br />
+$bentrydoc.display("title", "edit", $bentryobj)
+
+*$msg.get("blogArticle.field.keywords")*
+<br />
+$bentrydoc.display("keywords", "edit", $bentryobj)
+
+*$msg.get("blogArticle.field.content")*
+<br />
+$bentrydoc.display("content", "edit", $bentryobj)
+
+*$msg.get("blogArticle.field.extract")*
+<br />
+$bentrydoc.display("extract", "edit", $bentryobj)
+</div>
+
+{pre}
+<script language='javascript' type='text/javascript'>
+//<![CDATA[
+Ext.onReady(function(){
+$('XWiki.ArticleClass_0_title').setAttribute('maxlength', '80');
+});
+function checkForm() {
+   var isValid = true;
+   var title = document.forms.inline['XWiki.ArticleClass_0_title'].value;
+   if (title.length <= 1) {
+     alert('$msg.get('blogArticle.field.title.mandatory')');
+     isValid = false;
+   }
+   return isValid;
+}
+//]]>
+</script>
+#set($editors = $context.getEditorWysiwyg())
+#if($editors)
+#if($bentrydoc.syntaxId == "xwiki/1.0")
+#set($tinymce = $xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js"))
+#set($wikieditor = $xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js"))
+#set($footerJScript= "
+<script language='javascript' type='text/javascript' src='${tinymce}'></script>
+<script language='javascript' type='text/javascript' src='${wikieditor}'></script>
+<script language='javascript' type='text/javascript'>
+	wikiEditor.init({
+		elements : '$editors',
+	        language: 'en',
+		mode: 'exact',
+		content_css: '/xwiki/bin/skin/skins/style.css',
+		debug : false,
+		remove_linebreaks : false,
+		plugins: 'table, contextmenu, paste, searchreplace',
+        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
+        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
+        wiki_macro_path : '${bentrydoc.URL}',
+        wiki_use_style: '$xwiki.getWysiwygToolbars()',
+        wiki_plugins: 'core,attachments,macros'
+	});
+</script>
+")
+#elseif($xwiki.wysiwyg.isSyntaxSupported($bentrydoc.syntaxId))
+#wysiwyg_editProperties($bentrydoc $editors false)
+#end
+#end
+<div class="righttext">
+<input class="button button-confirm" type="submit" name="formactionsave" value="$msg.get("save")" onclick="if(checkForm() == false) return false; document.forms.inline.submit(); return false;"/>
+<input class="button button-cancel" type="submit" name="formactioncancel" value="$msg.get("cancel")" onclick="history.go(-1); return false;"/>
+</div>
+</form>
+{/pre}
+</div>
+#end ## }
+
+#**
+  * Performs article saving
+  *
+  *#
+#macro(blog_savearticle)
+#set($space = "Blog_${context.user.substring(6)}")
+#if($request.space)
+ #set($space = $request.space)
+#end
+#set($mytitle = $request.get("XWiki.ArticleClass_0_title"))
+#if($mytitle.length()>100) ##{
+#set($mytitle = "${mytitle.substring(0,100)}")
+#end ##}
+#set($pagename= $xwiki.getUniquePageName($space, $xwiki.clearName($mytitle)))
+#set($pagefullname = "$space.${pagename}")
+#set($tdoc = $xwiki.getDocument($request.page))
+#set($ok = $xwiki.renamePage($tdoc, $pagefullname))
+#set($newdoc = $xwiki.getDocument($pagefullname))
+#set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
+##set($ok = $newdoc.addObjectFromRequest("XWiki.TagClass"))
+#if($newdoc.syntaxId == "xwiki/2.0")
+$newdoc.setContent('{{velocity}}{{html}}#includeForm("XWiki.ArticleClassTemplate"){{/html}}{{/velocity}}')
+#else
+$newdoc.setContent($xwiki.getDocument("XWiki.ArticleClassTemplate").getContent())
+#end
+$newdoc.setParent("${space}.WebHome")
+$newdoc.save()
+$newdoc.use("XWiki.ArticleClass")
+#if($ok)
+ #set($url = $newdoc.getURL("view"))
+ #if("true" == $request.doContinue)
+  #set($url = $newdoc.getURL("inline"))
+ #end
+ $response.sendRedirect($url)
+#end
+The article [$mytitle>$pagefullname] has been published successfully.
+#end
+
+#**
+  * Performs redirect to real blog home page
+  *
+  *#
+#macro(blog_redirect)
+#if($doc.web == "Members") ## {
+$response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
+#else ## } {
+#set($user = $context.user)
+#if($user.startsWith("XWiki.")) ## {
+#set($user = $user.substring(6))
+#end ## }
+#if($doc.web.startsWith("Blog_")) ## {
+#set($shortname = $doc.web.substring(5))
+#else ## } {
+#set($shortname = $user)
+#end ## }
+#if($user == $shortname) ## {
+$response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
+#else ## } {
+#set($userarg = "user=${shortname}")
+$response.sendRedirect($xwiki.getURL('MyCurriki.Blog', 'view', "$userarg"))
+#end ## }
+#end ## }
+#end
+
+#**
+  * Creates a blog
+  *
+  *#
+#macro(blog_createblog)
+#if (!$isguest)
+ #set($user = "${xwiki.getDocument($context.user).name}")
+ #set($space = "Blog_${user}")
+ #set($blogmain = "${space}.WebHome")
+ #if($xwiki.exists($blogmain))
+$response.sendRedirect($xwiki.getURL($blogmain))
+ #else
+#set($showdata=0)
+#set($newspace = $xwiki.parseGroovyFromPage("MyCurriki.BlogGroovy"))
+$newspace.setObjects($xwiki, $context)
+$newspace.createSpace($space, $context.user)
+$response.sendRedirect($xwiki.getURL("MyCurriki.BlogCreateArticle",  "view", "space=${space}&xredirect=$xwiki.requestURL"))
+ #end
+#else
+$msg.get("myBlog.onlyMemberCanCreate")
+#end
+#end
+
+
+
+#**
+  * Removes a blog comment
+  *
+  *#
+#macro(blog_deletecomment)
+#if("$!request.date" != "") ## {
+#set($comments = $doc.getComments())
+#set($findDate = $request.date.replace("%20", " "))
+#foreach($comment in $comments) ## {
+#if("$findDate" == "${doc.getValue('date', $comment)}" && ($comment.author == $context.user || $xwiki.hasAdminRights() || $doc.hasAccessLevel("edit"))) ## {
+#set($junk = $doc.removeObject($comment))
+#set($junk = $doc.saveWithProgrammingRights())
+#end ## }
+#end ## }
+#end ## }
+$response.sendRedirect($xwiki.getURL($doc.fullName))
+#end
+

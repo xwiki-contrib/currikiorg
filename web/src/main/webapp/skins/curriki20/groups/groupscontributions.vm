@@ -1,0 +1,421 @@
+#**
+  * Groups Contributions Macros
+  *
+  *#                m
+
+
+#**
+  * Displays the list of contributions
+  *
+  *#
+#macro(groups_contributions)
+#set($headerArgs="")
+#set($allcols=true)
+#groupsinit()
+#groupsheader("curriculum")
+<div id="groups-main-header">
+#if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
+{pre}
+<a class="button button-confirm" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
+{/pre}
+#end ##}
+<div id="groups-main-header-title" class="main-title">
+$s.getDisplayTitle() $msg.get("groups.curriculum.contributions.title")<br />
+</div>
+<div id="groups-main-header-subtitle" class="tab-deck">
+$msg.get("groups.curriculum.contributions.about")
+</div>
+</div>
+<div id="groups-main-content" class="frame">
+## Do query for contributions
+#if("$!request.sortBy"=="") ## {
+#set($sortBy = "date")
+#set($sortDir = 'desc')
+#elseif($request.sortBy=="date") ## } {
+#set($sortBy = "date")
+#set($sortDir = 'desc')
+#elseif($request.sortBy=="title") ## } {
+#set($sortBy = "title")
+#set($sortDir = 'asc')
+#elseif($request.sortBy=="access" && $allcols) ## } {
+#set($sortBy = "access")
+#set($sortDir = 'asc')
+#else ## } {
+#set($sortBy = "date")
+#set($sortDir = 'desc')
+#end ## }
+##
+#if("$!request.sortDir"=="") ## {
+#elseif($request.sortDir=="asc") ## } {
+#set($sortDir = 'asc')
+#elseif($request.sortDir=="desc") ## } {
+#set($sortDir = 'desc')
+#end ## }
+##
+#set($sortArgs = "")
+#if($sortBy == "date") ## {
+#if($sortDir == "asc") ## {
+#set($sortArgs = "sortDir=asc")
+#end ## }
+#elseif ($sortBy == "title") ## } {
+#set($sortArgs = "sortBy=title")
+#if($sortDir == "desc") ## {
+#set($sortArgs = "${sortArgs}&sortDir=desc")
+#end ## }
+#elseif ($sortBy == "access") ## } {
+#set($sortArgs = "sortBy=access")
+#if($sortDir == "desc") ## {
+#set($sortArgs = "${sortArgs}&sortDir=desc")
+#end ## }
+#end ## }
+##
+## Order by reverse last updated
+#if($sortBy=="title") ## {
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' order by doc.title $sortDir")
+#elseif($sortBy=="access") ## Default sort by rights ## } {
+#set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and obj.id=prop1.id.id and prop1.id.name='rights' order by prop1.value $sortDir, doc.title asc")
+#else ## Default sort by date ## } {
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and doc.name != 'WebHome' and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' order by doc.date $sortDir")
+#end ## }
+## Order by property ascending
+## How can we sort by
+## filetype (determined in a macro)
+## instructional_component (if not exists how do we act as blank)
+##doesnt work #set($sql = ", BaseObject as obj left outer join StringProperty as prop1 on obj.id=prop1.id.id and prop1.id.name='instructional_component' where doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' and doc.web='Coll_${spaceName}' order by prop1.value $sortDir")
+##
+##
+#set($assetList = $xwiki.searchDocuments($sql))
+#set($nbToDisplay = 20)
+#set($startIndex = 0)
+#set($Integer = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex > ($assetList.size() - 1))
+ #set($startIndex = $assetList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex > ($assetList.size() - 1))
+ #set($endIndex = $assetList.size() - 1)
+#end
+## Display contributions in table using pagination
+<table id="mycurriki-contributions-table" class="table table-contributions">
+<tr>
+#if($sortBy=="title" && $sortDir == "asc") ## {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title&sortDir=desc"))
+#else ## } {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title"))
+#end ## }
+<th class="table-header#if($sortBy=="title") table-header-sorted#end table-col-title"><a href="$url">$msg.get('mycurriki.contributions.table.title')</a></th>
+<th class="table-header table-header-fixed table-col-ict">$msg.get('mycurriki.contributions.table.ict')</th>
+#if($sortBy=="date" && $sortDir == "desc") ## {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortDir=asc"))
+#else ## } {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}"))
+#end ## }
+<th class="table-header#if($sortBy=="date") table-header-sorted#end table-col-lastupdated"><a href="$url">$msg.get('mycurriki.contributions.table.lastupdated')</a></th>
+#if($allcols)
+#if($sortBy=="access" && $sortDir == "asc") ## {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=access&sortDir=desc"))
+#else ## } {
+#set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=access"))
+#end ## }
+<th class="table-header#if($sortBy=="access") table-header-sorted#end table-col-access"><a href="$url">$msg.get('mycurriki.contributions.table.access')</a></th>
+#end ## if allcols
+<th class="table-header table-header-fixed table-col-filetype">$msg.get('mycurriki.contributions.table.filetype')</th>
+#if($allcols)
+<th class="table-header table-header-fixed table-col-action">$msg.get('mycurriki.contributions.table.action')</th>
+#end ## if allcols
+</tr>
+## row per item -- number of rows configurable
+#set($showcount = 0)
+#set($descnb = 0)
+#foreach($assetPage in $assetList)
+#if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
+#set($asset = $xwiki.getDocument($assetPage))
+#set($type = 0)
+#set($type = $!asset.getValue("type", $asset.getObject("CurrikiCode.TextAssetClass")))
+#if("$!type"!="2")
+#set($showcount = 1 + $showcount)
+#if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
+#groups_contributions_asset($asset $allcols)
+#end ## showcount > startIndex && showcount < endIndex
+#end ## type != 2
+#end  ## if has view access
+#end ## foreach assetPage in list
+#if($showcount == 0)
+<tr><td colspan="6">$msg.get("mycurriki.contributions.noresults")</td></tr>
+#end
+</table>
+## Pagination here
+#curriki_paginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
+</div>
+#groupsfooter()
+#end
+
+
+
+
+#**
+  * title with mouseover description Macro
+  * @param $asset Asset to disply bloc for
+  *#
+#macro(groups_contributions_assettitlewithmodesc $asset) ## {
+#mycurriki_assettitlewithmodesc($asset)
+#end ## macro ## }
+
+
+
+#**
+  * title with mouseover description Macro and breadcrumb for favorites
+  * @param $asset Asset to disply bloc for
+  *#
+#macro(groups_contributions_favassettitlewithmodesc $asset) ## {
+#mycurriki_assettitlewithmodesc($asset)
+#end ## macro ## }
+
+
+#**
+  * show an asset bloc
+  * @param $asset Asset to disply bloc for
+  * @param $allcols show all columns
+  *#
+#macro(groups_contributions_asset $asset $allcols)
+#if(!$g_rowCount) ## {
+#set($g_rowCount = 0)
+#end ## }
+#set($g_rowCount = $g_rowCount + 1)
+<tr class="table-row#if(($g_rowCount % 2) == 0) table-odds#end">
+<td class="table-col-title">#groups_contributions_assettitlewithmodesc($asset)</td>
+<td class="table-col-ict">#mycurriki_ict($asset)</td>
+<td class="table-col-updated">#mycurriki_lastupdate($asset)</td>
+#if($allcols)
+<td class="table-col-access">#mycurriki_access($asset)</td>
+#end ## if allcols
+<td class="table-col-filetype">#mycurriki_filetype($asset)</td>
+#if($allcols)
+<td class="table-col-action">
+<div class="button-links">
+#set($g_actionFirst = true)
+#mycurriki_action_add($asset 'P')
+#mycurriki_action_copy($asset 'Copy')
+#mycurriki_action_buildup($asset 'N')
+#mycurriki_action_editcontent($asset)
+#mycurriki_action_editinfo($asset)
+#mycurriki_action_organize($asset)
+#mycurriki_action_delete($asset)
+</div>
+</td>
+#end ## if allcols
+</tr>
+#end
+
+
+#**
+  * Displays the contributions search
+  *#
+#macro(groups_contributions_search)
+#groupsinit()
+#groupsheader("curriculum")
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.ns('Curriki.userinfo');
+Curriki.userinfo = {
+	isAdmin: #if($hasGlobalAdmin)true#{else}false#end
+};
+/* ]]> */
+</script>
+<!--
+<script type="text/javascript" src="/xwiki/bin/view/Search/SearchJS?xpage=plain"></script>
+-->
+<script type="text/javascript" src="/xwiki/js/curriki-module-search.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+Curriki.module.search.tabList = ['resource'];
+Curriki.module.search.restrictions = 'web:Coll_${spaceName}';
+Curriki.module.search.start();
+/* ]]> */
+</script>
+{/pre}
+<div id="search-div"></div>
+<form id="history-form" class="x-hidden">
+    <input type="hidden" id="x-history-field" />
+    <iframe id="x-history-frame"></iframe>
+</form>
+#groupsfooter()
+#end
+
+
+#**
+  * Show collections
+  * @param $asset Asset to show collections for
+  *#
+#macro(groups_curriculum_collectionactions $asset)
+#set($g_actionFirst = true)
+#mycurriki_action_add($asset 'P')
+#mycurriki_action_buildup($asset 'N')
+#mycurriki_action_editinfo($asset)
+#mycurriki_action_organize($asset)
+#mycurriki_action_delete($asset)
+#end
+
+#macro(groups_curriculum_collectionasset $asset)
+#if(!$g_rowCount) ## {
+#set($g_rowCount = 0)
+#end ## }
+#set($g_rowCount = $g_rowCount + 1)
+<div class="frame-inset#if(($g_rowCount % 2) == 0) table-odds#end">
+<div>
+<div class="button-links">
+#groups_curriculum_collectionactions($asset)
+</div>
+<div class="frame-inset-ict">
+#mycurriki_ict($asset)
+</div>
+<div class="frame-inset-title">
+#mycurriki_assettitlewithmodesc($asset)
+</div>
+</div>
+<div class="frame-inset-description groups-collections-row-description">
+#mycurriki_collectiondescription($asset)
+</div>
+</div>
+#end
+
+#**
+  * Displays the collections list for this group
+  *#
+#macro(groups_curriculum)
+#groupinit()
+#groupsheader("curriculum")
+#groupsdisplaywelcomecolour($msg.get("groups.curriculum.about.title") $spaceName $doc.name "red" $isGroupAdmin)
+<div id="groups-search" class="frame">
+#curriki_titlebar($msg.get("groups.curriculum.contributions.title") "" "" "red")
+<div class="frame-content">
+$msg.get("groups.curriculum.contributions.about")
+<div>
+{pre}
+<form id="groupsearch"
+      onsubmit="document.groupsearch.method='post'; if (document.groupsearch.brsqry.value!='$msg.get("groups.curriculum.search.default")') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
+      action="/xwiki/bin/view/${spaceName}/ContributionsSearch"
+      name="groupsearch">
+{/pre}
+<div class="groupcontribution-leftbutton">
+<a class="button button-confirm" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
+$msg.get('groups.curriculum.contributions.viewORsearch')
+</div>
+##
+<div id="curriki-search-field-container">
+    <div class="curriki-search-a" id="curriki-search-field">
+     <input type="hidden" value="" name="area" class="hidden"/>
+     <input type="text" id="curriki-searchbox" name="brsqry"
+            value="$msg.get("groups.curriculum.search.default")"
+            onfocus="if (this.value=='$msg.get("groups.curriculum.search.default")') this.value=''; else this.select()"
+            onblur="if (this.value=='') this.value='$msg.get("groups.curriculum.search.default")'"
+/>
+     <button name="btn" type="submit" id="searchbtn">$msg.get("groups.curriculum.contributions.go")</button>
+    </div> </div>
+</form>
+</div>
+</div>
+</div>
+##
+<div id="groups-collections" class="frame">
+{pre}
+<script type="text/javascript">
+var $hidden = false;
+function toggle_desc(){
+  var $action;
+  var $titl;
+  if ($hidden){
+    $hidden = false;
+    $action = 'show';
+    $titl = "$msg.get('groups.curriculum.collections.titlebarbutton')";
+  } else {
+    $hidden = true;
+    $action = 'hide';
+    $titl = "$msg.get('groups.curriculum.collections.titlebarbuttonalt')";
+  }
+  $$('.groups-collections-row-description').invoke($action);
+  $('hider-link').title=$titl;
+  $('hider-link').innerHTML=$titl+"  &raquo;";
+  return false;
+}
+</script>
+{/pre}
+
+#if($sm.isMember($spaceName, $context.user) || $hasGlobalAdmin) ##{
+#set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
+#set($multiple = ($cnt > 1))
+#if($multiple) ##{
+#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
+#set($reordered = ($reorder > 0))
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+Curriki.data.reorder = {
+	place:'groups'
+	,which:'${spaceName}'
+	,reordered:${reordered}
+};
+/* ]]> */
+</script>
+<script type="text/javascript" src="/xwiki/js/curriki-module-reorder.js"></script>
+{/pre}
+#end ##}
+#end ##}
+
+#curriki_fulltitlebar($msg.get("groups.curriculum.collections.titlebar") $msg.get("groups.curriculum.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
+<div class="frame-content">
+<div id="groups-collections-instructional">
+## TODO: We need to know who can add to the collection here
+#if($context.action == "view")
+#if($sm.isMember($spaceName, $context.user))
+{pre}
+<a class="button button-confirm" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")">$msg.get("groups.curriculum.collections.addButton")</a>
+{/pre}
+#end
+#end
+<div id="groups-collections-instructional-text">
+$msg.get("groups.curriculum.collections.about")
+</div>
+</div>
+## Do query for contributions
+## TODO: Define groupname
+#set($groupname = 'test')
+#set($assetList = $xwiki.getPlugin("curriki").fetchCollectionsList($spaceName))
+#set($nbToDisplay = 20)
+#set($startIndex = 0)
+#set($Integer = 0)
+#if($request.startIndex)
+ #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+#end
+#if($startIndex > ($assetList.size() - 1))
+ #set($startIndex = $assetList.size() - 1)
+#end
+#set($endIndex = $startIndex - 1 + $nbToDisplay)
+#if($endIndex > ($assetList.size() - 1))
+ #set($endIndex = $assetList.size() - 1)
+#end
+##
+## row per item -- number of rows configurable
+#set($showcount = 0)
+#foreach($assetPage in $assetList)
+#if($xwiki.hasAccessLevel("view", $context.user, $assetPage))
+#set($showcount = 1 + $showcount)
+#if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
+#set($asset = $xwiki.getDocument($assetPage))
+#groups_curriculum_collectionasset($asset)
+#end ## showcount > startIndex && showcount < endIndex
+#end  ## if has view access
+#end ## foreach assetPage in list
+#if($showcount == 0)
+<div class="centertext">$msg.get("groups.curriculum.collections.noresults")</div>
+#end ## showcount
+#curriki_paginator($msg.get("groups.curriculum.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
+</div>
+</div>
+#groupsfooter()
+#end
+

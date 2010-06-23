@@ -1,0 +1,149 @@
+#asset_displaycontentheader("")
+<div class="asset-display-edit">
+    <div class="asset-display-edit-inner">
+        <form name="archive" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" enctype="multipart/form-data">
+            #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
+            <input  type="hidden" name="page" value="$asset.fullName" />
+            <input  type="hidden" name="xredirect" value="$xredirect" />
+            <fieldset>
+                <ul>
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
+                    ## if archive is not zip to not display the tree
+                    #if($asset.attachmentList.size()>0)
+                     #set($attach = $asset.attachmentList.get(0).filename)
+                    #else
+                     #set($attach = "")
+                    #end
+                    #set($treelist = $xwiki.curriki.getFileTreeList($asset, $attach))
+                    #if($treelist && $treelist.size()>0)
+                    <li class="input-text">
+                        #set($currentstartfile = $asset.getValue("startfile"))
+                        <span>
+                            <input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('startfile').style.display='block'} else {document.getElementById('startfile').style.display='none'}"/>
+                            <label for="startfile"">$msg.get("rve.content.edit.set_start.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.set_start.instruction_tooltip")"/></span>
+                        <div  id="startfile" style="display: none">
+                            #set($tmpActiveClass = $asset.getActiveClass())
+                            $asset.use("CurrikiCode.ArchiveAssetClass")
+                            $asset.display("startfile", "hidden", true)
+                            #if(!$treeviewid)
+                            #set($treeviewid = 1)
+                            #else
+                            #set($treeviewid = 1 + $treeviewid)
+                            #end
+                            <style type="text/css">
+                                @import "$xwiki.getSkinFile("js/yui/treeview/assets/tree.css")";
+
+                                .archive-startfile-checked {
+                                    text-color: red;
+                                    border: 1px solid red;                                   
+                                }
+                            </style>
+                            <script type="text/javascript" src="$xwiki.getSkinFile("js/yui/yahoo/yahoo-min.js")" ></script>
+                            <script type="text/javascript" src="$xwiki.getSkinFile("js/yui/treeview/treeview-min.js")" ></script>
+                            <script type="text/javascript" src="$xwiki.getSkinFile("js/yui/treeview/checknode.js")"></script>
+                            <div style="margin: 5px 0pt;">
+                                <div id="treeview${treeviewid}">
+                                </div>
+                                <script type="text/javascript">
+                                    function showTree(treeId, button) {
+                                        var treediv = document.getElementById("treeview" + treeId);
+                                        treediv.style.display = 'block';
+                                        button.onclick=function(){ hideTree(treeId, button);};
+                                        button.title="$msg.get('rve.content.view.hide_button')";
+                                        button.innerHTML="$msg.get('rve.content.view.hide_button')";
+                                        button.className="button button-confirm";
+                                    }
+
+                                    function hideTree(treeId, button){
+                                        var treediv = document.getElementById("treeview" + treeId);
+                                        treediv.style.display = 'none';
+                                        button.onclick=function(){ showTree(treeId, button);};
+                                        button.title="$msg.get('rve.content.view.show_button')";
+                                        button.innerHTML="$msg.get('rve.content.view.show_button')";
+                                        button.className="button button-confirm";
+                                    }
+
+                                    var tree${treeviewid};
+                                    var nodes${treeviewid} = {};
+                                    var nodeIndex${treeviewid};
+                                    var baseUrl${treeviewid} = "";
+                                    var currentStartFile = document.forms.archive["CurrikiCode.ArchiveAssetClass_0_startfile"].value;
+
+                                    function addTreeElement${treeviewid}(id, text, parent) {
+                                        var parent2;
+                                        if (parent=="")
+                                            parent2 = tree${treeviewid}.getRoot();
+                                        else
+                                            parent2 = nodes${treeviewid}[parent];
+                                        nodes${treeviewid}[id] = new YAHOO.widget.TextNode(text, parent2, currentStartFile.startsWith(id))
+                                        if (id==currentStartFile) {
+                                             nodes${treeviewid}[id].labelStyle = "ygtvlabel archive-startfile-checked";
+                                        };
+                                        if (!id.endsWith("/"))
+                                             nodes${treeviewid}[id].onLabelClick = onLabelClick${treeviewid};
+                                        else
+                                             nodes${treeviewid}[id].labelStyle = "ygtvlabel archive-folder";
+
+                                        nodes${treeviewid}[id].labelElId = id;
+                                    }
+
+                                    var callback = null;
+
+                                    function onLabelClick${treeviewid}(node) {
+                                        var path = node.labelElId;
+                                        var labelEl = node.getLabelEl();
+                                        if (labelEl)
+                                           labelEl.className = this.labelStyle + " archive-startfile-checked";
+                                        document.forms.archive["CurrikiCode.ArchiveAssetClass_0_startfile"].value = '/' + path;
+                                        for (var i in tree${treeviewid}._nodes) {
+                                          var nodeel = tree${treeviewid}._nodes[i];
+                                          if (nodeel.labelElId!=path) {
+                                              var el = document.getElementById(nodeel.labelElId);
+                                              if (el) el.className = "ygtvlabel";
+                                          }
+                                        }
+                                        return false;
+                                    }
+
+                                   function treeInit${treeviewid}() {
+                                        tree${treeviewid} = new YAHOO.widget.TreeView("treeview${treeviewid}");
+                                        //var tree = tree${treeviewid};
+                                        //var nodes = nodes${treeviewid};
+                                        baseUrl${treeviewid} = "$asset.getAttachmentURL("$attach")";
+                                    #foreach($item in $treelist)
+                                    #set($checked = $selectlist.contains($item.getId()))
+                                    #if ($item.value.length() > 80)
+                                    #set($title_item = $item.value.substring(0, 80))
+                                    #else
+                                    #set($title_item = $item.value)
+                                    #end
+                                    #set($title_item = $title_item.replaceAll("[\r\n]"," "))
+                                        addTreeElement${treeviewid}("$item.id", "$title_item", "$item.parent");
+                                    #end
+                                        tree${treeviewid}.draw();
+                                    }
+
+                                    // Init the tree
+                                    treeInit${treeviewid}();
+                                </script>
+                            </div>
+                            #if($tmpActiveClass)
+                            $asset.use($tmpActiveClass)
+                            #end
+                        </div>
+                    </li>
+                    #end ## end show tree
+
+                    #asset_edit_field($asset "CurrikiCode.ArchiveAssetClass" "type" "archive_type" "select" "" true)
+                    #asset_edit_field($asset "" "file" "replace_file" "file" "<input id='file' name='file' type='file' />" true)
+                    #asset_edit_revision()
+                </ul>
+            </fieldset>
+            <hr>
+            #asset_edit_buttons($asset false)
+        </form>
+        ## this allows to check for changes
+        #curriki_clickawayjs("archive" $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.warning.message_text")))
+    </div>
+</div>
+#asset_displaycontentfooter()

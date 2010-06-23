@@ -1,0 +1,72 @@
+#asset_displaycontentheader("text-align:center;")
+#set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
+#set($video_id = $objVT.id)
+#if($viditalk_counter)
+#set($viditalk_counter = $viditalk_counter + 1)
+#else
+#set($viditalk_counter = 1)
+#end
+#set($vidDiv = "div_vidiplayback_${viditalk_counter}")
+## Set $video_id if not already set
+#if(!$video_id)
+#if(!$request.vid)
+## Just a test code for now
+#set($video_id = "FbLBbkGm5dORWYOQ")
+#else
+#set($video_id = $request.vid)
+#end
+#end
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+        #set($caption = "")
+        #set($caption = $!asset.caption_text)
+        #if($!caption == "")
+        #set($caption = $!asset.description)
+        #end
+        <p>
+            $caption
+        </p>
+        <div style="height:280px; width:320px; margin: 0 auto;" id="$vidDiv">
+            Viditalk Playback Window - Loading components from VIDITalk
+        </div>
+        <script language="javascript" type="text/javascript">
+            // embedVidiPlayback(div_id, sc, mediaId, autoplay, width, height, stretchPlayer, skinLoc, shareUrl, allowFullScreen)
+            embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null, null, null, null, null, null, true);
+        </script>
+    </div>
+</div>
+#set($viditalkURL = "http://flashmedia.viditalk.com/10/active/${video_id}.mpg")
+#set($origVideo = $xwiki.getURLContent("http://components.viditalk.com/dl.asp?id=$video_id"))
+#if(!$origVideo||$origVideo=="") ##{
+	#set($has_origVideo = false)
+	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
+	#set($origVideo = $viditalkURL)
+#else ##}{
+	#set($has_origVideo = true)
+	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_files"))
+	#set($fileext = $origVideo.substring($origVideo.lastIndexOf(".")).substring(1).toLowerCase())
+#end ##}
+<div class="asset-display-download">
+    <div class="asset-display-download-inner subcategory-video_viditalk filetype-mpg">
+	<p><strong>$msgtext</strong>
+	    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip.viditalk")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
+	</p>
+        <a class="icon-link" onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');" href="$viditalkURL">$msg.get("rve.content.view.download.viditalk.download_button")</a>
+	<p class="text-link">
+		<a onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}');" href="$viditalkURL">$msg.get("rve.content.view.download.viditalk.download_button")</a>
+	</p>
+        <button class="button button-confirm" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${video_id}'); window.open('$viditalkURL');return false;" href="${viditalkURL}">$msg.get("rve.content.view.download.download_button")</button>
+    </div>
+
+    #if($has_origVideo) ##{
+    <div class="asset-display-download-inner filetype-${fileext}">
+        <a class="icon-link" onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');" href="$origVideo">$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
+	<p class="text-link">
+		<a onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');" href="$origVideo">$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
+	</p>
+        <button class="button button-confirm" title="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original'); window.open('$origVideo');return false;" href="${origVideo}">$msg.get("rve.content.view.download.download_button")</button>
+    </div>
+    #end ##}
+
+</div>
+#asset_displaycontentfooter()

@@ -1,0 +1,40 @@
+#asset_displaycontentheader("")
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+#if($request.showembed && $request.showembed=="1")
+        #set($fileName = $asset.attachmentList.get(0).filename)
+        #set($url = $asset.getAttachmentURL("$fileName"))
+        #set($url = "http://${request.serverName}${url}?basicauth=1")
+        <OBJECT id='mediaPlayer' width="320" height="285"
+                classid='CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95'
+                codebase='http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701'
+                standby='Loading Microsoft Windows Media Player components...' type='application/x-oleobject'>
+            <param name='fileName' value="$url">
+            <param name='animationatStart' value='true'>
+            <param name='transparentatStart' value='true'>
+            <param name='autoStart' value="true">
+            <param name='showControls' value="true">
+            <param name='loop' value="true">
+            <EMBED type='application/x-mplayer2'
+                   pluginspage='http://microsoft.com/windows/mediaplayer/en/download/'
+                   id='mediaPlayer' name='mediaPlayer' displaysize='4' autosize='-1'
+                   bgcolor='darkblue' showcontrols="true" showtracker='-1'
+                   showdisplay='0' showstatusbar='-1' videoborder3d='-1' width="320" height="285"
+                   src="$url" autostart="true" designtimesp='5311' loop="true">
+            </EMBED>
+        </OBJECT>
+#end
+        #set($caption = "")
+        #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+        #set($caption = $!asset.caption_text)
+        #set($ok = $asset.use("CurrikiCode.AssetClass"))
+        #if($!caption == "")
+        #set($caption = $!asset.description)
+        #end
+        <p>
+            $caption
+        </p>
+    </div>
+</div>
+#asset_attachments($asset)
+#asset_displaycontentfooter()

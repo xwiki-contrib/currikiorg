@@ -1,0 +1,1172 @@
+#**
+  * Macro for groups members and membership tools
+  *
+  *#
+
+
+#**
+  * Group Members
+  *
+  *#
+#macro(groups_members)
+#groupinit()
+#groupsheader("members")
+#if(!$isGroupMember && ($s.policy=="closed") && !$hasGlobalAdmin)
+$msg.get("groups_members_onlyaccessibletomembers")
+#else
+#set($im = $xwiki.invitationmanager)
+#set($spacePolicy = $s.policy)
+#groupsdisplaywelcome($msg.get("groups_members_about_title") $spaceName $doc.name $isGroupAdmin)
+#groupsmembershipinfo($spaceName)
+#if(!$xwiki.exists("${spaceName}.ManageRoles")) ## {
+  #set($discard = $xwiki.copyDocument("Groups_TemplateSpace.ManageRoles", "${spaceName}.ManageRoles"))
+#end ## }
+#begingroupsection($msg.get("groups_members_list_title"),$msg.get("groups_members_manage_roles"), $xwiki.getURL("${spaceName}.ManageRoles", "view"), "blue", $isGroupAdmin)
+#if(!$request.type)
+#set($type = "0")
+#else
+#set($type = $request.type)
+#end
+#if(!$isGroupAdmin)
+<div id="groups-members-list-$type" class="groups-members-list">
+#groupsdisplaymembers($spaceName)
+</div>
+#else
+#groupsdisplaymembersfilters($type)
+<div id="groups-members-list-$type" class="groups-members-list">
+## show members
+#if($type=="0")
+#groupsdisplaymembers($spaceName)
+## show membershiprequests
+#elseif($type=="1")
+#groupsdisplayopenmembershiprequests($spaceName)
+## show denied membershiprequests
+#elseif($type=="2")
+#groupsdisplaydeniedmembershiprequests($spaceName)
+#elseif($type=="3")
+#groupsdisplayinvitations($spaceName)
+#end
+##
+</div>
+#end
+#endgroupsection()
+#end
+#groupsfooter()
+#end
+
+
+##
+##
+## page: Groups.WebHomeSheet and Groups.MembersSheet
+## Groups membership info
+##
+#macro(groupsmembershipinfo $spaceName)
+#begingroupsection($msg.get("groups_home_membership_title"),"","", "blue", false)
+#if($sm.isMember($spaceName,$context.user))
+$msg.get("groups_home_membership_group_infotxt")
+<div id="groups-members-invite-button" class="center groups-members-button mgn-vrt">
+<a href="$xwiki.getURL("${spaceName}.InviteMembers")" class="button button-confirm">
+$msg.get("groups_home_membership_group_btt")
+</a>
+</div>
+#else
+#set($gpolicy = $sm.getSpace($spaceName).policy)
+#if($gpolicy=="open")
+$msg.get("groups_home_membership_open_visitor_infotxt")
+<div class="right mgn-vrt-15">
+<a href="$xwiki.getURL("${spaceName}.JoinGroup")" class="button button-confirm">
+$msg.get("groups_home_membership_open_visitor_btt")
+</a>
+</div>
+#else
+$msg.get("groups_home_membership_closed_visitor_infotxt")
+<div id="groups-members-request-button" class="groups-members-button">
+<a href="$xwiki.getURL("${spaceName}.RequestMembership")" class="button button-confirm">
+$msg.get("groups_home_membership_closed_visitor_btt")
+</a>
+</div>
+#end
+#end
+#endgroupsection()
+#end
+
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the members filters in the members page
+##
+#macro(groupsdisplaymembersfilters $type)
+<div id="groups-members-filter">
+$msg.get("groups_members_admin_list_instruction")
+<form action="">
+<span><input type="radio" name="type" value="0" #if($type=="0") checked #end onclick="this.form.submit()" />
+$msg.get("groups_members_admin_list_togglecurrent")</span>
+#if($spacePolicy=="closed")
+#set($mreqs = $im.getMembershipRequests($spaceName, 2))
+#set($nbmreqs = $!mreqs.size())
+<span><input type="radio" name="type" value="1" #if($type=="1") checked #end onclick="this.form.submit()" />
+$msg.get("groups_members_admin_list_togglepending", [ "$!nbmreqs" ])</span>
+<span><input type="radio" name="type" value="2" #if($type=="2") checked #end onclick="this.form.submit()" />
+$msg.get("groups_members_admin_list_toggledenied")</span>
+#end
+<span><input type="radio" name="type" value="3" #if($type=="3") checked #end onclick="this.form.submit()" />
+$msg.get("groups_members_admin_list_toggleinvitations")</span>
+</form>
+</div>
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the javascript to edit a member profile
+##
+#macro(groupsdisplayeditmemberjs)
+#groupsajaxjs()
+{pre}
+<script type="text/javascript">
+function editProfile(memberName,spaceName,divid) {
+  var pars = "user=" + memberName + "&space=" + spaceName + "&divid=" + divid + "&xpage=plain";
+  $(divid).innerHTML = "<p>${msg.groups_members_editsettings_loadinginprogress}</p>";
+  // call url to get the edit html to edit the profile
+  var myAjax = new Ajax.XWikiRequest( "Groups", "EditSpaceUserProfileService", {method: 'get', parameters: pars, onComplete: editProfileCallback, divid: divid });
+  return false;
+}
+function editProfileCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+ $(divid).parentNode.className = "groups-members-member group-members-edited";
+}
+function cancelEditProfile(memberName,spaceName,divid) {
+  var pars = "user=" + memberName + "&space=" + spaceName + "&divid=" + divid + "&xpage=plain";
+  $(divid).innerHTML = "<p>${msg.groups_members_editsettings_loadinginprogress}</p>";
+  // call url to get the edit html to edit the profile
+  var myAjax = new Ajax.XWikiRequest( "Groups", "ViewSpaceUserProfileService", {method: 'get', parameters: pars, onComplete: cancelEditProfileCallback, divid: divid });
+  return false;
+}
+function cancelEditProfileCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+ $(divid).parentNode.className = "groups-members-member";
+}
+function saveProfileCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).parentNode.className = "groups-members-member";
+}
+function removeAdmin(memberName,spaceName) {
+  var pars = "user=" + memberName + "&space=" + spaceName  + "&code=1&xpage=plain";
+  // call url to remove admin
+  var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
+  return false;
+}
+function addAdmin(memberName,spaceName) {
+  var pars = "user=" + memberName + "&space=" + spaceName  + "&code=2&xpage=plain";
+  // call url to remove admin
+  var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
+  return false;
+}
+function removeMember(memberName,spaceName) {
+  var pars = "user=" + memberName + "&space=" + spaceName  + "&code=3&xpage=plain";
+  // call url to remove admin
+  var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
+  return false;
+}
+</script>
+{/pre}
+#end
+##
+#macro(groupsdisplaymemberinfo $memberName $spaceName $divid) ## {
+#set($mdoc = $xwiki.getDocument($memberName))
+#if(!$mdoc.isNew())
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+#end
+#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+#if($isGroupAdmin||$memberName==$context.user)
+<div class="groups-members-membereditlink">
+<a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("groups_members_admin_current_members_editsettings_link")</a>
+</div>
+#end
+#set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
+#if($isGroupAdmin)
+#set($adminCount = $sm.getAdmins($spaceName).size())
+#if($memberIsAdmin)
+#if($adminCount>1)
+<div class="groups-members-addadmin">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_removeadmin_confirm")')) {removeAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_removeadmin_link")</a>
+</div>
+#end
+#else
+<div class="groups-members-addadmin">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_addadmin_confirm")')) {addAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_addadmin_link")</a>
+</div>
+#end
+#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+<div class="groups-members-remove">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
+</div>
+#end
+#else
+#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+#if($memberName==$context.user)
+<div class="groups-members-remove">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
+</div>
+#end
+#end
+#end
+<div class="groups-members-membername">
+<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+</div>
+<div class="groups-members-memberprofile">
+#set($profile = $uprofile.profile)
+#if($profile)
+$profile
+#end
+</div>
+#end
+##
+#macro(groupsdisplaymemberinfo $memberName $spaceName $divid)
+#set($mdoc = $xwiki.getDocument($memberName))
+#if(!$mdoc.isNew())
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+#end
+#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+#if($isGroupAdmin||$memberName==$context.user)
+<div class="groups-members-membereditlink">
+<a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("groups_members_admin_current_members_editsettings_link")</a>
+</div>
+#end
+#set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
+#if($isGroupAdmin)
+#set($adminCount = $sm.getAdmins($spaceName).size())
+#if($memberIsAdmin)
+#if($adminCount>1)
+<div class="groups-members-addadmin">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_removeadmin_confirm")')) {removeAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_removeadmin_link")</a>
+</div>
+#end
+#else
+<div class="groups-members-addadmin">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_addadmin_confirm")')) {addAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_addadmin_link")</a>
+</div>
+#end
+#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+<div class="groups-members-remove">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
+</div>
+#end
+#else
+#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+#if($memberName==$context.user)
+<div class="groups-members-remove">
+<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
+</div>
+#end
+#end
+#end
+<div class="groups-members-membername">
+<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+#if($memberIsAdmin) ## {
+  ($msg.get('groups.roles.admin.title'))
+#else ## } {
+  #set($memberRoles = $sm.getRoles($spaceName, $memberName))
+  #if($memberRoles.size() > 0) ## {
+    #set($firstRole = $xwiki.getDocument($memberRoles.get(0)))
+    ($firstRole.title)
+  #end ## }
+#end ## }
+</div>
+<div class="groups-members-memberprofile">
+#set($profile = $uprofile.profile)
+#if($profile)
+$profile
+#end
+</div>
+#end ## }
+##
+#macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid)
+#set($mdoc = $xwiki.getDocument($memberName))
+#if(!$mdoc.isNew())
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+#end
+#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+<div class="groups-members-membername">
+<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+</div>
+<form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;">
+<div class="groups-members-member-buttons">
+<input type="button"  class="button button-cancel" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button button-confirm" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+</div>
+<input type="hidden" name="user" value="$!memberName" />
+<input type="hidden" name="space" value="$!spaceName" />
+<input type="hidden" name="divid" value="$!divid" />
+<input type="hidden" name="xpage" value="plain" />
+$uprofile.display("profile","edit")
+#if($sm.getRoles($spaceName).size() > 0) ## {
+<div class="select-roles">$msg.get("groups.members.selectroles")</div>
+<div class="instruction">$msg.get("groups.members.selectroles.info")</div>
+<select name="roles" multiple size=4>
+#groupRoleSelector($spaceName false false $memberName)
+</select>
+#foreach($role in $ret_hasRoles) ## {
+<input type="hidden" name="hasrole" value="${role}" />
+#end ## }
+<br />
+#end ## }
+$uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
+<br />
+$uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
+</form>
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display a member block in the members list
+##
+#macro(groupsdisplaymember $memberName $spaceName $divid)
+#set($mdoc = $xwiki.getDocument($memberName))
+#if(!$mdoc.isNew())
+<div class="groups-members-member">
+<div id="groups-members-memberinfo-$divid" class="groups-members-memberinfo">
+#groupsdisplaymemberinfo("$memberName" "$spaceName" "groups-members-memberinfo-$divid")
+</div>
+#else
+$msg.get("groups_members_admin_current_membersettings_error")
+#end
+</div>
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display a single invitation in the invitation list
+##
+#macro(groupsdisplayinvitation $invitation)
+#groupsajaxjs()
+<div class="groups-members-invitee">
+#set($memberName = $invitation.invitee)
+#set($mdoc = $xwiki.getDocument($memberName))
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+<div class="groups-members-inviteeinfo">
+<div class="groups-members-inviteename">
+#if($mdoc.isNew())
+$memberName
+#else
+$xwiki.getLocalUserName($memberName)
+#end
+</div>
+<div class="groups-members-inviter">
+#set($invitationDate = $xwiki.formatDate($invitation.requestDate,$msg.get("mycurriki.datetimeFormat")))
+$msg.get("groups.members.invitedby") $xwiki.getLocalUserName($invitation.inviter) $msg.get("groups.members.on") $invitationDate
+</div>
+##<div class="groups-members-inviteestatus">
+##$msg.get("groups.members.invitestatus") $msg.get("groups.members.invitestatus.${invitation.status}")
+##</div>
+<div>
+<script type="text/javascript">
+function cancelInvitation(invitee, spaceName){
+	if (!window.confirm('$msg.get("groups_members_admin_invitations_cancel_confirm")')){
+		return;
+	}
+	var pars = "user=" + invitee + "&space=" + spaceName  + "&code=4&xpage=plain";
+  // call url to cancel invitation
+  var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
+  return false;
+}
+</script>
+<a href="javascript:void()" onclick="cancelInvitation('$invitation.invitee', '$invitation.space'); return false;">$msg.get("groups_members_admin_invitations_cancel_link")</a>
+</div>
+</div>
+</div>
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the members lists
+##
+#macro(groupsdisplaymembers $spaceName)
+<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#groupsdisplayeditmemberjs()
+#set($members = $sm.getMembers($spaceName))
+## pagination parameters
+#set($itemsPerPage=10)
+#if($request.ipp)
+#set($itemsPerPage=$xwiki.parseInt($request.ipp))
+#end
+#set($startIndex=0)
+#if($request.startIndex)
+#set($startIndex=$xwiki.parseInt($request.startIndex))
+#end
+#set($totalCount=$members.size())
+## end pagination parameters
+#if($members.size()==0)
+$msg.get("groups_members_admin_current_members_nomembers")
+#else
+$msg.get("groups_members_admin_current_members_infotxt")
+#set($endIndex = $startIndex + $itemsPerPage - 1)
+#if($endIndex >= $totalCount)
+#set($endIndex = $totalCount - 1)
+#end
+#foreach($mid in [$startIndex..$endIndex])
+#groupsdisplaymember($members.get($mid) $spaceName $mid)
+#end ## foreach
+#end ## if
+#curriki_paginatorargs($msg.get("groups_members_page"),$startIndex,$itemsPerPage,$totalCount,"type=0")
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the open membership requests
+##
+#macro(groupsdisplayopenmembershiprequests $spaceName)
+#groupsmembershiprequestsjs()
+#set($gdsrid = 0)
+#if(!$mreqs)
+#set($mreqs = $im.getMembershipRequests($spaceName, 2))
+#end
+#if($mreqs.size()==0)
+$msg.get("groups_members_admin_pending_nomembershiprequests")
+#else
+$msg.get("groups_members_admin_pending_infotxt")
+#foreach($mreq in $mreqs)
+#set($gdsrid = $gdsrid + 1)
+#groupsdisplaymembershiprequest($mreq $gdsrid)
+#end ## foreach
+#end ## if
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the denied membership requests
+##
+#macro(groupsdisplaydeniedmembershiprequests $spaceName)
+#groupsmembershiprequestsjs()
+#set($gdsrid = 0)
+#set($mreqs = $im.getMembershipRequests($spaceName, 4))
+#if($mreqs.size()==0)
+$msg.get("groups_members_admin_denied_nodeniedmembershiprequests")
+#else
+$msg.get("groups_members_admin_denied_infotxt")
+#foreach($mreq in $mreqs)
+#set($gdsrid = $gdsrid + 1)
+#groupsdisplaymembershiprequest($mreq $gdsrid)
+#end ## foreach
+#end ## if
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the open invitations
+##
+#macro(groupsdisplayinvitations $spaceName)
+## show invitations
+#set($minvites = $im.getInvitations($spaceName, 2))
+#if($minvites.size()==0)
+$msg.get("groups_members_admin_invitations_infotxt_noinvitations")
+#else
+$msg.get("groups_members_admin_invitations_infotxt")
+#foreach($minvite in $minvites)
+#groupsdisplayinvitation($minvite)
+#end ## foreach
+#end ## if
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the javascript for
+## accepting and rejecting membership requests
+##
+#macro(groupsajaxjs)
+{pre}
+<script type="text/javascript">
+Ajax.XWikiRequest = Class.create(Ajax.Request, {
+    initialize: function($super, space, docName, options, action) {
+    this.transport = Ajax.getTransport();
+    if (action)
+      this.action = action;
+    else
+      this.action = "view";
+    this.baseUrl = "/xwiki/bin/" + this.action;
+
+    options = Object.clone(options);
+    var onComplete = options.onComplete || Prototype.emptyFunction;
+    options.onComplete = (function() {
+       this.returnValue(onComplete);
+       //onComplete(this.transport);
+    }).bind(this);
+
+    $super(this.generateUrl(space, docName), options);
+  },
+    generateUrl: function(space, docName){
+        return this.baseUrl + "/" + space + "/" + docName;
+  },
+  returnValue: function(callBack) {
+    if (callBack)
+        callBack(this);
+    else
+        alert("error, callback");
+  }
+});
+function refreshPage(ajaxreq) {
+  alert(ajaxreq.transport.responseText);
+  window.location.href = window.location.href;
+}
+</script>
+{/pre}
+#end
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display a membership request
+##
+#macro(groupsdisplaymembershiprequest $msreq $gdsrid)
+#set($divid = "groups-members-request-$gdsrid")
+<div id="$divid" class="groups-members-request">
+#set($memberName = $msreq.requester)
+#set($mdoc = $xwiki.getDocument($memberName))
+<div class="groups-members-memberpic userpic">
+#if($mdoc.attachmentList.size()==0)
+ <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+#else
+ #foreach ($attach in $mdoc.attachmentList)
+  <a href="$mdoc.getURL("view")" >
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+ #end
+#end
+</div>
+<div class="groups-members-request-name">
+#if($mdoc.isNew())
+$memberName
+#else
+$xwiki.getLocalUserName($memberName)
+#end
+</div>
+#set($divid = "groups-members-request-info-$gdsrid")
+<div id="${divid}" class="groups-members-request-info">
+<div class="groups-members-request-links">
+## if group admin
+{pre}
+#set($memberDisplayName = $xwiki.getLocalUserName($memberName, false))
+<a href="javascript:void()" onclick="acceptRequest('$divid', '$memberName', '$xwiki.curriki.escapeForJS($memberDisplayName)'); return false;">$msg.get("groups_members_admin_pending_accept_link")</a>
+#if($msreq.status!=4)
+|
+<a href="javascript:void()" onclick="rejectRequest('$divid', '$memberName', '$xwiki.curriki.escapeForJS($memberDisplayName)'); return false;">$msg.get("groups_members_admin_pending_deny_link")</a>
+#end
+{/pre}
+## end
+</div>
+<div class="groups-members-request-date">
+#set($requestDate = $xwiki.formatDate($msreq.requestDate,$msg.get("mycurriki.datetimeFormat")))
+$msg.get("groups_members_admin_pending_requested") $requestDate ## $msg.get("groups_members_admin_pending_forrole")
+</div>
+##<div class="groups-members-request-status">
+##$msg.get("groups_members_admin_pending_status") $msg.get("groups_members_request_status_${msreq.status}")
+##</div>
+<div class="groups-members-request-message">
+<div class="groups-members-request-message-label">
+$msg.get("groups_members_admin_pending_reasons")
+</div>
+<div class="groups-members-request-message-content">
+{pre}
+$msreq.text
+{/pre}
+</div>
+</div>
+</div>
+</div>
+#end
+##
+## PAGE: Groups.MembersSheet
+## Macro to display the javascript for
+## accepting and rejecting membership requests
+##
+#macro(groupsmembershiprequestsjs)
+#groupsajaxjs()
+{pre}
+<script type="text/javascript">
+
+function acceptRequest(divid, memberName, displayName) {
+      $(divid).oldInnerHTML = $(divid).innerHTML;
+      $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box \"><form><p>${msg.groups_members_accept_confirm}</p><br />"
+                                                 + "<div class=\"button-right\"><input type=\"button\" class=\"button button-cancel\" value=\"${msg.groups_members_cancel_btt}\""
+                                                 + " onclick=\"acceptRequestCancel('" + divid + "','" + memberName + "');\" />"
+                                                + "<input type=\"button\" class=\"button button-confirm\" value=\"${msg.groups_members_accept_confirm_btt}\""
+                                                + " onclick=\"acceptRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
+                                                + "</form></div>";
+      $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
+}
+function acceptRequestCancel(divid, memberName) {
+      $(divid).innerHTML = $(divid).oldInnerHTML;
+      $(divid).parentNode.className = "groups-members-request";
+}
+function acceptRequestConfirm(divid, memberName) {
+      var pars = "user=" + memberName + "&space=${spaceName}&xpage=plain";
+      $(divid).innerHTML = "<p>${msg.groups_members_accept_inprogress}</p>";
+      // call url to accept the request.. check the return is "SUCCESS" other wise show output
+      var myAjax = new Ajax.XWikiRequest( "Groups", "AcceptMembershipRequestService", {method: 'get', parameters: pars, onComplete: acceptRequestCallback, divid: divid });
+}
+function acceptRequestCallback(ajaxreq) {
+    // hide div to show success full acceptance for user
+    var result = ajaxreq.transport.responseText;
+    // alert(result);
+    var divid = ajaxreq.options.divid;
+    if (result.strip()=="SUCCESS")
+     $(divid).innerHTML = "<p>${msg.groups_members_accept_done}</p>";
+    else
+     $(divid).innerHTML = "<p>${msg.groups_members_accept_failed}</p>" + "<p>" + result + "</p>";
+     $(divid).parentNode.className = "groups-members-request";
+}
+function rejectRequest(divid, memberName) {
+      $(divid).oldInnerHTML = $(divid).innerHTML;
+      $(divid).innerHTML = "<div class=\"groups-members-request-confirm-box\"><form><p>${msg.groups_members_reject_confirm}</p><textarea id=\"" + divid + "-reason\" cols=\"60\" rows=\"7\"></textarea><br />"
+                                                + "<div class=\"button-right\"><input type=\"button\" class=\"button button-cancel\" value=\"${msg.groups_members_cancel_btt}\""
+                                                + " onclick=\"rejectRequestCancel('" + divid + "','" + memberName + "');\" />"
+                                                + "<input type=\"button\" class=\"button button-confirm\" value=\"${msg.groups_members_reject_confirm_btt}\""
+                                                + " onclick=\"rejectRequestConfirm('" + divid + "','" + memberName + "');\" /></div>"
+                                                + "</form></div>";
+      $(divid).parentNode.className = "groups-members-request group-members-request-confirm";
+}
+function rejectRequestCancel(divid, memberName, displayName) {
+      $(divid).innerHTML = $(divid).oldInnerHTML;
+      $(divid).parentNode.className = "groups-members-request";
+}
+function rejectRequestConfirm(divid, memberName) {
+      var reason = encodeURIComponent($(divid+"-reason").value);
+      var pars = "user=" + memberName + "&reason=" + reason + "&space=${spaceName}&xpage=plain";
+      $(divid).innerHTML = "<p>${msg.groups_members_reject_inprogress}</p>";
+      // call url to accept the request.. check the return is "SUCCESS" other wise show output
+      var myAjax = new Ajax.XWikiRequest( "Groups", "RejectMembershipRequestService", {method: 'get', parameters: pars, onComplete: rejectRequestCallback, divid: divid});
+}
+function rejectRequestCallback(ajaxreq) {
+    // hide div to show success full acceptance for user
+    var result = ajaxreq.transport.responseText;
+    // alert(result);
+    var divid = ajaxreq.options.divid;
+    if (result.strip()=="SUCCESS")
+     $(divid).innerHTML = "<p>${msg.groups_members_reject_done}</p>";
+    else
+     $(divid).innerHTML = "<p>${msg.groups_members_reject_failed}</p>" + "<p>" + result + "</p>";
+    $(divid).parentNode.className = "groups-members-request";
+}
+</script>
+{/pre}
+#end
+
+
+
+#**
+ * Service for showing the edit member info form
+ *#
+#macro(groups_editmemberinfoform)
+#set($sm = $xwiki.csm)
+#set($spaceName = $request.space)
+#set($user = $request.user)
+#set($divid = $!request.divid)
+#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
+#if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
+#groupsdisplayeditmemberinfo($user,$spaceName,$divid)
+#else
+$msg.groups_needsadminrights
+#end
+#end
+
+
+#**
+  * Invite Member form
+  *#
+#macro(groups_invitemember)
+#groupinit()
+#groupsheader("members")
+#if(!$isGroupMember)
+$msg.get("groups_invitation_onlyaccessibletomembers")
+#else
+#set($spaceTitle = $s.displayTitle)
+#set($spaceURL="http://"+$s.homeShortcutURL+".groups.curriki.org")
+#if($request.method.toLowerCase()=="post")
+#begingroupsection($msg.get("groups_members_invite_title"),"","","blue",false)
+#set($im = $xwiki.invitationmanager)
+#set($invitees = $request.getParameter("invitees").split(","))
+#set($text = $request.getParameter("text"))
+#set($open = ($request.getParameter("open")=="open"))
+#set($roles = $xwiki.arrayList)
+#set($roleArray = $!request.getParameterValues('roles'))
+#foreach($role in $roleArray) ## {
+#set($discard = $roles.add($role))
+#end ## }
+#set($map = $xwiki.hashMap)
+#set($oldMessage = $map.put("message", $text))
+#set($invitationSentCount = 0)
+#set($invitationCount = 0)
+#foreach($invitee in $invitees)
+#set($invitationCount = $invitationCount+1)
+#set($invitee = $invitee.trim())
+#if($im.inviteUser($invitee,$spaceName,$open,$roles,null,$map)==false)
+#set($errCode = $context.get("InvitationManagerException").code)
+#if($errCode==101001)
+#error($msg.get("groups_members_invite_inviteemissing"))
+#elseif($errCode==101002)
+#error($msg.get("groups_members_invite_emailinvalid", [$invitee]))
+#elseif($errCode==101003)
+#error($msg.get("groups_members_invite_alreadyinvited", [$invitee, $spaceTitle]))
+#elseif($errCode==101004)
+#error($msg.get("groups_members_invite_alreadymember", [$invitee, $spaceTitle]))
+#else
+#error($msg.get("groups_members_invite_failed", [$invitee]))
+#end
+#else
+#info($msg.get("groups_members_invite_sent",[$invitee]))
+#set($invitationSentCount = $invitationSentCount + 1)
+#end
+#end
+
+$msg.get("groups_members_invite_report",[$invitationSentCount,$invitationCount])
+#if($invitationSentCount > 0)
+$msg.get("groups_members_invite_statuslink")
+#end
+$msg.get("groups_members_invite_backlink")
+#endgroupsection()
+#else
+#begingroupsection($msg.get("groups_members_invite_title"),"","","blue",false)
+<form action="" method="post">
+$msg.get("groups_members_invite_list_instruction",[$spaceTitle])
+
+<input type="text" name="invitees" value="" />
+
+$msg.get("groups_members_invite_note_instruction")
+#tooltip("invite_note_instruction",$msg.get("groups_members_invite_note_instruction_tooltip"))
+{pre}
+<textarea name="text" rows="7">
+$msg.get("groups_members_invite_invitefieldtxt", [$spaceTitle, $spaceURL, $xwiki.getUserName($context.user, false)])
+</textarea>
+{/pre}
+
+<input id="openInvitationCheckbox" type="checkbox" name="open" value="open" />
+<label for="openInvitationCheckbox">$msg.get("groups_members_invite_openinvitation")</label>
+
+<p class="paragraph button-right"><input type="submit" class="button button-confirm" value="$msg.get("groups_members_invite_btt")" /></p>
+</form>
+#endgroupsection()
+#end
+#end
+#groupsfooter()
+<div class="tooltips">
+$xwiki.addTooltipJS()
+</div>
+#end
+
+
+
+#**
+  * Show a confirmation form to the user
+  *#
+#macro(groups_joingroup_confirm $spaceTitle)
+#set($userprofile = $sm.getSpaceUserProfile($spaceName,$context.user))
+#set($userprofilePage = $sm.getSpaceUserProfilePageName($spaceName,$context.user))
+## Set defaults CURRIKI-1681
+#set($junk = $userprofile.set("allowNotifications", 1))
+#set($junk = $userprofile.set("allowNotificationsFromSelf", 1))
+<form action="" method="post">
+<p>
+<input type="hidden" name="confirm" value="1" />
+<input type="hidden" name="code" value="$!request.code" />
+<input type="hidden" name="user" value="$!request.user" />
+$msg.get("groups_members_join_infotxt",[$spaceTitle])
+#tooltip("bio_tooltip",$msg.get("groups_members_join_bio_tooltip"))
+<br />
+$userprofile.display("profile","edit")
+</p>
+#if($sm.getRoles($spaceName).size() > 0) ## {
+<p>$msg.get("groups.members.selectroles")<br />
+<span class="instruction">$msg.get("groups.members.join.selectroles.info")</span><br />
+<select name="roles" multiple size=4>
+#groupRoleSelector($spaceName false false false)
+</select>
+</p>
+#end ## }
+<p><br />
+$userprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
+#tooltip("email_tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))
+<br />
+$userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
+<br />
+##{pre}
+##<textarea name="profile" cols="80" rows="7"></textarea>
+##{/pre}
+##<br />
+##<input type="checkbox" name="allowNotifications" value="1" checked /> $msg.get("groups_members_create_membersettings_email") <br />
+##<input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /> $msg.get("groups_members_create_membersettings_changenotice")
+</p>
+<div class="button-right"><input type="submit" class="button button-confirm" value="$msg.get("groups_members_join_btt",[$spaceTitle])" /></div>
+</form>
+#end
+
+#**
+  * Join Group Form and Action
+  *#
+#macro(groups_joingroup)
+#groupsheader("members")
+#set($sm = $xwiki.csm)
+##Loading invitation manager
+#set($im = $xwiki.invitationmanager)
+#set($spaceName = $doc.space)
+#set($space = $sm.getSpace($spaceName))
+#set($spaceTitle = $space.displayTitle)
+#set($spacePolicy = $space.policy)
+#begingroupsection($msg.get("groups_members_join_title",[$spaceTitle]),"", "","blue",false)
+#if($context.user=="XWiki.XWikiGuest")
+## begin user is guest we need to ask him to login or create an account
+{pre}
+#set($redirurl= $logredir.replaceAll("&#38;", "-"))
+#set($regurl = $xwiki.getURL("Main.JoinCurriki", "view", "xredirect=${redirurl}"))
+$msg.get("groups_members_join_needaccount",[$regurl])
+#loginbox($logredir)
+{pre}
+## end user is guest
+## if user is already a member there is no need to join
+#elseif($sm.isMember($spaceName,$context.user))
+$msg.get("groups_members_join_alreadymember")
+## user is not a member so we can continue
+#else
+ ## we need to verify the invitation code
+ #set($code = $request.code)
+ #set($user = $request.user)
+ #set($verInv = false)
+ #if($code&&($code!=""))
+  ## we verify if the user is presenting a valid invitation (using the code and user)
+  ## Verify code
+  #set($verInv = $im.verifyInvitation($spaceName, $user, $code))
+ #else
+  ## we verify if the logged-in user is really invited
+  ## Verify is invited
+  #set($verInv = $im.verifyInvitation($spaceName))
+ #end
+## if the group is open and user did not present a valid invitation
+## then we can still show the join form
+#if(($spacePolicy=="open")&&($verInv==false))
+ #if($request.confirm=="1")
+  #if($sm.joinSpace($spaceName))
+    #set($wantedRoles = $!request.getParameterValues('roles'))
+    #foreach($role in $wantedRoles) ## {
+      #addUserToRole($role $context.user)
+    #end ## }
+   $msg.get("groups_members_join_success")
+  #else
+   $msg.get("groups_members_join_failure")
+  #end
+ #else
+  ## Confirm (open group)
+  #groups_joingroup_confirm($spaceTitle)
+ #end
+## if the user presented a valid invitation
+#elseif(($spacePolicy=="open")||($verInv==true))
+ #if($request.confirm=="1")
+  #if($code&&($code!=""))
+   #set($acceptInv = $im.acceptInvitation($spaceName, $user, $code))
+  #else
+   #set($acceptInv = $im.acceptInvitation($spaceName))
+  #end
+  #if($acceptInv)
+    #set($wantedRoles = $!request.getParameterValues('roles'))
+    #foreach($role in $wantedRoles) ## {
+      #addUserToRole($role $context.user)
+    #end ## }
+    $msg.get("groups_members_join_success")
+   #else
+    $msg.get("groups_members_join_failure")
+  #end
+ #else
+  ## Confirm (invitation)
+  #groups_joingroup_confirm($spaceTitle)
+ #end
+## if the user did not present a valid invitation
+## it also means the group is closed
+#else
+   $msg.get("groups_members_join_invitationinvalid")
+#end ## end if spacePolicy==open
+#end ## end if guest
+#endgroupsection()
+#groupsfooter()
+<div class="tooltips">
+$xwiki.addTooltipJS()
+</div>
+#end
+
+
+#**
+  * Group Members Service
+  *  Add/Remove Admin
+  *  Cancel invitation
+  *#
+#macro(groups_members_service)
+{pre}
+#set($sm=$xwiki.csm)
+#set($spaceName=$request.space)
+#set($memberName=$request.user)
+#set($actionCode=$request.code)
+#if((!$hasGlobalAdmin)&&(!$sm.isAdmin($spaceName, $context.user))&&(!(($actionCode == 3)&&($memberName==$context.user))))
+$msg.groups_needsadminrights
+#else
+## $context.user is an admin of $spaceName
+#set($adminCount = $sm.getAdmins($spaceName).size())
+## Found $adminCount admins in the $spaceName
+#if($actionCode == 1)
+#if($adminCount>1)
+## Removing $memberName from group admins.
+$sm.removeAdmin($spaceName,$memberName)
+$msg.groups_adminremoved
+#else
+$msg.groups_cannotremovelastadmin
+#end
+#elseif($actionCode == 2)
+## Adding $memberName to group admins.
+$sm.addAdmin($spaceName,$memberName)
+$msg.groups_adminadded
+#elseif($actionCode == 3)
+#set($memberIsAdmin = $sm.isAdmin($spaceName,$memberName))
+#if(!$memberIsAdmin || ($memberIsAdmin && $adminCount>1))
+## Removing $memberName from $spaceName.
+$sm.removeMember($spaceName,$memberName)
+$msg.groups_memberremoved
+#else
+$msg.groups_cannotremovemember
+#end
+#elseif($actionCode == 4)
+## Cancel invitation for $memberName to join $spaceName
+#if($xwiki.invitationmanager.cancelInvitation($memberName, $spaceName))
+$msg.groups_invitationcancelled
+#else
+$msg.groups_cannotcancelinvitation
+#end
+#end
+#end
+{/pre}
+#end
+
+#**
+  * Groups Accept Membership Request service
+  * This handles the call to accept a membership request
+  *#
+#macro(groups_acceptmembership_service)
+{pre}
+#set($sm = $xwiki.csm)
+##Loading invitation manager
+#set($im = $xwiki.invitationmanager)
+#set($spaceName = $request.space)
+#set($space = $sm.getSpace($spaceName))
+#set($spaceTitle = $space.displayTitle)
+#set($spacePolicy = $space.policy)
+#if($context.user=="XWiki.XWikiGuest")
+$msg.groups_members_accept_request_needtobeloggedin
+## if user is not member he cannot accept users
+#elseif(!$hasGlobalAdmin && !$sm.isAdmin($spaceName,$context.user))
+$msg.groups_needsadminrights
+#else
+## we need to verify there is a request fron this user
+#set($user = $request.user)
+## accept invitation
+#set($acceptInv = $im.acceptMembership($spaceName, $user))
+#if($acceptInv)
+## we also need to update the space profile with the data in the Map
+SUCCESS
+#else
+$msg.groups_members_accept_request_error
+#end
+#end
+{/pre}
+#end
+
+#**
+  * Groups Reject Membership Request service
+  * This handles the call to reject a membership request
+  *#
+#macro(groups_rejectmembership_service)
+{pre}
+#set($sm = $xwiki.csm)
+##Loading invitation manager
+#set($im = $xwiki.invitationmanager)
+#set($spaceName = $request.space)
+#set($space = $sm.getSpace($spaceName))
+#set($spaceTitle = $space.displayTitle)
+#set($spacePolicy = $space.policy)
+#if($context.user=="XWiki.XWikiGuest")
+$msg.groups_members_request_needtobeloggedin
+## if user is not member he cannot accept users
+#elseif(!$hasGlobalAdmin && !$sm.isAdmin($spaceName,$context.user))
+$msg.groups_needsadminrights
+#else
+## we need to verify there is a request for this user
+#set($user = $request.user)
+## reject invitation
+#if($im.rejectMembership($spaceName, $user))
+SUCCESS
+#else
+$msg.groups_members_reject_request_error
+#end
+#end
+{/pre}
+#end
+
+
+#**
+  * Groups Request Membership Sheet
+  *#
+#macro(groups_membershiprequest)
+#groupsheader("members")
+##Loading invitationmanager
+#set($sm = $xwiki.csm)
+#set($spaceName = $doc.space)
+#set($space = $sm.getSpace($spaceName))
+#set($spaceTitle = $space.displayTitle)
+#begingroupsection($msg.get("groups_members_request_title",[$spaceTitle]),"","","blue",false)
+#if($context.user=="XWiki.XWikiGuest")
+$msg.get("groups_members_request_needaccount")
+#elseif($sm.isMember($spaceName,$context.user))
+$msg.get("groups_members_request_alreadymember")
+#elseif($request.method.toLowerCase()=="post")
+#set($im = $xwiki.invitationmanager)
+#set($text = $request.getParameter("text"))
+## send request (invitee, space, open, text)
+#set($map = $xwiki.hashMap)
+#set($roles = $xwiki.arrayList)
+#set($roleArray = $!request.getParameterValues('roles'))
+#foreach($role in $roleArray) ## {
+#set($discard = $roles.add($role))
+#end ## }
+#if($request.allowNotifications)
+#set($ok = $map.put("allowNotifications", "true"))
+#end
+#if($request.allowNotificationsFromSelf)
+#set($ok = $map.put("allowNotificationsFromSelf", "true"))
+#end
+#set($ok = $map.put("profile", $!request.profile))
+$im.requestMembership($spaceName,$text, $roles, $map)
+$msg.get("groups_members_request_sent",[$spaceTitle])
+#else
+<form action="" method="post">
+<p>
+$msg.get("groups_members_request_infotxt",[$spaceTitle])
+<br /><br />
+$msg.get("groups_members_request_reasons_instruction")
+#tooltip("reasons-tooltip",$msg.get("groups_members_request_reasons_tooltip"))
+{pre}
+<textarea name="text" cols="80" rows="7"></textarea>
+{/pre}
+<br /><br />
+$msg.get("groups_members_request_bio_instruction")
+#tooltip("bio-tooltip",$msg.get("groups_members_request_bio_tooltip"))
+{pre}
+<textarea name="profile" cols="80" rows="7"></textarea>
+{/pre}
+
+#if($sm.getRoles($spaceName).size() > 0) ## {
+<div class="select-roles">
+$msg.get("groups.members.selectroles")
+</div>
+<div class="instruction">$msg.get("groups.members.invite.selectroles.info")</div>
+<select name="roles" multiple size=4>
+#groupRoleSelector($spaceName false false false)
+</select>
+#end ## }
+
+<br />
+<input type="checkbox" name="allowNotifications" value="1" checked /> $msg.get("groups_members_create_membersettings_email") #tooltip("email-tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))<br />
+<input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /> $msg.get("groups_members_create_membersettings_changenotice") <br />
+<p class="paragraph button-right"><input type="submit" class="button button-confirm" value="$msg.get("groups_members_request_request_btt")" /></p>
+</p>
+</form>
+#end
+#endgroupsection()
+#groupsfooter()
+<div class="tooltips">
+$xwiki.addTooltipJS()
+</div>
+#end
+
+
+#**
+  * Groups View User Profile service
+  * This handles the call to view the user profile
+  *#
+#macro(groups_viewuserprofile_service)
+#set($sm = $xwiki.csm)
+#set($spaceName = $request.space)
+#set($user = $request.user)
+#set($divid = $!request.divid)
+#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
+#groupsdisplaymemberinfo($user,$spaceName,$divid)
+#end
+
+#**
+  * Groups Save User Profile service
+  * This handles the call to save the user profile
+  *#
+#macro(groups_saveuserprofile_service)
+#set($sm = $xwiki.csm)
+#set($spaceName = $request.space)
+#set($memberName = $request.user)
+#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
+#if($isGroupAdmin||$memberName==$context.user)
+#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+#set($ok = $uprofile.updateProfileFromRequest())
+#set($ok = $uprofile.saveWithProgrammingRights())
+#set($wantedRoles = $!request.getParameterValues('roles'))
+#set($hasRoles = $!request.getParameterValues('hasrole'))
+#groupGetRoles($spaceName false)
+#foreach($role in $ret_groupRoleNames) ## {
+#set($hasRole = false)
+#set($wantsRole = false)
+#foreach($has in $hasRoles) ## {
+  #if($role == $has) ##{
+    #set($hasRole = true)
+  #end ## }
+#end ## }
+#foreach($wanted in $wantedRoles) ## {
+  #if($role == $wanted) ##{
+    #set($wantsRole = true)
+  #end ## }
+#end ## }
+#if($hasRole && !$wantsRole) ## {
+  #removeUserFromRole($role $memberName)
+#elseif(!$hasRole && $wantsRole) ## } {
+  #addUserToRole($role $memberName)
+#end ## }
+#end ## }
+<div class="groups-members-member-saveinfo">
+$msg.get("groups_members_membersettings_savedone")
+</div>
+#groupsdisplaymemberinfo($memberName,$spaceName,$request.divid)#else
+$msg.groups_needsadminrights
+#end
+#end

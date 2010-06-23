@@ -1,0 +1,22 @@
+#asset_displaycontentheader("")
+<div class="asset-display-edit">
+    <div class="asset-display-edit-inner">
+        <form name="attachment" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" enctype="multipart/form-data">
+            #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
+            <input  type="hidden" name="page" value="$asset.fullName" />
+            <input  type="hidden" name="xredirect" value="$xredirect" />
+            <fieldset>
+                <ul>
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
+                    #asset_edit_field($asset "" "file" "replace_file" "file" "<input id='file' name='file' type='file' />" true)
+                    #asset_edit_revision()
+                </ul>
+            </fieldset>
+            <hr>
+            #asset_edit_buttons($asset false)
+        </form>
+        ## this allows to check for changes
+        #curriki_clickawayjs("attachment" $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.warning.message_text")))
+    </div>
+</div>
+#asset_displaycontentfooter()

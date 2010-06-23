@@ -1,0 +1,47 @@
+#asset_displaycontentheader("")
+#if($asset.attachmentList.size() > 0)
+#set($fileName = $asset.attachmentList.get(0).filename)
+#set($url = $asset.getAttachmentURL("$fileName"))
+#set($pictSize = "Medium")
+#set($pictSize = $!asset.display("display_size", "view", $asset.getObject("CurrikiCode.ImageAssetClass")))
+#if($pictSize == "small")
+ #set($pictWidth = "300")
+#elseif($pictSize == "large")
+ #set($pictWidth = "570")
+#else
+ #set($pictWidth = "450")
+#end
+#set($caption = "")
+#set($caption = $!asset.caption_desc)
+#if($!caption == "")
+ #set($caption = $!asset.description)
+#end
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+        <a href="$url"><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" title="$!asset.alt_desc" /></a>
+        ## <p>$caption</p>
+    </div>
+</div>
+#end
+<div class="asset-display-edit">
+    <div class="asset-display-edit-inner">
+        <form name="image" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" enctype="multipart/form-data">
+            #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
+            <input  type="hidden" name="page" value="$asset.fullName" />
+            <input  type="hidden" name="xredirect" value="$xredirect" />
+            <fieldset>
+                <ul>
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
+                    #asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "alt_text" "alt_text" "textarea" "" true)
+                    #asset_edit_field($asset "" "file" "replace_file" "file" "<input id='file' name='file' type='file' />" true)
+                    #asset_edit_revision()
+                </ul>
+            </fieldset>
+            <hr>
+            #asset_edit_buttons($asset false)
+        </form>
+        ## this allows to check for changes
+        #curriki_clickawayjs("image" $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.warning.message_text")))        
+    </div>
+</div>
+#asset_displaycontentfooter()

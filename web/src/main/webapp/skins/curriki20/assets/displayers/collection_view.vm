@@ -1,0 +1,35 @@
+#if(!$asset.hasAccessLevel("view"))
+#asset_collectionemptyornorights()
+#else
+ ## The subAssetList property has already been prepared
+ ## in asset_tabs so that we can determine if we need an organize link
+#if(!$subAssetList)
+#set($subAssetList = $util.arrayList)
+#asset_preparesubassetlist($asset $subAssetList)
+#end
+#if($subAssetList.size()!=0)
+#set($counter = 0)
+#foreach($assetPage in $subAssetList)
+#set($counter = $counter + 1)
+#set($embeddedDoc = $xwiki.getDocument($assetPage))
+#if($embeddedDoc.getObject("CurrikiCode.CompositeAssetClass"))
+<div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
+    <div class="sub-asset-wrapper-inner">
+        #asset_beginsection($embeddedDoc false)
+        #asset_endsection()
+    </div>
+</div>
+#else
+<div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
+    <div class="sub-asset-wrapper-inner filetype-${embeddedDoc.filetypeClass}">
+        #asset_beginsection($embeddedDoc true)
+        $embeddedDoc.displayAsset("view")
+        #asset_endsection()
+    </div>
+</div>
+#end ## composite or source
+  #end ## foreach
+#else
+#asset_collectionemptyornorights()
+#end
+#end

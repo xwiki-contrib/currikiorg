@@ -1,0 +1,39 @@
+#asset_displaycontentheader("text-align:center;")
+#if($asset.attachmentList.size() > 0)
+#set($fileName = $asset.attachmentList.get(0).filename)
+#set($flashurl = $asset.getAttachmentURL("$fileName"))
+<div class="asset-display-media">
+<div class="asset-display-media-inner">
+    #set($caption = "")
+    #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+    #set($caption = $!asset.caption_text)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #if($!caption == "")
+    #set($caption = $!asset.description)
+    #end
+    <p>
+        $caption
+    </p>
+#if(! $flashDisplay)
+ #set($flashDisplay=true)
+ #set($flashNum=0)
+<script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/flash.js"></script>
+<script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/swfobject.js"></script>
+#end
+#set($flashNum= (1+$flashNum))
+<div id="flashContent${flashNum}">
+</div>
+<script type="text/javascript">
+  displayFlash("${flashurl}", ${flashNum});
+</script>
+<script type="text/javascript">
+var mObj${flashNum} = getFlashMovieObject("flashItem${flashNum}");
+mObj${flashNum}.StopPlay();
+</script>
+<button class="button button-confirm mgn-rt" onclick="playFlash(${flashNum}, this); return false;" title="$msg.get("rve.content.view.play_button")">$msg.get("rve.content.view.play_button")</button>
+<button class="button button-confirm" onclick="Curriki.logView('/Download/link/$url');  window.open('${flashurl}');">$msg.get("rve.content.view.launch_button")</button>
+#end
+</div>
+</div>
+#asset_attachments($asset)
+#asset_displaycontentfooter()

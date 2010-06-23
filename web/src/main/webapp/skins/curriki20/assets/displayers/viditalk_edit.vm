@@ -1,0 +1,42 @@
+#asset_displaycontentheader("")
+#set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
+#set($video_id = $objVT.id)
+<div class="asset-display-edit">
+    <div class="asset-display-edit-inner">
+        <form name="viditalk" action="$xwiki.getURL("CurrikiCode.AssetSaveService", "view")" onsubmit="return beforeAssetSubmit(this);" method="post" >
+            #set($xredirect = $xwiki.getFormEncoded($asset.getURL('view', $!request.queryString.replaceAll("viewer=assetedit", ""))))
+            <input  type="hidden" name="page" value="$asset.fullName" />
+            <input  type="hidden" name="xredirect" value="$xredirect" />
+            <fieldset>
+                <ul>
+##					#asset_edit_field($asset "CurrikiCode.AttachmentAssetClass" "caption_text" "caption" "textarea" "" true)
+					#set($vdiv="<div style='height:280px; width:320px; margin: 0 auto;' id='vidiCaptureDiv'>Viditalk Record Window - Loading components from VIDITalk</div><input type='hidden' id='videoId' name='CurrikiCode.VideoAssetClass_0_id' value='"+$video_id+"' />")
+					#asset_edit_field($asset "CurrikiCode.VideoAssetClass" "id" "replace_video" "text" $vdiv true)
+					<script language="javascript" type="text/javascript">
+						Ext.onReady(function(){
+							var videoSaveButton = new Ext.form.Field(Ext.get(Ext.query('input.button-save')[0]));
+							videoSaveButton.disable();
+						});
+
+						window.uploadComplete = function(videoId) {
+							var videoIdInput = new Ext.form.Field(Ext.get('videoId'));
+							videoIdInput.setValue(videoId);
+							var videoSaveButton = new Ext.form.Field(Ext.get(Ext.query('input.button-save')[0]));
+							videoSaveButton.enable();
+						};
+						window.capture_div='';
+						window.flashLoaded = false;
+						window.called_once=false;
+						embedVidiCapture('vidiCaptureDiv', "$msg.get('viditalk.sitecode')", null, null, false);
+					</script>
+                    #asset_edit_revision()
+                </ul>
+            </fieldset>
+            <hr>
+            #asset_edit_buttons($asset false)
+        </form>
+        ## this allows to check for changes
+        #curriki_clickawayjs("viditalk" $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.warning.message_text")))
+    </div>
+</div>
+#asset_displaycontentfooter()

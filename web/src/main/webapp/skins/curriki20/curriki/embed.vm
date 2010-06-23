@@ -1,0 +1,12 @@
+#**
+  * Embed entry point. It is called from view.vm
+  * It displays assets in embed mode. Links stay in the same windows
+  *#
+#asset_findtitle($doc)
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#template("htmlheader.vm")
+$context.setLinksQueryString("viewer=embed")
+#asset_display($doc "view")
+$context.unsetLinksQueryString()
+#template("htmlfooter.vm")

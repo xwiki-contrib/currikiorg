@@ -1,0 +1,133 @@
+
+#resource-toc .x-panel-bwrap {
+	overflow: visible;
+	overflow-x: auto;
+	overflow-y: hidden; 
+	padding-bottom: 15px;
+}
+
+/** [BEGIN] FIX WYSIWYG to PURE MODE **/
+
+#groups-messages .groups-edit-message span.mceEditorContainer {overflow: scroll !important; width: 100% !important;}
+#mycurriki-blog .edit-blog span.mceEditorContainer {overflow: scroll !important; width: 100% !important;}
+#groups-documentation-main span.mceEditorContainer {overflow: scroll !important; width: 100% !important;}
+
+/** [END] FIX WYSIWYG to PURE MODE **/ 
+
+
+body {
+}
+* html table {
+  font-size: 100%;
+}
+* html #em {
+  width: 1em;
+  height: 0;
+  overflow: hidden;
+}
+/*#main {
+  text-align: left;
+  width: expression(  (d = document)
+                   && (fs = d.getElementById('em').offsetWidth)
+                   && (po = 2 * fs)
+                   && (bo = 3)
+                   && (min = 50 * fs)
+                   && (max = 70 * fs)
+                   && (cw = d.body.clientWidth)
+                   && (px = 'px')
+                   && (cw - po >= max + bo ? max + px : cw - po <= min + bo ? min + px : 'auto')
+                   );
+}
+*/
+* html #xwikidatacontents{
+  position: relative;
+  top: 1px;
+  z-index: -1;
+}
+* html #xwikieditor{
+}
+* html #editPanels.panels{
+  float: none;
+  margin-top: 0px;
+}
+* html ul.xwikitabbar{
+  margin: 0px -3px;
+}
+
+/*
+
+Min- and max-width implementation for Windows Internet Explorer
+
+About the weird dynamic property expression
+
+fs = font-size (from the #em element)
+min = min-width
+max = max-width
+po = padding offset (from the body)
+bo = border offset (from the #main container, IE 6 seems to need one additional px)
+cw = client width
+px = pixel
+
+(Feel free to suggest more intuitive names.)
+
+Quriks-mode vs. standards-mode
+
+This expression is the result of extensive trial and error.
+I quess reading widths is equal in quirks- and standards-mode
+(in this demo), but setting them is different. I don't want
+to account for those differences, because they are very little.
+
+*/
+
+/* For CURRIKI-580, Styling of "Advanced Search" on main site */
+.gwt-ModalDialog-Content .find-selector .gwt-TextBox {
+	height: 18px;
+	line-height: 18px;
+}
+
+
+/* For CURRIKI-639, more "Advanced Search" */
+.gwt-ModalDialog-Content .find-selector-container .find-selector select.gwt-ListBox {
+	line-height: 19px;
+	height: 19px;
+}
+
+/*** More Advanced Search Tweaks ***/
+form .x-fieldset legend {
+	margin-left:-18px;
+	padding:0 497px 5px 0;
+}
+
+.collections-list .x-small-editor table {
+    margin-top:10px;
+}
+#search-tabPanel .x-grid3-hd-row td {
+line-height:6px;
+}
+.ext-gecko .x-form-text {
+padding-top:0;
+}
+td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner {
+margin:-2px 0;
+}
+.x-fieldset input[type=text], .x-fieldset input[type=password], .x-fieldset input[type=checkbox], .x-fieldset input[type=file], .x-fieldset select{padding-bottom:0;}
+
+#search-pager-resource table td span.ytb-text, #search-pager-blog table td span.ytb-text, #search-pager-member table td span.ytb-text, #search-pager-curriki table td span.ytb-text, #search-pager-group table td span.ytb-text {margin:0 20px;}
+
+.search-module .x-fieldset legend span.x-fieldset-header-text {
+	float:left;
+	width:100%;
+}
+
+.search-module .x-fieldset legend .x-tool-toggle {margin-left:5px;}
+
+
+/** CLEARFIX **/ 
+
+.asset-display-download-inner, .tab-container, .clearfix, .sub-asset-wrapper, .asset-display-download-inner, #asset-wrapper {zoom: 1;}  
+
+.clearfix, .sub-asset-wrapper, .asset-display-download-inner, #asset-wrapper  {display: block;}  
+	
+
+
+

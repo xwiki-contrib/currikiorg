@@ -1,0 +1,1678 @@
+#**
+  *    General Macros: skin, panels, title bar, avatar, pagination
+  *#
+
+
+#**
+  * Macro to generate a CSS Property
+  *
+  * @param csspropname The CSS Property name
+  * @param fieldname The CSS Property value
+  * @author	Curriki
+  *#
+#macro(csscolorproperty $csspropname $fieldname)
+#set($objcolor = $colors.get($fieldname))
+#if($objcolor && $objcolor != "")
+  $csspropname: $objcolor;
+#end
+#end
+
+#**
+  * Macro to generate an important CSS Property
+  *
+  * @param csspropname The CSS Property name
+  * @param fieldname The CSS Property value
+  * @author	Curriki
+  *#
+#macro(csscolorpropertyimportant $csspropname $fieldname)
+#set($objcolor = $colors.get($fieldname))
+#if($objcolor && $objcolor != "")
+  $csspropname: $objcolor !important;
+#end
+#end
+
+#**
+  * Macro to display an XWiki Property pretty name
+  * This macro uses a translation if one is available
+  * and otherwise users the class pretty name
+  * This macro has the prerequisite of having the $class variable defined
+  * @param prop The xwiki property
+  * @author	Curriki
+  *#
+#macro(displayPropName $prop)
+#if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
+$prop.prettyName#else
+$msg.get($prop.name)#end
+#end
+
+#**
+ * Truncates a text to a maximum number of chars
+ * text text to truncate
+ * maxChars maximum number of chars
+ *#
+#macro(truncatetext $text $maxChars)
+#if($text.length() > $maxChars)
+#set($i = $text.lastIndexOf(" ", $maxChars))
+#set($i = $i + 1)
+#set($text = "${text.substring(0, $i)}")
+#end
+#end
+
+#**
+ * Display a link on multiple lines with a maximum number of chars per line
+ * We switch to the next line only on a . or /
+ * linkToBreak URL to break in multiple lines
+ * size maximum number of chars in one line
+ *#
+#macro(breakLinkText $linkToBreak $size)
+ #if($linkToBreak.length()<=$size)
+$linkToBreak
+ #else
+#set($slashIndex = $linkToBreak.substring(0, $size).lastIndexOf('/'))
+#set($pointIndex = $linkToBreak.substring(0, $size).lastIndexOf('.'))
+#if($pointIndex == $slashIndex)
+#set($nextLink = $linkToBreak)
+#set($nextSize = 10 + $size)
+#breakLinkText($nextLink, $nextSize)
+#else
+#if($pointIndex > $slashIndex)
+ #set($index = 1 + $pointIndex)
+#else
+ #set($index = 1 + $slashIndex)
+#end
+$linkToBreak.substring(0, $index)
+#set($nextLink = $linkToBreak.substring($index))
+#breakLinkText($nextLink, $size)
+ #end
+#end
+#end
+
+#**
+ * Get an extract of a maximum number of chars of a content of a XWiki.ArticleClass
+ *
+ * fromObj XWiki Object
+ * fromDoc XWiki Document
+ * toStr string to output to
+ * maxChars maximum number of chars to display
+ *#
+#macro(getNewsExtract $fromObj $fromDoc $toStr $maxChars)
+#set($toStr = $fromDoc.display("extract", "view", $fromObj))
+#if($toStr=="")
+#set($toStr = $fromDoc.display("content", "view", $fromObj))
+#if($toStr.length() > $maxChars)
+#set($i = $toStr.lastIndexOf(" ", $maxChars))
+#set($i = $i + 1)
+#set($toStr = "${toStr.substring(0, $i)}")
+#end
+#end
+#end
+
+#**
+ * Displays the mime icon of a file according to its extension
+ *
+ * p_fileName filename
+ *#
+#macro(mimeicon $p_fileName)
+#if($p_fileName.lastIndexOf(".") == -1)
+ #set($m_fileExt = "Unknown")
+#else
+ #set($m_fileExt = $p_fileName.substring($p_fileName.lastIndexOf(".")))
+ #set($m_fileExt = $m_fileExt.substring(1).toUpperCase())
+#end
+## The next step is done with String to avoid list or set creation as it is not necessary
+##set($m_exts = "-ASF-AVI-BIN-BMP-CLASS-CSS-DCR-DIR-DOC-DSR-EXE-GIF-GPE-GTAR-GZ-HTM-HTTP-IHA-IZH-JPG-MOV-MP3-MPG-NOTEBOOK-PDF-PHP-PNG-PPT-PSD-RTF-SCO-SOS-SWF-TIF-TXT-URL-WAV-WMV-WWW-XLS-XML-ZIP-")
+#set($m_exts = "-ASF-AVI-BIN-BMP-CDCR-CLASS-CSS-CURRIKI-LINK-CURRIKI-TMP1-CURRIKI-DCR-DIR-DOC-DOCX-EXCEL-EXE-EXEC-GIF-GTAR-GZ-HTM-HTML-HTTP-IHA-IZH-JAR-JPG-MOV-MP3-MPG-NOTEBOOK-ODB-ODC-ODF-ODG-ODI-ODP-ODS-ODT-OPENOFFICE-PDF-PHP-PNG-PPT-PPTX-PS-PSD-QT-RTF-SCO-SIT-SVG-SWF-TAR-TAR_BZ-TAR_GZ-TIF-TXT-URL-VECTORGFX-VIDEO-WAV-WIKI-WMV-WORD-WWW-XLS-XLSX-XML-XO-ZIP-ZIP1-")
+##set($m_exts = "-ASF-AVI-BIN-BMP-CLASS-CSS-DCR-DIR-DOC-DSR-EXE-GIF-GPE-GTAR-GZ-HTM-HTTP-IHA-IZH-JPG-MOV-MP3-MPG-NOTEBOOK-ODB-ODG-PDF-PHP-PNG-PPT-PSD-RTF-SCO-SOS-SWF-TIF-TXT-URL-WAV-WMV-WWW-XLS-XML-ZIP-")
+#if($m_fileExt == "LHA")
+ #set($m_fileExt = "IHA")
+#elseif($m_fileExt == "LZH")
+ #set($m_fileExt = "IZH")
+#elseif($m_fileExt == "VIDI")
+ #set($m_fileExt = "VIDEO")
+#end
+#if($m_exts.indexOf("-${m_fileExt}-") == -1)
+ #set($m_fileExt = "Unknown")
+#end
+#set($macro_iconUrl = "")
+#set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
+#end
+
+#**
+ * Displays the mime icon of a file according to its extension
+ *
+ * p_fileName filename
+ *#
+#macro(mimeiconimg $p_fileName)
+#if($p_fileName.lastIndexOf(".") == -1)
+ #set($m_fileExt = "Unknown")
+#else
+ #set($m_fileExt = $p_fileName.substring($p_fileName.lastIndexOf(".")))
+ #set($m_fileExt = $m_fileExt.substring(1).toLowerCase())
+#end
+#set($m_map = $xwiki.hashMap)
+#set($junk = $m_map.put("asf", "video_asf"))
+#set($junk = $m_map.put("avi", "video_avi"))
+#set($junk = $m_map.put("bin", "document_bin"))
+#set($junk = $m_map.put("bmp", "image_bmp"))
+#set($junk = $m_map.put("csv", "document_csv"))
+#set($junk = $m_map.put("cdcr", "document_cdcr"))
+#set($junk = $m_map.put("class", "document_class"))
+#set($junk = $m_map.put("css", "document_css"))
+#set($junk = $m_map.put("dir", "document_dir"))
+#set($junk = $m_map.put("doc", "document_doc"))
+#set($junk = $m_map.put("docx", "document_docx"))
+#set($junk = $m_map.put("dcr", "document_dcr"))
+#set($junk = $m_map.put("eps", "document_eps"))
+#set($junk = $m_map.put("epub", "document_epub"))
+#set($junk = $m_map.put("exe", "document_exe"))
+#set($junk = $m_map.put("fla", "interactive_fla"))
+#set($junk = $m_map.put("flv", "video_flv"))
+#set($junk = $m_map.put("gif", "image_gif"))
+#set($junk = $m_map.put("gsp", "document_gsp"))
+#set($junk = $m_map.put("gtar", "archive_gtar"))
+#set($junk = $m_map.put("gz", "archive_gz"))
+#set($junk = $m_map.put("htm", "document_html"))
+#set($junk = $m_map.put("html", "document_html"))
+#set($junk = $m_map.put("iha", "document_iha"))
+#set($junk = $m_map.put("izh", "document_izh"))
+#set($junk = $m_map.put("jar", "archive_jar"))
+#set($junk = $m_map.put("jpe", "image_jpg"))
+#set($junk = $m_map.put("jpeg", "image_jpg"))
+#set($junk = $m_map.put("jpg", "image_jpg"))
+#set($junk = $m_map.put("js", "document_js"))
+#set($junk = $m_map.put("mov", "video_mov"))
+#set($junk = $m_map.put("mp3", "audio_mp3"))
+#set($junk = $m_map.put("mp4", "video_mp4"))
+#set($junk = $m_map.put("mpg", "video_mpg"))
+#set($junk = $m_map.put("notebook", "document_notebook"))
+#set($junk = $m_map.put("odb", "document_odb"))
+#set($junk = $m_map.put("odc", "document_odc"))
+#set($junk = $m_map.put("odf", "document_odf"))
+#set($junk = $m_map.put("odg", "document_odg"))
+#set($junk = $m_map.put("odi", "document_odi"))
+#set($junk = $m_map.put("odp", "document_odp"))
+#set($junk = $m_map.put("ods", "document_ods"))
+#set($junk = $m_map.put("odt", "document_odt"))
+#set($junk = $m_map.put("pdf", "document_pdf"))
+#set($junk = $m_map.put("php", "document_php"))
+#set($junk = $m_map.put("png", "image_png"))
+#set($junk = $m_map.put("pps", "document_pps"))
+#set($junk = $m_map.put("ppt", "document_ppt"))
+#set($junk = $m_map.put("pptm", "document_pptm"))
+#set($junk = $m_map.put("pptx", "document_pptx"))
+#set($junk = $m_map.put("prproj", "document_prproj"))
+#set($junk = $m_map.put("psd", "image_psd"))
+#set($junk = $m_map.put("ps", "document_ps"))
+#set($junk = $m_map.put("pub", "document_pub"))
+#set($junk = $m_map.put("qt", "video_qt"))
+#set($junk = $m_map.put("rar", "archive_rar"))
+#set($junk = $m_map.put("rtf", "document_rtf"))
+#set($junk = $m_map.put("sco", "archive_sco"))
+#set($junk = $m_map.put("sit", "archive_sit"))
+#set($junk = $m_map.put("svg", "image_svg"))
+#set($junk = $m_map.put("swf", "interactive_swf"))
+#set($junk = $m_map.put("tar", "archive_tar"))
+#set($junk = $m_map.put("tif", "image_tif"))
+#set($junk = $m_map.put("tiff", "image_tif"))
+#set($junk = $m_map.put("txt", "document_txt"))
+#set($junk = $m_map.put("vidi", "video_vidi"))
+#set($junk = $m_map.put("wav", "audio_wav"))
+#set($junk = $m_map.put("wma", "audio_wma"))
+#set($junk = $m_map.put("wmv", "video_wmv"))
+#set($junk = $m_map.put("xhtml", "text_xhtml"))
+#set($junk = $m_map.put("xls", "document_xls"))
+#set($junk = $m_map.put("xlsx", "document_xlsx"))
+#set($junk = $m_map.put("xml", "document_xml"))
+#set($junk = $m_map.put("xo", "archive_xo"))
+#set($junk = $m_map.put("xwiki", "text_xwiki"))
+#set($junk = $m_map.put("zip", "archive_zip"))
+#if($m_fileExt == "lha")
+ #set($m_fileExt = "iha")
+#elseif($m_fileExt == "lzh")
+ #set($m_fileExt = "izh")
+#end
+#set($m_subcat = "")
+#set($m_subcat = $!m_map.get($m_fileExt))
+#if("" == "$m_subcat") ##{
+#set($m_subcat = "unknown_unknown")
+#end ##}
+#set($m_cat = $m_subcat.replaceAll("_.*", ""))
+#set($m_icat = $m_cat.substring(0,1).toUpperCase()+$m_cat.substring(1))
+#set($rollover = $msg.get($m_subcat.replaceAll('_', '.')))
+#if($!rollover == "${m_subcat}") ##{
+#set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
+#end ##}
+#set($macro_iconUrl = "/xwiki/skins/curriki8/extjs/resources/images/default/s.gif")
+#set($macro_img = "<img class='resource-${m_icat} category-${m_cat} subcategory-${m_subcat}' src='${macro_iconUrl}' ext:qtip='${rollover}' />")
+#end
+
+
+#**
+ * Sets the userPrefix variable from the short name of a user
+ * For John Doe -> John's
+ * For James Doe -> James'
+ * If the user is the current user -> My
+ * userShortName short name of the user
+ *#
+#macro(curriki_finduserprefix $userShortName)
+ #set($userdoc = $xwiki.getDocument("XWiki", $userShortName))
+ #set($firstName = $!userdoc.display("first_name", "view"))
+ #if($firstName && $firstName.length()>0)
+  #if($firstName.endsWith("s"))
+   #set($userPrefix = "${firstName}'")
+  #else
+   #set($userPrefix = "${firstName}'s")
+  #end
+ #else
+  #set($userPrefix = "My")
+ #end
+#end
+
+#**
+  * Display a popup link in javascript
+  *
+  * url url to link to
+  * text text to display
+  *#
+#macro(showpopup $url $text)
+<a href="javascript:void()" onclick="showpopup('${url}?xpage=popup'); return false;">${text}</a>
+#end
+
+#**
+  * Display a mandatory asterix
+  *
+  *#
+#macro(asterix)
+<span style="color: #ff0000; font-size: 16px">! </span>
+#end
+
+#**
+  * Display of a document property with the pretty name
+  *
+  *#
+#macro(displayPropName $prop)
+#if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
+$prop.prettyName#else
+$msg.get($prop.name)#end
+#end
+
+#**
+  * Display a button
+  *
+  *#
+#macro(button $text $color $type $id $onclick)
+#if($type != "reset" && $type != "submit")
+#set($type = "submit")
+#end
+##<span class="btn-wrapper btn-wrapper-${color}">
+<button#if($id != "") id="${id}"#end class="button#if($color != "") button-${color}#end"#if($onclick != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
+#end
+
+
+#**
+  * Display a paragraph with an image
+  *
+  *#
+#macro(paragraphimg $type $image $imagetitle $text $readmorelink $readmore_linktext $source)
+#set($paratypeclass = "withimg")
+#if($type == "logo")
+#set($imgwidth = "150")
+#set($paratypeclass = "withlogo")
+#elseif($type == "portrait")
+#set($imgwidth = "83")
+#set($paratypeclass = "withportrait")
+#else
+#set($imgwidth = "109")
+#end
+#normalizeattachment($image)
+#normalizelink($readmorelink)
+#if($readmore_linktext == "")
+#set($readmoretxt = $msg.get("readmore") + "...")
+#else
+#set($readmoretxt = $readmore_linktext)
+#end
+<div class="para">
+<img src="$image" width="${imgwidth}" alt="${imagetitle}"/>
+<div class="${paratypeclass}">$text#if($readmorelink != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
+#if($source != "") <span class="infosource ${paratypeclass}">$source</span>#end
+</div>
+#end
+
+#**
+  * Display a paragraph
+  *
+  *#
+#macro(paragraph $text $readmorelink $readmore_linktext)
+#normalizelink($readmorelink)
+#if($readmore_linktext == "")
+#set($readmoretxt = $msg.get("readmore") + "...")
+#else
+#set($readmoretxt = $readmore_linktext)
+#end
+<div class="para">$text#if($readmorelink != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
+#end
+
+
+#**
+  * Display a title in a certain color
+  *
+  *#
+#macro(title $lefttitle $color)
+<div class="titlebar titelbar_$color">
+<h1 class="titlebar_left">$lefttitle</h1>
+</div>
+#end
+
+#**
+  * Normalize a link
+  *
+  *#
+#macro(normalizelink $link)
+#if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
+#set($link = $xwiki.getURL($link))
+#else
+#set($link = $context.util.escapeURL($link))
+#end
+#end
+
+
+#**
+  * Normalize an attachment link
+  *
+  *#
+#macro(normalizeattachment $link)
+#if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
+#set($link = $doc.getAttachmentURL($link))
+#end
+#end
+
+#**
+  * Display a titlebar
+  *
+  *#
+#macro(titlebar $lefttitle $righttitle $link $color)
+#normalizelink($link)
+#set($righttitletrunc = $righttitle)
+#if ($righttitletrunc.length() > 35)
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end
+<div class="titlebar titlebar_$color"><h3#if($link!="") class="titlebar_left"#end>$lefttitle</h3>#if($link!="")<div class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+</div>
+#end
+#macro(subtitlebar $text $righttitle $link $color)
+#normalizelink($link)
+#set($righttitletrunc = $righttitle)
+#if ($righttitle.length() > 35)
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end
+<div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+</div>
+#end
+#macro(subtitlebartarget $text $righttitle $link $color $target)
+#normalizelink($link)
+#set($righttitletrunc = $righttitle)
+#if ($righttitle.length() > 35)
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end
+<div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle" target="$target">$righttitletrunc  &raquo;</a></div>#end
+</div>
+#end
+
+
+#**
+  * Display a title bar of a section
+  *
+  *#
+#macro(beginsectionandshow $lefttitle $righttitle $link $color $show)
+#if(!$seccounter)
+#set($seccounter = 1)
+#else
+#set($seccounter = $seccounter + 1)
+#end
+#normalizelink($link)
+#set($righttitletrunc = $righttitle)
+#if ($righttitletrunc.length() > 35)
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end
+<div id="section_${seccounter}">
+<div class="titlebar titlebar_$color" id="section${seccounter}titlebar"><h3 id="section${seccounter}title"#if($link!="") class="titlebar_left"#end>$lefttitle</h3>#if($link!="")<div id="section${seccounter}links" class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc </a></div>#end</div>
+<script type="text/javascript">
+#if(!$togglesectionvisibility)
+#set($togglesectionvisibility = 1)
+function toggleSectionVisibility(seccounter, showhide){
+  var seccontent = document.getElementById("section" + seccounter + "content");
+  if(eltHasClass(seccontent, "hidden")){
+    rmClass(seccontent, "hidden");
+    // change text
+    showhide.removeChild(showhide.firstChild);
+    showhide.appendChild(document.createTextNode("$msg.get('caption.hide')"));
+    // erase cookie
+    eraseCookie("Section" + seccounter + "Hidden");
+  }
+  else{
+    addClass(seccontent, "hidden");
+    // Change text
+    showhide.removeChild(showhide.firstChild);
+    showhide.appendChild(document.createTextNode("$msg.get('caption.show')"));
+    // set cookie
+    createCookie("Section" + seccounter + "Hidden", true, "");
+  }
+  return false;
+}
+#end
+addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
+#if($link=="")
+var linksDiv = document.createElement("div");
+linksDiv.setAttribute("id", "section${seccounter}links");
+linksDiv.setAttribute("class", "titlebarRight");
+linksDiv.className = "titlebarRight";
+document.getElementById("section${seccounter}titlebar").appendChild(linksDiv);
+linksDiv.appendChild(document.createElement("a"));
+linksDiv = linksDiv.firstChild;
+linksDiv.setAttribute("href", "#section${seccounter}content");
+#else
+var linksDiv = document.getElementById("section${seccounter}links").firstChild;
+linksDiv.appendChild(document.createTextNode(" | "));
+#end
+var showhide${seccounter} = document.createElement("span");
+##showhide${seccounter}.setAttribute("href", "#section${seccounter}content");
+#if($show)
+showhide${seccounter}.appendChild(document.createTextNode("$msg.get('caption.hide')"));
+#else
+showhide${seccounter}.appendChild(document.createTextNode("$msg.get('caption.show')"));
+#end
+showhide${seccounter}.setAttribute("onclick", "toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+linksDiv.appendChild(showhide${seccounter});
+</script>
+#if($show)
+<div id="section${seccounter}content" class="">
+#else
+<div id="section${seccounter}content" class="hidden">
+#end
+#end
+
+
+#**
+  * Display a titlebar of a section
+  * This needs to be closed by endsection
+  *
+  *#
+#macro(beginsection $lefttitle $righttitle $link $color)
+#beginsectionandshow($lefttitle, $righttitle, $link, $color, true)
+#end
+
+
+#**
+  * Ends a section
+  *
+  *#
+#macro(endsection)
+</div>
+<div class="clearfloats"></div>
+</div>
+#end
+
+
+#**
+  * Display a panel content
+  *
+  *#
+#macro(displaypanelcontent $doc $obj)
+$doc.display("content", $obj)
+#end
+#macro(panelheadercolor $title $color)
+#set($cookieName = "${context.user}_${panel}")
+#set($expanded = "expanded")
+#set($expanded = $xwiki.getUserPreferenceFromCookie($cookieName))
+<div class="panel $expanded $color">
+<h5 class="xwikipaneltitle $color" onclick="if(eltHasClass(this.parentNode, 'expanded')) createCookie('$cookieName','collapsed', ''); else eraseCookie('$cookieName'); togglePanelVisibility(this.parentNode);">$title</h5>
+<div class="xwikipanelcontents">
+#end
+
+#**
+  * Display a panel header
+  *
+  *#
+#macro(panelheadercolornocollapse $title $color)
+<div class="panel expanded $color">
+<h5 class="xwikipaneltitle $color">$title</h5>
+<div class="xwikipanelcontents">
+#end
+
+#**
+  * Display a panel rounded header
+  *
+  *#
+#macro(panelrounded $lefttitle $righttitle $link)
+<div style="clear:both; width:670px;">
+ <div class="titlebar rounded">
+  <div class="titlebar_left">$lefttitle</div>
+  <div class="titlebarRight">[$righttitle>$link]</div>
+ </div>
+ <div class="panelroundedcontent">
+#end
+
+#**
+  * Display a panel rounded footer
+  *
+  *#
+#macro(panelroundedfooter)
+ </div>
+ <div class="panelroundedfooter"></div>
+</div>
+#end
+
+#**
+  * Display a panel footer
+  *
+  *#
+#macro(panelfooter)
+</div>
+</div>
+#end
+
+#**
+  * Display a panel custom header
+  *
+  *#
+#macro(panelheadercustom $color)
+<div class="custompanel custompanel_$color xwikipanelcontents">
+#end
+
+#**
+  * Display a panel custom footer
+  *
+  *#
+#macro(panelfootercustom)
+</div>
+#end
+
+#**
+  * Display a panel header
+  *
+  *#
+#macro(panelheader $title)
+<div class="panel expanded">
+<h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
+<div class="xwikipanelcontents">
+#end
+
+#**
+  * Display a large panel header
+  *
+  *#
+#macro(largepanelheader $title)
+<div class="large panel expanded">
+<h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
+<div class="xwikipanelcontents">
+#end
+
+#**
+  * Display a panel footer
+  *
+  *#
+#macro(panelfooter)
+</div>
+</div>
+#end
+
+#**
+  * Display an alternative panel rounder header
+  *
+  *#
+#macro(panelrounded2 $lefttitle $righttitle $link $color)
+<div class="panelrounded panelrounded_$color">
+ <div class="panelroundedtitle">
+  <div class="panelroundedleft">$lefttitle</div>
+  <div class="panelroundedright">#if($link!="")[$righttitle>$link]#end</div>
+ </div>
+ <div class="panelroundedcontent2">
+  <div class="panelroundedcontentinner">
+#end
+
+#**
+  * Display an alternative panel rounded footer
+  *
+  *#
+#macro(panelroundedfooter2)
+  </div>
+ </div>
+ <div class="panelroundedfooter2"></div>
+</div>
+#end
+
+#**
+  * Display a large panel with color
+  *
+  *#
+#macro(largepanelcolor $title $color)
+<div class="largepanel largepanel_$color expanded">
+<h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
+<div class="xwikipanelcontents">
+#end
+
+
+#**
+  * Begin the navigation panel
+  *
+  *#
+#macro(beginNavigationPanel $homerollovertext) ##{
+<div id="navigation" class="shadow-outer">
+<div class="shadow-middle">
+<div id="navigation-inner" class="shadow-inner navigation-menu">
+#set($active = false)
+#checkActive("Main.WebHome" $active)
+<div class="home"><a title="${homerollovertext}" class="titles#if($active) selected#end" href="$xwiki.getURL("Main.WebHome")"
+#if(!$active) 	onmouseover="addClass(this.parentNode, 'active');" 
+		onmouseout="rmClass(this.parentNode, 'active');" 
+#end >
+$msg.get("panel.navigation.home")
+#if($active) ##{
+	<img src="$xwiki.getSkinFile("menu-selected.gif")" />
+#end ##}
+</a></div>
+#end ##}
+##
+
+#**
+  * End the navigation panel
+  *
+  *#
+#macro(endNavigationPanel) ##{
+</div> ## shadow-outer
+</div> ## shadow-middle
+</div> ## shadow-inner navigation-menu
+#end ##}
+
+#**
+  * Macro for verifying if an entry in the nav panel is active
+  *
+  *#
+#macro(checkActive $docname $result) ##{
+  #if($doc.fullName == $docname) ##{
+    #if($doc.space == "MyCurriki" && "$!request.user" != "") ##{
+      #set($result = false)
+    #else ##}{
+      #set($result = true)
+    #end ##}
+  #end ##}
+#end ##}
+	
+#**
+  * Displays a navigation category, with sub-elements
+  *
+  *#
+#macro(navigationCategory $text $rollovertext $link $expanded $items) ##{
+  #set($iniexp = $expanded)
+  #if($doc.web.startsWith("Coll_")) ##{
+    #set($expanded = false) ##{
+    #set($cookiebase = "${context.user}_asset_")
+  #else ##}{
+    #set($cookiebase = "${context.user}_")
+  #end ##}  
+  #if(!$navcatcounter)  ##{
+    #set($navcatcounter = 1)
+  #else ##}{
+    #set($navcatcounter = $navcatcounter + 1)
+  #end ##}	  
+  #set($id = "currikinavcategory_${navcatcounter}")
+  #if($expanded == true) ##{
+    #set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
+  #else ##}{
+    #set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
+  #end ##}	  
+  #set($exp2 = "")
+  #set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
+  #if(!$exp2.equals("")) ##{
+    #if($exp2 == 'true') ##{
+      #set($expanded = true)
+    #else ##}{
+      #set($expanded = false)
+    #end ##}
+  #end ##}	  
+  #set($active = false)
+  #foreach($item in $items) ##{
+    #checkActive($item.get(1) $active)
+  #end ##}	  
+  #set($theCategLink = $link)
+  #normalizelink($theCategLink)
+<div class="expanded" id="${id}"> ##{
+  <a onclick="var expanded = eltHasClass(this.parentNode, 'expanded'); 
+  		${cookiemagic}
+		togglePanelVisibility(this.parentNode);
+		var clName = 'collapsed';
+		if(!expanded) clName = 'expanded';
+		$('${id}_arrow').className = clName;" 
+  	#if(!$active) ##{
+		onmouseover="var expanded = eltHasClass(this.parentNode, 'expanded'); addClass(this.parentNode, 'active'); if (!expanded) addClass(this.parentNode, 'activecollapsed');" 
+		onmouseout="rmClass(this.parentNode, 'active'); rmClass(this.parentNode, 'activecollapsed');" 
+	#end ##}
+	class="titles#if($active) selected#end"
+	title="${rollovertext}">
+    #set($cls = "collapsed")
+    #if($expanded) #set($cls = "expanded") #end
+    <span id="${id}_arrow" class="${cls}"></span>
+    $text
+  </a>    
+  <ul>
+  #foreach($item in $items) ##{
+    #set($active = false)
+    #checkActive($item.get(1) $active)
+    #set($theItemLink = $item.get(1))
+    #normalizelink($theItemLink)
+    #set($linktitle = "")
+    #if($item.size()>2) #set($linktitle="title='$item.get(2)'") #end
+    <li class="#if($active)selected#end#if($velocityCount == $items.size()) last#end"><a ${linktitle} href="{pre}${theItemLink}{/pre}">$item.get(0)</a>
+    #set($linktitle = "") ##rolling back to default value
+    #if($active)<img src="$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
+  #end ##}
+  </ul> ##}
+  #if(!$expanded) ##{
+    <script type="text/javascript">
+      togglePanelVisibility(document.getElementById("${id}"));
+    </script>
+  #end ##}
+  </div> ##}
+  #set($expanded=$iniexp) ##rolling back the parameter to initial value so it won't affect future calls to this macro
+#end  ##}
+
+
+#**
+ * Displays a navigation entry (without sub-elements)
+ *#
+#macro(navigationTopLevelEntry $text $link)
+#set($active = false)
+#checkActive($link $active)
+<div class="curriki-nav-tlentry#if($active)active selected#end" #if(!$active) onmouseover="addClass(this, 'curriki-nav-tlentryactive')" onmouseout="rmClass(this, 'curriki-nav-tlentryactive')" #end>
+<div class="curriki-nav-header"><h4>[$text>$link]</h4></div>
+</div>
+#end
+
+#**
+ *  FEATURED MEMBERS Panel: Display a Memeber
+ *#
+#macro(displayMember $member)
+#if(!$member.startsWith("XWiki."))
+#set($member = "XWiki.${member}")
+#end
+#set($memberdoc = $xwiki.getDocument($member))
+#if(!$memberdoc.isNew())
+#set($memberobj = $memberdoc.getObject("XWiki.XWikiUsers"))
+<div class="vcard">
+   <div class="userpic">
+#if($memberdoc.attachmentList.size()==0)
+   <img src="$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
+#else
+   #set($width = 72)
+   #foreach ($attach in $memberdoc.attachmentList)
+#if($velocityCount == 1)
+     <a href="$memberdoc.getURL()"><img class="photo" src="$memberdoc.getAttachmentURL($attach.filename,"download")" width="${width}" alt="$xwiki.getUserName($member, false)"/></a>
+#end
+#end
+#end
+</div> ## userpic
+<div class="userdata"><h5 class="fn">$xwiki.getUserName($member, true)</h5>
+#set($city = $memberobj.getProperty("city").value)
+#set($country = $memberobj.getProperty("country").value)
+#set($hasCountry = true)
+#if($country.trim().equals("") || $country.trim().equals("---")) #set($hasCountry = false) #end
+#set($hasCity = true)
+#if($city.trim().equals("") || $city.trim().equals("---")) #set($hasCity = false) #end
+#if($hasCountry || $hasCity)<address class="adr">(#if($hasCity)<span class="locality">$city</span>#end#if($hasCountry && $hasCity) - #end#if($hasCountry)<span class="country-name">$memberobj.display("country", "view")</span>#end)</address>#end
+<div class="userdesc">#set($content = $memberdoc.display("comment", "view", $memberobj))
+#if($content.length()>256)
+#set($i = $content.lastIndexOf(" ", 256))
+#set($i = $i + 1)
+#set($content = "${content.substring(0,$i)} [...>${memberdoc.fullName}]")
+#end
+<div class="xwikicontent">$memberdoc.getRenderedContent("$!content")</div></div>
+</div> ## userdata
+<div class="clr"></div>
+</div> ## vcard
+#end
+#end
+
+#**
+ * Adding this macro which does not seem to be loaded from albatross/macros.vm
+ *#
+#macro(xwikitopmenuentrystart $actionurl $linktext $id)
+<div class="topmenuentry" onmouseover="showsubmenu(this);" onmouseout="hidesubmenu(this);" id="$id"><a class="tme" href="$actionurl"><strong>$linktext</strong></a><span class="hidden menucolon">: </span><span class="submenu hidden">
+#end
+
+
+#**
+ * Curriki breadcrumb entry point
+ *#
+#macro(curriki_breadcrumb)
+<div id="breadcrumb">
+  #curriki_breadcrumb_bc($request.bc $doc)
+</div>
+#end
+
+#**
+ * Parents Breadcrumb
+ *#
+#macro(curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
+## prepare group data
+#set($sm = $xwiki.csm)
+#set($spaceName = $bcCurrentDoc.getSpace())
+#set($s = $sm.getSpace($spaceName))
+#if( $s ) #if( $s.isNew() || $s.isDeleted() )
+  #set( $s = "" )
+#end #end
+
+#if($bcDoc.fullName == "Groups.CreateNewGroup")
+ ## special breadcrumb parent for groups creation page
+ #set($usr = $context.user)
+ $xwiki.getUserName($usr,true) &gt;
+ #set($bcLocal = $bcCurrentDoc.fullName)
+#elseif($bcCurrentDoc.space.startsWith("Documentation_"))
+ ## special breadcrumb parent for groups documentation space
+  #set($grName = $bcCurrentDoc.space.substring( 14 ))
+  #set($s = $sm.getSpace($grName))
+  #if( $s )
+    #if( $s.isNew() || $s.isDeleted() )
+      #set( $s = "" )
+    #end
+  #end
+  #if($!s=="") #else
+  		  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name
+  		  #set($docPageName = $grName+".Documentation")
+  		  #set($docPage = $xwiki.getDocument( $docPageName ) )
+  		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
+  #end
+  #set($bcLocal = $bcCurrentDoc.fullName)
+#elseif ($s && $s != "")
+  ## special breadcrumb parent for groups space
+  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
+
+  #if($bcCurrentDoc.name == "Contributions" || $bcCurrentDoc.name == "ContributionsSearch")
+    <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
+  #end
+  #set($bcLocal = $bcCurrentDoc.fullName)
+#else 
+ ## prepare bcParent breadcrumb info of the parent page
+ ## prepare bcLocal breadcrum info of the current page
+ #set($bcParent = $bcParam)
+ #if($bcParam && $!bcParam != "")
+  #if($bcParam.endsWith($bcCurrentDoc.fullName))
+   #set($bcLocal = $bcParam)
+  #else
+   #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
+  #end
+ #else
+  #set($bcLocal = $bcCurrentDoc.fullName)
+ #end
+
+ ## find the top parent in the bcParam that is valid
+ #set($topParentDoc = $bcCurrentDoc)
+ #if($bcParam && $bcParam != "")
+  #set($topParentDone = false)
+  #foreach($bcItem in $bcLocal.split(";"))
+   ## ignoring empty elements and the XWiki.XWikiUsers parent page
+   #if(!$topParentDone && $bcItem != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+     #set($topParentDone = true)
+     #set($topParentDoc = $xwiki.getDocument($bcItem))
+   #end
+  #end
+ #end
+
+ ## enhance bcLocal from this top Parent
+ #curriki_breadcrumb_parent($topParentDoc, 0)
+#end
+ ## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
+ #set($isFirst = true)
+ #set($previousBc = "")
+ ## loop on each element of the breadcrumb
+ #foreach($bcItem in $bcLocal.split(";"))
+  ## ignoring empty elements and the XWiki.XWikiUsers parent page
+  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+   #if(!$isFirst)
+    &gt;
+   #end
+   #set($isFirst = false)
+   #curriki_breadcrumb_display($bcItem.replace('/', '.') $previousBc)
+  #end
+ #end
+#end
+
+#**
+  * Breadcrumb display of a page
+  *#
+#macro(curriki_breadcrumb_display $bcItem $previousBc)
+#set($bcDoc = $xwiki.getDocument($bcItem))
+   ## custom handling of EditArticle action
+   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+    #set($bcDoc = $xwiki.getDocument($request.editArticle))
+   #end
+   ## find the page title
+   #asset_findtitle($bcDoc)
+   ## custom title for groups
+   #curriki_breadcrumb_groups_fixtitle()
+   ## custom arguments for My Curriki
+   #set($userArg = "")
+   #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+    #set($userArg="&user=$request.user")
+   #end
+   #if(($currikiTitle.length()>125) && ($bcDoc.name!="Documentation") && ($bcDoc.name!=$msg.groups_home_page))
+    #set($currikiTitle = $currikiTitle.substring(0,125))
+    #set($currikiTitle = "${currikiTitle}...")
+   #end
+   ## Display the breacrumb
+   <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
+   #set($previousBc = "${previousBc};${bcItem}")
+   ## Display additional groups breadcrumb
+   #curriki_breadcrumb_groups_addbrowseinfo()
+#end
+
+#**
+  * Breadcrumb title change for groups features
+  *#
+#macro(curriki_breadcrumb_groups_fixtitle)
+  ## groups specific rules
+  #if($!s=="")
+    ##don't fix anything
+  #else
+    #if($bcDoc.name==$msg.groups_home_page) ##home page
+      #set($currikiTitle = $msg.groups_home_tabname)
+      #if($request.action)
+        #if($request.action=="editmasthead")
+          #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
+            #end
+        #if($request.action=="editinfo")
+          #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
+        #end
+      #end
+    #end ##end home page
+    #if($bcDoc.name=="Documentation") ##documentation page
+          #if(	$request.action)
+                #if($request.action == "newdoc")
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
+                #end
+                #if($request.action == "editdoc" && $request.method != "POST" )
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
+                #end
+                #if($request.action == "history" && $request.method != "POST" )
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
+                #end
+                #if($request.action == "compare")
+                      #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_compare_title}</a>")
+                #end
+          #end
+    #end  ##end documentation page
+  ###else
+  ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
+  ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
+  ##  #end
+  #end
+  ##end of groups specific rules
+#end
+
+#**
+  * This method adds one more level of breadcrumb for the browse groups page
+  * depending on which category is browsed
+  *#
+#macro(curriki_breadcrumb_groups_addbrowseinfo)
+#set($more = "")
+#if($bcDoc.fullName == "Groups.Browse")
+     #if( $request.subject )
+		#set($sdoc = $xwiki.getDocument($request.subject))
+		#set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
+		#set($more_href = "${doc.getURL()}?subject=${request.subject}")
+     #end
+   #end
+#if($more != "")
+    &gt; <a href="$more_href">$more</a>
+   #end
+#end
+
+
+
+#**
+ * Builds the Parents Breadcrumb in bcLocal
+ *#
+#macro(curriki_breadcrumb_parent $bcDoc $level)
+## prepare group info
+#set($sm = $xwiki.csm)
+#set($spaceName = $bcDoc.getSpace())
+#set($s = $sm.getSpace($spaceName))
+#if( $s ) #if( $s.isNew() || $s.isDeleted() )
+  #set( $s = "" )
+#end #end
+
+#if($!s=="")
+ #set($collType = "")
+ #set($category = $bcDoc.getValue("category"))
+ #if($category=="collection")
+  #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
+  #set($collType = $bcDoc.getValue("type"))
+ #end
+ #if($collType!="" && $collType != "folder")
+  ## do nothing because we have a collection or root collection
+ #else
+  ## handling breadcrumb if it is not a group
+  #set($parentList = $util.arrayList)
+  #set($parent = "")
+  #if($bcDoc.getObject("CurrikiCode.AssetClass"))
+   ## handling of breadcrumb for an Asset. Taking the first one.
+   ## TODO: setup a cache
+   #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' order by doc.creationDate")
+   #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
+  #end
+
+  ## if the parent list has more than 1 then we should
+  ## not follow the parent path
+  #if(!$parentList || $parentList.size() < 2)
+   #if($parentList && $parentList.size()>0)
+    #foreach($par in $parentList)
+     #set($parent = $par)
+    #end
+   #end
+  #else
+   #if(!$parent || ($!parent == ""))
+    #set($parent = $bcDoc.parent)
+   #end
+  #end
+
+  #if(!$parentList || $parentList.size() == 0)
+   #if(!$parent || ($!parent == ""))
+    #set($parent = $bcDoc.parent)
+   #else
+   #end
+  #end
+
+  #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
+   #set($bcLocal = "${parent};${bcLocal}")
+   #set($level = $level + 1)
+   #set($parentDoc = $xwiki.getDocument($parent))
+   #curriki_breadcrumb_parent($parentDoc,$level)
+  #end
+ #end ## end check collection or root collection
+#end ## end check groups
+#end ## end macro
+
+
+#**
+  * TODO: check if it is still used
+  * Subject breadcrumb
+  *
+  * @param $bcParam status parameter
+  * @param $bcCurrentDoc current doc to check in the breadcrumb
+  * @author dward@curriki.org
+  *#
+#macro(subjectbreadcrumb $bcParam $bcCurrentDoc)
+ ##Preparation de la liste
+ #set($bcParent = $bcParam)
+ #if($bcParam && $!bcParam != "")
+  #if($bcParam.endsWith($bcCurrentDoc.fullName))
+   #set($bcLocal = $bcParam)
+  #else
+   #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
+  #end
+ #else
+  #set($bcLocal = $bcCurrentDoc.fullName)
+ #end
+ #if(!$bcParam || $!bcParam == "")
+  #parentsBreadcrumb($bcCurrentDoc 0)
+ #end
+ #set($bcLocal = $bcLocal.replace("FW_masterFramework.WebHome;", ''))
+ ##Deroulage de la liste
+ #set($isFirst = true)
+ #set($previousBc = "")
+ #foreach($bcItem in $bcLocal.split(";"))
+  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+   #if(!$isFirst)
+    &gt;
+   #end
+   #set($isFirst = false)
+   #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
+   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+    #set($bcDoc = $xwiki.getDocument($request.editArticle))
+   #end
+   #asset_findtitle($bcDoc)
+   #if($currikiTitle.length()>125)
+    #set($currikiTitle = $currikiTitle.substring(0,125))
+    #set($currikiTitle = "${currikiTitle}...")
+   #end
+   #set($userArg = "")
+   #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+    #set($userArg="&user=$request.user")
+   #end
+   <a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a>
+   #set($previousBc = "${previousBc};${bcItem}")
+  #end
+ #end
+#end
+
+
+#*
+ * allows to insert a style sheet
+ *#
+#macro(css $filename)
+<style type="text/css">
+@import "$doc.getAttachmentURL($filename)";
+</style>
+#end
+
+#**
+ * Macro to display the page title
+ *#
+#macro(pageTitle) ##{
+  #if($doc.fullName=="Search.WebHome") ##{
+    $msg.get("main.curriki") - $msg.get("caption.search")
+  #else ##}{
+    #if(!$title) ##{
+      #set( $title = $!xwiki.getWebPreference("title"))
+      #if ( $title != "") ##{
+        $xwiki.parseContent($title)
+      #else  ##}{
+        XWiki . $!doc.web . $!doc.displayTitle
+      #end ##}
+    #else ##}{
+      $title
+    #end ##}
+  #end ## }
+#end ##}
+## End pageTitle
+
+## From Add Path spec in EOU1
+
+#**
+ * For CreateResources.Nortel6ELessonPlan output.
+ * References translations from CreateResources.Translations.
+ * This allows inclusion of Nortel Icon without hardcoding path to
+ * image in each lesson plan output.
+ *##
+#macro(currikiNortelIcon)        ##{
+<img src="$msg.get('nortel.lesson.plan.output.heading.icon.url')" height="$msg.get('nortel.lesson.plan.output.heading.icon.height')" width="$msg.get('nortel.lesson.plan.output.heading.icon.width')">
+#end                             ##}
+
+#**
+ * For CreateResources.ACELessonPlan output.
+ * References translations from CreateResources.Translations.
+ * This allows inclusion of ACELP Icon without hardcoding path to
+ * image in each lesson plan output.
+ *#
+#macro(currikiACELPIcon)         ##{
+<img src="$msg.get('ace.lesson.plan.output.heading.icon.url')" height="$msg.get('ace.lesson.plan.output.heading.icon.height')" width="$msg.get('ace.lesson.plan.output.heading.icon.width')">
+#end                             ##}
+
+#**
+ * For CreateResources.EducateforSustainabilityLessonPlan output.
+ * References translations from CreateResources.Translations.
+ * This allows inclusion of Nortel Icon without hardcoding path to
+ * image in each lesson plan output.
+ *##
+#macro(currikiEfSLPIcon)        ##{
+<img src="$msg.get('efs.title.learn.link4.thumbnail')" height="68" width="64" align="middle">
+#end                            ##}
+
+#**
+ * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+ * formatTextareasIntoWikiText() ). Call sequence:
+ *  macro currikiattachmentBegin()
+ *  macro currikiattachment("file1.gif")
+ *  macro currikiattachment("file2.gif")
+ *  macro currikiattachmentEnd()
+ *#
+#macro(currikiattachmentBegin)  ##{
+  <table><tbody>
+#end                             ##}
+
+#**
+ * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+ * formatTextareasIntoWikiText() ). Call sequence:
+ *  macro currikiattachmentBegin()
+ *  macro currikiattachment("file1.gif")
+ *  macro currikiattachment("file2.gif")
+ *  macro currikiattachmentEnd()
+ *#
+#macro(currikiattachment $fname) ##{
+  <tr><td class="table-col-filetype">
+    #mimeiconimg($fname) ## sets $macro_img as side-effect
+    &nbsp;${macro_img}&nbsp;
+  </td><td class="attachments_file">
+    &nbsp;{attach:${fname}}&nbsp;
+  </td></tr>
+#end                             ##}
+
+#**
+ * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
+ * formatTextareasIntoWikiText() ). Call sequence:
+ *  macro currikiattachmentBegin()
+ *  macro currikiattachment("file1.gif")
+ *  macro currikiattachment("file2.gif")
+ *  macro currikiattachmentEnd()
+ *#
+#macro(currikiattachmentEnd)    ##{
+  </tbody></table>
+#end                             ##}
+
+#**
+ * Check for editable collections (to know if we can show 'Add'
+ *#
+#macro(checkForCollections) ##{
+#if("$!g_checkedForCollections" == "") ##{
+#set($g_userHasCollections = false)
+#set($g_checkedForCollections = true)
+#set($m_userColls = $xwiki.curriki.fetchUserCollectionsList())
+#if($m_userColls.size() > 0) ##{
+#set($g_userHasCollections = true)
+#end ##}
+#if(!$g_userHasCollections) ##{
+#set($m_grpEditCount = 0)
+#set($m_userGroups = $xwiki.curriki.fetchUserGroups())
+#foreach($grp in $m_userGroups.keySet()) ##{
+#set($m_groupEditable = $m_userGroups.get($grp).get('editableCollectionCount'))
+#set($m_grpEditCount = $m_grpEditCount + $m_groupEditable)
+#end ##}
+#if($m_grpEditCount > 0) ##{
+#set($g_userHasCollections = true)
+#end ##}
+#end ##}
+#end ##}
+#end ##}
+
+#**
+ * escape JS text
+ *#
+#macro(escapeForJS $value) ##{
+#set($ret_escaped = $value.replaceAll('\\', '\\\\').replaceAll("'", "\\u0027").replaceAll('"', "\\u0022"))
+#end ##}
+
+
+#**
+  * Display a title bar with link and js
+  *
+  * @param $lefttitle Title to show on the left
+  * @param $righttitle Title to show on the right
+  * @param $link Link to show
+  * @param $js Javascript to add to the link
+  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
+  * @param $idpfx unique ID to add to html tags
+  * @author dward@curriki.org
+  *#
+#macro(curriki_fulltitlebar $lefttitle $righttitle $link $js $color $idpfx) ## {
+#if($link!="" || $js!="")
+#if("$!link" != "") ## {
+#normalizelink($link)
+#end ## }
+#set($righttitletrunc = $righttitle)
+#if ($righttitletrunc.length() > 35) ## {
+#set($righttitletrunc = $righttitle.substring(0, 34))
+#set($righttitletrunc = "${righttitletrunc}...")
+#end ## }
+#if("$!idpfx" != "") ## {
+#set($qt = '"')
+#set($tmp = "id=${qt}${idpfx}-")
+#set($dId = "${tmp}bar${qt}")
+#set($tId = "${tmp}title${qt}")
+#set($rdId = "${tmp}right${qt}")
+#set($lId = "${tmp}link${qt}")
+#else ## } {
+#set($dId = "")
+#set($tId = "")
+#set($rdId = "")
+#set($lId = "")
+#end ## }
+<div $dId class="titleheader titleheader-$color"><h3 $tId class="titleheader-left">$lefttitle</h3><div $rdId class="titleheader-right"><a $lId #if("$!link"!="") href="$link"#end#if("$!js"!="") onclick="$js"#end title="$righttitle">$righttitletrunc  &raquo;</a></div>
+</div>
+#else
+<h3 class="titleheader titleheader-$color">$lefttitle</h3>
+#end
+#end ## macro ## }
+
+#**
+  * Display a simple title bar with js
+  *
+  * @param $lefttitle Title to show on the left
+  * @param $righttitle Title to show on the right
+  * @param $js js to add
+  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
+  * @author dward@curriki.org
+  *#
+#macro(curriki_jstitlebar $lefttitle $righttitle $js $color) ## {
+#curriki_fulltitlebar($lefttitle $righttitle "" $js $color "")
+#end ## macro ## }
+
+#**
+  * Display a simple title bar
+  *
+  * @param $lefttitle Title to show on the left
+  * @param $righttitle Title to show on the right
+  * @param $link Link to show
+  * @param $color Color of the title bar (red,blue). This adds the class titleheader-red or titleheader-blue
+  * @author dward@curriki.org
+  *#
+#macro(curriki_titlebar $lefttitle $righttitle $link $color) ## {
+#curriki_fulltitlebar($lefttitle $righttitle $link "" $color "")
+#end ## macro ## }
+
+
+
+#**
+  * Curriki pagination macro with additional arguments
+  *
+  * @param $called Text to use in the pagination macro
+  * @param from start number
+  * @param $nbToDisplay number of elements to display
+  * @param $of Maximum number of elements
+  * @param $addargs Additional arguments for the url
+  * @author dward@curriki.org
+  *#
+#macro(curriki_paginatorargs $called $from $nbToDisplay $of $addargs) ## {
+<div id="mycurriki-paginator" class="table-results">
+## Make sure we have sane settings for $of
+#if($of < 0) ## {
+#set($of = 0)
+#end ## }
+## We dont show the paginator if nothing to paginate
+#if($of != 0) ## {
+## Make sure we have sane settings for $from
+#if($from < 0) ## {
+#set($from = 0)
+#end ## }
+#if($from >= $of) ## {
+#set($from = $of - 1)
+#end ## }
+## Make sure we have sane settings for $nbToDisplay
+#if($nbToDisplay < 1) ## {
+#set($nbToDisplay = 1)
+#end ## }
+#if("$called"=="") ## {
+#set($called = $msg.get("mycurriki.macro.paginate.results"))
+#end ## }
+## Determine what $to sould be
+#set($to = ($from + $nbToDisplay) - 1)
+#if($to >= $of) ## {
+#set($to = ($of - 1))
+#end ## }
+## Now figure out total, current, first, and last page
+#set($pages = (($of - 1) / $nbToDisplay) + 1)
+#set($cpage = ($from / $nbToDisplay) + 1)
+#set($fpage = ((($cpage - 1) / 10) * 10) + 1)
+#set($lpage = $fpage + 9)
+#if($lpage > $pages) ## {
+#set($lpage = $pages)
+#end ## }
+## Figure out if we need a user argument
+#if("$!request.user" == "") ## {
+#set($addarg="")
+#else ## } {
+#set($addarg="user=${request.user}&")
+#end ## }
+#if($addargs != "") ## {
+#set($addarg="${addarg}${addargs}&")
+#end ## }
+<div id="mycurriki-paginator-line1" class="table-results-title">
+## Display 1 -> X+1 instead of 0 -> X
+#set($dFrom = $from + 1)
+#set($dTo = $to + 1)
+$called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
+</div>
+<div id="mycurriki-paginator-line2" class="table-results-navigation">
+#if($cpage == 1) ## {
+#set($npage = 0)
+#else ## } {
+#set($npage = (($cpage - 2) * $nbToDisplay))
+#end ## }
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+#if($cpage!=1) ## {
+#set($prvpage = $cpage - 1)
+#set($altprev = "Page "+${prvpage})
+<a href="${url}" class="table-results-previous#if($cpage==1) table-results-disabled" onclick="return false;#end" alt="${altprev}" title="${altprev}">$msg.get("mycurriki.macro.paginate.previous")</a>
+#end ## }
+#foreach ($pg in [${fpage}..${lpage}]) ## {
+#set($npage = (($pg - 1) * $nbToDisplay))
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+<a href="${url}"#if($pg==$cpage) class="table-results-navigation-selected" onclick="return false;"#end>$pg</a>
+#end ## }
+#if($cpage==$pages) ## {
+#set($npage = (($pages - 1) * $nbToDisplay))
+#else ## } {
+#set($npage = ($cpage * $nbToDisplay))
+#end ## }
+#set($url = $xwiki.getURL($doc.fullName, "view", "${addarg}startIndex=${npage}"))
+#if($cpage!=$pages) ## {
+#set($nxtpage = $cpage + 1)
+#set($altnext = "Page "+${nxtpage})
+<a href="${url}" class="table-results-next#if($cpage==$pages) table-results-disabled" onclick="return false;#end" alt="${altnext}" title="${altnext}">$msg.get("mycurriki.macro.paginate.next")</a>
+#end ## }
+</div>
+#end ## if != 0 ## }
+</div>
+#end ## macro ## }
+
+#**
+  * My Curriki pagination macro
+  *
+  * @param $called Text to use in the pagination macro
+  * @param from start number
+  * @param $nbToDisplay number of elements to display
+  * @param $of Maximum number of elements
+  * @author dward@curriki.org
+  *#
+#macro(curriki_paginator $called $from $nbToDisplay $of) ## {
+#curriki_paginatorargs($called $from $nbToDisplay $of "")
+#end ## }
+
+
+#**
+  * Display the avatar of a user
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatar_width $userdoc $width) ## {
+#set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
+#if($userdoc.attachmentList.size()==0)  ## {
+ <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+ <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
+ </a>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end />
+  </a>
+ #end ## }
+#end ## }
+#end ## macro ## }
+
+#**
+  * Display the avatar of a user for the asset area
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatar $userdoc) ## {
+#curriki_avatar_width($userdoc "48")
+#end ## macro ## }
+
+#**
+  * Display the avatar of a user with a name
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatarwithname_width $userdoc) ## {
+#set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
+#if($userdoc.attachmentList.size()==0)  ## {
+<a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+ <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
+</a>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")" #if($width!="") width="${width}" #end /></a>
+ #end ## }
+#end  $xwiki.getUserName($userdoc.fullName) ## }
+#end ## macro ## }
+
+#**
+  * Display the avatar of a user with a name
+  *
+  * @param $userdoc User document
+  * @author dward@curriki.org
+  *#
+#macro(curriki_avatarwithname $userdoc) ## {
+#curriki_avatarwithname_width($userdoc "48")
+#end ## macro ## }
+
+#**
+ *  Macro to display an access denied message
+ *#
+#macro(curriki_noaccess)
+ #curriki_message("noaccess" true)
+#end
+
+
+#**
+ *  Macro to display a non existing document message
+ *#
+#macro(curriki_notfound)
+ #curriki_message("notfound" false)
+#end
+
+#**
+ *  Macro to display a message with links based con a key
+ *#
+#macro(curriki_message $key $withlogin)
+<div id="message-wrapper" class="mode-message mode-message-${key}">
+    <div id="message-wrapper-inner">
+        <ul id="message-links">
+            <li><a href="$msg.get("rve.${key}.goback_url")">$msg.get("rve.${key}.goback_link")</a></li>
+            #if($isguest && $withlogin)
+            <li><a href="$msg.get("rve.${key}.login_url")">$msg.get("rve.${key}.login_link")</a></li>
+            #end
+            <li><a href="$msg.get("rve.${key}.home_url")">$msg.get("rve.${key}.home_link")</a></li>
+            <li class="last-item"><a href="$msg.get("rve.${key}.help_url")">$msg.get("rve.${key}.help_link")</a></li>
+        </ul>
+        <div class="clear-right"></div>        
+        <div class="message-content-wrapper">
+            <h3>
+                $msg.get("rve.${key}.header")
+            </h3>
+            <div class="message-content-wrapper-inner">
+                <p>$msg.get("rve.${key}.message")</p>
+            </div>
+        </div>
+    </div>
+</div>
+#end
+
+
+#macro(curriki_locked $asset)
+#set($lockingUser = $xwiki.getLocalUserName($asset.getLockingUser()))
+#set($forceURL = $tdoc.getURL("view", "$!{request.getQueryString()}&force=1"))
+<div id="message-wrapper" class="mode-message mode-message-locked">
+    <div id="message-wrapper-inner">
+        <ul id="message-links">
+            <li><a href="$msg.get("rve.noaccess.goback_url")">$msg.get("rve.noaccess.goback_link")</a></li>
+            #if($isguest && $withlogin)
+            <li><a href="$msg.get("rve.noaccess.login_url")">$msg.get("rve.noaccess.login_link")</a></li>
+            #end
+            <li><a href="$msg.get("rve.noaccess.home_url")">$msg.get("rve.noaccess.home_link")</a></li>
+            <li class="last-item"><a href="$msg.get("rve.noaccess.help_url")">$msg.get("rve.noaccess.help_link")</a></li>
+        </ul>
+        <div class="clear-right"></div>
+        <div class="message-content-wrapper">
+            <h3>$msg.get("notice")</h3>
+            <div class="message-content-wrapper-inner">
+                <p>$msg.get("rve.content.edit.force.message_text", [ $lockingUser, $forceURL ])</p>
+                <button class="cancel" onclick="location='${msg.get("rve.noaccess.goback_url")}'">$msg.get("rve.content.edit.dialog.cancel_button")</button>
+                <button onclick="location='$forceURL'">$msg.get("rve.content.edit.dialog.continue_button")</button>
+            </div>
+        </div>
+    </div>
+</div>
+#end
+
+
+#macro(curriki_clickawayjs $formname $message)
+<script type="text/javascript">
+var clickAwayForm = document.forms.${formname};
+var clickAwayFormStatus1 = getFormStatus(clickAwayForm);
+
+function getFormStatus(form) {
+ var str = "";
+ for (i=0;i<form.length;i++) {
+   var formel = form[i];
+   if (formel.type) {
+     if (((formel.type!="radio")&&(formel.type!="checkbox"))||(formel.checked))
+      str += "-" + formel.value;
+   }
+ }
+ return str;
+}
+
+function checkFormStatus(form) {
+ var clickAwayFormStatus2 = getFormStatus(form);
+ if (clickAwayFormStatus1!=clickAwayFormStatus2)
+  return unescape('${message}');
+ else
+  return;
+}
+
+clickAwayForm.clickAwayFormOnSubmit = clickAwayForm.onsubmit;
+clickAwayByPass = false;
+clickAwayForm.onsubmit = function() {
+  if (clickAwayForm.clickAwayFormOnSubmit && (clickAwayForm.clickAwayFormOnSubmit()==false))
+   return false;
+
+  clickAwayByPass = true;
+  return true;
+}
+
+window.onbeforeunload = function() {
+ if (clickAwayByPass)
+  return;
+ clickAwayByPass = false;
+ return checkFormStatus(clickAwayForm)
+}
+</script>
+#end
+
+#**
+  * Stores the WYSIWYG configuration in a JavaScript variable. Overwrites the default XWiki configuration!
+  *
+  * @param $jsVarName the name of the JavaScript variable to store the WYSIWYG configuration
+  * @param $editedDocument the document being edited
+  * @param $fieldId identifies the form field to be replaced by the WYSIWYG editor
+  * @param $full {@code true} to use a fully-fledged editor, {@code false} to use the compact editor
+  *#
+#macro(wysiwyg_storeConfig $jsVarName $editedDocument $fieldId $full)
+<script type="text/javascript">
+//<![CDATA[
+var $jsVarName = {
+  hookId: '${fieldId}',
+  syntax: '${editedDocument.syntaxId}',
+#if("$!wysiwyg_inputURLQueryString" != "")
+  inputURL: '${editedDocument.getExternalURL("view", $wysiwyg_inputURLQueryString)}',
+#end
+#if($full)
+  displayTabs: true,
+  defaultEditor: "wysiwyg",
+#end
+  plugins: 'submit line separator text valign justify list indent history format font color symbol link image table macro importer#if($full && $request.sync) sync#end',
+  menu: 'link image table macro',
+  toolbar: 'bold italic underline strikethrough teletype | subscript superscript | justifyleft justifycenter justifyright justifyfull | unorderedlist orderedlist | outdent indent | undo redo | format | fontname fontsize forecolor backcolor | hr symbol removeformat | importer',
+  wiki: '${editedDocument.wiki.replace("'", "\'")}',
+  space: '${editedDocument.space.replace("'", "\'")}',
+  page: '${editedDocument.name.replace("'", "\'")}',
+#if($full && $request.sync)
+  // Additional configuration for the real-time editing feature.
+  syncPage: '${editedDocument.fullName.replace("'", "\'")}',
+#if($request.reset=="1")
+  syncReset: 1,
+#end
+#end
+  debug: #if($request.debug)'true'#else'false'#end
+};
+//]]>
+</script>
+#end

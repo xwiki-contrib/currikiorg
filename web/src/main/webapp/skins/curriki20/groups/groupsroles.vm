@@ -1,0 +1,233 @@
+
+##
+## Core Group Role macros
+##
+#macro(groupGetRoles $spaceName $withAdmin) ## {
+## Sets ret_groupRoles
+#set($ret_groupRoles = $xwiki.arrayList)
+#set($ret_groupRoleNames = $sm.getRoles($spaceName))
+#foreach($role in $ret_groupRoleNames) ## {
+  #set($discard = $ret_groupRoles.add($xwiki.getDocument($role)))
+#end ## }
+#if($withAdmin) ## {
+  #set($adminGroup = $xwiki.getDocument($sm.getAdminGroupName($spaceName)))
+  #set($discard = $adminGroup.setTitle($msg.get("groups.roles.admin.title")))
+  #set($discard = $ret_groupRoleNames.add(0, $sm.getAdminGroupName($spaceName)))
+  #set($discard = $ret_groupRoles.add(0, $adminGroup))
+#end ## }
+#end ## }
+##
+##
+#macro(checkForUniqueRole $spaceName $roleName) ## {
+#set($ret_isRoleUnique = true)
+#groupGetRoles($spaceName true)
+#foreach($role in $ret_groupRoles)
+  #if($roleName.equalsIgnoreCase($role.title)) ## {
+    #set($ret_isRoleUnique = false)
+  #end ## }
+#end ## }
+#end ## }
+##
+##
+#macro(checkForValidSizeRole $spaceName $roleName) ## {
+#set($ret_isRoleValidSize = true)
+#if($roleName.length() > 32 || $roleName.length() == 0) ## {
+  #set($ret_isRoleValidSize = false)
+#end ## }
+#end ## }
+##
+##
+#macro(findUniquePageWithExtra $spaceName $prefix $suffix $extra) ## {
+#set($ret_pageName = "${prefix}${extra}${suffix}")
+#if($xwiki.exists($ret_pageName)) ## {
+  #set($extra = "_"+$xwiki.generateRandomString(3).toLowerCase())
+  #findUniquePageWithExtra($spaceName $prefix $suffix $extra)
+#end ## }
+#end ## }
+##
+##
+#macro(findUniqueRolePage $spaceName $roleName) ## {
+#set($clearName = $xwiki.clearName($roleName))
+#if($clearName.length() == 0) ## {
+  #set($clearName = "__"+$xwiki.generateRandomString(3).toLowerCase())
+#end ## }
+#findUniquePageWithExtra($spaceName "Role_${clearName}" "Group" "")
+#end ## }
+##
+##
+#macro(createGroupRole $spaceName $roleName) ## {
+#set($ret_err = false)
+#set($ret_rDoc = false)
+#set($roleName = $roleName.trim())
+#checkForUniqueRole($spaceName $roleName)
+#checkForValidSizeRole($spaceName $roleName)
+#if(!$ret_isRoleUnique) ## {
+  #set($ret_err = $msg.get("groups.roles.create.notunique"))
+#elseif(!$ret_isRoleValidSize) ## } {
+  #set($ret_err = $msg.get("groups.roles.create.invalidsize"))
+#else ## } {
+  #findUniqueRolePage($spaceName $roleName)
+  #set($ret_rDoc = $xwiki.getDocument("${spaceName}.${ret_pageName}"))
+  #set($discard = $ret_rDoc.setTitle($roleName))
+  #set($discard = $ret_rDoc.saveWithProgrammingRights($msg.get("groups.roles.comment.created", [$roleName])))
+  #set($ret_success = $msg.get("groups.roles.create.created", [$roleName]))
+#end ## }
+#end ## }
+##
+##
+#macro(renameGroupRole $groupDoc $newRoleName $oldRoleName) ## {
+#set($ret_err = false)
+#set($newRoleName = $newRoleName.trim())
+#checkForUniqueRole($groupDoc.space $newRoleName)
+#checkForValidSizeRole($groupDoc.space $newRoleName)
+#if(!$ret_isRoleUnique) ## {
+  #set($ret_err = $msg.get("groups.roles.rename.notunique"))
+#elseif(!$ret_isRoleValidSize) ## } {
+  #set($ret_err = $msg.get("groups.roles.rename.invalidsize"))
+#else ## } {
+  #set($discard = $groupDoc.setTitle($newRoleName))
+  #set($discard = $groupDoc.saveWithProgrammingRights($msg.get("groups.roles.comment.renamed", [$oldRoleName,$newRoleName])))
+  #set($ret_success = $msg.get("groups.roles.rename.renamed", [$oldRoleName, $newRoleName]))
+#end ## }
+#end ## }
+##
+##
+#macro(deleteGroupRole $groupDoc) ## {
+#set($roleName = $groupDoc.title)
+#set($discard = $groupDoc.deleteWithProgrammingRights())
+#set($ret_success = $msg.get("groups.roles.delete.deleted", [$roleName]))
+#end ## }
+##
+##
+#macro(addUserToRole $groupName $member) ## {
+#set($discard = $sm.addUserToRole($spaceName, $member, $groupName))
+#end ## }
+##
+##
+#macro(removeUserFromRole $groupName $member) ## {
+#set($discard = $sm.removeUserFromRole($spaceName, $member, $groupName))
+#end ## }
+##
+##
+#macro(groupGetRoleMemberCount $groupDoc) ## {
+## Sets ret_roleCount
+#set($userList = $groupDoc.getObjects("XWiki.XWikiGroups"))
+#set($ret_roleCount = $userList.size())
+#end ## }
+##
+##
+#macro(groupRoleSelector $spaceName $withAdmin $disableEmpty $selectFor) ## {
+#groupGetRoles($spaceName $withAdmin)
+#set($ret_hasRoles = $xwiki.arrayList)
+#foreach($role in $ret_groupRoles) ## {
+  #if($disableEmpty) ## {
+    #groupGetRoleMemberCount($role)
+    #set($disabled = ($ret_roleCount == 0))
+  #else ## } {
+    #set($disabled = false)
+  #end ## }
+  #if($!selectFor) ## {
+    #set($sql = ", BaseObject as obj, StringProperty as prop1 where doc.fullName ='${role.fullName}' and doc.fullName=obj.name and obj.className='XWiki.XWikiGroups' and obj.id=prop1.id.id and prop1.id.name='member' and prop1.id.value='${selectFor}'")
+    #set($search = $xwiki.searchDocuments($sql, 1, 0))
+    #set($selected = ($search.size() > 0))
+    #if($selected) ## {
+      #set($discard = $ret_hasRoles.add($role.fullName))
+    #end ## }
+  #else ## } {
+    #set($selected = false)
+  #end ## }
+<option#if($disabled) DISABLED#end #if($selected) SELECTED#end value="${role.fullName}">$role.title</option>
+#end ## }
+#end ## }
+
+
+#**
+  * Displays one role line
+  *#
+#macro(groups_managerole_editroleline $role) ## {
+  <div id="groups-manage-role-line-${role.name}">
+<div class="lefttext">
+{pre}
+<div class="righttext floatright hidebuttons">
+<a href="javascript:void()" onclick="$('groups-manage-role-line-${role.name}').hide(); $('groups-manage-roles-edit-${role.name}').show(); $$('.hidebuttons').invoke('hide'); return false;">$msg.get("groups.roles.manage.edit")</a>
+#sep()
+<a href="$xwiki.getURL("${spaceName}.ManageRoles", "view", "delete=${role.name}")" onclick="return confirm('$msg.get("groups.roles.manage.delete.confirm")');">$msg.get("groups.roles.manage.delete")</a>
+</div>
+{/pre}
+$role.title
+</div>
+</div>
+<div id="groups-manage-roles-edit-${role.name}" style="display:none;" class="frame-inset">
+<form method="post">
+<input name="rename" type="hidden" value="${role.name}" />
+<input name="from" type="hidden" value="${role.title}" />
+<input name="to" type="text" size=32 maxlength=32 value="${role.title.replace('"', '\"')}" />
+<input class="button button-cancel" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
+<input type="submit" class="button button-confirm" value="$msg.get("groups.roles.manage.save")" />
+</form>
+</div>
+#end ## }
+
+#**
+  * Manage role interface
+  *#
+#macro(groups_manageroles)
+#groupinit()
+##
+#if(!$isGroupAdmin && !$hasGlobalAdmin) ## {
+$msg.get("groups_admins_onlyaccessibletoadmins")
+#else ## }{
+##
+## Create, Rename, Delete roles
+##
+#if($!request.create) ## {
+  #createGroupRole($spaceName $request.create)
+#elseif($!request.rename && $!request.to) ## } {
+  #set($roleDoc = $xwiki.getDocument("${spaceName}.${request.rename}"))
+  #if($roleDoc.name.startsWith("Role_") && $roleDoc.name.endsWith("Group")) ## {
+    #renameGroupRole($roleDoc $request.to $request.from)
+  #end ## }
+#elseif($!request.delete) ## } {
+  #set($roleDoc = $xwiki.getDocument("${spaceName}.${request.delete}"))
+  #if($roleDoc.name.startsWith("Role_") && $roleDoc.name.endsWith("Group")) ## {
+    #deleteGroupRole($roleDoc)
+  #end ## }
+#end ## }
+##
+## Main page
+##
+#groupsheader("members")
+## List current roles with Edit/Delete
+<div id="groups-main-content" class="frame">
+#curriki_titlebar($msg.get("groups.roles.manage.titlebar") "" "" "blue")
+<div id="groups-main-content-frame" class="frame-content">
+$msg.get("groups.roles.manage.intro")
+<br />
+#if($!ret_err) ## {
+<div id="groups-manage-roles-error" class="errormessage">$ret_err <br /></div>
+#end ## }
+#if($!ret_success) ## {
+<div id="groups-manage-roles-error" class="infomessage">$ret_success <br /></div>
+#end ## }
+#groupGetRoles($spaceName false)
+#foreach($role in $ret_groupRoles) ## {
+  #groups_managerole_editroleline($role)
+#end ## }
+## Add role Button
+<div id="groups-manage-roles-add-button" class="lefttext">
+<div class="righttext floatright hidebuttons"><button type="button" class="button button-confirm" onclick="{pre}$('groups-manage-roles-add-form').show(); $$('.hidebuttons').invoke('hide');{/pre}">$msg.get("groups.roles.manage.add")</button></div>
+</div>
+<div id="groups-manage-roles-add-form" style="display:none;" class="frame-inset">
+<form method="post">
+<input name="create" type="text" size=32 maxlength=32 />
+<input class="button button-cancel" type="submit" value="$msg.get("groups.roles.manage.cancel")" onclick="document.location.href='$xwiki.getURL("${spaceName}.ManageRoles", "view")'; return false;" />
+<input type="submit" class="button button-confirm" value="$msg.get("groups.roles.manage.save")" />
+</form>
+</div>
+</div>
+</div>
+## Back to Members
+<div id="groups-manage-roles-return" class="centertext"><a href="/xwiki/bin/view/${spaceName}/Members">$msg.get("groups.roles.manage.returnlink")</a></div>
+#groupsfooter()
+#end ## }
+#end

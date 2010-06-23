@@ -1,0 +1,16 @@
+#**
+  * Asset edit entry point. It is called from view.vm
+  * It displays an asset in edit mode
+  *#
+#if(!$doc.hasAccessLevel("edit"))
+#curriki_noaccess()
+#else
+#curriki_breadcrumb()
+## check locking of asset
+#set($force = $!request.get("force"))
+#if (($doc.getLocked()==true)&&(!$force))
+#curriki_locked($doc)
+#else
+#asset_display($doc "edit")
+#end
+#end
