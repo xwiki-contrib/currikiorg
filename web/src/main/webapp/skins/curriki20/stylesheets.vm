@@ -1,9 +1,3 @@
-<link href="$xwiki.getSkinFile("style.css", true)" rel="stylesheet" type="text/css" media="all" />
-<link href="$xwiki.getSkinFile("print.css", true)" rel="stylesheet" type="text/css" media="print" />
-## If we're in print view enable the print CSS so that it's applied in view mode
-#if ($printss)
-  <link href="$xwiki.getSkinFile("print.css", true)" rel="stylesheet" type="text/css" media="all" />
-#end
 #**
   * Curriki Specific 
   *#
@@ -37,6 +31,13 @@ document.write(unescape("%3Clink rel='stylesheet' type='text/css' href='" + ejcL
 <!--[if IE 6]>
   <link href="$xwiki.getSkinFile("ie-6.css", true)" rel="stylesheet" type="text/css" />
 <![endif]-->
+## xwiki styles
+<link href="$xwiki.getSkinFile("style.css", true)" rel="stylesheet" type="text/css" media="all" />
+<link href="$xwiki.getSkinFile("print.css", true)" rel="stylesheet" type="text/css" media="print" />
+## If we're in print view enable the print CSS so that it's applied in view mode
+#if ($printss)
+  <link href="$xwiki.getSkinFile("print.css", true)" rel="stylesheet" type="text/css" media="all" />
+#end
 #end
 ## Hook for inserting CSS skin extensions
 <!-- com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin -->
