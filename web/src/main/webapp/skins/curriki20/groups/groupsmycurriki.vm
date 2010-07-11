@@ -63,7 +63,7 @@
     #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
     #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
   #else
-    #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
+    #set($m_logo = $xwiki.getSkinFile("curriki/images/groups_default_logo.gif"))
 	#set($logowidth = 82)
 	#set($logoheight = 50)
   #end
@@ -87,8 +87,8 @@
 #end
   ##display logo
   <div class="frame-inset-logo">
-    <a href="$space.getHomeURL()" title="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}" alt="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" alt="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" />
+    <a href="$space.getHomeURL()" title="$xwiki.escapeText($space.getDisplayTitle())" alt="$xwiki.escapeText($space.getDisplayTitle())">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="$xwiki.escapeText(${space.getDisplayTitle()})" alt="$xwiki.escapeText(${space.getDisplayTitle()})" />
     </a>
   </div>
 #end
