@@ -1679,7 +1679,10 @@ $msg.get("notallowed")
   *  Macro to display root collections
   *#
 #macro(compositeasset_display $doc)
-#if($doc.space.startsWith("Coll_") && $doc.name == "WebHome") ## {
+#if($doc.space.startsWith("Coll_Group_") && $doc.name == "WebHome") ## {
+#set($group = $doc.space.substring(5))
+$response.sendRedirect($xwiki.getURL("${group}.Curriculum"))
+#elseif($doc.space.startsWith("Coll_") && $doc.name == "WebHome") ## {
 #set($user = $context.user)
 #if($user.startsWith("XWiki.")) ## {
 #set($user = $user.substring(6))
