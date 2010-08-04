@@ -61,6 +61,14 @@
                             }
                       </script>
                       #end
+                      #elseif($syntax=="xwiki/2.0")
+                        <li class="input-textarea">
+                          <p>$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
+                          <div id="input-wiki-wysiwyg">
+                            $asset.getTextArea()
+                          </div>
+                          #wysiwyg_editProperty($asset "content" true)
+                        </li>
                       #elseif($syntax=="xhtml/1.0")
                     <li class="input-textarea">
                         <p>$msg.get("rve.content.edit.text.instruction_text.html_wysiwyg")</p>
