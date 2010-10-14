@@ -1663,7 +1663,7 @@ Curriki.module.addpath.init = function(){
 					// Final message for add is per E
 
 					// Start Content Tree View screen
-					if (Curriki.data.user.collectionChildren.length > 0
+					if (true || Curriki.data.user.collectionChildren.length > 0
 						|| Curriki.data.user.groupChildren.length > 0){
 						handler = function(e,evt){
 							Curriki.current.flow = 'E';
@@ -2044,9 +2044,9 @@ Curriki.module.addpath.init = function(){
 				case 'O':
 				case 'Copy':
 					Curriki.init(function(){
-						Curriki.data.user.GetCollections(function(){
+						//Curriki.data.user.GetCollections(function(){
 							displayDone();
-						});
+						//});
 					});
 					break;
 
@@ -2064,32 +2064,34 @@ Curriki.module.addpath.init = function(){
 		AddPath.ChooseLocation = Ext.extend(Curriki.ui.dialog.Messages, {
 			  initComponent:function(){
 				var topChildren = [];
-				if (Curriki.data.user.collectionChildren.length>0){
+				//if (Curriki.data.user.collectionChildren.length>0){
 					topChildren.push({
-					 text:_('panels.myCurriki.myCollections')
-					,id:'ctv-drop-tree-collection-root'
-					,cls:'ctv-top ctv-header ctv-collections'
-					,leaf:false
-					,allowDrag:false
-					,allowDrop:true // Needed to auto-expand on hover
-					,disallowDropping:true // Disable drop on this node
-					,expanded:(Curriki.data.user.collectionChildren.length < 4)
-					,children:Curriki.data.user.collectionChildren
+						 text:_('panels.myCurriki.myCollections')
+						,id:'ctv-drop-tree-collection-root'
+						,cls:'ctv-top ctv-header ctv-collections'
+						,leaf:false
+						,allowDrag:false
+						,allowDrop:true // Needed to auto-expand on hover
+						,disallowDropping:true // Disable drop on this node
+						,expanded:false //(Curriki.data.user.collectionChildren.length < 4)
+						//,children:Curriki.data.user.collectionChildren
+						,currikiNodeType:'myCollections'
 					});
-				}
-				if (Curriki.data.user.groupChildren.length>0){
+				//}
+				//if (Curriki.data.user.groupChildren.length>0){
 					topChildren.push({
-					 text:_('panels.myCurriki.myGroups')
-					,id:'ctv-drop-tree-group-root'
-					,cls:'ctv-top ctv-header ctv-groups'
-					,leaf:false
-					,allowDrag:false
-					,allowDrop:true // Needed to auto-expand on hover
-					,disallowDropping:true // Disable drop on this node
-					,expanded:(Curriki.data.user.groupChildren.length < 4)
-					,children:Curriki.data.user.groupChildren
+						 text:_('panels.myCurriki.myGroups')
+						,id:'ctv-drop-tree-group-root'
+						,cls:'ctv-top ctv-header ctv-groups'
+						,leaf:false
+						,allowDrag:false
+						,allowDrop:true // Needed to auto-expand on hover
+						,disallowDropping:true // Disable drop on this node
+						,expanded:false //(Curriki.data.user.groupChildren.length < 4)
+						//,children:Curriki.data.user.groupChildren
+						,currikiNodeType:'myGroups'
 					});
-				}
+				//}
 
 				Ext.apply(this, {
 					 id:'ChooseLocationDialogueWindow'
@@ -3027,8 +3029,8 @@ Curriki.module.addpath.init = function(){
 					// Check if the user has any personal or group collections
 					// If so, determine location to put the copy
 					// If not, then use old procedure
-					Curriki.data.user.GetCollections(function(){
-						if (Curriki.data.user.collectionChildren.length > 0
+					//Curriki.data.user.GetCollections(function(){
+						if (true || Curriki.data.user.collectionChildren.length > 0
 							|| Curriki.data.user.groupChildren.length > 0){
 							Curriki.current.flow = 'Copy2';
 							next = 'apCopyLocation';
@@ -3049,7 +3051,7 @@ Curriki.module.addpath.init = function(){
 								}
 							);
 						}
-					});
+					//});
 					return;
 					break;
 
@@ -3174,9 +3176,9 @@ Curriki.module.addpath.init = function(){
 					// We should be getting the current one passed in
 					// Shows CTV
 					console.log('Starting path:', Curriki.current.flow);
-					Curriki.data.user.GetCollections(function(){
+					//Curriki.data.user.GetCollections(function(){
 						Curriki.ui.show('apLocation');
-					});
+					//});
 					return;
 					break;
 

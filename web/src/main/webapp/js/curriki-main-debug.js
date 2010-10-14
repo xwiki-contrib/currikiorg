@@ -1975,6 +1975,8 @@ Curriki.data.user = {
 
 	,collection_try:0
 	,GetCollections:function(callback){
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
 		if (Curriki.data.user.gotCollections){
 			// Already have collections
 			callback();
@@ -2005,14 +2007,23 @@ Curriki.data.user = {
 						this.collections = o;
 						this.collectionChildren = this.CreateCollectionChildren();
 	console.log('Collections: ', this.collectionChildren);
-						this.GetGroups(callback);
+						if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+							callback();
+						} else {
+							this.GetGroups(callback);
+						}
 					}
 				}
 				,failure:function(response, options){
+					Curriki.errors.fetchFailed = true;
 					console.error('Cannot get user\'s collection information', response, options);
 					alert(_('add.servertimedout.message.text'));
 					this.collections = [];
-					this.GetGroups(callback);
+					if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+						callback();
+					} else {
+						this.GetGroups(callback);
+					}
 				}
 			});
 		}
@@ -2020,6 +2031,8 @@ Curriki.data.user = {
 
 	,group_try:0
 	,GetGroups:function(callback){
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/groups'
 			,method:'GET'
@@ -2048,6 +2061,7 @@ Curriki.data.user = {
 				}
 			}
 			,failure:function(response, options){
+				Curriki.errors.fetchFailed = true;
 				console.error('Cannot get user\'s group information', response, options);
 				alert(_('add.servertimedout.message.text'));
 				this.groups = [];
@@ -3224,25 +3238,62 @@ console.log('createNode: End ',childInfo);
 		,requestData:function(node, callback){
 			if (node.attributes.currikiNodeType === 'group'){
 				this.dataUrl = '/xwiki/curriki/groups/'+(node.attributes.pageName||node.id)+'/collections';
+			} else if (node.attributes.currikiNodeType === 'myCollections'){
+				// Fetch user collections
+				this.dataUrl = null;
+			} else if (node.attributes.currikiNodeType === 'myGroups'){
+				// Fetch user's groups
+				this.dataUrl = null;
 			} else {
 				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
 
 			// From parent
 			if(this.fireEvent("beforeload", this, node, callback) !== false){
-				this.transId = Ext.Ajax.request({
-					 method: 'GET'
-					,url: this.dataUrl
-					,disableCaching:true
-					,headers: {
-						'Accept':'application/json'
+				if (this.dataUrl) {
+					this.transId = Ext.Ajax.request({
+						 method: 'GET'
+						,url: this.dataUrl
+						,disableCaching:true
+						,headers: {
+							'Accept':'application/json'
+						}
+						,success: this.handleResponse
+						,failure: this.handleFailure
+						,scope: this
+						,argument: {callback: callback, node: node}
+						,params: ''
+					});
+				} else {
+					this.transId = Math.floor(Math.random()*65535);
+					// Is a mycollections or mygroups request
+					if (node.attributes.currikiNodeType === 'myCollections'){
+						Curriki.settings.fetchMyCollectionsOnly = true;
+						// Load collections, then call handle[Response,Failure] with
+						// {resonseText: <collections>, argument: {node: node, callback: callback} }
+						Curriki.data.user.GetCollections(function(){
+							var response = {a:{callback: callback, node: node}};
+							if (Curriki.errors.fetchFailed) {
+								response.responseText = "[]";
+								this.handleFailure(response);
+							} else {
+								response.responseText = Ext.util.JSON.encode(Curriki.data.user.collectionChildren);
+								this.handleResponse(response);
+							}
+						});
+					} else if (node.attributes.currikiNodeType === 'myGroups'){
+						Curriki.data.user.GetGroups(function(){
+							var response = {a:{callback: callback, node: node}};
+							if (Curriki.errors.fetchFailed) {
+								response.responseText = "[]";
+								this.handleFailure(response);
+							} else {
+								response.responseText = Ext.util.JSON.encode(Curriki.data.user.groupChildren);
+								this.handleResponse(response);
+							}
+						});
 					}
-					,success: this.handleResponse
-					,failure: this.handleFailure
-					,scope: this
-					,argument: {callback: callback, node: node}
-					,params: ''
-				});
+				}
 			} else {
 				// if the load is cancelled, make sure we notify
 				// the node that we are done
