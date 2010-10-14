@@ -1758,7 +1758,7 @@ Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
 
 
-if (!('console' in window) || !('firebug' in console)){
+if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
 	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
 	             "trace", "profile", "profileEnd"];
@@ -3089,7 +3089,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
-console.log('createNode: ',attr);
+//console.log('createNode: ',attr);
 			if (this.setFullRollover) {
 				if ('string' !== Ext.type(attr.qtip)
 					&& 'string' === Ext.type(attr.description)
@@ -3145,7 +3145,7 @@ console.log('createNode: ',attr);
 				if (this.truncateTitle !== false) {
 					p.setText(Ext.util.Format.ellipsis(p.text, Ext.num(this.truncateTitle, 125)));
 				}
-console.log('createNode: parent', p);
+//console.log('createNode: parent', p);
 				return p;
 			}
 
@@ -3224,7 +3224,7 @@ console.log('createNode: parent', p);
 			   childInfo.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
 			}
 
-console.log('createNode: End ',childInfo);
+//console.log('createNode: End ',childInfo);
 			var retNode = (childInfo.leaf
 				   ? new Ext.tree.TreeNode(childInfo)
 				   : new Ext.tree.AsyncTreeNode(childInfo));
@@ -3240,17 +3240,17 @@ console.log('createNode: End ',childInfo);
 				this.dataUrl = '/xwiki/curriki/groups/'+(node.attributes.pageName||node.id)+'/collections';
 			} else if (node.attributes.currikiNodeType === 'myCollections'){
 				// Fetch user collections
-				this.dataUrl = null;
+				this.dataUrl = 'myCollections';
 			} else if (node.attributes.currikiNodeType === 'myGroups'){
 				// Fetch user's groups
-				this.dataUrl = null;
+				this.dataUrl = 'myGroups';
 			} else {
 				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
 
 			// From parent
 			if(this.fireEvent("beforeload", this, node, callback) !== false){
-				if (this.dataUrl) {
+				if (this.dataUrl.indexOf('/') === 0) {
 					this.transId = Ext.Ajax.request({
 						 method: 'GET'
 						,url: this.dataUrl
@@ -3267,31 +3267,30 @@ console.log('createNode: End ',childInfo);
 				} else {
 					this.transId = Math.floor(Math.random()*65535);
 					// Is a mycollections or mygroups request
+					var response = {argument:{callback: callback, node: node}};
 					if (node.attributes.currikiNodeType === 'myCollections'){
 						Curriki.settings.fetchMyCollectionsOnly = true;
 						// Load collections, then call handle[Response,Failure] with
 						// {resonseText: <collections>, argument: {node: node, callback: callback} }
-						Curriki.data.user.GetCollections(function(){
-							var response = {a:{callback: callback, node: node}};
+						Curriki.data.user.GetCollections((function(){
 							if (Curriki.errors.fetchFailed) {
-								response.responseText = "[]";
+								response.responseText = "[]"; // Need Empty Msg
 								this.handleFailure(response);
 							} else {
 								response.responseText = Ext.util.JSON.encode(Curriki.data.user.collectionChildren);
 								this.handleResponse(response);
 							}
-						});
+						}).createDelegate(this));
 					} else if (node.attributes.currikiNodeType === 'myGroups'){
-						Curriki.data.user.GetGroups(function(){
-							var response = {a:{callback: callback, node: node}};
+						Curriki.data.user.GetGroups((function(){
 							if (Curriki.errors.fetchFailed) {
-								response.responseText = "[]";
+								response.responseText = "[]"; // Need Empty Msg
 								this.handleFailure(response);
 							} else {
 								response.responseText = Ext.util.JSON.encode(Curriki.data.user.groupChildren);
 								this.handleResponse(response);
 							}
-						});
+						}).createDelegate(this));
 					}
 				}
 			} else {
