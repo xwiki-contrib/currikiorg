@@ -2049,9 +2049,9 @@ Curriki.data.user = {
 					if (this.group_try < 5){
 						this.GetGroups(callback);
 					} else {
+						//console.error('Cannot get user\'s group information', response, options);
+						//alert(_('add.servertimedout.message.text'));
 						throw {message: "GetUserinfo: Json object not found"};
-						console.error('Cannot get user\'s group information', response, options);
-						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.group_try = 0;
@@ -3274,7 +3274,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 						// {resonseText: <collections>, argument: {node: node, callback: callback} }
 						Curriki.data.user.GetCollections((function(){
 							if (Curriki.errors.fetchFailed) {
-								response.responseText = "[]"; // Need Empty Msg
+								response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"You have no collections to add this resource into. To make a personal collection <a href=\\"\\">click here</a>.", "qtip":"You have no collections to add this resource into.", "allowDrag":false, "allowDrop":false, "leaf":true}]'; // Need Empty Msg
 								this.handleFailure(response);
 							} else {
 								response.responseText = Ext.util.JSON.encode(Curriki.data.user.collectionChildren);
@@ -3284,7 +3284,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 					} else if (node.attributes.currikiNodeType === 'myGroups'){
 						Curriki.data.user.GetGroups((function(){
 							if (Curriki.errors.fetchFailed) {
-								response.responseText = "[]"; // Need Empty Msg
+								response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"Join or create a group to add into group collections.", "qtip":"Join or create a group to add into group collections.", "allowDrag":false, "allowDrop":false, "leaf":true}]'; // Need Empty Msg
 								this.handleFailure(response);
 							} else {
 								response.responseText = Ext.util.JSON.encode(Curriki.data.user.groupChildren);
