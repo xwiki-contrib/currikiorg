@@ -3274,13 +3274,13 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 						// {resonseText: <collections>, argument: {node: node, callback: callback} }
 						Curriki.data.user.GetCollections((function(){
 							if (Curriki.errors.fetchFailed) {
-								response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"You have no collections to add this resource into. To make a personal collection <a href=\\"\\">click here</a>.", "qtip":"You have no collections to add this resource into.", "allowDrag":false, "allowDrop":false, "leaf":true}]'; // Need Empty Msg
+								response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"'+_('add.chooselocation.collections.user.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
 								this.handleFailure(response);
 							} else {
 								if (Curriki.data.user.collectionChildren.length > 0) {
 									response.responseText = Ext.util.JSON.encode(Curriki.data.user.collectionChildren);
 								} else {
-									response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"You have no collections to add this resource into. To make a personal collection <a href=\\"\\">click here</a>.", "qtip":"You have no collections to add this resource into.", "allowDrag":false, "allowDrop":false, "leaf":true}]'; // Need Empty Msg
+									response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"'+_('add.chooselocation.collections.user.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
 								}
 								this.handleResponse(response);
 							}
@@ -3288,13 +3288,13 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 					} else if (node.attributes.currikiNodeType === 'myGroups'){
 						Curriki.data.user.GetGroups((function(){
 							if (Curriki.errors.fetchFailed) {
-								response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"Join or create a group to add into group collections.", "qtip":"Join or create a group to add into group collections.", "allowDrag":false, "allowDrop":false, "leaf":true}]'; // Need Empty Msg
+								response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"'+_('add.chooselocation.groups.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
 								this.handleFailure(response);
 							} else {
 								if (Curriki.data.user.groupChildren.length > 0) {
 									response.responseText = Ext.util.JSON.encode(Curriki.data.user.groupChildren);
 								} else {
-									response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"Join or create a group to add into group collections.", "qtip":"Join or create a group to add into group collections.", "allowDrag":false, "allowDrop":false, "leaf":true}]'; // Need Empty Msg
+									response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"'+_('add.chooselocation.groups.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
 								}
 								this.handleResponse(response);
 							}
