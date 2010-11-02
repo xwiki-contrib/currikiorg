@@ -70,6 +70,8 @@ Curriki.data.user = {
 
 	,collection_try:0
 	,GetCollections:function(callback){
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
 		if (Curriki.data.user.gotCollections){
 			// Already have collections
 			callback();
@@ -100,14 +102,23 @@ Curriki.data.user = {
 						this.collections = o;
 						this.collectionChildren = this.CreateCollectionChildren();
 	console.log('Collections: ', this.collectionChildren);
-						this.GetGroups(callback);
+						if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+							callback();
+						} else {
+							this.GetGroups(callback);
+						}
 					}
 				}
 				,failure:function(response, options){
+					Curriki.errors.fetchFailed = true;
 					console.error('Cannot get user\'s collection information', response, options);
 					alert(_('add.servertimedout.message.text'));
 					this.collections = [];
-					this.GetGroups(callback);
+					if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+						callback();
+					} else {
+						this.GetGroups(callback);
+					}
 				}
 			});
 		}
@@ -115,6 +126,8 @@ Curriki.data.user = {
 
 	,group_try:0
 	,GetGroups:function(callback){
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/groups'
 			,method:'GET'
@@ -131,9 +144,9 @@ Curriki.data.user = {
 					if (this.group_try < 5){
 						this.GetGroups(callback);
 					} else {
+						//console.error('Cannot get user\'s group information', response, options);
+						//alert(_('add.servertimedout.message.text'));
 						throw {message: "GetUserinfo: Json object not found"};
-						console.error('Cannot get user\'s group information', response, options);
-						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.group_try = 0;
@@ -143,6 +156,7 @@ Curriki.data.user = {
 				}
 			}
 			,failure:function(response, options){
+				Curriki.errors.fetchFailed = true;
 				console.error('Cannot get user\'s group information', response, options);
 				alert(_('add.servertimedout.message.text'));
 				this.groups = [];

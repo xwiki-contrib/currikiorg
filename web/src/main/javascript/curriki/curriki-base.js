@@ -12,7 +12,7 @@ Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
 
 
-if (!('console' in window) || !('firebug' in console)){
+if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
 	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
 	             "trace", "profile", "profileEnd"];
