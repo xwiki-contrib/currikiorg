@@ -7,7 +7,7 @@
 Ext.ns('Curriki.module.search.form');
 
 var Search = Curriki.module.search;
-var forms = Search.form; 
+var forms = Search.form;
 
 Search.init = function(){
 	console.log('search: init');
