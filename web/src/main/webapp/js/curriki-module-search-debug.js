@@ -2816,8 +2816,13 @@ console.log('now util.doSearch', tab, pagerValues);
 			var provider = new Ext.state.Provider();
 			var encodedToken = provider.encodeValue(token);
 			console.log('Saving History', {values: token});
-			Search.history.setLastToken(encodedToken);
-			Ext.History.add(encodedToken);
+            if(Search.history.lastHistoryToken) {
+                Search.history.setLastToken(encodedToken);
+                Ext.History.add(encodedToken);
+            } else {
+                Search.history.setLastToken(encodedToken);
+                window.location.replace("/xwiki/bin/view/Search/#" + encodedToken);
+            }
 		};
 
 		Search.tabPanel = {
