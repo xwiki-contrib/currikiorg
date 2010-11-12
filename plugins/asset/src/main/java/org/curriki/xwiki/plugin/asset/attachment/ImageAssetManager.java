@@ -31,7 +31,7 @@ public class ImageAssetManager extends AttachmentAssetManager {
     public void updateSubAssetClass(XWikiDocument assetDoc, String filetype, String category, XWikiAttachment attachment, XWikiContext context) {
         assetDoc.getObject(Constants.IMAGE_ASSET_CLASS, true, context);
 
-        ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin(ImagePlugin.PLUGIN_NAME, context);
+        ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin("image", context);
 
         BaseObject imageObject = assetDoc.getObject(Constants.IMAGE_ASSET_CLASS, true, context);
 
