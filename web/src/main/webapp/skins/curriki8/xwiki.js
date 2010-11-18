@@ -534,7 +534,7 @@ var CurrikiApp = {
 
 	errHighlight: function(elName, elmFocus) {
 		$(elName).addClassName('highlight');
-		if (elmFocus && !CurrikiApp.errFocusOn) {
+		if (elmFocus && !CurrikiApp.errFocusOn && typeof(elmFocus.focus)!="undefined") {
 			CurrikiApp.errFocusOn = true;
 			elmFocus.focus();
 			window.scrollTo(0, jt_.scrollTop() - 100);

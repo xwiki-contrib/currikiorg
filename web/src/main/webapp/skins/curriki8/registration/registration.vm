@@ -1,3 +1,8 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #macro(registrationinit $type) ##{
 #set($g_RegReq = $msg.get('flag.dialog.required.field.icon'))
 #set($g_ClearPx = "/xwiki/skins/curriki8/images/px.gif")
@@ -239,6 +244,12 @@ function validateRegisterForm(){
 		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
 		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.name2_long')");
 	}
+
+    if ($F('XWiki.XWikiUsers_0_member_type')=="0" || $F('XWiki.XWikiUsers_0_member_type').length<1){
+        errorMissing = true;
+        CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_member_type", $('register')['XWiki.XWikiUsers_0_member_type']);
+    }
+
 
 	if ($('field-receive-email-some') && $('field-receive-email-some').checked){
 		if(!$('field-receive-email-newsletters').checked
@@ -522,6 +533,7 @@ document.observe('dom:loaded', function(){
 			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
 			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
+            #set($i = $pfx+'.member_type')#registrationformtextfield($i 'member_type')
 		</ul>
 	</div>
 </fieldset>
@@ -628,12 +640,6 @@ document.observe('dom:loaded', function(){
 	<div id="interestWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: none;"#end>
 		<p>$msg.get("${pfx}.intro")</p>
 		<ul>
-			<li>
-				<span><label for="XWiki.XWikiUsers_0_member_type">$msg.get("${pfx}.member_type.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.member_type.tooltip")"/></span>
-				<ul class="fieldList">
-					<li>$userdoc.display('member_type', "edit")</li>
-				</ul>
-			</li>
 			<li>
 				<span><label for="XWiki.XWikiUsers_0_affiliation">$msg.get("${pfx}.affiliation.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.affiliation.tooltip")"/></span>
 				<ul class="fieldList">

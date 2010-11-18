@@ -592,6 +592,12 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
   *#
 #macro(mycurriki_viewprofile $userdoc $userobj) ##{
 <!-- Curriki View Profile -->
+    #set($member_type = "")
+    #set($member_type = $!userobj.getProperty("member_type").getValue())
+    #if($member_type == '---' || $member_type == '0') ##{
+    #set($member_type = "")
+    #end ##}
+    
 <fieldset>
 <h3>$msg.get('view_profile.account_info.header')</h3>
 <div class="fields-wrp">
@@ -618,6 +624,16 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 			*$msg.get("view_profile.account_info.login.title")*
 			#mycurriki_dashifempty($userdoc.name)
 		</li>
+        #if($member_type != "") ##{
+    	<li>
+    		*$msg.get("view_profile.account_info.member_type.title")*
+		    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
+    	</li>
+        #end ##}
+##        <li>
+##           *$msg.get("view_profile.account_info.member_type")*
+##            #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
+##        </li>
 	#end ##}
 	## Only show if the member has allowed email to be shared, or is a private profile viewing
 	#set($show_email = 0)
@@ -692,11 +708,6 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 </fieldset>
 #end ##}
 
-#set($member_type = "")
-#set($member_type = $!userobj.getProperty("member_type").getValue())
-#if($member_type == '---' || $member_type == '0') ##{
-#set($member_type = "")
-#end ##}
 #set($affiliation = "")
 #set($affiliation = $!userobj.getProperty("affiliation").getValue())
 #set($city = "")
@@ -739,12 +750,6 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 <h3>$msg.get('view_profile.interests.header')</h3>
 <div class="fields-wrp">
 <ul>
-#if($member_type != "") ##{
-	<li>
-		*$msg.get("view_profile.interests.member_type.title")*
-		#mycurriki_dashifempty($userdoc.display("member_type", $userobj))
-	</li>
-#end ##}
 #if($affiliation != "") ##{
 	<li>
 		*$msg.get("view_profile.interests.affiliation.title")*
