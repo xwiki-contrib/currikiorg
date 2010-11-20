@@ -721,6 +721,10 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #end ##}
 #set($language = "")
 #set($language = $!userobj.getProperty("language").getValue())
+#set($publish_intent = "")
+#set($publish_intent = $!userobj.getProperty("$publish_intent").getValue())
+#set($value_add = "")
+#set($value_add = $!userobj.getProperty("$value_add").getValue())
 #set($comment = "")
 #set($comment = $!userobj.getProperty("comment").getValue())
 #set($contact = "")
@@ -818,6 +822,18 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 	<li>
 		*$msg.get("view_profile.interests.language.title")*
 		#mycurriki_dashifempty($userdoc.display("language", $userobj))
+	</li>
+#end ##}
+#if($publish_intent != "") ##{
+	<li>
+		*$msg.get("view_profile.interests.publish_intent.title")*
+		#mycurriki_dashifempty($userdoc.display("publish_intent", $userobj))
+	</li>
+#end ##}
+#if($value_add != "") ##{
+	<li>
+		*$msg.get("view_profile.interests.value_add.title")*
+		#mycurriki_dashifempty($userdoc.display("value_add", $userobj))
 	</li>
 #end ##}
 #if($comment != "") ##{

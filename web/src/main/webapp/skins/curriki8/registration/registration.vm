@@ -118,9 +118,9 @@ $userdoc.use("XWiki.XWikiUsers")
 #end ##}
 
 #macro(startregistrationform) ##{
-#if($g_RegType == 'edit_profile') ##{
+###if($g_RegType == 'edit_profile') ##{
 <script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
-#end ##}
+###end ##}
 {pre}<script type="text/javascript">
 /* <![CDATA[ */
 var regFormOk = false;
@@ -442,12 +442,16 @@ $errMsg
 {pre}
 <script type="text/javascript">
 /* <![CDATA[ */
-#if($g_RegType == 'edit_profile') ##{
+
 function initRTEs() {
 	tinyMCE.init({
 		language: "en",
 		mode: "exact",
-		elements : "XWiki.XWikiUsers_0_comment,XWiki.XWikiUsers_0_contact,XWiki.XWikiUsers_0_websites",
+        #if($g_RegType == 'edit_profile') ##{
+        elements : "XWiki.XWikiUsers_0_comment,XWiki.XWikiUsers_0_contact,XWiki.XWikiUsers_0_websites,XWiki.XWikiUsers_0_value_add",
+        #else
+        elements : "XWiki.XWikiUsers_0_value_add",
+        #end
 		theme : "advanced",
 		plugins: 'safari,table,save,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
 	
@@ -466,7 +470,7 @@ if (Ext.isIE6) {
 	jt_.AddListener(window, 'load', initRTEs);
 }
 else initRTEs();
-#end ##}
+###end ##}
 
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
@@ -533,7 +537,7 @@ document.observe('dom:loaded', function(){
 			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
 			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
-            #set($i = $pfx+'.member_type')#registrationformtextfield($i 'member_type')
+            #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
 		</ul>
 	</div>
 </fieldset>
@@ -689,6 +693,18 @@ document.observe('dom:loaded', function(){
 					<li>$userdoc.display('language', "edit")</li>
 				</ul>
 			</li>
+            <li>
+                <span><label for="XWiki.XWikiUsers_0_publish_intent">$msg.get("${pfx}.publish_intent.title")</label>##
+                <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.publish_intent.tooltip")"/></span>
+                <p class="instructions">$msg.get("${pfx}.publish_intent.description")</p>
+                $userdoc.display('publish_intent', "edit")
+            </li>
+            <li>
+                <span><label for="XWiki.XWikiUsers_0_value_add">$msg.get("${pfx}.value_add.title")</label>##
+                <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.value_add.tooltip")"/></span>
+                <p class="instructions">$msg.get("${pfx}.value_add.description")</p>
+                $userdoc.display('value_add', "edit")
+            </li>
 		#if($g_RegType == 'edit_profile') ##{
 				<li>
 					<span><label for="XWiki.XWikiUsers_0_comment">$msg.get("${pfx}.bio.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.bio.tooltip")"/></span>
