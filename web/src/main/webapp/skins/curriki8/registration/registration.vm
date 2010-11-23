@@ -11,6 +11,9 @@
 #set($g_RegType = $type)
 #end ##}
 #if($g_RegType == 'edit_profile') ##{
+#if(!$xwiki.hasAccessLevel("edit",$userdoc.fullname))
+ $response.sendError(403,"Not authorized");       
+#end
 ## $userdoc should already be set
 $userdoc.use("XWiki.XWikiUsers")
 #else ##}{
