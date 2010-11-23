@@ -484,17 +484,17 @@ function toggleCorporateFieldsVisible() {
     if(memberType=="corporation") {
         i = $('registerform_publish_intent_section');
         if(i) i.show();
-        i = $('registerform_value_added_section');
+        i = $('registerform_value_add_section');
         if(i) i.show();
     } else {
         i = $('registerform_publish_intent_section');
-        if(i) i.show();
-        i = $('registerform_value_added_section');
-        if(i) i.show();
+        if(i) i.hide();
+        i = $('registerform_value_add_section');
+        if(i) i.hide();
     }
 }
 var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
-if(memberType) memberType.onchange = toggletCorporateFieldsVisible;
+if(memberType) memberType.onchange = toggleCorporateFieldsVisible;
 /* ]]> */
 </script>
 {/pre}
