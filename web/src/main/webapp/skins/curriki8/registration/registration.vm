@@ -476,6 +476,25 @@ document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
 });
+##
+function toggleCorporateFieldsVisible() {
+    var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
+    memberType = memberType.options[memberType.selectedIndex].value;
+    var i;
+    if(memberType=="corporation") {
+        i = $('registerform_publish_intent_section');
+        if(i) i.show();
+        i = $('registerform_value_added_section');
+        if(i) i.show();
+    } else {
+        i = $('registerform_publish_intent_section');
+        if(i) i.show();
+        i = $('registerform_value_added_section');
+        if(i) i.show();
+    }
+}
+var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
+if(memberType) memberType.onchange = toggletCorporateFieldsVisible;
 /* ]]> */
 </script>
 {/pre}
@@ -548,9 +567,9 @@ document.observe('dom:loaded', function(){
 <fieldset class="optional">
 	<h3>$msg.get("${pfx}.header")</h3> 
 #if($g_RegType != 'edit_profile') ##{
-	<a href="" id="privacyToggler" class="toggler collapsed" name="privacyToggle" onclick="return privacyToggle();">$msg.get('register.module.collapsed')</a>
+	<a href="" id="privacyToggler" class="toggler expanded" name="privacyToggle" onclick="return privacyToggle();">$msg.get('register.module.expanded')</a>
 #end ##}
-	<div id="privacyWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: none;"#end>
+	<div id="privacyWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: blcok;"#end>
 		<p>$msg.get("${pfx}.intro")</p>
 		<ul>
 			<li id="block-show_contact">
@@ -639,9 +658,9 @@ document.observe('dom:loaded', function(){
 <fieldset class="optional">
 	<h3>$msg.get("${pfx}.header")</h3> 
 #if($g_RegType != 'edit_profile') ##{
-	<a href="" id="interestToggler" class="toggler collapsed" name="interestToggle" onclick="return interestToggle();">$msg.get('register.module.collapsed')</a>
+	<a href="" id="interestToggler" class="toggler expanded" name="interestToggle" onclick="return interestToggle();">$msg.get('register.module.expanded')</a>
 #end ##}
-	<div id="interestWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: none;"#end>
+	<div id="interestWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: block;"#end>
 		<p>$msg.get("${pfx}.intro")</p>
 		<ul>
 			<li>
@@ -693,13 +712,13 @@ document.observe('dom:loaded', function(){
 					<li>$userdoc.display('language', "edit")</li>
 				</ul>
 			</li>
-            <li>
+            <li id="registerform_publish_intent_section">
                 <span><label for="XWiki.XWikiUsers_0_publish_intent">$msg.get("${pfx}.publish_intent.title")</label>##
                 <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.publish_intent.tooltip")"/></span>
                 <p class="instructions">$msg.get("${pfx}.publish_intent.description")</p>
                 $userdoc.display('publish_intent', "edit")
             </li>
-            <li>
+            <li id="registerform_value_add_section">
                 <span><label for="XWiki.XWikiUsers_0_value_add">$msg.get("${pfx}.value_add.title")</label>##
                 <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.value_add.tooltip")"/></span>
                 <p class="instructions">$msg.get("${pfx}.value_add.description")</p>
