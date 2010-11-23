@@ -624,12 +624,6 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 			*$msg.get("view_profile.account_info.login.title")*
 			#mycurriki_dashifempty($userdoc.name)
 		</li>
-        #if($member_type != "") ##{
-    	<li>
-    		*$msg.get("view_profile.interests.member_type.title")*
-		    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
-    	</li>
-        #end ##}
 ##        <li>
 ##           *$msg.get("view_profile.account_info.member_type")*
 ##            #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
@@ -648,6 +642,12 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		*$msg.get("view_profile.account_info.member_since")*
 		$xwiki.formatDate($userdoc.creationDate,$msg.get("mycurriki.dateFormat"))
 	</li>
+    #if($member_type != "") ##{
+    <li>
+    	*$msg.get("view_profile.interests.member_type.title")*
+	    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
+    </li>
+    #end ##}
 </ul>
 </div>
 </fieldset>
@@ -723,6 +723,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 #set($language = $!userobj.getProperty("language").getValue())
 #set($publish_intent = "")
 #set($publish_intent = $!userobj.getProperty("publish_intent").getValue())
+#set($publish_intent = $userdoc.display("publish_intent", $userobj).replaceAll("#--#",", "))
 #set($value_add = "")
 #set($value_add = $!userobj.getProperty("value_add").getValue())
 #set($comment = "")
@@ -827,7 +828,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 <!-- publish_intent="$publish_intent" and value_add="$value_add" -->
 #if($publish_intent != "") ##{
 	<li>*$msg.get("view_profile.interests.publish_intent.title")*
-		#mycurriki_dashifempty($userdoc.display("publish_intent", $userobj).replaceAll("#--#",", "))
+		#mycurriki_dashifempty($publish_intent)
 	</li>##}
 #end ##}
 #if($value_add != "") ##{
