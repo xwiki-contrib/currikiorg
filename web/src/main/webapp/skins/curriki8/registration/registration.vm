@@ -481,7 +481,7 @@ function toggleCorporateFieldsVisible() {
     var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
     memberType = memberType.options[memberType.selectedIndex].value;
     var i;
-    if(memberType=="corporation") {
+    if(memberType=="corporation" || memberType=="nonprofit") {
         i = $('registerform_publish_intent_section');
         if(i) i.show();
         i = $('registerform_value_add_section');
