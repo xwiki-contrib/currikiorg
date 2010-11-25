@@ -13,6 +13,10 @@
 #if($g_RegType == 'edit_profile') ##{
 ## $userdoc should already be set
 $userdoc.use("XWiki.XWikiUsers")
+#if(!$xwiki.hasAccessLevel("edit",$context.user,$userdoc.fullName))
+$response.sendError(403,"Not authorized.")
+<!-- not authorized! -->
+#end
 #else ##}{
 #set($userdoc = $xwiki.getDocument("XWiki.XWikiUserTemplate"))
 #set($ok = $userdoc.addObjectFromRequest("XWiki.XWikiUsers"))
@@ -109,8 +113,10 @@ $userdoc.use("XWiki.XWikiUsers")
 <div id="intro-register">
 	<h1>$msg.get('register.curriki_intro.title')</h1> 
 	<p>$msg.get('register.curriki_intro.description')
-		<a href="$msg.get('register.curriki_intro.link1_url')" ext:qtip="$msg.get('register.curriki_intro.link1_rollover')">$msg.get('register.curriki_intro.link1_text')</a> |
-		<a href="$msg.get('register.curriki_intro.link2_url')" ext:qtip="$msg.get('register.curriki_intro.link2_rollover')">$msg.get('register.curriki_intro.link2_text')</a>
+		<a href="$msg.get('register.curriki_intro.link1_url')" target="_blank" ## 
+           ext:qtip="$msg.get('register.curriki_intro.link1_rollover')">$msg.get('register.curriki_intro.link1_text')</a> |
+		<a href="$msg.get('register.curriki_intro.link2_url')" target="_blank" ##
+           ext:qtip="$msg.get('register.curriki_intro.link2_rollover')">$msg.get('register.curriki_intro.link2_text')</a>
     </p>
 	<p>$msg.get('register.curriki_intro.note')</p>
 	<p>$msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
@@ -358,6 +364,7 @@ $errMsg
 </div>
 ## Calculate %complete
 #set($c = 3) ## login name, password, email address have to exist
+#set($numberoffield = 20)
 ##
 #set($x = "")#set($x = $!userobj.getProperty('first_name').value)
 #if("$x" != "")#set($c = 1 + $c)#end
@@ -399,6 +406,16 @@ $errMsg
 #set($x = "")#set($x = $!userobj.getProperty('language').value)
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
+#set($mt=$!userobj.getProperty('member_type').value)
+#if($mt=="corporation" || $mt=="nonprofit" || $mt=="")
+    #set($numberoffield=22)
+    #set($x = "")#set($x = $!userobj.getProperty('publish_intent').value)
+    #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+    #set($x = "")#set($x = $!userobj.getProperty('value_add').value)
+    #if("$x" != "")#set($c = 1 + $c)#end
+#end
+##
 #set($x = "")#set($x = $!userobj.getProperty('comment').value)
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
@@ -411,7 +428,7 @@ $errMsg
 #if($userdoc.attachmentList.size()>0)#set($c = 1 + $c)#end
 ##
 #set($c = 100 * $c)
-#set($c = $c / 20)
+#set($c = $c / $numberoffield)
 #set($c = "${c}%")
 ##
 <div class="profile-push">$msg.get('edit_profile.intro.percent_complete', [$c])</div>
@@ -567,9 +584,9 @@ if(memberType) memberType.onchange = toggleCorporateFieldsVisible;
 <fieldset class="optional">
 	<h3>$msg.get("${pfx}.header")</h3> 
 #if($g_RegType != 'edit_profile') ##{
-	<a href="" id="privacyToggler" class="toggler expanded" name="privacyToggle" onclick="return privacyToggle();">$msg.get('register.module.expanded')</a>
+	<a href="" id="privacyToggler" class="toggler collapsed" name="privacyToggle" onclick="return privacyToggle();">$msg.get('register.module.collapsed')</a>
 #end ##}
-	<div id="privacyWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: blcok;"#end>
+	<div id="privacyWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: none;"#end>
 		<p>$msg.get("${pfx}.intro")</p>
 		<ul>
 			<li id="block-show_contact">

@@ -104,12 +104,16 @@ $text
 #end ## }
 #end ## }
 #end ## }
-#end ## }
+#end ## }h
 #if(!$whofor.startsWith("XWiki.")) ## {
 #set($whofor = "XWiki.$whofor")
 #end ## }
 ## Now know whofor
 #set($userdoc = $xwiki.getDocument($whofor))
+#if(!$xwiki.hasAccessLevel("edit",$context.user,$userdoc.fullName))##
+$response.sendError(403,"Not authorized.")##
+<!-- not authorized! -->##
+#end##
 #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 #set($g_userdoc = $userdoc)
 #set($g_userobj = $userobj)
