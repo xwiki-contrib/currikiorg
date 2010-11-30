@@ -116,7 +116,6 @@ public class DownloadAction extends XWikiAction
         response.setDateHeader("Expires", System.currentTimeMillis() + 604800000l);
         response.addHeader("Cache-Control","max-age: 604800");
         response.addHeader("ETag", serverETag);
-        System.out.println("Downloading attachment: " + attachment);
         // Sending the content of the attachment
         byte[] data;
         try {
