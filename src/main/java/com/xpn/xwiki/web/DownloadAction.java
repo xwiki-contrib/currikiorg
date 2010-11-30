@@ -76,6 +76,7 @@ public class DownloadAction extends XWikiAction
         // Choose the right content type
         String mimetype = attachment.getMimeType(context);
         response.setContentType(mimetype);
+        boolean forceDownload = "1".equals(request.getParameter("force-download"));
 
         String ofilename =
             Util.encodeURI(attachment.getFilename(), context).replaceAll("\\+", " ");
@@ -86,13 +87,36 @@ public class DownloadAction extends XWikiAction
         // dialog box. However, all mime types that cannot be displayed by the browser do prompt a
         // Save dialog box (exe, zip, xar, etc).
         String dispType = "inline";
-        if ("1".equals(request.getParameter("force-download"))) {
+        if (forceDownload) {
             dispType = "attachment";
         }
+
+        // see http://www.mnot.net/cache_docs/ for detailed explanations for
+        // a better caching strategy
+        String serverETag = ofilename + attachment.getVersion();
+
+        long lastModifOnClient = request.getDateHeader("If-Modified-Since");
+        long lastModifOnServer = attachment.getDate().getTime();
+        if(!forceDownload && lastModifOnClient != -1 && lastModifOnClient >= lastModifOnServer) {
+            boolean shouldntDeliver = true;
+            String clientETag = request.getHeader("If-None-Match");
+            if(clientETag!=null) {// also "validate" with the ETag, not only the if-modified
+                shouldntDeliver = clientETag.equals(serverETag);
+            }
+            if(shouldntDeliver) {
+                response.setStatus(XWikiResponse.SC_NOT_MODIFIED);
+                return null;
+            }
+        }
+
         response.addHeader("Content-disposition", dispType + "; filename=\"" + ofilename + "\"");
 
-        response.setDateHeader("Last-Modified", attachment.getDate().getTime());
-
+        response.setDateHeader("Last-Modified", lastModifOnServer);
+        // 7*24*60*60*1000l = 604800 (seconds in 7 days)
+        response.setDateHeader("Expires", System.currentTimeMillis() + 604800000l);
+        response.addHeader("Cache-Control","max-age: 604800");
+        response.addHeader("ETag", serverETag);
+        System.out.println("Downloading attachment: " + attachment);
         // Sending the content of the attachment
         byte[] data;
         try {
