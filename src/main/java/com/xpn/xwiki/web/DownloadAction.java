@@ -112,7 +112,7 @@ public class DownloadAction extends XWikiAction
         response.addHeader("Content-disposition", dispType + "; filename=\"" + ofilename + "\"");
 
         response.setDateHeader("Last-Modified", lastModifOnServer);
-        // 7*24*60*60*1000l = 604800 (seconds in 7 days)
+        // 7*24*60*60*1000 = 604800 (seconds in 7 days)
         response.setDateHeader("Expires", System.currentTimeMillis() + 604800000l);
         response.addHeader("Cache-Control","max-age: 604800");
         response.addHeader("ETag", serverETag);
