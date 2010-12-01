@@ -492,6 +492,11 @@ else initRTEs();
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
+    var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
+    if(memberType) {
+        memberType.onchange = toggleCorporateFieldsVisible;
+        toggleCorporateFieldsVisible();
+    }
 });
 ##
 function toggleCorporateFieldsVisible() {
@@ -510,8 +515,6 @@ function toggleCorporateFieldsVisible() {
         if(i) i.hide();
     }
 }
-var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
-if(memberType) memberType.onchange = toggleCorporateFieldsVisible;
 /* ]]> */
 </script>
 {/pre}
