@@ -110,10 +110,12 @@ $text
 #end ## }
 ## Now know whofor
 #set($userdoc = $xwiki.getDocument($whofor))
-#if(!$xwiki.hasAccessLevel("edit",$context.user,$userdoc.fullName))##
-$response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiPreferences")##(403,"Not authorized.")##
-<!-- not authorized! -->##
-#end##
+#set($access = "edit")
+#if($doc.name=="Profile")#set($access="view")#end
+#if(!$xwiki.hasAccessLevel($access,$context.user,$userdoc.fullName))
+$response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
+<!-- not authorized! -->
+#end
 #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 #set($g_userdoc = $userdoc)
 #set($g_userobj = $userobj)
