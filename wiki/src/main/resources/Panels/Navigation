@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.martagirdea</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.KApatterson</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.KApatterson</contentAuthor>
 <creationDate>1171480785000</creationDate>
-<date>1264532362000</date>
-<contentUpdateDate>1264532362000</contentUpdateDate>
-<version>105.1</version>
+<date>1272491938000</date>
+<contentUpdateDate>1272491938000</contentUpdateDate>
+<version>107.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Updating and rearranging.</comment>
+<comment>kp</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -178,7 +178,8 @@ function tourpop()
    [$msg.get('panel.navigation.featuredGroups'), "Main.FeaturedGroups"], 
    [$msg.get('panel.navigation.browseGroups'), "Groups.Browse"],
    [$msg.get('panel.navigation.createGroup'), "Groups.AboutCreatingGroups"],
-   [$msg.get('panel.navigation.currikiblog'), "http://blog.curriki.org/"]
+   [$msg.get('panel.navigation.currikiblog'), "http://blog.curriki.org/"],
+   [$msg.get('panel.navigation.currikimail'), "http://www.curriki.org/xwiki/bin/view/AdWordsJump/curriculummail0909?xpage=popup"]
   ]
 )
 ##
@@ -238,6 +239,19 @@ function tourpop()
    [$msg.get('panel.navigation.currikiblog'), "http://blog.curriki.org/"]
   ]
 )
+##
+##
+##SOCIAL NETWORKING
+#set($rot=$msg.get("panel.navigation.social_networking.rollover"))
+#navigationCategory($msg.get('panel.navigation.social_networking'), $rot, "", $defstate,
+  [
+  [$msg.get('panel.navigation.currikiblog'), "http://blog.curriki.org/"],
+  [$msg.get('panel.navigation.twitter'), "http://www.twitter.com/Curriki"],
+  [$msg.get('panel.navigation.facebook'), "http://www.facebook.com/pages/Curriki/134427817464"],
+  [$msg.get('panel.navigation.currikimail'), "http://www.curriki.org/xwiki/bin/view/AdWordsJump/curriculummail0909?xpage=popup"]
+  ]
+)
+##
 ##
 ##
 ##

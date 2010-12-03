@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1107744418000</creationDate>
-<date>1260911486000</date>
-<contentUpdateDate>1260911486000</contentUpdateDate>
-<version>72.1</version>
+<date>1291252589000</date>
+<contentUpdateDate>1291252589000</contentUpdateDate>
+<version>86.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>testing new panel</comment>
+<comment>kp</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -1837,9 +1837,9 @@ THANKS FOR JOINING CURRIKI!
 
 You have selected $xwikiname.replaceAll("XWiki.","") as your member login. 
 
-Curriki is a community of thousands of educators from around the world who are committed to using and sharing free and open education resources. Curriki originated from the idea that technology can play a crucial role in breaking down the barriers of the Education Divide -- the gap between those who have access to high-quality education and those who do not.
+You are now a member of a community of thousands of educators from around the world who are committed to using and sharing free and open education resources.
 
-Curriki offers thousands of free lessons, units, educational videos, and professional networking resources. As a member, you can use tools for building or posting your own curricula to share with teachers and students around the globe -- many from schools that would not be able to afford these resources otherwise.
+It is though community member participation that Curriki is able to offer thousands of free lessons, units, educational videos, and professional networking resources. As a member, you can use tools for building or posting your own curricula to share with teachers and students around the globe -- many from schools that would not be able to afford these resources otherwise.  
 
 
 START ENJOYING CURRIKI TODAY
@@ -1958,7 +1958,7 @@ Curriki</confirmation_email_content>
 <ldap_validate_password></ldap_validate_password>
 </property>
 <property>
-<leftPanels>Panels.Navigation,Panels.Donate,Panels.TableOfContents,Panels.MailingList,Panels.Sponsors,Panels.Watch Curriki Grow,Panels.FeaturedMembers,Panels.SearchTips,Panels.GroupTips,Panels.ResourceTips,Panels.MemberTips,Panels.TopRated,Panels.CreatingResourceTips</leftPanels>
+<leftPanels>Panels.Navigation,Panels.FavResources,Panels.Donate,Panels.TableOfContents,Panels.Advertising2,Panels.AllFeatured,Panels.Sponsors,Panels.Watch Curriki Grow,Panels.MailingList,Panels.FeaturedMembers,Panels.Students,Panels.SearchTips,Panels.GroupTips,Panels.ResourceTips,Panels.MemberTips,Panels.TopRated,Panels.CreatingResourceTips</leftPanels>
 </property>
 <property>
 <logo></logo>
@@ -2067,10 +2067,16 @@ Curriki</confirmation_email_content>
 <upload_maxsize>50000000</upload_maxsize>
 </property>
 <property>
+<use_email_verification></use_email_verification>
+</property>
+<property>
 <validation_email_content>#set($nl = $xwiki.getNl())
 From: Curriki Confirmation &lt;$sender&gt;${nl}To: $email${nl}Subject: Curriki Registration -- Action Needed
 
+#if($request.getParameter("XWiki.XWikiUsers_0_member_type")=="corporation")We are happy to count your company among Curriki's corporate members!
+#else
 Thank you for becoming a Curriki member!
+#end
 
 Please click this link to complete registration. http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')$xwiki.getURL('Registration.Complete')?xwikiname=$xwikiname&amp;validkey=$validkey If the link does not open your browser, please cut and paste the link into your browser.
 

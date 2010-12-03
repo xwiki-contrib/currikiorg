@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1193332613000</creationDate>
-<date>1248307925000</date>
-<contentUpdateDate>1248307925000</contentUpdateDate>
-<version>16.1</version>
+<date>1290520911000</date>
+<contentUpdateDate>1290520911000</contentUpdateDate>
+<version>26.1</version>
 <title>Groovy Script for Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>trying to make not-error</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,18 +55,17 @@
 <tags/>
 </property>
 </object>
-<content>/* Groovy Class [View Code&gt;$doc.fullName?viewer=code]  
-#** 
+<content>/** Groovy Class [View Code&gt;$doc.fullName?viewer=code]
+#*
    * Register Groovy Page
    * @programming
    * @type groovy
-   *#
 */
 
 import com.xpn.xwiki.api.Document;
 
 public class register {
- def msgmap = [ "email_notvalid": "This email is not valid", 
+ def msgmap = [ "email_notvalid": "This email is not valid",
 "account_already_exists": "This account already exists", "email_already_exists": "This email address is already used", "empty_password": "You have not entered a password", "unmatched_password" : "The passwords are not matching", "account_notvalid" : "This community name is invalid. Please enter a name without spaces or special characters.", "validation_failed" : "Some fields are incorrectly completed"];
 
  def xmsgmap;
@@ -79,12 +78,13 @@ public class register {
  def email = "";
  def password = "";
  def validkey = "";
+ def userdoc = null;
 
  public void setObjects(xwiki, context, msg) {
    setXWiki(xwiki)
    setContext(context)
    setMessageMap(msg)
- } 
+ }
 
  public void setMessageMap(msg) {
    xmsgmap = msg;
@@ -108,7 +108,7 @@ public class register {
      return msg3
    }
    else
-    return msg2 
+    return msg2
  }
 
  public String getMessage() {
@@ -127,12 +127,12 @@ public class register {
     message = "empty_password";
     return false;
    }
-   
+
    if ((password2==null)||(!password.equals(password2))) {
     message =  "unmatched_password";
     return false;
    }
-   
+
    return true;
  }
 
@@ -172,6 +172,14 @@ public class register {
    return true;
  }
 
+/*  public void log(String s) {
+  org.apache.commons.logging.LogFactory.getLog("groovy.Registration.RegisterGrooy").warn(s);
+  } */
+
+  public Document getUserdoc() {
+    return this.userdoc;
+  }
+
  public Document getUserDocument(request, generatePassword, withValidation) {
    def account = request.get("xwikiname");
    password = request.get("XWiki.XWikiUsers_0_password");
@@ -189,7 +197,7 @@ public class register {
    if (!isValidEmail(request)){
      return null;
    }
-   
+
    def userdoc = new Document(xwiki.xWiki.getDocument("XWiki.${account}", context.context), context.context);
    userdoc.addObjectFromRequest("XWiki.XWikiUsers");
    def userobj = userdoc.getObject("XWiki.XWikiUsers");
@@ -197,7 +205,7 @@ public class register {
    if (generatePassword) {
      password = org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(8);
      userobj.set("password", password);
-   }  
+   }
 
    if (withValidation) {
      userobj.set("active", "0");
@@ -249,7 +257,8 @@ public class register {
        xwiki.sendConfirmationMail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), "confirmation_email_content");
      }
 
-     return true; 
+     this.userdoc = userdoc;
+     return true;
     }
 
     message = "validation_failed";

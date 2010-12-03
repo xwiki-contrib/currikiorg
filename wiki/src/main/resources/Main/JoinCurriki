@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1161914843000</creationDate>
-<date>1248131473000</date>
-<contentUpdateDate>1248131473000</contentUpdateDate>
-<version>9.1</version>
+<date>1290520820000</date>
+<contentUpdateDate>1290520820000</contentUpdateDate>
+<version>17.1</version>
 <title>Register to Join Curriki</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>a</comment>
+<comment>removed log for now</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -80,6 +80,12 @@
 #registrationterms()
 #endregistrationform()
 #else ##}{ Registration succeeded -- go to email sent page
-$response.sendRedirect($xwiki.getURL('Registration.EmailSent'))
-#end ##}</content>
-</xwikidoc>
+#set($userdoc=$reg.userdoc)
+#set($userobj=$userdoc.getObject("XWiki.XWikiUsers"))
+    #if($userobj.getProperty("member_type").value=="corporation" || $userobj.getProperty("member_type").value=="nonprofit")
+        $response.sendRedirect($xwiki.getURL('Registration.EmailSentCorporations'))
+    #else
+        $response.sendRedirect($xwiki.getURL('Registration.EmailSent'))
+    #end
+#end ##}
+</content></xwikidoc>

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.joster</author>
+<author>XWiki.KApatterson</author>
 <customClass></customClass>
-<contentAuthor>XWiki.joster</contentAuthor>
+<contentAuthor>XWiki.KApatterson</contentAuthor>
 <creationDate>1201029761000</creationDate>
-<date>1248803521000</date>
-<contentUpdateDate>1248803521000</contentUpdateDate>
-<version>10.1</version>
+<date>1275943885000</date>
+<contentUpdateDate>1275943885000</contentUpdateDate>
+<version>12.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>add dimensions to PNG image</comment>
+<comment>kp</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -125,7 +125,14 @@
 <category>Information</category>
 </property>
 <property>
-<content>#if($doc.fullName!="Main.JoinCurriki") ##{
+<content>## The next line controls on and off. Change any 1 to 0 and it turns it off.
+#if(1==1)
+
+## The next line controls what space it is shown in. The || is an and statement, use != to be not equal too.
+
+#if( $doc.fullName != 'Main.WebHome' &amp;&amp; $doc.fullName == 'Main.JoinCurriki' &amp;&amp; ($doc.web == 'Search' || $doc.web == 'Main' || $doc.web=="Panels" || $doc.web=="Coll_creiswig") )
+
+##{
 &lt;div id="donate" class="shadow-outer"&gt;
 &lt;div class="shadow-middle"&gt;
 &lt;div class="shadow-inner"&gt; 
@@ -135,7 +142,11 @@
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-#end ##}</content>
+#end 
+
+#end
+
+##}</content>
 </property>
 <property>
 <description>Panel Description</description>

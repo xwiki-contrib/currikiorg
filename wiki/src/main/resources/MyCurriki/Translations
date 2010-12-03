@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.ShermanTank</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1196365645000</creationDate>
-<date>1251310797000</date>
-<contentUpdateDate>1251310797000</contentUpdateDate>
-<version>82.1</version>
+<date>1291259980000</date>
+<contentUpdateDate>1291259980000</contentUpdateDate>
+<version>95.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>added edit_profile.intro.percent_complete</comment>
+<comment>Grammar fix.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,7 +55,8 @@
 <tags/>
 </property>
 </object>
-<content>#{pre}
+<content>{pre}
+&lt;pre&gt;
 mycurriki.datetimeFormat=MMM-dd-yyyy - hh:mm a z
 mycurriki.dateFormat=MMM-dd-yyyy
 mycurriki.timeFormat=hh:mm a z
@@ -163,6 +164,8 @@ view_profile.interests.state.title=State/Province:
 view_profile.interests.country.title=Country:
 view_profile.interests.language.title=Primary Language:
 view_profile.interests.bio.title=Bio:
+view_profile.interests.publish_intent.title=What would you like to publish on Curriki?
+view_profile.interests.value_add.title=What added value does your organization bring to Curriki?
 view_profile.interests.contact.title=How to Contact Me:
 view_profile.interests.websites.title=Websites/Blogs:
 
@@ -194,13 +197,13 @@ edit_profile.account_info.email1.title=Email Address:
 edit_profile.account_info.email1.description=Please enter a valid email address. Directions on how to complete the registration process will be sent to this address.
 edit_profile.account_info.email1.tooltip=Email addresses must contain a single “@” character, contain no spaces, and must be unique.
 edit_profile.account_info.email2.title=Confirm Email Address:
-edit_profile.account_info.email2.description=Confirm your email address to make sure you typed it correctly.
+edit_profile.account_info.email2.description=Confirm your email address to make sure you entered it correctly in both instances.
 edit_profile.account_info.email2.tooltip=Check that you typed the domain name correctly both times. For instance, “gmail.com” can easily be mistyped without noticing.
 edit_profile.account_info.name1.title=Display Name 1:
-edit_profile.account_info.name1.description=Enter the first part of the name that will display on the site to other Curriki users. For tips on entering names, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
+edit_profile.account_info.name1.description=The name you enter will be viewable by all Curriki members as your first name. For tips on entering names, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
 edit_profile.account_info.name1.tooltip=If you want to display your real name, use your first name here.
 edit_profile.account_info.name2.title=Display Name 2:
-edit_profile.account_info.name2.description=Enter the second part of the name that will display on the site to other Curriki users.
+edit_profile.account_info.name2.description=The name you enter will be viewable by all Curriki members as your last name. 
 edit_profile.account_info.name2.tooltip=If you want to display your real name, use your last name here.
 edit_profile.account_info.error.blank_field=Some required fields are missing; see highlighted areas.
 edit_profile.account_info.error.login_not_unique=The member login you entered has already been used; please enter another member login.
@@ -241,25 +244,36 @@ edit_profile.privacy.error.no_suboptions_checked=If you choose to specify certai
 edit_profile.interests.header=Update Interests &amp; Affiliations
 edit_profile.interests.intro=The information in this section will help other Curriki members find you in order to collaborate on Curriki. In the future, Curriki will be able to send you customized recommendations or personalize your site experience based on the information you enter here.
 edit_profile.interests.member_type.title=Member Type:
-edit_profile.interests.member_type.tooltip=Select a matching member type; you can always edit this field later.
+edit_profile.interests.member_type.tooltip=Select a matching member type.
+edit_profile.interests.member_type.description=Select a matching member type.
 edit_profile.interests.affiliation.title=Are you affiliated with any particular organization?
-edit_profile.interests.affiliation.tooltip=Enter an organization; you can always edit this field later.
+edit_profile.interests.affiliation.tooltip=Enter an organization.
 edit_profile.interests.subject.title=What subjects interest you?
 edit_profile.interests.subject.description=Click arrows to expand or collapse subjects.
-edit_profile.interests.subject.tooltip=Select as many or as few subjects as you like; you can always edit this field later.
+edit_profile.interests.subject.tooltip=Select as many or as few subjects as you like.
 edit_profile.interests.ed_level.title=What educational levels interest you?
 edit_profile.interests.ed_level.description=Select one or more level(s).
-edit_profile.interests.ed_level.tooltip=Choose any matching levels; you can always edit this field later.
+edit_profile.interests.ed_level.tooltip=Choose any matching levels.
 edit_profile.interests.location.title=Where do you live?
 edit_profile.interests.location.tooltip=Provide information about your location; you can always edit these fields later.
 edit_profile.interests.country.title=Country:
 edit_profile.interests.state.title=State/Province:
 edit_profile.interests.city.title=City:
 edit_profile.interests.language.title=What is your preferred language?
-edit_profile.interests.language.tooltip=Choose a language; you can always edit this field later.
+edit_profile.interests.language.tooltip=Choose a language.
 edit_profile.interests.bio.title=Bio:
 edit_profile.interests.bio.description=Use the HTML editing toolbar to edit and format your content below. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/AbouttheHTMLEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.FormattingContentwiththeWYSIWYGEditingToolbar" target=blank&gt;help&lt;/a&gt; using the toolbar.
 edit_profile.interests.bio.tooltip=Share information about your professional career, such as your specialties and how long you have been in education.
+
+edit_profile.interests.value_add.title=&lt;strong&gt;Corporate &amp; Non-profit Members:&lt;/strong&gt; Please describe the value your organization will bring to Curriki:
+
+edit_profile.interests.value_add.tooltip=Share how your organization will contribute to Curriki, such as adding content.
+edit_profile.interests.value_add.description=Enter a description.
+
+edit_profile.interests.publish_intent.title=Corporate &amp; Non-Profit Members: What would you like to publish on Curriki?
+edit_profile.interests.publish_intent.tooltip=Please select all that apply.
+
+edit_profile.interests.publish_intent.description=Please select all that apply.
 edit_profile.interests.contact.title=How to Contact Me:
 edit_profile.interests.contact.description=Use the HTML editing toolbar to edit and format your content below. Get &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/AbouttheHTMLEditingToolbar?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository;Coll_curriki.FormattingContentwiththeWYSIWYGEditingToolbar" target=blank&gt;help&lt;/a&gt; using the toolbar.
 edit_profile.interests.contact.tooltip=If you like to network, this is the best place to enter any screennames for sites such as LinkedIn or Facebook, or for messaging services such as AIM or Skype.
@@ -388,5 +402,6 @@ mycurriki.macro.paginate.results=Results
 mycurriki.macro.paginate.of=of about
 mycurriki.macro.paginate.previous=Previous
 mycurriki.macro.paginate.next=Next
-#{/pre}</content>
+&lt;/pre&gt;
+{/pre}</content>
 </xwikidoc>

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.creiswig</author>
+<author>XWiki.ShermanTank</author>
 <customClass></customClass>
-<contentAuthor>XWiki.creiswig</contentAuthor>
+<contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1251400538000</creationDate>
-<date>1251913246000</date>
-<contentUpdateDate>1251913246000</contentUpdateDate>
-<version>11.1</version>
+<date>1290913613000</date>
+<contentUpdateDate>1290913613000</contentUpdateDate>
+<version>29.1</version>
 <title>Footer</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>updating links</comment>
+<comment>&lt;br /&gt;</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,17 +55,19 @@
 <tags/>
 </property>
 </object>
-<content>$context.setCacheDuration(60)
+<content>$context.setCacheDuration(86400)## 86400 = 60*60*24, 1 day
+&lt;br /&gt;
 &lt;div id="footerglobal"&gt;
-        &lt;div class="footer-center"&gt;
-                &lt;a href="$xwiki.getURL("Coll_curriki.CurrikiHelp")"&gt;Help&lt;/a&gt; |
-                &lt;a href="$xwiki.getURL("Main.Contact")"&gt;Contact Us&lt;/a&gt; |
-                &lt;a href="$xwiki.getURL("Main.PrivacyPolicy")"&gt;Privacy Policy&lt;/a&gt; |
-                &lt;a href="$xwiki.getURL("Main.TOS")"&gt;Terms of Use&lt;/a&gt; |
-                All content licensed &lt;a href="http://creativecommons.org/about/licenses/meet-the-licenses"&gt;Creative Commons&lt;/a&gt; |
-                &lt;a href="http://www.xwiki.org/xwiki/bin/view/Main/WebHome"&gt;Powered by XWiki&lt;/a&gt; |
-                Hosted by AT&amp;T |
-                &lt;a href="/xwiki/bin/view/Main/WebRss?xpage=rdf"&gt;&lt;img src="$xwiki.getSkinFile("ico_rss.gif")" alt="RSS"/&gt;&lt;/a&gt;
-        &lt;/div&gt;
+	&lt;div class="footer-center"&gt;
+&lt;!-- &lt;a href="$xwiki.getURL("Coll_curriki.CurrikiHelp")"&gt;Help&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt; --&gt;
+&lt;a href="$xwiki.getURL("Main.Contact")"&gt;Contact Us&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="$xwiki.getURL("Main.PrivacyPolicy")" target="_blank"&gt;Privacy Policy&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="$xwiki.getURL("Main.TOS")" target="_blank"&gt;Terms of Service&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="$xwiki.getURL("Main.Copyright")"&gt;Copyright &amp; Creative Commons&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="$xwiki.getURL("Demo.Xwiki")"&gt;Powered by XWiki&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="$xwiki.getURL("Demo.ATT")"&gt;Hosted by AT&amp;T&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="/xwiki/bin/view/Demo/AcademicBenchmarks/"&gt;Standards by Academic Benchmarks&lt;/a&gt;&lt;em class="vBar"&gt;|&lt;/em&gt;
+&lt;a href="/xwiki/bin/view/Main/WebRss?xpage=rdf" title="RSS"&gt;&lt;img src="/xwiki/skins/curriki8/icons/rss14x14.gif" alt="RSS"/&gt;&lt;/a&gt;
+	&lt;/div&gt;
 &lt;/div&gt;</content>
 </xwikidoc>
