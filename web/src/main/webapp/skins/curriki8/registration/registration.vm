@@ -459,16 +459,12 @@ $errMsg
 {pre}
 <script type="text/javascript">
 /* <![CDATA[ */
-
+#if($g_RegType == 'edit_profile') ##{
 function initRTEs() {
 	tinyMCE.init({
 		language: "en",
 		mode: "exact",
-        #if($g_RegType == 'edit_profile') ##{
         elements : "XWiki.XWikiUsers_0_comment,XWiki.XWikiUsers_0_contact,XWiki.XWikiUsers_0_websites",
-        #else
-        elements : "",
-        #end
 		theme : "advanced",
 		plugins: 'safari,table,save,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
 	
@@ -487,8 +483,9 @@ if (Ext.isIE6) {
 	jt_.AddListener(window, 'load', initRTEs);
 }
 else initRTEs();
+#end    
 ###end ##}
-
+##
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
