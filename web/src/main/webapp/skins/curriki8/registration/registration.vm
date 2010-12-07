@@ -497,7 +497,7 @@ document.observe('dom:loaded', function(){
 });
 ## 
 function toggleCorporateFieldsVisible() {
-    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'];
+    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
     memberType = memberType.options[memberType.selectedIndex].value;
     var i;
     if(memberType=="corporation" || memberType=="nonprofit") {
