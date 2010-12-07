@@ -489,7 +489,7 @@ else initRTEs();
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
-    var memberType = document.getElementById('XWiki.XWikiUsers_0_member_type');
+    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
     if(memberType) {
         memberType.onchange = toggleCorporateFieldsVisible;
         toggleCorporateFieldsVisible();
