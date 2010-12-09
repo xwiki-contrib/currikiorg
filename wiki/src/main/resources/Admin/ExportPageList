@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1172005824000</creationDate>
-<date>1291378185000</date>
-<contentUpdateDate>1291378185000</contentUpdateDate>
-<version>6.1</version>
+<date>1291404080000</date>
+<contentUpdateDate>1291404080000</contentUpdateDate>
+<version>7.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>trim lines in case</comment>
+<comment>now accepts forms</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,28 +55,55 @@
 <tags/>
 </property>
 </object>
-<content>1 XML Export of the Wiki from Admin/PageList
-&lt;%
+<content>
+
+&lt;h1&gt;Export Page List&lt;/h1&gt;
+&lt;hr&gt;
+ &lt;%
+
+//adjust export-page-list to be callable to produce a xar exporting a range of documents
+//(provided the user is admin)
+
 import com.xpn.xwiki.*;
 import com.xpn.xwiki.api.*;
 import com.xpn.xwiki.doc.*;
 import com.xpn.xwiki.plugin.packaging.*;
 
+/* com.xpn.xwiki.api.XWiki xwiki;
+com.xpn.xwiki.api.Context context;
+javax.servlet.http.HttpServletRequest request;
+javax.servlet.http.HttpServletResponse response;
+com.xpn.xwiki.web.XWikiMessageTool msg;
+*/
 
 def pagelist = "Admin.PageList"
 def exportdir = "/appserv/build/projects/curriki/wiki/src/main/resources"
-def createzip = false
+def createzip = false;
+def filename = "archive";
+
+if(!context.hasAdminRights()) {
+  response.sendError(403);
+  return;
+}
 
 if (request.pagelist != null){
   pagelist = request.pagelist
+  filename = pagelist;
 }
 
 if (request.createzip != null){
-  createzip = request.createzip
+  createzip = true;
 }
 
 if (request.exportdir != null){
   exportdir = request.exportdir
+} else {
+  if(createzip) {
+    exportdir = java.io.File.createTempFile("ExportPageXarTmp","xar");
+    exportdir.delete();
+    exportdir.mkdirs();
+    println("Exported to directory " + exportdir);
+  }
 }
 
 if (request.confirm=="1") {
@@ -85,7 +112,7 @@ if (request.confirm=="1") {
   println "Creating package"
   pack = new Package()
   if (createzip) {
-    pack.setName(pagelist+".zip")
+    pack.setName(filename+".xar")
   } else {
     pack.setName("curriki")
   }
@@ -97,20 +124,21 @@ if (request.confirm=="1") {
 
   pack.setWithVersions(false)
 //  pack.setWithVersions(true)
-  
+
 //  pack.addDocumentFilter(filter)
   println "Adding documents"
-  def pages = context.context.getWiki().getDocument(pagelist, context.context).content
+  def pages;
+  if(request.getParameter("pageListInput")==null)
+    pages = context.context.getWiki().getDocument(pagelist, context.context).content
+  else
+    pages = request.getParameter("pageListInput");
 
   def list = pages.split("(\r|\n)+")
   def last = list.size()
   def i = 0
   while (i &lt; last){
-    def fullName = list[i];
-    if(fullName==null || fullName.length()==0) continue;
-    fullName = fullName.trim();
-    println fullName;
-    pack.add(fullName, context.context)
+    println list[i]
+    pack.add(list[i], context.context)
     i++
   }
 
@@ -120,20 +148,23 @@ if (request.confirm=="1") {
   try {
     if (createzip){
       context.context.getResponse().setContentType("application/zip");
-      context.context.getResponse().addHeader("Content-disposition", "attachment; filename="+pagelist+".zip")
+      context.context.getResponse().addHeader("Content-disposition", "attachment; filename="+filename+".zip")
       context.context.setFinished(true);
       pack.export(context.context.getResponse().getOutputStream(), context.context)
     } else {
-      pack.exportToDir(new File(exportdir), context.context)    
+      pack.exportToDir(new File(exportdir), context.context)
+      println "Finished."
     }
   } catch (Exception e){
     println "Error exporting"
     println e.getMessage()
   }
 
-  println "Finished."
   } else {
-    println "[Confirm export&gt;ExportPageList?pagelist="+pagelist+"&amp;confirm=1]"
+    println "&lt;h3&gt;Input the pages you wish to export in a xar&lt;/h3&gt;"
+    println "&lt;form action='"+doc.name+"' method='get'&gt;&lt;textarea name='pageListInput' rows='5'&gt;"+(request.pageListInput!=null?request.pageListInput:"")+"&lt;/textarea&gt;&lt;input type='submit' name='confirm' label='confirm' value='1'/&gt;&lt;input type='hidden' name='createzip' value='true'&gt;&lt;/form&gt;"
+    println "&lt;p&gt;&lt;hr&gt;&lt;h3&gt; XML Export of the Wiki from Admin/PageList&lt;/h3&gt;"
+    println "[Confirm predefined export&gt;ExportPageList?pagelist="+pagelist+"&amp;confirm=1]"
   }
-%&gt;</content>
+//%&gt;</content>
 </xwikidoc>
