@@ -675,6 +675,27 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     <li id="info-rights-license">
                         <strong>$msg.get("rve.information.licensedeed_title")</strong><span>$!asset.display("licenseType")</span>
                     </li>
+                    #if($isOriginalAuthorOrAdmin)
+                    <li id="info-rights-grantCurrikiCommercialLicense">
+                        <strong>$msg.get("rve.information.grantCurrikiCommercialLicense_title")</strong><span>
+                            #set($gCPL=$!asset.get("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
+                            #set($lic=$!asset.get("CurrikiCode.AssetLicenseClass").getProperty("licenseType"))
+                            #if($lic=="Licences.CurrikiLicense"|| $lic=="Licences.PublicDomain"||$lic=="Licences.CreativeCommonsAttributionNoDerivatives"||$lic=="Licences.CreativeCommonsAttributionSharealike")
+                                $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")
+                            #else
+                                #if($gCPL)
+                                    #if($gCPL.value)
+                                        $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")
+                                    #else
+                                        $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_0")
+                                    #end
+                                #else
+                                    $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_")
+                                #end
+                            #end
+                        </span>
+                    </li>
+                    #end
                 </ul>
             </div>
         </div>
@@ -717,6 +738,10 @@ $asset.use("CurrikiCode.AssetClass")
     <input type="submit" value="$msg.get("rve.information.edit.cancel_button")" name="cancel" class="button-cancel" onclick="clickAwayByPass=true; location='${cancelurl}'; return false;"/>
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
+#set($gCPL=$!asset.get("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
+#if($gCPL)#else
+    #warning($msg.get("rve.information.grantCurrikiCommercialLicense.edit_warning_predefined"))
+#end
 <fieldset>
     <ul>
         $asset.use("CurrikiCode.AssetClass")
@@ -775,6 +800,26 @@ $asset.use("CurrikiCode.AssetClass")
             <span><label for="edit-license">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
+            ##
+            #if($gCPL) ## grant to curriki commercial usage is decided, only admin can edit
+                #if($xwiki.hasAdminRights())
+            <span><label for="edit-grantCurrikiCommercialLicense">$msg.get("rve.information.grantCurrikiCommercialLicense.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.grantCurrikiCommercialLicense.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <p>$msg.get("rve.information.grantCurrikiCommercialLicense.edit_txt")</p>
+            <p><label><input value='1' name='CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense' type='radio' ##
+                #if($gCPL.value) checked='checked'#end />##
+              $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</label></p>
+            <p><label><input name='CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense' type='radio' value='0'
+                #if($gCPL.value)#else checked='checked'#end />##
+              $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_0")</label></p>
+                #end
+            #else
+                <span><label for="edit-grantCurrikiCommercialLicense">$msg.get("rve.information.grantCurrikiCommercialLicense.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.grantCurrikiCommercialLicense.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+                <p>$msg.get("rve.information.grantCurrikiCommercialLicense.edit_txt")</p>
+                <p><label><input value='1' name='CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense' type='radio' checked='checked'/>##
+                  $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</label></p>
+                <p><label><input name='CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense' type='radio' value='0'/>##
+                  $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_0")</label></p>
+            #end
        </li>
        #end
     </ul>

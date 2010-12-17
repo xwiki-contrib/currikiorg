@@ -1565,7 +1565,7 @@ Curriki.module.addpath.init = function(){
 											})
 										}
 									}
-								}]
+								}, {xtype:'box', autoEl:{tag:'div',html:'--curriki-service-deed-will-be-here--'}}]
 
 						}]
 					}]
