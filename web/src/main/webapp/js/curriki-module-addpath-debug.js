@@ -1498,9 +1498,7 @@ Curriki.module.addpath.init = function(){
 										}
 									}
 								}]
-
-		// Licence Deed
-							},{
+							},{ // Licence Deed
 								 border:false
 								,items:[{
 									 xtype:'box'
@@ -1565,9 +1563,16 @@ Curriki.module.addpath.init = function(){
 											})
 										}
 									}
-								}, {xtype:'box', autoEl:{tag:'div',html:'--curriki-service-deed-will-be-here--'}}]
+								}
+                            ]
 
-						}]
+						}, { // grant_curriki_commercial_license
+                        border:false,
+                        items:[{ xtype:'checkbox',name:'grant_curriki_commercial_license',
+                                boxLabel:_("sri.license_type_license_to_curriki"),
+                                checked: true // TODO: check spec... always true?
+								}]
+                        }]
 					}]
 				});
 

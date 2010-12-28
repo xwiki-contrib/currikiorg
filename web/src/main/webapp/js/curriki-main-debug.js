@@ -2278,7 +2278,7 @@ Curriki.data.category.list.each(function(category){
 
 Ext.ns('Curriki.data.licence');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/licenseType  OR  Get filled in JS created by xwiki
-Curriki.data.licence.list = [ "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike" ];
+Curriki.data.licence.list = ["Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike" ];
 Curriki.data.licence.initial = Curriki.data.licence.list[0];
 Curriki.data.licence.data = [ ];
 Curriki.data.licence.list.each(function(lic){
@@ -2291,6 +2291,18 @@ Curriki.data.licence.store = new Ext.data.SimpleStore({
 	fields: ['id', 'licence'],
 	data: Curriki.data.licence.data
 });
+
+
+
+Ext.ns('Curriki.data.gCCL');
+Curriki.data.gCCL.list = ["0","1"];
+Curriki.data.gCCL.initial = Curriki.data.licence.list[0];
+Curriki.data.gCCL.data = ["0","1"];
+Curriki.data.licence.store = new Ext.data.SimpleStore({
+	fields: ['id', 'gCCL'],
+	data: Curriki.data.gCCL.data
+});
+
 
 
 Ext.ns('Curriki.data.fw_item');
