@@ -687,21 +687,23 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     <li id="info-rights-grantCurrikiCommercialLicense">
                             #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
                             #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").get("licenseType"))
-                            #if($lic=="Licences.CurrikiLicense"|| $lic=="Licences.PublicDomain"||$lic=="Licences.CreativeCommonsAttributionNoDerivatives"||$lic=="Licences.CreativeCommonsAttributionSharealike")
-                                <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
-                                <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
-                            #else
                                 #if($gCCL)
                                     <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
-                                    #if($gCCL.value)
+                                    #if($gCCL.value==1)
                                         <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
                                     #else
                                         <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_0")</span>
                                     #end
                                 #else
+                                    #if($lic=="Licences.CurrikiLicense"|| $lic=="Licences.PublicDomain"||$lic=="Licences.CreativeCommonsAttributionNoDerivatives"||$lic=="Licences.CreativeCommonsAttributionSharealike")
+                                     <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
+                                     <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
+                                     <!-- license-to-curriki is undefined but open-content license implies it is yes -->
+                                    #else
+                                    <!-- license-to-curriki is undefined and open-content license implies does not yes -->
                                     ## $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_")
+                                    #end
                                 #end
-                            #end
                     </li>
                     #end
                 </ul>
@@ -816,7 +818,9 @@ $asset.use("CurrikiCode.AssetClass")
             </label></li></ul>
                 #end
             #else ## grant to curriki commercial usage is unset, any "editor" can decide
-            <p>&nbsp;</p><ul><li><label style="font-weight:normal;">$asset.display("grantCurrikiCommercialLicense","edit",true)
+            <p>&nbsp;</p><ul><li><label style="font-weight:normal;">
+                <input type="checkbox" value="1" checked="checked"
+                       name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
                 $msg.get("sri.license_type_license_to_curriki")
             </label></li></ul>
             #end
