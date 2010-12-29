@@ -129,6 +129,8 @@ public class MetadataResource extends BaseResource {
         if (json.has("grant_curriki_commercial_license")) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
                     json.getString("grant_curriki_commercial_license").equals("on")?1:0);
+        } else { // checkbox is not checked... hence we assume it is displayed unchecked hence should be set to false
+            licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,0);
         }
         // rights_holder
         if (json.has("right_holder")) {

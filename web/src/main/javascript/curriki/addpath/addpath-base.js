@@ -1570,7 +1570,20 @@ Curriki.module.addpath.init = function(){
                         border:false,
                         items:[{ xtype:'checkbox',name:'grant_curriki_commercial_license',
                                 boxLabel:_("sri.license_type_license_to_curriki"),
-                                checked: true // TODO: check spec... always true?
+                                checked: true,
+                                id: 'metadata-grantCurrikiCommercialLicense-entry',
+                                listeners:{
+                                    render:function(comp){
+                                        comp.findParentByType('apSRI2').on('show', function() {
+                                            if (!Ext.isEmpty(Curriki.current.metadata)) {
+                                                var md = Curriki.current.metadata;
+                                                if (!Ext.isEmpty(md.grantCurrikiCommercialLicense) && md.grantCurrikiCommercialLicense==0){
+                                                    Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').setVisible(false);
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
 								}]
                         }]
 					}]

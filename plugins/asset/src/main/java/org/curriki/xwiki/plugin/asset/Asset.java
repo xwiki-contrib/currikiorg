@@ -937,7 +937,7 @@ public class Asset extends CurrikiDocument {
         } else if (!licenceSet) {
             newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT);
         }
-
+ 
         // Rights holder should be by default the pretty name of the user
         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, context.getWiki().getLocalUserName(context.getUser(), null, false, context));
     }
