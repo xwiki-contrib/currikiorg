@@ -700,12 +700,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                                      <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
                                      <!-- license-to-curriki is undefined but open-content license implies it is yes -->
                                     #else
-                                    <!-- license-to-curriki is undefined and open-content license implies does not yes -->
+                                    <!-- license-to-curriki is undefined and open-content license does not imply yes -->
                                     ## $msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_")
                                     #end
                                 #end
                     </li>
-                    #end
+                    #else<!-- not displaying license-to-curriki -->#end
                 </ul>
             </div>
         </div>

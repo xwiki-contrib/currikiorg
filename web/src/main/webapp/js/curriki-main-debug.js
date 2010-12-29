@@ -2298,7 +2298,7 @@ Ext.ns('Curriki.data.gCCL');
 Curriki.data.gCCL.list = ["0","1"];
 Curriki.data.gCCL.initial = Curriki.data.licence.list[0];
 Curriki.data.gCCL.data = ["0","1"];
-Curriki.data.licence.store = new Ext.data.SimpleStore({
+Curriki.data.gCCL.store = new Ext.data.SimpleStore({
 	fields: ['id', 'gCCL'],
 	data: Curriki.data.gCCL.data
 });
