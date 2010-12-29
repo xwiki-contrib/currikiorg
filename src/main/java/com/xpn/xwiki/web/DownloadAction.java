@@ -76,6 +76,7 @@ public class DownloadAction extends XWikiAction
         // Choose the right content type
         String mimetype = attachment.getMimeType(context);
         response.setContentType(mimetype);
+        response.setCharacterEncoding("");
         boolean forceDownload = "1".equals(request.getParameter("force-download"));
 
         String ofilename =
