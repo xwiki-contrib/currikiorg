@@ -675,13 +675,19 @@ public class Asset extends CurrikiDocument {
 
         com.xpn.xwiki.api.Object assetObj = getObject(Constants.ASSET_CLASS);
         for (java.lang.Object prop : assetObj.getPropertyNames()) {
-            LOG.debug("Adding "+prop+" to metadata list");
+            Property p = assetObj.getProperty((String) prop);
+            if(p!=null) LOG.debug("Adding "+prop+" to metadata list (value: " + p.getValue() + ").");
+            else LOG.debug("Adding "+prop+" to metadata list (value: null).");
             md.add(assetObj.getProperty((String) prop));
         }
 
         com.xpn.xwiki.api.Object licenseObj = getObject(Constants.ASSET_LICENCE_CLASS);
         for (java.lang.Object prop : licenseObj.getPropertyNames()) {
-            LOG.debug("Adding "+prop+" to metadata list");
+            Property p = assetObj.getProperty((String) prop);
+            if(LOG.isDebugEnabled()) {
+                if(p!=null) LOG.debug("Adding "+prop+" to metadata list (value: " + p.getValue() + ").");
+                else LOG.debug("Adding "+prop+" to metadata list (value: null).");
+            }
             md.add(licenseObj.getProperty((String) prop));
         }
 

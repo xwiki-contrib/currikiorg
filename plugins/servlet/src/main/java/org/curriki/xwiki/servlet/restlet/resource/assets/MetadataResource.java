@@ -74,7 +74,7 @@ public class MetadataResource extends BaseResource {
             asset.setTitle(asset.getTitle());
         }
 
-        // We need to be carefull when interacting with assets in write mode like that
+        // We need to be careful when interacting with assets in write mode like that
         // getObject does not retrieve the object in write mode if the asset has not been
         // switched to write mode first. We might need a function to switch to write mode
         Object assetObj = asset.getObject(Constants.ASSET_CLASS);
@@ -124,6 +124,11 @@ public class MetadataResource extends BaseResource {
         // license_deed
         if (json.has("license_type")) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_type"));
+        }
+        // grant_curriki_commercial_license
+        if (json.has("grant_curriki_commercial_license")) {
+            licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
+                    json.getString("grant_curriki_commercial_license").equals("on")?1:0);
         }
         // rights_holder
         if (json.has("right_holder")) {

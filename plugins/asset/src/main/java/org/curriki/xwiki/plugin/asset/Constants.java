@@ -110,9 +110,10 @@ public interface Constants {
     String ASSET_LICENCE_ITEM_RIGHTS_HOLDER = "rightsHolder";
     String ASSET_LICENCE_ITEM_EXTERNAL_RIGHTS_HOLDER = "externalRightsHolder";
     String ASSET_LICENCE_ITEM_LICENCE_TYPE = "licenseType";
+    String ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE = "grantCurrikiCommercialLicense";
     String ASSET_LICENCE_ITEM_LICENCE_TYPE_VALUES = "Licences.CurrikiLicense=Curriki License (Creative Commons Attributions 3.0)|Licences.PublicDomain=Public Domain|Licences.CreativeCommonsAttributionNon-Commercial=Creative Commons Attribution Non-Commercial|Licences.CreativeCommonsAttributionNoDerivatives=Creative Commons Attribution No Derivatives|Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives|Licences.CreativeCommonsAttributionSharealike=Creative Commons Attribution Share Alike|Licences.CreativeCommonsAttributionNon-CommercialShareAlike=Creative Commons Attribution Non-Commercial Share Alike";
     // String ASSET_LICENCE_ITEM_LICENCE_TYPE_QUERY = "select obj.name, prop.value from BaseObject as obj, StringProperty as prop, IntegerProperty as oprop where  obj.className='XWiki.LicenceClass' and prop.id.id = obj.id  and prop.id.name = 'name' and prop.value not like 'DEPRECATED:%' and oprop.id.id = obj.id and oprop.id.name = 'order' order by oprop.value";
-    String ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT = "Licences.CurrikiLicense";
+    String ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT = "Licences.CreativeCommonsAttributionNon-Commercial";
     String ASSET_LICENCE_ITEM_EXPIRY_DATE = "expiryDate";
     String ASSET_LICENCE_ITEM_EXPIRY_DATE_FORMAT = "dd/MM/yyyy";
 
