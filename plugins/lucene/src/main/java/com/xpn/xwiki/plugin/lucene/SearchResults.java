@@ -22,11 +22,16 @@ package com.xpn.xwiki.plugin.lucene;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.XWiki;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.search.Hits;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -240,6 +245,39 @@ public class SearchResults extends Api
     public int getTotalHitcount()
     {
         return hits.length();
+    }
+
+
+    /** Low level list of {@link Hit}s with indicated index and amount.
+     * Note that this method does not ensure that documents are allowed to be viewed.
+     *
+     * @param startIndex the first index
+     * @param numItems the max size of the list
+     * @return an ArrayList of the given size or less
+     */
+    public List<Hit> getHitsList(int startIndex, int numItems) {
+        List<Hit> l = new ArrayList<Hit>(numItems);
+        if(hits.length()<=startIndex) return l;
+        int lastIndexPlusOne = Math.min(hits.length(),startIndex+numItems);
+        // collect
+        for(int p=startIndex; p<lastIndexPlusOne; p++) {
+            l.add(new Hit(hits,p));
+        }
+        return l;
+    }
+
+    public static class Hit {
+        public Hit(Hits hits, int pos) {
+            this.hits = hits;
+            this.pos = pos;
+        }
+        private final Hits hits;
+        private final int pos;
+        public Document doc() throws IOException
+            { return hits.doc(pos); }
+        public float score() throws IOException { return hits.score(pos); }
+        public int id() throws IOException { return hits.id(pos); }
+        public int pos() { return pos; }
     }
 
 }
