@@ -749,7 +749,7 @@ $asset.use("CurrikiCode.AssetClass")
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
 #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
-#if($gCCL)#else
+#if($gCCL && $isOriginalAuthorOrAdmin)#else
     #info($msg.get("rve.information.license_to_curriki.edit_warning_predefined"))
 #end
 <fieldset>
