@@ -378,8 +378,8 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
         // Perform the actual search
         Hits hits = (sort == null) ? searcher.search(q) : searcher.search(q, sort);
         final int hitcount = hits.length();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("query " + q + " returned " + hitcount + " hits");
+        if (LOG.isInfoEnabled()) {
+            LOG.info("query \"" + q + "\" returned " + hitcount + " hits");
         }
         // Transform the raw Lucene search results into XWiki-aware results
         return new SearchResults(hits,
