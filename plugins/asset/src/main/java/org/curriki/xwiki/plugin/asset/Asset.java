@@ -898,11 +898,13 @@ public class Asset extends CurrikiDocument {
                         // licence
                         String licence = rObj.getStringValue(Constants.GROUP_DEFAULT_LICENCE_PROPERTY);
                         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, licence);
-			licenceSet = true;
+                        // TODO: should there be a licence-to-curriki-field in groups?
+                        newLicenceObj.setIntValue(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
+                                Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE_DEFAULT);
+               			licenceSet = true;
                     }
                 }
             }
-
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
         }
 
@@ -934,8 +936,11 @@ public class Asset extends CurrikiDocument {
         if (parentDoc != null && parentDoc.getObject(Constants.ASSET_LICENCE_CLASS) != null) {
             BaseObject parentLicenceObjAsset = parentDoc.getObject(Constants.ASSET_LICENCE_CLASS);
             copyProperty(parentLicenceObjAsset, newLicenceObj, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE);
+            copyProperty(parentLicenceObjAsset, newLicenceObj, Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE);
         } else if (!licenceSet) {
             newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT);
+            newLicenceObj.setIntValue(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
+                    Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE_DEFAULT);
         }
  
         // Rights holder should be by default the pretty name of the user
