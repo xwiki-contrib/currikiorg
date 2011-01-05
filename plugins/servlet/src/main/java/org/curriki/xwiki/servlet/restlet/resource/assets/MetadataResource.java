@@ -43,7 +43,11 @@ public class MetadataResource extends BaseResource {
 
         JSONObject json = new JSONObject();
         for (Property prop : results) {
-            json.put(prop.getName(), prop.getValue());
+            if(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE.equals(prop.getName()) ||
+                    Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH.equals(prop.getName()))
+                json.put(prop.getName(),prop.getValue().equals(0) ? "off" : "on");
+            else
+                json.put(prop.getName(), prop.getValue());
         }
 
         return formatJSON(json, variant);
@@ -125,12 +129,18 @@ public class MetadataResource extends BaseResource {
         if (json.has("license_type")) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_type"));
         }
+        Property gprop = licenseObj.getProperty(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE);
         // grant_curriki_commercial_license
-        if (json.has("grant_curriki_commercial_license")) {
+        if (json.has(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE)) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
-                    json.getString("grant_curriki_commercial_license").equals("on")?1:0);
-        } else { // checkbox is not checked... hence we assume it is displayed unchecked hence should be set to false
-            licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,0);
+                    json.getString(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE).equals("on")?1:0);
+        } else { // checkbox is not checked
+            if(gprop==null)
+                // no previous value... hence we assume it is displayed and was unchecked hence should be set to false
+                licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,0);
+            else // use previous value...
+                licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
+                        gprop.getValue());
         }
         // rights_holder
         if (json.has("right_holder")) {

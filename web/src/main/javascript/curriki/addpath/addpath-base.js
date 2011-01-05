@@ -1568,7 +1568,7 @@ Curriki.module.addpath.init = function(){
 
 						}, { // grant_curriki_commercial_license
                         border:false,
-                        items:[{ xtype:'checkbox',name:'grant_curriki_commercial_license',
+                        items:[{ xtype:'checkbox',name:'grantCurrikiCommercialLicense',
                                 boxLabel:_("sri.license_type_license_to_curriki"),
                                 checked: true,
                                 id: 'metadata-grantCurrikiCommercialLicense-entry',
@@ -1577,8 +1577,10 @@ Curriki.module.addpath.init = function(){
                                         comp.findParentByType('apSRI2').on('show', function() {
                                             if (!Ext.isEmpty(Curriki.current.metadata)) {
                                                 var md = Curriki.current.metadata;
-                                                if (!Ext.isEmpty(md.grantCurrikiCommercialLicense) && md.grantCurrikiCommercialLicense==0){
+                                                if (!Ext.isEmpty(md.grantCurrikiCommercialLicense) && md.grantCurrikiCommercialLicense=="off"){
                                                     Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').setVisible(false);
+                                                    Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').originalValue=false;
+                                                    Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').setValue(false);
                                                 }
                                             }
                                         })
@@ -2341,7 +2343,7 @@ Curriki.module.addpath.init = function(){
 			  initComponent:function(){
 				var topChildren = [];
                   // data.user.collectionChildren is loaded later, same for groups, assume there might be something
-				if (true || Curriki.data.user.collectionChildren.length>0){
+				//if (true || Curriki.data.user.collectionChildren.length>0){
 					topChildren.push({
 					 text:_('panels.myCurriki.myCollections')
 					,id:'ctv-drop-tree-collection-root'
@@ -2350,11 +2352,12 @@ Curriki.module.addpath.init = function(){
 					,allowDrag:false
 					,allowDrop:true // Needed to auto-expand on hover
 					,disallowDropping:true // Disable drop on this node
-					,expanded:(Curriki.data.user.collectionChildren.length < 4)
-					,children:Curriki.data.user.collectionChildren
+					,expanded:false //(Curriki.data.user.collectionChildren.length < 4)
+					//,children:Curriki.data.user.collectionChildren
+                    ,currikiNodeType:'myCollections'
 					});
-				}
-				if (true || Curriki.data.user.groupChildren.length>0){
+				//}
+				//if (true || Curriki.data.user.groupChildren.length>0){
 					topChildren.push({
 					 text:_('panels.myCurriki.myGroups')
 					,id:'ctv-drop-tree-group-root'
@@ -2363,10 +2366,11 @@ Curriki.module.addpath.init = function(){
 					,allowDrag:false
 					,allowDrop:true // Needed to auto-expand on hover
 					,disallowDropping:true // Disable drop on this node
-					,expanded:(Curriki.data.user.groupChildren.length < 4)
-					,children:Curriki.data.user.groupChildren
+					,expanded:false //(Curriki.data.user.groupChildren.length < 4)
+					//,children:Curriki.data.user.groupChildren
+                    ,currikiNodeType:'myGroups'
 					});
-				}
+				//}
 
 				Ext.apply(this, {
 					 id:'ChooseLocationDialogueWindow'
