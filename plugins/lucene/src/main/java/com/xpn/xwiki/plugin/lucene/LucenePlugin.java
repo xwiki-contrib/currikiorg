@@ -55,6 +55,8 @@ import com.xpn.xwiki.notify.DocChangeRule;
 import com.xpn.xwiki.notify.XWikiActionRule;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.MMapDirectory;
 
 /**
  * A plugin offering support for advanced searches using Lucene, a high performance, open source
@@ -564,13 +566,13 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
         List<IndexSearcher> searchersList = new ArrayList<IndexSearcher>();
         for (int i = 0; i < dirs.length; i++) {
             try {
-                if (!IndexReader.indexExists(dirs[i])) {
+                Directory dir = new MMapDirectory(new File(dirs[i]));
+                if (!IndexReader.indexExists(dir)) {
                     // If there's no index there, create an empty one; otherwise the reader
                     // constructor will throw an exception and fail to initialize
                     new IndexWriter(dirs[i], analyzer).close();
                 }
-		// New way to open a searcher that does not have bug XPLUCENE-30
-                searchersList.add(new IndexSearcher(dirs[i], true));
+                searchersList.add(new IndexSearcher(dir, true));
             } catch (IOException e) {
                 LOG.error("cannot open index " + dirs[i], e);
             }
