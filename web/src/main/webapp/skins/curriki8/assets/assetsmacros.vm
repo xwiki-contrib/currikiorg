@@ -1735,7 +1735,8 @@ $asset $updateResult
 #if($request.comment && $request.comment!="")
 #set($note = $request.comment)
 #else
-#set($note = $msg.get("rve.content.edit.revision.defaultnote"))
+    #set($note = $msg.get("curriki.comment.updatemetadata"))
+###set($note = $msg.get("rve.content.edit.revision.defaultnote"))
 #end
 $asset.applyRightsPolicy()
 $asset.save($!note)
