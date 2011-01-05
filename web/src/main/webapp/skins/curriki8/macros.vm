@@ -866,7 +866,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #set( $s = "" )
 #end #end
 
-#if($bcDoc.fullName == "Groups.CreateNewGroup")
+#if($bcDoc.fullName=="Groups.CreateNewGroup")
  ## special breadcrumb parent for groups creation page
  #set($usr = $context.user)
  $xwiki.getUserName($usr,true) &gt;
@@ -947,7 +947,7 @@ $memberdoc.getRenderedContent("$!content")</div>
 #macro(curriki_breadcrumb_display $bcItem $previousBc)
 #set($bcDoc = $xwiki.getDocument($bcItem))
    ## custom handling of EditArticle action
-   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+   #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    ## find the page title
@@ -1019,7 +1019,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   *#
 #macro(curriki_breadcrumb_groups_addbrowseinfo)
 #set($more = "")
-#if($bcDoc.fullName == "Groups.Browse")
+#if("Groups.Browse"==$bcDoc.fullName)
      #if( $request.subject )
 		#set($sdoc = $xwiki.getDocument($request.subject))
 		#set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
@@ -1048,7 +1048,7 @@ $memberdoc.getRenderedContent("$!content")</div>
 #if($!s=="")
  #set($collType = "")
  #set($category = $bcDoc.getValue("category"))
- #if($category=="collection")
+ #if("collection"==$category)
   #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
   #set($collType = $bcDoc.getValue("type"))
  #end
@@ -1131,7 +1131,7 @@ $memberdoc.getRenderedContent("$!content")</div>
    #end
    #set($isFirst = false)
    #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
-   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+   #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    #asset_findtitle($bcDoc)

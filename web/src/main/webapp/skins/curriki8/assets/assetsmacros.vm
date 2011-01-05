@@ -686,7 +686,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     #if($isOriginalAuthorOrAdmin)
                     <li id="info-rights-grantCurrikiCommercialLicense">
                             #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
-                            #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").get("licenseType"))
+                            #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("licenseType").getValue())
                                 #if($gCCL)
                                     <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
                                     #if($gCCL.value==1)
@@ -697,11 +697,11 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                                 #else <!-- license-to-curriki is undefined -->
                                     #if($hasGlobalAdmin)
                                          <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
-                                         <span>not set yet</span>##
-                                        #if($lic=="Licences.CurrikiLicense"|| $lic=="Licences.PublicDomain"||$lic=="Licences.CreativeCommonsAttributionNoDerivatives"||$lic=="Licences.CreativeCommonsAttributionSharealike")##
-                                        (but granted by open-license). #else (and not granted by open-license). #end
+                                         <span>$msg.get("rve.information.license_to_curriki_unset")</span>##
+                                        #if("Licences.CurrikiLicense"==$!lic|| "Licences.PublicDomain"==$!lic ||"Licences.CreativeCommonsAttributionNoDerivatives"==$!lic ||"Licences.CreativeCommonsAttributionSharealike"==$!lic)##
+                                        ($msg.get("rve.information.license_implies_license_to_curriki")). #else ($msg.get("rve.information.license_doesnt_imply_license_to_curriki")). #end
                                     #else ## (owner only, not admin)
-                                        #if($lic=="Licences.CurrikiLicense"|| $lic=="Licences.PublicDomain"||$lic=="Licences.CreativeCommonsAttributionNoDerivatives"||$lic=="Licences.CreativeCommonsAttributionSharealike")
+                                        #if("Licences.CurrikiLicense"==$!lic|| "Licences.PublicDomain"==$!lic ||"Licences.CreativeCommonsAttributionNoDerivatives"==$!lic ||"Licences.CreativeCommonsAttributionSharealike"==$!lic)##
                                          <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
                                          <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
                                          <!-- license-to-curriki is undefined but open-content license implies it is yes -->

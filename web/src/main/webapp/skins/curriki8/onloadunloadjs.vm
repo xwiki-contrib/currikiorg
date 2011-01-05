@@ -2,7 +2,7 @@
   * Javascript used for locking files in edit mode. This is only used in inline, edit, admin modes
   * @author XWiki
   *#
-#if(($context.action=="inline")||($context.action=="edit") || ($context.action=="admin") || ($request.viewer=="infoedit") || ($request.viewer=="assetedit")) ##{
+#if(("inline"==$context.action)||("edit"==$context.action) || ("admin"==$context.action) || ("infoedit"==$request.viewer) || ("assetedit"==$request.viewer)) ##{
 <script type="text/javascript">
  var cancelEditNextOnunload;
  var cancelCancelEditFlag = true;
