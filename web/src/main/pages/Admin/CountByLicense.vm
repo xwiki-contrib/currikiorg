@@ -18,6 +18,6 @@ $searchresults.totalHitcount
 #foreach($license in $licenses)
 * $license: #set($luceneQuery = "(CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome) AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp AND CurrikiCode.AssetLicenseClass.licenseType:${license.toLowerCase()} ")##
 #luceneCountAndLink($luceneQuery) ##
-(#luceneCountAndLink("${luceneQuery} +CurrikiCode.AssetLicenseClass.grantCurrikiCommercialLicense:1") with license to Curriki, ##
-    #luceneCountAndLink("${luceneQuery} +CurrikiCode.AssetLicenseClass.grantCurrikiCommercialLicense:0") with rejected)
+(license to curriki: #luceneCountAndLink("${luceneQuery} +CurrikiCode.AssetLicenseClass.grantCurrikiCommercialLicense:1") yes, ##
+    #luceneCountAndLink("${luceneQuery} +CurrikiCode.AssetLicenseClass.grantCurrikiCommercialLicense:0") no)
 #end

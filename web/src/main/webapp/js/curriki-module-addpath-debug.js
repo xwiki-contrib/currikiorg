@@ -1615,6 +1615,9 @@ Curriki.module.addpath.init = function(){
 			if ("string" === typeof Curriki.current.sri1.educational_level2){
 				Curriki.current.sri1.educational_level2 = Curriki.current.sri1.educational_level2.split(',');
 			}
+            if("undefined"==typeof(Curriki.current.sri2.grantCurrikiCommercialLicense)) {
+                Curriki.current.sri2.grantCurrikiCommercialLicense = "off";
+            }
 
 			var metadata = Curriki.current.sri1;
 			Ext.apply(metadata, Curriki.current.sri2);
