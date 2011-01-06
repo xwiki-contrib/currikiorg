@@ -1,0 +1,172 @@
+#set($uemail = $!request.get('email'))
+#set($forgot = $!request.get('forgot'))
+##
+#if(!$uemail || !$forgot || $!uemail == '' || $!forgot == '') ##{
+
+<h1>$msg.get('forgot.title')</h1>
+<p>$msg.get('forgot.description')</p>
+
+<div class="form-wrp">
+<form id="forgotForm" name="forgotform" action="" method="post">
+	<fieldset class="required">
+		<h3>&nbsp;</h3>
+		<div class="fields-wrp">
+			<ul>
+				<li id="block-email">
+					<span>$msg.get('flag.dialog.required.field.icon')<label for="email">$msg.get('forgot.enter_email')</label></span>
+					<input type="text" class="input-text" value="" id="email" name="email" />
+				</li>
+				<li id="block-forgot">
+					<span>$msg.get('flag.dialog.required.field.icon')<label>$msg.get('forgot.select_info')</label></span>
+					<ul>
+						<li><input type="radio" class="input-radio" id="field-forgot-login" name="forgot" value="login" CHECKED /><label for="field-forgot-login">$msg.get('forgot.login.title')</label></li>
+						<li><input type="radio" class="input-radio" id="field-forgot-password" name="forgot" value="password" /><label for="field-forgot-password">$msg.get('forgot.password.title')</label></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="center pad-vrt">
+			<button class="button-confirm" type="submit">$msg.get('forgot.submit_button')</button>
+		</div>
+	</fieldset>
+</form>
+</div>
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+var finishSubmit = false;
+Event.observe('forgotForm', 'submit', function(event) {
+	$$('#forgotForm .highlight').invoke('removeClassName', 'highlight');
+	CurrikiApp.errMsgReset();
+
+	function checkEmail() {
+		var isValid = true;
+		var emailStr = $('email').value;
+		if (emailStr.length <= 1) {
+			CurrikiApp.errMsgAdd("$msg.get("forgot.error.email_mandatory")");
+			CurrikiApp.errHighlight("block-email");
+			isValid = false;
+		}
+		else if (!jt_.validEmail(emailStr)) {
+			CurrikiApp.errMsgAdd("$msg.get('forgot.error.email_invalid')");
+			CurrikiApp.errHighlight("block-email");
+			isValid = false;
+		}
+		return isValid;
+	}
+
+	function checkForgot() {
+		var isValid = true;
+		if (!($('forgotForm').elements["forgot"][0].checked ||$('forgotForm').elements["forgot"][1].checked)){
+			CurrikiApp.errMsgAdd("$msg.get("forgot.error.no_choice")");
+			CurrikiApp.errHighlight("block-forgot");
+			isValid = false;
+		}
+		return isValid;
+	}
+
+	function checkExistingEmail(){
+
+		function checkEmailResponse(originalRequest){
+			var text = originalRequest.responseText;
+			var res = eval('[' + text + '][0]');
+			if(res.email){
+				alert(_('forgot.error.no_user', $F('email')));
+				return;
+			}
+			finishSubmit = true;
+			$('forgotForm').submit();
+		}
+
+		var url= "/xwiki/bin/view/XWiki/CheckAccountCreation";
+		var pars = 'xpage=plain&email=' + $F("email");
+		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
+	}
+
+	if (!finishSubmit) {
+		CurrikiApp.trimFields(document.forgotform);
+		if (checkEmail() && checkForgot()) {
+			checkExistingEmail();
+		} else {
+			CurrikiApp.errMsgShow();
+		}
+		event = event || window.event;
+		if (typeof event.preventDefault != "undefined") {
+			event.preventDefault();
+		} else if (window.event) {
+			event.returnValue = false;
+		}
+	}
+});
+/* ]]> */
+</script>
+{/pre}
+#else ##}{
+	#if($forgot == 'login') ##{
+		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (prop.value = '$!uemail')")
+		#set($list = $xwiki.searchDocuments($sql , 0 , 0))
+		#if($list.size()==0) ##{
+			$msg.get("forgot.error.no_user", [$uemail])
+		#elseif($list.size()==1) ##}{
+			## 1 username
+			#set($item = $list.get(0))
+			#set($bentrydoc = $xwiki.getDocument($item))
+			#set($from = $xwiki.getXWikiPreference("admin_email"))
+			#set($recipient = $bentrydoc.email)
+			#set($mesg = $xwiki.getDocument("Main.ForgotUsernameEmail").getContent())
+			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
+			$msg.get("forgotUsername.emailSent", [$uemail])
+		#else ##}{
+			## Multiple usernames
+			#foreach($item in $list) ##{
+				#set($bentrydoc = $xwiki.getDocument($item))
+				#if($names) ##{
+					#set($names = "${names}, ")
+				#end ##}
+				#set($names = "${names}${bentrydoc.name}")
+			#end ##}
+			#set($from = $xwiki.getXWikiPreference("admin_email"))
+			#set($recipient = $uemail)
+			#set($mesg = $xwiki.getDocument("Main.ForgotUsernamesEmail").getContent())
+			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
+			$msg.get("forgotUsername.emailSent", [$uemail])
+		#end ##}
+	#elseif($!forgot == 'password') ## password }{
+		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (prop.value = '$!uemail')")
+		#set($list = $xwiki.searchDocuments($sql))
+		#if($list.size()==0) ## {
+			$msg.get("forgot.error.no_user", [$uemail])
+		#elseif($list.size()>1) ## }{
+			$msg.get("forgot.error.multiple_users")
+		#elseif($list.size()==1) ## }{
+			#set($item = $list.get(0))
+			#set($bentrydoc = $xwiki.getDocument($item))
+
+			#set($from = $xwiki.getXWikiPreference("admin_email"))
+			#set($recipient = $bentrydoc.email)
+			#set($first_name = $bentrydoc.first_name)
+			#set($last_name = $bentrydoc.last_name)
+			#set($mesg = $xwiki.getDocument("Main.ForgotPasswordEmail").getContent())
+
+			#set($valkey = $xwiki.xWiki.generateRandomString(8))
+			## #set($reseturl = ${xwiki.getRequestURL()})
+			#set($reseturl = 'http://'+$!xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org'))
+			#set($reseturl = "${reseturl}${xwiki.getURL('Main.ForgotPassword')}")
+			#set($reseturl = "${reseturl}?q=$util.encodeURI(${uemail})&vk=${valkey}")
+
+			## Reseturl: $reseturl
+
+			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
+			#set($junk = $bentrydoc.set("validkey", $valkey))
+			#set($junk = $bentrydoc.saveWithProgrammingRights())
+			$msg.get("forgotPassword.emailSent", [$uemail])
+		#end ##}
+	#end ##}
+#end ##}
+
+
+
+## $msg.get('forgot.error.email_mandatory')
+## $msg.get('forgot.error.email_invalid')
+## $msg.get('forgot.error.no_user')
+## $msg.get('forgot.error.multiple_users')

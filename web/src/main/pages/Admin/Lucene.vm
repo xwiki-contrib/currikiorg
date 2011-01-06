@@ -1,0 +1,100 @@
+1 Lucene Search
+##
+#* @vtlvariable name="lucene" type="com.xpn.xwiki.plugin.lucene.LucenePluginApi" *# ##
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+##
+#set($lucene = $xwiki.getPlugin("lucene"))
+#set($itemsPerPage = "20")
+#set($doRebuild = $request.getParameter("rebuild"))
+#if($doRebuild=="yes")
+#if($lucene)
+#set($documentCount = $lucene.rebuildIndex(false, true))
+#if(${documentCount}>=0)
+Started index refresh with $documentCount documents. Will take some time depending on the number of pages/attachments.
+#else
+Index refresh failed.
+#end
+#end
+#else
+#if($xwiki.hasAdminRights())
+[Refresh Index>${doc.web}.${doc.name}?rebuild=yes] - $lucene.getPreIndexQueueSize() documents in pre-queue - $lucene.getQueueSize() documents in queue - $lucene.getActiveQueueSize() documents in active queue - $lucene.getLuceneDocCount() documents in indexer queue
+#end
+#end
+
+#set($query = $request.getParameter("text"))
+#if(!$query)#set($query = "")#end
+#set($queryEncoded = $util.encodeURI($query))
+{pre}
+<form action="$doc.name" method="get">
+<textarea rows="3" cols="80" name="text">$query</textarea>
+<input type="submit" value="$msg.get("tosearch")"/>
+</form>
+<p>You have all the choices of the <a href="http://lucene.apache.org/java/2_9_2/queryparsersyntax.html">Lucene query syntax</a>. Object properties are typically expressed in such a form as <code>CurrikiCode.AssetClass.title:nifty</code>. URLs displaying the results are exchangeable.</p>{/pre}
+#if($query != "")
+#set($lucene = $xwiki.getPlugin("lucene"))
+#if($lucene)
+#set($wikinames = "xwiki")
+#set($languages = "")
+#set($firstIndex = $request.getParameter("firstIndex"))
+#if(!$firstIndex)
+#set($firstIndex = "1")
+#end
+#set($searchresults = $lucene.getSearchResults($query, $wikinames, $languages, $xwiki))
+#set($results = $searchresults.getResults($firstIndex,$itemsPerPage))
+  #if($results.size()>0)
+#if($xwiki.isVirtual())
+#macro(resultlink $xwiki $web $name)
+   * [${result.wiki}:${result.web}.${result.name}] by [$result.creator]
+#end
+#else
+#macro(resultlink $xwiki $web $name)
+ #set($resDoc = $xwiki.getDocument("${result.web}.${result.name}"))
+ #if ($resDoc.displayTitle && $resDoc.displayTitle!="")
+  #set($title = $resDoc.displayTitle)
+ #else
+  #set($title = $result.name)
+ #end
+  * [$title>${result.web}.${result.name}] by [$result.creator]
+#end
+#end
+#set($lastIndex=$searchresults.getEndIndex($firstIndex, $itemsPerPage))
+#if($searchresults.totalHitcount==1)
+<hr/>
+{pre} One result:{/pre}
+#else
+<hr/>
+{pre}$msg.get("results") $firstIndex - $lastIndex $msg.get("of") ${searchresults.totalHitcount}:{/pre}
+
+#if($searchresults.hasPrevious($firstIndex))
+[$msg.get("previous")>${doc.web}.${doc.name}?text=$queryEncoded&firstIndex=$searchresults.getPreviousIndex($firstIndex,$itemsPerPage)]
+#else
+$msg.get("previous")
+#end
+ |
+#if($searchresults.hasNext($firstIndex,$itemsPerPage))
+[$msg.get("next")>${doc.web}.${doc.name}?text=$queryEncoded&firstIndex=$searchresults.getNextIndex($firstIndex,$itemsPerPage)]
+#else
+$msg.get("next")
+#end
+#end
+#foreach($result in $results)
+#resultlink(${result.wiki} ${result.web} ${result.name})
+#* #if($result.type=='wikipage')
+** wiki page
+#elseif($result.type=='attachment')
+** <a href="${result.url}">${result.filename}</a> : Attachment on [${result.web}.${result.name}] by [$result.author]
+#else
+** other
+#end *#
+#end
+#else
+$msg.get("noresults")
+#end
+
+#else
+lucene plugin not found
+#end
+#end

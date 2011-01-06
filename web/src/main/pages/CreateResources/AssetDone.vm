@@ -1,0 +1,222 @@
+## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/AssetDone?editor=wiki
+##
+## ---------- PREAMBLE, CHECK AUTHORIZATION ----------
+##
+##UNCOMMENT-TO-USE-LOCAL-STYLESHEET <link rel="stylesheet" href="/xwiki/bin/view/CreateResources/styleG?xpage=plain" type="text/css" />
+##
+#if( $context.user=="XWiki.XWikiGuest" ) ## {
+  #set( $logredir = $xwiki.getRequestURL() )
+  #set( $url = $xwiki.getURL("XWiki.XWikiLogin","login","xredirect=$logredir") )
+  $msg.get("createresources.needaccount", [$url])
+#else                                    ## } {
+  ##
+  ## ----- OK, WE HAVE AUTHORITY SETUP THE FORM POST/GET ETC  -----
+  ##
+  #includeMacros("CreateResources.StyledMacros")
+  ##  parameters passed by other forms or itself
+  #set( $successMessage     = $request.getParameter("successMessage") ) ##trigger special actions after POST from form.scratch.url
+  #set( $pageName           = $request.getParameter("pageName") )
+  #set( $publishSpace       = $request.getParameter("publishSpace") )
+  #set( $parentPage         = $request.getParameter("parentPage") )
+  #set( $noDialogs          = $request.getParameter("noDialogs") )
+#if( ("$!noDialogs"=="") || ("$!noDialogs"=="0") )  ## { ?noDialogs... not set, get parameters used for add-path dialogs
+  #set( $cameFrom           = $request.getParameter("cameFrom") )
+  #set( $flow               = $request.getParameter("flow") ) 
+  #set( $content            = $request.getParameter("CurrikiCode.TextAssetClass_0_text"))
+  #set( $title              = $request.getParameter("CurrikiCode.AssetClass_0_title"))
+  #set( $createLessonURL = $request.getParameter("createLessonURL"))
+  #set( $category        = $request.getParameter("CurrikiCode.AssetClass_0_category"))
+#end                                     ## }
+  ## if publish space is empty, then we get the space from user's collection space Coll_<user>
+  ## if the value is set, then it was passed in via POST as "Coll_Group_<group>" or from this form
+  #if( "$!publishSpace"=="" )            ## {
+   #set( $user = $context.user )
+    #if( $user.startsWith("XWiki.") )    ## {
+      #set( $shortname = $user.substring(6) )
+    #else                                ## } {
+      #set( $shortname = $user )
+    #end                                 ## }
+    #set( $publishSpace = "Coll_${shortname}" )
+  #end                                   ## }
+## DEBUG DEBUG DEBUG
+## <p>( after munging for publishSpace $!request.page $!request.method ): newAsset: $!newAsset , pageName: $!pageName , cameFrom: $!cameFrom , flow: $!flow , parentPage: $!parentPage , publishSpace: $!publishSpace</p>
+## DEBUG DEBUG DEBUG
+  #if( "$!pageName" != "" ) ## {
+    ## pageName is name of previously created asset (from other forms); get it and use it.
+    #set( $newAsset  = $xwiki.curriki.fetchAssetOrNull($pageName) )
+    #if(!$newAsset) ##{
+      #set( $redirect = $request.getParameter("xredirect"))
+      #if("$!redirect" != "") ##{
+        $response.sendRedirect($redirect)
+      #else ## } {
+        #if("$!createLessonURL" != "") ##{
+          $response.sendRedirect($createlessonURL)
+        #end ## }
+      #end ## }
+    #end ## }
+  #end ## }
+  ##
+  ## -------------------- POST PROCESSING --------------------
+  ## (nb. called from form in SimpleWikiResource and CurrikiStandardLessonPlan)
+  #if( $request.method=="POST" ) ## {
+  ##  
+  ## This section is the POST processing specifically for
+  ## SimpleWikiResource and CurrikiStandardLessonPlan which both set $successMessage
+  ## to indicate the submission has been validated.
+  ##
+  #if( "$!successMessage"!="" ) ## {
+   #if( "$!newAsset" != "" ) ## {
+     ## NOTE: "category" aka ASSET_CATEGORY_PROPERTY is set via hidden field in posting form:
+     ## NOTE: <input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="WikiText">
+     #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.AssetClass") )
+     #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.TextAssetClass") )
+     #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.AssetLicenseClass") )
+     $newAsset.setCategory($category)
+     #if($createLessonURL== $msg.get('form.html.scratch.url')) ##{
+         $newAsset.set("syntax", "xhtml/1.0") ##}
+     #else ##{
+         $newAsset.set("syntax", "xwiki/1.0")
+     #end##}
+     $newAsset.setContent("$content")
+     $newAsset.setTitle($title)
+     #if( $createLessonURL== $msg.get('ace.lesson.plan.url') ) ##{
+       #set( $formname = "ACELP" ) ##}
+     #elseif( $createLessonURL == $msg.get('lesson.plan.url') ) ##{
+       #set( $formname = "CSLP" ) ##}
+     #elseif( $createLessonURL == $msg.get('nortel.lesson.plan.url') ) ##{
+       #set( $formname = "NLLP" ) ##}
+     #elseif( $createLessonURL == $msg.get('form.scratch.url') ) ##{
+       #set( $formname = "SWR" ) ##}
+     #elseif( $createLessonURL == $msg.get('form.html.scratch.url') ) ##{
+       #set( $formname = "SHR" ) ##}
+     #elseif( $createLessonURL == $msg.get('wq.url') ) ##{
+       #set( $formname = "WQ" ) ##}
+     #elseif( $createLessonURL == $msg.get('celp.url') ) ##{
+       #set( $formname = "CELP" ) ##}
+     #elseif( $createLessonURL == $msg.get('efs.url') ) ##{
+       #set( $formname = "EFSLP" ) ##}
+     #end ##}
+     ## The ICT of CELP and EFSLP already be saved in Template
+     #if( $createLessonURL== $msg.get('ace.lesson.plan.url') || $createLessonURL== $msg.get('lesson.plan.url') || $createLessonURL== $msg.get('nortel.lesson.plan.url') ) ##{
+       $newAsset.set("instructional_component", "curriculum_lp")
+     #elseif($createLessonURL == $msg.get('wq.url')) ##{
+       $newAsset.set("instructional_component", "activity_webquest")
+     #end ##}
+     #set( $save_success = $newAsset.saveWithProgrammingRights() )
+     #if( $!save_success ) ## {
+       #set( $newAsset = $newAsset.publish($publishSpace) )
+       #if("$!parentPage"!="") ## {
+         #set( $parentAsset = $xwiki.curriki.fetchAsset($parentPage) )
+         #set( $ok = $parentAsset.addSubasset($newAsset.fullName) )
+         #set( $ok = $parentAsset.save($msg.get("curriki.comment.addsubasset")) )
+       #end ## }
+
+       ## add google-analytics
+       #if( "$!formname" != "") ##{
+         {pre}
+         <script type="text/javascript">
+           //<![CDATA[
+           var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+           document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+           var pageTracker = _gat._getTracker("$GA_uacct");
+           pageTracker._initData();
+           pageTracker._setVar('$formname');
+           pageTracker._trackPageview();
+           //]]>
+          </script>
+          {/pre}
+       #end ##}
+     #end ## }
+  #end ## } -- ("$!newAsset"!="")
+  ##
+  ## -------------------- ERROR DISPLAY --------------------
+  ##
+  #if( ("$!newAsset"=="") || ("$!pageName"=="") || !($!save_success) ) ## {
+    #if( !($!save_success) ) ## {
+      #xwikimessageboxstart("Asset lookup error:")
+      1.1.1.1.1 "Asset lookup error:"
+    #else ## } {
+     #xwikimessageboxstart("Save error on '${newAsset.fullname}':")
+     1.1.1.1.1 Save error on '${newAsset.fullname}':
+    #end ## }
+### DEBUG DEBUG DEBUG
+###     <dl>
+###       <dt>newAsset</dt><dd>$newAsset</dd>
+###       <dt>request.method</dt><dd>'$!request.method'</dd>
+###       <dt>request.page</dt><dd>'$!request.page'</dd>
+###       <dt>getParameter("pageName")</dt><dd>'$!pageName'</dd>
+###       <dt>getParameter("cameFrom")</dt><dd>'$!cameFrom'</dd>
+###       <dt>getParameter("flow")</dt><dd>'$!flow'</dd>
+###       <dt>getParameter("parentPage")</dt><dd>'$!parentPage'</dd>
+###       <dt>parentAsset</dt><dd>'$!parentAsset'</dd>
+###       <dt>getParameter("publishSpace")</dt><dd>'$!publishSpace'</dd>
+###     </dl>
+### DEBUG DEBUG DEBUG
+  #xwikimessageboxend()
+  #elseif( ("$!noDialogs"=="") || ("$!noDialogs"=="0") )  ## } { -- no "noDialogs" parameter ==> Fire up dialogs
+  ## nb: $newAsset and $pageName guaranteed valid/set beyond here
+  ## -------------------- DIALOG DISPLAY --------------------
+  1.1.1.1.1 $successMessage
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.onReady(function(){
+Curriki.current.assetName='$newAsset.fullName';
+Curriki.current.assetType='WikiText';
+Curriki.current.assetTitle='${newAsset.getDisplayTitle().replaceAll("\\","\\\\").replaceAll("'","\\'")}';
+#if("$!cameFrom"!="") ## {
+  Curriki.current.cameFrom='$cameFrom';
+#else  ## } { -- set default cameFrom back to this form as neither it nor SLP set it currently (TODO?)
+  Curriki.current.cameFrom='$msg.get("form.done.url")';
+#end ## }
+#if("$!flow"!="") ## {
+  Curriki.current.flow='$flow';
+#else ## } { -- set default flow to 'B', as set for SimpleWikiResource
+ Curriki.current.flow='B';
+#end ## }
+#if("$!parentAsset"!="") ## { -- note that this is only set on successful save AND existence of parentPage
+  Curriki.current.parentAsset='$parentAsset';
+  Curriki.current.parentTitle='${parentAsset.getDisplayTitle().replaceAll("\\","\\\\").replaceAll("'","\\'")}';
+#end ## }
+Curriki.module.addpath.startDoneMessage();
+});
+/* ]]> */
+</script>
+{/pre}
+#elseif( "$!noDialogs"=="1" )                           ## } { -- ?noDialogs=1 ==> Display In Browser
+    ## -------------------- noDialogs DISPLAY --------------------
+   #set( $asseturl = "http://next.dev.curriki.org/xwiki/bin/view/${newAsset.space}/${newAsset.name}" )
+   #xwikimessageboxstart(" Created $asseturl ! ")
+   Visit '${newAsset.getDisplayTitle()}' in '${newAsset.space}': <a href='$asseturl' target='_blank'>${newAsset.space}/${newAsset.name}</a>
+   <form action="" class="curriki-form1" id="inline" method="post">
+   <button 
+        onclick="try {if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); document.forms.inline.action='$msg.get("form.scratch.url")'; document.forms.inline.submit(); return false;} catch(e) {alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+'...');return false;}"
+        >Edit Again</button>
+   <input type="hidden" name="page"             value="$!request.page"          />
+   <input type="hidden" name="pageName"         value="$newAsset.fullName"      />
+   <input type="hidden" name="publishSpace"     value="$!publishSpace"          />
+   <input type="hidden" name="parentPage"       value="$!parentPage"            />
+#if( "$!noDialogs"!="" )   ## { when ?noDialogs=... argument set, pass it on to SimpleWikiResource for "edit-again"
+   <input type="hidden" name="noDialogs"        value="$!noDialogs"             />
+#else                      ## } {  -- ?noDialogs... not set, pass parameters used for add-path dialogs
+   <input type="hidden" name="cameFrom"         value="$!cameFrom"              />
+   <input type="hidden" name="flow"             value="$!flow"                  />
+#end                       ## }
+   </form>
+ <dl>
+   <dt>request.method</dt><dd>'$!request.method'</dd>
+   <dt>request.page</dt><dd>'$!request.page'</dd>
+   <dt>getParameter("pageName")</dt><dd>'$!pageName'</dd>
+   <dt>getParameter("cameFrom")</dt><dd>'$!cameFrom'</dd>
+   <dt>getParameter("flow")</dt><dd>'$!flow'</dd>
+   <dt>getParameter("publishSpace")</dt><dd>'$!publishSpace'</dd>
+ #if("$!parentAsset"!="" ) ## {
+   <dt>parentAsset</dt><dd>'$parentAsset'</dd>
+   <dt>parentAsset.title</dt><dd>'${parentAsset.getDisplayTitle().replaceAll('\\','\\\\').replaceAll("'","\\'")}'</dd>
+ #end ## }
+ </dl>
+    #xwikimessageboxend()
+   #end ## } -- end: noDialogs DISPLAY
+  #end ## } -- "$!successMessage"!=""
+#end ## } -- request.method=="POST"
+#end ## } -- end:authorization

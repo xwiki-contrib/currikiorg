@@ -1,0 +1,57 @@
+##
+#* @vtlvariable name="lucene" type="com.xpn.xwiki.plugin.lucene.LucenePluginApi" *# ##
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="hit" type="com.xpn.xwiki.plugin.lucene.SearchResults.Hit" *# ##
+1 Expert Search
+##
+(this page will become a way to share links to the public listing particular queries)
+#set($lucene = $xwiki.getPlugin("lucene"))
+#set($itemsPerPage = "20")
+#if($lucene)
+#set($query = $request.getParameter("text"))
+#if(!$query)#set($query = "")#end
+#set($queryEncoded = $util.encodeURI($query))
+{pre}
+<form action="$doc.name" method="get">
+<textarea rows="3" cols="80" name="text">$query</textarea>
+<input type="submit" value="$msg.get("tosearch")"/>
+</form>
+<p>You have all the choices of the <a href="http://lucene.apache.org/java/2_9_2/queryparsersyntax.html">Lucene query syntax</a>. Object properties are typically expressed in such a form as <code>CurrikiCode.AssetClass.title:nifty</code>. URLs displaying the results are exchangeable.</p>{/pre}
+#if($query != "")
+#set($wikinames = "xwiki")
+#set($languages = "")
+#set($firstIndex = $request.getParameter("firstIndex"))
+#if(!$firstIndex)
+#set($firstIndex = "1")
+#end
+#set($firstIndex=$util.parseInt($firstIndex))
+#set($searchresults = $lucene.getSearchResults($query, $wikinames, $languages, $xwiki))
+#set($results = $searchresults.getHitsList($firstIndex,$util.parseInt($itemsPerPage)))
+#if($results.size()==0)
+    <p>No results.</p>
+    #else ## results.size>0
+    #set($lastIndex=$results.size()+$firstIndex)
+    #set($previousIndex=$firstIndex-20)
+        {pre}
+    <hr>
+    <p>Results $firstIndex to $lastIndex of ${searchresults.totalHitcount}.
+       <a href="/xwiki/bin/view/${doc.web}/${doc.name}?text=$queryEncoded&firstIndex=$previousIndex">previous</a>
+       <a href="/xwiki/bin/view/${doc.web}/${doc.name}?text=$queryEncoded&firstIndex=$lastIndex">next</a>
+    </p>
+        <hr>
+    <table class="table table-favorites">
+    #foreach($hit in $results)
+        #set($fullN = $hit.doc().get("fullname"))
+        #set($asset = $xwiki.curriki.fetchAsset($fullN))
+        #mycurriki_contributionsasset($asset,false)
+        #*<tr><td>#mycurriki_ict($asset)</td>
+        <td><a href="$xwiki.getURL($fullN)">$asset.title</a></td>
+        <td>$asset.creator</td> *#
+    #end
+    </table><hr>
+#end
+#end
+#else no lucene #end

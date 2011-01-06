@@ -19,14 +19,14 @@ echo
 wget -O /dev/null $BASEURL"/xwiki/bin/view/Main/AboutConnecting"
 echo 
 echo
-echo =================== REQUESTING ONE VELOCITY RENDERING =====================
+echo ================== REQUESTING ONE ATTACHMENT DOWNLOAD =====================
 echo ------------------------ `date` --------------------------
 echo ===========================================================================
 echo 
 wget -O /dev/null $BASEURL"/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/video%20position%20img.png"
 echo 
 echo
-echo =================== REQUESTING ONE VELOCITY RENDERING =====================
+echo =================== REQUESTING ONE LUCENE INDEX ACCESS =====================
 echo ------------------------ `date` --------------------------
 echo ===========================================================================
 echo 

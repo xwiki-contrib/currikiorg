@@ -1,0 +1,23 @@
+#set($lucene = $xwiki.getPlugin("lucene"))
+
+
+* All resources: ##
+#set($luceneQuery = "(CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome) AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp")##
+#set($searchresults = $lucene.getSearchResults($luceneQuery, "xwiki", "default,en,de", $xwiki))##
+$searchresults.totalHitcount
+
+#macro(luceneCountAndLink $query)##
+#set($queryEncoded = $util.encodeURI($query))##
+<a href="/xwiki/bin/view/Search/ExpertSearch?text=$queryEncoded">$lucene.getSearchResults($query, "xwiki", "default,en,de", $xwiki).totalHitcount</a> ##
+#end
+
+
+1.1.1 Resources By License Type
+#set($licenses="Licences.CurrikiLicense,Licences.PublicDomain,Licences.CreativeCommonsAttributionNon-Commercial,Licences.CreativeCommonsAttributionNoDerivatives,Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives,Licences.CreativeCommonsAttributionSharealike,Licences.CreativeCommonsAttributionNon-CommercialShareAlike")
+#set($licenses = $licenses.split(","))
+#foreach($license in $licenses)
+* $license: #set($luceneQuery = "(CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome) AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp AND CurrikiCode.AssetLicenseClass.licenseType:${license.toLowerCase()} ")##
+#luceneCountAndLink($luceneQuery) ##
+(#luceneCountAndLink("${luceneQuery} +CurrikiCode.AssetLicenseClass.grantCurrikiCommercialLicense:1") with license to Curriki, ##
+    #luceneCountAndLink("${luceneQuery} +CurrikiCode.AssetLicenseClass.grantCurrikiCommercialLicense:0") with rejected)
+#end

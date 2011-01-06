@@ -1,0 +1,91 @@
+## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/StyledMacros
+{pre}
+## 
+##
+##
+#macro(curriki_formtitle $title_str) ## {
+<h2>$title_str</h2>
+#end ## }
+##
+## boxing effect taken from http://www.curriki.org/xwiki/bin/edit/Admin/R2SkinMacros?language=en
+##
+#macro(curriki_formpart_begin $header_str) ## {
+<fieldset class="frame">
+<div class="headerbar">$header_str</div>
+<div class="frame-content">
+#end ## }
+##
+## nb: must "bracket" #curriki_formpart_begin() exactly
+##
+#macro(curriki_formpart_end) ## {
+</div>  ##class=frame-content
+</fieldset> ##class="frame"
+#end ## }
+##
+##
+## 
+#macro(curriki_forminstructions $instructions_str) ## {
+<h3>$instructions_str</h3>
+#end ## }
+## 
+## tooltip code taken from macros.vm #tooltip(). Note must call $xwiki.addTooltipJS() in footer of main form
+##
+#macro(curriki_formprompt $title_str $tooltip_str $fieldtext $field_required_p $addl_css_class_str) ## {
+<div class="entry $addl_css_class_str">
+  ##<h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<span class="tooltip-generator">$xwiki.addTooltip("<img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/>", $tooltip_str)</span>#end</h5>
+  <h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<img class="tooltip" alt="" src="/xwiki/skins/curriki8/icons/exclamation.png" ext:qtip="$tooltip_str"/>#end</h5>
+  #if($fieldtext!="")<p class="instruction">$fieldtext</p>#end
+</div> ##class="entry $addl_css_class_str"
+#end ## }
+##
+## Fire up the WYSIWYG editor. See http://next.dev.curriki.org/xwiki/templates/textarea_wysiwyg.vm
+## This "inlines" #template("textarea_wysiwyg.vm") as it needs to customize the behavior
+## Note that this makes reference to vars $xwiki, $context and is to be added at the end of
+## forms to enable wysyiwyg editor javascript.
+##
+## Must be called in sequence
+## #curriki_wysiwyg_loader_preamble()
+## #curriki_wysiwyg_loader_editor()
+## ...
+#macro(curriki_wysiwyg_loader_preamble) ## {
+<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
+<script type="text/javascript">if ( !(browser.isIE || browser.isMozilla || browser.isGecko ) ) {alert("$msg.get('browsernoncompatible')");}</script>
+#end ## }
+##
+## Must be called one or more times after #curriki_wysiwyg_loader_preamble()
+##
+#macro(curriki_wysiwyg_loader_editor $thisEditor $thisAsset) ## {
+<script type="text/javascript">if ( ('$thisEditor' != '') && (browser.isIE || browser.isMozilla || browser.isGecko ) ) {wikiEditor.init({elements:"$thisEditor",language:"en",mode:"exact",content_css:"$xwiki.getSkinFile("style.css")",debug:false,remove_linebreaks:false,plugins:'table,contextmenu,paste,searchreplace',wiki_use_style:'$xwiki.useWysiwygStyleToolbar()',wiki_images_path:'${request.contextPath}/bin/download/$thisAsset.web/$thisAsset.name/',wiki_attach_path:'${request.contextPath}/bin/view/$thisAsset.web/$thisAsset.name',wiki_macro_path:'${request.contextPath}/bin/view/$thisAsset.web/$thisAsset.name',wiki_plugins:'core,attachments',use_linkeditor_tabs:'web_tab, email_tab'});}</script>
+#end ## }
+##
+## Must be called one or more times after #curriki_wysiwyg_loader_preamble()
+##
+#macro(curriki_SLP_wysiwyg_loader_editor $thisEditor $thisAsset $pubSpace) ## {
+<script type="text/javascript">if ( ('$thisEditor' != '') && (browser.isIE || browser.isMozilla || browser.isGecko ) ) {wikiEditor.init({elements:"$thisEditor",language:"en",mode:"exact",content_css:"$xwiki.getSkinFile("style.css")",debug:false,remove_linebreaks:false,plugins:'table,contextmenu,paste,searchreplace',wiki_use_style:'$xwiki.useWysiwygStyleToolbar()',document_base_url:'${request.contextPath}/bin/view/$pubSpace/$thisAsset.name',wiki_images_path:'${request.contextPath}/bin/download/$thisAsset.web/$thisAsset.name/',wiki_attach_path:'${request.contextPath}/bin/view/$thisAsset.web/$thisAsset.name',wiki_macro_path:'${request.contextPath}/bin/view/$thisAsset.web/$thisAsset.name',wiki_plugins:'core,attachments',relative_urls:false,convert_urls:true,use_linkeditor_tabs:'web_tab, email_tab' });}</script>
+#end ## }
+##
+## step 3 is the same in each... let's just use a macro
+##
+#macro(curriki_createresources_step3)
+#curriki_formpart_begin($msg.get("form.scratch.step3.header")) ## {
+#curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
+#curriki_formprompt($msg.get("sri.hidden_from_search_title"), $msg.get("sri.hidden_from_search_tooltip"), $msg.get("sri.hidden_from_search_txt"), false, "medium")
+$newAsset.display("hidden_from_search","edit")
+<label>$msg.get("sri.hidden_from_search_after")</label>		##special case where text is needed after display(), which appears as label-less toggle
+#curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "medium")
+$newAsset.display("rightsHolder","edit")
+#curriki_formprompt($msg.get("sri.rights_title"), $msg.get("sri.rights_tooltip"), $msg.get("sri.rights_txt"), false, "medium")
+$newAsset.display("rights","edit")
+#curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
+<p><label>$msg.get("sri.license_type_heading")</label></p>		##special case where additional text is needed as prompt before display()
+$newAsset.display("licenseType","edit")
+    #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
+    #if(""=="$!gCCL" || $!gCCL!="" && $gCCL.value!=0)<p>&nbsp;</p><p><label style="font-weight:normal;">
+              $newAsset.display("grantCurrikiCommercialLicense","edit")##
+              $msg.get("sri.license_type_license_to_curriki")
+          </label></p>#end
+#curriki_formpart_end() ## }
+#end
+
+{/pre}
