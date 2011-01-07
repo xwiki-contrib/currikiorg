@@ -866,7 +866,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #set( $s = "" )
 #end #end
 
-#if($bcDoc.fullName=="Groups.CreateNewGroup")
+#if("Groups.CreateNewGroup"==$bcDoc.fullName)
  ## special breadcrumb parent for groups creation page
  #set($usr = $context.user)
  $xwiki.getUserName($usr,true) &gt;

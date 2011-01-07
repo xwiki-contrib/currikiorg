@@ -687,7 +687,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     <li id="info-rights-grantCurrikiCommercialLicense">
                             #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
                             #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("licenseType").getValue())
-                                #if($gCCL)
+                                #if($gCCL && $gCCL.value!="")
                                     <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
                                     #if($gCCL.value==1)
                                         <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
@@ -754,7 +754,7 @@ $asset.use("CurrikiCode.AssetClass")
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
 #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
-#if("x$!gCCL"=="x" && $isOriginalAuthorOrAdmin)
+#if(("x$!gCCL"=="x" || "x$!gCCL.value"=="x") && $isOriginalAuthorOrAdmin && ! $xwiki.hasAdminRights())
     #info($msg.get("rve.information.license_to_curriki.edit_warning_predefined"))
 #end
 <fieldset>
@@ -816,17 +816,28 @@ $asset.use("CurrikiCode.AssetClass")
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
             ##
-            #if($gCCL) ## grant to curriki commercial usage is decided, only admin can edit
+            #if($gCCL && $!gCCL.value!="") ## grant to curriki commercial usage is decided, only admin can edit
                 #if($xwiki.hasAdminRights())
             <p>&nbsp;</p><ul><li><label style="font-weight:normal;">$asset.display("grantCurrikiCommercialLicense","edit",true)
                 $msg.get("sri.license_type_license_to_curriki")
             </label></li></ul>
+                #elseif($isOriginalAuthorOrAdmin && $gCCL.getValue()==0)
+                    <p>&nbsp;</p><ul><li><label style="font-weight:normal;">
+                    <input type="checkbox" value="1"
+                           name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+                    <input type="hidden" value="0" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+                        $msg.get("sri.license_type_license_to_curriki")
+                    </label></li></ul>
                 #end
             #else ## grant to curriki commercial usage is unset, any "editor" can decide
             <p>&nbsp;</p><ul><li><label style="font-weight:normal;">
-                <input type="checkbox" value="1" checked="checked"
-                       name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
-                <input type="hidden" value="0" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+                #if($xwiki.hasAdminRights())
+                    $asset.display("grantCurrikiCommercialLicense","edit",true)
+                #else
+                    <input type="checkbox" value="1" checked="checked"
+                           name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+                    <input type="hidden" value="0" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+                #end
                 $msg.get("sri.license_type_license_to_curriki")
             </label></li></ul>
             #end

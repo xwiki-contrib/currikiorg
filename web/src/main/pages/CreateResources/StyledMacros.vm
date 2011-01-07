@@ -81,8 +81,15 @@ $newAsset.display("rights","edit")
 <p><label>$msg.get("sri.license_type_heading")</label></p>		##special case where additional text is needed as prompt before display()
 $newAsset.display("licenseType","edit")
     #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
-    #if(""=="$!gCCL" || $!gCCL!="" && $gCCL.value!=0)<p>&nbsp;</p><p><label style="font-weight:normal;">
-              $newAsset.display("grantCurrikiCommercialLicense","edit")##
+    #if(""=="$!gCCL" || $!gCCL!="" && $gCCL.value!="0")<p>&nbsp;</p><p><label style="font-weight:normal;">
+        #if($gCCL.value==0) ## impossible?
+            <input type="checkbox" value="1" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+            <input type="hidden" value="0" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+        #else
+            <input type="checkbox" value="1" checked="checked" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+            <input type="hidden" value="0" name="CurrikiCode.AssetLicenseClass_0_grantCurrikiCommercialLicense">
+        #end
+              ## $newAsset.display("grantCurrikiCommercialLicense","edit")##
               $msg.get("sri.license_type_license_to_curriki")
           </label></p>#end
 #curriki_formpart_end() ## }
