@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.joster</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.joster</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1231836370000</creationDate>
-<date>1251478956000</date>
-<contentUpdateDate>1251478956000</contentUpdateDate>
-<version>20.1</version>
+<date>1294175403000</date>
+<contentUpdateDate>1294175403000</contentUpdateDate>
+<version>28.1</version>
 <title>WebQuest Template</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>button:hover re-org</comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -981,8 +981,7 @@ function getTableText(){
 	  &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" /&gt;
 	  &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_type" id="CurrikiCode.TextAssetClass_0_type" value="0" /&gt;
 	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_instructional_component2" id="CurrikiCode.AssetClass_0_instructional_component2" value="curriculum_lp" /&gt;
-	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_hidden_from_search" id="CurrikiCode.AssetClass_0_hidden_from_search" value="0" /&gt; 
-	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt; 
+	  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt;
 	  ## successMessage is null, validation not passed
 	  &lt;input type="hidden" 	name="successMessage" id="successMessage" value=""      /&gt;
 	  &lt;input type="hidden" 	name="page"		value="$!request.page"		/&gt;
@@ -1057,16 +1056,7 @@ function getTableText(){
 &lt;/iframe&gt;
   #curriki_formpart_end() ## }
 ####################################	step3
-  #curriki_formpart_begin($msg.get("form.scratch.step3.header")) 
-  #curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
-  #curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "medium")
-  $newAsset.display("rightsHolder","edit")
-  #curriki_formprompt($msg.get("sri.rights_title"), $msg.get("sri.rights_tooltip"), $msg.get("sri.rights_txt"), false, "medium")
-  $newAsset.display("rights", "edit")
-  #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
-  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		
-  $newAsset.display("licenseType","edit")
-  #curriki_formpart_end() 
+#curriki_createresources_step3()
 ####################################	step4
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) 
   &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
@@ -1133,5 +1123,5 @@ tinyMCE.convertURL = function(url, node, on_save) { return url; };
 /* ]]&gt; */
 &lt;/script&gt;{/pre}
 #end ## } -- else, aka "$!newAsset"!="" 
-#end ## } -- $context.user=="XWiki.XWikiGuest"</content>
-</xwikidoc>
+#end ## } -- $context.user=="XWiki.XWikiGuest"
+</content></xwikidoc>

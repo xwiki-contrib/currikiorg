@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1163561465000</creationDate>
-<date>1225756527000</date>
-<contentUpdateDate>1234891122000</contentUpdateDate>
-<version>5.1</version>
+<date>1293748373000</date>
+<contentUpdateDate>1293748373000</contentUpdateDate>
+<version>21.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>performance bottleneck</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -56,9 +56,15 @@
 </property>
 </object>
 <content>1 Lucene Search
-
+##
+#* @vtlvariable name="lucene" type="com.xpn.xwiki.plugin.lucene.LucenePluginApi" *# ##
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+##
 #set($lucene = $xwiki.getPlugin("lucene"))
-#set($itemsPerPage = "10")
+#set($itemsPerPage = "20")
 #set($doRebuild = $request.getParameter("rebuild"))
 #if($doRebuild=="yes")
 #if($lucene)
@@ -76,15 +82,14 @@ Index refresh failed.
 #end
 
 #set($query = $request.getParameter("text"))
-#if(!$query)
-#set($query = "")
-#end
+#if(!$query)#set($query = "")#end
+#set($queryEncoded = $util.encodeURI($query))
 {pre}
-&lt;form action="$doc.name" method="post"&gt;
-&lt;input type="text" name="text" value="$query" /&gt;
+&lt;form action="$doc.name" method="get"&gt;
+&lt;textarea rows="3" cols="80" name="text"&gt;$query&lt;/textarea&gt;
 &lt;input type="submit" value="$msg.get("tosearch")"/&gt;
 &lt;/form&gt;
-{/pre}
+&lt;p&gt;You have all the choices of the &lt;a href="http://lucene.apache.org/java/2_9_2/queryparsersyntax.html"&gt;Lucene query syntax&lt;/a&gt;. Object properties are typically expressed in such a form as &lt;code&gt;CurrikiCode.AssetClass.title:nifty&lt;/code&gt;. URLs displaying the results are exchangeable.&lt;/p&gt;{/pre}
 #if($query != "")
 #set($lucene = $xwiki.getPlugin("lucene"))
 #if($lucene)
@@ -99,44 +104,48 @@ Index refresh failed.
   #if($results.size()&gt;0)
 #if($xwiki.isVirtual())
 #macro(resultlink $xwiki $web $name)
-   * [${result.wiki}:${result.web}.${result.name}] by $msg.get("lastauthor") [$result.author]
+   * [${result.wiki}:${result.web}.${result.name}] by [$result.creator]
 #end
 #else
 #macro(resultlink $xwiki $web $name)
  #set($resDoc = $xwiki.getDocument("${result.web}.${result.name}"))
- #if ($resDoc.displayTitle)
+ #if ($resDoc.displayTitle &amp;&amp; $resDoc.displayTitle!="")
   #set($title = $resDoc.displayTitle)
  #else
   #set($title = $result.name)
  #end
-   * [$title&gt;${result.web}.${result.name}] by [$result.author]
+  * [$title&gt;${result.web}.${result.name}] by [$result.creator]
 #end
 #end
 #set($lastIndex=$searchresults.getEndIndex($firstIndex, $itemsPerPage))
-#if($searchresults.hitcount==1)
-{pre} $msg.get("oneresult"):{/pre}
+#if($searchresults.totalHitcount==1)
+&lt;hr/&gt;
+{pre} One result:{/pre}
 #else
-{pre}$msg.get("results") $firstIndex - $lastIndex $msg.get("of") ${searchresults.hitcount}:{/pre}
+&lt;hr/&gt;
+{pre}$msg.get("results") $firstIndex - $lastIndex $msg.get("of") ${searchresults.totalHitcount}:{/pre}
 
 #if($searchresults.hasPrevious($firstIndex))
-[$msg.get("previous")&gt;${doc.web}.${doc.name}?query=$query&amp;firstIndex=$searchresults.getPreviousIndex($firstIndex,$itemsPerPage)]
+[$msg.get("previous")&gt;${doc.web}.${doc.name}?text=$queryEncoded&amp;firstIndex=$searchresults.getPreviousIndex($firstIndex,$itemsPerPage)]
 #else
 $msg.get("previous")
 #end
- | 
+ |
 #if($searchresults.hasNext($firstIndex,$itemsPerPage))
-[$msg.get("next")&gt;${doc.web}.${doc.name}?query=$query&amp;firstIndex=$searchresults.getNextIndex($firstIndex,$itemsPerPage)]
+[$msg.get("next")&gt;${doc.web}.${doc.name}?text=$queryEncoded&amp;firstIndex=$searchresults.getNextIndex($firstIndex,$itemsPerPage)]
 #else
 $msg.get("next")
 #end
 #end
 #foreach($result in $results)
-#if($result.type=='wikipage')
 #resultlink(${result.wiki} ${result.web} ${result.name})
-#end
-#if($result.type=='attachment')
-* &lt;a href="${result.url}"&gt;${result.filename}&lt;/a&gt; : Attachment on [${result.web}.${result.name}] by [$result.author]
-#end
+#* #if($result.type=='wikipage')
+** wiki page
+#elseif($result.type=='attachment')
+** &lt;a href="${result.url}"&gt;${result.filename}&lt;/a&gt; : Attachment on [${result.web}.${result.name}] by [$result.author]
+#else
+** other
+#end *#
 #end
 #else
 $msg.get("noresults")

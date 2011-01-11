@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.joster</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.joster</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1236703282000</creationDate>
-<date>1251431251000</date>
-<contentUpdateDate>1251431251000</contentUpdateDate>
-<version>7.1</version>
+<date>1294175412000</date>
+<contentUpdateDate>1294175412000</contentUpdateDate>
+<version>15.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>add test for resource.title.maxlength, assign CSS to save button</comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -624,10 +624,6 @@ function setAttachmentsIframeSize() {
   ## Note lines commented out below with "NO-ICT-IN-SLP" -- normally set via
   ## display("instructional_component2","edit")
   &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_instructional_component2" id="CurrikiCode.AssetClass_0_instructional_component2" value="curriculum_lp" /&gt;
-  ## Force 0-value of hidden_from_search specifically for SLP, note lines
-  ## commented out with "NO-HIDDENSRCH-IN-SLP". Normally set via
-  ## display("hidden_from_search","edit")
-  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_hidden_from_search" id="CurrikiCode.AssetClass_0_hidden_from_search" value="0" /&gt; 
   ## CurrikiCode.AssetClass_0_category is a "fake" property named "category" in CurrikiCode.AssetClass.
   ## This is forced here to value "text". This hidden field is passed to AssetDone 
   ## via POST and instantiated via .updateObjectFromRequest("CurrikiCode.AssetClass")
@@ -726,19 +722,7 @@ function setAttachmentsIframeSize() {
 &lt;/iframe&gt;
   #curriki_formpart_end() ## }
 #####################################################################
-  #curriki_formpart_begin($msg.get("form.scratch.step3.header")) ## {
-  #curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
-##NO-HIDDENSRCH-IN-SLP #curriki_formprompt($msg.get("sri.hidden_from_search_title"), $msg.get("sri.hidden_from_search_tooltip"), $msg.get("sri.hidden_from_search_txt"), false, "medium")
-##NO-HIDDENSRCH-IN-SLP $newAsset.display("hidden_from_search","edit")
-##NO-HIDDENSRCH-IN-SLP &lt;label&gt;$msg.get("sri.hidden_from_search_after")&lt;/label&gt;		##special case where text is needed after display(), which appears as label-less toggle
-  #curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "medium")
-  $newAsset.display("rightsHolder","edit")
-  #curriki_formprompt($msg.get("sri.rights_title"), $msg.get("sri.rights_tooltip"), $msg.get("sri.rights_txt"), false, "medium")
-  $newAsset.display("rights","edit")
-  #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
-  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		##special case where additional text is needed as prompt before display()
-  $newAsset.display("licenseType","edit")
-  #curriki_formpart_end() ## }
+#curriki_createresources_step3()
 #####################################################################
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
   &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
@@ -806,5 +790,5 @@ tinyMCE.convertURL = function(url, node, on_save) { return url; };
 /* ]]&gt; */
 &lt;/script&gt;{/pre}
 #end ## } -- else, aka "$!newAsset"!="" 
-#end ## } -- $context.user=="XWiki.XWikiGuest"</content>
-</xwikidoc>
+#end ## } -- $context.user=="XWiki.XWikiGuest"
+</content></xwikidoc>

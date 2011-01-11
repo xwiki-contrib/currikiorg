@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.joster</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.joster</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1239225185000</creationDate>
-<date>1251431269000</date>
-<contentUpdateDate>1251431269000</contentUpdateDate>
-<version>3.1</version>
+<date>1294175406000</date>
+<contentUpdateDate>1294175406000</contentUpdateDate>
+<version>12.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>add test for resource.title.maxlength, assign CSS to save button</comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -280,7 +280,7 @@ function checkSimpleResourceDirty() {
 // To be called after validation of all required fields, this function
 // concatenates all the textarea and wysiwyg fields in the form
 //
-function formatTextareasIntoWikiText() { 			
+function formatTextareasIntoWikiText() {
   var slp_str = '';		// the string we concat into the TextAssetClass contents
   var title_markup_str = '*';
   var vert_break_str = '\\\\\n\n'
@@ -290,8 +290,8 @@ function formatTextareasIntoWikiText() {
       //slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + title_markup_str + '$msg.get("form.scratch.step2.content.title")' + title_markup_str +  vert_break_str + form_content;
     slp_str = ((slp_str != '') ? (slp_str + vert_break_str) : '') + form_content;
     }
-  } 
- 
+  }
+
   return (slp_str);
 }
 // set value POSTed via form hidden field w/
@@ -306,7 +306,7 @@ function setTextAssetToWikiText(str) {
   else { alert('error in setTextAssetToWikiText()'); }
 }
 //
-// return field's contents as string. returns null if field is empty or in case of 
+// return field's contents as string. returns null if field is empty or in case of
 // lookup error.
 //
 function getFieldContentStr(field_id_str) {
@@ -358,9 +358,9 @@ function setSuccessMessage(str) {
 function appendSeparatedErrorMessageStr(message_str, missed_field_err_str) {
   return(message_str + '\n\t\t' + missed_field_err_str);
 }
-// 
+//
 // set and clear the unload dialog.
-// 
+//
 var needUnloadDialog = false;
 function clearUnloadDialog() {
   // window.onbeforeunload = null;
@@ -381,7 +381,7 @@ function onWindowUnloading(e) {
 //
 function setUnloadDialog() {
   // window.onbeforeunload = unloadDialog;
-  Ext.EventManager.on(window, 'beforeunload', onWindowUnloading); 
+  Ext.EventManager.on(window, 'beforeunload', onWindowUnloading);
   needUnloadDialog = true;
 }
 /* ]]&gt; */
@@ -403,16 +403,16 @@ function setUnloadDialog() {
   ## below sets document.forms.inline.action='$msg.get("form.done.url")'
   ##
   &lt;form action="" class="curriki-form1" id="inline" method="post"&gt;
-  ## 
-  ## Xredirect foo 
+  ##
+  ## Xredirect foo
   ##
   &lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" /&gt;
   ##
   ## XWiki.AssetClass_0_category is a "fake" property named "category" in XWiki.AssetClass.
-  ## This is forced here to value "text". This hidden field is passed to AssetDone 
+  ## This is forced here to value "text". This hidden field is passed to AssetDone
   ## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
   &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" /&gt;
-  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt; 
+  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt;
   ## successMessage is a hidden field that is set to a string in validation javascript
   ## after successful validation. If AssetDone gets a POST with the default value of "" set here
   ## it will ignore the post as it means it's not validated.
@@ -461,22 +461,10 @@ function setUnloadDialog() {
   #curriki_forminstructions($msg.get("form.scratch.step2.instruction"))
   #curriki_formprompt($msg.get("form.scratch.step2.content.title"), "", $msg.get("form.scratch.step2.content.instruction"), true, "medium")
   ##$newTextAsset.display("text", "edit") ##WYSIWYG editor
-  &lt;textarea id='slp_text' name='slp_text'&gt;&lt;/textarea&gt; 
+  &lt;textarea id='slp_text' name='slp_text'&gt;&lt;/textarea&gt;
   #curriki_formpart_end() ## }
 #####################################################################
-  #curriki_formpart_begin($msg.get("form.scratch.step3.header")) ## {
-  #curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
-  #curriki_formprompt($msg.get("sri.hidden_from_search_title"), $msg.get("sri.hidden_from_search_tooltip"), $msg.get("sri.hidden_from_search_txt"), false, "medium")
-  $newAsset.display("hidden_from_search","edit")
-  &lt;label&gt;$msg.get("sri.hidden_from_search_after")&lt;/label&gt;		##special case where text is needed after display(), which appears as label-less toggle
-  #curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "medium")
-  $newAsset.display("rightsHolder","edit")
-  #curriki_formprompt($msg.get("sri.rights_title"), $msg.get("sri.rights_tooltip"), $msg.get("sri.rights_txt"), false, "medium")
-  $newAsset.display("rights","edit")
-  #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
-  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		##special case where additional text is needed as prompt before display()
-  $newAsset.display("licenseType","edit")
-  #curriki_formpart_end() ## }
+#curriki_createresources_step3()
 #####################################################################
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
   &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
@@ -484,9 +472,9 @@ function setUnloadDialog() {
 	&lt;button class="button-orange"
 		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkSimpleResourceForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
       &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
-     #if( "$!cameFrom" != "" ) ## { 
+     #if( "$!cameFrom" != "" ) ## {
        #set( $cancelURL = $cameFrom )
-     #else ## } {  
+     #else ## } {
        #set( $cancelURL = $xwiki.getURL("Main.WebHome") ) ## cameFrom not set means go to WebHome
      #end ## }
      &lt;button class="cancel"
@@ -513,7 +501,7 @@ function setUnloadDialog() {
   #set( $wysi_publishSpace = "Coll_${shortname}" )
 #else ## } {
   #set( $wysi_publishSpace = $publishSpace )
-#end  
+#end
 #curriki_SLP_wysiwyg_loader_editor("slp_text", $newAsset, $wysi_publishSpace) ## id="mce_editor_0"
 #end ## } -- if "$!noWYSIWYG"==""
 {pre}&lt;script language="javascript" type="text/javascript"&gt;
@@ -533,6 +521,6 @@ function startWaitingDialog() {
 setUnloadDialog();
 /* ]]&gt; */
 &lt;/script&gt;{/pre}
-#end ## } -- else, aka "$!newAsset"!="" 
-#end ## } -- $context.user=="XWiki.XWikiGuest"</content>
-</xwikidoc>
+#end ## } -- else, aka "$!newAsset"!=""
+#end ## } -- $context.user=="XWiki.XWikiGuest"
+</content></xwikidoc>

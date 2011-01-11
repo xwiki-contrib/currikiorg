@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.joster</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.joster</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1231834708000</creationDate>
-<date>1251431285000</date>
-<contentUpdateDate>1251431285000</contentUpdateDate>
-<version>17.1</version>
+<date>1294175405000</date>
+<contentUpdateDate>1294175405000</contentUpdateDate>
+<version>25.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>add test for resource.title.maxlength, assign CSS to save button</comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -456,19 +456,7 @@ function setUnloadDialog() {
   &lt;textarea id='slp_text' name='slp_text' style='height: 450px'&gt;&lt;/textarea&gt; 
   #curriki_formpart_end() ## }
 #####################################################################
-  #curriki_formpart_begin($msg.get("form.scratch.step3.header")) ## {
-  #curriki_forminstructions($msg.get("form.scratch.step3.instruction"))
-  #curriki_formprompt($msg.get("sri.hidden_from_search_title"), $msg.get("sri.hidden_from_search_tooltip"), $msg.get("sri.hidden_from_search_txt"), false, "medium")
-  $newAsset.display("hidden_from_search","edit")
-  &lt;label&gt;$msg.get("sri.hidden_from_search_after")&lt;/label&gt;		##special case where text is needed after display(), which appears as label-less toggle
-  #curriki_formprompt($msg.get("sri.right_holder_title"), $msg.get("sri.right_holder_tooltip"), $msg.get("sri.right_holder_txt"), true, "medium")
-  $newAsset.display("rightsHolder","edit")
-  #curriki_formprompt($msg.get("sri.rights_title"), $msg.get("sri.rights_tooltip"), $msg.get("sri.rights_txt"), false, "medium")
-  $newAsset.display("rights","edit")
-  #curriki_formprompt($msg.get("sri.license_type_title"), $msg.get("sri.license_type_tooltip"), $msg.get("sri.license_type_txt"), false, "medium")
-  &lt;p&gt;&lt;label&gt;$msg.get("sri.license_type_heading")&lt;/label&gt;&lt;/p&gt;		##special case where additional text is needed as prompt before display()
-  $newAsset.display("licenseType","edit")
-  #curriki_formpart_end() ## }
+#curriki_createresources_step3()
 #####################################################################
   #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
   &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
@@ -547,5 +535,5 @@ setUnloadDialog();
 /* ]]&gt; */
 &lt;/script&gt;{/pre}
 #end ## } -- else, aka "$!newAsset"!="" 
-#end ## } -- $context.user=="XWiki.XWikiGuest"</content>
-</xwikidoc>
+#end ## } -- $context.user=="XWiki.XWikiGuest"
+</content></xwikidoc>
