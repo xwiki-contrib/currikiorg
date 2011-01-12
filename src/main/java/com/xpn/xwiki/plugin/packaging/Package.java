@@ -87,6 +87,8 @@ public class Package
 
     private boolean withVersions = true;
 
+    private int numDocsDone = 0, totalNumDocs = 0;
+
     private List<DocumentFilter> documentFilters = new ArrayList<DocumentFilter>();
 
     public String getName()
@@ -192,7 +194,7 @@ public class Package
      * If set to true, Package will include the change history for the document when exporting the package. This implies
      * that the old version is preserved.
      * 
-     * @see #isVersionPreserved(boolean)
+     * @see #isVersionPreserved()
      */
     public void setWithVersions(boolean withVersions)
     {
@@ -507,11 +509,13 @@ public class Package
             setStatus(DocumentInfo.INSTALL_IMPOSSIBLE, context);
             return DocumentInfo.INSTALL_IMPOSSIBLE;
         }
+        totalNumDocs = this.customMappingFiles.size() + this.classFiles.size() + this.files.size();
 
         boolean hasCustomMappings = false;
         for (DocumentInfo docinfo : this.customMappingFiles) {
             BaseClass bclass = docinfo.getDoc().getxWikiClass();
             hasCustomMappings |= context.getWiki().getStore().injectCustomMapping(bclass, context);
+            numDocsDone++;
         }
 
         if (hasCustomMappings) {
@@ -545,9 +549,7 @@ public class Package
     {
         int result = DocumentInfo.INSTALL_OK;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Package installing document " + doc.getFullName() + " " + doc.getLanguage());
-        }
+        LOG.warn("Package installing document " + doc.getFullName() + " " + doc.getLanguage() + "("+(++numDocsDone)+ "/" + totalNumDocs + ").");
 
         if (doc.getAction() == DocumentInfo.ACTION_SKIP) {
             addToSkipped(doc.getFullName() + ":" + doc.getLanguage(), context);
@@ -630,6 +632,7 @@ public class Package
                 result = DocumentInfo.INSTALL_ERROR;
             }
         }
+        LOG.warn(".... finished installing document " + doc.getFullName() + " " + doc.getLanguage() + " (result: " + result + ").");
         return result;
     }
 
