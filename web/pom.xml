@@ -35,8 +35,8 @@
   <description>The standard Curriki WAR</description>
   <dependencies>
     <dependency>
-      <groupId>com.xpn.xwiki.platform</groupId>
-      <artifactId>xwiki-core</artifactId>
+      <groupId>org.curriki</groupId>
+      <artifactId>xwiki-corecurriki</artifactId>
       <version>${platform.core.version}</version>
       <type>jar</type>
     </dependency>
@@ -182,8 +182,7 @@ xwiki.inactiveuser.allowedpages=\
 # Configure the index location
 xwiki.plugins.lucene.indexdir=/appserv/lucene_index
 # Configure the analyzer used for indexing and searching.
-xwiki.plugins.lucene.analyzer=org.curriki.xwiki.plugin.lucene.NoStopWordsAnalyze
-r
+xwiki.plugins.lucene.analyzer=org.curriki.xwiki.plugin.lucene.NoStopWordsAnalyzer
 # Setting index interval
 xwiki.plugins.lucene.indexinterval=30
 xwiki.tags=0
@@ -216,6 +215,9 @@ xwiki.render.velocity.macrolist=\
         /skins/curriki8/bfcs/bfcsmacros.vm
 
 xwiki.authentication.group.allgroupimplicit=1
+
+xwiki.superadminpassword=grouin
+
             </xwikiCfgAdditionalProperties>
             <xwikiCfgDefaultSkin>curriki8</xwikiCfgDefaultSkin>
             <xwikiCfgVirtual>0</xwikiCfgVirtual>
@@ -238,6 +240,14 @@ xwiki.authentication.group.allgroupimplicit=1
               </includes>
             </resource>
           </webResources>
+          <overlays><overlay>
+                <groupId>com.xpn.xwiki.platform</groupId>
+             	<artifactId>xwiki-web-standard</artifactId>
+             	<excludes>
+             		<exclude>WEB-INF/lib/xwiki-core-1.5.jar</exclude>
+             		<exclude>WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</exclude>
+             	</excludes>
+          </overlay></overlays>
           <dependentWarExcludes>WEB-INF/lib/xwiki-core-1.5.jar</dependentWarExcludes>
           <!-- We need to exclude Plexus Container Default version 1.0-alpha-30 which comes from XWiki Rendering Doxia
                which itself uses Maven Doxia which uses it. We need to exclude it since XWiki itself uses that jar but
@@ -249,7 +259,7 @@ xwiki.authentication.group.allgroupimplicit=1
                Note 2: Since we're using version 2.x of the WAR plugin we need to use the incorrectly named
                        warSourceExcludes to exclude a dependent lib. In version 2.1.x of the plugin it's been renamed
                        to packagingExcludes so we'll need to update this POM when we move to that version. -->
-          <warSourceExcludes>WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</warSourceExcludes>
+          <dependentWarExcludes>WEB-INF/lib/plexus-container-default-1.0-alpha-30.jar</dependentWarExcludes>
         </configuration>
       </plugin>
     </plugins>
