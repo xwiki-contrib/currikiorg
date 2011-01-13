@@ -1144,7 +1144,7 @@ $msg.get("groups.curriculum.contributions.about")
 #set($spaceName = "Group_ludotest")
 #end
 #set($as = $xwiki.activitystream)
-#set($list = $as.getEvents($spaceName, true, 0, 0))
+#set($list = $as.getEvents($spaceName, true, 0, 50))
 ##foreach($event in $list)
 ##$event.date $event.page: $event.displayTitle <br />
 ###end
