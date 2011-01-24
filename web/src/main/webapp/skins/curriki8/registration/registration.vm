@@ -110,16 +110,10 @@ $userdoc.use("XWiki.XWikiUsers")
   * Macro to display the registration info module
   *#
 #macro(registrationinfo) ##{
-<div id="intro-register">
-	<h1>$msg.get('register.curriki_intro.title')</h1> 
-	<p>$msg.get('register.curriki_intro.description')
-		<a href="$msg.get('register.curriki_intro.link1_url')" target="_blank" ## 
-           ext:qtip="$msg.get('register.curriki_intro.link1_rollover')">$msg.get('register.curriki_intro.link1_text')</a> |
-		<a href="$msg.get('register.curriki_intro.link2_url')" target="_blank" ##
-           ext:qtip="$msg.get('register.curriki_intro.link2_rollover')">$msg.get('register.curriki_intro.link2_text')</a>
-    </p>
-	<p>$msg.get('register.curriki_intro.note')</p>
-	<p>$msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
+<div>## id="intro-register"
+	<h1>$msg.get('register.curriki_intro.title')</h1>
+	<p>$msg.get('register.curriki_intro.description')</p>
+        <p>$msg.get("register.curriki_intro.commercial")
 </div>
 #end ##}
 
@@ -560,9 +554,10 @@ function toggleCorporateFieldsVisible() {
 #macro(registrationaccountinfo) ##{
 #set($pfx = $g_RegType+'.account_info')
 <fieldset class="required">
-	<h3>$msg.get("${pfx}.header")</h3> 
+	<h3>$msg.get("${pfx}.header")</h3>
 	<div class="fields-wrp">
-		<p>$msg.get("${pfx}.intro")</p>
+		<p>$msg.get("${pfx}.intro")
+                  $msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
 		<ul>
 			#if($g_RegType == 'register') ##{
 				#set($i = $pfx+'.login')#registrationformtextfield($i 'xwikiname')
@@ -765,7 +760,7 @@ document.observe('dom:loaded', function(){
 
 #macro(registrationterms) ##{
 <fieldset class="required">
-	<h3>$msg.get('register.terms.header')</h3> 
+	<h3>$msg.get('register.terms.header')</h3>
 	<div class="fields-wrp">
 		<p>$msg.get('register.terms.intro')</p>
 		<ul>
@@ -773,13 +768,14 @@ document.observe('dom:loaded', function(){
 #set($iagree = "")
 #set($iagree = $!request.getParameter("XWiki.XWikiUsers_0_i_agree"))
 				$g_RegReq<input type="checkbox" class="input-checkbox" value="1" id="XWiki.XWikiUsers_0_i_agree" name="XWiki.XWikiUsers_0_i_agree" #if($iagree != "")CHECKED#end/>
-				<label for="XWiki.XWikiUsers_0_i_agree">$msg.get('register.terms.agreement')</label> 
+				<label for="XWiki.XWikiUsers_0_i_agree">$msg.get('register.terms.agreement')</label>
 			</li>
 		</ul>
+        <p>$msg.get('register.curriki_intro.note')</p>
 		<p>$msg.get('register.terms.notes')</p>
 	</div>
-	<div class="center pad-vrt">	
-		<button class="button-orange" type="submit">$msg.get('register.terms.save_button')</button>	
+	<div class="center pad-vrt">
+		<button class="button-orange" type="submit">$msg.get('register.terms.save_button')</button>
 	</div>
 </fieldset>
 #end ##}
