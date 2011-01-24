@@ -43,8 +43,9 @@ public class MetadataResource extends BaseResource {
 
         JSONObject json = new JSONObject();
         for (Property prop : results) {
-            if(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE.equals(prop.getName()) ||
+            if((Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE.equals(prop.getName()) ||
                     Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH.equals(prop.getName()))
+                    && prop.getValue()!=null)
                 json.put(prop.getName(),prop.getValue().equals(0) ? "off" : "on");
             else
                 json.put(prop.getName(), prop.getValue());
