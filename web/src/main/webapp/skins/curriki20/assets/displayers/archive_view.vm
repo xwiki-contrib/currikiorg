@@ -10,9 +10,9 @@
         #set($caption = $!asset.caption_text)
         #set($ok = $asset.use("CurrikiCode.AssetClass"))
         #if($!caption == "")
-        #set($caption = $!asset.description)
+        #set($caption = $!asset.display("description"))
         #end
-        <p>$!caption</p>
+        $!caption
         ## if archive is not zip to not display the tree
         #if($asset.attachmentList.size()>0)
          #set($attach = $asset.attachmentList.get(0).filename)

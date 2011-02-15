@@ -10,11 +10,9 @@
         #set($caption = $!asset.caption_text)
         #set($ok = $asset.use("CurrikiCode.AssetClass"))
         #if($!caption == "")
-        #set($caption = $!asset.description)
-        #end
-       <p>
-            $caption
-        </p>
+        #set($caption = $!asset.display("description"))
+        #end       
+        $!caption        
     </div>
 </div>
 #asset_attachments($asset)
