@@ -1659,7 +1659,7 @@ Ext.onReady(function(){
 	  Ext.apply(Ext.QuickTips.getQuickTip(), {
 		  showDelay: 1000
 		  ,hideDelay: 0
-		  ,interceptTitles: true
+		  ,interceptTitles: false
 	  });
 	}	
 });
@@ -1996,8 +1996,6 @@ console.log('Collections: ', this.collectionChildren);
 /*global Curriki */
 /*global _ */
 
-
-Ext.ns('Curriki.data.ict');
 Curriki.data.ict.data = [ ];
 Curriki.data.ict.list.each(function(ict){
 	var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
@@ -2040,7 +2038,6 @@ Curriki.data.ict.getRolloverDisplay = function(el_ict){
 
 
 
-Ext.ns('Curriki.data.el');
 Curriki.data.el.data = [ ];
 Curriki.data.el.list.each(function(el){
 	Curriki.data.el.data.push({
@@ -2069,7 +2066,6 @@ Curriki.data.el.getRolloverDisplay = function(el_array){
 };
 
 
-Ext.ns('Curriki.data.rights');
 Curriki.data.rights.initial = Curriki.data.rights.list[0];
 Curriki.data.rights.data = [ ];
 Curriki.data.rights.list.each(function(right){
@@ -2081,7 +2077,6 @@ Curriki.data.rights.list.each(function(right){
 });
 
 
-Ext.ns('Curriki.data.language');
 Curriki.data.language.initial = Curriki.data.language.list[0];
 Curriki.data.language.data = [ ];
 Curriki.data.language.list.each(function(lang){
@@ -2095,7 +2090,6 @@ Curriki.data.language.store = new Ext.data.SimpleStore({
 	data: Curriki.data.language.data
 });
 
-Ext.ns('Curriki.data.category');
 Curriki.data.category.data = [ ];
 Curriki.data.category.list.each(function(category){
 	Curriki.data.category.data.push({
@@ -2104,7 +2098,6 @@ Curriki.data.category.list.each(function(category){
 	});
 });
 
-Ext.ns('Curriki.data.licence');
 Curriki.data.licence.initial = Curriki.data.licence.list[0];
 Curriki.data.licence.data = [ ];
 Curriki.data.licence.list.each(function(lic){
@@ -2143,7 +2136,6 @@ Curriki.data.fw_item.fwCheckListener = function(node, checked){
 	}
 };
 
-var fwItem = 'FW_masterFramework.WebHome';
 Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 	var nodeInfo = {
 		 id:nodeName

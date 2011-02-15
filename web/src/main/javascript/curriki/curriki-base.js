@@ -23,12 +23,20 @@ if (!('console' in window) || !('firebug' in console)){
 console.log('initing Curriki');
 
 Ext.onReady(function(){
-	Ext.QuickTips.init();
-	Ext.apply(Ext.QuickTips.getQuickTip(), {
-		showDelay: 1000
-		,hideDelay: 0
-		,interceptTitles: true
-	});
+	Ext.QuickTips.init();	
+	if(Ext.isIE) {	  
+	  Ext.apply(Ext.QuickTips.getQuickTip(), {
+		  showDelay: 1000
+		  ,hideDelay: 0
+		  ,interceptTitles: false
+	  });
+	} else {
+	  Ext.apply(Ext.QuickTips.getQuickTip(), {
+		  showDelay: 1000
+		  ,hideDelay: 0
+		  ,interceptTitles: false
+	  });
+	}	
 });
 
 /*
