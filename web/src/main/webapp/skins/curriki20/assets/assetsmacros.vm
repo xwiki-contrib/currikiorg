@@ -10,7 +10,20 @@
 #macro(asset_resourcefunctions $asset)
 <ul id="function-tabs">
    #if(!$isguest)
-     <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+     #set($collSpace = "Coll_${context.user.replace('XWiki.', '')}")
+     #set($favoritesAsset = $xwiki.getPlugin("curriki").fetchAssetOrNull("${collSpace}.Favorites"))
+     #if(!$favoritesAsset)
+       ## Ensure that Coll_{username} is created for the current user
+       ## this also ensures that Favorites asset is created
+       #set($groovyObj = $xwiki.parseGroovyFromPage("INPSCode.CollectionSpaceGroovy"))
+       #set($discard = $groovyObj.ensureExists($collSpace, $context))
+       ## Reiterate Favorites Asset
+     #set($favoritesAsset = $xwiki.getPlugin("curriki").fetchAssetOrNull("${collSpace}.Favorites"))
+     #end
+     ## Check if the current asset is in Favorites folder
+     #if(!$favoritesAsset.subassetList.contains($doc.fullName))
+      <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+     #end
      #set($g_enable_ADDTHIS = true)
      <li id="tab-email"><a href="http://www.addthis.com/bookmark.php" style="text-decoration:none;" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("rve.title.function.email")</a></li>
      <li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
