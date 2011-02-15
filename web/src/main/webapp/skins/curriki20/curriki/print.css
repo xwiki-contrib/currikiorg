@@ -1,26 +1,114 @@
-#asset-header h2 a {
-	background:none;
-	padding-left:0
+/* Hide unneeded stuff */
+.edit_section,
+#rightPanels, #leftPanels, #mainmenu, #contentmenu, #editmenu,
+#globallinks, #footerglobal,
+#commentform, .xwikitabbar li, #Historyshortcut, #Informationshortcut, .separator,
+.commentheader .commenttools a, a.tag-delete , .tag-add a {
+  display: none !important;
+}
+#printcontainer {
+  overflow: visible !important; 
+  border: none; 
+  padding: 10px; 
+  text-align: justify;
+  float: none !important;
 }
 
-.sub-asset-wrapper .arrow-icon-wrapper a.icon-mini, .asset-display-download a.icon-link, .sub-asset-wrapper a.button-link, .sub-asset-wrapper a.button-link-download { 
-	float:right;
+#headerglobal {
+  float: none;
 }
-.sub-asset-wrapper a.button-link, button.button-link, #print-banner-wrapper a.button-link, #asset-attribution, #asset-rating, ul#asset-tabs, ul#asset-links, ul#function-tabs, #left-panel, .expanded #left-panel, #header-member, #header-search, #breadcrumb, html > body #actionmenu, #print-banner-wrapper, .sub-asset-wrapper button.button-link, #print-banner-wrapper button.button-link, #footerglobal {
-	display: none;
+#headerspace {
+  margin:0 !important;
 }
-
-.arrow-icon-wrapper {
-	width: 20px;
+#contentcolumn .main {
+  margin:0 !important;
 }
-
-.sub-asset-wrapper h3, .asset-display-download, .asset-display-text {
-	margin-left: 20px;
-}
-
-.expanded #right-panel, #right-panel {
-	margin: 0;
-	padding-left: 0;
-	width: 100% !important;
+/*-------------------------------------------------------------------*/
+.main {
+  background-color: white;
+  padding: 10px;
 }
 
+.xwikitabbar li.active {
+  display: block;
+}
+
+#docextrapanes #AddComment {
+  border: none;
+}
+
+#xwikidatacontents, #docExtraTabs {
+  background: white;
+}
+
+#xdocFooter, #docextrapanes {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#xwikicontent a , #xdocFooter a, #docextrapanes .commentauthor a, #breadcrumbs a{
+  color: $theme.textPrimaryColor !important;
+}
+
+#docExtraTabs ul.xwikitabbar {
+  padding: 0px;
+  background: white;
+}
+
+.leftsidecolumns, #contentcolumn {
+  float: none !important;
+}
+
+#docextrapanes { /* display all comments */
+  float: none !important;
+  overflow: visible !important;
+}
+
+/* Remove shortcuts */
+#document-info>div+div,
+#historyshortcut, #informationshortcut, #annotationsshortcut {
+  display: none;
+}
+.xdocLastModification {
+  width: auto;
+}
+.recentChangesMoreActions {
+  display: none;
+}
+
+ul#function-tabs {
+  display: none;
+}
+
+#rve-rating-wrapper {
+  display: none;
+}
+
+#print-banner-wrapper {
+  display: block;
+}
+
+#print-close-inner {
+  float: right;
+  margin-right: 5px;
+}
+
+#asset-bulk-download {
+  display: none;
+}
+
+#asset-attribution {
+  display: block;
+}
+
+#mainContentArea {
+  margin-left: 5px;
+}
+
+#breadcrumb {
+  display: block;
+}
+
+#asset-wrapper-inner {
+  margin-right: 0;
+}

@@ -38,28 +38,29 @@
     </a>
   </div> ## companylogo
   </div> ## company
-  <div id="globallinks">
-    <form action="$xwiki.getURL('Main.WebSearch')">
-      <div class="globalsearch">
-        <label class="hidden" for="headerglobalsearchinput">$msg.get('panels.search.inputLabel')</label><input class="globalsearchinput withTip" id="headerglobalsearchinput" type="text" name="text" value="$msg.get('panels.search.inputText')" size="15"/><input class="button" type="image" value="$msg.get('panels.search.submit')" alt="$msg.get('panels.search.submit')" src="$xwiki.getSkinFile('icons/xwiki/search.png')"/>
-      </div>
-    </form>
-#if($xwiki.isMultiLingual())
-  <span class="glink" id="headerlanguages">
-  #set($defaultLanguage = "$!{doc.getDefaultLanguage()}")
-  #if($defaultLanguage == '')
-    #set($defaultLanguage = "$!{doc.getLanguage()}")
-  #end
-  #if($defaultLanguage == '')
-    #set($defaultLanguage = "default")
-  #end
-  <a href="$!doc.getURL("view", "language=$defaultLanguage")" class="language-default#if($tdoc.realLanguage == $defaultLanguage || ($defaultLanguage == 'default' && $tdoc.realLanguage == '')) language-current#end">$defaultLanguage</a>
-  #foreach($lang in $doc.translationList)
-    / <a href="$!doc.getURL("view", "language=$lang")" class="language-translation#if($tdoc.realLanguage == $lang) language-current#end">$!lang</a>
-  #end
-  </span>
+#if("$!viewer" == "print")
+<div id="print-banner-wrapper">
+        <div id="print-meta">
+            <div id="print-meta-inner">
+                <h4>$msg.get("mode.print.header_title")</h4>
+                <p>$msg.get("mode.print.header_txt", [$doc.displayTitle])</p>
+                <a href="$doc.getURL("view", "bc=$!{request.bc}")">$msg.get("mode.print.header.view_link")</a>
+            </div>
+        </div>
+        <div id="print-close">
+            <div id="print-close-inner">
+                <button class="button button-cancel mgn-rt" onclick="window.close();">$msg.get("mode.print.header.close_button")</button>
+                <button class="button button-confirm" onclick="document.getElementById('print-banner-wrapper').style.display='none'; window.print(); ">$msg.get("mode.print.header.print_button")</button>
+            </div>
+        </div>
+    </div>
+#else
+<!-- LOGIN AREA -->
+#template("logininline.vm")
+<!-- End Of Login Area -->
+
+#template("advancedsearch.vm") 
 #end
-  </div> ## globallinks
   <div class="clearfloats"></div>
 </div> ## headerglobal
 #end

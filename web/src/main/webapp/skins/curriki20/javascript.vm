@@ -7,13 +7,9 @@
 #else##}{
 	#set($debugging = "")
 #end##}
-<script type="text/javascript">
-//<![CDATA[
-var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
-document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js' type='text/javascript'%3E%3C/script%3E"));
-document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects' type='text/javascript'%3E%3C/script%3E"));
-//]]>
-</script>
+#set($debugging = "-debug")
+<script type="text/javascript" src="$xwiki.getSkinFile("js/prototype/prototype.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/scriptaculous/effects.js")"></script>
 <script type="text/javascript">
 //<![CDATA[
 var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
@@ -40,6 +36,9 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 ## and uncomment the next one out instead
 ##<script src="/js/1/lang_${lang}.js"></script>
 <script src="/xwiki/js/curriki-main${debugging}.js"></script>
+## Once we have split data and code uncomment the 2 lines and delete the previous one
+##<script src="/xwiki/js/curriki-main-data-debug.js"></script>
+##<script src="/xwiki/js/curriki-main-code-debug.js"></script>
 <script src="/xwiki/js/curriki-module-addpath${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-organize${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-nominate${debugging}.js"></script>
@@ -48,10 +47,6 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="/xwiki/js/curriki-module-partner${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-asterixReview${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-flag${debugging}.js"></script>
-
-##if($!headerfile == "html") ## {
-<script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
-##end ## }
 #end ##}
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
@@ -71,7 +66,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
 
 #if($context.action=="admin") ##{
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("lightbox.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
 #end ##}
@@ -97,7 +92,6 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 ##
 ## JS Libraries.
 ##
-$xwiki.jsfx.use('js/scriptaculous/effects.js', true)
 $xwiki.jsfx.use('js/xwiki/widgets/modalPopup.js', true)
 $xwiki.ssfx.use('js/xwiki/widgets/modalPopup.css', true)
 $xwiki.jsfx.use('js/xwiki/widgets/jumpToPage.js', true)
@@ -107,7 +101,6 @@ $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/confirmedAjaxRequest.js', true)
 $xwiki.jsfx.use('uicomponents/widgets/notification.js', true)
 $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
-<script type="text/javascript" src="$xwiki.getSkinFile("js/prototype/prototype.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/xwiki.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.js")"></script>
 <script type="text/javascript">

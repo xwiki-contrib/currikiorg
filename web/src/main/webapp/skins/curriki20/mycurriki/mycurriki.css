@@ -1,4 +1,4 @@
-
+#template('colorThemeInit.vm')
 #mycurriki-blog h2 {
 	color: #000;
 	font-size: 16px;
@@ -15,14 +15,16 @@
 /** TABS **/
 
 .mycurriki .tab-container {
-	background: #f2f2f2;
+	background-color: $theme.panelBackgroundColor;
 	border: 1px solid #ababab;
+        position:relative;
+        top:-1px;
 }
 
 .mycurriki ul.tabs a {border-color: #C9C9C9 #C9C9C9 #ABABAB;}
 
 .mycurriki ul.tabs li.current a {
-	background: #f2f2f2;
+	background: $theme.panelBackgroundColor;
 	border-color: #ABABAB #ABABAB #F2F2F2
 }
 
@@ -39,8 +41,9 @@
 	padding: 10px;
 	min-height: 100px;
 }
+.subject-card { margin-bottom: 1em; padding: 5px; }
 
-.subject-link { height: 2.5em; padding: 0pt 0pt 5px; }
+.subject-link { padding: 0pt 0pt 5px; }
 .subject-link a span { font-size: 12px; }
 .all-subjects  { text-align: center; }
 .all-subjects a { font-size: 15px; font-weight: bold; text-decoration: none; }
@@ -48,6 +51,20 @@
 .custom-subject-card { background-color: #E3E4F5; }
 .browse-groups-info { padding-top: 10px; }
 /* end of MYcurriki GROUPS + BROWSE GROUPS */
+.browse-all { float:left;margin-right:1em;margin-bottom:1em;}
+.browse-subject h1 {padding-bottom:0.2em;}
+.browse-subject h1 img { margin-right:0.5em;vertical-align:middle;}
+.browse-by {width:100%;margin-top:0 !important;}
+.browse-by td {vertical-align:top;border:solid 1px #0198AB !important;padding:0 !important;}
+.browse-by td.spacer {width:2%;border:none !important;}
+
+.browse-topics {}
+.browse-edlevels {}
+.browse-topics .caption-text {background-color:#0198AB;font-weight:700;font-size:1em;color:#fff;padding: 4px 6px;text-transform:uppercase;margin-bottom:0.5em;}
+.topic-link {padding: 4px 6px;}
+.browse-edlevels .caption-text {background-color:#0198AB;font-weight:700;font-size:1em;color:#fff;padding: 4px 6px;text-transform:uppercase;margin-bottom:0.5em;}
+.browse-topics .column {float:left;width:50%;}
+.edlevel-link {padding: 4px 6px;}
 
 #mycurriki-main-content textarea { width: 99%; }
 #mycurriki-main-content .edit-blog textarea { width: 100% !important; width: 559px; }
@@ -79,7 +96,9 @@
 #mycurriki-groups .xwikicomment .righttext { color: #8C8C8C; }
 
 #mycurriki-collections .button-links p { display: inline; }
+#mycurriki-main-header {font-size:87.5%;}
 #mycurriki-main-header-subtitle { width: 75%; }
+
  
 /* MY CURRIKI*/
 #mycurriki-main-content form table table td strong { display: block; padding-top: 5px; }
@@ -137,3 +156,4 @@
 	font-size:1.1em;
 	padding-bottom:10px 0;
 }
+

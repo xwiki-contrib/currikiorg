@@ -5,14 +5,14 @@
 ###
 #if ($request.getParameter("raw").equals("1"))
   #template("code.vm")
-#else
-  #template("startpage.vm")
+#else  
   #if("$!viewer" == '')
     #set($viewer = $request.getParameter('viewer'))
   #end
   #if("$!viewer" == '')
     #set($viewer = 'content')
   #end
+  #template("startpage.vm")
   <div class="main layoutsubsection">
   #if($displayContentMenu)
     <div id="contentmenu" class="actionmenu">
