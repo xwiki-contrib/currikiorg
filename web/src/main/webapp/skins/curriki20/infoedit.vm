@@ -1,0 +1,18 @@
+#**
+ *  Asset info tab edit entry point. It is called from view.vm
+ *#
+#if(!$doc.hasAccessLevel("edit"))
+  #curriki_noaccess()
+#else 
+  #if($doc.getObject("CurrikiCode.AssetClass"))
+    ## check locking of asset
+    #set($force = $!request.get("force"))
+    #if($doc.getLocked() == true && !$force)
+      #curriki_locked($doc)
+    #else
+      #asset_infoedit($doc)
+    #end
+  #else
+    $msg.get("rve.information.pageisnotanasset")
+  #end
+#end
