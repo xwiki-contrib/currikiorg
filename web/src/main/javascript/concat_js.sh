@@ -28,7 +28,7 @@ CURRIKI="\
 	\
 	curriki/curriki-base.js \
 	curriki/data/curriki-data-user.js \
-	curriki/data/curriki-data-metadata.js \
+	curriki/data/curriki-data-code.js \
 	curriki/assets/curriki-assets.js \
 	curriki/ui/curriki-ui.js \
 	curriki/ui/rating.js \
@@ -36,6 +36,8 @@ CURRIKI="\
 
 cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js
 cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
+cat curriki/data/curriki-data-metadata.js | $UNCOMPRESS_JS > ../webapp/js/curriki-main-data-debug.js
+cat curriki/data/curriki-data-metadata.js | $COMPRESS_JS > ../webapp/js/curriki-main-data.js
 
 
 CURRIKICSS="\
