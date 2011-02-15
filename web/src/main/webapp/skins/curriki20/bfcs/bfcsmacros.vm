@@ -1,6 +1,7 @@
 	#macro(buildBFCSHql $ordered) ##{
 
 	##Set excludeList variable from ExcludeList page content
+	#set($excludeList = $util.arrayList)
 	#includeInContext("FileCheck.ExcludeList")
 
 	##----------------Begin Get filters from cookies
@@ -31,15 +32,17 @@
     ##----------------End Get filters from cookies
 
         #set($fromsql = "")
+        #if($listtool.size($excludeList) > 0)
         #set($wheresql = "and doc.creator not in (")
         #foreach($user in $excludeList)
         	#if($velocityCount>1)
         		#set($wheresql = "$wheresql ,")
         	#end
         	#set($wheresql = "$wheresql 'XWiki.${user}'")
-        #end
+        #end        
         #set($wheresql = "$wheresql )")
-        #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
+        #end
+        #set($wheresql = "$!wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
 
         #if($assetFilterCreationDateFrom&&($assetFilterCreationDateFrom!="")&&($assetFilterCreationDateFrom!="MM/DD/YYYY"))
 			#set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/"))
