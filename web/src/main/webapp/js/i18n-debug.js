@@ -3,7 +3,7 @@ function _() {
 	if (arguments.length < 1){
 		return '';
 	}
-	if (i18nDict && typeof i18nDict[arguments[0]] === 'string'){
+	if (typeof i18nDict != 'undefined' && typeof i18nDict[arguments[0]] === 'string'){
 		var t = i18nDict[arguments[0]];
 		var args;
 
