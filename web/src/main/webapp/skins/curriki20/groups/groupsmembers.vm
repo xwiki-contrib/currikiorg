@@ -732,7 +732,8 @@ $msg.get("groups_invitation_onlyaccessibletomembers")
 #foreach($invitee in $invitees)
 #set($invitationCount = $invitationCount+1)
 #set($invitee = $invitee.trim())
-#if($im.inviteUser($invitee,$spaceName,$open,$roles,null,$map)==false)
+#set($mailTemplate = "$spaceName.MailTemplateSendInvitation")
+#if($im.inviteUser($invitee,$spaceName,$open,$roles,$mailTemplate,$map)==false)
 #set($errCode = $context.get("InvitationManagerException").code)
 #if($errCode==101001)
 #error($msg.get("groups_members_invite_inviteemissing"))
@@ -996,7 +997,8 @@ $msg.groups_needsadminrights
 ## we need to verify there is a request fron this user
 #set($user = $request.user)
 ## accept invitation
-#set($acceptInv = $im.acceptMembership($spaceName, $user))
+#set($mailTemplate = "${spaceName}.MailTemplateAcceptRequest")
+#set($acceptInv = $im.acceptMembership($spaceName, $user, $mailTemplate))
 #if($acceptInv)
 ## we also need to update the space profile with the data in the Map
 SUCCESS
@@ -1029,7 +1031,8 @@ $msg.groups_needsadminrights
 ## we need to verify there is a request for this user
 #set($user = $request.user)
 ## reject invitation
-#if($im.rejectMembership($spaceName, $user))
+#set($mailTemplate = "${spaceName}.MailTemplateRejectRequest")
+#if($im.rejectMembership($spaceName, $user, $mailTemplate))
 SUCCESS
 #else
 $msg.groups_members_reject_request_error
