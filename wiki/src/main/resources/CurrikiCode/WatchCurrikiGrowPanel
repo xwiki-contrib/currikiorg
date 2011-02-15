@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-<web>Panels</web>
-<name>DocumentInformation</name>
+<web>CurrikiCode</web>
+<name>WatchCurrikiGrowPanel</name>
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.Admin</creator>
-<author>XWiki.LudovicDubost</author>
+<creator>XWiki.superadmin</creator>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1154097461000</creationDate>
-<date>1194014507000</date>
-<contentUpdateDate>1203116888000</contentUpdateDate>
-<version>1.29</version>
+<contentAuthor>XWiki.dward</contentAuthor>
+<creationDate>1213887120000</creationDate>
+<date>1233683433000</date>
+<contentUpdateDate>1233683433000</contentUpdateDate>
+<version>30.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Logic reversed on which panel is shown</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -91,48 +91,29 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </type>
 </class>
-<name>Panels.DocumentInformation</name>
+<name>CurrikiCode.WatchCurrikiGrowPanel</name>
 <number>0</number>
 <className>Panels.PanelClass</className>
 <property>
-<category>Tools</category>
+<category>Information</category>
 </property>
 <property>
-<content>#set($pages = $tdoc.includedPages)
-#largepanelheader($msg.get("panels.documentInformation.title"))
-&lt;dl&gt;
-&lt;dt&gt;&lt;label for="xwikidocparentinput2"&gt;$msg.get("panels.documentInformation.parent")&lt;/label&gt;&lt;/dt&gt; &lt;dd&gt;&lt;input type="text" id="xwikidocparentinput2" name="parent" value="$!tdoc.parent" size="30"/&gt;&lt;/dd&gt;
-#if(($tdoc.language=="")&amp;&amp;($xwiki.isMultiLingual()))
-&lt;dt&gt;&lt;label for="xwikidoclanguageinput2"&gt;$msg.get("panels.documentInformation.defaultLanguage")&lt;/label&gt;&lt;/dt&gt; &lt;dd&gt;&lt;input type="text" id="xwikidoclanguageinput2" name="defaultLanguage" value="$!tdoc.defaultLanguage" size="30"/&gt;&lt;/dd&gt;
-#end
-#if($pages.size() != 0)
-  #if($pages.size() == 1)
-    &lt;dt&gt;$msg.get("panels.documentInformation.includesOne", [$pages.size()])&lt;/dt&gt;
-  #else
-    &lt;dt&gt;$msg.get("panels.documentInformation.includesMore", [$pages.size()])&lt;/dt&gt;
-  #end
-  &lt;dd&gt;
-  &lt;table summary="$msg.get("panels.documentInformation.includesSummary")" id="xwikiincludeddocuments"&gt;
-  &lt;tbody&gt;
-  #foreach ($page in $pages)
-    &lt;tr&gt;&lt;td&gt;&lt;a href="$xwiki.getURL($page, "view")"&gt;$page&lt;/a&gt;&lt;/td&gt;
-    &lt;td class="xwikibuttonlink"&gt;&lt;a href="$xwiki.getURL($page, "edit")"&gt;$msg.get("panels.documentInformation.editIncluded")&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-  #end
-  &lt;/tbody&gt;
-  &lt;/table&gt;&lt;/dd&gt;
-#end
-&lt;/dl&gt;
-#template("tagedit.vm")
-#panelfooter()</content>
+<content>#if($doc.fullName=="Main.WebHome" || $doc.web=="Panels") ##{
+	#if($context.user!="XWiki.XWikiGuest") ##{
+		#includeTopic('PanelIncludes.WatchCurrikiGrowMember')
+	#else ##}{
+		#includeTopic('PanelIncludes.WatchCurrikiGrowGuest')
+	#end ##}
+#end ##}</content>
 </property>
 <property>
-<description>Displays and allows editing the document title, parent and inclded documents.</description>
+<description>Watch Curriki Grow</description>
 </property>
 <property>
-<name>Document Information</name>
+<name>WatchCurrikiGrowPanel</name>
 </property>
 <property>
-<type>edit</type>
+<type>view</type>
 </property>
 </object>
 <object>
@@ -161,7 +142,7 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </tags>
 </class>
-<name>Panels.DocumentInformation</name>
+<name>Panels.Watch Curriki Grow</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
 <property>

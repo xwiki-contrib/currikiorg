@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-<web>Panels</web>
-<name>WelcomeMember</name>
+<web>CurrikiCode</web>
+<name>JoinCurrikiPanel</name>
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.superadmin</creator>
+<creator>XWiki.jeremi</creator>
 <author>XWiki.LudovicDubost</author>
 <customClass></customClass>
 <contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1159733658000</creationDate>
-<date>1160235759000</date>
+<creationDate>1161722501000</creationDate>
+<date>1161988827000</date>
 <contentUpdateDate>1203116888000</contentUpdateDate>
-<version>1.7</version>
+<version>1.68</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -91,28 +91,31 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </type>
 </class>
-<name>Panels.WelcomeMember</name>
+<name>CurrikiCode.JoinCurrikiPanel</name>
 <number>0</number>
 <className>Panels.PanelClass</className>
 <property>
 <category>Information</category>
 </property>
 <property>
-<content>#if($xwiki.hasAccessLevel("view", $context.user, "Photos.WebHome"))
-#panelheader('Member Menu')
-* [Photos&gt;Photos.WebHome]
-* [Demo&gt;Demo.WebHome]
-#if($xwiki.hasAdminRights())
-* [Admin&gt;Admin.WebHome]
-#end
+<content>#if($context.user=="XWiki.XWikiGuest")
+#panelheadercolor("Join Curriki" "blue")
+
+Create a profile now to start participating in the curriki community. It's free!
+[Join now&gt;Main.JoinCurriki]
+
+#panelfooter()
+#else
+#panelheadercolor("My Curriki" "blue")
+* My Curriki
 #panelfooter()
 #end</content>
 </property>
 <property>
-<description>Welcome Members</description>
+<description>Panel Description</description>
 </property>
 <property>
-<name>Welcome Member</name>
+<name>JoinCurrikiPanel</name>
 </property>
 <property>
 <type>view</type>

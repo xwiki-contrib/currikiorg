@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-<web>Panels</web>
-<name>Contribute Content</name>
+<web>CurrikiCode</web>
+<name>FeaturedMembersPanel</name>
 <language></language>
-<defaultLanguage>fr</defaultLanguage>
+<defaultLanguage></defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.GArun</creator>
-<author>XWiki.thimel</author>
+<creator>XWiki.martagirdea</creator>
+<author>XWiki.superadmin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.thimel</contentAuthor>
-<creationDate>1161960626000</creationDate>
-<date>1171902844000</date>
-<contentUpdateDate>1203116888000</contentUpdateDate>
-<version>1.9</version>
+<contentAuthor>XWiki.superadmin</contentAuthor>
+<creationDate>1172389813000</creationDate>
+<date>1213691654000</date>
+<contentUpdateDate>1213691654000</contentUpdateDate>
+<version>23.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>CURRIKI 1980</comment>
 <minorEdit>false</minorEdit>
-<syntaxId>xwiki/1.0</syntaxId>
 <object>
 <class>
 <name>Panels.PanelClass</name>
@@ -91,29 +90,82 @@
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </type>
 </class>
-<name>Panels.Contribute Content</name>
+<name>CurrikiCode.FeaturedMembersPanel</name>
 <number>0</number>
 <className>Panels.PanelClass</className>
 <property>
-<category>Information</category>
+<category>Navigation</category>
 </property>
 <property>
-<content>#if($context.user!="XWiki.XWikiGuest")
-#panelheadercolor($msg.get("caption.contributeContent") "red")
-*$msg.get("caption.createAProfilToParticipate")*
+<content>#if( $doc.fullName != "Main.WebHome" ) ##{
 
-* [$msg.get("panels.contribute.addContent")&gt;AssetManager.Wizard1]
-#panelfooter()
-#end</content>
+&lt;div id="featuredmembers" class="shadow-outer"&gt; ##{
+&lt;div class="shadow-middle"&gt; ##{
+&lt;div class="shadow-inner"&gt; ##{
+&lt;div class="headerbar violet"&gt;$msg.get("panel.featuredmembers.title")&lt;/div&gt;
+&lt;div class="frame-content"&gt; ##{
+	   	
+##
+##
+## List of Featured Members:
+##
+
+#displayMember("mreinig")
+
+##displayMember("driscoll")
+##
+##
+##
+##&lt;div class="membercount"&gt;[$xwiki.includeTopic("XWiki.MemberCount") ##$msg.get("panel.featuredmembers.members.count")&gt;Main.WebHome]&lt;/div&gt;
+
+&lt;/div&gt; ##} ##frame-content
+&lt;/div&gt; ##} ##shadow-inner
+&lt;/div&gt; ##} ##shadow-middle
+&lt;/div&gt; ##} ##shadow-outer
+
+#end ##}</content>
 </property>
 <property>
-<description>Contribute Content</description>
+<description>Displays some members, selected by the admin.</description>
 </property>
 <property>
-<name>Contribute Content</name>
+<name>FeaturedMembersPanel</name>
 </property>
 <property>
 <type>view</type>
+</property>
+</object>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>CurrikiCode.FeaturedMembersPanel</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<property>
+<tags/>
 </property>
 </object>
 <content>#includeForm("Panels.PanelSheet")</content>
