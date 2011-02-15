@@ -5,7 +5,6 @@
 #if(!$doc.hasAccessLevel("edit"))
 #curriki_noaccess()
 #else
-#curriki_breadcrumb()
 ## check locking of asset
 #set($force = $!request.get("force"))
 #if (($doc.getLocked()==true)&&(!$force))
