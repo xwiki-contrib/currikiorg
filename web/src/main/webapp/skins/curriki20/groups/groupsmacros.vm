@@ -674,20 +674,21 @@ $msg.get("groups_creategroup_needaccount", [$url])
   #titlebar($msg.get("groups_creategroup_namedescribe_title"), "", "", "blue")
   <p>
     <span id="label-group-name">$msg.get("groups_creategroup_namedescribe_groupname"):</span> <br />
-    $newspace.display("displayTitle","edit")
-	#tooltip("group-name",$msg.get("groups_creategroup_namedescribe_groupname_tooltip"))
+    <input type="text" name="XWiki.SpaceClass_0_displayTitle" id="XWiki.SpaceClass_0_displayTitle" size="64">
+    ##$newspace.display("displayTitle","edit") display is hardcoded to 128 chars on input
+	  #tooltip("group-name",$msg.get("groups_creategroup_namedescribe_groupname_tooltip"))
     #validateGroup( "title-exists" "" $msg.groups_validation_title_exists)
     #validateGroup( "title-short" "" $msg.groups_validation_title_short)
     #validateGroup("title-long"  "" $msg.groups_validation_title_long)
     #validateGroup("title-invalid"  "" $msg.groups_validation_title_invalid)
-    #validateGroup( "space-exists" "" $msg.groups_validation_space_exists)
+    #validateGroup( "space-exists" "" $msg.groups_validation_space_exists)    
+    <div id="form-info-top">
     <span id="label-group-description">$msg.get("groups_creategroup_namedescribe_groupdescription")</span> <br />
-     <div id="form-info-top">
     $newspace.display("description","edit")
-#tooltip("group-description",$msg.groups_creategroup_namedescribe_groupdescription_tooltip)
+    #tooltip("group-description",$msg.groups_creategroup_namedescribe_groupdescription_tooltip)
     #validateGroup( "desc-short" "" $msg.groups_validation_desc_short)
     #validateGroup( "desc-long" "" $msg.groups_validation_desc_long)
-     </div>
+    </div>    
     <span id="label-group-webaddress">$msg.get("groups_creategroup_namedescribe_webaddress_instruction")</span> <br />
     http:&#47;&#47; $newspace.display("urlshortcut","edit") #groups_groupsuffixurl()
     #validateGroup( "url-short" "" $msg.groups_validation_url_short)
