@@ -26,7 +26,7 @@
 #macro(asset_icontitle $asset)
 <!-- #* Hack: HTML comment to fix bug CURRIKI-3568 Do not remove *# --><div id="asset-header">
  <!--<img src="images/collectionmedium.gif">-->
- #set($assetTitle = $asset.getDisplayTitle(125))
+ #set($assetTitle = $asset.getDisplayTitle())
  <h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
  #asset_info_rollover($asset 0)
 </div>
