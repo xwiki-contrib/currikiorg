@@ -2278,7 +2278,7 @@ Curriki.data.category.list.each(function(category){
 
 Ext.ns('Curriki.data.licence');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/licenseType  OR  Get filled in JS created by xwiki
-Curriki.data.licence.list = ["Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike" ];
+Curriki.data.licence.list = ["Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike","Licences.TeachersDomainDownloadShare" ];
 Curriki.data.licence.initial = Curriki.data.licence.list[0];
 Curriki.data.licence.data = [ ];
 Curriki.data.licence.list.each(function(lic){
