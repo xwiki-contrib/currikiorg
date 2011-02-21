@@ -5,21 +5,29 @@
 #* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="hit" type="com.xpn.xwiki.plugin.lucene.SearchResults.Hit" *# ##
+#if("ExpertSearch"==$doc.name && !$context.hasAdminRights())Sorry need to be admin#else
+#if($!embedded=="true")#else
 1 Expert Search
 ##
 (this page will become a way to share links to the public listing particular queries)
+#end
 #set($lucene = $xwiki.getPlugin("lucene"))
-#set($itemsPerPage = "20")
+#if($itemsPerPage) #else#set($itemsPerPage = "50")#end
 #if($lucene)
-#set($query = $request.getParameter("text"))
+#if(!$query)#set($query = $request.getParameter("text"))#end
 #if(!$query)#set($query = "")#end
 #set($queryEncoded = $util.encodeURI($query))
 {pre}
+#if($!embedded=="true")#else
 <form action="$doc.name" method="get">
 <textarea rows="3" cols="80" name="text">$query</textarea>
 <input type="submit" value="$msg.get("tosearch")"/>
 </form>
 <p>You have all the choices of the <a href="http://lucene.apache.org/java/2_9_2/queryparsersyntax.html">Lucene query syntax</a>. Object properties are typically expressed in such a form as <code>CurrikiCode.AssetClass.title:nifty</code>. URLs displaying the results are exchangeable.</p>{/pre}
+#end
+##
+## RESULTS DISPLAY
+##
 #if($query != "")
 #set($wikinames = "xwiki")
 #set($languages = "")
@@ -31,15 +39,19 @@
 #set($searchresults = $lucene.getSearchResults($query, $wikinames, $languages, $xwiki))
 #set($results = $searchresults.getHitsList($firstIndex,$util.parseInt($itemsPerPage)))
 #if($results.size()==0)
-    <p>No results.</p>
+    <p>$msg.get("search.find.no.results")</p>
     #else ## results.size>0
-    #set($lastIndex=$results.size()+$firstIndex)
+    #set($lastIndex=$results.size()+$firstIndex+(-1))
     #set($previousIndex=$firstIndex-20)
         {pre}
     <hr>
-    <p>Results $firstIndex to $lastIndex of ${searchresults.totalHitcount}.
-       <a href="/xwiki/bin/view/${doc.web}/${doc.name}?text=$queryEncoded&firstIndex=$previousIndex">previous</a>
-       <a href="/xwiki/bin/view/${doc.web}/${doc.name}?text=$queryEncoded&firstIndex=$lastIndex">next</a>
+    #if($!embedded=="true")#set($queryParam="")#else#set($queryParam="text=$queryEncoded&")#end
+    <p><table border="0" width="99%"><tr><td>#if($firstIndex>1)<a href="/xwiki/bin/view/${doc.web}/${doc.name}?${queryParam}}firstIndex=$previousIndex">$msg.get("search.pagination.prev.button")</a>#end</td>
+        <td align="center">
+         ##Displaying {0} - {1} Available Resources of About {2}
+        $msg.get("search.pagination.displaying.resource",
+        [$firstIndex,$lastIndex,${searchresults.totalHitcount}])</td>
+       <td align="right">#if($lastIndex<$searchresults.totalHitcount)<a href="/xwiki/bin/view/${doc.web}/${doc.name}?${queryParam}firstIndex=$lastIndex">$msg.get("search.pagination.next.button")</a>#end</td></tr></table>
     </p>
         <hr>
     <table class="table table-favorites">
@@ -55,3 +67,4 @@
 #end
 #end
 #else no lucene #end
+#end

@@ -1,0 +1,54 @@
+$response.setContentType("text/xml")
+#set($excludeSpaces = $xwiki.getDocument('Admin.SiteMapExcludeSpace').getContent().split("(\r|\n)+"))
+#set($excludeNames = $xwiki.getDocument('Admin.SiteMapExcludeName').getContent().split("(\r|\n)+"))
+#set($excludePages = $xwiki.getDocument('Admin.SiteMapExcludePage').getContent().split("(\r|\n)+"))
+##
+#set($excludeSpaceQ = '')
+#foreach ($line in $excludeSpaces) ##{
+#set($line = $line.trim())
+#if("$line" != "" && !$line.startsWith("#"))##{
+#set($excludeSpaceQ = $excludeSpaceQ + ", '${line}'")
+#end ##}
+#end ##}
+##
+#set($excludePageQ = '')
+#foreach ($line in $excludePages) ##{
+#set($line = $line.trim())
+#if("$line" != "" && !$line.startsWith("#"))##{
+#set($excludePageQ = $excludePageQ + ", '${line}'")
+#end ##}
+#end ##}
+##
+#set($excludeNameQ = '')
+#foreach ($line in $excludeNames) ##{
+#set($line = $line.trim())
+#if("$line" != "" && !$line.startsWith("#"))##{
+#set($excludeNameQ = $excludeNameQ + ", '${line}'")
+#end ##}
+#end ##}
+##
+#set($onlySpaceQ = '')
+#if($request.space) ##{
+#set($onlySpaceQ = "doc.web='${request.space}' AND")
+#end ##}
+#set ($sql = "where $onlySpaceQ doc.web NOT IN ('XWiki', 'AssetTemp', 'Admin', 'Sandbox', 'Frameworks', 'AssetManager', 'Panels', 'MimeType', 'MyCurriki', 'Temp', 'Test' $excludeSpaceQ) AND doc.name NOT IN ('WebPreferences' $excludeNameQ) AND doc.fullName NOT IN ('Admin.SiteMap' $excludePageQ) AND (doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='XWiki.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) order by doc.date desc")
+#set ($list = $xwiki.searchDocuments($sql))
+#set ($baseurl =  "http://${request.serverName}")
+{pre}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>$baseurl</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+#foreach ($item in $list)
+<url>##
+    #set($u = ${xwiki.getURLEncoded($item).replaceFirst('\.', '/')})
+    #set($u = "/xwiki/bin/view/$u")
+    #if($item.equals("Main.WebHomeVistor"))#set($u = "/")#end##
+<loc>${baseurl}$u</loc>
+</url>
+#end
+</urlset>
+{/pre}

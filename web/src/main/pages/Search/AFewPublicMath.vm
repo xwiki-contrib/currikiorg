@@ -1,0 +1,31 @@
+1 List of the Commercial Friendly School-Level Math Resources
+
+In the below list, one finds the resources:
+
+* Subject: Math
+* Levels: Grade 3-12
+* Rights: Public
+* License: commercial friendly
+
+<p style="text-align:right; font-size:0.8em">This page is created by [Paul Libbrecht>XWiki.polx], [Joshua Marks>XWiki.jmarks], and [Janet Pinto>XWiki.jpinto].</p>
+<p>&nbsp;</p>
+##
+## below is the search query and results display code
+##
+#set($query='oo:"desirable resources"
+-(CurrikiCode.TextAssetClass.syntax:cboe web:assettemp web:"coll templates" name:webhome name:webpreferences name:mycollections name:spaceindex CurrikiCode.AssetClass.hidden_from_search:1)
+oo:Math
++(CurrikiCode.AssetClass.fw_items:"fw masterframework.webhome"  CurrikiCode.AssetClass.fw_items:"fw masterframework.mathematics")
+oo:"Grade 3-12"
++CurrikiCode.AssetClass.educational_level.key:(gr-3-5 gr-6-8 gr-9-10 gr-11-12)
+oo:Access-privileges-public
++CurrikiCode.AssetClass.rights:(public protected)
+oo:curriki-license
++CurrikiCode.AssetLicenseClass.licenseType:(
+  Licences.CurrikiLicense
+  Licences.PublicDomain
+  Licences.CreativeCommonsAttributionNoDerivatives
+  Licences.CreativeCommonsAttributionSharealike)')
+#set($embedded="true")
+#set($itemsPerPage="50")
+#includeInContext("Admin.ExpertSearch")

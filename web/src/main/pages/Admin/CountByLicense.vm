@@ -8,7 +8,7 @@ $searchresults.totalHitcount
 
 #macro(luceneCountAndLink $query)##
 #set($queryEncoded = $util.encodeURI($query))##
-<a href="/xwiki/bin/view/Search/ExpertSearch?text=$queryEncoded">$lucene.getSearchResults($query, "xwiki", "default,en,de", $xwiki).totalHitcount</a> ##
+<a href="/xwiki/bin/view/Admin/ExpertSearch?text=$queryEncoded">$lucene.getSearchResults($query, "xwiki", "default,en,de", $xwiki).totalHitcount</a> ##
 #end
 
 
