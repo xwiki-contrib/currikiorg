@@ -342,23 +342,20 @@ wikiEditor.init({
   *  Documentation New Wiki Page edit wiki page form and handling
   *#
 #macro(groups_documentation_newwikipage)
-#if( $request.method == "POST" && $request.doctitle.trim() != "" )
+#if($request.method == "POST" && $request.doctitle.trim() != "")
      ##getting where the attached images were
-     #set( $attachDocName = $request.olddoc)
-     #set( $attachDoc = $xwiki.getDocument( $attachDocName ) )
+     #set($attachDocName = $request.olddoc)
+     #set($attachDoc = $xwiki.getDocument($attachDocName))
 
-     #set( $newDocName = $xwiki.getUniquePageName( $docsSpaceName, $request.doctitle))
-     #set( $newDocName = "${docsSpaceName}.${newDocName}")
+     #set($newDocName = $xwiki.getUniquePageName( $docsSpaceName, $request.doctitle))
+     #set($newDocName = "${docsSpaceName}.${newDocName}")
 
-     ##renaming the old doc to the new title
-     #set($ok = $attachDoc.rename($newDocName))
-##$request.olddoc $attachDoc $attachDocName  $newDocName $ok
+     #set($ok = $xwiki.copyDocument($attachDoc.fullName, $newDocName))
+     #set($ok = $xwiki.deleteDocument($attachDoc.fullName))
 
-     ##set( $newDoc = $xwiki.getDocument( $newDocName ) )
-     #set( $newDoc = $attachDoc )
-     $newDoc.setTitle( $request.doctitle )
-     $newDoc.setContent( $request.doctext )
-     $newDoc.save()
+     #set($newDoc = $xwiki.getDocument($newDocName))     
+     $newDoc.setTitle($request.doctitle)
+     $newDoc.setContent($request.doctext)
 
      #set($tg = $newDoc.newObject("XWiki.TagClass"))
      #set($tgok = $tg.set("tags","documentation-wiki"))
@@ -378,7 +375,7 @@ wikiEditor.init({
  #else
    #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
     <form action="#" method="post">
-       #set( $dctitle = $request.newdocname )
+       #set($dctitle = $request.newdocname)
 
        ##creating temporary doc so the wiki editor knows where to attaach stuff
        #set( $newDocName = $xwiki.getUniquePageName( "Temp", $dctitle))
@@ -387,7 +384,7 @@ wikiEditor.init({
        #if("$!request.xwiki2" == "true")
        $newDoc.setSyntaxId("xwiki/2.0")
        #end
-       #set( $ok = $newDoc.save() )
+       #set($ok = $newDoc.save())
 
 <label for="doctitle">${msg.groups_documentation_update_title}</label>
 <input type="hidden" name="olddoc" value="{pre}${newDocName}{/pre}" />
