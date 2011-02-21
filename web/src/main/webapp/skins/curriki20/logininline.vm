@@ -70,10 +70,12 @@
   #set($lname = $crtUserDoc.display("last_name", "view"))
   <span class="welcome">$msg.get("welcome") <strong>$fname $lname</strong></span>
     <ul>
-    #if($hasAdmin)    
-      <li><a href="$xwiki.getURL('XWiki.XWikiPreferences'), 'admin')">$msg.get("core.menu.admin")</a></li>
+    #if($hasAdmin)
+      #set($url = $xwiki.getURL("XWiki.XWikiPreferences", "admin"))
+      <li><a href="$!url">$msg.get("core.menu.admin")</a></li>
     #end
-      <li><a href="$xwiki.getURL('MyCurriki.Profile'), 'view')">$msg.get("core.menu.profile")</a></li>
+      #set($url = $xwiki.getURL("MyCurriki.Profile", "view"))
+      <li><a href="$!url">$msg.get("core.menu.profile")</a></li>
     </ul>
   #set($logredir = $xwiki.getURL("Main.WebHome"))
   #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
