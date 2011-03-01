@@ -5,20 +5,6 @@
 #includeMacros("Registration.FormMacros")
 #tryregister()
 #if(!$result) ##{
-#macro(registrationinfo) ##{
-<div>## id="intro-register"
-	<h1>$msg.get('register.curriki_intro.title')</h1> 
-	<p>$msg.get('register.curriki_intro.description')</p>
-        <p>$msg.get("register.curriki_intro.commercial")
-    ##  <p>$msg.get('register.curriki_intro.description.findout'): <a href="$msg.get('register.curriki_intro.link1_url')" target="_blank" ## 
-    ##       ext:qtip="$msg.get('register.curriki_intro.link1_rollover')">$msg.get('register.curriki_intro.link1_text')</a> |
-	##	<a href="$msg.get('register.curriki_intro.link2_url')" target="_blank" ##
-    ##       ext:qtip="$msg.get('register.curriki_intro.link2_rollover')">$msg.get('register.curriki_intro.link2_text')</a>
-    ##</p>
-	<p>$msg.get('register.curriki_intro.note')</p>
-	<p>$msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
-</div>
-#end ##}
 #registrationinit('register')
 #registrationinfo()
 #startregistrationform()
