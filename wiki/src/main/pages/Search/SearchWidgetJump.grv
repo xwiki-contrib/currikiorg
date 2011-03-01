@@ -1,0 +1,49 @@
+<%
+if(request.subject==null && request.mediatype==null && request.level==null && request.ict==null) {
+    println("This page will redirect you provided you input parameters (subject, mediatype, level, ict).");
+} else {
+    def subject = request.subject,
+        subjectparent = request.subjectparent,
+        mediatype = request.mediatype,
+        level = request.level,
+        ict = request.ict,
+        text = request.text;
+    // compatibility to AdWords "free resources" campaign
+    if(subjectparent == null && null != request.subjectparent_escaped)
+        subjectparent = URLDecoder.decode(request.subjectparent_escaped);
+    if(subject == null && null != request.subject_escaped)
+        subject = URLDecoder.decode(request.subject_escaped);
+    if(subjectparent==null && subject!=null) {
+        subjectparent = subject;
+        subject = null;
+    }
+    if(text == null && null != request.txt_escaped)
+        text = URLDecoder.decode(request.txt_escaped);
+
+    def url = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'www.curriki.org');
+    url = url + "/xwiki/bin/view/Search/"
+    // older
+    //url = url + "#o%3As%3Ds%253Aresource^f%3Do%253Aresource%253Do%25253A"
+    url = url + "#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253A"
+    if(text!=null) url = url + "terms%25253Ds%2525253A" + URLEncoder.encode(text) + "%25255E";
+    url = url+"subjectparent%25253Ds%2525253A"
+    if(subjectparent!=null) 
+        url = url + subjectparent; // e.g. FW_masterFramework.Science
+    url = url + "%25255Esubject%25253Ds%2525253A"
+    if(subject!=null) url = url + subject; // e.g. FW_masterFramework.Science
+    url = url + "%25255Ecategory%25253Ds%2525253A";
+    if(mediatype!=null) url = url + mediatype;// e.g. audio
+    url = url + "%25255Elevel%25253Ds%2525253A";
+    if(level!=null) url = url + level; // e.g. gr-3-5
+    url = url + "%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A"
+    def ictprfx = ict;
+    if(ictprfx!=null && ictprfx.contains("_")) ictprfx = ictprfx.substring(0,ictprfx.indexOf("_"));
+    if(ict!=null) url = url + ictprfx; // curriculum
+    url = url + "%25255Eict%25253Ds%2525253A";
+    if(ict !=null) url = url + ict;
+    url = url + "%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A^p%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25^t%3Ds%253Asearch-resource-tab^a%3Do%253A";
+
+    // TODO: handle text parameter
+    response.sendRedirect(url); // permanent? temnporary?
+}
+// %>
