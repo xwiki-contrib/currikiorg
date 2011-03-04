@@ -580,7 +580,7 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/currikiExtjs'
+			url: '/xwiki/bin/view/Search/Resources'//'/currikiExtjs'
 			,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
