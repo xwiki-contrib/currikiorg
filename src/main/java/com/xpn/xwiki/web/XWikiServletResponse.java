@@ -145,7 +145,7 @@ public class XWikiServletResponse implements XWikiResponse {
     }
 
     public void setHeader(String name, String value) {
-        response.addHeader(name, value);
+        response.setHeader(name, value);
     }
 
     public void addHeader(String name, String value) {
