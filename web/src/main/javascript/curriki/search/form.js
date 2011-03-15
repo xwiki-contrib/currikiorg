@@ -90,7 +90,7 @@ console.log('now util.doSearch', tab, pagerValues);
                 Ext.History.add(encodedToken);
             } else {
                 Search.history.setLastToken(encodedToken);
-                window.location.replace("/xwiki/bin/view/Search/#" + encodedToken);
+                window.location.replace(window.location.pathname + "#" + encodedToken);
             }
 		};
 

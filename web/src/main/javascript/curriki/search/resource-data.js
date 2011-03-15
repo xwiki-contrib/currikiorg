@@ -181,7 +181,7 @@ data.init = function(){
 
 	f.data.special = {
 		list: [
-			'contributions', 'collections', 'updated'
+			'contributions', 'collections', 'updated', 'info-only', 'also-privates'
 		]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
@@ -283,11 +283,12 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Resources'
+			url: document.location.path.endsWith("Search/Old") ?
+                    '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
-
+		,baseParams: { xpage: "plain"//, '_dc':(new Date().getTime())
+                        }
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
 			,totalProperty: 'resultCount'

@@ -131,7 +131,7 @@ module.init = function(){
 		if (!Ext.isEmpty(filterPanel)) {
 			var filterForm = filterPanel.getForm();
 			if (!Ext.isEmpty(filterForm)) {
-				Ext.apply(filters, filterForm.getValues(false));
+				Ext.apply(filters, filterForm.getValues(false));a
 			}
 		}
 		Ext.apply(filters, {module: modName});
@@ -144,6 +144,9 @@ module.init = function(){
 				Ext.apply(filters, filterForm.getValues(false));
 			}
 		}
+
+        // Search2
+        // TODO: if module is resource... set URL
 
 		// Check for emptyText value in terms field
 		if (filters.terms && filters.terms === _('search.text.entry.label')){
@@ -478,7 +481,7 @@ data.init = function(){
 
 	f.data.special = {
 		list: [
-			'contributions', 'collections', 'updated'
+			'contributions', 'collections', 'updated', 'info-only', 'also-privates'
 		]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
@@ -580,11 +583,12 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Resources'//'/currikiExtjs'
+			url: document.location.path.endsWith("Search/Old") ?
+                    '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
-
+		,baseParams: { xpage: "plain"//, '_dc':(new Date().getTime())
+                        }
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
 			,totalProperty: 'resultCount'
@@ -2821,7 +2825,7 @@ console.log('now util.doSearch', tab, pagerValues);
                 Ext.History.add(encodedToken);
             } else {
                 Search.history.setLastToken(encodedToken);
-                window.location.replace("/xwiki/bin/view/Search/#" + encodedToken);
+                window.location.replace(window.location.pathname + "#" + encodedToken);
             }
 		};
 

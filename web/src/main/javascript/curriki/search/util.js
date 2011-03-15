@@ -109,7 +109,7 @@ module.init = function(){
 		if (!Ext.isEmpty(filterPanel)) {
 			var filterForm = filterPanel.getForm();
 			if (!Ext.isEmpty(filterForm)) {
-				Ext.apply(filters, filterForm.getValues(false));
+				Ext.apply(filters, filterForm.getValues(false));a
 			}
 		}
 		Ext.apply(filters, {module: modName});
@@ -122,6 +122,9 @@ module.init = function(){
 				Ext.apply(filters, filterForm.getValues(false));
 			}
 		}
+
+        // Search2
+        // TODO: if module is resource... set URL
 
 		// Check for emptyText value in terms field
 		if (filters.terms && filters.terms === _('search.text.entry.label')){
