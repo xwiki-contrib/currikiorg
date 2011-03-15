@@ -283,7 +283,7 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: document.location.path.endsWith("Search/Old") ?
+			url: document.location.pathname.endsWith("Old") ?
                     '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
