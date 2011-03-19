@@ -1,0 +1,42 @@
+<%
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import com.xpn.xwiki.plugin.lucene.SearchResults;
+import org.apache.lucene.document.Document;
+
+DateFormat df = new SimpleDateFormat("yyyyMMdd");
+Date d = new Date();
+long oneDay = 1000l*60l*60*24l;
+StringBuffer dates = new StringBuffer();
+for(int i in 0..14) {
+    dates.append("creationdate:").append(df.format(d)).append("* ");
+    d.setTime(d.getTime()-oneDay);
+}
+
+def q = "+object:XWiki.XWikiUsers +(" + dates + ")";
+// (all methods with sort fail... shame)
+def sortFields = "XWiki.XWikiUsers.first_name,XWiki.XWikiUsers.last_name".split(",");
+
+//println("q = " + q);
+
+println ();
+
+def searchResults = xwiki.getPlugin("lucene").getSearchResults(q, "-date", "en,default");
+//println ("Results: " + searchResults);
+List results = searchResults.getHitsList(0,200);
+
+println("1 Recent users")
+println();
+println("List of users created in the last 14 days.");
+println(results.size() + " hits.")
+
+
+ for(hit in results) {
+    Document doc = hit.doc();
+    String fullname = doc.get("fullname");
+    println("* [" + fullname.substring("XWiki.".length()) + " > " + fullname + "]" )
+}
+
+
+
+// %>
