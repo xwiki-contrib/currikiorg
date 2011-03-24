@@ -119,6 +119,14 @@ module.init = function(){
 			}
 		);
 
+        Ext.StoreMgr.lookup('search-store-'+modName).addListener(
+            'exception'
+            ,function(error) {
+                Curriki.logView('/features/search/' + params.module + '/error/' + error.name + '/' + error.message);
+                Ext.MessageBox.alert("Error in searching","Apologies, an error has occurred fetching the search results: " + error.name + ' : ' + error.message);
+            }
+        );
+
 	};
 
 	// Perform a search for a module
@@ -131,7 +139,7 @@ module.init = function(){
 		if (!Ext.isEmpty(filterPanel)) {
 			var filterForm = filterPanel.getForm();
 			if (!Ext.isEmpty(filterForm)) {
-				Ext.apply(filters, filterForm.getValues(false));a
+				Ext.apply(filters, filterForm.getValues(false));
 			}
 		}
 		Ext.apply(filters, {module: modName});
@@ -145,8 +153,7 @@ module.init = function(){
 			}
 		}
 
-        // Search2
-        // TODO: if module is resource... set URL
+        
 
 		// Check for emptyText value in terms field
 		if (filters.terms && filters.terms === _('search.text.entry.label')){
@@ -159,6 +166,9 @@ module.init = function(){
 
 		var pager = Ext.getCmp('search-pager-'+modName)
 		if (!Ext.isEmpty(pager)) {
+            // TODO: check: add limit in the params
+            Ext.StoreMgr.lookup('search-store-'+modName).baseParams.rows = pager.pageSize;
+            console.log("Have adapted rows to " + pager.pageSize);
 			console.log('Searching', filters);
 			pager.doLoad(Ext.num(start, 0)); // Reset to first page if the tab is shown
 		}
@@ -598,6 +608,9 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
+    if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
+    if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
 	data.store.results.setDefaultSort('title', 'asc');
 
 
@@ -1301,6 +1314,8 @@ Ext.onReady(function(){
 // TODO:  Register this tab somehow with the main form
 
 })();
+
+
 // vim: ts=4:sw=4
 /*global Ext */
 /*global Curriki */
