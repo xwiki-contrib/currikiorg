@@ -1,0 +1,41 @@
+$response.setHeader("Cache-Control","max-age=120, public")
+$response.setHeader("Pragma","-")
+#set($expires = $util.getDate().getTime())
+#set($expires = $expires+1200000)
+#set($expires =$util.getDate($expires))
+$response.setDateHeader("Expires",$expires.getTime())
+#error ("Click to try [Google powered site search>Main.GoogleSearchResults] for faster results or try advanced search below.")
+
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.ns('Curriki.userinfo');
+#set($groups=$xwiki.getPlugin("curriki").fetchUserGroups().keySet())
+Curriki.userinfo = {
+	isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
+    userGroups: "#foreach($g in $groups)$g,#end",
+    userName:   "$context.user"
+
+};
+/* ]]> */
+</script>
+<!--
+<script type="text/javascript" src="/xwiki/bin/view/Search/SearchJS?xpage=plain"></script>
+-->
+<!-- -->
+<script type="text/javascript" src="/xwiki/js/${gVersion}/curriki-module-search${debugging}.js">
+</script>
+<!-- -->
+<div id="search-div"></div>
+<form id="history-form" class="x-hidden">
+    <input type="hidden" id="x-history-field" />
+    <iframe id="x-history-frame"></iframe>
+</form>
+<script type="text/javascript">
+/* <![CDATA[ */
+//Curriki.module.search.tabList = ['resource'];
+//Curriki.module.search.restrictions = 'web:Coll_${spaceName}';
+Curriki.module.search.start();
+/* ]]> */
+</script>
+{/pre}
