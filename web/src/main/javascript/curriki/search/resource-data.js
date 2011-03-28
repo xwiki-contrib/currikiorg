@@ -181,7 +181,7 @@ data.init = function(){
 
 	f.data.special = {
 		list: [
-			'contributions', 'collections', 'updated', 'info-only', 'also-privates'
+			'contributions', 'collections', 'updated', 'info-only'
 		]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]

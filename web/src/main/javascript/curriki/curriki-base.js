@@ -48,10 +48,7 @@ console.log('beforerequest', conn, options);
 console.log('requestcomplete', conn, response, options);
 		Curriki.Ajax.requestcomplete(conn, response, options);
 	});
-    Ext.Ajax.on('requestexception', function(conn, response, options){
-console.log('requestexception', conn, response, options);
-		Curriki.Ajax.requestexception(conn, response, options);
-	});
+    Ext.Ajax.on('requestexception', Curriki.notifyException);
 });
 
 Curriki.Ajax = {
@@ -68,6 +65,21 @@ Curriki.Ajax = {
 	}
 };
 
+
+Curriki.notifyException = function(exception){
+        console.log('requestexception', exception);
+		Curriki.Ajax.requestexception(null, null, null);
+        Curriki.logView('/features/ajax/error/');
+        var task = new Ext.util.DelayedTask(function(){
+            if(!Ext.isEmpty(Curriki.loadingMask)) {
+                Curriki.loadingMask.hide();
+                Curriki.loadingMask.disable();
+            }
+            Ext.MessageBox.alert("Error in searching",
+                    "Apologies, an error has occurred connecting to the server. Please relaod.");
+        });
+        task.delay(100);
+	};
 
 Curriki.id = function(prefix){
 	return Ext.id('', prefix+':');

@@ -99,10 +99,7 @@ module.init = function(){
 
         Ext.StoreMgr.lookup('search-store-'+modName).addListener(
             'exception'
-            ,function(error) {
-                Curriki.logView('/features/search/' + params.module + '/error/' + error.name + '/' + error.message);
-                Ext.MessageBox.alert("Error in searching","Apologies, an error has occurred fetching the search results: " + error.name + ' : ' + error.message);
-            }
+            ,Curriki.notifyException
         );
 
 	};
