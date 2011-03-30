@@ -1,5 +1,11 @@
 ## vim: ts=4:sw=4
 {pre}
+$response.setHeader("Cache-Control","max-age=60, public")##
+$response.setHeader("Pragma","-")##
+#set($expires = $util.getDate().getTime())##
+#set($expires = $expires+60000)##
+#set($expires =$util.getDate($expires))##
+$response.setDateHeader("Expires",$expires.getTime())##
 ## start=0&limit=25&sort=title&dir=ASC
 ## terms=&subject=&filetype=&level=&language=&ict=&special=
 ## return  root: results, totalProperty: totalCount

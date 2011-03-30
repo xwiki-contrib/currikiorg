@@ -220,10 +220,14 @@ $msg.get("groups.curriculum.contributions.about")
 {pre}
 <script type="text/javascript">
 /* <![CDATA[ */
-Ext.ns('Curriki.userinfo');
-Curriki.userinfo = {
-	isAdmin: #if($hasGlobalAdmin)true#{else}false#end
-};
+    Ext.ns('Curriki.userinfo');
+    #set($groups=$xwiki.getPlugin("curriki").fetchUserGroups().keySet())
+    Curriki.userinfo = {
+        isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
+        userGroups: "#foreach($g in $groups)$g,#end",
+        userName:   "$context.user"
+
+    };
 /* ]]> */
 </script>
 <!--

@@ -1821,8 +1821,8 @@ Curriki.notifyException = function(exception){
                 Curriki.loadingMask.hide();
                 Curriki.loadingMask.disable();
             }
-            Ext.MessageBox.alert("Error in searching",
-                    "Apologies, an error has occurred connecting to the server. Please relaod.");
+            Ext.MessageBox.alert(_("search.connection.error.title"),
+                    _("search.connection.error.body"));
         });
         task.delay(100);
 	};
