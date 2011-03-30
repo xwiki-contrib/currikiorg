@@ -608,7 +608,7 @@ data.init = function(){
     if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
     if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
     if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
-	data.store.results.setDefaultSort('review', 'asc');
+	data.store.results.setDefaultSort('rating', 'asc');
 
 
 
