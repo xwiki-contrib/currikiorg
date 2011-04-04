@@ -754,7 +754,7 @@ $asset.use("CurrikiCode.AssetClass")
     <input type="submit" value="$msg.get("rve.information.edit.save_button")" name="save" class="button-save"/>
 </fieldset>
 #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
-#if(("x$!gCCL"=="x" || "x$!gCCL.value"=="x") && $isOriginalAuthorOrAdmin && ! $xwiki.hasAdminRights())
+#if(("x$!gCCL"=="x" || "x$!gCCL.value"=="x") && $isOriginalAuthorOrAdmin && ! $hasGlobalAdmin)
     #info($msg.get("rve.information.license_to_curriki.edit_warning_predefined"))
 #end
 <fieldset>
@@ -817,7 +817,7 @@ $asset.use("CurrikiCode.AssetClass")
             $asset.display("licenseType", "edit", true)
             ##
             #if($gCCL && $!gCCL.value!="") ## grant to curriki commercial usage is decided, only admin can edit
-                #if($xwiki.hasAdminRights())
+                #if($hasGlobalAdmin)
             <p>&nbsp;</p><ul><li><label style="font-weight:normal;">$asset.display("grantCurrikiCommercialLicense","edit",true)
                 $msg.get("sri.license_type_license_to_curriki")
             </label></li></ul>
@@ -831,7 +831,7 @@ $asset.use("CurrikiCode.AssetClass")
                 #end
             #else ## grant to curriki commercial usage is unset, any "editor" can decide
             <p>&nbsp;</p><ul><li><label style="font-weight:normal;">
-                #if($xwiki.hasAdminRights())
+                #if($hasGlobalAdmin)
                     $asset.display("grantCurrikiCommercialLicense","edit",true)
                 #else
                     <input type="checkbox" value="1" checked="checked"
