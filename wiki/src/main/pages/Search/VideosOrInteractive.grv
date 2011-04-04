@@ -1,0 +1,149 @@
+<%
+
+import com.xpn.xwiki.plugin.lucene.LucenePluginApi
+import com.xpn.xwiki.plugin.lucene.SearchResults
+import org.apache.lucene.document.Document
+
+
+
+String query='+(CurrikiCode.AssetClass.category:interactive CurrikiCode.AssetClass.category:video) ' +
+            ' -(CurrikiCode.AssetClass.rights:private ' +
+            'CurrikiCode.TextAssetClass.syntax:cboe web:assettemp web:"coll templates" name:webhome name:webpreferences name:mycollections name:spaceindex CurrikiCode.AssetClass.hidden_from_search:1)';
+boolean noNav = true;
+
+
+LucenePluginApi lucene = xwiki.getPlugin("lucene");
+def abFetcher = xwiki.parseGroovyFromPage("Search2.ABFetcher");
+abFetcher.init(context);
+
+int itemsPerPage = 10000;
+if(request.itemsPerPage) itemsPerPage = request.itemsPerPage;
+//String query = request.getParameter("text");
+if(query==null) query="";
+String queryEncoded = util.encodeURI(query);
+
+String wikinames = "xwiki";
+int firstIndex = 0; if(request.getParameter("firstIndex")!=null)
+    firstIndex = request.getParameter("firstIndex");
+SearchResults searchresults = lucene.getSearchResults(query, wikinames, "en,default", xwiki);
+
+List results = searchresults.getHitsList(firstIndex,itemsPerPage);
+if(results.size()==0)
+    println("<p>" + msg.get('search.find.no.results')+"</p>")
+
+else {
+    // navigation next and previous
+    if(!noNav) {
+        int lastIndex = results.size()-firstIndex-1;
+        int previousIndex = firstIndex-20;
+        println("<hr/>");
+        def queryParam = "text=" + queryEncoded;
+        println('<p><table  width="99%"><tr><td>');
+        if(firstIndex>1)
+            println('<a href="/xwiki/bin/view/' + doc.web + doc.name + '?' + queryParam + '&firstIndex='+previousIndex+'">' + msg.get("search.pagination.prev.button") + '</a>');
+        println('</td>');
+        println('<td align="center">');
+        //Displaying {0} - {1} Available Resources of About {2}
+        println(msg.get("search.pagination.displaying.resource",
+                [firstIndex,lastIndex,searchresults.totalHitcount]) + '</td>' +
+                '<td align="right">');
+
+        if(lastIndex < searchresults.totalHitcount)
+            println('<a href="/xwiki/bin/view/'+doc.web+'/' + doc.name+'?' + queryParam+'&' + "firstIndex=" + lastIndex + '">' + msg.get("search.pagination.next.button")+'</a>');
+        println('</td></tr></table></p><hr>');
+    }
+
+
+    // actual table
+    println('{pre}<table border="1" class="table table-favorites">')
+    println("<script type='text/javascript'>document.title='Curriki: all interactive or video resources ("+ results.size() +")';</script>")
+    println("<thead style='background:lightgray'><tr><td>title</td><td>creator</td><td>assetType</td><td>ICT</td><td>description</td><td>subjects</td><td>grades</td><td>alignments</td><td>license</td><td>id</td><td>url</td></tr></thead><tbody>")
+
+    for(hit in results) {
+        String fullN = hit.doc().get("fullname");
+        Document doc = hit.doc();
+        try {
+            //Asset asset = xwiki.curriki.fetchAsset(fullN)
+            println("<tr>")
+            print("<td><a href='/xwiki/bin/view/" + fullN.replace('.','/') + "'>")
+            println(doc.get("title"));
+            println("</a></td><td>")
+            println(wrapUser(doc.get("creator")));
+            println("</td><td>")
+            String assetType = doc.get("CurrikiCode.AssetClass.category");
+            println(assetType);
+            if("document".equals(assetType) || "interactive".equals(assetType) || "image".equals(assetType)) {
+                print("("); print(doc.get("CurrikiCode.AttachmentAssetClass.file_type")); print(")");
+            }
+            println("</td><td>")
+            println(doc.get("CurrikiCode.AssetClass.instructional_component"))
+            println("</td><td>")
+            println(doc.get("CurrikiCode.AssetClass.description"))
+            println("</td><td>")
+            def s = doc.get("CurrikiCode.AssetClass.fw_items");
+            if(s.startsWith('[')) s = s.substring(1,s.length()-1);
+            for(v in s.split(",")) {
+                v = v.trim();
+                if(v.startsWith("FW_masterFramework.")) v= v.substring(19);
+                if("Science"==v || "WebHome"==v) continue;
+                print(v); print(", ");
+            }
+            println("</td><td>");
+            s = doc.get("CurrikiCode.AssetClass.educational_level");
+            if(s.startsWith('[')) s = s.substring(1,s.length()-1);
+            for(v in s.split(",")) {
+                v = v.trim();
+                print(v); print(", ");
+            }
+            println("</td><td>")
+            println("<ul>");
+            for(Map alignment in abFetcher.getAlignments(fullN)) {
+                println("<li>" + alignment.get("topic.stem") + ":" + alignment.get("topic.text") + "</li>")
+            }
+            println("</ul>");
+            println("</td><td>");
+            String lic = licenseFromLicenseType(doc.get("CurrikiCode.AssetLicenseClass.licenseType"));
+            println(lic)
+            print("</td><td>")
+            println(fullN);
+            println("</td>")
+            print("<td>")
+            println("http://www.curriki.org/xwiki/bin/view/" + doc.web + "/" + doc.name);
+            println("</td>")
+            println("</tr>");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    };
+
+    println("</tbody></table>{/pre}")
+}
+
+
+
+private String wrapUser(String userName) {
+    //def name = xwiki.get(xx)
+
+    if(userName.startsWith("XWiki.")) userName = userName.substring(6)
+    //def step2 = xwiki.getUserName(userName);
+    return "<a href='/xwiki/bin/view/XWiki/"+ userName + "'>" + userName + "</a>";
+}
+
+
+private String licenseFromLicenseType(String licenseType) {
+    Map licenses = ['Licences.CreativeCommonsAttributionNon-Commercial':      'cc-nc',
+             'Licences.CurrikiLicense':                                'cc-by',
+             'Licences.PublicDomain':                                  'pd',
+             'Licences.CreativeCommonsAttributionNoDerivatives':       'cc-nd',
+             'Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives': 'cc-nc-nd',
+             'Licences.CreativeCommonsAttributionSharealike':          'cc-sa',
+             'Licences.CreativeCommonsAttributionNon-CommercialShareAlike': 'cc-nc-sa',
+             'Licences.TeachersDomainDownloadShare':                   'td-DS'];    if(licenseType==null) return null;
+    //if(licenses==null) licenses = initLicenses();
+    String l = licenses.get(licenseType);
+    if(l==null) return licenseType;
+    return l;
+}
+
+
+// %>
