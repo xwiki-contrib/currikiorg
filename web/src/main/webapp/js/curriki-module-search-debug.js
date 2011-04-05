@@ -86,6 +86,17 @@ module.init = function(){
 			}
 		);
 
+        Ext.StoreMgr.lookup('search-store-'+modName).addListener(
+                'beforeload'
+                ,function(s, o) {
+                    // TODO: check: add limit in the params
+                    var store = Ext.StoreMgr.lookup('search-store-'+modName);
+                    var pager = Ext.getCmp('search-pager-'+modName);
+                    store.baseParams.rows = pager.pageSize;
+                    console.log("Have adapted rows to " + pager.pageSize);
+                    return true;
+            }
+        );
 		Ext.StoreMgr.lookup('search-store-'+modName).addListener(
 			'load'
 			,function(store, data, options) {
@@ -163,9 +174,6 @@ module.init = function(){
 
 		var pager = Ext.getCmp('search-pager-'+modName)
 		if (!Ext.isEmpty(pager)) {
-            // TODO: check: add limit in the params
-            Ext.StoreMgr.lookup('search-store-'+modName).baseParams.rows = pager.pageSize;
-            console.log("Have adapted rows to " + pager.pageSize);
 			console.log('Searching', filters);
 			pager.doLoad(Ext.num(start, 0)); // Reset to first page if the tab is shown
 		}
@@ -585,7 +593,7 @@ data.init = function(){
 		,{ name: 'parents' }
 		,{ name: 'lastUpdated' }
 		,{ name: 'updated' }
-        ,{ name: 'score' } // TODO: check score is in
+        ,{ name: 'score' }
 	]);
 
 	data.store.results = new Ext.data.Store({
@@ -609,7 +617,7 @@ data.init = function(){
     if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
     if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
     if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
-	data.store.results.setDefaultSort('rating', 'desc');
+	data.store.results.setDefaultSort('score', 'desc');
 
 
 
@@ -719,7 +727,6 @@ data.init = function(){
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
 			return String.format('{0}', dt);
 		}
-        // TODO: check score
         , score: function(value, metadata, record, rowIndex, colIndex, store){
             return value;
          }
@@ -1158,22 +1165,22 @@ form.init = function(){
 
 	form.rowExpander.renderer = function(v, p, record){
 		var cls;
-        var score = record.data.score, scoreClass = "";
+        var score = record.data.score, scoreBit = "";
         if(typeof(score)=="number") {
             if(score>1) score=1;
-            scoreClass = " score"+(Math.round(score*10)-1);
+            var scoreClass = "score"+(Math.round(score*10)-1) + " ";
+            scoreBit = String.format('<span class="{0}" ext:qtip="{1}"> &#x2297; </span>',scoreClass,  _('search.resource.icon.score.tooltip',[score.toPrecision(2)]));
         } else
             console.log("No score here ? " + record.data.fullName);
-        scoreClass = ' ';
-		if (record.data.parents && record.data.parents.size() > 0) {
+        if (record.data.parents && record.data.parents.size() > 0) {
 			p.cellAttr = 'rowspan="2"';
-			cls = 'x-grid3-row-expander' + scoreClass ;
+			cls = 'x-grid3-row-expander';
 //			return '<div class="x-grid3-row-expander">&#160;</div>';
-			return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover'));
+			return String.format('<nobr><img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover')) + scoreBit + "</nobr>";
 		} else {
 			cls = 'x-grid3-row-expander-empty' + scoreClass ;
 //			return '<div class="x-grid3-row-expander-empty">&#160;</div>';
-			return String.format('<img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL);
+			return String.format('<nobr><img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL) + scoreBit + "</nobr>";
 		}
 	};
 
@@ -1193,12 +1200,12 @@ form.init = function(){
 		Ext.apply(
 			form.rowExpander
 			,{
-//				tooltip:_('search.resource.icon.plus.title')
-                tooltip:_('search.resource.column.header.score.tooltip')
+                id:'score'
+                //,tooltip:_('search.resource.column.header.score.tooltip')
                 ,header: _('search.resource.column.header.score')
-                //,dataIndex: ''
-                ,width: 20
-                //,sortable:true
+                ,dataIndex: 'score'
+                ,width: 30
+                ,sortable:true
 			}
 		)
         /* Ext.apply(
