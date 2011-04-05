@@ -64,6 +64,17 @@ module.init = function(){
 			}
 		);
 
+        Ext.StoreMgr.lookup('search-store-'+modName).addListener(
+                'beforeload'
+                ,function(s, o) {
+                    // TODO: check: add limit in the params
+                    var store = Ext.StoreMgr.lookup('search-store-'+modName);
+                    var pager = Ext.getCmp('search-pager-'+modName);
+                    store.baseParams.rows = pager.pageSize;
+                    console.log("Have adapted rows to " + pager.pageSize);
+                    return true;
+            }
+        );
 		Ext.StoreMgr.lookup('search-store-'+modName).addListener(
 			'load'
 			,function(store, data, options) {
@@ -141,9 +152,6 @@ module.init = function(){
 
 		var pager = Ext.getCmp('search-pager-'+modName)
 		if (!Ext.isEmpty(pager)) {
-            // TODO: check: add limit in the params
-            Ext.StoreMgr.lookup('search-store-'+modName).baseParams.rows = pager.pageSize;
-            console.log("Have adapted rows to " + pager.pageSize);
 			console.log('Searching', filters);
 			pager.doLoad(Ext.num(start, 0)); // Reset to first page if the tab is shown
 		}

@@ -585,6 +585,7 @@ data.init = function(){
 		,{ name: 'parents' }
 		,{ name: 'lastUpdated' }
 		,{ name: 'updated' }
+        ,{ name: 'score' } // TODO: check score is in
 	]);
 
 	data.store.results = new Ext.data.Store({
@@ -608,7 +609,7 @@ data.init = function(){
     if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
     if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
     if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
-	data.store.results.setDefaultSort('rating', 'asc');
+	data.store.results.setDefaultSort('rating', 'desc');
 
 
 
@@ -718,6 +719,10 @@ data.init = function(){
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
 			return String.format('{0}', dt);
 		}
+        // TODO: check score
+        , score: function(value, metadata, record, rowIndex, colIndex, store){
+            return value;
+         }
 	};
 };
 
@@ -1153,13 +1158,20 @@ form.init = function(){
 
 	form.rowExpander.renderer = function(v, p, record){
 		var cls;
+        var score = record.data.score, scoreClass = "";
+        if(typeof(score)=="number") {
+            if(score>1) score=1;
+            scoreClass = " score"+(Math.round(score*10)-1);
+        } else
+            console.log("No score here ? " + record.data.fullName);
+        scoreClass = ' ';
 		if (record.data.parents && record.data.parents.size() > 0) {
 			p.cellAttr = 'rowspan="2"';
-			cls = 'x-grid3-row-expander';
+			cls = 'x-grid3-row-expander' + scoreClass ;
 //			return '<div class="x-grid3-row-expander">&#160;</div>';
 			return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover'));
 		} else {
-			cls = 'x-grid3-row-expander-empty';
+			cls = 'x-grid3-row-expander-empty' + scoreClass ;
 //			return '<div class="x-grid3-row-expander-empty">&#160;</div>';
 			return String.format('<img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL);
 		}
@@ -1167,13 +1179,13 @@ form.init = function(){
 
 	form.rowExpander.on('expand', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
-		var iconCol = Ext.DomQuery.selectNode('img[class=x-grid3-row-expander]', row);
+		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.minus.rollover')});
 	});
 
 	form.rowExpander.on('collapse', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
-		var iconCol = Ext.DomQuery.selectNode('img[class=x-grid3-row-expander]', row);
+		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.plus.rollover')});
 	});
 
@@ -1182,9 +1194,18 @@ form.init = function(){
 			form.rowExpander
 			,{
 //				tooltip:_('search.resource.icon.plus.title')
+                tooltip:_('search.resource.column.header.score.tooltip')
+                ,header: _('search.resource.column.header.score')
+                //,dataIndex: ''
+                ,width: 20
+                //,sortable:true
 			}
 		)
-		,{
+        /* Ext.apply(
+			form.rowExpander
+			,{}
+		)*/
+        ,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
 			,width: 164

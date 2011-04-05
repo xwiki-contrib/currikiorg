@@ -278,6 +278,7 @@ data.init = function(){
 		,{ name: 'parents' }
 		,{ name: 'lastUpdated' }
 		,{ name: 'updated' }
+        ,{ name: 'score' }
 	]);
 
 	data.store.results = new Ext.data.Store({
@@ -301,7 +302,7 @@ data.init = function(){
     if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
     if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
     if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
-	data.store.results.setDefaultSort('rating', 'asc');
+	data.store.results.setDefaultSort('score', 'desc');
 
 
 
@@ -411,6 +412,9 @@ data.init = function(){
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
 			return String.format('{0}', dt);
 		}
+        , score: function(value, metadata, record, rowIndex, colIndex, store){
+            return value;
+         }
 	};
 };
 
