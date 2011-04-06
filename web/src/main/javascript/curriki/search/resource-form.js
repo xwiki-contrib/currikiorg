@@ -426,22 +426,13 @@ form.init = function(){
 
 	form.rowExpander.renderer = function(v, p, record){
 		var cls;
-        var score = record.data.score, scoreBit = "";
-        if(typeof(score)=="number") {
-            if(score>1) score=1;
-            var scoreClass = "score"+(Math.round(score*10)-1) + " ";
-            scoreBit = String.format('<span class="{0}" ext:qtip="{1}"> &#x2297; </span>',scoreClass,  _('search.resource.icon.score.tooltip',[score.toPrecision(2)]));
-        } else
-            console.log("No score here ? " + record.data.fullName);
         if (record.data.parents && record.data.parents.size() > 0) {
 			p.cellAttr = 'rowspan="2"';
 			cls = 'x-grid3-row-expander';
-//			return '<div class="x-grid3-row-expander">&#160;</div>';
-			return String.format('<nobr><img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover')) + scoreBit + "</nobr>";
+			return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover'));
 		} else {
-			cls = 'x-grid3-row-expander-empty' + scoreClass ;
-//			return '<div class="x-grid3-row-expander-empty">&#160;</div>';
-			return String.format('<nobr><img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL) + scoreBit + "</nobr>";
+			cls = 'x-grid3-row-expander-empty';
+			return String.format('<img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL);
 		}
 	};
 
@@ -462,17 +453,13 @@ form.init = function(){
 			form.rowExpander
 			,{
                 id:'score'
-                //,tooltip:_('search.resource.column.header.score.tooltip')
-                ,header: _('search.resource.column.header.score')
+                ,tooltip:_('search.resource.column.header.score.tooltip')
+                ,header: ' '
                 ,dataIndex: 'score'
                 ,width: 30
                 ,sortable:true
 			}
 		)
-        /* Ext.apply(
-			form.rowExpander
-			,{}
-		)*/
         ,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')

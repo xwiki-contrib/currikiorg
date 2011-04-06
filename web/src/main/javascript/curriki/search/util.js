@@ -71,7 +71,6 @@ module.init = function(){
                     var store = Ext.StoreMgr.lookup('search-store-'+modName);
                     var pager = Ext.getCmp('search-pager-'+modName);
                     store.baseParams.rows = pager.pageSize;
-                    console.log("Have adapted rows to " + pager.pageSize);
                     return true;
             }
         );
@@ -205,6 +204,11 @@ module.init = function(){
 						,listeners:{
 							click:{
 								fn: function(){
+                                    if('resource'==modName && Ext.StoreMgr.lookup('search-store-resource').sortInfo) {
+                                        Ext.StoreMgr.lookup('search-store-resource').sortInfo.field = 'score';
+                                        Ext.StoreMgr.lookup('search-store-resource').sortInfo.direction = 'DESC';
+                                        Ext.log("Set the sorting to score.");
+                                    }
 									Search.doSearch(modName, true);
 								}
 							}
