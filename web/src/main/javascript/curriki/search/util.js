@@ -207,7 +207,6 @@ module.init = function(){
                                     if('resource'==modName && Ext.StoreMgr.lookup('search-store-resource').sortInfo) {
                                         Ext.StoreMgr.lookup('search-store-resource').sortInfo.field = 'score';
                                         Ext.StoreMgr.lookup('search-store-resource').sortInfo.direction = 'DESC';
-                                        Ext.log("Set the sorting to score.");
                                     }
 									Search.doSearch(modName, true);
 								}
