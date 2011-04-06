@@ -85,10 +85,11 @@ console.log('now util.doSearch', tab, pagerValues);
 			var provider = new Ext.state.Provider();
 			var encodedToken = provider.encodeValue(token);
 			console.log('Saving History', {values: token});
-            if(Search.history.lastHistoryToken) {
+            if(Search.history.lastHistoryToken || window.CurrikiHistoryStarted) {
                 Search.history.setLastToken(encodedToken);
                 Ext.History.add(encodedToken);
             } else {
+                window.Curriki.CurrikiHistoryStarted = true;
                 Search.history.setLastToken(encodedToken);
                 window.location.replace(window.location.pathname + "#" + encodedToken);
             }
