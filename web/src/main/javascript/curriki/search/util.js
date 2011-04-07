@@ -186,6 +186,10 @@ module.init = function(){
 								fn:function(field, e){
 									if (e.getKey() === Ext.EventObject.ENTER) {
 										e.stopEvent();
+                                        if('resource'==modName && Ext.StoreMgr.lookup('search-store-resource').sortInfo) {
+                                            Ext.StoreMgr.lookup('search-store-resource').sortInfo.field = 'score';
+                                            Ext.StoreMgr.lookup('search-store-resource').sortInfo.direction = 'DESC';
+                                        }
 										Search.doSearch(modName, true);
 									}
 								}
