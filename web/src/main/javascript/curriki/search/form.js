@@ -95,10 +95,12 @@ console.log('now util.doSearch', tab, pagerValues);
                 console.log("4");
                 window.Curriki.CurrikiHistoryStarted = true;
                 console.log("5");
+                Ext.History.un('change', History.historyChange);
                 Search.history.setLastToken(encodedToken);
                 console.log("6");
                 window.location.replace(window.location.pathname + "#" + encodedToken);
                 console.log("7");
+                Ext.History.on('change', History.historyChange);
             }
 		};
 
