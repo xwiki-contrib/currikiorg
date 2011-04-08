@@ -16,11 +16,11 @@ $xwiki.includeTopic('Admin.Configuration', false)
 #set($hasSpaceAdmin = $xwiki.hasAccessLevel("admin", $context.user, "${doc.space}.WebPreferences"))
 #set($isReadOnly = $xwiki.isReadOnly())
 #set($debugCookie = $xwiki.getUserPreferenceFromCookie("cdbg"))
-#if("$!debugCookie" == "")##{
-#set($globalDebug = false)
-#else##}{
+## #if("$!debugCookie" == "")##{
+## #set($globalDebug = false)
+## #else##}{
 #set($globalDebug = true)
-#end##}
+## #end##}
 #set($gVersion = $xwiki.version.replaceAll('.*\.', ''))
 #set($spaceViewUrl = $spaceDoc.getURL("view"))
 #set($viewUrl = $doc.getURL("view"))

@@ -86,12 +86,19 @@ console.log('now util.doSearch', tab, pagerValues);
 			var encodedToken = provider.encodeValue(token);
 			console.log('Saving History', {values: token});
             if(Search.history.lastHistoryToken || window.CurrikiHistoryStarted) {
+                console.log("1");
                 Search.history.setLastToken(encodedToken);
+                console.log("2");
                 Ext.History.add(encodedToken);
+                console.log("3");
             } else {
+                console.log("4");
                 window.Curriki.CurrikiHistoryStarted = true;
+                console.log("5");
                 Search.history.setLastToken(encodedToken);
+                console.log("6");
                 window.location.replace(window.location.pathname + "#" + encodedToken);
+                console.log("7");
             }
 		};
 
