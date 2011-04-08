@@ -67,7 +67,6 @@ module.init = function(){
         Ext.StoreMgr.lookup('search-store-'+modName).addListener(
                 'beforeload'
                 ,function(s, o) {
-                    // TODO: check: add limit in the params
                     var store = Ext.StoreMgr.lookup('search-store-'+modName);
                     var pager = Ext.getCmp('search-pager-'+modName);
                     store.baseParams.rows = pager.pageSize;

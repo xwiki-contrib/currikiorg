@@ -89,7 +89,6 @@ module.init = function(){
         Ext.StoreMgr.lookup('search-store-'+modName).addListener(
                 'beforeload'
                 ,function(s, o) {
-                    // TODO: check: add limit in the params
                     var store = Ext.StoreMgr.lookup('search-store-'+modName);
                     var pager = Ext.getCmp('search-pager-'+modName);
                     store.baseParams.rows = pager.pageSize;
@@ -2835,7 +2834,7 @@ Search.init = function(){
 
 						// Do the search
 						if ((("undefined" === typeof onlyHistory) || (onlyHistory = false)) && (Ext.isEmpty(searchTab) || searchTab === tab)) {
-console.log('now util.doSearch', tab, pagerValues);
+                            console.log('now util.doSearch', tab, pagerValues);
 							Search.util.doSearch(tab, (("undefined" !== typeof pagerValues[tab])?pagerValues[tab].c:0));
 						}
 					}
@@ -2854,7 +2853,7 @@ console.log('now util.doSearch', tab, pagerValues);
 			var provider = new Ext.state.Provider();
 			var encodedToken = provider.encodeValue(token);
 			console.log('Saving History', {values: token});
-            if(Search.history.lastHistoryToken || window.CurrikiHistoryStarted) {
+            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
                 console.log("1");
                 Search.history.setLastToken(encodedToken);
                 console.log("2");
@@ -2862,7 +2861,7 @@ console.log('now util.doSearch', tab, pagerValues);
                 console.log("3");
             } else {
                 console.log("4");
-                window.Curriki.CurrikiHistoryStarted = true;
+                window.currikiHistoryStarted = true;
                 console.log("5");
                 Ext.History.un('change', History.historyChange);
                 Search.history.setLastToken(encodedToken);
