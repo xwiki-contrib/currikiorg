@@ -87,9 +87,11 @@ Search.init = function(){
 			console.log('Saving History', {values: token});
             if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
                 console.log("1");
+                Ext.History.un('change', History.historyChange);
                 Search.history.setLastToken(encodedToken);
                 console.log("2");
                 Ext.History.add(encodedToken);
+                Ext.History.on('change', History.historyChange);
                 console.log("3");
             } else {
                 console.log("4");
@@ -98,7 +100,7 @@ Search.init = function(){
                 Ext.History.un('change', History.historyChange);
                 Search.history.setLastToken(encodedToken);
                 console.log("6");
-                window.location.replace(window.location.pathname + "#" + encodedToken);
+                window.top.location.replace(window.location.pathname + "#" + encodedToken);
                 console.log("7");
                 Ext.History.on('change', History.historyChange);
             }
