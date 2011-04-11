@@ -35,17 +35,21 @@ function initLoader() {
 Ext.ns('Curriki');
 Ext.ns('Curriki.module');
 
+Curriki.requestCount = 0;
+
 Ext.onReady(function(){
 	Curriki.loadingCount = 0;
 	Curriki.hideLoadingMask = false;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
-console.log('beforerequest', conn, options);
-		Curriki.Ajax.beforerequest(conn, options);
+        options.requestCount = Curriki.requestCount++;
+        console.log('beforerequest (' + options.requestCount + ")", conn, options);
+        if(options.requestCount>10) throw "No more than 10 requests!";
+        Curriki.Ajax.beforerequest(conn, options);
 	});
     Ext.Ajax.on('requestcomplete', function(conn, response, options){
-console.log('requestcomplete', conn, response, options);
+console.log('requestcomplete (' + options.requestCount + ")", conn, response, options);
 		Curriki.Ajax.requestcomplete(conn, response, options);
 	});
     Ext.Ajax.on('requestexception', Curriki.notifyException);
