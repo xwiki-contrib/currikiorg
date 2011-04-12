@@ -8,6 +8,7 @@ Ext.ns('Curriki.module.search.form');
 
 var Search = Curriki.module.search;
 var forms = Search.form;
+var NO_CONCURRENT_SEARCH_ERRMSG = "No concurrent searches on same tab.";
 
 Search.init = function(){
 	console.log('search: init');
@@ -66,6 +67,9 @@ Search.init = function(){
 
 						// Do the search
 						if ((("undefined" === typeof onlyHistory) || (onlyHistory = false)) && (Ext.isEmpty(searchTab) || searchTab === tab)) {
+                            // TODO: MSIE misery here
+                            if(Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
+                            Search['runningSearch' + tab] = true;
                             if(Curriki.numSearches>10) return; Curriki.numSearches++;
                             console.log('now util.doSearch (' + window.numSearches + ")", tab, pagerValues);
 							Search.util.doSearch(tab, (("undefined" !== typeof pagerValues[tab])?pagerValues[tab].c:0));
@@ -74,32 +78,27 @@ Search.init = function(){
 				}
 			);
 Curriki.numSearches = 0;
-			var token = {};
-			token['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
-			token['f'] = filterValues;
-			token['p'] = pagerValues;
+			var stateObject = {};
+			stateObject['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
+			stateObject['f'] = filterValues;
+			stateObject['p'] = pagerValues;
 			if (Ext.getCmp('search-tabPanel').getActiveTab) {
-				token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
+				stateObject['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
 			}
-			token['a'] = panelSettings;
+			stateObject['a'] = panelSettings;
 
 			var provider = new Ext.state.Provider();
-			var encodedToken = provider.encodeValue(token);
-			console.log('Saving History'+ token);
+			var encodedToken = provider.encodeValue(stateObject);
+			console.log('Saving History: '+ encodedToken );
             if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
-                console.log("1");
                 Search.history.setLastToken(encodedToken);
-                console.log("2");
                 Ext.History.add(encodedToken);
-                console.log("3");
+                console.log("-- created a new history frame.");
             } else {
-                console.log("4");
                 window.currikiHistoryStarted = true;
-                console.log("5");
                 Search.history.setLastToken(encodedToken);
-                console.log("6");
                 window.top.location.replace(window.location.pathname + "#" + encodedToken);
-                console.log("7");
+                console.log("-- rather replaced history.");
             }
 		};
 
@@ -202,7 +201,8 @@ Curriki.numSearches = 0;
 		History.updateFromHistory = function(token){
 			var provider = new Ext.state.Provider();
 			var values = provider.decodeValue(token);
-            if(History.lastHistoryToken==token) return;
+            if(History.lastHistoryToken==token || escape(History.lastHistoryToken)==token) return;
+
 			console.log('Got History: ' + token, {values: values});
 
 			if (!Ext.isEmpty(values)) {
@@ -226,6 +226,8 @@ Curriki.numSearches = 0;
 					,function(tab){
 						console.log('Updating '+tab);
 						var module = Search.form[tab];
+                        // TODO: MSIE misery here
+                        if(!Ext.isEmpty(Search) && Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
 						if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
 							var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
 							if (!Ext.isEmpty(filterPanel)) {

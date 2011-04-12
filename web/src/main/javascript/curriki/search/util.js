@@ -103,6 +103,11 @@ module.init = function(){
 
 				// Add to history
 				Search.doSearch(tab, false, true);
+
+                // stop blocking other searches
+                // TODO: MSIE misery here
+                Search['runningSearch' + modName] = false;
+
 			}
 		);
 
