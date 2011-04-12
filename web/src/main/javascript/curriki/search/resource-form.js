@@ -23,6 +23,10 @@ form.init = function(){
 	form.ictCombo = function(config) {
 		Ext.apply(this, config);
 	};
+
+    // this triggers inconsistent searches, rather not use this double of function
+    $('curriki-searchbox').disable();
+
 	Ext.extend(form.ictCombo, Ext.util.Observable, {
 		init:function(combo){
 			Ext.apply(combo, {
