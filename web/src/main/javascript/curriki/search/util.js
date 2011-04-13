@@ -107,7 +107,7 @@ module.init = function(){
 
                 // stop blocking other searches
                 // TODO: MSIE misery here
-                Search['runningSearch' + modName] = false;
+                // Search['runningSearch' + modName] = false;
 
 			}
 		);

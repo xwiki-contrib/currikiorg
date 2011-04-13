@@ -129,7 +129,7 @@ module.init = function(){
 
                 // stop blocking other searches
                 // TODO: MSIE misery here
-                Search['runningSearch' + modName] = false;
+                // Search['runningSearch' + modName] = false;
 
 			}
 		);
@@ -775,8 +775,19 @@ form.init = function(){
 		Ext.apply(this, config);
 	};
 
-    // this triggers inconsistent searches, rather not use this double of function
-    $('curriki-searchbox').disable();
+    // disable top search box, it triggers inconsistent searches, rather not use this double of function
+    var searchBox = $('curriki-searchbox');
+    if(!Ext.isEmpty(searchBox)) {
+        searchBox.setValue("...");
+        searchBox.setAttribute("curriki:deftxt","...");
+        searchBox.disable();
+        
+    }
+    var searchBoxGoBtn = $('searchbtn');
+    if(!Ext.isEmpty(searchBoxGoBtn)) {
+        searchBoxGoBtn.innerHTML="";
+    }
+
 
 	Ext.extend(form.ictCombo, Ext.util.Observable, {
 		init:function(combo){
@@ -2846,8 +2857,8 @@ Search.init = function(){
 						// Do the search
 						if ((("undefined" === typeof onlyHistory) || (onlyHistory = false)) && (Ext.isEmpty(searchTab) || searchTab === tab)) {
                             // TODO: MSIE misery here
-                            if(Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
-                            Search['runningSearch' + tab] = true;
+                            // if(Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
+                            // Search['runningSearch' + tab] = true;
                             if(Curriki.numSearches>10) return; Curriki.numSearches++;
                             console.log('now util.doSearch (' + window.numSearches + ")", tab, pagerValues);
 							Search.util.doSearch(tab, (("undefined" !== typeof pagerValues[tab])?pagerValues[tab].c:0));
@@ -3005,7 +3016,7 @@ Curriki.numSearches = 0;
 						console.log('Updating '+tab);
 						var module = Search.form[tab];
                         // TODO: MSIE misery here
-                        if(!Ext.isEmpty(Search) && Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
+                        // if(!Ext.isEmpty(Search) && Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
 						if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
 							var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
 							if (!Ext.isEmpty(filterPanel)) {

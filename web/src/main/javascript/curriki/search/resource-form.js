@@ -24,8 +24,19 @@ form.init = function(){
 		Ext.apply(this, config);
 	};
 
-    // this triggers inconsistent searches, rather not use this double of function
-    $('curriki-searchbox').disable();
+    // disable top search box, it triggers inconsistent searches, rather not use this double of function
+    var searchBox = $('curriki-searchbox');
+    if(!Ext.isEmpty(searchBox)) {
+        searchBox.setValue("...");
+        searchBox.setAttribute("curriki:deftxt","...");
+        searchBox.disable();
+        
+    }
+    var searchBoxGoBtn = $('searchbtn');
+    if(!Ext.isEmpty(searchBoxGoBtn)) {
+        searchBoxGoBtn.innerHTML="";
+    }
+
 
 	Ext.extend(form.ictCombo, Ext.util.Observable, {
 		init:function(combo){

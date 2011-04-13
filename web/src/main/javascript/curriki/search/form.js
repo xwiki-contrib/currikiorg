@@ -68,8 +68,8 @@ Search.init = function(){
 						// Do the search
 						if ((("undefined" === typeof onlyHistory) || (onlyHistory = false)) && (Ext.isEmpty(searchTab) || searchTab === tab)) {
                             // TODO: MSIE misery here
-                            if(Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
-                            Search['runningSearch' + tab] = true;
+                            // if(Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
+                            // Search['runningSearch' + tab] = true;
                             if(Curriki.numSearches>10) return; Curriki.numSearches++;
                             console.log('now util.doSearch (' + window.numSearches + ")", tab, pagerValues);
 							Search.util.doSearch(tab, (("undefined" !== typeof pagerValues[tab])?pagerValues[tab].c:0));
@@ -227,7 +227,7 @@ Curriki.numSearches = 0;
 						console.log('Updating '+tab);
 						var module = Search.form[tab];
                         // TODO: MSIE misery here
-                        if(!Ext.isEmpty(Search) && Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
+                        // if(!Ext.isEmpty(Search) && Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
 						if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
 							var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
 							if (!Ext.isEmpty(filterPanel)) {
