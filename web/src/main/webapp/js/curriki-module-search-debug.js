@@ -124,7 +124,8 @@ module.init = function(){
 				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
-				Search.doSearch(tab, false, true);
+                    // TODO: MSIE misery... have commented this out
+				//Search.doSearch(tab, false, true);
 
                 // stop blocking other searches
                 // TODO: MSIE misery here
@@ -2869,8 +2870,8 @@ Curriki.numSearches = 0;
 			console.log('Saving History: '+ encodedToken );
             if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
                 Search.history.setLastToken(encodedToken);
-                Ext.History.add(encodedToken);
-                console.log("-- created a new history frame.");
+                var created = Ext.History.add(encodedToken,true);
+                if(created) console.log("-- created a new history frame.");
             } else {
                 window.currikiHistoryStarted = true;
                 Search.history.setLastToken(encodedToken);

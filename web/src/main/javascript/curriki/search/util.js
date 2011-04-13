@@ -102,7 +102,8 @@ module.init = function(){
 				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
-				Search.doSearch(tab, false, true);
+                    // TODO: MSIE misery... have commented this out
+				//Search.doSearch(tab, false, true);
 
                 // stop blocking other searches
                 // TODO: MSIE misery here

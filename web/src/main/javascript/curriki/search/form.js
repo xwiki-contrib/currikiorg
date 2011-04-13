@@ -92,8 +92,8 @@ Curriki.numSearches = 0;
 			console.log('Saving History: '+ encodedToken );
             if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
                 Search.history.setLastToken(encodedToken);
-                Ext.History.add(encodedToken);
-                console.log("-- created a new history frame.");
+                var created = Ext.History.add(encodedToken,true);
+                if(created) console.log("-- created a new history frame.");
             } else {
                 window.currikiHistoryStarted = true;
                 Search.history.setLastToken(encodedToken);
