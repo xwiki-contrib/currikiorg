@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.martagirdea</creator>
-<author>XWiki.KApatterson</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.KApatterson</contentAuthor>
+<contentAuthor>XWiki.jmarks</contentAuthor>
 <creationDate>1172404560000</creationDate>
-<date>1273154818000</date>
-<contentUpdateDate>1273154818000</contentUpdateDate>
-<version>16.1</version>
+<date>1176581423000</date>
+<contentUpdateDate>1266877070000</contentUpdateDate>
+<version>1.16</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>kp</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -98,47 +98,23 @@
 <category>Navigation</category>
 </property>
 <property>
-<content>#if(1==1)
-
-#if( $doc.fullName == 'Main.WebHome' &amp;&amp; ($doc.web == 'Search' || $doc.web == 'Main' || $doc.web=="Panels" || $doc.web=="Coll_creiswig") )
-
-
-##{
-
-&lt;div id="PanelTopRated" class="shadow-outer"&gt; ##{
-&lt;div class="shadow-middle"&gt; ##{
-&lt;div class="shadow-inner"&gt; ##{
-&lt;div class="headerbar violet"&gt;This Month's Most Popular&lt;/div&gt;
-&lt;div class="frame-content"&gt; ##{
-           
-##PUT CONTENT BELOW THIS LINE
-
-&lt;img src="http://current.dev.curriki.org/xwiki/bin/download/Main/WebHome/textmini.gif"&gt;
-[Science Activities&gt;Demo.fhsst]
-
-&lt;img src="http://current.dev.curriki.org/xwiki/bin/download/Main/WebHome/videomini.gif"&gt;
-[Physics Videos&gt;Demo.learnthings]
-
-&lt;img src="http://current.dev.curriki.org/xwiki/bin/download/Main/WebHome/documentmini.gif"&gt;
-[English Grammar Lesson &gt;Demo.meritsoftware]
-
-&lt;img src="http://current.dev.curriki.org/xwiki/bin/download/Main/WebHome/audiomini.gif"&gt;
-[Panwapa&gt;Demo.panwapa] 
-
-&lt;img src="http://current.dev.curriki.org/xwiki/bin/download/Main/WebHome/collectionmini.gif"&gt;
-[Math Worksheets&gt;Demo.winpossible]
-
-##PUT CONTENT ABOVE THIS LINE
-
-&lt;/div&gt; ##} ##frame-content
-&lt;/div&gt; ##} ##shadow-inner
-&lt;/div&gt; ##} ##shadow-middle
-&lt;/div&gt; ##} ##shadow-outer
-
-#end
-
-#end
-</content></property><property><description>Displays quick links to favorite resources.</description>
+<content>#panelheadercolor("Favorite resources" "red")
+&lt;div id="FavResources"&gt;
+##
+##
+* [Golf and Physics&gt;Coll_demo.Qu2GboSfPT86UfNI]
+* [Ball and Club Physics&gt;Coll_demo.yrzrDFoa3oA4nw0A]
+* [English Grammar Lesson &gt; Coll_jmarks.Default]
+* [Coll_MMAP.TheAntarcticaProject-DirectandInverseVariationsTeacherNotes]
+* [AssetTemp.ChinaBlog]
+* [Coll_ezra.TheStudyofBiblicalLiterature]
+##
+##
+&lt;/div&gt;
+#panelfooter()</content>
+</property>
+<property>
+<description>Displays quick links to favorite resources.</description>
 </property>
 <property>
 <name>FavResources</name>

@@ -36,7 +36,7 @@ fi
 ## echo UPLOAD_TARGET is $UPLOAD_TARGET
 echo Uploading to $spacename/$pagename, language $language to $UPLOAD_HOST...
 cat "$file" |
-  curl -k -F comment="cli-upload." -F content="<-" "$UPLOAD_TARGET/xwiki/bin/save/$spacename/$pagename?language=$language"
+  curl  -k -F comment="cli-upload." -F content="<-" "$UPLOAD_TARGET/xwiki/bin/save/$spacename/$pagename?language=$language"
   statusNumber="$?"
   if [ $statusNumber != 0 ];
   then

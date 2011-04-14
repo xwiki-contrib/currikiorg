@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1247255732000</creationDate>
-<date>1291890470000</date>
-<contentUpdateDate>1291890470000</contentUpdateDate>
-<version>47.1</version>
+<date>1291854357000</date>
+<contentUpdateDate>1291854357000</contentUpdateDate>
+<version>45.1</version>
 <title>Forgot Login Information</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>CURRIKI-5247</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -209,7 +209,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			## #set($reseturl = ${xwiki.getRequestURL()})
 			#set($reseturl = 'http://'+$!xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org'))
 			#set($reseturl = "${reseturl}${xwiki.getURL('Main.ForgotPassword')}")
-			#set($reseturl = "${reseturl}?q=$util.encodeURI(${uemail})&amp;vk=${valkey}")
+			#set($reseturl = "${reseturl}?q=${uemail}&amp;vk=${valkey}")
 
 			## Reseturl: $reseturl
 

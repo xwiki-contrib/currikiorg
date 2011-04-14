@@ -13,13 +13,13 @@
 <contentAuthor>XWiki.mzielinski</contentAuthor>
 <creationDate>1248805817000</creationDate>
 <date>1248806501000</date>
-<contentUpdateDate>1248806501000</contentUpdateDate>
+<contentUpdateDate>1249945865000</contentUpdateDate>
 <version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>First changes to Polish</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>

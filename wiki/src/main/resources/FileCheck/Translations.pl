@@ -13,13 +13,13 @@
 <contentAuthor>XWiki.mzielinski</contentAuthor>
 <creationDate>1249332845000</creationDate>
 <date>1249332845000</date>
-<contentUpdateDate>1249332845000</contentUpdateDate>
+<contentUpdateDate>1249945865000</contentUpdateDate>
 <version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Check &amp; Flag - polish, proper place</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>

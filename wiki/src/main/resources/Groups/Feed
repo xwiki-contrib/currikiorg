@@ -8,13 +8,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.jmarks</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jmarks</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1202830806000</creationDate>
-<date>1288318890000</date>
-<contentUpdateDate>1288318890000</contentUpdateDate>
-<version>8.1</version>
+<date>1300231667000</date>
+<contentUpdateDate>1300231667000</contentUpdateDate>
+<version>9.1</version>
 <title>Feed</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -60,5 +60,24 @@
   * @type script
   * @refactored ludovic
   *#
+## temporarily, we copy the macro here to adjust a change.
+$context.setCacheDuration(180)## 5 minutes
+#macro(groups_feed)
+#set($spaceName = $request.space)
+#if(!$spaceName)
+#set($spaceName = "Group_ludotest")
+#end
+#set($as = $xwiki.activitystream)
+#set($list = $as.getEvents($spaceName, true, 50, 0))
+##foreach($event in $list)
+##$event.date $event.page: $event.displayTitle &lt;br /&gt;
+###end
+#if($request.type)
+#set($type = $request.type)
+#else
+#set($type = "atom_0.3")
+#end
+{pre}$as.getFeedOutput($list, "Curriki", "Curriki Group Feed", "Curriki Group Feed", "Copyright", $xwiki.encoding, "http://www.curriki.org/", $type){/pre}
+#end
 #groups_feed()
 </content></xwikidoc>

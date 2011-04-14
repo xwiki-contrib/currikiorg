@@ -13,7 +13,7 @@
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1229981148000</creationDate>
 <date>1229981148000</date>
-<contentUpdateDate>1234891124000</contentUpdateDate>
+<contentUpdateDate>1234995980000</contentUpdateDate>
 <version>1.1</version>
 <title></title>
 <template></template>

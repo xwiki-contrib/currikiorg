@@ -13,13 +13,13 @@
 <contentAuthor>XWiki.mzielinski</contentAuthor>
 <creationDate>1248819034000</creationDate>
 <date>1249077836000</date>
-<contentUpdateDate>1249077836000</contentUpdateDate>
+<contentUpdateDate>1249945864000</contentUpdateDate>
 <version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Polish - my Curriki - changes #1 major</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
