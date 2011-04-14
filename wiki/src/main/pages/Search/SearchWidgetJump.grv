@@ -66,7 +66,7 @@ if(request.subject==null && request.mediatype==null && request.level==null && re
         text = URLDecoder.decode(request.txt_escaped);
 
 
-    def query = ["s":"resource","t":"search-resources-tab","a":true,
+    def query = ["s":"resource",
             "f":["resource":
                 [subjectparent : subjectparent,
 	                subject : subject,
@@ -77,8 +77,15 @@ if(request.subject==null && request.mediatype==null && request.level==null && re
 	                review : review,
 	                ictprfx : ictprfx,
 	                ict : ict,
-	                special : special]] // group, member, curriki...
-            //"p":pagerValues
+	                special : special
+                    // CURRIKI-5404:
+                    ,sort:[field:"score", dir:"DESC"]
+                ]],
+                 "p":[curriki: [c: 0, s: 25], group: [c: 0, s: 25],
+                        member: [c: 0, s: 25], resource: [c: 0, s: 25]],
+                 "t":"search-resources-tab",
+                 "a":["a":true]
+                 // group, member, curriki...
     ];
 
     def url = "";//"http://" + xwiki.xWiki.Param('curriki.system.hostname', 'www.curriki.org');
