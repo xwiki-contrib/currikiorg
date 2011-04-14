@@ -2836,6 +2836,13 @@ Search.init = function(){
 								if ("undefined" !== typeof filterValues[tab]["other"] && filterValues[tab]["other"] === '') {
 									delete(filterValues[tab]["other"]);
 								}
+                                // CURRIKI-5404: almost there: store sort in URL
+                                if (Ext.StoreMgr.lookup('search-store-' + tab).sortInfo) {
+                                    filterValues[tab]['sort'] = new Object();
+                                    filterValues[tab]['sort'].field = Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.field;
+                                    filterValues[tab]['sort'].dir= Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.direction;
+                                }
+
 							}
 						}
 
@@ -3044,6 +3051,12 @@ Curriki.numSearches = 0;
 												}
 											}
 										}
+                                        // attempt at CURRIKI-5404
+                                        if (filterValues[tab]['sort']) {
+                                            var sortInfo = filterValues[tab]['sort'];
+                                            if(sortInfo.field) Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.field = sortInfo['field'];
+                                            if(sortInfo.dir)   Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.direction = sortInfo['dir'];
+                                        }
 									} catch(e) {
 										console.log('ERROR Updating '+tab, e);
 									}
