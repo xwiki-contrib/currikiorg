@@ -57,7 +57,7 @@ else {
     // actual table
     println('{pre}<table border="1" class="table table-favorites">')
     println("<script type='text/javascript'>document.title='Curriki: all interactive or video resources ("+ results.size() +")';</script>")
-    println("<thead style='background:lightgray'><tr><td>title</td><td>creator</td><td>assetType</td><td>ICT</td><td>description</td><td>subjects</td><td>grades</td><td>alignments</td><td>license</td><td>id</td><td>url</td></tr></thead><tbody>")
+    println("<thead style='background:lightgray'><tr><td>title</td><td>creator</td><td>assetType</td><td>ICT</td><td>description</td><td>subjects</td><td>grades</td><td>alignments</td><td>license</td><td>keywords</td><td>id</td><td>url</td></tr></thead><tbody>")
 
     for(hit in results) {
         String fullN = hit.doc().get("fullname");
@@ -104,10 +104,11 @@ else {
             println("</td><td>");
             String lic = licenseFromLicenseType(doc.get("CurrikiCode.AssetLicenseClass.licenseType"));
             println(lic)
+            println("</td><td>")
+            println(doc.get("CurrikiCode.AssetClass.keywords"));
             print("</td><td>")
             println(fullN);
-            println("</td>")
-            print("<td>")
+            println("</td><td>")
             println("http://www.curriki.org/xwiki/bin/view/" + doc.web + "/" + doc.name);
             println("</td>")
             println("</tr>");
