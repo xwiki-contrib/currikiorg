@@ -34,6 +34,7 @@ $response.setContentType("text/xml")
 #set ($sql = "where $onlySpaceQ doc.web NOT IN ('XWiki', 'AssetTemp', 'Admin', 'Sandbox', 'Frameworks', 'AssetManager', 'Panels', 'MimeType', 'MyCurriki', 'Temp', 'Test' $excludeSpaceQ) AND doc.name NOT IN ('WebPreferences' $excludeNameQ) AND doc.fullName NOT IN ('Admin.SiteMap' $excludePageQ) AND (doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='XWiki.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) order by doc.date desc")
 #set ($list = $xwiki.searchDocuments($sql))
 #set ($baseurl =  "http://${request.serverName}")
+#set($lastmod = $xwiki.parseBoolean($!request.lastmod))
 {pre}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -48,6 +49,7 @@ $response.setContentType("text/xml")
     #set($u = "/xwiki/bin/view/$u")
     #if($item.equals("Main.WebHomeVistor"))#set($u = "/")#end##
 <loc>${baseurl}$u</loc>
+#if($lastmod)<lastmod></lastmod>#end
 </url>
 #end
 </urlset>

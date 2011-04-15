@@ -1,0 +1,78 @@
+// <%
+import com.xpn.xwiki.*;
+import com.xpn.xwiki.api.*;
+import com.xpn.xwiki.doc.*;
+import com.xpn.xwiki.plugin.packaging.*;
+
+println ("1 XML Export of the Wiki from Admin/PageList")
+
+def pagelist = "Admin.PageList"
+def exportdir = "/appserv/build/projects/curriki/wiki/src/main/resources"
+def createzip = false
+
+if (request.pagelist != null){
+  pagelist = request.pagelist
+}
+
+if (request.createzip != null){
+  createzip = request.createzip
+}
+
+if (request.exportdir != null){
+  exportdir = request.exportdir
+}
+
+if (request.confirm=="1") {
+  println "Starting export"
+  println "Delete existing files"
+  println "Creating package"
+  pack = new Package()
+  if (createzip) {
+    pack.setName(pagelist+".zip")
+  } else {
+    pack.setName("curriki")
+  }
+
+  pack.setDescription("Export of Curriki Wiki-based Application Code");
+
+  pack.setBackupPack(true);
+  pack.setPreserveVersion(true);
+
+  pack.setWithVersions(false)
+//  pack.setWithVersions(true)
+
+//  pack.addDocumentFilter(filter)
+  println "Adding documents"
+  def pages = context.context.getWiki().getDocument(pagelist, context.context).content
+
+  def list = pages.split("(\r|\n)+")
+  def last = list.size()
+  def i = 0
+  while (i < last){
+    println list[i]
+    pack.add(list[i], context.context)
+    i++
+  }
+
+//  pack.addAllWikiDocuments(context.context)
+  println "Exporting documents"
+
+  try {
+    if (createzip){
+      context.context.getResponse().setContentType("application/zip");
+      context.context.getResponse().addHeader("Content-disposition", "attachment; filename="+pagelist+".zip")
+      context.context.setFinished(true);
+      pack.export(context.context.getResponse().getOutputStream(), context.context)
+    } else {
+      pack.exportToDir(new File(exportdir), context.context)
+    }
+  } catch (Exception e){
+    println "Error exporting"
+    println e.getMessage()
+  }
+
+  println "Finished."
+  } else {
+    println "[Confirm export>ExportPageList?pagelist="+pagelist+"&confirm=1]"
+  }
+// %>
