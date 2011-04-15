@@ -1791,8 +1791,8 @@ Ext.onReady(function(){
     Ext.Ajax.on('beforerequest', function(conn, options){
         options.requestCount = Curriki.requestCount++;
         console.log('beforerequest (' + options.requestCount + ")", conn, options);
-        // TODO: remove here when to prod
-        if(options.requestCount>10) throw "No more than 10 requests!";
+        // protection
+        //if(options.requestCount>10) throw "No more than 10 requests!";
         Curriki.Ajax.beforerequest(conn, options);
 	});
     Ext.Ajax.on('requestcomplete', function(conn, response, options){
