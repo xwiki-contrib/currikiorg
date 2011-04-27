@@ -315,6 +315,7 @@ Curriki.mycurriki.util.title.popup = function(title_id, attr){
 };
 #end ##}
 Ext.onReady(function(){
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
 ## Get description
 #set($curDesc = $!asset.getDescription().replaceAll('\\', '\\\\').replace("'", "\'").replaceAll("[\r\n]", ' '))
 ## Get Framework items
@@ -359,6 +360,7 @@ Ext.onReady(function(){
 #end ## }
 #set($curICT = "[ $curICT ]")
 Curriki.mycurriki.util.title.popup("mycurriki-title-${descnb}", {'description':'$curDesc' , 'fwItems':$curFW , 'levels':$curLvl , 'ict':$curICT});
+});
 });
 /* ]]> */
 </script>
