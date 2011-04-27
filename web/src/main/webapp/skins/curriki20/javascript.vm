@@ -12,20 +12,20 @@
 <script type="text/javascript" src="$xwiki.getSkinFile("js/scriptaculous/effects.js")"></script>
 <script type="text/javascript">
 //<![CDATA[
-var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/ext-2.3.0/" : "http://extjs.cachefly.net/ext-2.3.0/");
 document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
 //]]>
 </script>
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
-#if("$!request.lang" != "")##{
-#set($lang = $request.lang)
-#else##}{
-#set($lang = $xwiki.getLanguagePreference())
-#end##}
-#if("$!lang" == "")##{
-#set($lang = "en")
-#end##}
+  #if("$!request.lang" != "")##{
+    #set($lang = $request.lang)
+  #else##}{
+    #set($lang = $xwiki.getLanguagePreference())
+  #end##}
+  #if("$!lang" == "")##{
+    #set($lang = "en")
+  #end##}
 ##
 ## The xwiki translation files are converted for use with javascript
 ## and loaded via the /js/0/lang_${lang}.js URL using an apache rewrite rule
@@ -35,7 +35,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="/xwiki/js/i18n.js"></script>
 ## and uncomment the next one out instead
 ##<script src="/js/1/lang_${lang}.js"></script>
-<script src="/xwiki/js/curriki-main-data${debugging}.js"></script>
+##<script src="/xwiki/js/curriki-main-data${debugging}.js"></script>
 <script src="/xwiki/js/curriki-main${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-addpath${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-organize${debugging}.js"></script>
@@ -49,24 +49,24 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
 #if($!headerfile == "http") ## {
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
+##<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
 #end ## }
 
 #if($!headerfile == "help") ## {
-<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
+##<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+##<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
 #end ## }
 
 #if($headerfile == "html") ##{
-<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
+##<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+##<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
+##<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
+##<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
 
 #if($context.action=="admin") ##{
-<script type="text/javascript" src="$xwiki.getSkinFile("lightbox.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/lightbox/lightbox.js", true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/usersandgroups/usersandgroups.js", true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.js")"></script>
 #end ##}
 #end ## }
 
@@ -82,7 +82,7 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 ##
 ## CSS files related to JS libraries.
 ##
-<link href="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.css")" rel="stylesheet" type="text/css" />
+<link href="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.css", true)" rel="stylesheet" type="text/css" />
 <link href="$xwiki.getSkinFile("js/xwiki/lightbox/lightbox.css", true)" rel="stylesheet" type="text/css" />
 <!--[if IE]>
   <link href="$xwiki.getSkinFile("js/xwiki/lightbox/lightboxIE.css", true)" rel="stylesheet" type="text/css" />
@@ -98,7 +98,20 @@ $xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js', true)
 $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/confirmedAjaxRequest.js', true)
 $xwiki.jsfx.use('uicomponents/widgets/notification.js', true)
+$xwiki.ssfx.use('uicomponents/widgets/notification.css', true)## JS Libraries.
+##
+$xwiki.jsfx.use('js/scriptaculous/effects.js', true)
+$xwiki.jsfx.use('js/xwiki/widgets/modalPopup.js', true)
+$xwiki.ssfx.use('js/xwiki/widgets/modalPopup.css', true)
+$xwiki.jsfx.use('js/xwiki/widgets/jumpToPage.js', true)
+$xwiki.ssfx.use('js/xwiki/widgets/jumpToPage.css', {'forceSkinAction' : true, 'language' : $context.language})
+$xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js', true)
+$xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
+$xwiki.jsfx.use('uicomponents/widgets/confirmedAjaxRequest.js', true)
+$xwiki.jsfx.use('uicomponents/widgets/notification.js', true)
 $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
+$xwiki.jsfx.use('uicomponents/widgets/list/xlist.js')
+$xwiki.jsfx.use('js/xwiki/suggest/ajaxSuggest.js')
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/xwiki.js", true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.js")"></script>
 <script type="text/javascript">
@@ -106,24 +119,28 @@ $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 XWiki.webapppath = "${xwiki.webAppPath}";
 XWiki.servletpath = "${xwiki.servletPath}";
 XWiki.contextPath = "${request.contextPath}";
-XWiki.mainWiki = "${context.mainWikiName}";
-XWiki.currentWiki = "${context.database}";
-XWiki.currentSpace = "${doc.space}";
-XWiki.editor = "$!{editor}";
-XWiki.viewer = "$!{viewer}";
-XWiki.contextaction = "${context.getAction()}";
+XWiki.mainWiki = "$!{escapetool.javascript(${xcontext.mainWikiName})}";
+XWiki.currentWiki = "$!{escapetool.javascript(${xcontext.database})}";
+XWiki.currentSpace = "$!{escapetool.javascript($doc.space)}";
+XWiki.currentPage = "$!{escapetool.javascript($doc.name)}";
+XWiki.editor = "$!{escapetool.javascript($editor)}";
+XWiki.viewer = "$!{escapetool.javascript($viewer)}";
+XWiki.contextaction = "${xcontext.getAction()}";
 XWiki.docisnew = $!doc.isNew();
-XWiki.docsyntax = "$!doc.getSyntaxId()";
+XWiki.docsyntax = "$!doc.getSyntax().toIdString()";
 XWiki.blacklistedSpaces = [ #foreach($space in $blacklistedSpaces)#if($velocityCount > 1),#end"$space"#end ];
 XWiki.hasEdit = $hasEdit;
 XWiki.hasProgramming = $hasProgramming;
+XWiki.hasBackupPackImportRights =#if ($xwiki.package) $xwiki.package.hasBackupPackImportRights()#else false#end;
 window.docviewurl = "${doc.getURL('view')}";
 window.docediturl = "${doc.getURL('edit')}";
 window.docsaveurl = "${doc.getURL('save')}";
 window.docgeturl = "${doc.getURL('get')}";
 // ]]>
 </script>
-#if(($context.action=="inline")||($context.action=="edit") || ($context.action=="admin"))
+#if(($xcontext.action=="inline")||($xcontext.action=="edit") || ($xcontext.action=="admin"))
+$xwiki.get('jsfx').use('uicomponents/widgets/validation/livevalidation_prototype.js')
+$xwiki.get('ssfx').use('uicomponents/widgets/validation/livevalidation.css')
 <script type="text/javascript">
 // <![CDATA[
  var cancelEditNextOnunload;
@@ -152,7 +169,7 @@ window.docgeturl = "${doc.getURL('get')}";
 
  function lockEdit(){
     if (lockEditFlag==false) {
-#if($context.action=="inline")
+#if($xcontext.action=="inline")
       var surl = "$doc.getExternalURL("lock")?action=inline&ajax=1&${docvariant.replaceAll("&amp;", "&")}";
 #else
       var surl = "$doc.getExternalURL("lock")?ajax=1&${docvariant.replaceAll("&amp;", "&")}";
@@ -176,6 +193,7 @@ window.docgeturl = "${doc.getURL('get')}";
  }
     Event.observe(window, "unload", cancelEdit);
     Event.observe(window, "pagehide", cancelEdit);
+    Event.observe(document, "dom:loaded", prepareCancelEdit);
 // ]]>
 </script>
 #end
@@ -190,4 +208,4 @@ window.docgeturl = "${doc.getURL('get')}";
 ## Compatibility "aspect" file for deprecated code.
 ## Placed at the very end of the stream so that skin file extensions code can be deprecated easily as well.
 ##
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/compatibility.js", true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/compatibility.js", false)" defer="defer"></script>
