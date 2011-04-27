@@ -555,10 +555,8 @@ Organize.start = function(resourceInfo){
 		Data.resource = resourceInfo.assetPage;
 
 		if('undefined' == typeof resourceInfo.creator
-		   || ((resourceInfo.creator != Curriki.global.username
-		        && !Curriki.global.isAdmin)
-		       && ('undefined' == typeof resourceInfo.title
-		           || 'undefined' == typeof resourceInfo.creatorName))) {
+		   || ((resourceInfo.creator != Curriki.global.username && !Curriki.global.isAdmin)
+		       && ('undefined' == typeof resourceInfo.title || 'undefined' == typeof resourceInfo.creatorName))) {
 			// Fetch resource info if not provided
 			Curriki.assets.GetAssetInfo(Data.resource, function(cbInfo){
 				Organize.start(cbInfo);

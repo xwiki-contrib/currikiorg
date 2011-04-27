@@ -321,7 +321,9 @@ Search.display = function(){
 
 Search.start = function(){
 	Ext.onReady(function(){
-		Search.display();
+	  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+		  Search.display();
+		});
 	});
 };
 })();

@@ -270,6 +270,8 @@ module.init = function(){
 };
 
 Ext.onReady(function(){
-	module.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  module.init();
+	});
 });
 })();

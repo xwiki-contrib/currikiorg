@@ -377,6 +377,8 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-	data.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  data.init();
+	});
 });
 })();

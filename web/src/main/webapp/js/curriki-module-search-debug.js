@@ -292,7 +292,9 @@ module.init = function(){
 };
 
 Ext.onReady(function(){
-	module.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  module.init();
+	});
 });
 })();
 // vim: ts=4:sw=4
@@ -674,7 +676,9 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-	data.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  data.init();
+	});
 });
 })();
 // vim: ts=4:sw=4
@@ -1257,7 +1261,9 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-	form.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  form.init();
+	});
 });
 
 // TODO:  Register this tab somehow with the main form
@@ -1459,7 +1465,9 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-	data.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  data.init();
+	});
 });
 })();
 // vim: ts=4:sw=4
@@ -1772,7 +1780,9 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-	form.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  form.init();
+	});
 });
 
 
@@ -1956,7 +1966,9 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-	data.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  data.init();
+	});
 });
 })();
 // vim: ts=4:sw=4
@@ -2265,7 +2277,9 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-	form.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  form.init();
+	});
 });
 
 
@@ -2351,7 +2365,9 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-	data.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  data.init();
+	});
 });
 })();
 // vim: ts=4:sw=4
@@ -2488,7 +2504,9 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-	form.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  form.init();
+	});
 });
 
 
@@ -2567,7 +2585,9 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-	data.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  data.init();
+	});
 });
 })();
 // vim: ts=4:sw=4
@@ -2688,7 +2708,9 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-	form.init();
+  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+	  form.init();
+	});
 });
 
 
@@ -3018,7 +3040,9 @@ Search.display = function(){
 
 Search.start = function(){
 	Ext.onReady(function(){
-		Search.display();
+	  Curriki.data.EventManager.on('Curriki.data:ready', function(){
+		  Search.display();
+		});
 	});
 };
 })();

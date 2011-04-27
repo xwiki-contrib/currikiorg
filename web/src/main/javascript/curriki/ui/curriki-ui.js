@@ -2,7 +2,6 @@
 /*global Ext */
 /*global Curriki */
 /*global _ */
-
 Ext.ns('Curriki.ui');
 Curriki.ui.InfoImg = '/xwiki/skins/curriki8/icons/exclamation.png';
 

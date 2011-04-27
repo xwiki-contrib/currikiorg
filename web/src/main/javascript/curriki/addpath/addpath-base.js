@@ -1461,7 +1461,7 @@ Curriki.module.addpath.init = function(){
 									}
 								}]
 
-		// Licence Deed
+		// License Deed
 							},{
 								 border:false
 								,items:[{
@@ -1503,16 +1503,16 @@ Curriki.module.addpath.init = function(){
 									,hideLabel:true
 									,width:'75%'
 									,mode:'local'
-									,store:Curriki.data.licence.store
-									,displayField:'licence'
+									,store:Curriki.data.license.store
+									,displayField:'license'
 									,valueField:'id'
 									,typeAhead:true
 									,triggerAction:'all'
 									,emptyText:_('sri.license_type_empty_msg')
 									,selectOnFocus:true
 									,forceSelection:true
-									,value:Curriki.data.licence.initial
-										?Curriki.data.licence.initial
+									,value:Curriki.data.license.initial
+										?Curriki.data.license.initial
 										:undefined
 									,listeners:{
 										render:function(comp){

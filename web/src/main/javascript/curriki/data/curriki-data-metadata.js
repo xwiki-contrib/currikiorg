@@ -19,9 +19,9 @@ Ext.ns('Curriki.data.category');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/category  OR  Get filled in JS created by xwiki
 Curriki.data.category.list = ["text","image","audio","video","interactive","archive","document","external","collection","unknown"];
 
-Ext.ns('Curriki.data.licence');
+Ext.ns('Curriki.data.license');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/licenseType  OR  Get filled in JS created by xwiki
-Curriki.data.licence.list = [ "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike" ];
+Curriki.data.license.list = [ "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike" ];
 
 Ext.ns('Curriki.data.fw_item');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/fw_items  OR  Get filled in JS created by xwiki

@@ -1995,24 +1995,88 @@ console.log('Collections: ', this.collectionChildren);
 /*global Ext */
 /*global Curriki */
 /*global _ */
+Ext.onReady(function(){
 
-Curriki.data.ict.data = [ ];
-Curriki.data.ict.list.each(function(ict){
-	var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
-	if (ict === 'other') {
-		sort = 'zzz';
-	}
-	Curriki.data.ict.data.push([
-		 ict
-		,_('CurrikiCode.AssetClass_instructional_component_'+ict)
-		,sort
-	]);
+Curriki.DataObservable = function() {
+  this.addEvents({'Curriki.data:ready': true,
+                  'Curriki.data.ict:ready': true,
+                  'Curriki.data.fw_item:ready': true,
+                  'Curriki.data.el:ready': true,
+                  'Curriki.data.rights:ready': true,
+                  'Curriki.data.language:ready': true,
+                  'Curriki.data.category:ready': true,
+                  'Curriki.data.license:ready': true
+                  });
+}
+Ext.extend(Curriki.DataObservable, Ext.util.Observable);
+Curriki.data.EventManager = new Curriki.DataObservable();
+
+Ext.util.Observable.capture(Curriki.data.EventManager, function(event){
+  if(event == 'Curriki.data.ict:ready') {
+    Curriki.data.ict.initialized = true;
+  } else if (event == 'Curriki.data.fw_item:ready') {
+    Curriki.data.fw_item.initialized = true;
+  } else if (event == 'Curriki.data.el:ready') {
+    Curriki.data.el.initialized = true;
+  } else if (event == 'Curriki.data.rights:ready') {
+    Curriki.data.rights.initialized = true;
+  } else if (event == 'Curriki.data.language:ready') {
+    Curriki.data.language.initialized = true;
+  } else if (event == 'Curriki.data.category:ready') {
+    Curriki.data.category.initialized = true;
+  } else if (event == 'Curriki.data.license:ready') {
+    Curriki.data.license.initialized = true;
+  } 
+  if (Curriki.data.ict.initialized && 
+      Curriki.data.fw_item.initialized &&
+      Curriki.data.el.initialized &&
+      Curriki.data.rights.initialized &&
+      Curriki.data.language.initialized &&
+      Curriki.data.category.initialized &&
+      Curriki.data.license.initialized) {
+    Ext.util.Observable.releaseCapture(Curriki.data.EventManager);
+    Curriki.data.EventManager.fireEvent('Curriki.data:ready');    
+  }
 });
-Curriki.data.ict.store = new Ext.data.SimpleStore({
-	fields: ['id', 'ict', 'sortValue']
-	,sortInfo: {field:'sortValue', direction:'ASC'}
-	,data: Curriki.data.ict.data
-	,id: 0
+
+Ext.ns('Curriki.data.ict');
+Curriki.data.EventManager.addListener('Curriki.data.ict:ready', function() {
+  Curriki.data.ict.data = [];
+  Curriki.data.ict.list.each(function(ict) {
+    var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
+    if (ict === 'other') {
+      sort = 'zzz';
+    }    
+    Curriki.data.ict.data.push([
+      ict
+      ,_('CurrikiCode.AssetClass_instructional_component_'+ict)
+      ,sort
+    ]);
+  });
+  Curriki.data.ict.store = new Ext.data.SimpleStore({
+    fields: ['id', 'ict', 'sortValue']
+    ,sortInfo: {field:'sortValue', direction:'ASC'}
+    ,data: Curriki.data.ict.data
+    ,id: 0
+  });
+});
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/instructional_component",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {    
+      Curriki.data.ict.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);      
+    }
+    Curriki.data.EventManager.fireEvent('Curriki.data.ict:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
 });
 
 Curriki.data.ict.getRolloverDisplay = function(el_ict){
@@ -2036,14 +2100,35 @@ Curriki.data.ict.getRolloverDisplay = function(el_ict){
 	return ict;
 };
 
+Ext.ns('Curriki.data.el');
 
+Curriki.data.EventManager.addListener('Curriki.data.el:ready', function() {
+  Curriki.data.el.data = [];
+  Curriki.data.el.list.each(function(el){
+    Curriki.data.el.data.push({
+      inputValue:el
+      ,boxLabel:_('CurrikiCode.AssetClass_educational_level_'+el)
+    });
+  });
+});
 
-Curriki.data.el.data = [ ];
-Curriki.data.el.list.each(function(el){
-	Curriki.data.el.data.push({
-		 inputValue:el
-		,boxLabel:_('CurrikiCode.AssetClass_educational_level_'+el)
-	});
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/educational_level",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {
+      Curriki.data.el.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);
+    }
+    Curriki.data.EventManager.fireEvent('Curriki.data.el:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
 });
 
 Curriki.data.el.getRolloverDisplay = function(el_array){
@@ -2065,54 +2150,159 @@ Curriki.data.el.getRolloverDisplay = function(el_array){
 	return lvl;
 };
 
-
-Curriki.data.rights.initial = Curriki.data.rights.list[0];
-Curriki.data.rights.data = [ ];
-Curriki.data.rights.list.each(function(right){
-	Curriki.data.rights.data.push({
-		 inputValue:right
-		,boxLabel:_('CurrikiCode.AssetClass_rights_'+right)
-		,checked:Curriki.data.rights.initial == right?true:false
-	});
+Ext.ns('Curriki.data.rights');
+Curriki.data.EventManager.addListener('Curriki.data.rights:ready', function() {
+  Curriki.data.rights.data = [];
+  Curriki.data.rights.initial = Curriki.data.rights.list[0];
+  Curriki.data.rights.list.each(function(right){
+    Curriki.data.rights.data.push({
+      inputValue:right
+      ,boxLabel:_('CurrikiCode.AssetClass_rights_'+right)
+      ,checked:Curriki.data.rights.initial == right?true:false
+    });      
+  });
 });
 
-
-Curriki.data.language.initial = Curriki.data.language.list[0];
-Curriki.data.language.data = [ ];
-Curriki.data.language.list.each(function(lang){
-	Curriki.data.language.data.push([
-		 lang
-		,_('CurrikiCode.AssetClass_language_'+lang)
-	]);
-});
-Curriki.data.language.store = new Ext.data.SimpleStore({
-	fields: ['id', 'language'],
-	data: Curriki.data.language.data
-});
-
-Curriki.data.category.data = [ ];
-Curriki.data.category.list.each(function(category){
-	Curriki.data.category.data.push({
-		 inputValue:category
-		,boxLabel:_('CurrikiCode.AssetClass_category_'+category)
-	});
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/rights",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {
+      Curriki.data.rights.list = Ext.util.JSON.decode(response.responseText).allowedValues;            
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);
+    }
+    Curriki.data.EventManager.fireEvent('Curriki.data.rights:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
 });
 
-Curriki.data.licence.initial = Curriki.data.licence.list[0];
-Curriki.data.licence.data = [ ];
-Curriki.data.licence.list.each(function(lic){
-	Curriki.data.licence.data.push([
-		 lic
-		,_('CurrikiCode.AssetLicenseClass_licenseType_'+lic)
-	]);
+Ext.ns('Curriki.data.language');
+Curriki.data.EventManager.addListener('Curriki.data.language:ready', function() {
+  Curriki.data.language.data = [];
+  Curriki.data.language.initial = Curriki.data.language.list[0];
+  Curriki.data.language.list.each(function(lang){
+    Curriki.data.language.data.push([
+      lang
+      ,_('CurrikiCode.AssetClass_language_'+lang)
+    ]);
+  });
+  Curriki.data.language.store = new Ext.data.SimpleStore({
+    fields: ['id', 'language'],
+    data: Curriki.data.language.data
+  });  
 });
-Curriki.data.licence.store = new Ext.data.SimpleStore({
-	fields: ['id', 'licence'],
-	data: Curriki.data.licence.data
+
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/language",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {
+      Curriki.data.language.list = Ext.util.JSON.decode(response.responseText).allowedValues;            
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);
+    }    
+    Curriki.data.EventManager.fireEvent('Curriki.data.language:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
+});
+
+Ext.ns('Curriki.data.category');
+Curriki.data.EventManager.addListener('Curriki.data.category:ready', function() {
+  Curriki.data.category.data = [];
+  Curriki.data.category.list.each(function(category){
+    Curriki.data.category.data.push({
+      inputValue:category
+      ,boxLabel:_('CurrikiCode.AssetClass_category_'+category)
+    });
+  });
+});
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/category",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {
+      Curriki.data.category.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);
+    }
+    Curriki.data.EventManager.fireEvent('Curriki.data.category:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
+});
+
+Ext.ns('Curriki.data.license');
+Curriki.data.EventManager.addListener('Curriki.data.license:ready', function() {
+  Curriki.data.license.data = [];
+  Curriki.data.license.initial = Curriki.data.license.list[0];    
+    Curriki.data.license.list.each(function(lic){
+      Curriki.data.license.data.push([
+        lic
+        ,_('CurrikiCode.AssetLicenseClass_licenseType_'+lic)
+      ]);
+    });
+    Curriki.data.license.store = new Ext.data.SimpleStore({
+      fields: ['id', 'license'],
+      data: Curriki.data.license.data
+    });
+});
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/licenseType",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {
+      Curriki.data.license.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);
+    }   
+    Curriki.data.EventManager.fireEvent('Curriki.data.license:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
 });
 
 
 Ext.ns('Curriki.data.fw_item');
+Curriki.data.EventManager.addListener('Curriki.data.fw_item:ready', function() {  
+  Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
+});
+Ext.Ajax.request({
+  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/fw_items",
+  method: 'GET',
+  headers: {
+    'Accept':'application/json'
+  },
+  success:function(response,options) {
+    try {
+      Curriki.data.fw_item.fwMap = Ext.util.JSON.decode(response.responseText).allowedValueMap;      
+    } catch(e) {
+      console.error('Invalid metadata information', response, options);
+    }    
+    Curriki.data.EventManager.fireEvent('Curriki.data.fw_item:ready');
+  },
+  failure:function(response,options) {
+    console.error('Cannot get metadata information', response, options);
+  }
+});
 // For fwTree
 Curriki.data.fw_item.fwCheckListener = function(node, checked){
 	var validator = Ext.getCmp('fw_items-validation');
@@ -2159,7 +2349,6 @@ Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 
 	return nodeInfo;
 };
-Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
 
 Curriki.data.fw_item.getRolloverDisplay = function(fw_array){
 	var fws = fw_array||[];
@@ -2240,7 +2429,8 @@ Curriki.ui.component.asset.getFwTree = function(){
 		})
 	};
 };
-// vim: ts=4:sw=4
+
+});// vim: ts=4:sw=4
 /*global Curriki */
 /*global _ */
 
@@ -2821,7 +3011,6 @@ Curriki.assets = {
 /*global Ext */
 /*global Curriki */
 /*global _ */
-
 Ext.ns('Curriki.ui');
 Curriki.ui.InfoImg = '/xwiki/skins/curriki8/icons/exclamation.png';
 
