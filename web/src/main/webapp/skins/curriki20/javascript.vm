@@ -2,11 +2,11 @@
   * Setup the external Javascript files loaded for the curriki pages
   * @author Curriki dev team
   *#
-#if($globalDebug)##{
+#if($globalDebug)
 	#set($debugging = "-debug")
-#else##}{
+#else
 	#set($debugging = "")
-#end##}
+#end
 #set($debugging = "-debug")
 <script type="text/javascript" src="$xwiki.getSkinFile("js/prototype/prototype.js")"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("js/scriptaculous/effects.js")"></script>
@@ -17,15 +17,15 @@ document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' ty
 document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
 //]]>
 </script>
-#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
-  #if("$!request.lang" != "")##{
+#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")
+  #if("$!request.lang" != "")
     #set($lang = $request.lang)
-  #else##}{
+  #else
     #set($lang = $xwiki.getLanguagePreference())
-  #end##}
-  #if("$!lang" == "")##{
+  #end
+  #if("$!lang" == "")
     #set($lang = "en")
-  #end##}
+  #end
 ##
 ## The xwiki translation files are converted for use with javascript
 ## and loaded via the /js/0/lang_${lang}.js URL using an apache rewrite rule
@@ -35,7 +35,6 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="/xwiki/js/i18n.js"></script>
 ## and uncomment the next one out instead
 ##<script src="/js/1/lang_${lang}.js"></script>
-##<script src="/xwiki/js/curriki-main-data${debugging}.js"></script>
 <script src="/xwiki/js/curriki-main${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-addpath${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-organize${debugging}.js"></script>
@@ -45,30 +44,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="/xwiki/js/curriki-module-partner${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-asterixReview${debugging}.js"></script>
 <script src="/xwiki/js/curriki-module-flag${debugging}.js"></script>
-#end ##}
-
-#if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest") ##{
-#if($!headerfile == "http") ## {
-##<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-#end ## }
-
-#if($!headerfile == "help") ## {
-##<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-##<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-#end ## }
-
-#if($headerfile == "html") ##{
-##<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-##<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-##<script type="text/javascript" src="$xwiki.getSkinFile("scripts/shortcuts.js", true)"></script>
-##<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
-
-#if($context.action=="admin") ##{
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/lightbox/lightbox.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/usersandgroups/usersandgroups.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.js")"></script>
-#end ##}
-#end ## }
+#end
 
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -78,7 +54,6 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 /* ]]> */
 </script>
 
-#end ##}
 ##
 ## CSS files related to JS libraries.
 ##
@@ -89,16 +64,6 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 <![endif]-->
 ##
 ## JS Libraries.
-##
-$xwiki.jsfx.use('js/xwiki/widgets/modalPopup.js', true)
-$xwiki.ssfx.use('js/xwiki/widgets/modalPopup.css', true)
-$xwiki.jsfx.use('js/xwiki/widgets/jumpToPage.js', true)
-$xwiki.ssfx.use('js/xwiki/widgets/jumpToPage.css', true)
-$xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js', true)
-$xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
-$xwiki.jsfx.use('uicomponents/widgets/confirmedAjaxRequest.js', true)
-$xwiki.jsfx.use('uicomponents/widgets/notification.js', true)
-$xwiki.ssfx.use('uicomponents/widgets/notification.css', true)## JS Libraries.
 ##
 $xwiki.jsfx.use('js/scriptaculous/effects.js', true)
 $xwiki.jsfx.use('js/xwiki/widgets/modalPopup.js', true)
@@ -113,7 +78,6 @@ $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/list/xlist.js')
 $xwiki.jsfx.use('js/xwiki/suggest/ajaxSuggest.js')
 <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/xwiki.js", true)"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/suggest/ajaxSuggest.js")"></script>
 <script type="text/javascript">
 // <![CDATA[
 XWiki.webapppath = "${xwiki.webAppPath}";
