@@ -12,12 +12,11 @@ $response.setDateHeader("Expires",$expires.getTime())
 <script type="text/javascript">
 /* <![CDATA[ */
 Ext.ns('Curriki.userinfo');
-#set($groups=$xwiki.getPlugin("curriki").fetchUserGroups().keySet())
+#set($groups=$xwiki.csm.getSpaceNames($context.user,$xwiki.null))
 Curriki.userinfo = {
 	isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
-    userGroups: "#foreach($g in $groups)$g,#end",
+    userGroups:"#foreach($g in $groups)$g,#end",
     userName:   "$context.user"
-
 };
 /* ]]> */
 </script>
