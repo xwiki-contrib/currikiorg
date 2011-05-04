@@ -2789,7 +2789,7 @@ Ext.onReady(function(){
 })();
 // vim: ts=4:sw=4
 /*global Ext */
-/*global Curriki */
+/*global Curriki */ 
 /*global _ */
 
 (function(){
@@ -2816,9 +2816,11 @@ Search.init = function(){
 			}
 
             var t= $('search-termPanel-'+searchTab+'-terms').getValue();
-            console.log("Setting window title.",t);
-            document.title = _("search.windowTitle." + searchTab, [t]);
-            $('curriki-searchbox').value = t;
+            if(t==_('search.text.entry.label')) t= "";
+            document.title = _("search.window.title." + searchTab, [t]);
+            var box = $('curriki-searchbox');
+            if(box.style) box.style.color='lightgrey';
+            box.value = t;
 
 			var pagerValues = {};
 

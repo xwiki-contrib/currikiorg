@@ -27,9 +27,11 @@ Search.init = function(){
 			}
 
             var t= $('search-termPanel-'+searchTab+'-terms').getValue();
-            console.log("Setting window title.",t);
+            if(t==_('search.text.entry.label')) t= "";
             document.title = _("search.window.title." + searchTab, [t]);
-            $('curriki-searchbox').value = t;
+            var box = $('curriki-searchbox');
+            if(box.style) box.style.color='lightgrey';
+            box.value = t;
 
 			var pagerValues = {};
 
