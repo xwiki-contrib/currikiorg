@@ -881,11 +881,11 @@ form.init = function(){
 //			,form.helpPanel
 			,{
 				xtype:'fieldset'
-				,title:_('search.advanced.search.button')
+				,title:''// _('search.advanced.search.button')
 				,id:'search-advanced-'+modName
 				,autoHeight:true
-				,collapsible:true
-				,collapsed:true
+				,collapsible:false
+				,collapsed:false
 				,animCollapse:false
 				,border:true
 				,stateful:true
@@ -2815,6 +2815,11 @@ Search.init = function(){
 				filterValues['all'] = Ext.getCmp('search-termPanel').getForm().getValues(false);
 			}
 
+            var t= $('search-termPanel-'+searchTab+'-terms').getValue();
+            console.log("Setting window title.",t);
+            document.title = _("search.windowTitle." + searchTab, [t]);
+            $('curriki-searchbox').value = t;
+
 			var pagerValues = {};
 
 			var panelSettings = {};
@@ -2982,7 +2987,6 @@ Curriki.numSearches = 0;
 					History.updateFromHistory(token);
 				}
 			} else {
-				// TODO:
 				// This is the initial default state.
 				// Necessary if you navigate starting from the
 				// page without any existing history token params

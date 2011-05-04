@@ -130,11 +130,11 @@ form.init = function(){
 //			,form.helpPanel
 			,{
 				xtype:'fieldset'
-				,title:_('search.advanced.search.button')
+				,title:''// _('search.advanced.search.button')
 				,id:'search-advanced-'+modName
 				,autoHeight:true
-				,collapsible:true
-				,collapsed:true
+				,collapsible:false
+				,collapsed:false
 				,animCollapse:false
 				,border:true
 				,stateful:true
