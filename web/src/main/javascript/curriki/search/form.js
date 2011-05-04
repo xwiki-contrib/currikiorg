@@ -1,6 +1,6 @@
 // vim: ts=4:sw=4
 /*global Ext */
-/*global Curriki */
+/*global Curriki */ 
 /*global _ */
 
 (function(){
