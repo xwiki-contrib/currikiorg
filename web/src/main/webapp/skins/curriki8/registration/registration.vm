@@ -484,9 +484,9 @@ else initRTEs();
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
-    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
+    var memberType = $('XWiki.XWikiUsers_0_member_type');
     if(typeof memberType!="undefined") {
-        memberType.onchange = toggleCorporateFieldsVisible;
+        memberType.observe("change",toggleCorporateFieldsVisible);
         toggleCorporateFieldsVisible();
     }
 });
