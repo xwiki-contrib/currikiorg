@@ -894,10 +894,12 @@ public class Asset extends CurrikiDocument {
                     if (parentAsset == null || parentAsset.length() == 0) {
                         // educationLevel
                         List edLevels = rObj.getListValue(Constants.GROUP_DEFAULT_GRADE_PROPERTY);
+                        if(edLevels!=null) edLevels = new ArrayList(edLevels);
                         assetObj.setDBStringListValue(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, edLevels);
 
                         // topic
                         List topics = rObj.getListValue(Constants.GROUP_DEFAULT_TOPIC_PROPERTY);
+                        if(topics!=null) topics = new ArrayList(topics);
                         assetObj.setDBStringListValue(Constants.ASSET_CLASS_FRAMEWORK_ITEMS, topics);
 
                         // language
