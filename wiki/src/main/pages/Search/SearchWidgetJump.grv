@@ -18,7 +18,7 @@
             def flat = "";
             for(key in v.keySet()){
                 if(v.get(key) != null){
-                    flat += key + "=" + this.encodeValue(v.get(key)) + "^";
+                    flat += key + "=" + this.encodeValue(v.get(key)).replaceAll("\\+","%20") + "^";
                 }
             }
             enc = "o:" + flat.substring(0, flat.length()-1);
@@ -92,7 +92,10 @@ if(request.subject==null && request.mediatype==null && request.level==null && re
     url = url + "/xwiki/bin/view/Search/#" + encodeValue(query);
 
 
-    //println("Please go <a href='" + url + "'>here</a>.")
-    response.sendRedirect(url); // permanent? temnporary?
+    println("{pre}")
+    println(query);
+    println("{pre}")
+    println("Please go <a href='" + url + "'>here</a>.")
+    //response.sendRedirect(url); // permanent? temnporary?
 }
 // %>

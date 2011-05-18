@@ -1,0 +1,241 @@
+#* get search params and do search *#
+{pre}
+#template("analytics.vm")
+{/pre}
+#macro(pageTitle $title)
+	<script language="javascript" type="text/javascript">
+	Element.insert("page_titles", {bottom : "$title<br/>"});
+	</script>
+#end
+#macro(sampleLink $title $link $desc)
+	<script language="javascript" type="text/javascript">
+var trStr = '<tr><td width="20"></td><td colspan="2" align="left" height="22" style="font-size:16px;"><img src="$imgdoc.getAttachmentURL('tl.gif')">  ';
+trStr += '<a href="$link" class="a_blue">$title</a></td></tr>';
+trStr += '<tr><td width="20"></td><td width="10"></td><td align="left">$desc</td></tr>';
+	Element.insert("sample_links", {bottom : trStr});
+	</script>
+#end
+#if("$!logpic" == "")
+#set($logpic = '/xwiki/skins/curriki8/logo.gif')
+#end
+#set($box_title = $msg.get("AdWordsJump.LandingPageLogTemplate.box.title"))
+#set($box_title_desc= $msg.get("AdWordsJump.LandingPageLogTemplate.box.title.desc"))
+#set($box_search_for= $msg.get("AdWordsJump.LandingPageLogTemplate.box.search.for"))
+#set($box_email_addr= $msg.get("AdWordsJump.LandingPageLogTemplate.box.email.addr"))
+#set($box_inform_txt= $msg.get("AdWordsJump.LandingPageLogTemplate.box.inform.txt"))
+#set($box_notices= $msg.get("AdWordsJump.LandingPageLogTemplate.box.notices"))
+##================================ show the input page
+#set($imgdoc = $xwiki.getDocument("AdWordsJump.LandingPageTemplate"))
+{pre}
+<style type="text/css">
+body {margin-top:0;}
+td {font-family:sans-serif;}
+.font_12 {font-size:12px;}
+.highlight {border: 2px solid #FF0000;}
+.a_blue {text-decoration:none;color:#5b8395}
+</style>
+## show loading message
+#if("$!request.lang" != "")
+#set($lang = $request.lang)
+#else
+#set($lang = $xwiki.getLanguagePreference())
+#end
+#if("$!lang" == "")
+#set($lang = "en")
+#end
+<script type="text/javascript">
+//<![CDATA[
+var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js' type='text/javascript'%3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects' type='text/javascript'%3E%3C/script%3E"));
+
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + ejLoc + "ext-all.js' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+<script src="/xwiki/gen/js/${gVersion}/lang_${lang}.js"></script>
+<script src="/xwiki/js/${gVersion}/i18n.js"></script>
+<script src="/xwiki/js/${gVersion}/curriki-main.js"></script>
+<script type="text/javascript">
+function validate_form(){
+	$$('.font_12.highlight').invoke('removeClassName', 'highlight');
+	var noerror = true;
+	var txt = document.search_form.txt;
+	if(txt.value == ""){
+		alert("$msg.get("AdWordsJump.WorksheetsLandingPage.validate.txt.alert")");
+		txt.focus();
+		hightLightEl("div_searchfor");
+		noerror = false;
+	}
+	var inform = document.search_form.inform;
+	if(inform.value == "1"){
+		var email = document.search_form.email;
+		var emailStr = email.value;
+		var atIndex = emailStr.indexOf("@");
+		if ((atIndex < 1) || (emailStr.lastIndexOf(".") <= (atIndex+1)) || (emailStr.length <= (emailStr.lastIndexOf(".") + 1)) || (emailStr.lastIndexOf("@") != atIndex) || (emailStr.replace(/^[a-zA-Z0-9_+=\.-]+@([a-zA-Z0-9-]+[\.])+([a-zA-Z]){2,4}$/, "") != "")) {
+			alert("$msg.get("AdWordsJump.WorksheetsLandingPage.validate.email.alert")");
+			email.focus();
+			hightLightEl('div_email');
+			noerror = false;
+		}
+	}
+    document.search_form.txt_escaped.value = escape(escape(escape(document.search_form.txt.value)));
+    document.search_form.subject_escaped.value = escape(escape("$subject"));
+    document.search_form.subjectparent_escaped.value = escape(escape("$subjectparent"));
+	return noerror;
+}
+function hightLightEl(elName){
+  $(elName).addClassName('highlight');
+}
+function switch_informed(){
+	var inform = document.search_form.inform;
+	var email = document.search_form.email;
+	if(inform.value == "0"){
+		inform.value = "1";
+		document.getElementById("inform_img").src="$imgdoc.getAttachmentURL('checked.gif')";
+		email.style.backgroundColor="#FFFFFF";
+		email.disabled = false;
+	}else{
+		inform.value = "0";
+		document.getElementById("inform_img").src="$imgdoc.getAttachmentURL('unchecked.gif')";
+		email.style.backgroundColor="#DFDFDF";
+		email.disabled = true;
+		$("div_email").removeClassName('highlight');
+	}
+}
+function search_form_submit(){
+    Curriki.showLoading();
+    var url= "/xwiki/bin/view/AdWordsJump/LandingPageLogWriter";
+    var jumpname = document.search_form.jumpname.value;
+    var txt = document.search_form.txt.value;
+    var inform = document.search_form.inform.value;
+    var email = document.search_form.email.value;
+    var txt_escaped = document.search_form.txt_escaped.value;
+    var subjectparent_escaped = document.search_form.subjectparent_escaped.value;
+    var subject_escaped = document.search_form.subject_escaped.value;
+    var pars = 'xpage=plain&jumpname='+jumpname+'&txt='+txt+'&inform='+inform+'&email='+email+
+            '&txt_escaped='+txt_escaped+'&subjectparent_escaped='+subjectparent_escaped+'&subject_escaped='+subject_escaped;
+    var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: submit_to_nextpage });
+}
+function submit_to_nextpage(originalRequest){
+    //Curriki.hideLoading();
+    var text = originalRequest.responseText;
+    var res = eval('[' + text + '][0]');
+    document.redirect_form.action=res.rurl;
+    document.redirect_form.submit();
+}
+</script>
+{/pre}
+<table border="0" cellspacing="0" width="866" height="713" align="center" style="background:url($imgdoc.getAttachmentURL('bg.gif')) #5b70b1 repeat-x;font-family:Arial;">
+	<tr><td align="center">
+		<table border="0" cellspacing="0" width="790" bgcolor="#ffffff">
+			<!-- logo begin -->
+			<tr><td align="left" height="112">
+				<a href="$!loglink"><img src="$!logpic" border="0"></a>
+			</td></tr>
+			<!-- logo end -->
+			<!-- title begin -->
+			<tr><td bgcolor="#67ac41" height="190">
+				<table border="0" cellspacing="0" cellpadding="0"  width="100%" height="100%" style="color:white;">
+					<tr><td align="center" id="page_titles"></td></tr>
+				</table>
+			</td></tr>
+			<!-- title end -->
+			<!-- content begin -->
+			<tr><td>
+				<table border="0" cellspacing="0" width="100%" height="100%" align="left" style="font-size:14px">
+					<tr><td width="55%" align="right" valign="top">
+						<table border="0" cellspacing="0" width="96%" height="100%" align="right" style="font-size:14px">
+							<tr><td>
+							<table border="0" cellspacing="0" cellpadding="0" width="100%" align="left">
+								<tr><td align="left">$!left_title_1</td></tr>
+								<tr><td align="left">$!left_title_1_desc</td></tr>
+							</table>
+							</td></tr>
+							<tr><td>
+							<table border="0" cellspacing="0" cellpadding="0" width="100%" align="left">
+								<tr><td width="10"></td><td align="left" height="32" style="color:#5b8395; font-size:25px;">$!left_title_2</td></tr>
+							</table>
+							</td></tr>
+							<tr><td>
+							<table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" id="sample_links">
+							</table><br/>
+							</td></tr>
+						</table>
+					</td><td align="center">
+                        <form name='redirect_form' method='post' style='display:none'></form>
+						<form name="search_form" method="post">
+						<input type="hidden" name="subject_escaped" value="">
+						<input type="hidden" name="subjectparent_escaped" value="">
+						<input type="hidden" name="txt_escaped" value="">
+						<input type="hidden" name="jumpname" value="$doc.name">
+						<br>
+						<table border="0" cellspacing="0" cellpadding="0" width="277" style="font-size:12px">
+							<tr><td colspan="3" style="background:url($imgdoc.getAttachmentURL('boxtop.gif'))" height="16"></td></tr>
+							<tr><td width="2" bgcolor="#666699"></td>
+							<td>
+				<table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-size:11px">
+				<tr><td width="5px"></td><td>
+				<p style="font-weight:bold; color:#67ac41; font-size:28px;" align="center">$!box_title</p>
+				<p style="font-size:12px;" align="left">  $!box_title_desc</p>
+				<div name="div_searchfor" id="div_searchfor" class="font_12" style="margin-left:10;  height:29px;" align="left">
+					<table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" style="font-size:12px">
+						<tr><td width="100">
+					$!box_search_for</td><td><input type="text" name="txt" size="15">
+					</td></tr></table>
+				</div>
+				<input type="hidden" name="inform" value="1">
+				<img src="$imgdoc.getAttachmentURL('checked.gif')" id="inform_img" onclick="switch_informed();">$!box_inform_txt
+				<div name="div_email" id="div_email" class="font_12" style="margin-left:10;  height:29px;" align="left">
+					<table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" style="font-size:12px">
+						<tr><td width="100">
+					$!box_email_addr</td><td><input type="text" name="email" size="15">
+					</td></tr></table>
+				</div>
+				</td></tr></table>
+							</td>
+							<td bgcolor="#666699" width="2"></td></tr>
+							<tr><td bgcolor="#666699"></td>
+#set($box_bg = $imgdoc.getAttachmentURL('boxbg.gif'))
+#set($bog_h = 55)
+#if("$!btn2_value" != "")
+    #set($box_bg = $imgdoc.getAttachmentURL('boxbg1.gif'))
+    #set($bog_h = 84)
+#end
+							<td style="background:url($!box_bg)" align="center" valign="middle" height="$bog_h">
+<table border="0" cellspacing="0" cellpadding="0" style="font-size:10px;cursor:pointer;" title="$msg.get("AdWordsJump.WorksheetsLandingPage.button.title")" onclick="if(validate_form()){search_form_submit();}">
+	<tr><td style="background:url($imgdoc.getAttachmentURL('btnl.gif'));width:8px;height:30px;"></td>
+	  <td style="background:url($imgdoc.getAttachmentURL('btnc.gif'));font-family:Arial;color:white;font-weight:bold;font-size:16px;">
+	  <div style="margin-left:10px;margin-right:10px;">$btn_value</div></td>
+	  <td style="background:url($imgdoc.getAttachmentURL('btnr.gif'));width:35px;"></td></tr>
+</table>
+#if("$!btn2_value" != "")
+<table border="0" cellspacing="0" cellpadding="0" style="font-size:10px;cursor:pointer;" onclick="window.location.href='$!btn2_link'">
+	<tr><td height="4" colspan="3"></td></tr>
+	<tr><td style="background:url($imgdoc.getAttachmentURL('btnl.gif'));width:8px;height:30px;"></td>
+	  <td style="background:url($imgdoc.getAttachmentURL('btnc.gif'));font-family:Arial;color:white;font-weight:bold;font-size:16px;">
+	  <div style="margin-left:1px;margin-right:1px;">$btn2_value</div></td>
+	  <td style="background:url($imgdoc.getAttachmentURL('btnr.gif'));width:35px;"></td></tr>
+</table>
+#end
+								<!--input type="image" src="$imgdoc.getAttachmentURL('boxbutton.gif')"  title="Click here to search Curriki"--></td>
+								<td bgcolor="#666699"></td></tr>
+							<tr><td colspan="3" style="background:url($imgdoc.getAttachmentURL('boxbottom.gif'));" height="13"></td></tr>
+							<tr><td colspan="3"></td></tr>
+						</table>
+						<table border="0" cellspacing="0" cellpadding="0" width="277" style="font-size:10px">
+							<tr><td colspan="3" align="left">$!box_notices</td></tr>
+						</table>
+						</form>
+
+					</td></tr>
+				</table>
+
+			</td></tr>
+			<tr><td height="10"></td></tr>
+			<!-- content end -->
+		</table>
+	</td></tr>
+	<tr><td bgcolor="#5b70b1" height="10"><p/></td></tr>
+</table>
