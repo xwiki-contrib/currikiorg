@@ -92,10 +92,10 @@ if(request.subject==null && request.mediatype==null && request.level==null && re
     url = url + "/xwiki/bin/view/Search/#" + encodeValue(query);
 
 
-    println("{pre}")
-    println(query);
-    println("{pre}")
-    println("Please go <a href='" + url + "'>here</a>.")
-    //response.sendRedirect(url); // permanent? temnporary?
+    //println("{pre}")
+    //println(query);
+    //println("{pre}")
+    //println("Please go <a href='" + url + "'>here</a>.")
+    response.sendRedirect(url); // permanent? temnporary?
 }
 // %>
