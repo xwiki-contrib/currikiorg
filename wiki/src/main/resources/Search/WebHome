@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1218122305000</creationDate>
-<date>1301992773000</date>
-<contentUpdateDate>1301992773000</contentUpdateDate>
-<version>61.1</version>
+<date>1304543013000</date>
+<contentUpdateDate>1304543013000</contentUpdateDate>
+<version>68.1</version>
 <title>Search</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>saving for saving</comment>
+<comment>group slow</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -62,19 +62,18 @@ $response.setHeader("Pragma","-")
 #set($expires =$util.getDate($expires))
 $response.setDateHeader("Expires",$expires.getTime())
 &lt;!--
-#error ("Click to try [Google powered site search&gt;Main.GoogleSearchResults] for faster results or try advanced search below.")
+## #error ("Click to try [Google powered site search&gt;Main.GoogleSearchResults] for faster results or try advanced search below.")
 --&gt;
 
 {pre}
 &lt;script type="text/javascript"&gt;
 /* &lt;![CDATA[ */
 Ext.ns('Curriki.userinfo');
-#set($groups=$xwiki.getPlugin("curriki").fetchUserGroups().keySet())
+#set($groups=$xwiki.csm.getSpaceNames($context.user,$xwiki.null))
 Curriki.userinfo = {
 	isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
-    userGroups: "#foreach($g in $groups)$g,#end",
+    userGroups:"#foreach($g in $groups)$g,#end",
     userName:   "$context.user"
-
 };
 /* ]]&gt; */
 &lt;/script&gt;

@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1220366621000</creationDate>
-<date>1255975305000</date>
-<contentUpdateDate>1266877071000</contentUpdateDate>
-<version>60.1</version>
+<date>1305717270000</date>
+<contentUpdateDate>1305717270000</contentUpdateDate>
+<version>62.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>x</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <attachment>
@@ -263,9 +263,9 @@ function validate_form(){
 			noerror = false;
 		}
 	}
-    document.search_form.txt_escaped.value = escape(escape(escape(escape(document.search_form.txt.value))));
-    document.search_form.subject_escaped.value = escape(escape(escape(escape("$subject"))));
-    document.search_form.subjectparent_escaped.value = escape(escape(escape(escape("$subjectparent"))));
+    document.search_form.txt_escaped.value = escape(escape(escape(document.search_form.txt.value)));
+    document.search_form.subject_escaped.value = escape(escape("$subject"));
+    document.search_form.subjectparent_escaped.value = escape(escape("$subjectparent"));
 	return noerror;
 }
 function hightLightEl(elName){
@@ -358,7 +358,7 @@ function submit_to_nextpage(originalRequest){
 							&lt;tr&gt;&lt;td colspan="3" style="background:url($imgdoc.getAttachmentURL('boxtop.gif'))" height="16"&gt;&lt;/td&gt;&lt;/tr&gt;
 							&lt;tr&gt;&lt;td width="2" bgcolor="#666699"&gt;&lt;/td&gt;
 							&lt;td&gt;
-				&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-size:11px"&gt;	
+				&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" style="font-size:11px"&gt;
 				&lt;tr&gt;&lt;td width="5px"&gt;&lt;/td&gt;&lt;td&gt;
 				&lt;p style="font-weight:bold; color:#67ac41; font-size:28px;" align="center"&gt;$!box_title&lt;/p&gt;
 				&lt;p style="font-size:12px;" align="left"&gt;  $!box_title_desc&lt;/p&gt;
@@ -368,7 +368,7 @@ function submit_to_nextpage(originalRequest){
 					$!box_search_for&lt;/td&gt;&lt;td&gt;&lt;input type="text" name="txt" size="15"&gt;
 					&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 				&lt;/div&gt;
-				&lt;input type="hidden" name="inform" value="1"&gt; 
+				&lt;input type="hidden" name="inform" value="1"&gt;
 				&lt;img src="$imgdoc.getAttachmentURL('checked.gif')" id="inform_img" onclick="switch_informed();"&gt;$!box_inform_txt
 				&lt;div name="div_email" id="div_email" class="font_12" style="margin-left:10;  height:29px;" align="left"&gt;
 					&lt;table border="0" cellspacing="0" cellpadding="0" width="100%" align="left" style="font-size:12px"&gt;
@@ -393,7 +393,7 @@ function submit_to_nextpage(originalRequest){
 	  &lt;div style="margin-left:10px;margin-right:10px;"&gt;$btn_value&lt;/div&gt;&lt;/td&gt;
 	  &lt;td style="background:url($imgdoc.getAttachmentURL('btnr.gif'));width:35px;"&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;
-#if("$!btn2_value" != "") 
+#if("$!btn2_value" != "")
 &lt;table border="0" cellspacing="0" cellpadding="0" style="font-size:10px;cursor:pointer;" onclick="window.location.href='$!btn2_link'"&gt;
 	&lt;tr&gt;&lt;td height="4" colspan="3"&gt;&lt;/td&gt;&lt;/tr&gt;
 	&lt;tr&gt;&lt;td style="background:url($imgdoc.getAttachmentURL('btnl.gif'));width:8px;height:30px;"&gt;&lt;/td&gt;
@@ -414,7 +414,7 @@ function submit_to_nextpage(originalRequest){
 
 					&lt;/td&gt;&lt;/tr&gt;
 				&lt;/table&gt;
-				
+
 			&lt;/td&gt;&lt;/tr&gt;
 			&lt;tr&gt;&lt;td height="10"&gt;&lt;/td&gt;&lt;/tr&gt;
 			&lt;!-- content end --&gt;
