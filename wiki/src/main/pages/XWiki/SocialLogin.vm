@@ -1,0 +1,47 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#set($tool=$xwiki.parseGroovyFromPage("XWiki.SocialLoginToolGroovy"))##
+$tool.init($xwiki,$context,$request,$response,$msg)##
+#set($view=$tool.action())##
+#macro(render $view)
+    #if($view=="creationForm")
+    <form class="xform" action=${doc.getURL('view')} method="post" id="createUsernameForm">
+      <div class="centered">
+        <fieldset class="xwikimessage">
+          <legend><span>${msg.get('xwiki.socialLogin.youMustBeNewHere')}</span></legend>
+          <input type="hidden" name="xaction" value="createProfile" />
+          <p class="message">
+            ${msg.get('xwiki.socialLogin.createProfileMessage',[$provider])}
+          </p>
+          <dl>
+            <dt>${msg.get('xwiki.socialLogin.pickupUsername')}</dt>
+            <dd><input type="text" name="username" value="${defaultValue}" /></dd>
+          </dl>
+          <div class="buttons">
+            <span class="buttonwrapper">
+              <input class="button" type="submit" value="${msg.get('xwiki.socialLogin.createMyAccount')}" />
+            </span>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+    #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
+    #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())
+    #elseif($view=="createNewProfile")#set($view=$tool.createNewProfile())
+    #elseif($view=="loginSucceeded")#set($view=$tool.acceptLoginAndRedirect())
+    #elseif($view=="redirectInHtml")<html> <head><meta http-equiv="Refresh" content="0;url=$util.escapeURL($request.getAttribute('targetUrl'))">
+        </head><body><p>Please go <a href="$request.getAttribute('targetUrl')">here</a>.</p></body></html>
+    #elseif($view=="error")#error($tool.error)
+    #elseif($view=="nothing")##nothing
+    #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->
+    #end##
+#end##
+#render($view)##
+## the little extra in case
+#if($view)#render($view)#end##

@@ -1,0 +1,333 @@
+import org.brickred.socialauth.AuthProvider;
+import org.brickred.socialauth.AuthProviderFactory;
+import com.xpn.xwiki.api.XWiki;
+import com.xpn.xwiki.api.Context
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpServletRequest
+import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.web.XWikiMessageTool
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory;
+
+public class SocialLoginToolGroovy {
+    private static Properties properties = null;
+
+    private XWiki xwiki = null;
+    private Context context = null;
+    private HttpServletRequest request = null;
+    private HttpServletResponse response = null;
+    private XWikiMessageTool msg = null;
+    private String error = null;
+    private String providerId = null;
+    private String guessedUsername = null;
+
+    Log LOG = LogFactory.getLog("GroovyPages.SocialLogin");
+
+    public String init(XWiki xwiki, Context context, HttpServletRequest request, HttpServletResponse response, XWikiMessageTool msg) {
+        this.xwiki= xwiki;
+        this.context = context;
+        this.request = request;
+        this.response = response;
+        this.msg = msg;
+        if(properties==null) {
+            properties = new Properties();
+            properties.load(
+                    request.getSession(true).getServletContext().
+                            getResourceAsStream("/WEB-INF/oauth_consumer.properties"));
+        }
+        LOG.info("Initted");
+        return "";
+    }
+
+    public String authenticateUser(Document userDoc) {
+        try {
+            System.out.println("Authenticating user " + userDoc);
+            if(userDoc==null) return null;
+            String password = userDoc.getObject('XWiki.SocialLoginClass').getProperty('password_cache').value
+            xwiki.checkAuth(userDoc.fullName, password, "false");
+
+            //def xwikiAuthenticator = xwiki.getXWiki().getAuthService(); //.@authenticators.get('xwiki')
+            //def psm = xwikiAuthenticator.@persistentLoginManager;
+            // psm.rememberLogin(request, response, userDoc.fullName, password)
+            //xwikiAuthenticator.authenticate(userDoc.fullName, password, context.context);
+            //xwiki.getXWiki().getAuthService().authenticate(userDoc.fullName, password, context.context)
+        } catch (Exception ex) {
+            System.err.println("Trouble at authenticating: " + ex);
+            ex.printStackTrace();
+            error = msg.get('xwiki.socialLogin.genericError', [ex.message])
+            return "error";
+        };
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    /**
+     * Initiate the OAuth dance with the requested provider
+     */
+    public String bounceToProvider() {
+        try {
+            LOG.info("Bouncing to Provider " + request.provider);
+            def provider = AuthProviderFactory.getInstance(request.provider, properties);
+            //println provider; // ???
+            String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
+                    request.getPathInfo()  + '?callback=1';
+            if("facebook".equals(request.provider)) targetUrl = URLEncoder.encode(targetUrl);
+            String url = provider.getLoginRedirectURL(targetUrl);
+
+            // Store in session
+            request.session.setAttribute("org.brickred.socialauth.AuthProvider", provider);
+            request.session.setAttribute("org.brickred.socialauth.AuthProvider.hint", request.provider);
+            response.sendRedirect(url);
+            return "nothing";
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            error = msg.get('xwiki.socialLogin.genericError', [ex.message])
+            return "error";
+        };
+    }
+
+    /**
+     * We've got a response from the provider, let's treat it
+     */
+    public String processAuthReturn() {
+
+        try {
+            // get the provider back from session
+            AuthProvider providerObj = request.session.getAttribute("org.brickred.socialauth.AuthProvider");
+            this.providerId = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
+            LOG.info("Welcoming from provider " + providerId);
+
+            // verify the authentication
+            System.err.println("Verifying " + providerObj + " for provider " + providerId);
+            def profile = providerObj.verifyResponse(request);
+
+            // Search for this profile id in database, find user
+            String query =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
+                    " userObj.className='XWiki.XWikiUsers' and doc.fullName=userObj.name " +
+                    " and socialLoginObj.className='XWiki.SocialLoginProfileClass' and " +
+                    " doc.fullName=socialLoginObj.name and " +
+                    " provider.id.id = socialLoginObj.id and profileId.id.id = socialLoginObj.id and " +
+                    " provider.name='provider' and profileId.name='validatedId' and provider.value='"+providerId+"' and profileId.value='"+profile.validatedId+"'";
+            System.out.println("Querying: " + query);
+            List userDocs = xwiki.searchDocuments(query,30,0);
+            //original: XWQL: from doc.object(XWiki.XWikiUsers) as user, doc.object(XWiki.SocialLoginProfileClass) as profile where profile.provider = '""" + provider + "' and profile.validatedId = '" + profile.validatedId + "'")
+
+
+            System.out.println("Found userDocs: " + userDocs);
+            for (result in userDocs) {
+                if(result==null) continue;
+                System.out.println("Doc: " + result + " of class " + result.getClass());
+                authenticateUser(xwiki.getDocument(result))
+            }
+
+            if(userDocs==null || userDocs.isEmpty()) {
+                // Not authenticated/redirected yet ? -> You must be new here
+                // You will have to pick-up a username and dad will create an account for you
+
+                // Store the social profile in the session
+                request.session.setAttribute("org.brickred.socialauth.Profile", profile);
+
+                // Try to guess what username the user will want to use
+                guessedUsername = profile.displayName
+                // TODO: add more attempts to obtain it
+
+                // Outputs the form to create the username
+                return "creationForm";
+            } else {
+                // final step, login worked, existing user
+                return "loginSucceeded";
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            error = msg.get('xwiki.socialLogin.genericError', [ex.message])
+            return "error";
+        };
+    }
+
+
+
+    /**
+     * Create a new user profile from the social profile result
+     */
+    public String createNewProfile() {
+        def profile = request.session.getAttribute("org.brickred.socialauth.Profile")
+        def provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
+        LOG.info("Creating new profile from provider " + provider);
+
+
+        String userName = request.username
+        String email = profile.email;
+        String password = null;
+        if (userName && userName != '' && !xwiki.exists("XWiki." + userName)) {
+            // Everything clear, let's proceed
+
+            // Generate a random password
+            boolean generatePassword = request.password=="" || request.password==null;
+            if(generatePassword) {
+                password = org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(8);
+            } else {
+                if (password==null || password.length()<3){
+                    return "error";
+                }
+            }
+            if (!isValidEmail(email))
+                return "error";
+
+            if (!isValidAccount(userName))
+                return "error";
+
+            def propMap = new HashMap();
+            propMap.put("active", "1")
+            propMap.put("email", profile.email)
+            propMap.put("first_name", profile.firstName)
+            propMap.put("last_name", profile.lastName)
+            propMap.put("password", password)
+            System.out.println("Obtained record: " + profile.properties)
+
+            //request.getParameterMap().put("xwikiname",userDocName);
+            //request.getParameterMap().put("XWiki.XWikiUsers_0_password",password);
+
+            def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${userName}", context.context), context.context);
+            userDoc.addObjectFromRequest("XWiki.XWikiUsers"); // TODO: use other explicit values ??
+            def userObj = userDoc.getObject("XWiki.XWikiUsers");
+            userObj.set("password", password);
+
+            userObj.set("active", "1");
+            userObj.set("email_undeliverable", "0");
+
+            userObj.set("show_contact","2");
+            userObj.set("email",email);
+            userObj.set("first_name",profile.firstName);
+            userObj.set("last_name", profile.lastName);
+            userObj.set('country', profile.country); // ?? map??
+            userObj.set('city', profile.location);
+            // other fields? language?
+
+            /* def validkey = xwiki.xWiki.generateValidationKey(16);
+            userObj.set("validkey", validkey);
+            userObj.set("validredirect", request.xredirect); */
+
+            //userdoc.setParent("XWiki.XWikiUsers");
+            userDoc.setContent('#include' + 'Form("XWiki.XWikiUserSheet")');
+            userDoc.getDoc().setCreator(userDoc.getFullName());
+            userDoc.getDoc().setAuthor(userDoc.getFullName());
+
+            def rightobj = userDoc.newObject("XWiki.XWikiRights");
+            rightobj.set("users", new String("${userName}"));
+            rightobj.set("allow", new String("1"));
+            rightobj.set("levels", new String("edit"));
+            rightobj.set("groups", new String(""));
+
+            def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
+            // TODO: remove these properties
+            socialProfile.set('provider', provider)
+            socialProfile.set('fullName', profile.fullName)
+            socialProfile.set('firstName', profile.firstName)
+            socialProfile.set('lastName', profile.lastName)
+            socialProfile.set('displayName', profile.displayName)
+            socialProfile.set('email', profile.email)
+            socialProfile.set('profileImageURL', profile.profileImageURL)
+            socialProfile.set('gender', profile.gender)
+            socialProfile.set('dob', profile.dob)
+            socialProfile.set('validatedId', profile.validatedId)
+            socialProfile.set('country', profile.country)
+            socialProfile.set('location', profile.location)
+
+            def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
+            socialPrefs.set('password_cache', password)
+            socialPrefs.set('preferred_provider', provider)
+
+            userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
+            return authenticateUser(userDoc)
+        }
+        else {
+            if (!userName || userName == '')
+                this.error= 'xwiki.socialLogin.youMustPickUsername';
+            else if (xwiki.exists('XWiki.' + userName))
+                this.error = 'xwiki.socialLogin.usernameAlreadyTaken';
+            if(this.error)
+                return "error";
+            else return null;
+        }
+    }
+
+    public String acceptLoginAndRedirect() {
+        // currently: just redirect to profile
+        String targetUrl = "/xwiki/bin/view/" + context.user.replaceAll("\\.",".");
+        if(!response.isCommitted())
+            response.sendRedirect(targetUrl);
+        else {
+            request.setAttribute("targetUrl", targetUrl);
+            return "redirectInHtml";
+        }
+        // todo: future: use xredirect that was laid before, make sure
+        return "nothing";
+    }
+
+
+    public String action() {
+        String a = this.actionHere();
+        LOG.info("Action: " + a);
+        System.out.println("Action: " + a);
+        return a;
+    }
+
+
+
+    public boolean isValidAccount(account) {
+        if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
+            if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
+                error = "account_already_exists";
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            error = "account_notvalid";
+            return false;
+        }
+    }
+
+    public boolean isValidEmail(String email) {
+        if("paul@hoplahup.net"==email) return true;
+        def atIndex = email.indexOf("@");
+
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+
+        // Check to see if the email address is already used
+        if (xwiki.searchDocuments(query).size() > 0) {
+            error = "email_already_exists";
+            return false;
+        }
+
+        // We should make this a bit better...
+        if ((atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
+            error  = "email_notvalid";
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public String actionHere() {
+        if(!request.callback && request.provider) {
+            return "bounceToProvider";
+        }
+        else if (request.callback){
+            return "processAuthReturn";
+        }
+        else if (request.xaction && request.xaction == 'createProfile') {
+            return "createNewProfile";
+        }
+        else {
+            return "nothingToDo";
+        }
+    }
+
+}

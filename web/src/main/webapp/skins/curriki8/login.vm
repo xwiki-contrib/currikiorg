@@ -1,48 +1,117 @@
-#**
-  *  Displays a login box
-  *  TODO: style to curriki styles
-  *#
-#if($context.user!="XWiki.XWikiGuest") ##{
-#if(!$request.srid) ##{
-#if($request.xredirect) ##{
-$response.sendRedirect($request.xredirect)
-#else ##}{
-$response.sendRedirect($xwiki.getURL("MyCurriki.Profile"))
-#end ##}
-#end  ##}
-#elseif($doc.fullName != "XWiki.XWikiLogin") ##}{
-#set($qs = "")
-#set($qs = $request.queryString)
-#if(!$request.getParameter("xredirect")) ##{
-#set($qs = "xredirect=$util.encodeURI($doc.getURL('view'))&${qs}")
-#end ##}
-$response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
-#else ##}{
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#if ($xcontext.user != 'XWiki.XWikiGuest')
+  #if ($request.xredirect)
+    $response.sendRedirect($request.xredirect)
+  #else
+    $response.sendRedirect($xwiki.getURL('Main.WebHome'))
+  #end
+#elseif($doc.fullName != 'XWiki.XWikiLogin')
+  #set($qs = "$!{request.queryString}")
+  #if(!$request.getParameter('xredirect'))
+    #set($qs = "xredirect=$escapetool.url($doc.getURL('view'))&${qs}")
+  #end
+  $response.sendRedirect($xwiki.getURL('XWiki.XWikiLogin', 'login', $qs))
+#else
 ###
 ### Login page
 ###
 ###
 #template("startpage.vm")
-#set($logredir = $!request.xredirect)
-##loginbox($logredir)
-#set($message = $msg.get($xwiki.parseMessage()))
-#if($message) ##{
 <div class="main layoutsubsection">
-## errors for the previous login
-#if(("$!request.j_username" == "$msg.get('header.login_username')") || (("$!request.j_username" == "")&&("$!request.j_password" == ""))) ##{
-#set($message = $msg.get('redirect.error.no_info'))
-#end ##}
-#error($message)
+<div id="mainContentArea">
+<form id="loginForm" action="$doc.getURL('loginsubmit')" method="post">
+<div class="hidden"><input type="hidden" name="xredirect" value="$!{escapetool.xml($request.xredirect)}"/>
+#if("$!request.srid" != '')
+  <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
+#end
 </div>
-#end ##}
-#set($redirectnote = $xwiki.getDocument("Main.RedirectNote"))
-#if($!redirectnote) ##{
-<div id="redirect-note">
-$redirectnote.getTranslatedDocument().getRenderedContent()
-</div>
-#end ##}
-<div id="whyjoin">
-$xwiki.getDocument("Main.WhyJoin").getTranslatedDocument().getRenderedContent()
-</div>
+#xwikimessageboxstart($msg.get('login') '')
+#set($message = $msg.get($xwiki.parseMessage()))
+#if($message)
+  <!-- previous login errors -->
+  #error($message)
+#end
+#set($hasSocialLogin = false)
+#if($xwiki.exists('XWiki.SocialLoginConfiguration'))
+  #set($socialLoginConfigurationDocument = $xwiki.getDocument('XWiki.SocialLoginConfiguration'))
+    <!-- socialLoginConfigurationDocument  = "$socialLoginConfigurationDocument" , xwiki is $xwiki -->
+  #set($socialLoginConfiguration = $socialLoginConfigurationDocument.getObject('XWiki.SocialLoginConfigurationClass'))
+  #set($providersAsString = $socialLoginConfiguration.getProperty('providers').value)
+  #set($providers = [])
+  #if("$!providersAsString" != '')
+    #set($providersA = $providersAsString.split('\n'))
+    #set($providers = $xwiki.getArrayList())
+    #foreach($p in $providersA)#set($junk=$providers.add($p.trim()))#end
+  #end
+    <!-- providers  is $providers of class $providers.getClass() -->
+  #if($providers.size() > 0)
+    #set($hasSocialLogin = true)
+    XX #includeInContext("XWiki.SocialLogin2") XX
+  #end
+#end
+    <!-- hasSocialLogin ? $hasSocialLogin -->
+#if($hasSocialLogin)
+##<div class="column half">
+<table width="100%"><tr><td>
+#end
+<table class="xwikilogintable" summary="$msg.get('loginform')">
+  <tr>
+    <th><label for="j_username">$msg.get('username'):</label></th>
+    <td><input type="text" id="j_username" name="j_username" value=""/></td>
+  </tr>
+  <tr>
+    <th><label for="j_password">$msg.get('password'):</label></th>
+    <td><input type="password" id="j_password" name="j_password" value=""/></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: left;">
+      <input id="rememberme" type="checkbox" name="j_rememberme" value="true"/>
+      <label for="rememberme">$msg.get('remembermeonthiscomp')</label>
+    </td>
+  </tr>
+</table>
+<div class="buttons"><span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('login')"/></span></div>
+## TODO: Replace this with an interface extension once IX are implemented
+#if($xwiki.exists('XWiki.ResetPassword'))
+  <div style="font-size: 70%; margin-top: 2em;">Forgot your <a href="$xwiki.getURL('XWiki.ForgotUsername')">username</a> or <a href="$xwiki.getURL('XWiki.ResetPassword')">password</a>?</div>
+#end
+
+#if($hasSocialLogin)
+</td><td valign="top" align="right">
+##</div>
+##<div class="column half socialLoginProviders">
+    #foreach($provider in $providers)
+    <div class="provider">
+        <!-- provider is of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
+      #set($link = $xwiki.getURL('XWiki.SocialLogin2', 'view', "provider=${provider.toLowerCase()}"))
+      <a href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])">
+	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}.png"))
+	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}.png")" />
+	  #else
+	    $msg.get('xwiki.socialLogin.signInWith', [$provider])
+	  #end
+	  </a>
+    </div>
+  #end
+</td></tr></table>
+<div class="clearfloats"></div>
+#end
+#xwikimessageboxend()
+</form>
+</div>## mainContentArea
+</div>## main
+## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
+<script type="text/javascript">
+//<![CDATA[
+  document.forms.loginForm.j_username.focus();
+//]]>
+</script>
 #template("endpage.vm")
-#end ##}
+#end
