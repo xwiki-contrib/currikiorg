@@ -6,12 +6,17 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
-#if ($xcontext.user != 'XWiki.XWikiGuest')
-  #if ($request.xredirect)
-    $response.sendRedirect($request.xredirect)
-  #else
-    $response.sendRedirect($xwiki.getURL('Main.WebHome'))
-  #end
+#if ($request.xredirect)##
+#set($redir=$request.xredirect)##
+#elseif ($request.session && $request.session.getAttribute("xredirect"))##
+#set($redir=$request.session.getAttribute("xredirect"))##
+#elseif($xcontext.user)##
+#set($redir='/xwiki/bin/view${xcontext.user.replaceAll("\\.","/")}')##
+#else##
+#set($redir="/")##
+#end##
+#if ($xcontext.user != 'XWiki.XWikiGuest')##
+$response.sendRedirect($redir)##
 #elseif($doc.fullName != 'XWiki.XWikiLogin')
   #set($qs = "$!{request.queryString}")
   #if(!$request.getParameter('xredirect'))
@@ -23,16 +28,16 @@
 ### Login page
 ###
 ###
-#template("startpage.vm")
+## #template("startpage.vm")
 <div class="main layoutsubsection">
 <div id="mainContentArea">
-<form id="loginForm" action="$doc.getURL('loginsubmit')" method="post">
+<form id="loginForm" action="$doc.getURL('loginsubmit')" method="post" target="_top">
 <div class="hidden"><input type="hidden" name="xredirect" value="$!{escapetool.xml($request.xredirect)}"/>
 #if("$!request.srid" != '')
   <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
 #end
 </div>
-#xwikimessageboxstart($msg.get('login') '')
+## #xwikimessageboxstart($msg.get('login') '')
 #set($message = $msg.get($xwiki.parseMessage()))
 #if($message)
   <!-- previous login errors -->
@@ -50,10 +55,9 @@
     #set($providers = $xwiki.getArrayList())
     #foreach($p in $providersA)#set($junk=$providers.add($p.trim()))#end
   #end
-    <!-- providers  is $providers of class $providers.getClass() -->
   #if($providers.size() > 0)
     #set($hasSocialLogin = true)
-    XX #includeInContext("XWiki.SocialLogin") XX
+    $xwiki.includeForm("XWiki.SocialLogin",false)
   #end
 #end
     <!-- hasSocialLogin ? $hasSocialLogin -->
@@ -61,6 +65,7 @@
 ##<div class="column half">
 <table width="100%"><tr><td>
 #end
+<h3>Login if you are a member of Curriki.</h3>
 <table class="xwikilogintable" summary="$msg.get('loginform')">
   <tr>
     <th><label for="j_username">$msg.get('username'):</label></th>
@@ -78,15 +83,18 @@
   </tr>
 </table>
 <div class="buttons"><span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('login')"/></span></div>
-## TODO: Replace this with an interface extension once IX are implemented
-#if($xwiki.exists('XWiki.ResetPassword'))
-  <div style="font-size: 70%; margin-top: 2em;">Forgot your <a href="$xwiki.getURL('XWiki.ForgotUsername')">username</a> or <a href="$xwiki.getURL('XWiki.ResetPassword')">password</a>?</div>
-#end
-
+<div style="font-size: 70%; margin-top: 2em;"##
+ ><a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">Forgot your login or password</a>?</div>
 #if($hasSocialLogin)
 </td><td valign="top" align="right">
 ##</div>
 ##<div class="column half socialLoginProviders">
+<div class="provider" style="background: #EEEEEE">
+  <a href="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('xwiki.socialLogin.signInWith.Curriki')">
+  <img align="middle" src="/xwiki/skins/curriki8/LogoStandalone-globeOnly.png" height="22" />
+  Create a new account on Curriki</a>
+</div>
+<hr/>
     #foreach($provider in $providers)
     <div class="provider">
         <!-- provider is of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
@@ -103,7 +111,7 @@
 </td></tr></table>
 <div class="clearfloats"></div>
 #end
-#xwikimessageboxend()
+## #xwikimessageboxend()
 </form>
 </div>## mainContentArea
 </div>## main
@@ -113,5 +121,5 @@
   document.forms.loginForm.j_username.focus();
 //]]>
 </script>
-#template("endpage.vm")
+## #template("endpage.vm")
 #end
