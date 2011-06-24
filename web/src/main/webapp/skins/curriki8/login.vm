@@ -53,7 +53,7 @@
     <!-- providers  is $providers of class $providers.getClass() -->
   #if($providers.size() > 0)
     #set($hasSocialLogin = true)
-    XX #includeInContext("XWiki.SocialLogin2") XX
+    XX #includeInContext("XWiki.SocialLogin") XX
   #end
 #end
     <!-- hasSocialLogin ? $hasSocialLogin -->
@@ -90,7 +90,7 @@
     #foreach($provider in $providers)
     <div class="provider">
         <!-- provider is of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-      #set($link = $xwiki.getURL('XWiki.SocialLogin2', 'view', "provider=${provider.toLowerCase()}"))
+      #set($link = $xwiki.getURL('XWiki.SocialLogin', 'view', "provider=${provider.toLowerCase()}"))
       <a href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])">
 	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}.png"))
 	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}.png")" />
