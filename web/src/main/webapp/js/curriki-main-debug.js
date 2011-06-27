@@ -3339,6 +3339,21 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			}
 		}
 });
+
+Ext.ns('Curriki.ui.login');
+Curriki.ui.login.displayIntroStep = function() {
+    var w = 500, h=250;
+    Curriki.ui.login.loginDialog = new Ext.Window({
+                width:w,
+                height:h,
+                modal:true,
+                closable:true,
+                title:"Login or Register",
+                html: "<iframe src='/xwiki/bin/loginsubmit/XWiki/XWikiLogin' width='"+w+"' height='"+h+"'/>"
+            });
+    Curriki.ui.login.loginDialog.show();
+};
+
 // vim: ts=4:sw=4
 
 /*
