@@ -6,6 +6,7 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+## this is loaded when /xwiki/bin/login/X/Y is loaded
 #if ($request.xredirect)##
 #set($redir=$request.xredirect)##
 #elseif ($request.session && $request.session.getAttribute("xredirect"))##
