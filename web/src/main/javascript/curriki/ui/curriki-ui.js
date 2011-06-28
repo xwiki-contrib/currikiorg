@@ -20,6 +20,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,collapsible:false
 	,closable:false
 	,resizable:false
+    , monitorResize: true
 	,shadow:false
 	,defaults:{border:false}
 	,listeners:{
