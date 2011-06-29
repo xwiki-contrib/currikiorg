@@ -1,0 +1,34 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+## this page is included by XWiki.SocialLogin, itself included by login.vm ##
+## it provides the content of the dialogs following a successful authentication
+## and authorization at an identity provider to request the little bit more.
+## -- this page is displayed within a dialog -- no panel or anything such
+<h3>Registration Almost Complete</h3>
+<p>From XXX, we have been able to assemble a few of the fields below.<br/>
+    Please complete and/or confirm them.</p>
+<form class="xform" action=${doc.getURL('view')} method="post" id="createUsernameForm">
+  <div class="centered">
+    <fieldset class="xwikimessage">
+      <legend><span>${msg.get('xwiki.socialLogin.youMustBeNewHere')}</span></legend>
+      <input type="hidden" name="xaction" value="createProfile" />
+      <p class="message">
+        ${msg.get('xwiki.socialLogin.createProfileMessage',[$provider])}
+      </p>
+      <dl>
+        <dt>${msg.get('xwiki.socialLogin.pickupUsername')}</dt>
+        <dd><input type="text" name="username" value="${defaultValue}" /></dd>
+      </dl>
+      <div class="buttons">
+        <span class="buttonwrapper">
+          <input class="button" type="submit" value="${msg.get('xwiki.socialLogin.createMyAccount')}" />
+        </span>
+      </div>
+    </fieldset>
+  </div>

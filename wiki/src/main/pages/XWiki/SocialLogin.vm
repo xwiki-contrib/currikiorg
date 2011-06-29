@@ -10,26 +10,7 @@
 $tool.init($xwiki,$context,$request,$response,$msg)##
 #set($view=$tool.action())##
 #macro(render $view)
-    #if($view=="creationForm")
-    <form class="xform" action=${doc.getURL('view')} method="post" id="createUsernameForm">
-      <div class="centered">
-        <fieldset class="xwikimessage">
-          <legend><span>${msg.get('xwiki.socialLogin.youMustBeNewHere')}</span></legend>
-          <input type="hidden" name="xaction" value="createProfile" />
-          <p class="message">
-            ${msg.get('xwiki.socialLogin.createProfileMessage',[$provider])}
-          </p>
-          <dl>
-            <dt>${msg.get('xwiki.socialLogin.pickupUsername')}</dt>
-            <dd><input type="text" name="username" value="${defaultValue}" /></dd>
-          </dl>
-          <div class="buttons">
-            <span class="buttonwrapper">
-              <input class="button" type="submit" value="${msg.get('xwiki.socialLogin.createMyAccount')}" />
-            </span>
-          </div>
-        </fieldset>
-      </div>
+    #if($view=="creationForm")$xwiki.includeInContext("XWiki.RegistrationBootstrap",false)
     </form>
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
     #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())
