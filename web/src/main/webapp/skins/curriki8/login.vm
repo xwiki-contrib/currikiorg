@@ -7,6 +7,7 @@
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 ## this is loaded when /xwiki/bin/login/X/Y is loaded
+## --- beware to end each line with ## at least until the first redirect
 #if ($request.xredirect)##
 #set($redir=$request.xredirect)##
 #elseif ($request.session && $request.session.getAttribute("xredirect"))##
@@ -17,13 +18,25 @@
 #set($redir="/")##
 #end##
 #if ($xcontext.user != 'XWiki.XWikiGuest')##
-$response.sendRedirect($redir)##
-#elseif($doc.fullName != 'XWiki.XWikiLogin')
-  #set($qs = "$!{request.queryString}")
-  #if(!$request.getParameter('xredirect'))
-    #set($qs = "xredirect=$escapetool.url($doc.getURL('view'))&${qs}")
-  #end
-  $response.sendRedirect($xwiki.getURL('XWiki.XWikiLogin', 'login', $qs))
-#else
+##$response.sendRedirect($redir)##
+## rather JS-redirect so that we get frame=_top
+<html><head><title>Redirection</title></head><body>##
+<a href=="${redir}" target="_top">follow me</a>##
+<script type="text/javascript">
+    window.moveOnTask = null;
+    function moveOn() {
+        window.top.location.href = "${redir}";
+        window.clearInterval(window.moveOnTask);
+        window.moveOnTask = null;
+    }
+    window.moveOnTask = window.setInterval(moveOnTask,100);</script>##
+</body></html>##
+#elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself (e.g. missing rights)
+#set($qs = "$!{request.queryString}")
+#if(!$request.getParameter('xredirect'))##
+    #set($qs = "xredirect=$escapetool.url($doc.getURL('view'))&${qs}")##
+#end##
+$response.sendRedirect($xwiki.getURL('XWiki.XWikiLogin', 'login', $qs))
+#else## we're on the right place... display login or register
 $xwiki.includeForm("XWiki.LoginOrRegister",false)
 #end

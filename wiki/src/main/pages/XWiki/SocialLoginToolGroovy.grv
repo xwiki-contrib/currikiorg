@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory;
 
 public class SocialLoginToolGroovy {
+    // the properties are static... it means they are loaded with the compilation of the groovy class
     private static Properties properties = null;
 
     private XWiki xwiki = null;
@@ -257,14 +258,27 @@ public class SocialLoginToolGroovy {
     public String acceptLoginAndRedirect() {
         // currently: just redirect to profile
         String targetUrl = "/xwiki/bin/view/" + context.user.replaceAll("\\.",".");
-        if(!response.isCommitted())
-            response.sendRedirect(targetUrl);
-        else {
+        //if(!response.isCommitted())
+        //    response.sendRedirect(targetUrl);
+        //else {
             request.setAttribute("targetUrl", targetUrl);
             return "redirectInHtml";
-        }
+        //}
         // todo: future: use xredirect that was laid before, make sure
-        return "nothing";
+        //return "nothing";
+    }
+
+    public String getApplicationApiKey(String provider) {
+        provider = provider.toLowerCase();
+        if("facebook"==provider)
+            return properties.getProperty("graph.facebook.com.consumer_key");
+        else if("google"==provider)
+            return properties.getProperty("www.google.com.consumer_key");
+        else if("yahoo"==provider)
+            return properties.getProperty("api.login.yahoo.com.consumer_key");
+        else if("twitter"==provider)
+            return properties.getProperty("twitter.com.consumer_key");
+        else throw new IllegalArgumentException("Unknown provider \"" + provider + "\".");
     }
 
 

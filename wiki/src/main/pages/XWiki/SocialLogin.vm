@@ -11,13 +11,15 @@ $tool.init($xwiki,$context,$request,$response,$msg)##
 #set($view=$tool.action())##
 #macro(render $view)
     #if($view=="creationForm")$xwiki.includeInContext("XWiki.RegistrationBootstrap",false)
-    </form>
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
     #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())
     #elseif($view=="createNewProfile")#set($view=$tool.createNewProfile())
     #elseif($view=="loginSucceeded")#set($view=$tool.acceptLoginAndRedirect())
-    #elseif($view=="redirectInHtml")<html> <head><meta http-equiv="Refresh" content="0;url=$util.escapeURL($request.getAttribute('targetUrl'))">
-        </head><body><p>Please go <a href="$request.getAttribute('targetUrl')">here</a>.</p></body></html>
+    #elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top
+<html><head><title>Redirection</title></head><body>##
+<a href=="${redir}" target="_top">follow me</a>##
+<script type="text/javascript">window.top.location.href = "${redir}";</script>##
+</body></html>##
     #elseif($view=="error")#error($tool.error)
     #elseif($view=="nothing")##nothing
     #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->

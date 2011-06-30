@@ -6,29 +6,26 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
-<head >
-</head><body>
 ###
 ### Login page
+### (is delivered as full page except if framed=true is in the request)
 ###
-###
-## #template("startpage.vm")
-<div class="main layoutsubsection">
+#if($request.framed=='true')
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head ><title>Curriki Login</title>
+</head><body>
+#else
+#template("startpage.vm")
+#end
+<div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-<form id="loginForm" action="$doc.getURL('loginsubmit')" method="post" target="_top">
+<form id="loginForm" action="$doc.getURL('loginsubmit')" method="post">
 <div class="hidden"><input type="hidden" name="xredirect" value="$!{escapetool.xml($request.xredirect)}"/>
 #if("$!request.srid" != '')
   <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
 #end
 </div>
-## #xwikimessageboxstart($msg.get('login') '')
-#set($message = $msg.get($xwiki.parseMessage()))
-#if($message)
-  <!-- previous login errors -->
-  #error($message)
-#end
 #set($hasSocialLogin = false)
 #if($xwiki.exists('XWiki.SocialLoginConfiguration'))
   #set($socialLoginConfigurationDocument = $xwiki.getDocument('XWiki.SocialLoginConfiguration'))
@@ -43,7 +40,6 @@
   #end
   #if($providers.size() > 0)
     #set($hasSocialLogin = true)
-    $xwiki.includeForm("XWiki.SocialLogin",false)
   #end
 #end
     <!-- hasSocialLogin ? $hasSocialLogin -->
@@ -52,6 +48,13 @@
 <table width="100%"><tr><td>
 #end
 <h3>Login if you are a member of Curriki.</h3>
+## #xwikimessageboxstart($msg.get('login') '')
+#set($message = $msg.get($xwiki.parseMessage()))
+#if($message)
+  <!-- previous login errors -->
+  #error($message)
+#end
+## #xwikimessageboxend()
 <table class="xwikilogintable" summary="$msg.get('loginform')">
   <tr>
     <th><label for="j_username">$msg.get('username'):</label></th>
@@ -72,6 +75,8 @@
 <div style="font-size: 70%; margin-top: 2em;"##
  ><a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">Forgot your login or password</a>?</div>
 #if($hasSocialLogin)
+#set($socialLoginTool=$xwiki.parseGroovyFromPage("XWiki.SocialLoginToolGroovy"))
+#set($junk=$socialLoginTool.init($xwiki, $context, $request, $response, $msg))
 </td><td valign="top" align="left">
 ##</div>
 ##<div class="column half socialLoginProviders">
@@ -98,19 +103,16 @@
 </td></tr></table>
 <div class="clearfloats"></div>
 #end
-## #xwikimessageboxend()
 </form>
 </div>## mainContentArea
-</div>## main
 ## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
 <script type="text/javascript">
 //<![CDATA[
   document.forms.loginForm.j_username.focus();
 //]]>
 </script>
-## #template("endpage.vm")
 <script type="text/javascript">
-    var fbAppId='209849199049784';
+    var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
     if(fbAppId) {
         window.fbAsyncInit = function() {
           console.log("fbAsyncInit start.");
@@ -126,4 +128,11 @@
         console.log("fbAsyncInit finished.")
     }
 </script>
+</div>## main
+#if($request.framed=='true')
 </body></html>
+#else
+#template("endpage.vm")
+## TODO: move the div of id 'mainContentArea' into an Ext window
+## TODO: remove the login or register header!
+#end

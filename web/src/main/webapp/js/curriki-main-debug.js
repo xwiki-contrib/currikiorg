@@ -3351,7 +3351,7 @@ Curriki.ui.login.displayIntroStep = function() {
                 closable:true,
                 monitorResize: true,
                 title:"Login or Register",
-                html: "<iframe id='loginIframe' src='/xwiki/bin/loginsubmit/XWiki/XWikiLogin' width='"+w+"' height='"+h+"'/>"
+                html: "<iframe id='loginIframe' src='/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true' width='"+w+"' height='"+h+"'/>"
             });
     Curriki.ui.login.loginDialog.show();
 };
