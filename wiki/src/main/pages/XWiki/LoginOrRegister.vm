@@ -6,6 +6,7 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapeTool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 ###
 ### Login page
 ### (is delivered as full page except if framed=true is in the request)
@@ -21,7 +22,18 @@
 <div id="mainContentArea">
 <div id="fb-root"></div>
 <form id="loginForm" action="$doc.getURL('loginsubmit')" method="post">
-<div class="hidden"><input type="hidden" name="xredirect" value="$!{escapetool.xml($request.xredirect)}"/>
+#set($xredirect=$!request.xredirect)
+#if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
+#if($xredirect && $xredirect!="/")##
+    $request.session.setAttribute("xredirect",$xredirect)##
+#else##
+    #if($request.session.getAttribute("xredirect"))#set($xredirect=$request.session.getAttribute("xredirect"))#end##
+#end##
+    <!-- xredirect is $xredirect -->
+    #if($xredirect.startsWith("%2"))#set($xredirect=$xredirect.replaceAll("%2F","/"))#end
+<div class="hidden">##
+<input type="hidden" name="xredirect" value="/xwiki/bin/login/XWiki/XWikiLogin"/> ## $!{escapetool.xml($xredirect)}
+<input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
 #if("$!request.srid" != '')
   <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
 #end

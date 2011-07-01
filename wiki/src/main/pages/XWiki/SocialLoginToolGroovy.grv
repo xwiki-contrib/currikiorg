@@ -256,15 +256,15 @@ public class SocialLoginToolGroovy {
     }
 
     public String acceptLoginAndRedirect() {
-        // currently: just redirect to profile
-        String targetUrl = "/xwiki/bin/view/" + context.user.replaceAll("\\.",".");
+        String xredirect = request.xredirect;
+        if(xredirect==null || xredirect=="") xredirect = request.getSession().getAttribute("xredirect");
+        if(xredirect==null || xredirect=="") xredirect = "/xwiki/bin/view/" + context.user.replaceAll("\\.",".");
         //if(!response.isCommitted())
-        //    response.sendRedirect(targetUrl);
+        //    response.sendRedirect(xredirect);
         //else {
-            request.setAttribute("targetUrl", targetUrl);
+            request.setAttribute("targetUrl", xredirect);
             return "redirectInHtml";
         //}
-        // todo: future: use xredirect that was laid before, make sure
         //return "nothing";
     }
 

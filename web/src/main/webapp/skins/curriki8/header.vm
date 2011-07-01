@@ -1,3 +1,12 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #**
   * Displays the Curriki Header
   * @author Curriki dev team
@@ -34,7 +43,9 @@
 	#elseif($request.srid) ##}{
 		#set($logredir = "srid=$request.srid")
 	#end ##}
-    #set($anchorAtts='href="/xwiki/bin/loginsubmit/XWiki/XWikiLogin" onclick="Curriki.ui.login.displayIntroStep(); return false;"')
+    #set($escapedURL=$escapetool.url($request.getRequestURI()))##
+    #set($targetURL="/xwiki/bin/loginsubmit/XWiki/XWikiLogin?xredirect=$escapedURL")
+    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayIntroStep(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
     <a $anchorAtts>Login</a> or <a $anchorAtts>Register</a>
 #else ## }{ ## is logged in
 	## crtUserDoc is set in fudocs.vm
@@ -43,7 +54,11 @@
 	#if($hasGlobalAdmin)
 	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
 	#end
-	#set($logredir = $xwiki.getURL("Main.WebHome"))
+    #if($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
+        #set($logredir = $request.getRequestURI())
+    #else
+        #set($logredir = $xwiki.getURL("Main.WebHome"))
+    #end
 	#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
 	<a href="$logouturl" class="logout">$msg.get("header.logout")</a>
 #end ##}
