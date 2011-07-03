@@ -1,0 +1,31 @@
+1 Reindexer
+##
+#* @vtlvariable name="lucene" type="com.xpn.xwiki.plugin.lucene.LucenePluginApi" *# ##
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+##
+#set($docsList = $!request.getParameter("docs"))
+#if($docsList)
+    #set($lucene = $xwiki.getPlugin("lucene"))
+    #set($count=0)
+    <ul>
+    #foreach($name in $docsList.split("\n"))
+        #set($count = $count+1)
+        #if($name.indexOf("/")>=0)#set($name=$name.replaceAll("/","."))#end
+        <li>queuing <a href="/xwiki/bin/view/$name.replaceAll(".","/")">$name</a></li>
+        #set($doc=$xwiki.getDocument($name))
+        $lucene.queueDocument($doc, $context.getContext())
+    #end
+    </ul>
+    <p>Have queued $count docs.</p>
+    <p>$lucene.getPreIndexQueueSize() documents in pre-queue - $lucene.getQueueSize() documents in queue - $lucene.getActiveQueueSize() documents in active queue.</p>
+#else
+    <form action="$doc.name" method="POST">
+         <p>Please provide the page names below, one per line in the form <tt>space.name</tt>).</p>
+        <textarea rows="3" cols="80" name="docs"></textarea><br/>
+        <input type="submit" value="reindex the pages"/>
+    </form>
+#end
+<p>Please also see [Admin.Lucene].</p>
