@@ -11,11 +11,11 @@
 ### Login page
 ### (is delivered as full page except if framed=true is in the request)
 ###
-#if($request.framed=='true')
+#if($request.framed=='true')##
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head ><title>Curriki Login</title>
 </head><body>
-#else
+#else##
 #template("startpage.vm")
 #end
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
@@ -137,6 +137,9 @@
             '//connect.facebook.net/en_US/all.js'; // TODO: language
           document.getElementById('fb-root').appendChild(e);
         }());
+        FB.Event.subscribe('auth.login', function(response) {
+            // do something with response.session
+        });
         console.log("fbAsyncInit finished.")
     }
 </script>

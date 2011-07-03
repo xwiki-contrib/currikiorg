@@ -10,7 +10,7 @@
 $tool.init($xwiki,$context,$request,$response,$msg)##
 #set($view=$tool.action())##
 #macro(render $view)
-    #if($view=="creationForm")$xwiki.includeInContext("XWiki.RegistrationBootstrap",false)
+    #if($view=="creationForm")$xwiki.includeForm("XWiki.RegistrationBootstrap",false)
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
     #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())
     #elseif($view=="createNewProfile")#set($view=$tool.createNewProfile())
@@ -20,7 +20,7 @@ $tool.init($xwiki,$context,$request,$response,$msg)##
 <a href=="${redir}" target="_top">follow me</a>##
 <script type="text/javascript">window.top.location.href = "${redir}";</script>##
 </body></html>##
-    #elseif($view=="error")#error($tool.error)
+    #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
     #elseif($view=="nothing")##nothing
     #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->
     #end##

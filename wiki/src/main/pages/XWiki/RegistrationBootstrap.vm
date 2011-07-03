@@ -10,26 +10,98 @@
 ## it provides the content of the dialogs following a successful authentication
 ## and authorization at an identity provider to request the little bit more.
 ## -- this page is displayed within a dialog -- no panel or anything such
-<h3>Registration Almost Complete</h3>
-<p>From XXX, we have been able to assemble a few of the fields below.<br/>
-    Please complete and/or confirm them.</p>
+## ----------------
+## prepare variables
+##
+#set($warningFields="username")
+#set($okFields="")
+## ----------------
+<style type="text/css">
+    .disabledLook p input {background-color: lightgray; border: lightgray 0px; }
+    .registrationTable { width:99%; text-align:left; }
+    .registrationTable p {padding-right: 40px; padding-top: 3px; padding-bottom:6px; padding-left: 10px; height:2em}
+    .registrationTable p label b {float: left; vertical-align: middle; width: 10em;}
+    .registrationTable p input  {float: right; width: 25em;}
+    .warningField {
+        border: solid red;
+        background: transparent url(/xwiki/skins/curriki8/warning.png) no-repeat center right;
+    }
+    .okField {}
+</style>
+## ----------------
 <form class="xform" action=${doc.getURL('view')} method="post" id="createUsernameForm">
   <div class="centered">
-    <fieldset class="xwikimessage">
-      <legend><span>${msg.get('xwiki.socialLogin.youMustBeNewHere')}</span></legend>
+      <fieldset class="xwikimessage">
+          <h3>Registration Almost Complete</h3>
+          <p align="left">The registration form has been pre-populated with information from ${tool.providerId}.<br/>
+          Please verify and fill in any required information.</p>
+          <ul class="errors">
+          #foreach($m in $tool.errors)
+              <li>$msg.get($m)</li>
+          #end
+          </ul>
       <input type="hidden" name="xaction" value="createProfile" />
-      <p class="message">
-        ${msg.get('xwiki.socialLogin.createProfileMessage',[$provider])}
-      </p>
-      <dl>
-        <dt>${msg.get('xwiki.socialLogin.pickupUsername')}</dt>
-        <dd><input type="text" name="username" value="${defaultValue}" /></dd>
-      </dl>
-      <div class="buttons">
-        <span class="buttonwrapper">
-          <input class="button" type="submit" value="${msg.get('xwiki.socialLogin.createMyAccount')}" />
-        </span>
-      </div>
-    </fieldset>
+        #macro(computeTrClasses $f)##
+            #if($okFields.contains($f)) okField #end #if($warningFields.contains($f)) warningField #end #end##
+            #if($provider && $providerFields.contains($f)) disabledLook #end## && $provider is validated
+      <div class="registrationTable">
+          ##
+          #set($f="username")
+          <p class="#computeTrClasses($f)">
+              <label for="${f}_input"><b>Member Login:</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.username}"/>
+          </p>
+          ##
+          ##
+          #set($f="password")
+          <p class="#computeTrClasses($f)">
+              <label for="${f}_input"><b>Password:</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password"/>
+          </p>
+          ##
+          ##
+          #set($f="firstName")
+          <p class="#computeTrClasses($f)">
+              <label for="${f}_input"><b>First Name:</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.firstName}" disabled="disabled"/>
+          </p>
+          ##
+          ##
+          #set($f="lastName")
+          <p class="#computeTrClasses($f)">
+              <label for="${f}_input"><b>Last Name:</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.lastName}" disabled="disabled"/>
+          </p>
+          ##
+          ##
+          #set($f="email")
+          <p class="#computeTrClasses($f)">
+              <label for="${f}_input"><b>Email:</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.email}" disabled="disabled"/>
+          </p>
+          ##
+          ##
+          #set($f="memberType")
+          <p class="#computeTrClasses($f)">
+              <label for="${f}_input"><b>Member type:</b></label>
+              <input id="${f}_input" name="${f}" value="FIXME" disabled="disabled"/>
+          </p>
+          ##
+          ##
+          #set($f="agree")
+          <p class="#computeTrClasses($f)">
+                  <label style="float: none; width:100%">
+                      <input type="checkbox" name="agree"
+                              #if($request.agree)checked #end >
+                      I agree to Curriki's Privacy Policy and Terms of service.
+                  </label>
+          </p>
+          <p align="right">
+              <input type="submit" value="Create my account"/>
+              <input type="button" value="Cancel"/> ### TODO: what to do in cancel??
+          </p>
+      </fieldset>
+
+
   </div>
 </form>

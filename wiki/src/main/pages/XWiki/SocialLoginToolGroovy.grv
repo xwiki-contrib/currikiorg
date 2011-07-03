@@ -18,9 +18,9 @@ public class SocialLoginToolGroovy {
     private HttpServletRequest request = null;
     private HttpServletResponse response = null;
     private XWikiMessageTool msg = null;
-    private String error = null;
+    private List errors = new ArrayList();
     private String providerId = null;
-    private String guessedUsername = null;
+    private String location, country;
 
     Log LOG = LogFactory.getLog("GroovyPages.SocialLogin");
 
@@ -55,13 +55,13 @@ public class SocialLoginToolGroovy {
         } catch (Exception ex) {
             System.err.println("Trouble at authenticating: " + ex);
             ex.printStackTrace();
-            error = msg.get('xwiki.socialLogin.genericError', [ex.message])
+            errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
             return "error";
         };
     }
 
-    public String getError() {
-        return error;
+    public List getErrors() {
+        return errors;
     }
 
     /**
@@ -84,7 +84,7 @@ public class SocialLoginToolGroovy {
             return "nothing";
         } catch (Exception ex) {
             ex.printStackTrace();
-            error = msg.get('xwiki.socialLogin.genericError', [ex.message])
+            errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
             return "error";
         };
     }
@@ -129,10 +129,28 @@ public class SocialLoginToolGroovy {
 
                 // Store the social profile in the session
                 request.session.setAttribute("org.brickred.socialauth.Profile", profile);
+                LOG.warn("Received from " + providerId + " profile " + profile + ".");
 
-                // Try to guess what username the user will want to use
-                guessedUsername = profile.displayName
-                // TODO: add more attempts to obtain it
+                firstName = profile.getFirstName();
+                lastName = profile.getLastName();
+                email = profile.getEmail();
+                location = profile.location;
+                country  = profile.country;
+
+                username = profile.displayName;
+                if(username==null || username=='') {
+                    int p = email.indexOf('@');
+                    username = email.substring(0,p);
+                    if(!isValidUsername(username, false)) {
+                        int i=0;
+                        while(i<20) {
+                            if(isValidUsername(username + i, false)) break
+                        }
+                        username = username +i;
+                    }
+                }
+
+
 
                 // Outputs the form to create the username
                 return "creationForm";
@@ -143,7 +161,7 @@ public class SocialLoginToolGroovy {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            error = msg.get('xwiki.socialLogin.genericError', [ex.message])
+            errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
             return "error";
         };
     }
@@ -171,13 +189,14 @@ public class SocialLoginToolGroovy {
                 password = org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(8);
             } else {
                 if (password==null || password.length()<3){
+                    errors.add(msg.get('registration.errors.passwordTooShort'));
                     return "error";
                 }
             }
             if (!isValidEmail(email))
                 return "error";
 
-            if (!isValidAccount(userName))
+            if (!isValidUsername(userName, true))
                 return "error";
 
             def propMap = new HashMap();
@@ -246,10 +265,10 @@ public class SocialLoginToolGroovy {
         }
         else {
             if (!userName || userName == '')
-                this.error= 'xwiki.socialLogin.youMustPickUsername';
+                errors.add('xwiki.socialLogin.youMustPickUsername');
             else if (xwiki.exists('XWiki.' + userName))
-                this.error = 'xwiki.socialLogin.usernameAlreadyTaken';
-            if(this.error)
+                errors.add('xwiki.socialLogin.usernameAlreadyTaken');
+            if(!errors.isEmpty())
                 return "error";
             else return null;
         }
@@ -291,10 +310,10 @@ public class SocialLoginToolGroovy {
 
 
 
-    public boolean isValidAccount(account) {
+    public boolean isValidUsername(String account, boolean echoErrors) {
         if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
             if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
-                error = "account_already_exists";
+                if(echoErrors) errors.add("account_already_exists");
                 return false;
             }
             else {
@@ -302,7 +321,7 @@ public class SocialLoginToolGroovy {
             }
         }
         else {
-            error = "account_notvalid";
+            if(echoErrors) errors.add("account_notvalid");
             return false;
         }
     }
@@ -315,13 +334,13 @@ public class SocialLoginToolGroovy {
 
         // Check to see if the email address is already used
         if (xwiki.searchDocuments(query).size() > 0) {
-            error = "email_already_exists";
+            errors.add("email_already_exists");
             return false;
         }
 
         // We should make this a bit better...
         if ((atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
-            error  = "email_notvalid";
+            errors.add("email_notvalid");
             return false;
         }
         return true;
@@ -341,6 +360,21 @@ public class SocialLoginToolGroovy {
         }
         else {
             return "nothingToDo";
+        }
+    }
+
+    // form values
+    String username, password, firstName, lastName, email, memberType, agree;
+
+    public void checkSubmittedFormValues() {
+        LOG.warn("Checking form values " + request.getParameterMap());
+        LOG.warn("Profile props: " + properties);
+        if(request.method=="POST") {
+            username=request.username;
+            if(username==null || username=="") {
+                username
+            }
+            firstName
         }
     }
 
