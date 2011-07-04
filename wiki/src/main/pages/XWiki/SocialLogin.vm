@@ -13,18 +13,22 @@ $tool.init($xwiki,$context,$request,$response,$msg)##
     #if($view=="creationForm")$xwiki.includeForm("XWiki.RegistrationBootstrap",false)
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
     #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())
-    #elseif($view=="createNewProfile")#set($view=$tool.createNewProfile())
+    #elseif($view=="createNewProfile")#set($view=$tool.tryCreateNewProfile())
     #elseif($view=="loginSucceeded")#set($view=$tool.acceptLoginAndRedirect())
-    #elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top
+    #elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top and a wait dialog
 <html><head><title>Redirection</title></head><body>##
-<a href=="${redir}" target="_top">follow me</a>##
-<script type="text/javascript">window.top.location.href = "${redir}";</script>##
+<a href=="${tool.getRedirectTarget()}" target="_top">follow me</a>##
+<script type="text/javascript">window.top.location.href = "${tool.getRedirectTarget()}";</script>##
 </body></html>##
     #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
     #elseif($view=="nothing")##nothing
     #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->
     #end##
 #end##
+<!-- view is $view -->
 #render($view)##
 ## the little extra in case
+<!-- view is $view -->
+#if($view)#render($view)#end##
+<!-- view is $view -->
 #if($view)#render($view)#end##

@@ -13,8 +13,10 @@
 ## ----------------
 ## prepare variables
 ##
-#set($warningFields="username")
-#set($okFields="")
+#set($warningFields=$tool.warningFields)
+#set($okFields=$tool.okFields)
+<!-- warningFields: $warningFields -->
+<!-- okFields : $okFields -->
 ## ----------------
 <style type="text/css">
     .disabledLook p input {background-color: lightgray; border: lightgray 0px; }
@@ -41,6 +43,9 @@
           #end
           </ul>
       <input type="hidden" name="xaction" value="createProfile" />
+      <input type="hidden" name="city"  value="$tool.city"/>
+      <input type="hidden" name="country" value="$tool.country"/>
+
         #macro(computeTrClasses $f)##
             #if($okFields.contains($f)) okField #end #if($warningFields.contains($f)) warningField #end #end##
             #if($provider && $providerFields.contains($f)) disabledLook #end## && $provider is validated
@@ -84,7 +89,12 @@
           #set($f="memberType")
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>Member type:</b></label>
-              <input id="${f}_input" name="${f}" value="FIXME" disabled="disabled"/>
+              #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
+              <select name="member_type" id="${f}_input">##
+                  #foreach($val in $propVals)#if($val!="0")##
+                  <option value="$val" #if($tool.memberType==$val)check="checked"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")##
+                  #end#end
+              </select>
           </p>
           ##
           ##

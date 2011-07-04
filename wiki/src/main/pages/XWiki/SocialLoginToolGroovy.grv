@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.web.XWikiMessageTool
 import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.LogFactory
+import org.brickred.socialauth.Permission
+import org.brickred.socialauth.Profile;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -19,8 +21,11 @@ public class SocialLoginToolGroovy {
     private HttpServletResponse response = null;
     private XWikiMessageTool msg = null;
     private List errors = new ArrayList();
-    private String providerId = null;
-    private String location, country;
+    String providerId = null;
+    String city, country;
+    String warningFields="", okFields="";
+    String username, password, firstName, lastName, email, memberType, agree;
+
 
     Log LOG = LogFactory.getLog("GroovyPages.SocialLogin");
 
@@ -44,9 +49,8 @@ public class SocialLoginToolGroovy {
         try {
             System.out.println("Authenticating user " + userDoc);
             if(userDoc==null) return null;
-            String password = userDoc.getObject('XWiki.SocialLoginClass').getProperty('password_cache').value
-            xwiki.checkAuth(userDoc.fullName, password, "false");
-
+            xwiki.checkAuth(userDoc.fullName, userDoc.get("XWiki.XWikiUsers").get("password").value, "false")
+            return "loginSucceeded";
             //def xwikiAuthenticator = xwiki.getXWiki().getAuthService(); //.@authenticators.get('xwiki')
             //def psm = xwikiAuthenticator.@persistentLoginManager;
             // psm.rememberLogin(request, response, userDoc.fullName, password)
@@ -69,13 +73,17 @@ public class SocialLoginToolGroovy {
      */
     public String bounceToProvider() {
         try {
-            LOG.info("Bouncing to Provider " + request.provider);
-            def provider = AuthProviderFactory.getInstance(request.provider, properties);
+            System.out.println("Bouncing to Provider " + request.provider);
+            AuthProvider provider = AuthProviderFactory.getInstance(request.provider, properties);
             //println provider; // ???
             String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1';
-            if("facebook".equals(request.provider)) targetUrl = URLEncoder.encode(targetUrl);
+            if("facebook".equalsIgnoreCase(request.provider)) {
+                targetUrl = URLEncoder.encode(targetUrl);
+                provider.setPermission(Permission.AUHTHENTICATE_ONLY);
+            }
             String url = provider.getLoginRedirectURL(targetUrl);
+            System.out.println("Redirecting to " + url);
 
             // Store in session
             request.session.setAttribute("org.brickred.socialauth.AuthProvider", provider);
@@ -134,7 +142,7 @@ public class SocialLoginToolGroovy {
                 firstName = profile.getFirstName();
                 lastName = profile.getLastName();
                 email = profile.getEmail();
-                location = profile.location;
+                city = profile.location;
                 country  = profile.country;
 
                 username = profile.displayName;
@@ -149,8 +157,6 @@ public class SocialLoginToolGroovy {
                         username = username +i;
                     }
                 }
-
-
 
                 // Outputs the form to create the username
                 return "creationForm";
@@ -171,33 +177,30 @@ public class SocialLoginToolGroovy {
     /**
      * Create a new user profile from the social profile result
      */
-    public String createNewProfile() {
-        def profile = request.session.getAttribute("org.brickred.socialauth.Profile")
-        def provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
-        LOG.info("Creating new profile from provider " + provider);
+    public String tryCreateNewProfile() {
+        Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile")
+        String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
+        LOG.info("Trying to create new profile from provider " + provider);
+        
+
+        username = request.username;
+        firstName = profile.firstName;
+        lastName = profile.lastName;
+        email = profile.email;
+        city = profile.location;
+        country = profile.country;
+        password = request.password;
+        memberType = request.getParameter("member_type");
+
+        boolean validUsername = isValidUsername(username, true);
+        boolean validEmail = isValidEmail(email, true);
+        boolean validPassword = isValidPassword(password, true);
+        boolean validMemberType = isValidMemberType(memberType, true);
+        boolean validAgree = isValidAgree(request.agree, true);
 
 
-        String userName = request.username
-        String email = profile.email;
-        String password = null;
-        if (userName && userName != '' && !xwiki.exists("XWiki." + userName)) {
+        if (validUsername && validEmail && validPassword && validMemberType && validAgree) {
             // Everything clear, let's proceed
-
-            // Generate a random password
-            boolean generatePassword = request.password=="" || request.password==null;
-            if(generatePassword) {
-                password = org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(8);
-            } else {
-                if (password==null || password.length()<3){
-                    errors.add(msg.get('registration.errors.passwordTooShort'));
-                    return "error";
-                }
-            }
-            if (!isValidEmail(email))
-                return "error";
-
-            if (!isValidUsername(userName, true))
-                return "error";
 
             def propMap = new HashMap();
             propMap.put("active", "1")
@@ -210,21 +213,24 @@ public class SocialLoginToolGroovy {
             //request.getParameterMap().put("xwikiname",userDocName);
             //request.getParameterMap().put("XWiki.XWikiUsers_0_password",password);
 
-            def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${userName}", context.context), context.context);
+            def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${username}", context.context), context.context);
             userDoc.addObjectFromRequest("XWiki.XWikiUsers"); // TODO: use other explicit values ??
             def userObj = userDoc.getObject("XWiki.XWikiUsers");
-            userObj.set("password", password);
+            userObj.set("password",   password);
+            userObj.set("first_name", firstName);
+            userObj.set("last_name",  lastName);
+            userObj.set("email",      email);
+            userObj.set("city",       city);
+            userObj.set('country',    country);
 
             userObj.set("active", "1");
             userObj.set("email_undeliverable", "0");
-
             userObj.set("show_contact","2");
-            userObj.set("email",email);
-            userObj.set("first_name",profile.firstName);
-            userObj.set("last_name", profile.lastName);
-            userObj.set('country', profile.country); // ?? map??
-            userObj.set('city', profile.location);
+
             // other fields? language?
+            String language = profile.language;
+            if(!language) language = context.language;
+            userObj.set("language",    language);
 
             /* def validkey = xwiki.xWiki.generateValidationKey(16);
             userObj.set("validkey", validkey);
@@ -235,12 +241,14 @@ public class SocialLoginToolGroovy {
             userDoc.getDoc().setCreator(userDoc.getFullName());
             userDoc.getDoc().setAuthor(userDoc.getFullName());
 
+            // set rights correct (I edit, others view)
             def rightobj = userDoc.newObject("XWiki.XWikiRights");
-            rightobj.set("users", new String("${userName}"));
+            rightobj.set("users", new String("${username}"));
             rightobj.set("allow", new String("1"));
             rightobj.set("levels", new String("edit"));
             rightobj.set("groups", new String(""));
 
+            // add a socialLogin profile... discuss this one!
             def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
             // TODO: remove these properties
             socialProfile.set('provider', provider)
@@ -257,19 +265,19 @@ public class SocialLoginToolGroovy {
             socialProfile.set('location', profile.location)
 
             def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
-            socialPrefs.set('password_cache', password)
+            //socialPrefs.set('password_cache', password)
             socialPrefs.set('preferred_provider', provider)
 
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
             return authenticateUser(userDoc)
         }
         else {
-            if (!userName || userName == '')
+            if (!username || username == '')
                 errors.add('xwiki.socialLogin.youMustPickUsername');
-            else if (xwiki.exists('XWiki.' + userName))
+            else if (xwiki.exists('XWiki.' + username))
                 errors.add('xwiki.socialLogin.usernameAlreadyTaken');
             if(!errors.isEmpty())
-                return "error";
+                return "creationForm";
             else return null;
         }
     }
@@ -314,19 +322,22 @@ public class SocialLoginToolGroovy {
         if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
             if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
                 if(echoErrors) errors.add("account_already_exists");
+                warningFields += ", username";
                 return false;
             }
             else {
+                okFields += ", username";
                 return true;
             }
         }
         else {
+            warningFields += ", username";
             if(echoErrors) errors.add("account_notvalid");
             return false;
         }
     }
 
-    public boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email, boolean echoErrors) {
         if("paul@hoplahup.net"==email) return true;
         def atIndex = email.indexOf("@");
 
@@ -334,18 +345,54 @@ public class SocialLoginToolGroovy {
 
         // Check to see if the email address is already used
         if (xwiki.searchDocuments(query).size() > 0) {
+            warningFields += ", email";
             errors.add("email_already_exists");
             return false;
         }
 
         // We should make this a bit better...
-        if ((atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
+        if (echoErrors && (atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
             errors.add("email_notvalid");
+            warningFields += ", email";
             return false;
         }
+        okFields += ", email";
         return true;
     }
 
+    public boolean isValidPassword(String ps, boolean echoErrors ) {
+        if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
+            okFields += ", password";
+            return true
+        };
+        if(echoErrors)
+            errors.add("password_notvalid");
+        warningFields += ", password";
+        return false;
+    }
+
+    public boolean isValidMemberType(String ps, boolean echoErrors) {
+        if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
+            okFields += ", memberType";
+            return true
+        };
+        if(echoErrors)
+            errors.add("memberType_notvalid");
+        warningFields += ", memberType";
+        return false;
+    }
+
+    public boolean isValidAgree(String ag, boolean echoErrors) {
+        if(ag!=null &&
+                (ag.equalsIgnoreCase("on") || ag.equalsIgnoreCase("true") || ag.equalsIgnoreCase("checked"))) {
+            okFields += ", agree";
+            return true
+        };
+        if(echoErrors)
+            errors.add("agree_notvalid");
+        warningFields += ", agree";
+        return false;
+    }
 
 
     public String actionHere() {
@@ -363,19 +410,14 @@ public class SocialLoginToolGroovy {
         }
     }
 
-    // form values
-    String username, password, firstName, lastName, email, memberType, agree;
-
-    public void checkSubmittedFormValues() {
-        LOG.warn("Checking form values " + request.getParameterMap());
-        LOG.warn("Profile props: " + properties);
-        if(request.method=="POST") {
-            username=request.username;
-            if(username==null || username=="") {
-                username
-            }
-            firstName
-        }
+    public String getRedirectTarget() {
+        String xredirect = request.session.getAttribute("xredirect");
+        if(xredirect==null && "XWiki.XWikiGuest"!=context.user)
+            xredirect="/xwiki/bin/view/MyCurriki/";
+        else
+            xredirect="/";
+        return xredirect;
     }
+
 
 }
