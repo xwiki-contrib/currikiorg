@@ -27,11 +27,11 @@
 <script type="text/javascript">
     window.moveOnTask = null;
     function moveOn() {
-        window.top.location.href = "${redir}";
+        window.top.location.replace("${redir}");
         window.clearInterval(window.moveOnTask);
         window.moveOnTask = null;
     }
-    window.moveOnTask = window.setInterval(moveOn,100);</script>##
+    window.moveOnTask = window.setInterval(moveOn,50);</script>##
 </body></html>##
 #elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself (e.g. missing rights)
 #set($qs = "$!{request.queryString}")
