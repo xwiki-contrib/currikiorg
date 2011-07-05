@@ -76,8 +76,12 @@ public class SocialLoginToolGroovy {
             System.out.println("Bouncing to Provider " + request.provider);
             AuthProvider provider = AuthProviderFactory.getInstance(request.provider, properties);
             //println provider; // ???
+            String maybeRedirect = request.getParameter("xredirect");
+            if(maybeRedirect!=null && maybeRedirect.length()>0)
+                maybeRedirect = "&xredirect=" +request.getParameter("xredirect");
+                else maybeRedirect = "";
             String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
-                    request.getPathInfo()  + '?callback=1';
+                    request.getPathInfo()  + '?callback=1' ;//+ maybeRedirect;
             if("facebook".equalsIgnoreCase(request.provider)) {
                 targetUrl = URLEncoder.encode(targetUrl);
                 provider.setPermission(Permission.AUHTHENTICATE_ONLY);
@@ -283,13 +287,13 @@ public class SocialLoginToolGroovy {
     }
 
     public String acceptLoginAndRedirect() {
-        String xredirect = request.xredirect;
-        if(xredirect==null || xredirect=="") xredirect = request.getSession().getAttribute("xredirect");
+        String xredirect = request.session.getAttribute("xredirect");
+        if(xredirect==null || xredirect=="") xredirect = request.getParameter("xredirect");
         if(xredirect==null || xredirect=="") xredirect = "/xwiki/bin/view/" + context.user.replaceAll("\\.",".");
         //if(!response.isCommitted())
         //    response.sendRedirect(xredirect);
         //else {
-            request.setAttribute("targetUrl", xredirect);
+            request.session.setAttribute("xredirect", xredirect);
             return "redirectInHtml";
         //}
         //return "nothing";
@@ -321,11 +325,12 @@ public class SocialLoginToolGroovy {
     public boolean isValidUsername(String account, boolean echoErrors) {
         if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
             if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
-                if(echoErrors) errors.add("account_already_exists");
-                warningFields += ", username";
+                if(echoErrors) {
+                    errors.add("account_already_exists");
+                    warningFields += ", username";
+                }
                 return false;
-            }
-            else {
+            } else {
                 okFields += ", username";
                 return true;
             }
@@ -412,10 +417,14 @@ public class SocialLoginToolGroovy {
 
     public String getRedirectTarget() {
         String xredirect = request.session.getAttribute("xredirect");
-        if(xredirect==null && "XWiki.XWikiGuest"!=context.user)
-            xredirect="/xwiki/bin/view/MyCurriki/";
-        else
-            xredirect="/";
+        if(xredirect==null) {
+            if(context.user!="XWiki.XWikiGuest")
+                xredirect="/xwiki/bin/view/MyCurriki/";
+            else
+                xredirect="/";
+        }
+        System.out.println("xredirect is " + xredirect);
+        request.session.removeAttribute("xredirect");
         return xredirect;
     }
 

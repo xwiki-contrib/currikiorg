@@ -19,6 +19,9 @@
 #set($redir="/")##
 #end##
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end##
+#if($redir && ! $redir.startsWith("/xwiki/bin/view/XWiki/SocialLogin") && ! $redir.startsWith("/xwiki/bin/view/XWiki/XWikiLogin"))
+$request.session.setAttribute("xredirect",$redir)
+#end
 #if ($context.user != 'XWiki.XWikiGuest')##
 ##$response.sendRedirect($redir)##
 ## rather JS-redirect so that we get frame=_top

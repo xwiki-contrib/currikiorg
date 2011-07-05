@@ -33,12 +33,11 @@
 <!-- xredirect is $xredirect -->
 <!-- session's xredirect is $request.session.getAttribute("xredirect") -->
 <div class="hidden">##
-<input type="hidden" name="xredirect" value="/xwiki/bin/login/XWiki/XWikiLogin"/> ## $!{escapetool.xml($xredirect)}
+<input type="hidden" name="xredirect" value="$xredirect"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
 #if("$!request.srid" != '')
   <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
 #end
-    $xwiki.getClass("XWiki.XWikiUsers").getBaseClass().get("member_type").getList($context.context)
 </div>
 #set($hasSocialLogin = false)
 #if($xwiki.exists('XWiki.SocialLoginConfiguration'))
@@ -103,7 +102,7 @@
     #foreach($provider in $providers)
     <div class="provider">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-      #set($link = $xwiki.getURL('XWiki.SocialLogin', 'view', "provider=${provider.toLowerCase()}"))
+      #set($link = $xwiki.getURL('XWiki.SocialLogin', 'view', "provider=${provider.toLowerCase()}&xredirect=$xredirect"))
       <a target="_top" href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])"
               onclick="window.top.location.replace('${link}')">
 	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))
