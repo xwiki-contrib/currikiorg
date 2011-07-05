@@ -229,12 +229,15 @@ public class SocialLoginToolGroovy {
 
             userObj.set("active", "1");
             userObj.set("email_undeliverable", "0");
-            userObj.set("show_contact","2");
+            userObj.set("show_contact","2"); // Show Your Profile:
+            userObj.set("opt_out", 0); // 
 
             // other fields? language?
             String language = profile.language;
-            if(!language) language = context.language;
-            userObj.set("language",    language);
+            if(!language)
+                language = context.language;
+            Locale locale = new Locale(language);
+            userObj.set("language",    locale.getISO3Language());
 
             /* def validkey = xwiki.xWiki.generateValidationKey(16);
             userObj.set("validkey", validkey);
