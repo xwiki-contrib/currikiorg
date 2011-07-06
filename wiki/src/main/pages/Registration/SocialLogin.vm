@@ -6,11 +6,11 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
-#set($tool=$xwiki.parseGroovyFromPage("XWiki.SocialLoginToolGroovy"))##
+#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
 $tool.init($xwiki,$context,$request,$response,$msg)##
 #set($view=$tool.action())##
 #macro(render)
-    #if($view=="creationForm")$xwiki.includeForm("XWiki.RegistrationBootstrap",false)##
+    #if($view=="creationForm")$xwiki.includeForm("Registration.RegistrationBootstrap",false)##
     #set($view="nothing")
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
     #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())

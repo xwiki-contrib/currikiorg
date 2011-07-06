@@ -32,6 +32,7 @@
 #end##
 <!-- xredirect is $xredirect -->
 <!-- session's xredirect is $request.session.getAttribute("xredirect") -->
+<!-- this document is from Registration.LoginOrRegister -->
 <div class="hidden">##
 <input type="hidden" name="xredirect" value="$xredirect"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
@@ -88,7 +89,7 @@
 <div style="font-size: 70%; margin-top: 2em;"##
  ><a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">Forgot your login or password</a>?</div>
 #if($hasSocialLogin)
-#set($socialLoginTool=$xwiki.parseGroovyFromPage("XWiki.SocialLoginToolGroovy"))
+#set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
 #set($junk=$socialLoginTool.init($xwiki, $context, $request, $response, $msg))
 </td><td valign="top" align="left">
 ##</div>
@@ -100,7 +101,7 @@
 </div>
 <hr/>
     #foreach($provider in $providers)
-    <div class="provider">
+    <div class="provider"  id="identifyWith${provider}">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
       #set($link = $xwiki.getURL('XWiki.SocialLogin', 'view', "provider=${provider.toLowerCase()}&xredirect=$xredirect"))
       <a target="_top" href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])"
@@ -125,26 +126,47 @@
   document.forms.loginForm.j_username.focus();
 //]]>
 </script>
+{pre}
 <script type="text/javascript">
     var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
     if(fbAppId) {
+        window.fbReady = false;
         window.fbAsyncInit = function() {
           console.log("fbAsyncInit start.");
+          // below is the script when it's hooked
           FB.init({appId: fbAppId, status: true, cookie: true,
                    xfbml: true});
+          FB.Event.subscribe('auth.login', function(response) {
+              window.loginHasHappened(response);
+          });
+          window.loginHasHappened = function(response) {
+                // logged in and connected user, someone you know
+                // we now adjust the link to sign-up with Facebook
+                console.log("Is FB logged in: "); console.log(response.session);
+                var fbLink = document.getElementById("identifyWithFacebook").children[0];
+                fbLink.target="_self";
+                fbLink.onclick="";
+          };
+          FB.getLoginStatus(function() {
+              window.fbReady = true;
+              if (response.session) {
+                  window.loginHasHappened(response);
+              } else {
+                  console.log("Not FB logged in and authorized: will simply proceed with a log-in on user-request.");
+              }
+          });
         };
+        // hook the FB script
         (function() {
           var e = document.createElement('script'); e.async = true;
           e.src = document.location.protocol +
-            '//connect.facebook.net/en_US/all.js'; // TODO: language
+            '//connect.facebook.net/${language}_US}/all.js'; // TODO: language
           document.getElementById('fb-root').appendChild(e);
         }());
-        FB.Event.subscribe('auth.login', function(response) {
-            // do something with response.session
-        });
         console.log("fbAsyncInit finished.")
     }
 </script>
+{/pre}
 </div>## main
 #if($request.framed=='true')
 </body></html>

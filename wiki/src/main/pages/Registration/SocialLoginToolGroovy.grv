@@ -80,8 +80,10 @@ public class SocialLoginToolGroovy {
             if(maybeRedirect!=null && maybeRedirect.length()>0)
                 maybeRedirect = "&xredirect=" +request.getParameter("xredirect");
                 else maybeRedirect = "";
+            String maybeXpage="";
+            if(request.framed) maybeXpage="&xpage=popup";
             String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
-                    request.getPathInfo()  + '?callback=1' ;//+ maybeRedirect;
+                    request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
             if("facebook".equalsIgnoreCase(request.provider)) {
                 targetUrl = URLEncoder.encode(targetUrl);
                 provider.setPermission(Permission.AUHTHENTICATE_ONLY);
