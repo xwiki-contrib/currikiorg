@@ -6,18 +6,33 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
-#* @vtlvariable name="escapeTool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 ###
 ### Login page
 ### (is delivered as full page except if framed=true is in the request)
 ###
-#if($request.framed=='true')##
+#if($request.framed=='true')#set($framed="true")##
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head ><title>Curriki Login</title>
-</head><body>
-#else##
-#template("startpage.vm")
+</head><body>##
+#else#set($framed="false")##
+{pre}#template("startpage.vm"){/pre}##
 #end
+<script type="text/javascript">##
+    #set($redir="/xwiki/bin/view/Xwiki/XWikiLogin")
+    if(window.name=='curriki-identity-dialog-popup'
+            && window.parent && window.parent.name=='curriki-identity-dialog' ) {
+        // in a pop-up with a caller dialog?... need to go to caller and close oneself
+        window.location.replace("${redir}");
+        window.setInterval("window.close();", 20);##
+    } else if(!($framed) && window.top!=window) {
+        window.top.location.replace("/xwiki/bin/view/Registration/JumpToFramed?redir=$escapetool.url(${redir})");
+    } else if(!($framed)){
+        Ext.onReady(function() {
+            displayLoginDialog("$redir");
+        });
+    }
+</script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
@@ -34,7 +49,7 @@
 <!-- session's xredirect is $request.session.getAttribute("xredirect") -->
 <!-- this document is from Registration.LoginOrRegister -->
 <div class="hidden">##
-<input type="hidden" name="xredirect" value="$xredirect"/>
+<input type="hidden" name="xredirect" value="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($xredirect)"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
 #if("$!request.srid" != '')
   <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
@@ -97,15 +112,16 @@
 <div class="provider" style="background: #EEEEEE">
   <a href="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('xwiki.socialLogin.signInWith.Curriki')">
   <img align="middle" src="/xwiki/skins/curriki8/LogoStandalone-globeOnly.png" height="22" />
-  Create a new account on Curriki</a>
+  Create a new account manually on Curriki</a>
 </div>
 <hr/>
     #foreach($provider in $providers)
     <div class="provider"  id="identifyWith${provider}">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-      #set($link = $xwiki.getURL('XWiki.SocialLogin', 'view', "provider=${provider.toLowerCase()}&xredirect=$xredirect"))
-      <a target="_top" href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])"
-              onclick="window.top.location.replace('${link}')">
+      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect")
+      <a target="_top" href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])"##
+              onclick="window.name='curriki-identity-dialog'; window.open('${link}','curriki-identity-dialog-popup'); return false;">##
+          ## TODO: may wish to display that we're waiting
 	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))
 	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" />
 	  #end
@@ -171,7 +187,7 @@
 #if($request.framed=='true')
 </body></html>
 #else
-#template("endpage.vm")
+{pre}#template("endpage.vm"){/pre}##
 ## TODO: move the div of id 'mainContentArea' into an Ext window
 ## TODO: remove the login or register header!
 #end

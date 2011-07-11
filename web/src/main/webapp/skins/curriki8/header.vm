@@ -45,7 +45,7 @@
 	#end ##}
     #set($escapedURL=$escapetool.url($request.getRequestURI()))##
     #set($targetURL="/xwiki/bin/loginsubmit/XWiki/XWikiLogin?xredirect=$escapedURL")
-    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayIntroStep(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
     <a $anchorAtts>Login or Register</a>
 #else ## }{ ## is logged in
 	## crtUserDoc is set in fudocs.vm

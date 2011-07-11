@@ -1,0 +1,33 @@
+##
+## This page is included by other pages when a delivery as a dialog within a curriki page
+## is desired.
+##
+## it needs one variable or parameter to be defined: redir
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+{pre}#if($redir)#else#set($redir=$request.redir)#end##
+#if(!$included && $request.xpage=="plain")
+<html><head><title>Redirection</title>
+    #template("javascripts.vm")
+    #template("stylesheets.vm")
+</head><body>##
+#end
+#if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
+<a id="followMeLink" href="${redir}" target="_top">displaying dialog</a>##
+<script type="text/javascript">##
+    if(window.name=='curriki-identity-dialog-popup') {
+            //&& window.opener && window.opener.name=='curriki-identity-dialog' ) {
+        // in a pop-up with a caller dialog?... need to go to caller and close oneself
+        window.opener.location.replace("${redir}");
+        window.setInterval("window.close();", 20);##
+    } else if(window.top==window) {
+        window.top.location.replace("/xwiki/bin/view/Registration/JumpToFramed?redir=$escapetool.url(${redir})");
+    } else {
+        Ext.onReady(function() {
+            displayLoginDialog("$redir");
+        });
+    }
+</script>
+#if(!$included && $request.xpage=="plain")
+</body></html>##
+#end
+{/pre}

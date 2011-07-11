@@ -25,17 +25,6 @@ $request.session.setAttribute("xredirect",$redir)##
 #if ($context.user != 'XWiki.XWikiGuest')##
 ##$response.sendRedirect($redir)##
 ## rather JS-redirect so that we get frame=_top
-<html><head><title>Redirection</title></head><body>##
-<a href="${redir}" target="_top">login in process</a>##
-<script type="text/javascript">##
-    window.moveOnTask = null;##
-    function moveOn() {##
-        window.top.location.replace("${redir}");##
-        window.clearInterval(window.moveOnTask);##
-        window.moveOnTask = null;##
-    }##
-    window.moveOnTask = window.setInterval(moveOn,50);</script>##
-</body></html>##
 #elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself (e.g. missing rights)
 #set($qs = "$!{request.queryString}")##
 #if(!$request.getParameter('xredirect'))##

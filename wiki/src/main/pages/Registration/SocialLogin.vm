@@ -10,17 +10,22 @@
 $tool.init($xwiki,$context,$request,$response,$msg)##
 #set($view=$tool.action())##
 #macro(render)
-    #if($view=="creationForm")$xwiki.includeForm("Registration.RegistrationBootstrap",false)##
+    #if($view=="creationForm")$tool.readProviderProfile()$xwiki.includeForm("Registration.RegistrationBootstrap",false)##
     #set($view="nothing")
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
     #elseif($view=="processAuthReturn")#set($view=$tool.processAuthReturn())
     #elseif($view=="createNewProfile")#set($view=$tool.tryCreateNewProfile())
-    #elseif($view=="loginSucceeded")#set($view=$tool.acceptLoginAndRedirect())
+    #elseif($view=="redirectInDialog")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.JumpToFramed",false)##
+    #elseif($view=="redirectOnTop")#set($redir=$tool.getNowTarget())#set($view="")$xwiki.includeForm("Registration.JumpToTop",false)##
     #elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top and a wait dialog
 <html><head><title>Redirection</title></head><body>##
 #set($targetUrl=${tool.getRedirectTarget()})
-<a href="$targetUrl" target="_top">follow me</a>##
-<script type="text/javascript">window.top.location.href = "$targetUrl";</script>##
+<a href="$targetUrl" target="curriki-identity-dialog">follow me</a>##
+<script type="text/javascript">
+        var w = window;
+        if(window.opener && window.opener.name=='curriki-identity-dialog') w=window.opener;
+        w.location.replace("$targetUrl");
+</script>##
 </body></html>##
     #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
     #elseif($view=="nothing")##nothing

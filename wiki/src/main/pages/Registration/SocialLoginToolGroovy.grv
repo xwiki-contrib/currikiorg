@@ -9,7 +9,8 @@ import com.xpn.xwiki.web.XWikiMessageTool
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.brickred.socialauth.Permission
-import org.brickred.socialauth.Profile;
+import org.brickred.socialauth.Profile
+import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -25,6 +26,7 @@ public class SocialLoginToolGroovy {
     String city, country;
     String warningFields="", okFields="";
     String username, password, firstName, lastName, email, memberType, agree;
+    String nowTarget = null;
 
 
     Log LOG = LogFactory.getLog("GroovyPages.SocialLogin");
@@ -50,7 +52,8 @@ public class SocialLoginToolGroovy {
             System.out.println("Authenticating user " + userDoc);
             if(userDoc==null) return null;
             xwiki.checkAuth(userDoc.fullName, userDoc.get("XWiki.XWikiUsers").get("password").value, "false")
-            return "loginSucceeded";
+            nowTarget = request.session.getAttribute("xredirect");
+            return "redirectOnTop";
             //def xwikiAuthenticator = xwiki.getXWiki().getAuthService(); //.@authenticators.get('xwiki')
             //def psm = xwikiAuthenticator.@persistentLoginManager;
             // psm.rememberLogin(request, response, userDoc.fullName, password)
@@ -81,7 +84,7 @@ public class SocialLoginToolGroovy {
                 maybeRedirect = "&xredirect=" +request.getParameter("xredirect");
                 else maybeRedirect = "";
             String maybeXpage="";
-            if(request.framed) maybeXpage="&xpage=popup";
+            if(request.framed=="true") maybeXpage="&xpage=popup";
             String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
             if("facebook".equalsIgnoreCase(request.provider)) {
@@ -145,30 +148,17 @@ public class SocialLoginToolGroovy {
                 request.session.setAttribute("org.brickred.socialauth.Profile", profile);
                 LOG.warn("Received from " + providerId + " profile " + profile + ".");
 
-                firstName = profile.getFirstName();
-                lastName = profile.getLastName();
-                email = profile.getEmail();
-                city = profile.location;
-                country  = profile.country;
 
-                username = profile.displayName;
-                if(username==null || username=='') {
-                    int p = email.indexOf('@');
-                    username = email.substring(0,p);
-                    if(!isValidUsername(username, false)) {
-                        int i=0;
-                        while(i<20) {
-                            if(isValidUsername(username + i, false)) break
-                        }
-                        username = username +i;
-                    }
-                }
+                readProviderProfile();
 
-                // Outputs the form to create the username
-                return "creationForm";
+                // take to the display of the form to create the username
+                nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
+                return "redirectInDialog";
             } else {
                 // final step, login worked, existing user
-                return "loginSucceeded";
+                nowTarget = request.getSession().getAttribute("xredirect");
+                System.out.println("Redirecting to " + nowTarget + " through a redirectOnTop");
+                return "redirectOnTop";
             }
 
         } catch (Exception ex) {
@@ -178,6 +168,29 @@ public class SocialLoginToolGroovy {
         };
     }
 
+
+    public void readProviderProfile() {
+        Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile");
+        providerId = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
+        firstName = profile.getFirstName();
+        lastName = profile.getLastName();
+        email = profile.getEmail();
+        city = profile.location;
+        country  = profile.country;
+
+        username = profile.displayName;
+        if(username==null || username=='') {
+            int p = email.indexOf('@');
+            username = email.substring(0,p);
+            if(!isValidUsername(username, false)) {
+                int i=0;
+                while(i<20) {
+                    if(isValidUsername(username + i, false)) break
+                }
+                username = username +i;
+            }
+        }
+    }
 
 
     /**
@@ -232,7 +245,9 @@ public class SocialLoginToolGroovy {
             userObj.set("active", "1");
             userObj.set("email_undeliverable", "0");
             userObj.set("show_contact","2"); // Show Your Profile:
-            userObj.set("opt_out", 0); // 
+            userObj.set("opt_out", 0); //
+
+            //userDoc.addAttachments("xxx xx?");
 
             // other fields? language?
             String language = profile.language;
@@ -291,18 +306,14 @@ public class SocialLoginToolGroovy {
         }
     }
 
-    public String acceptLoginAndRedirect() {
+    /* public String acceptLoginAndRedirect() {
         String xredirect = request.session.getAttribute("xredirect");
         if(xredirect==null || xredirect=="") xredirect = request.getParameter("xredirect");
-        if(xredirect==null || xredirect=="") xredirect = "/xwiki/bin/view/" + context.user.replaceAll("\\.",".");
-        //if(!response.isCommitted())
-        //    response.sendRedirect(xredirect);
-        //else {
+        if(xredirect==null || xredirect=="") xredirect = "/xwiki/bin/view/" + context.user.replaceAll("\\.","/");
             request.session.setAttribute("xredirect", xredirect);
-            return "redirectInHtml";
-        //}
-        //return "nothing";
-    }
+        nowTarget = xredirect;
+        return "redirectOnTop";
+    } */
 
     public String getApplicationApiKey(String provider) {
         provider = provider.toLowerCase();
@@ -411,7 +422,8 @@ public class SocialLoginToolGroovy {
         }
         else if (request.callback){
             return "processAuthReturn";
-        }
+        } else if(request.xaction && request.xaction=='creationForm')
+            return "creationForm";
         else if (request.xaction && request.xaction == 'createProfile') {
             return "createNewProfile";
         }
@@ -431,6 +443,10 @@ public class SocialLoginToolGroovy {
         System.out.println("xredirect is " + xredirect);
         request.session.removeAttribute("xredirect");
         return xredirect;
+    }
+
+    public String getNowTarget() {
+        return nowTarget;
     }
 
 
