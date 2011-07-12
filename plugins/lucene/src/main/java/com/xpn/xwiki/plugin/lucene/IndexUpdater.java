@@ -376,9 +376,9 @@ public class IndexUpdater extends AbstractXWikiRunnable
     private void addToIndex(IndexData data, XWikiDocument doc, XWikiContext context)
         throws IOException
     {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("addToIndex: " + data);
-        }
+        if(doc!=null && "XWiki.XWikiAllGroup".equals(doc.getFullName()))
+            return;
+        LOG.info("addToIndex: " + data);
 
         org.apache.lucene.document.Document luceneDoc = new org.apache.lucene.document.Document();
         data.addDataToLuceneDocument(luceneDoc, doc, context);
