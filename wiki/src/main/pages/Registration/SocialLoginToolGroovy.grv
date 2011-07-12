@@ -51,6 +51,7 @@ public class SocialLoginToolGroovy {
         try {
             System.out.println("Authenticating user " + userDoc);
             if(userDoc==null) return null;
+            context.context.put("ajax",true);
             xwiki.checkAuth(userDoc.fullName, userDoc.get("XWiki.XWikiUsers").get("password").value, "false")
             nowTarget = request.session.getAttribute("xredirect");
             return "redirectOnTop";
@@ -210,6 +211,7 @@ public class SocialLoginToolGroovy {
         country = profile.country;
         password = request.password;
         memberType = request.getParameter("member_type");
+        if(memberType==null) memberType="-";
 
         boolean validUsername = isValidUsername(username, true);
         boolean validEmail = isValidEmail(email, true);
@@ -293,9 +295,11 @@ public class SocialLoginToolGroovy {
             socialPrefs.set('preferred_provider', provider)
 
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
+            System.out.println("New profile created and saved: " + userDoc);
             return authenticateUser(userDoc)
         }
         else {
+            System.out.println("New profile not created.");
             if (!username || username == '')
                 errors.add('xwiki.socialLogin.youMustPickUsername');
             else if (xwiki.exists('XWiki.' + username))

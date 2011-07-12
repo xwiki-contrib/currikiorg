@@ -22,7 +22,7 @@
         if(w!=window) // this was a popup, close me in 100ms
             window.setInterval("window.close();", 100);##
             w.top.location.replace("${redir}");
-        if(console) console.log("Jumping to ${redir}");##
+        if(w.top.console) w.top.console.log("Jumping to ${redir}");##
          window.clearInterval(w.moveOnTask);##
          w.moveOnTask = null;##
     }##
