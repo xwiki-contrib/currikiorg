@@ -3352,7 +3352,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
                 closable:true,
                 monitorResize: true,
                 scrollbars: true,
-                title:"Login or Register",
+                title:_("join.login.title"),
                 html: "<iframe id='loginIframe' src='"+url+"' width='"+w+"' height='"+h+"'/>"
             });
     Curriki.ui.login.loginDialog.show();

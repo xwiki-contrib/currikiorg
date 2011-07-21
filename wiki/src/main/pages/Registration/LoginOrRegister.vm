@@ -13,7 +13,7 @@
 ###
 #if($request.framed=='true')#set($framed="true")##
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head ><title>Curriki Login</title>
+<head><title>$msg.get("join.login.title")</title>
 </head><body>##
 #else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
@@ -76,56 +76,45 @@
 ##<div class="column half">
 <table width="100%"><tr><td>
 #end
-<h3>Login if you are a member of Curriki.</h3>
-## #xwikimessageboxstart($msg.get('login') '')
-#set($message = $msg.get($xwiki.parseMessage()))
-#if($message)
-  <!-- previous login errors -->
-  #error($message)
-#end
-## #xwikimessageboxend()
-<table class="xwikilogintable" summary="$msg.get('loginform')">
+<h3>$msg.get("join.login.header")</h3>
+<table class="xwikilogintable" summary="$msg.get('join.login.header')">
   <tr>
-    <th><label for="j_username">$msg.get('username'):</label></th>
+    <th><label for="j_username">$msg.get('join.login.username'):</label></th>
     <td><input type="text" id="j_username" name="j_username" value=""/></td>
   </tr>
   <tr>
-    <th><label for="j_password">$msg.get('password'):</label></th>
+    <th><label for="j_password">$msg.get('join.login.password'):</label></th>
     <td><input type="password" id="j_password" name="j_password" value=""/></td>
   </tr>
   <tr>
     <td colspan="2" style="text-align: left;">
       <input id="rememberme" type="checkbox" name="j_rememberme" value="true"/>
-      <label for="rememberme">$msg.get('remembermeonthiscomp')</label>
+      <label for="rememberme">$msg.get('join.login.remember_me')</label>
     </td>
   </tr>
 </table>
-<div class="buttons"><span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('login')"/></span></div>
-<div style="font-size: 70%; margin-top: 2em;"##
- ><a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">Forgot your login or password</a>?</div>
+<div class="buttons">##
+    <span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('join.login.button')"/></span>
+    <span class="buttonwrapper"><input type="button" class="button" value="$msg.get('join.login.cancel')" onclick="window.top.location.href.replace('$xredirect')"/></span>
+</div>
 #if($hasSocialLogin)
 #set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
 #set($junk=$socialLoginTool.init($xwiki, $context, $request, $response, $msg))
 </td><td valign="top" align="left">
 ##</div>
 ##<div class="column half socialLoginProviders">
-<div class="provider" style="background: #EEEEEE">
-  <a href="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('xwiki.socialLogin.signInWith.Curriki')">
-  <img align="middle" src="/xwiki/skins/curriki8/LogoStandalone-globeOnly.png" height="22" />
-  Create a new account manually on Curriki</a>
-</div>
-<hr/>
+    <h3>$msg.get('join.login.social_header')</h3>## or login with...
     #foreach($provider in $providers)
     <div class="provider"  id="identifyWith${provider}">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect")
-      <a target="_top" href="${link}" title="$msg.get('xwiki.socialLogin.signInWith', [$provider])"##
+      <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="window.name='curriki-identity-dialog'; window.open('${link}','curriki-identity-dialog-popup'); return false;">##
-          ## TODO: may wish to display that we're waiting
-	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))
-	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" />
-	  #end
-          $msg.get('xwiki.socialLogin.signInWith', [$provider])##
+	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
+	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" />##
+      #else##
+        $msg.get("join.login.social.login-with-${provider}.tooltip")##
+	  #end##
 	  </a>
     </div>
     #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button></div>#end
@@ -135,6 +124,11 @@
 <div class="clearfloats"></div>
 #end
 </form>
+<div style="font-size: 70%; margin-top: 2em;">##
+   <a href="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('join.login.join_curriki')">##
+    $msg.get('join.login.join_curriki')</a>
+   <a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">$msg.get('join.login.forgot')</a>?##
+</div>
 </div>## mainContentArea
 ## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
 <script type="text/javascript">
@@ -188,6 +182,4 @@
 </body></html>
 #else
 {pre}#template("endpage.vm"){/pre}##
-## TODO: move the div of id 'mainContentArea' into an Ext window
-## TODO: remove the login or register header!
 #end
