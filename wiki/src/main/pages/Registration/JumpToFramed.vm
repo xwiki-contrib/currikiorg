@@ -14,16 +14,17 @@
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
 <a id="followMeLink" href="${redir}" target="_top">displaying dialog</a>##
 <script type="text/javascript">##
-    if(window.name=='curriki-identity-dialog-popup') {
+    if(window.name=='curriki-identity-dialog-popup' && window.opener != window) {
             //&& window.opener && window.opener.name=='curriki-identity-dialog' ) {
         // in a pop-up with a caller dialog?... need to go to caller and close oneself
+        if(console) console.log("Redirecting to ${redir}")
         window.opener.location.replace("${redir}");
         window.setInterval("window.close();", 20);##
-    } else if(window.top==window) {
+    } else if(window.top!=window) {
         window.top.location.replace("/xwiki/bin/view/Registration/JumpToFramed?redir=$escapetool.url(${redir})");
     } else {
         Ext.onReady(function() {
-            displayLoginDialog("$redir");
+            Curriki.ui.login.displayLoginDialog("$redir");
         });
     }
 </script>

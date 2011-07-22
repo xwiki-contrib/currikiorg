@@ -10,7 +10,8 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
-import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi;
+import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi
+import com.xpn.xwiki.doc.XWikiAttachment;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -102,7 +103,7 @@ public class SocialLoginToolGroovy {
             return "nothing";
         } catch (Exception ex) {
             ex.printStackTrace();
-            errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
+            errors.add(msg.get('registration.genericError', [ex.message]));
             return "error";
         };
     }
@@ -213,14 +214,17 @@ public class SocialLoginToolGroovy {
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
-        boolean validUsername = isValidUsername(username, true);
-        boolean validEmail = isValidEmail(email, true);
-        boolean validPassword = isValidPassword(password, true);
-        boolean validMemberType = isValidMemberType(memberType, true);
-        boolean validAgree = isValidAgree(request.agree, true);
+        boolean passed = isValidUserName(username, true);
+        passed = passed & isValidUsername(username, true);
+        passed = passed & isValidEmail(email, true);
+        passed = passed & isValidPassword(password, true);
+        passed = passed & isValidMemberType(memberType, true);
+        passed = passed & isValidAgree(request.agree, true);
+        passed = passed & isValidFirstName(firstName, true);
+        passed = passed & isValidLastName(lastName, true);
 
 
-        if (validUsername && validEmail && validPassword && validMemberType && validAgree) {
+        if (passed) {
             // Everything clear, let's proceed
 
             def propMap = new HashMap();
@@ -295,15 +299,18 @@ public class SocialLoginToolGroovy {
             socialPrefs.set('preferred_provider', provider)
 
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
+
+            addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
+
             System.out.println("New profile created and saved: " + userDoc);
             return authenticateUser(userDoc)
         }
         else {
             System.out.println("New profile not created.");
             if (!username || username == '')
-                errors.add('xwiki.socialLogin.youMustPickUsername');
+                errors.add(msg.get('join.error.unsername'));
             else if (xwiki.exists('XWiki.' + username))
-                errors.add('xwiki.socialLogin.usernameAlreadyTaken');
+                errors.add(msg.get('join.error.login_not_unique'));
             if(!errors.isEmpty())
                 return "creationForm";
             else return null;
@@ -346,7 +353,7 @@ public class SocialLoginToolGroovy {
         if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
             if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
                 if(echoErrors) {
-                    errors.add("account_already_exists");
+                    errors.add(msg.get("join.error.login_not_unique"));
                     warningFields += ", username";
                 }
                 return false;
@@ -357,7 +364,7 @@ public class SocialLoginToolGroovy {
         }
         else {
             warningFields += ", username";
-            if(echoErrors) errors.add("account_notvalid");
+            if(echoErrors) errors.add(msg.get("join.error.unsername"));
             return false;
         }
     }
@@ -371,13 +378,13 @@ public class SocialLoginToolGroovy {
         // Check to see if the email address is already used
         if (xwiki.searchDocuments(query).size() > 0) {
             warningFields += ", email";
-            errors.add("email_already_exists");
+            errors.add(msg.get("join.error.email_not_unique"));
             return false;
         }
 
         // We should make this a bit better...
         if (echoErrors && (atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
-            errors.add("email_notvalid");
+            errors.add(msg.get("join.error.email_invalid"));
             warningFields += ", email";
             return false;
         }
@@ -391,8 +398,30 @@ public class SocialLoginToolGroovy {
             return true
         };
         if(echoErrors)
-            errors.add("password_notvalid");
+            errors.add(msg.get("join.error.password_invalid"));
         warningFields += ", password";
+        return false;
+    }
+
+    public boolean isValidFirstName(String name, boolean echoErrors) {
+        if(name!=null && name.length()<32 ) {
+            okFields += ", first_name";
+            return true
+        };
+        if(echoErrors)
+            errors.add(msg.get("join.error.fname1_long"));
+        warningFields += ", first_name";
+        return false;
+    }
+
+    public boolean isValidLastName(String name, boolean echoErrors) {
+        if(name!=null && name.length()<32 ) {
+            okFields += ", last_name";
+            return true
+        };
+        if(echoErrors)
+            errors.add(msg.get("join.error.lname1_long"));
+        warningFields += ", last_name";
         return false;
     }
 
@@ -402,7 +431,7 @@ public class SocialLoginToolGroovy {
             return true
         };
         if(echoErrors)
-            errors.add("memberType_notvalid");
+            errors.add(msg.get("join.error.membership_type"));
         warningFields += ", memberType";
         return false;
     }
@@ -414,7 +443,7 @@ public class SocialLoginToolGroovy {
             return true
         };
         if(echoErrors)
-            errors.add("agree_notvalid");
+            errors.add(msg.get("join.error.policy"));
         warningFields += ", agree";
         return false;
     }
@@ -447,6 +476,37 @@ public class SocialLoginToolGroovy {
         System.out.println("xredirect is " + xredirect);
         request.session.removeAttribute("xredirect");
         return xredirect;
+    }
+
+    public void addProfilePictureFromAttachment(String url, Document userDoc) {
+        try {
+            URL u = new URL(url)
+            String name=u.getPath()
+            if(name.contains("/")) {
+                if(name.endsWith("/") && name.length()>1)
+                    name = name.substring(0, name.length()-1);
+                name = name.substring(name.lastIndexOf("/")+1);
+            }
+            XWikiAttachment attachment = userDoc.document.getAttachment(name)
+            if (attachment == null) {
+                attachment = new XWikiAttachment();
+                userDoc.document.getAttachmentList().add(attachment);
+            }
+            InputStream inS = u.openStream()
+            ByteArrayOutputStream bout = new ByteArrayOutputStream()
+            int r=0
+            while((r=inS.read())!=-1) { bout.write((byte) r);}
+            attachment.setContent(bout.toByteArray())
+            attachment.setFilename(name)
+            attachment.setAuthor(context.user)
+            attachment.setDoc(userDoc.document)
+            userDoc.document.saveAllAttachments(context.context)
+            def userObj = userDoc.getObject("XWiki.XWikiUsers")
+            userObj.set("avatar",name)
+        } catch (Exception ex) {
+            LOG.warn("Couldn't write profile picture.",ex);
+        };
+
     }
 
     public String getNowTarget() {

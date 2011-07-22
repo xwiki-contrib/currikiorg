@@ -110,19 +110,19 @@
 ##<div class="column half socialLoginProviders">
     <h3>$msg.get('join.login.social_header')</h3>## or login with...
     #foreach($provider in $providers)
-    <div class="provider"  id="identifyWith${provider}">
+    <div class="provider"  id="identifyWith${provider}" style="display:inline">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="window.name='curriki-identity-dialog'; window.open('${link}','curriki-identity-dialog-popup'); return false;">##
 	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
-	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" style="width:3em"/>##
+	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" width="100"/>##
       #else##
         $msg.get("join.login.social.login-with-${provider}.tooltip")##
 	  #end##
 	  </a>
     </div>
-    #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button></div>#end
+    #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="120" max-rows="1"></fb:login-button></div>#end
     ##<hr/>
   #end
 </td></tr></table>

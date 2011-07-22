@@ -41,12 +41,12 @@
               #end..</p>
           <ul class="errors">
           #foreach($m in $tool.errors)
-              <li>$msg.get($m)</li>
+              <li>$m</li>
           #end
           </ul>
-      <input type="hidden" name="xaction" value="createProfile" />
-      <input type="hidden" name="city"  value="$tool.city"/>
-      <input type="hidden" name="country" value="$tool.country"/>
+      <input type="hidden" name="xaction" value="createProfile" >
+      <input type="hidden" name="city"  value="$tool.city">
+      <input type="hidden" name="country" value="$tool.country">
 
         #macro(computeTrClasses $f)##
             #if($okFields.contains($f)) okField #end #if($warningFields.contains($f)) warningField #end #end##
@@ -57,7 +57,7 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_name")</b></label>
               <input id="${f}_input" name="${f}" value="${tool.username}"##
-                title="$msg.get("join.member_name_instructions")"/>
+                title="$msg.get("join.member_name_instructions")">
           </p>
           ##
           ##
@@ -65,7 +65,7 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_password")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password" ###
-                      title="$msg.get("join.member_password_instructions")"/>
+                      title="$msg.get("join.member_password_instructions")">
           </p>
           ##
           ##
@@ -73,7 +73,7 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
               <input id="${f}_input" name="${f}" value="${tool.firstName}" disabled="disabled"##
-                      title="$msg.get('join.member_social_prefilled_tooltip')"/>
+                      title="$msg.get('join.member_social_prefilled_tooltip')">
           </p>
           ##
           ##
@@ -81,7 +81,7 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
               <input id="${f}_input" name="${f}" value="${tool.lastName}" disabled="disabled"##
-                      title="$msg.get('join.member_social_prefilled_tooltip')/>
+                      title="$msg.get('join.member_social_prefilled_tooltip')">
           </p>
           ##
           ##
@@ -89,7 +89,7 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_email")</b></label>
               <input id="${f}_input" name="${f}" value="${tool.email}" disabled="disabled"##
-                      title="$msg.get('join.member_social_prefilled_tooltip')/>
+                      title="$msg.get('join.member_social_prefilled_tooltip')">
           </p>
           ##
           ##
@@ -98,8 +98,10 @@
               <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
               <select name="member_type" id="${f}_input">##
+                  #set($val="-")
+                  <option value="$val" #if($tool.memberType==$val)check="checked"#end></option>##
                   #foreach($val in $propVals)#if($val!="0")##
-                  <option value="$val" #if($tool.memberType==$val)check="checked"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")##
+                  <option value="$val" #if($tool.memberType==$val)check="checked"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
                   #end#end
               </select>
           </p>
@@ -114,8 +116,8 @@
                   </label>
           </p>
           <p align="right">
-              <input type="submit" value="$msg.get("join.member.save_button")"/>
-              <input type="button" value="$msg.get("join.member.cancel_button")"  onclick="window.open('$xredirect','_top')"/>### TODO: warning in case of cancel
+              <input type="submit" value="$msg.get("join.member.save_button")">
+              <input type="button" value="$msg.get("join.member.cancel_button")"  onclick="window.open('$xredirect','_top')">### TODO: warning in case of cancel
           </p>
       </fieldset>
 
