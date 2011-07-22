@@ -11,11 +11,15 @@
         </p>##
 <script type="text/javascript">##
     var w = window;
-    if(w.name=='curriki-identity-dialog-popup'
-            && w.opener && w.opener.name=='curriki-identity-dialog') {
-        w = window.opener;
-        if(!(w.name)) w.name="curriki-parent-window";
-        window.links[0].target=w.name;
+    try {
+        if (w.name == 'curriki-identity-dialog-popup'
+                && w.opener && w.opener.name == 'curriki-identity-dialog') {
+            w = window.opener;
+            if (!(w.name)) w.name = "curriki-parent-window";
+            window.links[0].target = w.name;
+        }
+    } catch(e) {
+        if(console) console.log("Can't check for parent.",e);
     }
     w.moveOnTask = null;##
     function moveOn() {##

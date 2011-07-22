@@ -34,9 +34,11 @@
 <form class="xform" action=${doc.getURL('view')} method="post" id="createUsernameForm">
   <div class="centered">
       <fieldset class="xwikimessage">
-          <h3>Registration Almost Complete</h3>
-          <p align="left">The registration form has been pre-populated with information from ${tool.providerId}.<br/>
-          Please verify and fill in any required information.</p>
+          <h3>$msg.get("join.member.title")</h3>
+          <p align="left">
+              #if($tool.providerId)$msg.get("",[${tool.providerId}])#else##
+                  $msg.get("join.member.curriki_instructions")##
+              #end..</p>
           <ul class="errors">
           #foreach($m in $tool.errors)
               <li>$msg.get($m)</li>
@@ -53,42 +55,47 @@
           ##
           #set($f="username")
           <p class="#computeTrClasses($f)">
-              <label for="${f}_input"><b>Member Login:</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.username}"/>
+              <label for="${f}_input"><b>$msg.get("join.member_name")</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.username}"##
+                title="$msg.get("join.member_name_instructions")"/>
           </p>
           ##
           ##
           #set($f="password")
           <p class="#computeTrClasses($f)">
-              <label for="${f}_input"><b>Password:</b></label>
-              <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password"/>
+              <label for="${f}_input"><b>$msg.get("join.member_password")</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password" ###
+                      title="$msg.get("join.member_password_instructions")"/>
           </p>
           ##
           ##
           #set($f="firstName")
           <p class="#computeTrClasses($f)">
-              <label for="${f}_input"><b>First Name:</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.firstName}" disabled="disabled"/>
+              <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.firstName}" disabled="disabled"##
+                      title="$msg.get('join.member_social_prefilled_tooltip')"/>
           </p>
           ##
           ##
           #set($f="lastName")
           <p class="#computeTrClasses($f)">
-              <label for="${f}_input"><b>Last Name:</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.lastName}" disabled="disabled"/>
+              <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.lastName}" disabled="disabled"##
+                      title="$msg.get('join.member_social_prefilled_tooltip')/>
           </p>
           ##
           ##
           #set($f="email")
           <p class="#computeTrClasses($f)">
-              <label for="${f}_input"><b>Email:</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.email}" disabled="disabled"/>
+              <label for="${f}_input"><b>$msg.get("join.member_email")</b></label>
+              <input id="${f}_input" name="${f}" value="${tool.email}" disabled="disabled"##
+                      title="$msg.get('join.member_social_prefilled_tooltip')/>
           </p>
           ##
           ##
           #set($f="memberType")
           <p class="#computeTrClasses($f)">
-              <label for="${f}_input"><b>Member type:</b></label>
+              <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
               <select name="member_type" id="${f}_input">##
                   #foreach($val in $propVals)#if($val!="0")##
@@ -101,14 +108,14 @@
           #set($f="agree")
           <p class="#computeTrClasses($f)">
                   <label style="float: none; width:100%">
-                      <input type="checkbox" name="agree"
-                              #if($request.agree)checked #end >
-                      I agree to Curriki's Privacy Policy and Terms of service.
+                      <input type="checkbox" name="agree"##
+                              #if($request.agree)checked #end >##
+                      $msg.get("join.member_agreement").replaceFirst("_","<a href='$msg.get('join.member_privacy_policy_url')'>").replaceFirst("_","</a>").replaceFirst("_","<a href='$msg.get('join.member_terms_service_url')'>").replaceFirst("_","</a>")
                   </label>
           </p>
           <p align="right">
-              <input type="submit" value="Create my account"/>
-              <input type="button" value="Cancel"/> ### TODO: what to do in cancel??
+              <input type="submit" value="$msg.get("join.member.save_button")"/>
+              <input type="button" value="$msg.get("join.member.cancel_button")"  onclick="window.open('$xredirect','_top')"/>### TODO: warning in case of cancel
           </p>
       </fieldset>
 

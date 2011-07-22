@@ -14,7 +14,7 @@
 #elseif ($request.session && $request.session.getAttribute("xredirect"))##
 #set($redir=$request.session.getAttribute("xredirect"))##
 #elseif($context.user)##
-#set($redir="/xwiki/bin/view/${xcontext.user.replaceAll('\\.','/')}")##
+#set($redir="/xwiki/bin/view/${context.user.replaceAll('\\.','/')}")##
 #else##
 #set($redir="/")##
 #end##

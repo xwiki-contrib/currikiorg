@@ -77,13 +77,18 @@
 <table width="100%"><tr><td>
 #end
 <h3>$msg.get("join.login.header")</h3>
+    #set($message = $msg.get($xwiki.parseMessage()))
+    #if($message)
+      <!-- previous login errors -->
+      #error($message)
+    #end
 <table class="xwikilogintable" summary="$msg.get('join.login.header')">
   <tr>
-    <th><label for="j_username">$msg.get('join.login.username'):</label></th>
+    <th><label for="j_username">$msg.get('join.login.username')</label></th>
     <td><input type="text" id="j_username" name="j_username" value=""/></td>
   </tr>
   <tr>
-    <th><label for="j_password">$msg.get('join.login.password'):</label></th>
+    <th><label for="j_password">$msg.get('join.login.password')</label></th>
     <td><input type="password" id="j_password" name="j_password" value=""/></td>
   </tr>
   <tr>
@@ -95,7 +100,7 @@
 </table>
 <div class="buttons">##
     <span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('join.login.button')"/></span>
-    <span class="buttonwrapper"><input type="button" class="button" value="$msg.get('join.login.cancel')" onclick="window.top.location.href.replace('$xredirect')"/></span>
+    <span class="buttonwrapper"><input type="button" class="button" value="$msg.get('join.login.cancel')" onclick="window.open('$xredirect','_top')"/></span>
 </div>
 #if($hasSocialLogin)
 #set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
@@ -111,14 +116,14 @@
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="window.name='curriki-identity-dialog'; window.open('${link}','curriki-identity-dialog-popup'); return false;">##
 	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
-	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" />##
+	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" style="width:3em"/>##
       #else##
         $msg.get("join.login.social.login-with-${provider}.tooltip")##
 	  #end##
 	  </a>
     </div>
     #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button></div>#end
-    <hr/>
+    ##<hr/>
   #end
 </td></tr></table>
 <div class="clearfloats"></div>
@@ -157,7 +162,7 @@
                 fbLink.target="_self";
                 fbLink.onclick="";
           };
-          FB.getLoginStatus(function() {
+          FB.getLoginStatus(function(response) {
               window.fbReady = true;
               if (response.session) {
                   window.loginHasHappened(response);
@@ -168,9 +173,13 @@
         };
         // hook the FB script
         (function() {
+          var lang = "$context.language";
+          ## built from http://www.facebook.com/translations/FacebookLocales.xml
+          var country = {"en":"US", "fr":"FR", "ru":"RU", "hi": "IN", "es": "LA", "id": "ID", "si": "SI", "ta":"IN", "eo":"EO", "pl":"PL"}[lang];
+          if(typeof(country)!="string") { lang="en"; country="US";}
           var e = document.createElement('script'); e.async = true;
           e.src = document.location.protocol +
-            '//connect.facebook.net/${language}_US}/all.js'; // TODO: language
+            '//connect.facebook.net/'+lang+'_' + country +'/all.js';
           document.getElementById('fb-root').appendChild(e);
         }());
         console.log("fbAsyncInit finished.")

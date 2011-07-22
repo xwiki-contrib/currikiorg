@@ -363,7 +363,7 @@ public class SocialLoginToolGroovy {
     }
 
     public boolean isValidEmail(String email, boolean echoErrors) {
-        if("paul@hoplahup.net"==email) return true;
+        if("paul@hoplahup.net"==email || "polx@i2geo.net"==email || "paul@activemath.org"==email) return true;
         def atIndex = email.indexOf("@");
 
         def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
