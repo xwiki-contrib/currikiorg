@@ -214,8 +214,7 @@ public class SocialLoginToolGroovy {
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
-        boolean passed = isValidUserName(username, true);
-        passed = passed & isValidUsername(username, true);
+        boolean passed =  isValidUsername(username, true);
         passed = passed & isValidEmail(email, true);
         passed = passed & isValidPassword(password, true);
         passed = passed & isValidMemberType(memberType, true);

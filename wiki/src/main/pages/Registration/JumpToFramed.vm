@@ -12,21 +12,9 @@
 </head><body>##
 #end
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
-<a id="followMeLink" href="${redir}" target="_top">displaying dialog</a>##
+<a id="followMeLink" href="${redir}" target="_top">$msg.get("registration.jump.proceeding")</a>##
 <script type="text/javascript">##
-    if(window.name=='curriki-identity-dialog-popup' && window.opener != window) {
-            //&& window.opener && window.opener.name=='curriki-identity-dialog' ) {
-        // in a pop-up with a caller dialog?... need to go to caller and close oneself
-        if(console) console.log("Redirecting to ${redir}")
-        window.opener.location.replace("${redir}");
-        window.setInterval("window.close();", 20);##
-    } else if(window.top!=window) {
-        window.top.location.replace("/xwiki/bin/view/Registration/JumpToFramed?redir=$escapetool.url(${redir})");
-    } else {
-        Ext.onReady(function() {
-            Curriki.ui.login.displayLoginDialog("$redir");
-        });
-    }
+    Curriki.ui.login.makeSureWeAreFramed("${redir}");
 </script>
 #if(!$included && $request.xpage=="plain")
 </body></html>##
