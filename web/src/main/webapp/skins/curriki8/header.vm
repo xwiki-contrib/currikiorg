@@ -43,7 +43,7 @@
 		#set($logredir = "srid=$request.srid")
 	#end ##}
     #set($escapedURL=$escapetool.url($request.getRequestURI()))##
-    #set($targetURL="/xwiki/bin/view/Registration/LogiOrRegister?xredirect=$escapedURL")
+    #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
     #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
     <a $anchorAtts>$msg.get("join.login.title")</a>
 #else ## }{ ## is logged in
