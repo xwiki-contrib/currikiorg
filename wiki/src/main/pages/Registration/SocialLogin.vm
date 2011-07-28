@@ -7,13 +7,25 @@
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 {pre}##
+#if($request.session)#set($oldTool=$request.session.getAttribute("SocialLoginTool"))#end##
 #set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
-$tool.init($xwiki,$context,$request,$response,$msg)##
-#set($view=$tool.action())##
+#if($oldTool)##
+ $tool.grabFrom($oldTool)##
+ $request.session.removeAttribute("SocialLoginTool")##
+#end##
+$tool.init($xwiki,$context,$request,$msg)##
+#set($view=$tool.action($request))##
 #macro(render)
-    #if($view=="creationForm")$tool.readProviderProfile()$xwiki.includeForm("Registration.RegistrationBootstrap",false)##
+    #if($view=="creationForm")#if($request.method=="POST")##
+        $request.session.setAttribute("SocialLoginTool",$tool)##
+        $tool.readProviderProfile()##
+        $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/SocialLogin?xaction=creationForm&$!request.getQueryString()")##
+    #else##
+        $tool.readProviderProfile()##
+        $xwiki.includeForm("Registration.RegistrationBootstrap",false)##
+    #end##
     #set($view="nothing")
-    #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider())
+    #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider($response))
     #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())
     #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())
     #elseif($view=="redirectInDialog")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.JumpToFramed",false)##
@@ -21,17 +33,6 @@ $tool.init($xwiki,$context,$request,$response,$msg)##
     #elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top and a wait dialog
         #set($redir="${tool.getRedirectTarget()}")##
         $xwiki.includeForm("Registration.JumpToTop",false)
-##<html><head><title>Redirection</title></head><body>##
-###set($targetUrl=${tool.getRedirectTarget()})
-##<a href="$targetUrl" target="curriki-identity-dialog">follow me</a>##
-##<script type="text/javascript">
-##        var w = window;
-##        if(window.opener && window.opener.name=='curriki-identity-dialog') w=window.opener;
-##        w.location.replace("$targetUrl");
-##        w.location.reload();
-##
-##</script>##
-##</body></html>##
     #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
     #elseif($view=="nothing")##nothing
     #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->

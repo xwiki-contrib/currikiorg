@@ -13,14 +13,20 @@
 ###
 #if($request.framed=='true')#set($framed="true")##
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>$msg.get("join.login.title")</title>
-</head><body>##
+<head>
+    <title>$msg.get("join.login.title")</title>
+    #template("xwikivars.vm")
+    #template("javascripts.vm")
+    #template("stylesheets.vm")
+    ## #template("analytics.vm")
+</head><body style="background-color:white">##
 #else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
 #end
 <script type="text/javascript">##
-    #set($redir="/xwiki/bin/view/Xwiki/XWikiLogin")
-    if(window.name=='curriki-identity-dialog-popup'
+    #set($redir="/xwiki/bin/login/XWiki/XWikiLogin")
+    ## Curriki.ui.login.makeSureWeAreFramed("$redir");
+    /* if(window.name=='curriki-identity-dialog-popup'
             && window.parent && window.parent.name=='curriki-identity-dialog' ) {
         // in a pop-up with a caller dialog?... need to go to caller and close oneself
         window.location.replace("${redir}");
@@ -31,12 +37,12 @@
         Ext.onReady(function() {
             displayLoginDialog("$redir");
         });
-    }
+    }*/
 </script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-<form id="loginForm" action="$doc.getURL('loginsubmit')" method="post">
+<form id="loginForm" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()" method="post">
 #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
 #if($xredirect.startsWith("%2"))#set($xredirect=$xredirect.replaceAll("%2F","/"))#end
@@ -76,16 +82,27 @@
 ##<div class="column half">
 <table width="100%"><tr><td>
 #end
-<h3>$msg.get("join.login.header")</h3>
-    #set($message = $msg.get($xwiki.parseMessage()))
+<h3>$msg.get("join.login.header")</h3><!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest") -->
+    #set($message=$!request.session.getAttribute("messagesForNextLoginRequest"))
+    #set($userName=$!request.j_username)
+    #if($message)
+        $request.session.removeAttribute("messagesForNextLoginRequest")
+        #set($userName="$request.session.getAttribute('lastUserName')")
+        $request.session.removeAttribute("lastUserName")<!-- lastUserName = $userName -->
+    #end
+    #if($!message.length()==0)#set($message = $xwiki.parseMessage())#end##
+    #if($!message.length()==0 && ("$!request.j_username" == "$msg.get('header.login_username')" || "$!request.j_username" == "") && ("$!request.j_password" == "")) ##{
+        #set($message = 'redirect.error.no_info')##
+        #set($userName=$msg.get('header.login_username'))
+    #end ##}
     #if($message)
       <!-- previous login errors -->
-      #error($message)
+      #error($msg.get("$message"))
     #end
 <table class="xwikilogintable" summary="$msg.get('join.login.header')">
   <tr>
     <th><label for="j_username">$msg.get('join.login.username')</label></th>
-    <td><input type="text" id="j_username" name="j_username" value=""/></td>
+    <td><input type="text" id="j_username" name="j_username" value="$escapetool.html("$!userName")"/></td>
   </tr>
   <tr>
     <th><label for="j_password">$msg.get('join.login.password')</label></th>
@@ -104,7 +121,7 @@
 </div>
 #if($hasSocialLogin)
 #set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
-#set($junk=$socialLoginTool.init($xwiki, $context, $request, $response, $msg))
+#set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg))
 </td><td valign="top" align="left">
 ##</div>
 ##<div class="column half socialLoginProviders">
@@ -112,7 +129,7 @@
     #foreach($provider in $providers)
     <div class="provider"  id="identifyWith${provider}" style="display:inline">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect")
+      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="window.name='curriki-identity-dialog'; window.open('${link}','curriki-identity-dialog-popup'); return false;">##
 	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
@@ -130,7 +147,7 @@
 #end
 </form>
 <div style="font-size: 70%; margin-top: 2em;">##
-   <a href="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('join.login.join_curriki')">##
+   <a href="/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('join.login.join_curriki')">##
     $msg.get('join.login.join_curriki')</a>
    <a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">$msg.get('join.login.forgot')</a>?##
 </div>

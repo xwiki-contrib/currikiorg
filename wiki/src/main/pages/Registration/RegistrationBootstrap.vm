@@ -30,8 +30,9 @@
     }
     .okField {}
 </style>
+<!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
 ## ----------------
-<form class="xform" action=${doc.getURL('view')} method="post" id="createUsernameForm">
+<form class="xform" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm">
   <div class="centered">
       <fieldset class="xwikimessage">
           <h3>$msg.get("join.member.title")</h3>
@@ -45,8 +46,8 @@
           #end
           </ul>
       <input type="hidden" name="xaction" value="createProfile" >
-      <input type="hidden" name="city"  value="$tool.city">
-      <input type="hidden" name="country" value="$tool.country">
+      <input type="hidden" name="city"  value="$!tool.city">
+      <input type="hidden" name="country" value="$!tool.country">
 
         #macro(computeTrClasses $f)##
             #if($okFields.contains($f)) okField #end #if($warningFields.contains($f)) warningField #end #end##
@@ -56,7 +57,7 @@
           #set($f="username")
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_name")</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.username}"##
+              <input id="${f}_input" name="${f}" value="$!{tool.username}"##
                 title="$msg.get("join.member_name_instructions")">
           </p>
           ##
@@ -72,7 +73,7 @@
           #set($f="firstName")
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.firstName}" disabled="disabled"##
+              <input id="${f}_input" name="${f}" value="$!{tool.firstName}" disabled="disabled"##
                       title="$msg.get('join.member_social_prefilled_tooltip')">
           </p>
           ##
@@ -80,7 +81,7 @@
           #set($f="lastName")
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.lastName}" disabled="disabled"##
+              <input id="${f}_input" name="${f}" value="$!{tool.lastName}" disabled="disabled"##
                       title="$msg.get('join.member_social_prefilled_tooltip')">
           </p>
           ##
@@ -88,7 +89,7 @@
           #set($f="email")
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_email")</b></label>
-              <input id="${f}_input" name="${f}" value="${tool.email}" disabled="disabled"##
+              <input id="${f}_input" name="${f}" value="$!{tool.email}" disabled="disabled"##
                       title="$msg.get('join.member_social_prefilled_tooltip')">
           </p>
           ##
@@ -116,8 +117,8 @@
                   </label>
           </p>
           <p align="right">
-              <input type="submit" value="$msg.get("join.member.save_button")">
-              <input type="button" value="$msg.get("join.member.cancel_button")"  onclick="window.open('$tool.getRedirectTarget()','_top')">### TODO: warning in case of cancel
+              <input type="submit" value="$msg.get("join.member.save_button")" class="button-orange">
+              <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$tool.getRedirectTarget()','_top')">### TODO: warning in case of cancel
           </p>
       </fieldset>
 

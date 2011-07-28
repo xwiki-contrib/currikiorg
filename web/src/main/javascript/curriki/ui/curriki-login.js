@@ -22,7 +22,9 @@ Curriki.ui.login.displayLoginDialog = function(url) {
 
 Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
     try { // we are in the same protocol as window.opener
-        if (window.name == 'curriki-identity-dialog-popup' && window.opener != window) {
+        // we need to satisfy window.name='curriki-identity-dialog-popup' and
+        //    window.parent.name='curriki-identity-dialog'
+        if (window.name != 'curriki-identity-dialog-popup' || window.parent == window) {
             if (console) console.log("Redirecting to " + framedContentURL)
             window.opener.location.replace(framedContentURL);
             window.setInterval("window.close();", 20);

@@ -19,8 +19,7 @@ public class SocialLoginToolGroovy {
 
     private XWiki xwiki = null;
     private Context context = null;
-    private HttpServletRequest request = null;
-    private HttpServletResponse response = null;
+    HttpServletRequest request = null;
     private XWikiMessageTool msg = null;
     private List errors = new ArrayList();
     String providerId = null;
@@ -28,15 +27,15 @@ public class SocialLoginToolGroovy {
     String warningFields="", okFields="";
     String username, password, firstName, lastName, email, memberType, agree;
     String nowTarget = null;
+    boolean hasReadProviderProfile = false;
 
 
-    Log LOG = LogFactory.getLog("GroovyPages.SocialLogin");
+    Log LOG = LogFactory.getLog("groovyPages.SocialLogin");
 
-    public String init(XWiki xwiki, Context context, HttpServletRequest request, HttpServletResponse response, XWikiMessageTool msg) {
+    public String init(XWiki xwiki, Context context, HttpServletRequest request, XWikiMessageTool msg) {
         this.xwiki= xwiki;
         this.context = context;
         this.request = request;
-        this.response = response;
         this.msg = msg;
         if(properties==null) {
             properties = new Properties();
@@ -46,6 +45,32 @@ public class SocialLoginToolGroovy {
         }
         LOG.info("Initted");
         return "";
+    }
+
+    public void grabFrom(Object other1) {
+        if(other1==null) return;
+        if(!(other1 instanceof SocialLoginToolGroovy)) {
+            System.out.println("tograb is not correct: \"" + other1 + "\" of class " + other1.getClass() );
+            return;
+        }
+        SocialLoginToolGroovy other = other1;
+        LOG.info("SocialLoginToolGroovy  grabbing from" + this + " being prepopulated from " + other);
+        this.hasReadProviderProfile = other.hasReadProviderProfile
+        this.firstName = other.firstName;
+        this.lastName = other.lastName;
+        this.agree = other.agree;
+        this.city = other.city;
+        this.country = other.country;
+        this.memberType = other.memberType;
+        this.password = other.password;
+        this.providerId = other.providerId;
+        this.username = other.username;
+
+
+        this.errors = other.errors;
+        this.warningFields = other.warningFields;
+        this.okFields = other.okFields;
+        this.nowTarget = other.nowTarget;
     }
 
     public String authenticateUser(Document userDoc) {
@@ -76,7 +101,7 @@ public class SocialLoginToolGroovy {
     /**
      * Initiate the OAuth dance with the requested provider
      */
-    public String bounceToProvider() {
+    public String bounceToProvider(HttpServletResponse response) {
         try {
             System.out.println("Bouncing to Provider " + request.provider);
             AuthProvider provider = AuthProviderFactory.getInstance(request.provider, properties);
@@ -134,7 +159,6 @@ public class SocialLoginToolGroovy {
             List userDocs = xwiki.searchDocuments(query,30,0);
             //original: XWQL: from doc.object(XWiki.XWikiUsers) as user, doc.object(XWiki.SocialLoginProfileClass) as profile where profile.provider = '""" + provider + "' and profile.validatedId = '" + profile.validatedId + "'")
 
-
             System.out.println("Found userDocs: " + userDocs);
             for (result in userDocs) {
                 if(result==null) continue;
@@ -172,6 +196,8 @@ public class SocialLoginToolGroovy {
 
 
     public void readProviderProfile() {
+        if(hasReadProviderProfile) return;
+        hasReadProviderProfile = true;
         Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile");
         providerId = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
         firstName = profile.getFirstName();
@@ -339,8 +365,8 @@ public class SocialLoginToolGroovy {
     }
 
 
-    public String action() {
-        String a = this.actionHere();
+    public String action(HttpServletRequest request) {
+        String a = this.actionHere(request);
         LOG.info("Action: " + a);
         System.out.println("Action: " + a);
         return a;
@@ -439,7 +465,7 @@ public class SocialLoginToolGroovy {
         if(ag!=null &&
                 (ag.equalsIgnoreCase("on") || ag.equalsIgnoreCase("true") || ag.equalsIgnoreCase("checked"))) {
             okFields += ", agree";
-            return true
+            return true;
         };
         if(echoErrors)
             errors.add(msg.get("join.error.policy"));
@@ -448,7 +474,7 @@ public class SocialLoginToolGroovy {
     }
 
 
-    public String actionHere() {
+    public String actionHere(HttpServletRequest request) {
         if(!request.callback && request.provider) {
             return "bounceToProvider";
         }
@@ -465,7 +491,8 @@ public class SocialLoginToolGroovy {
     }
 
     public String getRedirectTarget() {
-        String xredirect = request.session.getAttribute("xredirect");
+        String xredirect = null;
+        if(request.session) xredirect = request.session.getAttribute("xredirect");
         if(xredirect==null) {
             if(context.user!="XWiki.XWikiGuest")
                 xredirect="/xwiki/bin/view/MyCurriki/";

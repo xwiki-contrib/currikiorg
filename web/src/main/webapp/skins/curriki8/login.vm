@@ -10,27 +10,34 @@
 ## this is loaded when /xwiki/bin/login/X/Y is loaded
 ## --- beware to end each line with ## at least until the first redirect
 #if ($request.xredirect)##
-#set($redir=$request.xredirect)##
+  #set($redir=$request.xredirect)##
 #elseif ($request.session && $request.session.getAttribute("xredirect"))##
-#set($redir=$request.session.getAttribute("xredirect"))##
-#elseif($context.user)##
-#set($redir="/xwiki/bin/view/${context.user.replaceAll('\\.','/')}")##
+  #set($redir=$request.session.getAttribute("xredirect"))##
+#elseif($context.user && $context.user != "XWiki.XWikiGuest")##
+  #set($redir="/xwiki/bin/view/${context.user.replaceAll('\\.','/')}")##
 #else##
 #set($redir="/")##
 #end##
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end##
 #if($redir && ! $redir.startsWith("/xwiki/bin/view/XWiki/SocialLogin") && ! $redir.startsWith("/xwiki/bin/view/XWiki/XWikiLogin"))##
-$request.session.setAttribute("xredirect",$redir)##
+    $request.session.setAttribute("xredirect",$redir)##
 #end##
 #if ($context.user != 'XWiki.XWikiGuest')##
 ##$response.sendRedirect($redir)##
 ## rather JS-redirect so that we get frame=_top
-#elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself (e.g. missing rights)
+#elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself
 #set($qs = "$!{request.queryString}")##
 #if(!$request.getParameter('xredirect'))##
     #set($qs = "xredirect=$escapetool.url($doc.getURL('view'))&${qs}")##
 #end##
 $response.sendRedirect($xwiki.getURL('XWiki.XWikiLogin', 'login', $qs))##
+#elseif($request.method=="POST")##
+  ## if we arrived here, login was unsuccessfully posted, there should be messages
+  ## store them in session and take them for the next query on http
+  $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
+  $request.session.setAttribute("lastUserName","$!request.j_username")##
+  $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/login/XWiki/XWikiLogin?$!request.getQueryString()")##
+  <!-- have sent redirect -->
 #else## we're on the right place... display login or register
 $xwiki.includeForm("Registration.LoginOrRegister",false)##
 #end##
