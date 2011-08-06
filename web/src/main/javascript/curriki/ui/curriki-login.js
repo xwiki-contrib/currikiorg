@@ -10,6 +10,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
     Curriki.ui.login.loginDialog = new Ext.Window({
                 width:w,
                 height:h,
+                headerCls: "registration-dialog-header",
                 modal:true,
                 closable:true,
                 monitorResize: true,
@@ -53,3 +54,123 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
         });
     }
 };
+
+Ext.namespace("Curriki.ui.login.liveValidation");
+Curriki.ui.login.liveValidation = function() {
+    var idOfUsername = null, idOfEmail = null;
+    var queue = new Array();
+
+    return {
+        queue: queue,
+
+
+    launchCheckFieldRequest: function(value, field, queueEntry) {
+        Curriki.ui.login.liveValidation.notifyValidationResult(field, "waiting");
+        var r = Ext.Ajax.request({
+            url: "/xwiki/bin/view/Registration/CheckValid"
+            ,headers: {'Accept':'application/json'}
+            ,method: "GET"
+            ,failure:function(response, options) {
+                if(console) console.log("failed validation: ", response, options);
+            }
+		    ,success:function(response, options){
+                var t = response.responseText;
+                if(t) t = t.trim();
+                if(console) console.log("Response: " + t);
+                Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
+                queue.remove(queueEntry);
+            }
+            , params: { what: field.dom.name,
+                value: value,
+                xpage: "plain"
+              }
+            , scope: this
+        });
+        return r;
+    },
+
+    notifyValidationResult:function(field, res) {
+        /*
+        Ext.get("loginIframe").dom.contentWindow.Ext.get("username_input").parent().addClass("warningField")
+        */
+        try {
+            if (field) {
+            } else {
+                if(console) console.log("Warning: missing field.");
+                return;
+            }
+            var pElt = field.parent();
+            if (null == res) {
+                pElt.removeClass("okField");
+                pElt.removeClass("waiting");
+                pElt.removeClass("warningField");
+            } else if("waiting" == res) {
+                pElt.addClass("waiting");
+            } else if (true == res || "true" == res) {
+                pElt.removeClass("waiting");
+                pElt.removeClass("warningField");
+                pElt.addClass("okField");
+            } else if (false == res || "false" == res) {
+                pElt.removeClass("waiting");
+                pElt.removeClass("okField");
+                pElt.addClass("warningField");
+            }
+        } catch(e) {
+            if(console) console.log("Error: ", e)
+        }
+    },
+
+
+
+
+        activate:function(idOfUsernameInput, idOfEmailInput) {
+            // disable flashy XHR witness
+            Ext.Ajax.purgeListeners();
+
+            idOfUsername = idOfUsernameInput;
+            idOfEmail = idOfEmailInput;
+            var i=Ext.get(idOfEmailInput), j = Ext.get(idOfUsername);
+            i.addListener("blur", function(evt) {
+                console.log("Focus-out...")
+                Curriki.ui.login.liveValidation.queueQueryNow(i);
+            });
+            j.addListener("blur", function(evt) {
+                console.log("Focus-out...")
+                Curriki.ui.login.liveValidation.queueQueryNow(j);
+            });
+            i.addListener("change", function() { console.log("change"); })
+            // TODO: logic to activate after some timeout after value change
+        }
+        , queueQueryNow: function(inputElt) {
+                var q = new Object();
+                q.value = inputElt.getValue();
+                if(typeof(q.value)=="undefined" || q.value==null) {
+                    if(console) console.log("Undefined value, stop.");
+                    return;
+                }
+                // scan the queue if there's a query with same value, bring it to front
+                for(x in queue) {
+                    if(x.value == q.value) {
+                        var i = queue.indexOf(x);
+                        if(i>0) for(j=i-1; j>=0; j--) {
+                            queue[j+1] = queue[j];
+                        }
+                        if(console) console.log("Swapping existing queue entries.")
+                        queue[0] = x;
+                        return;
+                    }
+                }
+                // otherwise launch request
+                if(console) console.log("Launching in queue.")
+                q.request = this.launchCheckFieldRequest(q.value, inputElt, q);
+                // add to queue
+                queue[queue.length] = q;
+                // cancel any other? not now
+        }
+
+    };
+}();
+
+// TODO: only in 
+
+

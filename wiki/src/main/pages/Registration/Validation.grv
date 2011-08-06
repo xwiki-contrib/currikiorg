@@ -1,0 +1,134 @@
+import com.xpn.xwiki.api.XWiki
+
+public class Validation {
+
+    public void init(XWiki xwiki) {
+        this.xwiki=xwiki;
+        this.errors = null;
+        this.warningFields = null;
+        this.okFields = null;
+    }
+
+    public void init(XWiki xwiki, List errors, List warningFields, List okFields) {
+        this.xwiki = xwiki;
+        this.errors = errors;
+        this.warningFields = warningFields;
+        this.okFields = okFields;
+    }
+
+    private XWiki xwiki;
+    private List errors;
+    private List warningFields, okFields;
+
+    public boolean isValidUsername(String account, boolean echoErrors) {
+        if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
+            if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
+                if(echoErrors && warningFields!=null) {
+                    addError("join.error.login_not_unique");
+                    addWarning("username");
+                }
+                return false;
+            } else {
+                addOk("username");
+                return true;
+            }
+        }
+        else {
+            if(warningFields!=null && echoErrors) warningFields += "username";
+            if(echoErrors) errors.add("join.error.unsername");
+            return false;
+        }
+    }
+
+    public boolean isValidEmail(String email, boolean echoErrors) {
+        if("paul@hoplahup.net"==email || "polx@i2geo.net"==email || "paul@activemath.org"==email) return true;
+        def atIndex = email.indexOf("@");
+
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+
+        // Check to see if the email address is already used
+        if (xwiki.searchDocuments(query).size() > 0) {
+            addWarning("email");
+            addError("join.error.email_not_unique");
+            return false;
+        }
+
+        // We should make this a bit better...
+        if (echoErrors && (atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
+            addError("join.error.email_invalid");
+            addWarning("email");
+            return false;
+        }
+        addOk("email");
+        return true;
+    }
+
+    public boolean isValidPassword(String ps, boolean echoErrors ) {
+        if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
+            addOk("password");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.password_invalid");
+        addWarning("password");
+        return false;
+    }
+
+    public boolean isValidFirstName(String name, boolean echoErrors) {
+        if(name!=null && name.length()<32 ) {
+            addOk("first_name");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.fname1_long");
+        addWarning("first_name");
+        return false;
+    }
+
+    public boolean isValidLastName(String name, boolean echoErrors) {
+        if(name!=null && name.length()<32 ) {
+            addOk("last_name");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.lname1_long");
+        addWarning("last_name");
+        return false;
+    }
+
+    public boolean isValidMemberType(String ps, boolean echoErrors) {
+        if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
+            addOk("memberType");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.membership_type");
+        addWarning("memberType");
+        return false;
+    }
+
+    public boolean isValidAgree(String ag, boolean echoErrors) {
+        if(ag!=null &&
+                (ag.equalsIgnoreCase("on") || ag.equalsIgnoreCase("true") || ag.equalsIgnoreCase("checked"))) {
+            addOk("agree");
+            return true;
+        };
+        if(echoErrors)
+            addError("join.error.policy");
+        addWarning("agree");
+        return false;
+    }
+
+
+    private void addWarning(String warning) {
+        if(warningFields!=null) warningFields.add(warning);
+    }
+
+    private void addOk(String ok) {
+        if(okFields!=null) okFields.add(ok);
+    }
+    private void addError(String error) {
+        if(errors!=null) errors.add(error);
+    }
+
+}

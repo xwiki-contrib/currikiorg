@@ -24,10 +24,11 @@ public class SocialLoginToolGroovy {
     private List errors = new ArrayList();
     String providerId = null;
     String city, country;
-    String warningFields="", okFields="";
+    List warningFields=[], okFields=[];
     String username, password, firstName, lastName, email, memberType, agree;
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
+    Object validation;
 
 
     Log LOG = LogFactory.getLog("groovyPages.SocialLogin");
@@ -43,6 +44,9 @@ public class SocialLoginToolGroovy {
                     request.getSession(true).getServletContext().
                             getResourceAsStream("/WEB-INF/oauth_consumer.properties"));
         }
+        validation = xwiki.parseGroovyFromPage("Registration.Validation");
+        validation.init(xwiki, errors, warningFields, okFields);
+
         LOG.info("Initted");
         return "";
     }
@@ -210,10 +214,10 @@ public class SocialLoginToolGroovy {
         if(username==null || username=='') {
             int p = email.indexOf('@');
             username = email.substring(0,p);
-            if(!isValidUsername(username, false)) {
+            if(!validation.isValidUsername(username, false)) {
                 int i=0;
                 while(i<20) {
-                    if(isValidUsername(username + i, false)) break
+                    if(validation.isValidUsername(username + i, false)) break
                 }
                 username = username +i;
             }
@@ -240,13 +244,13 @@ public class SocialLoginToolGroovy {
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
-        boolean passed =  isValidUsername(username, true);
-        passed = passed & isValidEmail(email, true);
-        passed = passed & isValidPassword(password, true);
-        passed = passed & isValidMemberType(memberType, true);
-        passed = passed & isValidAgree(request.agree, true);
-        passed = passed & isValidFirstName(firstName, true);
-        passed = passed & isValidLastName(lastName, true);
+        boolean passed =  validation.isValidUsername(username, true);
+        passed = passed & validation.isValidEmail(email, true);
+        passed = passed & validation.isValidPassword(password, true);
+        passed = passed & validation.isValidMemberType(memberType, true);
+        passed = passed & validation.isValidAgree(request.agree, true);
+        passed = passed & validation.isValidFirstName(firstName, true);
+        passed = passed & validation.isValidLastName(lastName, true);
 
 
         if (passed) {
@@ -374,104 +378,6 @@ public class SocialLoginToolGroovy {
 
 
 
-    public boolean isValidUsername(String account, boolean echoErrors) {
-        if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
-            if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
-                if(echoErrors) {
-                    errors.add(msg.get("join.error.login_not_unique"));
-                    warningFields += ", username";
-                }
-                return false;
-            } else {
-                okFields += ", username";
-                return true;
-            }
-        }
-        else {
-            warningFields += ", username";
-            if(echoErrors) errors.add(msg.get("join.error.unsername"));
-            return false;
-        }
-    }
-
-    public boolean isValidEmail(String email, boolean echoErrors) {
-        if("paul@hoplahup.net"==email || "polx@i2geo.net"==email || "paul@activemath.org"==email) return true;
-        def atIndex = email.indexOf("@");
-
-        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
-
-        // Check to see if the email address is already used
-        if (xwiki.searchDocuments(query).size() > 0) {
-            warningFields += ", email";
-            errors.add(msg.get("join.error.email_not_unique"));
-            return false;
-        }
-
-        // We should make this a bit better...
-        if (echoErrors && (atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
-            errors.add(msg.get("join.error.email_invalid"));
-            warningFields += ", email";
-            return false;
-        }
-        okFields += ", email";
-        return true;
-    }
-
-    public boolean isValidPassword(String ps, boolean echoErrors ) {
-        if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
-            okFields += ", password";
-            return true
-        };
-        if(echoErrors)
-            errors.add(msg.get("join.error.password_invalid"));
-        warningFields += ", password";
-        return false;
-    }
-
-    public boolean isValidFirstName(String name, boolean echoErrors) {
-        if(name!=null && name.length()<32 ) {
-            okFields += ", first_name";
-            return true
-        };
-        if(echoErrors)
-            errors.add(msg.get("join.error.fname1_long"));
-        warningFields += ", first_name";
-        return false;
-    }
-
-    public boolean isValidLastName(String name, boolean echoErrors) {
-        if(name!=null && name.length()<32 ) {
-            okFields += ", last_name";
-            return true
-        };
-        if(echoErrors)
-            errors.add(msg.get("join.error.lname1_long"));
-        warningFields += ", last_name";
-        return false;
-    }
-
-    public boolean isValidMemberType(String ps, boolean echoErrors) {
-        if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
-            okFields += ", memberType";
-            return true
-        };
-        if(echoErrors)
-            errors.add(msg.get("join.error.membership_type"));
-        warningFields += ", memberType";
-        return false;
-    }
-
-    public boolean isValidAgree(String ag, boolean echoErrors) {
-        if(ag!=null &&
-                (ag.equalsIgnoreCase("on") || ag.equalsIgnoreCase("true") || ag.equalsIgnoreCase("checked"))) {
-            okFields += ", agree";
-            return true;
-        };
-        if(echoErrors)
-            errors.add(msg.get("join.error.policy"));
-        warningFields += ", agree";
-        return false;
-    }
 
 
     public String actionHere(HttpServletRequest request) {

@@ -28,8 +28,22 @@
         border: solid red;
         background: transparent url(/xwiki/skins/curriki8/warning.png) no-repeat center right;
     }
-    .okField {}
+    .okField {
+        border: none;
+        background: transparent url(/xwiki/skins/curriki8/ok.png) no-repeat center right;
+    }
+    .waiting {
+        border: none;
+        background: transparent url(/xwiki/skins/curriki8/icons/spinner.gif) no-repeat center right;
+    }
 </style>
+<!-- begin javascripts -->##
+#set($debugging="-debug")##
+{pre}
+#template("javascripts.vm")##
+{/pre}
+## note: we do not run CurrikiApp.init()
+<!-- end javascripts -->
 <!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
 ## ----------------
 <form class="xform" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm">
@@ -39,10 +53,10 @@
           <p align="left">
               #if($tool.providerId)$msg.get("",[${tool.providerId}])#else##
                   $msg.get("join.member.curriki_instructions")##
-              #end..</p>
+              #end</p>
           <ul class="errors">
           #foreach($m in $tool.errors)
-              <li>$m</li>
+              <li>$msg.get($m)</li>
           #end
           </ul>
       <input type="hidden" name="xaction" value="createProfile" >
@@ -121,7 +135,9 @@
               <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$tool.getRedirectTarget()','_top')">### TODO: warning in case of cancel
           </p>
       </fieldset>
-
-
   </div>
 </form>
+<script type="text/javascript">
+    Ext.onReady(function() {Curriki.ui.login.liveValidation.activate("username_input", "email_input"); },
+            Curriki.ui.login.liveValidation);
+</script>
