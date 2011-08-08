@@ -31,7 +31,7 @@
   </parent>
   <groupId>org.curriki</groupId>
   <artifactId>xwiki-corecurriki</artifactId>
-  <version>1.5-curriki-5</version>
+  <version>1.5-curriki-6-SNAPSHOT</version>
   <name>XWiki Platform - Core - Core</name>
   <packaging>jar</packaging>
   <description>XWiki Platform - Core - Core</description>
@@ -638,8 +638,8 @@
           <subpackages>com.xpn.xwiki.api</subpackages>
         </configuration>
       </plugin>
-      <plugin>
-        <!-- Apply the Checkstyle configurations defined in the top level pom.xml file -->
+<!--       <plugin>
+        [!- Apply the Checkstyle configurations defined in the top level pom.xml file -]
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <dependencies>
@@ -678,7 +678,7 @@
           </includes>
           <excludes>
               **/RenamePageReplaceLinkHandler.java,
-              <!-- these files are clean, but failed in checkstyle because http://jira.codehaus.org/browse/MCHECKSTYLE-54 : -->
+               these files are clean, but failed in checkstyle because http://jira.codehaus.org/browse/MCHECKSTYLE-54 :
               **/XWikiPatchUtils.java,
               **/XWikiRCSArchive.java,
               **/XWikiHibernateRecycleBinStore.java,
@@ -686,7 +686,7 @@
               **/migration/AbstractXWikiMigrationManager.java
           </excludes>
         </configuration>
-      </plugin>
+      </plugin> -->
     </plugins>
   </build>
   <profiles>
