@@ -21,7 +21,7 @@ public class Validation {
     private List warningFields, okFields;
 
     public boolean isValidUsername(String account, boolean echoErrors) {
-        if (!account.equals("") && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
+        if (account.length()>=3 && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
             if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
                 if(echoErrors && warningFields!=null) {
                     addError("join.error.login_not_unique");
@@ -35,7 +35,7 @@ public class Validation {
         }
         else {
             if(warningFields!=null && echoErrors) warningFields += "username";
-            if(echoErrors) errors.add("join.error.unsername");
+            if(echoErrors) errors.add("join.error.username");
             return false;
         }
     }

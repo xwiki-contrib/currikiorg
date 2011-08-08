@@ -3422,10 +3422,10 @@ Curriki.ui.login.liveValidation = function() {
                     var t = response.responseText;
                     if(t) t = t.trim();
                     if(console) console.log("Response: " + t);
+                    queue.remove(queueEntry);
                     if(queueEntry.value!=field.getValue()) return;
                     Curriki.ui.login.liveValidation.validatedValue=queueEntry.value;
                     Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
-                    queue.remove(queueEntry);
                 }
                 , params: { what: field.dom.name,
                     value: value,
@@ -3495,16 +3495,16 @@ Curriki.ui.login.liveValidation = function() {
             });
         }
         , queueQueryNow: function(inputElt) {
-            var q = new Object();
-            q.value = inputElt.getValue();
-            console.log("Queuing query for " + q.value);
-            if(typeof(q.value)=="undefined" || q.value==null) {
+            var queueEntry = new Object();
+            queueEntry.value = inputElt.getValue();
+            console.log("Queuing query for " + queueEntry.value);
+            if(typeof(queueEntry.value)=="undefined" || queueEntry.value==null) {
                 if(console) console.log("Undefined value, stop.");
                 return;
             }
             // scan the queue if there's a query with same value, bring it to front
             for(x in queue) {
-                if(x.value == q.value) {
+                if(x.value == queueEntry.value) {
                     var i = queue.indexOf(x);
                     if(i>0) for(j=i-1; j>=0; j--) {
                         queue[j+1] = queue[j];
@@ -3516,9 +3516,9 @@ Curriki.ui.login.liveValidation = function() {
             }
             // otherwise launch request
             if(console) console.log("Launching in queue.")
-            q.request = this.launchCheckFieldRequest(q.value, inputElt, q);
+            queueEntry.request = this.launchCheckFieldRequest(queueEntry.value, inputElt, queueEntry);
             // add to queue
-            queue[queue.length] = q;
+            queue[queue.length] = queueEntry;
             // cancel any other? not now
         }
 
