@@ -3414,7 +3414,7 @@ Curriki.ui.login.liveValidation = function() {
                 ,headers: {'Accept':'application/json'}
                 ,method: "GET"
                 ,failure:function(response, options) {
-                    Curriki.ui.login.liveValidation.validatedValue=queueEntry.value;
+                    Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
                     Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
                     if(console) console.log("failed validation: ", response, options);
                 }
@@ -3424,7 +3424,6 @@ Curriki.ui.login.liveValidation = function() {
                     if(console) console.log("Response: " + t);
                     queue.remove(queueEntry);
                     if(queueEntry.value!=field.getValue()) return;
-                    Curriki.ui.login.liveValidation.validatedValue=queueEntry.value;
                     Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
                 }
                 , params: { what: field.dom.name,
@@ -3497,6 +3496,7 @@ Curriki.ui.login.liveValidation = function() {
         , queueQueryNow: function(inputElt) {
             var queueEntry = new Object();
             queueEntry.value = inputElt.getValue();
+            Curriki.ui.login.liveValidation.queriedValue = inputElt.getValue();
             console.log("Queuing query for " + queueEntry.value);
             if(typeof(queueEntry.value)=="undefined" || queueEntry.value==null) {
                 if(console) console.log("Undefined value, stop.");
@@ -3525,7 +3525,7 @@ Curriki.ui.login.liveValidation = function() {
         , intervalPointer: null
         , startedPollingTime: null
         , inputFieldBeingPolled: null
-        , validatedValue: null
+        , queriedValue: null
         , lastValue: null
 
         , startPollingTextField: function(inputField) {
@@ -3567,7 +3567,7 @@ Curriki.ui.login.liveValidation = function() {
                         t.lastChanged = now;
                     } else { // same value: act if nothing happened since 200ms
                         if(t.lastChanged && now-t.lastChanged>200 &&
-                                (typeof(t.validatedValue)=="undefined" || t.validatedValue != value))
+                                (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value))
                             t.queueQueryNow(input);
                     }
                 } else {
