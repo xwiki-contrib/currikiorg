@@ -16,7 +16,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
                 monitorResize: true,
                 scrollbars: true,
                 title:_("join.login.title"),
-                html: "<iframe id='loginIframe' src='"+url+"' width='"+w+"' height='"+h+"'/>"
+                html: "<iframe name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+w+"' height='"+h+"'/>"
             });
     Curriki.ui.login.loginDialog.show();
     return Ext.get("loginIframe").dom.contentWindow;
@@ -71,7 +71,7 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
     if(window==window.top) {
         if(!framedContentURL || framedContentURL==null) framedContentURL = window.location.href;
         Curriki.ui.login.displayLoginDialog(window.location.href);
-    } else if (window.name != 'curriki-identity-dialog-popup' && framedContentURL && framedContentURL!=null) {
+    } else if (window.name != 'curriki-login-dialog' && framedContentURL && framedContentURL!=null) {
         if (console) console.log("Redirecting to " + framedContentURL)
         window.opener.location.replace(framedContentURL);
         window.setInterval("window.close();", 50);
