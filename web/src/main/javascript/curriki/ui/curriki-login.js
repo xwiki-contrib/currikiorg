@@ -31,7 +31,6 @@ Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, request
 }
 Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
     Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
-    // TODO: make the opener relationship work!!
 }
 Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
     // called from the login-or-register dialog or from the in-header-icons
@@ -41,7 +40,6 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
     window.Curriki.ui.login.authorizeDialog = otherWindow;
     if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
     return false;
-    // TODO: name windows properly, also leave trace in this window
 };
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow) {
@@ -61,7 +59,6 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
         },20);
         return false;
     } else {
-        // TODO: treat case it's not framed in popup (e.g. when clicking in the header)
         if(console) console.log("No popup parent found... ah well.");
         openedWindow.location.href = targetURL;
     }
