@@ -68,37 +68,16 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 
 
 Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
-    try { // we are in the same protocol as window.opener
-        // we need to satisfy window.name='curriki-identity-dialog-popup' and
-        //    window.parent.name='curriki-identity-dialog'
-        if (window.name != 'curriki-identity-dialog-popup' || window.parent == window) {
-            if (console) console.log("Redirecting to " + framedContentURL)
-            window.opener.location.replace(framedContentURL);
-            window.setInterval("window.close();", 50);
-            return;
-        }
-    } catch(e) {
-        console.log("Failed evaluating: " + e);
+    if(window==window.top) {
+        if(!framedContentURL || framedContentURL==null) framedContentURL = window.location.href;
+        Curriki.ui.login.displayLoginDialog(window.location.href);
+    } else if (window.name != 'curriki-identity-dialog-popup' && framedContentURL && framedContentURL!=null) {
+        if (console) console.log("Redirecting to " + framedContentURL)
+        window.opener.location.replace(framedContentURL);
+        window.setInterval("window.close();", 50);
+        return;
     }
 
-    try { // we are in a different protocol as window.opener but the parent is probably good
-        if (window.opener!=window &&
-              (window.opener.name == 'curriki-identity-dialog' || window.opener.top.Curriki.ui.login.loginDialog.isVisible())) {
-            if (console) console.log("Sending to the right frame " + framedContentURL)
-            window.opener.Curriki.ui.login.displayLoginDialog(framedContentURL);
-            window.setInterval("window.close();", 20);
-            return;
-        }
-    } catch(e) {
-        console.log("Failed evaluating: " + e);
-    }
-    if(window.top!=window) {
-        window.open("/xwiki/bin/view/Registration/JumpToFramed?redir=" + encodeURIComponent(framedContentURL),"_top")
-    } else {
-        Ext.onReady(function() {
-            Curriki.ui.login.displayLoginDialog(framedContentURL);
-        });
-    }
 };
 
 

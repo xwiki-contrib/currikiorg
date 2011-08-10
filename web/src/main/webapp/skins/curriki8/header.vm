@@ -25,7 +25,8 @@
 
 <!-- member area -->
 <div id="header-member"> ##{
-#if($isguest) ##{
+#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
+##{
 	#if ($request.xredirect) ##{
 		#set($logredir = $request.xredirect)
 	#elseif($doc.web == "Registration") ##}{
@@ -55,8 +56,8 @@
               onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}'); return false;">##
       <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="24"
            title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" /></a>
+      #end
     #end</p>
-
 #else ## }{ ## is logged in
 	## crtUserDoc is set in fudocs.vm
 	#set($fname = $crtUserDoc.display("first_name","view"))
@@ -64,13 +65,15 @@
 	#if($hasGlobalAdmin)
 	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
 	#end
-    #if($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
+    #if("MyCurriki"=="$doc.space")
+     #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
+    #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
         #set($logredir = $request.getRequestURI())
     #else
         #set($logredir = $xwiki.getURL("Main.WebHome"))
     #end
 	#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
-	<a href="$logouturl" class="logout">$msg.get("header.logout")</a>
+	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 </div> ##} ##header-member
 <!-- end of member area -->

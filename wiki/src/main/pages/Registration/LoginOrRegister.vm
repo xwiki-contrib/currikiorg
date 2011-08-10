@@ -26,20 +26,7 @@
 {pre}#template("startpage.vm"){/pre}##
 #end
 <script type="text/javascript">##
-    #set($redir="/xwiki/bin/login/XWiki/XWikiLogin")
-    ## Curriki.ui.login.makeSureWeAreFramed("$redir");
-    /* if(window.name=='curriki-identity-dialog-popup'
-            && window.parent && window.parent.name=='curriki-identity-dialog' ) {
-        // in a pop-up with a caller dialog?... need to go to caller and close oneself
-        window.location.replace("${redir}");
-        window.setInterval("window.close();", 20);##
-    } else if(!($framed) && window.top!=window) {
-        window.top.location.replace("/xwiki/bin/view/Registration/JumpToFramed?redir=$escapetool.url(${redir})");
-    } else if(!($framed)){
-        Ext.onReady(function() {
-            displayLoginDialog("$redir");
-        });
-    }*/
+    Curriki.ui.login.makeSureWeAreFramed(null);
 </script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
@@ -210,4 +197,7 @@
 </body></html>
 #else
 {pre}#template("endpage.vm"){/pre}##
+<script type="text/javascript">
+    Ext.onReady(function() {Ext.select("j_username").dom.focus();});
+</script>
 #end

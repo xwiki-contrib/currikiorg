@@ -11,7 +11,8 @@ import org.apache.commons.logging.LogFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
 import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi
-import com.xpn.xwiki.doc.XWikiAttachment;
+import com.xpn.xwiki.doc.XWikiAttachment
+import com.xpn.xwiki.web.SavedRequestRestorerFilter;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -403,12 +404,18 @@ public class SocialLoginToolGroovy {
         if(removeMe==null) removeMe = false;
         String xredirect = null;
         if(request.session && request.session.getAttribute(SAVED_REQUEST)) {
-            String u = ((com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest)
-                request.session.getAttribute(SAVED_REQUEST)).requestUrl;
-            if(u && u.length()>0 && removeMe) {
-                request.session.removeAttribute(SAVED_REQUEST);
-                request.session.removeAttribute("xredirect");
-            }
+            try {
+                Object o = request.session.getAttribute(SAVED_REQUEST)
+                String u = null;
+                if(o instanceof Map)
+                    u = ((Map) m).value().iterator().next()
+                else
+                    u = ((SavedRequestRestorerFilter.SavedRequest) o).requestUrl;
+                if(u && u.length()>0 && removeMe) {
+                    request.session.removeAttribute(SAVED_REQUEST);
+                    request.session.removeAttribute("xredirect");
+                }
+            } catch (Exception e) { LOG.warn(e); }
         }
         if(request.session) xredirect = request.session.getAttribute("xredirect");
         if(xredirect==null) {
