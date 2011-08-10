@@ -38,7 +38,7 @@
     }
 </style>
 <!-- begin javascripts -->##
-#set($debugging="-debug")##
+#set($globalDebug=true)##
 {pre}
 #template("javascripts.vm")##
 {/pre}
@@ -72,7 +72,8 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_name")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.username}"##
-                title="$msg.get("join.member_name_instructions")">
+                title="$msg.get("join.member_name_instructions")"##
+                autocomplete="off">
           </p>
           ##
           ##
@@ -80,7 +81,8 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_password")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password" ###
-                      title="$msg.get("join.member_password_instructions")">
+                      title="$msg.get("join.member_password_instructions")"##
+                autocomplete="off">
           </p>
           ##
           ##
@@ -88,7 +90,8 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.firstName}" disabled="disabled"##
-                      title="$msg.get('join.member_social_prefilled_tooltip')">
+                      title="$msg.get('join.member_social_prefilled_tooltip')"##
+                autocomplete="off">
           </p>
           ##
           ##
@@ -96,7 +99,8 @@
           <p class="#computeTrClasses($f)">
               <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.lastName}" disabled="disabled"##
-                      title="$msg.get('join.member_social_prefilled_tooltip')">
+                      title="$msg.get('join.member_social_prefilled_tooltip')"##
+                autocomplete="off">
           </p>
           ##
           ##
@@ -132,7 +136,7 @@
           </p>
           <p align="right">
               <input type="submit" value="$msg.get("join.member.save_button")" class="button-orange">
-              <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$tool.getRedirectTarget()','_top')">### TODO: warning in case of cancel
+              <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$tool.getRedirectTarget(false)','_top')">### TODO: warning in case of cancel
           </p>
       </fieldset>
   </div>

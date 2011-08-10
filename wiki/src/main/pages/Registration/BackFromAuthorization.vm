@@ -1,0 +1,26 @@
+##
+## This page is included by other pages when a delivery as a dialog within a curriki page
+## is desired.
+##
+## it needs one variable or parameter to be defined: redir
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+<!-- THIS IS BackFromAuthorization -->
+{pre}#if($redir)#else#set($redir=$request.redir)#end##
+#if(!$included && $request.xpage=="plain")
+<html><head><title>Redirection</title>
+    #template("javascripts.vm")
+    #template("stylesheets.vm")
+</head><body>##
+#elseif($request.xpage=="popup")
+    #set($globalDebug=true)##
+    #template("javascripts.vm")
+#end
+#if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
+<a id="followMeLink" href="${redir}" target="_top">$msg.get("registration.jump.proceeding")</a>##
+<script type="text/javascript">##
+Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window);
+</script>
+#if(!$included && $request.xpage=="plain")
+</body></html>##
+#end
+{/pre}

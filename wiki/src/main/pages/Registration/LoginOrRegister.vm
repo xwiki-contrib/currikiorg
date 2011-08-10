@@ -44,7 +44,7 @@
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-<form id="loginForm" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()" method="post">
+<form id="loginForm" target="_top" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()" method="post">
 #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
 #if($xredirect.startsWith("%2"))#set($xredirect=$xredirect.replaceAll("%2F","/"))#end
@@ -89,8 +89,6 @@
     #set($userName=$!request.j_username)
     #if($message)
         $request.session.removeAttribute("messagesForNextLoginRequest")
-        #set($userName="$request.session.getAttribute('lastUserName')")
-        $request.session.removeAttribute("lastUserName")<!-- lastUserName = $userName -->
     #end
     #if($!message.length()==0)#set($message = $xwiki.parseMessage())#end##
     #if($!message.length()==0 && ("$!request.j_username" == "$msg.get('header.login_username')" || "$!request.j_username" == "") && ("$!request.j_password" == "")) ##{
@@ -133,12 +131,14 @@
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
-              onclick="window.name='curriki-identity-dialog'; window.open('${link}','curriki-identity-dialog-popup'); return false;">##
-	  #if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
-	    <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" width="100"/>##
-      #else##
-        $msg.get("join.login.social.login-with-${provider}.tooltip")##
-	  #end##
+              onclick="Curriki.ui.login.popupIdentityAuthorization('${link}'); return false">##
+      <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"
+           title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" />
+	  ###if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
+	  ##  <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" width="100"/>##
+      ###else##
+      ##  $msg.get("join.login.social.login-with-${provider}.tooltip")##
+	  ###end##
 	  </a>
     </div>
     ## #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="120" max-rows="1"></fb:login-button></div>#end

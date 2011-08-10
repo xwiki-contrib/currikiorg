@@ -115,7 +115,8 @@ public class SocialLoginToolGroovy {
                 maybeRedirect = "&xredirect=" +request.getParameter("xredirect");
                 else maybeRedirect = "";
             String maybeXpage="";
-            if(request.framed=="true") maybeXpage="&xpage=popup";
+            //if(request.framed=="true")
+            maybeXpage="&xpage=popup";
             String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
             if("facebook".equalsIgnoreCase(request.provider)) {
@@ -274,6 +275,7 @@ public class SocialLoginToolGroovy {
             userObj.set("first_name", firstName);
             userObj.set("last_name",  lastName);
             userObj.set("email",      email);
+            userObj.set("member_type",memberType);
             userObj.set("city",       city);
             userObj.set('country',    country);
 
@@ -396,8 +398,18 @@ public class SocialLoginToolGroovy {
         }
     }
 
-    public String getRedirectTarget() {
+    private static String SAVED_REQUEST = "com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest_SavedRequests";
+    public String getRedirectTarget(boolean removeMe) {
+        if(removeMe==null) removeMe = false;
         String xredirect = null;
+        if(request.session && request.session.getAttribute(SAVED_REQUEST)) {
+            String u = ((com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest)
+                request.session.getAttribute(SAVED_REQUEST)).requestUrl;
+            if(u && u.length()>0 && removeMe) {
+                request.session.removeAttribute(SAVED_REQUEST);
+                request.session.removeAttribute("xredirect");
+            }
+        }
         if(request.session) xredirect = request.session.getAttribute("xredirect");
         if(xredirect==null) {
             if(context.user!="XWiki.XWikiGuest")
@@ -406,7 +418,7 @@ public class SocialLoginToolGroovy {
                 xredirect="/";
         }
         System.out.println("xredirect is " + xredirect);
-        request.session.removeAttribute("xredirect");
+        if(removeMe) request.session.removeAttribute("xredirect");
         return xredirect;
     }
 

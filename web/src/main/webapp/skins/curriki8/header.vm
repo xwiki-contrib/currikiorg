@@ -45,7 +45,18 @@
     #set($escapedURL=$escapetool.url($request.getRequestURI()))##
     #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
     #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
-    <a $anchorAtts>$msg.get("join.login.title")</a>
+    <a $anchorAtts>$msg.get("join.login.title")</a><br/>
+
+    <p>#foreach($provider in ["Facebook","Google"])
+      <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
+        #set($xredirect=$escapetool.url("http://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url2')}${request.getRequestURI()}"))##
+      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
+      <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")" width="32" ##
+              onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}'); return false;">##
+      <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="24"
+           title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" /></a>
+    #end</p>
+
 #else ## }{ ## is logged in
 	## crtUserDoc is set in fudocs.vm
 	#set($fname = $crtUserDoc.display("first_name","view"))

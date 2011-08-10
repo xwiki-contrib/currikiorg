@@ -19,7 +19,56 @@ Curriki.ui.login.displayLoginDialog = function(url) {
                 html: "<iframe id='loginIframe' src='"+url+"' width='"+w+"' height='"+h+"'/>"
             });
     Curriki.ui.login.loginDialog.show();
+    return Ext.get("loginIframe").dom.contentWindow;
 };
+
+Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL) {
+    try {
+        if (console) console.log("Opening pop-up that will request authorization.");
+        var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL))
+        Curriki.ui.login.popupIdentityAuthorization2(requestURL,dialog);
+    } catch(e) { console.log(e); }
+}
+Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
+    Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
+    // TODO: make the opener relationship work!!
+}
+Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
+    // called from the login-or-register dialog or from the in-header-icons
+    if(console) console.log("Opening authorization.");
+    window.name='curriki-login-dialog';
+    var otherWindow = window.open(requestURL,'curriki-login-authorize');
+    window.Curriki.ui.login.authorizeDialog = otherWindow;
+    if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
+    return false;
+    // TODO: name windows properly, also leave trace in this window
+};
+
+ Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow) {
+    if(console) console.log("Finishing popup.");
+    if(openerWindow && openerWindow.Curriki.ui.login.authorizeDialog &&
+            openerWindow.Curriki.ui.login.authorizeDialog==window) {
+        // we are in a popup relationship, can close and revert to that popup
+        if(console) console.log("We are in popup, closing and opening popup.");
+        var targetWindow = openerWindow;
+        if(openerWindow.Curriki.ui.login.windowThatShouldNextGoTo)
+            targetWindow = openerWindow.Curriki.ui.login.windowThatShouldNextGoTo;
+        targetWindow.location.href = targetURL;
+        // schedule a close
+        openedWindow.setInterval(function() {
+           targetWindow.focus();
+           openedWindow.close();
+        },20);
+        return false;
+    } else {
+        // TODO: treat case it's not framed in popup (e.g. when clicking in the header)
+        if(console) console.log("No popup parent found... ah well.");
+        openedWindow.location.href = targetURL;
+    }
+}
+
+
+
 
 Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
     try { // we are in the same protocol as window.opener
