@@ -26,6 +26,12 @@ echo
 wget -O /dev/null $BASEURL"/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/video%20position%20img.png"
 echo 
 echo
+echo =================== REQUESTING ONE SOLR INDEX ACCESS =====================
+echo ------------------------ `date` --------------------------
+echo ===========================================================================
+echo
+wget -O /dev/null $BASEULR"/currikiExtjs?start=0&limit=25&xpage=plain&groupsId=Group_InventingtheFuture%2CGroup_AppalachianWatershedEducators%2CGroup_DigitalToolsforHomeworkHelp%2CGroup_HotTopicsinEducationalTechnology%2C&userId=XWiki.adminPolx&isAdmin=true&module=resource&terms=&other=&subjectparent=&subject=&category=interactive&level=&language=&review=&ictprfx=&ict=&special=&rows=25&sort=score&dir=DESC"
+echo
 echo =================== REQUESTING ONE LUCENE INDEX ACCESS =====================
 echo ------------------------ `date` --------------------------
 echo ===========================================================================
