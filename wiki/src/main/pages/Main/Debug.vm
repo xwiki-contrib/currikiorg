@@ -1,0 +1,28 @@
+<% System.out.println("cdbg is " + request.getCookie("cdbg")) %>
+#if($request.remove == "true")
+<%
+  def cookie = new javax.servlet.http.Cookie("cdbg","false");
+  cookie.setMaxAge(0);
+  response.addCookie(cookie);
+  response.sendRedirect( xwiki.getURL(doc.fullName) );
+%>
+#end
+#if($request.add == "true")
+<% response.addCookie(new javax.servlet.http.Cookie("cdbg","true"));
+  response.sendRedirect( xwiki.getURL(doc.fullName) );
+%>
+#end
+
+1 Debug status
+
+#if($globalDebug)
+your cookie says DEBUG
+
+<a href="${doc.name}?remove=true">remove it.</a>
+#else
+  Your cookie doesn't say DEBUG.
+
+  <a href="${doc.name}?add=true">activate it</a>
+#end
+
+globalDebug variable is $globalDebug.
