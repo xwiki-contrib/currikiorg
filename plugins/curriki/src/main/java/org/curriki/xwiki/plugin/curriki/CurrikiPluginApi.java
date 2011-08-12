@@ -16,6 +16,9 @@ import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.api.Document;
 
 import javax.management.timer.Timer;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  */
@@ -240,6 +243,10 @@ public class CurrikiPluginApi extends Api {
 
     public String escapeForJS(String origtext) {
         return Util.escapeForJS(origtext);
+    }
+
+    public void ensureUsernameCookie(HttpServletRequest req, HttpServletResponse resp, String username) {
+        plugin.ensureUsernameCookie(req, resp, username);
     }
 
 }

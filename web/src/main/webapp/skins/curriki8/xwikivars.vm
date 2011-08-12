@@ -15,6 +15,7 @@ $xwiki.includeTopic('Admin.Configuration', false)
 #set($hasGlobalAdmin = $xwiki.hasAccessLevel("admin", $context.user, "XWiki.XWikiPreferences"))
 #set($hasSpaceAdmin = $xwiki.hasAccessLevel("admin", $context.user, "${doc.space}.WebPreferences"))
 #set($isReadOnly = $xwiki.isReadOnly())
+## no real need $xwiki.curriki.ensureUsernameCookie($request, $response, $context.user)
 #set($debugCookie = $xwiki.getUserPreferenceFromCookie("cdbg"))
 #if("$!debugCookie" == "")##{
 #set($globalDebug = false)

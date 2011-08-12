@@ -1,5 +1,6 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +42,10 @@ import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.web.XWikiRequest;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  */
@@ -853,4 +858,52 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
                 LOG.error("CURRIKI ASSET CONVERTER: Error evaluating asset conversion or converting asset for asset: " + newdoc.getFullName(), e);
         }
     }
+
+    private long timeSpentEnsuringCookies = 0;
+    private int numRequestsEnsuringCookies = 0;
+
+    public void ensureUsernameCookie(HttpServletRequest req, HttpServletResponse resp, String username) {
+        long start = System.nanoTime();
+        if("XWiki.XWikiGuest".equals(username)) username = null;
+        Cookie[] cookies = req.getCookies();
+        Cookie unameCookie = null;
+        for(Cookie cookie: cookies) {
+            if("uname".equals(cookie.getName())) {
+                unameCookie = cookie; break;
+            }
+        }
+        if(username==null) {
+            if(unameCookie != null) { // remove it
+                Cookie c = new Cookie("uname", "");
+                c.setPath(unameCookie.getPath());
+                c.setDomain(unameCookie.getDomain());
+                c.setMaxAge(0);
+                resp.addCookie(c);
+            } // otherwise nothing to do, leave it off
+        } else { // username !=null
+            if(unameCookie != null) { // check it
+                if(username.equals(unameCookie.getValue())) {
+                    // nothing to do, things are ok, it won't install it
+                } else { // username change... that seems harsh
+                    Cookie c = new Cookie("uname", username);
+                    c.setPath(unameCookie.getPath());
+                    c.setDomain(unameCookie.getDomain());
+                    c.setMaxAge(1800); // 30 minutes
+                    resp.addCookie(c);
+                }
+            }
+            if(unameCookie==null) {
+                // install it
+                Cookie c = new Cookie("uname", username);
+                c.setPath("/");
+                c.setMaxAge(1800); // 30 minutes
+                resp.addCookie(c);
+            }
+        }
+        numRequestsEnsuringCookies++;
+        timeSpentEnsuringCookies+= (System.nanoTime()-start);
+        if(numRequestsEnsuringCookies>0 && numRequestsEnsuringCookies % 10==0)
+            System.out.println("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
+    }
+
 }
