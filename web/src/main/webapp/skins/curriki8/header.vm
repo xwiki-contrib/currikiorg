@@ -75,6 +75,12 @@
 	#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
 	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
+#if($request.session.getAttribute("header.message")=="logout-ok")##
+    $request.session.removeAttribute("header.message")##
+    <p align="right" style="font-size:smaller">$msg.get("logout.ok-you-left")<br/>
+        $msg.get("logout.offer-logout.facebook")</p>
+#end
+
 </div> ##} ##header-member
 <!-- end of member area -->
 
