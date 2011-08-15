@@ -3,21 +3,24 @@ Ext.ns('Curriki.ui.login');
 Curriki.ui.login.displayLoginDialog = function(url) {
     if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
         Curriki.ui.login.loginDialog.hide();
-    var w = 700, h=500;
-    if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
+    var w = 700, h=400;
+    //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
     if(window.innerWidth && window.innerWidth<w)   w = Math.round(window.innerWidth*0.95);
     if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
+    // the default header should be blue, not green as it is in AddPath, adjust the CSS live
+    Ext.util.CSS.updateRule(".x-window .x-window-tl, .x-panel-ghost .x-window-tl",
+        "background-color", "#4E83C7")
     Curriki.ui.login.loginDialog = new Ext.Window({
                 width:w,
                 height:h,
-                headerCls: "registration-dialog-header",
                 modal:true,
                 closable:true,
-                monitorResize: true,
+                autoHeight: true,
                 scrollbars: true,
                 title:_("join.login.title"),
-                html: "<iframe name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+w+"' height='"+h+"'/>"
+                html: "<iframe name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
             });
+    Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
     return Ext.get("loginIframe").dom.contentWindow;
 };

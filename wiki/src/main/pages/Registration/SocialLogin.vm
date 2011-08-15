@@ -29,6 +29,7 @@ $tool.init($xwiki,$context,$request,$msg)##
     #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())
     #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())
     #elseif($view=="redirectInDialog")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.BackFromAuthorization",false)##
+    #elseif($view=="pleaseDonate")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.PleaseDonate",false)##
     #elseif($view=="redirectOnTop")#set($redir=$tool.getNowTarget())#set($view="")$xwiki.includeForm("Registration.JumpToTop",false)##
         ###elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top and a wait dialog
         ###set($redir="${tool.getRedirectTarget()}")##

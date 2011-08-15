@@ -84,7 +84,8 @@ public class SocialLoginToolGroovy {
             if(userDoc==null) return null;
             context.context.put("ajax",true);
             xwiki.checkAuth(userDoc.fullName, userDoc.get("XWiki.XWikiUsers").get("password").value, "false")
-            nowTarget = request.session.getAttribute("xredirect");
+            nowTarget = getRedirectTarget(true);
+            //nowTarget = request.session.getAttribute("xredirect");
             return "redirectOnTop";
             //def xwikiAuthenticator = xwiki.getXWiki().getAuthService(); //.@authenticators.get('xwiki')
             //def psm = xwikiAuthenticator.@persistentLoginManager;
@@ -335,7 +336,9 @@ public class SocialLoginToolGroovy {
             addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
 
             System.out.println("New profile created and saved: " + userDoc);
-            return authenticateUser(userDoc)
+            String view = authenticateUser(userDoc);
+            if(view=="redirectOnTop") return "pleaseDonate";
+            else return view;
         }
         else {
             System.out.println("New profile not created.");

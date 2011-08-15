@@ -1,0 +1,19 @@
+<script type="text/javascript">
+    window.onload = function() {
+        document.body.className = document.body.className + " insideIframe";
+    };
+</script>
+
+<h3>$msg.get('join.complete.title')</h3>
+
+
+<p>$msg.get('join.complete.text')</p>
+
+
+<p>$msg.get('join.complete.header')</p>
+
+<p align="center">
+    <button class="button-grey" type="submit"
+            #if($redir)onclick="window.top.location='$redir'; return false;"#end
+            >$msg.get('join.complete.later_button')</button></p>
+

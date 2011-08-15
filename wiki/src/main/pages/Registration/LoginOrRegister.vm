@@ -11,7 +11,9 @@
 ### Login page
 ### (is delivered as full page except if framed=true is in the request)
 ###
+<!-- THIS IS LoginOrRegister -->##
 #if($request.framed=='true')#set($framed="true")##
+#if(!$skin)## we did not pass initialization already
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>$msg.get("join.login.title")</title>
@@ -21,8 +23,13 @@
     #template("stylesheets.vm")
     ## #template("analytics.vm")
 {/pre}
-</head><body style="background-color:white">##
-#else#set($framed="false")##
+<body style="background-color:white" class="iframeInside">##
+#else
+    #template("javascripts.vm")
+<script type="text/javascript">
+    document.body.className = document.body.className + " iframeInside";
+</script>
+#end#else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
 #end
 <script type="text/javascript">##
