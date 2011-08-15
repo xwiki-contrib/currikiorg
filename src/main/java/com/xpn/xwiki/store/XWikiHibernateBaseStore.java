@@ -47,6 +47,8 @@ public class XWikiHibernateBaseStore
 
     private String hibpath;
 
+    private static boolean schemaUpdated = false;
+
     private URL hiburl;
 
     /**
@@ -277,6 +279,9 @@ public class XWikiHibernateBaseStore
             return;
         }
 
+        if(schemaUpdated) {
+            return;
+        }
         if (log.isInfoEnabled()) {
             log.info("Updating schema update for wiki [" + context.getDatabase() + "]...");
         }
@@ -294,6 +299,7 @@ public class XWikiHibernateBaseStore
                 "update xwikidoc set xwd_default_language='' where xwd_default_language is null",
                 "update xwikidoc set xwd_fullname=" + fullName + " where xwd_fullname is null",
                 "update xwikidoc set xwd_elements=3 where xwd_elements is null",
+                        // TODO: these two are highly suspicious and take a huge load of time
                 "delete from xwikiproperties where xwp_name like 'editbox_%' and xwp_classtype='com.xpn.xwiki.objects.LongProperty'",
                 "delete from xwikilongs where xwl_name like 'editbox_%'"};
 
@@ -313,6 +319,7 @@ public class XWikiHibernateBaseStore
                 log.info("Schema update for wiki [" + context.getDatabase() + "] done");
             }
         }
+        schemaUpdated = true;
     }
 
     /**

@@ -30,6 +30,8 @@ public class LogoutAction extends XWikiAction
         XWikiRequest request = context.getRequest();
         XWikiResponse response = context.getResponse();
 
+        context.getRequest().getSession().setAttribute("header.message","logout-ok");
+
         String redirect;
         redirect = context.getRequest().getParameter("xredirect");
         if ((redirect == null) || (redirect.equals("")))
