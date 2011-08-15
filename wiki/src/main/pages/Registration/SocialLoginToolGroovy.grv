@@ -387,6 +387,9 @@ public class SocialLoginToolGroovy {
 
 
     public String actionHere(HttpServletRequest request) {
+        if(request.error == "user_denied" && request.error_reason == "access_denied") {
+            return "redirectOnTop";
+        }
         if(!request.callback && request.provider) {
             return "bounceToProvider";
         }

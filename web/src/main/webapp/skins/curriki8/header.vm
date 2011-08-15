@@ -77,8 +77,16 @@
 #end ##}
 #if($request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
-    <p align="right" style="font-size:smaller">$msg.get("logout.ok-you-left")<br/>
-        $msg.get("logout.offer-logout.facebook")</p>
+    #if($request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))
+    #set($provider=$request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))
+    #if($provider=="facebook")#set($logoutUrl="http://www.facebook.com/logout.php")
+    #elseif($provider=="google")#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")
+    #end
+    #if($logoutUrl)
+        <p align="right" style="font-size:smaller; margin-top: -1em">$msg.get("logout.ok-you-left")<br/>
+            <a href="">$msg.get("logout.offer-logout.facebook")</a></p>
+    #end
+    #end
 #end
 
 </div> ##} ##header-member
