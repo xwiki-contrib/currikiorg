@@ -22,7 +22,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
             });
     Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
-    return Ext.get("loginIframe").dom.contentWindow;
+    return Ext.get("loginIframe").dom.contentWindow; 
 };
 
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL) {
