@@ -1641,7 +1641,7 @@ window.onbeforeunload = function() {
 $response.setHeader("Cache-Control","max-age=${numSeconds}, public")##
 $response.setHeader("Pragma","-")##
 #set($expires = $util.getDate().getTime())##
-#set($expires = $expires+1000*$numSeconds)##
+#set($expires = $expires+$mathtool.mul(1000,$numSeconds))##
 #set($expires =$util.getDate($expires))##
 $response.setDateHeader("Expires",$expires.getTime())##
 #end

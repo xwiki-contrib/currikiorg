@@ -1,14 +1,11 @@
 #set($what=$request.getParameter("what"))##
 #set($v=$xwiki.parseGroovyFromPage("Registration.Validation"))##
 $v.init($xwiki)##
-$response.setHeader("Cache-Control","max-age=60, public")##
-$response.setHeader("Pragma","-")##
-#set($expires = $util.getDate().getTime())##
-#set($expires = $expires+60000)##
-#set($expires =$util.getDate($expires))##
-$response.setDateHeader("Expires",$expires.getTime())##
+#browserCacheEnableFor(60)##
 #if($what=="username")$v.isValidUsername($request.value, false)##
 #elseif($what=="email")$v.isValidEmail($request.value, false)##
 #else##
     Only verifies email and username now.
 #end##
+
+Response is $response
