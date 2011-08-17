@@ -278,7 +278,7 @@ public class XWikiHibernateBaseStore
                 log.debug("Schema update deactivated for wiki [" + context.getDatabase() + "]");
             return;
         }
-
+        log.warn("Would update schema? " + !schemaUpdated);
         if(schemaUpdated) {
             return;
         }
