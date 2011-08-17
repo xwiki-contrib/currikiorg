@@ -20,10 +20,11 @@
 ## ----------------
 <style type="text/css">
     .disabledLook p input {background-color: lightgray; border: lightgray 0px; }
-    .registrationTable { width:99%; text-align:left; }
-    .registrationTable p {padding-right: 40px; padding-top: 3px; padding-bottom:6px; padding-left: 10px; height:2em}
-    .registrationTable p label b {float: left; vertical-align: middle; width: 10em;}
-    .registrationTable p input  {float: right; width: 25em;}
+    .registrationTable { width:80%; text-align:left; }
+    .registrationTable p {padding-right: 20px; padding-top: 3px; padding-bottom:6px; padding-left: 10px; height:2em}
+    .registrationTable p.textfield label b {float: left; vertical-align: middle; width: 10em;}
+    .registrationTable p.textfield input|select  {float: right; width: 35em;}
+    body { min-width: 0; margin-right:1em; width:90%}
     .warningField {
         border: solid red;
         background: transparent url(/xwiki/skins/curriki8/warning.png) no-repeat center right;
@@ -36,6 +37,9 @@
         border: none;
         background: transparent url(/xwiki/skins/curriki8/icons/spinner.gif) no-repeat center right;
     }
+    fieldset {
+        margin: 2em;
+    }
 </style>
 <!-- begin javascripts -->##
 #set($globalDebug=true)##
@@ -46,15 +50,16 @@
 <!-- end javascripts -->
 <!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
 ## ----------------
+{pre}
 <form class="xform" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm">
   <div class="centered">
-      <fieldset class="xwikimessage">
+      <fieldset>
           <h3>$msg.get("join.member.title")</h3>
           <p align="left">
-              #if($tool.providerId)$msg.get("",[${tool.providerId}])#else##
+              #if($tool.providerId)$msg.get("join.member.social_instructions",[${tool.providerId}])#else##
                   $msg.get("join.member.curriki_instructions")##
               #end</p>
-          <p id="currikiRegistrationAdvice"></p>
+          <p id="currikiRegistrationAdvice" align="left">&nbsp;</p>
           #if($tool.errors)
               <p class="warning">#foreach($m in $tool.errors)$msg.get($m)#end</p>
           #end
@@ -68,7 +73,7 @@
       <div class="registrationTable">
           ##
           #set($f="username")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_name_instructions');">
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_name_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_name")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.username}"##
                 autocomplete="off">
@@ -76,7 +81,7 @@
           ##
           ##
           #set($f="password")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_password_instructions');">
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_password_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_password")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password" ###
                 autocomplete="off">
@@ -84,7 +89,7 @@
           ##
           ##
           #set($f="firstName")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip');">
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);">
               <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.firstName}" disabled="disabled"##
                 autocomplete="off">
@@ -92,7 +97,7 @@
           ##
           ##
           #set($f="lastName")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip');">
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);">
               <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.lastName}" disabled="disabled"##
                 autocomplete="off">
@@ -100,7 +105,7 @@
           ##
           ##
           #set($f="email")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip');">
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);">
               <label for="${f}_input"><b>$msg.get("join.member_email")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.email}" disabled="disabled"##
               >
@@ -122,7 +127,7 @@
           ##
           ##
           #set($f="agree")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('');">
+          <p class="#computeTrClasses($f) fullwidth" onmouseover="Curriki.ui.login.displayInstruction('join.member_agreement_instructions');">
                   <label style="float: none; width:100%">
                       <input type="checkbox" name="agree"##
                               #if($request.agree)checked #end >##
@@ -133,9 +138,10 @@
               <input type="submit" value="$msg.get("join.member.save_button")" class="button-orange">
               <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$tool.getRedirectTarget(false)','_top')">### TODO: warning in case of cancel
           </p>
-      </fieldset>
+      ##</fieldset>
   </div>
 </form>
+{/pre}
 <script type="text/javascript">
     Ext.onReady(function() {
                 Curriki.ui.login.liveValidation.activate("username_input", "email_input"); },
