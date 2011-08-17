@@ -77,20 +77,20 @@
 #end ##}
 #if($request.session.getAttribute("header.message")=="logout-ok")##
     ##$request.session.removeAttribute("header.message")##
-    #if($request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))
-        $request.session.removeAttribute("org.brickred.socialauth.AuthProvider.hint")
-        $request.session.removeAttribute("org.brickred.socialauth.AuthProvider")
-        $request.session.removeAttribute("org.brickred.socialauth.Profile ")
-    #set($provider=$request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))
-    #if($provider=="facebook")#set($logoutUrl="http://www.facebook.com/logout.php")
-    #elseif($provider=="google")#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")
-    #end
+    #if($request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))##
+        $request.session.removeAttribute("org.brickred.socialauth.AuthProvider.hint")##
+        $request.session.removeAttribute("org.brickred.socialauth.AuthProvider")##
+        $request.session.removeAttribute("org.brickred.socialauth.Profile ")##
+        #set($provider=$request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))##
+        #if($provider=="facebook")#set($logoutUrl="http://www.facebook.com/logout.php")##
+        #elseif($provider=="google")#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
+        #end##
+    #end##
     <p align="right" style="font-size:smaller; margin-top: -1em">$msg.get("logout.ok-you-left")##
     #if($logoutUrl)##
-            <br/><a href="">$msg.get("logout.offer-logout.facebook")</a>##
+            <br/><a href="$logoutUrl">$msg.get("logout.offer-logout.${provider}")</a>##
     #end##
     </p>
-    #end
 #end
 ##
 </div> ##} ##header-member
