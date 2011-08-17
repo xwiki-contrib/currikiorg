@@ -11,8 +11,8 @@
 ### Login page
 ### (is delivered as full page except if framed=true is in the request)
 ###
-<!-- THIS IS LoginOrRegister -->##
 #if($request.framed=='true')#set($framed="true")##
+<!-- framed is $framed -->
 #if(!$skin)## we did not pass initialization already
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,10 +25,12 @@
 {/pre}
 <body style="background-color:white" class="iframeInside">##
 #else
+{pre}
     #template("javascripts.vm")
-<script type="text/javascript">
+    <script type="text/javascript">
     document.body.className = document.body.className + " iframeInside";
-</script>
+    </script>
+{/pre}
 #end#else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
 #end

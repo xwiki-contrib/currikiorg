@@ -82,8 +82,8 @@
         $request.session.removeAttribute("org.brickred.socialauth.AuthProvider")##
         $request.session.removeAttribute("org.brickred.socialauth.Profile ")##
         #set($provider=$request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))##
-        #if($provider=="facebook")#set($logoutUrl="http://www.facebook.com/logout.php")##
-        #elseif($provider=="google")#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
+        #if($provider.equalsIgnoreCase("facebook"))#set($logoutUrl="http://www.facebook.com/logout.php")##
+        #elseif($provider.equalsIgnoreCase("google"))#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
         #end##
     #end##
     <p align="right" style="font-size:smaller; margin-top: -1em">$msg.get("logout.ok-you-left")##

@@ -343,7 +343,7 @@ public class SocialLoginToolGroovy {
         else {
             System.out.println("New profile not created.");
             if (!username || username == '')
-                errors.add(msg.get('join.error.unsername'));
+                errors.add(msg.get('join.error.username'));
             else if (xwiki.exists('XWiki.' + username))
                 errors.add(msg.get('join.error.login_not_unique'));
             if(!errors.isEmpty())
@@ -379,6 +379,7 @@ public class SocialLoginToolGroovy {
         String a = this.actionHere(request);
         LOG.info("Action: " + a);
         System.out.println("Action: " + a);
+        System.out.println("Future target: " + getRedirectTarget(false));
         return a;
     }
 
@@ -387,10 +388,11 @@ public class SocialLoginToolGroovy {
 
 
     public String actionHere(HttpServletRequest request) {
-        if(request.error == "user_denied" && request.error_reason == "access_denied") {
-            return "redirectOnTop";
+        if(request.error == "access_denied" && request.error_reason == "user_denied") {
+            nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&xredirect=" + URLEncoder.encode(getRedirectTarget(false));
+            return "redirectInDialog";
         }
-        if(!request.callback && request.provider) {
+        else if(!request.callback && request.provider) {
             return "bounceToProvider";
         }
         else if (request.callback){
@@ -412,26 +414,29 @@ public class SocialLoginToolGroovy {
         if(request.session && request.session.getAttribute(SAVED_REQUEST)) {
             try {
                 Object o = request.session.getAttribute(SAVED_REQUEST)
-                String u = null;
                 if(o instanceof Map)
-                    u = ((Map) m).value().iterator().next()
+                    xredirect = ((Map) m).value().iterator().next()
                 else
-                    u = ((SavedRequestRestorerFilter.SavedRequest) o).requestUrl;
+                    xredirect = ((SavedRequestRestorerFilter.SavedRequest) o).requestUrl;
                 if(u && u.length()>0 && removeMe) {
                     request.session.removeAttribute(SAVED_REQUEST);
                     request.session.removeAttribute("xredirect");
                 }
             } catch (Exception e) { LOG.warn(e); }
         }
-        if(request.session) xredirect = request.session.getAttribute("xredirect");
+        if(xredirect==null && request.session)
+            xredirect = request.session.getAttribute("xredirect");
         if(xredirect==null) {
             if(context.user!="XWiki.XWikiGuest")
                 xredirect="/xwiki/bin/view/MyCurriki/";
             else
                 xredirect="/";
         }
-        System.out.println("xredirect is " + xredirect);
-        if(removeMe) request.session.removeAttribute("xredirect");
+        System.out.println("redirect target is " + xredirect);
+        if(removeMe) {
+            request.session.removeAttribute("xredirect")
+            request.session.removeAttribute(SAVED_REQUEST);
+        };
         return xredirect;
     }
 
