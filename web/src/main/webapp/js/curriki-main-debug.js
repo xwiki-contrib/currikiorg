@@ -3364,7 +3364,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
             });
     Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
-    return Ext.get("loginIframe").dom.contentWindow;
+    return Ext.get("loginIframe").dom.contentWindow; 
 };
 
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL) {
@@ -3424,6 +3424,13 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
     }
 
 };
+
+
+Curriki.ui.login.displayInstruction = function(text) {
+    try {
+        Ext.get("currikiRegistrationAdvice").dom.textContent = _(text);
+    } catch(e) { if(console) console.log(e); }
+}
 
 
 Ext.namespace("Curriki.ui.login.liveValidation");

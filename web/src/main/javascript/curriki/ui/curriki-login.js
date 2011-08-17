@@ -84,6 +84,13 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
 };
 
 
+Curriki.ui.login.displayInstruction = function(text) {
+    try {
+        Ext.get("currikiRegistrationAdvice").dom.textContent = _(text);
+    } catch(e) { if(console) console.log(e); }
+}
+
+
 Ext.namespace("Curriki.ui.login.liveValidation");
 Curriki.ui.login.liveValidation = function() {
     var idOfUsername = null, idOfEmail = null;
