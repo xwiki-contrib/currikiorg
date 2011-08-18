@@ -21,7 +21,7 @@
 <style type="text/css">
     .disabledLook p input {background-color: lightgray; border: lightgray 0px; }
     .registrationTable { width:80%; text-align:left; }
-    .registrationTable p {padding-right: 20px; padding-top: 3px; padding-bottom:6px; padding-left: 10px; height:2em}
+    .registrationTable p {padding-right: 20px; padding-top: 3px; padding-bottom:6px; padding-left: 10px; height:2em;}
     .registrationTable p.textfield label b {float: left; vertical-align: middle; width: 10em;}
     .registrationTable p.textfield input|select  {float: right; width: 35em;}
     body { min-width: 0; margin-right:1em; width:90%}
@@ -40,6 +40,7 @@
     fieldset {
         margin: 2em;
     }
+    .warning { text-align:left; }
 </style>
 <!-- begin javascripts -->##
 #set($globalDebug=true)##
@@ -51,17 +52,18 @@
 <!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
 ## ----------------
 {pre}
-<form class="xform" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm">
+<form class="xform" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
+    onsubmit="console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true;">
   <div class="centered">
       <fieldset>
           <h3>$msg.get("join.member.title")</h3>
-          <p align="left">
-              #if($tool.providerId)$msg.get("join.member.social_instructions",[${tool.providerId}])#else##
+          <p align="left"><!-- providerId: "$tool.providerId" -->
+              #if($tool.providerId)$msg.get("join.member.social_instructions",["$tool.providerId"])#else##
                   $msg.get("join.member.curriki_instructions")##
               #end</p>
           <p id="currikiRegistrationAdvice" align="left">&nbsp;</p>
           #if($tool.errors)
-              <p class="warning">#foreach($m in $tool.errors)$msg.get($m)#end</p>
+              <p class="warning">#foreach($m in $tool.errors)$msg.get($m) #end</p>
           #end
       <input type="hidden" name="xaction" value="createProfile" >
       <input type="hidden" name="city"  value="$!tool.city">
@@ -116,14 +118,15 @@
           <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
-              <select name="member_type" id="${f}_input">##
+              <select name="member_type" id="${f}_input" onchange="Curriki.ui.login.memberTypeChanged()">##
                   #set($val="-")
-                  <option value="$val" #if($tool.memberType==$val)check="checked"#end></option>##
+                  <option value="$val" #if($tool.memberType==$val)selected="selected"#end></option>##
                   #foreach($val in $propVals)#if($val!="0")##
-                  <option value="$val" #if($tool.memberType==$val)check="checked"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
+                  <option value="$val" #if($tool.memberType==$val)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
                   #end#end
               </select>
           </p>
+          <p class="warning" id="memberTypeNotice">&nbsp;</p>
           ##
           ##
           #set($f="agree")
@@ -141,9 +144,53 @@
       ##</fieldset>
   </div>
 </form>
-{/pre}
 <script type="text/javascript">
     Ext.onReady(function() {
                 Curriki.ui.login.liveValidation.activate("username_input", "email_input"); },
                     Curriki.ui.login.liveValidation);
+    Ext.onReady(function() {
+        // adjust dialog height
+        if(window.innerHeight < document.height) {
+            if(window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) {
+                h = document.height;
+                if(window.parent.innerHeight < h) h = window.parent.innerHeight;
+                window.parent.Ext.get('loginIframe').dom.height = 10 + h;
+            }
+        }
+
+        //
+        Curriki.ui.login.memberTypeChanged = function () {
+            try {
+                var p = Ext.get("memberTypeNotice");
+                var s = Ext.get("memberType_input");
+                if(!p || !s) {
+                    console.log("Can't find elements. Stopping.");
+                    return;
+                }
+                var text = p.dom.textContent;
+                if(s && s.dom.value &&
+                        ("corporation"==s.dom.value || "nonprofit"==s.dom.value)) {
+                    text = _('join.member_type_coporate_instructions');
+                    console.log("memberTypeNotice: " + text);
+                }
+                Ext.get("memberTypeNotice").dom.textContent = text;
+            } catch(e) { if(console) console.log(e); }
+        };
+        // do it after load: the warning must be displayed in case
+        Curriki.ui.login.memberTypeChanged();
+
+        Curriki.ui.login.displayInstruction = function(key,params) {
+            try {
+                var text;
+                if(params) text = _(key,params);
+                    else text = _(key)
+                Ext.get("currikiRegistrationAdvice").dom.textContent = text;
+            } catch(e) { if(console) console.log(e); }
+        };
+
+
+    })
+
+
 </script>
+{/pre}
