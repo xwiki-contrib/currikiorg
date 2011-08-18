@@ -8,20 +8,26 @@
 	#set($debugging = "")
 #end##}
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+
+#if($useCdns)
 <script type="text/javascript">
-//<![CDATA[
+/* <![CDATA[ */
 var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
 document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects' type='text/javascript'%3E%3C/script%3E"));
-
 var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
 document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
-//]]>
+/* ]]> */
 </script>
+#else
+<script src="/xwiki/prototype.js" type="text/javascript"></script>
+<script src="/xwiki/skins/albatross/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
+<script src="/xwiki/skins/curriki8/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
+<script src="/xwiki/skins/curriki8/extjs/ext-all${debugging}.js" type="text/javascript"></script>
+#end
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
-
 	#if("$!request.lang" != "")##{
 		#set($lang = $request.lang)
 	#else##}{
