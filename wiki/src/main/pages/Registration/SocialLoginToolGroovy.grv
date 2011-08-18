@@ -12,7 +12,8 @@ import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
 import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi
 import com.xpn.xwiki.doc.XWikiAttachment
-import com.xpn.xwiki.web.SavedRequestRestorerFilter;
+import com.xpn.xwiki.web.SavedRequestRestorerFilter
+import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -30,6 +31,8 @@ public class SocialLoginToolGroovy {
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
     Object validation;
+
+    MailSenderPluginApi mailsender = null;
 
 
     Log LOG = LogFactory.getLog("groovyPages.SocialLogin");
@@ -336,6 +339,11 @@ public class SocialLoginToolGroovy {
             addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
 
             System.out.println("New profile created and saved: " + userDoc);
+
+            sendConfirmationEmail();
+            System.out.println("Email sent.");
+
+
             String view = authenticateUser(userDoc);
             if(view=="redirectOnTop") return "pleaseDonate";
             else return view;
@@ -471,9 +479,22 @@ public class SocialLoginToolGroovy {
 
     }
 
+
     public String getNowTarget() {
         return nowTarget;
     }
 
+
+    public void sendConfirmationEmail() {
+        mailsender = xwiki.mailsender;
+        def emailDoc = "Registration.MemberRegCompleteEmail"
+        if('corporation'==memberType || 'nonprofit'==memberType)
+            emailDoc = "Registration/CorporateRegCompleteEmail";
+        emailDoc = xwiki.getDocument(emailDoc);
+        def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
+        mailsender.sendHtmlMessage("Curriki <webmaster@curriki.org>", email, null, null,
+            msg.get("registration.email.welcome"), text, text.replaceAll("<[^>]*>",""), []);
+        //xwiki.sendConfirmationMail(username, password, request.get("XWiki.XWikiUsers_0_email"), "confirmation_email_content");
+    }
 
 }

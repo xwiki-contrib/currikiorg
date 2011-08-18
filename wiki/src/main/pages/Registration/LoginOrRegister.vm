@@ -40,7 +40,8 @@
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-<form id="loginForm" target="_top" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()" method="post">
+<form id="loginForm" target="_top" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()"
+      onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
 #if($xredirect.startsWith("%2"))#set($xredirect=$xredirect.replaceAll("%2F","/"))#end
@@ -202,11 +203,23 @@
 </script>
 {/pre}
 </div>## main
+<script type="text/javascript">
+    Ext.onReady(function() {
+        Ext.get("j_username").dom.focus();
+        Curriki.ui.login.validateLoginForm = function () {
+            try {
+                var userName = Ext.get("j_username"),
+                        pass = Ext.get("j_password");
+                var valid = (userName && userName.dom.value != "") && (pass && pass.dom.value != "");
+                console.log("Valid? " + valid);
+                return valid;
+            } catch(e) { if(console) console.log("Error in validating.", e); }
+        };
+
+    });
+</script>
 #if($request.framed=='true')
 </body></html>
 #else
 {pre}#template("endpage.vm"){/pre}##
-<script type="text/javascript">
-    Ext.onReady(function() {Ext.select("j_username").dom.focus();});
-</script>
 #end

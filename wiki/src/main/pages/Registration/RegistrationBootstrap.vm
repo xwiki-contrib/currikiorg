@@ -167,12 +167,12 @@
                     console.log("Can't find elements. Stopping.");
                     return;
                 }
-                var text = p.dom.textContent;
+                var text = ' ';
                 if(s && s.dom.value &&
                         ("corporation"==s.dom.value || "nonprofit"==s.dom.value)) {
                     text = _('join.member_type_coporate_instructions');
-                    console.log("memberTypeNotice: " + text);
                 }
+                console.log("memberTypeNotice: " + text);
                 Ext.get("memberTypeNotice").dom.textContent = text;
             } catch(e) { if(console) console.log(e); }
         };
