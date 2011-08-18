@@ -3367,6 +3367,13 @@ Curriki.ui.login.displayLoginDialog = function(url) {
     return Ext.get("loginIframe").dom.contentWindow; 
 };
 
+Curriki.ui.login.ensureProperBodyCssClass = function() {
+    window.onload = function() {
+        document.body.className = document.body.className + " insideIframe";
+    };
+}
+
+
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL) {
     try {
         if (console) console.log("Opening pop-up that will request authorization.");
@@ -3381,7 +3388,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
     // called from the login-or-register dialog or from the in-header-icons
     if(console) console.log("Opening authorization.");
     window.name='curriki-login-dialog';
-    var otherWindow = window.open(requestURL,'curriki-login-authorize');
+    var otherWindow = window.open(requestURL,'curriki-login-authorize',"toolbar=0,status=1,menubar=0,resizable=1,width=700,height=550");
     window.Curriki.ui.login.authorizeDialog = otherWindow;
     if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
     return false;
@@ -3426,9 +3433,12 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
 };
 
 
-Curriki.ui.login.displayInstruction = function(text) {
+Curriki.ui.login.displayInstruction = function(key,params) {
     try {
-        Ext.get("currikiRegistrationAdvice").dom.textContent = _(text);
+        var text;
+        if(params) text = _(key,params);
+            else text = _(key)
+        Ext.get("currikiRegistrationAdvice").dom.textContent = text;
     } catch(e) { if(console) console.log(e); }
 }
 
