@@ -1,0 +1,6 @@
+#if($request.method=="POST")##
+## this file is only included in case there's an error in logging in
+$request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
+$request.session.setAttribute("lastUserName","$!request.j_username")##
+$response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/login/XWiki/XWikiLogin?$!request.getQueryString().replaceAll('xpage=popup','')")##
+#end
