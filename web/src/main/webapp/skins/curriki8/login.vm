@@ -9,6 +9,8 @@
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 ## this is loaded when /xwiki/bin/login/X/Y is loaded
 ## --- beware to end each line with ## at least until the first redirect
+<!-- start of login.vm -->
+#set($junk=$response.setHeader("Fluff","method: $request.method and document $doc.fullName "))##
 #if ($request.xredirect)##
   #set($redir=$request.xredirect)##
 #elseif ($request.session && $request.session.getAttribute("xredirect"))##
@@ -25,6 +27,7 @@
 #if ($context.user != 'XWiki.XWikiGuest')##
 ##$response.sendRedirect($redir)##
 ## rather JS-redirect so that we get frame=_top
+$xwiki.includeForm("Registration.JumpToTop")
 #elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself
 #set($qs = "$!{request.queryString}")##
 #if(!$request.getParameter('xredirect'))##
@@ -37,7 +40,6 @@ $response.sendRedirect($xwiki.getURL('XWiki.XWikiLogin', 'login', $qs))##
   $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
   $request.session.setAttribute("lastUserName","$!request.j_username")##
   $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/login/XWiki/XWikiLogin?$!request.getQueryString()")##
-  <!-- have sent redirect -->
 #else## we're on the right place... display login or register
 $xwiki.includeForm("Registration.LoginOrRegister",false)##
 #end##

@@ -40,7 +40,7 @@
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-<form id="loginForm" target="_top" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()"
+<form id="loginForm" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()"
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
@@ -84,6 +84,7 @@
 <h3>$msg.get("join.login.header")</h3><!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest") -->
     #set($message=$!request.session.getAttribute("messagesForNextLoginRequest"))
     #set($userName=$!request.j_username)
+    #if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))#end
     #if($message)
         $request.session.removeAttribute("messagesForNextLoginRequest")
     #end
@@ -145,6 +146,7 @@
 <div class="clearfloats"></div>
 #end
 </form>
+{pre}
 <div style="font-size: 70%; margin-top: 2em;">##
    <a href="/xwiki/bin/view/Main/JoinCurriki" target="_top" title="$msg.get('join.login.join_curriki')">##
     $msg.get('join.login.join_curriki')</a>
@@ -154,10 +156,13 @@
 ## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
 <script type="text/javascript">
 //<![CDATA[
-  document.forms.loginForm.j_username.focus();
+  #if($!userName!="")##
+      document.forms.loginForm.j_password.focus();##
+  #else##
+      document.forms.loginForm.j_username.focus();##
+  #end##
 //]]>
 </script>
-{pre}
 <script type="text/javascript">
     var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
     if(fbAppId) {
@@ -205,7 +210,6 @@
 </div>## main
 <script type="text/javascript">
     Ext.onReady(function() {
-        Ext.get("j_username").dom.focus();
         Curriki.ui.login.validateLoginForm = function () {
             try {
                 var userName = Ext.get("j_username"),
