@@ -22,6 +22,8 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.ecs.storage.Hash;
 import org.joda.time.format.FormatUtils;
 
+/**
+ */
 public class CurrikiDocument extends Document {
     public CurrikiDocument(XWikiDocument doc, XWikiContext context) {
         super(doc, context);

@@ -13,6 +13,8 @@ import java.util.List;
 import org.curriki.xwiki.plugin.asset.composite.CollectionCompositeAsset;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
+/**
+ */
 public class CollectionSpace {
     private String spaceName;
     private XWikiContext context;

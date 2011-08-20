@@ -26,21 +26,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <groupId>com.xpn.xwiki.platform.plugins</groupId>
+    <artifactId>xwiki-plugins</artifactId>
+    <version>29</version>
   </parent>
   <groupId>org.curriki</groupId>
   <artifactId>curriki-plugins</artifactId>
+  <version>2.1</version>
   <packaging>pom</packaging>
   <name>XWiki Products - Curriki - Plugins - Parent POM</name>
   <description>XWiki Products - Curriki - Plugins - Parent POM</description>
+  <properties>
+    <platform.version>3.1</platform.version>
+    <curriki.version>2.1</curriki.version>
+    <platform.plugins.invitationmanager.version>1.0.1</platform.plugins.invitationmanager.version>
+    <platform.plugins.spacemanager.version>1.1.1</platform.plugins.spacemanager.version>
+  </properties>
   <dependencies>
     <dependency>
-      <groupId>com.xpn.xwiki.platform</groupId>
-      <artifactId>xwiki-core</artifactId>
-      <version>${platform.core.version}</version>
-      <scope>provided</scope>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-oldcore</artifactId>
+      <version>${platform.version}</version>
     </dependency>
   </dependencies>
   <modules>
@@ -55,4 +61,15 @@
     <module>servlet</module>
     <module>lucene</module>
   </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.xwiki.commons</groupId>
+          <artifactId>xwiki-commons-tool-xar-plugin</artifactId>
+          <version>${commons.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

@@ -28,7 +28,7 @@
   <parent>
     <groupId>org.curriki</groupId>
     <artifactId>curriki-parent</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.1</version>
   </parent>
   <artifactId>curriki-wiki</artifactId>
   <name>XWiki Products - Curriki - Wiki</name>
@@ -36,10 +36,119 @@
   <description>XWiki Products - Curriki - Wiki</description>
   <dependencies>
     <dependency>
-      <groupId>org.xwiki.enterprise</groupId>
-      <artifactId>xwiki-enterprise-wiki</artifactId>
-      <version>${platform.core.version}</version>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-panels</artifactId>
+      <version>${platform.version}</version>
       <type>xar</type>
-    </dependency>    
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-administration</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-scheduler-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-watchlist-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-statistics</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-search-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <!-- 
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-blog</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-office-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-webdav-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-tag-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-rendering-wikimacro-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-annotation-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-invitation</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-extension-ui</artifactId>
+      <version>${platform.version}</version>
+      <type>xar</type>
+    </dependency>
   </dependencies>
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.xwiki.commons</groupId>
+        <artifactId>xwiki-commons-tool-xar-handlers</artifactId>
+        <version>${commons.version}</version>
+      </extension>
+    </extensions>
+    <plugins>
+      <plugin>
+        <groupId>org.xwiki.commons</groupId>
+        <artifactId>xwiki-commons-tool-xar-plugin</artifactId>
+        <version>${commons.version}</version>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <!-- Exclude from being Clovered since it doesn't bring interesting information and causes
+               problems with the XAR plugin since Clover generates files in target/classes that conflicts -->
+          <groupId>com.atlassian.maven.plugins</groupId>
+          <artifactId>maven-clover2-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

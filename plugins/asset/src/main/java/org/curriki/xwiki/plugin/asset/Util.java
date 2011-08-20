@@ -1,9 +1,6 @@
 package org.curriki.xwiki.plugin.asset;
 
 /**
- * User: ludovic
- * Date: 10 févr. 2009
- * Time: 19:39:18
  */
 public class Util {
     /**
