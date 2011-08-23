@@ -26,6 +26,7 @@
 <body style="background-color:white" class="iframeInside">##
 #else
 {pre}
+    #template("xwikivars.vm")
     #template("javascripts.vm")
     <script type="text/javascript">
     document.body.className = document.body.className + " iframeInside";
@@ -40,9 +41,12 @@
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-<form id="loginForm" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/loginsubmit/XWiki/XWikiLogin?$!request.getQueryString()"
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+#set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
+<form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&srid=${targets.createSrid($request,$nextURL)}"
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
-#set($xredirect=$!request.xredirect)
+#* #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
 #if($xredirect.startsWith("%2"))#set($xredirect=$xredirect.replaceAll("%2F","/"))#end
 #if($xredirect && $xredirect!="" && $xredirect!="/")##
@@ -51,22 +55,13 @@
     #if($request.session.getAttribute("xredirect"))#set($xredirect=$request.session.getAttribute("xredirect"))#end##
 #end##
 <!-- xredirect is $xredirect -->
-<!-- session's xredirect is $request.session.getAttribute("xredirect") -->
+<!-- session's xredirect is $request.session.getAttribute("xredirect") --> *#
 <!-- this document is from Registration.LoginOrRegister -->
 <div class="hidden">##
-<input type="hidden" name="xredirect" value="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($xredirect)"/>
+<input type="hidden" name="xredirect" value="$nextURL"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
-#if("$!request.srid" != '')
-  <input type="hidden" name="srid" value="$!escapetool.xml($request.srid)"/>
-#end
 </div>
-#set($hasSocialLogin = false)
-#if($xwiki.exists('XWiki.SocialLoginConfiguration'))
-  #set($socialLoginConfigurationDocument = $xwiki.getDocument('XWiki.SocialLoginConfiguration'))
-    <!-- socialLoginConfigurationDocument  = "$socialLoginConfigurationDocument" , xwiki is $xwiki -->
-  #set($socialLoginConfiguration = $socialLoginConfigurationDocument.getObject('XWiki.SocialLoginConfigurationClass'))
-  #set($providersAsString = $socialLoginConfiguration.getProperty('providers').value)
-  #set($providers = [])
+#set($providers = ["facebook","google"])##
   #if("$!providersAsString" != '')
     #set($providersA = $providersAsString.split('\n'))
     #set($providers = $xwiki.getArrayList())
@@ -75,8 +70,7 @@
   #if($providers.size() > 0)
     #set($hasSocialLogin = true)
   #end
-#end
-    <!-- hasSocialLogin ? $hasSocialLogin -->
+<!-- hasSocialLogin ? $hasSocialLogin -->
 #if($hasSocialLogin)
 ##<div class="column half">
 <table width="100%"><tr><td>
@@ -115,11 +109,10 @@
 </table>
 <div class="buttons">##
     <span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('join.login.button')"/></span>
-    <span class="buttonwrapper"><input type="button" class="button-grey" value="$msg.get('join.login.cancel')" onclick="window.open('$xredirect','_top')"/></span>
+    <span class="buttonwrapper"><input type="button" class="button-grey" value="$msg.get('join.login.cancel')" onclick="window.open('$targets.noLogin','_top')"/></span>
 </div>
-#if($hasSocialLogin)
 #set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
-#set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg))
+#set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg, $targets))
 </td><td valign="top" align="left">
 ##</div>
 ##<div class="column half socialLoginProviders">
@@ -127,7 +120,7 @@
     #foreach($provider in $providers)
     <div class="provider"  id="identifyWith${provider}" style="display:inline">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
+      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$targets.afterLogin#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="Curriki.ui.login.popupIdentityAuthorization('${link}'); return false">##
       <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"
@@ -144,7 +137,6 @@
   #end
 </td></tr></table>
 <div class="clearfloats"></div>
-#end
 </form>
 {pre}
 <div style="font-size: 70%; margin-top: 2em;">##
@@ -179,9 +171,11 @@
                 // logged in and connected user, someone you know
                 // we now adjust the link to sign-up with Facebook
                 console.log("Is FB logged in: "); console.log(response.session);
-                var fbLink = document.getElementById("identifyWithFacebook").children[0];
-                fbLink.target="_self";
-                fbLink.onclick="";
+                var fbLink = Ext.get("identifyWithFacebook");
+                if(fbLink) {
+                    fbLink.dom.children[0].target="_self";
+                    fbLink.dom.children[0].onclick="";
+                }
           };
           FB.getLoginStatus(function(response) {
               window.fbReady = true;

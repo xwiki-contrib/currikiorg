@@ -1,0 +1,43 @@
+// <%
+
+println();
+println("1 Session of id $request.session.id")
+println("<table border='1' cellpadding='3'>");
+for(x in request.session.getAttributeNames()) {
+  if(x==null || x=="") continue;
+  println("<tr><td>");
+  println(x);
+  println("</td><td>");
+  def o = request.session.getAttribute(x);
+  if(o instanceof Map) {
+      println("Map: <ul>");
+      for(k in o.keySet()) {
+          println("<li>" + k + " : " + toStringOf(o.get(k)) + "</li>");
+      }
+      println("</ul>");
+  } else
+  println(toStringOf(o));
+  println();
+  println("</td></tr>");
+}
+println("</table>");
+if(request.clear=="clear") {
+    for(x in request.session.getAttributeNames()) {
+        request.session.removeAttribute(x);
+    }
+    println("<p><i>Session has been cleared.</i></p>");
+    println("<input type='submit' class='button-grey' value='reload' name='reload' onclick='window.location.href=\\'"+ doc.name +"\\''; return false;'/>");
+} else {
+    println("<form method='get' action='" + doc.name +
+            "'><input type='submit' class='button-grey' value='clear' name='clear'/> </form>");
+}
+
+private String toStringOf(Object o) {
+    if(o==null) return "null"
+    else if(o instanceof com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest) {
+        return o.toString() + " to " + o.getRequestUrl();
+    } else
+        return o.toString();
+}
+
+// %>

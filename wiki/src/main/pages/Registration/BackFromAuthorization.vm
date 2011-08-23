@@ -18,7 +18,12 @@
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
 <a id="followMeLink" href="${redir}" target="_top">$msg.get("registration.jump.proceeding")</a>##
 <script type="text/javascript">##
-  Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window);
+  #if($redir.startsWith("/xwiki/bin/view/Registration"))
+    Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window, false);
+  #else
+    Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window, true);
+  #end##
+  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window);")
 </script>
 #if(!$included && $request.xpage=="plain")
 </body></html>##

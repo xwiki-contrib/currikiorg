@@ -3374,10 +3374,10 @@ Curriki.ui.login.ensureProperBodyCssClass = function() {
 }
 
 
-Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL) {
+Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL, xredirect) {
     try {
         if (console) console.log("Opening pop-up that will request authorization.");
-        var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL))
+        var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
         Curriki.ui.login.popupIdentityAuthorization2(requestURL,dialog);
     } catch(e) { console.log(e); }
 }
@@ -3394,7 +3394,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
     return false;
 };
 
- Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow) {
+ Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
     if(console) console.log("Finishing popup.");
     if(openerWindow && openerWindow.Curriki.ui.login.authorizeDialog &&
             openerWindow.Curriki.ui.login.authorizeDialog==window) {
@@ -3403,7 +3403,9 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
         var targetWindow = openerWindow;
         if(openerWindow.Curriki.ui.login.windowThatShouldNextGoTo)
             targetWindow = openerWindow.Curriki.ui.login.windowThatShouldNextGoTo;
+        if(toTop) targetWindow = targetWindow.top;
         targetWindow.location.href = targetURL;
+        //alert("Would go to " + targetURL + " from " + targetWindow);
         // schedule a close
         openedWindow.setInterval(function() {
            targetWindow.focus();
@@ -3413,6 +3415,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
     } else {
         if(console) console.log("No popup parent found... ah well.");
         openedWindow.location.href = targetURL;
+        //alert("Would go to " + targetURL + " from " + openedWindow);
     }
 }
 

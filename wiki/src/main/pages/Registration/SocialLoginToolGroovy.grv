@@ -31,17 +31,19 @@ public class SocialLoginToolGroovy {
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
     Object validation;
+    def targets;
 
     MailSenderPluginApi mailsender = null;
 
 
     Log LOG = LogFactory.getLog("groovyPages.SocialLogin");
 
-    public String init(XWiki xwiki, Context context, HttpServletRequest request, XWikiMessageTool msg) {
+    public String init(XWiki xwiki, Context context, HttpServletRequest request, XWikiMessageTool msg, Object targets) {
         this.xwiki= xwiki;
         this.context = context;
         this.request = request;
         this.msg = msg;
+        this.targets = targets;
         if(properties==null) {
             properties = new Properties();
             properties.load(
@@ -189,12 +191,14 @@ public class SocialLoginToolGroovy {
 
                 // take to the display of the form to create the username
                 nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
-                return "redirectInDialog";
+                return "backFromAuthorization";
             } else {
                 // final step, login worked, existing user
-                nowTarget = request.getSession().getAttribute("xredirect");
+                nowTarget = targets!=null?
+                        targets.afterLogin :
+                        request.getSession().getAttribute("xredirect");
                 System.out.println("Redirecting to " + nowTarget + " through a redirectOnTop");
-                return "redirectOnTop";
+                return "backFromAuthorization";
             }
 
         } catch (Exception ex) {
@@ -227,6 +231,25 @@ public class SocialLoginToolGroovy {
                 }
                 username = username +i;
             }
+        }
+    }
+
+
+    public String mergeExistingProfileWithSocial() {
+        Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile")
+        String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
+        LOG.info("Trying to merge profile with provider's profile from " + provider);
+
+        boolean passed =  validation.isValidUsername(username, true);
+        passed = passed & validation.isValidEmail(email, true);
+        passed = passed & validation.isValidPassword(password, true);
+        passed = passed & validation.isValidMemberType(memberType, true);
+        passed = passed & validation.isValidAgree(request.agree, true);
+        passed = passed & validation.isValidFirstName(firstName, true);
+        passed = passed & validation.isValidLastName(lastName, true);
+
+        if(!passed) {
+            return "error";
         }
     }
 
@@ -314,27 +337,7 @@ public class SocialLoginToolGroovy {
             rightobj.set("levels", new String("edit"));
             rightobj.set("groups", new String(""));
 
-            // add a socialLogin profile... discuss this one!
-            def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
-            // TODO: remove these properties
-            socialProfile.set('provider', provider)
-            socialProfile.set('fullName', profile.fullName)
-            socialProfile.set('firstName', profile.firstName)
-            socialProfile.set('lastName', profile.lastName)
-            socialProfile.set('displayName', profile.displayName)
-            socialProfile.set('email', profile.email)
-            socialProfile.set('profileImageURL', profile.profileImageURL)
-            socialProfile.set('gender', profile.gender)
-            socialProfile.set('dob', profile.dob)
-            socialProfile.set('validatedId', profile.validatedId)
-            socialProfile.set('country', profile.country)
-            socialProfile.set('location', profile.location)
-
-            def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
-            //socialPrefs.set('password_cache', password)
-            socialPrefs.set('preferred_provider', provider)
-
-            userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
+            createSocialLoginProfileObject(profile, userDoc, provider);
 
             addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
 
@@ -358,6 +361,27 @@ public class SocialLoginToolGroovy {
                 return "creationForm";
             else return null;
         }
+    }
+
+    public void createSocialLoginProfileObject(Profile profile, Document userDoc, String provider) {
+            // add a socialLogin profile... actually needed??
+            def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
+            socialProfile.set('provider', provider)
+            socialProfile.set('fullName', profile.fullName)
+            socialProfile.set('firstName', profile.firstName)
+            socialProfile.set('lastName', profile.lastName)
+            socialProfile.set('displayName', profile.displayName)
+            socialProfile.set('email', profile.email)
+            socialProfile.set('profileImageURL', profile.profileImageURL)
+            socialProfile.set('gender', profile.gender)
+            socialProfile.set('dob', profile.dob)
+            socialProfile.set('validatedId', profile.validatedId)
+            socialProfile.set('country', profile.country)
+            socialProfile.set('location', profile.location)
+
+            def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
+            socialPrefs.set('preferred_provider', provider)
+            userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
     }
 
     /* public String acceptLoginAndRedirect() {
@@ -398,7 +422,7 @@ public class SocialLoginToolGroovy {
     public String actionHere(HttpServletRequest request) {
         if(request.error == "access_denied" && request.error_reason == "user_denied") {
             nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&xredirect=" + URLEncoder.encode(getRedirectTarget(false));
-            return "redirectInDialog";
+            return "backFromAuthorization";
         }
         else if(!request.callback && request.provider) {
             return "bounceToProvider";
@@ -416,7 +440,13 @@ public class SocialLoginToolGroovy {
     }
 
     private static String SAVED_REQUEST = "com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest_SavedRequests";
+
     public String getRedirectTarget(boolean removeMe) {
+        if(targets!=null) {
+            String target = targets.afterLogin;
+            if(removeMe) targets.cleanupTargets();
+            return target;
+        }
         if(removeMe==null) removeMe = false;
         String xredirect = null;
         if(request.session && request.session.getAttribute(SAVED_REQUEST)) {

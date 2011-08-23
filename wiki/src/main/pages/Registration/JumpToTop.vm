@@ -4,7 +4,7 @@
 ##
 ## it needs one variable or parameter to be defined: redir
 {pre}#if($redir)#else#set($redir=$request.redir)#end##
-#if($redir && $request.session)#else#set($redir=$request.session.getAttribute("xredirect"))#end##
+#if($redir)#else#set($redir=$targets.afterLogin)#end##
 #if($redir)#else#set($redir="/")#end##
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
 <html><head><title>Redirection</title></head><body>##
@@ -30,6 +30,7 @@
         if(w!=window) // this was a popup, close me in 100ms
             window.setInterval("window.close();", 100);##
         w.top.location.replace("${redir}");
+        //alert("Would replace with  ${redir}")
         if(console) console.log("Jumping to ${redir}");##
          w.moveOnTask = null;##
     }##

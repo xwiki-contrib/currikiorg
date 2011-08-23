@@ -7,20 +7,21 @@
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 {pre}##
-#if($request.getSession(true)&& $request.xredirect)$request.session.setAttribute("xredirect", $request.xredirect)#end##
 #if($request.session)#set($oldTool=$request.session.getAttribute("SocialLoginTool"))#end##
 #set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
 #if($oldTool)##
  $tool.grabFrom($oldTool)##
  $request.session.removeAttribute("SocialLoginTool")##
 #end##
-$tool.init($xwiki,$context,$request,$msg)##
+$tool.init($xwiki,$context,$request,$msg,$targets)##
 #set($view=$tool.action($request))##
 #macro(render)
     #if($view=="creationForm")#if($request.method=="POST")##
         $request.session.setAttribute("SocialLoginTool",$tool)##
         $tool.readProviderProfile()##
-        $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/SocialLogin?xaction=creationForm&$!request.getQueryString()")##
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/SocialLogin?xaction=creationForm&$!request.getQueryString()")##
     #else##
         $tool.readProviderProfile()##
         $xwiki.includeForm("Registration.RegistrationBootstrap",false)##
@@ -29,12 +30,9 @@ $tool.init($xwiki,$context,$request,$msg)##
     #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider($response))
     #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())
     #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())
-    #elseif($view=="redirectInDialog")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.BackFromAuthorization",false)##
+    #elseif($view=="backFromAuthorization")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.BackFromAuthorization",false)##
     #elseif($view=="pleaseDonate")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.PleaseDonate",false)##
     #elseif($view=="redirectOnTop")#set($redir=$tool.getNowTarget())#set($view="")$xwiki.includeForm("Registration.JumpToTop",false)##
-        ###elseif($view=="redirectInHtml")## rather JS-redirect so that we get frame=_top and a wait dialog
-        ###set($redir="${tool.getRedirectTarget()}")##
-        ##$xwiki.includeForm("Registration.JumpToTop",false)
     #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
     #elseif($view=="nothing")##nothing
     #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->

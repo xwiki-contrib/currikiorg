@@ -10,7 +10,6 @@
 ## this is loaded when /xwiki/bin/login/X/Y is loaded
 ## --- beware to end each line with ## at least until the first redirect
 <!-- start of login.vm -->
-#set($junk=$response.setHeader("Fluff","method: $request.method and document $doc.fullName "))##
 #if ($request.xredirect)##
   #set($redir=$request.xredirect)##
 #elseif ($request.session && $request.session.getAttribute("xredirect"))##

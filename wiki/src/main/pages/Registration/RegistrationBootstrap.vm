@@ -13,8 +13,12 @@
 ## ----------------
 ## prepare variables
 ##
-#set($warningFields=$tool.warningFields)
-#set($okFields=$tool.okFields)
+#set($warningFields=$tool.warningFields)##
+#set($okFields=$tool.okFields)##
+#if($targets)#else##
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+#end
 <!-- warningFields: $warningFields -->
 <!-- okFields : $okFields -->
 ## ----------------
@@ -52,7 +56,7 @@
 <!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
 ## ----------------
 {pre}
-<form class="xform" action="https://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')}/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
+<form class="xform" action="https://$hostname/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
     onsubmit="console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true;">
   <div class="centered">
       <fieldset>
@@ -139,7 +143,7 @@
           </p>
           <p align="right">
               <input type="submit" value="$msg.get("join.member.save_button")" class="button-orange">
-              <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$tool.getRedirectTarget(false)','_top')">### TODO: warning in case of cancel
+              <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$targets.noLogin','_top')">### TODO: warning in case of cancel
           </p>
       ##</fieldset>
   </div>

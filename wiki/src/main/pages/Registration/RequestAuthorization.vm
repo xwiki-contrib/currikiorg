@@ -2,12 +2,13 @@
 ## unless the request has a parameter doPopup=yes, it actually does not pop-up because
 ## such pop-ups are considered ad-pop-ups.
 <!-- begin javascripts -->##
-#set($debugging="-debug")##
 {pre}
 #template("javascripts.vm")##
 {/pre}
 ## note: we do not run CurrikiApp.init()
 <!-- end javascripts -->
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
 #if($request.doPopup=="yes")
 <script type="text/javascript">
     Curriki.ui.login.popupIdentityAuthorization("${request.to}")
@@ -16,3 +17,4 @@
 <p><a target="identity-provider" href="${request.to}">Requesting your authorization to transmit information to Curriki from
     ${request.provider}. This page should go away then.</a>
 </p>
+<p align="right"><button onclick="window.top.location.href='$targets.noLogin'; return false;'" value="Cancel"></p>
