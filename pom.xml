@@ -34,23 +34,148 @@
   <artifactId>curriki-parent</artifactId>
   <packaging>pom</packaging>
   <name>XWiki Products - Curriki - Parent POM</name>
-  <version>2.1</version>
+  <version>2.1-NEXT-SNAPSHOT</version>
   <description>XWiki Products - Curriki - Parent POM</description>
   <scm>
-    <connection>scm:svn:http://svn.xwiki.org/svnroot/xwiki/curriki/trunk</connection>
-    <developerConnection>scm:svn:https://svn.xwiki.org/svnroot/xwiki/curriki/trunk</developerConnection>
-    <url>http://svn.xwiki.org/svnroot/xwiki/curriki/trunk</url>
+    <connection>scm:svn:http://svn.xwiki.org/svnroot/xwiki/curriki/branches/2.1-NEXT</connection>
+    <developerConnection>scm:svn:https://svn.xwiki.org/svnroot/xwiki/curriki/2.1-NEXT</developerConnection>
+    <url>http://svn.xwiki.org/svnroot/xwiki/curriki/2.1-NEXT</url>
   </scm>
   <properties>
     <!-- Versions of XWiki dependencies used in Curriki modules -->
     <platform.version>3.1</platform.version>
     <commons.version>3.1</commons.version>
     <rendering.version>3.1</rendering.version>
-    <curriki.version>2.1</curriki.version>
     <smartgwt.version>2.4</smartgwt.version>
     <platform.plugins.invitationmanager.version>1.0.1</platform.plugins.invitationmanager.version>
     <platform.plugins.spacemanager.version>1.1.1</platform.plugins.spacemanager.version>
+    <!-- Don't run CLIRR on XE modules since there's no Java code and for some reason CLIRR executes which makes
+         the build take longer than needed (since it downloads the previous versions). -->
+    <xwiki.clirr.skip>true</xwiki.clirr.skip>
   </properties>
+  <dependencyManagement>
+    <dependencies>
+      <!-- Everybody logs -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.6.1</version>
+      </dependency>
+      <!-- SLF4J implementation we use -->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>0.9.29</version>
+      </dependency>
+      <!-- External libraries using Commons Logging will delegate to SLF4J -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>1.6.1</version>
+      </dependency>
+      <!-- External libraries using Log4J will delegate to SLF4J -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
+        <version>1.6.1</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <appendAssemblyId>false</appendAssemblyId>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>xwiki-platform-tool-configuration-resources</id>
+              <configuration>
+                <properties>
+                  <!-- Default configuration data for hibernate.cfg.xml -->
+                  <xwikiDbConnectionUrl>${xwiki.db.connection.url}</xwikiDbConnectionUrl>
+                  <xwikiDbConnectionUsername>${xwiki.db.connection.username}</xwikiDbConnectionUsername>
+                  <xwikiDbConnectionPassword>${xwiki.db.connection.password}</xwikiDbConnectionPassword>
+                  <xwikiDbConnectionDriverClass>${xwiki.db.connection.driver_class}</xwikiDbConnectionDriverClass>
+                  <xwikiDbDialect>${xwiki.db.dialect}</xwikiDbDialect>
+                  <xwikiDbHbmXwiki>${xwiki.db.hbm.xwiki}</xwikiDbHbmXwiki>
+                  <xwikiDbHbmFeeds>${xwiki.db.hbm.feeds}</xwikiDbHbmFeeds>
+                  <!-- Default configuration data for xwiki.cfg -->
+                  <xwikiCfgPlugins>\
+                    com.xpn.xwiki.monitor.api.MonitorPlugin,\
+                    com.xpn.xwiki.plugin.calendar.CalendarPlugin,\
+                    com.xpn.xwiki.plugin.feed.FeedPlugin,\
+                    com.xpn.xwiki.plugin.ldap.LDAPPlugin,\
+                    com.xpn.xwiki.plugin.google.GooglePlugin,\
+                    com.xpn.xwiki.plugin.mail.MailPlugin,\
+                    com.xpn.xwiki.plugin.packaging.PackagePlugin,\
+                    com.xpn.xwiki.plugin.query.QueryPlugin,\
+                    com.xpn.xwiki.plugin.svg.SVGPlugin,\
+                    com.xpn.xwiki.plugin.charts.ChartingPlugin,\
+                    com.xpn.xwiki.plugin.fileupload.FileUploadPlugin,\
+                    com.xpn.xwiki.plugin.image.ImagePlugin,\
+                    com.xpn.xwiki.plugin.userdirectory.UserDirectoryPlugin,\
+                    com.xpn.xwiki.plugin.usertools.XWikiUserManagementToolsImpl,\
+                    com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin,\
+                    com.xpn.xwiki.plugin.autotag.AutoTagPlugin,\
+                    com.xpn.xwiki.plugin.lucene.LucenePlugin,\
+                    com.xpn.xwiki.plugin.diff.DiffPlugin,\
+                    com.xpn.xwiki.plugin.rightsmanager.RightsManagerPlugin, \
+                    org.curriki.xwiki.plugin.framework.FrameworkManagerPlugin,\
+                    org.curriki.xwiki.plugin.licence.LicenceManagerPlugin,\
+                    org.curriki.xwiki.plugin.mimetype.MimeTypePlugin,\
+                    org.curriki.xwiki.plugin.curriki.CurrikiPlugin,\
+                    org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
+                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
+                  </xwikiCfgPlugins>
+                  <xwikiCfgVirtual>0</xwikiCfgVirtual>
+                  <xwikiCfgExo>0</xwikiCfgExo>
+                  <xwikiCfgEditCommentMandatory>0</xwikiCfgEditCommentMandatory>
+                  <xwikiCfgDefaultSkin>curriki20</xwikiCfgDefaultSkin>
+                  <xwikiCfgDefaultBaseSkin>colibri</xwikiCfgDefaultBaseSkin>
+                  <xwikiCfgEncoding>UTF-8</xwikiCfgEncoding>
+                  <xwikiCfgAdditionalProperties>
+xwiki.work.dir=work
+
+## Spacemanager settings
+# Configure the spacemanager extension
+xwiki.spacemanager.extension=org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension
+
+# Set the groupname prefix
+xwiki.spacemanager.prefix=Group_
+
+# override the macro list
+xwiki.render.velocity.macrolist=/templates/macros.vm,/skins/albatross/macros.vm,\
+                /skins/curriki20/macros.vm,/skins/curriki20/blog/blogmacros.vm,\
+                /skins/curriki20/assets/assetsmacros.vm,/skins/curriki20/pages/pagesmacros.vm,\
+                /skins/curriki20/mycurriki/mycurrikimacros.vm,\
+                /skins/curriki20/groups/groupsmacros.vm,\
+                /skins/curriki20/groups/groupscontributions.vm,\
+                /skins/curriki20/groups/groupsdocs.vm,\
+                /skins/curriki20/groups/groupsmembers.vm,\
+                /skins/curriki20/groups/groupsmessages.vm,\
+                /skins/curriki20/groups/groupsroles.vm,\
+                /skins/curriki20/groups/groupsmycurriki.vm,\
+                /skins/curriki20/crs/crsmacros.vm,\
+                /skins/curriki20/bfcs/bfcsmacros.vm
+
+xwiki.invitationmanager.resourcespace=Groups
+                </xwikiCfgAdditionalProperties>
+                </properties>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
   <profiles>
     <profile>
       <id>default</id>
@@ -73,6 +198,23 @@
         <module>plugins</module>
         <module>web</module>
       </modules>
+    </profile>
+    <profile>
+      <id>mysql</id>
+      <properties>
+        <xwiki.db>mysql</xwiki.db>
+        <xwiki.db.jdbc.groupId>mysql</xwiki.db.jdbc.groupId>
+        <xwiki.db.jdbc.artifactId>mysql-connector-java</xwiki.db.jdbc.artifactId>
+        <xwiki.db.jdbc.version>5.1.6</xwiki.db.jdbc.version>
+        <!-- We need to set the sql_mode to a less strict value, see XWIKI-1945 -->
+        <xwiki.db.connection.url>jdbc:mysql://localhost/xwiki?useServerPrepStmts=false&amp;amp;amp;useUnicode=true&amp;amp;amp;characterEncoding=UTF-8&amp;amp;amp;sessionVariables=sql_mode=''</xwiki.db.connection.url>
+        <xwiki.db.connection.username>xwiki</xwiki.db.connection.username>
+        <xwiki.db.connection.password>xwiki</xwiki.db.connection.password>
+        <xwiki.db.connection.driver_class>com.mysql.jdbc.Driver</xwiki.db.connection.driver_class>
+        <xwiki.db.dialect>org.hibernate.dialect.MySQLDialect</xwiki.db.dialect>
+        <xwiki.db.hbm.xwiki>xwiki.hbm.xml</xwiki.db.hbm.xwiki>
+        <xwiki.db.hbm.feeds>feeds.hbm.xml</xwiki.db.hbm.feeds>
+      </properties>
     </profile>
   </profiles>
 </project>
