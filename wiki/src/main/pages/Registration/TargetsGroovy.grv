@@ -29,7 +29,7 @@ public class TargetsGroovy {
         String referer = req.getHeader("Referer");
         String refererPath = null;
         String hostname = xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
-        System.out.println("Hostname: " + hostname + " referer.startsWith... " + referer.startsWith("http://" + hostname) + " and " + referer.substring(7+referer.substring(7).indexOf('/')));
+        //System.out.println("Hostname: " + hostname + " referer.startsWith... " + referer.startsWith("http://" + hostname) + " and " + referer.substring(7+referer.substring(7).indexOf('/')));
         if(referer!=null && referer.startsWith("http://" + hostname))
             refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
         def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);

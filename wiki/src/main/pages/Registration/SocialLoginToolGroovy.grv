@@ -188,6 +188,15 @@ public class SocialLoginToolGroovy {
 
 
                 readProviderProfile();
+                def validation = xwiki.parseGroovyFromPage("Registration.Validation");
+                validation.init(xwiki, errors, warningFields, okFields);
+                if(!validation.isValidEmail(((Profile)profile).email, false)) {
+                    if(validation.foundAccountName) {
+                        mergeAccountWithProfile(profile, validation.foundAccountName, providerId);
+                        return "redirectOnTop";
+                    }
+                }
+
 
                 // take to the display of the form to create the username
                 nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
@@ -235,24 +244,6 @@ public class SocialLoginToolGroovy {
     }
 
 
-    public String mergeExistingProfileWithSocial() {
-        Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile")
-        String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
-        LOG.info("Trying to merge profile with provider's profile from " + provider);
-
-        boolean passed =  validation.isValidUsername(username, true);
-        passed = passed & validation.isValidEmail(email, true);
-        passed = passed & validation.isValidPassword(password, true);
-        passed = passed & validation.isValidMemberType(memberType, true);
-        passed = passed & validation.isValidAgree(request.agree, true);
-        passed = passed & validation.isValidFirstName(firstName, true);
-        passed = passed & validation.isValidLastName(lastName, true);
-
-        if(!passed) {
-            return "error";
-        }
-    }
-
 
     /**
      * Create a new user profile from the social profile result
@@ -273,8 +264,8 @@ public class SocialLoginToolGroovy {
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
-        boolean passed =  validation.isValidUsername(username, true);
-        passed = passed & validation.isValidEmail(email, true);
+        boolean passed = validation.isValidEmail(email, true);
+        passed =  passed & validation.isValidUsername(username, true);
         passed = passed & validation.isValidPassword(password, true);
         passed = passed & validation.isValidMemberType(memberType, true);
         passed = passed & validation.isValidAgree(request.agree, true);
@@ -338,8 +329,8 @@ public class SocialLoginToolGroovy {
             rightobj.set("groups", new String(""));
 
             createSocialLoginProfileObject(profile, userDoc, provider);
-
             addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
+            userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
 
             System.out.println("New profile created and saved: " + userDoc);
 
@@ -364,24 +355,32 @@ public class SocialLoginToolGroovy {
     }
 
     public void createSocialLoginProfileObject(Profile profile, Document userDoc, String provider) {
-            // add a socialLogin profile... actually needed??
-            def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
-            socialProfile.set('provider', provider)
-            socialProfile.set('fullName', profile.fullName)
-            socialProfile.set('firstName', profile.firstName)
-            socialProfile.set('lastName', profile.lastName)
-            socialProfile.set('displayName', profile.displayName)
-            socialProfile.set('email', profile.email)
-            socialProfile.set('profileImageURL', profile.profileImageURL)
-            socialProfile.set('gender', profile.gender)
-            socialProfile.set('dob', profile.dob)
-            socialProfile.set('validatedId', profile.validatedId)
-            socialProfile.set('country', profile.country)
-            socialProfile.set('location', profile.location)
+        def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
+        socialProfile.set('provider', provider)
+        socialProfile.set('fullName', profile.fullName)
+        socialProfile.set('firstName', profile.firstName)
+        socialProfile.set('lastName', profile.lastName)
+        socialProfile.set('displayName', profile.displayName)
+        socialProfile.set('email', profile.email)
+        socialProfile.set('profileImageURL', profile.profileImageURL)
+        socialProfile.set('gender', profile.gender)
+        socialProfile.set('dob', profile.dob)
+        socialProfile.set('validatedId', profile.validatedId)
+        socialProfile.set('country', profile.country)
+        socialProfile.set('location', profile.location)
 
-            def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
-            socialPrefs.set('preferred_provider', provider)
-            userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
+        def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
+        socialPrefs.set('preferred_provider', provider)
+    }
+
+    public void mergeAccountWithProfile(Profile profile, String userName, String provider) {
+        Document userDoc = xwiki.getDocument(userName);
+        LOG.warn("Trying to merge profile of user "+userName+" with provider's profile from " + provider);
+        createSocialLoginProfileObject(profile, userDoc, provider);
+        userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true);
+        // and login!
+        authenticateUser(userDoc);
+        
     }
 
     /* public String acceptLoginAndRedirect() {

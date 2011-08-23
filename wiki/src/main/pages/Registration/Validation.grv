@@ -19,6 +19,8 @@ public class Validation {
     private XWiki xwiki;
     private List errors;
     private List warningFields, okFields;
+    private String foundAccountName = null;
+
 
     public boolean isValidUsername(String account, boolean echoErrors) {
         if (account.length()>=3 && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
@@ -40,6 +42,7 @@ public class Validation {
         }
     }
 
+
     public boolean isValidEmail(String email, boolean echoErrors) {
         if("paul@hoplahup.net"==email || "polx@i2geo.net"==email || "paul@activemath.org"==email) return true;
         def atIndex = email.indexOf("@");
@@ -47,7 +50,10 @@ public class Validation {
         def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
 
         // Check to see if the email address is already used
-        if (xwiki.searchDocuments(query).size() > 0) {
+        List docs = xwiki.searchDocuments(query);
+        if (!docs.isEmpty()) {
+            foundAccountName = docs.get(0);
+            System.out.println("Found user: " + foundAccountName);
             addWarning("email");
             addError("join.error.email_not_unique");
             return false;
