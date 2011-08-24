@@ -37,14 +37,15 @@
 #end
 <script type="text/javascript">##
     Curriki.ui.login.makeSureWeAreFramed(null);
+    //alert("Would reframe.");
 </script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
 <div id="mainContentArea">
 <div id="fb-root"></div>
-#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))##
+#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))#end##
 #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
-<form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&srid=${targets.createSrid($request,$nextURL)}"
+<form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true" ## &srid=${targets.createSrid($request,$nextURL)}
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 #* #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
@@ -58,7 +59,7 @@
 <!-- session's xredirect is $request.session.getAttribute("xredirect") --> *#
 <!-- this document is from Registration.LoginOrRegister -->
 <div class="hidden">##
-<input type="hidden" name="xredirect" value="$nextURL"/>
+## <input type="hidden" name="xredirect" value="$nextURL"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
 </div>
 #set($providers = ["facebook","google"])##
@@ -170,8 +171,8 @@
           window.loginHasHappened = function(response) {
                 // logged in and connected user, someone you know
                 // we now adjust the link to sign-up with Facebook
-                console.log("Is FB logged in: "); console.log(response.session);
-                var fbLink = Ext.get("identifyWithFacebook");
+                console.log("Is FB logged in: ",response.session);
+                var fbLink = Ext.get("identifyWithfacebook");
                 if(fbLink) {
                     fbLink.dom.children[0].target="_self";
                     fbLink.dom.children[0].onclick="";

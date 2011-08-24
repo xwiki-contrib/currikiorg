@@ -1,4 +1,8 @@
-// <%
+<%
+
+def localUrl = doc.name;
+if(request.xpage) localUrl=localUrl + "?xpage=" + request.xpage;
+
 
 println();
 println("1 Session of id $request.session.id")
@@ -26,10 +30,9 @@ if(request.clear=="clear") {
         request.session.removeAttribute(x);
     }
     println("<p><i>Session has been cleared.</i></p>");
-    println("<input type='submit' class='button-grey' value='reload' name='reload' onclick='window.location.href=\\'"+ doc.name +"\\''; return false;'/>");
+    println("<input type='submit' class='button-grey' value='reload' name='reload' onclick='window.location.href=\\'"+ localUrl +"\\''; return false;'/>");
 } else {
-    println("<form method='get' action='" + doc.name +
-            "'><input type='submit' class='button-grey' value='clear' name='clear'/> </form>");
+    println("<input type='submit' class='button-grey' value='clear' name='clear' onclick='window.location.href=\\'"+ localUrl +"&clear=clear\\''; return false;'/>");
 }
 
 private String toStringOf(Object o) {

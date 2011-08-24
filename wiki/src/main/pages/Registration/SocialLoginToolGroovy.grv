@@ -203,10 +203,11 @@ public class SocialLoginToolGroovy {
                 return "backFromAuthorization";
             } else {
                 // final step, login worked, existing user
-                nowTarget = targets!=null?
+                def afterLogin = targets!=null?
                         targets.afterLogin :
                         request.getSession().getAttribute("xredirect");
-                System.out.println("Redirecting to " + nowTarget + " through a redirectOnTop");
+                nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=" + afterLogin;
+                System.out.println("Redirecting to " + afterLogin+ " through a redirectOnTop");
                 return "backFromAuthorization";
             }
 

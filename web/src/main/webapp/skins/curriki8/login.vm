@@ -8,21 +8,8 @@
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 ## this is loaded when /xwiki/bin/login/X/Y is loaded
-## --- beware to end each line with ## at least until the first redirect
-<!-- start of login.vm -->
-#if ($request.xredirect)##
-  #set($redir=$request.xredirect)##
-#elseif ($request.session && $request.session.getAttribute("xredirect"))##
-  #set($redir=$request.session.getAttribute("xredirect"))##
-#elseif($context.user && $context.user != "XWiki.XWikiGuest")##
-  #set($redir="/xwiki/bin/view/${context.user.replaceAll('\\.','/')}")##
-#else##
-#set($redir="/")##
-#end##
-#if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end##
-#if($redir && ! $redir.startsWith("/xwiki/bin/view/XWiki/SocialLogin") && ! $redir.startsWith("/xwiki/bin/view/XWiki/XWikiLogin"))##
-    $request.session.setAttribute("xredirect",$redir)##
-#end##
+#set($targets=$xwiki.parseGroovyFromPage("Registration.Targets"))##
+#set($junk=$targets.init($request,$xwiki))##
 #if ($context.user != 'XWiki.XWikiGuest')##
 ##$response.sendRedirect($redir)##
 ## rather JS-redirect so that we get frame=_top
