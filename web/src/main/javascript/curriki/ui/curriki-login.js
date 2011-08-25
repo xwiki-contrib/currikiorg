@@ -83,7 +83,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
     if(window==window.top) {
         if(!framedContentURL || framedContentURL==null) framedContentURL = window.location.href;
-        Curriki.ui.login.displayLoginDialog(window.location.href);
+        Curriki.ui.login.displayLoginDialog(framedContentURL);
     } else if (window.name != 'curriki-login-dialog' && framedContentURL && framedContentURL!=null) {
         if (console) console.log("Redirecting to " + framedContentURL)
         window.opener.location.replace(framedContentURL);

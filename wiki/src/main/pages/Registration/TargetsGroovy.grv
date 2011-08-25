@@ -26,81 +26,89 @@ public class TargetsGroovy {
 
     public void init(HttpServletRequest req, XWiki xwiki) {
         System.out.println("Request to " + req.getRequestURI())
-        System.out.println("  - " + req.getParameterMap());
-        System.out.println("  - xwiki: " + xwiki.getXWiki());
+        System.out.println("  - " + req.getParameterMap())
+        System.out.println("  - xwiki: " + xwiki.getXWiki())
         // find out afterLogin
         HttpSession session = req.getSession(true);
         String referer = req.getHeader("Referer");
         String refererPath = null;
-        String hostname = xwiki.xWiki==null ? null : xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
-        if(referer!=null && referer.startsWith("http://" + hostname))
-            refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
-        def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
+        try {
+            String hostname = xwiki.xWiki==null ? null : xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
+            if(referer!=null && referer.startsWith("http://" + hostname))
+                refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
+            def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
 
-        // care for srid in request and
-        if(req.srid
-                && (redirectMap instanceof Map && redirectMap.containsKey(req.srid)
-                || redirectMap instanceof SavedRequestRestorerFilter.SavedRequest)) {
-            afterLogin = readSrid(redirectMap, req.srid);
-        }
-        // care for xredirect in request
-        else if (req.xredirect) {
-            afterLogin = req.xredirect;
-        }
-
-        // care for srid in session
-        else if (session.getAttribute("srid")) {
-            def o = session.getAttribute("srid");
-            afterLogin = readSrid(o, null);
-        }
-        // care for xredirect in session
-        else if (session.getAttribute("xredirect")) {
-            afterLogin = session.getAttribute("xredirect");
-        }
-
-        // make host absolute
-        if(afterLogin.startsWith("http://" + hostname))
-            afterLogin = afterLogin.substring(("http://" + hostname).length());
-
-        // special cases?
-        // no redirect outside here
-        System.out.println("aferlogin now is " + afterLogin);
-        if(! (afterLogin.startsWith("/xwiki/bin/"))) {
-            afterLogin = "/"
-            System.out.println("Zapped it to /");
-        };
-        else if(afterLogin.startsWith("/xwiki/bin/view/XWiki/XWikiLogin")) afterLogin = "/";
-        // login from home or any page in space Main => go to MyCurriki
-        System.out.println("RefererPath is " + refererPath);
-        if(refererPath &&
-                    (afterLogin.startsWith("/xwiki/bin/view/Main/") ||
-                    afterLogin.startsWith("/xwiki/bin/view/Registration/"))
-                && (refererPath.startsWith("/xwiki/bin/view/Main/") || refererPath.startsWith("/xwiki/bin/view/Registration/") || refererPath=="/")) {
-            afterLogin = "/xwiki/bin/view/MyCurriki/";
-        }
-        if(afterLogin.startsWith("/xwiki/bin/view/Registration/Jump*")) {
-            def m=Pattern.compile(".*redir=([^?&]*)\\&?.*").matcher(afterLogin);
-            if(m.matches()) {
-                afterLogin = URLDecoder.decode(m.group(1));
+            // care for srid in request and
+            if(req.srid
+                    && (redirectMap instanceof Map && redirectMap.containsKey(req.srid)
+                    || redirectMap instanceof SavedRequestRestorerFilter.SavedRequest)) {
+                afterLogin = readSrid(redirectMap, req.srid);
             }
-        }
+            // care for xredirect in request
+            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/")) {
+                afterLogin = req.xredirect;
+            }
+
+            // care for srid in session
+            else if (session.getAttribute("srid")) {
+                def o = session.getAttribute("srid");
+                afterLogin = readSrid(o, null);
+            }
+            // care for xredirect in session
+            else if (session.getAttribute("xredirect")) {
+                afterLogin = session.getAttribute("xredirect");
+            }
+
+            // make host absolute
+            if(afterLogin.startsWith("http://" + hostname))
+                afterLogin = afterLogin.substring(("http://" + hostname).length());
+
+            // special cases?
+            // no redirect outside here
+            System.out.println("aferlogin now is " + afterLogin);
+            if(! (afterLogin.startsWith("/xwiki/bin/"))) {
+                afterLogin = "/"
+                System.out.println("Zapped it to /");
+            };
+            else if(afterLogin.startsWith("/xwiki/bin/view/XWiki/XWikiLogin")) afterLogin = "/";
+            // login from home or any page in space Main => go to MyCurriki
+            System.out.println("RefererPath is " + refererPath);
+            if(refererPath &&
+                    (afterLogin.startsWith("/xwiki/bin/view/Main/") ||
+                            afterLogin.startsWith("/xwiki/bin/view/Registration/"))
+                    && (refererPath.startsWith("/xwiki/bin/view/Main/") || refererPath.startsWith("/xwiki/bin/view/Registration/") || refererPath=="/")) {
+                afterLogin = "/xwiki/bin/view/MyCurriki/";
+            }
+            if(afterLogin.startsWith("/xwiki/bin/view/Registration/Jump*")) {
+                def m=Pattern.compile(".*redir=([^?&]*)\\&?.*").matcher(afterLogin);
+                if(m.matches()) {
+                    afterLogin = URLDecoder.decode(m.group(1));
+                }
+            }
 
 
-        // find out noLogin
-        // desired target is public-readable and not MyCurriki... use it
-        if(session.getAttribute("nologin"))
-            noLogin = session.getAttribute("nologin");
-        else if(!(afterLogin.startsWith("/xwiki/bin/view/MyCurriki")) &&
-                afterLogin.startsWith("/xwiki/bin/view/")) {
-            int s = afterLogin.indexOf("/", 16); // 16 = "/xwiki/bin/view/".length() + 1
-            int t = afterLogin.indexOf("/", s+1);
-            //System.out.println("S: " + s + ", T: " + t);
-            if(t==-1) t = afterLogin.length();
-            String docName = afterLogin.substring(16, s) + "." + afterLogin.substring(s+1,t);
-            System.out.println("Checking auth for document " + docName);
-            if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName))
-                noLogin = afterLogin;
-        }
+            // find out noLogin
+            // desired target is public-readable and not MyCurriki... use it
+            if(session.getAttribute("nologin"))
+                noLogin = session.getAttribute("nologin");
+            else if(!(refererPath.startsWith("/xwiki/bin/view/MyCurriki")) &&
+                    refererPath.startsWith("/xwiki/bin/view/")) {
+                int s = refererPath.indexOf("/", 16); // 16 = "/xwiki/bin/view/".length() + 1
+                int t = refererPath.indexOf("/", s+1);
+                //System.out.println("S: " + s + ", T: " + t);
+                if(t==-1) t = refererPath.length();
+                String docName = refererPath.substring(16, s) + "." + refererPath.substring(s+1,t);
+                System.out.println("Checking auth for document " + docName);
+                if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName))
+                    noLogin = refererPath;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        };
+
+        // last check
+        if(afterLogin==null || afterLogin.length()==0) afterLogin = "/xwiki/bin/view/MyCurriki/";
+        if(noLogin==null || noLogin.length()==0) noLogin = "/";
 
         // write in session
         System.out.println("Targets initted: afterLogin: " + afterLogin + ", noLogin: " + noLogin);

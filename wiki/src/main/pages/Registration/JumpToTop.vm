@@ -4,6 +4,8 @@
 ##
 ## it needs one variable or parameter to be defined: redir
 {pre}#if($redir)#else#set($redir=$request.redir)#end##
+#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))#end##
 #if($redir)#else#set($redir=$targets.afterLogin)#end##
 #if($redir)#else#set($redir="/")#end##
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
