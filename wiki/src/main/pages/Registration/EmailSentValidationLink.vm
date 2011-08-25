@@ -8,9 +8,11 @@
 <p>We've just sent you an email from $from. <br/>
 To complete the sign-up process, enter the validation key from the email or click the link in the email.<p>
 
-<form name="input" action="/xwiki/bin/view/Registration/Complete" method="get">
+<form name="input" action="/xwiki/bin/view/Registration/Complete" method="POST">
 Enter Validation Key:
-     <input style="width:10em" type="text" name="validkey" id="validkey_input" size="16" /><button class="button-confirm" type="submit">$msg.get('forgot.submit_button')</button>
+    <input type="hidden" name="xwikiname" value="$request.xwikiname"/>
+    #if($request.xpage)<input type="hidden" name="xpage" value="$request.xpage"/>#end
+    <input style="width:10em" type="text" name="validkey" id="validkey_input" size="16" /><button class="button-confirm" type="submit">$msg.get('forgot.submit_button')</button>
 </form> 
 
 
@@ -18,7 +20,7 @@ Enter Validation Key:
 <h2>If you do not receive the email:</h2>
 <ol>
 <li>Check your Spam folder and be sure to add Curriki &lt;$from&gt; to your "safe senders" list or address book.</li>
-<li>Click this link to <a href="/xwiki/bin/view/${doc.web}/${doc.name}?mailAgain=1">resend the activation email</a>.</li>
+<li>Click this link to <a href="/xwiki/bin/view/${doc.web}/${doc.name}?xpage=$request.xpage&mailAgain=1">resend the activation email</a>.</li>
 <li>If you still do not receive and email [please contact support>Registration.EmailNotReceived].</li>
 </ol>
 

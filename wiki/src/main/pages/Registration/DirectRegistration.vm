@@ -19,13 +19,11 @@
         $request.session.setAttribute("SocialLoginTool",$tool)##
         #if($tool.readAndValidateQueryParams())##
             $success=$tool.createUser()##
-            $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/JumpToTop?redir=/xwiki/bin/view/Registration/EmailSent")##
+            $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&xpage=popup")##
         #else
             $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration")##
         #end ##
 #end
-
-
 {pre}
 #if(!$skin)## we did not pass initialization already
 <html xmlns="http://www.w3.org/1999/xhtml">

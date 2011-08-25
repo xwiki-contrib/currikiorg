@@ -1,0 +1,36 @@
+#includeMacros("Groups.Macros")
+#if($request.xwikiname && $request.xwikiname != "" && $request.validkey && $request.validkey != "")
+#set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
+#set($junk = $reg.setObjects($xwiki, $context, $msg))
+#set($result = $reg.validateUser(true))
+#set($junk = $context.context.remove("message"))
+#if($result)
+<div style="height: 20em;  vertical-align: middle;" class="registration-complete">
+<h2 style="text-align: center">$msg.get("registration.validate.validated")</h2>
+<br />
+#set($userdoc = $xwiki.getDocument("XWiki.${request.xwikiname}"))
+#set($ok = $userdoc.use("XWiki.XWikiUsers"))
+#set($junk = $!userdoc.set("email_undeliverable", "0"))
+#set($logredir = $!userdoc.getValue("validredirect").replaceAll("-","&"))
+####
+#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+#if($targets)##
+<p align="center">
+    <button class="button-grey" style="button" onclick="window.location.href='${targets.noLogin}'; return false;">##
+      $msg.get("registration.validate.cancel")</button>
+    #if($context.user!="XWiki.XWikiGuest")
+        <button class="button-confirm" style="button" onclick="window.top.location.href='${targets.afterLogin}'; return false;">##
+          $msg.get("registration.validate.ok-continue")</button>
+    #else
+        <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&j_username=$request.xwikiname'; return false;">##
+          $msg.get("registration.validate.ok-now-login")</button>
+    #end
+</p>#end##
+</div>
+#else
+$msg.get("registration.validate.failed.bad_key_or_loginname")
+#end
+#else
+$msg.get("registration.validate.failed.no_info")
+#end
