@@ -1,4 +1,7 @@
 import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.api.Document
+import javax.servlet.http.HttpServletRequest
 
 public class Validation {
 
@@ -137,4 +140,30 @@ public class Validation {
         if(errors!=null) errors.add(error);
     }
 
+    public void activateUser(Context context) {
+        // context.context.put("ajax",true)
+        Document userDoc = xwiki.getDocument(context.user);
+        com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers")
+        //#set($result = $reg.validateUser(true))
+
+        //xwiki.checkAuth(userObj.getProperty("password").value, "false");
+        userObj.set("active", "1");
+        userObj.set("email_undeliverable", "0");
+        userDoc.save();
+    }
+
+
+    public boolean checkValidationKey(HttpServletRequest request, String username) {
+        Document userDoc = xwiki.getDocument(username);
+        com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers")
+        String receivedKey = request.getParameter("validkey");
+        if(receivedKey==null) {
+            System.out.println("Warning: empty validkey.");
+            return false
+        };
+        boolean passed = receivedKey.trim().equals(userObj.getProperty("validkey").value);
+        if(passed) System.out.println("passing validation for user " + username);
+        else System.out.println("Failed validation for user " + username + " with request " + request + " from " + request.getRemoteHost());
+        return passed;
+    }
 }

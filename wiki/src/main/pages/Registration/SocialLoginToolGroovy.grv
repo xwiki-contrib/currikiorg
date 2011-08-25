@@ -28,10 +28,13 @@ public class SocialLoginToolGroovy {
     String city, country;
     List warningFields=[], okFields=[];
     String username, password, firstName, lastName, email, memberType, agree;
+    String validKey = null;
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
     Object validation;
     def targets;
+    def profile = null;
+
 
     MailSenderPluginApi mailsender = null;
 
@@ -158,7 +161,7 @@ public class SocialLoginToolGroovy {
 
             // verify the authentication
             System.err.println("Verifying " + providerObj + " for provider " + providerId);
-            def profile = providerObj.verifyResponse(request);
+            profile = providerObj.verifyResponse(request);
 
             // Search for this profile id in database, find user
             String query =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
@@ -245,7 +248,6 @@ public class SocialLoginToolGroovy {
     }
 
 
-
     /**
      * Create a new user profile from the social profile result
      */
@@ -288,46 +290,7 @@ public class SocialLoginToolGroovy {
             //request.getParameterMap().put("xwikiname",userDocName);
             //request.getParameterMap().put("XWiki.XWikiUsers_0_password",password);
 
-            def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${username}", context.context), context.context);
-            userDoc.addObjectFromRequest("XWiki.XWikiUsers"); // TODO: use other explicit values ??
-            def userObj = userDoc.getObject("XWiki.XWikiUsers");
-            userObj.set("password",   password);
-            userObj.set("first_name", firstName);
-            userObj.set("last_name",  lastName);
-            userObj.set("email",      email);
-            userObj.set("member_type",memberType);
-            userObj.set("city",       city);
-            userObj.set('country',    country);
-
-            userObj.set("active", "1");
-            userObj.set("email_undeliverable", "0");
-            userObj.set("show_contact","2"); // Show Your Profile:
-            userObj.set("opt_out", 0); //
-
-            //userDoc.addAttachments("xxx xx?");
-
-            // other fields? language?
-            String language = profile.language;
-            if(!language)
-                language = context.language;
-            Locale locale = new Locale(language);
-            userObj.set("language",    locale.getISO3Language());
-
-            /* def validkey = xwiki.xWiki.generateValidationKey(16);
-            userObj.set("validkey", validkey);
-            userObj.set("validredirect", request.xredirect); */
-
-            //userdoc.setParent("XWiki.XWikiUsers");
-            userDoc.setContent('#include' + 'Form("XWiki.XWikiUserSheet")');
-            userDoc.getDoc().setCreator(userDoc.getFullName());
-            userDoc.getDoc().setAuthor(userDoc.getFullName());
-
-            // set rights correct (I edit, others view)
-            def rightobj = userDoc.newObject("XWiki.XWikiRights");
-            rightobj.set("users", new String("${username}"));
-            rightobj.set("allow", new String("1"));
-            rightobj.set("levels", new String("edit"));
-            rightobj.set("groups", new String(""));
+            Document userDoc = createUserDoc();
 
             createSocialLoginProfileObject(profile, userDoc, provider);
             addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
@@ -353,6 +316,51 @@ public class SocialLoginToolGroovy {
                 return "creationForm";
             else return null;
         }
+    }
+
+    private Document createUserDoc() {
+        def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${username}", context.context), context.context);
+        //userDoc.addObjectFromRequest("XWiki.XWikiUsers"); // TODO: use other explicit values ??
+        def userObj = userDoc.getObject("XWiki.XWikiUsers", true);
+        userObj.set("password",   password);
+        userObj.set("first_name", firstName);
+        userObj.set("last_name",  lastName);
+        userObj.set("email",      email);
+        userObj.set("member_type",memberType);
+        if(city) userObj.set("city",       city);
+        if(country) userObj.set('country',    country);
+        userObj.set("show_contact","2"); // Show Your Profile:
+        userObj.set("opt_out", 0); //
+
+        String language = context.language;
+        if(profile && profile.language) language = profile.language;
+        Locale locale = new Locale(language);
+        userObj.set("language",    locale.getISO3Language());
+
+        // activate if from social login, otherwise send mail and put validation key
+        if(profile) {
+            userObj.set("active", "1");
+            userObj.set("email_undeliverable", "0");
+        } else {
+            validKey = xwiki.xWiki.generateValidationKey(16);
+            userObj.set("validkey", validKey);
+            userObj.set("validredirect", request.xredirect);
+        }
+
+
+        //userdoc.setParent("XWiki.XWikiUsers");
+        userDoc.setContent('#include' + 'Form("XWiki.XWikiUserSheet")');
+        userDoc.getDoc().setCreator(userDoc.getFullName());
+        userDoc.getDoc().setAuthor(userDoc.getFullName());
+
+        // set rights correct (I edit, others view)
+        def rightobj = userDoc.newObject("XWiki.XWikiRights");
+        rightobj.set("users", new String(username));
+        rightobj.set("allow", new String("1"));
+        rightobj.set("levels", new String("edit"));
+        rightobj.set("groups", new String(""));
+
+        return userDoc;
     }
 
     public void createSocialLoginProfileObject(Profile profile, Document userDoc, String provider) {
@@ -516,15 +524,78 @@ public class SocialLoginToolGroovy {
 
 
     public void sendConfirmationEmail() {
+        sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail", "registration.email.welcome");
+    }
+
+
+
+
+    // ============================== SIMPLE REGISTRATION ===============================
+
+    public boolean readAndValidateQueryParams() {
+        username = request.username;
+        firstName = request.firstName;
+        lastName = request.lastName;
+        email = request.email;
+        city = request.location;
+        country = request.country;
+        password = request.password;
+        memberType = request.getParameter("member_type");
+        if(memberType==null) memberType="-";
+
+        boolean passed = validation.isValidEmail(email, true);
+        passed =  passed & validation.isValidUsername(username, true);
+        passed = passed & validation.isValidPassword(password, true);
+        passed = passed & validation.isValidMemberType(memberType, true);
+        passed = passed & validation.isValidAgree(request.agree, true);
+        passed = passed & validation.isValidFirstName(firstName, true);
+        passed = passed & validation.isValidLastName(lastName, true);
+
+        return passed;
+    }
+
+    public boolean createUser() {
+        Document userDoc = createUserDoc();
+        userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
+        sendValidationEmail();
+        //authenticateUser(userDoc);
+        return true;
+    }
+
+
+    public void sendValidationEmail() {
+        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail", "emailValidation.step1.emailSubject");
+    }
+
+    private void sendRegistrationMail(String nonCorpPage, String corpPage, String subjectMsgKey) {
+        LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email);
         mailsender = xwiki.mailsender;
-        def emailDoc = "Registration.MemberRegCompleteEmail"
+        def emailDoc = "Registration." + nonCorpPage;
         if('corporation'==memberType || 'nonprofit'==memberType)
-            emailDoc = "Registration/CorporateRegCompleteEmail";
+            emailDoc = "Registration." + corpPage;
         emailDoc = xwiki.getDocument(emailDoc);
         def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
-        mailsender.sendHtmlMessage("Curriki <webmaster@curriki.org>", email, null, null,
-            msg.get("registration.email.welcome"), text, text.replaceAll("<[^>]*>",""), []);
-        //xwiki.sendConfirmationMail(username, password, request.get("XWiki.XWikiUsers_0_email"), "confirmation_email_content");
+
+        def from = msg.get("registration.email");
+        if(from==null || from=="") from="webmaster@curriki.org";
+        if(msg.get("registration.email.name")!="registration.email.name") from = msg.get("registration.email.name") + "<" + from + ">";
+
+        mailsender.sendHtmlMessage(from, email, null, null,
+            msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), []);
+    }
+
+
+    // ============================== post login... to create the mail again ============
+    public void grabFromCurrentUser() {
+        username = context.user;
+        LOG.info("Grabbing from " + username);
+        Document userDoc = xwiki.getDocument(username);
+        com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", false);
+        this.firstName = userObj.get("first_name");
+        this.lastName = userObj.get("last_name");
+        this.validKey = userObj.getProperty("validkey").value;
+        this.email = userObj.get("email");
+        this.memberType = userObj.get("member_type");
     }
 
 }

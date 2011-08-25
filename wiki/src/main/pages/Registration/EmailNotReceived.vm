@@ -1,0 +1,72 @@
+1 $msg.get('email_not_received.title')
+
+#if ($!request.send) ## {
+#set($nl=$xwiki.getNl())
+#set($from = $xwiki.getXWikiPreference("admin_email"))
+#set($recipient = "registration@curriki.org")
+#set($mesg = "To: $recipient${nl}From: $from${nl}Subject: Email Not Received${nl}${nl}Login: $!request.login${nl}Email: $!request.email${nl}Phone: $!request.phone${nl}Client: $!request.client")
+#set($junk = $xwiki.sendMessage($from, $recipient, $mesg))
+#set($xredirect=$xwiki.getURL("Registration.EmailNotReceivedSent"))
+#if($context.user != "XWiki.XWikiGuest") ##{
+$response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=${xredirect}"))
+#else ## }{
+$response.sendRedirect($xredirect)
+#end ## }
+#else ## }{
+<div id="email-not-received">
+$msg.get('email_not_received.info')
+{pre}
+<script type="text/javascript">
+function validateForm(){
+  var hasError = false;
+
+  if ($('send_email')['login'].value.length < 3) {
+    hasError = true;
+    alert("$msg.get("email_not_received.error.need_login")");
+  }
+  if ($('send_email')['email'].value.length < 8) {
+    hasError = true;
+    alert("$msg.get("email_not_received.error.need_email")");
+  }
+  if ($('send_email')['phone'].value.length < 7) {
+    hasError = true;
+    alert("$msg.get("email_not_received.error.need_phone")");
+  }
+
+  if (hasError){
+    return false;
+  } else {
+    return true;
+  }
+}
+</script>
+{/pre}
+#set($username = "")
+#set($email = "")
+#if("${context.user}" != "XWiki.XWikiGuest") ##{
+#set($userDoc = $xwiki.getDocument($context.user))
+#set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
+#set($username = $context.user.substring(6))
+#set($email = $!userObj.getProperty("email").getValue())
+#end ##}
+<form id="send_email" name="send_email" method="post" onsubmit="return validateForm();">
+<table class="email-not-received-form">
+<tr><td colspan=2>#asterix() <span class="required">$msg.get('email_not_received.required')</span></td></tr>
+<tr><td>#asterix() $msg.get('email_not_received.login')</td><td><input name="login" type="text" value="$!username" size="50" /></td></tr>
+<tr><td>#asterix() $msg.get('email_not_received.email')</td><td><input name="email" type="text" value="$!email" size="50" /></td></tr>
+<tr><td>#asterix() $msg.get('email_not_received.phone')</td><td><input name="phone" type="text" size="50" /></td></tr>
+<tr><td>$msg.get('email_not_received.client')</td><td><input type="text" name="client" size="50" /></td></tr>
+</table>
+
+<p class="button-right"><button type="submit" class="button button-orange" name="send" value="1">$msg.get('email_not_received.button')</button></p>
+</form>
+</div>
+#if("${context.user}" != "XWiki.XWikiGuest") ##{
+#if("$!footerJScript" == "") ## {
+#set($footerJScript = "")
+#end ## }
+{pre}
+#set($footerJScript = $footerJScript + '<script type="text/javascript">$$("a").invoke("observe", "click", function(event){ var item = Event.element(event); if (!item.href) {item = item.up("a"); } if ((item.href.indexOf("/xwiki/bin/view/") != -1) && (item.href.indexOf("/xwiki/bin/logout") == -1)){ if (!confirm("'+"${msg.get('emailValidation.step1.goElsewhere')}"+'")){ event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } } else { item.href = "/xwiki/bin/logout/XWiki/XWikiLogout?xredirect="+item.href; } } });</script>')
+{/pre}
+#end ##}
+#end ## }

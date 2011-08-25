@@ -56,7 +56,7 @@
 <!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
 ## ----------------
 {pre}
-<form class="xform" action="https://$hostname/xwiki/bin/view/Registration/SocialLogin?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
+<form class="xform" action="https://$hostname/xwiki/bin/view/$doc.space/$doc.name?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
     onsubmit="console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true;">
   <div class="centered">
       <fieldset>
@@ -95,25 +95,31 @@
           ##
           ##
           #set($f="firstName")
-          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);">
+          <p class="textfield #computeTrClasses($f)"
+                onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
               <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
-              <input id="${f}_input" name="${f}" value="$!{tool.firstName}" disabled="disabled"##
+              <input id="${f}_input" name="${f}" value="$!{tool.firstName}"##
+                     #if($provider)disabled="disabled" #end##
                 autocomplete="off">
           </p>
           ##
           ##
           #set($f="lastName")
-          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);">
+          <p class="textfield #computeTrClasses($f)"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
               <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
-              <input id="${f}_input" name="${f}" value="$!{tool.lastName}" disabled="disabled"##
+              <input id="${f}_input" name="${f}" value="$!{tool.lastName}" ##
+                     #if($provider)disabled="disabled" #end##
                 autocomplete="off">
           </p>
           ##
           ##
           #set($f="email")
-          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);">
+          <p class="textfield #computeTrClasses($f)"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
               <label for="${f}_input"><b>$msg.get("join.member_email")</b></label>
-              <input id="${f}_input" name="${f}" value="$!{tool.email}" disabled="disabled"##
+              <input id="${f}_input" name="${f}" value="$!{tool.email}" ##
+                     #if($provider)disabled="disabled" #end##
               >
           </p>
           ##
@@ -124,9 +130,9 @@
               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
               <select name="member_type" id="${f}_input" onchange="Curriki.ui.login.memberTypeChanged()">##
                   #set($val="-")
-                  <option value="$val" #if($tool.memberType==$val)selected="selected"#end></option>##
+                  <option value="$val" #if($val==$tool.memberType)selected="selected"#end></option>##
                   #foreach($val in $propVals)#if($val!="0")##
-                  <option value="$val" #if($tool.memberType==$val)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
+                  <option value="$val" #if($val==$tool.memberType)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
                   #end#end
               </select>
           </p>
@@ -188,6 +194,7 @@
                 var text;
                 if(params) text = _(key,params);
                     else text = _(key)
+                if(!text || text=="") text=" "; // warning nbsp in this quote
                 Ext.get("currikiRegistrationAdvice").dom.textContent = text;
             } catch(e) { if(console) console.log(e); }
         };

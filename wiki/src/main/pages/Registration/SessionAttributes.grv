@@ -32,7 +32,9 @@ if(request.clear=="clear") {
     println("<p><i>Session has been cleared.</i></p>");
     println("<input type='submit' class='button-grey' value='reload' name='reload' onclick='window.location.href=\\'"+ localUrl +"\\''; return false;'/>");
 } else {
-    println("<input type='submit' class='button-grey' value='clear' name='clear' onclick='window.location.href=\\'"+ localUrl +"&clear=clear\\''; return false;'/>");
+    String sep = "?";
+    if( localUrl && localUrl.contains("?")) sep = "&";
+    println("<input type='submit' class='button-grey' value='clear' name='clear' onclick='window.location.href=\\'"+ localUrl + sep + "clear=clear\\''; return false;'/>");
 }
 
 private String toStringOf(Object o) {

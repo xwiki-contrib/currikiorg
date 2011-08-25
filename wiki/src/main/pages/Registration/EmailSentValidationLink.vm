@@ -1,0 +1,42 @@
+
+
+##set($from = $msg.get('registration.email'))
+#set($from = $xwiki.getXWikiPreference("admin_email"))
+<h1>Thanks for signing up. You're almost done!</h1><br>
+<h2>Check your email to finish creating your account.</h2>
+
+<p>We've just sent you an email from $from. <br/>
+To complete the sign-up process, enter the validation key from the email or click the link in the email.<p>
+
+<form name="input" action="/xwiki/bin/view/Registration/Complete" method="get">
+Enter Validation Key:
+     <input style="width:10em" type="text" name="validkey" id="validkey_input" size="16" /><button class="button-confirm" type="submit">$msg.get('forgot.submit_button')</button>
+</form> 
+
+
+
+<h2>If you do not receive the email:</h2>
+<ol>
+<li>Check your Spam folder and be sure to add Curriki &lt;$from&gt; to your "safe senders" list or address book.</li>
+<li>Click this link to <a href="/xwiki/bin/view/${doc.web}/${doc.name}?mailAgain=1">resend the activation email</a>.</li>
+<li>If you still do not receive and email [please contact support>Registration.EmailNotReceived].</li>
+</ol>
+
+
+<!-- Google Code for Registration Email Sent Conversion Page -->
+
+<script language="JavaScript" type="text/javascript">
+var google_conversion_id = 1066533164;
+var google_conversion_language = "en_US";
+var google_conversion_format = "1";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "uQs3CMK_ShCsgsj8Aw";
+//-->
+</script>
+<script language="JavaScript" src="http://www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<img height="1" width="1" border="0" src="http://www.googleadservices.com/pagead/conversion/1066533164/?label=uQs3CMK_ShCsgsj8Aw&amp;script=0"/>
+</noscript>
+
+<img src="https://cts.vresp.com/s.gif?h=d6487b16dd" height="1" width="1"/>

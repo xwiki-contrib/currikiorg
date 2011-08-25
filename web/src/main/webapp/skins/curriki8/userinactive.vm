@@ -7,19 +7,35 @@
 #template("htmlheader.vm")
 #template("header.vm")
 #template("baseheader.vm")
-<div id="content">
+#if($request.mailAgain=="1")##
+    #if($tool)#else#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))#set($junk=$tool.init($xwiki,$context,$request,$msg,""))$tool.grabFromCurrentUser()#end##
+    $tool.sendValidationEmail()##
+    #info("Email resent.")
+#end##
+#if($request.errors)#foreach($m in $request.errors.split(","))#error($msg.get($m))#end #end
+#if($request.validkey) ## we are logged in here. Process the validation
+    ## copied from Registration Complete
+    #set($validation=$xwiki.parseGroovyFromPage("Registration.Validation"))##
+    #set($junk=$validation.init($xwiki))##
+    #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+    #set($junk=$targets.init($request,$xwiki))##
+    #set($success=$validation.checkValidationKey($request,$context.user))##
+    #if($success)##
+        $validation.activateUser($context)##
+        #set($redir=$targets.afterLogin)##
+        $xwiki.includeForm("Registration.JumpToTop",false)##
+    #else$response.sendRedirect("$request.getRequestURI()?errors=emailValidation.step2.errBadVkey")##
+    #end
+#else<div id="content">
 #if ($cause == "disabled") ## {
 $msg.get("accountdisabled")
 #else ## }{
-## Is this a page we want to load?
-#set($allowList = $xwiki.arrayList)
-#set($junk = $allowList.add("Registration.EmailVerification"))
-#set($junk = $allowList.add("Registration.EmailVerificationSent"))
-#set($junk = $allowList.add("Registration.EmailVerified"))
-#set($junk = $allowList.add("Registration.EmailNotReceived"))
-#if($allowList.contains($doc.fullName)) ## {
-$xwiki.includeForm($doc.fullName, false)
-#else ## }{
+## Is this a page we want to load?.. seems to be broken
+#set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink"])##
+#if($allowList.contains($doc.name) && $doc.web=="Registration") ## {
+##$xwiki.includeForm($doc.fullName,false)##
+##$doc.getContent()##
+<!-- included content of $doc.fullName  of length $cdoc.getContent().length()-->#else ## }{
 ## Account not active -- why?  1. New, 2. Disabled due to undeliverable email
 #set($userDoc = $xwiki.getDocument($context.user))
 #set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
@@ -28,7 +44,7 @@ $xwiki.includeForm($doc.fullName, false)
 #if("$!active" == "0" && "$!undeliv" == "1") ## {
 $response.sendRedirect($xwiki.getURL("Registration.EmailVerification"))
 #else ## }{
-$msg.get("accountnotactive")
+#* $msg.get("accountnotactive")
 <br />
 $msg.get("accountnotactive_email")
 <br />
@@ -37,7 +53,8 @@ $msg.get("accountnotactive_email")
 <input type="hidden" name="xwikiname" value="$context.user" />
 <input type="text" name="validkey" size="16" />
 <input type="submit" value="$msg.get("confirmaccount")" />
-</form>
+</form> *#
+$xwiki.includeForm("Registration.EmailSentValidationLink", false)
 #end ## }
 #end ## }
 #end ## }
@@ -45,3 +62,4 @@ $msg.get("accountnotactive_email")
 #template("basefooter.vm")
 #template("footer.vm")
 #template("htmlfooter.vm")
+#end

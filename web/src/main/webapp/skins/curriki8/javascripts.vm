@@ -2,6 +2,8 @@
   * Setup the external Javascript files loaded for the curriki pages
   * @author Curriki dev team
   *#
+#if($gVersion)#else#template("xwikivars.vm")#end##
+#set($hasScripts=true)##
 #if($globalDebug)##{
 	#set($debugging = "-debug")
 #else##}{
@@ -94,8 +96,8 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script type="text/javascript">
 /* <![CDATA[ */
 Ext.ns('Curriki.global');
-Curriki.global.username = "${context.user}";
-Curriki.global.fullname = "$xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
+Curriki.global.username = "$!{context.user}";
+Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 /* ]]> */
 </script>

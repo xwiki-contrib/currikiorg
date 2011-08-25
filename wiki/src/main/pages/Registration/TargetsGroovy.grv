@@ -27,11 +27,12 @@ public class TargetsGroovy {
     public void init(HttpServletRequest req, XWiki xwiki) {
         System.out.println("Request to " + req.getRequestURI())
         System.out.println("  - " + req.getParameterMap());
+        System.out.println("  - xwiki: " + xwiki.getXWiki());
         // find out afterLogin
         HttpSession session = req.getSession(true);
         String referer = req.getHeader("Referer");
         String refererPath = null;
-        String hostname = xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
+        String hostname = xwiki.xWiki==null ? null : xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
         if(referer!=null && referer.startsWith("http://" + hostname))
             refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
         def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
@@ -71,8 +72,10 @@ public class TargetsGroovy {
         else if(afterLogin.startsWith("/xwiki/bin/view/XWiki/XWikiLogin")) afterLogin = "/";
         // login from home or any page in space Main => go to MyCurriki
         System.out.println("RefererPath is " + refererPath);
-        if(refererPath && afterLogin.startsWith("/xwiki/bin/view/Main/") &&
-                (refererPath.startsWith("/xwiki/bin/view/Main/") || refererPath=="/")) {
+        if(refererPath &&
+                    (afterLogin.startsWith("/xwiki/bin/view/Main/") ||
+                    afterLogin.startsWith("/xwiki/bin/view/Registration/"))
+                && (refererPath.startsWith("/xwiki/bin/view/Main/") || refererPath.startsWith("/xwiki/bin/view/Registration/") || refererPath=="/")) {
             afterLogin = "/xwiki/bin/view/MyCurriki/";
         }
         if(afterLogin.startsWith("/xwiki/bin/view/Registration/Jump*")) {
