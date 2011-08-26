@@ -568,11 +568,11 @@ public class SocialLoginToolGroovy {
     }
 
     private void sendRegistrationMail(String nonCorpPage, String corpPage, String subjectMsgKey) {
-        LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email);
         mailsender = xwiki.mailsender;
         def emailDoc = "Registration." + nonCorpPage;
         if('corporation'==memberType || 'nonprofit'==memberType)
             emailDoc = "Registration." + corpPage;
+        LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDoc + '.');
         emailDoc = xwiki.getDocument(emailDoc);
         def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
 
