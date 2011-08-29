@@ -171,7 +171,8 @@
 </table>
 
 <p align="center">
+    #if($redir)#else#if($targets)#else #set($targets=$xwiki.parseGroovyFromPage("Registration.Targets"))#end #set($redirs=$targets.afterLogin)#end
     <button class="button-grey" type="submit"
-            #if($redir)onclick="window.top.location='$redir'; return false;"#end
+            #if($redir)onclick="window.top.location='$redir'; return false;"#else onclick="window.top.location='/';"#end
             >$msg.get('join.complete.later_button')</button></p>
 

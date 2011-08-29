@@ -26,12 +26,22 @@ $tool.init($xwiki,$context,$request,$msg,$targets)##
         $tool.readProviderProfile()##
         $xwiki.includeForm("Registration.RegistrationBootstrap",false)##
     #end##
-    #set($view="nothing")
-    #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider($response))
-    #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())
-    #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())
+    #set($view="nothing")##
+    #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider($response))##
+    #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())##
+    #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())##
     #elseif($view=="backFromAuthorization")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.BackFromAuthorization",false)##
-    #elseif($view=="pleaseDonate")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.PleaseDonate",false)##
+    #elseif($view=="pleaseDonate")##
+        #if($tool.isCorporateAccount())#set($donateDoc="CorporateSponsorUsForm")#else#set($donateDoc="PleaseDonate")#end
+        ## HAVE TO REDIRECT WITH THE USER-NAME INCLUDED AND ONLY IF NOT CHROME
+        #if($request.method=="POST" && ! $request.getHeader("User-Agent").contains("Chrome"))##
+            $request.session.setAttribute("SocialLoginTool",$tool)##
+            $response.sendRedirect("/xwiki/bin/view/Registration/$donateDoc?xwikiname=$tool.username"))##
+        #else##
+            #set($view="")##
+            #set($included=true)##
+            $xwiki.includeForm("Registration.$donateDoc",false)##
+        #end
     #elseif($view=="redirectOnTop")#set($redir=$tool.getNowTarget())#set($view="")$xwiki.includeForm("Registration.JumpToTop",false)##
     #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
     #elseif($view=="nothing")##nothing

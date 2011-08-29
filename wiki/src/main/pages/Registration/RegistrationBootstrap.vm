@@ -53,7 +53,8 @@
 {/pre}
 ## note: we do not run CurrikiApp.init()
 <!-- end javascripts -->
-<!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method -->
+<!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method
+    #set($provider = $tool.providerId)-->
 ## ----------------
 {pre}
 <form class="xform" action="https://$hostname/xwiki/bin/view/$doc.space/${doc.name}?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
@@ -156,7 +157,7 @@
 </form>
 <script type="text/javascript">
     Ext.onReady(function() {
-                Curriki.ui.login.liveValidation.activate("username_input", "email_input"); },
+                Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]); },
                     Curriki.ui.login.liveValidation);
     Ext.onReady(function() {
         // adjust dialog height
@@ -164,7 +165,7 @@
             if(window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) {
                 h = document.height;
                 if(window.parent.innerHeight < h) h = window.parent.innerHeight;
-                window.parent.Ext.get('loginIframe').dom.height = 10 + h;
+                window.parent.Ext.get('loginIframe').dom.height = 20 + h;
             }
         }
 

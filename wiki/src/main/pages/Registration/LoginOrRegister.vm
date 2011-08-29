@@ -46,8 +46,8 @@
 #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
 #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
 #if($request.getHeader("User-Agent") && $request.getHeader("User-Agent").contains(" Chrome/"))##
-#set($nextURL="https://$hostname$nextURL")"#end
-<form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true" ## &srid=${targets.createSrid($request,$nextURL)}
+#set($nextURL="https://$hostname$nextURL")#end
+<form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 #* #set($xredirect=$!request.xredirect)
 #if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end

@@ -3440,7 +3440,6 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
 
 Ext.namespace("Curriki.ui.login.liveValidation");
 Curriki.ui.login.liveValidation = function() {
-    var idOfUsername = null, idOfEmail = null;
     var queue = new Array();
 
     return {
@@ -3509,23 +3508,25 @@ Curriki.ui.login.liveValidation = function() {
 
 
 
-        activate:function(idOfUsernameInput, idOfEmailInput) {
+        activate:function(ids) {
             // disable flashy XHR witness
             Ext.Ajax.purgeListeners();
 
-            idOfUsername = idOfUsernameInput;
-            idOfEmail = idOfEmailInput;
-            var i=Ext.get(idOfEmailInput), j = Ext.get(idOfUsername);
-            Ext.each([i,j], function(x) {
-                console.log("Registering on " + x);
+            Ext.each(ids, function(name) {
+                console.log("Registering on " + name);
+                var x = Ext.get(name);
+                if(x) {} else {
+                    console.log("Not found: " + name);
+                    return;
+                }
                 if(x.purgeListeners) x.purgeListeners();
                 x.addListener("blur", function(evt) {
-                    console.log("Focus-out...")
+                    console.log("Focus-out...");
                     Curriki.ui.login.liveValidation.queueQueryNow(x);
                     Curriki.ui.login.liveValidation.stopPolling();
                 });
                 x.addListener("focus", function(evt) {
-                    console.log("Focus-in...")
+                    console.log("Focus-in...");
                     var handle=window.setInterval(function() {
                         clearInterval(handle);
                         Curriki.ui.login.liveValidation.startPollingTextField(x);
@@ -3534,6 +3535,28 @@ Curriki.ui.login.liveValidation = function() {
             });
         }
         , queueQueryNow: function(inputElt) {
+            // this is the main function to call the validation
+            var fieldName = inputElt.dom.name;
+            var fieldValue = inputElt.dom.value;
+            console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
+            if(fieldValue && fieldValue.length<=3) return;
+            if(fieldName!="email" && fieldName!="username") {
+                var passed = false;
+                var silentFailure = fieldName=="firstName" || fieldName=="lastName" || fieldName=="password";
+                if(fieldName=="agree") passed = fieldValue!="0";
+                if(fieldName=="member_type") passed = fieldValue!="-";
+                if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>4;
+                if(fieldName=="password") passed = fieldValue.length>5;
+                console.log("passed? " + passed + ".");
+                // manual check here, just long enough
+                if(passed==false)
+                    if(!silentFailure) Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, false);
+                if(passed==true)
+                    Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, true);
+                // missed case: silentFailure == true && passed == false (no need to bother folks for too short names)
+                return;
+            }
+            // we're left with email and username, only check if longer than 3
             var queueEntry = new Object();
             queueEntry.value = inputElt.getValue();
             Curriki.ui.login.liveValidation.queriedValue = inputElt.getValue();
@@ -3573,7 +3596,7 @@ Curriki.ui.login.liveValidation = function() {
             if(inputField) {} else {return;}
             if(t.intervalPointer && t.intervalPointer!=null)
                 t.stopPolling();
-            console.log("Start polling.");
+            console.log("Start polling on " + t);
             t.inputFieldBeingPolled = inputField;
             t.startedPollingTime = new Date().getTime();
             t.intervalPointer = window.setInterval(t.inputFieldPoll, 50);
@@ -3599,22 +3622,25 @@ Curriki.ui.login.liveValidation = function() {
             /* if(now - t.startedPollingTime > 30000) {
                 t.stopPolling(); return;
             }*/
-            var value = input.getValue();
+            var value = input.dom.value;
+            // Evaluating value=asdasd@i2go.e wrt t.lastValue=asdasd@i2go.e and t.lastChanged=1314641854765 with now 1314641858380
             if(value) {
                 if(t.lastValue) {
-                    if(value!=t.lastValue) {
+                    if(! (value==t.lastValue)) {
                         t.lastValue = value;
                         t.lastChanged = now;
                     } else { // same value: act if nothing happened since 200ms
-                        if(t.lastChanged && now-t.lastChanged>200 &&
-                                (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value))
+                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || t.lastChecked===undefined) &&
+                                (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value)) {
+                            t.lastChecked = now;
                             t.queueQueryNow(input);
+                        }
                     }
                 } else {
                     t.lastValue = value;
                     t.lastChanged = now;
                 }
-            } // otherwise can't do much... no value
+            }
 
         }
 

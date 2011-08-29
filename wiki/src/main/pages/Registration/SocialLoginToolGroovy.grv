@@ -225,7 +225,7 @@ public class SocialLoginToolGroovy {
     public void readProviderProfile() {
         if(hasReadProviderProfile) return;
         hasReadProviderProfile = true;
-        Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile");
+        profile = request.session.getAttribute("org.brickred.socialauth.Profile");
         providerId = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
         firstName = profile.getFirstName();
         lastName = profile.getLastName();
@@ -252,7 +252,7 @@ public class SocialLoginToolGroovy {
      * Create a new user profile from the social profile result
      */
     public String tryCreateNewProfile() {
-        Profile profile = request.session.getAttribute("org.brickred.socialauth.Profile")
+        profile = request.session.getAttribute("org.brickred.socialauth.Profile")
         String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
         LOG.info("Trying to create new profile from provider " + provider);
         
@@ -318,6 +318,10 @@ public class SocialLoginToolGroovy {
         }
     }
 
+    public boolean isCorporateAccount() {
+        return 'corporation'==memberType || 'nonprofit'==memberType;
+    }
+
     private Document createUserDoc() {
         def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${username}", context.context), context.context);
         //userDoc.addObjectFromRequest("XWiki.XWikiUsers"); // TODO: use other explicit values ??
@@ -339,9 +343,13 @@ public class SocialLoginToolGroovy {
 
         // activate if from social login, otherwise send mail and put validation key
         if(profile) {
+            System.out.println("Making profile active.")
             userObj.set("active", "1");
             userObj.set("email_undeliverable", "0");
         } else {
+            System.out.println("Making profile inactive.")
+            userObj.set("active", "0");
+            userObj.set("email_undeliverable", "1");
             validKey = xwiki.xWiki.generateValidationKey(16);
             userObj.set("validkey", validKey);
             userObj.set("validredirect", request.xredirect);
@@ -570,7 +578,7 @@ public class SocialLoginToolGroovy {
     private void sendRegistrationMail(String nonCorpPage, String corpPage, String subjectMsgKey) {
         mailsender = xwiki.mailsender;
         def emailDoc = "Registration." + nonCorpPage;
-        if('corporation'==memberType || 'nonprofit'==memberType)
+        if(isCorporateAccount())
             emailDoc = "Registration." + corpPage;
         LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDoc + '.');
         emailDoc = xwiki.getDocument(emailDoc);
