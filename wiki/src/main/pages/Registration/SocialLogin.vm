@@ -36,7 +36,7 @@ $tool.init($xwiki,$context,$request,$msg,$targets)##
         ## HAVE TO REDIRECT WITH THE USER-NAME INCLUDED AND ONLY IF NOT CHROME
         #if($request.method=="POST" && ! $request.getHeader("User-Agent").contains("Chrome"))##
             $request.session.setAttribute("SocialLoginTool",$tool)##
-            $response.sendRedirect("/xwiki/bin/view/Registration/$donateDoc?xwikiname=$tool.username"))##
+            $response.sendRedirect("/xwiki/bin/view/Registration/$donateDoc?xpage=popup&framed=true&xwikiname=$tool.username"))##
         #else##
             #set($view="")##
             #set($included=true)##

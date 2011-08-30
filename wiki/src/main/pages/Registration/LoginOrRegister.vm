@@ -22,8 +22,9 @@
     #template("javascripts.vm")
     #template("stylesheets.vm")
     ## #template("analytics.vm")
+    <style type="text/css">body { min-width: 0; margin-right:1em; width:90%}</style>
 {/pre}
-<body style="background-color:white" class="iframeInside">##
+<body style="background-color:white" class="iframeInside" style="min-width: 0; margin-right:1em; width:90%">##
 #else
 {pre}
     #template("xwikivars.vm")
@@ -31,12 +32,33 @@
     <script type="text/javascript">
     document.body.className = document.body.className + " iframeInside";
     </script>
+    <style type="text/css">body { min-width: 0; margin-right:1em; width:90%}</style>
 {/pre}
 #end#else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
 #end
-<script type="text/javascript">##
-    Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&${request.getQueryString()}");
+<style type="text/css">
+/*  join popup styles */
+    body{background-color: #ffffff;}
+    #mainContentArea {margin-top: 5em;}
+    #join_form_contents.fields_wrp { width: 500px; margin: 20px auto }
+    #joinformleftblock{float: left; width: 250px; text-align: right; border-right:  2px solid #ccc; padding-right: 20px;padding: 0 20px  10px 0;}
+    div#joinformrightblock {float: left; width: 190px; text-align: left; border-left:  2px solid #ccc; margin-left: -2px;padding: 0 0 10px 20px;}
+    #joinformrightblock a img {float: left; padding-right: 15px; margin-top: 20px;}
+    #joinformleftblock h2 {margin-right: 130px;	}
+    input#j_username, input#j_password {width: 120px;}
+    #join_register_footer {border-top:  2px solid #ccc; width: 400px; margin:0px auto; padding: 10px;font-variant: normal;	font-size: 90%;	font-weight: bold;}
+    #join_register_footer_cancel {width: 400px; margin:0px auto; padding: 5px;font-variant: normal;	font-size: 90%;	font-weight: bold; text-align:right;}
+    input.button {font-weight: bold;border-style: none;padding:3 6 3 7;}
+    label {font-weight: bold; color:#555}
+    h2 {color: #3366B9}
+    a {text-decoration: none; color: #3377cc;} a:hover{text-decoration: underline; color: #3377ff;}
+    span#sign_up {margin-right: 30px;}
+    #rememberme_td {text-align:left; }
+    #login_submit {text-align:right;}
+</style>
+<script language="javascript">
+Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&${request.getQueryString()}");
     //alert("Would reframe.");
 </script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
@@ -47,6 +69,7 @@
 #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
 #if($request.getHeader("User-Agent") && $request.getHeader("User-Agent").contains(" Chrome/"))##
 #set($nextURL="https://$hostname$nextURL")#end
+<div id="join_form_contents" class="fields_wrp">
 <form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 #* #set($xredirect=$!request.xredirect)
@@ -65,20 +88,12 @@
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
 </div>
 #set($providers = ["facebook","google"])##
-  #if("$!providersAsString" != '')
+#if("$!providersAsString" != '')
     #set($providersA = $providersAsString.split('\n'))
     #set($providers = $xwiki.getArrayList())
     #foreach($p in $providersA)#set($junk=$providers.add($p.trim()))#end
-  #end
-  #if($providers.size() > 0)
-    #set($hasSocialLogin = true)
-  #end
-<!-- hasSocialLogin ? $hasSocialLogin -->
-#if($hasSocialLogin)
-##<div class="column half">
-<table width="100%"><tr><td>
 #end
-<h3>$msg.get("join.login.header")</h3><!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest") -->
+<!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest") -->
     #set($message=$!request.session.getAttribute("messagesForNextLoginRequest"))
     #set($userName=$!request.j_username)
     #if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))#end
@@ -94,32 +109,25 @@
       <!-- previous login errors -->
       #error($msg.get("$message"))
     #end
-<table class="xwikilogintable" summary="$msg.get('join.login.header')">
-  <tr>
-    <th><label for="j_username">$msg.get('join.login.username')</label></th>
-    <td><input type="text" id="j_username" name="j_username" value="$escapetool.html("$!userName")"/></td>
-  </tr>
-  <tr>
-    <th><label for="j_password">$msg.get('join.login.password')</label></th>
-    <td><input type="password" id="j_password" name="j_password" value=""/></td>
-  </tr>
-  <tr>
-    <td colspan="2" style="text-align: left;">
-      <input id="rememberme" type="checkbox" name="j_rememberme" value="true"/>
-      <label for="rememberme">$msg.get('join.login.remember_me')</label>
-    </td>
-  </tr>
-</table>
-<div class="buttons">##
-    <span class="buttonwrapper"><input type="submit" class="button" value="$msg.get('join.login.button')"/></span>
-    <span class="buttonwrapper"><input type="button" class="button-grey" value="$msg.get('join.login.cancel')" onclick="window.open('$targets.noLogin','_top')"/></span>
-</div>
-#set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
-#set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg, $targets))
-</td><td valign="top" align="left">
-##</div>
-##<div class="column half socialLoginProviders">
-    <h3>$msg.get('join.login.social_header')</h3>## or login with...
+<div id="joinformleftblock" class="xwikilogintable" summary="$msg.get("join.login.header")">
+        <h2>$msg.get("join.login.header")</h2>
+    <p>
+    <p><label for="j_username">$msg.get('join.login.username')</label>
+      <input type="text" id="j_username" name="j_username" value="$escapetool.html("$!userName")"/></p>
+    <p><label for="j_password">$msg.get('join.login.password')</label>
+      <input type="password" id="j_password" name="j_password" value=""/></p>
+    <p>&nbsp;</p><p>
+    <table border='0' width="80%" align="right"><tr><td id="rememberme_td"><input id="rememberme" type="checkbox" name="j_rememberme" value="true"/>
+      <label for="rememberme">$msg.get('join.login.remember_me')</label></td>
+        <td id="login_submit"><input type="submit" class="button" value="$msg.get('join.login.button')"/></td></tr></table>
+#set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+#set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg, $targets))##
+</div><!--end joinformleftblock-->
+##
+##
+<div id="joinformrightblock">
+    <h2>$msg.get('join.login.social_header')</h2>
+    ## or login with...
     #foreach($provider in $providers)
     <div class="provider"  id="identifyWith${provider}" style="display:inline">
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
@@ -137,17 +145,33 @@
     </div>
     ## #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="120" max-rows="1"></fb:login-button></div>#end
     ##<hr/>
-  #end
-</td></tr></table>
-<div class="clearfloats"></div>
+  #end## foreach
+</div><!--end joinformrightblock-->
 </form>
+</div> <!-- join_form_contents -->
 {pre}
-<div style="font-size: 70%; margin-top: 2em;">##
-   <a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki')">##
-    $msg.get('join.login.join_curriki')</a>
-   <a href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup">$msg.get('join.login.forgot')</a>?##
-</div>
 </div>## mainContentArea
+##
+##
+##
+<div style="clear:left">
+	<div id="join_register_footer">
+      <span id="sign_up">$msg.get('join.login.join_curriki_question')##
+          <a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki_tooltip')">##
+            $msg.get('join.login.join_curriki')</a></span>
+      <span id="forgot_password"><a ##
+          href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup"
+            title="$msg.get('join.login.forgot_tooltip')">$msg.get('join.login.forgot')</a></span>
+</div>
+<div>
+    <div id="join_register_footer_cancel">
+      <span id="login_cancel">
+                <input type="button" class="button-grey" value="$msg.get('join.login.cancel')" ##
+                  style="padding: 0; font-size: smaller;" ##
+                  onclick="window.open('$targets.noLogin','_top')"/></span>
+    </div>
+</div>
+## SCRIPTS
 ## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
 <script type="text/javascript">
 //<![CDATA[

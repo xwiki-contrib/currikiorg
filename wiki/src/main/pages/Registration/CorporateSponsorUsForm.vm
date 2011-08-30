@@ -5,19 +5,14 @@
 
 $msg.get('join.complete.corporate.header')
 
-<button class="button-confirm" type="submit">$msg.get('join.complet.corporate.later_button')</button>
-
-
-
-
 $xwiki.includeForm("Registration.DonateCorp")##
 
 ## ===================================================================
 <p align="center">
-    <button class="button-grey" type="submit"
-            #if($redir)onclick="window.top.location='$redir'; return false;"#end
-            >$msg.get('join.complete.later_button')</button></p>
-
+    #if($redir)#else#if($targets)#else #set($targets=$xwiki.parseGroovyFromPage("Registration.Targets"))#end #set($redirs=$targets.afterLogin)#end
+    <button class="button-confirm" type="submit"
+            #if($redir)onclick="window.top.location='$redir'; return false;"#else onclick="window.top.location='/xwiki/bin/view/MyCurriki/';"#end
+            >$msg.get('join.complet.corporate.later_button')</button>
 
 <script type="text/javascript">
     try {
