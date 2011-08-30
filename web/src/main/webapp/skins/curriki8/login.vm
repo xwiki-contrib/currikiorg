@@ -14,13 +14,13 @@
 ##$response.sendRedirect($redir)##
 ## rather JS-redirect so that we get frame=_top
 $xwiki.includeForm("Registration.JumpToTop")
-#* #elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself
+#elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself
 #set($qs = "$!{request.queryString}")##
 #if(!$request.getParameter('xredirect'))##
     #set($qs = "xredirect=$escapetool.url($doc.getURL('view'))&${qs}")##
 #end##
-$response.sendRedirect($xwiki.getURL('XWiki.XWikiLogin', 'login', $qs))##
-*##elseif($request.method=="POST")##
+$response.sendRedirect("/xwiki/bin/view/Main/Registration/LoginOrRegister$qs")##
+#elseif($request.method=="POST")##
   ## if we arrived here, login was unsuccessfully posted, there should be messages
   ## store them in session and take them for the next query on http
   $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##

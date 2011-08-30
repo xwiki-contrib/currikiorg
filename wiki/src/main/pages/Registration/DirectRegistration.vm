@@ -17,13 +17,14 @@
     #set($junk=$targets.init($request,$xwiki))##
     #set($junk=$tool.init($xwiki,$context,$request,$msg,$targets))##
         $request.session.setAttribute("SocialLoginTool",$tool)##
+        $tool.echoToConsole("Post bit")##
         #if($tool.readAndValidateQueryParams())##
             $success=$tool.createUser()##
             $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&xpage=popup")##
         #else
-            $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration")##
+            $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration?xpage=popup")##
         #end ##
-#end
+#else
 {pre}
 #if(!$skin)## we did not pass initialization already
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -42,7 +43,7 @@
     </script>
 #end
 #if($request.session)#set($oldTool=$request.session.getAttribute("SocialLoginTool"))#end##
-#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+#if($tool)#else#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))#end##
 #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
 #set($junk=$targets.init($request,$xwiki))##
 #if($oldTool)##
@@ -54,9 +55,11 @@
 #set($junk=$targets.init($request,$xwiki))##
 #end
 $tool.init($xwiki,$context,$request,$msg,$targets)##
+$tool.echoToConsole("Last bit ")##
 $xwiki.includeForm("Registration.RegistrationBootstrap",false)
 <script type="text/javascript">##
     Curriki.ui.login.makeSureWeAreFramed("DirectRegistration?xpage=popup&framed=true");
     //alert("Would reframe.");
 </script>
 {/pre}
+#end

@@ -67,7 +67,7 @@ public class SocialLoginToolGroovy {
             return;
         }
         SocialLoginToolGroovy other = other1;
-        LOG.info("SocialLoginToolGroovy  grabbing from" + this + " being prepopulated from " + other);
+        System.out.println("SocialLoginToolGroovy  grabbing into " + this + " being prepopulated from " + other);
         this.hasReadProviderProfile = other.hasReadProviderProfile
         this.firstName = other.firstName;
         this.lastName = other.lastName;
@@ -78,6 +78,7 @@ public class SocialLoginToolGroovy {
         this.password = other.password;
         this.providerId = other.providerId;
         this.username = other.username;
+        System.out.println("E.g. username: " + other.username);
 
 
         this.errors = other.errors;
@@ -432,6 +433,15 @@ public class SocialLoginToolGroovy {
     }
 
 
+    public void echoToConsole() { echoToConsole("");}
+
+    public void echoToConsole(String msg) {
+        System.out.print(msg + " This is " + toString() + " with e.g. username " + username);
+        if(request!=null)
+            System.out.println(" with request to " + request.getRequestURI() + ".");
+        else
+            System.out.println(" with request to " + request + ".");
+    }
 
 
 

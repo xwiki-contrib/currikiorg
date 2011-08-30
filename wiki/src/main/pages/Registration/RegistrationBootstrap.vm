@@ -130,10 +130,10 @@
               <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
               <select name="member_type" id="${f}_input" onchange="Curriki.ui.login.memberTypeChanged()">##
-                  #set($val="-")
-                  <option value="$val" #if($val==$tool.memberType)selected="selected"#end></option>##
+                  #set($val="-")##
+                  <option value="$val" #if($val==$!tool.memberType)selected="selected"#end>$msg.get("join.member_type_instructions")</option>##
                   #foreach($val in $propVals)#if($val!="0")##
-                  <option value="$val" #if($val==$tool.memberType)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
+                  <option value="$val" #if($val==$!tool.memberType)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
                   #end#end
               </select>
           </p>

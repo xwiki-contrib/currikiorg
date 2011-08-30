@@ -3353,14 +3353,33 @@ Curriki.ui.login.displayLoginDialog = function(url) {
     Ext.util.CSS.updateRule(".x-window .x-window-tl, .x-panel-ghost .x-window-tl",
         "background-color", "#4E83C7")
     Curriki.ui.login.loginDialog = new Ext.Window({
-                width:w,
-                height:h,
-                modal:true,
-                closable:true,
-                autoHeight: true,
-                scrollbars: true,
+                //width:w,
+                //height:h,
+                //modal:true,
+                //border:false,
+                //autoHeight: true,
+                //resizable: false,
+                //scrollbars: true,
                 title:_("join.login.title"),
-                html: "<iframe name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
+
+        border:false,
+                scrollbars: false
+        ,modal:true
+        ,width:634
+        ,minWidth:400
+        ,minHeight:100
+        ,maxHeight:575
+        ,autoScroll:false
+        ,constrain:true
+        ,collapsible:false
+        ,closable:false
+        ,resizable:false
+        , monitorResize: true
+        ,shadow:false
+        ,defaults:{border:false},
+
+
+                html: "<iframe style='border:none' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
             });
     Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
