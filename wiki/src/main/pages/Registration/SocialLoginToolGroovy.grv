@@ -603,18 +603,42 @@ public class SocialLoginToolGroovy {
             msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), []);
     }
 
+    public String validateUser() {
+        def userdoc = null;
+        if(username==null) username = request.getParameter("xwikiname");
+        if(username!=null) userdoc = xwiki.getDocument("XWiki." + username);
+        if(userdoc==null) return "join.validation.missing-username";
+        def userobj = userdoc.getObject("XWiki.XWikiUsers", false);
+        if(userobj==null) return "join.validation.missing-username";
+        grabFromUserDoc(userdoc);
+        def requestKey = request.getParameter("validkey");
+        if(requestKey==null || requestKey==""
+                || requestKey != userobj.getProperty("validkey").value)
+            return "join.validation.missing-key";
+        // everything clear let's activate user
+        userobj.set("active", "1");
+        userobj.set("email_undeliverable", "0");
+        // and send validation mail
+        sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail", "registration.email.welcome");
+        return "success";
+    }
+
 
     // ============================== post login... to create the mail again ============
     public void grabFromCurrentUser() {
         username = context.user;
         LOG.info("Grabbing from " + username);
         Document userDoc = xwiki.getDocument(username);
+        grabFromUserDoc(userDoc);
+    }
+
+
+    private void grabFromUserDoc(Document userDoc) {
         com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", false);
         this.firstName = userObj.get("first_name");
         this.lastName = userObj.get("last_name");
         this.validKey = userObj.getProperty("validkey").value;
         this.email = userObj.get("email");
-        this.memberType = userObj.get("member_type");
+        this.memberType = userObj.getProperty("member_type").value;
     }
-
 }

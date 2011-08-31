@@ -3363,7 +3363,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
                 title:_("join.login.title"),
 
         border:false,
-                scrollbars: false
+        scrollbars: false
         ,modal:true
         ,width:634
         ,minWidth:400
@@ -3558,13 +3558,16 @@ Curriki.ui.login.liveValidation = function() {
             var fieldName = inputElt.dom.name;
             var fieldValue = inputElt.dom.value;
             console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
-            if(fieldValue && fieldValue.length<=3) return;
+            var min_length=3;
+            if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
+                min_length=1;
+            if(typeof(fieldValue)!="undefined" && fieldValue.length<=min_length) return;
             if(fieldName!="email" && fieldName!="username") {
                 var passed = false;
                 var silentFailure = fieldName=="firstName" || fieldName=="lastName" || fieldName=="password";
                 if(fieldName=="agree") passed = fieldValue!="0";
                 if(fieldName=="member_type") passed = fieldValue!="-";
-                if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>4;
+                if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
                 if(fieldName=="password") passed = fieldValue.length>5;
                 console.log("passed? " + passed + ".");
                 // manual check here, just long enough
