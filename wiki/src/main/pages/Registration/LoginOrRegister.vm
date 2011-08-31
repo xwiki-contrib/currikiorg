@@ -72,17 +72,6 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
 <div id="join_form_contents" class="fields_wrp">
 <form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
-#* #set($xredirect=$!request.xredirect)
-#if($xredirect && $xredirect.contains("/login") && $xredirect.contains("XWikiLogin"))#set($xredirect="/")#end
-#if($xredirect.startsWith("%2"))#set($xredirect=$xredirect.replaceAll("%2F","/"))#end
-#if($xredirect && $xredirect!="" && $xredirect!="/")##
-    $request.session.setAttribute("xredirect",$xredirect)##
-#else##
-    #if($request.session.getAttribute("xredirect"))#set($xredirect=$request.session.getAttribute("xredirect"))#end##
-#end##
-<!-- xredirect is $xredirect -->
-<!-- session's xredirect is $request.session.getAttribute("xredirect") --> *#
-<!-- this document is from Registration.LoginOrRegister -->
 <div class="hidden">##
 <input type="hidden" name="xredirect" value="$nextURL"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
@@ -160,7 +149,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
           <a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki_tooltip')">##
             $msg.get('join.login.join_curriki')</a></span>
       <span id="forgot_password"><a ##
-          href="/xwiki/bin/view/Registration/ForgotLogin?xpage=popup"
+          href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&xpage=popup"
             title="$msg.get('join.login.forgot_tooltip')">$msg.get('join.login.forgot')</a></span>
 </div>
 <div>
