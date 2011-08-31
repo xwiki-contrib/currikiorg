@@ -1018,7 +1018,6 @@ public class Asset extends CurrikiDocument {
         String prettyName = context.getWiki().clearName(name, true, true, context);
         //rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>());
         this.doc = assetDoc.copyDocument(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context),context);
-        context.getWiki().deleteDocument(assetDoc, context);
 
         applyRightsPolicy();
 
@@ -1031,6 +1030,11 @@ public class Asset extends CurrikiDocument {
             root.addSubasset(this.getFullName());
             root.saveDocument(context.getMessageTool().get("curriki.comment.addtocollectionasset"));
         }
+        
+        // delete asset doc _at the end_, to be sure that all copying of the real document happens properly. 
+        // E.g. filesystem attachments fail to be copied properly if the original documnent is being deleted before 
+        // the copied document is saved
+        context.getWiki().deleteDocument(assetDoc, context);
 
         return this;
     }
