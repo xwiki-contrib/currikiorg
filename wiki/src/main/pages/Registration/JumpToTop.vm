@@ -14,11 +14,12 @@
     #set($redir="http://$hostname$redir")##
     $xwiki.includeForm("Registration.LoginSuccessful",false)##
 #else
-<p style="width:100%; height:100%; text-align: center; line-height:10em; background-color: #d3d3d3;"
+<p style="width:100%; height:100%; text-align: center; line-height:10em; background-color: white;"
         ><a id="followMeLink" href="${redir}" target="_top">$msg.get("registration.jump.proceeding")</a>##
     ##<img src="/xwiki/skins/curriki8/icons/spinner.gif"/>
         </p>##
-<script type="text/javascript">##
+
+<script type="text/javascript">
     var w = window;
     try {
         if (w.name == 'curriki-identity-dialog-popup'
@@ -30,22 +31,27 @@
     } catch(e) {
         if(console) console.log("Can't check for parent.",e);
     }
-    w.moveOnTask = null;##
-    function moveOn() {##
-        var targ = "${redir}";
-    if(console) console.log("Jumping to ${redir}");##
+    w.moveOnTask = null;
+    function moveOn() {
         window.clearInterval(w.moveOnTask);##
-        if(w!=window) // this was a popup, close me in 100ms
-            window.setInterval("window.close();", 100);##
-        w.top.location.replace(targ);
-        if(targ.indexOf("force%2ddownload=1")>0) {
-            w.reload();
-            if(console) console.log("Also reloading this page.");##
+        var targ = "${redir}";
+        w.moveOnTask = null;
+        if(console) console.log("Jumping to targ");##
+        if(targ.toLowerCase().indexOf("force%2ddownload=1")>0) {
+            if(console) console.log("Also reload page.");##
+            window.moveOnTask =
+                    window.setInterval(
+                            "window.clearInterval(window.moveOnTask); window.top.location.reload();",300);
+        } else {
+            w.top.location.replace(targ);
         }
-        //alert("Would replace with  ${redir}")
-         w.moveOnTask = null;##
     }##
     w.moveOnTask = window.setInterval(moveOn,50);</script>##
+#if($redir.toLowerCase().indexOf("force%2ddownload=1")>0)
+        <iframe width="200" height="100" src="$redir">
+            <p><a href="$redir">downloading</a>.</p>
+        </iframe>
+#end
 </body></html>##
 #end
 {/pre}

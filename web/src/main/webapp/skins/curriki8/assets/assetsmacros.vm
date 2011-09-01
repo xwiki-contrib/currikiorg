@@ -482,14 +482,16 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  </p>
     <!-- user is $context.user -->
  <button class="button-link button-link-download" ##
-    ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
     #if($context.user=="XWiki.XWikiGuest")##
         #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+        ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
         onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;"##
+            >$msg.get("login.button_login_to_download")</button>
     #else##
+        ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
         onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
-    #end    >$msg.get("rve.content.view.download.download_button")</button>
-
+            >$msg.get("rve.content.view.download.download_button")</button>
+#end
 #end
 
 

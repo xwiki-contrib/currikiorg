@@ -76,7 +76,7 @@
 	#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
 	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
-#if($request.session.getAttribute("header.message")=="logout-ok")##
+#if($!request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
     #set($provider=$request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))##
     <!-- provider: "$provider" -->
