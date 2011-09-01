@@ -32,12 +32,17 @@
     }
     w.moveOnTask = null;##
     function moveOn() {##
+        var targ = "${redir}";
+    if(console) console.log("Jumping to ${redir}");##
         window.clearInterval(w.moveOnTask);##
         if(w!=window) // this was a popup, close me in 100ms
             window.setInterval("window.close();", 100);##
-        w.top.location.replace("${redir}");
+        w.top.location.replace(targ);
+        if(targ.indexOf("force%2ddownload=1")>0) {
+            w.reload();
+            if(console) console.log("Also reloading this page.");##
+        }
         //alert("Would replace with  ${redir}")
-        if(console) console.log("Jumping to ${redir}");##
          w.moveOnTask = null;##
     }##
     w.moveOnTask = window.setInterval(moveOn,50);</script>##

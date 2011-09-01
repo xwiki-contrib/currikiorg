@@ -471,9 +471,25 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
      #else
      #set($filesize = 0)
      #end
-     <a href="$assetAttachmentURL">$assetAttachmentFilename</a> (${filesize}kb)
+     <a href="$assetAttachmentURL"
+    #if($context.user=="XWiki.XWikiGuest")##
+        #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+        onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+    #else##
+        onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+    #end##
+             >$assetAttachmentFilename</a> (${filesize}kb)
  </p>
- <button class="button-link button-link-download" ext:qtip="$msg.get("rve.content.view.download.download_button")" onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;">$msg.get("rve.content.view.download.download_button")</button>
+    <!-- user is $context.user -->
+ <button class="button-link button-link-download" ##
+    ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
+    #if($context.user=="XWiki.XWikiGuest")##
+        #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+        onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;"##
+    #else##
+        onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+    #end    >$msg.get("rve.content.view.download.download_button")</button>
+
 #end
 
 
