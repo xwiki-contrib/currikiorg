@@ -305,6 +305,9 @@ public class Asset extends CurrikiDocument {
         XWikiDocument newDoc = copyDoc.getDoc().copyDocument(Constants.ASSET_TEMPORARY_SPACE+"."+pageName, context);
 
         Asset assetDoc = new Asset(newDoc, context);
+        // FIXME: Trick this asset doc to believe that the doc we just set is already a clone, so that it returns it 
+        // uncloned on getDoc() to work around this bug: http://jira.xwiki.org/jira/browse/XWIKI-6885
+        assetDoc.cloned = true;
         //assetDoc.init(copyOf, publishSpace);
         assetDoc.getDoc().setCreator(context.getUser());
         assetDoc.getDoc().setCustomClass(assetDoc.getClass().getName());
@@ -1015,8 +1018,14 @@ public class Asset extends CurrikiDocument {
         }
 
         // Let's choose a nice name for the page
-        String prettyName = context.getWiki().clearName(name, true, true, context);
+        String prettyName = context.getWiki().clearName(name, true, true, context);        
         //rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>());
+        // FIXME: this works totally by mistake, there is bug http://jira.xwiki.org/jira/browse/XWIKI-6885 which 
+        // normally breaks the doc returned by Document.getDoc(). But, lucky lucky, since this.clone = true from the 
+        // previous getDoc()s that were called, getDoc() will not re-clone again what we set in the following 
+        // line in this.doc but return it as is, which makes so that this.save() saves properly the copied attachments. 
+        // See the FIXME in copyTempAsset for a case when it doesn't work properly, a newly created Asset from a copied 
+        // XWikiDocument.
         this.doc = assetDoc.copyDocument(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context),context);
 
         applyRightsPolicy();
