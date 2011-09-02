@@ -580,17 +580,20 @@ var CurrikiApp = {
 	},
 
 	initSearchForm: function() {
-		if (document.searchform && document.searchform.brsqry) {
-			CurrikiApp.defaultSearchText = document.searchform.brsqry.getAttribute('Curriki:defTxt');
-			jt_.AddListener(document.searchform.brsqry, 'focus', function() {
-				if (document.searchform.brsqry.value == CurrikiApp.defaultSearchText) document.searchform.brsqry.value = '';
-				else document.searchform.brsqry.select();
+        CurrikiApp.initSearchForm2(document.searchform, document.searchform.brsqry);
+    },
+    initSearchForm2: function(form, input) {
+		if (form && input) {
+			CurrikiApp.defaultSearchText = input.getAttribute('Curriki:defTxt');
+			jt_.AddListener(input, 'focus', function() {
+				if (input.value == CurrikiApp.defaultSearchText) input.value = '';
+				else input.select();
 			});
-			jt_.AddListener(document.searchform.brsqry, 'blur', function() {
-				 if (document.searchform.brsqry.value == '') document.searchform.brsqry.value = CurrikiApp.defaultSearchText;
+			jt_.AddListener(input, 'blur', function() {
+				 if (input.value == '') input.value = CurrikiApp.defaultSearchText;
 			});
 			if (Ext.isIE6) {
-				CurrikiApp.submitOnEnter(document.searchform, 'brsqry', CurrikiApp.searchbtnGo);
+				CurrikiApp.submitOnEnter(form, input.getAttribute('name'), CurrikiApp.searchbtnGo);
 			}
 		}
 	},

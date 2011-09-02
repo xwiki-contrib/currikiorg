@@ -128,7 +128,8 @@ a:hover {
 	width: 180px;	}
 #main_wrapper {
 	margin-top:20px;
-	margin-bottom:20px; 	}
+	margin-bottom:20px; 
+text-align: left;	}
 #main_vertical_lines {
 	}
 #col_main {
@@ -520,8 +521,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script></div></d
                   <label><input name="mediatype" type="radio" value=""  checked="checked"/> any</label><br/>
                   <label><input name="mediatype" type="radio" value="interactive" /> interactive</label><br/>
                   <label><input name="mediatype" type="radio" value="video" /> video</label><br/>
-                  <label><input name="mediatype" type="radio" value="audio" /> podcast</label><br/>
-                    <input name="text" type="text" id="curriki-searchbox" size="20"><br>
+                  <label><input name="mediatype" type="radio" value="audio" /> podcast</label>
               </td><td>
                   <h4>type of usage:</h4>
                   <label><input name="ict" type="radio" value="" checked="checked"/> any</label><br/>
@@ -532,15 +532,23 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script></div></d
               </td></tr>
               <tr>
                   <td>
+                      #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))##
+                    <input name="text" type="text" value="$defaultsearchtext" id="curriki-searchbox" Curriki:defTxt="$defaultsearchtext" size="15">
               </td>
                   <td class="adv_search_go_align" >
-<a href="javascript:document.getElementById('chpAdvSearchForm').submit();">go&raquo;</a>
+                        <a href="javascript:document.getElementById('chpAdvSearchForm').submit();">go&raquo;</a>
                   </td>
               </tr>
-         <tr><td colspan="2" style="height:3ex">
-           <!-- <a onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'; return true;" href="/xwiki/bin/view/Search/">Advanced Search</a> -->
+         <tr><td colspan="2" style="height:4ex;" valign="top">
+	<hr>
           </td></tr></table>
       </form>
+    <script type="text/javascript">
+        Ext.onReady(function() {
+            try {
+                CurrikiApp.initSearchForm2(document.chpAdvSearchForm, document.chpAdvSearchForm.text);
+            } catch(e) { if(console) console.log(e); }});
+    </script>
 
       <!--end search form fields-->
           <!--begin google search + bullets-->
