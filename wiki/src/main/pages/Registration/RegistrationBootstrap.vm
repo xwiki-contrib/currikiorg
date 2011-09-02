@@ -68,7 +68,7 @@
               #end</p>
           <p id="currikiRegistrationAdvice" align="left">&nbsp;</p>
           #if($tool.errors)
-              <p class="warning">#foreach($m in $tool.errors)$msg.get($m) #end</p>
+              <ul class="warning">#foreach($m in $tool.errors)<li>$msg.get($m)</li> #end</ul>
           #end
       <input type="hidden" name="xaction" value="createProfile" >
       <input type="hidden" name="city"  value="$!tool.city">

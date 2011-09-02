@@ -463,7 +463,11 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
- <a class="icon-link" href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
+ <a class="icon-link"
+    #if($context.user=="XWiki.XWikiGuest") ##
+      onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+    #end ##
+    href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
  <p class="text-link">
      #if($attachment.filesize)
      #set($filesize = $attachment.filesize / 1024)
