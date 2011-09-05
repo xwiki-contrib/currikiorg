@@ -1,0 +1,40 @@
+#**
+   * Javascript translation script
+   * @type script
+   * @programming
+   *#
+{pre}
+$response.setContentType("text/javascript")
+#if("$!request.lang" != "")##{
+#set($lang = $request.lang)
+#else##}{
+#set($lang = $xwiki.getLanguagePreference())
+#end##}
+#if("$!lang" == "")##{
+#set($lang = "en")
+#end##}
+var i18nDict = {
+'LANGUAGE':'$lang'
+,'MEDIAHOST':'${MEDIAHOST}'
+#foreach ($item in $context.context.wiki.getXWikiPreference("documentBundles", $context.context).split(","))##{
+,'TRANSLATION_PAGE_$item':'$item'
+#set($tDoc = $xwiki.getDocument($item))
+#foreach ($line in $tDoc.getTranslatedDocument("en").getContent().split("\n"))##{
+#set($line = $line.trim())
+#if("$line" != "" && !$line.startsWith("#") && $line.contains("="))##{
+#set($pair = $line.split("=", 2))
+#set($left = true)
+#foreach ($side in $pair)##{
+#if($left)##{
+#set($lText = $side.trim().replaceAll("'", "\\'"))
+#set($left = false)
+#else## }{
+#set($rText = $msg.get($lText).trim().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+#end##}
+#end##}
+,'$lText':'$rText'
+#end##}
+#end##}
+#end##}
+}
+{/pre}
