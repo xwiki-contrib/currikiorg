@@ -83,20 +83,22 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
     #set($providers = $xwiki.getArrayList())
     #foreach($p in $providersA)#set($junk=$providers.add($p.trim()))#end
 #end
-<!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest") -->
+<!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest")
+    request's messages: $!{request.message} -->
     #set($message="$!{request.session.getAttribute('messagesForNextLoginRequest')}$!{request.message}")
     #set($userName=$!request.j_username)
     #if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))#end
     #if($message)
         $request.session.removeAttribute("messagesForNextLoginRequest")
     #end
+    #* -- not used anymore
     #if($!message.length()==0)#set($message = $xwiki.parseMessage())#end##
-    #if($!message.length()==0 && ("$!request.j_username" == "$msg.get('header.login_username')" || "$!request.j_username" == "") && ("$!request.j_password" == "")) ##{
+     #if($!message.length()==0 && ("$!request.j_username" == "$msg.get('header.login_username')" || "$!request.j_username" == "") && ("$!request.j_password" == "")) ##{
         #set($message = 'redirect.error.no_info')##
         #set($userName=$msg.get('header.login_username'))
-    #end ##}
-    #if($message)
-      <!-- previous login errors -->
+    #end *###}
+    #if($!message.length()>0)
+      <!-- previous login errors: $message -->
       #error($msg.get("$message"))
     #end
 <div id="joinformleftblock" class="xwikilogintable" summary="$msg.get("join.login.header")">
