@@ -463,7 +463,10 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
-#set($requireLogin= ($!request.viewer!="embed") && $context.user=="XWiki.XWikiGuest")
+    #set($requireLogin1= ("$!request.viewer"!="embed"))
+    #set($requireLogin2= $context.user=="XWiki.XWikiGuest")
+#set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest")
+    <!-- requireLogin is $requireLogin combined form $requireLogin1 and $requireLogin2 -->
  <a class="icon-link"
     #if($requireLogin) ##
       onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
