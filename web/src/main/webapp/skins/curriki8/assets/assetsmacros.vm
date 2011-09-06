@@ -463,8 +463,9 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
+#set($requireLogin= ($!request.viewer!="embed") && $context.user=="XWiki.XWikiGuest")
  <a class="icon-link"
-    #if($context.user=="XWiki.XWikiGuest") ##
+    #if($requireLogin) ##
       onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
     #else
       onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}');" ##
@@ -478,7 +479,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
      #set($filesize = 0)
      #end
      <a href="$assetAttachmentURL"
-    #if($context.user=="XWiki.XWikiGuest")##
+    #if($requireLogin)##
         #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
         onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
     #else##
@@ -487,7 +488,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
              >$assetAttachmentFilename</a> (${filesize}kb)
  </p>
  <button class="button-link button-link-download" ##
-    #if($context.user=="XWiki.XWikiGuest")##
+    #if($requireLogin)##
         #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
         ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
         onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;"##
