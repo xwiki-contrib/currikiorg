@@ -23,28 +23,68 @@
 <!-- okFields : $okFields -->
 ## ----------------
 <style type="text/css">
-    .disabledLook p input {background-color: lightgray; border: lightgray 0px; }
-    .registrationTable { width:80%; text-align:left; }
-    .registrationTable p {padding-right: 20px; padding-top: 3px; padding-bottom:6px; padding-left: 10px; height:2em;}
-    .registrationTable p.textfield label b {float: left; vertical-align: middle; width: 10em;}
-    .registrationTable p.textfield input|select  {float: right; width: 35em;}
-    body { min-width: 0; margin-right:1em; width:90%}
-    .warningField {
-        border: solid red;
-        background: transparent url(/xwiki/skins/curriki8/warning.png) no-repeat center right;
-    }
-    .okField {
-        border: none;
-        background: transparent url(/xwiki/skins/curriki8/ok.png) no-repeat center right;
-    }
-    .waiting {
-        border: none;
-        background: transparent url(/xwiki/skins/curriki8/icons/spinner.gif) no-repeat center right;
-    }
-    fieldset {
-        margin: 2em;
-    }
-    .warning { text-align:left; }
+ {
+    background-color: lightgray;
+    border: 0 none lightgray;
+}
+body { min-width: 0pt; }
+.registrationTable {
+    margin: 20px auto;
+    text-align: left;
+    width: 325px;
+}
+.registrationTable p {
+    height: 2em;
+    padding: 3px 20px 6px 10px;
+}
+.registrationTable p.textfield {
+    margin: 0;
+    padding: 0;
+}
+.registrationTable p.textfield label b, .registrationTable p label b {
+    float: left;
+    padding: 5px;
+    text-align: right;
+    vertical-align: bottom;
+    width: 8em;
+}
+.registrationTable p.textfield input {
+    float: left;
+    width: 15em;
+}
+select#memberType_input {
+    float: left;
+    width: 15em;
+}
+.warningField {
+    background: url("/xwiki/skins/curriki8/warning.png") no-repeat scroll right center transparent;
+    border: medium solid red;
+padding: 0 0 5px 0;
+}
+.okField {
+    background: url("/xwiki/skins/curriki8/ok.png") no-repeat scroll right center transparent;
+    border: medium none;
+}
+.waiting {
+    background: url("/xwiki/skins/curriki8/icons/spinner.gif") no-repeat scroll right center transparent;
+    border: medium none;
+}
+fieldset {
+    line-height: 12px;
+    margin: 20px auto;
+    width: 365px;
+    padding: 0 20px;
+}
+fieldset h3 {
+    color: #4E83C7;
+    font: bold 16px arial,helvetica,sans-serif;
+    padding: 2px 0px;
+    text-align:left;
+}
+.warning {
+    text-align: left;
+}
+
 </style>
 <!-- begin javascripts -->##
 #set($globalDebug=true)##
@@ -158,7 +198,7 @@
 <script type="text/javascript">
     Ext.onReady(function() {
                 Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]); },
-            Curriki.ui.login.liveValidation);
+                    Curriki.ui.login.liveValidation);
     Ext.onReady(function() {
         var docH = getDocHeight(document);
         // adjust dialog height
@@ -179,7 +219,7 @@
                     console.log("Can't find elements. Stopping.");
                     return;
                 }
-                var text = ' ';
+                var text = ' ';
                 if(s && s.dom.value &&
                         ("corporation"==s.dom.value || "nonprofit"==s.dom.value)) {
                     text = _('join.member_type_coporate_instructions');
@@ -195,8 +235,8 @@
             try {
                 var text;
                 if(params) text = _(key,params);
-                else text = _(key)
-                if(!text || text=="") text=" "; // warning nbsp in this quote
+                    else text = _(key)
+                if(!text || text=="") text=" "; // warning nbsp in this quote
                 Ext.get("currikiRegistrationAdvice").dom.textContent = text;
             } catch(e) { if(console) console.log(e); }
         };
