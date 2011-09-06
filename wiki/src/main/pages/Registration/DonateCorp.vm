@@ -1,3 +1,7 @@
+<h2 style="text-align: center">$msg.get("join.complete.corporate.title")</h2>
+<br />
+<p>$msg.get("join.complete.corporate.text")</p>
+<p>$msg.get("join.complete.corporate.header")</p>
 <table width="630" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr>
     <td valign="top" width="126" height="126" background="/xwiki/bin/download/Main/Donate/donatebuttonbackground.gif">
@@ -140,3 +144,17 @@
     </td>
   </tr>
 </table>
+##
+##
+<p align="center">
+    <button class="button-grey" style="button" onclick="window.location.href='${targets.noLogin}'; return false;">##
+      $msg.get("registration.validate.cancel")</button>
+    #if($context.user!="XWiki.XWikiGuest")
+        <button class="button-confirm" style="button" onclick="window.top.location.href='${targets.afterLogin}'; return false;">##
+          $msg.get("join.complet.corporate.later_button")</button>
+    #else
+        <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&j_username=$request.xwikiname'; return false;">##
+          $msg.get("join.complet.corporate.later_button")</button>
+    #end
+</p>
+

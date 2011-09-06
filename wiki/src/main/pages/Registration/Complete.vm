@@ -17,8 +17,6 @@
 #set($memberType = $tool.memberType)##
 #if($result=="success")
 <div style="height: 20em;  vertical-align: middle;" class="registration-complete">
-<h2 style="text-align: center">$msg.get("registration.validate.validated")</h2>
-<br />
 ####
 <!-- member is $userdoc of type $memberType -->
 <script type="text/javascript">
@@ -34,23 +32,12 @@
         }
     });
 </script>
-#if($memberType=='corporation' || $memberType=='nonprofit')
+#if($memberType=='corporation' || $memberType=='nonprofit')<!-- including corporate donate -->
     $xwiki.includeForm("Registration.DonateCorp",false)
-#else
+#else<!-- including non-corporate donate -->
     $xwiki.includeForm("Registration.DonateNonCorp",false)
 #end
-
-<p align="center">
-    <button class="button-grey" style="button" onclick="window.location.href='${targets.noLogin}'; return false;">##
-      $msg.get("registration.validate.cancel")</button>
-    #if($context.user!="XWiki.XWikiGuest")
-        <button class="button-confirm" style="button" onclick="window.top.location.href='${targets.afterLogin}'; return false;">##
-          $msg.get("registration.validate.ok-continue")</button>
-    #else
-        <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&j_username=$request.xwikiname'; return false;">##
-          $msg.get("registration.validate.ok-now-login")</button>
-    #end
-</p>#end##
+#end##
 </div>
 #else
 $msg.get("registration.validate.failed.bad_key_or_loginname")
