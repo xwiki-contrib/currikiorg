@@ -622,3 +622,33 @@ function getDocHeight(D) {
         Math.max(D.body.clientHeight, D.documentElement.clientHeight)
     );
 }
+function getDocWidth(D) {
+    return Math.max(
+        Math.max(D.body.scrollWidth, D.documentElement.scrollWidth),
+        Math.max(D.body.offsetWidth, D.documentElement.offsetWidth),
+        Math.max(D.body.clientWidth, D.documentElement.clientWidth)
+    );
+}
+
+function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName) {
+    var accomplishRescale = function() {
+        var docH = getDocHeight(dialogDoc);
+        // adjust dialog height
+        if(Math.abs(dialogWindow.innerHeight-docH) > 50) {
+            if(console) { console.log("Should resize dialog from " +
+                dialogWindow.innerHeight + " to accomodate " + docH ) }
+            if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
+                window.parent.Ext.get(iframeName).dom.height = 20 + docH;
+            }
+        }
+        var docW = getDocWidth(dialogDoc);
+        if(Math.abs(dialogWindow.innerWidth-docW) > 50) {
+            if(console) { console.log("Should resize dialog from " +
+                dialogWindow.innerWidth + " to accomodate " + docW ) }
+            if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
+                window.parent.Ext.get(iframeName).dom.width = 20 + docW;
+            }
+        }
+    };
+    if(Ext) Ext.onReady(accomplishRescale);
+}

@@ -1,21 +1,3 @@
-<h3>$msg.get('join.complete.title')</h3>
-
-
-<p>$msg.get('join.complete.text')</p>
-
-$msg.get('join.complete.corporate.header')
-
+{pre}
 $xwiki.includeForm("Registration.DonateCorp")##
-
-## ===================================================================
-<p align="center">
-    #if($redir)#else#if($targets)#else #set($targets=$xwiki.parseGroovyFromPage("Registration.Targets"))#end #set($redirs=$targets.afterLogin)#end
-    <button class="button-confirm" type="submit"
-            #if($redir)onclick="window.top.location='$redir'; return false;"#else onclick="window.top.location='/xwiki/bin/view/MyCurriki/';"#end
-            >$msg.get('join.complet.corporate.later_button')</button>
-
-<script type="text/javascript">
-    try {
-        window.top.Ext.get("loginIframe").setTitle("$escapetool.javascript($msg.get('join.complete.header'))");
-    } catch(e) { if(console) console.log(e);}
-</script>
+{/pre}

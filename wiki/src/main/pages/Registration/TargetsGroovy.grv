@@ -4,7 +4,8 @@ import com.xpn.xwiki.web.SavedRequestRestorerFilter
 import com.xpn.xwiki.api.XWiki
 import javax.servlet.http.HttpSession
 import javax.servlet.http.HttpServletRequestWrapper
-import java.util.regex.Pattern;
+import java.util.regex.Pattern
+import java.util.regex.Matcher;
 
 /*
   This page is a class used in RegistrationBootstrap and LoginOrRegister to be able
@@ -153,6 +154,28 @@ public class TargetsGroovy {
     }
 
 
+
+    Pattern pattern = null;
+
+    private Pattern getOrMakePattern() {
+        if(pattern==null)
+            pattern = Pattern.compile("(.*)/xwiki/bin/download/([^/]+)/([^/&]+)\\??.*force(.?.?.)download=1");
+        return pattern;
+    }
+
+    public boolean isDownloadLink(String l) {
+        if(l==null) return false;
+        return getOrMakePattern().matcher(l).matches();
+    }
+
+    public String fromDownloadToResource(String t) {
+        if(t==null) return "/";
+        Matcher m = getOrMakePattern().matcher(t);
+        if(m.matches()) {
+            return "/xwiki/bin/view/" + m.group(2) + "/" + m.group(3);
+        } else
+            return t;
+    }
 
 }
 

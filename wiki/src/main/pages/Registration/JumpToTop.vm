@@ -9,6 +9,9 @@
 #if($redir)#else#set($redir=$targets.afterLogin)#end##
 #if($redir)#else#set($redir="/")#end##
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
+#set($hasDownload=$redir.matches(".*force(..?.?)?download=1.*"))##
+#set($directURL=$redir)##
+#if($hasDownload)#set($directURL=$targets.fromDownloadToResource($redir))#end ##
 <html><head><title>Redirection</title></head><body>##
 #if($request.getHeader("User-Agent").contains(" Chrome"))
     #set($redir="http://$hostname$redir")##
@@ -33,21 +36,22 @@
     }
     w.moveOnTask = null;
     function moveOn() {
-        window.clearInterval(w.moveOnTask);##
+        window.clearInterval(w.moveOnTask);
         var targ = "${redir}";
         w.moveOnTask = null;
-        if(console) console.log("Jumping to targ");##
-        if(targ.toLowerCase().indexOf("force%2ddownload=1")>0) {
-            if(console) console.log("Also reload page.");##
+        if("undefined"!==typeof(console)) {console.log("Jumping to targ");}
+        var hasDownload = $hasDownload;
+        if(hasDownload) {
+            if("undefined"!==typeof(console)) {console.log("Also reload page.");}
             window.moveOnTask =
                     window.setInterval(
-                            "window.clearInterval(window.moveOnTask); window.top.location.reload();",300);
+                            "window.clearInterval(window.moveOnTask); window.top.location.reload();",500);
         } else {
             w.top.location.replace(targ);
         }
-    }##
-    w.moveOnTask = window.setInterval(moveOn,50);</script>##
-#if($redir.toLowerCase().indexOf("force%2ddownload=1")>0)
+    }
+    w.moveOnTask = window.setInterval(moveOn,50);</script>
+#if($hasDownload)
         <iframe width="200" height="100" src="$redir">
             <p><a href="$redir">downloading</a>.</p>
         </iframe>
