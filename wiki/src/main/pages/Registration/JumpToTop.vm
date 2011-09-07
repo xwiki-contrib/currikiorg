@@ -41,7 +41,7 @@
         w.moveOnTask = null;
         if("undefined"!==typeof(console)) {console.log("Jumping to targ");}
         var hasDownload = $hasDownload;
-        if(hasDownload) {
+        if(hasDownload && window.top!=window) {
             if("undefined"!==typeof(console)) {console.log("Also reload page.");}
             window.moveOnTask =
                     window.setInterval(

@@ -32,7 +32,7 @@
         }
     });
 </script>
-#if($memberType=='corporation' || $memberType=='nonprofit')<!-- including corporate donate -->
+#if($memberType=='corporation')<!-- including corporate donate -->
     $xwiki.includeForm("Registration.DonateCorp",false)
 #else<!-- including non-corporate donate -->
     $xwiki.includeForm("Registration.DonateNonCorp",false)

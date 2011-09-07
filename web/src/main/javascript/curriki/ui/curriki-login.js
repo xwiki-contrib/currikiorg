@@ -35,9 +35,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
         , monitorResize: true
         ,shadow:false
         ,defaults:{border:false},
-
-
-                html: "<iframe style='border:none' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
+         html: "<iframe style='border:none' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
             });
     Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
@@ -65,7 +63,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
     // called from the login-or-register dialog or from the in-header-icons
     if(console) console.log("Opening authorization.");
     window.name='curriki-login-dialog';
-    var otherWindow = window.open(requestURL,'curriki-login-authorize',"toolbar=0,status=1,menubar=0,resizable=1,width=700,height=550");
+    var otherWindow = window.open(requestURL,'curriki-login-authorize',"toolbar=0,status=1,menubar=0,resizable=1,width=750,height=550");
     window.Curriki.ui.login.authorizeDialog = otherWindow;
     if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
     return false;

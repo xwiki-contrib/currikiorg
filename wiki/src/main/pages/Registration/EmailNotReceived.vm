@@ -1,3 +1,4 @@
+<style type="text/css">body { min-width: 0; margin-right:1em; width:90%}</style>
 1 $msg.get('email_not_received.title')
 
 #if ($!request.send) ## {
@@ -48,6 +49,11 @@ function validateForm(){
 #set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
 #set($username = $context.user.substring(6))
 #set($email = $!userObj.getProperty("email").getValue())
+#elseif($request.xwikiname)
+#set($username = $!request.xwikiname)
+#set($userDoc = $xwiki.getDocument("XWiki.$username"))
+#set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
+#set($email = $!userObj.getProperty("email").getValue())
 #end ##}
 <form id="send_email" name="send_email" method="post" onsubmit="return validateForm();">
 <table class="email-not-received-form">
@@ -57,8 +63,10 @@ function validateForm(){
 <tr><td>#asterix() $msg.get('email_not_received.phone')</td><td><input name="phone" type="text" size="50" /></td></tr>
 <tr><td>$msg.get('email_not_received.client')</td><td><input type="text" name="client" size="50" /></td></tr>
 </table>
-
-<p class="button-right"><button type="submit" class="button button-orange" name="send" value="1">$msg.get('email_not_received.button')</button></p>
+<p class="button-center">
+    <button type="submit" class="button button-orange" name="send" value="1">$msg.get('email_not_received.button')</button>
+    <button class="button button-grey" name="cancel" onclick="window.location.href='EmailSentValidationLink?xwikiname=$!username&xpage=${request.xpage}';'">$msg.get('email_not_received.cancel_button')</button>
+</p>
 </form>
 </div>
 #if("${context.user}" != "XWiki.XWikiGuest") ##{

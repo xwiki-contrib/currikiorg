@@ -402,7 +402,7 @@ $errMsg
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
 #set($mt=$!userobj.getProperty('member_type').value)
-#if($mt=="corporation" || $mt=="nonprofit" || $mt=="")
+#if($mt=="corporation" || $mt=="")
     #set($numberoffield=22)
     #set($x = "")#set($x = $!userobj.getProperty('publish_intent').value)
     #if("$x" != "")#set($c = 1 + $c)#end
@@ -493,7 +493,7 @@ function toggleCorporateFieldsVisible() {
     var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
     memberType = memberType.options[memberType.selectedIndex].value;
     var i;
-    if(memberType=="corporation" || memberType=="nonprofit") {
+    if(memberType=="corporation") {
         i = $('registerform_publish_intent_section');
         if(i) i.show();
         i = $('registerform_value_add_section');
