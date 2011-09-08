@@ -103,6 +103,7 @@ public class TargetsGroovy {
                 if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName))
                     noLogin = refererPath;
             }
+            if(noLogin.startsWith("/xwiki/bin/view/Registration/")) noLogin="/";
         } catch (Exception ex) {
             ex.printStackTrace();
         };

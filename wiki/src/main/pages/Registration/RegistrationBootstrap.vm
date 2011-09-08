@@ -58,7 +58,7 @@ select#memberType_input {
 }
 .warningField {
     background: url("/xwiki/skins/curriki8/warning.png") no-repeat scroll right center transparent;
-    border: medium solid red;
+    border: thin solid red;
 padding: 0 0 5px 0;
 }
 .okField {
@@ -200,7 +200,7 @@ fieldset h3 {
                 Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]); },
                     Curriki.ui.login.liveValidation);
 
-    scheduleDialogRescale(window, document, "loginIframe");
+    scheduleDialogRescale(window, document, "loginIframe", 500,0);
     Ext.onReady(function() {
         //
         Curriki.ui.login.memberTypeChanged = function () {

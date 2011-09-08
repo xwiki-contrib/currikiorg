@@ -169,9 +169,9 @@
 
 ##
 <p align="center">
-    <button class="button-grey" style="button" onclick="window.location.href='${targets.noLogin}'; return false;">##
-      $msg.get("registration.validate.cancel")</button>
     #if($context.user!="XWiki.XWikiGuest")
+        <button class="button-grey" style="button" onclick="window.top.location.href='${targets.noLogin}'; return false;">##
+          $msg.get("registration.validate.cancel")</button>
         <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/JumpToTop?xpage=popup&redir=${targets.afterLogin}'; return false;">##
           $msg.get("join.complete.later_button")</button>
     #else
@@ -182,5 +182,5 @@
 ##
 ##
 <script type="text/javascript">
-    scheduleDialogRescale(window, document, "loginIframe");
+    scheduleDialogRescale(window, document, "loginIframe", 750,0);
 </script>

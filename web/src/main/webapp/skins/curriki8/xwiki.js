@@ -630,23 +630,25 @@ function getDocWidth(D) {
     );
 }
 
-function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName) {
+function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, minHeight) {
     var accomplishRescale = function() {
         var docH = getDocHeight(dialogDoc);
+        if(docH < minHeight) docH=minHeight;
         // adjust dialog height
         if(Math.abs(dialogWindow.innerHeight-docH) > 50) {
             if(console) { console.log("Should resize dialog from " +
                 dialogWindow.innerHeight + " to accomodate " + docH ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
-                window.parent.Ext.get(iframeName).dom.height = 20 + docH;
+                dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
             }
         }
         var docW = getDocWidth(dialogDoc);
+        if(docW<minWidth) docW = minWidth;
         if(Math.abs(dialogWindow.innerWidth-docW) > 50) {
             if(console) { console.log("Should resize dialog from " +
                 dialogWindow.innerWidth + " to accomodate " + docW ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
-                window.parent.Ext.get(iframeName).dom.width = 20 + docW;
+                dialogWindow.parent.Ext.get(iframeName).dom.width = 20 + docW;
             }
         }
     };

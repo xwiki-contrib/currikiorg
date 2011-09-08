@@ -65,7 +65,7 @@ function validateForm(){
 </table>
 <p class="button-center">
     <button type="submit" class="button button-orange" name="send" value="1">$msg.get('email_not_received.button')</button>
-    <button class="button button-grey" name="cancel" onclick="window.location.href='EmailSentValidationLink?xwikiname=$!username&xpage=${request.xpage}';'">$msg.get('email_not_received.cancel_button')</button>
+    <button class="button button-grey" onclick="window.location.href='/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$!username&xpage=${request.xpage}'; return false">$msg.get('email_not_received.cancel_button')</button>
 </p>
 </form>
 </div>

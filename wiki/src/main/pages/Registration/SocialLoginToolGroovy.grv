@@ -632,6 +632,15 @@ public class SocialLoginToolGroovy {
         grabFromUserDoc(userDoc);
     }
 
+    public void grabFromRequestParam() {
+        def userdoc = null;
+        if(username==null) username = request.getParameter("xwikiname");
+        if(username!=null) userdoc = xwiki.getDocument("XWiki." + username);
+        if(userdoc!=null) {
+            grabFromUserDoc(userdoc);
+        }
+    }
+
 
     private void grabFromUserDoc(Document userDoc) {
         com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", false);
