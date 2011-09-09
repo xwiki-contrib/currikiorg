@@ -1,4 +1,4 @@
-
+// This script is the set of pages used to command the UI for the login and registration steps
 Ext.ns('Curriki.ui.login');
 Curriki.ui.login.displayLoginDialog = function(url) {
     if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
