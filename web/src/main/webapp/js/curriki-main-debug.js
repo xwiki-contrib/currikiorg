@@ -3340,7 +3340,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			}
 		}
 });
-
+// This script is the set of pages used to command the UI for the login and registration steps
 Ext.ns('Curriki.ui.login');
 Curriki.ui.login.displayLoginDialog = function(url) {
     if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
@@ -3377,9 +3377,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
         , monitorResize: true
         ,shadow:false
         ,defaults:{border:false},
-
-
-                html: "<iframe style='border:none' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
+         html: "<iframe style='border:none' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
             });
     Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
@@ -3388,7 +3386,17 @@ Curriki.ui.login.displayLoginDialog = function(url) {
 
 Curriki.ui.login.ensureProperBodyCssClass = function() {
     window.onload = function() {
-        document.body.className = document.body.className + " insideIframe";
+        try {
+            if (document.body) {
+                var x = document.body.className;
+                if (x) {
+                    document.body.className = x + " insideIframe";
+                } else if(!Ext.isIE()) {
+                    document.body.className = "insideIframe";
+                }
+
+            }
+        } catch(e) { if(console) console.log(e); }
     };
 }
 
@@ -3405,9 +3413,18 @@ Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
 }
 Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
     // called from the login-or-register dialog or from the in-header-icons
-    if(console) console.log("Opening authorization.");
+    if(console) {console.log("Opening authorization to " + requestURL); }
     window.name='curriki-login-dialog';
-    var otherWindow = window.open(requestURL,'curriki-login-authorize',"toolbar=0,status=1,menubar=0,resizable=1,width=700,height=550");
+    var otherWindow;
+    if(window.frames['curriki_login_authorize']) {
+        if(console) console.log("Re-using window.");
+        otherWindow = window.frames['curriki_login_authorize'];
+        otherWindow.location.href= requestURL;
+        otherWindow.focus();
+    } else {
+        if(console) console.log("Creating window.");
+        otherWindow = window.open(requestURL,'curriki_login_authorize',"toolbar=no,status=yes,menubar=no,resizable=yes,width=750,height=550");
+    }
     window.Curriki.ui.login.authorizeDialog = otherWindow;
     if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
     return false;
