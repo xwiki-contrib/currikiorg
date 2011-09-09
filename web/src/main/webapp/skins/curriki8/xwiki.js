@@ -635,7 +635,7 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
         var docH = getDocHeight(dialogDoc);
         if(docH < minHeight) docH=minHeight;
         // adjust dialog height
-        if(Math.abs(dialogWindow.innerHeight-docH) > 50) {
+        if(Math.abs(dialogWindow.innerHeight-docH) > 20) {
             if(console) { console.log("Should resize dialog from " +
                 dialogWindow.innerHeight + " to accomodate " + docH ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
@@ -644,7 +644,7 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
         }
         var docW = getDocWidth(dialogDoc);
         if(docW<minWidth) docW = minWidth;
-        if(Math.abs(dialogWindow.innerWidth-docW) > 50) {
+        if(Math.abs(dialogWindow.innerWidth-docW) > 20) {
             if(console) { console.log("Should resize dialog from " +
                 dialogWindow.innerWidth + " to accomodate " + docW ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
