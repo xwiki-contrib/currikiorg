@@ -339,7 +339,13 @@ public class SocialLoginToolGroovy {
         userObj.set("opt_out", 0); //
 
         String language = context.language;
-        if(profile && profile.language) language = profile.language;
+        try {
+            if(profile && profile.language) language = profile.language
+            if(language!=null && language.indexOf('-')>=0) language = language.substring(0, language.indexOf('-'))
+        } catch (Exception ex) {
+            LOG.warn("Language \"" + language + "\" incompatible, using " + context.language + " instead.", ex);
+            language = context.language;
+        };
         Locale locale = new Locale(language);
         userObj.set("language",    locale.getISO3Language());
 
