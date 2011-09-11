@@ -9,7 +9,7 @@ Curriki.ui.login.displayLoginDialog = function(url) {
     if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
     // the default header should be blue, not green as it is in AddPath, adjust the CSS live
     var rule = ".x-window .x-window-tl, .x-panel-ghost .x-window-tl";
-    if(Ext && Ext.isIE()) rule=".x-window .x-window-tl";
+    if(Ext && Ext.isIE) rule=".x-window .x-window-tl";
     Ext.util.CSS.updateRule(rule,
         "background-color", "#4E83C7");
     Curriki.ui.login.loginDialog = new Ext.Window({
