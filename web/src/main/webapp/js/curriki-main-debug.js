@@ -3372,9 +3372,9 @@ Curriki.ui.login.displayLoginDialog = function(url) {
         , monitorResize: true
         ,shadow:false
         ,defaults:{border:false},
-         html: "<iframe style='border:none' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
+         html: "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
             });
-    Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
+    Curriki.ui.login.loginDialog.headerCls = "gistration-dialog-header";
     Curriki.ui.login.loginDialog.show();
     return Ext.get("loginIframe").dom.contentWindow; 
 };

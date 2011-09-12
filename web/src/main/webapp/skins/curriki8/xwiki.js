@@ -632,21 +632,41 @@ function getDocWidth(D) {
 
 function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, minHeight) {
     var accomplishRescale = function() {
+        if(console) console.log("About to rescale " + dialogWindow);
+
+        var winH = 0 , winW = 0;
+        if (dialogDoc.body && dialogDoc.body.offsetWidth) {
+            winW = dialogDoc.body.offsetWidth;
+            winH = dialogDoc.body.offsetHeight;
+        }
+        if (dialogDoc.compatMode=='CSS1Compat' &&
+            dialogDoc.documentElement &&
+            dialogDoc.documentElement.offsetWidth ) {
+            winW = dialogDoc.documentElement.offsetWidth;
+            winH = dialogDoc.documentElement.offsetHeight;
+        }
+        if (dialogWindow.innerWidth && dialogWindow.innerHeight) {
+            winW = dialogWindow.innerWidth;
+            winH = dialogWindow.innerHeight;
+        }
+
         var docH = getDocHeight(dialogDoc);
         if(docH < minHeight) docH=minHeight;
-        // adjust dialog height
-        if(Math.abs(dialogWindow.innerHeight-docH) > 20) {
+        if(console) console.log("Comparing " + winW + " and " + docH);
+         // adjust dialog height
+        if(Math.abs(winH-docH) > 20) {
             if(console) { console.log("Should resize dialog from " +
-                dialogWindow.innerHeight + " to accomodate " + docH ) }
+                winH + " to accomodate " + docH ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
                 dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
             }
         }
         var docW = getDocWidth(dialogDoc);
         if(docW<minWidth) docW = minWidth;
-        if(Math.abs(dialogWindow.innerWidth-docW) > 20) {
+        if(console) console.log("Comparing " + winW + " and " + docW);
+        if(Math.abs(winW-docW) > 20) {
             if(console) { console.log("Should resize dialog from " +
-                dialogWindow.innerWidth + " to accomodate " + docW ) }
+                winW + " to accomodate " + docW ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
                 dialogWindow.parent.Ext.get(iframeName).dom.width = 20 + docW;
             }
