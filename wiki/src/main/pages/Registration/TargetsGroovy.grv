@@ -22,6 +22,7 @@ public class TargetsGroovy {
 
     String afterLogin = "/xwiki/bin/view/MyCurriki/";
     String noLogin    = "/";
+    HttpServletRequest request;
     static String SAVED_REQUEST_ATTNAME="com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest_SavedRequests";
     
 
@@ -29,6 +30,7 @@ public class TargetsGroovy {
         System.out.println("Request to " + req.getRequestURI())
         System.out.println("  - " + req.getParameterMap())
         System.out.println("  - xwiki: " + xwiki.getXWiki())
+        this.request = req;
         // find out afterLogin
         HttpSession session = req.getSession(true);
         String referer = req.getHeader("Referer");
@@ -176,6 +178,10 @@ public class TargetsGroovy {
             return "/xwiki/bin/view/" + m.group(2) + "/" + m.group(3);
         } else
             return t;
+    }
+
+    public void storeFileToDownload() {
+        request.getSession().setAttribute("downloadSoon", afterLogin);
     }
 
 }

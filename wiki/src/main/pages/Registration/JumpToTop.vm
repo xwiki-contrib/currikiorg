@@ -11,7 +11,9 @@
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
 #set($hasDownload=$redir.matches(".*force(..?.?)?download=1.*"))##
 #set($directURL=$redir)##
-#if($hasDownload)#set($directURL=$targets.fromDownloadToResource($redir))#end ##
+#if($hasDownload)##
+    #if($request.getHeader("User-Agent").contains(" MSIE "))$targets.storeFileToDownload() #set($msieHere=true)#end##
+    #set($directURL=$targets.fromDownloadToResource($redir))#end ##
 <html><head><title>Redirection</title></head><body>##
 #if($request.getHeader("User-Agent").contains(" Chrome"))
     #set($redir="http://$hostname$redir")##
@@ -51,7 +53,7 @@
         }
     }
     w.moveOnTask = window.setInterval(moveOn,50);</script>
-#if($hasDownload)
+#if($hasDownload  && !$msieHere)
         <iframe width="200" height="100" src="$redir">
             <p><a href="$redir">downloading</a>.</p>
         </iframe>

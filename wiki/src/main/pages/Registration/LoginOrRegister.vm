@@ -125,7 +125,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$targets.afterLogin#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
-              onclick="Curriki.ui.login.popupIdentityAuthorization('${link}'); return false">##
+              onclick="return Curriki.ui.login.popupIdentityAuthorization('${link}');">##
       <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"
            title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" />
 	  ###if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
@@ -192,8 +192,11 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
                 console.log("Is FB logged in: ",response.session);
                 var fbLink = Ext.get("identifyWithfacebook");
                 if(fbLink) {
-                    fbLink.dom.children[0].target="_self";
-                    fbLink.dom.children[0].onclick="";
+                    var elt = fbLink.dom.children[0];
+                    elt.target="_self";
+                    elt.setAttribute("onclick", "");
+                    elt.onclick = function() {};
+                    window.isFacebookLoggedIn = true;
                 }
           };
           FB.getLoginStatus(function(response) {
