@@ -12,8 +12,8 @@
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1204046558000</creationDate>
-<date>1316013722000</date>
-<contentUpdateDate>1316013722000</contentUpdateDate>
+<date>1316018854000</date>
+<contentUpdateDate>1316018854000</contentUpdateDate>
 <version>1.1</version>
 <title>Email Verification</title>
 <template></template>
@@ -108,8 +108,9 @@
 #set($link = $host + $xwiki.getURL("Registration.EmailVerified", "view", "u=${username}&amp;v=${valCode}"))
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
-#set($mailSubject = $doc.getRenderedContent($mailDoc.title))
-#set($mailContent = $doc.getRenderedContent($mailDoc.content))
+#set($translatedMailDoc = $mailDoc.getTranslatedDocument($context.language))
+#set($mailSubject = $doc.getRenderedContent($translatedMailDoc.title))
+#set($mailContent = $doc.getRenderedContent($translatedMailDoc.content))
 $xwiki.mailsender.sendTextMessage($mailFrom, $newEmail, $mailSubject, $mailContent)
 #set($emailSent = 1)
 #end ## }
