@@ -3,6 +3,18 @@
   * @author Curriki dev team
   *#
 $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
+    #if($request.session && $request.session.getAttribute("downloadSoon"))##
+      <script type="text/javascript">
+        // downloadSoon treatment here.
+        window.nowDownload = function() {
+            window.clearInterval(window.downloader);
+            window.location.href="$request.session.getAttribute("downloadSoon")";
+            Curriki.logView('/Download/attachment/${request.session.getAttribute("downloadSoon").replaceAll("/xwiki/bin/download/","").replaceAll(".force.*","")}');
+            // removed attribute: $request.session.removeAttribute("downloadSoon")
+        };
+        window.downloader = window.setInterval("nowDownload();", 100);
+    </script>
+    #end##
 #if($g_enable_ADDTHIS && ("$!ADDTHIS_acct" != "0") && ("$!ADDTHIS_acct" != "") ) ## {
 <script type="text/javascript">
 //<![CDATA[

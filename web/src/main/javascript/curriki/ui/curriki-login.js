@@ -62,7 +62,7 @@ Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, request
     } catch(e) { console.log(e); }
 }
 Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
-    Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
+    return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
 }
 Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
     // called from the login-or-register dialog or from the in-header-icons
@@ -84,7 +84,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 };
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
-    if(console) console.log("Finishing popup.");
+    if(console) console.log("Finishing popup, target: " + targetURL);
     if(openerWindow && openerWindow.Curriki.ui.login.authorizeDialog &&
             openerWindow.Curriki.ui.login.authorizeDialog==window) {
         // we are in a popup relationship, can close and revert to that popup

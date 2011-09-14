@@ -121,8 +121,9 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
     <h2>$msg.get('join.login.social_header')</h2>
     ## or login with...
     #foreach($provider in $providers)
+    ## don't put the following comment inside the div... it'd break the javascript of loginHappened!
+    <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
     <div class="provider"  id="identifyWith${provider}" style="display:inline">
-      <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$targets.afterLogin#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="return Curriki.ui.login.popupIdentityAuthorization('${link}');">##
@@ -193,10 +194,10 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
                 var fbLink = Ext.get("identifyWithfacebook");
                 if(fbLink) {
                     var elt = fbLink.dom.children[0];
-                    elt.target="_self";
-                    elt.setAttribute("onclick", "");
-                    elt.onclick = function() {};
-                    window.isFacebookLoggedIn = true;
+                    //elt.target="curriki-login-dialog";
+                    elt.removeAttribute("target");
+                    elt.setAttribute("onclick", "Curriki.showLoading(_('loading.loading_msg')); window.location.href='" + elt.getAttribute("href") + "'; return false;");
+                    elt.onclick = function() {Curriki.showLoading(_('loading.loading_msg')); window.location.href=elt.getAttribute("href"); return false;};
                 }
           };
           FB.getLoginStatus(function(response) {

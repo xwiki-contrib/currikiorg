@@ -9,11 +9,12 @@
 #if($redir)#else#set($redir=$targets.afterLogin)#end##
 #if($redir)#else#set($redir="/")#end##
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
-#set($hasDownload=$redir.matches(".*force(..?.?)?download=1.*"))##
-#set($directURL=$redir)##
+#set($hasDownload=$redir.matches(".*force(..?.?)?download=1.*"))<!-- hasDownload: $hasDownload -->##
+#set($nextStep=$redir)##
 #if($hasDownload)##
-    #if($request.getHeader("User-Agent").contains(" MSIE "))$targets.storeFileToDownload() #set($msieHere=true)#end##
-    #set($directURL=$targets.fromDownloadToResource($redir))#end ##
+    $targets.storeFileToDownload()##
+    #set($nextStep=$targets.fromDownloadToResource($redir))
+#end ##
 <html><head><title>Redirection</title></head><body>##
 #if($request.getHeader("User-Agent").contains(" Chrome"))
     #set($redir="http://$hostname$redir")##
@@ -39,25 +40,12 @@
     w.moveOnTask = null;
     function moveOn() {
         window.clearInterval(w.moveOnTask);
-        var targ = "${redir}";
+        var targ = "${nextStep}";
         w.moveOnTask = null;
-        if("undefined"!==typeof(console)) {console.log("Jumping to targ");}
-        var hasDownload = $hasDownload;
-        if(hasDownload && window.top!=window) {
-            if("undefined"!==typeof(console)) {console.log("Also reload page.");}
-            window.moveOnTask =
-                    window.setInterval(
-                            "window.clearInterval(window.moveOnTask); window.top.location.reload();",500);
-        } else {
-            w.top.location.replace(targ);
-        }
+        if("undefined"!==typeof(console)) {console.log("Jumping to target: " + targ);}
+        w.top.location.replace(targ);
     }
     w.moveOnTask = window.setInterval(moveOn,50);</script>
-#if($hasDownload  && !$msieHere)
-        <iframe width="200" height="100" src="$redir">
-            <p><a href="$redir">downloading</a>.</p>
-        </iframe>
-#end
 </body></html>##
 #end
 {/pre}
