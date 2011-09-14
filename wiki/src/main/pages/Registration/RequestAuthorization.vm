@@ -1,6 +1,7 @@
 ## this page is displayed with xpage=plain or popup to indicate that the request for authorization has been sent
 ## unless the request has a parameter doPopup=yes, it actually does not pop-up because
 ## such pop-ups are considered ad-pop-ups.
+<style type="text/css">body {  min-width: 0; }</style>
 <!-- begin javascripts -->##
 {pre}
 #template("javascripts.vm")##
@@ -14,7 +15,7 @@
     Curriki.ui.login.popupIdentityAuthorization("${request.to}")
 </script>
 #end
-<p><a target="identity-provider" href="${request.to}">Requesting your authorization to transmit information to Curriki from
-    ${request.provider}. This page should go away then.</a>
+<p style="margin: 3em;"><a target="identity-provider" href="${request.to}">Requesting your authorization to transmit information to Curriki from
+    ${request.provider}. <br>This page should go away then.</a>
 </p>
-<p align="right"><button onclick="window.top.location.href='$targets.noLogin'; return false;'" value="Cancel"></p>
+<p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">Cancel</button></p>

@@ -31,7 +31,7 @@ body { min-width: 0pt; }
 .registrationTable {
     margin: 20px auto;
     text-align: left;
-    width: 325px;
+    width: 425px;
 }
 .registrationTable p {
     height: 2em;
@@ -50,16 +50,16 @@ body { min-width: 0pt; }
 }
 .registrationTable p.textfield input {
     float: left;
-    width: 15em;
+    width: 20em;
 }
 select#memberType_input {
     float: left;
-    width: 15em;
+    width: 20em;
 }
 .warningField {
     background: url("/xwiki/skins/curriki8/warning.png") no-repeat scroll right center transparent;
     border: thin solid red;
-padding: 0 0 5px 0;
+    padding: 0 20px 5px 0;
 }
 .okField {
     background: url("/xwiki/skins/curriki8/ok.png") no-repeat scroll right center transparent;
@@ -72,7 +72,7 @@ padding: 0 0 5px 0;
 fieldset {
     line-height: 12px;
     margin: 20px auto;
-    width: 365px;
+    width: 420px;
     padding: 0 20px;
 }
 fieldset h3 {
@@ -83,6 +83,8 @@ fieldset h3 {
 }
 .warning {
     text-align: left;
+    color: #666;
+    font-weight: bold;
 }
 
 </style>
@@ -106,7 +108,7 @@ fieldset h3 {
               #if($tool.providerId)$msg.get("join.member.social_instructions",["$tool.providerId"])#else##
                   $msg.get("join.member.curriki_instructions")##
               #end</p>
-          <p id="currikiRegistrationAdvice" align="left">&nbsp;</p>
+          <div style="height:1em"><p id="currikiRegistrationAdvice" align="left">&nbsp;</p></div>
           #if($tool.errors)
               <ul class="warning">#foreach($m in $tool.errors)<li>$msg.get($m)</li> #end</ul>
           #end
@@ -166,7 +168,7 @@ fieldset h3 {
           ##
           ##
           #set($f="memberType")
-          <p class="#computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
               <select name="member_type" id="${f}_input" onchange="Curriki.ui.login.memberTypeChanged()">##
