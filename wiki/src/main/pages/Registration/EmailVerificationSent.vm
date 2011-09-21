@@ -1,0 +1,13 @@
+#if($!request.xpage=="popup")<style type="text/css">body { min-width: 0; margin-right:2em; width:80%}</style>#end
+<div id="email-verification2">
+ <h1>$msg.get('emailValidation.sent.title')</h1>
+ $msg.get('emailValidation.sent.text')
+ #set($xpage="")#if($!request.xpage!="")#set($xpage="xpage=$request.xpage")#end
+ <strong>$msg.get('emailValidation.sent.notreceived',["/xwiki/bin/view/Registration/EmailNotReceived?${xpage}"])</strong>
+</div>
+#if("$!footerJScript" == "")
+#set($footerJScript = "")
+#end
+{pre}
+#set($footerJScript = $footerJScript + '<script type="text/javascript">$$("a").invoke("observe", "click", function(event){ var item = Event.element(event); if (!item.href) {item = item.up("a"); } if ((item.href.indexOf("/xwiki/bin/view/") != -1) && (item.href.indexOf("/xwiki/bin/logout") == -1) && (item.href.indexOf("EmailNotReceived") == -1)){ if (!confirm("'+"${msg.get('emailValidation.step1.goElsewhere')}"+'")){ event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } } else { item.href = "/xwiki/bin/logout/XWiki/XWikiLogout?xredirect="+item.href; } } });</script>')
+{/pre}

@@ -42,7 +42,8 @@ $msg.get("accountdisabled")
 #set($active = $!userObj.getProperty('active').value)
 #set($undeliv = $!userObj.getProperty('email_undeliverable').value)
 #if("$!active" == "0" && "$!undeliv" == "1") ## {
-$response.sendRedirect("/xwki/bin/view/Registration/EmailVerification?xpage=popup")
+    #set($xpageParam="")#if($!request.xpage=="popup" || $!request.xpage=="plain" || $!request.framed!="")#set($xpageParam="xpage=popup")#end
+    $response.sendRedirect("/xwiki/bin/view/Registration/EmailVerification?$xpageParam")
 #else ## }{
 #* $msg.get("accountnotactive")
 <br />

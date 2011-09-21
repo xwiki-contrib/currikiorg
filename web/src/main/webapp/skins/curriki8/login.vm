@@ -11,9 +11,11 @@
 #set($targets=$xwiki.parseGroovyFromPage("Registration.Targets"))##
 #set($junk=$targets.init($request,$xwiki))##
 #if ($context.user != 'XWiki.XWikiGuest')##
-##$response.sendRedirect($redir)##
-## rather JS-redirect so that we get frame=_top
-$xwiki.includeForm("Registration.JumpToTop")
+    #if($context.user.getObject("XWiki.XWikiUsers").getProperty("active").getValue()==1)##
+        $xwiki.includeForm("Registration.JumpToTop")##
+    #else##
+        $xwiki.includeForm("Registration.EmailVerification")##
+#end##
 #elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself
 #set($qs = "$!{request.queryString}")##
 #if(!$request.getParameter('xredirect'))##
