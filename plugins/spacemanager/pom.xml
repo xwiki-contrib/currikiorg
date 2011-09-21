@@ -66,4 +66,22 @@
     <developerConnection>scm:svn:https://svn.xwiki.org/svnroot/xwiki/curriki/branches/curriki-2.1-NEXT/plugins/spacemanager/</developerConnection>
     <url>http://svn.xwiki.org/svnroot/xwiki/curriki/branches/curriki-2.1-NEXT/plugins/spacemanager/</url>
   </scm>
+  <build>
+    <pluginManagement>
+      <plugins>      
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <!-- We're deploying using the SCP protocol so we need the SSH Wagon for Maven 3 to work -->
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>1.0-beta-7</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>      
