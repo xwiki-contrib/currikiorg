@@ -42,7 +42,7 @@ $msg.get("accountdisabled")
 #set($active = $!userObj.getProperty('active').value)
 #set($undeliv = $!userObj.getProperty('email_undeliverable').value)
 #if("$!active" == "0" && "$!undeliv" == "1") ## {
-$response.sendRedirect($xwiki.getURL("Registration.EmailVerification"))
+$response.sendRedirect("/xwki/bin/view/Registration/EmailVerification?xpage=popup")
 #else ## }{
 #* $msg.get("accountnotactive")
 <br />
@@ -61,5 +61,11 @@ $xwiki.includeForm("Registration.EmailSentValidationLink", false)
 </div>
 #template("basefooter.vm")
 #template("footer.vm")
+<script type="text/javascript">
+    if(window.top!=window) {
+        if(console) console.log("Jumping to top.");
+        window.top.location.href=window.location.href;
+    }
+</script>
 #template("htmlfooter.vm")
 #end
