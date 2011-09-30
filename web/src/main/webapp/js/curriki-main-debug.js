@@ -3418,7 +3418,9 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
         otherWindow.focus();
     } else {
         if(console) console.log("Creating window.");
-        otherWindow = window.open(requestURL,'curriki_login_authorize',"toolbar=no,status=yes,menubar=no,resizable=yes,width=750,height=550");
+        var x = Math.max(0,(screen.width-850)/2);
+        var y = Math.max(0,(screen.height-550)/2);
+        otherWindow = window.open(requestURL,'curriki_login_authorize',"toolbar=no,status=yes,menubar=no,resizable=yes,width=850,height=550,");
     }
     window.Curriki.ui.login.authorizeDialog = otherWindow;
     if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
@@ -3509,6 +3511,7 @@ Curriki.ui.login.liveValidation = function() {
             /*
              Ext.get("loginIframe").dom.contentWindow.Ext.get("username_input").parent().addClass("warningField")
              */
+            if(console) console.log("Notifying validation result " + res + " on field " + field);
             try {
                 if (field) {
                 } else {
@@ -3570,10 +3573,10 @@ Curriki.ui.login.liveValidation = function() {
             var fieldName = inputElt.dom.name;
             var fieldValue = inputElt.dom.value;
             console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
-            var min_length=3;
-            if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
-                min_length=1;
-            if(typeof(fieldValue)!="undefined" && fieldValue.length<=min_length) return;
+            //var min_length=3;
+            //if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
+            //    min_length=1;
+            //if(typeof(fieldValue)!="undefined" && fieldValue.length<=min_length) return;
             if(fieldName!="email" && fieldName!="username") {
                 var passed = false;
                 var silentFailure = fieldName=="firstName" || fieldName=="lastName" || fieldName=="password";
@@ -3583,11 +3586,15 @@ Curriki.ui.login.liveValidation = function() {
                 if(fieldName=="password") passed = fieldValue.length>5;
                 console.log("passed? " + passed + ".");
                 // manual check here, just long enough
-                if(passed==false)
-                    if(!silentFailure) Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, false);
-                if(passed==true)
+                if(passed==false) {
+                    if(silentFailure) {
+                        // silentFailure == true && passed == false (no need to bother folks for too short names: cler mark)
+                        Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, null);
+                    } else {
+                        Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, false);
+                    }
+                } if(passed==true)
                     Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, true);
-                // missed case: silentFailure == true && passed == false (no need to bother folks for too short names)
                 return;
             }
             // we're left with email and username, only check if longer than 3
@@ -3646,9 +3653,10 @@ Curriki.ui.login.liveValidation = function() {
             } catch(e) { console.log(e); }
         }
         , inputFieldPoll: function() {
-            //console.log("poll");
+            //console.log("poll4");
             var t = Curriki.ui.login.liveValidation;
             var input = t.inputFieldBeingPolled;
+            //console.log("Checking input " + input + ".");
             if(input) {} else {return;}
             var now = new Date().getTime();
             if(t.startedPollingTime && t.startedPollingTime==null)
@@ -3658,12 +3666,15 @@ Curriki.ui.login.liveValidation = function() {
             }*/
             var value = input.dom.value;
             // Evaluating value=asdasd@i2go.e wrt t.lastValue=asdasd@i2go.e and t.lastChanged=1314641854765 with now 1314641858380
-            if(value) {
-                if(t.lastValue) {
+            //console.log("Checking " + value + " of type " + typeof(value));
+            if(typeof(value)!="undefined") {
+                if(typeof(t.lastValue)!="undefined") {
                     if(! (value==t.lastValue)) {
-                        t.lastValue = value;
+                        //console.log("not same value.");
                         t.lastChanged = now;
+                        t.lastValue = value;
                     } else { // same value: act if nothing happened since 200ms
+                        //console.log("same value since " + (now - t.lastChanged));
                         if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || t.lastChecked===undefined) &&
                                 (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value)) {
                             t.lastChecked = now;
@@ -3674,7 +3685,7 @@ Curriki.ui.login.liveValidation = function() {
                     t.lastValue = value;
                     t.lastChanged = now;
                 }
-            }
+            } else console.log("Giving up value undefined.");
 
         }
 
