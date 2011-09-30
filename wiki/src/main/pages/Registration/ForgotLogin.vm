@@ -112,7 +112,7 @@ Event.observe('forgotForm', 'submit', function(event) {
             <h1><!-- 2 -->$msg.get('forgot.title')</h1>
             $msg.get("forgot.error.no_user", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-grey" onclick="window.back(); return false;">$msg.get('forgot.cancel_button')</button>
+                <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
             </div>
 		#elseif($list.size()==1) ##}{
             <h1><!-- 3 -->$msg.get('forgot.title')</h1>
@@ -125,7 +125,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
 			$msg.get("forgotUsername.emailSent", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)#if($request.framed)&framed=true#end#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
 		#else ##}{
 			## Multiple usernames
@@ -143,7 +143,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
 			$msg.get("forgotUsername.emailSent", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
 		#end ##}
 	#elseif($!forgot == 'password') ## password }{
@@ -153,12 +153,12 @@ Event.observe('forgotForm', 'submit', function(event) {
 		#if($list.size()==0) ## {
 			$msg.get("forgot.error.no_user", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-grey" onclick="window.back(); return false;">$msg.get('forgot.cancel_button')</button>
+                <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup&#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
             </div>
 		#elseif($list.size()>1) ## }{
 			$msg.get("forgot.error.multiple_users")
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
 		#elseif($list.size()==1) ## }{
 			#set($item = $list.get(0))

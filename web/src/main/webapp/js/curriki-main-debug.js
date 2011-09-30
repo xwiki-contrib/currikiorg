@@ -3420,7 +3420,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
         if(console) console.log("Creating window.");
         var x = Math.max(0,(screen.width-850)/2);
         var y = Math.max(0,(screen.height-550)/2);
-        otherWindow = window.open(requestURL,'curriki_login_authorize',"toolbar=no,status=yes,menubar=no,resizable=yes,width=850,height=550,");
+        otherWindow = window.open(requestURL,'curriki_login_authorize',"toolbar=no,status=yes,menubar=no,resizable=yes,width=850,height=550,left="+x+",top="+y);
     }
     window.Curriki.ui.login.authorizeDialog = otherWindow;
     if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
