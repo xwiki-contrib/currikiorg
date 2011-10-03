@@ -47,19 +47,23 @@
     #joinformrightblock a img {float: left; padding-right: 15px; margin-top: 20px;}
     #joinformleftblock h2 {margin-right: 130px;	}
     input#j_username, input#j_password {width: 120px;}
-    #join_register_footer {border-top:  2px solid #ccc; width: 400px; margin:0px auto; padding: 10px;font-variant: normal;	font-size: 90%;	font-weight: bold;}
-    #join_register_footer_cancel {width: 400px; margin:0px auto; font-variant: normal;	 font-size: 95%;	font-weight: bold; padding: 0 50px 20px 0 ; text-align: right;}
-    #join_register_footer a { text-decoration: underline; color: #3875d7 }
+    #join_register_footer {width: 400px; border-top:  2px solid #ccc; width: 400px; margin:0px auto; padding: 3px;font-variant: normal;	font-size: 90%; }
+    #join_register_footer tr td {vertical-align: top; padding-top:1.5em}
+        ## #join_register_footer_cancel {width: 400px; margin:0px auto; font-variant: normal;	 font-size: 95%;	font-weight: bold; padding: 0 50px 20px 0 ; text-align: right;}
+    ###join_register_footer * a:active { text-decoration: underline; color: #1C3a7b; }
     input.button {font-weight: bold;border-style: none;padding:3 6 3 7;}
     label {font-weight: bold; color:#555}
     h2 {color: #3366B9}
-    a {text-decoration: none; color: #3377cc;} a:hover{text-decoration: underline; color: #3377ff;}
-    span#sign_up {margin-right: 30px;}
+    ## a {text-decoration: none; color: #3377cc;} a:hover{text-decoration: underline; color: #3377ff;}
+    ##span#sign_up {margin-right: 30px;}
+    span#sign_up_link {font-size: larger; font-weight: bold; margin-left: 0.5em}
+    span#sign_up_link a:link { text-decoration: underline; color: #3875d7 }
+    span#sign_up_link a:active {color: #1C3a7b;}
     #rememberme_td {text-align:left; }
     #login_submit {text-align:right;}
 </style>
 <script language="javascript">
-Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&${request.getQueryString()}");
+Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&$!{request.getQueryString()}");
     //alert("Would reframe.");
 </script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
@@ -148,21 +152,25 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
 ##
 ##
 <div style="clear:left">
-	<div id="join_register_footer">
-      <span id="sign_up">$msg.get('join.login.join_curriki_question')##
-          <a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki_tooltip')">##
-            $msg.get('join.login.join_curriki')</a></span>
-      <span id="forgot_password"><a ##
-          href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&xpage=popup"
-            title="$msg.get('join.login.forgot_tooltip')">$msg.get('join.login.forgot')</a></span>
-</div>
+    <table id="join_register_footer"><tr>
+        <td>
+            <span id="sign_up">$msg.get('join.login.join_curriki_question')##
+               </span>
+            <span id="sign_up_link"><a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki_tooltip')">##
+                   $msg.get('join.login.join_curriki')</a></span>
+        </td>
+        <td align="right">
+            <span id="forgot_password"><a ##
+                href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&xpage=popup"
+                  title="$msg.get('join.login.forgot_tooltip')">$msg.get('join.login.forgot')</a></span>
+            <br/><br/>
+            <span id="login_cancel">
+                      <input type="button" class="button-grey" value="$msg.get('join.login.cancel')" ##
+                        style="padding: 3pt 6pt; font-size: 11px;" ##
+                        onclick="window.open('$targets.noLogin','_top')"/></span>
+        </td>
+    </tr></table>
 <div>
-    <div id="join_register_footer_cancel">
-      <span id="login_cancel">
-                <input type="button" class="button-grey" value="$msg.get('join.login.cancel')" ##
-                  style="padding: 3pt 6pt; font-size: 11px;" ##
-                  onclick="window.open('$targets.noLogin','_top')"/></span>
-    </div>
 </div>
 ## SCRIPTS
 ## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
