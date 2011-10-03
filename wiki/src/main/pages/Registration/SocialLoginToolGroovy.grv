@@ -593,6 +593,7 @@ public class SocialLoginToolGroovy {
     }
 
     private void sendRegistrationMail(String nonCorpPage, String corpPage, String subjectMsgKey) {
+        long time=System.currentTimeMillis();
         mailsender = xwiki.mailsender;
         def emailDoc = "Registration." + nonCorpPage;
         if(isCorporateAccount())
@@ -600,6 +601,8 @@ public class SocialLoginToolGroovy {
         LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDoc + '.');
         emailDoc = xwiki.getDocument(emailDoc);
         def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
+        System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
+        time=System.currentTimeMillis();
 
         def from = msg.get("registration.email");
         if(from==null || from=="") from="webmaster@curriki.org";
@@ -607,6 +610,7 @@ public class SocialLoginToolGroovy {
 
         mailsender.sendHtmlMessage(from, email, null, null,
             msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), []);
+        System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to send email.");
     }
 
     public String validateUser() {
