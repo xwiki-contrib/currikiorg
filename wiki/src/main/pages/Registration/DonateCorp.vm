@@ -154,11 +154,11 @@
 ##
 <p align="center">
     #if($context.user!="XWiki.XWikiGuest")
-        <button class="button-grey" style="button" onclick="window.top.location.href='${targets.noLogin}'; return false;">##
-          $msg.get("registration.validate.cancel")</button>
         <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/JumpToTop?xpage=popup&redir=${targets.afterLogin}'; return false;">##
           $msg.get("join.complet.corporate.later_button")</button>
     #else
+        <button class="button-grey" style="button" onclick="window.top.location.href='${targets.noLogin}'; return false;">##
+          $msg.get("join.complet.corporate.cancel_button")</button>
         <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&j_username=$request.xwikiname'; return false;">##
           $msg.get("join.complet.corporate.later_button")</button>
     #end
