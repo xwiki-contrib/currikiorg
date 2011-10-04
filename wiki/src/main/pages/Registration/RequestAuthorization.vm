@@ -12,7 +12,9 @@
 #set($junk=$targets.init($request,$xwiki))##
 #if($request.doPopup=="yes")
 <script type="text/javascript">
-    Curriki.ui.login.popupIdentityAuthorization("${request.to}")
+    Ext.onReady(function() {
+        Curriki.ui.login.popupIdentityAuthorization("${request.to}")
+    });
 </script>
 #end
 <p style="margin: 3em;"><a target="identity-provider" href="${request.to}">Requesting your authorization to transmit information to Curriki from
