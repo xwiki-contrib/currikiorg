@@ -76,7 +76,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
 #set($nextURL="https://$hostname$nextURL")#end
 <div id="join_form_contents" class="fields_wrp">
 <form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
-      onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
+      onsubmit="if(Curriki.ui.login.validateLoginForm()) {console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 <div class="hidden">##
 <input type="hidden" name="xredirect" value="$nextURL"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
