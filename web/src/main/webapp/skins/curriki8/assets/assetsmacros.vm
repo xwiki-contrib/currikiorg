@@ -8,6 +8,11 @@
 #* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 
 
 
@@ -466,11 +471,14 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest")
  <a class="icon-link"
     #if($requireLogin) ##
-      onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+      #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+      #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}');")##
+      onclick="$scriptBit return false;" ##
+      href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
     #else
       onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}');" ##
+      href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
     #end ##
-    href="$assetAttachmentURL">$msg.get("rve.content.view.download.download_button")</a>
  <p class="text-link">
      #if($attachment.filesize)
      #set($filesize = $attachment.filesize / 1024)
@@ -478,11 +486,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
      #else
      #set($filesize = 0)
      #end
-     <a href="$assetAttachmentURL"
+     <a
     #if($requireLogin)##
-        #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
         onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+        href="javascript:$escapetool.url($scriptBit)" ##
     #else##
+        href="$assetAttachmentURL" ##
         onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
     #end##
              >$assetAttachmentFilename</a> (${filesize}kb)
