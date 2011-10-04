@@ -19,8 +19,12 @@
 #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
 #set($junk=$targets.init($request,$xwiki))##
 #end
-<!-- warningFields: $warningFields -->
-<!-- okFields : $okFields -->
+{pre}
+<!--
+    warningFields: $warningFields
+    okFields : $okFields
+    errors: $tool.errors -->
+{/pre}
 ## ----------------
 <style type="text/css">
  {
@@ -100,7 +104,7 @@ fieldset h3 {
 ## ----------------
 {pre}
 <form class="xform" action="https://$hostname/xwiki/bin/view/$doc.space/${doc.name}?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
-    onsubmit="console.log('loading.'); Curriki.showLoading(_('loading.loading_msg')); return true;">
+    onsubmit="console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true;">
   <div class="centered">
       <fieldset>
           <h3>$msg.get("join.member.title")</h3>
@@ -117,8 +121,10 @@ fieldset h3 {
       <input type="hidden" name="country" value="$!tool.country">
 
         #macro(computeTrClasses $f)##
-            #if($okFields.contains($f)) okField #end #if($warningFields.contains($f)) warningField #end #end##
-            #if($provider && $providerFields.contains($f)) disabledLook #end## && $provider is validated
+            #if($okFields.contains($f)) okField #end ##
+            #if($warningFields.contains($f)) warningField #end ##
+        #end##
+        #if($provider && $providerFields.contains($f)) disabledLook #end## && $provider is validated
       <div class="registrationTable">
           ##
           #set($f="username")
@@ -200,9 +206,12 @@ fieldset h3 {
 <script type="text/javascript">
     Ext.onReady(function() {
                 Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]); },
-                    Curriki.ui.login.liveValidation);
+            Curriki.ui.login.liveValidation);
+    
+    Curriki.ui.login.hideLoginLoading();
 
     scheduleDialogRescale(window, document, "loginIframe", 500,0);
+
     Ext.onReady(function() {
         //
         Curriki.ui.login.memberTypeChanged = function () {
