@@ -631,9 +631,10 @@ function getDocWidth(D) {
 }
 
 function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, minHeight) {
+    console.log("About to rescale " + dialogWindow);
+    // only run if inside a popup
+    if(window.top==dialogWindow) return;
     var accomplishRescale = function() {
-        if(console) console.log("About to rescale " + dialogWindow);
-
         var winH = 0 , winW = 0;
         if (dialogDoc.body && dialogDoc.body.offsetWidth) {
             winW = dialogDoc.body.offsetWidth;
@@ -652,7 +653,7 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
 
         var docH = getDocHeight(dialogDoc);
         if(docH < minHeight) docH=minHeight;
-        if(console) console.log("Comparing " + winW + " and " + docH);
+        if(console) console.log("Comparing H " + winH + " and " + docH);
          // adjust dialog height
         if(Math.abs(winH-docH) > 20) {
             if(console) { console.log("Should resize dialog from " +
@@ -663,7 +664,7 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
         }
         var docW = getDocWidth(dialogDoc);
         if(docW<minWidth) docW = minWidth;
-        if(console) console.log("Comparing " + winW + " and " + docW);
+        if(console) console.log("Comparing W " + winW + " and " + docW);
         if(Math.abs(winW-docW) > 20) {
             if(console) { console.log("Should resize dialog from " +
                 winW + " to accomodate " + docW ) }

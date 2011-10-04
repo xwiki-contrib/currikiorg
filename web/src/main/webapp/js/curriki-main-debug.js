@@ -3468,6 +3468,40 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
 
 };
 
+Curriki.ui.login.showLoginLoading=function(msg, multi) {
+    Curriki.showLoading(msg, multi);
+    try {
+        if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // also make the surroundings grey
+            var d = window.parent.Ext.get('loginIframe');
+            console.log("will set bg on " + d);
+            while (typeof(d) != "undefined" && d != null && d.setStyle) {
+                if (d.id && "loginDialogWindow" == d.id) break;
+                console.log("setting bg on " + d);
+                d.setStyle("background-color", "#DDD");
+                d = d.parent();
+            }
+        }
+    } catch(e) {
+        if(console) console.log(e);
+    }
+};
+Curriki.ui.login.hideLoginLoading= function() {
+    try {
+        if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // no more make the surroundings grey
+            var d = window.parent.Ext.get('loginIframe');
+            while (typeof(d) != "undefined" && d != null && d.setStyle) {
+                if (d.id && "loginDialogWindow" == d.id) break;
+                d.setStyle("background-color", "white");
+                d = d.parent();
+            }
+        }
+    } catch(e) {
+        if(console) console.log(e);
+    }
+}
+
+
+
 
 
 
@@ -3688,6 +3722,7 @@ Curriki.ui.login.liveValidation = function() {
             } else console.log("Giving up value undefined.");
 
         }
+
 
     };
 }();
