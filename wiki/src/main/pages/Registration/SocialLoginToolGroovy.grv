@@ -26,7 +26,7 @@ public class SocialLoginToolGroovy {
     private List errors = new ArrayList();
     String providerId = null;
     String city, country;
-    List warningFields=[], okFields=[];
+    List warningFields=new ArrayList(), okFields=new ArrayList();
     String username, password, firstName, lastName, email, memberType, agree;
     String validKey = null;
     String nowTarget = null;
@@ -79,13 +79,14 @@ public class SocialLoginToolGroovy {
         this.password = other.password;
         this.providerId = other.providerId;
         this.username = other.username;
-        System.out.println("E.g. username: " + other.username);
-
 
         this.errors = other.errors;
         this.warningFields = other.warningFields;
         this.okFields = other.okFields;
         this.nowTarget = other.nowTarget;
+        System.out.println("Errors: " + errors);
+        System.out.println("WarningFields: " + warningFields);
+        System.out.println("okFields: " + okFields);
     }
 
     public String authenticateUser(Document userDoc) {
@@ -270,12 +271,12 @@ public class SocialLoginToolGroovy {
         if(memberType==null) memberType="-";
 
         boolean passed = validation.isValidEmail(email, true);
-        passed =  passed & validation.isValidUsername(username, true);
-        passed = passed & validation.isValidPassword(password, true);
-        passed = passed & validation.isValidMemberType(memberType, true);
-        passed = passed & validation.isValidAgree(request.agree, true);
-        passed = passed & validation.isValidFirstName(firstName, true);
-        passed = passed & validation.isValidLastName(lastName, true);
+        passed = validation.isValidUsername(username, true) & passed;
+        passed = validation.isValidPassword(password, true) & passed;
+        passed = validation.isValidMemberType(memberType, true) & passed;
+        passed = validation.isValidAgree(request.agree, true) & passed;
+        passed = validation.isValidFirstName(firstName, true) & passed;
+        passed = validation.isValidLastName(lastName, true) & passed;
 
 
         if (passed) {
@@ -569,12 +570,12 @@ public class SocialLoginToolGroovy {
         if(memberType==null) memberType="-";
 
         boolean passed = validation.isValidEmail(email, true);
-        passed =  passed & validation.isValidUsername(username, true);
-        passed = passed & validation.isValidPassword(password, true);
-        passed = passed & validation.isValidMemberType(memberType, true);
-        passed = passed & validation.isValidAgree(request.agree, true);
-        passed = passed & validation.isValidFirstName(firstName, true);
-        passed = passed & validation.isValidLastName(lastName, true);
+        passed = validation.isValidUsername(username, true) & passed;
+        passed = validation.isValidPassword(password, true) & passed;
+        passed = validation.isValidMemberType(memberType, true) & passed;
+        passed = validation.isValidAgree(request.agree, true) & passed;
+        passed = validation.isValidFirstName(firstName, true) & passed;
+        passed = validation.isValidLastName(lastName, true) & passed;
 
         return passed;
     }

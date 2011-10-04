@@ -39,7 +39,7 @@ public class Validation {
             }
         }
         else {
-            if(warningFields!=null && echoErrors) warningFields += "username";
+            addWarning("username");
             if(echoErrors) errors.add("join.error.username");
             return false;
         }
@@ -49,10 +49,14 @@ public class Validation {
     public boolean isValidEmail(String email, boolean echoErrors) {
         if("paul@hoplahup.net"==email || "polx@i2geo.net"==email || "paul@activemath.org"==email) return true;
         def atIndex = email.indexOf("@");
+        if(email==null || email.length()==0 || atIndex==-1) {
+            addWarning("email");
+            if(echoErrors) addError("join.error.email_invalid");
+        }
 
-        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
 
         // Check to see if the email address is already used
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
         List docs = xwiki.searchDocuments(query);
         if (!docs.isEmpty()) {
             foundAccountName = docs.get(0);
@@ -84,24 +88,24 @@ public class Validation {
     }
 
     public boolean isValidFirstName(String name, boolean echoErrors) {
-        if(name!=null && name.length()<32 ) {
-            addOk("first_name");
+        if(name!=null && name.length()>=1 && name.length()<32 ) {
+            addOk("firstName");
             return true
         };
         if(echoErrors)
             addError("join.error.fname1_long");
-        addWarning("first_name");
+        addWarning("firstName");
         return false;
     }
 
     public boolean isValidLastName(String name, boolean echoErrors) {
-        if(name!=null && name.length()<32 ) {
-            addOk("last_name");
+        if(name!=null && name.length()>=1 && name.length()<32 ) {
+            addOk("lastName");
             return true
         };
         if(echoErrors)
             addError("join.error.lname1_long");
-        addWarning("last_name");
+        addWarning("lastName");
         return false;
     }
 
