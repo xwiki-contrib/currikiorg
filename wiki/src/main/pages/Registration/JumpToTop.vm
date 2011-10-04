@@ -16,7 +16,7 @@
     #set($nextStep=$targets.fromDownloadToResource($redir))
 #end ##
 <html><head><title>Redirection</title></head><body>##
-#if($request.getHeader("User-Agent").contains(" Chrome"))
+#if($context.user!="XWiki.XWikiGuest" && $request.getHeader("User-Agent").contains(" Chrome"))
     #set($redir="http://$hostname$redir")##
     $xwiki.includeForm("Registration.LoginSuccessful",false)##
 #else
