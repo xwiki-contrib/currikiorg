@@ -332,7 +332,9 @@ Curriki.ui.login.liveValidation = function() {
             console.log("Start polling on " + t);
             t.inputFieldBeingPolled = inputField;
             t.startedPollingTime = new Date().getTime();
-            t.intervalPointer = window.setInterval(t.inputFieldPoll, 50);
+            var interval = 50;
+            if(Ext.isIE) interval = 300;
+            t.intervalPointer = window.setInterval(t.inputFieldPoll, interval);
         }
         , stopPolling: function() {
             console.log("Stop polling.");

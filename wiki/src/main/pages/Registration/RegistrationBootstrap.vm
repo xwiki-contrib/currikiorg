@@ -42,8 +42,8 @@ body { min-width: 0pt; }
     padding: 3px 20px 6px 10px;
 }
 .registrationTable p.textfield {
-    margin: 0;
-    padding: 0;
+    margin: 2pt;
+    padding: 2pt;
 }
 .registrationTable p.textfield label b, .registrationTable p label b {
     float: left;
@@ -139,7 +139,7 @@ fieldset h3 {
           <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_password_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_password")</b></label>
               <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password" ###
-                autocomplete="off">
+                autocomplete="off" #if($request.getHeader("User-Agent").contains("MSIE"))style="width:19.5em"#end >
           </p>
           ##
           ##
@@ -228,7 +228,7 @@ fieldset h3 {
                     text = _('join.member_type_coporate_instructions');
                 }
                 console.log("memberTypeNotice: " + text);
-                Ext.get("memberTypeNotice").dom.textContent = text;
+                Ext.get("memberTypeNotice").dom.innerHTML= text;
             } catch(e) { if(console) console.log(e); }
         };
         // do it after load: the warning must be displayed in case
@@ -240,7 +240,7 @@ fieldset h3 {
                 if(params) text = _(key,params);
                     else text = _(key)
                 if(!text || text=="") text=" "; // warning nbsp in this quote
-                Ext.get("currikiRegistrationAdvice").dom.textContent = text;
+                Ext.get("currikiRegistrationAdvice").dom.innerHTML = text;
             } catch(e) { if(console) console.log(e); }
         };
 
