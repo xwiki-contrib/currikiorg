@@ -16,14 +16,14 @@
     #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
     #set($junk=$targets.init($request,$xwiki))##
     #set($junk=$tool.init($xwiki,$context,$request,$msg,$targets))##
-        $request.session.setAttribute("SocialLoginTool",$tool)##
-        $tool.echoToConsole("Post bit")##
-        #if($tool.readAndValidateQueryParams())##
-            $success=$tool.createUser()##
-            $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&xpage=popup")##
-        #else
-            $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration?xpage=popup")##
-        #end ##
+    $request.session.setAttribute("SocialLoginTool",$tool)##
+    $tool.echoToConsole("Post bit")##
+    #if($tool.readAndValidateQueryParams())##
+        $success=$tool.createUser()##
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&xpage=popup")##
+    #else
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration?xpage=popup")##
+    #end ##
 #else
 {pre}
 #if(!$skin)## we did not pass initialization already
