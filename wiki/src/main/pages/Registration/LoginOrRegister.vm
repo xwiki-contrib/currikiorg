@@ -204,8 +204,8 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
                     var elt = fbLink.dom.children[0];
                     //elt.target="curriki-login-dialog";
                     elt.removeAttribute("target");
-                    elt.setAttribute("onclick", "Curriki.showLoading(_('loading.loading_msg')); window.location.href='" + elt.getAttribute("href") + "'; return false;");
-                    elt.onclick = function() {Curriki.showLoading(_('loading.loading_msg')); window.location.href=elt.getAttribute("href"); return false;};
+                    elt.setAttribute("onclick", "Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); window.location.href='" + elt.getAttribute("href") + "'; return false;");
+                    elt.onclick = function() {Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); window.location.href=elt.getAttribute("href"); return false;};
                 }
           };
           FB.getLoginStatus(function(response) {

@@ -3,7 +3,7 @@ Ext.ns('Curriki.ui.login');
 Curriki.ui.login.displayLoginDialog = function(url) {
     if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
         Curriki.ui.login.loginDialog.hide();
-    var w = 700, h=400;
+    var w = 600, h=400;
     //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
     if(window.innerWidth && window.innerWidth<w)   w = Math.round(window.innerWidth*0.95);
     if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
@@ -18,7 +18,8 @@ Curriki.ui.login.displayLoginDialog = function(url) {
         id: 'loginDialogWindow',
         scrollbars: false
         ,modal:true
-        ,width:634
+        ,width: w
+        //, height: h
         ,minWidth:400
         ,minHeight:100
         ,maxHeight:575
@@ -127,35 +128,50 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
 };
 
 Curriki.ui.login.showLoginLoading=function(msg, multi) {
-    Curriki.showLoading(msg, multi);
     try {
-        if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // also make the surroundings grey
-            var d = window.parent.Ext.get('loginIframe');
-            console.log("will set bg on " + d);
-            while (typeof(d) != "undefined" && d != null && d.setStyle) {
-                if (d.id && "loginDialogWindow" == d.id) break;
-                console.log("setting bg on " + d);
-                d.setStyle("background-color", "#DDD");
-                d = d.parent();
+        if(navigator.appVersion.indexOf(" Chrome")>0) {
+            // we need this here because a failure would only leave grey borders around while
+            // a failure with the other system leaves a whole glasspane on top
+            // that failure happens in Chrome where LoginSuccessful is displayed from https
+            Curriki.showLoading(msg, true);
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // also make the surroundings grey
+                var d = window.parent.Ext.get('loginIframe');
+                console.log("will set bg on " + d);
+                while (typeof(d) != "undefined" && d != null && d.setStyle) {
+                    if (d.id && "loginDialogWindow" == d.id) break;
+                    console.log("setting bg on " + d);
+                    d.setStyle("background-color", "#DDD");
+                    d = d.parent();
+                }
             }
+        } else {
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe'))
+                window.parent.Curriki.showLoading(msg, true);
+            else
+                Curriki.showLoading(msg, multi);
         }
-    } catch(e) {
-        if(console) console.log(e);
-    }
+    } catch(e) { console.log(e); }
 };
-Curriki.ui.login.hideLoginLoading= function() {
+Curriki.ui.login.hideLoginLoading=function() {
     try {
-        if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // no more make the surroundings grey
-            var d = window.parent.Ext.get('loginIframe');
-            while (typeof(d) != "undefined" && d != null && d.setStyle) {
-                if (d.id && "loginDialogWindow" == d.id) break;
-                d.setStyle("background-color", "white");
-                d = d.parent();
+        if(navigator.appVersion.indexOf(" Chrome")>0) {
+            // see remark above
+            Curriki.hideLoading(true);
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // no more make the surroundings grey
+                var d = window.parent.Ext.get('loginIframe');
+                while (typeof(d) != "undefined" && d != null && d.setStyle) {
+                    if (d.id && "loginDialogWindow" == d.id) break;
+                    d.setStyle("background-color", "white");
+                    d = d.parent();
+                }
             }
+        } else {
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe'))
+                window.parent.Curriki.hideLoading(true);
+            else
+                Curriki.hideLoading(multi);
         }
-    } catch(e) {
-        if(console) console.log(e);
-    }
+    } catch(e) { console.log(e); }
 }
 
 

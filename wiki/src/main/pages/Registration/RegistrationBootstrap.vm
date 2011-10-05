@@ -207,8 +207,10 @@ fieldset h3 {
     Ext.onReady(function() {
                 Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]); },
             Curriki.ui.login.liveValidation);
-    
-    Curriki.ui.login.hideLoginLoading();
+
+    Ext.onReady(function() {
+        Curriki.ui.login.hideLoginLoading();
+    });
 
     scheduleDialogRescale(window, document, "loginIframe", 500,0);
 

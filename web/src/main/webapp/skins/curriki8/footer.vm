@@ -14,6 +14,8 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
         };
         window.downloader = window.setInterval("nowDownload();", 100);
     </script>
+    #* <iframe width="3" height="3" src="$request.session.getAttribute("downloadSoon")"></iframe>
+    <!-- $request.session.removeAttribute("downloadSoon") --> *#
     #end##
 #if($g_enable_ADDTHIS && ("$!ADDTHIS_acct" != "0") && ("$!ADDTHIS_acct" != "") ) ## {
 <script type="text/javascript">
