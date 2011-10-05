@@ -173,6 +173,7 @@ Curriki.ui.login.liveValidation = function() {
 
         launchCheckFieldRequest: function(value, field, queueEntry) {
             Curriki.ui.login.liveValidation.notifyValidationResult(field, "waiting");
+            Curriki.Ajax.beforerequest = function() {};
             var r = Ext.Ajax.request({
                 url: "/xwiki/bin/view/Registration/CheckValid"
                 ,headers: {'Accept':'application/json'}
