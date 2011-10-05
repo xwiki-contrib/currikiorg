@@ -244,6 +244,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
                 return valid;
             } catch(e) { if(console) console.log("Error in validating.", e); }
         };
+        Curriki.ui.login.hideLoginLoading();
     });
     scheduleDialogRescale(window, document, "loginIframe", 500,0);
 </script>
