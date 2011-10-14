@@ -1,171 +1,81 @@
-#if($request.xpage=="popup")#template("javascripts.vm")#end
-<style type="text/css">body {  min-width: 0; }</style>
-<h2>$msg.get("join.complete.corporate.title")</h2>
-<br />
-<p>$msg.get("join.complete.corporate.text")</p>
-<p><b>$msg.get("join.complete.corporate.header")</b></p>
-#if($targets)#else##
-#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))##
-#end##
-<table width="630" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td valign="top" width="126" height="126" background="/xwiki/bin/download/Main/Donate/donatebuttonbackground.gif">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-      <input type="hidden" name="cmd" value="_xclick"/>
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <input type="hidden" name="item_name" value="Donation to Curriki"/>
-      <input type="hidden" name="no_shipping" value="1"/>
-      <input type="hidden" name="no_note" value="0"/>
-      <input type="hidden" name="currency_code" value="USD"/>
-      <input type="hidden" name="ah" value="0"/>
-      <input type="hidden" name="tax" value="0"/>
-      <input type="hidden" name="amount" value="75.00"/>
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>      <input type="image" src="/xwiki/bin/download/Main/Donate/donate75.gif" border="0" name="submit" alt="Thank you for your donation!">
-      </form>
-      <img src="/xwiki/bin/download/Main/Donate/donate0s.gif">
-    </td>
-    <td valign="top" width="126" height="126" background="/xwiki/bin/download/Main/Donate/donatebuttonbackground.gif">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-      <input type="hidden" name="cmd" value="_xclick"/>
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <input type="hidden" name="item_name" value="Donation to Curriki"/>
-      <input type="hidden" name="no_shipping" value="1"/>
-      <input type="hidden" name="no_note" value="0"/>
-      <input type="hidden" name="currency_code" value="USD"/>
-      <input type="hidden" name="ah" value="0"/>
-      <input type="hidden" name="tax" value="0"/>
-      <input type="hidden" name="amount" value="150.00" />
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>      <input type="image" src="/xwiki/bin/download/Main/Donate/donate150.gif" border="0" name="submit" alt="Thank you for your donation!">
-      </form>
-      <div class="form">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" class="inline" target="_top">
-      <!-- Identify your business so that you can collect the payments. -->
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <!-- Specify a Subscribe button. -->
-      <input type="hidden" name="cmd" value="_xclick-subscriptions">
-      <!-- Identify the subscription. -->
-      <input type="hidden" name="item_name" value="Donation to Curriki">
-      <input type="hidden" name="item_number" value="No Item Number">
-      <!-- Set the terms of the regular subscription. -->
-      <input type="hidden" name="currency_code" value="USD">
-      <input type="hidden" name="a3" value="12.50">
-    <input type="hidden" name="p3" value="1">
-    <input type="hidden" name="t3" value="M"><p/>
-    <input type="hidden" name="src" value="1">
-    <input type="hidden" name="srt" value="12">
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-      <!-- Display the payment button. -->
-      <input type="image" name="submit" border="0" src="/xwiki/bin/download/Main/Donate/donate150s.gif" alt="Thank you for your donation!">
-      </form>
-      </div>
-    </td>
-    <td valign="top" width="126" height="126" background="/xwiki/bin/download/Main/Donate/donatebuttonbackground.gif">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-      <input type="hidden" name="cmd" value="_xclick"/>
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <input type="hidden" name="item_name" value="Donation to Curriki"/>
-      <input type="hidden" name="no_shipping" value="1"/>
-      <input type="hidden" name="no_note" value="0"/>
-      <input type="hidden" name="currency_code" value="USD"/>
-      <input type="hidden" name="ah" value="0"/>
-      <input type="hidden" name="tax" value="0"/>
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-      <input type="hidden" name="amount" value="300.00"/>
-      <input type="image" src="/xwiki/bin/download/Main/Donate/donate300.gif" border="0" name="submit" alt="Thank you for your donation!">
-      </form>
-      <div class="form">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" class="inline" target="_top">
-      <!-- Identify your business so that you can collect the payments. -->
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <!-- Specify a Subscribe button. -->
-      <input type="hidden" name="cmd" value="_xclick-subscriptions">
-      <!-- Identify the subscription. -->
-      <input type="hidden" name="item_name" value="Donation to Curriki">
-      <input type="hidden" name="item_number" value="No Item Number">
-      <!-- Set the terms of the regular subscription. -->
-      <input type="hidden" name="currency_code" value="USD">
-      <input type="hidden" name="a3" value="25.00">
-    <input type="hidden" name="p3" value="1">
-    <input type="hidden" name="t3" value="M"><p/>
-    <input type="hidden" name="src" value="1">
-    <input type="hidden" name="srt" value="12">
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-      <!-- Display the payment button. -->
-      <input type="image" name="submit" border="0" src="/xwiki/bin/download/Main/Donate/donate300s.gif" alt="Thank you for your donation!">
-      </form>
-    </td>
-    <td valign="top" width="126" height="126" background="/xwiki/bin/download/Main/Donate/donatebuttonbackground.gif">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-      <input type="hidden" name="cmd" value="_xclick"/>
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <input type="hidden" name="item_name" value="Donation to Curriki"/>
-      <input type="hidden" name="no_shipping" value="1"/>
-      <input type="hidden" name="no_note" value="0"/>
-      <input type="hidden" name="currency_code" value="USD"/>
-      <input type="hidden" name="ah" value="0"/>
-      <input type="hidden" name="tax" value="0"/>
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-      <input type="hidden" name="amount" value="1000.00"/>
-      <input type="image" src="/xwiki/bin/download/Main/Donate/donate1000.gif" border="0" name="submit" alt="Thank you for your donation!">
-      </form>
-      <div class="form">
-      <form style="margin-top: 0; margin-bottom: 0;" action="https://www.paypal.com/cgi-bin/webscr" method="post" class="inline" target="_top">
-      <!-- Identify your business so that you can collect the payments. -->
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <!-- Specify a Subscribe button. -->
-      <input type="hidden" name="cmd" value="_xclick-subscriptions">
-      <!-- Identify the subscription. -->
-      <input type="hidden" name="item_name" value="Donation to Curriki">
-      <input type="hidden" name="item_number" value="No Item Number">
-      <!-- Set the terms of the regular subscription. -->
-      <input type="hidden" name="currency_code" value="USD">
-      <input type="hidden" name="a3" value="83.37">
-    <input type="hidden" name="p3" value="1">
-    <input type="hidden" name="t3" value="M"><p/>
-    <input type="hidden" name="src" value="1">
-    <input type="hidden" name="srt" value="12">
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-      <!-- Display the payment button. -->
-      <input type="image" name="submit" border="0" src="/xwiki/bin/download/Main/Donate/donate1000s.gif" alt="Thank you for your donation!">
-      </form>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3"><div align="right">You may also choose the amount you wish to donate.</div></td>
-    <td width="126" height="49">
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-      <input type="hidden" name="cmd" value="_xclick"/>
-      <input type="hidden" name="business" value="khallstein@curriki.org"/>
-      <input type="hidden" name="item_name" value="Donation to Curriki"/>
-      <input type="hidden" name="no_shipping" value="1"/>
-      <input type="hidden" name="no_note" value="0"/>
-      <input type="hidden" name="currency_code" value="USD"/>
-      <input type="hidden" name="ah" value="0"/>
-      <input type="hidden" name="tax" value="0"/>
-      <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-      <input type="image" src="/xwiki/bin/download/Main/Donate/donateonly.gif" border="0" name="submit"  alt="Thank you for your donation!">
-      </form>
-    </td>
-  </tr>
-</table>
-##
-##
-<p align="center">
-    #if($context.user!="XWiki.XWikiGuest")
-        <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/JumpToTop?xpage=popup&redir=${targets.afterLogin}'; return false;">##
-          $msg.get("join.complet.corporate.later_button")</button>
-    #else
-        <button class="button-grey" style="button" onclick="window.top.location.href='${targets.noLogin}'; return false;">##
-          $msg.get("join.complet.corporate.cancel_button")</button>
-        <button class="button-confirm" style="button" onclick="window.location.href='/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&j_username=$request.xwikiname'; return false;">##
-          $msg.get("join.complet.corporate.later_button")</button>
-    #end
-</p>
-##
-##
+#template("xwikivars.vm")
+#template("javascripts.vm")
 <script type="text/javascript">
-    scheduleDialogRescale(window, document, "loginIframe", 650,0);
+document.body.className = document.body.className + " iframeInside";
+</script>
+<style type="text/css">
+    body { min-width: 0; margin-right:1em; width:90%}
+    #container{ padding: 20px; font: normal 14px/16px arial, helvetica, sans-serif;color:#666; background-color: inherit;text-align: left; width:620px; }
+    h2 {color:#3968B7; margin:0 0 20px 0}
+    .h2graysspan{color: #666;}
+    #box-wrapper{ margin: 20px 0;}
+    .box-top, .box, .box-short, button.box   {border:  3px solid #999; padding: 10px ;margin: 0 15px 15px 0; width: 120px; height: 120px; font-size:20px; }
+    .box {padding: 18px 10px 2px 10px; text-align: center;  float:left; }
+    button.box{height:115px; width:115px; line-height:16px;}
+    button.box-short{ height:40px; font-size: 12px; padding-top:10px; margin-top:-5px}
+</style>
+##
+#set($user=$request.user)
+#if($user)#else#set($user=$request.xwikiname)#end
+#if($user)#else#set($user=$context.user)#end
+#if($user=="XWiki.XWikiGuest")#warning("Warning: no user, donation will be to 'guest'")#end
+##
+##
+<div id="container">
+    <h2>Thank you for joining Curriki!</h2>
+
+    <h2><span class="h2graysspan">Please donate for your corprate membership.</span></h2>
+
+    <p> Your donations support Curriki's mission of providing free resources to members like you.</p>
+    <p><b>Choose a donation:</b></p>
+    <div id="box-wrapper">
+        ##
+        ##
+        #set($amount="75")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
+            <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+        ##
+        ##
+        #set($amount="150")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
+            <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+        ##
+        ##
+        #set($amount="300")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
+            <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+##
+        ##
+        ##
+        #set($amount="1000")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
+            <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+            <div style="clear: both"></div>
+            Should you wish to invoke this payment from another place,<br/> please right-click and copy the link of the button.
+    </div>
+</div>
+<script type="text/javascript">
+    scheduleDialogRescale(window, document, "loginIframe", 800,0);
     Curriki.ui.login.hideLoginLoading();
 </script>
+#if("XWiki.XWikiGuest"!=$context.user)
+<p style="text-align:center; margin-top: 2em;">$msg.get('join.complete.corporate.membertype')</p>
+<p style="text-align:center">    <button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;" class="button-grey">$msg.get('join.complet.corporate.cancel_button')</button>
+    <button onclick="window.top.location.href='/xwiki/bin/view/MyCurriki/EditProfile?user=${context.user}#block-XWiki-XWikiUsers_0_member_type'; return false;" class="button-grey">$msg.get('join.complete.corporate.membertype.link')</button>
+</p>
+
+#else
+<p style="text-align:center; margin-top: 2em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">Cancel</button></p>
+#end

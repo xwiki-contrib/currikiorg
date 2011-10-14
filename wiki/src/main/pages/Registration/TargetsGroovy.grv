@@ -78,8 +78,9 @@ public class TargetsGroovy {
             System.out.println("RefererPath is " + refererPath);
             if(refererPath &&
                     (afterLogin.startsWith("/xwiki/bin/view/Main/") ||
-                            afterLogin.startsWith("/xwiki/bin/view/Registration/"))
-                    && (refererPath.startsWith("/xwiki/bin/view/Main/") || refererPath.startsWith("/xwiki/bin/view/Registration/") || refererPath=="/")) {
+                            afterLogin.startsWith("/xwiki/bin/view/Registration/") ||
+                            afterLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
+                     refererPath=="/")) {
                 afterLogin = "/xwiki/bin/view/MyCurriki/";
             }
             if(afterLogin.startsWith("/xwiki/bin/view/Registration/Jump*")) {

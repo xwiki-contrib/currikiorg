@@ -1,0 +1,19 @@
+1 Order List
+
+#if($request.archive)#info($msg.get($xwiki.googleCheckout.archiveOrder($request.archive),[$request.archive]))#end
+
+List of current orders
+
+<table border="1" cellpadding="2" cellspacing="1" style=" ">
+<thead><td>serial</td><td>user</td><td>date</td><td>amount</td><td>financial</td><td>actions</td></thead>
+#foreach($obj in $doc.getObjects("GCheckout.GChOrder"))
+    <tr>
+        <td>$obj.get("serialNumber")</td>
+        <td>$obj.get("user")</td>
+        <td>$obj.get("date")</td>
+        <td>$obj.get("amount")</td>
+        <td>$obj.get("financialState")</td>
+        <td><small><a href="$doc.name?archive=$obj.get('serialNumber')">archive</a></small></td>
+    </tr>
+#end
+</table>

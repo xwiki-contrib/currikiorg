@@ -127,3 +127,7 @@ $err
 $err
 </div>
 #end ## }
+<script type="text/javascript">
+    if(typeof(Ext)=="object") Ext.onReady(Curriki.ui.login.hideLoginLoading);
+    else if(window.parent && window.parent.Ext) window.parent.Curriki.ui.login.hideLoginLoading();
+</script>
