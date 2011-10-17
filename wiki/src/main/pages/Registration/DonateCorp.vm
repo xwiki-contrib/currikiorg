@@ -14,6 +14,8 @@ document.body.className = document.body.className + " iframeInside";
     button.box{height:115px; width:115px; line-height:16px;}
     button.box-short{ height:40px; font-size: 12px; padding-top:10px; margin-top:-5px}
 </style>
+    #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+    #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
 ##
 #set($user=$request.user)
 #if($user)#else#set($user=$request.xwikiname)#end
@@ -22,17 +24,17 @@ document.body.className = document.body.className + " iframeInside";
 ##
 ##
 <div id="container">
-    <h2>Thank you for joining Curriki!</h2>
+    <h2>$msg.get('join.complete.donate.title')</h2>
 
-    <h2><span class="h2graysspan">Please donate for your corprate membership.</span></h2>
+    <h2><span class="h2graysspan">$msg.get('join.complete.donate.corp-subtitle')</span></h2>
+    <p> $msg.get('join.complete.donate.corp-text')</p>
 
-    <p> Your donations support Curriki's mission of providing free resources to members like you.</p>
-    <p><b>Choose a donation:</b></p>
+    <p><b>$msg.get('join.complete.donate.header')</b></p>
     <div id="box-wrapper">
         ##
         ##
         #set($amount="75")##
-        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&type=corporation&user=$user&amount=${amount}")##
         <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
             <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -40,7 +42,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         ##
         #set($amount="150")##
-        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&type=corporation&user=$user&amount=${amount}")##
         <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
             <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -48,7 +50,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         ##
         #set($amount="300")##
-        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popuptype=corporation&&user=$user&amount=${amount}")##
         <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
             <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -57,7 +59,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         ##
         #set($amount="1000")##
-        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&user=$user&amount=${amount}")##
+        #set($url="/xwiki/bin/view/GCheckout/CorporateMembershipDonationCheckout?xpage=popup&type=corporation&user=$user&amount=${amount}")##
         <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
             <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -72,10 +74,12 @@ document.body.className = document.body.className + " iframeInside";
 </script>
 #if("XWiki.XWikiGuest"!=$context.user)
 <p style="text-align:center; margin-top: 2em;">$msg.get('join.complete.corporate.membertype')</p>
-<p style="text-align:center">    <button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;" class="button-grey">$msg.get('join.complet.corporate.cancel_button')</button>
-    <button onclick="window.top.location.href='/xwiki/bin/view/MyCurriki/EditProfile?user=${context.user}#block-XWiki-XWikiUsers_0_member_type'; return false;" class="button-grey">$msg.get('join.complete.corporate.membertype.link')</button>
+<p style="text-align:center">    <button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;" class="button-grey"##
+ >$msg.get('join.complet.corporate.cancel_button')</button>
+    <button onclick="window.top.location.href='/xwiki/bin/view/MyCurriki/EditProfile?user=${context.user}#block-XWiki-XWikiUsers_0_member_type'; return false;" class="button-grey"
+            >$msg.get('join.complete.corporate.membertype.link')</button>
 </p>
-
 #else
-<p style="text-align:center; margin-top: 2em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">Cancel</button></p>
+<p style="text-align:center; margin-top: 2em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;"
+        >$msg.get('join.login.cancel')</button></p>
 #end
