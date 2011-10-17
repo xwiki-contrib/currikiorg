@@ -15,6 +15,10 @@ document.body.className = document.body.className + " iframeInside";
     button.box{height:115px; width:115px; line-height:16px;}
     button.box-short{ height:40px; font-size: 12px; padding-top:10px; margin-top:-5px}
 </style>
+#if($user)#else#set($user=$request.user)#end
+#if($user)#else#set($user=$request.xwikiname)#end
+#if($user)#else#set($user=$context.user)#end
+#if($user=="XWiki.XWikiGuest")#warning("Warning: no user, donation will be to 'guest'")#end
     #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
     #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
 ##

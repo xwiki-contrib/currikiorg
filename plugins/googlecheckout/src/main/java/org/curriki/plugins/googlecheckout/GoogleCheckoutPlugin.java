@@ -33,6 +33,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface {
 
@@ -44,9 +46,10 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
     private static final String ORDERPROP_user ="user",
             ORDERPROP_serialNumber = "serialNumber",
-            ORDERPROP_lastHistoryState ="lastOrderState",
+            ORDERPROP_lastHistoryState="lastOrderState",
             ORDERPROP_financialState = "financialState",
             ORDERPROP_fulfillmentState = "fulfillmentState",
+            ORDERPROP_orderType = "orderType",
             ORDERPROP_amount = "amount",
             ORDERPROP_date = "date";
     private static ThreadLocal<NumberFormat> currencies = new ThreadLocal<NumberFormat>() {protected NumberFormat initialValue() {
@@ -54,10 +57,12 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         }};
     private static final String checkoutNSuri = "http://checkout.google.com/schema/2";
 
-    private static final String DOCNAME_orderList = "GCheckout.OrderList",
-            DOCNAME_oldOrderList = "GCheckout.OldOrderList",
+    private static final String DOCNAME_orderList = "GCheckout.Orders",
+            DOCNAME_oldOrderList = "GCheckout.OldOrders",
             DOCNAME_orderClass = "GCheckout.GChOrder",
             DOCNAME_donationTrackClass = "Registration.DonationTrack";
+
+    private static float MIN_CORP_AMOUNT = 75f;
 
     private static Namespace checkoutNS = Namespace.getNamespace("co", checkoutNSuri);
 
@@ -112,7 +117,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         return post;
     }
 
-    public String getCheckoutRedirect(String userName, String amount) throws IOException {
+    public String getCheckoutRedirect(String userName, String amount, String type, XWikiMessageTool msg) throws IOException {
 
         List<String> errors = new ArrayList<String>();
         if(userName==null) {
@@ -129,32 +134,32 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
         PostMethod post = createCheckoutPost(checkoutURL);
 
-        // TODO: make that template static
-        String cart = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+
+        String cartType = "corporation".equals(type) ? "corporate-membership" : "donation";
+        String cart =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "\n" +
                 "<checkout-shopping-cart xmlns=\""+checkoutNSuri +"\">\n" +
                 "  <shopping-cart>\n" +
                 "    <items>\n" +
                 "      <item>\n" +
-                "        <item-name>Curriki Corporate Membership</item-name>\n" +
-                "        <item-description>Donation to ensure the corporate membership of user\n" +
-                "            "+userName.substring(6) +"\n" +
-                "            http://"+host +"</item-description>\n" +
+                "        <item-name>"+msg.get("googlecheckout.cart."+cartType+".title")+"</item-name>\n" +
+                "        <item-description>" + msg.get("googlecheckout.cart."+cartType+".details",
+                               Arrays.asList(userName.substring(6),  "http://"+host)) +"</item-description>\n" +
                 "        <unit-price currency=\"USD\">"+amount+"</unit-price>\n" +
                 "        <quantity>1</quantity>\n" +
                 "      </item>\n" +
                 "    </items>\n" +
-                "    <merchant-private-data >Username:"+userName+"\n" +
+                "    <merchant-private-data >Username:"+userName+" Carttype:" + cartType +
                 "    </merchant-private-data>\n" +
                 "  </shopping-cart>\n" +
                 "  <checkout-flow-support>\n" +
                 "    <merchant-checkout-flow-support>\n" +
-                // TODO: what to do as continue shopping URL?
                 "      <continue-shopping-url>http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?user="+userName+"</continue-shopping-url>\n" +
                 //"      <edit-cart-url >http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?user="+userName+"</edit-cart-url>\n" +
                 "    </merchant-checkout-flow-support>\n" +
                 "  </checkout-flow-support>\n" +
                 "</checkout-shopping-cart>";
+
 
         LOG.warn("Request: " + cart);
         post.setRequestBody(cart);
@@ -277,24 +282,27 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
      * @param xwiki the wiki we're living in
      */
     public void updateOrderListDoc(Element node, String orderStateDoc, String historyStepSerialNumber, XWiki xwiki, XWikiMessageTool msg, String urlToHere) throws Exception {
-
         try {
             Document orderList = xwiki.getDocument(DOCNAME_orderList);
             String orderNumber = selectSingleEltXPath("./co:order-summary/co:google-order-number", node).getTextNormalize();
             float amount = currencies.get().parse(selectSingleEltXPath("./co:order-summary/co:order-total", node).getTextNormalize()).longValue();
             com.xpn.xwiki.api.Object orderObj = orderList.getObject(DOCNAME_orderClass,ORDERPROP_serialNumber, orderNumber);
             String userName;
+            String cartType;
+            String privateData = selectSingleEltXPath("//co:merchant-private-data", node).getTextTrim();
+            Matcher matcher = Pattern.compile(".*Username:([A-Za-z\\.]*).*Carttype:([A-Za-z\\.\\-]*)").matcher(privateData);
+            if(!matcher.matches()) throw new IllegalArgumentException("Can't understand merchantData!");
+            userName = matcher.group(1); cartType = matcher.group(2);
             if(orderObj==null) {
                 int i = orderList.createNewObject(DOCNAME_orderClass);
                 orderObj = orderList.getObject(DOCNAME_orderClass, i);
                 orderObj.set(ORDERPROP_serialNumber, orderNumber);
-                userName = selectSingleEltXPath("//co:merchant-private-data", node).getTextNormalize();
                 orderObj.set(ORDERPROP_amount, amount);
-                if(userName.startsWith("Username:")) userName = userName.substring("Username:".length());
                 orderObj.set(ORDERPROP_user, userName);
             }
 
             // note last state
+            orderObj.set(ORDERPROP_orderType, cartType);
             orderObj.set(ORDERPROP_lastHistoryState, orderStateDoc);
             orderObj.set(ORDERPROP_financialState,
                     selectSingleEltXPath("//co:financial-order-state",node).getTextNormalize());
@@ -324,14 +332,15 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                         if(email!=null && email.equals(userObj.get("email"))) {
                             if(doneEmails.contains(email)) continue;
                             doneEmails.add(email);
-                            LOG.warn("activating user's email " + email);
-                            // TODO: only if not yet active
-                            userObj.set("email_undeliverable",0);
-                            userObj.set("active", 1);
-                            userDoc.saveWithProgrammingRights("Validating thanks to payment.");
-                            sendConfirmationEmail(xwiki, userDoc.getName(),
-                                    (String) userObj.get("email"), languages.get((String) userObj.getProperty("language").getValue()), (String) userObj.get("memberType"),
-                                    msg, urlToHere);
+                            if("No".equals(userObj.get("email_undeliverable"))) {
+                                LOG.warn("activating user's email " + email);
+                                userObj.set("email_undeliverable",0);
+                                userObj.set("active", 1);
+                                userDoc.saveWithProgrammingRights("Validating thanks to payment.");
+                                sendConfirmationEmail(xwiki, userDoc.getName(),
+                                        (String) userObj.get("email"), languages.get((String) userObj.getProperty("language").getValue()), (String) userObj.get("memberType"),
+                                        msg, urlToHere);
+                            }
                         }
                     }
 
@@ -341,14 +350,27 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                         userDoc.createNewObject(DOCNAME_donationTrackClass);
                         donationTrackObj = userDoc.getObject(DOCNAME_donationTrackClass);
                     }
-                    donationTrackObj.set("lastDonation", currencies.get().format(amount));
-                    donationTrackObj.set("lastDonationDate", new Date());
+                    donationTrackObj.set("lastDonated", currencies.get().format(amount));
+                    Date date = new Date(); // TODO: read Date from order??
+                    donationTrackObj.set("lastDonatedDate", date);
 
-                    String totalS = (String) donationTrackObj.get("totalDonation");
-                    float totalDonation = 0;
-                    if(totalS!=null && totalS.length()>0)
-                        totalDonation = Float.parseFloat(totalS);
-                    donationTrackObj.set("totalDonation", currencies.get().format(totalDonation + amount));
+                    Object o = donationTrackObj.get("totalDonated");
+                    if(o instanceof String) {
+                        if(((String)o).length()==0) o = 0f;
+                        else o = currencies.get().parse((String) o);
+                    }
+                    float totalDonated = o==null ? 0 : ((Number) o).floatValue();
+                    donationTrackObj.set("totalDonated", totalDonated + amount);
+
+                    if("corporate-membership".equals(cartType)) {
+                        donationTrackObj.set("lastCorpMembershipDonated", amount);
+                        donationTrackObj.set("lastCorpMembershipDate",   date);
+                        if(amount> MIN_CORP_AMOUNT)
+                            donationTrackObj.set("corpMembershipValid", 1);
+                    } else {
+                        donationTrackObj.set("corpMembershipValid", 0);
+                    }
+
                     userDoc.saveWithProgrammingRights("Received donation");
 
                 }

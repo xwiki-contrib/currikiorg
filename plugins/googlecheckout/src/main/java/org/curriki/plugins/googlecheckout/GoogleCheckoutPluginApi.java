@@ -48,10 +48,10 @@ public class GoogleCheckoutPluginApi extends PluginApi<GoogleCheckoutPlugin> {
      * @param request the details of the request (user and amount is needed)
      * @return either a string "errors: " with a space separated list of error messages or a URL
      */
-    public String  processCartCheckout(HttpServletRequest request) throws IOException {
+    public String  processCartCheckout(HttpServletRequest request, XWikiMessageTool msg) throws IOException {
         try {
             return getProtectedPlugin()
-                    .getCheckoutRedirect(request.getParameter("user"), request.getParameter("amount"));
+                    .getCheckoutRedirect(request.getParameter("user"), request.getParameter("amount"), request.getParameter("type"), msg);
         } catch (Exception e) {
             e.printStackTrace();
             LOG.warn("Couldn't launch cart-checkout.", e);

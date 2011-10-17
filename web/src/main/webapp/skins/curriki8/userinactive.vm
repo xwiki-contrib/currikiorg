@@ -2,7 +2,9 @@
   * User inactive page. This page has it's own template to strip it from content
   * that would not be inaccessible to an inactive user.
   * TODO: verify curriki styles
-  *#
+  *###
+#if($doc.fullName == "Util.JSTrans" && $request.xpage=="plain")$xwiki.includeForm("Util.JSTransShadow",false)##
+#else
 #template("xwiki.vm")
 #template("htmlheader.vm")
 #template("header.vm")
@@ -69,4 +71,5 @@ $xwiki.includeForm("Registration.EmailSentValidationLink", false)
     }
 </script>
 #template("htmlfooter.vm")
+#end
 #end

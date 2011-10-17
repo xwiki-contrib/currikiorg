@@ -2,6 +2,15 @@
   * Footer: this will display the footer of Curriki
   * @author Curriki dev team
   *#
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
     #if($request.session && $request.session.getAttribute("downloadSoon"))##
       <script type="text/javascript">
@@ -17,6 +26,32 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
     #* <iframe width="3" height="3" src="$request.session.getAttribute("downloadSoon")"></iframe>
     <!-- $request.session.removeAttribute("downloadSoon") --> *#
     #end##
+#if("XWiki.XWikiGuest"!=$context.user)
+    #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")
+    #if("corporation"==$userType)
+        #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")
+        #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated<75)
+            #set($corpWarnedAtt=$!request.session.getAttribute("corpWarned"))
+            #if($corpWarnedAtt)#else#set($corpWarnedAtt='not-warned')#end
+            #if($corpWarnedAtt!=$context.user)
+                <!-- corp-warning on $request.session.setAttribute("corpWarned",$context.user) -->
+                <script type="text/javascript">Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/DonateCorp?xpage=popup")</script>
+            #else <!-- should not warn corp: corpWarnedAtt = "$!corpWarnedAtt" -->
+            #end
+        #else <!-- should not warn corp: lastCorpMembershipDonated = "$lastCorpMembershipDonated" -->
+        #end
+    #else <!-- should not warn corp: userType = $userType -->
+    #end
+#else <!-- should not warn corp: user is $context.user -->
+#end
+
+
+#if($context.user==$!request.session.getAttribute("corpWarned"))#else
+    #if("XWiki.XWikiGuest"!=$context.user && "corporation"==$!xwiki.getDocument($context.user).get("XWiki.XWikiUsers").get("member_type"))
+        $request.session.addAttribute("corpWarned",$context.user)
+        <script type="text/javascript">Curriki.ui.login.popupIdentityAuthorization("/xwiki/bin/view/Registration/DonateCorp?xpage=popup")</script>
+    #end
+#end
 #if($g_enable_ADDTHIS && ("$!ADDTHIS_acct" != "0") && ("$!ADDTHIS_acct" != "") ) ## {
 <script type="text/javascript">
 //<![CDATA[

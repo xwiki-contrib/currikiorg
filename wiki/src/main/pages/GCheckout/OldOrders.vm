@@ -7,6 +7,8 @@ List of current orders
 <table border="1" cellpadding="2" cellspacing="1" style=" ">
 <thead><td>serial</td><td>user</td><td>date</td><td>amount</td><td>financial</td></thead>
 #foreach($obj in $doc.getObjects("GCheckout.GChOrder"))
+#if($request.user && $obj.get("user").indexOf($request.user)<0)
+    #else
     <tr>
         <td>$obj.get("serialNumber")</td>
         <td>$obj.get("user")</td>
@@ -15,5 +17,5 @@ List of current orders
         <td>$obj.get("amount")</td>
         <td>$obj.get("financialState")</td>
     </tr>
-#end
+#end#end
 </table>
