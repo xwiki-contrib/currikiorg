@@ -290,7 +290,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
             String userName;
             String cartType;
             String privateData = selectSingleEltXPath("//co:merchant-private-data", node).getTextTrim();
-            Matcher matcher = Pattern.compile(".*Username:([A-Za-z\\.]*).*Carttype:([A-Za-z\\.\\-]*)").matcher(privateData);
+            Matcher matcher = Pattern.compile(".*Username:([^ ]*)[ ]+Carttype:([^ ]*)").matcher(privateData);
             if(!matcher.matches()) throw new IllegalArgumentException("Can't understand merchantData!");
             userName = matcher.group(1); cartType = matcher.group(2);
             if(orderObj==null) {
