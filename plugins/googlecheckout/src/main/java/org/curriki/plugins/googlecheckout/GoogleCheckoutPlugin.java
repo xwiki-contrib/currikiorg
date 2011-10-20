@@ -9,9 +9,6 @@ import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi;
-import com.xpn.xwiki.render.XWikiPluginRenderer;
-import com.xpn.xwiki.render.XWikiRenderer;
-import com.xpn.xwiki.render.XWikiRenderingEngine;
 import com.xpn.xwiki.web.XWikiMessageTool;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -25,7 +22,6 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
 
-import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -40,9 +36,9 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
     private static final Log LOG = LogFactory.getLog(GoogleCheckoutPlugin.class);
 
-    private String merchant="669895943580289", key="Ea0jLLapBsYxX2hRvapowg", host="hoplahup.homeip.net";
-    private URL checkoutURL = new URL("https://sandbox.google.com/checkout/api/checkout/v2/merchantCheckout/Donations/" + merchant),
-            orderInfoURL = new URL("https://sandbox.google.com/checkout/api/checkout/v2/reports/Merchant/" + merchant);
+    private String merchant, key, host;
+    private URL checkoutURL, orderInfoURL;
+            //orderInfoURL = googleCheckout.orderInfoApiEndpoint=https://sandbox.google.com/checkout/api/checkout/v2/reports/Merchant/" + merchant);
 
     private static final String ORDERPROP_user ="user",
             ORDERPROP_serialNumber = "serialNumber",
@@ -83,8 +79,19 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         languages.put("eus", "mk");
         languages.put("zho", "zh");
         languages.put("cha", "ch");
-         // TODO: a few more 
+
+        Properties props = new Properties();
+        props.load(xcontext.getWiki().getResourceAsStream("WEB-INF/googlecheckout_config.properties"));
+
+        merchant= props.getProperty("googleCheckout.merchantID"); // e.g. "669895943580289";
+        key= props.getProperty("googleCheckout.merchantKey");//"Ea0jLLapBsYxX2hRvapowg"
+        checkoutURL = new URL(props.getProperty("googleCheckout.notificationApiEndpoint")); // "https://sandbox.google.com/checkout/api/checkout/v2/merchantCheckout/Donations/" + merchant
+        orderInfoURL = new URL(props.getProperty("googleCheckout.orderInfoApiEndpoint"));
+        host=xcontext.getWiki().Param("curriki.system.hostname"); // e.g. "hoplahup.homeip.net";
+
+         // TODO: a few more
     }
+
 
 
     public String getName()
@@ -332,7 +339,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                         if(email!=null && email.equals(userObj.get("email"))) {
                             if(doneEmails.contains(email)) continue;
                             doneEmails.add(email);
-                            if("No".equals(userObj.getProperty("email_undeliverable").getValue())) {
+                            if("No".equals(userObj.get("email_undeliverable"))) {
                                 LOG.warn("activating user's email " + email);
                                 userObj.set("email_undeliverable",0);
                                 userObj.set("active", 1);
@@ -385,38 +392,41 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
     }
 
     private void sendConfirmationEmail(XWiki xwiki, String username, String email, String lang, String memberType, XWikiMessageTool msg, String urlToHere) throws Exception {
-        String subjectMsgKey = "registration.email.welcome";
+        try {
+            String subjectMsgKey = "registration.email.welcome";
 
-        String emailDocName = "corporate".equals(memberType) ?
-                "CorporateRegCompleteEmail" :"MemberRegCompleteEmail";
+            String emailDocName = "corporate".equals(memberType) ?
+                    "CorporateRegCompleteEmail" :"MemberRegCompleteEmail";
 
-        long time=System.currentTimeMillis();
-        MailSenderPluginApi mailsender = (MailSenderPluginApi) xwiki.getPlugin("mailsender");
+            long time=System.currentTimeMillis();
+            MailSenderPluginApi mailsender = (MailSenderPluginApi) xwiki.getPlugin("mailsender");
 
 
+            Object emailDocO = null;
+            URL url = new URL( new URL("http://127.0.0.1:8080")//new URL(urlToHere),
+                    ,"/xwiki/bin/view/Registration/" + emailDocName + "?xpage=plain&language=" + lang + "&username=" + username);
+            LOG.info("Fetching " + url + " as mail body.");
+            emailDocO = url.getContent();
+            if(emailDocO instanceof InputStream) {
+                emailDocO = org.apache.commons.io.IOUtils.toString((InputStream) emailDocO, "utf-8");
+            }
+            String text = (String) emailDocO;
 
-        Object emailDocO = null; 
-        URL url = new URL( new URL("http://127.0.0.1:8080")//new URL(urlToHere),
-                ,"/xwiki/bin/view/Registration/" + emailDocName + "?xpage=plain&language=" + lang + "&username=" + username);
-        LOG.info("Fetching " + url + " as mail body.");
-        emailDocO = url.getContent();
-        if(emailDocO instanceof InputStream) {
-            emailDocO = org.apache.commons.io.IOUtils.toString((InputStream) emailDocO, "utf-8");
+            LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDocName + '.');
+            System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
+            time=System.currentTimeMillis();
+
+            String from = msg.get("registration.email");
+            if(from==null || from.length()==0) from="webmaster@curriki.org";
+            if(!msg.get("registration.email.name").equals("registration.email.name"))
+                from = msg.get("registration.email.name") + "<" + from + ">";
+
+            mailsender.sendHtmlMessage(from, email, null, null,
+                    msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), Collections.emptyList());
+            System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to send email.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        String text = (String) emailDocO;
-
-        LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDocName + '.');
-        System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
-        time=System.currentTimeMillis();
-
-        String from = msg.get("registration.email");
-        if(from==null || from.length()==0) from="webmaster@curriki.org";
-        if(!msg.get("registration.email.name").equals("registration.email.name"))
-            from = msg.get("registration.email.name") + "<" + from + ">";
-
-        mailsender.sendHtmlMessage(from, email, null, null,
-                msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), Collections.emptyList());
-        System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to send email.");
     }
 
     public String archiveOrder(XWiki xwiki, String serialNumber) throws XWikiException{

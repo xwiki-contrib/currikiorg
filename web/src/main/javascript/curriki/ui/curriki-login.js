@@ -66,19 +66,27 @@ Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
     return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
 }
 Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
+
+}
+
+Curriki.ui.login.popupGCheckout
+
+Curriki.ui.login.popupIdentityAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
     // called from the login-or-register dialog or from the in-header-icons
     if(console) {console.log("Opening authorization to " + requestURL); }
     window.name='curriki-login-dialog';
+    if(dialogName) window.name = dialogName;
+    if(popupName) {} else { popupName = 'curriki_login_authorize'; }
     var otherWindow;
-    if(window.frames['curriki_login_authorize']) {
+    if(window.frames[popupName]) {
         if(console) console.log("Re-using window.");
-        otherWindow = window.frames['curriki_login_authorize'];
+        otherWindow = window.frames[popupName];
         otherWindow.location.href= requestURL;
     } else {
         if(console) console.log("Creating window.");
         var x = Math.max(0,(screen.width-850)/2);
         var y = Math.max(0,(screen.height-550)/2);
-        otherWindow = window.open(requestURL,'curriki_login_authorize',"toolbar=no,status=yes,menubar=no,resizable=yes,width=850,height=550,left="+x+",top="+y);
+        otherWindow = window.open(requestURL, popupName, "toolbar=no,status=yes,menubar=no,resizable=yes,width=850,height=550,left="+x+",top="+y);
     }
     window.focusIt = window.setInterval(function() { window.clearInterval(window.focusIt); otherWindow.focus(); }, 100)
     window.Curriki.ui.login.authorizeDialog = otherWindow;
