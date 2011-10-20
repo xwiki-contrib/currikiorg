@@ -48,7 +48,7 @@ public class TargetsGroovy {
                 afterLogin = readSrid(redirectMap, req.srid);
             }
             // care for xredirect in request
-            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/")) {
+            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/") && req.xredirect.contains("/xwiki/bin/view/GCheckout/") ) {
                 afterLogin = req.xredirect;
             }
 
@@ -106,13 +106,14 @@ public class TargetsGroovy {
                 if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName))
                     noLogin = refererPath;
             }
-            if(noLogin.startsWith("/xwiki/bin/view/Registration/")) noLogin="/";
+            if(noLogin.startsWith("/xwiki/bin/view/Registration/") || noLogin.startsWith("/xwiki/bin/view/GCheckout/"))
+                noLogin="/";
         } catch (Exception ex) {
             ex.printStackTrace();
         };
 
         // last check
-        if(afterLogin==null || afterLogin.length()==0) afterLogin = "/xwiki/bin/view/MyCurriki/";
+        if(afterLogin==null || afterLogin.length()==0 || afterLogin.startsWith("/xwiki/bin/view/Registration/") || afterLogin.startsWith("/xwiki/bin/view/GCheckout/")) afterLogin = "/xwiki/bin/view/MyCurriki/";
         if(noLogin==null || noLogin.length()==0) noLogin = "/";
 
         // write in session

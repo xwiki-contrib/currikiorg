@@ -23,8 +23,8 @@
 #if($username!="XWiki.XWikiGuest")
     #set($userdoc=$xwiki.getDocument($username))
     #if($userdoc)
-        #set($userobj=$userdoc.get("XWiki.XWikiUsers"))
-        #if($userobj.get("active").value==1)
+        #set($userobj=$userdoc.getObject("XWiki.XWikiUsers"))
+        #if("$userobj.getProperty('active').value"=="1")
             #if($context.user!="XWiki.XWikiGuest")
                 #set($redir=$targets.afterLogin)
             #else
@@ -33,6 +33,7 @@
             #end
         #else
             #set($redir="/xwiki/bin/view/Registration/EmailSentValidationLink?xpage=popup")
+            //#set($redir="/xwiki/bin/view/Sandbox/Try")
         #end
     #end
 #end

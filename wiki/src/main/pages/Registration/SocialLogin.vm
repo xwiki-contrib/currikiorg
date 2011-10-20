@@ -38,6 +38,7 @@ $tool.init($xwiki,$context,$request,$msg,$targets)##
             $request.session.setAttribute("SocialLoginTool",$tool)##
             $response.sendRedirect("/xwiki/bin/view/Registration/$donateDoc?xpage=popup&framed=true&xwikiname=$tool.username"))##
         #else##
+            #set($user="$tool.username")##
             #set($view="")##
             #set($included=true)##
             $xwiki.includeForm("Registration.$donateDoc",false)##
