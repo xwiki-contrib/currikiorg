@@ -332,7 +332,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                         if(email!=null && email.equals(userObj.get("email"))) {
                             if(doneEmails.contains(email)) continue;
                             doneEmails.add(email);
-                            if("No".equals(userObj.get("email_undeliverable"))) {
+                            if("No".equals(userObj.getProperty("email_undeliverable").getValue())) {
                                 LOG.warn("activating user's email " + email);
                                 userObj.set("email_undeliverable",0);
                                 userObj.set("active", 1);
@@ -395,9 +395,9 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
 
 
-        Object emailDocO = null;
-        URL url = new URL( new URL(urlToHere),
-                "/xwiki/bin/view/Registration/" + emailDocName + "?xpage=plain&language=" + lang + "&username=" + username);
+        Object emailDocO = null; 
+        URL url = new URL( new URL("http://127.0.0.1:8080")//new URL(urlToHere),
+                ,"/xwiki/bin/view/Registration/" + emailDocName + "?xpage=plain&language=" + lang + "&username=" + username);
         LOG.info("Fetching " + url + " as mail body.");
         emailDocO = url.getContent();
         if(emailDocO instanceof InputStream) {
