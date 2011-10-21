@@ -151,7 +151,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 "      <item>\n" +
                 "        <item-name>"+msg.get("googlecheckout.cart."+cartType+".title")+"</item-name>\n" +
                 "        <item-description>" + msg.get("googlecheckout.cart."+cartType+".details",
-                               Arrays.asList(userName.substring(6),  "http://"+host)) +"</item-description>\n" +
+                               Arrays.asList(userName,  "http://"+host)) +"</item-description>\n" +
                 "        <unit-price currency=\"USD\">"+amount+"</unit-price>\n" +
                 "        <quantity>1</quantity>\n" +
                 "      </item>\n" +
@@ -175,7 +175,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
         int status = -1;
         synchronized (client) {
-            client.executeMethod(post);
+            status = client.executeMethod(post);
         }
         if(status!=200) throw new IllegalStateException("Error " + post.getStatusText());
         String responseString = post.getResponseBodyAsString();
@@ -219,7 +219,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 "</notification-history-request>");
         int status = -1;
         synchronized (client) {
-            client.executeMethod(post);
+            status = client.executeMethod(post);
         }
         String responseText = post.getResponseBodyAsString(32768);
         LOG.warn(responseText);
@@ -399,8 +399,6 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
     private void sendConfirmationEmail(XWiki xwiki, String username, String email, String lang, String memberType, XWikiMessageTool msg, String urlToHere) throws Exception {
         try {
-            String subjectMsgKey = "registration.email.welcome";
-
             String emailDocName = "corporate".equals(memberType) ?
                     "CorporateRegCompleteEmail" :"MemberRegCompleteEmail";
 
@@ -418,7 +416,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
             }
             String text = (String) emailDocO;
 
-            LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDocName + '.');
+            LOG.warn("Sending mail to " + email + " with page " + emailDocName + '.');
             System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
             time=System.currentTimeMillis();
 
@@ -428,7 +426,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 from = msg.get("registration.email.name") + "<" + from + ">";
 
             mailsender.sendHtmlMessage(from, email, null, null,
-                    msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), Collections.emptyList());
+                    xwiki.getDocument("Registration."+emailDocName).getTitle(), text, text.replaceAll("<[^>]*>",""), Collections.emptyList());
             System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to send email.");
         } catch (IOException e) {
             e.printStackTrace();
