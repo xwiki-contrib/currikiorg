@@ -69,9 +69,12 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 
 }
 
-Curriki.ui.login.popupGCheckout
+Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
+    Curriki.ui.login.popupAuthorization4(requestURL, null, "curriki-login-dialog", "checkout-window");
+    window.location.href = nextURLhere;
+}
 
-Curriki.ui.login.popupIdentityAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
+Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
     // called from the login-or-register dialog or from the in-header-icons
     if(console) {console.log("Opening authorization to " + requestURL); }
     window.name='curriki-login-dialog';
@@ -104,13 +107,17 @@ Curriki.ui.login.popupIdentityAuthorization4 = function(requestURL, windowThatSh
         if(openerWindow.Curriki.ui.login.windowThatShouldNextGoTo)
             targetWindow = openerWindow.Curriki.ui.login.windowThatShouldNextGoTo;
         if(toTop) targetWindow = targetWindow.top;
-        targetWindow.location.href = targetURL;
-        //alert("Would go to " + targetURL + " from " + targetWindow);
-        // schedule a close
-        openedWindow.setInterval(function() {
-           targetWindow.focus();
-           openedWindow.close();
-        },20);
+        if(targetWindow && targetWindow.location) {
+            targetWindow.location.href = targetURL;
+            //alert("Would go to " + targetURL + " from " + targetWindow);
+            // schedule a close
+            openedWindow.setInterval(function() {
+               targetWindow.focus();
+               openedWindow.close();
+            },20);
+        } else {
+            window.top.location.href = targetURL;
+        }
         return false;
     } else {
         if(console) console.log("No popup parent found... ah well.");

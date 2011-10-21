@@ -180,6 +180,7 @@ public class SocialLoginToolGroovy {
             System.out.println("Found userDocs: " + userDocs);
             for (result in userDocs) {
                 if(result==null) continue;
+                updateUserDoc(result);
                 System.out.println("Doc: " + result + " of class " + result.getClass());
                 authenticateUser(xwiki.getDocument(result))
             }
@@ -254,13 +255,19 @@ public class SocialLoginToolGroovy {
     /**
      * Create a new user profile from the social profile result
      */
+
     public String tryCreateNewProfile() {
+        return updateUserDoc(null);
+    }
+
+    public String updateUserDoc(Document preExistingUserDoc) {
         profile = request.session.getAttribute("org.brickred.socialauth.Profile")
         String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
-        LOG.info("Trying to create new profile from provider " + provider);
-        
+        boolean isNew = preExistingUserDoc == null;
+        if(isNew) LOG.info("Trying to create new profile from provider " + provider);
+            else LOG.info("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
 
-        username = request.username;
+        if(isNew) username = request.username; else username = preExistingUserDoc.getName();
         firstName = profile.firstName;
         lastName = profile.lastName;
         email = profile.email;
@@ -293,10 +300,12 @@ public class SocialLoginToolGroovy {
             //request.getParameterMap().put("xwikiname",userDocName);
             //request.getParameterMap().put("XWiki.XWikiUsers_0_password",password);
 
-            Document userDoc = createUserDoc();
+            Document userDoc;
+            if(isNew) userDoc = createUserDoc();
+                else userDoc = preExistingUserDoc;
 
             createSocialLoginProfileObject(profile, userDoc, provider);
-            addProfilePictureFromAttachment(profile.profileImageURL, userDoc);
+            tryToAddProfilePictureFromProfile(profile.profileImageURL, userDoc);
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
 
             System.out.println("New profile created and saved: " + userDoc);
@@ -512,8 +521,11 @@ public class SocialLoginToolGroovy {
         return xredirect;
     }
 
-    public void addProfilePictureFromAttachment(String url, Document userDoc) {
+    public void tryToAddProfilePictureFromProfile(String url, Document userDoc) {
         try {
+            if(url==null || url.length()==0) return;
+            def userObj = userDoc.getObject("XWiki.XWikiUsers")
+            if(userObj.get("avatar")!=null) return;
             URL u = new URL(url)
             String name=u.getPath()
             if(name.contains("/")) {
@@ -535,7 +547,6 @@ public class SocialLoginToolGroovy {
             attachment.setAuthor(context.user)
             attachment.setDoc(userDoc.document)
             userDoc.document.saveAllAttachments(context.context)
-            def userObj = userDoc.getObject("XWiki.XWikiUsers")
             userObj.set("avatar",name)
         } catch (Exception ex) {
             LOG.warn("Couldn't write profile picture.",ex);

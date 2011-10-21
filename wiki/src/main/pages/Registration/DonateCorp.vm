@@ -23,6 +23,8 @@ document.body.className = document.body.className + " iframeInside";
 #if($user=="XWiki.XWikiGuest")#warning("Warning: no user, donation will be to 'guest'")#end
 ##
 ##
+#set($baseUrlNext="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=corporation&keepQuiet=true&user=$user&amount=")##
+#set($baseUrlPopup="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=corporation&redirectNow=true&user=$user&amount=")##
 <div id="container">
     <h2>$msg.get('join.complete.donate.title')</h2>
     <p> $msg.get('join.complete.corporate.text')</p>
@@ -32,8 +34,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         ##
         #set($amount="75")##
-        #set($url="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=corporation&user=$user&amount=${amount}")##
-        <a href="$url"><button class="box" onclick="window.location.href='$url'; return false;" style="background: white">
+        <a href="$baseUrlPopup$amount"><button class="box" onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','$baseUrlNext$amount'); return false;" style="background: white">
             <span style="font-size: 14px; vertical-align:top">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>

@@ -161,7 +161,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 "  </shopping-cart>\n" +
                 "  <checkout-flow-support>\n" +
                 "    <merchant-checkout-flow-support>\n" +
-                "      <continue-shopping-url>http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?user="+userName+"</continue-shopping-url>\n" +
+                "      <continue-shopping-url>http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?xpage=popup&amp;user="+userName+"</continue-shopping-url>\n" +
                 //"      <edit-cart-url >http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?user="+userName+"</edit-cart-url>\n" +
                 "    </merchant-checkout-flow-support>\n" +
                 "  </checkout-flow-support>\n" +
@@ -173,7 +173,10 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         post.setRequestHeader("Content-Type","application/xml;charset=UTF-8");
         post.setRequestHeader("Accept","application/xml;charset=UTF-8");
 
-        int status = client.executeMethod(post);
+        int status = -1;
+        synchronized (client) {
+            client.executeMethod(post);
+        }
         if(status!=200) throw new IllegalStateException("Error " + post.getStatusText());
         String responseString = post.getResponseBodyAsString();
         org.jdom.Element response = parseToElement(responseString);
@@ -214,7 +217,10 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         post.setRequestBody("<notification-history-request xmlns='http://checkout.google.com/schema/2'> " +
                 "<serial-number>"+serialNumber+"</serial-number>" +
                 "</notification-history-request>");
-        int status = client.executeMethod(post);
+        int status = -1;
+        synchronized (client) {
+            client.executeMethod(post);
+        }
         String responseText = post.getResponseBodyAsString(32768);
         LOG.warn(responseText);
         if(status==200) {
@@ -339,7 +345,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                         if(email!=null && email.equals(userObj.get("email"))) {
                             if(doneEmails.contains(email)) continue;
                             doneEmails.add(email);
-                            if("No".equals(userObj.get("email_undeliverable"))) {
+                            if("Yes".equals(userObj.get("email_undeliverable"))) {
                                 LOG.warn("activating user's email " + email);
                                 userObj.set("email_undeliverable",0);
                                 userObj.set("active", 1);
