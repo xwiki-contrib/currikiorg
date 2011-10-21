@@ -180,9 +180,10 @@ public class SocialLoginToolGroovy {
             System.out.println("Found userDocs: " + userDocs);
             for (result in userDocs) {
                 if(result==null) continue;
-                updateUserDoc(result);
+                Document userDoc = xwiki.getDocument(result)
+                updateUserDoc(userDoc);
                 System.out.println("Doc: " + result + " of class " + result.getClass());
-                authenticateUser(xwiki.getDocument(result))
+                authenticateUser(userDoc)
             }
 
             if(userDocs==null || userDocs.isEmpty()) {
@@ -261,7 +262,7 @@ public class SocialLoginToolGroovy {
     }
 
     public String updateUserDoc(Document preExistingUserDoc) {
-        profile = request.session.getAttribute("org.brickred.socialauth.Profile")
+        if(profile==null) profile = request.session.getAttribute("org.brickred.socialauth.Profile")
         String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
         boolean isNew = preExistingUserDoc == null;
         if(isNew) LOG.info("Trying to create new profile from provider " + provider);
@@ -561,7 +562,7 @@ public class SocialLoginToolGroovy {
 
 
     public void sendConfirmationEmail() {
-        sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail", "registration.email.welcome");
+        sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
     }
 
 
@@ -601,18 +602,19 @@ public class SocialLoginToolGroovy {
 
 
     public void sendValidationEmail() {
-        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail", "emailValidation.step1.emailSubject");
+        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail");
     }
 
-    private void sendRegistrationMail(String nonCorpPage, String corpPage, String subjectMsgKey) {
+    private void sendRegistrationMail(String nonCorpPage, String corpPage) {
         long time=System.currentTimeMillis();
         mailsender = xwiki.mailsender;
         def emailDoc = "Registration." + nonCorpPage;
         if(isCorporateAccount())
             emailDoc = "Registration." + corpPage;
-        LOG.warn("Sending mail for purpose " + subjectMsgKey + " to " + email + " with page " + emailDoc + '.');
+        LOG.warn("Sending mail to " + email + " with page " + emailDoc + '.');
         emailDoc = xwiki.getDocument(emailDoc);
         def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
+        def subject = xwiki.renderText(emailDoc.title, emailDoc);
         System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
         time=System.currentTimeMillis();
 
@@ -621,7 +623,7 @@ public class SocialLoginToolGroovy {
         if(msg.get("registration.email.name")!="registration.email.name") from = msg.get("registration.email.name") + "<" + from + ">";
 
         mailsender.sendHtmlMessage(from, email, null, null,
-            msg.get(subjectMsgKey), text, text.replaceAll("<[^>]*>",""), []);
+            subject, text, text.replaceAll("<[^>]*>",""), []);
         System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to send email.");
     }
 
@@ -641,7 +643,7 @@ public class SocialLoginToolGroovy {
         userobj.set("active", "1");
         userobj.set("email_undeliverable", "0");
         // and send validation mail
-        sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail", "registration.email.welcome");
+        sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
         return "success";
     }
 
