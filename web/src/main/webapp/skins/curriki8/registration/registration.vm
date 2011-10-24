@@ -504,6 +504,13 @@ function toggleCorporateFieldsVisible() {
         i = $('registerform_value_add_section');
         if(i) i.hide();
     }
+
+    var text = ' ';
+    if(memberType == "corporation")
+        text = _('join.member_type_coporate_instructions');
+    console.log("memberTypeNotice: " + text);
+    Ext.get("memberTypeNotice").dom.innerHTML= text;
+
 }
 /* ]]> */
 </script>
@@ -569,6 +576,8 @@ function toggleCorporateFieldsVisible() {
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
             #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
 		</ul>
+        <p id="memberTypeNotice">&nbsp;</p>
+        <p>$msg.get("edit_profile.account_info.remove.member")</p>
 	</div>
 </fieldset>
 #end ##}
