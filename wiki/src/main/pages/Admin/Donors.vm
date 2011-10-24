@@ -11,6 +11,9 @@
 
 {table}
 #set($list = $xwiki.searchDocuments(",BaseObject as obj where doc.fullName=obj.name and obj.className='Registration.DonationTrack'"))
+
+$list.size() donations.
+
 Photo | First Name | Last Name | eMail | View Profile | total 
 #foreach($user in $list)
 #set($userdoc = $xwiki.getDocument($user)) $userdoc.use("XWiki.XWikiUsers")##
