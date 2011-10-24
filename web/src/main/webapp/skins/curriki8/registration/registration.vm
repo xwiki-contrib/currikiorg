@@ -486,14 +486,15 @@ document.observe('dom:loaded', function(){
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
     $$("#register select[name=XWiki.XWikiUsers_0_member_type]").each(function(inputElt){
         inputElt.observe("change",toggleCorporateFieldsVisible);
-        toggleCorporateFieldsVisible();});
+        toggleCorporateFieldsVisible();
+    });
 });
 ## 
 function toggleCorporateFieldsVisible() {
     var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
     memberType = memberType.options[memberType.selectedIndex].value;
     var i;
-    if(memberType=="corporation" || memberType=="nonprofit" || memberType==""nonprofit_education) {
+    if(memberType=="corporation" || memberType=="nonprofit" || memberType=="nonprofit_education") {
         i = $('registerform_publish_intent_section');
         if(i) i.show();
         i = $('registerform_value_add_section');
@@ -505,7 +506,7 @@ function toggleCorporateFieldsVisible() {
         if(i) i.hide();
     }
 
-    var text = ' ';
+    var text = String.fromCharCode(160);
     if(memberType == "corporation")
         text = _('join.member_type_coporate_instructions');
     console.log("memberTypeNotice: " + text);
@@ -577,7 +578,7 @@ function toggleCorporateFieldsVisible() {
             #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
 		</ul>
         <p id="memberTypeNotice">&nbsp;</p>
-        <p>$msg.get("edit_profile.account_info.remove.member")</p>
+        <p style="margin-bottom: 0; color: #777; font-weight: 100;">$msg.get("edit_profile.account_info.remove.member")</p>
 	</div>
 </fieldset>
 #end ##}

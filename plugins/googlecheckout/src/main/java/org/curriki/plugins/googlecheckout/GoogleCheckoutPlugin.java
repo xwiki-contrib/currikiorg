@@ -364,7 +364,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                         donationTrackObj = userDoc.getObject(DOCNAME_donationTrackClass);
                     }
                     donationTrackObj.set("lastDonated", currencies.get().format(amount));
-                    Date date = new Date(); // TODO: read Date from order??
+                    Date date = new Date();
                     donationTrackObj.set("lastDonatedDate", date);
 
                     Object o = donationTrackObj.get("totalDonated");

@@ -7,7 +7,7 @@ Sorry, please correct the errors:
 #foreach($error in $redirectURL.substring(7).split(" "))
 * $msg.get($error)
 #end#elseif($request.redirectNow)$response.sendRedirect($redirectURL)#else
-<!-- should send user to <a href="$redirectURL" target="gcheckout">please checkout</a> (will be a redirect) -->
+<!-- redirectNow? #if($request.redirectNow) yes #else no #end should send user to <a href="$redirectURL" target="gcheckout">please checkout</a> (will be a redirect) -->
 #set($url="")
 <style type="text/css">body {  min-width: 0; }</style>
 <!-- begin javascripts -->##

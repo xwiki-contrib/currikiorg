@@ -654,9 +654,9 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 	    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))##
         #set($donationObj=$userdoc.getObject("Registration.DonationTrack"))##
         #if($donationObj && $hasGlobalAdmin)
-            <br/> This user has donated &#34;${donationObj.get("totalDonated")}.
+            <br/> This user has donated &#36;${donationObj.get("totalDonated")}.
             #if("corporation"==$userobj.getProperty("member_type").getValue())<br/>Last corporate membership fee of
-                $donationObj.get("lastCorpMembershipDonated") made on $donationObj.get("lastCorpMembershipDate").#end
+                &#36;$donationObj.get("lastCorpMembershipDonated") made on $donationObj.get("lastCorpMembershipDate").#end
         #end ##
     </li>
     #end ##}
