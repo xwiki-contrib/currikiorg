@@ -3400,15 +3400,15 @@ Curriki.ui.login.ensureProperBodyCssClass = function() {
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL, xredirect) {
     try {
         if (console) console.log("Opening pop-up that will request authorization.");
+        Curriki.ui.login.popupIdentityAuthorization2(requestURL, dialog);
         var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
-        Curriki.ui.login.popupIdentityAuthorization2(requestURL,dialog);
     } catch(e) { console.log(e); }
 }
 Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
     return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
 }
 Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
-
+    Curriki.ui.login.popupAuthorization4(requestURL, windowThatShouldNextGoTo, 'curriki-login-dialog', 'curriki_login_authorize');
 }
 
 Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {

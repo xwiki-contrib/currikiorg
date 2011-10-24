@@ -651,7 +651,11 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
     #if($member_type != "") ##{
     <li>
     	*$msg.get("view_profile.interests.member_type.title")*
-	    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
+	    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))##
+        #set($donationObj=$userdoc.getObject("Registration.DonationTrack"))##
+        #if($donationObj && $hasGlobalAdmin)
+            <br/> This user has donated ${donationObj.get("totalDonated")}$.
+        #end ##
     </li>
     #end ##}
 </ul>
