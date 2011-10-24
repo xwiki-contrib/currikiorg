@@ -142,16 +142,31 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         PostMethod post = createCheckoutPost(checkoutURL);
 
 
-        String cartType = "corporation".equals(type) ? "corporate-membership" : "donation";
+        if(userName==null || userName.length()==0) userName = "XWikiGuest";
+        if(userName.startsWith("XWiki.") && userName.length()>6) userName = userName.substring(6);
+        String cartType, itemDescription;
+        if("corporation".equals(type)) {
+            cartType ="corporate-membership";
+            itemDescription = msg.get("googlecheckout.cart.corporation.details",
+                                   Arrays.asList(userName,  "http://"+host));
+        } else {
+            cartType ="donation";
+            if("XWikiGuest".equals(userName))
+                itemDescription =  msg.get("googlecheckout.cart.donation.details.anonymous",
+                   Arrays.asList("http://"+host));
+            else itemDescription = msg.get("googlecheckout.cart.donation.details",
+                    Arrays.asList(userName,  "http://"+host)) +"</item-description>\n";
+        }
+        String itemName = msg.get("googlecheckout.cart."+cartType+".title");
+
         String cart =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "\n" +
                 "<checkout-shopping-cart xmlns=\""+checkoutNSuri +"\">\n" +
                 "  <shopping-cart>\n" +
                 "    <items>\n" +
                 "      <item>\n" +
-                "        <item-name>"+msg.get("googlecheckout.cart."+cartType+".title")+"</item-name>\n" +
-                "        <item-description>" + msg.get("googlecheckout.cart."+cartType+".details",
-                               Arrays.asList(userName,  "http://"+host)) +"</item-description>\n" +
+                "        <item-name>"+itemName+"</item-name>\n" +
+                "        <item-description>" + itemDescription + "</itemDescription>\n" +
                 "        <unit-price currency=\"USD\">"+amount+"</unit-price>\n" +
                 "        <quantity>1</quantity>\n" +
                 "      </item>\n" +
