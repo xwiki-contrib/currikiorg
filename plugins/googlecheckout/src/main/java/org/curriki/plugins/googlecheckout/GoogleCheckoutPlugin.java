@@ -155,7 +155,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 itemDescription =  msg.get("googlecheckout.cart.donation.details.anonymous",
                    Arrays.asList("http://"+host));
             else itemDescription = msg.get("googlecheckout.cart.donation.details",
-                    Arrays.asList(userName,  "http://"+host)) +"</item-description>\n";
+                    Arrays.asList(userName,  "http://"+host));
         }
         String itemName = msg.get("googlecheckout.cart."+cartType+".title");
 
