@@ -166,7 +166,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 "    <items>\n" +
                 "      <item>\n" +
                 "        <item-name>"+itemName+"</item-name>\n" +
-                "        <item-description>" + itemDescription + "</itemDescription>\n" +
+                "        <item-description>" + itemDescription + "</item-description>\n" +
                 "        <unit-price currency=\"USD\">"+amount+"</unit-price>\n" +
                 "        <quantity>1</quantity>\n" +
                 "      </item>\n" +
