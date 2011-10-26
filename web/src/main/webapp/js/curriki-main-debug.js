@@ -3414,7 +3414,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 }
 
 Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
-    Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkout-window");
+    Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
     window.location.href = nextURLhere;
 }
 
