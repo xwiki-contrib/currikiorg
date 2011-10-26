@@ -489,8 +489,24 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script></div></d
         <li>To narrow your search, select a subject and grade level.</li>
       </ul>
     </div>
+    <script type="text/javascript">
+        function adjustForm() {
+            var b = Ext.get('curriki-searchbox');
+            if(b && b.dom.value==b.dom.getAttribute('Curriki:defTxt')) {
+                console.log('zapped dom');
+                b.dom.value='';
+            } else {
+                console.log("didn't zap");
+            }
+            return false;
+        }
+        function submitSearchForm() {
+            adjustForm();
+            Ext.get('chpAdvSearchForm').dom.submit();
+        }
+    </script>
       <!--begin search form fields-->
-      <form id="chpAdvSearchForm" name="chpAdvSearchForm" method="GET" onsubmit="b = Ext.get('curriki-searchbox'); if(b && b.dom.value==b.dom.getAttribute('Curriki:defTxt')) {b.value='';}" action="/xwiki/bin/view/Search/SearchWidgetJump">
+      <form id="chpAdvSearchForm" name="chpAdvSearchForm" method="GET" onsubmit="return adjustForm();" action="/xwiki/bin/view/Search/SearchWidgetJump">
           <table>
               <tr>
                   <td colspan="2"><h3>Teacher resources by grade + subject</h3></td>
@@ -536,10 +552,10 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script></div></d
               <tr>
                   <td>
                       #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))##
-                    <input name="text" type="text" value="$defaultsearchtext" id="curriki-searchbox" Curriki:defTxt="$defaultsearchtext" size="15">
+                    <input name="text" type="text" value="$defaultsearchtext" id="curriki-searchbox" Curriki:defTxt="$escapetool.xml($defaultsearchtext)" size="15">
               </td>
                   <td class="adv_search_go_align" >
-                        <a href="javascript:document.getElementById('chpAdvSearchForm').submit();">go&raquo;</a>
+                        <a href="javascript:submitSearchForm();">go&raquo;</a>
                   </td>
               </tr>
          <tr><td colspan="2" style="height:4ex;" valign="top">
