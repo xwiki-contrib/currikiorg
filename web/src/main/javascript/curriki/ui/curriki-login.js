@@ -68,7 +68,7 @@ Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
     return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
 }
 Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
-    Curriki.ui.login.popupAuthorization4(requestURL, windowThatShouldNextGoTo, 'curriki-login-dialog', 'curriki_login_authorize');
+    return Curriki.ui.login.popupAuthorization4(requestURL, windowThatShouldNextGoTo, 'curriki-login-dialog', 'curriki_login_authorize');
 }
 
 Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
@@ -158,10 +158,10 @@ Curriki.ui.login.showLoginLoading=function(msg, multi) {
             Curriki.showLoading(msg, true);
             if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // also make the surroundings grey
                 var d = window.parent.Ext.get('loginIframe');
-                console.log("will set bg on " + d);
+                if(console) console.log("will set bg on " + d);
                 while (typeof(d) != "undefined" && d != null && d.setStyle) {
                     if (d.id && "loginDialogWindow" == d.id) break;
-                    console.log("setting bg on " + d);
+                    if(console) console.log("setting bg on " + d);
                     d.setStyle("background-color", "#DDD");
                     d = d.parent();
                 }
@@ -172,7 +172,7 @@ Curriki.ui.login.showLoginLoading=function(msg, multi) {
             else
                 Curriki.showLoading(msg, multi);
         }
-    } catch(e) { console.log(e); }
+    } catch(e) { if(console) console.log(e); }
 };
 Curriki.ui.login.hideLoginLoading=function() {
     try {
@@ -193,7 +193,7 @@ Curriki.ui.login.hideLoginLoading=function() {
             else
                 Curriki.hideLoading(true);
         }
-    } catch(e) { console.log(e); }
+    } catch(e) { if(console) console.log(e); }
 }
 
 
@@ -278,20 +278,20 @@ Curriki.ui.login.liveValidation = function() {
             Ext.Ajax.purgeListeners();
 
             Ext.each(ids, function(name) {
-                console.log("Registering on " + name);
+                if(console) console.log("Registering on " + name);
                 var x = Ext.get(name);
                 if(x) {} else {
-                    console.log("Not found: " + name);
+                    if(console) console.log("Not found: " + name);
                     return;
                 }
                 if(x.purgeListeners) x.purgeListeners();
                 x.addListener("blur", function(evt) {
-                    console.log("Focus-out...");
+                    if(console) console.log("Focus-out...");
                     Curriki.ui.login.liveValidation.queueQueryNow(x);
                     Curriki.ui.login.liveValidation.stopPolling();
                 });
                 x.addListener("focus", function(evt) {
-                    console.log("Focus-in...");
+                    if(console) console.log("Focus-in...");
                     var handle=window.setInterval(function() {
                         clearInterval(handle);
                         Curriki.ui.login.liveValidation.startPollingTextField(x);
@@ -303,7 +303,7 @@ Curriki.ui.login.liveValidation = function() {
             // this is the main function to call the validation
             var fieldName = inputElt.dom.name;
             var fieldValue = inputElt.dom.value;
-            console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
+            if(console) console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
             //var min_length=3;
             //if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
             //    min_length=1;
