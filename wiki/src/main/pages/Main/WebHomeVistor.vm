@@ -379,10 +379,10 @@ span.missionitalic {
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
         #set($xredirect=$escapetool.url("http://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url2')}${request.getRequestURI()}"))##
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
-      <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")" width="32" ##
+      <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip")" width="32" ##
               onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}'); return false;">##
       <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="24"
-           title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" /></a>
+           title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
       #end
     #end</p>
 #else ## }{ ## is logged in
