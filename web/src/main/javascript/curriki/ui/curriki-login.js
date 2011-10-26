@@ -56,10 +56,12 @@ Curriki.ui.login.ensureProperBodyCssClass = function() {
 
 
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL, xredirect) {
-    try {
+    try { 
         if (console) console.log("Opening pop-up that will request authorization.");
-        Curriki.ui.login.popupIdentityAuthorization2(requestURL, dialog);
+        if(!Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
         var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
+        if(Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
+        window.Curriki.ui.login.windowThatShouldNextGoTo = dialog;
     } catch(e) { console.log(e); }
 }
 Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
@@ -70,7 +72,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 }
 
 Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
-    Curriki.ui.login.popupAuthorization4(requestURL, null, "curriki-login-dialog", "checkout-window");
+    Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkout-window");
     window.location.href = nextURLhere;
 }
 
@@ -93,20 +95,25 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
     }
     window.focusIt = window.setInterval(function() { window.clearInterval(window.focusIt); otherWindow.focus(); }, 100)
     window.Curriki.ui.login.authorizeDialog = otherWindow;
-    if(windowThatShouldNextGoTo) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
+    window.top.Curriki.ui.login.authorizeDialog = otherWindow;
+    if(windowThatShouldNextGoTo && windowThatShouldNextGoTo != null) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
     return false;
 };
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
     if(console) console.log("Finishing popup, target: " + targetURL);
-    if(openerWindow && openerWindow.Curriki.ui.login.authorizeDialog &&
-            openerWindow.Curriki.ui.login.authorizeDialog==window) {
+    if(openerWindow &&
+            (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
+            || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))) {
         // we are in a popup relationship, can close and revert to that popup
         if(console) console.log("We are in popup, closing and opening popup.");
         var targetWindow = openerWindow;
         if(openerWindow.Curriki.ui.login.windowThatShouldNextGoTo)
             targetWindow = openerWindow.Curriki.ui.login.windowThatShouldNextGoTo;
+        if(console) console.log("targetWindow: " + targetWindow + " with force to top " + toTop);
         if(toTop) targetWindow = targetWindow.top;
+        else if(openerWindow.Ext && openerWindow.Ext.get('loginIframe'))
+            targetWindow = openerWindow.Ext.get('loginIframe').dom.contentWindow;
         if(targetWindow && targetWindow.location) {
             targetWindow.location.href = targetURL;
             //alert("Would go to " + targetURL + " from " + targetWindow);
@@ -184,7 +191,7 @@ Curriki.ui.login.hideLoginLoading=function() {
             if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe'))
                 window.parent.Curriki.hideLoading(true);
             else
-                Curriki.hideLoading(multi);
+                Curriki.hideLoading(true);
         }
     } catch(e) { console.log(e); }
 }

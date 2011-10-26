@@ -46,7 +46,7 @@
     #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
     #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
     <p style="margin-top: 1em; width:100%; text-align:left; font-size:130%; font-weight: bolder;">##
-    <a $anchorAtts style="color: #FF5500; ">$msg.get('join.header.title.1')&nbsp;&nbsp;&nbsp;$msg.get("join.header.title.2")</a></p>
+    <a $anchorAtts style="color: #FF5500; ">$msg.get('join.header.title.1') $msg.get("join.header.title.2")</a></p>
     ## join.header.title.1 = Login,
     ## join.header.title.2=Join Curriki,
     <p style="margin-top:-18pt; margin-bottom: 0; width:100%; text-align:right;">
@@ -93,7 +93,7 @@
         #elseif($provider.equalsIgnoreCase("google"))#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
         #end##
     #end##
-    <p align="right" style="font-size:smaller; margin-top: -1em">$msg.get("logout.ok-you-left")##
+    <p align="right" style="font-size:smaller; margin-top: 0.3em">$msg.get("logout.ok-you-left")##
     #if($logoutUrl)##
     ##        <br/><a href="$logoutUrl">$msg.get("logout.offer-logout.${provider}")</a>##
     #end##

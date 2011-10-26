@@ -22,12 +22,14 @@
 <button type="button-grey" onclick="if(window.top.location.href.indexOf('/xwiki/bin/view/Registration')>0) {window.top.back();} else {window.top.reload();}">$msg.get("join.login.cancel_button")</button>
 </p>##
 <script type="text/javascript">##
-  #if($redir.startsWith("/xwiki/bin/view/Registration"))
+  var goTop = false;
+#if($redir.startsWith("/xwiki/bin/view/Registration"))
     Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window, false);
+    ##alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window, false);")
   #else
+    ##alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window, true);")
     Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window, true);
   #end##
-  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window);")
 </script>
 #if(!$included && $request.xpage=="plain")
 </body></html>##

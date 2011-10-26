@@ -20,10 +20,12 @@
 {pre}#if($redir)#else#set($redir=$request.redir)#end##
 #set($username=$request.user)
 #if($username)#else#set($username=$context.user)#end
+#if($username.startsWith("XWiki."))#else#set($username="XWiki.$username")#end
 #if($username!="XWiki.XWikiGuest")
     #set($userdoc=$xwiki.getDocument($username))
-    #if($userdoc)
+    #if($userdoc)<!-- userdoc is $userdoc of class $userdoc.getClass() with objects $userdoc.getObject("XWiki.XWikiRights") -->
         #set($userobj=$userdoc.getObject("XWiki.XWikiUsers"))
+        <!-- userobj is $userobj active? $userobj.getProperty('active').value -->
         #if("$userobj.getProperty('active').value"=="1")
             #if($context.user!="XWiki.XWikiGuest")
                 #set($redir=$targets.afterLogin)
@@ -33,7 +35,7 @@
             #end
         #else
             #set($redir="/xwiki/bin/view/Registration/EmailSentValidationLink?xpage=popup")
-            //#set($redir="/xwiki/bin/view/Sandbox/Try")
+            ## #set($redir="/xwiki/bin/view/Sandbox/Try")
         #end
     #end
 #end
@@ -55,10 +57,11 @@
 <script type="text/javascript">##
   #if($redir.startsWith("/xwiki/bin/view/Registration"))
     Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window, false);
+    ##alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window,false);")
   #else
     Curriki.ui.login.finishAuthorizationPopup("${redir}", window.opener, window, true);
+    ##alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window,true);")
   #end##
-  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${redir}', window.opener, window);")
 </script>
 #if(!$included && $request.xpage=="plain")
 </body></html>##
