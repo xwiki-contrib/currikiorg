@@ -168,7 +168,7 @@ public class SocialLoginToolGroovy {
 
             // Search for this profile id in database, find user
             String query =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
-                    " userObj.className='XWiki.XWikiUsers' and doc.fullName=userObj.name " +
+                    " userObj.className='XWiki.XWikiUsers' and doc.web='XWiki' and doc.fullName=userObj.name " +
                     " and socialLoginObj.className='XWiki.SocialLoginProfileClass' and " +
                     " doc.fullName=socialLoginObj.name and " +
                     " provider.id.id = socialLoginObj.id and profileId.id.id = socialLoginObj.id and " +
