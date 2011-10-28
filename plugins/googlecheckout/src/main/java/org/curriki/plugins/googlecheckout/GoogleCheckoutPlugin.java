@@ -147,7 +147,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         String cartType, itemDescription;
         if("corporation".equals(type)) {
             cartType ="corporate-membership";
-            itemDescription = msg.get("googlecheckout.cart.corporation.details",
+            itemDescription = msg.get("googlecheckout.cart.corporate-membership.details",
                                    Arrays.asList(userName,  "http://"+host));
         } else {
             cartType ="donation";
@@ -176,7 +176,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                 "  </shopping-cart>\n" +
                 "  <checkout-flow-support>\n" +
                 "    <merchant-checkout-flow-support>\n" +
-                "      <continue-shopping-url>http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?xpage=popup&amp;user="+userName+"</continue-shopping-url>\n" +
+                "      <continue-shopping-url>http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?xpage=popup&amp;cartType="+ cartType +"&amp;user="+userName+"</continue-shopping-url>\n" +
                 //"      <edit-cart-url >http://"+host+"/xwiki/bin/view/GCheckout/BackFromGCheckout?user="+userName+"</edit-cart-url>\n" +
                 "    </merchant-checkout-flow-support>\n" +
                 "  </checkout-flow-support>\n" +
@@ -321,6 +321,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
             Matcher matcher = Pattern.compile(".*Username:([^ ]*)[ ]+Carttype:([^ ]*)").matcher(privateData);
             if(!matcher.matches()) throw new IllegalArgumentException("Can't understand merchantData!");
             userName = matcher.group(1); cartType = matcher.group(2);
+            if(!userName.startsWith("XWiki.")) userName = "XWiki." + userName;
             if(orderObj==null) {
                 int i = orderList.createNewObject(DOCNAME_orderClass);
                 orderObj = orderList.getObject(DOCNAME_orderClass, i);
