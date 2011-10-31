@@ -129,7 +129,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
     ## don't put the following comment inside the div... it'd break the javascript of loginHappened!
     <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
     <div class="provider"  id="identifyWith${provider}" style="display:inline">
-      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($targets.afterLogin)#if($framed)&xpage=popup#end")
+      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool($targets.afterLogin)#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
               onclick="return Curriki.ui.login.popupIdentityAuthorization('${link}');">##
       <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"

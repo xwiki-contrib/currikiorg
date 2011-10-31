@@ -39,6 +39,6 @@ pageTracker._trackPageview('/features/staf/referred/'+window.location);
 //]]>
 #if($request.session.getAttribute("curriki.analytics.toLogView"))#foreach($m in $request.session.getAttribute("curriki.analytics.toLogView").split(",| "))
     pageTracker._trackPageview("$m");
-#end#end
+#end$request.session.removeAttribute("curriki.analytics.toLogView")#end
 </script>
 #end ##}
