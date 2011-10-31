@@ -86,8 +86,25 @@
     <p align="left" style="font-size:smaller; margin-top: 0.3em">$msg.get("logout.ok-you-left")<!-- logout message here -->##
     #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
     #if($idProviderName)<!-- provider: "$idProviderName" -->##
-        #if($idProviderName.equalsIgnoreCase("facebook"))#set($idProviderLogoutUrl="http://www.facebook.com/logout.php")##
-        #elseif($idProviderName.equalsIgnoreCase("google"))#set($idProviderLogoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
+        #if($idProviderName.equalsIgnoreCase("facebook"))
+            <script type="text/javascript">
+                var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
+                var country = {"en":"US", "fr":"FR", "ru":"RU", "hi": "IN", "es": "LA", "id": "ID", "si": "SI", "ta":"IN", "eo":"EO", "pl":"PL"}[lang];
+                if(typeof(country)!="string") { lang="en"; country="US";}
+                var e = document.createElement('script'); e.async = true;
+                e.src = document.location.protocol +
+                  '//connect.facebook.net/'+lang+'_' + country +'/all.js';
+                document.getElementById('fb-root').appendChild(e);
+                function doOnUserLogout() { window.reload(); }
+            </script>
+            <div id="fb-root"/>
+            <a href="http://www.facebook.com/logout.php"
+               onclick="FB.Connect.logout(doOnUserLogout()); return(false);"
+                    >$msg.get("logout.offer-logout.facebook")</a>
+        #elseif($idProviderName.equalsIgnoreCase("google"))
+            <a href="http://www.google.com/accounts/Logout?continue=$escapetool.url()"
+               target="_google_logout_window"
+                    >$msg.get("logout.offer-logout.google")</a>
         #end##
     #end##
     #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
