@@ -5,15 +5,23 @@
 ## it needs one variable or parameter to be defined: redir
 {pre}#if($redir)#else#set($redir=$request.redir)#end##
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))#end##
-#if($redir)#else#set($redir=$targets.afterLogin)#end##
-#if($redir)#else#set($redir="/")#end##
-#if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
-#set($hasDownload=$redir.matches(".*force(..?.?)?download=1.*"))<!-- hasDownload: $hasDownload -->##
+#set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+#* #if($redir)#else#set($redir=$request.redir)#end##
+#if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
+#if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end *#
+#set($hasDownload=$targets.isDownloadLink($redir))<!-- hasDownload: $hasDownload -->##
 #set($nextStep=$redir)##
 #if($hasDownload)##
     $targets.storeFileToDownload()##
-    #set($nextStep=$targets.fromDownloadToResource($redir))
+    #set($nextStep=$targets.fromDownloadToResourceOrSelf($redir)) ##
+#end    <!-- nextStep now is $nextStep -->
+#if($redir)#else#set($redir=$targets.afterLogin)#end##
+#if($redir)#else#set($redir="/")#end##
+#if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
+#if($hasDownload)##
+    $targets.storeFileToDownload()##
+    #set($nextStep=$targets.fromDownloadToResource($redir)) ##
+    <!-- nextStep now is $nextStep -->
 #end ##
 <html><head><title>Redirection</title></head><body>##
 #if($context.user!="XWiki.XWikiGuest" && $request.getHeader("User-Agent").contains(" Chrome"))
@@ -27,6 +35,7 @@
         </p>##
 
 <script type="text/javascript">
+    if($hasDownload && console) console.log("Has download.");
     var w = window;
     try {
         if (w.name == 'curriki-identity-dialog-popup'

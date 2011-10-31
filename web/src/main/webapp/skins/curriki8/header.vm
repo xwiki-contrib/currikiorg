@@ -78,27 +78,22 @@
     #else
         #set($logredir = $xwiki.getURL("Main.WebHome"))
     #end
-	#set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
+	#set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
 	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 #if($!request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
-    #set($provider=$request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))##
-    <!-- provider: "$provider" -->
-    #if($request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint"))##
-        $request.session.removeAttribute("org.brickred.socialauth.AuthProvider.hint")##
-        $request.session.removeAttribute("org.brickred.socialauth.AuthProvider")##
-        $request.session.removeAttribute("org.brickred.socialauth.Profile ")##
-        #if($provider.equalsIgnoreCase("facebook"))#set($logoutUrl="http://www.facebook.com/logout.php")##
-        #elseif($provider.equalsIgnoreCase("google"))#set($logoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
+    <p align="left" style="font-size:smaller; margin-top: 0.3em">$msg.get("logout.ok-you-left")<!-- logout message here -->##
+    #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
+    #if($idProviderName)<!-- provider: "$idProviderName" -->##
+        #if($idProviderName.equalsIgnoreCase("facebook"))#set($idProviderLogoutUrl="http://www.facebook.com/logout.php")##
+        #elseif($idProviderName.equalsIgnoreCase("google"))#set($idProviderLogoutUrl="http://www.google.com/accounts/Logout?continue=http://www.google.com/")##
         #end##
     #end##
-    <p align="right" style="font-size:smaller; margin-top: 0.3em">$msg.get("logout.ok-you-left")##
-    #if($logoutUrl)##
-    ##        <br/><a href="$logoutUrl">$msg.get("logout.offer-logout.${provider}")</a>##
-    #end##
+    #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
+        <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
     </p>
-#end
+#end##
 ##
 </div> ##} ##header-member
 <!-- end of member area -->

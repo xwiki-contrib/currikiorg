@@ -15,13 +15,21 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
     #if($request.session && $request.session.getAttribute("downloadSoon"))##
       <script type="text/javascript">
         // downloadSoon treatment here.
+        var downloadTarget = "$request.session.getAttribute("downloadSoon")";
+        var rawName = '${request.session.getAttribute("downloadSoon").replaceAll("/xwiki/bin/download/","").replaceAll(".force.*","")}';
         window.nowDownload = function() {
             window.clearInterval(window.downloader);
-            window.location.href="$request.session.getAttribute("downloadSoon")";
-            Curriki.logView('/Download/attachment/${request.session.getAttribute("downloadSoon").replaceAll("/xwiki/bin/download/","").replaceAll(".force.*","")}');
-            // removed attribute: $request.session.removeAttribute("downloadSoon")
+            if(Ext.isIE) {
+                /*var elt = Ext.get("DownloadElement_" + '${request.session.getAttribute("downloadSoon").replaceAll("/xwiki/bin/download/","").replaceAll(".force.*","").replaceAll("[^a-zA-Z]","_")}');
+                if(elt) elt.focus(50); */
+                Curriki.ui.login.restoreScrollPos();
+            } else {
+                window.location.href=downloadTarget;
+                Curriki.logView('/Download/attachment/' + rawName);
+                // removed attribute: $request.session.removeAttribute("downloadSoon")
+            }
         };
-        window.downloader = window.setInterval("nowDownload();", 100);
+        window.downloader = window.setInterval(window.nowDownload, 100);
     </script>
     #* <iframe width="3" height="3" src="$request.session.getAttribute("downloadSoon")"></iframe>
     <!-- $request.session.removeAttribute("downloadSoon") --> *#

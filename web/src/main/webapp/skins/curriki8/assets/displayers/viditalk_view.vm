@@ -57,7 +57,7 @@
         #set($requireLogin= ("embed"!="$!request.viewer") && $context.user=="XWiki.XWikiGuest")
       <a class="icon-link" href="$origVideo"
         #if($requireLogin) ##
-          onclick="Curriki.logView('/Download/will/viditalk/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+          onclick="Curriki.logView('/Download/will/viditalk/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}' + Curriki.ui.login.readScrollPos())); return false;" ##
         #else
           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');"
         #end ##
@@ -68,7 +68,7 @@
         <a href="$origVideo"
        #if($requireLogin)##
            #set($target="${origVideo}?force%2Ddownload=1")##
-           onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+           onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}&' + Curriki.ui.login.readScrollPos()); return false;" ##
        #else##
            onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${origVideo}?force%2Ddownload=1'; return false;"##
        #end##
@@ -86,7 +86,7 @@
            #if($requireLogin)##
                #set($target="${origVideo}?force%2Ddownload=1")##
                ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
-               onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;"##
+               onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}' + Curriki.ui.login.readScrollPos())); return false;"##
                    >$msg.get("login.button_login_to_download")
            #else##
                ext:qtip="$msg.get("rve.content.view.download.download_button")" ##

@@ -24,7 +24,7 @@
         var docH = getDocHeight(document);
         // adjust dialog height
         if(window.innerHeight < docH) {
-            console.log("Should resize dialog from " + window.innerHeight + " to accomodate " + docH + " minding " + getDocHeight(window.parent.document) + ".")
+            if(console) console.log("Should resize dialog from " + window.innerHeight + " to accomodate " + docH + " minding " + getDocHeight(window.parent.document) + ".")
             if(window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) {
                 h = docH;
                 window.parent.Ext.get('loginIframe').dom.height = 20 + h;

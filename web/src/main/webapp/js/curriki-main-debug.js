@@ -3342,6 +3342,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 });
 // This script is the set of pages used to command the UI for the login and registration steps
 Ext.ns('Curriki.ui.login');
+
 Curriki.ui.login.displayLoginDialog = function(url) {
     if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
         Curriki.ui.login.loginDialog.hide();
@@ -3375,9 +3376,43 @@ Curriki.ui.login.displayLoginDialog = function(url) {
         ,defaults:{border:false},
          html: "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
             });
-    Curriki.ui.login.loginDialog.headerCls = "gistration-dialog-header";
+    Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
     Curriki.ui.login.loginDialog.show();
     return Ext.get("loginIframe").dom.contentWindow; 
+};
+
+Curriki.ui.login.readScrollPos = function(w) {
+    if(typeof(w)=="undefined") w=window;
+    try {
+        if (w && w.Ext) {
+            var s = w.Ext.getBody().getScroll();
+            return escape("&l=" + s.left + "&t=" + s.top);
+        } else
+            return "";
+    } catch(e) { if(console){console.log(e);} return "";}
+};
+
+Curriki.ui.login.restoreScrollPos = function(url) {
+    try {
+        if(console) console.log("Intending to restoreScroll.");
+        if(!url.match(/t=[0-9]/)) {
+            if(console) console.log("No coordinates passed.");
+            return;
+        }
+        var l = url.replace(/.*l=([0-9]+).*/, "$1");
+        var t = url.replace(/.*t=([0-9]+).*/, "$1");
+        if (typeof(l) == "undefined") {
+            l = 0;
+        }
+        if (typeof(t) == "undefined") {
+            t = 0;
+        }
+        if(console) console.log("Would scroll to " + l + ":" + t + " if I were IE.");
+        if (Ext.isIE) {
+            if(console) console.log("Scrolling by "+l + ":" + t);
+            window.scrollBy(l, t);
+        }
+    } catch(e) { if(console) {console.log(e);}}
 };
 
 Curriki.ui.login.ensureProperBodyCssClass = function() {
@@ -3461,8 +3496,12 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
             //alert("Would go to " + targetURL + " from " + targetWindow);
             // schedule a close
             openedWindow.setInterval(function() {
-               targetWindow.focus();
-               openedWindow.close();
+                try {
+                    targetWindow.focus();
+                } catch(e) { if(console) console.log(e); }
+                try {
+                    openedWindow.close();
+                } catch(e) { if(console) console.log(e); }
             },20);
         } else {
             window.top.location.href = targetURL;
@@ -3470,7 +3509,7 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
         return false;
     } else {
         if(console) console.log("No popup parent found... ah well.");
-        openedWindow.location.href = targetURL;
+        openedWindow.top.location.href = targetURL;
         //alert("Would go to " + targetURL + " from " + openedWindow);
     }
 }

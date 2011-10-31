@@ -77,7 +77,7 @@
 #set($junk = $userObj.set("validkey", $valCode))
 #set($junk = $userObj.set("email", $newEmail))
 #set($junk = $userDoc.saveWithProgrammingRights())
-#set($link = "http://"+$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')+$xwiki.getURL("Registration.EmailVerified", "view", "u=${username}&v=${valCode}"))
+#set($link = "http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')/xwiki/bin/view/Registration/EmailVerified?u=${username}&v=${valCode}"))
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
 #set($mailSubject = $doc.getRenderedContent($mailDoc.title))

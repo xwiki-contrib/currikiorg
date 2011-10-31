@@ -6,7 +6,7 @@
 #set($hasScripts=true)##
 #if($globalDebug)##{
 	#set($debugging = "-debug")
-    <script type="text/javascript">if(console) console.log("Now on: " + window.location.href ); console.log(" inside frame? " + (window.top!=window));</script>
+    <script type="text/javascript">if(console) console.log("Now in "+window.name+" on: " + window.location.href ); console.log(" inside frame? " + (window.top!=window));</script>
 #else##}{
 	#set($debugging = "")
 #end##}

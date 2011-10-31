@@ -27,7 +27,7 @@ Sorry, please correct the errors:
 </script>
 #end
 <p style="margin: 3em;"><a target="GCheckout" href="${redirectURL}">Displaying Google Checkout in a popup.<br>This page should go away afterwards.</a></p>
-#if("XWiki.XWikiGuest"!=$context.user)
+#if("XWiki.XWikiGuest"!=$context.user && "donation"==$request.type)
 <p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;">Logout and Cancel</button></p>
 #else
 <p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">Cancel</button></p>

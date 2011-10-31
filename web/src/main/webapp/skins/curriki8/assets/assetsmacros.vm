@@ -472,7 +472,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
  <a class="icon-link"
     #if($requireLogin) ##
       #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
-      #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}');")##
+      #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos());")##
       onclick="$scriptBit return false;" ##
       href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
     #else
@@ -488,7 +488,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
      #end
      <a
     #if($requireLogin)##
-        onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;" ##
+        onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos()); return false;" ##
         href="javascript:$escapetool.url($scriptBit)" ##
     #else##
         href="$assetAttachmentURL" ##
@@ -500,7 +500,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #if($requireLogin)##
         #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
         ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
-        onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'); return false;"##
+        onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos()); return false;"##
             >$msg.get("login.button_login_to_download")
     #else##
         ext:qtip="$msg.get("rve.content.view.download.download_button")" ##

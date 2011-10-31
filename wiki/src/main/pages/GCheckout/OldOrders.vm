@@ -12,7 +12,7 @@ List of current orders #if($request.user) for user [$request.user].
     #else
     <tr>
         <td>$obj.get("serialNumber")</td>
-        <td>[$obj.get("user")]</td>
+        <td>#set($u=$obj.get("user"))#if($u.startsWith("XWiki."))#else#set($u="XWiki.$u")#end[$u]</td>
         <td>$obj.get("date")</td>
         <td>$obj.get("orderType")</td>
         <td>$obj.get("amount")</td>

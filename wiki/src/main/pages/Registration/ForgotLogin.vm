@@ -173,7 +173,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($valkey = $xwiki.xWiki.generateRandomString(8))
 			## #set($reseturl = ${xwiki.getRequestURL()})
 			#set($reseturl = 'http://'+$!hostname)
-			#set($reseturl = "${reseturl}${xwiki.getURL('Main.ForgotPassword')}")
+			#set($reseturl = "${reseturl}/xwiki/bin/view/Main/ForgotPassword")
 			#set($reseturl = "${reseturl}?q=$util.encodeURI(${uemail})&vk=${valkey}")
 
 			## Reseturl: $reseturl
