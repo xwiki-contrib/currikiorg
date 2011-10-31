@@ -30,7 +30,7 @@ if(request.getParameter("user")!=null) {
         userobj.set("active",0);
         userobj.set("email", changedEmail);
         userobj.set("email_undeliverable", 1);
-        userdoc.saveWithProgrammingRights("Deactivated by user " + context.user + ".");
+        //userdoc.saveWithProgrammingRights("Deactivated by user " + context.user + ".");
         userdoc.removeObjects("XWiki.SocialLoginClass");
         userdoc.removeObjects("XWiki.SocialLoginProfileClass");
         userdoc.rename("DeactivatedUsers." + userdoc.name);
