@@ -1,0 +1,45 @@
+$context.setCacheDuration(1200)
+<div id="watch-curriki-grow" class="shadow-outer"> ##{
+  <div class="shadow-middle"> ##{
+    <div class="shadow-inner information"> ##{
+      <div class="headerbar">$msg.get("panel.watchgrow.title")</div>
+         <div class="frame-content"> ##{
+   	   	<table class="stats">
+   	   	 <tbody>
+   	   	  <tr>
+   	   	   <td><a href="$xwiki.getURL("Main.Browse")">$msg.get("panel.watchgrow.resources")</a></td>
+   	   	   <td><a href="$xwiki.getURL("Main.Browse")">
+#set($lucene = $xwiki.getPlugin("lucene"))
+#if(!$lucene)
+ #error("Error loading Lucene search")
+#end
+#set($luceneQuery = "(CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome) AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp")
+#set($wikinames = "xwiki")
+#set($langs = "default,en,de")
+#set($searchresults = $lucene.getSearchResults($luceneQuery, $wikinames, $langs, $xwiki))
+$searchresults.totalHitcount
+</a></td>
+   	   	  </tr>
+   	   	  <tr>
+   	   	   <td><a href="$xwiki.getURL("XWiki.XWikiLogin","login")">$msg.get("panel.watchgrow.members")</a></td>
+                   <td><a href="$xwiki.getURL("XWiki.XWikiLogin","login")">$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.XWikiUsers'").get(0)</a>
+                   </td>
+   	   	  </tr>
+   	   	  <tr>
+   	   	   <td><a href="$xwiki.getURL("Groups.Browse")">$msg.get("panel.watchgrow.groups")</a></td>
+   	   	   <td>
+                     <a href="$xwiki.getURL("Groups.Browse")">$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.CurrikiSpaceClass'").get(0)</a>
+                   </td>
+   	   	  </tr>
+   	   	 </tbody>
+   	   	</table>
+   	   	<p class="links">##
+    #set($escapedURL="$escapetool.url($request.getRequestURI())")##
+    #set($targetURL="/xwiki/bin/login/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")##
+    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+    <a $anchorAtts>$msg.get("panel.watchgrow.join")</a>
+</p>
+      </div> ##}
+    </div> ##}
+  </div>##}
+</div> ##}
