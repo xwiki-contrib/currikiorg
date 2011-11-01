@@ -42,3 +42,7 @@ pageTracker._trackPageview('/features/staf/referred/'+window.location);
 #end$request.session.removeAttribute("curriki.analytics.toLogView")#end
 </script>
 #end ##}
+#macro(logViewScript $viewName)#if("$!GA_uacct" != "0" && "$!GA_uacct" != "")
+    <script language="text/javascript">Curriki.logView("$viewName");</script>
+#end#end
+

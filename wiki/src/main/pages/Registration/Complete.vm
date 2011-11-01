@@ -2,8 +2,9 @@
 <style type="text/css">
     body{min-width: 0; margin-right:1em; width:90%}
 </style>
-#template("xwikivars.vm")
-#template("javascripts.vm")
+#template("xwikivars.vm")##
+#template("javascripts.vm")##
+#template("analytics.vm")##
 #if($request.xwikiname && $request.xwikiname != "" && $request.validkey && $request.validkey != "")
 #* #set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
 #set($junk = $reg.setObjects($xwiki, $context, $msg))
@@ -13,7 +14,7 @@
 #set($junk=$tool.init($xwiki, $context, $request, $msg, $targets))##
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
 #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-#set($result=$tool.validateUser())
+#set($result=$tool.validateUser())##
 #set($memberType = $tool.memberType)##
 #if($result=="success")
 <div style="height: 20em;  vertical-align: middle;" class="registration-complete">
@@ -33,12 +34,24 @@
     });
 </script>
 #if($memberType=='corporation')<!-- including corporate donate -->
-    $xwiki.includeForm("Registration.DonateCorp",false)
+        #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")##
+        #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated<75)
+            $xwiki.includeForm("Registration.DonateCorp",false)
+        #else
+            #set($redir=$targets.afterLogin)##
+            $xwiki.includeForm("Registration.JumpToTop",false)##
+        #end
+
 #else<!-- including non-corporate donate -->
     $xwiki.includeForm("Registration.DonateNonCorp",false)
 #end
+    #logViewScript("/join/enterValidation/submit/success")
+#else
+    #logViewScript("/join/enterValidation/submit/invalid")
+    $msg.get("registration.validate.failed.bad_key_or_loginname")
 #end##
 </div>
 #else
+#logViewScript("/join/enterValidation/submit/invalid")
 $msg.get("registration.validate.failed.bad_key_or_loginname")
 #end

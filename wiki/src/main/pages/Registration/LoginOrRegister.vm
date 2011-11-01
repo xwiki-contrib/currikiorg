@@ -106,7 +106,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
     #if($!message.length()>0)
       <!-- previous login errors: $message -->
       #error($msg.get("$message"))
-      <script language="text/javascript">Curriki.logView("/join/entry/error");</script>
+      #logViewScript("/join/entry/error")
     #end
 <div id="joinformleftblock" class="xwikilogintable" summary="$msg.get("join.login.header")">
         <h2>$msg.get("join.login.header")</h2>

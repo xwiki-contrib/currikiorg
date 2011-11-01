@@ -649,6 +649,7 @@ public class SocialLoginToolGroovy {
         userobj.set("email_undeliverable", "0");
         // and send validation mail
         sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
+        authenticateUser(userdoc);
         return "success";
     }
 

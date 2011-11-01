@@ -41,7 +41,7 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
         #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated<75)
             #set($corpWarnedAtt=$!request.session.getAttribute("corpWarned"))
             #if(""=="$!corpWarnedAtt")#else#set($corpWarnedAtt='not-warned')#end
-            #if($corpWarnedAtt!=$context.user)
+            #if("$corpWarnedAtt"!="$context.user")
                 <!-- corp-warning on $request.session.setAttribute("corpWarned",$context.user) -->
                 <script type="text/javascript">Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/DonateCorp?xpage=popup")</script>
             #else <!-- should not warn corp: corpWarnedAtt = "$!corpWarnedAtt" -->

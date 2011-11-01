@@ -9,7 +9,9 @@
 #template("htmlheader.vm")
 #template("header.vm")
 #template("baseheader.vm")
+#template("analytics.vm")
 #if($request.mailAgain=="1")##
+    #logViewScript("/join/enterValidation/submit/sent")
     #if($tool)#else#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))#set($junk=$tool.init($xwiki,$context,$request,$msg,""))$tool.grabFromCurrentUser()#end##
     $tool.sendValidationEmail()##
     #info("Email resent.")
@@ -26,11 +28,13 @@
         $validation.activateUser($context)##
         #set($redir=$targets.afterLogin)##
         $xwiki.includeForm("Registration.JumpToTop",false)##
+        #logViewScript("/join/enterValidation/submit/success")##
     #else$response.sendRedirect("$request.getRequestURI()?errors=emailValidation.step2.errBadVkey")##
     #end
 #else<div id="content">
 #if ($cause == "disabled") ## {
 $msg.get("accountdisabled")
+#logViewScript("/join/enterValidation/accountDisabled")##
 #else ## }{
 ## Is this a page we want to load?.. seems to be broken
 #set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink"])##

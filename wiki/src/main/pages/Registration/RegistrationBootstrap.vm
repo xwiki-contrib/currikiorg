@@ -117,10 +117,10 @@ fieldset h3 {
                   $msg.get("join.member.curriki_instructions")##
               #end</p>
           <div style="height:1em"><p id="currikiRegistrationAdvice" align="left">&nbsp;</p></div>
-          <script type="text/javascript">Curriki.logView("/join/register/${regMode}/view");</script>
+          #logViewScript("/join/register/${regMode}/view")
           #if($tool.errors)
               <ul class="warning">#foreach($m in $tool.errors)<li>$msg.get($m)</li> #end</ul>
-              <script type="text/javascript">Curriki.logView("/join/${regMode}/submit/errors");</script>
+              #logViewScript("/join/${regMode}/submit/errors")
           #end
       <input type="hidden" name="xaction" value="createProfile" >
       <input type="hidden" name="city"  value="$!tool.city">
