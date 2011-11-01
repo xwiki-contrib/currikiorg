@@ -1,10 +1,3 @@
-## - (1) checks to see if account is active:
-##   - if logged in: display thanks (short) and goto target
-##   - if not logged-in: go to log-in with message: "account active, now log-in"
-## - if not active
-##   - go to activation request EmailSentValidationLink.vm
-##   - go to activation request
-## - checks to see if there's an opener that's a login-dialog, opens itself there then
 #* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
 ## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
 ## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
@@ -18,12 +11,13 @@
 {pre}
 <script type="text/javascript">
     function closer() {
-        if(window.frames["currikiMainWindow"])
+        if(window.frames["currikiMainWindow"]) {
             window.frames["currikiMainWindow"].focus();
-        window.close();
+            window.close();
+        }
     }
-    window.setInterval(closer,50);
+    window.setInterval(closer,20);
 </script>
-<p>Thank you for your transaction.</p>
-<p>You can now close this window.</p>
+<p>$msg.get("googlecheckout.cart.finished-transaction")</p>
+<p><a href="http://www.curriki.org/" target="currikiMainWindow">www.curriki.org/</a> </p>
 {/pre}
