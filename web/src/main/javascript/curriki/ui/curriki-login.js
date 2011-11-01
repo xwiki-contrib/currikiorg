@@ -107,8 +107,11 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 }
 
 Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
-    Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
-    window.location.href = nextURLhere;
+    if(!Ext.isIE)  Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
+    if("close-now" == nextURLhere) window.top.location.reload();
+        else if(nextURLhere) window.location.href = nextURLhere;
+    if(Ext.isIE)  Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
+    window.top.name="currikiMainWindow";
 }
 
 Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
@@ -126,7 +129,7 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
         if(console) console.log("Creating window.");
         var x = Math.max(0,(screen.width-850)/2);
         var y = Math.max(0,(screen.height-550)/2);
-        otherWindow = window.open(requestURL, popupName, "toolbar=no,status=yes,menubar=no,resizable=yes,width=850,height=550,left="+x+",top="+y);
+        otherWindow = window.open(requestURL, popupName, "toolbar=no,status=yes,menubar=no,resizable=yes,width=900,height=600,left="+x+",top="+y);
     }
     window.focusIt = window.setInterval(function() { window.clearInterval(window.focusIt); otherWindow.focus(); }, 100)
     window.Curriki.ui.login.authorizeDialog = otherWindow;

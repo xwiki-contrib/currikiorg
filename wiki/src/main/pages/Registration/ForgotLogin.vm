@@ -1,4 +1,7 @@
-#if($request.xpage=="popup")#template("javascripts.vm")#end
+#if($request.xpage=="popup")
+    #template("javascripts.vm")
+    #template("analytics.vm")
+#end
 #set($uemail = $!request.get('email'))
 #set($forgot = $!request.get('forgot'))
 #if($request.framed)<style type="text/css">body { min-width: 0; margin-right:1em;}</style>#end
@@ -53,6 +56,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 		else if (!jt_.validEmail(emailStr)) {
 			CurrikiApp.errMsgAdd("$msg.get('forgot.error.email_invalid')");
 			CurrikiApp.errHighlight("block-email");
+            Curriki.logView("/join/forgotLogin/error");
 			isValid = false;
 		}
 		return isValid;
@@ -63,6 +67,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 		if (!($('forgotForm').elements["forgot"][0].checked ||$('forgotForm').elements["forgot"][1].checked)){
 			CurrikiApp.errMsgAdd("$msg.get("forgot.error.no_choice")");
 			CurrikiApp.errHighlight("block-forgot");
+            Curriki.logView("/join/forgotLogin/error");
 			isValid = false;
 		}
 		return isValid;
@@ -74,6 +79,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			var text = originalRequest.responseText;
 			var res = eval('[' + text + '][0]');
 			if(res.email){
+                Curriki.logView("/join/forgotLogin/error");
 				alert(_('forgot.error.no_user', $F('email')));
 				return;
 			}
@@ -115,6 +121,7 @@ Event.observe('forgotForm', 'submit', function(event) {
             <div class="center pad-vrt">
                 <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
             </div>
+            <script type="text/javascript">Curriki.logView("/join/forgotLogin/error");</script>
 		#elseif($list.size()==1) ##}{
             <h1><!-- 3 -->$msg.get('forgot.title')</h1>
 			## 1 username
@@ -128,6 +135,7 @@ Event.observe('forgotForm', 'submit', function(event) {
             <div class="center pad-vrt">
                 <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)#if($request.framed)&framed=true#end#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
+            <script type="text/javascript">Curriki.logView("/join/forgotLogin/remailedId");</script>
 		#else ##}{
 			## Multiple usernames
             <h1><!-- 4 -->$msg.get('forgot.title')</h1>
@@ -146,6 +154,7 @@ Event.observe('forgotForm', 'submit', function(event) {
             <div class="center pad-vrt">
                 <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
+            <script type="text/javascript">Curriki.logView("/join/forgotLogin/error");</script>
 		#end ##}
 	#elseif($!forgot == 'password') ## password }{
         <h1><!-- 5 -->$msg.get('forgot.title')</h1>
@@ -156,11 +165,13 @@ Event.observe('forgotForm', 'submit', function(event) {
             <div class="center pad-vrt">
                 <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup&#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
             </div>
+            <script type="text/javascript">Curriki.logView("/join/forgotLogin/error");</script>
 		#elseif($list.size()>1) ## }{
 			$msg.get("forgot.error.multiple_users")
             <div class="center pad-vrt">
                 <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
+            <script type="text/javascript">Curriki.logView("/join/forgotLogin/error");</script>
 		#elseif($list.size()==1) ## }{
 			#set($item = $list.get(0))
 			#set($bentrydoc = $xwiki.getDocument($item))
@@ -182,6 +193,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($junk = $bentrydoc.set("validkey", $valkey))
 			#set($junk = $bentrydoc.saveWithProgrammingRights())
 			$msg.get("forgotPassword.emailSent", [$uemail])
+            <script language="text/javascript">Curriki.logView("/join/forgotLogin/remailedPassReset");</script>
             <div class="center pad-vrt">
                 <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>

@@ -207,7 +207,9 @@ public class TargetsGroovy {
             }
             for(String n in l) session.removeAttribute(n);
             session.setAttribute("header.message","logout-ok");
-            session.setAttribute("curriki.analytics.toLogView","/Logout/top");
+            session.setAttribute("curriki.analytics.toLogView","/join/"+
+                    ( idProviderName==null ? "inCurriki" : idProviderName)
+                    +"/logout");
             if(idProviderName!=null) session.setAttribute("header.idProviderName", idProviderName);
             response.sendRedirect("/xwiki/bin/logout/XWiki/XWikiLogout?xredirect=" + URLEncoder.encode(xredirect));
             // debug: response.sendRedirect("/xwiki/bin/view/Registration/SessionAttributes");

@@ -96,11 +96,15 @@ fieldset h3 {
 #set($globalDebug=true)##
 {pre}
 #template("javascripts.vm")##
+#template("analytics.vm")##
 {/pre}
 ## note: we do not run CurrikiApp.init()
 <!-- end javascripts -->
 <!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method
     #set($provider = $tool.providerId)-->
+#if($provider)#set($regMode=$provider)##
+    #else#set($regMode="inCurriki")##
+#end##
 ## ----------------
 {pre}
 <form class="xform" action="https://$hostname/xwiki/bin/view/$doc.space/${doc.name}?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
@@ -113,8 +117,10 @@ fieldset h3 {
                   $msg.get("join.member.curriki_instructions")##
               #end</p>
           <div style="height:1em"><p id="currikiRegistrationAdvice" align="left">&nbsp;</p></div>
+          <script type="text/javascript">Curriki.logView("/join/register/${regMode}/view");</script>
           #if($tool.errors)
               <ul class="warning">#foreach($m in $tool.errors)<li>$msg.get($m)</li> #end</ul>
+              <script type="text/javascript">Curriki.logView("/join/${regMode}/submit/errors");</script>
           #end
       <input type="hidden" name="xaction" value="createProfile" >
       <input type="hidden" name="city"  value="$!tool.city">
