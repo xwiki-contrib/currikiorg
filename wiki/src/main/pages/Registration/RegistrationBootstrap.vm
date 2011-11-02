@@ -118,7 +118,7 @@ fieldset h3 {
               #end</p>
           <div style="height:1em"><p id="currikiRegistrationAdvice" align="left">&nbsp;</p></div>
           #logViewScript("/join/register/${regMode}/view")
-          #if($tool.errors)
+          #if($tool.errors && ! $tool.errors.isEmpty())
               <ul class="warning">#foreach($m in $tool.errors)<li>$msg.get($m)</li> #end</ul>
               #logViewScript("/join/${regMode}/submit/errors")
           #end

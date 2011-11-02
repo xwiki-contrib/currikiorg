@@ -11,7 +11,7 @@
 ### Login page
 ### (is delivered as full page except if framed=true is in the request)
 ###
-$context.setCacheDuration(86400)##
+## $context.setCacheDuration(86400)##
 #if($request.framed=='true')#set($framed="true")##
 <!-- framed is $framed -->
 #if(!$skin)## we did not pass initialization already
@@ -73,7 +73,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
 <div id="mainContentArea">
 <div id="fb-root"></div>
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+#set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
 #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
 #if($request.getHeader("User-Agent") && $request.getHeader("User-Agent").contains(" Chrome/"))##
 #set($nextURL="https://$hostname$nextURL")#end
