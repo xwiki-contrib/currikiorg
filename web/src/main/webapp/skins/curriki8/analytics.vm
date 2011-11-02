@@ -5,13 +5,10 @@
 ## Loaded in xwikivars now #set($GA_uacct = $!xwiki.getXWiki().Param('curriki.system.GA', '0'))
 #if("$!GA_uacct" != "0" && "$!GA_uacct" != "") ## {
 <script type="text/javascript">
-//<![CDATA[
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-//]]>
 </script>
 <script type="text/javascript">
-//<![CDATA[
 #set($cookies = $request.getCookies())
 #foreach($cookie in $cookies) ##{
 #if($cookie.name == '__utmv') ##{
@@ -36,13 +33,15 @@ pageTracker._trackPageview();
 #if("$!request.staf" == "1") ##{
 pageTracker._trackPageview('/features/staf/referred/'+window.location);
 #end ##}
-//]]>
 #if($request.session.getAttribute("curriki.analytics.toLogView"))#foreach($m in $request.session.getAttribute("curriki.analytics.toLogView").split(",| "))
     pageTracker._trackPageview("$m");
 #end$request.session.removeAttribute("curriki.analytics.toLogView")#end
+    if(window.pageTrackerQueue) { for(var i=0; i<window.pageTrackerQueue.length; i++) {
+        pageTracker._trackPageview(window.pageTrackerQueue.get(i));
+    } }
 </script>
+#else
 #end ##}
-#macro(logViewScript $viewName)#if("$!GA_uacct" != "0" && "$!GA_uacct" != "")
-    <script language="text/javascript">Curriki.logView("$viewName");</script>
-#end#end
-
+#macro(logViewScript $viewName)
+    <script type="text/javascript">Curriki.logView("$viewName");</script>
+#end

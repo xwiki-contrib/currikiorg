@@ -670,7 +670,7 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
                 winW + " to accomodate " + docW ) }
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
                 elt = dialogWindow.parent.Ext.get(iframeName);
-                while(elt && elt.getId())
+                while(elt && elt.get)
                 dialogWindow.parent.Ext.get(iframeName).dom.width = 20 + docW;
             }
         }

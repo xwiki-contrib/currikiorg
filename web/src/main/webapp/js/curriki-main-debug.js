@@ -1866,6 +1866,8 @@ Curriki.logView = function(page){
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
 	} else {
+        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
+        window.top.pageTrackerQueue.push(page);
 		console.info('Would track: ', page);
 	}
 }
