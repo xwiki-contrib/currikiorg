@@ -37,7 +37,7 @@ $msg.get("accountdisabled")
 #logViewScript("/join/enterValidation/accountDisabled")##
 #else ## }{
 ## Is this a page we want to load?.. seems to be broken
-#set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink"])##
+#set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink","CleanLogout"])##
 #if($allowList.contains($doc.name) && $doc.web=="Registration") ## {
 ##$xwiki.includeForm($doc.fullName,false)##
 ##$doc.getContent()##

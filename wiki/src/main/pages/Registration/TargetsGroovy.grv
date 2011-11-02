@@ -82,6 +82,7 @@ public class TargetsGroovy {
             if(afterLogin.startsWith("/xwiki/bin/view/Main/") ||
                     afterLogin.startsWith("/xwiki/bin/view/Registration/") ||
                     afterLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
+                    afterLogin.startsWith("/xwiki/bin/login") ||
                      refererPath=="/") {
                 afterLogin = "/xwiki/bin/view/MyCurriki/";
             }
@@ -105,7 +106,9 @@ public class TargetsGroovy {
                 noLogin = refererPath;
             }
             noLogin = outOfJump(noLogin);
-            if(noLogin.startsWith("/xwiki/bin/view/Registration/") || noLogin.startsWith("/xwiki/bin/view/GCheckout/"))
+            if(noLogin.startsWith("/xwiki/bin/view/Registration/") ||
+                    noLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
+                noLogin.startsWith("/xwiki/bin/login")  )
                 noLogin="/";
         } catch (Exception ex) {
             ex.printStackTrace();

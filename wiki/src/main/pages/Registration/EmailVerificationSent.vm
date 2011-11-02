@@ -1,9 +1,12 @@
 #if($!request.xpage=="popup")<style type="text/css">body { min-width: 0; margin-right:2em; width:80%}</style>#end
+    #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+    #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
 <div id="email-verification2">
  <h1>$msg.get('emailValidation.sent.title')</h1>
  $msg.get('emailValidation.sent.text')
  #set($xpage="")#if($!request.xpage!="")#set($xpage="xpage=$request.xpage")#end
  <strong>$msg.get('emailValidation.sent.notreceived',["/xwiki/bin/view/Registration/EmailNotReceived?${xpage}"])</strong>
+ <p style="text-align:right"><button onclick="window.top.location.href='$target.noLogin'; return false;" class="button-grey">$msg.get("join.login.cancel")</button></p>
 </div>
 #if("$!footerJScript" == "")
 #set($footerJScript = "")

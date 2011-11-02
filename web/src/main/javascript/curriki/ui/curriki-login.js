@@ -108,7 +108,7 @@ Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatSh
 
 Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
     if(!Ext.isIE)  Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
-    if("close-now" == nextURLhere) window.top.location.reload();
+    if(nextURLhere && nextURLhere.startsWith("close-now-")) window.top.location.href=nextURLhere.substring(10);
         else if(nextURLhere) window.location.href = nextURLhere;
     if(Ext.isIE)  Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
     window.top.name="currikiMainWindow";
