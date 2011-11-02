@@ -38,7 +38,6 @@ public class TargetsGroovy {
         String refererPath = null;
         try {
             String hostname = xwiki.xWiki==null ? null : xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
-            System.err.println("referer is " + referer + " and hostname is " + hostname);
             if(referer!=null && referer.startsWith("http://" + hostname))
                 refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
             def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
@@ -70,14 +69,14 @@ public class TargetsGroovy {
 
             // special cases?
             // no redirect outside here
-            System.out.println("aferlogin now is " + afterLogin);
+            //System.out.println("aferlogin now is " + afterLogin);
             if(! (afterLogin.startsWith("/xwiki/bin/"))) {
                 afterLogin = "/"
                 System.out.println("Zapped it to /.");
             };
             else if(afterLogin.startsWith("/xwiki/bin/view/XWiki/XWikiLogin")) afterLogin = "/";
             // login from home or any page in space Main => go to MyCurriki
-            System.out.println("RefererPath is " + refererPath);
+            //System.out.println("RefererPath is " + refererPath);
 
             afterLogin = outOfJump(afterLogin);
             if(afterLogin.startsWith("/xwiki/bin/view/Main/") ||
@@ -90,7 +89,7 @@ public class TargetsGroovy {
 
             // find out noLogin
             // desired target is public-readable and not MyCurriki... use it
-            System.err.println("refererpath: " + refererPath);
+            //System.err.println("refererpath: " + refererPath);
             if(session.getAttribute("nologin"))
                 noLogin = session.getAttribute("nologin");
             else if(refererPath !=null && refererPath.startsWith("/xwiki/bin/")) {
