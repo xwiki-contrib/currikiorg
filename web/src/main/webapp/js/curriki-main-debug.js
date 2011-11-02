@@ -3348,7 +3348,7 @@ Ext.ns('Curriki.ui.login');
 Curriki.ui.login.displayLoginDialog = function(url) {
     if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
         Curriki.ui.login.loginDialog.hide();
-    var w = 600, h=400;
+    var w = 630, h=400;
     //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
     if(window.innerWidth && window.innerWidth<w)   w = Math.round(window.innerWidth*0.95);
     if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";

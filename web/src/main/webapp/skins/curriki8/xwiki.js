@@ -662,18 +662,7 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
                 dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
             }
         }
-        var docW = getDocWidth(dialogDoc);
-        if(docW<minWidth) docW = minWidth;
-        if(console) console.log("Comparing W " + winW + " and " + docW);
-        if(Math.abs(winW-docW) > 20) {
-            if(console) { console.log("Should resize dialog from " +
-                winW + " to accomodate " + docW ) }
-            if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
-                elt = dialogWindow.parent.Ext.get(iframeName);
-                while(elt && elt.get)
-                dialogWindow.parent.Ext.get(iframeName).dom.width = 20 + docW;
-            }
-        }
+        // there was a similar part for the width but this is given up
     };
     if(Ext) Ext.onReady(accomplishRescale);
 }
