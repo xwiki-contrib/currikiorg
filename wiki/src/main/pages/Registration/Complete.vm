@@ -35,6 +35,7 @@
         }
     });
 </script>
+#set($hasAuthenticated=true)##
 #if($memberType=='corporation')<!-- including corporate donate -->
         #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")##
         #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated<75)
@@ -43,7 +44,6 @@
             #set($redir=$targets.afterLogin)##
             $xwiki.includeForm("Registration.JumpToTop",false)##
         #end
-
 #else<!-- including non-corporate donate -->
     $xwiki.includeForm("Registration.DonateNonCorp",false)
 #end

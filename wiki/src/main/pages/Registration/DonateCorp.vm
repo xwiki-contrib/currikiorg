@@ -79,10 +79,10 @@ document.body.className = document.body.className + " iframeInside";
     scheduleDialogRescale(window, document, "loginIframe", 800,0);
     Curriki.ui.login.hideLoginLoading();
 </script>
-#if("XWiki.XWikiGuest"!=$context.user || ($tool && $tool.hasAuthenticated))
+#if("XWiki.XWikiGuest"!=$context.user || ($tool && $tool.hasAuthenticated) || $hasAuthenticated)
 <p style="text-align:center">    <button onclick="window.top.location.href='/xwiki/bin/view/Registration/CleanLogout'; return false;" class="button-grey"##
  >$msg.get('join.complet.corporate.cancel_button')</button>
-    <button onclick="window.top.location.href='/xwiki/bin/view/MyCurriki/EditProfile?user=${context.user}#block-XWiki-XWikiUsers_0_member_type'; return false;" class="button-grey"
+    <button onclick="window.top.location.href='/xwiki/bin/view/MyCurriki/EditProfile#block-XWiki-XWikiUsers_0_member_type'; return false;" class="button-grey"
             >$msg.get('join.complete.corporate.membertype.link')</button>
 </p>
 #else
@@ -91,4 +91,5 @@ document.body.className = document.body.className + " iframeInside";
         >$msg.get('join.login.cancel')</button></p>
 #end
 </div>
-<!-- corp-warning on $request.session.setAttribute("corpWarned",$context.user) -->
+<!-- corp-warning on $request.session.setAttribute("corpWarned","XWiki.${tool.username}") -->
+<!-- user is now $context.user -->
