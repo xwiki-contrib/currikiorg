@@ -35,13 +35,14 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
     <!-- $request.session.removeAttribute("downloadSoon") --> *#
     #end##
 #if("XWiki.XWikiGuest"!=$context.user && $doc.fullName!="MyCurriki.EditProfile")
-    #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")
+    #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")<!-- userType: $userType -->
     #if("corporation"==$userType)
         #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")
+        <!-- lastCorpMembershipDonated = $lastCorpMembershipDonated -->
         #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated<75)
             #set($corpWarnedAtt=$!request.session.getAttribute("corpWarned"))
-            #if(""=="$!corpWarnedAtt")#else#set($corpWarnedAtt='not-warned')#end
-            #if("$corpWarnedAtt"!="$context.user")
+            <!-- corpWarnedAtt = $corpWarnedAtt -->
+            #if("$!corpWarnedAtt"!="$!context.user")
                 <!-- corp-warning on $request.session.setAttribute("corpWarned",$context.user) -->
                 <script type="text/javascript">Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/DonateCorp?xpage=popup")</script>
             #else <!-- should not warn corp: corpWarnedAtt = "$!corpWarnedAtt" -->
