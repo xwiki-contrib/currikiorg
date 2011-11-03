@@ -3527,8 +3527,10 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
         if(!framedContentURL || framedContentURL==null) framedContentURL = window.location.href;
         Curriki.ui.login.displayLoginDialog(framedContentURL);
     } else if (window.name != 'curriki-login-dialog' && framedContentURL && framedContentURL!=null) {
-        if (console) console.log("Redirecting to " + framedContentURL)
-        window.opener.location.replace(framedContentURL);
+        if (console) console.log("Redirecting to " + framedContentURL);
+        var t= window.opener;
+        if(typeof(t)!="object") t=window.top;
+        t.replace(framedContentURL);
         window.setInterval("window.close();", 50);
         return;
     }
