@@ -77,7 +77,7 @@
 #set($junk = $userObj.set("validkey", $valCode))
 #set($junk = $userObj.set("email", $newEmail))
 #set($junk = $userDoc.saveWithProgrammingRights())
-#set($link = "http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')/xwiki/bin/view/Registration/EmailVerified?u=${username}&v=${valCode}"))
+#set($link = "http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')/xwiki/bin/view/Registration/CompleteCaller?xwikiname=${username}&validkey=${valCode}"))
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
 #set($mailSubject = $doc.getRenderedContent($mailDoc.title))
@@ -111,7 +111,7 @@ $err
   <p>$msg.get('emailValidation.step1.weHave', [$name1, $name2, $emailInput])</p>
   <p>$msg.get('emailValidation.step1.pleaseSubmit')</p>
   <p class="button-right">
-      <button class="button button-grey" onclick="window.top.location.href='/xwiki/bin/view/Registration/CleanLogout'; return false;">$msg.get('emailValidation.step1.cancel')</button>
+      <button class="button button-grey" onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;">$msg.get('emailValidation.step1.cancel')</button>
       <button type="submit" class="button button-orange">$msg.get('emailValidation.step1.submit')</button>
   </p>
  </form>

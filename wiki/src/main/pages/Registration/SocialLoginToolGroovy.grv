@@ -34,6 +34,7 @@ public class SocialLoginToolGroovy {
     Object validation;
     def targets;
     def profile = null;
+    boolean hasAuthenticated = false;
 
 
     MailSenderPluginApi mailsender = null;
@@ -98,6 +99,7 @@ public class SocialLoginToolGroovy {
             request.session.setAttribute("curriki.analytics.toLogView","/join/"+
                     ( providerId==null ? "inCurriki" : providerId) +"/login");
             nowTarget = getRedirectTarget(true);
+            this.authenticated = true;
             //nowTarget = request.session.getAttribute("xredirect");
             return "redirectOnTop";
             //def xwikiAuthenticator = xwiki.getXWiki().getAuthService(); //.@authenticators.get('xwiki')
