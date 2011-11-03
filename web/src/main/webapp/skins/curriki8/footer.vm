@@ -32,7 +32,7 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
         window.downloader = window.setInterval(window.nowDownload, 100);
     </script>
     #* <iframe width="3" height="3" src="$request.session.getAttribute("downloadSoon")"></iframe>
-    <!--  $request.session.removeAttribute("downloadSoon") --> *#
+    <!-- $request.session.removeAttribute("downloadSoon") --> *#
     #end##
 #if("XWiki.XWikiGuest"!=$context.user && $doc.fullName!="MyCurriki.EditProfile")
     #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")<!-- userType: $userType -->
