@@ -17,7 +17,7 @@
     });
 </script>
 #end
-<p style="margin: 3em;"><a target="identity-provider" href="${request.to}">Requesting your authorization to transmit information to Curriki from
-    ${request.provider}. <br>This page should go away then.</a>
+<p style="margin: 3em;"><a target="identity-provider" href="${request.to}"
+        >$msg.get("",[${request.provider}])</a>
 </p>
 <p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">Cancel</button></p>
