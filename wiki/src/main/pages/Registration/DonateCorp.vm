@@ -11,7 +11,7 @@ document.body.className = document.body.className + " iframeInside";
     h2 {color:#3968B7; margin:0 0 20px 0; font-size:20px}
     .h2graysspan{color: #666;}
     #box-wrapper{ margin: 10px auto; padding: 0; width: 580px;}
-    .box  {border:  16px solid #999; ;margin: 7px; font-size:20px; padding: 20px 10px 0px 0px; text-align: center;  float:left;   background-color: white; height:130px; width:130px; line-height:20px;}
+    .box  {border:  16px solid #999; ;margin: 7px; font-size:20px; padding: 7px 10px 0px 3px; text-align: center;  float:left;   background-color: white; height:130px; width:130px; line-height:20px;}
     a {text-decoration: none;}
     .dollar_sign{ font-size: 14px; vertical-align: top; padding-left:10px;}
     p {margin-bottom:10px}
@@ -38,7 +38,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         #set($amount="75")##
         <a href="$baseUrlPopup$amount" style="border-color: #FB661E">
-            <button class="box" style="border-color: #99CB25;" onclick="Curriki.logView('/join/donate/corporate-membership/started'); Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;">
+            <button class="box" style="border-color: #99CB25;" onclick="Curriki.logView('/join/donate/corporate-membership/started'); window.top.Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;">
             <span class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
@@ -46,7 +46,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         #set($amount="150")##
         <a href="$baseUrlPopup$amount" style="border-color: #FB661E">
-            <button class="box" onclick="Curriki.logView('/join/donate/corporate-membership/started'); Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;" ##
+            <button class="box" onclick="Curriki.logView('/join/donate/corporate-membership/started'); window.top.Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;" ##
                 style="border-color: #FB661E; background: none repeat scroll 0% 0% white;">
             <span class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -55,7 +55,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         #set($amount="300")##
         <a href="$baseUrlPopup$amount" style="border-color: #3E6AFB">
-            <button class="box" onclick="Curriki.logView('/join/donate/corporate-membership/started'); Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;" ##
+            <button class="box" onclick="Curriki.logView('/join/donate/corporate-membership/started'); window.top.Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;" ##
                 style="border-color: #3E6AFB; background: none repeat scroll 0% 0% white;">
             <span class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -65,7 +65,7 @@ document.body.className = document.body.className + " iframeInside";
         ##
         #set($amount="1000")##
         <a href="$baseUrlPopup$amount">
-            <button class="box" onclick="Curriki.logView('/join/donate/corporate-membership/started'); Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;"
+            <button class="box" onclick="Curriki.logView('/join/donate/corporate-membership/started'); window.top.Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); return false;"
                     style="border-color: #FC9824; background: none repeat scroll 0% 0% white;">
             <span class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
@@ -91,5 +91,7 @@ document.body.className = document.body.className + " iframeInside";
         >$msg.get('join.login.cancel')</button></p>
 #end
 </div>
-<!-- corp-warning on $request.session.setAttribute("corpWarned","XWiki.${tool.username}") -->
+#set($username="$!context.user")##
+#if($username=="XWiki.XWikiGuest" && $tool)#set($username="XWiki.${tool.username}")#end
+<!-- corp-warning on $request.session.setAttribute("corpWarned",$username) now of value $request.session.getAttribute("corpWarned")  -->
 <!-- user is now $context.user -->
