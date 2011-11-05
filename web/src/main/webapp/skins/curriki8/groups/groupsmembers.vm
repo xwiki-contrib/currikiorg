@@ -843,7 +843,7 @@ $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_membe
 ## begin user is guest we need to ask him to login or create an account
 {pre}
 #set($redirurl= $logredir.replaceAll("&#38;", "-"))
-#set($regurl = "/xwiki/bin/view/Main/JoinCurriki?redir=${escapetool.url($redirurl)}"))
+#set($regurl = "/xwiki/bin/view/Main/JoinCurriki?redir=${escapetool.url($redirurl)}")
 $msg.get("groups_members_join_needaccount",[$regurl])
 ## #loginbox($logredir)
 {pre}
