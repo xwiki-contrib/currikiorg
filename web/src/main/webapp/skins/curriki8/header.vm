@@ -79,42 +79,16 @@
         #set($logredir = $xwiki.getURL("Main.WebHome"))
     #end
 	#set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
-	<nobr><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></nobr>
+	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 #if($!request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
-    <div id="fb-root"></div>
-    <p align="left" style="font-size:smaller; margin-top: 0.3em">$msg.get("logout.ok-you-left")<!-- logout message here -->##
+    <p align="left" style="font-size:smaller; margin-top: 0; white-space:nowrap">$msg.get("logout.ok-you-left")<!-- logout message here -->##
     #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
     #if($idProviderName)<!-- idProviderName: "$idProviderName" -->##
         #if($idProviderName.equalsIgnoreCase("facebook"))
-            #* <script type="text/javascript">
-                var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
-                if(fbAppId) {
-                    window.fbReady = false;
-                    window.fbAsyncInit = function() {
-                      if(console) console.log("fbAsyncInit start.");
-                      // below is the script when it's hooked
-                      FB.init({appId: fbAppId, status: true, cookie: true,
-                               xfbml: true});
-                    };
-                    // hook the FB script
-                    (function() {
-                      var lang = "$context.language";
-                      ## built from http://www.facebook.com/translations/FacebookLocales.xml
-                      var country = {"en":"US", "fr":"FR", "ru":"RU", "hi": "IN", "es": "LA", "id": "ID", "si": "SI", "ta":"IN", "eo":"EO", "pl":"PL"}[lang];
-                      if(typeof(country)!="string") { lang="en"; country="US";}
-                      var e = document.createElement('script'); e.async = true;
-                      e.src = document.location.protocol +
-                        '//connect.facebook.net/'+lang+'_' + country +'/all.js';
-                      document.getElementById('fb-root').appendChild(e);
-                    }());
-                    if(console) console.log("fbAsyncInit finished.")
-                }
-            </script> *#
             <a href="http://www.facebook.com/logout.php" target="_facebook_window"
-               onclick="FB.logout(function() {}); return(false);"
-                    >$msg.get("logout.offer-logout.facebook")</a>
+               >$msg.get("logout.offer-logout.facebook")</a>
         #elseif($idProviderName.equalsIgnoreCase("google"))
             <a href="http://www.google.com/accounts/Logout?continue=$escapetool.url()"
                target="_google_logout_window"
