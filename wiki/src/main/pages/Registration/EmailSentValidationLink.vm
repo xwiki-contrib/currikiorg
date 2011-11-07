@@ -25,28 +25,26 @@ body {  min-width: 0;
 
 ##set($from = $msg.get('registration.email'))
 #set($from = $xwiki.getXWikiPreference("admin_email"))
-<h1>Thanks for signing up. You're almost done!</h1><br>
-<h2>Check your email to finish creating your account.</h2>
+<h1>$msg.get('join.validate.email.title')</h1><br>
+<h2>$msg.get('join.validate.email.header1')</h2>
 
 #if("$!notice"!="")#info($notice)#end
-<p>We've just sent you an email from $from. <br/>
-To complete the sign-up process, enter the validation key from the email
-     or click the link in the email.</p>
+<p>$msg.get('join.validate.email.text1') $from.<br/>$msg.get('join.validate.email.text2')</p>
 ##
 <form name="input" action="/xwiki/bin/view/Registration/Complete" method="POST">
-Enter Validation Key:
+$msg.get('join.validate.email.header2')
     <input type="hidden" name="xwikiname" value="$request.xwikiname"/>
     #if($request.xpage)<input type="hidden" name="xpage" value="$request.xpage"/>#end
-    <input style="width:10em" type="text" name="validkey" id="validkey_input" size="16" /><button class="button-confirm" type="submit">$msg.get('forgot.submit_button')</button>
+    <input style="width:10em" type="text" name="validkey" id="validkey_input" size="16" /><button class="button-confirm" type="submit">$msg.get('join.validate.email.login_button')</button>
 </form> 
 
 
 
-<h2>If you do not receive the email:</h2>
+<h2>$msg.get('join.validate.email.help_instructions_header')</h2>
 <ol>
-<li>Check your Spam folder and be sure to add Curriki &lt;$from&gt; to your "safe senders" list or address book.</li>
-<li>Click this link to <a href="/xwiki/bin/view/${doc.web}/${doc.name}?xpage=$request.xpage&xwikiname=${request.xwikiname}&mailAgain=1">resend the activation email</a>.</li>
-<li>If you still do not receive and email <a href="/xwiki/bin/view/Registration/EmailNotReceived?xpage=$!request.xpage&xwikiname=$!{request.xwikiname}">please contact support</a>.</li>
+<li>$msg.get('join.validate.email.help_instructions_text1')</li>
+<li>$msg.get('join.validate.email.help_instructions_text2') <a href="/xwiki/bin/view/${doc.web}/${doc.name}?xpage=$request.xpage&xwikiname=${request.xwikiname}&mailAgain=1">$msg.get('join.validate.email.send_email_button')</a>.</li>
+<li>$msg.get('join.validate.email.help_instructions_text3') <a href="/xwiki/bin/view/Registration/EmailNotReceived?xpage=$!request.xpage&xwikiname=$!{request.xwikiname}">$msg.get('join.validate.email.email_not_received_button')</a>.</li>
 </ol>
 #if($targets)#else##
 #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
@@ -54,7 +52,7 @@ Enter Validation Key:
 #end##
 <p style="text-align:right; padding-right: 3em;">
     <button class="button-grey" style="button" onclick="window.top.location.href='${targets.noLogin}'; return false;">##
-      $msg.get("registration.validate.cancel")</button>
+      $msg.get('join.validate.email.cancel_button')</button>
 </p>
 
 
