@@ -79,7 +79,7 @@
         #set($logredir = $xwiki.getURL("Main.WebHome"))
     #end
 	#set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
-	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
+	<nobr><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></nobr>
 #end ##}
 #if($!request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
