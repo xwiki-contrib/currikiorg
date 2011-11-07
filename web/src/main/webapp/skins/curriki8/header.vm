@@ -23,7 +23,7 @@
 </div> ##}
 
 <!-- member area -->
-<div id="header-member"> ##{
+<div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
 #if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
 ##{
 	#if ($request.xredirect) ##{
@@ -83,11 +83,12 @@
 #end ##}
 #if($!request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
+    <div id="fb-root"></div>
     <p align="left" style="font-size:smaller; margin-top: 0.3em">$msg.get("logout.ok-you-left")<!-- logout message here -->##
     #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
-    #if($idProviderName)<!-- provider: "$idProviderName" -->##
+    #if($idProviderName)<!-- idProviderName: "$idProviderName" -->##
         #if($idProviderName.equalsIgnoreCase("facebook"))
-            <script type="text/javascript">
+            #* <script type="text/javascript">
                 var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
                 if(fbAppId) {
                     window.fbReady = false;
@@ -110,10 +111,9 @@
                     }());
                     if(console) console.log("fbAsyncInit finished.")
                 }
-            </script>
-            <div id="fb-root"></div>
-            <a href="http://www.facebook.com/logout.php"
-               onclick="FB.Connect.logout(doOnUserLogout()); return(false);"
+            </script> *#
+            <a href="http://www.facebook.com/logout.php" target="_facebook_window"
+               onclick="FB.logout(function() {}); return(false);"
                     >$msg.get("logout.offer-logout.facebook")</a>
         #elseif($idProviderName.equalsIgnoreCase("google"))
             <a href="http://www.google.com/accounts/Logout?continue=$escapetool.url()"

@@ -99,7 +99,7 @@ public class SocialLoginToolGroovy {
             request.session.setAttribute("curriki.analytics.toLogView","/join/"+
                     ( providerId==null ? "inCurriki" : providerId) +"/login");
             nowTarget = getRedirectTarget(true);
-            this.authenticated = true;
+            this.hasAuthenticated  = true;
             //nowTarget = request.session.getAttribute("xredirect");
             return "redirectOnTop";
             //def xwikiAuthenticator = xwiki.getXWiki().getAuthService(); //.@authenticators.get('xwiki')
@@ -108,8 +108,7 @@ public class SocialLoginToolGroovy {
             //xwikiAuthenticator.authenticate(userDoc.fullName, password, context.context);
             //xwiki.getXWiki().getAuthService().authenticate(userDoc.fullName, password, context.context)
         } catch (Exception ex) {
-            System.err.println("Trouble at authenticating: " + ex);
-            ex.printStackTrace();
+            LOG.warn("Trouble at authenticating: ", ex);
             errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
             return "error";
         };
@@ -149,7 +148,7 @@ public class SocialLoginToolGroovy {
             response.sendRedirect(url);
             return "nothing";
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOG.warn("Generic error at bounce to provider.", ex);
             errors.add(msg.get('registration.genericError', [ex.message]));
             return "error";
         };
@@ -306,9 +305,16 @@ public class SocialLoginToolGroovy {
             //request.getParameterMap().put("xwikiname",userDocName);
             //request.getParameterMap().put("XWiki.XWikiUsers_0_password",password);
 
+
+
             Document userDoc;
             if(isNew) userDoc = createUserDoc();
                 else userDoc = preExistingUserDoc;
+
+            userobj = userDoc.getObject("XWiki.XWikiUsers");
+            userobj.set("active", "1");
+            userobj.set("email_undeliverable", "0");
+            
 
             createSocialLoginProfileObject(profile, userDoc, provider);
             tryToAddProfilePictureFromProfile(profile.profileImageURL, userDoc);

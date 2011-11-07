@@ -11,12 +11,16 @@
 {pre}
 <script type="text/javascript">
     function closer() {
-        if(window.frames["currikiMainWindow"]) {
-            window.frames["currikiMainWindow"].focus();
+        window.clearInterval(window.closerInterval);
+        if(window.opener && !window.opener.closed) {
+            window.opener.focus();
             window.close();
+        } else {
+            window.open("http://$xwiki.getXWiki().Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')", "currikiMainWindow");
+            if("currikiMainWindow"!=window.name) window.close();
         }
     }
-    window.setInterval(closer,20);
+    window.closerInterval = window.setInterval(closer,20);
 </script>
 <p>$msg.get("googlecheckout.cart.finished-transaction")</p>
 <p><a href="http://www.curriki.org/" target="currikiMainWindow">www.curriki.org</a> </p>

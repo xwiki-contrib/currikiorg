@@ -219,40 +219,39 @@ fieldset h3 {
     });
 
     scheduleDialogRescale(window, document, "loginIframe", 500,0);
-
+    Curriki.ui.login.memberTypeChanged = function () {
+        try {
+            var p = Ext.get("memberTypeNotice");
+            var s = Ext.get("memberType_input");
+            if(!p || !s) {
+                if(console) {console.log("Can't find elements. Stopping.");}
+                return;
+            }
+            var text = ' ';
+            if(s && s.dom.value &&
+                    ("corporation"==s.dom.value)) {
+                text = _('join.member_type_coporate_instructions');
+            }
+            if(console) {console.log("memberTypeNotice: " + text);}
+            Ext.get("memberTypeNotice").dom.innerHTML= text;
+        } catch(e) { if(console) console.log(e); }
+    };
+    ##
+    Curriki.ui.login.displayInstruction = function(key,params) {
+        try {
+            var text;
+            if(params) text = _(key,params);
+                else text = _(key)
+            if(!text || text=="") text=" "; // warning nbsp in this quote
+            Ext.get("currikiRegistrationAdvice").dom.innerHTML = text;
+        } catch(e) { if(console) console.log(e); }
+    };
+    ##
+    ##
     Ext.onReady(function() {
         //
-        Curriki.ui.login.memberTypeChanged = function () {
-            try {
-                var p = Ext.get("memberTypeNotice");
-                var s = Ext.get("memberType_input");
-                if(!p || !s) {
-                    if(console) {console.log("Can't find elements. Stopping.");}
-                    return;
-                }
-                var text = ' ';
-                if(s && s.dom.value &&
-                        ("corporation"==s.dom.value)) {
-                    text = _('join.member_type_coporate_instructions');
-                }
-                if(console) {console.log("memberTypeNotice: " + text);}
-                Ext.get("memberTypeNotice").dom.innerHTML= text;
-            } catch(e) { if(console) console.log(e); }
-        };
         // do it after load: the warning must be displayed in case
         Curriki.ui.login.memberTypeChanged();
-
-        Curriki.ui.login.displayInstruction = function(key,params) {
-            try {
-                var text;
-                if(params) text = _(key,params);
-                    else text = _(key)
-                if(!text || text=="") text=" "; // warning nbsp in this quote
-                Ext.get("currikiRegistrationAdvice").dom.innerHTML = text;
-            } catch(e) { if(console) console.log(e); }
-        };
-
-
     })
 
 

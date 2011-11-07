@@ -372,6 +372,7 @@ Curriki.ui.login.liveValidation = function() {
                     Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, true);
                 return;
             }
+            //
             // we're left with email and username, only check if longer than 3
             var queueEntry = new Object();
             queueEntry.value = inputElt.getValue();
@@ -381,6 +382,11 @@ Curriki.ui.login.liveValidation = function() {
                 if(console) console.log("Undefined value, stop.");
                 return;
             }
+            if(typeof(queueEntry.value)!="undefined" && queueEntry.value.length<3) {
+                Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, null);
+                return;
+            }
+            // something to check on the server
             // scan the queue if there's a query with same value, bring it to front
             for(x in queue) {
                 if(x.value == queueEntry.value) {
@@ -388,13 +394,13 @@ Curriki.ui.login.liveValidation = function() {
                     if(i>0) for(j=i-1; j>=0; j--) {
                         queue[j+1] = queue[j];
                     }
-                    if(console) console.log("Swapping existing queue entries.")
+                    if(console) console.log("Swapping existing queue entries.");
                     queue[0] = x;
                     return;
                 }
             }
             // otherwise launch request
-            if(console) console.log("Launching in queue.")
+            if(console) console.log("Launching in queue.");
             queueEntry.request = this.launchCheckFieldRequest(queueEntry.value, inputElt, queueEntry);
             // add to queue
             queue[queue.length] = queueEntry;
