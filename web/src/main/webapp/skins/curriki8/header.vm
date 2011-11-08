@@ -81,9 +81,12 @@
 	#set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
 	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
-#if($!request.session.getAttribute("header.message")=="logout-ok")##
+#set($headerMsg="$!request.session.getAttribute('header.message')")##
+#if($headerMsg!="")
+<p align="left" style="font-size:smaller; margin-top: 0; white-space:nowrap">##
+#if($headerMsg=="logout-ok")##
     $request.session.removeAttribute("header.message")##
-    <p align="left" style="font-size:smaller; margin-top: 0; white-space:nowrap">$msg.get("logout.ok-you-left")<!-- logout message here -->##
+    $msg.get("logout.ok-you-left")<!-- logout message here -->##
     #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
     #if($idProviderName)<!-- idProviderName: "$idProviderName" -->##
         #if($idProviderName.equalsIgnoreCase("facebook"))
@@ -97,7 +100,8 @@
     #end##
     #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
         <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
-    </p>
+#else$msg.get($headerMsg,[$context.user])#end
+</p>
 #end##
 ##
 </div> ##} ##header-member

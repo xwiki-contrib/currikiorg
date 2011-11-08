@@ -204,6 +204,7 @@ public class SocialLoginToolGroovy {
                 if(!validation.isValidEmail(((Profile)profile).email, false)) {
                     if(validation.foundAccountName) {
                         mergeAccountWithProfile(profile, validation.foundAccountName, providerId);
+                        session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
                         return "redirectOnTop";
                     }
                 }
@@ -426,6 +427,7 @@ public class SocialLoginToolGroovy {
         Document userDoc = xwiki.getDocument(userName);
         LOG.warn("Trying to merge profile of user "+userName+" with provider's profile from " + provider);
         createSocialLoginProfileObject(profile, userDoc, provider);
+        updateUserDoc(userDoc);
         userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true);
         // and login!
         authenticateUser(userDoc);
