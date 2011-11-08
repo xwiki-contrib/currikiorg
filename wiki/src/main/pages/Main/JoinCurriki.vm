@@ -1,3 +1,3 @@
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
 #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-$response.sendRedirect("/xwiki/bin/view/Registration/LoginOrRegister?xredirect=$escapetool.url($targets.afterLogin)")##
+$response.sendRedirect("/xwiki/bin/view/Registration/DirectLogin?xredirect=$escapetool.url($targets.afterLogin)")##
