@@ -23,8 +23,8 @@ document.body.className = document.body.className + " iframeInside";
 #if($user)#else#set($user=$request.user)#end
 #if($user)#else#set($user=$request.xwikiname)#end
 #if($user)#else#set($user=$context.user)#end
-#if($user=="XWiki.XWikiGuest")#warning("Warning: no user, donation will be to 'guest'")#end
-##
+#if($user=="XWiki.XWikiGuest")#warning($msg.get("join.complete.corporate.warningNotLoggedIn"))#end
+## 
 ##
 #set($baseUrlNext="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=corporation&keepQuiet=true&user=$user&amount=")##
 #set($baseUrlPopup="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=corporation&redirectNow=true&user=$user&amount=")##
