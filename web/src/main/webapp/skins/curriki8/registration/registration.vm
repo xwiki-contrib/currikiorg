@@ -493,7 +493,6 @@ document.observe('dom:loaded', function(){
 function toggleCorporateFieldsVisible() {
     var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
     memberType = memberType.options[memberType.selectedIndex].value;
-    Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
     var i;
     if(memberType=="corporation" || memberType=="nonprofit" || memberType=="nonprofit_education") {
         i = $('registerform_publish_intent_section');
@@ -512,6 +511,7 @@ function toggleCorporateFieldsVisible() {
         text = _('join.member_type_coporate_instructions');
     console.log("memberTypeNotice: " + text);
     Ext.get("memberTypeNotice").dom.innerHTML= text;
+    Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
 }
 /* ]]> */
 </script>

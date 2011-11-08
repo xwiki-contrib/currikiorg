@@ -100,7 +100,7 @@
     #end##
     #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
         <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
-#else$msg.get($headerMsg,[$context.user])#end
+#else$msg.get($headerMsg,[$context.user.substring(6)])#end## "XWiki.".length() = 6
 </p>
 #end##
 ##

@@ -166,8 +166,16 @@ public class SocialLoginToolGroovy {
             LOG.info("Welcoming from provider " + providerId);
 
             // verify the authentication
-            System.err.println("Verifying " + providerObj + " for provider " + providerId);
-            profile = providerObj.verifyResponse(request);
+            LOG.info("Verifying " + providerObj + " for provider " + providerId);
+            try {
+                if(request.error!='access_denied')
+                    profile = providerObj.verifyResponse(request)
+                LOG.info("obtained profile: " + profile);
+            } catch (Exception ex) { LOG.warn(ex); }
+            if(profile==null) {
+                LOG.info("Refused authorization.");
+                return "refused";
+            }
 
             // Search for this profile id in database, find user
             String query =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
@@ -203,8 +211,9 @@ public class SocialLoginToolGroovy {
                 validation.init(xwiki, errors, warningFields, okFields);
                 if(!validation.isValidEmail(((Profile)profile).email, false)) {
                     if(validation.foundAccountName) {
+                        validation.zapErrors();
                         mergeAccountWithProfile(profile, validation.foundAccountName, providerId);
-                        session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
+                        request.session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
                         return "redirectOnTop";
                     }
                 }
@@ -312,7 +321,7 @@ public class SocialLoginToolGroovy {
             if(isNew) userDoc = createUserDoc();
                 else userDoc = preExistingUserDoc;
 
-            userobj = userDoc.getObject("XWiki.XWikiUsers");
+            def userobj = userDoc.getObject("XWiki.XWikiUsers");
             userobj.set("active", "1");
             userobj.set("email_undeliverable", "0");
             
@@ -480,8 +489,7 @@ public class SocialLoginToolGroovy {
 
     public String actionHere(HttpServletRequest request) {
         if(request.error == "access_denied" && request.error_reason == "user_denied") {
-            nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&xredirect=" + URLEncoder.encode(getRedirectTarget(false));
-            return "backFromAuthorization";
+            return "refused";
         }
         else if(!request.callback && request.provider) {
             return "bounceToProvider";

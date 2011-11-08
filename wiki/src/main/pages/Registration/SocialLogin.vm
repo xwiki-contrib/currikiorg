@@ -31,6 +31,7 @@ $tool.init($xwiki,$context,$request,$msg,$targets)##
     #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())##
     #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())##
     #elseif($view=="backFromAuthorization")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.BackFromAuthorization",false)##
+    #elseif($view=="refused")#set($redir=$targets.noLogin)#set($included="true")$xwiki.includeForm("Registration.BackFromAuthorization",false)#set($view="")##
     #elseif($view=="pleaseDonate")##
         #if($tool.isCorporateAccount())#set($donateDoc="DonateCorp")#else#set($donateDoc="DonateNonCorp")#end
         ## HAVE TO REDIRECT WITH THE USER-NAME INCLUDED AND ONLY IF NOT CHROME

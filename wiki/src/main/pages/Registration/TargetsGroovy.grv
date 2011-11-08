@@ -90,7 +90,7 @@ public class TargetsGroovy {
 
             // find out noLogin
             // desired target is public-readable and not MyCurriki... use it
-            //System.err.println("refererpath: " + refererPath);
+            System.err.println("refererpath: " + refererPath);
             if(session.getAttribute("nologin"))
                 noLogin = session.getAttribute("nologin");
             else if(refererPath !=null && refererPath.startsWith("/xwiki/bin/")) {
@@ -108,8 +108,14 @@ public class TargetsGroovy {
             noLogin = outOfJump(noLogin);
             if(noLogin.startsWith("/xwiki/bin/view/Registration/") ||
                     noLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
-                noLogin.startsWith("/xwiki/bin/login")  )
+                    noLogin.startsWith("/xwiki/bin/login")  )
                 noLogin="/";
+            if(noLogin=="/" && afterLogin.startsWith("/xwiki/bin/view/")) {
+                String targetDocName = afterLogin.replaceAll("/xwiki/bin/[a-z]+/","");
+                if(targetDocName.contains("?")) targetDocName = targetDocName.substring(targetDocName.indexOf("?"));
+                targetDocName = targetDocName.replaceAll("/",".");
+                if(xwiki.checkAccess(targetDocName, "view")) noLogin = "/xwiki/bin/view/" + targetDocName.replaceAll("\\.","/");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         };
@@ -125,6 +131,7 @@ public class TargetsGroovy {
     }
 
     private String outOfJump(String from) {
+        if(from==null) return null;
         if(from.startsWith("/xwiki/bin/view/Registration/Jump")) {
             def m=Pattern.compile(".*redir=([^?&]*)\\&?.*").matcher(from);
             if(m.matches()) {

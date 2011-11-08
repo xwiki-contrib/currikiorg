@@ -24,6 +24,9 @@ public class Validation {
     private List warningFields, okFields;
     private String foundAccountName = null;
 
+    public void zapErrors() {
+        errors.clear();
+    }
 
     public boolean isValidUsername(String account, boolean echoErrors) {
         if (account.length()>=3 && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
