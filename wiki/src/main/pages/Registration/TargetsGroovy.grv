@@ -111,10 +111,12 @@ public class TargetsGroovy {
                     noLogin.startsWith("/xwiki/bin/login")  )
                 noLogin="/";
             if(noLogin=="/" && afterLogin.startsWith("/xwiki/bin/view/")) {
-                String targetDocName = afterLogin.replaceAll("/xwiki/bin/[a-z]+/","");
-                if(targetDocName.contains("?")) targetDocName = targetDocName.substring(targetDocName.indexOf("?"));
-                targetDocName = targetDocName.replaceAll("/",".");
-                if(xwiki.checkAccess(targetDocName, "view")) noLogin = "/xwiki/bin/view/" + targetDocName.replaceAll("\\.","/");
+                if (!(afterLogin.contains("MyCurriki"))) {
+                    String targetDocName = afterLogin.replaceAll("/xwiki/bin/[a-z]+/","")
+                    if(targetDocName.contains("?")) targetDocName = targetDocName.substring(targetDocName.indexOf("?"))
+                    targetDocName = targetDocName.replaceAll("/",".")
+                    if(xwiki.checkAccess(targetDocName, "view")) noLogin = "/xwiki/bin/view/" + targetDocName.replaceAll("\\.","/")
+                };
             }
         } catch (Exception ex) {
             ex.printStackTrace();
