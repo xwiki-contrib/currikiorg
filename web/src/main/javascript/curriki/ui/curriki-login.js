@@ -139,7 +139,7 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
 };
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
-    if(console) console.log("Finishing popup, target: " + targetURL);
+    if(console) console.log("Finishing popup, (toTop? "+ toTop+ ") target: " + targetURL);
     if(openerWindow &&
             (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
             || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))) {
@@ -165,12 +165,16 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
                 } catch(e) { if(console) console.log(e); }
             },20);
         } else {
-            window.top.location.href = targetURL;
+            var w = window;
+            if(toTop) w = w.top;
+            w.location.href = targetURL;
         }
         return false;
     } else {
         if(console) console.log("No popup parent found... ah well.");
-        openedWindow.top.location.href = targetURL;
+        var w = openedWindow;
+        if(toTop) w = w.top;
+        w.location.href = targetURL;
         //alert("Would go to " + targetURL + " from " + openedWindow);
     }
 }
