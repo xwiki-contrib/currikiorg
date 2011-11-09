@@ -377,7 +377,7 @@ span.missionitalic {
 
     <p>#foreach($provider in ["Facebook","Google"])
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-        #set($xredirect=$escapetool.url("http://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url2')}${request.getRequestURI()}"))##
+        #set($xredirect=$escapetool.url("http://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url2')}"))##
       #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
       <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip")" width="32" ##
               onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}'); return false;">##
