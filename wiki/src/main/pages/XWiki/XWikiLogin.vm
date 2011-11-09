@@ -2,5 +2,5 @@
 ## this file is only included in case there's an error in logging in
 $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
 $request.session.setAttribute("lastUserName","$!request.j_username")##
-$response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
+$response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
 #end

@@ -5,12 +5,8 @@
   *###
 #if($doc.fullName == "Util.JSTrans" && $request.xpage=="plain")$xwiki.includeForm("Util.JSTransShadow",false)##
 #else
-#template("xwiki.vm")
-#template("htmlheader.vm")
-#template("header.vm")
-#template("baseheader.vm")
-#template("analytics.vm")
-#if($request.mailAgain=="1")##
+    #template("startpage.vm")#set($wrapMe=true)##
+    #if($request.mailAgain=="1")##
     #logViewScript("/join/enterValidation/submit/sent")
     #if($tool)#else#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))#set($junk=$tool.init($xwiki,$context,$request,$msg,""))$tool.grabFromCurrentUser()#end##
     $tool.sendValidationEmail()##
