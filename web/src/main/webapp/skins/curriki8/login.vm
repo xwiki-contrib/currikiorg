@@ -33,7 +33,7 @@ $response.sendRedirect("/xwiki/bin/view/Main/Registration/LoginOrRegister$qs")##
 #else## we're on the right place... display login or register
   <!-- this is login.vm -->
     #if(!$skin)## we did not pass initialization already
-        #set($doSurround=true)
+        #set($doSurround=true) 
         #template("startpage.vm")
     #end
   $xwiki.includeForm("Registration.DirectLogin",false)##

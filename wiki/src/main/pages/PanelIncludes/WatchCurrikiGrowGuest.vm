@@ -1,4 +1,6 @@
 $context.setCacheDuration(1200)
+#set($targetURL="/xwiki/bin/view/Registration/DirectLogin")##
+#set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&quot;); return false;'")
 <div id="watch-curriki-grow" class="shadow-outer"> ##{
   <div class="shadow-middle"> ##{
     <div class="shadow-inner information"> ##{
@@ -7,8 +9,8 @@ $context.setCacheDuration(1200)
    	   	<table class="stats">
    	   	 <tbody>
    	   	  <tr>
-   	   	   <td><a href="$xwiki.getURL("Main.Browse")">$msg.get("panel.watchgrow.resources")</a></td>
-   	   	   <td><a href="$xwiki.getURL("Main.Browse")">
+   	   	   <td><a href="/xwiki/bin/view/Main/Browse">$msg.get("panel.watchgrow.resources")</a></td>
+   	   	   <td><a href="/xwiki/bin/view/Main/Browse">
 #set($lucene = $xwiki.getPlugin("lucene"))
 #if(!$lucene)
  #error("Error loading Lucene search")
@@ -21,22 +23,16 @@ $searchresults.totalHitcount
 </a></td>
    	   	  </tr>
    	   	  <tr>
-   	   	   <td><a href="$xwiki.getURL("XWiki.XWikiLogin","login")">$msg.get("panel.watchgrow.members")</a></td>
-                   <td><a href="$xwiki.getURL("XWiki.XWikiLogin","login")">$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.XWikiUsers'").get(0)</a>
-                   </td>
+   	   	   <td><a $anchorAtts>$msg.get("panel.watchgrow.members")</a></td>
+           <td><a $anchorAtts>$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.XWikiUsers'").get(0)</a></td>
    	   	  </tr>
    	   	  <tr>
-   	   	   <td><a href="$xwiki.getURL("Groups.Browse")">$msg.get("panel.watchgrow.groups")</a></td>
-   	   	   <td>
-                     <a href="$xwiki.getURL("Groups.Browse")">$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.CurrikiSpaceClass'").get(0)</a>
-                   </td>
+   	   	   <td><a href="/xwiki/bin/view/Groups/Browse">$msg.get("panel.watchgrow.groups")</a></td>
+   	   	   <td><a href="/xwiki/bin/view/Groups/Browse">$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.CurrikiSpaceClass'").get(0)</a></td>
    	   	  </tr>
    	   	 </tbody>
    	   	</table>
    	   	<p class="links">##
-    #set($escapedURL="$escapetool.url($request.getRequestURI())")##
-    #set($targetURL="/xwiki/bin/login/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")##
-    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
     <a $anchorAtts>$msg.get("panel.watchgrow.join")</a>
 </p>
       </div> ##}
