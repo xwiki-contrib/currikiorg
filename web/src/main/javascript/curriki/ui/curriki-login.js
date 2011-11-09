@@ -97,7 +97,7 @@ Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, request
         var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
         if(Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
         window.Curriki.ui.login.windowThatShouldNextGoTo = dialog;
-    } catch(e) { console.log(e); }
+    } catch(e) { if(console) console.log(e); }
 }
 Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
     return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
@@ -363,7 +363,7 @@ Curriki.ui.login.liveValidation = function() {
                 if(fieldName=="member_type") passed = fieldValue!="-";
                 if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
                 if(fieldName=="password") passed = fieldValue.length>5;
-                console.log("passed? " + passed + ".");
+                if(console) console.log("passed? " + passed + ".");
                 // manual check here, just long enough
                 if(passed==false) {
                     if(silentFailure) {
@@ -381,7 +381,7 @@ Curriki.ui.login.liveValidation = function() {
             var queueEntry = new Object();
             queueEntry.value = inputElt.getValue();
             Curriki.ui.login.liveValidation.queriedValue = inputElt.getValue();
-            console.log("Queuing query for " + queueEntry.value);
+            if(console) console.log("Queuing query for " + queueEntry.value);
             if(typeof(queueEntry.value)=="undefined" || queueEntry.value==null) {
                 if(console) console.log("Undefined value, stop.");
                 return;
@@ -422,7 +422,7 @@ Curriki.ui.login.liveValidation = function() {
             if(inputField) {} else {return;}
             if(t.intervalPointer && t.intervalPointer!=null)
                 t.stopPolling();
-            console.log("Start polling on " + t);
+            if(console) console.log("Start polling on " + t);
             t.inputFieldBeingPolled = inputField;
             t.startedPollingTime = new Date().getTime();
             var interval = 50;
@@ -430,14 +430,14 @@ Curriki.ui.login.liveValidation = function() {
             t.intervalPointer = window.setInterval(t.inputFieldPoll, interval);
         }
         , stopPolling: function() {
-            console.log("Stop polling.");
+            if(console) console.log("Stop polling.");
             try {
                 var t = Curriki.ui.login.liveValidation;
                 if (t.intervalPointer && t.intervalPointer != null)
                     window.clearInterval(t.intervalPointer);
                 t.startedPollingTime = null;
                 t.inputFieldBeingPolled = null;
-            } catch(e) { console.log(e); }
+            } catch(e) { if(console) console.log(e); }
         }
         , inputFieldPoll: function() {
             //console.log("poll4");
@@ -472,7 +472,7 @@ Curriki.ui.login.liveValidation = function() {
                     t.lastValue = value;
                     t.lastChanged = now;
                 }
-            } else console.log("Giving up value undefined.");
+            } else if(console) console.log("Giving up value undefined.");
 
         }
 
