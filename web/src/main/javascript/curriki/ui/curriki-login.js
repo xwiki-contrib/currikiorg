@@ -47,14 +47,14 @@ Curriki.ui.login.readScrollPos = function(w) {
             return escape("&l=" + s.left + "&t=" + s.top);
         } else
             return "";
-    } catch(e) { if(console){console.log(e);} return "";}
+    } catch(e) { Curriki.console.log(e); return "";}
 };
 
 Curriki.ui.login.restoreScrollPos = function(url) {
     try {
-        if(console) console.log("Intending to restoreScroll.");
+        Curriki.console.log("Intending to restoreScroll.");
         if(!url.match(/t=[0-9]/)) {
-            if(console) console.log("No coordinates passed.");
+            Curriki.console.log("No coordinates passed.");
             return;
         }
         var l = url.replace(/.*l=([0-9]+).*/, "$1");
@@ -65,12 +65,12 @@ Curriki.ui.login.restoreScrollPos = function(url) {
         if (typeof(t) == "undefined") {
             t = 0;
         }
-        if(console) console.log("Would scroll to " + l + ":" + t + " if I were IE.");
+        Curriki.console.log("Would scroll to " + l + ":" + t + " if I were IE.");
         if (Ext.isIE) {
-            if(console) console.log("Scrolling by "+l + ":" + t);
+            Curriki.console.log("Scrolling by "+l + ":" + t);
             window.scrollBy(l, t);
         }
-    } catch(e) { if(console) {console.log(e);}}
+    } catch(e) { Curriki.console.log(e); }
 };
 
 Curriki.ui.login.ensureProperBodyCssClass = function() {
@@ -85,19 +85,19 @@ Curriki.ui.login.ensureProperBodyCssClass = function() {
                 }
 
             }
-        } catch(e) { if(console) console.log(e); }
+        } catch(e) { Curriki.console.log(e); }
     };
 }
 
 
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL, xredirect) {
     try { 
-        if (console) console.log("Opening pop-up that will request authorization.");
+        Curriki.console.log("Opening pop-up that will request authorization.");
         if(!Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
         var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
         if(Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
         window.Curriki.ui.login.windowThatShouldNextGoTo = dialog;
-    } catch(e) { if(console) console.log(e); }
+    } catch(e) { Curriki.console.log(e); }
 }
 Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
     return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
@@ -116,17 +116,17 @@ Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
 
 Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
     // called from the login-or-register dialog or from the in-header-icons
-    if(console) {console.log("Opening authorization to " + requestURL); }
+    Curriki.console.log("Opening authorization to " + requestURL);
     window.name='curriki-login-dialog';
     if(dialogName) window.name = dialogName;
     if(popupName) {} else { popupName = 'curriki_login_authorize'; }
     var otherWindow;
     if(window.frames[popupName]) {
-        if(console) console.log("Re-using window.");
+        Curriki.console.log("Re-using window.");
         otherWindow = window.frames[popupName];
         otherWindow.location.href= requestURL;
     } else {
-        if(console) console.log("Creating window.");
+        Curriki.console.log("Creating window.");
         var x = Math.max(0,(screen.width-850)/2);
         var y = Math.max(0,(screen.height-550)/2);
         otherWindow = window.open(requestURL, popupName, "toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width=980,height=600,left="+x+",top="+y);
@@ -139,16 +139,16 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
 };
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
-    if(console) console.log("Finishing popup, (toTop? "+ toTop+ ") target: " + targetURL);
+    Curriki.console.log("Finishing popup, (toTop? "+ toTop+ ") target: " + targetURL);
     if(openerWindow &&
             (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
             || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))) {
         // we are in a popup relationship, can close and revert to that popup
-        if(console) console.log("We are in popup, closing and opening popup.");
+        Curriki.console.log("We are in popup, closing and opening popup.");
         var targetWindow = openerWindow;
         if(openerWindow.Curriki.ui.login.windowThatShouldNextGoTo)
             targetWindow = openerWindow.Curriki.ui.login.windowThatShouldNextGoTo;
-        if(console) console.log("targetWindow: " + targetWindow + " with force to top " + toTop);
+        Curriki.console.log("targetWindow: " + targetWindow + " with force to top " + toTop);
         if(toTop) targetWindow = targetWindow.top;
         else if(openerWindow.Ext && openerWindow.Ext.get('loginIframe'))
             targetWindow = openerWindow.Ext.get('loginIframe').dom.contentWindow;
@@ -159,10 +159,10 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
             openedWindow.setInterval(function() {
                 try {
                     targetWindow.focus();
-                } catch(e) { if(console) console.log(e); }
+                } catch(e) { Curriki.console.log(e); }
                 try {
                     openedWindow.close();
-                } catch(e) { if(console) console.log(e); }
+                } catch(e) { Curriki.console.log(e); }
             },20);
         } else {
             var w = window;
@@ -171,7 +171,7 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
         }
         return false;
     } else {
-        if(console) console.log("No popup parent found... ah well.");
+        Curriki.console.log("No popup parent found... ah well.");
         var w = openedWindow;
         if(toTop) w = w.top;
         w.location.href = targetURL;
@@ -187,7 +187,7 @@ Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
         if(!framedContentURL || framedContentURL==null) framedContentURL = window.location.href;
         Curriki.ui.login.displayLoginDialog(framedContentURL);
     } else if (window.name != 'curriki-login-dialog' && framedContentURL && framedContentURL!=null) {
-        if (console) console.log("Redirecting to " + framedContentURL);
+        Curriki.console.log("Redirecting to " + framedContentURL);
         var t= window.opener;
         if(typeof(t)!="object") t=window.top;
         t.replace(framedContentURL);
@@ -206,10 +206,10 @@ Curriki.ui.login.showLoginLoading=function(msg, multi) {
             Curriki.showLoading(msg, true);
             if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // also make the surroundings grey
                 var d = window.parent.Ext.get('loginIframe');
-                if(console) console.log("will set bg on " + d);
+                Curriki.console.log("will set bg on " + d);
                 while (typeof(d) != "undefined" && d != null && d.setStyle) {
                     if (d.id && "loginDialogWindow" == d.id) break;
-                    if(console) console.log("setting bg on " + d);
+                    Curriki.console.log("setting bg on " + d);
                     d.setStyle("background-color", "#DDD");
                     d = d.parent();
                 }
@@ -220,7 +220,7 @@ Curriki.ui.login.showLoginLoading=function(msg, multi) {
             else
                 Curriki.showLoading(msg, multi);
         }
-    } catch(e) { if(console) console.log(e); }
+    } catch(e) { Curriki.console.log(e); }
 };
 Curriki.ui.login.hideLoginLoading=function() {
     try {
@@ -241,7 +241,7 @@ Curriki.ui.login.hideLoginLoading=function() {
             else
                 Curriki.hideLoading(true);
         }
-    } catch(e) { if(console) console.log(e); }
+    } catch(e) { Curriki.console.log(e); }
 }
 
 
@@ -267,12 +267,12 @@ Curriki.ui.login.liveValidation = function() {
                 ,failure:function(response, options) {
                     Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
                     Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
-                    if(console) console.log("failed validation: ", response, options);
+                    Curriki.console.log("failed validation: ", response, options);
                 }
                 ,success:function(response, options){
                     var t = response.responseText;
                     if(t) t = t.trim();
-                    if(console) console.log("Response: " + t);
+                    Curriki.console.log("Response: " + t);
                     queue.remove(queueEntry);
                     if(queueEntry.value!=field.getValue()) return;
                     Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
@@ -290,11 +290,11 @@ Curriki.ui.login.liveValidation = function() {
             /*
              Ext.get("loginIframe").dom.contentWindow.Ext.get("username_input").parent().addClass("warningField")
              */
-            if(console) console.log("Notifying validation result " + res + " on field " + field);
+            Curriki.console.log("Notifying validation result " + res + " on field " + field);
             try {
                 if (field) {
                 } else {
-                    if(console) console.log("Warning: missing field.");
+                    Curriki.console.log("Warning: missing field.");
                     return;
                 }
                 var pElt = field.parent();
@@ -314,7 +314,7 @@ Curriki.ui.login.liveValidation = function() {
                     pElt.addClass("warningField");
                 }
             } catch(e) {
-                if(console) console.log("Error: ", e)
+                Curriki.console.log("Error: ", e)
             }
         },
 
@@ -326,20 +326,20 @@ Curriki.ui.login.liveValidation = function() {
             Ext.Ajax.purgeListeners();
 
             Ext.each(ids, function(name) {
-                if(console) console.log("Registering on " + name);
+                Curriki.console.log("Registering on " + name);
                 var x = Ext.get(name);
                 if(x) {} else {
-                    if(console) console.log("Not found: " + name);
+                    Curriki.console.log("Not found: " + name);
                     return;
                 }
                 if(x.purgeListeners) x.purgeListeners();
                 x.addListener("blur", function(evt) {
-                    if(console) console.log("Focus-out...");
+                    Curriki.console.log("Focus-out...");
                     Curriki.ui.login.liveValidation.queueQueryNow(x);
                     Curriki.ui.login.liveValidation.stopPolling();
                 });
                 x.addListener("focus", function(evt) {
-                    if(console) console.log("Focus-in...");
+                    Curriki.console.log("Focus-in...");
                     var handle=window.setInterval(function() {
                         clearInterval(handle);
                         Curriki.ui.login.liveValidation.startPollingTextField(x);
@@ -351,7 +351,7 @@ Curriki.ui.login.liveValidation = function() {
             // this is the main function to call the validation
             var fieldName = inputElt.dom.name;
             var fieldValue = inputElt.dom.value;
-            if(console) console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
+            Curriki.console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
             //var min_length=3;
             //if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
             //    min_length=1;
@@ -363,7 +363,7 @@ Curriki.ui.login.liveValidation = function() {
                 if(fieldName=="member_type") passed = fieldValue!="-";
                 if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
                 if(fieldName=="password") passed = fieldValue.length>5;
-                if(console) console.log("passed? " + passed + ".");
+                Curriki.console.log("passed? " + passed + ".");
                 // manual check here, just long enough
                 if(passed==false) {
                     if(silentFailure) {
@@ -381,9 +381,9 @@ Curriki.ui.login.liveValidation = function() {
             var queueEntry = new Object();
             queueEntry.value = inputElt.getValue();
             Curriki.ui.login.liveValidation.queriedValue = inputElt.getValue();
-            if(console) console.log("Queuing query for " + queueEntry.value);
+            Curriki.console.log("Queuing query for " + queueEntry.value);
             if(typeof(queueEntry.value)=="undefined" || queueEntry.value==null) {
-                if(console) console.log("Undefined value, stop.");
+                Curriki.console.log("Undefined value, stop.");
                 return;
             }
             if(typeof(queueEntry.value)!="undefined" && queueEntry.value.length<2) {
@@ -398,13 +398,13 @@ Curriki.ui.login.liveValidation = function() {
                     if(i>0) for(j=i-1; j>=0; j--) {
                         queue[j+1] = queue[j];
                     }
-                    if(console) console.log("Swapping existing queue entries.");
+                    Curriki.console.log("Swapping existing queue entries.");
                     queue[0] = x;
                     return;
                 }
             }
             // otherwise launch request
-            if(console) console.log("Launching in queue.");
+            Curriki.console.log("Launching in queue.");
             queueEntry.request = this.launchCheckFieldRequest(queueEntry.value, inputElt, queueEntry);
             // add to queue
             queue[queue.length] = queueEntry;
@@ -422,7 +422,7 @@ Curriki.ui.login.liveValidation = function() {
             if(inputField) {} else {return;}
             if(t.intervalPointer && t.intervalPointer!=null)
                 t.stopPolling();
-            if(console) console.log("Start polling on " + t);
+            Curriki.console.log("Start polling on " + t);
             t.inputFieldBeingPolled = inputField;
             t.startedPollingTime = new Date().getTime();
             var interval = 50;
@@ -430,14 +430,14 @@ Curriki.ui.login.liveValidation = function() {
             t.intervalPointer = window.setInterval(t.inputFieldPoll, interval);
         }
         , stopPolling: function() {
-            if(console) console.log("Stop polling.");
+            Curriki.console.log("Stop polling.");
             try {
                 var t = Curriki.ui.login.liveValidation;
                 if (t.intervalPointer && t.intervalPointer != null)
                     window.clearInterval(t.intervalPointer);
                 t.startedPollingTime = null;
                 t.inputFieldBeingPolled = null;
-            } catch(e) { if(console) console.log(e); }
+            } catch(e) { Curriki.console.log(e); }
         }
         , inputFieldPoll: function() {
             //console.log("poll4");
@@ -472,7 +472,7 @@ Curriki.ui.login.liveValidation = function() {
                     t.lastValue = value;
                     t.lastChanged = now;
                 }
-            } else if(console) console.log("Giving up value undefined.");
+            } else Curriki.console.log("Giving up value undefined.");
 
         }
 
@@ -480,27 +480,3 @@ Curriki.ui.login.liveValidation = function() {
     };
 }();
 
-// from http://stackoverflow.com/questions/690251/what-happened-to-console-log-in-ie8
-function fixConsole(alertFallback)
-{
-    if (typeof console === "undefined")
-    {
-        console = {}; // define it if it doesn't exist already
-    }
-    if (typeof console.log === "undefined")
-    {
-        if (alertFallback) { console.log = function(msg) { alert(msg); }; }
-        else { console.log = function() {}; }
-    }
-    if (typeof console.dir === "undefined")
-    {
-        if (alertFallback)
-        {
-            console.dir = function(obj) { alert("DIR: "+obj); };
-        }
-        else { console.dir = function() {}; }
-    }
-}
-try {
-    fixConsole(false);
-} catch(e) { }

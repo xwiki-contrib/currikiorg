@@ -21,7 +21,6 @@ if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 		window.console[names[i]] = Ext.emptyFn
 }
 console.log('initing Curriki');
-
 /*
  * Example of dynamically loading javascript
 function initLoader() {
@@ -33,6 +32,7 @@ function initLoader() {
 */
 
 Ext.ns('Curriki');
+Curriki.console = window.console;
 Ext.ns('Curriki.module');
 
 Curriki.requestCount = 0;
