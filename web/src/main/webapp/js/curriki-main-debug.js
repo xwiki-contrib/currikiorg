@@ -3823,6 +3823,31 @@ Curriki.ui.login.liveValidation = function() {
 
     };
 }();
+
+// from http://stackoverflow.com/questions/690251/what-happened-to-console-log-in-ie8
+function fixConsole(alertFallback)
+{
+    if (typeof console === "undefined")
+    {
+        console = {}; // define it if it doesn't exist already
+    }
+    if (typeof console.log === "undefined")
+    {
+        if (alertFallback) { console.log = function(msg) { alert(msg); }; }
+        else { console.log = function() {}; }
+    }
+    if (typeof console.dir === "undefined")
+    {
+        if (alertFallback)
+        {
+            console.dir = function(obj) { alert("DIR: "+obj); };
+        }
+        else { console.dir = function() {}; }
+    }
+}
+try {
+    fixConsole(false);
+} catch(e) { }
 // vim: ts=4:sw=4
 
 /*
