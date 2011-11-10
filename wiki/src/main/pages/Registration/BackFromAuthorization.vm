@@ -34,12 +34,12 @@
 </p>##
 <script type="text/javascript">##
   var goTop = false;
-    if(console) console.log("Has download? $hasDownload");
+    Curriki.console.log("Has download? $hasDownload");
 #if($nextStep.startsWith("/xwiki/bin/view/Registration"))
     Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, false);
-    ##alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, false);")
+    //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, false);")
   #else
-    ##alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, true);")
+    //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, true);")
     Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, true);
   #end##
 </script>

@@ -35,7 +35,8 @@
         </p>##
 
 <script type="text/javascript">
-    if($hasDownload && console) console.log("Has download.");
+    #if($hasDownload)Curriki.console.log("Has download.");
+    #end
     var w = window;
     try {
         if (w.name == 'curriki-identity-dialog-popup'
@@ -45,14 +46,14 @@
             window.links[0].target = w.name;
         }
     } catch(e) {
-        if(console) console.log("Can't check for parent.",e);
+        Curriki.console.log("Can't check for parent.",e);
     }
     w.moveOnTask = null;
     function moveOn() {
         window.clearInterval(w.moveOnTask);
         var targ = "${nextStep}";
         w.moveOnTask = null;
-        if("undefined"!==typeof(console)) {console.log("Jumping to target: " + targ);}
+        Curriki.console.log("Jumping to target: " + targ);
         w.top.location.replace(targ);
         //alert("would go to " + targ);
     }

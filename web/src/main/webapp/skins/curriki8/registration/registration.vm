@@ -509,7 +509,7 @@ function toggleCorporateFieldsVisible() {
     var text = String.fromCharCode(160);
     if(memberType == "corporation")
         text = _('join.member_type_coporate_instructions');
-    console.log("memberTypeNotice: " + text);
+    Curriki.console.log("memberTypeNotice: " + text);
     Ext.get("memberTypeNotice").dom.innerHTML= text;
     Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
 }

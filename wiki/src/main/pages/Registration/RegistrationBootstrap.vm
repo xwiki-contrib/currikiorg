@@ -108,7 +108,7 @@ fieldset h3 {
 ## ----------------
 {pre}
 <form class="xform" action="https://$hostname/xwiki/bin/view/$doc.space/${doc.name}?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
-    onsubmit="if(console) {console.log('loading.');} Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true;">
+    onsubmit="Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true;">
   <div class="centered">
       <fieldset>
           <h3>$msg.get("join.member.title")</h3>
@@ -224,7 +224,7 @@ fieldset h3 {
             var p = Ext.get("memberTypeNotice");
             var s = Ext.get("memberType_input");
             if(!p || !s) {
-                if(console) {console.log("Can't find elements. Stopping.");}
+                Curriki.console.log("Can't find elements. Stopping.");
                 return;
             }
             var text = ' ';
@@ -232,9 +232,9 @@ fieldset h3 {
                     ("corporation"==s.dom.value)) {
                 text = _('join.member_type_coporate_instructions');
             }
-            if(console) {console.log("memberTypeNotice: " + text);}
+            Curriki.console.log("memberTypeNotice: " + text);
             Ext.get("memberTypeNotice").dom.innerHTML= text;
-        } catch(e) { if(console) console.log(e); }
+        } catch(e) { Curriki.console.log(e); }
     };
     ##
     Curriki.ui.login.displayInstruction = function(key,params) {
@@ -244,7 +244,7 @@ fieldset h3 {
                 else text = _(key)
             if(!text || text=="") text=" "; // warning nbsp in this quote
             Ext.get("currikiRegistrationAdvice").dom.innerHTML = text;
-        } catch(e) { if(console) console.log(e); }
+        } catch(e) { Curriki.console.log(e); }
     };
     ##
     ##

@@ -631,7 +631,7 @@ function getDocWidth(D) {
 }
 
 function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, minHeight) {
-    console.log("About to rescale " + dialogWindow);
+    Curriki.console.log("About to rescale " + dialogWindow);
     // only run if inside a popup
     if(window.top==dialogWindow) return;
     var accomplishRescale = function() {
@@ -653,11 +653,11 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
 
         var docH = getDocHeight(dialogDoc);
         if(docH < minHeight) docH=minHeight;
-        if(console) console.log("Comparing H " + winH + " and " + docH);
+        Curriki.console.log("Comparing H " + winH + " and " + docH);
          // adjust dialog height
         if(Math.abs(winH-docH) > 20) {
-            if(console) { console.log("Should resize dialog from " +
-                winH + " to accomodate " + docH ) }
+            Curriki.console.log("Should resize dialog from " +
+                winH + " to accomodate " + docH );
             if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
                 dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
             }

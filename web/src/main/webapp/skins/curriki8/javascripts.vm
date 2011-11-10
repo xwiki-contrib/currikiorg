@@ -6,7 +6,6 @@
 #set($hasScripts=true)##
 #if($globalDebug)##{
 	#set($debugging = "-debug")
-    <script type="text/javascript">if(console) console.log("Now in "+window.name+" on: " + window.location.href ); console.log(" inside frame? " + (window.top!=window));</script>
 #else##}{
 	#set($debugging = "")
 #end##}
@@ -101,7 +100,9 @@ Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll(
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 </script>
 #end ##}
-
+#if($globalDebug)##{
+    <script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
+#end##}
 ## Hook for inserting JavaScript skin extensions
 ## Use $xwiki.jsfx.use("jsfile.js", true)
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->

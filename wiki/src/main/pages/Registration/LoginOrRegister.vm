@@ -79,7 +79,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
 #set($nextURL="https://$hostname$nextURL")#end
 <div id="join_form_contents" class="fields_wrp">
 <form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
-      onsubmit="if(Curriki.ui.login.validateLoginForm()) {if(console){console.log('loading.');} Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
+      onsubmit="if(Curriki.ui.login.validateLoginForm()) {Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
 <div class="hidden">##
 <input type="hidden" name="xredirect" value="$nextURL"/>
 <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
@@ -192,7 +192,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
     if(fbAppId) {
         window.fbReady = false;
         window.fbAsyncInit = function() {
-          if(console) console.log("fbAsyncInit start.");
+          Curriki.console.log("fbAsyncInit start.");
           // below is the script when it's hooked
           FB.init({appId: fbAppId, status: true, cookie: true,
                    xfbml: true});
@@ -202,7 +202,7 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
           window.loginHasHappened = function(response) {
                 // logged in and connected user, someone you know
                 // we now adjust the link to sign-up with Facebook
-                if(console) console.log("Is FB logged in: ",response.session);
+                Curriki.console.log("Is FB logged in: ",response.session);
                 var fbLink = Ext.get("identifyWithfacebook");
                 if(fbLink) {
                     var elt = fbLink.dom.children[0];
@@ -244,9 +244,9 @@ Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegist
                 var userName = Ext.get("j_username"),
                         pass = Ext.get("j_password");
                 var valid = (userName && userName.dom.value != "") && (pass && pass.dom.value != "");
-                if(console) console.log("Valid? " + valid);
+                Curriki.console.log("Valid? " + valid);
                 return valid;
-            } catch(e) { if(console) console.log("Error in validating.", e); }
+            } catch(e) { Curriki.console.log("Error in validating.", e); }
         };
         Curriki.ui.login.hideLoginLoading();
     });
