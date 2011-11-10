@@ -34,7 +34,8 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
     #* <iframe width="3" height="3" src="$request.session.getAttribute("downloadSoon")"></iframe>
     <!-- $request.session.removeAttribute("downloadSoon") --> *#
     #end##
-#if("XWiki.XWikiGuest"!=$context.user && $doc.web!="    MyCurriki")
+<!-- 14:41 -->
+#if("XWiki.XWikiGuest"!="$!context.user" && $doc.fullName!="MyCurriki.EditProfile" && $doc.web!="Registration" && ""=="$!request.xpage" && "true"!="$!request.framed")
     #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")<!-- userType: $userType -->
     #if("corporation"==$userType)
         #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")
@@ -44,14 +45,16 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
             <!-- corpWarnedAtt = $corpWarnedAtt -->
             #if("$!corpWarnedAtt"!="$!context.user")
                 <!-- corp-warning on $request.session.setAttribute("corpWarned",$context.user) -->
-                <script type="text/javascript">Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/DonateCorp?xpage=popup")</script>
+                <script type="text/javascript">
+                    Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/DonateCorp?xpage=popup");
+                </script>
             #else <!-- should not warn corp: corpWarnedAtt = "$!corpWarnedAtt" -->
             #end
         #else <!-- should not warn corp: lastCorpMembershipDonated = "$lastCorpMembershipDonated" -->
         #end
     #else <!-- should not warn corp: userType = $userType -->
     #end
-#else <!-- should not warn corp: user is $context.user or doc.fullName is $doc.fullName-->
+#else <!-- should not warn corp: user is $context.user or doc.fullName is $doc.fullName -->
 #end
 
 

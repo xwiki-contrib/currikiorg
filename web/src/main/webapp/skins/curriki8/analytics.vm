@@ -35,12 +35,13 @@ pageTracker._trackPageview('/features/staf/referred/'+window.location);
 #end ##}
 #if($request.session.getAttribute("curriki.analytics.toLogView"))#foreach($m in $request.session.getAttribute("curriki.analytics.toLogView").split(",| "))
     pageTracker._trackPageview("$m");
-#end$request.session.removeAttribute("curriki.analytics.toLogView")#end
+#end$request.session.removeAttribute("curriki.analytics.toLogView")// removed toLogView attributes
+    #end
     if(window.pageTrackerQueue) { for(var i=0; i<window.pageTrackerQueue.length; i++) {
         pageTracker._trackPageview(window.pageTrackerQueue.get(i));
     } }
 </script>
-#else
+#else<!-- no analytics GA code -->
 #end ##}
 #macro(logViewScript $viewName)
     <script type="text/javascript">Curriki.logView("$viewName");</script>

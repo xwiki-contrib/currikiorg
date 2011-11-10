@@ -1,6 +1,19 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="response" type="com.xpn.xwiki.web.XWikiResponse" *# ##
+#* @vtlvariable name="request" type="com.xpn.xwiki.web.XWikiRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #if($request.method=="POST")##
 ## this file is only included in case there's an error in logging in
 $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
 $request.session.setAttribute("lastUserName","$!request.j_username")##
-$response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
+#if($response.isCommitted())
+#else
+    $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
+#end
 #end
