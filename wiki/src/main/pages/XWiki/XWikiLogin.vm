@@ -14,6 +14,7 @@ $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage(
 $request.session.setAttribute("lastUserName","$!request.j_username")##
 #if($response.isCommitted())
 #else
-    $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
+    $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
 #end
+#else$response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
 #end
