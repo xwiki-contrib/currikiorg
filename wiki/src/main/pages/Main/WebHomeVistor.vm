@@ -356,7 +356,7 @@ span.missionitalic {
     <!--begin banner body float-->
     <div id="banner_body">
        <div id="banner_menu_a">
- <div class="float_left"><a href="/xwiki/bin/view/Main/Donate" title="Donate"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/donate_03.gif" alt="Donate button" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/donate_03.gif" /></a> <a href=" /xwiki/bin/view/Main/JoinCurriki?XWiki.XWikiUsers_0_member_type=corporation" title="Corporation join link"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/corporatemembership.gif" alt="Corporate Membership link button" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/corporatemembership.gif" /></a></div>
+ <div class="float_left"><a href="/xwiki/bin/view/Main/Donate" title="Donate"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/donate_03.gif" alt="Donate button" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/donate_03.gif" /></a> <a href=" /xwiki/bin/view/Main/Sponsors" title="About Corporate Membership"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/corporatemembership.gif" alt="Corporate Membership link button" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/corporatemembership.gif" /></a></div>
  <div id="facebook" class="float_left">
 
 <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCurriki%2F134427817464%3Fref%3Dts&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
@@ -368,12 +368,12 @@ span.missionitalic {
 <div class="clear"></div>
       <div id="banner_menu_b" style="float:right; padding-right: 20px;"> ##
 <!-- member area -->
+#set($escapedURL="%2F")##
+#set($targetURL="/xwiki/bin/login/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
+#set($joinAnchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
 #if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
 ##{
-    #set($escapedURL="%2F")##
-    #set($targetURL="/xwiki/bin/login/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
-    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
-    <a $anchorAtts>$msg.get("join.login.title")</a><br/>
+    <a $joinAnchorAtts>$msg.get("join.login.title")</a><br/>
 
     <p>#foreach($provider in ["Facebook","Google"])
       <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
@@ -392,8 +392,8 @@ span.missionitalic {
 	#if($hasGlobalAdmin)
 	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
 	#end
-    #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=%2F"))
-	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
+    ###set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=%2F")
+	##<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 #if($request.session.getAttribute("header.message")=="logout-ok")##
     $request.session.removeAttribute("header.message")##
@@ -424,10 +424,9 @@ span.missionitalic {
     <ul id="navlist">
       <li id="active"><a href="/xwiki/bin/view/Main/AboutContributing" id="current">Contribute + Publish Resources</a></li><li id="active"><a href="/xwiki/bin/view/Main/AboutConnecting" >Connect With Teachers</a></li><li id="active"><a href="/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ecategory%25253Ds%2525253Ainteractive%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1" >Interactive Resources</a></li><li id="active"><a href="/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ecategory%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253Acurriculum%25255Eict%25253Ds%2525253Acurriculum_course%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1" >Full Courses</a></li>
 #if($isguest) ##{
-      <li id="member"><a class="join" href="/xwiki/bin/view/Main/JoinCurriki" >Join</a></li>
+      <li id="member"><a class="join" $joinAnchorAtts >Join</a></li>
 #else
-    #set($logredir = "/")##
-    #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))##
+    #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=%2F")
     <li id="member"><a  class = "join" href="$logouturl">$msg.get("header.logout")</a></li>
 #end
     </ul>
