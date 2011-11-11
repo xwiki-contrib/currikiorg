@@ -140,9 +140,10 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
     Curriki.console.log("Finishing popup, (toTop? "+ toTop+ ") target: " + targetURL);
-    if(openerWindow &&
-            (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
-            || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))) {
+    if(openerWindow
+        //&& (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
+        //    || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))
+        ) {
         // we are in a popup relationship, can close and revert to that popup
         Curriki.console.log("We are in popup, closing and opening popup.");
         var targetWindow = openerWindow;
