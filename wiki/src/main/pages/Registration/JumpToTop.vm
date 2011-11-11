@@ -46,14 +46,14 @@
             window.links[0].target = w.name;
         }
     } catch(e) {
-        Curriki.console.log("Can't check for parent.",e);
+        //Curriki.console.log("Can't check for parent.",e);
     }
     w.moveOnTask = null;
     function moveOn() {
         window.clearInterval(w.moveOnTask);
         var targ = "${nextStep}";
         w.moveOnTask = null;
-        Curriki.console.log("Jumping to target: " + targ);
+        //Curriki.console.log("Jumping to target: " + targ);
         w.top.location.replace(targ);
         //alert("would go to " + targ);
     }

@@ -1,0 +1,59 @@
+1 Give prog rights
+
+#if(!$xwiki.hasAdminRights())
+You are running this script as a non admin. It will have no effect. Login as admin.
+#else
+This script automatically set the owner of the pages in Groups, MyCurriki spaces and a list of specific pages as well as all pages containing the tag "@programming" to an admin. This will allow the priviledged scripts included in them to work.
+#end
+
+[Confirm>$doc.fullName?confirm=1]
+
+#foreach($item in $xwiki.searchDocuments("where doc.web='Groups'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='MyCurriki'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+#foreach($item in $xwiki.searchDocuments("where doc.web='Search2'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='Search'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='CurrikiCode'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='Registration'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='GCheckout'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where (doc.fullName in ('Members.MyBlog', 'XWiki.MyBlogGroovy',
+ 'CreateResources.AssetDone', 'CreateResources.StyledMacros','Affiliate.RegistrationTemplate','Affiliate.AffiliateManagement','Affiliate.PartnerEncryptGroovy',
+'AdWordsJump.LandingPageLogWriter','AdWordsJump.LandingPageLog',
+'AdWordsJump.LandingPageLogExport',
+'AdWordsJump.LandingPageLogTemplate',
+'AdWordsJump.AdWordsJumpPageTemplate',
+'FileCheck.WebHome',
+'FileCheck.Check', 'FileCheck.Flag',
+'FileCheck.SeeCounts',
+'CRS.Reviews',
+'CRS.Review', 'Registration.EmailSent', 'Registration.ForgotLogin', 'News.WebHome', 'XWiki.ArticleClassSheet',  'Main.JoinCurriki', 'Registration.EmailSentCorporations', 'PanelIncludes.WatchCurrikiGrowMember', 'PanelIncludes.WatchCurrikiGrowGuest', 'XWiki.BlogSheet', 'XWiki.BlogSheet2', 'Admin.Configuration') or doc.content like '%@programming%') and doc.web not in ('Groups','MyCurriki','CurrikiCode')"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
