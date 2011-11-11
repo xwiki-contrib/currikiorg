@@ -93,6 +93,7 @@ Curriki.ui.login.ensureProperBodyCssClass = function() {
 Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL, xredirect) {
     try { 
         Curriki.console.log("Opening pop-up that will request authorization.");
+        window.top.name = "currikiMainWindow";
         if(!Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
         var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
         if(Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
@@ -117,7 +118,7 @@ Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
 Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
     // called from the login-or-register dialog or from the in-header-icons
     Curriki.console.log("Opening authorization to " + requestURL);
-    window.name='curriki-login-dialog';
+    if(window!=window.top) window.name='curriki-login-dialog';
     if(dialogName) window.name = dialogName;
     if(popupName) {} else { popupName = 'curriki_login_authorize'; }
     var otherWindow;
@@ -127,8 +128,8 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
         otherWindow.location.href= requestURL;
     } else {
         Curriki.console.log("Creating window.");
-        var x = Math.max(0,(screen.width-850)/2);
-        var y = Math.max(0,(screen.height-550)/2);
+        var x = Math.max(0,(screen.width-980)/2);
+        var y = Math.max(0,(screen.height-600)/2);
         otherWindow = window.open(requestURL, popupName, "toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width=980,height=600,left="+x+",top="+y);
     }
     window.focusIt = window.setInterval(function() { window.clearInterval(window.focusIt); otherWindow.focus(); }, 100)
@@ -140,6 +141,9 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
 
  Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
     Curriki.console.log("Finishing popup, (toTop? "+ toTop+ ") target: " + targetURL);
+     if(typeof(openerWindow)=="undefined" || openerWindow==window) {
+         openerWindow = window.open(targetURL, "currikiMainWindow");
+     }
     if(openerWindow
         //&& (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
         //    || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))

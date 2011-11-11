@@ -214,7 +214,7 @@ public class SocialLoginToolGroovy {
                         validation.zapErrors();
                         mergeAccountWithProfile(profile, validation.foundAccountName, providerId);
                         request.session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
-                        return "redirectOnTop";
+                        return "backFromAuthorization";
                     }
                 }
 
