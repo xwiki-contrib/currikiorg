@@ -14,7 +14,7 @@
 #end##
 #if($request.errors)<h2>$msg.get("join.invalid.key.title")</h2>
         #foreach($m in $request.errors.split(","))#error($msg.get($m))#end
-        <p align='right'><button class='button-grey' onclick='window.location.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
+        <p align='right'><button class='button-grey' onclick='window.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
     #end
 #if($request.validkey) ## we are logged in here. Process the validation
     ## copied from Registration Complete
