@@ -20,6 +20,6 @@ Photo | First Name | Last Name | eMail | View Profile | total
 #if($userdoc.attachmentList.size()>0) #set($attach = $userdoc.attachmentList.get(0)) <img src="$userdoc.getAttachmentURL($attach.filename,"download", "height=50")" height="50"/> #end##
 | $userdoc.first_name | $userdoc.last_name | #if($xwiki.hasAdminRights()) $userdoc.email #else not shown #end | [View Profile>$userdoc.fullName] | ##
 $userdoc.use("Registration.DonationTrack")##
-<a href="/xwiki/bin/view/GCheckout/OldOrders?user=$userdoc">$userdoc.totalDonated</a>
+<a href="/xwiki/bin/view/Admin/OldOrders?user=$userdoc">$userdoc.totalDonated</a>
 #end
 {table}
