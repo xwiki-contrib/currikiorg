@@ -12,7 +12,10 @@
     $tool.sendValidationEmail()##
     #info("Email resent.")
 #end##
-#if($request.errors)#foreach($m in $request.errors.split(","))#error($msg.get($m))#end #end
+#if($request.errors)<h2>$msg.get("join.invalid.key.title")</h2>
+        #foreach($m in $request.errors.split(","))#error($msg.get($m))#end
+        <p align='right'><button class='button-grey' onclick='window.location.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
+    #end
 #if($request.validkey) ## we are logged in here. Process the validation
     ## copied from Registration Complete
     #set($validation=$xwiki.parseGroovyFromPage("Registration.Validation"))##
@@ -25,7 +28,7 @@
         #set($redir=$targets.afterLogin)##
         $xwiki.includeForm("Registration.JumpToTop",false)##
         #logViewScript("/join/enterValidation/submit/success")##
-    #else$response.sendRedirect("$request.getRequestURI()?errors=emailValidation.step2.errBadVkey")##
+    #else$response.sendRedirect("$request.getRequestURI()?errors=join.invalid.key.text")##
     #end
 #else<div id="content">
 #if ($cause == "disabled") ## {
