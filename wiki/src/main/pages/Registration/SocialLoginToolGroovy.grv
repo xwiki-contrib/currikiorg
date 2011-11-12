@@ -300,7 +300,8 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidFirstName(firstName, true) & passed;
         passed = validation.isValidLastName(lastName, true) & passed;
 
-
+        LOG.info("Passed? " + passed);
+        if(!passed) LOG.info("Errors: " + validation.errors);
         if (passed) {
             // Everything clear, let's proceed
 
@@ -327,7 +328,7 @@ public class SocialLoginToolGroovy {
             
 
             createSocialLoginProfileObject(profile, userDoc, provider);
-            tryToAddProfilePictureFromProfile(profile.profileImageURL, userDoc);
+            tryToAddProfilePictureFromProfile(profile.profileImageURL, userDoc, userobj);
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
 
             System.out.println("New profile created and saved: " + userDoc);
@@ -545,11 +546,15 @@ public class SocialLoginToolGroovy {
         return xredirect;
     }
 
-    public void tryToAddProfilePictureFromProfile(String url, Document userDoc) {
+    public void tryToAddProfilePictureFromProfile(String url, Document userDoc, com.xpn.xwiki.api.Object userObj) {
         try {
+            System.out.println("Defining profile picture form " + url);
             if(url==null || url.length()==0) return;
-            def userObj = userDoc.getObject("XWiki.XWikiUsers")
-            if(userObj.get("avatar")!=null) return;
+            def avatar = userObj.get("avatar");
+            if(avatar!=null && !"".equals(avatar)) {
+                System.out.println(" avatar \"" + avatar + "\" of class " + avatar.getClass() + " already there, leaving quiet.");
+                return
+            };
             URL u = new URL(url)
             String name=u.getPath()
             if(name.contains("/")) {
