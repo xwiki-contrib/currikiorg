@@ -52,12 +52,12 @@
     #logViewScript("/join/enterValidation/submit/invalid")
     <h2>$msg.get("join.invalid.key.title")</h2>
     <p>$msg.get("join.invalid.key.text")</p>
-    <p align='right'><button class='button-grey' onclick='window.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
+    <p align='right'><button class='button-grey' onclick='window.history.go(-1); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
 #end##
 </div>
 #else
 #logViewScript("/join/enterValidation/submit/invalid")
 <h2>$msg.get("join.invalid.key.title")</h2>
 <p>$msg.get("join.invalid.key.text")</p>
-<p align='right'><button class='button-grey' onclick='window.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
+<p align='right'><button class='button-grey' onclick='window.history.go(-1); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
 #end

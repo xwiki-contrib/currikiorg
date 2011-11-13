@@ -30,7 +30,7 @@
 <p style="width:100%; height:100%; text-align: center; line-height:2em; background-color: white;"
         ><a style="text-decoration: none; color: #4E83C7; font-size: 12px; font-family: arial, helvetica, sans-serif; line-height:10em"##
    id="followMeLink" href="${nextStep}" target="_top">$msg.get("registration.jump.proceeding")</a><br/>
-<button type="button-grey" onclick="if(window.top.location.href.indexOf('/xwiki/bin/view/Registration')>0) {window.top.back();} else {window.top.reload();}">$msg.get("join.login.cancel_button")</button>
+<button type="button-grey" onclick="if(window.top.location.href.indexOf('/xwiki/bin/view/Registration')>0) {window.top.history.go(-1);} else {window.top.reload();}">$msg.get("join.login.cancel_button")</button>
 </p>##
 <script type="text/javascript">##
   var goTop = false;
