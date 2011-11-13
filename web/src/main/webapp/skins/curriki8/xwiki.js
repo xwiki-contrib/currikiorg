@@ -635,34 +635,37 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
     // only run if inside a popup
     if(window.top==dialogWindow) return;
     var accomplishRescale = function() {
-        var winH = 0 , winW = 0;
-        if (dialogDoc.body && dialogDoc.body.offsetWidth) {
-            winW = dialogDoc.body.offsetWidth;
-            winH = dialogDoc.body.offsetHeight;
-        }
-        if (dialogDoc.compatMode=='CSS1Compat' &&
-            dialogDoc.documentElement &&
-            dialogDoc.documentElement.offsetWidth ) {
-            winW = dialogDoc.documentElement.offsetWidth;
-            winH = dialogDoc.documentElement.offsetHeight;
-        }
-        if (dialogWindow.innerWidth && dialogWindow.innerHeight) {
-            winW = dialogWindow.innerWidth;
-            winH = dialogWindow.innerHeight;
-        }
-
-        var docH = getDocHeight(dialogDoc);
-        if(docH < minHeight) docH=minHeight;
-        Curriki.console.log("Comparing H " + winH + " and " + docH);
-         // adjust dialog height
-        if(Math.abs(winH-docH) > 20) {
-            Curriki.console.log("Should resize dialog from " +
-                winH + " to accomodate " + docH );
-            if(dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
-                dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
+        try {
+            var winH = 0 , winW = 0;
+            if (dialogDoc.body && dialogDoc.body.offsetWidth) {
+                winW = dialogDoc.body.offsetWidth;
+                winH = dialogDoc.body.offsetHeight;
             }
-        }
-        // there was a similar part for the width but this is given up
+            if (dialogDoc.compatMode == 'CSS1Compat' &&
+                dialogDoc.documentElement &&
+                dialogDoc.documentElement.offsetWidth) {
+                winW = dialogDoc.documentElement.offsetWidth;
+                winH = dialogDoc.documentElement.offsetHeight;
+            }
+            if (dialogWindow.innerWidth && dialogWindow.innerHeight) {
+                winW = dialogWindow.innerWidth;
+                winH = dialogWindow.innerHeight;
+            }
+
+            var docH = getDocHeight(dialogDoc);
+            if (Ext && Ext.isIE) docH = docH * 1.1;
+            if (docH < minHeight) docH = minHeight;
+            Curriki.console.log("Comparing H " + winH + " and " + docH);
+            // adjust dialog height
+            if (Math.abs(winH - docH) > 20) {
+                Curriki.console.log("Should resize dialog from " +
+                    winH + " to accomodate " + docH);
+                if (dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
+                    dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
+                }
+            }
+            // there was a similar part for the width but this is given up
+        } catch(e) { Curriki.console.log("Bummer: " +e ); }
     };
     if(Ext) Ext.onReady(accomplishRescale);
 }
