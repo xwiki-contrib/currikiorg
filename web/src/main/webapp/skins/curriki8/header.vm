@@ -45,10 +45,13 @@
     #set($escapedURL=$escapetool.url($request.getRequestURI()))##
     #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
     #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
-    <p style="margin-top: 1em; width:100%; text-align:left; font-size:130%; font-weight: bolder;">##
+    <p style="margin-top: 0.7em; width:100%; text-align:left; font-size:130%; font-weight: bolder;">##
     <a $anchorAtts style="color: #FF5500; ">$msg.get('join.header.title.1') $msg.get("join.header.title.2")</a></p>
     ## join.header.title.1 = Login,
     ## join.header.title.2=Join Curriki,
+    #if($!request.getHeader("User-Agent").contains("MSIE 7"))
+        &nbsp;
+    #end
     <p style="margin-top:-18pt; margin-bottom: 0; width:100%; text-align:right;">
     <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
     ## join.header.title.3=orSign-in using
