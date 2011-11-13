@@ -653,7 +653,6 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
             }
 
             var docH = getDocHeight(dialogDoc);
-            if (Ext && Ext.isIE) docH = docH * 1.2;
             if (docH < minHeight) docH = minHeight;
             Curriki.console.log("Comparing H " + winH + " and " + docH);
             // adjust dialog height
