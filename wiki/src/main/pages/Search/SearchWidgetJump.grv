@@ -36,7 +36,7 @@ private String nonNullParam(String paramName) {
     return o;
 }
 
-if(request.subject==null && request.mediatype==null && request.level==null && request.ict==null) {
+if(request.subject==null && request.mediatype==null && request.level==null && request.ict==null && request.txt_escaped==null) {
     println("This page will redirect you provided you input parameters (subject, mediatype, level, ict).");
 } else {
     def subject = nonNullParam("subject"),
