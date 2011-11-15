@@ -6,7 +6,7 @@ List of current orders
 
 <table border="1" cellpadding="2" cellspacing="1" style=" ">
 <thead><td>serial</td><td>user</td><td>date</td><td>amount</td><td>financial</td><td>actions</td></thead>
-#foreach($obj in $doc.getObjects("GCheckout.GChOrder"))
+#foreach($obj in $xwiki.getDocument("GCheckout.Orders").getObjects("GCheckout.GChOrder"))
     #if($request.user && $obj.get("user").indexOf($request.user)<0)
         #else
     <tr>
