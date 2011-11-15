@@ -106,6 +106,7 @@ public class TargetsGroovy {
                 noLogin = refererPath;
             }
             noLogin = outOfJump(noLogin);
+            if(noLogin==null || noLogin.length()==0) noLogin="/";
             if(noLogin.startsWith("/xwiki/bin/view/Registration/") ||
                     noLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
                     noLogin.startsWith("/xwiki/bin/login")  )

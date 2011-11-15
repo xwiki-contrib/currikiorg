@@ -8,7 +8,7 @@
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-###set($junk=$targets.init($request,$xwiki))##
+#set($junk=$targets.init($request,$xwiki))##
 #end##
 #if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end##
 #set($success=$targets.cleanLogout($request,$response))##
