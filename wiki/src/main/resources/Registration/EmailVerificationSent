@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1204046644000</creationDate>
-<date>1204909491000</date>
-<contentUpdateDate>1266877071000</contentUpdateDate>
-<version>5.1</version>
+<date>1320332484000</date>
+<contentUpdateDate>1320332484000</contentUpdateDate>
+<version>14.1</version>
 <title>Email Sent</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,10 +55,15 @@
 <tags/>
 </property>
 </object>
-<content>&lt;div id="email-verification2"&gt;
+<content>#if($!request.xpage=="popup")&lt;style type="text/css"&gt;body { min-width: 0; margin-right:2em; width:80%}&lt;/style&gt;#end
+    #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+    #set($junk=$targets.init($request,$xwiki))#end&lt;!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin --&gt;#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+&lt;div id="email-verification2"&gt;
  &lt;h1&gt;$msg.get('emailValidation.sent.title')&lt;/h1&gt;
  $msg.get('emailValidation.sent.text')
- &lt;strong&gt;$msg.get('emailValidation.sent.notreceived')&lt;/strong&gt;
+ #set($xpage="")#if($!request.xpage!="")#set($xpage="xpage=$request.xpage")#end
+ &lt;strong&gt;$msg.get('emailValidation.sent.notreceived',["/xwiki/bin/view/Registration/EmailNotReceived?${xpage}"])&lt;/strong&gt;
+ &lt;p style="text-align:right"&gt;&lt;button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;" class="button-grey"&gt;$msg.get("join.login.cancel")&lt;/button&gt;&lt;/p&gt;
 &lt;/div&gt;
 #if("$!footerJScript" == "")
 #set($footerJScript = "")
