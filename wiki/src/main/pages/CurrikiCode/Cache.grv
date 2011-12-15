@@ -11,7 +11,6 @@ import com.xpn.xwiki.store.XWikiHibernateStore
 import org.hibernate.impl.SessionFactoryImpl
 import com.opensymphony.oscache.extra.StatisticListenerImpl
 
-
 def displayer = new CacheDisplayer();
 displayer.out = out;
 
@@ -28,26 +27,32 @@ class CacheDisplayer {
     static long latestTotalEvictions;
     long totalCapacity = 0;
     PrintWriter out;
+    boolean useCacheListener = false;
+
 
     private void updateLastMeasured() {
         lastMeasured = System.currentTimeMillis();
     }
 
     public void displayEvictions(XWiki xwiki) {
-        if(lastMeasured==0) lastMeasured = System.currentTimeMillis();
-        StatisticListenerImpl stat = putStatisticsListener(xwiki.getXWiki().store.getCache());
-        out.println(stat);
-        out.println("- last time measured: " + new Date(lastMeasured));
-        out.println("- now measured: " + new Date());
-        float span = (1/1000f)* (System.currentTimeMillis()-lastMeasured);
-        out.println("- time span (s): " + span);
-        out.println("- total capacity: " + totalCapacity);
-        long evictions = (stat.entriesAdded-totalCapacity);
-        if(evictions<0) evictions = 0;
-        out.println("- evictions since start: " + evictions);
-        out.println("- evictions since latest: " + (evictions-latestTotalEvictions));
-        if(span!=0) out.println("- eviction rate (ev/s): " + ((evictions-latestTotalEvictions)/(span)));
-        latestTotalEvictions = stat.entriesAdded-totalCapacity;
+        if(useCacheListener) {
+            if(lastMeasured==0) lastMeasured = System.currentTimeMillis();
+            StatisticListenerImpl stat = getOrMakeStatisticsListener(xwiki.getXWiki().store.getCache());
+            out.println(stat);
+            out.println("- last time measured: " + new Date(lastMeasured));
+            out.println("- now measured: " + new Date());
+            float span = (1/1000f)* (System.currentTimeMillis()-lastMeasured);
+            out.println("- time span (s): " + span);
+            out.println("- total capacity: " + totalCapacity);
+            long evictions = (stat.entriesAdded-totalCapacity);
+            if(evictions<0) evictions = 0;
+            out.println("- evictions since start: " + evictions);
+            out.println("- evictions since latest: " + (evictions-latestTotalEvictions));
+            if(span!=0) out.println("- eviction rate (ev/s): " + ((evictions-latestTotalEvictions)/(span)));
+            latestTotalEvictions = stat.entriesAdded-totalCapacity;
+        } else {
+            removeCacheListener(xwiki.getXWiki().store.getCache());
+        }
     }
 
     static long lastNumDBQueries;
@@ -121,10 +126,28 @@ class CacheDisplayer {
         out.println("</tr>")
     }
 
-    private StatisticListenerImpl putStatisticsListener(OSCacheCache xcache) {
+    private void removeCacheListener(OSCacheCache xcache) {
         com.opensymphony.oscache.base.Cache cache = getCacheAdmin(xcache).getCache();
         for(x in cache.getCacheEventListenerList()) {
-            if(x instanceof StatisticListenerImpl) return x;
+            if(x instanceof StatisticListenerImpl) {
+                cache.removeCacheEventListener(x);
+                return;
+            };
+        }
+    }
+
+    private StatisticListenerImpl getOrMakeStatisticsListener(OSCacheCache xcache) {
+        com.opensymphony.oscache.base.Cache cache = getCacheAdmin(xcache).getCache();
+        for(x in cache.getCacheEventListenerList()) {
+            if(x instanceof StatisticListenerImpl) {
+                StatisticListenerImpl l = x;
+                if(l.entriesAdded<0) {
+                    l.entriesAdded = 0;
+                    l.entriesRemoved = 0;
+                    l.entriesUpdated = 0;
+                }
+                return x
+            };
         }
         // need to create it
         StatisticListenerImpl r = new StatisticListenerImpl();
