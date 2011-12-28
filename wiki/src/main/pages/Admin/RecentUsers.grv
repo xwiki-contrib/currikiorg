@@ -19,22 +19,27 @@ def sortFields = "XWiki.XWikiUsers.first_name,XWiki.XWikiUsers.last_name".split(
 
 //println("q = " + q);
 
+
 println ();
 
 def searchResults = xwiki.getPlugin("lucene").getSearchResults(q, "-date", "en,default");
 //println ("Results: " + searchResults);
-List results = searchResults.getHitsList(0,200);
+List results = searchResults.getHitsList(0,10000);
+
+println("<!-- query : " + q + "-->");
+
 
 println("1 Recent users")
 println();
 println("List of users created in the last 14 days.");
 println(results.size() + " hits.")
 
+int i=1;
 
  for(hit in results) {
     Document doc = hit.doc();
     String fullname = doc.get("fullname");
-    println("* [" + fullname.substring("XWiki.".length()) + " > " + fullname + "]" )
+    println("* "+ (i++) + " [" + fullname.substring("XWiki.".length()) + " > " + fullname + "]" )
 }
 
 

@@ -55,6 +55,14 @@ public class Validation {
         if(email==null || email.length()==0 || atIndex==-1) {
             addWarning("email");
             if(echoErrors) addError("join.error.email_invalid");
+            return false;
+        }
+
+        // We should make this a bit better...
+        if (echoErrors && (atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
+            addError("join.error.email_invalid");
+            addWarning("email");
+            return false;
         }
 
 
@@ -69,12 +77,6 @@ public class Validation {
             return false;
         }
 
-        // We should make this a bit better...
-        if (echoErrors && (atIndex < 1) || (email.lastIndexOf(".") <= (atIndex+1)) || (email.length() <= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
-            addError("join.error.email_invalid");
-            addWarning("email");
-            return false;
-        }
         addOk("email");
         return true;
     }
@@ -148,15 +150,12 @@ public class Validation {
     }
 
     public void activateUser(Context context) {
-        // context.context.put("ajax",true)
         Document userDoc = xwiki.getDocument(context.user);
         com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers")
-        //#set($result = $reg.validateUser(true))
 
-        //xwiki.checkAuth(userObj.getProperty("password").value, "false");
         userObj.set("active", "1");
         userObj.set("email_undeliverable", "0");
-        userDoc.save();
+        userDoc.saveWithProgrammingRights();
     }
 
 

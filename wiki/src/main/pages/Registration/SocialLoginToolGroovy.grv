@@ -10,9 +10,8 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
-import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi
 import com.xpn.xwiki.doc.XWikiAttachment
-import com.xpn.xwiki.web.SavedRequestRestorerFilter
+import org.xwiki.container.servlet.filters.SavedRequestManager
 import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi;
 
 public class SocialLoginToolGroovy {
@@ -133,7 +132,7 @@ public class SocialLoginToolGroovy {
             String maybeXpage="";
             //if(request.framed=="true")
             maybeXpage="&xpage=popup";
-            String targetUrl = "http://" + xwiki.xWiki.Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
+            String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
             if("facebook".equalsIgnoreCase(request.provider)) {
                 targetUrl = URLEncoder.encode(targetUrl);
@@ -358,7 +357,7 @@ public class SocialLoginToolGroovy {
     }
 
     private Document createUserDoc() {
-        def userDoc = new Document(xwiki.xWiki.getDocument("XWiki.${username}", context.context), context.context);
+        def userDoc = new Document(xwiki.getXWiki().getDocument("XWiki.${username}", context.context), context.context);
         //userDoc.addObjectFromRequest("XWiki.XWikiUsers"); // TODO: use other explicit values ??
         def userObj = userDoc.getObject("XWiki.XWikiUsers", true);
         userObj.set("password",   password);
@@ -393,7 +392,7 @@ public class SocialLoginToolGroovy {
             System.out.println("Making profile inactive.")
             userObj.set("active", "0");
             userObj.set("email_undeliverable", "1");
-            validKey = xwiki.xWiki.generateValidationKey(16);
+            validKey = xwiki.getXWiki().generateValidationKey(16);
             userObj.set("validkey", validKey);
             userObj.set("validredirect", request.xredirect);
         }
@@ -507,7 +506,7 @@ public class SocialLoginToolGroovy {
         }
     }
 
-    private static String SAVED_REQUEST = "com.xpn.xwiki.web.SavedRequestRestorerFilter.SavedRequest_SavedRequests";
+    private static String SAVED_REQUEST = "org.xwiki.container.servlet.filters.SavedRequestManager.SavedRequest_SavedRequests";
 
     public String getRedirectTarget(boolean removeMe) {
         if(targets!=null) {
@@ -523,7 +522,7 @@ public class SocialLoginToolGroovy {
                 if(o instanceof Map)
                     xredirect = ((Map) m).value().iterator().next()
                 else
-                    xredirect = ((SavedRequestRestorerFilter.SavedRequest) o).requestUrl;
+                    xredirect = ((org.xwiki.container.servlet.filters.SavedRequestManager.SavedRequest) o).requestUrl;
                 if(u && u.length()>0 && removeMe) {
                     request.session.removeAttribute(SAVED_REQUEST);
                     request.session.removeAttribute("xredirect");
@@ -670,12 +669,12 @@ public class SocialLoginToolGroovy {
         // everything clear let's activate user
         userobj.set("active", "1");
         userobj.set("email_undeliverable", "0");
+        userdoc.saveWithProgrammingRights("Validation.");
         // and send validation mail
         sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
         authenticateUser(userdoc);
         return "success";
     }
-
 
     // ============================== post login... to create the mail again ============
     public void grabFromCurrentUser() {

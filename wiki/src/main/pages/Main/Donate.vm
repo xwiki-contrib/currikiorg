@@ -34,18 +34,32 @@ document.body.className = document.body.className + " iframeInside";
 <div id="container">
 ##    <h2>$msg.get('join.complete.donate.title')</h2>
 ##
-    <p>$msg.get("main.donate.intro")</p>
+    <p>$msg.get("main.donate.intro").</p>
     <p><b>$msg.get('join.complete.donate.header'):</b></p>
     <div id="box-wrapper" style="margin: 30px auto 0; padding:0; width: 450px">
         ##
         ##
-        #set($amount="25")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #99CB25" ##
-                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+        #set($amount="10")##
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #adcb68" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
         ##
+        ##
+        #set($amount="25")##
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #25b3cb" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+            <span  class="dollar_sign">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+        ##
+        ##
+        #set($amount="50")##
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #cb8325" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+            <span  class="dollar_sign">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+        ##
+<div style="clear: both"></div>
         ##
         #set($amount="75")##
         <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #FB661E"##
@@ -62,7 +76,6 @@ document.body.className = document.body.className + " iframeInside";
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
         ##
-<div style="clear: both"></div>
         ##
         #set($amount="150")##
         <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #FC9824"##
@@ -71,10 +84,18 @@ document.body.className = document.body.className + " iframeInside";
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
         ##
+<div style="clear: both"></div>
         ##
         #set($amount="300")##
         <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #379817" ##
-                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+            <span  class="dollar_sign">$</span>$amount<br/>
+            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
+        </a>
+        ##
+        ##
+        #set($amount="500")##
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #99CB25" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>

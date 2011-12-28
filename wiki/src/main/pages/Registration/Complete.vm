@@ -8,10 +8,6 @@
 #template("analytics.vm")##
 {/pre}
 #if($request.xwikiname && $request.xwikiname != "" && $request.validkey && $request.validkey != "")
-#* #set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
-#set($junk = $reg.setObjects($xwiki, $context, $msg))
-#set($result = $reg.validateUser(true))
-#set($junk = $context.context.remove("message")) *#
 #set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
 #set($junk=$tool.init($xwiki, $context, $request, $msg, $targets))##
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##

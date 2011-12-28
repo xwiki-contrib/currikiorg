@@ -28,60 +28,63 @@
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
-    <style type="text/css">
-        td { vertical-align:top;}
-        h4 {margin-bottom:0;}
-    </style>
-    <form id="chpAdvSearchForm" name="chpAdvSearchForm"
-        method="GET" action="http://www.curriki.org/xwiki/bin/view/Search/SearchWidgetJump" target="_curriki_search_result">
-    <table>
-        <tr>
-            <td colspan="2"><h3>Curriki Teacher Resources</h3></td>
-        </tr>
-        <tr><td><!-- WARNING: after each input is a non-break-space, the equivalent of &nbsp;, as a real character -->
-            <h4>grade range/age range: </h4>
-            <label><input name="level" type="radio" value="" checked="checked"/> any</label><br/>
-            <label><input name="level" type="radio" value="gr-k-2" /> K-2</label><br/>
-            <label><input name="level" type="radio" value="gr-3-5" /> 3-5</label><br/>
-            <label><input name="level" type="radio" value="gr-6-8" /> 6-8</label><br/>
-            <label><input name="level" type="radio" value="gr-9-10" /> 9-10</label><br/>
-            <label><input name="level" type="radio" value="gr-11-12"/> 11-12</label><br/>
-        </td><td>
-            <h4>subject:</h4>
-            <label><input name="subject" type="radio" value="" checked="checked"/> any</label><br/>
-            <label><input name="subject" type="radio" value="FW_masterFramework.LanguageArts" /> language arts</label><br/>
-            <label><input name="subject" type="radio" value="FW_masterFramework.Mathematics" /> mathematics</label><br/>
-            <label><input name="subject" type="radio" value="FW_masterFramework.Science" /> science</label><br/>
-            <label><input name="subject" type="radio" value="FW_masterFramework.SocialStudies" /> social studies</label><br/>
-            <label><input name="subject" type="radio" value="FW_masterFramework.ForeignLanguages"/> world languages</label><br/>
-        </td>
-        </tr>
-        <tr><td>
-            <h4>type of resource: </h4>
-            <label><input name="mediatype" type="radio" value=""  checked="checked"/> any</label><br/>
-            <label><input name="mediatype" type="radio" value="interactive" /> interactive</label><br/>
-            <label><input name="mediatype" type="radio" value="video" /> video</label><br/>
-            <label><input name="mediatype" type="radio" value="audio" /> podcast</label><br/> <br/>
-        </td><td>
-            <h4>type of usage:</h4>
-            <label><input name="ict" type="radio" value="" checked="checked"/> any</label><br/>
-            <label><input name="ict" type="radio" value="activity_exercise" /> exercise</label><br/>
-            <label><input name="ict" type="radio" value="curriculum_unit" /> unit</label><br/>
-            <label><input name="ict" type="radio" value="curriculum_lp" /> lesson plan</label><br/>
-            <label><input name="ict" type="radio" value="activity_game"/> games</label><br/>
-        </td></tr>
-        <tr>
-            <td>
-            text <input name="text" type="text" id="curriki-searchbox" size="14"> <br>
-        </td>
-            <td class="adv_search_go_align" >
-              <button type="submit" style="vertical-align:middle">
-                <img align="right" height="25" src="http://www.curriki.org/xwiki/skins/curriki8/LogoStandalone-globeOnly.png"/>
-                go&raquo;
-              </button>
-            </td>
-        </tr>
-</table>
+<!--begin search form -->
+<form id="chpAdvSearchForm" name="chpAdvSearchForm" method="GET"  action="http://www.curriki.org/xwiki/bin/view/Search/SearchWidgetJump" target="curriki-window">
+ <table style="border:lightgray 1pt solid; margin:1em; border-collapse:separate;" ><tr><td style="border-collapse:separate; padding:1em"><table>
+              <tr>
+                  <td colspan="2">
+                      <a href="http://www.curriki.org/xwiki/bin/view/Search/" target="curriki-window"><img src="http://www.curriki.org/xwiki/bin/download/Coll_adminPolx/HowToEmbedCurrikiSearch/HowToEmbedCurrikiSearch.zip/HowToEmbedCurrikiSearch/curriki_find_logo.GIF" alt="find header" width="375" height="79"></a>
+                      <br><h3>
+                    <a target="curriki-window" href="http://www.curriki.org/xwiki/bin/view/Search/">Teacher resources by grade + subject + type</a></h3>
+      <ul>
+        <li>Click on a button to view all lessons for the subject or grade.</li>
+        <li>To narrow your search, select a subject and grade level.</li>
+      </ul>
+</td>
+              </tr>
+              <tr><td><!-- WARNING: after each input is a non-break-space, the equivalent of &nbsp;, as a real character -->
+                  <h4>grade range/age range: </h4>
+                  <label><input name="level" type="radio" value="" checked="checked"/> any</label><br/>
+                  <label><input name="level" type="radio" value="gr-k-2" /> K-2</label><br/>
+                  <label><input name="level" type="radio" value="gr-3-5" /> 3-5</label><br/>
+                  <label><input name="level" type="radio" value="gr-6-8" /> 6-8</label><br/>
+                  <label><input name="level" type="radio" value="gr-9-10" /> 9-10</label><br/>
+                  <label><input name="level" type="radio" value="gr-11-12"/> 11-12</label><br/>
+              </td><td>
+                  <h4>subject:</h4>
+                  <label><input name="subject" type="radio" value="" checked="checked"/> any</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.LanguageArts" /> language arts</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.Mathematics" /> mathematics</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.Science" /> science</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.SocialStudies" /> social studies</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.ForeignLanguages"/> world languages</label><br/>
+              </td>
+              </tr>
+              <tr><td>
+                  <h4>type of resource: </h4>
+                  <label><input name="mediatype" type="radio" value=""  checked="checked"/> any</label><br/>
+                  <label><input name="mediatype" type="radio" value="interactive" /> interactive</label><br/>
+                  <label><input name="mediatype" type="radio" value="video" /> video</label><br/>
+                  <label><input name="mediatype" type="radio" value="audio" /> podcast</label>
+              </td><td>
+                  <h4>type of usage:</h4>
+                  <label><input name="ict" type="radio" value="" checked="checked"/> any</label><br/>
+                  <label><input name="ict" type="radio" value="activity_exercise" /> exercise</label><br/>
+                  <label><input name="ict" type="radio" value="curriculum_unit" /> unit</label><br/>
+                  <label><input name="ict" type="radio" value="curriculum_lp" /> lesson plan</label><br/>
+                  <label><input name="ict" type="radio" value="activity_game"/> games</label><br/>
+              </td></tr>
+              <tr>
+                  <td><h4>text (optional): </h4>
+                      <input name="text" type="text" size="20"><br>              </td>
+                  <td  valign="bottom" align="right">
+                      <input type="submit" value="go">
+                      <!-- alternatively, make a Go link as follows:
+                     <a href="javascript:document.getElementById('chpAdvSearchForm').submit();">go&raquo;</a> -->
+                  </td>
+              </tr>
+              <tr><td colspan="2" style="height:3ex">
+              </td></tr></table></td></tr></table>
 </form>
     ]]>
   </Content>
