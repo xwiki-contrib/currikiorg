@@ -3,30 +3,35 @@
 #template("javascripts.vm")
 #template("analytics.vm")
 <script type="text/javascript">
-document.body.className = document.body.className + " iframeInside";
+    document.body.className = document.body.className + " iframeInside";
 </script>
 <style type="text/css">
     #container{ padding: 20px; font: normal 14px/16px arial, helvetica, sans-serif;color:#666; background-color: inherit;text-align: left; width:580px; }
     h2 {color:#3968B7; margin:0 0 20px 0}
     .h2graysspan{color: #666;}
-    #box-wrapper{ margin: 10px auto; padding: 0; width: 580px;}
-    .box  {border:  16px solid #999; ;margin: 7px; font-size:20px; padding: 7px 10px 0px 3px; text-align: center;  float:left;   background-color: white; height:130px; width:130px; line-height:20px;}
-    a {text-decoration: none;}
-    .dollar_sign{ font-size: 14px; vertical-align: top; padding-left:10px;}
+    #box-wrapper{ margin: 10px auto; padding: 0; width:500px; }
+    #box-wrapper img { margin-left: 0px; }
+    .box  {border: 8px solid #999; ;margin: 5px; font-size:20px; padding: 0 5px 0 0; text-align: center;  float:left;  height:110px; width:110px; line-height:20px; background-color: #fff;}
+    a {text-decoration: none; }
+    .dollar_sign{ font-size: 14px; vertical-align: top; padding:0px;}
     p {margin-bottom:10px}
 </style>
 <h1 style="color:#666699">$msg.get("main.donate.title")</h1>
 ##
 <h3>$msg.get("main.donate.subtitle")</h3>
+
+<p>$msg.get("main.donate.intro") </p>
 <br>
 <img src="/xwiki/bin/download/Main/Donate/classroom1.jpg" alt="Make a Difference. Donate to Curriki." style="height="150" width="630"><br>
 #if($user)#else#set($user=$request.user)#end
 #if($user)#else#set($user=$request.xwikiname)#end
 #if($user)#else#set($user=$context.user)#end
 ###if($user=="XWiki.XWikiGuest")#warning("Warning: no user, donation will be to 'guest'")#end
-    #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+
+<p><b>$msg.get('join.complete.donate.header'):</b></p>
+#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
     #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-    #if("XWiki.XWikiGuest"==$context.user)#set($now=$targets.noLogin)#else#set($now=$targets.afterLogin)#end
+#if("XWiki.XWikiGuest"==$context.user)#set($now=$targets.noLogin)#else#set($now=$targets.afterLogin)#end
 ##
 #set($baseUrlNext="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=donation&keepQuiet=true&user=$user&amount=")##
 #set($baseUrlPopup="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=donation&redirectNow=true&user=$user&amount=")##
@@ -34,99 +39,110 @@ document.body.className = document.body.className + " iframeInside";
 <div id="container">
 ##    <h2>$msg.get('join.complete.donate.title')</h2>
 ##
-    <p>$msg.get("main.donate.intro").</p>
-    <p><b>$msg.get('join.complete.donate.header'):</b></p>
-    <div id="box-wrapper" style="margin: 30px auto 0; padding:0; width: 450px">
-        ##
-        ##
+    <div id="box-wrapper">
+    ##
+    ##
         #set($amount="10")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #adcb68" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: yellow" ##
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-        ##
+    ##        ##
         #set($amount="25")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #25b3cb" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #99CB25" ##
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-        ##
-        #set($amount="50")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #cb8325" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>$amount<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-        ##
-<div style="clear: both"></div>
-        ##
+    ##
+    ##
         #set($amount="75")##
         <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #FB661E"##
-                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-        ##
+    ##
+    ##
         #set($amount="100")##
         <a href="$baseUrlPopup$amount"><button class="box"  style="border-color: #3E6AFB"##
-                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-        ##
+    ##
+        <div style="clear: both"></div>
+    ##
         #set($amount="150")##
         <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #FC9824"##
-                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-<div style="clear: both"></div>
-        ##
+    ##
         #set($amount="300")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #379817" ##
-onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #2300C6"##
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-        ##
+    ##
+    ##
         #set($amount="500")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #99CB25" ##                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #379817" ##
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-        ##
-        ##
+    ##
+    ##
         #set($amount="1000")##
         <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #9933ff"
-                onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
+                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount',null); Curriki.logView('/join/donate/donation/started'); return false;">
             <span  class="dollar_sign">$</span>$amount<br/>
             <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
         </a>
-            <div style="clear: both"></div>
-            ## $msg.get('join.complete.donate.let-others-pay')
+        <div style="clear: both"></div>
+    ## $msg.get('join.complete.donate.let-others-pay')
     </div>
 </div>
 ##
 ##
-<form style="align: right; text-align: right;" action="/xwiki/bin/view/GCheckout/CheckoutNow" method="GET" target="checkoutWindow">
-    Or choose your amount:
-    <input type="hidden" name="xpage" value="popup"/>
-    <input type="hidden" name="type"  value="donation"/>
-    <input type="hidden" name="redirectNow" value="true"/>
-    <input type="hidden" name="user"  value="$user"/>
-  <label>US $
-    <input type="text"   name="amount"
-           style="width:5em; align: right"
-           maxlength="5" size="5" value=""/></label>
-    <input type="image" style="vertical-align: top" width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"
-            onclick="window.top.name='currikiMainWindow'; Ext.get('freeAmountForm').dom.submit()"/>
-</form>
+<table border="0">
+    <tr>
+        <td align="left">
+        ##
+        ##    <p style="vertical-align:top">
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="get">
+                <input type="hidden" name="cmd" value="_xclick"/>
+                <input type="hidden" name="business" value="khallstein@curriki.org"/>
+                <input type="hidden" name="item_name" value="Donation to Curriki"/>
+                <input type="hidden" name="no_shipping" value="1"/>
+                <input type="hidden" name="no_note" value="0"/>
+                <input type="hidden" name="currency_code" value="USD"/>
+                <input type="hidden" name="ah" value="0"/>
+                <input type="hidden" name="tax" value="0"/>
+                <input type="hidden" name="image_url" value="https://www.curriki.org/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
+                <input type="image" src="/xwiki/bin/download/Main/Donate/Paypal-donate.png" border="0" name="submit"  alt="Thank you for your donation!">
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=khallstein%40curriki.org&item_name=Donation+to+Curriki&no_shipping=1&no_note=0&currency_code=USD&ah=0&tax=0&image_url=https%3A%2F%2Fwww.curriki.org%2Fxwiki%2Fskins%2Fcurriki8%2Fimages%2Fcurriki%252Dlogo.gif&submit.x=31&submit.y=10">You may also donate via Paypal</a>.
+            </form>
+        </td>
+        <td align="right"><form style="align: right; text-align: right;" action="/xwiki/bin/view/GCheckout/CheckoutNow" method="GET" target="checkoutWindow">
+            Or choose your amount:
+            <input type="hidden" name="xpage" value="popup"/>
+            <input type="hidden" name="type"  value="donation"/>
+            <input type="hidden" name="redirectNow" value="true"/>
+            <input type="hidden" name="user"  value="$user"/>
+            <label>US $
+                <input type="text"   name="amount"
+                       style="width:5em; align: right"
+                       maxlength="5" size="5" value=""/></label>
+            <input type="image" style="vertical-align: top" width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"
+                   onclick="window.top.name='currikiMainWindow'; Ext.get('freeAmountForm').dom.submit()"/>
+        </form><br/>
+            Please only use digits (no commas or periods).
+        </td>
+    </tr></table>
+##
 
-##
-##
-<p>You may also <a href="DonateOld">donate via Paypal</a>.</p>
