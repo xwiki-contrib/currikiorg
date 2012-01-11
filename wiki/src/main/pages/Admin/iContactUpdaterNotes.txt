@@ -1,0 +1,88 @@
+/*
+Application name: curriki-dev
+
+Accept: text/xml
+Content-Type: text/xml
+API-Version: 2.2
+API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC
+API-Username: curriki-tester
+API-Password: share-them
+ */
+
+/*
+e.g.
+
+curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
+  -H "API-Version: 2.2" \
+  -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
+  -H "API-Username: curriki-dev"  -H "API-Password: share-them"  \
+    'https://app.sandbox.icontact.com/icp/time'
+
+
+*/
+
+/* GET account-id
+
+curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
+  -H "API-Version: 2.2" \
+  -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
+  -H "API-Username: curriki-tester"  -H "API-Password: share-them"  \
+    'https://app.sandbox.icontact.com/icp/a/'
+
+
+accountId: 412984
+
+
+curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
+  -H "API-Version: 2.2" \
+  -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
+  -H "API-Username: curriki-tester"  -H "API-Password: share-them"  \
+    'https://app.sandbox.icontact.com/icp/a/412984/c'
+
+clientFolderId: 124308
+
+
+
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
+  -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
+  -H "API-Username: curriki-tester"  -H "API-Password: share-them" \
+  "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/" \
+  --data-binary "<contacts>
+    <contact>
+       <email>plibbrecht+1@curriki.org</email>
+       <prefix>Mr.</prefix>
+       <firstName>Paul</firstName>
+       <lastName>Libbrecht</lastName>
+       <suffix></suffix>
+       <city>Saarbruecken</city>
+       <postalCode>66123</postalCode>
+       <business>iContact</business>
+       <status>normal</status>
+       <currikiusername>polx</currikiusername>
+    </contact>
+</contacts>"
+
+
+// how to add a custom field to the client contract?
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them"      "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/" --data-binary "<customfields>
+    <customfield>
+        <privateName>currikiUserName</privateName>
+        <displayToUser>0</displayToUser>
+        <fieldType>text</fieldType>
+    </customfield>
+</customfields>"
+
+// how to delete a custom field?
+curl --dump-header - -X DELETE -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them" "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/curriki_user_name"
+
+
+// how to list custom fields?
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them" "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/"
+
+// how to list contacts
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
+  -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
+  -H "API-Username: curriki-tester"  -H "API-Password: share-them" \
+  "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/"
+
+*/

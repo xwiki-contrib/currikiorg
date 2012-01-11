@@ -1,0 +1,310 @@
+import com.xpn.xwiki.api.*
+import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi;
+import org.jdom.Element;
+import org.jdom.FilterIterator
+import org.jdom.filter.ElementFilter
+import org.apache.commons.httpclient.HttpClient
+import org.apache.commons.httpclient.methods.PostMethod
+import org.jdom.input.SAXBuilder
+import org.apache.commons.httpclient.methods.PutMethod
+import org.apache.commons.httpclient.methods.GetMethod
+import org.apache.commons.httpclient.HttpMethod
+import org.apache.commons.httpclient.methods.DeleteMethod
+import org.jdom.output.XMLOutputter
+import org.apache.log4j.helpers.ISO8601DateFormat
+import java.text.DateFormat
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.jdom.output.Format
+
+public class iContactUpdateTool {
+
+    Log LOG = LogFactory.getLog("groovyPages.iContactUpdateTool");
+
+    public void init(XWiki xwiki, Context context) {
+        this.xwiki = xwiki;
+        this.context = context;
+    }
+
+    private XWiki xwiki;
+    private Context context;
+    public Date defaultEndDate = new Date(), defaultStartDate = new Date(System.currentTimeMillis()-24L*3600*1000);
+    public Date getDefaultStartDate() { return defaultStartDate; }
+    public Date getDefaultEndDate() { return defaultEndDate; }
+
+    public List listTopicsCustomNames() {
+        def hql = "where doc.web='FW_masterFramework' order by doc.name desc";
+        List docNames = xwiki.searchDocuments(hql);
+        List r = new ArrayList();
+        for(fullName in docNames) {
+            r.add(mapCurrikiNameToCustomName(xwiki.getDocument(fullName).name, "subj_"))
+        }
+        return r;
+    }
+
+    // ==================== iContact communication =========================================
+
+    private HttpClient httpClient = new HttpClient();
+    private SAXBuilder saxBuilder = new SAXBuilder();
+    // TODO: parametrize from props (including customer id and app-URL)
+    private String baseURL = "https://app.sandbox.icontact.com/icp/a/412984/c/124308/";
+    
+    private Element postToiContact(String path, String msg) {
+        try {
+            PostMethod post = new PostMethod(baseURL + path);
+            post.setRequestBody(msg);
+            return readDocumentFromRequest(post);
+        } catch (Exception ex) {
+            throw new IOException("Issue at post of " + msg, ex);
+        }
+    }
+    private Element putToiContact(String path, String msg) {
+        PutMethod put = new PutMethod(baseURL + path);
+        put.setRequestBody(msg);
+        return readDocumentFromRequest(put);
+    }
+    private Element getFromiContact(String path) {
+        GetMethod get = new GetMethod(baseURL + path);
+        return readDocumentFromRequest(get);
+    }
+
+    private void deleteFromiContact(String path) {
+        DeleteMethod delete = new DeleteMethod(baseURL + path);
+        request(delete);
+    }
+    
+
+    private void request(HttpMethod method) {
+        if (method instanceof PostMethod || method instanceof PutMethod)
+            method.addRequestHeader("Content-Type","text/xml");
+        method.addRequestHeader("Accept", "text/xml");
+        method.addRequestHeader("API-Version","2.2");
+        method.addRequestHeader("API-AppId","twa66mHlvPggubn82ncwSBiVbfwmiPJC");
+        method.addRequestHeader("API-Username","curriki-tester");
+        method.addRequestHeader("API-Password","share-them");
+        int result = httpClient.executeMethod(method);
+        reports.add("- status: " + result);
+        if(result!=200) throw new IOException("Error receiving element (status " + result + ") when on request " + method.getURI());
+    }
+
+    private Element readDocumentFromRequest(HttpMethod method) {
+        try {
+            request(method);
+        } catch (Exception ex) {
+            throw new IOException("Issue with method " + method, ex);
+        }
+        String type = method.getResponseHeader("Content-Type").value;
+        if(type==null) return null;
+        if(!(type.startsWith("text/xml")))
+            throw new IOException("Content-type of response is wrong: \"" + type + "\".");
+        org.jdom.Document responseDoc = saxBuilder.build(method.getResponseBodyAsStream());
+        return responseDoc.getRootElement();
+    }
+
+
+    // ========================== custom fields manipulation =======================
+
+
+    public String mapCurrikiNameToCustomName(String docName, String prefix) {
+        docName = docName.replaceAll("\\&", "_");
+        docName = docName.replaceAll("\\(", "_");
+        docName = docName.replaceAll("\\)", "_");
+        docName = docName.replaceAll(" ", "_");
+        docName = docName.replaceAll("__", "_");
+        docName = docName.replaceAll("([a-z])([A-Z])", "\$1_\$2");
+        docName = prefix + docName;
+        if(docName.length()>20)
+            docName = docName.substring(0,20);
+        return docName.toLowerCase();
+    }
+
+
+    private void makeSureFieldsAreInitted() {
+        if (!subjectPropToField.isEmpty()) return;
+        for(txt in xwiki.searchDocuments("where doc.web='FW_masterFramework' order by doc.name desc")) {
+            txt = txt.substring("FW_masterFramework.".length());
+            subjectPropToField.put(txt, mapCurrikiNameToCustomName(txt, "subj_"));
+        }
+        for(txt in xwiki.curriki.getValues("CurrikiCode.AssetClass","educational_level")) {
+            eduLevelPropToField.put(txt, mapCurrikiNameToCustomName(txt, "lev_"));
+        }
+    }
+    
+    private static List ownFields = ["curriki_username", "curriki_member_type", "curriki_country",
+            "opt_out", "member_since", "affiliation"];
+    private static Map subjectPropToField = new HashMap(),
+        eduLevelPropToField = new HashMap();
+
+
+    List reports = new LinkedList();
+
+    public List getReports() { return reports; }
+
+    public String refreshCustomFieldNames() {
+        try {
+            makeSureFieldsAreInitted();
+            TreeSet neededFields = new TreeSet();
+            neededFields.addAll(ownFields);
+            neededFields.addAll(subjectPropToField.values());
+            neededFields.addAll(eduLevelPropToField.values());
+            Element customFields = getFromiContact("customfields/?limit=500");
+            TreeSet foundCustomFields = new TreeSet();
+            Iterator i = customFields.getDescendants(new ElementFilter("customFieldId"));
+            while(i.hasNext()) {
+                String customFieldId = (i.next()).getText();
+                foundCustomFields.add(customFieldId);
+            }
+
+            Set fieldsToAdd = new TreeSet();
+            fieldsToAdd.addAll(neededFields);
+            fieldsToAdd.removeAll(foundCustomFields);
+            Set fieldsToRemove = new TreeSet();
+            fieldsToRemove.addAll(foundCustomFields);
+            fieldsToRemove.removeAll(neededFields);
+
+            for(String field in fieldsToRemove) {
+                reports.add("* Deleting custom field " + field);
+                try {
+                    deleteFromiContact("customfields/" + field);
+                } catch (Exception excep) { reports.add(excep);
+                }
+            }
+
+            for(String field in fieldsToAdd) {
+                String type = "text";
+                reports.add("* Adding custom field " + field);
+                if(field.startsWith("subj") || field.startsWith("eduLevel")) type = "checkbox";
+                String msg = "<customfields>\n" +
+                        "    <customfield>\n" +
+                        "        <privateName>${field}</privateName>\n" +
+                        "        <displayToUser>0</displayToUser>\n" +
+                        "        <fieldType>${type}</fieldType>\n" +
+                        "    </customfield>\n" +
+                        "</customfields>"
+                postToiContact("customfields/", msg);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            reports.add(ex);
+        }
+        return "ok";
+    }
+
+    private XMLOutputter outputter = createOutputter();
+    private XMLOutputter createOutputter() {
+        XMLOutputter outputter = new XMLOutputter();
+        Format format = outputter.getFormat();
+        format.setEncoding("utf-8");
+        format.setOmitDeclaration(true);
+        format.setTextMode(Format.TextMode.NORMALIZE);
+        outputter.setFormat(format);
+        return outputter;
+    }
+    
+    public String updateUserToiContact(String name) {
+        if (!name.startsWith("XWiki.")) name = "XWiki." + name;
+        List l= Arrays.asList(name);
+        updateUsersToiContact(l);
+        return "OK";
+    }
+
+    public String updateGroupsUsersToiContact(String groupName) {
+        Document groupDoc = xwiki.getDocument(groupName);
+        List members = new LinkedList();
+        LOG.warn("members: " + groupDoc);
+        for (Object obj in groupDoc.getObjects("XWiki.XWikiGroups")) {
+            LOG.warn("adding " + obj.getProperty("member").value)
+            members.add(obj.getProperty("member").value);
+        }
+        return updateUsersToiContact(members);
+    }
+
+    public String updateUsersToiContact(List userNames) {
+        int n=0; int max = userNames.size();
+        Element uploadUserDocRoot = createUploadUserDocRoot();
+        LOG.warn("Preparing to update " + userNames.size() + " users.")
+        for (String userName in userNames) {
+            uploadUserDocRoot.addContent(createUserProfile(userName));
+            reports.add("added " + userName);
+            n++;
+            if(n % 100 == 0 || n == max) {
+                LOG.warn("Outputting " + outputter.outputString(uploadUserDocRoot.getDocument()));
+                postToiContact("contacts/", outputter.outputString(uploadUserDocRoot.getDocument()));
+                uploadUserDocRoot = createUploadUserDocRoot();
+                reports.add("Posted.");
+            }
+        }
+        return "OK, done " + n;
+    }
+
+
+    public String updateByDate(String fromDate, String toDate) {
+        Date since=new Date(fromDate);
+        Date earliest = new Date(toDate);
+
+        int numsBack = 50, cursor = 0;
+        List list = xwiki.searchDocuments("where 1=1 and doc.web='XWiki' order by doc.date desc", 
+                numsBack, cursor);
+
+        List usersList = new LinkedList();
+        while(!list.isEmpty() && earliest.after(since)) {
+            for(String docName in list) {
+                com.xpn.xwiki.api.Document d = xwiki.getDocument(docName);
+                if(d.getObject("XWiki.XWikiUsers")==null) continue;
+                Date date = d.date;
+                usersList.add(docName);
+                if(date.before(earliest)) earliest = date;
+                if(earliest.before(since)) break;
+            }
+        }
+        return updateUsersToiContact(usersList);
+    }
+    
+    private Element createUploadUserDocRoot() {
+        Element elt = new Element("contacts");
+        new org.jdom.Document(elt);
+        return elt;
+    }
+    
+    private static DateFormat isoFormatter = new ISO8601DateFormat();
+    
+    private Element createUserProfile(String userName) {
+        Document userDoc = xwiki.getDocument(userName);
+        Object obj = userDoc.getObject("XWiki.XWikiUsers");
+        Element contact = new Element("contact");
+
+        if(userName.startsWith("XWiki.")) userName = userName.substring("XWiki.".length());
+        addProp("curriki_username", userName, contact);
+        addProp("curriki_member_type", obj.getProperty("member_type"), contact);
+        addProp("email", obj.getProperty("email"), contact);
+        addProp("firstName", obj.getProperty("first_name"), contact);
+        addProp("lastName", obj.getProperty("last_name"), contact);
+        addProp("state", obj.getProperty("state"), contact);
+        addProp("city", obj.getProperty("city"), contact);
+        addProp("curriki_country", obj.get("country"), contact);
+        addProp("affiliation", obj.getProperty("affiliation"), contact);
+        addProp("opt_out", obj.getProperty("opt_out"), contact);
+        addProp("member_since", isoFormatter.format(userDoc.getCreationDate()), contact);
+        if (obj.getProperty("educational_level")!=null)
+            for(String v in obj.getProperty("educational_level").value) {
+                addProp(mapCurrikiNameToCustomName(v, "lev_"), "1", contact);
+            }
+        if (obj.getProperty("topics")!=null)
+            for(String v in obj.getProperty("topics").value) {
+                if(v.startsWith("FW_masterFramework.")) v = v.substring("FW_masterFramework.".length());;
+                addProp(mapCurrikiNameToCustomName(v, "subj_"), "1", contact);
+            }
+        return contact;
+    }
+
+
+    private void addProp(String eltName, java.lang.Object value, Element to) {
+        Element elt = new Element(eltName);
+        to.addContent(elt);
+        if (value instanceof Property) value = ((Property) value).value;
+        if (value!=null)
+            elt.addContent(value.toString());
+    }
+
+
+}
