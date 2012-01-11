@@ -44,6 +44,7 @@
 #end ## }
 #end ## macro ## }
 
+
 #**
   * Display a Group logo for a space
   *
@@ -51,6 +52,16 @@
   * @author dward@curriki.org
   *#
 #macro(groups_grouplogo $space)
+#groups_grouplogo2($space true)
+#end
+
+#**
+  * Display a Group logo for a space
+  *
+  * @param $space Space/Group to display the logo of
+  * @author dward@curriki.org
+  *#
+#macro(groups_grouplogo2 $space $withpre)
   #set($logofilename = $space.display("logo","view"))
   #set($attachLogo = "")
   #if($logofilename != "")
@@ -64,8 +75,8 @@
     #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
   #else
     #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
-	#set($logowidth = 82)
-	#set($logoheight = 50)
+	#set($logowidth = 120)
+	#set($logoheight = 82)
   #end
 #set( $image_resize = "" )
 #if($logowidth > 120 || $logoheight > 82)
@@ -87,9 +98,16 @@
 #end
   ##display logo
   <div class="frame-inset-logo">
-    <a href="$space.getHomeURL()" title="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}" alt="{pre}$xwiki.escapeText($space.getDisplayTitle()){/pre}">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" alt="{pre}$xwiki.escapeText(${space.getDisplayTitle()}){/pre}" />
+    #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
+    #if($withpre)
+    <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+    </a>    
+    #else
+    <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
+      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="${jstitle}" alt="${jstitle}" />
     </a>
+    #end
   </div>
 #end
 

@@ -830,7 +830,7 @@ $msg.get("panel.navigation.home")
 #set($i = $i + 1)
 #set($content = "${content.substring(0,$i)} [...>${memberdoc.fullName}]")
 #end
-<div class="xwikicontent">$memberdoc.getRenderedContent("$!content")</div></div>
+$memberdoc.getRenderedContent("$!content")</div>
 </div> ## userdata
 <div class="clr"></div>
 </div> ## vcard
@@ -866,7 +866,7 @@ $msg.get("panel.navigation.home")
   #set( $s = "" )
 #end #end
 
-#if($bcDoc.fullName == "Groups.CreateNewGroup")
+#if("Groups.CreateNewGroup"==$bcDoc.fullName)
  ## special breadcrumb parent for groups creation page
  #set($usr = $context.user)
  $xwiki.getUserName($usr,true) &gt;
@@ -947,7 +947,7 @@ $msg.get("panel.navigation.home")
 #macro(curriki_breadcrumb_display $bcItem $previousBc)
 #set($bcDoc = $xwiki.getDocument($bcItem))
    ## custom handling of EditArticle action
-   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+   #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    ## find the page title
@@ -991,13 +991,13 @@ $msg.get("panel.navigation.home")
     #end ##end home page
     #if($bcDoc.name=="Documentation") ##documentation page
           #if(	$request.action)
-                #if($request.action == "newdoc")
+                #if($request.action == "newdoc" && $request.method != "POST" )
                       #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
                 #end
                 #if($request.action == "editdoc" && $request.method != "POST" )
                       #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
                 #end
-                #if($request.action == "history" && $request.method != "POST" )
+                #if($request.action == "history")
                       #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
                 #end
                 #if($request.action == "compare")
@@ -1019,7 +1019,7 @@ $msg.get("panel.navigation.home")
   *#
 #macro(curriki_breadcrumb_groups_addbrowseinfo)
 #set($more = "")
-#if($bcDoc.fullName == "Groups.Browse")
+#if("Groups.Browse"==$bcDoc.fullName)
      #if( $request.subject )
 		#set($sdoc = $xwiki.getDocument($request.subject))
 		#set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
@@ -1048,7 +1048,7 @@ $msg.get("panel.navigation.home")
 #if($!s=="")
  #set($collType = "")
  #set($category = $bcDoc.getValue("category"))
- #if($category=="collection")
+ #if("collection"==$category)
   #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
   #set($collType = $bcDoc.getValue("type"))
  #end
@@ -1061,7 +1061,7 @@ $msg.get("panel.navigation.home")
   #if($bcDoc.getObject("CurrikiCode.AssetClass"))
    ## handling of breadcrumb for an Asset. Taking the first one.
    ## TODO: setup a cache
-   #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' order by doc.creationDate")
+   #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate")
    #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
   #end
 
@@ -1131,7 +1131,7 @@ $msg.get("panel.navigation.home")
    #end
    #set($isFirst = false)
    #set($bcDoc = $xwiki.getDocument($bcItem.replace('/', '.')))
-   #if($bcDoc.fullName == "XWiki.EditArticle" && $request.editArticle)
+   #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
     #set($bcDoc = $xwiki.getDocument($request.editArticle))
    #end
    #asset_findtitle($bcDoc)
@@ -1210,7 +1210,7 @@ $msg.get("panel.navigation.home")
  *##
 #macro(currikiEfSLPIcon)        ##{
 <img src="$msg.get('efs.title.learn.link4.thumbnail')" height="68" width="64" align="middle">
-#end                            ##}
+#end      
 
 #**
  * For Lesson Plan output (see CreateResources.CurrikiStandardLessonPlan
@@ -1500,7 +1500,6 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author dward@curriki.org
   *#
 #macro(curriki_avatarwithname_width $userdoc) ## {
-#set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #if($userdoc.attachmentList.size()==0)  ## {
 <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
@@ -1637,42 +1636,12 @@ window.onbeforeunload = function() {
 </script>
 #end
 
-#**
-  * Stores the WYSIWYG configuration in a JavaScript variable. Overwrites the default XWiki configuration!
-  *
-  * @param $jsVarName the name of the JavaScript variable to store the WYSIWYG configuration
-  * @param $editedDocument the document being edited
-  * @param $fieldId identifies the form field to be replaced by the WYSIWYG editor
-  * @param $full {@code true} to use a fully-fledged editor, {@code false} to use the compact editor
-  *#
-#macro(wysiwyg_storeConfig $jsVarName $editedDocument $fieldId $full)
-<script type="text/javascript">
-//<![CDATA[
-var $jsVarName = {
-  hookId: '${fieldId}',
-  syntax: '${editedDocument.syntaxId}',
-#if("$!wysiwyg_inputURLQueryString" != "")
-  inputURL: '${editedDocument.getExternalURL("view", $wysiwyg_inputURLQueryString)}',
-#end
-#if($full)
-  displayTabs: true,
-  defaultEditor: "wysiwyg",
-#end
-  plugins: 'submit line separator text valign justify list indent history format font color symbol link image table macro importer#if($full && $request.sync) sync#end',
-  menu: 'link image table macro',
-  toolbar: 'bold italic underline strikethrough teletype | subscript superscript | justifyleft justifycenter justifyright justifyfull | unorderedlist orderedlist | outdent indent | undo redo | format | fontname fontsize forecolor backcolor | hr symbol removeformat | importer',
-  wiki: '${editedDocument.wiki.replace("'", "\'")}',
-  space: '${editedDocument.space.replace("'", "\'")}',
-  page: '${editedDocument.name.replace("'", "\'")}',
-#if($full && $request.sync)
-  // Additional configuration for the real-time editing feature.
-  syncPage: '${editedDocument.fullName.replace("'", "\'")}',
-#if($request.reset=="1")
-  syncReset: 1,
-#end
-#end
-  debug: #if($request.debug)'true'#else'false'#end
-};
-//]]>
-</script>
+
+#macro(browserCacheEnableFor $numSeconds)##
+$response.setHeader("Cache-Control","max-age=${numSeconds}, public")##
+$response.setHeader("Pragma","-")##
+#set($expires = $util.getDate().getTime())##
+#set($expires = $expires+$mathtool.mul(1000,$numSeconds))##
+#set($expires =$util.getDate($expires))##
+$response.setDateHeader("Expires",$expires.getTime())##
 #end

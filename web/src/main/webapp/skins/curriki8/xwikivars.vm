@@ -6,6 +6,8 @@
 ##  GWT settings
 #set($gwtmainpath = "/xwiki/bin/view/GWT/Editor?xpage=plain&")
 #set($gwtsitepath = "/xwiki/gwt")
+## Loaded settings
+$xwiki.includeTopic('Admin.Configuration', false)
 ## Rights vars
 #set($isGuest = $context.getUser().equals("XWiki.XWikiGuest"))
 #set($hasEdit = $xwiki.hasAccessLevel("edit"))
@@ -13,12 +15,14 @@
 #set($hasGlobalAdmin = $xwiki.hasAccessLevel("admin", $context.user, "XWiki.XWikiPreferences"))
 #set($hasSpaceAdmin = $xwiki.hasAccessLevel("admin", $context.user, "${doc.space}.WebPreferences"))
 #set($isReadOnly = $xwiki.isReadOnly())
+## no real need $xwiki.curriki.ensureUsernameCookie($request, $response, $context.user)
 #set($debugCookie = $xwiki.getUserPreferenceFromCookie("cdbg"))
 #if("$!debugCookie" == "")##{
 #set($globalDebug = false)
 #else##}{
 #set($globalDebug = true)
 #end##}
+#set($gVersion = $xwiki.version.replaceAll('.*\.', ''))
 #set($spaceViewUrl = $spaceDoc.getURL("view"))
 #set($viewUrl = $doc.getURL("view"))
 #set($userObj = $!crtUserDoc.getObject("XWiki.XWikiUsers",0))
@@ -62,3 +66,5 @@
 #set($docvariant = "$languageparams")
 #end
 #template("deprecatedVars.vm")
+#set($hostname=$xwiki.getXWiki().Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config'))
+#set($GA_uacct=$xwiki.getXWiki().Param('curriki.system.GA'))

@@ -78,7 +78,7 @@ data.init = function(){
 		,parentList: {}
 		,list: []
 		,data: [
-			['', _('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED')]
+			['', _('CurrikiCode.AssetClass_instructional_component_UNSPECIFIED', '   ')]
 		]
 	};
 	f.data.ict.fullList.each(function(value){
@@ -86,9 +86,15 @@ data.init = function(){
 		f.data.ict.parentList[name] = name;
 	});
 	Object.keys(f.data.ict.parentList).each(function(value){
+        var sort = _('CurrikiCode.AssetClass_instructional_component_'+value);
+        if (value === 'other') {
+                sort = 'zzz';
+        }
+
 		f.data.ict.data.push([
 			value
 			,_('CurrikiCode.AssetClass_instructional_component_'+value)
+			,sort
 		]);
 	});
 
@@ -106,13 +112,21 @@ data.init = function(){
 					parentICT+'*'
 					,_('CurrikiCode.AssetClass_instructional_component_'+parentICT+'_UNSPECIFIED')
 					,parentICT
+					,'   '
 				]);
 				f.data.subict.parents[parentICT] = parentICT;
 			}
+
+			var sort = _('CurrikiCode.AssetClass_instructional_component_'+value);
+			if (value === 'other') {
+					sort = 'zzz';
+			}
+
 			f.data.subict.data.push([
 				value
 				,_('CurrikiCode.AssetClass_instructional_component_'+value)
 				,parentICT
+				,sort
 			]);
 		}
 	});
@@ -167,7 +181,7 @@ data.init = function(){
 
 	f.data.special = {
 		list: [
-			'contributions', 'collections', 'updated'
+			'contributions', 'collections', 'updated', 'info-only'
 		]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
@@ -201,13 +215,15 @@ data.init = function(){
 		})
 
 		,ict: new Ext.data.SimpleStore({
-			fields: ['id', 'ict']
+			fields: ['id', 'ict', 'sortValue']
+			,sortInfo: {field:'sortValue', direction:'ASC'}
 			,data: f.data.ict.data
 			,id: 0
 		})
 
 		,subict: new Ext.data.SimpleStore({
-			fields: ['id', 'ict', 'parentICT']
+			fields: ['id', 'ict', 'parentICT', 'sortValue']
+			,sortInfo: {field:'sortValue', direction:'ASC'}
 			,data: f.data.subict.data
 			,id: 0
 		})
@@ -260,17 +276,20 @@ data.init = function(){
 		,{ name: 'fwItems' }
 		,{ name: 'levels' }
 		,{ name: 'parents' }
+		,{ name: 'lastUpdated' }
 		,{ name: 'updated' }
+        ,{ name: 'score' }
 	]);
 
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Resources'
+			url: document.location.pathname.endsWith("Old") ?
+                    '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
-
+		,baseParams: { xpage: "plain"//, '_dc':(new Date().getTime())
+                        }
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
 			,totalProperty: 'resultCount'
@@ -280,7 +299,10 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
-	data.store.results.setDefaultSort('title', 'asc');
+    if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
+    if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
+    if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
+	data.store.results.setDefaultSort('score', 'desc');
 
 
 
@@ -296,11 +318,24 @@ data.init = function(){
 
 			var fw = Curriki.data.fw_item.getRolloverDisplay(record.data.fwItems||[]);
 			var lvl = Curriki.data.el.getRolloverDisplay(record.data.levels||[]);
+			var lastUpdated = record.data.lastUpdated||'';
 
-			desc = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}"
+			var qTipFormat = '{1}<br />{0}<br /><br />';
+
+			// Add lastUpdated if available
+			if (lastUpdated !== '') {
+				qTipFormat = qTipFormat+'{7}<br />{6}<br /><br />';
+			}
+
+			// Base qTip (framework, ed levels)
+			qTipFormat = qTipFormat+'{3}<br />{2}<br />{5}<br />{4}';
+
+
+			desc = String.format(qTipFormat
 				,desc,_('global.title.popup.description')
 				,fw,_('global.title.popup.subject')
 				,lvl,_('global.title.popup.educationlevel')
+				,lastUpdated,_('global.title.popup.last_updated')
 			);
 
 			// Asset Type icon
@@ -358,12 +393,16 @@ data.init = function(){
 		}
 
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
-			if (value != "") {
+			if (value != "" && value != "0" && value != 0) {
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
 
-				metadata.css = String.format('rating-{0}', value);
-				return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+				if (ratingCount != "" && ratingCount != "0" && ratingCount != 0) {
+					metadata.css = String.format('rating-{0}', value);
+					return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+				} else {
+					return String.format('');
+				}
 			} else {
 				return String.format('');
 			}
@@ -373,12 +412,13 @@ data.init = function(){
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
 			return String.format('{0}', dt);
 		}
+        , score: function(value, metadata, record, rowIndex, colIndex, store){
+            return value;
+         }
 	};
 };
 
 Ext.onReady(function(){
-  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-	  data.init();
-	});
+	data.init();
 });
 })();

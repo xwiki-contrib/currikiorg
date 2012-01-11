@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 cd $DIR
 
-COMPRESSOR="./compressor/yuicompressor-2.3.5.jar"
+COMPRESSOR="./compressor/yuicompressor-2.4.2.jar"
 
 COMPRESS_JS="java -jar $COMPRESSOR --type js "
 COMPRESS_CSS="java -jar $COMPRESSOR --type css "
@@ -20,6 +20,8 @@ cat $I18N | $UNCOMPRESS_JS > ../webapp/js/i18n-debug.js
 cat $I18N | $COMPRESS_JS > ../webapp/js/i18n.js
 
 CURRIKI="\
+	ext/Math.uuid.js \
+	ext/jsonp.js \
 	ext/DDView.js \
 	ext/Multiselect.js \
 	ext/pPageSize.js \
@@ -28,15 +30,15 @@ CURRIKI="\
 	\
 	curriki/curriki-base.js \
 	curriki/data/curriki-data-user.js \
-	curriki/data/curriki-data-code.js \
+	curriki/data/curriki-data-metadata.js \
 	curriki/assets/curriki-assets.js \
 	curriki/ui/curriki-ui.js \
+	curriki/ui/curriki-login.js \
 	curriki/ui/rating.js \
 	"
 
 cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js
 cat $CURRIKI | $COMPRESS_JS > ../webapp/js/curriki-main.js
-
 
 
 CURRIKICSS="\
@@ -139,3 +141,15 @@ FLAG="\
 	"
 cat $FLAG | $UNCOMPRESS_JS > ../webapp/js/curriki-module-flag-debug.js
 cat $FLAG | $COMPRESS_JS > ../webapp/js/curriki-module-flag.js
+
+
+
+
+## vidiembed_curriki.js removed from MERGED list (was right after $I18N)
+##	../webapp/skins/curriki8/js/vidiembed_curiki.js
+VIDITALK="\
+	../webapp/skins/curriki8/js/viditalk_stub.js \
+	"
+
+MERGED="$I18N $VIDITALK $CURRIKI $ADDPATH $ORGANIZE $NOMINATE $REVIEW $UNNOMINATE $PARTNER $ASTERIXREVIEW $FLAG"
+cat $MERGED | $COMPRESS_JS > ../webapp/js/curriki-merged.js

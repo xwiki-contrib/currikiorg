@@ -7,10 +7,13 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+#if($!request.getHeader("User-Agent").contains("MSIE 9"))
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+#end
 <title>#pageTitle()</title>
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
 $xwiki.parseContent($!xwiki.getWebPreference("meta"))
-#template("analytics.vm")
+<!-- analytics -->#template("analytics.vm")<!-- /analytics -->
 #template("stylesheets.vm")
 <meta http-equiv="imagetoolbar" content="no" />
 #set($headerfile="html")
@@ -18,8 +21,9 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 #template("ie.vm")
 #template("onloadunloadjs.vm")
 #set($clsPageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
+</head>
 <body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName'>
-#if("$!request.viewer"!="embed")
+#if("$!request.viewer"!="embed") 
 <div id="main">
- <div id="shadow-right">
+	<div id="shadow-right">
 #end

@@ -1,108 +1,131 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #**
   * Displays the Curriki Header
   * @author Curriki dev team
   *#
 <!-- header -->
 <div id="header"> ##{
-
 <!-- logo -->
-## TODO: Add translation for title and alt
 #set($altinfo = $msg.get("header.altinfo"))
 #set($logourl = $xwiki.getSkinFile("images/curriki-logo.gif"))
 <div id="header-logo"> ##{
   <a href="$xwiki.getURL("Main.WebHome", "view")" title="$altinfo">
-    <img src="$logourl" title="$altinfo" alt="$altinfo" />
+    <img src="$logourl" title="$escapetool.xml($altinfo)" alt="$escapetool.xml($altinfo)" />
   </a>
 </div> ##}
 
 <!-- member area -->
-<div id="header-member"> ##{
-#if($isguest) ##{
-  #if ($request.xredirect) ##{
-   #set($logredir = $request.xredirect)
-  #elseif($logredir.contains("/login"))
-   #set($logredir = "")
-  #end	  
-<!-- login area -->
-<form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "xredirect=$logredir")" method="post"> ##{
-  <input type="hidden" name="srid" value="$!request.srid" />
-  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="$msg.get("header.login_username")" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
-  <input class="input password" id="j_loginpwd_placeholder" tabindex="2" type="text" value="$msg.get("header.login_password")" onfocus="showLoginPasswordInput.apply(this)"/>
-  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="this.select()" onblur="hideLoginPasswordInput.apply(this)" style="display:none;"/>
-
-  <script type="text/javascript">
-    // In IE we can't change the type of a password input (we can't toggle between text and password type) so we have to
-    // use a place holder in order to display the password label when the password field is empty.
-    function showLoginPasswordInput() {
-      // Hide the place holder.
-      this.style.display = 'none';
-      // Show the password input.
-      var pwd = document.getElementById('j_loginpwd');
-      pwd.style.display = '';
-      pwd.focus();
-    }
-    function hideLoginPasswordInput() {
-      // Hide the password input if it's empty.
-      if (this.value == '') {
-        this.style.display = 'none';
-        // Show the place holder.
-        var placeHolder = document.getElementById('j_loginpwd_placeholder');
-        placeHolder.style.display = '';
-      }
-    }
-  </script>
-
-  <button type="submit" id="loginbtn" class="button button-confirm" tabindex="4">$msg.get("header.login_go")</button>
-
-  <!-- remember me -->
-  <fieldset id="fieldset-remember">
-	<span><input tabindex="3" type="checkbox" class="checkbox" name="j_rememberme" value="true"/>$msg.get("header.login_rememberme")</label></span>
-    <a href="$xwiki.getURL("Main.ForgotPassword")" title="">$msg.get("header.login_forgot")</a>
-  </fieldset>
-  <!-- end of remember me -->
-  
-  <!-- registration -->
-  #set($regurl = $xwiki.getURL("Main.JoinCurriki"))
-  <a href="$regurl" class="register"><span>$msg.get("header.becomemember_part1")</span> $msg.get("header.becomemember_part2")</a>
-  <!-- end of registration -->
-  
-</form> ##}
-<!-- end of login area -->
-
+<div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
+#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
+##{
+	#if ($request.xredirect) ##{
+		#set($logredir = $request.xredirect)
+	#elseif($doc.web == "Registration") ##}{
+		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+	#elseif($doc.fullName == "Main.WebHome") ##}{
+		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+	#elseif($doc.fullName == "Main.JoinCurriki") ##}{
+		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+	#elseif($logredir.contains("/login")) ##}{
+		#set($logredir = "")
+	#end ##}
+	#if("$!logredir"!="") ##{
+		#set($logredir = "xredirect=$logredir")
+	#elseif($request.srid) ##}{
+		#set($logredir = "srid=$request.srid")
+	#end ##}
+    #set($escapedURL=$escapetool.url($request.getRequestURI()))##
+    #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
+    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+    <p style="margin-top: 0.7em; width:100%; text-align:left; font-size:130%; font-weight: bolder;">##
+    <a $anchorAtts style="color: #FF5500; ">$msg.get('join.header.title.1') $msg.get("join.header.title.2")</a></p>
+    ## join.header.title.1 = Login,
+    ## join.header.title.2=Join Curriki,
+    #if($!request.getHeader("User-Agent").contains("MSIE 7"))
+        &nbsp;
+    #end
+    <p style="margin-top:-18pt; margin-bottom: 0; width:100%; text-align:right;">
+    <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
+    ## join.header.title.3=orSign-in using
+    $msg.get('join.header.title.3')##
+    #foreach($provider in ["Facebook","Google"])
+      <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
+        #set($xredirect="${request.getRequestURI()}")##
+    <!-- xredirect is $xredirect -->
+        #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
+      <a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
+              onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
+      <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="36"
+           style="vertical-align: bottom; margin-left: 1em; margn-right:1em;" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
+      #end</p>
+    #end
 #else ## }{ ## is logged in
-  ## crtUserDoc is set in fudocs.vm
-  #set($fname = $crtUserDoc.display("first_name","view"))
-  <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
-  #if($hasGlobalAdmin)
-    <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
-  #end
-  #set($logredir = $xwiki.getURL("Main.WebHome"))
-  #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
-  <a href="$logouturl" class="logout">$msg.get("header.logout")</a>
-  
+	## crtUserDoc is set in fudocs.vm
+	#set($fname = $crtUserDoc.display("first_name","view"))
+	<span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+	#if($hasGlobalAdmin)
+	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
+	#end
+    #if("MyCurriki"=="$doc.space")
+     #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
+    #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
+        #set($logredir = $request.getRequestURI())
+    #else
+        #set($logredir = $xwiki.getURL("Main.WebHome"))
+    #end
+	#set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
+	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
-	
+#set($headerMsg="$!request.session.getAttribute('header.message')")##
+#if($headerMsg!="")
+<p align="left" style="font-size:smaller; margin-top: 0; white-space:nowrap">##
+#if($headerMsg=="logout-ok")##
+    $request.session.removeAttribute("header.message")##
+    $msg.get("logout.ok-you-left")<!-- logout message here -->##
+    #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
+    #if($idProviderName)<!-- idProviderName: "$idProviderName" -->##
+        #if($idProviderName.equalsIgnoreCase("facebook"))
+            <a href="http://www.facebook.com/logout.php" target="_facebook_window"
+               >$msg.get("logout.offer-logout.facebook")</a>
+        #elseif($idProviderName.equalsIgnoreCase("google"))
+            <a href="http://www.google.com/"
+               target="_google_logout_window"
+                    >$msg.get("logout.offer-logout.google")</a>
+        #end##
+    #end##
+    #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
+        <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
+#else$msg.get($headerMsg,[$context.user.substring(6)])#end## "XWiki.".length() = 6
+</p>
+#end##
+##
 </div> ##} ##header-member
 <!-- end of member area -->
 
 <!-- advanced search -->
 #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))
+#set($brsqry = $request.brsqry)
+#if(!$brsqry || $brsqry == "")
+	#set($brsqry = $defaultsearchtext)
+#end
 <div id="header-search"> ##{
-  <form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="document.location.href=document.searchform.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(($('curriki-searchbox').value!=='$defaultsearchtext')?$('curriki-searchbox').value:'')))); return false;"> ##{
-  
-    <input type="hidden" class="hidden" name="area" value=""/>
-    #set($brsqry = $request.brsqry)
-    #if(!$brsqry || $brsqry == "")
-      #set($brsqry = $defaultsearchtext)
-    #end
-    <input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" onfocus="if (this.value=='$defaultsearchtext') this.value=''; else this.select()" onblur="if (this.value=='') this.value='$defaultsearchtext'" />
-    <button type="submit" id="searchbtn" name="btn">$msg.get("header.search_go")</button>
-      
-  </form> ##}
-  <p> ##{
-    <a href="$xwiki.getURL("Search.WebHome")" onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape($('curriki-searchbox').value.replace(/^$defaultsearchtext/, ''))))); return true;">$msg.get("header.advanced_search")</a> |
-    <a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
-  </p> ##}
+	<form id="searchform" name="searchform" class="search-box" action="$xwiki.getURL("Search.WebHome")" onsubmit="CurrikiApp.searchbtnGo(); return false;"> ##{
+		<input type="hidden" class="hidden" name="area" value=""/>
+		<input type="text" id="curriki-searchbox" name="brsqry" class="input" value="$!brsqry" Curriki:defTxt="$defaultsearchtext" />
+		<a href="" id="searchbtn" onclick="CurrikiApp.searchbtnGo(); return false;">$msg.get("header.search_go")</a>
+	</form>
+	<p>
+		<a href="$xwiki.getURL("Search.WebHome")" onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape($('curriki-searchbox').value.replace(/^$defaultsearchtext/, '').replace(/^\.\.\./, ''))))); return true;">$msg.get("header.advanced_search")</a> |
+		<a href="$xwiki.getURL("Main.Browse")">$msg.get("header.browse_subjects")</a>
+	</p>
 </div> ##} ##member-search
 <!-- end of advanced search -->  
 

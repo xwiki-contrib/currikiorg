@@ -19,7 +19,7 @@ Curriki.module.asterixReview.selectedConfirm = function(asterixReviewValue,redir
 		},
 		icon : Ext.MessageBox.QUESTION
 	});
-}
+};
 
 Curriki.module.asterixReview.removedConfirm = function(redirectURL) {
 	if (document.getElementById('currentStatus').value != 80) {
@@ -45,4 +45,4 @@ Curriki.module.asterixReview.removedConfirm = function(redirectURL) {
 	else {
 		document.getElementById('asterixReview').style.display = 'none';
 	}
-}
+};

@@ -64,6 +64,15 @@ module.init = function(){
 			}
 		);
 
+        Ext.StoreMgr.lookup('search-store-'+modName).addListener(
+                'beforeload'
+                ,function(s, o) {
+                    var store = Ext.StoreMgr.lookup('search-store-'+modName);
+                    var pager = Ext.getCmp('search-pager-'+modName);
+                    store.baseParams.rows = pager.pageSize;
+                    return true;
+            }
+        );
 		Ext.StoreMgr.lookup('search-store-'+modName).addListener(
 			'load'
 			,function(store, data, options) {
@@ -93,9 +102,20 @@ module.init = function(){
 				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
-				Search.doSearch(tab, false, true);
+                    // TODO: MSIE misery... have commented this out
+				//Search.doSearch(tab, false, true);
+
+                // stop blocking other searches
+                // TODO: MSIE misery here
+                // Search['runningSearch' + modName] = false;
+
 			}
 		);
+
+        Ext.StoreMgr.lookup('search-store-'+modName).addListener(
+            'exception'
+            ,Curriki.notifyException
+        );
 
 	};
 
@@ -122,6 +142,8 @@ module.init = function(){
 				Ext.apply(filters, filterForm.getValues(false));
 			}
 		}
+
+        
 
 		// Check for emptyText value in terms field
 		if (filters.terms && filters.terms === _('search.text.entry.label')){
@@ -169,6 +191,10 @@ module.init = function(){
 								fn:function(field, e){
 									if (e.getKey() === Ext.EventObject.ENTER) {
 										e.stopEvent();
+                                        if('resource'==modName && Ext.StoreMgr.lookup('search-store-resource').sortInfo) {
+                                            Ext.StoreMgr.lookup('search-store-resource').sortInfo.field = 'score';
+                                            Ext.StoreMgr.lookup('search-store-resource').sortInfo.direction = 'DESC';
+                                        }
 										Search.doSearch(modName, true);
 									}
 								}
@@ -182,11 +208,15 @@ module.init = function(){
 					,items:[{
 						xtype:'button'
 						,id:'search-termPanel-button-'+modName
-						,cls:'button button-confirm'
+						,cls:'search-termPanel-button'
 						,text:_('search.text.entry.button')
 						,listeners:{
 							click:{
 								fn: function(){
+                                    if('resource'==modName && Ext.StoreMgr.lookup('search-store-resource').sortInfo) {
+                                        Ext.StoreMgr.lookup('search-store-resource').sortInfo.field = 'score';
+                                        Ext.StoreMgr.lookup('search-store-resource').sortInfo.direction = 'DESC';
+                                    }
 									Search.doSearch(modName, true);
 								}
 							}
@@ -270,8 +300,6 @@ module.init = function(){
 };
 
 Ext.onReady(function(){
-  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-	  module.init();
-	});
+	module.init();
 });
 })();

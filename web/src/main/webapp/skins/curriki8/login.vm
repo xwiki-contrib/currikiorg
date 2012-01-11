@@ -1,29 +1,43 @@
-#**
-  *  Displays a login box
-  *  TODO: style to curriki styles
-  *#
-#if($context.user!="XWiki.XWikiGuest")
-#if(!$request.srid)
-#if($request.xredirect)
-$response.sendRedirect($request.xredirect)
-#else
-$response.sendRedirect($xwiki.getURL("Main.WebHome"))
-#end
-#end 
-#elseif($doc.fullName != "XWiki.XWikiLogin")
-#set($qs = "")
-#set($qs = $request.queryString)
-#if(!$request.getParameter("xredirect"))
-#set($qs = "xredirect=$util.encodeURI($doc.getURL('view'))&${qs}")
-#end
-$response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
-#else
-###
-### Login page
-###
-###
-#template("startpage.vm")
-#set($logredir = $!request.xredirect)
-#loginbox($logredir)
-#template("endpage.vm")
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+## this is loaded when /xwiki/bin/login/X/Y is loaded
+#set($targets=$xwiki.parseGroovyFromPage("Registration.Targets"))##
+#set($junk=$targets.init($request,$xwiki))##
+#if ($context.user != 'XWiki.XWikiGuest')##
+    #if($xwiki.getDocument($context.user).getObject("XWiki.XWikiUsers").getProperty("active").getValue())##
+        #set($target=$targets.afterLogin)
+        #if($target)#else#set($target="/xwiki/bin/view/MyCurriki/")#end
+        <script type="text/javascript">window.top.location.replace("$target");</script>
+    #else##
+        $xwiki.includeForm("Registration.EmailVerification")##
+    #end
+#elseif($doc.fullName != 'XWiki.XWikiLogin')## still redirecting to myself
+#set($qs = "$!{request.queryString}")##
+#if(!$request.getParameter('xredirect'))##
+    #set($qs = "xredirect=$escapetool.url($doc.getURL('view'))&${qs}")##
+#end##
+$response.sendRedirect("/xwiki/bin/view/Main/Registration/LoginOrRegister$qs")##
+#elseif($request.method=="POST")##
+  ## if we arrived here, login was unsuccessfully posted, there should be messages
+  ## store them in session and take them for the next query on http
+  $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
+  $request.session.setAttribute("lastUserName","$!request.j_username")##
+  $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
+#else## we're on the right place... display login or register
+  <!-- this is login.vm -->
+    #if(!$skin)## we did not pass initialization already
+        #set($doSurround=true) 
+        #template("startpage.vm")
+    #end
+  $xwiki.includeForm("Registration.DirectLogin",false)##
+    #if($doSurround)
+        #template("endpage.vm")
+    #end
 #end

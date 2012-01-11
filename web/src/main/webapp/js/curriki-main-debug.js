@@ -1,3 +1,167 @@
+/*!
+Math.uuid.js (v1.4)
+http://www.broofa.com
+mailto:robert@broofa.com
+
+Copyright (c) 2009 Robert Kieffer
+Dual licensed under the MIT and GPL licenses.
+*/
+
+/*
+ * Generate a random uuid.
+ *
+ * USAGE: Math.uuid(length, radix)
+ *   length - the desired number of characters
+ *   radix  - the number of allowable values for each character.
+ *
+ * EXAMPLES:
+ *   // No arguments  - returns RFC4122, version 4 ID
+ *   >>> Math.uuid()
+ *   "92329D39-6F5C-4520-ABFC-AAB64544E172"
+ * 
+ *   // One argument - returns ID of the specified length
+ *   >>> Math.uuid(15)     // 15 character ID (default base=62)
+ *   "VcydxgltxrVZSTV"
+ *
+ *   // Two arguments - returns ID of the specified length, and radix. (Radix must be <= 62)
+ *   >>> Math.uuid(8, 2)  // 8 character ID (base=2)
+ *   "01001010"
+ *   >>> Math.uuid(8, 10) // 8 character ID (base=10)
+ *   "47473046"
+ *   >>> Math.uuid(8, 16) // 8 character ID (base=16)
+ *   "098F4D35"
+ */
+Math.uuid = (function() {
+  // Private array of chars to use
+  var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''); 
+
+  return function (len, radix) {
+    var chars = CHARS, uuid = [];
+    radix = radix || chars.length;
+
+    if (len) {
+      // Compact form
+      for (var i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+    } else {
+      // rfc4122, version 4 form
+      var r;
+
+      // rfc4122 requires these characters
+      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+      uuid[14] = '4';
+
+      // Fill in random data.  At i==19 set the high bits of clock sequence as
+      // per rfc4122, sec. 4.1.5
+      for (var i = 0; i < 36; i++) {
+        if (!uuid[i]) {
+          r = 0 | Math.random()*16;
+          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        }
+      }
+    }
+
+    return uuid.join('');
+  };
+})();
+/*
+ * Ext Core Library Examples 3.0
+ * http://extjs.com/
+ * Copyright(c) 2006-2009, Ext JS, LLC.
+ * 
+ * The MIT License
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ */
+
+Ext.ns('Ext.ux');
+
+Ext.ux.JSONP = (function(){
+    var _queue = [],
+        _current = null,
+        _nextRequest = function() {
+            _current = null;
+            if(_queue.length) {
+                _current = _queue.shift();
+    			_current.script.src = _current.url + '?' + _current.params;
+    			document.getElementsByTagName('head')[0].appendChild(_current.script);
+            }
+        };
+
+    return {
+        request: function(url, o) {
+            if(!url) {
+                return;
+            }
+            var me = this;
+
+            o.params = o.params || {};
+            if(o.callbackKey) {
+                o.params[o.callbackKey] = 'Ext.ux.JSONP.callback';
+            }
+            var params = Ext.urlEncode(o.params);
+
+            var script = document.createElement('script');
+			script.type = 'text/javascript';
+
+            if(o.isRawJSON) {
+                if(Ext.isIE) {
+                    Ext.fly(script).on('readystatechange', function() {
+                        if(script.readyState == 'complete') {
+                            var data = script.innerHTML;
+                            if(data.length) {
+                                me.callback(Ext.decode(data));
+                            }
+                        }
+                    });
+                }
+                else {
+                     Ext.fly(script).on('load', function() {
+                        var data = script.innerHTML;
+                        if(data.length) {
+                            me.callback(Ext.decode(data));
+                        }
+                    });
+                }
+            }
+
+            _queue.push({
+                url: url,
+                script: script,
+                callback: o.callback || function(){},
+                scope: o.scope || window,
+                params: params || null
+            });
+
+            if(!_current) {
+                _nextRequest();
+            }
+        },
+
+        callback: function(json) {
+            _current.callback.apply(_current.scope, [json]);
+            Ext.fly(_current.script).removeAllListeners();
+            document.getElementsByTagName('head')[0].removeChild(_current.script);
+            _nextRequest();
+        }
+    }
+})();
 Array.prototype.contains = function(element) {
 	return this.indexOf(element) !== -1;
 };
@@ -1580,49 +1744,6 @@ Ext.override(Ext.ux.Andrie.pPageSize, {
 		this.updateStore();
 	}
 });
-
-/* CURRIKI-3999, CURRIKI-4109
- * Safari has an issue with a grid with autoHeight: true
- *
- * Fix from http://extjs.com/forum/showthread.php?t=44623
- *
- * TODO: Remove this override after upgrading ExtJS (currently 2.2)
- */
-Ext.override(Ext.grid.GridView, {
-	layout : function(){
-		if(!this.mainBody){
-			return;         }
-		var g = this.grid;
-		var c = g.getGridEl();
-		var csize = c.getSize(true);
-		var vw = csize.width;
-		if(vw < 20 || csize.height < 20){
-			return;
-		}
-		if(g.autoHeight){
-			this.scroller.dom.style.overflow = 'visible';
-			this.scroller.dom.style.position = 'static';
-		}else{
-			this.el.setSize(csize.width, csize.height);
-			var hdHeight = this.mainHd.getHeight();
-			var vh = csize.height - (hdHeight);
-			this.scroller.setSize(vw, vh);
-			if(this.innerHd){
-				this.innerHd.style.width = (vw)+'px';
-			}
-		}
-		if(this.forceFit){
-			if(this.lastViewWidth != vw){
-				this.fitColumns(false, false);
-				this.lastViewWidth = vw;
-			}
-		}else {
-			this.autoExpand();
-			this.syncHeaderScroll();
-		}
-		this.onLayout(vw, vh);
-	}
-});
 // vim: ts=4:sw=4
 /*global Ext */
 /*global _ */
@@ -1637,7 +1758,7 @@ Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
 
 
-if (!('console' in window) || !('firebug' in console)){
+if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
 	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
 	             "trace", "profile", "profileEnd"];
@@ -1646,24 +1767,6 @@ if (!('console' in window) || !('firebug' in console)){
 		window.console[names[i]] = Ext.emptyFn
 }
 console.log('initing Curriki');
-
-Ext.onReady(function(){
-	Ext.QuickTips.init();	
-	if(Ext.isIE) {	  
-	  Ext.apply(Ext.QuickTips.getQuickTip(), {
-		  showDelay: 1000
-		  ,hideDelay: 0
-		  ,interceptTitles: false
-	  });
-	} else {
-	  Ext.apply(Ext.QuickTips.getQuickTip(), {
-		  showDelay: 1000
-		  ,hideDelay: 0
-		  ,interceptTitles: false
-	  });
-	}	
-});
-
 /*
  * Example of dynamically loading javascript
 function initLoader() {
@@ -1675,26 +1778,59 @@ function initLoader() {
 */
 
 Ext.ns('Curriki');
+Curriki.console = window.console;
 Ext.ns('Curriki.module');
+
+Curriki.requestCount = 0;
 
 Ext.onReady(function(){
 	Curriki.loadingCount = 0;
+	Curriki.hideLoadingMask = false;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
-console.log('beforerequest', conn, options);
-		Curriki.showLoading(options.waitMsg);
+        options.requestCount = Curriki.requestCount++;
+        console.log('beforerequest (' + options.requestCount + ")", conn, options);
+        // protection
+        //if(options.requestCount>10) throw "No more than 10 requests!";
+        Curriki.Ajax.beforerequest(conn, options);
 	});
     Ext.Ajax.on('requestcomplete', function(conn, response, options){
-console.log('requestcomplete', conn, response, options);
-		Curriki.hideLoading();
+console.log('requestcomplete (' + options.requestCount + ")", conn, response, options);
+		Curriki.Ajax.requestcomplete(conn, response, options);
 	});
-    Ext.Ajax.on('requestexception', function(conn, response, options){
-console.log('requestexception', conn, response, options);
-		Curriki.hideLoading(true);
-	});
+    Ext.Ajax.on('requestexception', Curriki.notifyException);
 });
 
+Curriki.Ajax = {
+	'beforerequest': function(conn, options) {
+		Curriki.showLoading(options.waitMsg);
+	}
+
+	,'requestcomplete': function(conn, response, options) {
+		Curriki.hideLoading();
+	}
+
+	,'requestexception': function(conn, response, options) {
+		Curriki.hideLoading(true);
+	}
+};
+
+
+Curriki.notifyException = function(exception){
+        console.log('requestexception', exception);
+		Curriki.Ajax.requestexception(null, null, null);
+        Curriki.logView('/features/ajax/error/');
+        var task = new Ext.util.DelayedTask(function(){
+            if(!Ext.isEmpty(Curriki.loadingMask)) {
+                Curriki.loadingMask.hide();
+                Curriki.loadingMask.disable();
+            }
+            Ext.MessageBox.alert(_("search.connection.error.title"),
+                    _("search.connection.error.body"));
+        });
+        task.delay(100);
+	};
 
 Curriki.id = function(prefix){
 	return Ext.id('', prefix+':');
@@ -1704,7 +1840,7 @@ Curriki.showLoading = function(msg, multi){
 	if (multi === true) {
 		Curriki.loadingCount++;
 	}
-	if (!Ext.isEmpty(Curriki.loadingMask)){
+	if (!Curriki.hideLoadingMask && !Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
 		Curriki.loadingMask.enable();
@@ -1730,6 +1866,8 @@ Curriki.logView = function(page){
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
 	} else {
+        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
+        window.top.pageTrackerQueue.push(page);
 		console.info('Would track: ', page);
 	}
 }
@@ -1798,83 +1936,122 @@ Curriki.data.user = {
 	,collectionChildren:[]
 	,groupChildren:[]
 
+	,gotCollections:false
+
 	,json_prefix:'/xwiki/curriki/users/'
 	,user_try:0
 	,GetUserinfo:function(callback){
-		this.user_try++;
-		Ext.Ajax.request({
-			 url: this.json_prefix+'me'
-			,method:'GET'
-			,disableCaching:true
-			,headers: {
-				'Accept':'application/json'
+		if (!Ext.isEmpty(Curriki.global)
+		    && !Ext.isEmpty(Curriki.global.username)
+		    && !Ext.isEmpty(Curriki.global.fullname)) {
+			this.me = {
+				'username':Curriki.global.username
+				,'fullname':Curriki.global.fullname
+			};
+			if (Curriki.settings&&Curriki.settings.localCollectionFetch){
+				callback();
+			} else {
+				this.GetCollections(callback);
 			}
-			,scope:this
-			,success:function(response, options){
-				var json = response.responseText;
-				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot get user information');
-					if (this.user_try < 5){
-						this.GetUserinfo(callback);
-					} else {
-						console.error('Cannot get user information', response, options);
-						alert(_('add.servertimedout.message.text'));
-					}
-				} else {
-					this.user_try = 0;
-					this.me = o;
-					this.GetCollections(callback);
+		} else {
+			this.user_try++;
+			Ext.Ajax.request({
+				 url: this.json_prefix+'me'
+				,method:'GET'
+				,disableCaching:true
+				,headers: {
+					'Accept':'application/json'
 				}
-			}
-			,failure:function(response, options){
-				console.error('Cannot get user information', response, options);
-				alert(_('add.servertimedout.message.text'));
-			}
-		});
+				,scope:this
+				,success:function(response, options){
+					var json = response.responseText;
+					var o = json.evalJSON(true);
+					if(!o) {
+						console.warn('Cannot get user information');
+						if (this.user_try < 5){
+							this.GetUserinfo(callback);
+						} else {
+							console.error('Cannot get user information', response, options);
+							alert(_('add.servertimedout.message.text'));
+						}
+					} else {
+						this.user_try = 0;
+						this.me = o;
+						if (Curriki.settings&&Curriki.settings.localCollectionFetch){
+							callback();
+						} else {
+							this.GetCollections(callback);
+						}
+					}
+				}
+				,failure:function(response, options){
+					console.error('Cannot get user information', response, options);
+					alert(_('add.servertimedout.message.text'));
+				}
+			});
+		}
 	}
 
 	,collection_try:0
 	,GetCollections:function(callback){
-		this.collection_try++;
-		Ext.Ajax.request({
-			 url: this.json_prefix+this.me.username+'/collections'
-			,method:'GET'
-			,disableCaching:true
-			,headers: {
-				'Accept':'application/json'
-			}
-			,scope:this
-			,success:function(response, options){
-				var json = response.responseText;
-				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot read user\'s collection information');
-					if (this.collection_try < 5){
-						this.GetCollections(callback);
-					} else {
-						console.error('Cannot get user\'s collection information', response, options);
-						alert(_('add.servertimedout.message.text'));
-					}
-				} else {
-					this.collection_try = 0;
-					this.collections = o;
-					this.collectionChildren = this.CreateCollectionChildren();
-console.log('Collections: ', this.collectionChildren);
-					this.GetGroups(callback);
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
+		if (Curriki.data.user.gotCollections){
+			// Already have collections
+			callback();
+		} else {
+			this.collection_try++;
+			Ext.Ajax.request({
+				 url: this.json_prefix+this.me.username+'/collections'
+				,method:'GET'
+				,disableCaching:true
+				,headers: {
+					'Accept':'application/json'
 				}
-			}
-			,failure:function(response, options){
-				console.error('Cannot get user\'s collection information', response, options);
-				alert(_('add.servertimedout.message.text'));
-				this.collections = [];
-				this.GetGroups(callback);
-			}
-		});
+				,scope:this
+				,success:function(response, options){
+					var json = response.responseText;
+					var o = json.evalJSON(true);
+					if(!o) {
+						console.warn('Cannot read user\'s collection information');
+						if (this.collection_try < 5){
+							this.GetCollections(callback);
+						} else {
+							console.error('Cannot get user\'s collection information', response, options);
+							alert(_('add.servertimedout.message.text'));
+						}
+					} else {
+						this.collection_try = 0;
+						this.gotCollections = true;
+						this.collections = o;
+						this.collectionChildren = this.CreateCollectionChildren();
+	console.log('Collections: ', this.collectionChildren);
+						if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+							callback();
+						} else {
+							this.GetGroups(callback);
+						}
+					}
+				}
+				,failure:function(response, options){
+					Curriki.errors.fetchFailed = true;
+					console.error('Cannot get user\'s collection information', response, options);
+					alert(_('add.servertimedout.message.text'));
+					this.collections = [];
+					if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+						callback();
+					} else {
+						this.GetGroups(callback);
+					}
+				}
+			});
+		}
 	}
 
 	,group_try:0
 	,GetGroups:function(callback){
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/groups'
 			,method:'GET'
@@ -1891,9 +2068,9 @@ console.log('Collections: ', this.collectionChildren);
 					if (this.group_try < 5){
 						this.GetGroups(callback);
 					} else {
+						//console.error('Cannot get user\'s group information', response, options);
+						//alert(_('add.servertimedout.message.text'));
 						throw {message: "GetUserinfo: Json object not found"};
-						console.error('Cannot get user\'s group information', response, options);
-						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.group_try = 0;
@@ -1903,6 +2080,7 @@ console.log('Collections: ', this.collectionChildren);
 				}
 			}
 			,failure:function(response, options){
+				Curriki.errors.fetchFailed = true;
 				console.error('Cannot get user\'s group information', response, options);
 				alert(_('add.servertimedout.message.text'));
 				this.groups = [];
@@ -1925,6 +2103,7 @@ console.log('Collections: ', this.collectionChildren);
 			};
 
 			if (Ext.isArray(collection.children) && collection.children.length > 0) {
+/* Removed for CURRIKI-4874
 				var children = [];
 
 				collection.children.each(function(child){
@@ -1956,6 +2135,8 @@ console.log('Collections: ', this.collectionChildren);
 				});
 
 				colInfo.children = children;
+*/
+				colInfo.leaf = false;
 			} else {
 				colInfo.leaf = false;
 				colInfo.children = [];
@@ -1995,88 +2176,28 @@ console.log('Collections: ', this.collectionChildren);
 /*global Ext */
 /*global Curriki */
 /*global _ */
-Ext.onReady(function(){
 
-Curriki.DataObservable = function() {
-  this.addEvents({'Curriki.data:ready': true,
-                  'Curriki.data.ict:ready': true,
-                  'Curriki.data.fw_item:ready': true,
-                  'Curriki.data.el:ready': true,
-                  'Curriki.data.rights:ready': true,
-                  'Curriki.data.language:ready': true,
-                  'Curriki.data.category:ready': true,
-                  'Curriki.data.license:ready': true
-                  });
-}
-Ext.extend(Curriki.DataObservable, Ext.util.Observable);
-Curriki.data.EventManager = new Curriki.DataObservable();
-
-Ext.util.Observable.capture(Curriki.data.EventManager, function(event){
-  if(event == 'Curriki.data.ict:ready') {
-    Curriki.data.ict.initialized = true;
-  } else if (event == 'Curriki.data.fw_item:ready') {
-    Curriki.data.fw_item.initialized = true;
-  } else if (event == 'Curriki.data.el:ready') {
-    Curriki.data.el.initialized = true;
-  } else if (event == 'Curriki.data.rights:ready') {
-    Curriki.data.rights.initialized = true;
-  } else if (event == 'Curriki.data.language:ready') {
-    Curriki.data.language.initialized = true;
-  } else if (event == 'Curriki.data.category:ready') {
-    Curriki.data.category.initialized = true;
-  } else if (event == 'Curriki.data.license:ready') {
-    Curriki.data.license.initialized = true;
-  } 
-  if (Curriki.data.ict.initialized && 
-      Curriki.data.fw_item.initialized &&
-      Curriki.data.el.initialized &&
-      Curriki.data.rights.initialized &&
-      Curriki.data.language.initialized &&
-      Curriki.data.category.initialized &&
-      Curriki.data.license.initialized) {
-    Ext.util.Observable.releaseCapture(Curriki.data.EventManager);
-    Curriki.data.EventManager.fireEvent('Curriki.data:ready');    
-  }
-});
 
 Ext.ns('Curriki.data.ict');
-Curriki.data.EventManager.addListener('Curriki.data.ict:ready', function() {
-  Curriki.data.ict.data = [];
-  Curriki.data.ict.list.each(function(ict) {
-    var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
-    if (ict === 'other') {
-      sort = 'zzz';
-    }    
-    Curriki.data.ict.data.push([
-      ict
-      ,_('CurrikiCode.AssetClass_instructional_component_'+ict)
-      ,sort
-    ]);
-  });
-  Curriki.data.ict.store = new Ext.data.SimpleStore({
-    fields: ['id', 'ict', 'sortValue']
-    ,sortInfo: {field:'sortValue', direction:'ASC'}
-    ,data: Curriki.data.ict.data
-    ,id: 0
-  });
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrkiCode.AssetClass/fields/instructional_component  OR  Get filled in JS created by xwiki
+Curriki.data.ict.list = ["activity_assignment","activity_exercise","activity_lab","activity_game","activity_worksheet","activity_problemset","activity_webquest","book_fiction","book_nonfiction","book_readings","book_textbook","curriculum_answerkey","curriculum_assessment","curriculum_course","curriculum_unit","curriculum_lp","curriculum_rubric","curriculum_scope","curriculum_standards","curriculum_studyguide","curriculum_syllabus","curriculum_tutorial","curriculum_workbook","resource_animation","resource_article","resource_diagram","resource_glossary","resource_index","resource_photograph","resource_presentation","resource_collection","resource_script","resource_speech","resource_study","resource_table","resource_template","resource_webcast","other"];
+Curriki.data.ict.data = [ ];
+Curriki.data.ict.list.each(function(ict){
+	var sort = _('CurrikiCode.AssetClass_instructional_component_'+ict);
+	if (ict === 'other') {
+		sort = 'zzz';
+	}
+	Curriki.data.ict.data.push([
+		 ict
+		,_('CurrikiCode.AssetClass_instructional_component_'+ict)
+		,sort
+	]);
 });
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/instructional_component",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {    
-      Curriki.data.ict.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);      
-    }
-    Curriki.data.EventManager.fireEvent('Curriki.data.ict:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
+Curriki.data.ict.store = new Ext.data.SimpleStore({
+	fields: ['id', 'ict', 'sortValue']
+	,sortInfo: {field:'sortValue', direction:'ASC'}
+	,data: Curriki.data.ict.data
+	,id: 0
 });
 
 Curriki.data.ict.getRolloverDisplay = function(el_ict){
@@ -2100,35 +2221,17 @@ Curriki.data.ict.getRolloverDisplay = function(el_ict){
 	return ict;
 };
 
+
+
 Ext.ns('Curriki.data.el');
-
-Curriki.data.EventManager.addListener('Curriki.data.el:ready', function() {
-  Curriki.data.el.data = [];
-  Curriki.data.el.list.each(function(el){
-    Curriki.data.el.data.push({
-      inputValue:el
-      ,boxLabel:_('CurrikiCode.AssetClass_educational_level_'+el)
-    });
-  });
-});
-
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/educational_level",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {
-      Curriki.data.el.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);
-    }
-    Curriki.data.EventManager.fireEvent('Curriki.data.el:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/educational_level  OR  Get filled in JS created by xwiki
+Curriki.data.el.list = [ "prek", "gr-k-2", "gr-3-5", "gr-6-8", "gr-9-10", "gr-11-12", "college_and_beyond", "professional_development", "special_education", "na" ];
+Curriki.data.el.data = [ ];
+Curriki.data.el.list.each(function(el){
+	Curriki.data.el.data.push({
+		 inputValue:el
+		,boxLabel:_('CurrikiCode.AssetClass_educational_level_'+el)
+	});
 });
 
 Curriki.data.el.getRolloverDisplay = function(el_array){
@@ -2150,159 +2253,78 @@ Curriki.data.el.getRolloverDisplay = function(el_array){
 	return lvl;
 };
 
+
 Ext.ns('Curriki.data.rights');
-Curriki.data.EventManager.addListener('Curriki.data.rights:ready', function() {
-  Curriki.data.rights.data = [];
-  Curriki.data.rights.initial = Curriki.data.rights.list[0];
-  Curriki.data.rights.list.each(function(right){
-    Curriki.data.rights.data.push({
-      inputValue:right
-      ,boxLabel:_('CurrikiCode.AssetClass_rights_'+right)
-      ,checked:Curriki.data.rights.initial == right?true:false
-    });      
-  });
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/rights  OR  Get filled in JS created by xwiki
+Curriki.data.rights.list = [ "public", "members", "private" ];
+Curriki.data.rights.initial = Curriki.data.rights.list[0];
+Curriki.data.rights.data = [ ];
+Curriki.data.rights.list.each(function(right){
+	Curriki.data.rights.data.push({
+		 inputValue:right
+		,boxLabel:_('CurrikiCode.AssetClass_rights_'+right)
+		,checked:Curriki.data.rights.initial == right?true:false
+	});
 });
 
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/rights",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {
-      Curriki.data.rights.list = Ext.util.JSON.decode(response.responseText).allowedValues;            
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);
-    }
-    Curriki.data.EventManager.fireEvent('Curriki.data.rights:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
-});
 
 Ext.ns('Curriki.data.language');
-Curriki.data.EventManager.addListener('Curriki.data.language:ready', function() {
-  Curriki.data.language.data = [];
-  Curriki.data.language.initial = Curriki.data.language.list[0];
-  Curriki.data.language.list.each(function(lang){
-    Curriki.data.language.data.push([
-      lang
-      ,_('CurrikiCode.AssetClass_language_'+lang)
-    ]);
-  });
-  Curriki.data.language.store = new Ext.data.SimpleStore({
-    fields: ['id', 'language'],
-    data: Curriki.data.language.data
-  });  
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/language  OR  Get filled in JS created by xwiki
+Curriki.data.language.list = ["eng","ind","zho","nld","fra","deu","hin","ita","jpn","kor","nep","por","rus","sin","spa","tam","999"];
+Curriki.data.language.initial = Curriki.data.language.list[0];
+Curriki.data.language.data = [ ];
+Curriki.data.language.list.each(function(lang){
+	Curriki.data.language.data.push([
+		 lang
+		,_('CurrikiCode.AssetClass_language_'+lang)
+	]);
 });
-
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/language",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {
-      Curriki.data.language.list = Ext.util.JSON.decode(response.responseText).allowedValues;            
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);
-    }    
-    Curriki.data.EventManager.fireEvent('Curriki.data.language:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
+Curriki.data.language.store = new Ext.data.SimpleStore({
+	fields: ['id', 'language'],
+	data: Curriki.data.language.data
 });
 
 Ext.ns('Curriki.data.category');
-Curriki.data.EventManager.addListener('Curriki.data.category:ready', function() {
-  Curriki.data.category.data = [];
-  Curriki.data.category.list.each(function(category){
-    Curriki.data.category.data.push({
-      inputValue:category
-      ,boxLabel:_('CurrikiCode.AssetClass_category_'+category)
-    });
-  });
-});
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/category",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {
-      Curriki.data.category.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);
-    }
-    Curriki.data.EventManager.fireEvent('Curriki.data.category:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/category  OR  Get filled in JS created by xwiki
+Curriki.data.category.list = ["text","image","audio","video","interactive","archive","document","external","collection","unknown"];
+Curriki.data.category.data = [ ];
+Curriki.data.category.list.each(function(category){
+	Curriki.data.category.data.push({
+		 inputValue:category
+		,boxLabel:_('CurrikiCode.AssetClass_category_'+category)
+	});
 });
 
-Ext.ns('Curriki.data.license');
-Curriki.data.EventManager.addListener('Curriki.data.license:ready', function() {
-  Curriki.data.license.data = [];
-  Curriki.data.license.initial = Curriki.data.license.list[0];    
-    Curriki.data.license.list.each(function(lic){
-      Curriki.data.license.data.push([
-        lic
-        ,_('CurrikiCode.AssetLicenseClass_licenseType_'+lic)
-      ]);
-    });
-    Curriki.data.license.store = new Ext.data.SimpleStore({
-      fields: ['id', 'license'],
-      data: Curriki.data.license.data
-    });
+Ext.ns('Curriki.data.licence');
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/licenseType  OR  Get filled in JS created by xwiki
+Curriki.data.licence.list = ["Licences.CreativeCommonsAttributionNon-Commercial", "Licences.CurrikiLicense", "Licences.PublicDomain", "Licences.CreativeCommonsAttributionNoDerivatives", "Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "Licences.CreativeCommonsAttributionSharealike", "Licences.CreativeCommonsAttributionNon-CommercialShareAlike","Licences.TeachersDomainDownloadShare" ];
+Curriki.data.licence.initial = Curriki.data.licence.list[0];
+Curriki.data.licence.data = [ ];
+Curriki.data.licence.list.each(function(lic){
+	Curriki.data.licence.data.push([
+		 lic
+		,_('CurrikiCode.AssetLicenseClass_licenseType_'+lic)
+	]);
 });
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/licenseType",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {
-      Curriki.data.license.list = Ext.util.JSON.decode(response.responseText).allowedValues;      
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);
-    }   
-    Curriki.data.EventManager.fireEvent('Curriki.data.license:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
+Curriki.data.licence.store = new Ext.data.SimpleStore({
+	fields: ['id', 'licence'],
+	data: Curriki.data.licence.data
 });
+
+
+
+Ext.ns('Curriki.data.gCCL');
+Curriki.data.gCCL.list = ["0","1"];
+Curriki.data.gCCL.initial = Curriki.data.licence.list[0];
+Curriki.data.gCCL.data = ["0","1"];
+Curriki.data.gCCL.store = new Ext.data.SimpleStore({
+	fields: ['id', 'gCCL'],
+	data: Curriki.data.gCCL.data
+});
+
 
 
 Ext.ns('Curriki.data.fw_item');
-Curriki.data.EventManager.addListener('Curriki.data.fw_item:ready', function() {  
-  Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
-});
-Ext.Ajax.request({
-  url: "/xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/fw_items",
-  method: 'GET',
-  headers: {
-    'Accept':'application/json'
-  },
-  success:function(response,options) {
-    try {
-      Curriki.data.fw_item.fwMap = Ext.util.JSON.decode(response.responseText).allowedValueMap;      
-    } catch(e) {
-      console.error('Invalid metadata information', response, options);
-    }    
-    Curriki.data.EventManager.fireEvent('Curriki.data.fw_item:ready');
-  },
-  failure:function(response,options) {
-    console.error('Cannot get metadata information', response, options);
-  }
-});
 // For fwTree
 Curriki.data.fw_item.fwCheckListener = function(node, checked){
 	var validator = Ext.getCmp('fw_items-validation');
@@ -2326,6 +2348,9 @@ Curriki.data.fw_item.fwCheckListener = function(node, checked){
 	}
 };
 
+// TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetLicenseClass/fields/fw_items  OR  Get filled in JS created by xwiki
+Curriki.data.fw_item.fwMap = {"TREEROOTNODE":[{"id":"FW_masterFramework.WebHome","parent":""}],"FW_masterFramework.WebHome":[{"id":"FW_masterFramework.Arts","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.VocationalEducation","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.Education&Teaching","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.EducationalTechnology","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.Health","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.Information&MediaLiteracy","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.LanguageArts","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.Mathematics","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.Science","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.SocialStudies","parent":"FW_masterFramework.WebHome"},{"id":"FW_masterFramework.ForeignLanguages","parent":"FW_masterFramework.WebHome"}],"FW_masterFramework.Information&MediaLiteracy":[{"id":"FW_masterFramework.EvaluatingSources","parent":"FW_masterFramework.Information&MediaLiteracy"},{"id":"FW_masterFramework.MediaEthics","parent":"FW_masterFramework.Information&MediaLiteracy"},{"id":"FW_masterFramework.OnlineSafety","parent":"FW_masterFramework.Information&MediaLiteracy"},{"id":"FW_masterFramework.ResearchMethods","parent":"FW_masterFramework.Information&MediaLiteracy"}],"FW_masterFramework.SocialStudies":[{"id":"FW_masterFramework.Anthropology","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Careers_5","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Civics","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.CurrentEvents","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Economics","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Entrepreneurship","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Geography","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.GlobalAwareness","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Government","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.History Local","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.PoliticalSystems","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Psychology","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Religion","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Research_0","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Sociology","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.StateHistory","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Technology_1","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.Thinking&ProblemSolving","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.UnitedStatesGovernment","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.UnitedStatesHistory","parent":"FW_masterFramework.SocialStudies"},{"id":"FW_masterFramework.WorldHistory","parent":"FW_masterFramework.SocialStudies"}],"FW_masterFramework.Arts":[{"id":"FW_masterFramework.Architecture","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.Careers","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.Dance","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.DramaDramatics","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.Film","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.History","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.Music","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.Photography","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.PopularCulture","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.Technology","parent":"FW_masterFramework.Arts"},{"id":"FW_masterFramework.VisualArts","parent":"FW_masterFramework.Arts"}],"FW_masterFramework.EducationalTechnology":[{"id":"FW_masterFramework.Careers_0","parent":"FW_masterFramework.EducationalTechnology"},{"id":"FW_masterFramework.IntegratingTechnologyintotheClassroom","parent":"FW_masterFramework.EducationalTechnology"},{"id":"FW_masterFramework.UsingMultimedia&theInternet","parent":"FW_masterFramework.EducationalTechnology"}],"FW_masterFramework.VocationalEducation":[{"id":"FW_masterFramework.Agriculture_0","parent":"FW_masterFramework.VocationalEducation"},{"id":"FW_masterFramework.Business","parent":"FW_masterFramework.VocationalEducation"},{"id":"FW_masterFramework.Careers_6","parent":"FW_masterFramework.VocationalEducation"},{"id":"FW_masterFramework.OccupationalHomeEconomics","parent":"FW_masterFramework.VocationalEducation"},{"id":"FW_masterFramework.School-to-work","parent":"FW_masterFramework.VocationalEducation"},{"id":"FW_masterFramework.Technology_2","parent":"FW_masterFramework.VocationalEducation"},{"id":"FW_masterFramework.Trade&Industrial","parent":"FW_masterFramework.VocationalEducation"}],"FW_masterFramework.Health":[{"id":"FW_masterFramework.BodySystems&Senses","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.Careers_1","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.EnvironmentalHealth","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.HumanSexuality","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.MentalEmotionalHealth","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.Nutrition","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.PhysicalEducation","parent":"FW_masterFramework.Health"},{"id":"FW_masterFramework.SafetySmokingSubstanceAbusePrevention","parent":"FW_masterFramework.Health"}],"FW_masterFramework.Education&Teaching":[{"id":"FW_masterFramework.Accessibility","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.AdultEducation","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.BilingualEducation","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.ClassroomManagement","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.EarlyChildhoodEducation","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.EducationAdministration","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.EducationalFoundations","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.EducationalPsychology","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.InstructionalDesign","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.MeasurementEvaluation","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.Mentoring","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.MulticulturalEducation","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.StandardsAlignment","parent":"FW_masterFramework.Education&Teaching"},{"id":"FW_masterFramework.TeachingTechniques","parent":"FW_masterFramework.Education&Teaching"}],"FW_masterFramework.ForeignLanguages":[{"id":"FW_masterFramework.Alphabet","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.Careers_7","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.CulturalAwareness","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.Grammar","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.InformalEducation","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.Linguistics","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.ListeningComprehension","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.Reading","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.Speaking","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.Spelling","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.VocabularyWriting","parent":"FW_masterFramework.ForeignLanguages"},{"id":"FW_masterFramework.FLWriting","parent":"FW_masterFramework.ForeignLanguages"}],"FW_masterFramework.Mathematics":[{"id":"FW_masterFramework.Algebra","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Appliedmathematics","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Arithmetic","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Calculus","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Careers_3","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.DataAnalysis&Probability","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Equations","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Estimation","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Geometry","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Graphing","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Measurement","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.NumberSense&Operations","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Patterns","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.ProblemSolving","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Statistics","parent":"FW_masterFramework.Mathematics"},{"id":"FW_masterFramework.Trigonometry","parent":"FW_masterFramework.Mathematics"}],"FW_masterFramework.Science":[{"id":"FW_masterFramework.Agriculture","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Astronomy","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Biology","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Botany","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Careers_4","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Chemistry","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Earthscience","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Ecology","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Engineering","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Generalscience","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Geology","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.HistoryofScience","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.LifeSciences","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Meteorology","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.NaturalHistory","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Oceanography","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Paleontology","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.PhysicalSciences","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Physics","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.ProcessSkills","parent":"FW_masterFramework.Science"},{"id":"FW_masterFramework.Technology_0","parent":"FW_masterFramework.Science"}],"FW_masterFramework.LanguageArts":[{"id":"FW_masterFramework.Alphabet_0","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Careers_2","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.LanguageArts_Grammar","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Journalism","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Listening&Speaking","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Literature","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Phonics","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.ReadingComprehension","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Research","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Spelling_0","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.StoryTelling","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Vocabulary","parent":"FW_masterFramework.LanguageArts"},{"id":"FW_masterFramework.Writing","parent":"FW_masterFramework.LanguageArts"}]};
+var fwItem = 'FW_masterFramework.WebHome';
 Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 	var nodeInfo = {
 		 id:nodeName
@@ -2349,6 +2374,7 @@ Curriki.data.fw_item.fwAddNode = function(fwMap, nodeName){
 
 	return nodeInfo;
 };
+Curriki.data.fw_item.fwChildren = Curriki.data.fw_item.fwAddNode(Curriki.data.fw_item.fwMap, 'FW_masterFramework.WebHome').children;
 
 Curriki.data.fw_item.getRolloverDisplay = function(fw_array){
 	var fws = fw_array||[];
@@ -2429,8 +2455,7 @@ Curriki.ui.component.asset.getFwTree = function(){
 		})
 	};
 };
-
-});// vim: ts=4:sw=4
+// vim: ts=4:sw=4
 /*global Curriki */
 /*global _ */
 
@@ -3011,6 +3036,7 @@ Curriki.assets = {
 /*global Ext */
 /*global Curriki */
 /*global _ */
+
 Ext.ns('Curriki.ui');
 Curriki.ui.InfoImg = '/xwiki/skins/curriki8/icons/exclamation.png';
 
@@ -3028,6 +3054,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,collapsible:false
 	,closable:false
 	,resizable:false
+    , monitorResize: true
 	,shadow:false
 	,defaults:{border:false}
 	,listeners:{
@@ -3094,7 +3121,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
-console.log('createNode: ',attr);
+//console.log('createNode: ',attr);
 			if (this.setFullRollover) {
 				if ('string' !== Ext.type(attr.qtip)
 					&& 'string' === Ext.type(attr.description)
@@ -3102,7 +3129,46 @@ console.log('createNode: ',attr);
 					&& 'array' === Ext.type(attr.levels)
 					&& 'array' === Ext.type(attr.ict)
 				) {
-					attr.qtip = Curriki.ui.util.getTitleRollover(attr, this.setTitleInRollover);
+					var desc = attr.description||'';
+					desc = Ext.util.Format.stripTags(desc);
+					desc = Ext.util.Format.ellipsis(desc, 256);
+					desc = Ext.util.Format.htmlEncode(desc);
+
+					var lastUpdated = attr.lastUpdated||'';
+
+					var title = attr.displayTitle||attr.title;
+
+					var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
+					var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
+					var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
+					
+
+					var qTipFormat = '';
+
+					// Show Title if desired
+					if (this.setTitleInRollover) {
+						qTipFormat = '{1}<br />{0}<br /><br />';
+					}
+
+					// Add Description
+					qTipFormat = qTipFormat+'{3}<br />{2}<br /><br />';
+
+					// Add lastUpdated if available
+					if (lastUpdated !== '') {
+						qTipFormat = qTipFormat+'{11}<br />{10}<br /><br />';
+					}
+
+					// Base qTip (framework, ed levels, ict)
+					qTipFormat = qTipFormat+'{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}';
+
+					attr.qtip = String.format(qTipFormat
+						,title,_('global.title.popup.title')
+						,desc,_('global.title.popup.description')
+						,fw,_('global.title.popup.subject')
+						,lvl,_('global.title.popup.educationlevel')
+						,ict,_('global.title.popup.ict')
+						,lastUpdated,_('global.title.popup.last_updated')
+					);
 				}
 			}
 
@@ -3111,7 +3177,7 @@ console.log('createNode: ',attr);
 				if (this.truncateTitle !== false) {
 					p.setText(Ext.util.Format.ellipsis(p.text, Ext.num(this.truncateTitle, 125)));
 				}
-console.log('createNode: parent', p);
+//console.log('createNode: parent', p);
 				return p;
 			}
 
@@ -3190,7 +3256,7 @@ console.log('createNode: parent', p);
 			   childInfo.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
 			}
 
-console.log('createNode: End ',childInfo);
+//console.log('createNode: End ',childInfo);
 			var retNode = (childInfo.leaf
 				   ? new Ext.tree.TreeNode(childInfo)
 				   : new Ext.tree.AsyncTreeNode(childInfo));
@@ -3204,25 +3270,69 @@ console.log('createNode: End ',childInfo);
 		,requestData:function(node, callback){
 			if (node.attributes.currikiNodeType === 'group'){
 				this.dataUrl = '/xwiki/curriki/groups/'+(node.attributes.pageName||node.id)+'/collections';
+			} else if (node.attributes.currikiNodeType === 'myCollections'){
+				// Fetch user collections
+				this.dataUrl = 'myCollections';
+			} else if (node.attributes.currikiNodeType === 'myGroups'){
+				// Fetch user's groups
+				this.dataUrl = 'myGroups';
 			} else {
 				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
 
 			// From parent
 			if(this.fireEvent("beforeload", this, node, callback) !== false){
-				this.transId = Ext.Ajax.request({
-					 method: 'GET'
-					,url: this.dataUrl
-					,disableCaching:true
-					,headers: {
-						'Accept':'application/json'
+				if (this.dataUrl.indexOf('/') === 0) {
+					this.transId = Ext.Ajax.request({
+						 method: 'GET'
+						,url: this.dataUrl
+						,disableCaching:true
+						,headers: {
+							'Accept':'application/json'
+						}
+						,success: this.handleResponse
+						,failure: this.handleFailure
+						,scope: this
+						,argument: {callback: callback, node: node}
+						,params: ''
+					});
+				} else {
+					this.transId = Math.floor(Math.random()*65535);
+					// Is a mycollections or mygroups request
+					var response = {argument:{callback: callback, node: node}};
+					if (node.attributes.currikiNodeType === 'myCollections'){
+						Curriki.settings.fetchMyCollectionsOnly = true;
+						// Load collections, then call handle[Response,Failure] with
+						// {resonseText: <collections>, argument: {node: node, callback: callback} }
+						Curriki.data.user.GetCollections((function(){
+							if (Curriki.errors.fetchFailed) {
+								response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"'+_('add.chooselocation.collections.user.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
+								this.handleFailure(response);
+							} else {
+								if (Curriki.data.user.collectionChildren.length > 0) {
+									response.responseText = Ext.util.JSON.encode(Curriki.data.user.collectionChildren);
+								} else {
+									response.responseText = '[{"id":"NOUSERCOLLECTIONS", "text":"'+_('add.chooselocation.collections.user.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
+								}
+								this.handleResponse(response);
+							}
+						}).createDelegate(this));
+					} else if (node.attributes.currikiNodeType === 'myGroups'){
+						Curriki.data.user.GetGroups((function(){
+							if (Curriki.errors.fetchFailed) {
+								response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"'+_('add.chooselocation.groups.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
+								this.handleFailure(response);
+							} else {
+								if (Curriki.data.user.groupChildren.length > 0) {
+									response.responseText = Ext.util.JSON.encode(Curriki.data.user.groupChildren);
+								} else {
+									response.responseText = '[{"id":"NOGROUPCOLLECTIONS", "text":"'+_('add.chooselocation.groups.empty')+'", "allowDrag":false, "allowDrop":false, "leaf":true}]';
+								}
+								this.handleResponse(response);
+							}
+						}).createDelegate(this));
 					}
-					,success: this.handleResponse
-					,failure: this.handleFailure
-					,scope: this
-					,argument: {callback: callback, node: node}
-					,params: ''
-				});
+				}
 			} else {
 				// if the load is cancelled, make sure we notify
 				// the node that we are done
@@ -3232,60 +3342,493 @@ console.log('createNode: End ',childInfo);
 			}
 		}
 });
+// This script is the set of pages used to command the UI for the login and registration steps
+Ext.ns('Curriki.ui.login');
 
-Ext.ns('Curriki.ui.util');
-Curriki.ui.util.getTitleRollover = function(attr, hasTitle) {
-	var hasTitle = !Ext.isEmpty(hasTitle)?hasTitle:false;
-	var qtip = '';
-
-	var desc = attr.description||'';
-	desc = Ext.util.Format.stripTags(desc);
-	desc = Ext.util.Format.ellipsis(desc, 256);
-	desc = Ext.util.Format.htmlEncode(desc);
-
-	var title = attr.displayTitle||attr.title||'';
-
-	var fw = Curriki.data.fw_item.getRolloverDisplay(attr.fwItems||[]);
-	var lvl = Curriki.data.el.getRolloverDisplay(attr.levels||[]);
-	var ict = Curriki.data.ict.getRolloverDisplay(attr.ict||[]);
-	
-	if (!hasTitle) {
-		qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}<br />{7}<br />{6}"
-			,desc,_('global.title.popup.description')
-			,fw,_('global.title.popup.subject')
-			,lvl,_('global.title.popup.educationlevel')
-			,ict,_('global.title.popup.ict')
-		);
-	} else {
-		qtip = String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br /><br />{5}<br />{4}<br />{7}<br />{6}<br />{9}<br />{8}"
-			,title,_('global.title.popup.title')
-			,desc,_('global.title.popup.description')
-			,fw,_('global.title.popup.subject')
-			,lvl,_('global.title.popup.educationlevel')
-			,ict,_('global.title.popup.ict')
-		);
-	}
-
-	return qtip;
+Curriki.ui.login.displayLoginDialog = function(url) {
+    if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
+        Curriki.ui.login.loginDialog.hide();
+    var w = 630, h=400;
+    //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
+    if(window.innerWidth && window.innerWidth<w)   w = Math.round(window.innerWidth*0.95);
+    if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
+    // the default header should be blue, not green as it is in AddPath, adjust the CSS live
+    var rule = ".x-window .x-window-tl, .x-panel-ghost .x-window-tl";
+    if(Ext && Ext.isIE) rule=".x-window .x-window-tl";
+    Ext.util.CSS.updateRule(rule,
+        "background-color", "#4E83C7");
+    Curriki.ui.login.loginDialog = new Ext.Window({
+        title:_("join.login.title"),
+        border:false,
+        id: 'loginDialogWindow',
+        scrollbars: false
+        ,modal:true
+        ,width: w
+        //, height: h
+        ,minWidth:400
+        ,minHeight:100
+        ,maxHeight:575
+        ,autoScroll:false
+        ,constrain:true
+        ,collapsible:false
+        ,closable:false
+        ,resizable:false
+        , monitorResize: true
+        ,shadow:false
+        ,defaults:{border:false},
+         html: "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
+            });
+    Curriki.ui.login.loginDialog.headerCls = "registration-dialog-header";
+    Curriki.ui.login.loginDialog.show();
+    return Ext.get("loginIframe").dom.contentWindow; 
 };
 
-/*
-Ext.ns('Curriki.mycurriki.util.title');
-Curriki.mycurriki.util.title.popup = function(title_id, attr){
-	if ('string' === Ext.type(attr.description)
-	    && 'array' === Ext.type(attr.fwItems)
-	    && 'array' === Ext.type(attr.levels)
-	    && 'array' === Ext.type(attr.ict)
-	) {
-		var qtip = Curriki.ui.util.getTitleRollover(attr);
-
-		Ext.QuickTips.getQuickTip().register({
-			target:title_id
-			,text:qtip
-		});
-	}
+Curriki.ui.login.readScrollPos = function(w) {
+    if(typeof(w)=="undefined") w=window;
+    try {
+        if (w && w.Ext) {
+            var s = w.Ext.getBody().getScroll();
+            return escape("&l=" + s.left + "&t=" + s.top);
+        } else
+            return "";
+    } catch(e) { Curriki.console.log(e); return "";}
 };
-*/
+
+Curriki.ui.login.restoreScrollPos = function(url) {
+    try {
+        Curriki.console.log("Intending to restoreScroll.");
+        if(!url.match(/t=[0-9]/)) {
+            Curriki.console.log("No coordinates passed.");
+            return;
+        }
+        var l = url.replace(/.*l=([0-9]+).*/, "$1");
+        var t = url.replace(/.*t=([0-9]+).*/, "$1");
+        if (typeof(l) == "undefined") {
+            l = 0;
+        }
+        if (typeof(t) == "undefined") {
+            t = 0;
+        }
+        Curriki.console.log("Would scroll to " + l + ":" + t + " if I were IE.");
+        if (Ext.isIE) {
+            Curriki.console.log("Scrolling by "+l + ":" + t);
+            window.scrollBy(l, t);
+        }
+    } catch(e) { Curriki.console.log(e); }
+};
+
+Curriki.ui.login.ensureProperBodyCssClass = function() {
+    window.onload = function() {
+        try {
+            if (document.body) {
+                var x = document.body.className;
+                if (x) {
+                    document.body.className = x + " insideIframe";
+                } else if(!Ext.isIE()) {
+                    document.body.className = "insideIframe";
+                }
+
+            }
+        } catch(e) { Curriki.console.log(e); }
+    };
+}
+
+
+Curriki.ui.login.popupPopupAndIdentityAuthorization = function(provider, requestURL, xredirect) {
+    try { 
+        Curriki.console.log("Opening pop-up that will request authorization.");
+        window.top.name = "currikiMainWindow";
+        if(!Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
+        var dialog = Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/RequestAuthorization?xpage=popup&provider=" + provider + "&to=" + encodeURIComponent(requestURL) + '&xredirect=' + encodeURIComponent(xredirect))
+        if(Ext.isIE) Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
+        window.Curriki.ui.login.windowThatShouldNextGoTo = dialog;
+    } catch(e) { Curriki.console.log(e); }
+}
+Curriki.ui.login.popupIdentityAuthorization = function(requestURL) {
+    return Curriki.ui.login.popupIdentityAuthorization2(requestURL, null);
+}
+Curriki.ui.login.popupIdentityAuthorization2 = function(requestURL, windowThatShouldNextGoTo) {
+    return Curriki.ui.login.popupAuthorization4(requestURL, windowThatShouldNextGoTo, 'curriki-login-dialog', 'curriki_login_authorize');
+}
+
+Curriki.ui.login.popupGCheckout = function(requestURL, nextURLhere) {
+    if(!Ext.isIE)  Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
+    if(nextURLhere && nextURLhere.startsWith("close-now-")) window.top.location.href=nextURLhere.substring(10);
+        else if(nextURLhere) window.location.href = nextURLhere;
+    if(Ext.isIE)  Curriki.ui.login.popupAuthorization4(requestURL, window, "curriki-login-dialog", "checkoutWindow");
+    window.top.name="currikiMainWindow";
+}
+
+Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNextGoTo, dialogName, popupName) {
+    // called from the login-or-register dialog or from the in-header-icons
+    Curriki.console.log("Opening authorization to " + requestURL);
+    if(window!=window.top) window.name='curriki-login-dialog';
+    if(dialogName) window.name = dialogName;
+    if(popupName) {} else { popupName = 'curriki_login_authorize'; }
+    var otherWindow;
+    if(window.frames[popupName]) {
+        Curriki.console.log("Re-using window.");
+        otherWindow = window.frames[popupName];
+        otherWindow.location.href= requestURL;
+    } else {
+        Curriki.console.log("Creating window.");
+        var x = Math.max(0,(screen.width-980)/2);
+        var y = Math.max(0,(screen.height-600)/2);
+        otherWindow = window.open(requestURL, popupName, "toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width=980,height=600,left="+x+",top="+y);
+    }
+    window.focusIt = window.setInterval(function() { window.clearInterval(window.focusIt); otherWindow.focus(); }, 100)
+    window.Curriki.ui.login.authorizeDialog = otherWindow;
+    window.top.Curriki.ui.login.authorizeDialog = otherWindow;
+    if(windowThatShouldNextGoTo && windowThatShouldNextGoTo != null) window.Curriki.ui.login.windowThatShouldNextGoTo = windowThatShouldNextGoTo;
+    return false;
+};
+
+ Curriki.ui.login.finishAuthorizationPopup = function(targetURL, openerWindow, openedWindow, toTop) {
+    Curriki.console.log("Finishing popup, (toTop? "+ toTop+ ") target: " + targetURL);
+     if(typeof(openerWindow)=="undefined" || openerWindow==window) {
+         openerWindow = window.open(targetURL, "currikiMainWindow");
+     }
+    if(openerWindow
+        //&& (openerWindow.Curriki.ui.login.authorizeDialog && openerWindow.Curriki.ui.login.authorizeDialog==window
+        //    || (openerWindow.top.Curriki.ui.login.authorizeDialog && openerWindow.top.Curriki.ui.login.authorizeDialog==window))
+        ) {
+        // we are in a popup relationship, can close and revert to that popup
+        Curriki.console.log("We are in popup, closing and opening popup.");
+        var targetWindow = openerWindow;
+        if(openerWindow.Curriki.ui.login.windowThatShouldNextGoTo)
+            targetWindow = openerWindow.Curriki.ui.login.windowThatShouldNextGoTo;
+        Curriki.console.log("targetWindow: " + targetWindow + " with force to top " + toTop);
+        if(toTop) targetWindow = targetWindow.top;
+        else if(openerWindow.Ext && openerWindow.Ext.get('loginIframe'))
+            targetWindow = openerWindow.Ext.get('loginIframe').dom.contentWindow;
+        if(targetWindow && targetWindow.location) {
+            targetWindow.location.href = targetURL;
+            //alert("Would go to " + targetURL + " from " + targetWindow);
+            // schedule a close
+            openedWindow.setInterval(function() {
+                try {
+                    targetWindow.focus();
+                } catch(e) { Curriki.console.log(e); }
+                try {
+                    openedWindow.close();
+                } catch(e) { Curriki.console.log(e); }
+            },20);
+        } else {
+            var w = window;
+            if(toTop) w = w.top;
+            w.location.href = targetURL;
+        }
+        return false;
+    } else {
+        Curriki.console.log("No popup parent found... ah well.");
+        var w = openedWindow;
+        if(toTop) w = w.top;
+        w.location.href = targetURL;
+        //alert("Would go to " + targetURL + " from " + openedWindow);
+    }
+}
+
+
+
+
+Curriki.ui.login.makeSureWeAreFramed = function(framedContentURL) {
+    if(window==window.top) {
+        if(!framedContentURL || framedContentURL==null) framedContentURL = window.location.href;
+        Curriki.ui.login.displayLoginDialog(framedContentURL);
+    } else if (window.name != 'curriki-login-dialog' && framedContentURL && framedContentURL!=null) {
+        Curriki.console.log("Redirecting to " + framedContentURL);
+        var t= window.opener;
+        if(typeof(t)!="object") t=window.top;
+        t.replace(framedContentURL);
+        window.setInterval("window.close();", 50);
+        return;
+    }
+
+};
+
+Curriki.ui.login.showLoginLoading=function(msg, multi) {
+    try {
+        if(navigator.appVersion.indexOf(" Chrome")>0) {
+            // we need this here because a failure would only leave grey borders around while
+            // a failure with the other system leaves a whole glasspane on top
+            // that failure happens in Chrome where LoginSuccessful is displayed from https
+            Curriki.showLoading(msg, true);
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // also make the surroundings grey
+                var d = window.parent.Ext.get('loginIframe');
+                Curriki.console.log("will set bg on " + d);
+                while (typeof(d) != "undefined" && d != null && d.setStyle) {
+                    if (d.id && "loginDialogWindow" == d.id) break;
+                    Curriki.console.log("setting bg on " + d);
+                    d.setStyle("background-color", "#DDD");
+                    d = d.parent();
+                }
+            }
+        } else {
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe'))
+                window.parent.Curriki.showLoading(msg, true);
+            else
+                Curriki.showLoading(msg, multi);
+        }
+    } catch(e) { Curriki.console.log(e); }
+};
+Curriki.ui.login.hideLoginLoading=function() {
+    try {
+        if(navigator.appVersion.indexOf(" Chrome")>0) {
+            // see remark above
+            Curriki.hideLoading(true);
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe')) { // no more make the surroundings grey
+                var d = window.parent.Ext.get('loginIframe');
+                while (typeof(d) != "undefined" && d != null && d.setStyle) {
+                    if (d.id && "loginDialogWindow" == d.id) break;
+                    d.setStyle("background-color", "white");
+                    d = d.parent();
+                }
+            }
+        } else {
+            if (window.parent && window.parent.Ext && window.parent.Ext.get('loginIframe'))
+                window.parent.Curriki.hideLoading(true);
+            else
+                Curriki.hideLoading(true);
+        }
+    } catch(e) { Curriki.console.log(e); }
+}
+
+
+
+
+
+
+Ext.namespace("Curriki.ui.login.liveValidation");
+Curriki.ui.login.liveValidation = function() {
+    var queue = new Array();
+
+    return {
+        queue: queue,
+
+
+        launchCheckFieldRequest: function(value, field, queueEntry) {
+            Curriki.ui.login.liveValidation.notifyValidationResult(field, "waiting");
+            Curriki.Ajax.beforerequest = function() {};
+            var r = Ext.Ajax.request({
+                url: "/xwiki/bin/view/Registration/CheckValid"
+                ,headers: {'Accept':'application/json'}
+                ,method: "GET"
+                ,failure:function(response, options) {
+                    Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
+                    Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
+                    Curriki.console.log("failed validation: ", response, options);
+                }
+                ,success:function(response, options){
+                    var t = response.responseText;
+                    if(t) t = t.trim();
+                    Curriki.console.log("Response: " + t);
+                    queue.remove(queueEntry);
+                    if(queueEntry.value!=field.getValue()) return;
+                    Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
+                }
+                , params: { what: field.dom.name,
+                    value: value,
+                    xpage: "plain"
+                }
+                , scope: this
+            });
+            return r;
+        },
+
+        notifyValidationResult:function(field, res) {
+            /*
+             Ext.get("loginIframe").dom.contentWindow.Ext.get("username_input").parent().addClass("warningField")
+             */
+            Curriki.console.log("Notifying validation result " + res + " on field " + field);
+            try {
+                if (field) {
+                } else {
+                    Curriki.console.log("Warning: missing field.");
+                    return;
+                }
+                var pElt = field.parent();
+                if (null == res) {
+                    pElt.removeClass("okField");
+                    pElt.removeClass("waiting");
+                    pElt.removeClass("warningField");
+                } else if("waiting" == res) {
+                    pElt.addClass("waiting");
+                } else if (true == res || "true" == res) {
+                    pElt.removeClass("waiting");
+                    pElt.removeClass("warningField");
+                    pElt.addClass("okField");
+                } else if (false == res || "false" == res) {
+                    pElt.removeClass("waiting");
+                    pElt.removeClass("okField");
+                    pElt.addClass("warningField");
+                }
+            } catch(e) {
+                Curriki.console.log("Error: ", e)
+            }
+        },
+
+
+
+
+        activate:function(ids) {
+            // disable flashy XHR witness
+            Ext.Ajax.purgeListeners();
+
+            Ext.each(ids, function(name) {
+                Curriki.console.log("Registering on " + name);
+                var x = Ext.get(name);
+                if(x) {} else {
+                    Curriki.console.log("Not found: " + name);
+                    return;
+                }
+                if(x.purgeListeners) x.purgeListeners();
+                x.addListener("blur", function(evt) {
+                    Curriki.console.log("Focus-out...");
+                    Curriki.ui.login.liveValidation.queueQueryNow(x);
+                    Curriki.ui.login.liveValidation.stopPolling();
+                });
+                x.addListener("focus", function(evt) {
+                    Curriki.console.log("Focus-in...");
+                    var handle=window.setInterval(function() {
+                        clearInterval(handle);
+                        Curriki.ui.login.liveValidation.startPollingTextField(x);
+                    }, 50);
+                });
+            });
+        }
+        , queueQueryNow: function(inputElt) {
+            // this is the main function to call the validation
+            var fieldName = inputElt.dom.name;
+            var fieldValue = inputElt.dom.value;
+            Curriki.console.log("Validation on field " + fieldName + " with value '" + fieldValue + "'.");
+            //var min_length=3;
+            //if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
+            //    min_length=1;
+            //if(typeof(fieldValue)!="undefined" && fieldValue.length<=min_length) return;
+            if(fieldName!="email" && fieldName!="username") {
+                var passed = false;
+                var silentFailure = fieldName=="firstName" || fieldName=="lastName" || fieldName=="password";
+                if(fieldName=="agree") passed = fieldValue!="0";
+                if(fieldName=="member_type") passed = fieldValue!="-";
+                if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
+                if(fieldName=="password") passed = fieldValue.length>5;
+                Curriki.console.log("passed? " + passed + ".");
+                // manual check here, just long enough
+                if(passed==false) {
+                    if(silentFailure) {
+                        // silentFailure == true && passed == false (no need to bother folks for too short names: cler mark)
+                        Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, null);
+                    } else {
+                        Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, false);
+                    }
+                } if(passed==true)
+                    Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, true);
+                return;
+            }
+            //
+            // we're left with email and username, only check if longer than 3
+            var queueEntry = new Object();
+            queueEntry.value = inputElt.getValue();
+            Curriki.ui.login.liveValidation.queriedValue = inputElt.getValue();
+            Curriki.console.log("Queuing query for " + queueEntry.value);
+            if(typeof(queueEntry.value)=="undefined" || queueEntry.value==null) {
+                Curriki.console.log("Undefined value, stop.");
+                return;
+            }
+            if(typeof(queueEntry.value)!="undefined" && queueEntry.value.length<2) {
+                Curriki.ui.login.liveValidation.notifyValidationResult(inputElt, null);
+                return;
+            }
+            // something to check on the server
+            // scan the queue if there's a query with same value, bring it to front
+            for(x in queue) {
+                if(x.value == queueEntry.value) {
+                    var i = queue.indexOf(x);
+                    if(i>0) for(j=i-1; j>=0; j--) {
+                        queue[j+1] = queue[j];
+                    }
+                    Curriki.console.log("Swapping existing queue entries.");
+                    queue[0] = x;
+                    return;
+                }
+            }
+            // otherwise launch request
+            Curriki.console.log("Launching in queue.");
+            queueEntry.request = this.launchCheckFieldRequest(queueEntry.value, inputElt, queueEntry);
+            // add to queue
+            queue[queue.length] = queueEntry;
+            // cancel any other? not now
+        }
+
+        , intervalPointer: null
+        , startedPollingTime: null
+        , inputFieldBeingPolled: null
+        , queriedValue: null
+        , lastValue: null
+
+        , startPollingTextField: function(inputField) {
+            var t = Curriki.ui.login.liveValidation;
+            if(inputField) {} else {return;}
+            if(t.intervalPointer && t.intervalPointer!=null)
+                t.stopPolling();
+            Curriki.console.log("Start polling on " + t);
+            t.inputFieldBeingPolled = inputField;
+            t.startedPollingTime = new Date().getTime();
+            var interval = 50;
+            if(Ext.isIE) interval = 300;
+            t.intervalPointer = window.setInterval(t.inputFieldPoll, interval);
+        }
+        , stopPolling: function() {
+            Curriki.console.log("Stop polling.");
+            try {
+                var t = Curriki.ui.login.liveValidation;
+                if (t.intervalPointer && t.intervalPointer != null)
+                    window.clearInterval(t.intervalPointer);
+                t.startedPollingTime = null;
+                t.inputFieldBeingPolled = null;
+            } catch(e) { Curriki.console.log(e); }
+        }
+        , inputFieldPoll: function() {
+            //console.log("poll4");
+            var t = Curriki.ui.login.liveValidation;
+            var input = t.inputFieldBeingPolled;
+            //console.log("Checking input " + input + ".");
+            if(input) {} else {return;}
+            var now = new Date().getTime();
+            if(t.startedPollingTime && t.startedPollingTime==null)
+                t.startedPollingTime = now;
+            /* if(now - t.startedPollingTime > 30000) {
+                t.stopPolling(); return;
+            }*/
+            var value = input.dom.value;
+            // Evaluating value=asdasd@i2go.e wrt t.lastValue=asdasd@i2go.e and t.lastChanged=1314641854765 with now 1314641858380
+            //console.log("Checking " + value + " of type " + typeof(value));
+            if(typeof(value)!="undefined") {
+                if(typeof(t.lastValue)!="undefined") {
+                    if(! (value==t.lastValue)) {
+                        //console.log("not same value.");
+                        t.lastChanged = now;
+                        t.lastValue = value;
+                    } else { // same value: act if nothing happened since 200ms
+                        //console.log("same value since " + (now - t.lastChanged));
+                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || t.lastChecked===undefined) &&
+                                (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value)) {
+                            t.lastChecked = now;
+                            t.queueQueryNow(input);
+                        }
+                    }
+                } else {
+                    t.lastValue = value;
+                    t.lastChanged = now;
+                }
+            } else Curriki.console.log("Giving up value undefined.");
+
+        }
+
+
+    };
+}();
+
 // vim: ts=4:sw=4
 
 /*

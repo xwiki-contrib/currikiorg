@@ -69,7 +69,7 @@ Organize.init = function(){
 				,bbar:[{
 					 text:_('organize.dialog.remove_button')
 					,id:'organize-remove-btn'
-					,cls:'button btn-remove button-confirm'
+					,cls:'button btn-remove'
 					,disabled:true
 					,listeners:{
 						click:function(btn, e){
@@ -82,7 +82,7 @@ Organize.init = function(){
 				},'->',{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-cancel-btn'
-					,cls:'button button-cancel'
+					,cls:'button btn-cancel'
 					,listeners:{
 						click:{
 							 fn: function(btn, e){
@@ -98,7 +98,7 @@ Organize.init = function(){
 				},{
 					 text:_('organize.dialog.done_button')
 					,id:'organize-done-btn'
-					,cls:'button btn-done button-confirm'
+					,cls:'button btn-done'
 					,disabled:true
 					,listeners:{
 						click:{
@@ -405,7 +405,7 @@ console.log('removed node', node, oldParent, tree);
 				,bbar:['->',{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-confirm-cancel-button'
-					,cls:'button button-cancel'
+					,cls:'button btn-cancel'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -418,7 +418,7 @@ console.log('removed node', node, oldParent, tree);
 				},{
 					 text:_('organize.dialog.ok_button')
 					,id:'organize-confirm-ok-button'
-					,cls:'button button-confirm'
+					,cls:'button btn-next'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -465,7 +465,7 @@ console.log('removed node', node, oldParent, tree);
 				,bbar:[{
 					 text:_('organize.intention.message.continue_button')
 					,id:'organize-intention-continue-button'
-					,cls:'button button-confirm'
+					,cls:'button continue-btn'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -478,7 +478,7 @@ console.log('removed node', node, oldParent, tree);
 				},{
 					 text:_('organize.dialog.cancel_button')
 					,id:'organize-intention-cancel-button'
-					,cls:'button button-cancel'
+					,cls:'button cancel-btn'
 					,listeners:{
 						'click':{
 							fn:function(e,evt){
@@ -555,8 +555,10 @@ Organize.start = function(resourceInfo){
 		Data.resource = resourceInfo.assetPage;
 
 		if('undefined' == typeof resourceInfo.creator
-		   || ((resourceInfo.creator != Curriki.global.username && !Curriki.global.isAdmin)
-		       && ('undefined' == typeof resourceInfo.title || 'undefined' == typeof resourceInfo.creatorName))) {
+		   || ((resourceInfo.creator != Curriki.global.username
+		        && !Curriki.global.isAdmin)
+		       && ('undefined' == typeof resourceInfo.title
+		           || 'undefined' == typeof resourceInfo.creatorName))) {
 			// Fetch resource info if not provided
 			Curriki.assets.GetAssetInfo(Data.resource, function(cbInfo){
 				Organize.start(cbInfo);

@@ -12,7 +12,7 @@ Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
 
 
-if (!('console' in window) || !('firebug' in console)){
+if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
 	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
 	             "trace", "profile", "profileEnd"];
@@ -21,24 +21,6 @@ if (!('console' in window) || !('firebug' in console)){
 		window.console[names[i]] = Ext.emptyFn
 }
 console.log('initing Curriki');
-
-Ext.onReady(function(){
-	Ext.QuickTips.init();	
-	if(Ext.isIE) {	  
-	  Ext.apply(Ext.QuickTips.getQuickTip(), {
-		  showDelay: 1000
-		  ,hideDelay: 0
-		  ,interceptTitles: false
-	  });
-	} else {
-	  Ext.apply(Ext.QuickTips.getQuickTip(), {
-		  showDelay: 1000
-		  ,hideDelay: 0
-		  ,interceptTitles: false
-	  });
-	}	
-});
-
 /*
  * Example of dynamically loading javascript
 function initLoader() {
@@ -50,26 +32,59 @@ function initLoader() {
 */
 
 Ext.ns('Curriki');
+Curriki.console = window.console;
 Ext.ns('Curriki.module');
+
+Curriki.requestCount = 0;
 
 Ext.onReady(function(){
 	Curriki.loadingCount = 0;
+	Curriki.hideLoadingMask = false;
 	Curriki.loadingMask = new Ext.LoadMask(Ext.getBody(), {msg:_('loading.loading_msg')});
 
     Ext.Ajax.on('beforerequest', function(conn, options){
-console.log('beforerequest', conn, options);
-		Curriki.showLoading(options.waitMsg);
+        options.requestCount = Curriki.requestCount++;
+        console.log('beforerequest (' + options.requestCount + ")", conn, options);
+        // protection
+        //if(options.requestCount>10) throw "No more than 10 requests!";
+        Curriki.Ajax.beforerequest(conn, options);
 	});
     Ext.Ajax.on('requestcomplete', function(conn, response, options){
-console.log('requestcomplete', conn, response, options);
-		Curriki.hideLoading();
+console.log('requestcomplete (' + options.requestCount + ")", conn, response, options);
+		Curriki.Ajax.requestcomplete(conn, response, options);
 	});
-    Ext.Ajax.on('requestexception', function(conn, response, options){
-console.log('requestexception', conn, response, options);
-		Curriki.hideLoading(true);
-	});
+    Ext.Ajax.on('requestexception', Curriki.notifyException);
 });
 
+Curriki.Ajax = {
+	'beforerequest': function(conn, options) {
+		Curriki.showLoading(options.waitMsg);
+	}
+
+	,'requestcomplete': function(conn, response, options) {
+		Curriki.hideLoading();
+	}
+
+	,'requestexception': function(conn, response, options) {
+		Curriki.hideLoading(true);
+	}
+};
+
+
+Curriki.notifyException = function(exception){
+        console.log('requestexception', exception);
+		Curriki.Ajax.requestexception(null, null, null);
+        Curriki.logView('/features/ajax/error/');
+        var task = new Ext.util.DelayedTask(function(){
+            if(!Ext.isEmpty(Curriki.loadingMask)) {
+                Curriki.loadingMask.hide();
+                Curriki.loadingMask.disable();
+            }
+            Ext.MessageBox.alert(_("search.connection.error.title"),
+                    _("search.connection.error.body"));
+        });
+        task.delay(100);
+	};
 
 Curriki.id = function(prefix){
 	return Ext.id('', prefix+':');
@@ -79,7 +94,7 @@ Curriki.showLoading = function(msg, multi){
 	if (multi === true) {
 		Curriki.loadingCount++;
 	}
-	if (!Ext.isEmpty(Curriki.loadingMask)){
+	if (!Curriki.hideLoadingMask && !Ext.isEmpty(Curriki.loadingMask)){
 		msg = msg||'loading.loading_msg';
 		Curriki.loadingMask.msg = _(msg);
 		Curriki.loadingMask.enable();
@@ -105,6 +120,8 @@ Curriki.logView = function(page){
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
 	} else {
+        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
+        window.top.pageTrackerQueue.push(page);
 		console.info('Would track: ', page);
 	}
 }

@@ -159,15 +159,15 @@ Toc.init = function(){
 	return true;
 };
 
-Toc.start = function(){	
-	if (Toc.init()) {
-		Toc.display();
-	}	
+Toc.start = function(){
+	Ext.onReady(function(){
+		if (Toc.init()) {
+			Toc.display();
+		}
+	});
 };
 
 Ext.onReady(function(){
-  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-	  Curriki.module.toc.start();
-	});
+	Curriki.module.toc.start();
 });
 })();

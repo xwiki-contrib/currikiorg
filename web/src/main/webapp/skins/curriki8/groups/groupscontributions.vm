@@ -16,7 +16,7 @@
 <div id="groups-main-header">
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
 {pre}
-<a class="button button-confirm" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
+<a class="button-orange" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
 {/pre}
 #end ##}
 <div id="groups-main-header-title" class="main-title">
@@ -213,17 +213,22 @@ $msg.get("groups.curriculum.contributions.about")
 
 #**
   * Displays the contributions search
-  *#
+  * this page is mostly the page of search (Search/WebHome)
+   *#
 #macro(groups_contributions_search)
 #groupsinit()
 #groupsheader("curriculum")
 {pre}
 <script type="text/javascript">
 /* <![CDATA[ */
-Ext.ns('Curriki.userinfo');
-Curriki.userinfo = {
-	isAdmin: #if($hasGlobalAdmin)true#{else}false#end
-};
+    Ext.ns('Curriki.userinfo');
+    #set($groups=$xwiki.csm.getSpaceNames($context.user,$xwiki.null))
+    Curriki.userinfo = {
+        isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
+        userGroups: "#foreach($g in $groups)$g,#end",
+        userName:   "$context.user"
+
+    };
 /* ]]> */
 </script>
 <!--
@@ -293,63 +298,66 @@ Curriki.module.search.start();
 <div id="groups-search" class="frame">
 #curriki_titlebar($msg.get("groups.curriculum.contributions.title") "" "" "red")
 <div class="frame-content">
-$msg.get("groups.curriculum.contributions.about")
-<div>
+##
+#if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
 {pre}
-<form id="groupsearch"
-      onsubmit="document.groupsearch.method='post'; if (document.groupsearch.brsqry.value!='$msg.get("groups.curriculum.search.default")') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
-      action="/xwiki/bin/view/${spaceName}/ContributionsSearch"
-      name="groupsearch">
+	<a class="button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
 {/pre}
-<div class="groupcontribution-leftbutton">
-<a class="button button-confirm" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
-$msg.get('groups.curriculum.contributions.viewORsearch')
+#end ##}
+$msg.get("groups.curriculum.contributions.about")
+	<div style="clear:both;">
+{pre}
+		<form id="groupsearch" name="groupsearch" method="post"
+			onsubmit="if (document.groupsearch.brsqry.value!='$msg.get("groups.curriculum.search.default")') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
+			action="/xwiki/bin/view/${spaceName}/ContributionsSearch">
+{/pre}
+			<div class="groupcontribution-leftbutton">
+				<a class="button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
+				$msg.get('groups.curriculum.contributions.viewORsearch')
+			</div>
+		##
+			<div id="curriki-search-field-container">
+				<div class="curriki-search-a" id="curriki-search-field">
+					<input type="hidden" value="" name="area" class="hidden"/>
+					<input type="text" id="curriki-searchbox" name="brsqry"
+						value="$msg.get("groups.curriculum.search.default")"
+						onfocus="if (this.value=='$msg.get("groups.curriculum.search.default")') this.value=''; else this.select()"
+						onblur="if (this.value=='') this.value='$msg.get("groups.curriculum.search.default")'" />
+					<button name="btn" type="submit" id="searchbtn">$msg.get("groups.curriculum.contributions.go")</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 </div>
 ##
-<div id="curriki-search-field-container">
-    <div class="curriki-search-a" id="curriki-search-field">
-     <input type="hidden" value="" name="area" class="hidden"/>
-     <input type="text" id="curriki-searchbox" name="brsqry"
-            value="$msg.get("groups.curriculum.search.default")"
-            onfocus="if (this.value=='$msg.get("groups.curriculum.search.default")') this.value=''; else this.select()"
-            onblur="if (this.value=='') this.value='$msg.get("groups.curriculum.search.default")'"
-/>
-     <button name="btn" type="submit" id="searchbtn">$msg.get("groups.curriculum.contributions.go")</button>
-    </div> </div>
-</form>
-</div>
-</div>
-</div>
-##
-<div id="groups-collections" class="frame">
 {pre}
 <script type="text/javascript">
 var $hidden = false;
 function toggle_desc(){
-  var $action;
-  var $titl;
-  if ($hidden){
-    $hidden = false;
-    $action = 'show';
-    $titl = "$msg.get('groups.curriculum.collections.titlebarbutton')";
-  } else {
-    $hidden = true;
-    $action = 'hide';
-    $titl = "$msg.get('groups.curriculum.collections.titlebarbuttonalt')";
-  }
-  $$('.groups-collections-row-description').invoke($action);
-  $('hider-link').title=$titl;
-  $('hider-link').innerHTML=$titl+"  &raquo;";
-  return false;
+	var $action;
+	var $titl;
+	if ($hidden){
+		$hidden = false;
+		$action = 'show';
+		$titl = "$msg.get('groups.curriculum.collections.titlebarbutton')";
+	} else {
+		$hidden = true;
+		$action = 'hide';
+		$titl = "$msg.get('groups.curriculum.collections.titlebarbuttonalt')";
+	}
+	$$('.groups-collections-row-description').invoke($action);
+	$('hider-link').title=$titl;
+	$('hider-link').innerHTML=$titl+"  &raquo;";
+	return false;
 }
 </script>
 {/pre}
-
 #if($sm.isMember($spaceName, $context.user) || $hasGlobalAdmin) ##{
 #set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
 #set($multiple = ($cnt > 1))
 #if($multiple) ##{
-#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='XWiki.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
+#set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
 #set($reordered = ($reorder > 0))
 {pre}
 <script type="text/javascript">
@@ -365,7 +373,7 @@ Curriki.data.reorder = {
 {/pre}
 #end ##}
 #end ##}
-
+<div id="groups-collections" class="frame">
 #curriki_fulltitlebar($msg.get("groups.curriculum.collections.titlebar") $msg.get("groups.curriculum.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
 <div class="frame-content">
 <div id="groups-collections-instructional">
@@ -373,7 +381,7 @@ Curriki.data.reorder = {
 #if($context.action == "view")
 #if($sm.isMember($spaceName, $context.user))
 {pre}
-<a class="button button-confirm" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")">$msg.get("groups.curriculum.collections.addButton")</a>
+<a class="button-orange" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")">$msg.get("groups.curriculum.collections.addButton")</a>
 {/pre}
 #end
 #end

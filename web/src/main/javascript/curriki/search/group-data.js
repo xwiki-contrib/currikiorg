@@ -194,8 +194,6 @@ data.init = function(){
 };
 
 Ext.onReady(function(){
-  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-	  data.init();
-	});
+	data.init();
 });
 })();

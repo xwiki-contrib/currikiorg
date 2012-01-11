@@ -1,0 +1,829 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#macro(registrationinit $type) ##{ 
+#set($g_RegReq = $msg.get('flag.dialog.required.field.icon'))
+#set($g_ClearPx = "/xwiki/skins/curriki8/images/px.gif")
+#set($g_RegType = 'register')
+#if($!type && ($type != 'register')) ##{
+#set($g_RegType = $type)
+#end ##}
+#if($g_RegType == 'edit_profile') ##{
+## $userdoc should already be set
+$userdoc.use("XWiki.XWikiUsers")
+#if(!$xwiki.hasAccessLevel("edit",$context.user,$userdoc.fullName))
+$response.sendError(403,"Not authorized.")
+<!-- not authorized! -->
+#end
+#else ##}{
+#set($userdoc = $xwiki.getDocument("XWiki.XWikiUserTemplate"))
+#set($ok = $userdoc.addObjectFromRequest("XWiki.XWikiUsers"))
+$userdoc.use("XWiki.XWikiUsers")
+## Set defaults
+#if(!$userdoc.show_contact || $userdoc.show_contact == "") ##{
+#set($junk = ($userdoc.set('show_contact', '1')))
+#end ##}
+#end ##}
+#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+#end ##}
+
+#macro(registrationdefault) ##{
+#registrationform()
+#end ##}
+
+#macro(registrationform) ##{
+#registrationinfo()
+#startregistrationform()
+#registrationaccountinfo()
+#registrationprivacysettings()
+#registrationinterests()
+#registrationterms()
+#endregistrationform()
+#end ##}
+
+#macro(tryregister) ##{
+#set($errMsg = "")
+#if($request.xwikiname) ##{
+#set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
+#set($junk = $reg.setObjects($xwiki, $context, $msg))
+#set($result = $reg.createAccount($request))
+#set($errMsg = $reg.getMessage())
+#else ##}{
+#set($result = false)
+#end ##}
+#end ##}
+
+#macro(tryprofileupdate) ##{
+	#if($request.method=="POST") ##{
+		#if($context.user == $userdoc.fullName) ##{
+			#set($userarg = "")
+		#else ## user == owner ##}{
+			#set($userarg = "user=${userdoc.fullName}")
+			#if(!$xwiki.hasAdminRights()) ##{
+				$response.sendRedirect($xwiki.getURL('MyCurriki.Profile', "$userarg"))
+			#end ## not admin ##}
+		#end ## user == owner ##}
+		#set($xredirect = $xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
+		#set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
+		#set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
+
+		## Avatar Upload
+		#set($filename = $xwiki.fileupload.getFileName("filepath"))
+		#if($filename&&($filename!="")) ##{
+			#set($attlist = $userdoc.attachmentList)
+			#foreach ($att in $attlist) ##{
+				#set($junk = $userdoc.document.deleteAttachment($att.attachment, $context.context))
+			#end ##}
+			#set($junk = $userdoc.addAttachments())
+		#end ##}
+
+		## Info change
+		#set($oPass = '********')
+		#set($nPass = $request.getParameter("XWiki.XWikiUsers_0_password"))
+		#set($oEmail = "${userobj.getProperty('email').getValue()}")
+		#set($nEmail = $request.getParameter("XWiki.XWikiUsers_0_email"))
+
+		#set($junk = $userdoc.updateObjectFromRequest("XWiki.XWikiUsers"))
+		#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+
+
+		#if($oEmail != $nEmail) ##{
+			#if($oPass != $nPass) ##{
+				#set($junk = $userobj.set("active", 0))
+				#set($junk = $userobj.set("email_undeliverable", 1))
+				#set($junk = $userdoc.saveWithProgrammingRights())
+				$response.sendRedirect($xredirectemail2)
+			#else ##}{
+				#set($junk = $userdoc.saveWithProgrammingRights())
+				$response.sendRedirect($xredirectemail)
+			#end ##}
+		#end ##}
+
+		#set($junk = $userdoc.saveWithProgrammingRights())
+		$response.sendRedirect($userdoc.getURL("view"))
+	#end ##}
+#end ##}
+
+#**
+  * Macro to display the registration info module
+  *#
+#macro(registrationinfo) ##{
+<div>## id="intro-register"
+	<h1>$msg.get('register.curriki_intro.title')</h1>
+	<p>$msg.get('register.curriki_intro.description')</p>
+        <p>$msg.get("register.curriki_intro.commercial")
+</div>
+#end ##}
+
+
+#macro(startregistrationform) ##{
+###if($g_RegType == 'edit_profile') ##{
+<script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
+###end ##}
+{pre}<script type="text/javascript">
+/* <![CDATA[ */
+var regFormOk = false;
+
+function checkEmailResponse(response){
+	var text = response.responseText;
+	var res = eval('[' + text + '][0]');
+
+#if($g_RegType != 'edit_profile') ##{
+	if(!res.login){
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.login_not_unique')");
+		CurrikiApp.errHighlight("block-xwikiname", $('register')['xwikiname']);
+	}
+#end ##}
+
+	if(!res.email){
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_not_unique')");
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_email", $('register')['XWiki.XWikiUsers_0_email']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email");
+	}  
+	if (CurrikiApp.errMsg) {
+		CurrikiApp.msgOff();
+		CurrikiApp.errMsgShow();
+	}
+	else {
+		CurrikiApp.msgOn('$msg.get('register.account.saving.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		regFormOk = true;
+		document.register.submit();
+	}
+}
+
+function validateRegisterForm(){
+	if (regFormOk) return true;
+
+	var hasError = false;
+	var errorMissing = false;
+	$$('#register .highlight').invoke('removeClassName', 'highlight');
+	CurrikiApp.errMsgReset();
+	CurrikiApp.trimFields(document.register);
+
+#if($g_RegType != 'edit_profile') ##{
+	if (document.register.xwikiname.value.length < 1){
+		errorMissing = true;
+		CurrikiApp.errHighlight("block-xwikiname", $('register')['xwikiname']);
+	}
+	else if ($F('xwikiname').replace(/[A-Za-z0-9]/g, "") != ""){
+		hasError = true;
+		CurrikiApp.errHighlight("block-xwikiname", $('register')['xwikiname']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info_error.login_invalid')");
+	}
+#end ##}
+
+#if($g_RegType == 'edit_profile') ##{
+	var fileName = $('xwikiuploadfile').value;
+	if (fileName.length){
+		var ext = false;
+		var pos = fileName.lastIndexOf(".");
+		if (pos > 0){
+			ext = fileName.substring(pos + 1).toLowerCase();
+		}
+		if (!ext || (ext != "gif" && ext != "jpg" && ext != "jpeg" && ext != "jpe" && ext != "png" && ext != "bmp")) {
+			hasError = true;
+			CurrikiApp.errHighlight("block-avatar", $('register')['xwikiuploadfile']);
+			CurrikiApp.errMsgAdd("$msg.get('edit_profile.change_photo.file_error')");
+		}
+	}
+#end ##}
+
+//## Passwords cannot be accessed via $F() or even $() directly
+
+	if($('register')['XWiki.XWikiUsers_0_password'].value.indexOf(" ") >= 0){
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['XWiki.XWikiUsers_0_password']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_password");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.password_invalid')");
+	}
+
+	if ($('register')['XWiki.XWikiUsers_0_password'].value.length < 5) {
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['XWiki.XWikiUsers_0_password']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_password");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.password_short')");
+	}
+	else if ($('register')['2XWiki.XWikiUsers_0_password'].value != $('register')['XWiki.XWikiUsers_0_password'].value){
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_password", $('register')['2XWiki.XWikiUsers_0_password']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_password");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.password_mismatch')");
+	}
+
+	if (!jt_.validEmail($('XWiki.XWikiUsers_0_email').value)) {
+		hasError = true;
+		CurrikiApp.errHighlight('block-XWiki-XWikiUsers_0_email', $('register')['XWiki.XWikiUsers_0_email']);
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email");
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_invalid')");
+	}
+
+	if ($F('2XWiki.XWikiUsers_0_email') != $F('XWiki.XWikiUsers_0_email')){
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_email");
+		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email", $('register')['2XWiki.XWikiUsers_0_email']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_mismatch')");
+	}
+
+	if ($F('XWiki.XWikiUsers_0_first_name').length < 1){
+		errorMissing = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_first_name", $('register')['XWiki.XWikiUsers_0_first_name']);
+	}
+	else if ($F('XWiki.XWikiUsers_0_first_name').length > 32){
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_first_name", $('register')['XWiki.XWikiUsers_0_first_name']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.name1_long')");
+	}
+
+	if ($F('XWiki.XWikiUsers_0_last_name').length < 1){
+		errorMissing = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
+	}
+	else if ($F('XWiki.XWikiUsers_0_last_name').length > 32){
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_last_name", $('register')['XWiki.XWikiUsers_0_last_name']);
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.name2_long')");
+	}
+
+    if ($F('XWiki.XWikiUsers_0_member_type')=="0" || $F('XWiki.XWikiUsers_0_member_type').length<1){
+        errorMissing = true;
+        CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_member_type", $('register')['XWiki.XWikiUsers_0_member_type']);
+    }
+
+
+	if ($('field-receive-email-some') && $('field-receive-email-some').checked){
+		if(!$('field-receive-email-newsletters').checked
+		   && !$('field-receive-email-recommendations').checked
+		   && !$('field-receive-email-reviews').checked
+		   && !$('field-receive-email-friend').checked) {
+			hasError = true;
+			CurrikiApp.errHighlight("email-desired-wrapper", $('field-receive-email-newsletters'));
+			CurrikiApp.errMsgAdd("$msg.get('register.privacy.error.no_suboptions_checked')");
+		}
+	}
+
+	if ($('XWiki.XWikiUsers_0_i_agree') && !$('XWiki.XWikiUsers_0_i_agree').checked){
+		hasError = true;
+		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_i_agree", $('XWiki.XWikiUsers_0_i_agree'));
+		CurrikiApp.errMsgAdd("$msg.get('register.terms.no_agreement')");
+	}
+
+	if (errorMissing) {
+		hasError = true;
+		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.blank_field')");
+	}
+	else if (!hasError) {
+		CurrikiApp.msgOn('$msg.get('register.account.validating.txt') <img src="http://extjs.cachefly.net/ext-2.2/resources/images/default/grid/loading.gif">');
+		var url = "/xwiki/bin/view/XWiki/CheckAccountCreation";
+		var pars = 'xpage=plain&email=' + $F("XWiki.XWikiUsers_0_email") + #if($g_RegType != 'edit_profile')'&login='#else'&account=XWiki.'#end + $F("xwikiname");
+		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
+	}
+
+	CurrikiApp.errMsgShow();
+	return false;
+}
+
+function enableEmailDesired() {
+	$('email-desired-wrapper').removeClassName('inactive');
+	$$('#email-desired-wrapper input').each(function(i){i.enable()});
+	return true;
+}
+
+function disableEmailDesired() {
+	$('email-desired-wrapper').addClassName('inactive');
+	$$('#email-desired-wrapper input').each(function(i){i.disable()});
+	return true;
+}
+
+function privacyToggle(){
+	var toggler = $('privacyToggler');
+	var toggled = $('privacyWrapper');
+
+	if (toggler.hasClassName('collapsed')) {
+		toggler.innerHTML = '$msg.get('register.module.expanded')';
+		toggler.removeClassName('collapsed');
+		toggler.addClassName('expanded');
+		toggled.show();
+	}
+	else {
+		toggler.innerHTML = '$msg.get('register.module.collapsed')';
+		toggler.removeClassName('expanded');
+		toggler.addClassName('collapsed');
+		toggled.hide();
+	}
+	return false;
+}
+
+function interestToggle(){
+	var toggler = $('interestToggler');
+	var toggled = $('interestWrapper');
+
+	if (toggler.hasClassName('collapsed')) {
+		toggler.innerHTML = '$msg.get('register.module.expanded')';
+		toggler.removeClassName('collapsed');
+		toggler.addClassName('expanded');
+		toggled.show();
+	}
+	else {
+		toggler.innerHTML = '$msg.get('register.module.collapsed')';
+		toggler.removeClassName('expanded');
+		toggler.addClassName('collapsed');
+		toggled.hide();
+	}
+	return false;
+}
+
+window.onbeforeunload = function () {
+// Check for nonsubmission and log (what format?)
+//Curriki.logView('/stats/');
+}.bind(this);
+/* ]]> */
+</script>
+{/pre}
+#if("$!errMsg" != "") ##{
+<div class="form-wrp">
+<div class="error">
+$errMsg
+</div>
+</div>
+#end ##}
+#if($g_RegType != 'edit_profile') ##{ 
+<div class="form-wrp">
+#end ##}
+<form id="register" name="register" action="" method="POST" enctype="multipart/form-data;charset=utf-8" onsubmit="return validateRegisterForm();">
+#if($g_RegType == 'edit_profile') ##{
+<div class="button-right">
+	<button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button>
+	<button class="button-orange" type="submit">$msg.get('edit_profile.save_button')</button>
+</div>
+## Calculate %complete
+#set($c = 3) ## login name, password, email address have to exist
+#set($numberoffield = 20)
+##
+#set($x = "")#set($x = $!userobj.getProperty('first_name').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('last_name').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('show_contact').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('show_email').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('opt_out').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('member_type').value)
+#if("$x" != "" && "$x" != '---' && "$x" != '0')#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('affiliation').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")
+#set($x = $!userobj.getProperty("topics").getValue())
+#if("$x" != "" && $x.size() > 1)#set($c = 1 + $c)#end
+#set($x = "")
+#set($x = $!userobj.getProperty("educational_level").getValue())
+#if("$x" != "" && $x.size() > 0)#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('country').value)
+#if("$x" != "" && "$x" != '---')#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('state').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('city').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('language').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($mt=$!userobj.getProperty('member_type').value)
+#if($mt=="corporation" || $mt=="")
+    #set($numberoffield=22)
+    #set($x = "")#set($x = $!userobj.getProperty('publish_intent').value)
+    #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+    #set($x = "")#set($x = $!userobj.getProperty('value_add').value)
+    #if("$x" != "")#set($c = 1 + $c)#end
+#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('comment').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('contact').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#set($x = "")#set($x = $!userobj.getProperty('websites').value)
+#if("$x" != "")#set($c = 1 + $c)#end
+##
+#if($userdoc.attachmentList.size()>0)#set($c = 1 + $c)#end
+##
+#set($c = 100 * $c)
+#set($c = $c / $numberoffield)
+#set($c = "${c}%")
+##
+<div class="profile-push">$msg.get('edit_profile.intro.percent_complete', [$c])</div>
+#end ##}
+<input type="hidden" name="xredirect" value="" />
+#if($g_RegType != 'edit_profile') ##{
+<input type="hidden" name="XWiki.XWikiUsers_0_notminor" value="Unknown" />
+#end ##}
+#if($g_RegType == 'edit_profile') ##{
+<input id="origemail" name="origemail" type="hidden" value="${userobj.getProperty('email').getValue()}" />
+{pre}<input id="origpw" name="origpw" type="hidden" value="********" />{/pre}
+#end ##}
+#end ##}
+
+#macro(endregistrationform) ##{
+#if($g_RegType == 'edit_profile') ##{
+<div class="button-right">
+	<button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button>
+	<button class="button-orange" type="submit">$msg.get('edit_profile.save_button')</button>
+</div>
+<div style="clear:both;line-height:0;height:0;"></div>
+<input type="hidden" name="xwikiname" id="xwikiname" value="$userdoc.name" />
+#end ##}
+</form>
+#if($g_RegType != 'edit_profile') ##{
+</div>
+#end ##}
+{pre}
+<script type="text/javascript">
+/* <![CDATA[ */
+#if($g_RegType == 'edit_profile') ##{
+function initRTEs() {
+	tinyMCE.init({
+		language: "en",
+		mode: "exact",
+        elements : "XWiki.XWikiUsers_0_comment,XWiki.XWikiUsers_0_contact,XWiki.XWikiUsers_0_websites",
+		theme : "advanced",
+		plugins: 'safari,table,save,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
+	
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect,forecolor,backcolor",
+		theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,cleanup,help,code",
+		theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,fullscreen",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "",
+		theme_advanced_resizing : true
+	});
+}
+
+if (Ext.isIE6) {
+	jt_.AddListener(window, 'load', initRTEs);
+}
+else initRTEs();
+#end    
+###end ##}
+##
+document.observe('dom:loaded', function(){
+	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
+	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
+    $$("#register select[name=XWiki.XWikiUsers_0_member_type]").each(function(inputElt){
+        inputElt.observe("change",toggleCorporateFieldsVisible);
+        toggleCorporateFieldsVisible();
+    });
+});
+## 
+function toggleCorporateFieldsVisible() {
+    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
+    memberType = memberType.options[memberType.selectedIndex].value;
+    var i;
+    if(memberType=="corporation" || memberType=="nonprofit" || memberType=="nonprofit_education") {
+        i = $('registerform_publish_intent_section');
+        if(i) i.show();
+        i = $('registerform_value_add_section');
+        if(i) i.show();
+    } else {
+        i = $('registerform_publish_intent_section');
+        if(i) i.hide();
+        i = $('registerform_value_add_section');
+        if(i) i.hide();
+    }
+
+    var text = String.fromCharCode(160);
+    if(memberType == "corporation")
+        text = _('join.member_type_coporate_instructions');
+    Curriki.console.log("memberTypeNotice: " + text);
+    Ext.get("memberTypeNotice").dom.innerHTML= text;
+    // Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
+}
+/* ]]> */
+</script>
+{/pre}
+#end ##}
+
+#macro(registrationformtextfield $pfx $fld) ##{
+#registrationformtextfieldfull($pfx $fld true 0 0)
+#end ##}
+
+#macro(registrationformtextfielddup $pfx $fld) ##{
+#registrationformtextfieldfull($pfx $fld true 2 0 )
+#end ##}
+
+#macro(registrationformtextfieldro $pfx $fld) ##{
+#registrationformtextfieldfull($pfx $fld true 0 1)
+#end ##}
+
+#macro(registrationformtextfieldfull $pfx $fld $req $dup $ro) ##{
+#set($field = $fld)
+#if($fld != 'xwikiname') ##{
+#set($field = "XWiki-XWikiUsers_0_${fld}")
+#end ##}
+#if($dup!='0') ##{
+#set($field = "${dup}${field}")
+#end ##}
+	<li id="block-${field}">
+		<span>#if($req)$g_RegReq#end<label for="${field}">#set($title = $pfx+'.title')$msg.get($title)</label>#set($tt = $pfx+'.tooltip')<img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get($tt)"/></span>
+		<p class="instructions">#set($desc = $pfx+'.description')$msg.get($desc)</p>
+#if($field == 'xwikiname') ##{
+	#if($ro!='0') ##{
+		$msg.get($title): $userdoc.name
+		<input type="hidden" value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end" id="${field}" name="${field}" autocomplete="off" />
+	#else ##}{
+		<input type="text" class="input-text" value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end" id="${field}" name="${field}" autocomplete="off"#if($ro!='0') READONLY#{end}/>
+	#end ##}
+#else ##}{
+	#if($dup!='0') ##{
+		$userdoc.display($fld, "edit", "2")
+	#else ##}{
+		$userdoc.display($fld, "edit")
+	#end ##}
+#end ##}
+	</li>
+#end ##}
+
+#macro(registrationaccountinfo) ##{
+#set($pfx = $g_RegType+'.account_info')
+<fieldset class="required">
+	<h3>$msg.get("${pfx}.header")</h3>
+	<div class="fields-wrp">
+		<p>$msg.get("${pfx}.intro")
+                  $msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
+		<ul>
+			#if($g_RegType == 'register') ##{
+				#set($i = $pfx+'.login')#registrationformtextfield($i 'xwikiname')
+			#end ##}
+			#set($i = $pfx+'.password1')#registrationformtextfield($i 'password')
+			#set($i = $pfx+'.password2')#registrationformtextfielddup($i 'password')
+			#set($i = $pfx+'.email1')#registrationformtextfield($i 'email')
+			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
+			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
+			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
+            #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
+		</ul>
+        <p id="memberTypeNotice">&nbsp;</p>
+        <p style="margin-bottom: 0; color: #777; font-weight: 100;">$msg.get("edit_profile.account_info.remove.member")</p>
+	</div>
+</fieldset>
+#end ##}
+
+#macro(registrationprivacysettings) ##{
+#set($pfx = $g_RegType+'.privacy')
+<fieldset class="optional">
+	<h3>$msg.get("${pfx}.header")</h3> 
+#if($g_RegType != 'edit_profile') ##{
+	<a href="" id="privacyToggler" class="toggler collapsed" name="privacyToggle" onclick="return privacyToggle();">$msg.get('register.module.collapsed')</a>
+#end ##}
+	<div id="privacyWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: none;"#end>
+		<p>$msg.get("${pfx}.intro")</p>
+		<ul>
+			<li id="block-show_contact">
+#set($show_contact = "")
+#set($show_contact = $!userobj.getProperty('show_contact').value)
+#if("$show_contact" == "") ##{
+#set($show_contact = "1")
+#end ##}
+				<span><label>$msg.get("${pfx}.show_profile.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.show_profile.tooltip")"/></span>
+				<ul class="radioBtns">
+					<li><input type="radio" class="input-radio" id="field-show-contact-everyone" name="XWiki.XWikiUsers_0_show_contact" value="1" #if($show_contact == "1")CHECKED#end /><label for="field-show-contact-everyone">$msg.get("${pfx}.show_profile.everyone")</label></li>
+					<li><input type="radio" class="input-radio" id="field-show-contact-members" name="XWiki.XWikiUsers_0_show_contact" value="2" #if($show_contact == "2")CHECKED#end /><label for="field-show-contact-members">$msg.get("${pfx}.show_profile.members")</label></li>
+					<li><input type="radio" class="input-radio" id="field-show-contact-noone" name="XWiki.XWikiUsers_0_show_contact" value="0" #if($show_contact == "0")CHECKED#end /><label for="field-show-contact-noone">$msg.get("${pfx}.show_profile.noone")</label></li>
+				</ul>
+			</li>
+			<li id="block-show_email">
+#set($show_email = "")
+#set($show_email = $!userobj.getProperty('show_email').value)
+#if("$show_email" == "") ##{
+#set($show_email = "0")
+#end ##}
+				<span><label>$msg.get("${pfx}.show_email.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.show_email.tooltip")"/></span>
+				<ul class="radioBtns">	
+					<li><input type="radio" class="input-radio" id="field-show-email-everyone" name="XWiki.XWikiUsers_0_show_email" value="1" #if($show_email == "1")CHECKED#end /><label for="field-show-email-everyone">$msg.get("${pfx}.show_email.everyone")</label></li>
+					<li><input type="radio" class="input-radio" id="field-show-email-members" name="XWiki.XWikiUsers_0_show_email" value="2" #if($show_email == "2")CHECKED#end /><label for="field-show-email-members">$msg.get("${pfx}.show_email.members")</label></li>
+					<li><input type="radio" class="input-radio" id="field-show-email-noone" name="XWiki.XWikiUsers_0_show_email" value="0" #if($show_email == "0")CHECKED#end /><label for="field-show-email-noone">$msg.get("${pfx}.show_email.noone")</label></li>
+				</ul>
+			</li>
+			<li id="block-email_options">
+#set($opt_out = "")
+#set($opt_out = $!userobj.getProperty('opt_out').value)
+#if("$opt_out" == "") ##{
+#set($opt_out = "0")
+#end ##}
+#if($opt_out == "2") ##{
+<script type="text/javascript">
+{pre}
+/* <![CDATA[ */
+document.observe('dom:loaded', function(){
+	enableEmailDesired();
+});
+/* ]]> */
+{/pre}
+</script>
+#end ##}
+				<span><label>$msg.get("${pfx}.email_options.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.email_options.tooltip")"/></span>
+				<ul class="radioBtns">
+					<li><input type="radio" class="input-radio" id="field-receive-email-all" name="XWiki.XWikiUsers_0_opt_out" value="0" #if($opt_out == "0")CHECKED#end onclick="return disableEmailDesired();" />
+						<label for="field-receive-email-all">$msg.get("${pfx}.email_options.all")</label>
+					</li>
+					<li>
+						<input type="radio" class="input-radio" id="field-receive-email-some" name="XWiki.XWikiUsers_0_opt_out" value="2" #if($opt_out == "2")CHECKED#end onclick="return enableEmailDesired();" /><label for="field-receive-email-some">$msg.get("${pfx}.email_options.some")</label>
+						<ul id="email-desired-wrapper" class="inactive">
+#set($options = "")
+#set($options = $!userobj.getProperty('email_options').value)
+#set($email_options = $xwiki.arrayList)
+#if($opt_out == "2" && "$!options" != "" && $options.size() > 0) ##{
+#foreach($option in $!options) ##{
+#set($junk = $email_options.add($option))
+#end ##}
+#else ##}{
+#set($junk = $email_options.add('newsletters'))
+#set($junk = $email_options.add('recommendations'))
+#set($junk = $email_options.add('reviews'))
+#set($junk = $email_options.add('friend'))
+#end ##}
+<input type="hidden" name="XWiki.XWikiUsers_0_email_options" value="" />
+							<li><input type="checkbox" class="input-checkbox" id="field-receive-email-newsletters" name="XWiki.XWikiUsers_0_email_options" value="newsletters" #if($email_options.contains('newsletters'))CHECKED#end DISABLED /><label for="field-receive-email-newsletters">$msg.get("${pfx}.email_options.newsletters")</label></li>
+							<li><input type="checkbox" class="input-checkbox" id="field-receive-email-recommendations" name="XWiki.XWikiUsers_0_email_options" value="recommendations" #if($email_options.contains('recommendations'))CHECKED#end DISABLED /><label for="field-receive-email-recommendations">$msg.get("${pfx}.email_options.recommendations")</label></li>
+							<li><input type="checkbox" class="input-checkbox" id="field-receive-email-reviews" name="XWiki.XWikiUsers_0_email_options" value="reviews" #if($email_options.contains('reviews'))CHECKED#end DISABLED /><label for="field-receive-email-reviews">$msg.get("${pfx}.email_options.reviews")</label></li>
+							<li><input type="checkbox" class="input-checkbox" id="field-receive-email-friend" name="XWiki.XWikiUsers_0_email_options" value="friend" #if($email_options.contains('friend'))CHECKED#end DISABLED /><label for="field-receive-email-friend">$msg.get("${pfx}.email_options.friend")</label></li>
+						</ul>
+					</li>
+					<li><input type="radio" class="input-radio" id="field-receive-email-none" name="XWiki.XWikiUsers_0_opt_out" value="1" #if($opt_out == "1")CHECKED#end onclick="return disableEmailDesired();" />
+						<label for="field-receive-email-none">$msg.get("${pfx}.email_options.none")</label>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</fieldset>
+#end ##}
+
+#macro(registrationinterests) ##{
+#set($pfx = $g_RegType+'.interests')
+<fieldset class="optional">
+	<h3>$msg.get("${pfx}.header")</h3> 
+#if($g_RegType != 'edit_profile') ##{
+	<a href="" id="interestToggler" class="toggler expanded" name="interestToggle" onclick="return interestToggle();">$msg.get('register.module.expanded')</a>
+#end ##}
+	<div id="interestWrapper" class="fields-wrp" #if($g_RegType != 'edit_profile')style="display: block;"#end>
+		<p>$msg.get("${pfx}.intro")</p>
+		<ul>
+			<li>
+				<span><label for="XWiki.XWikiUsers_0_affiliation">$msg.get("${pfx}.affiliation.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.affiliation.tooltip")"/></span>
+				<ul class="fieldList">
+					<li>$userdoc.display('affiliation', "edit")</li>
+				</ul>
+			</li>
+			<li id="item-interest-areas">
+				<table>
+					<thead>
+						<tr>
+							<th class="item-interest-areas-th">
+								<span><label for="XWiki.XWikiUsers_0_topics">$msg.get("${pfx}.subject.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.subject.tooltip")"/></span>
+								<p class="instructions">$msg.get("${pfx}.subject.description")</p>
+							</th>
+							<th class="item-interest-areas-th">
+								<span><label for="XWiki.XWikiUsers_0_educational_level">$msg.get("${pfx}.ed_level.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.ed_level.tooltip")"/></span>
+								<p class="instructions">$msg.get("${pfx}.ed_level.description")</p>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="item-interest-areas-td">
+								$userdoc.display('topics', "edit")
+							</td>
+							<td class="item-interest-areas-td">
+								$userdoc.display('educational_level', "edit")
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			<li>
+				<span><label>$msg.get("${pfx}.location.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.location.tooltip")"/></span>
+				<ul class="fieldList">
+					<li><label for="XWiki.XWikiUsers_0_country">$msg.get("${pfx}.country.title")</label>
+						$userdoc.display('country', "edit")</li>
+					<li><label for="XWiki.XWikiUsers_0_state">$msg.get("${pfx}.state.title")</label>
+						$userdoc.display('state', "edit")</li>
+					<li><label for="XWiki.XWikiUsers_0_city">$msg.get("${pfx}.city.title")</label>
+						$userdoc.display('city', "edit")</li>
+				</ul>
+			</li>
+			<li>
+				<span><label for="XWiki.XWikiUsers_0_language">$msg.get("${pfx}.language.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.language.tooltip")"/></span>
+				<ul class="fieldList">
+					<li>$userdoc.display('language', "edit")</li>
+				</ul>
+			</li>
+            <li id="registerform_publish_intent_section">
+                <span><label for="XWiki.XWikiUsers_0_publish_intent">$msg.get("${pfx}.publish_intent.title")</label>##
+                <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.publish_intent.tooltip")"/></span>
+                <p class="instructions">$msg.get("${pfx}.publish_intent.description")</p>
+                $userdoc.display('publish_intent', "edit")
+            </li>
+            <li id="registerform_value_add_section">
+                <span><label for="XWiki.XWikiUsers_0_value_add">$msg.get("${pfx}.value_add.title")</label>##
+                <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.value_add.tooltip")"/></span>
+                <p class="instructions">$msg.get("${pfx}.value_add.description")</p>
+                $userdoc.display('value_add', "edit")
+            </li>
+		#if($g_RegType == 'edit_profile') ##{
+				<li>
+					<span><label for="XWiki.XWikiUsers_0_comment">$msg.get("${pfx}.bio.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.bio.tooltip")"/></span>
+					<p class="instructions">$msg.get("${pfx}.bio.description")</p>
+					$userdoc.display('comment', "edit")
+				</li>
+				<li>
+					<span><label for="XWiki.XWikiUsers_0_contact">$msg.get("${pfx}.contact.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.contact.tooltip")"/></span>
+					<p class="instructions">$msg.get("${pfx}.contact.description")</p>
+					$userdoc.display('contact', "edit")
+				</li>
+				<li>
+					<span><label for="XWiki.XWikiUsers_0_websites">$msg.get("${pfx}.websites.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.websites.tooltip")"/></span>
+					<p class="instructions">$msg.get("${pfx}.websites.description")</p>
+					$userdoc.display('websites', "edit")
+				</li>
+		#end ##}
+		</ul>
+	</div>
+</fieldset>
+#end ##}
+
+#macro(registrationterms) ##{
+<fieldset class="required">
+	<h3>$msg.get('register.terms.header')</h3>
+	<div class="fields-wrp">
+		<p>$msg.get('register.terms.intro')</p>
+		<ul>
+			<li id='block-XWiki-XWikiUsers_0_i_agree'>
+#set($iagree = "")
+#set($iagree = $!request.getParameter("XWiki.XWikiUsers_0_i_agree"))
+				$g_RegReq<input type="checkbox" class="input-checkbox" value="1" id="XWiki.XWikiUsers_0_i_agree" name="XWiki.XWikiUsers_0_i_agree" #if($iagree != "")CHECKED#end/>
+				<label for="XWiki.XWikiUsers_0_i_agree">$msg.get('register.terms.agreement')</label>
+			</li>
+		</ul>
+        <p>$msg.get('register.curriki_intro.note')</p>
+		<p>$msg.get('register.terms.notes')</p>
+	</div>
+	<div class="center pad-vrt">
+		<button class="button-orange" type="submit">$msg.get('register.terms.save_button')</button>
+	</div>
+</fieldset>
+#end ##}
+
+#macro(profilechange_photo) ##{
+<fieldset class="required" style="clear:right;">
+	<h3>$msg.get('edit_profile.change_photo.header')</h3> 
+	<div class="fields-wrp">
+		<ul>
+			<li id='block-avatar'>
+				<span><label for="change_photo">$msg.get("edit_profile.change_photo.choose_file.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("edit_profile.change_photo.choose_file.tooltip")"/></span>
+				<p class="instructions">$msg.get("edit_profile.change_photo.choose_file.description")</p>
+				<input id="xwikiuploadname" type="hidden" name="filename" value="" />
+				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40"/>
+			</li>
+		</ul>
+	</div>
+</fieldset>
+#if($userdoc.attachmentList.size()>0) ##{
+	#set($attach = $userdoc.attachmentList.get(0))
+	#if ($context.user == $userdoc.fullName || $hasGlobalAdmin) ## {
+		#if($context.user == $userdoc.fullName) ##{
+			#set($userarg = "")
+		#else ##}{
+			#set($userarg = "user=${userdoc.fullName}")
+		#end ##}
+		#set($xredirectdelphoto = $xwiki.getURL("MyCurriki.EditProfile", "view", "$userarg"))
+		#set($dellink = $userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${xredirectdelphoto}"))
+<script type="text/javascript">
+{pre}
+/* <![CDATA[ */
+$('profile-removephoto').observe('click', function(){
+	if (confirm('$msg.get('edit_profile.change_photo.remove_confirmation')')) {
+		window.location="${dellink}";
+	}
+});
+/* ]]> */
+{/pre}
+</script>
+	#end  ## } is same user
+#end  ## } has attachment
+#end ##}

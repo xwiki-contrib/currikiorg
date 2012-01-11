@@ -96,7 +96,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.contributemenu.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel mgn-rt'
+							,cls:'button cancel'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -109,7 +109,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_('add.contributemenu.next.button')
 							,id:'nextbutton'
-							,cls:'button button-confirm'
+							,cls:'button next'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -202,6 +202,42 @@ Curriki.module.addpath.init = function(){
 								,disabled:true
 							}]
 
+		// Video upload
+						},{
+							 xtype:'radio'
+							,value:'video_upload'
+							,inputValue:'video_upload'
+							,boxLabel:_('add.contributemenu.option.video_upload')
+							,listeners:{
+								check:AddPath.RadioSelect
+							}
+						},{
+							 xtype:'container'
+							,id:'video_upload-container-cmp'
+							,hidden:true
+							,autoEl:{
+								 tag:'div'
+								,id:'video_upload-container'
+								,html:''
+							}
+							,items:[{
+								 xtype:'textfield'
+								,inputType:'file'
+								,id:'video_upload-entry-box'
+								,name:'upload[file]'
+								,allowBlank:false
+								,preventMark:true
+								,hideMode:'display'
+								,hideLabel:true
+								,hidden:true
+								,disabled:true
+								,listeners:{ // focus, invalid, blur, valid
+									focus:function(){
+									}
+								}
+							}]
+
+/*
 		// VIDITalk Video Upload
 						},{
 							 xtype:'radio'
@@ -254,6 +290,7 @@ Curriki.module.addpath.init = function(){
 									,height:'320px'
 								}
 							}]
+*/
 
 		// External Web Link
 						},{
@@ -324,6 +361,7 @@ Curriki.module.addpath.init = function(){
 							,inputValue:'scratch'
 							,boxLabel:_('add.contributemenu.option.scratch')
 
+/*
 		// Create with VIDITalk
 						},{
 							 xtype:'radio'
@@ -382,6 +420,7 @@ Curriki.module.addpath.init = function(){
 								,id:'video_capture-container'
 								,html:''
 							}
+*/
 
 		// Create folder
 						},{
@@ -506,7 +545,7 @@ Curriki.module.addpath.init = function(){
 						,buttons:[{
 							 text:_(tmplPfx+'.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel mgn-rt'
+							,cls:'button cancel'
 							,listeners:{
 								'click':function(e, ev){
 									Ext.getCmp(e.id).ownerCt.ownerCt.close();
@@ -516,7 +555,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_(tmplPfx+'.next.button')
 							,id:'nextbutton'
-							,cls:'button button-confirm'
+							,cls:'button next'
 							,listeners:{
 								'click':function(e, ev){
 									AddPath.PostToTemplate(Curriki.current.submitToTemplate);
@@ -606,7 +645,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.setrequiredinfo.part1.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel mgn-rt'
+							,cls:'button cancel'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -619,7 +658,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_('add.setrequiredinfo.part1.next.button')
 							,id:'nextbutton'
-							,cls:'button button-confirm'
+							,cls:'button next'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -1001,6 +1040,59 @@ Curriki.module.addpath.init = function(){
 								}]
 							}]
 
+		// Keywords
+							},{
+								 border:false
+								,items:[{
+									 xtype:'box'
+									,autoEl:{
+										 tag:'div'
+										,id:'metadata-keywords'
+										,cls:'information-header'
+										,children:[{
+											 tag:'span'
+											,id:'metadata-keywords-title'
+											,cls:'metadata-title'
+											,html:_('sri.keywords_title')
+										},{
+											 tag:'img'
+											,id:'metadata-keywords-info'
+											,cls:'metadata-tooltip'
+											,src:Curriki.ui.InfoImg
+											,qtip:_('sri.keywords_tooltip')
+										}]
+									}
+								},{
+									 xtype:'box'
+									,autoEl:{
+										 tag:'div'
+										,html:_('sri.keywords_txt')
+										,cls:'directions'
+									}
+								},{
+									 xtype:'textfield'
+									,id:'metadata-keywords-entry'
+									,name:'keywords'
+									,emptyText:_('sri.keywords.empty_msg')
+									,hideLabel:true
+									,listeners:{
+										render:function(comp){
+											comp.findParentByType('apSRI1').on('show', function() {
+												if (!Ext.isEmpty(Curriki.current.metadata)) {
+													var md = Curriki.current.metadata;
+
+													if (!Ext.isEmpty(md.keywords)){
+														if (Ext.isArray(md.keywords)){
+															md.keywords = md.keywords.join(' ');
+														}
+														Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
+													}
+												}
+											})
+										}
+									}
+								}]
+
 		// Instructional Component Type
 						},{
 							 xtype:'box'
@@ -1114,7 +1206,7 @@ Curriki.module.addpath.init = function(){
 						,bbar:['->',{
 							 text:_('add.setrequiredinfo.part2.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel mgn-rt'
+							,cls:'button cancel'
 							,listeners:{
 								'click':function(e, ev){
 									Ext.WindowMgr.get('MetadataDialogueWindow').close();
@@ -1124,7 +1216,7 @@ Curriki.module.addpath.init = function(){
 						},{
 							 text:_('add.setrequiredinfo.part2.next.button')
 							,id:'nextbutton'
-							,cls:'button button-confirm'
+							,cls:'button next'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -1230,7 +1322,7 @@ Curriki.module.addpath.init = function(){
 								},{
 									 border:false
 									,xtype:'radiogroup'
-									,width:588
+									,width:'90%'
 									,columns:[.95]
 									,vertical:true
 									,defaults:{
@@ -1285,60 +1377,6 @@ Curriki.module.addpath.init = function(){
 									 xtype:'checkbox'
 									,name:'hidden_from_search'
 									,boxLabel:_('sri.hidden_from_search_after')
-								}]
-
-		// Keywords
-							},{
-								 border:false
-								,items:[{
-									 xtype:'box'
-									,autoEl:{
-										 tag:'div'
-										,id:'metadata-keywords'
-										,cls:'information-header'
-										,children:[{
-											 tag:'span'
-											,id:'metadata-keywords-title'
-											,cls:'metadata-title'
-											,html:_('sri.keywords_title')
-										},{
-											 tag:'img'
-											,id:'metadata-keywords-info'
-											,cls:'metadata-tooltip'
-											,src:Curriki.ui.InfoImg
-											,qtip:_('sri.keywords_tooltip')
-										}]
-									}
-								},{
-									 xtype:'box'
-									,autoEl:{
-										 tag:'div'
-										,html:_('sri.keywords_txt')
-										,cls:'directions'
-									}
-								},{
-									 xtype:'textfield'
-									,id:'metadata-keywords-entry'
-									,name:'keywords'
-									,emptyText:_('sri.keywords.empty_msg')
-									,hideLabel:true
-									,width:'60%'
-									,listeners:{
-										render:function(comp){
-											comp.findParentByType('apSRI2').on('show', function() {
-												if (!Ext.isEmpty(Curriki.current.metadata)) {
-													var md = Curriki.current.metadata;
-
-													if (!Ext.isEmpty(md.keywords)){
-														if (Ext.isArray(md.keywords)){
-															md.keywords = md.keywords.join(' ');
-														}
-														Ext.getCmp('metadata-keywords-entry').setValue(md.keywords);
-													}
-												}
-											})
-										}
-									}
 								}]
 
 		// Language
@@ -1460,9 +1498,7 @@ Curriki.module.addpath.init = function(){
 										}
 									}
 								}]
-
-		// License Deed
-							},{
+							},{ // Licence Deed
 								 border:false
 								,items:[{
 									 xtype:'box'
@@ -1503,16 +1539,16 @@ Curriki.module.addpath.init = function(){
 									,hideLabel:true
 									,width:'75%'
 									,mode:'local'
-									,store:Curriki.data.license.store
-									,displayField:'license'
+									,store:Curriki.data.licence.store
+									,displayField:'licence'
 									,valueField:'id'
 									,typeAhead:true
 									,triggerAction:'all'
 									,emptyText:_('sri.license_type_empty_msg')
 									,selectOnFocus:true
 									,forceSelection:true
-									,value:Curriki.data.license.initial
-										?Curriki.data.license.initial
+									,value:Curriki.data.licence.initial
+										?Curriki.data.licence.initial
 										:undefined
 									,listeners:{
 										render:function(comp){
@@ -1527,9 +1563,31 @@ Curriki.module.addpath.init = function(){
 											})
 										}
 									}
-								}]
+								}
+                            ]
 
-						}]
+						}, { // grant_curriki_commercial_license
+                        border:false,
+                        items:[{ xtype:'checkbox',name:'grantCurrikiCommercialLicense',
+                                boxLabel:_("sri.license_type_license_to_curriki"),
+                                checked: true,
+                                id: 'metadata-grantCurrikiCommercialLicense-entry',
+                                listeners:{
+                                    render:function(comp){
+                                        comp.findParentByType('apSRI2').on('show', function() {
+                                            if (!Ext.isEmpty(Curriki.current.metadata)) {
+                                                var md = Curriki.current.metadata;
+                                                if (!Ext.isEmpty(md.grantCurrikiCommercialLicense) && md.grantCurrikiCommercialLicense=="off"){
+                                                    Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').setVisible(false);
+                                                    Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').originalValue=false;
+                                                    Ext.getCmp('metadata-grantCurrikiCommercialLicense-entry').setValue(false);
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+								}]
+                        }]
 					}]
 				});
 
@@ -1557,6 +1615,9 @@ Curriki.module.addpath.init = function(){
 			if ("string" === typeof Curriki.current.sri1.educational_level2){
 				Curriki.current.sri1.educational_level2 = Curriki.current.sri1.educational_level2.split(',');
 			}
+            if("undefined"==typeof(Curriki.current.sri2.grantCurrikiCommercialLicense)) {
+                Curriki.current.sri2.grantCurrikiCommercialLicense = "off";
+            }
 
 			var metadata = Curriki.current.sri1;
 			Ext.apply(metadata, Curriki.current.sri2);
@@ -1565,12 +1626,12 @@ Curriki.module.addpath.init = function(){
 				Curriki.current.asset.assetPage,
 				metadata,
 				function(newMetadata){
-console.log("SetMD CB: ", newMetadata);
+					console.log("SetMD CB: ", newMetadata);
 					Curriki.assets.Publish(
 						Curriki.current.asset.assetPage,
 						Curriki.current.publishSpace,
 						function(newAsset){
-console.log("Published CB: ", newAsset);
+							console.log("Published CB: ", newAsset);
 							Curriki.current.assetName = newAsset.assetPage;
 							Curriki.current.asset.assetPage = newAsset.assetPage;
 							Curriki.current.asset.assetType = newAsset.assetType;
@@ -1582,7 +1643,7 @@ console.log("Published CB: ", newAsset);
 								Curriki.assets.CreateSubasset(
 									 Curriki.current.parentAsset
 									,Curriki.current.assetName
-									,-1
+									,(Curriki.current.drop&&(('undefined' != typeof Curriki.current.drop.targetIndex)?Curriki.current.drop.targetIndex:-1))
 									,AddPath.ShowDone()
 								);
 							} else {
@@ -1625,7 +1686,7 @@ console.log("Published CB: ", newAsset);
 					// Final message for add is per E
 
 					// Start Content Tree View screen
-					if (Curriki.data.user.collectionChildren.length > 0
+					if (true || Curriki.data.user.collectionChildren.length > 0
 						|| Curriki.data.user.groupChildren.length > 0){
 						handler = function(e,evt){
 							Curriki.current.flow = 'E';
@@ -1674,7 +1735,7 @@ console.log("Published CB: ", newAsset);
 
 			return {
 				 text:text
-				,cls:'link'
+				,cls:'button link'
 				,handler:handler
 				,hidden:disabled
 			};
@@ -1709,6 +1770,15 @@ console.log("Published CB: ", newAsset);
 					msg = '<p>'+_('add.finalmessage.text_'+name+'_success', msgArgs)+'</p>';
 					break;
 
+				case 'Copy2':
+					var msgArgs = [
+						Curriki.current.copyOfTitle||'UNKNOWN'
+						,Curriki.current.assetTitle||(Curriki.current.sri1&&Curriki.current.sri1.title)||(Curriki.current.asset&&Curriki.current.asset.title)||'UNKNOWN'
+						,Curriki.current.parentTitle||'UNKNOWN'
+					];
+					msg = '<p>'+_('add.finalmessage.text_'+name+'_success', msgArgs)+'</p>';
+					break;
+
 				default:
 					msg = '<p>'+_('add.finalmessage.text_'+name+'_success')+'</p>';
 					break;
@@ -1735,7 +1805,6 @@ console.log("Published CB: ", newAsset);
 			return {
 					 text:_('add.finalmessage.close.button')
 					,id:'closebutton'
-					,cls:'button button-confirm'
 					,listeners:{
 						'click':{
 							 fn:function(e,evt){
@@ -1948,6 +2017,24 @@ console.log("Published CB: ", newAsset);
 		});
 		Ext.reg('apDoneCopy', AddPath.DoneCopy);
 
+		AddPath.DoneCopy2 = Ext.extend(Curriki.ui.dialog.Messages, {
+			  initComponent:function(){
+				Ext.apply(this, {
+					 title:_('add.finalmessage.title_copiedtolocation')
+					,cls:'addpath addpath-done resource resource-add'
+					,bbar:[
+						 AddPath.FinalLink('view'),'->'
+						,AddPath.CloseDone(this)
+					]
+					,items:[
+						 AddPath.DoneMessage('copiedtolocation')
+					]
+				});
+				AddPath.DoneCopy2.superclass.initComponent.call(this);
+			}
+		});
+		Ext.reg('apDoneCopy2', AddPath.DoneCopy2);
+
 
 
 		AddPath.ShowDone = function(){
@@ -1958,14 +2045,40 @@ console.log("Published CB: ", newAsset);
 			var pageCreated = (Curriki.current.asset&&Curriki.current.asset.assetPage)||Curriki.current.assetName;
 			Curriki.logView('/features/resources/add/'+Curriki.current.flow+Curriki.current.flowFolder+'/'+((Curriki.current.asset&&Curriki.current.asset.assetType)||Curriki.current.assetType||'UNKNOWN')+'/'+pageCreated.replace('.', '/'));
 
-			Curriki.init(function(){
+			var displayDone = function(){
 				var p = Ext.ComponentMgr.create({
 					 xtype:'apDone'+Curriki.current.flow+Curriki.current.flowFolder
 					,id:'done-dialogue'
 				});
 				p.show();
 				Ext.ComponentMgr.register(p);
-			});
+			};
+
+			Ext.ns('Curriki.settings');
+			Curriki.settings.localCollectionFetch = true;
+
+			switch (Curriki.current.flow) {
+				// If flow in [ABDRIO],Copy then fetch collections for add link
+				case 'A':
+				case 'B':
+				case 'D':
+				case 'R':
+				case 'I':
+				case 'O':
+				case 'Copy':
+					Curriki.init(function(){
+						//Curriki.data.user.GetCollections(function(){
+							displayDone();
+						//});
+					});
+					break;
+
+				default:
+					Curriki.init(function(){
+						displayDone();
+					});
+					break;
+			}
 		}
 
 
@@ -1974,32 +2087,34 @@ console.log("Published CB: ", newAsset);
 		AddPath.ChooseLocation = Ext.extend(Curriki.ui.dialog.Messages, {
 			  initComponent:function(){
 				var topChildren = [];
-				if (Curriki.data.user.collectionChildren.length>0){
+				//if (Curriki.data.user.collectionChildren.length>0){
 					topChildren.push({
-					 text:_('panels.myCurriki.myCollections')
-					,id:'ctv-drop-tree-collection-root'
-					,cls:'ctv-top ctv-header ctv-collections'
-					,leaf:false
-					,allowDrag:false
-					,allowDrop:true // Needed to auto-expand on hover
-					,disallowDropping:true // Disable drop on this node
-					,expanded:(Curriki.data.user.collectionChildren.length < 4)
-					,children:Curriki.data.user.collectionChildren
+						 text:_('panels.myCurriki.myCollections')
+						,id:'ctv-drop-tree-collection-root'
+						,cls:'ctv-top ctv-header ctv-collections'
+						,leaf:false
+						,allowDrag:false
+						,allowDrop:true // Needed to auto-expand on hover
+						,disallowDropping:true // Disable drop on this node
+						,expanded:false //(Curriki.data.user.collectionChildren.length < 4)
+						//,children:Curriki.data.user.collectionChildren
+						,currikiNodeType:'myCollections'
 					});
-				}
-				if (Curriki.data.user.groupChildren.length>0){
+				//}
+				//if (Curriki.data.user.groupChildren.length>0){
 					topChildren.push({
-					 text:_('panels.myCurriki.myGroups')
-					,id:'ctv-drop-tree-group-root'
-					,cls:'ctv-top ctv-header ctv-groups'
-					,leaf:false
-					,allowDrag:false
-					,allowDrop:true // Needed to auto-expand on hover
-					,disallowDropping:true // Disable drop on this node
-					,expanded:(Curriki.data.user.groupChildren.length < 4)
-					,children:Curriki.data.user.groupChildren
+						 text:_('panels.myCurriki.myGroups')
+						,id:'ctv-drop-tree-group-root'
+						,cls:'ctv-top ctv-header ctv-groups'
+						,leaf:false
+						,allowDrag:false
+						,allowDrop:true // Needed to auto-expand on hover
+						,disallowDropping:true // Disable drop on this node
+						,expanded:false //(Curriki.data.user.groupChildren.length < 4)
+						//,children:Curriki.data.user.groupChildren
+						,currikiNodeType:'myGroups'
 					});
-				}
+				//}
 
 				Ext.apply(this, {
 					 id:'ChooseLocationDialogueWindow'
@@ -2039,7 +2154,7 @@ console.log("Published CB: ", newAsset);
 						,bbar:['->',{
 							 text:_('add.chooselocation.cancel.button')
 							,id:'cancelbutton'
-							,cls:'button button-cancel mgn-rt'
+							,cls:'button cancel'
 							,listeners:{
 								click:{
 									 fn: function(){
@@ -2052,7 +2167,7 @@ console.log("Published CB: ", newAsset);
 						},{
 							 text:_('add.chooselocation.next.button')
 							,id:'nextbutton'
-							,cls:'button button-confirm'
+							,cls:'button next'
 							,disabled:true
 							,listeners:{
 								click:{
@@ -2172,7 +2287,7 @@ console.log("Published CB: ", newAsset);
 											var nextSibling = targetNode.nextSibling;
 											var targetIndex = -1;
 											if (nextSibling){
-												targetIndex = nextSibling.attributes.order||-1;
+												targetIndex = ('undefined' != typeof nextSibling.attributes.order)?nextSibling.attributes.order:-1;
 											}
 											Curriki.current.drop = {
 												 parentPage:parentNodeId
@@ -2223,6 +2338,287 @@ console.log("Published CB: ", newAsset);
 			}
 		});
 		Ext.reg('apLocation', AddPath.ChooseLocation);
+
+
+
+
+		AddPath.ChooseCopyLocation = Ext.extend(Curriki.ui.dialog.Messages, {
+			  initComponent:function(){
+				var topChildren = [];
+                  // data.user.collectionChildren is loaded later, same for groups, assume there might be something
+				//if (true || Curriki.data.user.collectionChildren.length>0){
+					topChildren.push({
+					 text:_('panels.myCurriki.myCollections')
+					,id:'ctv-drop-tree-collection-root'
+					,cls:'ctv-top ctv-header ctv-collections'
+					,leaf:false
+					,allowDrag:false
+					,allowDrop:true // Needed to auto-expand on hover
+					,disallowDropping:true // Disable drop on this node
+					,expanded:false //(Curriki.data.user.collectionChildren.length < 4)
+					//,children:Curriki.data.user.collectionChildren
+                    ,currikiNodeType:'myCollections'
+					});
+				//}
+				//if (true || Curriki.data.user.groupChildren.length>0){
+					topChildren.push({
+					 text:_('panels.myCurriki.myGroups')
+					,id:'ctv-drop-tree-group-root'
+					,cls:'ctv-top ctv-header ctv-groups'
+					,leaf:false
+					,allowDrag:false
+					,allowDrop:true // Needed to auto-expand on hover
+					,disallowDropping:true // Disable drop on this node
+					,expanded:false //(Curriki.data.user.groupChildren.length < 4)
+					//,children:Curriki.data.user.groupChildren
+                    ,currikiNodeType:'myGroups'
+					});
+				//}
+
+				Ext.apply(this, {
+					 id:'ChooseLocationDialogueWindow'
+					,title:_('add.chooselocation.copy.title')
+					,cls:'addpath addpath-ctv resource resource-add'
+					,autoScroll:false
+					,width:634
+					,items:[{
+						 xtype:'panel'
+						,id:'guidingquestion-container'
+						,cls:'guidingquestion-container'
+						,items:[{
+							 xtype:'box'
+							,autoEl:{
+								 tag:'div'
+								,html:_('add.chooselocation.copy.guidingquestion', (Curriki.current.copyOfTitle||Current.copyOf||'UNKNOWN'))
+								,cls:'guidingquestion'
+							}
+						},{
+							 xtype:'box'
+							,autoEl:{
+								 tag:'div'
+								,html:_('add.chooselocation.copy.instruction')
+								,cls:'instruction'
+							}
+						}]
+					},{
+						 xtype:'form'
+						,id:'ChooseLocationDialoguePanel'
+						,formId:'ChooseLocationDialogueForm'
+						,labelWidth:25
+						,autoScroll:false
+						,border:false
+						,defaults:{
+							 labelSeparator:''
+						}
+						,bbar:['->',{
+							 text:_('add.chooselocation.copy.cancel.button')
+							,id:'cancelbutton'
+							,cls:'button cancel'
+							,listeners:{
+								click:{
+									 fn: function(){
+										if (Ext.isEmpty(Curriki.current.drop) || confirm(_('add.chooselocation.copy.error'))) {
+											this.close();
+											window.location.href = Curriki.current.cameFrom;
+										}
+									}
+									,scope:this
+								}
+							}
+						},{
+							 text:_('add.chooselocation.copy.next.button')
+							,id:'nextbutton'
+							,cls:'button next'
+							,listeners:{
+								click:{
+									 fn: function(){
+										if (!Ext.isEmpty(Curriki.current.drop)){
+											Curriki.current.publishSpace = Curriki.current.drop.parentPage.replace(/\..*/, '');
+											Curriki.current.parentAsset = Curriki.current.drop.parentPage;
+										} else {
+											Curriki.current.flow = 'Copy';
+										}
+										next = 'apSRI1';
+										Curriki.assets.CopyAsset(
+											Curriki.current.copyOf,
+											Curriki.current.publishSpace,
+											function(asset){
+													console.log("CopyAsset CB: ", asset);
+													Curriki.current.asset = asset;
+													callback = function(){
+														var dlg = Ext.getCmp('ChooseLocationDialogueWindow');
+														if (dlg) {
+															dlg.close();
+														}
+														AddPath.ShowNextDialogue(next);
+													};
+													Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+														Curriki.current.metadata = metadata;
+														callback();
+													});
+											}
+										);
+									}
+									,scope:this
+								}
+							}
+						}]
+						,listeners:{
+						}
+						,items:[{
+		// DRAG BOX
+							 xtype:'panel'
+							,id:'resource-pickup'
+							,border:false
+							,items:[{
+								 xtype:'box'
+								,autoEl:{
+									 tag:'div'
+									,html:_('add.chooselocation.copy.instruction_short')
+									,cls:'instruction'
+								}
+							},{
+								 xtype:'treepanel'
+								,loader: new Curriki.ui.treeLoader.Base()
+								,id:'ctv-from-tree-cmp'
+								,useArrows:true
+								,autoScroll:false
+								,border:false
+								,cls:'ctv-from-tree'
+								,animate:true
+								,enableDrag:true
+								,rootVisible:false
+								,root: new Ext.tree.AsyncTreeNode({
+									 text:_('add.chooselocation.pickup_root')
+									,id:'ctv-drag-tree-root'
+									,cls:'ctv-drag-root'
+									,leaf:false
+									,hlColor:'93C53C'
+									,hlDrop:false
+									,allowDrag:false
+									,allowDrop:false
+									,expanded:true
+									,children:[{
+										 text:Curriki.current.copyOfTitle||'UNKNOWN'
+										,id:'ctv-target-node'
+										,assetName:Curriki.current.copyOf
+										,cls:'ctv-target ctv-resource resource-'+(Curriki.current.copyOfAssetType||'UNKNOWN')
+										,leaf:true
+									}]
+								})
+							}]
+
+		// DROP TREE
+						},{
+							 xtype:'panel'
+							,id:'resource-drop'
+							,border:false
+							,items:[{
+								 xtype:'treepanel'
+								,loader: new Curriki.ui.treeLoader.Base()
+								,id:'ctv-to-tree-cmp'
+								,autoScroll:true
+								,useArrows:true
+								,border:false
+								,hlColor:'93C53C'
+								,hlDrop:false
+								,cls:'ctv-to-tree'
+								,animate:true
+								,enableDD:true
+								,ddScroll:true
+								,containerScroll:true
+								,rootVisible:false
+								,listeners:{
+									nodedragover:{
+										fn: function(dragOverEvent){
+											var draggedNodeId = dragOverEvent.dropNode.attributes.assetName;
+											var parentNode = dragOverEvent.target;
+											if (dragOverEvent.point !== 'append') {
+												parentNode = parentNode.parentNode;
+												if (Ext.isEmpty(parentNode)) {
+													return false;
+												}
+											}
+
+											if (!Ext.isEmpty(parentNode.attributes.disallowDropping) && (parentNode.attributes.disallowDropping === true)) {
+												dragOverEvent.cancel = true;
+												return false;
+											}
+
+											var cancel = false;
+											while (!Ext.isEmpty(parentNode) && !cancel){
+												if (parentNode.id === draggedNodeId) {
+													cancel = true;
+													dragOverEvent.cancel = true;
+													return false;
+												} else {
+													parentNode = parentNode.parentNode;
+												}
+											}
+										}
+										,scope:this
+									}
+									,nodedrop:{
+										fn: function(dropEvent){
+											var targetNode = Ext.getCmp('ctv-to-tree-cmp').getNodeById('ctv-target-node');
+											var parentNode = targetNode.parentNode;
+											var parentNodeId = parentNode.id;
+											var nextSibling = targetNode.nextSibling;
+											var targetIndex = -1;
+											if (nextSibling){
+												targetIndex = ('undefined' != typeof nextSibling.attributes.order)?nextSibling.attributes.order:-1;
+											}
+											Curriki.current.drop = {
+												 parentPage:parentNodeId
+												,targetIndex:targetIndex
+											};
+											Curriki.current.parentTitle = parentNode.text;
+											AddPath.EnableNext();
+										}
+										,scope:this
+									}
+									,expandnode:{
+										fn: function(node){
+											var wnd = this;
+											wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
+										}
+										,scope:this
+									}
+									,render:function(tPanel){
+//TODO: Try to generalize this (for different # of panels)
+										tPanel.ownerCt.ownerCt.ownerCt.on(
+											'bodyresize'
+											,function(wPanel, width, height){
+												if (height === 'auto') {
+													tPanel.setHeight('auto');
+												} else {
+													tPanel.setHeight(wPanel.getInnerHeight()-(wPanel.findByType('panel')[0].getBox().height+wPanel.findByType('panel')[0].el.getMargins('tb')+wPanel.findByType('panel')[1].getBox().height+wPanel.items.get(1).getFrameHeight()+wPanel.findByType('panel')[1].el.getMargins('tb')+(Ext.isIE?AddPath.ie_size_shift:0)+(Ext.isMac?(2*AddPath.ie_size_shift):0)));
+												}
+											}
+										);
+									}
+								}
+								,root: new Ext.tree.AsyncTreeNode({
+									 text:_('add.chooselocation.drop_root')
+									,id:'ctv-drop-tree-root'
+									,cls:'ctv-drop-root'
+									,leaf:false
+									,allowDrag:false
+									,allowDrop:false
+									,expanded:true
+									,children:topChildren
+								})
+							}]
+
+						}]
+					}]
+				});
+				AddPath.ChooseCopyLocation.superclass.initComponent.call(this);
+			}
+		});
+		Ext.reg('apCopyLocation', AddPath.ChooseCopyLocation);
+
+
 
 		AddPath.PostToTemplate = function(templateUrl){
 			Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
@@ -2278,6 +2674,182 @@ console.log("Published CB: ", newAsset);
 					}
 				});
 			});
+		}
+
+		AddPath.UploadDlg = Ext.extend(Curriki.ui.dialog.Actions, {
+			initComponent:function(){
+				Ext.apply(this, {
+					title: _('add.video.uploading.dialog.title')
+					,cls:'addpath addpath-upload resource resource-add'
+					,id:'upload-dlg'
+					,width:254
+					,minWidth:254
+					,items:[{
+						 xtype:'panel'
+						,html: _('add.video.uploading.dialog.sub.title')
+ 					},{
+						 xtype:'progress'
+						,id:'upload-progress-bar'
+						,text:'0%'
+					}]
+					,bbar:[{
+						 text:_('add.video.uploading.dialog.cancel.button')
+						,id:'upload-cancel-button'
+						,cls:'button cancel btn-cancel'
+						,listeners:{
+							click:{
+								 fn: function(){
+										Ext.Msg.show({
+											title:_('add.video.uploading.dialog.cancel.title')
+											,msg:_('add.video.uploading.dialog.cancel.txt')
+											,buttons:{
+												ok:_('add.video.uploading.dialog.ok.button')
+												,cancel:_('add.video.uploading.dialog.cancel.button')
+											}
+											,fn:function(buttonId){
+												if (buttonId == 'yes' || buttonId == 'ok') {
+													if (Curriki.current.videoStatusTask) {
+														Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+													}
+													window.location.href = Curriki.current.cameFrom;
+													this.close();
+													Curriki.hideLoadingMask = false;
+												}
+											}
+											,closable:false
+											,scope:this
+										});
+										var btns = Ext.Msg.getDialog().buttons;
+										btns[0].addClass('btn-next'); // OK
+										btns[1].addClass('btn-next'); // YES
+										btns[2].addClass('btn-cancel'); // NO
+										btns[3].addClass('btn-cancel'); // CANCEL
+										Ext.Msg.getDialog().body.findParent('div.x-window-mc', 2, true).setStyle('background-color', '#FFFFFF');
+									}
+								,scope:this
+							}
+						}
+					}]
+				});
+				AddPath.UploadDlg.superclass.initComponent.call(this);
+			}
+		});
+		Ext.reg('apUploadDlg', AddPath.UploadDlg);
+
+		AddPath.PostVideo = function(callback, formId, uploadCompleteCallback){
+			Curriki.current.videoCompleteCallback = callback;
+			if (Ext.isEmpty(formId)) {
+				formId = 'addDialogueForm';
+			}
+			if (Ext.isEmpty(uploadCompleteCallback)) {
+				Curriki.current.uploadCompleteCallback = function(success) {
+					Curriki.assets.CreateAsset(Curriki.current.parentAsset, Curriki.current.publishSpace, function(asset){
+						Curriki.current.asset = asset;
+
+						Curriki.current.videoId = success.id;
+
+						Curriki.current.videoCompleteCallback(asset);
+					});
+				}
+			} else {
+				Curriki.current.uploadCompleteCallback = uploadCompleteCallback;
+			}
+
+			Curriki.current.uuid = Math.uuid(21);
+			Curriki.hideLoadingMask = true;
+			Curriki.current.uploading = true;
+			Curriki.current.vu_last_update = 0;
+			Curriki.ui.show('apUploadDlg');
+
+			// Submit form to post file
+			Ext.Ajax.request({
+				url:'http://'+_('MEDIAHOST')+'/cgi/upload.cgi?key='+Curriki.current.uuid
+				,isUpload:true
+				,form:formId
+				,headers: {
+					'Accept':'text/html'
+				}
+				,callback:function(options, success, response){
+					if (success) {
+						// Empty, taken care of via jsonp callback
+					} else {
+						console.log('Upload failed', options, response);
+						alert(_('add.servertimedout.message.text'));
+					}
+				}
+			});
+
+			// Watch status of uploaded file
+			Curriki.current.videoStatusRequest = function() {
+				Ext.ux.JSONP.request('http://'+_('MEDIAHOST')+'/upload', {
+					callbackKey: 'callback',
+					params: {
+						key: Curriki.current.uuid,
+						r: Math.uuid(21)
+					},
+					callback: Curriki.current.videoJsonCallback
+				});
+			};
+
+			Curriki.current.videoSuccessCallback = function(success){
+				Curriki.current.uploadCompleteCallback(success);
+			};
+
+			Curriki.current.videoErrorCallback = function(error){
+				console.log('Video Upload Error', error);
+				Ext.Msg.alert(_('add.video.cannot.process.title'), _('add.video.cannot.process.txt'));
+				var btns = Ext.Msg.getDialog().buttons;
+				btns[0].addClass('btn-next'); // OK
+				btns[1].addClass('btn-next'); // YES
+				btns[2].addClass('btn-cancel'); // NO
+				btns[3].addClass('btn-cancel'); // CANCEL
+				Ext.Msg.getDialog().body.findParent('div.x-window-mc', 2, true).setStyle('background-color', '#FFFFFF');
+			};
+
+			Curriki.current.videoJsonCallback = function(data){
+				if (!Curriki.current.uploading) {
+					return;
+				}
+
+				if (data.complete) {
+					if (data.error || data.success) {
+						Curriki.current.uploading = false;
+						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);
+						Curriki.hideLoadingMask = false;
+						Ext.getCmp('upload-dlg').hide();
+
+						if (data.error) {
+							Curriki.current.videoErrorCallback(data.error);
+							return;
+						} else if (data.success) {
+							Curriki.current.videoSuccessCallback(data.success);
+							return;
+						}
+					}
+				} else {
+					var now = new Date().getTime();
+					if (now < Curriki.current.vu_last_update) {
+						return;
+					}
+					Curriki.current.vu_last_update = now;
+					var current = data.current||0;
+					var total = data.total||0;
+					var percent = 0;
+					var ptext = '%';
+					if (total&&current) {
+						percent = current/total;
+					}
+					ptext = Math.floor(percent*100) + '%';
+					Ext.getCmp('upload-progress-bar').updateProgress(percent, ptext);
+				}
+			};
+
+			var task = {
+				run: Curriki.current.videoStatusRequest
+				,interval: 3000
+			};
+
+			Curriki.current.videoStatusTask = Ext.TaskMgr.start(task);
 		}
 
 		AddPath.AddSubasset = function(callback){
@@ -2339,31 +2911,36 @@ console.log("Published CB: ", newAsset);
 					break;
 
 				case 'video_upload':
-				case 'video_capture':
-					Curriki.current.videoId = allValues[selected+'-entry-value'];
-
+				//case 'video_capture':
 					next = 'apSRI1';
-					Curriki.assets.CreateAsset(
-						Curriki.current.parentAsset,
-						Curriki.current.publishSpace,
-						function(asset){
-console.log("CreateAsset (video) CB: ", asset);
-							Curriki.current.asset = asset;
-
-							Curriki.assets.CreateVIDITalk(
-								asset.assetPage,
-								Curriki.current.videoId,
-								function(videoInfo){
-console.log("Created viditalk CB: ", videoInfo);
-									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
-									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-										Curriki.current.metadata = metadata;
-										callback();
-									});
-								}
-							)
+					// Check for "valid" extensions before continuing
+					// TODO: Move this list into a translation key value
+					var exts = "asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg";
+					var re = new RegExp("^.+\\.("+exts+")$", 'i');
+					var pName = Ext.getCmp('video_upload-entry-box').getValue();
+					if (! re.test(pName)) {
+						if (!confirm(_('add.video.uploading.unknown.file.txt'))) {
+							return false;
 						}
-					);
+					}
+
+					AddPath.PostVideo(function(asset){
+						console.log("CreateAsset (video) CB: ", asset);
+						Curriki.current.asset = asset;
+
+						Curriki.assets.CreateVIDITalk(
+							asset.assetPage,
+							Curriki.current.videoId,
+							function(videoInfo){
+								console.log("Created viditalk CB: ", videoInfo);
+								callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
+								Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+									Curriki.current.metadata = metadata;
+									callback();
+								});
+							}
+						)
+					});
 					return;
 					break;
 
@@ -2374,14 +2951,14 @@ console.log("Created viditalk CB: ", videoInfo);
 						Curriki.current.parentAsset,
 						Curriki.current.publishSpace,
 						function(asset){
-console.log("CreateAsset (link) CB: ", asset);
+							console.log("CreateAsset (link) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateExternal(
 								asset.assetPage,
 								Curriki.current.linkUrl,
 								function(linkInfo){
-console.log("Created Link CB: ", linkInfo);
+									console.log("Created Link CB: ", linkInfo);
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
 										Curriki.current.metadata = metadata;
@@ -2420,13 +2997,13 @@ console.log("Created Link CB: ", linkInfo);
 						Curriki.current.parentAsset,
 						Curriki.current.publishSpace,
 						function(asset){
-console.log("CreateAsset (folder) CB: ", asset);
+							console.log("CreateAsset (folder) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateFolder(
 								asset.assetPage,
 								function(assetInfo){
-console.log("Created Folder CB: ", assetInfo);
+									console.log("Created Folder CB: ", assetInfo);
 									Curriki.current.flowFolder = 'Folder';
 									callback = function(){AddPath.ShowNextDialogue(next, AddPath.AddSourceDialogueId);};
 									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
@@ -2446,13 +3023,13 @@ console.log("Created Folder CB: ", assetInfo);
 						Curriki.current.parentAsset,
 						Curriki.current.publishSpace,
 						function(asset){
-console.log("CreateAsset (collection) CB: ", asset);
+							console.log("CreateAsset (collection) CB: ", asset);
 							Curriki.current.asset = asset;
 
 							Curriki.assets.CreateCollection(
 								asset.assetPage,
 								function(assetInfo){
-console.log("Created Collection CB: ", assetInfo);
+									console.log("Created Collection CB: ", assetInfo);
 									callback = function(){AddPath.ShowNextDialogue(next);};
 									Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
 										Curriki.current.metadata = metadata;
@@ -2475,20 +3052,32 @@ console.log("Created Collection CB: ", assetInfo);
 					break;
 
 				case 'copy':
-					next = 'apSRI1';
-					Curriki.assets.CopyAsset(
-						Curriki.current.copyOf,
-						Curriki.current.publishSpace,
-						function(asset){
-console.log("CopyAsset CB: ", asset);
-								Curriki.current.asset = asset;
-								callback = function(){AddPath.ShowNextDialogue(next);};
-								Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
-									Curriki.current.metadata = metadata;
-									callback();
-								});
+					// Check if the user has any personal or group collections
+					// If so, determine location to put the copy
+					// If not, then use old procedure
+					//Curriki.data.user.GetCollections(function(){
+						if (true || Curriki.data.user.collectionChildren.length > 0
+							|| Curriki.data.user.groupChildren.length > 0){
+							Curriki.current.flow = 'Copy2';
+							next = 'apCopyLocation';
+							AddPath.ShowNextDialogue(next);
+						} else {
+							next = 'apSRI1';
+							Curriki.assets.CopyAsset(
+								Curriki.current.copyOf,
+								Curriki.current.publishSpace,
+								function(asset){
+										console.log("CopyAsset CB: ", asset);
+										Curriki.current.asset = asset;
+										callback = function(){AddPath.ShowNextDialogue(next);};
+										Curriki.assets.GetMetadata(asset.assetPage, function(metadata){
+											Curriki.current.metadata = metadata;
+											callback();
+										});
+								}
+							);
 						}
-					);
+					//});
 					return;
 					break;
 
@@ -2528,11 +3117,11 @@ console.log("CopyAsset CB: ", asset);
 	//
 	// 18. Add Template - Skip type selection and just show template selection
 
-console.log('Starting path: ', path);
+			console.log('Starting path: ', path);
 
 			// This should already have been handled, but do a simple test here
 			if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
-console.log('Not signed in:');
+				console.log('Not signed in:');
 				window.location.href='/xwiki/bin/login/XWiki/XWikiLogin?xredirect='+window.location.href;
 				return;
 			}
@@ -2612,8 +3201,10 @@ console.log('Not signed in:');
 					// Need titles for current and parent assets in Done Msg
 					// We should be getting the current one passed in
 					// Shows CTV
-console.log('Starting path:', Curriki.current.flow);
-					Curriki.ui.show('apLocation');
+					console.log('Starting path:', Curriki.current.flow);
+					//Curriki.data.user.GetCollections(function(){
+						Curriki.ui.show('apLocation');
+					//});
 					return;
 					break;
 
@@ -2680,7 +3271,11 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 		current.assetType = options.assetType||current.assetType;
 		current.parentTitle = options.parentTitle||current.parentTitle;
 		current.copyOfTitle = options.copyOfTitle||current.copyOfTitle;
+		current.copyOfAssetType = options.copyOfAssetType||current.copyOfAssetType;
 	}
+
+	Ext.ns('Curriki.settings');
+	Curriki.settings.localCollectionFetch = true;
 
 	Curriki.init(function(){
 		if (Ext.isEmpty(Curriki.data.user.me) || 'XWiki.XWikiGuest' === Curriki.data.user.me.username){
@@ -2712,11 +3307,13 @@ Curriki.module.addpath.initAndStart = function(fcn, options){
 
 		var copyOfFn;
 		if (!Ext.isEmpty(current.copyOf)
-		    && Ext.isEmpty(current.copyOfTitle)) {
+		    && (Ext.isEmpty(current.copyOfTitle)
+		        || Ext.isEmpty(current.copyOfAssetType))) {
 			// Get parent asset info
 			copyOfFn = function(){
 				Curriki.assets.GetAssetInfo(current.copyOf, function(info){
 					Curriki.current.copyOfTitle = info.title;
+					Curriki.current.copyOfAssetType = info.assetType;
 					parentFn();
 				});
 			}
@@ -2767,12 +3364,14 @@ Curriki.current = {
 			,assetType:null
 			,parentTitle:null
 			,copyOfTitle:null
+			,copyOfAssetType:null
 
 			,asset:null
 			,metadata:null
 
 			,selected:null
 			,fileName:null
+			,uuid:null
 			,videoId:null
 			,linkUrl:null
 

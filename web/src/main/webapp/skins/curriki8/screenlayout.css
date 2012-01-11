@@ -4,8 +4,13 @@ General layout of the page
 for @media screen displays
 
 **/
-
-
+/**
+body#body{
+  width: 100%; 
+  padding: 0;
+  margin: 0 ;  
+  min-width: 760px;
+}**/
 
 #xwikimaincontainer{
   margin: 0px 40px;
@@ -86,12 +91,8 @@ Global header
   font-size: 0.8em;
   font-weight: bold;
 }
-#globalmenu #headerlanguages a{
-  text-transform: capitalize;
-}
-#globalmenu span {
-  display: none;
-}
+#globalmenu #headerlanguages a{text-transform: capitalize;}
+#globalmenu span {display: none;}
 
 
 #company{
@@ -101,34 +102,15 @@ Global header
 }
 
 #companylogo{
-padding: 3em 0 0 40px;
+	padding: 3em 0 0 40px;
 }
 
 #globaldoctitle {
-  display: none; /*pour éviter pb dans IE -- a regler*/
+	display: none; /*pour éviter pb dans IE -- a regler*/
 }
 
 #globaldoctitle h1{
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -137,38 +119,31 @@ padding: 3em 0 0 40px;
 Space header, footer
 ---------------------------------------
 */
-#headerspace, #footerglobal {
-  height: 1.5em;
-}
-#footerglobal {
-  padding: 1em 0px;
-  text-align: center;
+#headerspace {
+	height: 1.5em;
 }
 
-#headerspace hr, #footerglobal hr{
-  display: none;
+#headerspace hr,
+#footerglobal hr {
+	display: none;
 }
-#breadcrumbs {
-  padding-left: 40px;
-}
+#breadcrumbs {padding-left: 40px;}
 * html #breadcrumbs {
   width: 100%;
 }
 
-#footerglobal, #headerspace {
-  clear:both;
-}
+#headerspace {clear:both;}
 #xwikilicence {
-  float: right;
-  clear: right;
-  margin-right: 5px;
+	float: right;
+	clear: right;
+	margin-right: 5px;
 }
 #xwikidocinfo {
-  width: 100%;
+	width: 100%;
 }
 #xwikiplatformversion {
-  float: left;
-  margin-left: 5px;
+	float: left;
+	margin-left: 5px;
 }
 /*
 ---------------------------------------
@@ -188,7 +163,7 @@ Content
   width: auto;
 }
 .main {
-  padding: 0; /** padding: 20px 40px 20px 40px; **/
+  padding: 20px 40px 20px 40px;
 }
 .leftsidecolumns{
   float: left;
@@ -798,7 +773,9 @@ td.label{
   border: 1px solid #DDD !important;
   overflow: hidden;
 }
-
+.center{
+  text-align: center;
+}
 
 .padded{
   padding: 8px;

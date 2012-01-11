@@ -23,6 +23,21 @@ form.init = function(){
 	form.ictCombo = function(config) {
 		Ext.apply(this, config);
 	};
+
+    // disable top search box, it triggers inconsistent searches, rather not use this double of function
+    var searchBox = $('curriki-searchbox');
+    if(!Ext.isEmpty(searchBox)) {
+        searchBox.setValue("...");
+        searchBox.setAttribute("curriki:deftxt","...");
+        searchBox.disable();
+        
+    }
+    var searchBoxGoBtn = $('searchbtn');
+    if(!Ext.isEmpty(searchBoxGoBtn)) {
+        searchBoxGoBtn.innerHTML="";
+    }
+
+
 	Ext.extend(form.ictCombo, Ext.util.Observable, {
 		init:function(combo){
 			Ext.apply(combo, {
@@ -115,11 +130,11 @@ form.init = function(){
 //			,form.helpPanel
 			,{
 				xtype:'fieldset'
-				,title:_('search.advanced.search.button')
+				,title:''// _('search.advanced.search.button')
 				,id:'search-advanced-'+modName
 				,autoHeight:true
-				,collapsible:true
-				,collapsed:true
+				,collapsible:false
+				,collapsed:false
 				,animCollapse:false
 				,border:true
 				,stateful:true
@@ -426,27 +441,25 @@ form.init = function(){
 
 	form.rowExpander.renderer = function(v, p, record){
 		var cls;
-		if (record.data.parents && record.data.parents.size() > 0) {
+        if (record.data.parents && record.data.parents.size() > 0) {
 			p.cellAttr = 'rowspan="2"';
 			cls = 'x-grid3-row-expander';
-//			return '<div class="x-grid3-row-expander">&#160;</div>';
 			return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />', cls, Ext.BLANK_IMAGE_URL, _('search.resource.icon.plus.rollover'));
 		} else {
 			cls = 'x-grid3-row-expander-empty';
-//			return '<div class="x-grid3-row-expander-empty">&#160;</div>';
 			return String.format('<img class="{0}" src="{1}" />', cls, Ext.BLANK_IMAGE_URL);
 		}
 	};
 
 	form.rowExpander.on('expand', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
-		var iconCol = Ext.DomQuery.selectNode('img[class=x-grid3-row-expander]', row);
+		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.minus.rollover')});
 	});
 
 	form.rowExpander.on('collapse', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
-		var iconCol = Ext.DomQuery.selectNode('img[class=x-grid3-row-expander]', row);
+		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.plus.rollover')});
 	});
 
@@ -454,10 +467,15 @@ form.init = function(){
 		Ext.apply(
 			form.rowExpander
 			,{
-//				tooltip:_('search.resource.icon.plus.title')
+                id:'score'
+                ,tooltip:_('search.resource.column.header.score.tooltip')
+                ,header: ' '
+                ,dataIndex: 'score'
+                ,width: 30
+                ,sortable:true
 			}
 		)
-		,{
+        ,{
 			id: 'title'
 			,header: _('search.resource.column.header.title')
 			,width: 164
@@ -578,11 +596,11 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-	  form.init();
-	});
+	form.init();
 });
 
 // TODO:  Register this tab somehow with the main form
 
 })();
+
+

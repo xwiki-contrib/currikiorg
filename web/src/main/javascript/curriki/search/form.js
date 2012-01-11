@@ -1,6 +1,6 @@
 // vim: ts=4:sw=4
 /*global Ext */
-/*global Curriki */
+/*global Curriki */ 
 /*global _ */
 
 (function(){
@@ -8,12 +8,13 @@ Ext.ns('Curriki.module.search.form');
 
 var Search = Curriki.module.search;
 var forms = Search.form;
+var NO_CONCURRENT_SEARCH_ERRMSG = "No concurrent searches on same tab.";
 
 Search.init = function(){
 	console.log('search: init');
 	if (Ext.isEmpty(Search.initialized)) {
 		if (Ext.isEmpty(Search.tabList)) {
-			Search.tabList = ['resource', 'group', 'member', 'blog', 'curriki'];
+			Search.tabList = ['resource', 'group', 'member', 'curriki'];
 		}
 
 		var comboWidth = 140;
@@ -24,6 +25,13 @@ Search.init = function(){
 			    && Ext.getCmp('search-termPanel').getForm) {
 				filterValues['all'] = Ext.getCmp('search-termPanel').getForm().getValues(false);
 			}
+
+            var t= $('search-termPanel-'+searchTab+'-terms').getValue();
+            if(t==_('search.text.entry.label')) t= "";
+            document.title = _("search.window.title." + searchTab, [t]);
+            var box = $('curriki-searchbox');
+            if(box.style) box.style.color='lightgrey';
+            box.value = t;
 
 			var pagerValues = {};
 
@@ -46,6 +54,13 @@ Search.init = function(){
 								if ("undefined" !== typeof filterValues[tab]["other"] && filterValues[tab]["other"] === '') {
 									delete(filterValues[tab]["other"]);
 								}
+                                // CURRIKI-5404: almost there: store sort in URL
+                                if (Ext.StoreMgr.lookup('search-store-' + tab).sortInfo) {
+                                    filterValues[tab]['sort'] = new Object();
+                                    filterValues[tab]['sort'].field = Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.field;
+                                    filterValues[tab]['sort'].dir= Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.direction;
+                                }
+
 							}
 						}
 
@@ -66,27 +81,39 @@ Search.init = function(){
 
 						// Do the search
 						if ((("undefined" === typeof onlyHistory) || (onlyHistory = false)) && (Ext.isEmpty(searchTab) || searchTab === tab)) {
-console.log('now util.doSearch', tab, pagerValues);
+                            // TODO: MSIE misery here
+                            // if(Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
+                            // Search['runningSearch' + tab] = true;
+                            if(Curriki.numSearches>10) return; Curriki.numSearches++;
+                            console.log('now util.doSearch (' + window.numSearches + ")", tab, pagerValues);
 							Search.util.doSearch(tab, (("undefined" !== typeof pagerValues[tab])?pagerValues[tab].c:0));
 						}
 					}
 				}
 			);
-
-			var token = {};
-			token['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
-			token['f'] = filterValues;
-			token['p'] = pagerValues;
+Curriki.numSearches = 0;
+			var stateObject = {};
+			stateObject['s'] = Ext.isEmpty(searchTab)?'all':searchTab;
+			stateObject['f'] = filterValues;
+			stateObject['p'] = pagerValues;
 			if (Ext.getCmp('search-tabPanel').getActiveTab) {
-				token['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
+				stateObject['t'] = Ext.getCmp('search-tabPanel').getActiveTab().id;
 			}
-			token['a'] = panelSettings;
+			stateObject['a'] = panelSettings;
 
 			var provider = new Ext.state.Provider();
-			var encodedToken = provider.encodeValue(token);
-			console.log('Saving History', {values: token});
-			Search.history.setLastToken(encodedToken);
-			Ext.History.add(encodedToken);
+			var encodedToken = provider.encodeValue(stateObject);
+			console.log('Saving History: '+ encodedToken );
+            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
+                Search.history.setLastToken(encodedToken);
+                var created = Ext.History.add(encodedToken,true);
+                if(created) console.log("-- created a new history frame.");
+            } else {
+                window.currikiHistoryStarted = true;
+                Search.history.setLastToken(encodedToken);
+                window.top.location.replace(window.location.pathname + "#" + encodedToken);
+                console.log("-- rather replaced history.");
+            }
 		};
 
 		Search.tabPanel = {
@@ -173,7 +200,6 @@ console.log('now util.doSearch', tab, pagerValues);
 					History.updateFromHistory(token);
 				}
 			} else {
-				// TODO:
 				// This is the initial default state.
 				// Necessary if you navigate starting from the
 				// page without any existing history token params
@@ -188,7 +214,9 @@ console.log('now util.doSearch', tab, pagerValues);
 		History.updateFromHistory = function(token){
 			var provider = new Ext.state.Provider();
 			var values = provider.decodeValue(token);
-			console.log('Got History', {token: token, values: values});
+            if(History.lastHistoryToken==token || escape(History.lastHistoryToken)==token) return;
+
+			console.log('Got History: ' + token, {values: values});
 
 			if (!Ext.isEmpty(values)) {
 				var filterValues = values['f'];
@@ -211,6 +239,8 @@ console.log('now util.doSearch', tab, pagerValues);
 					,function(tab){
 						console.log('Updating '+tab);
 						var module = Search.form[tab];
+                        // TODO: MSIE misery here
+                        // if(!Ext.isEmpty(Search) && Search['runningSearch' + tab]) throw NO_CONCURRENT_SEARCH_ERRMSG;
 						if (!Ext.isEmpty(module) && !Ext.isEmpty(module.doSearch) && !Ext.isEmpty(filterValues) && !Ext.isEmpty(filterValues[tab])) {
 							var filterPanel = Ext.getCmp('search-filterPanel-'+tab);
 							if (!Ext.isEmpty(filterPanel)) {
@@ -238,6 +268,12 @@ console.log('now util.doSearch', tab, pagerValues);
 												}
 											}
 										}
+                                        // attempt at CURRIKI-5404
+                                        if (filterValues[tab]['sort']) {
+                                            var sortInfo = filterValues[tab]['sort'];
+                                            if(sortInfo.field) Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.field = sortInfo['field'];
+                                            if(sortInfo.dir)   Ext.StoreMgr.lookup('search-store-' + tab).sortInfo.direction = sortInfo['dir'];
+                                        }
 									} catch(e) {
 										console.log('ERROR Updating '+tab, e);
 									}
@@ -321,9 +357,7 @@ Search.display = function(){
 
 Search.start = function(){
 	Ext.onReady(function(){
-	  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-		  Search.display();
-		});
+		Search.display();
 	});
 };
 })();

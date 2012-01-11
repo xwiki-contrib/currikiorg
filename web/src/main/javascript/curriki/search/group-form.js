@@ -308,9 +308,7 @@ form.init = function(){
 };
 
 Ext.onReady(function(){
-  Curriki.data.EventManager.on('Curriki.data:ready', function(){
-	  form.init();
-	});
+	form.init();
 });
 
 

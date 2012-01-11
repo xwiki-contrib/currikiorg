@@ -2,45 +2,91 @@
   * Footer: this will display the footer of Curriki
   * @author Curriki dev team
   *#
-<div id="footerglobal">
-<div class="footer-left">
-<a href="$xwiki.getURL("Main.PrivacyPolicy")">Privacy Policy</a> |
-<a href="$xwiki.getURL("Coll_curriki.CurrikiHelp")">Help</a> |
-<a href="$xwiki.getURL("Main.Contact")">Contact Us</a> |
-All content licensed <a href="http://creativecommons.org/about/licenses/meet-the-licenses">Creative Commons</a> | 
-<a href="$xwiki.getURL("Main.TOS")">Terms of Use</a> |
-<a href="$xwiki.getURL("Main.TOS")">Copyright</a>
-</div>
-<div class="footer-right">
-<a href="/xwiki/bin/view/Main/WebRss?xpage=rdf"><img src="$xwiki.getSkinFile("ico_rss.gif")" alt="RSS"/></a>
-<a href="#"><img src="$xwiki.getSkinFile("ico_xhtml_valid.gif")" alt="XHTML Valid"/></a>
-<a href="#"><img src="$xwiki.getSkinFile("ico_css_valid.gif")" alt="RSS Valid"/></a>
-<a href="http://www.xwiki.org"><img src="$xwiki.getSkinFile("ico_xwiki_powered.gif")" alt="XWiki Powered"/></a>
-</div>
-## TODO: check if we need this
-## <span class="clr">&nbsp;aaa</span>
-</div>
-## Additionnal Curriki Staf Footer
-#if("$!g_enable_STAF" != "" && $g_enable_STAF) ##{
-#template('staf.vm')
-#end ##}
-## Load addthis.com code
-#if("$!g_enable_ADDTHIS" != "" && $g_enable_ADDTHIS) ##{
-#set($ADDTHIS_acct = $!xwiki.getXWiki().Param('curriki.system.addthis', '0'))
-#if("$!ADDTHIS_acct" != "0" && "$!ADDTHIS_acct" != "") ## {
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+$xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
+    #if($request.session && $request.session.getAttribute("downloadSoon"))##
+      <script type="text/javascript">
+        // downloadSoon treatment here.
+        var downloadTarget = "$request.session.getAttribute("downloadSoon")";
+        var rawName = '${request.session.getAttribute("downloadSoon").replaceAll("/xwiki/bin/download/","").replaceAll(".force.*","")}';
+        window.nowDownload = function() {
+            window.clearInterval(window.downloader);
+            if(Ext.isIE) {
+                /*var elt = Ext.get("DownloadElement_" + '${request.session.getAttribute("downloadSoon").replaceAll("/xwiki/bin/download/","").replaceAll(".force.*","").replaceAll("[^a-zA-Z]","_")}');
+                if(elt) elt.focus(50); */
+                Curriki.ui.login.restoreScrollPos();
+            } else {
+                window.location.href=downloadTarget;
+                Curriki.logView('/Download/attachment/' + rawName);
+                // removed attribute: $request.session.removeAttribute("downloadSoon")
+            }
+        };
+        window.downloader = window.setInterval(window.nowDownload, 100);
+    </script>
+    #* <iframe width="3" height="3" src="$request.session.getAttribute("downloadSoon")"></iframe>
+    <!-- $request.session.removeAttribute("downloadSoon") --> *#
+    #end##
+<!-- 14:41 -->
+#if("XWiki.XWikiGuest"!="$!context.user" && $doc.web!="MyCurriki" && $doc.web!="XWiki" &&$doc.web!="Registration" && ""=="$!request.xpage" && "true"!="$!request.framed")
+    #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")<!-- userType: $userType -->
+    #if("corporation"==$userType)
+        #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")
+        <!-- lastCorpMembershipDonated = $lastCorpMembershipDonated -->
+        #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated<75)
+            #set($corpWarnedAtt=$!request.session.getAttribute("corpWarned"))
+            <!-- corpWarnedAtt = $corpWarnedAtt -->
+            #if("$!corpWarnedAtt"!="$!context.user")
+                <!-- corp-warning on $request.session.setAttribute("corpWarned",$context.user) -->
+                <script type="text/javascript">
+                    Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/DonateCorp?xpage=popup");
+                </script>
+            #else <!-- should not warn corp: corpWarnedAtt = "$!corpWarnedAtt" -->
+            #end
+        #else <!-- should not warn corp: lastCorpMembershipDonated = "$lastCorpMembershipDonated" -->
+        #end
+    #else <!-- should not warn corp: userType = $userType -->
+    #end
+#else <!-- should not warn corp: user is $context.user or doc.fullName is $doc.fullName -->
+#end
+
+
+#if($context.user==$!request.session.getAttribute("corpWarned"))#else
+    #if("XWiki.XWikiGuest"!=$context.user && "corporation"==$!xwiki.getDocument($context.user).get("XWiki.XWikiUsers").get("member_type"))
+        $request.session.addAttribute("corpWarned",$context.user)
+        <script type="text/javascript">Curriki.ui.login.popupIdentityAuthorization("/xwiki/bin/view/Registration/DonateCorp?xpage=popup")</script>
+    #end
+#end
+#if($g_enable_ADDTHIS && ("$!ADDTHIS_acct" != "0") && ("$!ADDTHIS_acct" != "") ) ## {
 <script type="text/javascript">
+//<![CDATA[
 var addthis_config = {
 	username: "${ADDTHIS_acct}",
 	ui_cobrand: 'Curriki',
-	services_exclude: 'print',
-	services_compact: 'email, digg, facebook, twitter, aim, delicious, google, linkedin, myspace, favorites, more',
+	services_exclude: 'print, favorites',
+	services_compact: '$msg.get("addThis.services_compact")',
 	ui_header_color: "#ffffff",
 	ui_header_background: "#4e83c7",
 	ui_delay:200,
 	ui_offset_top: 5,
 	ui_offset_left: 5
 }
+var addthis_share = {
+	templates: {
+		twitter: '$msg.get("addThis.templates.twitter")'
+	}
+}
+var addthis_curriki = document.createElement('script');
+addthis_curriki.setAttribute('type', 'text/javascript');
+document.getElementsByTagName('head')[0].appendChild(addthis_curriki);
+addthis_curriki.setAttribute('src', document.location.protocol + "//s7.addthis.com/js/250/addthis_widget.js");
+//]]>
 </script>
-<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
-#end ##}
 #end ##}

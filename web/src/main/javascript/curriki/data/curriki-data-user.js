@@ -12,83 +12,122 @@ Curriki.data.user = {
 	,collectionChildren:[]
 	,groupChildren:[]
 
+	,gotCollections:false
+
 	,json_prefix:'/xwiki/curriki/users/'
 	,user_try:0
 	,GetUserinfo:function(callback){
-		this.user_try++;
-		Ext.Ajax.request({
-			 url: this.json_prefix+'me'
-			,method:'GET'
-			,disableCaching:true
-			,headers: {
-				'Accept':'application/json'
+		if (!Ext.isEmpty(Curriki.global)
+		    && !Ext.isEmpty(Curriki.global.username)
+		    && !Ext.isEmpty(Curriki.global.fullname)) {
+			this.me = {
+				'username':Curriki.global.username
+				,'fullname':Curriki.global.fullname
+			};
+			if (Curriki.settings&&Curriki.settings.localCollectionFetch){
+				callback();
+			} else {
+				this.GetCollections(callback);
 			}
-			,scope:this
-			,success:function(response, options){
-				var json = response.responseText;
-				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot get user information');
-					if (this.user_try < 5){
-						this.GetUserinfo(callback);
-					} else {
-						console.error('Cannot get user information', response, options);
-						alert(_('add.servertimedout.message.text'));
-					}
-				} else {
-					this.user_try = 0;
-					this.me = o;
-					this.GetCollections(callback);
+		} else {
+			this.user_try++;
+			Ext.Ajax.request({
+				 url: this.json_prefix+'me'
+				,method:'GET'
+				,disableCaching:true
+				,headers: {
+					'Accept':'application/json'
 				}
-			}
-			,failure:function(response, options){
-				console.error('Cannot get user information', response, options);
-				alert(_('add.servertimedout.message.text'));
-			}
-		});
+				,scope:this
+				,success:function(response, options){
+					var json = response.responseText;
+					var o = json.evalJSON(true);
+					if(!o) {
+						console.warn('Cannot get user information');
+						if (this.user_try < 5){
+							this.GetUserinfo(callback);
+						} else {
+							console.error('Cannot get user information', response, options);
+							alert(_('add.servertimedout.message.text'));
+						}
+					} else {
+						this.user_try = 0;
+						this.me = o;
+						if (Curriki.settings&&Curriki.settings.localCollectionFetch){
+							callback();
+						} else {
+							this.GetCollections(callback);
+						}
+					}
+				}
+				,failure:function(response, options){
+					console.error('Cannot get user information', response, options);
+					alert(_('add.servertimedout.message.text'));
+				}
+			});
+		}
 	}
 
 	,collection_try:0
 	,GetCollections:function(callback){
-		this.collection_try++;
-		Ext.Ajax.request({
-			 url: this.json_prefix+this.me.username+'/collections'
-			,method:'GET'
-			,disableCaching:true
-			,headers: {
-				'Accept':'application/json'
-			}
-			,scope:this
-			,success:function(response, options){
-				var json = response.responseText;
-				var o = json.evalJSON(true);
-				if(!o) {
-					console.warn('Cannot read user\'s collection information');
-					if (this.collection_try < 5){
-						this.GetCollections(callback);
-					} else {
-						console.error('Cannot get user\'s collection information', response, options);
-						alert(_('add.servertimedout.message.text'));
-					}
-				} else {
-					this.collection_try = 0;
-					this.collections = o;
-					this.collectionChildren = this.CreateCollectionChildren();
-console.log('Collections: ', this.collectionChildren);
-					this.GetGroups(callback);
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
+		if (Curriki.data.user.gotCollections){
+			// Already have collections
+			callback();
+		} else {
+			this.collection_try++;
+			Ext.Ajax.request({
+				 url: this.json_prefix+this.me.username+'/collections'
+				,method:'GET'
+				,disableCaching:true
+				,headers: {
+					'Accept':'application/json'
 				}
-			}
-			,failure:function(response, options){
-				console.error('Cannot get user\'s collection information', response, options);
-				alert(_('add.servertimedout.message.text'));
-				this.collections = [];
-				this.GetGroups(callback);
-			}
-		});
+				,scope:this
+				,success:function(response, options){
+					var json = response.responseText;
+					var o = json.evalJSON(true);
+					if(!o) {
+						console.warn('Cannot read user\'s collection information');
+						if (this.collection_try < 5){
+							this.GetCollections(callback);
+						} else {
+							console.error('Cannot get user\'s collection information', response, options);
+							alert(_('add.servertimedout.message.text'));
+						}
+					} else {
+						this.collection_try = 0;
+						this.gotCollections = true;
+						this.collections = o;
+						this.collectionChildren = this.CreateCollectionChildren();
+	console.log('Collections: ', this.collectionChildren);
+						if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+							callback();
+						} else {
+							this.GetGroups(callback);
+						}
+					}
+				}
+				,failure:function(response, options){
+					Curriki.errors.fetchFailed = true;
+					console.error('Cannot get user\'s collection information', response, options);
+					alert(_('add.servertimedout.message.text'));
+					this.collections = [];
+					if (Curriki.settings&&Curriki.settings.fetchMyCollectionsOnly){
+						callback();
+					} else {
+						this.GetGroups(callback);
+					}
+				}
+			});
+		}
 	}
 
 	,group_try:0
 	,GetGroups:function(callback){
+		Ext.ns('Curriki.errors');
+		Curriki.errors.fetchFailed = false;
 		Ext.Ajax.request({
 			 url: this.json_prefix+this.me.username+'/groups'
 			,method:'GET'
@@ -105,9 +144,9 @@ console.log('Collections: ', this.collectionChildren);
 					if (this.group_try < 5){
 						this.GetGroups(callback);
 					} else {
+						//console.error('Cannot get user\'s group information', response, options);
+						//alert(_('add.servertimedout.message.text'));
 						throw {message: "GetUserinfo: Json object not found"};
-						console.error('Cannot get user\'s group information', response, options);
-						alert(_('add.servertimedout.message.text'));
 					}
 				} else {
 					this.group_try = 0;
@@ -117,6 +156,7 @@ console.log('Collections: ', this.collectionChildren);
 				}
 			}
 			,failure:function(response, options){
+				Curriki.errors.fetchFailed = true;
 				console.error('Cannot get user\'s group information', response, options);
 				alert(_('add.servertimedout.message.text'));
 				this.groups = [];
@@ -139,6 +179,7 @@ console.log('Collections: ', this.collectionChildren);
 			};
 
 			if (Ext.isArray(collection.children) && collection.children.length > 0) {
+/* Removed for CURRIKI-4874
 				var children = [];
 
 				collection.children.each(function(child){
@@ -170,6 +211,8 @@ console.log('Collections: ', this.collectionChildren);
 				});
 
 				colInfo.children = children;
+*/
+				colInfo.leaf = false;
 			} else {
 				colInfo.leaf = false;
 				colInfo.children = [];

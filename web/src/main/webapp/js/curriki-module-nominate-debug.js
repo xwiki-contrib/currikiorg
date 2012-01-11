@@ -65,7 +65,7 @@ Curriki.module.nominate.init = function() {
 						bbar : ['->', {
 							text : _('curriki.crs.nominate.cancel'),
 							id : 'cancelbutton',
-							cls : 'button button-cancel',
+							cls : 'button cancel',
 							listeners : {
 								click : {
 									fn : function() {
@@ -78,7 +78,7 @@ Curriki.module.nominate.init = function() {
 						}, {
 							text : _('curriki.crs.nominate.submit'),
 							id : 'submitbutton',
-							cls : 'submitbutton button button-confirm',
+							cls : 'submitbutton button next',
 							listeners : {
 								click : {
 									fn : function() {
@@ -238,36 +238,6 @@ Curriki.module.nominate.initAndStart = function(fcn, options) {
 
 		currentFn();
 	});
-}
+};
 
 Curriki.module.nominate.loaded = true;
-
-// Initialize "current" information
-Ext.ns('Curriki.current');
-Curriki.current = {
-	init : function() {
-		Ext.apply(this, {
-			assetName : null,
-			parentAsset : null,
-			publishSpace : null,
-			cameFrom : null,
-			flow : null,
-			flowFolder : '',
-			assetTitle : null,
-			assetType : null,
-			parentTitle : null,
-			asset : null,
-			metadata : null,
-			selected : null,
-			fileName : null,
-			videoId : null,
-			linkUrl : null,
-			sri1 : null,
-			sri1fillin : null,
-			sri2fillin : null,
-			submitToTemplate : null,
-			drop : null
-		});
-	}
-}
-Curriki.current.init();

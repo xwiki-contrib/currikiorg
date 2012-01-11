@@ -1,0 +1,54 @@
+#**
+ *  Asset standards tab view entry point. It is called from view.vm
+ *#
+#curriki_breadcrumb()
+#if($doc.getObject("CurrikiCode.AssetClass"))
+	#set($ok = $doc.use("CurrikiCode.AssetClass"))
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-$!viewer">
+	#asset_resourcefunctions($doc)
+	#asset_icontitle($doc)
+	#asset_attribution($doc)
+	#asset_rating($doc)
+	#asset_tabs($doc "standards")
+	#asset_edit_isoriginalauthorjs($doc false)    
+	<div id="asset-wrapper-inner">
+		<iframe src="" name="abStandardsFrame" id="abStandardsFrame" frameborder="0"></iframe>
+	</div> ##asset-wrapper-inner
+</div> ##asset-wrapper
+#if("$!request.lang" != "")##{
+#set($lang = $request.lang)
+#else##}{
+#set($lang = $xwiki.getLanguagePreference())
+#end##}
+#if("$!lang" == "")##{
+#set($lang = "en")
+#end##}
+<script type="text/javascript">
+var abStandardsFrame = document.getElementById('abStandardsFrame');
+abStandardsFrame.src = document.location.protocol + "//" + document.location.host + "/ab/${lang}/alignments/view/${doc.fullName}" + (location.search ? location.search + '&' : '?') + "ts=" + (new Date()).getMilliseconds();
+var abStandardsCurrHeight;
+var abStandardsTimer;
+function abStandardsHeight(doc) {
+	function setHeight() {
+		try {
+			if (doc && doc.body) {
+				var pageHeight = Math.max(doc.body.scrollHeight, pageWrapDIV.offsetHeight);
+				if ( (pageHeight != abStandardsCurrHeight) && (pageHeight > 0) ) {
+					abStandardsCurrHeight = pageHeight;
+					abStandardsFrame.style.height = jt_.valPx(pageHeight);
+				}
+			}
+		}
+		catch(err) {
+		}
+	}
+
+	var pageWrapDIV = doc.getElementById('pageWrap');
+	setHeight();
+	clearInterval(abStandardsTimer);
+	abStandardsTimer = setInterval(setHeight, 75);
+}
+</script>
+#else
+	$msg.get("rve.information.pageisnotanasset")
+#end
