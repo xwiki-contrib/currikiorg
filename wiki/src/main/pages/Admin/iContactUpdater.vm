@@ -2,69 +2,92 @@
 
 #set($tool=$xwiki.parseGroovyFromPage("Admin.iContactUpdateTool"))
 $tool.init($xwiki,$context)
-#macro(outputReports)
-    #set($reports=$tool.reports)
+Last update finished on: $tool.getLastUpdatedFinished()
+<small>(and started on $tool.getLastUpdatedStarted())</small>
 
-    #foreach($m in $reports)
-*  $m
-
-    #end
-#end
-#*
-1.1 Subjects
-List of the subjects names derived from the Curriki topic names.
-#foreach($name in $tool.listTopicsCustomNames())
-* $name
-#end
-*#
-
-1.1 Refresh Custom Fields
-#if($request.refreshCustomFields)
-
-<!-- $tool.refreshCustomFieldNames() -->
-#outputReports()
+<hr>
+$tool.getLastUpdatedMessage()
+<hr>
+#if($request.confirmUpdate=="1")
+    $tool.updateByDateSinceState()
+    
+(<a onclick="window.location.href = window.location.href +'?redisplay=true'; return false;">please refresh status</a>)
 #else
-    <a href="$doc.name?refreshCustomFields=true">click here to refresh custom fields</a>
+<form style="text-align:right" action="$doc.name" method="POST">
+    <input type="hidden" name="confirmUpdate" value="1">
+    <button type="submit" class="button-orange">Run update since last</button>
+</form>
 #end
+## ========================================================================
+#if($request.method=="POST" && $request.massive=="1")
+1 Massive upload
+    $tool.uploadFromTextRequest($request)
+## ========================================================================
+#elseif(!$request.advanced)
+## ----------- only for advanced ones here
+<p style="font-size: small">
+    (<a href="$doc.name?advanced=1">advanced users</a>)</p>#end
+
+#if($request.advanced=="1")
+    #macro(outputReports)
+        #set($reports=$tool.reports)
+
+        #foreach($m in $reports)
+        *  $m
+
+        #end
+    #end
+1.1 Refresh Custom Fields
+    #if($request.refreshCustomFields)
+
+    <!-- $tool.refreshCustomFieldNames() -->
+        #outputReports()
+    #else
+    <a href="$doc.name?refreshCustomFields=true">click here to refresh custom fields</a>
+    #end
 
 1.1 Update a user
 
-#if($request.userName)
-$tool.updateUserToiContact($request.userName)
-    #outputReports()
-#else
-<form action="$doc.name" method="GET"><input name="userName" type="text"> </form>
-#end
+    #if($request.userName)
+        $tool.updateUserToiContact($request.userName)
+        #outputReports()
+    #else
+    <form action="$doc.name" method="GET"><input type="hidden" name="advanced" value="1">
+        <input name="userName" type="text"> </form>
+    #end
 
 
 1.1 Update users of a group
 
-#if($request.groupName)
-    $tool.updateGroupsUsersToiContact($request.groupName)
-    #outputReports()
-#else
-Indicate the name of the group, e.g. XWiki.EditorGroup
+    #if($request.groupName)
+        $tool.updateGroupsUsersToiContact($request.groupName)
+        #outputReports()
+    #else
+    Indicate the name of the group, e.g. XWiki.EditorGroup
 
-If a Curriki group X, please use Group_X.Members.
-<form action="$doc.name" method="GET"><input name="groupName" type="text"> </form>
-#end
+    If a Curriki group X, please use Group_X.Members.
+    <form action="$doc.name" method="GET"><input type="hidden" name="advanced" value="1">
+        <input name="groupName" type="text"> </form>
+    #end
 
 
 1.1 Update users that have been updated at...
 
-#if($request.fromDate)
-    $tool.updateByDate($request.fromDate,$request.toDate)
-    #outputReports()
-#else
-Indicate the start date and end date. Beware that there's generally a 1000 users a day... so that it may be slow
-and would still work even though the UI says it times out.
-Note: current listing script may be slow.
+    #if($request.fromDate)
+        $tool.updateByDate($request.fromDate,$request.toDate, 1000)
+        #outputReports()
+    #else
+    Indicate the start date and end date. Beware that there's generally a 1000 users a day... so that it may be slow
+    and would still work even though the UI says it times out.
+    Note: current listing script may be slow.
 
-<form action="$doc.name" method="GET">
-From: <input name="fromDate" type="text" value="$tool.defaultStartDate">
-    
-To:   <input name="toDate" type="text" value="$tool.defaultEndDate">
+    <form action="$doc.name" method="GET">
+        <input type="hidden" name="advanced" value="1">
+        From: <input name="fromDate" type="text" value="$tool.defaultStartDate">
 
-<input type="submit" value="go">
-</form>
+        To:   <input name="toDate" type="text" value="$tool.defaultEndDate">
+
+        <input type="submit" value="go">
+    </form>
+    #end
 #end
