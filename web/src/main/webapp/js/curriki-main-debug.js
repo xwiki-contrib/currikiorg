@@ -733,7 +733,7 @@ Ext.ux.Multiselect = Ext.extend(Ext.form.Field,  {
 	allowDup:false,
 	allowTrash:false,
 	legend:null,
-	focusClass:undefined,
+	//focusClass:undefined,
 	delimiter:',',
 	view:null,
 	dragGroup:null,
@@ -931,7 +931,7 @@ Ext.ux.ItemSelector = Ext.extend(Ext.form.Field,  {
 	valueField:1,
 	switchToFrom:false,
 	allowDup:false,
-	focusClass:undefined,
+	//focusClass:undefined,
 	delimiter:',',
 	readOnly:false,
 	toLegend:null,
@@ -1297,7 +1297,7 @@ Ext.extend(Ext.ux.Andrie.pPageSize, Ext.util.Observable, {
 	 * @cfg {Object} comboCfg
 	 * Combo config object that overrides the defaults
 	 */
-	comboCfg: undefined,
+	//comboCfg: undefined,
 	
 	init: function(pagingToolbar){
 		this.pagingToolbar = pagingToolbar;
@@ -3812,7 +3812,7 @@ Curriki.ui.login.liveValidation = function() {
                         t.lastValue = value;
                     } else { // same value: act if nothing happened since 200ms
                         //console.log("same value since " + (now - t.lastChanged));
-                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || t.lastChecked===undefined) &&
+                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || typeof(t.lastChecked)==="undefined") &&
                                 (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value)) {
                             t.lastChecked = now;
                             t.queueQueryNow(input);
@@ -3870,9 +3870,9 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 	hoverText: rating_list,
 
 	// private config
-	displayValue : undefined,
-	ratedValue : undefined,
-	hoverValue : undefined,
+	//displayValue : undefined,
+	//ratedValue : undefined,
+	//hoverValue : undefined,
 
 	rated : false,
 
