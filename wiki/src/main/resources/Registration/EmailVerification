@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1204046558000</creationDate>
-<date>1320332483000</date>
-<contentUpdateDate>1320332483000</contentUpdateDate>
-<version>41.1</version>
+<date>1248983683000</date>
+<contentUpdateDate>1266877071000</contentUpdateDate>
+<version>21.1</version>
 <title>Email Verification</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -134,7 +134,7 @@
 #set($junk = $userObj.set("validkey", $valCode))
 #set($junk = $userObj.set("email", $newEmail))
 #set($junk = $userDoc.saveWithProgrammingRights())
-#set($link = "http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')/xwiki/bin/view/Registration/CompleteCaller?xwikiname=${username}&amp;validkey=${valCode}"))
+#set($link = "http://"+$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')+$xwiki.getURL("Registration.EmailVerified", "view", "u=${username}&amp;v=${valCode}"))
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
 #set($mailSubject = $doc.getRenderedContent($mailDoc.title))
@@ -156,21 +156,16 @@ $response.sendRedirect($xwiki.getURL("Registration.EmailVerificationSent"))
 $err
 &lt;/div&gt;
 #end ## }
-#if($!request.xpage=="popup")&lt;style type="text/css"&gt;body { min-width: 0; margin-right:2em; width:80%}&lt;/style&gt;#end
 &lt;div id="email-verification1"&gt;
  &lt;h1&gt;$msg.get('emailValidation.step1.title')&lt;/h1&gt;
  &lt;form method="post" action="$xwiki.getURL('Registration.EmailVerification')"&gt;
   &lt;input type="hidden" name="sendemail" value="1" /&gt;
   &lt;input type="hidden" name="username" value="${username}" /&gt;
-  #if($!request.xpage!="")&lt;input type="hidden" name="xpage" value="$request.xpage"/&gt;#end
   &lt;p&gt;$msg.get('emailValidation.step1.intro')&lt;/p&gt;
   #set($emailInput = '&lt;input type="text" name="email" size=32 value="'+$userEmail+'" /&gt;')
   &lt;p&gt;$msg.get('emailValidation.step1.weHave', [$name1, $name2, $emailInput])&lt;/p&gt;
   &lt;p&gt;$msg.get('emailValidation.step1.pleaseSubmit')&lt;/p&gt;
-  &lt;p class="button-right"&gt;
-      &lt;button class="button button-grey" onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;"&gt;$msg.get('emailValidation.step1.cancel')&lt;/button&gt;
-      &lt;button type="submit" class="button button-orange"&gt;$msg.get('emailValidation.step1.submit')&lt;/button&gt;
-  &lt;/p&gt;
+  &lt;p class="button-right"&gt;&lt;button type="submit" class="button button-orange"&gt;$msg.get('emailValidation.step1.submit')&lt;/button&gt;&lt;/p&gt;
  &lt;/form&gt;
 &lt;/div&gt;
 #if("$!footerJScript" == "")
@@ -186,9 +181,5 @@ $err
 &lt;div id="email-verification1-error" class="errormessage"&gt;
 $err
 &lt;/div&gt;
-#end ## }
-&lt;script type="text/javascript"&gt;
-    if(typeof(Ext)=="object") Ext.onReady(Curriki.ui.login.hideLoginLoading);
-    else if(window.parent &amp;&amp; window.parent.Ext) window.parent.Curriki.ui.login.hideLoginLoading();
-&lt;/script&gt;</content>
+#end ## }</content>
 </xwikidoc>

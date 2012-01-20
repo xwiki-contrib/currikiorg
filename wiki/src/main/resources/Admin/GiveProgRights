@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1200615531000</creationDate>
-<date>1320968958000</date>
-<contentUpdateDate>1320968958000</contentUpdateDate>
-<version>29.1</version>
+<date>1302735030000</date>
+<contentUpdateDate>1302735030000</contentUpdateDate>
+<version>28.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment>added Search and Search2 spaces</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -89,17 +89,7 @@ This script automatically set the owner of the pages in Groups, MyCurriki spaces
 
 #end
 ##
-#foreach($item in $xwiki.searchDocuments("where doc.web='Registration'"))
-* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
-
-#end
-##
-#foreach($item in $xwiki.searchDocuments("where doc.web='GCheckout'"))
-* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
-
-#end
-##
-#foreach($item in $xwiki.searchDocuments("where (doc.fullName in ('Members.MyBlog', 'XWiki.MyBlogGroovy',
+#foreach($item in $xwiki.searchDocuments("where (doc.fullName in ('Members.MyBlog', 'XWiki.MyBlogGroovy', 
  'CreateResources.AssetDone', 'CreateResources.StyledMacros','Affiliate.RegistrationTemplate','Affiliate.AffiliateManagement','Affiliate.PartnerEncryptGroovy',
 'AdWordsJump.LandingPageLogWriter','AdWordsJump.LandingPageLog',
 'AdWordsJump.LandingPageLogExport',

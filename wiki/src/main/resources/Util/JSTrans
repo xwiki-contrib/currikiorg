@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1208206707000</creationDate>
-<date>1315255169000</date>
-<contentUpdateDate>1315255169000</contentUpdateDate>
-<version>32.1</version>
+<date>1291854356000</date>
+<contentUpdateDate>1291854356000</contentUpdateDate>
+<version>30.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -63,7 +63,7 @@
 {pre}
 $response.setContentType("text/javascript")
 #if("$!request.lang" != "")##{
-#set($lang = $request.language)
+#set($lang = $request.lang)
 #else##}{
 #set($lang = $xwiki.getLanguagePreference())
 #end##}
@@ -76,7 +76,7 @@ var i18nDict = {
 #foreach ($item in $context.context.wiki.getXWikiPreference("documentBundles", $context.context).split(","))##{
 ,'TRANSLATION_PAGE_$item':'$item'
 #set($tDoc = $xwiki.getDocument($item))
-#foreach ($line in $tDoc.getTranslatedDocument("en").getContent().split("\n"))##{
+#foreach ($line in $tDoc.getTranslatedDocument($lang).getContent().split("\n"))##{
 #set($line = $line.trim())
 #if("$line" != "" &amp;&amp; !$line.startsWith("#") &amp;&amp; $line.contains("="))##{
 #set($pair = $line.split("=", 2))
@@ -86,7 +86,7 @@ var i18nDict = {
 #set($lText = $side.trim().replaceAll("'", "\\'"))
 #set($left = false)
 #else## }{
-#set($rText = $msg.get($lText).trim().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+#set($rText = $side.trim().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
 #end##}
 #end##}
 ,'$lText':'$rText'

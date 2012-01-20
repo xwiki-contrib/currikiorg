@@ -1,16 +1,172 @@
-/*
-Application name: curriki-dev
 
+iContact Updater Notes
+======================
+This is an XWiki "application" made of five ingredients:
+
+- two XWiki pages: iContactUpdater.vm and iContactUpdateTool
+- two XWiki object pages: iContactUpdaterState and iContactUpdaterStateClass
+  (the class contains the properties lastUpdatedFinishDate, lastUpdatedStarted, both dates,
+   and lastUpdatedMessage, a text; the state document contains an instance of the class
+   with the date of the initialization inside)
+- a java programme to perform the massive upload (e.g. at the initialization)
+- configuration file to be put in WEB-INF with the values to the following properties
+  iContact.baseAppURL, iContact.defaultListId, iContact.headers.appId,
+  iContact.headers.apiUsername, iContact.headers.apiPassword
+- this README which contains multiple hints
+
+All the XWiki pages should be uploaded in the Admin space.
+The iContactUpdaterState should be initialized with an obect of class iContactUpdaterStateClass
+with manual comments indicating the initialization is being done.
+
+Now get into the mysql database of your curriki, and get a list of all users:
+
+  echo "select XWO_NAME from xwikiobjects where XWO_CLASSNAME='XWiki.XWikiUsers' " \
+   | mysql -u dev -p currikinextdev_xwiki > /tmp/userNames.txt
+
+Transport the file where your build is, say, inside curriki/src/main/pages/Admin/.
+Copy the below java file as iContactMassiveUpdater.java, compile it:
+
+  javac -classpath .:`find ../../../../../web/target/curriki-web-1.0-SNAPSHOT/WEB-INF/lib/ -name "*.jar" \
+    | tr "\n" ":" ` iContactMassiveUpdater.java
+
+Now run it:
+
+  java -classpath .:`find ../../../../../web/target/curriki-web-1.0-SNAPSHOT/WEB-INF/lib/ \
+    -name "*.jar" | tr "\n" ":" ` iContactMassiveUpdater /tmp/userNames.txt \
+    'http://user:password@<host>:8080/xwiki/bin/view/Admin/iContactUpdater?massive=1&xpage=plain' \
+    123000
+
+replacing user:password by the values for an admin, and the <host>:8080 by thte right
+host and port, finally 123000 by the number of the line where you wish the upload to restart.
+
+Wait sufficient times (it takes about 3 minutes per thousand users) watching the log.
+Restart, incrementing the line-number, if need be.
+
+Once finished, take your browser to the iContact uploader page:
+    http://current.dev.curriki.org/xwiki/bin/view/Admin/iContactUpdater
+and run an update since last release.
+
+---------------------------------------------------------------------------------------
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.*;
+import java.lang.Exception;
+import java.lang.Process;
+import java.lang.String;
+import java.lang.System;
+import java.lang.Thread;
+import java.util.LinkedList;
+import java.util.List;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+
+public class iContactMassiveUpdater {
+
+    public static void main(String[] args) throws Exception {
+        if(args.length<2) {
+            System.err.println("Usage: iContactMassiveUpdater file uploadURL [line-to-start]");
+        }
+        int start = 0;
+        if(args.length>2) start = Integer.parseInt(args[2]);
+        LineNumberReader in = new LineNumberReader(new InputStreamReader(new FileInputStream(args[0])));
+        int numDone = start;
+        String line;
+        final List<String> list = new LinkedList<String>();
+        long phaseStarted = System.currentTimeMillis();
+        URL url = new URL(args[1]);
+
+        if(start>0) {
+            System.out.println("Scrolling till "+ start + ".");
+            while((line=in.readLine())!=null && numDone<start) {
+                numDone++;
+            }
+        }
+
+        HttpClient httpClient = new HttpClient();
+        String userInfo = url.getUserInfo();
+        if(userInfo!=null && userInfo.indexOf(":")>0) {
+            String user=null, pass=null;
+            httpClient.getParams().setAuthenticationPreemptive(true);
+            int p = userInfo.indexOf(":");
+            user = userInfo.substring(0,p);
+            pass = userInfo.substring(p+1);
+            httpClient.getState().setCredentials(new AuthScope(url.getHost(), url.getPort(), AuthScope.ANY_REALM),
+                    new UsernamePasswordCredentials(user, pass));
+        }
+
+        while( (line=in.readLine())!=null) {
+            list.add(line);
+            numDone++;
+            if(numDone % 1000==0) {
+                // sleep if necessary
+                long waitTime = (phaseStarted+1000L*3*60)-System.currentTimeMillis();
+                if(waitTime<0) waitTime = 10000;
+                System.out.println("-- Sleeping " + waitTime/1000 + " seconds.");
+                Thread.sleep(waitTime);
+                System.out.print("Posting till line " + numDone  + "... ");
+                System.out.flush();
+                long started = System.currentTimeMillis();
+
+                PostMethod post = new PostMethod(url.toExternalForm());
+                post.setRequestEntity(new RequestEntity() {
+                    public boolean isRepeatable() {
+                        return true;
+                    }
+
+                    public void writeRequest(OutputStream out) throws IOException {
+                        Writer w = new OutputStreamWriter(out, "utf-8");
+                        for (String l : list) {
+                            w.write(l);
+                            w.write("\n");
+                        }
+                        w.flush();
+                    }
+
+                    public long getContentLength() {
+                        return -1;
+                    }
+
+                    public String getContentType() {
+                        return "text/plain";
+                    }
+                });
+                httpClient.executeMethod(post);
+                System.out.println(" done: Posted till " + numDone + " (result " + post.getStatusLine() + " in "+ ((System.currentTimeMillis()-started)/1000f) +"s)");
+                list.clear();
+            }
+        }
+    }
+
+}
+
+---------------------------------------------------------------------------------------
+
+TESTING ENVIRONMENT
+
+authorization for API in sandbox.icontact.com for Sandbox account curriki-tester (associated to account janetpinto).
+
+Application name: curriki-dev
 Accept: text/xml
 Content-Type: text/xml
 API-Version: 2.2
 API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC
 API-Username: curriki-tester
 API-Password: share-them
- */
 
-/*
-e.g.
+Example curl operations
+=======================
+
+
+== Check connection: get time
+   (does not proof user-name)
 
 curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Version: 2.2" \
@@ -18,10 +174,7 @@ curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Username: curriki-dev"  -H "API-Password: share-them"  \
     'https://app.sandbox.icontact.com/icp/time'
 
-
-*/
-
-/* GET account-id
+== GET account-id
 
 curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Version: 2.2" \
@@ -29,9 +182,7 @@ curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Username: curriki-tester"  -H "API-Password: share-them"  \
     'https://app.sandbox.icontact.com/icp/a/'
 
-
 accountId: 412984
-
 
 curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Version: 2.2" \
@@ -42,6 +193,8 @@ curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
 clientFolderId: 124308
 
 
+
+POST a user
 
 curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
@@ -63,7 +216,8 @@ curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
 </contacts>"
 
 
-// how to add a custom field to the client contract?
+ADD A CUSTOM FIELD
+
 curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them"      "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/" --data-binary "<customfields>
     <customfield>
         <privateName>currikiUserName</privateName>
@@ -72,17 +226,25 @@ curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API
     </customfield>
 </customfields>"
 
-// how to delete a custom field?
+LIST CUSTOM FIELDS
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them" "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/"
+
+DELETE A CUSTOM FIELD
 curl --dump-header - -X DELETE -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them" "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/curriki_user_name"
 
 
-// how to list custom fields?
-curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them" "https://app.sandbox.icontact.com/icp/a/412984/c/124308/customfields/"
 
-// how to list contacts
+LIST CONTACTS
+  (this will page, no worry of bloating)
 curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
   -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
   -H "API-Username: curriki-tester"  -H "API-Password: share-them" \
   "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/"
 
-*/
+
+LIST A USER BY EMAIL
+
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"    -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them"   "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/?email=paul%40hoplahup.net
+
+(you can also post as doing an update, the contactId will be returned)
+

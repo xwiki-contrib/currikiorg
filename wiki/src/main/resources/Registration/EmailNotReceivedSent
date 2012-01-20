@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1204745111000</creationDate>
-<date>1319148602000</date>
-<contentUpdateDate>1319148602000</contentUpdateDate>
-<version>6.1</version>
+<date>1205336398000</date>
+<contentUpdateDate>1266877071000</contentUpdateDate>
+<version>3.1</version>
 <title>Email Not Received Message Sent</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,14 +55,9 @@
 <tags/>
 </property>
 </object>
-<content>&lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em; width:90%}&lt;/style&gt;
-#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))#end##
-1 $msg.get('email_not_received_sent.title')
+<content>1 $msg.get('email_not_received_sent.title')
 
-&lt;div id="email-not-received-sent" style="margin:2em"&gt;
+&lt;div id="email-not-received-sent"&gt;
 $msg.get('email_not_received.email_sent')
-&lt;/div&gt;
-
-&lt;p align="center"&gt;&lt;a href="${targets.noLogin}" target="_top" class="button-orange"##
-&gt;$msg.get('email_not_received_sent.ok_button')&lt;/a&gt;&lt;/p&gt;</content>
+&lt;/div&gt;</content>
 </xwikidoc>

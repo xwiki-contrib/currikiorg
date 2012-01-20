@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1247255732000</creationDate>
-<date>1320187169000</date>
-<contentUpdateDate>1320187169000</contentUpdateDate>
-<version>81.1</version>
+<date>1291854357000</date>
+<contentUpdateDate>1291854357000</contentUpdateDate>
+<version>45.1</version>
 <title>Forgot Login Information</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -55,21 +55,16 @@
 <tags/>
 </property>
 </object>
-<content>#if($request.xpage=="popup")
-    #template("javascripts.vm")
-    #template("analytics.vm")
-#end
-#set($uemail = $!request.get('email'))
+<content>#set($uemail = $!request.get('email'))
 #set($forgot = $!request.get('forgot'))
-#if($request.framed)&lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em;}&lt;/style&gt;#end
 ##
 #if(!$uemail || !$forgot || $!uemail == '' || $!forgot == '') ##{
-&lt;h1&gt;&lt;!-- 1 --&gt;$msg.get('forgot.title')&lt;/h1&gt;
+
+&lt;h1&gt;$msg.get('forgot.title')&lt;/h1&gt;
 &lt;p&gt;$msg.get('forgot.description')&lt;/p&gt;
 
 &lt;div class="form-wrp"&gt;
 &lt;form id="forgotForm" name="forgotform" action="" method="post"&gt;
-    &lt;input type="hidden" name="framed" value="true"/&gt;
 	&lt;fieldset class="required"&gt;
 		&lt;h3&gt;&amp;nbsp;&lt;/h3&gt;
 		&lt;div class="fields-wrp"&gt;
@@ -87,9 +82,8 @@
 				&lt;/li&gt;
 			&lt;/ul&gt;
 		&lt;/div&gt;
-		&lt;div class="center pad-vrt"&gt;
-			&lt;button class="button-grey" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&amp;framed=true#end '; return false;"&gt;$msg.get('forgot.cancel_button')&lt;/button&gt;
-            &lt;button class="button-confirm" type="submit"&gt;$msg.get('forgot.submit_button')&lt;/button&gt;
+		&lt;div class="center pad-vrt"&gt;	
+			&lt;button class="button-confirm" type="submit"&gt;$msg.get('forgot.submit_button')&lt;/button&gt;
 		&lt;/div&gt;
 	&lt;/fieldset&gt;
 &lt;/form&gt;
@@ -113,7 +107,6 @@ Event.observe('forgotForm', 'submit', function(event) {
 		else if (!jt_.validEmail(emailStr)) {
 			CurrikiApp.errMsgAdd("$msg.get('forgot.error.email_invalid')");
 			CurrikiApp.errHighlight("block-email");
-            Curriki.logView("/join/forgotLogin/error");
 			isValid = false;
 		}
 		return isValid;
@@ -124,7 +117,6 @@ Event.observe('forgotForm', 'submit', function(event) {
 		if (!($('forgotForm').elements["forgot"][0].checked ||$('forgotForm').elements["forgot"][1].checked)){
 			CurrikiApp.errMsgAdd("$msg.get("forgot.error.no_choice")");
 			CurrikiApp.errHighlight("block-forgot");
-            Curriki.logView("/join/forgotLogin/error");
 			isValid = false;
 		}
 		return isValid;
@@ -136,7 +128,6 @@ Event.observe('forgotForm', 'submit', function(event) {
 			var text = originalRequest.responseText;
 			var res = eval('[' + text + '][0]');
 			if(res.email){
-                Curriki.logView("/join/forgotLogin/error");
 				alert(_('forgot.error.no_user', $F('email')));
 				return;
 			}
@@ -168,19 +159,12 @@ Event.observe('forgotForm', 'submit', function(event) {
 &lt;/script&gt;
 {/pre}
 #else ##}{
-    #if($forgot == 'login') ##{
-    &lt;!-- now forgot login --&gt;
+	#if($forgot == 'login') ##{
 		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (prop.value = '$!uemail')")
 		#set($list = $xwiki.searchDocuments($sql , 0 , 0))
 		#if($list.size()==0) ##{
-            &lt;h1&gt;&lt;!-- 2 --&gt;$msg.get('forgot.title')&lt;/h1&gt;
-            $msg.get("forgot.error.no_user", [$uemail])
-            &lt;div class="center pad-vrt"&gt;
-                &lt;button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&amp;framed=true#end'; return false;"&gt;$msg.get('forgot.cancel_button')&lt;/button&gt;
-            &lt;/div&gt;
-            #logViewScript("/join/forgotLogin/error")
+			$msg.get("forgot.error.no_user", [$uemail])
 		#elseif($list.size()==1) ##}{
-            &lt;h1&gt;&lt;!-- 3 --&gt;$msg.get('forgot.title')&lt;/h1&gt;
 			## 1 username
 			#set($item = $list.get(0))
 			#set($bentrydoc = $xwiki.getDocument($item))
@@ -189,13 +173,8 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($mesg = $xwiki.getDocument("Main.ForgotUsernameEmail").getContent())
 			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
 			$msg.get("forgotUsername.emailSent", [$uemail])
-            &lt;div class="center pad-vrt"&gt;
-                &lt;button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)#if($request.framed)&amp;framed=true#end#end '; return false;"&gt;$msg.get('forgot.now_login_button')&lt;/button&gt;
-            &lt;/div&gt;
-            #logViewScript("/join/forgotLogin/remailedId")
 		#else ##}{
 			## Multiple usernames
-            &lt;h1&gt;&lt;!-- 4 --&gt;$msg.get('forgot.title')&lt;/h1&gt;
 			#foreach($item in $list) ##{
 				#set($bentrydoc = $xwiki.getDocument($item))
 				#if($names) ##{
@@ -208,30 +187,18 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($mesg = $xwiki.getDocument("Main.ForgotUsernamesEmail").getContent())
 			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
 			$msg.get("forgotUsername.emailSent", [$uemail])
-            &lt;div class="center pad-vrt"&gt;
-                &lt;button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&amp;framed=true#end '; return false;"&gt;$msg.get('forgot.now_login_button')&lt;/button&gt;
-            &lt;/div&gt;
-            #logViewScript("/join/forgotLogin/error")
 		#end ##}
 	#elseif($!forgot == 'password') ## password }{
-        &lt;h1&gt;&lt;!-- 5 --&gt;$msg.get('forgot.title')&lt;/h1&gt;
 		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (prop.value = '$!uemail')")
 		#set($list = $xwiki.searchDocuments($sql))
 		#if($list.size()==0) ## {
 			$msg.get("forgot.error.no_user", [$uemail])
-            &lt;div class="center pad-vrt"&gt;
-                &lt;button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup&amp;#if($request.framed)&amp;framed=true#end'; return false;"&gt;$msg.get('forgot.cancel_button')&lt;/button&gt;
-            &lt;/div&gt;
-            #logViewScript("/join/forgotLogin/error")
 		#elseif($list.size()&gt;1) ## }{
 			$msg.get("forgot.error.multiple_users")
-            &lt;div class="center pad-vrt"&gt;
-                &lt;button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&amp;framed=true#end'; return false;"&gt;$msg.get('forgot.now_login_button')&lt;/button&gt;
-            &lt;/div&gt;
-            #logViewScript("/join/forgotLogin/error")
 		#elseif($list.size()==1) ## }{
 			#set($item = $list.get(0))
 			#set($bentrydoc = $xwiki.getDocument($item))
+
 			#set($from = $xwiki.getXWikiPreference("admin_email"))
 			#set($recipient = $bentrydoc.email)
 			#set($first_name = $bentrydoc.first_name)
@@ -240,9 +207,9 @@ Event.observe('forgotForm', 'submit', function(event) {
 
 			#set($valkey = $xwiki.xWiki.generateRandomString(8))
 			## #set($reseturl = ${xwiki.getRequestURL()})
-			#set($reseturl = 'http://'+$!hostname)
-			#set($reseturl = "${reseturl}/xwiki/bin/view/Main/ForgotPassword")
-			#set($reseturl = "${reseturl}?q=$util.encodeURI(${uemail})&amp;vk=${valkey}")
+			#set($reseturl = 'http://'+$!xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org'))
+			#set($reseturl = "${reseturl}${xwiki.getURL('Main.ForgotPassword')}")
+			#set($reseturl = "${reseturl}?q=${uemail}&amp;vk=${valkey}")
 
 			## Reseturl: $reseturl
 
@@ -250,11 +217,6 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($junk = $bentrydoc.set("validkey", $valkey))
 			#set($junk = $bentrydoc.saveWithProgrammingRights())
 			$msg.get("forgotPassword.emailSent", [$uemail])
-            #logViewScript("/join/forgotLogin/remailedPassReset")
-            &lt;div class="center pad-vrt"&gt;
-                &lt;button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&amp;framed=true#end '; return false;"&gt;$msg.get('forgot.now_login_button')&lt;/button&gt;
-            &lt;/div&gt;
-
 		#end ##}
 	#end ##}
 #end ##}

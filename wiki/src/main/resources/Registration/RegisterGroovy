@@ -12,14 +12,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1193332613000</creationDate>
-<date>1320841951000</date>
-<contentUpdateDate>1320841951000</contentUpdateDate>
-<version>36.1</version>
+<date>1291854359000</date>
+<contentUpdateDate>1291854359000</contentUpdateDate>
+<version>27.1</version>
 <title>Groovy Script for Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -79,7 +79,6 @@ public class register {
  def password = "";
  def validkey = "";
  def userdoc = null;
- def log = org.apache.commons.logging.LogFactory.getLog("groovyPages.Registration.RegisterGroovy");
 
  public void setObjects(xwiki, context, msg) {
    setXWiki(xwiki)
@@ -242,7 +241,6 @@ public class register {
  }
 
  public boolean createAccount(request, generatePassword, withValidation) {
-   log.warn("xwiki is " + xwiki + " and xwiki.xWiki is " + xwiki.xWiki);
    def userdoc = getUserDocument(request, generatePassword, withValidation);
 
    if (userdoc==null){

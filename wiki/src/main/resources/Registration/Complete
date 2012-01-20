@@ -8,18 +8,18 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.dward</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.dward</contentAuthor>
 <creationDate>1192654245000</creationDate>
-<date>1321178290000</date>
-<contentUpdateDate>1321178290000</contentUpdateDate>
-<version>53.1</version>
+<date>1247243949000</date>
+<contentUpdateDate>1266877071000</contentUpdateDate>
+<version>4.1</version>
 <title>Registration Complete</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <object>
@@ -56,66 +56,24 @@
 </property>
 </object>
 <content>#includeMacros("Groups.Macros")
-&lt;style type="text/css"&gt;
-    body{min-width: 0; margin-right:1em; width:90%}
-&lt;/style&gt;
-{pre}
-#template("xwikivars.vm")##
-#template("javascripts.vm")##
-#template("analytics.vm")##
-{/pre}
 #if($request.xwikiname &amp;&amp; $request.xwikiname != "" &amp;&amp; $request.validkey &amp;&amp; $request.validkey != "")
-#* #set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
+#set($reg = $xwiki.parseGroovyFromPage("Registration.RegisterGroovy"))
 #set($junk = $reg.setObjects($xwiki, $context, $msg))
 #set($result = $reg.validateUser(true))
-#set($junk = $context.context.remove("message")) *#
-#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
-#set($junk=$tool.init($xwiki, $context, $request, $msg, $targets))##
-#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))#end&lt;!-- targets is $targets  --&gt;#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-#set($result=$tool.validateUser())##
-#set($memberType = $tool.memberType)##
-#if($result=="success")
-&lt;div style="height: 20em;  vertical-align: middle;" class="registration-complete"&gt;
-####
-&lt;!-- member is $userdoc of type $memberType --&gt;
-&lt;script type="text/javascript"&gt;
-    Ext.onReady(function() {
-        var docH = getDocHeight(document);
-        // adjust dialog height
-        if(window.innerHeight &lt; docH) {
-            Curriki.console.log("Should resize dialog from " + window.innerHeight + " to accomodate " + docH + " minding " + getDocHeight(window.parent.document) + ".")
-            if(window.parent &amp;&amp; window.parent.Ext &amp;&amp; window.parent.Ext.get('loginIframe')) {
-                h = docH;
-                window.parent.Ext.get('loginIframe').dom.height = 20 + h;
-            }
-        }
-    });
-&lt;/script&gt;
-#set($hasAuthenticated=true)##
-#if($memberType=='corporation')&lt;!-- including corporate donate --&gt;
-        #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")##
-        #if("x$!lastCorpMembershipDonated"=="x" || $lastCorpMembershipDonated&lt;75)
-            $xwiki.includeForm("Registration.DonateCorp",false)
-        #else
-            #set($redir=$targets.afterLogin)##
-            $xwiki.includeForm("Registration.JumpToTop",false)##
-        #end
-#else&lt;!-- including non-corporate donate --&gt;
-    $xwiki.includeForm("Registration.DonateNonCorp",false)
-#end
-    #logViewScript("/join/enterValidation/submit/success")
-#else
-    #logViewScript("/join/enterValidation/submit/invalid")
-    &lt;h2&gt;$msg.get("join.invalid.key.title")&lt;/h2&gt;
-    &lt;p&gt;$msg.get("join.invalid.key.text")&lt;/p&gt;
-    &lt;p align='right'&gt;&lt;button class='button-grey' onclick='window.history.go(-1); return false;'&gt;$msg.get('join.invalid.key.ok_button')&lt;/button&gt;&lt;/p&gt;
-#end##
+#set($junk = $context.context.remove("message"))
+#if($result)
+&lt;div class="registration-complete"&gt;
+$msg.get("registration.validate.validated")
+&lt;br /&gt;
+#set($userdoc = $xwiki.getDocument("XWiki.${request.xwikiname}"))
+#set($ok = $userdoc.use("XWiki.XWikiUsers"))
+#set($junk = $!userdoc.set("email_undeliverable", "0"))
+#set($logredir = $!userdoc.getValue("validredirect").replaceAll("-","&amp;"))
 &lt;/div&gt;
 #else
-#logViewScript("/join/enterValidation/submit/invalid")
-&lt;h2&gt;$msg.get("join.invalid.key.title")&lt;/h2&gt;
-&lt;p&gt;$msg.get("join.invalid.key.text")&lt;/p&gt;
-&lt;p align='right'&gt;&lt;button class='button-grey' onclick='window.history.go(-1); return false;'&gt;$msg.get('join.invalid.key.ok_button')&lt;/button&gt;&lt;/p&gt;
+$msg.get("registration.validate.failed.bad_key_or_loginname")
 #end
-</content></xwikidoc>
+#else
+$msg.get("registration.validate.failed.no_info")
+#end</content>
+</xwikidoc>
