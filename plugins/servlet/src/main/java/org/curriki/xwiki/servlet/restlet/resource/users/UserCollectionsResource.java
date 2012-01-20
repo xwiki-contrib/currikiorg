@@ -47,6 +47,7 @@ public class UserCollectionsResource extends BaseResource {
                 collInfo.put("revision", asset.getVersion());
                 collInfo.put("collectionType", "collection") ; // ???
                 collInfo.put("displayTitle", asset.getTitle());
+                json.add(collInfo);
             }
             //results = plugin.fetchUserCollectionsInfo(forUser);
         } catch (XWikiException e) {
