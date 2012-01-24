@@ -44,12 +44,12 @@ public class UserCollectionsResource extends BaseResource {
             for(String collFullName: resultList) {
                 JSONObject collInfo = new JSONObject();
                 collInfo.put("collectionPage", collFullName);
-                CompositeAsset asset =
-                        plugin.fetchAsset(collFullName).as(CompositeAsset.class);
+                // CompositeAsset asset = plugin.fetchAsset(collFullName).as(CompositeAsset.class);
+                Asset asset = plugin.fetchAsset(collFullName);
                 collInfo.put("revision", asset.getVersion());
                 collInfo.put("collectionType", "collection") ; // ???
                 collInfo.put("displayTitle", asset.getTitle());
-                collInfo.put("children", asset.getSubassetList());
+                //collInfo.put("children", asset.getSubassetList());
                 json.add(collInfo);
             }
             //results = plugin.fetchUserCollectionsInfo(forUser);

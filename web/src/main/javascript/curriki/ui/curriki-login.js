@@ -467,7 +467,7 @@ Curriki.ui.login.liveValidation = function() {
                         t.lastValue = value;
                     } else { // same value: act if nothing happened since 200ms
                         //console.log("same value since " + (now - t.lastChanged));
-                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || t.lastChecked===undefined) &&
+                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || typeof(t.lastChecked)=="undefined") &&
                                 (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value)) {
                             t.lastChecked = now;
                             t.queueQueryNow(input);

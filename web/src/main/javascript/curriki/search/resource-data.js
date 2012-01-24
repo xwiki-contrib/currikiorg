@@ -312,6 +312,7 @@ data.init = function(){
 			// Title
 			var page = record.id.replace(/\./, '/');
 
+            console.log("Rendering title of " + record);
 			var desc = Ext.util.Format.stripTags(record.data.description);
 			desc = Ext.util.Format.ellipsis(desc, 256);
 			desc = Ext.util.Format.htmlEncode(desc);
@@ -357,6 +358,7 @@ data.init = function(){
 			var css;
 			var dotIct;
 			var ict = record.data.ict;
+            console.log("Rendering ict ");
 			if (!Ext.isEmpty(ict)){
 				// Find CSS classes needed
 				var topIct = ict.replace(/_.*/, '');
@@ -377,10 +379,12 @@ data.init = function(){
 
 		,contributor: function(value, metadata, record, rowIndex, colIndex, store){
 			var page = value.replace(/\./, '/');
+            console.log("Rendering contributor");
 			return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
 		}
 
 		,rating: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("Rendering rating");
 			if (value != "") {
 				var page = record.id.replace(/\./, '/');
 
@@ -393,6 +397,7 @@ data.init = function(){
 		}
 
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("Rendering rating");
 			if (value != "" && value != "0" && value != 0) {
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
@@ -409,10 +414,12 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("Rendering updated");
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
 			return String.format('{0}', dt);
 		}
         , score: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("rendering score ")
             return value;
          }
 	};

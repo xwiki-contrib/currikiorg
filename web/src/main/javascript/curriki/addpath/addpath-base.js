@@ -1424,8 +1424,8 @@ Curriki.module.addpath.init = function(){
 									,selectOnFocus:true
 									,forceSelection:true
 									,value:Curriki.data.language.initial
-										?Curriki.data.language.initial
-										:undefined
+										//?Curriki.data.language.initial
+										//:undefined
 									,listeners:{
 										render:function(comp){
 											comp.findParentByType('apSRI2').on('show', function() {
@@ -1548,8 +1548,8 @@ Curriki.module.addpath.init = function(){
 									,selectOnFocus:true
 									,forceSelection:true
 									,value:Curriki.data.licence.initial
-										?Curriki.data.licence.initial
-										:undefined
+										//?Curriki.data.licence.initial
+										//:undefined
 									,listeners:{
 										render:function(comp){
 											comp.findParentByType('apSRI2').on('show', function() {

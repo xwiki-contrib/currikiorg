@@ -61,7 +61,7 @@ Curriki.data.el.list.each(function(el){
 });
 
 Curriki.data.el.getRolloverDisplay = function(el_array){
-	var lvls = el_array; //||undefined; 
+	var lvls = el_array; //||undefined;
     if(lvls===false || lvls===null) lvls = [];
 	var lvl = "";
 
