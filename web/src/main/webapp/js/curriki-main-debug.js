@@ -1758,14 +1758,14 @@ Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
 
 
-if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
+//if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
 	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
 	             "trace", "profile", "profileEnd"];
 	window.console = {};
 	for (var i = 0; i < names.length; ++i)
 		window.console[names[i]] = Ext.emptyFn
-}
+//}
 console.log('initing Curriki');
 /*
  * Example of dynamically loading javascript
@@ -2137,7 +2137,6 @@ Curriki.data.user = {
 				colInfo.children = children;
 */
 				colInfo.leaf = false;
-                colInfo.children = [];
 			} else {
 				colInfo.leaf = false;
 				colInfo.children = [];
@@ -2236,8 +2235,7 @@ Curriki.data.el.list.each(function(el){
 });
 
 Curriki.data.el.getRolloverDisplay = function(el_array){
-	var lvls = el_array; //||undefined;
-    if(lvls===false || lvls===null) lvls = [];
+	var lvls = el_array||undefined;
 	var lvl = "";
 
 	if ("undefined" !== typeof lvls && "undefined" !== typeof lvls[0]) {
@@ -3813,7 +3811,7 @@ Curriki.ui.login.liveValidation = function() {
                         t.lastValue = value;
                     } else { // same value: act if nothing happened since 200ms
                         //console.log("same value since " + (now - t.lastChanged));
-                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || typeof(t.lastChecked)=="undefined") &&
+                        if(t.lastChanged && now-t.lastChanged>200 && (t.lastChanged > t.lastChecked || t.lastChecked===undefined) &&
                                 (typeof(t.queriedValue)=="undefined" || t.queriedValue!=value)) {
                             t.lastChecked = now;
                             t.queueQueryNow(input);
@@ -3871,11 +3869,9 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 	hoverText: rating_list,
 
 	// private config
-	/*
 	displayValue : undefined,
-     ratedValue : undefined,
-     hoverValue : undefined,
-	 */
+	ratedValue : undefined,
+	hoverValue : undefined,
 
 	rated : false,
 

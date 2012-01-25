@@ -38,11 +38,9 @@ Curriki.ui.Rating = Ext.extend(Ext.form.NumberField, {
 	hoverText: rating_list,
 
 	// private config
-	/*
 	displayValue : undefined,
-     ratedValue : undefined,
-     hoverValue : undefined,
-	 */
+	ratedValue : undefined,
+	hoverValue : undefined,
 
 	rated : false,
 

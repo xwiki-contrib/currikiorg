@@ -213,7 +213,6 @@ Curriki.data.user = {
 				colInfo.children = children;
 */
 				colInfo.leaf = false;
-                colInfo.children = [];
 			} else {
 				colInfo.leaf = false;
 				colInfo.children = [];
