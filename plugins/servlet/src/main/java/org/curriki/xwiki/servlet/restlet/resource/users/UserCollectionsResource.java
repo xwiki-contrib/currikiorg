@@ -1,6 +1,5 @@
 package org.curriki.xwiki.servlet.restlet.resource.users;
 
-import org.curriki.xwiki.plugin.asset.composite.CompositeAsset;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 import org.restlet.resource.ResourceException;
@@ -38,26 +37,14 @@ public class UserCollectionsResource extends BaseResource {
 
         List<String> resultList;
         Map<String,Object> results;
-        JSONArray json = new JSONArray();
         try {
             resultList = plugin.fetchUserCollectionsList(forUser);
-            for(String collFullName: resultList) {
-                JSONObject collInfo = new JSONObject();
-                collInfo.put("collectionPage", collFullName);
-                // CompositeAsset asset = plugin.fetchAsset(collFullName).as(CompositeAsset.class);
-                Asset asset = plugin.fetchAsset(collFullName);
-                collInfo.put("revision", asset.getVersion());
-                collInfo.put("collectionType", "collection") ; // ???
-                collInfo.put("displayTitle", asset.getTitle());
-                //collInfo.put("children", asset.getSubassetList());
-                json.add(collInfo);
-            }
-            //results = plugin.fetchUserCollectionsInfo(forUser);
+            results = plugin.fetchUserCollectionsInfo(forUser);
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
-        //JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
+        JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
 
         return formatJSON(json, variant);
     }
