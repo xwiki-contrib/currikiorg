@@ -510,7 +510,13 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
         #set($junk=$processor.seedLoginToDownloadEscapes())##
         #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
     #end##
-#set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($doc.space))
+#set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($asset.space))
+    #*<!-- require login: $requireLogin
+    loginToDownloadEscapes is $loginToDownloadEscapes
+     parts: !request.viewer"!="embed" #if("$!request.viewer"!="embed") true #else false #end
+     parts: context.user=="XWiki.XWikiGuest" #if($context.user=="XWiki.XWikiGuest") true #else false #end
+     parts: !loginToDownloadEscapes.contains(asset.space) #if(!$loginToDownloadEscapes.contains($asset.space)) true #else false #end
+    -->*#
  <a class="icon-link"
     #if($requireLogin) ##
       #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
