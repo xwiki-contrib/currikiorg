@@ -1,0 +1,13 @@
+#set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
+#set($junk=$processor.init($xwiki, $context, $request))##
+
+1 $doc.name
+
+$processor.seedLoginToDownloadEscapes()
+
+The webapp context's attribute LoginToDownloadEscapes is now
+{pre}
+$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes")
+{/pre}
+
+

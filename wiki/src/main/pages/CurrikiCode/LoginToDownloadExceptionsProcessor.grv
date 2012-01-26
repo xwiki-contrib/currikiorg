@@ -1,0 +1,34 @@
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.web.XWikiServletRequest
+
+public class LoginToDownloadExceptionsProcessor {
+
+    private XWiki xwiki;
+    private Context context;
+    private XWikiServletRequest request;
+
+    public LoginToDownloadExceptionsProcessor() {}
+
+    public String init(XWiki xwiki, Context context, XWikiServletRequest request) {
+        this.xwiki = xwiki;
+        this.context = context;
+        this.request = request;
+    }
+
+
+    public String seedLoginToDownloadEscapes() {
+        TreeSet set = new TreeSet();
+        String content = xwiki.getDocument("CurrikiCode.LoginToDownloadExceptions").getContent();
+        LineNumberReader r = new LineNumberReader(new StringReader(content));
+        String line;
+        while((line=r.readLine())!=null) {
+            if(line==null || line.length()==0) continue;
+            set.add(line);
+        }
+        request.getHttpServletRequest().getSession().getServletContext().setAttribute("LoginToDownloadEscapes", set);
+        return "ok";
+    }
+
+
+}
