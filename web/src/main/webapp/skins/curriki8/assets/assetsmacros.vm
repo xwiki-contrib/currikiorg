@@ -503,7 +503,14 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
-#set($requireLogin= !($viewer.startsWith("embed")) && $context.user=="XWiki.XWikiGuest")
+    #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
+    #if($loginToDownloadEscapes)#else##
+        #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
+        #set($junk=$processor.init($xwiki, $context, $request))##
+        #set($junk=$processor.seedLoginToDownloadEscapes())##
+        #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
+    #end##
+#set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($doc.space))
  <a class="icon-link"
     #if($requireLogin) ##
       #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
