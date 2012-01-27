@@ -128,7 +128,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     public Map<String,Object> fetchCollectionsInfo() {
         return fetchCollectionsInfo("date");
     }
-    
+
     /**
      * Get a list of all viewable collections owned by a specific user with extra info
      *
