@@ -1,6 +1,7 @@
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.lang.Class;
 import java.lang.String;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,7 +34,8 @@ public class DumpUsersAndCountry {
                 "              and stringPropCountry.xws_name=\"country\"\n" +
                 "              and stringPropCity.xws_name=\"city\"\n" +
                 "  ;";
-                
+
+        Class.forName("com.mysql.jdbc.Driver");
         Connection conn = DriverManager.getConnection(args[0], args[1], args[2]);
         Statement s = conn.createStatement();
         s.execute(query);
