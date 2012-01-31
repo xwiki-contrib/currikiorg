@@ -12,14 +12,14 @@ Ext.Ajax.disableCaching=false;
 Ext.Ajax.timeout=120000;
 
 
-//if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
+if (!('console' in window) || !(console.log) /* || !('firebug' in console) */){
 	var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
 	             "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
 	             "trace", "profile", "profileEnd"];
 	window.console = {};
 	for (var i = 0; i < names.length; ++i)
 		window.console[names[i]] = Ext.emptyFn
-//}
+}
 console.log('initing Curriki');
 /*
  * Example of dynamically loading javascript
