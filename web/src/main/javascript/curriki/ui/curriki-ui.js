@@ -205,7 +205,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			}
 
 			// ?? = attr.order;
-
+//console.log("childInfo: " ,childInfo);
 			Ext.apply(childInfo, attr);
 
 			if (this.truncateTitle !== false) {
@@ -245,6 +245,11 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			} else {
 				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
+            if(this.setFullRollover) {
+                this.dataUrl = this.dataUrl + "?full=true";
+            } else {
+                this.dataUrl = this.dataUrl + "?full=false";
+            }
 
 			// From parent
 			if(this.fireEvent("beforeload", this, node, callback) !== false){

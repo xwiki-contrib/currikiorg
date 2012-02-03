@@ -1647,6 +1647,7 @@ Curriki.module.addpath.init = function(){
 									,AddPath.ShowDone()
 								);
 							} else {
+                                console.log("No current parentAsset.");
 								AddPath.ShowDone();
 							}
 						}

@@ -78,7 +78,7 @@ Curriki.data.user = {
 		} else {
 			this.collection_try++;
 			Ext.Ajax.request({
-				 url: this.json_prefix+this.me.username+'/collections'
+				 url: this.json_prefix+this.me.username+'/collections?full=false'
 				,method:'GET'
 				,disableCaching:true
 				,headers: {
