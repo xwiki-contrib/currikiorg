@@ -16,10 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
-import org.curriki.xwiki.plugin.asset.Asset;
-import org.curriki.xwiki.plugin.asset.CollectionSpace;
-import org.curriki.xwiki.plugin.asset.Constants;
-import org.curriki.xwiki.plugin.asset.DefaultAssetManager;
+import org.curriki.xwiki.plugin.asset.*;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
 import com.xpn.xwiki.XWikiContext;
@@ -183,6 +180,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @return List of all groups that the specified user is in
      */
     public Map<String,Object> fetchUserGroups(String forUser, XWikiContext context) {
+        System.out.println("fetchUserGroups " + forUser);
         Map<String,Object> groups = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi(CurrikiSpaceManager.CURRIKI_SPACEMANGER_NAME, context);
         List spaces;
@@ -194,6 +192,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             return null;
         }
 
+        //CURRIKI-5472: this is a dangerous spot: it has to deserialize all the collections of each of the group
         for (Object space : spaces) {
             if (space instanceof String) {
                 groups.put((String) space, getGroupInfo((String) space, context));
@@ -204,6 +203,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     protected Map<String,Object> getGroupInfo(String group, XWikiContext context) {
+        System.out.println("getGroupInfo " + group);
         Map<String,Object> groupInfo = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi("csm", context);
 
@@ -211,8 +211,20 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             Space space = sm.getSpace(group);
             groupInfo.put("displayTitle", space.getDisplayTitle());
             groupInfo.put("description", space.getDescription());
+            //CURRIKI-5472: this is a dangerous spot: it has to deserialize all the collections of the group
+
+            if(hasCollections(group, context)) {
+                System.out.println("has");
+                groupInfo.put("collectionCount", 1);
+                groupInfo.put("editableCollectionCount", 1);
+            } else {
+                System.out.println("has none");
+                groupInfo.put("collectionCount", 0);
+                groupInfo.put("editableCollectionCount", 0);
+            }
+
+            /* groupInfo.put("collectionCount", collections.size());
             Map<String,Object> collections = fetchCollectionsInfo(group, context);
-            groupInfo.put("collectionCount", collections.size());
             int editableCount = 0;
             for (String collection : collections.keySet()) {
                 Map<String,Object> cInfo = (Map<String,Object>) collections.get(collection);
@@ -221,13 +233,36 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
                     editableCount++;
                 }
             }
-            groupInfo.put("editableCollectionCount", editableCount);
+            groupInfo.put("editableCollectionCount", editableCount); */
         } catch (Exception e) {
             LOG.error("Error getting group space", e);
             return null;
         }
 
         return groupInfo;
+    }
+    
+    private boolean hasCollections(String entity, XWikiContext context) {
+        entity = entity.replaceFirst(Constants.USER_PREFIX_REGEX, ""); // For users
+        entity = entity.replaceFirst("\\."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
+
+        if (Constants.GUEST_USER.replaceFirst(Constants.USER_PREFIX_REGEX, "").equals(entity)) {
+            return false;
+        }
+
+        String spaceName = Constants.COLLECTION_PREFIX+entity;
+        String rootPage = spaceName+"."+Constants.ROOT_COLLECTION_PAGE;
+        RootCollectionCompositeAsset root;
+        try {
+            root = Asset.fetchAsset(rootPage, context).as(RootCollectionCompositeAsset.class);
+            if(root!=null) {
+                List<String> subAssets = root.getSubassetList();
+                if(!subAssets.isEmpty()) return true;
+            }
+        } catch (XWikiException ex) {
+            // The page exists, but must not be a root collection -- ah well
+        }
+        return false;
     }
 
 
@@ -260,6 +295,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
 
     public List<String> fetchCollectionsList(String entity, XWikiContext context) throws XWikiException {
+        System.out.println("fetchCollectionsList " + entity);
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
@@ -270,6 +306,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) throws XWikiException {
+        System.out.println("fetchCollectionsInfo " + entity);
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
