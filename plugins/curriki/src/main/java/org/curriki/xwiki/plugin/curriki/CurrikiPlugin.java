@@ -214,11 +214,11 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             //CURRIKI-5472: this is a dangerous spot: it has to deserialize all the collections of the group
 
             if(hasCollections(group, context)) {
-                System.out.println("has");
+                System.out.println("Group " + group +" has collections.");
                 groupInfo.put("collectionCount", 1);
                 groupInfo.put("editableCollectionCount", 1);
             } else {
-                System.out.println("has none");
+                System.out.println("Group " + group + " has no collections.");
                 groupInfo.put("collectionCount", 0);
                 groupInfo.put("editableCollectionCount", 0);
             }
