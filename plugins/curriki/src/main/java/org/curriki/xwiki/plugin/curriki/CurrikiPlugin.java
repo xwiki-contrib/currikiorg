@@ -181,11 +181,15 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      */
     public Map<String,Object> fetchUserGroups(String forUser, XWikiContext context) {
         System.out.println("fetchUserGroups " + forUser);
+        long start = System.nanoTime(), time = start;
         Map<String,Object> groups = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi(CurrikiSpaceManager.CURRIKI_SPACEMANGER_NAME, context);
         List spaces;
         try {
             spaces = sm.getSpaceNames(forUser, null);
+            time = System.nanoTime();
+            System.out.println("fetchUserGroups: getSpaceNames: " + (time-start));
+            start = time;
         } catch (Exception e) {
             // Ignore exception -- just return an empty list
             LOG.error("Error getting user groups", e);
@@ -196,6 +200,9 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         for (Object space : spaces) {
             if (space instanceof String) {
                 groups.put((String) space, getGroupInfo((String) space, context));
+                time = System.nanoTime();
+                System.out.println("fetchUserGroups: getGroupInfo: "+ space+ ": " + (time-start));
+                start = time;
             }
         }
 
