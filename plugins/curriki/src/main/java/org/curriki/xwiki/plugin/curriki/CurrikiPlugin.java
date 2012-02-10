@@ -192,7 +192,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         try {
             spaces = sm.getSpaceNames(forUser, null);
             time = System.nanoTime();
-            System.out.println("fetchUserGroups: getSpaceNames: " + durationDf.get().format(time-start));
+            System.out.println("fetchUserGroups: getSpaceNames: " + durationDf.get().format((time-start)/1000000)+ "::" + ((time-start)%1000000));
             start = time;
         } catch (Exception e) {
             // Ignore exception -- just return an empty list
@@ -205,7 +205,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             if (space instanceof String) {
                 groups.put((String) space, getGroupInfo((String) space, context));
                 time = System.nanoTime();
-                System.out.println("fetchUserGroups: getGroupInfo: "+ space+ ": " + durationDf.get().format(time-start));
+                System.out.println("fetchUserGroups: getGroupInfo: "+ space+ ": " + durationDf.get().format(time-start)+ "::" + ((time-start)%1000000));
                 start = time;
             }
         }
