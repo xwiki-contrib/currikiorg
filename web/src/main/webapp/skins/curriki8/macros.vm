@@ -387,10 +387,14 @@ $msg.get($prop.name)#end
 #macro(normalizelink $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
 ## #set($link = $xwiki.getURL($link))
-#setVariable("link" $xwiki.getURL($link))
+#set($result=$xwiki.getURL($link))
+#set ($link = $util.null)
+#setVariable("$link" $result)
 #else
 ## #set($link = $context.util.escapeURL($link))
-#setVariable("link" $context.util.escapeURL($link))
+#set($result=$context.util.escapeURL($link))
+#set ($link = $util.null)
+#setVariable("$link" $result)
 #end
 #end
 
@@ -402,7 +406,9 @@ $msg.get($prop.name)#end
 #macro(normalizeattachment $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
 ##set($link = $doc.getAttachmentURL($link))
-#setVariable("link" $doc.getAttachmentURL($link))
+#set($result=$doc.getAttachmentURL($link))
+#set ($link = $util.null)
+#setVariable("$link" $result)
 #end
 #end
 
