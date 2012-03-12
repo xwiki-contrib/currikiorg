@@ -113,13 +113,19 @@ $linkToBreak.substring(0, $index)
  * maxChars maximum number of chars to display
  *#
 #macro(getNewsExtract $fromObj $fromDoc $toStr $maxChars)
-#set($toStr = $fromDoc.display("extract", "view", $fromObj))
+    #set ($toStr = $util.null)
+    #setVariable ("$toStr" $fromDoc.display("extract", "view", $fromObj))
+    #set($toStr=$fromDoc.display("extract", "view", $fromObj))
 #if($toStr=="")
-#set($toStr = $fromDoc.display("content", "view", $fromObj))
+    #set ($toStr = $util.null)
+    #setVariable ("$toStr" $fromDoc.display("content", "view", $fromObj))
+    #set($toStr=$fromDoc.display("content", "view", $fromObj))
 #if($toStr.length() > $maxChars)
 #set($i = $toStr.lastIndexOf(" ", $maxChars))
 #set($i = $i + 1)
-#set($toStr = "${toStr.substring(0, $i)}")
+    #set ($toStr = $util.null)
+    #setVariable ("$toStr" "${toStr.substring(0, $i)}")
+    #set($toStr="${toStr.substring(0, $i)}")
 #end
 #end
 #end
@@ -319,7 +325,8 @@ $msg.get($prop.name)#end
   *#
 #macro(button $text $color $type $id $onclick)
 #if($type != "reset" && $type != "submit")
-#set($type = "submit")
+    #set ($type = $util.null)
+    #setVariable ("$type" "submit")#set($type="submit")
 #end
 ##<span class="btn-wrapper btn-wrapper-${color}">
 <button#if($id != "") id="${id}"#end class="button#if($color != "") button-${color}#end"#if($onclick != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
@@ -386,15 +393,12 @@ $msg.get($prop.name)#end
   *#
 #macro(normalizelink $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
-## #set($link = $xwiki.getURL($link))
 #set($result=$xwiki.getURL($link))
-#set ($link = $util.null)
-#setVariable("$link" $result)
+#set ($link = $util.null) #setVariable("$link" $result)
 #else
-## #set($link = $context.util.escapeURL($link))
-#set($result=$context.util.escapeURL($link))
-#set ($link = $util.null)
-#setVariable("$link" $result)
+## #set($link = $util.escapeURL($link))
+#set($result=$util.escapeURL($link))
+#set ($link = $util.null) #setVariable("$link" $result)
 #end
 #end
 
@@ -405,7 +409,6 @@ $msg.get($prop.name)#end
   *#
 #macro(normalizeattachment $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
-##set($link = $doc.getAttachmentURL($link))
 #set($result=$doc.getAttachmentURL($link))
 #set ($link = $util.null)
 #setVariable("$link" $result)
@@ -721,10 +724,11 @@ $msg.get("panel.navigation.home")
   *#
 #macro(checkActive $docname $result) ##{
   #if($doc.fullName == $docname) ##{
+    #set ($result = $util.null)
     #if($doc.space == "MyCurriki" && "$!request.user" != "") ##{
-      #set($result = false)
+        #setVariable ("$result" false)
     #else ##}{
-      #set($result = true)
+        #setVariable ("$result" true)
     #end ##}
   #end ##}
 #end ##}
@@ -735,8 +739,8 @@ $msg.get("panel.navigation.home")
   *#
 #macro(navigationCategory $text $rollovertext $link $expanded $items) ##{
   #set($iniexp = $expanded)
-  #if($doc.web.startsWith("Coll_")) ##{
-    #set($expanded = false) ##{
+  #if($doc.space.startsWith("Coll_")) ##{
+      #set ($expanded = $util.null)#setVariable ("$expanded" false)#set($expanded=false) ##{
     #set($cookiebase = "${context.user}_asset_")
   #else ##}{
     #set($cookiebase = "${context.user}_")
@@ -824,7 +828,7 @@ $msg.get("panel.navigation.home")
  *#
 #macro(displayMember $member)
 #if(!$member.startsWith("XWiki."))
-#set($member = "XWiki.${member}")
+    #set($tmp="${member}")#set ($member = $util.null)#setVariable ("$member" "XWiki.${member}")#set($member="XWiki.${member}")
 #end
 #set($memberdoc = $xwiki.getDocument($member))
 #if(!$memberdoc.isNew())
@@ -1197,7 +1201,7 @@ $memberdoc.getRenderedContent("$!content")</div>
       #if ( $title != "") ##{
         $xwiki.parseContent($title)
       #else  ##}{
-        XWiki . $!doc.web . $!doc.displayTitle
+        XWiki . $!doc.space . $!doc.displayTitle
       #end ##}
     #else ##}{
       $title
@@ -1395,23 +1399,28 @@ $memberdoc.getRenderedContent("$!content")</div>
 <div id="mycurriki-paginator" class="table-results">
 ## Make sure we have sane settings for $of
 #if($of < 0) ## {
-#set($of = 0)
+    #set ($of = $util.null)
+    #setVariable ("$of" 0)#set($of=0)
 #end ## }
 ## We dont show the paginator if nothing to paginate
 #if($of != 0) ## {
 ## Make sure we have sane settings for $from
 #if($from < 0) ## {
-#set($from = 0)
+    #set ($from = $util.null)
+    #setVariable ("$from" 0)#set($from=0)
 #end ## }
 #if($from >= $of) ## {
-#set($from = $of - 1)
+    #set ($from = $util.null)
+    #setVariable ("$from" $of-1)#set($from=$of-1)
 #end ## }
 ## Make sure we have sane settings for $nbToDisplay
 #if($nbToDisplay < 1) ## {
-#set($nbToDisplay = 1)
+    #set ($nbToDisplay = $util.null)
+    #setVariable ("$nbToDisplay" 1)#set($nbToDisplay=1)
 #end ## }
 #if("$called"=="") ## {
-#set($called = $msg.get("mycurriki.macro.paginate.results"))
+    #set ($called = $util.null)
+    #setVariable ("$called" $msg.get("mycurriki.macro.paginate.results"))#set($called=$msg.get("mycurriki.macro.paginate.results"))
 #end ## }
 ## Determine what $to sould be
 #set($to = ($from + $nbToDisplay) - 1)

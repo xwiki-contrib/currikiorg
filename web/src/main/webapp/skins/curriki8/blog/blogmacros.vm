@@ -109,7 +109,7 @@ $msg.get("mycurriki.blog.noblog")
 #end ## }
 #if($context.action == "inline") ## {
 #set($m_user = $context.user.substring(6))
-#if("$doc.web" == "Blog_${m_user}")
+#if("$doc.space" == "Blog_${m_user}")
 #set($m_bc="bc=MyCurriki.WebHome;MyCurriki.Blog&")
 #else
 #set($m_bc="")
@@ -189,7 +189,7 @@ $comment.comment
 #macro(mycurriki_blogarticle $bentrydoc $bentryobj $displayFully) ## {
 #set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.dateFormat")))
 #set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
-#if($doc.web == "MyCurriki") ## {
+#if($doc.space == "MyCurriki") ## {
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
 #if($title == "") ## {
 #set($title = "&nbsp;")
@@ -322,8 +322,8 @@ $('XWiki.ArticleClass_0_title').setAttribute('maxlength', '80');
 		debug : false,
 		remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
-        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
+        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.space/$bentrydoc.name/',
+        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.space/$bentrydoc.name',
         wiki_use_style: '$xwiki.getWysiwygToolbars()',
         wiki_plugins: 'core,attachments,macros'
 	});
@@ -387,15 +387,15 @@ The article [$mytitle>$pagefullname] has been published successfully.
   *
   *#
 #macro(blog_redirect)
-#if($doc.web == "Members") ## {
+#if($doc.space == "Members") ## {
 $response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
 #else ## } {
 #set($user = $context.user)
 #if($user.startsWith("XWiki.")) ## {
 #set($user = $user.substring(6))
 #end ## }
-#if($doc.web.startsWith("Blog_")) ## {
-#set($shortname = $doc.web.substring(5))
+#if($doc.space.startsWith("Blog_")) ## {
+#set($shortname = $doc.space.substring(5))
 #else ## } {
 #set($shortname = $user)
 #end ## }

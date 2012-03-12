@@ -4,7 +4,7 @@
   *#
 ## We need to no display content for AssetTemp otherwise posting in the CB GWT Editor
 ## will fail in IE with JS errors. This is not a nice hack but is necessary
-#if($doc.web!="AssetTemp")
+#if($doc.space!="AssetTemp")
 ## Need to do this before xwikivars is called otherwise the data might be removed
 #if($request.method=="POST") ##{
   #set($fileuploadlist = $xwiki.fileupload.getFileItems())

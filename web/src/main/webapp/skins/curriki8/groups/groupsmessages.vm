@@ -17,7 +17,7 @@ $msg.get("groups_messages_onlyaccessibletomembers")
 #groupsdisplaywelcome($msg.get("groups_messages_about_title") $spaceName $doc.name $isGroupAdmin)
 #if($isGroupMember)
 #begingroupsection($msg.get("groups_messages_createmessage_title"),"","","blue",false)
-<a href="$xwiki.getURL("${doc.web}.CreateMessage")">
+<a href="$xwiki.getURL("${doc.space}.CreateMessage")">
 <img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>
 <div class="add-message-content">
 $msg.get("groups_messages_createmessage_infotxt")
@@ -57,11 +57,11 @@ $msg.get("groups_messages_createmessage_infotxt")
 #set($membersGroup = $spaceName + ".MemberGroup")
 #set($noViewRightsSpecified = "not exists (from BaseObject as r, StringProperty as l where doc.fullName=r.name and r.className='XWiki.XWikiRights' and r.id=l.id.id and l.id.name='levels' and instr(l.value,'view')>0)")
 #set($existsGroupViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')>0 and instr(groups.value,'${membersGroup}')>0)")
-#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
 #elseif($filter=="1")
 ## To Me
 #set($existsUserViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as users where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=users.id.id and users.id.name='users' and instr(levels.value,'view')>0 and instr(users.value,'${context.user}')>0)")
-#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.space='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
 #elseif($filter=="2")
 ## To My Roles
 #if($request.role!="")
@@ -75,11 +75,11 @@ $msg.get("groups_messages_createmessage_infotxt")
 #set($existsRoleViewRights = $existsRoleViewRights + "instr(groups.value,'${role}')>0 or ")
 #end
 #set($existsRoleViewRights = $existsRoleViewRights + "1=0))")
-#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ${existsRoleViewRights} order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ${existsRoleViewRights} order by doc.date desc")
 #end
 #elseif($filter=="3" && $isGroupAdmin)
 ## To All
-#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and doc.web='Messages_$doc.web' order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and doc.web='Messages_$doc.space' order by doc.date desc")
 #end
 
 #set($itemsPerPage = 10)
@@ -885,8 +885,8 @@ $bentrydoc.display("content", "edit", $bentryobj)
 		debug : false,
 		remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
-        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
+        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.space/$bentrydoc.name/',
+        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.space/$bentrydoc.name',
         wiki_use_style: 'true',
         wiki_plugins: 'core,attachments'
 	});

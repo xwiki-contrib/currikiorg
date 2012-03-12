@@ -94,19 +94,20 @@ $text
 ## Determine whofor
 #if("$!whofor" == "") ## {
 #if("$!request.user" != "") ## {
-#set($whofor = $request.user)
+    #set ($whofor = $util.null)#setVariable ("$whofor" $request.user)#set($whofor=$request.user)
+    <!-- setting whofor to $request.user ; $whofor is now $whofor -->
 #else ## } {
-#if($doc.web.startsWith("Blog_")) ## {
-#set($whofor = $doc.web.substring(5))
+#if($doc.space.startsWith("Blog_")) ## {
+    #set ($whofor = $util.null)#setVariable ("$whofor" $doc.space.substring(5))#set($whofor=$doc.space.substring(5))
 #else ## } {
 #if("$!whofor" == "") ## {
-#set($whofor = $context.user)
+    #set ($whofor = $util.null)#setVariable ("$whofor" $context.user)#set($whofor=$context.user)
 #end ## }
 #end ## }
 #end ## }
 #end ## }h
 #if(!$whofor.startsWith("XWiki.")) ## {
-#set($whofor = "XWiki.$whofor")
+    #set ($whofor = $util.null)#setVariable ("$whofor" "XWiki.$whofor")#set($whofor="XWiki.$whofor")
 #end ## }
 ## Now know whofor
 #set($userdoc = $xwiki.getDocument($whofor))
@@ -163,7 +164,7 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 #if($pageref == "favorites" || $pageref == "contributions" || $pageref == "collections" || $pageref == "blog" || $pageref == "groups") ## {
 			class="frame"
 #end ## }
-		>
+		><!-- userdoc is $userdoc and userobj is $userobj whofor is $whofor -->
 ## The followint two used to be a call back to the local macro of the page including this macro
   ## #mycurriki_pagecontent($userdoc $userobj)
     #if("Profile"== $doc.name)
@@ -1214,7 +1215,7 @@ $msg.get("deleted")
 #macro(assets_userIsGroupAdmin $asset) ##{
 #set($sm = $xwiki.csm)
 #set($ret_assetGroupAdmin = false)
-#if($asset.creator == $context.user || $sm.isAdmin($asset.web.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin) ##{
+#if($asset.creator == $context.user || $sm.isAdmin($asset.space.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin) ##{
 	#set($ret_assetGroupAdmin = true)
 #end ##}
 #end ##}
@@ -1228,7 +1229,7 @@ $msg.get("deleted")
 #macro(assets_userInGroup $asset) ##{
 #set($sm = $xwiki.csm)
 #set($ret_userInAssetGroup = false)
-#if($asset.creator == $context.user || $sm.isMember($asset.web.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin) ##{
+#if($asset.creator == $context.user || $sm.isMember($asset.space.replaceFirst('Coll_', ''), $context.user) || $hasGlobalAdmin) ##{
 	#set($ret_assetGroupMember = true)
 #end ##}
 #end ##}

@@ -4,6 +4,18 @@
 ## Groups Macros ## {
 ##
 ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+
 
 ## groups shared macros
 #macro(groupinit)
@@ -640,7 +652,9 @@ $msg.get("groups_creategroup_needaccount", [$url])
     </thead>
     <tbody>
     <tr>
-    <td width="50%">
+    <td width="50%"><!-- newspace is $newspace of class $newspace.getClass()
+        $newspace.isDeleted()
+    -->
 		$newspace.display("topic","edit")
     </td>
     <td width="50%">
@@ -973,7 +987,7 @@ $xwiki.addTooltipJS()
 #set($showFeed = false)
 #if($isGroupMember || $s.policy=="open")
 #set($showFeed = true)
-#set($feedURL = $xwiki.getDocument("Groups.Feed").getExternalURL("view", $context.util.escapeURL("space=${spaceName}&xpage=plain")))
+#set($feedURL = $xwiki.getDocument("Groups.Feed").getExternalURL("view", $util.escapeURL("space=${spaceName}&xpage=plain")))
 #begingroupsection($msg.groups_home_activity_title $msg.groups_home_activity_feed $feedURL "blue" $showFeed)
 #set($as = $xwiki.activitystream)
 #set($streamName = $as.getStreamName($spaceName))

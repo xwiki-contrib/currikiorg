@@ -40,7 +40,7 @@
 #macro(findUniquePageWithExtra $spaceName $prefix $suffix $extra) ## {
 #set($ret_pageName = "${prefix}${extra}${suffix}")
 #if($xwiki.exists($ret_pageName)) ## {
-  #set($extra = "_"+$xwiki.generateRandomString(3).toLowerCase())
+  #set ($extra = $util.null)#setVariable ("$extra" "_$xwiki.generateRandomString(3).toLowerCase()")#set($extra = "_$xwiki.generateRandomString(3).toLowerCase()")
   #findUniquePageWithExtra($spaceName $prefix $suffix $extra)
 #end ## }
 #end ## }
@@ -58,7 +58,9 @@
 #macro(createGroupRole $spaceName $roleName) ## {
 #set($ret_err = false)
 #set($ret_rDoc = false)
-#set($roleName = $roleName.trim())
+    #set($temp=$roleName)
+    #set ($roleName = $util.null)
+    #setVariable ("$roleName" $temp.trim())#set($roleName="$temp.trim")
 #checkForUniqueRole($spaceName $roleName)
 #checkForValidSizeRole($spaceName $roleName)
 #if(!$ret_isRoleUnique) ## {
@@ -77,7 +79,7 @@
 ##
 #macro(renameGroupRole $groupDoc $newRoleName $oldRoleName) ## {
 #set($ret_err = false)
-#set($newRoleName = $newRoleName.trim())
+    #set ($newRoleName = $util.null) #setVariable("$newRoleName" $newRoleName.trim())#set($newRoleName=$newRoleName.trim())
 #checkForUniqueRole($groupDoc.space $newRoleName)
 #checkForValidSizeRole($groupDoc.space $newRoleName)
 #if(!$ret_isRoleUnique) ## {

@@ -35,7 +35,7 @@ $xwiki.getDocument("Panels.Footer").getTranslatedDocument().getRenderedContent()
     <!-- $request.session.removeAttribute("downloadSoon") --> *#
     #end##
 <!-- 14:41 -->
-#if("XWiki.XWikiGuest"!="$!context.user" && $doc.web!="MyCurriki" && $doc.web!="XWiki" &&$doc.web!="Registration" && ""=="$!request.xpage" && "true"!="$!request.framed")
+#if("XWiki.XWikiGuest"!="$!context.user" && $doc.space!="MyCurriki" && $doc.space!="XWiki" &&$doc.space!="Registration" && ""=="$!request.xpage" && "true"!="$!request.framed")
     #set($userType="$!xwiki.getDocument($context.user).get('XWiki.XWikiUsers').get('member_type').value")<!-- userType: $userType -->
     #if("corporation"==$userType)
         #set($lastCorpMembershipDonated="$!{xwiki.getDocument($context.user).get('Registration.DonationTrack').get('lastCorpMembershipDonated').value}")

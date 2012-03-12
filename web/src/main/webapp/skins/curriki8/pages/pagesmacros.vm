@@ -141,10 +141,12 @@ $assetdesc <a class="readmore" href="$assetdoc.getURL()">$msg.get("readmore")...
 #set($inbstart = $xwiki.parseInt($nbstart))
 <div class="homepage_news">
 #if($lefttitle == "")
-#set($lefttitle = "News - Staff Blogs")
+    #set ($lefttitle = $util.null)
+    #setVariable ("$lefttitle" "News - Staff Blogs")
 #end
 #if($righttitle == "")
-#set($righttitle = "Go to the staff blog section")
+    #set ($righttitle = $util.null)
+    #setVariable ("$righttitle"  "Go to the staff blog section")
 #end
 #titlebar($lefttitle $righttitle "News.WebHome" $color)
 #foreach ($item in $xwiki.searchDocuments($sql, $inbitems, $inbstart))

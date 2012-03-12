@@ -1594,8 +1594,9 @@ $asset.use($classname)
         #if($fieldtype=="text"||$fieldtype=="textarea")
          #set($fieldValue = $asset.getValue($fieldname))
          #if($fieldValue && $fieldValue!="")
-          #set($hidebydefault = false)
-         #end 
+             #set ($hidebydefault = $util.null)
+             #setVariable ("$hidebydefault" false)#set($hidebydefault=false)
+         #end
         #end
         #if($hidebydefault)
         <input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
@@ -1813,8 +1814,8 @@ $msg.get("notallowed")
 #if($user.startsWith("XWiki.")) ## {
 #set($user = $user.substring(6))
 #end ## }
-#if($doc.web.startsWith("Coll_")) ## {
-#set($shortname = $doc.web.substring(5))
+#if($doc.space.startsWith("Coll_")) ## {
+#set($shortname = $doc.space.substring(5))
 #else ## } {
 #set($shortname = $user)
 #end ## }
