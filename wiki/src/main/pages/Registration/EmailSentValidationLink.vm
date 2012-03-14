@@ -1,0 +1,77 @@
+#template("xwikivars.vm")
+#template("javascripts.vm")
+<style type="text/css">
+body {  min-width: 0;
+        margin-left:2em;
+        margin-right:2em;
+        margin-top: 1em;
+        padding: 20px;
+        font: normal 12px/16px arial, helvetica, sans-serif;
+        color:#444; background-color: rgb(255, 255, 255);
+        text-align: left; width:600px;}
+ h1 {color:#3968B7; font-size: 16px;}
+ h2 {margin:  10px 0 0 0;}
+ ol, li{margin-top:0; padding-top:0}
+    li {margin-top: 0.7em; margin-right:10em;}
+ form { padding-top: 1em; padding-bottom: 2em; margin-left: 2em }
+</style>
+#if($request.mailAgain=="1" && $request.xwikiname)
+    #set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+    #set($junk=$tool.init($xwiki, $context, $request, $msg, $targets))##
+    $tool.grabFromRequestParam()##
+    $tool.sendValidationEmail()##
+    #set($notice ="A new mail was sent .")
+#end
+
+##set($from = $msg.get('registration.email'))
+#set($from = $xwiki.getXWikiPreference("admin_email"))
+<h1>$msg.get('join.validate.email.title')</h1><br>
+<h2>$msg.get('join.validate.email.header1')</h2>
+
+#if("$!notice"!="")#info($notice)#end
+<p>$msg.get('join.validate.email.text1') $from.<br/>$msg.get('join.validate.email.text2')</p>
+##
+<form name="input" action="/xwiki/bin/view/Registration/Complete" method="POST">
+$msg.get('join.validate.email.header2')
+    <input type="hidden" name="xwikiname" value="$request.xwikiname"/>
+    #if($request.xpage)<input type="hidden" name="xpage" value="$request.xpage"/>#end
+    <input style="width:10em" type="text" name="validkey" id="validkey_input" size="16" /><button class="button-confirm" type="submit">$msg.get('join.validate.email.login_button')</button>
+</form> 
+
+
+
+<h2>$msg.get('join.validate.email.help_instructions_header')</h2>
+<ol>
+<li>$msg.get('join.validate.email.help_instructions_text1')</li>
+<li>$msg.get('join.validate.email.help_instructions_text2') <a href="/xwiki/bin/view/${doc.web}/${doc.name}?xpage=$request.xpage&xwikiname=${request.xwikiname}&mailAgain=1">$msg.get('join.validate.email.send_email_button')</a>.</li>
+<li>$msg.get('join.validate.email.help_instructions_text3') <a href="/xwiki/bin/view/Registration/EmailNotReceived?xpage=$!request.xpage&xwikiname=$!{request.xwikiname}">$msg.get('join.validate.email.email_not_received_button')</a>.</li>
+</ol>
+#if($targets)#else##
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+#end##
+<p style="text-align:right; padding-right: 3em;">
+    <button class="button-grey" style="button" onclick="window.top.location.href='${targets.noLogin}'; return false;">##
+      $msg.get('join.validate.email.cancel_button')</button>
+</p>
+
+
+<!-- Google Code for Registration Email Sent Conversion Page -->
+<script language="JavaScript" type="text/javascript">
+var google_conversion_id = 1066533164;
+var google_conversion_language = "en_US";
+var google_conversion_format = "1";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "uQs3CMK_ShCsgsj8Aw";
+//-->
+</script>
+<script language="JavaScript" src="http://www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<img height="1" width="1" border="0" src="http://www.googleadservices.com/pagead/conversion/1066533164/?label=uQs3CMK_ShCsgsj8Aw&amp;script=0"/>
+</noscript>
+
+<img src="https://cts.vresp.com/s.gif?h=d6487b16dd" height="1" width="1"/>
+<script type="text/javascript">
+    Ext.onReady(Curriki.ui.login.hideLoginLoading);
+</script>

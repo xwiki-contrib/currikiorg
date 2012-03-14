@@ -1,0 +1,48 @@
+<style type="text/css">
+#content {
+ padding: 0em 0 4em;
+}
+</style>#error ("This is the older Advanced Search with Apache Solr. Please compare with the [Advanced Search using Solr > Search.WebHome].")
+
+
+{pre}
+<style type="text/css">
+#content {
+ padding: 0em 0 1em;
+}
+</style>
+<script type="text/javascript">
+/* <![CDATA[ */
+Ext.ns('Curriki.userinfo');
+Curriki.userinfo = {
+	isAdmin: #if($hasGlobalAdmin)true#{else}false#end
+};
+/* ]]> */
+</script>
+<!--
+<script type="text/javascript" src="/xwiki/bin/view/Search/SearchJS?xpage=plain"></script>
+-->
+<!-- -->
+<script type="text/javascript" src="/xwiki/js/${gVersion}/curriki-module-search${debugging}.js">
+</script>
+<!-- -->
+<div id="search-div"></div>
+<form id="history-form" class="x-hidden">
+    <input type="hidden" id="x-history-field" />
+    <iframe id="x-history-frame"></iframe>
+</form>
+<script type="text/javascript">
+/* <![CDATA[ */
+//Curriki.module.search.tabList = ['resource'];
+//Curriki.module.search.restrictions = 'web:Coll_${spaceName}';
+Curriki.module.search.start();
+/* ]]> */
+</script>
+{/pre}
+
+<br>
+<hr>
+<h3>Sponsored by</h3>
+
+<br><a href="http://www.enterprisedb.com"><img src="http://www.curriki.org/xwiki/bin/download/Main/Browse_InfoMediaLit/EDBlogobluebkrgb300SM.jpg" style="float:left;margin:-6px 4px 0px 0px;" alt="EnterpriseDB" /> </a>
+<br>

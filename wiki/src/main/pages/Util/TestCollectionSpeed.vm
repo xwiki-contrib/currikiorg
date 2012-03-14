@@ -1,0 +1,39 @@
+## #set($ok = $xwiki.flushCache())
+## just to make sure we have the basic init of xwiki done
+## #set($ok = $xwiki.curriki.fetchUserCollectionsList())
+#set($userName="$context.user")
+#set($time1 = $xwiki.date.time)
+#set($ok = $xwiki.curriki.fetchUserCollectionsList($userName))
+#set($time2 = $xwiki.date.time)
+#set($ok = $xwiki.curriki.fetchUserCollectionsInfo($userName))
+#set($time3 = $xwiki.date.time)
+#set($ok = $xwiki.curriki.fetchUserGroups($userName))
+#set($time4 = $xwiki.date.time)
+#set($dtime1 = $time2 - $time1)
+#set($dtime2 = $time3 - $time2)
+#set($dtime3 = $time4 - $time3)
+* Run1:
+** fetchUserCollectionsList: $dtime1
+** fetchUserCollectionsInfo: $dtime2
+** fetchUserGroups: $dtime3
+#set($time1 = $xwiki.date.time)
+#set($ok = $xwiki.curriki.fetchUserCollectionsList($userName))
+#set($time2 = $xwiki.date.time)
+#set($ok = $xwiki.curriki.fetchUserCollectionsInfo($userName))
+#set($time3 = $xwiki.date.time)
+#set($ok = $xwiki.curriki.fetchUserGroups($userName))
+#set($time4 = $xwiki.date.time)
+#set($dtime1 = $time2 - $time1)
+#set($dtime2 = $time3 - $time2)
+#set($dtime3 = $time4 - $time3)
+
+#if("$!request.sleep"!="")
+<%
+Thread.sleep(Integer.parseInt(request.sleep));
+%>
+Have slept $request.sleep miliseconds.
+#end
+* Run2:
+** fetchUserCollectionsList: $dtime1
+** fetchUserCollectionsInfo: $dtime2
+** fetchUserGroups: $dtime3

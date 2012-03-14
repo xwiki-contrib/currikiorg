@@ -1,0 +1,32 @@
+
+#if($request.method=="POST" && "$!request.confirm"=="1")
+    #set($tool=$xwiki.parseGroovyFromPage("Admin.FixValidationTool"))
+    $tool.init($request, $context, $xwiki, $msg)
+    #foreach($u in $tool.usersBeingFixed)##
+        <!-- u is $u with obj $u.userObj and active $u.userObj.getProperty("active").getValue() or class $u.userObj.getProperty("active").getValue().getClass() -->
+        #if($u.isMissing==false)
+- <a href="/xwiki/bin/edit/XWiki/${u.userDoc.name}?editor=object">$u.firstName $u.lastName &lt;$u.email&gt;</a>
+        #else
+        #end##
+    #end
+    ... Finished
+
+    #if($tool.rejects.size()>0)The following users have not been processed:
+        #foreach($u in $tool.rejects)
+- <a href="/xwiki/bin/edit/XWiki/${u.userDoc.name}?editor=object">$u.fullName</a> ($u.reason)
+        #end #end
+
+    <a href="$doc.name">Restart?</a>
+#else
+1 Fix Validation
+
+Insert in the below box the xwiki-name or validation URLs of the intended users.
+This will activate their account and display their email address so that you can warn them.
+
+<form action="FixValidation" method="POST">
+    <textarea name='urls' rows='5'>
+    </textarea>
+    <br/>
+    <input type='submit' name='confirm' label='confirm' value='1'/>
+</form>
+#end

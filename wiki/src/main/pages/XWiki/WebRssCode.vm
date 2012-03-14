@@ -1,0 +1,103 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="asset" type="org.curriki.plugin.asset.Asset" *# ##
+{pre}
+$response.setContentType("text/xml")
+#set($quote='"')##
+#macro(asset_info_edlevel $asset $popup)
+#set($educlevels = $!asset.getValue("educational_level"))
+<ul class="asset-info-edlevel">
+    #set($edlevelCounter = 0)
+    #foreach($educlevel in $educlevels)
+    #set($edlevelCounter = $edlevelCounter + 1)
+    #if(!$popup || $edlevelCounter<3)
+    <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
+    #end
+    #end
+    #if($popup)
+    #if(!$educlevels || $educlevels.size()==0)
+     <li>$msg.get("global.title.popup.none.selected")</li>
+    #end
+    #if($edlevelCounter>2)
+     <li>...</li>
+    #end
+    #end
+</ul>
+#end##
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://purl.org/rss/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/" >
+<channel rdf:about="$baseurl">
+<title>$request.serverName</title>
+<link>$baseurl</link>
+<description>
+$request.serverName
+</description>
+<image rdf:resource="${baseurl}/xwiki/skins/curriki8/LogoStandalone-globeOnly.png" />
+<dc:language>$doc.defaultLanguage</dc:language>
+<dc:rights>$xwiki.webCopyright</dc:rights>
+<dc:publisher>Curriki Inc.</dc:publisher>
+<dc:creator>Curriki Inc.</dc:creator>
+<items>
+<rdf:Seq>
+#foreach ($item in $list)
+#if($xwiki.hasAccessLevel("view", "${context.database}:${item}"))
+#set ($currentdoc = $xwiki.getDocument($item))
+<rdf:li rdf:resource="${baseurl}/xwiki/bin/view/${currentdoc.web}/${currentdoc.name}" />
+#end
+#end
+</rdf:Seq>
+</items>
+</channel>
+<image rdf:about="${baseurl}/xwiki/skins/default/logo.gif">
+  <title>XWiki Logo</title>
+  <link>${baseurl}</link>
+  <url>${baseurl}/xwiki/skins/default/logo.gif</url>
+</image>
+#foreach ($item in $list)
+#if($xwiki.hasAccessLevel("view", "${context.database}:${item}"))
+#set ($currentdoc = $xwiki.getDocument($item))
+#if($currentdoc.getObject("CurrikiCode.AssetClass")) #set ($asset = $xwiki.curriki.fetchAsset($item))#end
+#set ($url = "${baseurl}/xwiki/bin/view/${currentdoc.web}/${currentdoc.name}")
+#if ($currentdoc.content.length() < 255)
+#set ($length = $currentdoc.content.length())
+#else
+#set ($length = 255)
+#end
+<item rdf:about="$url">
+<title>#if($asset)$xwiki.getXMLEncoded($asset.getDisplayTitle())#else${currentdoc.web}.${currentdoc.name}#end</title>
+<link>$url</link>
+<description>
+#set($i = $currentdoc.author.indexOf(".")+1)
+$xwiki.getXMLEncoded("Version $currentdoc.version edited by <a href=${quote}${baseurl}/xwiki/bin/view/XWiki/$currentdoc.author.substring($i)${quote}>$xwiki.getXMLEncoded($xwiki.getUserName($currentdoc.author,false))</a> on $currentdoc.date")
+#set($comment = $!currentdoc.comment)
+#if($comment && $currentdoc.version != "2.1")
+$xwiki.getXMLEncoded("<p><b>Comment:</b> $comment</p>")
+#end
+#if($asset)
+##$xwiki.getXMLEncoded("<p><b>Description:</b> $xwiki.getXMLEncoded($asset.getDescription().replaceAll('<[^>]+>',''))</p>")
+##$xwiki.getXMLEncoded("#asset_info_subject($asset false)")
+$xwiki.getXMLEncoded("<p><strong>$msg.get('global.title.popup.description')</strong><span>$!asset.display('description')</span></p>")
+$xwiki.getXMLEncoded("<strong>$msg.get('global.title.popup.subject')</strong>")
+$xwiki.getXMLEncoded("#asset_info_subject($asset false)")
+$xwiki.getXMLEncoded("<strong>$msg.get('global.title.popup.educationlevel')</strong>")
+$xwiki.getXMLEncoded("#asset_info_edlevel($asset false)")
+$xwiki.getXMLEncoded("<strong>$msg.get('global.title.popup.ict')</strong>")
+$xwiki.getXMLEncoded("#asset_info_ict($asset true)")
+$asset.use("CurrikiCode.AssetLicenseClass")
+$xwiki.getXMLEncoded("<p><strong>$msg.get('rve.information.rightsholder_title')</strong><span>$!asset.display('rightsHolder')</span></p>")
+$xwiki.getXMLEncoded("<p><strong>$msg.get('rve.information.licensedeed_title')</strong><span>$!asset.display('licenseType')</span></p>")
+#end
+</description>
+<dc:date>$xwiki.formatDate($currentdoc.date,"yyyy-MM-dd'T'HH:mm:ss'Z'")</dc:date>
+<dc:creator>$xwiki.getXMLEncoded($xwiki.getUserName($currentdoc.creator,false))</dc:creator>
+<dc:contributor>
+<rdf:Description link="">
+<rdf:value>$xwiki.getXMLEncoded($xwiki.getUserName($currentdoc.author,false))</rdf:value>
+</rdf:Description>
+</dc:contributor>
+</item>
+#end
+#end
+</rdf:RDF>
+{/pre}

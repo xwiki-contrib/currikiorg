@@ -1,0 +1,60 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+{pre}##
+#if($request.session)#set($oldTool=$request.session.getAttribute("SocialLoginTool"))#end##
+#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+#if($oldTool)##
+ $tool.grabFrom($oldTool)##
+ $request.session.removeAttribute("SocialLoginTool")##
+#end##
+$tool.init($xwiki,$context,$request,$msg,$targets)##
+#set($view=$tool.action($request))##
+#macro(render)
+    #if($view=="creationForm")#if($request.method=="POST")##
+        $request.session.setAttribute("SocialLoginTool",$tool)##
+        $tool.readProviderProfile()##
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/SocialLogin?xaction=creationForm&$!request.getQueryString()")##
+    #else##
+        $tool.readProviderProfile()##
+        $xwiki.includeForm("Registration.RegistrationBootstrap",false)##
+    #end##
+    #set($view="nothing")##
+    #elseif($view=="bounceToProvider")#set($view=$tool.bounceToProvider($response))##
+    #elseif($view=="processAuthReturn")<!-- view: $view -->#set($view=$tool.processAuthReturn())##
+    #elseif($view=="createNewProfile")<!-- view: $view -->#set($view=$tool.tryCreateNewProfile())##
+    #elseif($view=="backFromAuthorization")#set($redir=$tool.getNowTarget())#set($view="")#set($included=true)$xwiki.includeForm("Registration.BackFromAuthorization",false)##
+    #elseif($view=="refused")#set($redir=$targets.noLogin)#set($included="true")$xwiki.includeForm("Registration.BackFromAuthorization",false)#set($view="")##
+    #elseif($view=="pleaseDonate")##
+        #if($tool.isCorporateAccount())#set($donateDoc="DonateCorp")#else#set($donateDoc="DonateNonCorp")#end
+        ## HAVE TO REDIRECT WITH THE USER-NAME INCLUDED AND ONLY IF NOT CHROME
+        #if($request.method=="POST" && ! $request.getHeader("User-Agent").contains("Chrome"))##
+            $request.session.setAttribute("SocialLoginTool",$tool)##
+            $response.sendRedirect("/xwiki/bin/view/Registration/$donateDoc?xpage=popup&framed=true&xwikiname=$tool.username"))##
+        #else##
+            #set($user="$tool.username")##
+            #set($view="")##
+            #set($included=true)##
+            $xwiki.includeForm("Registration.$donateDoc",false)##
+        #end
+    #elseif($view=="redirectOnTop")#set($redir=$tool.getNowTarget())#set($view="")$xwiki.includeForm("Registration.JumpToTop",false)##
+    #elseif($view=="error")#foreach($e in $tool.errors)#error($e)#end
+    #elseif($view=="nothing")##nothing
+    #else<!-- ${msg.get('xwiki.socialLogin.nothingToDo')} -->
+    #end##
+#end##
+<!-- view is $view -->
+#render()##
+## the little extra in case
+<!-- view is $view -->
+#if($view)#render()#end##
+<!-- view is $view -->
+#if($view)#render()#end##
+{/pre}

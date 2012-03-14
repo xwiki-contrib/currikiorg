@@ -1,0 +1,52 @@
+<h1>Google-powered Search</h1>
+
+<br>
+
+<div class="headerbar orange">Finding Curriki Resources</div>
+#if($request.warning=="iOSWarn")
+<p>We apologize that Curriki Search feature is experiencing difficulty on Safari on iOS5. Currently, this platform can only make use of the Google special search below.</p>
+<p>When using the Google-powered Search on Curriki, entering several search terms will improve the results.<p>
+#else
+    <br />
+
+    <img src="/xwiki/bin/download/Main/AboutFindingCollecting/tutorialicon.gif" style="float:left;margin:-8px 2px 0 0;" alt="" width="41" height="33" border="0" /><a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/VideoTutorialHowToUseAdvancedSearch?bc=;Coll_curriki.Tutorials;Coll_curriki.TutorialsHowtoSearchBrowseFindResources">Tutorial: How to Use Advanced Search</a>
+
+<p>When using the Google-powered Search on Curriki, entering several search terms will improve the results.<p>
+<p>To use Curriki's <a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/RefineyourSearchforLearningResources?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.HowtoSearchBrowseCurriki_0">search filters</a>, such as subject area, ICT, or educational level, go to <a href="/xwiki/bin/view/Search/#o%3Af%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1">Advanced Search</a>.</p>
+
+For more information on search tools, check out the <i><a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/HowtoSearchBrowseCurriki_0?bc=;Coll_curriki.CurrikiHelp">How to Search & Browse</a></i> section in the <a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/CurrikiHelp?bc=">Curriki Help Collection</a>.
+#end
+
+<br>
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load('search', '1');
+    google.setOnLoadCallback(function() {
+        google.search.CustomSearchControl.attachAutoCompletion(
+                '009445585974142445861:5jwom-vlw5i',
+                document.getElementById('q'),
+                'cse-search-box');
+    });
+</script>
+<form action="/xwiki/bin/view/Main/GoogleSearchResults" id="cse-search-box">
+    <div>
+        <input type="hidden" name="cx" value="009445585974142445861:5jwom-vlw5i" />
+        <input type="hidden" name="cof" value="FORID:11" />
+        <input type="hidden" name="ie" value="UTF-8" />
+        #if($request.warning=="iOSWarn")<input type="hidden" name="warning" value="iOSWarn"/>#end
+        <input type="text" name="q" autocomplete="off" size="31" />
+        <input type="submit" name="sa" class="button" value="Search" />
+    </div>
+</form>
+<script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&lang=en"></script>
+
+<div id="cse-search-results"></div>
+<script type="text/javascript">
+    var googleSearchIframeName = "cse-search-results";
+    var googleSearchFormName = "cse-search-box";
+    var googleSearchFrameWidth = 600;
+    var googleSearchDomain = "www.google.com";
+    var googleSearchPath = "/cse";
+</script>
+<script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>

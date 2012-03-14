@@ -1,0 +1,123 @@
+import javax.servlet.http.HttpServletRequest
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.web.XWikiMessageTool
+import java.util.regex.Pattern
+import java.util.regex.Matcher
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.api.Object
+import com.xpn.xwiki.api.Document
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+
+public class FixValidationTool {
+
+    void init(HttpServletRequest request, Context context, XWiki xwiki, XWikiMessageTool msg) {
+        this.request = request;
+        this.context = context;
+        this.msg = msg;
+        this.xwiki = xwiki;
+        this.rejects = new LinkedList();
+    }
+
+    HttpServletRequest request;
+    Context context;
+    XWiki xwiki;
+    XWikiMessageTool msg;
+    List rejects;
+
+
+
+    Iterator getUsersBeingFixed() {
+        return new  UsersBeingFixedIterator(request, xwiki, rejects);
+    }
+
+
+
+}
+
+
+
+class UsersBeingFixedIterator implements Iterator {
+
+    StringTokenizer stok;
+    XWiki xwiki;
+    List rejects;
+
+    public UsersBeingFixedIterator(HttpServletRequest request, XWiki xwiki, List rejects) {
+        stok = new StringTokenizer(request.getParameter("urls"),"\n\r \t", false);
+        this.xwiki=xwiki;
+        this.rejects = rejects;
+    }
+
+    public boolean hasNext() {
+        return stok.hasMoreTokens();
+    }
+
+    public java.lang.Object next() {
+        String urlBit = stok.nextToken();
+        UserBeingFixed u = new UserBeingFixed(urlBit, xwiki);
+        if(u.isMissing) rejects.add(u);
+        return u;
+    }
+
+    public void remove() { throw new UnsupportedOperationException();}
+}
+
+
+
+class UserBeingFixed {
+    String email;
+    String fullName;
+    String firstName, lastName;
+    Document userDoc;
+    Object userObj;
+    String reason;
+
+
+    boolean isMissing = true;
+    Log LOG = LogFactory.getLog("groovyPages.FixValidationTool");
+    Pattern validationUrlPattern = Pattern.compile("/xwiki/bin/view/Registration/Complete\\?xwikiname=([^&]+)&validkey=([^&]+)");
+    // e.g. /xwiki/bin/view/Registration/Complete?xwikiname=xxx&validkey=xxx
+
+    UserBeingFixed(String urlBit, XWiki xwiki) {
+        LOG.warn('Attempting to fix validation for "${urlBit }".');
+        Matcher validationUrl = validationUrlPattern.matcher(urlBit);
+        String validationKey = null;
+        if(validationUrl.matches()) {
+            validationKey = validationUrl.group(2);
+            urlBit = validationUrl.group(1);
+            this.fullName = "XWiki.${urlBit}";
+        } else {
+            if(urlBit.startsWith("XWiki")) urlBit = urlBit.substring("XWiki.".length());
+            this.fullName = "XWiki.${urlBit}";
+        }
+        userDoc = xwiki.getDocument(fullName);
+        if(userDoc!=null) {
+            LOG.warn("Fixing validation for \"" + fullName + "\".");
+            userObj = userDoc.getObject("XWiki.XWikiUsers");
+            if(userObj==null) {
+                LOG.warn("User ${fullName} has no object!!");
+                reason = "no user object";
+            } else if (userObj.getProperty("active")!=null && userObj.getProperty("active").value==1){
+                LOG.warn("User ${fullName} is already active.");
+                reason = "already active";
+            } else if(validationKey!=null && validationKey != userObj.getProperty("validkey").value) {
+                LOG.warn("Validation key " + validationKey + " is invalid.")
+                reason = "validation key invalid";
+            } else {
+                userObj.set("active", "1");
+                userObj.set("email_undeliverable", "0");
+                userDoc.saveWithProgrammingRights("Activating to circumvent past buggy validation.");
+                LOG.warn("Fixed validation for \"${fullName}\".");
+
+                this.firstName = userObj.get("first_name");
+                this.lastName = userObj.get("last_name");
+                this.email = userObj.get("email");
+                this.isMissing = false;
+            }
+        } else {
+            LOG.warn("No user doc found.");
+            reason = "no user doc";
+        }
+    }
+}

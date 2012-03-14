@@ -1,0 +1,9 @@
+#set($what=$request.getParameter("what"))##
+#set($v=$xwiki.parseGroovyFromPage("Registration.Validation"))##
+$v.init($xwiki)##
+#browserCacheEnableFor(60)##
+#if($what=="username")$v.isValidUsername($request.value, false)##
+#elseif($what=="email")$v.isValidEmail($request.value, false)##
+#else##
+    Only verifies email and username now.
+#end##

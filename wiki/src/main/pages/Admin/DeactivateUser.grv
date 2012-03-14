@@ -1,0 +1,71 @@
+
+// <%
+import com.xpn.xwiki.api.*;
+
+
+//XWiki xwiki;
+//Context context;
+//Document doc;
+
+println();
+println("1 Deactivate User");
+if(request.getParameter("user")!=null) {
+    String username = request.getParameter("user");
+    if(!username.startsWith("XWiki.")) username = "XWiki." + username;
+    Document userdoc = xwiki.getDocument(username);
+    com.xpn.xwiki.api.Object userobj = userdoc.getObject("XWiki.XWikiUsers"),
+        socialLoginObj = userdoc.getObject("XWiki.SocialLoginClass"),
+        socialLoginProfileObj = userdoc.getObject("XWiki.SocialLoginProfileClass");
+    String formerEmail=null, changedEmail = null;
+    if(userobj!=null) {
+      formerEmail  = userobj.get("email");
+      changedEmail = "nobody-+" + System.currentTimeMillis() + formerEmail.replaceAll("@","_at_") + "@deactivated.example.com";
+    }
+
+    if(userobj==null) {
+        println(" User not found: \"" + request.getParameter("user") + "\".");
+        println();
+        println("Please go back to [" + doc.fullName + "].")
+    } else if(request.getParameter("confirm")=="1") {
+        userobj.set("active",0);
+        userobj.set("email", changedEmail);
+        userobj.set("email_undeliverable", 1);
+        //userdoc.saveWithProgrammingRights("Deactivated by user " + context.user + ".");
+        userdoc.removeObjects("XWiki.SocialLoginClass");
+        userdoc.removeObjects("XWiki.SocialLoginProfileClass");
+        userdoc.rename("DeactivatedUsers." + userdoc.name);
+        userdoc.setContent("1 Deactivated user\n * <a href='/xwiki/bin/view/MyCurriki/Profile?user='" + userdoc.fullName + "'>watch profile</a>\n * <a href='/xwiki/bin/edit/" + userdoc.fullName.replace(".","/") + "?editor=object>objects</a>")
+        userdoc.saveWithProgrammingRights("Deactivated and moved by user " + context.user + ".");
+        println();
+        print("Have moved user " + username + " to [" + userdoc.fullName + "], ")
+        println(" (<a href='/xwiki/bin/edit/" + userdoc.fullName.replace(".","/") + "?editor=object'>objects</a>):" )
+    } else {
+        println("Document found: " + userdoc);
+        println("")
+        print("Would deactivate user [" + username + "]: ")
+        println(" (<a href='/xwiki/bin/edit/" + username.replace(".","/") + "?editor=object'>objects</a>):" )
+        println("* would replace email " + formerEmail + " by " + changedEmail);
+        println("* would make inactive")
+        if(socialLoginObj!=null || socialLoginProfileObj!=null) {
+            for(Object profile: userdoc.getObjects("XWiki.SocialLoginProfileClass")) {
+                println("* would remove the social login profile for provider " +
+                        profile.get("provider") + " with email "+ profile.get("email") +
+                        " with name \"" + profile.get("firstName") + " " + profile.get("lastName") + "\".");
+            }
+        }
+        println();
+        println();
+        println("<a href='" + doc.name + "?user=" + username + "&confirm=1'>Please confirm</a>.")
+    }
+} else {
+    println("")
+    println("<form action='" + doc.name + "' method='get'><input name='user'/>");
+    println("<input type='submit' value='go'></form>");
+    println("<hr>")
+    println("Don't know hte user name ? Try [Admin.UserSearch].")
+}
+
+
+
+
+// %>

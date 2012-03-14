@@ -1,0 +1,37 @@
+#set($redirectURL="$doc.name?user=$request.user&xpage=$request.xpage&type=$request.type&amount=$request.amount")##
+#if($request.keepQuiet)#else#set($redirectURL=$xwiki.googleCheckout.processCartCheckout($request, $msg))#end##
+#if($redirectURL.startsWith("errors:"))
+1 Google Checkout For Corporate Membership
+
+Sorry, please correct the errors:
+#foreach($error in $redirectURL.substring(7).split(" "))
+* $msg.get($error)
+#end#elseif($request.redirectNow)$response.sendRedirect($redirectURL)#else
+<!-- redirectNow? #if($request.redirectNow) yes #else no #end should send user to <a href="$redirectURL" target="gcheckout">please checkout</a> (will be a redirect) -->
+#set($url="")
+<style type="text/css">body {  min-width: 0; }</style>
+<!-- begin javascripts -->##
+{pre}
+#template("javascripts.vm")##
+{/pre}
+## note: we do not run CurrikiApp.init()
+<!-- end javascripts -->
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+
+#if($request.keepQuiet)#else
+<script type="text/javascript">
+    Ext.onReady(function() {
+        Curriki.ui.login.popupIdentityAuthorization("$redirectURL")
+    });
+</script>
+#end
+<p style="margin: 3em;"><a target="GCheckout" href="${redirectURL}">Displaying Google Checkout in a popup.<br>This page should go away afterwards.</a></p>
+#if("XWiki.XWikiGuest"!=$context.user && "donation"==$request.type)
+<p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;">Logout and Cancel</button></p>
+#else
+<p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">Cancel</button></p>
+#end
+#end
+
+

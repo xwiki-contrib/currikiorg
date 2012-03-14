@@ -1,0 +1,20 @@
+1 Users
+
+   * [Main.JoinCurriki]
+
+#if($xwiki.hasAdminRights())
+1 Current Users
+
+#set($list = $xwiki.searchDocuments(",BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers'",50,0))
+{table}
+Photo | First Name | Last Name | eMail | View Profile
+#foreach($user in $list)
+#set($userdoc = $xwiki.getDocument($user)) $userdoc.use("XWiki.XWikiUsers") #if($userdoc.attachmentList.size()>0) #set($attach = $userdoc.attachmentList.get(0)) <img src="$userdoc.getAttachmentURL($attach.filename,"download", "height=50")" height="50"/> #end | $userdoc.first_name | $userdoc.last_name | #if($xwiki.hasAdminRights()) $userdoc.email #else not shown #end | [View Profile>$userdoc.fullName]
+#end
+{table}
+
+1 Admin
+
+   * [XWikiUserTemplate]
+   * [XWikiUserSheet]
+#end

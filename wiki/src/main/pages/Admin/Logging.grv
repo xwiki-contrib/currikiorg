@@ -1,0 +1,39 @@
+
+//<%
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+def log = LogFactory.getLog("groovyPages.Test");
+
+println "1 Logging"
+
+println "* Log is " + log + " of class " + log.getClass();
+
+log.error("This is an error")
+println "* Has the string \"This is an error\" appeared?"
+
+log.warn("This is a warning")
+println "* Has the string \"This is a warning\" appeared?"
+
+log.getLogger().setLevel(org.apache.log4j.Level.INFO)
+
+log.info("This is a info")
+println "* Has the string \"This is an info\" appeared?"
+
+
+println "<hr/>"
+
+println "log4j.properties is loaded from " + Log.class.getResource("/log4j.properties")
+
+println "<hr/>"
+
+println "Logger priority of Lucene and packaging set to info.";
+
+LogFactory.getLog("com.xpn.xwiki.plugin.packaging").getLogger().setLevel(org.apache.log4j.Level.INFO)
+LogFactory.getLog("com.xpn.xwiki.plugin.lucene").getLogger().setLevel(org.apache.log4j.Level.INFO)
+
+println "<hr/>"
+
+println "xwiki.version is " + xwiki.version
+
+// %>

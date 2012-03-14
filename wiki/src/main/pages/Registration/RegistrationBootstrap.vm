@@ -1,0 +1,257 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+## this page is included by XWiki.SocialLogin, itself included by login.vm ##
+## it provides the content of the dialogs following a successful authentication
+## and authorization at an identity provider to request the little bit more.
+## -- this page is displayed within a dialog -- no panel or anything such
+## ----------------
+## prepare variables
+##
+#set($warningFields=$tool.warningFields)##
+#set($okFields=$tool.okFields)##
+#if($targets)#else##
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+#end
+{pre}
+<!--
+    warningFields: $warningFields
+    okFields : $okFields
+    errors: $tool.errors -->
+{/pre}
+## ----------------
+<style type="text/css">
+ {
+    background-color: lightgray;
+    border: 0 none lightgray;
+}
+body { min-width: 0pt; }
+.registrationTable {
+    margin: 20px auto;
+    text-align: left;
+    width: 425px;
+}
+.registrationTable p {
+    height: 2em;
+    padding: 3px 20px 6px 10px;
+}
+.registrationTable p.textfield {
+    margin: 2pt;
+    padding: 2pt;
+}
+.registrationTable p.textfield label b, .registrationTable p label b {
+    float: left;
+    padding: 5px;
+    text-align: right;
+    vertical-align: bottom;
+    width: 8em;
+}
+.registrationTable p.textfield input {
+    float: left;
+    width: 20em;
+}
+select#memberType_input {
+    float: left;
+    width: 20em;
+}
+.warningField {
+    background: url("/xwiki/skins/curriki8/warning.png") no-repeat scroll right center transparent;
+    border: thin solid red;
+    padding: 0 20px 5px 0;
+}
+.okField {
+    background: url("/xwiki/skins/curriki8/ok.png") no-repeat scroll right center transparent;
+    border: medium none;
+}
+.waiting {
+    background: url("/xwiki/skins/curriki8/icons/spinner.gif") no-repeat scroll right center transparent;
+    border: medium none;
+}
+fieldset {
+    line-height: 12px;
+    margin: 20px auto;
+    width: 420px;
+    padding: 0 20px;
+}
+fieldset h3 {
+    color: #4E83C7;
+    font: bold 16px arial,helvetica,sans-serif;
+    padding: 2px 0px;
+    text-align:left;
+}
+.warning {
+    text-align: left;
+    color: #666;
+    font-weight: bold;
+}
+
+</style>
+<!-- begin javascripts -->##
+#set($globalDebug=true)##
+{pre}
+#template("javascripts.vm")##
+#template("analytics.vm")##
+{/pre}
+## note: we do not run CurrikiApp.init()
+<!-- end javascripts -->
+<!-- socialLoginTool is $tool with request of method $tool.request.method, while our request's method is $request.method
+    #set($provider = $tool.providerId)-->
+#if($provider)#set($regMode=$provider)##
+    #else#set($regMode="inCurriki")##
+#end##
+## ----------------
+{pre}
+<form class="xform" action="https://$hostname/xwiki/bin/view/$doc.space/${doc.name}?#if($request.xpage)xpage=$request.xpage#end" method="post" id="createUsernameForm"##
+    onsubmit="Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true;">
+  <div class="centered">
+      <fieldset>
+          <h3>$msg.get("join.member.title")</h3>
+          <p align="left"><!-- providerId: "$tool.providerId" -->
+              #if($tool.providerId)$msg.get("join.member.social_instructions",["$tool.providerId"])#else##
+                  $msg.get("join.member.curriki_instructions")##
+              #end</p>
+          <div style="height:1em"><p id="currikiRegistrationAdvice" align="left">&nbsp;</p></div>
+          #logViewScript("/join/register/${regMode}/view")
+          #if($tool.errors && ! $tool.errors.isEmpty())
+              <ul class="warning">#foreach($m in $tool.errors)<li>$msg.get($m)</li> #end</ul>
+              #logViewScript("/join/${regMode}/submit/errors")
+          #end
+      <input type="hidden" name="xaction" value="createProfile" >
+      <input type="hidden" name="city"  value="$!tool.city">
+      <input type="hidden" name="country" value="$!tool.country">
+
+        #macro(computeTrClasses $f)##
+            #if($okFields.contains($f)) okField #end ##
+            #if($warningFields.contains($f)) warningField #end ##
+        #end##
+        #if($provider && $providerFields.contains($f)) disabledLook #end## && $provider is validated
+      <div class="registrationTable">
+          ##
+          #set($f="username")
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_name_instructions');">
+              <label for="${f}_input"><b>$msg.get("join.member_name")</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.username}"##
+                autocomplete="off">
+          </p>
+          ##
+          ##
+          #set($f="password")
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_password_instructions');">
+              <label for="${f}_input"><b>$msg.get("join.member_password")</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.password}" type="password" ###
+                autocomplete="off" #if($request.getHeader("User-Agent").contains("MSIE"))style="width:19.5em"#end >
+          </p>
+          ##
+          ##
+          #set($f="firstName")
+          <p class="textfield #computeTrClasses($f)"
+                onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+              <label for="${f}_input"><b>$msg.get("join.member_first_name")</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.firstName}"##
+                     #if($provider)disabled="disabled" #end##
+                autocomplete="off">
+          </p>
+          ##
+          ##
+          #set($f="lastName")
+          <p class="textfield #computeTrClasses($f)"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+              <label for="${f}_input"><b>$msg.get("join.member_last_name")</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.lastName}" ##
+                     #if($provider)disabled="disabled" #end##
+                autocomplete="off">
+          </p>
+          ##
+          ##
+          #set($f="email")
+          <p class="textfield #computeTrClasses($f)"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+              <label for="${f}_input"><b>$msg.get("join.member_email")</b></label>
+              <input id="${f}_input" name="${f}" value="$!{tool.email}" ##
+                     #if($provider)disabled="disabled" #end##
+              >
+          </p>
+          ##
+          ##
+          #set($f="memberType")
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
+              <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
+              #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
+              <select name="member_type" id="${f}_input" onchange="Curriki.ui.login.memberTypeChanged()">##
+                  #set($val="-")##
+                  <option value="$val" #if($val==$!tool.memberType)selected="selected"#end>$msg.get("join.member_type_instructions")</option>##
+                  #foreach($val in $propVals)#if($val!="0")##
+                  <option value="$val" #if($val==$!tool.memberType)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
+                  #end#end
+              </select>
+          </p>
+          <p class="warning" id="memberTypeNotice">&nbsp;</p>
+          ##
+          ##
+          #set($f="agree")
+          <p class="#computeTrClasses($f) fullwidth" onmouseover="Curriki.ui.login.displayInstruction('join.member_agreement_instructions');">
+                  <label style="float: none; width:100%">
+                      <input type="checkbox" name="agree"##
+                              #if($request.agree)checked #end >##
+                      $msg.get("join.member_agreement").replaceFirst("_","<a target='curriki-terms' href='$msg.get('join.member_privacy_policy_url')'>").replaceFirst("_","</a>").replaceFirst("_","<a target='curriki-terms' href='$msg.get('join.member_terms_service_url')'>").replaceFirst("_","</a>")
+                  </label>
+          </p>
+          <p align="right">
+              <input type="submit" value="$msg.get("join.member.save_button")" class="button-orange">
+              <input type="button" value="$msg.get("join.member.cancel_button")"  class="button-grey" onclick="window.open('$targets.noLogin','_top')">### TODO: warning in case of cancel
+          </p>
+      ##</fieldset>
+  </div>
+</form>
+<script type="text/javascript">
+    Ext.onReady(function() {
+        Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]);
+    }, Curriki.ui.login.liveValidation);
+
+    Ext.onReady(function() {
+        Curriki.ui.login.hideLoginLoading();
+    });
+
+    scheduleDialogRescale(window, document, "loginIframe", 500,0);
+    Curriki.ui.login.memberTypeChanged = function () {
+        try {
+            var p = Ext.get("memberTypeNotice");
+            var s = Ext.get("memberType_input");
+            if(!p || !s) {
+                Curriki.console.log("Can't find elements. Stopping.");
+                return;
+            }
+            var text = ' ';
+            if(s && s.dom.value &&
+                    ("corporation"==s.dom.value)) {
+                text = _('join.member_type_coporate_instructions');
+            }
+            Curriki.console.log("memberTypeNotice: " + text);
+            Ext.get("memberTypeNotice").dom.innerHTML= text;
+        } catch(e) { Curriki.console.log(e); }
+    };
+    ##
+    Curriki.ui.login.displayInstruction = function(key,params) {
+        try {
+            var text;
+            if(params) text = _(key,params);
+                else text = _(key)
+            if(!text || text=="") text=" "; // warning nbsp in this quote
+            Ext.get("currikiRegistrationAdvice").dom.innerHTML = text;
+        } catch(e) { Curriki.console.log(e); }
+    };
+    ##
+    ##
+    Ext.onReady(function() {
+        //
+        // do it after load: the warning must be displayed in case
+        Curriki.ui.login.memberTypeChanged();
+    });
+</script>
+{/pre}

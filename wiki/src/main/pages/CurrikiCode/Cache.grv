@@ -1,0 +1,169 @@
+
+<%
+
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.store.XWikiCacheStore
+import org.xwiki.cache.oscache.internal.OSCacheCache
+import java.lang.reflect.Field
+import com.opensymphony.oscache.general.GeneralCacheAdministrator
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.store.XWikiHibernateStore
+import org.hibernate.impl.SessionFactoryImpl
+import com.opensymphony.oscache.extra.StatisticListenerImpl
+import com.xpn.xwiki.user.api.XWikiGroupService
+import com.xpn.xwiki.user.impl.xwiki.XWikiGroupServiceImpl
+
+def displayer = new CacheDisplayer();
+displayer.out = out;
+
+displayer.displayXWikiCacheInfo(xwiki, context);
+println();
+displayer.displayEvictions(xwiki);
+println();
+//displayer.displayHibernateStore(xwiki, context);
+displayer.updateLastMeasured();
+
+class CacheDisplayer {
+
+    static long lastMeasured;
+    static long latestTotalEvictions;
+    long totalCapacity = 0;
+    PrintWriter out;
+    boolean useCacheListener = false;
+
+
+    private void updateLastMeasured() {
+        lastMeasured = System.currentTimeMillis();
+    }
+
+    public void displayEvictions(XWiki xwiki) {
+        if(useCacheListener) {
+            if(lastMeasured==0) lastMeasured = System.currentTimeMillis();
+            StatisticListenerImpl stat = getOrMakeStatisticsListener(xwiki.getXWiki().store.getCache());
+            out.println(stat);
+            out.println("- last time measured: " + new Date(lastMeasured));
+            out.println("- now measured: " + new Date());
+            float span = (1/1000f)* (System.currentTimeMillis()-lastMeasured);
+            out.println("- time span (s): " + span);
+            out.println("- total capacity: " + totalCapacity);
+            long evictions = (stat.entriesAdded-totalCapacity);
+            if(evictions<0) evictions = 0;
+            out.println("- evictions since start: " + evictions);
+            out.println("- evictions since latest: " + (evictions-latestTotalEvictions));
+            if(span!=0) out.println("- eviction rate (ev/s): " + ((evictions-latestTotalEvictions)/(span)));
+            latestTotalEvictions = stat.entriesAdded-totalCapacity;
+        } else {
+            removeCacheListener(xwiki.getXWiki().store.getCache());
+        }
+    }
+
+    static long lastNumDBQueries;
+
+    public void displayHibernateStore(XWiki xwiki, Context context) {
+        XWikiCacheStore store = xwiki.getXWiki().store;
+        XWikiHibernateStore hibStore = store.store;
+        out.println("1 Hibernate Store")
+        out.println("Back end store is " + hibStore);
+        SessionFactoryImpl sessionFactory = hibStore.sessionFactory;
+        out.println("Session factory: " + sessionFactory);
+
+        try {
+            long numDBQueries = sessionFactory.getStatistics().queryExecutionCount
+            if(lastNumDBQueries==0) lastNumDBQueries = numDBQueries
+            out.println("* DB-queries since last time: " + (numDBQueries-lastNumDBQueries))
+            long span = (1/1000f)*(System.currentTimeMillis()-lastMeasured);
+            if(span!=0) out.println("* DB-query rate (q/s): " + ((numDBQueries-lastNumDBQueries)/span))
+        } catch (Exception ex) { ex.printStackTrace(); };
+
+        //out.println("Session: " + hibStore.getSession(context.context));
+        //out.println("query cache " + sessionFactory.queryCache);
+        out.println();
+        /* Field allCacheRegionsField = SessionFactoryImpl.class.getField("allCacheRegions");
+   allCacheRegionsField.setAccessible(true);
+   out.println("cache regions " + allCacheRegionsField.get(sessionFactory)); */
+        //out.println("{pre}")
+        out.println("* enabled: " + sessionFactory.getStatistics().setStatisticsEnabled(true));
+        out.println("* Statistics " + sessionFactory.getStatistics().toString().replace('[','').replace(']','').replaceAll(",", "\n\r* "));
+        //out.println("{/pre}")
+
+        
+    }
+
+
+    public void displayXWikiCacheInfo(XWiki xwiki, Context context) {
+        out.println("1 XWiki Cache information")
+        XWikiCacheStore store = xwiki.getXWiki().store;
+        out.println("XWiki Store is " + store + ".")
+        out.println("Back end store is " + store.store);
+        XWikiGroupServiceImpl groupService = xwiki.getXWiki().getGroupService(context.getXWikiContext());
+        out.println("{pre}")
+        out.println("<table class='wiki-table'>");
+        printHeaders();
+        out.println("<tbody>")
+
+        Field groupCacheField = XWikiGroupServiceImpl.class.getDeclaredField("groupCache");
+        groupCacheField.setAccessible(true);
+
+        displayInfoForCache("pageExistCache", store.getPageExistCache());
+        displayInfoForCache("groupCache", groupCacheField.get(groupService));
+        displayInfoForCache("cache", store.getCache());
+        out.println("</tbody></table>");
+        out.println("{/pre}")
+    }
+
+
+    private void printHeaders() {
+        out.println("<thead><tr><th>name</th><th>entries</th><th>capacity</th><th>admin object</th></tr></thead>")
+    }
+
+    private Object getCacheAdmin(OSCacheCache cache) {
+        Field field = cache.getClass().getDeclaredField("cacheAdmin")
+        field.setAccessible(true);
+        GeneralCacheAdministrator cacheAdmin = field.get(cache);
+        return cacheAdmin;
+    }
+
+    private void displayInfoForCache(String name, OSCacheCache xcache) {
+        out.println("<tr>");
+        out.println("<td>" + name + "</td>");
+        GeneralCacheAdministrator cacheAdmin = getCacheAdmin(xcache);
+        out.println(" <td> " + cacheAdmin.getCache().nbEntries + "</td>");
+        out.println(" <td>" + cacheAdmin.getCache().capacity + "</td>");
+        totalCapacity += cacheAdmin.getCache().capacity;
+        out.print(" <td> " + cacheAdmin + "</td>");
+        out.println("</tr>")
+    }
+
+    private void removeCacheListener(OSCacheCache xcache) {
+        com.opensymphony.oscache.base.Cache cache = getCacheAdmin(xcache).getCache();
+        for(x in cache.getCacheEventListenerList()) {
+            if(x instanceof StatisticListenerImpl) {
+                cache.removeCacheEventListener(x);
+                return;
+            };
+        }
+    }
+
+    private StatisticListenerImpl getOrMakeStatisticsListener(OSCacheCache xcache) {
+        com.opensymphony.oscache.base.Cache cache = getCacheAdmin(xcache).getCache();
+        for(x in cache.getCacheEventListenerList()) {
+            if(x instanceof StatisticListenerImpl) {
+                StatisticListenerImpl l = x;
+                if(l.entriesAdded<0) {
+                    l.entriesAdded = 0;
+                    l.entriesRemoved = 0;
+                    l.entriesUpdated = 0;
+                }
+                return x
+            };
+        }
+        // need to create it
+        StatisticListenerImpl r = new StatisticListenerImpl();
+        cache.addCacheEventListener(r);
+        return r;
+    }
+}
+
+
+
+// %>

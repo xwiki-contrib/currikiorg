@@ -1,0 +1,13 @@
+$response.setContentType("text/javascript")
+#browserCacheEnableFor(2)
+#if($context.user!="XWiki.XWikiGuest")
+Curriki.userinfo = {
+isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
+userGroups:"#foreach($g in $groups)$g,#end",
+userName:   "$context.user",
+firstName:  '$escapetool.javascript($xwiki.getDocument($context.user).display("first_name","view"))'
+};
+if(typeof(CurrikiUserinfoOnceLoaded)=="function") CurrikiUserinfoOnceLoaded();
+#else
+    // user is guest
+#end

@@ -1,0 +1,111 @@
+
+<h1>Export Page List</h1>
+<hr>
+ <%
+
+//adjust export-page-list to be callable to produce a xar exporting a range of documents
+//(provided the user is admin)
+
+import com.xpn.xwiki.*;
+import com.xpn.xwiki.api.*;
+import com.xpn.xwiki.doc.*;
+import com.xpn.xwiki.plugin.packaging.*;
+
+/* com.xpn.xwiki.api.XWiki xwiki;
+com.xpn.xwiki.api.Context context;
+javax.servlet.http.HttpServletRequest request;
+javax.servlet.http.HttpServletResponse response;
+com.xpn.xwiki.web.XWikiMessageTool msg;
+*/
+
+def pagelist = "Admin.PageList"
+def exportdir = "/appserv/build/projects/curriki/wiki/src/main/resources"
+def createzip = false;
+def filename = "archive";
+
+if(!context.hasAdminRights()) {
+  response.sendError(403);
+  return;
+}
+
+if (request.pagelist != null){
+  pagelist = request.pagelist
+  filename = pagelist;
+}
+
+if (request.createzip != null){
+  createzip = true;
+}
+
+if (request.exportdir != null){
+  exportdir = request.exportdir
+} else {
+  if(createzip) {
+    exportdir = java.io.File.createTempFile("ExportPageXarTmp","xar");
+    exportdir.delete();
+    exportdir.mkdirs();
+    println("Exported to directory " + exportdir);
+  }
+}
+
+if (request.confirm=="1") {
+  println "Starting export"
+  println "Delete existing files"
+  println "Creating package"
+  pack = new Package()
+  if (createzip) {
+    pack.setName(filename+".xar")
+  } else {
+    pack.setName("curriki")
+  }
+
+  pack.setDescription("Export of Curriki Wiki-based Application Code");
+
+  pack.setBackupPack(true);
+  pack.setPreserveVersion(true);
+
+  pack.setWithVersions(false)
+//  pack.setWithVersions(true)
+
+//  pack.addDocumentFilter(filter)
+  println "Adding documents"
+  def pages;
+  if(request.getParameter("pageListInput")==null)
+    pages = context.context.getWiki().getDocument(pagelist, context.context).content
+  else
+    pages = request.getParameter("pageListInput");
+
+  def list = pages.split("(\r|\n)+")
+  def last = list.size()
+  def i = 0
+  while (i < last){
+    println list[i]
+    pack.add(list[i], context.context)
+    i++
+  }
+
+//  pack.addAllWikiDocuments(context.context)
+  println "Exporting documents"
+
+  try {
+    if (createzip){
+      context.context.getResponse().setContentType("application/zip");
+      context.context.getResponse().addHeader("Content-disposition", "attachment; filename="+filename+".zip")
+      context.context.setFinished(true);
+      pack.export(context.context.getResponse().getOutputStream(), context.context)
+    } else {
+      pack.exportToDir(new File(exportdir), context.context)
+      println "Finished."
+    }
+  } catch (Exception e){
+    println "Error exporting"
+    println e.getMessage()
+  }
+
+  } else {
+    println "<h3>Input the pages you wish to export in a xar</h3>"
+    println "<form action='"+doc.name+"' method='get'><textarea name='pageListInput' rows='5'>"+(request.pageListInput!=null?request.pageListInput:"")+"</textarea><input type='submit' name='confirm' label='confirm' value='1'/><input type='hidden' name='createzip' value='true'></form>"
+    println "<p><hr><h3> XML Export of the Wiki from Admin/PageList</h3>"
+    println "[Confirm predefined export>ExportPageList?pagelist="+pagelist+"&confirm=1]"
+  }
+//%>

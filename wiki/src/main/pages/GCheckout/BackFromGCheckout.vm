@@ -1,0 +1,27 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+<!-- THIS IS BackFromGCheckout -->
+{pre}
+<script type="text/javascript">
+    function closer() {
+        window.clearInterval(window.closerInterval);
+        if(window.opener && !window.opener.closed) {
+            window.opener.focus();
+            window.close();
+        } else {
+            window.open("http://$xwiki.getXWiki().Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')", "currikiMainWindow");
+            if("currikiMainWindow"!=window.name) window.close();
+        }
+    }
+    window.closerInterval = window.setInterval(closer,20);
+</script>
+<p>$msg.get("googlecheckout.cart.finished-transaction")</p>
+<p><a href="/" target="currikiMainWindow">$hostname</a> </p>
+{/pre}

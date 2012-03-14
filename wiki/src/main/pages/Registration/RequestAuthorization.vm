@@ -1,0 +1,23 @@
+## this page is displayed with xpage=plain or popup to indicate that the request for authorization has been sent
+## unless the request has a parameter doPopup=yes, it actually does not pop-up because
+## such pop-ups are considered ad-pop-ups.
+<style type="text/css">body {  min-width: 0; }</style>
+<!-- begin javascripts -->##
+{pre}
+#template("javascripts.vm")##
+{/pre}
+## note: we do not run CurrikiApp.init()
+<!-- end javascripts -->
+#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+#set($junk=$targets.init($request,$xwiki))##
+#if($request.doPopup=="yes")
+<script type="text/javascript">
+    Ext.onReady(function() {
+        Curriki.ui.login.popupIdentityAuthorization("${request.to}")
+    });
+</script>
+#end
+<p style="margin: 3em;"><a target="identity-provider" href="${request.to}"
+        >$msg.get("join.dialogs.back-requesting-auth",[${request.provider}])</a>
+</p>
+<p style="text-align:center; margin-top: 5em;"><button onclick="window.top.location.href='$targets.noLogin'; return false;">$msg.get("join.dialogs.back-requesting-auth.cancel")</button></p>

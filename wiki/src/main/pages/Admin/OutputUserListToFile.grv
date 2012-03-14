@@ -1,0 +1,44 @@
+
+// <%
+import com.xpn.xwiki.api.*
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory;
+
+Log LOG = LogFactory.getLog("groovyPages.iContactUpdateTool");
+
+
+if(request.confirm=="1") {
+    Writer out = null;
+
+    int numsBack = 100;
+    int cursor = 0;
+    int numsDone = 0;
+    String whereHql = ",BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and doc.web='XWiki'";
+    List list;
+
+    println();
+
+    while( (list = xwiki.searchDocuments(whereHql, numsBack, cursor)).size()>0) {
+        cursor += list.size();
+        LOG.warn("Received list of size " + list.size())
+        for(String n in list) {
+            if(numsDone % 1000 == 0) {
+                LOG.warn("new file: " + numsDone + " done.");
+                if(out!=null) { out.flush(); out.close(); }
+                out = new OutputStreamWriter(new FileOutputStream("/tmp/usernames-" + (numsDone/1000) + ".txt"));
+                if(numsDone %10000==0) {
+                    Thread.sleep(10000);
+                    LOG.warn("Sleeping a bit.")
+                }
+            }
+            out.write(n);
+            LOG.warn(n)
+            out.write("\n");
+            numsDone++;
+        }
+    }
+    if(out!=null) { out.flush(); out.close(); }
+} else println("Please <a href='" + doc.name + "?confirm=1'>confirm</a>.")
+
+
+// %>

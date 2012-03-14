@@ -1,0 +1,136 @@
+## Step 1 for email validation
+##
+## Initialize
+##
+#set($emailSent = 0)
+#if($request.username) ## {
+#set($username = $request.username)
+#else ##}{
+#set($username = $context.user.substring(6))
+#end ##}
+##
+#if("$!username" == "" || $username.length() == 0 || $username == "XWikiGuest") ## {
+## No username given...  Error or Bounce to somewhere
+#set($err = $msg.get("emailValidation.step1.errNoUser"))
+#else ## }{
+## We first need to get the the right user
+#set($userDoc = $xwiki.getDocument("XWiki.${username}"))
+#set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
+#if(!$userObj) ## {
+## Error here too -- user could not be found
+#set($err = $msg.get("emailValidation.step1.errNotFound"))
+#else ## } {
+## Then check if inactive + bounced
+#if($!userObj.getProperty("active").getValue() == 0 && $!userObj.getProperty("email_undeliverable").getValue() == 1) ## {
+#set($userEmail = $!userObj.getProperty("email").getValue())
+#if("$!userEmail" == "") ## {
+#set($userEmail = "")
+#end ## }
+#set($name1 = $!userObj.getProperty("first_name").getValue())
+#if("$!name1" == "") ## {
+#set($name1 = "")
+#end ## }
+#set($name2 = $!userObj.getProperty("last_name").getValue())
+#if("$!name2" == "") ## {
+#set($name2 = "")
+#end ## }
+#else ## } {
+## We should give an error or bounce to somewhere here too
+#set($err = $msg.get("emailValidation.step1.errNotBounced"))
+#end ## }
+#end ## }
+#end ## }
+##
+##
+#if("$!err" == "") ## {
+##
+#if($!request.sendemail) ## {
+## Sending the email
+## Change the email address for the user (error if applicable)
+## Change the validation code for the user
+## And finally send the email with appropriate fillins
+#if("$!request.email" == "") ## {
+#set($err = $msg.get("emailValidation.step1.errNoEmail"))
+#else ## } {
+#set($newEmail = $request.email)
+## We need to check the email for proper formatting
+## Check for @
+## Check for 2 @s
+## Check for spaces
+## Check for no . after @
+## Check for . immediatley after @
+## Check for . at end
+## Check for "bad characters"
+## Summary -- [a-zA-Z0-9._+-=]+@([a-zA-Z0-9-].)+([a-zA-Z0-9]{2,4})
+#if(!$newEmail.matches('[a-zA-Z0-9_+=\.-]+@([a-zA-Z0-9-]+[\.])+([a-zA-Z]){2,4}')) ## {
+#set($err = $msg.get("emailValidation.step1.errBadEmail"))
+#end ## }
+## We need to check that the address is not already used by another user
+#set($qry = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='$newEmail' and obj.name<>'XWiki.$username'")
+#if($xwiki.searchDocuments($qry).size()>0) ## {
+#set($err = $msg.get("emailValidation.step1.errDupEmail"))
+#end ## }
+#end ## }
+##
+#if("$!err" == "") ## {
+#set($valCode = $xwiki.generateRandomString(8))
+#set($junk = $userObj.set("validkey", $valCode))
+#set($junk = $userObj.set("email", $newEmail))
+#set($junk = $userDoc.saveWithProgrammingRights())
+#set($link = "http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')/xwiki/bin/view/Registration/CompleteCaller?xwikiname=${username}&validkey=${valCode}"))
+#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
+#set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
+#set($mailSubject = $doc.getRenderedContent($mailDoc.title))
+#set($mailContent = $doc.getRenderedContent($mailDoc.content))
+$xwiki.mailsender.sendTextMessage($mailFrom, $newEmail, $mailSubject, $mailContent)
+#set($emailSent = 1)
+#end ## }
+#end ## }
+##
+##
+#if($emailSent == 1) ## {
+## Redirect to Sent Email page
+$response.sendRedirect($xwiki.getURL("Registration.EmailVerificationSent"))
+#else ## }{
+## Display Validation Form
+## TODO:  Implement email address validation in Javascript too?
+#if("$!err" != "") ## {
+<div id="email-verification1-error" class="errormessage">
+$err
+</div>
+#end ## }
+#if($!request.xpage=="popup")<style type="text/css">body { min-width: 0; margin-right:2em; width:80%}</style>#end
+<div id="email-verification1">
+ <h1>$msg.get('emailValidation.step1.title')</h1>
+ <form method="post" action="$xwiki.getURL('Registration.EmailVerification')">
+  <input type="hidden" name="sendemail" value="1" />
+  <input type="hidden" name="username" value="${username}" />
+  #if($!request.xpage!="")<input type="hidden" name="xpage" value="$request.xpage"/>#end
+  <p>$msg.get('emailValidation.step1.intro')</p>
+  #set($emailInput = '<input type="text" name="email" size=32 value="'+$userEmail+'" />')
+  <p>$msg.get('emailValidation.step1.weHave', [$name1, $name2, $emailInput])</p>
+  <p>$msg.get('emailValidation.step1.pleaseSubmit')</p>
+  <p class="button-right">
+      <button class="button button-grey" onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;">$msg.get('emailValidation.step1.cancel')</button>
+      <button type="submit" class="button button-orange">$msg.get('emailValidation.step1.submit')</button>
+  </p>
+ </form>
+</div>
+#if("$!footerJScript" == "")
+#set($footerJScript = "")
+#end
+{pre}
+#set($homepage = $xwiki.getURL("Main.WebHome"))
+#set($footerJScript = $footerJScript + '<script type="text/javascript">var warna = $$("a"); $$("#navigation-inner a.titles").each(function(a){warna=warna.without(a);}); $$("#header-member a.logout").each(function(a){warna=warna.without(a);}); warna.invoke("observe", "click", function(event){ if (!confirm("'+"${msg.get('emailValidation.step1.goElsewhere')}"+'")){ event=event||window.event; if(typeof event.preventDefault != "undefined"){ event.preventDefault(); } else if (window.event){ event.returnValue = false; } } else { item.href = "/xwiki/bin/logout/XWiki/XWikiLogout?xredirect='+"${homepage}"+'"; } });</script>')
+{/pre}
+#end ## }
+#else ## } {
+## Error:
+<div id="email-verification1-error" class="errormessage">
+$err
+</div>
+#end ## }
+<script type="text/javascript">
+    if(typeof(Ext)=="object") Ext.onReady(Curriki.ui.login.hideLoginLoading);
+    else if(window.parent && window.parent.Ext) window.parent.Curriki.ui.login.hideLoginLoading();
+</script>
