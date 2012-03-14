@@ -13,6 +13,7 @@ import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagerException;
 import com.xpn.xwiki.plugin.spacemanager.impl.SpaceImpl;
 import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 
+
 public class CurrikiSpace extends SpaceImpl {
 	
 	public static final String SPACE_LICENCE = "licence";

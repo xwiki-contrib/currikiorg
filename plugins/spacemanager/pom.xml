@@ -26,9 +26,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.xpn.xwiki.platform.plugins</groupId>
-    <artifactId>xwiki-plugins</artifactId>
-    <version>29</version>
+      <!-- <groupId>com.xpn.xwiki.platform.plugins</groupId>
+     <artifactId>xwiki-plugins</artifactId>
+     <version>30</version> -->
+      <groupId>org.curriki</groupId>
+      <artifactId>curriki-plugins</artifactId>
+      <version>1.11-SNAPSHOT</version>
   </parent>
   <artifactId>xwiki-plugin-spacemanager</artifactId>
   <version>1.1.1-3.1</version>
@@ -47,6 +50,9 @@
       <artifactId>jmock-cglib</artifactId>
       <version>1.1.0</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion><groupId>junit</groupId><artifactId>junit</artifactId></exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.xwiki.platform</groupId>

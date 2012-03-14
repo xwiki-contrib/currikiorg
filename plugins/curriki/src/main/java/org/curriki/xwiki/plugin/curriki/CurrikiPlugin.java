@@ -39,8 +39,8 @@ import com.xpn.xwiki.objects.classes.StaticListClass;
 import com.xpn.xwiki.objects.classes.BooleanClass;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.web.XWikiRequest;
+import com.xpn.xwiki.plugin.spacemanager.api.Space;
 
 /**
  */
