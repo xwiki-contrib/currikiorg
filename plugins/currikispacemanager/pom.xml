@@ -58,5 +58,15 @@
       <artifactId>xwiki-plugin-invitationmanager</artifactId>
       <version>${platform.plugins.invitationmanager.version}</version>
     </dependency>
+
+      <dependency><groupId>org.xwiki.platform</groupId>
+          <artifactId>xwiki-platform-model</artifactId><version>${platform.version}</version>
+          <exclusions><exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion></exclusions>
+      </dependency>
+      <dependency><artifactId>xwiki-rendering-api</artifactId>
+          <version>${platform.version}</version><groupId>org.xwiki.rendering</groupId>
+      </dependency>
+      <dependency><artifactId>commons-lang</artifactId><groupId>commons-lang</groupId></dependency>
+
   </dependencies>
 </project>      

@@ -34,4 +34,21 @@
   <name>XWiki Products - Curriki - Plugins - Mimetype Plugin</name>
   <packaging>jar</packaging>
   <description>XWiki Products - Curriki - Plugins - Mimetype Plugin</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.xwiki.platform</groupId>
+            <artifactId>xwiki-platform-legacy-oldcore</artifactId>
+            <version>${platform.version}</version>
+        </dependency>
+
+        <dependency><groupId>org.xwiki.platform</groupId>
+            <artifactId>xwiki-platform-model</artifactId><version>${platform.version}</version>
+            <exclusions><exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion></exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+
+    </dependencies>
 </project>

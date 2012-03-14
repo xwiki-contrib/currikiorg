@@ -80,6 +80,14 @@
       <artifactId>log4j</artifactId>
       <scope>provided</scope>
     </dependency>
+
+      <dependency><groupId>org.xwiki.commons</groupId>
+        <artifactId>xwiki-commons-context</artifactId><version>${platform.version}</version></dependency>
+      <dependency><groupId>org.xwiki.platform</groupId>
+          <artifactId>xwiki-platform-model</artifactId><version>${platform.version}</version>
+          <exclusions><exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion></exclusions>
+      </dependency>
+
   </dependencies>
   <scm>
     <connection>scm:git:https://github.com/xwiki-contrib/currikiorg.git</connection>
