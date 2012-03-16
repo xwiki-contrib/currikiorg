@@ -139,8 +139,8 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 #if($hasbutton == 1) ## {
 	## This used to be call back to the local macro of the page including this macro
 	## #mycurriki_pagebutton($userobj)
-    #if("Profile"== $doc.name)
-        #mycurriki_editprofilebutton($userobj)
+    #if("$doc.name"=="Profile")
+        #mycurriki_editprofilebutton($userdoc)
     #elseif("Favorites"==$doc.name)
         #mycurriki_favoritesbutton($userobj )
     #elseif("Contributions"==$doc.name)
@@ -169,6 +169,8 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
   ## #mycurriki_pagecontent($userdoc $userobj)
     #if("Profile"== $doc.name)
         #mycurriki_viewprofilebox($userdoc $userobj)
+    #elseif("$doc.name"=="EditProfile")<!-- editProfile Box -->
+        #mycurriki_editprofilebox($userdoc $userobj)
     #elseif("Favorites"==$doc.name)
         #mycurriki_favoritesbox( $userdoc $userobj )
     #elseif("Contributions"==$doc.name)
@@ -438,7 +440,6 @@ $!desc
   *#
 #macro(mycurriki_editprofilebox $userdoc $userobj) ##{
 	<!-- Profile Box -->
-	#includeMacros("Registration.FormMacros")
 	#tryprofileupdate()
 	#registrationinit('edit_profile')
 	#startregistrationform()
@@ -458,7 +459,7 @@ $!desc
   * @param $userdoc Document of the user
   *#
 #macro(mycurriki_editprofilebutton $userdoc) ##{
-	#if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights())) ##{
+    #if($context.action == "view" && ($context.user==$userdoc.fullName || $xwiki.hasAdminRights())) ##{
 		<div class="button-right">
 		#if("$!request.mode"=="") ##{
 			<a class="button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view", "mode=public")" title="$msg.get("view_profile.intro.public_button")">$msg.get("view_profile.intro.public_button")</a></span>

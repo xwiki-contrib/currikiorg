@@ -49,7 +49,7 @@ I believe this last blog no longer exists
             if(Curriki && Curriki.userinfo && Curriki.userinfo != "XWiki.XWikiGuest") {
                 var adminBit = "";
                 if(Curriki.userinfo.isAdmin) adminBit = "<a href='/xwiki/bin/view/Admin/'>" + _('header.admin') + "</a>";
-                $("joinPane").update("<span class='welcome'><a href='/xwiki/bin/view/XWiki/"+
+                $("joinPane").update("<span class='welcome'><a href='/xwiki/bin/view/"+
                         Curriki.userinfo.userName.replace(".", "/") +
                         "'>" + _("header.welcome", [Curriki.userinfo.firstName]) + "</a></span>" + adminBit);
                 $("member").update("<a class='join' href='/xwiki/bin/view/Registration/CleanLogout?xredirect=' + escape())>"+
