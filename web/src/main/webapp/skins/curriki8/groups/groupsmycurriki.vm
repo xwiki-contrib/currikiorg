@@ -101,11 +101,11 @@
     #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
     #if($withpre)
     <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+      <img src="${m_logo}${image_resize}?width=$width&height=$height" width="$width" height="$height" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
     </a>    
     #else
     <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-      <img src="${m_logo}${image_resize}" width="$width" height="$height" title="${jstitle}" alt="${jstitle}" />
+      <img src="${m_logo}${image_resize}?width=$width&height=$height" width="$width" height="$height" title="${jstitle}" alt="${jstitle}" />
     </a>
     #end
   </div>
