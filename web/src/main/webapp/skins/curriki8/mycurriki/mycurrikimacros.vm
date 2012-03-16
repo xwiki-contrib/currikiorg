@@ -165,11 +165,11 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 			class="frame"
 #end ## }
 		><!-- userdoc is $userdoc and userobj is $userobj whofor is $whofor -->
-## The followint two used to be a call back to the local macro of the page including this macro
+## The following two used to be a call back to the local macro of the page including this macro
   ## #mycurriki_pagecontent($userdoc $userobj)
     #if("Profile"== $doc.name)
         #mycurriki_viewprofilebox($userdoc $userobj)
-    #elseif("$doc.name"=="EditProfile")<!-- editProfile Box -->
+    #elseif("EditProfile"==$doc.name)<!-- editProfile Box -->
         #mycurriki_editprofilebox($userdoc $userobj)
     #elseif("Favorites"==$doc.name)
         #mycurriki_favoritesbox( $userdoc $userobj )
