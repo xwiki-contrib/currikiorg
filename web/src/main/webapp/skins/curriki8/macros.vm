@@ -356,7 +356,7 @@ $msg.get($prop.name)#end
 #set($readmoretxt = $readmore_linktext)
 #end
 <div class="para">
-<img src="$image" width="${imgwidth}" alt="${imagetitle}"/>
+<img src="$image" width="${imgwidth}" alt="${imagetitle}?width=${imgwidth}"/>
 <div class="${paratypeclass}">$text#if($readmorelink != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
 #if($source != "") <span class="infosource ${paratypeclass}">$source</span>#end
 </div>
@@ -1503,16 +1503,47 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @param $userdoc User document
   * @author dward@curriki.org
   *#
-#macro(curriki_avatar_width $userdoc $width) ## {
+#macro(curriki_avatar_width $userdoc $width)
+    #curriki_avatar_width_height($userdoc $width "")
+#end
+
+#**
+  * Display the avatar of a user with maximum width and height
+  * keeping the aspect ratio.
+  *
+  * @param $userdoc User document
+  * @param $width the maximum width
+  * @param $height the maximum height
+  * @author plibbrecht@curriki.org
+  *#
+#macro(curriki_avatar_width_height $userdoc $width $height)
 #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #if($userdoc.attachmentList.size()==0)  ## {
+    #set($src=$xwiki.getSkinFile("noavatar.png"))##
  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
- <img src="$xwiki.getSkinFile("noavatar.png")#if("$!width"!="")?width="${width}#end" #if($width!="") width="${width}" #end />
+ #if("$!width"=="" && "$!height"=="")##
+     <img src="$src"/>
+ #elseif("$!width"=="")##
+     <img src="$src?height=$height" height="$height"/>
+ #elseif("$!height"=="")##
+     <img src="$src?width=$width" width="$width"/>
+ #else##
+     <img src="$src?width=$width&height=$height&keepAspectRatio=true"/>
+ #end##
  </a>
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
+     #set($src=$userdoc.getAttachmentURL($attach.filename,"download"))##
   <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")#if("$!width"!="")?width="${width}#end" #if($width!="") width="${width}" #end />
+      #if("$!width"=="" && "$!height"=="")##
+         <img src="$src"/>##
+      #elseif("$!width"=="")##
+         <img src="$src?height=$height" height="$height"/>##
+      #elseif("$!height"=="")##
+          <img src="$src?width=$width" width="$width"/>##
+      #else##
+          <img src="$src?width=$width&height=$height&keepAspectRatio=true"/>
+      #end##
   </a>
  #end ## }
 #end ## }

@@ -175,7 +175,7 @@ function removeMember(memberName,spaceName) {
 #else
  #foreach ($attach in $mdoc.attachmentList)
   <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
  #end
 #end
 </div>
@@ -234,7 +234,7 @@ $profile
 #else
  #foreach ($attach in $mdoc.attachmentList)
   <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
  #end
 #end
 </div>
@@ -302,7 +302,7 @@ $profile
 #else
  #foreach ($attach in $mdoc.attachmentList)
   <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
  #end
 #end
 </div>
@@ -369,7 +369,7 @@ $msg.get("groups_members_admin_current_membersettings_error")
 #else
  #foreach ($attach in $mdoc.attachmentList)
   <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
  #end
 #end
 </div>
@@ -556,7 +556,7 @@ function refreshPage(ajaxreq) {
 #else
  #foreach ($attach in $mdoc.attachmentList)
   <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")" width="80" /></a>
+  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
  #end
 #end
 </div>

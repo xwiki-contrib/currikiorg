@@ -7,7 +7,7 @@
 #normalizeattachment($image)
 #normalizelink($readmorelink)
 <div class="homepage_m1">
-<img src="$image" width="300px" alt="${imagetitle}"/>
+<img src="$image?width=300" width="300px" alt="${imagetitle}"/>
 <h2 class="homepage_m1_title">$title</h2>
 <div class="deck">$text</div>
 <a href="${readmorelink}" class="readmore">$msg.get("readmore")...</a>
@@ -220,7 +220,7 @@ $bentrydoc.getRenderedContent($content)<a href="${bentrydoc.getURL()}" class="re
 ##
 #macro(board_display_member_flag $name $url $country $flag $desc)
 <tr>
-  <td class="flag"><img src="$xwiki.getAttachmentURL("Main.Board", $flag)" width="24" height="15" alt="${country}"/></td>
+  <td class="flag"><img src="$xwiki.getAttachmentURL("Main.Board", $flag)?width=24" width="24" height="15" alt="${country}"/></td>
   <td class="person">[$name>$url]</td>
   <td>$desc</td>
 </tr>
