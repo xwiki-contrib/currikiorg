@@ -71,41 +71,20 @@
   #end
   #if(($logofilename != "")&&$attachLogo&&($attachLogo!=""))
     #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
-    #set($logowidth = $xwiki.image.getWidth($srcdoc.fullName,$logofilename))
-    #set($logoheight = $xwiki.image.getHeight($srcdoc.fullName,$logofilename))
   #else
     #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
-	#set($logowidth = 120)
-	#set($logoheight = 82)
   #end
-#set( $image_resize = "" )
-#if($logowidth > 120 || $logoheight > 82)
-  ## find out wich dimmension overflows the most and computes scaled sizes
-  #set( $ratiox = $logowidth / 120)
-  #set( $ratioy = $logoheight / 82)
-  #if($ratiox>$ratioy)
-    #set($width = 120)
-    #set($height = $width * $logoheight /  $logowidth)
-    #set( $image_resize = "?width=120")
-  #else
-    #set($height = 82)
-    #set($width = $height * $logowidth / $logoheight)
-    #set( $image_resize = "?height=82")
-  #end
-#else
-  #set($height = $logoheight)
-  #set($width = $logowidth)
-#end
+#set( $image_resize = "?width=120&height=82&keepAspectRatio=1" )
   ##display logo
   <div class="frame-inset-logo">
     #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
     #if($withpre)
     <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-      <img src="${m_logo}${image_resize}?width=$width&height=$height" width="$width" height="$height" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+      <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
     </a>    
     #else
     <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-      <img src="${m_logo}${image_resize}?width=$width&height=$height" width="$width" height="$height" title="${jstitle}" alt="${jstitle}" />
+      <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
     </a>
     #end
   </div>
