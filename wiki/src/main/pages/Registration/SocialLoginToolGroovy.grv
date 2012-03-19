@@ -12,7 +12,9 @@ import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
 import com.xpn.xwiki.doc.XWikiAttachment
 import org.xwiki.container.servlet.filters.SavedRequestManager
-import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi;
+import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
+import org.apache.commons.httpclient.HttpClient
+import org.apache.commons.httpclient.methods.GetMethod;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -136,8 +138,8 @@ public class SocialLoginToolGroovy {
                     request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
             if("facebook".equalsIgnoreCase(request.provider)) {
                 targetUrl = URLEncoder.encode(targetUrl);
-                provider.setPermission(Permission.AUHTHENTICATE_ONLY);
             }
+            provider.setPermission(Permission.AUHTHENTICATE_ONLY);
             String url = provider.getLoginRedirectURL(targetUrl);
             System.out.println("Redirecting to " + url);
 
@@ -566,15 +568,16 @@ public class SocialLoginToolGroovy {
                 attachment = new XWikiAttachment();
                 userDoc.document.getAttachmentList().add(attachment);
             }
-            InputStream inS = u.openStream()
-            ByteArrayOutputStream bout = new ByteArrayOutputStream()
-            int r=0
-            while((r=inS.read())!=-1) { bout.write((byte) r);}
-            attachment.setContent(bout.toByteArray())
-            attachment.setFilename(name)
-            attachment.setAuthor(context.user)
-            attachment.setDoc(userDoc.document)
-            userDoc.document.saveAllAttachments(context.context)
+            HttpClient client = new HttpClient();
+            GetMethod method = new GetMethod(u.toExternalForm());
+            int result = client.executeMethod(method);
+            if(result==200) {
+                attachment.setContent(method.getResponseBodyAsStream(), (int) method.getResponseContentLength());
+                attachment.setFilename(name)
+                attachment.setAuthor(context.user)
+                attachment.setDoc(userDoc.document)
+                userDoc.document.saveAllAttachments(context.context)
+            }
             userObj.set("avatar",name)
         } catch (Exception ex) {
             LOG.warn("Couldn't write profile picture.",ex);
