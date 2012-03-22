@@ -38,7 +38,7 @@ $msg.get("accountdisabled")
 ## Is this a page we want to load?.. seems to be broken
 #set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink","CleanLogout"])##
 #if($allowList.contains($doc.name) && $doc.space=="Registration") ## {
-## $xwiki.includeForm($doc.fullName,false)##
+$xwiki.includeForm($doc.fullName,false)##
 ##$doc.getContent()##
 <!-- included content of $doc.fullName  of length $doc.getContent().length()-->##
 #else ## }{

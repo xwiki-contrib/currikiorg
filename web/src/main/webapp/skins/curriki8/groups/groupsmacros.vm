@@ -14,7 +14,7 @@
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
-#* @vtlvariable name="as" type="com.xpn.xwiki.plugin.activitystream.api.ActivityStream" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 
 
@@ -991,8 +991,8 @@ $xwiki.addTooltipJS()
 #set($feedURL = $xwiki.getDocument("Groups.Feed").getExternalURL("view", $util.escapeURL("space=${spaceName}&xpage=plain")))
 #begingroupsection($msg.groups_home_activity_title $msg.groups_home_activity_feed $feedURL "blue" $showFeed)
 #set($as = $xwiki.activitystream)
-#set($streamName = $as.getStreamName($spaceName,$context.getContext()))
-#set($events = $as.getEvents($streamName, true, 5, 0, $context.getContext()))
+#set($streamName = $as.getStreamName($spaceName))
+#set($events = $as.getEvents($streamName, true, 5, 0))
 #foreach($event in $events)
   #set($cls = "spacedoc")
   #if($velocityCount == 1)
