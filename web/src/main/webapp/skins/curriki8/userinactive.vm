@@ -40,7 +40,8 @@ $msg.get("accountdisabled")
 #if($allowList.contains($doc.name) && $doc.space=="Registration") ## {
 ## $xwiki.includeForm($doc.fullName,false)##
 ##$doc.getContent()##
-<!-- included content of $doc.fullName  of length $cdoc.getContent().length()-->#else ## }{
+<!-- included content of $doc.fullName  of length $doc.getContent().length()-->##
+#else ## }{
 ## Account not active -- why?  1. New, 2. Disabled due to undeliverable email
 #set($userDoc = $xwiki.getDocument($context.user))
 #set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))

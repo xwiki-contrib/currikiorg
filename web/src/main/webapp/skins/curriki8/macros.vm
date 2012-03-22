@@ -834,14 +834,14 @@ $msg.get("panel.navigation.home")
 #if(!$memberdoc.isNew())
 #set($memberobj = $memberdoc.getObject("XWiki.XWikiUsers"))
 <div class="vcard">
-   <div class="userpic"><!-- memberobj is $memberobj and memberdoc is $memberdoc -->
+   <div class="userpic">
 #if($memberdoc.attachmentList.size()==0)
    <img src="$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
 #else
    #set($width = 72)
    #foreach ($attach in $memberdoc.attachmentList)
 #if($velocityCount == 1)
-     <a href="$memberdoc.getURL()"><img class="photo" src="$memberdoc.getAttachmentURL($attach.filename,"download")" width="${width}" alt="$xwiki.getUserName($member, false)"/></a>
+     <a href="$memberdoc.getURL()?width=$width"><img class="photo" src="$memberdoc.getAttachmentURL($attach.filename,"download")" width="${width}" alt="$xwiki.getUserName($member, false)"/></a>
 #end
 #end
 #end
