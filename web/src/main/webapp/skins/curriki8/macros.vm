@@ -828,13 +828,13 @@ $msg.get("panel.navigation.home")
  *#
 #macro(displayMember $member)
 #if(!$member.startsWith("XWiki."))
-    #set($tmp="${member}")#set ($member = $util.null)#setVariable ("$member" "XWiki.${member}")#set($member="XWiki.${member}")
+    #set($tmp="${member}")#set ($member = $util.null)#setVariable ("$tmp" "XWiki.${member}")#set($member="XWiki.${tmp}")
 #end
 #set($memberdoc = $xwiki.getDocument($member))
 #if(!$memberdoc.isNew())
 #set($memberobj = $memberdoc.getObject("XWiki.XWikiUsers"))
 <div class="vcard">
-   <div class="userpic">
+   <div class="userpic"><!-- memberobj is $memberobj and memberdoc is $memberdoc -->
 #if($memberdoc.attachmentList.size()==0)
    <img src="$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
 #else

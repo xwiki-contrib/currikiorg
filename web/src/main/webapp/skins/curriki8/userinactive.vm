@@ -38,7 +38,7 @@ $msg.get("accountdisabled")
 ## Is this a page we want to load?.. seems to be broken
 #set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink","CleanLogout"])##
 #if($allowList.contains($doc.name) && $doc.space=="Registration") ## {
-##$xwiki.includeForm($doc.fullName,false)##
+## $xwiki.includeForm($doc.fullName,false)##
 ##$doc.getContent()##
 <!-- included content of $doc.fullName  of length $cdoc.getContent().length()-->#else ## }{
 ## Account not active -- why?  1. New, 2. Disabled due to undeliverable email
@@ -46,6 +46,7 @@ $msg.get("accountdisabled")
 #set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
 #set($active = $!userObj.getProperty('active').value)
 #set($undeliv = $!userObj.getProperty('email_undeliverable').value)
+<!-- userDoc is "$!userDoc" userObj is "$!userDoc", active is "$!active", undeliv is "$!undeliv" -->
 #if("$!active" == "0" && "$!undeliv" == "1") ## {
     #set($xpageParam="")#if($!request.xpage=="popup" || $!request.xpage=="plain" || $!request.framed!="")#set($xpageParam="xpage=popup")#end
     $response.sendRedirect("/xwiki/bin/view/Registration/EmailVerification?$xpageParam")
