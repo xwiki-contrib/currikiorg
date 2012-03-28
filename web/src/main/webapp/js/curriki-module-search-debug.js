@@ -68,6 +68,7 @@ module.init = function(){
 					tab.setTitle(String.format(titleMsg, _('search.'+modName+'.tab.title'), resultCount, totalCount));
 
 				}
+                console.log("Tab updated now updating pager.");
 
 				var pager = Ext.getCmp('search-pager-'+modName);
 				if (!Ext.isEmpty(pager)) {
@@ -83,6 +84,8 @@ module.init = function(){
 					}
 					pager.displayMsg = String.format(displayMsg, '{0}', '{1}', '{2}', totalCount);
 				}
+                console.log("Updated pager.");
+
 			}
 		);
 
@@ -636,6 +639,7 @@ data.init = function(){
 	// Set up renderers
 	data.renderer = {
 		title: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("render title " + value);
 			// Title
 			var page = record.id.replace(/\./, '/');
 
@@ -684,6 +688,7 @@ data.init = function(){
 			var css;
 			var dotIct;
 			var ict = record.data.ict;
+            console.log("render ict " + value);
 			if (!Ext.isEmpty(ict)){
 				// Find CSS classes needed
 				var topIct = ict.replace(/_.*/, '');
@@ -704,10 +709,12 @@ data.init = function(){
 
 		,contributor: function(value, metadata, record, rowIndex, colIndex, store){
 			var page = value.replace(/\./, '/');
+            console.log("render contributor " + value);
 			return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
 		}
 
 		,rating: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("render rating " + value);
 			if (value != "") {
 				var page = record.id.replace(/\./, '/');
 
@@ -720,6 +727,7 @@ data.init = function(){
 		}
 
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("render memberRating " + value);
 			if (value != "" && value != "0" && value != 0) {
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
@@ -736,6 +744,7 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("render updated " + value);
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
 			return String.format('{0}', dt);
 		}
