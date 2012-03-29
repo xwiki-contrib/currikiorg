@@ -17,10 +17,10 @@ $xwiki.includeTopic('Admin.Configuration', false)
 #set($isReadOnly = $xwiki.isReadOnly())
 ## no real need $xwiki.curriki.ensureUsernameCookie($request, $response, $context.user)
 #set($debugCookie = $xwiki.getUserPreferenceFromCookie("cdbg"))
-#if("$!debugCookie" == "")##{
-#set($globalDebug = false)
+#if("$!debugCookie" == "" && "$!xwiki.getXWiki().Param('curriki.system.globalDebug')"=="")##{
+#set($globalDebug = false)<!-- globalDebug is false -->
 #else##}{
-#set($globalDebug = true)
+#set($globalDebug = true)<!-- globalDebug is true -->
 #end##}
 #set($gVersion = $xwiki.version.replaceAll('.*\.', ''))
 #set($spaceViewUrl = $spaceDoc.getURL("view"))
