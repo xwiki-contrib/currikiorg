@@ -1848,6 +1848,13 @@ Curriki.showLoading = function(msg, multi){
 	}
 }
 
+Curriki.isISO8601DateParsing = function() {
+    if(typeof(Curriki.ISO8601DateParsing)!="undefined") return Curriki.ISO8601DateParsing;
+    var s = navigator.userAgent;
+    Curriki.ISO8601DateParsing = s.indexOf("iOS 5")!=-1 && ( s.indexOf("iPhone")!=-1 || s.indexOf("iPod")!=-1 || s.indexOf("iPad")!=-1);
+    return Curriki.ISO8601DateParsing;
+}
+
 Curriki.hideLoading = function(multi){
 	if (multi === true) {
 		Curriki.loadingCount--;

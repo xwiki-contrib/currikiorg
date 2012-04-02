@@ -158,6 +158,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('title', 'asc');
 
 
@@ -187,7 +188,9 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};

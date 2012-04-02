@@ -139,6 +139,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('name1', 'asc');
 
 

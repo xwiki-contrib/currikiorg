@@ -68,7 +68,6 @@ module.init = function(){
 					tab.setTitle(String.format(titleMsg, _('search.'+modName+'.tab.title'), resultCount, totalCount));
 
 				}
-                console.log("Tab updated now updating pager.");
 
 				var pager = Ext.getCmp('search-pager-'+modName);
 				if (!Ext.isEmpty(pager)) {
@@ -84,8 +83,6 @@ module.init = function(){
 					}
 					pager.displayMsg = String.format(displayMsg, '{0}', '{1}', '{2}', totalCount);
 				}
-                console.log("Updated pager.");
-
 			}
 		);
 
@@ -632,6 +629,7 @@ data.init = function(){
     if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
     if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
     if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('score', 'desc');
 
 
@@ -640,6 +638,7 @@ data.init = function(){
 	data.renderer = {
 		title: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render title " + value);
+            if(typeof(value)!="string") title ="";
 			// Title
 			var page = record.id.replace(/\./, '/');
 
@@ -710,12 +709,13 @@ data.init = function(){
 		,contributor: function(value, metadata, record, rowIndex, colIndex, store){
 			var page = value.replace(/\./, '/');
             console.log("render contributor " + value);
+            if(typeof("value")!="string") value="";
 			return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
 		}
 
 		,rating: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render rating " + value);
-			if (value != "") {
+			if (typeof(value)=="string" && value != "") {
 				var page = record.id.replace(/\./, '/');
 
 				metadata.css = String.format('crs-{0}', value); // Added to <td>
@@ -728,7 +728,7 @@ data.init = function(){
 
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render memberRating " + value);
-			if (value != "" && value != "0" && value != 0) {
+			if (typeof(value)=="string"  && value != "" && value != "0" && value != 0) {
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
 
@@ -745,10 +745,13 @@ data.init = function(){
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render updated " + value);
+            if(typeof("value")!="string") return "";
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
         , score: function(value, metadata, record, rowIndex, colIndex, store){
+            if(typeof(value)!="number") value=0;
             return value;
          }
 	};
@@ -1524,6 +1527,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('title', 'asc');
 
 
@@ -1553,7 +1557,9 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};
@@ -2021,6 +2027,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('name1', 'asc');
 
 
@@ -2420,6 +2427,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('updated', 'desc');
 
 
@@ -2445,7 +2453,9 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};
@@ -2640,6 +2650,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('name', 'asc');
 
 
@@ -2661,7 +2672,9 @@ data.init = function(){
 */
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};
