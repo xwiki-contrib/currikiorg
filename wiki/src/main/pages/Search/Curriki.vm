@@ -1,0 +1,141 @@
+## vim: ts=4:sw=4
+{pre}
+## start=0&limit=25&sort=title&dir=ASC
+## terms=&subject=&filetype=&level=&language=&ict=&special=
+## return  root: results, totalProperty: totalCount
+##   pagename, title, ict, contributor, contributorName, review
+#set($lucene = $xwiki.getPlugin("lucene"))
+#if(!$lucene) ##{
+{'resultCount':'0', 'rows':[]}
+#else ## }{
+    #if("$!request.lang" != "")##{
+        #set($lang = $request.lang)
+    #else##}{
+        #set($lang = $xwiki.getLanguagePreference())
+    #end##}
+    #if("$!lang" == "")##{
+        #set($lang = "en")
+    #end##}
+##
+## Set start and limit for result list
+##
+    #set($Integer = 0)
+    #set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
+    #set($start = 0)
+    #if("$!request.start" != "") ##{
+        #set($start = $Integer.parseInt($request.start))
+    #end ##}
+    #set($start = 1 + $start)
+    #set($start = "$start")
+    #set($limit = "25")
+    #if("$!request.limit" != "") ##{
+        #set($limit = $request.limit)
+    #end ##}
+##
+## Set sort field
+##
+    #set($sortField1 = 'title.untokenized')
+    #set($sortField2 = 'date')
+    #if($!request.sort != "") ##{
+        #if($request.sort == "name") ##{
+            #set($sortField1 = 'title.untokenized')
+            #set($sortField2 = 'date')
+        #end ##}
+        #if($request.sort == "updated") ##{
+            #set($sortField1 = 'date')
+            #set($sortField2 = 'title.untokenized')
+        #end ##}
+    #end ##}
+    #if($!request.dir == "DESC") ##{
+        #set($sortField1 = "-${sortField1}")
+    #end ##}
+    #set($sortFields = "${sortField1},${sortField2}")
+    #set($sortFields = $sortFields.split(","))
+##
+## Create query
+##
+    #set($q = $xwiki.arrayList)
+##
+## Terms
+    #if($!request.terms != "") ##{
+        #set($junk = $q.add("${request.terms}"))
+    #end ##}
+##
+## Put together query conditions
+    #set($conditions = "")
+    #foreach($condition in $q) ##{
+        #set($conditions = "$conditions AND $condition")
+    #end ##}
+##
+## General query information
+    #set($wikinames = "xwiki")
+    #set($languages = "default,en")
+## CURRIKI-2572
+##  Only fetch things in the default or en language for now, as the $languages
+##  parameter does not seem to be working
+##  NOTE That this SHOULD try to look for items in the user's language
+    #set($include = "web:(Main OR News OR Demo) AND lang:(default OR en)")
+    #set($exclude = "AND NOT name:WebPreferences AND NOT web:Blog_Demo AND NOT web:Coll_Demo AND NOT type:attachment AND NOT type:objects")
+    #set($luceneQuery = "$include $conditions $exclude")
+##
+## Do query
+##
+    #set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
+    #set($results = $searchResults.getResults($start, $limit))
+    #set($resultCount = $searchResults.totalHitcount)
+    #set($modifiedCount = $resultCount)
+    #if($modifiedCount > $maxResults) ##{
+        #set($modifiedCount = $maxResults)
+    #end ##}
+
+##
+## List out results
+##
+    #if("$!resultCount" == "") ##{
+        #set($resultCount = 0)
+    #end ##}
+{
+'rows':[
+    #set($first = true)
+    #foreach($result in $results) ##{
+    ##
+    ## Get each result
+        #set($d = $xwiki.getDocument("${result.web}.${result.name}"))
+    ##
+    ## Get Title
+        #asset_findtitle($d)
+        #set($title = $currikiTitle)
+        #if(!$title || $title.length() == 0) ## {
+            #set($title = $msg.get("caption.untitled"))
+        #end ## }
+        #set($title = $title.replace("'", "&#39;"))
+    ##
+    ## Get URL
+        #set($url = $xwiki.getURL($d.fullName))
+    ##
+    ## Get Content
+        #set($text = "")
+        #set($text = $!d.getRenderedContent())
+        #set($text = $text.replace("'", "&#39;"))
+        #set($text = $text.replaceAll("[\n|\r]+", "<br />"))
+    ##
+    ##
+        #if($first) ##{
+            #set($first = false)
+        #else ##} {
+        ,
+        #end ##}
+    {
+    'page':'${d.fullName}'
+    ,'name':'${title}'
+    ##		,'text':'${text}'
+    ,'updated':'${xwiki.formatDate($d.date,"yyyy/MM/dd HH:mm")}'
+    ,'url':'${url}'
+    }
+    #end ##}
+]
+,'resultCount':'${modifiedCount}'
+,'totalResults':'${resultCount}'
+}
+#end ## }
+{/pre}
