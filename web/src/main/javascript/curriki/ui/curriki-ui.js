@@ -14,7 +14,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,width:634
 	,minWidth:400
 	,minHeight:100
-	,maxHeight:575
+	,maxHeight:6000
 	,autoScroll:false
 	,constrain:true
 	,collapsible:false
@@ -25,6 +25,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,defaults:{border:false}
 	,listeners:{
 		afterlayout:function(wnd, layout){
+            console.log("afterlayout 2 on " + wnd);
 			if (this.afterlayout_maxheight) {
 				// Don't collapse again
 			} else {
@@ -32,8 +33,10 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 					wnd.setHeight(wnd.maxHeight);
 					wnd.center();
 					this.afterlayout_maxheight = true;
+                    console.log("afterlayout_maxheight reached: " + wnd.maxHeight);
 				} else {
 					wnd.setHeight('auto');
+                    console.log("set auto height");
 				}
 			}
 		}

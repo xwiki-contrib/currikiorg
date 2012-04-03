@@ -2300,8 +2300,11 @@ Curriki.module.addpath.init = function(){
 									}
 									,expandnode:{
 										fn: function(node){
+                                            console.log("expandnode 2");
 											var wnd = this;
+                                            console.log("expandnode 2: fire afterlayout");
 											wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
+                                            console.log("expandnode 2: afterlayout finished");
 										}
 										,scope:this
 									}
@@ -2579,6 +2582,7 @@ Curriki.module.addpath.init = function(){
 									}
 									,expandnode:{
 										fn: function(node){
+                                            console.log("expandnode 3")
 											var wnd = this;
 											wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
 										}
