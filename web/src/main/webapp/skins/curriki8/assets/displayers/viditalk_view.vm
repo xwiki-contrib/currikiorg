@@ -20,7 +20,7 @@
     <div class="asset-display-media-inner">
         #set($caption = "")
         #set($caption = $!asset.caption_text)
-        #if($!caption == "")
+        #if("$!caption" == "")
         #set($caption = $!asset.description)
         #end
         <p>
@@ -37,7 +37,7 @@
     </div>
 </div>
 #set($origVideo = $xwiki.getURLContent("http://${MEDIAHOST}/video/url/orig/$video_id"))
-#if(!$origVideo||$origVideo=="") ##{
+#if("$!origVideo"=="") ##{
 	#set($has_origVideo = false)
 #else ##}{
 	#set($has_origVideo = true)

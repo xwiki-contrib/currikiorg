@@ -9,7 +9,7 @@
 <title>
 #if(!$title)
 #set( $title = $!xwiki.getWebPreference("title"))
-#if ( $title != "")
+#if ( "$!title" != "")
 $xwiki.parseContent($title)
 #else
 XWiki . $!doc.space . $!doc.displayTitle

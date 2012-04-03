@@ -857,7 +857,7 @@ $msg.get("groups_members_join_alreadymember")
  #set($code = $request.code)
  #set($user = $request.user)
  #set($verInv = false)
- #if($code&&($code!=""))
+ #if("$!code"!=""))
   ## we verify if the user is presenting a valid invitation (using the code and user)
   ## Verify code
   #set($verInv = $im.verifyInvitation($spaceName, $user, $code))
@@ -886,7 +886,7 @@ $msg.get("groups_members_join_alreadymember")
 ## if the user presented a valid invitation
 #elseif(($spacePolicy=="open")||($verInv==true))
  #if($request.confirm=="1")
-  #if($code&&($code!=""))
+  #if("$!code"!=""))
    #set($acceptInv = $im.acceptInvitation($spaceName, $user, $code))
   #else
    #set($acceptInv = $im.acceptInvitation($spaceName))

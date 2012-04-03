@@ -18,17 +18,17 @@
 ## Home page module 2: latest resources
 ##
 #macro(home_latest_resources $number $left_title $right_title $maxDescLenS)
-#if($left_title == "")
+#if("$!left_title" == "")
 #set($lefttitle = "Last resources created")
 #else
 #set($lefttitle = $left_title)
 #end
-#if($right_title == "")
+#if("$!right_title" == "")
 #set($righttitle = "Go to the resources section")
 #else
 #set($righttitle = $right_title)
 #end
-#if($maxDescLenS == "")
+#if("$!maxDescLenS" == "")
 #set($maxDescLen = 50)
 #else
 #set($maxDescLen = $xwiki.parseInt($maxDescLenS))
@@ -78,7 +78,7 @@ $assetdesc <a class="readmore" href="$assetdoc.getURL()">$msg.get("readmore")...
 #macro(itemtitle $title $fulltextlink)
 #set($link = $fulltextlink)
 #normalizelink($link)
-<h4 class="itemtitle">#if ($link != "")<a href="${link}">#end $title#if ($link != "")</a>#end </h4>
+<h4 class="itemtitle">#if ("$!link" != "")<a href="${link}">#end $title#if ("$!link" != "")</a>#end </h4>
 #end
 ##
 #macro(featured_content_item $title $text $fulltextlink)
@@ -140,11 +140,11 @@ $assetdesc <a class="readmore" href="$assetdoc.getURL()">$msg.get("readmore")...
 #set($inbitems = $nr)
 #set($inbstart = $xwiki.parseInt($nbstart))
 <div class="homepage_news">
-#if($lefttitle == "")
+#if("$!lefttitle" == "")
     #set ($lefttitle = $util.null)
     #setVariable ("$lefttitle" "News - Staff Blogs")
 #end
-#if($righttitle == "")
+#if("$!righttitle" == "")
     #set ($righttitle = $util.null)
     #setVariable ("$righttitle"  "Go to the staff blog section")
 #end
@@ -159,7 +159,7 @@ $assetdesc <a class="readmore" href="$assetdoc.getURL()">$msg.get("readmore")...
 ${creationDate} &ndash; $msg.get("publishedby", [$xwiki.getLocalUserName($author)])
 </div> ## hnewsmeta
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "")
+#if("$!title" == "")
 #set($title = "&nbsp;")
 #end
 

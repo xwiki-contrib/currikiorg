@@ -23,7 +23,7 @@
 #set($crsText = $msg.get("curriki.crs.reviewpending"))
 #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
 #set($crsIconText = $msg.get("curriki.crs.rating.pending"))
-#elseif((!$status)||($status=="100")||($status==""))
+#elseif((!$status)||($status=="100")||("$!status"==""))
 ## no crs rating has been set
 #if($isguest || "$!rights" == "private")
 #set($crsText = $msg.get("rve.title.rating.crs.info"))
@@ -37,7 +37,7 @@
 #set($crsText = $msg.get("curriki.crs.rating${status}"))
 #set($crsTextUrl = $asset.getURL("view", "viewer=comments"))
 #end
-#if((!$status)||($status=="100")||($status==""))
+#if((!$status)||($status=="100")||("$!status"==""))
 #set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
 #set($crsIconTarget = "target='_blank'")
 #set($crsClass = "crs-rating-unrated")
@@ -280,7 +280,7 @@ $xwiki.addTooltipJS()
     #else
     #set($status = "")
     #end
-    #if((!$status)||($status=="100")||($status==""))
+    #if((!$status)||($status=="100")||("$!status"==""))
     <div class="crs_reviewrating">
         <div class="crs_reviewratingtext">
             $msg.get("curriki.crs.unrated")

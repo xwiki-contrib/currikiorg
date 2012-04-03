@@ -22,7 +22,7 @@ $response.sendError(403,"Not authorized.")
 #set($ok = $userdoc.addObjectFromRequest("XWiki.XWikiUsers"))
 $userdoc.use("XWiki.XWikiUsers")
 ## Set defaults
-#if(!$userdoc.show_contact || $userdoc.show_contact == "") ##{
+#if("$!userdoc.show_contact" == "") ##{
 #set($junk = ($userdoc.set('show_contact', '1')))
 #end ##}
 #end ##}
@@ -71,7 +71,7 @@ $userdoc.use("XWiki.XWikiUsers")
 
 		## Avatar Upload
 		#set($filename = $xwiki.fileupload.getFileName("filepath"))
-		#if($filename&&($filename!="")) ##{
+		#if("$!filename"!="") ##{
 			#set($attlist = $userdoc.attachmentList)
 			#foreach ($att in $attlist) ##{
 				#set($junk = $userdoc.document.deleteAttachment($att.attachment, $context.context))
@@ -402,7 +402,7 @@ $errMsg
 #if("$x" != "")#set($c = 1 + $c)#end
 ##
 #set($mt=$!userobj.getProperty('member_type').value)
-#if($mt=="corporation" || $mt=="")
+#if($mt=="corporation" || "$!mt"=="")
     #set($numberoffield=22)
     #set($x = "")#set($x = $!userobj.getProperty('publish_intent').value)
     #if("$x" != "")#set($c = 1 + $c)#end
@@ -776,7 +776,7 @@ document.observe('dom:loaded', function(){
 			<li id='block-XWiki-XWikiUsers_0_i_agree'>
 #set($iagree = "")
 #set($iagree = $!request.getParameter("XWiki.XWikiUsers_0_i_agree"))
-				$g_RegReq<input type="checkbox" class="input-checkbox" value="1" id="XWiki.XWikiUsers_0_i_agree" name="XWiki.XWikiUsers_0_i_agree" #if($iagree != "")CHECKED#end/>
+				$g_RegReq<input type="checkbox" class="input-checkbox" value="1" id="XWiki.XWikiUsers_0_i_agree" name="XWiki.XWikiUsers_0_i_agree" #if("$!iagree" != "")CHECKED#end/>
 				<label for="XWiki.XWikiUsers_0_i_agree">$msg.get('register.terms.agreement')</label>
 			</li>
 		</ul>

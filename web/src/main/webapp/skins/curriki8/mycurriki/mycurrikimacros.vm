@@ -30,7 +30,7 @@
   * @author dward@curriki.org
   *#
 #macro(mycurriki_dashifempty $text)
-#if($!text == "")
+#if("$!text" == "")
 $msg.get("profile.emptyField")
 #else
 $text
@@ -350,7 +350,7 @@ $msg.get("mycurriki.macro.access.${access}")
 #macro(mycurriki_ict $asset) ## {
 #set($ict = "")
 #set($ict = $!asset.getObject("CurrikiCode.AssetClass").getProperty("instructional_component").getValue())
-#if($ict == "" || $ict.size() == 0) ## {
+#if("$!ict" == "") ## {
 ## No ICT set -- nothing to do
 #else ## } {
 #if($ict.size() > 1) ## {
@@ -673,7 +673,7 @@ $response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=$
 		*$msg.get("view_profile.account_info.member_since")*
 		$xwiki.formatDate($userdoc.creationDate,$msg.get("mycurriki.dateFormat"))
 	</li>
-    #if($member_type != "") ##{
+    #if("$!member_type" != "") ##{
     <li>
     	*$msg.get("view_profile.interests.member_type.title")*
 	    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))##

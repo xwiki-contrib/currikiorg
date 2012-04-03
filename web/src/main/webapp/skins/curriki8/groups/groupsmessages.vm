@@ -37,7 +37,7 @@ $msg.get("groups_messages_createmessage_infotxt")
       <input type="radio" id="toEntireGroup" name="filter" value="0" class="messages-radio-left" onclick="this.form.submit()" #if($filter=="0") checked="checked" #end/><label for="toEntireGroup">$msg.get("groups_messages_filter_toentiregroup")</label>
       <input type="radio" id="toMe" name="filter" value="1" onclick="this.form.submit()" #if($filter=="1") checked="checked" #end/><label for="toMe">$msg.get("groups_messages_filter_tome")</label>
       <input type="radio" id="toMyRole" name="filter" value="2" onclick="this.form.submit()" #if($filter=="2") checked="checked" #end/><select name="role" onchange="this.form.submit()" #if($filter!="2")disabled="disabled"#end>
-<option value="" #if(!$request.role || $request.role=="")selected="selected"#end>$msg.get("groups_messages_filter_tomyrole")</option>
+<option value="" #if("$!request.role"=="")selected="selected"#end>$msg.get("groups_messages_filter_tomyrole")</option>
 #set($myRoles = $sm.getRoles($spaceName, $context.user))
 #foreach($role in $myRoles)
 <option value="$role" #if($role==$request.role)selected="selected"#end>$xwiki.getDocument($role).title</option>
@@ -64,7 +64,7 @@ $msg.get("groups_messages_createmessage_infotxt")
 #set($sql = ", BaseObject as obj where doc.space='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
 #elseif($filter=="2")
 ## To My Roles
-#if($request.role!="")
+#if("$!request.role"!="")
 #set($myRoles = [$request.role])
 #elseif($isGroupAdmin)
 #set($ok = $myRoles.add($sm.getAdminGroupName($spaceName)))
@@ -296,7 +296,7 @@ $msgdoc.save()
 #end
 #end
 #end
-#if($!mailTo != "")
+#if("$!mailTo" != "")
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
 ## $msgdoc has to be in the current context because it is used in the mail template

@@ -46,7 +46,7 @@ $xwiki.includeTopic('Admin.Configuration', false)
 #set($logredir = $xwiki.getFormEncoded($xwiki.getRequestURL()))
 ## Check language option
 #set($languageparams = "")
-#if(($xwiki.isMultiLingual()==true)&&($tdoc.realLanguage!=""))
+#if(($xwiki.isMultiLingual()==true)&&("$!tdoc.realLanguage"!=""))
 #set($languageparams="language=${tdoc.realLanguage}")
 #end
 ## Check revision option
@@ -56,13 +56,13 @@ $xwiki.includeTopic('Admin.Configuration', false)
 #set($revparams = "")
 #end
 #set($docvariant = "")
-#if($revparams != "")
-#if($languageparams != "")
+#if("$!revparams" != "")
+#if("$!languageparams" != "")
 #set($docvariant = "$languageparams&amp;$revparams")
 #else
 #set($docvariant = "$revparams")
 #end
-#elseif($languageparams != "")
+#elseif("$!languageparams" != "")
 #set($docvariant = "$languageparams")
 #end
 #template("deprecatedVars.vm")

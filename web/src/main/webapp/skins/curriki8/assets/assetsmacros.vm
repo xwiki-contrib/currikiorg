@@ -257,7 +257,7 @@ function checkEditOrCopy() {
  #set($ok = $asset.use($obj))
  #set($position = $asset.getValue("order"))
  #set($assetPage = $asset.getValue("assetpage"))
- #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
+ #if(($assetPage == "PAGEBREAK")||("$!assetPage" == ""))
 ## do not add
  #else
   #set($embeddedDoc = $xwiki.getDocument($assetPage))
@@ -721,7 +721,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     <li id="info-rights-grantCurrikiCommercialLicense">
                             #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
                             #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("licenseType").getValue())
-                                #if($gCCL && $gCCL.value!="")
+                                #if("$!gCCL.value"!="")
                                     <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
                                     #if($gCCL.value==1)
                                         <span>$msg.get("CurrikiCode.AssetLicenseClass_grantCurrikiCommercialLicense_1")</span>
@@ -850,7 +850,7 @@ $asset.use("CurrikiCode.AssetClass")
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
             ##
-            #if($gCCL && $!gCCL.value!="") ## grant to curriki commercial usage is decided, only admin can edit
+            #if("$!gCCL.value"!="") ## grant to curriki commercial usage is decided, only admin can edit
                 #if($hasGlobalAdmin)
             <p>&nbsp;</p><ul><li><label style="font-weight:normal;">$asset.display("grantCurrikiCommercialLicense","edit",true)
                 $msg.get("sri.license_type_license_to_curriki")
@@ -1386,7 +1386,7 @@ $asset.set("rating", $cRating)
 #if("$!nomination"=="1") ##{
 ## asset is in review pending status
 ## already nominated
-#elseif((!$status)||($status=="100")||($status=="")) ##}{
+#elseif((!$status)||($status=="100")||("$!status"=="")) ##}{
 ## no crs rating has been set
 #if("$!rights" == "private") ##{
 ## Ignored for nomination
@@ -1499,7 +1499,7 @@ $asset.saveWithProgrammingRights($msg.get("rve.comments.comment.revision.edit"))
 #if("$!nomination"=="1") ##{
 ## asset is in review pending status
 ## already nominated
-#elseif((!$status)||($status=="100")||($status=="")) ##}{
+#elseif((!$status)||($status=="100")||("$!status"=="")) ##}{
 ## no crs rating has been set
 #if("$!rights" == "private") ##{
 ## Ignored for nomination
@@ -1592,7 +1592,7 @@ $asset.use($classname)
     <span>
         #if($fieldtype=="text"||$fieldtype=="textarea")
          #set($fieldValue = $asset.getValue($fieldname))
-         #if($fieldValue && $fieldValue!="")
+         #if("$!fieldValue"!="")
              #set ($hidebydefault = $util.null)
              #setVariable ("$hidebydefault" false)#set($hidebydefault=false)
          #end
@@ -1604,7 +1604,7 @@ $asset.use($classname)
         #end
         <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
     <div  id="${fieldname}" #if($hidebydefault) style="display: none" #end >
-    #if($fieldcontent!="")
+    #if("$!fieldcontent"!="")
     $fieldcontent
     #else
     $asset.display($fieldname, "edit", true)
@@ -1739,11 +1739,11 @@ $asset.use($classname)
 
 
 #macro(asset_saveinfo)
-#if($request.page && $request.page!="")
+#if("$!request.page"!="")
 #set($asset = $xwiki.getDocument($request.page))
 #if($asset.hasAccessLevel("edit"))
 ## let's read data
-#if($request.content)
+#if("$!request.content")
 $asset.setContent($request.content)
 #end
 #if($request.title)
@@ -1779,7 +1779,7 @@ $asset.updateObjectFromRequest("CurrikiCode.ExternalAssetClass")
 #set($updateResult = $asset.replaceAttachment())
 $asset $updateResult
 ## saving with the user comment
-#if($request.comment && $request.comment!="")
+#if("$!request.comment"!="")
 #set($note = $request.comment)
 #else
     #set($note = $msg.get("curriki.comment.updatemetadata"))
@@ -1788,7 +1788,7 @@ $asset $updateResult
 $asset.applyRightsPolicy()
 $asset.save($!note)
 $asset.unLock()
-#if($request.xredirect && $request.xredirect!="")
+#if("$!request.xredirect"!="")
  #if($request.saveandcontinue)
   $response.sendRedirect("${request.xredirect}&viewer=assetedit")
  #else
@@ -1837,7 +1837,7 @@ $response.sendRedirect($xwiki.getURL('MyCurriki.Collections', 'view', "$userarg"
  #set($shortname = $user.substring(6))
 #end
 #curriki_finduserprefix($shortname)
-#if(!$userPrefix || $userPrefix == "")
+#if(!$userPrefix || "$!userPrefix" == "")
 1 Collection List
 #else
 1 $userPrefix Collections
@@ -2088,7 +2088,7 @@ $!xwiki.formatDate($asset.date, $msg.get("dateFormat"))
  *$msg.get("metadata.license_type_title"):* $!asset.display("licenseType", "view", $rightsObject)
 
 #set($hidden = $!asset.display("hidden_from_search", "view", $assetObj))
-#if($hidden == "")
+#if("$!hidden" == "")
 #set($hidden = $msg.get("yesno_0"))
 #end
  *$msg.get("metadata.hidden_from_search"):* $hidden
@@ -2142,7 +2142,7 @@ $objTxt.text
  #includeForm("GWT.ViditalkPlayback")
 <div class="clearfloats"></div>
 </div>
-#elseif ($objComp && $objComp != "")
+#elseif ("objComp"!= "")
  #if($develop)
  <div class="asset-content-body">
 #set($objs = $asset.getObjects("CurrikiCode.SubAssetClass"))
@@ -2163,7 +2163,7 @@ $objTxt.text
 ##set($hql = "select str.value from BaseObject obj, StringProperty str, LongProperty lg where obj.className='CurrikiCode.SubAssetClass' and obj.name='$asset.fullName' and obj.id=str.id.id  and obj.id=lg.id.id and str.name='assetpage' and lg.name='order' order by lg.value ")
 ##set($assetList = $xwiki.search($hql))
   #foreach($assetPage in $assetList)
-   #if(($assetPage == "PAGEBREAK")||($assetPage == ""))
+   #if(($assetPage == "PAGEBREAK")||("$!assetPage" == ""))
  <hr >
    #else
     #set($embeddedDoc = $xwiki.getDocument($assetPage))

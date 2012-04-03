@@ -64,12 +64,12 @@
 #macro(groups_grouplogo2 $space $withpre)
   #set($logofilename = $space.display("logo","view"))
   #set($attachLogo = "")
-  #if($logofilename != "")
+  #if("$!logofilename" != "")
    #set($spacehome = $space.getSpaceName()+".WebHome")
    #set($srcdoc = $xwiki.getDocument($spacehome))
    #set($attachLogo = $srcdoc.getAttachment($logofilename))
   #end
-  #if(($logofilename != "")&&$attachLogo&&($attachLogo!=""))
+  #if("$!logofilename"!="" && "$!attachLogo"!="")
     #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
   #else
     #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))

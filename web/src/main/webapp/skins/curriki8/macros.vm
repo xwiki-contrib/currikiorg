@@ -45,7 +45,7 @@
   *#
 #macro(csscolorproperty $csspropname $fieldname)
 #set($objcolor = $colors.get($fieldname))
-#if($objcolor && $objcolor != "")
+#if("$!objcolor" != "")
   $csspropname: $objcolor;
 #end
 #end
@@ -59,7 +59,7 @@
   *#
 #macro(csscolorpropertyimportant $csspropname $fieldname)
 #set($objcolor = $colors.get($fieldname))
-#if($objcolor && $objcolor != "")
+#if("$!objcolor" != "")
   $csspropname: $objcolor !important;
 #end
 #end
@@ -132,7 +132,7 @@ $linkToBreak.substring(0, $index)
     #set ($toStr = $util.null)
     #setVariable ("$toStr" $fromDoc.display("extract", "view", $fromObj))
     #set($toStr=$fromDoc.display("extract", "view", $fromObj))
-#if($toStr=="")
+#if("$!toStr"=="")
     #set ($toStr = $util.null)
     #setVariable ("$toStr" $fromDoc.display("content", "view", $fromObj))
     #set($toStr=$fromDoc.display("content", "view", $fromObj))
@@ -345,7 +345,7 @@ $msg.get($prop.name)#end
     #setVariable ("$type" "submit")#set($type="submit")
 #end
 ##<span class="btn-wrapper btn-wrapper-${color}">
-<button#if($id != "") id="${id}"#end class="button#if($color != "") button-${color}#end"#if($onclick != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
+<button#if("$!id" != "") id="${id}"#end class="button#if("$!color" != "") button-${color}#end"#if("$!onclick" != "") onclick="${onclick}"#end type="${type}">$text</button>##</span>
 #end
 
 
@@ -366,15 +366,15 @@ $msg.get($prop.name)#end
 #end
 #normalizeattachment($image)
 #normalizelink($readmorelink)
-#if($readmore_linktext == "")
+#if("$!readmore_linktext" == "")
 #set($readmoretxt = $msg.get("readmore") + "...")
 #else
 #set($readmoretxt = $readmore_linktext)
 #end
 <div class="para">
 <img src="$image" width="${imgwidth}" alt="${imagetitle}?width=${imgwidth}"/>
-<div class="${paratypeclass}">$text#if($readmorelink != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
-#if($source != "") <span class="infosource ${paratypeclass}">$source</span>#end
+<div class="${paratypeclass}">$text#if("$!readmorelink" != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
+#if("$!source" != "") <span class="infosource ${paratypeclass}">$source</span>#end
 </div>
 #end
 
@@ -384,12 +384,12 @@ $msg.get($prop.name)#end
   *#
 #macro(paragraph $text $readmorelink $readmore_linktext)
 #normalizelink($readmorelink)
-#if($readmore_linktext == "")
+#if("$!readmore_linktext" == "")
 #set($readmoretxt = $msg.get("readmore") + "...")
 #else
 #set($readmoretxt = $readmore_linktext)
 #end
-<div class="para">$text#if($readmorelink != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
+<div class="para">$text#if("$!readmorelink" != "") <a href="${readmorelink}" class="readmore">$readmoretxt</a>#end</div>
 #end
 
 
@@ -442,7 +442,7 @@ $msg.get($prop.name)#end
 #set($righttitletrunc = $righttitle.substring(0, 34))
 #set($righttitletrunc = "${righttitletrunc}...")
 #end
-<div class="titlebar titlebar_$color"><h3#if($link!="") class="titlebar_left"#end>$lefttitle</h3>#if($link!="")<div class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+<div class="titlebar titlebar_$color"><h3#if("$!link"!="") class="titlebar_left"#end>$lefttitle</h3>#if("$!link"!="")<div class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
 </div>
 #end
 #macro(subtitlebar $text $righttitle $link $color)
@@ -452,7 +452,7 @@ $msg.get($prop.name)#end
 #set($righttitletrunc = $righttitle.substring(0, 34))
 #set($righttitletrunc = "${righttitletrunc}...")
 #end
-<div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
+<div class="subtitlebar_${color} subtitlebar"><h4#if("$!link"!="")  class="subtitlebar_left"#end>$text</h4>#if("$!link"!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle">$righttitletrunc  &raquo;</a></div>#end
 </div>
 #end
 #macro(subtitlebartarget $text $righttitle $link $color $target)
@@ -462,7 +462,7 @@ $msg.get($prop.name)#end
 #set($righttitletrunc = $righttitle.substring(0, 34))
 #set($righttitletrunc = "${righttitletrunc}...")
 #end
-<div class="subtitlebar_${color} subtitlebar"><h4#if($link!="")  class="subtitlebar_left"#end>$text</h4>#if($link!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle" target="$target">$righttitletrunc  &raquo;</a></div>#end
+<div class="subtitlebar_${color} subtitlebar"><h4#if("$!link"!="")  class="subtitlebar_left"#end>$text</h4>#if("$!link"!="")<div class="subtitlebarRight"><a href="$link" title="$righttitle" target="$target">$righttitletrunc  &raquo;</a></div>#end
 </div>
 #end
 
@@ -484,7 +484,7 @@ $msg.get($prop.name)#end
 #set($righttitletrunc = "${righttitletrunc}...")
 #end
 <div id="section_${seccounter}">
-<div class="titlebar titlebar_$color" id="section${seccounter}titlebar"><h3 id="section${seccounter}title"#if($link!="") class="titlebar_left"#end>$lefttitle</h3>#if($link!="")<div id="section${seccounter}links" class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc </a></div>#end</div>
+<div class="titlebar titlebar_$color" id="section${seccounter}titlebar"><h3 id="section${seccounter}title"#if("$!link"!="") class="titlebar_left"#end>$lefttitle</h3>#if("$!link"!="")<div id="section${seccounter}links" class="titlebarRight"><a href="$link" title="$righttitle">$righttitletrunc </a></div>#end</div>
 <script type="text/javascript">
 #if(!$togglesectionvisibility)
 #set($togglesectionvisibility = 1)
@@ -510,7 +510,7 @@ function toggleSectionVisibility(seccounter, showhide){
 }
 #end
 addClass(document.getElementById("section${seccounter}title"), "titlebar_left");
-#if($link=="")
+#if("$!link"=="")
 var linksDiv = document.createElement("div");
 linksDiv.setAttribute("id", "section${seccounter}links");
 linksDiv.setAttribute("class", "titlebarRight");
@@ -674,7 +674,7 @@ $doc.display("content", $obj)
 <div class="panelrounded panelrounded_$color">
  <div class="panelroundedtitle">
   <div class="panelroundedleft">$lefttitle</div>
-  <div class="panelroundedright">#if($link!="")[$righttitle>$link]#end</div>
+  <div class="panelroundedright">#if("$!link"!="")[$righttitle>$link]#end</div>
  </div>
  <div class="panelroundedcontent2">
   <div class="panelroundedcontentinner">
@@ -926,14 +926,14 @@ $memberdoc.getRenderedContent("$!content")</div>
       #set( $s = "" )
     #end
   #end
-  #if($!s=="") #else
+  #if("$!s"=="") #else
   		  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name
   		  #set($docPageName = $grName+".Documentation")
   		  #set($docPage = $xwiki.getDocument( $docPageName ) )
   		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
   #end
   #set($bcLocal = $bcCurrentDoc.fullName)
-#elseif ($s && $s != "")
+#elseif ("$!s" != "")
   ## special breadcrumb parent for groups space
   <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
 
@@ -945,7 +945,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  ## prepare bcParent breadcrumb info of the parent page
  ## prepare bcLocal breadcrum info of the current page
  #set($bcParent = $bcParam)
- #if($bcParam && $!bcParam != "")
+ #if("$!bcParam" != "")
   #if($bcParam.endsWith($bcCurrentDoc.fullName))
    #set($bcLocal = $bcParam)
   #else
@@ -957,11 +957,11 @@ $memberdoc.getRenderedContent("$!content")</div>
 
  ## find the top parent in the bcParam that is valid
  #set($topParentDoc = $bcCurrentDoc)
- #if($bcParam && $bcParam != "")
+ #if("$!bcParam" != "")
   #set($topParentDone = false)
   #foreach($bcItem in $bcLocal.split(";"))
    ## ignoring empty elements and the XWiki.XWikiUsers parent page
-   #if(!$topParentDone && $bcItem != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+   #if(!$topParentDone && "$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
      #set($topParentDone = true)
      #set($topParentDoc = $xwiki.getDocument($bcItem))
    #end
@@ -977,7 +977,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  ## loop on each element of the breadcrumb
  #foreach($bcItem in $bcLocal.split(";"))
   ## ignoring empty elements and the XWiki.XWikiUsers parent page
-  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+  #if("$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
    #if(!$isFirst)
     &gt;
    #end
@@ -1021,7 +1021,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   *#
 #macro(curriki_breadcrumb_groups_fixtitle)
   ## groups specific rules
-  #if($!s=="")
+  #if("$!s"=="")
     ##don't fix anything
   #else
     #if($bcDoc.name==$msg.groups_home_page) ##home page
@@ -1072,7 +1072,7 @@ $memberdoc.getRenderedContent("$!content")</div>
 		#set($more_href = "${doc.getURL()}?subject=${request.subject}")
      #end
    #end
-#if($more != "")
+#if("$!more" != "")
     &gt; <a href="$more_href">$more</a>
    #end
 #end
@@ -1091,14 +1091,14 @@ $memberdoc.getRenderedContent("$!content")</div>
   #set( $s = "" )
 #end #end
 
-#if($!s=="")
+#if("$!s"=="")
  #set($collType = "")
  #set($category = $bcDoc.getValue("category"))
  #if("collection"==$category)
   #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
   #set($collType = $bcDoc.getValue("type"))
  #end
- #if($collType!="" && $collType != "folder")
+ #if("$!collType"!="" && $collType != "folder")
   ## do nothing because we have a collection or root collection
  #else
   ## handling breadcrumb if it is not a group
@@ -1120,19 +1120,19 @@ $memberdoc.getRenderedContent("$!content")</div>
     #end
    #end
   #else
-   #if(!$parent || ($!parent == ""))
+   #if("$!parent" == "")
     #set($parent = $bcDoc.parent)
    #end
   #end
 
   #if(!$parentList || $parentList.size() == 0)
-   #if(!$parent || ($!parent == ""))
+   #if("$!parent" == "")
     #set($parent = $bcDoc.parent)
    #else
    #end
   #end
 
-  #if($parent && ($!parent != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
+  #if($parent && ("$!parent" != "") && ($level < 6) && ($bcLocal.indexOf($parent) == -1))
    #set($bcLocal = "${parent};${bcLocal}")
    #set($level = $level + 1)
    #set($parentDoc = $xwiki.getDocument($parent))
@@ -1154,7 +1154,7 @@ $memberdoc.getRenderedContent("$!content")</div>
 #macro(subjectbreadcrumb $bcParam $bcCurrentDoc)
  ##Preparation de la liste
  #set($bcParent = $bcParam)
- #if($bcParam && $!bcParam != "")
+ #if("$!bcParam" != "")
   #if($bcParam.endsWith($bcCurrentDoc.fullName))
    #set($bcLocal = $bcParam)
   #else
@@ -1163,7 +1163,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  #else
   #set($bcLocal = $bcCurrentDoc.fullName)
  #end
- #if(!$bcParam || $!bcParam == "")
+ #if("$!bcParam" == "")
   #parentsBreadcrumb($bcCurrentDoc 0)
  #end
  #set($bcLocal = $bcLocal.replace("FW_masterFramework.WebHome;", ''))
@@ -1171,7 +1171,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  #set($isFirst = true)
  #set($previousBc = "")
  #foreach($bcItem in $bcLocal.split(";"))
-  #if($bcItem != "" && $bcItem != "XWiki.XWikiUsers")
+  #if("$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers")
    #if(!$isFirst)
     &gt;
    #end
@@ -1214,7 +1214,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #else ##}{
     #if(!$title) ##{
       #set( $title = $!xwiki.getWebPreference("title"))
-      #if ( $title != "") ##{
+      #if ( "$!title" != "") ##{
         $xwiki.parseContent($title)
       #else  ##}{
         XWiki . $!doc.space . $!doc.displayTitle
@@ -1344,7 +1344,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   * @author dward@curriki.org
   *#
 #macro(curriki_fulltitlebar $lefttitle $righttitle $link $js $color $idpfx) ## {
-#if($link!="" || $js!="")
+#if("$!link"!="" || "$!js"!="")
 #if("$!link" != "") ## {
 #normalizelink($link)
 #end ## }
@@ -1457,7 +1457,7 @@ $memberdoc.getRenderedContent("$!content")</div>
 #else ## } {
 #set($addarg="user=${request.user}&")
 #end ## }
-#if($addargs != "") ## {
+#if("$!addargs" != "") ## {
 #set($addarg="${addarg}${addargs}&")
 #end ## }
 <div id="mycurriki-paginator-line1" class="table-results-title">
@@ -1584,12 +1584,12 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #macro(curriki_avatarwithname_width $userdoc) ## {
 #if($userdoc.attachmentList.size()==0)  ## {
 <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
- <img src="$xwiki.getSkinFile("noavatar.png")" #if($width!="") width="${width}" #end />
+ <img src="$xwiki.getSkinFile("noavatar.png")" #if("$!width"!="") width="${width}" #end />
 </a>
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
   <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")#if("$!width"!="")?width="${width}#end" #if($width!="") width="${width}" #end /></a>
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")#if("$!width"!="")?width="${width}#end" #if("$!width"!="") width="${width}" #end /></a>
  #end ## }
 #end  $xwiki.getUserName($userdoc.fullName) ## }
 #end ## macro ## }

@@ -16,7 +16,7 @@
 #if(!$revisionscount)
 #set($revisionscount = 0)
 #end
-#if ($tdoc.realLanguage!="")
+#if ("$!tdoc.realLanguage"!="")
 #set($lang = "&amp;language=${tdoc.realLanguage}")
 #else
 #set($lang = "")
@@ -28,7 +28,7 @@
 #set($newdoc = $xwiki.getDocument($tdoc, $nextversion))
         <tr class="row#if($velocityCount % 2 == 1) even #else odd #end">
           <td>$nextversion</td>
-#if($newdoc=="")
+#if("$!newdoc"=="")
           <td>&ndash;</td>
           <td>&ndash;</td>
 #else

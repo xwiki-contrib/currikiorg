@@ -40,7 +40,7 @@ $msg.get("changes.on") $xwiki.formatDate($newdoc.date,$msg.get("mycurriki.dateti
 </div>
 ## <div class="clearfloats"></div>
 <div id="changes-info-comment">
-$msg.get("changes.comment"): #if($newdoc.comment=="") $msg.get("changes.nocomment") #else $newdoc.comment #end
+$msg.get("changes.comment"): #if("$!newdoc.comment"=="") $msg.get("changes.nocomment") #else $newdoc.comment #end
 </div>
 </div>
 ## <div class="clearfloats"></div>
@@ -184,7 +184,7 @@ $msg.get("changes.toversion") <a href="$newdoc.getAttachmentRevisionURL($attachC
 <td>
 #if($propname=="author")
 #set($author = $objdiff.getPrevValue().toString())
-#if($author!="")
+#if("$!author"!="")
 $xwiki.renderText($xwiki.getLocalUserName($author),$doc)
 #end
 #else
@@ -194,7 +194,7 @@ $objdiff.getPrevValue().toString()
 <td>
 #if($propname=="author")
 #set($author = $objdiff.getNewValue().toString())
-#if($author!="")
+#if("$!author"!="")
 $xwiki.renderText($xwiki.getLocalUserName($author),$doc)
 #end
 #else

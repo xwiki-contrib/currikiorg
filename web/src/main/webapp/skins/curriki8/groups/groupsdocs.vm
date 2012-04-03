@@ -145,7 +145,7 @@
 #begingroupsection("${msg.groups_documentation_add_document_title}" "" "" "blue" true)
 #if($request.method=="POST")
   #set($filename = $xwiki.fileupload.getFileName("filepath"))
-  #if($filename&&($filename!=""))
+  #if("$!filename"!="")
     ## create a doc for the upload
     #set( $attDocName = $xwiki.getUniquePageName( "doc" ) )
     #set( $attDocName = "."+$attDocName )
@@ -226,7 +226,7 @@ function getFileExtension() {
 #foreach( $docName in  $spaceDocs)
   #set( $docdoc = $xwiki.getDocument( $docName ) )
   #set( $doctitle = $docdoc.title )
-  #if( $doctitle == "" ) #set( $doctitle = $docdoc.name )  #end
+  #if( "$!doctitle" == "" ) #set( $doctitle = $docdoc.name )  #end
   <div class="frame-inset document-content">
     <div class="headlines">
       ##determining the icon to display
@@ -419,7 +419,7 @@ wikiEditor.init({
 #set( $docName = $request.pagename )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
 #if( $request.method == "POST" )
-     #if($request.doctitle && $request.doctitle!="")
+     #if("$!request.doctitle"!="")
       $editDoc.setTitle( $request.doctitle )
      #end
      $editDoc.setContent( $request.doctext )
@@ -497,7 +497,7 @@ wikiEditor.init({
 #else
 #set($type = "html")
 #end
-#if ($comparedoc.realLanguage!="")
+#if ("$!comparedoc.realLanguage"!="")
 #set($lang = "&language=${comparedoc.realLanguage}")
 #else
 #set($lang = "")
@@ -547,7 +547,7 @@ Edit
 #if(!$revisionscount)
 #set($revisionscount = 0)
 #end
-#if ($docdoc.realLanguage!="")
+#if ("$!docdoc.realLanguage"!="")
 #set($lang = "&amp;language=${docdoc.realLanguage}")
 #else
 #set($lang = "")
@@ -566,7 +566,7 @@ Edit
 #set($revURL = $revURL + "&pagename=")
 #set($revURL = $revURL + $request.pagename)
 <a href="${revURL}")">$nextversion</a></td>
-#if($newdoc=="")
+#if("$!newdoc"=="")
           <td>&ndash;</td>
           <td>&ndash;</td>
 #else

@@ -117,7 +117,7 @@ $msg.get("mycurriki.blog.noblog")
 $response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_bc}editArticle=${doc.fullName}"))
 #else ## } {
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "") ## {
+#if("$!title" == "") ## {
 #set($title = "&nbsp;")
 #end ## }
 #curriki_titlebar($title "" "" "blue")
@@ -191,7 +191,7 @@ $comment.comment
 #set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
 #if($doc.space == "MyCurriki") ## {
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "") ## {
+#if("$!title" == "") ## {
 #set($title = "&nbsp;")
 #end ## }
 1 $title
@@ -206,7 +206,7 @@ $comment.comment
 #set($content = "")
 #end ##}
 #if(!$displayFully)
- #if($!extract != "")
+ #if("$!extract" != "")
   #set($content = $extract)
  #else
   #if($content.length()>400)

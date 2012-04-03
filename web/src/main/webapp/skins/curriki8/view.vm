@@ -9,10 +9,10 @@
 #if($request.method=="POST") ##{
   #set($fileuploadlist = $xwiki.fileupload.getFileItems())
 #end ##}
-	#if((!$viewer) || ($viewer == "")) ##{
+	#if("$!viewer" == "") ##{
   #set($viewer = $request.getParameter("viewer"))
 #end ##}
-#if((!$viewer) || ($viewer == "")) ##{
+#if("$!viewer" == "") ##{
   #set($viewer = "view")
 #end ##}
 ## In Print Mode we don't want the standard header

@@ -85,7 +85,7 @@
 	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 #set($headerMsg="$!request.session.getAttribute('header.message')")##
-#if($headerMsg!="")
+#if("$!headerMsg"!="")
 <p align="left" style="font-size:smaller; margin-top: 0; white-space:nowrap">##
 #if($headerMsg=="logout-ok")##
     $request.session.removeAttribute("header.message")##
@@ -113,7 +113,7 @@
 <!-- advanced search -->
 #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))
 #set($brsqry = $request.brsqry)
-#if(!$brsqry || $brsqry == "")
+#if("$!brsqry" == "")
 	#set($brsqry = $defaultsearchtext)
 #end
 <div id="header-search"> ##{

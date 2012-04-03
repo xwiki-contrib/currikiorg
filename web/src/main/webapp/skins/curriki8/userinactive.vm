@@ -48,7 +48,7 @@
                 #set($undeliv = $!userObj.getProperty('email_undeliverable').value)
                 <!-- userDoc is "$!userDoc" userObj is "$!userDoc", active is "$!active", undeliv is "$!undeliv" -->
                 #if("$!active" == "0" && "$!undeliv" == "1") ## {
-                    #set($xpageParam="")#if($!request.xpage=="popup" || $!request.xpage=="plain" || $!request.framed!="")#set($xpageParam="xpage=popup")#end
+                    #set($xpageParam="")#if($!request.xpage=="popup" || $!request.xpage=="plain" || "$!request.framed"!="")#set($xpageParam="xpage=popup")#end
                     $response.sendRedirect("/xwiki/bin/view/Registration/EmailVerification?$xpageParam")
                 #else ## }{
                 #* $msg.get("accountnotactive")
