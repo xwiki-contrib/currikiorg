@@ -6,7 +6,7 @@
 <div id="menuview">
 #if($context.getMode()==0) ## Visible only in a page
 <div id="actionmenu" class="layoutsubsection">
-<h3 id="xwikimenutitle" class="hidden">$msg.get("menu")</h3>
+## <h3 id="xwikimenutitle" class="hidden">$msg.get("menu")</h3>
 <div class="rightmenu"><a id="tmDoc" href='http://www.xwiki.org/xwiki/bin/view/Main/Documentation' onclick="openURL('http://www.xwiki.org/xwiki/bin/view/Main/Documentation', '_blank'); return false;"><strong>$msg.get("documentation")</strong></a></div>
 <div class="leftmenu">
 ##
@@ -36,7 +36,7 @@
 ##
 ## Edit menu
 ##
-#if($isAdvancedUser)
+###if($isAdvancedUser)
 #xwikitopmenuentrystart($doc.getURL($editaction, $languageparams) $msg.get("edit") "tmEdit")
 #submenuitem($doc.getURL("edit", "${languageparams}&amp;editor=wiki") $msg.get("editwiki"))
 #submenuitem($doc.getURL("edit", "$languageparams&amp;editor=wysiwyg") $msg.get("editvisual"))
@@ -47,9 +47,9 @@
 #submenuitem($doc.getURL("edit", "editor=rights") $msg.get("editrights"))
 #end
 #xwikitopmenuentryend()
-#else ## !isAdvanced
-#xwikitopmenuentry($doc.getURL($editaction, $languageparams) $msg.get("edit") "tmEdit")
-#end
+###else ## !isAdvanced
+###xwikitopmenuentry($doc.getURL($editaction, $languageparams) $msg.get("edit") "tmEdit")
+## #end
 #end
 ##
 ## Show menu
