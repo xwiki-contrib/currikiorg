@@ -1083,6 +1083,7 @@ $memberdoc.getRenderedContent("$!content")</div>
  * Builds the Parents Breadcrumb in bcLocal
  *#
 #macro(curriki_breadcrumb_parent $bcDoc $level)
+#if("$!bcDoc"!="")
 ## prepare group info
 #set($sm = $xwiki.csm)
 #set($spaceName = $bcDoc.getSpace())
@@ -1140,6 +1141,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   #end
  #end ## end check collection or root collection
 #end ## end check groups
+#end ## end check null bcName
 #end ## end macro
 
 
