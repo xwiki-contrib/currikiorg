@@ -1,5 +1,6 @@
 package org.curriki.xwiki.servlet.restlet.resource.users;
 
+import org.curriki.xwiki.plugin.asset.composite.CompositeAsset;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 import org.restlet.resource.ResourceException;
@@ -11,6 +12,8 @@ import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -31,20 +34,45 @@ public class UserCollectionsResource extends BaseResource {
 
     @Override public Representation represent(Variant variant) throws ResourceException {
         setupXWiki();
-
         Request request = getRequest();
+        boolean full = Boolean.parseBoolean(getQuery().getFirstValue("full"));
+        if(full) throw new ResourceException(501, new UnsupportedOperationException("Can't render a full tree for user's collections."));
+
         String forUser = (String) request.getAttributes().get("userName");
 
+        //
         List<String> resultList;
-        Map<String,Object> results;
+        JSONArray json = new JSONArray();
         try {
             resultList = plugin.fetchUserCollectionsList(forUser);
-            results = plugin.fetchUserCollectionsInfo(forUser);
+            for(String collFullName: resultList) {
+                JSONObject collInfo = new JSONObject();
+                collInfo.put("collectionPage", collFullName);
+                CompositeAsset asset = plugin.fetchAsset(collFullName).as(CompositeAsset.class);
+                //Asset asset = plugin.fetchAsset(collFullName);
+                collInfo.put("revision", asset.getVersion());
+                collInfo.put("collectionType", "collection") ; // ???
+                collInfo.put("displayTitle", asset.getTitle());
+                collInfo.put("description", asset.getDescription());
+                collInfo.put("assetType",asset.getAssetType());
+                // levels? ict? category? subcategory? rights? fwItems?
+                List<String> subAssetList = asset.getSubassetList();
+                List<Map<String,Object>> subAssets = new ArrayList<Map<String, Object>>(subAssetList.size());
+                for(String subAssetFullName: subAssetList) {
+                    Map<String, Object> m = new HashMap<String,Object>();
+                    m.put("assetpage", subAssetFullName);
+                    subAssets.add(m);
+                }
+                collInfo.put("children", subAssets);
+                json.add(collInfo);
+            }
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
-
-        JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
+        // -- previously:
+        //   Map<String,Object> results;
+        //   results = plugin.fetchUserCollectionsInfo(forUser);
+        //   JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
 
         return formatJSON(json, variant);
     }
@@ -93,7 +121,7 @@ public class UserCollectionsResource extends BaseResource {
                 fAsset.reorder(orig, want);
                 fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.reordered"));
             } catch (XWikiException e) {
-                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Reorder failed: "+e.getMessage(), e);
+                throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         } else {
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a root collection.");
