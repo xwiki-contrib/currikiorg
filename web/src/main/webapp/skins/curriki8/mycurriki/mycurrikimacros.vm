@@ -350,7 +350,7 @@ $msg.get("mycurriki.macro.access.${access}")
 #macro(mycurriki_ict $asset) ## {
 #set($ict = "")
 #set($ict = $!asset.getObject("CurrikiCode.AssetClass").getProperty("instructional_component").getValue())
-#if("$!ict" == "") ## {
+#if("$!ict" == "" || $ict.size()==0) ## {
 ## No ICT set -- nothing to do
 #else ## } {
 #if($ict.size() > 1) ## {
