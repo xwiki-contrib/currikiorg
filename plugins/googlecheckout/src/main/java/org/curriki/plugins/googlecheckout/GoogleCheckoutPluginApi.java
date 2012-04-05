@@ -5,8 +5,8 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.XWiki;
 import com.xpn.xwiki.plugin.PluginApi;
 import com.xpn.xwiki.web.XWikiMessageTool;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class GoogleCheckoutPluginApi extends PluginApi<GoogleCheckoutPlugin> {
 
-    private static final Log LOG = LogFactory.getLog(GoogleCheckoutPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleCheckoutPlugin.class);
 
     public GoogleCheckoutPluginApi(GoogleCheckoutPlugin plugin, XWikiContext context)
     {

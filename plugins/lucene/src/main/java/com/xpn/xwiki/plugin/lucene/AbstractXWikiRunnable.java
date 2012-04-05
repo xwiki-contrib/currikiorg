@@ -19,8 +19,8 @@
  */
 package com.xpn.xwiki.plugin.lucene;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xwiki.context.ExecutionContext;
 import org.xwiki.context.Execution;
 import org.xwiki.context.ExecutionContextException;
@@ -37,7 +37,7 @@ public abstract class AbstractXWikiRunnable implements Runnable
     /**
      * Logging object.
      */
-    private static final Log LOG = LogFactory.getLog(IndexUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexUpdater.class);
 
     protected void initXWikiContainer(XWikiContext context)
     {

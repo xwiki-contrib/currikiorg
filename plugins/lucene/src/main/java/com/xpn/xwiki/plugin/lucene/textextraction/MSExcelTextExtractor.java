@@ -24,8 +24,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -34,11 +32,13 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MSExcelTextExtractor implements MimetypeTextExtractor
 {
     /** Logging helper. */
-    private static final Log LOG = LogFactory.getLog(MSExcelTextExtractor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MSExcelTextExtractor.class);
 
     /** The currently preparing Excel workbook. */
     private HSSFWorkbook mWorkbook;

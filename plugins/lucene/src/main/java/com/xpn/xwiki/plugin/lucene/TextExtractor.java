@@ -22,9 +22,6 @@ package com.xpn.xwiki.plugin.lucene;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.xpn.xwiki.plugin.lucene.textextraction.MSExcelTextExtractor;
 import com.xpn.xwiki.plugin.lucene.textextraction.MSPowerPointTextExtractor;
 import com.xpn.xwiki.plugin.lucene.textextraction.MSWordTextExtractor;
@@ -32,6 +29,8 @@ import com.xpn.xwiki.plugin.lucene.textextraction.MimetypeTextExtractor;
 import com.xpn.xwiki.plugin.lucene.textextraction.PDFTextExtractor;
 import com.xpn.xwiki.plugin.lucene.textextraction.PlainTextExtractor;
 import com.xpn.xwiki.plugin.lucene.textextraction.XmlTextExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Extraction of text from various binary formats. Extraction itself is done by the textExtractor
@@ -42,7 +41,7 @@ import com.xpn.xwiki.plugin.lucene.textextraction.XmlTextExtractor;
  */
 public class TextExtractor
 {
-    private static final Log LOG = LogFactory.getLog(TextExtractor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TextExtractor.class);
 
     static final Map<String, MimetypeTextExtractor> textExtractors = new HashMap<String, MimetypeTextExtractor>();
 

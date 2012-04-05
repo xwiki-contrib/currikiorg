@@ -13,13 +13,13 @@ import org.curriki.xwiki.plugin.asset.external.VideoAssetManager;
 import org.curriki.xwiki.plugin.asset.external.ExternalAssetManager;
 import org.curriki.xwiki.plugin.asset.composite.CompositeAssetManager;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  */
 public abstract class DefaultAssetManager implements AssetManager {
-    private static final Log LOG = LogFactory.getLog(DefaultAssetManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAssetManager.class);
 
     private static String CATEGORY_NAME = Constants.ASSET_CATEGORY_UNKNOWN;
     private static  Class<? extends Asset> ASSET_CLASS = AttachmentAsset.class;

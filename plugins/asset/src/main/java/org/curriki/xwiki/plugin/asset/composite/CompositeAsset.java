@@ -1,7 +1,5 @@
 package org.curriki.xwiki.plugin.asset.composite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -13,6 +11,8 @@ import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.AssetException;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Collections;
 /**
  */
 public abstract class CompositeAsset extends Asset {
-    private static final Log LOG = LogFactory.getLog(RootCollectionCompositeAsset.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RootCollectionCompositeAsset.class);
 
     public final static String CATEGORY_NAME = Constants.ASSET_CATEGORY_COLLECTION;
 

@@ -29,8 +29,8 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
@@ -38,8 +38,7 @@ import java.util.*;
 
 public class MimeTypePlugin  extends XWikiDefaultPlugin implements XWikiPluginInterface, MimeTypeConstant {
 
-    private static Log mLogger =
-            LogFactory.getFactory().getInstance(MimeTypePlugin.class);
+    private static final Logger mLogger = LoggerFactory.getLogger(MimeTypePlugin.class);
 
     private Properties mimetypeConfig = new Properties();
     private String mimetypeConfigDocVersion = null;

@@ -27,13 +27,13 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class LicenceManagerPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface, LicenceManagerConstant {
-    private static Log log = LogFactory.getFactory().getInstance(LicenceManagerPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LicenceManagerPlugin.class);
 
     public LicenceManagerPlugin(String name, String className, XWikiContext context) {
         super(name, className, context);

@@ -26,8 +26,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import org.curriki.xwiki.servlet.restlet.router.BaseRouter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xwiki.container.servlet.ServletContainerInitializer;
 import org.xwiki.container.servlet.ServletContainerException;
 import org.xwiki.container.Container;
@@ -37,7 +37,7 @@ import org.xwiki.context.Execution;
  */
 public class RestletServlet extends BaseServlet {
     protected ServletConverter converter;
-    private static final Log LOG = LogFactory.getLog(RestletServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RestletServlet.class);
 
     @Override protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         try {

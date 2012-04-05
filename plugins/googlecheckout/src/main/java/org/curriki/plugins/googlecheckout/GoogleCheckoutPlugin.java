@@ -14,13 +14,13 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface {
 
-    private static final Log LOG = LogFactory.getLog(GoogleCheckoutPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleCheckoutPlugin.class);
 
     private String merchant, key, host;
     private URL checkoutURL, orderInfoURL;

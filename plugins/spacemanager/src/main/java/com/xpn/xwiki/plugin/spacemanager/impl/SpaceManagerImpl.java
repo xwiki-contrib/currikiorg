@@ -28,12 +28,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xwiki.model.reference.DocumentReference;
 
 import com.xpn.xwiki.XWiki;
@@ -83,7 +83,7 @@ public class SpaceManagerImpl extends XWikiDefaultPlugin implements SpaceManager
     /**
      * Log object to log messages in this class.
      */
-    private static final Log LOG = LogFactory.getLog(SpaceManagerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpaceManagerImpl.class);
 
     /**
      * The extension that defines specific functions for this space manager

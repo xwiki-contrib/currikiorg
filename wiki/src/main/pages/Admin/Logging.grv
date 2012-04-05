@@ -1,9 +1,26 @@
 
 //<%
+import java.lang.management.ManagementFactory;
+import javax.management.MBeanServer
+import org.apache.commons.logging.LogFactory
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
-def log = LogFactory.getLog("groovyPages.Test");
+MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+def mbean = new GroovyMBean(server, 'logback:type=xwiki')
+
+println "Current log level for 'org.xwiki':"
+println mbean.getLoggerLevel("org.xwiki")
+
+println "Set log level to DEBUG"
+mbean.setLoggerLevel("org.xwiki", "debug");
+
+mbean.setLoggerLevel("groovyPages", "debug");
+mbean.setLoggerLevel("org.curriki.xwiki","debug");
+mbean.setLoggerLevel("org.curriki.xwiki.plugin.curriki.CurrikiPlugin","debug");
+mbean.setLoggerLevel("com.xpn.xwiki.lucene", "debug");
+mbean.setLoggerLevel("com.xpn.xwiki.plugin.spacemanager", "debug");
+
+Log log = LogFactory.getLog("groovyPages.Test");
 
 println "1 Logging"
 
@@ -15,25 +32,27 @@ println "* Has the string \"This is an error\" appeared?"
 log.warn("This is a warning")
 println "* Has the string \"This is a warning\" appeared?"
 
-log.getLogger().setLevel(org.apache.log4j.Level.INFO)
+//log.getLogger().setLevel(org.apache.log4j.Level.INFO)
 
 log.info("This is a info")
 println "* Has the string \"This is an info\" appeared?"
-
-
-println "<hr/>"
-
-println "log4j.properties is loaded from " + Log.class.getResource("/log4j.properties")
+println();
 
 println "<hr/>"
 
-println "Logger priority of Lucene and packaging set to info.";
+//println "log4j.properties is loaded from " + Log.class.getResource("/log4j.properties")
+
+/*
+println "<hr/>"
 
 LogFactory.getLog("com.xpn.xwiki.plugin.packaging").getLogger().setLevel(org.apache.log4j.Level.INFO)
 LogFactory.getLog("com.xpn.xwiki.plugin.lucene").getLogger().setLevel(org.apache.log4j.Level.INFO)
+println "Logger priority of Lucene, packaging plugins set to info.";
+
+LogFactory.getLog("org.curriki.xwiki.plugin").getLogger().setLevel(org.apache.log4j.Level.DEBUG)
+println "Logger priority of curriki plugins set to debug.";
 
 println "<hr/>"
-
+*/
 println "xwiki.version is " + xwiki.version
-
 // %>

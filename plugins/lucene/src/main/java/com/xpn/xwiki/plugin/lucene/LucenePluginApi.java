@@ -19,9 +19,6 @@
  */
 package com.xpn.xwiki.plugin.lucene;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.doc.XWikiAttachment;
@@ -29,6 +26,8 @@ import com.xpn.xwiki.api.Context;
 import com.xpn.xwiki.api.Document;
 import com.xpn.xwiki.api.Attachment;
 import com.xpn.xwiki.plugin.PluginApi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -47,7 +46,7 @@ import java.util.List;
 public class LucenePluginApi extends PluginApi<LucenePlugin>
 {
     /** Logging helper. */
-    private static final Log LOG = LogFactory.getLog(LucenePluginApi.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LucenePluginApi.class);
 
     /**
      * Return value for {@link #rebuildIndex()} meaning that the caller does not have admin rights.

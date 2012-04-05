@@ -23,8 +23,8 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.XWiki;
 import org.apache.lucene.search.Hits;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class SearchResults extends Api
 
     private final Hits hits;
 
-    private static final Log LOG = LogFactory.getLog(SearchResults.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SearchResults.class);
 
     private List relevantResults;
 

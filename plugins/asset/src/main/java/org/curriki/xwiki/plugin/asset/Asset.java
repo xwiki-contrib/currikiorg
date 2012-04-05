@@ -24,8 +24,6 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.collections.ListUtils;
 import org.apache.velocity.VelocityContext;
 import org.curriki.xwiki.plugin.asset.attachment.*;
@@ -50,9 +48,11 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
 import com.xpn.xwiki.api.Object;
 import com.xpn.xwiki.api.Attachment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Asset extends CurrikiDocument {
-    private static final Log LOG = LogFactory.getLog(Asset.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Asset.class);
 
 
     public Asset(XWikiDocument doc, XWikiContext context) {

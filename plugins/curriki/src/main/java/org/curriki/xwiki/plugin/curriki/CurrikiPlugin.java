@@ -12,12 +12,13 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.lang.reflect.Method;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.*;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -49,7 +50,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface, XWikiDocChangeNotificationInterface {
     public static final String PLUGIN_NAME = "curriki";
 
-    private static final Log LOG = LogFactory.getLog(CurrikiPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CurrikiPlugin.class);
     private static ThreadLocal<SimpleDateFormat> durationDf = new ThreadLocal<SimpleDateFormat>() {
         protected SimpleDateFormat initialValue() {
             return new SimpleDateFormat("mm'm'ss's'SSS'ms'");

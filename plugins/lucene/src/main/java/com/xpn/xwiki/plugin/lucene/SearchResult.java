@@ -26,6 +26,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Result of a search. The Plugin will return a collection of these for display on the search page.
@@ -66,8 +68,7 @@ public class SearchResult
 
     private String creator;
 
-    private static final Log LOG = LogFactory.getLog(SearchResult.class);
-
+    private static final Logger LOG = LoggerFactory.getLogger(SearchResult.class);
     /**
      * @todo add fallback for unknown index field names (read values into a map accessible from search results page)
      *       This would be useful for integration of external indexes where the field names dont match ours.
