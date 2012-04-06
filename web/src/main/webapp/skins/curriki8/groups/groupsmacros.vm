@@ -16,6 +16,7 @@
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
 
 
 ## groups shared macros
@@ -1003,7 +1004,9 @@ $xwiki.addTooltipJS()
 <div class="${cls}">
   <span class="spacedoc-date">$xwiki.formatDate($event.date, $msg.get("mycurriki.datetimeFormat"))</span>
   <span class="spacedoc-title">$displayBody</span>
-    <!-- event $event is of class $event.getClass() loaded from $event.getClass().getResource("ActivityEvent.class") -->
+    <!-- event $event is of class $event.getClass() loaded from $event.getClass().getResource("ActivityEvent.class")
+        eventId: $event.eventId
+    -->
 ##  <span class="spacedoc-editor">$xwiki.getUserName($event.user)</span>
 </div>
 #end
