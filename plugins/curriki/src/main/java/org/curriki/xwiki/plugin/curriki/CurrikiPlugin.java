@@ -17,9 +17,6 @@ import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.*;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.XWiki;
@@ -40,6 +37,8 @@ import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.web.XWikiRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -119,7 +118,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     public Asset createAsset(String parent, XWikiContext context) throws XWikiException {
         return Asset.createTempAsset(parent, context);
     }
-    
+
 
     public Asset copyAsset(String copyOf, String publishSpace, XWikiContext context) throws XWikiException {
         return Asset.copyTempAsset(copyOf, publishSpace, context);
@@ -185,7 +184,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @return List of all groups that the specified user is in
      */
     public Map<String,Object> fetchUserGroups(String forUser, XWikiContext context) {
-        System.out.println("fetchUserGroups " + forUser);
+        if(LOG.isDebugEnabled()) LOG.debug("fetchUserGroups " + forUser);
         long start = System.nanoTime(), time = start;
         Map<String,Object> groups = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi(CurrikiSpaceManager.CURRIKI_SPACEMANGER_NAME, context);
@@ -193,7 +192,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         try {
             spaces = sm.getSpaceNames(forUser, null);
             time = System.nanoTime();
-            System.out.println("fetchUserGroups: getSpaceNames: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
+            if(LOG.isDebugEnabled()) LOG.debug("fetchUserGroups: getSpaceNames: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
             start = time;
         } catch (Exception e) {
             // Ignore exception -- just return an empty list
@@ -206,7 +205,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             if (space instanceof String) {
                 groups.put((String) space, getGroupInfo((String) space, context));
                 time = System.nanoTime();
-                System.out.println("fetchUserGroups: getGroupInfo: "+ space+ ": " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
+                if(LOG.isDebugEnabled()) LOG.debug("fetchUserGroups: getGroupInfo: "+ space+ ": " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
                 start = time;
             }
         }
@@ -215,7 +214,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     protected Map<String,Object> getGroupInfo(String group, XWikiContext context) {
-        System.out.println("getGroupInfo " + group);
+        if(LOG.isDebugEnabled()) LOG.debug("getGroupInfo " + group);
         Map<String,Object> groupInfo = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi("csm", context);
 
@@ -226,11 +225,11 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             //CURRIKI-5472: this is a dangerous spot: it has to deserialize all the collections of the group
 
             if(hasCollections(group, context)) {
-                System.out.println("Group " + group +" has collections.");
+                if(LOG.isDebugEnabled()) LOG.debug("Group " + group +" has collections.");
                 groupInfo.put("collectionCount", 1);
                 groupInfo.put("editableCollectionCount", 1);
             } else {
-                System.out.println("Group " + group + " has no collections.");
+                if(LOG.isDebugEnabled()) LOG.debug("Group " + group + " has no collections.");
                 groupInfo.put("collectionCount", 0);
                 groupInfo.put("editableCollectionCount", 0);
             }
@@ -253,7 +252,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return groupInfo;
     }
-    
+
     private boolean hasCollections(String entity, XWikiContext context) {
         entity = entity.replaceFirst(Constants.USER_PREFIX_REGEX, ""); // For users
         entity = entity.replaceFirst("\\."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
@@ -307,25 +306,34 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
 
     public List<String> fetchCollectionsList(String entity, XWikiContext context) throws XWikiException {
-        System.out.println("fetchCollectionsList " + entity);
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList " + entity);
+        long start = System.nanoTime();
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
             return new ArrayList<String>();
         }
 
-        return root.getSubassetList();
+        List<String> l = root.getSubassetList();
+
+        long time = System.nanoTime();
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
+        return l;
     }
 
     public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) throws XWikiException {
-        System.out.println("fetchCollectionsInfo " + entity);
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsInfo " + entity);
+        long start = System.nanoTime();
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
             return new HashMap<String,Object>();
         }
 
-        return root.fetchCollectionsInfo();
+        Map<String,Object> r = root.fetchCollectionsInfo();
+        long time = System.nanoTime();
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
+        return r;
     }
 
     public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) throws XWikiException {
@@ -531,7 +539,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setCache(true);
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparators("|");
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparator(" ");
-        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setPicker(true);                
+        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setPicker(true);
         needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, 5, true, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL_VALUES);
         ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setSeparators(" ,|");
         ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setSeparator("#--#");
@@ -644,7 +652,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         bclass.setName(Constants.VIDEO_ASSET_CLASS);
 
         needsUpdate |= bclass.addStaticListField(Constants.VIDEO_ASSET_PARTNER, Constants.VIDEO_ASSET_PARTNER, 1, false,
-                      Constants.VIDEO_ASSET_PARTNER_VALUES);        
+                Constants.VIDEO_ASSET_PARTNER_VALUES);
         needsUpdate |= bclass.addTextField(Constants.VIDEO_ASSET_ID, Constants.VIDEO_ASSET_ID, 30);
 
         String content = doc.getContent();
@@ -675,7 +683,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         needsUpdate |= bclass.addTextField(Constants.ARCHIVE_ASSET_START_FILE, Constants.ARCHIVE_ASSET_START_FILE, 60);
         needsUpdate |= bclass.addStaticListField(Constants.ARCHIVE_ASSET_TYPE, Constants.ARCHIVE_ASSET_TYPE, 1, false,
-                      Constants.ARCHIVE_ASSET_TYPE_VALUES);
+                Constants.ARCHIVE_ASSET_TYPE_VALUES);
 
 
         String content = doc.getContent();
@@ -860,7 +868,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             xwiki.saveDocument(doc, context);
     }
 
-    
+
     /**
      * Notification to handle a rollback and check the result
      */
@@ -871,7 +879,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             // because the previous one is a copy
             Document apidoc = newdoc.newDocument(context);
 
-            System.out.println("Action " + context.getAction() + " " + newdoc.getFullName());
+            if(LOG.isWarnEnabled()) LOG.warn("Action " + context.getAction() + " " + newdoc.getFullName());
             if (context.getAction().equals("rollback")&&(apidoc instanceof Asset)) {
                 Asset asset = (Asset) apidoc;
                 if (!asset.isLatestVersion()) {
@@ -952,7 +960,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         numRequestsEnsuringCookies++;
         timeSpentEnsuringCookies+= (System.nanoTime()-start);
         if(numRequestsEnsuringCookies>0 && numRequestsEnsuringCookies % 10==0)
-            System.out.println("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
+            if(LOG.isDebugEnabled()) LOG.debug("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
     }
 
 }
