@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.xpn.xwiki.plugin.activitystream.api.ActivityStreamException;
+import com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent;
 import org.curriki.plugin.activitystream.impl.CurrikiActivityStream;
 
 import com.xpn.xwiki.XWikiContext;
@@ -43,16 +45,23 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
             .getActivityStream();
     }
 
-    public List publicWrapEvents(List events)
+    public List<ActivityEvent> getEvents(boolean filter, int nb, int start) throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().getEvents(filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+
+    private List<ActivityEvent> wrapEvents(List<com.xpn.xwiki.plugin.activitystream.api.ActivityEvent> events)
     {
         if (events == null || events.size() == 0) {
-            return Collections.EMPTY_LIST;
+            return new ArrayList<ActivityEvent>(0);
         }
-        List result = new ArrayList(events.size());
-        Iterator iter = events.iterator();
-        while (iter.hasNext()) {
-            com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
-                (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) iter.next();
+        List<ActivityEvent> result = new ArrayList<ActivityEvent>(events.size());
+        for(com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event: events) {
             com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent;
             if (event.getSpace().startsWith("Messages_Group_")) {
                 wrappedEvent = new MessageActivityEvent(event, getXWikiContext());
