@@ -43,12 +43,12 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
             .getActivityStream();
     }
 
-    protected List wrapEvents(List events)
+    public List publicWrapEvents(List events)
     {
         if (events == null || events.size() == 0) {
             return Collections.EMPTY_LIST;
         }
-        List result = new ArrayList();
+        List result = new ArrayList(events.size());
         Iterator iter = events.iterator();
         while (iter.hasNext()) {
             com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
