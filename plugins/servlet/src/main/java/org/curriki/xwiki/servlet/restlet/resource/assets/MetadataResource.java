@@ -123,9 +123,9 @@ public class MetadataResource extends BaseResource {
 
         // grantCurrikiCommercialLicense ("on")
         if (json.has("grantCurrikiCommercialLicense")) {
-            assetObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, json.getString("grantCurrikiCommercialLicense").equals("on")?1:0);
+            licenseObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, json.getString("grantCurrikiCommercialLicense").equals("on")?1:0);
         } else {
-            assetObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, 0);
+            licenseObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, 0);
         }
 
 
