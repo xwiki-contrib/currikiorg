@@ -45,15 +45,15 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
             .getActivityStream();
     }
 
-    public List<ActivityEvent> getEvents(boolean filter, int nb, int start) throws ActivityStreamException
+    public List<ActivityEvent> getEvents(String streamName, boolean filter, int nb, int start)
+            throws ActivityStreamException
     {
         if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEvents(filter, nb, start, this.context));
+            return wrapEvents(getActivityStream().getEvents(streamName, filter, nb, start, this.context));
         } else {
             return null;
         }
     }
-
 
     private List<ActivityEvent> wrapEvents(List<com.xpn.xwiki.plugin.activitystream.api.ActivityEvent> events)
     {
