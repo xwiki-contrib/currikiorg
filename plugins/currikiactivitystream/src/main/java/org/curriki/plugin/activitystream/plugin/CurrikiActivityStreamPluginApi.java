@@ -20,8 +20,6 @@
 package org.curriki.plugin.activitystream.plugin;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import com.xpn.xwiki.plugin.activitystream.api.ActivityStreamException;
@@ -41,9 +39,80 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
 
     protected CurrikiActivityStream getCurrikiActivityStream()
     {
-        return (CurrikiActivityStream) ((CurrikiActivityStreamPlugin) getProtectedPlugin())
+        return (CurrikiActivityStream) (getProtectedPlugin())
             .getActivityStream();
     }
+
+    public List<ActivityEvent> getEvents(boolean filter, int nb, int start) throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().getEvents(filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> getEventsForSpace(String space, boolean filter, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().getEventsForSpace(space, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+    public List<ActivityEvent> getEventsForSpace(String streamName, String space, boolean filter, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().getEventsForSpace(streamName, space, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> getEventsForUser(String user, boolean filter, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().getEventsForUser(user, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> getEventsForUser(String streamName, String user, boolean filter, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().getEventsForUser(streamName, user, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> searchEvents(String hql, boolean filter, boolean globalSearch, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents(hql, filter, globalSearch, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> searchEvents(String hql, boolean filter, boolean globalSearch, int nb, int start,
+                                            List<Object> parameterValues) throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents("", hql, filter, globalSearch, nb, start,
+                    parameterValues, this.context));
+        } else {
+            return null;
+        }
+    }
+
+
 
     public List<ActivityEvent> getEvents(String streamName, boolean filter, int nb, int start)
             throws ActivityStreamException
@@ -80,6 +149,70 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
         }
         return result;
     }
+
+    public List<ActivityEvent> searchEvents(String hql, boolean filter, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents(hql, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+    public List<ActivityEvent> searchEvents(String hql, boolean filter, int nb, int start, List<Object> parameterValues)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents("", hql, filter, nb, start, parameterValues,
+                    this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, boolean globalSearch, int nb,
+                                            int start) throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, globalSearch, nb, start,
+                    this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, boolean globalSearch, int nb,
+                                            int start, List<Object> parameterValues) throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, globalSearch, nb, start,
+                    this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, int nb, int start)
+            throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, int nb, int start,
+                                            List<Object> parameterValues) throws ActivityStreamException
+    {
+        if (hasProgrammingRights()) {
+            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, nb, start, this.context));
+        } else {
+            return null;
+        }
+    }
+
+
 /*
     protected List unwrapEvents(List events)
     {
