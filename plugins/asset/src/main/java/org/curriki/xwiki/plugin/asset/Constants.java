@@ -66,6 +66,7 @@ public interface Constants {
     String ASSET_CLASS_LANGUAGE = "language";
     String ASSET_CLASS_LANGUAGE_VALUES = "eng=English|ind=Bahasa Indonesia|zho=Chinese|nld=Dutch|fra=French|deu=German|hin=Hindi|ita=Italian|jpn=Japanese|kor=Korean|nep=Nepali|por=Portuguese|rus=Russian|sin=Sinhalese|spa=Spanish|tam=Tamil|---=Other";
     String ASSET_CLASS_HIDDEN_FROM_SEARCH = "hidden_from_search";
+    String ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS = "grantCurrikiCommercialLicense";
 
     String ASSET_CATEGORY_UNKNOWN = "unknown";
     String ASSET_CATEGORY_ATTACHMENT = "attachment";

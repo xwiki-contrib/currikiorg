@@ -121,6 +121,14 @@ public class MetadataResource extends BaseResource {
             assetObj.set(Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH, 0);
         }
 
+        // grantCurrikiCommercialLicense ("on")
+        if (json.has("grantCurrikiCommercialLicense")) {
+            assetObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, json.getString("grantCurrikiCommercialLicense").equals("on")?1:0);
+        } else {
+            assetObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, 0);
+        }
+
+
         // license_deed
         if (json.has("license_type")) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_type"));
