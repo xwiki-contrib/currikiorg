@@ -1743,7 +1743,7 @@ $asset.use($classname)
 #set($asset = $xwiki.getDocument($request.page))
 #if($asset.hasAccessLevel("edit"))
 ## let's read data
-#if("$!request.content")
+#if("$!request.content"!="")
 $asset.setContent($request.content)
 #end
 #if($request.title)
