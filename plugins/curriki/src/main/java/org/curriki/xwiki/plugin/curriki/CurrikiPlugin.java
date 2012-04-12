@@ -11,7 +11,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.*;
@@ -94,6 +101,34 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         // Insert a notification so that we can handle rollback and convert assets
         // if we are reading an asset in the old format
         context.getWiki().getNotificationManager(). addGeneralRule(new DocChangeRule(this, true, false));
+
+        String startupURLs = context.getWiki().Param("curriki.startupURLs");
+        final Pattern ptrn = Pattern.compile("http://(.*):(.*)@([^/]+)(:([0-9]+))?/.*");
+        for(final String startupURL: startupURLs.split("[,\t\n ]+")) {
+            new Thread("Startup URL fetch " + startupURL) {
+                public void run() {
+                    try {
+                        LOG.warn("Loading startup URL " + startupURL + ".");
+                        HttpClient client = new HttpClient();
+                        Matcher matcher = ptrn.matcher(startupURL);
+                        if(matcher.matches()) {
+                            client.getParams().setAuthenticationPreemptive(true);
+                            Credentials defaultcreds = new UsernamePasswordCredentials(matcher.group(1), matcher.group(2));
+                            String host = matcher.group(3);
+                            int port = 80;
+                            if(matcher.group(5)!=null && matcher.group(5).length()>0) port = Integer.parseInt(matcher.group(5));
+                            client.getState().setCredentials(new AuthScope(host, port, AuthScope.ANY_REALM), defaultcreds);
+                        }
+                        GetMethod method = new GetMethod(startupURL);
+                        int status = client.executeMethod(method);
+                        if(status!=200) throw new IllegalStateException("URL " + startupURL + " responded " + method.getStatusLine());
+                        LOG.warn("Startup URL " + startupURL + " successfully loaded.");
+                    } catch (Exception e) {
+                        LOG.warn("Notification page " + startupURL + " failed to load.",e);
+                    }
+                }
+            }.start();
+        }
 
     }
 
