@@ -12,7 +12,7 @@
 #end##}
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
-#set($useCdns=true)
+#set($useCdns=false)
 #if($useCdns)
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -26,10 +26,10 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 /* ]]> */
 </script>
 #else
-<script src="/xwiki/prototype.js" type="text/javascript"></script>
-<script src="/xwiki/skins/albatross/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
-<script src="/xwiki/skins/curriki8/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
-<script src="/xwiki/skins/curriki8/extjs/ext-all${debugging}.js" type="text/javascript"></script>
+<script src="/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
+<script src="/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
+<script src="/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
+<script src="/xwiki/skins/curriki20/extjs/ext-all${debugging}.js" type="text/javascript"></script>
 #end
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
