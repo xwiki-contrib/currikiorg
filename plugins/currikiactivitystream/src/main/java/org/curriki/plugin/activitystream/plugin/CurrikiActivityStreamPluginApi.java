@@ -20,10 +20,10 @@
 package org.curriki.plugin.activitystream.plugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-import com.xpn.xwiki.plugin.activitystream.api.ActivityStreamException;
-import com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent;
 import org.curriki.plugin.activitystream.impl.CurrikiActivityStream;
 
 import com.xpn.xwiki.XWikiContext;
@@ -39,98 +39,20 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
 
     protected CurrikiActivityStream getCurrikiActivityStream()
     {
-        return (CurrikiActivityStream) (getProtectedPlugin())
-            .getActivityStream();
+        return (CurrikiActivityStream) ((CurrikiActivityStreamPlugin) getProtectedPlugin())
+                .getActivityStream();
     }
 
-    public List<ActivityEvent> getEvents(boolean filter, int nb, int start) throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEvents(filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> getEventsForSpace(String space, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEventsForSpace(space, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-    public List<ActivityEvent> getEventsForSpace(String streamName, String space, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEventsForSpace(streamName, space, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> getEventsForUser(String user, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEventsForUser(user, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> getEventsForUser(String streamName, String user, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEventsForUser(streamName, user, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> searchEvents(String hql, boolean filter, boolean globalSearch, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents(hql, filter, globalSearch, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> searchEvents(String hql, boolean filter, boolean globalSearch, int nb, int start,
-                                            List<Object> parameterValues) throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents("", hql, filter, globalSearch, nb, start,
-                    parameterValues, this.context));
-        } else {
-            return null;
-        }
-    }
-
-
-
-    public List<ActivityEvent> getEvents(String streamName, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().getEvents(streamName, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    private List<ActivityEvent> wrapEvents(List<com.xpn.xwiki.plugin.activitystream.api.ActivityEvent> events)
+    protected List wrapEvents(List events)
     {
         if (events == null || events.size() == 0) {
-            return new ArrayList<ActivityEvent>(0);
+            return Collections.EMPTY_LIST;
         }
-        List<ActivityEvent> result = new ArrayList<ActivityEvent>(events.size());
-        for(com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event: events) {
+        List result = new ArrayList();
+        Iterator iter = events.iterator();
+        while (iter.hasNext()) {
+            com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
+                    (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) iter.next();
             com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent;
             if (event.getSpace().startsWith("Messages_Group_")) {
                 wrappedEvent = new MessageActivityEvent(event, getXWikiContext());
@@ -142,77 +64,13 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
                 wrappedEvent = new DocumentationActivityEvent(event, getXWikiContext());
             } else {
                 wrappedEvent =
-                    new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
-                        getXWikiContext());
+                        new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
+                                getXWikiContext());
             }
             result.add(wrappedEvent);
         }
         return result;
     }
-
-    public List<ActivityEvent> searchEvents(String hql, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents(hql, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-    public List<ActivityEvent> searchEvents(String hql, boolean filter, int nb, int start, List<Object> parameterValues)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents("", hql, filter, nb, start, parameterValues,
-                    this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, boolean globalSearch, int nb,
-                                            int start) throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, globalSearch, nb, start,
-                    this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, boolean globalSearch, int nb,
-                                            int start, List<Object> parameterValues) throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, globalSearch, nb, start,
-                    this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, int nb, int start)
-            throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-    public List<ActivityEvent> searchEvents(String fromHql, String hql, boolean filter, int nb, int start,
-                                            List<Object> parameterValues) throws ActivityStreamException
-    {
-        if (hasProgrammingRights()) {
-            return wrapEvents(getActivityStream().searchEvents(fromHql, hql, filter, nb, start, this.context));
-        } else {
-            return null;
-        }
-    }
-
-
 /*
     protected List unwrapEvents(List events)
     {

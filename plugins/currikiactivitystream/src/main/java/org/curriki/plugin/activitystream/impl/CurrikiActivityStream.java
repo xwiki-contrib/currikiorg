@@ -45,8 +45,9 @@ import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagers;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
+import org.xwiki.observation.event.Event;
 
-public class CurrikiActivityStream extends ActivityStreamImpl
+public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDocChangeNotificationInterface
 {
     private static final String CURRIKI_SPACE_TYPE = "currikispace";
 
@@ -61,12 +62,19 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         super();
     }
 
+    public void onEvent(Event event, Object source, Object data) {
+        System.out.println("onEvent for CurrikiActivityStream!");
+        // ignoring these calls, we get the notify calls in principle
+    }
+
+
     /**
      * {@inheritDoc}
      */
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
+        System.out.println("Notification for CurrikiActivityStream!");
         try {
             String spaceName = newdoc.getSpace();
             if (spaceName == null) {
