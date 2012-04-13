@@ -104,7 +104,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         String startupURLs = context.getWiki().Param("curriki.startupURLs");
         final Pattern ptrn = Pattern.compile("http://(.*):(.*)@([^/]+)(:([0-9]+))?/.*");
-        for(final String startupURL: startupURLs.split("[,\t\n ]+")) {
+        if(startupURLs!=null) for(final String startupURL: startupURLs.split("[,\t\n ]+")) {
             new Thread("Startup URL fetch " + startupURL) {
                 public void run() {
                     try {

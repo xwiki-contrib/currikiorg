@@ -74,7 +74,6 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
-        System.out.println("Notification for CurrikiActivityStream!");
         try {
             String spaceName = newdoc.getSpace();
             if (spaceName == null) {
