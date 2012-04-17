@@ -253,6 +253,7 @@ public class Asset extends CurrikiDocument {
         MimeTypePlugin mimePlugin = getMimeTypePlugin();
         String category = getCategory();
         String displayer = mimePlugin.getDisplayer(category, null, context);
+        context.setDoc(this.getDoc());
         String result = context.getWiki().parseTemplate("assets/displayers/" + displayer  + "_" + mode + ".vm", context);
         if (result.equals(""))
            result =  context.getWiki().parseTemplate("assets/displayers/" + category + "_" + mode + ".vm", context);
