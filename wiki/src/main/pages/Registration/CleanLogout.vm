@@ -13,4 +13,3 @@
 #if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end##
 #set($success=$targets.cleanLogout($request,$response))##
 #if($success)#else$response.sendRedirect("/xwiki/bin/logout/XWiki/XWikiLogout?xredirect=$escapetool.url($request.getParameter($xredirect))")#end##
-##DEBUG: #if($success)#else$response.sendRedirect("/xwiki/bin/view/Registration/SessionAttributes")#end##
