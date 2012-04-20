@@ -28,10 +28,17 @@ Search.init = function(){
 
             var t= $('search-termPanel-'+searchTab+'-terms').getValue();
             if(t==_('search.text.entry.label')) t= "";
-            document.title = _("search.window.title." + searchTab, [t]);
+            if(document.savedTitle && t!="") {
+                document.title = document.savedTitle;
+            } else {
+                if(typeof(document.savedTitle)=="undefined") document.savedTitle = document.title;
+                document.title = _("search.window.title." + searchTab, [t]);
+            }
             var box = $('curriki-searchbox');
-            if(box.style) box.style.color='lightgrey';
-            box.value = t;
+            if(typeof(box)=="object" && typeof(box.style)=="object") {
+                box.style.color='lightgrey';
+                box.value = t;
+            }
 
 			var pagerValues = {};
 

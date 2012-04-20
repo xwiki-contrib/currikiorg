@@ -1513,7 +1513,8 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Groups'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Groups' : '/currikiExtjs'
 			,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
@@ -2013,8 +2014,10 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Members'
-			,method:'GET'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Members' : '/currikiExtjs'
+
+            ,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
@@ -2413,8 +2416,9 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Blogs'
-			,method:'GET'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Blogs' : '/currikiExtjs'
+            ,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
@@ -2636,8 +2640,9 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Curriki'
-			,method:'GET'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Curriki' : '/currikiExtjs'
+            ,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
