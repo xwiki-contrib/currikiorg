@@ -24,7 +24,7 @@
   #set($editURL = "")
   #set($editTxt = "")
   #if( $sm.isMember( $s.spaceName, $context.user ) )
-    #set($editURL = $s.homeURL + "Documentation")
+    #set($editURL = $s.homeURL.replace("/WebHome","/") + "Documentation")
     #set($editURL = $editURL + "?action=editdoc&pagename=")
     #set($editURL = $editURL + $doc.getFullName())
 	#set($editTxt = ${msg.groups_documentation_documents_edit})
