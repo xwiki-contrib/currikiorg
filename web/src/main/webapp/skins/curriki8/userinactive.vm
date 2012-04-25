@@ -25,17 +25,27 @@
 #end
 #if($request.validkey)<!-- a validation key was presented --> ## we are logged in here. Process the validation
 ## copied from Registration Complete
-    #set($validation=$xwiki.parseGroovyFromPage("Registration.Validation"))##
-    #set($junk=$validation.init($xwiki))##
-    #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-    #set($junk=$targets.init($request,$xwiki))##
-    #set($success=$validation.checkValidationKey($request,$context.user))##
-    #if($success)<!-- validation success -->##
-        $validation.activateUser($context)##
-        #set($redir=$targets.afterLogin)##
-        $xwiki.includeForm("Registration.JumpToTop",false)##
-        #logViewScript("/join/enterValidation/submit/success")##
-    #else<!-- validation error -->$response.sendRedirect("$request.getRequestURI()?errors=join.invalid.key.text")##
+    #if($xwiki.hasAccessLevel("write",$context.user))
+        ## redirect to the same URL after a logout (a logged-in user may not save its document if inactive)
+        #set($target=$escapetool.url("$request.getRequestURI()?$request.getQueryString()"))##
+        #set($target="/xwiki/bin/view/Registration/CleanLogout?xredirect=$target")##
+        <script type="text/javascript">
+            window.top.location.href="$target";
+        </script>
+        <p><a href="$target">Validating...</a></p>
+    #else
+        #set($validation=$xwiki.parseGroovyFromPage("Registration.Validation"))##
+        #set($junk=$validation.init($xwiki))##
+        #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+        #set($junk=$targets.init($request,$xwiki))##
+        #set($success=$validation.checkValidationKey($request,$context.user))##
+        #if($success)<!-- validation success -->##
+            $validation.activateUser($context)##
+            #set($redir=$targets.afterLogin)##
+            $xwiki.includeForm("Registration.JumpToTop",false)##
+            #logViewScript("/join/enterValidation/submit/success")##
+        #else<!-- validation error -->$response.sendRedirect("$request.getRequestURI()?errors=join.invalid.key.text")##
+        #end
     #end
 #else<!-- other cases of inactivity, expecting key --><div id="content">
     #if ($cause == "disabled") ## {
