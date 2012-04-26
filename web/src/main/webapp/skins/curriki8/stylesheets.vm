@@ -13,11 +13,11 @@ document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/c
 //]]>
 </script>
 ##
-<link href="/xwiki/js/$gVersion/curriki-js.css" type="text/css" rel="stylesheet" type="text/css" />
+<link href="/xwiki/js/$gVersion/curriki-js.css" type="text/css" rel="stylesheet"/>
+<link href="/xwiki/bin/skin/skins/curriki8/${gVersion}/stylebase.css" rel="stylesheet" type="text/css"  />
+<link href="/xwiki/bin/skin/skins/curriki8/${gVersion}/style.css" rel="stylesheet" type="text/css"  />
+<link href="/xwiki/skins/curriki8/${gVersion}/style2.css" rel="stylesheet" type="text/css"  />
 ##<link href="$xwiki.getSkinFile("stylebase.css", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
-<link href="$xwiki.getSkinFile("screenlayout.css", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
-<link href="$xwiki.getSkinFile("colorsblack.css", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
-<link href="$xwiki.getSkinFile("elements.css", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
 #if(!$request.style || $request.style=="1")
 <link href="$xwiki.getSkinFile("style.css", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
 #end
@@ -31,6 +31,7 @@ document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/c
 <link href="$xwiki.getSkinFile("embed.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
 #end
 #end
+*#
 #if("$!request.viewer"=="print")
 <link href="$xwiki.getSkinFile("print_preview.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
 #end
