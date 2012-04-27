@@ -42,6 +42,12 @@ $xwiki.getTextArea($tdoc.content)
             wiki_plugins: 'core,attachments,macros'
 });
 } else {
-        alert("$msg.get('browsernoncompatible')");
-}
+        // alert("$msg.get('browsernoncompatible')");
+        Ext.onReady(function() {
+            var hintsParas = Ext.select(".input-textarea-indication").elements;
+            if(hintsParas) hintsParas.each(function(para) {
+                para.innerHTML = _("rve.content.edit.text.instruction_text.wiki_text");
+            });
+        });
+    }
 </script>

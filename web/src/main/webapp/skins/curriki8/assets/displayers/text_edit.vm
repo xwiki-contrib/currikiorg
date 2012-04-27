@@ -16,7 +16,7 @@
                         ## are not setting up the wysiwyg but instead stay in wiki mode adding a message and a button to switch
                         <p>$msg.get("rve.content.edit.text.instruction_text.wiki_text")</p>
                         #else
-                        <p>$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
+                        <p class="input-textarea-indication">$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
                         #end
                         <div id="input-wiki-wysiwyg">
                           $asset.getTextArea()
@@ -57,13 +57,19 @@
                                     wiki_plugins: 'core,attachments'
                                 });
                             } else {
-                                alert("$msg.get('browsernoncompatible')");
+                                //alert("$msg.get('browsernoncompatible')");
+                                Ext.onReady(function() {
+                                    var hintsParas = Ext.select(".input-textarea-indication").elements;
+                                    if(hintsParas) hintsParas.each(function(para) {
+                                        para.innerHTML = _("rve.content.edit.text.instruction_text.wiki_text");
+                                    });
+                                });
                             }
                       </script>
                       #end
                       #elseif($syntax=="xhtml/1.0")
                     <li class="input-textarea">
-                        <p>$msg.get("rve.content.edit.text.instruction_text.html_wysiwyg")</p>
+                        <p class="input-textarea-indication">$msg.get("rve.content.edit.text.instruction_text.html_wysiwyg")</p>
                         <div id="input-html-wysiwyg">
                           $asset.getTextArea()
                         </div>
