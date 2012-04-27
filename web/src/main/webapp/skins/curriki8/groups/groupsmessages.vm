@@ -599,6 +599,7 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 		remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
         wiki_use_style: 'true',
+        safari_warning: false,
         wiki_plugins: 'core,attachments',
         wiki_images_path : '/xwiki/bin/download/${doc.space}/${doc.name}/',
         wiki_attach_path : '/xwiki/bin/view/${doc.space}/${doc.name}'
@@ -883,7 +884,8 @@ $bentrydoc.display("content", "edit", $bentryobj)
 		mode: "exact",
 		content_css: "$xwiki.getSkinFile("style.css", true)",
 		debug : false,
-		remove_linebreaks : false,
+        safari_warning: false,
+        remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
         wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.space/$bentrydoc.name/',
         wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.space/$bentrydoc.name',
