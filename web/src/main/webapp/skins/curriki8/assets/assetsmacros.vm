@@ -292,7 +292,7 @@ function checkEditOrCopy() {
 	#set($ok = $asset.use("CurrikiCode.AssetClass"))
 <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
 	#asset_findmode()
-	#if(!$isEmbed)
+    #if(!$isEmbed)
 		#if($mode!="edit")
 			#asset_resourcefunctions($asset)
 		#end
@@ -311,7 +311,7 @@ function checkEditOrCopy() {
 		#asset_attribution($asset)
 		<a id="powered-by-curriki">$msg.get("mode.embed.powered_txt")</a>
 	#end
-	#if(!$isPrint&&!$isEmbed&&$mode!="edit")
+	#if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
 		#asset_links($asset)
 	#end
 	#if(!$asset.hasAccessLevel("view"))
@@ -1702,18 +1702,19 @@ $asset.use($classname)
 
 #macro(asset_findmode)
 #set($mode = "")
-#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("print"))
+#if("$!request.getParameter('viewer')"=="print")
 #set($mode = "print")
-#end
-#if($request.getParameter("viewer") && $request.getParameter("viewer").equals("embed"))
+#elseif("$!request.getParameter('viewer')"=="embed")
 #set($mode = "embed")
+#elseif("$!request.getParameter('viewer')"=="assetedit")
+#set($mode = "edit")
 #end
-#if($mode=="print")
+#if("$!mode"=="print")
 #set($isPrint = true)
 #else
 #set($isPrint = false)
 #end
-#if($mode=="embed")
+#if("$!mode"=="embed")
 #set($isEmbed = true)
 #else
 #set($isEmbed = false)
