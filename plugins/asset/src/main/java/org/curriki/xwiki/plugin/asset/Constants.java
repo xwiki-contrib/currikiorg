@@ -311,4 +311,5 @@ public interface Constants {
     // TODO: What about the list used by GWT:  audio, text, image, link ?
 
 
+    String ASSET_CLASS_GENERATED_KEYWORDS_TRANS_PREFIX = "curriki.tags.";
 }
