@@ -312,4 +312,5 @@ public interface Constants {
 
 
     String ASSET_CLASS_GENERATED_KEYWORDS_TRANS_PREFIX = "curriki.tags.";
+    String ASSET_CLASS_GENERATED_KEYWORDS = "generated_keywords";
 }

@@ -294,7 +294,11 @@ public class Asset extends CurrikiDocument {
                     }
                 }
             }
-        }
+            // Store generated keywords
+            assetObj.setStringValue(Constants.ASSET_CLASS_GENERATED_KEYWORDS, keywords);
+        } // else { ERROR: This doesn't seem to be an asset }
+        super.saveDocument(comment, minorEdit);
+
     }
 
     public static Asset createTempAsset(String parentAsset, XWikiContext context) throws XWikiException {
