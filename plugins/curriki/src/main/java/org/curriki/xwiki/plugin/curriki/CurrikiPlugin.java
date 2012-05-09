@@ -1,6 +1,8 @@
 package org.curriki.xwiki.plugin.curriki;
 
-import java.sql.Time;
+import java.io.IOException;
+import java.io.Writer;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +21,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.*;
@@ -46,10 +49,14 @@ import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.web.XWikiRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  */
@@ -86,6 +93,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             initSubAssetClass(context);
             initReorderAssetClass(context);
             initCompositeAssetClass(context);
+            initSolrClient(context);
         } catch (XWikiException e) {
             if (LOG.isErrorEnabled())
                 LOG.error("Error generating asset classes", e);
@@ -1002,5 +1010,108 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         if(numRequestsEnsuringCookies>0 && numRequestsEnsuringCookies % 10==0)
             if(LOG.isDebugEnabled()) LOG.debug("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
     }
+
+
+    // this code is not meant to stay here but is expected to move after the GSoC for SOLR is concluded
+    private final HttpClient solrClient = new HttpClient();
+    private String solrBaseURL;
+
+    public void initSolrClient(XWikiContext context) {
+        solrBaseURL = context.getWiki().Param("org.curriki.solrUrl");
+    }
+
+    public String solrGetSingleValue(String query, String fieldName) throws IOException {
+        GetMethod g = solrCreateQueryGetMethod(query, fieldName);
+        int status = solrClient.executeMethod(g);
+        if(status !=200) throw new IllegalStateException("Solr responded status " + g.getStatusCode() + " " + g.getStatusText());
+        feedFieldFromXmlStream(g, singleValueReadBuff.get(), null, fieldName);
+        StringBuilder builder = singleValueReadBuff.get().getBuilder();
+        String result = builder.toString().trim();
+        builder.delete(0, builder.length());
+        return result;
+    }
+
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames) throws IOException {
+        GetMethod result = new GetMethod(solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames);
+        LOG.warn("Creating solr URL: " + result.getURI());
+        return result;
+    }
+
+    static ThreadLocal<StringBuilderWriter> pingReadBuff = new ThreadLocal<StringBuilderWriter>() {
+        protected StringBuilderWriter initialValue() {
+            return new StringBuilderWriter(128);
+        }
+    }, singleValueReadBuff = new ThreadLocal<StringBuilderWriter>() {
+        protected StringBuilderWriter initialValue() {
+            return new StringBuilderWriter(1024);
+        }
+    };
+    public boolean checkSolrIsUp() {
+        if(solrBaseURL == null) return false;
+        try {
+            GetMethod g = new GetMethod(solrBaseURL + "/admin/ping");
+            startMethod(g);
+            feedFieldFromXmlStream(g, pingReadBuff.get(), null, "status");
+            // TODO: shorter timeout here
+            String val=pingReadBuff.get().toString();
+            pingReadBuff.get().getBuilder().delete(0, val.length());
+            return val.equals("OK");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<String> listDocNamesSolr(String query, int start, int num) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+    public int countDocsSolr(String query, boolean cache) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    public void startMethod(GetMethod g) {
+        try {
+            int status = solrClient.executeMethod(g);
+            if(status!=200) throw new IllegalStateException("Solr server responded: " + status + ":" + g.getStatusText());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void feedFieldFromXmlStream(GetMethod g, final Writer out, final Runnable separatorWriter, final String elementName) throws IOException {
+        try {
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
+                boolean isInInterestingStringBit = false, isInInterestingArray = false;
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    try {
+                        if(isInInterestingStringBit || isInInterestingArray) out.write(ch, start, length);
+
+                    } catch (IOException e) {
+                        throw new IllegalStateException("Broken stream, can't write to " + out);
+                    }
+                }
+
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    String nameAtt = attributes.getValue("name");
+                    if("str".equals(qName)) {
+                        if(elementName.equals(nameAtt)) isInInterestingStringBit = true;
+                    }
+                    if("arr".equals(qName) && elementName.equals(nameAtt)) isInInterestingArray = true;
+                }
+
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if(elementName.equals(localName)) isInInterestingStringBit = false;
+                    if(isInInterestingArray && "str".equals(qName) && separatorWriter!=null) separatorWriter.run();
+                    if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
+                }
+            });
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+
 
 }

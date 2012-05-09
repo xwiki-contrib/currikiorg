@@ -1,9 +1,14 @@
 package org.curriki.xwiki.plugin.curriki;
 
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.Util;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
@@ -14,8 +19,12 @@ import com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin;
 import com.xpn.xwiki.api.Api;
 import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.api.Document;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.management.timer.Timer;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  */
@@ -245,4 +254,26 @@ public class CurrikiPluginApi extends Api {
           return Util.escapeForJS(origtext);
     }
 
+
+    // this code is not meant to stay here but is expected
+
+    public String solrGetSingleValue(String query, String fieldName) throws IOException {
+        return plugin.solrGetSingleValue(query, fieldName);
+    }
+
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames) throws IOException {
+        return plugin.solrCreateQueryGetMethod(query, fieldNames);
+    }
+
+    public boolean checkSolrIsUp() {
+        return plugin.checkSolrIsUp();
+    }
+
+    public void startMethod(GetMethod g) {
+        plugin.startMethod(g);
+    }
+
+    public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {
+        plugin.feedFieldFromXmlStream(g, out, null, elementName);
+    }
 }

@@ -71,7 +71,8 @@ public class BaseResource extends Resource {
 // TODO: Remove
 // DEBUGGING CODE for CURRIKI-4238
 System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
-        return new ResourceException(status, message+" Stacktrace: "+st, cause);
+        cause.printStackTrace();
+        return new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, message+" Stacktrace: "+st, cause);
     }
 
     protected ResourceException error(Status status, Throwable cause) {
@@ -96,6 +97,7 @@ System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
             || MediaType.APPLICATION_JAVASCRIPT.equals(variant.getMediaType())
             || MediaType.TEXT_JAVASCRIPT.equals(variant.getMediaType())) {
             r = new StringRepresentation(json.toString(), variant.getMediaType());
+            // TODO: make this output streaming! (this library does not support it, which is fairly crazy!)
         } else if (MediaType.APPLICATION_XML.equals(variant.getMediaType())
             || MediaType.TEXT_XML.equals(variant.getMediaType())) {
             r = new StringRepresentation(new XMLSerializer().write(json), variant.getMediaType());
@@ -120,7 +122,7 @@ System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
         getVariants().add(new Variant(MediaType.TEXT_HTML));
     }
 
-    protected JSONArray flattenMapToJSONArray(Map<String,Object> map, String itemName) {
+    public static JSONArray flattenMapToJSONArray(Map<String,Object> map, String itemName) {
         JSONArray json = new JSONArray();
 
         for (String item : map.keySet()) {

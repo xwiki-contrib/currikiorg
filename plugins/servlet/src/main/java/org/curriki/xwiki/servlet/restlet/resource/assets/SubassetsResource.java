@@ -1,5 +1,6 @@
 package org.curriki.xwiki.servlet.restlet.resource.assets;
 
+import org.curriki.xwiki.servlet.restlet.router.CTVRepresentation;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 import org.restlet.resource.ResourceException;
@@ -10,9 +11,6 @@ import org.restlet.data.Status;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
-
-import java.util.Map;
-import java.util.List;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
@@ -35,7 +33,7 @@ public class SubassetsResource extends BaseResource {
         Request request = getRequest();
         String assetName = (String) request.getAttributes().get("assetName");
 
-        List<Map<String,Object>> results = null;
+        /* List<Map<String,Object>> results = null;
 
         try {
             FolderCompositeAsset doc = (FolderCompositeAsset) plugin.fetchAssetAs(assetName, FolderCompositeAsset.class);
@@ -49,7 +47,15 @@ public class SubassetsResource extends BaseResource {
 
         JSONArray json = JSONArray.fromObject(results);
 
-        return formatJSON(json, variant);
+        return formatJSON(json, variant); */
+        CTVRepresentation rep = null;
+        try {
+            rep = new CTVRepresentation(assetName, CTVRepresentation.Type.COLLECTION_CONTENT, xwikiContext);
+            rep.init(xwikiContext);
+        } catch (Exception e) {
+            error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, e.getMessage(), e);
+        }
+        return rep;
     }
 
     @Override public void acceptRepresentation(Representation representation) throws ResourceException {
