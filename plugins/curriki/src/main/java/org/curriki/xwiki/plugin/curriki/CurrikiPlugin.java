@@ -4,14 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import sun.misc.Cache;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -1021,7 +1015,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public String solrGetSingleValue(String query, String fieldName) throws IOException {
-        GetMethod g = solrCreateQueryGetMethod(query, fieldName);
+        GetMethod g = solrCreateQueryGetMethod(query, fieldName, 0, 1);
         int status = solrClient.executeMethod(g);
         if(status !=200) throw new IllegalStateException("Solr responded status " + g.getStatusCode() + " " + g.getStatusText());
         feedFieldFromXmlStream(g, singleValueReadBuff.get(), null, fieldName);
@@ -1031,9 +1025,9 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         return result;
     }
 
-    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames) throws IOException {
-        GetMethod result = new GetMethod(solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames);
-        LOG.warn("Creating solr URL: " + result.getURI());
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
+        // TODO: only allow with programming right?
+        GetMethod result = new GetMethod(solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames + "&start=" + start + "&rows=" + rows);
         return result;
     }
 
@@ -1062,10 +1056,27 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public List<String> listDocNamesSolr(String query, int start, int num) {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
+        try {
+            GetMethod g = solrCreateQueryGetMethod(query, "fullname", start, num);
+            startMethod(g);
+            List<String> fullnames = collectFieldValuesFromXmlStream(g, "fullname");
+            return fullnames;
+        } catch (Exception e) {
+            throw new IllegalStateException("No SOLR configured.");
+        }
     }
-    public int countDocsSolr(String query, boolean cache) {
-        throw new UnsupportedOperationException("Not yet implemented.");
+
+    public int countDocsSolr(String query) {
+        if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
+        try {
+            GetMethod g = solrCreateQueryGetMethod(query, "fullname", 0, 0);
+            startMethod(g);
+            int count = collectDocCount(g);
+            return count;
+        } catch (Exception e) {
+            throw new IllegalStateException("No SOLR configured.");
+        }
     }
 
     public void startMethod(GetMethod g) {
@@ -1102,7 +1113,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
                 @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
-                    if(elementName.equals(localName)) isInInterestingStringBit = false;
+                    if("str".equals(localName)) isInInterestingStringBit = false;
                     if(isInInterestingArray && "str".equals(qName) && separatorWriter!=null) separatorWriter.run();
                     if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
                 }
@@ -1112,6 +1123,67 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
+    private List<String> collectFieldValuesFromXmlStream(GetMethod g, final String elementName) throws IOException {
+        try {
+            final LinkedList<String> list = new LinkedList<String>();
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
+                boolean isInInterestingStringBit = false, isInInterestingArray = false;
+                StringBuilderWriter writer = singleValueReadBuff.get();
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    if(isInInterestingStringBit) writer.write(ch, start, length);
+                }
+
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    String nameAtt = attributes.getValue("name");
+                    if("str".equals(qName)) {
+                        if(elementName.equals(nameAtt)) isInInterestingStringBit = true;
+                    }
+                }
+
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if("str".equals(qName)) {
+                        if(isInInterestingStringBit) {
+                            isInInterestingStringBit = false;
+                            String value = writer.getBuilder().toString();
+                            pushValue(value);
+                            writer.getBuilder().delete(0, value.length());
+                        }
+                    }
+                }
+
+                private void pushValue(String value) {
+                    list.add(value);
+                }
+            });
+            return list;
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+
+    private int collectDocCount(GetMethod g) throws IOException {
+        try {
+            final StringBuilder b = singleValueReadBuff.get().getBuilder();
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    if("result".equals(qName)) {
+                        b.append(attributes.getValue("numFound"));
+                    }
+                }
+
+            });
+            String result = b.toString();
+            b.delete(0, result.length());
+            return Integer.parseInt(result);
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
 
 
 }

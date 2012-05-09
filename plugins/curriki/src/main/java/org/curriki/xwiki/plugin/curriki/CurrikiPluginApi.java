@@ -260,16 +260,26 @@ public class CurrikiPluginApi extends Api {
     public String solrGetSingleValue(String query, String fieldName) throws IOException {
         return plugin.solrGetSingleValue(query, fieldName);
     }
-
     public GetMethod solrCreateQueryGetMethod(String query, String fieldNames) throws IOException {
-        return plugin.solrCreateQueryGetMethod(query, fieldNames);
+        return plugin.solrCreateQueryGetMethod(query, fieldNames, 0, 10);
+    }
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
+        return plugin.solrCreateQueryGetMethod(query, fieldNames, start, rows);
     }
 
     public boolean checkSolrIsUp() {
         return plugin.checkSolrIsUp();
     }
 
-    public void startMethod(GetMethod g) {
+    public int countDocsSolr(String query) {
+        return plugin.countDocsSolr(query);
+    }
+
+    public List<String> listDocNamesSolr(String query, int start, int num) {
+        return plugin.listDocNamesSolr(query, start, num);
+    }
+
+        public void startMethod(GetMethod g) {
         plugin.startMethod(g);
     }
 

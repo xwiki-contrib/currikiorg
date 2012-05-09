@@ -86,7 +86,7 @@ public class CTVRepresentation extends StreamRepresentation {
         String solrRev = currikiPlugin.solrGetSingleValue(fn, "revisionNumber");
         if(xwikiVersion.equals(solrRev)) {
             isBackEndStream = true;
-            get = currikiPlugin.solrCreateQueryGetMethod(fn, solrField);
+            get = currikiPlugin.solrCreateQueryGetMethod(fn, solrField, 0, 100);
             currikiPlugin.startMethod(get);
         } else {
             isBackEndStream = false;
