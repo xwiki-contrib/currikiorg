@@ -36,6 +36,7 @@ public class SubassetResource extends BaseResource {
         try {
             asset = (FolderCompositeAsset) plugin.fetchAssetAs(assetName, FolderCompositeAsset.class);
         } catch (XWikiException e) {
+            e.printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -46,6 +47,7 @@ public class SubassetResource extends BaseResource {
         try {
             link = asset.getSubassetInfo(subassetId);
         } catch (AssetException e) {
+            e.printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "SubAsset "+subassetIdString+" not found for "+assetName+".");
         }
 

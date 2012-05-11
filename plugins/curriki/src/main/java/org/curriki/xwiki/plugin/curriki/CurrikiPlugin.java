@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import sun.misc.Cache;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -377,6 +376,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
         return r;
     }
+
+
 
     public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) throws XWikiException {
         entity = entity.replaceFirst(Constants.USER_PREFIX_REGEX, ""); // For users
@@ -1005,7 +1006,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             if(LOG.isDebugEnabled()) LOG.debug("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
     }
 
-
+    // ---- solr specific ------
     // this code is not meant to stay here but is expected to move after the GSoC for SOLR is concluded
     private final HttpClient solrClient = new HttpClient();
     private String solrBaseURL;
@@ -1018,7 +1019,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         GetMethod g = solrCreateQueryGetMethod(query, fieldName, 0, 1);
         int status = solrClient.executeMethod(g);
         if(status !=200) throw new IllegalStateException("Solr responded status " + g.getStatusCode() + " " + g.getStatusText());
-        feedFieldFromXmlStream(g, singleValueReadBuff.get(), null, fieldName);
+        feedFieldFromXmlStream(g, singleValueReadBuff.get(), fieldName);
         StringBuilder builder = singleValueReadBuff.get().getBuilder();
         String result = builder.toString().trim();
         builder.delete(0, builder.length());
@@ -1027,7 +1028,9 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
     public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
         // TODO: only allow with programming right?
-        GetMethod result = new GetMethod(solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames + "&start=" + start + "&rows=" + rows);
+        String url = solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames + "&start=" + start + "&rows=" + rows;
+        System.out.println("SOLR URL: " + url);
+        GetMethod result = new GetMethod(url);
         return result;
     }
 
@@ -1044,8 +1047,8 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         if(solrBaseURL == null) return false;
         try {
             GetMethod g = new GetMethod(solrBaseURL + "/admin/ping");
-            startMethod(g);
-            feedFieldFromXmlStream(g, pingReadBuff.get(), null, "status");
+            startSolrMethod(g);
+            feedFieldFromXmlStream(g, pingReadBuff.get(), "status");
             // TODO: shorter timeout here
             String val=pingReadBuff.get().toString();
             pingReadBuff.get().getBuilder().delete(0, val.length());
@@ -1059,7 +1062,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
         try {
             GetMethod g = solrCreateQueryGetMethod(query, "fullname", start, num);
-            startMethod(g);
+            startSolrMethod(g);
             List<String> fullnames = collectFieldValuesFromXmlStream(g, "fullname");
             return fullnames;
         } catch (Exception e) {
@@ -1071,7 +1074,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
         try {
             GetMethod g = solrCreateQueryGetMethod(query, "fullname", 0, 0);
-            startMethod(g);
+            startSolrMethod(g);
             int count = collectDocCount(g);
             return count;
         } catch (Exception e) {
@@ -1079,7 +1082,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
-    public void startMethod(GetMethod g) {
+    public void startSolrMethod(GetMethod g) {
         try {
             int status = solrClient.executeMethod(g);
             if(status!=200) throw new IllegalStateException("Solr server responded: " + status + ":" + g.getStatusText());
@@ -1088,8 +1091,48 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
-    public void feedFieldFromXmlStream(GetMethod g, final Writer out, final Runnable separatorWriter, final String elementName) throws IOException {
+    public interface SolrResultCollector {
+        /** This called back by the method feedField... and should not call methods of the solr-plugin. */
+        public void addValue(String value);
+    }
+
+
+    public void feedFieldFromXmlStream(GetMethod g, final SolrResultCollector collector, final String elementName) throws IOException {
         try {
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {;
+                boolean isInInterestingZone = false, isInInterestingArray = false;
+
+                @Override public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    if(isInInterestingArray && "str".equals(qName)) isInInterestingZone = true;
+                    if("arr".equals(qName) && elementName.equals(attributes.getValue("name"))) isInInterestingArray = true;
+                }
+
+                @Override public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if(isInInterestingZone && "str".equals(qName)) {
+                        isInInterestingZone = false;
+                        String value = singleValueReadBuff.get().toString();
+                        singleValueReadBuff.get().getBuilder().delete(0, value.length());
+                        collector.addValue(value);
+                    }
+                    if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
+
+                }
+
+                @Override public void characters(char[] ch, int start, int length) throws SAXException {
+                    if(isInInterestingZone) {
+                        System.out.println("Characters: " + new String(ch, start, length));
+                        singleValueReadBuff.get().write(ch, start, length);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e);
+        }
+    }
+
+    public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {
+            try {
             SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
                 boolean isInInterestingStringBit = false, isInInterestingArray = false;
                 @Override
@@ -1114,7 +1157,6 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
                 @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
                     if("str".equals(localName)) isInInterestingStringBit = false;
-                    if(isInInterestingArray && "str".equals(qName) && separatorWriter!=null) separatorWriter.run();
                     if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
                 }
             });

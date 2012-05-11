@@ -1,20 +1,20 @@
 package org.curriki.xwiki.servlet.restlet.router;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.doc.XWikiDocument;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.xwiki.plugin.curriki.CurrikiPlugin;
-import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi;
-import org.json.JSONException;
-import org.json.JSONWriter;
 import org.restlet.data.MediaType;
 import org.restlet.resource.StreamRepresentation;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  */
@@ -36,6 +36,10 @@ public class CTVRepresentation extends StreamRepresentation {
     private boolean isBackEndStream = false;
     private GetMethod get;
     private Object objectToOutput;
+    private List userGroups;
+    private String userName;
+    private boolean userIsAdmin;
+    private String childRightsS = null;
     private static ThreadLocal<Gson> gson = new ThreadLocal<Gson>() {
         protected Gson initialValue() { return new Gson(); }};
 
@@ -43,7 +47,10 @@ public class CTVRepresentation extends StreamRepresentation {
     public CTVRepresentation(String targetDocument, Type type, XWikiContext context)  throws IOException, XWikiException {
         super(jsonMediaType);
         this.xwiki =context.getWiki();
+        this.userGroups = ((CurrikiSpaceManager) xwiki.getPlugin("csm",context)).getSpaceNames(context.getUser(), null, context);
         this.type = type;
+        this.userName = context.getUser();
+        this.userIsAdmin = xwiki.checkAccess("admin", xwiki.getDocument("XWiki.XWikiPreferences", context), context);
         this.docFullName = targetDocument;
         this.currikiPlugin = (CurrikiPlugin) xwiki.getPlugin("curriki",context);
 
@@ -65,8 +72,6 @@ public class CTVRepresentation extends StreamRepresentation {
             throw new UnsupportedEncodingException();
         }
 
-        // TODO: check versions and rights: between solr and xwiki
-
         /* totalSize = PREFIX.length() + SUFFIX.length();
        for(SubRepresentation rep: reps) {
            rep.init();
@@ -87,7 +92,7 @@ public class CTVRepresentation extends StreamRepresentation {
         if(xwikiVersion.equals(solrRev)) {
             isBackEndStream = true;
             get = currikiPlugin.solrCreateQueryGetMethod(fn, solrField, 0, 100);
-            currikiPlugin.startMethod(get);
+            childRightsS = currikiPlugin.solrGetSingleValue("fullname:" + docFullName, "childRights");
         } else {
             isBackEndStream = false;
             objectToOutput = currikiPlugin.fetchCollectionsInfo(docFullName, context);
@@ -103,23 +108,69 @@ public class CTVRepresentation extends StreamRepresentation {
         //return jsonBytes.length;
     }
 
+    private static String ghostSubAssetInfoJson = createPrivatisedSubAssetInfo();
+    private static String createPrivatisedSubAssetInfo() {
+        Map<String,Object> subInfo = new TreeMap<String,Object>();
+        subInfo.put("displayTitle", "");
+        subInfo.put("description", "");
+        subInfo.put("revision", "");
+        subInfo.put("fwItems", new String[]{});
+        subInfo.put("levels", new String[]{});
+        subInfo.put("category", "");
+        subInfo.put("subcategory", "");
+        subInfo.put("ict", "");
+        //subInfo.put("assetType", assetType);
+
+        Map<String,Boolean> rightsInfo = new HashMap<String, Boolean>(3);
+        rightsInfo.put("view", false);
+        rightsInfo.put("edit", false);
+        rightsInfo.put("delete", false);
+        subInfo.put("rights", rightsInfo);
+        return new Gson().toJson(subInfo);
+    }
+
+
+    private boolean isUserAllowed(String rights) {
+        if(userIsAdmin) return true;
+        if(rights.startsWith("privateToGroup:"))
+            return !userGroups.contains(rights.substring("privateToGroup:".length()));
+        else if(rights.startsWith("privateToUser:"))
+            return !userName.equals(rights.substring("privateToUser:".length()));
+        else return true;
+    }
+
     public void write(final Writer out) throws IOException {
-        if(isBackEndStream) {
-            if(type==Type.COLLECTION_CONTENT) out.write("[");
-            Runnable sepWriter = null;
-            if(type==Type.COLLECTION_CONTENT) sepWriter = new Runnable() { public void run() {
-                try {
-                    out.write(",\n");
-                } catch (IOException e) { e.printStackTrace(); }
-            }};
-            currikiPlugin.feedFieldFromXmlStream(get, out,sepWriter, solrField);
-            if(type==Type.COLLECTION_CONTENT) out.write("]");
-        } else {
-            try {
-                new JSONWriter(out).value(objectToOutput);
-            } catch (JSONException e) {
-                throw new IOException(e);
+        try {
+            if(isBackEndStream) {
+                final StringTokenizer childRights= type==Type.COLLECTION_CONTENT ?
+                        new StringTokenizer(childRightsS, ",")
+                        : null;
+                currikiPlugin.startSolrMethod(get);
+                if(type==Type.COLLECTION_CONTENT) {
+                    out.write("[");
+                    CurrikiPlugin.SolrResultCollector collector =new CurrikiPlugin.SolrResultCollector() {
+                        public void addValue(String value) {
+                            String right = childRights!=null ? childRights.nextToken() : null;
+                            try {
+                                if(childRights!=null && isUserAllowed(right)) out.write(value);
+                                else out.write(ghostSubAssetInfoJson );
+                                out.write(",\n");
+                            } catch (Exception e) {
+                                throw new IllegalStateException(e);
+                            }
+                        }
+                    };
+                    currikiPlugin.feedFieldFromXmlStream(get, collector, solrField);
+                    out.write("]");
+                } else {
+                    currikiPlugin.feedFieldFromXmlStream(get, out, solrField);
+                }
+            } else {
+                new Gson().toJson(objectToOutput,  out);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
