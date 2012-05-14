@@ -560,7 +560,7 @@ $!desc
     #else  ## }{ attachmentList.size must be > 0
       #foreach ($attach in $userdoc.attachmentList) ## {
 	<a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")" >
-	<img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=88&height=88&keepAspectRatio=1"  /></a>
+	<img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=88&height=88&keepAspectRatio=true"  /></a>
 	#if ($context.action=="inline") ##{
 	  #set($deleteredir = $userdoc.getURL("inline"))
 	  <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');" title="$msg.get("profile.removeYourPhoto")">$msg.get("profile.removePhoto")</a>
