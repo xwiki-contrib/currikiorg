@@ -1043,7 +1043,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             return new StringBuilderWriter(1024);
         }
     };
-    public boolean checkSolrIsUp() {
+    public boolean solrCheckIsUp() {
         if(solrBaseURL == null) return false;
         try {
             GetMethod g = new GetMethod(solrBaseURL + "/admin/ping");
@@ -1058,7 +1058,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
-    public List<String> listDocNamesSolr(String query, int start, int num) {
+    public List<String> solrListDocNames(String query, int start, int num) {
         if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
         try {
             GetMethod g = solrCreateQueryGetMethod(query, "fullname", start, num);
@@ -1070,7 +1070,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
-    public int countDocsSolr(String query) {
+    public int solrCountDocs(String query) {
         if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
         try {
             GetMethod g = solrCreateQueryGetMethod(query, "fullname", 0, 0);
@@ -1079,6 +1079,17 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             return count;
         } catch (Exception e) {
             throw new IllegalStateException("No SOLR configured.");
+        }
+    }
+
+    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, SolrResultCollector collector) {
+        try {
+            GetMethod get = solrCreateQueryGetMethod(query, fields, start, max);
+            startSolrMethod(get);
+            feedFieldFromXmlStream(get, collector, fields);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -1092,35 +1103,78 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public interface SolrResultCollector {
-        /** This called back by the method feedField... and should not call methods of the solr-plugin. */
-        public void addValue(String value);
+        /** called at beginning to indicate the first results information */
+        public void status(int statusCode, int qTime, int numFound, int start);
+
+        /** This called back by the method feedField... and should not call methods of the solr-client. */
+        public void addValue(String name, String value);
+
+        /** indicates that the following values concern a new document */
+        public void newDocument();
     }
 
 
-    public void feedFieldFromXmlStream(GetMethod g, final SolrResultCollector collector, final String elementName) throws IOException {
+    public void feedFieldFromXmlStream(GetMethod g, final SolrResultCollector collector, final String fieldNames) throws IOException {
         try {
+            // TODO: use new API completely
             SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {;
-                boolean isInInterestingZone = false, isInInterestingArray = false;
+                boolean isInInterestingZone = false, isInInterestingArray = false, isInStatus = false;
+                Set<String> names = new TreeSet(Arrays.asList(fieldNames.split(",")));
+                int statusCode=-1, qTime=-1;
+                String name = null;
 
                 @Override public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    if(isInInterestingArray && "str".equals(qName)) isInInterestingZone = true;
-                    if("arr".equals(qName) && elementName.equals(attributes.getValue("name"))) isInInterestingArray = true;
+                    String n=attributes.getValue("name");
+                    if("doc".equals(qName)) {
+                        collector.newDocument();
+                    }
+                    if("lst".equals(qName) && "responseHeader".equals(n)) isInStatus = true;
+                    else if("result".equals(qName) && "response".equals(n)) {
+                        isInStatus = false;
+                        String numFound = attributes.getValue("numFound"), start = attributes.getValue("start");
+                        if(numFound==null) numFound="-1"; if(start==null) start="-1";
+                        collector.status(statusCode, qTime, Integer.parseInt(numFound), Integer.parseInt(start));
+                    }
+                    else if("str".equals(qName) || "arr".equals(qName) || "int".equals(qName)) {
+                        if(isInInterestingArray) isInInterestingZone = true;
+                        else if(isInStatus && n!=null && ("QTime".equals(n) || "status".equals(n) )|| names.contains(n)) {
+                            if("str".equals(qName) || "int".equals(qName)) isInInterestingZone = true;
+                            else isInInterestingArray = true;
+                            name = n;
+                        }
+                    }
+                }
+
+                private String collectValue() {
+                    String value = singleValueReadBuff.get().toString();
+                    singleValueReadBuff.get().getBuilder().delete(0, value.length());
+                    return value;
                 }
 
                 @Override public void endElement(String uri, String localName, String qName) throws SAXException {
-                    if(isInInterestingZone && "str".equals(qName)) {
+                    if(isInStatus && "int".equals(qName)) {
+                        if("status".equals(name)) {
+                            statusCode = Integer.parseInt(collectValue());
+                            isInInterestingZone = false;
+                        } else if("QTime".equals(name)) {
+                            statusCode = Integer.parseInt(collectValue());
+                            isInInterestingZone = false;
+                        }
+                    }
+                    if(isInInterestingZone && !isInStatus && "str".equals(qName)) {
                         isInInterestingZone = false;
-                        String value = singleValueReadBuff.get().toString();
-                        singleValueReadBuff.get().getBuilder().delete(0, value.length());
-                        collector.addValue(value);
+                        collector.addValue(name, collectValue());
+                        name = null;
                     }
                     if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
+                    if("lst".equals(qName) && isInStatus) {
+                        isInStatus = false;
+                    }
 
                 }
 
                 @Override public void characters(char[] ch, int start, int length) throws SAXException {
                     if(isInInterestingZone) {
-                        System.out.println("Characters: " + new String(ch, start, length));
                         singleValueReadBuff.get().write(ch, start, length);
                     }
                 }

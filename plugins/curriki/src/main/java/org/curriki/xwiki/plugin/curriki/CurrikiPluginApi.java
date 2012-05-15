@@ -261,15 +261,15 @@ public class CurrikiPluginApi extends Api {
     }
 
     public boolean checkSolrIsUp() {
-        return plugin.checkSolrIsUp();
+        return plugin.solrCheckIsUp();
     }
 
     public int countDocsSolr(String query) {
-        return plugin.countDocsSolr(query);
+        return plugin.solrCountDocs(query);
     }
 
     public List<String> listDocNamesSolr(String query, int start, int num) {
-        return plugin.listDocNamesSolr(query, start, num);
+        return plugin.solrListDocNames(query, start, num);
     }
 
         public void startMethod(GetMethod g) {

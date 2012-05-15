@@ -78,7 +78,7 @@ Curriki.ui.treeLoader.Base = function(config){
 
 Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		dataUrl:'DYNAMICALLY DETERMINED'
-		,setChildHref:false
+		,setChildHref:true
 		,setFullRollover:false
 		,setAllowDrag:false
 		,setUniqueId:false
@@ -90,8 +90,8 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
-//console.log('createNode: ',attr);
-			if (this.setFullRollover) {
+console.log('createNode: ',attr);
+        if (this.setFullRollover) {
 				if ('string' !== Ext.type(attr.qtip)
 					&& 'string' === Ext.type(attr.description)
 					&& 'array' === Ext.type(attr.fwItems)
@@ -176,6 +176,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 
 			if (this.setChildHref) {
 				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
+                childInfo.onclick="return false;"
 			}
 
 			if (attr.rights && !attr.rights.view){
