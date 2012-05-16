@@ -43,7 +43,10 @@ public class CTVRepresentation extends StreamRepresentation {
     public CTVRepresentation(String targetDocument, Type type, XWikiContext context)  throws IOException, XWikiException {
         super(jsonMediaType);
         this.xwiki =context.getWiki();
-        this.userGroups = new TreeSet<String>(((CurrikiSpaceManager) xwiki.getPlugin("csm",context)).getSpaceNames(context.getUser(), null, context));
+        this.userGroups = new TreeSet<String>();
+        for(Object groupName : ((CurrikiSpaceManager) xwiki.getPlugin("csm",context)).getSpaceNames(context.getUser(), null, context)) {
+            userGroups.add(((String)groupName).substring("Group_".length()));
+        }
         this.type = type;
         this.userName = context.getUser();
         if(userName.startsWith("XWiki.")) userName = userName.substring("XWiki.".length());
@@ -116,7 +119,7 @@ public class CTVRepresentation extends StreamRepresentation {
         subInfo.put("category", "");
         subInfo.put("subcategory", "");
         subInfo.put("ict", "");
-        subInfo.put("assetType", "Protected"); // TODO: a "question" asset-type? order??
+        subInfo.put("assetType", "Protected");
 
         // remove leading {, it will be added after a few other things at output time
         return new Gson().toJson(subInfo).substring(1);
