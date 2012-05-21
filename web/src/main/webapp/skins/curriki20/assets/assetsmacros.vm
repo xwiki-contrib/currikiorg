@@ -197,8 +197,7 @@ Ext.select('div#asset-header h2 a').hover(function(){Ext.select('ul#asset-tabs l
     ## Organize
    #if($subAssetList.size()!=0)
     <li class="last-item">
-        #escapeForJS(${xwiki.getUserName($asset.creator, false)})
-        #set($escapedCreatorName = $ret_escaped)
+        #set($escapedCreatorName = $escapetool.javascript(${xwiki.getUserName($asset.creator, false)}))
         <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
     </li>
     #end

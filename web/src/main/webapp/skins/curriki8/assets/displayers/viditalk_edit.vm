@@ -7,7 +7,7 @@
             <fieldset>
                 <ul>
 			<li class="input-text">
-				<span><label for="replace-video-file">$msg.get('rve.content.edit.replace_video.instruction_title')</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get('rve.content.edit.replace_video.instruction_tooltip')"/></span>
+				<span><label for="replace-video-file" class="sectitle">$msg.get('rve.content.edit.replace_video.instruction_title')</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get('rve.content.edit.replace_video.instruction_tooltip')"/></span>
 <div>
 				<input id='replace-video-file' type='file' name='upload[file]' />
 </div>
@@ -24,7 +24,7 @@
                 <ul>
 <li class="input-text">
     <span>
-        <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
+        <label for="revision" class="sectitle">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
     <div  id="revision">
         #set($revnote = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.revision.entry_sample")))
         <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$revnote') { this.value ='' };" />
