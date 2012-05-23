@@ -1052,7 +1052,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             // TODO: shorter timeout here
             String val=pingReadBuff.get().toString();
             pingReadBuff.get().getBuilder().delete(0, val.length());
-            return val.equals("OK");
+            return val.trim().equals("OK");
         } catch (Exception e) {
             return false;
         }
