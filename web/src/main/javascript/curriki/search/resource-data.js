@@ -165,9 +165,7 @@ data.init = function(){
 	});
 
 	f.data.review = {
-		list: [
-			'partners', 'highest_rated', 'members.highest_rated'
-		]
+		list: [ 'partners', 'highest_rated', 'members.highest_rated' ]
 		,data: [
 			['', _('search.resource.review.selector.UNSPECIFIED')]
 		]
@@ -180,9 +178,7 @@ data.init = function(){
 	});
 
 	f.data.special = {
-		list: [
-			'contributions', 'collections', 'updated', 'info-only'
-		]
+		list: [ 'contributions', 'collections', 'updated', 'info-only' ]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
 		]
