@@ -43,7 +43,7 @@
 <div class="entry $addl_css_class_str">
   ##<h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<span class="tooltip-generator">$xwiki.addTooltip("<img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/>", $tooltip_str)</span>#end</h5>
   <h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<img class="tooltip" alt="" src="/xwiki/skins/curriki8/icons/exclamation.png" ext:qtip="$escapetool.html($tooltip_str)"/>#end</h5>
-  #if($fieldtext!="")<p class="instruction">$escapetool.html($fieldtext)</p>#end
+  #if($fieldtext!="")<p class="instruction">$fieldtext</p>#end## $escapetool.html(
 </div> ##class="entry $addl_css_class_str"
 #end ## }
 ##
