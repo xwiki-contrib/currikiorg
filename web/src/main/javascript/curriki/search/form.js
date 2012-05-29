@@ -34,10 +34,15 @@ Search.init = function(){
                 if(typeof(document.savedTitle)=="undefined") document.savedTitle = document.title;
                 document.title = _("search.window.title." + searchTab, [t]);
             }
-            var box = $('curriki-searchbox');
-            if(typeof(box)=="object" && typeof(box.style)=="object") {
-                box.style.color='lightgrey';
-                box.value = t;
+            try {
+	            var box = $('curriki-searchbox');
+	            if(typeof(box)=="object" && typeof(box.style)=="object") {
+	                box.style.color='lightgrey';
+	                box.value = t;
+	            }
+            } catch(e) {
+            	console.log('search: curriki-searchbox not found. (Ok in embedded mode)');
+            	console.log('EmbeddedMode: ' + Curriki.module.search.util.isInEmbeddedMode());
             }
 
 			var pagerValues = {};
@@ -108,18 +113,22 @@ Curriki.numSearches = 0;
 			}
 			stateObject['a'] = panelSettings;
 
-			var provider = new Ext.state.Provider();
-			var encodedToken = provider.encodeValue(stateObject);
-			console.log('Saving History: '+ encodedToken );
-            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
-                Search.history.setLastToken(encodedToken);
-                var created = Ext.History.add(encodedToken,true);
-                if(created) console.log("-- created a new history frame.");
-            } else {
-                window.currikiHistoryStarted = true;
-                Search.history.setLastToken(encodedToken);
-                window.top.location.replace(window.location.pathname + "#" + encodedToken);
-                console.log("-- rather replaced history.");
+            if(!Curriki.module.search.util.isInEmbeddedMode()){ //History is disabled for embedded search currently
+
+				var provider = new Ext.state.Provider();
+				var encodedToken = provider.encodeValue(stateObject);
+				console.log('Saving History: '+ encodedToken );
+	            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
+	                Search.history.setLastToken(encodedToken);
+	                var created = Ext.History.add(encodedToken,true);
+	                if(created) console.log("-- created a new history frame.");
+	            } else {
+	                window.currikiHistoryStarted = true;
+	                Search.history.setLastToken(encodedToken);
+	                window.top.location.replace(window.location.pathname + "#" + encodedToken);
+	                console.log("-- rather replaced history.");
+	            }
+	            
             }
 		};
 
@@ -353,14 +362,20 @@ Curriki.numSearches = 0;
 	}
 };
 
+
 Search.display = function(){
 	Search.init();
 
 	var s = new Ext.Panel(Search.mainPanel);
 	s.render();
 
-	Search.history.init();
+	if(Curriki.module.search.util.isInEmbeddedMode()){
+		Curriki.module.search.util.sendResizeMessageToEmbeddingWindow(); // Initial resizement of the embedding iframe
+	}else {
+		Search.history.init();
+	}
 };
+
 
 Search.start = function(){
 	Ext.onReady(function(){

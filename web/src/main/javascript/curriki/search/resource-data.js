@@ -288,8 +288,10 @@ data.init = function(){
                     '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain"//, '_dc':(new Date().getTime())
-                        }
+		,baseParams: {	xpage: "plain"
+                     	//"json.wrf": "Curriki.module.search.data.resource.store.results.loadData" // parameter for Solr to wrap the json result into a function call
+                     	//, '_dc':(new Date().getTime())
+                      }
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
 			,totalProperty: 'resultCount'
@@ -352,8 +354,11 @@ data.init = function(){
 				rollover = _('unknown.unknown');
 			}
 
-//			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-			return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			if(Curriki.module.search.util.isInEmbeddedMode()){
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}?viewer=embed" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}else {
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}
 		}
 
 		,ict: function(value, metadata, record, rowIndex, colIndex, store){
