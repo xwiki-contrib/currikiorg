@@ -78,7 +78,7 @@ Curriki.ui.treeLoader.Base = function(config){
 
 Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		dataUrl:'DYNAMICALLY DETERMINED'
-		,setChildHref:true
+		,setChildHref:false
 		,setFullRollover:false
 		,setAllowDrag:false
 		,setUniqueId:false

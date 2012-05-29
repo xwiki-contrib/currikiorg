@@ -492,9 +492,7 @@ data.init = function(){
 	});
 
 	f.data.review = {
-		list: [
-			'partners', 'highest_rated', 'members.highest_rated'
-		]
+		list: [ 'partners', 'highest_rated', 'members.highest_rated' ]
 		,data: [
 			['', _('search.resource.review.selector.UNSPECIFIED')]
 		]
@@ -507,9 +505,7 @@ data.init = function(){
 	});
 
 	f.data.special = {
-		list: [
-			'contributions', 'collections', 'updated', 'info-only'
-		]
+		list: [ 'contributions', 'collections', 'updated', 'info-only' ]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
 		]
@@ -1959,7 +1955,7 @@ data.init = function(){
 	});
 
 	f.data.member_type =  {
-		list: ['student', 'parent', 'professional', 'teacher', 'administration']
+		list: ['student', 'teacher', 'parent','professional','administration','nonprofit','nonprofit_education','corporation']
 		,data: [
 			['', _('XWiki.XWikiUsers_member_type_UNSPECIFIED')]
 		]

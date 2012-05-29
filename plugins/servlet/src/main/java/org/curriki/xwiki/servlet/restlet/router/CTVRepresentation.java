@@ -5,11 +5,16 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.doc.XWikiDocument;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
+import org.curriki.xwiki.plugin.asset.composite.FolderCompositeAsset;
 import org.curriki.xwiki.plugin.curriki.CurrikiPlugin;
 import org.jfree.util.Log;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.StreamRepresentation;
 
 import java.io.*;
@@ -32,12 +37,15 @@ public class CTVRepresentation extends StreamRepresentation {
     private boolean isBackEndStream = false;
     private GetMethod get;
     private Object objectToOutput;
+    private List<String> subAssetNames;
     private Set userGroups;
     private String userName;
     private boolean userIsAdmin;
     private String childRightsS = null, childPagesS = null;
     private static ThreadLocal<Gson> gson = new ThreadLocal<Gson>() {
         protected Gson initialValue() { return new Gson(); }};
+    private boolean useBackEnd = true;
+    private String propNameForFullname = null;
 
 
     public CTVRepresentation(String targetDocument, Type type, XWikiContext context)  throws IOException, XWikiException {
@@ -54,19 +62,22 @@ public class CTVRepresentation extends StreamRepresentation {
         this.docFullName = targetDocument;
         this.currikiPlugin = (CurrikiPlugin) xwiki.getPlugin("curriki",context);
 
-        boolean useBackEnd = true;
 
         if(!currikiPlugin.solrCheckIsUp()) useBackEnd = false;
 
         // identify docs to queries
         if(type==Type.USER_COLLECTIONS) {
             solrField = "userCollections";
+            propNameForFullname = "collectionPage";
         } else if(type==Type.USER_GROUPS) {
             solrField = "userGroups";
+            propNameForFullname = "groupSpace";
         } else if(type==Type.GROUP_COLLECTIONS) {
             solrField = "childInfo";
+            propNameForFullname = "collectionPage";
         } else if(type==Type.COLLECTION_CONTENT) {
             solrField = "childInfo";
+            propNameForFullname = "assetpage";
         } else {
             throw new UnsupportedEncodingException();
         }
@@ -78,8 +89,8 @@ public class CTVRepresentation extends StreamRepresentation {
         String xwikiVersion = doc.getVersion();
 
         String fn = "fullname:" + docFullName;
-        String solrRev = currikiPlugin.solrGetSingleValue(fn, "revisionNumber");
-        if(xwikiVersion.equals(solrRev)) {
+        String solrRev = useBackEnd? currikiPlugin.solrGetSingleValue(fn, "revisionNumber") : "";
+        if(useBackEnd && xwikiVersion.equals(solrRev)) {
             isBackEndStream = true;
             get = currikiPlugin.solrCreateQueryGetMethod(fn, solrField, 0, 100);
             currikiPlugin.solrCollectResultsFromQuery(
@@ -94,11 +105,76 @@ public class CTVRepresentation extends StreamRepresentation {
             });
         } else {
             isBackEndStream = false;
-            objectToOutput = currikiPlugin.fetchCollectionsInfo(docFullName, context);
+            // identify docs to queries
+            if(type==Type.USER_COLLECTIONS) {
+                propNameForFullname = "collectionPage";
+                subAssetNames = currikiPlugin.fetchCollectionsList(docFullName, context);
+                objectToOutput = currikiPlugin.fetchCollectionsInfo(docFullName, context);
+            } else if(type==Type.GROUP_COLLECTIONS) {
+                propNameForFullname = "collectionPage";
+                String groupName = docFullName.replace(".WebPreferences", "");
+                subAssetNames = currikiPlugin.fetchCollectionsList(groupName, context);
+                objectToOutput = currikiPlugin.fetchCollectionsInfo(groupName, context);
+            } else if(type==Type.USER_GROUPS) {
+                propNameForFullname = "groupSpace";
+                subAssetNames = null;
+                objectToOutput = currikiPlugin.fetchUserGroups(docFullName, context);
+            } else if(type==Type.COLLECTION_CONTENT) {
+                propNameForFullname = "assetpage";
+
+                FolderCompositeAsset fca = (FolderCompositeAsset) currikiPlugin.fetchAssetAs(docFullName, FolderCompositeAsset.class, context);
+                if (fca != null) {
+                        FolderCompositeAsset fAsset = fca.as(FolderCompositeAsset.class);
+                        objectToOutput = fAsset.getSubassetsInfo();
+                } else objectToOutput = new LinkedList();
+            } else {
+                throw new UnsupportedEncodingException();
+            }
         }
 
 
     }
+
+
+    public static List<Map<String,Object>> flattenMapToJSONArray(Map<String,Object> map, String itemName) {
+        List<Map<String,Object>> list = new LinkedList<Map<String,Object>>();
+
+        for (String item : map.keySet()) {
+            JSONObject o = new JSONObject();
+            o.put(itemName, item);
+            Map<String,Object> info = (Map<String,Object>) map.get(item);
+            for (String infoItem : info.keySet()) {
+                o.put(infoItem, info.get(infoItem));
+            }
+            list.add(o);
+        }
+
+        return list;
+    }
+
+
+    protected List<Map<String, Object>> flattenMapToJSONArray(Map<String,Object> map, List<String> items, String itemName) throws IOException {
+        List<Map<String, Object>> list = new LinkedList<Map<String, Object>>();
+
+        for (String item : items) {
+            //Map<String,Object> m = new TreeMap<String,Object>();
+            Map<String,Object> info = (Map<String,Object>) map.get(item);
+            info.put(itemName, item);
+            if (info != null) {
+                for (String infoItem : info.keySet()) {
+                    info.put(infoItem, info.get(infoItem));
+                }
+            } else {
+                // Error:  Item in list is not in the map
+                throw new IOException("Map for "+itemName+": "+item+" cannot be found");
+            }
+            list.add(info);
+        }
+
+        return list;
+    }
+
+
 
     private long getLength() {
         if(isBackEndStream)
@@ -176,6 +252,7 @@ public class CTVRepresentation extends StreamRepresentation {
                 if(isSubassetsQuery) {
                     out.write("[");
                     CurrikiPlugin.SolrResultCollector collector =new CurrikiPlugin.SolrResultCollector() {
+                        boolean started = false;
                         public void status(int statusCode, int qTime, int numFound, int start) { }
 
                         public void newDocument() { }
@@ -186,20 +263,21 @@ public class CTVRepresentation extends StreamRepresentation {
                             String right = childRights!=null ? childRights.nextToken() : null;
                             String assetpage = childPages.nextToken();
                             try {
+                                if(!started) started = true;
+                                    else out.write(", "); // \n
                                 if(childRights!=null && canUserRead(right)) {
                                     System.err.println("Rights: view: " + canUserRead(right) + ", edit:" + canUserModify(right) + ", delete:" + canUserDelete(assetpage) +".");
                                     // TODO: convert the label "rights" to "ownership"
                                     if(canUserModify(right))
-                                        out.write("{rights:{view:true, edit:true, delete: ");
+                                        out.write("{rights:{'view':true, 'edit':true, 'delete': ");
                                     else
-                                        out.write("{rights:{view:true, edit:false, delete: ");
+                                        out.write("{rights:{'view':true, 'edit':false, 'delete': ");
                                     if(canUserDelete(assetpage)) out.write("true},"); else out.write("false},");
                                     out.write(value.substring(1));
                                 } else { // no read allowance
-                                    out.write("{rights:{view:false, edit:false, delete: false}, assetpage: \"" + assetpage + "\",");
+                                    out.write("{rights:{'view':false, 'edit':false, 'delete': false}, assetpage: \"" + assetpage + "\",");
                                     out.write(ghostSubAssetInfoJson);
                                 }
-                                out.write(",\n");
                             } catch (Exception e) {
                                 throw new IllegalStateException(e);
                             }
@@ -211,7 +289,14 @@ public class CTVRepresentation extends StreamRepresentation {
                     currikiPlugin.feedFieldFromXmlStream(get, out, solrField);
                 }
             } else {
-                new Gson().toJson(objectToOutput,  out);
+                if(objectToOutput instanceof Map) {
+                    new Gson().toJson(subAssetNames == null ?
+                            flattenMapToJSONArray((Map<String,Object>) objectToOutput, propNameForFullname) :
+                            flattenMapToJSONArray((Map<String,Object>) objectToOutput, subAssetNames, propNameForFullname),  out);
+                } else {
+                    new Gson().toJson(objectToOutput,  out);
+
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -70,7 +70,7 @@ data.init = function(){
 	});
 
 	f.data.member_type =  {
-		list: ['student', 'parent', 'professional', 'teacher', 'administration']
+		list: ['student', 'teacher', 'parent','professional','administration','nonprofit','nonprofit_education','corporation']
 		,data: [
 			['', _('XWiki.XWikiUsers_member_type_UNSPECIFIED')]
 		]

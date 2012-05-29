@@ -351,7 +351,7 @@ $errMsg
 #if($g_RegType != 'edit_profile') ##{ 
 <div class="form-wrp">
 #end ##}
-<form id="register" name="register" action="" method="POST" enctype="multipart/form-data;charset=utf-8" onsubmit="return validateRegisterForm();">
+<form id="register" name="register" action="" method="POST" enctype="multipart/form-data" onsubmit="return validateRegisterForm();">
 #if($g_RegType == 'edit_profile') ##{
 <div class="button-right">
 	<button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button>
@@ -425,6 +425,7 @@ $errMsg
 #set($c = 100 * $c)
 #set($c = $c / $numberoffield)
 #set($c = "${c}%")
+#set($percentComplete=$c)
 ##
 <div class="profile-push">$msg.get('edit_profile.intro.percent_complete', [$c])</div>
 #end ##}
