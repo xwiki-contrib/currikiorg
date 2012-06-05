@@ -22,7 +22,7 @@ function resizeCurrikiIframe(styleString){
 }
 
 function openResourceUrl(resourceUrl){
-	if(typeof currikiResourceProxyWindow === "undefined" || currikiResourceProxyWindow.closed){
+	if(currikiResourceProxyWindow == null || typeof currikiResourceProxyWindow === "undefined" || currikiResourceProxyWindow.closed){
 		currikiResourceProxyWindow = window.open("currikiResourceProxy.html?resourceurl=" + resourceUrl);
 	}else{
 		currikiResourceProxyWindow.location.href = ("currikiResourceProxy.html?resourceurl=" + resourceUrl);
