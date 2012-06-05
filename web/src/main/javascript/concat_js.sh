@@ -162,8 +162,8 @@ cat $ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/teachhub-advancedSear
 IE_CONSOLE_FIX="\
 	curriki/embeddedsearch/ie-console-fix.js
 	"
-cat $EMBEDDED_SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-ie-console-fix-debug.js
-cat $EMBEDDED_SEARCH | $COMPRESS_JS > ../webapp/js/curriki-ie-console-fix.js
+cat $IE_CONSOLE_FIX | $UNCOMPRESS_JS > ../webapp/js/curriki-ie-console-fix-debug.js
+cat $IE_CONSOLE_FIX | $COMPRESS_JS > ../webapp/js/curriki-ie-console-fix.js
 
 ## vidiembed_curriki.js removed from MERGED list (was right after $I18N)
 ##	../webapp/skins/curriki8/js/vidiembed_curiki.js
