@@ -121,6 +121,10 @@ module.init = function(){
 					}
 				);
 
+				if(Curriki.module.search.util.isInEmbeddedMode()){
+					Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+				}
+
 				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
@@ -316,8 +320,19 @@ module.init = function(){
 		}
 	};
 
+	module.isInEmbeddedMode = function(){
+		return !(	//If this attribute is not set, we can are not in embedded mode
+					typeof Curriki.module.search.embeddingPartnerUrl === "undefined");
+	}
+
+	module.sendResizeMessageToEmbeddingWindow = function() {
+		var height = document.body.scrollHeight + 25;
+		window.parent.postMessage("height:"+ height + "px;",'*');
+	}
+	
 	module.registerSearchLogging = function(tab){
 	};
+
 
 };
 
@@ -611,8 +626,10 @@ data.init = function(){
                     '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain"//, '_dc':(new Date().getTime())
-                        }
+		,baseParams: {	xpage: "plain"
+                     	//"json.wrf": "Curriki.module.search.data.resource.store.results.loadData" // parameter for Solr to wrap the json result into a function call
+                     	//, '_dc':(new Date().getTime())
+                      }
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
 			,totalProperty: 'resultCount'
@@ -675,8 +692,11 @@ data.init = function(){
 				rollover = _('unknown.unknown');
 			}
 
-//			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-			return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			if(Curriki.module.search.util.isInEmbeddedMode()){
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}?viewer=embed" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}else {
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}
 		}
 
 		,ict: function(value, metadata, record, rowIndex, colIndex, store){
@@ -2846,10 +2866,15 @@ Search.init = function(){
                 if(typeof(document.savedTitle)=="undefined") document.savedTitle = document.title;
                 document.title = _("search.window.title." + searchTab, [t]);
             }
-            var box = $('curriki-searchbox');
-            if(typeof(box)=="object" && typeof(box.style)=="object") {
-                box.style.color='lightgrey';
-                box.value = t;
+            try {
+	            var box = $('curriki-searchbox');
+	            if(typeof(box)=="object" && typeof(box.style)=="object") {
+	                box.style.color='lightgrey';
+	                box.value = t;
+	            }
+            } catch(e) {
+            	console.log('search: curriki-searchbox not found. (Ok in embedded mode)');
+            	console.log('EmbeddedMode: ' + Curriki.module.search.util.isInEmbeddedMode());
             }
 
 			var pagerValues = {};
@@ -2920,18 +2945,22 @@ Curriki.numSearches = 0;
 			}
 			stateObject['a'] = panelSettings;
 
-			var provider = new Ext.state.Provider();
-			var encodedToken = provider.encodeValue(stateObject);
-			console.log('Saving History: '+ encodedToken );
-            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
-                Search.history.setLastToken(encodedToken);
-                var created = Ext.History.add(encodedToken,true);
-                if(created) console.log("-- created a new history frame.");
-            } else {
-                window.currikiHistoryStarted = true;
-                Search.history.setLastToken(encodedToken);
-                window.top.location.replace(window.location.pathname + "#" + encodedToken);
-                console.log("-- rather replaced history.");
+            if(!Curriki.module.search.util.isInEmbeddedMode()){ //History is disabled for embedded search currently
+
+				var provider = new Ext.state.Provider();
+				var encodedToken = provider.encodeValue(stateObject);
+				console.log('Saving History: '+ encodedToken );
+	            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
+	                Search.history.setLastToken(encodedToken);
+	                var created = Ext.History.add(encodedToken,true);
+	                if(created) console.log("-- created a new history frame.");
+	            } else {
+	                window.currikiHistoryStarted = true;
+	                Search.history.setLastToken(encodedToken);
+	                window.top.location.replace(window.location.pathname + "#" + encodedToken);
+	                console.log("-- rather replaced history.");
+	            }
+	            
             }
 		};
 
@@ -3165,14 +3194,20 @@ Curriki.numSearches = 0;
 	}
 };
 
+
 Search.display = function(){
 	Search.init();
 
 	var s = new Ext.Panel(Search.mainPanel);
 	s.render();
 
-	Search.history.init();
+	if(Curriki.module.search.util.isInEmbeddedMode()){
+		Curriki.module.search.util.sendResizeMessageToEmbeddingWindow(); // Initial resizement of the embedding iframe
+	}else {
+		Search.history.init();
+	}
 };
+
 
 Search.start = function(){
 	Ext.onReady(function(){
