@@ -23,7 +23,7 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 #set($clsPageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
 </head>
 <body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName'>
-#if("$!request.viewer"!="embed") 
+#if(!($viewer.startsWith("embed")))
 <div id="main">
 	<div id="shadow-right">
 #end

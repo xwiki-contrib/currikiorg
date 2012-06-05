@@ -54,7 +54,7 @@
 ##
     <div class="asset-display-download-inner filetype-${fileext}">
 
-        #set($requireLogin= ("embed"!="$!request.viewer") && $context.user=="XWiki.XWikiGuest")
+        #set($requireLogin= (!$viewer.startsWith("embed")) && $context.user=="XWiki.XWikiGuest")
       <a class="icon-link" href="$origVideo"
         #if($requireLogin) ##
           onclick="Curriki.logView('/Download/will/viditalk/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}' + Curriki.ui.login.readScrollPos())); return false;" ##

@@ -70,3 +70,6 @@ $xwiki.includeTopic('Admin.Configuration', false)
 #set($GA_uacct=$xwiki.getXWiki().Param('curriki.system.GA'))
 #set ($isInServletMode = $xwikimode == 0)
 #set ($isInPortletMode = $xwikimode == 1)
+##
+#set($viewer="$!request.viewer")
+#if($viewer=="")#set($viewer="view")#end

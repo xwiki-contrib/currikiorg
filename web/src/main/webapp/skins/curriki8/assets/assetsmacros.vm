@@ -468,7 +468,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
 #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
-#set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest")
+#set($requireLogin= !($viewer.startsWith("embed")) && $context.user=="XWiki.XWikiGuest")
  <a class="icon-link"
     #if($requireLogin) ##
       #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
@@ -1704,7 +1704,7 @@ $asset.use($classname)
 #set($mode = "")
 #if("$!request.getParameter('viewer')"=="print")
 #set($mode = "print")
-#elseif("$!request.getParameter('viewer')"=="embed")
+#elseif($viewer.startsWith("embed"))
 #set($mode = "embed")
 #elseif("$!request.getParameter('viewer')"=="assetedit")
 #set($mode = "edit")
