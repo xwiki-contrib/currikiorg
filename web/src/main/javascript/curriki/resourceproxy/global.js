@@ -8,7 +8,7 @@
 	var ResourceProxy = Curriki.module.resourceproxy;
 
 	ResourceProxy.settings = {
-		proxyUrl: "http://current.dev.curriki.org"
+		proxyUrl: "http://current.dev.curriki.org" //Working on current util release
 	};
 
 	ResourceProxy.run = function(){

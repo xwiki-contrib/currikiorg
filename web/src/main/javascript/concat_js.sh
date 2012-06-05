@@ -148,6 +148,23 @@ RESOURCE_PROXY="\
 cat $RESOURCE_PROXY | $UNCOMPRESS_JS > ../webapp/js/curriki-module-resourceproxy-debug.js
 cat $RESOURCE_PROXY | $COMPRESS_JS > ../webapp/js/curriki-module-resourceproxy.js
 
+EMBEDDED_SEARCH="\
+	curriki/embeddedsearch/startup.js
+	"
+cat $EMBEDDED_SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-embedded-search-startup-debug.js
+cat $EMBEDDED_SEARCH | $COMPRESS_JS > ../webapp/js/curriki-embedded-search-startup.js
+
+ADVANCED_SEARCH_FRAME="\
+	curriki/embeddedsearch/advancedSearchFrame.html
+	"
+cat $ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/teachhub-advancedSearchFrame.html
+
+IE_CONSOLE_FIX="\
+	curriki/embeddedsearch/ie-console-fix.js
+	"
+cat $EMBEDDED_SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-ie-console-fix-debug.js
+cat $EMBEDDED_SEARCH | $COMPRESS_JS > ../webapp/js/curriki-ie-console-fix.js
+
 ## vidiembed_curriki.js removed from MERGED list (was right after $I18N)
 ##	../webapp/skins/curriki8/js/vidiembed_curiki.js
 VIDITALK="\

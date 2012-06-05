@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>Curriki - Search for -  - among resources</title>
+	<script type="text/javascript">
+	 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	 	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
+	<script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-1841781-1");
+		pageTracker._initData();
+	 	pageTracker._trackPageview();
+	    if(window.pageTrackerQueue) { 
+	    	for(var i=0; i<window.pageTrackerQueue.length; i++) {
+	    		pageTracker._trackPageview(window.pageTrackerQueue.get(i));
+	    	} 
+	    }
+	</script>
+
+	<link type="text/css" href="http://extjs.cachefly.net/ext-2.3.0/resources/css/ext-all.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/xwiki/js/f33b/curriki-js.css">
+	<link type="text/css" rel="stylesheet" href="/xwiki/bin/skin/skins/curriki8/f33b/stylebase.css">
+	<link type="text/css" rel="stylesheet" href="/xwiki/bin/skin/skins/curriki8/f33b/style.css">
+	<link type="text/css" rel="stylesheet" href="/xwiki/skins/curriki8/f33b/style2.css">
+
+
+	<!-- /analytics -->
+
+	<script type="text/javascript">
+		//<![CDATA[
+		var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/f33b/extjs/" : "http://extjs.cachefly.net/ext-2.3.0/");
+		document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/css/ext-all.css' type='text/css' /%3E"));
+		//]]>
+	</script>
+
+	<script type="text/javascript" src="/xwiki/resources/js/prototype/prototype.js"></script>
+	<script type="text/javascript" src="/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki8/f33b/skin.js"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki20/extjs/ext-all-debug.js"></script>
+	<script type="text/javascript" src="/xwiki/gen/js/f33b/lang_en.js"></script>
+	<script type="text/javascript" src="/xwiki/js/f33b/curriki-merged.js"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki8/f33b/accordion/accordion.js"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki8/f33b/swfobject.js"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki8/f33b/xwiki.js"></script>
+	<script type="text/javascript" src="/xwiki/skins/curriki8/f33b/js/presentation.js"></script>
+	<script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/f33b/scripts/shortcuts.js"></script>
+
+	<script type="text/javascript">
+		Ext.ns('Curriki.global');
+		Curriki.global.username = "XWiki.XWikiGuest";
+		Curriki.global.fullname = "XWikiGuest";
+		Curriki.global.isAdmin = false;
+	</script>
+</head>
+<body style="background-color:transparent; min-width:100%">
+	<style type="text/css">
+		.x-panel-header {
+	    	overflow: hidden;
+	    	height: 30px;
+	    	font: bold 20px/30px tahoma,arial,verdana,sans-serif;
+		}
+	</style>
+	<div style="position:absolute; top: 15px; right:5px; float:right; z-index:1;">
+		<img height="35px" src="/image.gif"/>
+	</div>
+	<div id="test">
+		<script type="text/javascript">
+		    /* <![CDATA[ */
+		    Ext.ns('Curriki.userinfo');
+		        Curriki.userinfo = {
+		    	isAdmin:    false,
+		        userGroups:"",
+		        userName:   "XWiki.XWikiGuest"
+		    };
+		    /* ]]>*/
+		</script>
+		<script src="/xwiki/js/f33b/curriki-module-search-debug.js" type="text/javascript"></script>
+		<div id="search-div" class=" x-panel search-module x-panel-noborder"></div>
+		<script type="text/javascript">
+		    /* <![CDATA[ */
+		    Curriki.module.search.tabList = ['resource'];
+		    Curriki.module.search.embeddingPartnerUrl = 'http://teachhub.com';
+		    Curriki.module.search.start();
+		    /* ]]>*/
+		</script>
+	</div>
+	<form class="x-hidden" id="history-form">
+		<input type="hidden" id="x-history-field" value="">
+		<iframe id="x-history-frame"></iframe>
+	</form>
+	<script type="text/javascript">
+		// IE9 workaround for the createContextualFragment method which is not supported there under extjs 2.3
+	    if ((typeof Range !== "undefined") && !Range.prototype.createContextualFragment)
+	    {
+	        Range.prototype.createContextualFragment = function(html)
+	        {
+	            var frag = document.createDocumentFragment();
+	            div = document.createElement("div");
+	            frag.appendChild(div);
+	            div.outerHTML = html;
+	            return frag;
+	        };
+	    }
+	</script>
+</body>
+</html>
