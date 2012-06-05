@@ -31,13 +31,6 @@
 
 	ResourceProxy.renderPage = function(url){
 
-		// xmlhttp=new XMLHttpRequest();
-		// xmlhttp.open("GET", ResourceProxy.settings.proxyUrl + unescape(url),false, "demo", "gelc");
-		// xmlhttp.send();
-		// // xmlDoc=xmlhttp.responseText;
-		// var body = document.getElementsByTagName("body")[0];
-		// body.innerHTML = xmlhttp.responseText;
-
 		Ext.DomHelper.append(
 	   		Ext.getBody(),
 		    {tag: 'iframe', src: ResourceProxy.settings.proxyUrl + unescape(url), width:'100%', height:'100%', scrolling:"auto", frameborder:"0", allowtransparency:"true"},

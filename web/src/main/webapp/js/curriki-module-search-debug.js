@@ -323,12 +323,20 @@ module.init = function(){
 	module.isInEmbeddedMode = function(){
 		return !(	//If this attribute is not set, we can are not in embedded mode
 					typeof Curriki.module.search.embeddingPartnerUrl === "undefined");
-	}
+	};
 
 	module.sendResizeMessageToEmbeddingWindow = function() {
 		var height = document.body.scrollHeight + 25;
-		window.parent.postMessage("height:"+ height + "px;",'*');
-	}
+		console.log("search: sending resource view height to embedding window (" + height + "px)");
+		var data = "resize:height:"+ height + "px;"
+		window.parent.postMessage(data,'*');
+	};
+
+	module.sendResourceUrlToEmbeddingWindow = function(url) {
+		console.log("search: sending resource url to embedding window (" + url + ")");
+		var data = "resourceurl:"+url;
+		window.parent.postMessage(data,'*');
+	};
 	
 	module.registerSearchLogging = function(tab){
 	};
@@ -693,7 +701,7 @@ data.init = function(){
 			}
 
 			if(Curriki.module.search.util.isInEmbeddedMode()){
-				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}?viewer=embed" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a onclick="Curriki.module.search.util.sendResourceUrlToEmbeddingWindow(\'/xwiki/bin/view/{0}\')" href="#" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 			}else {
 				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
 			}
