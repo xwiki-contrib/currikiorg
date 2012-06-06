@@ -386,6 +386,10 @@ public class SocialLoginToolGroovy {
         userObj.set("i_agree",   "1");
         if(city) userObj.set("city",       city);
         if(country) userObj.set('country',    country);
+        if(state) userObj.set('state', state);
+        if(postalCode) userObj.set('postalCode', postalCode)
+        if(longitude) userObj.set('longitude', longitude);
+        if(latitude) userObj.set('latitutde', latitude);
         userObj.set("show_contact","2"); // Show Your Profile:
         userObj.set("opt_out", 0); //
 
@@ -627,8 +631,12 @@ public class SocialLoginToolGroovy {
         firstName = request.firstName;
         lastName = request.lastName;
         email = request.email;
-        city = request.location;
+        city = request.city;
         country = request.country;
+        postalCode = request.postalCode;
+        state = request.state;
+        longitude = request.longitude;
+        latitude = request.latitude;
         password = request.password;
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
@@ -640,7 +648,7 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidAgree(request.agree, true) & passed;
         passed = validation.isValidFirstName(firstName, true) & passed;
         passed = validation.isValidLastName(lastName, true) & passed;
-
+        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, true) & passed;
         return passed;
     }
 

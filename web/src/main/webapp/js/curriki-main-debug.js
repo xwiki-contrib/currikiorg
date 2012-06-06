@@ -3628,7 +3628,7 @@ Curriki.ui.login.liveValidation = function() {
                     ,method:'GET'
                     ,headers: { 'Accept':'application/json' ,'Content-type':'application/json' }
                     ,params: { 'q':"postalCode:" + field.dom.value,
-                        "fl": "cityName,stateCode,longitude,latitude", rows:1}
+                        "fl": "cityName,stateCode,long,lati", rows:1}
                     ,scope:this
                     ,success:function(response, options){
                         var json = response.responseText;
@@ -3637,16 +3637,20 @@ Curriki.ui.login.liveValidation = function() {
                         window.results = results;
 
                         var docs = results.response.docs;
-                        if(!docs || docs.length==0) {
+                        if(!docs || docs.length==0 || !(docs[0].cityName && docs[0].stateCode)) {
                             if(console) console.log("Docs returned unusable.",docs);
                             Ext.get("postalCode_results").dom.innerHTML = "";
                             Curriki.ui.login.liveValidation.notifyValidationResult(field, false);
                         } else {
                             var d = docs[0];
                             if(console) console.log(d.cityName + " " + d.stateCode, d);
-                            Ext.get("postalCode_results").dom.innerHTML = d.cityName + " " + d.stateCode;
-                            // TODO: define input-fields, city, state latitude, longitude and...
-                            Curriki.ui.login.liveValidation.notifyValidationResult(field, true);
+                                Ext.get("postalCode_results").dom.innerHTML = d.cityName + " " + d.stateCode;
+                                Ext.get("postalCode_input").dom.value = field.dom.value;
+                                Ext.get("city_input").dom.value= d.cityName;
+                                Ext.get("state_input").dom.value= d.stateCode;
+                                if(d['long']) Ext.get("longitude_input").dom.value = d['long'];
+                                if(d['lati']) Ext.get("latitude_input").dom.value = d['lati'];
+                                Curriki.ui.login.liveValidation.notifyValidationResult(field, true);
                         }
                     }
                     ,failure:function(response, options){

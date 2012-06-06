@@ -191,14 +191,13 @@ fieldset h3 {
               ##
               <p class="hidden #computeTrClass($f) " id="extraLocationSection"
                   onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
-                  <label for="postalCode_input"><b>$msg.get("join.member.country.postalCode_US")</b></label>
+                  <label for="postalCode_input"><b>$msg.get("join.member.postalCode_US")</b></label>
                   <input type="text" name="postalCode" id="postalCode_input" style="width:5em">
                   <span id="postalCode_results">&nbsp;</span>
-                  <input type="hidden" name="city" value="$!tool.city">
-                  <input type="hidden" name="state" value="$!tool.state">
-                  <input type="hidden" name="postalCode" value="$!tool.postalCode">
-                  <input type="hidden" name="latitude" value="$!tool.latitude">
-                  <input type="hidden" name="longitude" value="$!tool.longitude">
+                  <input type="hidden" name="city" id="city_input" value="$!tool.city">
+                  <input type="hidden" name="state" id="state_input" value="$!tool.state">
+                  <input type="hidden" name="latitude" id="latitude_input" value="$!tool.latitude">
+                  <input type="hidden" name="longitude" id="longitude_input" value="$!tool.longitude">
               </p>
           ##
           ##
