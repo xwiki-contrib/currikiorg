@@ -123,10 +123,8 @@ fieldset h3 {
               #logViewScript("/join/${regMode}/submit/errors")
           #end
       <input type="hidden" name="xaction" value="createProfile" >
-      <input type="hidden" name="city"  value="$!tool.city">
-      <input type="hidden" name="country" value="$!tool.country">
 
-        #macro(computeTrClasses $f)##
+          #macro(computeTrClasses $f)##
             #if($okFields.contains($f)) okField #end ##
             #if($warningFields.contains($f)) warningField #end ##
         #end##
@@ -179,6 +177,31 @@ fieldset h3 {
           </p>
           ##
           ##
+              #set($f="country")
+              <p class="textfield #computeTrClasses($f)"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+                  <label for="${f}_input"><b>$msg.get("join.member.country.title")</b></label>
+                  #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("country").getPropertyClass().getList($context.context))
+                  <select name="${f}" id="${f}_input" onchange="Curriki.ui.login.countryChanged()" style="width:20em; max-width: 20em">##
+                      #foreach($val in $propVals)#if($val!="0" && "$val"!="---")##
+                          <option value="$val" #if($val==$!tool.country)selected="selected"#end>$msg.get("XWiki.XWikiUsers_country_${val}")</option>##
+                      #end#end
+                  </select>
+              </p>
+              ##
+              <p class="hidden #computeTrClass($f) " id="extraLocationSection"
+                  onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+                  <label for="postalCode_input"><b>$msg.get("join.member.country.postalCode_US")</b></label>
+                  <input type="text" name="postalCode" id="postalCode_input" style="width:5em">
+                  <span id="postalCode_results">&nbsp;</span>
+                  <input type="hidden" name="city" value="$!tool.city">
+                  <input type="hidden" name="state" value="$!tool.state">
+                  <input type="hidden" name="postalCode" value="$!tool.postalCode">
+                  <input type="hidden" name="latitude" value="$!tool.latitude">
+                  <input type="hidden" name="longitude" value="$!tool.longitude">
+              </p>
+          ##
+          ##
           #set($f="memberType")
           <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
@@ -211,7 +234,7 @@ fieldset h3 {
 </form>
 <script type="text/javascript">
     Ext.onReady(function() {
-        Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]);
+        Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input","postalCode_input"]);
     }, Curriki.ui.login.liveValidation);
 
     Ext.onReady(function() {
@@ -237,6 +260,50 @@ fieldset h3 {
         } catch(e) { Curriki.console.log(e); }
     };
     ##
+    Curriki.ui.login.countryChanged = function () {
+        try {
+            var i = Ext.get("country_input");
+            if(i && i.dom.value) {
+                if("US"== i.dom.value) {
+                    Ext.get("extraLocationSection").replaceClass("hidden","visible")
+                } else {
+                    Ext.get("extraLocationSection").replaceClass("visible","hidden")
+                }
+            }
+        } catch(e) { Curriki.console.log(e); }
+    };
+    ##
+    Curriki.ui.login.postalCodeChanged = function() {
+        var postalCode = Ext.get("postalCode_input");
+        if(postalCode && postalCode.dom && postalCode.dom.value) {
+            postalCode = Ext.get("postalCode_input").dom.value;
+        } else return;
+        if(console) console.log("postalCode changed to " + postalCode);
+
+        Ext.Ajax.request({
+            url: "/solr/locations"
+            ,method:'GET'
+            ,headers: { 'Accept':'application/json' ,'Content-type':'application/json' }
+            ,params: { 'q':"postalCode:" + postalCode,
+                "fl": "cityName,stateCode,longitude,latitude", rows:1}
+            ,scope:this
+            ,success:function(response, options){
+                var json = response.responseText;
+                var o = json.evalJSON(true);
+                if(console) console.log("Results: ",results);
+                window.results = results;
+                for(var i in results.response.docs) {
+                    var d= results.response.docs[i];
+                    if(console) console.log(d.cityName + " " + d.stateCode);
+                    Ext.get("postalCode_results").dom.innerHTML = d.cityName + " " + d.stateCode;
+                }
+            }
+            ,failure:function(response, options){
+                console.error('Cannot resolve location', response, options);
+            }
+        });
+    }
+    ##
     Curriki.ui.login.displayInstruction = function(key,params) {
         try {
             var text;
@@ -252,6 +319,7 @@ fieldset h3 {
         //
         // do it after load: the warning must be displayed in case
         Curriki.ui.login.memberTypeChanged();
+        Curriki.ui.login.countryChanged();
     });
 </script>
 {/pre}

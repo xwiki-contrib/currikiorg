@@ -265,29 +265,64 @@ Curriki.ui.login.liveValidation = function() {
         launchCheckFieldRequest: function(value, field, queueEntry) {
             Curriki.ui.login.liveValidation.notifyValidationResult(field, "waiting");
             Curriki.Ajax.beforerequest = function() {};
-            var r = Ext.Ajax.request({
-                url: "/xwiki/bin/view/Registration/CheckValid"
-                ,headers: {'Accept':'application/json'}
-                ,method: "GET"
-                ,failure:function(response, options) {
-                    Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
-                    Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
-                    Curriki.console.log("failed validation: ", response, options);
-                }
-                ,success:function(response, options){
-                    var t = response.responseText;
-                    if(t) t = t.trim();
-                    Curriki.console.log("Response: " + t);
-                    queue.remove(queueEntry);
-                    if(queueEntry.value!=field.getValue()) return;
-                    Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
-                }
-                , params: { what: field.dom.name,
-                    value: value,
-                    xpage: "plain"
-                }
-                , scope: this
-            });
+            var r;
+            console.log("launching check field request " + field + " of name " + field.dom.name);
+            if(field.dom && field.dom.name && field.dom.name=="postalCode") {
+                r = Ext.Ajax.request({
+                    url: "/solr/locations"
+                    ,method:'GET'
+                    ,headers: { 'Accept':'application/json' ,'Content-type':'application/json' }
+                    ,params: { 'q':"postalCode:" + field.dom.value,
+                        "fl": "cityName,stateCode,longitude,latitude", rows:1}
+                    ,scope:this
+                    ,success:function(response, options){
+                        var json = response.responseText;
+                        var results = json.evalJSON(true);
+                        if(console) console.log("Results: ",results);
+                        window.results = results;
+
+                        var docs = results.response.docs;
+                        if(!docs || docs.length==0) {
+                            if(console) console.log("Docs returned unusable.",docs);
+                            Ext.get("postalCode_results").dom.innerHTML = "";
+                            Curriki.ui.login.liveValidation.notifyValidationResult(field, false);
+                        } else {
+                            var d = docs[0];
+                            if(console) console.log(d.cityName + " " + d.stateCode, d);
+                            Ext.get("postalCode_results").dom.innerHTML = d.cityName + " " + d.stateCode;
+                            // TODO: define input-fields, city, state latitude, longitude and...
+                            Curriki.ui.login.liveValidation.notifyValidationResult(field, true);
+                        }
+                    }
+                    ,failure:function(response, options){
+                        console.error('Cannot resolve location', response, options);
+                    }
+                });
+            } else {
+                r = Ext.Ajax.request({
+                    url: "/xwiki/bin/view/Registration/CheckValid"
+                    ,headers: {'Accept':'application/json'}
+                    ,method: "GET"
+                    ,failure:function(response, options) {
+                        Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
+                        Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
+                        Curriki.console.log("failed validation: ", response, options);
+                    }
+                    ,success:function(response, options){
+                        var t = response.responseText;
+                        if(t) t = t.trim();
+                        Curriki.console.log("Response: " + t);
+                        queue.remove(queueEntry);
+                        if(queueEntry.value!=field.getValue()) return;
+                        Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
+                    }
+                    , params: { what: field.dom.name,
+                        value: value,
+                        xpage: "plain"
+                    }
+                    , scope: this
+                });
+            }
             return r;
         },
 
@@ -361,7 +396,7 @@ Curriki.ui.login.liveValidation = function() {
             //if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
             //    min_length=1;
             //if(typeof(fieldValue)!="undefined" && fieldValue.length<=min_length) return;
-            if(fieldName!="email" && fieldName!="username") {
+            if(fieldName!="email" && fieldName!="username" && fieldName!="postalCode") {
                 var passed = false;
                 var silentFailure = fieldName=="firstName" || fieldName=="lastName" || fieldName=="password";
                 if(fieldName=="agree") passed = fieldValue!="0";

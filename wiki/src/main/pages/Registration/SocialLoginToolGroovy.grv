@@ -26,9 +26,9 @@ public class SocialLoginToolGroovy {
     private XWikiMessageTool msg = null;
     private List errors = new ArrayList();
     String providerId = null;
-    String city, country;
+    String city="", state="", country="";
     List warningFields=new ArrayList(), okFields=new ArrayList();
-    String username, password, firstName, lastName, email, memberType, agree;
+    String username, password, firstName, lastName, email, memberType, postalCode="", longitude="", latitude="", agree;
     String validKey = null;
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
@@ -76,8 +76,13 @@ public class SocialLoginToolGroovy {
         this.email = other.email;
         this.agree = other.agree;
         this.city = other.city;
+        this.state = other.state;
         this.country = other.country;
         this.memberType = other.memberType;
+        this.longitude = other.longitude;
+        this.latitude = other.latitude;
+        this.postalCode = other.postalCode;
+
         this.password = other.password;
         this.providerId = other.providerId;
         this.username = other.username;
@@ -250,6 +255,7 @@ public class SocialLoginToolGroovy {
         lastName = profile.getLastName();
         email = profile.getEmail();
         city = profile.location;
+        state = profile.state;
         country  = profile.country;
 
         username = profile.displayName;
@@ -293,6 +299,14 @@ public class SocialLoginToolGroovy {
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
+        if(request.getParameter("country")) country= request.getParameter("country");
+        if(request.getParameter("city")) city  = request.getParameter("city");
+        if(request.getParameter("state")) city  = request.getParameter("state");
+        if(request.getParameter("postalCode"))    postalCode = request.getParameter("postalCode");
+        if(request.getParameter("longitude"))     longitude = request.getParameter("longitude");
+        if(request.getParameter("latitude"))      longitude = request.getParameter("latitude");
+
+
         boolean passed = validation.isValidEmail(email, true);
         passed = validation.isValidUsername(username, true) & passed;
         passed = validation.isValidPassword(password, true) & passed;
@@ -300,19 +314,20 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidAgree(request.agree, true) & passed;
         passed = validation.isValidFirstName(firstName, true) & passed;
         passed = validation.isValidLastName(lastName, true) & passed;
+        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, true) & passed;
 
         LOG.info("Passed? " + passed);
         if(!passed) LOG.info("Errors: " + validation.errors);
         if (passed) {
             // Everything clear, let's proceed
 
-            def propMap = new HashMap();
+            /* def propMap = new HashMap();
             propMap.put("active", "1")
             propMap.put("email", profile.email)
             propMap.put("first_name", profile.firstName)
             propMap.put("last_name", profile.lastName)
             propMap.put("password", password)
-            System.out.println("Obtained record: " + profile.properties)
+            System.out.println("Obtained record: " + profile.properties) */
 
             //request.getParameterMap().put("xwikiname",userDocName);
             //request.getParameterMap().put("XWiki.XWikiUsers_0_password",password);
@@ -373,6 +388,13 @@ public class SocialLoginToolGroovy {
         if(country) userObj.set('country',    country);
         userObj.set("show_contact","2"); // Show Your Profile:
         userObj.set("opt_out", 0); //
+
+        userObj.set("country", country);
+        userObj.set("city", city);
+        userObj.set("state", state);
+        userObj.set("postalCode", postalCode);
+        userObj.set("longitude", longitude);
+        userObj.set("latitude", latitude);
 
         String language = context.language;
         try {
