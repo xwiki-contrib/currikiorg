@@ -3639,7 +3639,7 @@ Curriki.ui.login.liveValidation = function() {
                         var docs = results.response.docs;
                         if(!docs || docs.length==0 || !(docs[0].cityName && docs[0].stateCode)) {
                             if(console) console.log("Docs returned unusable.",docs);
-                            Ext.get("postalCode_results").dom.innerHTML = "";
+                            Ext.get("postalCode_results").dom.innerHTML = "-";
                             Curriki.ui.login.liveValidation.notifyValidationResult(field, false);
                         } else {
                             var d = docs[0];
