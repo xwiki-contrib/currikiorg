@@ -18,7 +18,7 @@ function postMessageHandler(event){ // Event having data of the form "eventtype:
 }
 
 function resizeCurrikiIframe(styleString){
-  document.getElementById("curriki_iframe").setAttribute("style", styleString)
+  document.getElementById("curriki_search_frame").setAttribute("style", styleString)
 }
 
 function openResourceUrl(resourceUrl){
@@ -28,6 +28,15 @@ function openResourceUrl(resourceUrl){
 		currikiResourceProxyWindow.location.href = ("currikiResourceProxy.html?resourceurl=" + resourceUrl);
 	}
 }
+
+function setCurrikiIFrameSrc(){
+	//Please do not change
+	var SEARCH_FRAME_PATH = "genericEmbeddedSearchFrame.html"
+	var currikiSearchFrame = document.getElementById("curriki_search_frame");
+	var iFrameSrc = CURRIKI_HOST + "/" + SEARCH_FRAME_PATH + "?embeddingPartnerUrl=" + PARTNER_HOST + "&" + "resourceDisplay=" + RESOURCE_DISPLAYER + "&" + "embedViewMode=" + EMBED_VIEW_MODE;
+	currikiSearchFrame.setAttribute("src", iFrameSrc);
+}
+
 
 if(typeof window.attachEvent === "function" || typeof window.attachEvent === "object"){ // Firefox 
 	console.log("search: attached Listener to evenet via window.attachEvent");

@@ -24,18 +24,14 @@
 		if(! (typeof params.resourceurl === "undefined") ){
 			return params.resourceurl;
 		} else {
-			document.write("Proxy Error: No ressourceurl defined");
-			throw "Proxy Error: No ressourceurl defined";
+			document.write("Please provide a resource to display");
+			throw "EmbeddedDisplay Error: No ressourceurl defined";
 		}
 	};
 
 	ResourceProxy.renderPage = function(url){
-
-		Ext.DomHelper.append(
-	   		Ext.getBody(),
-		    {tag: 'iframe', src: ResourceProxy.settings.proxyUrl + unescape(url), width:'100%', height:'100%', scrolling:"auto", frameborder:"0", allowtransparency:"true"},
-		    false // this is required in order to return DOM node instead of Ext.Element
-		);
+		var resourceFrame = document.getElementById("curriki_resource_frame");
+		resourceFrame.setAttribute("src", ResourceProxy.settings.proxyUrl + unescape(url));
 	};
 
 	Ext.onReady(function(){

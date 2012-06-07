@@ -170,23 +170,9 @@ VIDITALK="\
 MERGED="$I18N $VIDITALK $CURRIKI $ADDPATH $ORGANIZE $NOMINATE $REVIEW $UNNOMINATE $PARTNER $ASTERIXREVIEW $FLAG"
 cat $MERGED | $COMPRESS_JS > ../webapp/js/curriki-merged.js
 
-
-
 ## All search frames for partner-base
 
-HOPLAHUP_ADVANCED_SEARCH_FRAME="\
-	curriki/embeddedsearch/hoplahup-advancedSearchFrame.html
+ADVANCED_SEARCH_FRAME="\
+	curriki/embeddedsearch/advancedSearchFrame.html
 	"
-cat $HOPLAHUP_ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/hoplahup-advancedSearchFrame.html
-
-
-FELIX_ADVANCED_SEARCH_FRAME="\
-	curriki/embeddedsearch/felix-advancedSearchFrame.html
-	"
-cat $FELIX_ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/felix-advancedSearchFrame.html
-
-
-TEACHHUB_ADVANCED_SEARCH_FRAME="\
-	curriki/embeddedsearch/teachhub-advancedSearchFrame.html
-	"
-cat $TEACHHUB_ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/teachhub-advancedSearchFrame.html
+cat $ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/advancedSearchFrame.html

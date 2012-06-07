@@ -701,10 +701,10 @@ data.init = function(){
 			}
 
 			if(Curriki.module.search.util.isInEmbeddedMode()){
-				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="'+Curriki.module.search.embeddingPartnerUrl+'/currikiResourceProxy.html?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+'?viewer=embed-teachhub'), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="' + Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+'?'+Curriki.module.search.embedViewMode), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 				// return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a onclick="Curriki.module.search.util.sendResourceUrlToEmbeddingWindow(\'/xwiki/bin/view/{0}\')" href="#" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed-teachhub"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 			}else {
-				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
 			}
 		}
 
@@ -1219,7 +1219,7 @@ form.init = function(){
 					var page = values.page||false;
 					if (page) {
 						if(Curriki.module.search.util.isInEmbeddedMode()){
-							return Curriki.module.search.embeddingPartnerUrl + '/currikiResourceProxy.html?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?viewer=embed-teachhub');
+							return Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?'+Curriki.module.search.embedViewMode);
 						}else{
 							return '/xwiki/bin/view/'+page.replace(/\./, '/');
 						}

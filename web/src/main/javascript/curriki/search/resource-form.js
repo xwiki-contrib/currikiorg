@@ -417,7 +417,7 @@ form.init = function(){
 					var page = values.page||false;
 					if (page) {
 						if(Curriki.module.search.util.isInEmbeddedMode()){
-							return Curriki.module.search.embeddingPartnerUrl + '/currikiResourceProxy.html?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?viewer=embed-teachhub');
+							return Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?'+Curriki.module.search.embedViewMode);
 						}else{
 							return '/xwiki/bin/view/'+page.replace(/\./, '/');
 						}
