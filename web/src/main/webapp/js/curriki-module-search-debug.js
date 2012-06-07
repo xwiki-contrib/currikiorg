@@ -701,7 +701,7 @@ data.init = function(){
 			}
 
 			if(Curriki.module.search.util.isInEmbeddedMode()){
-				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="'+Curriki.module.search.embeddingPartnerUrl+'/currikiResourceProxy.html?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed-teachhub"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="'+Curriki.module.search.embeddingPartnerUrl+'/currikiResourceProxy.html?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+'?viewer=embed-teachhub'), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 				// return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a onclick="Curriki.module.search.util.sendResourceUrlToEmbeddingWindow(\'/xwiki/bin/view/{0}\')" href="#" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed-teachhub"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 			}else {
 				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="http://current.dev.curriki.org/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
@@ -735,7 +735,11 @@ data.init = function(){
 			var page = value.replace(/\./, '/');
             console.log("render contributor " + value);
             if(typeof("value")!="string") value="";
-			return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
+            if(Curriki.module.search.util.isInEmbeddedMode()){
+				return String.format('<a href="/xwiki/bin/view/{0}" target="_blank">{1}</a>', page, record.data.contributorName);
+			} else{
+				return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
+			}
 		}
 
 		,rating: function(value, metadata, record, rowIndex, colIndex, store){
@@ -745,7 +749,13 @@ data.init = function(){
 
 				metadata.css = String.format('crs-{0}', value); // Added to <td>
 				//metadata.attr = String.format('title="{0}"', _('curriki.crs.rating'+value)); // Added to <div> around the returned HTML
-				return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
+				
+				
+				if(Curriki.module.search.util.isInEmbeddedMode()){
+					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" target="_blank"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
+				}else{
+					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
+				}
 			} else {
 				return String.format('');
 			}
@@ -759,7 +769,11 @@ data.init = function(){
 
 				if (ratingCount != "" && ratingCount != "0" && ratingCount != 0) {
 					metadata.css = String.format('rating-{0}', value);
-					return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+					if(Curriki.module.search.util.isInEmbeddedMode()){
+						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}" target="_blank"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+					}else{
+						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+					}
 				} else {
 					return String.format('');
 				}
@@ -1188,12 +1202,14 @@ form.init = function(){
 	}
 
 	form.rowExpander = new Ext.grid.RowExpander({
+
+
 		tpl: new Ext.XTemplate(
 			_('search.resource.resource.expanded.title'),
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">',
-					'<a href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a target="{this.getLinkTarget(values)}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
@@ -1202,7 +1218,11 @@ form.init = function(){
 				getParentURL: function(values){
 					var page = values.page||false;
 					if (page) {
-						return '/xwiki/bin/view/'+page.replace(/\./, '/');
+						if(Curriki.module.search.util.isInEmbeddedMode()){
+							return Curriki.module.search.embeddingPartnerUrl + '/currikiResourceProxy.html?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?viewer=embed-teachhub');
+						}else{
+							return '/xwiki/bin/view/'+page.replace(/\./, '/');
+						}
 					} else {
 						return '';
 					}
@@ -1222,6 +1242,14 @@ form.init = function(){
 						,fw,_('global.title.popup.subject')
 						,lvl,_('global.title.popup.educationlevel')
 					);
+				},
+
+				getLinkTarget: function(values){
+					if(Curriki.module.search.util.isInEmbeddedMode()){
+							return '_blank';
+						}else{
+							return '';
+						}
 				}
 			}
 		)

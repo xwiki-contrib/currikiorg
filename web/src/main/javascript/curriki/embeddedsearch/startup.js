@@ -1,4 +1,4 @@
-var currikiResourceProxyWindow;
+typeof currikiResourceProxyWindow;
 
 function postMessageHandler(event){ // Event having data of the form "eventtype:value"
 	var eventData = event.data;
@@ -29,12 +29,15 @@ function openResourceUrl(resourceUrl){
 	}
 }
 
-if(typeof window.attachEvent === "function"){
+if(typeof window.attachEvent === "function" || typeof window.attachEvent === "object"){ // Firefox 
 	console.log("search: attached Listener to evenet via window.attachEvent");
 	window.attachEvent('onmessage',postMessageHandler);
 }else if (typeof window.addEventListener === "function"){
 	console.log("search: attached Listener to evenet via window.addEvenListener");
   	window.addEventListener("message", postMessageHandler, false);
-}else{
+}else if(typeof document.attachEvent === "function"){
 	console.log("search: cors iframe communication is not possible");
+	document.attachEvent('onmessage',postMessageHandler);
+}else{
+	alert("Frame communication not possible");
 }
