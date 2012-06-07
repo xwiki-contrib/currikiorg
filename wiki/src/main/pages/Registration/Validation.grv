@@ -151,11 +151,13 @@ public class Validation {
         }
         if(country=="US") {
             if(!(postalCode) || postalCode.length()>5 || postalCode.length()<2 || !isDigitsOnly(postalCode)) {
-                if(echoErrors) addWarning("join.error.requireZipCode");
+                if(echoErrors) addWarning("postalCode");
+                addError("join.error.requireZipCode");
                 return false;
             }
             if(!city || !state) {
-                if(echoErrors) addWarning("join.error.requireValidZipCode");
+                if(echoErrors) addWarning("postalCode");
+                addError("join.error.requireValidZipCode");
                 return false;
             }
         }

@@ -289,13 +289,8 @@ Curriki.ui.login.liveValidation = function() {
                         } else {
                             var d = docs[0];
                             if(console) console.log(d.cityName + " " + d.stateCode, d);
-                                Ext.get("postalCode_results").dom.innerHTML = d.cityName + " " + d.stateCode;
-                                Ext.get("postalCode_input").dom.value = field.dom.value;
-                                Ext.get("city_input").dom.value= d.cityName;
-                                Ext.get("state_input").dom.value= d.stateCode;
-                                if(d['long']) Ext.get("longitude_input").dom.value = d['long'];
-                                if(d['lati']) Ext.get("latitude_input").dom.value = d['lati'];
-                                Curriki.ui.login.liveValidation.notifyValidationResult(field, true);
+                            Curriki.ui.login.liveValidation.updatePostalCodeResult(d.cityName, d.stateCode, d['long'], d['lati']);
+                            Curriki.ui.login.liveValidation.notifyValidationResult(field, true);
                         }
                     }
                     ,failure:function(response, options){
@@ -330,6 +325,20 @@ Curriki.ui.login.liveValidation = function() {
             return r;
         },
 
+        updatePostalCodeResult: function(cityName, stateCode, longitude, latitude) {
+            if(cityName) {} else {cityName="";}
+            if(stateCode) {} else {stateCode = "";}
+            if(longitude) {} else {longitude="";}
+            if(latitude) {} else {latitude = "";}
+            var label = "-";
+            if(cityName && stateCode) label = cityName + " " + stateCode
+            Ext.get("postalCode_results").dom.innerHTML = label;
+            Ext.get("city_input").dom.value= cityName
+            Ext.get("state_input").dom.value= stateCode;
+            Ext.get("longitude_input").dom.value = longitude;
+            Ext.get("latitude_input").dom.value = latitude;
+        },
+
         notifyValidationResult:function(field, res) {
             /*
              Ext.get("loginIframe").dom.contentWindow.Ext.get("username_input").parent().addClass("warningField")
@@ -341,11 +350,15 @@ Curriki.ui.login.liveValidation = function() {
                     Curriki.console.log("Warning: missing field.");
                     return;
                 }
+                window.lastField = field;
                 var pElt = field.parent();
                 if (null == res) {
                     pElt.removeClass("okField");
                     pElt.removeClass("waiting");
                     pElt.removeClass("warningField");
+                    if(field.dom && field.dom.name && "postalCode"==field.dom.name) {
+                        Curriki.ui.login.liveValidation.updatePostalCodeResult(null, null, null, null);
+                    }
                 } else if("waiting" == res) {
                     pElt.addClass("waiting");
                 } else if (true == res || "true" == res) {
