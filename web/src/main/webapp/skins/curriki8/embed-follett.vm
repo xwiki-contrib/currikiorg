@@ -2,7 +2,6 @@
  * Embed entry point. It is called from view.vm
  * It displays assets in embed mode. Links stay in the same windows
  *#
-<!-- this embed-follett.vm -->
 #if($doc.getObject("XWiki.XWikiUsers"))
     $response.sendRedirect($doc.getURL())
 #else
@@ -10,6 +9,7 @@
     #template("xwikivars.vm")
     #template("layoutvars.vm")
     #template("htmlheader.vm")
+<!-- this embed-follett.vm -->
     $context.setLinksQueryString("viewer=embed")
     #asset_display($doc "view")
     $context.unsetLinksQueryString()

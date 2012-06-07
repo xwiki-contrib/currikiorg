@@ -137,6 +137,30 @@ public class Validation {
         return false;
     }
 
+    private boolean isDigitsOnly(String s) {
+        for(int i in 0..s.length()) {
+            if(!Character.isDigit(s.charAt(i))) return false;
+        }
+        return true;
+    }
+
+
+    public boolean isValidLocation(String country, String postalCode, String city, String state, String longitude, String latitude, boolean echoErrors) {
+        if(!(country) || country =="---") {
+            if(echoErrors) addError("join.error.requireCountry"); return false;
+        }
+        if(country=="US") {
+            if(!(postalCode) || postalCode.length()>5 || postalCode.length()<2 || !isDigitsOnly(postalCode)) {
+                if(echoErrors) addWarning("join.error.requireZipCode");
+                return false;
+            }
+            if(!city || !state) {
+                if(echoErrors) addWarning("join.error.requireValidZipCode");
+                return false;
+            }
+        }
+        return true;
+    }
 
     private void addWarning(String warning) {
         if(warningFields!=null) warningFields.add(warning);
