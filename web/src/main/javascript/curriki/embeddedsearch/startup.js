@@ -31,9 +31,9 @@ function openResourceUrl(resourceUrl){
 
 function setCurrikiIFrameSrc(){
 	//Please do not change
-	var SEARCH_FRAME_PATH = "advancedSearchFrame.html"
+	var SEARCH_FRAME_PATH = "/xwiki/js/advancedSearchFrame.html"
 	var currikiSearchFrame = document.getElementById("curriki_search_frame");
-	var iFrameSrc = CURRIKI_HOST + "/" + SEARCH_FRAME_PATH + "?embeddingPartnerUrl=" + PARTNER_HOST + "&" + "resourceDisplay=" + RESOURCE_DISPLAYER + "&" + "embedViewMode=" + EMBED_VIEW_MODE;
+	var iFrameSrc = CURRIKI_HOST + SEARCH_FRAME_PATH + "?embeddingPartnerUrl=" + PARTNER_HOST + "&" + "resourceDisplay=" + RESOURCE_DISPLAYER + "&" + "embedViewMode=" + EMBED_VIEW_MODE;
 	currikiSearchFrame.setAttribute("src", iFrameSrc);
 }
 
