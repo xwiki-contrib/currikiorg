@@ -191,16 +191,21 @@ fieldset h3 {
               ##
               #set($f="postalCode")
               #if("US"==$!tool.country)#set($isInUS=true)#else#set($isInUS=false)#end
-              <p class="#if($isInUS)hidden#end #computeTrClasses($f) " id="extraLocationSection"
+              <p class="#if($isInUS)hidden#end #computeTrClasses($f) " id="extraLocationSectionUS"
                   onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
                   <label for="postalCode_input"><b>$msg.get("join.member.postalCode_US")</b></label>
-                  <input type="text" name="postalCode" id="postalCode_input" style="width:5em">
+                  <input type="text" maxlength="5" name="postalCode" id="postalCode_input" style="width:5em">
                   <span id="postalCode_results">&nbsp;</span>
-                  <input type="hidden" name="city" id="city_input" value="$!tool.city">
-                  <input type="hidden" name="state" id="state_input" value="$!tool.state">
-                  <input type="hidden" name="latitude" id="latitude_input" value="$!tool.latitude">
-                  <input type="hidden" name="longitude" id="longitude_input" value="$!tool.longitude">
               </p>
+              #set($f="state")
+              <p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+                  <label for="${f}_input}"><b>$msg.get("join.member.province.title")</b></label>
+                  <input id="${f}_input" name="${f}" value="$!tool.state">
+              </p>
+              <input type="hidden" name="city" id="city_input" value="$!tool.city">
+              <input type="hidden" name="latitude" id="latitude_input" value="$!tool.latitude">
+              <input type="hidden" name="longitude" id="longitude_input" value="$!tool.longitude">
           ##
           ##
           #set($f="memberType")
@@ -266,9 +271,11 @@ fieldset h3 {
             var i = Ext.get("country_input");
             if(i && i.dom.value) {
                 if("US"== i.dom.value) {
-                    Ext.get("extraLocationSection").replaceClass("hidden","visible")
+                    Ext.get("extraLocationSectionUS").replaceClass("hidden","visible")
+                    Ext.get("extraLocationSectionNonUS").replaceClass("visible","hidden")
                 } else {
-                    Ext.get("extraLocationSection").replaceClass("visible","hidden")
+                    Ext.get("extraLocationSectionUS").replaceClass("visible","hidden")
+                    Ext.get("extraLocationSectionNonUS").replaceClass("hidden","visible")
                 }
                 scheduleDialogRescale(window, document, "loginIframe", 500,0);
             }
