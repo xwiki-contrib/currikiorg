@@ -407,7 +407,7 @@ form.init = function(){
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">',
-					'<a target="{this.getLinkTarget(values)}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a target="{[this.getLinkTarget(values)]}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
