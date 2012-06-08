@@ -1248,7 +1248,7 @@ form.init = function(){
 					if(Curriki.module.search.util.isInEmbeddedMode()){
 							return '_blank';
 						}else{
-							return '';
+							return '_self';
 						}
 				}
 			}
