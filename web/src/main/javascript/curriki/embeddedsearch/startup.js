@@ -1,4 +1,4 @@
-typeof currikiResourceProxyWindow;
+// typeof currikiResourceProxyWindow;
 
 function postMessageHandler(event){ // Event having data of the form "eventtype:value"
 	var eventData = event.data;
@@ -10,10 +10,10 @@ function postMessageHandler(event){ // Event having data of the form "eventtype:
 			resizeCurrikiIframe(value);
 		break
 
-		case 'resourceurl':
-			console.log("embedded search: recieved resource url event");
-			openResourceUrl(value);
-		break
+		// case 'resourceurl':
+		// 	console.log("embedded search: recieved resource url event");
+		// 	openResourceUrl(value);
+		// break
 	}
 }
 
@@ -21,13 +21,13 @@ function resizeCurrikiIframe(styleString){
   document.getElementById("curriki_search_frame").setAttribute("style", styleString)
 }
 
-function openResourceUrl(resourceUrl){
-	if(currikiResourceProxyWindow == null || typeof currikiResourceProxyWindow === "undefined" || currikiResourceProxyWindow.closed){
-		currikiResourceProxyWindow = window.open("currikiResourceProxy.html?resourceurl=" + resourceUrl);
-	}else{
-		currikiResourceProxyWindow.location.href = ("currikiResourceProxy.html?resourceurl=" + resourceUrl);
-	}
-}
+// function openResourceUrl(resourceUrl){
+// 	if(currikiResourceProxyWindow == null || typeof currikiResourceProxyWindow === "undefined" || currikiResourceProxyWindow.closed){
+// 		currikiResourceProxyWindow = window.open("currikiResourceProxy.html?resourceurl=" + resourceUrl);
+// 	}else{
+// 		currikiResourceProxyWindow.location.href = ("currikiResourceProxy.html?resourceurl=" + resourceUrl);
+// 	}
+// }
 
 function setCurrikiIFrameSrc(){
 	//Please do not change

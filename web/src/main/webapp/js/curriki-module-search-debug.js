@@ -2982,8 +2982,6 @@ Curriki.numSearches = 0;
 			}
 			stateObject['a'] = panelSettings;
 
-            if(!Curriki.module.search.util.isInEmbeddedMode()){ //History is disabled for embedded search currently
-
 				var provider = new Ext.state.Provider();
 				var encodedToken = provider.encodeValue(stateObject);
 				console.log('Saving History: '+ encodedToken );
@@ -2994,11 +2992,13 @@ Curriki.numSearches = 0;
 	            } else {
 	                window.currikiHistoryStarted = true;
 	                Search.history.setLastToken(encodedToken);
-	                window.top.location.replace(window.location.pathname + "#" + encodedToken);
+	                if(!Curriki.module.search.util.isInEmbeddedMode()){
+	                	window.top.location.replace(window.location.pathname + "#" + encodedToken);
+	                }else{
+	                	location.replace(window.location.pathname + location.search + "#" + encodedToken);
+	                }
 	                console.log("-- rather replaced history.");
 	            }
-	            
-            }
 		};
 
 		Search.tabPanel = {
@@ -3240,9 +3240,10 @@ Search.display = function(){
 
 	if(Curriki.module.search.util.isInEmbeddedMode()){
 		Curriki.module.search.util.sendResizeMessageToEmbeddingWindow(); // Initial resizement of the embedding iframe
-	}else {
-		Search.history.init();
 	}
+
+	Search.history.init();
+	
 };
 
 
