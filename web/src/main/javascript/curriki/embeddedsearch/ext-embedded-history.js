@@ -171,12 +171,9 @@ Ext.History = (function () {
                     return true;
                 }
             }
-            if (Ext.isIE) {
-                return updateIFrame(token);
-            } else {
-                location.hash = token;
-                return true;
-            }
+            updateIFrame(token);
+            location.hash = token;
+            return true;
         },
 
         /**
