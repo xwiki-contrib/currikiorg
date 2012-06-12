@@ -857,7 +857,7 @@ $msg.get("panel.navigation.home")
    #set($width = 72)
    #foreach ($attach in $memberdoc.attachmentList)
 #if($velocityCount == 1)
-     <a href="$memberdoc.getURL()?width=$width"><img class="photo" src="$memberdoc.getAttachmentURL($attach.filename,"download")" width="${width}" alt="$xwiki.getUserName($member, false)"/></a>
+     <a href="$memberdoc.getURL()"><img class="photo" src="$memberdoc.getAttachmentURL($attach.filename,"download")?width=$width" width="${width}" alt="$xwiki.getUserName($member, false)"/></a>
 #end
 #end
 #end
