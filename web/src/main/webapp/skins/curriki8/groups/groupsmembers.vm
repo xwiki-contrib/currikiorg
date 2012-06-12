@@ -15,6 +15,7 @@
 #* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+#* @vtlvariable name="user" type="java.lang.String" *###
 
 
 #**
@@ -884,11 +885,12 @@ $msg.get("groups_members_join_alreadymember")
 #if(($spacePolicy=="open")&&($verInv==false))
  #if($request.confirm=="1")
   #if($sm.joinSpace($spaceName))
-    #set($wantedRoles = $!request.getParameterValues('roles'))
+      #set($wantedRoles = $!request.getParameterValues('roles'))
     #foreach($role in $wantedRoles) ## {
       #addUserToRole($role $context.user)
     #end ## }
-   $msg.get("groups_members_join_success")
+      #set($userdoc=$xwiki.getDocument($user))<!-- Have-joined-with-success $userdoc.saveWithProgrammingRights("Joined group: ${spaceTitle}.", true) -->
+      $msg.get("groups_members_join_success")
   #else
    $msg.get("groups_members_join_failure")
   #end
@@ -909,7 +911,8 @@ $msg.get("groups_members_join_alreadymember")
     #foreach($role in $wantedRoles) ## {
       #addUserToRole($role $context.user)
     #end ## }
-    $msg.get("groups_members_join_success")
+      #set($userdoc=$xwiki.getDocument($user))<!-- Have-joined-with-success $userdoc.saveWithProgrammingRights("Joined group: ${spaceTitle}.", true) -->
+      $msg.get("groups_members_join_success")
    #else
     $msg.get("groups_members_join_failure")
   #end
