@@ -255,7 +255,7 @@ public class SocialLoginToolGroovy {
         lastName = profile.getLastName();
         email = profile.getEmail();
         city = profile.location;
-        state = profile.state;
+        //state = profile.state;
         country  = profile.country;
 
         username = profile.displayName;
@@ -301,7 +301,7 @@ public class SocialLoginToolGroovy {
 
         if(request.getParameter("country")) country= request.getParameter("country");
         if(request.getParameter("city")) city  = request.getParameter("city");
-        if(request.getParameter("state")) city  = request.getParameter("state");
+        if(request.getParameter("state")) state = request.getParameter("state");
         if(request.getParameter("postalCode"))    postalCode = request.getParameter("postalCode");
         if(request.getParameter("longitude"))     longitude = request.getParameter("longitude");
         if(request.getParameter("latitude"))      longitude = request.getParameter("latitude");
@@ -462,6 +462,8 @@ public class SocialLoginToolGroovy {
 
     public void mergeAccountWithProfile(Profile profile, String userName, String provider) {
         Document userDoc = xwiki.getDocument(userName);
+        if(userName.endsWith("XWikiGuest") || userName.startsWith("DeactivatedUsers."))
+            throw new IllegalStateException("Can't merge an inactive user!");
         LOG.warn("Trying to merge profile of user "+userName+" with provider's profile from " + provider);
         createSocialLoginProfileObject(profile, userDoc, provider);
         updateUserDoc(userDoc);

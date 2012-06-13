@@ -194,13 +194,12 @@ fieldset h3 {
               <p class="#if($isInUS)hidden#end #computeTrClasses($f) " id="extraLocationSectionUS"
                   onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
                   <label for="postalCode_input"><b>$msg.get("join.member.postalCode_US")</b></label>
-                  <input type="text" maxlength="5" name="postalCode" id="postalCode_input" style="width:5em">
+                  <input type="text" maxlength="5" name="postalCode" id="postalCode_input" value="$!tool.postalCode" style="width:5em">
                   <span id="postalCode_results">&nbsp;</span>
               </p>
               #set($f="state")
-              <p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS"
-                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
-                  <label for="${f}_input}"><b>$msg.get("join.member.province.title")</b></label>
+              <p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS">
+                  <label for="${f}_input"><b>$msg.get("join.member.province.title")</b></label>
                   <input id="${f}_input" name="${f}" value="$!tool.state">
               </p>
               <input type="hidden" name="city" id="city_input" value="$!tool.city">

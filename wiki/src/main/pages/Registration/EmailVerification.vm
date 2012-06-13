@@ -105,7 +105,7 @@
         <form method="post" action="$xwiki.getURL('Registration.EmailVerification')">
             <input type="hidden" name="sendemail" value="1" />
             <input type="hidden" name="username" value="${username}" />
-            #if($!request.xpage!="")<input type="hidden" name="xpage" value="$request.xpage"/>#end
+            #if("$!request.xpage"!="")<input type="hidden" name="xpage" value="$request.xpage"/>#end
             <p>$msg.get('emailValidation.step1.intro')</p>
             #set($emailInput = '<input type="text" name="email" size=32 value="'+$userEmail+'" />')
             <p>$msg.get('emailValidation.step1.weHave', [$name1, $name2, $emailInput])</p>

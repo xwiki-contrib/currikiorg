@@ -16,6 +16,21 @@
   * These macros are used in the pages of the Wiki MyCurriki space
   *
   *#
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+#* @vtlvariable name="user" type="java.lang.String" *###
+
 
 ##
 ## My Curriki General Macros
@@ -602,16 +617,25 @@ $response.sendRedirect($xwiki.getURL("Main.WebHome"))
 $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 #else ## } {
 ##
-## Logout the user and redirect to Email Verification page
+## Logout the user, send a verification mail, and redirect to Email Verification page
 #set($username = $context.user.replace("XWiki.", ""))
 #set($userDoc = $xwiki.getDocument("XWiki.${username}"))
 #set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
+#set($valCode = $xwiki.generateRandomString(8))
+#set($newEmail = $userObj.getProperty("email").getValue())
+#set($junk = $userObj.set("validkey", $valCode))
 #set($junk = $userObj.set("active", 0))
 #set($junk = $userObj.set("email_undeliverable", 1))
 #set($junk = $userDoc.saveWithProgrammingRights())
+#set($link = "http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')/xwiki/bin/view/Registration/CompleteCaller?xwikiname=${username}&validkey=${valCode}"))
+#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
+#set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
+#set($mailSubject = $doc.getRenderedContent($mailDoc.title))
+#set($mailContent = $doc.getRenderedContent($mailDoc.content))
+$xwiki.mailsender.sendTextMessage($mailFrom, $newEmail, $mailSubject, $mailContent)
 #set($session = $request.getSession(true))
 #set($xredirect = $xwiki.getURL("Registration.EmailVerification", "view", "username=${username}"))
-$response.sendRedirect($xwiki.getURL("XWiki.XWikiLogout", "logout", "xredirect=${xredirect}"))
+$response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xredirect=${xredirect}"))
 #end ## }
 #end
 

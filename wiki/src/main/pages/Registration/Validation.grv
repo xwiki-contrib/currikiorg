@@ -67,7 +67,7 @@ public class Validation {
 
 
         // Check to see if the email address is already used
-        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
         List docs = xwiki.searchDocuments(query);
         if (!docs.isEmpty()) {
             foundAccountName = docs.get(0);
