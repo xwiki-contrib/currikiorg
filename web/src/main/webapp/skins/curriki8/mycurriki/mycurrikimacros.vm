@@ -455,10 +455,65 @@ $!desc
   *#
 #macro(mycurriki_editprofilebox $userdoc $userobj) ##{
 	<!-- Profile Box -->
+    #set($g_RegType = 'edit_profile')
 	#tryprofileupdate()
-	#registrationinit('edit_profile')
-	#startregistrationform()
-	#profilechange_photo()
+        #registrationinit('edit_profile')
+    ## Calculate %complete
+        #set($c = 3) ## login name, password, email address have to exist
+        #set($numberoffield = 20)
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('first_name').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('last_name').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('show_contact').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('show_email').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('opt_out').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('member_type').value)
+        #if("$x" != "" && "$x" != '---' && "$x" != '0')#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('affiliation').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")
+        #set($x = $!userobj.getProperty("topics").getValue())
+        #if("$x" != "" && $x.size() > 1)#set($c = 1 + $c)#end
+        #set($x = "")
+        #set($x = $!userobj.getProperty("educational_level").getValue())
+        #if("$x" != "" && $x.size() > 0)#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('country').value)
+        #if("$x" != "" && "$x" != '---')#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('state').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('city').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($x = "")#set($x = $!userobj.getProperty('language').value)
+        #if("$x" != "")#set($c = 1 + $c)#end
+    ##
+        #set($mt=$!userobj.getProperty('member_type').value)
+        #if($mt=="corporation" || "$!mt"=="")
+            #set($numberoffield=22)
+            #set($x = "")#set($x = $!userobj.getProperty('publish_intent').value)
+            #if("$x" != "")#set($c = 1 + $c)#end
+        ##
+            #set($x = "")#set($x = $!userobj.getProperty('value_add').value)
+            #if("$x" != "")#set($c = 1 + $c)#end
+        #end
+    <div class="button-right"><button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button></div>
+    #profilechange_photo()
+    #startregistrationform()
 	#registrationaccountinfo()
 	#registrationprivacysettings()
 	#registrationinterests()
