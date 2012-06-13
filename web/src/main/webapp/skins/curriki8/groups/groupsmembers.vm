@@ -968,6 +968,7 @@ $msg.groups_adminadded
 #if(!$memberIsAdmin || ($memberIsAdmin && $adminCount>1))
 ## Removing $memberName from $spaceName.
 $sm.removeMember($spaceName,$memberName)
+#set($userdoc=$xwiki.getDocument($context.user))$userdoc.saveWithProgrammingRights("Removed from group.", true)
 $msg.groups_memberremoved
 #else
 $msg.groups_cannotremovemember
