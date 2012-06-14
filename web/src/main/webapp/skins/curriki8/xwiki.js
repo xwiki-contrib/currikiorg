@@ -580,6 +580,7 @@ var CurrikiApp = {
 	},
 
 	initSearchForm: function() {
+        if( !( typeof document.searchform === "undefined" ) ) 
         CurrikiApp.initSearchForm2(document.searchform, document.searchform.brsqry);
     },
     initSearchForm2: function(form, input) {
