@@ -1873,9 +1873,24 @@ Curriki.logView = function(page){
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
 	} else {
-        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
-        window.top.pageTrackerQueue.push(page);
-		console.info('Would track: ', page);
+
+		// Double try catch for CURRIKI-5828
+		// This is needed because we can not define if where 
+		// are coming from an embedded search in a resource proxy.
+		// So we need to try to address not the top frame if thats fails.
+		try{ 
+	        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
+	        window.top.pageTrackerQueue.push(page);
+			console.info('Would track: ', page);
+		}catch(e){
+			try{
+	 			window.pageTrackerQueue = window.pageTrackerQueue || new Array();
+		        window.pageTrackerQueue.push(page);
+				console.info('Would track: ', page);
+			}catch(e){
+
+			}
+		}
 	}
 }
 
