@@ -37,7 +37,7 @@ public class TargetsGroovy {
         String referer = req.getHeader("Referer");
         String refererPath = null;
         try {
-            String hostname = xwiki.xWiki==null ? null : xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
+            String hostname = xwiki.getXWiki()==null ? null : xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url');
             if(referer!=null && referer.startsWith("http://" + hostname))
                 refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
             def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
@@ -71,8 +71,8 @@ public class TargetsGroovy {
             // no redirect outside here
             //System.out.println("aferlogin now is " + afterLogin);
             if(! (afterLogin.startsWith("/xwiki/bin/"))) {
+                System.out.println("Zapped '${afterLogin}' to /.");
                 afterLogin = "/"
-                System.out.println("Zapped it to /.");
             };
             else if(afterLogin.startsWith("/xwiki/bin/view/XWiki/XWikiLogin")) afterLogin = "/";
             // login from home or any page in space Main => go to MyCurriki
@@ -100,8 +100,7 @@ public class TargetsGroovy {
                 if(t==-1) t = refererPath.length();
                 String docName = refererPath.substring(16, s) + "." + refererPath.substring(s+1,t);
                 System.out.println("Checking auth for document " + docName);
-                if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName))
-                    noLogin = refererPath;
+                if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName)) noLogin = refererPath;
             } else {
                 noLogin = refererPath;
             }
