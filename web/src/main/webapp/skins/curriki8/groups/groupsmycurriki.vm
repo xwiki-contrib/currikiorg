@@ -79,13 +79,26 @@
   <div class="frame-inset-logo">
     #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
     #if($withpre)
-    <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-      <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
-    </a>    
+      #if($viewer == "embed-teachhub")
+        <a target="_blank" href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
+          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+        </a>    
+      #else
+        <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
+          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+        </a>    
+     
     #else
-    <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-      <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
-    </a>
+
+        #if($viewer == "embed-teachhub")
+          <a target="_blank" href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
+            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
+          </a>
+        #else
+          <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
+            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
+          </a>
+        #end
     #end
   </div>
 #end
