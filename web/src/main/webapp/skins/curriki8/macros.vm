@@ -1540,7 +1540,11 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #if($userdoc.attachmentList.size()==0)  ## {
     #set($src=$xwiki.getSkinFile("noavatar.png"))##
- <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+ #if($viewer == "embed-teachhub")
+  <a target="_blank" href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+ #else
+  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+ #end
  #if("$!width"=="" && "$!height"=="")##
      <img src="$src"/>
  #elseif("$!width"=="")##
@@ -1554,7 +1558,11 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
      #set($src=$userdoc.getAttachmentURL($attach.filename,"download"))##
-  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  #if($viewer == "embed-teachhub")
+    <a target="_blank" href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  #else
+    <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  #end
       #if("$!width"=="" && "$!height"=="")##
          <img src="$src"/>##
       #elseif("$!width"=="")##
