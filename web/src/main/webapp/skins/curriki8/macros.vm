@@ -934,7 +934,7 @@ $memberdoc.getRenderedContent("$!content")</div>
   		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
   #end
   #set($bcLocal = $bcCurrentDoc.fullName)
-#elseif ("$!s" != "" && !$s.endsWith("WebPreferences") )
+#elseif ("$!s" != "" && !$s.endsWith("WebPreferences") && !$s.startsWith("Coll_Group_CRSCollaboration") )
   ## special breadcrumb parent for groups space
 <!-- s is $s -->
   <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
