@@ -42,9 +42,15 @@
 <!-- #* Hack: HTML comment to fix bug CURRIKI-3568 Do not remove *# --><div id="asset-header">
 <!--<img src="images/collectionmedium.gif">-->
 	#set($assetTitle = $asset.getDisplayTitle(125))
-<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
-	#asset_info_rollover($asset 0)
-</div>
+	#if($viewer == "embed-teachhub")
+		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a target="_blank" href="http://$hostname$asset.getURL("view")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+			#asset_info_rollover($asset 0)
+		</div>
+	#else
+		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+			#asset_info_rollover($asset 0)
+		</div>
+	#end
 #end
 
 
@@ -79,7 +85,11 @@
 	#end
 	<li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
 #end
-	<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+	#if($viewer == "embed-teachhub")
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="http://$hostname$assetAuthorDoc.getURL("view")" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+	#else
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+	#end
 </ul>
 #end
 
@@ -309,7 +319,11 @@ function checkEditOrCopy() {
 	#if($isEmbed)
 		#asset_icontitle($asset)
 		#asset_attribution($asset)
-		<a id="powered-by-curriki">$msg.get("mode.embed.powered_txt")</a>
+		#if($viewer == "embed-teachhub")
+			<a id="powered-by-curriki" href="http://$hostname" target="_blank" >$msg.get("mode.embed.powered_txt")</a>
+		#else
+			<a id="powered-by-curriki" >$msg.get("mode.embed.powered_txt")</a>
+		#end
 	#end
 	#if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
 		#asset_links($asset)
