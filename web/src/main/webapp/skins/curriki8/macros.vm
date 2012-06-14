@@ -927,15 +927,16 @@ $memberdoc.getRenderedContent("$!content")</div>
       #set( $s = "" )
     #end
   #end
-  #if("$!s"=="") #else
+  #if("$!s"!="")<!-- s is $s -->
   		  <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name
   		  #set($docPageName = $grName+".Documentation")
   		  #set($docPage = $xwiki.getDocument( $docPageName ) )
   		  <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
   #end
   #set($bcLocal = $bcCurrentDoc.fullName)
-#elseif ("$!s" != "")
+#elseif ("$!s" != "" && !$s.endsWith("WebPreferences") )
   ## special breadcrumb parent for groups space
+<!-- s is $s -->
   <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
 
   #if($bcCurrentDoc.name == "Contributions" || $bcCurrentDoc.name == "ContributionsSearch")
