@@ -4,6 +4,7 @@
   *    General Macros: skin, panels, title bar, avatar, pagination
   *#
 #* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+#* @vtlvariable name="bcCurrentDoc" type="com.xpn.xwiki.api.Document" *#
 ## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
 ## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
 #* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
@@ -907,12 +908,12 @@ $memberdoc.getRenderedContent("$!content")</div>
 ## prepare group data
 #set($sm = $xwiki.csm)
 #set($spaceName = $bcCurrentDoc.getSpace())
-#set($s = $sm.getSpace($spaceName))
-#if( $s ) #if( $s.isNew() || $s.isDeleted() )
-  #set( $s = "" )
+#set($s = "$!sm.getSpace($spaceName)")
+#if( $s!="") #if( $s.isNew() || $s.isDeleted() )
+  #set( $s = "")
 #end #end
 
-#if("Groups.CreateNewGroup"==$bcDoc.fullName)
+#if("Groups.CreateNewGroup"=="$!bcDoc.fullName")
  ## special breadcrumb parent for groups creation page
  #set($usr = $context.user)
  $xwiki.getUserName($usr,true) &gt;
@@ -1095,11 +1096,11 @@ $memberdoc.getRenderedContent("$!content")</div>
 #if("$!s"=="")
  #set($collType = "")
  #set($category = $bcDoc.getValue("category"))
- #if("collection"==$category)
+ #if("collection"=="$!category")
   #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
   #set($collType = $bcDoc.getValue("type"))
  #end
- #if("$!collType"!="" && $collType != "folder")
+ #if("$!collType"!="" && "$!collType" != "folder")
   ## do nothing because we have a collection or root collection
  #else
   ## handling breadcrumb if it is not a group
@@ -1114,8 +1115,8 @@ $memberdoc.getRenderedContent("$!content")</div>
 
   ## if the parent list has more than 1 then we should
   ## not follow the parent path
-  #if(!$parentList || $parentList.size() < 2)
-   #if($parentList && $parentList.size()>0)
+  #if("$!parentList"!=""|| $parentList.size() < 2)
+   #if("$!parentList"!="" && $parentList.size()>0)
     #foreach($par in $parentList)
      #set($parent = $par)
     #end
@@ -1126,7 +1127,7 @@ $memberdoc.getRenderedContent("$!content")</div>
    #end
   #end
 
-  #if(!$parentList || $parentList.size() == 0)
+  #if("$!parentList"!="" || $parentList.size() == 0)
    #if("$!parent" == "")
     #set($parent = $bcDoc.parent)
    #else
