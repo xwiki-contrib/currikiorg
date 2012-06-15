@@ -1135,7 +1135,7 @@ $memberdoc.getRenderedContent("$!content")</div>
    #end
   #end
 
-  #if($parent && ("$!parent" != "") && $xwiki.checkAccess("$parent","view") && $level < 6) && ($bcLocal.indexOf($parent) == -1))
+  #if($parent && ("$!parent" != "") && $xwiki.checkAccess("$parent","view") && $level < 6 && ($bcLocal.indexOf($parent) == -1))
    #set($bcLocal = "${parent};${bcLocal}")
    #set($level = $level + 1)
    #set($parentDoc = $xwiki.getDocument($parent))
