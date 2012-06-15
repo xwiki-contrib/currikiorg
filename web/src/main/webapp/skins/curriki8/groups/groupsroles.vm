@@ -70,12 +70,10 @@
 #end ## }
 ##
 ##
-#macro(createGroupRole $spaceName $roleName) ## {
+#macro(createGroupRole $spaceName $roleName)## {
 #set($ret_err = false)
 #set($ret_rDoc = false)
-    #set($temp=$roleName)
-    #set ($roleName = $util.null)
-    #setVariable ("$roleName" $temp.trim())#set($roleName="$temp.trim")
+#set($roleName="$roleName.trim()")
 #checkForUniqueRole($spaceName $roleName)
 #checkForValidSizeRole($spaceName $roleName)
 #if(!$ret_isRoleUnique) ## {
@@ -197,7 +195,7 @@ $msg.get("groups_admins_onlyaccessibletoadmins")
 ##
 ## Create, Rename, Delete roles
 ##
-#if($!request.create) ## {
+#if("$!request.create"!="") ## {
   #createGroupRole($spaceName $request.create)
 #elseif($!request.rename && $!request.to) ## } {
   #set($roleDoc = $xwiki.getDocument("${spaceName}.${request.rename}"))
