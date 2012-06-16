@@ -396,15 +396,24 @@ $xwiki.addTooltipJS()
 <div class="asset-display-title">
  <div class="asset-display-title-inner">
     <div class="arrow-icon-wrapper">
-#if($withcollapse)
-      <span id="section${seccounter}collapser" class="collapser" onclick="toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;">
-        <img class="collapser" src="$defaultGif"/>
-      </span>
-#end
-      <a class="icon-mini" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$msg.get("rvw.content.section.icon.${category}")</a>
+		#if($withcollapse)
+		    <span id="section${seccounter}collapser" class="collapser" onclick="toggleSectionVisibility(${seccounter}, showhide${seccounter}); return false;">
+		    	<img class="collapser" src="$defaultGif"/>
+		    </span>
+		#end
+
+		#if($viewer == "embed-teachhub")
+	      	<a class="icon-mini" target="_blank" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$msg.get("rvw.content.section.icon.${category}")</a>
+		#else
+	      	<a class="icon-mini" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$msg.get("rvw.content.section.icon.${category}")</a>
+		#end
     </div>
     <h3>
-        <a href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
+		#if($viewer == "embed-teachhub")
+        	<a target="_blank" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
+		#else
+        	<a href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
+		#end
     </h3>
     #asset_info_rollover($assetDoc $seccounter)
  </div>
