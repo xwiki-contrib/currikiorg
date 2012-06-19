@@ -43,7 +43,7 @@
 <!--<img src="images/collectionmedium.gif">-->
 	#set($assetTitle = $asset.getDisplayTitle(125))
 	#if($viewer == "embed-teachhub")
-		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a target="_blank" href="http://$hostname$asset.getURL("view")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a target="_blank" href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
 			#asset_info_rollover($asset 0)
 		</div>
 	#else
@@ -90,7 +90,7 @@
 	#end
 #end
 	#if($viewer == "embed-teachhub")
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a target="_blank" href="http://$hostname$assetAuthorDoc.getURL("view")" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a target="_blank" href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#else
 		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#end
@@ -324,7 +324,7 @@ function checkEditOrCopy() {
 		#asset_icontitle($asset)
 		#asset_attribution($asset)
 		#if($viewer == "embed-teachhub")
-			<a id="powered-by-curriki" href="http://$hostname" target="_blank" >$msg.get("mode.embed.powered_txt")</a>
+			<a id="powered-by-curriki" href="http://www.curriki.org/" target="_blank" >$msg.get("mode.embed.powered_txt")</a>
 		#else
 			<a id="powered-by-curriki" >$msg.get("mode.embed.powered_txt")</a>
 		#end
