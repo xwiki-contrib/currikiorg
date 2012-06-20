@@ -14,10 +14,13 @@
     #asset_display($doc "view")
     $context.unsetLinksQueryString()
     <script type="text/javascript">
-		var height = document.body.scrollHeight;
-		console.log("embedded resource: sending resource view height to embedding window (" + height + "px)");
-		var data = "resize:height:"+ height + "px;"
-		window.parent.postMessage(data,'*');
+	    Ext.onReady(function(){
+			ResourceProxy.run();
+			var height = document.body.scrollHeight;
+			console.log("embedded resource: sending resource view height to embedding window (" + height + "px)");
+			var data = "resize:height:"+ height + "px;"
+			window.parent.postMessage(data,'*');
+		});
 	</script>
     #template("htmlfooter.vm")
 #end
