@@ -143,7 +143,8 @@ cat $FLAG | $UNCOMPRESS_JS > ../webapp/js/curriki-module-flag-debug.js
 cat $FLAG | $COMPRESS_JS > ../webapp/js/curriki-module-flag.js
 
 RESOURCE_PROXY="\
-	curriki/resourceproxy/global.js
+	curriki/resourceproxy/startup.js \
+	curriki/resourceproxy/global.js \
 	"
 cat $RESOURCE_PROXY | $UNCOMPRESS_JS > ../webapp/js/curriki-module-resourceproxy-debug.js
 cat $RESOURCE_PROXY | $COMPRESS_JS > ../webapp/js/curriki-module-resourceproxy.js

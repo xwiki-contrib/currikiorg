@@ -48,5 +48,5 @@ if(typeof window.attachEvent === "function" || typeof window.attachEvent === "ob
 	console.log("search: cors iframe communication is not possible");
 	document.attachEvent('onmessage',postMessageHandler);
 }else{
-	alert("Frame communication not possible");
+	console.log("Frame communication not possible");
 }
