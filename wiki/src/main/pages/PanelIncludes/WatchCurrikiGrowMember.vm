@@ -1,0 +1,31 @@
+$context.setCacheDuration(1200)
+#set($numResources= $xwiki.curriki.countDocsSolr("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
+#set($numUsers= $xwiki.curriki.countDocsSolr("type:user"))
+#set($numGroups= $xwiki.curriki.countDocsSolr("type:group"))
+<div id="watch-curriki-grow" class="shadow-outer"> ##{
+    <div class="shadow-middle"> ##{
+        <div class="shadow-inner information"> ##{
+            <div class="headerbar">$msg.get("panel.watchgrow.title")</div>
+            <div class="frame-content"> ##{
+                <table class="stats">
+                    <tbody>
+                    <tr>
+                        <td><a href="$xwiki.getURL("Main.Browse")">$msg.get("panel.watchgrow.resources")</a></td>
+                        <td align="right"><a href="$xwiki.getURL("Main.Browse")">$numResources</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="$xwiki.getURL("MyCurriki.Profile")">$msg.get("panel.watchgrow.members")</a></td>
+                        <td align="right"><a href="$xwiki.getURL("MyCurriki.Profile")">$numUsers</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="$xwiki.getURL("Groups.Browse")">$msg.get("panel.watchgrow.groups")</a></td>
+                        <td align="right"><a href="$xwiki.getURL("Groups.Browse")">$numGroups</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div> ##}
+        </div> ##}
+    </div>##}
+</div> ##}
