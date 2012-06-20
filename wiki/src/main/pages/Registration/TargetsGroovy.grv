@@ -49,10 +49,9 @@ public class TargetsGroovy {
                 afterLogin = readSrid(redirectMap, req.srid);
             }
             // care for xredirect in request
-            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/") && !req.xredirect.contains("/xwiki/bin/view/GCheckout/") && !req.xredirect.contains("/login/") && !req.xredirect.contains("logout") ) {
+            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/") && !req.xredirect.contains("/xwiki/bin/view/GCheckout/") && !req.xredirect.contains("/login") && !req.xredirect.contains("/Login") && !req.xredirect.contains("logout") ) {
                 afterLogin = req.xredirect;
             }
-
             // care for srid in session
             else if (session.getAttribute("srid")) {
                 def o = session.getAttribute("srid");
