@@ -71,7 +71,7 @@ Ext.History = (function () {
             if (newtoken !== token) {
                 token = newtoken;
                 handleStateChange(token);
-                top.location.hash = token;
+                location.hash = token;
                 hash = token;
                 doSave();
             } else if (newHash !== hash) {
