@@ -15,7 +15,7 @@
     $context.unsetLinksQueryString()
     <script type="text/javascript">
 	    Ext.onReady(function(){
-			var height = document.body.scrollHeight;
+			var height = document.body.scrollHeight + 100;
 			console.log("embedded resource: sending resource view height to embedding window (" + height + "px)");
 			var data = "resize:height:"+ height + "px;"
 			window.parent.postMessage(data,'*');
