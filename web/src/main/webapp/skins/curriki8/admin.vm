@@ -21,7 +21,7 @@ $context.setLinksQueryString("skin=toucan")
 ##-------------------------------------------------
 ## Determine which editor to use (global or space)
 ##-------------------------------------------------
-#if(("$!editor" == "")
+#if("$!editor" == "")
   #set($editor = $request.getParameter("editor"))
   #if("$!editor" == "")
     #if($doc.fullName == "XWiki.XWikiPreferences")
