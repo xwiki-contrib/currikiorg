@@ -469,12 +469,20 @@ form.init = function(){
 		var row = expander.grid.view.getRow(idx);
 		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.minus.rollover')});
+		
+		if(Curriki.module.search.util.isInEmbeddedMode()){
+			Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+		}
 	});
 
 	form.rowExpander.on('collapse', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
 		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.plus.rollover')});
+
+		if(Curriki.module.search.util.isInEmbeddedMode()){
+			Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+		}
 	});
 
 	form.columnModel = new Ext.grid.ColumnModel([
