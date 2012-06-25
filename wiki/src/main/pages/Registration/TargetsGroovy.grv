@@ -83,6 +83,7 @@ public class TargetsGroovy {
                     afterLogin.startsWith("/xwiki/bin/view/Registration/") ||
                     afterLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
                     afterLogin.startsWith("/xwiki/bin/login") ||
+                    afterLogin.startsWith("/xwiki/bin/logout") ||
                     refererPath=="/") {
                 afterLogin = "/xwiki/bin/view/MyCurriki/";
             }
@@ -239,6 +240,8 @@ public class TargetsGroovy {
             return "false";
         };
     }
+
+    public void log(String s)  { System.out.println("LOG: "+s); }
 }
 
 
