@@ -110,7 +110,7 @@ $text
 #if("$!whofor" == "") ## {
 #if("$!request.user" != "") ## {
     #set ($whofor = $util.null)#setVariable ("$whofor" $request.user)#set($whofor=$request.user)
-    <!-- setting whofor to $request.user ; $whofor is now $whofor -->
+    ##<!-- setting whofor to $request.user ; $whofor is now $whofor -->
 #else ## } {
 #if($doc.space.startsWith("Blog_")) ## {
     #set ($whofor = $util.null)#setVariable ("$whofor" $doc.space.substring(5))#set($whofor=$doc.space.substring(5))
@@ -125,7 +125,14 @@ $text
     #set ($whofor = $util.null)#setVariable ("$whofor" "XWiki.$whofor")#set($whofor="XWiki.$whofor")
 #end ## }
 ## Now know whofor
-#set($userdoc = $xwiki.getDocument($whofor))
+#set($userdoc = $xwiki.getDocument($whofor))##
+#if("XWiki.XWikiGuest"==$whofor || $userdoc.isNew())##
+    #if($request.getHeader("Referer").contains("ogout"))##
+        $response.sendRedirect("/")##
+    #else
+        $response.sendRedirect("/xwiki/bin/view/Registration/DirectLogin")##
+    #end
+#end
 #set($access = "edit")
 #if($doc.name!="EditProfile")#set($access="view")#end
 #if(!$xwiki.hasAccessLevel($access,$context.user,$userdoc.fullName))
@@ -1522,6 +1529,13 @@ $msg.get("deleted")
   #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))##{
     {pre}
     <a class="button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
+      <script type="text/javascript">
+          Ext.onReady(function() {
+              if(location.hash=="#startAdd") {
+                  Curriki.module.addpath.startPath('I', {});
+              }
+          });
+      </script>
     {/pre}
   #end ##}
   <!-- End MyCurriki Contributions Buttons -->

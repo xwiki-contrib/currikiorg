@@ -94,7 +94,7 @@
     request's messages: $!{request.message} -->
                 #set($message="$!{request.session.getAttribute('messagesForNextLoginRequest')}$!{request.message}")
                 #set($userName=$!request.j_username)
-            ###if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))#end
+                #if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))$request.session.removeAttribute("lastUserName")#end
                 #if($message)
                     $request.session.removeAttribute("messagesForNextLoginRequest")
                 #end

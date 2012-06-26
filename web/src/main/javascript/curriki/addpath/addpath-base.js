@@ -101,6 +101,9 @@ Curriki.module.addpath.init = function(){
 								click:{
 									 fn: function(){
 											this.close();
+                                            if(Curriki.current.cameFrom.endsWith("#startAdd")) {
+                                                Curriki.current.cameFrom = Curriki.current.cameFrom.substring(0, Curriki.current.cameFrom.length-"#startAdd".length);
+                                            }
 											window.location.href = Curriki.current.cameFrom;
 										}
 									,scope:this
