@@ -487,11 +487,6 @@ function toggleCorporateFieldsVisible() {
 #set($pfx = $g_RegType+'.account_info')
 <fieldset class="required">
 	<h3>$msg.get("${pfx}.header")</h3>
-    #if($g_RegType == 'edit_profile')
-    <div class="button-right">## TODO: another button on the optional one?
-        <button class="button-orange" type="submit">$msg.get('edit_profile.save_info_button')</button>
-    </div>
-    #end
     <div class="fields-wrp">
 		<p>$msg.get("${pfx}.intro")
                   $msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
@@ -510,6 +505,11 @@ function toggleCorporateFieldsVisible() {
         <p id="memberTypeNotice">&nbsp;</p>
         <p style="margin-bottom: 0; color: #777; font-weight: 100;">$msg.get("edit_profile.account_info.remove.member")</p>
 	</div>
+    #if($g_RegType == 'edit_profile')
+        <div class="button-right" style="margin-top:1em; margin-bottom:0">## TODO: another button on the optional one?
+            <button class="button-orange" type="submit">$msg.get('edit_profile.save_info_button')</button>
+        </div>
+    #end
 </fieldset>
 #end ##}
 
@@ -725,7 +725,6 @@ document.observe('dom:loaded', function(){
 <form id="photo-upload" name="photo-upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return validatePhotoForm();">
     <fieldset class="required" style="clear:right;">
 	<h3>$msg.get('edit_profile.change_photo.header')</h3>
-    <div class="button-right"><button class="button-orange" type="submit">$msg.get('edit_profile.save_photo_button')</button></div>
     <div class="fields-wrp">
 		<ul>
 			<li id='block-avatar'>
@@ -733,7 +732,8 @@ document.observe('dom:loaded', function(){
 				<p class="instructions">$msg.get("edit_profile.change_photo.choose_file.description")</p>
 				<input id="xwikiuploadname" type="hidden" name="filename" value="" />
 				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40"/>
-			</li>
+                &nbsp;&nbsp;
+                <button class="button-orange" type="submit">$msg.get('edit_profile.save_photo_button')</button></li>
 		</ul>
 	</div>
 </fieldset>
