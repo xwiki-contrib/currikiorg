@@ -138,7 +138,9 @@ public class TargetsGroovy {
         if(from.startsWith("/xwiki/bin/view/Registration/Jump")) {
             def m=Pattern.compile(".*redir=([^?&]*)\\&?.*").matcher(from);
             if(m.matches()) {
-                return URLDecoder.decode(m.group(1));
+                String t= m.group(1);
+                t = t.replace("xpage=popup","");
+                return URLDecoder.decode(t);
             }
         }
         return from;

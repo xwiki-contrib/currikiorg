@@ -506,7 +506,7 @@ function toggleCorporateFieldsVisible() {
         <p style="margin-bottom: 0; color: #777; font-weight: 100;">$msg.get("edit_profile.account_info.remove.member")</p>
 	</div>
     #if($g_RegType == 'edit_profile')
-        <div class="button-right" style="margin-top:1em; margin-bottom:0">## TODO: another button on the optional one?
+        <div class="button-right" style="margin-top:1em; margin-bottom:0; padding-right:1em">
             <button class="button-orange" type="submit">$msg.get('edit_profile.save_info_button')</button>
         </div>
     #end
@@ -731,7 +731,7 @@ document.observe('dom:loaded', function(){
 				<span><label for="xwikiuploadfile">$msg.get("edit_profile.change_photo.choose_file.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("edit_profile.change_photo.choose_file.tooltip")"/></span>
 				<p class="instructions">$msg.get("edit_profile.change_photo.choose_file.description")</p>
 				<input id="xwikiuploadname" type="hidden" name="filename" value="" />
-				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40"/>
+				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40" style="width:400px"/>
                 &nbsp;&nbsp;
                 <button class="button-orange" type="submit">$msg.get('edit_profile.save_photo_button')</button></li>
 		</ul>
