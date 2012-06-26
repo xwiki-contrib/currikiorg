@@ -1537,6 +1537,8 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author plibbrecht@curriki.org
   *#
 #macro(curriki_avatar_width_height $userdoc $width $height)
+#set($reqHeight=$!height+$!height)
+#set($reqWidth=$!width+$!width)
 #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #if($userdoc.attachmentList.size()==0)  ## {
     #set($src=$xwiki.getSkinFile("noavatar.png"))##
@@ -1548,11 +1550,11 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
  #if("$!width"=="" && "$!height"=="")##
      <img src="$src"/>
  #elseif("$!width"=="")##
-     <img src="$src?height=$height" height="$height"/>
+     <img src="$src?height=$reqHeight" height="$height"/>
  #elseif("$!height"=="")##
-     <img src="$src?width=$width" width="$width"/>
+     <img src="$src?width=$reqWidth" width="$width"/>
  #else##
-     <img src="$src?width=$width&height=$height&keepAspectRatio=true"/>
+     <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true"/>
  #end##
  </a>
 #else ## } {
@@ -1566,11 +1568,11 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
       #if("$!width"=="" && "$!height"=="")##
          <img src="$src"/>##
       #elseif("$!width"=="")##
-         <img src="$src?height=$height" height="$height"/>##
+         <img src="$src?height=$reqHeight" height="$height"/>##
       #elseif("$!height"=="")##
-          <img src="$src?width=$width" width="$width"/>##
+          <img src="$src?width=$reqWidth" width="$width"/>##
       #else##
-          <img src="$src?width=$width&height=$height&keepAspectRatio=true"/>
+          <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true"/>
       #end##
   </a>
  #end ## }
@@ -1584,7 +1586,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author dward@curriki.org
   *#
 #macro(curriki_avatar $userdoc) ## {
-#curriki_avatar_width($userdoc "48")
+#curriki_avatar_width($userdoc 48)
 #end ## macro ## }
 
 #**
