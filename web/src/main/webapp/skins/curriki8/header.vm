@@ -22,23 +22,21 @@
   </a>
 </div> ##}
 
-<!-- member area isguest: $isguest, isActiveUser: $isActiveUser
- ->
+<!-- member area isguest: $isguest, isActiveUser: $isActiveUser -->
 <div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
-#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
+#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/') && $isActiveUser)
 ##{
-    #if($isActiveUser)
-	#if ($request.xredirect) ##{
-        #set($logredir = $request.xredirect)
-    #elseif($doc.space == "Registration") ##}{
-        #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-    #elseif($doc.fullName == "Main.WebHome") ##}{
-        #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-    #elseif($doc.fullName == "Main.JoinCurriki") ##}{
-        #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-    #elseif($logredir.contains("/login")) ##}{
-        #set($logredir = "")
-    #end ##}
+        #if ($request.xredirect) ##{
+            #set($logredir = $request.xredirect)
+        #elseif($doc.space == "Registration") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($doc.fullName == "Main.WebHome") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($doc.fullName == "Main.JoinCurriki") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($logredir.contains("/login")) ##}{
+            #set($logredir = "")
+        #end ##}
         #if("$!logredir"!="") ##{
             #set($logredir = "xredirect=$logredir")
         #elseif($request.srid) ##}{
@@ -68,7 +66,6 @@
                     <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="36"
                          style="vertical-align: bottom; margin-left: 1em; margn-right:1em;" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
             #end</p>
-    #end
     #end
 #else ## }{ ## is logged in
     #if($isActiveUser)
