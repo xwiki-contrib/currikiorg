@@ -22,67 +22,72 @@
   </a>
 </div> ##}
 
-<!-- member area -->
+<!-- member area isguest: $isguest, isActiveUser: $isActiveUser
+ ->
 <div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
 #if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
 ##{
+    #if($isActiveUser)
 	#if ($request.xredirect) ##{
-		#set($logredir = $request.xredirect)
-	#elseif($doc.space == "Registration") ##}{
-		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-	#elseif($doc.fullName == "Main.WebHome") ##}{
-		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-	#elseif($doc.fullName == "Main.JoinCurriki") ##}{
-		#set($logredir = $xwiki.getURL("MyCurriki.Profile"))
-	#elseif($logredir.contains("/login")) ##}{
-		#set($logredir = "")
-	#end ##}
-	#if("$!logredir"!="") ##{
-		#set($logredir = "xredirect=$logredir")
-	#elseif($request.srid) ##}{
-		#set($logredir = "srid=$request.srid")
-	#end ##}
-    #set($escapedURL=$escapetool.url($request.getRequestURI()))##
-    #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
-    #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
-    <p style="margin-top: 0.7em; width:100%; text-align:left; font-size:130%; font-weight: bolder;">##
-    <a $anchorAtts style="color: #FF5500; ">$msg.get('join.header.title.1') $msg.get("join.header.title.2")</a></p>
+        #set($logredir = $request.xredirect)
+    #elseif($doc.space == "Registration") ##}{
+        #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+    #elseif($doc.fullName == "Main.WebHome") ##}{
+        #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+    #elseif($doc.fullName == "Main.JoinCurriki") ##}{
+        #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+    #elseif($logredir.contains("/login")) ##}{
+        #set($logredir = "")
+    #end ##}
+        #if("$!logredir"!="") ##{
+            #set($logredir = "xredirect=$logredir")
+        #elseif($request.srid) ##}{
+            #set($logredir = "srid=$request.srid")
+        #end ##}
+        #set($escapedURL=$escapetool.url($request.getRequestURI()))##
+        #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
+        #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+        <p style="margin-top: 0.7em; width:100%; text-align:left; font-size:130%; font-weight: bolder;">##
+            <a $anchorAtts style="color: #FF5500; ">$msg.get('join.header.title.1') $msg.get("join.header.title.2")</a></p>
     ## join.header.title.1 = Login,
     ## join.header.title.2=Join Curriki,
-    #if($!request.getHeader("User-Agent").contains("MSIE 7"))
-        &nbsp;
+        #if($!request.getHeader("User-Agent").contains("MSIE 7"))
+            &nbsp;
+        #end
+        <p style="margin-top:-18pt; margin-bottom: 0; width:100%; text-align:right;">
+            <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
+        ## join.header.title.3=orSign-in using
+            $msg.get('join.header.title.3')##
+            #foreach($provider in ["Facebook","Google"])
+                <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
+                #set($xredirect="${request.getRequestURI()}")##
+                <!-- xredirect is $xredirect -->
+                #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
+                <a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
+                   onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
+                    <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="36"
+                         style="vertical-align: bottom; margin-left: 1em; margn-right:1em;" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
+            #end</p>
     #end
-    <p style="margin-top:-18pt; margin-bottom: 0; width:100%; text-align:right;">
-    <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
-    ## join.header.title.3=orSign-in using
-    $msg.get('join.header.title.3')##
-    #foreach($provider in ["Facebook","Google"])
-      <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
-        #set($xredirect="${request.getRequestURI()}")##
-    <!-- xredirect is $xredirect -->
-        #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
-      <a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
-              onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
-      <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="36"
-           style="vertical-align: bottom; margin-left: 1em; margn-right:1em;" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
-      #end</p>
     #end
 #else ## }{ ## is logged in
-	## crtUserDoc is set in fudocs.vm
-	#set($fname = $crtUserDoc.display("first_name","view"))
-	<span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
-	#if($hasGlobalAdmin)
-	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
-	#end
-    #if("MyCurriki"=="$doc.space")
-     #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
-    #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
-        #set($logredir = $request.getRequestURI())
-    #else
-        #set($logredir = $xwiki.getURL("Main.WebHome"))
+    #if($isActiveUser)
+	    ## crtUserDoc is set in fudocs.vm
+        #set($fname = $crtUserDoc.display("first_name","view"))
+        <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+        #if($hasGlobalAdmin)
+            <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
+        #end
+        #if("MyCurriki"=="$doc.space")
+            #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
+        #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
+            #set($logredir = $request.getRequestURI())
+        #else
+            #set($logredir = $xwiki.getURL("Main.WebHome"))
+        #end
+        #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
+        <a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
     #end
-	#set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
-	<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 #set($headerMsg="$!request.session.getAttribute('header.message')")##
 #if("$!headerMsg"!="")

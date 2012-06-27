@@ -10,6 +10,7 @@
 $xwiki.includeTopic('Admin.Configuration', false)
 ## Rights vars
 #set($isGuest = $context.getUser().equals("XWiki.XWikiGuest"))
+#set($isActiveUser=$xwiki.getXWiki().checkActive($context.getContext())==1)
 #set($hasEdit = $xwiki.hasAccessLevel("edit"))
 #set($hasAdmin = $xwiki.hasAccessLevel("admin"))
 #set($hasGlobalAdmin = $xwiki.hasAccessLevel("admin", $context.user, "XWiki.XWikiPreferences"))
