@@ -22,9 +22,9 @@
   </a>
 </div> ##}
 
-<!-- member area isguest: $isguest, isActiveUser: $isActiveUser -->
+<!-- member area -->
 <div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
-#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/') && $isActiveUser)
+#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
 ##{
         #if ($request.xredirect) ##{
             #set($logredir = $request.xredirect)
@@ -68,23 +68,21 @@
             #end</p>
     #end
 #else ## }{ ## is logged in
-    #if($isActiveUser)
-	    ## crtUserDoc is set in fudocs.vm
-        #set($fname = $crtUserDoc.display("first_name","view"))
-        <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
-        #if($hasGlobalAdmin)
-            <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
-        #end
-        #if("MyCurriki"=="$doc.space")
-            #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
-        #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
-            #set($logredir = $request.getRequestURI())
-        #else
-            #set($logredir = $xwiki.getURL("Main.WebHome"))
-        #end
-        #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
-        <a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
+    ## crtUserDoc is set in fudocs.vm
+    #set($fname = $crtUserDoc.display("first_name","view"))
+    <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+    #if($hasGlobalAdmin)
+        <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
     #end
+    #if("MyCurriki"=="$doc.space")
+        #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
+    #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
+        #set($logredir = $request.getRequestURI())
+    #else
+        #set($logredir = $xwiki.getURL("Main.WebHome"))
+    #end
+    #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
+    <a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
 #end ##}
 #set($headerMsg="$!request.session.getAttribute('header.message')")##
 #if("$!headerMsg"!="")
