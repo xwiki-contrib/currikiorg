@@ -142,7 +142,7 @@ public class register {
      return null;
    }
 
-   def userdoc = new Document(xwiki.xWiki.getDocument("XWiki.${account}", context.context), context.context);
+   def userdoc = new Document(xwiki.getXWiki().getDocument("XWiki.${account}", context.context), context.context);
    userdoc.addObjectFromRequest("XWiki.XWikiUsers");
    def userobj = userdoc.getObject("XWiki.XWikiUsers");
 
@@ -154,7 +154,7 @@ public class register {
    if (withValidation) {
      userobj.set("active", "0");
      userobj.set("email_undeliverable", "1");
-     validkey = xwiki.xWiki.generateValidationKey(16);
+     validkey = xwiki.getXWiki().generateValidationKey(16);
      userobj.set("validkey", validkey);
      if (request.xredirect!=null)
       userobj.set("validredirect", request.xredirect);
@@ -185,7 +185,7 @@ public class register {
  }
 
  public boolean createAccount(request, generatePassword, withValidation) {
-   log.warn("xwiki is " + xwiki + " and xwiki.xWiki is " + xwiki.xWiki);
+   log.warn("xwiki is " + xwiki + " and xwiki.xWiki is " + xwiki.getXWiki());
    def userdoc = getUserDocument(request, generatePassword, withValidation);
 
    if (userdoc==null){
@@ -194,10 +194,10 @@ public class register {
 
    if (userdoc.validate()) {
      //userdoc.saveWithProgrammingRights();
-     xwiki.xWiki.saveDocument(userdoc.getDoc(), "", context.getContext());
+     xwiki.getXWiki().saveDocument(userdoc.getDoc(), "", context.getContext());
      // CURRIKI-738 - removed - xwiki.addToAllGroup(request.xwikiname);
      if (withValidation) {
-       xwiki.xWiki.sendValidationEmail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), validkey, "validation_email_content", context.getContext());
+       xwiki.getXWiki().sendValidationEmail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), validkey, "validation_email_content", context.getContext());
      } else {
        xwiki.sendConfirmationMail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), "confirmation_email_content");
      }
