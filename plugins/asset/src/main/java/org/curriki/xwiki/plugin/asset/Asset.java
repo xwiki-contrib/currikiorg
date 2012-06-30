@@ -517,6 +517,8 @@ public class Asset extends CurrikiDocument {
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
 
+        // Always let the group admin edit
+
         if (rights.equals(Constants.ASSET_CLASS_RIGHT_PUBLIC)) {
             // Viewable by all and any member can edit
             rightObj = assetDoc.newObject(Constants.RIGHTS_CLASS, context);
