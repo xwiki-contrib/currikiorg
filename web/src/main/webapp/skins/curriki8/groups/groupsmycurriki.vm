@@ -81,23 +81,21 @@
     #if($withpre)
       #if($viewer == "embed-teachhub")
         <a target="_blank" href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" width="120" />
         </a>    
       #else
         <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
+          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" width="120"/>
         </a>  
       #end  
-     
     #else
-
         #if($viewer == "embed-teachhub")
           <a target="_blank" href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
+            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" width="120"/>
           </a>
         #else
           <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
+            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" width="120"/>
           </a>
         #end
     #end
