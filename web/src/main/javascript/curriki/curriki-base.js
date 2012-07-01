@@ -105,7 +105,8 @@ Curriki.showLoading = function(msg, multi){
 Curriki.isISO8601DateParsing = function() {
     if(typeof(Curriki.ISO8601DateParsing)!="undefined") return Curriki.ISO8601DateParsing;
     var s = navigator.userAgent;
-    Curriki.ISO8601DateParsing = s.indexOf("iOS 5")!=-1 && ( s.indexOf("iPhone")!=-1 || s.indexOf("iPod")!=-1 || s.indexOf("iPad")!=-1);
+    Curriki.ISO8601DateParsing = s.indexOf("OS 5")!=-1 && ( s.indexOf("iPhone")!=-1 || s.indexOf("iPod")!=-1 || s.indexOf("iPad")!=-1);
+    console.log("Set ISO8601 parsing to " + Curriki.ISO8601DateParsing);
     return Curriki.ISO8601DateParsing;
 }
 
