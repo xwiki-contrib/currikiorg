@@ -269,7 +269,7 @@ Curriki.ui.login.liveValidation = function() {
             console.log("launching check field request " + field + " of name " + field.dom.name);
             if(field.dom && field.dom.name && field.dom.name=="postalCode") {
                 r = Ext.Ajax.request({
-                    url: "/solr/locations"
+                    url: "/locations"
                     ,method:'GET'
                     ,headers: { 'Accept':'application/json' ,'Content-type':'application/json' }
                     ,params: { 'q':"postalCode:" + field.dom.value,
