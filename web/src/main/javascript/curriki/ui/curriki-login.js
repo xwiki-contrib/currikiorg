@@ -275,7 +275,7 @@ Curriki.ui.login.liveValidation = function() {
                     ,params: { 'q':"postalCode:" + field.dom.value,
                         "fl": "cityName,stateCode,long,lati", rows:1}
                     ,scope:this
-                    ,success:function(response, options){
+                    ,success:function(respoxmlnse, options){
                         var json = response.responseText;
                         var results = json.evalJSON(true);
                         if(console) console.log("Results: ",results);
