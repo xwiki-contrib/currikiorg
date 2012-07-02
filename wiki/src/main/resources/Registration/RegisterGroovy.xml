@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xwikidoc>
 <web>Registration</web>
 <name>RegisterGroovy</name>
@@ -8,20 +7,21 @@
 <translation>0</translation>
 <parent>Main.WebHome</parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1193332613000</creationDate>
-<date>1225389898000</date>
-<contentUpdateDate>1225389898000</contentUpdateDate>
-<version>13.1</version>
+<date>1341064423000</date>
+<contentUpdateDate>1341064423000</contentUpdateDate>
+<version>37.1</version>
 <title>Groovy Script for Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -34,6 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
+<disabled>0</disabled>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
@@ -51,23 +52,23 @@
 <name>Registration.RegisterGroovy</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
+<guid>629c2d0c-c4ab-4b6f-af92-7ca5472dd545</guid>
 <property>
 <tags/>
 </property>
 </object>
-<content>/* Groovy Class [View Code&gt;$doc.fullName?viewer=code]  
-#** 
+<content>/** Groovy Class [View Code&gt;$doc.fullName?viewer=code]
+#*
    * Register Groovy Page
    * @programming
    * @type groovy
-   *#
 */
 
 import com.xpn.xwiki.api.Document;
 
 public class register {
- def msgmap = [ "email_notvalid": "This email is not valid", 
-"account_already_exists": "This account already exists", "empty_password": "You have not entered a password", "unmatched_password" : "The passwords are not matching", "account_notvalid" : "This community name is invalid. Please enter a name without spaces or special characters.", "validation_failed" : "Some fields are incorrectly completed"];
+ def msgmap = [ "email_notvalid": "This email is not valid",
+"account_already_exists": "This account already exists", "email_already_exists": "This email address is already used", "empty_password": "You have not entered a password", "unmatched_password" : "The passwords are not matching", "account_notvalid" : "This community name is invalid. Please enter a name without spaces or special characters.", "validation_failed" : "Some fields are incorrectly completed"];
 
  def xmsgmap;
  def xwiki;
@@ -79,12 +80,14 @@ public class register {
  def email = "";
  def password = "";
  def validkey = "";
+ def userdoc = null;
+ def log = org.apache.commons.logging.LogFactory.getLog("groovyPages.Registration.RegisterGroovy");
 
  public void setObjects(xwiki, context, msg) {
    setXWiki(xwiki)
    setContext(context)
    setMessageMap(msg)
- } 
+ }
 
  public void setMessageMap(msg) {
    xmsgmap = msg;
@@ -108,7 +111,7 @@ public class register {
      return msg3
    }
    else
-    return msg2 
+    return msg2
  }
 
  public String getMessage() {
@@ -127,12 +130,12 @@ public class register {
     message = "empty_password";
     return false;
    }
-   
+
    if ((password2==null)||(!password.equals(password2))) {
     message =  "unmatched_password";
     return false;
    }
-   
+
    return true;
  }
 
@@ -156,6 +159,14 @@ public class register {
    def email = request.get("XWiki.XWikiUsers_0_email");
    def atIndex = email.indexOf("@");
 
+   def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+
+   // Check to see if the email address is already used
+   if (xwiki.searchDocuments(query).size() &gt; 0) {
+     message = "email_already_exists";
+     return false;
+   }
+
    // We should make this a bit better...
    if ((atIndex &lt; 1) || (email.lastIndexOf(".") &lt;= (atIndex+1)) || (email.length() &lt;= (email.lastIndexOf(".") + 1)) || (email.lastIndexOf("@") != atIndex) || !email.matches("[a-zA-Z0-9_+=\\.-]+@([a-zA-Z0-9-]+[\\.])+([a-zA-Z]){2,4}")) {
      message = "email_notvalid";
@@ -163,6 +174,14 @@ public class register {
    }
    return true;
  }
+
+/*  public void log(String s) {
+  org.apache.commons.logging.LogFactory.getLog("groovy.Registration.RegisterGrooy").warn(s);
+  } */
+
+  public Document getUserdoc() {
+    return this.userdoc;
+  }
 
  public Document getUserDocument(request, generatePassword, withValidation) {
    def account = request.get("xwikiname");
@@ -181,20 +200,20 @@ public class register {
    if (!isValidEmail(request)){
      return null;
    }
-   
-   def userdoc = new Document(xwiki.xWiki.getDocument("XWiki.${account}", context.context), context.context);
+
+   def userdoc = new Document(xwiki.getXWiki().getDocument("XWiki.${account}", context.context), context.context);
    userdoc.addObjectFromRequest("XWiki.XWikiUsers");
    def userobj = userdoc.getObject("XWiki.XWikiUsers");
 
    if (generatePassword) {
      password = org.apache.commons.lang.RandomStringUtils.randomAlphanumeric(8);
      userobj.set("password", password);
-   }  
+   }
 
    if (withValidation) {
      userobj.set("active", "0");
      userobj.set("email_undeliverable", "1");
-     validkey = xwiki.xWiki.generateValidationKey(16);
+     validkey = xwiki.getXWiki().generateValidationKey(16);
      userobj.set("validkey", validkey);
      if (request.xredirect!=null)
       userobj.set("validredirect", request.xredirect);
@@ -225,6 +244,7 @@ public class register {
  }
 
  public boolean createAccount(request, generatePassword, withValidation) {
+   log.warn("xwiki is " + xwiki + " and xwiki.xWiki is " + xwiki.getXWiki());
    def userdoc = getUserDocument(request, generatePassword, withValidation);
 
    if (userdoc==null){
@@ -233,15 +253,16 @@ public class register {
 
    if (userdoc.validate()) {
      //userdoc.saveWithProgrammingRights();
-     xwiki.xWiki.saveDocument(userdoc.getDoc(), "", context.getContext());
-     xwiki.addToAllGroup(request.xwikiname);
+     xwiki.getXWiki().saveDocument(userdoc.getDoc(), "", context.getContext());
+     // CURRIKI-738 - removed - xwiki.addToAllGroup(request.xwikiname);
      if (withValidation) {
-       xwiki.xWiki.sendValidationEmail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), validkey, "validation_email_content", context.getContext());
+       xwiki.getXWiki().sendValidationEmail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), validkey, "validation_email_content", context.getContext());
      } else {
        xwiki.sendConfirmationMail(userdoc.name, password, request.get("XWiki.XWikiUsers_0_email"), "confirmation_email_content");
      }
 
-     return true; 
+     this.userdoc = userdoc;
+     return true;
     }
 
     message = "validation_failed";
@@ -260,5 +281,4 @@ public class register {
   }
  }
 }
-/* *# */</content>
-</xwikidoc>
+/* *# */</content></xwikidoc>

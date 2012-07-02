@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xwikidoc>
 <web>PanelIncludes</web>
 <name>WatchCurrikiGrowMember</name>
@@ -8,20 +7,21 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1233683247000</creationDate>
-<date>1233683247000</date>
-<contentUpdateDate>1233683247000</contentUpdateDate>
-<version>1.1</version>
+<date>1336597858000</date>
+<contentUpdateDate>1336597858000</contentUpdateDate>
+<version>4.1</version>
 <title>Watch Curriki Grow</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>New page to be able to cache Watch Curriki Grow</comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -34,6 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
+<disabled>0</disabled>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
@@ -51,47 +52,39 @@
 <name>PanelIncludes.WatchCurrikiGrowMember</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
+<guid>cb3650c8-f26b-4219-a651-259d2a661c9a</guid>
 <property>
 <tags/>
 </property>
 </object>
 <content>$context.setCacheDuration(1200)
+#set($numResources= $xwiki.curriki.countDocsSolr("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
+#set($numUsers= $xwiki.curriki.countDocsSolr("type:user"))
+#set($numGroups= $xwiki.curriki.countDocsSolr("type:group"))
 &lt;div id="watch-curriki-grow" class="shadow-outer"&gt; ##{
-  &lt;div class="shadow-middle"&gt; ##{
-    &lt;div class="shadow-inner information"&gt; ##{
-      &lt;div class="headerbar"&gt;$msg.get("panel.watchgrow.title")&lt;/div&gt;
-         &lt;div class="frame-content"&gt; ##{
-   	   	&lt;table class="stats"&gt;
-   	   	 &lt;tbody&gt;
-   	   	  &lt;tr&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("Main.Browse")"&gt;$msg.get("panel.watchgrow.resources")&lt;/a&gt;&lt;/td&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("Main.Browse")"&gt;
-#set($lucene = $xwiki.getPlugin("lucene"))
-#if(!$lucene)
- #error("Error loading Lucene search")
-#end
-#set($luceneQuery = "(CurrikiCode.AssetClass.fw_items:FW_masterFramework.WebHome) AND NOT name:WebHome AND NOT name:WebPreferences AND NOT name:MyCollections AND NOT name:SpaceIndex AND NOT web:AssetTemp")
-#set($wikinames = "xwiki")
-#set($langs = "default,en,de")
-#set($searchresults = $lucene.getSearchResults($luceneQuery, $wikinames, $langs, $xwiki))
-$searchresults.totalHitcount
-&lt;/a&gt;&lt;/td&gt;
-   	   	  &lt;/tr&gt;
-   	   	  &lt;tr&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("MyCurriki.Profile")"&gt;$msg.get("panel.watchgrow.members")&lt;/a&gt;&lt;/td&gt;
-                   &lt;td&gt;&lt;a href="$xwiki.getURL("MyCurriki.Profile")"&gt;$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.XWikiUsers'").get(0)&lt;/a&gt;   	                        
-                   &lt;/td&gt;
-   	   	  &lt;/tr&gt;
-   	   	  &lt;tr&gt;
-   	   	   &lt;td&gt;&lt;a href="$xwiki.getURL("Groups.Browse")"&gt;$msg.get("panel.watchgrow.groups")&lt;/a&gt;&lt;/td&gt;
-   	   	   &lt;td&gt; 
-                     &lt;a href="$xwiki.getURL("Groups.Browse")"&gt;$xwiki.search("select count(*) from BaseObject obj where obj.className = 'XWiki.CurrikiSpaceClass'").get(0)&lt;/a&gt;
-                   &lt;/td&gt;
-   	   	  &lt;/tr&gt;
-   	   	 &lt;/tbody&gt;
-   	   	&lt;/table&gt;
-      &lt;/div&gt; ##}
-    &lt;/div&gt; ##}
-  &lt;/div&gt;##}
-&lt;/div&gt; ##}</content>
-</xwikidoc>
+    &lt;div class="shadow-middle"&gt; ##{
+        &lt;div class="shadow-inner information"&gt; ##{
+            &lt;div class="headerbar"&gt;$msg.get("panel.watchgrow.title")&lt;/div&gt;
+            &lt;div class="frame-content"&gt; ##{
+                &lt;table class="stats"&gt;
+                    &lt;tbody&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;a href="$xwiki.getURL("Main.Browse")"&gt;$msg.get("panel.watchgrow.resources")&lt;/a&gt;&lt;/td&gt;
+                        &lt;td align="right"&gt;&lt;a href="$xwiki.getURL("Main.Browse")"&gt;$numResources&lt;/a&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;a href="$xwiki.getURL("MyCurriki.Profile")"&gt;$msg.get("panel.watchgrow.members")&lt;/a&gt;&lt;/td&gt;
+                        &lt;td align="right"&gt;&lt;a href="$xwiki.getURL("MyCurriki.Profile")"&gt;$numUsers&lt;/a&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;a href="$xwiki.getURL("Groups.Browse")"&gt;$msg.get("panel.watchgrow.groups")&lt;/a&gt;&lt;/td&gt;
+                        &lt;td align="right"&gt;&lt;a href="$xwiki.getURL("Groups.Browse")"&gt;$numGroups&lt;/a&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt; ##}
+        &lt;/div&gt; ##}
+    &lt;/div&gt;##}
+&lt;/div&gt; ##}</content></xwikidoc>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xwikidoc>
 <web>Registration</web>
 <name>EmailNotReceivedSent</name>
@@ -8,20 +7,21 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1204745111000</creationDate>
-<date>1205336398000</date>
-<contentUpdateDate>1205336398000</contentUpdateDate>
-<version>3.1</version>
+<date>1319148602000</date>
+<contentUpdateDate>1319148602000</contentUpdateDate>
+<version>6.1</version>
 <title>Email Not Received Message Sent</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Add div</comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -34,6 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
+<disabled>0</disabled>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
@@ -51,13 +52,18 @@
 <name>Registration.EmailNotReceivedSent</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
+<guid></guid>
 <property>
 <tags/>
 </property>
 </object>
-<content>1 $msg.get('email_not_received_sent.title')
+<content>&lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em; width:90%}&lt;/style&gt;
+#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))#end##
+1 $msg.get('email_not_received_sent.title')
 
-&lt;div id="email-not-received-sent"&gt;
+&lt;div id="email-not-received-sent" style="margin:2em"&gt;
 $msg.get('email_not_received.email_sent')
-&lt;/div&gt;</content>
-</xwikidoc>
+&lt;/div&gt;
+
+&lt;p align="center"&gt;&lt;a href="${targets.noLogin}" target="_top" class="button-orange"##
+&gt;$msg.get('email_not_received_sent.ok_button')&lt;/a&gt;&lt;/p&gt;</content></xwikidoc>
