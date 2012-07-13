@@ -264,6 +264,15 @@ public class CurrikiPluginApi extends Api {
         return plugin.solrCheckIsUp();
     }
 
+    public int countDocsSolrCatchAll(String query) {
+        try {
+            return plugin.solrCountDocs(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public int countDocsSolr(String query) {
         return plugin.solrCountDocs(query);
     }

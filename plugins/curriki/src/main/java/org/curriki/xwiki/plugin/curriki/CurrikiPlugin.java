@@ -1066,7 +1066,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             List<String> fullnames = collectFieldValuesFromXmlStream(g, "fullname");
             return fullnames;
         } catch (Exception e) {
-            throw new IllegalStateException("No SOLR configured.");
+            throw new IllegalStateException("Error at SOLR: ", e);
         }
     }
 
@@ -1078,7 +1078,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             int count = collectDocCount(g);
             return count;
         } catch (Exception e) {
-            throw new IllegalStateException("No SOLR configured.");
+            throw new IllegalStateException("Error at SOLR: ", e);
         }
     }
 

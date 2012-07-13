@@ -1,7 +1,7 @@
 $context.setCacheDuration(1200)
-#set($numResources= $xwiki.curriki.countDocsSolr("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
-#set($numUsers= $xwiki.curriki.countDocsSolr("type:user"))
-#set($numGroups= $xwiki.curriki.countDocsSolr("type:group"))
+#set($numResources = $xwiki.curriki.countDocsSolrCatchAll("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
+#set($numUsers =     $xwiki.curriki.countDocsSolrCatchAll("type:user"))
+#set($numGroups =    $xwiki.curriki.countDocsSolrCatchAll("type:group"))
 <div id="watch-curriki-grow" class="shadow-outer"> ##{
     <div class="shadow-middle"> ##{
         <div class="shadow-inner information"> ##{
