@@ -2,7 +2,7 @@ $context.setCacheDuration(1200)
 #set($numResources = $xwiki.curriki.countDocsSolrCatchAll("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
 #set($numUsers =     $xwiki.curriki.countDocsSolrCatchAll("type:user"))
 #set($numGroups =    $xwiki.curriki.countDocsSolrCatchAll("type:group"))
-#if($numResources==-1 || $numUsers==-1 || $numGroups==-1)<!-- $xwiki.mailsender.sendTextMessage("paul@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org", "polx@curriki.org", "CurrikiSolr client error ($hostname)", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numUsers $numGroups") -->#end
+#if($numResources==-1 || $numUsers==-1 || $numGroups==-1)<!-- $xwiki.mailsender.sendTextMessage("polx@curriki.org","polx@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org", "CurrikiSolr client error ($hostname)", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numUsers $numGroups . The log would contain the detailed error.") -->#end
 <div id="watch-curriki-grow" class="shadow-outer"> ##{
     <div class="shadow-middle"> ##{
         <div class="shadow-inner information"> ##{
