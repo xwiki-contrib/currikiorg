@@ -41,7 +41,7 @@ pageTracker._trackPageview('/features/staf/referred/'+window.location);
         pageTracker._trackPageview(window.pageTrackerQueue.get(i));
     } }
 </script>
-#else<!-- no analytics GA code -->
+#else<!-- no analytics GA code. The setting is "$!{GA_uacct}" -->
 #end ##}
 #macro(logViewScript $viewName)
     <script type="text/javascript">Curriki.logView("$viewName");</script>
