@@ -42,7 +42,12 @@ pageTracker._trackPageview('/features/staf/referred/'+window.location);
         pageTracker._trackPageview(window.pageTrackerQueue.get(i));
     } }
 </script>
-#else<!-- no analytics GA code. The setting is "$!{GA_uacct}" -->
+#else<!-- no analytics GA code. The setting is "$!{GA_uacct}"
+    page has programming rights ? $doc.hasProgrammingRights()
+    xwiki is $xwiki
+    xwiki.getXWiki is $xwiki.getXWiki()
+-->
+
 #end ##}
 #macro(logViewScript $viewName)
     <script type="text/javascript">Curriki.logView("$viewName");</script>
