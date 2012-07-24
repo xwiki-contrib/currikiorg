@@ -2,7 +2,8 @@
   * Setup the Google Analytics used for the pages. 
   * @author Curriki dev team
   *#
-## Loaded in xwikivars now #set($GA_uacct = $!xwiki.getXWiki().Param('curriki.system.GA', '0'))
+## Loaded in xwikivars now
+#set($GA_uacct = $!xwiki.getXWiki().Param('curriki.system.GA', '0'))
 #if("$!GA_uacct" != "0" && "$!GA_uacct" != "") ## {
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -41,7 +42,12 @@ pageTracker._trackPageview('/features/staf/referred/'+window.location);
         pageTracker._trackPageview(window.pageTrackerQueue.get(i));
     } }
 </script>
-#else<!-- no analytics GA code -->
+#else<!-- no analytics GA code. The setting is "$!{GA_uacct}"
+    page has programming rights ? $doc.hasProgrammingRights()
+    xwiki is $xwiki
+    xwiki.getXWiki is $xwiki.getXWiki()
+-->
+
 #end ##}
 #macro(logViewScript $viewName)
     <script type="text/javascript">Curriki.logView("$viewName");</script>
