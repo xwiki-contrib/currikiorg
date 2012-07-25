@@ -316,8 +316,8 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidLastName(lastName, true) & passed;
         passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, true) & passed;
 
-        LOG.info("Passed? " + passed);
-        if(!passed) LOG.info("Errors: " + validation.errors);
+        LOG.warn("Passed? " + passed);
+        if(!passed) LOG.warn("Errors: " + validation.errors);
         if (passed) {
             // Everything clear, let's proceed
 
