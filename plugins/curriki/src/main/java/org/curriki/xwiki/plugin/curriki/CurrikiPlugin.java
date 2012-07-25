@@ -1107,7 +1107,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     private static final String MISSING = "----missing----123123";
 
     public String getPublicCurrikiConfig(String name, String defaultVal, XWikiContext context) {
-        if(name==null || publicConfigNames.contains(name)) throw new IllegalAccessError("Property \"" + name + "\" not allowed for read.");
+        if(name==null || !publicConfigNames.contains(name)) throw new IllegalAccessError("Property \"" + name + "\" not allowed for read.");
         String r = publicConfigCache.get(name);
         if(r==MISSING) return defaultVal;
         if(r!=null) return r;
