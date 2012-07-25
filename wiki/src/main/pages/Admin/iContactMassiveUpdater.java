@@ -5,7 +5,9 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.Reader;
 import java.lang.*;
 import java.lang.Exception;
@@ -27,7 +29,7 @@ public class iContactMassiveUpdater {
         }
         int start = 0;
         if(args.length>2) start = Integer.parseInt(args[2]);
-        LineNumberReader in = new LineNumberReader(new InputStreamReader(new FileInputStream(args[0])));
+        LineReaderWithEnd in = new LineReaderWithEnd(new InputStreamReader(new FileInputStream(args[0])));
         int numDone = start;
         String line;
         final List<String> list = new LinkedList<String>();
@@ -53,15 +55,19 @@ public class iContactMassiveUpdater {
                     new UsernamePasswordCredentials(user, pass));
         }
 
+        boolean doneOne = false;
         while( (line=in.readLine())!=null) {
             list.add(line);
             numDone++;
-            if(numDone % 1000==0) {
+            if(numDone % 1000==0 || in.isFinished()) {
                 // sleep if necessary
                 long waitTime = (phaseStarted+1000L*3*60)-System.currentTimeMillis();
                 if(waitTime<0) waitTime = 10000;
-                System.out.println("-- Sleeping " + waitTime/1000 + " seconds.");
-                Thread.sleep(waitTime);
+                if(doneOne) {
+                    System.out.println("-- Sleeping " + waitTime/1000 + " seconds.");
+                    doneOne = true;
+                    Thread.sleep(waitTime);
+                }
                 System.out.print("Posting till line " + numDone  + "... ");
                 System.out.flush();
                 long started = System.currentTimeMillis();
@@ -77,6 +83,7 @@ public class iContactMassiveUpdater {
                         for (String l : list) {
                             w.write(l);
                             w.write("\n");
+                            System.out.println("Posted user-name: " + l);
                         }
                         w.flush();
                     }
@@ -95,5 +102,22 @@ public class iContactMassiveUpdater {
             }
         }
     }
-    
+
+    private static class LineReaderWithEnd extends LineNumberReader {
+        public LineReaderWithEnd(Reader enclosed) throws IOException {
+            super(enclosed);
+            setAside = super.readLine();
+        }
+        private String setAside;
+
+        private boolean isFinished() {
+            return setAside == null;
+        }
+
+        public String readLine() throws IOException {
+            String x = setAside;
+            setAside = super.readLine();
+            return x;
+        }
+    }
 }
