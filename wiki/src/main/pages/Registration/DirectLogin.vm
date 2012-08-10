@@ -2,9 +2,14 @@
     #template("javascripts.vm")
 #end
 ##
+#set($provider="$!request.provider")
 <script type="text/javascript">
     Ext.onReady(function() {
-        Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&$!{request.getQueryString()}");
+#if($provider!="")
+    Curriki.ui.login.popupPopupAndIdentityAuthorization('$provider','/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}','/'); return false;
+#else
+    Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&$!{request.getQueryString()}");
+#end
     });
 </script>
 <p>Displaying login screen.</p>
