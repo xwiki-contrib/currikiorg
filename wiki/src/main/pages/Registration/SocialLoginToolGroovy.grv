@@ -198,7 +198,7 @@ public class SocialLoginToolGroovy {
             for (result in userDocs) {
                 if(result==null) continue;
                 Document userDoc = xwiki.getDocument(result)
-                updateUserDoc(userDoc);
+                updateUserDoc(userDoc, false); // We dont merge the docs here
                 System.out.println("Doc: " + result + " of class " + result.getClass());
                 authenticateUser(userDoc)
             }
@@ -279,15 +279,15 @@ public class SocialLoginToolGroovy {
      */
 
     public String tryCreateNewProfile() {
-        return updateUserDoc(null);
+        return updateUserDoc(null, false); //Nothing to merge
     }
 
-    public String updateUserDoc(Document preExistingUserDoc) {
+    public String updateUserDoc(Document preExistingUserDoc, isMerging) {
         if(profile==null) profile = request.session.getAttribute("org.brickred.socialauth.Profile")
         String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
         boolean isNew = preExistingUserDoc == null;
         if(isNew) LOG.info("Trying to create new profile from provider " + provider);
-        else LOG.info("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
+        else LOG.warn("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
 
         if(isNew) username = request.username; else username = preExistingUserDoc.getName();
         firstName = profile.firstName;
@@ -314,11 +314,11 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidAgree(request.agree, true) & passed;
         passed = validation.isValidFirstName(firstName, true) & passed;
         passed = validation.isValidLastName(lastName, true) & passed;
-        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, true) & passed;
+        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, !isMerging) & passed;
 
-        LOG.warn("Passed? " + passed);
-        if(!passed) LOG.warn("Errors: " + validation.errors);
-        if (passed) {
+        System.out.println("Validation Passed? " + passed);
+        if(!passed) System.out.println(" Validation Errors ( Merging is "+ isMerging +"): " + validation.errors);
+        if ( passed || isMerging ) {
             // Everything clear, let's proceed
 
             /* def propMap = new HashMap();
@@ -358,7 +358,7 @@ public class SocialLoginToolGroovy {
             else return view;
         }
         else {
-            System.out.println("New profile not created.");
+            System.out.println("New profile not created!");
             if (!username || username == '')
                 errors.add(msg.get('join.error.username'));
             else if (xwiki.exists('XWiki.' + username))
@@ -465,8 +465,10 @@ public class SocialLoginToolGroovy {
         if(userName.endsWith("XWikiGuest") || userName.startsWith("DeactivatedUsers."))
             throw new IllegalStateException("Can't merge an inactive user!");
         LOG.warn("Trying to merge profile of user "+userName+" with provider's profile from " + provider);
-        createSocialLoginProfileObject(profile, userDoc, provider);
-        updateUserDoc(userDoc);
+
+        //createSocialLoginProfileObject(profile, userDoc, provider); Not need anymore the profile object is created while updating the UserDoc
+
+        updateUserDoc(userDoc,true); // We want to merge
         userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true);
         // and login!
         authenticateUser(userDoc);
@@ -581,8 +583,10 @@ public class SocialLoginToolGroovy {
             if(url==null || url.length()==0) return;
             def avatar = userObj.get("avatar");
             if(avatar!=null && !"".equals(avatar)) {
-                System.out.println(" avatar \"" + avatar + "\" of class " + avatar.getClass() + " already there, leaving quiet.");
-                return
+                System.out.println("avatar \"" + avatar + "\" of class " + avatar.getClass() + " already there, leaving quiet.");
+                return;
+            }else {
+                System.out.println("no avatar there (avatar: "+avatar+")!  We're going to get the one from the social authprovier.");
             };
             URL u = new URL(url)
             String name=u.getPath()
