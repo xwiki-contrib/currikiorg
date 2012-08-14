@@ -2,7 +2,9 @@ package org.curriki.xwiki.plugin.curriki;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.lang.reflect.Method;
@@ -1100,6 +1102,34 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Set<String> publicConfigNames = new TreeSet(Arrays.asList("hostname", "GA", "addthis", "standardstab", "mediahost", "globalDebug","appserverHost"));
+    private static Map<String,String> publicConfigCache = new TreeMap<String,String>();
+    private static final String MISSING = "----missing----123123";
+
+    public String getPublicCurrikiConfig(String name, String defaultVal, XWikiContext context) {
+        if(name==null || !publicConfigNames.contains(name)) throw new IllegalAccessError("Property \"" + name + "\" not allowed for read.");
+        String r = publicConfigCache.get(name);
+        if(r==MISSING) return defaultVal;
+        if(r!=null) return r;
+
+        if("appserverHost".equals(name)) {
+            try {
+                publicConfigCache.put(name, InetAddress.getLocalHost().getHostName());
+                return publicConfigCache.get(name);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                publicConfigCache.put(name, MISSING);
+                return defaultVal;
+            }
+        }
+        r = context.getWiki().Param("curriki.system." + name, null);
+        if(r==null) r = MISSING;
+        if(publicConfigCache.size()>1000) throw new IllegalStateException("Can't have more than 1000 properties for curriki.");
+        publicConfigCache.put(name, r);
+        if(r==MISSING) return defaultVal;
+        return r;
     }
 
     public interface SolrResultCollector {

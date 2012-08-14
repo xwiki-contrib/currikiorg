@@ -253,14 +253,24 @@ curl --dump-header - -X DELETE -H "Accept: text/xml" -H "Content-Type: text/xml"
 LIST CONTACTS
   (this will page, no worry of bloating)
 curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
-  -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
-  -H "API-Username: curriki-tester"  -H "API-Password: share-them" \
-  "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/"
+  -H "API-Version: 2.2"   -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz" \
+  -H "API-Username: janetpinto"  -H "API-Password: shar3-1t" \
+  "https://app.icontact.com/icp/a/973153/c/45691/contacts/"
+
+
+LIST LISTS
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
+  -H "API-Version: 2.2"   -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz"  \
+   -H "API-Username: janetpinto"  -H "API-Password: shar3-1t"   \
+   "https://app.icontact.com/icp/a/973153/c/45691/lists/"
 
 
 LIST A USER BY EMAIL
 
-curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"    -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them"   "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/?email=paul%40hoplahup.net
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"    \
+    -H "API-Version: 2.2"   -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz"   \
+    -H "API-Username: janetpinto"  -H "API-Password: shar3-1t" \
+    "https://app.icontact.com/icp/a/973153/c/45691/contacts/?email=paul%40hoplahup.net"
 
 (you can also post as doing an update, the contactId will be returned)
 

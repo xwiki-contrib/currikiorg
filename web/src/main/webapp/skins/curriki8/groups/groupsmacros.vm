@@ -876,7 +876,7 @@ $xwiki.addTooltipJS()
   * Group suffix URL. Built from hostname
   *#
 #macro(groups_groupsuffixurl)
-#set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
+#set($serverURL=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'curriki.org'))
 #set($serverURL=$serverURL.replaceAll("www.", ""))
 #set($groupURL=".groups."+$serverURL)
 ${groupURL}#end
@@ -1187,7 +1187,7 @@ $msg.get("groups.curriculum.contributions.about")
 #if($spaces&&($spaces.size()>0))
 #set($space = $spaces.get(0))
 #if($space)
-$response.sendRedirect("http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')${space.homeURL}")
+$response.sendRedirect("http://$xwiki.curriki.getPublicCurrikiConfig('hostname', 'www.curriki.org')${space.homeURL}")
 #end
 #end
 #if(!$space)

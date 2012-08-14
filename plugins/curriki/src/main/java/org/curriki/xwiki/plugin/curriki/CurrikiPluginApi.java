@@ -1,9 +1,7 @@
 package org.curriki.xwiki.plugin.curriki;
 
 import java.io.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.curriki.xwiki.plugin.asset.Asset;
@@ -287,5 +285,9 @@ public class CurrikiPluginApi extends Api {
 
     public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {
         plugin.feedFieldFromXmlStream(g, out, elementName);
+    }
+
+    public String getPublicCurrikiConfig(String name, String defaultVal) {
+        return plugin.getPublicCurrikiConfig(name,defaultVal, context);
     }
 }
