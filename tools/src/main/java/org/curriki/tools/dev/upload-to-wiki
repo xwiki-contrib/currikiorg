@@ -1,11 +1,12 @@
 #!/bin/sh
 
 ## This script takes one parameter: the file-name
-## and one environment variable: AUTHHOST in the form of http://host/xwiki
+## and one environment variable: UPLOAD_TO in the form of http://host/xwiki
 ## It saves the document name at the page with its same name (less the extensions)
 ## within a space of the directory it contains.
 
 UPLOAD_HOST=`echo $UPLOAD_TO | sed 's|.*://\([^/]*\).*|\1|'`
+echo Begin upload to host: $UPLOAD_HOST
 UPLOAD_AUTH=`grep $UPLOAD_HOST ${HOME}/.upload-auth | sed 's|[^ ]*  *||'`
 export UPLOAD_AUTH
 UPLOAD_TARGET=`echo $UPLOAD_TO | sed "s|://|://${UPLOAD_AUTH}@|"`
