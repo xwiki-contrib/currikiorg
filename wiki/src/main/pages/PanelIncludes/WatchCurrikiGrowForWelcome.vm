@@ -7,6 +7,6 @@ $context.setCacheDuration(1200)##
 #if($numResources==-1 || $numUsers==-1 || $numGroups==-1)<!-- $xwiki.mailsender.sendTextMessage("polx@curriki.org","polx@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org", "CurrikiSolr client error ($hostname)", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numUsers $numGroups . The log would contain the detailed error.") -->#end##
 <p>
     <span>$numbertool.format($numUsers) Members</span>##
-    <span><a href="http://${xwiki.curriki.getPublicCurrikiConfig("hostname","broken")}/xwiki/bin/view/Main/Browse">$numbertool.format($numResources) Resources</a></span>
-    <span><a href="http://${xwiki.curriki.getPublicCurrikiConfig("hostname","broken")}/xwiki/bin/view/Groups/Browse">$numbertool.format($numGroups) Groups</a></span>
+    <span><a href="/resources-curricula/">$numbertool.format($numResources) Resources</a></span>
+    <span><a href="/collaborate/groups/">$numbertool.format($numGroups) Groups</a></span>
 </p>
