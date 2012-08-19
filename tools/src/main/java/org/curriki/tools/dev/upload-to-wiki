@@ -6,9 +6,32 @@
 ## within a space of the directory it contains.
 
 UPLOAD_HOST=`echo $UPLOAD_TO | sed 's|.*://\([^/]*\).*|\1|'`
-echo Begin upload to host: $UPLOAD_HOST
+echo Begin upload to host: "$UPLOAD_HOST"
+## echo auth $UPLOAD_AUTH
+if [ "x$UPLOAD_HOST" = "x" ];
+then
+  echo ""
+  echo "ERROR: Missing host, please define the environment variable UPLOAD_TO."
+  echo ""
+  exit 1
+fi
+
+
+
 UPLOAD_AUTH=`grep $UPLOAD_HOST ${HOME}/.upload-auth | sed 's|[^ ]*  *||'`
 export UPLOAD_AUTH
+
+## echo auth $UPLOAD_AUTH
+if [ "x$UPLOAD_AUTH" = "x" ];
+then
+  echo ""
+  echo "ERROR: Missing auth. No line with \"$UPLOAD_HOST\" in ~/.upload-auth"
+  echo ""
+  exit 1
+fi
+
+
+
 UPLOAD_TARGET=`echo $UPLOAD_TO | sed "s|://|://${UPLOAD_AUTH}@|"`
 
 for file in "$@" ; do
@@ -23,15 +46,6 @@ spacename=`basename $spacename`
 if [ "$pagename" = "$language" ];
 then
   language=en
-fi
-
-## echo auth $UPLOAD_AUTH
-if [ "x$UPLOAD_AUTH" = "x" ];
-then
-  echo ""
-  echo "ERROR: Missing auth."
-  echo ""
-  exit 1
 fi
 
 ## echo UPLOAD_TARGET is $UPLOAD_TARGET
