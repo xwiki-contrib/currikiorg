@@ -10,9 +10,9 @@
         <li class="menu-item menu-item-type-post_type menu-item-object-page"
             ><a href="http://welcome.curriki.org/about-curriki/contact-us/" target="_top"><strong>Contact Us</strong></a></li>
         <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
-                href="${hostname}/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&amp;xredirect=%2F"><strong>Register</strong></a></li>
+                href="http://${hostname}/xwiki/bin/view/Registration/DirectLogin?xredirect=%2F"><strong>Register</strong></a></li>
         <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
-                href="${hostname}/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&amp;xredirect=%2F"><strong>Sign In</strong></a></li>
+                href="http://${hostname}/xwiki/bin/view/Registration/DirectLogin?xredirect=%2F"><strong>Sign In</strong></a></li>
         <li class="menu-item">
             <a style="width:48px" title="Join using your Facebook account" target="_top"
                href="http://www.curriki.org/xwiki/bin/view/Registration/SocialLogin?provider=facebook&amp;xredirect=%2Fxwiki%2Fbin%2Fview%2FMyCurriki%2FProfile" target="_top" class="social">
@@ -33,7 +33,9 @@
         ><a  target="_top"
              href="http://welcome.curriki.org/about-curriki/contact-us/"><strong>Contact Us</strong></a></li>
     <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
-             href="${hostname}/xwiki/bin/view/MyCurriki/" title="Visit your profile"><strong>Welcome  $crtUserDoc.display("first_name","view")</strong></a></li>
+             href="http://${hostname}/xwiki/bin/view/MyCurriki/" title="Visit your profile"><strong>Welcome  $crtUserDoc.display("first_name","view")</strong></a></li>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
+             href="http://${hostname}/xwiki/bin/view/Registration/CleanLogout" title="Logout"><strong>Logout</strong></a></li>
 </ul>
 #end
 </div>
