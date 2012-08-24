@@ -306,13 +306,13 @@ public abstract class CompositeAsset extends Asset {
                             throw new AssetException(AssetException.ERROR_ASSET_SUBASSET_RECURSION, msg.get("addsubasset.recursive_add_message"));
                         }
                         if (sql != null) {
-                            sql = sql + ", '" + item + "'";
+                            sql = sql + "or prop.value='" + item + "'";
                         } else {
-                            sql = "'" + item + "'";
+                            sql = "prop.value='" + item + "'";
                         }
                     }
 
-                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='"+Constants.SUBASSET_CLASS+"' and prop.id.id = obj.id and prop.name='"+Constants.SUBASSET_CLASS_PAGE+"' and prop.value in (" + sql + ")";
+                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='"+Constants.SUBASSET_CLASS+"' and prop.id.id = obj.id and prop.name='"+Constants.SUBASSET_CLASS_PAGE+"' and (" + sql + ")";
                     List<String> list = context.getWiki().getStore().searchDocumentsNames(sql, context);
                     if ((list==null)||(list.size()==0)){
                         done = true;
