@@ -1,0 +1,91 @@
+##
+## the default expandation state for categories
+#set($defstate=false)
+##
+#beginNavigationPanel($msg.get("panel.navigation.home.rollover"))
+##
+##
+##
+##RESOURCES AND CURRICULA (RC)
+##
+<!--
+#set($list=[])
+$list.add([$msg.get('panel.navigation.rc.about'), "http://welcome.curriki.org/resources-curricula/"])
+$list.add([$msg.get('panel.navigation.rc.reviewteam'), "http://welcome.curriki.org/resources-curricula/contribute-content/about-curriki-review-team/"])
+$list.add([$msg.get('panel.navigation.rc.share'), "http://welcome.curriki.org/resources-curricula/share-and-rate-resources/"])
+$list.add([$msg.get('panel.navigation.rc.standards'), "http://welcome.curriki.org/resources-curricula/about-standards/"])
+$list.add([$msg.get('panel.navigation.rc.publish'), "http://welcome.curriki.org/resources-curricula/contribute-content/publish-resources/"])
+$list.add([$msg.get('panel.navigation.rc.addresource'), "/xwiki/bin/view/MyCurriki/StartAdd"])
+$list.add([$msg.get('panel.navigation.rc.pdworkshop'), "http://welcome.curriki.org/resources-curricula/pd-workshops/"])
+-->
+#navigationCategory($msg.get('panel.navigation.rc'), $msg.get("panel.navigation.rc.rollover"), "",  $defstate,$list)
+##
+##COLLABORATE
+##
+<!--
+#set($list=[])
+$list.add([$msg.get('panel.navigation.collaborate.about'), "http://welcome.curriki.org/collaborate/"])
+$list.add([$msg.get('panel.navigation.collaborate.groups'), "http://welcome.curriki.org/collaborate/groups/"])
+-->
+#navigationCategory($msg.get('panel.navigation.collaborate'), $msg.get("panel.navigation.collaborate.rollover"),"",  $defstate,$list)
+##
+##
+##
+##ABOUT CURRIKI
+##
+<!--
+#set($list=[])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.curriki'), "http://welcome.curriki.org/about-curriki/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.team'), "http://welcome.curriki.org/about-curriki/team/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.board'), "http://welcome.curriki.org/about-curriki/board/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.mediacenter'), "http://welcome.curriki.org/about-curriki/media-center/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.contactus'), "http://welcome.curriki.org/about-curriki/contact-us/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.linktocurriki'), "http://welcome.curriki.org/about-curriki/link-to-curriki/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.faq'), "http://welcome.curriki.org/about-curriki/faq/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.partners'), "http://welcome.curriki.org/about-curriki/partners/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.sponsors'), "http://welcome.curriki.org/sponsors/"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.volunteer'), "Main.Volunteer"])
+-->
+#navigationCategory($msg.get('panel.navigation.about'),
+    $msg.get("panel.navigation.about.rollover"),"", $defstate, $list)
+##
+##
+##HELP
+##
+#set($list=[])
+<!--
+$list.add([$msg.get('panel.navigation.help_collection'), "Coll_curriki.CurrikiHelp"])
+$list.add([$msg.get('panel.navigation.help.tutorials'), "Coll_curriki.Tutorials"])
+$list.add([$msg.get('panel.navigation.help.guided_tour'), "javascript:tourpop();"])
+-->
+#navigationCategory($msg.get('panel.navigation.help'), $msg.get("panel.navigation.help.rollover"),"", $defstate,$list)
+##
+##MY CURRIKI
+#set($suser = $context.user.replaceAll("XWiki.",""))
+#if(!$isguest)
+    #set($list=[])
+<!--
+$list.add([$msg.get('panel.navigation.myprofile'), "MyCurriki.Profile"])
+$list.add([$msg.get('panel.navigation.myfavorites'), "MyCurriki.Favorites"])
+$list.add([$msg.get('panel.navigation.mycontributors'),"MyCurriki.Contributions"])
+$list.add([$msg.get('panel.navigation.mycollection'), "MyCurriki.Collections"])
+$list.add([$msg.get('panel.navigation.mygroups'), "MyCurriki.Groups"])
+-->
+    #navigationCategory($msg.get('panel.navigation.mycurriki'), $msg.get("panel.navigation.mycurriki.rollover"),"", $defstate,$list)
+#end
+##
+##
+##
+#endNavigationPanel()
+##
+##
