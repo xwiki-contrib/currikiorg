@@ -141,10 +141,8 @@ public class SocialLoginToolGroovy {
             maybeXpage="&xpage=popup";
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
-            if("facebook".equalsIgnoreCase(request.provider)) {
-                targetUrl = URLEncoder.encode(targetUrl);
-            }
-            provider.setPermission(Permission.AUHTHENTICATE_ONLY);
+
+            provider.setPermission(Permission.AUTHENTICATE_ONLY);
             String url = provider.getLoginRedirectURL(targetUrl);
             System.out.println("Redirecting to " + url);
 
@@ -177,7 +175,7 @@ public class SocialLoginToolGroovy {
                 if(request.error!='access_denied')
                     profile = providerObj.verifyResponse(request)
                 LOG.info("obtained profile: " + profile);
-            } catch (Exception ex) { LOG.warn(ex); }
+            } catch (Exception ex) { LOG.warn("Error while verifing response", ex); }
             if(profile==null) {
                 LOG.info("Refused authorization.");
                 return "refused";
@@ -345,6 +343,7 @@ public class SocialLoginToolGroovy {
 
             createSocialLoginProfileObject(profile, userDoc, provider);
             tryToAddProfilePictureFromProfile(profile.profileImageURL, userDoc, userobj);
+//            //tryToAddProfilePictureFromGoogle();
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
 
             System.out.println("New profile created and saved: " + userDoc);
@@ -451,7 +450,7 @@ public class SocialLoginToolGroovy {
         socialProfile.set('email', profile.email)
         socialProfile.set('profileImageURL', profile.profileImageURL)
         socialProfile.set('gender', profile.gender)
-        socialProfile.set('dob', profile.dob)
+        //socialProfile.set('dob', profile.dob) !!! This line raised an error while logging in via facebook, this attribute seems not to be there anymore
         socialProfile.set('validatedId', profile.validatedId)
         socialProfile.set('country', profile.country)
         socialProfile.set('location', profile.location)
@@ -559,7 +558,7 @@ public class SocialLoginToolGroovy {
                     request.session.removeAttribute(SAVED_REQUEST);
                     request.session.removeAttribute("xredirect");
                 }
-            } catch (Exception e) { LOG.warn(e); }
+            } catch (Exception e) { LOG.warn("Error while getting the saved request from the session ",e); }
         }
         if(xredirect==null && request.session)
             xredirect = request.session.getAttribute("xredirect");
@@ -579,8 +578,8 @@ public class SocialLoginToolGroovy {
 
     public void tryToAddProfilePictureFromProfile(String url, Document userDoc, com.xpn.xwiki.api.Object userObj) {
         try {
-            System.out.println("Defining profile picture form " + url);
             if(url==null || url.length()==0) return;
+            System.out.println("Defining profile picture form " + url);
             def avatar = userObj.get("avatar");
             if(avatar!=null && !"".equals(avatar)) {
                 System.out.println("avatar \"" + avatar + "\" of class " + avatar.getClass() + " already there, leaving quiet.");
@@ -615,6 +614,21 @@ public class SocialLoginToolGroovy {
             LOG.warn("Couldn't write profile picture.",ex);
         };
 
+    }
+
+   /**
+    * Not in use yet
+    **/
+    public void tryToAddProfilePictureFromGoogle(){
+        try {
+            String pictureApiUrl = "https://www.google.com/m8/feeds/photos/profile/curriki.org/felix";
+            AuthProvider providerObj = request.session.getAttribute("org.brickred.socialauth.AuthProvider");
+            providerObj.verifyResponse(request);
+            org.brickred.socialauth.util.Response response = providerObj.api(pictureApiUrl, "GET", new HashMap<String, String>(), new HashMap<String, String>(), "");
+            System.out.println("Try to load profile Picture from Google.." + response.getResponseBodyAsString("UTF-8").length() );
+        } catch (Exception e){
+            LOG.warn("Error while loading profile picture from Google: " + e);
+        }
     }
 
 
