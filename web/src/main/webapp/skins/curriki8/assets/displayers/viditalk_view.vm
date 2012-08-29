@@ -29,6 +29,7 @@
         <div style="height:320px; width:470px; margin: 0 auto;" id="$vidDiv">
             $msg.get('viditalk.loading_player')
         </div>
+    #set($MEDIAHOST=$xwiki.curriki.getPublicCurrikiConfig("mediahost","MEDIAHOST_MISSING"))##
 	<script type="text/javascript" src="http://${MEDIAHOST}/video/js/video.js"></script>
         <script language="javascript" type="text/javascript">
             // embedVidiPlayback(div_id, sc, mediaId, autoplay, width, height, stretchPlayer, skinLoc, shareUrl, allowFullScreen)

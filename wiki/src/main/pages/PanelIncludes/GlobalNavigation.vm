@@ -11,8 +11,8 @@
 <!--
 #set($list=[])
 $list.add([$msg.get('panel.navigation.rc.about'), "http://welcome.curriki.org/resources-curricula/"])
-$list.add([$msg.get('panel.navigation.rc.reviewteam'), "http://welcome.curriki.org/resources-curricula/contribute-content/about-curriki-review-team/"])
 $list.add([$msg.get('panel.navigation.rc.share'), "http://welcome.curriki.org/resources-curricula/share-and-rate-resources/"])
+$list.add([$msg.get('panel.navigation.rc.reviewteam'), "http://welcome.curriki.org/resources-curricula/contribute-content/about-curriki-review-team/"])
 $list.add([$msg.get('panel.navigation.rc.standards'), "http://welcome.curriki.org/resources-curricula/about-standards/"])
 $list.add([$msg.get('panel.navigation.rc.publish'), "http://welcome.curriki.org/resources-curricula/contribute-content/publish-resources/"])
 $list.add([$msg.get('panel.navigation.rc.addresource'), "/xwiki/bin/view/MyCurriki/StartAdd"])
@@ -26,6 +26,7 @@ $list.add([$msg.get('panel.navigation.rc.pdworkshop'), "http://welcome.curriki.o
 #set($list=[])
 $list.add([$msg.get('panel.navigation.collaborate.about'), "http://welcome.curriki.org/collaborate/"])
 $list.add([$msg.get('panel.navigation.collaborate.groups'), "http://welcome.curriki.org/collaborate/groups/"])
+$list.add([$msg.get('panel.navigation.collaborate.createGroup'), "/xwiki/bin/view/Groups/CreateNewGroup/"])
 -->
 #navigationCategory($msg.get('panel.navigation.collaborate'), $msg.get("panel.navigation.collaborate.rollover"),"",  $defstate,$list)
 ##
@@ -38,11 +39,11 @@ $list.add([$msg.get('panel.navigation.collaborate.groups'), "http://welcome.curr
 ## ---- comment
 $list.add([$msg.get('panel.navigation.about.curriki'), "http://welcome.curriki.org/about-curriki/"])
 ## ---- comment
+$list.add([$msg.get('panel.navigation.about.mediacenter'), "http://welcome.curriki.org/about-curriki/media-center/"])
+## ---- comment
 $list.add([$msg.get('panel.navigation.about.team'), "http://welcome.curriki.org/about-curriki/team/"])
 ## ---- comment
 $list.add([$msg.get('panel.navigation.about.board'), "http://welcome.curriki.org/about-curriki/board/"])
-## ---- comment
-$list.add([$msg.get('panel.navigation.about.mediacenter'), "http://welcome.curriki.org/about-curriki/media-center/"])
 ## ---- comment
 $list.add([$msg.get('panel.navigation.about.contactus'), "http://welcome.curriki.org/about-curriki/contact-us/"])
 ## ---- comment
@@ -55,6 +56,8 @@ $list.add([$msg.get('panel.navigation.about.partners'), "http://welcome.curriki.
 $list.add([$msg.get('panel.navigation.about.sponsors'), "http://welcome.curriki.org/sponsors/"])
 ## ---- comment
 $list.add([$msg.get('panel.navigation.about.volunteer'), "Main.Volunteer"])
+## ---- comment
+$list.add([$msg.get('panel.navigation.about.donate'), "http://welcome.curriki.org/about-curriki/donate/"])
 -->
 #navigationCategory($msg.get('panel.navigation.about'),
     $msg.get("panel.navigation.about.rollover"),"", $defstate, $list)
@@ -72,7 +75,7 @@ $list.add([$msg.get('panel.navigation.help.guided_tour'), "javascript:tourpop();
 ##
 ##MY CURRIKI
 #set($suser = $context.user.replaceAll("XWiki.",""))
-#if(!$isguest)
+#if(!$isGuest)
     #set($list=[])
 <!--
 $list.add([$msg.get('panel.navigation.myprofile'), "MyCurriki.Profile"])
