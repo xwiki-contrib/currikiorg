@@ -72,7 +72,7 @@
     #set($fname = $crtUserDoc.display("first_name","view"))
     <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
     #if($hasGlobalAdmin)
-        <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
+        <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> ($xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host"))#sep()
     #end
     #if("MyCurriki"=="$doc.space")
         #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
