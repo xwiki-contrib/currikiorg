@@ -859,6 +859,7 @@ $asset.use("CurrikiCode.AssetClass")
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
             $asset.display("hidden_from_search", "edit", true) $msg.get("rve.information.hidefromsearch.edit_instruction")
         </li>
+        #set($isOriginalAuthorOrAdmin = ($context.user==$asset.creator) || $hasGlobalAdmin || ($assetIsFromGroup && $xwiki.csm.isAdmin($assetGroupName, $context.user)))
         #if($isOriginalAuthorOrAdmin)
         $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-rights" class="field-important input-text">
