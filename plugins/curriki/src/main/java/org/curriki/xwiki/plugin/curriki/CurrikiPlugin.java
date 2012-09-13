@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -1010,11 +1011,14 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
     // ---- solr specific ------
     // this code is not meant to stay here but is expected to move after the GSoC for SOLR is concluded
-    private final HttpClient solrClient = new HttpClient();
+    private HttpClient solrClient = null;
     private String solrBaseURL;
 
     public void initSolrClient(XWikiContext context) {
         solrBaseURL = context.getWiki().Param("org.curriki.solrUrl");
+        MultiThreadedHttpConnectionManager connectionManager =
+                new MultiThreadedHttpConnectionManager();
+        solrClient = new HttpClient(connectionManager);
     }
 
     public String solrGetSingleValue(String query, String fieldName) throws IOException {
@@ -1031,7 +1035,6 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
         // TODO: only allow with programming right?
         String url = solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames + "&start=" + start + "&rows=" + rows;
-        System.out.println("SOLR URL: " + url);
         GetMethod result = new GetMethod(url);
         return result;
     }
