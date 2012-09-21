@@ -4,11 +4,16 @@ package org.curriki.plugins.googlecheckout;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Api;
+import com.xpn.xwiki.api.Context;
 import com.xpn.xwiki.api.XWiki;
 import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.doc.XWikiDocument;
+import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi;
+import com.xpn.xwiki.util.AbstractXWikiRunnable;
+import com.xpn.xwiki.web.Utils;
 import com.xpn.xwiki.web.XWikiMessageTool;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -21,13 +26,18 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xwiki.context.Execution;
+import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.EntityReference;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,12 +72,8 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
     private static Namespace checkoutNS = Namespace.getNamespace("co", checkoutNSuri);
 
-    private Map<String,String> languages = null;
-
-
-    public GoogleCheckoutPlugin(String name, String className, XWikiContext xcontext) throws Exception {
-        super(name, className, xcontext);
-        languages = new HashMap<String, String>();
+    private static Map<String,String> languages = languages = new HashMap<String, String>();
+    static {
         languages.put("eng","en");
         languages.put("fra","fr");
         languages.put("rus", "ru");
@@ -79,6 +85,11 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         languages.put("eus", "mk");
         languages.put("zho", "zh");
         languages.put("cha", "ch");
+    }
+
+
+    public GoogleCheckoutPlugin(String name, String className, XWikiContext xcontext) throws Exception {
+        super(name, className, xcontext);
 
         Properties props = new Properties();
         props.load(xcontext.getWiki().getResourceAsStream("WEB-INF/googlecheckout_config.properties"));
@@ -119,7 +130,9 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
                     new AuthScope(checkoutURL.getHost(), checkoutURL.getPort(), AuthScope.ANY_REALM),
                     new UsernamePasswordCredentials(merchant, key));
         }
-        PostMethod post = new PostMethod(url.toExternalForm());
+        String u = url.toExternalForm();
+        LOG.warn("Creating a POST to " + u);
+        PostMethod post = new PostMethod(u);
         post.setDoAuthentication(true);
         return post;
     }
@@ -202,17 +215,23 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
     }
 
 
-    public String processNotificationAPICall(HttpServletRequest request, HttpServletResponse response, XWiki xwiki, XWikiMessageTool msg, String urlToHere) {
+
+    public String processNotificationAPICall(HttpServletRequest request, HttpServletResponse response, XWiki xwiki, XWikiMessageTool msg, String urlToHere, XWikiContext context) {
         String serialNumber = request.getParameter("serial-number");
+        String olderThreadName=Thread.currentThread().getName();
+        DateFormat df = new SimpleDateFormat("HH:mm:ss:SSS");
+        Thread.currentThread().setName(Thread.currentThread().getName() + " started-" + df.format(new Date()));
         LOG.warn("Received notification from : " + request.getRemoteHost() + " params: " + request.getParameterMap());
-        String processStatus = orderNotification(serialNumber, xwiki, msg, urlToHere);
+        String processStatus = orderNotification(serialNumber, xwiki, msg, urlToHere, context);
         int status = Integer.parseInt(processStatus.substring(0,3));
         processStatus = processStatus.substring(3);
         if(status==200) {
             response.setContentType("application/xml;charset=utf-8");
+            Thread.currentThread().setName(olderThreadName);
             return "<notification-acknowledgment xmlns='http://checkout.google.com/schema/2' "+
                     "serial-number='"+serialNumber+"' />";
         } else {
+            Thread.currentThread().setName(olderThreadName);
             response.setStatus(status, processStatus);
             return "<error>" + processStatus + "</error>";
         }
@@ -246,13 +265,13 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
     }
 
     // the central method of processing
-    public String orderNotification(String historyStepSerialNumber, XWiki xwiki, XWikiMessageTool msg, String urlToHere) {
+    public String orderNotification(String historyStepSerialNumber, XWiki xwiki, XWikiMessageTool msg, String urlToHere, XWikiContext context) {
         try {
             Object[] r= obtainOrderHistory(historyStepSerialNumber);
             Element node = (Element) r[0];
             String fullDoc = (String) r[1];
             LOG.warn("Obtained History: " + fullDoc);
-            updateOrderListDoc(node, fullDoc, historyStepSerialNumber, xwiki, msg, urlToHere);
+            updateOrderListDoc(node, fullDoc, historyStepSerialNumber, xwiki, msg, urlToHere, context);
             return "200 OK";
         } catch (Exception ex) {
             LOG.warn("Issue at order processing.", ex);
@@ -304,12 +323,12 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
     /**
      *
-     * @param node the recevied history document's root
+     * @param node the received history document's root
      * @param orderStateDoc the full String (for storage)
      * @param historyStepSerialNumber the serial-number indicated
      * @param xwiki the wiki we're living in
      */
-    public void updateOrderListDoc(Element node, String orderStateDoc, String historyStepSerialNumber, XWiki xwiki, XWikiMessageTool msg, String urlToHere) throws Exception {
+    public void updateOrderListDoc(Element node, String orderStateDoc, String historyStepSerialNumber, XWiki xwiki, XWikiMessageTool msg, String urlToHere, XWikiContext context) throws Exception {
         try {
             Document orderList = xwiki.getDocument(DOCNAME_orderList);
             String orderNumber = selectSingleEltXPath("./co:order-summary/co:google-order-number", node).getTextNormalize();
@@ -338,8 +357,6 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
             orderObj.set(ORDERPROP_fulfillmentState,
                     selectSingleEltXPath("//co:fulfillment-order-state",node).getTextNormalize());
             orderObj.set(ORDERPROP_date, new Date());
-            orderList.saveWithProgrammingRights("Receiving payment for order " + orderNumber);
-
 
             // finished?
 
@@ -348,72 +365,27 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
             boolean finished = ("CHARGEABLE".equals(orderObj.get(ORDERPROP_financialState)));
             userName = (String) orderObj.get(ORDERPROP_user);
             LOG.warn("financialState is " + orderObj.get(ORDERPROP_financialState));
+            if(!finished) {
+                LOG.warn("Saving " + orderList);
+                orderList.saveWithProgrammingRights("Updating financialState " + orderNumber + " to " + orderObj.get(ORDERPROP_financialState));
+            }
 
             if(finished) {
                 LOG.warn("Finished checkout for user " + userName);
                 Document userDoc = xwiki.getDocument(userName);
                 com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers");
                 if(userObj!=null) {
-                    // if email is there and matches, activate
-                    Set<String> doneEmails = new HashSet<String>();
-                    for(Object emailElt : selectMultipleXPath("//co:email", node)) {
-                        String email = ((Element) emailElt).getTextNormalize();
-                        if(email!=null && email.equals(userObj.get("email"))) {
-                            if(doneEmails.contains(email)) continue;
-                            doneEmails.add(email);
-                            if("Yes".equals(userObj.get("email_undeliverable"))) {
-                                LOG.warn("activating user's email " + email);
-                                userObj.set("email_undeliverable",0);
-                                userObj.set("active", 1);
-                                userDoc.saveWithProgrammingRights("Validating thanks to payment.");
-                                sendConfirmationEmail(xwiki, userDoc.getName(),
-                                        (String) userObj.get("email"), languages.get((String) userObj.getProperty("language").getValue()), (String) userObj.get("memberType"),
-                                        msg, urlToHere);
-                            }
-                        }
-                    }
-
-                    // update user-donation-object
-                    com.xpn.xwiki.api.Object donationTrackObj = userDoc.getObject(DOCNAME_donationTrackClass);
-                    if(donationTrackObj==null) {
-                        userDoc.createNewObject(DOCNAME_donationTrackClass);
-                        donationTrackObj = userDoc.getObject(DOCNAME_donationTrackClass);
-                    }
-                    donationTrackObj.set("lastDonated", currencies.get().format(amount));
-                    Date date = new Date();
-                    donationTrackObj.set("lastDonatedDate", date);
-
-                    Object o = donationTrackObj.get("totalDonated");
-                    if(o instanceof String) {
-                        if(((String)o).length()==0) o = 0f;
-                        else o = currencies.get().parse((String) o);
-                    }
-                    float totalDonated = o==null ? 0 : ((Number) o).floatValue();
-                    donationTrackObj.set("totalDonated", totalDonated + amount);
-
-                    if("corporate-membership".equals(cartType)) {
-                        donationTrackObj.set("lastCorpMembershipDonated", amount);
-                        donationTrackObj.set("lastCorpMembershipDate",   date);
-                        if(amount> MIN_CORP_AMOUNT)
-                            donationTrackObj.set("corpMembershipValid", 1);
-                    } else {
-                        donationTrackObj.set("corpMembershipValid", 0);
-                    }
-
-                    userDoc.saveWithProgrammingRights("Received donation");
-
+                    archiveOrder(xwiki, orderNumber, node, msg, urlToHere, userName, cartType, amount, context);
                 }
 
-                archiveOrder(xwiki, orderNumber);
                 LOG.warn("Finished successfully processing notification : " + historyStepSerialNumber);
-
             }
         } catch (Exception ex) {
             LOG.warn("Issue at processing order: ", ex);
         }
     }
 
-    private void sendConfirmationEmail(XWiki xwiki, String username, String email, String lang, String memberType, XWikiMessageTool msg, String urlToHere) throws Exception {
+    private static void sendConfirmationEmail(XWiki xwiki, String username, String email, String lang, String memberType, XWikiMessageTool msg, String urlToHere) {
         try {
             String emailDocName = "corporate".equals(memberType) ?
                     "CorporateRegCompleteEmail" :"MemberRegCompleteEmail";
@@ -444,36 +416,114 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
             mailsender.sendHtmlMessage(from, email, null, null,
                     xwiki.getDocument("Registration."+emailDocName).getTitle(), text, text.replaceAll("<[^>]*>",""), null);
             System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to send email.");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public String archiveOrder(XWiki xwiki, String serialNumber) throws XWikiException{
-        try {
-            // move to finished orders
-            Document orderList = xwiki.getDocument(DOCNAME_orderList);
-            Document oldOrders = xwiki.getDocument(DOCNAME_oldOrderList);
-
-            com.xpn.xwiki.api.Object finishedOrder = oldOrders.getObject(DOCNAME_orderClass,oldOrders.createNewObject(DOCNAME_orderClass));
-            com.xpn.xwiki.api.Object order = orderList.getObject(DOCNAME_orderClass,ORDERPROP_serialNumber, serialNumber);
-            if(order==null || order.getProperties()==null)
-                return "error.order-not-found";
+    public String archiveOrder(XWiki xwiki, String serialNumber, Element node, XWikiMessageTool msg, String urlToHere, String userName, String cartType, float amount, XWikiContext context) throws XWikiException{
+        new Thread(new GCheckoutArchivingWorker(serialNumber, node, msg, urlToHere, userName, cartType, amount, context), "GCheckoutArchiver-" + serialNumber).start();
+        return "launched";
+    }
 
 
-            for(com.xpn.xwiki.api.Element propElt: order.getProperties()) {
-                String propName = propElt.getName();
-                //LOG.warn("Copying property " + propElt + " for name " + propName);
-                finishedOrder.set(propName, order.get(propName));
+    public static class GCheckoutArchivingWorker extends AbstractXWikiRunnable {
+
+        public GCheckoutArchivingWorker(String serialNumber, Element nodeInNotifDoc, XWikiMessageTool msg, String urlToHere, String userName, String cartType, float amount, XWikiContext xcontext) {
+            super(XWikiContext.EXECUTIONCONTEXT_KEY, xcontext.clone());
+            this.serialNumber = serialNumber;
+            this.nodeInNotifDoc = nodeInNotifDoc;
+            this.userName = userName;
+            this.msg = msg;
+            this.urlToHere = urlToHere;
+            this.amount = amount;
+            this.cartType = cartType;
+        }
+        private String serialNumber;
+        private Element nodeInNotifDoc;
+        private String userName;
+        private String urlToHere;
+        private XWikiMessageTool msg;
+        private float amount;
+        private String cartType;
+
+
+        @Override
+        protected void runInternal() {
+            try {
+                XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
+                        .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
+
+                // adjust user document
+                XWikiDocument userDoc = xcontext.getWiki().getDocument(userName, xcontext);
+                BaseObject userObj = userDoc.getObject("XWiki.XWikiUsers");
+
+
+                if(userName!=null && nodeInNotifDoc!=null) {
+                    // if email is there and matches, activate
+                    Set<String> doneEmails = new HashSet<String>();
+                    for(Object emailElt : selectMultipleXPath("//co:email", nodeInNotifDoc)) {
+                        String email = ((Element) emailElt).getTextNormalize();
+                        if(email!=null && email.equals(userObj.getStringValue("email"))) {
+                            if(doneEmails.contains(email)) continue;
+                            doneEmails.add(email);
+                            if(1==userObj.getIntValue("email_undeliverable")) {
+                                LOG.warn("activating user's email " + email);
+                                userObj.setIntValue("email_undeliverable",0);
+                                userObj.setIntValue("active", 1);
+                                xcontext.getWiki().saveDocument(userDoc, "Validating thanks to payment.", xcontext);
+                                sendConfirmationEmail(new XWiki(xcontext.getWiki(), xcontext), userDoc.getName(), userObj.getStringValue("email"),
+                                        languages.get(userObj.getStringValue("language")), userObj.getStringValue("memberType"),
+                                        msg, urlToHere);
+                            }
+                        }
+                    }
+
+                    // update user-donation-object
+                    BaseObject donationTrackObj = userDoc.getObject(DOCNAME_donationTrackClass);
+                    if(donationTrackObj==null) {
+                        userDoc.createNewObject(DOCNAME_donationTrackClass, xcontext);
+                        donationTrackObj = userDoc.getObject(DOCNAME_donationTrackClass);
+                    }
+                    donationTrackObj.setFloatValue("lastDonated", amount);
+                    Date date = new Date();
+                    donationTrackObj.setDateValue("lastDonatedDate", date);
+
+                    float totalDonated = donationTrackObj.getFloatValue("totalDonated");
+                    donationTrackObj.setFloatValue("totalDonated", totalDonated + amount);
+
+                    if("corporate-membership".equals(cartType)) {
+                        donationTrackObj.setFloatValue("lastCorpMembershipDonated", amount);
+                        donationTrackObj.setDateValue("lastCorpMembershipDate",   date);
+                        if(amount> MIN_CORP_AMOUNT)
+                            donationTrackObj.setIntValue("corpMembershipValid", 1);
+                    } else {
+                        donationTrackObj.setIntValue("corpMembershipValid", 0);
+                    }
+
+                    xcontext.getWiki().saveDocument(userDoc, xcontext);
+
+                }
+
+                // move order object to finished orders
+
+                XWikiDocument dd1 = xcontext.getWiki().getDocument("xwiki:GCheckout.Orders", xcontext),
+                        dd2=xcontext.getWiki().getDocument("xwiki:GCheckout.OldOrders", xcontext);
+                LOG.warn("Obtained document " + dd1 + " and " + dd2);
+                BaseObject obj1 = dd1.getObject(DOCNAME_orderClass,ORDERPROP_serialNumber, serialNumber);
+                //obj1.setDocumentReference(dd2.getDocumentReference());
+                dd2.addXObject(obj1.clone());
+                String versionMsg = "Archiving " + serialNumber;
+                xcontext.getWiki().saveDocument(dd2, versionMsg, xcontext);
+                dd1.removeXObject(obj1);
+                xcontext.getWiki().saveDocument(dd1, versionMsg, xcontext);
+                LOG.warn("Finished " + versionMsg);
+
+
+                LOG.warn("Finished archiving " + serialNumber);
+            } catch (XWikiException e) {
+                LOG.warn("Issue at archiving " + e);
             }
-
-            oldOrders.saveWithProgrammingRights("Archiving " + serialNumber);
-            orderList.removeObject(order);
-            orderList.saveWithProgrammingRights("Archiving " + serialNumber);
-            return "ok-archived";
-        } catch (XWikiException e) {
-            LOG.warn("Issue at archiving " + e);
-            return "archive-error";
         }
     }
 }
