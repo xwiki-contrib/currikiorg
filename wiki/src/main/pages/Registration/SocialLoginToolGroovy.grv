@@ -260,6 +260,8 @@ public class SocialLoginToolGroovy {
         if(username==null || username=='') {
             int p = email.indexOf('@');
             username = email.substring(0,p);
+            username = username.replaceAll("[^a-zA-Z0-9]","_");
+            username = username.replaceAll("__","_").replaceAll("__","_");
             if(!validation.isValidUsername(username, false)) {
                 int i=0;
                 while(i<20) {
