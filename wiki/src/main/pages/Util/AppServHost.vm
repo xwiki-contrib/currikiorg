@@ -1,3 +1,24 @@
-1 $xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host")
+1 Host name
 
-(hostname you are running the xwiki web-app on)
+#macro(hostLink $hostname)
+<a href="$doc.name" ##
+   onclick="d = new Date(); d.setDate(d.getDate()+7); document.cookie='JSESSIONID=xxx.$hostname; ' + d.toUTCString()" ##
+        >$hostname</a>
+#end
+
+You are currently running from the XWiki on this host:
+
+$xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host")
+
+
+You can go to the following hosts but please note that you log yourself out!
+
+Prod:
+
+- #hostLink("prod-app")
+- #hostLink("failover-app")
+
+Beta:
+
+- #hostLink("beta-app")
+- #hostLink("dev-next-app")
