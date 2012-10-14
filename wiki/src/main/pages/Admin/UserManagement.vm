@@ -154,12 +154,13 @@ $userManagement.processReceivedData()
         </div>
     #end
     <div class="clearfix"></div>
-    <p><label for="rows">Max. Results</label></p>
+    <label for="rows">Results per page:</label>
     <select id="rows" name="rows">
         <option #if($request.rows=="25")selected#end>25</option>
         <option #if($request.rows=="50")selected#end>50</option>
         <option #if($request.rows=="100")selected#end>100</option>
     </select>
+    <br>
     <input type="submit" class="button" value="Search"/>
 </form>
 
@@ -268,7 +269,7 @@ $userManagement.processReceivedData()
                 <div id="${userName}.stillHasContributions" style="display: none;">
                     <ul class="resourceList">
                     #foreach($resource in $warningsForUser.get("userResources"))
-                        <li><a href="/xwiki/bin/view/Coll_${userName}/${resource}">$resource</a></li>
+                        <li><a href="/xwiki/bin/view/${resource.replace(".","/")}">$resource</a></li>
                     #end
                     </ul>
                 </div>

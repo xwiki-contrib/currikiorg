@@ -443,7 +443,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     }
 
     private List<String> getUserResources(String userName){
-        List results = xwiki.getXWiki().search("select doc.name from XWikiDocument doc, BaseObject obj where doc.creator='XWiki." + userName + "' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
+        List results = xwiki.getXWiki().search("select doc.fullName from XWikiDocument doc, BaseObject obj where doc.creator='XWiki." + userName + "' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
         return results;
     }
 
