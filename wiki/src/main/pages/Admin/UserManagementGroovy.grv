@@ -228,24 +228,31 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     private void applyStatusChanges() {
         Map<String, String> userStates = extractUserStatesFromParams();
 
+        //For all parameters of the request
         for (Map.Entry<String, String> entry : userStates.entrySet()) {
             String userName = entry.key;
             String userState = entry.value;
 
+            //Try to get the userDoc
             Document userDoc = xwiki.getDocument("XWiki." + userName);
             if (userDoc == null){
                 errors.add("Could not find UserDoc for user " + userName)
                 continue;
             }
 
+            //Try to get the userObj of the Doc
             def userObj = userDoc.getObject("XWiki.XWikiUsers");
             if(userObj == null) {
                 errors.add("Could not find UserObj for user " + userName);
                 continue;
             }
 
+            //Variables to track the changes of the users
             boolean changedAUser = false;
             boolean deletedAUser = false;
+
+            //Look which state is wanted for the user and
+            //delegate the switch of the state change
             if (userState.equals("ACTIVE")) {
                 changedAUser = activateUser(userObj);
                 if(changedAUser) activatedUsers.add(userName);
@@ -263,12 +270,17 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
                 if(deletedAUser) deletedUsers.add(userName);
             }
 
+            //If the user was changed it needs to be saved
             if(changedAUser && !deletedAUser){
                 userDoc.saveWithProgrammingRights();
             }
         }
     }
 
+    /**
+     * This function is called when the userSearch was triggered.
+     * We need the information in the view how many results we should show per page
+     */
     private void computeTotalPageNumber() {
         //calculate the number of pages for the view
         double result = totalNumberOfSolrResults / maxRowsInSolrResponse;
@@ -363,12 +375,19 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         return hasChanged;
     }
 
+    /**
+     * Tries to delete a user. Befor it does so it checks for several conditions
+     * e.g if the user is a system admin he can not be deleted.
+     * @param userName - the name of the user to delete
+     * @return true if the user was deleted, false otherwise.
+     */
     private boolean deleteUser(String userName){
         boolean userFreeToDeletion = true;
 
         Map<String, String> userAttributes  = foundUsers.get(userName);
         String numberOfContributions = userAttributes.get("userContributions");
 
+        //The user still has resources
         if(Integer.valueOf(numberOfContributions) > 0){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
             warningsForUser.put("cause", WARNING_USER_STILL_HAS_CONTRIBUTIONS);
@@ -379,6 +398,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             userFreeToDeletion = false;
         }
 
+        //The user is a system admin
         List<String> groupNames = getGroupNamesFromSolrString(userName);
         if(groupNames.contains(CurrikiSpaceManagerExtension.LEADERS_GROUP_NAME)){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
@@ -388,6 +408,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             userFreeToDeletion = false;
         }
 
+        //The user is a admin in a group
         List<String> groupNamesWhereUserIsAdmin = getGroupNamesWhereUserIsAdmin(userName, groupNames);
         if(groupNamesWhereUserIsAdmin.size() > 0){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
@@ -398,6 +419,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             userFreeToDeletion = false;
         }
 
+        //The user is the same which sent the request
         if(("XWiki."+userName).equals(context.getUser())){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
             warningsForUser.put("cause", WARNING_USER_IS_YOURSELF);
@@ -406,6 +428,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             userFreeToDeletion = false;
         }
 
+        //No Case matched we can delete the user
         if(userFreeToDeletion) {
             Document userDoc = xwiki.getDocument("XWiki." + userName);
             if (userDoc != null){
@@ -417,6 +440,12 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         }
     }
 
+    /**
+     * Get all names of groups where the user is a group admin
+     * @param userName - The name of the user to check
+     * @param groupNames - The names of the groups to check if the user is an admin in
+     * @return
+     */
     private List<String> getGroupNamesWhereUserIsAdmin(String userName, List<String> groupNames){
         List <String> result  = new ArrayList<String>();
         for(groupName in groupNames){
@@ -428,6 +457,12 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         return result;
     }
 
+    /**
+     * Solr returns the group information in the form
+     * [{displayTitle:"", spaceName:"" ...}, {...}]
+     * @param userName - the name of the user for which to extract the group information out of the solr result
+     * @return Complete names of the Groups where the user is member in
+     */
     private List<String> getGroupNamesFromSolrString(String userName){
         List<String> result = new ArrayList();
         Map<String, String> userAttributes = foundUsers.get(userName);
@@ -442,6 +477,11 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         return result;
     }
 
+    /**
+     * Get Full names of all resources of a users
+     * @param userName -  the username of which the resources should be found
+     * @return all resources of a user with their full names
+     */
     private List<String> getUserResources(String userName){
         List results = xwiki.getXWiki().search("select doc.fullName from XWikiDocument doc, BaseObject obj where doc.creator='XWiki." + userName + "' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
         return results;
