@@ -279,8 +279,13 @@ public class CurrikiPluginApi extends Api {
         return plugin.solrListDocNames(query, start, num);
     }
 
-        public void startMethod(GetMethod g) {
+    public void startMethod(GetMethod g) {
         plugin.startSolrMethod(g);
+    }
+
+    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, CurrikiPlugin.SolrResultCollector collector){
+        if(!hasProgrammingRights()) return;
+        plugin.solrCollectResultsFromQuery(query,fields,start,max,collector);
     }
 
     public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {

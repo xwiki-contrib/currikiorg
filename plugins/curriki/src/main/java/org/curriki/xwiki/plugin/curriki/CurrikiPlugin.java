@@ -1168,10 +1168,10 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
                         if(numFound==null) numFound="-1"; if(start==null) start="-1";
                         collector.status(statusCode, qTime, Integer.parseInt(numFound), Integer.parseInt(start));
                     }
-                    else if("str".equals(qName) || "arr".equals(qName) || "int".equals(qName)) {
+                    else if("str".equals(qName) || "arr".equals(qName) || "int".equals(qName) || "bool".equals(qName)) {
                         if(isInInterestingArray) isInInterestingZone = true;
                         else if(isInStatus && n!=null && ("QTime".equals(n) || "status".equals(n) )|| names.contains(n)) {
-                            if("str".equals(qName) || "int".equals(qName)) isInInterestingZone = true;
+                            if("str".equals(qName) || "int".equals(qName) || "bool".equals(qName)) isInInterestingZone = true;
                             else isInInterestingArray = true;
                             name = n;
                         }
@@ -1194,7 +1194,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
                             isInInterestingZone = false;
                         }
                     }
-                    if(isInInterestingZone && !isInStatus && "str".equals(qName)) {
+                    if(isInInterestingZone && !isInStatus &&  (("str".equals(qName)) || "bool".equals(qName) || "int".equals(qName)) ) {
                         isInInterestingZone = false;
                         collector.addValue(name, collectValue());
                         name = null;
