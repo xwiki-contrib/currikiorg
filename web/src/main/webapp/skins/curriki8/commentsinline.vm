@@ -18,7 +18,7 @@
 ###
 ### List document comments
 ###
-	#if($xwiki.getWebPreferenceAsInt("commentsorder",1)==1)
+	#if($xwiki.getSpacePreferenceAsInt("commentsorder",1)==1)
 		#set($comments = $doc.getComments())
 	#else
 		#set($comments = $doc.getComments(false))
@@ -55,7 +55,7 @@
 ## #if($hasedit) <span class="commentdelete"><a class="commentremove" href="$doc.getURL("objectremove" , "classname=XWiki.XWikiComments&amp;classid=${comment.number}&amp;xredirect=${delredir}")"
 ##    onclick="return confirm('$msg.get("confirmcommentremove")')">$msg.get("removethiscomment")</a></span>#end ## endif hasedit
 	</div>## commentheader
-	<div class="commentcontent">$doc.getRenderedContent($doc.display("comment","view",$comment))</div>## xwikicomment
+	<div class="commentcontent">$doc.getRenderedContent($doc.display("comment","view",$comment),"xwiki/1.0")</div>## xwikicomment
 </div>## commentscontent
 			#end  ## end foreach 
 		#end ## endif comments.size > 0
