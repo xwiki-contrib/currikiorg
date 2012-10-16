@@ -65,7 +65,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     private int currentPageNumber = 0;
 
     /**
-     * The total numbre of solr result without paging
+     * The total number of solr results without paging
      */
     private int totalNumberOfSolrResults = 0;
 
@@ -73,6 +73,11 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * The number of pages which are containing results (totalNumberOfSolrResults / maxRowsInSolrResponse)
      */
     private int totalNumberOfPages = 0;
+
+    /**
+     * The value of the sort parameter in a request to this tool. Which is then used to sort the solr result
+     */
+    private String sortParam = "";
 
     /**
      * If a status change of users is made this set keeps track of the activated ones
@@ -140,6 +145,10 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             currentPageNumber = Integer.valueOf(params.get("pageNumber")[0]);
         }
 
+        if(params.containsKey("sort")){
+            this.sortParam = getSortParamFromRequest(params.get("sort")[0]);
+        }
+
         if(params.containsKey("usernames")){
             searchUserByName(params.get("usernames")[0]);
         }
@@ -194,6 +203,40 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     }
 
     /**
+     * This behavior is wrapped in this function that no direct parameter input is possible and breaks the query
+     * @param sortParam the param sort of the request
+     * @return the correct sort parameter for solr
+     */
+    private String getSortParamFromRequest(String sortParam){
+        if(null == sortParam) return null;
+        String result = "&sort=";
+
+        if(sortParam.contains("userName")){
+            result += "userNameForSort";
+        }else if(sortParam.contains("userFirstName")){
+            result += "userFirstNameForSort";
+        }else if(sortParam.contains("userLastName")){
+            result += "userLastNameForSort";
+        }else if(sortParam.contains("userEmail")){
+            result += "userEmailForSort";
+        }else{
+            result = ""; // Fall back if no information about the field was provided we sort nothing
+        }
+
+        if(result.length()!=0){ // Only if the comparing above had a result we try to determine the search order
+            if(sortParam.contains("asc")){
+                result += "%20asc";
+            }else if(sortParam.contains("desc")){
+                result += "%20desc";
+            }else{
+                result = ""; // Fall back if no information about the order was provided we sort nothing
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Called to search users by name and fill the result map
      * a map of maps with all data needed for the view [username1: [useractive:"true", userFirstname:"first1", userLastname:"last1"], username2: [useractive:"false" ...], ...]
      * @param userNames the input of the user names in the form "username1, username2, username3"
@@ -201,12 +244,12 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     private void searchUserByName(String userNames) {
         if(userNames == null || userNames.equals("")) return;
         try{
-            String fields = "userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups";
+            String fields = "userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups" + sortParam;
 
-            String queryString = "((userName:*" + userNames + "*)OR";
-            queryString += "(userFirstName:*" + userNames + "*)OR";
-            queryString += "(userLastName:*" + userNames + "*)OR";
-            queryString += "(userEmail:*" + userNames + "*)";
+            String queryString = "((userName:" + userNames + ")OR";
+            queryString += "(userFirstName:" + userNames + ")OR";
+            queryString += "(userLastName:" + userNames + ")OR";
+            queryString += "(userEmail:" + userNames + ")";
             queryString += ")AND(type:user)";
 
             int start = (currentPageNumber-1)*maxRowsInSolrResponse;
@@ -376,7 +419,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     }
 
     /**
-     * Tries to delete a user. Befor it does so it checks for several conditions
+     * Tries to delete a user. Before it does so it checks for several conditions
      * e.g if the user is a system admin he can not be deleted.
      * @param userName - the name of the user to delete
      * @return true if the user was deleted, false otherwise.

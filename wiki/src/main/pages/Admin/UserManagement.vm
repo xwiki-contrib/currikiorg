@@ -7,6 +7,75 @@ $userManagement.processReceivedData()
 #set($foundUsers = $userManagement.getFoundUsers())
 
 {pre}<script type="text/javascript">
+    Ext.onReady(function(){
+        sortParam = gup("sort");
+        setSortColumn(sortParam);
+    });
+    function gup( name )
+    {
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( window.location.href );
+        if( results == null )
+            return "";
+        else
+            return results[1];
+    }
+    function removeAllOtherSortColumnStyles(){
+        var columnHeaderIds = new Array("userNameHeader", "userFirstNameHeader", "userLastNameHeader", "userEmailHeader");
+        for(headerId in columnHeaderIds){
+            var headerElement = Ext.get(headerId);
+            if(headerElement != null){
+                headerElement.removeClass("sortColumn")
+            }
+        }
+    }
+    function setSortColumn(columnName){
+        removeAllOtherSortColumnStyles();
+        var targetId = "";
+        if (columnName.indexOf("userName") != -1) {
+            targetId = "userNameHeader"
+        } else if (columnName.indexOf("userFirstName") != -1) {
+            targetId = "userFirstNameHeader"
+        } else if (columnName.indexOf("userLastName") != -1) {
+            targetId = "userLastNameHeader"
+        } else if (columnName.indexOf("userEmail") != -1) {
+            targetId = "userEmailHeader"
+        } else {
+            targetId == "userNameHeader"
+        }
+        var targetHeaderElement = Ext.get(targetId);
+        if(targetHeaderElement != null){
+            targetHeaderElement.addClass('sortColumn')
+        }
+    }
+    function changeSortColumn(columnName){
+        var sortParamGetFormElement = Ext.get("sortParamGetForm");
+        var sortParamPostFormElement = Ext.get("sortParamPostForm");
+
+        //Lookup which order is choosen
+        var sortParam = gup("sort");
+        var order = "asc"
+
+        if(sortParam.indexOf(columnName)!=-1){  // If the same field is clicked twice the paramter already contains the field name
+            if(sortParam.indexOf("asc")!=-1){  // Then we want to switch the order of the results.
+                order = "desc";
+            }else if(sortParam.indexOf("desc")!=-1){
+                order = "asc";
+            }
+        }
+
+        if(sortParamGetFormElement != null){
+            sortParamGetFormElement.set({value: columnName+" "+order})
+        }
+
+        if(sortParamPostFormElement != null){
+            sortParamPostFormElement.set({value: columnName+""+order})
+        }
+        Ext.get("searchForm").dom.submit();
+
+    }
     function showHide(div){
         if(document.getElementById(div).style.display == 'none'){
             document.getElementById(div).style.display = 'block';
@@ -116,6 +185,14 @@ $userManagement.processReceivedData()
         position: relative;
         left: 1.5em;
     }
+    .sortColumn{
+        color: #4d82f3;
+        text-decoration:underline;
+    }
+    .tableHeaderHover:hover {
+        color: #413cf3;
+        text-decoration:underline;
+    }
 </style>
 
 <h2>User-Management-Tool</h2>
@@ -162,6 +239,7 @@ $userManagement.processReceivedData()
     </select>
     <br>
     <input type="submit" class="button" value="Search"/>
+    <input id="sortParamGetForm" type="hidden" name="sort" #if($request.sort) value="${request.sort}" #else value="userName asc" #end />
 </form>
 
 
@@ -172,10 +250,10 @@ $userManagement.processReceivedData()
     <input type="hidden" name="applyStatusChanges" value="true"/>
     <table style=" table-layout: fixed; width: 100%; padding: 25px; word-wrap: break-word;">
         <tr>
-            <th style="width: 15%"><div class="vertical_hidden_text"></div>Accountname<img src="/xwiki/skins/curriki8/images/adv-search-sort-sprite.gif"></th>
-            <th style="width: 25%"><div class="vertical_hidden_text"></div>Email</th>
-            <th><div class="vertical_hidden_text"></div>Firstname</th>
-            <th><div class="vertical_hidden_text"></div>Lastname</th>
+            <th id="userNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userName')" style="width: 15%"><div class="vertical_hidden_text"></div>Accountname<img src="/xwiki/skins/curriki8/images/adv-search-sort-sprite.gif"></th>
+            <th id="userEmailHeader" class="tableHeaderHover" onclick="changeSortColumn('userEmail')" style="width: 25%"><div class="vertical_hidden_text"></div>Email</th>
+            <th id="userFirstNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userFirstName')" ><div class="vertical_hidden_text"></div>Firstname</th>
+            <th id="userLastNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userLastName')" ><div class="vertical_hidden_text"></div>Lastname</th>
             <th class="vertical_text">Active</th>
             <th class="vertical_text">Inactive</th>
             <th class="vertical_text">Deactivated</th>
@@ -220,9 +298,10 @@ $userManagement.processReceivedData()
     <input id="pageNumberPostForm" type="hidden" name="pageNumber" #if($request.pageNumber) value="${request.pageNumber}" #else value="1" #end />
     <input type="hidden" name="usernames" #if($request.usernames)value="${request.usernames}"#else value="" #end />
     <input type="hidden" name="rows" #if($request.rows)value="${request.rows}"#else value="" #end />
+    <input id="sortParamPostForm" type="hidden" name="sort" #if($request.sort) value="${request.sort}" #else value="userName asc" #end />
 </form>
 
-#set($totalNumberOfPages=$userManagement.getTotalNumberOfPages())
+    #set($totalNumberOfPages=$userManagement.getTotalNumberOfPages())
 <div style="float:right; padding: 0.5em;" onclick="increaseCurrentPageNumber('$totalNumberOfPages');"><a href="#" > Next &gt;&gt;</a></div>
 <div style="float:right; padding: 0.5em;"> Page: $request.pageNumber of $totalNumberOfPages </div>
 <div style="float:right; padding: 0.5em;" onclick="decreaseCurrentPageNumber();"><a href="#" > &lt;&lt; Previous </a> </div>
