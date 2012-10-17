@@ -86,11 +86,11 @@ $userManagement.processReceivedData()
     function warnIfUsersShouldBeDeleted(){
         var inputs = document.getElementsByTagName("input");
         for(i = 0; i < inputs.length; i++){
-           var input = inputs[i];
-           var value = input.getAttribute("value");
-           if(input.getAttribute("value") == "TO_DELETE" && input.checked){
-            return confirm("You marked one or more user/s for deletion. You know what you are doing?");
-           }
+            var input = inputs[i];
+            var value = input.getAttribute("value");
+            if(input.getAttribute("value") == "TO_DELETE" && input.checked){
+                return confirm("You marked one or more users for deletion. You do know what you are doing?");
+            }
         }
         return true;
     }
@@ -200,9 +200,9 @@ $userManagement.processReceivedData()
 
 <h3>Activate - Deactivate - Inactivate</h3>
 <ol>
-    <li>Search for one or more users by name</li>
-    <li>Apply changes to the states of the found users</li>
-    <li>Hit "Set changed status" button</li>
+    <li>Search for one or more users by name.</li>
+    <li>Apply changes to the states of the found users.</li>
+    <li>Select "Set Changed Status" button.</li>
 </ol>
 </p>
 <p>
@@ -215,17 +215,17 @@ $userManagement.processReceivedData()
 <form id="searchForm" method="GET">
     <input type="hidden" name="searchUsers"  value="true"/>
     <input id="pageNumberGetForm" type="hidden" name="pageNumber" #if($request.pageNumber) value="${request.pageNumber}" #else value="1" #end />
-    <p><label for="usernames">$msg.get('join.login.username') (e.g. jmkars plox tsherman)</label></p>
+    <p><label for="usernames">$msg.get('join.login.username') (e.g. jmarks plox) Hint: NOT, AND, quotes and wildcards all work.</label></p>
     <textarea id="usernames" name="usernames" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }">#if($request.usernames)${request.usernames}#end</textarea>
     #if( ! $foundUsers )
         <div id="wrongInputNotification">
             <div id="wrongInputNotificationBorder">
                 Sorry your input was not well formed.<br>
-                Please be sure to:
+                Please:
                 <ul>
                     <li>Don't use commas to separate search terms</li>
-                    <li>Have all parenthesis closed correct</li>
-                    <li>Have all parenthesis closed correct</li>
+                    <li>Have all parenthesis closed correctly</li>
+                    <li>Have all parenthesis closed correctly</li>
                 </ul>
             </div>
         </div>
@@ -294,7 +294,7 @@ $userManagement.processReceivedData()
         #end
 
     </table>
-    <input type="submit" class="button" value="Apply status changes" #if($foundUsers.size()==0)disabled="disabled"#end/>
+    <input type="submit" class="button" value="Apply Status Changes" #if($foundUsers.size()==0)disabled="disabled"#end/>
     <input id="pageNumberPostForm" type="hidden" name="pageNumber" #if($request.pageNumber) value="${request.pageNumber}" #else value="1" #end />
     <input type="hidden" name="usernames" #if($request.usernames)value="${request.usernames}"#else value="" #end />
     <input type="hidden" name="rows" #if($request.rows)value="${request.rows}"#else value="" #end />
@@ -317,16 +317,16 @@ $userManagement.processReceivedData()
     #set($warnings=$userManagement.getWarnings())
     #set($errors=$userManagement.getErrors())
 
-    <h2>Results of status changes</h2>
-    <br>
+<h2>Results of Status Changes</h2>
+<br>
 
     #if($warnings.size() == 0 && $errors.size() == 0)
     <div  id="successMessage">
-        <h3>OK</h3>
+        <h3>Success</h3>
         <ul>
-            <li>Users changed</li>
-            <li>Reindex triggered</li>
-            <li>It takes a moment until your changes appear to search</li>
+            <li>Users changed.</li>
+            <li>Reindex triggered.</li>
+            <li><b>It takes a moment until your changes appear in search results.</b></li>
         </ul>
     </div>
     #end
@@ -334,9 +334,9 @@ $userManagement.processReceivedData()
     <div  class="warningMessage">
         <h3>Warning</h3>
         <ul>
-            <li>There had been problems deleting some users</li>
-            <li>See messages below for further</li>
-            <li>It takes a moment until your changes appear to search</li>
+            <li>There are problems deleting some users.</li>
+            <li>See messages below for further information.</li>
+            <li><b>It takes a moment until your changes appear in search results.</b></li>
         </ul>
         <br>
         #foreach($warningsForUser in $warnings)
@@ -344,33 +344,33 @@ $userManagement.processReceivedData()
             #set($cause=$warningsForUser.get("cause"))
 
             #if($cause == "WARNING_USER_STILL_HAS_CONTRIBUTIONS")
-            The user $userName could not be deleted, he/she still has <a href="#" onclick="showHide('${userName}.stillHasContributions');">$warningsForUser.get("numberOfContributions") contribution/s </a> in Curriki. <br>
+                The user $userName could not be deleted, he/she still has <a href="#" onclick="showHide('${userName}.stillHasContributions');">$warningsForUser.get("numberOfContributions") contribution/s </a> in Curriki. <br>
                 <div id="${userName}.stillHasContributions" style="display: none;">
                     <ul class="resourceList">
-                    #foreach($resource in $warningsForUser.get("userResources"))
-                        <li><a href="/xwiki/bin/view/${resource.replace(".","/")}">$resource</a></li>
-                    #end
+                        #foreach($resource in $warningsForUser.get("userResources"))
+                            <li><a href="/xwiki/bin/view/${resource.replace(".","/")}">$resource</a></li>
+                        #end
                     </ul>
                 </div>
             #end
 
             #if($cause == "WARNING_USER_IS_SYSTEM_ADMIN")
-            The user $userName could not be deleted, he/she is a system admin. <br>
+                The user $userName could not be deleted, he/she is a system admin. <br>
             #end
 
             #if($cause == "WARNING_USER_IS_GROUP_ADMIN")
-            The user $userName could not be deleted, he/she is a group admin in <a href="#" onclick="showHide('${userName}.isGroupAdmin');">$warningsForUser.get("groupNames").size() groups</a>. <br>
-             <div id="${userName}.isGroupAdmin" style="display: none;">
-                <ul class="resourceList">
-                    #foreach($groupName in $warningsForUser.get("groupNames"))
-                        <li><a href="/xwiki/bin/view/${groupName}/WebHome">$groupName</a></li>
-                    #end
-                </ul>
-            </div>
+                The user $userName could not be deleted, he/she is a group admin in <a href="#" onclick="showHide('${userName}.isGroupAdmin');">$warningsForUser.get("groupNames").size() groups</a>. <br>
+                <div id="${userName}.isGroupAdmin" style="display: none;">
+                    <ul class="resourceList">
+                        #foreach($groupName in $warningsForUser.get("groupNames"))
+                            <li><a href="/xwiki/bin/view/${groupName}/WebHome">$groupName</a></li>
+                        #end
+                    </ul>
+                </div>
             #end
 
             #if($cause == "WARNING_USER_IS_YOURSELF")
-            The user $userName could not be deleted, you cannot delete yourself. <br>
+                The user $userName could not be deleted, you cannot delete yourself. Doh!<br>
             #end
 
         #end
@@ -381,9 +381,9 @@ $userManagement.processReceivedData()
     <div  class="errorMessage">
         <h3>Error</h3>
         <ul>
-            <li>There had been errors while deleting a user</li>
-            <li>See messages below for further information</li>
-            <li>It takes a moment until your changes appear to search</li>
+            <li>There were errors while deleting a user.</li>
+            <li>See messages below for further information.</li>
+            <li><b>It takes a moment until your changes appear in search results.</b></li>
         </ul>
         <br>
         #foreach($error in $errors)
@@ -391,38 +391,37 @@ $userManagement.processReceivedData()
         #end
     </div>
     #end
-    <br>
-    <hr>
+<br>
+<hr>
 
-    <h3 class="resultHeading">$activatedUsers.size() activated</h3>
-    <p class="resultText">
-        #foreach($user in $activatedUsers)
+<h3 class="resultHeading">$activatedUsers.size() activated</h3>
+<p class="resultText">
+    #foreach($user in $activatedUsers)
                 $user
         #end
-    </p>
-    <hr>
+</p>
+<hr>
 
-    <h3 class="resultHeading"> $inactivatedUsers.size() inactivated</h3>
-    <p class="resultText">
-        #foreach($user in $inactivatedUsers)
+<h3 class="resultHeading"> $inactivatedUsers.size() inactivated</h3>
+<p class="resultText">
+    #foreach($user in $inactivatedUsers)
                 $user
         #end
-    </p>
-    <hr>
+</p>
+<hr>
 
-    <h3 class="resultHeading">$deactivatedUsers.size() deactivated</h3>
-    <p class="resultText">
-        #foreach($user in $deactivatedUsers)
+<h3 class="resultHeading">$deactivatedUsers.size() deactivated</h3>
+<p class="resultText">
+    #foreach($user in $deactivatedUsers)
                 $user
         #end
-    </p>
-    <hr>
+</p>
+<hr>
 
-    <h3 class="resultHeading">$deletedUsers.size() deleted</h3>
-    <p class="resultText">
-        #foreach($user in $deletedUsers)
+<h3 class="resultHeading">$deletedUsers.size() deleted</h3>
+<p class="resultText">
+    #foreach($user in $deletedUsers)
                 $user
         #end
-    </p>
+</p>
 #end
-
