@@ -110,6 +110,11 @@ $userManagement.processReceivedData()
             document.getElementById("searchForm").submit();
         }
     }
+    function resetPageAndSubmitSearch(){
+        document.getElementById("pageNumberGetForm").setAttribute("value", 1);
+        document.getElementById("searchForm").submit();
+    }
+
 </script>
 {/pre}
 
@@ -216,7 +221,7 @@ $userManagement.processReceivedData()
     <input type="hidden" name="searchUsers"  value="true"/>
     <input id="pageNumberGetForm" type="hidden" name="pageNumber" #if($request.pageNumber) value="${request.pageNumber}" #else value="1" #end />
     <p><label for="usernames">$msg.get('join.login.username') (e.g. jmarks plox) Hint: NOT, AND, quotes and wildcards all work.</label></p>
-    <textarea id="usernames" name="usernames" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }">#if($request.usernames)${request.usernames}#end</textarea>
+    <textarea id="usernames" name="usernames" onkeydown="if (event.keyCode == 13) { resetPageAndSubmitSearch(); return false; }">#if($request.usernames)${request.usernames}#end</textarea>
     #if( ! $foundUsers )
         <div id="wrongInputNotification">
             <div id="wrongInputNotificationBorder">
@@ -238,7 +243,7 @@ $userManagement.processReceivedData()
         <option #if($request.rows=="100")selected#end>100</option>
     </select>
     <br>
-    <input type="submit" class="button" value="Search"/>
+    <button onclick="resetPageAndSubmitSearch();" class="button">Search</button>
     <input id="sortParamGetForm" type="hidden" name="sort" #if($request.sort) value="${request.sort}" #else value="userName asc" #end />
 </form>
 
@@ -302,9 +307,11 @@ $userManagement.processReceivedData()
 </form>
 
     #set($totalNumberOfPages=$userManagement.getTotalNumberOfPages())
-<div style="float:right; padding: 0.5em;" onclick="increaseCurrentPageNumber('$totalNumberOfPages');"><a href="#" > Next &gt;&gt;</a></div>
-<div style="float:right; padding: 0.5em;"> Page: $request.pageNumber of $totalNumberOfPages </div>
-<div style="float:right; padding: 0.5em;" onclick="decreaseCurrentPageNumber();"><a href="#" > &lt;&lt; Previous </a> </div>
+    #if($totalNumberOfPages > 1)
+        <div style="float:right; padding: 0.5em;" onclick="increaseCurrentPageNumber('$totalNumberOfPages');"><a href="#" > Next &gt;&gt;</a></div>
+        <div style="float:right; padding: 0.5em;"> Page: $request.pageNumber of $totalNumberOfPages </div>
+        <div style="float:right; padding: 0.5em;" onclick="decreaseCurrentPageNumber();"><a href="#" > &lt;&lt; Previous </a> </div>
+    #end
 #end
 
 
