@@ -442,8 +442,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         }
 
         //The user is a system admin
-        List<String> groupNames = getGroupNamesFromSolrString(userName);
-        if(groupNames.contains(CurrikiSpaceManagerExtension.LEADERS_GROUP_NAME)){
+        if(isSystemAdmin(userName)){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
             warningsForUser.put("cause", WARNING_USER_IS_SYSTEM_ADMIN);
             warningsForUser.put("userName", userName);
@@ -452,6 +451,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         }
 
         //The user is a admin in a group
+        List<String> groupNames = getGroupNamesFromSolrString(userName);
         List<String> groupNamesWhereUserIsAdmin = getGroupNamesWhereUserIsAdmin(userName, groupNames);
         if(groupNamesWhereUserIsAdmin.size() > 0){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
@@ -518,6 +518,16 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             }
         }
         return result;
+    }
+
+    /**
+     * Check if the given user is a system admin
+     * @param userName - the user to check.
+     * @return true if the user is a SystemAdmin (means a member of the group XWiki.AdminGroup)
+     */
+    private boolean isSystemAdmin(String userName){
+        boolean isSystemAdmin =  null != xwiki.getDocument("XWiki.AdminGroup").getObject('XWiki.XWikiGroups', 'member', "XWiki."+userName, false);
+        return isSystemAdmin;
     }
 
     /**
