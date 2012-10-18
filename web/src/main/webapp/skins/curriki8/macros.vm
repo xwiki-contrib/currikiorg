@@ -878,7 +878,7 @@ $msg.get("panel.navigation.home")
 #set($i = $i + 1)
 #set($content = "${content.substring(0,$i)} [...>${memberdoc.fullName}]")
 #end
-$memberdoc.getRenderedContent("$!content")</div>
+$memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
 </div> ## userdata
 <div class="clr"></div>
 </div> ## vcard
@@ -1218,7 +1218,7 @@ $memberdoc.getRenderedContent("$!content")</div>
     $msg.get("main.curriki") - $msg.get("caption.search")
   #else ##}{
     #if(!$title) ##{
-      #set( $title = $!xwiki.getWebPreference("title"))
+      #set( $title = $!xwiki.getSpacePreference("title"))
       #if ( "$!title" != "") ##{
         $xwiki.parseContent($title)
       #else  ##}{

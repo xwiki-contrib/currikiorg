@@ -8,7 +8,7 @@
 <head>
 <title>
 #if(!$title)
-#set( $title = $!xwiki.getWebPreference("title"))
+#set( $title = $!xwiki.getSpacePreference("title"))
 #if ( "$!title" != "")
 $xwiki.parseContent($title)
 #else
@@ -19,7 +19,7 @@ $title
 #end
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
-$!xwiki.getWebPreference("meta")
+$!xwiki.getSpacePreference("meta")
 #template("analytics.vm")
 #template("stylesheets.vm")
 <meta http-equiv="imagetoolbar" content="no" />

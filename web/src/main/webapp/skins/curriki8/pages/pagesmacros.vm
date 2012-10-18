@@ -166,7 +166,7 @@ ${creationDate} &ndash; $msg.get("publishedby", [$xwiki.getLocalUserName($author
 #itemtitle($title $bentrydoc.fullName)
 <div class="hnewscontent">
 #getNewsExtract($bentryobj $bentrydoc $content 400)
-$bentrydoc.getRenderedContent($content)<a href="${bentrydoc.getURL()}" class="readmore">$msg.get("readmore")...</a>
+$bentrydoc.getRenderedContent($content,"xwiki/1.0")<a href="${bentrydoc.getURL()}" class="readmore">$msg.get("readmore")...</a>
 </div> ## hnewscontent
 </div> ## hnewsentry
 <hr/>

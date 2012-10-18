@@ -1,24 +1,36 @@
 1 Host name
 
+#set($currentHostName=$xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host").toLowerCase())
+
 #macro(hostLink $hostname)
+#if("$!currentHostName"=="$!hostname")
+(current) $hostname
+#else
 <a href="$doc.name" ##
    onclick="d = new Date(); d.setDate(d.getDate()+7); document.cookie='JSESSIONID=xxx.$hostname; ' + d.toUTCString()" ##
         >$hostname</a>
 #end
+#end
 
 You are currently running from the XWiki on this host:
 
-$xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host")
+<p style="text-align:center; font-size: 120%; font-weight: bold"##
+        >$currentHostName</p>
 
+
+1.1 Switch
 
 You can go to the following hosts but please note that you log yourself out!
 
-Prod:
+#set($hosts=["prod-app","failover-app"])
+#if($hosts.contains($currentHostName))
+    #foreach($name in $hosts)
+- #hostLink($name)
+    #end
+#else
+    #set($hosts=["beta-app","dev-next-app"])
+    #foreach($name in $hosts)
+    - #hostLink($name)
+    #end
+#end
 
-- #hostLink("prod-app")
-- #hostLink("failover-app")
-
-Beta:
-
-- #hostLink("beta-app")
-- #hostLink("dev-next-app")
