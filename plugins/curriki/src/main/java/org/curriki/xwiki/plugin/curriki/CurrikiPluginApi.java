@@ -283,10 +283,15 @@ public class CurrikiPluginApi extends Api {
         plugin.startSolrMethod(g);
     }
 
-    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, CurrikiPlugin.SolrResultCollector collector){
+    public void solrCollectResultsFromQueryWithSort(String query, String fields, String sortParam, int start, int max, CurrikiPlugin.SolrResultCollector collector){
         if(!hasProgrammingRights()) return;
-        plugin.solrCollectResultsFromQuery(query,fields,start,max,collector);
+        plugin.solrCollectResultsFromQueryWithSort(query, fields, sortParam, start, max, collector);
     }
+
+    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, CurrikiPlugin.SolrResultCollector collector){
+        this.solrCollectResultsFromQueryWithSort(query, fields, null, start, max, collector);
+    }
+
 
     public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {
         plugin.feedFieldFromXmlStream(g, out, elementName);

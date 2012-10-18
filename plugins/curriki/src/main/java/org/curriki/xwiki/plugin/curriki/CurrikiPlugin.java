@@ -1033,8 +1033,15 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
+        return solrCreateQueryGetMethod(query, fieldNames, null, start, rows);
+    }
+
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, String sortParam, int start, int rows) throws IOException {
         // TODO: only allow with programming right?
         String url = solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames + "&start=" + start + "&rows=" + rows;
+        if(sortParam!=null && sortParam.length()>0){
+            url += "&sort=" + sortParam;
+        }
         GetMethod result = new GetMethod(url);
         return result;
     }
@@ -1087,15 +1094,19 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
-    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, SolrResultCollector collector) {
+    public void solrCollectResultsFromQueryWithSort(String query, String fields, String sortParam, int start, int max, SolrResultCollector collector) {
         try {
-            GetMethod get = solrCreateQueryGetMethod(query, fields, start, max);
+            GetMethod get = solrCreateQueryGetMethod(query, fields, sortParam, start, max);
             startSolrMethod(get);
             feedFieldFromXmlStream(get, collector, fields);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, SolrResultCollector collector) {
+        solrCollectResultsFromQueryWithSort(query, fields, null, start, max, collector);
     }
 
     public void startSolrMethod(GetMethod g) {

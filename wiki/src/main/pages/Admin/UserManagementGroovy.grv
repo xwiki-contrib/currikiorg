@@ -209,7 +209,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      */
     private String getSortParamFromRequest(String sortParam){
         if(null == sortParam) return null;
-        String result = "&sort=";
+        String result = "";
 
         if(sortParam.contains("userName")){
             result += "userNameForSort";
@@ -244,16 +244,14 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     private void searchUserByName(String userNames) {
         if(userNames == null || userNames.equals("")) return;
         try{
-            String fields = "userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups" + sortParam;
-
+            String fields = "userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups";
             String queryString = "((userName:" + userNames + ")OR";
             queryString += "(userFirstName:" + userNames + ")OR";
             queryString += "(userLastName:" + userNames + ")OR";
             queryString += "(userEmail:" + userNames + ")";
             queryString += ")AND(type:user)";
-
             int start = (currentPageNumber-1)*maxRowsInSolrResponse;
-            currikiPluginApi.solrCollectResultsFromQuery(queryString, fields, start, maxRowsInSolrResponse, this);
+            currikiPluginApi.solrCollectResultsFromQueryWithSort(queryString, fields, sortParam, start, maxRowsInSolrResponse, this);
         }catch(Exception e){
             foundUsers = null;
             LOG.error("Error while searching for users, please enter the usernames properly.");
