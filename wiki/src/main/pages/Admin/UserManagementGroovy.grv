@@ -109,7 +109,8 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      */
     private Set<String> errors = new LinkedHashSet<String>();
 
-    public final String WARNING_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_USER_STILL_HAS_CONTRIBUTIONS";
+    public final String WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS";
+    public final String WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS";
     public final String WARNING_USER_IS_SYSTEM_ADMIN = "WARNING_USER_IS_SYSTEM_ADMIN";
     public final String WARNING_USER_IS_GROUP_ADMIN = "WARNING_USER_IS_GROUP_ADMIN";
     public final String WARNING_USER_IS_YOURSELF = "WARNING_USER_IS_YOURSELF";
@@ -244,7 +245,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     private void searchUserByName(String userNames) {
         if(userNames == null || userNames.equals("")) return;
         try{
-            String fields = "userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups";
+            String fields = "fullname,userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups";
             String queryString = "((userName:" + userNames + ")OR";
             queryString += "(userFirstName:" + userNames + ")OR";
             queryString += "(userLastName:" + userNames + ")OR";
@@ -257,8 +258,8 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
             LOG.error("Error while searching for users, please enter the usernames properly.");
         }
 
-        if (tmpUser != null && tmpUser.size() > 0)
-            foundUsers.put(tmpUser.get("userName"), tmpUser);
+        this.newDocument(); // After the collector ran we need to signal a new document a last time to get
+                            // the result which was collected as the last one gets pushed to our result list
     }
 
     /**
@@ -271,22 +272,24 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
 
         //For all parameters of the request
         for (Map.Entry<String, String> entry : userStates.entrySet()) {
-            String userName = entry.key;
+            String fullname = entry.key;
             String userState = entry.value;
 
             //Try to get the userDoc
-            Document userDoc = xwiki.getDocument("XWiki." + userName);
+            Document userDoc = xwiki.getDocument(fullname);
             if (userDoc == null){
-                errors.add("Could not find UserDoc for user " + userName)
+                errors.add("Could not find UserDoc for user " + fullname)
                 continue;
             }
 
             //Try to get the userObj of the Doc
             def userObj = userDoc.getObject("XWiki.XWikiUsers");
             if(userObj == null) {
-                errors.add("Could not find UserObj for user " + userName);
+                errors.add("Could not find UserObj for user " + fullname);
                 continue;
             }
+
+            String userName = foundUsers.get(fullname).get("userName");
 
             //Variables to track the changes of the users
             boolean changedAUser = false;
@@ -303,11 +306,11 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
                 if(changedAUser) inactivatedUsers.add(userName);
             }
             else if (userState.equals("DEACTIVATED")) {
-                changedAUser = deactivateUser(userObj);
+                changedAUser = deactivateUser(fullname, userObj);
                 if(changedAUser) deactivatedUsers.add(userName);
             }
             else if (userState.equals("TO_DELETE")) {
-                deletedAUser = deleteUser(userName);
+                deletedAUser = deleteUser(fullname);
                 if(deletedAUser) deletedUsers.add(userName);
             }
 
@@ -343,19 +346,19 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         //Iterate over all parameters we have
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            //Extract the username from the key
+            //Extract the fullname from the key
             String key = entry.key;
-            String userName = ""
+            String fullname = ""
 
-            if(key.indexOf(".")!=-1)
-                userName = key.substring(0, key.indexOf("."));
+            if(key.indexOf("#")!=-1)
+                fullname = key.substring(0, key.indexOf("#"));
 
-            //If the username was not read yet and we are at a username or state
-            if (!key.contains("applyStatusChanges") && !key.contains("usernames") && !userName.equals("") &&!userStates.keySet().contains(userName)) {
+            //If the fullname was not read yet and we are at a fullname or state
+            if (!key.contains("applyStatusChanges") && !key.contains("usernames") && !fullname.equals("") &&!userStates.keySet().contains(fullname)) {
 
                 //Pull the userState directly from the params map
-                String userState = params.get(userName + ".STATE")[0];
-                userStates.put(userName, userState);
+                String userState = params.get(fullname + "#STATE")[0];
+                userStates.put(fullname, userState);
             }
         }
         return userStates;
@@ -403,8 +406,22 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * @param userObj the userObject of a XWiki User Doc which should be changed to deactive
      * @return true if a change was made false if the user was already in this state
      */
-    private boolean deactivateUser(userObj){
+    private boolean deactivateUser(String fullname, userObj){
         boolean hasChanged = false;
+        String userName = foundUsers.get(fullname).get("userName");
+        String numberOfContributions = foundUsers.get(fullname).get("userContributions");
+
+        //The user still has resources
+        if(Integer.valueOf(numberOfContributions) > 0){
+            Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
+            warningsForUser.put("cause", WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS);
+            warningsForUser.put("userName", userName);
+            warningsForUser.put("numberOfContributions", numberOfContributions);
+            warningsForUser.put("userResources", getUserResources(fullname))
+            warnings.add(warningsForUser);
+            return;
+        }
+
         if(!userObj.get("active").equals("Inactive")){
             userObj.set("active","0");
             hasChanged = true;
@@ -419,28 +436,28 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     /**
      * Tries to delete a user. Before it does so it checks for several conditions
      * e.g if the user is a system admin he can not be deleted.
-     * @param userName - the name of the user to delete
+     * @param fullname - the name of the user to delete
      * @return true if the user was deleted, false otherwise.
      */
-    private boolean deleteUser(String userName){
+    private boolean deleteUser(String fullname){
         boolean userFreeToDeletion = true;
-
-        Map<String, String> userAttributes  = foundUsers.get(userName);
+        Map<String, String> userAttributes  = foundUsers.get(fullname);
+        String userName = userAttributes.get("userName");
         String numberOfContributions = userAttributes.get("userContributions");
 
         //The user still has resources
         if(Integer.valueOf(numberOfContributions) > 0){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
-            warningsForUser.put("cause", WARNING_USER_STILL_HAS_CONTRIBUTIONS);
+            warningsForUser.put("cause", WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS);
             warningsForUser.put("userName", userName);
             warningsForUser.put("numberOfContributions", numberOfContributions);
-            warningsForUser.put("userResources", getUserResources(userName))
+            warningsForUser.put("userResources", getUserResources(fullname))
             warnings.add(warningsForUser);
             userFreeToDeletion = false;
         }
 
         //The user is a system admin
-        if(isSystemAdmin(userName)){
+        if(isSystemAdmin(fullname)){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
             warningsForUser.put("cause", WARNING_USER_IS_SYSTEM_ADMIN);
             warningsForUser.put("userName", userName);
@@ -449,8 +466,8 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         }
 
         //The user is a admin in a group
-        List<String> groupNames = getGroupNamesFromSolrString(userName);
-        List<String> groupNamesWhereUserIsAdmin = getGroupNamesWhereUserIsAdmin(userName, groupNames);
+        List<String> groupNames = getGroupNamesFromSolrString(fullname);
+        List<String> groupNamesWhereUserIsAdmin = getGroupNamesWhereUserIsAdmin(fullname, groupNames);
         if(groupNamesWhereUserIsAdmin.size() > 0){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
             warningsForUser.put("cause", WARNING_USER_IS_GROUP_ADMIN);
@@ -461,7 +478,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         }
 
         //The user is the same which sent the request
-        if(("XWiki."+userName).equals(context.getUser())){
+        if(fullname.equals(context.getUser())){
             Map<String, Object> warningsForUser = new LinkedHashMap<String, Object>();
             warningsForUser.put("cause", WARNING_USER_IS_YOURSELF);
             warningsForUser.put("userName", userName);
@@ -471,7 +488,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
 
         //No Case matched we can delete the user
         if(userFreeToDeletion) {
-            Document userDoc = xwiki.getDocument("XWiki." + userName);
+            Document userDoc = xwiki.getDocument(fullname);
             if (userDoc != null){
                 userDoc.deleteWithProgrammingRights();
                 return true;
@@ -487,11 +504,11 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * @param groupNames - The names of the groups to check if the user is an admin in
      * @return
      */
-    private List<String> getGroupNamesWhereUserIsAdmin(String userName, List<String> groupNames){
+    private List<String> getGroupNamesWhereUserIsAdmin(String fullname, List<String> groupNames){
         List <String> result  = new ArrayList<String>();
         for(groupName in groupNames){
             //Use the space manager to redirect that questions
-            if(xwiki.csm.isAdmin(groupName, "XWiki."+userName)) {
+            if(xwiki.csm.isAdmin(groupName, fullname)) {
                 result.add(groupName);
             }
         }
@@ -504,9 +521,9 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * @param userName - the name of the user for which to extract the group information out of the solr result
      * @return Complete names of the Groups where the user is member in
      */
-    private List<String> getGroupNamesFromSolrString(String userName){
+    private List<String> getGroupNamesFromSolrString(String fullname){
         List<String> result = new ArrayList();
-        Map<String, String> userAttributes = foundUsers.get(userName);
+        Map<String, String> userAttributes = foundUsers.get(fullname);
         String userGroupsString = userAttributes.get("userGroups");
         if(userGroupsString != null){
             JSONArray groups = JSONSerializer.toJSON(userGroupsString);
@@ -523,8 +540,8 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * @param userName - the user to check.
      * @return true if the user is a SystemAdmin (means a member of the group XWiki.AdminGroup)
      */
-    private boolean isSystemAdmin(String userName){
-        boolean isSystemAdmin =  null != xwiki.getDocument("XWiki.AdminGroup").getObject('XWiki.XWikiGroups', 'member', "XWiki."+userName, false);
+    private boolean isSystemAdmin(String fullname){
+        boolean isSystemAdmin =  null != xwiki.getDocument("XWiki.AdminGroup").getObject('XWiki.XWikiGroups', 'member', fullname, false);
         return isSystemAdmin;
     }
 
@@ -533,8 +550,8 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * @param userName -  the username of which the resources should be found
      * @return all resources of a user with their full names
      */
-    private List<String> getUserResources(String userName){
-        List results = xwiki.getXWiki().search("select doc.fullName from XWikiDocument doc, BaseObject obj where doc.creator='XWiki." + userName + "' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
+    private List<String> getUserResources(String fullname){
+        List results = xwiki.getXWiki().search("select doc.fullName from XWikiDocument doc, BaseObject obj where doc.creator='" + fullname + "' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
         return results;
     }
 
@@ -563,8 +580,7 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
     public void newDocument() {
         if (isInDocument) { //The first time we see a new document we don't push it to the map.
             if (tmpUser != null && tmpUser.size() > 0)
-                foundUsers.put(tmpUser.get("userName"), tmpUser);
-
+                foundUsers.put(tmpUser.get("fullname"), tmpUser);
             tmpUser = new HashMap<String, String>();
         } else {
             isInDocument = true;

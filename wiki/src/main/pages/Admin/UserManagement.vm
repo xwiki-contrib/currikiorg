@@ -127,7 +127,7 @@ $userManagement.processReceivedData()
     th {
         padding-left: 0.5em;
         vertical-align: bottom;
-        height: 8.5em;
+        height: 12em;
     }
     td {
         padding-left: 0.5em;
@@ -255,20 +255,20 @@ $userManagement.processReceivedData()
     <input type="hidden" name="applyStatusChanges" value="true"/>
     <table style=" table-layout: fixed; width: 100%; padding: 25px; word-wrap: break-word;">
         <tr>
-            <th id="userNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userName')" style="width: 15%"><div class="vertical_hidden_text"></div>Accountname<img src="/xwiki/skins/curriki8/images/adv-search-sort-sprite.gif"></th>
+            <th id="userNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userName')" style="width: 15%"><div class="vertical_hidden_text"></div>Accountname</th>
             <th id="userEmailHeader" class="tableHeaderHover" onclick="changeSortColumn('userEmail')" style="width: 25%"><div class="vertical_hidden_text"></div>Email</th>
             <th id="userFirstNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userFirstName')" ><div class="vertical_hidden_text"></div>Firstname</th>
             <th id="userLastNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userLastName')" ><div class="vertical_hidden_text"></div>Lastname</th>
-            <th class="vertical_text">Active</th>
-            <th class="vertical_text">Inactive</th>
-            <th class="vertical_text">Deactivated</th>
+            <th class="vertical_text">Verified Member</th>
+            <th class="vertical_text">Unverified Email</th>
+            <th class="vertical_text">Spammer</th>
             <th class="vertical_text">Delete</th>
         </tr>
 
         #foreach($user in $foundUsers) ##Create a row for each found user
             <tr>
                 <td>
-                    <a href="/xwiki/bin/view/XWiki/${user.userName}"">$user.userName (<a href="/xwiki/bin/edit/XWiki/$user.userName?editor=object">edit</a>)</a>
+                    <a href="/xwiki/bin/view/${user.fullname.replace(".","/")}"">$user.userName (<a href="/xwiki/bin/edit/${user.fullname.replace(".","/")}?editor=object">edit</a>)</a>
                 </td>
                 <td>
                     #if($user.userEmail)
@@ -281,19 +281,19 @@ $userManagement.processReceivedData()
                 <td>$user.userLastName</td>
 
                 <td>
-                    <input type="radio" name="${user.userName}.STATE"value="ACTIVE" #if($user.userActive == "true" && $user.userEmailUndeliverable == "false") checked  #end/>
+                    <input type="radio" name="${user.fullname}#STATE"value="ACTIVE" #if($user.userActive == "true" && $user.userEmailUndeliverable == "false") checked  #end/>
                 </td>
 
                 <td style="padding-left: 0.5em; padding-top: 1em;">
-                    <input type="radio" name="${user.userName}.STATE" value="INACTIVE" #if($user.userActive == "false" && $!user.userEmailUndeliverable == "true") checked  #end/>
+                    <input type="radio" name="${user.fullname}#STATE" value="INACTIVE" #if($user.userActive == "false" && $!user.userEmailUndeliverable == "true") checked  #end/>
                 </td>
 
                 <td style="padding-left: 0.5em; padding-top: 1em;">
-                    <input type="radio" name="${user.userName}.STATE" value="DEACTIVATED" #if($user.userActive == "false" && $!user.userEmailUndeliverable == "false") checked  #end/>
+                    <input type="radio" name="${user.fullname}#STATE" value="DEACTIVATED" #if($user.userActive == "false" && $!user.userEmailUndeliverable == "false") checked  #end/>
                 </td>
 
                 <td style="padding-left: 0.5em; padding-top: 1em;">
-                    <input type="radio" name="${user.userName}.STATE" value="TO_DELETE" />
+                    <input type="radio" name="${user.fullname}#STATE" value="TO_DELETE" />
                 </td>
             </tr>
         #end
@@ -350,7 +350,18 @@ $userManagement.processReceivedData()
             #set($userName=$warningsForUser.get("userName"))
             #set($cause=$warningsForUser.get("cause"))
 
-            #if($cause == "WARNING_USER_STILL_HAS_CONTRIBUTIONS")
+            #if($cause == "WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS")
+                The user $userName could not be deactivated, he/she still has <a href="#" onclick="showHide('${userName}.stillHasContributions');">$warningsForUser.get("numberOfContributions") contribution/s </a> in Curriki. <br>
+                <div id="${userName}.stillHasContributions" style="display: none;">
+                    <ul class="resourceList">
+                        #foreach($resource in $warningsForUser.get("userResources"))
+                            <li><a href="/xwiki/bin/view/${resource.replace(".","/")}">$resource</a></li>
+                        #end
+                    </ul>
+                </div>
+            #end
+
+            #if($cause == "WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS")
                 The user $userName could not be deleted, he/she still has <a href="#" onclick="showHide('${userName}.stillHasContributions');">$warningsForUser.get("numberOfContributions") contribution/s </a> in Curriki. <br>
                 <div id="${userName}.stillHasContributions" style="display: none;">
                     <ul class="resourceList">
