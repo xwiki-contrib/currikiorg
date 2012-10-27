@@ -89,7 +89,7 @@ $userManagement.processReceivedData()
             var input = inputs[i];
             var value = input.getAttribute("value");
             if(input.getAttribute("value") == "TO_DELETE" && input.checked){
-                return confirm("You marked one or more users for deletion. You do know what you are doing?");
+                return confirm("You marked one or more users for deletion. Are you sure you want to delete?");
             }
         }
         return true;
@@ -203,7 +203,7 @@ $userManagement.processReceivedData()
 <h2>User-Management-Tool</h2>
 <p>
 
-<h3>Activate - Deactivate - Inactivate</h3>
+<h3 title="Engineering notes: Verified Member is Active, Unverified Email is Inactive, and Spammer is known at Deactivated.">Verified Member - Unverified Email - Spammer</h3>
 <ol>
     <li>Search for one or more users by name.</li>
     <li>Apply changes to the states of the found users.</li>
@@ -268,7 +268,7 @@ $userManagement.processReceivedData()
         #foreach($user in $foundUsers) ##Create a row for each found user
             <tr>
                 <td>
-                    <a href="/xwiki/bin/view/${user.fullname.replace(".","/")}"">$user.userName (<a href="/xwiki/bin/edit/${user.fullname.replace(".","/")}?editor=object">edit</a>)</a>
+                    <a href="/xwiki/bin/view/${user.fullname.replace(".","/")}"">$user.userName (<a href="/xwiki/bin/edit/${user.fullname.replace(".","/")}?editor=object">edit object</a>)</a>
                 </td>
                 <td>
                     #if($user.userEmail)
@@ -308,9 +308,9 @@ $userManagement.processReceivedData()
 
     #set($totalNumberOfPages=$userManagement.getTotalNumberOfPages())
     #if($totalNumberOfPages > 1)
-        <div style="float:right; padding: 0.5em;" onclick="increaseCurrentPageNumber('$totalNumberOfPages');"><a href="#" > Next &gt;&gt;</a></div>
-        <div style="float:right; padding: 0.5em;"> Page: $request.pageNumber of $totalNumberOfPages </div>
-        <div style="float:right; padding: 0.5em;" onclick="decreaseCurrentPageNumber();"><a href="#" > &lt;&lt; Previous </a> </div>
+    <div style="float:right; padding: 0.5em;" onclick="increaseCurrentPageNumber('$totalNumberOfPages');"><a href="#" > Next &gt;&gt;</a></div>
+    <div style="float:right; padding: 0.5em;"> Page: $request.pageNumber of $totalNumberOfPages </div>
+    <div style="float:right; padding: 0.5em;" onclick="decreaseCurrentPageNumber();"><a href="#" > &lt;&lt; Previous </a> </div>
     #end
 #end
 
@@ -351,7 +351,7 @@ $userManagement.processReceivedData()
             #set($cause=$warningsForUser.get("cause"))
 
             #if($cause == "WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS")
-                The user $userName could not be deactivated, he/she still has <a href="#" onclick="showHide('${userName}.stillHasContributions');">$warningsForUser.get("numberOfContributions") contribution/s </a> in Curriki. <br>
+                The user $userName could not be deactivated, made a Spammer, he/she still has <a href="#" onclick="showHide('${userName}.stillHasContributions');">$warningsForUser.get("numberOfContributions") contribution/s </a> in Curriki. <br>
                 <div id="${userName}.stillHasContributions" style="display: none;">
                     <ul class="resourceList">
                         #foreach($resource in $warningsForUser.get("userResources"))
@@ -412,7 +412,7 @@ $userManagement.processReceivedData()
 <br>
 <hr>
 
-<h3 class="resultHeading">$activatedUsers.size() activated</h3>
+<h3 class="resultHeading">$activatedUsers.size() Member(s) Verified</h3>
 <p class="resultText">
     #foreach($user in $activatedUsers)
                 $user
@@ -420,7 +420,7 @@ $userManagement.processReceivedData()
 </p>
 <hr>
 
-<h3 class="resultHeading"> $inactivatedUsers.size() inactivated</h3>
+<h3 class="resultHeading"> $inactivatedUsers.size()  Email(s) Unverified</h3>
 <p class="resultText">
     #foreach($user in $inactivatedUsers)
                 $user
@@ -428,7 +428,7 @@ $userManagement.processReceivedData()
 </p>
 <hr>
 
-<h3 class="resultHeading">$deactivatedUsers.size() deactivated</h3>
+<h3 class="resultHeading">$deactivatedUsers.size() Marked as Spammer(s)</h3>
 <p class="resultText">
     #foreach($user in $deactivatedUsers)
                 $user
@@ -436,7 +436,7 @@ $userManagement.processReceivedData()
 </p>
 <hr>
 
-<h3 class="resultHeading">$deletedUsers.size() deleted</h3>
+<h3 class="resultHeading">$deletedUsers.size() Deleted</h3>
 <p class="resultText">
     #foreach($user in $deletedUsers)
                 $user
