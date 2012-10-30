@@ -11,12 +11,9 @@ import net.sf.json.JSONSerializer
 import net.sf.json.JSONArray
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension
 import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.util.AbstractXWikiRunnable
+import javax.servlet.http.HttpSession
 
-/**
- * User: Felix Tscheulin
- * Date: 9/21/12
- * Time: 12:01 PM
- */
 public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
 
     /**
@@ -108,6 +105,11 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
      * All errors occurred while changing the state of a user are stored here so the view can show the messages to the user
      */
     private Set<String> errors = new LinkedHashSet<String>();
+
+    /**
+     * All users for deletion are collected here and then this list in handed off to the background task
+     */
+    private List<String> deleteUsersQueue = new LinkedList<String>();
 
     public final String WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS";
     public final String WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS";
@@ -319,6 +321,10 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
                 userDoc.saveWithProgrammingRights();
             }
         }
+
+        //After all changes were made we trigger the background task to start with the deletion of the users which were selected for it
+        UserManagementBackgroundDeleter userManagementBackgroundDeleter =  new UserManagementBackgroundDeleter(xwiki, deleteUsersQueue, request.getSession(false));
+        userManagementBackgroundDeleter.start();
     }
 
     /**
@@ -488,11 +494,8 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
 
         //No Case matched we can delete the user
         if(userFreeToDeletion) {
-            Document userDoc = xwiki.getDocument(fullname);
-            if (userDoc != null){
-                userDoc.deleteWithProgrammingRights();
-                return true;
-            }
+            deleteUsersQueue.add(fullname);
+            return true;
         } else{
             return false;
         }
@@ -585,5 +588,51 @@ public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
         } else {
             isInDocument = true;
         }
+
+    }
+}
+
+class UserManagementBackgroundDeleter extends AbstractXWikiRunnable{
+
+    private String SESSION_BACKGROUND_TASK_RUNNING_FLAG = "USERDELETION_RUNNING";
+    private XWiki xwiki;
+    private List<String> fullnames;
+    private HttpSession session;
+
+
+    public UserManagementBackgroundDeleter(XWiki xwiki, List<String>fullnames, HttpSession session){
+        this.xwiki = xwiki;
+        this.fullnames = fullnames;
+        this.session = session;
+    }
+
+    private void start(){
+        new Thread(this, this.getClass().getName()).start();
+    }
+
+    @Override
+    protected void runInternal() {
+        for(int i = 0; i < fullnames.size(); i++){
+            setSessionFlag(i+"/"+fullnames.size());
+            deleteUser(fullnames.get(i))
+            Thread.sleep(1000);
+        }
+        removeSessionFlag();
+    }
+
+    private void deleteUser(String fullname){
+        Document userDoc = xwiki.getDocument(fullname);
+        if (userDoc != null){
+            userDoc.deleteWithProgrammingRights();
+        }
+    }
+
+    private void setSessionFlag(String value){
+        session.setAttribute(SESSION_BACKGROUND_TASK_RUNNING_FLAG, value);
+    }
+
+    private void removeSessionFlag(){
+        Thread.sleep(30000);
+        session.removeAttribute(SESSION_BACKGROUND_TASK_RUNNING_FLAG)
     }
 }
