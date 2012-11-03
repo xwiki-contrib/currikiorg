@@ -92,8 +92,18 @@
     scheduleDialogRescale(window, document, "loginIframe", 800,0);
     Curriki.ui.login.hideLoginLoading();
 </script>
+#if($redir)#else#set($redir=$targets.afterLogin)#end##
+#set($hasDownload=$targets.isDownloadLink($redir))<!-- hasDownload: $hasDownload -->##
+#set($nextStep=$redir)##
+#if($redir)#else#set($redir="/")#end##
+#if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
+#if($hasDownload)##
+    $targets.storeFileToDownload()##
+    #set($nextStep=$targets.fromDownloadToResourceOrSelf($redir)) ##
+<!-- nextStep now is $nextStep -->
+#end ##
 <p style="text-align:center; width: 500px; margin:0; ">
-    <button onclick="window.top.location.href='$targets.afterLogin'; return false;"##
+    <button onclick="window.top.location.href='$nextStep'; return false;"##
             class="button-grey">${msg.get('join.complete.donate.later_button')}</button>
 </p>
 <p>&nbsp;</p>
