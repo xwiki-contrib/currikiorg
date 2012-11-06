@@ -15,7 +15,7 @@
 #set($nbToDisplay = 5)
 ##
 #set($sm = $xwiki.csm)
-#set($spaceList = $sm.getSpaceNames($userdoc.fullName, $xwiki.null))
+#set($spaceList = $sm.getSpaceNames($userdoc.fullName, $util.null))
 #set($startIndex = 0)
 #set($Integer = 0)
 #if($request.startIndex)
@@ -74,18 +74,18 @@
   #else
     #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
   #end
-#set( $image_resize = "?width=240&height=164&keepAspectRatio=true" )
+#set( $image_resize = "?width=120&height=82&keepAspectRatio=true" )
   ##display logo
   <div class="frame-inset-logo">
     #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
     #if($withpre)
       #if($viewer == "embed-teachhub")
         <a target="_blank" href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" width="120" />
+          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" />
         </a>    
       #else
         <a href="$space.getHomeURL()" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}">
-          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}" width="120"/>
+          <img src="${m_logo}${image_resize}" title="{pre}${jstitle}{/pre}" alt="{pre}${jstitle}{/pre}"/>
         </a>  
       #end  
     #else

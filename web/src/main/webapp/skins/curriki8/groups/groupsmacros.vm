@@ -133,7 +133,9 @@ wikiEditor.init({
 });
 function saveWelcomeBlock() {
 	jt_.cssClass.rem(document.getElementById('section_1'), 'hideRight');
-	document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();
+    if(tinyMCE.getContent()!=null) {
+        document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();
+    }
 }
 function editWelcomeBlock(spaceName, pageName, divid) {
 	jt_.cssClass.add(document.getElementById('section_1'), 'hideRight');

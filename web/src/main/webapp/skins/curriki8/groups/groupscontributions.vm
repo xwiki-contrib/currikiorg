@@ -233,7 +233,7 @@ $msg.get("groups.curriculum.contributions.about")
 <script type="text/javascript">
 /* <![CDATA[ */
     Ext.ns('Curriki.userinfo');
-    #set($groups=$xwiki.csm.getSpaceNames($context.user,$xwiki.null))
+    #set($groups=$xwiki.csm.getSpaceNames($context.user,$util.null))
     Curriki.userinfo = {
         isAdmin:    #if($hasGlobalAdmin)true#{else}false#end,
         userGroups: "#foreach($g in $groups)$g,#end",
