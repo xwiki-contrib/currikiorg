@@ -350,9 +350,11 @@ public class SocialLoginToolGroovy {
 
             System.out.println("New profile created and saved: " + userDoc);
 
-            sendConfirmationEmail();
-            System.out.println("Email sent.");
-
+            //Only if we don't merge a profile with an existing one we'll send the confirmation email.
+            if(!isMerging){
+                sendConfirmationEmail();
+                System.out.println("Confirmation email sent.");
+            }
 
             String view = authenticateUser(userDoc);
             if(view=="redirectOnTop") return "pleaseDonate";
