@@ -155,19 +155,24 @@ function checkEmailResponse(response){
 
 
 function validatePhotoForm() {
-        var fileName = $('xwikiuploadfile').value;
-        if (fileName.length){
-            var ext = false;
-            var pos = fileName.lastIndexOf(".");
-            if (pos > 0){
-                ext = fileName.substring(pos + 1).toLowerCase();
-            }
-            if (!ext || (ext != "gif" && ext != "jpg" && ext != "jpeg" && ext != "jpe" && ext != "png" && ext != "bmp")) {
-                hasError = true;
-                CurrikiApp.errHighlight("block-avatar", $('photo-upload')['xwikiuploadfile']);
-                CurrikiApp.errMsgAdd("$msg.get('edit_profile.change_photo.file_error')");
-            }
+    var fileName = $('xwikiuploadfile').value;
+    if (fileName.length){
+        var ext = false;
+        var pos = fileName.lastIndexOf(".");
+        if (pos > 0){
+            ext = fileName.substring(pos + 1).toLowerCase();
         }
+        if (!ext || (ext != "gif" && ext != "jpg" && ext != "jpeg" && ext != "jpe" && ext != "png" && ext != "bmp")) {
+            hasError = true;
+            CurrikiApp.errHighlight("block-avatar", $('photo-upload')['xwikiuploadfile']);
+            CurrikiApp.errMsgAdd("$msg.get('edit_profile.change_photo.file_error')");
+        } else {
+            hasError = false;
+        }
+    } else {
+        hasError = true;
+    }
+    return !hasError;
 }
 
 function validateRegisterForm(){
