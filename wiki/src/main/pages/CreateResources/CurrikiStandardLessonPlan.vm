@@ -42,7 +42,7 @@
      #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
   #else ## } {
     ## empty pageName means no asset... so create new one. This is "default" action
-     #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
+     #set( $newAsset = $xwiki.curriki.createAsset($util.null) )
      ## note-below: <input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/>
      ## so followup POSTs set pageName to newly created asset, i.e. condition below:
   #end ## }
