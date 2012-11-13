@@ -7,7 +7,7 @@
 (current) $hostname
 #else
 <a href="$doc.name" ##
-   onclick="d = new Date(); d.setDate(d.getDate()+7); document.cookie='JSESSIONID=xxx.$hostname; ' + d.toUTCString()" ##
+   onclick="return changeCookie('$hostname')" ##
         >$hostname</a>
 #end
 #end
@@ -34,3 +34,24 @@ You can go to the following hosts but please note that you log yourself out!
     #end
 #end
 
+{pre}
+<script type="text/javascript">
+    function changeCookie(hostname) {
+        var d = new Date();
+        d.setDate(d.getDate()+7);
+        var cookies = document.cookie.split(";");
+        var prefix = new Date().toGMTString();
+        for(i=cookies.length-1; i>=0; i--){
+            var x=cookies[i];
+            if(x.startsWith("JSESSIONID=")) {
+                prefix = x.substring("JSESSIONID=".length);
+                var p = prefix.indexOf(".");
+                if(p>=0) prefix = prefix.substring(0, p);
+            }
+        }
+        document.cookie='JSESSIONID='+prefix+'.' + hostname+ '; ' + d.toUTCString()
+        //console.log("Would set cookie: " + 'JSESSIONID='+prefix+'.' + hostname + '; ' + d.toUTCString())
+        return true;
+    }
+</script>
+{/pre}
