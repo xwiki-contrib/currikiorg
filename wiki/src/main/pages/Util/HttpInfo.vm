@@ -1,0 +1,41 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+
+1 Http Info
+
+Details of the HTTP information the Curriki sever receives from your browser.
+
+1.1 Headers
+#foreach($headerName in $request.getHeaderNames())
+#if($headerName!="authorization" && $headerName!="cookie")
+#foreach($value in $request.getHeaders($headerName))
+- <b>$headerName</b>: $value
+#end
+#end
+#end
+
+1.1 Cookies
+
+#foreach($cookie in $request.getCookies())
+- <b>$cookie.name</b>: $cookie.value (maxAge: $cookie.maxAge)
+#end
+
+1.1 Network
+
+- <b>Address</b>: $request.getRemoteAddr()
+- <b>Host</b>: $request.getRemoteHost()
+- <b>Port</b>: $request.getRemotePort()
+
+1.1 More information
+
+- <b>browser capabilities</b>: http://browserspy.dk/
+- <b>location</b>: http://ip-lookup.net/ (and others)
