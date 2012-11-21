@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1182375999000</creationDate>
-<date>1222900011000</date>
-<contentUpdateDate>1266877070000</contentUpdateDate>
-<version>5.1</version>
+<date>1351798440000</date>
+<contentUpdateDate>1351798440000</contentUpdateDate>
+<version>6.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>cli-upload.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Admin.SiteMap</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>f8009243-5703-4e3f-8b6d-5fea6e569bee</guid>
 <property>
 <tags/>
 </property>
@@ -151,7 +151,7 @@
 <name>Admin.SiteMap</name>
 <number>0</number>
 <className>XWiki.XWikiRights</className>
-<guid></guid>
+<guid>b968afae-be60-48e3-8b22-9c51a2f3999d</guid>
 <property>
 <allow>1</allow>
 </property>
@@ -172,47 +172,47 @@
 ##
 #set($excludeSpaceQ = '')
 #foreach ($line in $excludeSpaces) ##{
-#set($line = $line.trim())
-#if("$line" != "" &amp;&amp; !$line.startsWith("#"))##{
-#set($excludeSpaceQ = $excludeSpaceQ + ", '${line}'")
-#end ##}
+    #set($line = $line.trim())
+    #if("$line" != "" &amp;&amp; !$line.startsWith("#"))##{
+        #set($excludeSpaceQ = $excludeSpaceQ + ", '${line}'")
+    #end ##}
 #end ##}
 ##
 #set($excludePageQ = '')
 #foreach ($line in $excludePages) ##{
-#set($line = $line.trim())
-#if("$line" != "" &amp;&amp; !$line.startsWith("#"))##{
-#set($excludePageQ = $excludePageQ + ", '${line}'")
-#end ##}
+    #set($line = $line.trim())
+    #if("$line" != "" &amp;&amp; !$line.startsWith("#"))##{
+        #set($excludePageQ = $excludePageQ + ", '${line}'")
+    #end ##}
 #end ##}
 ##
 #set($excludeNameQ = '')
 #foreach ($line in $excludeNames) ##{
-#set($line = $line.trim())
-#if("$line" != "" &amp;&amp; !$line.startsWith("#"))##{
-#set($excludeNameQ = $excludeNameQ + ", '${line}'")
-#end ##}
+    #set($line = $line.trim())
+    #if("$line" != "" &amp;&amp; !$line.startsWith("#"))##{
+        #set($excludeNameQ = $excludeNameQ + ", '${line}'")
+    #end ##}
 #end ##}
 ##
 #set($onlySpaceQ = '')
 #if($request.space) ##{
-#set($onlySpaceQ = "doc.web='${request.space}' AND")
+    #set($onlySpaceQ = "doc.web='${request.space}' AND")
 #end ##}
 #set ($sql = "where $onlySpaceQ doc.web NOT IN ('XWiki', 'AssetTemp', 'Admin', 'Sandbox', 'Frameworks', 'AssetManager', 'Panels', 'MimeType', 'MyCurriki', 'Temp', 'Test' $excludeSpaceQ) AND doc.name NOT IN ('WebPreferences' $excludeNameQ) AND doc.fullName NOT IN ('Admin.SiteMap' $excludePageQ) AND (doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='XWiki.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) order by doc.date desc")
 #set ($list = $xwiki.searchDocuments($sql))
-#set ($baseurl =  "http://${request.serverName}")
+#set ($baseurl =  "http://${xwiki.curriki.getPublicCurrikiConfig('hostname','missing-curriki-hostname')}")
 {pre}
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
-&lt;url&gt;
-&lt;loc&gt;$baseurl&lt;/loc&gt;
-&lt;changefreq&gt;weekly&lt;/changefreq&gt;
-&lt;priority&gt;0.8&lt;/priority&gt;
-&lt;/url&gt;
-#foreach ($item in $list)
-&lt;url&gt;
-&lt;loc&gt;${baseurl}/xwiki/bin/view/$xwiki.getURLEncoded($item).replaceFirst('\.', '/')&lt;/loc&gt;
-&lt;/url&gt;
-#end
+    &lt;url&gt;
+        &lt;loc&gt;$baseurl&lt;/loc&gt;
+        &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+        &lt;priority&gt;0.8&lt;/priority&gt;
+    &lt;/url&gt;
+    #foreach ($item in $list)
+        &lt;url&gt;
+            &lt;loc&gt;${baseurl}/xwiki/bin/view/$xwiki.getURLEncoded($item).replaceFirst('\.', '/')&lt;/loc&gt;
+        &lt;/url&gt;
+    #end
 &lt;/urlset&gt;
 {/pre}</content></xwikidoc>

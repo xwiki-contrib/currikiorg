@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1309965594000</creationDate>
-<date>1339517603000</date>
-<contentUpdateDate>1339517603000</contentUpdateDate>
-<version>104.1</version>
+<date>1352234564000</date>
+<contentUpdateDate>1352234564000</contentUpdateDate>
+<version>152.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -165,10 +165,8 @@ public class SocialLoginToolGroovy {
             maybeXpage="&amp;xpage=popup";
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
-            if("facebook".equalsIgnoreCase(request.provider)) {
-                targetUrl = URLEncoder.encode(targetUrl);
-            }
-            provider.setPermission(Permission.AUHTHENTICATE_ONLY);
+
+            provider.setPermission(Permission.AUTHENTICATE_ONLY);
             String url = provider.getLoginRedirectURL(targetUrl);
             System.out.println("Redirecting to " + url);
 
@@ -201,7 +199,7 @@ public class SocialLoginToolGroovy {
                 if(request.error!='access_denied')
                     profile = providerObj.verifyResponse(request)
                 LOG.info("obtained profile: " + profile);
-            } catch (Exception ex) { LOG.warn(ex); }
+            } catch (Exception ex) { LOG.warn("Error while verifing response", ex); }
             if(profile==null) {
                 LOG.info("Refused authorization.");
                 return "refused";
@@ -222,7 +220,7 @@ public class SocialLoginToolGroovy {
             for (result in userDocs) {
                 if(result==null) continue;
                 Document userDoc = xwiki.getDocument(result)
-                updateUserDoc(userDoc);
+                updateUserDoc(userDoc, false); // We dont merge the docs here
                 System.out.println("Doc: " + result + " of class " + result.getClass());
                 authenticateUser(userDoc)
             }
@@ -286,6 +284,8 @@ public class SocialLoginToolGroovy {
         if(username==null || username=='') {
             int p = email.indexOf('@');
             username = email.substring(0,p);
+            username = username.replaceAll("[^a-zA-Z0-9]","_");
+            username = username.replaceAll("__","_").replaceAll("__","_");
             if(!validation.isValidUsername(username, false)) {
                 int i=0;
                 while(i&lt;20) {
@@ -303,15 +303,15 @@ public class SocialLoginToolGroovy {
      */
 
     public String tryCreateNewProfile() {
-        return updateUserDoc(null);
+        return updateUserDoc(null, false); //Nothing to merge
     }
 
-    public String updateUserDoc(Document preExistingUserDoc) {
+    public String updateUserDoc(Document preExistingUserDoc, isMerging) {
         if(profile==null) profile = request.session.getAttribute("org.brickred.socialauth.Profile")
         String provider = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
         boolean isNew = preExistingUserDoc == null;
         if(isNew) LOG.info("Trying to create new profile from provider " + provider);
-        else LOG.info("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
+        else LOG.warn("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
 
         if(isNew) username = request.username; else username = preExistingUserDoc.getName();
         firstName = profile.firstName;
@@ -338,11 +338,11 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidAgree(request.agree, true) &amp; passed;
         passed = validation.isValidFirstName(firstName, true) &amp; passed;
         passed = validation.isValidLastName(lastName, true) &amp; passed;
-        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, true) &amp; passed;
+        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, !isMerging) &amp; passed;
 
-        LOG.info("Passed? " + passed);
-        if(!passed) LOG.info("Errors: " + validation.errors);
-        if (passed) {
+        System.out.println("Validation Passed? " + passed);
+        if(!passed) System.out.println(" Validation Errors ( Merging is "+ isMerging +"): " + validation.errors);
+        if ( passed || isMerging ) {
             // Everything clear, let's proceed
 
             /* def propMap = new HashMap();
@@ -369,20 +369,25 @@ public class SocialLoginToolGroovy {
 
             createSocialLoginProfileObject(profile, userDoc, provider);
             tryToAddProfilePictureFromProfile(profile.profileImageURL, userDoc, userobj);
+//            //tryToAddProfilePictureFromGoogle();
             userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
 
             System.out.println("New profile created and saved: " + userDoc);
 
-            sendConfirmationEmail();
-            System.out.println("Email sent.");
-
+            //Only if we don't merge a profile with an existing one we'll send the confirmation email.
+            if(!isMerging){
+                sendConfirmationEmail();
+                System.out.println("Confirmation email sent.");
+            }else{
+                System.out.println("No Confirmation email sent.");
+            }
 
             String view = authenticateUser(userDoc);
             if(view=="redirectOnTop") return "pleaseDonate";
             else return view;
         }
         else {
-            System.out.println("New profile not created.");
+            System.out.println("New profile not created!");
             if (!username || username == '')
                 errors.add(msg.get('join.error.username'));
             else if (xwiki.exists('XWiki.' + username))
@@ -475,7 +480,7 @@ public class SocialLoginToolGroovy {
         socialProfile.set('email', profile.email)
         socialProfile.set('profileImageURL', profile.profileImageURL)
         socialProfile.set('gender', profile.gender)
-        socialProfile.set('dob', profile.dob)
+        //socialProfile.set('dob', profile.dob) !!! This line raised an error while logging in via facebook, this attribute seems not to be there anymore
         socialProfile.set('validatedId', profile.validatedId)
         socialProfile.set('country', profile.country)
         socialProfile.set('location', profile.location)
@@ -489,8 +494,10 @@ public class SocialLoginToolGroovy {
         if(userName.endsWith("XWikiGuest") || userName.startsWith("DeactivatedUsers."))
             throw new IllegalStateException("Can't merge an inactive user!");
         LOG.warn("Trying to merge profile of user "+userName+" with provider's profile from " + provider);
-        createSocialLoginProfileObject(profile, userDoc, provider);
-        updateUserDoc(userDoc);
+
+        //createSocialLoginProfileObject(profile, userDoc, provider); Not need anymore the profile object is created while updating the UserDoc
+
+        updateUserDoc(userDoc,true); // We want to merge
         userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true);
         // and login!
         authenticateUser(userDoc);
@@ -581,7 +588,7 @@ public class SocialLoginToolGroovy {
                     request.session.removeAttribute(SAVED_REQUEST);
                     request.session.removeAttribute("xredirect");
                 }
-            } catch (Exception e) { LOG.warn(e); }
+            } catch (Exception e) { LOG.warn("Error while getting the saved request from the session ",e); }
         }
         if(xredirect==null &amp;&amp; request.session)
             xredirect = request.session.getAttribute("xredirect");
@@ -601,12 +608,14 @@ public class SocialLoginToolGroovy {
 
     public void tryToAddProfilePictureFromProfile(String url, Document userDoc, com.xpn.xwiki.api.Object userObj) {
         try {
-            System.out.println("Defining profile picture form " + url);
             if(url==null || url.length()==0) return;
+            System.out.println("Defining profile picture form " + url);
             def avatar = userObj.get("avatar");
             if(avatar!=null &amp;&amp; !"".equals(avatar)) {
-                System.out.println(" avatar \"" + avatar + "\" of class " + avatar.getClass() + " already there, leaving quiet.");
-                return
+                System.out.println("avatar \"" + avatar + "\" of class " + avatar.getClass() + " already there, leaving quiet.");
+                return;
+            }else {
+                System.out.println("no avatar there (avatar: "+avatar+")!  We're going to get the one from the social authprovier.");
             };
             URL u = new URL(url)
             String name=u.getPath()
@@ -635,6 +644,21 @@ public class SocialLoginToolGroovy {
             LOG.warn("Couldn't write profile picture.",ex);
         };
 
+    }
+
+   /**
+    * Not in use yet
+    **/
+    public void tryToAddProfilePictureFromGoogle(){
+        try {
+            String pictureApiUrl = "https://www.google.com/m8/feeds/photos/profile/curriki.org/felix";
+            AuthProvider providerObj = request.session.getAttribute("org.brickred.socialauth.AuthProvider");
+            providerObj.verifyResponse(request);
+            org.brickred.socialauth.util.Response response = providerObj.api(pictureApiUrl, "GET", new HashMap&lt;String, String&gt;(), new HashMap&lt;String, String&gt;(), "");
+            System.out.println("Try to load profile Picture from Google.." + response.getResponseBodyAsString("UTF-8").length() );
+        } catch (Exception e){
+            LOG.warn("Error while loading profile picture from Google: " + e);
+        }
     }
 
 

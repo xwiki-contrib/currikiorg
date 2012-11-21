@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1208206707000</creationDate>
-<date>1315255169000</date>
-<contentUpdateDate>1315255169000</contentUpdateDate>
-<version>32.1</version>
+<date>1352754000000</date>
+<contentUpdateDate>1352754000000</contentUpdateDate>
+<version>33.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,7 +52,7 @@
 <name>Util.JSTrans</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>679907aa-58b1-4f16-8024-e03aa3821605</guid>
 <property>
 <tags/>
 </property>
@@ -74,7 +74,7 @@ $response.setContentType("text/javascript")
 #end##}
 var i18nDict = {
 'LANGUAGE':'$lang'
-,'MEDIAHOST':'${MEDIAHOST}'
+,'MEDIAHOST':'$xwiki.curriki.getPublicCurrikiConfig("mediahost","missing-curriki.system.mediahost-in-config")'
 #foreach ($item in $context.context.wiki.getXWikiPreference("documentBundles", $context.context).split(","))##{
 ,'TRANSLATION_PAGE_$item':'$item'
 #set($tDoc = $xwiki.getDocument($item))

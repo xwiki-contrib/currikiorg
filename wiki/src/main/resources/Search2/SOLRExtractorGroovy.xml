@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>Search2</web>
+<name>SOLRExtractorGroovy</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.adminPolx</creator>
+<author>XWiki.adminPolx</author>
+<customClass></customClass>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
+<creationDate>1298699908000</creationDate>
+<date>1351548945000</date>
+<contentUpdateDate>1351548945000</contentUpdateDate>
+<version>104.1</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>cli-upload.</comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<disabled>0</disabled>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Search2.SOLRExtractorGroovy</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<guid>62e49a2e-e69a-47b2-9805-fd45da62d29a</guid>
+<property>
+<tags/>
+</property>
+</object>
+<content>// Groovy class #*
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.api.Property
+import com.xpn.xwiki.api.Document
+import org.curriki.xwiki.plugin.asset.Asset
+import com.xpn.xwiki.api.Attachment
+import java.text.SimpleDateFormat
+import javax.swing.text.html.HTMLEditorKit
+import javax.swing.text.html.parser.ParserDelegator
+import java.util.regex.Pattern
+import java.util.regex.Matcher
+import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi
+import org.curriki.xwiki.plugin.asset.composite.CompositeAsset;
+import com.xpn.xwiki.XWikiException
+import com.google.gson.Gson
+import com.xpn.xwiki.web.XWikiResponse;
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponseWrapper
+import com.xpn.xwiki.api.DeletedDocument;
+
+// Groovy class
+
+public class SOLRExtractorGroovy {
+
+    public boolean hasAccess() { return xwiki.checkAccess(docFullName, "view"); }
+    
+    private static Set excludedSpaces = new HashSet(["AssetTemp", "Blog", "CurrikiCode", "AssetTemplate", "Admin", "Panels", "Search2", "Search", "Sandbox", "Util", "CreateResources", "Registration"]),
+        excludedPrefixes = new HashSet(["UserProfiles_Group", "Messages_Group", "Documentation_Group"]),
+        excludedNames = new HashSet(["Favorites", "Default"]),
+        excludedPages = new HashSet([]);
+
+    
+    private static boolean isExcluded(Document doc) {
+        boolean baseExcluded = excludedSpaces.contains(doc.space) ||
+            excludedNames.contains(doc.name) ||
+                excludedPages.contains(doc.fullName);
+        baseExcluded = baseExcluded || doc.name.endsWith("Class") || doc.name.endsWith("Template") || doc.name.endsWith("Templates") || doc.name.endsWith("Sheet") || doc.name.endsWith("Invitations");
+        if(!baseExcluded) {
+            for(s in excludedPrefixes) {
+                if(doc.space.startsWith((String) s)) { return true; }
+            }
+        }
+
+        // no title? go away!
+        if(!baseExcluded &amp;&amp; doc.name!="WebHome") {
+            String title = doc.title;
+            if(!"WebPreferences".equals(doc.name) &amp;&amp; doc.getObject("XWiki.XWikiUsers")==null)
+                if(title==null || title.trim().length()==0) return true;
+        }
+        return baseExcluded;
+    } 
+
+
+    public void init(XWiki xwiki, Context context, String docFullName) {
+        this.xwiki = xwiki;
+        this.context = context;
+        this.currikiPlugin = xwiki.curriki;
+        this.docFullName = docFullName;
+        System.out.println("Initting extraction on " + docFullName);
+        if(docFullName!=null &amp;&amp; docFullName.indexOf('/')&gt;0) docFullName= docFullName.replaceAll('/','.');
+        if(hasAccess()) {
+
+            this.type = null;
+            this.doc = xwiki.getDocument(docFullName);
+            if(isExcluded(doc)) {
+                System.out.println("Excluded.");
+                return;
+            }
+            def assetObject = doc.getObject("CurrikiCode.AssetClass", false);
+            def groupObject = doc.getObject("XWiki.CurrikiSpaceClass", false);
+            def userObject = doc.getObject("XWiki.XWikiUsers", false);
+            if(doc.space=="XWiki" &amp;&amp; userObject==null) return; // only users in XWiki space
+            if(assetObject!=null) {
+                // a resource
+                if(doc.space!="Coll_Templates" &amp;&amp; doc.name != "Favorites" ) {
+                    this.asset = xwiki.curriki.fetchAsset(docFullName);
+                    this.type = "resource";
+                    try {
+                        if(xwiki.getXWiki().Param('curriki.system.hostname', 'nowhere').endsWith("curriki.org")) {
+                            def fetcher = xwiki.parseGroovyFromPage("Search2.ABFetcher")
+                            fetcher.init(context)
+                            alignments = fetcher.getAlignments(docFullName)
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    };
+                    childPagesList = createChildPagesList();
+                }
+            } else if(groupObject !=null) {
+                // a group
+                this.type = "group";
+                this.groupObjectC = groupObject;
+                this.groupObjectX = doc.getObject("XWiki.SpaceClass", true);
+                childPagesList = createChildPagesList();
+            } else if (userObject !=null) {
+                // a user
+                this.type = "user";
+                this.userObject = userObject;
+            } else {
+                this.type = "page";
+            }
+            System.out.println("Type is " + type)
+        } else {
+            System.out.println("No access.");
+        }
+
+    }
+
+    XWiki xwiki;
+    Context context;
+    CurrikiPluginApi currikiPlugin;
+    String docFullName;
+    List childPagesList;
+    Document doc;
+    Asset asset;
+    List alignments;
+    List parentList = null;
+    String type=null;
+
+    com.xpn.xwiki.api.Object userObject = null, groupObjectX = null, groupObjectC = null;
+
+    private static ThreadLocal formatter = new FormatterThreadLocal();
+
+    static int LENGTH_OF_COLL_PREFIX = "Coll_".length(),
+        LENGTH_OF_COLL_GROUP_PREFIX = "Coll_group_".length();
+
+
+    public boolean isApplicable() {
+        return type!=null;
+    }
+
+    public HttpServletResponse getNeutralizedResponse(HttpServletResponse resp) {
+        return new HttpServletResponseWrapper(resp){
+            public void sendRedirect(String s) throws IOException {
+                // do nothing
+            }
+        };
+
+    }
+
+
+    public String getFullNameForComments() { return docFullName.replaceAll('--','- -'); }
+    
+    public String getFullNameX() { return xmlEncode(docFullName); }
+    public String getNameX() { return xmlEncode(doc.name);}
+    public String getWebX() { return xmlEncode(doc.space);}
+
+    private String getActorCodeX(String userName) {
+        if(userName==null) return "";
+        if(userName.startsWith("XWiki.") &amp;&amp; userName.length()&gt;6) userName = userName.substring(6);
+        return xmlEncode(userName);
+    }
+
+    public String getAuthorCodeX() {
+        return getActorCodeX(doc.author)
+    }
+    public String getAuthorX() { return xmlEncode(xwiki.getUserName(doc.author, false)); }
+
+    public String getCreatorCodeX() { return getActorCodeX(doc.creator); }
+    public String getCreatorX() { return xmlEncode(xwiki.getUserName(doc.creator, false)); }
+
+    public String getTitleX() { return xmlEncode(asset.getDisplayTitle()); }
+    public String getDescriptionX() {
+        String text = getTextOfHtml(xwiki.renderText(asset.getDescription(), asset));
+        return xmlEncode(text);
+    }
+
+    public String getHiddenFromSearch() {
+        def obj= doc.getObject("CurrikiCode.AssetClass");
+        //return obj.get("hidden_from_search") + " of type " + obj.get("hidden_from_search").getClass();
+        if(obj.get("hidden_from_search")=="1") return "true" else return "false";
+    }
+
+    public List getICTs() {
+        return (List) asset.getValue("instructional_component");
+    }
+
+    public String getLanguage() {
+        return asset.getValue("language");
+    }
+    
+    public List getLevels() {
+        return (List) asset.getValue("educational_level");
+    }
+
+    public List getSubjects() {
+        return (List) asset.getValue("fw_items");
+    }
+
+
+    public String getKeywords() {
+        // TODO: check-me that it works!
+        return flattenList(asset.getValue("keywords"));
+    }
+    public String getGeneratedKeywords() {
+        return flattenList(asset.getValue("generated_keywords"));
+    }
+    private String flattenList(Object x) {
+        if(x==null) return "";
+        if(x instanceof String) return x;
+        if(x instanceof Collection) {
+            StringBuilder b = new StringBuilder();
+            for(k in x) {
+                b.append(k).append(' ');
+            }
+            return b.toString();
+        }
+    }
+
+
+    public String getRenderedContentX() {
+        System.out.println("Rendering content.");
+        return xmlEncode(getTextOfHtml(asset.getRenderedContent()));
+    }
+
+    public String getAssetType() {
+        return asset.getAssetType();
+    }
+
+    public String getCategory() {
+        return asset.getCategory();
+    }
+
+    public String getSubCategory() {
+        return asset.getCategorySubtype();
+    }
+
+    public List getAttachmentTypes() {
+        String fileType1 = asset.getFiletype();
+        if(fileType1!=null) {
+            return [fileType1];
+        }
+        List l = new ArrayList();
+        for(Attachment attach in doc.attachmentList) {
+            String filename = attach.filename;
+            if(filename!=null &amp;&amp; filename.contains(".")) {
+                int p = filename.lastIndexOf(".");
+                if(p&gt;-1 &amp;&amp; p+1&lt;filename.length()) 
+                    l.add(filename.substring(p+1).toLowerCase());
+            }
+        }
+        return l;
+    }
+
+    public List getAttachmentFilenames() {
+        List l = new ArrayList();
+        for(Attachment attach in doc.attachmentList) {
+            String filename = attach.filename;
+            if(filename!=null)
+                l.add(filename);
+        }
+        return l;
+    }
+
+    public String getModificationDate() {
+        return formatter.get().format(doc.contentUpdateDate);
+    }
+
+    public String getCreationDate() {
+        return formatter.get().format(doc.creationDate);
+    }
+
+    public boolean hasAttachment() {
+        return asset.getCategory()!=null &amp;&amp; asset.getCategory()!="" || !doc.attachmentList.empty;
+    }
+
+    public String getRights() {
+        return asset.getValue("rights");
+    }
+
+    public String getLicense() {
+        def obj = doc.getObject("CurrikiCode.AssetLicenseClass");
+        if(obj!=null)
+            return obj.getProperty("licenseType").value;
+        else return "";
+    }
+
+    public String getPrivateToUser() {
+        String rights = asset.getValue("rights");
+        if("private"==rights) {
+            if(!docFullName.startsWith("Coll_Group_")) {
+                return doc.space.substring(LENGTH_OF_COLL_PREFIX);
+            }
+        }
+        return "";
+    }
+
+    public String getPrivateToGroups() {
+        String rights = asset.getValue("rights");
+        if("private"==rights) {
+            if(docFullName.startsWith("Coll_Group_")) {
+                return doc.space.substring(LENGTH_OF_COLL_GROUP_PREFIX);
+            }
+        }
+        return "";
+    }
+
+    public String getFileCheckStatus() {
+        return asset.getValue("fcstatus");
+    }
+
+    public String getCurrikiReviewStatus() {
+        def obj = doc.getObject("CRS.CurrikiReviewStatusClass");
+        if(obj!=null &amp;&amp; obj.getProperty("status")!=null)
+            return obj.getProperty("status").value;
+        else return "";
+    }
+
+    public String getUsersRating() {
+        def obj= doc.getObject("CurrikiCode.AssetClass");
+        if(obj!=null &amp;&amp; obj.getProperty("rating")!=null)
+            return obj.getProperty("rating").getValue();
+        else return "";
+    }
+
+    public String getUsersRatingCount() {
+        def obj= doc.getObject("CurrikiCode.AssetClass");
+        if(obj!=null &amp;&amp; obj.getProperty("rating_count")!=null)
+            return obj.getProperty("rating_count").getValue();
+        else return "";
+    }
+
+    public String getRevisionNumber() {
+        return doc.getVersion();
+    }
+
+    public List getInCollection() {
+        if(this.parentList!=null) return this.parentList;
+        String hql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='CurrikiCode.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='folder') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='CurrikiCode.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='"+ docFullName +"' order by doc.name";
+        this.parentList = xwiki.searchDocuments(hql);
+        return parentList;
+    }
+
+    public List getInCollectionRights() {
+        List l = getInCollection();
+        ArrayList inCollectionRights = new ArrayList(l.size());
+        for(String docFullName in l) {
+            Document doc = xwiki.getDocument(docFullName);
+            def assetObject = doc.getObject("CurrikiCode.AssetClass", false);
+            if(assetObject==null) continue;
+            Asset asset = xwiki.curriki.fetchAsset(docFullName);
+            String rights = asset.getValue("rights");
+            if("members".equals(rights) || "public".equals(rights))
+                inCollectionRights.add(rights);
+            else {
+                int p = docFullName.indexOf('.');
+                //System.out.println("docFullName: " + docFullName);
+                String space = p&gt;-1 ? docFullName.substring(0,p) : docFullName;
+                //System.out.println("p: " + p);
+                //System.out.println("space: " + space);
+                inCollectionRights.add("private:" + space.substring(5)); // 5 = "Coll_".length()
+            }
+        }
+        return inCollectionRights;
+    }
+
+    public List getInCollectionDetailsJSON() {
+        // ported from Search.Resources velocity code
+        //if(asset.isCollection()) return [];
+        String hql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='CurrikiCode.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='folder') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='CurrikiCode.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='"+ docFullName +"' order by doc.name";
+        List parentList = xwiki.searchDocuments(hql);
+        if(parentList.isEmpty()) {
+            return [];
+        } else {
+            // TODO: add inCollectionPrivateTo
+            // TODO: port to JSON
+            // removed rating count, ok?
+            List allParents = new LinkedList();
+            for(String parentDocFullName in parentList) {
+                Document parentDoc = xwiki.getDocument(parentDocFullName);
+                try {
+                    Asset parentAsset = xwiki.curriki.fetchAsset(parentDocFullName)
+                    StringBuffer fwItemsB = new StringBuffer()
+                    for(String fwI in parentAsset.getValue("fw_items")) {
+                        fwItemsB.append('"').append(fwI).append('"');
+                        fwItemsB.append(",")
+                    }
+                    if(fwItemsB.length()&gt;2) fwItemsB.deleteCharAt(fwItemsB.length()-1)
+                    StringBuffer levels = new StringBuffer()
+                    for(String level in parentAsset.getValue("educational_level")) {
+                        levels.append('"').append(level).append('"');
+                        levels.append(",")
+                    }
+                    if(levels.length()&gt;0) levels.deleteCharAt(levels.length()-1)
+                    def json = new StringBuffer();
+                    json.append("{ 'page':'").append(parentDocFullName);
+                    json.append("', 'title':'").append(protectForJSON(parentAsset.getDisplayTitle())).
+                        append("', 'assetType':'"+ parentAsset.getAssetType()).
+                        append("', 'ict':'"+ parentAsset.getValue("instructional_component")).
+                        append("' ,'contributor':'").append(parentDoc.creator).
+                        append(" ','contributorName':'").append(protectForJSON(xwiki.getUserName(parentDoc.creator,false))).
+                        append("' ,'description':'").append(protectForJSON(parentAsset.getDescription())).
+                        append("' ,'fwItems':[").append(fwItemsB).append("]").
+                        append(", 'levels':[").append(levels).append("]}");
+                    allParents.add(xmlEncode(json.toString()));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                };
+            }
+            return allParents;
+        }
+    }
+
+
+    public List getSubAssetsInfo() {
+        String d = docFullName;
+        if(type=="group") d = "Coll_" + doc.space + ".WebHome";
+        Document docD = xwiki.getDocument(d);
+        if(docD.getObject("CurrikiCode.SubAssetClass")==null) return new ArrayList(0);
+        CompositeAsset composite = currikiPlugin.fetchAssetAs(d, CompositeAsset.class);
+        List l = new ArrayList(composite.getSubassetsInfo());
+        Iterator it = l.iterator();
+        while(it.hasNext()) {
+            Map m = it.next();
+            if(!xwiki.exists(m.get("assetpage"))) {
+                it.remove()
+                continue;
+            }
+            //System.out.println("- subasset (getSubAssetsInfo: " + m.get("assetpage"));
+            m.put("solrMade", true);
+            m.remove("rights");
+        }
+        return l;
+    }
+
+
+
+
+    public List getStandardsCodeX() {
+        if(alignments==null) return new ArrayList();
+        List l = new ArrayList(alignments.size());
+        for(alignment in alignments) {
+            l.add(xmlEncode(alignment.get("topic.guid")));
+        }
+        return l;
+    }
+
+    public List getStandardsLabelsX() {
+        if(alignments==null) return new ArrayList();
+        List l = new ArrayList(alignments.size());
+        for(alignment in alignments) {
+            l.add(xmlEncode(alignment.get("topic.state_num") + " " + alignment.get("topic.stem")  + " "+ alignment.get("topic.text")  + " " + alignment.get("standard.grade")  + " " + alignment.get("standard.grade_code")));
+        }
+        return l;
+    }
+
+
+    public Iterator getChildPagesIt() { return childPagesList.iterator(); }
+
+    private List createChildPagesList() {
+        Document d;
+        if(type=="resource") d=doc;
+        if(type=="group") d=xwiki.getDocument("Coll_" + doc.space, "WebHome");
+        //System.out.println("Fetching subassets from " + d);
+        List objectsList = d.getObjects("CurrikiCode.SubAssetClass");
+        /* objectsList.sort(new Comparator() {
+            int compare(Object o1, Object o2) {
+                com.xpn.xwiki.api.Object oo1 = o1, oo2=o2;
+                String order1 = oo1.get("order"), order2 = oo2.get("order");
+                //System.out.println("Order1: \"" + order1 + "\" and Order2: \"" + order2 + "\".");
+                if(order2==null) return +1;
+                if(order1==null) return -1;
+                return (Integer.parseInt(order1)).compareTo(Integer.parseInt(order2));
+            }
+        }) */
+        List l = new LinkedList();
+        for(com.xpn.xwiki.api.Object b in objectsList) {
+            String childFullName = b.get("assetpage");
+            if(xwiki.exists(childFullName)) l.add(childFullName);
+            //System.out.println("- subasset (createChildPagesList): " + childFullName);
+        }
+        return l;
+    }
+
+
+    public Iterator getChildRights() {
+        final Iterator childPages = getChildPagesIt();
+        return new Iterator() {
+            boolean hasNext() {
+                return childPages.hasNext();
+            }
+
+            Object next() {
+                String childFullName = childPages.next();
+                String n = childRights(childFullName);
+                return n;
+            }
+
+            private String childRights(String childFullName) {
+                Document childDoc = xwiki.getDocument(childFullName);
+                // fetch the "owner"
+                boolean ownerIsGroup = false;
+                String owner;
+                if(childFullName.startsWith("Coll_Group_")) {
+                    ownerIsGroup = true;
+                    owner = childDoc.space.substring("Coll_Group_".length(), childFullName.indexOf('.'));
+                } else if (childFullName.startsWith("Coll_")) {
+                    owner = childDoc.space.substring("Coll_".length());
+                } else throw new IllegalStateException("Bizarre child: " + childFullName);
+                Object o =childDoc.getObject("CurrikiCode.AssetClass");
+                if(o==null)
+                   throw new RuntimeException("Warning: unknown asset class for document " + childFullName);
+                Property p = o.getProperty("rights");
+                if(p==null) throw new RuntimeException("Warning: unknown rights property for document " + childFullName);
+                String rights = p.getValue();
+                if("private".equals(rights)) {
+                    if(ownerIsGroup) return "privateToGroup:" + owner
+                    else return "privateToUser:" + owner;
+                } else if("protected") {
+                    if(ownerIsGroup) return "protectedToGroup:" + owner
+                    else return "protectedToUser:" + owner;
+                } else {
+                    if(rights!=null &amp;&amp; rights.length()&gt;0) return rights
+                    else return "x";
+                }
+            }
+
+            void remove() { throw new UnsupportedOperationException(); }
+        }
+
+    }
+
+    public String protectForJSON(String src) {
+        return src.replaceAll("\n","&amp;#xA;").replaceAll("\r","&amp;#xD;").replaceAll("'","\\\\'");
+    }
+
+
+    // coding utilities
+
+
+    public String xmlEncode(String src) {
+        if(src==null) return null;
+        return src.replaceAll("&lt;","&amp;lt;").replaceAll("&gt;","&amp;gt;").replaceAll("&amp;","&amp;amp;").replaceAll("'","&amp;apos;").replaceAll("\"","&amp;quot;");
+    }
+
+
+    public String getTextOfHtml(String html){
+        StringBuffer buff = new StringBuffer(html);
+        Matcher matcher = Pattern.compile("&amp;\\#([^;]*);").matcher(html);
+        int offset = 0;
+        while(matcher.find()) {
+            String replacement = getTextOfHtmlTrue(matcher.group(0)).trim();
+            buff.replace(matcher.start()-offset, matcher.end()-offset, replacement);
+            offset += matcher.end()-matcher.start()-1;
+        }
+        html = buff.toString();
+        matcher = Pattern.compile("&lt;[^&gt;]+&gt;").matcher(html);
+        offset=0;
+        while(matcher.find()) {
+            buff.delete(matcher.start()-offset,matcher.end()-offset);
+            offset += matcher.end()-matcher.start();
+        }
+        return buff.toString();
+    }
+
+    public String getTextOfHtmlTrue(String html) {
+
+        StringBuffer buff = new StringBuffer();
+        StringReader read = new StringReader(html);
+        HTMLEditorKit.ParserCallback htmlListener = new HereParser(buff)
+        new ParserDelegator().parse(read,htmlListener, true);
+        return buff.toString();
+    }
+
+
+    public String flattenMap(Map map) {
+        return new Gson().toJson(map);
+    }
+
+    public String flattenToJSONArrayString(Map map, String itemName) {
+        LinkedList list = new LinkedList();
+
+        for (String item : map.keySet()) {
+            HashMap m = new HashMap();
+            m.put(itemName, item);
+            Object o = map.get(item);
+            if(o instanceof Map) {
+                Map info = (Map) map.get(item);
+                for (Object infoItem : info.keySet()) {
+                    m.put(infoItem, info.get(infoItem));
+                }
+                list.add(m);
+            } // otherwise ignore
+        }
+        return new Gson().toJson(list);
+    }
+
+    protected String flattenToJSONArrayString(Map map, List items, String itemName) throws ResourceException {
+
+        LinkedList json = new LinkedList();
+
+        for (String item : items) {
+            Map o = new HashMap();
+            o.put(itemName, item);
+            Map info = (Map) map.get(item);
+            if (info != null) {
+                for (String infoItem : info.keySet()) {
+                    o.put(infoItem, info.get(infoItem));
+                }
+            } else {
+                throw new IllegalStateException("Map for "+itemName+": "+item+" cannot be found");
+            }
+            json.add(o);
+        }
+
+        return new Gson().toJson(json);
+    }
+
+
+
+    // ===================== for a user object =============================
+
+    private String getUserPropertyStringX(String propName) {
+        Property prop = userObject.getProperty(propName);
+        if(prop!=null &amp;&amp; prop.getValue()!=null)
+            return xmlEncode(prop.getValue().toString());
+        else
+            return "";
+    }
+
+    public String getUserFirstNameX() { return getUserPropertyStringX("first_name"); }
+    public String getUserLastNameX() { return getUserPropertyStringX("last_name"); }
+    public String getUserNameX() { return doc.name; }
+    public String getUserEmailX() { return getUserPropertyStringX("email");}
+    public String getUserCityX() { return getUserPropertyStringX("city");}
+    public String getUserStateX() { return getUserPropertyStringX("state"); }
+    public String getUserCountryX() { return getUserPropertyStringX("country"); }
+    public String getUserActiveX() { return getUserPropertyStringX("active"); }
+    public String getUserEmailUndeliverable() { return getUserPropertyStringX("email_undeliverable"); }
+
+    public String getUserTypeX() { return getUserPropertyStringX("member_type"); }
+
+    public List getUserSubjects() {
+        Property prop = userObject.getProperty("topics");
+        if(prop == null) return Collections.EMPTY_LIST;
+        return (List) prop.getValue();
+    }
+    public String getUserBioX() {
+        Property prop = userObject.getProperty("comment");
+        if(prop==null || prop.value==null) return "";
+        xmlEncode(getTextOfHtml(doc.getRenderedContent(prop.value.toString())));
+    }
+    public String getUserPictureX() {
+        Property prop = userObject.getProperty("avatar");
+        String result = null;
+        if(prop!=null) result = prop.value;
+        if(result==null || result=="") { // take first attachment
+            for (Attachment attachment: doc.attachmentList) {
+                if(result==null || result=="") {
+                    result = attachment.filename;
+                }
+            }
+        }
+        if(result==null || result=="") return "/xwiki/skins/albatross/noavatar.png";
+        if(result.contains("/")) return result;
+        return "/xwiki/bin/download/" + doc.space + "/" + doc.name + "/" + result + "?width=88";
+    }
+
+    public String getUserContributionsX() {
+        List results = xwiki.getXWiki().search("select count(doc) from XWikiDocument doc, BaseObject obj where doc.creator='"+ docFullName +"' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
+        return results.get(0);
+    }
+    /* public String getUserBio() { return getUserProperty("country"); }
+    public String getUserBlogsAndCo() { return getUserProperty("country"); } */
+
+
+
+    public String getUserGroupsX() {
+        Map m = currikiPlugin.fetchUserGroups(docFullName);
+        m.put("solrMade", "true");
+        return xmlEncode(flattenToJSONArrayString(m, "groupSpace"));
+    }
+
+    public String getUserCollectionsX() {
+        List resultList = currikiPlugin.fetchUserCollectionsList(docFullName);
+        Map results = currikiPlugin.fetchUserCollectionsInfo(docFullName);
+        results.put("solrMade", "true");
+
+        return xmlEncode(flattenToJSONArrayString(results, resultList, "collectionPage"));
+    }
+
+    // ======= group functions =====================================
+
+    private String getGroupPropertyXX(String propName) {
+        Property prop = groupObjectX.getProperty(propName);
+        if(prop!=null &amp;&amp; prop.value!=null)
+            return xmlEncode(prop.value.toString());
+        return prop;
+    }
+
+    private String getGroupPropertyCX(String propName) {
+        Property prop = groupObjectC.getProperty(propName);
+        if(prop!=null &amp;&amp; prop.value!=null)
+            return xmlEncode(prop.value.toString());
+        return prop;
+    }
+
+    public String getGroupNameX() { return getGroupPropertyXX("type");}
+
+    public String getGroupTitleX() { return getGroupPropertyXX("displayTitle"); }
+    public String getGroupDescriptionX() {
+        return getTextOfHtml(doc.getRenderedContent(groupObjectX.getProperty("description").value.toString()));
+    }
+    public List getGroupSubjects() {
+        Property prop = groupObjectC.getProperty("topic");
+        if(prop==null) return Collections.EMPTY_LIST;
+        return prop.value;
+    }
+    public List getGroupLevels() {
+        Property prop = groupObjectC.getProperty("educationLevel");
+        if(prop==null) return Collections.EMPTY_LIST;
+        return prop.value;
+    }
+
+    public String getGroupLanguageX() {
+        String v = getGroupPropertyCX("language");
+        if(v==null) v = "fra";
+        return v;
+    }
+    public String getGroupMembershipPolicyX() {return getGroupPropertyXX("policy"); }
+
+    public String getGroupCollectionsX() {
+        List resultList;
+        Map results;
+        String groupName = docFullName;
+        if(groupName.endsWith(".WebPreferences"))
+            groupName = groupName.substring(0,groupName.length()-".WebPreferences".length());
+        try {
+            resultList = currikiPlugin.fetchGroupCollectionsList(groupName);
+            results = currikiPlugin.fetchGroupCollectionsInfo(groupName);
+            results.put("solrMade", "true");
+        } catch (XWikiException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
+
+        return xmlEncode(flattenToJSONArrayString(results, resultList, "collectionPage"));
+
+    }
+
+    // ================== page functions ========================
+
+    public String getPageTextX() {
+        return xmlEncode(getTextOfHtmlTrue(doc.getRenderedContent()));
+    }
+}
+
+class FormatterThreadLocal extends ThreadLocal {
+     protected Object initialValue() {
+         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+     }
+ };
+
+
+/* Unfortunately, this parser seems to either swallow all spaces or
+  swallow a few things that get lost (e.g. a "/"). Giving up.
+ */
+class HereParser extends HTMLEditorKit.ParserCallback {
+
+    public HereParser(StringBuffer buff) {
+        this.buff = buff;
+    }
+
+    StringBuffer buff;
+
+    void handleEndOfLineString(String s) {
+        buff.append(s);
+    }
+
+    void handleText(char[] chars, int i) {
+        buff.append(chars).append(' ');
+    }
+}
+</content></xwikidoc>

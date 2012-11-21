@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.martagirdea</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1171480785000</creationDate>
-<date>1322615450000</date>
-<contentUpdateDate>1322615450000</contentUpdateDate>
-<version>123.1</version>
+<date>1351544040000</date>
+<contentUpdateDate>1351544040000</contentUpdateDate>
+<version>126.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>updating left menu with partners and sponors</comment>
+<comment>removing "spurious EOLs".</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -99,7 +99,7 @@
 <name>Panels.Navigation</name>
 <number>0</number>
 <className>Panels.PanelClass</className>
-<guid></guid>
+<guid>cbebff8e-9394-4a86-b480-97544eb116ac</guid>
 <property>
 <category>Navigation</category>
 </property>
@@ -114,6 +114,9 @@ function tourpop()
 &lt;/SCRIPT&gt;
 ##
 &lt;div id="treeviewtemp" style="display: none;"&gt;&lt;/div&gt;
+##
+$xwiki.includeTopic("PanelIncludes.GlobalNavigation")
+##
 ##
 ## the default expandation state for categories 
 #set($defstate=false)
@@ -291,16 +294,14 @@ function tourpop()
 ##
 ##
 &lt;script type="text/javascript"&gt;
-{pre}
- // xwiki pre tag here
 /* &lt;![CDATA[ */
 Ext.onReady(function(){
-#if($doc.web.startsWith("Coll_")) ##{
-#set($cookiebase = "${context.user}_asset_")
+#if($doc.space.startsWith("Coll_")) ##{
+#set($cookiebase = "${context.user}_asset_")##
 #else ##}{
-#set($cookiebase = "${context.user}_")
+#set($cookiebase = "${context.user}_")##
 #end ##} 
-#set($cookiebase = "${cookiebase}_currikinavcategory_home")
+#set($cookiebase = "${cookiebase}_currikinavcategory_home")##
 	Ext.ns('Curriki.data.nav');
 	var nav = Curriki.data.nav;
 	nav.expanded = true;
@@ -314,11 +315,9 @@ Ext.onReady(function(){
 		}
 	}
 	Ext.select('#navigation-inner/div[class*=home]/a').first().dom.innerHTML = '&lt;span id="navhome-expander" class="'+(nav.expanded?"expanded":"collapsed")+'"&gt;&lt;/span&gt;' + Ext.select('#navigation-inner/div[class*=home]/a').first().dom.innerHTML;
-
 	if (!nav.expanded) {
 		Ext.select('#navigation-inner/div[id]').each(function(el) {el.setVisibilityMode(Ext.Element.DISPLAY); el.hide();})
 	}
-
 	Ext.get('navhome-expander').on({
 		'click':{
 			fn: function(e, t, o){
@@ -338,8 +337,6 @@ Ext.onReady(function(){
 	});
 });
 /* ]]&gt; */
- // xwiki /pre tag here
-{/pre}
 &lt;/script&gt;</content>
 </property>
 <property>
@@ -382,7 +379,7 @@ Ext.onReady(function(){
 <name>Panels.Navigation</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>9e78db17-318d-4977-8d63-25d25b8fde61</guid>
 <property>
 <tags/>
 </property>
