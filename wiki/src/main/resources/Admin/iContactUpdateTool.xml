@@ -10,19 +10,20 @@
 <author>XWiki.adminPolx</author>
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
-<creationDate>1326128130000</creationDate>
-<date>1326873222000</date>
-<contentUpdateDate>1326873222000</contentUpdateDate>
-<version>135.1</version>
+<creationDate>1342077791000</creationDate>
+<date>1342077881000</date>
+<contentUpdateDate>1342077881000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
-<content>import com.xpn.xwiki.api.*
+<content>// Groovy code #*
+import com.xpn.xwiki.api.*
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter
 import org.apache.commons.httpclient.HttpClient
@@ -33,8 +34,6 @@ import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.commons.httpclient.HttpMethod
 import org.apache.commons.httpclient.methods.DeleteMethod
 import org.jdom.output.XMLOutputter
-import org.apache.log4j.helpers.ISO8601DateFormat
-import java.text.DateFormat
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.jdom.output.Format
@@ -43,6 +42,9 @@ import com.xpn.xwiki.web.XWikiServletRequest
 import com.xpn.xwiki.criteria.impl.RevisionCriteria
 import com.xpn.xwiki.criteria.impl.Period
 import org.jdom.xpath.XPath
+import org.joda.time.Chronology
+import org.joda.time.chrono.ISOChronology
+import org.joda.time.DateTime
 
 public class iContactUpdateTool {
 
@@ -151,6 +153,7 @@ public class iContactUpdateTool {
 
     private Element postToiContact(String path, java.lang.Object msg) {
         try {
+            LOG.warn("posting to " + baseURL + path);
             PostMethod post = new PostMethod(baseURL + path);
             if(msg instanceof String) {
                 LOG.warn("Outputting " + msg);
@@ -161,7 +164,9 @@ public class iContactUpdateTool {
                 out.flush(); out.close();
                 post.setRequestBody(outputter.outputString((Element) msg));
             }
-            return readDocumentFromRequest(post);
+            Element elt = readDocumentFromRequest(post);
+            LOG.warn("Received " + elt);
+            return elt;
         } catch (Exception ex) {
             throw new IOException("Issue at post of " + msg, ex);
         }
@@ -203,6 +208,7 @@ public class iContactUpdateTool {
         try {
             request(method);
         } catch (Exception ex) {
+            LOG.warn("issue with method " + method, ex);
             throw new IOException("Issue with method " + method, ex);
         }
         String type = method.getResponseHeader("Content-Type").value;
@@ -238,6 +244,7 @@ public class iContactUpdateTool {
         docName = docName.replaceAll("\\(", "_");
         docName = docName.replaceAll("\\)", "_");
         docName = docName.replaceAll(" ", "_");
+        docName = docName.replaceAll("|", "_");
         docName = docName.replaceAll("__", "_");
         docName = docName.replaceAll("([a-z])([A-Z])", "\$1_\$2");
         docName = prefix + docName;
@@ -345,13 +352,11 @@ public class iContactUpdateTool {
             reports.add("added " + userName);
             n++;
             if(n % 100 == 0 || n == max) {
-
                 if (selectOldEmails==null)
                     selectOldEmails = XPath.newInstance("./contact[oldEmail]");
                 List oldEmailsElt = selectOldEmails.selectNodes(uploadUserDocRoot);
                 if (oldEmailsElt!=null &amp;&amp; oldEmailsElt.size()&gt;0)
                     injectContactIdForOldEmails(oldEmailsElt);
-
                 Element uploadResult = postToiContact("contacts/", uploadUserDocRoot);
                 subscribeUploadedUsers(uploadResult);
                 uploadUserDocRoot = createUploadUserDocRoot();
@@ -383,7 +388,7 @@ public class iContactUpdateTool {
             String oldEmail = enrichedContact.getChild("email").getText();
             Element contact = null;
             for(Object o: contactsWithOldEmail) {
-                if (oldEmail.equals(((Element) o).getChild("oldEmail").getText())) {
+                if (oldEmail.equals(((Element) o).getChild("email").getText())) {
                     contact = o;
                     break;
                 }
@@ -396,6 +401,7 @@ public class iContactUpdateTool {
     }
 
     public String subscribeUploadedUsers(Element uploadDoc) {
+        if (uploadDoc==null) throw new IllegalStateException("Null uploadDoc!");
         // create subscription Document
         /* example
           &lt;subscriptions&gt; 
@@ -487,7 +493,7 @@ public class iContactUpdateTool {
         new org.jdom.Document(elt);
         return elt;
     }
-    private static DateFormat isoFormatter = new ISO8601DateFormat();
+    private static Chronology isoChrono= ISOChronology.getInstance();
     
     private Element createUserProfile(String userName) {
         Document userDoc = xwiki.getDocument(userName);
@@ -510,7 +516,7 @@ public class iContactUpdateTool {
         addProp("curriki_country", obj.getProperty("country"), contact);
         addProp("affiliation", obj.getProperty("affiliation"), contact);
         addProp("opt_out", obj.getProperty("opt_out"), contact);
-        addProp("member_since", isoFormatter.format(userDoc.getCreationDate()), contact);
+        addProp("member_since", new DateTime(userDoc.getCreationDate().getTime(), isoChrono).toString(), contact);
         if (obj.getProperty("educational_level")!=null)
             for(String v in obj.getProperty("educational_level").value) {
                 addProp(mapCurrikiNameToCustomName(v, "lev_"), "1", contact);
@@ -532,7 +538,7 @@ public class iContactUpdateTool {
                 if (vNum!=null &amp;&amp; vNumber&lt;allVersions.size()-1) {
                     Document oldUserDoc = xwiki.getDocument(userDoc, (String) allVersions.get(vNumber+1));
                     String email = oldUserDoc.getObject("XWiki.XWikiUsers").get("email");
-                    if(!email.equals(obj.getProperty("email").toString())) {
+                    if(!email.equals(obj.getProperty("email").value)) {
                         addProp("oldEmail", email, contact);
                         LOG.warn("changed email from " + email + " to " + obj.get("email"));
                     }
@@ -552,4 +558,5 @@ public class iContactUpdateTool {
     }
     
 
-}</content></xwikidoc>
+}
+//*#</content></xwikidoc>

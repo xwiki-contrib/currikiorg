@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>Admin</web>
+<name>UserManagement</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.flixt</creator>
+<author>XWiki.flixt</author>
+<customClass></customClass>
+<contentAuthor>XWiki.flixt</contentAuthor>
+<creationDate>1350069917000</creationDate>
+<date>1353020974000</date>
+<contentUpdateDate>1353020974000</contentUpdateDate>
+<version>95.1</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
+<content>#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#set($userManagement=$xwiki.parseGroovyFromPage("Admin.UserManagementGroovy"))
+&lt;!--$userManagement.init($request, $xwiki, $context)
+ $userManagement.processReceivedData() --&gt;
+#set($worker = $request.getSession(false).getAttribute("USERDELETION_RUNNING"))##
+#if($worker)
+    $worker.logReport()&lt;!-- worker object is $worker --&gt;
+#end
+#set($foundUsers = $userManagement.getFoundUsers())##
+
+
+&lt;style&gt;
+    tr th {
+        background-color: transparent;
+        border-bottom: solid 1px grey;
+    }
+    th {
+        padding-left: 0.5em;
+        vertical-align: bottom;
+        height: 12em;
+    }
+    td {
+        padding-left: 0.5em;
+        padding-top: 1em;
+    }
+    .vertical_text {
+        border:0px;
+        writing-mode:tb-rl;
+        -webkit-transform:rotate(90deg);
+        -moz-transform:rotate(90deg);
+        -o-transform: rotate(90deg);
+        white-space:nowrap;
+        width:2em;
+        background-color: transparent;
+        vertical-align: middle;
+    }
+    #usernames {
+        width: 50%;
+        height: 10em;
+        float: left;
+        #if( ! $foundUsers)
+            background-color: #ffbfbf;
+            border: 1px solid #ff8080;
+        #end
+    }
+    .clearfix {
+        clear: both;
+    }
+    #wrongInputNotification {
+        height: 12em;
+        color: #ff4040;
+    }
+    #wrongInputNotificationBorder {
+        position: relative;
+        padding: 0.5em;
+        margin-left: 0.5em;
+        top: 0.6em;
+        left: 5%;
+    }
+    .resultHeading {
+        position: relative;
+        left: 1.5em;
+    }
+    .resultText {
+        position: relative;
+        padding-left: 2.5em;
+    }
+    #successMessage {
+        color: #00c200;
+        position: relative;
+        left: 1.5em;
+    }
+    .warningMessage {
+        color: rgba(245, 156, 39, 0.97);
+        position: relative;
+        left: 1.5em;
+    }
+    .errorMessage {
+        color: #ff4040;
+        position: relative;
+        left: 1.5em;
+    }
+    .sortColumn{
+        color: #4d82f3;
+        text-decoration:underline;
+    }
+    .tableHeaderHover:hover {
+        color: #413cf3;
+        text-decoration:underline;
+    }
+&lt;/style&gt;
+
+
+#if($userManagement.getRedirect())
+    $response.sendRedirect($userManagement.getRedirect())
+###
+###
+#elseif($worker.isWorking()) ##view which is shown if users are currently deleted in the background
+###
+###
+{pre}
+&lt;script&gt;
+    function reloadPage(){
+        window.location.reload()
+    }
+
+    function countDown(){
+        counter = parseInt(document.getElementById("countdown").innerHTML, 10) - 1;
+
+        if(counter &gt;= 0){
+            document.getElementById("countdown").innerHTML = counter;
+        }
+    }
+        #if($request.stop)
+        #else
+        setInterval(function(){reloadPage()},15000);
+        setInterval(function(){countDown()},1000);
+        #end
+&lt;/script&gt;
+{/pre}
+&lt;h3&gt;The system currently works on your request. Please wait ($worker.getProcessedUserCount() tasks done).&lt;/h3&gt;
+&lt;h4&gt;(working since $worker.duration)&lt;/h4&gt;
+&lt;h4&gt;This page will reload automatically in &lt;div style="display: inline;" id="countdown"&gt;15&lt;/div&gt; seconds...&lt;/h4&gt;
+    #if($request.stop)$worker.stop()
+    &lt;p style="font-size: smaller"&gt;Process stopped.&lt;/p&gt;
+    &lt;button onclick="window.location.href='$doc.name?$worker.searchRequestParams';"&gt;Back to search&lt;/button&gt;
+    #else
+    &lt;p style="font-size: smaller"&gt;In worst cases, you can &lt;a href="$doc.name?stop=1"&gt;stop it&lt;/a&gt; but please note that this may lead to data loss.&lt;/p&gt;
+    #end
+###
+###
+## ####################################################################################
+### FINISHED
+###
+#elseif($worker &amp;&amp; !$worker.isWorking())
+###
+###
+###
+### ====================== ERROR REPORT ========================================
+    #set($activatedUsers=$worker.getActivatedUsers())
+    #set($inactivatedUsers=$worker.getInactivatedUsers())
+    #set($deactivatedUsers=$worker.getDeactivatedUsers())
+    #set($deletedUsers=$worker.getDeletedUsers())
+    #set($warnings=$worker.getWarnings())
+    #set($errors=$worker.getErrors())
+    $request.getSession(false).removeAttribute("USERDELETION_RUNNING")##
+###
+
+&lt;h2&gt;Results of Status Changes&lt;/h2&gt;
+&lt;br&gt;
+
+    #if($warnings.size() == 0 &amp;&amp; $errors.size() == 0)
+    &lt;div  id="successMessage"&gt;
+        &lt;h3&gt;Success&lt;/h3&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Users changed.&lt;/li&gt;
+        ##&lt;li&gt;Reindex triggered.&lt;/li&gt;
+            &lt;li&gt;&lt;b&gt;It takes a moment until your changes appear in search results.&lt;/b&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+    #end
+    #if($warnings.size() &gt; 0)
+    &lt;div  class="warningMessage"&gt;
+        &lt;h3&gt;Warning&lt;/h3&gt;
+        &lt;ul&gt;
+            &lt;li&gt;There are problems deleting some users.&lt;/li&gt;
+            &lt;li&gt;See messages below for further information.&lt;/li&gt;
+            &lt;li&gt;&lt;b&gt;It takes a moment until your changes appear in search results.&lt;/b&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;br&gt;
+        #foreach($warningsForUser in $warnings)
+            #set($userName=$warningsForUser.get("userName"))
+            #set($cause=$warningsForUser.get("cause"))
+
+            #if($cause == "WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS")
+                The user $userName could not be deactivated, made a Spammer, he/she still has &lt;a href="#" onclick="showHide('${userName}.stillHasContributions');"&gt;$warningsForUser.get("numberOfContributions") contribution/s &lt;/a&gt; in Curriki. &lt;br&gt;
+                &lt;div id="${userName}.stillHasContributions" style="display: none;"&gt;
+                    &lt;ul class="resourceList"&gt;
+                        #foreach($resource in $warningsForUser.get("userResources"))
+                            &lt;li&gt;&lt;a href="/xwiki/bin/view/${resource.replace(".","/")}"&gt;$resource&lt;/a&gt;&lt;/li&gt;
+                        #end
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            #end
+
+            #if($cause == "WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS")
+                The user $userName could not be deleted, he/she still has &lt;a href="#" onclick="showHide('${userName}.stillHasContributions');"&gt;$warningsForUser.get("numberOfContributions") contribution/s &lt;/a&gt; in Curriki. &lt;br&gt;
+                &lt;div id="${userName}.stillHasContributions" style="display: none;"&gt;
+                    &lt;ul class="resourceList"&gt;
+                        #foreach($resource in $warningsForUser.get("userResources"))
+                            &lt;li&gt;&lt;a href="/xwiki/bin/view/${resource.replace(".","/")}"&gt;$resource&lt;/a&gt;&lt;/li&gt;
+                        #end
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            #end
+
+            #if($cause == "WARNING_USER_IS_SYSTEM_ADMIN")
+                The user $userName could not be deleted, he/she is a system admin. &lt;br&gt;
+            #end
+
+            #if($cause == "WARNING_USER_IS_GROUP_ADMIN")
+                The user $userName could not be deleted, he/she is a group admin in &lt;a href="#" onclick="showHide('${userName}.isGroupAdmin');"&gt;$warningsForUser.get("groupNames").size() groups&lt;/a&gt;. &lt;br&gt;
+                &lt;div id="${userName}.isGroupAdmin" style="display: none;"&gt;
+                    &lt;ul class="resourceList"&gt;
+                        #foreach($groupName in $warningsForUser.get("groupNames"))
+                            &lt;li&gt;&lt;a href="/xwiki/bin/view/${groupName}/WebHome"&gt;$groupName&lt;/a&gt;&lt;/li&gt;
+                        #end
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            #end
+
+            #if($cause == "WARNING_USER_IS_YOURSELF")
+                The user $userName could not be deleted, you cannot delete yourself. Doh!&lt;br&gt;
+            #end
+
+        #end
+    &lt;/div&gt;
+    #end
+
+    #if($errors.size() &gt; 0 )
+    &lt;div  class="errorMessage"&gt;
+        &lt;h3&gt;Error&lt;/h3&gt;
+        &lt;ul&gt;
+            &lt;li&gt;There were errors while deleting a user.&lt;/li&gt;
+            &lt;li&gt;See messages below for further information.&lt;/li&gt;
+            &lt;li&gt;&lt;b&gt;It takes a moment until your changes appear in search results.&lt;/b&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;br&gt;
+        #foreach($error in $errors)
+            $error &lt;br&gt;
+        #end
+    &lt;/div&gt;
+    #end
+&lt;br&gt;
+&lt;h3 class="resultHeading"&gt;$activatedUsers.size() Member(s) Verified&lt;/h3&gt;
+&lt;p class="resultText"&gt;
+    #foreach($user in $activatedUsers)
+                    $user
+            #end
+&lt;/p&gt;
+&lt;hr&gt;
+##
+&lt;h3 class="resultHeading"&gt; $inactivatedUsers.size()  Email(s) Unverified&lt;/h3&gt;
+&lt;p class="resultText"&gt;
+    #foreach($user in $inactivatedUsers)
+                    $user
+            #end
+&lt;/p&gt;
+&lt;hr&gt;
+##
+&lt;h3 class="resultHeading"&gt;$deactivatedUsers.size() Marked as Spammer(s)&lt;/h3&gt;
+&lt;p class="resultText"&gt;
+    #foreach($user in $deactivatedUsers)
+                    $user
+            #end
+&lt;/p&gt;
+&lt;hr&gt;
+##
+&lt;h3 class="resultHeading"&gt;$deletedUsers.size() Deleted&lt;/h3&gt;
+&lt;p class="resultText"&gt;
+    #foreach($user in $deletedUsers)
+                    $user
+            #end
+&lt;/p&gt;
+
+&lt;br&gt;
+
+
+&lt;hr&gt;
+&lt;button onclick="window.location.href='$doc.name?$worker.searchRequestParams';"&gt;Back to search&lt;/button&gt;
+##
+##
+## ####################################################################################
+## -------------
+#else ## View with the search form to search for users
+##
+##
+{pre}&lt;script type="text/javascript"&gt;
+
+//We store all clicked radio buttons of the applyForm because we only want to deliver
+//the ones which where really clicked
+clickedRadioButtons = new Object();
+
+//Initialize the view with the sort parameter of the url
+Ext.onReady(function(){
+    sortParam = gup("sort");
+    setSortColumn(sortParam);
+});
+
+/**
+ * Function to get a parameter value from the url
+ * @param name name of the parameter you want the value of
+ */
+function gup( name )
+{
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&amp;]"+name+"=([^&amp;#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( window.location.href );
+    if( results == null )
+        return "";
+    else
+        return results[1];
+}
+
+/**
+ * If the sort column gets changed we need to remove the style from the
+ * one which was selected before
+ */
+function removeAllOtherSortColumnStyles(){
+    var columnHeaderIds = new Array("userNameHeader", "userFirstNameHeader", "userLastNameHeader", "userEmailHeader");
+    for(headerId in columnHeaderIds){
+        var headerElement = Ext.get(headerId);
+        if(headerElement != null){
+            headerElement.removeClass("sortColumn")
+        }
+    }
+}
+
+/**
+ * Called to initially set the right sort column from the url
+ * @param columnName name of the column which should get the sort column
+ */
+function setSortColumn(columnName){
+    removeAllOtherSortColumnStyles();
+    var targetId = "";
+    if (columnName.indexOf("userName") != -1) {
+        targetId = "userNameHeader"
+    } else if (columnName.indexOf("userFirstName") != -1) {
+        targetId = "userFirstNameHeader"
+    } else if (columnName.indexOf("userLastName") != -1) {
+        targetId = "userLastNameHeader"
+    } else if (columnName.indexOf("userEmail") != -1) {
+        targetId = "userEmailHeader"
+    } else {
+        targetId == "userNameHeader"
+    }
+    var targetHeaderElement = Ext.get(targetId);
+    if(targetHeaderElement != null){
+        targetHeaderElement.addClass('sortColumn')
+    }
+}
+
+/**
+ * Called when a sort column is clicked and takes care of changes which are
+ * needed to set the new column to the sort column
+ * @param columnName
+ */
+function changeSortColumn(columnName){
+    var sortParamGetFormElement = Ext.get("sortParamGetForm");
+    var sortParamPostFormElement = Ext.get("sortParamPostForm");
+
+    //Lookup which order is choosen
+    var sortParam = gup("sort");
+    var order = "asc"
+
+    if(sortParam.indexOf(columnName)!=-1){  // If the same field is clicked twice the paramter already contains the field name
+        if(sortParam.indexOf("asc")!=-1){  // Then we want to switch the order of the results.
+            order = "desc";
+        }else if(sortParam.indexOf("desc")!=-1){
+            order = "asc";
+        }
+    }
+
+    if(sortParamGetFormElement != null){
+        sortParamGetFormElement.set({value: columnName+" "+order})
+    }
+
+    if(sortParamPostFormElement != null){
+        sortParamPostFormElement.set({value: columnName+""+order})
+    }
+    Ext.get("searchForm").dom.submit();
+
+}
+
+/**
+ * Hides a element by setting toggling its style to display none and display block
+ * @param div
+ */
+function showHide(div){
+    if(document.getElementById(div).style.display == 'none'){
+        document.getElementById(div).style.display = 'block';
+    }else{
+        document.getElementById(div).style.display = 'none';
+    }
+}
+
+/**
+ * Called when a radio button of the applyForm is pressed
+ * Then it stores the name of the button and the value in the object which is
+ * intended to store the values (see script beginning)
+ * @param inputElement element of the radio button which is clicked
+ */
+function radioButtonClicked(inputElement){
+    nameAttribute = inputElement.getAttribute("name");
+    valueAttribute = inputElement.getAttribute("value");
+    clickedRadioButtons[nameAttribute] = valueAttribute;
+    var test = 5;
+}
+
+/**
+ * Called onSubmit of the applyForm.
+ * Checks if users are marked for deletion and asks the user for a confirmation.
+ * Removes all unused radio buttons from the form so that only the ones which where clicked
+ * are sent to the server.
+ * @return {Boolean} true if the request can be sent.
+ */
+function prepareFormForSubmit(){
+    var deleteIsConfirmed = warnIfUsersShouldBeDeleted();
+    if(!deleteIsConfirmed) return false;
+
+    applyForm = document.getElementById("applyForm");
+    radioButtons = getRadioButtonsOfApplyForm();
+
+    for(var i = 0; i &lt; radioButtons.length; i++){ // Go through all radio buttons in the form
+        nameAttribute = radioButtons[i].getAttribute("name");
+        valueAttribute = radioButtons[i].getAttribute("value");
+        if(clickedRadioButtons[nameAttribute] != valueAttribute){
+            parentNode = radioButtons[i].parentNode;
+            parentNode.removeChild(radioButtons[i])
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Return an array of all radio button elements in the applyForm
+ */
+function getRadioButtonsOfApplyForm(){
+    return Ext.get('applyForm').select('input[type=radio]').elements;
+}
+
+/**
+ * Ask for a confirmation if a user is marked for deletion
+ * @return {*}
+ */
+function warnIfUsersShouldBeDeleted(){
+    var inputs = document.getElementsByTagName("input");
+    for(i = 0; i &lt; inputs.length; i++){
+        var input = inputs[i];
+        var value = input.getAttribute("value");
+        if(input.getAttribute("value") == "TO_DELETE" &amp;&amp; input.checked){
+            return confirm("You marked one or more users for deletion. Are you sure you want to delete?");
+        }
+    }
+    return true;
+}
+
+/**
+ * Called if the user chooses the link to see the next page of search results
+ * @param max maximum number of pages available
+ */
+function increaseCurrentPageNumber(max){
+    var currentNumber = parseInt(document.getElementById("pageNumberGetForm").getAttribute("value"));
+    if(parseInt(max)&gt;=(currentNumber+1)){
+        document.getElementById("pageNumberGetForm").setAttribute("value", currentNumber+1);
+        document.getElementById("pageNumberPostForm").setAttribute("value", currentNumber+1);
+        document.getElementById("searchForm").submit();
+    }
+}
+
+/**
+ *  Called if the user chooses the link to see the previous page of search results
+ */
+function decreaseCurrentPageNumber(){
+    var currentNumber = parseInt(document.getElementById("pageNumberGetForm").getAttribute("value"));
+    if(currentNumber - 1 &gt;= 1){
+        document.getElementById("pageNumberPostForm").setAttribute("value", currentNumber-1);
+        document.getElementById("pageNumberGetForm").setAttribute("value", currentNumber-1);
+        document.getElementById("searchForm").submit();
+    }
+}
+
+/**
+ * If a search is done we need to reset the page for the case the result has less entries than the one before
+ */
+function resetPageAndSubmitSearch(){
+    document.getElementById("pageNumberGetForm").setAttribute("value", 1);
+    document.getElementById("searchForm").submit();
+}
+
+
+&lt;/script&gt;
+{/pre}
+
+
+
+&lt;h2&gt;User-Management-Tool&lt;/h2&gt;
+&lt;p&gt;
+
+&lt;h3 title="Engineering notes: Verified Member is Active, Unverified Email is Inactive, and Spammer is known at Deactivated."&gt;Verified Member - Unverified Email - Spammer&lt;/h3&gt;
+&lt;ol&gt;
+    &lt;li&gt;Search for one or more users by name.&lt;/li&gt;
+    &lt;li&gt;Apply changes to the states of the found users.&lt;/li&gt;
+    &lt;li&gt;Select "Set Changed Status" button.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;h3&gt;Delete&lt;/h3&gt;
+&lt;ol&gt;
+    &lt;li&gt;Search one or more users by name&lt;/li&gt;
+    &lt;li&gt;Set the state of the user you want to delete&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/p&gt;
+&lt;form id="searchForm" method="GET"&gt;
+    &lt;input type="hidden" name="searchUsers"  value="true"/&gt;
+    &lt;input id="pageNumberGetForm" type="hidden" name="pageNumber" #if($request.pageNumber) value="${request.pageNumber}" #else value="1" #end /&gt;
+    &lt;p&gt;&lt;label for="usernames"&gt;$msg.get('join.login.username') (e.g. jmarks plox) Hint: NOT, AND, quotes and wildcards all work.&lt;/label&gt;&lt;/p&gt;
+    &lt;textarea id="usernames" name="usernames" onkeydown="if (event.keyCode == 13) { resetPageAndSubmitSearch(); return false; }"&gt;#if($request.usernames)${request.usernames}#end&lt;/textarea&gt;
+    #if( ! $foundUsers )
+        &lt;div id="wrongInputNotification"&gt;
+            &lt;div id="wrongInputNotificationBorder"&gt;
+                Sorry your input was not well formed.&lt;br&gt;
+                Please:
+                &lt;ul&gt;
+                    &lt;li&gt;Don't use commas to separate search terms&lt;/li&gt;
+                    &lt;li&gt;Have all parenthesis closed correctly&lt;/li&gt;
+                    &lt;li&gt;Have all parenthesis closed correctly&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    #end
+    &lt;div class="clearfix"&gt;&lt;/div&gt;
+    &lt;label for="rows"&gt;Results per page:&lt;/label&gt;
+    &lt;select id="rows" name="rows"&gt;
+        &lt;option #if($request.rows=="25")selected#end&gt;25&lt;/option&gt;
+        &lt;option #if($request.rows=="50")selected#end&gt;50&lt;/option&gt;
+        &lt;option #if($request.rows=="100")selected#end&gt;100&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;br&gt;
+    &lt;button onclick="resetPageAndSubmitSearch();" class="button"&gt;Search&lt;/button&gt;
+    &lt;input id="sortParamGetForm" type="hidden" name="sort" #if($request.sort) value="${request.sort}" #else value="userName asc" #end /&gt;
+&lt;/form&gt;
+
+
+    #if($foundUsers &amp;&amp; $request.applyStatusChanges != "true" &amp;&amp; $request.searchUsers)
+
+    &lt;h4&gt;Found $userManagement.getTotalNumberOfSolrResults() results &lt;/h4&gt;
+    &lt;form id="applyForm" method="POST" style="position: relative; top:-3em;" onsubmit="return prepareFormForSubmit()"&gt;
+        &lt;input type="hidden" name="applyStatusChanges" value="true"/&gt;
+        &lt;table style=" table-layout: fixed; width: 100%; padding: 25px; word-wrap: break-word;"&gt;
+            &lt;tr&gt;
+                &lt;th id="userNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userName')" style="width: 15%"&gt;&lt;div class="vertical_hidden_text"&gt;&lt;/div&gt;Accountname&lt;/th&gt;
+                &lt;th id="userEmailHeader" class="tableHeaderHover" onclick="changeSortColumn('userEmail')" style="width: 25%"&gt;&lt;div class="vertical_hidden_text"&gt;&lt;/div&gt;Email&lt;/th&gt;
+                &lt;th id="userFirstNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userFirstName')" &gt;&lt;div class="vertical_hidden_text"&gt;&lt;/div&gt;Firstname&lt;/th&gt;
+                &lt;th id="userLastNameHeader" class="tableHeaderHover" onclick="changeSortColumn('userLastName')" &gt;&lt;div class="vertical_hidden_text"&gt;&lt;/div&gt;Lastname&lt;/th&gt;
+                &lt;th class="vertical_text"&gt;Verified Member&lt;/th&gt;
+                &lt;th class="vertical_text"&gt;Unverified Email&lt;/th&gt;
+                &lt;th class="vertical_text"&gt;Spammer&lt;/th&gt;
+                &lt;th class="vertical_text"&gt;Delete&lt;/th&gt;
+            &lt;/tr&gt;
+
+            #foreach($user in $foundUsers) ##Create a row for each found user
+                &lt;tr&gt;
+                    &lt;td&gt;
+                        &lt;a href="/xwiki/bin/view/${user.fullname.replace(".","/")}""&gt;$user.userName (&lt;a href="/xwiki/bin/edit/${user.fullname.replace(".","/")}?editor=object"&gt;edit object&lt;/a&gt;)&lt;/a&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                        #if($user.userEmail)
+                            $user.userEmail
+                        #else
+                            &lt;p style="color: red;"&gt;No Email&lt;/p&gt;
+                        #end
+                    &lt;/td&gt;
+                    &lt;td&gt;$user.userFirstName&lt;/td&gt;
+                    &lt;td&gt;$user.userLastName&lt;/td&gt;
+
+                    &lt;td&gt;
+                        &lt;input type="radio" name="${user.fullname}#STATE"value="ACTIVE" #if($user.userActive == "true" &amp;&amp; $user.userEmailUndeliverable == "false") checked  #end onclick="radioButtonClicked(this)"/&gt;
+                    &lt;/td&gt;
+
+                    &lt;td style="padding-left: 0.5em; padding-top: 1em;"&gt;
+                        &lt;input type="radio" name="${user.fullname}#STATE" value="INACTIVE" #if($user.userActive == "false" &amp;&amp; $user.userEmailUndeliverable == "true") checked  #end onclick="radioButtonClicked(this)"/&gt;
+                    &lt;/td&gt;
+
+                    &lt;td style="padding-left: 0.5em; padding-top: 1em;"&gt;
+                        &lt;input type="radio" name="${user.fullname}#STATE" value="DEACTIVATED" #if($user.userActive == "false" &amp;&amp; $user.userEmailUndeliverable == "false") checked  #end onclick="radioButtonClicked(this)"/&gt;
+                    &lt;/td&gt;
+
+                    &lt;td style="padding-left: 0.5em; padding-top: 1em;"&gt;
+                        &lt;input type="radio" name="${user.fullname}#STATE" value="TO_DELETE" onclick="radioButtonClicked(this)"/&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            #end
+
+        &lt;/table&gt;
+        &lt;input type="submit" class="button" value="Apply Status Changes" #if($foundUsers.size()==0)disabled="disabled"#end/&gt;
+        &lt;input id="pageNumberPostForm" type="hidden" name="pageNumber" #if($request.pageNumber) value="${request.pageNumber}" #else value="1" #end /&gt;
+        &lt;input type="hidden" name="usernames" #if($request.usernames)value="${request.usernames}"#else value="" #end /&gt;
+        &lt;input type="hidden" name="rows" #if($request.rows)value="${request.rows}"#else value="" #end /&gt;
+        &lt;input id="sortParamPostForm" type="hidden" name="sort" #if($request.sort) value="${request.sort}" #else value="userName asc" #end /&gt;
+    &lt;/form&gt;
+
+        #set($totalNumberOfPages=$userManagement.getTotalNumberOfPages())
+        #if($totalNumberOfPages &gt; 1)
+        &lt;div style="float:right; padding: 0.5em;" onclick="increaseCurrentPageNumber('$totalNumberOfPages');"&gt;&lt;a href="#" &gt; Next &amp;gt;&amp;gt;&lt;/a&gt;&lt;/div&gt;
+        &lt;div style="float:right; padding: 0.5em;"&gt; Page: $request.pageNumber of $totalNumberOfPages &lt;/div&gt;
+        &lt;div style="float:right; padding: 0.5em;" onclick="decreaseCurrentPageNumber();"&gt;&lt;a href="#" &gt; &amp;lt;&amp;lt; Previous &lt;/a&gt; &lt;/div&gt;
+        #end
+    #end
+
+#end</content></xwikidoc>
