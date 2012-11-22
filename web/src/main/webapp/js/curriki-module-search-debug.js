@@ -121,6 +121,10 @@ module.init = function(){
 					}
 				);
 
+				if(Curriki.module.search.util.isInEmbeddedMode()){
+					Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+				}
+
 				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
@@ -316,8 +320,27 @@ module.init = function(){
 		}
 	};
 
+	module.isInEmbeddedMode = function(){
+		return !(	//If this attribute is not set, we can are not in embedded mode
+					typeof Curriki.module.search.embeddingPartnerUrl === "undefined");
+	};
+
+	module.sendResizeMessageToEmbeddingWindow = function() {
+		var height = document.body.scrollHeight + 25;
+		console.log("search: sending resource view height to embedding window (" + height + "px)");
+		var data = "resize:height:"+ height + "px;"
+		window.parent.postMessage(data,'*');
+	};
+
+	module.sendResourceUrlToEmbeddingWindow = function(url) {
+		console.log("search: sending resource url to embedding window (" + url + ")");
+		var data = "resourceurl:"+url;
+		window.parent.postMessage(data,'*');
+	};
+	
 	module.registerSearchLogging = function(tab){
 	};
+
 
 };
 
@@ -492,9 +515,7 @@ data.init = function(){
 	});
 
 	f.data.review = {
-		list: [
-			'partners', 'highest_rated', 'members.highest_rated'
-		]
+		list: [ 'partners', 'highest_rated', 'members.highest_rated' ]
 		,data: [
 			['', _('search.resource.review.selector.UNSPECIFIED')]
 		]
@@ -507,9 +528,7 @@ data.init = function(){
 	});
 
 	f.data.special = {
-		list: [
-			'contributions', 'collections', 'updated', 'info-only'
-		]
+		list: [ 'contributions', 'collections', 'updated', 'info-only' ]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
 		]
@@ -615,8 +634,10 @@ data.init = function(){
                     '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
-		,baseParams: { xpage: "plain"//, '_dc':(new Date().getTime())
-                        }
+		,baseParams: {	xpage: "plain"
+                     	//"json.wrf": "Curriki.module.search.data.resource.store.results.loadData" // parameter for Solr to wrap the json result into a function call
+                     	//, '_dc':(new Date().getTime())
+                      }
 		,reader: new Ext.data.JsonReader({
 			root: 'rows'
 			,totalProperty: 'resultCount'
@@ -629,6 +650,7 @@ data.init = function(){
     if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
     if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
     if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('score', 'desc');
 
 
@@ -636,6 +658,8 @@ data.init = function(){
 	// Set up renderers
 	data.renderer = {
 		title: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("render title " + value);
+            if(typeof(value)!="string") title ="";
 			// Title
 			var page = record.id.replace(/\./, '/');
 
@@ -676,14 +700,19 @@ data.init = function(){
 				rollover = _('unknown.unknown');
 			}
 
-//			return String.format('<img class="x-tree-node-icon assettype-icon" style="width:16px;height:17px;background-repeat:no-repeat;" src="{0}" alt="{1}" ext:qtip="{1}" />', Ext.BLANK_IMAGE_URL, rollover);
-			return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			if(Curriki.module.search.util.isInEmbeddedMode()){
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="' + Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+'?'+Curriki.module.search.embedViewMode), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
+				// return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a onclick="Curriki.module.search.util.sendResourceUrlToEmbeddingWindow(\'/xwiki/bin/view/{0}\')" href="#" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed-teachhub"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
+			}else {
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}
 		}
 
 		,ict: function(value, metadata, record, rowIndex, colIndex, store){
 			var css;
 			var dotIct;
 			var ict = record.data.ict;
+            console.log("render ict " + value);
 			if (!Ext.isEmpty(ict)){
 				// Find CSS classes needed
 				var topIct = ict.replace(/_.*/, '');
@@ -704,29 +733,47 @@ data.init = function(){
 
 		,contributor: function(value, metadata, record, rowIndex, colIndex, store){
 			var page = value.replace(/\./, '/');
-			return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
+            console.log("render contributor " + value);
+            if(typeof("value")!="string") value="";
+            if(Curriki.module.search.util.isInEmbeddedMode()){
+				return String.format('<a href="/xwiki/bin/view/{0}" target="_blank">{1}</a>', page, record.data.contributorName);
+			} else{
+				return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
+			}
 		}
 
 		,rating: function(value, metadata, record, rowIndex, colIndex, store){
-			if (value != "") {
+            console.log("render rating " + value);
+			if (typeof(value)=="string" && value != "") {
 				var page = record.id.replace(/\./, '/');
 
 				metadata.css = String.format('crs-{0}', value); // Added to <td>
 				//metadata.attr = String.format('title="{0}"', _('curriki.crs.rating'+value)); // Added to <div> around the returned HTML
-				return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
+				
+				
+				if(Curriki.module.search.util.isInEmbeddedMode()){
+					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" target="_blank"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
+				}else{
+					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
+				}
 			} else {
 				return String.format('');
 			}
 		}
 
 		,memberRating: function(value, metadata, record, rowIndex, colIndex, store){
-			if (value != "" && value != "0" && value != 0) {
+            console.log("render memberRating " + value);
+			if (typeof(value)=="string"  && value != "" && value != "0" && value != 0) {
 				var page = record.id.replace(/\./, '/');
 				var ratingCount = record.data.ratingCount;
 
 				if (ratingCount != "" && ratingCount != "0" && ratingCount != 0) {
 					metadata.css = String.format('rating-{0}', value);
-					return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+					if(Curriki.module.search.util.isInEmbeddedMode()){
+						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" target="_blank"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}" target="_blank"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+					}else{
+						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
+					}
 				} else {
 					return String.format('');
 				}
@@ -736,10 +783,14 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
+            console.log("render updated " + value);
+            if(typeof("value")!="string") return "";
 			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
         , score: function(value, metadata, record, rowIndex, colIndex, store){
+            if(typeof(value)!="number") value=0;
             return value;
          }
 	};
@@ -1151,12 +1202,14 @@ form.init = function(){
 	}
 
 	form.rowExpander = new Ext.grid.RowExpander({
+
+
 		tpl: new Ext.XTemplate(
 			_('search.resource.resource.expanded.title'),
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">',
-					'<a href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a target="{[this.getLinkTarget(values)]}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
@@ -1165,7 +1218,11 @@ form.init = function(){
 				getParentURL: function(values){
 					var page = values.page||false;
 					if (page) {
-						return '/xwiki/bin/view/'+page.replace(/\./, '/');
+						if(Curriki.module.search.util.isInEmbeddedMode()){
+							return Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?'+Curriki.module.search.embedViewMode);
+						}else{
+							return '/xwiki/bin/view/'+page.replace(/\./, '/');
+						}
 					} else {
 						return '';
 					}
@@ -1185,6 +1242,14 @@ form.init = function(){
 						,fw,_('global.title.popup.subject')
 						,lvl,_('global.title.popup.educationlevel')
 					);
+				},
+
+				getLinkTarget: function(values){
+					if(Curriki.module.search.util.isInEmbeddedMode()){
+							return '_blank';
+						}else{
+							return '_self';
+						}
 				}
 			}
 		)
@@ -1206,12 +1271,20 @@ form.init = function(){
 		var row = expander.grid.view.getRow(idx);
 		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.minus.rollover')});
+		
+		if(Curriki.module.search.util.isInEmbeddedMode()){
+			Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+		}
 	});
 
 	form.rowExpander.on('collapse', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
 		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.plus.rollover')});
+
+		if(Curriki.module.search.util.isInEmbeddedMode()){
+			Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+		}
 	});
 
 	form.columnModel = new Ext.grid.ColumnModel([
@@ -1501,7 +1574,8 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Groups'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Groups' : '/currikiExtjs'
 			,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
@@ -1515,6 +1589,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('title', 'asc');
 
 
@@ -1544,7 +1619,9 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};
@@ -1943,7 +2020,7 @@ data.init = function(){
 	});
 
 	f.data.member_type =  {
-		list: ['student', 'parent', 'professional', 'teacher', 'administration']
+		list: ['student', 'teacher', 'parent','professional','administration','nonprofit','nonprofit_education','corporation']
 		,data: [
 			['', _('XWiki.XWikiUsers_member_type_UNSPECIFIED')]
 		]
@@ -1998,8 +2075,10 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Members'
-			,method:'GET'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Members' : '/currikiExtjs'
+
+            ,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
@@ -2012,6 +2091,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('name1', 'asc');
 
 
@@ -2397,8 +2477,9 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Blogs'
-			,method:'GET'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Blogs' : '/currikiExtjs'
+            ,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
@@ -2411,6 +2492,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('updated', 'desc');
 
 
@@ -2436,7 +2518,9 @@ data.init = function(){
 		}
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};
@@ -2617,8 +2701,9 @@ data.init = function(){
 	data.store.results = new Ext.data.Store({
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
-			url: '/xwiki/bin/view/Search/Curriki'
-			,method:'GET'
+            url: document.location.pathname.endsWith("Old") ?
+                '/xwiki/bin/view/Search/Curriki' : '/currikiExtjs'
+            ,method:'GET'
 		})
 		,baseParams: { xpage: "plain", '_dc':(new Date().getTime()) }
 
@@ -2631,6 +2716,7 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
 	data.store.results.setDefaultSort('name', 'asc');
 
 
@@ -2652,7 +2738,9 @@ data.init = function(){
 */
 
 		,updated: function(value, metadata, record, rowIndex, colIndex, store){
-			var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof("value")!="string") return "";
+            var dt = Ext.util.Format.date(value, 'M-d-Y');
+            if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
 		}
 	};
@@ -2817,10 +2905,22 @@ Search.init = function(){
 
             var t= $('search-termPanel-'+searchTab+'-terms').getValue();
             if(t==_('search.text.entry.label')) t= "";
-            document.title = _("search.window.title." + searchTab, [t]);
-            var box = $('curriki-searchbox');
-            if(box.style) box.style.color='lightgrey';
-            box.value = t;
+            if(document.savedTitle && t!="") {
+                document.title = document.savedTitle;
+            } else {
+                if(typeof(document.savedTitle)=="undefined") document.savedTitle = document.title;
+                document.title = _("search.window.title." + searchTab, [t]);
+            }
+            try {
+	            var box = $('curriki-searchbox');
+	            if(typeof(box)=="object" && typeof(box.style)=="object") {
+	                box.style.color='lightgrey';
+	                box.value = t;
+	            }
+            } catch(e) {
+            	console.log('search: curriki-searchbox not found. (Ok in embedded mode)');
+            	console.log('EmbeddedMode: ' + Curriki.module.search.util.isInEmbeddedMode());
+            }
 
 			var pagerValues = {};
 
@@ -2890,19 +2990,23 @@ Curriki.numSearches = 0;
 			}
 			stateObject['a'] = panelSettings;
 
-			var provider = new Ext.state.Provider();
-			var encodedToken = provider.encodeValue(stateObject);
-			console.log('Saving History: '+ encodedToken );
-            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
-                Search.history.setLastToken(encodedToken);
-                var created = Ext.History.add(encodedToken,true);
-                if(created) console.log("-- created a new history frame.");
-            } else {
-                window.currikiHistoryStarted = true;
-                Search.history.setLastToken(encodedToken);
-                window.top.location.replace(window.location.pathname + "#" + encodedToken);
-                console.log("-- rather replaced history.");
-            }
+				var provider = new Ext.state.Provider();
+				var encodedToken = provider.encodeValue(stateObject);
+				console.log('Saving History: '+ encodedToken );
+	            if(Search.history.lastHistoryToken || window.currikiHistoryStarted) {
+	                Search.history.setLastToken(encodedToken);
+	                var created = Ext.History.add(encodedToken,true);
+	                if(created) console.log("-- created a new history frame.");
+	            } else {
+	                window.currikiHistoryStarted = true;
+	                Search.history.setLastToken(encodedToken);
+	                if(!Curriki.module.search.util.isInEmbeddedMode()){
+	                	window.top.location.replace(window.location.pathname + "#" + encodedToken);
+	                }else{
+	                	location.replace(window.location.pathname + location.search + "#" + encodedToken);
+	                }
+	                console.log("-- rather replaced history.");
+	            }
 		};
 
 		Search.tabPanel = {
@@ -3135,14 +3239,21 @@ Curriki.numSearches = 0;
 	}
 };
 
+
 Search.display = function(){
 	Search.init();
 
 	var s = new Ext.Panel(Search.mainPanel);
 	s.render();
 
+	if(Curriki.module.search.util.isInEmbeddedMode()){
+		Curriki.module.search.util.sendResizeMessageToEmbeddingWindow(); // Initial resizement of the embedding iframe
+	}
+
 	Search.history.init();
+	
 };
+
 
 Search.start = function(){
 	Ext.onReady(function(){

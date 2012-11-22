@@ -1,0 +1,86 @@
+<!-- LOGIN BOX -->
+<!-- member area -->
+<div id="header-member">
+#if($isguest)
+  #if($request.xredirect)
+    #set($logredir = $request.xredirect)
+  #elseif($doc.space == "Registration")
+    #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+  #elseif($doc.fullName == "Main.WebHome")
+    #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+  #elseif($doc.fullName == "Main.JoinCurriki")
+    #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+  #elseif($logredir.contains("/login"))
+    #set($logredir = "")
+  #end
+  #if("$!logredir"!="")
+    #set($logredir = "xredirect=$logredir")
+  #elseif($request.srid)
+    #set($logredir = "srid=$request.srid")
+  #end
+<!-- login area -->
+<script type="text/javascript">
+  // In IE we can't change the type of a password input (we can't toggle between text and password type) so we have to
+  // use a place holder in order to display the password label when the password field is empty.
+  function showLoginPasswordInput() {
+    // Hide the place holder.
+    this.style.display = 'none';
+    // Show the password input.
+    var pwd = document.getElementById('j_loginpwd');
+    pwd.style.display = '';
+    pwd.focus();
+  }
+
+  function hideLoginPasswordInput() {
+    // Hide the password input if it's empty.
+    if (this.value == '') {
+      this.style.display = 'none';
+      // Show the place holder.
+      var placeHolder = document.getElementById('j_loginpwd_placeholder');
+      placeHolder.style.display = '';
+    }
+  }
+</script>
+<form action="$xwiki.getURL("XWiki.XWikiLogin", "loginsubmit", "$logredir")" method="post">
+  <input type="hidden" name="srid" value="$!request.srid" />
+  <input class="input" id="j_loginname" tabindex="1" type="text" name="j_username" value="#if("$!request.j_username" != "")$request.j_username#else${msg.get("header.login_username")}#end" onfocus="if (this.value=='$msg.get("header.login_username")'){this.value=''} else {this.select()};" onblur="if (this.value==''){this.value='$msg.get("header.login_username")';}"/>
+  <input class="input password" id="j_loginpwd_placeholder" tabindex="2" type="text" value="$msg.get("header.login_password")" onfocus="showLoginPasswordInput.apply(this)"/>
+  <input class="input password" id="j_loginpwd" tabindex="2" type="password" name="j_password" onfocus="this.select()" onblur="hideLoginPasswordInput.apply(this)" style="display:none;"/>
+  <!-- remember me -->
+  <div id="remember-forgot">
+    <input tabindex="3" type="checkbox" class="checkbox" name="j_rememberme" value="true"/>$msg.get("header.login_rememberme")</label>
+    <a href="$xwiki.getURL("XWiki.ForgotUsernameOrPassword")" title="">$msg.get("header.login_forgot")</a>
+  </div>
+  <!-- end of remember me -->
+
+  <button class="login-button" type="submit" id="loginbtn" tabindex="4">$msg.get("header.login_go")</button>
+
+  <!-- registration -->
+  #set($regurl = $xwiki.getURL("Main.JoinCurriki"))
+  <a href="$regurl" class="register"><span>$msg.get("header.becomemember_part1") </span> $msg.get("header.becomemember_part2")</a>
+  <!-- end of registration -->
+
+</form>
+<!-- end of login area -->
+
+#else
+  ## is logged in
+  ## crtUserDoc is set in fudocs.vm
+  #set($fname = $crtUserDoc.display("first_name","view"))
+  #set($lname = $crtUserDoc.display("last_name", "view"))
+  <span class="welcome">$msg.get("welcome") <strong>$fname $lname</strong></span>
+    <ul>
+    #if($hasAdmin)
+      #set($url = $xwiki.getURL("XWiki.XWikiPreferences", "admin"))
+      <li><a href="$!url">$msg.get("core.menu.admin")</a></li>
+    #end
+      #set($url = $xwiki.getURL("MyCurriki.Profile", "view"))
+      <li><a href="$!url">$msg.get("core.menu.profile")</a></li>
+    </ul>
+  #set($logredir = $xwiki.getURL("Main.WebHome"))
+  #set($logouturl = $xwiki.getURL("XWiki.XWikiLogout","logout", "xredirect=$logredir"))
+  <a class="button button-confirm" href="$logouturl" class="logout">$msg.get("logout")</a>
+#end
+</div>
+##header-member
+<!-- end of member area -->

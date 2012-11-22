@@ -4,6 +4,20 @@
 ## Groups Macros ## {
 ##
 ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+
 
 ## groups shared macros
 #macro(groupinit)
@@ -100,8 +114,8 @@
 #groupsajaxjs()
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
+<script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
 <script type="text/javascript">
 wikiEditor.init({
 	elements : "",
@@ -109,6 +123,7 @@ wikiEditor.init({
 	mode: "exact",
 	content_css: "$xwiki.getSkinFile("style.css", true)",
 	debug : false,
+    safari_warning : false,
 	remove_linebreaks : false,
 	plugins: 'table, contextmenu, paste, searchreplace',
 	wiki_use_style: 'true',
@@ -118,7 +133,9 @@ wikiEditor.init({
 });
 function saveWelcomeBlock() {
 	jt_.cssClass.rem(document.getElementById('section_1'), 'hideRight');
-	document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();
+    if(tinyMCE.getContent()!=null) {
+        document.forms['wblockform']['XWiki.CurrikiWelcomeBlockClass_0_content'].value = tinyMCE.getContent();
+    }
 }
 function editWelcomeBlock(spaceName, pageName, divid) {
 	jt_.cssClass.add(document.getElementById('section_1'), 'hideRight');
@@ -162,7 +179,7 @@ function cancelEditWelcomeBlockCallback(ajaxreq) {
 #set($ok = $doc.use("XWiki.CurrikiWelcomeBlockClass"))
 ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
 #set($welcomeContent = $!doc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
-#if($welcomeContent!="")
+#if("$!welcomeContent"!="")
 #begingroupsection($title,"","", $colour, false)
 <div id="groups-members-welcomeblock">
 $welcomeContent
@@ -182,7 +199,7 @@ $welcomeContent
 #set($ok = $wdoc.use("XWiki.CurrikiWelcomeBlockClass"))
 ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
 #set($welcomeContent = $!wdoc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
-#if($welcomeContent=="")
+#if("$!welcomeContent"=="")
 ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
 $xwiki.getDocument("Groups.${wdoc.name}Welcome").getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
 #else
@@ -294,9 +311,9 @@ $wdoc.display("content", "edit")
 #error($message)
 #end
 <table class="xwikilogintable" summary="$msg.get("loginform")">
-<tr><th><label for="j_username">$msg.get("username"):</label></th>
+<tr><th><label for="j_username" class="sectitle">$msg.get("username"):</label></th>
 <td><input type="text" id="j_username" name="j_username" value=""/></td></tr>
-<tr><th><label for="j_password">$msg.get("password"):</label></th>
+<tr><th><label for="j_password" class="sectitle">$msg.get("password"):</label></th>
 <td><input type="password" id="j_password" name="j_password" value=""/></td></tr>
 <tr><td colspan="2" style="text-align: left;"><input id="rememberme" type="checkbox" name="j_rememberme" value="true"/><label for="rememberme">$msg.get("remembermeonthiscomp")</label></td></tr>
 </table>
@@ -640,7 +657,9 @@ $msg.get("groups_creategroup_needaccount", [$url])
     </thead>
     <tbody>
     <tr>
-    <td width="50%">
+    <td width="50%"><!-- newspace is $newspace of class $newspace.getClass()
+        $newspace.isDeleted()
+    -->
 		$newspace.display("topic","edit")
     </td>
     <td width="50%">
@@ -761,7 +780,7 @@ $msg.get("groups_home_firsttimewelcome_title")
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
-  #if($filename&&($filename!=""))
+  #if("$!filename"!="")
     $xwiki.getDocument("${doc.space}.WebHome").addAttachments()
     #set($filename = $context.addedAttachments.get(0).filename)
     $s.set("logo", $filename)
@@ -859,7 +878,7 @@ $xwiki.addTooltipJS()
   * Group suffix URL. Built from hostname
   *#
 #macro(groups_groupsuffixurl)
-#set($serverURL=$xwiki.getXWiki().Param('curriki.system.hostname', 'curriki.org'))
+#set($serverURL=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'curriki.org'))
 #set($serverURL=$serverURL.replaceAll("www.", ""))
 #set($groupURL=".groups."+$serverURL)
 ${groupURL}#end
@@ -973,7 +992,7 @@ $xwiki.addTooltipJS()
 #set($showFeed = false)
 #if($isGroupMember || $s.policy=="open")
 #set($showFeed = true)
-#set($feedURL = $xwiki.getDocument("Groups.Feed").getExternalURL("view", $context.util.escapeURL("space=${spaceName}&xpage=plain")))
+#set($feedURL = $xwiki.getDocument("Groups.Feed").getExternalURL("view", $util.escapeURL("space=${spaceName}&xpage=plain")))
 #begingroupsection($msg.groups_home_activity_title $msg.groups_home_activity_feed $feedURL "blue" $showFeed)
 #set($as = $xwiki.activitystream)
 #set($streamName = $as.getStreamName($spaceName))
@@ -1170,7 +1189,7 @@ $msg.get("groups.curriculum.contributions.about")
 #if($spaces&&($spaces.size()>0))
 #set($space = $spaces.get(0))
 #if($space)
-$response.sendRedirect("http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')${space.homeURL}")
+$response.sendRedirect("http://$xwiki.curriki.getPublicCurrikiConfig('hostname', 'www.curriki.org')${space.homeURL}")
 #end
 #end
 #if(!$space)

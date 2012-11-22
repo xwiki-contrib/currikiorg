@@ -9,8 +9,6 @@ import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.commons.httpclient.HttpMethod
 import org.apache.commons.httpclient.methods.DeleteMethod
 import org.jdom.output.XMLOutputter
-import org.apache.log4j.helpers.ISO8601DateFormat
-import java.text.DateFormat
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.jdom.output.Format
@@ -19,6 +17,9 @@ import com.xpn.xwiki.web.XWikiServletRequest
 import com.xpn.xwiki.criteria.impl.RevisionCriteria
 import com.xpn.xwiki.criteria.impl.Period
 import org.jdom.xpath.XPath
+import org.joda.time.Chronology
+import org.joda.time.chrono.ISOChronology
+import org.joda.time.DateTime
 
 public class iContactUpdateTool {
 
@@ -127,6 +128,7 @@ public class iContactUpdateTool {
 
     private Element postToiContact(String path, java.lang.Object msg) {
         try {
+            LOG.warn("posting to " + baseURL + path);
             PostMethod post = new PostMethod(baseURL + path);
             if(msg instanceof String) {
                 LOG.warn("Outputting " + msg);
@@ -137,7 +139,9 @@ public class iContactUpdateTool {
                 out.flush(); out.close();
                 post.setRequestBody(outputter.outputString((Element) msg));
             }
-            return readDocumentFromRequest(post);
+            Element elt = readDocumentFromRequest(post);
+            LOG.warn("Received " + elt);
+            return elt;
         } catch (Exception ex) {
             throw new IOException("Issue at post of " + msg, ex);
         }
@@ -179,6 +183,7 @@ public class iContactUpdateTool {
         try {
             request(method);
         } catch (Exception ex) {
+            LOG.warn("issue with method " + method, ex);
             throw new IOException("Issue with method " + method, ex);
         }
         String type = method.getResponseHeader("Content-Type").value;
@@ -205,7 +210,7 @@ public class iContactUpdateTool {
     // ========================== custom fields manipulation =======================
 
     private static List ownFields = ["curriki_username", "curriki_member_type", "curriki_country",
-            "opt_out", "member_since", "affiliation"];
+            "opt_out", "email_options", "member_since", "affiliation"];
     private static Map subjectPropToField = new HashMap(),
                        eduLevelPropToField = new HashMap();
 
@@ -214,6 +219,7 @@ public class iContactUpdateTool {
         docName = docName.replaceAll("\\(", "_");
         docName = docName.replaceAll("\\)", "_");
         docName = docName.replaceAll(" ", "_");
+        docName = docName.replaceAll("|", "_");
         docName = docName.replaceAll("__", "_");
         docName = docName.replaceAll("([a-z])([A-Z])", "\$1_\$2");
         docName = prefix + docName;
@@ -313,21 +319,31 @@ public class iContactUpdateTool {
         Element uploadUserDocRoot = createUploadUserDocRoot();
         LOG.warn("Preparing to update " + userNames.size() + " users.")
         for (String userName in userNames) {
-            Element userProfile = createUserProfile(userName);
-            if (userProfile==null) continue;
+            java.lang.Object r = createUserProfile(userName);
+            if (r instanceof String) {
+                try {
+                    Element userInfo = getFromiContact("contacts/?email=" + r);
+                    r = userInfo.getChild("contacts").getChild("contact").getChild("contactId").getTextTrim();
+                    LOG.warn("Deleting from iContact: " + userName);
+                    deleteFromiContact("contacts/" + r)
+                } catch (Exception ex) {
+                    LOG.warn("Couldn't delete " + userName, ex);
+                }
+                continue;
+            }
+            if(r==null) continue;
+            Element userProfile = r;
             uploadUserDocRoot.addContent(userProfile);
             lastUser2 = lastUser1;
             lastUser1= userName;
             reports.add("added " + userName);
             n++;
             if(n % 100 == 0 || n == max) {
-
                 if (selectOldEmails==null)
                     selectOldEmails = XPath.newInstance("./contact[oldEmail]");
                 List oldEmailsElt = selectOldEmails.selectNodes(uploadUserDocRoot);
                 if (oldEmailsElt!=null && oldEmailsElt.size()>0)
                     injectContactIdForOldEmails(oldEmailsElt);
-
                 Element uploadResult = postToiContact("contacts/", uploadUserDocRoot);
                 subscribeUploadedUsers(uploadResult);
                 uploadUserDocRoot = createUploadUserDocRoot();
@@ -341,7 +357,7 @@ public class iContactUpdateTool {
         // create a new document
         Element idObtainingDoc = createUploadUserDocRoot();
 
-        for(Object o: contactsWithOldEmail) {
+        for(java.lang.Object o: contactsWithOldEmail) {
             // remove oldEmail, replace the email with oldEmail
             Element contact = o.clone();
             Element oldEmail = contact.getChild("oldEmail");
@@ -359,7 +375,7 @@ public class iContactUpdateTool {
             String oldEmail = enrichedContact.getChild("email").getText();
             Element contact = null;
             for(Object o: contactsWithOldEmail) {
-                if (oldEmail.equals(((Element) o).getChild("oldEmail").getText())) {
+                if (oldEmail.equals(((Element) o).getChild("email").getText())) {
                     contact = o;
                     break;
                 }
@@ -372,6 +388,7 @@ public class iContactUpdateTool {
     }
 
     public String subscribeUploadedUsers(Element uploadDoc) {
+        if (uploadDoc==null) throw new IllegalStateException("Null uploadDoc!");
         // create subscription Document
         /* example
           <subscriptions> 
@@ -463,9 +480,9 @@ public class iContactUpdateTool {
         new org.jdom.Document(elt);
         return elt;
     }
-    private static DateFormat isoFormatter = new ISO8601DateFormat();
+    private static Chronology isoChrono= ISOChronology.getInstance();
     
-    private Element createUserProfile(String userName) {
+    private java.lang.Object createUserProfile(String userName) {
         Document userDoc = xwiki.getDocument(userName);
         if (userDoc==null) return null;
         Object obj = userDoc.getObject("XWiki.XWikiUsers");
@@ -485,8 +502,13 @@ public class iContactUpdateTool {
         addProp("city", obj.getProperty("city"), contact);
         addProp("curriki_country", obj.getProperty("country"), contact);
         addProp("affiliation", obj.getProperty("affiliation"), contact);
+        java.lang.Object opt_out_value = obj.getProperty("opt_out");
+        if(opt_out_value!=null) opt_out_value = opt_out_value.value;
+        String emailOptions = obj.get("email_options");
+        if(opt_out_value == 1 || opt_out_value == 2 && !emailOptions.contains("newsletter")) return obj.getProperty("email").value;
         addProp("opt_out", obj.getProperty("opt_out"), contact);
-        addProp("member_since", isoFormatter.format(userDoc.getCreationDate()), contact);
+        addProp("email_options", obj.getProperty("email_options"), contact)
+        addProp("member_since", new DateTime(userDoc.getCreationDate().getTime(), isoChrono).toString(), contact);
         if (obj.getProperty("educational_level")!=null)
             for(String v in obj.getProperty("educational_level").value) {
                 addProp(mapCurrikiNameToCustomName(v, "lev_"), "1", contact);
@@ -508,7 +530,7 @@ public class iContactUpdateTool {
                 if (vNum!=null && vNumber<allVersions.size()-1) {
                     Document oldUserDoc = xwiki.getDocument(userDoc, (String) allVersions.get(vNumber+1));
                     String email = oldUserDoc.getObject("XWiki.XWikiUsers").get("email");
-                    if(!email.equals(obj.getProperty("email").toString())) {
+                    if(!email.equals(obj.getProperty("email").value)) {
                         addProp("oldEmail", email, contact);
                         LOG.warn("changed email from " + email + " to " + obj.get("email"));
                     }

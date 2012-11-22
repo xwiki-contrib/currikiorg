@@ -16,7 +16,7 @@
   #if("$!pageName" != "") 
      #set($newAsset = $xwiki.curriki.fetchAsset($pageName))
   #else
-     #set($newAsset = $xwiki.curriki.createAsset($xwiki.null))
+     #set($newAsset = $xwiki.curriki.createAsset($util.null))
   #end 
   #################################### If newAsset is null, show error message
   #if( "$!newAsset"=="" ) 
@@ -388,9 +388,9 @@
     #assessment_div .x-grid3-hd-0,#assessment_div .x-grid3-hd-1,#assessment_div .x-grid3-hd-2,#assessment_div .x-grid3-hd-3,#assessment_div .x-grid3-hd-4{text-align:left;}
     {/pre}
     </style>
-    <script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-    <script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-    <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+    <script type="text/javascript" src="/xwiki/resources/js/yui/yahoo/yahoo-min.js" ></script>
+    <script type="text/javascript" src="/xwiki/resources/js/yui/treeview/treeview-min.js" ></script>
+    <script type="text/javascript" src="/xwiki/resources/js/yui/treeview/checknode.js"></script>
     <script>
     {pre}
     // ----------------------------------- override YUI checknode method -------------------

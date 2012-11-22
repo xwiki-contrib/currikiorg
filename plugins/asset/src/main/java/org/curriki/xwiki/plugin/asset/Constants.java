@@ -66,6 +66,7 @@ public interface Constants {
     String ASSET_CLASS_LANGUAGE = "language";
     String ASSET_CLASS_LANGUAGE_VALUES = "eng=English|ind=Bahasa Indonesia|zho=Chinese|nld=Dutch|fra=French|deu=German|hin=Hindi|ita=Italian|jpn=Japanese|kor=Korean|nep=Nepali|por=Portuguese|rus=Russian|sin=Sinhalese|spa=Spanish|tam=Tamil|---=Other";
     String ASSET_CLASS_HIDDEN_FROM_SEARCH = "hidden_from_search";
+    String ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS = "grantCurrikiCommercialLicense";
 
     String ASSET_CATEGORY_UNKNOWN = "unknown";
     String ASSET_CATEGORY_ATTACHMENT = "attachment";
@@ -93,15 +94,6 @@ public interface Constants {
     String ASSET_CLASS_FCDATE_FORMAT =  "MM/dd/yyyy HH:mm";
     String ASSET_CLASS_FCNOTES = "fcnotes";
 
-    // Rating fields
-    String ASSET_CLASS_RATING = "rating";
-    String ASSET_CLASS_RATING_COUNT = "rating_count";
-    String ASSET_CLASS_RATING_SUM = "rating_sum";
-
-    // Generated Keyword field
-    String ASSET_CLASS_GENERATED_KEYWORDS = "generated_keywords";
-    String ASSET_CLASS_GENERATED_KEYWORDS_TRANS_PREFIX = "curriki.tags.";
-
     /**
      *    Class AssetLicenseClass
      */
@@ -110,11 +102,9 @@ public interface Constants {
     String ASSET_LICENCE_ITEM_RIGHTS_HOLDER = "rightsHolder";
     String ASSET_LICENCE_ITEM_EXTERNAL_RIGHTS_HOLDER = "externalRightsHolder";
     String ASSET_LICENCE_ITEM_LICENCE_TYPE = "licenseType";
-    String ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE = "grantCurrikiCommercialLicense";
     String ASSET_LICENCE_ITEM_LICENCE_TYPE_VALUES = "Licences.CurrikiLicense=Curriki License (Creative Commons Attributions 3.0)|Licences.PublicDomain=Public Domain|Licences.CreativeCommonsAttributionNon-Commercial=Creative Commons Attribution Non-Commercial|Licences.CreativeCommonsAttributionNoDerivatives=Creative Commons Attribution No Derivatives|Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives|Licences.CreativeCommonsAttributionSharealike=Creative Commons Attribution Share Alike|Licences.CreativeCommonsAttributionNon-CommercialShareAlike=Creative Commons Attribution Non-Commercial Share Alike";
     // String ASSET_LICENCE_ITEM_LICENCE_TYPE_QUERY = "select obj.name, prop.value from BaseObject as obj, StringProperty as prop, IntegerProperty as oprop where  obj.className='XWiki.LicenceClass' and prop.id.id = obj.id  and prop.id.name = 'name' and prop.value not like 'DEPRECATED:%' and oprop.id.id = obj.id and oprop.id.name = 'order' order by oprop.value";
     String ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT = "Licences.CreativeCommonsAttributionNon-Commercial";
-    int ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE_DEFAULT = 1;
     String ASSET_LICENCE_ITEM_EXPIRY_DATE = "expiryDate";
     String ASSET_LICENCE_ITEM_EXPIRY_DATE_FORMAT = "dd/MM/yyyy";
 
@@ -321,4 +311,6 @@ public interface Constants {
     // TODO: What about the list used by GWT:  audio, text, image, link ?
 
 
+    String ASSET_CLASS_GENERATED_KEYWORDS_TRANS_PREFIX = "curriki.tags.";
+    String ASSET_CLASS_GENERATED_KEYWORDS = "generated_keywords";
 }

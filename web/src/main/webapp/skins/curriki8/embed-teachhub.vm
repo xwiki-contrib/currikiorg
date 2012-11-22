@@ -1,0 +1,25 @@
+#**
+ * Embed entry point. It is called from view.vm
+ * It displays assets in embed mode. Links stay in the same windows
+ *#
+#if($doc.getObject("XWiki.XWikiUsers"))
+    $response.sendRedirect($doc.getURL())
+#else
+    #asset_findtitle($doc)
+    #template("xwikivars.vm")
+    #template("layoutvars.vm")
+    #template("htmlheader.vm")
+    <!-- this embed-teachhub.vm -->
+#** $context.setLinksQueryString("viewer=embed-teachhub") *#
+    #asset_display($doc "view")
+    $context.unsetLinksQueryString()
+    <script type="text/javascript">
+	    Ext.onReady(function(){
+			var height = document.body.scrollHeight + 100;
+			console.log("embedded resource: sending resource view height to embedding window (" + height + "px)");
+			var data = "resize:height:"+ height + "px;"
+			window.parent.postMessage(data,'*');
+		});
+	</script>
+    #template("htmlfooter.vm")
+#end

@@ -22,6 +22,7 @@ package org.curriki.plugin.activitystream.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xpn.xwiki.web.Utils;
 import org.apache.velocity.VelocityContext;
 
 import com.xpn.xwiki.XWikiContext;
@@ -45,8 +46,10 @@ import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagers;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
+import org.xwiki.observation.event.Event;
+import org.xwiki.observation.remote.RemoteObservationManagerContext;
 
-public class CurrikiActivityStream extends ActivityStreamImpl
+public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDocChangeNotificationInterface
 {
     private static final String CURRIKI_SPACE_TYPE = "currikispace";
 
@@ -61,12 +64,22 @@ public class CurrikiActivityStream extends ActivityStreamImpl
         super();
     }
 
+    public void onEvent(Event event, Object source, Object data) {
+        System.out.println("onEvent for CurrikiActivityStream!");
+        // ignoring these calls, we get the notify calls in principle
+    }
+
+
     /**
      * {@inheritDoc}
      */
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
+        if(Utils.getComponent(RemoteObservationManagerContext.class).isRemoteState()) {
+            System.out.println("Ignoring remote DocumentUpdatedEvent for " + newdoc);
+            return;
+        }
         try {
             String spaceName = newdoc.getSpace();
             if (spaceName == null) {

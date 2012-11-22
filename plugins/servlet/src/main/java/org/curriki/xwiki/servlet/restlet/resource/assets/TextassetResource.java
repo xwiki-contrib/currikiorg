@@ -45,7 +45,7 @@ public class TextassetResource extends BaseResource {
         String syntax = null;
         try {
             content = asset.getText();
-            syntax = asset.getSyntax();
+            syntax = asset.getTextSyntax();
         } catch (XWikiException e) {
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No texts found for "+assetName);
         }

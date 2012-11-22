@@ -27,8 +27,6 @@ import java.util.Properties;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -55,6 +53,8 @@ import com.xpn.xwiki.notify.DocChangeRule;
 import com.xpn.xwiki.notify.XWikiActionRule;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A plugin offering support for advanced searches using Lucene, a high performance, open source
@@ -84,7 +84,7 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
     private static final String DEFAULT_ANALYZER =
         "org.apache.lucene.analysis.standard.StandardAnalyzer";
 
-    private static final Log LOG = LogFactory.getLog(LucenePlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LucenePlugin.class);
 
     /**
      * The Lucene text analyzer, can be configured in <tt>xwiki.cfg</tt> using the key
@@ -378,8 +378,8 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
         // Perform the actual search
         Hits hits = (sort == null) ? searcher.search(q) : searcher.search(q, sort);
         final int hitcount = hits.length();
-        if (LOG.isInfoEnabled()) {
-            LOG.info("query \"" + q + "\" returned " + hitcount + " hits");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("query " + q + " returned " + hitcount + " hits");
         }
         // Transform the raw Lucene search results into XWiki-aware results
         return new SearchResults(hits,
@@ -569,7 +569,7 @@ public class LucenePlugin extends XWikiDefaultPlugin implements XWikiPluginInter
                     // constructor will throw an exception and fail to initialize
                     new IndexWriter(dirs[i], analyzer).close();
                 }
-		// New way to open a searcher that does not have bug XPLUCENE-30
+
                 searchersList.add(new IndexSearcher(dirs[i], true));
             } catch (IOException e) {
                 LOG.error("cannot open index " + dirs[i], e);

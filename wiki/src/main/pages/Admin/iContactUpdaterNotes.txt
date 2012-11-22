@@ -21,7 +21,7 @@ with manual comments indicating the initialization is being done.
 Now get into the mysql database of your curriki, and get a list of all users:
 
   echo "select XWO_NAME from xwikiobjects where XWO_CLASSNAME='XWiki.XWikiUsers' " \
-   | mysql -u dev -p currikinextdev_xwiki > /tmp/userNames.txt
+   | mysql -u prod -p currikinextdev_xwiki > /tmp/userNames.txt
 
 Transport the file where your build is, say, inside curriki/src/main/pages/Admin/.
 Copy the below java file as iContactMassiveUpdater.java, compile it:
@@ -36,7 +36,7 @@ Now run it:
     'http://user:password@<host>:8080/xwiki/bin/view/Admin/iContactUpdater?massive=1&xpage=plain' \
     123000
 
-replacing user:password by the values for an admin, and the <host>:8080 by thte right
+replacing user:password by the values for an admin, and the <host>:8080 by the right
 host and port, finally 123000 by the number of the line where you wish the upload to restart.
 
 Wait sufficient times (it takes about 3 minutes per thousand users) watching the log.
@@ -179,10 +179,19 @@ curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
 curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Version: 2.2" \
   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
-  -H "API-Username: curriki-tester"  -H "API-Password: share-them"  \
+  -H "API-Username: curriki-tester"  -H "API-Password: shar3-1t"  \
     'https://app.sandbox.icontact.com/icp/a/'
 
+
+curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
+  -H "API-Version: 2.2" \
+  -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz" \
+  -H "API-Username: janetpinto"  -H "API-Password: shar3-1t"  \
+    'https://app.icontact.com/icp/a/'
+
+
 accountId: 412984
+accountId: 973153
 
 curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Version: 2.2" \
@@ -190,8 +199,15 @@ curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
   -H "API-Username: curriki-tester"  -H "API-Password: share-them"  \
     'https://app.sandbox.icontact.com/icp/a/412984/c'
 
-clientFolderId: 124308
+curl -H "Accept: text/xml" -H "Content-Type: text/xml" \
+  -H "API-Version: 2.2" \
+  -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz" \
+  -H "API-Username: janetpinto"  -H "API-Password: shar3-1t"  \
+    'https://app.icontact.com/icp/a/973153/c'
 
+
+clientFolderId: 124308
+clientFolderId: 45691
 
 
 POST a user
@@ -237,14 +253,24 @@ curl --dump-header - -X DELETE -H "Accept: text/xml" -H "Content-Type: text/xml"
 LIST CONTACTS
   (this will page, no worry of bloating)
 curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
-  -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC" \
-  -H "API-Username: curriki-tester"  -H "API-Password: share-them" \
-  "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/"
+  -H "API-Version: 2.2"   -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz" \
+  -H "API-Username: janetpinto"  -H "API-Password: shar3-1t" \
+  "https://app.icontact.com/icp/a/973153/c/45691/contacts/"
+
+
+LIST LISTS
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"  \
+  -H "API-Version: 2.2"   -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz"  \
+   -H "API-Username: janetpinto"  -H "API-Password: shar3-1t"   \
+   "https://app.icontact.com/icp/a/973153/c/45691/lists/"
 
 
 LIST A USER BY EMAIL
 
-curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"    -H "API-Version: 2.2"   -H "API-AppId: twa66mHlvPggubn82ncwSBiVbfwmiPJC"   -H "API-Username: curriki-tester"  -H "API-Password: share-them"   "https://app.sandbox.icontact.com/icp/a/412984/c/124308/contacts/?email=paul%40hoplahup.net
+curl --dump-header - -H "Accept: text/xml" -H "Content-Type: text/xml"    \
+    -H "API-Version: 2.2"   -H "API-AppId: 5MoochZy3kF5hQq7YLj0Es6nktFsEXRz"   \
+    -H "API-Username: janetpinto"  -H "API-Password: shar3-1t" \
+    "https://app.icontact.com/icp/a/973153/c/45691/contacts/?email=paul%40hoplahup.net"
 
 (you can also post as doing an update, the contactId will be returned)
 

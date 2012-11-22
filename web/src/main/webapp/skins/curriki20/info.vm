@@ -1,0 +1,8 @@
+#**
+ *  Asset info tab view entry point. It is called from view.vm
+ *#
+#if($doc.getObject("CurrikiCode.AssetClass"))
+  #asset_info($doc)
+#else
+  $msg.get("rve.information.pageisnotanasset")
+#end

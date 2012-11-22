@@ -39,14 +39,14 @@
         	#set($wheresql = "$wheresql 'XWiki.${user}'")
         #end
         #set($wheresql = "$wheresql )")
-        #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
+        ## #set($wheresql = "$wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
 
-        #if($assetFilterCreationDateFrom&&($assetFilterCreationDateFrom!="")&&($assetFilterCreationDateFrom!="MM/DD/YYYY"))
+        #if($assetFilterCreationDateFrom&&("$!assetFilterCreationDateFrom"!="")&&($assetFilterCreationDateFrom!="MM/DD/YYYY"))
 			#set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/"))
         	#set($wheresql = "$wheresql and doc.creationDate>='$date'")
         #end
 
-        #if($assetFilterCreationDateTo&&($assetFilterCreationDateTo!="")&&($assetFilterCreationDateTo!="MM/DD/YYYY"))
+        #if($assetFilterCreationDateTo&&("$!assetFilterCreationDateTo"!="")&&($assetFilterCreationDateTo!="MM/DD/YYYY"))
             #set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateTo,"MM/DD/YYYY","YYYY/MM/DD","/"))
            	#set($wheresql = "$wheresql and doc.creationDate<='$date 23:59:59'")
         #end
@@ -105,13 +105,13 @@
 		#end
 
         ## Check which Subject was selected in the filter combo
-        #if(($assetFilterSubjectArea)&&($assetFilterSubjectArea!=""))
+        #if("$!assetFilterSubjectArea"!="")
         	#set($fromsql = "$fromsql ,DBStringListProperty as prop2 join prop2.list list ")
         	#set($wheresql = "$wheresql  and obj.id=prop2.id.id and prop2.id.name='fw_items' and list = '${assetFilterSubjectArea}'")
 		#end
 
 		## Check which Access Privilege was selected in the filter combo
-        #if(($assetAccessPrivileges)&&($assetAccessPrivileges!=""))
+        #if("$!assetAccessPrivileges"!="")
 			#set($fromsql = "$fromsql ,StringProperty as spropRights ")
 			#if($assetAccessPrivileges=="protectedAndPublic")
 				#set($wheresql = "$wheresql  and obj.id=spropRights.id.id and spropRights.id.name='rights' and (spropRights.value = 'members' or spropRights.value = 'public')")

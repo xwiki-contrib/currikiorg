@@ -67,7 +67,7 @@ public class Validation {
 
 
         // Check to see if the email address is already used
-        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
         List docs = xwiki.searchDocuments(query);
         if (!docs.isEmpty()) {
             foundAccountName = docs.get(0);
@@ -137,6 +137,39 @@ public class Validation {
         return false;
     }
 
+    private boolean isDigitsOnly(String s) {
+        for(int i in 0..s.length()-1) {
+            if(!Character.isDigit(s.charAt(i))) return false;
+        }
+        return true;
+    }
+
+
+    public boolean isValidLocation(String country, String postalCode, String city, String state, String longitude, String latitude, boolean echoErrors) {
+        if(!(country) || country =="---") {
+            if(echoErrors) addError("join.error.requireCountry");
+            return false;
+        }
+        if(country=="US") {
+            if(!(postalCode) || postalCode.length()>5 || postalCode.length()<2 || !isDigitsOnly(postalCode)) {
+                if(echoErrors) addWarning("postalCode");
+                addError("join.error.requireZipCode");
+                return false;
+            }
+            if(!city || !state) {
+                if(echoErrors) addWarning("postalCode");
+                addError("join.error.requireValidZipCode");
+                return false;
+            }
+        } else {
+            if(state==null || state.length()<=1) {
+                addError("join.error.region_missing");
+                addWarning("state")
+                return false;
+            };
+        }
+        return true;
+    }
 
     private void addWarning(String warning) {
         if(warningFields!=null) warningFields.add(warning);

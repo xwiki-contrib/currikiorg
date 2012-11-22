@@ -1,3 +1,19 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+#* @vtlvariable name="attachdoc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+
+
 #**
  * This macro is called from the contentview.vm template when a page is a documentation page
  * It adds the header and footer of the groups section to the pages
@@ -8,7 +24,7 @@
   #set($editURL = "")
   #set($editTxt = "")
   #if( $sm.isMember( $s.spaceName, $context.user ) )
-    #set($editURL = $s.homeURL + "Documentation")
+    #set($editURL = $s.homeURL.replace("/WebHome","/") + "Documentation")
     #set($editURL = $editURL + "?action=editdoc&pagename=")
     #set($editURL = $editURL + $doc.getFullName())
 	#set($editTxt = ${msg.groups_documentation_documents_edit})
@@ -145,7 +161,7 @@
 #begingroupsection("${msg.groups_documentation_add_document_title}" "" "" "blue" true)
 #if($request.method=="POST")
   #set($filename = $xwiki.fileupload.getFileName("filepath"))
-  #if($filename&&($filename!=""))
+  #if("$!filename"!="")
     ## create a doc for the upload
     #set( $attDocName = $xwiki.getUniquePageName( "doc" ) )
     #set( $attDocName = "."+$attDocName )
@@ -226,7 +242,7 @@ function getFileExtension() {
 #foreach( $docName in  $spaceDocs)
   #set( $docdoc = $xwiki.getDocument( $docName ) )
   #set( $doctitle = $docdoc.title )
-  #if( $doctitle == "" ) #set( $doctitle = $docdoc.name )  #end
+  #if( "$!doctitle" == "" ) #set( $doctitle = $docdoc.name )  #end
   <div class="frame-inset document-content">
     <div class="headlines">
       ##determining the icon to display
@@ -286,12 +302,12 @@ function getFileExtension() {
    #set($stopRender = "ok")
    #begingroupsection("Edit about documentation" "" "" "blue" true)
     <form action="#" method="post">
-<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+<label for="doctext" class="doctext" class="sectitle">${msg.groups_documentation_enter_content}</label>
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
-<script type="text/javascript">
+        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
+        <script type="text/javascript">
 wikiEditor.init({
   elements : "doctext",
   language: "en",
@@ -299,6 +315,7 @@ wikiEditor.init({
   content_css: "$xwiki.getSkinFile("style.css", true)",
   debug : false,
   remove_linebreaks : false,
+  safari_warning: false,
   plugins: 'table, contextmenu, paste, searchreplace',
         wiki_use_style: 'true',
         wiki_plugins: 'core,attachments',
@@ -334,7 +351,7 @@ wikiEditor.init({
 ##$request.olddoc $attachDoc $attachDocName  $newDocName $ok
 
      ##set( $newDoc = $xwiki.getDocument( $newDocName ) )
-     #set( $newDoc = $attachDoc )
+     #set( $newDoc = $xwiki.getDocument($newDocName))
      $newDoc.setTitle( $request.doctitle )
      $newDoc.setContent( $request.doctext )
      $newDoc.save()
@@ -365,21 +382,21 @@ wikiEditor.init({
        #set( $newDoc = $xwiki.getDocument( $newDocName))
        #set( $ok = $newDoc.save() )
 
-<label for="doctitle">${msg.groups_documentation_update_title}</label>
+<label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
 <input type="hidden" name="olddoc" value="${newDocName}" />
 
 #if( $request.doctitle.trim() == "" )
   <div class="error">${msg.group_documentation_empty_title}</div>
 #end
 <input type="text" name="doctitle" class="doctitle" value="${dctitle}" />
-<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+<label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
 
 
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
-<script type="text/javascript">
+        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
+        <script type="text/javascript">
 
 wikiEditor.init({
   elements : "doctext",
@@ -388,6 +405,7 @@ wikiEditor.init({
   content_css: "$xwiki.getSkinFile("style.css",true)",
   debug : false,
   remove_linebreaks : false,
+  safari_warning: false,
   plugins: 'table, contextmenu, paste, searchreplace',
         wiki_use_style: 'true',
         wiki_plugins: 'core,attachments',
@@ -419,7 +437,7 @@ wikiEditor.init({
 #set( $docName = $request.pagename )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
 #if( $request.method == "POST" )
-     #if($request.doctitle && $request.doctitle!="")
+     #if("$!request.doctitle"!="")
       $editDoc.setTitle( $request.doctitle )
      #end
      $editDoc.setContent( $request.doctext )
@@ -445,14 +463,14 @@ History
     <form action="#" method="post">
       <input type="hidden" name="pagename" value="${request.pagename}" />
       #set( $titleField = $xwiki.getFormEncoded($editDoc.title))
-<label for="doctitle">${msg.groups_documentation_update_title}</label>
+<label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
 <input type="text" name="doctitle" class="doctitle" value="$titleField" />
-<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+<label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
-<script type="text/javascript">
+        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
+        <script type="text/javascript">
 wikiEditor.init({
   elements : "doctext",
   language: "en",
@@ -497,7 +515,7 @@ wikiEditor.init({
 #else
 #set($type = "html")
 #end
-#if ($comparedoc.realLanguage!="")
+#if ("$!comparedoc.realLanguage"!="")
 #set($lang = "&language=${comparedoc.realLanguage}")
 #else
 #set($lang = "")
@@ -547,7 +565,7 @@ Edit
 #if(!$revisionscount)
 #set($revisionscount = 0)
 #end
-#if ($docdoc.realLanguage!="")
+#if ("$!docdoc.realLanguage"!="")
 #set($lang = "&amp;language=${docdoc.realLanguage}")
 #else
 #set($lang = "")
@@ -566,7 +584,7 @@ Edit
 #set($revURL = $revURL + "&pagename=")
 #set($revURL = $revURL + $request.pagename)
 <a href="${revURL}")">$nextversion</a></td>
-#if($newdoc=="")
+#if("$!newdoc"=="")
           <td>&ndash;</td>
           <td>&ndash;</td>
 #else

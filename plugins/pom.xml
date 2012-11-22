@@ -26,34 +26,64 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.xpn.xwiki.platform.plugins</groupId>
+    <artifactId>xwiki-plugins</artifactId>
+    <version>30</version>
   </parent>
   <groupId>org.curriki</groupId>
   <artifactId>curriki-plugins</artifactId>
+  <version>1.14-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>XWiki Products - Curriki - Plugins - Parent POM</name>
   <description>XWiki Products - Curriki - Plugins - Parent POM</description>
-  <dependencies>
+  <properties>
+    <platform.version>3.5</platform.version>
+    <platform.plugins.invitationmanager.version>1.0.1</platform.plugins.invitationmanager.version>
+    <platform.plugins.spacemanager.version>1.1.1-3.1</platform.plugins.spacemanager.version>
+  </properties>
+  <!-- <dependencies>
     <dependency>
-      <groupId>org.curriki</groupId>
-      <artifactId>xwiki-corecurriki</artifactId>
-      <version>${platform.core.version}</version>
-      <scope>provided</scope>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-legacy-oldcore</artifactId>
+      <version>${platform.version}</version>
     </dependency>
-  </dependencies>
+  </dependencies> -->
   <modules>
     <module>asset</module>
     <module>licence</module>
     <module>framework</module>
+    <module>googlecheckout</module>
     <module>mimetype</module>
     <module>metadata</module>
+    <module>spacemanager</module>
     <module>currikispacemanager</module>
     <module>currikiactivitystream</module>
     <module>curriki</module>
     <module>servlet</module>
     <module>lucene</module>
-    <module>googlecheckout</module>
   </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.xwiki.commons</groupId>
+          <artifactId>xwiki-commons-tool-xar-plugin</artifactId>
+          <version>${commons.version}</version>
+        </plugin>
+        <!-- We need this for scp deploy with maven 3 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <!-- We're deploying using the SCP protocol so we need the SSH Wagon for Maven 3 to work -->
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>1.0-beta-7</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

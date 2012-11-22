@@ -1,0 +1,136 @@
+	#macro(buildBFCSHql $ordered) ##{
+
+	##Set excludeList variable from ExcludeList page content
+	#set($excludeList = $util.arrayList)
+	#includeInContext("FileCheck.ExcludeList")
+
+	##----------------Begin Get filters from cookies
+        #set($assetFilterCreationDateFrom = $request.getCookie("assetFilterCreationDateFrom"))
+        #if($assetFilterCreationDateFrom)
+        	#set($assetFilterCreationDateFrom = $assetFilterCreationDateFrom.getValue())
+        #end
+        #set($assetFilterCreationDateTo = $request.getCookie("assetFilterCreationDateTo"))
+        #if($assetFilterCreationDateTo)
+        	#set($assetFilterCreationDateTo = $assetFilterCreationDateTo.getValue())
+        #end
+
+        #set($assetFilterFileCheckStatus = $request.getCookie("assetFilterFileCheckStatus"))
+        #if($assetFilterFileCheckStatus)
+        	#set($assetFilterFileCheckStatus = $assetFilterFileCheckStatus.getValue())
+        #end
+
+        #set($assetFilterSubjectArea = $request.getCookie("assetFilterSubjectArea"))
+        #if($assetFilterSubjectArea)
+        	#set($assetFilterSubjectArea = $assetFilterSubjectArea.getValue())
+        #end
+
+        #set($assetAccessPrivileges = $request.getCookie("assetAccessPrivileges"))
+        #if($assetAccessPrivileges)
+        	#set($assetAccessPrivileges = $assetAccessPrivileges.getValue())
+        #end
+
+    ##----------------End Get filters from cookies
+
+        #set($fromsql = "")
+        #if($listtool.size($excludeList) > 0)
+        #set($wheresql = "and doc.creator not in (")
+        #foreach($user in $excludeList)
+        	#if($velocityCount>1)
+        		#set($wheresql = "$wheresql ,")
+        	#end
+        	#set($wheresql = "$wheresql 'XWiki.${user}'")
+        #end        
+        #set($wheresql = "$wheresql )")
+        #end
+        #set($wheresql = "$!wheresql and doc.fullName not in (select obj3.name from BaseObject as obj3, LongProperty as lprop3 where obj3.name = doc.fullName and obj3.id=lprop3.id.id and lprop3.id.name='type' and lprop3.value=2)")
+
+        #if($assetFilterCreationDateFrom&&($assetFilterCreationDateFrom!="")&&($assetFilterCreationDateFrom!="MM/DD/YYYY"))
+			#set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/"))
+        	#set($wheresql = "$wheresql and doc.creationDate>='$date'")
+        #end
+
+        #if($assetFilterCreationDateTo&&($assetFilterCreationDateTo!="")&&($assetFilterCreationDateTo!="MM/DD/YYYY"))
+            #set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateTo,"MM/DD/YYYY","YYYY/MM/DD","/"))
+           	#set($wheresql = "$wheresql and doc.creationDate<='$date 23:59:59'")
+        #end
+
+		#if($assetFilterFileCheckStatus)
+	        #if($assetFilterFileCheckStatus=="1")##without status
+	        	#set($wheresql = "$wheresql and obj.id not in (select obj2.id from BaseObject as obj2, StringProperty as sprop2 where obj2.className='CurrikiCode.AssetClass' and obj2.id=sprop2.id.id and sprop2.id.name='fcstatus' and sprop2.value is not null)")
+	        	#elseif($assetFilterFileCheckStatus!="1" && $assetFilterFileCheckStatus!="0")##with status
+	        		#set($fromsql = "$fromsql ,StringProperty as sprop")
+	
+	        		#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus' and sprop.value is not null ")
+	        			#if($assetFilterFileCheckStatus=="2")##with any status
+	        				#set($wheresql = "$wheresql and sprop.value <> '0'")
+	        			#end
+	        			#if($assetFilterFileCheckStatus=="3")##with status ok
+	        				#set($wheresql = "$wheresql and sprop.value = '1'")
+	        			#end
+	        			#if($assetFilterFileCheckStatus=="4")##with status Special Check Required
+	        				#set($wheresql = "$wheresql and sprop.value = '2'")
+	        			#end
+	        			#if($assetFilterFileCheckStatus=="5")##with status Improvement Requested
+	        				#set($wheresql = "$wheresql and sprop.value = '3'")
+	        			#end
+	        			#if($assetFilterFileCheckStatus=="6")##with status Deleted
+	        				#set($wheresql = "$wheresql and sprop.value = '4'")
+	        			#end
+	        			#if($assetFilterFileCheckStatus=="7")##with status Flagged
+	        				#set($wheresql = "$wheresql and sprop.value = '5'")
+	        			#end
+	
+	        #end
+	   	#end    
+
+ 		#set($order = "")
+		#if($ordered ==true)
+			#if($request.order=="fcstatus")
+				#if(!$assetFilterFileCheckStatus || $assetFilterFileCheckStatus=="1" || $assetFilterFileCheckStatus=="0")
+				## "StringProperty as sprop" was not added in the from previously, add it now
+					#set($fromsql = "$fromsql ,StringProperty as sprop")
+					#set($wheresql = "$wheresql and obj.id=sprop.id.id and sprop.id.name='fcstatus'")
+				#end
+				#set($order = "order by sprop.value $currentDirectionOrder, doc.creationDate desc")
+			#elseif($request.order=="fcdate")
+				#set($fromsql = "$fromsql ,DateProperty as dprop")
+				#set($wheresql = "$wheresql and obj.id=dprop.id.id and dprop.id.name='fcdate'")
+				#set($order = "order by dprop.value $currentDirectionOrder, doc.creationDate desc")
+			#elseif($request.order=="contributor")
+				#set($fromsql = "$fromsql ,BaseObject as userObj,StringProperty as userSprop")
+				#set($wheresql = "$wheresql and doc.creator=userObj.name and userObj.className='XWiki.XWikiUsers' and userObj.id=userSprop.id.id and userSprop.id.name='first_name'")
+				#set($order = "order by userSprop.value $currentDirectionOrder, doc.creationDate desc")
+			#elseif($request.order=="resourcetitle")
+				#set($order = "order by doc.title $currentDirectionOrder, doc.creationDate desc")
+			#else
+				#set($order = "order by doc.creationDate desc")
+			#end
+		#end
+
+        ## Check which Subject was selected in the filter combo
+        #if(($assetFilterSubjectArea)&&($assetFilterSubjectArea!=""))
+        	#set($fromsql = "$fromsql ,DBStringListProperty as prop2 join prop2.list list ")
+        	#set($wheresql = "$wheresql  and obj.id=prop2.id.id and prop2.id.name='fw_items' and list = '${assetFilterSubjectArea}'")
+		#end
+
+		## Check which Access Privilege was selected in the filter combo
+        #if(($assetAccessPrivileges)&&($assetAccessPrivileges!=""))
+			#set($fromsql = "$fromsql ,StringProperty as spropRights ")
+			#if($assetAccessPrivileges=="protectedAndPublic")
+				#set($wheresql = "$wheresql  and obj.id=spropRights.id.id and spropRights.id.name='rights' and (spropRights.value = 'members' or spropRights.value = 'public')")
+				#else
+					#set($wheresql = "$wheresql  and obj.id=spropRights.id.id and spropRights.id.name='rights' and spropRights.value = '$assetAccessPrivileges'")
+			#end
+        #end
+
+
+        ## Filter for excluding Favorites Collections
+        #set($notFavoritesFoldersSQL = " and doc.name != 'Favorites' ")
+
+        ## Filter for excluding "Root" collection
+        #set($notRootSQL = " and doc.name != 'WebHome' ")
+
+        #set($sql = ", BaseObject as obj $!fromsql where doc.web like 'Coll_%' and doc.fullName=obj.name and obj.className='CurrikiCode.AssetClass' $!notRootSQL $!notFavoritesFoldersSQL $!wheresql $order")
+
+
+	#end ##}

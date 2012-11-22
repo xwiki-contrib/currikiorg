@@ -1,0 +1,628 @@
+@import "$xwiki.getSkinFile('microformats.css')";
+@import "$xwiki.getSkinFile('colibri.css', true)#if ("$!{request.colorTheme}" != '')?colorTheme=${request.colorTheme}#end";
+#template('colorThemeInit.vm')
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+  font-family: Arial,Helvetica,sans-serif;
+}
+ul {
+  list-style:none;
+}
+/* wysiwyg lists styling */
+body.main ol{
+  list-style-type:decimal;
+}
+body.main ul {
+  list-style-type:circle;
+}
+
+body{
+  background-color:#f9f9f9;
+}
+#xwikimaincontainerinner {
+  width:970px;
+  margin:0 auto;
+  /*background-image:url($xwiki.getSkinFile("shadow-bg.gif"));
+  background-repeat:repeat-y;*/
+  border:1px solid #ddd;
+}
+#headerglobal {
+  height:130px;
+  border-top:4px solid $theme.panelHeaderBackgroundColor;
+  margin-bottom:0.5em;
+}
+
+#company {
+  width:40%;
+  display:inline-block;
+  height:75%;
+  float:left;
+}
+
+#companylogo a img {
+  margin-top:30px;
+  margin-left:10px;
+}
+
+#document-title h1 {
+  font-size:1.61em;
+}
+
+h2 {
+  font-size:1.46em;
+}
+
+h3 {
+   font-size:1.33em;
+}
+
+h4 {
+   font-size:1.2em;
+}
+
+#xwikicontent h1{
+  display:none;
+}
+
+.home img{
+  display:none;
+}
+
+#header-search{
+  background-image: url($xwiki.getSkinFile("search-bg.jpg"));
+  background-repeat:repeat-x;
+  float:right;
+  padding-bottom:0;
+  padding-left:20px;
+  padding-right:20px;
+  padding-top:10px;
+  height:45%;
+  margin-top:35px;
+  margin-right:1.7em;
+  color:$theme.panelHeaderTextColor;
+}
+
+#header-search p{
+  margin-top:0.5em
+} 
+
+#header-member{
+  border-right:1px solid $theme.borderColor;
+  border-left:1px solid $theme.borderColor;
+  float:left;
+  padding:0;
+  width:28%; 
+  margin-top:20px;
+  height:75%;
+  font-size:87.5%;
+  text-align:center;
+}
+
+#header-member a:hover {
+  text-decoration:underline;
+}
+
+#header-member #remember-forgot {
+  font-size:0.9em;
+  margin-bottom:1em;
+  margin-top:0.5em;
+}
+
+#remember-forgot a{
+  margin-left:2em;
+}
+
+#remember-forgot .checkbox {
+  margin-right:0.4em;
+}
+
+#header-member .register {
+  font-size:1.2em;
+  text-decoration:underline;
+  display:inline-block;
+  float:left;
+  padding-top:0.2em;
+}
+
+#header-member .register:hover {
+  font-size:1.2em;
+  text-decoration:none;
+}
+
+
+#header-member fieldset{
+  font-size:0.9em;
+  margin-bottom:0.7em;
+}
+
+#header-member .input{
+  margin-bottom:0.3em;
+  width:175px;
+}
+
+#header-member #loginbtn {
+  background: #88B53F url($xwiki.getSkinFile('button-bg.jpg')) repeat-x left bottom;
+  border:1px solid $theme.buttonPrimaryBackgroundColor;
+  color:$theme.buttonPrimaryTextColor;
+  font-size:100%;
+  padding:2px 5px;
+  cursor:pointer;
+  font-family:sans-serif;
+  margin-bottom:0.6em;
+  margin-right:1em;
+  display:inline-block;
+  margin-left:4em;
+  float:left;
+}
+
+#header-search #searchbtn{
+  background: #88B53F url($xwiki.getSkinFile('button-bg.jpg')) repeat-x left bottom;
+  border:1px solid $theme.buttonPrimaryBackgroundColor;
+  color:$theme.panelHeaderTextColor;
+  font-size:87.5%;
+  padding:3px 5px;
+  background-color:#88b53f;
+  display:inline-block;
+  width:auto;
+  cursor:pointer;
+}
+
+#header-search #searchbtn:hover{
+  text-decoration:none;
+}
+
+#header-search a{
+  color:#fff;
+  font-size:0.78em;
+}
+
+#header-search a{
+
+}
+#header-member ul {
+  margin:1em 2em;
+  list-style-type:disc;
+}
+
+ 
+
+/*-- Administration link from login section --*/
+a.button {
+  color:#fff;
+  font-size:100%;
+  background: #88B53F url($xwiki.getSkinFile('button-bg.jpg')) repeat-x left bottom;
+  border:1px solid $theme.buttonPrimaryBackgroundColor;
+  display:inline-block;
+  width:auto;
+  cursor:pointer;
+  padding:3px 5px;  
+}
+#header-member .welcome+a{
+  display:none;
+}
+#header-member #logoutbtn {
+  color:#fff;
+  font-size:100%;
+  background: #88B53F url($xwiki.getSkinFile('button-bg.jpg')) repeat-x left bottom;
+  border:1px solid $theme.buttonPrimaryBackgroundColor;
+  display:inline-block;
+  width:auto;
+  cursor:pointer;
+  padding:3px 5px;
+}
+
+#header-member #logoutbtn:hover {
+  text-decoration:none;
+}
+/*
+#xwikimaincontainerinner{
+  background-image: url($xwiki.getSkinFile("bg-shadow.gif"));
+  background-repeat:repeat-y;
+}*/
+
+#mainmenu {
+  position: absolute;
+}
+
+#contentmenu {
+  margin-left: 20px;
+  width: auto;
+}
+
+.alleditcontent {
+  margin:0 225px 25px 0px;
+}
+
+#mainContentArea, #mainEditArea {
+  padding:0;
+  margin-left:20px;
+}
+
+#mainEditArea {
+  padding: 0;
+}
+
+.panel input, .panel select, .panel dt, .panel table, .padded label {
+  font-size:0.95em;
+  margin:0;
+  padding:0;
+  width:99%;
+}
+
+input#tags {
+  width:99%;
+}
+
+#document-info {
+  display:none;
+}
+
+.curricula-panels,#curricula-highlights,#sponsors,#featuredmembers,#watch-curriki-grow{
+display:none;
+}
+
+#body.hideright #contentcolumn .main  {
+  margin-left:200px;
+  margin-right:5px;
+}
+
+.main{
+  padding:0;
+}
+
+#breadcrumb {
+  padding-top:0;
+  background-color:#fafafa;
+  border-top:1px solid #ddd;
+  line-height:24px;
+  font-size: 90%;
+  padding-left:15px;
+}
+
+.home{
+  background-color:#0198ab;
+  color:#ffffff;
+}
+
+/* Navigation */
+#navigation-inner .home a {
+  color:#ffffff;
+  line-height:25px;
+  padding-left:10px;
+  text-transform:uppercase;
+}
+
+#navigation-inner {
+  background-color:#fbfafa;
+}
+
+#navigation-inner .titles, #navigation-inner .titles selected {
+  text-transform:lowercase;
+  font-size:0.9em;
+  color:#333;
+  padding-left:10px;
+  display:block;;
+  border-top:1px solid #CCCCCC;
+  line-height:22px;
+  font-weight:bold;
+  font-size:87.5%;
+}
+#navigation-inner .titles:hover{
+  text-decoration:none
+}
+
+#navigation-inner ul {
+  list-style-type:none;
+}
+
+#navigation-inner ul a {
+  font-size:87.5%;
+  color:#333;
+  line-height:1.4em;
+}
+#navigation-inner ul a:hover {
+  font-size:87.5%;
+  color:#333;
+  text-decoration:none;
+  color:#0198ab;
+}
+
+/*Don`t display the Donate button*/
+#donatebtn {
+  display:none;
+}
+
+
+#bottom-sections #assets{
+  border-left:5px solid #789a3f;
+}
+
+/* Global Collection Button */
+#globalCollection{
+  display:block;
+  color:#fff;
+  font-weight:bold;
+  font-size:1.2em;
+}
+
+#globalCollection:hover{
+ text-decoration:none;
+}
+
+#globalCollectionImage{
+  width:203px;
+  height:55px;
+  background-image: url($xwiki.getSkinFile("globalCollection.jpg"));
+  background-repeat:none;
+  margin-left:5px;
+  text-align:center;
+}
+
+.globalColl {
+  display:block;
+  width:203px;
+  height:60px;
+  background-image: url($xwiki.getSkinFile("globalCollection.jpg"));
+  background-repeat:no-repeat;
+  margin-left:5px;
+}
+.globalColl span{
+  display:none;
+}
+
+/** USER RATING **/
+
+ 
+.ux-form-rater-wrap .ux-form-rater-stars {
+	margin:0;
+	padding:0;
+	display:block;
+	background:transparent url($xwiki.getSkinFile("images/sprite_star_medium.gif")) repeat-x 0 -25px;
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  {
+	margin:0;
+	padding:0;
+	display:block;
+	list-style:none;
+	float:left;
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  li {
+	margin:0;
+	padding:0;
+	display:block;
+	list-style:none;
+	left:0;
+	position:absolute;
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  li.rating {
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  li.star {
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  li.ux-form-rater-vote {
+	background:transparent url($xwiki.getSkinFile("images/sprite_star_medium.gif")) repeat-x 0 0;
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  li.ux-form-rater-voted {
+	background:transparent url($xwiki.getSkinFile("images/sprite_star_medium.gif")) repeat-x 0 0;
+}
+
+.ux-form-rater-wrap ul.ux-form-rater-stars  li.ux-form-rater-hover {
+	background:transparent url($xwiki.getSkinFile("images/sprite_star_medium.gif")) repeat-x 0 0;
+}
+
+.ux-form-rater-wrap .ux-form-rater-text-top {
+	clear: both;
+}
+
+.ux-form-rater-wrap .ux-form-rater-text-bottom {
+	clear: both;
+}
+
+.mode-comments li.comment ul.ux-form-rater-stars {
+	border: 0;
+	margin: 0;
+}
+
+img.rating-icon {
+	background-image: url($xwiki.getSkinFile("images/sprite_stars.gif"));
+	background-repeat: no-repeat;
+}
+
+/** small stars **/
+#search-results-resource {
+  width:750px !important;
+}
+#search-results-resource img.rating-icon {
+	background-position: 100px 100px;
+	height: 13px;   
+	width: 65px; 
+}
+
+#search-results-resource .rating-5 img.rating-icon {background-position: 0 -150px;} 
+#search-results-resource .rating-4 img.rating-icon {background-position: 0 -175px;} 
+#search-results-resource .rating-3 img.rating-icon {background-position: 0 -200px;} 
+#search-results-resource .rating-2 img.rating-icon {background-position: 0 -225px;} 
+#search-results-resource .rating-1 img.rating-icon {background-position: 0 -250px;}
+#search-results-resource .rating-0 img.rating-icon {background-position: 0 -275px;}
+
+#search-results-resource .x-grid3-col-memberRating a:hover {text-decoration: none;}
+
+#search-results-resource img.rating-icon {
+	float: left;
+	margin-right: 3px;
+}
+
+
+/** medium stars **/
+
+.rve-rating-wrapper img.rating-icon, .comment img.rating-icon {
+	background-position: 100px 100px;
+	height: 17px;   
+	width: 85px; 
+}
+
+.rve-rating-wrapper .rating-5 img.rating-icon, .comment .rating-5 img.rating-icon {background-position: 0 0;} 
+.rve-rating-wrapper .rating-4 img.rating-icon, .comment .rating-4 img.rating-icon {background-position: 0 -25px;} 
+.rve-rating-wrapper .rating-3 img.rating-icon, .comment .rating-3 img.rating-icon {background-position: 0 -50px;} 
+.rve-rating-wrapper .rating-2 img.rating-icon, .comment .rating-2 img.rating-icon {background-position: 0 -75px;} 
+.rve-rating-wrapper .rating-1 img.rating-icon, .comment .rating-1 img.rating-icon {background-position: 0 -100px;}
+.rve-rating-wrapper .rating-0 img.rating-icon, .comment .rating-0 img.rating-icon {background-position: 0 -125px;}
+
+.rve-rating-wrapper img.rating-icon {
+	float: left;
+	margin-right: 3px;
+}
+
+#member-rating a:hover {text-decoration: none;}
+#member-rating span {clear: left; display: block;}
+.rve-rating-wrapper #member-rating {
+	clear: left;
+}
+
+.rve-rating-wrapper { 
+	display:inline;
+	float:right;
+	margin:0 5px 0 0;
+	width:130px;
+}
+
+body.hideright #footerglobal { 
+  margin:30px auto;
+  text-transform:capitalize;
+  font-size:0.8em;
+}
+.footer-nav{
+  margin-bottom:10px;
+  margin-left:3em;
+}
+
+
+#footerglobal .footer-nav li.last-item {
+  text-transform: none;
+}
+
+#footerglobal .footer-nav li{ 
+  display:inline;
+  text-transform:capitalize;
+  border-right:1px solid #CCC;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+#footerglobal .footer-nav li.last-item {
+  border-right:none;
+}
+
+#footerglobal .footer-nav li a {
+  text-decoration:underline;
+}
+
+#footerglobal .footer-nav li a:hover {
+  text-decoration:none;
+}
+/* The following line is from view.css in order to point to the specific file */
+.asset-display-title a.icon-mini, #asset-header h2 img{
+        /*background-image:url("images/sprite_mediatype.gif");*/
+        background-image: url($xwiki.getSkinFile("spritemediatypeblue.gif"));
+        background-repeat:no-repeat;
+}
+.sub-asset-wrapper-inner {
+  overflow: visible;
+  padding:0 2em;
+}
+
+/* margin of the SAVE buttons */
+.bottombuttons {
+  margin-left:1em;
+}
+
+input[type="text"], input[type="password"] {
+  height:1.5em;
+  color:$theme.textColor;
+}
+
+.asset-display-download .icon-link {
+  display: none;
+}
+
+.xwiki-form-listclass {
+  font-weight:normal !important;
+}
+
+/* footer bg logo */
+#footer-content {
+ height:55px;
+ min-height:55px;
+ height:auto !important;
+}
+
+.rve-rating-wrapper {
+  width: 200px;
+}
+
+#member-rating {
+  float:right;
+}
+
+#asset-rating {
+  display:none;
+}
+
+#asset-bulk-download {
+  clear:right;
+  float:right;
+  margin-top: 15px;
+}
+
+#bulk-download-icon {
+  display: inline;
+  float: left;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  background-image: url($xwiki.getSkinFile("bulkdownload.png"));
+}
+
+/* create resource page colors */
+
+.xwikicontent .curriki-form1 .headerbar {
+  background-color:$theme.menuBackgroundColor;
+  padding:5px;
+}
+
+input.button, button.button, a.button, table.button button, body.p-CRS-Review button#ext-gen24, body.p-CRS-Review button#ext-gen48 {
+  background-color:$theme.buttonPrimaryBackgroundColor;
+  border:1px solid $theme.buttonPrimaryBackgroundColor;
+  color:$theme.buttonPrimaryTextColor;
+  cursor:pointer;
+  display:inline-block;  
+  font-weight: normal;
+  height:auto;
+  overflow: visible;
+  padding:3px 10px 3px;
+  width: auto;
+}
+
+/* search field */
+.x-menu-list {
+  width:160px;
+} 
+
+.main #search-tabPanel th,.main #search-tabPanel td {
+  border:none;
+}
+table#search-termPanel-button-resource button, table#search-termPanel-button-group button, table#search-termPanel-button-member button, table#search-termPanel-button-blog button, table#search-termPanel-button-curriki button {
+  border:1px solid #DDD;
+}
+
+
+#search-div .x-grid3-hd-row td{
+  font-size:0.8em;
+}
+/* END Search styling */
+

@@ -17,7 +17,7 @@ $msg.get("groups_messages_onlyaccessibletomembers")
 #groupsdisplaywelcome($msg.get("groups_messages_about_title") $spaceName $doc.name $isGroupAdmin)
 #if($isGroupMember)
 #begingroupsection($msg.get("groups_messages_createmessage_title"),"","","blue",false)
-<a href="$xwiki.getURL("${doc.web}.CreateMessage")">
+<a href="$xwiki.getURL("${doc.space}.CreateMessage")">
 <img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>
 <div class="add-message-content">
 $msg.get("groups_messages_createmessage_infotxt")
@@ -37,7 +37,7 @@ $msg.get("groups_messages_createmessage_infotxt")
       <input type="radio" id="toEntireGroup" name="filter" value="0" class="messages-radio-left" onclick="this.form.submit()" #if($filter=="0") checked="checked" #end/><label for="toEntireGroup">$msg.get("groups_messages_filter_toentiregroup")</label>
       <input type="radio" id="toMe" name="filter" value="1" onclick="this.form.submit()" #if($filter=="1") checked="checked" #end/><label for="toMe">$msg.get("groups_messages_filter_tome")</label>
       <input type="radio" id="toMyRole" name="filter" value="2" onclick="this.form.submit()" #if($filter=="2") checked="checked" #end/><select name="role" onchange="this.form.submit()" #if($filter!="2")disabled="disabled"#end>
-<option value="" #if(!$request.role || $request.role=="")selected="selected"#end>$msg.get("groups_messages_filter_tomyrole")</option>
+<option value="" #if("$!request.role"=="")selected="selected"#end>$msg.get("groups_messages_filter_tomyrole")</option>
 #set($myRoles = $sm.getRoles($spaceName, $context.user))
 #foreach($role in $myRoles)
 <option value="$role" #if($role==$request.role)selected="selected"#end>$xwiki.getDocument($role).title</option>
@@ -57,14 +57,14 @@ $msg.get("groups_messages_createmessage_infotxt")
 #set($membersGroup = $spaceName + ".MemberGroup")
 #set($noViewRightsSpecified = "not exists (from BaseObject as r, StringProperty as l where doc.fullName=r.name and r.className='XWiki.XWikiRights' and r.id=l.id.id and l.id.name='levels' and instr(l.value,'view')>0)")
 #set($existsGroupViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')>0 and instr(groups.value,'${membersGroup}')>0)")
-#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
 #elseif($filter=="1")
 ## To Me
 #set($existsUserViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as users where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=users.id.id and users.id.name='users' and instr(levels.value,'view')>0 and instr(users.value,'${context.user}')>0)")
-#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.space='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
 #elseif($filter=="2")
 ## To My Roles
-#if($request.role!="")
+#if("$!request.role"!="")
 #set($myRoles = [$request.role])
 #elseif($isGroupAdmin)
 #set($ok = $myRoles.add($sm.getAdminGroupName($spaceName)))
@@ -75,11 +75,11 @@ $msg.get("groups_messages_createmessage_infotxt")
 #set($existsRoleViewRights = $existsRoleViewRights + "instr(groups.value,'${role}')>0 or ")
 #end
 #set($existsRoleViewRights = $existsRoleViewRights + "1=0))")
-#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ${existsRoleViewRights} order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.space' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ${existsRoleViewRights} order by doc.date desc")
 #end
 #elseif($filter=="3" && $isGroupAdmin)
 ## To All
-#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and doc.web='Messages_$doc.web' order by doc.date desc")
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and doc.web='Messages_$doc.space' order by doc.date desc")
 #end
 
 #set($itemsPerPage = 10)
@@ -296,14 +296,14 @@ $msgdoc.save()
 #end
 #end
 #end
-#if($!mailTo != "")
+#if("$!mailTo" != "")
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
 #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
 ## $msgdoc has to be in the current context because it is used in the mail template
 #set($msgdoc = $msg_doc)
 $msgdoc.use("XWiki.ArticleClass")
-#set($mailSubject = $doc.getRenderedContent($mailDoc.title))
-#set($mailContent = $doc.getRenderedContent($mailDoc.content))
+#set($mailSubject = $doc.getRenderedContent($mailDoc.title,"xwiki/1.0"))
+#set($mailContent = $doc.getRenderedContent($mailDoc.content,"xwiki/1.0"))
 #set($ok = $xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null))
 #end
 #end
@@ -587,8 +587,8 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 #groupsajaxjs()
 {pre}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
+<script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
 <script type="text/javascript">
  wikiEditor.init({
 		elements : "",
@@ -599,6 +599,7 @@ preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
 		remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
         wiki_use_style: 'true',
+        safari_warning: false,
         wiki_plugins: 'core,attachments',
         wiki_images_path : '/xwiki/bin/download/${doc.space}/${doc.name}/',
         wiki_attach_path : '/xwiki/bin/view/${doc.space}/${doc.name}'
@@ -874,19 +875,20 @@ $bentrydoc.display("content", "edit", $bentryobj)
 #set($editors = $context.getEditorWysiwyg())
 #if($editors)
 {pre}
-<script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
-<script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
-<script language="javascript" type="text/javascript">
+    <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+    <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
+    <script language="javascript" type="text/javascript">
 	wikiEditor.init({
 		elements : "$editors",
 		language: "en",
 		mode: "exact",
 		content_css: "$xwiki.getSkinFile("style.css", true)",
 		debug : false,
-		remove_linebreaks : false,
+        safari_warning: false,
+        remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
-        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
+        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.space/$bentrydoc.name/',
+        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.space/$bentrydoc.name',
         wiki_use_style: 'true',
         wiki_plugins: 'core,attachments'
 	});
@@ -965,7 +967,7 @@ $adoc.use($viewRightObj)
 {pre}
 <div class="button-right">
 <input type="button" class="button-grey" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
-<input type="submit" class="button-orange" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent(); if(checkForm('editform') == false) return false;" />
+<input type="submit" class="button-orange" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="if(tinyMCE.getContent()!=null) {document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent();}; if(checkForm('editform') == false) return false;" />
 </div>
 {/pre}
 </p>

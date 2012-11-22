@@ -1,0 +1,745 @@
+## this page should Main.WebHomeVisitor
+##                  ===========================
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+## #browserCacheEnableFor(60)##
+{pre}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head>
+<!-- META headers from xwiki preferences -->
+$xwiki.getWebPreference("meta")
+<!-- /META headers from xwiki preferences -->
+
+
+<!-- GENERIC RSS STREAMS -->
+
+<!-- Todd These first two are duplicates. They are already included in the XWiki Presentation page
+<link rel="alternate" type="application/rss+xml" title="Wiki RSS Feed" href="/xwiki/bin/view/Main/WebRss?xpage=rdf" />
+<link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="http://blog.curriki.org/feed/" />
+
+I believe this last blog no longer exists
+<link rel="alternate" type="application/rss+xml" title="User Blog RSS Feed" href="/xwiki/bin/view/Main/BlogRss?xpage=rdf" />
+-->
+
+<!-- google analytics -->
+#template("analytics.vm")
+<!-- /google analytics -->
+    #template("javascripts.vm")
+<script type="text/javascript">
+//<![CDATA[
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/36504/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/css/ext-all.css' type='text/css' /%3E"));
+//]]>
+</script>
+<link href="/xwiki/skins/curriki8/36504/style2.css" rel="stylesheet" type="text/css"  />
+
+<!-- ============================ STYLES ===================================== -->
+<style type="text/css">
+
+/* Global Styles */
+* {	margin: 0px;
+	padding:0px;	}
+body {
+	margin:0px;
+	background:gray;
+	font:11px arial;
+	line-height:18px;
+	color:#666;	}
+img {border: none;	}
+a { 
+	color: #dd5500;
+	text-decoration:none;
+	font-weight:bold;	}
+a:hover {
+	color: #cc3300;
+	text-decoration:underline;
+	font-weight:bold;	}
+
+/* Class Styles */
+.clear {clear:left}
+.blog_entry {
+	border-bottom:1px dotted #ccc;
+	margin: 20px auto;
+	padding-bottom: 10px;	}
+.quote_block{
+	font-style:italic;
+	line-height: 1.4em;
+	margin: 5px 0px 20px 0px;}
+.float_left{float:left;}
+.orange {color:#ff6600;}
+	
+/* IDs for Layout Position */	
+#wrapper {
+	width:870px;
+	margin: auto;
+	background-color:#fff;}
+#banner {
+	width:860px;
+	height: 90px;
+	padding: 0px 0 0 5px;	}
+#banner_body {
+	 float: left;
+	 width: 660px;
+ 	height: 85px;	}
+#banner_menu_a  {	
+	font-size: 1em;
+	line-height:1.3em;
+	margin: 0 0 0 250px;
+	vertical-align:top;
+	color: #ff6600; 
+          }
+
+#banner_menu_a  a{	
+	margin-left:5px;  }
+#banner_menu_b {
+	float:right;
+	width: 32em;
+	padding: 5px 20px 0px 0px;
+	text-align: right;}
+#navcontainer {
+	width: 100%;
+	clear: both;  }
+#logo {	float: left;
+	width: 180px;
+	height: 85px;
+	text-align:center; }
+#logo p{	font-weight: bold; }
+#banner p {
+	color:#ff6600;
+	margin: 0 0 0 8px; 
+	line-height:1em }
+#logged_in {
+	 margin-left:530px;
+     height:20px;
+	 color: #3366CC; }
+#facebook {  
+	margin: 5px 0px 0 25px;}
+#mission {
+	color:#3366cc;
+	padding:5px 0 0 90px;
+       	line-height:1em;
+	float:left;  }
+#col_left {
+	float:left;
+	padding: 0px 5px 0px 15px;
+	margin: 0px 0px 0px 15px;
+	width: 180px;	}
+#main_wrapper {
+	margin-top:20px;
+	margin-bottom:20px;
+    text-align: left;
+    background-color: white;
+}
+#main_vertical_lines {
+	}
+#col_main {
+	float:left;
+	padding: 0px 15px 0px 15px;
+	margin: 0 0px 0 10px;
+	width:375px;
+	height: 820px;
+	border-left: 1px dotted #ccc;
+	border-right: 1px dotted #ccc;	}
+#col_right {
+	float:left;
+	margin: 0px 10px 0px 15px;
+	width: 190px;	}
+#footer {
+	clear:both;
+	padding: 20px;
+	width:830px;
+	height: 100px;
+	background-color:#aaaaaa;
+    text-align:left;
+}
+#copyright	{
+	float: left;
+        height: 120px;	
+        min-height: 120px;
+	width: 180px;
+	padding: 0px 20px 0px 1px;		}
+ #about, #find, #discuss, #add, #learn	{
+	float: left;
+	width: 125px;	}
+
+
+/* ID selectors +  html element styles */
+#col_left p,#col_right p, #col_left ul	{
+	font-size: 1em;
+	line-height:1.6em;
+	border-bottom: 1px dotted #ccc;
+	padding:5px 0px 10px 0;
+	margin: 0;	}
+#col_left h1, #col_right h1, #col_main h1 	{
+	border-bottom: 2px solid #DC638C;
+	color:#3366cc;
+	font-size: 1.4em;
+	line-height:1.3em;
+	margin: 0px 0px 0px 0px;}
+#col_left h1	{
+	margin: 10px 0px 5px 0px;}
+
+#col_left h2, #col_right h2	{
+	color:#3366cc;
+	font-size: 1.2em;
+	text-transform:none;
+	line-height:1.2em;
+	padding: 5px 0px 0px 0px;
+	margin: 0px;}
+#col_left h2 a, #col_right h2 a	{
+	color:#3366cc;
+	text-transform:none;}
+
+#col_left h2 a:hover, #col_right h2 a:hover	{
+	color:#36F;
+	border-bottom: 1px solid #ccc;
+        text-decoration:none;
+	}
+
+
+#col_right h3	{
+	font-family:Arial, Helvetica, sans-serif;
+	color:#FF6600;
+	font-size: 1.1em;
+	line-height:1.2em;
+	margin: 10px 0 0 0;	}
+#col_left a, #col_right a, #col_main a	{
+	color:#FF6600;
+	font-size: 1em;
+	text-transform:lowercase;
+	line-height:1.2em;
+	margin: 5px 0px 12px 0px;	}
+#col_left hr, #col_right hr	{
+	border: 0;
+	width: 100%;
+	color:#CC0000;
+	height: 1px;}
+#navcontainer ul	{
+	padding: .2em 0;
+	list-style-type: none;
+	background-color: #ff6600;
+	color: #FFF;
+	width: 100%;
+	line-height:1.5em;
+	text-align: center;
+	text-transform:uppercase; 	}
+#navcontainer li {
+	display: inline;
+	line-height: 1.5em; }
+#navcontainer li a {
+	text-decoration: none;
+	background-color:#FF6600;
+	color: #FFF;
+	padding: .2em 1em;
+	border-right: 1px solid #fff;
+        line-height: 1.5em; 	}
+#navcontainer li a:hover	{
+	background-color: #369;
+	color: #fff;
+	 line-height: 1.5em;   	}
+#navcontainer li#last a { 
+      border-right: 0px;}
+	
+	/* Search Form, Main Column */
+.adv_search	{
+	background-color: #FFF; 
+	padding-bottom:1px; }
+.adv_search ul{
+	margin: 0;
+	line-height: 1.3em;
+	padding: 5px 5px 5px 25px;   }
+#col_main table {
+	width: 90%;
+	margin:0 auto;  }
+#col_main form tr, td {
+	line-height: 1.8em;
+	padding: 0;
+	margin:0;
+	vertical-align:top   }
+#col_main form th {
+	color: #666;  }
+#col_main form h3 {
+	font-size: 1em; 
+	margin: 10px 0 0 0;
+	color: #666;
+	letter-spacing: .1em;
+	border-bottom: 1px solid #666;
+	padding-bottom: 0; 
+        text-transform: uppercase;}
+#col_main form h4 {
+	font-size: 1em; 
+	color: #999;
+	margin: 0;}
+#col_main form th {
+	color: #666;  }
+#cse-search-box label input {
+	margin: 0 0 10px 25px;
+	width: 200px;  }
+#col_main h2.special{
+	font: normal .95em/1.4em arial;
+	background-color:#3366CC; color:#fff;
+	font-weight: bold;
+	letter-spacing:.1em;
+	padding: 2px 10px;
+	margin:0;
+	text-transform: uppercase;  }
+
+/* Watch Curriki Grow, ON HOLD */
+#watch-curriki-grow {	 }
+table.stats {
+    width:150px;
+    margin: 0 auto;
+    color:#999;
+    line-height: 1.3em;
+    vertical-align:top;
+	text-align: left;   }
+table.stats td {
+    color:#ff6600;   }
+
+/* Footer */
+#copyright p {
+	color: #eeeeee;
+	line-height: 12px;
+	margin: 0 ;}	
+#copyright p a, copyright p a:hover {
+	color: #fff; 	}
+copyright p a:hover {
+	color: #fff; text-decoration:underline;	}
+#footer li, #footer a	{
+	color:#eee;
+	line-height: 1.3em;
+	font-weight: normal;
+	list-style: none;	}
+	#footer h6{
+	padding: 0 0 2px 0;
+	margin: 0;
+	font-size: 1em;
+	line-height:1em; }
+#footer h6 a{
+	color:#fff;
+	text-decoration: underline;  }
+	
+/* Special Cases */
+#col_right .image_portrait, #col_left .image_portrait, .entry-content .alignleft	{ 	
+	width: 100px;
+        float: left;
+	border-right:  10px solid #fff; 
+        border-bottom:  10px solid #fff; }
+
+#col_right .image_portrait {
+        float:left; 
+        padding: 0px 15px 0px 0px; 
+        line-height:12px;
+        border: 0px solid #fff;}
+
+#col_right .image_landscape 	{ 	
+	width: 193px;}
+#col_right .image_attrib, span.image_attrib, #col_left .image_attrib 
+{font:  italic 10px/11px arial,sans-serif}
+
+.wp-caption-text{margin:.5em 0 0 0;}
+
+span.missionitalic {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: bold;
+	font-style: italic;  }
+.fb_member_numbers{
+	margin-left: -10px; }
+.google_button_go_align{padding: 0 0 0 5px; line-height: .5em;
+	}
+.adv_search_go_align{ padding: 0 0 10px 50px; margin:0; vertical-align: top;
+	}
+.adv_search_go_align, .google_button_go_align{ font-size: 14px;}
+
+/* Join Graphic  */
+#joingraphic, #joinCTA { width:180px;}
+#joingraphic .leftbox, #joingraphic .rightbox {float: left; height: 65px; letter-spacing:1px;}
+#joingraphic .leftbox{background-color: #98C848; color: #fff;font: bold 22px/20px arial, sans; background-image:url(http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/newbanner65x36.gif); background-repeat:no-repeat; 
+   width:90px; padding: 15px 0px 10px 30px;}
+#joingraphic .rightbox {background-color: #3698F8;color: #fff;
+width:50px;  padding: 10px 0px 15px 10px;  }
+#joingraphic .rightbox p{ font: italic bold 13px/12px arial, sans; padding-bottom:12px; border-bottom:none;  }
+#joingraphic .leftbox a:hover {
+	border-bottom: 3px solid #fff;}
+#joinCTA .border{ clear: both;width:100%; padding:2px 0 0 0; }
+#joinCTA p {}
+#GreatNP{width: 180px; }
+#specialcollections{ margin: 5px 0 5px 5px}
+#specialcollections h1{ margin-left:0px }
+#specialcollections h2{ display:block; color:#3366CC; font-size:14px; }
+#specialcollections h2, #specialcollections a {font-weight:bold; color:#3366CC; text-transform:none; }
+#specialcollections p {line-height: 16px;}
+ #specialcollections a:hover {border-bottom: 1px dotted #ccc; }
+#notification { background-color: #f5f5f5; padding: 15px 10px 10px 30px; color: #ff0000; border: 1px solid #dddddd; font-size:12px; margin-bottom: 20px}
+</style>
+
+<title>Curriki</title>
+</head>
+<body>
+<div id="wrapper">
+  <!--begin banner block-->
+	<div id="banner">
+    <!--begin logo float-->
+    <div id="logo"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/Curriki-Logo-violet.jpg" alt="Curriki logo" width="145" height="66" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/Curriki-Logo-violet.jpg" />
+
+      <p>K-12 Open Curricula Community</p>
+    </div>
+    <!--end logo float-->
+    <!--begin banner body float-->
+    <div id="banner_body">
+       <div id="banner_menu_a">
+         <div class="float_left"><a href="/xwiki/bin/view/Main/Donate" title="Donate"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/donate_03.gif" alt="Donate button" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/donate_03.gif" /></a> <a href=" /xwiki/bin/view/Main/Sponsors" title="About Corporate Membership"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/corporatemembership.gif" alt="Corporate Membership link button" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/corporatemembership.gif" /></a></div>
+       </div>
+ <div id="facebook" class="float_left"><iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FCurriki%2F134427817464%3Fref%3Dts&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe></div>
+ <div  class= "float_left fb_member_numbers"></div>
+</div>
+<!--end banner_menu a-->
+<div class="clear"></div>
+      <div id="banner_menu_b" style="float:right; padding-right: 20px;"> ##
+<!-- member area -->
+#set($escapedURL="%2F")##
+#set($targetURL="/xwiki/bin/login/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
+#set($joinAnchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+#if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
+##{
+    <a $joinAnchorAtts>$msg.get("join.login.title")</a><br/>
+
+    <p>#foreach($provider in ["Facebook","Google"])
+      <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
+        #set($xredirect=$escapetool.url("http://${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url2')}"))##
+      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$xredirect#if($framed)&xpage=popup#end")
+      <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip")" width="32" ##
+              onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}'); return false;">##
+      <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="24"
+           title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
+      #end
+    #end</p>
+#else ## }{ ## is logged in
+	## crtUserDoc is set in fudocs.vm
+	#set($fname = $crtUserDoc.display("first_name","view"))
+	<span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+	#if($hasGlobalAdmin)
+	<a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> #sep()
+	#end
+    ###set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=%2F")
+	##<a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
+#end ##}
+</div>
+      <div id="mission">The<span class="missionitalic"> non-profit </span> empowering <span class="missionitalic">educators </span>to deliver and <span class="missionitalic">share curricula </span> </div>
+    </div>
+  </div>
+  <!--end banner block-->
+  <div id="navcontainer">
+    <ul id="navlist">##
+      <li id="active"><a href="/xwiki/bin/view/Main/AboutContributing" id="current">Contribute + Publish Resources</a></li>##
+      <li id="active"><a href="/xwiki/bin/view/Main/AboutConnecting" >Connect With Teachers</a></li>##
+      <li id="active"><a href="/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ecategory%25253Ds%2525253Ainteractive%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1" >Interactive Resources</a></li>##
+      <li id="last"><a href="/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ecategory%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253Acurriculum%25255Eict%25253Ds%2525253Acurriculum_course%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1" >Full Courses</a></li>##
+#if($isguest)
+      <li id="member"><a class="join" $joinAnchorAtts >Join</a></li>
+#else##
+    #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=%2F")##
+    <li id="member"><a  class = "join" href="$logouturl">$msg.get("header.logout")</a></li>##
+#end##
+     </ul>
+  </div>
+  <!--begin main-->
+    <div id="main_vertical_lines">
+    <div id="main_wrapper">
+  <div id="col_left">
+
+<!-- begin Join CTA block-->
+<div id="joinCTA">
+<div  style="width: 150px; margin: 0 auto"><img src="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/joinv2.gif">	</div>
+<p>With over 40,000 k-12 learning resources we're growing our 250,000+ teacher + learner membership!  Won't you join us?  Sign up <a href="https://www.curriki.org/xwiki/bin/view/Main/JoinCurriki">here!</a> </p>
+</div>
+<!-- end Join CTA block--> 
+<!-- begin User# block-->
+<p style= "background-color: #FF7F00; padding: 10px 20px; text-align:center; font: bold italic 16px arial, helvetica, sans serif; color: #fff; border-top: 2px solid #FF3300; border-bottom: 2px solid #FF3300">
+5.6 Million Curriki Users! </p>
+<!-- end User# block-->
+    <h1>Partner & Sponsor Showcase</h1>
+<!--begin Showcase Links -->
+<div id="flashembed" style="padding: 0px ;  border: 0px; margin: 0 0 10px 0;">
+<p style="border-bottom: 1px dotted #ccc;"><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,16,0" 
+width="190" height="150" >
+<param name="movie" value="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/currikirotatinglogos4.swf">
+<param name="quality" value="high">
+<param name="play" value="true">
+<param name="LOOP" value="false">
+<embed src="/xwiki/bin/download/Main/WebHomeVistor/currikirotatinglogos4.swf" width="190" height="150 play="true" loop="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" 
+type="application/x-shockwave-flash">
+</embed>
+</object></p>
+</div><!--end Technology ShowcaseLinks -->
+     <div id="watch-curriki-grow">
+    #if($context.user!="XWiki.XWikiGuest")
+		#includeTopic('PanelIncludes.WatchCurrikiGrowMember')
+	#else
+		#includeTopic('PanelIncludes.WatchCurrikiGrowGuest')
+	#end
+      </div>
+<p><a href="http://www.facebook.com/pages/Curriki/134427817464" title="facebook link"><img src="/xwiki/bin/download/Main/WebHomeVistor/FaceBook-icon17.png" alt="facebook link" longdesc="http://www.facebook.com/pages/Curriki/134427817464" /></a> <a href="http://twitter.com/curriki" title="twitter link"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/twitter_icon17x17.jpg" alt="twitter link" longdesc="http://www.twitter.com" /></a> <a href="http://blog.curriki.org/" title="wordpress link"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/wordpress_icon17x17.jpg" alt="wordpress link" width="17" height="17" longdesc="http://www.wordpress.org" /></a> <a href="/xwiki/bin/view/Main/WebRss?xpage=rdf" title="RSS Feed"><img src="/xwiki/bin/download/Main/WebHomeVistor/rssicon17x17.gif"></a> <a href="mailto:info@curriki.org"><img src="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/mail-icon.jpg" alt="email link" longdesc="/xwiki/bin/download/Main/WebHomeVistor/images.zip/images/mail-icon.jpg" /></a></p>
+<div id="google_ad" style="margin:15px 0"><script type="text/javascript"> google_ad_client = "pub-9912167125518556";
+/* 180x150, created 11/16/10 */
+google_ad_slot = "9975306902";
+google_ad_width = 180;
+google_ad_height = 150;
+//
+</script><script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script></div></div>
+<div id="col_main">##
+##
+## ----------------- NEA block ----------------------------------
+## (to be displayed to users clicking from the newsletter)
+#if($request.fromNEA=="1")
+<div id="nea" style="margin:0 0 10px 0">
+<div id="nealogo"><img src="/xwiki/bin/download/Main/WebHomeVistor/nea-resized03.gif" longdesc="links/images/nea-resized_03.gif" width="367" height="52"></div>
+<p style="margin:0;padding:0; line-height:12px; font-weight:bold"><span style="color:#f60;">WELCOME NEA MEMBERS!</span> Find lesson plans, units, student games, interactive resources and more.</p>
+<p style="margin:0;padding:0; line-height:12px;font-weight:bold">Get started with a <a href="http://www.curriki.org/xwiki/bin/download/Coll_curriki/CurrikiGuidedTour/currikiguidedtour.zip/currikiguidedtour/index.html" title="Curriki Tour">TOUR</a> or search for materials below.</p>
+</div>
+#end ##
+## ------------------- end of NEA block --------------------------------
+#set($advancedSearchURL="/xwiki/bin/view/Search/#o%3Af%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch%2Dresource%2Dtab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1")
+##
+##
+<!-- begin temporary outage notification  -->
+<!-- <div id="notification">
+<img src="/xwiki/bin/download/Main/WebHomeVistor/alert16.png"> SCHEDULED MAINTENANCE: Beginning Saturday May 20th at 9pm PT/11pm ET, Curriki will undergo routine maintenance. During this time, the website may be unavailable. Follow us on <a href ="http://www.twitter.com/Curriki">twitter</a> to be notified when work is complete.
+</div>
+-->
+<!-- end temporary outage notification  -->
+<!-- begin cakebox -->
+<div id="cakebox" style=" border: 1px solid #FFFFBC; background-color: #FFFFF3; line-height: 15px; padding: 10px; margin:0px;">
+<div style="float:right; width:100px; margin:0 0 0 10px;""><a href="http://www.curriki.org/xwiki/bin/view/Coll_Group_CurrikisThematicCollections/Literacy"><img src="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/Literacy1.gif"></a></div>
+<h2 style="color:#3366cc">International Members</h2>
+<p>You are a vital part of the Curriki community and we want to hear about what works for you! Please comment on this new <a href="http://www.curriki.org/xwiki/bin/view/Coll_Group_CurrikisThematicCollections/Literacy?bc=" target="_blank">Literacy collection</a> and share with us <a href="http://www.curriki.org/xwiki/bin/view/Coll_Group_CurrikisThematicCollections/Literacy?bc=&amp;viewer=comments#comment-submit-" target="_blank">here</a> what else you think would be useful for your classrooms.&nbsp; Let’s hear from you so we may begin to engage 21st Century teachers to help each other. </p></div>
+<!-- end cakebox  -->
+<a href="$advancedSearchURL"><h1 style="font: bold  arial, helvetica, sans-serif; color:#FF6600; letter-spacing: 1px; font-size: 45px; border-bottom: 0px;">find</h1></a>
+    <div class="adv_search">
+<h2  class="special" >TEACHER RESOURCES BY GRADE + SUBJECT</h2>
+     </div>
+        <script type="text/javascript">
+            function adjustForm() {
+                var b = Ext.get('curriki-searchbox');
+                if(b && b.dom.value==b.dom.getAttribute('Curriki:defTxt')) {
+                    console.log('zapped dom');
+                    b.dom.value='';
+                } else {
+                    console.log("didn't zap");
+                }
+                return false;
+            }
+            function submitSearchForm() {
+                adjustForm();
+                Ext.get('chpAdvSearchForm').dom.submit();
+            }
+        </script>
+      <!--begin search form fields-->
+        <form id="chpAdvSearchForm" name="chpAdvSearchForm" method="GET" onsubmit="return adjustForm();" action="/xwiki/bin/view/Search/SearchWidgetJump">
+          <table>
+               
+              <tr>
+                  <td colspan="2"><h3>Teacher resources by grade + subject</h3></td>
+              </tr>
+              <tr><td><!-- WARNING: after each input is a non-break-space, the equivalent of &nbsp;, as a real character -->
+                  <h4>grade range/age range: </h4>
+                  <label><input name="level" type="radio" value="" checked="checked"/> any</label><br/>
+                  <label><input name="level" type="radio" value="gr-k-2" /> K-2</label><br/>
+                  <label><input name="level" type="radio" value="gr-3-5" /> 3-5</label><br/>
+                  <label><input name="level" type="radio" value="gr-6-8" /> 6-8</label><br/>
+                  <label><input name="level" type="radio" value="gr-9-10" /> 9-10</label><br/>
+                  <label><input name="level" type="radio" value="gr-11-12"/> 11-12</label><br/>
+                  <label><input name="level" type="radio" value="special_education"> special education</label><br/>
+                  <label><input name="level" value="college_and_beyond" type="radio">  college and beyond</label><br>
+              </td><td>
+                  <h4>subject:</h4>
+                  <label><input name="subject" type="radio" value="" checked="checked"/> any</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.VocationalEducation" />  technical education </label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.LanguageArts" /> language arts</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.Mathematics" /> mathematics</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.Science" /> science</label><br/>
+                  <label><input name="subject" type="radio" value="FW_masterFramework.SocialStudies" /> social studies</label><br/>
+                   <label><input name="subject" type="radio" value="FW_masterFramework.ForeignLanguages"/> world languages</label><br/>
+              </td>
+              </tr>
+<!--  
+              <tr>
+                  <td colspan="2"><h3>Teacher resources by type</h3></td>
+              </tr>
+             <tr><td>
+                  <h4>type of resource: </h4>
+                  <label><input name="mediatype" type="radio" value=""  checked="checked"/> any</label><br/>
+                  <label><input name="mediatype" type="radio" value="interactive" /> interactive</label><br/>
+                  <label><input name="mediatype" type="radio" value="video" /> video</label><br/>
+                  <label><input name="mediatype" type="radio" value="audio" /> podcast</label><br/><br/>
+                    <input name="text" type="text" id="curriki-searchbox" size="20"> 
+
+              </td><td>
+
+              <h4>type of usage:</h4>
+                  <label><input name="ict" type="radio" value="" checked="checked"/> any</label><br/>
+                  <label><input name="ict" type="radio" value="activity_exercise" /> exercise</label><br/>
+                  <label><input name="ict" type="radio" value="curriculum_unit" /> unit</label><br/>
+                  <label><input name="ict" type="radio" value="curriculum_lp" /> lesson plan</label><br/>
+                  <label><input name="ict" type="radio" value="activity_game"/> games</label><br/>
+
+              </td></tr>  
+-->
+              <tr>
+                  <td>
+                      #set($defaultsearchtext = $msg.get("header.defaultsearchtext"))##
+                    <input name="text" type="text" value="$defaultsearchtext" id="curriki-searchbox" Curriki:defTxt="$escapetool.xml($defaultsearchtext)" size="15">
+              </td>
+                  <td class="adv_search_go_align" >
+                        <a href="javascript:submitSearchForm();">go&raquo;</a>
+                  </td>
+              </tr>
+         <tr><td colspan="2" style="height:4ex;" valign="top">
+	<hr>
+          </td></tr></table>
+      </form>
+    <script type="text/javascript">
+        Ext.onReady(function() {
+            try {
+                CurrikiApp.initSearchForm2(document.chpAdvSearchForm, document.chpAdvSearchForm.text);
+            } catch(e) { if(console) console.log(e); }});
+    </script>
+
+      <!--end search form fields-->
+          <!--begin google search + bullets-->
+<!--begin google search + bullets--><p/>
+            <div class="adv_search"><p/>
+              <h2  class="special">google search</h2>
+              <ul>
+                <li>search for resources by subject, grade, or keywords.</li>
+              </ul>
+              <form name="chpGoogleForm" action="/xwiki/bin/view/Main/GoogleSearchResults" id="cse-search-box">
+              <label>
+              <input type="text" name="q" />
+    <input type="hidden" name="cx" value="009445585974142445861:5jwom-vlw5i">
+        <input type="hidden" name="cof" value="FORID:11">
+        <input type="hidden" name="ie" value="UTF-8">
+              </label>
+<span class="google_button_go_align"><a href='javaScript:document.chpGoogleForm.submit()'>go&raquo;</a>
+              </span>
+
+               </form>
+            </div>
+        <!--end google search + bullets-->
+<div  style="margin: 10px 0; border-bottom: 1px dotted #CCCCCC;"></div>
+<h1> Explore Special Collections</h1>
+<!--begin Special Collection Links -->
+<div id="specialcollections">
+<h2>
+Grammaropolis</h2>
+<p style="margin:10px auto; line-height: 16px;"><a href="http://www.curriki.org/xwiki/bin/view/Coll_jpinto/Grammaropolis" ><div style="float:left; width:170px; margin-right:10px;"><img src="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/Grammaropolis.GIF" width="160px"></div></a>Created by a Writing and Language Arts teacher, Grammaropolis provides fun and interactive grammar instruction via animated episodes, books, songs, and games. Covers basic parts of speech.</p>
+</div><!--end Special Collection Links -->
+</div>
+  <div id="col_right"> 
+<h1>Follow Our Blog</h1>
+  <!--cut and paste
+<h3></h3>
+<h2>TITLE</h2>
+<p>
+<img class="image_portrait"  src=""> OR
+<img class="image_landscape"  src=""> OR
+<div style="float:left; padding: 0px 15px 0px 0px; line-height:12px;"><img  style="width:100px" src=""></div>
+<span class="image_attrib"> <a href=""></a></span>
+<a href="http://blog.curriki.org/"> &raquo; read more posted August , 2011</a></p>
+end cut and paste-->
+<h2>Sheika Moza bint Nassar – A Passion for Education</h2>
+<p><span style= "font: italic 10px/12px arial, helvetica, sans-serif">By Kim Jones, Curriki Executive Director</span><br><a href="http://blog.curriki.org/"><img class="image_landscape" title="qatar" src="http://currikiblog.files.wordpress.com/2011/11/sheikha2.jpg"></a>
+I’m writing to you from Qatar. Her Highness Sheika Moza bint Nassar, wife of the Emir (King), is the head of the Qatar foundation and the patron of the WISE conference that I’m attending. She has a strong passion for education.  Women here dress very conservatively, and most are completely covered.  The Sheika dresses in the long black abaya, but her face is not covered although her hair is.  She is very beautiful and when she travels to the Western world, she dresses in Western fashions and is now on all the” best dressed” lists.
+<a href="http://blog.curriki.org/"> &raquo; read more posted November 3, 2011</a></p>
+<!-- end blog entries -->
+<!-- begin bottom right column block -->
+<div id="GreatNP"  style=" border: 0px">
+<p><br><a href="http://greatnonprofits.org/reviews/curriki/ "><img src="/xwiki/bin/download/Main/WebHomeVistor/TopRatedBadge150pxw.jpg"></a>
+</p></div> <a href="http://www.curriki.org/xwiki/bin/view/Main/ProfessionalDevelopment">
+<div id="flashembed" style="padding: 15px 0 ;  border: 0px">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,16,0" 
+width="190" height="150" >
+<param name="movie" value="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/currikiad.swf">
+<param name="quality" value="high">
+<param name="play" value="true">
+<param name="LOOP" value="false">
+<embed src="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/currikiad.swf" width="190" height="150 play="true" loop="true" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" 
+type="application/x-shockwave-flash">
+</embed>
+</object>
+</div></a>
+<div id="WiseVideo"  style="padding: 5px 0 0 5px ;  border: 0px">
+<p><a href="http://www.curriki.org/xwiki/bin/view/Main/WhyIloveCurriki"><img src="http://www.curriki.org/xwiki/bin/download/Main/WebHomeVistor/currikiwhy.png"></a></p>
+</div
+<!-- end  bottom right column block -->
+</div>
+  <div class="clear"></div>
+</div>
+</div>
+  <!--end main-->
+  <!--begin footer-->
+  <div id="footer">
+    <div id="copyright">
+      <p>$xwiki.getWebPreference("webcopyright")
+##          &copy;2010 Curriki.org<br />
+##        Creative Commons License xxxxx .</p>
+<p> <a href="/xwiki/bin/view/Main/PrivacyPolicy">Privacy Policy: <br> updated September 16, 2011</a></p> 
+<p><a href="/xwiki/bin/view/Main/TOS">Terms of Service</a></p> 
+<p><a href="/xwiki/bin/view/Demo/ATT">Hosted by AT&T</a></p> 
+</div>
+
+    <div id="about">
+      <h6><a href="/xwiki/bin/view/Main/About">About</a></h6>
+ <ul><li><a href="/xwiki/bin/view/Main/Contact">Contact Us</a></li>
+     <li><a href="/xwiki/bin/download/Coll_curriki/CurrikiGuidedTour/currikiguidedtour.zip/currikiguidedtour/index.html">How Curriki Works</a></li>
+      <li><a href="/xwiki/bin/view/Main/FAQ">FAQs</a></li>
+      <li><a href="/xwiki/bin/view/Main/Board">Who We Are</a></li>
+      <li><a href="/xwiki/bin/view/Main/Sponsors">Sponsors</a></li>
+      <li><a href="/xwiki/bin/view/Main/Partners">Partners</a></li>
+      <li><a href="/xwiki/bin/view/Main/MediaCenter">Press</a></li></ul>
+    </div>
+    <div id="find">
+      <h6><a href="/xwiki/bin/view/Main/AboutFindingCollecting">Find</a></h6>
+      <ul><li><a href="/xwiki/bin/view/Main/BrowseStandards">By Standards</a></li>
+      <li><a href="/xwiki/bin/view/Main/Browse">By Subject</a></li>
+      <li><a href="/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ecategory%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253Ahighest_rated%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1%255Emember%253Do%25253Aa%25253Db%2525253A1">Top Collections</a></li>
+      <li><a href="/xwiki/bin/view/Search/#o%3Af%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch%2Dresource%2Dtab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1">Advanced Search</a></li></ul>
+    </div>
+    <div id="discuss">
+      <h6><a href="/xwiki/bin/view/Main/AboutConnecting">Discuss</a></h6>
+     <ul><li><a href="/xwiki/bin/view/Main/AboutMemberRating">Rate</a></li>
+      <li><a href="/xwiki/bin/view/Main/AboutCurrikiReviewSystem">Review</a></li>
+      <li><a href="http://blog.curriki.org/">Blog</a></li>
+      <li><a href="/xwiki/bin/view/AdWordsJump/curriculummail0909?xpage=popup">Mailing List</a></li></ul>
+    </div>
+    <div id="add">
+   <h6><a href="/xwiki/bin/view/Main/AboutContributing">Add + Build</a></h6>
+      <ul><li><a href="/xwiki/bin/view/Coll_curriki/HowtoCreateResources?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository">Add Resources</a></li>
+      <li><a href="/xwiki/bin/view/Coll_curriki/HowtoCreateCollections?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository">Build Collection</a></li>
+      <li><a href="/xwiki/bin/view/Coll_curriki/HowtoJoinaGroup?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.Groups_0">Join Group</a></li>
+      <li><a href="/xwiki/bin/view/Main/AboutCurrikiReviewSystem">Write Review</a></li></ul>
+    </div>
+
+    <div id="learn">
+      <h6><a href="/xwiki/bin/view/Coll_curriki/CurrikiHelp">Learn More</a></h6>
+      <ul><li><a href="/xwiki/bin/view/Coll_curriki/Tutorials?bc=;Coll_curriki.CurrikiHelp">Video Tutorials</a></li>
+      <li><a href="/xwiki/bin/view/Main/AboutFindingCollecting">About Collections</a></li>
+      <li><a href="/xwiki/bin/view/Coll_curriki/HowtoCreateResources?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.ContributingtoEditingResourcesintheRepository">About Resources</a></li>
+      <li><a href="/xwiki/bin/view/Coll_curriki/GroupsOverview?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.Groups_0">About Groups</a></li></ul>
+
+    </div>
+  </div>
+  <!--end footer-->
+
+</div>
+<!--end wrapper-->
+</body>
+</html>

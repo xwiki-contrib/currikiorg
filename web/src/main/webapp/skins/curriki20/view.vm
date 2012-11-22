@@ -1,0 +1,38 @@
+###
+### Main "view" template
+###
+### General wrapper for view actions
+###
+#if ($request.getParameter("raw").equals("1"))
+  #template("code.vm")
+#else  
+  #if("$!viewer" == '')
+    #set($viewer = $request.getParameter('viewer'))
+  #end
+  #if("$!viewer" == '')
+    #set($viewer = 'content')
+  #end
+  #template("startpage.vm")
+  <div class="main layoutsubsection">
+  #if($displayContentMenu)
+    <div id="contentmenu" class="actionmenu">
+    #template("contentmenu.vm")
+    </div>
+  #end
+  <div id="mainContentArea">
+  #template("hierarchy.vm")
+  #if($viewer == 'content')
+    #template("contentview.vm")
+  #elseif($viewer == "edit") 
+    #template("curriki/assetedit.vm")
+  #else
+    #template("${viewer}.vm")
+  #end
+  <div class="clearfloats"></div>
+  </div>## mainContentArea
+  #if($viewer == 'content' && $displayDocExtra)
+    #template("docextra.vm")
+  #end
+  </div>## main
+  #template("endpage.vm")
+#end

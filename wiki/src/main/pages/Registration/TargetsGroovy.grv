@@ -25,7 +25,7 @@ public class TargetsGroovy {
     String noLogin    = "/";
     HttpServletRequest request;
     static String SAVED_REQUEST_ATTNAME="org.xwiki.container.servlet.filters.SavedRequestManager.SavedRequest_SavedRequests";
-    
+
 
     public void init(HttpServletRequest req, XWiki xwiki) {
         System.out.println("Request to " + req.getRequestURI())
@@ -37,7 +37,7 @@ public class TargetsGroovy {
         String referer = req.getHeader("Referer");
         String refererPath = null;
         try {
-            String hostname = xwiki.xWiki==null ? null : xwiki.xWiki.Param('curriki.system.hostname', 'broken-url');
+            String hostname = xwiki.getXWiki()==null ? null : xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url');
             if(referer!=null && referer.startsWith("http://" + hostname))
                 refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
             def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
@@ -49,10 +49,9 @@ public class TargetsGroovy {
                 afterLogin = readSrid(redirectMap, req.srid);
             }
             // care for xredirect in request
-            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/") && !req.xredirect.contains("/xwiki/bin/view/GCheckout/") && !req.xredirect.contains("/login/") && !req.xredirect.contains("logout") ) {
+            else if (req.xredirect && ! req.xredirect.contains("/xwiki/bin/view/Registration/") && !req.xredirect.contains("/xwiki/bin/view/GCheckout/") && !req.xredirect.contains("/login") && !req.xredirect.contains("/Login") && !req.xredirect.contains("logout") ) {
                 afterLogin = req.xredirect;
             }
-
             // care for srid in session
             else if (session.getAttribute("srid")) {
                 def o = session.getAttribute("srid");
@@ -71,8 +70,8 @@ public class TargetsGroovy {
             // no redirect outside here
             //System.out.println("aferlogin now is " + afterLogin);
             if(! (afterLogin.startsWith("/xwiki/bin/"))) {
+                System.out.println("Zapped '${afterLogin}' to /.");
                 afterLogin = "/"
-                System.out.println("Zapped it to /.");
             };
             else if(afterLogin.startsWith("/xwiki/bin/view/XWiki/XWikiLogin")) afterLogin = "/";
             // login from home or any page in space Main => go to MyCurriki
@@ -80,11 +79,13 @@ public class TargetsGroovy {
 
             afterLogin = outOfJump(afterLogin);
             if(afterLogin.startsWith("/xwiki/bin/view/Main/") ||
+                    afterLogin.equals("/") ||
                     afterLogin.startsWith("/xwiki/bin/view/Registration/") ||
                     afterLogin.startsWith("/xwiki/bin/view/GCheckout/") ||
                     afterLogin.startsWith("/xwiki/bin/login") ||
-                     refererPath=="/") {
-                afterLogin = "/xwiki/bin/view/MyCurriki/";
+                    afterLogin.startsWith("/xwiki/bin/logout") ||
+                    refererPath=="/") {
+                afterLogin = "/xwiki/bin/view/MyCurriki/Profile";
             }
 
 
@@ -100,8 +101,7 @@ public class TargetsGroovy {
                 if(t==-1) t = refererPath.length();
                 String docName = refererPath.substring(16, s) + "." + refererPath.substring(s+1,t);
                 System.out.println("Checking auth for document " + docName);
-                if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName))
-                    noLogin = refererPath;
+                if(xwiki.hasAccessLevel("view","XWiki.XWikiGuest",docName)) noLogin = refererPath;
             } else {
                 noLogin = refererPath;
             }
@@ -138,7 +138,9 @@ public class TargetsGroovy {
         if(from.startsWith("/xwiki/bin/view/Registration/Jump")) {
             def m=Pattern.compile(".*redir=([^?&]*)\\&?.*").matcher(from);
             if(m.matches()) {
-                return URLDecoder.decode(m.group(1));
+                String t= m.group(1);
+                t = t.replace("xpage=popup","");
+                return URLDecoder.decode(t);
             }
         }
         return from;
@@ -240,6 +242,8 @@ public class TargetsGroovy {
             return "false";
         };
     }
+
+    public void log(String s)  { System.out.println("LOG: "+s); }
 }
 
 

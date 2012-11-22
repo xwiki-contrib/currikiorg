@@ -1,0 +1,35 @@
+#asset_displaycontentheader("")
+#if($asset.attachmentList.size() > 0)
+#set($fileName = $asset.attachmentList.get(0).filename)
+#set($url = $asset.getAttachmentURL("$fileName"))
+#set($pictSize = "Medium")
+#set($pictSize = $!asset.display("display_size", "view", $asset.getObject("CurrikiCode.ImageAssetClass")))
+#if($pictSize == "small")
+ #set($pictWidth = "300")
+#elseif($pictSize == "large")
+## #set($pictWidth = "600") ## reduced due to style issues
+ #set($pictWidth = "570")
+#else
+ #set($pictWidth = "450")
+#end
+#set($caption = "")
+#set($alt_text = "")
+#set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+#set($caption = $!asset.caption_text)
+#set($alt_text = $!asset.alt_text)
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#if($!caption == "")
+#set($caption = $!asset.description)
+#end
+#if($!alt_text == "")
+ #set($alt_text = $!asset.title)
+#end
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+        <a href="$url" title="$!alt_text" ><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" alt="$!alt_text" /></a>
+        <p>$caption</p>
+    </div>
+</div>
+#end
+#asset_attachments($asset)
+#asset_displaycontentfooter()

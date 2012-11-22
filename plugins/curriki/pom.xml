@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.curriki</groupId>
     <artifactId>curriki-plugins</artifactId>
-    <version>1.0-SNAPSHOT</version>
+      <version>1.14-SNAPSHOT</version>
   </parent>
   <artifactId>curriki-plugin-curriki</artifactId>
   <name>XWiki Products - Curriki - Plugins - Curriki Plugin</name>
@@ -35,36 +35,56 @@
   <description>XWiki Products - Curriki - Plugins - Curriki Plugin</description>
   <dependencies>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <!-- Note: The 2.4 version is not technically correct as 2.4 corresponds to a specification
+           # and is not an implementation version. The central repo would need to be fixed... -->
+      <version>2.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.curriki</groupId>
       <artifactId>curriki-plugin-asset</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.xpn.xwiki.platform.plugins</groupId>
       <artifactId>xwiki-plugin-spacemanager</artifactId>
-      <version>1.1.1</version>
+      <version>${platform.plugins.spacemanager.version}</version>
     </dependency>
     <dependency>
       <groupId>org.curriki</groupId>
       <artifactId>curriki-plugin-spacemanager</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
     </dependency>
-<!--
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-legacy-oldcore</artifactId>
+      <version>${platform.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-zipexplorer</artifactId>
+      <version>${platform.version}</version>
+    </dependency>
+
+    <!--
     <dependency>
       <groupId>org.curriki</groupId>
       <artifactId>curriki-plugin-licence</artifactId>
-      <version>${pom.version}</version>
+      <version>${curriki.version}</version>
     </dependency>
     <dependency>
       <groupId>org.curriki</groupId>
       <artifactId>curriki-plugin-framework</artifactId>
-      <version>${pom.version}</version>
+      <version>${curriki.version}</version>
     </dependency>
     <dependency>
       <groupId>org.curriki</groupId>
       <artifactId>curriki-plugin-mimetype</artifactId>
-      <version>${pom.version}</version>
+      <version>${curriki.version}</version>
     </dependency>
--->
+    -->
   </dependencies>
 </project>

@@ -21,8 +21,6 @@ package com.xpn.xwiki.plugin.lucene;
 
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
@@ -30,13 +28,15 @@ import org.apache.lucene.search.TermQuery;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.doc.XWikiDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @version $Id: $
  */
 public abstract class IndexData
 {
-    private static final Log LOG = LogFactory.getLog(IndexData.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexData.class);
 
     private String documentTitle;
 

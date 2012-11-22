@@ -2,6 +2,21 @@
 ##
 ## Core Group Role macros
 ##
+
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+
 #macro(groupGetRoles $spaceName $withAdmin) ## {
 ## Sets ret_groupRoles
 #set($ret_groupRoles = $xwiki.arrayList)
@@ -40,7 +55,7 @@
 #macro(findUniquePageWithExtra $spaceName $prefix $suffix $extra) ## {
 #set($ret_pageName = "${prefix}${extra}${suffix}")
 #if($xwiki.exists($ret_pageName)) ## {
-  #set($extra = "_"+$xwiki.generateRandomString(3).toLowerCase())
+  #set ($extra = $util.null)#setVariable ("$extra" "_$xwiki.generateRandomString(3).toLowerCase()")#set($extra = "_$xwiki.generateRandomString(3).toLowerCase()")
   #findUniquePageWithExtra($spaceName $prefix $suffix $extra)
 #end ## }
 #end ## }
@@ -55,10 +70,10 @@
 #end ## }
 ##
 ##
-#macro(createGroupRole $spaceName $roleName) ## {
+#macro(createGroupRole $spaceName $roleName)## {
 #set($ret_err = false)
 #set($ret_rDoc = false)
-#set($roleName = $roleName.trim())
+#set($roleName="$roleName.trim()")
 #checkForUniqueRole($spaceName $roleName)
 #checkForValidSizeRole($spaceName $roleName)
 #if(!$ret_isRoleUnique) ## {
@@ -77,7 +92,7 @@
 ##
 #macro(renameGroupRole $groupDoc $newRoleName $oldRoleName) ## {
 #set($ret_err = false)
-#set($newRoleName = $newRoleName.trim())
+    #set ($newRoleName = $util.null) #setVariable("$newRoleName" $newRoleName.trim())#set($newRoleName=$newRoleName.trim())
 #checkForUniqueRole($groupDoc.space $newRoleName)
 #checkForValidSizeRole($groupDoc.space $newRoleName)
 #if(!$ret_isRoleUnique) ## {
@@ -180,7 +195,7 @@ $msg.get("groups_admins_onlyaccessibletoadmins")
 ##
 ## Create, Rename, Delete roles
 ##
-#if($!request.create) ## {
+#if("$!request.create"!="") ## {
   #createGroupRole($spaceName $request.create)
 #elseif($!request.rename && $!request.to) ## } {
   #set($roleDoc = $xwiki.getDocument("${spaceName}.${request.rename}"))

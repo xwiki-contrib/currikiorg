@@ -18,10 +18,10 @@
 #set($caption = $!asset.caption_text)
 #set($alt_text = $!asset.alt_text)
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
-#if($!caption == "")
+#if("$!caption" == "")
 #set($caption = $!asset.description)
 #end
-#if($!alt_text == "")
+#if("$!alt_text" == "")
  #set($alt_text = $!asset.title)
 #end
 <div class="asset-display-media">

@@ -1,24 +1,27 @@
 
-<%
+//  <%
 
 import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.store.XWikiCacheStore
-import org.xwiki.cache.oscache.internal.OSCacheCache
 import java.lang.reflect.Field
-import com.opensymphony.oscache.general.GeneralCacheAdministrator
 import com.xpn.xwiki.api.Context
 import com.xpn.xwiki.store.XWikiHibernateStore
 import org.hibernate.impl.SessionFactoryImpl
-import com.opensymphony.oscache.extra.StatisticListenerImpl
+import com.xpn.xwiki.user.impl.xwiki.XWikiGroupServiceImpl
+import org.xwiki.cache.infinispan.internal.InfinispanCache
+import org.infinispan.CacheImpl
+import javax.management.MBeanServer
+import java.lang.management.ManagementFactory
+import javax.management.ObjectName
 
 def displayer = new CacheDisplayer();
 displayer.out = out;
 
-displayer.displayXWikiCacheInfo(xwiki);
+displayer.displayXWikiCacheInfo(xwiki, context);
 println();
-displayer.displayEvictions(xwiki);
+//displayer.displayEvictions(xwiki);
 println();
-displayer.displayHibernateStore(xwiki, context);
+//displayer.displayHibernateStore(xwiki, context);
 displayer.updateLastMeasured();
 
 class CacheDisplayer {
@@ -34,7 +37,7 @@ class CacheDisplayer {
         lastMeasured = System.currentTimeMillis();
     }
 
-    public void displayEvictions(XWiki xwiki) {
+/*    public void displayEvictions(XWiki xwiki) {
         if(useCacheListener) {
             if(lastMeasured==0) lastMeasured = System.currentTimeMillis();
             StatisticListenerImpl stat = getOrMakeStatisticsListener(xwiki.getXWiki().store.getCache());
@@ -54,16 +57,18 @@ class CacheDisplayer {
             removeCacheListener(xwiki.getXWiki().store.getCache());
         }
     }
-
+*/
     static long lastNumDBQueries;
 
     public void displayHibernateStore(XWiki xwiki, Context context) {
         XWikiCacheStore store = xwiki.getXWiki().store;
         XWikiHibernateStore hibStore = store.store;
+        out.println();
         out.println("1 Hibernate Store")
-        out.println("Back end store is " + hibStore);
+        out.println("")
+        out.println("Back end store is " + hibStore + " of class " + hibStore.getClass());
         SessionFactoryImpl sessionFactory = hibStore.sessionFactory;
-        out.println("Session factory: " + sessionFactory);
+        out.println("Session factory: " + sessionFactory + " of class " + sessionFactory.getClass());
 
         try {
             long numDBQueries = sessionFactory.getStatistics().queryExecutionCount
@@ -88,16 +93,68 @@ class CacheDisplayer {
     }
 
 
-    public void displayXWikiCacheInfo(XWiki xwiki) {
-        out.println("1 XWiki Cache information")
+    public void displayXWikiCacheInfo(XWiki xwiki, Context context) {
+        out.println();
+        out.println();
+        out.println("= XWiki Cache information =")
         XWikiCacheStore store = xwiki.getXWiki().store;
         out.println("XWiki Store is " + store + ".")
+        out.println();
         out.println("Back end store is " + store.store);
+        out.println();
+
+
+        MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+//def query = new ObjectName('jboss.cache:*')
+//def allNames = server.queryNames(query, null)
+//println """ jBossCache EventCacheEvicted:
+//    $allNames
+//"""
+
+        out.println("Listing infinispan's objects.")
+        for(def mbean in server.queryMBeans(new ObjectName("org.infinispan:*"),null)) {
+            out.println("<hr>");
+            out.println();
+            //out.println("class: " + mbean.class);
+            out.println("name : " + mbean.getObjectName());
+            GroovyMBean mb = new GroovyMBean(server, mbean.getObjectName());
+            out.println("mb: " + mb);
+            /* if(mb.hasProperty("statistics")) {
+                out.println("stat: " + mb.statistics);
+            }*/
+            try {
+                out.println(mbean.type);
+            } catch(Exception ex) {
+                out.println(ex);
+            }
+            for(def at: mb.listAttributeNames()) {
+                out.println("* att " + at);
+            }
+            out.println();
+        }
+        out.println("Finished listing infinispan's objects.")
+        //new GroovyMBean(server, 'org.infinispan:type=CacheManager,name="DefaultCacheManager"');
+
+        /* def mbeanEv = new GroovyMBean(server, 'jboss.cache:service=JBossCache,uniqueId=32dcce09,jmx-resource=CacheMgmtInterceptor')
+        println("mbeanEv: " + mbeanEv + ", enabled: " + mbeanEv.StatisticsEnabled);
+        println("evictions amount: " + mbeanEv.Evictions);
+        println("hits amount: " + mbeanEv.Hits);
+*/
+
+        XWikiGroupServiceImpl groupService = xwiki.getXWiki().getGroupService(context.getXWikiContext());
         out.println("{pre}")
         out.println("<table class='wiki-table'>");
         printHeaders();
         out.println("<tbody>")
+
+        for(Field f in XWikiGroupServiceImpl.class.getDeclaredFields()) {
+            println("<tr><td> Field " + f + "</td></tr>")
+        }
+        /* Field groupCacheField = XWikiGroupServiceImpl.class.getDeclaredField("groupCache");
+        groupCacheField.setAccessible(true); */
+
         displayInfoForCache("pageExistCache", store.getPageExistCache());
+        //displayInfoForCache("groupCache", groupCacheField.get(groupService));
         displayInfoForCache("cache", store.getCache());
         out.println("</tbody></table>");
         out.println("{/pre}")
@@ -108,6 +165,30 @@ class CacheDisplayer {
         out.println("<thead><tr><th>name</th><th>entries</th><th>capacity</th><th>admin object</th></tr></thead>")
     }
 
+    private void displayInfoForCache(String name, org.xwiki.cache.Cache<Object> cache) {
+        InfinispanCache icache = (InfinispanCache) cache;
+        out.println("<tr><td>");
+        out.println("<b>" + name + "</b><br>");
+        out.println("cache: " + icache);
+        out.println("</td><td>");
+        CacheImpl c = getPrivateFieldValue(icache, icache.getClass(), "cache");
+
+        out.println();
+        out.println("<ul>");
+        for(Object o in c.getListeners()) {
+            out.println("<li>" + o + "</li>");
+        }
+        out.println("</ul>");
+        out.println("</td></tr>");
+    }
+
+    private Object getPrivateFieldValue(Object b, Class c, String fieldName) {
+        Field field = c.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return field.get(b);
+    }
+
+    /*
     private Object getCacheAdmin(OSCacheCache cache) {
         Field field = cache.getClass().getDeclaredField("cacheAdmin")
         field.setAccessible(true);
@@ -153,7 +234,7 @@ class CacheDisplayer {
         StatisticListenerImpl r = new StatisticListenerImpl();
         cache.addCacheEventListener(r);
         return r;
-    }
+    } */
 }
 
 

@@ -23,8 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.document.Field;
 
 import com.xpn.xwiki.XWikiContext;
@@ -36,13 +34,15 @@ import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.objects.classes.ListItem;
 import com.xpn.xwiki.objects.classes.PasswordClass;
 import com.xpn.xwiki.objects.classes.StaticListClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hold the property values of the XWiki.ArticleClass Objects.
  */
 public class ObjectData extends IndexData
 {
-    private static final Log LOG = LogFactory.getLog(ObjectData.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectData.class);
 
     public ObjectData(final XWikiDocument doc, final XWikiContext context)
     {

@@ -1,6 +1,15 @@
 ## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/StyledMacros
 {pre}
-## 
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+##
 ##
 ##
 #macro(curriki_formtitle $title_str) ## {
@@ -33,8 +42,8 @@
 #macro(curriki_formprompt $title_str $tooltip_str $fieldtext $field_required_p $addl_css_class_str) ## {
 <div class="entry $addl_css_class_str">
   ##<h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<span class="tooltip-generator">$xwiki.addTooltip("<img src='/xwiki/skins/curriki8/icons/exclamation.png' id='tooltip-image-instruction' class='tooltip-image'/>", $tooltip_str)</span>#end</h5>
-  <h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<img class="tooltip" alt="" src="/xwiki/skins/curriki8/icons/exclamation.png" ext:qtip="$tooltip_str"/>#end</h5>
-  #if($fieldtext!="")<p class="instruction">$fieldtext</p>#end
+  <h5 class="instruction">#if($field_required_p)<em>$msg.get("form.required.fields.indicator")</em>&nbsp;#end$title_str&nbsp;#if($tooltip_str!="")<img class="tooltip" alt="" src="/xwiki/skins/curriki8/icons/exclamation.png" ext:qtip="$escapetool.html($tooltip_str)"/>#end</h5>
+  #if($fieldtext!="")<p class="instruction">$fieldtext</p>#end## $escapetool.html(
 </div> ##class="entry $addl_css_class_str"
 #end ## }
 ##
@@ -48,9 +57,9 @@
 ## #curriki_wysiwyg_loader_editor()
 ## ...
 #macro(curriki_wysiwyg_loader_preamble) ## {
-<script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
-<script type="text/javascript">if ( !(browser.isIE || browser.isMozilla || browser.isGecko ) ) {alert("$msg.get('browsernoncompatible')");}</script>
+<script type="text/javascript" src="${request.contextPath}/resources/js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="${request.contextPath}/resources/js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js"></script>
+## <script type="text/javascript">if ( !(browser.isIE || browser.isMozilla || browser.isGecko ) ) {alert("$msg.get('browsernoncompatible')");}</script>
 #end ## }
 ##
 ## Must be called one or more times after #curriki_wysiwyg_loader_preamble()

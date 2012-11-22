@@ -1,0 +1,103 @@
+#**
+ * lpattachments.vm by Niels P. Mayer
+ *
+ * Template for use by CurrikiStandardLessonPlan and other lesson plans
+ * that create new resources and allow for file attachments to those
+ * resources. The intent is to use something like
+ * <iframe src="$newAsset.getURL("view", "xpage=lpattachments")"
+ *         onload="try { setAttachmentsIframeSize(); } catch(e) { alert('iframe onload error: '+e+' ...'); return false; }" ></iframe>
+ * embedded in the lesson plan. (where $newAsset is the asset being
+ * populated, that resides in AssetTemp).
+ *
+ * taken from
+ * xwiki-product-enterprise/web/target/xwiki-enterprise-web-1.3-SNAPSHOT/skins/albatross/attachmentsinline.vm
+ **# 
+#macro(dynamicsize $sz) ## {
+#if($sz < 1024)         ## {
+$sz bytes
+#else                   ## } {
+#set($ksz = $sz / 1024)
+#if($ksz < 1024)        ## {
+${ksz}kb
+#else                   ## } {
+#set($Msz = $sz / 1048576)
+${Msz}Mb
+#end                    ## }
+#end                    ## }
+#end                    ## }
+
+<link href="$xwiki.getSkinFile("style2.css")" rel="stylesheet" type="text/css"  />
+<style type="text/css">
+body {background: #fff; text-align: left; min-width: 0; padding: 0;}
+</style>
+#if( $request.xredirect )                   ## {
+  #set( $redirect = $request.xredirect )
+#else			                    ## } {
+  #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
+#end			                    ## }
+##
+## Compute velocity vars for attachments that are made available to 
+## framing app via javascript getAttachmentsSize() and getAttachmentsNames().
+##
+#set( $total_attachments_size  = 0 )        ## javascript:getAttachmentsSize()
+#set( $total_attachments_names = [] )       ## javascript:getAttachmentsNames()
+#foreach ($attach in $doc.attachmentList)   ## {
+  #set( $ok = $total_attachments_names.add("'${attach.filename}'") )                    ## append attachment filename to ArrayList
+  #set( $total_attachments_size = ${total_attachments_size} + ${attach.getFilesize()} ) ## compute total size of atttachments
+#end					    ## } -- foreach
+##
+## File upload area
+##
+<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+  <input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+  <input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/>
+  <input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/>
+  <script type="text/javascript">function getAttachmentsNames() { return (${total_attachments_names}); } function getAttachmentsSize() { return (${total_attachments_size}); } function updateXRedirect(formName, returnValue) { var xredirect = document.forms[formName].xredirect; xredirect.value = '${doc.getURL("view", "xpage=lpattachments")}'; return returnValue; }</script>
+  <input class="button button-confirm" type="submit" value="$msg.get("attachthisfile")" onclick="try { if (getAttachmentsSize() < $msg.get("lesson.plan.file.size.maximum")) { return updateXRedirect('attachmentAddForm', this.form.filepath.value != ''); } else { alert('$msg.get('lesson.plan.file.size.dialog')'); return false; } } catch(e) { alert('$msg.get('attachthisfile') button onclick error: ' + e + ' ...'); return false; }" />
+</form>
+##
+## If there's attachments, display list of attachments and messages/headers
+## accociated w/ them
+##
+#if( $doc.attachmentList.size() > 0 )       ## {
+  ##
+  ## Headers and instructional text -- styled per
+  ## #curriki_formprompt() in CreateResources.StyledMacros
+  ##
+  <div class="entry medium">
+  <p   class="instruction">$msg.get("lesson.plan.required.attachments.file.attached")</p>
+  <h5  class="instruction">$msg.get("lesson.plan.attachments.title")</h5>
+  ##
+  ## Attachments list, as table
+  ##
+  <table class="instruction">
+  <tbody>
+  ##
+  ## iterate through attachments, creating a table-row for each
+  ## 
+  #set( $Integer = 0 )                      ## need to use $Integer.parseInt()
+  #foreach ($attach in $doc.attachmentList) ## {
+      <tr><td class="table-col-filetype">
+        #mimeiconimg($attach.filename)         ## this hack-macro sets $macro_img as side-effect
+        &nbsp;${macro_img}&nbsp;
+      </td><td class="attachments_file">
+        &nbsp;${attach.filename}&nbsp;
+      </td><td class="attachments_version">
+        &nbsp;${attach.version}&nbsp;
+#if( $total_attachments_size >= $Integer.parseInt($msg.get("lesson.plan.file.size.maximum")) ) ## {   -- display the filesize of attachments if "over the limit"
+      </td><td class="attachments_filesize">
+        &nbsp;#dynamicsize(${attach.getFilesize()})&nbsp;
+#end                                        ## }
+      </td><td class="attachments_delete">
+        &nbsp;&nbsp;&nbsp;<a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="try { return confirm('$msg.get("confirmdelattachment")'); } catch(e) { alert('$msg.get("lesson.plan.attachments.delete") button onclick error: ' + e + ' ...'); return false; }" title="$msg.get("lesson.plan.attachments.delete")">$msg.get("lesson.plan.attachments.delete")</a>
+      </td></tr>
+    #end                                    ## } -- foreach
+  ##
+  ## End of attachment table
+  ##
+  </tbody>
+  </table>
+  <label for="attachments_size">$msg.get("lesson.plan.file.size.label")</label>
+  <span name="attachments_size" id="attachments_size">#dynamicsize(${total_attachments_size})</span>
+  </div>
+#end                                        ## } -- if

@@ -1,0 +1,1 @@
+try{console}catch(e){console={};console.log=function(){}};

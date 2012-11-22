@@ -43,12 +43,7 @@ public class MetadataResource extends BaseResource {
 
         JSONObject json = new JSONObject();
         for (Property prop : results) {
-            if((Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE.equals(prop.getName()) ||
-                    Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH.equals(prop.getName()))
-                    && prop.getValue()!=null)
-                json.put(prop.getName(),prop.getValue().equals(0) ? "off" : "on");
-            else
-                json.put(prop.getName(), prop.getValue());
+            json.put(prop.getName(), prop.getValue());
         }
 
         return formatJSON(json, variant);
@@ -79,7 +74,7 @@ public class MetadataResource extends BaseResource {
             asset.setTitle(asset.getTitle());
         }
 
-        // We need to be careful when interacting with assets in write mode like that
+        // We need to be carefull when interacting with assets in write mode like that
         // getObject does not retrieve the object in write mode if the asset has not been
         // switched to write mode first. We might need a function to switch to write mode
         Object assetObj = asset.getObject(Constants.ASSET_CLASS);
@@ -126,22 +121,17 @@ public class MetadataResource extends BaseResource {
             assetObj.set(Constants.ASSET_CLASS_HIDDEN_FROM_SEARCH, 0);
         }
 
+        // grantCurrikiCommercialLicense ("on")
+        if (json.has("grantCurrikiCommercialLicense")) {
+            licenseObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, json.getString("grantCurrikiCommercialLicense").equals("on")?1:0);
+        } else {
+            licenseObj.set(Constants.ASSET_CLASS_GRANT_CURRIKI_COMMERCIAL_RIGHTS, 0);
+        }
+
+
         // license_deed
         if (json.has("license_type")) {
             licenseObj.set(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE,  json.getString("license_type"));
-        }
-        Property gprop = licenseObj.getProperty(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE);
-        // grant_curriki_commercial_license
-        if (json.has(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE)) {
-            licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
-                    json.getString(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE).equals("on")?1:0);
-        } else { // checkbox is not checked
-            if(gprop==null)
-                // no previous value... hence we assume it is displayed and was unchecked hence should be set to false
-                licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,0);
-            else // use previous value...
-                licenseObj.set(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
-                        gprop.getValue());
         }
         // rights_holder
         if (json.has("right_holder")) {

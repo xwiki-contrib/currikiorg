@@ -123,10 +123,8 @@ fieldset h3 {
               #logViewScript("/join/${regMode}/submit/errors")
           #end
       <input type="hidden" name="xaction" value="createProfile" >
-      <input type="hidden" name="city"  value="$!tool.city">
-      <input type="hidden" name="country" value="$!tool.country">
 
-        #macro(computeTrClasses $f)##
+          #macro(computeTrClasses $f)##
             #if($okFields.contains($f)) okField #end ##
             #if($warningFields.contains($f)) warningField #end ##
         #end##
@@ -179,6 +177,36 @@ fieldset h3 {
           </p>
           ##
           ##
+              #set($f="country")
+              <p class="textfield #computeTrClasses($f)"
+                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+                  <label for="${f}_input"><b>$msg.get("join.member.country.title")</b></label>
+                  #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("country").getPropertyClass().getList($context.context))
+                  <select name="${f}" id="${f}_input" onchange="Curriki.ui.login.countryChanged()" style="width:20em; max-width: 20em">##
+                      #foreach($val in $propVals)#if($val!="0" && "$val"!="---")##
+                          <option value="$val" #if($val==$!tool.country)selected="selected"#end>$msg.get("XWiki.XWikiUsers_country_${val}")</option>##
+                      #end#end
+                  </select>
+              </p>
+              ##
+              #set($f="postalCode")
+              #if("US"==$!tool.country)#set($isInUS=true)#else#set($isInUS=false)#end
+              <p class="#if($isInUS)hidden#end #computeTrClasses($f) " id="extraLocationSectionUS"
+                  onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
+                  <label for="postalCode_input"><b>$msg.get("join.member.postalCode_US")</b></label>
+                  <input type="text" maxlength="5" name="postalCode" id="postalCode_input" value="$!tool.postalCode" style="width:5em">
+                  <span id="postalCode_results">&nbsp;</span>
+              </p>
+              #set($f="state")
+              <p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS">
+                  <label for="${f}_input"><b>$msg.get("join.member.province.title")</b></label>
+                  <input id="${f}_input" name="${f}" value="$!tool.state">
+              </p>
+              <input type="hidden" name="city" id="city_input" value="$!tool.city">
+              <input type="hidden" name="latitude" id="latitude_input" value="$!tool.latitude">
+              <input type="hidden" name="longitude" id="longitude_input" value="$!tool.longitude">
+          ##
+          ##
           #set($f="memberType")
           <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
               <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
@@ -211,7 +239,7 @@ fieldset h3 {
 </form>
 <script type="text/javascript">
     Ext.onReady(function() {
-        Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input"]);
+        Curriki.ui.login.liveValidation.activate(["username_input", "email_input","firstName_input","lastName_input","password_input","postalCode_input"]);
     }, Curriki.ui.login.liveValidation);
 
     Ext.onReady(function() {
@@ -237,6 +265,22 @@ fieldset h3 {
         } catch(e) { Curriki.console.log(e); }
     };
     ##
+    Curriki.ui.login.countryChanged = function () {
+        try {
+            var i = Ext.get("country_input");
+            if(i && i.dom.value) {
+                if("US"== i.dom.value) {
+                    Ext.get("extraLocationSectionUS").replaceClass("hidden","visible")
+                    Ext.get("extraLocationSectionNonUS").replaceClass("visible","hidden")
+                } else {
+                    Ext.get("extraLocationSectionUS").replaceClass("visible","hidden")
+                    Ext.get("extraLocationSectionNonUS").replaceClass("hidden","visible")
+                }
+                scheduleDialogRescale(window, document, "loginIframe", 500,0);
+            }
+        } catch(e) { Curriki.console.log(e); }
+    };
+    ##
     Curriki.ui.login.displayInstruction = function(key,params) {
         try {
             var text;
@@ -252,6 +296,7 @@ fieldset h3 {
         //
         // do it after load: the warning must be displayed in case
         Curriki.ui.login.memberTypeChanged();
+        Curriki.ui.login.countryChanged();
     });
 </script>
 {/pre}

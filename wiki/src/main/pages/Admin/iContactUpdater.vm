@@ -43,7 +43,7 @@ $tool.getLastUpdatedMessage()
     <!-- $tool.refreshCustomFieldNames() -->
         #outputReports()
     #else
-    <a href="$doc.name?refreshCustomFields=true">click here to refresh custom fields</a>
+    <a href="$doc.name?advanced=1&refreshCustomFields=true">click here to refresh custom fields</a>
     #end
 
 1.1 Update a user
@@ -52,7 +52,8 @@ $tool.getLastUpdatedMessage()
         $tool.updateUserToiContact($request.userName)
         #outputReports()
     #else
-    <form action="$doc.name" method="GET"><input type="hidden" name="advanced" value="1">
+    <form action="$doc.name" method="GET">
+        <input type="hidden" name="advanced" value="1">
         <input name="userName" type="text"> </form>
     #end
 
@@ -66,7 +67,8 @@ $tool.getLastUpdatedMessage()
     Indicate the name of the group, e.g. XWiki.EditorGroup
 
     If a Curriki group X, please use Group_X.Members.
-    <form action="$doc.name" method="GET"><input type="hidden" name="advanced" value="1">
+    <form action="$doc.name" method="GET">
+        <input type="hidden" name="advanced" value="1">
         <input name="groupName" type="text"> </form>
     #end
 

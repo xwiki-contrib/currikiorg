@@ -1,0 +1,25 @@
+$context.setCacheDuration(1200)
+## #set($targetURL="/xwiki/bin/view/Registration/DirectLogin")##
+## #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&quot;); return false;'")
+#set($numResources= $xwiki.curriki.countDocsSolr("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
+#set($numUsers= $xwiki.curriki.countDocsSolr("type:user"))
+#set($numGroups= $xwiki.curriki.countDocsSolr("type:group"))
+<div id="watch">
+    <h2>$msg.get("panel.watchgrow.title")</h2>
+    <table>
+        <tbody>
+        <tr id="watchCurrikiGrowResources">
+            <th><a href="/xwiki/bin/view/Main/Browse">$msg.get("panel.watchgrow.resources")</a></th>
+            <td><a href="/xwiki/bin/view/Main/Browse">$numResources</a></td>
+        </tr>
+        <tr id="watchCurrikiGrowMembers">
+            <th><a>$msg.get("panel.watchgrow.members")</a></th>
+            <td><a>$numUsers</a></td>
+        </tr>
+        <tr id="watchCurrikiGrowGroups">
+            <th><a href="/xwiki/bin/view/Groups/Browse">$msg.get("panel.watchgrow.groups")</a></th>
+            <td><a href="/xwiki/bin/view/Groups/Browse">$numGroups</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

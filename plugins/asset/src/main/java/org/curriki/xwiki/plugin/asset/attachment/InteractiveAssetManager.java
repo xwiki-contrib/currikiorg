@@ -4,11 +4,6 @@ import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.Asset;
 
 /**
- * Created by IntelliJ IDEA.
- * User: ludovic
- * Date: 10 déc. 2008
- * Time: 19:43:01
- * To change this template use File | Settings | File Templates.
  */
 public class InteractiveAssetManager extends AttachmentAssetManager {
 

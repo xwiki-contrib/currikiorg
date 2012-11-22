@@ -1,9 +1,9 @@
 package org.curriki.xwiki.plugin.curriki;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.Util;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
@@ -16,9 +16,6 @@ import com.xpn.xwiki.api.Property;
 import com.xpn.xwiki.api.Document;
 
 import javax.management.timer.Timer;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  */
@@ -242,11 +239,65 @@ public class CurrikiPluginApi extends Api {
     }
 
     public String escapeForJS(String origtext) {
-        return Util.escapeForJS(origtext);
+        if (origtext==null)
+          return "";
+        else
+          return Util.escapeForJS(origtext);
     }
 
-    public void ensureUsernameCookie(HttpServletRequest req, HttpServletResponse resp, String username) {
-        plugin.ensureUsernameCookie(req, resp, username);
+
+    // this code is not meant to stay here but is expected
+
+    public String solrGetSingleValue(String query, String fieldName) throws IOException {
+        return plugin.solrGetSingleValue(query, fieldName);
+    }
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames) throws IOException {
+        return plugin.solrCreateQueryGetMethod(query, fieldNames, 0, 10);
+    }
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
+        return plugin.solrCreateQueryGetMethod(query, fieldNames, start, rows);
     }
 
+    public boolean checkSolrIsUp() {
+        return plugin.solrCheckIsUp();
+    }
+
+    public int countDocsSolrCatchAll(String query) {
+        try {
+            return plugin.solrCountDocs(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public int countDocsSolr(String query) {
+        return plugin.solrCountDocs(query);
+    }
+
+    public List<String> listDocNamesSolr(String query, int start, int num) {
+        return plugin.solrListDocNames(query, start, num);
+    }
+
+    public void startMethod(GetMethod g) {
+        plugin.startSolrMethod(g);
+    }
+
+    public void solrCollectResultsFromQueryWithSort(String query, String fields, String sortParam, int start, int max, CurrikiPlugin.SolrResultCollector collector){
+        if(!hasProgrammingRights()) return;
+        plugin.solrCollectResultsFromQueryWithSort(query, fields, sortParam, start, max, collector);
+    }
+
+    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, CurrikiPlugin.SolrResultCollector collector){
+        this.solrCollectResultsFromQueryWithSort(query, fields, null, start, max, collector);
+    }
+
+
+    public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {
+        plugin.feedFieldFromXmlStream(g, out, elementName);
+    }
+
+    public String getPublicCurrikiConfig(String name, String defaultVal) {
+        return plugin.getPublicCurrikiConfig(name,defaultVal, context);
+    }
 }

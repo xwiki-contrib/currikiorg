@@ -12,7 +12,7 @@
     #set($ok = $asset.use("CurrikiCode.ExternalAssetClass"))
     #set($caption = $!asset.caption_text)
     #set($ok = $asset.use("CurrikiCode.AssetClass"))
-    #if($!caption == "")
+    #if("$!caption" == "")
     #set($caption = $!asset.description)
     #end
     <p>
@@ -27,7 +27,7 @@
     <img class="tooltip" width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" ext:qtip="$msg.get("rve.content.view.link.instruction_tooltip")"/>
 </p>
 <p class="text-link">
-#if(!$linktext||$linktext=="")
+#if("$!linktext"=="")
 #set($linktext = $url)
 #end
 <a href="$url" onclick="Curriki.logView('/Download/link/$url');" target="_blank" >#breakLinkText($linktext, 90)</a>

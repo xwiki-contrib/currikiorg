@@ -8,9 +8,17 @@
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
-#if($request.method=="POST")##
+#if("$!request.method"=="POST")##
 ## this file is only included in case there's an error in logging in
-$request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
+#if($request.j_username && "$!context.message"=="invalidcredentials")
+    #set($udoc=$xwiki.getDocument("XWiki.${request.j_username}"))##
+    #if($udoc.isNew())##
+        #set($loginmsg="register.account_info_error.login_invalid")##
+    #else##
+        #set($loginmsg="redirect.error.invalid_password")##
+    #end##
+#end##
+$request.session.setAttribute("messagesForNextLoginRequest",$loginmsg)##
 $request.session.setAttribute("lastUserName","$!request.j_username")##
 #if($response.isCommitted())
 #else

@@ -15,7 +15,7 @@
   #if( "$!pageName" != "" )
 	 #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
   #else
-	 #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
+	 #set( $newAsset = $xwiki.curriki.createAsset($util.null) )
   #end
 
 ####################################	If newAsset is null, show error message
@@ -336,9 +336,9 @@ function setAttachmentsIframeSize() {
 
 input {	width:expression(this.type=="text" ? "83%" : "style"); }
 </style>
-<script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+<script type="text/javascript" src="/xwiki/resources/js/yui/yahoo/yahoo-min.js" ></script>
+<script type="text/javascript" src="/xwiki/resources/js/yui/treeview/treeview-min.js" ></script>
+<script type="text/javascript" src="/xwiki/resources/js/yui/treeview/checknode.js"></script>
 <script>
 // ----------------------------------- override YUI checknode method -------------------
 /**

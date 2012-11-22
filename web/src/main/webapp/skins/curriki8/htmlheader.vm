@@ -12,7 +12,7 @@
 #end
 <title>#pageTitle()</title>
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
-$xwiki.parseContent($!xwiki.getWebPreference("meta"))
+$xwiki.parseContent($!xwiki.getSpacePreference("meta"))
 <!-- analytics -->#template("analytics.vm")<!-- /analytics -->
 #template("stylesheets.vm")
 <meta http-equiv="imagetoolbar" content="no" />
@@ -23,7 +23,7 @@ $xwiki.parseContent($!xwiki.getWebPreference("meta"))
 #set($clsPageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
 </head>
 <body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName'>
-#if("$!request.viewer"!="embed") 
+#if(!($viewer.startsWith("embed")))
 <div id="main">
 	<div id="shadow-right">
 #end

@@ -24,8 +24,6 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.collections.ListUtils;
 import org.apache.velocity.VelocityContext;
 import org.curriki.xwiki.plugin.asset.attachment.*;
@@ -50,9 +48,11 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.objects.BaseStringProperty;
 import com.xpn.xwiki.api.Object;
 import com.xpn.xwiki.api.Attachment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Asset extends CurrikiDocument {
-    private static final Log LOG = LogFactory.getLog(Asset.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Asset.class);
 
 
     public Asset(XWikiDocument doc, XWikiContext context) {
@@ -253,6 +253,7 @@ public class Asset extends CurrikiDocument {
         MimeTypePlugin mimePlugin = getMimeTypePlugin();
         String category = getCategory();
         String displayer = mimePlugin.getDisplayer(category, null, context);
+        context.setDoc(this.getDoc());
         String result = context.getWiki().parseTemplate("assets/displayers/" + displayer  + "_" + mode + ".vm", context);
         if (result.equals(""))
            result =  context.getWiki().parseTemplate("assets/displayers/" + category + "_" + mode + ".vm", context);
@@ -293,12 +294,11 @@ public class Asset extends CurrikiDocument {
                     }
                 }
             }
-
             // Store generated keywords
             assetObj.setStringValue(Constants.ASSET_CLASS_GENERATED_KEYWORDS, keywords);
         } // else { ERROR: This doesn't seem to be an asset }
-
         super.saveDocument(comment, minorEdit);
+
     }
 
     public static Asset createTempAsset(String parentAsset, XWikiContext context) throws XWikiException {
@@ -341,6 +341,9 @@ public class Asset extends CurrikiDocument {
         XWikiDocument newDoc = copyDoc.getDoc().copyDocument(Constants.ASSET_TEMPORARY_SPACE+"."+pageName, context);
 
         Asset assetDoc = new Asset(newDoc, context);
+        // FIXME: Trick this asset doc to believe that the doc we just set is already a clone, so that it returns it 
+        // uncloned on getDoc() to work around this bug: http://jira.xwiki.org/jira/browse/XWIKI-6885
+        assetDoc.cloned = true;
         //assetDoc.init(copyOf, publishSpace);
         assetDoc.getDoc().setCreator(context.getUser());
         assetDoc.getDoc().setCustomClass(assetDoc.getClass().getName());
@@ -357,50 +360,15 @@ public class Asset extends CurrikiDocument {
             newLicenceObj = assetDoc.getDoc().newObject(Constants.ASSET_LICENCE_CLASS, context);
         }
 
-        // CURRIKI-4837 - Make sure group rights are used by default
-        if (publishSpace != null && publishSpace.startsWith(Constants.GROUP_COLLECTION_SPACE_PREFIX)) {
-            String groupSpace = publishSpace.replaceFirst("^"+Constants.GROUP_COLLECTION_SPACE_PREFIX, Constants.GROUP_SPACE_PREFIX);
-            String rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
-
-            // TODO: This should probably be using the SpaceManager extension
-            XWikiDocument groupSpaceDoc = context.getWiki().getDocument(groupSpace+"."+Constants.GROUP_RIGHTS_PAGE, context);
-            if (groupSpaceDoc != null){
-                // Note that the values for the group access defaults
-                //  DO NOT MATCH the values that need to be applied to the collection
-                BaseObject rObj = groupSpaceDoc.getObject(Constants.GROUP_RIGHTS_CLASS);
-                if (rObj != null){
-                    String groupDefaultPrivs = rObj.getStringValue(Constants.GROUP_RIGHTS_PROPERTY);
-                    if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PRIVATE)){
-                        rights = Constants.ASSET_CLASS_RIGHT_PRIVATE;
-                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PROTECTED)){
-                        rights = Constants.ASSET_CLASS_RIGHT_MEMBERS;
-                    } else if (groupDefaultPrivs.equals(Constants.GROUP_RIGHT_PUBLIC)){
-                        rights = Constants.ASSET_CLASS_RIGHT_PUBLIC;
-                    }
-                }
-            }
-
-            assetDoc.getDoc().getObject(Constants.ASSET_CLASS).setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
-        }
-
         // Rights Holder should be by default the pretty name of the user added with the current rights holder (only if not already in the list)
         String newRightsHolder = context.getWiki().getLocalUserName(context.getUser(), null, false, context);
         String origRightsHolder = copyDoc.getDoc().getStringValue(Constants.ASSET_LICENCE_CLASS, Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER);
-        if (!origRightsHolder.matches("\\b"+newRightsHolder+"\\b")) {
-            newRightsHolder += ", " + origRightsHolder;
-            newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, newRightsHolder);
-        } else {
-            newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, origRightsHolder);
-        }
-
-        /* // copy grantCurrikiCommercialLicense explicitly (why???)
-        Property gCCLProp = copyDoc.getObject(Constants.ASSET_LICENCE_CLASS).getProperty(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE);
-        if(gCCLProp!= null)
-            newLicenceObj.setIntValue(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
-                    (Integer)gCCLProp.getValue());
-        else
-            newLicenceObj.setIntValue(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
-                    Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE_DEFAULT); */
+	if (!origRightsHolder.matches("\\b"+newRightsHolder+"\\b")) {
+		newRightsHolder += ", " + origRightsHolder;
+		newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, newRightsHolder);
+	} else {
+		newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, origRightsHolder);
+	}
 
         BaseObject newObjAsset = assetDoc.getDoc().getObject(Constants.ASSET_CLASS);
         if (newObjAsset==null) {
@@ -408,11 +376,6 @@ public class Asset extends CurrikiDocument {
         }
         // Keep the information allowing to track where that asset came from
         newObjAsset.setStringValue(Constants.ASSET_CLASS_TRACKING, copyOf);
-
-        // Clear the rating
-        newObjAsset.setIntValue(Constants.ASSET_CLASS_RATING, 0);
-        newObjAsset.setLongValue(Constants.ASSET_CLASS_RATING_COUNT, 0);
-        newObjAsset.setLongValue(Constants.ASSET_CLASS_RATING_SUM, 0);
 
 
         // Clear rights objects otherwise this will trigger a remove object although these have never been saved
@@ -453,7 +416,7 @@ public class Asset extends CurrikiDocument {
 
     public void addAttachment(InputStream iStream, String name) throws XWikiException, IOException {
         assertCanEdit();
-        XWikiAttachment att = addAttachment(name, iStream);
+        XWikiAttachment att = addAttachment(name, iStream).getAttachment();
         getDoc().saveAttachmentContent(att, context);
     }
 
@@ -553,6 +516,8 @@ public class Asset extends CurrikiDocument {
         rightObj.setLargeStringValue(usergroupfield, usergroupvalue);
         rightObj.setStringValue("levels", "edit");
         rightObj.setIntValue("allow", 1);
+
+        // Always let the group admin edit
 
         if (rights.equals(Constants.ASSET_CLASS_RIGHT_PUBLIC)) {
             // Viewable by all and any member can edit
@@ -662,16 +627,7 @@ public class Asset extends CurrikiDocument {
         if (doc instanceof Asset){
             return ((Asset) doc).as(null);
         } else {
-            // Check to be sure the space exists (for add to Favorites)
-            String space = assetName.replaceAll("\\..*$", "");
-            CollectionSpace.ensureExists(space, context);
-
-            doc = xwikiApi.getDocument(assetName);
-            if (doc instanceof Asset){
-                return ((Asset) doc).as(null);
-            } else {
-                throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset "+assetName+" could not be found");
-            }
+            throw new AssetException(AssetException.ERROR_ASSET_NOT_FOUND, "Asset "+assetName+" could not be found");
         }
     }
 
@@ -684,19 +640,13 @@ public class Asset extends CurrikiDocument {
 
         com.xpn.xwiki.api.Object assetObj = getObject(Constants.ASSET_CLASS);
         for (java.lang.Object prop : assetObj.getPropertyNames()) {
-            Property p = assetObj.getProperty((String) prop);
-            if(p!=null) LOG.debug("Adding "+prop+" to metadata list (value: " + p.getValue() + ").");
-            else LOG.debug("Adding "+prop+" to metadata list (value: null).");
+            LOG.debug("Adding "+prop+" to metadata list");
             md.add(assetObj.getProperty((String) prop));
         }
 
         com.xpn.xwiki.api.Object licenseObj = getObject(Constants.ASSET_LICENCE_CLASS);
         for (java.lang.Object prop : licenseObj.getPropertyNames()) {
-            Property p = assetObj.getProperty((String) prop);
-            if(LOG.isDebugEnabled()) {
-                if(p!=null) LOG.debug("Adding "+prop+" to metadata list (value: " + p.getValue() + ").");
-                else LOG.debug("Adding "+prop+" to metadata list (value: null).");
-            }
+            LOG.debug("Adding "+prop+" to metadata list");
             md.add(licenseObj.getProperty((String) prop));
         }
 
@@ -862,7 +812,7 @@ public class Asset extends CurrikiDocument {
             assetObj = assetDoc.getObject(Constants.ASSET_CLASS, true, context);
         }
 
-        boolean licenceSet = false;
+	boolean licenceSet = false;
         BaseObject newLicenceObj = doc.getObject(Constants.ASSET_LICENCE_CLASS);
         if (newLicenceObj == null) {
             newLicenceObj = doc.newObject(Constants.ASSET_LICENCE_CLASS, context);
@@ -909,10 +859,11 @@ public class Asset extends CurrikiDocument {
                         // licence
                         String licence = rObj.getStringValue(Constants.GROUP_DEFAULT_LICENCE_PROPERTY);
                         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, licence);
-               			licenceSet = true;
+			licenceSet = true;
                     }
                 }
             }
+
             assetObj.setStringValue(Constants.ASSET_CLASS_RIGHT, rights);
         }
 
@@ -947,10 +898,6 @@ public class Asset extends CurrikiDocument {
         } else if (!licenceSet) {
             newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE, Constants.ASSET_LICENCE_ITEM_LICENCE_TYPE_DEFAULT);
         }
-
-        // always default to grantCurrikiCommercialLicense
-        newLicenceObj.setIntValue(Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE,
-                Constants.ASSET_LICENCE_ITEM_GRANT_CURRIKI_COMMERCIAL_LICENSE_DEFAULT);
 
         // Rights holder should be by default the pretty name of the user
         newLicenceObj.setStringValue(Constants.ASSET_LICENCE_ITEM_RIGHTS_HOLDER, context.getWiki().getLocalUserName(context.getUser(), null, false, context));
@@ -1109,8 +1056,15 @@ public class Asset extends CurrikiDocument {
         }
 
         // Let's choose a nice name for the page
-        String prettyName = context.getWiki().clearName(name, true, true, context);
-        assetDoc.rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>(), context);
+        String prettyName = context.getWiki().clearName(name, true, true, context);        
+        //rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>());
+        // FIXME: this works totally by mistake, there is bug http://jira.xwiki.org/jira/browse/XWIKI-6885 which 
+        // normally breaks the doc returned by Document.getDoc(). But, lucky lucky, since this.clone = true from the 
+        // previous getDoc()s that were called, getDoc() will not re-clone again what we set in the following 
+        // line in this.doc but return it as is, which makes so that this.save() saves properly the copied attachments. 
+        // See the FIXME in copyTempAsset for a case when it doesn't work properly, a newly created Asset from a copied 
+        // XWikiDocument.
+        this.doc = assetDoc.copyDocument(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context),context);
 
         applyRightsPolicy();
 
@@ -1123,6 +1077,11 @@ public class Asset extends CurrikiDocument {
             root.addSubasset(this.getFullName());
             root.saveDocument(context.getMessageTool().get("curriki.comment.addtocollectionasset"));
         }
+        
+        // delete asset doc _at the end_, to be sure that all copying of the real document happens properly. 
+        // E.g. filesystem attachments fail to be copied properly if the original documnent is being deleted before 
+        // the copied document is saved
+        context.getWiki().deleteDocument(assetDoc, context);
 
         return this;
     }
@@ -1188,18 +1147,7 @@ public class Asset extends CurrikiDocument {
      */
     public Integer getCommentNumbers()
     {
-	// Fix count as getObjectNumbers() counts non-existant objects
-	int reviewCount = 0;
-	List reviews = getObjects(Constants.ASSET_CURRIKI_REVIEW_CLASS);
-	if ((reviews!=null) && (reviews.size()>0)) {
-		for (int i=0; i<reviews.size();i++) {
-			Object review = (Object) reviews.get(i);
-			if (review!=null) {
-				reviewCount++;
-			}
-		}
-	}
-    	return getComments().size() + reviewCount;
+    	return getComments().size() + getObjectNumbers(Constants.ASSET_CURRIKI_REVIEW_CLASS);
     }
 
     public List getCommentsByDate() {

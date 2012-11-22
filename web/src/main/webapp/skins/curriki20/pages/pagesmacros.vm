@@ -1,0 +1,243 @@
+##
+##  HOME PAGE MODULES
+##
+##  Home Page Module 1: Large text + image
+##
+#macro(home_intro $image $imagetitle $title $text $readmorelink)
+#normalizeattachment($image)
+#normalizelink($readmorelink)
+<div class="homepage_m1">
+<img src="$image" width="300px" alt="${imagetitle}"/>
+<h2 class="homepage_m1_title">$title</h2>
+<div class="deck">$text</div>
+<a href="${readmorelink}" class="readmore">$msg.get("readmore")...</a>
+<div class="clr"></div>
+</div>
+#end
+##
+## Home page module 2: latest resources
+##
+#macro(home_latest_resources $number $left_title $right_title $maxDescLenS)
+#if($left_title == "")
+#set($lefttitle = "Last resources created")
+#else
+#set($lefttitle = $left_title)
+#end
+#if($right_title == "")
+#set($righttitle = "Go to the resources section")
+#else
+#set($righttitle = $right_title)
+#end
+#if($maxDescLenS == "")
+#set($maxDescLen = 50)
+#else
+#set($maxDescLen = $xwiki.parseInt($maxDescLenS))
+#end
+#titlebar($lefttitle $righttitle "Main.BrowseSearch" "red")
+##
+##
+#if($isguest)
+#set($rightsstr="rights.value = 'public'")
+#else
+#set($rightsstr="(rights.value = 'public' or rights.value = 'members')")
+#end
+#set($sql = ", BaseObject obj, StringProperty status, StringProperty rights where doc.web <> 'AssetTemp' and doc.fullName = obj.name and obj.className = 'CurrikiCode.AssetClass' and status.id.id = obj.id and status.id.name = 'status' and (status.value = 'final' or status.value='revised') and rights.id.id = obj.id and rights.id.name = 'rights' and ${rightsstr} order by doc.creationDate desc")
+<div class="hlastresources">
+#foreach($asset in $xwiki.searchDocuments($sql, $number, 0))
+#set($assetdoc = $xwiki.getDocument($asset))
+#set($assetobj = $assetdoc.getObject("CurrikiCode.AssetClass"))
+#set($assettitle = $assetdoc.display("title", "view", $assetobj))
+#set($assetdesc = $assetdoc.display("description", "view", $assetobj))
+#set($assetcat = $assetdoc.display("fw_items", "view", $assetobj))
+#set($assetlevel = $assetdoc.display("educational_level", "view", $assetobj))
+#set($assetDate  = $assetdoc.creationDate)
+#set($assetCreator  = $assetdoc.creator)
+<div class="resource">
+<h4 class="resourcecat">
+##$assetcat &ndash;
+$assetlevel</h4>
+<div class="resourcemeta">$xwiki.formatDate($assetDate, $msg.get("dateFormatLong")) &ndash; $msg.get("createdby") $xwiki.getLocalUserName($assetCreator)</div>
+<h4 class="resourcetitle">[$assettitle>$assetdoc.fullName]</h4>
+<div class="resourcedesc">
+##extract from the description
+#truncatetext($assetdesc $maxDescLen)
+$assetdesc <a class="readmore" href="$assetdoc.getURL()">$msg.get("readmore")...</a>
+<hr/>
+</div>
+</div>
+#end
+<div class="clr"></div>
+</div>
+#end
+##
+##
+##
+## HOME PAGE MODULE 3: FEATURED CONTENT
+##
+##
+#macro(itemtitle $title $fulltextlink)
+#set($link = $fulltextlink)
+#normalizelink($link)
+<h4 class="itemtitle">#if ($link != "")<a href="${link}">#end $title#if ($link != "")</a>#end </h4>
+#end
+##
+#macro(featured_content_item $title $text $fulltextlink)
+<div class="hitem">
+#itemtitle($title $fulltextlink)
+#paragraph($text $fulltextlink "")
+</div>
+#end
+##
+#macro(home_featured_content $items)
+#titlebar($msg.get("featuredContent.title") $msg.get("featuredContent.titlebarRight") "Main.FeaturedContent" "red")
+#foreach ($item in $items)
+#set($name     = $item.get(0))
+#set($subtitle = "featuredContent.${name}.subtitle")
+#set($infos    = "featuredContent.${name}.infos")
+#set($link     = $item.get(1))
+#featured_content_item($msg.get($subtitle) $msg.get($infos) $link)
+#end
+#end
+##
+##
+##
+##
+## Home page module 4: Featured Partner
+##
+##
+##
+#macro(featured_partner_item $title $text $imagelink $fulltextlink)
+<div class="">
+#itemtitle($title $fulltextlink)
+#set($image = $xwiki.getAttachmentURL("Main.Partners", $imagelink))
+#paragraphimg("portrait" $image "" $text $fulltextlink "" "")
+<div class="clr"></div>
+</div>
+#end
+##
+#macro(home_featured_partners $partner $image $fulltextlink)
+#titlebar($msg.get("featuredPartner.title") $msg.get("featuredPartner.titlebarRight") "Main.Partners" "blue")
+#set($name = "partners.${partner}.name")
+#set($name = $msg.get($name))
+#set($desc = "partners.${partner}.intro")
+#set($desc = $msg.get($desc))
+#featured_partner_item($name $desc $image $fulltextlink)
+#end
+##
+##
+##
+##
+##  Home Page Module 5: News
+##
+#macro(home_news $nr $lefttitle $righttitle)
+#set($nbstart = "0")
+#set($space = "News")
+#set($color = "purple")
+#set($parent = "News.WebHome")
+#set($itemname = "News")
+#set($spacesql = " and doc.web='${space}'")
+#set ($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.name<>'ArticleClassTemplate' and doc.web='News' order by doc.creationDate desc")
+#set($inbitems = $nr)
+#set($inbstart = $xwiki.parseInt($nbstart))
+<div class="homepage_news">
+#if($lefttitle == "")
+#set($lefttitle = "News - Staff Blogs")
+#end
+#if($righttitle == "")
+#set($righttitle = "Go to the staff blog section")
+#end
+#titlebar($lefttitle $righttitle "News.WebHome" $color)
+#foreach ($item in $xwiki.searchDocuments($sql, $inbitems, $inbstart))
+<div class="hnewsentry">
+<div class="hnewsmeta">
+#set($bentrydoc = $xwiki.getDocument($item))
+#set($bentryobj = $bentrydoc.getObject("XWiki.ArticleClass"))
+#set($creationDate = $xwiki.formatDate($bentrydoc.creationDate, $msg.get("dateFormatLong")))
+#set($author = $bentrydoc.creator)
+${creationDate} &ndash; $msg.get("publishedby", [$xwiki.getLocalUserName($author)])
+</div> ## hnewsmeta
+#set($title = $!bentrydoc.display("title","view", $bentryobj))
+#if($title == "")
+#set($title = "&nbsp;")
+#end
+
+#itemtitle($title $bentrydoc.fullName)
+<div class="hnewscontent">
+#getNewsExtract($bentryobj $bentrydoc $content 400)
+$bentrydoc.getRenderedContent($content)<a href="${bentrydoc.getURL()}" class="readmore">$msg.get("readmore")...</a>
+</div> ## hnewscontent
+</div> ## hnewsentry
+<hr/>
+#end
+</div> ## homepage_news
+#end
+##
+##
+########
+##
+##  Member home page menu
+##
+#macro(member_menu $buttons)
+<div class="membercontribmenu">
+#set($first = "first")
+#foreach($button in $buttons)
+#if($velocityCount != 1)
+#set($first = "")
+#end
+#member_menu_button($button.get(0) $button.get(1) $button.get(2) "${first}")
+#end
+<div class="clr"></div>
+</div>
+#end
+#macro(member_menu_button $text $linkro $imagero $first)
+#set($image = $imagero)
+#normalizeattachment($image)
+#set($link = $linkro)
+#normalizelink($link)
+<a class="membercontribbtn ${first}" style="background-image: url(${image})" href="$link">$text</a>
+#end
+##
+##
+##
+##
+##
+## PAGE MODULES
+##
+##
+##
+## Module 1: board members
+##
+##
+#macro(board_display_member $name $url $desc)
+<tr>
+  <td class="personl">[$name>$url]</td>
+  <td>$desc</td>
+</tr>
+#end
+##
+##
+#macro(board_display_member_flag $name $url $country $flag $desc)
+<tr>
+  <td class="flag"><img src="$xwiki.getAttachmentURL("Main.Board", $flag)" width="24" height="15" alt="${country}"/></td>
+  <td class="person">[$name>$url]</td>
+  <td>$desc</td>
+</tr>
+#end
+##
+##
+##
+##
+##
+##
+##  MessageBox Macros
+##
+#macro(messageboxstart $title $color)
+    <div class="messagebox $color">
+      <div class="titlebar titlebar_$color">$title</div>
+      <div class="messageboxcontent">
+#end
+#macro(messageboxend)
+      </div>
+    </div>
+#end
+##

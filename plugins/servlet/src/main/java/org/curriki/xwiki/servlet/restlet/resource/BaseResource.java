@@ -21,6 +21,8 @@ import net.sf.json.util.JSONUtils;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 /**
  */
@@ -61,6 +63,26 @@ public class BaseResource extends Resource {
         return new ResourceException(status, message);
     }
 
+    protected ResourceException error(Status status, String message, Throwable cause) {
+        StringWriter sw = new StringWriter();
+        cause.printStackTrace(new PrintWriter(sw));
+        String st = sw.toString();
+        getResponse().setEntity(message+" Stacktrace: "+st, MediaType.TEXT_PLAIN);
+// TODO: Remove
+// DEBUGGING CODE for CURRIKI-4238
+System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
+        cause.printStackTrace();
+        return new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, message+" Stacktrace: "+st, cause);
+    }
+
+    protected ResourceException error(Status status, Throwable cause) {
+        StringWriter sw = new StringWriter();
+        cause.printStackTrace(new PrintWriter(sw));
+        String st = sw.toString();
+        getResponse().setEntity("Exception Thrown: "+cause.getMessage()+" Stacktrace: "+st, MediaType.TEXT_PLAIN);
+        return new ResourceException(status, cause);
+    }
+
     protected Representation formatJSON(JSON json, Variant variant) {
         Representation r = null;
         // TODO: Firefox 2 seems to not send the specified application/json header
@@ -75,6 +97,7 @@ public class BaseResource extends Resource {
             || MediaType.APPLICATION_JAVASCRIPT.equals(variant.getMediaType())
             || MediaType.TEXT_JAVASCRIPT.equals(variant.getMediaType())) {
             r = new StringRepresentation(json.toString(), variant.getMediaType());
+            // TODO: make this output streaming! (this library does not support it, which is fairly crazy!)
         } else if (MediaType.APPLICATION_XML.equals(variant.getMediaType())
             || MediaType.TEXT_XML.equals(variant.getMediaType())) {
             r = new StringRepresentation(new XMLSerializer().write(json), variant.getMediaType());
@@ -99,7 +122,7 @@ public class BaseResource extends Resource {
         getVariants().add(new Variant(MediaType.TEXT_HTML));
     }
 
-    protected JSONArray flattenMapToJSONArray(Map<String,Object> map, String itemName) {
+    public static JSONArray flattenMapToJSONArray(Map<String,Object> map, String itemName) {
         JSONArray json = new JSONArray();
 
         for (String item : map.keySet()) {

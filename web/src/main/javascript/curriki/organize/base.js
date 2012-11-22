@@ -282,14 +282,17 @@ console.log('dragover - okay', evt, node, target);
 							}
 							,expandnode:{
 								fn:function(node){
+                                    console.log("expandnode " + this);
 									var cmp = this.findById('organize-tree-cmp');
 									if (!Ext.isEmpty(cmp)) {
 										cmp.fireEvent('afterlayout', cmp, cmp.getLayout());
 									}
+                                    console.log("expandnode done");
 								}
 								,scope:this
 							}
 							,afterlayout:function(cmp, layout){
+                                console.log("afterlayout 1")
 								if (this.afterlayout_maxheight) {
 									// Don't collapse again
 								} else {

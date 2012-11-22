@@ -5,8 +5,8 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.XWiki;
 import com.xpn.xwiki.plugin.PluginApi;
 import com.xpn.xwiki.web.XWikiMessageTool;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class GoogleCheckoutPluginApi extends PluginApi<GoogleCheckoutPlugin> {
 
-    private static final Log LOG = LogFactory.getLog(GoogleCheckoutPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleCheckoutPlugin.class);
 
     public GoogleCheckoutPluginApi(GoogleCheckoutPlugin plugin, XWikiContext context)
     {
@@ -25,7 +25,7 @@ public class GoogleCheckoutPluginApi extends PluginApi<GoogleCheckoutPlugin> {
     public String processNotification(HttpServletRequest request, HttpServletResponse response, XWikiMessageTool msg) throws IOException {
         try {
             return getProtectedPlugin().processNotificationAPICall(request, response, new XWiki(context.getWiki(), context), msg,
-                    request.getRequestURL().toString());
+                    request.getRequestURL().toString(), context);
         } catch (Exception e) {
             e.printStackTrace();
             LOG.warn("Couldn't process notification.", e);
@@ -36,7 +36,7 @@ public class GoogleCheckoutPluginApi extends PluginApi<GoogleCheckoutPlugin> {
     public String archiveOrder(String serialNumber) {
         try {
             XWiki xwiki = new XWiki(context.getWiki(), context);
-            return getProtectedPlugin().archiveOrder(xwiki, serialNumber);
+            return getProtectedPlugin().archiveOrder(xwiki, serialNumber, null, null, null, null, null, 0, context);
         } catch (XWikiException e) {
             LOG.warn("error at archiving ", e);
             return "error";

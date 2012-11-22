@@ -14,7 +14,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,width:634
 	,minWidth:400
 	,minHeight:100
-	,maxHeight:575
+	,maxHeight:6000
 	,autoScroll:false
 	,constrain:true
 	,collapsible:false
@@ -25,6 +25,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,defaults:{border:false}
 	,listeners:{
 		afterlayout:function(wnd, layout){
+            console.log("afterlayout 2 on " + wnd);
 			if (this.afterlayout_maxheight) {
 				// Don't collapse again
 			} else {
@@ -32,8 +33,10 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 					wnd.setHeight(wnd.maxHeight);
 					wnd.center();
 					this.afterlayout_maxheight = true;
+                    console.log("afterlayout_maxheight reached: " + wnd.maxHeight);
 				} else {
 					wnd.setHeight('auto');
+                    console.log("set auto height");
 				}
 			}
 		}
@@ -87,8 +90,8 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
-//console.log('createNode: ',attr);
-			if (this.setFullRollover) {
+console.log('createNode: ',attr);
+        if (this.setFullRollover) {
 				if ('string' !== Ext.type(attr.qtip)
 					&& 'string' === Ext.type(attr.description)
 					&& 'array' === Ext.type(attr.fwItems)
@@ -173,6 +176,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 
 			if (this.setChildHref) {
 				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
+                childInfo.onclick="return false;"
 			}
 
 			if (attr.rights && !attr.rights.view){
@@ -205,7 +209,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			}
 
 			// ?? = attr.order;
-//console.log("childInfo: " ,childInfo);
+
 			Ext.apply(childInfo, attr);
 
 			if (this.truncateTitle !== false) {
@@ -245,11 +249,6 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			} else {
 				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
-            if(this.setFullRollover) {
-                this.dataUrl = this.dataUrl + "?full=true";
-            } else {
-                this.dataUrl = this.dataUrl + "?full=false";
-            }
 
 			// From parent
 			if(this.fireEvent("beforeload", this, node, callback) !== false){

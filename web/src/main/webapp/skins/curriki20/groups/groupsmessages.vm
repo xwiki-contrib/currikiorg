@@ -1,0 +1,1140 @@
+#**
+  * Groups Messages Macros
+  *
+  *#
+
+
+#**
+  * Displays the list of messages
+  *
+  *#
+#macro(groups_messages)
+#groupinit()
+#groupsheader("messages")
+#if(!$isGroupMember && ($s.policy=="closed") && !$hasGlobalAdmin)
+$msg.get("groups_messages_onlyaccessibletomembers")
+#else
+#groupsdisplaywelcome($msg.get("groups_messages_about_title") $spaceName $doc.name $isGroupAdmin)
+#if($isGroupMember)
+#begingroupsection($msg.get("groups_messages_createmessage_title"),"","","blue",false)
+<a href="$xwiki.getURL("${doc.web}.CreateMessage")">
+<img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>
+<div class="add-message-content">
+$msg.get("groups_messages_createmessage_infotxt")
+</div>
+#endgroupsection()
+#end
+#begingroupsection($msg.get("groups_messages_allmessages_title",[$s.displayTitle]),"","","blue",false)
+#if(!$request.filter)
+#set($filter = "0")
+#else
+#set($filter = $request.filter)
+#end
+<div class="frame-content messages-content">
+  <form>
+    <p>$msg.get("groups_messages_filter_title")</p>
+    <p class="messages-radio">
+      <input type="radio" id="toEntireGroup" name="filter" value="0" class="messages-radio-left" onclick="this.form.submit()" #if($filter=="0") checked="checked" #end/><label for="toEntireGroup">$msg.get("groups_messages_filter_toentiregroup")</label>
+      <input type="radio" id="toMe" name="filter" value="1" onclick="this.form.submit()" #if($filter=="1") checked="checked" #end/><label for="toMe">$msg.get("groups_messages_filter_tome")</label>
+      <input type="radio" id="toMyRole" name="filter" value="2" onclick="this.form.submit()" #if($filter=="2") checked="checked" #end/><select name="role" onchange="this.form.submit()" #if($filter!="2")disabled="disabled"#end>
+<option value="" #if(!$request.role || $request.role=="")selected="selected"#end>$msg.get("groups_messages_filter_tomyrole")</option>
+#set($myRoles = $sm.getRoles($spaceName, $context.user))
+#foreach($role in $myRoles)
+<option value="$role" #if($role==$request.role)selected="selected"#end>$xwiki.getDocument($role).title</option>
+#end
+#if($isGroupAdmin)
+#set($roleDoc = $xwiki.getDocument($sm.getAdminGroupName($spaceName)))
+<option value="${roleDoc.fullName}" #if($roleDoc.fullName==$request.role)selected="selected"#end>$msg.get("groups.roles.admin.title")</option>
+#end
+</select>
+#if($isGroupAdmin)
+      <input type="radio" id="toAll" name="filter" value="3" onclick="this.form.submit()" #if($filter=="3") checked="checked" #end/><label for="toAll">$msg.get("groups_messages_filter_toall")</label>
+#end
+    </p>
+  </form>
+#if($filter=="0")
+## To Entire Group
+#set($membersGroup = $spaceName + ".MemberGroup")
+#set($noViewRightsSpecified = "not exists (from BaseObject as r, StringProperty as l where doc.fullName=r.name and r.className='XWiki.XWikiRights' and r.id=l.id.id and l.id.name='levels' and instr(l.value,'view')>0)")
+#set($existsGroupViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')>0 and instr(groups.value,'${membersGroup}')>0)")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ((${noViewRightsSpecified}) or (${existsGroupViewRights})) order by doc.date desc")
+#elseif($filter=="1")
+## To Me
+#set($existsUserViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as users where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=users.id.id and users.id.name='users' and instr(levels.value,'view')>0 and instr(users.value,'${context.user}')>0)")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and ${existsUserViewRights} order by doc.date desc")
+#elseif($filter=="2")
+## To My Roles
+#if($request.role!="")
+#set($myRoles = [$request.role])
+#elseif($isGroupAdmin)
+#set($ok = $myRoles.add($sm.getAdminGroupName($spaceName)))
+#end
+#if($myRoles.size()>0)
+#set($existsRoleViewRights = "exists (from BaseObject as rights, StringProperty as levels, LargeStringProperty as groups where doc.fullName=rights.name and rights.className='XWiki.XWikiRights' and rights.id=levels.id.id and levels.id.name='levels' and rights.id=groups.id.id and groups.id.name='groups' and instr(levels.value,'view')>0 and (")
+#foreach($role in $myRoles)
+#set($existsRoleViewRights = $existsRoleViewRights + "instr(groups.value,'${role}')>0 or ")
+#end
+#set($existsRoleViewRights = $existsRoleViewRights + "1=0))")
+#set($sql = ", BaseObject as obj where doc.web='Messages_$doc.web' and doc.fullName=obj.name and obj.className='XWiki.ArticleClass'  and ${existsRoleViewRights} order by doc.date desc")
+#end
+#elseif($filter=="3" && $isGroupAdmin)
+## To All
+#set($sql = ", BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.ArticleClass' and doc.web='Messages_$doc.web' order by doc.date desc")
+#end
+
+#set($itemsPerPage = 10)
+#if( $request.ipp )
+#set($itemsPerPage = $xwiki.parseInt($request.ipp))
+#end
+#set($startIndex = 0)
+#if($request.startIndex)
+  #set($startIndex = $xwiki.parseInt($request.startIndex))
+#end
+
+#if($sql)
+#set($totalCount = $xwiki.searchDocuments($sql).size())
+#foreach($messagePageName in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
+#if($xwiki.checkAccess($messagePageName, "view")) ## {
+#messagelistmessage($messagePageName)
+#end ## }
+#end
+#else
+#set($totalCount = 0)
+#end
+#set($args = "filter=${filter}")
+#if($request.role)
+#set($args = "${args}&role=${request.role}")
+#end
+#curriki_paginatorargs($msg.get("groups_messages_page"),$startIndex,$itemsPerPage,$totalCount,$args)
+</div>
+#endgroupsection()
+#end
+#groupsfooter()
+#end
+
+
+#macro(messagelistjs)
+{pre}
+<script type="text/javascript">
+#if(!$togglemsgsectionvisibility)
+#set($togglemsgsectionvisibility = 1)
+function toggleMsgSectionVisibility(seccounter, showhide){
+  var seccontent = document.getElementById("msgsection" + seccounter + "content");
+  if(eltHasClass(seccontent, "hidden")){
+    rmClass(seccontent, "hidden");
+    seccontent.style.display = "";
+    // change text
+    showhide.removeChild(showhide.firstChild);
+    showhide.appendChild(document.createTextNode("$msg.get('caption.hide')"));
+    // erase cookie
+    eraseCookie("Section" + seccounter + "Hidden");
+  }
+  else{
+    addClass(seccontent, "hidden");
+    seccontent.style.display = "none";
+    // Change text
+    showhide.removeChild(showhide.firstChild);
+    showhide.appendChild(document.createTextNode("$msg.get('caption.show')"));
+    // set cookie
+    createCookie("Section" + seccounter + "Hidden", true, "");
+  }
+  return false;
+}
+#end
+var linksDiv = document.getElementById("msgsection${seccounter}links");
+var showhide${seccounter} = document.createElement("a");
+addClass(showhide${seccounter}, "button-link-table");
+linksDiv.appendChild(showhide${seccounter});
+showhide${seccounter}.setAttribute("href", "#msgsection${seccounter}content");
+#if($show)
+showhide${seccounter}.appendChild(document.createTextNode("$msg.get('caption.hide')"));
+#else
+showhide${seccounter}.appendChild(document.createTextNode("$msg.get('caption.show')"));
+#end
+showhide${seccounter}.setAttribute("onclick", "toggleMsgSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
+</script>
+{/pre}
+#end
+
+#macro(messagelistmessage $messagePageName)
+#if(!$seccounter)
+#set($seccounter = 1)
+#else
+#set($seccounter = $seccounter + 1)
+#end
+#set($messageDoc = $xwiki.getDocument($messagePageName))
+#set($ok = $messageDoc.use("XWiki.ArticleClass"))
+	<div class="frame-inset">
+#set($modificationDate = $xwiki.formatDate($messageDoc.date,$msg.get("mycurriki.datetimeFormat")))
+	 <p><span class="date">$modificationDate</span>, $msg.groups_messages_createdby <a>$xwiki.getLocalUserName($messageDoc.creator)</a></p>
+	 <p id="msgsection${seccounter}links" class="button-links">
+	  <a class="button-link" href="$messageDoc.getURL()">$msg.get("groups_messages_message_optionsview_link")</a>
+#if($messageDoc.hasAccessLevel("edit"))
+	  <a class="button-link-table" href="$messageDoc.getURL("view","edit=1")">$msg.get("groups_messages_message_optionsedit_link")</a>
+#end
+	  ## show/hide will be added automatically
+	 </p>
+	 <p class="messages-title"><a href="$messageDoc.getURL("view")">$messageDoc.display("title")</a></p>
+#set($show = 1)
+#messagelistjs()
+#if($show)
+     <div id="msgsection${seccounter}content" class="messages-content">
+#else
+     <div id="msgsection${seccounter}content" class="messages-content hidden">
+#end
+     ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+	 $messageDoc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+	 <div class="clearfloats"></div>
+	 <p class="date">
+	  <a href="$messageDoc.getURL("view")#attachments">$msg.get("groups_messages_message_attachments", [$messageDoc.attachmentList.size()])</a>
+	  <a href="$messageDoc.getURL("view")#comments">$msg.get("groups_messages_message_comments", [$messageDoc.getComments().size()])</a>
+	 </p>
+	</div>
+   </div>
+#end
+
+#macro(groupsdisplayarticleblock $adoc)
+#if($adoc.hasAccessLevel("view"))
+#set($obj = $adoc.getObject("XWiki.ArticleClass",0))
+#set($msgtitle = $adoc.display("title", "view"))
+## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+#set($msgcontent = $adoc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
+## CURRIKI-1860: we display the modification date and the last author
+#set($modificationDate = $xwiki.formatDate($adoc.date,$msg.get("mycurriki.datetimeFormat")))
+<p><span class="date">$modificationDate</span>, by <a>$xwiki.getLocalUserName($adoc.creator)</a></p>
+<p class="frame-title">$msgtitle</p>
+<p>
+$msgcontent
+</p>
+#end
+#end
+
+##
+## PAGE: Groups.CreateMessageSheet
+## Macro to update from request the rights of the given message document
+##
+#macro(messageUpdateRightsFromRequest $msgdoc)
+## Remove any previous rights
+#set($ok = true)
+#if($msgdoc.getObject("XWiki.XWikiRights"))
+#set($ok = $msgdoc.removeObjects("XWiki.XWikiRights"))
+#end
+#if($ok)
+## Add edit right to creator
+$msgdoc.use($msgdoc.newObject("XWiki.XWikiRights"))
+$msgdoc.set("users", $context.user)
+$msgdoc.set("levels", "edit")
+$msgdoc.set("groups",  "")
+$msgdoc.set("allow","1")
+## Add view rights
+#set($users = $context.user)
+#if($request.toMember)
+#set($users = $users + "," + $request.selectedMembersList)
+#end
+#set($groups = "")
+#if($request.toGroup)
+#set($groups = $groups + "," + $spaceName + ".MemberGroup")
+#if($s.policy == "open")
+#set($groups = $groups + ",XWiki.XWikiAllGroup")
+#end
+#end
+#if($request.toRole)
+#set($groups = $groups + "," + $request.selectedRolesList)
+#end
+$msgdoc.use($msgdoc.newObject("XWiki.XWikiRights"))
+$msgdoc.set("users", $users)
+$msgdoc.set("groups",  $groups)
+$msgdoc.set("levels", "view")
+$msgdoc.set("allow","1")
+$msgdoc.save()
+#end ## if previous rights have been removed successfuly
+#end
+##
+## PAGE: Groups.CreateMessageSheet
+## Macro to send a notification mail to the "To" list of the message that has just been created
+##
+#macro(messageSendNotificationMail $msg_doc)
+#if($request.notify && $xwiki.mailsender)
+#set($mailTo = "")
+#if($request.toGroup)
+## add all group members
+#foreach($member in $sm.getMembers($spaceName))
+#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
+#if($profile && $profile.allowNotifications)
+#set($mailTo = $mailTo + $xwiki.getUser($member).email + ",")
+#end
+#end
+#else
+#set($mailToList = $xwiki.arrayList)
+#if($request.toMember && $request.selectedMembersList.trim().length() > 0)
+## add selected members
+#foreach($member in $request.selectedMembersList.split(","))
+#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
+#if($profile && $profile.allowNotifications)
+#set($memberEmail = $xwiki.getUser($member).email)
+#if(!$mailToList.contains($memberEmail))
+#set($ok = $mailToList.add($memberEmail))
+#set($mailTo = $mailTo + $memberEmail + ",")
+#end
+#end
+#end
+#end
+#if($request.toRole && $request.selectedRolesList.trim().length() > 0)
+## add members having selected roles
+#foreach($role in $request.selectedRolesList.split(","))
+#foreach($member in $sm.getUsersForRole($spaceName, $role))
+#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
+#if($profile && $profile.allowNotifications)
+#set($memberEmail = $xwiki.getUser($member).email)
+#if(!$mailToList.contains($memberEmail))
+#set($ok = $mailToList.add($memberEmail))
+#set($mailTo = $mailTo + $memberEmail + ",")
+#end
+#end
+#end
+#end
+#end
+#end
+#if($!mailTo != "")
+#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
+#set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
+## $msgdoc has to be in the current context because it is used in the mail template
+#set($msgdoc = $msg_doc)
+$msgdoc.use("XWiki.ArticleClass")
+#set($mailSubject = $doc.getRenderedContent($mailDoc.title))
+#set($mailContent = $doc.getRenderedContent($mailDoc.content))
+#set($ok = $xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null))
+#end
+#end
+#end
+##
+## PAGE: Groups.CreateMessageSheet
+## Macro to include the JavaScript code needed for message creation
+##
+#macro(messageIncludeCreateJs)
+{pre}
+<script type="text/javascript">
+function checkForm(formName) {
+   var isValid = true;
+   var title = document.forms[formName]['XWiki.ArticleClass_0_title'].value;
+   if (title.length <= 1) {
+     alert("$msg.get("groups_messages_create_mandatory")");
+     isValid = false;
+   }
+   if (isValid && !saveToList()){
+     alert('$msg.get("groups_messages_create_to_mandatory")');
+     isValid = false;
+   }
+   return isValid;
+}
+function displayAddLink(selectObj, linkId){
+var linkObj = document.getElementById(linkId);
+if (selectObj.value!=''){
+linkObj.style.display='';
+}else{
+linkObj.style.display='none';
+}
+}
+function addToList(addLink, selectId, divId){
+var selectObj = document.getElementById(selectId);
+if (selectObj.selectedIndex < 0){
+return;
+}
+var option = selectObj.options[selectObj.selectedIndex]
+if (option.value.length == 0){
+return;
+}
+var getClass=document.getElementsByClassName(divId);
+var menu=getClass[0].getElementsByTagName('td');
+var tr = document.createElement('tr');
+tr.className=divId;
+var td1 = document.createElement('td');
+var td2 = document.createElement('td');
+var td3 = document.createElement('td');
+getClass[0].parentNode.insertBefore(tr, getClass[0]);
+tr.appendChild(td1);
+moveChildNodes(menu[0], td1);
+tr.appendChild(td2);
+tr.appendChild(td3);
+
+var deleteLink = document.createElement('a');
+deleteLink.appendChild(document.createTextNode('Delete'));
+deleteLink.href = 'javascript:void()';
+if (selectId == 'rolesList') {
+deleteLink.title = '${msg.get('groups_messages_create_to_delete_role_tooltip')}';
+} else if (selectId == 'membersList') {
+deleteLink.title = '${msg.get('groups_messages_create_to_delete_member_tooltip')}';
+} else {
+deleteLink.title = '${msg.get('groups_messages_create_to_delete_tooltip')}';
+}
+deleteLink.onclick = function(){
+if (!selectObj.disabled){
+var parentTr=this.parentNode.parentNode;
+var getClass=document.getElementsByClassName(parentTr.className);
+if(parentTr==getClass[0]){
+moveChildNodes(parentTr.getElementsByTagName('td')[0],getClass[1].getElementsByTagName('td')[0]);
+}
+this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+option.style.display = '';
+option.disabled = false;
+}
+return false;
+};
+td2.appendChild(document.createTextNode(option.text));
+td3.appendChild(deleteLink);
+option.style.display = 'none';
+option.disabled = true;
+selectObj.selectedIndex = 0;
+selectObj.onchange();
+}
+function getInputs(parent, type){
+var inputs = parent.getElementsByTagName('input');
+var result = [];
+for(var i=0; i<inputs.length; i++){
+if (inputs[i].type == type){
+result.push(inputs[i]);
+}
+}
+return result;
+}
+function moveChildNodes(fromParent, toParent){
+var checkboxes = getInputs(fromParent, 'checkbox');
+var checked = new Array(checkboxes.length);
+for(var i=0; i<checkboxes.length; i++){
+checked[i] = checkboxes[i].checked;
+}
+var child = fromParent.firstChild;
+while(child){
+var nextSibling = child.nextSibling;
+toParent.appendChild(child);
+child = nextSibling;
+}
+checkboxes = getInputs(toParent, 'checkbox');
+for(var i=0; i<checkboxes.length; i++){
+checkboxes[i].checked = checked[i];
+}
+}
+function enableSelect(checkbox, selectId){
+var selectObj = document.getElementById(selectId);
+selectObj.selectedIndex = 0;
+selectObj.disabled = !checkbox.checked;
+selectObj.onchange();
+}
+function getSelectedOptions(select){
+var selectedOptions = [];
+for(var i=0; i<select.options.length; i++){
+if (select.options[i].style.display == 'none'){
+selectedOptions.push(select.options[i].value);
+}
+}
+return selectedOptions;
+}
+function saveSelectedOptions(checkBoxId, selectId, hiddenId){
+if (document.getElementById(checkBoxId).checked){
+var select = document.getElementById(selectId);
+var selectedOptions = getSelectedOptions(select);
+if (selectedOptions.length == 0){
+return false;
+}
+document.getElementById(hiddenId).value = selectedOptions.join(',');
+return true;
+}
+return false;
+}
+function saveToList(){
+var rolesSaved = saveSelectedOptions('toRole', 'rolesList', 'selectedRolesList');
+var membersSaved = saveSelectedOptions('toMember', 'membersList', 'selectedMembersList');
+var toGroup = document.getElementById('toGroup').checked;
+return toGroup || rolesSaved || membersSaved;
+}
+function preFillList(addLinkId, selectId, divId, items){
+  var select = document.getElementById(selectId);
+  var addLink = document.getElementById(addLinkId);
+  for(var i=0; i<select.options.length; i++){
+    var option = select.options[i];
+    if (inArray(option.value, items)){
+      select.selectedIndex = option.index;
+      addToList(addLink, selectId, divId);
+    }
+  }
+}
+function inArray(item, items){
+  for(var i=0; i<items.length; i++){
+    if (items[i] == item){
+      return true;
+    }
+  }
+  return false;
+}
+</script>
+{/pre}
+#end
+##
+## PAGE: Groups.CreateMessageSheet
+## Macro to add the input fields needed for selecting the "To" list
+##
+#macro(messageAddSendToFormFields $spaceName $toGroup $selectedRoles $selectedMembers)
+<div class="groups-create-messages">
+<div class="strong">$msg.get('groups_messages_create_to_label')</div>
+<table>
+<tbody>
+<tr>
+<td colspan="3">
+<input id="toGroup" name="toGroup" type="checkbox" #if($toGroup)checked="checked"#end style="width:auto;" /><label for="toGroup">$msg.get('groups_messages_create_to_group_label')</label>
+</td>
+</tr>
+<tr class="selectedRoles">
+<td>
+<input id="toRole" name="toRole" type="checkbox" #if($selectedRoles.size()>0)checked="checked"#end style="width:auto;" onclick="enableSelect(this, 'rolesList')" /><label for="toRole">$msg.get('groups_messages_create_to_role_label')</label>
+</td>
+<td>
+<input id="selectedRolesList" name="selectedRolesList" type="hidden" value="" />
+<select id="rolesList" onchange="displayAddLink(this, 'addRoleLink')" disabled="true">
+<option value="">$msg.get('groups_messages_create_to_role_default')</option>
+#groupGetRoles($spaceName true)
+#foreach($role in $ret_groupRoles)
+#groupGetRoleMemberCount($role)
+<option#if($ret_roleCount==0) DISABLED#end value="${role.fullName}">$role.title</option>
+#end
+</select>
+</td>
+<td>
+<a id="addRoleLink" href="javascript:void()" title="${msg.get('groups_messages_create_to_role_add_tooltip')}" onclick="addToList(this, 'rolesList', 'selectedRoles'); return false;" style="display:none;">$msg.get('groups_messages_create_to_role_add_label')</a>
+</td>
+</tr>
+<tr class="selectedMembers">
+<td>
+<input id="toMember" name="toMember" type="checkbox" #if($selectedMembers.size()>0)checked="checked"#end style="width:auto;" onclick="enableSelect(this, 'membersList')" /><label for="toMember">$msg.get('groups_messages_create_to_member_label')</label>
+</td>
+<td>
+<input id="selectedMembersList" name="selectedMembersList" type="hidden" value="" />
+<select id="membersList" onchange="displayAddLink(this, 'addMemberLink');" disabled="true">
+<option value="" selected="selected">$msg.get('groups_messages_create_to_member_default')</option>
+#foreach($memberName in $sm.getMembers($spaceName))
+<option value="${memberName}">$xwiki.getUserName($memberName, false)</option>
+#end
+</select>
+</td>
+<td>
+<a id="addMemberLink" href="javascript:void()" title="${msg.get('groups_messages_create_to_member_add_tooltip')}" onclick="addToList(this, 'membersList','selectedMembers'); return false;" style="display:none;">$msg.get('groups_messages_create_to_member_add_label')</a>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="strong">$msg.get('groups_messages_create_notify_label')</div>
+<div>
+<input id="notify" name="notify" type="checkbox" style="width:auto;" /><label for="notify">$msg.get('groups_messages_create_notify_mail_label')</label>
+</div>
+</div>
+#if($selectedRoles.size()>0 || $selectedMembers.size()>0)
+{pre}
+<script type="text/javascript">
+#if($selectedRoles.size()>0)
+enableSelect(document.getElementById('toRole'), 'rolesList');
+var selectedRoles = [#foreach($role in $selectedRoles)'${role}',#end];
+preFillList('addRoleLink', 'rolesList', 'selectedRoles', selectedRoles);
+#end
+#if($selectedMembers.size()>0)
+enableSelect(document.getElementById('toMember'), 'membersList');
+var selectedMembers = [#foreach($member in $selectedMembers)'${member}',#end];
+preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
+#end
+</script>
+{/pre}
+#end
+#end
+##
+
+#macro(groups_message)
+#groupsinit()
+#groupsheader("messages")
+#set($obj = $doc.getObject("XWiki.ArticleClass",0))
+#set($msgtitle = $doc.display("title", "view"))
+##set($msgcontent = $doc.display("content", "view"))
+#set($divid = "groups-message-edit")
+#if($request.xredirect)
+#set($redirect = $request.xredirect)
+#else
+#set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
+#end
+#if($doc.hasAccessLevel("edit"))
+  ## Includes the JavaScript code needed for the "Send To" input fields
+  #messageIncludeCreateJs()
+  ## this is the autoincrement value used to create unique ids
+  #if(!$counter)
+    #set($counter = 1)
+  #else
+    #set($counter = $counter + 1)
+  #end
+  #set($editText = $msg.groups_messages_view_message_edit_link)
+  #set($deleteText = $msg.groups_messages_view_message_delete_link)
+  <div class="frame" id="section_${counter}">
+   <div class="titleheader titleheader-blue"><h3 class="titleheader-left">$msgtitle</h3>
+    <div class="titleheader-right">
+     <span id="editLinkContainer" style="padding:0px;">
+      {pre}<a href="javascript:editMessage('$doc.space','$doc.name','$divid')" title="$editText">$editText</a>{/pre}
+      #sep()
+     </span>
+     {pre}<a href="javascript:deleteMessage('$doc.space','$doc.name')" title="$deleteText">$deleteText</a>{/pre}
+    </div>
+  </div>
+  <div class="frame-content" id="section${counter}content">
+#else
+#begingroupsection($msgtitle,"Edit","javascript:editMessage('$doc.space','$doc.name','$divid')","blue",false)
+#end
+#if($doc.hasAccessLevel("edit"))
+#groupsajaxjs()
+{pre}
+<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+#if($doc.syntaxId == "xwiki/1.0")
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script type="text/javascript">
+ wikiEditor.init({
+		elements : "",
+	    language: "en",
+		mode: "exact",
+		content_css: "$xwiki.getSkinFile("style.css",true)",
+		debug : false,
+		remove_linebreaks : false,
+		plugins: 'table, contextmenu, paste, searchreplace',
+        wiki_use_style: 'true',
+        wiki_plugins: 'core,attachments',
+        wiki_images_path : '/xwiki/bin/download/${doc.space}/${doc.name}/',
+        wiki_attach_path : '/xwiki/bin/view/${doc.space}/${doc.name}'
+        });
+</script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($doc.syntaxId))
+## Import the JavaScript files required by the WYSIWYG editor (lazy=false).
+#wysiwyg_import(false)
+## Store the WYSIWYG editor configuration in a JavaScript variable which will be used later to create the editor.
+#wysiwyg_storeConfig("messageWysiwygConfig" $doc "XWiki.ArticleClass_0_content" false)
+#end
+<script type="text/javascript">
+function editMessage(spaceName,pageName,divid) {
+  var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
+  $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+  // call url to get the edit html to edit the profile
+  var myAjax = new Ajax.XWikiRequest( "Groups", "EditMessageService", {method: 'get', parameters: pars, onComplete: editMessageCallback, divid: divid });
+}
+function editMessageCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+ evalInlineScripts($(divid));
+ if (typeof tinyMCE != 'undefined') {
+  tinyMCE.addMCEControl(document.getElementById("XWiki.ArticleClass_0_content"), "XWiki.ArticleClass_0_content");
+ } else {
+  createWysiwygEditor('messageWysiwyg', 'messageInputURL', messageWysiwygConfig);
+ }
+ setViewMode(false);
+}
+function evalInlineScripts(container) {
+ var scripts = container.getElementsByTagName('script');
+ for(var i=0; i<scripts.length; i++){
+  var script = scripts[i];
+  try{
+   eval(script.innerHTML);
+  }catch(e){
+   // ignore
+  }
+ }
+}
+function cancelEditMessage(spaceName,pageName,divid) {
+  releaseWysiwygEditor('messageWysiwyg');
+  // We give the WYSIWYG editor a chance to execute its deferred updates before removing it from the document. This
+  // timeout shouldn't be necessary and will be removed in the future.
+  setTimeout(function() {
+    var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
+    $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+    // call url to get the edit html to edit the profile
+    var myAjax = new Ajax.XWikiRequest( "Groups", "ViewMessageService", {method: 'get', parameters: pars, onComplete: cancelEditMessageCallback, divid: divid });
+  }, 100);
+}
+function cancelEditMessageCallback(ajaxreq) {
+ var divid = ajaxreq.options.divid;
+ $(divid).innerHTML = ajaxreq.transport.responseText;
+ setViewMode(true);
+}
+function deleteMessage(spaceName,pageName) {
+  if (confirm('$msg.groups_messages_view_message_delete_confirm')) {
+   var pars = "confirm=1&ajax=1&xredirect=$xwiki.getURL("${spaceName}.Messages")";
+   // call url to get the edit html to edit the profile
+   var myAjax = new Ajax.XWikiRequest( spaceName, pageName, {method: 'get', parameters: pars, onComplete: deleteMessageCallback }, "delete");
+  }
+}
+function deleteMessageCallback(ajaxreq) {
+  alert('$msg.groups_messages_view_message_delete_done');
+  location= '$xwiki.getURL("${spaceName}.Messages")';
+}
+function setViewMode(viewMode){
+ var display = 'none';
+ if (viewMode){
+  display = 'block';
+ }
+ // show / hide comments
+ document.getElementById('section_2').style.display = display;
+ // show / hide attachments
+ document.getElementById('section_3').style.display = display;
+ // show / hide edit link
+ document.getElementById('editLinkContainer').style.display = viewMode ? 'inline':'none';
+}
+function updateSectionTitle(ajaxreq){
+  var h3s = document.getElementById('section_1').getElementsByTagName('h3');
+  if (h3s.length == 0){
+    return;
+  }
+  var sectionTitle = h3s[0];
+  var tmpDiv = document.createElement('div');
+  tmpDiv.innerHTML = ajaxreq.responseText;
+  var ps = tmpDiv.getElementsByTagName('p');
+  for(var i=0; i<ps.length; i++){
+    if (ps[i].className == 'frame-title'){
+      sectionTitle.innerHTML = ps[i].innerHTML;
+    }
+  }
+}
+function beforeSubmitEditMessage() {
+ if (checkForm('editform') == false) {
+  return false;
+ }
+ if (typeof tinyMCE != 'undefined') {
+  document.forms['editform']['XWiki.ArticleClass_0_content'].value = tinyMCE.getContent();
+ } else {
+  // We have to release the editor before submitting the form. The editor will be replaced by the response.
+  releaseWysiwygEditor('messageWysiwyg');
+ }
+ return true;
+}
+// With the new WYSIWYG editor it is possible to experience conversion exceptions (from HTML to wiki syntax) in which 
+// case we must reopen the editor to prevent the user from loosing unsaved changes.
+function afterSubmitEditMessage(transport, divid) {
+ $(divid).innerHTML = transport.responseText;
+ // Check if the save failed. This test is not bullet proof: the user can add the specified form in the message body.
+ if (document.forms['editform']) {
+  evalInlineScripts($(divid));
+  createWysiwygEditor('messageWysiwyg', 'messageInputURL', messageWysiwygConfig);
+ } else {
+  setViewMode(true);
+  updateSectionTitle(transport);
+ }
+}
+// Creates a new WYSIWYG editor based on the given configuration and stores it in a window property with the specified name.
+function createWysiwygEditor(name, inputURLId, config) {
+ if (typeof Wysiwyg != 'undefined') {
+  Wysiwyg.onModuleLoad(function() {
+   // We have to update the input URL because the user can edit/save multiple times without reloading the page.
+   // The input URL is taken from the edit form.
+   config.inputURL = document.getElementById(inputURLId).value;
+   window[name] = new WysiwygEditor(config);
+  });
+ }
+}
+// Release the JavaScript objects and the event listeners used by the WYSIWYG editor to prevent memory leaks.
+function releaseWysiwygEditor(name) {
+ if (window[name]) {
+  window[name].release();
+  window[name] = undefined;
+ }
+}
+</script>
+{/pre}
+#end
+<div id="$divid">
+#groupsdisplayarticleblock($doc)
+</div>
+#if($request.edit=="1")
+<script type="text/javascript">
+ editMessage('$doc.space','$doc.name','$divid');
+</script>
+#end
+#endgroupsection()
+<!-- end of FIRST FRAME -->
+<!-- COMMENTS FRAME -->
+<a name="comments"></a>#begingroupsection($msg.get("groups_messages_view_comments_title"),"","","blue",false)
+#set($count = 0)
+#set($isFirst = true)
+#foreach($comment in $doc.comments) ## {
+#if(!$isFirst) ## {
+ <hr class="my-curriki-hr"/>
+#end ## }
+#set($odd = $count%2)
+#if($odd==0)
+  #set($odd = "")
+#else
+  #set($odd = " odd-row")
+#end
+<div id="comment${count}" class="blog-comment${odd}">
+<div class="blog-comment-avatar" "style=float:left;">
+#curriki_avatar($xwiki.getDocument($comment.author))
+</div>
+<div class="blog-comment-line">
+<p><span class="date">
+#set($commentDate = $xwiki.formatDate($doc.getValue("date", $comment), $msg.get('mycurriki.dateFormat')))
+$xwiki.getUserName($comment.author) | <span class="blog-comment-date">$commentDate</span>
+#if(($comment.author == $context.user) || $isGroupAdmin || $xwiki.hasAdminRights()) ##{
+#set($qs = "docname=${doc.fullName}&date=${doc.getValue('date', $comment).time}")
+<a class="right" href="$xwiki.getURL("Groups.MessageDeleteCommentService", "view", $qs)" class="curriki-link" title="${msg.get('mycurriki.blog.comment.delete')}" onclick="return updateHref(this, confirm('${msg.get("mycurriki.blog.comment.delete.confirm")}'));">$msg.get('mycurriki.blog.comment.delete')</a> ## Link to delete -- use XWikiComments.author and date to get unique specification
+#end ## }
+</span></p>
+</div>
+{pre}$doc.getValue("comment", $comment).replaceAll("\n","<br />"){/pre}
+</div>
+#set($count = 1 - $count) 
+#set($isFirst = false)
+#end ## foreach on comments ## }
+#if($xwiki.hasAccessLevel("comment")) ## {
+<div id="commentscontent" class="xwikiintracontent">
+ 
+<div class="right"><a class="button button-confirm" onclick="toggleForm(document.getElementById('commentAddForm')); return false;" href="#" title="$msg.get("groups_messages_view_addcomment_btt")">$msg.get("groups_messages_view_addcomment_btt")</a></div>
+ 
+#set($cclass = $xwiki.getDocument("XWiki.XWikiComments").getxWikiClass())
+#set($comment = $cclass.newObject())
+      <form id="commentAddForm" action="$doc.getURL("commentadd")" method="post">
+        <hr class="my-curriki-hr"/>
+
+
+
+        <fieldset class="expanded" id="commentform">
+        <input type="hidden" name="xredirect" value="${doc.getURL("view")}" />
+        <input type="hidden" name="XWiki.XWikiComments_author" value="$context.user"/>
+        <input type="hidden" name="XWiki.XWikiComments_date" value=""/>
+        <div><textarea id='XWiki.XWikiComments_comment' rows='5' name='XWiki.XWikiComments_comment'></textarea></div>
+        <div class="mgn-vrt-15">
+	<button class="button button-confirm" type="submit" onclick="return updateXRedirect('commentAddForm', true);">$msg.get("caption.saveComment")</button>
+	<button class="button button-cancel" type="reset" onclick="hideForm(this.form);">$msg.get("cancel")</button>
+        </div>
+        </fieldset>
+      </form>
+</div>
+      <script type="text/javascript">
+//<!--
+document.getElementById("commentform").className = "collapsed";
+//-->
+      </script>
+#end ## hasAccessLevel comments ## }
+#endgroupsection()
+<!-- end of COMMENTS FRAME -->
+<!-- ATTACHMENTS FRAME -->
+<a name="attachments"></a>#begingroupsection($msg.get("groups_messages_view_attachments_title"),"","","blue",false)
+#if($doc.attachmentList.size()>0)
+#foreach ($attach in $doc.attachmentList)
+    <!-- Each comment row is inside an "attachments" class div -->
+  	<div class="attachments">
+	 <!-- Paragraph containing the post infos -->
+	 <div class="attachments_icon">
+	 #mimeicon($attach.filename)
+	 </div>
+	 <p><span class="date">{pre}<a href="$doc.getAttachmentURL("${attach.filename}", "download")" title="$msg.get("downloadthisattachment")">#packName($attach.filename)</a></span> $attach.version
+<span class="right">
+  <a href="$doc.getAttachmentURL("${attach.filename}", "download")?force-download=1" title="$msg.get("downloadthisattachment")">$msg.get("download")</a>
+#if($hasedit || $hasadmin)
+   | <a href="$doc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${redirect}")" onclick="return confirm('$msg.get("confirmdelattachment")');" title="$msg.get("deletethisattachment")">$msg.get("delete")</a>
+#end
+</span>{/pre}
+	 <!-- Paragraph containing the post text -->
+	 <p><span class="date">$msg.groups_messages_view_attachments_providedby $xwiki.getLocalUserName($attach.author) $msg.groups_messages_view_attachments_on $xwiki.formatDate($doc.creationDate,$msg.get("mycurriki.datetimeFormat"))</span></p>
+	</div>
+	<!-- End of an attachments row -->
+#end
+#end
+#if($hasedit || $hasadmin)
+<div id="attachmentscontent" class="xwikiintracontent">
+<div class="right"><a class="button button-confirm" onclick="toggleForm(document.getElementById('attachmentAddForm'))">$msg.get("addattachment")</a></div>
+<form id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
+<input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" />
+<fieldset class="expanded" id="attachform">
+<div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
+<div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
+<div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
+<div>
+
+<div class="mgn-vrt-15"><input class="button button-confirm" type="submit" value="$msg.get("attachthisfile")" onclick="return updateXRedirect('attachmentAddForm', updateAttachName(this.form, '$msg.get("doyouwanttoreplace")'))" /></div>
+##<span class="button button-confirm"><input type="reset" value="$msg.get("cancel")" onclick="hideForm(this.form);" class="button"/></span>
+</div>
+</fieldset>
+</form>
+</div>
+      <script type="text/javascript">
+//<!--
+document.getElementById("attachform").className = "collapsed";
+//-->
+      </script>
+#end
+#endgroupsection()
+ <!-- End of ATTACHMENTS FRAME -->
+{pre}
+<script type="text/javascript">
+function isEditMode(){
+var child = document.getElementById('${divid}').firstChild;
+while(child){
+if (child.tagName && child.tagName.toLowerCase()=='form'){
+return true;
+}
+child = child.nextSibling;
+}
+return false;
+}
+function updateXRedirect(formName, returnValue){
+var xredirect = document.forms[formName].xredirect;
+if (isEditMode()){
+xredirect.value = '${doc.getURL("view", "edit=1")}';
+}else{
+xredirect.value = '${doc.getURL("view")}';
+}
+return returnValue;
+}
+function updateHref(anchor, returnValue){
+if (isEditMode()){
+anchor.href += '&edit=1';
+}
+anchor.href += '&confirm=1';
+return returnValue;
+}
+</script>
+{/pre}
+#groupsfooter()
+#end
+
+#**
+  * Displays the create message form
+  *
+  *#
+#macro(groups_message_create)
+#groupsinit()
+#groupsheader("messages")
+#if(!$isGroupMember)
+$msg.get("groups_documentation_onlyaccessibletomembers")
+#else
+#groupsdisplaywelcome($msg.get("groups_messages_create_about_title") $spaceName $doc.name $isGroupAdmin)
+#if($request.page)
+## saving article
+#set($space = "Messages_${spaceName}")
+#set($mytitle = $request.get("XWiki.ArticleClass_0_title"))
+#set($pagename= $xwiki.getUniquePageName($space, $xwiki.clearName($mytitle)))
+#set($pagefullname = "$space.${pagename}")
+#set($tdoc = $xwiki.getDocument($request.page))
+#set($ok = $xwiki.renamePage($tdoc, $pagefullname))
+#set($newdoc = $xwiki.getDocument($pagefullname))
+#set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
+#if($newdoc.syntaxId == "xwiki/2.0")
+$newdoc.setContent('{{velocity}}{{html}}#includeForm("Groups.MessageTemplate"){{/html}}{{/velocity}}')
+#else
+$newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
+#end
+$newdoc.setParent("${spaceName}.Messages")
+## Update rights
+#messageUpdateRightsFromRequest($newdoc)
+## Send notification mail
+#messageSendNotificationMail($newdoc)
+## Redirect to message
+$response.sendRedirect($newdoc.getURL())
+#else
+#begingroupsection($msg.get("groups_messages_create_title"), "", "", "blue",false)
+<div class="groups-edit-message">
+$msg.get("groups_messages_create_about_infotxt")
+#set($bentrydoc = $xwiki.getDocument("Temp", $xwiki.getUniquePageName("Temp","Article")))
+#if("$!request.xwiki2" == "true")
+$bentrydoc.setSyntaxId("xwiki/2.0")
+#end
+#set($ok = $bentrydoc.save())
+#set($bentryobj = $bentrydoc.newObject("XWiki.ArticleClass"))
+#set($junk = $bentrydoc.use($bentryobj))
+#set($cancelAction = $xwiki.getURL("${doc.space}.Messages", "view"))
+#set($saveAction = "")
+<form action="$saveAction" id="inline" method="post">
+<input type="hidden" name="page" value="$bentrydoc.fullName" />
+<div class="fields">
+*$msg.get("groups_messages_create_messagetitle_instruction")*
+<br />
+<span class="tmargin full-width">
+$bentrydoc.display("title", "edit", $bentryobj)
+</span>
+*$msg.get("groups_messages_create_messagecontent_instruction")*
+<br />
+$bentrydoc.display("content", "edit", $bentryobj)
+</div>
+#set($editors = $context.getEditorWysiwyg())
+#if($editors)
+{pre}
+#if($bentrydoc.syntaxId == "xwiki/1.0")
+<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script language="javascript" type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script language="javascript" type="text/javascript">
+	wikiEditor.init({
+		elements : "$editors",
+	        language: "en",
+		mode: "exact",
+		content_css: "$xwiki.getSkinFile("style.css", true)",
+		debug : false,
+		remove_linebreaks : false,
+		plugins: 'table, contextmenu, paste, searchreplace',
+        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
+        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
+        wiki_use_style: 'true',
+        wiki_plugins: 'core,attachments'
+	});
+</script>
+#elseif($xwiki.wysiwyg.isSyntaxSupported($bentrydoc.syntaxId))
+#wysiwyg_editProperties($bentrydoc $editors false)
+#end
+{/pre}
+#end
+#messageIncludeCreateJs()
+#messageAddSendToFormFields($spaceName, true, [], [])
+<div class="righttext">
+{pre}
+<input class="button button-confirm floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm('inline') == false) return false; document.forms.inline.submit(); return false;"/>
+<input class="button button-cancel floatright" type="submit" name="formactioncancel" value="$msg.get("groups_messages_create_cancel_btt")" onclick="history.go(-1); return false;"/>
+{/pre}
+</div>
+</form>
+</div>
+#endgroupsection()
+#end
+#end
+#groupsfooter()
+#end
+
+
+#**
+  * Service to show edit message form
+  *
+  *#
+#macro(groups_editmessageform)
+#groupsinit()
+#set($pageName = $request.page)
+#set($spaceName = $request.space)
+#set($groupName = $spaceName)
+#if(!$groupName.startsWith("Group_"))
+#set($pos = 1 + $groupName.indexOf("_"))
+#set($groupName = $groupName.substring($pos))
+#end
+#set($divid = $request.divid)
+#set($adoc = $xwiki.getDocument("${spaceName}.${pageName}"))
+#set($ok = $adoc.use("XWiki.ArticleClass"))
+<form id="editform" action="$xwiki.getURL("Groups.SaveMessageService")" method="post" onsubmit="new iframe(this,{onComplete:function(t){afterSubmitEditMessage(t,'{pre}${divid}{/pre}')}}); return false;">
+<p>
+<input type="hidden" name="xpage" value="plain" />
+<input type="hidden" name="space" value="{pre}$spaceName{/pre}" />
+<input type="hidden" name="page" value="{pre}$pageName{/pre}" />
+<br />
+*$msg.get("groups_messages_create_messagetitle_instruction")*
+$adoc.display("title", "edit")
+<br />
+<br />
+*$msg.get("groups_messages_create_messagecontent_instruction")*
+#if($xwiki.wysiwyg.isSyntaxSupported($adoc.syntaxId))
+#wysiwyg_inputProperty($adoc "XWiki.ArticleClass_0_content")
+#wysiwyg_displayConversionError("XWiki.ArticleClass_0_content")
+<input type="hidden" id="messageInputURL" value="{pre}${adoc.getExternalURL("view", $wysiwyg_inputURLQueryString)}{/pre}" disabled="disabled" />
+## In case of a conversion exception the conversion filter sould redirect us back to the edit form (by default it redirects
+## to the referer, which in our case is the page where the edit form is included).
+<input type="hidden" name="xerror" value="{pre}$!{request.requestURL}?$!{request.queryString}{/pre}" />
+#end
+$adoc.display("content", "edit")
+<br />
+## The JavaScript needed is included in Groups.MessageSheet
+#set($viewRightObj = $adoc.getObject("XWiki.XWikiRights", "levels", "view"))
+#set($toGroup = true)
+#set($selectedRoles = [])
+#set($selectedMembers = [])
+#if($viewRightObj)
+$adoc.use($viewRightObj)
+#if(!$adoc.groups.contains("${groupName}.MemberGroup"))
+#set($toGroup = false)
+#end
+#foreach($role in $adoc.groups.split(","))
+#if($role.length()>0 && !$role.equals("XWiki.XWikiAllGroup") && !$role.equals("${groupName}.MemberGroup"))
+#set($ok = $selectedRoles.add($role))
+#end
+#end
+#foreach($member in $adoc.users.split(","))
+#if($member.length()>0)
+#set($ok = $selectedMembers.add($member))
+#end
+#end
+#end
+#messageAddSendToFormFields($groupName, $toGroup, $selectedRoles, $selectedMembers)
+{pre}
+<div class="right mgn-vrt">
+<input type="button" class="button button-cancel mgn-rt" value="$msg.get("groups_messages_edit_cancel_btt")" onclick="cancelEditMessage('${spaceName}','${pageName}','${divid}');" />
+<input type="submit" class="button button-confirm" value="$msg.get("groups_messages_edit_submitsend_btt")" onclick="return beforeSubmitEditMessage();" />
+</div>
+{/pre}
+</p>
+</form>
+#end
+
+
+#**
+ * Delete Comment Service
+ *#
+#macro(groups_messages_deletecomment_service)
+<!-- Message Start -->
+## since this is called from the Groups.DeleteCommentServicePage we need to change the
+## $doc so that it finds the right space name
+#set($doc = $xwiki.getDocument($request.docname))
+#groupsinit()
+#if("$!request.confirm" == "1") ## {
+#set($deletedoc = $xwiki.getDocument($request.docname))
+#if("$!request.date" != "") ## {
+#set($comments = $deletedoc.getComments())
+#foreach($comment in $comments) ## {
+#set($time = $deletedoc.getValue('date', $comment).time)
+#if(($request.date == "$time") && ( ($comment.author == $context.user) || $isGroupAdmin || $xwiki.hasAdminRights())) ## {
+#set($junk = $deletedoc.removeObject($comment))
+#set($junk = $deletedoc.saveWithProgrammingRights())
+DELETED
+#end ## }  ## if
+#end ## }  ## foreach
+#if($request.edit=="1")
+$response.sendRedirect($xwiki.getURL($deletedoc.fullName, "view", "edit=1"))
+#else
+#$xwiki.getURL($deletedoc.fullName)
+$response.sendRedirect($xwiki.getURL($deletedoc.fullName))
+#end
+#else
+#warning("Request invalid: comment date was not provided.")
+#end ## end if date
+#else
+#warning("Request invalid: call was not made from a javascript link.")
+#end ## end if confirm
+#end ## end macro
+
+
+#**
+  * Groups View message service
+  * This handles the call to view a message
+  *#
+#macro(groups_viewmessage_service)
+#set($adoc = $xwiki.getDocument("${request.space}.${request.page}"))
+#groupsdisplayarticleblock($adoc)
+#end
+
+
+#**
+ * Save Message Service
+ *#
+#macro(groups_savemessage_service)
+#groupsinit()
+#set($msgSpaceName = $request.space)
+#set($spaceName = $msgSpaceName)
+#if(!$spaceName.startsWith("Group_"))
+#set($pos = 1 + $spaceName.indexOf("_"))
+#set($spaceName = $spaceName.substring($pos))
+#end
+#set($s = $sm.getSpace($spaceName))
+#set($pageName = $request.page)
+#set($adoc = $xwiki.getDocument("${msgSpaceName}.${pageName}"))
+#set($ok = $adoc.updateObjectFromRequest("XWiki.ArticleClass"))
+## Update rights
+#messageUpdateRightsFromRequest($adoc)
+## Send notification mail
+#messageSendNotificationMail($adoc)
+<div class="groups-messages-saveinfo">
+$msg.get("groups_messages_savedone")
+</div>
+$adoc.use("XWiki.ArticleClass")
+#groupsdisplayarticleblock($adoc)
+#end

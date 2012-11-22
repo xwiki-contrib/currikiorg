@@ -1,7 +1,5 @@
 package org.curriki.xwiki.plugin.asset.composite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
@@ -13,6 +11,8 @@ import org.curriki.xwiki.plugin.asset.Constants;
 import org.curriki.xwiki.plugin.asset.AssetException;
 import org.curriki.xwiki.plugin.asset.other.ProtectedAsset;
 import org.curriki.xwiki.plugin.asset.other.InvalidAsset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Collections;
 /**
  */
 public abstract class CompositeAsset extends Asset {
-    private static final Log LOG = LogFactory.getLog(RootCollectionCompositeAsset.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RootCollectionCompositeAsset.class);
 
     public final static String CATEGORY_NAME = Constants.ASSET_CATEGORY_COLLECTION;
 
@@ -306,13 +306,13 @@ public abstract class CompositeAsset extends Asset {
                             throw new AssetException(AssetException.ERROR_ASSET_SUBASSET_RECURSION, msg.get("addsubasset.recursive_add_message"));
                         }
                         if (sql != null) {
-                            sql = sql + ", '" + item + "'";
+                            sql = sql + "or prop.value='" + item + "'";
                         } else {
-                            sql = "'" + item + "'";
+                            sql = "prop.value='" + item + "'";
                         }
                     }
 
-                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='"+Constants.SUBASSET_CLASS+"' and prop.id.id = obj.id and prop.name='"+Constants.SUBASSET_CLASS_PAGE+"' and prop.value in (" + sql + ")";
+                    sql = ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='"+Constants.SUBASSET_CLASS+"' and prop.id.id = obj.id and prop.name='"+Constants.SUBASSET_CLASS_PAGE+"' and (" + sql + ")";
                     List<String> list = context.getWiki().getStore().searchDocumentsNames(sql, context);
                     if ((list==null)||(list.size()==0)){
                         done = true;
@@ -335,17 +335,22 @@ public abstract class CompositeAsset extends Asset {
 
     public void setSubassets(List<String> wantedList) throws XWikiException {
         XWikiDocument assetDoc = getDoc();
+        List<BaseObject> existingList = assetDoc.getObjects(Constants.SUBASSET_CLASS);
 
         String[] want = new String[0];
         if (wantedList != null) {
             want = wantedList.toArray(want);
         }
 
-        List<BaseObject> existingList = assetDoc.getObjects(Constants.SUBASSET_CLASS);
         BaseObject[] existing = new BaseObject[0];
         if (existingList != null) {
             existing = existingList.toArray(existing);
         }
+
+// TODO: Remove
+// DEBUGGING CODE for CURRIKI-4238
+System.out.println("REORDER "+assetDoc.getFullName()+" want: "+(wantedList==null?"NULL":wantedList.toString()));
+System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+(existingList==null?"NULL":existingList.toString()));
 
         int wSize = (wantedList != null)?want.length:0;
         int eSize = (existingList != null)?existing.length:0;
@@ -362,8 +367,12 @@ public abstract class CompositeAsset extends Asset {
                     e++;
                 }
                 if (b == null) {
+System.out.println("REORDER "+assetDoc.getFullName()+" Adding object w="+w+" e="+e);
                     b = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
                 }
+else {
+System.out.println("REORDER "+assetDoc.getFullName()+" Updating object w="+w+" e="+e);
+}
 
                 b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want[w]);
                 b.setLongValue(Constants.SUBASSET_CLASS_ORDER, w);
@@ -378,6 +387,7 @@ public abstract class CompositeAsset extends Asset {
                 e++;
             }
             if (b != null) {
+System.out.println("REORDER "+assetDoc.getFullName()+" Removing object w="+w+" e="+e);
                 assetDoc.removeObject(b);
             }
         }

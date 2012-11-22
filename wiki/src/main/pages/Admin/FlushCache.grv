@@ -1,0 +1,25 @@
+<%
+
+import com.xpn.xwiki.user.impl.xwiki.XWikiGroupServiceImpl
+
+
+if (request.confirm=="1") {
+    xwiki.flushCache()
+    Runtime.getRuntime().gc()
+    Runtime.getRuntime().runFinalization()
+    Runtime.getRuntime().gc()
+    xwiki.flushCache()
+    XWikiGroupServiceImpl groupService = xwiki.getXWiki().getGroupService(context.getXWikiContext());
+    groupService.flushCache();
+
+    println "Flush cache and GC Done"
+
+
+} else {
+    println "[Confirm Flush Cache and GC>$doc.fullName?confirm=1]"
+}
+%>
+
+[MemoryStatus]
+
+

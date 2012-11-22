@@ -20,7 +20,7 @@
 #set($range = $xwiki.criteriaService.rangeFactory.createRange($startAt, $endAt))
 ## Reuse the old object, just add the range.
   $criteria.setRange($range)
-#if ($tdoc.realLanguage!="")
+#if ("$!tdoc.realLanguage"!="")
 #set($lang = "&amp;language=${tdoc.realLanguage}")
 #else
 #set($lang = "")
@@ -71,7 +71,7 @@
             <td class="revision-col-author">$xwiki.getLocalUserName($revinfo.author)</td>
     ##if($xwiki.hasEditComment())
             #set($note = $!revinfo.comment)
-            #if($note == "")
+            #if("$!note" == "")
              #set($note = "curriki.comment.no.note")
             #end
             <td class="revision-col-note">$msg.get($note)</td>

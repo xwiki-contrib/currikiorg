@@ -3,6 +3,7 @@
   * @author Curriki dev team
   *#
 #if($gVersion)#else#template("xwikivars.vm")#end##
+<!-- start javascripts.vm -->
 #set($hasScripts=true)##
 #if($globalDebug)##{
 	#set($debugging = "-debug")
@@ -11,22 +12,24 @@
 #end##}
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
+#set($useCdns=false)
 #if($useCdns)
 <script type="text/javascript">
 /* <![CDATA[ */
+## ExtJS through CDNs
 var ajProt = (("https:" == document.location.protocol) ? "https://" : "http://");
-document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js' type='text/javascript'%3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/prototype/1.7/prototype.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ajProt + "ajax.googleapis.com/ajax/libs/scriptaculous/1.8.1/scriptaculous.js?load=effects' type='text/javascript'%3E%3C/script%3E"));
-var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki8/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.2/");
+var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/${gVersion}/ext-2.3.0/" : "http://extjs.cachefly.net/ext-2.3.0/");
 document.write(unescape("%3Cscript src='" + ejLoc + "adapter/ext/ext-base.js' type='text/javascript'%3E%3C/script%3E"));
 document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' type='text/javascript'%3E%3C/script%3E"));
 /* ]]> */
 </script>
 #else
-<script src="/xwiki/prototype.js" type="text/javascript"></script>
-<script src="/xwiki/skins/albatross/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
-<script src="/xwiki/skins/curriki8/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
-<script src="/xwiki/skins/curriki8/extjs/ext-all${debugging}.js" type="text/javascript"></script>
+<script src="/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
+<script src="/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
+<script src="/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
+<script src="/xwiki/skins/curriki20/extjs/ext-all${debugging}.js" type="text/javascript"></script>
 #end
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
@@ -65,7 +68,8 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 	#end ##}
 
 	#if($!headerfile == "html")##{
-<script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
+        <!-- would embed accordion.js -->
+## <script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js").replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 	#end ## }
 #end ##}
 
@@ -103,6 +107,8 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 #if($globalDebug)##{
     <script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
 #end##}
-## Hook for inserting JavaScript skin extensions
+## (Disabled) hook for inserting JavaScript skin extensions
 ## Use $xwiki.jsfx.use("jsfile.js", true)
-<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
+## <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
+## the HTML comment there actually inserts it!
+<!-- end javascripts.vm -->

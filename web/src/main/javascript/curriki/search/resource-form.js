@@ -400,12 +400,14 @@ form.init = function(){
 	}
 
 	form.rowExpander = new Ext.grid.RowExpander({
+
+
 		tpl: new Ext.XTemplate(
 			_('search.resource.resource.expanded.title'),
 			'<ul>',
 			'<tpl for="parents">',
 				'<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">',
-					'<a href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
+					'<a target="{[this.getLinkTarget(values)]}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',
 						'{title}',
 					'</a>',
 				'</li>',
@@ -414,7 +416,11 @@ form.init = function(){
 				getParentURL: function(values){
 					var page = values.page||false;
 					if (page) {
-						return '/xwiki/bin/view/'+page.replace(/\./, '/');
+						if(Curriki.module.search.util.isInEmbeddedMode()){
+							return Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/'+ escape(page.replace(/\./, '/')+'?'+Curriki.module.search.embedViewMode);
+						}else{
+							return '/xwiki/bin/view/'+page.replace(/\./, '/');
+						}
 					} else {
 						return '';
 					}
@@ -434,6 +440,14 @@ form.init = function(){
 						,fw,_('global.title.popup.subject')
 						,lvl,_('global.title.popup.educationlevel')
 					);
+				},
+
+				getLinkTarget: function(values){
+					if(Curriki.module.search.util.isInEmbeddedMode()){
+							return '_blank';
+						}else{
+							return '_self';
+						}
 				}
 			}
 		)
@@ -455,12 +469,20 @@ form.init = function(){
 		var row = expander.grid.view.getRow(idx);
 		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.minus.rollover')});
+		
+		if(Curriki.module.search.util.isInEmbeddedMode()){
+			Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+		}
 	});
 
 	form.rowExpander.on('collapse', function(expander, record, body, idx){
 		var row = expander.grid.view.getRow(idx);
 		var iconCol = Ext.DomQuery.selectNode('img[class*=x-grid3-row-expander]', row); // TODO: here
 		Ext.fly(iconCol).set({'ext:qtip':_('search.resource.icon.plus.rollover')});
+
+		if(Curriki.module.search.util.isInEmbeddedMode()){
+			Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+		}
 	});
 
 	form.columnModel = new Ext.grid.ColumnModel([

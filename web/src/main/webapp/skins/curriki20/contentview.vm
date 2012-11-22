@@ -1,0 +1,35 @@
+#**
+  * View entry point. It is called from view.vm
+  * It displays either a specific Asset view
+  * or the standard XWiki view 
+  *#
+#if($doc.space.startsWith("Documentation_") && $doc.name != "WebPreferences" && $doc.name != "WebHome" && $doc.name != "AboutDocumentation")
+<div id="content">
+#groups_documentationview()
+</div>
+#else
+#if($doc.getObject("CurrikiCode.AssetClass"))
+ #if($doc.getObject("CurrikiCode.CompositeAssetClass"))
+  #if($doc.isRootCollection())
+<div id="content">
+   #compositeasset_display($doc)
+</div>
+  #else
+   #asset_display($doc "view")
+  #end
+ #else
+   #asset_display($doc "view")
+ #end
+#else
+#if(!$doc.web.startsWith("Coll_") && !$doc.web.startsWith("Group_") && !$doc.web.startsWith("Messages_Group_") && !$doc.web.startsWith("Documentation_Group_") && !$doc.web.startsWith("Members_Group_") && $doc.web != "MyCurriki" && !$doc.web.startsWith("Blog_")  && $doc.web != "CurrikiBlog"  && $doc.web != "News")
+#set($wikicontent = true)
+#else
+#set($wikicontent = false)
+#end
+<div id="content">
+#if($wikicontent)<div class="xwikicontent">#end
+ $cdoc.getRenderedContent()
+#if($wikicontent)</div>#end
+</div>
+#end
+#end

@@ -1,0 +1,18 @@
+#if($!request.xpage == "print")
+  #template("xwikivars.vm")
+  #template("layoutvars.vm")
+  #template("htmlheader.vm")
+  $context.setLinksQueryString("xpage=print")
+  #template("contentview.vm")
+  $context.unsetLinksQueryString()
+  <div class="clearfloats"></div>
+  #template("htmlfooter.vm")
+#else
+  #**
+   * Print entry point. It is called from view.vm
+   * It allows nice printing of the site and of assets
+   *#
+  #asset_findtitle($doc)
+  #template("printheader.vm")
+  #template("contentview.vm")
+#end

@@ -10,11 +10,11 @@
 <head>
 <title>
 #if(!$title)
-#set( $title = $!xwiki.getWebPreference("title"))
-#if ( $title != "")
+#set( $title = $!xwiki.getSpacePreference("title"))
+#if ( "$!title" != "")
 $xwiki.parseContent($title)
 #else
-XWiki . $!doc.web . $!doc.displayTitle
+XWiki . $!doc.space . $!doc.displayTitle
 #end
 #else
 $title

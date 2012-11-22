@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.MDC;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Field;
@@ -49,6 +47,8 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.notify.XWikiActionNotificationInterface;
 import com.xpn.xwiki.notify.XWikiDocChangeNotificationInterface;
 import com.xpn.xwiki.notify.XWikiNotificationRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @version $Id: $
@@ -57,7 +57,7 @@ public class IndexUpdater extends AbstractXWikiRunnable
     implements XWikiDocChangeNotificationInterface, XWikiActionNotificationInterface
 {
     /** Logging helper. */
-    private static final Log LOG = LogFactory.getLog(IndexUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexUpdater.class);
 
     /** Milliseconds of sleep between checks for changed documents. */
     private int indexingInterval = 30000;
@@ -376,9 +376,9 @@ public class IndexUpdater extends AbstractXWikiRunnable
     private void addToIndex(IndexData data, XWikiDocument doc, XWikiContext context)
         throws IOException
     {
-        if(doc!=null && "XWiki.XWikiAllGroup".equals(doc.getFullName()))
-            return;
-        LOG.info("addToIndex: " + data);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("addToIndex: " + data);
+        }
 
         org.apache.lucene.document.Document luceneDoc = new org.apache.lucene.document.Document();
         data.addDataToLuceneDocument(luceneDoc, doc, context);

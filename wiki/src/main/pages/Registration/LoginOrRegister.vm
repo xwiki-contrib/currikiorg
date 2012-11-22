@@ -14,34 +14,34 @@
 ##$context.setCacheDuration(86400)##
 #if($request.framed=='true')#set($framed="true")##
 <!-- framed is $framed -->
-#if(!$skin)## we did not pass initialization already
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>$msg.get("join.login.title")</title>
-{pre}
-    #template("xwikivars.vm")
-    #template("javascripts.vm")
-    #template("stylesheets.vm")
-    #template("analytics.vm")
+    #if(!$skin)## we did not pass initialization already
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>$msg.get("join.login.title")</title>
+        {pre}
+        #template("xwikivars.vm")
+        #template("javascripts.vm")
+        #template("stylesheets.vm")
+        #template("analytics.vm")
     ## #template("analytics.vm")
-    <style type="text/css">body { min-width: 0; margin-right:1em; width:90%}</style>
-{/pre}
-<body style="background-color:white" class="iframeInside" style="min-width: 0; margin-right:1em; width:90%">##
-#else
-{pre}
-    #template("xwikivars.vm")
-    #template("javascripts.vm")
-    #template("analytics.vm")
+        <style type="text/css">body { min-width: 0; margin-right:1em; width:90%}</style>
+        {/pre}
+    <body style="background-color:white" class="iframeInside" style="min-width: 0; margin-right:1em; width:90%">##
+    #else
+    {pre}
+        #template("xwikivars.vm")
+        #template("javascripts.vm")
+        #template("analytics.vm")
     <script type="text/javascript">
-    document.body.className = document.body.className + " iframeInside";
+        document.body.className = document.body.className + " iframeInside";
     </script>
     <style type="text/css">body { min-width: 0; margin-right:1em; width:90%}</style>
-{/pre}
-#end#else#set($framed="false")##
+    {/pre}
+    #end#else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
 #end
 <style type="text/css">
-/*  join popup styles */
+        /*  join popup styles */
     body{background-color: #ffffff;}
     #mainContentArea {margin-top: 5em;}
     #join_form_contents.fields_wrp { width: 500px; margin: 20px auto }
@@ -52,7 +52,7 @@
     input#j_username, input#j_password {width: 120px;}
     #join_register_footer {width: 400px; border-top:  2px solid #ccc; width: 400px; margin:0px auto; padding: 3px;font-variant: normal;	font-size: 90%; }
     #join_register_footer tr td {vertical-align: top; padding-top:1.5em}
-        ## #join_register_footer_cancel {width: 400px; margin:0px auto; font-variant: normal;	 font-size: 95%;	font-weight: bold; padding: 0 50px 20px 0 ; text-align: right;}
+    ## #join_register_footer_cancel {width: 400px; margin:0px auto; font-variant: normal;	 font-size: 95%;	font-weight: bold; padding: 0 50px 20px 0 ; text-align: right;}
     ###join_register_footer * a:active { text-decoration: underline; color: #1C3a7b; }
     input.button {font-weight: bold;border-style: none;padding:3 6 3 7;}
     label {font-weight: bold; color:#555}
@@ -66,192 +66,192 @@
     #login_submit {text-align:right;}
 </style>
 <script language="javascript">
-Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&$!{request.getQueryString()}");
+    Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&$!{request.getQueryString()}");
     //alert("Would reframe.");
 </script>
 <div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml">
-<div id="mainContentArea">
-<div id="fb-root"></div>
-#if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-#set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
-#if($request.getHeader("User-Agent") && $request.getHeader("User-Agent").contains(" Chrome/"))##
-#set($nextURL="https://$hostname$nextURL")#end
-<div id="join_form_contents" class="fields_wrp">
-<form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
-      onsubmit="if(Curriki.ui.login.validateLoginForm()) {Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
-<div class="hidden">##
-<input type="hidden" name="xredirect" value="$nextURL"/>
-<input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
-</div>
-#set($providers = ["facebook","google"])##
-#if("$!providersAsString" != '')
-    #set($providersA = $providersAsString.split('\n'))
-    #set($providers = $xwiki.getArrayList())
-    #foreach($p in $providersA)#set($junk=$providers.add($p.trim()))#end
-#end
-<!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest")
+    <div id="mainContentArea">
+        <div id="fb-root"></div>
+        #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+            #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+        #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=$escapetool.url($targets.afterLogin)")##
+        #if($request.getHeader("User-Agent") && $request.getHeader("User-Agent").contains(" Chrome/"))##
+            #set($nextURL="https://$hostname$nextURL")#end
+        <div id="join_form_contents" class="fields_wrp">
+            <form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
+                  onsubmit="if(Curriki.ui.login.validateLoginForm()) {Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
+                <div class="hidden">##
+                    <input type="hidden" name="xredirect" value="$nextURL"/>
+                    <input type="hidden" name="framed" value="true"/>## keep framed until a correct password is provided
+                </div>
+                #set($providers = ["facebook","google"])##
+                #if("$!providersAsString" != '')
+                    #set($providersA = $providersAsString.split('\n'))
+                    #set($providers = $xwiki.getArrayList())
+                    #foreach($p in $providersA)#set($junk=$providers.add($p.trim()))#end
+                #end
+                <!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest")
     request's messages: $!{request.message} -->
-    #set($message="$!{request.session.getAttribute('messagesForNextLoginRequest')}$!{request.message}")
-    #set($userName=$!request.j_username)
-    ###if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))#end
-    #if($message)
-        $request.session.removeAttribute("messagesForNextLoginRequest")
-    #end
-    #* -- not used anymore
-    #if($!message.length()==0)#set($message = $xwiki.parseMessage())#end##
-     #if($!message.length()==0 && ("$!request.j_username" == "$msg.get('header.login_username')" || "$!request.j_username" == "") && ("$!request.j_password" == "")) ##{
-        #set($message = 'redirect.error.no_info')##
-        #set($userName=$msg.get('header.login_username'))
-    #end *###}
-    #if($!message.length()>0)
-      <!-- previous login errors: $message -->
-      #error($msg.get("$message"))
-      #logViewScript("/join/entry/error")
-    #end
-<div id="joinformleftblock" class="xwikilogintable" summary="$msg.get("join.login.header")">
-        <h2>$msg.get("join.login.header")</h2>
-    <p>
-    <p><label for="j_username">$msg.get('join.login.username')</label>
-      <input type="text" id="j_username" name="j_username" value="$escapetool.html("$!userName")"/></p>
-    <p><label for="j_password">$msg.get('join.login.password')</label>
-      <input type="password" id="j_password" name="j_password" value=""/></p>
-    <p>&nbsp;</p><p>
-    <table border='0' width="80%" align="right"><tr><td id="rememberme_td"><input id="rememberme" type="checkbox" name="j_rememberme" value="true"/>
-      <label for="rememberme">$msg.get('join.login.remember_me')</label></td>
-        <td id="login_submit"><input type="submit" class="button" value="$msg.get('join.login.button')"/></td></tr></table>
-#set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
-#set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg, $targets))##
-</div><!--end joinformleftblock-->
+                #set($message="$!{request.session.getAttribute('messagesForNextLoginRequest')}$!{request.message}")
+                #set($userName=$!request.j_username)
+                #if($userName)#else#set($userName=$!request.session.getAttribute("lastUserName"))$request.session.removeAttribute("lastUserName")#end
+                #if($message)
+                    $request.session.removeAttribute("messagesForNextLoginRequest")
+                #end
+            #* -- not used anymore
+           #if($!message.length()==0)#set($message = $xwiki.parseMessage())#end##
+            #if($!message.length()==0 && ("$!request.j_username" == "$msg.get('header.login_username')" || "$!request.j_username" == "") && ("$!request.j_password" == "")) ##{
+               #set($message = 'redirect.error.no_info')##
+               #set($userName=$msg.get('header.login_username'))
+           #end *###}
+                #if($!message.length()>0)
+                    <!-- previous login errors: $message -->
+                    #error($msg.get("$message"))
+                    #logViewScript("/join/entry/error")
+                #end
+                <div id="joinformleftblock" class="xwikilogintable" summary="$msg.get("join.login.header")">
+                    <h2>$msg.get("join.login.header")</h2>
+                    <p>
+                    <p><label for="j_username">$msg.get('join.login.username')</label>
+                        <input type="text" id="j_username" name="j_username" value="$escapetool.html("$!userName")"/></p>
+                    <p><label for="j_password">$msg.get('join.login.password')</label>
+                        <input type="password" id="j_password" name="j_password" value=""/></p>
+                    <p>&nbsp;</p><p>
+                    <table border='0' width="80%" align="right"><tr><td id="rememberme_td"><input id="rememberme" type="checkbox" name="j_rememberme" value="true"/>
+                        <label for="rememberme">$msg.get('join.login.remember_me')</label></td>
+                        <td id="login_submit"><input type="submit" class="button" value="$msg.get('join.login.button')"/></td></tr></table>
+                    #set($socialLoginTool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+                    #set($junk=$socialLoginTool.init($xwiki, $context, $request, $msg, $targets))##
+                </div><!--end joinformleftblock-->
+            ##
+            ##
+                <div id="joinformrightblock">
+                    <h2>$msg.get('join.login.social_header')</h2>
+                ## or login with...
+                    #foreach($provider in $providers)
+                    ## don't put the following comment inside the div... it'd break the javascript of loginHappened!
+                        <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
+                        <div class="provider"  id="identifyWith${provider}" style="display:inline">
+                            #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($targets.afterLogin)#if($framed)&xpage=popup#end")
+                            <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
+                               onclick="return Curriki.ui.login.popupIdentityAuthorization('${link}');">##
+                                <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"
+                                     title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" />
+                            ###if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
+                            ##  <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" width="100"/>##
+                            ###else##
+                            ##  $msg.get("join.login.social.login-with-${provider}.tooltip")##
+                            ###end##
+                            </a>
+                        </div>
+                    ## #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="120" max-rows="1"></fb:login-button></div>#end
+                    ##<hr/>
+                    #end## foreach
+                </div><!--end joinformrightblock-->
+            </form>
+        </div> <!-- join_form_contents -->
+        {pre}
+    </div>## mainContentArea
 ##
 ##
-<div id="joinformrightblock">
-    <h2>$msg.get('join.login.social_header')</h2>
-    ## or login with...
-    #foreach($provider in $providers)
-    ## don't put the following comment inside the div... it'd break the javascript of loginHappened!
-    <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument -->
-    <div class="provider"  id="identifyWith${provider}" style="display:inline">
-      #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($targets.afterLogin)#if($framed)&xpage=popup#end")
-      <a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
-              onclick="return Curriki.ui.login.popupIdentityAuthorization('${link}');">##
-      <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"
-           title="$escapetool.xml($msg.get("join.login.social.login-with-${provider}.tooltip"))" />
-	  ###if($socialLoginConfigurationDocument.getAttachment("${provider.toLowerCase()}-logo.png"))##
-	  ##  <img src="$socialLoginConfigurationDocument.getAttachmentURL("${provider.toLowerCase()}-logo.png")" width="100"/>##
-      ###else##
-      ##  $msg.get("join.login.social.login-with-${provider}.tooltip")##
-	  ###end##
-	  </a>
-    </div>
-    ## #if("Facebook"==$provider)<div id="fbFriends" class="provider"><fb:login-button show-faces="true" width="120" max-rows="1"></fb:login-button></div>#end
-    ##<hr/>
-  #end## foreach
-</div><!--end joinformrightblock-->
-</form>
-</div> <!-- join_form_contents -->
-{pre}
-</div>## mainContentArea
 ##
-##
-##
-<div style="clear:left">
-    <table id="join_register_footer"><tr>
-        <td>
+    <div style="clear:left">
+        <table id="join_register_footer"><tr>
+            <td>
             <span id="sign_up">$msg.get('join.login.join_curriki_question')##
                </span>
             <span id="sign_up_link"><a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki_tooltip')">##
                    $msg.get('join.login.join_curriki')</a></span>
-        </td>
-        <td align="right">
+            </td>
+            <td align="right">
             <span id="forgot_password"><a ##
-                href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&xpage=popup"
-                  title="$msg.get('join.login.forgot_tooltip')">$msg.get('join.login.forgot')</a></span>
-            <br/><br/>
+                    href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&xpage=popup"
+                    title="$msg.get('join.login.forgot_tooltip')">$msg.get('join.login.forgot')</a></span>
+                <br/><br/>
             <span id="login_cancel">
                       <input type="button" class="button-grey" value="$msg.get('join.login.cancel')" ##
-                        style="padding: 3pt 6pt; font-size: 11px;" ##
-                        onclick="window.open('$targets.noLogin','_top')"/></span>
-        </td>
-    </tr></table>
-<div>
-</div>
-## SCRIPTS
-## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
-<script type="text/javascript">
-//<![CDATA[
-  #if($!userName!="")##
-      document.forms.loginForm.j_password.focus();##
-  #else##
-      document.forms.loginForm.j_username.focus();##
-  #end##
-//]]>
-</script>
-<script type="text/javascript">
-    var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
-    if(fbAppId) {
-        window.fbReady = false;
-        window.fbAsyncInit = function() {
-          Curriki.console.log("fbAsyncInit start.");
-          // below is the script when it's hooked
-          FB.init({appId: fbAppId, status: true, cookie: true,
-                   xfbml: true});
-          FB.Event.subscribe('auth.login', function(response) {
-              window.loginHasHappened(response);
-          });
-          window.loginHasHappened = function(response) {
-                // logged in and connected user, someone you know
-                // we now adjust the link to sign-up with Facebook
-                Curriki.console.log("Is FB logged in: ",response.session);
-                var fbLink = Ext.get("identifyWithfacebook");
-                if(fbLink) {
-                    var elt = fbLink.dom.children[0];
-                    //elt.target="curriki-login-dialog";
-                    elt.removeAttribute("target");
-                    elt.setAttribute("onclick", "Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); window.location.href='" + elt.getAttribute("href") + "'; return false;");
-                    elt.onclick = function() {Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); window.location.href=elt.getAttribute("href"); return false;};
-                }
-          };
-          FB.getLoginStatus(function(response) {
-              window.fbReady = true;
-              if (response.session) {
-                  window.loginHasHappened(response);
-              } else {
-                  if(console) console.log("Not FB logged in and authorized: will simply proceed with a log-in on user-request.");
-              }
-          });
-        };
-        // hook the FB script
-        (function() {
-          var lang = "$context.language";
-          ## built from http://www.facebook.com/translations/FacebookLocales.xml
-          var country = {"en":"US", "fr":"FR", "ru":"RU", "hi": "IN", "es": "LA", "id": "ID", "si": "SI", "ta":"IN", "eo":"EO", "pl":"PL"}[lang];
-          if(typeof(country)!="string") { lang="en"; country="US";}
-          var e = document.createElement('script'); e.async = true;
-          e.src = document.location.protocol +
-            '//connect.facebook.net/'+lang+'_' + country +'/all.js';
-          document.getElementById('fb-root').appendChild(e);
-        }());
-        if(console) console.log("fbAsyncInit finished.")
-    }
-</script>
-{/pre}
-</div>## main
-<script type="text/javascript">
-    Ext.onReady(function() {
-        Curriki.ui.login.validateLoginForm = function () {
-            try {
-                var userName = Ext.get("j_username"),
-                        pass = Ext.get("j_password");
-                var valid = (userName && userName.dom.value != "") && (pass && pass.dom.value != "");
-                Curriki.console.log("Valid? " + valid);
-                return valid;
-            } catch(e) { Curriki.console.log("Error in validating.", e); }
-        };
-        Curriki.ui.login.hideLoginLoading();
-    });
-    scheduleDialogRescale(window, document, "loginIframe", 500,0);
-</script>
+                             style="padding: 3pt 6pt; font-size: 11px;" ##
+                             onclick="window.open('$targets.noLogin','_top')"/></span>
+            </td>
+        </tr></table>
+        <div>
+        </div>
+    ## SCRIPTS
+    ## Ensure that the username field of the login form has the focus to make it easy for users to log in quickly
+        <script type="text/javascript">
+            //<![CDATA[
+                #if("$!userName"!="")##
+                document.forms.loginForm.j_password.focus();##
+                #else##
+                document.forms.loginForm.j_username.focus();##
+                #end##
+            //]]>
+        </script>
+        <script type="text/javascript">
+            var fbAppId='${socialLoginTool.getApplicationApiKey("facebook")}';
+            if(fbAppId) {
+                window.fbReady = false;
+                window.fbAsyncInit = function() {
+                    Curriki.console.log("fbAsyncInit start.");
+                    // below is the script when it's hooked
+                    FB.init({appId: fbAppId, status: true, cookie: true,
+                        xfbml: true});
+                    FB.Event.subscribe('auth.login', function(response) {
+                        window.loginHasHappened(response);
+                    });
+                    window.loginHasHappened = function(response) {
+                        // logged in and connected user, someone you know
+                        // we now adjust the link to sign-up with Facebook
+                        Curriki.console.log("Is FB logged in: ",response.session);
+                        var fbLink = Ext.get("identifyWithfacebook");
+                        if(fbLink) {
+                            var elt = fbLink.dom.children[0];
+                            //elt.target="curriki-login-dialog";
+                            elt.removeAttribute("target");
+                            elt.setAttribute("onclick", "Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); window.location.href='" + elt.getAttribute("href") + "'; return false;");
+                            elt.onclick = function() {Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); window.location.href=elt.getAttribute("href"); return false;};
+                        }
+                    };
+                    FB.getLoginStatus(function(response) {
+                        window.fbReady = true;
+                        if (response.session) {
+                            window.loginHasHappened(response);
+                        } else {
+                            if(console) console.log("Not FB logged in and authorized: will simply proceed with a log-in on user-request.");
+                        }
+                    });
+                };
+                // hook the FB script
+                (function() {
+                    var lang = "$context.language";
+                ## built from http://www.facebook.com/translations/FacebookLocales.xml
+                    var country = {"en":"US", "fr":"FR", "ru":"RU", "hi": "IN", "es": "LA", "id": "ID", "si": "SI", "ta":"IN", "eo":"EO", "pl":"PL"}[lang];
+                    if(typeof(country)!="string") { lang="en"; country="US";}
+                    var e = document.createElement('script'); e.async = true;
+                    e.src = document.location.protocol +
+                            '//connect.facebook.net/'+lang+'_' + country +'/all.js';
+                    document.getElementById('fb-root').appendChild(e);
+                }());
+                if(console) console.log("fbAsyncInit finished.")
+            }
+        </script>
+        {/pre}
+    </div>## main
+    <script type="text/javascript">
+        Ext.onReady(function() {
+            Curriki.ui.login.validateLoginForm = function () {
+                try {
+                    var userName = Ext.get("j_username"),
+                            pass = Ext.get("j_password");
+                    var valid = (userName && userName.dom.value != "") && (pass && pass.dom.value != "");
+                    Curriki.console.log("Valid? " + valid);
+                    return valid;
+                } catch(e) { Curriki.console.log("Error in validating.", e); }
+            };
+            Curriki.ui.login.hideLoginLoading();
+        });
+        scheduleDialogRescale(window, document, "loginIframe", 500,0);
+    </script>
 #if($request.framed=='true')
 </body></html>
 #else

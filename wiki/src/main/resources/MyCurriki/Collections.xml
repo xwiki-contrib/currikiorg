@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>MyCurriki</web>
+<name>Collections</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.ShermanTank</creator>
+<author>XWiki.ShermanTank</author>
+<customClass></customClass>
+<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<creationDate>1332532334000</creationDate>
+<date>1332532865000</date>
+<contentUpdateDate>1332532865000</contentUpdateDate>
+<version>1.1</version>
+<title>Collections</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment>Restoring</comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
+<content>#**
+  * MyCurriki Collections Page
+  *
+  *#
+#**
+  * MyCurriki Collections Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj)
+#mycurriki_collections($userdoc $userobj)
+#end
+#**
+  * MyCurriki Collections Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagebutton $userobj)
+#mycurriki_collectionbutton($userobj)
+#end
+## Actual Display of page
+#mycurriki_pagewithbutton("collections")</content></xwikidoc>

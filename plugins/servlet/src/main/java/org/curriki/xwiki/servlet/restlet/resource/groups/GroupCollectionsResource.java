@@ -1,5 +1,6 @@
 package org.curriki.xwiki.servlet.restlet.resource.groups;
 
+import org.curriki.xwiki.servlet.restlet.router.CTVRepresentation;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 import org.restlet.resource.ResourceException;
@@ -11,6 +12,7 @@ import org.curriki.xwiki.plugin.asset.Asset;
 import org.curriki.xwiki.plugin.asset.composite.RootCollectionCompositeAsset;
 import org.curriki.xwiki.servlet.restlet.resource.BaseResource;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.List;
 
@@ -34,8 +36,18 @@ public class GroupCollectionsResource extends BaseResource {
 
         Request request = getRequest();
         String forGroup = (String) request.getAttributes().get("groupName");
+        try {
+            CTVRepresentation rep = new CTVRepresentation(forGroup + ".WebPreferences", CTVRepresentation.Type.GROUP_COLLECTIONS, xwikiContext);
+            rep.init(xwikiContext);
+            return rep;
+        } catch (IOException e) {
+            throw error(Status.CONNECTOR_ERROR_COMMUNICATION, e.getMessage());
+        } catch (XWikiException e) {
+            throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
+        }
 
-        List<String> resultList;
+
+        /* List<String> resultList;
         Map<String,Object> results;
         try {
             resultList = plugin.fetchGroupCollectionsList(forGroup);
@@ -46,7 +58,7 @@ public class GroupCollectionsResource extends BaseResource {
 
         JSONArray json = flattenMapToJSONArray(results, resultList, "collectionPage");
 
-        return formatJSON(json, variant);
+        return formatJSON(json, variant); */
     }
 
     @Override public void storeRepresentation(Representation representation) throws ResourceException {

@@ -1,0 +1,5 @@
+#set($doc=$xwiki.getDocument($request.doc))
+#set($obj = "")
+#set($obj = $doc.getObject("Panels.PanelClass"))
+#set($class = $obj.xWikiClass)
+#displaypanelcontent($doc $obj)

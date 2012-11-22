@@ -16,16 +16,16 @@
                         ## are not setting up the wysiwyg but instead stay in wiki mode adding a message and a button to switch
                         <p>$msg.get("rve.content.edit.text.instruction_text.wiki_text")</p>
                         #else
-                        <p>$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
+                        <p class="input-textarea-indication">$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
                         #end
                         <div id="input-wiki-wysiwyg">
                           $asset.getTextArea()
                         </div>
                     </li>
                     #if(!$useWikiMode)
-                    <script type="text/javascript" src="${request.contextPath}/tiny_mce/tiny_mce.js"></script>
-                    <script type="text/javascript" src="${request.contextPath}/wiki_editor/wiki_editor.js"></script>
-                    <script language="javascript" type="text/javascript">
+                        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
+                        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
+                        <script language="javascript" type="text/javascript">
                             if ( browser.isIE || browser.isMozilla || browser.isGecko) {
                                 // NLLP Icon
                                 var nortelIconHtmlSrc = '<img src="' + '$msg.get("nortel.lesson.plan.output.heading.icon.url")' + '" alt="" width="' + '$msg.get("nortel.lesson.plan.output.heading.icon.width")' + '" height="' + '$msg.get("nortel.lesson.plan.output.heading.icon.height")' + '" />';
@@ -47,23 +47,30 @@
                                     language: "en",
                                     elements : "content",
                                     mode: "exact",
+                                    safari_warning : false,
                                     content_css: "$xwiki.getSkinFile("style.css", true)",
                                     debug : false,
                                     remove_linebreaks : false,
                                     plugins: 'table, contextmenu, paste, searchreplace',
-                                    wiki_images_path : '${request.contextPath}/bin/download/$asset.web/$asset.name/',
-                                    wiki_attach_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
-                                    wiki_macro_path : '${request.contextPath}/bin/view/$asset.web/$asset.name',
+                                    wiki_images_path : '${request.contextPath}/bin/download/$asset.space/$asset.name/',
+                                    wiki_attach_path : '${request.contextPath}/bin/view/$asset.space/$asset.name',
+                                    wiki_macro_path : '${request.contextPath}/bin/view/$asset.space/$asset.name',
                                     wiki_plugins: 'core,attachments'
                                 });
                             } else {
-                                alert("$msg.get('browsernoncompatible')");
+                                //alert("$msg.get('browsernoncompatible')");
+                                Ext.onReady(function() {
+                                    var hintsParas = Ext.select(".input-textarea-indication").elements;
+                                    if(hintsParas) hintsParas.each(function(para) {
+                                        para.innerHTML = _("rve.content.edit.text.instruction_text.wiki_text");
+                                    });
+                                });
                             }
                       </script>
                       #end
                       #elseif($syntax=="xhtml/1.0")
                     <li class="input-textarea">
-                        <p>$msg.get("rve.content.edit.text.instruction_text.html_wysiwyg")</p>
+                        <p class="input-textarea-indication">$msg.get("rve.content.edit.text.instruction_text.html_wysiwyg")</p>
                         <div id="input-html-wysiwyg">
                           $asset.getTextArea()
                         </div>

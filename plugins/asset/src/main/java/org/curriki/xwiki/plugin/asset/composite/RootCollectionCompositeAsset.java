@@ -6,9 +6,9 @@ import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.objects.BaseObject;
 import org.curriki.xwiki.plugin.asset.Constants;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.curriki.xwiki.plugin.asset.Asset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 /**
  */
 public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
-    private static final Log LOG = LogFactory.getLog(RootCollectionCompositeAsset.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RootCollectionCompositeAsset.class);
 
     public RootCollectionCompositeAsset(XWikiDocument doc, XWikiContext context) {
         super(doc, context);
@@ -128,7 +128,7 @@ public class RootCollectionCompositeAsset extends CollectionCompositeAsset {
     public Map<String,Object> fetchCollectionsInfo() {
         return fetchCollectionsInfo("date");
     }
-
+    
     /**
      * Get a list of all viewable collections owned by a specific user with extra info
      *

@@ -51,12 +51,7 @@ public class FieldResource extends BaseResource {
             json.put("fieldName", fieldName);
             json.put("fieldType", fieldType);
             json.put("shortFieldType", shortFieldType);
-            if (className.equals("CurrikiCode.AssetClass") && fieldName.equals("category")) {
-                // TODO: Fix this when the class is fixed
-                // We are not using valid values (as per the DBListClass list) for category for some reason
-                // So give the actual used values here
-                json.put("allowedValues", new String[] {"audio", "text", "image", "link"});
-            } else if (shortFieldType.equals("Boolean")) {
+            if (shortFieldType.equals("Boolean")) {
                 // No extra info
             } else if (shortFieldType.equals("Date")) {
                 // No extra info

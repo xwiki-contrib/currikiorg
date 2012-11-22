@@ -1,19 +1,23 @@
 package org.curriki.xwiki.plugin.curriki;
 
-import java.sql.Time;
+import java.io.IOException;
+import java.io.Writer;
+import java.net.InetAddress;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager;
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi;
 import org.curriki.xwiki.plugin.asset.*;
@@ -39,21 +43,28 @@ import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.spacemanager.api.Space;
 import com.xpn.xwiki.web.XWikiRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  */
 public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface, XWikiDocChangeNotificationInterface {
     public static final String PLUGIN_NAME = "curriki";
 
-    private static final Log LOG = LogFactory.getLog(CurrikiPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CurrikiPlugin.class);
     private static ThreadLocal<SimpleDateFormat> durationDf = new ThreadLocal<SimpleDateFormat>() {
         protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("HH:mm:s:SSS");
+            return new SimpleDateFormat("mm'm'ss's'SSS'ms'");
         }};
+    private static boolean startupURLLaunched = false;
 
     public CurrikiPlugin(String name, String className, XWikiContext context) {
         super(name, className, context);
@@ -78,6 +89,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             initSubAssetClass(context);
             initReorderAssetClass(context);
             initCompositeAssetClass(context);
+            initSolrClient(context);
         } catch (XWikiException e) {
             if (LOG.isErrorEnabled())
                 LOG.error("Error generating asset classes", e);
@@ -94,6 +106,38 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         // Insert a notification so that we can handle rollback and convert assets
         // if we are reading an asset in the old format
         context.getWiki().getNotificationManager(). addGeneralRule(new DocChangeRule(this, true, false));
+
+        if(!startupURLLaunched) {
+            String startupURLs = context.getWiki().Param("curriki.startupURLs");
+            final Pattern ptrn = Pattern.compile("http://(.*):(.*)@([^/]+)(:([0-9]+))?/.*");
+            if(startupURLs!=null) for(final String startupURL: startupURLs.split("[,\t\n ]+")) {
+                new Thread("Startup URL fetch " + startupURL) {
+                    public void run() {
+                        try {
+                            LOG.warn("Loading startup URL " + startupURL + ".");
+                            HttpClient client = new HttpClient();
+                            Matcher matcher = ptrn.matcher(startupURL);
+                            if(matcher.matches()) {
+                                client.getParams().setAuthenticationPreemptive(true);
+                                Credentials defaultcreds = new UsernamePasswordCredentials(matcher.group(1), matcher.group(2));
+                                String host = matcher.group(3);
+                                int port = 80;
+                                if(matcher.group(5)!=null && matcher.group(5).length()>0) port = Integer.parseInt(matcher.group(5));
+                                client.getState().setCredentials(new AuthScope(host, port, AuthScope.ANY_REALM), defaultcreds);
+                            }
+                            GetMethod method = new GetMethod(startupURL);
+                            int status = client.executeMethod(method);
+                            if(status!=200) throw new IllegalStateException("URL " + startupURL + " responded " + method.getStatusLine());
+                            LOG.warn("Startup URL " + startupURL + " successfully loaded.");
+                        } catch (Exception e) {
+                            LOG.warn("Notification page " + startupURL + " failed to load.",e);
+                        }
+                    }
+                }.start();
+            }
+            startupURLLaunched = true;
+        }
+
 
     }
 
@@ -118,7 +162,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     public Asset createAsset(String parent, XWikiContext context) throws XWikiException {
         return Asset.createTempAsset(parent, context);
     }
-    
+
 
     public Asset copyAsset(String copyOf, String publishSpace, XWikiContext context) throws XWikiException {
         return Asset.copyTempAsset(copyOf, publishSpace, context);
@@ -184,7 +228,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
      * @return List of all groups that the specified user is in
      */
     public Map<String,Object> fetchUserGroups(String forUser, XWikiContext context) {
-        System.out.println("fetchUserGroups " + forUser);
+        if(LOG.isDebugEnabled()) LOG.debug("fetchUserGroups " + forUser);
         long start = System.nanoTime(), time = start;
         Map<String,Object> groups = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi(CurrikiSpaceManager.CURRIKI_SPACEMANGER_NAME, context);
@@ -192,7 +236,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         try {
             spaces = sm.getSpaceNames(forUser, null);
             time = System.nanoTime();
-            System.out.println("fetchUserGroups: getSpaceNames: " + durationDf.get().format((time-start)/1000000)+ "::" + ((time-start)%1000000));
+            if(LOG.isDebugEnabled()) LOG.debug("fetchUserGroups: getSpaceNames: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
             start = time;
         } catch (Exception e) {
             // Ignore exception -- just return an empty list
@@ -205,7 +249,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             if (space instanceof String) {
                 groups.put((String) space, getGroupInfo((String) space, context));
                 time = System.nanoTime();
-                System.out.println("fetchUserGroups: getGroupInfo: "+ space+ ": " + durationDf.get().format(time-start)+ "::" + ((time-start)%1000000));
+                if(LOG.isDebugEnabled()) LOG.debug("fetchUserGroups: getGroupInfo: "+ space+ ": " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
                 start = time;
             }
         }
@@ -214,7 +258,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
     }
 
     protected Map<String,Object> getGroupInfo(String group, XWikiContext context) {
-        System.out.println("getGroupInfo " + group);
+        if(LOG.isDebugEnabled()) LOG.debug("getGroupInfo " + group);
         Map<String,Object> groupInfo = new HashMap<String,Object>();
         CurrikiSpaceManagerPluginApi sm = (CurrikiSpaceManagerPluginApi) context.getWiki().getPluginApi("csm", context);
 
@@ -225,11 +269,11 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             //CURRIKI-5472: this is a dangerous spot: it has to deserialize all the collections of the group
 
             if(hasCollections(group, context)) {
-                System.out.println("Group " + group +" has collections.");
+                if(LOG.isDebugEnabled()) LOG.debug("Group " + group +" has collections.");
                 groupInfo.put("collectionCount", 1);
                 groupInfo.put("editableCollectionCount", 1);
             } else {
-                System.out.println("Group " + group + " has no collections.");
+                if(LOG.isDebugEnabled()) LOG.debug("Group " + group + " has no collections.");
                 groupInfo.put("collectionCount", 0);
                 groupInfo.put("editableCollectionCount", 0);
             }
@@ -252,7 +296,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         return groupInfo;
     }
-    
+
     private boolean hasCollections(String entity, XWikiContext context) {
         entity = entity.replaceFirst(Constants.USER_PREFIX_REGEX, ""); // For users
         entity = entity.replaceFirst("\\."+Constants.ROOT_COLLECTION_PAGE+"$", ""); // For groups
@@ -306,26 +350,37 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
 
     public List<String> fetchCollectionsList(String entity, XWikiContext context) throws XWikiException {
-        System.out.println("fetchCollectionsList " + entity);
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList " + entity);
+        long start = System.nanoTime();
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
             return new ArrayList<String>();
         }
 
-        return root.getSubassetList();
+        List<String> l = root.getSubassetList();
+
+        long time = System.nanoTime();
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
+        return l;
     }
 
     public Map<String,Object> fetchCollectionsInfo(String entity, XWikiContext context) throws XWikiException {
-        System.out.println("fetchCollectionsInfo " + entity);
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsInfo " + entity);
+        long start = System.nanoTime();
         RootCollectionCompositeAsset root = fetchRootCollection(entity, context);
         if (root == null) {
             // Ignore any error, will just return 0 results
             return new HashMap<String,Object>();
         }
 
-        return root.fetchCollectionsInfo();
+        Map<String,Object> r = root.fetchCollectionsInfo();
+        long time = System.nanoTime();
+        if(LOG.isDebugEnabled()) LOG.debug("fetchCollectionsList: " + durationDf.get().format((time-start)/1000000)+ " " + ((time-start)%1000000) + "ns");
+        return r;
     }
+
+
 
     public RootCollectionCompositeAsset fetchRootCollection(String entity, XWikiContext context) throws XWikiException {
         entity = entity.replaceFirst(Constants.USER_PREFIX_REGEX, ""); // For users
@@ -530,7 +585,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setCache(true);
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparators("|");
         ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setSeparator(" ");
-        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setPicker(true);                
+        ((DBTreeListClass)bclass.get(Constants.ASSET_CLASS_FRAMEWORK_ITEMS)).setPicker(true);
         needsUpdate |= bclass.addStaticListField(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL, 5, true, Constants.ASSET_CLASS_EDUCATIONAL_LEVEL_VALUES);
         ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setSeparators(" ,|");
         ((StaticListClass)bclass.get(Constants.ASSET_CLASS_EDUCATIONAL_LEVEL)).setSeparator("#--#");
@@ -643,7 +698,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         bclass.setName(Constants.VIDEO_ASSET_CLASS);
 
         needsUpdate |= bclass.addStaticListField(Constants.VIDEO_ASSET_PARTNER, Constants.VIDEO_ASSET_PARTNER, 1, false,
-                      Constants.VIDEO_ASSET_PARTNER_VALUES);        
+                Constants.VIDEO_ASSET_PARTNER_VALUES);
         needsUpdate |= bclass.addTextField(Constants.VIDEO_ASSET_ID, Constants.VIDEO_ASSET_ID, 30);
 
         String content = doc.getContent();
@@ -674,7 +729,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
 
         needsUpdate |= bclass.addTextField(Constants.ARCHIVE_ASSET_START_FILE, Constants.ARCHIVE_ASSET_START_FILE, 60);
         needsUpdate |= bclass.addStaticListField(Constants.ARCHIVE_ASSET_TYPE, Constants.ARCHIVE_ASSET_TYPE, 1, false,
-                      Constants.ARCHIVE_ASSET_TYPE_VALUES);
+                Constants.ARCHIVE_ASSET_TYPE_VALUES);
 
 
         String content = doc.getContent();
@@ -859,7 +914,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             xwiki.saveDocument(doc, context);
     }
 
-    
+
     /**
      * Notification to handle a rollback and check the result
      */
@@ -870,7 +925,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             // because the previous one is a copy
             Document apidoc = newdoc.newDocument(context);
 
-            System.out.println("Action " + context.getAction() + " " + newdoc.getFullName());
+            if(LOG.isWarnEnabled()) LOG.warn("Action " + context.getAction() + " " + newdoc.getFullName());
             if (context.getAction().equals("rollback")&&(apidoc instanceof Asset)) {
                 Asset asset = (Asset) apidoc;
                 if (!asset.isLatestVersion()) {
@@ -951,7 +1006,324 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         numRequestsEnsuringCookies++;
         timeSpentEnsuringCookies+= (System.nanoTime()-start);
         if(numRequestsEnsuringCookies>0 && numRequestsEnsuringCookies % 10==0)
-            System.out.println("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
+            if(LOG.isDebugEnabled()) LOG.debug("Spent mean time of " + (timeSpentEnsuringCookies/numRequestsEnsuringCookies) + " nanoseconds in " + numRequestsEnsuringCookies + " requests to ensure cookies.");
     }
+
+    // ---- solr specific ------
+    // this code is not meant to stay here but is expected to move after the GSoC for SOLR is concluded
+    private HttpClient solrClient = null;
+    private String solrBaseURL;
+
+    public void initSolrClient(XWikiContext context) {
+        solrBaseURL = context.getWiki().Param("org.curriki.solrUrl");
+        MultiThreadedHttpConnectionManager connectionManager =
+                new MultiThreadedHttpConnectionManager();
+        solrClient = new HttpClient(connectionManager);
+    }
+
+    public String solrGetSingleValue(String query, String fieldName) throws IOException {
+        GetMethod g = solrCreateQueryGetMethod(query, fieldName, 0, 1);
+        int status = solrClient.executeMethod(g);
+        if(status !=200) throw new IllegalStateException("Solr responded status " + g.getStatusCode() + " " + g.getStatusText());
+        feedFieldFromXmlStream(g, singleValueReadBuff.get(), fieldName);
+        StringBuilder builder = singleValueReadBuff.get().getBuilder();
+        String result = builder.toString().trim();
+        builder.delete(0, builder.length());
+        return result;
+    }
+
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, int start, int rows) throws IOException {
+        return solrCreateQueryGetMethod(query, fieldNames, null, start, rows);
+    }
+
+    public GetMethod solrCreateQueryGetMethod(String query, String fieldNames, String sortParam, int start, int rows) throws IOException {
+        // TODO: only allow with programming right?
+        String url = solrBaseURL + "/select?q=" + URLEncoder.encode(query, "UTF-8") + "&fl=" + fieldNames + "&start=" + start + "&rows=" + rows;
+        if(sortParam!=null && sortParam.length()>0){
+            url += "&sort=" + sortParam;
+        }
+        GetMethod result = new GetMethod(url);
+        return result;
+    }
+
+    static ThreadLocal<StringBuilderWriter> pingReadBuff = new ThreadLocal<StringBuilderWriter>() {
+        protected StringBuilderWriter initialValue() {
+            return new StringBuilderWriter(128);
+        }
+    }, singleValueReadBuff = new ThreadLocal<StringBuilderWriter>() {
+        protected StringBuilderWriter initialValue() {
+            return new StringBuilderWriter(1024);
+        }
+    };
+    public boolean solrCheckIsUp() {
+        if(solrBaseURL == null) return false;
+        try {
+            GetMethod g = new GetMethod(solrBaseURL + "/admin/ping");
+            startSolrMethod(g);
+            feedFieldFromXmlStream(g, pingReadBuff.get(), "status");
+            // TODO: shorter timeout here
+            String val=pingReadBuff.get().toString();
+            pingReadBuff.get().getBuilder().delete(0, val.length());
+            return val.trim().equals("OK");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<String> solrListDocNames(String query, int start, int num) {
+        if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
+        try {
+            GetMethod g = solrCreateQueryGetMethod(query, "fullname", start, num);
+            startSolrMethod(g);
+            List<String> fullnames = collectFieldValuesFromXmlStream(g, "fullname");
+            return fullnames;
+        } catch (Exception e) {
+            throw new IllegalStateException("Error at SOLR: ", e);
+        }
+    }
+
+    public int solrCountDocs(String query) {
+        if(solrBaseURL == null) throw new IllegalStateException("No SOLR configured.");
+        try {
+            GetMethod g = solrCreateQueryGetMethod(query, "fullname", 0, 0);
+            startSolrMethod(g);
+            int count = collectDocCount(g);
+            return count;
+        } catch (Exception e) {
+            throw new IllegalStateException("Error at SOLR: ", e);
+        }
+    }
+
+    public void solrCollectResultsFromQueryWithSort(String query, String fields, String sortParam, int start, int max, SolrResultCollector collector) {
+        try {
+            GetMethod get = solrCreateQueryGetMethod(query, fields, sortParam, start, max);
+            startSolrMethod(get);
+            feedFieldFromXmlStream(get, collector, fields);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void solrCollectResultsFromQuery(String query, String fields, int start, int max, SolrResultCollector collector) {
+        solrCollectResultsFromQueryWithSort(query, fields, null, start, max, collector);
+    }
+
+    public void startSolrMethod(GetMethod g) {
+        try {
+            int status = solrClient.executeMethod(g);
+            if(status!=200) throw new IllegalStateException("Solr server responded: " + status + ":" + g.getStatusText());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Set<String> publicConfigNames = new TreeSet(Arrays.asList("hostname", "GA", "addthis", "standardstab", "mediahost", "globalDebug","appserverHost"));
+    private static Map<String,String> publicConfigCache = new TreeMap<String,String>();
+    private static final String MISSING = "----missing----123123";
+
+    public String getPublicCurrikiConfig(String name, String defaultVal, XWikiContext context) {
+        if(name==null || !publicConfigNames.contains(name)) throw new IllegalAccessError("Property \"" + name + "\" not allowed for read.");
+        String r = publicConfigCache.get(name);
+        if(r==MISSING) return defaultVal;
+        if(r!=null) return r;
+
+        if("appserverHost".equals(name)) {
+            try {
+                publicConfigCache.put(name, InetAddress.getLocalHost().getHostName());
+                return publicConfigCache.get(name);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                publicConfigCache.put(name, MISSING);
+                return defaultVal;
+            }
+        }
+        r = context.getWiki().Param("curriki.system." + name, null);
+        if(r==null) r = MISSING;
+        if(publicConfigCache.size()>1000) throw new IllegalStateException("Can't have more than 1000 properties for curriki.");
+        publicConfigCache.put(name, r);
+        if(r==MISSING) return defaultVal;
+        return r;
+    }
+
+    public interface SolrResultCollector {
+        /** called at beginning to indicate the first results information */
+        public void status(int statusCode, int qTime, int numFound, int start);
+
+        /** This called back by the method feedField... and should not call methods of the solr-client. */
+        public void addValue(String name, String value);
+
+        /** indicates that the following values concern a new document */
+        public void newDocument();
+    }
+
+
+    public void feedFieldFromXmlStream(GetMethod g, final SolrResultCollector collector, final String fieldNames) throws IOException {
+        try {
+            // TODO: use new API completely
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {;
+                boolean isInInterestingZone = false, isInInterestingArray = false, isInStatus = false;
+                Set<String> names = new TreeSet(Arrays.asList(fieldNames.split(",")));
+                int statusCode=-1, qTime=-1;
+                String name = null;
+
+                @Override public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    String n=attributes.getValue("name");
+                    if("doc".equals(qName)) {
+                        collector.newDocument();
+                    }
+                    if("lst".equals(qName) && "responseHeader".equals(n)) isInStatus = true;
+                    else if("result".equals(qName) && "response".equals(n)) {
+                        isInStatus = false;
+                        String numFound = attributes.getValue("numFound"), start = attributes.getValue("start");
+                        if(numFound==null) numFound="-1"; if(start==null) start="-1";
+                        collector.status(statusCode, qTime, Integer.parseInt(numFound), Integer.parseInt(start));
+                    }
+                    else if("str".equals(qName) || "arr".equals(qName) || "int".equals(qName) || "bool".equals(qName)) {
+                        if(isInInterestingArray) isInInterestingZone = true;
+                        else if(isInStatus && n!=null && ("QTime".equals(n) || "status".equals(n) )|| names.contains(n)) {
+                            if("str".equals(qName) || "int".equals(qName) || "bool".equals(qName)) isInInterestingZone = true;
+                            else isInInterestingArray = true;
+                            name = n;
+                        }
+                    }
+                }
+
+                private String collectValue() {
+                    String value = singleValueReadBuff.get().toString();
+                    singleValueReadBuff.get().getBuilder().delete(0, value.length());
+                    return value;
+                }
+
+                @Override public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if(isInStatus && "int".equals(qName)) {
+                        if("status".equals(name)) {
+                            statusCode = Integer.parseInt(collectValue());
+                            isInInterestingZone = false;
+                        } else if("QTime".equals(name)) {
+                            statusCode = Integer.parseInt(collectValue());
+                            isInInterestingZone = false;
+                        }
+                    }
+                    if(isInInterestingZone && !isInStatus &&  (("str".equals(qName)) || "bool".equals(qName) || "int".equals(qName)) ) {
+                        isInInterestingZone = false;
+                        collector.addValue(name, collectValue());
+                        name = null;
+                    }
+                    if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
+                    if("lst".equals(qName) && isInStatus) {
+                        isInStatus = false;
+                    }
+
+                }
+
+                @Override public void characters(char[] ch, int start, int length) throws SAXException {
+                    if(isInInterestingZone) {
+                        singleValueReadBuff.get().write(ch, start, length);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e);
+        }
+    }
+
+    public void feedFieldFromXmlStream(GetMethod g, final Writer out, final String elementName) throws IOException {
+            try {
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
+                boolean isInInterestingStringBit = false, isInInterestingArray = false;
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    try {
+                        if(isInInterestingStringBit || isInInterestingArray) out.write(ch, start, length);
+
+                    } catch (IOException e) {
+                        throw new IllegalStateException("Broken stream, can't write to " + out);
+                    }
+                }
+
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    String nameAtt = attributes.getValue("name");
+                    if("str".equals(qName)) {
+                        if(elementName.equals(nameAtt)) isInInterestingStringBit = true;
+                    }
+                    if("arr".equals(qName) && elementName.equals(nameAtt)) isInInterestingArray = true;
+                }
+
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if("str".equals(localName)) isInInterestingStringBit = false;
+                    if(isInInterestingArray && "arr".equals(qName)) isInInterestingArray = false;
+                }
+            });
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+    private List<String> collectFieldValuesFromXmlStream(GetMethod g, final String elementName) throws IOException {
+        try {
+            final LinkedList<String> list = new LinkedList<String>();
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
+                boolean isInInterestingStringBit = false, isInInterestingArray = false;
+                StringBuilderWriter writer = singleValueReadBuff.get();
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    if(isInInterestingStringBit) writer.write(ch, start, length);
+                }
+
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    String nameAtt = attributes.getValue("name");
+                    if("str".equals(qName)) {
+                        if(elementName.equals(nameAtt)) isInInterestingStringBit = true;
+                    }
+                }
+
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if("str".equals(qName)) {
+                        if(isInInterestingStringBit) {
+                            isInInterestingStringBit = false;
+                            String value = writer.getBuilder().toString();
+                            pushValue(value);
+                            writer.getBuilder().delete(0, value.length());
+                        }
+                    }
+                }
+
+                private void pushValue(String value) {
+                    list.add(value);
+                }
+            });
+            return list;
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+
+    private int collectDocCount(GetMethod g) throws IOException {
+        try {
+            final StringBuilder b = singleValueReadBuff.get().getBuilder();
+            SAXParserFactory.newInstance().newSAXParser().parse(g.getResponseBodyAsStream(), new DefaultHandler() {
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    if("result".equals(qName)) {
+                        b.append(attributes.getValue("numFound"));
+                    }
+                }
+
+            });
+            String result = b.toString();
+            b.delete(0, result.length());
+            return Integer.parseInt(result);
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
 
 }

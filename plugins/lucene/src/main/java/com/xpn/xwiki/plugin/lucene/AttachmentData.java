@@ -22,14 +22,14 @@ package com.xpn.xwiki.plugin.lucene;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds all data but the content of an attachment to be indexed. The content is retrieved at indexing time, which
@@ -55,7 +55,7 @@ public class AttachmentData extends IndexData
         MIMETYPES.put("xls", "application/ms-excel");
     }
 
-    private static final Log LOG = LogFactory.getLog(AttachmentData.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AttachmentData.class);
 
     private int size;
 

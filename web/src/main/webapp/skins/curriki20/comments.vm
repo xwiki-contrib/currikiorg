@@ -1,0 +1,56 @@
+#**
+ *  Comments entry point. It is called from view.vm
+ *  It calls commentsinline for non asset pages for compatibility
+ *#
+#set($asset = $doc)
+#if(!$asset.getObject("CurrikiCode.AssetClass"))
+#template("commentsinline.vm")
+#else
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-$!viewer">
+    #asset_resourcefunctions($asset)
+    #asset_icontitle($asset)
+    #asset_attribution($asset)
+    #asset_rating($asset)
+    #asset_tabs($asset "comments")
+    <div id="asset-wrapper-inner">
+        #set($addedItems = false)
+        <ul id="asset-links">
+            #if($asset.hasAccessLevel("comment"))
+            #set($addedItems = true)
+            <li class="last-item"><a href="javascript:void(0)" onclick="showCommentBlock(); return false;" title="$msg.get("rve.comments.comment.addcomment_rollover")">$msg.get("rve.comments.comment.addcomment_link")</a></li>
+<script type="text/javascript">
+/* <![CDATA[ */
+function showCommentBlock(){
+	document.getElementById('comment-submit-form').style.display = 'block';
+	clickAwayCounter++;
+	clickAwayActive = true;
+	location = '#comment-submit-form';
+	document.forms['comment-add']['XWiki.XWikiComments_comment'].focus();
+	if(Ext.get('XWiki.XWikiComments_rating')&&!Ext.get('XWiki.XWikiComments_rating').hasClass('x-hidden')){
+		var nr = new Curriki.ui.Rating({id:'XWikiComments_rating'});
+		nr.applyToMarkup('XWiki.XWikiComments_rating');
+	}else{
+		if(Ext.get('XWiki.XWikiComments_rating')&&Ext.get('XWiki.XWikiComments_rating').hasClass('x-form-rating-field')&&Ext.getCmp('XWikiComments_rating')){
+			Ext.getCmp('XWikiComments_rating').alignStars();
+		}
+	}
+}
+
+#if("$!request.addcomment" != "" && "$!request.addcomment" == "true") ##{
+Ext.onReady(function(){
+  showCommentBlock();
+});
+#end ##}
+/* ]]> */
+</script>
+            #end
+            #if($addedItems == false)
+            <li class="last-item"></li>
+            #end
+        </ul>
+        <div class="clear-right"></div>
+        #asset_comments($asset)
+    </div> ##asset-wrapper-inner
+</div> ##asset-wrapper
+#end

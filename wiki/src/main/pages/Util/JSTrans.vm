@@ -15,7 +15,7 @@ $response.setContentType("text/javascript")
 #end##}
 var i18nDict = {
 'LANGUAGE':'$lang'
-,'MEDIAHOST':'${MEDIAHOST}'
+,'MEDIAHOST':'$xwiki.curriki.getPublicCurrikiConfig("mediahost","missing-curriki.system.mediahost-in-config")'
 #foreach ($item in $context.context.wiki.getXWikiPreference("documentBundles", $context.context).split(","))##{
 ,'TRANSLATION_PAGE_$item':'$item'
 #set($tDoc = $xwiki.getDocument($item))

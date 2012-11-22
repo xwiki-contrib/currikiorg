@@ -9,11 +9,6 @@ import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.plugin.image.ImagePlugin;
 
 /**
- * Created by IntelliJ IDEA.
- * User: ludovic
- * Date: 10 déc. 2008
- * Time: 19:42:51
- * To change this template use File | Settings | File Templates.
  */
 public class ImageAssetManager extends AttachmentAssetManager {
 
@@ -31,7 +26,7 @@ public class ImageAssetManager extends AttachmentAssetManager {
     public void updateSubAssetClass(XWikiDocument assetDoc, String filetype, String category, XWikiAttachment attachment, XWikiContext context) {
         assetDoc.getObject(Constants.IMAGE_ASSET_CLASS, true, context);
 
-        ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin(ImagePlugin.PLUGIN_NAME, context);
+        ImagePlugin imgPlugin = (ImagePlugin) context.getWiki().getPlugin("image", context);
 
         BaseObject imageObject = assetDoc.getObject(Constants.IMAGE_ASSET_CLASS, true, context);
 

@@ -29,7 +29,7 @@
   <parent>
     <groupId>org.curriki</groupId>
     <artifactId>curriki-plugins</artifactId>
-    <version>1.0-SNAPSHOT</version>
+      <version>1.14-SNAPSHOT</version>
   </parent>
   <artifactId>curriki-plugin-spacemanager</artifactId>
   <name>XWiki Products - Curriki - Plugins - Space Manager</name>
@@ -37,31 +37,36 @@
   <description>XWiki Products - Curriki - Plugins - Space Manager</description>
   <dependencies>
     <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-legacy-oldcore</artifactId>
+      <version>${platform.version}</version>
+    </dependency>
+    <!-- Mailsender -->
+    <dependency>
+      <groupId>org.xwiki.platform</groupId>
+      <artifactId>xwiki-platform-mailsender</artifactId>
+      <version>${platform.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.curriki</groupId>
-      <artifactId>xwiki-corecurriki</artifactId>
-      <version>${platform.core.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>jmock</groupId>
-      <artifactId>jmock-cglib</artifactId>
-      <version>1.1.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.xpn.xwiki.platform.plugins</groupId>
-      <artifactId>xwiki-plugin-mailsender</artifactId>
-      <version>1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>com.xpn.xwiki.platform.plugins</groupId>
       <artifactId>xwiki-plugin-spacemanager</artifactId>
-      <version>1.1.1</version>
+      <version>${platform.plugins.spacemanager.version}</version>
     </dependency>
     <dependency>
       <groupId>com.xpn.xwiki.platform.plugins</groupId>
       <artifactId>xwiki-plugin-invitationmanager</artifactId>
       <version>${platform.plugins.invitationmanager.version}</version>
     </dependency>
+
+      <dependency><groupId>org.xwiki.platform</groupId>
+          <artifactId>xwiki-platform-model</artifactId><version>${platform.version}</version>
+          <exclusions><exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion></exclusions>
+      </dependency>
+      <dependency><artifactId>xwiki-rendering-api</artifactId>
+          <version>${platform.version}</version><groupId>org.xwiki.rendering</groupId>
+      </dependency>
+      <dependency><artifactId>commons-lang</artifactId><groupId>commons-lang</groupId></dependency>
+
   </dependencies>
 </project>      

@@ -27,13 +27,13 @@ import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.objects.classes.BaseClass;
 import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class LicenceManagerPlugin extends XWikiDefaultPlugin implements XWikiPluginInterface, LicenceManagerConstant {
-    private static Log log = LogFactory.getFactory().getInstance(LicenceManagerPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LicenceManagerPlugin.class);
 
     public LicenceManagerPlugin(String name, String className, XWikiContext context) {
         super(name, className, context);
@@ -69,7 +69,7 @@ public class LicenceManagerPlugin extends XWikiDefaultPlugin implements XWikiPlu
 
     public String addLicence(String name, boolean compatible, XWikiContext context) throws XWikiException {
         String pageName = context.getWiki().getUniquePageName(LICENCE_SPACE, name, context);
-        XWikiDocument xwDoc = context.getWiki().getDocument(LICENCE_SPACE, pageName, context);
+        XWikiDocument xwDoc = context.getWiki().getDocumentFromPath(LICENCE_SPACE + "." + pageName, context);
         com.xpn.xwiki.api.Object obj;
         Licence doc;
 
@@ -105,7 +105,7 @@ public class LicenceManagerPlugin extends XWikiDefaultPlugin implements XWikiPlu
     }
 
     public String getLicenceName(String name, XWikiContext context) throws XWikiException {
-        Licence lic = (Licence) context.getWiki().getDocument(LICENCE_SPACE, name, context).newDocument(context);
+        Licence lic = (Licence) context.getWiki().getDocumentFromPath(LICENCE_SPACE + "." + name, context).newDocument(context);
         lic.use(LICENCE_CLASS_FULLNAME);
         return (String) lic.get(LICENCE_ITEM_NAME);
     }
@@ -116,7 +116,7 @@ public class LicenceManagerPlugin extends XWikiDefaultPlugin implements XWikiPlu
         boolean needsUpdate = false;
 
         try {
-            doc = xwiki.getDocument(LICENCE_CLASS_FULLNAME, context);
+            doc = xwiki.getDocumentFromPath(LICENCE_CLASS_FULLNAME, context);
         } catch (Exception e) {
             doc = new XWikiDocument();
             doc.setSpace("XWiki");
@@ -132,7 +132,7 @@ public class LicenceManagerPlugin extends XWikiDefaultPlugin implements XWikiPlu
         String content = doc.getContent();
         if ((content==null)||(content.equals(""))) {
             needsUpdate = true;
-            doc.setContent("1 " + LICENCE_CLASS_FULLNAME);
+            doc.setContent((String) ("1 " + LICENCE_CLASS_FULLNAME));
         }
 
         if (needsUpdate)

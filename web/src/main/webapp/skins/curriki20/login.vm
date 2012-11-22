@@ -1,0 +1,33 @@
+#if($context.user!="XWiki.XWikiGuest")
+#if($request.xredirect)
+$response.sendRedirect($request.xredirect)
+#else
+$response.sendRedirect($xwiki.getURL("Main.WebHome"))
+#end
+#elseif($doc.fullName != "XWiki.XWikiLogin")
+#set($qs = "")
+#set($qs = $request.queryString)
+#if(!$request.getParameter("xredirect"))
+#set($qs = "xredirect=$util.encodeURI($doc.getURL('view'))&${qs}")
+#end
+$response.sendRedirect($xwiki.getURL("XWiki.XWikiLogin", "login", $qs))
+#else
+###
+### Login page
+###
+###
+#template("startpage.vm")
+<div class="main layoutsubsection">
+<div id="mainContentArea" style="margin-left:0;">
+  #set($attachlist = $doc.getAttachmentList())
+  #if($listtool.size($attachlist) > 0)
+    #set($max = $listtool.size($attachlist) - 1)
+    #set($i = $mathtool.random(0,$max))
+    #set($attach = $attachlist.get($i))    
+    #set($url = $doc.getAttachmentURL($attach.filename))
+    <img src="$!url" />
+  #end
+</div>## mainContentArea
+</div>## main
+#template("endpage.vm")
+#end 

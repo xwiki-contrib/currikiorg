@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>Admin</web>
+<name>UserManagementGroovy</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.flixt</creator>
+<author>XWiki.flixt</author>
+<customClass></customClass>
+<contentAuthor>XWiki.flixt</contentAuthor>
+<creationDate>1350069939000</creationDate>
+<date>1353020964000</date>
+<contentUpdateDate>1353020964000</contentUpdateDate>
+<version>88.1</version>
+<title>UserManagementGroovy</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
+<content>/* Groovy Class #* */
+
+import com.xpn.xwiki.api.XWiki
+import javax.servlet.http.HttpServletRequest
+import org.curriki.xwiki.plugin.curriki.CurrikiPluginApi
+import org.curriki.xwiki.plugin.curriki.CurrikiPlugin
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
+import net.sf.json.JSONSerializer
+import net.sf.json.JSONArray
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.util.AbstractXWikiRunnable
+import javax.servlet.http.HttpSession
+import com.xpn.xwiki.XWikiContext
+import com.xpn.xwiki.web.Utils
+import org.xwiki.context.Execution
+import com.xpn.xwiki.doc.XWikiDocument
+import com.xpn.xwiki.objects.BaseObject
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import com.xpn.xwiki.api.Document
+
+public class UserManagementGroovy implements CurrikiPlugin.SolrResultCollector {
+
+    /**
+     * LOGGER
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(UserManagementGroovy.class);
+
+    /**
+     * The Request of the velocity page containing the parameters such as the username
+     */
+    private HttpServletRequest request;
+
+    /**
+     * The xwiki object of the running curriki instance
+     */
+    private XWiki wiki;
+
+    /**
+     * The interface to interact with the curriki api
+     */
+    private CurrikiPluginApi currikiPluginApi;
+
+    /**
+     * The context of the request
+     */
+    private Context context;
+
+    /**
+     * The results for the queries to solr to get the user information
+     */
+    private Map&lt;String, Map&lt;String, String&gt;&gt; foundUsers = new LinkedHashMap&lt;String, Map&lt;String, String&gt;&gt;();
+
+    /**
+     * A temporary map for a single user until it is added to the Map above
+     */
+    private Map&lt;String, String&gt; tmpUser = new LinkedHashMap&lt;String, String&gt;();
+
+    /**
+     * The maximum number of rows which are given to us by solr responses
+     */
+    private int maxRowsInSolrResponse = 25;
+
+    /**
+     * The current page number the user if viewing
+     */
+    private int currentPageNumber = 0;
+
+    /**
+     * The total number of solr results without paging
+     */
+    private int totalNumberOfSolrResults = 0;
+
+    /**
+     * The number of pages which are containing results (totalNumberOfSolrResults / maxRowsInSolrResponse)
+     */
+    private int totalNumberOfPages = 0;
+
+    /**
+     * The value of the sort parameter in a request to this tool. Which is then used to sort the solr result
+     */
+    private String sortParam = "";
+
+    /**
+     * If a status change of users is made this set keeps track of the activated ones
+     */
+    private Set&lt;String&gt; activatedUsers = new LinkedHashSet&lt;String&gt;();
+
+    /**
+     * If a status change of users is made this set keeps track of the deactivated ones
+     */
+    private Set&lt;String&gt; deactivatedUsers = new LinkedHashSet&lt;String&gt;();
+
+    /**
+     * If a status change of users is made this set keeps track of the inactivated ones
+     */
+    private Set&lt;String&gt; inactivatedUsers = new LinkedHashSet&lt;String&gt;();
+
+    /**
+     * If a status change of users is made this set keeps track of the deleted ones
+     */
+    private Set&lt;String&gt; deletedUsers = new LinkedHashSet&lt;String&gt;();
+
+    /**
+     * All warnings occurred while changing the state of a user are stored here so the view can show the messages to the user
+     */
+    private Set&lt;Map&lt;String, Object&gt;&gt; warnings = new LinkedHashSet&lt;Map&lt;String, Object&gt;&gt;();
+
+    /**
+     * All errors occurred while changing the state of a user are stored here so the view can show the messages to the user
+     */
+    private Set&lt;String&gt; errors = new LinkedHashSet&lt;String&gt;();
+
+    private Set&lt;String&gt; unchangedUsers = new LinkedHashSet&lt;String&gt;();
+
+    /**
+     * All users for deletion are collected here and then this list in handed off to the background task
+     */
+    private List&lt;String&gt; deleteUsersQueue = new LinkedList&lt;String&gt;();
+
+
+    private Map&lt;String, String&gt; userStates = new HashMap&lt;String, String&gt;();
+
+    public final String WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS";
+    public final String WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS = "WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS";
+    public final String WARNING_USER_IS_SYSTEM_ADMIN = "WARNING_USER_IS_SYSTEM_ADMIN";
+    public final String WARNING_USER_IS_GROUP_ADMIN = "WARNING_USER_IS_GROUP_ADMIN";
+    public final String WARNING_USER_IS_YOURSELF = "WARNING_USER_IS_YOURSELF";
+
+    private String searchRequestParams = "";
+
+
+    /**
+     * Needs to be called to initiate an instance of this class properly
+     * @param request
+     * @param xwiki
+     */
+    public void init(HttpServletRequest request, XWiki xwiki, Context context) {
+        this.request = request;
+        this.wiki = xwiki;
+        this.context = context;
+        if (xwiki != null)
+            this.currikiPluginApi = xwiki.curriki;
+        searchRequestParams =
+            "searchUsers="+request.searchUsers + "&amp;pageNumber=" + request.pageNumber + "&amp;usernames=" + request.usernames + "&amp;rows=" + request.rows+ "&amp;sort=" + request.sort;
+    }
+
+    /**
+     * This function processes all parameters received by any request to this site
+     * calls the appropriate functions and sets the right attributes in this instance
+     */
+    public void processReceivedData(){
+        if(request==null){LOG.error("Request to UserMangagement is null");return;}
+
+        Map&lt;String[],String&gt; params = request.getParameterMap();
+
+        if(params.containsKey("rows")){
+            maxRowsInSolrResponse = Integer.valueOf(params.get("rows")[0]);
+        }
+
+        if(params.containsKey("pageNumber")){
+            currentPageNumber = Integer.valueOf(params.get("pageNumber")[0]);
+        }
+
+        if(params.containsKey("sort")){
+            this.sortParam = getSortParamFromRequest(params.get("sort")[0]);
+        }
+
+        if(params.containsKey("usernames")){
+            searchUserByName(params.get("usernames")[0]);
+        }
+
+
+        if(!params.containsKey("applyStatusChanges")) {
+            computeTotalPageNumber();
+        } else {
+            this.userStates = extractUserStatesFromParams();
+            //After all changes were made we trigger the background task to start with the deletion of the users which were selected for it
+            UserManagementBackgroundDeleter userManagementBackgroundDeleter =  new UserManagementBackgroundDeleter(deleteUsersQueue, request.getSession(false), context.getLocalUser());
+            userManagementBackgroundDeleter.start();
+        }
+
+    }
+
+    public String getRedirect() {
+        if(request.getParameter("applyStatusChanges")!=null) return "UserManagement";
+        else return null;
+    }
+
+
+    /**
+     * This method is called from the view to get the data about the found users to show
+     * @return A Map of Maps with user names as keys on the first map level and user attributes on the second map level
+     */
+    public Map&lt;String, Map&lt;String, String&gt;&gt; getFoundUsers(){
+        return foundUsers;
+    }
+
+    public int getTotalNumberOfSolrResults(){
+        return totalNumberOfSolrResults;
+    }
+
+    public int getTotalNumberOfPages(){
+        return totalNumberOfPages;
+    }
+
+
+    /**
+     * This behavior is wrapped in this function that no direct parameter input is possible and breaks the query
+     * @param sortParam the param sort of the request
+     * @return the correct sort parameter for solr
+     */
+    private String getSortParamFromRequest(String sortParam){
+        if(null == sortParam) return null;
+        String result = "";
+
+        if(sortParam.contains("userName")){
+            result += "userNameForSort";
+        }else if(sortParam.contains("userFirstName")){
+            result += "userFirstNameForSort";
+        }else if(sortParam.contains("userLastName")){
+            result += "userLastNameForSort";
+        }else if(sortParam.contains("userEmail")){
+            result += "userEmailForSort";
+        }else{
+            result = ""; // Fall back if no information about the field was provided we sort nothing
+        }
+
+        if(result.length()!=0){ // Only if the comparing above had a result we try to determine the search order
+            if(sortParam.contains("asc")){
+                result += "%20asc";
+            }else if(sortParam.contains("desc")){
+                result += "%20desc";
+            }else{
+                result = ""; // Fall back if no information about the order was provided we sort nothing
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Called to search users by name and fill the result map
+     * a map of maps with all data needed for the view [username1: [useractive:"true", userFirstname:"first1", userLastname:"last1"], username2: [useractive:"false" ...], ...]
+     * @param userNames the input of the user names in the form "username1, username2, username3"
+     */
+    private void searchUserByName(String userNames) {
+        if(userNames == null || userNames.equals("")) return;
+        try{
+            String fields = "fullname,userName,userFirstName,userLastName,userActive,userEmailUndeliverable,userEmail,userContributions,userGroups";
+            String queryString = "((userName:" + userNames + ")OR";
+            queryString += "(userFirstName:" + userNames + ")OR";
+            queryString += "(userLastName:" + userNames + ")OR";
+            queryString += "(userEmail:" + userNames + ")";
+            queryString += ")AND(type:user)";
+            int start = (currentPageNumber-1)*maxRowsInSolrResponse;
+            currikiPluginApi.solrCollectResultsFromQueryWithSort(queryString, fields, sortParam, start, maxRowsInSolrResponse, this);
+        }catch(Exception e){
+            foundUsers = null;
+            LOG.error("Error while searching for users, please enter the usernames properly.",e);
+        }
+
+        this.newDocument(); // After the collector ran we need to signal a new document a last time to get
+        // the result which was collected as the last one gets pushed to our result list
+    }
+
+
+    /**
+     * This function is called when the userSearch was triggered.
+     * We need the information in the view how many results we should show per page
+     */
+    private void computeTotalPageNumber() {
+        //calculate the number of pages for the view
+        double result = totalNumberOfSolrResults / maxRowsInSolrResponse;
+        if(result &lt;= 1) {
+            totalNumberOfPages = 1;
+        } else{
+            totalNumberOfPages = result+1;
+        }
+    }
+
+    /**
+     * This method processes the parameter list excluding all parameters which are not usernames and their state values.
+     * @return  Map&lt;String, Map&lt;String, String&gt;&gt; a map of maps. The key for the outer maps are the user names and the inner key value pairs are representing the users state
+     */
+    private Map&lt;String, String&gt; extractUserStatesFromParams(){
+        Map&lt;String, String&gt; params = request.getParameterMap();
+        Map&lt;String, String&gt; userStates = new HashMap&lt;String, String&gt;();
+
+        //Iterate over all parameters we have
+        for (Map.Entry&lt;String, String&gt; entry : params.entrySet()) {
+
+            //Extract the fullname from the key
+            String key = entry.key;
+            String fullname = ""
+
+            if(key.indexOf("#")!=-1)
+                fullname = key.substring(0, key.indexOf("#"));
+
+            //If the fullname was not read yet and we are at a fullname or state
+            if (!key.contains("applyStatusChanges") &amp;&amp; !key.contains("usernames") &amp;&amp; !fullname.equals("") &amp;&amp;!userStates.keySet().contains(fullname)) {
+
+                //Pull the userState directly from the params map
+                String userState = params.get(fullname + "#STATE")[0];
+                userStates.put(fullname, userState);
+            }
+        }
+        LOG.warn("UserStates extracted from request:" + userStates);
+        return userStates;
+    }
+
+
+
+    /**
+     * Tries to delete a user. Before it does so it checks for several conditions
+     * e.g if the user is a system admin he can not be deleted.
+     * @param fullname - the name of the user to delete
+     * @return true if the user was deleted, false otherwise.
+     */
+    private boolean checkUserForDeletion(String fullname){
+        boolean userFreeToDeletion = true;
+        Map&lt;String, String&gt; userAttributes  = foundUsers.get(fullname);
+        String userName = userAttributes.get("userName");
+        String numberOfContributions = userAttributes.get("userContributions");
+
+        //The user still has resources
+        if(Integer.valueOf(numberOfContributions) &gt; 0){
+            Map&lt;String, Object&gt; warningsForUser = new LinkedHashMap&lt;String, Object&gt;();
+            warningsForUser.put("cause", WARNING_CANNOT_DELETE_USER_STILL_HAS_CONTRIBUTIONS);
+            warningsForUser.put("userName", userName);
+            warningsForUser.put("numberOfContributions", numberOfContributions);
+            warningsForUser.put("userResources", getUserResources(fullname))
+            warnings.add(warningsForUser);
+            userFreeToDeletion = false;
+        }
+
+        //The user is a system admin
+        if(isSystemAdmin(fullname)){
+            Map&lt;String, Object&gt; warningsForUser = new LinkedHashMap&lt;String, Object&gt;();
+            warningsForUser.put("cause", WARNING_USER_IS_SYSTEM_ADMIN);
+            warningsForUser.put("userName", userName);
+            warnings.add(warningsForUser);
+            userFreeToDeletion = false;
+        }
+
+        //The user is a admin in a group
+        List&lt;String&gt; groupNames = getGroupNamesFromSolrString(fullname);
+        List&lt;String&gt; groupNamesWhereUserIsAdmin = getGroupNamesWhereUserIsAdmin(fullname, groupNames);
+        if(groupNamesWhereUserIsAdmin.size() &gt; 0){
+            Map&lt;String, Object&gt; warningsForUser = new LinkedHashMap&lt;String, Object&gt;();
+            warningsForUser.put("cause", WARNING_USER_IS_GROUP_ADMIN);
+            warningsForUser.put("userName", userName);
+            warningsForUser.put("groupNames", groupNamesWhereUserIsAdmin);
+            warnings.add(warningsForUser);
+            userFreeToDeletion = false;
+        }
+
+        //The user is the same which sent the request
+        if(fullname.equals(context.getUser())){
+            Map&lt;String, Object&gt; warningsForUser = new LinkedHashMap&lt;String, Object&gt;();
+            warningsForUser.put("cause", WARNING_USER_IS_YOURSELF);
+            warningsForUser.put("userName", userName);
+            warnings.add(warningsForUser);
+            userFreeToDeletion = false;
+        }
+
+        //No Case matched we can delete the user
+        if(userFreeToDeletion) {
+            deleteUsersQueue.add(fullname);
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    /**
+     * Get all names of groups where the user is a group admin
+     * @param userName - The name of the user to check
+     * @param groupNames - The names of the groups to check if the user is an admin in
+     * @return
+     */
+    private List&lt;String&gt; getGroupNamesWhereUserIsAdmin(String fullname, List&lt;String&gt; groupNames){
+        List &lt;String&gt; result  = new ArrayList&lt;String&gt;();
+        for(groupName in groupNames){
+            //Use the space manager to redirect that questions
+            if(wiki.csm.isAdmin(groupName, fullname)) {
+                result.add(groupName);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Solr returns the group information in the form
+     * [{displayTitle:"", spaceName:"" ...}, {...}]
+     * @param userName - the name of the user for which to extract the group information out of the solr result
+     * @return Complete names of the Groups where the user is member in
+     */
+    private List&lt;String&gt; getGroupNamesFromSolrString(String fullname){
+        List&lt;String&gt; result = new ArrayList();
+        Map&lt;String, String&gt; userAttributes = foundUsers.get(fullname);
+        String userGroupsString = userAttributes.get("userGroups");
+        if(userGroupsString != null){
+            JSONArray groups = JSONSerializer.toJSON(userGroupsString);
+            for(group in groups){
+                String spaceName = group.getString("groupSpace");
+                result.add(spaceName);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Check if the given user is a system admin
+     * @param userName - the user to check.
+     * @return true if the user is a SystemAdmin (means a member of the group XWiki.AdminGroup)
+     */
+    private boolean isSystemAdmin(String fullname){
+        boolean isSystemAdmin =  null != wiki.getDocument("XWiki.AdminGroup").getObject('XWiki.XWikiGroups', 'member', fullname, false);
+        return isSystemAdmin;
+    }
+
+    /**
+     * Get Full names of all resources of a users
+     * @param userName -  the username of which the resources should be found
+     * @return all resources of a user with their full names
+     */
+    private List&lt;String&gt; getUserResources(String fullname){
+        List results = wiki.getXWiki().search("select doc.fullName from XWikiDocument doc, BaseObject obj where doc.creator='" + fullname + "' and doc.name!='WebHome' and doc.name!='WebPreferences' and doc.name!='Favorites' and doc.space!='AssetTemp' and doc.space!='Coll_Templates' and obj.name=doc.fullName and obj.className='CurrikiCode.AssetClass'", context.getContext());
+        return results;
+    }
+
+    /*
+     *##############################################################################
+     * SOLR RESULT COLLECTOR INTERFACE IMPLEMENTATION
+     *##############################################################################
+     */
+
+    /**
+     * We need to remember if we are already parsing a document of a user search.
+     */
+    private boolean isInDocument = false;
+
+    @Override
+    public void status(int statusCode, int qTime, int numFound, int start) {
+        totalNumberOfSolrResults = numFound;
+    }
+
+    @Override
+    public void addValue(String name, String value) {
+        tmpUser.put(name, value);
+    }
+
+    @Override
+    public void newDocument() {
+        if (isInDocument) { //The first time we see a new document we don't push it to the map.
+            if (tmpUser != null &amp;&amp; tmpUser.size() &gt; 0)
+                foundUsers.put(tmpUser.get("fullname"), tmpUser);
+            tmpUser = new HashMap&lt;String, String&gt;();
+        } else {
+            isInDocument = true;
+        }
+
+    }
+
+    class UserManagementBackgroundDeleter extends AbstractXWikiRunnable{
+
+        private String SESSION_BACKGROUND_TASK_RUNNING = "USERDELETION_RUNNING";
+        private String SESSION_BACKGROUND_EXCEPTION = "SESSION_BACKGROUND_EXCEPTION";
+        private XWiki xwiki;
+        private List&lt;String&gt; fullnames;
+        private HttpSession session;
+        private String localUser;
+        private boolean alive = false;
+        private int currentUserIndex =0;
+        private boolean timeToStop;
+        private Thread workerThread=null;
+        private long startedAt = System.currentTimeMillis();
+
+        private static final Logger LOG = LoggerFactory.getLogger(UserManagementBackgroundDeleter.class);
+
+
+
+        public UserManagementBackgroundDeleter(List&lt;String&gt;fullnames, HttpSession session, String localUser){
+            this.xwiki = UserManagementGroovy.this.wiki;
+            this.fullnames = new ArrayList(fullnames);
+            this.session = session;
+            this.localUser = localUser;
+            LOG.warn("UserManagementBackgroundDeleter created.");
+            session.setAttribute(SESSION_BACKGROUND_TASK_RUNNING, this);
+            LOG.warn("Background process flag (" + this.getProcessedUserCount()  + ") set for user " + localUser);
+        }
+
+        private void start(){
+            LOG.warn("Started UserManagementBackgroundDeleter to delete " + this.fullnames.size() + " users.");
+            workerThread = new Thread(this, "UserManagementBackgroundDeleter-(" + this.fullnames + ")");
+            workerThread.start();
+        }
+
+
+        /**
+         *
+         * Called in the background thread to perform the changes and deletions.
+         */
+        protected void runInternal() {
+            alive = true;
+            Thread.sleep(5000);
+                //For all parameters of the request
+                for (Map.Entry&lt;String, String&gt; entry : UserManagementGroovy.this.userStates.entrySet()) {
+                    if(timeToStop) break;
+
+                    String fullname = entry.key;
+                    String userState = entry.value;
+
+                    //Try to get the userDoc
+                    Document userDoc = this.xwiki.getDocument(fullname);
+                    if (userDoc == null){
+                        errors.add("Could not find UserDoc for user " + fullname)
+                        continue;
+                    }
+
+                    Thread.sleep(1000)
+
+                    //Try to get the userObj of the Doc
+                    com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers");
+                    if(userObj == null) {
+                        errors.add("Could not find UserObj for user " + fullname);
+                        continue;
+                    }
+
+
+                    Thread.sleep(1000)
+
+                    String userName = foundUsers.get(fullname).get("userName");
+
+                    //Variables to track the changes of the users
+                    boolean activatedUser = false;
+                    boolean inactivatedUser = false;
+                    boolean deactivatedUser = false;
+                    boolean deletedAUser = false;
+
+                    LOG.warn("USER BEFORE CHANGE:" + userDoc + " # active:" + userObj.get("active") + " emailUndef:"+userObj.get("email_undeliverable"));
+
+
+
+                    //Look which state is wanted for the user and
+                    //delegate the switch of the state change
+                    if (userState.equals("ACTIVE")) {
+                        activatedUser = activateUser(userObj);
+                    }
+                    else if (userState.equals("INACTIVE")) {
+                        inactivatedUser = inactivateUser(userObj);
+                    }
+                    else if (userState.equals("DEACTIVATED")) {
+                        deactivatedUser = deactivateUser(fullname, userObj);
+                    }
+                    else if (userState.equals("TO_DELETE")) {
+                        //deletedAUser = checkUserForDeletion(fullname);
+                        deletedAUser = checkUserForDeletion(fullname);;
+                        //deletedAUser(userName);
+                    }
+
+                    //If the user was changed it needs to be saved
+                    if((activatedUser || inactivatedUser || deactivatedUser) &amp;&amp; !deletedAUser){
+                        try{
+                            userDoc.saveWithProgrammingRights();
+                            if(activatedUser)   activatedUsers.add(userName);
+                            if(inactivatedUser) inactivatedUsers.add(userName);
+                            if(deactivatedUser) deactivatedUsers.add(userName);
+                            currentUserIndex++;
+                        } catch (Exception e){
+                            errors.add("Error while changing a user..." + fullname + "&lt;br&gt;" + e.getMessage()+ "&lt;br&gt;");
+                            LOG.error("Error while changing a user...", e);
+                        }
+                        //userDoc.save();
+                        //this.xwiki.saveDocument(userDoc, xcontext);
+
+                        Thread.sleep(1000)
+                    }
+                }
+
+                if(deleteUsersQueue.size()&gt;0){
+                    Iterator it = deleteUsersQueue.iterator();
+                    while(it.hasNext()){
+                        String userName = it.next();
+                        try {
+                            Thread.sleep(3000);
+                            deleteUser(userName);
+                            deletedUsers.add(userName);
+                        } catch (Exception e) {
+                            errors.add("Error while deleting a user...", userName + "&lt;br&gt;" + e.getMessage()+ "&lt;br&gt;");
+                            LOG.error("Error while deleting a user...", e);
+                        }
+                        currentUserIndex++;
+
+                        it.remove();
+                    }
+
+                }
+            LOG.warn("Finished UserManagementBackground " + this);
+            Thread.sleep(5000);
+            LOG.warn("Finished Sleeping " + this);
+            alive = false;
+        }
+
+
+        public boolean isWorking() {
+            LOG.warn("Checking alive on object " + this);
+            return alive;
+        }
+
+        public void logReport() {
+            LOG.warn("This is " + this + " which is alive? " + alive + " with users " + deleteUsersQueue + ".")
+            StackTraceElement[] stackTrace = workerThread.stackTrace;
+            StringBuilder b = new StringBuilder();
+            for(StackTraceElement e: stackTrace) {
+                b.append("     - ").append(e.toString()).append('\n');
+            }
+            LOG.warn("Worker thread currently at:\n" + b);
+        }
+
+        public String getProcessedUserCount() {
+            return currentUserIndex+"/"+UserManagementGroovy.this.userStates.entrySet().size();
+        }
+
+
+        private void deleteUser(String fullname){
+            Document userDoc = this.xwiki.getDocument(fullname);
+            if (userDoc != null){
+                LOG.warn("Deleting user: " + fullname);
+                userDoc.deleteWithProgrammingRights();
+                //this.xwiki.deleteDocument(userDoc, false, xcontext);
+                LOG.warn("Deleted user: " + fullname);
+            } else {
+                LOG.warn("User object is null.");
+            }
+        }
+
+
+        public void closeSessionAttribute(){
+            session.removeAttribute(SESSION_BACKGROUND_TASK_RUNNING);
+            LOG.warn("Background process flag deleted for user " + localUser);
+        }
+
+
+        /**
+         * Changes the userObj to represent an active state
+         * @param userObj the userObject of a XWiki User Doc which should be changed to active
+         * @return true if a change was made false if the user was already in this state
+         */
+        private boolean activateUser(com.xpn.xwiki.api.Object userObj){
+            boolean hasChanged = false;
+            LOG.warn("Try to activate user "+ userObj);
+            if(!userObj.get("active").equals("Active")){
+                userObj.set("active","1");
+                hasChanged = true;
+            }
+            if(!userObj.get("email_undeliverable").equals("No")){
+                userObj.set("email_undeliverable","0");
+                hasChanged = true;
+            }
+
+            if(hasChanged){
+                LOG.warn("Activated user " + userObj);
+            } else {
+                LOG.warn("Not Activated user " + userObj);
+            }
+
+            return hasChanged;
+        }
+
+        /**
+         * Changes the userObj to represent an inactive state
+         * @param userObj the userObject of a XWiki User Doc which should be changed to inactive
+         * @return true if a change was made false if the user was already in this state
+         */
+        private boolean inactivateUser(com.xpn.xwiki.api.Object userObj){
+            boolean hasChanged = false;
+            LOG.warn("Try to inactivate user "+ userObj);
+            if(!userObj.get("active").equals("Inactive")){
+                userObj.set("active","0");
+                hasChanged = true;
+            }
+            if(!userObj.get("email_undeliverable").equals("Yes")){
+                userObj.set("email_undeliverable","1");
+                hasChanged = true;
+            }
+
+            if(hasChanged){
+                LOG.warn("Inactivated user " + userObj);
+            } else {
+                LOG.warn("Not Inactivated user " + userObj);
+            }
+
+            return hasChanged;
+        }
+
+        /**
+         * Changes the userObj to represent an deactivated state
+         * @param userObj the userObject of a XWiki User Doc which should be changed to deactive
+         * @return true if a change was made false if the user was already in this state
+         */
+        private boolean deactivateUser(String fullname, com.xpn.xwiki.api.Object userObj){
+            boolean hasChanged = false;
+
+            LOG.warn("Try to deactivate user "+ userObj);
+
+            String userName = foundUsers.get(fullname).get("userName");
+            String numberOfContributions = foundUsers.get(fullname).get("userContributions");
+
+            //The user still has resources
+            if(Integer.valueOf(numberOfContributions) &gt; 0){
+                Map&lt;String, Object&gt; warningsForUser = new LinkedHashMap&lt;String, Object&gt;();
+                warningsForUser.put("cause", WARNING_CANNOT_DEACTIVATE_USER_STILL_HAS_CONTRIBUTIONS);
+                warningsForUser.put("userName", userName);
+                warningsForUser.put("numberOfContributions", numberOfContributions);
+                warningsForUser.put("userResources", getUserResources(fullname))
+                warnings.add(warningsForUser);
+                return;
+            }
+
+            if(!userObj.get("active").equals("Inactive")){
+                userObj.set("active","0");
+                hasChanged = true;
+            }
+            if(!userObj.get("email_undeliverable").equals("No")){
+                userObj.set("email_undeliverable","0");
+                hasChanged = true;
+            }
+
+            if(hasChanged){
+                LOG.warn("Deactivated user " + userObj);
+            } else {
+                LOG.warn("Not Deactivated user " + userObj);
+            }
+
+            return hasChanged;
+        }
+
+        public void stop() {
+            LOG.warn("Stopping background thread per user request.")
+            timeToStop = true;
+            Thread.sleep(5000);
+            if(workerThread!=null &amp;&amp; workerThread.isAlive()) {
+                LOG.warn("Harsh-stopping background thread per user request.")
+                workerThread.stop()
+            };
+            alive = false;
+            LOG.warn("Finished stopping background thread per user request.")
+        }
+
+        public Set&lt;String&gt; getActivatedUsers(){
+            return UserManagementGroovy.this.activatedUsers;
+        }
+
+        public Set&lt;String&gt; getInactivatedUsers(){
+            return UserManagementGroovy.this.inactivatedUsers;
+        }
+
+        public Set&lt;String&gt; getDeactivatedUsers(){
+            return UserManagementGroovy.this.deactivatedUsers;
+        }
+
+        public Set&lt;String&gt; getDeletedUsers(){
+            return UserManagementGroovy.this.deletedUsers;
+        }
+
+        public Set&lt;String&gt; getUnchangedUsers(){
+            return UserManagementGroovy.this.unchangedUsers;
+        }
+
+        public Set&lt;Map &lt;String, Object&gt;&gt; getWarnings(){
+            return UserManagementGroovy.this.warnings;
+        }
+
+        public Set&lt;String&gt; getErrors(){
+            return UserManagementGroovy.this.errors;
+        }
+
+        NumberFormat nf = new java.text.DecimalFormat("00")
+        public String getDuration() {
+            long duration = (System.currentTimeMillis()-startedAt)/1000;
+            long hours = duration/3600, minutes = ((duration%3600)/60), seconds = (duration%60);
+            return nf.format(hours) + ":" + nf.format(minutes) + ":" + nf.format(seconds);
+        }
+
+        public String getSearchRequestParams() {
+            return UserManagementGroovy.this.searchRequestParams;
+        }
+    }
+}
+</content></xwikidoc>

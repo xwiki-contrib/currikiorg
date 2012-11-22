@@ -142,8 +142,37 @@ FLAG="\
 cat $FLAG | $UNCOMPRESS_JS > ../webapp/js/curriki-module-flag-debug.js
 cat $FLAG | $COMPRESS_JS > ../webapp/js/curriki-module-flag.js
 
+RESOURCE_PROXY="\
+	curriki/resourceproxy/startup.js \
+	curriki/resourceproxy/global.js \
+	"
+cat $RESOURCE_PROXY | $UNCOMPRESS_JS > ../webapp/js/curriki-module-resourceproxy-debug.js
+cat $RESOURCE_PROXY | $COMPRESS_JS > ../webapp/js/curriki-module-resourceproxy.js
+
+EMBEDDED_SEARCH="\
+	curriki/embeddedsearch/startup.js
+	"
+cat $EMBEDDED_SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-embedded-search-startup-debug.js
+cat $EMBEDDED_SEARCH | $COMPRESS_JS > ../webapp/js/curriki-embedded-search-startup.js
+
+## The generic advanced search frame 
+
+ADVANCED_SEARCH_FRAME="\
+	curriki/embeddedsearch/advancedSearchFrame.html
+	"
+cat $ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/advancedSearchFrame.html
 
 
+EXT_EMBEDDED_HISTORY="\
+	curriki/embeddedsearch/ext-embedded-history.js
+	"
+cat $EXT_EMBEDDED_HISTORY | $UNCOMPRESS_JS > ../webapp/js/ext-embedded-history.js
+
+
+IE_CONSOLE_FIX="\
+	curriki/embeddedsearch/ie-console-fix.js
+	"
+cat $IE_CONSOLE_FIX | $COMPRESS_JS > ../webapp/js/curriki-ie-console-fix.js
 
 ## vidiembed_curriki.js removed from MERGED list (was right after $I18N)
 ##	../webapp/skins/curriki8/js/vidiembed_curiki.js
@@ -153,3 +182,6 @@ VIDITALK="\
 
 MERGED="$I18N $VIDITALK $CURRIKI $ADDPATH $ORGANIZE $NOMINATE $REVIEW $UNNOMINATE $PARTNER $ASTERIXREVIEW $FLAG"
 cat $MERGED | $COMPRESS_JS > ../webapp/js/curriki-merged.js
+
+
+

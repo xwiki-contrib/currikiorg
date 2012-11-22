@@ -1848,6 +1848,14 @@ Curriki.showLoading = function(msg, multi){
 	}
 }
 
+Curriki.isISO8601DateParsing = function() {
+    if(typeof(Curriki.ISO8601DateParsing)!="undefined") return Curriki.ISO8601DateParsing;
+    var s = navigator.userAgent;
+    Curriki.ISO8601DateParsing = s.indexOf("OS 5")!=-1 && ( s.indexOf("iPhone")!=-1 || s.indexOf("iPod")!=-1 || s.indexOf("iPad")!=-1);
+    console.log("Set ISO8601 parsing to " + Curriki.ISO8601DateParsing);
+    return Curriki.ISO8601DateParsing;
+}
+
 Curriki.hideLoading = function(multi){
 	if (multi === true) {
 		Curriki.loadingCount--;
@@ -1866,9 +1874,24 @@ Curriki.logView = function(page){
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
 	} else {
-        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
-        window.top.pageTrackerQueue.push(page);
-		console.info('Would track: ', page);
+
+		// Double try catch for CURRIKI-5828
+		// This is needed because we can not define if where 
+		// are coming from an embedded search in a resource proxy.
+		// So we need to try to address not the top frame if thats fails.
+		try{ 
+	        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
+	        window.top.pageTrackerQueue.push(page);
+			console.info('Would track: ', page);
+		}catch(e){
+			try{
+	 			window.pageTrackerQueue = window.pageTrackerQueue || new Array();
+		        window.pageTrackerQueue.push(page);
+				console.info('Would track: ', page);
+			}catch(e){
+
+			}
+		}
 	}
 }
 
@@ -2002,7 +2025,7 @@ Curriki.data.user = {
 		} else {
 			this.collection_try++;
 			Ext.Ajax.request({
-				 url: this.json_prefix+this.me.username+'/collections?full=false'
+				 url: this.json_prefix+this.me.username+'/collections'
 				,method:'GET'
 				,disableCaching:true
 				,headers: {
@@ -2270,7 +2293,7 @@ Curriki.data.rights.list.each(function(right){
 
 Ext.ns('Curriki.data.language');
 // TODO:  Fetch the list from /xwiki/curriki/metadata/CurrikiCode.AssetClass/fields/language  OR  Get filled in JS created by xwiki
-Curriki.data.language.list = ["eng","ind","zho","nld","fra","deu","hin","ita","jpn","kor","nep","por","rus","sin","spa","tam","999"];
+Curriki.data.language.list = ["eng","ind","zho","nld","fin","fra","deu", "hin","ita","jpn","kor","nep","por","rus","sin","spa","tam","999"];
 Curriki.data.language.initial = Curriki.data.language.list[0];
 Curriki.data.language.data = [ ];
 Curriki.data.language.list.each(function(lang){
@@ -3048,7 +3071,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,width:634
 	,minWidth:400
 	,minHeight:100
-	,maxHeight:575
+	,maxHeight:6000
 	,autoScroll:false
 	,constrain:true
 	,collapsible:false
@@ -3059,6 +3082,7 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 	,defaults:{border:false}
 	,listeners:{
 		afterlayout:function(wnd, layout){
+            console.log("afterlayout 2 on " + wnd);
 			if (this.afterlayout_maxheight) {
 				// Don't collapse again
 			} else {
@@ -3066,8 +3090,10 @@ Curriki.ui.dialog.Base = Ext.extend(Ext.Window, {
 					wnd.setHeight(wnd.maxHeight);
 					wnd.center();
 					this.afterlayout_maxheight = true;
+                    console.log("afterlayout_maxheight reached: " + wnd.maxHeight);
 				} else {
 					wnd.setHeight('auto');
+                    console.log("set auto height");
 				}
 			}
 		}
@@ -3121,8 +3147,8 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 		,unviewableText:_('add.chooselocation.resource_unavailable')
 		,unviewableQtip:_('add.chooselocation.resource_unavailable_tooltip')
 		,createNode:function(attr){
-//console.log('createNode: ',attr);
-			if (this.setFullRollover) {
+console.log('createNode: ',attr);
+        if (this.setFullRollover) {
 				if ('string' !== Ext.type(attr.qtip)
 					&& 'string' === Ext.type(attr.description)
 					&& 'array' === Ext.type(attr.fwItems)
@@ -3207,6 +3233,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 
 			if (this.setChildHref) {
 				childInfo.href = '/xwiki/bin/view/'+attr.pageName.replace('.', '/');
+                childInfo.onclick="return false;"
 			}
 
 			if (attr.rights && !attr.rights.view){
@@ -3239,7 +3266,7 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			}
 
 			// ?? = attr.order;
-//console.log("childInfo: " ,childInfo);
+
 			Ext.apply(childInfo, attr);
 
 			if (this.truncateTitle !== false) {
@@ -3279,11 +3306,6 @@ Ext.extend(Curriki.ui.treeLoader.Base, Ext.tree.TreeLoader, {
 			} else {
 				this.dataUrl = '/xwiki/curriki/assets/'+(node.attributes.pageName||node.id)+'/subassets';
 			}
-            if(this.setFullRollover) {
-                this.dataUrl = this.dataUrl + "?full=true";
-            } else {
-                this.dataUrl = this.dataUrl + "?full=false";
-            }
 
 			// From parent
 			if(this.fireEvent("beforeload", this, node, callback) !== false){
@@ -3614,30 +3636,78 @@ Curriki.ui.login.liveValidation = function() {
         launchCheckFieldRequest: function(value, field, queueEntry) {
             Curriki.ui.login.liveValidation.notifyValidationResult(field, "waiting");
             Curriki.Ajax.beforerequest = function() {};
-            var r = Ext.Ajax.request({
-                url: "/xwiki/bin/view/Registration/CheckValid"
-                ,headers: {'Accept':'application/json'}
-                ,method: "GET"
-                ,failure:function(response, options) {
-                    Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
-                    Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
-                    Curriki.console.log("failed validation: ", response, options);
-                }
-                ,success:function(response, options){
-                    var t = response.responseText;
-                    if(t) t = t.trim();
-                    Curriki.console.log("Response: " + t);
-                    queue.remove(queueEntry);
-                    if(queueEntry.value!=field.getValue()) return;
-                    Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
-                }
-                , params: { what: field.dom.name,
-                    value: value,
-                    xpage: "plain"
-                }
-                , scope: this
-            });
+            var r;
+            console.log("launching check field request " + field + " of name " + field.dom.name);
+            if(field.dom && field.dom.name && field.dom.name=="postalCode") {
+                r = Ext.Ajax.request({
+                    url: "/locations"
+                    ,method:'GET'
+                    ,headers: { 'Accept':'application/json' ,'Content-type':'application/json' }
+                    ,params: { 'q':"postalCode:" + field.dom.value,
+                        "fl": "cityName,stateCode,long,lati", rows:1}
+                    ,scope:this
+                    ,success:function(response, options){
+                        var json = response.responseText;
+                        var results = json.evalJSON(true);
+                        if(console) console.log("Results: ",results);
+                        window.results = results;
+
+                        var docs = results.response.docs;
+                        if(!docs || docs.length==0 || !(docs[0].cityName && docs[0].stateCode)) {
+                            if(console) console.log("Docs returned unusable.",docs);
+                            Ext.get("postalCode_results").dom.innerHTML = "-";
+                            Curriki.ui.login.liveValidation.notifyValidationResult(field, false);
+                        } else {
+                            var d = docs[0];
+                            if(console) console.log(d.cityName + " " + d.stateCode, d);
+                            Curriki.ui.login.liveValidation.updatePostalCodeResult(d.cityName, d.stateCode, d['long'], d['lati']);
+                            Curriki.ui.login.liveValidation.notifyValidationResult(field, true);
+                        }
+                    }
+                    ,failure:function(response, options){
+                        console.error('Cannot resolve location', response, options);
+                    }
+                });
+            } else {
+                r = Ext.Ajax.request({
+                    url: "/xwiki/bin/view/Registration/CheckValid"
+                    ,headers: {'Accept':'application/json'}
+                    ,method: "GET"
+                    ,failure:function(response, options) {
+                        Curriki.ui.login.liveValidation.queriedValue=queueEntry.value;
+                        Curriki.ui.login.liveValidation.notifyValidationResult(field, null);
+                        Curriki.console.log("failed validation: ", response, options);
+                    }
+                    ,success:function(response, options){
+                        var t = response.responseText;
+                        if(t) t = t.trim();
+                        Curriki.console.log("Response: " + t);
+                        queue.remove(queueEntry);
+                        if(queueEntry.value!=field.getValue()) return;
+                        Curriki.ui.login.liveValidation.notifyValidationResult(field, "true" == t);
+                    }
+                    , params: { what: field.dom.name,
+                        value: value,
+                        xpage: "plain"
+                    }
+                    , scope: this
+                });
+            }
             return r;
+        },
+
+        updatePostalCodeResult: function(cityName, stateCode, longitude, latitude) {
+            if(cityName) {} else {cityName="";}
+            if(stateCode) {} else {stateCode = "";}
+            if(longitude) {} else {longitude="";}
+            if(latitude) {} else {latitude = "";}
+            var label = "-";
+            if(cityName && stateCode) label = cityName + ", " + stateCode
+            Ext.get("postalCode_results").dom.innerHTML = label;
+            Ext.get("city_input").dom.value= cityName
+            Ext.get("state_input").dom.value= stateCode;
+            Ext.get("longitude_input").dom.value = longitude;
+            Ext.get("latitude_input").dom.value = latitude;
         },
 
         notifyValidationResult:function(field, res) {
@@ -3651,11 +3721,15 @@ Curriki.ui.login.liveValidation = function() {
                     Curriki.console.log("Warning: missing field.");
                     return;
                 }
+                window.lastField = field;
                 var pElt = field.parent();
                 if (null == res) {
                     pElt.removeClass("okField");
                     pElt.removeClass("waiting");
                     pElt.removeClass("warningField");
+                    if(field.dom && field.dom.name && "postalCode"==field.dom.name) {
+                        Curriki.ui.login.liveValidation.updatePostalCodeResult(null, null, null, null);
+                    }
                 } else if("waiting" == res) {
                     pElt.addClass("waiting");
                 } else if (true == res || "true" == res) {
@@ -3710,7 +3784,7 @@ Curriki.ui.login.liveValidation = function() {
             //if(fieldName=="firsName" || fieldName=="lastName" || fieldName=="agree" || fieldName=="member_type")
             //    min_length=1;
             //if(typeof(fieldValue)!="undefined" && fieldValue.length<=min_length) return;
-            if(fieldName!="email" && fieldName!="username") {
+            if(fieldName!="email" && fieldName!="username" && fieldName!="postalCode") {
                 var passed = false;
                 var silentFailure = fieldName=="firstName" || fieldName=="lastName" || fieldName=="password";
                 if(fieldName=="agree") passed = fieldValue!="0";

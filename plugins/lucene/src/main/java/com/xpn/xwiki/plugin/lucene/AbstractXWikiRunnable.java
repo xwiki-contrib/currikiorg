@@ -19,12 +19,13 @@
  */
 package com.xpn.xwiki.plugin.lucene;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.xwiki.context.ExecutionContextInitializerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xwiki.context.ExecutionContext;
 import org.xwiki.context.Execution;
-import org.xwiki.context.ExecutionContextInitializerException;
+import org.xwiki.context.ExecutionContextException;
+import org.xwiki.context.ExecutionContextManager;
+
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.web.Utils;
 
@@ -36,13 +37,13 @@ public abstract class AbstractXWikiRunnable implements Runnable
     /**
      * Logging object.
      */
-    private static final Log LOG = LogFactory.getLog(IndexUpdater.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexUpdater.class);
 
     protected void initXWikiContainer(XWikiContext context)
     {
-        ExecutionContextInitializerManager ecim =
-                (ExecutionContextInitializerManager) Utils.getComponent(ExecutionContextInitializerManager.ROLE);
-        Execution execution = (Execution) Utils.getComponent(Execution.ROLE);
+        ExecutionContextManager ecim =
+                (ExecutionContextManager) Utils.getComponent(ExecutionContextManager.class);
+        Execution execution = (Execution) Utils.getComponent(Execution.class);
 
         try {
             ExecutionContext ec = new ExecutionContext();
@@ -52,7 +53,7 @@ public abstract class AbstractXWikiRunnable implements Runnable
 
             ecim.initialize(ec);
             execution.setContext(ec);
-        } catch (ExecutionContextInitializerException e) {
+        } catch (ExecutionContextException e) {
             // Note: We should raise an exception here but we cannot since XWikiDefaultPlugin has
             // overrident's XWikiPluginInterface's init() method without declaring a throw XWikiException...
             LOG.error("Failed to initialize Execution Context. Behavior of the Lucene plugin could be "
@@ -63,7 +64,7 @@ public abstract class AbstractXWikiRunnable implements Runnable
 
     protected void cleanupXWikiContainer(XWikiContext context)
     {
-        Execution ech = (Execution) Utils.getComponent(Execution.ROLE);
+        Execution ech = (Execution) Utils.getComponent(Execution.class);
         // We must ensure we clean the ThreadLocal variables located in the Execution
         // component as otherwise we will have a potential memory leak.
         ech.removeContext();

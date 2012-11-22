@@ -1,0 +1,29 @@
+
+// <%
+
+def hql = "where 1=1 and doc.web='XWiki' order by doc.date desc";
+
+Date since=new Date(System.currentTimeMillis()- 7*24*3600*1000L);
+Date earliest = new Date();
+
+int numsBack = 50, cursor = 0;
+List list = xwiki.searchDocuments(hql, numsBack, cursor);
+
+println();
+while(!list.isEmpty() && earliest.after(since)) {
+    for(String docName in list) {
+        com.xpn.xwiki.api.Document d = xwiki.getDocument(docName);
+        if(d.getObject("XWiki.XWikiUsers")==null) continue;
+        Date date = d.date;
+        print("* [" + d.fullName + "]");
+        println(" (" + date + ")");
+        if(date.before(earliest)) earliest = date;
+        if(earliest.before(since)) break;
+    }
+}
+
+public String updateIContact(com.xpn.xwiki.api.Document d) {
+    
+}
+
+// %>

@@ -1,0 +1,482 @@
+#template('colorThemeInit.vm')
+/** TABS **/
+
+.tab-container {
+	background-color: #ccc; 
+	border: 1px solid #000; 
+	clear: left;
+	margin: 0 0 10px; 
+	padding: 10px; 
+}
+
+ul.tabs {
+        clear:none;
+        float:left;
+        margin: 0px;
+        margin-left: 10px;
+        height: 40px;
+        padding:0;
+}
+
+.tab-container {
+        margin-top: 10px;
+        clear: left;
+}
+
+ul.tabs li { 
+	float:left; 
+	margin:0 5px -1px 0;
+	padding:0;
+	position:relative;
+}
+
+ul.tabs li, ul.tabs {
+  list-style:none outside none;
+  float:left;
+  margin-right:5px;
+}
+
+ul.tabs a { 
+	-moz-border-radius-bottomleft:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-topleft:3px;
+	-moz-border-radius-topright:3px;
+	background: #fff;
+	border-width:1px;
+        border-top:1px solid #ccc;
+        border-bottom:none;
+        border-left:1px solid #CCC;
+        border-right:1px solid #CCC;
+	color:#555;
+	display:block;
+	font-weight:bold;
+	padding:5px 10px;
+}
+ul.tabs li.current {
+  position:relative;
+  z-index:2;
+}
+ul.tabs li.current a { 
+	background:$theme.panelBackgroundColor none repeat scroll 0 0;
+        border-top:1px solid $theme.borderColor;
+        border-left:1px solid $theme.borderColor;
+        border-right:1px solid $theme.borderColor;
+	color:#333;
+        position:relative;
+        z-index:2;
+}
+
+
+/** TITLEBAR **/
+
+.subtitlebar{
+	text-align: right;
+	line-height: 1.2em;
+	border-bottom: 1px solid;	
+	margin: 5px 0px;
+}
+
+.subtitlebar *{
+	font-size: 12px;
+	font-family: Helvetica, sans-serif;
+	line-height: 1.2em;
+}
+
+.subtitlebar a{
+	text-decoration: none;
+	padding: 2px 0px;
+}
+
+html > body .subtitlebar a{
+  	display: block;
+  	float: right;
+}
+
+html > body .subtitlebarRight{overflow: hidden;}
+
+.subtitlebar h4{
+  	font-weight: normal;
+  	font-style: normal;
+  	text-transform: uppercase;
+  	padding: 2px 0px;
+  	margin: 0px;
+  	text-align: left;
+}
+
+.subtitlebar_left{float: left;}
+.subtitlebarRight{overflow: hidden;}
+
+/** INPS specific green color for all subtitle bars  **/
+
+.subtitlebar_red, .subtitlebar_red h4 {
+  	color: $theme.titleColor;
+  	border-bottom-color: $theme.titleColor;
+}
+
+.subtitlebar_red .subtitlebarRight a{color: $theme.linkColor;}
+
+.subtitlebar_blue, .subtitlebar_blue h4 {
+  	color: $theme.titleColor;
+  	border-bottom-color: $theme.titleColor;
+}
+
+.subtitlebar_blue .subtitlebarRight a{color: $theme.linkColor;}
+
+.subtitlebar_green, .subtitlebar_green h4 {
+  	color: $theme.titleColor;
+  	border-bottom-color: $theme.titleColor;
+}
+.subtitlebar_green .subtitlebarRight a{color: $theme.linkColor;}
+
+.subtitlebar_purple{
+        color: $theme.titleColor;
+  	border-bottom-color: $theme.titleColor;
+}
+
+.currikicontent .subtitlebar_purple h4, .subtitlebar_purple h4 {color: $theme.titleColor !important;} 
+
+.subtitlebar_purple .subtitlebarRight a{color: $theme.linkColor;}
+
+.titlebar{
+	text-align: right;
+	line-height: 1.2em;
+	margin: 8px 0px;
+	position: relative;
+	width: auto;
+}
+
+.titlebar *{
+	/*color: #FFF !important;*/
+        color:$theme.menuLinkColor;  /** Added by Ciprian **/
+	font-size: 12px;
+	font-family: Helvetica, sans-serif;
+	line-height: 1.2em;
+}
+
+.titlebar a{
+  	text-decoration: none;
+  	padding: 2px 8px;
+}
+
+html > body .titlebar a{
+ 	display: block;
+  	float: right;
+}
+
+html > body .titlebarRight{overflow: hidden;}
+
+.titlebar_left { 
+	float:none;
+	overflow:hidden;
+	padding-right:120px;
+}
+
+.titlebarRight { 
+	float:none;
+  	overflow: hidden;
+	position:absolute;
+	right:0;
+	top:0;
+}
+
+.titlebar h3{
+ 	font-weight: bold;
+	font-style: normal;
+	text-transform: uppercase;
+  	padding: 2px 8px;
+  	margin: 0px;
+  	text-align: left;
+}
+
+.titlebar_red{background-color: $theme.menuBackgroundColor;}
+.titlebar_red .titlebarRight a{background-color: #444}
+.titlebar_blue {background-color: $theme.menuBackgroundColor;}
+.titlebar_blue .titlebarRight a{background-color: #1C4E95;}
+.titlebar_purple{background-color: $theme.menuBackgroundColor;}
+.titlebar_purple .titlebarRight a{background-color: #644299;}
+.titlebar_green{background-color: $theme.menuBackgroundColor;}
+.titlebar_green .titlebarRight a{background-color: #161;}
+
+* html .titlebarRight a{
+  display: block;
+  float: right;
+  height: 17px;
+}
+* html .titlebar{
+  height: 17px;
+}
+
+
+/** SUBTITLEBAR **/
+
+subtitlebar_red { 
+	border-bottom-color:#FF4100;
+	color:#FF4100;
+}
+.subtitlebar { 
+	border-bottom:1px solid;
+	line-height:1.2em;
+	margin-bottom:10px;
+        margin-top:15px;
+	text-align:right;
+}
+
+.subtitlebar h4 { 
+	font-style:normal;
+	font-weight:normal;
+	margin:0;
+	padding:2px 0;
+	text-align:left;
+	text-transform:uppercase;
+}
+.subtitlebar_left {float:left;}
+
+.subtitlebar * { 
+	font-family:Helvetica,sans-serif;
+	font-size:12px;
+	line-height:1.2em;
+}
+
+
+
+/** TITLEHEADER **/
+
+.titleheader {
+	position: relative;
+	width: auto;
+	zoom: 1;
+}
+
+.titleheader * {
+	color: $theme.panelHeaderTextColor;
+	font-family: Helvetica,sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: bold;
+	line-height: 1.2em;
+	margin: 0;
+	padding: 2px 8px;
+	text-align: left;
+	text-transform: uppercase;
+}
+
+.titleheader-blue { background-color: $theme.panelHeaderBackgroundColor; }
+.titleheader-red { background-color: $theme.panelHeaderBackgroundColor; }
+
+.titleheader-right {
+	position: absolute; 
+	overflow: hidden;
+	right: 0px !important;
+	right: -1px;
+	top: 0px;
+}
+
+.titleheader-right a {
+	cursor: pointer;
+	font-weight: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.titleheader-right a:hover { color: $theme.buttonPrimaryTextColor; text-decoration: underline; }
+.titleheader-red .titleheader-right { background-color:$theme.buttonPrimaryBackgroundColor; }
+.titleheader-blue .titleheader-right { background-color:$theme.buttonPrimaryBackgroundColor; }
+.titleheader-right a { color: $theme.buttonPrimaryTextColor; }
+
+h3.titleheader {
+	color:#FFFFFF;
+	font-family:Helvetica,sans-serif;
+	font-size:12px;
+	font-style:normal;
+	font-weight:bold;
+	line-height:1.2em;
+	margin:0;
+	padding:2px 8px;
+	text-align:left;
+	text-transform:uppercase;
+}
+
+
+/** FRAME **/
+
+.frame {
+        background-color:#FFFFFF;
+        border-left:1px solid #dcdcdc;
+        border-right:1px solid #dcdcdc;
+        border-bottom:1px solid #dcdcdc;
+        margin:10px 0 20px;
+        padding:0;
+        position:relative;
+}
+
+.frame p { margin: 0; }
+.frame-inset .button-links { display: block; float: right;}
+.frame-inset-ict { float:left; padding: 0; }
+.frame-inset-ict img { margin: 0 5px 0 0; }
+
+.frame-inset-title a, .frame-inset-title a:hover {
+        border-width: 0;
+        color: #000;
+        font-weight: bold;
+        margin: 0;
+}
+
+.frame-inset {
+        border: 1px solid #CCC;
+        border-bottom: 1px solid #E5E5E5;
+        border-right: 1px solid #E5E5E5;
+        margin: 10px 10px 0;
+        padding: 10px;
+        zoom: 1;
+}
+
+.frame-content { padding: 0.5em; }
+
+.frame-inset .button-links { margin-bottom: 15px; padding-left: 17px; font-size: 0; }
+.frame-inset .button-links a { font-size: 12px; padding: 0 4px; }
+.frame-inset-ict { margin-bottom: 5px; }
+.frame-inset-title { padding: 1px 0 18px; }
+
+/** GENERAL */
+
+.links { padding: 1em 0; }
+.instruction { color: #3f3f3f; font-size: 10px; }
+.clearfloat { clear: both; }
+.bold { font-weight: bold; }
+.strong, table td { font-size: 12px; }
+.date { color: #8C8C8C; }
+.righttext {
+        color:#CBCBCB;
+        line-height:1.2em;
+        margin:3px 0;
+        overflow:hidden;
+        text-align:right;
+}
+
+
+.floatright { float: right; }
+.righttext .floatright { margin-left: 15px; }
+.centertext { text-align: center; }
+
+.xwikicomment {
+        border-top:1px dotted #CCCCCC;
+        padding:10px 0;
+}
+
+
+
+/** TABLE RELATED **/
+
+table { border-collapse: collapse; }
+
+.table-header {
+        background-color:$theme.panelHeaderBackgroundColor;
+        border-right:1px solid #FFFFFF;
+        color:$theme.panelHeaderTextColor;
+        font-size:12px;
+        line-height:12px;
+        padding:3px 5px 4px;
+        text-align:center;
+        text-transform:uppercase;
+}
+
+.table-header a {
+        color: $theme.panelHeaderTextColor;
+        text-transform: uppercase;
+}
+
+.table th a:hover { text-decoration: underline; }
+.table tr { margin: 0 5px; }
+
+.table td {
+        font-size: 12px;
+        padding: 5px;
+        text-align: center;
+}
+
+.table-odds td {background-color: #F1F1F1;}
+
+.table-results {
+        border-top: 2px solid $theme.panelHeaderBackgroundColor;
+        font-size: 11px;
+        margin: 10px 0;
+}
+
+.table-results-title {
+        background-color: $theme.panelBackgroundColor;
+        text-align: center;
+}
+
+.table-results-navigation {
+        padding: 5px 0;
+        text-align: center;
+}
+
+.table-results-navigation a {text-decoration: none;}
+a.table-results-navigation-selected {color: #FF8D90;}
+.table .button-links a { display: block; padding-left: 20px; text-align: left; }
+.button-links a.button-link-table {border-left:1px solid #C9C9C9;}
+.table .button-links a.button-link-table  { border: none; }
+.table {border-collapse:collapse; width: 100%;}
+
+.table-contributions .table-col-title {width:186px;}
+.table .table-col-title {text-align:left;}
+.table-contributions th.table-header-sorted a, .table-contributions th.table-col-title a:hover { text-decoration: underline; }
+.table-contributions th a:hover { color: #FFF; }
+
+.table-favorites .table-col-title { width: 193px; }
+.table-favorites .table-col-contributor { width: 146px; }
+.table-favorites .table-col-ict { width: 67px; }
+.table-favorites .table-col-filetype { width: 112px; }
+.table-favorites .table-col-action { width: 90px; }
+
+.table-contributions .table-col-title { width: 186px; }
+.table-contributions .table-col-ict { width: 48px; }
+.table-contributions .table-col-lastupdated { width: 121px; }
+.table-contributions .table-col-access{ width: 78px; }
+.table-contributions .table-col-filetype { width: 85px; }
+.table-contributions .table-col-action { width: 90px; }
+.table .table-col-action { border-right: none; }
+
+.table .table-col-contributor {
+        text-align: left;
+        padding-left: 10px;
+}
+
+.main th, .main td {
+  /*border: none;*/
+}
+#search-pager-member th, #search-pager-member td {
+  border: none;
+}
+
+
+
+/* BUTTONS */
+input.button, button.button, a.button, table.button button, body.p-CRS-Review button#ext-gen24, body.p-CRS-Review button#ext-gen48 /** ONE OFF **/ {
+  background:$theme.buttonPrimaryBackgroundColor;
+  border:1px solid $theme.buttonPrimaryBackgroundColor;
+  color:$theme.buttonPrimaryTextColor;
+  cursor:pointer;
+  display:inline-block;  
+  font-weight: normal;
+  height:auto;
+  overflow: visible;
+  padding:2px 10px;
+  width: auto;
+}
+
+input.button-confirm:hover, button.button-confirm:hover, a.button-confirm:hover, table.button-confirm button:hover, body.p-CRS-Review button#ext-gen24:hover /** ONE OFF **/ {
+  text-decoration: none;
+}
+
+input.button-cancel, button.button-cancel, a.button-cancel, table.button-cancel button, body.p-CRS-Review button#ext-gen48 /** ONE OFF **/ {
+
+        border-color: $theme.borderColor;
+        color: #fff;
+}
+
+input.button-cancel:hover, button.button-cancel:hover, a.button-cancel:hover, table.button-cancel button:hover, body.p-CRS-Review button#ext-gen48:hover /** ONE OFF **/  {
+        color: #3f3f3f;
+        text-decoration: none;
+}
+

@@ -24,14 +24,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.MDC;
 
 import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -70,7 +70,7 @@ import com.xpn.xwiki.doc.XWikiDocument;
 public class IndexRebuilder extends AbstractXWikiRunnable
 {
     /** Logging helper. */
-    private static final Log LOG = LogFactory.getLog(IndexRebuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IndexRebuilder.class);
 
     /** The actual object/thread that indexes data. */
     private IndexUpdater indexUpdater;

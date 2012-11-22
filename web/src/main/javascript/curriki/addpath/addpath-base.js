@@ -101,6 +101,9 @@ Curriki.module.addpath.init = function(){
 								click:{
 									 fn: function(){
 											this.close();
+                                            if(Curriki.current.cameFrom.endsWith("#startAdd")) {
+                                                Curriki.current.cameFrom = Curriki.current.cameFrom.substring(0, Curriki.current.cameFrom.length-"#startAdd".length);
+                                            }
 											window.location.href = Curriki.current.cameFrom;
 										}
 									,scope:this
@@ -1647,7 +1650,6 @@ Curriki.module.addpath.init = function(){
 									,AddPath.ShowDone()
 								);
 							} else {
-                                console.log("No current parentAsset.");
 								AddPath.ShowDone();
 							}
 						}
@@ -2301,8 +2303,11 @@ Curriki.module.addpath.init = function(){
 									}
 									,expandnode:{
 										fn: function(node){
+                                            console.log("expandnode 2");
 											var wnd = this;
+                                            console.log("expandnode 2: fire afterlayout");
 											wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
+                                            console.log("expandnode 2: afterlayout finished");
 										}
 										,scope:this
 									}
@@ -2580,6 +2585,7 @@ Curriki.module.addpath.init = function(){
 									}
 									,expandnode:{
 										fn: function(node){
+                                            console.log("expandnode 3")
 											var wnd = this;
 											wnd.fireEvent('afterlayout', wnd, wnd.getLayout());
 										}

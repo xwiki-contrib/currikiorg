@@ -1,0 +1,43 @@
+<html><head><title>MemberIFrame</title>
+    <link rel="stylesheet" href="http://welcome.curriki.org/wp-content/themes/curriki/css/normalize.css" />
+    <link rel="stylesheet" href="http://welcome.curriki.org/wp-content/themes/curriki/style.css" media="screen" />
+</head><body style="background:none; border:none; text-align:right">
+    #set($isGuest = $context.getUser().equals("XWiki.XWikiGuest"))
+    #set($hostname=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config'))
+<div id="top-nav-frame" >
+    #if($isGuest)
+        <ul>
+            <li class="menu-item menu-item-type-post_type menu-item-object-page"
+                    ><a href="http://welcome.curriki.org/about-curriki/contact-us/" target="_top"><strong>Contact Us</strong></a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
+                                                                                    href="http://${hostname}/xwiki/bin/view/Registration/DirectLogin?xredirect=%2F"><strong>Register</strong></a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
+                                                                                    href="http://${hostname}/xwiki/bin/view/Registration/DirectLogin?xredirect=%2F"><strong>Sign In</strong></a></li>
+            <li class="menu-item">
+                <a style="width:48px" title="Join using your Facebook account" target="_top"
+                   href="http://www.curriki.org/xwiki/bin/view/Registration/SocialLogin?provider=facebook&amp;xredirect=%2Fxwiki%2Fbin%2Fview%2FMyCurriki%2FProfile" target="_top" class="social">
+                    <img width="36" title="Join using your Facebook account" style="vertical-align: bottom; margin-left: 1em; margn-right:1em;" src="http://www.curriki.org/xwiki/skins/curriki8/registration/facebook-logo.png">
+                </a>
+            </li>
+            <li class="menu-item">
+                <a style="width:48px" title="Join using your Google account"  target="_top"
+                   href="http://www.curriki.org/xwiki/bin/view/Registration/SocialLogin?provider=google&amp;xredirect=%2Fxwiki%2Fbin%2Fview%2FMyCurriki%2FProfile" target="_top" class="social">
+                    <img width="36" title="Join using your Google account" style="vertical-align: bottom; margin-left: 1em; margn-right:1em;" src="http://www.curriki.org/xwiki/skins/curriki8/registration/google-logo.png">
+                </a>
+            </li>
+        </ul>
+    #else
+        #set($crtUserDoc=$xwiki.getDocument($context.user))##
+        <ul>
+            <li class="menu-item menu-item-type-post_type menu-item-object-page"
+                    ><a  target="_top"
+                         href="http://welcome.curriki.org/about-curriki/contact-us/"><strong>Contact Us</strong></a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
+                                                                                    href="http://${hostname}/xwiki/bin/view/MyCurriki/" title="Visit your profile"><strong>Welcome  $crtUserDoc.display("first_name","view")</strong></a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
+                                                                                    href="http://${hostname}/xwiki/bin/view/Registration/CleanLogout" title="Logout"><strong>Logout</strong></a></li>
+        </ul>
+    #end
+</div>
+</body>
+</html>

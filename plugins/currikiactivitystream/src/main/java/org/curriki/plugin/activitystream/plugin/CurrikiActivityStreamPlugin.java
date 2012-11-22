@@ -21,6 +21,7 @@ package org.curriki.plugin.activitystream.plugin;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Api;
+import com.xpn.xwiki.notify.DocChangeRule;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.plugin.activitystream.plugin.ActivityStreamPlugin;
 
@@ -29,10 +30,15 @@ import org.curriki.plugin.activitystream.impl.CurrikiActivityStream;
 
 public class CurrikiActivityStreamPlugin extends ActivityStreamPlugin {
 
+    private DocChangeRule docChangeRule;
+
     public CurrikiActivityStreamPlugin(String name, String className, XWikiContext context)
     {
         super(name, className, context);
-        setActivityStream(new CurrikiActivityStream());       
+        CurrikiActivityStream as = new CurrikiActivityStream();
+        setActivityStream(as);
+        docChangeRule =new DocChangeRule(as, false, true);
+        context.getWiki().getNotificationManager().addGeneralRule(this.docChangeRule);
     }
 
     public String getName() {

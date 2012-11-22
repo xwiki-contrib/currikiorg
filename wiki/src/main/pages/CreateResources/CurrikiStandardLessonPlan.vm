@@ -42,7 +42,7 @@
      #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
   #else ## } {
     ## empty pageName means no asset... so create new one. This is "default" action
-     #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
+     #set( $newAsset = $xwiki.curriki.createAsset($util.null) )
      ## note-below: <input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/>
      ## so followup POSTs set pageName to newly created asset, i.e. condition below:
   #end ## }
@@ -68,9 +68,9 @@
 <style type="text/css">
 input {	width:expression(this.type=="text" ? "83%" : "style"); }
 </style>
-<script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+<script type="text/javascript" src="/xwiki/resources/js/yui/yahoo/yahoo-min.js" ></script>
+<script type="text/javascript" src="/xwiki/resources/js/yui/treeview/treeview-min.js" ></script>
+<script type="text/javascript" src="/xwiki/resources/js/yui/treeview/checknode.js"></script>
 <script language="javascript" type="text/javascript">
 // ----------------------------------- override YUI checknode method -------------------
 /**

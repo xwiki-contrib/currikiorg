@@ -40,7 +40,7 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
     protected CurrikiActivityStream getCurrikiActivityStream()
     {
         return (CurrikiActivityStream) ((CurrikiActivityStreamPlugin) getProtectedPlugin())
-            .getActivityStream();
+                .getActivityStream();
     }
 
     protected List wrapEvents(List events)
@@ -52,7 +52,7 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
         Iterator iter = events.iterator();
         while (iter.hasNext()) {
             com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
-                (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) iter.next();
+                    (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) iter.next();
             com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent;
             if (event.getSpace().startsWith("Messages_Group_")) {
                 wrappedEvent = new MessageActivityEvent(event, getXWikiContext());
@@ -64,25 +64,25 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
                 wrappedEvent = new DocumentationActivityEvent(event, getXWikiContext());
             } else {
                 wrappedEvent =
-                    new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
-                        getXWikiContext());
+                        new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
+                                getXWikiContext());
             }
             result.add(wrappedEvent);
         }
         return result;
     }
-
+/*
     protected List unwrapEvents(List events)
     {
-        List result = super.unwrapEvents(events);
-        for (int i = 0; i < events.size(); i++) {
-            com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
-                (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) result.get(i);
-            com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent =
-                (com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent) events.get(i);
-            event.setTitle(wrappedEvent.getDisplayTitle());
-            event.setBody(wrappedEvent.getDisplayBody());
+        List result =
+            new ArrayList();
+        if (events != null) {
+            for (Object event : events) {
+                Object unwrappedEvent = ((com.xpn.xwiki.plugin.activitystream.api.ActivityEvent)event).getEvent();
+                result.add(unwrappedEvent);
+            }
         }
         return result;
     }
+*/
 }

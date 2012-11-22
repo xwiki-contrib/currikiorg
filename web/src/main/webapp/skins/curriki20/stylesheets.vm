@@ -1,0 +1,45 @@
+<script type="text/javascript">
+//<![CDATA[
+var ejcLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/extjs/" : "http://extjs.cachefly.net/ext-2.3.0/");
+document.write(unescape("%3Clink rel='stylesheet' type='text/css' href='" + ejcLoc + "resources/css/ext-all.css' /%3E"));
+//]]>
+</script>
+<link href="$xwiki.getSkinFile("style.css", true)" rel="stylesheet" type="text/css" media="all" />
+## If we're in print view enable the print CSS so that it's applied in view mode
+#**
+  * Curriki Specific 
+  *#
+<link href="/xwiki/js/curriki-js.css" type="text/css" rel="stylesheet" type="text/css" />
+<link href="$xwiki.getSkinFile("curriki/ictcrs.css", false)" rel="stylesheet" type="text/css"  />
+<link href="$xwiki.getSkinFile("curriki/panels.css", false)" rel="stylesheet" type="text/css"  />
+<link href="$xwiki.getSkinFile("curriki/addpath.css", false)" rel="stylesheet" type="text/css"  />
+<link href="$xwiki.getSkinFile("curriki/filetypes.css", false)" rel="stylesheet" type="text/css"  />
+<link href="$xwiki.getSkinFile("curriki/search.css", false)" rel="stylesheet" type="text/css"  />
+##we should not need that one
+##<link href="$xwiki.getSkinFile("curriki/style2.css", false)" rel="stylesheet" type="text/css"  />
+
+## ext-js script taken from here
+
+#if($doc.getObject("CurrikiCode.AssetClass"))
+<link href="$xwiki.getSkinFile("curriki/views.css", false)" rel="stylesheet" type="text/css"  />
+#if("$!request.viewer"=="embed")
+<link href="$xwiki.getSkinFile("curriki/embed.css", false)" rel="stylesheet" type="text/css"  />
+#end
+#end
+#if("$!request.viewer"=="print")  
+  <link href="$xwiki.getSkinFile("curriki/print.css", true)" rel="stylesheet" type="text/css" media="all" />
+#end
+## IE specific stylesheets
+#if($response.getHeader("user-agent").contains("MSIE"))
+<!--[if IE]>
+  <link href="$xwiki.getSkinFile("ie-all.css", true)" rel="stylesheet" type="text/css" />
+  <link href="$xwiki.getSkinFile("curriki/ie.css")" rel="stylesheet" type="text/css" title="default" />
+<![endif]-->
+<!--[if IE 6]>
+  <link href="$xwiki.getSkinFile("ie-6.css", true)" rel="stylesheet" type="text/css" />
+<![endif]-->
+#end
+## Hook for inserting CSS skin extensions
+<!-- com.xpn.xwiki.plugin.skinx.CssSkinExtensionPlugin -->
+<!-- com.xpn.xwiki.plugin.skinx.CssSkinFileExtensionPlugin -->
+ 

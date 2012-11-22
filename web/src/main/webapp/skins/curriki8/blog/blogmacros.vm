@@ -109,7 +109,7 @@ $msg.get("mycurriki.blog.noblog")
 #end ## }
 #if($context.action == "inline") ## {
 #set($m_user = $context.user.substring(6))
-#if("$doc.web" == "Blog_${m_user}")
+#if("$doc.space" == "Blog_${m_user}")
 #set($m_bc="bc=MyCurriki.WebHome;MyCurriki.Blog&")
 #else
 #set($m_bc="")
@@ -117,7 +117,7 @@ $msg.get("mycurriki.blog.noblog")
 $response.sendRedirect($xwiki.getURL("MyCurriki.BlogEditArticle", "view", "${m_bc}editArticle=${doc.fullName}"))
 #else ## } {
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "") ## {
+#if("$!title" == "") ## {
 #set($title = "&nbsp;")
 #end ## }
 #curriki_titlebar($title "" "" "blue")
@@ -189,9 +189,9 @@ $comment.comment
 #macro(mycurriki_blogarticle $bentrydoc $bentryobj $displayFully) ## {
 #set($creationDay = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.dateFormat")))
 #set($creationHour = $xwiki.formatDate($bentrydoc.creationDate,$msg.get("mycurriki.timeFormat")))
-#if($doc.web == "MyCurriki") ## {
+#if($doc.space == "MyCurriki") ## {
 #set($title = $!bentrydoc.display("title","view", $bentryobj))
-#if($title == "") ## {
+#if("$!title" == "") ## {
 #set($title = "&nbsp;")
 #end ## }
 1 $title
@@ -206,7 +206,7 @@ $comment.comment
 #set($content = "")
 #end ##}
 #if(!$displayFully)
- #if($!extract != "")
+ #if("$!extract" != "")
   #set($content = $extract)
  #else
   #if($content.length()>400)
@@ -216,7 +216,7 @@ $comment.comment
   #end
  #end
 #end
-$bentrydoc.getRenderedContent($content).replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+$bentrydoc.getRenderedContent($content,"xwiki/1.0").replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
 #if($bentrydoc.fullName != $doc.fullName || !$displayFully)
 <div class="clearfloats"></div>
 
@@ -229,7 +229,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 {pre}
 #set($g_enable_ADDTHIS = true)
-<a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://$xwiki.getXWiki().Param('curriki.system.hostname', 'www.curriki.org')$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
+<a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://$xwiki.curriki.getPublicCurrikiConfig('hostname','www.curriki.org')$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
 #if ($bentrydoc.hasAccessLevel("edit"))
 #sep()
 <a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a>
@@ -311,19 +311,20 @@ $('XWiki.ArticleClass_0_title').setAttribute('maxlength', '80');
 #set($editors = $context.getEditorWysiwyg())
 #if($editors)
 #set($footerJScript= "
-<script language='javascript' type='text/javascript' src='/xwiki/tiny_mce/tiny_mce.js'></script>
-<script language='javascript' type='text/javascript' src='/xwiki/wiki_editor/wiki_editor.js'></script>
-<script language='javascript' type='text/javascript'>
+    <script language='javascript' type='text/javascript' src='/xwiki/tiny_mce/tiny_mce.js'></script>
+    <script language='javascript' type='text/javascript' src='/xwiki/wiki_editor/wiki_editor.js'></script>
+    <script language='javascript' type='text/javascript'>
 	wikiEditor.init({
 		elements : '$editors',
 	        language: 'en',
 		mode: 'exact',
 		content_css: '/xwiki/bin/skin/skins/style.css',
 		debug : false,
+        safari_warning : false,
 		remove_linebreaks : false,
 		plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.web/$bentrydoc.name/',
-        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.web/$bentrydoc.name',
+        wiki_images_path : '${request.contextPath}/bin/download/$bentrydoc.space/$bentrydoc.name/',
+        wiki_attach_path : '${request.contextPath}/bin/view/$bentrydoc.space/$bentrydoc.name',
         wiki_use_style: '$xwiki.getWysiwygToolbars()',
         wiki_plugins: 'core,attachments,macros'
 	});
@@ -387,15 +388,15 @@ The article [$mytitle>$pagefullname] has been published successfully.
   *
   *#
 #macro(blog_redirect)
-#if($doc.web == "Members") ## {
+#if($doc.space == "Members") ## {
 $response.sendRedirect($xwiki.getURL('MyCurriki.Blog'))
 #else ## } {
 #set($user = $context.user)
 #if($user.startsWith("XWiki.")) ## {
 #set($user = $user.substring(6))
 #end ## }
-#if($doc.web.startsWith("Blog_")) ## {
-#set($shortname = $doc.web.substring(5))
+#if($doc.space.startsWith("Blog_")) ## {
+#set($shortname = $doc.space.substring(5))
 #else ## } {
 #set($shortname = $user)
 #end ## }

@@ -8,10 +8,10 @@
 #template("analytics.vm")##
 {/pre}
 #if($request.xwikiname && $request.xwikiname != "" && $request.validkey && $request.validkey != "")
-#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
-#set($junk=$tool.init($xwiki, $context, $request, $msg, $targets))##
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
 #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))
+#set($junk=$tool.init($xwiki, $context, $request, $msg, $targets))##
 #set($result=$tool.validateUser())##
 #set($memberType = $tool.memberType)##
 #if($result=="success")

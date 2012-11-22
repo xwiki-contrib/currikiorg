@@ -16,7 +16,7 @@
   #if("$!pageName" != "") 
      #set($newAsset = $xwiki.curriki.fetchAsset($pageName))
   #else
-     #set($newAsset = $xwiki.curriki.createAsset($xwiki.null))
+     #set($newAsset = $xwiki.curriki.createAsset($util.null))
   #end 
   #################################### If newAsset is null, show error message
   #if( "$!newAsset"=="" ) 
@@ -348,9 +348,9 @@
     .x-form-field-ace{overflow:hidden}
     input { width:expression(this.type=="text" ? "83%" : "style"); }
     </style>
-    <script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-    <script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-    <script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+    <script type="text/javascript" src="/xwiki/resources/js/yui/yahoo/yahoo-min.js" ></script>
+    <script type="text/javascript" src="/xwiki/resources/js/yui/treeview/treeview-min.js" ></script>
+    <script type="text/javascript" src="/xwiki/resources/js/yui/treeview/checknode.js"></script>
     <script>
     // ----------------------------------- override YUI checknode method -------------------
     /**
@@ -880,12 +880,12 @@
     <textarea id="nlp_standards" name="nlp_standards"></textarea>  ## in JS, this is replaced w/ WYSIWYG
     #curriki_forminstructions($msg.get("celp.step2.instruction2"))
     ##Summative Assessment(s):
-    #curriki_formprompt($msg.get("celp.step2.assess.title"), $msg.get("celp.step2.assess.tooltip").replaceAll("\"","\\\""), $msg.get("celp.step2.assess.instruction"), true, "medium")
+    #curriki_formprompt($msg.get("celp.step2.assess.title"), $msg.get("celp.step2.assess.tooltip"), $msg.get("celp.step2.assess.instruction"), true, "medium")
     <div id="assess_div"></div>
     <button class="button-orange" id="addRowBtn_1" onclick="return addrow(1);">$msg.get("ace.lesson.plan.procedures.addrow")</button>
     #curriki_forminstructions($msg.get("celp.step2.instruction3"))
     ##Pre-Requisite Knowledge & Skills:
-    #curriki_formprompt($msg.get("celp.step2.prereq.title"), $msg.get("celp.step2.prereq.tooltip").replaceAll("\"","\\\""), $msg.get("celp.step2.prereq.instruction"), false, "medium")
+    #curriki_formprompt($msg.get("celp.step2.prereq.title"), $msg.get("celp.step2.prereq.tooltip"), $msg.get("celp.step2.prereq.instruction"), false, "medium")
     <textarea id="nlp_prereq" name="nlp_prereq"></textarea>
     ##Procedures:
     #curriki_formprompt($msg.get("celp.step2.procedures.title"), $msg.get("celp.step2.procedures.tooltip"), $msg.get("celp.step2.procedures.instruction"), true, "medium")

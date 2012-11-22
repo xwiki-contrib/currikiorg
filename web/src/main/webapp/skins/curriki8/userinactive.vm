@@ -1,78 +1,105 @@
 #**
-  * User inactive page. This page has it's own template to strip it from content
-  * that would not be inaccessible to an inactive user.
-  * TODO: verify curriki styles
-  *###
-#if($doc.fullName == "Util.JSTrans" && $request.xpage=="plain")$xwiki.includeForm("Util.JSTransShadow",false)##
-#else
-    #template("startpage.vm")#set($wrapMe=true)##
-    #if($request.mailAgain=="1")##
+ * User inactive page. This page has it's own template to strip it from content
+ * that would not be inaccessible to an inactive user.
+ * TODO: verify curriki styles
+ *###
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#template("startpage.vm")#set($wrapMe=true)##
+#if($request.mailAgain=="1")<!-- reporting mailed again -->##
     #logViewScript("/join/enterValidation/submit/sent")
     #if($tool)#else#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))#set($junk=$tool.init($xwiki,$context,$request,$msg,""))$tool.grabFromCurrentUser()#end##
     $tool.sendValidationEmail()##
     #info("Email resent.")
-#end##
-#if($request.errors)<h2>$msg.get("join.invalid.key.title")</h2>
-        #foreach($m in $request.errors.split(","))#error($msg.get($m))#end
-        <p align='right'><button class='button-grey' onclick='window.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
+#end
+#if($request.errors)<!-- errors in request --><h2>$msg.get("join.invalid.key.title")</h2>
+    #foreach($m in $request.errors.split(","))#error($msg.get($m))#end
+<p align='right'><button class='button-grey' onclick='window.back(); return false;'>$msg.get('join.invalid.key.ok_button')</button></p>
+#end
+#if($request.validkey)<!-- a validation key was presented --> ## we are logged in here. Process the validation
+## copied from Registration Complete
+    #if($xwiki.hasAccessLevel("write",$context.user))
+        ## redirect to the same URL after a logout (a logged-in user may not save its document if inactive)
+        #set($target=$escapetool.url("$request.getRequestURI()?$request.getQueryString()"))##
+        #set($target="/xwiki/bin/view/Registration/CleanLogout?xredirect=$target")##
+        <script type="text/javascript">
+            window.top.location.href="$target";
+        </script>
+        <p><a href="$target">Validating...</a></p>
+    #else
+        #set($validation=$xwiki.parseGroovyFromPage("Registration.Validation"))##
+        #set($junk=$validation.init($xwiki))##
+        #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
+        #set($junk=$targets.init($request,$xwiki))##
+        #set($success=$validation.checkValidationKey($request,$context.user))##
+        #if($success)<!-- validation success -->##
+            $validation.activateUser($context)##
+            #set($redir=$targets.afterLogin)##
+            $xwiki.includeForm("Registration.JumpToTop",false)##
+            #logViewScript("/join/enterValidation/submit/success")##
+        #else<!-- validation error -->$response.sendRedirect("$request.getRequestURI()?errors=join.invalid.key.text")##
+        #end
     #end
-#if($request.validkey) ## we are logged in here. Process the validation
-    ## copied from Registration Complete
-    #set($validation=$xwiki.parseGroovyFromPage("Registration.Validation"))##
-    #set($junk=$validation.init($xwiki))##
-    #set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-    #set($junk=$targets.init($request,$xwiki))##
-    #set($success=$validation.checkValidationKey($request,$context.user))##
-    #if($success)##
-        $validation.activateUser($context)##
-        #set($redir=$targets.afterLogin)##
-        $xwiki.includeForm("Registration.JumpToTop",false)##
-        #logViewScript("/join/enterValidation/submit/success")##
-    #else$response.sendRedirect("$request.getRequestURI()?errors=join.invalid.key.text")##
-    #end
-#else<div id="content">
-#if ($cause == "disabled") ## {
-$msg.get("accountdisabled")
-#logViewScript("/join/enterValidation/accountDisabled")##
-#else ## }{
-## Is this a page we want to load?.. seems to be broken
-#set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink","CleanLogout"])##
-#if($allowList.contains($doc.name) && $doc.web=="Registration") ## {
-##$xwiki.includeForm($doc.fullName,false)##
-##$doc.getContent()##
-<!-- included content of $doc.fullName  of length $cdoc.getContent().length()-->#else ## }{
-## Account not active -- why?  1. New, 2. Disabled due to undeliverable email
-#set($userDoc = $xwiki.getDocument($context.user))
-#set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
-#set($active = $!userObj.getProperty('active').value)
-#set($undeliv = $!userObj.getProperty('email_undeliverable').value)
-#if("$!active" == "0" && "$!undeliv" == "1") ## {
-    #set($xpageParam="")#if($!request.xpage=="popup" || $!request.xpage=="plain" || $!request.framed!="")#set($xpageParam="xpage=popup")#end
-    $response.sendRedirect("/xwiki/bin/view/Registration/EmailVerification?$xpageParam")
-#else ## }{
-#* $msg.get("accountnotactive")
-<br />
-$msg.get("accountnotactive_email")
-<br />
-#set($confirmdoc = $xwiki.getDocument("XWiki.RegisterNewUserConfirmation")) 
-<form action="$confirmdoc.getURL("view")" method="post">
-<input type="hidden" name="xwikiname" value="$context.user" />
-<input type="text" name="validkey" size="16" />
-<input type="submit" value="$msg.get("confirmaccount")" />
-</form> *#
-$xwiki.includeForm("Registration.EmailSentValidationLink", false)
-#end ## }
-#end ## }
-#end ## }
+#else<!-- other cases of inactivity, expecting key --><div id="content">
+    #if ($cause == "disabled") ## {
+        $msg.get("accountdisabled")
+        #logViewScript("/join/enterValidation/accountDisabled")##
+    #else ## }{
+    ## Is this a page we want to load?.. seems to be broken
+        #set($allowList = ["EmailVerification", "EmailVerificationSent","EmailVerified","EmailSent","EmailNotReceived","EmailSentValidationLink","CleanLogout"])##
+        #if($allowList.contains($doc.name) && $doc.space=="Registration") ## {
+            ## $xwiki.includeForm($doc.fullName,false)##
+            #set($doc=$xwiki.getDocument($doc.fullName))
+            $xwiki.renderText($doc.getContent(),$doc)##
+            <!-- included content of $doc.fullName  of length $doc.getContent().length()-->##
+        #else ## }{
+        ## Account not active -- why?  1. New, 2. Disabled due to undeliverable email
+            #set($userDoc = $xwiki.getDocument($context.user))
+            #set($userObj = $userDoc.getObject("XWiki.XWikiUsers"))
+            #set($active = $!userObj.getProperty('active').value)
+            #set($undeliv = $!userObj.getProperty('email_undeliverable').value)
+            <!-- userDoc is "$!userDoc" userObj is "$!userDoc", active is "$!active", undeliv is "$!undeliv" -->
+            #if("$!active" == "0" && "$!undeliv" == "1") ## {
+                #set($xpageParam="")#if($!request.xpage=="popup" || $!request.xpage=="plain" || "$!request.framed"!="")#set($xpageParam="xpage=popup")#end
+                $response.sendRedirect("/xwiki/bin/view/Registration/EmailVerification?$xpageParam")
+            #else ## }{
+            #* $msg.get("accountnotactive")
+           <br />
+           $msg.get("accountnotactive_email")
+           <br />
+           #set($confirmdoc = $xwiki.getDocument("XWiki.RegisterNewUserConfirmation"))
+           <form action="$confirmdoc.getURL("view")" method="post">
+           <input type="hidden" name="xwikiname" value="$context.user" />
+           <input type="text" name="validkey" size="16" />
+           <input type="submit" value="$msg.get("confirmaccount")" />
+           </form> *#
+                #*$xwiki.includeForm("Registration.EmailSentValidationLink", false)*#
+           <h3>Your account has been deactivated.</h3>
+            #end ## }
+        #end ## }
+    #end ## }
 </div>
-#template("basefooter.vm")
-#template("footer.vm")
 <script type="text/javascript">
     if(window.top!=window) {
         if(console) console.log("Jumping to top.");
         window.top.location.href=window.location.href;
     }
 </script>
+    <script type="text/javascript">
+        try {
+            var hm = document.getElementById("header-member");
+            if (hm) hm.setStyle("display:none");
+        } catch (e) { }
+    </script>
+#end
+#template("footer.vm")
 #template("htmlfooter.vm")
-#end
-#end
+
+

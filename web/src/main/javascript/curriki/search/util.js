@@ -99,6 +99,10 @@ module.init = function(){
 					}
 				);
 
+				if(Curriki.module.search.util.isInEmbeddedMode()){
+					Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
+				}
+
 				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
@@ -294,8 +298,27 @@ module.init = function(){
 		}
 	};
 
+	module.isInEmbeddedMode = function(){
+		return !(	//If this attribute is not set, we can are not in embedded mode
+					typeof Curriki.module.search.embeddingPartnerUrl === "undefined");
+	};
+
+	module.sendResizeMessageToEmbeddingWindow = function() {
+		var height = document.body.scrollHeight + 25;
+		console.log("search: sending resource view height to embedding window (" + height + "px)");
+		var data = "resize:height:"+ height + "px;"
+		window.parent.postMessage(data,'*');
+	};
+
+	module.sendResourceUrlToEmbeddingWindow = function(url) {
+		console.log("search: sending resource url to embedding window (" + url + ")");
+		var data = "resourceurl:"+url;
+		window.parent.postMessage(data,'*');
+	};
+	
 	module.registerSearchLogging = function(tab){
 	};
+
 
 };
 

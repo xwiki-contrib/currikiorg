@@ -20,7 +20,7 @@
 	#set($currentstartfile = $asset.getValue("startfile"))
 						<span>
 							<input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('startfile').style.display='block'} else {document.getElementById('startfile').style.display='none'}"/>
-							<label for="startfile">$msg.get("rve.content.edit.set_start.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.set_start.instruction_tooltip")"/></span>
+							<label for="startfile" class="sectitle">$msg.get("rve.content.edit.set_start.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.set_start.instruction_tooltip")"/></span>
 						<div  id="startfile" style="display: none">
 	#set($tmpActiveClass = $asset.getActiveClass())
 	$asset.use("CurrikiCode.ArchiveAssetClass")
@@ -31,16 +31,16 @@
 		#set($treeviewid = 1 + $treeviewid)
 	#end
 <style type="text/css">
-@import "/xwiki/yui/treeview/assets/tree.css";
+@import "/xwiki/resources/js/yui/treeview/assets/tree.css";
 
 .archive-startfile-checked {
 	text-color: red;
 	border: 1px solid red;                                   
 }
 </style>
-<script type="text/javascript" src="/xwiki/yui/yahoo/yahoo-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/treeview-min.js" ></script>
-<script type="text/javascript" src="/xwiki/yui/treeview/checknode.js"></script>
+        <script type='text/javascript' src='/xwiki/resources/js/yui/yahoo/yahoo-min.js' ></script>
+        <script type='text/javascript' src='/xwiki/resources/js/yui/treeview/treeview-min.js' ></script>
+        <script type='text/javascript' src='/xwiki/resources/js/yui/treeview/checknode.js'></script>
                             <div style="margin: 5px 0pt;">
                                 <div id="treeview${treeviewid}">
                                 </div>
