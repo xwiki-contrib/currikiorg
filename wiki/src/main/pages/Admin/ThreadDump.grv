@@ -1,0 +1,34 @@
+<%
+import java.lang.management.ManagementFactory
+
+def tmxB = ManagementFactory.getThreadMXBean();
+def threadDump = tmxB.dumpAllThreads(true,true);
+
+println("{pre}")
+response.setContentType("text/plain")
+println("Thread Dump: " + xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host"))
+println(new Date())
+println("")
+int n=threadDump.length;
+for(int i=0; i<n; i++) {
+    println(" \"" + threadDump[i].getThreadName()  + "\" " + threadDump[i].threadState);
+    def stackTrace = threadDump[i].stackTrace;
+    def l =stackTrace.length;
+    for(int j=0; j<l; j++) {
+        def frame = stackTrace[j]
+        StringBuilder b = new StringBuilder();
+        b.append("   ");
+        b.append(frame.getClassName()).append('.').append(frame.methodName);
+        if(frame.isNativeMethod()) {
+            b.append("(Native)");
+        } else {
+            String filename = frame.fileName;
+            if(filename!=null) b.append(frame.fileName).append(':').append(frame.lineNumber);
+        }
+        println(b);
+    }
+    println();
+}
+println("{/pre}")
+
+// %>
