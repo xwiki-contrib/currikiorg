@@ -99,7 +99,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         if(userName==null) {
             errors.add("missing-username");
         }
-        if(amount==null)
+        if(amount==null || amount.length() == 0)
             errors.add("missing-amount");
 
         if(!errors.isEmpty()) {
@@ -111,7 +111,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         PostMethod post = createCheckoutPost(checkoutURL);
 
 
-        if(userName==null || userName.length()==0) userName = "XWikiGuest";
+        if(userName.length()==0) userName = "XWikiGuest";
         if(userName.startsWith("XWiki.") && userName.length()>6) userName = userName.substring(6);
         String cartType, itemDescription;
         if("corporation".equals(type)) {
