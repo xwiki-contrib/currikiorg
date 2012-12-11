@@ -3502,6 +3502,17 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
         var x = Math.max(0,(screen.width-980)/2);
         var y = Math.max(0,(screen.height-600)/2);
         otherWindow = window.open(requestURL, popupName, "toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width=980,height=600,left="+x+",top="+y);
+
+        if(!otherWindow || typeof (otherWindow) == undefined){
+            if(popupName == "checkoutWindow"){
+                if(window.localtion.indexOf())
+                window.location = "http://welcome.curriki.org/about-curriki/donate/";
+            }else
+            if(popupName == "curriki_login_authorize"){
+                window.location.pathname = "/xwiki/bin/view/Registration/ManualLogin";
+            }
+        }
+
     }
     window.focusIt = window.setInterval(function() { window.clearInterval(window.focusIt); otherWindow.focus(); }, 100)
     window.Curriki.ui.login.authorizeDialog = otherWindow;

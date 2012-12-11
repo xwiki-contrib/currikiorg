@@ -21,19 +21,54 @@
     #set($baseUrlNext="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=donation&keepQuiet=true&user=$user&amount=")##
     #set($baseUrlPopup="/xwiki/bin/view/GCheckout/CheckoutNow?xpage=popup&type=donation&redirectNow=true&user=$user&amount=")##
     -->
+    {pre}
+    <script type="text/javascript">
+
+        //Check if a number was entered to the text field
+        //if yes it must be a whole number and the radio buttons need to be reset.
+        function validateDonateForm(){
+            amountInput = document.getElementById("donateAmount");
+            amount = amountInput.value;
+
+            if(amount.length > 0){
+                alert(amount.length);
+                disableRadioButtonsIfNumberInput();
+            }
+
+            if(amount % 1 != 0) {
+                alert("Please enter a whole number for donation");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        //If the user entered a number no other radio button should be active
+        function disableRadioButtonsIfNumberInput(){
+            inputs = document.getElementById("donationForm").getElementsByTagName("input");
+
+            for(i = 0; i < inputs.length; i++){
+                inputs[i].checked = false;
+            }
+        }
+
+    </script>
+    {/pre}
 </head>
 <body>
-<form action="/xwiki/bin/view/GCheckout/CheckoutNow" target="curriki-donations">##
+<form id="donationForm" action="/xwiki/bin/view/GCheckout/CheckoutNow" target="curriki-donations" onsubmit="validateDonateForm();">##
     <input type="hidden" name="xpage" value="popup"/>##
     <input type="hidden" name="type"  value="donation"/>##
     <input type="hidden" name="redirectNow" value="true"/>##
     <input type="hidden" name="user" value="$user"/>##
 
-    #set($values=[25,50,100,250,500,1000])##
+
+    <label><input type="radio" name="amount" value="$25" checked />&#36;25</label>
+    #set($values=[50,100,250,500,1000])##
     #foreach($value in $values)
         <label><input type="radio" name="amount" value="${value}"/>&#36;${value}</label> - ##
     #end ##
-    other: &#36;<input type="text" name="amount" value="" size="5"/>##
+    other: &#36;<input id="donateAmount" type="text" name="amount" value="" size="5"/>##
     <input type="image" name="image" style="height:43px; width:100px; vertical-align:-23px"
            src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&amp;w=115&amp;h=50&amp;style=white&amp;variant=text&amp;loc=en"/>
 
