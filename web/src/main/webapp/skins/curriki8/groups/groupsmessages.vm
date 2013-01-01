@@ -255,58 +255,9 @@ $msgdoc.save()
 ## Macro to send a notification mail to the "To" list of the message that has just been created
 ##
 #macro(messageSendNotificationMail $msg_doc)
-#if($request.notify && $xwiki.mailsender)
-#set($mailTo = "")
-#if($request.toGroup)
-## add all group members
-#foreach($member in $sm.getMembers($spaceName))
-#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
-#if($profile && $profile.allowNotifications)
-#set($mailTo = $mailTo + $xwiki.getUser($member).email + ",")
-#end
-#end
-#else
-#set($mailToList = $xwiki.arrayList)
-#if($request.toMember && $request.selectedMembersList.trim().length() > 0)
-## add selected members
-#foreach($member in $request.selectedMembersList.split(","))
-#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
-#if($profile && $profile.allowNotifications)
-#set($memberEmail = $xwiki.getUser($member).email)
-#if(!$mailToList.contains($memberEmail))
-#set($ok = $mailToList.add($memberEmail))
-#set($mailTo = $mailTo + $memberEmail + ",")
-#end
-#end
-#end
-#end
-#if($request.toRole && $request.selectedRolesList.trim().length() > 0)
-## add members having selected roles
-#foreach($role in $request.selectedRolesList.split(","))
-#foreach($member in $sm.getUsersForRole($spaceName, $role))
-#set($profile = $sm.getSpaceUserProfile($spaceName, $member))
-#if($profile && $profile.allowNotifications)
-#set($memberEmail = $xwiki.getUser($member).email)
-#if(!$mailToList.contains($memberEmail))
-#set($ok = $mailToList.add($memberEmail))
-#set($mailTo = $mailTo + $memberEmail + ",")
-#end
-#end
-#end
-#end
-#end
-#end
-#if("$!mailTo" != "")
-#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
-#set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
-## $msgdoc has to be in the current context because it is used in the mail template
-#set($msgdoc = $msg_doc)
-$msgdoc.use("XWiki.ArticleClass")
-#set($mailSubject = $doc.getRenderedContent($mailDoc.title,"xwiki/1.0"))
-#set($mailContent = $doc.getRenderedContent($mailDoc.content,"xwiki/1.0"))
-#set($ok = $xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null))
-#end
-#end
+    #set($notificationMailSender=$xwiki.parseGroovyFromPage("Groups.GroupMessageNotificationMailSender"))
+    $notificationMailSender.init($request, $xwiki, $context)
+    $notificationMailSender.messageSendNotificationMail($msg_doc, $spacename)
 #end
 ##
 ## PAGE: Groups.CreateMessageSheet

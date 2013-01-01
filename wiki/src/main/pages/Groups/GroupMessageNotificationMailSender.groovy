@@ -1,7 +1,6 @@
 import com.xpn.xwiki.api.Context
 import com.xpn.xwiki.api.Document
 import com.xpn.xwiki.api.XWiki
-import com.xpn.xwiki.doc.XWikiDocument
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile
 import com.xpn.xwiki.util.AbstractXWikiRunnable
 import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi
@@ -71,12 +70,10 @@ public class GroupMessageNotificationMailSender {
      *
      * @param spaceName
      */
-    public void messageSendNotificationMail(String spaceName){
-            XWikiDocument document = new XWikiDocument();
-            document.setTitle("TestTitle");
-            document.setContent("TestContent");
-            BackgroundGroupMessageNotificationMailSender bgnms = new BackgroundGroupMessageNotificationMailSender(wiki, context, request);
-            bgnms.addMessageSendNotificationMail(document, spaceName);
+    public void messageSendNotificationMail(Document messageDocument, String spaceName){
+        BackgroundGroupMessageNotificationMailSender bgnms = new BackgroundGroupMessageNotificationMailSender(wiki, context, request, messageDocument, spaceName);
+        Thread runner = new Thread(bgnms);
+        runner.start();
     }
 
 
@@ -113,7 +110,12 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
     /**
      *
      */
-    private XWikiDocument document;
+    private Document document;
+
+    /**
+     *
+     */
+    private String spaceName;
 
     /**
      *
@@ -121,11 +123,13 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
      * @param context
      * @param request
      */
-    BackgroundGroupMessageNotificationMailSender(XWiki wiki, Context context, HttpServletRequest request) {
+    BackgroundGroupMessageNotificationMailSender(XWiki wiki, Context context, HttpServletRequest request, Document document, String spaceName) {
         this.wiki = wiki
         this.spaceManager = wiki.csm;
         this.context = context;
         this.request = request
+        this.document = document;
+        this.spaceName = spaceName;
     }
 
     /**
@@ -133,7 +137,7 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
      * @param document
      * @param spaceName
      */
-    public void addMessageSendNotificationMail(XWikiDocument document, String spaceName){
+    public void addMessageSendNotificationMail(){
         if(request.getAttribute("notify") == null) return; // If the notification was not checked we will not do it
 
         String mailTo = "";
@@ -148,7 +152,7 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
             if(request.getAttribute("toMember") && request.getAttribute("selectedMembersList")){ // By name
 
                 List<String> fullNames = request.getAttribute("selectedMembersList").split(",");
-                addEmailsToRecipient(fullNames, spaceName);
+                mailTo +=  addEmailsToRecipient(fullNames, spaceName);
 
             }
 
@@ -157,7 +161,7 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
                 List<String> roles = request.getAttribute("selectedRolesList").split(",");
                 for(String role : roles) {
                     List<String> fullNames = spaceManager.getUsersForRole(spaceName, role);
-                    addEmailsToRecipient(fullNames, spaceName);
+                    mailTo +=  addEmailsToRecipient(fullNames, spaceName);
                 }
 
             }
@@ -166,6 +170,8 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
 
         if(!mailTo.equals("")){
             sendMail(mailTo, document);
+        }else {
+            LOG.warn("MailTo was empty, cannot send email.");
         }
 
 
@@ -197,12 +203,18 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
      * @param mailTo
      * @param document
      */
-    private void sendMail(String mailTo, XWikiDocument document){
-
+    private void sendMail(String mailTo, Document document){
+        LOG.warn("Try to send email")
+        String mailFrom = wiki.getXWikiPreference("admin_email");
+        Document mailDoc = wiki.getDocument("Groups.MailTemplateCreateMessage");
+        mailDoc.use("XWiki.ArticleClass")
+        String mailSubject = document.getRenderedContent(mailDoc.getTitle(), "xwiki/1.0");
+        String mailContent = document.getRenderedContent(mailDoc.getContent(), "xwiki/1.0");
+        wiki.mailsender.sendTextMessage(mailFrom, null, null, mailTo, mailSubject, mailContent, null);
     }
 
     @Override
     protected void runInternal() {
-
+        addMessageSendNotificationMail();
     }
 }
