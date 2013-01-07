@@ -1,0 +1,269 @@
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+##----------------Indicate if order ascending or descending
+#if($request.directionOrder)
+    #if($request.directionOrder=="asc" && $request.previousOrderColumn && $request.previousOrderColumn==$request.order)
+        #set($directionOrder="desc")
+    #else
+        #if ($request.previousOrderColumn)
+            #set($directionOrder="asc")
+        #else
+            #set($directionOrder=$request.directionOrder)
+        #end
+    #end
+    #set($currentDirectionOrder=$directionOrder)
+#else
+    #if($request.currentDirectionOrder && $request.order==$previousOrderColumn)
+        #set($currentDirectionOrder=$request.currentDirectionOrder)
+    #else
+        #set($currentDirectionOrder="asc")
+    #end
+#end
+
+#set($previousOrderColumn=$request.order)
+
+1 $msg.fc_filecheck
+#set($startIndex = 0)
+#if($request.startIndex)
+    #set($startIndex = $xwiki.parseInt($request.startIndex))
+#end
+#set($itemsPerPage = 20)
+#if( $request.ipp )
+    #set($itemsPerPage = $xwiki.parseInt($request.ipp))
+#end
+
+
+##----------------Begin Get filters from cookies
+#set($assetFilterCreationDateFrom = $request.getCookie("assetFilterCreationDateFrom"))
+#if($assetFilterCreationDateFrom)
+    #set($assetFilterCreationDateFrom = $assetFilterCreationDateFrom.getValue())
+#end
+#set($assetFilterCreationDateTo = $request.getCookie("assetFilterCreationDateTo"))
+#if($assetFilterCreationDateTo)
+    #set($assetFilterCreationDateTo = $assetFilterCreationDateTo.getValue())
+#end
+
+#set($assetFilterFileCheckStatus = $request.getCookie("assetFilterFileCheckStatus"))
+#if($assetFilterFileCheckStatus)
+    #set($assetFilterFileCheckStatus = $assetFilterFileCheckStatus.getValue())
+#end
+
+#set($assetFilterSubjectArea = $request.getCookie("assetFilterSubjectArea"))
+#if($assetFilterSubjectArea)
+    #set($assetFilterSubjectArea = $assetFilterSubjectArea.getValue())
+#end
+
+#set($assetAccessPrivileges = $request.getCookie("assetAccessPrivileges"))
+#if($assetAccessPrivileges)
+    #set($assetAccessPrivileges = $assetAccessPrivileges.getValue())
+#end
+
+
+##----------------End Get filters from cookies
+
+#set($qs = "type=$!assetFilterFileCheckStatus")
+#set($counter = 0)
+
+#if($assetFilterCreationDateFrom&&($assetFilterCreationDateFrom!="")&&($assetFilterCreationDateFrom!="MM/DD/YYYY"))
+    #set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateFrom,"MM/DD/YYYY","YYYY/MM/DD","/"))
+    #set($from = $assetFilterCreationDateFrom)
+    #set($qs = "${qs}&from=$!$assetFilterCreationDateFrom")
+#else
+    #set($from = "MM/DD/YYYY")
+#end
+
+#if($assetFilterCreationDateTo&&($assetFilterCreationDateTo!="")&&($assetFilterCreationDateTo!="MM/DD/YYYY"))
+    #set($date=$xwiki.curriki.changeFormatDate($assetFilterCreationDateTo,"MM/DD/YYYY","YYYY/MM/DD","/"))
+    #set($to = $assetFilterCreationDateTo)
+    #set($qs = "${qs}&to=$!$assetFilterCreationDateTo")
+#else
+    #set($to = "MM/DD/YYYY")
+#end
+
+#set($ordered=true)
+
+#buildBFCSHql($ordered)
+
+#set($countsql = "select count(*) from XWikiDocument as doc ${sql}")
+#set($auxTotalCount = $xwiki.search($countsql))
+#set($totalCount = 0)
+#if($auxTotalCount.size()>=0)
+    #set($totalCount = $auxTotalCount.get(0))
+#end
+<!-- $sql -->
+{pre}
+<script type="text/javascript">
+    function saveFilterParameters(form) {
+        var fromText=document.getElementById('from');
+        createCookie("assetFilterCreationDateFrom",fromText.value, "");
+        var toText=document.getElementById('to');
+        createCookie("assetFilterCreationDateTo",toText.value, "");
+        var fileCheckStatusSelect=document.getElementById('type');
+        createCookie("assetFilterFileCheckStatus",fileCheckStatusSelect.value, "");
+        var subjectAreaSelect=document.getElementById('fw_item');
+        createCookie("assetFilterSubjectArea",subjectAreaSelect.value, "");
+        var accessPrivilegesSelect=document.getElementById('accessPrivilegesSelect');
+        createCookie("assetAccessPrivileges",accessPrivilegesSelect.value, "");
+        return true;
+    }
+</script>
+{/pre}
+<form action="" onsubmit="return saveFilterParameters(this);">
+    1.1 $msg.fc_daterange
+    #if($from == "")
+        #set($!from = "MM/DD/YYYY")
+    #end
+    $msg.fc_showresourcesfrom <input type="text" style="width: auto;" id="from" name="from" value="$!from" size="12" onclick="if(this.value=='MM/DD/YYYY'){this.value='';}" />
+    #if($to == "")
+        #set($!to = "MM/DD/YYYY")
+    #end
+    $msg.fc_to <input type="text" style="width: auto;" id="to" name="to" value="$!to" size="12" onclick="if (this.value=='MM/DD/YYYY'){this.value='';}" />
+    1.1 $msg.fc_filterby
+
+    <table class="filechecktable" style="table-layout:fixed;width:100%;overflow:hidden;word-wrap:break-word;">
+        <tr>
+            <td align="left">
+                $msg.fc_queueFilterChooseFCStatus
+
+                <select name="type" id="type">
+                    <option value="0" #if(!$assetFilterFileCheckStatus||($assetFilterFileCheckStatus=="0")) selected #end >$msg.get("fc_all")</option>
+                    <option value="1" #if($assetFilterFileCheckStatus=="1") selected #end >$msg.get("fc_onlywithoutfcstatus")</option>
+                    <option value="2" #if($assetFilterFileCheckStatus=="2") selected #end >$msg.get("fc_onlywithfcstatus")</option>
+                    <option value="7" #if($assetFilterFileCheckStatus=="7") selected #end >$msg.get("fc_statusFilter_5")</option>
+                    #foreach($status in [1..4])
+                        #set($auxStatus = $status+2)
+                        <option value="$auxStatus" #if($auxStatus=="$assetFilterFileCheckStatus")  selected #end >$msg.get("fc_statusFilter_${status}")</option>
+                    #end
+                </select>
+            </td>
+            <td align="left">
+                $msg.fc_queueFilterChooseSubjectArea
+
+                <select name="fw_item" id="fw_item">
+                    <option value="" #if(!$assetFilterSubjectArea||($assetFilterSubjectArea=="")) selected #end >$msg.get("fc_all")</option>
+                    #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome' order by doc.title"))
+                        #set($itemdoc = $xwiki.getDocument($item))
+                        <option value="$item" #if($item==$assetFilterSubjectArea) selected #end >$itemdoc.title</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                $msg.fc_withAccessPrivilegesOf
+
+                <select name="accessPrivilegesSelect" id="accessPrivilegesSelect">
+                    <option value="" #if(!$assetAccessPrivileges||($assetAccessPrivileges=="")) selected #end >$msg.get("fc_withAccessPrivilegesOf_All")</option>
+                    #foreach($item in $xwiki.curriki.getValues("CurrikiCode.AssetClass","rights"))
+                        <option value="$item" #if($item==$assetAccessPrivileges) selected #end >$msg.get("fc_withAccessPrivilegesOf_$item")</option>
+                    #end
+                    <option value="protectedAndPublic" #if($assetAccessPrivileges=="protectedAndPublic") selected #end >$msg.get("fc_withAccessPrivilegesOf_protectedAndPublic")</option>
+
+                </select>
+
+            </td>
+            <td align="left">
+
+            </td>
+        </tr>
+    </table>
+
+
+
+    <input type="submit" value="$msg.fc_ok" />
+
+</form>
+{pre}
+<script type="text/javascript">
+    function new_window(url) {
+        link = window.open(url,"Link","toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=yes,resizable=yes,width=430,height=300,left=80,top=180");
+    }
+</script>
+{/pre}
+
+#set($seeCountsUrl = $xwiki.getURL("FileCheck.SeeCounts", "view", "xpage=plain"))
+
+<table class="filechecktable" style="table-layout:fixed;width:100%;overflow:hidden;word-wrap:break-word;">
+    <tr>
+        <td align="right" colspan="8"> <a href="javascript:new_window('$seeCountsUrl');">$msg.fc_seeCounts</a> </td>
+    </tr>
+    <tr>
+        <th> [$msg.fc_resourcetitle>$doc.fullName?$qs&order=resourcetitle&directionOrder=$currentDirectionOrder&previousOrderColumn=$previousOrderColumn]</td>
+        <th> $msg.fc_dateadded </td>
+        <th> $msg.fc_queueTableColheaderIct </td>
+        <th> [$msg.fc_contributor>$doc.fullName?$qs&order=contributor&directionOrder=$currentDirectionOrder&previousOrderColumn=$previousOrderColumn]</td>
+        <th> [$msg.fc_status>$doc.fullName?$qs&order=fcstatus&directionOrder=$currentDirectionOrder&previousOrderColumn=$previousOrderColumn] </td>
+        <th> [$msg.fc_datechecked>$doc.fullName?$qs&order=fcdate&directionOrder=$currentDirectionOrder&previousOrderColumn=$previousOrderColumn] </td>
+        <th> $msg.fc_notes </td>
+        <th> $msg.fc_select </td>
+    </tr>
+    #foreach($fullname in $xwiki.searchDocuments($sql,$itemsPerPage,$startIndex))
+        #set($counter = $counter+1)
+        #set($itemdoc = $xwiki.getDocument($fullname))
+        #set($ok = $itemdoc.use("CurrikiCode.AssetClass"))
+        #asset_findtitle($itemdoc)
+        <tr>
+            <td>
+
+                <div class="title">
+                    <a href="$escapetool.xml($xwiki.getURL($fullname, "view"))" target="_blank" />
+                    {pre}$currikiTitle{/pre}</a>
+                </div>
+            </td>
+            <td>
+                <div class="date">
+                    $xwiki.curriki.formatDate($itemdoc.creationDate,"MM/dd/yyyy")
+                </div>
+            </td>
+            <td>
+                <div class="ict">
+                    #set($ict = $util.arrayList)
+                    #set($ict = $itemdoc.getValue("instructional_component"))
+                ## xwiki.curriki.getAssetICT($fullname))
+                    #if($ict.size()==1)
+                        $msg.get("CurrikiCode.AssetClass_instructional_component_${ict.get(0)}")
+                    #elseif($ict.size()>1)
+                        $msg.fc_queueTableICTMultiple
+                    #end
+                </div>
+            </td>
+            <td>
+                <div class="username">
+                    $xwiki.getLocalUserName($itemdoc.creator)
+                </div>
+            </td>
+            <td>
+                <div class="fcstatus">
+                    $itemdoc.display("fcstatus")
+                </div>
+            </td>
+            <td>
+                <div class="fcdate">
+                ##            		$itemdoc.display("fcdate")
+			#set($fcdate = "")
+            		#set($fcdate = $itemdoc.getValue("fcdate"))
+#if("$!fcdate" != "") ##{
+                    $xwiki.formatDate($fcdate, $msg.get("mycurriki.datetimeFormat"))
+                #end ##}
+                </div>
+            </td>
+            <td>
+                <div class="fcnotes">
+                    $itemdoc.display("fcnotes")
+                </div>
+            </td>
+            <td>
+                <div class="action">
+                    #set($qs2 = $xwiki.getURLEncoded($fullname))
+                    <a href="$escapetool.xml($xwiki.getURL("FileCheck.Check", "view", "page=${qs2}"))" target="_blank">${msg.fc_action}</a>
+                </div>
+            </td>
+        </tr>
+    #end
+</table>
+#if($request.order)
+    #set($qs = "${qs}&order=${request.order}&directionOrder=${currentDirectionOrder}")
+#end
+
+#curriki_paginatorargs($msg.fc_files, $startIndex, $itemsPerPage, $totalCount, $qs)

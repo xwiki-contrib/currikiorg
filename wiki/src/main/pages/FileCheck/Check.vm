@@ -1,0 +1,141 @@
+#if($request.page)
+    #set($asset = $xwiki.getDocument($request.page))
+#if($asset.isNew())
+    $msg.fc_noassetselected
+#else
+1 $msg.fc_filecheck $asset.getDisplayTitle()
+    #if($request.submit)
+        #set($ok = $asset.updateObjectFromRequest("CurrikiCode.AssetClass"))
+        #set($ok = $asset.use("CurrikiCode.AssetClass"))
+        #set($ok = $asset.set("fcreviewer", $context.user))
+        #set($ok = $asset.set("fcdate", $xwiki.formatDate($xwiki.date, "MM/dd/yyyy HH:mm")))
+        #set($status = $asset.getValue("fcstatus"))
+        #set($emailsource = "")
+        #set($assetowner = $asset.creator)
+        $asset.checkReviewQueue()
+        #if("$status"=="3")
+            #set($emailsource = "FileCheck.ResourceImprovementEmail")
+            $asset.applyRightsPolicy("private")
+        #elseif("$status"=="4")
+            #set($emailsource = "FileCheck.ResourceDeletedEmail")
+            $asset.changeOwnership("XWiki.Delete")
+            $asset.applyRightsPolicy("private")
+        #end
+        #set($message = $msg.get("fc_updatemessage${status}"))
+        $asset.saveWithProgrammingRights($message)
+        $msg.get("fc_filecheckddone"). $msg.get("fc_returnto") [$msg.get("fc_document")>$asset.fullName] $msg.get("fc_or") [$msg.get("fc_fchomepage")>WebHome].
+        #if($emailsource!="")
+            #if($assetowner&&($assetowner!=""))
+                #set($assetownerdoc = $xwiki.getDocument($assetowner))
+                #set($ok = $assetownerdoc.use("XWiki.XWikiUsers"))
+                #set($email = $assetownerdoc.getValue("email"))
+                #set($assettitle = $asset.displayTitle)
+                #set($membername = $assetownerdoc.name)
+            ##set($adminemail = $xwiki.getXWikiPreference("admin_email"))
+            ##set($asseturl = $asset.getExternalURL("view"))
+            ##set($profileurl = $assetownerdoc.getExternalURL())
+                #set($mesg = $xwiki.parseContent($xwiki.getDocument($emailsource).getTranslatedContent()))
+                #set($junk = $xwiki.sendMessage("filecheck@curriki.org", $email, $mesg))
+                $msg.get("fc_mailsentto") [$email>$assetowner]:
+            {pre}
+            <pre>
+                $mesg
+            </pre>
+            {/pre}
+            #end
+        #end
+    #else
+    {pre}
+    <script type="text/javascript">
+        var msg = new Object();
+            #foreach($status in [1..4])
+            msg["status$status"] = "$msg.get("fc_confirmmessage${status}")";
+            #end
+        function getCheckedValue(radioObj) {
+            if(!radioObj)
+                return "";
+            var radioLength = radioObj.length;
+            if(radioLength == undefined)
+                if(radioObj.checked)
+                    return radioObj.value;
+                else
+                    return "";
+            for(var i = 0; i < radioLength; i++) {
+                if(radioObj[i].checked) {
+                    return radioObj[i].value;
+                }
+            }
+            return "";
+        }
+        function confirmform(form) {
+            var status = getCheckedValue(form["CurrikiCode.AssetClass_0_fcstatus"]);
+            if (status=="") {
+                alert("$msg.fc_noactionchecked");
+            } else {
+                var result = confirm(msg["status" + status]);
+                if (result)
+                    return true;
+            }
+            return false;
+        }
+
+        var maxLen,errMsg;invChars=/\W/;  //global default settings
+        function initCount(ident,maxChars,displayId,chkStr){ // init settings
+            taObj=document.getElementById(ident);maxLen=maxChars;
+            errMsg="$msg.fc_commentsSizeExceeded";
+            if(chkStr!==""){invChars=chkStr;}
+            if(chkStr.toLowerCase()==="nocheck"){invChars="";}
+            if(displayId.toLowerCase()==="noshow"){return;} // suppress display
+            dispObj=document.getElementById(displayId);
+            dispObj.innerHTML=maxLen-taObj.value.length;
+        }
+
+        function taCount(ident,displayId){
+            taObj=document.getElementById(ident);
+            taLength=taObj.value.length; // look at current length
+            if (taLength>maxLen){ // clip characters
+                taObj.value=taObj.value.substring(0,maxLen);alert(errMsg);}
+            taLength=taObj.value.length;oldLength=0;
+            while (oldLength<taLength){ //validate characters
+                tChar=taObj.value.charAt(oldLength);
+                if ((invChars!=="")&&(invChars.test(tChar))){
+                    alert('Invalid char['+tChar+'] Letters, numbers or hyphens only.');
+                    tStr=taObj.value;tail=tStr.substring(oldLength+1);
+                    taObj.value=tStr.substring(0,oldLength)+tail;taLength--;
+                }else{oldLength++;}
+            }
+            if (displayId.toLowerCase()==="noshow"){return;} // suppress display
+            dispObj=document.getElementById(displayId);
+            dispObj.innerHTML=(maxLen-taObj.value.length);
+        }
+    </script>
+    {/pre}
+    <form action="" onsubmit="return confirmform(this);">
+{pre}
+        <input type="hidden" name="page" value="$escapetool.xml($!request.page)" />
+{/pre}
+        #set($ok = $asset.use("CurrikiCode.AssetClass"))
+        1.1 $msg.fc_chooseaction
+        #set($fcstatus = $asset.getValue("fcstatus"))
+        #foreach($status in [1..4])
+            <input type="radio" name="CurrikiCode.AssetClass_0_fcstatus" value="${status}" #if("$status"=="$fcstatus") checked #end />
+            $msg.get("fc_statusmessage${status}") <br />
+        #end
+        1.1 $msg.fc_filechecknote
+        $asset.display("fcnotes", "edit")
+        <br />
+        <span id="charsRemaining" class="bold">0</span> $msg.get("fc_charactersRemaining")
+        <br />
+        <script type="text/javascript">
+            var textAreaComments = document.getElementById('CurrikiCode.AssetClass_0_fcnotes');
+            initCount('CurrikiCode.AssetClass_0_fcnotes',400,'charsRemaining','NOCHECK');
+            textAreaComments.onkeyup=function() {return taCount('CurrikiCode.AssetClass_0_fcnotes','charsRemaining');};
+        </script>
+        <input type="button" name="cancel" value="$msg.fc_cancel" onclick="window.open('','_self');window.close();" />
+        <input type="submit" name="submit" value="$msg.fc_ok" />
+    </form>
+    #end
+#end
+#else
+    $msg.fc_noassetselected
+#end
