@@ -127,7 +127,11 @@ Curriki.logView = function(page){
 	// <a onClick="javascript:Curriki.logView('/Download/attachment/${space}/${name}/${attach.filename}');"> .. </a>
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
-	} else {
+    } else if (_gaq) {
+        _gaq.push(["_trackPageview", page]);
+    } else if (window.top._gaq) {
+        window.top._gaq.push(["_trackPageview", page]);
+    } else {
 
 		// Double try catch for CURRIKI-5828
 		// This is needed because we can not define if where 

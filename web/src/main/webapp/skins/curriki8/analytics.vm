@@ -5,42 +5,53 @@
 ## Loaded in xwikivars now
 #set($GA_uacct = $xwiki.curriki.getPublicCurrikiConfig("GA","0"))
 #if("$!GA_uacct" != "0" && "$!GA_uacct" != "") ## {
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-#set($cookies = $request.getCookies())
-#foreach($cookie in $cookies) ##{
-#if($cookie.name == '__utmv') ##{
-#set($utmv = $cookie.value)
-#end ##}
-#end ##}
-#if($hasGlobalAdmin) ##{
-#if("$!utmv" != "Admin") ##{
-#set($set__utmv = 'Admin')
-#end ##}
-#else ## }{
-#if(!$isguest && "$!utmv" == "") ##{
-#set($set__utmv = 'Member')
-#end ##}
-#end ##}
-var pageTracker = _gat._getTracker("$GA_uacct");
-pageTracker._initData();
-#if("$!set__utmv" != "") ##{
-pageTracker._setVar('${set__utmv}');
-#end ##}
-pageTracker._trackPageview();
-#if("$!request.staf" == "1") ##{
-pageTracker._trackPageview('/features/staf/referred/'+window.location);
-#end ##}
-#if($request.session.getAttribute("curriki.analytics.toLogView"))#foreach($m in $request.session.getAttribute("curriki.analytics.toLogView").split(",| "))
-    pageTracker._trackPageview("$m");
-#end$request.session.removeAttribute("curriki.analytics.toLogView")// removed toLogView attributes
-    #end
-    if(window.pageTrackerQueue) { for(var i=0; i<window.pageTrackerQueue.length; i++) {
-        pageTracker._trackPageview(window.pageTrackerQueue.get(i));
-    } }
+    #set($cookies = $request.getCookies())##
+    #foreach($cookie in $cookies) ##{
+        #if($cookie.name == '__utmv') ##{
+            #set($utmv = $cookie.value)
+        #end ##}
+    #end ##}
+    #if($hasGlobalAdmin) ##{
+        #if("$!utmv" != "Admin") ##{
+            #set($set__utmv = 'Admin')
+        #end ##}
+    #else ## }{
+        #if(!$isguest && "$!utmv" == "") ##{
+            #set($set__utmv = 'Member')
+        #end ##}
+    #end ##}
+
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        ##document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', '$GA_uacct']);
+            _gaq.push(function() {
+                window.pageTracker = _gat._getTracker('$GA_uacct');
+                pageTracker._trackPageview();
+                #if("$!set__utmv" != "")
+                    pageTracker._setVar('${set__utmv}');
+
+                #end
+                #if("$!request.staf" == "1") ##{
+                    pageTracker._trackPageview('/features/staf/referred/'+window.location);
+                #end ##}
+                #if($request.session.getAttribute("curriki.analytics.toLogView"))#foreach($m in $request.session.getAttribute("curriki.analytics.toLogView").split(",| "))
+                    pageTracker._trackPageview("$m");
+                #end$request.session.removeAttribute("curriki.analytics.toLogView")// removed toLogView attributes
+                #end
+                if(window.pageTrackerQueue) { for(var i=0; i<window.pageTrackerQueue.length; i++) {
+                    pageTracker._trackPageview(window.pageTrackerQueue.get(i));
+                } }
+            });
+
+
+        ## actual activation
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
 </script>
 #else<!-- no analytics GA code. The setting is "$!{GA_uacct}"
     page has programming rights ? $doc.hasProgrammingRights()
