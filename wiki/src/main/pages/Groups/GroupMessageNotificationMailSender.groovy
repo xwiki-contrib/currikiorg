@@ -71,9 +71,12 @@ public class GroupMessageNotificationMailSender {
      * @param spaceName
      */
     public void messageSendNotificationMail(Document messageDocument, String spaceName){
-        BackgroundGroupMessageNotificationMailSender bgnms = new BackgroundGroupMessageNotificationMailSender(wiki, context, request, messageDocument, spaceName);
-        Thread runner = new Thread(bgnms);
-        runner.start();
+        LOG.warn("Prepare background task to send emails about new messages in the group "  + spaceName);
+
+
+
+        backgroundGroupMessageNotificationMailSender = new BackgroundGroupMessageNotificationMailSender(wiki, context, request, messageDocument, spaceName);
+        backgroundGroupMessageNotificationMailSender.start();
     }
 
 
@@ -119,6 +122,11 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
 
     /**
      *
+     */
+    Thread workerThread;
+
+    /**
+     *
      * @param wiki
      * @param context
      * @param request
@@ -130,6 +138,8 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
         this.request = request
         this.document = document;
         this.spaceName = spaceName;
+        LOG.warn("Inited BackgroundGroupMessageNotificationMailSender");
+
     }
 
     /**
@@ -137,28 +147,28 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
      * @param document
      * @param spaceName
      */
-    public void addMessageSendNotificationMail(){
-        if(request.getAttribute("notify") == null) return; // If the notification was not checked we will not do it
+    private void addMessageSendNotificationMail(){
+        if(request.getParameter("notify") == null) return; // If the notification was not checked we will not do it
+        LOG.warn("Notification for new group message via email was checked")
 
         String mailTo = "";
 
-        if(request.getAttribute("toGroup") != null){  // We send the mails to all members of the group
-
+        if(request.getParameter("toGroup") != null){  // We send the mails to all members of the group
             List<String> fullNames = spaceManager.getMembers(spaceName);
+            LOG.warn("Loading members for group " + spaceName)
             addEmailsToRecipient(fullNames, spaceName);
-
         } else {  // We send the mails to specific members by name or role
 
-            if(request.getAttribute("toMember") && request.getAttribute("selectedMembersList")){ // By name
+            if(request.getParameter("toMember") && request.getParameter("selectedMembersList")){ // By name
 
-                List<String> fullNames = request.getAttribute("selectedMembersList").split(",");
+                List<String> fullNames = request.getParameter("selectedMembersList").split(",");
                 mailTo +=  addEmailsToRecipient(fullNames, spaceName);
 
             }
 
-            if(request.getAttribute("toRole") && request.getAttribute("selectedRolesList")){ // By role
+            if(request.getParameter("toRole") && request.getParameter("selectedRolesList")){ // By role
 
-                List<String> roles = request.getAttribute("selectedRolesList").split(",");
+                List<String> roles = request.getParameter("selectedRolesList").split(",");
                 for(String role : roles) {
                     List<String> fullNames = spaceManager.getUsersForRole(spaceName, role);
                     mailTo +=  addEmailsToRecipient(fullNames, spaceName);
@@ -169,6 +179,7 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
         }
 
         if(!mailTo.equals("")){
+            LOG.warn("Notification for new group message will be sent to: " + mailTo);
             sendMail(mailTo, document);
         }else {
             LOG.warn("MailTo was empty, cannot send email.");
@@ -213,8 +224,23 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
         wiki.mailsender.sendTextMessage(mailFrom, null, null, mailTo, mailSubject, mailContent, null);
     }
 
+    public void start(){
+        LOG.warn("Started BackgroundGroupMessageNotificationMailSender");
+        workerThread = new Thread(this, "BackgroundGroupMessageNotificationMailSender");
+        workerThread.start();
+    }
+
     @Override
     protected void runInternal() {
+        Iterator<String> it = request.getParameterMap().keySet().iterator();
+        StringBuffer buffer = new StringBuffer()
+        buffer.append("RequestParameter: \n");
+        while (it.hasNext()) {
+            String parameterName  =  it.next();
+            String parameterValue = request.getParameterMap().get(parameterName)[0];
+            buffer.append(parameterName+":"+parameterValue+"\n");
+        }
+        LOG.warn(buffer.toString());
         addMessageSendNotificationMail();
     }
 }
