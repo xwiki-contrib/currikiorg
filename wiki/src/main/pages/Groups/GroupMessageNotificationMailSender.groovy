@@ -156,7 +156,7 @@ class BackgroundGroupMessageNotificationMailSender extends AbstractXWikiRunnable
         if(request.getParameter("toGroup") != null){  // We send the mails to all members of the group
             List<String> fullNames = spaceManager.getMembers(spaceName);
             LOG.warn("Loading members for group " + spaceName)
-            addEmailsToRecipient(fullNames, spaceName);
+            mailTo += addEmailsToRecipient(fullNames, spaceName);
         } else {  // We send the mails to specific members by name or role
 
             if(request.getParameter("toMember") && request.getParameter("selectedMembersList")){ // By name
