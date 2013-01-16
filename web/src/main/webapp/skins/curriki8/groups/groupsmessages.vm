@@ -257,7 +257,7 @@ $msgdoc.save()
 #macro(messageSendNotificationMail $msg_doc)
     #set($notificationMailSender=$xwiki.parseGroovyFromPage("Groups.GroupMessageNotificationMailSender"))
     $notificationMailSender.init($request, $xwiki, $context)
-    $notificationMailSender.messageSendNotificationMail($msg_doc, $spacename)
+    $notificationMailSender.messageSendNotificationMail($msg_doc, $spaceName)
 #end
 ##
 ## PAGE: Groups.CreateMessageSheet
