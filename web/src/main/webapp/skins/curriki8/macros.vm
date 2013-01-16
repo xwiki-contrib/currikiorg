@@ -1216,6 +1216,13 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
 #macro(pageTitle) ##{
   #if($doc.fullName=="Search.WebHome") ##{
     $msg.get("main.curriki") - $msg.get("caption.search")
+  #elseif($doc.fullName.startsWith("Coll_"))
+      Curriki - $doc.displayTitle
+  #elseif($doc.space == "MyCurriki")
+      #set($user = $context.user)#if($request.user)#set($user=$request.user)#end##
+      #set($userDoc=$xwiki.getDocument($user))##
+      #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
+      Curriki - $doc.displayTitle - $userObj.first_name $userObj.last_name
   #else ##}{
     #if(!$title) ##{
       #set( $title = $!xwiki.getSpacePreference("title"))

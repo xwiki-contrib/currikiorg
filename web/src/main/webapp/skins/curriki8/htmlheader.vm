@@ -10,6 +10,8 @@
 #if($!request.getHeader("User-Agent").contains("MSIE 9"))
     <meta http-equiv="X-UA-Compatible" content="IE=8">
 #end
+<!-- title var is $title
+    doc.title is $doc.title and doc.displayTitle = $doc.displayTitle -->
 <title>#pageTitle()</title>
 <meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />
 $xwiki.parseContent($!xwiki.getSpacePreference("meta"))
