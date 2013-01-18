@@ -10,8 +10,6 @@
 #if($!request.getHeader("User-Agent").contains("MSIE 9"))
     <meta http-equiv="X-UA-Compatible" content="IE=8">
 #end
-<!-- title var is $title
-    doc.title is $doc.title and doc.displayTitle = $doc.displayTitle -->
 <title>#pageTitle()</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- analytics -->#template("analytics.vm")<!-- /analytics -->
@@ -22,8 +20,8 @@
         ## an asset
         #set($assetObj=$!doc.getObject("CurrikiCode.AssetClass"))##
         #set($description="Curriki resource: $!{assetObj.description}")##
-        #if($description.length()>200)#set($description="$description.substring(0,120)")#end##
-        <meta name="description" content="$description" />
+        #if($description.length()>400)#set($description="${description.substring(0,397)}...")#end##
+        <meta name="description" content="$escapetool.xml($description.replaceAll('<[^>]+>','').replaceAll('\n',' '))" />
         <meta name="author" content="$xwiki.getUserName($doc.creator,false).toString()" />
     #else
         <meta name="description" content="Curriki, the online education community, is building the first website to offer free, open-source instructional materials for K-12. We have thousands of free worksheets, lesson plans, exams, project ideas and activities for English language arts, math, science, social studies, technology integration and other subjects. All of our educational material is contributed by teachers and partners and is free and open source." />
@@ -43,8 +41,6 @@
 
     <link rel="alternate" type="application/rss+xml" title="Wiki RSS Feed" href="/xwiki/bin/view/Main/WebRss?xpage=rdf" />
     <link rel="image_src" href="/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
-
-
     #set($headerfile="html")
 #template("javascripts.vm")
 #template("ie.vm")

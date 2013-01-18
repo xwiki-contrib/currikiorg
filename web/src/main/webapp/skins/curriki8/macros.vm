@@ -1214,27 +1214,21 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
  * Macro to display the page title
  *#
 #macro(pageTitle) ##{
-  #if($doc.fullName=="Search.WebHome") ##{
-    $msg.get("main.curriki") - $msg.get("caption.search")
-  #elseif($doc.fullName.startsWith("Coll_"))
-      Curriki - $doc.displayTitle
-  #elseif($doc.space == "MyCurriki")
-      #set($user = $context.user)#if($request.user)#set($user=$request.user)#end##
-      #set($userDoc=$xwiki.getDocument($user))##
-      #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
-      Curriki - $doc.displayTitle - $userObj.first_name $userObj.last_name
-  #else ##}{
-    #if(!$title) ##{
-      #set( $title = $!xwiki.getSpacePreference("title"))
-      #if ( "$!title" != "") ##{
-        $xwiki.parseContent($title)
-      #else  ##}{
-        XWiki . $!doc.space . $!doc.displayTitle
-      #end ##}
+    #if($doc.fullName=="Search.WebHome") ##{
+        $msg.get("main.curriki") - $msg.get("caption.search")
+    #elseif($doc.fullName.startsWith("Coll_"))
+    Curriki - $doc.displayTitle
+    #elseif($doc.space == "MyCurriki")
+        #set($user = $context.user)#if($request.user)#set($user=$request.user)#end##
+        #set($userDoc=$xwiki.getDocument($user))##
+        #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
+    Curriki  - $msg.get("mycurriki.tab.${doc.name.toLowerCase()}.label") - $userObj.first_name $userObj.last_name
     #else ##}{
-      $title
+        #if($title)$!escapetool.xml($!title.replaceAll('<[^>]+>','').replaceAll('\n',' '))
+        #elseif($doc.displayTitle)Curriki - $!escapetool.xml($!doc.displayTitle.replaceAll('<[^>]+>','').replaceAll('\n',' '))
+        #else Curriki $doc.name
+        #end
     #end ##}
-  #end ## }
 #end ##}
 ## End pageTitle
 
