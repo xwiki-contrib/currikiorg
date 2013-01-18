@@ -850,7 +850,7 @@ $msg.get("panel.navigation.home")
 #set($memberdoc = $xwiki.getDocument($member))
 #if(!$memberdoc.isNew())
 #set($memberobj = $memberdoc.getObject("XWiki.XWikiUsers"))
-<div class="vcard">
+<div class="vcardStyle">
    <div class="userpic">
 #if($memberdoc.attachmentList.size()==0)
    <img src="$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
@@ -881,7 +881,7 @@ $msg.get("panel.navigation.home")
 $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
 </div> ## userdata
 <div class="clr"></div>
-</div> ## vcard
+</div> ## vcardStyle
 #end
 #end
 
