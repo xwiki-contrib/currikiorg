@@ -123,18 +123,20 @@ Curriki.hideLoading = function(multi){
 }
 
 Curriki.logEvent = function(eventParams, followup) {
+    var gaqParams=eventParams.reverse();
+    gaqParams.push("_trackEvent"); gaqParams = gaqParams.reverse();
     if(window._gaq) {
         if(followup) {
-            _gaq.push(eventParams).push(followup);
+            _gaq.push(gaqParams).push(followup);
         } else {
-            _gaq.push(eventParams);
+            _gaq.push(gaqParams);
         }
     } else {
         try{
             if(followup) {
-                window.top._gaq.push(eventParams).push(followup);
+                window.top._gaq.push(gaqParams).push(followup);
             } else {
-                window.top._gaq.push(eventParams);
+                window.top._gaq.push(gaqParams);
             }
             if(console) console.info('Would track: ', page);
         }catch(e){
