@@ -14,9 +14,6 @@
 #* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 
-
-
-
 #**
  * Macro for resources functions of asset
  *#
@@ -59,7 +56,7 @@
  *#
 #macro(asset_attribution $asset)
 #set($assetAuthorDoc = $xwiki.getDocument($asset.creator))
-#set($assetAuthorLink = $assetAuthorDoc.getURL())
+#set($assetAuthorLink = "/xwiki/bin/view/MyCurriki/Profile?user=$asset.creator")
 #set($assetAuthorDisplayName = $!xwiki.getUserName($asset.creator, false))
 #if($asset.space.startsWith("Coll_Group_")) ## {
 	#set($assetGroupName = $asset.space.replaceFirst("Coll_", ""))
@@ -69,7 +66,7 @@
 #else
 	#set($assetIsFromGroup = false)
 #end
-<ul id="asset-attribution">
+<ul id="asset-attribution" class="vcard">
 	<li id="asset-avatar">
 #if($assetIsFromGroup)
 	#groups_grouplogo2($assetGroup false)
@@ -86,13 +83,13 @@
 	#if($viewer == "embed-teachhub")
 		<li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
 	#else
-		<li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+		<li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
 	#end
 #end
 	#if($viewer == "embed-teachhub")
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a target="_blank" href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a target="_blank" href="$assetAuthorLink" rel="autor" class="fn url"  title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#else
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#end
 </ul>
 #end

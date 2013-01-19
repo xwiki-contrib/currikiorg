@@ -262,6 +262,7 @@ fieldset h3 {
             }
             Curriki.console.log("memberTypeNotice: " + text);
             Ext.get("memberTypeNotice").dom.innerHTML= text;
+            Curriki.logEvent(['Registration', 'member-type-changed', s.dom.value])
         } catch(e) { Curriki.console.log(e); }
     };
     ##

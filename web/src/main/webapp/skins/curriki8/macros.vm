@@ -850,7 +850,7 @@ $msg.get("panel.navigation.home")
 #set($memberdoc = $xwiki.getDocument($member))
 #if(!$memberdoc.isNew())
 #set($memberobj = $memberdoc.getObject("XWiki.XWikiUsers"))
-<div class="vcard">
+<div class="vcardStyle">
    <div class="userpic">
 #if($memberdoc.attachmentList.size()==0)
    <img src="$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
@@ -881,7 +881,7 @@ $msg.get("panel.navigation.home")
 $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
 </div> ## userdata
 <div class="clr"></div>
-</div> ## vcard
+</div> ## vcardStyle
 #end
 #end
 
@@ -1214,20 +1214,21 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
  * Macro to display the page title
  *#
 #macro(pageTitle) ##{
-  #if($doc.fullName=="Search.WebHome") ##{
-    $msg.get("main.curriki") - $msg.get("caption.search")
-  #else ##}{
-    #if(!$title) ##{
-      #set( $title = $!xwiki.getSpacePreference("title"))
-      #if ( "$!title" != "") ##{
-        $xwiki.parseContent($title)
-      #else  ##}{
-        XWiki . $!doc.space . $!doc.displayTitle
-      #end ##}
+    #if($doc.fullName=="Search.WebHome") ##{
+        $msg.get("main.curriki") - $msg.get("caption.search")
+    #elseif($doc.fullName.startsWith("Coll_"))
+    Curriki - $doc.displayTitle
+    #elseif($doc.space == "MyCurriki")
+        #set($user = $context.user)#if($request.user)#set($user=$request.user)#end##
+        #set($userDoc=$xwiki.getDocument($user))##
+        #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
+    Curriki  - $msg.get("mycurriki.tab.${doc.name.toLowerCase()}.label") - $userObj.first_name $userObj.last_name
     #else ##}{
-      $title
+        #if($title)$!escapetool.xml($!title.replaceAll('<[^>]+>','').replaceAll('\n',' '))
+        #elseif($doc.displayTitle)Curriki - $!escapetool.xml($!doc.displayTitle.replaceAll('<[^>]+>','').replaceAll('\n',' '))
+        #else Curriki $doc.name
+        #end
     #end ##}
-  #end ## }
 #end ##}
 ## End pageTitle
 
@@ -1544,36 +1545,36 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #if($userdoc.attachmentList.size()==0)  ## {
     #set($src=$xwiki.getSkinFile("noavatar.png"))##
  #if($viewer == "embed-teachhub")
-  <a target="_blank" href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  <a target="_blank" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  #else
-  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  <a href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  #end
  #if("$!width"=="" && "$!height"=="")##
-     <img src="$src"/>
+     <img src="$src" class="photo"/>
  #elseif("$!width"=="")##
-     <img src="$src?height=$reqHeight" height="$height"/>
+     <img src="$src?height=$reqHeight" height="$height" class="photo"/>
  #elseif("$!height"=="")##
-     <img src="$src?width=$reqWidth" width="$width"/>
+     <img src="$src?width=$reqWidth" width="$width" class="photo"/>
  #else##
-     <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true"/>
+     <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" class="photo"/>
  #end##
  </a>
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
      #set($src=$userdoc.getAttachmentURL($attach.filename,"download"))##
   #if($viewer == "embed-teachhub")
-    <a target="_blank" href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+    <a target="_blank" href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
   #else
-    <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+    <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
   #end
       #if("$!width"=="" && "$!height"=="")##
-         <img src="$src"/>##
+         <img src="$src" class="photo"/>##
       #elseif("$!width"=="")##
-         <img src="$src?height=$reqHeight" height="$height"/>##
+         <img src="$src?height=$reqHeight" height="$height" class="photo"/>##
       #elseif("$!height"=="")##
-          <img src="$src?width=$reqWidth" width="$width"/>##
+          <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
       #else##
-          <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true"/>
+          <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" class="photo"/>
       #end##
   </a>
  #end ## }
@@ -1603,9 +1604,9 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 </a>
 #else ## } {
  #foreach ($attach in $userdoc.attachmentList) ## {
-  <a href="$userdoc.getURL("view")" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+  <a href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc.fullName" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
   #if("$!width"!="")#set($reqWidth=$width*2)#end
-  <img src="$userdoc.getAttachmentURL($attach.filename,"download")#if("$!width"!="")?width="${reqWidth}#end" #if("$!width"!="") width="${width}" #end /></a>
+  <img src="$userdoc.getAttachmentURL($attach.filename,"download")#if("$!width"!="")?width="${reqWidth}#end" #if("$!width"!="") width="${width}" #end  class="photo"/></a>
  #end ## }
 #end  $xwiki.getUserName($userdoc.fullName) ## }
 #end ## macro ## }
