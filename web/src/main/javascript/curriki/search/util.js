@@ -101,9 +101,11 @@ module.init = function(){
 
 				if(Curriki.module.search.util.isInEmbeddedMode()){
 					Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
-				}
+                    Curriki.logView('/features/embeddedsearch/'+tab+'/'+terms+'/'+advanced+filters+page);
+                }else {
+                    Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
+                }
 
-				Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
 
 				// Add to history
                     // TODO: MSIE misery... have commented this out
