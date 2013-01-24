@@ -62,18 +62,24 @@ function treeInit${tviewid}() {
 	var nodes = nodes${tviewid};
 #foreach($item in $treelist)
 	#set($checked = $selectlist.contains($item.getId()))
-	#if ($item.value.length() > 80)
-		#set($title_item = $item.value.substring(0, 80))
-	#else
-		#set($title_item = $item.value)
-	#end
-	#set($title_item = $title_item.replaceAll("[\r\n]"," "))
+    #if($item.id.startsWith("FW_masterFramework."))
+        var text = _("CurrikiCode.AssetClass_fw_items_${item.id}");
+        if(text.length> 80) { text = text.substring(0,80); }
+    #else
+        #if ($item.value.length() > 80)
+            #set($title_item = $item.value.substring(0, 80))
+        #else
+            #set($title_item = $item.value)
+        #end
+        #set($title_item = $title_item.replaceAll("[\r\n]"," "))
+    var text = "$escapetool.javascript($title_item)";
+    #end
 	#if($mode == "view")
 		#if($checked)
-addTreeElementViewMode(tree, nodes, "$item.id", "$title_item", "$item.parent")
+addTreeElementViewMode(tree, nodes, "$item.id", text, "$item.parent")
 		#end
 	#else
-addTreeElement(tree, nodes, "$item.id", "$title_item", "$item.parent", #if($checked) true #else false #end)
+addTreeElement(tree, nodes, "$item.id", text, "$item.parent", #if($checked) true #else false #end)
 	#end
 #end
 	tree.draw();
