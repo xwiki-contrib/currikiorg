@@ -9,10 +9,69 @@ class LRMItool {
     static Map createLRMIfromICTmap() {
         HashMap m = new HashMap();
         m.put("exercise", ["exercise", "active", "learner", "exercise", "exercise"])
+
+
+        // template: m.put("xxx", ["xx","xx","xx","xx","xx"])
+
+        m.put("activity", ictToArr("activity",                           "active", "learner"));
+        m.put("activity_assignment", ictToArr("activity_assignment",     "active", "learner"));
+        m.put("activity_exercise", ictToArr("activity_exercise",         "active", "learner"));
+        m.put("activity_lab", ictToArr("activity_lab",                   "active", "learner"));
+        m.put("activity_game", ictToArr("activity_game",                 "active", "learner"));
+        m.put("activity_worksheet", ictToArr("activity_worksheet",       "active", "learner"));
+        m.put("activity_problemset", ictToArr("activity_problemset",     "active", "learner"));
+        m.put("activity_webquest", ictToArr("activity_webquest",         "active", "learner"));
+
+        m.put("book", ictToArr("book",                                   "expositive", ""));
+        m.put("book_fiction", ictToArr("book_fiction",                   "expositive", ""));
+        m.put("book_nonfiction", ictToArr("book_nonfiction",             "expositive", ""));
+        m.put("book_readings", ictToArr("book_readings",                 "expositive",  ""));
+        m.put("book_textbook", ictToArr("book_textbook",                 "expositive", "learner"));
+
+        m.put("curriculum", ictToArr("curriculum",                       "",           ""));
+        m.put("curriculum_assessment", ictToArr("curriculum_assessment", "active", "learner"));
+        m.put("curriculum_course", ictToArr("curriculum_course",         "mixed", "teacher"));
+        m.put("curriculum_lp",  ictToArr("curriculum_lp",                "mixed", "teacher"));
+        m.put("curriculum_rubric", ictToArr("curriculum_rubric",         "mixed", "teacher"));
+        m.put("curriculum_scope", ictToArr("curriculum_scope",           "mixed", "teacher"));
+        m.put("curriculum_standards", ictToArr("curriculum_standards",   "expositive", "teacher"));
+        m.put("curriculum_studyguide", ictToArr("curriculum_studyguide", "expositive", "learner"));
+        m.put("curriculum_syllabus", ictToArr("curriculum_syllabus",      "expositive", "learner"));
+        m.put("curriculum_tutorial", ictToArr("curriculum_tutorial",     "expositive", "learner"));
+        m.put("curriculum_unit", ictToArr("curriculum_unit",             "mixed", "teacher"));
+        m.put("curriculum_workbook", ictToArr("curriculum_workbook",     "active", "learner"));
+
+        m.put("resource",  ictToArr("resource",                          "", ""));
+        m.put("resource_animation", ictToArr("resource_animation",        "active", ""));
+        m.put("resource_article", ictToArr("resource_article",            "expositive", "learner"));
+        m.put("resource_speech", ictToArr("resource_speech",              "expositive", "learner"));
+        m.put("resource_diagram", ictToArr("resource_diagram",            "", "learner"));
+        m.put("resource_glossary",  ictToArr("resource_glossary",           "expositive", "learner"));
+        m.put("resource_index", ictToArr("resource_index",                "expositive", "learner"));
+        m.put("resource_photograph", ictToArr("resource_photograph",      "mixed", "learner"));
+        m.put("resource_collection", ictToArr("resource_collection",      "mixed", "learner"));
+        m.put("resource_script", ictToArr("resource_script",              "mixed", "learner"));
+        m.put("resource_study", ictToArr("resource_study",                "expositive", "learner"));
+        m.put("resource_table", ictToArr("resource_table",                "mixed", "learner"));
+        m.put("resource_template", ictToArr("resource_template",          "active", ""));
+        m.put("resource_presentation", ictToArr("resource_presentation",  "expositive", ""));
+        m.put("resource_webcast", ictToArr("resource_webcast",            "expositive",""));
+
+        m.put("other", ictToArr("other",                                  "",""));
+
         // TODO: continue with all values from table
         // using pattern ^([^\t]+)\t+([^\t]+)\t+([^\t]+) to m.put($1, "$1", "$2", "$3", "$1", "$1")
         return m;
     }
+
+
+
+    private static String[] ictToArr(String ict, String interactivityType, String intendedEndUserRole) {
+        // educationalUse	learningResourceType	interactivityType	intendedEndUserRole	genre
+        return [ict, ict, interactivityType, intendedEndUserRole, ict];
+    }
+
+
 
     public String[] getForIct(String ict) {
         if(lrmiFromICT==null) lrmiFromICT = createLRMIfromICTmap();
