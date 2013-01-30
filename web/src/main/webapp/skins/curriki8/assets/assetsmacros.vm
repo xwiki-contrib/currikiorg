@@ -38,13 +38,14 @@
 #macro(asset_icontitle $asset)
 <!-- #* Hack: HTML comment to fix bug CURRIKI-3568 Do not remove *# --><div id="asset-header">
 <!--<img src="images/collectionmedium.gif">-->
+    #set($mediaType="")
 	#set($assetTitle = $asset.getDisplayTitle(125))
 	#if($viewer == "embed-teachhub")
 		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a target="_blank" href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
 			#asset_info_rollover($asset 0)
 		</div>
 	#else
-		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+		<h2 itemprop="name"><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" itemprop="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
 			#asset_info_rollover($asset 0)
 		</div>
 	#end
@@ -87,9 +88,9 @@
 	#end
 #end
 	#if($viewer == "embed-teachhub")
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a target="_blank" href="$assetAuthorLink" rel="autor" class="fn url"  title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemProp="author" target="_blank" href="$assetAuthorLink" rel="autor" class="fn url"  title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#else
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemProp="author" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#end
 </ul>
 #end
@@ -297,11 +298,20 @@ function checkEditOrCopy() {
 #end
 #end
 
+#macro(mediatype $asset)##
+#set($category="$!asset.categoryClass")##
+#if($category=="unknown")application/unknown##
+#elseif($category=="collection" || $category=="folder")application/url-list##TODO
+#elseif($category=="attachment")$asset.fileType##
+#end##
+#end
+
 
 #macro(asset_display $asset $mode)
     	#set($modeParam=$mode)
 	#set($ok = $asset.use("CurrikiCode.AssetClass"))
 <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
+    <meta itemprop="mediaType" value="#mediatype($asset)"/>
 	#asset_findmode()
     #if(!$isEmbed)
 		#if($mode!="edit")
@@ -355,12 +365,13 @@ $xwiki.addTooltipJS()
  * Rollover information div about an asset
  *#
 #macro(asset_info_rollover $asset $seccounter)
+#set($lrmiTool=$xwiki.parseGroovyFromPage("CurrikiCode.LRMItool"))##
 <div id="mycurriki-description-${seccounter}" class="popup popup-info-rollover" style="display: none;">
     ##<p>
     ##    <strong>$msg.get("global.title.popup.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
     ##</p>
-	<p><strong>$msg.get("global.title.popup.description")</strong><span>$!asset.display("description")</span></p>
-	<p><strong>$msg.get("global.title.popup.last_updated")</strong><span>$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</span></p>
+	<p><strong>$msg.get("global.title.popup.description")</strong><span itemprop="description">$!asset.display("description")</span></p>
+	<p><strong>$msg.get("global.title.popup.last_updated")</strong><span><time datetime="$!{xwiki.formatDate($asset.contentUpdateDate,"YYYY-MM-DDThh:mm:ss'T'TZD")}">$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</time></span></p>
 	<strong>$msg.get("global.title.popup.subject")</strong>
 	#asset_info_subject($asset true)
 	<strong>$msg.get("global.title.popup.educationlevel")</strong>
@@ -568,13 +579,13 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
          #else
           #set($ps = "")
          #end
-         <li>$ps$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
+         <li itemprop="about">$ps$msg.get("CurrikiCode.AssetClass_fw_items_${subject}")</li>
       #end
       #end
     #end
     #if($popup)
     #if($subjectCounter==0)
-     <li>$msg.get("global.title.popup.none.selected")</li>
+     <li itemprop="about">$msg.get("global.title.popup.none.selected")</li>
     #end
     #if($subjectCounter>2)
      <li>...</li>
@@ -582,6 +593,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #end
 </ul>
 #end
+
+
 
 
 #**
@@ -594,7 +607,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #foreach($educlevel in $educlevels)
     #set($edlevelCounter = $edlevelCounter + 1)
     #if(!$popup || $edlevelCounter<3)
-    <li>$msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
+    <li itemprop="typicalAgeRange">#foreach($age in $lrmiTool.getAgesForLevel($educlevel))<meta itemProp="typicalAgeRange" value="$age"/>#end##
+        $msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
     #end
     #end
     #if($popup)
@@ -610,7 +624,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #if("$!generated" != "") ##{
 <ul id="info-edlevel-generated" style="display: none;">
     #foreach($keyword in $generated.split(" ")) ##{
-	<li>$keyword</li>
+	<li itemprop="keywords">$keyword</li>
     #end ##}
 </ul>
 #end ##}
@@ -633,7 +647,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
      #else
       #set($ictcategoryitem = $ictitem.substring(0, $hyphenpos))
      #end
-    <li class="ict-${ictitem.replace('_','-')} ict-${ictcategoryitem}">$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")</li>
+    <li class="ict-${ictitem.replace('_','-')} ict-${ictcategoryitem}">#asset_info_ict_lrmi_open($asset $ictitem)$msg.get("CurrikiCode.AssetClass_instructional_component_${ictitem}")#asset_info_ict_lrmi_close($asset $ictitem)</li>
     #end
     #end
     #if($popup)
@@ -645,6 +659,18 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #end
     #end
 </ul>
+#end
+
+#macro(asset_info_ict_lrmi_open $asset $ict)##
+#set($arr=$lrmiTool.getForIct($ict))##
+<meta itemprop="educationalUse" value="$arr[0]"/>##
+<meta itemprop="learningResourceType" value="$arr[1]"/>##
+<meta itemprop="interactivityType" value="$arr[2]"/>##
+<meta itemprop="intendedEndUserRole" value="$arr[3]"/>##
+<meta itemprop="genre" value="$arr[4]"/>##
+#end
+
+#macro(asset_info_ict_lrmi_close $asset $ict)
 #end
 
 
@@ -677,12 +703,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                 <ul>
                     <li id="info-basic-title">
                         <strong>$msg.get("rve.information.title_title")</strong>
-                        <p>$asset.getDisplayTitle()</p>
+                        <p itemprop="name">$asset.getDisplayTitle()</p>
                     </li>
 
                     <li id="info-basic-description">
                         <strong>$msg.get("rve.information.description_title")</strong>
-                        <p>$asset.display("description")</p>
+                        <p itemprop="description">$asset.display("description")</p>
                     </li>
 
                     <li id="info-basic-subject-education">
@@ -709,8 +735,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                         <strong>$msg.get("rve.information.ict_title")</strong>
                         #asset_info_ict($asset false)
                     </li>
-                    <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span>$!asset.display("keywords")</span></li>
-                    <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span>$!asset.display("language")</span></li>
+                    <li id="info-basic-tags"><strong>$msg.get("rve.information.keywords_title")</strong><span itemprop="keywords">$!asset.display("keywords")</span></li>
+                    <li id="info-basic-language"><strong>$msg.get("rve.information.language_title")</strong><span itemprop="inLanguage">$!asset.display("language")</span></li>
                     #set($rights = $!asset.getValue("rights"))
                     #if($xwiki.getDocument("FileCheck.WebHome").hasAccessLevel("view") && "$!rights" != "private")
                     <li id="info-basic-check"><strong>$msg.get("rve.information.bfcs_title")</strong>
@@ -735,16 +761,18 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                         #end</span>
                     </li>
                     $asset.use("CurrikiCode.AssetLicenseClass")
+                    #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
+                    #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("licenseType").getValue())
                     <li id="info-rights-holder">
-                        <strong>$msg.get("rve.information.rightsholder_title")</strong><span>$!asset.display("rightsHolder")</span>
+                        <strong>$msg.get("rve.information.rightsholder_title")</strong><span itemProp="provider">$!asset.display("rightsHolder")</span>
                     </li>
                     <li id="info-rights-license">
-                        <strong>$msg.get("rve.information.licensedeed_title")</strong><span>$!asset.display("licenseType")</span>
+                        <strong>$msg.get("rve.information.licensedeed_title")</strong><span>##
+                        <link itemProp="useRightsUrl" href="$lrmiTool.getLicenseUrl($lic)">##
+                        $!asset.display("licenseType")</link></span>
                     </li>
                     #if($isOriginalAuthorOrAdmin)
                     <li id="info-rights-grantCurrikiCommercialLicense">
-                            #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
-                            #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("licenseType").getValue())
                                 #if("$!gCCL.value"!="")
                                     <strong>$msg.get("rve.information.license_to_curriki_title")</strong>
                                     #if($gCCL.value==1)

@@ -1,0 +1,81 @@
+
+class LRMItool {
+
+    static Map lrmiFromICT = createLRMIfromICTmap();
+
+// association between the Curriki ICT
+// and the LRMI fields: educationalUse	learningResourceType	interactivityType	intendedEndUserRole	and creativeWork's genre
+// see https://docs.google.com/a/curriki.org/document/d/1hJsjXd6Uux3VBjlutrUWCSKeObHgm9RrDkCemtPMx_s/edit
+    static Map createLRMIfromICTmap() {
+        HashMap m = new HashMap();
+        m.put("exercise", ["exercise", "active", "learner", "exercise", "exercise"])
+        // TODO: continue with all values from table
+        // using pattern ^([^\t]+)\t+([^\t]+)\t+([^\t]+) to m.put($1, "$1", "$2", "$3", "$1", "$1")
+        return m;
+    }
+
+    public String[] getForIct(String ict) {
+        if(lrmiFromICT==null) lrmiFromICT = createLRMIfromICTmap();
+        String[] x = lrmiFromICT.get(ict);
+        if(x==null) x = ["-broken-ict-$ict-","","","",""];
+        return x;
+    }
+
+
+// ================================= ages ===================================================================
+
+    static Map agesForLevel = createAgesForLevel();
+    static Map createAgesForLevel() {
+        HashMap m = new HashMap();
+        m.put("prek",     ["0-4"]);
+        m.put("gr-k-2",   ["5-7"]);
+        m.put("gr-3-5",   ["8-10"]);
+        m.put("gr-6-8",   ["11-13"]);
+        m.put("gr-9-10",  ["14-16"]);
+        m.put("gr-11-12", ["16-18"]);
+
+        m.put("college_and_beyond",        ["19-120"]);
+        m.put("professional_development",  ["19-120"]);
+        m.put("special_education",         ["0-120"]);
+        m.put("na", []);
+        return m;
+    }
+
+
+    public String[] getAgesForLevel(String level) {
+        if(agesForLevel==null) agesForLevel = createAgesForLevel();
+        List l = agesForLevel.get(level);
+        if(l == null) l = ["-broken-age-$level-"];
+        return l;
+    }
+
+
+// ====================================== licenses ========================================================
+
+
+    private static Map licenseToUrl = createLicenseToUrl();
+
+    private static Map createLicenseToUrl() {
+        Map m = new HashMap();
+
+        m.put("Licences.CurrikiLicense",                                        "http://creativecommons.org/licenses/by/3.0/");
+        m.put("Licences.PublicDomain",                                          "http://wiki.creativecommons.org/Public_domain");
+        m.put("Licences.CreativeCommonsAttributionNon-Commercial",              "http://creativecommons.org/licenses/by-nc/3.0/");
+        m.put("Licences.CreativeCommonsAttributionNon-CommercialNoDerivatives", "http://creativecommons.org/licenses/by-nc-nd/3.0/");
+        m.put("Licences.CreativeCommonsAttributionNoDerivatives",               "http://creativecommons.org/licenses/by-nd/3.0/");
+        m.put("Licences.CreativeCommonsAttributionSharealike",                  "http://creativecommons.org/licenses/by-sa/3.0/");
+        m.put("Licences.CreativeCommonsAttributionNon-CommercialShareAlike",    "http://creativecommons.org/licenses/by-nc-sa/3.0/");
+        m.put("Licences.TeachersDomainDownloadShare",                           "http://www.teachersdomain.org/licenses/download-and-share/1.0/");
+        return m;
+    }
+
+
+    public String getLicenseUrl(String lic) {
+        if(licenseToUrl == null) licenseToUrl = createLicenseToUrl();
+        String u = licenseToUrl.get(lic);
+        if(u == null) u = "--broken-license-value-$lic--";
+        return u;
+    }
+
+}
+
