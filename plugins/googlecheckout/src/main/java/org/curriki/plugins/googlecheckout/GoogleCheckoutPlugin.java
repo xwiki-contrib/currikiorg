@@ -161,7 +161,7 @@ public class GoogleCheckoutPlugin extends XWikiDefaultPlugin implements XWikiPlu
         synchronized (client) {
             status = client.executeMethod(post);
         }
-        if(status!=200) throw new IllegalStateException("Error " + post.getStatusText());
+        if(status!=200) throw new IllegalStateException("Error (HTTP/"+status+")" + post.getStatusText());
         String responseString = post.getResponseBodyAsString();
         org.jdom.Element response = parseToElement(responseString);
         //initiateOrderState(response, userName);
