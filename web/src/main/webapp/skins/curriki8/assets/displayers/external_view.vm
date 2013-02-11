@@ -39,10 +39,6 @@ Please check the address you entered or improve the macro to make it support thi
         #if($!caption == "")
             #set($caption = $!asset.display("description"))
         #end
-
-        <!-- url is $url of class $url.getClass() -->        youtube: $url.lastIndexOf("http://www.youtube.com/watch?v=")
-        dailymtion $url.lastIndexOf("http://www.dailymotion.com/video/")
-        google video: $url.lastIndexOf("http://video.google.com/googleplayer.swf?")
         #if($url.lastIndexOf("http://www.youtube.com/watch?v=") != -1 || $url.lastIndexOf("http://www.dailymotion.com/video/") != -1 || $url.lastIndexOf("http://video.google.com/googleplayer.swf?") != -1)
             #video($url)
         #end

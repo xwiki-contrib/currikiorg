@@ -19,7 +19,7 @@
 #set($alt_text = $!asset.alt_text)
 #set($ok = $asset.use("CurrikiCode.AssetClass"))
 #if("$!caption" == "")
-#set($caption = $!asset.description)
+    #set($caption = $!asset.display("description"))
 #end
 #if("$!alt_text" == "")
  #set($alt_text = $!asset.title)

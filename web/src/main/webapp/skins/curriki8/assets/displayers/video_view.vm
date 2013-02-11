@@ -29,7 +29,7 @@
         #set($caption = $!asset.caption_text)
         #set($ok = $asset.use("CurrikiCode.AssetClass"))
         #if("$!caption" == "")
-        #set($caption = $!asset.description)
+            #set($caption = $!asset.display("description"))
         #end
         <p>
             $caption
