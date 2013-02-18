@@ -14,7 +14,7 @@
         .dollar_sign{ font-size: 14px; vertical-align: top; padding-left:10px;}
         p {margin-bottom:10px}
     </style>
-<!--    #if($user)#else#set($user=$request.user)#end ##
+    <!--    #if($user)#else#set($user=$request.user)#end ##
     #if($user)#else#set($user=$request.xwikiname)#end ##
     #if($user)#else#set($user=$context.user)#end user is $user
     #if($user=="XWiki.XWikiGuest")Warning: no user, donation will be to 'guest'.#end
@@ -27,45 +27,67 @@
         //Check if a number was entered to the text field
         //if yes it must be a whole number and the radio buttons need to be reset.
         function validateDonateForm(){
-            amountInput = document.getElementById("donateAmount");
-            amount = amountInput.value;
+            var amountInput = document.getElementById("donateAmount");
+            var amount = amountInput.value;
+            var isValid = false;
 
-            if(amount.length > 0){
+            //if input is a whole number
+            if(amount.length > 0 && amount.match(/^\d+$/g)){
                 disableRadioButtonsIfNumberInput();
-            }
-
-            if(amount % 1 != 0) {
-                alert("Please enter a whole number for donation");
-                return false;
-            } else {
                 return true;
             }
+
+            //If input is not a whole number
+            if(amount.length > 0 && !amount.match(/^\d+$/g)) {
+                disableRadioButtonsIfNumberInput();
+                alert("Please enter a whole number for donation, \nor choose an amount from the list");
+                return false;
+            }
+
+            //If nothing is chosen
+            if(amount.length == 0 && !isAmountSelected()){
+                alert("Please enter a whole number for donation, \nor choose an amount from the list");
+                return false;
+            }
+
         }
 
         //If the user entered a number no other radio button should be active
         function disableRadioButtonsIfNumberInput(){
-            inputs = document.getElementById("donationForm").getElementsByTagName("input");
+            var inputs = document.getElementById("donationForm").getElementsByTagName("input");
 
-            for(i = 0; i < inputs.length; i++){
+            for(var i = 0; i < inputs.length; i++){
                 inputs[i].checked = false;
             }
+        }
+
+        //If the user entered a number no other radio button should be active
+        function isAmountSelected(){
+            var inputs = document.getElementById("donationForm").getElementsByTagName("input");
+
+            for(var i = 0; i < inputs.length; i++){
+                if (inputs[i].checked == true) {
+                    return true;
+                }
+            }
+            return false;
         }
 
     </script>
     {/pre}
 </head>
 <body>
-<form id="donationForm" action="/xwiki/bin/view/GCheckout/CheckoutNow" target="curriki-donations" onsubmit="validateDonateForm();">##
+<form id="donationForm" action="/xwiki/bin/view/GCheckout/CheckoutNow" target="curriki-donations" onsubmit="return validateDonateForm();">##
     <input type="hidden" name="xpage" value="popup"/>##
     <input type="hidden" name="type"  value="donation"/>##
     <input type="hidden" name="redirectNow" value="true"/>##
     <input type="hidden" name="user" value="$user"/>##
 
 
-    <label><input type="radio" name="amount" value="25" checked />&#36;25</label>
+    <label><input id="firstAmount" type="radio" name="amount" value="25" checked onclick="document.getElementById('donateAmount').value = '';"/>&#36;25</label>
     #set($values=[50,100,250,500,1000])##
     #foreach($value in $values)
-        <label><input type="radio" name="amount" value="${value}"/>&#36;${value}</label> - ##
+        <label><input type="radio" name="amount" value="${value}" onclick="document.getElementById('donateAmount').value = '';" />&#36;${value}</label> - ##
     #end ##
     other: &#36;<input id="donateAmount" type="text" name="amount" value="" size="5"/>##
     <input type="image" name="image" style="height:43px; width:100px; vertical-align:-23px"
