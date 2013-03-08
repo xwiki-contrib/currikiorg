@@ -35,6 +35,7 @@ CURRIKI="\
 	curriki/ui/curriki-ui.js \
 	curriki/ui/curriki-login.js \
 	curriki/ui/rating.js \
+	curriki/ui/curriki-video.js\
 	"
 
 cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js

@@ -102,6 +102,10 @@ Ext.ns('Curriki.global');
 Curriki.global.username = "$!{context.user}";
 Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+
+window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('curriki.system.mediajwplayerkey','-missing-media-mediajwplayerkey-')";
+window.videoPrefixToDownload = "$xwiki.curriki.getPublicCurrikiConfig('curriki.system.mediahost','-missing-media-host-')";
+
 </script>
 #end ##}
 #if($globalDebug)##{
@@ -109,6 +113,6 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 #end##}
 ## (Disabled) hook for inserting JavaScript skin extensions
 ## Use $xwiki.jsfx.use("jsfile.js", true)
-## <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
 ## the HTML comment there actually inserts it!
 <!-- end javascripts.vm -->
