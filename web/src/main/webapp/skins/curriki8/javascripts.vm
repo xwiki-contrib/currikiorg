@@ -97,15 +97,19 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 		#end ##}
 	#end ## }
 
+#set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
+#if($mediaHost!='-missing-media-host-')
+<script src="$mediaHost/jwplayer6/jwplayer.js"></script>
+<script type="text/javascript">
+    window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
+    window.videoPrefixToDownload = "$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')";
+</script>
+#end##
 <script type="text/javascript">
 Ext.ns('Curriki.global');
 Curriki.global.username = "$!{context.user}";
 Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
-
-window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('curriki.system.mediajwplayerkey','-missing-media-mediajwplayerkey-')";
-window.videoPrefixToDownload = "$xwiki.curriki.getPublicCurrikiConfig('curriki.system.mediahost','-missing-media-host-')";
-
 </script>
 #end ##}
 #if($globalDebug)##{
