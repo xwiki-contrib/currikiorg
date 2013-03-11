@@ -4247,7 +4247,7 @@ function videoInsert(videoId, title) {
 
 
 function videoWatchSizesArrived(videoId) {
-    var candidateValue = window[videoId + "_sizes"];
+    var candidateValue = window["video_" + videoId + "_sizes"];
     window.numWatches = window.numWatchers || new Object();
     if(typeof(window.numWatches[videoId])!="number") window.numWatches[videoId] = 0;
     if(candidateValue) {
@@ -4257,7 +4257,7 @@ function videoWatchSizesArrived(videoId) {
             var timeout = 50;
             window.numWatches[videoId] = window.numWatches[videoId] + 1;
             if(window.numWatches[videoId]>200) timeout = timeout*5;
-            window.setTimeout("videoWatchSizesArrived('"+videoId+"');", 50);
+            window.setTimeout("videoWatchSizesArrived('"+videoId+"');", timeout);
         }
     }
 }
@@ -4267,7 +4267,7 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
         var s = sources[i];
         s.file = window.videoPrefixToDownload + s.file;
     }
-    jwplayer(videoId).setup({
+    jwplayer("video_div_" + videoId).setup({
         playlist: [{
             image: window.videoPrefixToDownload + sources[0].image,
             sources: sources,
@@ -4276,13 +4276,13 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
             height: sources[0].height
         }]
     });
-    var im = Ext.get(videoId+"_image");
+    var im = Ext.get("video_img_" + videoId+"_image");
     if(im) {
         im.setSize(sources[0].width, sources[0].height);
         im.dom.setAttribute("src",    sources[0].image);
     }
 
-    jwplayer(videoId).onQualityChange(videoQualityChange);
+    jwplayer("video_div_" + videoId).onQualityChange(videoQualityChange);
 
 }
 

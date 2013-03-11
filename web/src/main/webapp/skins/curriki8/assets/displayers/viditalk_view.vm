@@ -1,3 +1,14 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #asset_displaycontentheader("text-align:center;")
 #set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
 #set($video_id = $objVT.id)
@@ -8,8 +19,8 @@
 #end
 #set($vidDiv = "div_vidiplayback_${viditalk_counter}")
 ## Set $video_id if not already set
-#if(!$video_id)
-#if(!$request.vid)
+#if("$!video_id"=="")
+#if("$!request.vid"=="")
 ## Just a test code for now
 #set($video_id = "FbLBbkGm5dORWYOQ")
 #else
@@ -26,17 +37,13 @@
         <p>
             $caption
         </p>
-        <div style="height:320px; width:470px; margin: 0 auto;" id="$vidDiv">
-            $msg.get('viditalk.loading_player')
+        <div style="height:320px; width:480px; margin: 0 auto;" id="video_div_$video_id">
+            <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('viditalk.loading_player'))">
         </div>
-    #set($MEDIAHOST=$xwiki.curriki.getPublicCurrikiConfig("mediahost","MEDIAHOST_MISSING"))##
-	<script type="text/javascript" src="http://${MEDIAHOST}/video/js/video.js"></script>
-        <script language="javascript" type="text/javascript">
-            // embedVidiPlayback(div_id, sc, mediaId, autoplay, width, height, stretchPlayer, skinLoc, shareUrl, allowFullScreen)
-            embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null, null, null, null, null, null, true);
-        </script>
+        <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)");</script>
     </div>
 </div>
+#set($MEDIAHOST="$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
 #set($origVideo = $xwiki.getURLContent("http://${MEDIAHOST}/video/url/orig/$video_id"))
 #if("$!origVideo"=="") ##{
 	#set($has_origVideo = false)
