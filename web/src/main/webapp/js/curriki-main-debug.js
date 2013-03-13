@@ -4282,7 +4282,7 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
         im.dom.setAttribute("src",    sources[0].image);
     }
 
-    jwplayer("video_div_" + videoId).onQualityChange(videoQualityChange);
+    //jwplayer("video_div_" + videoId).onQualityChange(videoQualityChange);
 
 }
 
