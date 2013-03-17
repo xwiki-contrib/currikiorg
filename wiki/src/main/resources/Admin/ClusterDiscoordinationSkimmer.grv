@@ -1,0 +1,41 @@
+<%
+/*
+   This little script inspects all recently modified  (1d)
+
+
+ */
+boolean quiet = "1"== request.getParameter("quiet")
+def docInCache = new HashMap();
+def cache = xwiki.getXWiki().store.cache;
+def jcache = xwiki.getXWiki().getPrivateField(cache, "cache");
+def items = jcache.entrySet(); //jcache.getRoot().getChildren();
+if(!quiet) println("1 Reading cache")
+for (item in items) {
+    docInCache.put(item.key, item.value.version)
+    // println("* $item.key")
+}
+
+if(!quiet) println("Cache contains " + docInCache.size() + " docs.")
+
+if(!quiet) println("1 Now comparing to DB")
+int count=0;
+def hql = "select doc.fullName, doc.language, doc.version from XWikiDocument as doc where doc.date > curdate() - 1";
+def list = xwiki.search(hql);
+for (item in list) {
+    def fullName = item[0]
+    def language = item[1]
+    def version = item[2]
+
+    def key = (language==null||language=="") ? "xwiki:" + fullName : "xwiki:"+fullName +":" +language;
+    def currentVersion = docInCache.get(key)
+    if (currentVersion!=null && currentVersion!=version) {
+        System.out.println("CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
+        println("* CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
+        cache.remove(key);
+        count++;
+    }
+}
+if(!quiet) println("Detected " + count + " cluster desyncs.");
+if(count>0) println("Have cleaned up the " + count + " cluster desyncs.");
+
+// %>
