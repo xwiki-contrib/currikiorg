@@ -4263,23 +4263,30 @@ function videoWatchSizesArrived(videoId) {
 }
 
 function videoNotifyVideoSizeArrived(videoId, sources) {
-    for(var i=0; i<sources.length; i++) {
-        var s = sources[i];
-        s.file = window.videoPrefixToDownload + s.file;
-    }
-    jwplayer("video_div_" + videoId).setup({
-        playlist: [{
-            image: window.videoPrefixToDownload + sources[0].image,
-            sources: sources,
-            title: window.videoTitles[videoId],
-            width: sources[0].width,
-            height: sources[0].height
-        }]
-    });
     var im = Ext.get("video_img_" + videoId+"_image");
-    if(im) {
-        im.setSize(sources[0].width, sources[0].height);
-        im.dom.setAttribute("src",    sources[0].image);
+    if(typeof(sources)=="string") {
+        if(im) {
+            im.setSize(320, 240);
+            im.replace("<div width='320' height='240'><p>"+_(sources)+"</p></div>")
+        }
+    } else if (typeof(sources)=="array") {
+        if(im) {
+            im.setSize(sources[0].width, sources[0].height);
+            im.dom.setAttribute("src",    sources[0].image);
+        }
+        for(var i=0; i<sources.length; i++) {
+            var s = sources[i];
+            s.file = window.videoPrefixToDownload + s.file;
+        }
+        jwplayer("video_div_" + videoId).setup({
+            playlist: [{
+                image: window.videoPrefixToDownload + sources[0].image,
+                sources: sources,
+                title: window.videoTitles[videoId],
+                width: sources[0].width,
+                height: sources[0].height
+            }]
+        });
     }
 
     //jwplayer("video_div_" + videoId).onQualityChange(videoQualityChange);
