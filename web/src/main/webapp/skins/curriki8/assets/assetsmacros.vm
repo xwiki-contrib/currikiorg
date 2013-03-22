@@ -88,9 +88,9 @@
 	#end
 #end
 	#if($viewer == "embed-teachhub")
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemProp="author" target="_blank" href="$assetAuthorLink" rel="autor" class="fn url"  title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" target="_blank" href="$assetAuthorLink" rel="autor" class="fn url"  title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#else
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemProp="author" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 	#end
 </ul>
 #end
@@ -607,7 +607,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
     #foreach($educlevel in $educlevels)
     #set($edlevelCounter = $edlevelCounter + 1)
     #if(!$popup || $edlevelCounter<3)
-    <li itemprop="typicalAgeRange">#foreach($age in $lrmiTool.getAgesForLevel($educlevel))<meta itemProp="typicalAgeRange" value="$age"/>#end##
+    <li itemprop="typicalAgeRange">#foreach($age in $lrmiTool.getAgesForLevel($educlevel))<meta itemprop="typicalAgeRange" value="$age"/>#end##
         $msg.get("CurrikiCode.AssetClass_educational_level_${educlevel}")</li>
     #end
     #end
@@ -764,11 +764,11 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
                     #set($gCCL=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("grantCurrikiCommercialLicense"))
                     #set($lic=$!asset.getObject("CurrikiCode.AssetLicenseClass").getProperty("licenseType").getValue())
                     <li id="info-rights-holder">
-                        <strong>$msg.get("rve.information.rightsholder_title")</strong><span itemProp="provider">$!asset.display("rightsHolder")</span>
+                        <strong>$msg.get("rve.information.rightsholder_title")</strong><span itemprop="provider">$!asset.display("rightsHolder")</span>
                     </li>
                     <li id="info-rights-license">
                         <strong>$msg.get("rve.information.licensedeed_title")</strong><span>##
-                        <link itemProp="useRightsUrl" href="$lrmiTool.getLicenseUrl($lic)">##
+                        <link itemprop="useRightsUrl" href="$lrmiTool.getLicenseUrl($lic)">##
                         $!asset.display("licenseType")</link></span>
                     </li>
                     #if($isOriginalAuthorOrAdmin)
