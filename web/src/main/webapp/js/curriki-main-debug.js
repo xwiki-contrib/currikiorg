@@ -4269,7 +4269,7 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
             im.setSize(320, 240);
             im.replace("<div width='320' height='240'><p>"+_(sources)+"</p></div>")
         }
-    } else if (typeof(sources)=="array") {
+    } else if (typeof(sources)=="object") {
         if(im) {
             im.setSize(sources[0].width, sources[0].height);
             im.dom.setAttribute("src",    sources[0].image);
