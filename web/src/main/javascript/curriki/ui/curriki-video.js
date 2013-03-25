@@ -41,7 +41,7 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
     } else if (typeof(sources)=="object") {
         if(im) {
             im.setSize(sources[0].width, sources[0].height);
-            im.dom.setAttribute("src",    sources[0].image);
+            im.dom.setAttribute("src",   window.videoPrefixToDownload +  sources[0].image);
         }
         for(var i=0; i<sources.length; i++) {
             var s = sources[i];
@@ -60,8 +60,10 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
     var origPath = window['video_' + videoId + "_originalName"];
     if(origPath) {
         Ext.get("download_original_"+videoId+"_div").setVisible(true);
-        var extension = origPath.substring(origPath.lastIndexOf('.'));
+        var extension = origPath.substring(origPath.lastIndexOf('.')+1);
         Ext.get("download_original_"+videoId+"_div").addClass("filetype-" + extension)
+        Ext.get("video_download_link_" + videoId).dom.setAttribute("href",
+            window.videoPrefixToDownload.replace('/deliver/', '/original/') + origPath + "?forceDownload=1");
     }
     //jwplayer("video_div_" + videoId).onQualityChange(videoQualityChange);
 
@@ -93,7 +95,7 @@ function videoQualityChange(evt) {
 
 function videoDownloadOriginal(videoId) {
     var p = window['video_' + videoId + "_originalName"];
-    location.href= videoPrefixToDownload + p + "?forceDownload=1";
+    location.href= window.videoPrefixToDownload.replace('/deliver/', '/original/') + p + "?forceDownload=1";
     return false;
 }
 

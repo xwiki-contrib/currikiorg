@@ -60,11 +60,11 @@
 ##
      <p class="text-link">
 		##<a onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');" href="$origVideo">$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
-        <a href="$origVideo"
+        <a id='video_download_link_${video_id}'
        #if($requireLogin)##
            onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos()); return false;" ##
        #else##
-           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${assetAttachmentFilename}'); videoDownloadOriginal(${video_id}); return false;"##
+           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${assetAttachmentFilename}'); videoDownloadOriginal('${video_id}'); return false;"##
        #end##
                 >$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
 ##
