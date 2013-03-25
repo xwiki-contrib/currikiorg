@@ -32,12 +32,12 @@
             $caption
         </p>
         <div style="height:320px; width:480px; margin: 0 auto; display: inline-block; " id="video_div_$video_id">
-            <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('viditalk.loading_player'))"
+            <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('video.player.loading'))"
                     src="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/deliver/314159/${video_id}-lq.jpg">
         </div>
         <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)");</script>
     </div>
-    <p><a href="javascript:videoDisplayEmbedCode('$doc.fullName');" alt="$msg.get('video.embed.link.tooltip')">$msg.get("video.embed.link.text")</a></p>
+    <p><a href="#" onclick="videoDisplayEmbedCode('$doc.fullName'); return false;" alt="$msg.get('video.embed.link.tooltip')">$msg.get("video.embed.link.text")</a></p>
 </div>
 
 <div class="asset-display-download" id="download_original_${video_id}_div" style="display:none">
@@ -83,7 +83,7 @@
                    >$msg.get("login.button_login_to_download")
            #else##
                ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
-               onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original'); videoDownloadOriginal(${video_id}); return false;"##
+               onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original'); videoDownloadOriginal('${video_id}'); return false;"##
                    >$msg.get("rve.content.view.download.download_button")
            #end##
         </button>
