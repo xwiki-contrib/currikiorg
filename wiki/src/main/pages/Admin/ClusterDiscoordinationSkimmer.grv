@@ -1,21 +1,34 @@
+
 <%
+import org.xwiki.observation.ObservationManager
+import com.xpn.xwiki.web.Utils
+
 /*
    This little script inspects all recently modified  (1d)
 
 
  */
 boolean quiet = "1"== request.getParameter("quiet")
+boolean plaintext = "1" == request.getParameter("plaintext")
 def docInCache = new HashMap();
 def cache = xwiki.getXWiki().store.cache;
 def jcache = xwiki.getXWiki().getPrivateField(cache, "cache");
 def items = jcache.entrySet(); //jcache.getRoot().getChildren();
+if(plaintext) {
+    response.setContentType("text/plain");
+    println("{pre}");
+}
 if(!quiet) println("1 Reading cache")
 for (item in items) {
     docInCache.put(item.key, item.value.version)
-    // println("* $item.key")
+    if(!quiet) println("* $item.key")
 }
 
 if(!quiet) println("Cache contains " + docInCache.size() + " docs.")
+
+def docChangeListener = Utils.getComponent(ObservationManager.class).getListener("DocChangeListener");
+boolean doReindexIfDesynced = "prod-app".equals(xwiki.curriki.getPublicCurrikiConfig("appserverHost", "-missing-appserver-host-"));
+
 
 if(!quiet) println("1 Now comparing to DB")
 int count=0;
@@ -30,12 +43,21 @@ for (item in list) {
     def currentVersion = docInCache.get(key)
     if (currentVersion!=null && currentVersion!=version) {
         System.out.println("CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
-        println("* CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
+        print("* CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
         cache.remove(key);
+        if(doReindexIfDesynced) {
+            docChangeListener.addToQueue(fullName)
+            print(" (reindex requested)");
+        } else {
+            print(" (no reindexing needed)");
+        }
+        println();
         count++;
     }
 }
 if(!quiet) println("Detected " + count + " cluster desyncs.");
-if(count>0) println("Have cleaned up the " + count + " cluster desyncs.");
-
+if(count>0) println("Have cleaned up the " + count + " cluster desyncs (out of ${list.size()} changes).");
+if(plaintext) {
+    print("{/pre}")
+};
 // %>
