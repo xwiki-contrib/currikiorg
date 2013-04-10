@@ -6,9 +6,9 @@
 <!-- start javascripts.vm -->
 #set($hasScripts=true)##
 #if($globalDebug)##{
-	#set($debugging = "-debug")
+    #set($debugging = "-debug")
 #else##}{
-	#set($debugging = "")
+    #set($debugging = "")
 #end##}
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
@@ -99,10 +99,11 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 
 #set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
 #if($mediaHost!='-missing-media-host-')
-<script src="$mediaHost/jwplayer6/jwplayer.js"></script>
+<script src="$mediaHost/media/jwplayer6/jwplayer.js"></script>
 <script type="text/javascript">
+    if(typeof(window.jwplayer)=="undefined") window.jwplayer = new Object();
     window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
-    window.videoPrefixToDownload = "http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/deliver/314159/";
+    window.videoPrefixToDownload = "http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/";
 </script>
 #end##
 <script type="text/javascript">

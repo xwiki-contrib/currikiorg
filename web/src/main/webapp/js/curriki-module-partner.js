@@ -1,1 +1,3 @@
-Ext.ns("Curriki.module.partner");Curriki.module.partner.confirm=function(a){Ext.Msg.show({title:_("curriki.crs.review.partnerconfirmtitle"),msg:_("curriki.crs.review.partnerconfirmmessage"),buttons:Ext.Msg.OKCANCEL,fn:function(b){if(b=="ok"){var c=Ext.get("assetFullName").dom.value;Curriki.assets.PartnerAsset(c,function(d){window.location.pathname=a})}else{document.getElementById("partner").checked=false}},icon:Ext.MessageBox.QUESTION})};
+Ext.ns("Curriki.module.partner");Curriki.module.partner.confirm=function(a){Ext.Msg.show({title:_("curriki.crs.review.partnerconfirmtitle"),msg:_("curriki.crs.review.partnerconfirmmessage"),buttons:Ext.Msg.OKCANCEL,fn:function(b){if(b=="ok"){var c=Ext.get("assetFullName").dom.value;
+Curriki.assets.PartnerAsset(c,function(d){window.location.pathname=a})}else{document.getElementById("partner").checked=false
+}},icon:Ext.MessageBox.QUESTION})};
