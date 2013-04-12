@@ -618,7 +618,8 @@ if(typeof(window.numWatches[c])!="number"){window.numWatches[c]=0}if(b){videoNot
 }else{if(window.numWatches[c]<500){var a=50;window.numWatches[c]=window.numWatches[c]+1;
 if(window.numWatches[c]>200){a=a*5}window.setTimeout("videoWatchSizesArrived('"+c+"');",a)
 }}}function videoNotifyVideoSizeArrived(f,b){var a=Ext.get("video_img_"+f+"_image");
-if(typeof(b)=="string"){if(a){a.setSize(320,240);a.replace("<div width='320' height='240'><p>"+_(b)+"</p></div>")
+if(typeof(b)=="string"){if(console){console.log("size is still a string, display it: "+b)
+}if(a){a.setSize(320,240);a.update("<div width='320' height='240'><p>"+_(b)+"</p></div>")
 }}else{if(typeof(b)=="object"){if(a){a.setSize(b[0].width,b[0].height);a.dom.setAttribute("src",window.videoPrefixToDownload+b[0].image)
 }for(var c=0;c<b.length;c++){var d=b[c];d.file=window.videoPrefixToDownload+d.file
 }jwplayer("video_div_"+f).setup({playlist:[{image:window.videoPrefixToDownload+b[0].image,sources:b,width:b[0].width,height:b[0].height}]})

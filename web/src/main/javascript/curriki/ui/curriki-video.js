@@ -7,7 +7,8 @@ function videoInsert(videoId, title) {
     // insert script
     var sizeScript = document.createElement('script'); sizeScript.type = 'text/javascript';
     sizeScript.src = window.videoPrefixToDownload + videoId + "-sizes.js";
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sizeScript, s);
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(sizeScript, s);
 
     if(typeof(window.videoTitles)!="object") window.videoTitles = new Object();
     window.videoTitles[videoId] = title;
@@ -34,9 +35,10 @@ function videoWatchSizesArrived(videoId) {
 function videoNotifyVideoSizeArrived(videoId, sources) {
     var im = Ext.get("video_img_" + videoId+"_image");
     if(typeof(sources)=="string") {
+        if(console) console.log("size is still a string, display it: " + sources);
         if(im) {
             im.setSize(320, 240);
-            im.replace("<div width='320' height='240'><p>"+_(sources)+"</p></div>")
+            im.update("<div width='320' height='240'><p>"+_(sources)+"</p></div>")
         }
     } else if (typeof(sources)=="object") {
         if(im) {
