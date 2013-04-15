@@ -37,7 +37,8 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
     if(typeof(sources)=="string") {
         if(console) console.log("size is still a string, display it: " + sources);
         if(im) {
-            im.setSize(320, 240);
+            im=im.parent();
+            im.setSize(320, 80);
             im.update("<div width='320' height='240'><p>"+_(sources)+"</p></div>")
         }
     } else if (typeof(sources)=="object") {
