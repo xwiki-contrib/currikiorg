@@ -83,7 +83,10 @@
 #end
 #template("deprecatedVars.vm")
 #set($hostname=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config'))
-#set($GA_uacct=$xwiki.curriki.getPublicCurrikiConfig('GA'))
+#set($GA_uacct=$xwiki.curriki.getPublicCurrikiConfig('GA', "-missing-curriki.system.GA"))
+#set($ADDTHIS_acct=$xwiki.curriki.getPublicCurrikiConfig('addthis',"0"))
+
+
 #set ($isInServletMode = $xwikimode == 0)
 #set ($isInPortletMode = $xwikimode == 1)
 ##
