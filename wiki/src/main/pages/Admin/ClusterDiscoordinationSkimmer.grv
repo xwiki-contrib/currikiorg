@@ -14,6 +14,8 @@ def docInCache = new HashMap();
 def cache = xwiki.getXWiki().store.cache;
 def jcache = xwiki.getXWiki().getPrivateField(cache, "cache");
 def items = jcache.entrySet(); //jcache.getRoot().getChildren();
+def starChar = "*";
+if(plaintext) starChar = "-";
 if(plaintext) {
     response.setContentType("text/plain");
     println("{pre}");
@@ -21,13 +23,13 @@ if(plaintext) {
 if(!quiet) println("1 Reading cache")
 for (item in items) {
     docInCache.put(item.key, item.value.version)
-    if(!quiet) println("* $item.key")
+    if(!quiet) println("${starChar} $item.key")
 }
 
 if(!quiet) println("Cache contains " + docInCache.size() + " docs.")
 
 def docChangeListener = Utils.getComponent(ObservationManager.class).getListener("DocChangeListener");
-boolean doReindexIfDesynced = "prod-app".equals(xwiki.curriki.getPublicCurrikiConfig("appserverHost", "-missing-appserver-host-"));
+boolean doReindexIfDesynced = "prod-app".equalsIgnoreCase(xwiki.curriki.getPublicCurrikiConfig("appserverHost", "-missing-appserver-host-"));
 
 
 if(!quiet) println("1 Now comparing to DB")
@@ -43,7 +45,7 @@ for (item in list) {
     def currentVersion = docInCache.get(key)
     if (currentVersion!=null && currentVersion!=version) {
         System.out.println("CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
-        print("* CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
+        print("${starChar} CLUSTER SYNC ERROR: "+key+" version is different "+currentVersion+" " +version + ".");
         cache.remove(key);
         if(doReindexIfDesynced) {
             docChangeListener.addToQueue(fullName)
