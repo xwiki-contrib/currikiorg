@@ -625,7 +625,8 @@ if(typeof(b)=="string"){if(console){console.log("size is still a string, display
 }jwplayer("video_div_"+f).setup({playlist:[{image:window.videoPrefixToDownload+b[0].image,sources:b,width:b[0].width,height:b[0].height}]})
 }}var e=window["video_"+f+"_originalName"];if(e){Ext.get("download_original_"+f+"_div").setVisible(true);
 var g=e.substring(e.lastIndexOf(".")+1);Ext.get("download_original_"+f+"_div").addClass("filetype-"+g);
-Ext.get("video_download_link_"+f).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1")
+Ext.get("video_download_link_"+f).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1");
+Ext.get("video_download_link_"+f+"_text").dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1")
 }}function videoDownloadOriginal(b){var a=window["video_"+b+"_originalName"];location.href=window.videoPrefixToDownload.replace("/deliver/","/original/")+a+"?forceDownload=1";
 return false}function videoDisplayEmbedCode(a){var b="  <iframe width='558' height='490' \n src='http://"+location.host+"/xwiki/bin/view/"+a.replace("\\.","/")+"?viewer=embed'></iframe>";
 b="<div style='margin:1em'><h1>"+_("video.embed.title")+"</h1><p>"+_("video.embed.intro")+"</p><code>\n"+b.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</code><p align='right'><span><input type='button' class='button-grey' value='"+_("video.embed.okButton")+"' style='padding: 3pt 6pt; font-size: 11px;' onclick='window.embedDialog.close()'/></span></span></p></div>";
