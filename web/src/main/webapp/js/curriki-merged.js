@@ -560,7 +560,8 @@ var f=window.setInterval(function(){clearInterval(f);Curriki.ui.login.liveValida
 },50)})})},queueQueryNow:function(f){var h=f.dom.name;var d=f.dom.value;Curriki.console.log("Validation on field "+h+" with value '"+d+"'.");
 if(h!="email"&&h!="username"&&h!="postalCode"){var g=false;var b=h=="firstName"||h=="lastName"||h=="password";
 if(h=="agree"){g=d!="0"}if(h=="member_type"){g=d!="-"}if(h=="firstName"||h=="lastName"){g=d.length>=1
-}if(h=="password"){g=d.length>5}Curriki.console.log("passed? "+g+".");if(g==false){if(b){Curriki.ui.login.liveValidation.notifyValidationResult(f,null)
+}if(h=="password"){g=d.length>5&&!(d.indexOf(" ")>-1)}Curriki.console.log("passed? "+g+".");
+if(g==false){if(b){Curriki.ui.login.liveValidation.notifyValidationResult(f,null)
 }else{Curriki.ui.login.liveValidation.notifyValidationResult(f,false)}}if(g==true){Curriki.ui.login.liveValidation.notifyValidationResult(f,true)
 }return}var e=new Object();e.value=f.getValue();Curriki.ui.login.liveValidation.queriedValue=f.getValue();
 Curriki.console.log("Queuing query for "+e.value);if(typeof(e.value)=="undefined"||e.value==null){Curriki.console.log("Undefined value, stop.");
