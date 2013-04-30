@@ -56,7 +56,7 @@
                     button.innerHTML="$msg.get('rve.content.view.hide_button')";
                     button.className="button-link button-link-hide";
 
-                    Curriki.logView(location.pathname + "/" + "${attach}");
+                    Curriki.logEvent(["archive", "show_files", location.pathname+"${attach}"])
                 }
 
                 function hideTree(treeId, button){
@@ -92,7 +92,7 @@
                     if (!(path[path.length - 1] == "/"))
                         window.open(baseUrl${treeviewid} + "/" + path);
 
-                    Curriki.logView(baseUrl${treeviewid} + "/" + path);
+                    Curriki.logEvent(["archive", "clicked_file", baseUrl${treeviewid} + "/" + path])
                 }
 
                 function treeInit${treeviewid}() {
