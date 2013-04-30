@@ -6,9 +6,9 @@
 <!-- start javascripts.vm -->
 #set($hasScripts=true)##
 #if($globalDebug)##{
-	#set($debugging = "-debug")
+    #set($debugging = "-debug")
 #else##}{
-	#set($debugging = "")
+    #set($debugging = "")
 #end##}
 <script type="text/javascript" src="$xwiki.getSkinFile('skin.js').replaceAll('/curriki8/', "/curriki8/${gVersion}/")"></script>
 
@@ -97,6 +97,15 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 		#end ##}
 	#end ## }
 
+#set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
+#if($mediaHost!='-missing-media-host-')
+<script src="$mediaHost/media/jwplayer6/jwplayer.js"></script>
+<script type="text/javascript">
+    if(typeof(window.jwplayer)=="undefined") window.jwplayer = new Object();
+    window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
+    window.videoPrefixToDownload = "http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/";
+</script>
+#end##
 <script type="text/javascript">
 Ext.ns('Curriki.global');
 Curriki.global.username = "$!{context.user}";
@@ -109,6 +118,6 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 #end##}
 ## (Disabled) hook for inserting JavaScript skin extensions
 ## Use $xwiki.jsfx.use("jsfile.js", true)
-## <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
 ## the HTML comment there actually inserts it!
 <!-- end javascripts.vm -->

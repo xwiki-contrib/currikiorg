@@ -2770,7 +2770,7 @@ Curriki.module.addpath.init = function(){
 
 			// Submit form to post file
 			Ext.Ajax.request({
-				url:'http://'+_('MEDIAHOST')+'/cgi/upload.cgi?key='+Curriki.current.uuid
+				url:'http://'+_('MEDIAHOST')+'/media/upload?key='+Curriki.current.uuid
 				,isUpload:true
 				,form:formId
 				,headers: {
@@ -2788,7 +2788,7 @@ Curriki.module.addpath.init = function(){
 
 			// Watch status of uploaded file
 			Curriki.current.videoStatusRequest = function() {
-				Ext.ux.JSONP.request('http://'+_('MEDIAHOST')+'/upload', {
+				Ext.ux.JSONP.request('http://'+_('MEDIAHOST')+'/media/uploadStatus', {
 					callbackKey: 'callback',
 					params: {
 						key: Curriki.current.uuid,
@@ -2804,7 +2804,7 @@ Curriki.module.addpath.init = function(){
 
 			Curriki.current.videoErrorCallback = function(error){
 				console.log('Video Upload Error', error);
-				Ext.Msg.alert(_('add.video.cannot.process.title'), _('add.video.cannot.process.txt'));
+				Ext.Msg.alert(_('add.video.cannot.process.title'), _('add.video.cannot.process.txt', _(error.msg)));
 				var btns = Ext.Msg.getDialog().buttons;
 				btns[0].addClass('btn-next'); // OK
 				btns[1].addClass('btn-next'); // YES
@@ -2818,7 +2818,8 @@ Curriki.module.addpath.init = function(){
 					return;
 				}
 
-				if (data.complete) {
+                if(console) console.log("Complete? " + data.complete + ", Error? " + data.error);
+                if (data.complete) {
 					if (data.error || data.success) {
 						Curriki.current.uploading = false;
 						Ext.TaskMgr.stop(Curriki.current.videoStatusTask);

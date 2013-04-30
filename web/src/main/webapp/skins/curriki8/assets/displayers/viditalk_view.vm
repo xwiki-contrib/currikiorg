@@ -1,15 +1,20 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #asset_displaycontentheader("text-align:center;")
 #set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
 #set($video_id = $objVT.id)
-#if($viditalk_counter)
-#set($viditalk_counter = $viditalk_counter + 1)
-#else
-#set($viditalk_counter = 1)
-#end
-#set($vidDiv = "div_vidiplayback_${viditalk_counter}")
 ## Set $video_id if not already set
-#if(!$video_id)
-#if(!$request.vid)
+#if("$!video_id"=="")
+#if("$!request.vid"=="")
 ## Just a test code for now
 #set($video_id = "FbLBbkGm5dORWYOQ")
 #else
@@ -17,7 +22,7 @@
 #end
 #end
 <div class="asset-display-media">
-    <div class="asset-display-media-inner">
+    <div class="asset-display-media-inner" style="width:80%; margin: 0 auto;">
         #set($caption = "")
         #set($caption = $!asset.caption_text)
         #if("$!caption" == "")
@@ -26,39 +31,28 @@
         <p>
             $caption
         </p>
-        <div style="height:320px; width:470px; margin: 0 auto;" id="$vidDiv">
-            $msg.get('viditalk.loading_player')
+        <div style="height:320px; width:480px; margin: 0 auto; display: inline-block; " id="video_div_$video_id">
+            <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('video.player.loading'))"
+                    src="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/${video_id}-lq.jpg" width="474">
         </div>
-    #set($MEDIAHOST=$xwiki.curriki.getPublicCurrikiConfig("mediahost","MEDIAHOST_MISSING"))##
-	<script type="text/javascript" src="http://${MEDIAHOST}/video/js/video.js"></script>
-        <script language="javascript" type="text/javascript">
-            // embedVidiPlayback(div_id, sc, mediaId, autoplay, width, height, stretchPlayer, skinLoc, shareUrl, allowFullScreen)
-            embedVidiPlayback("$vidDiv", "$msg.get('viditalk.sitecode')", "$video_id", null, null, null, null, null, null, true);
-        </script>
+        <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)");</script>
     </div>
+    <p><a href="#" onclick="videoDisplayEmbedCode('$doc.fullName'); return false;" alt="$msg.get('video.embed.link.tooltip')">$msg.get("video.embed.link.text")</a></p>
 </div>
-#set($origVideo = $xwiki.getURLContent("http://${MEDIAHOST}/video/url/orig/$video_id"))
-#if("$!origVideo"=="") ##{
-	#set($has_origVideo = false)
-#else ##}{
-	#set($has_origVideo = true)
-	#set($fileext = $origVideo.substring($origVideo.lastIndexOf(".")).substring(1).toLowerCase())
-#end ##}
-#if ($has_origVideo) ##{
-	#set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
-<div class="asset-display-download">
-    <div class="asset-display-download-inner subcategory-video_viditalk filetype-$streamFileext">
-	<p><strong>$msgtext</strong>
+
+<div class="asset-display-download" id="download_original_${video_id}_div" style="display:none">
+    ## will be set to displayed by the javascript, if available
+    <div class="asset-display-download-inner subcategory-video_viditalk">
+	<p><strong>$msg.get("rve.content.view.download.instruction_title.single_file")</strong>
 	    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip.viditalk")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
 	</p>
     </div>
 ##
-    <div class="asset-display-download-inner filetype-${fileext}">
-
+    <div class="asset-display-download-inner"> ## filetype-$streamFileext
         #set($requireLogin= (!$viewer.startsWith("embed")) && $context.user=="XWiki.XWikiGuest")
-      <a class="icon-link" href="$origVideo"
+      <a class="icon-link" href="$origVideo" id='video_download_link_${video_id}_text'
         #if($requireLogin) ##
-          onclick="Curriki.logView('/Download/will/viditalk/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}' + Curriki.ui.login.readScrollPos())); return false;" ##
+          onclick="Curriki.logView('/Download/will/viditalk/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos())); return false;" ##
         #else
           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');"
         #end ##
@@ -66,12 +60,11 @@
 ##
      <p class="text-link">
 		##<a onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');" href="$origVideo">$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
-        <a href="$origVideo"
+        <a id='video_download_link_${video_id}'
        #if($requireLogin)##
-           #set($target="${origVideo}?force%2Ddownload=1")##
-           onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}&' + Curriki.ui.login.readScrollPos()); return false;" ##
+           onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos()); return false;" ##
        #else##
-           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${origVideo}?force%2Ddownload=1'; return false;"##
+           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${assetAttachmentFilename}'); videoDownloadOriginal('${video_id}'); return false;"##
        #end##
                 >$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
 ##
@@ -85,17 +78,15 @@
         *#
         <button class="button-link button-link-download" ##
            #if($requireLogin)##
-               #set($target="${origVideo}?force%2Ddownload=1")##
                ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
-               onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}' + Curriki.ui.login.readScrollPos()); return false;"##
+               onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos()); return false;"##
                    >$msg.get("login.button_login_to_download")
            #else##
                ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
-               onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original'); location = '${origVideo}?force%2Ddownload=1'; return false;"##
+               onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original'); videoDownloadOriginal('${video_id}'); return false;"##
                    >$msg.get("rve.content.view.download.download_button")
            #end##
         </button>
 </div>
 </div>
-#end ##}
 #asset_displaycontentfooter()

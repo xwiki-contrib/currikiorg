@@ -5,7 +5,7 @@ cd $DIR
 
 COMPRESSOR="./compressor/yuicompressor-2.4.2.jar"
 
-COMPRESS_JS="java -jar $COMPRESSOR --type js "
+COMPRESS_JS="java -jar $COMPRESSOR --line-break 80 --type js "
 COMPRESS_CSS="java -jar $COMPRESSOR --type css "
 
 UNCOMPRESS_JS="cat"
@@ -35,6 +35,7 @@ CURRIKI="\
 	curriki/ui/curriki-ui.js \
 	curriki/ui/curriki-login.js \
 	curriki/ui/rating.js \
+	curriki/ui/curriki-video.js\
 	"
 
 cat $CURRIKI | $UNCOMPRESS_JS > ../webapp/js/curriki-main-debug.js

@@ -269,13 +269,13 @@ public class CTVRepresentation extends StreamRepresentation {
                                     System.err.println("Rights: view: " + canUserRead(right) + ", edit:" + canUserModify(right) + ", delete:" + canUserDelete(assetpage) +".");
                                     // TODO: convert the label "rights" to "ownership"
                                     if(canUserModify(right))
-                                        out.write("{rights:{'view':true, 'edit':true, 'delete': ");
+                                        out.write("{\"rights\":{\"view\":true, \"edit\":true, \"delete\": ");
                                     else
-                                        out.write("{rights:{'view':true, 'edit':false, 'delete': ");
+                                        out.write("{\"rights\":{\"view\":true, \"edit\":false, \"delete\": ");
                                     if(canUserDelete(assetpage)) out.write("true},"); else out.write("false},");
                                     out.write(value.substring(1));
                                 } else { // no read allowance
-                                    out.write("{rights:{'view':false, 'edit':false, 'delete': false}, assetpage: \"" + assetpage + "\",");
+                                    out.write("{\"rights\":{\"view\":false, \"edit\":false, \"delete\": false}, \"assetpage\": \"" + assetpage + "\",");
                                     out.write(ghostSubAssetInfoJson);
                                 }
                             } catch (Exception e) {

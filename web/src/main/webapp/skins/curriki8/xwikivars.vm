@@ -31,12 +31,13 @@
 #set($hasSpaceAdmin = $xwiki.hasAccessLevel("admin", $context.user, "${doc.space}.WebPreferences"))
 #set($isReadOnly = $xwiki.isReadOnly())
 ## no real need $xwiki.curriki.ensureUsernameCookie($request, $response, $context.user)
-#set($debugCookie = $xwiki.getUserPreferenceFromCookie("cdbg"))
-#if("$!debugCookie" == "" && "$!xwiki.curriki.getPublicCurrikiConfig('globalDebug')"=="")##{
-#set($globalDebug = false)##
+#set($debugCookie = "$!xwiki.getUserPreferenceFromCookie('cdbg')")
+#if("$!debugCookie" == "" && "$!xwiki.curriki.getPublicCurrikiConfig('globalDebug','-missing-config-')"=="")##{
+    #set($globalDebug = false)##
 #else##}{
-#set($globalDebug = true)##
+    #set($globalDebug = true)##
 #end##}
+## <!-- globalDebug is $globalDebug debugCookie is "$debugCookie", config is $!xwiki.curriki.getPublicCurrikiConfig('globalDebug', '-missing-config-') -->
 #set($gVersion = $xwiki.version.replaceAll('.*\.', ''))
 #set($spaceViewUrl = $spaceDoc.getURL("view"))
 #set($viewUrl = $doc.getURL("view"))
@@ -82,7 +83,10 @@
 #end
 #template("deprecatedVars.vm")
 #set($hostname=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config'))
-#set($GA_uacct=$xwiki.curriki.getPublicCurrikiConfig('GA'))
+#set($GA_uacct=$xwiki.curriki.getPublicCurrikiConfig('GA', "-missing-curriki.system.GA"))
+#set($ADDTHIS_acct=$xwiki.curriki.getPublicCurrikiConfig('addthis',"0"))
+
+
 #set ($isInServletMode = $xwikimode == 0)
 #set ($isInPortletMode = $xwikimode == 1)
 ##
