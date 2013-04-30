@@ -39,7 +39,10 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
         if(im) {
             im=im.parent();
             im.setSize(320, 80);
-            im.update("<div width='320' height='240'><p>"+_(sources)+"</p></div>")
+            var m = _(sources);
+            if(sources.startsWith("video.errors."));
+                m = m + "</p><p style='font-size:small'>" + _(sources + ".details");
+            im.update("<div width='320' height='240'><p>"+m+"</p></div>")
         }
     } else if (typeof(sources)=="object") {
         if(im) {
