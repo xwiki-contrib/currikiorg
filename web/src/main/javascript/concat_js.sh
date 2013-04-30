@@ -155,19 +155,10 @@ EMBEDDED_SEARCH="\
 cat $EMBEDDED_SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-embedded-search-startup-debug.js
 cat $EMBEDDED_SEARCH | $COMPRESS_JS > ../webapp/js/curriki-embedded-search-startup.js
 
-## The generic advanced search frame 
-
-ADVANCED_SEARCH_FRAME="\
-	curriki/embeddedsearch/advancedSearchFrame.html
-	"
-cat $ADVANCED_SEARCH_FRAME | $UNCOMPRESS_JS > ../webapp/js/advancedSearchFrame.html
-
-
 EXT_EMBEDDED_HISTORY="\
 	curriki/embeddedsearch/ext-embedded-history.js
 	"
 cat $EXT_EMBEDDED_HISTORY | $UNCOMPRESS_JS > ../webapp/js/ext-embedded-history.js
-
 
 IE_CONSOLE_FIX="\
 	curriki/embeddedsearch/ie-console-fix.js
