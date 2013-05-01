@@ -566,10 +566,11 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
   *#
 #macro(asset_info_subject $asset $popup)
 <ul class="asset-info-subject">
-    #set($subjects = $!asset.getValue("fw_items"))
+    <!-- $asset.use("CurrikiCode.AssetClass") -->
+    #set($subjects = $!asset.getValue("fw_items"))##
     #set($subjectCounter = 0)
     #foreach($subject in $subjects)
-     #if($subject!="FW_masterFramework.WebHome")
+    #if($subject!="FW_masterFramework.WebHome")
       #set($subjectCounter = $subjectCounter + 1)
       #if(!$popup || $subjectCounter<3)
          #set($parentSubject = $xwiki.getDocument($subject).parent)
