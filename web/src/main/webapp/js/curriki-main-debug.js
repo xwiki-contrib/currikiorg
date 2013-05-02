@@ -4234,7 +4234,7 @@ Ext.reg('rating', Curriki.ui.Rating);
 // -- window.videoPrefixToDownload = "http://media.dev.curriki.org/---"; (the video hosting server, including jwplayer code and videos)
 
 
-function videoInsert(videoId, title) {
+function videoInsert(videoId, title, rscName) {
     // insert script
     var sizeScript = document.createElement('script'); sizeScript.type = 'text/javascript';
     sizeScript.src = window.videoPrefixToDownload + videoId + "-sizes.js";
@@ -4242,7 +4242,9 @@ function videoInsert(videoId, title) {
     s.parentNode.insertBefore(sizeScript, s);
 
     if(typeof(window.videoTitles)!="object") window.videoTitles = new Object();
+    if(typeof(window.videoFullNames)!="object") window.videoFullNames= new Object();
     window.videoTitles[videoId] = title;
+    window.videoFullNames[videoId] = rscName;
     window.setTimeout("videoWatchSizesArrived('"+videoId+"');", 50)
 }
 
@@ -4271,8 +4273,9 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
             im=im.parent();
             im.setSize(320, 80);
             var m = _(sources);
-            if(sources.startsWith("video.errors."));
-                m = m + "</p><p style='font-size:small'>" + _(sources + ".details");
+            var mailTo = "mailto:" + _('video.errors.reportErrorsToEmail') + '?subject=' + encodeURI(_(m)) + '&body=' + encodeURI(_(sources + ".details", [videoId, mailTo]));
+            if(sources.startsWith("video.errors.") || sources.startsWith("video.processingMessages"));
+                m = m + "</p><p style='font-size:small'>" + _(sources + ".details", [videoId, mailTo]);
             im.update("<div width='320' height='240'><p>"+m+"</p></div>")
         }
     } else if (typeof(sources)=="object") {
@@ -4284,7 +4287,8 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
             var s = sources[i];
             s.file = window.videoPrefixToDownload + s.file;
         }
-        var sharingURL = "http://"+ location.host + "/xwiki/bin/view/" + rsrcName.replace('\\.','/')  +"?viewer=embed";
+        var rsrcName = window.videoFullNames[videoId];
+        var sharingURL = "http://"+ location.host + "/xwiki/bin/view/" + rsrcName.replace('.','/')  +"?viewer=embed";
         var sharingCode = "<iframe width='558' height='490' \n src='"+sharingURL+"'></iframe>";
 
         jwplayer("video_div_" + videoId).setup({
@@ -4293,13 +4297,14 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
                 sources: sources,
                 //title: window.videoTitles[videoId],
                 width: sources[0].width,
-                height: sources[0].height,
-                sharing: {
-                    code: encodeURI(sharingCode),
-                    url: sharingURL
-                }
+                height: sources[0].height
             }],
-            ga: {}
+            ga: {},
+            sharing: {
+                code: encodeURI(sharingCode),
+                link: sharingURL,
+                title: _('video.sharing.title')
+            }
         });
     }
     var origPath = window['video_' + videoId + "_originalName"];
