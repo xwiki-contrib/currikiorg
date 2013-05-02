@@ -53,14 +53,22 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
             var s = sources[i];
             s.file = window.videoPrefixToDownload + s.file;
         }
+        var sharingURL = "http://"+ location.host + "/xwiki/bin/view/" + rsrcName.replace('\\.','/')  +"?viewer=embed";
+        var sharingCode = "<iframe width='558' height='490' \n src='"+sharingURL+"'></iframe>";
+
         jwplayer("video_div_" + videoId).setup({
             playlist: [{
                 image: window.videoPrefixToDownload + sources[0].image,
                 sources: sources,
                 //title: window.videoTitles[videoId],
                 width: sources[0].width,
-                height: sources[0].height
-            }]
+                height: sources[0].height,
+                sharing: {
+                    code: encodeURI(sharingCode),
+                    url: sharingURL
+                }
+            }],
+            ga: {}
         });
     }
     var origPath = window['video_' + videoId + "_originalName"];
@@ -104,34 +112,5 @@ function videoQualityChange(evt) {
 function videoDownloadOriginal(videoId) {
     var p = window['video_' + videoId + "_originalName"];
     location.href= window.videoPrefixToDownload.replace('/deliver/', '/original/') + p + "?forceDownload=1";
-    return false;
-}
-
-function videoDisplayEmbedCode(rsrcName) {
-    var code="  <iframe width='558' height='490' \n src='http://"+ location.host + "/xwiki/bin/view/" + rsrcName.replace('\\.','/')  +"?viewer=embed'></iframe>";
-    code = "<div style='margin:1em'><h1>"+_("video.embed.title")+"</h1><p>"+_("video.embed.intro")+ "</p>" +
-        "<code>\n" + code.replace(/&/g,"&amp;").replace(/</g, "&lt;").replace(/>/g,"&gt;")+
-        "</code>" +
-        "<p align='right'><span><input type='button' class='button-grey' value='" + _("video.embed.okButton") + "' style='padding: 3pt 6pt; font-size: 11px;' onclick='window.embedDialog.close()'/></span></span></p></div>";
-    window.embedDialog = new Ext.Window({
-        title:_("video.embed.title"),
-        border:false,
-        id: 'embedDialog',
-        scrollbars: false
-        ,modal:true
-        ,width: 720
-        ,minWidth:500
-        ,minHeight:400
-        ,maxHeight:575
-        ,autoScroll:false
-        ,constrain:true
-        ,collapsible:false
-        ,closable:true
-        ,resizable:true
-        ,shadow:false
-        ,defaults:{border:false}
-        ,html: code
-    });
-    window.embedDialog.show();
     return false;
 }

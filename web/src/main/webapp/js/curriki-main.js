@@ -618,18 +618,16 @@ a.parentNode.insertBefore(d,a);if(typeof(window.videoTitles)!="object"){window.v
 if(typeof(window.numWatches[c])!="number"){window.numWatches[c]=0}if(b){videoNotifyVideoSizeArrived(c,b)
 }else{if(window.numWatches[c]<500){var a=50;window.numWatches[c]=window.numWatches[c]+1;
 if(window.numWatches[c]>200){a=a*5}window.setTimeout("videoWatchSizesArrived('"+c+"');",a)
-}}}function videoNotifyVideoSizeArrived(g,c){var b=Ext.get("video_img_"+g+"_image");
-if(typeof(c)=="string"){if(console){console.log("size is still a string, display it: "+c)
-}if(b){b=b.parent();b.setSize(320,80);var a=_(c);if(c.startsWith("video.errors.")){}a=a+"</p><p style='font-size:small'>"+_(c+".details");
-b.update("<div width='320' height='240'><p>"+a+"</p></div>")}}else{if(typeof(c)=="object"){if(b){b.setSize(c[0].width,c[0].height);
-b.dom.setAttribute("src",window.videoPrefixToDownload+c[0].image)}for(var d=0;d<c.length;
-d++){var e=c[d];e.file=window.videoPrefixToDownload+e.file}jwplayer("video_div_"+g).setup({playlist:[{image:window.videoPrefixToDownload+c[0].image,sources:c,width:c[0].width,height:c[0].height}]})
-}}var f=window["video_"+g+"_originalName"];if(f){Ext.get("download_original_"+g+"_div").setVisible(true);
-var h=f.substring(f.lastIndexOf(".")+1);Ext.get("download_original_"+g+"_div").addClass("filetype-"+h);
-Ext.get("video_download_link_"+g).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+f+"?forceDownload=1");
-Ext.get("video_download_link_"+g+"_text").dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+f+"?forceDownload=1")
+}}}function videoNotifyVideoSizeArrived(g,a){var h=Ext.get("video_img_"+g+"_image");
+if(typeof(a)=="string"){if(console){console.log("size is still a string, display it: "+a)
+}if(h){h=h.parent();h.setSize(320,80);var c=_(a);if(a.startsWith("video.errors.")){}c=c+"</p><p style='font-size:small'>"+_(a+".details");
+h.update("<div width='320' height='240'><p>"+c+"</p></div>")}}else{if(typeof(a)=="object"){if(h){h.setSize(a[0].width,a[0].height);
+h.dom.setAttribute("src",window.videoPrefixToDownload+a[0].image)}for(var d=0;d<a.length;
+d++){var l=a[d];l.file=window.videoPrefixToDownload+l.file}var b="http://"+location.host+"/xwiki/bin/view/"+rsrcName.replace("\\.","/")+"?viewer=embed";
+var f="<iframe width='558' height='490' \n src='"+b+"'></iframe>";jwplayer("video_div_"+g).setup({playlist:[{image:window.videoPrefixToDownload+a[0].image,sources:a,width:a[0].width,height:a[0].height,sharing:{code:encodeURI(f),url:b}}],ga:{}})
+}}var e=window["video_"+g+"_originalName"];if(e){Ext.get("download_original_"+g+"_div").setVisible(true);
+var k=e.substring(e.lastIndexOf(".")+1);Ext.get("download_original_"+g+"_div").addClass("filetype-"+k);
+Ext.get("video_download_link_"+g).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1");
+Ext.get("video_download_link_"+g+"_text").dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1")
 }}function videoDownloadOriginal(b){var a=window["video_"+b+"_originalName"];location.href=window.videoPrefixToDownload.replace("/deliver/","/original/")+a+"?forceDownload=1";
-return false}function videoDisplayEmbedCode(a){var b="  <iframe width='558' height='490' \n src='http://"+location.host+"/xwiki/bin/view/"+a.replace("\\.","/")+"?viewer=embed'></iframe>";
-b="<div style='margin:1em'><h1>"+_("video.embed.title")+"</h1><p>"+_("video.embed.intro")+"</p><code>\n"+b.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</code><p align='right'><span><input type='button' class='button-grey' value='"+_("video.embed.okButton")+"' style='padding: 3pt 6pt; font-size: 11px;' onclick='window.embedDialog.close()'/></span></span></p></div>";
-window.embedDialog=new Ext.Window({title:_("video.embed.title"),border:false,id:"embedDialog",scrollbars:false,modal:true,width:720,minWidth:500,minHeight:400,maxHeight:575,autoScroll:false,constrain:true,collapsible:false,closable:true,resizable:true,shadow:false,defaults:{border:false},html:b});
-window.embedDialog.show();return false};
+return false};
