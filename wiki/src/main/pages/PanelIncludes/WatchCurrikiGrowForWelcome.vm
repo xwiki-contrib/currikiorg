@@ -3,6 +3,7 @@
 ##
 ##
 $context.setCacheDuration(1200)##
+<!-- this count page is updated every hour, eight minutes after the hour (0:08, 1:08, ...) -->
 #set($targetURL="/xwiki/bin/view/Registration/DirectLogin")##
 #set($anchorAtts="href='$targetURL' onclick='Curriki.ui.login.displayLoginDialog(&quot;/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&quot;); return false;'")##
 #set($numResources = $xwiki.curriki.countDocsSolrCatchAll("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))##

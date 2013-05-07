@@ -1,6 +1,13 @@
+<h1>$msg.get("join.login.header.alternative")</h1>
+<p style="clear:both"></p>
+<p></p>
+<h3 >Why isn’t the standard login working for me?</h3>
+<p>Often school and corporate networks prevent access to sites using a secure protocol or only allow specific sites access. Use the login below to avoid an issue identified at a number of schools and districts using proxy servers.</p>
+
+</ol>
 <form id="loginForm" action="/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup"
       onsubmit="if(Curriki.ui.login.validateLoginForm()) {Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
-<!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest")
+    <!-- session's message: $!request.session.getAttribute("messagesForNextLoginRequest")
     request's messages: $!{request.message} -->
     #set($message="$!{request.session.getAttribute('messagesForNextLoginRequest')}$!{request.message}")
     #set($userName=$!request.j_username)
@@ -8,17 +15,26 @@
         $request.session.removeAttribute("messagesForNextLoginRequest")
     #end
     #if($!message.length()>0)
-      <!-- previous login errors: $message -->
-      #error($msg.get("$message"))
-      #logViewScript("/join/entry/error")
+        <!-- previous login errors: $message -->
+        #error($msg.get("$message"))
+        #logViewScript("/join/entry/error")
     #end
-<div id="joinformleftblock" class="xwikilogintable" summary="$msg.get("join.login.header")">
-        <h2>$msg.get("join.login.header")</h2>
-    <p><label for="j_username">$msg.get('join.login.username')</label>
-      <input type="text" id="j_username" name="j_username" value="$escapetool.html("$!userName")"/></p>
-    <p><label for="j_password">$msg.get('join.login.password')</label>
-      <input type="password" id="j_password" name="j_password" value=""/></p>
-    <p>&nbsp;</p>
-    <table border='0' width="80%" align="right"><tr><td></td>
-        <td id="login_submit"><input type="submit" class="button" value="$msg.get('join.login.button')"/></td></tr></table>
-</div>
+    <div id="manualjoin" summary="$msg.get("join.login.header")" style="margin-left: 1px; width:200px">
+
+        <p><label for="j_username"><b>$msg.get('join.login.username')</b></label>
+            <input type="text" size="35" id="j_username" name="j_username"  required = "required" autofocus = "autofocus"  autocomplete = "off" value="$escapetool.html("$!userName")"/></p>
+        <p><label for="j_password"><b>$msg.get('join.login.password')</b></label>
+            <input type="password" size="23" id="j_password" name="j_password"  required = "required" autocomplete = "off" value=""/></p>
+        <p>&nbsp;</p>
+
+        <table border='0' width="80%" align="left"><tr><td></td>
+            <td id="login_submit"><input type="submit" class="button" value="$msg.get('join.login.button')"/></td></tr></table>
+    </div>
+    <br />
+    <br />
+    <br />
+    <h3 >Please Help Us Solve Login Problems for Everyone</h3>
+    <p>Please also contact the IT department of your organization and have them add www.curriki.org to their list of accepted sites. This list is often called a "white list". Once added the Standard Login might, or might not work correctly.</p>
+
+    <p>If white-listing does not solve the issue with the standard login process. Please copy the information displayed using this link <a href="http://www.curriki.org/xwiki/bin/view/Util/HttpInfo?xpage=popup" target=_blank"><b>HTTP Information</b></a> and email the results to our <a href="mailto:webmaster@curriki.org?subject=HTTP  Information"><b>Web Master</b></a>.</p>
+    <p>Thank you for your help! The Curriki Team</p>
