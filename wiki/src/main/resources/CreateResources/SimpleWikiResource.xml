@@ -7,20 +7,20 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.superadmin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.superadmin</contentAuthor>
 <creationDate>1239225185000</creationDate>
-<date>1332456461000</date>
-<contentUpdateDate>1332456461000</contentUpdateDate>
-<version>5.1</version>
+<date>1368118163000</date>
+<contentUpdateDate>1368118163000</contentUpdateDate>
+<version>60.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
-<syntaxId>xwiki/1.0</syntaxId>
+<syntaxId>xwiki/2.0</syntaxId>
 <hidden>false</hidden>
 <object>
 <class>
@@ -52,12 +52,13 @@
 <name>CreateResources.SimpleWikiResource</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>279d5df1-dc55-4c91-976b-bd7f34a1341b</guid>
+<guid>ec5b86d4-7eb6-4fea-8d0a-fe427be5f7d7</guid>
 <property>
 <tags/>
 </property>
 </object>
-<content>## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/SimpleWikiResource
+<content>{{velocity}}
+## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/SimpleWikiResource
 ## originally from http://next.dev.curriki.org/xwiki/bin/view/Groups/CreateNewGroup?viewer=code&amp;showlinenumbers=0&amp;language=en
 ## NPM attempting to emulate first form in http://www.curriki.org/xwiki/bin/view/Project/Form+Templates?xpage=print&amp;language=en
 ##
@@ -73,7 +74,7 @@
   ##
   ## ----- OK, WE HAVE AUTHORITY SETUP THE FORM POST/GET ETC  -----
   ##
-  #includeMacros("CreateResources.StyledMacros")
+  #includeMacros("CreateResources.StyledMacros20")
   ##  parameters passed by other forms or itself
   #set( $pageName   = $request.getParameter("pageName") )
   #set( $cameFrom   = $request.getParameter("cameFrom") )
@@ -89,10 +90,11 @@
   #else ## } {
     ## empty pageName means no asset... so create new one. This is "default" action
      #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
-     ## note-below: &lt;input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/&gt;
+     ## note-below: &lt;input type="hidden" name="pageName" value="$!newAsset.fullName"  /&gt;
      ## so followup POSTs set pageName to newly created asset, i.e. condition below:
   #end ## }
   #if( "$!newAsset"=="" ) ## {
+    {{html}}
     #if( "$!pageName" != "" )&lt;p&gt;asset creation error:&lt;/p&gt;#else&lt;p&gt;asset lookup error:&lt;/p&gt;#end
     &lt;dl&gt;
       &lt;dt&gt;request.method&lt;/dt&gt;&lt;dd&gt;$!request.method&lt;/dd&gt;
@@ -103,6 +105,7 @@
       &lt;dt&gt;getParameter("parentPage")&lt;/dt&gt;&lt;dd&gt;$!parentPage&lt;/dd&gt;
       &lt;dt&gt;getParameter("publishSpace")&lt;/dt&gt;&lt;dd&gt;$!publishSpace&lt;/dd&gt;
     &lt;/dl&gt;
+    {{/html}}
   #else ## } ----- $newAsset defined for entire branch below ----- {
   ## create or get newTextAsset -- used to display WYSIWYG editor
   #if( !$newAsset.getObject("CurrikiCode.TextAssetClass") ) ## {
@@ -118,14 +121,14 @@
 ##
 ## ---------- JAVASCRIPT SPECIFICALLY FOR THIS FORM ----------
 ##
-{pre}
+{{html clean=false}}
 &lt;style type="text/css"&gt;
 .curriki-form1 .mceEditorIframe { height: 410px !important; width: 100%  !important; }
-input {	width:expression(this.type=="text" ? "83%" : "style"); }
+input { width:expression(this.type=="text" ? "83%" : "style"); }
 &lt;/style&gt;
-&lt;script type="text/javascript" src="/xwiki/resources/js/yui/yahoo/yahoo-min.js" &gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="/xwiki/resources/js/yui/treeview/treeview-min.js" &gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="/xwiki/resources/js/yui/treeview/checknode.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="$xwiki.getSkinFile('js/yui/yahoo/yahoo-min.js')" &gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="$xwiki.getSkinFile('js/yui/treeview/treeview-min.js')" &gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="$xwiki.getSkinFile('js/yui/treeview/checknode.js')"&gt;&lt;/script&gt;
 &lt;script language="javascript" type="text/javascript"&gt;
 
 // ----------------------------------- override YUI checknode method -------------------
@@ -387,126 +390,155 @@ function setUnloadDialog() {
   needUnloadDialog = true;
 }
 /* ]]&gt; */
-&lt;/script&gt;{/pre}
+&lt;/script&gt;
+{{/html}}
 #set( $noDialogs = $request.getParameter("noDialogs") )  ## ?noDialogs=1 turns off add-path dialogs, for testing, or to enable "edit-again"
-  ##
-  ## -------------------- THE MAIN DISPLAY --------------------
-  ##
-  &lt;div class="header"&gt;
-  #curriki_formtitle($msg.get("form.scratch.title"))
-  $msg.get("form.scratch.title.description") &lt;a href="$msg.get('form.title.description.link1.url')" target="_blank"&gt;$msg.get("form.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('form.title.description.link3.url')" target="_blank"&gt;$msg.get("form.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;img src="$msg.get('form.title.description.link2.thumbnail')" align="middle"&gt;&lt;a href="$msg.get('form.title.description.link2.url')" target="_blank"&gt;$msg.get("form.title.description.link2")&lt;/a&gt;
-  &lt;br /&gt;$msg.get("form.required.fields.instruction")
-  &lt;/div&gt;
-  ##
-  ## --------------------FORM ITSELF --------------------
-  ##
-  ## NB: default action goes back to this form, which shouldnt happen, because,
-  ## after successful validation via call to checkSimpleResourceForm(), the button
-  ## below sets document.forms.inline.action='$msg.get("form.done.url")'
-  ##
-  &lt;form action="" class="curriki-form1" id="inline" method="post"&gt;
-  ##
-  ## Xredirect foo
-  ##
-  &lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" /&gt;
-  ##
-  ## XWiki.AssetClass_0_category is a "fake" property named "category" in XWiki.AssetClass.
-  ## This is forced here to value "text". This hidden field is passed to AssetDone
-  ## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
-  &lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" /&gt;
-  &lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt;
-  ## successMessage is a hidden field that is set to a string in validation javascript
-  ## after successful validation. If AssetDone gets a POST with the default value of "" set here
-  ## it will ignore the post as it means it's not validated.
-  &lt;input type="hidden" 	name="successMessage" id="successMessage" value=""      /&gt;
-  &lt;input type="hidden" 	name="page"		value="$!request.page"		/&gt;
-  &lt;input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/&gt;
-  &lt;input type="hidden"	name="publishSpace"	value="$!publishSpace"		/&gt;
-  &lt;input type="hidden"	name="parentPage"	value="$!parentPage"		/&gt;
-#if( "$!noDialogs"!="" )                ## { when ?noDialogs=... argument set, pass it on to AssetDone
-  &lt;input type="hidden"	name="noDialogs"	value="$noDialogs"		/&gt;
-#else                                   ## } {  -- ?noDialogs... not set, pass parameters used for add-path dialogs
-  &lt;input type="hidden"	name="flow"		value="$!flow"			/&gt;
-  &lt;input type="hidden"	name="createLessonURL"		value="$msg.get('form.scratch.url')"	/&gt; ## for ICT
-  &lt;input type="hidden"	name="cameFrom"
-  #if( "$!cameFrom"=="" )              ## {
+##
+## -------------------- THE MAIN DISPLAY --------------------
+##
+{{html clean=false}}
+&lt;div class="header"&gt;
+{{/html}}
+#curriki20_formtitle($msg.get("form.scratch.title"))
+{{html clean=false}}
+$msg.get("form.scratch.title.description") &lt;a href="$msg.get('form.title.description.link1.url')" target="_blank"&gt;$msg.get("form.title.description.link1")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;a href="$msg.get('form.title.description.link3.url')" target="_blank"&gt;$msg.get("form.title.description.link3")&lt;/a&gt;&lt;span class="separator"&gt;&amp;nbsp;|&amp;nbsp;&lt;/span&gt;&lt;img src="$msg.get('form.title.description.link2.thumbnail')" align="middle"&gt;&lt;a href="$msg.get('form.title.description.link2.url')" target="_blank"&gt;$msg.get("form.title.description.link2")&lt;/a&gt;
+&lt;br /&gt;$msg.get("form.required.fields.instruction")
+&lt;/div&gt;
+{{/html}}
+##
+## --------------------FORM ITSELF --------------------
+##
+## NB: default action goes back to this form, which shouldnt happen, because,
+## after successful validation via call to checkSimpleResourceForm(), the button
+## below sets document.forms.inline.action='$msg.get("form.done.url")'
+##
+{{html clean=false}}
+&lt;form action="" class="curriki-form1" id="inline" method="post"&gt;
+##
+## Xredirect foo
+##
+&lt;input type="hidden" name="xredirect" value="$xwiki.getFormEncoded($xwiki.getRequestURL())" /&gt;
+##
+## XWiki.AssetClass_0_category is a "fake" property named "category" in XWiki.AssetClass.
+## This is forced here to value "text". This hidden field is passed to AssetDone
+## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
+&lt;input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" /&gt;
+&lt;input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /&gt;
+## successMessage is a hidden field that is set to a string in validation javascript
+## after successful validation. If AssetDone gets a POST with the default value of "" set here
+## it will ignore the post as it means it's not validated.
+&lt;input type="hidden"  name="successMessage" id="successMessage" value="" /&gt;
+&lt;input type="hidden"  name="page"         value="$!request.page"    /&gt;
+&lt;input type="hidden"  name="pageName"     value="$!newAsset.fullName"  /&gt;
+&lt;input type="hidden"  name="publishSpace" value="$!publishSpace"    /&gt;
+&lt;input type="hidden"  name="parentPage"   value="$!parentPage"    /&gt;
+#if( "$!noDialogs"!="" )                
+  ## when ?noDialogs=... argument set, pass it on to AssetDone
+  &lt;input type="hidden" name="noDialogs"  value="$noDialogs"    /&gt;
+#else                                   
+  ## ?noDialogs... not set, pass parameters used for add-path dialogs
+  &lt;input type="hidden" name="flow" value="$!flow" /&gt;
+  &lt;input type="hidden" name="createLessonURL" value="$msg.get('form.scratch.url')" /&gt; ## for ICT
+  &lt;input type="hidden" name="cameFrom"
+  #if( "$!cameFrom"=="" )
    value="$msg.get('form.scratch.url')" ## default cameFrom to this form
-  #else                                ## } {
-   value="{pre}$!cameFrom{/pre}"                  ## pass along cameFrom
-  #end                                 ## }
+  #else
+   value="$!cameFrom"                   ## pass along cameFrom
+  #end
   /&gt;
-#end                                   ## }
-#####################################################################
-  #curriki_formpart_begin($msg.get("form.scratch.step1.header")) ## {
-  #curriki_forminstructions($msg.get("form.scratch.step1.instruction"))
-  #curriki_formprompt($msg.get("sri.title_title"), $msg.get("form.scratch.title_tooltip"), $msg.get("form.scratch.title_txt"), true, "medium")
-  ##$newAsset.display("title","edit")
-  &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
-  #curriki_formprompt($msg.get("sri.description_title"), $msg.get("form.scratch.description_tooltip"), $msg.get("form.scratch.description_txt"), true, "medium")
-  $newAsset.display("description","edit")
-  &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
-  #curriki_formprompt($msg.get("sri.fw_items_title"), $msg.get("sri.fw_items_tooltip"), $msg.get("sri.fw_items_txt"), true, "")
-  $newAsset.display("fw_items","edit")
-  &lt;/td&gt;&lt;td&gt;
-  #curriki_formprompt($msg.get("sri.educational_level_title"), $msg.get("sri.educational_level_tooltip"), $msg.get("sri.educational_level_txt"), true, "medium")
-  $newAsset.display("educational_level","edit")
-  &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt; ##class="subject-educational"
-  #curriki_formprompt($msg.get("sri.instructional_component2_title"), $msg.get("sri.instructional_component2_tooltip"), $msg.get("sri.instructional_component2_txt"), true, "medium")
-  $newAsset.display("instructional_component","edit")
-  #curriki_formprompt($msg.get("sri.keywords_title"), $msg.get("sri.keywords_tooltip"), $msg.get("sri.keywords_txt"), false, "medium")
-  $newAsset.display("keywords","edit")
-  #curriki_formprompt($msg.get("sri.language_title"), $msg.get("sri.language_tooltip"), $msg.get("sri.language_txt"), false, "medium")
-  $newAsset.display("language","edit")
-  #curriki_formpart_end() ## }
-#####################################################################
-  #curriki_formpart_begin($msg.get("form.scratch.step2.header")) ## {
-  #curriki_forminstructions($msg.get("form.scratch.step2.instruction"))
-  #curriki_formprompt($msg.get("form.scratch.step2.content.title"), "", $msg.get("form.scratch.step2.content.instruction"), true, "medium")
-  ##$newTextAsset.display("text", "edit") ##WYSIWYG editor
-  &lt;textarea id='slp_text' name='slp_text'&gt;&lt;/textarea&gt;
-  #curriki_formpart_end() ## }
-#####################################################################
-#curriki_createresources_step3()
-#####################################################################
-  #curriki_formpart_begin($msg.get("form.scratch.step4.header")) ## {
-  &lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
-  &lt;p class="links"&gt;
-	&lt;button class="button-orange"
-		onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkSimpleResourceForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"
-      &gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
-     #if( "$!cameFrom" != "" ) ## {
-       #set( $cancelURL = $cameFrom )
-     #else ## } {
-       #set( $cancelURL = $xwiki.getURL("Main.WebHome") ) ## cameFrom not set means go to WebHome
-     #end ## }
-     &lt;button class="cancel"
-      onclick="try { clearUnloadDialog(); window.location.href='{pre}$cancelURL{/pre}'; return false; } catch(e) { alert('$msg.get("form.scratch.cancel.button") button onclick error: '+e+' ...'); return false; }"
-      &gt;$msg.get("form.scratch.cancel.button")&lt;/button&gt;
-  &lt;/p&gt;
-  #curriki_formpart_end() ## }
-#####################################################################
-  &lt;div class="tooltips"&gt;
-    {pre} $xwiki.addTooltipJS() {/pre}
-  &lt;/div&gt;
-  &lt;/form&gt;
-#set( $noWYSIWYG  = $request.getParameter("noWYSIWYG") ) ##For testing,etc, add parameter ?noWYSIWYG=1 to force WYSIWYG editors to not display, and use TEXTAREA instead
-#if( "$!noWYSIWYG" == "" ) ## {
-#curriki_wysiwyg_loader_preamble()
-##curriki_wysiwyg_loader_editor($context.getEditorWysiwyg(), $newAsset) ## aka "mce_editor_0"
-#if( "$!publishSpace"=="" )            ## {
- #set( $user = $context.user )
-  #if( $user.startsWith("XWiki.") )    ## {
-    #set( $shortname = $user.substring(6) )
-  #else                                ## } {
-    #set( $shortname = $user )
-  #end                                 ## }
-  #set( $wysi_publishSpace = "Coll_${shortname}" )
-#else ## } {
-  #set( $wysi_publishSpace = $publishSpace )
 #end
-#curriki_SLP_wysiwyg_loader_editor("slp_text", $newAsset, $wysi_publishSpace) ## id="mce_editor_0"
-#end ## } -- if "$!noWYSIWYG"==""
-{pre}&lt;script language="javascript" type="text/javascript"&gt;
+{{/html}}
+#####################################################################
+#curriki20_formpart_begin($msg.get("form.scratch.step1.header"))
+#curriki20_forminstructions($msg.get("form.scratch.step1.instruction"))
+#curriki20_formprompt($msg.get("sri.title_title"), $msg.get("form.scratch.title_tooltip"), $msg.get("form.scratch.title_txt"), true, "medium")
+##$newAsset.display("title","edit")
+{{html clean=false}}
+&lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
+{{/html}}
+#curriki20_formprompt($msg.get("sri.description_title"), $msg.get("form.scratch.description_tooltip"), $msg.get("form.scratch.description_txt"), true, "medium")
+$newAsset.display("description","edit")
+{{html clean=false}}
+&lt;table class='subject-educational'&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;
+{{/html}}
+#curriki20_formprompt($msg.get("sri.fw_items_title"), $msg.get("sri.fw_items_tooltip"), $msg.get("sri.fw_items_txt"), true, "")
+$newAsset.display("fw_items","edit")
+{{html clean=false}}
+&lt;/td&gt;
+&lt;td&gt;
+{{/html}}
+#curriki20_formprompt($msg.get("sri.educational_level_title"), $msg.get("sri.educational_level_tooltip"), $msg.get("sri.educational_level_txt"), true, "medium")
+$newAsset.display("educational_level","edit")
+{{html clean=false}}
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+{{/html}}
+#curriki20_formprompt($msg.get("sri.instructional_component2_title"), $msg.get("sri.instructional_component2_tooltip"), $msg.get("sri.instructional_component2_txt"), true, "medium")
+$newAsset.display("instructional_component","edit")
+#curriki20_formprompt($msg.get("sri.keywords_title"), $msg.get("sri.keywords_tooltip"), $msg.get("sri.keywords_txt"), false, "medium")
+$newAsset.display("keywords","edit")
+#curriki20_formprompt($msg.get("sri.language_title"), $msg.get("sri.language_tooltip"), $msg.get("sri.language_txt"), false, "medium")
+$newAsset.display("language","edit")
+#curriki20_formpart_end()
+#####################################################################
+#curriki20_formpart_begin($msg.get("form.scratch.step2.header"))
+#curriki20_forminstructions($msg.get("form.scratch.step2.instruction"))
+#curriki20_formprompt($msg.get("form.scratch.step2.content.title"), "", $msg.get("form.scratch.step2.content.instruction"), true, "medium")
+##$newTextAsset.display("text", "edit") ##WYSIWYG editor
+{{html clean=false}}
+&lt;textarea id='slp_text' name='slp_text'&gt;&lt;/textarea&gt;
+{{/html}}
+#curriki20_formpart_end()
+#####################################################################
+#curriki20_createresources_step3()
+#####################################################################
+#curriki20_formpart_begin($msg.get("form.scratch.step4.header"))
+{{html clean=false}}
+&lt;p&gt;&lt;label&gt;$msg.get("form.scratch.step4.instruction")&lt;/label&gt;&lt;/p&gt;
+&lt;p class="links"&gt;
+&lt;button class="button-orange" onclick="try { if (document.forms.inline.onsubmit) document.forms.inline.onsubmit(); if (checkSimpleResourceForm()) { clearUnloadDialog(); startWaitingDialog(); document.forms.inline.action='$msg.get("form.done.url")'; document.forms.inline.submit(); } return false; } catch(e) { alert('$msg.get("form.scratch.submit.button") button onclick error: '+e+' ...'); return false; }"&gt;$msg.get("form.scratch.submit.button")&lt;/button&gt;
+#if( "$!cameFrom" != "" )
+  #set( $cancelURL = $cameFrom )
+#else
+  #set( $cancelURL = $xwiki.getURL("Main.WebHome") ) ## cameFrom not set means go to WebHome
+#end
+&lt;button class="cancel" onclick="try { clearUnloadDialog(); window.location.href='{pre}$cancelURL{/pre}'; return false; } catch(e) { alert('$msg.get("form.scratch.cancel.button") button onclick error: '+e+' ...'); return false; }"&gt;$msg.get("form.scratch.cancel.button")&lt;/button&gt;
+&lt;/p&gt;
+{{/html}}
+#curriki20_formpart_end()
+#####################################################################
+{{html clean=false}}
+&lt;div class="tooltips"&gt;$xwiki.addTooltipJS()&lt;/div&gt;
+&lt;/form&gt;
+{{/html}}
+#set( $noWYSIWYG  = $request.getParameter("noWYSIWYG") ) ##For testing,etc, add parameter ?noWYSIWYG=1 to force WYSIWYG editors to not display, and use TEXTAREA instead
+#if( "$!noWYSIWYG" == "" )
+
+
+{{html}}
+#wysiwyg_editProperty($newAsset "slp_text" true)
+{{/html}}
+
+
+#if("$!publishSpace"=="" )
+  #set($user = $context.user)
+  #if($user.startsWith("XWiki."))
+    #set($shortname = $user.substring(6))
+  #else
+    #set($shortname = $user)
+  #end
+  #set($wysi_publishSpace = "Coll_${shortname}")
+#else
+  #set($wysi_publishSpace = $publishSpace)
+#end
+#end
+{{html clean=false}}
+&lt;script language="javascript" type="text/javascript"&gt;
 /* &lt;![CDATA[ */
 /*
  * this javascript code  must be at end, otherwise  strange   things
@@ -522,7 +554,8 @@ function startWaitingDialog() {
  */
 setUnloadDialog();
 /* ]]&gt; */
-&lt;/script&gt;{/pre}
+&lt;/script&gt;
+{{/html}}
 #end ## } -- else, aka "$!newAsset"!=""
 #end ## } -- $context.user=="XWiki.XWikiGuest"
-</content></xwikidoc>
+{{/velocity}}</content></xwikidoc>
