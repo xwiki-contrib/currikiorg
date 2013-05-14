@@ -616,19 +616,20 @@ if(false&&!g){var f=Ext.fly(document.body).getAlignToXY(d)[0];e.setLeft(f);c.set
 this.wrap.addClass("x-item-disabled")},onEnable:function(){Curriki.ui.Rating.superclass.onEnable.call(this);
 this.wrap.removeClass("x-item-disabled")},onHide:function(){this.wrap.addClass("x-hidden")
 },onShow:function(){this.wrap.removeClass("x-hidden")}});Ext.reg("rating",Curriki.ui.Rating)
-})();function videoInsert(c,d,a){var e=document.createElement("script");e.type="text/javascript";
-e.src=window.videoPrefixToDownload+c+"-sizes.js";var b=document.getElementsByTagName("script")[0];
-b.parentNode.insertBefore(e,b);if(typeof(window.videoTitles)!="object"){window.videoTitles=new Object()
+})();function videoInsert(c,d,b){var e=document.createElement("script");e.type="text/javascript";
+e.src=window.videoPrefixToDownload+c+"-sizes.js";var a=document.getElementsByTagName("script")[0];
+a.parentNode.insertBefore(e,a);if(typeof(window.videoTitles)!="object"){window.videoTitles=new Object()
 }if(typeof(window.videoFullNames)!="object"){window.videoFullNames=new Object()}window.videoTitles[c]=d;
-window.videoFullNames[c]=a;window.setTimeout("videoWatchSizesArrived('"+c+"');",50)
+window.videoFullNames[c]=b;window.setTimeout("videoWatchSizesArrived('"+c+"');",50)
 }function videoWatchSizesArrived(c){var b=window["video_"+c+"_sizes"];window.numWatches=window.numWatchers||new Object();
 if(typeof(window.numWatches[c])!="number"){window.numWatches[c]=0}if(b){videoNotifyVideoSizeArrived(c,b)
 }else{if(window.numWatches[c]<500){var a=50;window.numWatches[c]=window.numWatches[c]+1;
 if(window.numWatches[c]>200){a=a*5}window.setTimeout("videoWatchSizesArrived('"+c+"');",a)
 }}}function videoNotifyVideoSizeArrived(h,b){var l=Ext.get("video_img_"+h+"_image");
 if(typeof(b)=="string"){if(console){console.log("size is still a string, display it: "+b)
-}if(l){l=l.parent();l.setSize(320,80);var d=_(b);var a="mailto:"+_("video.errors.reportErrorsToEmail")+"?subject="+encodeURI(_(d))+"&body="+encodeURI(_(b+".details",[h,a]));
-if(b.startsWith("video.errors.")||b.startsWith("video.processingMessages")){}d=d+"</p><p style='font-size:small'>"+_(b+".details",[h,a]);
+}if(l){l=l.parent();l.setSize(320,80);var d=_(b);var a=_("video.errors.reportErrorsToEmail");
+a="mailto:"+_("video.errors.reportErrorsToEmail")+"?subject="+encodeURI(_(d))+"&body="+encodeURI(_(b+".details",[a,h]));
+if(b.startsWith("video.errors.")||b.startsWith("video.processingMessages")){}d=d+"</p><p style='font-size:small'>"+_(b+".details",[a,h]);
 l.update("<div width='320' height='240'><p>"+d+"</p></div>")}}else{if(typeof(b)=="object"){if(l){l.setSize(b[0].width,b[0].height);
 l.dom.setAttribute("src",window.videoPrefixToDownload+b[0].image)}for(var e=0;e<b.length;
 e++){var o=b[e];o.file=window.videoPrefixToDownload+o.file}var k=window.videoFullNames[h];

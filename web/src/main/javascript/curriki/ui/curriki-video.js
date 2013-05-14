@@ -42,9 +42,10 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
             im=im.parent();
             im.setSize(320, 80);
             var m = _(sources);
-            var mailTo = "mailto:" + _('video.errors.reportErrorsToEmail') + '?subject=' + encodeURI(_(m)) + '&body=' + encodeURI(_(sources + ".details", [videoId, mailTo]));
+            var mailTo = _('video.errors.reportErrorsToEmail');
+            mailTo = "mailto:" + _('video.errors.reportErrorsToEmail') + '?subject=' + encodeURI(_(m)) + '&body=' + encodeURI(_(sources + ".details", [mailTo, videoId]));
             if(sources.startsWith("video.errors.") || sources.startsWith("video.processingMessages"));
-                m = m + "</p><p style='font-size:small'>" + _(sources + ".details", [videoId, mailTo]);
+                m = m + "</p><p style='font-size:small'>" + _(sources + ".details", [mailTo, videoId]);
             im.update("<div width='320' height='240'><p>"+m+"</p></div>")
         }
     } else if (typeof(sources)=="object") {
