@@ -366,6 +366,7 @@ $xwiki.addTooltipJS()
  *#
 #macro(asset_info_rollover $asset $seccounter)
 #set($lrmiTool=$xwiki.parseGroovyFromPage("CurrikiCode.LRMItool"))##
+<!-- use: $asset.use("CurrikiCode.AssetClass") -->
 <div id="mycurriki-description-${seccounter}" class="popup popup-info-rollover" style="display: none;">
     ##<p>
     ##    <strong>$msg.get("global.title.popup.contributor")</strong><span>$!xwiki.getUserName($asset.creator, false)</span>
