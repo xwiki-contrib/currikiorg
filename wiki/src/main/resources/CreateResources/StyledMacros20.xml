@@ -211,7 +211,7 @@ function checkSimpleResourceForm() {
     setSuccessMessage('');     //not POSTing due to 'false' return below, so this should not matter -- reset in case of going "back" in browser after successful POST??
     return false;
   } else { // SUCCESS!
-    //setTextAssetToHtmlText(getWysiwygFieldContent('slp_text'));
+    setTextAssetToHtmlText(getWysiwygFieldContent('slp_text'));
     setSuccessMessage(_('form.done.created.resource'));
     return true;
   }
