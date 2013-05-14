@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.superadmin</creator>
-<author>XWiki.Admin</author>
+<author>XWiki.FlaviusOlaru</author>
 <customClass></customClass>
-<contentAuthor>XWiki.Admin</contentAuthor>
+<contentAuthor>XWiki.FlaviusOlaru</contentAuthor>
 <creationDate>1368103426000</creationDate>
-<date>1368530663000</date>
-<contentUpdateDate>1368530663000</contentUpdateDate>
-<version>15.1</version>
+<date>1368628177000</date>
+<contentUpdateDate>1368628177000</contentUpdateDate>
+<version>5.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Imported from XAR</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/2.1</syntaxId>
 <hidden>false</hidden>
@@ -211,7 +211,6 @@ function checkSimpleResourceForm() {
     setSuccessMessage('');     //not POSTing due to 'false' return below, so this should not matter -- reset in case of going "back" in browser after successful POST??
     return false;
   } else { // SUCCESS!
-    setTextAssetToHtmlText(getWysiwygFieldContent('slp_text'));
     setSuccessMessage(_('form.done.created.resource'));
     return true;
   }
@@ -255,27 +254,13 @@ function isFieldEmpty(field_id, by_name) {
 //
 function isWysiwygFieldEmpty(field_id) {
   var wysiwyg = Wysiwyg.getInstance(field_id);
-  var content = wysiwyg.getRichTextArea().contentWindow.document.body;
+  var wysiwyg_body = wysiwyg.getRichTextArea().contentWindow.document.body;
   // here the value is actually 1 for IE9, to be fixed
   var minNodes = browser.isIE ? 0 : 1;
-  if (content.childNodes.length == 1 &amp;&amp; content.childNodes[0].textContent == "")
+  if (wysiwyg_body.childNodes.length == 1 &amp;&amp; wysiwyg_body.textContent == "" &amp;&amp; wysiwyg_body.childNodes[0].nodeName != 'IMG')
     return true;
-  return (content.childNodes.length &lt; minNodes); 
+  return (wysiwyg_body.childNodes.length &lt; minNodes); 
 }
-//
-function getWysiwygFieldContent(field_id) {
-  var wysiwyg = Wysiwyg.getInstance(field_id);
-  return wysiwyg.getRichTextArea().contentWindow.document.body.innerHTML;
-}
-//
-function setTextAssetToHtmlText(html) {
-  var field = $('CurrikiCode.TextAssetClass_0_text');
-  if (field != null) {
-    field.value = html;
-  }
-  else { alert('error in setTextAssetToHtmlText()'); }
-}
-
 // set value POSTed via form hidden field w/ id="successMessage" and
 // default value="" (which if received on POST, indicates an unexpected
 // error condition has occurred). A nonempty string-value indicates
