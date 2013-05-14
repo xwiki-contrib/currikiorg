@@ -1,20 +1,93 @@
 #if(1==1)
-    #if ($doc.web == "Main" && $doc.name!='JoinCurriki' || $doc.web.startsWith("Coll_") || $doc.web=='Search' || $doc.web.startsWith("Group") || $doc.web == "MyCurriki" )
-    <!-- Phoenix Ad Appears here -->
+  <!--   #if ($doc.web == "Main" && $doc.name!='JoinCurriki' || $doc.web.startsWith("Coll_") || $doc.web=='Search' || $doc.web.startsWith("Group") || $doc.web == "MyCurriki" ) -->
+<!-- Phoenix Ad Appears here -->
 {pre}
-    <div id="Advertising2" class="shadow-outer">
-        <div class="shadow-middle">
-            <div class="shadow-inner">
-                <div style="padding:0px 0px 0px 0px">
-                    <a href="http://www.phoenix.edu/colleges_divisions/education.html" ##
-                            onclick="_gaq.push(['_trackEvent','ads','clicked','phoenix'], ##
-                                function() {window.location.href='http://www.phoenix.edu/colleges_divisions/education.html'}); return false;">
-                        <img src="/xwiki/bin/download/Panels/Advertising2/edu01899_advanceplacement_180x150_-qzsvar8.jpg">
-                    </a>
-                </div>
-            </div>
-        </div>
+<script  type="text/javascript">
+
+  Ext.onReady(function(){
+    Curriki.logEvent(['ads','viewed','phoenix', 1, true]);
+  });
+
+  function trackOutboundLink(link, category, action, label) {
+
+    try {
+      Curriki.logEvent([category , action, label]);
+    } catch(err){}
+
+    setTimeout(function() {
+      document.location.href = link.href;
+    }, 100);
+  }
+
+</script>
+<div id="Advertising2" class="shadow-outer">
+  <div class="shadow-middle">
+    <div class="shadow-inner">
+      <div style="padding:0px 0px 0px 0px">
+        <a href="http://www.phoenix.edu/colleges_divisions/education.html"  onclick="trackOutboundLink(this, 'ads', 'clicked', 'phoenix'); return false;">
+          <img src="/xwiki/bin/download/Panels/Advertising2/edu01899_advanceplacement_180x150_-qzsvar8.jpg">
+        </a>
+      </div>
     </div>
+  </div>
+</div>
 {/pre}
-    #end
+<!--    #end -->
 #end
+
+## Old content follows here, we had three versions of this file, one on current, one on beta and one on production.
+## All with different content. To clean it out I commented out the old page of current and merged in the functionality of production
+## Felix, 12th May 2013
+##
+##<!DOCTYPE html>
+##<html lang="en">
+##<head>
+##
+##  <!--
+##    <meta http-equiv="Content-type" content="text/html; charset=utf-8"> -->
+##  <!--[if IE]>
+##  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+##  <![endif]-->
+##
+##  <!-- <style type="text/css" media="screen">
+##  </style> -->
+##
+##  <script type='text/javascript'>
+##    var googletag = googletag || {};
+##    googletag.cmd = googletag.cmd || [];
+##    (function() {
+##      var gads = document.createElement('script');
+##      gads.async = true;
+##      gads.type = 'text/javascript';
+##      var useSSL = 'https:' == document.location.protocol;
+##      gads.src = (useSSL ? 'https:' : 'http:') +
+##        '//www.googletagservices.com/tag/js/gpt.js';
+##      var node = document.getElementsByTagName('script')[0];
+##      node.parentNode.insertBefore(gads, node);
+##    })();
+##  </script>
+##
+##  <script type='text/javascript'>
+##    googletag.cmd.push(function() {
+##      googletag.defineSlot('/18564968/Left_Column_Ad_Space', [200, 167], 'div-gpt-ad-1360190631089-0').addService(googletag.pubads());
+##      googletag.pubads().enableSingleRequest();
+##      googletag.enableServices();
+##    });
+##  </script>
+##
+##
+##</head>
+##<body>
+##
+##
+##
+##<h6 margin-left="50px">Advertisement</h6>
+##<!-- Left_Column_Ad_Space -->
+##<div id='div-gpt-ad-1360190631089-0' style='width:200px; height:167px;'>
+##  <script type='text/javascript'>
+##    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1360190631089-0'); });
+##  </script>
+##</div>
+##<br>
+##</body>
+##</html>
