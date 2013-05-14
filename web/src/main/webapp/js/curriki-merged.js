@@ -847,7 +847,7 @@ Ext.ComponentMgr.register(d);if(!Ext.isEmpty(e)){var b=Ext.getCmp(e);if(b){b.clo
 }}};a.SourceSelected=function(g,b){Curriki.current.selected=g;var f;switch(g){case"file":Curriki.current.fileName=b.filename;
 f="apSRI1";a.PostFile(function(h){callback=function(){a.ShowNextDialogue(f,a.AddSourceDialogueId)
 };Curriki.assets.GetMetadata(h.assetPage||Curriki.current.asset.assetPage,function(k){Curriki.current.metadata=k;
-callback()})});return;break;case"video_upload":f="apSRI1";var d="asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg";
+callback()})});return;break;case"video_upload":f="apSRI1";var d="asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg|3gp|m4v|f4v|webm";
 var e=new RegExp("^.+\\.("+d+")$","i");var c=Ext.getCmp("video_upload-entry-box").getValue();
 if(!e.test(c)){if(!confirm(_("add.video.uploading.unknown.file.txt"))){return false
 }}a.PostVideo(function(h){console.log("CreateAsset (video) CB: ",h);Curriki.current.asset=h;

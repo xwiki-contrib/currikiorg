@@ -2923,7 +2923,7 @@ Curriki.module.addpath.init = function(){
 					next = 'apSRI1';
 					// Check for "valid" extensions before continuing
 					// TODO: Move this list into a translation key value
-					var exts = "asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg";
+					var exts = "asf|avi|wma|wmv|flv|mov|movie|qt|mp4|mpg|mpeg|3gp|m4v|f4v|webm";
 					var re = new RegExp("^.+\\.("+exts+")$", 'i');
 					var pName = Ext.getCmp('video_upload-entry-box').getValue();
 					if (! re.test(pName)) {
