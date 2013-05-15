@@ -4,21 +4,21 @@
   *#
 #asset_displaycontentheader("")
 <div class="asset-display-text">
-    <div class="asset-display-text-inner">
-        #set($objTxt = $asset.getObject("CurrikiCode.TextAssetClass"))
-        #if($asset.getObject("CurrikiCode.TextAssetClass"))
-        #if($objTxt.syntax == "xwiki/1.0")
-         ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
-        $asset.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
-        #elseif($objTxt.syntax == "xwiki/2.0")
-        $asset.getRenderedContent()
-        #else
-        $asset.content
-        #end
-        #else
-        $asset.content
-        #end
-    </div>
+  <div class="asset-display-text-inner">
+  #set($objTxt = $asset.getObject("CurrikiCode.TextAssetClass"))
+  #if($asset.getObject("CurrikiCode.TextAssetClass"))
+    #if($objTxt.syntax == "xwiki/1.0")
+      ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+      $asset.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+    #elseif($objTxt.syntax == "xwiki/2.0" || $objTxt.syntax == "xwiki/2.1")
+      $asset.getRenderedContent()
+    #else
+      $asset.content
+    #end
+  #else
+    $asset.content
+  #end
+  </div>
 </div>
 #asset_displaycontentfooter()
 
