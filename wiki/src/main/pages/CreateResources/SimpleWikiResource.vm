@@ -128,7 +128,6 @@ $msg.get("form.scratch.title.description") <a href="$msg.get('form.title.descrip
 ## XWiki.AssetClass_0_category is a "fake" property named "category" in XWiki.AssetClass.
 ## This is forced here to value "text". This hidden field is passed to AssetDone
 ## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
-<input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" />
 <input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" />
 ## successMessage is a hidden field that is set to a string in validation javascript
 ## after successful validation. If AssetDone gets a POST with the default value of "" set here
@@ -195,7 +194,6 @@ $newAsset.display("language","edit")
 #curriki20_formpart_begin($msg.get("form.scratch.step2.header"))
 #curriki20_forminstructions($msg.get("form.scratch.step2.instruction"))
 #curriki20_formprompt($msg.get("form.scratch.step2.content.title"), "", $msg.get("form.scratch.step2.content.instruction"), true, "medium")
-##$newTextAsset.display("text", "edit") ##WYSIWYG editor
 {{html clean=false}}
 <textarea id='slp_text' name='slp_text'></textarea>
 {{/html}}

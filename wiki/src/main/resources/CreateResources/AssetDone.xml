@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.NielsMayer</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.Admin</contentAuthor>
 <creationDate>1212692135000</creationDate>
-<date>1332456434000</date>
-<contentUpdateDate>1332456434000</contentUpdateDate>
-<version>16.1</version>
+<date>1368621008000</date>
+<contentUpdateDate>1368621008000</contentUpdateDate>
+<version>15.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>CreateResources.AssetDone</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>0b12d849-acab-4cb9-a179-4b54a53f4198</guid>
+<guid>f74accd0-9510-4cb9-a5c3-f1a919e8f478</guid>
 <property>
 <tags/>
 </property>
@@ -132,11 +132,13 @@
      #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.AssetLicenseClass") )
      $newAsset.setCategory($category)
      #if($createLessonURL== $msg.get('form.html.scratch.url')) ##{
-         $newAsset.set("syntax", "xhtml/1.0") ##}
+         $newAsset.set("syntax", "xhtml/1.0")
+         #set ($content = "$!request.get('slp_text')")
      #else ##{
-         $newAsset.set("syntax", "xwiki/1.0")
+         $newAsset.set("syntax", "xwiki/2.1")
+         #set ($content = "$!request.get('slp_text')")
      #end##}
-     $newAsset.setContent("$content")
+     $newAsset.setContent("$!content")
      $newAsset.setTitle($title)
      #if( $createLessonURL== $msg.get('ace.lesson.plan.url') ) ##{
        #set( $formname = "ACELP" ) ##}

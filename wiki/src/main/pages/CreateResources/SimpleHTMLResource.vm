@@ -125,7 +125,6 @@ function setUnloadDialog() {
 ## XWiki.AssetClass_0_category is a "fake" property named "category" in XWiki.AssetClass.
 ## This is forced here to value "text". This hidden field is passed to AssetDone 
 ## via POST and instantiated via .updateObjectFromRequest("XWiki.AssetClass")
-<input type="hidden"  name="CurrikiCode.TextAssetClass_0_text" id="CurrikiCode.TextAssetClass_0_text" value="$msg.get('form.done.wysiwyg.error.wikitext')" />
 <input type="hidden"  name="CurrikiCode.AssetClass_0_category" id="CurrikiCode.AssetClass_0_category" value="text" /> 
 ## successMessage is a hidden field that is set to a string in validation javascript
 ## after successful validation. If AssetDone gets a POST with the default value of "" set here
@@ -185,7 +184,6 @@ $newAsset.display("language","edit")
 #curriki20_formpart_begin($msg.get("form.html.scratch.step2.header")) ## {
 #curriki20_forminstructions($msg.get("form.html.scratch.step2.instruction"))
 #curriki20_formprompt($msg.get("form.html.scratch.step2.content.title"), "", $msg.get("form.html.scratch.step2.content.instruction"), true, "medium")
-##$newTextAsset.display("text", "edit") ##WYSIWYG editor
 {{html clean=false}}
 <textarea id='slp_text' name='slp_text' style='height: 450px'></textarea> 
 {{/html}}
@@ -217,7 +215,11 @@ $newAsset.display("language","edit")
 
 
 {{html}}
-#wysiwyg_editProperty($newAsset "slp_text" true)
+#set ($parameters = $util.hashMap)
+#wysiwyg_storeConfig($parameters $newAsset "slp_text" true)
+#set ($discard = $parameters.put('syntax', 'xhtml/1.0'))
+#set ($discard = $parameters.put('convertInput', false))
+#wysiwyg_editPropertyCustom($newAsset $parameters)
 {{/html}}
 
 
