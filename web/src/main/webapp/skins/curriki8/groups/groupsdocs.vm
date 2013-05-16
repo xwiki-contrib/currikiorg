@@ -181,7 +181,7 @@
   <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
 <input id="xwikiuploadname" type="hidden" name="filename" value="" />
 <input id="xwikiuploadfile" type="file" name="filepath" value=""  size="40" />
-{pre}
+#verbatim_start
 <script type="text/javascript">
 function checkFileExtension() {
   var isValid = true;
@@ -215,7 +215,7 @@ function getFileExtension() {
   return "ok";
 }
 </script>
-{/pre}
+#verbatim_end
 <button type="submit" class="button-orange">${msg.groups_documentation_add_document_upload}</button>
 </form>
 #endgroupsection()
@@ -295,6 +295,9 @@ function getFileExtension() {
 #macro(groups_documentation_editabout)
 #set( $docName = $docsSpaceName + ".AboutDocumentation" )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
+#if("$!request.xwiki2" == "true")
+$editDoc.setSyntaxId("xwiki/2.1")
+#end
 #if( $request.method == "POST" )
      $editDoc.setContent( $request.doctext )
      $editDoc.save()
@@ -302,34 +305,19 @@ function getFileExtension() {
    #set($stopRender = "ok")
    #begingroupsection("Edit about documentation" "" "" "blue" true)
     <form action="#" method="post">
-<label for="doctext" class="doctext" class="sectitle">${msg.groups_documentation_enter_content}</label>
-{pre}
+## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
+<input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
+<label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
+<textarea name="doctext" id="doctext" rows="20">$editDoc.content</textarea>
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
-        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
-        <script type="text/javascript">
-wikiEditor.init({
-  elements : "doctext",
-  language: "en",
-  mode: "exact",
-  content_css: "$xwiki.getSkinFile("style.css", true)",
-  debug : false, safari_warning: false,
-  remove_linebreaks : false,
-  safari_warning: false,
-  plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_use_style: 'true',
-        wiki_plugins: 'core,attachments',
-        wiki_images_path : '/xwiki/bin/download/${doc.space}/AboutDocumentation/',
-        wiki_attach_path : '/xwiki/bin/view/${doc.space}/AboutDocumentation'
-});
-</script>
-{/pre}
-<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.renderedContent)</textarea>
-	<div class="button-right">
-		<input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
-		<input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
-	</div>
-</form>
+    #verbatim_start
+    #wysiwyg_editProperty($editDoc 'doctext' true)
+    #verbatim_end
+        <div class="right mgn-vrt-15">
+          <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}"  class="button button-cancel mgn-rt" />
+          <input type="submit" value="${msg.groups_home_editwelcome_submit_btt}"  class="button button-confirm" />
+        </div>
+    </form>
 #endgroupsection()
 #end
 #end
@@ -339,91 +327,58 @@ wikiEditor.init({
   *#
 #macro(groups_documentation_newwikipage)
 #if( $request.method == "POST" && $request.doctitle.trim() != "" )
-     ##getting where the attached images were
-     #set( $attachDocName = $request.olddoc)
-     #set( $attachDoc = $xwiki.getDocument( $attachDocName ) )
-
-     #set( $newDocName = $xwiki.getUniquePageName( $docsSpaceName, $request.doctitle))
-     #set( $newDocName = "${docsSpaceName}.${newDocName}")
-
-     ##renaming the old doc to the new title
-     #set($ok = $attachDoc.rename($newDocName))
-##$request.olddoc $attachDoc $attachDocName  $newDocName $ok
-
-     ##set( $newDoc = $xwiki.getDocument( $newDocName ) )
-     #set( $newDoc = $xwiki.getDocument($newDocName))
-     $newDoc.setTitle( $request.doctitle )
-     $newDoc.setContent( $request.doctext )
-     $newDoc.save()
-
-     #set($tg = $newDoc.newObject("XWiki.TagClass"))
-     #set($tgok = $tg.set("tags","documentation-wiki"))
-
-    $newDoc.use($newDoc.newObject("XWiki.XWikiRights"))
-    $newDoc.set("users", $context.user)
-    $newDoc.set("levels", "delete")
-    $newDoc.set("allow","1")
-
-     $newDoc.save() 
-
-     ## this should send us back to the right view URL
-     ## and fix bug CURRIKI-3924
-     $response.sendRedirect( $doc.getURL() )
-
-     #set( $newDocSaved = $request.doctitle )
- #else
-   #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
-    <form action="#" method="post">
-       #set( $dctitle = $request.newdocname )
-
-       ##creating temporary doc so the wiki editor knows where to attaach stuff
-       #set( $newDocName = $xwiki.getUniquePageName( "Temp", $dctitle))
-       #set( $newDocName = "Temp.${newDocName}")
-       #set( $newDoc = $xwiki.getDocument( $newDocName))
-       #set( $ok = $newDoc.save() )
-
-<label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
-<input type="hidden" name="olddoc" value="${newDocName}" />
-
-#if( $request.doctitle.trim() == "" )
+  ##getting where the attached images were
+  #set( $attachDocName = $request.olddoc)
+  #set( $attachDoc = $xwiki.getDocument( $attachDocName ) )
+  #set( $newDocName = $xwiki.getUniquePageName( $docsSpaceName, $request.doctitle))
+  #set( $newDocName = "${docsSpaceName}.${newDocName}")
+  ##renaming the old doc to the new title
+  #set($ok = $attachDoc.rename($newDocName))
+  ##$request.olddoc $attachDoc $attachDocName  $newDocName $ok
+  ##set( $newDoc = $xwiki.getDocument( $newDocName ) )
+  #set( $newDoc = $xwiki.getDocument($newDocName))
+  $newDoc.setTitle( $request.doctitle )
+  $newDoc.setContent( $request.doctext )
+  $newDoc.save()
+  #set($tg = $newDoc.newObject("XWiki.TagClass"))
+  #set($tgok = $tg.set("tags","documentation-wiki"))
+  $newDoc.use($newDoc.newObject("XWiki.XWikiRights"))
+  $newDoc.set("users", $context.user)
+  $newDoc.set("levels", "delete")
+  $newDoc.set("allow","1")
+  $newDoc.save() 
+  ## this should send us back to the right view URL
+  ## and fix bug CURRIKI-3924
+  $response.sendRedirect( $doc.getURL() )
+  #set( $newDocSaved = $request.doctitle )
+#else
+  #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
+  <form action="#" method="post">
+  <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+  #set( $dctitle = $request.newdocname )
+  ##creating temporary doc so the wiki editor knows where to attaach stuff
+  #set( $newDocName = $xwiki.getUniquePageName( "Temp", $dctitle))
+  #set( $newDocName = "Temp.${newDocName}")
+  #set( $newDoc = $xwiki.getDocument( $newDocName))
+  #set( $ok = $newDoc.save() )
+  <label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
+  <input type="hidden" name="olddoc" value="${newDocName}" />
+  #if( $request.doctitle.trim() == "" )
   <div class="error">${msg.group_documentation_empty_title}</div>
-#end
-<input type="text" name="doctitle" class="doctitle" value="${dctitle}" />
-<label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
-
-
-{pre}
-<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
-        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
-        <script type="text/javascript">
-
-wikiEditor.init({
-  elements : "doctext",
-  language: "en",
-  mode: "exact",
-  content_css: "$xwiki.getSkinFile("style.css",true)",
-  debug : false, safari_warning: false,
-  remove_linebreaks : false,
-  safari_warning: false,
-  plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_use_style: 'true',
-        wiki_plugins: 'core,attachments',
-        wiki_images_path : '/xwiki/bin/download/${newDoc.space}/${newDoc.name}/',
-        wiki_attach_path : '/xwiki/bin/view/${newDoc.space}/${newDoc.name}'
-});
-</script>
-{/pre}
-<textarea name="doctext" id="doctext" rows="20"></textarea>
-        <div class="button-right">
-          <input type="button" onclick="if(confirm('${msg.groups_documentation_new_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " class="button-grey" value="${msg.groups_documentation_new_wiki_cancel}" />
-          <input type="submit" class="button-orange" value="${msg.groups_documentation_new_wiki_save}" />
-
-      </div>
-    </form>
-
-#set( $stopRender = "ok" )
-#endgroupsection()
+  #end
+  <input type="text" name="doctitle" class="doctitle" value="${dctitle}" />
+  <label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
+  <textarea name="doctext" id="doctext" rows="20"></textarea>
+  #verbatim_start
+  #wysiwyg_editProperty($newDoc 'doctext' true)
+  #verbatim_end
+  <div class="button-right">
+    <input type="button" onclick="if(confirm('${msg.groups_documentation_new_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " class="button-grey" value="${msg.groups_documentation_new_wiki_cancel}" />
+    <input type="submit" class="button-orange" value="${msg.groups_documentation_new_wiki_save}" />
+  </div>
+  </form>
+  #set( $stopRender = "ok" )
+  #endgroupsection()
 #end ## post
 #end ## macro
 
@@ -434,69 +389,50 @@ wikiEditor.init({
   *#
 #macro(groups_documentation_editpage)
 #if($request.pagename && $sm.isMember( $s.spaceName, $context.user ) )
-#set( $docName = $request.pagename )
-#set( $editDoc = $xwiki.getDocument( $docName ) )
-#if( $request.method == "POST" )
-     #if("$!request.doctitle"!="")
+  #set( $docName = $request.pagename )
+  #set( $editDoc = $xwiki.getDocument( $docName ) )
+  #if( $request.method == "POST" )
+    #if("$!request.doctitle"!="")
       $editDoc.setTitle( $request.doctitle )
-     #end
-     $editDoc.setContent( $request.doctext )
-     $editDoc.saveWithProgrammingRights()
-     #if( $request.gotodoc == "true" )
-       $response.sendRedirect( $editDoc.getURL() )
-     #else
-       ## this should send us back to the right view URL
-       ## and fix bug CURRIKI-3924
-       $response.sendRedirect( $doc.getURL() )
-     #end
-     #set( $editDocSaved = $request.doctitle )
-#else
-   #set($stopRender = "ok")
-  <div class="edit-history">
-     <span class="inactive-link">Wiki</span>
-     <a href="${doc.uRL}?action=history&pagename=${request.pagename}">
-History
-</a>
-   </div>
-<div class="documentation-edition">
-   #begingroupsection("${msg.groups_documentation_edit_wiki_title}" "" "" "blue" true)
+    #end
+    $editDoc.setContent( $request.doctext )
+    $editDoc.saveWithProgrammingRights()
+    #if( $request.gotodoc == "true" )
+      $response.sendRedirect( $editDoc.getURL() )
+    #else
+      ## this should send us back to the right view URL
+      ## and fix bug CURRIKI-3924
+      $response.sendRedirect( $doc.getURL() )
+    #end
+    #set( $editDocSaved = $request.doctitle )
+  #else
+    #set($stopRender = "ok")
+    <div class="edit-history">
+      <span class="inactive-link">Wiki</span>
+      <a href="${doc.uRL}?action=history&pagename=${request.pagename}">History</a>
+    </div>
+    <div class="documentation-edition">
+    <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+    #begingroupsection("${msg.groups_documentation_edit_wiki_title}" "" "" "blue" true)
     <form action="#" method="post">
       <input type="hidden" name="pagename" value="${request.pagename}" />
       #set( $titleField = $xwiki.getFormEncoded($editDoc.title))
-<label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
-<input type="text" name="doctitle" class="doctitle" value="$titleField" />
-<label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
-{pre}
-<script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-        <script language="javascript" type="text/javascript" src="/xwiki/tiny_mce/tiny_mce.js"></script>
-        <script language="javascript" type="text/javascript" src="/xwiki/wiki_editor/wiki_editor.js"></script>
-        <script type="text/javascript">
-wikiEditor.init({
-  elements : "doctext",
-  language: "en",
-  mode: "exact",
-  content_css: "$xwiki.getSkinFile("style.css", true)",
-  debug : false, safari_warning: false,
-  remove_linebreaks : false,
-  plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_use_style: 'true',
-        wiki_plugins: 'core,attachments',
-        wiki_images_path : '/xwiki/bin/download/${editDoc.space}/${editDoc.name}/',
-        wiki_attach_path : '/xwiki/bin/view/${editDoc.space}/${editDoc.name}'
-});
-</script>
-<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
-{/pre}
-	<div class="button-right">
-		<input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
-		<input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
-	</div>
-</form>
-
-#set( $stopRender = "ok" )
-#endgroupsection()
-</div>
-#end ## post
+      <label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
+      <input type="text" name="doctitle" class="doctitle" value="$titleField" />
+      <label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
+      <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
+      #verbatim_start
+      #wysiwyg_editProperty($editDoc 'doctext' true)
+      #verbatim_end
+      <div class="button-right">
+        <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
+        <input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
+      </div>
+    </form>
+    #set( $stopRender = "ok" )
+    #endgroupsection()
+  </div>
+  #end ## post
 #end ## pagename
 #end ## macro
 

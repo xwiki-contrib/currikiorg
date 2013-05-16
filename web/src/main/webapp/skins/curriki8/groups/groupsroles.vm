@@ -162,13 +162,13 @@
 #macro(groups_managerole_editroleline $role) ## {
   <div id="groups-manage-role-line-${role.name}">
 <div class="lefttext">
-{pre}
+#verbatim_start
 <div class="righttext floatright hidebuttons">
 <a href="javascript:void()" onclick="$('groups-manage-role-line-${role.name}').hide(); $('groups-manage-roles-edit-${role.name}').show(); $$('.hidebuttons').invoke('hide'); return false;">$msg.get("groups.roles.manage.edit")</a>
 #sep()
 <a href="$xwiki.getURL("${spaceName}.ManageRoles", "view", "delete=${role.name}")" onclick="return confirm('$msg.get("groups.roles.manage.delete.confirm")');">$msg.get("groups.roles.manage.delete")</a>
 </div>
-{/pre}
+#verbatim_end
 $role.title
 </div>
 </div>
@@ -230,7 +230,9 @@ $msg.get("groups.roles.manage.intro")
 #end ## }
 ## Add role Button
 <div id="groups-manage-roles-add-button" class="lefttext">
-<div class="righttext floatright hidebuttons"><button type="button" class="button-orange" onclick="{pre}$('groups-manage-roles-add-form').show(); $$('.hidebuttons').invoke('hide');{/pre}">$msg.get("groups.roles.manage.add")</button></div>
+#verbatim_start
+<div class="righttext floatright hidebuttons"><button type="button" class="button-orange" onclick="$('groups-manage-roles-add-form').show(); $$('.hidebuttons').invoke('hide');">$msg.get("groups.roles.manage.add")</button></div>
+#verbatim_end
 </div>
 <div id="groups-manage-roles-add-form" style="display:none;" class="frame-inset">
 <form method="post">
