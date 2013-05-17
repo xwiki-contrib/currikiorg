@@ -700,6 +700,7 @@ $xwiki.addTooltipJS()
   *#
 #macro(groups_homepage)
 #groupinit()
+#groupsajaxjs()
 #groupsheader("home")
 #groups_homepage_aftercreate()
 #set($action = $request.get("action"))
@@ -754,17 +755,23 @@ $msg.get("groups_home_firsttimewelcome_title")
 #set($spaceName = $doc.space)
 #set($s = $sm.getSpace($spaceName))
 #if($request.method=="POST")
-  #set($filename = $xwiki.fileupload.getFileName("filepath"))
+  #set($fileupload = $xwiki.fileupload)
+  #set($filename = $fileupload.getFileName("filepath"))
+  #set($filedata = $fileupload.getFileItemData("filepath"))
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
-  #if("$!filename"!="")
-    $xwiki.getDocument("${doc.space}.WebHome").addAttachments()
-    #set($filename = $context.addedAttachments.get(0).filename)
-    $s.set("logo", $filename)
+  #if($!filename != "" && $filedata)
+    #set ($spaceHome = $xwiki.getDocument("${spaceName}.WebHome"))
+    #set($attach = $spaceHome.addAttachment($filename, $filedata))
+    #if($attach)
+      $s.set("logo", $attach.filename)
+      #set($filename = $attach.filename)
+      $spaceHome.save()
+      $s.save()
+      $response.sendRedirect($s.getHomeURL())
+    #end
   #end
-  $s.save()
-  $response.sendRedirect($s.getHomeURL())
 #else
 <div class="frame">
 <form class="CreateNewGroup" action="#" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
@@ -801,9 +808,9 @@ $s.display("description","edit")
 #if($logofilename&&$logoattach)
 #set($redirect = $xwiki.requestURL)
 #set($url = $doc.getAttachmentURL($logofilename, "delattachment", "xredirect=${redirect}"))
-$msg.get("groups_home_editmasthead_logo_infotxt_withlogo", [$url])
+#verbatim($msg.get("groups_home_editmasthead_logo_infotxt_withlogo", [$url]))
 #else
-$msg.groups_home_editmasthead_logo_infotxt_withoutlogo
+#verbatim($msg.groups_home_editmasthead_logo_infotxt_withoutlogo)
 #end
 </p>
 </div>
@@ -812,36 +819,6 @@ $msg.groups_home_editmasthead_logo_infotxt_withoutlogo
 <input id="xwikiuploadname" type="hidden" name="filename" value="" />
 <div><input id="xwikiuploadfile" type="file" name="filepath" value="" size="40"/></div>
 </div>
-#verbatim_start
-<script type="text/javascript">
-function checkFileExtension() {
-  var isValid = true;
-  var ext = getFileExtension();
-  if (ext) {
-    if (ext != "ok" && ext != "ai" && ext != "gif" && ext != "jpg" && ext != "tif" && ext != "bmp" && ext != "jpe" && ext != "psd" && ext != "png") {
-      isValid = false;
-    }
-  } else {
-    isValid = false;
-  }
-  if (!isValid) {
-    alert("$msg.get("mycurriki.profile.needPicture")");
-  }
-  return isValid;
-}
-function getFileExtension() {
-  var fileName = document.getElementById("xwikiuploadfile").value;
-  if (fileName.length){
-   fileName = fileName.toLowerCase();
-   var pos = fileName.lastIndexOf(".");
-   if (pos > 0){
-     return fileName.substring(pos + 1);
-   }
-  }
-  return "ok";
-}
-</script>
-#verbatim_end
 </div>
 </div>
 <div class="button-center button-masthead"><input class="button-orange" type="submit" value="$msg.groups_home_editmasthead_submit_btt" />#button(  "$msg.groups_home_editinformation_cancel_btt"  "grey"  "reset"  ""  "if(confirm('$msg.groups_home_editmasthead_cancel_confirm')) window.location='$s.getHomeURL()';" )</div>
