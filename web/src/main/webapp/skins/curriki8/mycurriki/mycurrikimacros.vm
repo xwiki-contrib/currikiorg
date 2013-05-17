@@ -37,6 +37,13 @@
 ##
 ##
 
+#macro(htmlcomment $comment)
+ #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
+ {{html clean=false}}${comment}{{/html}}
+ #else
+ $comment
+ #end
+#end
 
 #**
   * Adding a dash instead of an empty text
@@ -110,7 +117,7 @@ $text
 #if("$!whofor" == "") ## {
 #if("$!request.user" != "") ## {
     #set ($whofor = $util.null)#setVariable ("$whofor" $request.user)#set($whofor=$request.user)
-    ##<!-- setting whofor to $request.user ; $whofor is now $whofor -->
+    #htmlcomment("<!-- setting whofor to $request.user ; $whofor is now $whofor -->")
 #else ## } {
 #if($doc.space.startsWith("Blog_")) ## {
     #set ($whofor = $util.null)#setVariable ("$whofor" $doc.space.substring(5))#set($whofor=$doc.space.substring(5))
@@ -137,7 +144,7 @@ $text
 #if($doc.name!="EditProfile")#set($access="view")#end
 #if(!$xwiki.hasAccessLevel($access,$context.user,$userdoc.fullName))
 $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
-<!-- not authorized! -->
+#htmlcomment("<!-- not authorized! -->")
 #end
 #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 #set($g_userdoc = $userdoc)
@@ -170,8 +177,10 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
     #elseif("Collections"==$doc.name)
         #mycurriki_collectionbutton($userobj )
     #elseif("Groups"==$doc.name)
-        <!-- no button in groups list -->
-        #else<!-- not a recognized page -->#end
+        #htmlcomment("<!-- no button in groups list -->")
+    #else 
+        #htmlcomment("<!-- not a recognized page -->")
+    #end
 ##
 #end ## }
 #if("$!subtitle" != "" && $subtitle != "mycurriki.tab.${pageref}.subtitle") ## {
@@ -186,12 +195,13 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 #if($pageref == "favorites" || $pageref == "contributions" || $pageref == "collections" || $pageref == "blog" || $pageref == "groups") ## {
 			class="frame"
 #end ## }
-		><!-- userdoc is $userdoc and userobj is $userobj whofor is $whofor -->
+		>
+		#htmlcomment("<!-- userdoc is $userdoc and userobj is $userobj whofor is $whofor -->")
 ## The following two used to be a call back to the local macro of the page including this macro
   ## #mycurriki_pagecontent($userdoc $userobj)
     #if("Profile"== $doc.name)
         #mycurriki_viewprofilebox($userdoc $userobj)
-    #elseif("EditProfile"==$doc.name)<!-- editProfile Box -->
+    #elseif("EditProfile"==$doc.name)#htmlcomment("<!-- editProfile Box -->")
         #mycurriki_editprofilebox($userdoc $userobj)
     #elseif("Favorites"==$doc.name)
         #mycurriki_favoritesbox( $userdoc $userobj )
@@ -461,7 +471,7 @@ $!desc
   * @author dward@curriki.org
   *#
 #macro(mycurriki_editprofilebox $userdoc $userobj) ##{
-	<!-- Profile Box -->
+	#htmlcomment("<!-- Profile Box -->")
     #set($g_RegType = 'edit_profile')
 	#tryprofileupdate()
         #registrationinit('edit_profile')
@@ -527,7 +537,7 @@ $!desc
 	#endregistrationform()
 
 	#set($footerJScript = "$!footerJScript" + '<script>var warna = $$("a"); $$("#mycurriki-main a").each(function(a){warna=warna.without(a);}); $$("#navigation-inner a.titles").each(function(a){warna=warna.without(a);}); var hmnav = $$("#navigation-inner .home a.titles"); if (hmnav.length > 0) {warna.push(hmnav[0])}; warna.invoke("observe", "click", function(event){ var el = Event.element(event); if (!confirm("'+$msg.get('mycurriki.editprofile.confirmLeave')+'")){event=event||window.event; if (typeof event.preventDefault != "undefined") { event.preventDefault(); } else if (window.event){ event.returnValue = false; } }; });</script>')
-	<!-- End Profile Box -->
+	#htmlcomment("<!-- End Profile Box -->")
 #end ##}
 
 #**
@@ -544,7 +554,7 @@ $!desc
 			<a class="button-orange" href="$xwiki.getURL("MyCurriki.Profile", "view")" title="$msg.get("view_profile.intro.return_button")">$msg.get("view_profile.intro.return_button")</a></span>
 		#end ##}
 		#if("$!request.mode"=="") ##{
-			<!-- My Curriki edit profile button -->
+		    #htmlcomment("<!-- My Curriki edit profile button -->")
 			<a class="button-orange" href="$xwiki.getURL("MyCurriki.EditProfile", "view", "user=${userdoc.fullName}")" title="$msg.get("view_profile.intro.edit_button")">$msg.get("view_profile.intro.edit_button")</a></span>
 		#end ##}
 		</div>
@@ -607,7 +617,7 @@ $!desc
 #set($c = $c / 20)
 #set($c = "${c}%")
 ##
-			<div class="profile-push">$msg.get('view_profile.intro.percent_complete', [$c])</div>
+			<div class="profile-push">{{html clean=false}}$msg.get('view_profile.intro.percent_complete', [$c]){{/html}}</div>
 			#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
 			#if($!highlights) ##{
 			<div class="clearfloats"></div>
@@ -617,7 +627,7 @@ $!desc
 			#end ##}
 		#end ##}
 	#end ##}
-  <!-- End My Curriki edit profile button -->
+ #htmlcomment("<!-- End My Curriki edit profile button -->")
 #end ## } end macro
 
 
@@ -627,7 +637,7 @@ $!desc
   * @param $userdoc Document of the user
   *#
 #macro(mycurriki_viewphoto $userdoc) ##{
-<!-- My Curriki View Photo -->
+#htmlcomment("<!-- My Curriki View Photo -->")
 <div class="userpic">
     #if($userdoc.attachmentList.size()==0) ##{
       <img src="$xwiki.getSkinFile("noavatar.png")"/>
@@ -653,7 +663,7 @@ $!desc
       #end  ## } is inline
    #end ##}
 </div>
-<!-- End My Curriki View Photo -->
+#htmlcomment("<!-- End My Curriki View Photo -->")
 #end ##}
 
 #**
@@ -708,7 +718,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_viewprofile $userdoc $userobj) ##{
-<!-- Curriki View Profile -->
+#htmlcomment("<!-- Curriki View Profile -->")
     #set($member_type = "")
     #set($member_type = $!userobj.getProperty("member_type").getValue())
     #if($member_type == '---' || $member_type == '0') ##{
@@ -725,7 +735,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#set($first_name = $!userobj.getProperty("first_name").getValue())
 		#if("$!first_name" != "") ##{
 			<li>
-				*$msg.get("view_profile.account_info.name1.title")*
+				**$msg.get("view_profile.account_info.name1.title")**
 				#mycurriki_dashifempty($userdoc.display("first_name", $userobj))
 			</li>
 		#end ##}
@@ -733,16 +743,16 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#set($last_name = $!userobj.getProperty("last_name").getValue())
 		#if("$!last_name" != "") ##{
 			<li>
-				*$msg.get("view_profile.account_info.name2.title")*
+				**$msg.get("view_profile.account_info.name2.title")**
 				#mycurriki_dashifempty($userdoc.display("last_name", $userobj))
 			</li>
 		#end ##}
 		<li>
-			*$msg.get("view_profile.account_info.login.title")*
+			**$msg.get("view_profile.account_info.login.title")**
 			#mycurriki_dashifempty($userdoc.name)
 		</li>
 ##        <li>
-##           *$msg.get("view_profile.account_info.member_type")*
+##           **$msg.get("view_profile.account_info.member_type")**
 ##            #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
 ##        </li>
 	#end ##}
@@ -751,25 +761,44 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 	#set($show_email = $!userobj.getProperty('show_email').value)
 	#if(!$public_profile||($show_email == 1)||(($show_email == 2) && ($context.user != 'XWiki.XWikiGuest'))) ##{
 		<li>
-			*$msg.get("view_profile.account_info.email.title")*
+			**$msg.get("view_profile.account_info.email.title")**
 			#mycurriki_dashifempty($userdoc.display("email", $userobj))
 		</li>
 	#end ##}
 	<li>
-		*$msg.get("view_profile.account_info.member_since")*
+		**$msg.get("view_profile.account_info.member_since")**
 		$xwiki.formatDate($userdoc.creationDate,$msg.get("mycurriki.dateFormat"))
 	</li>
-    #if("$!member_type" != "") ##{
-    <li>
-    	*$msg.get("view_profile.interests.member_type.title")*
-	    #mycurriki_dashifempty($userdoc.display("member_type", $userobj))##
-        #set($donationObj=$userdoc.getObject("Registration.DonationTrack"))##
-        #if($donationObj && $hasGlobalAdmin)
-            <br/> This user has donated &#36;${donationObj.get("totalDonated")}.
-            #if("corporation"==$userobj.getProperty("member_type").getValue())<br/>Last corporate membership fee of
-                &#36;$donationObj.get("lastCorpMembershipDonated") made on $donationObj.get("lastCorpMembershipDate").#end
-        #end ##
-    </li>
+	<li>
+		#set($neamember=$userdoc.getValue("neamember"))
+		**$msg.get("view_profile.account_info.neamember")**
+		#mycurriki_dashifempty($userdoc.display("neamember", $userobj))
+	</li>
+	#if("$!neamember" != "0") ##{
+		<li>
+			**$msg.get("view_profile.account_info.neaaffiliate")**
+			#mycurriki_dashifempty($userdoc.display("neaaffiliate", $userobj))
+		</li>
+		    #if("$!member_type" != "") ##{
+    		<li>
+    			**$msg.get("view_profile.interests.member_type.title")**
+		    	#mycurriki_dashifempty($userdoc.display("member_type", $userobj))##
+        		#*
+        		#set($donationObj=$userdoc.getObject("Registration.DonationTrack"))##
+	        	#if($donationObj && $hasGlobalAdmin)
+    	        	<br/> This user has donated &#36;${donationObj.get("totalDonated")}.
+        	    	#if("corporation"==$userobj.getProperty("member_type").getValue())<br/>Last corporate membership fee of
+            	    	&#36;$donationObj.get("lastCorpMembershipDonated") made on $donationObj.get("lastCorpMembershipDate").#end
+        		#end ##
+        		*#
+    		</li>
+        	#if("$!member_type" == "support") ##{
+			<li>
+				**$msg.get("view_profile.account_info.neaprofessiontitle")**
+				#mycurriki_dashifempty($userdoc.display("neaprofessiontitle", $userobj))
+			</li>
+	    	#end ##}
+	    #end ##}
     #end ##}
 </ul>
 </div>
@@ -782,7 +811,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 <div class="fields-wrp">
 <ul>
 	<li>
-		*$msg.get("view_profile.privacy.show_profile.title")*
+		**$msg.get("view_profile.privacy.show_profile.title")**
 		#set($show_profile = "")
 		#set($show_profile = $!userobj.getProperty('show_contact').value)
 		#if($show_profile == "1") ##{
@@ -794,7 +823,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#end ##}
 	</li>
 	<li>
-		*$msg.get("view_profile.privacy.show_email.title")*
+		**$msg.get("view_profile.privacy.show_email.title")**
 		#set($show_email = "")
 		#set($show_email = $!userobj.getProperty('show_email').value)
 		#if($show_email == 1) ##{
@@ -808,7 +837,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#end ##}
 	</li>
 	<li>
-		*$msg.get("view_profile.privacy.email_options.title")*
+		**$msg.get("view_profile.privacy.email_options.title")**
 		#set($opt_out = "")
 		#set($opt_out = $!userobj.getProperty('opt_out').value)
 		#if($opt_out == 0) ##{
@@ -880,7 +909,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 <ul>
 #if("$!affiliation" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.affiliation.title")*
+		**$msg.get("view_profile.interests.affiliation.title")**
 		#mycurriki_dashifempty($userdoc.display("affiliation", $userobj))
 	</li>
 #end ##}
@@ -926,55 +955,55 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 #end ##}
 #if("$!city" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.city.title")*
+		**$msg.get("view_profile.interests.city.title")**
 		#mycurriki_dashifempty($userdoc.display("city", $userobj))
 	</li>
 #end ##}
 #if("$!state" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.state.title")*
+		**$msg.get("view_profile.interests.state.title")**
 		#mycurriki_dashifempty($userdoc.display("state", $userobj))
 	</li>
 #end ##}
 #if("$!country" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.country.title")*
+		**$msg.get("view_profile.interests.country.title")**
 		#mycurriki_dashifempty($userdoc.display("country", $userobj))
 	</li>
 #end ##}
 #if("$!language" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.language.title")*
+		**$msg.get("view_profile.interests.language.title")**
 		#mycurriki_dashifempty($userdoc.display("language", $userobj))
 	</li>
 #end ##}
-<!-- publish_intent="$publish_intent" and value_add="$value_add" -->
+#htmlcomment("<!-- publish_intent=$publish_intent and value_add=$value_add -->")
 #if("$!publish_intent" != "") ##{
-	<li>*$msg.get("view_profile.interests.publish_intent.title")*
+	<li>**$msg.get("view_profile.interests.publish_intent.title")**
 		#mycurriki_dashifempty($publish_intent)
 	</li>##}
 #end ##}
 #if("$!value_add" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.value_add.title")*
+		**$msg.get("view_profile.interests.value_add.title")**
 		#mycurriki_dashifempty($userdoc.display("value_add", $userobj))
 	</li>
 #end ##}
 #if("$!comment" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.bio.title")*
+		**$msg.get("view_profile.interests.bio.title")**
 		#mycurriki_dashifempty($userdoc.display("comment", $userobj))
 	</li>
 #end ##}
 #if("$!contact" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.contact.title")*
+		**$msg.get("view_profile.interests.contact.title")**
 		#mycurriki_dashifempty($userdoc.display("contact", $userobj))
 	</li>
 #end ##}
 #if("$!websites" != "") ##{
 	<li>
-		*$msg.get("view_profile.interests.websites.title")*
+		**$msg.get("view_profile.interests.websites.title")**
 		#mycurriki_dashifempty($userdoc.display("websites", $userobj))
 	</li>
 #end ##}
@@ -982,7 +1011,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 </div>
 </fieldset>
 #end ##}
-<!-- End Curriki View Profile -->
+#htmlcomment("<!-- End Curriki View Profile -->")
 #end ##} end macro
 
 
@@ -993,7 +1022,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_viewprofilebox $userdoc $userobj) ##{
-<!-- View Profile Box -->
+#htmlcomment("<!-- View Profile Box -->")
 ## 4 states
 ## 1. Private Profile -- Member looking at own profile or Admin
 ## 2. Member Public Profile -- Member (or Admin) viewing their "public" profile
@@ -1023,8 +1052,8 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#else ##}{
 			#mycurriki_viewprofile($userdoc $userobj)
 		#end ##}
-	#end ##}
-<!-- End View Profile Box -->
+	#end ##
+	#htmlcomment(" <!-- End View Profile Box -->")
 #end ##} end macro
 
 ##
@@ -1039,7 +1068,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $allcols True if we show the action column of the favorites
   *#
 #macro(mycurriki_favoritesheader $allcols)
-<!-- MyCurriki Favorites Header -->
+#htmlcomment("<!-- MyCurriki Favorites Header -->")
 <tr>
   <th class="table-header table-col-title">$msg.get('mycurriki.favorites.table.title')</th>
   <th class="table-header table-col-contributor">$msg.get('mycurriki.favorites.table.contributor')</th>
@@ -1049,7 +1078,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
     <th class="table-header table-header-fixed table-col-action">$msg.get('mycurriki.favorites.table.action')</th>
   #end ## if allcols ## }
 </tr>
-<!-- End MyCurriki Favorites Header -->
+#htmlcomment("<!-- End MyCurriki Favorites Header -->")
 #end ##} end macro mycurrikifavoritesheader
 
 
@@ -1060,7 +1089,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $allcols True if we show the action column of the favorites
   *#
 #macro(mycurriki_favoritesasset $asset $allcols)
-  <!-- MyCurriki Favorites Asset -->
+  #htmlcomment("<!-- MyCurriki Favorites Asset -->")
   #if(!$g_rowCount) ## {
     #set($g_rowCount = 0)
   #end ## }
@@ -1080,7 +1109,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
       </td>
     #end ## if allcols ## }
   </tr>
-  <!-- End MyCurriki Favorites Asset -->
+  #htmlcomment("<!-- End MyCurriki Favorites Asset -->")
 #end ##end macro mycurriki_favoritesasset
 
 #**
@@ -1091,9 +1120,9 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $assetList asset list that is displayed
   *#
 #macro(mycurriki_favoritespagination $startIndex $nbToDisplay $assetList) ##{
-  <!-- MyCurriki Favorites Pagination -->
+  #htmlcomment("<!-- MyCurriki Favorites Pagination -->")
   #curriki_paginator($msg.get("mycurriki.tab.favorites.label") $startIndex $nbToDisplay $assetList.size())
-  <!-- End MyCurriki Favorites Pagination -->
+  #htmlcomment("<!-- End MyCurriki Favorites Pagination -->")
 #end ## } end macro mycurriki_favoritespagination
 
 
@@ -1103,7 +1132,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_favoritesbutton $userobj)
-  <!-- MyCurriki Favorites Button -->
+  #htmlcomment("<!-- MyCurriki Favorites Button -->")
   #if($context.user==$userdoc.fullName) ## {
     #set($shortname = $userdoc.fullName)
     #set($breadcrumb="MyCurriki.WebHome")
@@ -1122,7 +1151,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
       #end ## }
     #end ## }
   #end ## }
-  <!-- End MyCurriki Favorites Button -->
+  #htmlcomment("<!-- End MyCurriki Favorites Button -->")
 #end
 
 #**
@@ -1132,7 +1161,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_favoritesbox $userdoc $userobj) ##{
-  <!-- MyCurriki Favorites Box -->
+  #htmlcomment("<!-- MyCurriki Favorites Box -->")
   #set($allcols = false)
   #if($context.user=="XWiki.XWikiGuest") ## {
     ## Settings for guests here
@@ -1190,7 +1219,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
   </table>
   ## Pagination here
   #mycurriki_favoritespagination( $startIndex $nbToDisplay $assetList )
-  <!-- End MyCurriki Favorites Box -->
+  #htmlcomment("<!-- End MyCurriki Favorites Box -->")
 #end ##} end macro mycurrikifavoritesbox
 
 
@@ -1260,7 +1289,7 @@ $msg.get("deleted")
   * @param $allcols true if the actions columns are added
   *#
 #macro(mycurriki_contributionsheader $sortBy $sortDir $headerArgs $allcols) ##{
-  <!-- MyCurriki Contributions Header -->
+  #htmlcomment("<!-- MyCurriki Contributions Header -->")
   <tr>
       #if($sortBy=="title" && $sortDir == "asc") ## {
         #set($url = $xwiki.getURL($doc.fullName, "view", "${headerArgs}sortBy=title&sortDir=desc"))
@@ -1288,7 +1317,7 @@ $msg.get("deleted")
         <th class="table-header table-header-fixed table-col-action">$msg.get('mycurriki.contributions.table.action')</th>
       #end ## if allcols
     </tr>
-    <!-- End MyCurriki Contributions Header -->
+    #htmlcomment("<!-- End MyCurriki Contributions Header -->")
 #end ##} end macro mycurrikicontributionsheader
 
 
@@ -1472,7 +1501,7 @@ $msg.get("deleted")
   * @param $allcols true if the actions columns are added
   *#
 #macro(mycurriki_contributionsasset $asset $allcols)
-  <!-- MyCurriki Contributions Asset -->
+  #htmlcomment("<!-- MyCurriki Contributions Asset -->")
   #if(!$g_rowCount) ## {
     #set($g_rowCount = 0)
   #end ## }
@@ -1500,7 +1529,7 @@ $msg.get("deleted")
       </td>
     #end ## if allcols
   </tr>
-  <!-- End MyCurriki Contributions Asset -->
+  #htmlcomment("<!-- End MyCurriki Contributions Asset -->")
 #end
 
 
@@ -1513,9 +1542,9 @@ $msg.get("deleted")
   * @param $sortArgs The sort arguments for the url
   *#
 #macro(mycurriki_contributionspagination $startIndex $nbToDisplay $showcount $sortArgs) ##{
-  <!-- MyCurriki Contributions Pagination -->
+  #htmlcomment("<!-- MyCurriki Contributions Pagination -->")
   #curriki_paginatorargs($msg.get("mycurriki.tab.contributions.label") $startIndex $nbToDisplay $showcount $sortArgs)
-  <!-- End MyCurriki Contributions Pagination -->
+  #htmlcomment("<!-- End MyCurriki Contributions Pagination -->")
 #end ##} end macro
 
 
@@ -1525,9 +1554,9 @@ $msg.get("deleted")
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_contributionsbutton $userdoc $userobj )
-  <!-- MyCurriki Contributions Buttons -->
+  #htmlcomment("<!-- MyCurriki Contributions Buttons -->")
   #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))##{
-    {pre}
+    ## {pre}
     <a class="button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
       <script type="text/javascript">
           Ext.onReady(function() {
@@ -1536,9 +1565,9 @@ $msg.get("deleted")
               }
           });
       </script>
-    {/pre}
+    ## {/pre}
   #end ##}
-  <!-- End MyCurriki Contributions Buttons -->
+  #htmlcomment("<!-- End MyCurriki Contributions Buttons -->")
 #end ##} end macro
 
 
@@ -1549,7 +1578,7 @@ $msg.get("deleted")
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_contributionsbox $userdoc $userobj) ##{
-  <!-- MyCurriki Contributions Box -->
+  #htmlcomment("<!-- MyCurriki Contributions Box -->")
   #set($headerArgs="user=${userdoc.fullName}&")
   #set($allcols = false)
   #if($context.user=="XWiki.XWikiGuest")
@@ -1665,7 +1694,7 @@ $msg.get("deleted")
   </table>
   ## Pagination here
   #mycurriki_contributionspagination( $startIndex $nbToDisplay $showcount $sortArgs )
-  <!-- End MyCurriki Contributions Box -->
+  #htmlcomment("<!-- End MyCurriki Contributions Box -->")
 #end ##} end macro
 
 

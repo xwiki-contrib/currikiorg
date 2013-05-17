@@ -119,10 +119,12 @@ $userdoc.use("XWiki.XWikiUsers")
 
 
 #macro(startregistrationform) ##{
+{{html clean=false}}
 ###if($g_RegType == 'edit_profile') ##{
-<script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
+## <script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
 ###end ##}
-{pre}<script type="text/javascript">
+## {pre}
+<script type="text/javascript">
 /* <![CDATA[ */
 var regFormOk = false;
 
@@ -346,7 +348,7 @@ window.onbeforeunload = function () {
 }.bind(this);
 /* ]]> */
 </script>
-{/pre}
+## {/pre}
 #if("$!errMsg" != "") ##{
 <div class="form-wrp">
 <div class="error">
@@ -364,8 +366,11 @@ $errMsg
 #end ##}
 #if($g_RegType == 'edit_profile') ##{
 <input id="origemail" name="origemail" type="hidden" value="${userobj.getProperty('email').getValue()}" />
-{pre}<input id="origpw" name="origpw" type="hidden" value="********" />{/pre}
+## {pre}
+<input id="origpw" name="origpw" type="hidden" value="********" />
+##{/pre}
 #end ##}
+{{/html}}
 #end ##}
 
 #macro(endregistrationform) ##{
@@ -381,11 +386,14 @@ $errMsg
 #if($g_RegType != 'edit_profile') ##{
 </div>
 #end ##}
-{pre}
+##{pre}
+{{html clean=false}}
 <script type="text/javascript">
 /* <![CDATA[ */
 #if($g_RegType == 'edit_profile') ##{
 function initRTEs() {
+// TODO replace with Wysiwyg 2.0
+/*
 	tinyMCE.init({
 		language: "en",
 		mode: "exact",
@@ -402,6 +410,7 @@ function initRTEs() {
 		theme_advanced_statusbar_location : "",
 		theme_advanced_resizing : true
 	});
+*/
 }
 
 if (Ext.isIE6) {
@@ -415,8 +424,12 @@ document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
     $$("#register select[name=XWiki.XWikiUsers_0_member_type]").each(function(inputElt){
-        inputElt.observe("change",toggleCorporateFieldsVisible);
-        toggleCorporateFieldsVisible();
+        inputElt.observe("change",toggleNEAFieldsVisible);
+        toggleNEAFieldsVisible();
+    });
+    $$("#register input[name=XWiki.XWikiUsers_0_neamember]").each(function(inputElt){
+        inputElt.observe("change",toggleNEAFieldsVisible);
+        toggleNEAFieldsVisible();
     });
 });
 ## 
@@ -443,9 +456,36 @@ function toggleCorporateFieldsVisible() {
     Ext.get("memberTypeNotice").dom.innerHTML= text;
     // Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
 }
+
+function toggleNEAFieldsVisible() {
+    // specific NEA visibility
+    var neamember = $('register')['XWiki.XWikiUsers_0_neamember'][0];
+    if (neamember.checked) {
+      console.log("nea member is checked");
+      var i = $('nea-affiliate-section');
+      if(i) i.show();
+    } else {
+      console.log("nea member is not checked");
+      var i = $('nea-affiliate-section');
+      if(i) i.hide();      
+    }
+    
+    // only show profession title if the member type is education
+    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
+    memberType = memberType.options[memberType.selectedIndex].value;
+    var i;
+    if(memberType=="support") {
+        i = $('nea-professiontitle-section');
+        if(i) i.show();
+    } else {
+        i = $('nea-professiontitle-section');
+        if(i) i.hide();
+    }
+}
 /* ]]> */
 </script>
-{/pre}
+{{/html}}
+##{/pre}
 #end ##}
 
 #macro(registrationformtextfield $pfx $fld) ##{
@@ -493,8 +533,10 @@ function toggleCorporateFieldsVisible() {
 <fieldset class="required">
 	<h3>$msg.get("${pfx}.header")</h3>
     <div class="fields-wrp">
+    {{html clean=false}}
 		<p>$msg.get("${pfx}.intro")
                   $msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
+    {{/html}}
 		<ul>
 			#if($g_RegType == 'register') ##{
 				#set($i = $pfx+'.login')#registrationformtextfield($i 'xwikiname')
@@ -505,7 +547,14 @@ function toggleCorporateFieldsVisible() {
 			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
 			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
+            #set($i = $pfx+'.neamember')#registrationformtextfield($i 'neamember')
+            <div id="nea-affiliate-section" style="display: none;">       
+            #set($i = $pfx+'.neaaffiliate')#registrationformtextfield($i 'neaaffiliate')   
             #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
+            <div id="nea-professiontitle-section" style="display: none;">       
+            #set($i = $pfx+'.neaprofessiontitle')#registrationformtextfield($i 'neaprofessiontitle')          
+            </div>
+            </div>
 		</ul>
         <p id="memberTypeNotice">&nbsp;</p>
         <p style="margin-bottom: 0; color: #777; font-weight: 100;">$msg.get("edit_profile.account_info.remove.member")</p>
@@ -561,15 +610,17 @@ function toggleCorporateFieldsVisible() {
 #set($opt_out = "0")
 #end ##}
 #if($opt_out == "2") ##{
+{{html clean=false}}
 <script type="text/javascript">
-{pre}
+##{pre}
 /* <![CDATA[ */
 document.observe('dom:loaded', function(){
 	enableEmailDesired();
 });
 /* ]]> */
-{/pre}
+##{/pre}
 </script>
+{{/html}}
 #end ##}
 				<span><label>$msg.get("${pfx}.email_options.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.email_options.tooltip")"/></span>
 				<ul class="radioBtns">
@@ -684,18 +735,24 @@ document.observe('dom:loaded', function(){
             </li>
 		#if($g_RegType == 'edit_profile') ##{
 				<li>
+				    {{html clean=false}}
 					<span><label for="XWiki.XWikiUsers_0_comment">$msg.get("${pfx}.bio.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.bio.tooltip")"/></span>
 					<p class="instructions">$msg.get("${pfx}.bio.description")</p>
+					{{/html}}
 					$userdoc.display('comment', "edit")
 				</li>
 				<li>
+				    {{html clean=false}}
 					<span><label for="XWiki.XWikiUsers_0_contact">$msg.get("${pfx}.contact.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.contact.tooltip")"/></span>
 					<p class="instructions">$msg.get("${pfx}.contact.description")</p>
+					{{/html}}
 					$userdoc.display('contact', "edit")
 				</li>
 				<li>
+				    {{html clean=false}}
 					<span><label for="XWiki.XWikiUsers_0_websites">$msg.get("${pfx}.websites.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.websites.tooltip")"/></span>
 					<p class="instructions">$msg.get("${pfx}.websites.description")</p>
+					{{/html}}
 					$userdoc.display('websites', "edit")
 				</li>
 		#end ##}
@@ -705,6 +762,7 @@ document.observe('dom:loaded', function(){
 #end ##}
 
 #macro(registrationterms) ##{
+{{html clean=false}}
 <fieldset class="required">
 	<h3>$msg.get('register.terms.header')</h3>
 	<div class="fields-wrp">
@@ -724,9 +782,11 @@ document.observe('dom:loaded', function(){
 		<button class="button-orange" type="submit">$msg.get('register.terms.save_button')</button>
 	</div>
 </fieldset>
+{{/html}}
 #end ##}
 
 #macro(profilechange_photo) ##{
+{{html clean=false}}
 <form id="photo-upload" name="photo-upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return validatePhotoForm();">
     <fieldset class="required" style="clear:right;">
 	<h3>$msg.get('edit_profile.change_photo.header')</h3>
@@ -753,7 +813,7 @@ document.observe('dom:loaded', function(){
 		#set($xredirectdelphoto = $xwiki.getURL("MyCurriki.EditProfile", "view", "$userarg"))
 		#set($dellink = $userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${xredirectdelphoto}"))
 <script type="text/javascript">
-{pre}
+## {pre}
 /* <![CDATA[ */
 $('profile-removephoto').observe('click', function(){
 	if (confirm('$msg.get('edit_profile.change_photo.remove_confirmation')')) {
@@ -761,9 +821,10 @@ $('profile-removephoto').observe('click', function(){
 	}
 });
 /* ]]> */
-{/pre}
+## {/pre}
 </script>
 	#end  ## } is same user
 #end  ## } has attachment
 </form>
+{{/html}}
 #end ##}
