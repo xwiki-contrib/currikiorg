@@ -70,13 +70,18 @@ $userdoc.use("XWiki.XWikiUsers")
 		#set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
 
 		## Avatar Upload
-		#set($filename = $xwiki.fileupload.getFileName("filepath"))
-		#if("$!filename"!="") ##{
+    #set($fileupload = $xwiki.fileupload)
+    #set($filename = $fileupload.getFileName("filepath"))
+    #set($filedata = $fileupload.getFileItemData("filepath"))
+		#if($!filename != "" && $filedata) ##{
 			#set($attlist = $userdoc.attachmentList)
 			#foreach ($att in $attlist) ##{
 				#set($junk = $userdoc.document.deleteAttachment($att.attachment, $context.context))
 			#end ##}
-			#set($junk = $userdoc.addAttachments())
+      #set($attach = $userdoc.addAttachment($filename, $filedata))
+      #if($attach)
+        #set ($junk = $userdoc.save())
+      #end
         #else
             ## Info change
             #set($oPass = '********')
