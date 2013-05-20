@@ -1215,7 +1215,7 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
  *#
 #macro(pageTitle) ##{
     ## prepare if a group
-    #if($doc.space.startsWith("Group_"))
+    #if($doc.name.startsWith("Group_"))
         #set($sm = $xwiki.csm)
         #set($spaceName = $doc.space)
         #if(!$spaceName.startsWith("Group_"))
@@ -1235,6 +1235,11 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
         #set($userDoc=$xwiki.getDocument($user))##
         #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
     ${msg.get('app.siteName')}  - $msg.get("mycurriki.tab.${doc.name.toLowerCase()}.label") - $userObj.first_name $userObj.last_name
+    #elseif($hasSpace && $doc.name=="WebHome"       )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_home_tabname")##
+    #elseif($hasSpace && $doc.name=="Messages"      )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_messages_tabname")##
+    #elseif($hasSpace && $doc.name=="Curriculum"    )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_curriculum_tabname")
+    #elseif($hasSpace && $doc.name=="Members"       )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_members_tabname")
+    #elseif($hasSpace && $doc.name=="Documentation" )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_documentation_tabname")
     #else ##}{
         #if($title)$!escapetool.xml($!title.replaceAll('<[^>]+>','').replaceAll('\n',' '))
         #elseif($doc.displayTitle)${msg.get('app.siteName')} - $!escapetool.xml($!doc.displayTitle.replaceAll('<[^>]+>','').replaceAll('\n',' '))
