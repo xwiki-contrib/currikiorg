@@ -1214,6 +1214,18 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
  * Macro to display the page title
  *#
 #macro(pageTitle) ##{
+    ## prepare if a group
+    #if($doc.name.startsWith("Group_"))
+        #set($sm = $xwiki.csm)
+        #set($spaceName = $doc.space)
+        #if(!$spaceName.startsWith("Group_"))
+            #set($pos = 1 + $spaceName.indexOf("_"))
+            #set($spaceName = $spaceName.substring($pos))
+        #end
+        #set($space = $sm.getSpace($spaceName))
+        #set($hasSpace=true)
+    #end
+    ##
     #if($doc.fullName=="Search.WebHome") ##{
         $msg.get("main.curriki") - $msg.get("caption.search")
     #elseif($doc.fullName.startsWith("Coll_"))
@@ -1223,6 +1235,11 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
         #set($userDoc=$xwiki.getDocument($user))##
         #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
     Curriki  - $msg.get("mycurriki.tab.${doc.name.toLowerCase()}.label") - $userObj.first_name $userObj.last_name
+    #elseif($hasSpace && $doc.name=="WebHome"       )Curriki - $space.getDisplayTitle() - $msg.get("groups_home_tabname")##
+    #elseif($hasSpace && $doc.name=="Messages"      )Curriki - $space.getDisplayTitle() - $msg.get("groups_messages_tabname")##
+    #elseif($hasSpace && $doc.name=="Curriculum"    )Curriki - $space.getDisplayTitle() - $msg.get("groups_curriculum_tabname")
+    #elseif($hasSpace && $doc.name=="Members"       )Curriki - $space.getDisplayTitle() - $msg.get("groups_members_tabname")
+    #elseif($hasSpace && $doc.name=="Documentation" )Curriki - $space.getDisplayTitle() - $msg.get("groups_documentation_tabname")
     #else ##}{
         #if($title)$!escapetool.xml($!title.replaceAll('<[^>]+>','').replaceAll('\n',' '))
         #elseif($doc.displayTitle)Curriki - $!escapetool.xml($!doc.displayTitle.replaceAll('<[^>]+>','').replaceAll('\n',' '))
