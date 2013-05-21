@@ -36,12 +36,18 @@
         $asset.use("CurrikiCode.ArchiveAssetClass")
         <button class="button-link button-link-show" onclick="showTree('${treeviewid}', this);" title="$msg.get("rve.content.view.show_button")">$msg.get("rve.content.view.show_button")</button>
         #if ($asset.getValue("startfile") && $asset.getValue("startfile")!="")
-        <button class="button-link button-link-start" onclick="window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
+        <button class="button-link button-link-start" onclick="archiveStartButtonClicked();return false;" title="$msg.get("rve.content.view.start_button")">$msg.get("rve.content.view.start_button")</button>
         #end
         <div style="margin: 5px 0pt;">
             <div id="treeview${treeviewid}" style="display: none;">
             </div>
             <script type="text/javascript">
+
+                function archiveStartButtonClicked(){
+                  window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');
+                  Curriki.logView('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');
+                }
+
                 function showTree(treeId, button) {
                     var treediv = document.getElementById("treeview" + treeId);
                     treediv.style.display = 'block';
