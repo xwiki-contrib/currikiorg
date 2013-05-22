@@ -8,7 +8,7 @@ This script automatically set the owner of the pages in Groups, MyCurriki spaces
 
 [Confirm>$doc.fullName?confirm=1]
 
-#foreach($item in $xwiki.searchDocuments("where doc.web='Groups'"))
+#foreach($item in $xwiki.searchDocuments("where doc.web='Groups' or doc.web='Groups_TemplateSpace'"))
 * $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
 
 #end
