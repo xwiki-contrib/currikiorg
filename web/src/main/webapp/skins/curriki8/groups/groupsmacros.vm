@@ -761,17 +761,19 @@ $msg.get("groups_home_firsttimewelcome_title")
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
-  #if($!filename != "" && $filedata)
+  ## CURRIKI-6078 need to ignore if no filename as otherwise 
+  ## you cannot update the title and desc without uploading a new logo
+  ##if($!filename != "" && $filedata)
     #set ($spaceHome = $xwiki.getDocument("${spaceName}.WebHome"))
     #set($attach = $spaceHome.addAttachment($filename, $filedata))
     #if($attach)
       $s.set("logo", $attach.filename)
       #set($filename = $attach.filename)
+    #end
       $spaceHome.save()
       $s.save()
       $response.sendRedirect($s.getHomeURL())
-    #end
-  #end
+  ##end
 #else
 <div class="frame">
 <form class="CreateNewGroup" action="#" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
