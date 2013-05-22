@@ -169,8 +169,11 @@
     #set( $tmp = $xwiki.copyDocument( "Groups.DocumentationAttachmentTemplate", $attDocName ) )
     #set( $attDoc = $xwiki.getDocument( $attDocName ) )
     $attDoc.save()
-    #set( $tmp = $attDoc.addAttachments() )
-    $attDoc.setTitle( $context.addedAttachments.get(0).filename )
+    #set($fileupload = $xwiki.fileupload)
+    #set($filename = $fileupload.getFileName("filepath"))
+    #set($filedata = $fileupload.getFileItemData("filepath"))
+    #set($attach = $spaceHome.addAttachment($filename, $filedata))
+    $attDoc.setTitle($filename)
     ## marks this as being file
     #set( $tmp = $attDoc.tagList.add( "documentation-file" ) )
    $attDoc.save()
