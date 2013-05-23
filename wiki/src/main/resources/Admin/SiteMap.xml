@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1182375999000</creationDate>
-<date>1351798440000</date>
-<contentUpdateDate>1351798440000</contentUpdateDate>
-<version>6.1</version>
+<date>1360105566000</date>
+<contentUpdateDate>1360105566000</contentUpdateDate>
+<version>22.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -165,10 +165,24 @@
 <users>XWiki.XWikiGuest</users>
 </property>
 </object>
-<content>$response.setContentType("text/xml")
-#set($excludeSpaces = $xwiki.getDocument('Admin.SiteMapExcludeSpace').getContent().split("(\r|\n)+"))
-#set($excludeNames = $xwiki.getDocument('Admin.SiteMapExcludeName').getContent().split("(\r|\n)+"))
-#set($excludePages = $xwiki.getDocument('Admin.SiteMapExcludePage').getContent().split("(\r|\n)+"))
+<content>#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="datetool" type="org.apache.velocity.tools.generic.DateTool" *# ##
+#set($min=0)#if("$!request.min"!="")#set($min=$numbertool.toNumber($request.min))#end##
+#set($step=1000)#if("$!request.step"!="")#set($step=$numbertool.toNumber($request.step))#end##
+#set($max=$min+$step)
+$response.setContentType("text/xml")##
+#set($excludeSpaces = $xwiki.getDocument('Admin.SiteMapExcludeSpace').getContent().split("(\r|\n)+"))##
+#set($excludeNames = $xwiki.getDocument('Admin.SiteMapExcludeName').getContent().split("(\r|\n)+"))##
+#set($excludePages = $xwiki.getDocument('Admin.SiteMapExcludePage').getContent().split("(\r|\n)+"))##
+#set ($baseurl =  "http://${xwiki.curriki.getPublicCurrikiConfig('hostname','missing-curriki-hostname')}")##
 ##
 #set($excludeSpaceQ = '')
 #foreach ($line in $excludeSpaces) ##{
@@ -198,21 +212,62 @@
 #if($request.space) ##{
     #set($onlySpaceQ = "doc.web='${request.space}' AND")
 #end ##}
-#set ($sql = "where $onlySpaceQ doc.web NOT IN ('XWiki', 'AssetTemp', 'Admin', 'Sandbox', 'Frameworks', 'AssetManager', 'Panels', 'MimeType', 'MyCurriki', 'Temp', 'Test' $excludeSpaceQ) AND doc.name NOT IN ('WebPreferences' $excludeNameQ) AND doc.fullName NOT IN ('Admin.SiteMap' $excludePageQ) AND (doc.fullName NOT IN (SELECT robj.name FROM BaseObject as robj, StringProperty as rprop WHERE robj.className='XWiki.AssetClass' AND robj.name = doc.fullName AND robj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value = 'private')) order by doc.date desc")
-#set ($list = $xwiki.searchDocuments($sql))
-#set ($baseurl =  "http://${xwiki.curriki.getPublicCurrikiConfig('hostname','missing-curriki-hostname')}")
-{pre}
+#set ($sql = "where $onlySpaceQ doc.space NOT IN ('AssetTemp', 'Admin', 'CurrikiCode', 'CreateResources', 'CRS', 'Sandbox', 'Frameworks', 'Groups', 'GCheckout', 'AssetManager', 'Panels', 'Metadata', 'MimeType', 'MyCurriki', 'Registration', 'Scheduler', 'Temp', 'Test', 'Search2', 'Util', 'XWiki' $excludeSpaceQ) AND doc.name NOT IN ('WebPreferences', 'WebHome', 'Favorites', 'Default' $excludeNameQ) AND not doc.web LIKE 'Blog_%' AND doc.fullName NOT IN ('Admin.SiteMap' $excludePageQ) ")
+#set($list=$request.session.servletContext.getAttribute("docList"))##
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+#if($list.size()&gt;0)&lt;!-- re-used list: $list.size() --&gt;#else##
+    &lt;!-- creating list --&gt;
+    #set ($list = $xwiki.searchDocuments($sql))##
+    $request.session.servletContext.setAttribute("docList",$list)##
+#end
+#if($request.index)
+## ------------------------------------------- sitemaps index --------------------------------------------
+{pre}
+&lt;sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+#set($count=0)#set($numMaps=$list.size()/$max)##
+    #foreach($count in [0..$numMaps])
+        &lt;sitemap&gt;&lt;loc&gt;${baseurl}/sitemaps/sitemap${numbertool.format("000",$count)}.xml&lt;/loc&gt;&lt;/sitemap&gt;
+    #end
+&lt;/sitemapindex&gt;
+
+&lt;!-- the end (might be eaten) --&gt;
+#else
+## ------------------------------------------- actual sitemaps --------------------------------------------
+#set($out=$response.getOutputStream())##
+#set($count=0)##
+{pre}&lt;!-- min: $min, max: $max --&gt;
 &lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
-    &lt;url&gt;
+    &lt;url&gt;&lt;!-- size : $list.size() --&gt;
         &lt;loc&gt;$baseurl&lt;/loc&gt;
         &lt;changefreq&gt;weekly&lt;/changefreq&gt;
         &lt;priority&gt;0.8&lt;/priority&gt;
     &lt;/url&gt;
-    #foreach ($item in $list)
-        &lt;url&gt;
-            &lt;loc&gt;${baseurl}/xwiki/bin/view/$xwiki.getURLEncoded($item).replaceFirst('\.', '/')&lt;/loc&gt;
-        &lt;/url&gt;
-    #end
+#foreach ($item in $list)#set($count=$count+1)##
+##        &lt;!-- count: $count #if($count&gt;$min)up#end #if($count&lt;$max)down#end --&gt;
+#if($count&gt;$min &amp;&amp; $count&lt;$max)##
+#set($shouldDo=true)##
+#if($item.startsWith("XWiki."))##
+#set($q = ", BaseObject obj, StringProperty rprop where doc.fullName=obj.name AND obj.className='CurrikiCode.AssetClass' AND doc.creator='${item}' AND doc.web != 'AssetTemp' AND doc.name != 'Favorites' AND doc.name != 'WebHome' ")##
+#set($q = "$q AND obj.id=rprop.id.id AND rprop.id.name='rights' AND rprop.value != 'private' AND doc.creator='$item')) ")##
+#set($numRsrc=$xwiki.countDocuments("$q"))##
+## &lt;!-- $item numRsrc = $numRsrc --&gt;
+#if($numRsrc&gt;0)#else#set($shouldDo=false)#end##
+#end##
+#set($doc=$xwiki.getDocument($item))##
+#if($item.startsWith("Coll_"))#set($assetRights=$doc.getObject("CurrikiCode.AssetClass").getXWikiObject().getStringValue('rights'))##
+#if($assetRights=='protected' || $assetRights=='public' || $assetRights=='members')#else#set($shouldDo=false)#end##
+#end
+#if($x.startsWith('Search.') || $x.startsWith('Blog.') || $x.startsWith('Coll_Templates.') || $x.startsWith('GWT.') )##
+#set($shouldDo=false)##
+#end##
+#if($shouldDo)##
+    &lt;url&gt;&lt;loc&gt;${baseurl}/xwiki/bin/view/$escapetool.url($item).replaceFirst('\.', '/')&lt;/loc&gt;##
+    #if($doc.date)&lt;lastmod&gt;$datetool.format("yyyy-MM-dd", $doc.date)&lt;/lastmod&gt;#end&lt;/url&gt;
+#else&lt;!-- ignored $item.replaceAll("--","&amp;#45;&amp;#45;") --&gt;#end##
+#end##
+#end
 &lt;/urlset&gt;
+    #set($left=$list.size()-$max)##
+    #if($count&lt;$max)$request.session.servletContext.removeAttribute("docList")&lt;!-- removed list attribute, next one will cache again --&gt;#else&lt;!-- warning: still $left to run --&gt;#end
+#end
 {/pre}</content></xwikidoc>

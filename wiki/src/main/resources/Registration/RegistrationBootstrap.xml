@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1309965611000</creationDate>
-<date>1339152018000</date>
-<contentUpdateDate>1339152018000</contentUpdateDate>
-<version>131.1</version>
+<date>1358520516000</date>
+<contentUpdateDate>1358520516000</contentUpdateDate>
+<version>132.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -290,9 +290,8 @@ fieldset h3 {
                   &lt;span id="postalCode_results"&gt;&amp;nbsp;&lt;/span&gt;
               &lt;/p&gt;
               #set($f="state")
-              &lt;p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS"
-                 onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end"&gt;
-                  &lt;label for="${f}_input}"&gt;&lt;b&gt;$msg.get("join.member.province.title")&lt;/b&gt;&lt;/label&gt;
+              &lt;p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS"&gt;
+                  &lt;label for="${f}_input"&gt;&lt;b&gt;$msg.get("join.member.province.title")&lt;/b&gt;&lt;/label&gt;
                   &lt;input id="${f}_input" name="${f}" value="$!tool.state"&gt;
               &lt;/p&gt;
               &lt;input type="hidden" name="city" id="city_input" value="$!tool.city"&gt;
@@ -355,6 +354,7 @@ fieldset h3 {
             }
             Curriki.console.log("memberTypeNotice: " + text);
             Ext.get("memberTypeNotice").dom.innerHTML= text;
+            Curriki.logEvent(['Registration', 'member-type-changed', s.dom.value])
         } catch(e) { Curriki.console.log(e); }
     };
     ##

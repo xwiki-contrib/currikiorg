@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1310343011000</creationDate>
-<date>1331760853000</date>
-<contentUpdateDate>1331760853000</contentUpdateDate>
-<version>54.1</version>
+<date>1354568441000</date>
+<contentUpdateDate>1354568441000</contentUpdateDate>
+<version>57.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -34,10 +34,10 @@
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end *#
 #set($hasDownload=$targets.isDownloadLink($redir))&lt;!-- hasDownload: $hasDownload --&gt;##
-#set($nextStep=$redir)##
 #if($redir)#else#set($redir=$targets.afterLogin)#end##
 #if($redir)#else#set($redir="/")#end##
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
+#set($nextStep=$redir)##
 #if($hasDownload)##
     $targets.storeFileToDownload()##
     #set($nextStep=$targets.fromDownloadToResourceOrSelf($redir)) ##

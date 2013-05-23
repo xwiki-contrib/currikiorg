@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1298699908000</creationDate>
-<date>1351548945000</date>
-<contentUpdateDate>1351548945000</contentUpdateDate>
-<version>104.1</version>
+<date>1366276606000</date>
+<contentUpdateDate>1366276606000</contentUpdateDate>
+<version>105.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -84,18 +84,20 @@ import com.xpn.xwiki.api.DeletedDocument;
 public class SOLRExtractorGroovy {
 
     public boolean hasAccess() { return xwiki.checkAccess(docFullName, "view"); }
-    
-    private static Set excludedSpaces = new HashSet(["AssetTemp", "Blog", "CurrikiCode", "AssetTemplate", "Admin", "Panels", "Search2", "Search", "Sandbox", "Util", "CreateResources", "Registration"]),
-        excludedPrefixes = new HashSet(["UserProfiles_Group", "Messages_Group", "Documentation_Group"]),
-        excludedNames = new HashSet(["Favorites", "Default"]),
-        excludedPages = new HashSet([]);
 
-    
+    private static Set excludedSpaces = new HashSet(["AssetTemp", "Blog", "CurrikiCode", "AssetTemplate", "Admin", "Panels", "Search2", "Search", "Sandbox", "Util", "CreateResources", "Registration"]),
+                       excludedPrefixes = new HashSet(["UserProfiles_Group", "Messages_Group", "Documentation_Group"]),
+                       excludedNames = new HashSet(["Favorites", "Default"]),
+                       excludedPages = new HashSet([]);
+
+
     private static boolean isExcluded(Document doc) {
         boolean baseExcluded = excludedSpaces.contains(doc.space) ||
-            excludedNames.contains(doc.name) ||
+                excludedNames.contains(doc.name) ||
                 excludedPages.contains(doc.fullName);
-        baseExcluded = baseExcluded || doc.name.endsWith("Class") || doc.name.endsWith("Template") || doc.name.endsWith("Templates") || doc.name.endsWith("Sheet") || doc.name.endsWith("Invitations");
+        boolean suffixExcluded = doc.name.endsWith("Class") || doc.name.endsWith("Template") || doc.name.endsWith("Templates") || doc.name.endsWith("Sheet") || doc.name.endsWith("Invitations");
+        if(doc.space=="Main" || doc.space.startsWith("Coll_")) suffixExcluded = false;
+        baseExcluded = baseExcluded || suffixExcluded;
         if(!baseExcluded) {
             for(s in excludedPrefixes) {
                 if(doc.space.startsWith((String) s)) { return true; }
@@ -109,7 +111,7 @@ public class SOLRExtractorGroovy {
                 if(title==null || title.trim().length()==0) return true;
         }
         return baseExcluded;
-    } 
+    }
 
 
     public void init(XWiki xwiki, Context context, String docFullName) {
@@ -117,6 +119,7 @@ public class SOLRExtractorGroovy {
         this.context = context;
         this.currikiPlugin = xwiki.curriki;
         this.docFullName = docFullName;
+        System.out.println("XWiki is " + xwiki.getXWiki());
         System.out.println("Initting extraction on " + docFullName);
         if(docFullName!=null &amp;&amp; docFullName.indexOf('/')&gt;0) docFullName= docFullName.replaceAll('/','.');
         if(hasAccess()) {
@@ -183,7 +186,7 @@ public class SOLRExtractorGroovy {
     private static ThreadLocal formatter = new FormatterThreadLocal();
 
     static int LENGTH_OF_COLL_PREFIX = "Coll_".length(),
-        LENGTH_OF_COLL_GROUP_PREFIX = "Coll_group_".length();
+               LENGTH_OF_COLL_GROUP_PREFIX = "Coll_group_".length();
 
 
     public boolean isApplicable() {
@@ -201,7 +204,7 @@ public class SOLRExtractorGroovy {
 
 
     public String getFullNameForComments() { return docFullName.replaceAll('--','- -'); }
-    
+
     public String getFullNameX() { return xmlEncode(docFullName); }
     public String getNameX() { return xmlEncode(doc.name);}
     public String getWebX() { return xmlEncode(doc.space);}
@@ -220,7 +223,7 @@ public class SOLRExtractorGroovy {
     public String getCreatorCodeX() { return getActorCodeX(doc.creator); }
     public String getCreatorX() { return xmlEncode(xwiki.getUserName(doc.creator, false)); }
 
-    public String getTitleX() { return xmlEncode(asset.getDisplayTitle()); }
+    public String getTitleX() { if(asset!=null) return xmlEncode(asset.getDisplayTitle()); else return null; }
     public String getDescriptionX() {
         String text = getTextOfHtml(xwiki.renderText(asset.getDescription(), asset));
         return xmlEncode(text);
@@ -239,7 +242,7 @@ public class SOLRExtractorGroovy {
     public String getLanguage() {
         return asset.getValue("language");
     }
-    
+
     public List getLevels() {
         return (List) asset.getValue("educational_level");
     }
@@ -296,7 +299,7 @@ public class SOLRExtractorGroovy {
             String filename = attach.filename;
             if(filename!=null &amp;&amp; filename.contains(".")) {
                 int p = filename.lastIndexOf(".");
-                if(p&gt;-1 &amp;&amp; p+1&lt;filename.length()) 
+                if(p&gt;-1 &amp;&amp; p+1&lt;filename.length())
                     l.add(filename.substring(p+1).toLowerCase());
             }
         }
@@ -446,13 +449,13 @@ public class SOLRExtractorGroovy {
                     def json = new StringBuffer();
                     json.append("{ 'page':'").append(parentDocFullName);
                     json.append("', 'title':'").append(protectForJSON(parentAsset.getDisplayTitle())).
-                        append("', 'assetType':'"+ parentAsset.getAssetType()).
-                        append("', 'ict':'"+ parentAsset.getValue("instructional_component")).
-                        append("' ,'contributor':'").append(parentDoc.creator).
-                        append(" ','contributorName':'").append(protectForJSON(xwiki.getUserName(parentDoc.creator,false))).
-                        append("' ,'description':'").append(protectForJSON(parentAsset.getDescription())).
-                        append("' ,'fwItems':[").append(fwItemsB).append("]").
-                        append(", 'levels':[").append(levels).append("]}");
+                            append("', 'assetType':'"+ parentAsset.getAssetType()).
+                            append("', 'ict':'"+ parentAsset.getValue("instructional_component")).
+                            append("' ,'contributor':'").append(parentDoc.creator).
+                            append(" ','contributorName':'").append(protectForJSON(xwiki.getUserName(parentDoc.creator,false))).
+                            append("' ,'description':'").append(protectForJSON(parentAsset.getDescription())).
+                            append("' ,'fwItems':[").append(fwItemsB).append("]").
+                            append(", 'levels':[").append(levels).append("]}");
                     allParents.add(xmlEncode(json.toString()));
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -560,7 +563,7 @@ public class SOLRExtractorGroovy {
                 } else throw new IllegalStateException("Bizarre child: " + childFullName);
                 Object o =childDoc.getObject("CurrikiCode.AssetClass");
                 if(o==null)
-                   throw new RuntimeException("Warning: unknown asset class for document " + childFullName);
+                    throw new RuntimeException("Warning: unknown asset class for document " + childFullName);
                 Property p = o.getProperty("rights");
                 if(p==null) throw new RuntimeException("Warning: unknown rights property for document " + childFullName);
                 String rights = p.getValue();
@@ -737,7 +740,9 @@ public class SOLRExtractorGroovy {
         Map results = currikiPlugin.fetchUserCollectionsInfo(docFullName);
         results.put("solrMade", "true");
 
-        return xmlEncode(flattenToJSONArrayString(results, resultList, "collectionPage"));
+        String s  = flattenToJSONArrayString(results, resultList, "collectionPage");
+        org.apache.commons.logging.LogFactory.getLog("groovyPages.SOLRExtractor").warn("getUserCollections: " +s );
+        return xmlEncode(s);
     }
 
     // ======= group functions =====================================
@@ -806,10 +811,10 @@ public class SOLRExtractorGroovy {
 }
 
 class FormatterThreadLocal extends ThreadLocal {
-     protected Object initialValue() {
-         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-     }
- };
+    protected Object initialValue() {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    }
+};
 
 
 /* Unfortunately, this parser seems to either swallow all spaces or
