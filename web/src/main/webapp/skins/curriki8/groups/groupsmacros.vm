@@ -638,7 +638,9 @@ $msg.get("groups_creategroup_needaccount", [$url])
     <tr>
     <td width="50%">
     $newspace.display("topic","edit")
-    <input type="hidden" name="XWiki.CurrikiSpaceClass_0_topic" value="FW_masterFramework.WebHome" id="XWiki.CurrikiSpaceClass_0_topic"/>
+    ## CURRIKI-6109 We had to remove this otherwise it would not create the topic field properly because the hidden field is included twice
+    ## I'm leaving the comment because it's not clear why we have this issue
+    ## <input type="hidden" name="XWiki.CurrikiSpaceClass_0_topic" value="FW_masterFramework.WebHome" id="XWiki.CurrikiSpaceClass_0_topic"/>
     </td>
     <td width="50%">
 	        $newspace.display("educationLevel","edit")
