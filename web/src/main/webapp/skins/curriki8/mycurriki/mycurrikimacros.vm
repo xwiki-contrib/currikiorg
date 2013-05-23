@@ -252,7 +252,7 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
 #end ## }
-<a class="curriki-link" href="$asset.getURL("view")">{pre}$title{/pre}</a>
+<a class="curriki-link" href="$asset.getURL("view")">#verbatim_start()$title#verbatim_end()</a>
 #end ## macro ## }
 
 #**
@@ -271,8 +271,8 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
 #end ## }
-<a id="mycurriki-title-${descnb}" class="curriki-link" href="$asset.getURL("view")">{pre}$title{/pre}</a>
-{pre}
+<a id="mycurriki-title-${descnb}" class="curriki-link" href="$asset.getURL("view")">#verbatim_start()$title#verbatim_end()</a>
+#verbatim_start()
 <script type="text/javascript">
 /* <![CDATA[ */
 #if("$!descpopupjs" == "") ##{
@@ -358,7 +358,7 @@ Curriki.mycurriki.util.title.popup("mycurriki-title-${descnb}", {'description':'
 });
 /* ]]> */
 </script>
-{/pre}
+#verbatim_end()
 #end ## macro ## }
 
 #**
@@ -427,7 +427,8 @@ $msg.get("mycurriki.macro.access.${access}")
 #if($!rollover == "${category}.${subcategory}") ##{
 #set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
 #end ##}
-{pre}<img id="favorites-filetype-${ftnb}" class="resource-${assetType} category-${category} subcategory-${category}_${subcategory}" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${rollover}"/>{/pre}
+#verbatim_start()
+<img id="favorites-filetype-${ftnb}" class="resource-${assetType} category-${category} subcategory-${category}_${subcategory}" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${rollover}"/>#verbatim_end()
 #end ## Macro ## }
 
 #**
@@ -642,7 +643,7 @@ $!desc
     #if($userdoc.attachmentList.size()==0) ##{
       <img src="$xwiki.getSkinFile("noavatar.png")"/>
       #if($context.action=="view" && ($userdoc.fullName == $context.user || $hasGlobalAdmin)) ##{
-	<a class="curriki-link" onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;' href="$userdoc.getURL("attach")">$msg.get('profile.changeMyPhoto')</a>
+	<a class="curriki-link" onclick='document.getElementById("attachdiv").attributes#verbatim_start()[#verbatim_end()"class"].value="visible"; #verbatim_start()$("attachdiv").scrollTo();#verbatim_end() return false;' href="$userdoc.getURL("attach")">$msg.get('profile.changeMyPhoto')</a>
       #end ## }
     #else  ## }{ attachmentList.size must be > 0
       #foreach ($attach in $userdoc.attachmentList) ## {
@@ -1365,7 +1366,7 @@ $msg.get("deleted")
 		#asset_findtitle($asset)
 		#set($escapedTitle = $escapetool.javascript($currikiTitle))
 		#if($asset.creator == $context.user || $hasGlobalAdmin || $doc.name != 'Favorites' || ($g_userdoc.fullName == $context.user && $doc.name == 'Favorites'))##{
-		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'}); return false;" ext:qtip="$msg.get('mycurriki.link.add.tooltip')">$msg.get('mycurriki.link.add')</a>{/pre}
+		#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {assetName:'$escapedFullName', assetTitle:'$escapedTitle'}); return false;" ext:qtip="$msg.get('mycurriki.link.add.tooltip')">$msg.get('mycurriki.link.add')</a>#verbatim_end()
 		#end##}
 	#end##}
 #end ##}
@@ -1396,7 +1397,7 @@ $msg.get("deleted")
 	#if($ret_assetGroupAdmin || $hasGlobalAdmin) ##{
 		#set($deleteMsg = $msg.get('mycurriki.link.delete.confirm'))
 		#set($deleteUrl = $xwiki.getURL("XWiki.DeleteDocument", "view", "confirm=1&docName=${asset.fullName}&sourceDoc=$doc.getURL('view')"))
-		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" onclick="return confirm('$deleteMsg')" href="$deleteUrl" ext:qtip="$msg.get('mycurriki.link.delete.tooltip')">$msg.get("mycurriki.link.delete")</a>{/pre}
+		#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" onclick="return confirm('$deleteMsg')" href="$deleteUrl" ext:qtip="$msg.get('mycurriki.link.delete.tooltip')">$msg.get("mycurriki.link.delete")</a>#verbatim_end()
 	#end ##}
 #end ##}
 
@@ -1414,7 +1415,7 @@ $msg.get("deleted")
 	#if($asset.getCategory() != 'collection') ##{
 		#set($escapedFullName = $escapetool.javascript($asset.fullName))
 		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
-		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {copyOf:'${escapedFullName}'}); return false;" ext:qtip="$msg.get('mycurriki.link.copy.tooltip')">$msg.get('mycurriki.link.copy')</a>{/pre}
+		#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {copyOf:'${escapedFullName}'}); return false;" ext:qtip="$msg.get('mycurriki.link.copy.tooltip')">$msg.get('mycurriki.link.copy')</a>#verbatim_end()
 		#end##}
 	#end##}
 #end ##}
@@ -1430,7 +1431,7 @@ $msg.get("deleted")
 	#assets_userIsGroupAdmin($asset)
 	#if($asset.getCategory() != 'collection' && ($ret_assetGroupAdmin || $hasGlobalAdmin)) ##{
 		#set($editUrl = $asset.getURL('view', 'viewer=assetedit'))
-		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="$editUrl" ext:qtip="$msg.get('mycurriki.link.editcontent.tooltip')">$msg.get("mycurriki.link.editcontent")</a>{/pre}
+		#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="$editUrl" ext:qtip="$msg.get('mycurriki.link.editcontent.tooltip')">$msg.get("mycurriki.link.editcontent")</a>#verbatim_end()
 	#end ##}
 #end ##}
 
@@ -1444,7 +1445,7 @@ $msg.get("deleted")
 	#assets_userIsGroupAdmin($asset)
 	#if($ret_assetGroupAdmin || $hasGlobalAdmin) ##{
 		#set($editUrl = $asset.getURL('view', 'viewer=infoedit'))
-		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="$editUrl" ext:qtip="$msg.get('mycurriki.link.editinfo.tooltip')">$msg.get("mycurriki.link.editinfo")</a>{/pre}
+		#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="$editUrl" ext:qtip="$msg.get('mycurriki.link.editinfo.tooltip')">$msg.get("mycurriki.link.editinfo")</a>#verbatim_end()
 	#end ##}
 #end ##}
 
@@ -1464,7 +1465,7 @@ $msg.get("deleted")
 		#set($escapedTitle = $escapetool.javascript($currikiTitle))
 		#assets_userInGroup($asset)
 		#if($doc.name != 'Favorites' && ($ret_assetGroupMember || $hasGlobalAdmin))##{
-		{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'}); return false;" ext:qtip="$msg.get('mycurriki.link.buildup.tooltip')">$msg.get('mycurriki.link.buildup')</a>{/pre}
+		#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.addpath.startPath('${addpath}', {parentAsset:'$escapedFullName', parentTitle:'$escapedTitle'}); return false;" ext:qtip="$msg.get('mycurriki.link.buildup.tooltip')">$msg.get('mycurriki.link.buildup')</a>#verbatim_end()
 		#end##}
 	#end##}
 #end ##}
@@ -1486,7 +1487,7 @@ $msg.get("deleted")
 		#if($doc.name != 'Favorites' && ($asset.creator == $context.user || $hasGlobalAdmin))##{
 			#set($cnt = $asset.as($util.null).getSubassetList().size())
 			#if($cnt > 0) ##{
-			{pre}<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.organize.start({assetPage:'$escapedFullName', title:'$escapedTitle', creator:'${asset.creator}', creatorName:'${escapedCreatorName}'}); return false;" ext:qtip="$msg.get('mycurriki.link.organize.tooltip')">$msg.get('mycurriki.link.organize')</a>{/pre}
+			#verbatim_start()<a class="button-link#if($g_actionFirst) first-item#set($g_actionFirst = false)#end" href="#" onclick="Curriki.module.organize.start({assetPage:'$escapedFullName', title:'$escapedTitle', creator:'${asset.creator}', creatorName:'${escapedCreatorName}'}); return false;" ext:qtip="$msg.get('mycurriki.link.organize.tooltip')">$msg.get('mycurriki.link.organize')</a>#verbatim_end()
 			#end##}
 		#end##}
 	#end##}
@@ -1556,7 +1557,7 @@ $msg.get("deleted")
 #macro(mycurriki_contributionsbutton $userdoc $userobj )
   #htmlcomment("<!-- MyCurriki Contributions Buttons -->")
   #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))##{
-    ## {pre}
+    ## #verbatim_start()
     <a class="button-orange" onclick="Curriki.module.addpath.startPath('I', {});" title="$msg.get('mycurriki.contributions.addButton_tooltip')">$msg.get('mycurriki.contributions.addButton')</a>
       <script type="text/javascript">
           Ext.onReady(function() {
@@ -1565,7 +1566,7 @@ $msg.get("deleted")
               }
           });
       </script>
-    ## {/pre}
+    ## #verbatim_end()
   #end ##}
   #htmlcomment("<!-- End MyCurriki Contributions Buttons -->")
 #end ##} end macro
@@ -1769,7 +1770,7 @@ $msg.get("deleted")
 #if($multiple) ##{
 #set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${shortname}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
 #set($reordered = ($reorder > 0))
-{pre}
+#verbatim_start()
 <script type="text/javascript">
 /* <![CDATA[ */
 Curriki.data.reorder = {
@@ -1780,7 +1781,7 @@ Curriki.data.reorder = {
 /* ]]> */
 </script>
 <script type="text/javascript" src="/xwiki/js/curriki-module-reorder.js"></script>
-{/pre}
+#verbatim_end()
 #end ##}
 #end ##}
 ## Get collections
@@ -1799,7 +1800,7 @@ Curriki.data.reorder = {
  #set($endIndex = $assetList.size() - 1)
 #end
 ##
-{pre}
+#verbatim_start()
 <script type="text/javascript">
 var $hidden = false;
 function toggle_desc(){
@@ -1820,7 +1821,7 @@ function toggle_desc(){
   return false;
 }
 </script>
-{/pre}
+#verbatim_end()
 #curriki_fulltitlebar($msg.get("mycurriki.collections.titlebar") $msg.get("mycurriki.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
 ## row per item -- number of rows configurable
 #set($showcount = 0)
@@ -1845,9 +1846,9 @@ function toggle_desc(){
   *#
 #macro(mycurriki_collectionbutton $userobj)
 #if($context.action == "view" && ($context.user==$userdoc.fullName || $hasGlobalAdmin))
-{pre}
+#verbatim_start()
 <a class="button-orange" onclick="Curriki.module.addpath.startPath('K', {});" alt="$msg.get("mycurriki.collections.addButton")" title="$msg.get("mycurriki.collections.addButton_tooltip")">$msg.get("mycurriki.collections.addButton")</a>
-{/pre}
+#verbatim_end()
 #end
 #end ## buttonmacro
 
