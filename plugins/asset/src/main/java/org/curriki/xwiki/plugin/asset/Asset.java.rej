@@ -1,0 +1,16 @@
+***************
+*** 1064,1070 ****
+          String prettyName = context.getWiki().clearName(name, true, true, context);
+          //rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>());
+          this.doc = assetDoc.copyDocument(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context),context);
+-         context.getWiki().deleteDocument(assetDoc, context);
+  
+          applyRightsPolicy();
+  
+--- 1064,1069 ----
+          String prettyName = context.getWiki().clearName(name, true, true, context);
+          //rename(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context), new ArrayList<String>());
+          this.doc = assetDoc.copyDocument(space + "." + context.getWiki().getUniquePageName(space, prettyName.trim(), context),context);
+  
+          applyRightsPolicy();
+  
