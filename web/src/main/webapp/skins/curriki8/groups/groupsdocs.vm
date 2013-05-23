@@ -168,16 +168,15 @@
     #set( $attDocName = $docsSpaceName + $attDocName )
     #set( $tmp = $xwiki.copyDocument( "Groups.DocumentationAttachmentTemplate", $attDocName ) )
     #set( $attDoc = $xwiki.getDocument( $attDocName ) )
-    $attDoc.save()
     #set($fileupload = $xwiki.fileupload)
     #set($filename = $fileupload.getFileName("filepath"))
-    #set($filedata = $fileupload.getFileItemData("filepath"))
-    #set($attach = $spaceHome.addAttachment($filename, $filedata))
     $attDoc.setTitle($filename)
+    #set($filedata = $fileupload.getFileItemData("filepath"))
+    #set($attach = $attDoc.addAttachment($filename, $filedata))
     ## marks this as being file
     #set( $tmp = $attDoc.tagList.add( "documentation-file" ) )
-   $attDoc.save()
-   <script type="text/javascript">window.location='$doc.getURL("view")';</script>
+    $attDoc.save()
+    <script type="text/javascript">window.location='$doc.getURL("view")';</script>
   #end
 #end
   $msg.groups_documentation_add_document_choose
