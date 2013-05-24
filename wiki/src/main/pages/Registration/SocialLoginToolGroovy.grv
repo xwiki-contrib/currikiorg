@@ -613,7 +613,8 @@ public class SocialLoginToolGroovy {
                 attachment.setFilename(name)
                 attachment.setAuthor(context.user)
                 attachment.setDoc(userDoc.document)
-                userDoc.document.saveAllAttachments(context.context)
+                // not necessary for the file-system-attachment storage http://jira.xwiki.org/browse/CURRIKI-6141
+                //userDoc.document.saveAllAttachments(context.context)
             }
             userObj.set("avatar",name)
         } catch (Exception ex) {
