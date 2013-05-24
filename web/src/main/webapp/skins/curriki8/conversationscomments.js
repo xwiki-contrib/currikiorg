@@ -186,6 +186,7 @@ viewers.Comments = Class.create({
     var comment = editActivator.up(this.xcommentSelector);
     editActivator._x_editForm.hide();
     comment.show();
+    // force hiding the form
     this.cancelPreview(editActivator._x_editForm);
     this.editing = false;
   },
@@ -205,18 +206,23 @@ viewers.Comments = Class.create({
           item.blur();
           event.stop();
           // If the form was already displayed as a reply, re-enable the Reply button for the old location
+          /*
           if (this.form.up('.commentthread')) {
             this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
           }
           // Insert the form on top of that comment's discussion
           item.up(this.xcommentSelector).next('.commentthread').insert({'top' : this.form});
+          */
           // Set the replyto field to the replied comment's number
           this.form["XWiki.XWikiComments_replyto"].value = item.up(this.xcommentSelector)._x_number;
           // Clear the contents and focus the textarea
           this.form["XWiki.XWikiComments_comment"].value = "";
           this.form["XWiki.XWikiComments_comment"].focus();
           // Hide the reply button
-          item.hide();
+          // item.hide();
+          // Show the comment form
+          this.form.show();
+          this.center(this.form);
         }.bindAsEventListener(this));
       }.bind(this));
     } else {
@@ -271,10 +277,12 @@ viewers.Comments = Class.create({
           formData.unset('action_cancel');
           // Create a notification message to display to the user when the submit is being sent
           form._x_notification = new XWiki.widgets.Notification("$msg.get('core.viewers.comments.add.inProgress')", "inprogress");
+          form.hide();
           form.disable();
           this.restartNeeded = false;
           new Ajax.Request(url, {
             method : 'post',
+            evalJS : false,
             parameters : formData,
             onSuccess : function () {
               this.restartNeeded = true;
@@ -316,7 +324,7 @@ viewers.Comments = Class.create({
       this.initialLocation = new Element("span", {className : "hidden"});
       $('_comments').insert(this.initialLocation);
       // If the form is inside a thread, as a reply form, move it back to the bottom.
-      this.form.down('a.cancel').observe('click', this.resetForm.bindAsEventListener(this));
+      this.form.down('a.cancel').observe('click', function() { this.resetForm.bindAsEventListener(this); this.container.hide(); } );
     }
   },
   /**
@@ -400,11 +408,15 @@ viewers.Comments = Class.create({
     if (event) {
       event.stop();
     }
+    var ccontent = this.form;
+    if (ccontent) ccontent.hide();
+    console.log("In cancel : " + ccontent);
+
     if (this.form.up('.commentthread')) {
       // Show the comment's reply button
-      this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
+      // this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
       // Put the form back to its initial location and clear the contents
-      this.initialLocation.insert({after: this.form});
+      // this.initialLocation.insert({after: this.form});
     }
     this.form["XWiki.XWikiComments_replyto"].value = "";
     this.form["XWiki.XWikiComments_comment"].value = "";
@@ -437,16 +449,27 @@ viewers.Comments = Class.create({
     var msg = new Element('div', {"class" : "notification" });
     msg.update(message);
     return msg;
+  },
+
+  center: function(el) {
+   console.log("in center");
+   var wwidth = window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth);
+   var wheight=  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
+   var width = el.getWidth()
+   var height = el.getHeight()
+   el.style.padding="30px";
+   el.style.backgroundColor = "#ccc";
+   el.style.left = (wwidth-width)/2 + "px";
+   el.style.top = (wheight-height)/2 + "px";
   }
 });
 
 function init() {
-  return new viewers.Comments();
+  viewers.comments = new viewers.Comments();
 }
 
 // When the document is loaded, trigger the Comments form enhancements.
-(XWiki.domIsLoaded && init())
-|| document.observe("xwiki:dom:loaded", init);
+document.observe("dom:loaded", init);
 
 // End XWiki augmentation.
 return XWiki;
