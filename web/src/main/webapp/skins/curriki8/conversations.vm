@@ -12,6 +12,13 @@ $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js')
 $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
 $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
+## use curriki avatars
+#macro(mediumUserAvatar2 $user)
+  #curriki_avatar_width_height($xwiki.getDocument($user) "48" "")
+#end
+#macro(smallUserAvater2 $user)
+  #curriki_avatar_width_height($xwiki.getDocument($user) "48" "")
+#end
 ##
 ##---------------------------------------------------------------------
 ## Set some 'global' variables
@@ -131,7 +138,7 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
   #end
   ## display the comment
   <div id="xwikicomment_${conversationId}_${comment.number}" class="xwikicomment#if($comment.getProperty('author').value == $commentDoc.creator) commentByCreator#end">
-    <div class="commentavatar">#if("$!comment.replyto" == '')#mediumUserAvatar($comment.author)#{else}#smallUserAvatar($comment.author)#end</div>
+    <div class="commentavatar">#if("$!comment.replyto" == '')#mediumUserAvatar2($comment.author)#{else}#smallUserAvater2($comment.author)#end</div>
     <div class="commentheader">
       <div>
       <span class="commentauthor">$!xwiki.getUserName($doc.display('author', 'view', $comment))</span>##
@@ -180,10 +187,10 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
     #else
       #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#${conversationId}")
     #end
-    <form action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
+  <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment" style="display: none;">
       <fieldset class="expanded commentform" id="${conversationId}_commentform">
         <legend>$msg.get('core.viewers.comments.add.title')</legend>
-        <div class="commentavatar">#mediumUserAvatar($context.user)</div>
+        ##  <div class="commentavatar">#mediumUserAvatar2($context.user)</div>
         #if($xcontext.user != 'XWiki.XWikiGuest')
           <label>$msg.get('core.viewers.comments.add.guestName.prompt') $xwiki.getUserName($xcontext.user)</label>
           <input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>
@@ -214,6 +221,7 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
         </div>
       </fieldset>
     </form>
+    <a href="javascript:void()" onclick="$('${conversationId}_addcommentform').toggle(); XWiki.viewers.comments.center($('${conversationId}_addcommentform'));" class="button buttonorange">Add comment</a>
   #end
 #end
 ##
@@ -441,7 +449,7 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
 </script>
 #elseif($services.wysiwyg.isSyntaxSupported($doc.syntax.toIdString()))
 ## Load the rich text object properties using a compact WYSIWYG editor.
-##wysiwyg_editProperties($doc $editors false)
+#wysiwyg_editProperties($doc $editors false)
 #else
 #warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$doc.syntax.toIdString()</em>.")
 #end
