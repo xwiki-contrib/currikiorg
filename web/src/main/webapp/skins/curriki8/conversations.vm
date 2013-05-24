@@ -5,12 +5,13 @@
 ## adding ratings app
 $xwiki.jsx.use('XWiki.Ratings', { 'minify' : false })
 $xwiki.ssx.use('XWiki.Ratings')
-$xwiki.jsfx.use('uicomponents/viewers/comments.js')
+$xwiki.jsfx.use('conversationscomments.js', {'forceSkinAction' : true, 'defer' : false})
 $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/notification.js')
 $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js')
 $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
+$xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
 ##
 ##---------------------------------------------------------------------
 ## Set some 'global' variables
@@ -152,7 +153,7 @@ $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
           ## Although this will fail if the javascript is not working, we assume it's always working
           ## so edit comment will redirect to the conversations view of the article for which we edited comment, so that we have a correct reloading after save
           #set($commentEditRedirect = $commentDoc.getURL('get', 'xpage=xpart&vm=conversations.vm'))
-          <span class="commenttool commentedit"><a class="edit" href="$commentDoc.getURL('view', "viewer=comments&amp;number=${comment.number}&amp;xredirect=$escapetool.url($commentEditRedirect)")" title="$msg.get('core.viewers.comments.edit')">$msg.get('core.viewers.comments.edit')</a></span>
+          <span class="commenttool commentedit"><a class="edit" href="$commentDoc.getURL('view', "viewer=conversationscomments&amp;number=${comment.number}&amp;xredirect=$escapetool.url($commentEditRedirect)")" title="$msg.get('core.viewers.comments.edit')">$msg.get('core.viewers.comments.edit')</a></span>
         #end
       #end
       #if ($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($commentDoc.documentReference, 'compactwiki')))
@@ -309,9 +310,6 @@ $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
   #if ($doc.getObject('XWiki.ConversationClass'))
     #set($isArticle = false)
   #end
-  ## include the js
-  $xwiki.jsfx.use('uicomponents/viewers/comments.js', {'forceSkinAction' : true, 'defer' : false})
-  $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
   #set($spaceColorTheme = $xwiki.getSpacePreference('colorTheme'))
   #set($ssxParams = {})
   #if ("$!spaceColorTheme" != "")
