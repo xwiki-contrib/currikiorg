@@ -242,6 +242,7 @@ viewers.Comments = Class.create({
 
          // now we can reload the editor
          tarea.wysiwyg = new WysiwygEditor(WysiwygConfig[tarea.id]);
+         XWiki.widgets.fs.addBehavior(this.form.down(".xRichTextEditor"));
 
           // Set the replyto field to the replied comment's number
           this.form["XWiki.XWikiComments_replyto"].value = item.up(this.xcommentSelector)._x_number;
@@ -341,9 +342,10 @@ viewers.Comments = Class.create({
                   "element": this.container
                 });
                 this.updateCount()
+                */
               } else {
                 form.enable();
-              } */
+              } 
             }.bind(this)
           });
         }
@@ -455,6 +457,7 @@ viewers.Comments = Class.create({
 
       // now we can reload the editor
       tarea.wysiwyg = new WysiwygEditor(WysiwygConfig[tarea.id]);
+      XWiki.widgets.fs.addBehavior(this.form.down(".xRichTextEditor"));
     }
     this.form["XWiki.XWikiComments_replyto"].value = "";
     this.form["XWiki.XWikiComments_comment"].value = "";
@@ -765,6 +768,11 @@ function init() {
       }
     });
   });
+
+  // Activate full screen:
+  if (!XWiki.widgets.fs)
+     XWiki.widgets.fs = new XWiki.widgets.FullScreen();
+
 }
 
 // When the document is loaded, trigger the Comments form enhancements.
