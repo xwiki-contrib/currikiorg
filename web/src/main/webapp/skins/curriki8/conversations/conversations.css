@@ -1,0 +1,256 @@
+
+.conversation h2 {
+  font-size: 100%;
+  background: none no-repeat scroll 5px 5px transparent;
+}
+
+.conversation h2.question {
+  background-image: url('conversation-question.png')
+}
+
+.conversation h2.alert {
+  background-image: url('conversation-alert.png');
+}
+
+.conversation h2.feedback {
+  background-image: url('conversation-feedback.png');
+}
+
+.conversation h2.suggestion {
+  background-image: url('conversation-suggestion.png');
+}
+
+.conversation:target h2, .conversation:target .conversation-info {
+  background: $theme.highlightColor;
+}
+
+.conversation-titlebar {
+  padding: 5px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.conversation-title {
+  border-bottom: 2px solid $theme.borderColor;
+  display: block;
+  font-size: 150%;
+  margin-left: 35px;
+  padding-right: 100px;
+}
+
+.conversation-togglehandler {
+  cursor: n-resize;  
+}
+
+.conversation-showhandler {
+  cursor: s-resize;
+}
+
+.conversation-inlineactions {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: default;
+}
+
+.conversation-inlineactions span {
+  background: none no-repeat scroll center top transparent;
+  min-width: 28px;
+  text-align: center;
+  color: #fff;
+  display: inline-block;
+  min-height: 20px;
+}
+
+.conversation-inlineactions span.separator {
+  border: none;
+  color: transparent;
+  display: inline-block;
+  height: 16px;
+  text-indent: -1000px;
+  width: 2px;
+  min-width: 2px;
+  background: #878787;
+  #css3_backgroundLinearGradient({
+     'angle': 'top',
+     'colors': [
+      {'color': '#878787', 'position': '0%'},
+      {'color': '#ffffff', 'position': '100%'}
+    ]
+  })
+}
+
+.conversation-inlineactions .conversation-ratings .conversation-score {
+  /* Color of the icons */
+  color: #878787;
+  padding-right: 4px;
+  min-width: auto;
+  /* Wow, that's ugly. But it will probably work fine */
+  vertical-align: -1px;
+}
+
+.conversation-inlineactions .conversation-ratings .conversation-like img.canVote {
+  cursor: pointer;
+}
+
+.conversation-inlineactions .conversation-ratings .conversation-like img, 
+.conversation-inlineactions .conversation-permalink .permalink img {
+  vertical-align: middle;
+}
+
+.conversation-inlineactions .conversation-count {
+  background-image: url('conversation-replies.png');
+  /*  try as much as possible to put the comments number text inside the icon */
+  line-height: 15px;
+  font-size: 90%;
+}
+
+.conversation-info {
+  margin-bottom: 20px;
+}
+
+.conversation-creationdate {
+  font-family: 'liberation_sansbold';
+}
+
+.conversation-status {
+  font-family: 'liberation_sansbold';
+  color: #000000;
+}
+
+.conversation-actions a {
+  background: none no-repeat scroll left top transparent;
+  display: inline-block;
+  height: 16px;
+  margin: 0 0 0 4px;
+  overflow: hidden;
+  text-indent: 30px;
+  width: 16px;
+}
+
+.conversation-actions .conversation-edit a {
+  background-image: url('$xwiki.getSkinFile("icons/silk/pencil.png")');
+}
+
+.conversation-editformcontainer {
+  min-height: 16px;
+}
+
+.conversation-actions .conversation-delete a {
+  background-image: url('$xwiki.getSkinFile("icons/silk/delete.png")');
+}
+
+/* Put the add activator to the right */
+a.addconversation-activator {
+  float: right;
+  border: 1px solid #ccc;
+  color: #000000;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+a.addconversation-activator:hover {
+  text-decoration: none;
+}
+
+/* If there are long links in the comments, force wrap them so that we see them entirely. */
+.commentcontent {
+  word-wrap: break-word;
+}
+
+/* 
+  Redo the comments style with class instead of id, since they all seem to depend on the .AddComment id which we don't want to duplicate
+*/
+
+/* Form */
+.AddComment {
+  border-top: 1px solid black;
+}
+.AddComment fieldset {
+  padding-left: 60px;
+}
+.commentthread .AddComment fieldset {
+  padding-left: 35px;
+}
+.AddComment label {
+  font-size: .9em;
+  font-weight: 400;
+}
+.AddComment legend {
+  font-size: 1em;
+  margin-left: -60px;
+}
+.commentthread .AddComment legend {
+  display: none;     /* For replies, don't display the legend, because it is unnecessary and does not integrate well. */
+}
+.commentthread .AddComment {
+  border-top: none;  /*For replies, don't display the separation line (same reason as above). */
+}
+#xwikidata .AddComment {
+  width: auto;       /* Overriding toucan */
+}
+.AddComment .commentcontainer {
+  padding: 4px 0;
+}
+.AddComment .commentcontainer label {
+  display: none;
+}
+.AddComment .commentcontainer textarea {
+  width: 100%;
+}
+* html .AddComment .commentcontainer textarea {
+  /* fix for IE6 */
+  width: 98%;
+}
+*+html .AddComment .commentcontainer textarea {
+  /* fix for IE7 */
+  width: 98%;
+}
+
+/* Redo the style for the comments buttons */
+.conversation .comment-permalink a {
+  background-image: url("$xwiki.getSkinFile('icons/silk/link.png')");
+}
+.conversation .commentdelete a {
+  background-image: url("$xwiki.getSkinFile('icons/silk/delete.png')");
+}
+.conversation .commentreply a {
+  width: 22px;
+}
+.conversation .commentedit a {
+  background-image: url("$xwiki.getSkinFile('icons/silk/pencil.png')");
+}
+
+.commentthread .commentavatar {
+    margin-left: 0px !important;
+    width: auto !important;
+}
+
+.commentavatar {
+    margin-left: 5px !important;
+}
+
+.commentthread .commentavatar {
+    margin-left: 5px !important;
+}
+
+.commentcontent, .commentheader {
+    margin-left: 50px !important;
+}
+
+.commentavatar img, .commentthread .commentavatar img {
+    max-height: 50px !important;
+    max-width: 50px !important;
+}
+
+.commentavatar img {
+    width: 30px !important;
+}
+
+.commentthread .reply {
+    padding-left: 25px !important;
+}
+
+.reply {
+    padding-left: 10px !important;
+}

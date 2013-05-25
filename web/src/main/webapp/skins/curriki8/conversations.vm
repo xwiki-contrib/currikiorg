@@ -5,13 +5,14 @@
 ## adding ratings app
 $xwiki.jsx.use('XWiki.Ratings', { 'minify' : false })
 $xwiki.ssx.use('XWiki.Ratings')
-$xwiki.jsfx.use('conversationscomments.js', {'forceSkinAction' : true, 'defer' : false})
+$xwiki.jsfx.use('conversations/conversationscomments.js', {'forceSkinAction' : true, 'defer' : false})
 $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/notification.js')
 $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js')
 $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
-$xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
+$xwiki.ssfx.use('conversations/conversations.css', true)
+
 ## use curriki avatars
 #macro(mediumUserAvatar2 $user)
   #curriki_avatar_width_height($xwiki.getDocument($user) "48" "")
@@ -187,7 +188,7 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
     #else
       #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#${conversationId}")
     #end
-  <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment" style="display: none;">
+  <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
       <fieldset class="expanded commentform" id="${conversationId}_commentform">
         <legend>$msg.get('core.viewers.comments.add.title')</legend>
         ##  <div class="commentavatar">#mediumUserAvatar2($context.user)</div>
@@ -221,7 +222,6 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
         </div>
       </fieldset>
     </form>
-    <a href="javascript:void()" onclick="$('${conversationId}_addcommentform').toggle(); XWiki.viewers.comments.center($('${conversationId}_addcommentform'));" class="button buttonorange">Add comment</a>
   #end
 #end
 ##
@@ -318,12 +318,6 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
   #if ($doc.getObject('XWiki.ConversationClass'))
     #set($isArticle = false)
   #end
-  #set($spaceColorTheme = $xwiki.getSpacePreference('colorTheme'))
-  #set($ssxParams = {})
-  #if ("$!spaceColorTheme" != "")
-    #set($discard = $ssxParams.put('colorTheme', $spaceColorTheme))
-  #end
-  $xwiki.ssx.use('XWiki.ConversationSheet', $ssxParams)
   ## start rendering the forms
   #if ($isArticle)
     <div id="document-title"><h1>$msg.get('conversations.title', [$escapetool.xml($doc.getPlainTitle()), $doc.getURL()])</h1></div>
@@ -449,6 +443,25 @@ $xwiki.jsx.use('XWiki.ConversationSheet', {'defer' : false, 'minify' : false})
 </script>
 #elseif($services.wysiwyg.isSyntaxSupported($doc.syntax.toIdString()))
 ## Load the rich text object properties using a compact WYSIWYG editor.
+#**
+  * Creates a new WYSIWYG editor instance using the given configuration parameters.
+  *
+  * @param $parameters WYSIWYG editor configuration parameters
+  *#
+#macro(wysiwyg_createEditor $parameters)
+#set($jsVarName = "wysiwygConfig${util.generateRandomString(4)}")
+#wysiwyg_writeConfig($jsVarName $parameters)
+<script type="text/javascript">
+//<![CDATA[
+var WysiwygConfig = WysiwygConfig || {};
+Wysiwyg.onModuleLoad(function() {
+  WysiwygConfig['${parameters.hookId}'] = $jsVarName; 
+  $('${parameters.hookId}').wysiwyg = new WysiwygEditor($jsVarName);
+  $jsVarName = undefined;
+});
+//]]>
+</script>
+#end
 #wysiwyg_editProperties($doc $editors false)
 #else
 #warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$doc.syntax.toIdString()</em>.")
