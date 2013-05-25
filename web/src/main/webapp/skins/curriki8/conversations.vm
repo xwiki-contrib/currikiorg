@@ -11,6 +11,8 @@ $xwiki.jsfx.use('uicomponents/widgets/notification.js')
 $xwiki.ssfx.use('uicomponents/widgets/notification.css', true)
 $xwiki.jsfx.use('uicomponents/widgets/confirmationBox.js')
 $xwiki.ssfx.use('uicomponents/widgets/confirmationBox.css', true)
+$xwiki.jsfx.use('uicomponents/widgets/fullScreen.js', {'forceSkinAction' : true, 'defer' : false})
+$xwiki.ssfx.use('uicomponents/widgets/fullScreen.css', true)
 $xwiki.ssfx.use('conversations/conversations.css', true)
 
 ## use curriki avatars
@@ -205,7 +207,7 @@ $xwiki.ssfx.use('conversations/conversations.css', true)
         <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
         <div class="commentcontainer">
            <label for="${xCommentClass}_comment_${conversationId}">$msg.get('core.viewers.comments.add.comment.label')</label>
-           <textarea id='${xCommentClass}_comment_${conversationId}' rows='5' cols="80" name='${xCommentClass}_comment'>$!comment</textarea>
+           <textarea id='${xCommentClass}_comment_${conversationId}' rows='5' cols="80" name='${xCommentClass}_comment' class="maximizable">$!comment</textarea>
 ## adding to wysiwyg editors
 #if($editors=="")
  #set($editors = "${xCommentClass}_comment_${conversationId}")
