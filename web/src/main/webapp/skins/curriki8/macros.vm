@@ -1215,7 +1215,7 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
  *#
 #macro(pageTitle) ##{
     ## prepare if a group
-    #if($doc.name.startsWith("Group_"))
+    #if($doc.space.startsWith("Group_"))
         #set($sm = $xwiki.csm)
         #set($spaceName = $doc.space)
         #if(!$spaceName.startsWith("Group_"))
