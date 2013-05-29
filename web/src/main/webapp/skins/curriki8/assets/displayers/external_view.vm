@@ -1,22 +1,58 @@
 #macro(video $url)<!-- VIDEO -->
+    ##
+    ## ---------------------- dailymotion.com -----------------------------------------------
     #if ($url.indexOf("dailymotion") != "-1")
         #set($id1 = $url.indexOf("video/"))
         #set($id2 = $url.indexOf("_",$id1))
         #set($id1 = $id1 + 6)
         #set($dmid = $url.substring($id1, $id2))
     <div  style="border: 1px solid #000; width: 520px; height: 411px;"><object width="520" height="411"><param name="movie" value="http://www.dailymotion.com/swf/$dmid&v3=1&related=0"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed style="border: 1px solid #000;" src="http://www.dailymotion.com/swf/$dmid&v3=1&related=0" type="application/x-shockwave-flash" width="520" height="411" allowFullScreen="true" allowScriptAccess="always"></embed></object></div>
-    #elseif($url.indexOf("youtube") != "-1")
+    ##
+    ## ---------------------- youtube.com -----------------------------------------------
+    #elseif($url.indexOf("youtube") != -1 || $url.indexOf("youtu.be")!=-1)<!-- youtube link here -->
         #set($iy1 = $url.indexOf("v="))
-        #set($iy1 = $iy1 + 2)
-        #set($iy2 = $iy1 + 11)
-        #set($ytid = $url.substring($iy1, $iy2))
-    <div  style="border: 1px solid #000; width: 510px; height: 426px;"><object width="510" height="426"><param name="movie" value="http://www.youtube.com/v/$ytid"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$ytid" type="application/x-shockwave-flash" wmode="transparent" width="510" height="426"></embed></object></div>
-    #elseif($url.indexOf("google") != "-1")
+        #if($iy1!=-1)
+            #set($iy1 = $iy1 + 2)
+            #set($iy2 = $iy1 + 11)
+            #set($ytid = $url.substring($iy1, $iy2))
+        #else
+            #set($p=$url.lastIndexOf("/"))#set($p=$p+1)
+            #set($ytid=$url.substring($p))
+        #end
+    <div  style="border: 1px solid #000; width: 510px; height: 390px;">
+        <iframe width="510" height="390" src="http://www.youtube.com/embed/$ytid" frameborder="0" allowfullscreen></iframe>
+    </div>
+    ##
+    ## ---------------------- video.google.com -----------------------------------------------
+    #elseif($url.indexOf("video.google") != "-1")
         #set($ig1 = $url.indexOf("docid="))
         #set($ig1 = $ig1 + 6)
         #set($ig2 = $ig1 + 19)
         #set($gvid = $url.substring($ig1, $ig2))
     <div style="text-align: right; width: 600px; height: 519px; border: 1px solid #000;"><embed style="width:600px; height:519px;" id="VideoPlayback" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docid=$gvid" flashvars=""> </embed></div>
+    ##
+    ## ---------------------- vimeo.com -----------------------------------------------
+    #elseif($url.indexOf("http://vimeo.com") !=-1)
+        #set($p=$url.lastIndexOf("/"))#set($p=$p+1)
+        #set($tytid=$url.substring($p))
+        #if($tytid.indexOf("?")!=-1)#set($tytid=$tytid.substring(0,$tytid.indexOf("?")))#end
+    <div  style="border: 1px solid #000; width: 510px; height: 390px;">
+        <iframe src="http://player.vimeo.com/video/$tytid" width="510" height="390" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+    </div>
+    ## ---------------------- slideshare -----------------------------------------------
+    ## example: from http://www.slideshare.net/shyamantab/5-infographics-ideas-for-your-fb-page
+    ## example: <iframe src="http://www.slideshare.net/slideshow/embed_code/22017037" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/shyamantab/5-infographics-ideas-for-your-fb-page" title="5 Infographics Ideas for Your FB Page" target="_blank">5 Infographics Ideas for Your FB Page</a> </strong> from <strong><a href="http://www.slideshare.net/shyamantab" target="_blank">Shyamanta Baruah</a></strong> </div>
+    ## TODO
+    ## ---------------------- videolectures.net -----------------------------------------------
+    ## xxx
+    ## TODO
+    ## ---------------------- flickr -----------------------------------------------
+    ## xxx
+    ## TODO
+    ## ---------------------- google drive -----------------------------------------------
+    ## xxx
+    ## e.g. from https://docs.google.com/a/curriki.org/document/d/1osoShZ4wkCru_fAGPVmBIYHjcAvuCZiZmVYgLMfuy3Q/edit
+    ## .... to https://docs.google.com/a/curriki.org/document/d/1osoShZ4wkCru_fAGPVmBIYHjcAvuCZiZmVYgLMfuy3Q/view
     #else
         #warning('The Video URL you entered does not match any of the video websites supported by this macro. <br />
 Please check the address you entered or improve the macro to make it support this website :-\)')
@@ -39,9 +75,12 @@ Please check the address you entered or improve the macro to make it support thi
         #if($!caption == "")
             #set($caption = $!asset.display("description"))
         #end
-        #if($url.lastIndexOf("http://www.youtube.com/watch?v=") != -1 || $url.lastIndexOf("http://www.dailymotion.com/video/") != -1 || $url.lastIndexOf("http://video.google.com/googleplayer.swf?") != -1)
+        #if($url.contains("http://www.youtube.com/watch?v=")|| $url.contains("http://www.dailymotion.com/video/") ||
+                $url.contains("http://video.google.com/googleplayer.swf?")  || $url.contains("http://www.youtu.be/") ||
+                $url.startsWith("http://vimeo.com/"))##
             #video($url)
         #end
+        <p>&nbsp;</p>
         <p>$!caption</p>
     </div>
 </div>
