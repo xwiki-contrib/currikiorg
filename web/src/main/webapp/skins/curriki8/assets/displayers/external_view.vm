@@ -1,4 +1,6 @@
 #macro(video $url)<!-- VIDEO -->
+    #set($width=510)#set($height=390)##
+    #if("$!request.viewer"!="" && $!request.viewer.startsWith("embed"))#set($width=460)#set($height=352)<!-- smaller width, we are embedded -->#end##
     ##
     ## ---------------------- dailymotion.com -----------------------------------------------
     #if ($url.contains("dailymotion") )
@@ -6,7 +8,7 @@
         #set($id2 = $url.indexOf("_",$id1))
         #set($id1 = $id1 + 6)
         #set($dmid = $url.substring($id1, $id2))
-    <div  style="border: 1px solid #000; width: 520px; height: 411px;"><object width="520" height="411"><param name="movie" value="http://www.dailymotion.com/swf/$dmid&v3=1&related=0"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed style="border: 1px solid #000;" src="http://www.dailymotion.com/swf/$dmid&v3=1&related=0" type="application/x-shockwave-flash" width="520" height="411" allowFullScreen="true" allowScriptAccess="always"></embed></object></div>
+    <div  style="border: 1px solid #000; width: ${width}px; height: ${height}px;"><object width="${width}" height="${height}"><param name="movie" value="http://www.dailymotion.com/swf/$dmid&v3=1&related=0"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed style="border: 1px solid #000;" src="http://www.dailymotion.com/swf/$dmid&v3=1&related=0" type="application/x-shockwave-flash" width="${width}" height="${height}" allowFullScreen="true" allowScriptAccess="always"></embed></object></div>
     ##
     ## ---------------------- youtube.com -----------------------------------------------
     #elseif($url.contains("youtube.com") || $url.contains("youtu.be"))<!-- youtube link here -->
@@ -19,8 +21,8 @@
             #set($p=$url.lastIndexOf("/"))#set($p=$p+1)
             #set($ytid=$url.substring($p))
         #end
-    <div  style="border: 1px solid #000; width: 510px; height: 390px;">
-        <iframe width="510" height="390" src="http://www.youtube.com/embed/$ytid" frameborder="0" allowfullscreen></iframe>
+    <div  style="border: 1px solid #000; width: ${width}px; height: ${height}px;">
+        <iframe width="${width}" height="${height}" src="http://www.youtube.com/embed/$ytid" frameborder="0" allowfullscreen></iframe>
     </div>
     ##
     ## ---------------------- video.google.com -----------------------------------------------
@@ -29,15 +31,15 @@
         #set($ig1 = $ig1 + 6)
         #set($ig2 = $ig1 + 19)
         #set($gvid = $url.substring($ig1, $ig2))
-    <div style="text-align: right; width: 600px; height: 519px; border: 1px solid #000;"><embed style="width:600px; height:519px;" id="VideoPlayback" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docid=$gvid" flashvars=""> </embed></div>
+    <div style="text-align: right; width: ${width}px; height: ${height}px; border: 1px solid #000;"><embed style="width:${width}px; height:${height}px;" id="VideoPlayback" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docid=$gvid" flashvars=""> </embed></div>
     ##
     ## ---------------------- vimeo.com -----------------------------------------------
     #elseif($url.contains("http://vimeo.com"))
         #set($p=$url.lastIndexOf("/"))#set($p=$p+1)
         #set($tytid=$url.substring($p))
         #if($tytid.indexOf("?")!=-1)#set($tytid=$tytid.substring(0,$tytid.indexOf("?")))#end
-    <div  style="border: 1px solid #000; width: 510px; height: 390px;">
-        <iframe src="http://player.vimeo.com/video/$tytid" width="510" height="390" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+    <div  style="border: 1px solid #000; width: ${width}px; height: ${height}px;">
+        <iframe src="http://player.vimeo.com/video/$tytid" width="${width}" height="${height}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
     </div>
     ## ---------------------- slideshare -----------------------------------------------
     ## example: from http://www.slideshare.net/shyamantab/5-infographics-ideas-for-your-fb-page
