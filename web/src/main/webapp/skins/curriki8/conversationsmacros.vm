@@ -241,6 +241,31 @@
   $picturelist.get("${username}--${size}")##
 #end
 ###
+#macro(displayTopicSortButton $field) 
+  #set($sortclass = "forum-sort-button-inactive")
+  #if($request.sortfield)
+   #set($currentfield = $request.sortfield)
+  #else
+   #set($currentfield = "date")
+  #end   
+  #if($request.sortorder)
+   #set($currentorder = $request.sortorder)
+  #else
+   #set($currentorder = "desc")
+  #end  
+  #set($nextorder = "desc")   
+  #if($currentfield==$field)
+   #if($currentorder=="desc")
+    #set($style = "forum-sort-button-desc")
+    #set($nextorder = "asc")   
+   #else
+    #set($style = "forum-sort-button-asc")
+    #set($nextorder = "desc")    
+   #end
+  #end
+  <span class="${sortclass}"><a href="$doc.getURL("view", "viewer=conversationsforum&sortfield=${field}&sortorder=${nextorder}")" onclick="">$msg.get("conversations.forum.sorttopicsby.${field}")</a></span>   
+#end
+###
 ###
 #macro(displayTopicAddForm)
     <div class="addconversation-container">
