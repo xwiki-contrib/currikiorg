@@ -15,32 +15,24 @@
     #end
   #end
 
-  ## Display forum shortcuts (edit / like / nb of comments)
-  <div>  
-    <span class="commenttools forum">                  
-      #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
-        <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.forum.edit')">$msg.get('conversations.forum.edit')</a></span>
-      #end
-      <span class="separator">&nbsp;|&nbsp;</span>
-      <span class="conversation-ratings">
-        <span class="conversation-like">
-          <input type="hidden" name="documenttolike" value="$doc.fullName" />
-          <img src="$escapetool.xml($xwiki.getDocument('ConversationCode.TopicSheet').getAttachmentURL('conversation-like.png'))" alt="$escapetool.xml($msg.get('conversation.like.button'))" #if($xwiki.ratings.getRating($doc, $xcontext.user) == $util.null)class="canVote" title="$msg.get('conversation.like.button.tooltip')"#else title="$msg.get('conversation.like.button.alreadyliked.tooltip')"#end />
-        </span>
-        #set($rating = $xwiki.ratings.getAverageRating($doc).nbVotes)
-        <span class="conversation-score" title="$msg.get('conversation.like.score.tooltip', [$rating])">$rating</span>
-      </span>
-      <span class="separator">&nbsp;|&nbsp;</span>
-      <span class="conversation-topic">$topics.size()</span> 
-      <span class="separator">&nbsp;|&nbsp;</span>
-      <span class="conversation-comments">$!comments</span>       
-    </span>## commenttools
+  ## Display forum title and helpers
+  <div id="forum-header">
+   <span id="forum-title" class="forum-title">
+   <h1>$doc.displayTitle</h1>
+   </span>
+   #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
+   <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.forum.edit')">$msg.get('conversations.forum.edit')</a></span>
+   #end
+   <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
   </div>
-  ## Display forum title and description
-  <div id="document-title" class="conversation-title"><h1>$doc.displayTitle</h1></div>
-  <div class="forum-description">$doc.display('description')</div>
-  ## Display topic add form
-  #displayTopicAddForm()
+  <div id="forum-description">$doc.display('description')</div>
+  <div id="forum-buttons">
+  <label>$msg.get("conversations.forum.sorttopicsby")</label>
+   #displayTopicSortButton("date")
+   #displayTopicSortButton("votes")
+   #displayTopicSortButton("comments")
+   #displayTopicAddForm()
+  </div>  
   ## Display topic list
   #displayTopics()
   #displayEditors()
