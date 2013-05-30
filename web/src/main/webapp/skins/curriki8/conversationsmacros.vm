@@ -306,37 +306,96 @@
 #end
 ##
 ##
+##
+##
 #macro(displayTopics)
-  #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', 0, 0, [$doc.fullName, 'ConversationCode.TopicClass']))
+  #set($nb = 10)
+  #set($start = 0)
+  #set($nextstart = 10)
+  #if($request.start)
+   #set($start = $util.parseInt($request.start))
+   #set($start = $start + 10)
+  #end
+  #if($request.sortfield=="votes")
+  SORT BY VOTES
+   #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))  
+  #elseif($request.sortfield=="comments")
+  SORT BY COMMENTS
+  #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
+  #else
+   #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
+  #end
   #foreach($topic in $topics)
     #displayForumTopic($topic)
   #end
+  <div id="forum-more">
+  <a href="$doc.getURL("view", "viewer=conversations&start=${nextstart}")">$msg.get("conversations.forum.more")</a>
+  </div>
 #end
 ##
+#macro(displayForumAddThis $topicDoc) 
+<div class="topic-addthis">
+TODO ADD THIS
+</div>
+#end
 ##
+#macro(displayForumActions $topicDoc) 
+<div class="topic-actions-flag">
+FLAG
+</div>
+<div class="topic-actions-permalink">
+<a href="$topicDoc.getURL()"></a>
+<div>
+#end
+##
+
+
 ## TO DO : display all metadata, as specified in requirements
 #macro(displayForumTopic $topic)
-  #set($topicDoc = $xwiki.getDocument($topic))
+  #set($topicDoc = $xwiki.getDocument($topic))  
   #set($topicTitle = $topicDoc.displayTitle)
-  #set($topicDescription = $topicDoc.getValue('description'))
+  #set($topicDescription = $topicDoc.display('description'))
   #set($topicComments = 0)
   #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc', 0, 0, [$doc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
   #foreach($topicAnswer in $topicAnswers)
     #set($answerDoc = $xwiki.getDocument($topicAnswer))
     #set($topicComments = $topicComments + $answerDoc.getComments())
   #end
+  #set($nbCommentsAnswers = $topicAnswers.size() + $topicComments)
   <div class="topic">
-    #smallUserAvater2($context.user)
-    <div class="topic-author">$!xwiki.getUserName($topicDoc.creator)</div>
+    <span class="user-avatar">#smallUserAvater2($context.user)</span>
+    <h3 class="topic-title"><a href="$topicDoc.getURL()" title="$escapetool.xml($topicTitle)">$topicTitle</a></h3>
+    <span class="topic-comments">$topicComments</span>
     <div class="topic-metadata">      
-      <span class="topic-title"><a href="$topicDoc.getURL()">$topicTitle</a></span>    
-      <span class="topic-description">$!topicDescription</span>
-      <span class="topic-date">$datetool.format('yyyy/MM/dd HH:mm', $topicDoc.date)</span> ## Maybe it should be creation date ?
-      <span class="topic-answers">$topicAnswers.size()</span>
-      <span class="topic-comments">$topicComments</span>
+      <span class="topic-authortype">$!xwiki.getDocument($topicDoc.creator).display("neaoccupation")</span>
+      <span class="topic-metas">
+        <span class="topic-author">$!xwiki.getUserName($topicDoc.creator)</span>
+        <span class="topic-date">$datetool.format('dd/MM/yyyy', $topicDoc.date)</span> ## Maybe it should be creation date ?
+        <span class="topic-answers">$topicAnswers.size()</span>
+        <span class="topic-vote">VOTE</span>
+      </span>
+    </div>
+  <div class="topic-description">
+    $!topicDescription
+    <div class="topic-actions">
+      <span class="left">
+        #displayForumActions($topicDoc)
+      </span>
+      <span class="center">VOTE</span>
+      <span class="right">
+       #displayForumAddThis($topicDoc)             
+      </span>
     </div>
   </div>
+  #if($topicDoc.hasAccessLevel("edit"))
+  <div class="topic-moderation">
+    <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
+    <a class="topic-delete" href="$topicDoc.getURL("delete")" title="$msg.get("conversations.forum.delete")">$msg.get("conversations.forum.delete")</a>
+  </div>
+  #end
+</div>
 #end
+##
 ##
 ##
 #macro(displayAnswers)
