@@ -1,0 +1,8 @@
+{{velocity}}
+  #if($context.action != 'view')
+    : $msg.get('conversations.answer')
+    ; $doc.display('answer')
+  #elseif($context.action == 'view' && $request.viewer != 'conversations')
+    $response.sendRedirect($doc.getURL('view', 'viewer=conversations'))
+  #end
+{{/velocity}}

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>ConversationCode</web>
+<name>Actions</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
+<customClass></customClass>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1369827328000</creationDate>
+<date>1369896933000</date>
+<contentUpdateDate>1369896933000</contentUpdateDate>
+<version>1.24</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>true</minorEdit>
+<syntaxId>xwiki/2.1</syntaxId>
+<hidden>false</hidden>
+<content>{{velocity}}
+## check token
+#if("$!request.action" != "" &amp;&amp; !$services.csrf.isTokenValid("$!request.form_token"))
+  $response.sendRedirect($services.csrf.getResubmissionURL())
+#else
+  #if("$!request.action" == "addtopic")
+    #if("$!request.title.trim()" != '')
+      #if("$!request.space" != '')
+        #set($newTopicName = "$!request.space." + $xwiki.getUniquePageName("$!request.space", 'Topic'))
+        #set($topicTitle = "$!request.title.trim()")
+        #set($topicDoc = $xwiki.getDocument($newTopicName))
+        #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($topicDoc.documentReference, $context.database)))
+          ## Add the TopicClass object
+          #set($discard = $topicDoc.updateObjectFromRequest('ConversationCode.TopicClass'))
+          $topicDoc.setTitle($topicTitle)
+          $topicDoc.setParent("$!request.parent")
+          #set($discard = $topicDoc.saveWithProgrammingRights())
+          #if("$!request.xredirect" != "")
+            $response.sendRedirect("$!request.xredirect")
+          #end
+        #else
+          $response.setStatus(403)
+          {{warning}}$msg.get("conversations.create.error.topic.norights"){{/warning}}
+        #end
+      #else
+        {{warning}}$msg.get('conversations.create.error.missingmetadata'){{/warning}}
+      #end
+    #else
+      $response.setStatus(403)
+      {{warning}}$msg.get('conversations.create.error.missingtitle'){{/warning}}
+    #end  
+  #elseif("$!request.action" == "addconversation")
+    #set($spaceName = "$!request.space")
+    #set($topicName = "$!request.page")
+    #if($spaceName != '' &amp;&amp; $topicName != '')
+      #set($newAnswerName = $xwiki.getUniquePageName($spaceName, "${topicName}Answer"))
+      ## Make sure that the doc name is not oversized (it should be safe because topic name should be short, but we take an extra measure in case the doc is not created with the default creation form located in a topic page)
+      #if($newAnswerName.length() &gt; 250)
+        #set($newAnswerName = $newAnswerName.substring(0, 250))
+      #end
+      #set($newAnswerDocName = "${spaceName}.${newAnswerName}")
+      #set($newAnswerDoc = $xwiki.getDocument($newAnswerDocName))
+      #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($topicDoc.documentReference, $context.database))) 
+        #if($newAnswerDoc.isNew())     
+          $newAnswerDoc.setParent("${spaceName}.${topicName}")
+          #set($discard = $newAnswerDoc.updateObjectFromRequest('ConversationCode.AnswerClass'))
+          #set($discard = $newAnswerDoc.saveWithProgrammingRights())
+          #if("$!request.xredirect" != "")
+            $response.sendRedirect("$!request.xredirect")
+          #end
+        #else
+          {{warning}}Conversation document is not new, although it should have been: either there are too many conversations with the same name or an interleaving issue occurred; or document reference is null (document exists and user doesn't have rights).{{/warning}}
+        #end 
+      #else
+        $response.setStatus(403)
+        {{warning}}$msg.get('conversations.create.error.answer.norights'){{/warning}}
+      #end    
+    #else
+      {{warning}}Not enough parameters.{{/warning}}
+    #end
+  #elseif ("$!request.action" == "deleteconversation" || "$!request.action" == "deletecomment")
+    #set($isDeleteComment = "$!request.action" == "deletecomment")
+    #set($conversationDoc = $xwiki.getDocument("$!request.conversationdoc"))
+    #set($conversationObj = $conversationDoc.getObject('ConversationCode.AnswerClass'))
+    #if ($isDeleteComment)
+      #set($commentNumber = $util.parseInt("$!request.commentnumber"))
+      #set($commentObj = $conversationDoc.getObject('XWiki.XWikiComments', $commentNumber))
+    #end
+    #if (!$conversationDoc.isNew() &amp;&amp; $conversationObj &amp;&amp; (!$isDeleteComment || $commentObj))
+      ## check rights
+      #set($requiredRight = 'edit')
+      #if (!$isDeleteComment)
+        #set($requiredRight = 'delete')
+      #end
+      #if($xwiki.hasAccessLevel($requiredRight, $xcontext.user, $services.model.serialize($conversationDoc.documentReference, $context.database)))
+        ## do the action then send a mail
+        ## 0. collect some data we need after
+        ## get a representation of the deleted item
+        #set($itemRepresentation = "")
+        #if ($isDeleteComment)
+          #set($itemRepresentation = $commentObj.getProperty('comment').value)
+        #else
+          #set($itemRepresentation = $conversationDoc.displayTitle)
+        #end
+        ## get the item author to send mail after
+        #set($itemAuthor = '')
+        #if ($isDeleteComment)
+          #set($itemAuthor = $commentObj.getProperty('author').value)
+        #else
+          #set($itemAuthor = $conversationDoc.creator)
+        #end
+        ## 1. do the action
+        #if($isDeleteComment)
+          #set($discard = $conversationDoc.removeObject($commentObj))
+          #set($discard = $conversationDoc.save($msg.get("conversations.${request.action}.changecomment")))
+        #else
+          #set($discard = $conversationDoc.delete())
+        #end
+        ## 2. send an email
+        ## get the email of the dude to send the mail to
+        #set($itemAuthorUser = $xwiki.getUser($itemAuthor))
+        #set($itemAuthorEmail = $itemAuthorUser.email)
+        #if ("$!itemAuthorEmail" != '')
+          #set ($sender = $xwiki.getUserName($context.user, false))
+          #if ("$!{xwiki.getXWikiPreference('admin_email')}" != '')
+            #set ($sender = "$sender &lt;$!{xwiki.getXWikiPreference('admin_email')}&gt;")
+          #else
+            #set ($sender = "$!{escapetool.q($sender)} &lt;noreply@$!{request.serverName}&gt;")
+          #end
+         #set ($result = $xwiki.mailsender.sendMessageFromTemplate($sender, $itemAuthorEmail, ${util.null}, ${util.null}, $xcontext.language, 'ConversationCode.Actions', ${util.null}))
+          #if ($result != 0)
+            {{warning}}$msg.get("conversations.${request.action}.error.nomailsent"){{/warning}}
+          #else
+            {{success}}$msg.get("conversations.${request.action}.success"){{/success}}
+            #if("$!request.xredirect" != "")
+              $response.sendRedirect("$!request.xredirect")
+            #end
+          #end        
+        #else
+          {{warning}}$msg.get("conversations.${request.action}.error.nomailsent"){{/warning}}
+        #end
+      #else
+        ## set the status and print a message
+        $response.setStatus(403)
+        {{warning}}$msg.get("conversations.${request.action}.error.norights"){{/warning}}  
+      #end
+    #else
+      ## set the status and print a message
+      $response.setStatus(404)
+      {{warning}}$msg.get("conversations.${request.action}.error.notfound"){{/warning}}
+    #end
+  #else
+    {{warning}}No action specified.{{/warning}}
+  #end##action switch
+#end##csrf token verification
+{{/velocity}}</content></xwikidoc>

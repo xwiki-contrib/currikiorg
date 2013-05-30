@@ -1,0 +1,39 @@
+{{velocity}}
+#if("$!request.forumName" != '')
+  #set($newForumDocName = "Forums_${request.forumName}.WebHome")
+  #if($newForumDocName.length > 230)
+    #set($newForumDocName = $newForumDocName.substring(0, 230))
+  #end
+  #set($newForumDoc = $xwiki.getDocument($newForumDocName))
+  #if(!$newForumDoc.isNew())
+    {{warning}}$msg.get('forum.create.alreadyexists', ["$!request.forumName", $newForumDocName])
+  #else
+    $response.sendRedirect($newForumDoc.getURL('inline', "title=${request.forumName}&parent=Forums.WebHome&template=ConversationCode.ForumTemplate"))
+  #end
+
+#else
+
+  {{html clean="false"}}
+    <div class="forum-create-metadata">
+      $msg.get('conversations.forum.create') ## should be used as tip for forumName input
+      <form action="" method="post">        
+        <input type="text" name="forumName"  value="" />
+        <input type="submit" class="button" value="$msg.get('conversations.forum.create.submit')" />
+      </form>
+    </div>
+  {{/html}}
+
+  #set($columns = ['doc.title', 'doc.date', 'doc.creator'])
+  #set($columnsProperties = {
+     "doc.title" : { "type" : "text", "link" : "view"},
+     "doc.creator" : { "type" : "text", "link" : "view"}
+  })
+  #set($options = { 
+    'className' : 'ConversationCode.ForumClass',
+    'translationPrefix' : 'conversations.',
+    'rowCount' : 10
+  })
+  #livetable('forums' $columns $columnsProperties $options)
+
+#end
+{{/velocity}}
