@@ -1,0 +1,53 @@
+##
+##---------------------------------------------------------------------
+## Set some 'global' variables
+##---------------------------------------------------------------------
+##
+## need this editors list to activate wysiwyg
+#set($editors = "")
+##
+#set($xCommentClass = 'XWiki.XWikiComments')
+##
+#if(!$replyTo)
+  #set($replyTo = $escapetool.xml($!request.get('replyto')))
+#end
+
+#if ("$!replyToConversation" == "")
+  #set($replyToConversation = "$!request.get('replytoconversation')")
+#end
+##
+#set($requestedByAjax = ($request.getHeader('X-Requested-With') == 'XMLHttpRequest'))
+##
+#if("$!captchaAnswerWrong" == '')
+  #set($captchaAnswerWrong = ($request.get('captchaAnswerWrong') == '1'))
+#end
+##
+#if("$!hideCaptcha" == '')
+  #set($hideCaptcha = ($captchaAnswerWrong != true && $requestedByAjax))
+#end
+##
+#if("$!fillInFields" == '')
+  #set($fillInFields = ($captchaAnswerWrong == true))
+#end
+##
+## If $fillInFields, then set variables for each field.
+#if($fillInFields)
+  #set($author = $!escapetool.xml($request.get("${xCommentClass}_author")))
+  #set($comment = $!escapetool.xml($request.get("${xCommentClass}_comment")))
+  #if("$!replyTo" == '')
+    #set($replyTo = $escapetool.xml($!request.get("${xCommentClass}_replyto")))
+  #end
+#end
+##
+#if("$!author" == '')
+  #set($author = $msg.get('core.viewers.comments.add.guestName.default'))
+#end
+##
+#set($xredirect = $request.get("xredirect"))
+#if("$!xredirect" == '')
+  #set($xredirect = "$doc.getURL('view')?$request.getQueryString()")
+#end
+##
+#if("$!offerGuestsCaptcha" == '')
+  #set($offerGuestsCaptcha = $xwiki.getSpacePreferenceAsInt('guest_comment_requires_captcha', 0) == 1)
+#end

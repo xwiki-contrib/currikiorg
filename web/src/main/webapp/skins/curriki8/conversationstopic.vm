@@ -1,0 +1,41 @@
+  ## Import styles & scripts
+  #template('conversationssetup.vm')
+  ## Import vars
+  #template('conversationsvars.vm')
+  ## Import macros
+  #template('conversationsmacros.vm')
+
+  ## Display forum shortcuts (edit / like / nb of comments)
+  #set($comments = 0)
+  #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc', 0, 0, [$doc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
+  #foreach($topicAnswer in $topicAnswers)
+    #set($answerDoc = $xwiki.getDocument($topicAnswer))
+    #set($answerComments = $answerDoc.getComments())
+    #set($comments = $comments + $answerDoc.getComments().size())
+  #end
+  <div>  
+    <span class="commenttools topic">                  
+      #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
+        <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.topic.edit')">$msg.get('conversations.topic.edit')</a></span>
+      #end
+      <span class="separator">&nbsp;|&nbsp;</span>
+      <span class="conversation-ratings">
+        <span class="conversation-like">
+          <input type="hidden" name="documenttolike" value="$doc.fullName" />
+          <img src="$escapetool.xml($xwiki.getDocument('ConversationCode.TopicSheet').getAttachmentURL('conversation-like.png'))" alt="$escapetool.xml($msg.get('conversation.like.button'))" #if($xwiki.ratings.getRating($doc, $xcontext.user) == $util.null)class="canVote" title="$msg.get('conversation.like.button.tooltip')"#else title="$msg.get('conversation.like.button.alreadyliked.tooltip')"#end />
+        </span>
+        #set($rating = $xwiki.ratings.getAverageRating($doc).nbVotes)
+        <span class="conversation-score" title="$msg.get('conversation.like.score.tooltip', [$rating])">$rating</span>
+      </span>
+      <span class="separator">&nbsp;|&nbsp;</span>
+      <span class="conversation-answers">$topicAnswers.size()</span>
+      <span class="separator">&nbsp;|&nbsp;</span>
+      <span class="conversation-comments">$!comments</span>       
+    </span>## commenttools
+  </div>
+  ## Display forum title and description
+  <div id="document-title" class="conversation-title"><h1>$doc.displayTitle</h1></div>
+  <div class="forum-description">$doc.display('description')</div>
+  #displayConversationAddForm()
+  #displayAnswers()
+  #displayEditors()

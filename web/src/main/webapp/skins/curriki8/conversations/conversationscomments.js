@@ -522,7 +522,7 @@ viewers.Comments = Class.create({
               // Remove the corresponding HTML element from the UI
               var conversation = conversationDelete.up('.conversation');
               // Replace the comment with a "deleted conversation" placeholder
-              conversation.replace(this.createNotification("$msg.get('article.conversation.delete.success')"));
+              conversation.replace(this.createNotification("$msg.get('conversation.delete.success')"));
             }.bind(this),
             onComplete : function() {
               // In the end: re-enable the button
@@ -531,10 +531,10 @@ viewers.Comments = Class.create({
           },
           /* Interaction parameters */
           {
-             confirmationText: commentsCount > 0 ? "$escapetool.javascript($msg.get('article.conversation.delete.confirm.withReplies', ['__number__']))".replace('__number__', commentsCount) : "$escapetool.javascript($msg.get('article.conversation.delete.confirm'))",
-             progressMessageText : "$msg.get('article.conversation.delete.inProgress')",
-             successMessageText : "$msg.get('article.conversation.delete.done')",
-             failureMessageText : "$msg.get('article.conversation.delete.failed')"
+             confirmationText: commentsCount > 0 ? "$escapetool.javascript($msg.get('conversation.delete.confirm.withReplies', ['__number__']))".replace('__number__', commentsCount) : "$escapetool.javascript($msg.get('conversation.delete.confirm'))",
+             progressMessageText : "$msg.get('conversation.delete.inProgress')",
+             successMessageText : "$msg.get('conversation.delete.done')",
+             failureMessageText : "$msg.get('conversation.delete.failed')"
           }
         );
       }
@@ -587,7 +587,7 @@ viewers.Comments = Class.create({
           if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
             failureReason = 'Server not responding';
           }
-          editForm._x_notification = new XWiki.widgets.Notification("$msg.get('article.conversation.edit.failed')" + failureReason, "error");
+          editForm._x_notification = new XWiki.widgets.Notification("$msg.get('conversation.edit.failed')" + failureReason, "error");
           conversationEditFormContainer.remove();
         }.bind(this),
         on0 : function (response) {
@@ -672,10 +672,10 @@ viewers.Comments = Class.create({
           parameters : {'xpage' : 'plain', 'doc' : conversationDocName, 'vote' : '1'},
           onCreate : function () {
             conversationLikeBlock.votingInProgress = true;
-            conversationLikeBlock._x_notification = new XWiki.widgets.Notification("$escapetool.javascript($msg.get('article.conversation.like.loading'))", "inprogress");
+            conversationLikeBlock._x_notification = new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.loading'))", "inprogress");
           }.bind(this),
           onSuccess : function (response) {
-            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('article.conversation.like.done'))", "done"));
+            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.done'))", "done"));
             // get the conversation score which is the sibling of the like block
             var scoreDisplayer = conversationLikeBlock.next('.conversation-score');
             if (scoreDisplayer) {
@@ -697,7 +697,7 @@ viewers.Comments = Class.create({
             if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
               failureReason = 'Server not responding';
             }
-            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('article.conversation.like.failed'))" + failureReason, "error"));
+            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.failed'))" + failureReason, "error"));
           }.bind(this),
           on0 : function (response) {
             response.request.options.onFailure(response);
