@@ -49,7 +49,7 @@
 #end
 #end
 #set($url = $flagDoc.getExternalURL())
-#set($res = $xwiki.mailsender.sendMessageFromTemplate($mailFrom, $mailTo, "", "", "en", "ConversationCode.MailTemplateFlag", $context.vcontext))
+#set($res = $xwiki.mailsender.sendMessageFromTemplate($mailFrom, $mailTo, $util.null, $util.null, "en", "ConversationCode.MailTemplateFlag", $context.vcontext))
 ## sending notification email
 
 == $msg.get("conversations.flag.success.dialog.header") ==
