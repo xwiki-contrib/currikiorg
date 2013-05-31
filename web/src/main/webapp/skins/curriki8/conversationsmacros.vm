@@ -99,6 +99,11 @@
       #if ($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($commentDoc.documentReference, 'compactwiki')))
         <span class="commenttool commentdelete"><a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deletecomment&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($commentDoc.documentReference, 'compactwiki'))}&amp;commentnumber=${comment.number}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('core.viewers.comments.delete')">$msg.get('core.viewers.comments.delete')</a></span>
       #end
+      #if ($context.user!="XWiki.XWikiGuest")
+        <span class="conversation-flag">
+         <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}:xwikicomment_${conversationId}_${comment.number}")">$msg.get("conversations.flag.button")</a>
+        </span>
+      #end
       </span>## commenttools
     </div>## commentheader
     <div class="commentcontent">$commentDoc.getRenderedContent($comment.getProperty('comment').getValue(), $doc.getSyntax().toIdString())</div>
@@ -367,12 +372,12 @@ TODO ADD THIS
 #end
 ##
 #macro(displayForumActions $topicDoc) 
-<div class="topic-actions-flag">
-FLAG
-</div>
-<div class="topic-actions-permalink">
-<a href="$topicDoc.getURL()"></a>
-<div>
+<span class="topic-actions-flag conversation-flag">
+ <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($topicDoc.fullName)}")">$msg.get("conversations.flag.button")</a>
+</span>
+<span class="topic-actions-permalink">
+ <a href="$topicDoc.getURL()"></a>
+</span>
 #end
 ##
 
@@ -482,6 +487,11 @@ FLAG
             #end
             #if($xwiki.hasAccessLevel('delete', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))        
               <span class="conversation-delete"><a href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($conversationDoc.documentReference, 'compactwiki'))}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a></span>
+            #end
+            #if($context.user!="XWiki.XWikiUsers")
+             <span class="conversation-flag">
+              <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}:${conversationId}")">$msg.get("conversations.flag.button")</a>
+             </span>
             #end
           </span>
         </div>

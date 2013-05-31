@@ -22,6 +22,10 @@
         #end
         #if("$!viewer" == 'conversationstopic')
           <span class="separator">|</span>
+          <span class="conversation-flag">
+           <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}")">$msg.get("conversations.flag.button")</a>
+          </span>
+          <span class="separator">|</span>
           <span class="conversation-ratings">
             <span class="conversation-like">
               <input type="hidden" name="documenttolike" value="$doc.fullName" />
