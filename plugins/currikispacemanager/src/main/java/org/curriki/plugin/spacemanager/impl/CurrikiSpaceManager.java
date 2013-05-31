@@ -28,7 +28,7 @@ import java.util.List;
 public class CurrikiSpaceManager extends SpaceManagerImpl {
     public static final String CURRIKI_SPACEMANGER_NAME = "csm";
     private static final String CURRIKI_SPACEMANAGER_DEFAULT_EXTENSION = "org.xwiki.plugin.spacemanager.impl.CurrikiSpaceManagerExtension";
-    private static final String CURRIKI_SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES = "UserProfiles,Messages,Documentation";
+    private static final String CURRIKI_SPACEMANAGER_DEFAULT_PROTECTED_SUBSPACES = "UserProfiles,Messages,Documentation,Discussions";
 
     /**
 	 * Space manager constructor

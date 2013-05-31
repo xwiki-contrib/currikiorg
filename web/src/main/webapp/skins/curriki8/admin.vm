@@ -4,13 +4,13 @@
 #if(!$request.skin)
 #set($url = $xwiki.requestURL)
 #if($url.indexOf("?")==-1)
-#set($url = "${url}?skin=toucan")
+#set($url = "${url}?skin=colibri")
 #else
-#set($url = "${url}&skin=toucan")
+#set($url = "${url}&skin=colibri")
 #end
 $response.sendRedirect($url)
 #end
-$context.setLinksQueryString("skin=toucan")
+$context.setLinksQueryString("skin=colibri")
 ## Determine whether the admin sheet is available
 ##-------------------------------------------------
 #if($xwiki.exists("XWiki.AdminSheet"))

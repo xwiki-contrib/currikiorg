@@ -51,3 +51,16 @@
 #if("$!offerGuestsCaptcha" == '')
   #set($offerGuestsCaptcha = $xwiki.getSpacePreferenceAsInt('guest_comment_requires_captcha', 0) == 1)
 #end
+## Some special treatment for Groups
+#if($doc.space.startsWith("Group_") && ($doc.name=="Discussions" && $request.viewer))
+ $response.sendRedirect($doc.getURL())
+#end
+#if($doc.space.startsWith("Group_") && ($doc.name!="Discussions"))
+ #curriki_breadcrumb()
+ <div id="content">
+ #groupinit()
+ #groupsheader("discussions")
+ #set($space = "${doc.space}_Discussions")
+#else
+ #set($space = $doc.space)
+#end
