@@ -334,27 +334,29 @@
 ##
 ##
 #macro(displayTopics)
-  #set($nb = 10)
+  #set($step = 10)
+  #set($nb = $step)
   #set($start = 0)
-  #set($nextstart = 10)
+  #set($nextstart = $step)
   #if($request.start)
    #set($start = $util.parseInt($request.start))
-   #set($start = $start + 10)
+   #set($nextstart = $start + $step)
   #end
   #if($request.sortfield=="votes")
-  SORT BY VOTES
-   #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))  
+   ## sort by votes - requires programming rights
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, BaseObject as votesobj, IntegerProperty as nbvotes where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and votesobj.name=doc.fullName and votesobj.className='XWiki.AverageRatingsClass' and votesobj.id=nbvotes.id.id and nbvotes.id.name='nbvotes'  order by nbvotes.value $!{currentorder}", $nb, $start, [ $doc.fullName ]))
   #elseif($request.sortfield=="comments")
-  SORT BY COMMENTS
-  #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
+   ## sort by comments - requires programming rights
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, XWikiDocument as answerdoc, BaseObject as cobj where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and answerdoc.parent=doc.fullName and answerdoc.fullName=cobj.name and cobj.className='XWiki.XWikiComments' group by 1 order by count(distinct cobj.number)+count(distinct answerdoc.fullName) $!{currentorder}", $nb, $start, [ $doc.fullName ]))
   #else
+   ## sort by last update date
    #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
   #end
   #foreach($topic in $topics)
     #displayForumTopic($topic)
   #end
   <div id="forum-more">
-  <a href="$doc.getURL("view", "viewer=conversations&start=${nextstart}")">$msg.get("conversations.forum.more")</a>
+  <a href="$doc.getURL("view", "viewer=conversationsforum&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
   </div>
 #end
 ##

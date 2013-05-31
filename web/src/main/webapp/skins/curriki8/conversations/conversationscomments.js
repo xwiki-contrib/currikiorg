@@ -767,6 +767,83 @@ function init() {
         });
       }
     });
+    
+    // add vote click handler for the topic
+    var topicDiv = $('conversation-topic');
+    var topicLike = topicDiv.down('.conversation-like img.canVote');
+      
+    // if there is no clickable button, return, don't do anything
+    if (topicLike) {
+      // if we have an active like button, add a listener to it
+      topicLike.observe('click', function(event) {
+        event.stop();
+        var topicLikeBlock = event.findElement('.conversation-like');
+        if (topicLikeBlock.votingInProgress) {
+          // there is already a voting in progress, don't start again
+          return;
+        }
+        // find the conversation document name to vote for
+        var topicDocName;
+        if (topicLikeBlock) {
+          var topicNameInput = topicLikeBlock.down('input[name=documenttolike]');
+          if (topicNameInput) {
+            topicDocName = topicNameInput.value;
+          }
+        }
+        if (!topicDocName || typeof(topicDocName) == "undefined") {
+          // we don't have the name of the document to like, return
+          return;
+        }
+
+        console.log("Liking " + topicDocName);
+        var likeUrl = '$escapetool.javascript($xwiki.getURL("XWiki.Ratings"))';
+        topicLikeBlock.votingInProgress = false;
+
+        new Ajax.Request(likeUrl, {
+          method : 'post',
+          parameters : {'xpage' : 'plain', 'doc' : topicDocName, 'vote' : '1'},
+          onCreate : function () {
+            topicLikeBlock.votingInProgress = true;
+            topicLikeBlock._x_notification = new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.loading'))", "inprogress");
+          }.bind(this),
+          onSuccess : function (response) {
+            topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.done'))", "done"));
+            // get the conversation score which is the sibling of the like block
+            var scoreDisplayer = topicLikeBlock.next('.conversation-score');
+            if (scoreDisplayer) {
+              scoreDisplayer.update(response.responseJSON.totalvotes);
+            }
+            // and now remove this listener from the like button, since the current user shouldn't be able to vote again ...
+            var topicLikeButton = topicLikeBlock.down('img');
+            if (topicLikeButton) {
+              topicLikeButton.stopObserving('click');
+              // ... and put inactive class to change the style
+              topicLikeButton.removeClassName('canVote');
+            }
+          }.bind(this),
+          onFailure : function (response) {
+            var failureReason = response.responseText;
+            if (!response.responseText || response.responseText == '' ) {
+              failureReason = response.statusText;
+            }
+            if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
+              failureReason = 'Server not responding';
+            }
+            topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.failed'))" + failureReason, "error"));
+          }.bind(this),
+          on0 : function (response) {
+            response.request.options.onFailure(response);
+          },
+          onComplete : function (response) {
+            topicLikeBlock.votingInProgress = false;
+          }.bind(this)
+        });
+      }.bindAsEventListener(this));
+    }
+    // end topicLike listener
+
+    
+    
   });
 
   // Activate full screen:

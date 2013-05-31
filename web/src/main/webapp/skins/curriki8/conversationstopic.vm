@@ -13,7 +13,7 @@
     #set($comments = $comments + $answerDoc.getComments().size())
   #end
   ## Display topic header
-  <div class="conversation-main">
+  <div id="conversation-topic" class="conversation-main">
     <div class="conversation-titlebar">
       <div class="conversation-inlineactions">                
         #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
