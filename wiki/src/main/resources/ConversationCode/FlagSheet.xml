@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>ConversationCode</web>
+<name>FlagSheet</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent>ConversationCode.FlagClass</parent>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
+<customClass></customClass>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1357027200000</creationDate>
+<date>1357027200000</date>
+<contentUpdateDate>1357027200000</contentUpdateDate>
+<version>1.1</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/2.1</syntaxId>
+<hidden>false</hidden>
+<content>{{velocity}}
+## Change class name to your class name 
+#set($class = $doc.getObject("ConversationCode.FlagClass").xWikiClass)
+
+#foreach($prop in $class.properties)
+; **${prop.prettyName}**
+#if($prop.getName()=="target" &amp;&amp; $context.action=="view")
+; 
+#set($target = $doc.getValue("target"))
+#set($pos = $target.indexOf(":"))
+#if($pos==-1)
+ #set($targetDocName = $target)
+ #set($anchor = "")
+#else
+ #set($targetDocName = $target.substring(0, $pos))
+ #set($pos = $pos + 1)
+ #set($anchor = $target.substring($pos))
+#end
+[[$msg.get("conversations.flag.viewsource")&gt;&gt;${targetDocName}||target="_blank" anchor="${anchor}"]]
+#else
+: $doc.display($prop.getName())
+#end
+#end
+
+#if($context.action=="view")
+{{html clean=false}}
+&lt;a href="$doc.getURL("inline")" class="button button-orange"&gt;$msg.get("conversations.flag.edit")&lt;/a&gt;
+{{/html}}
+#end
+{{/velocity}}</content></xwikidoc>

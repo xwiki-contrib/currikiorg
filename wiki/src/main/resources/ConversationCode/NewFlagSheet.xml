@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>ConversationCode</web>
+<name>NewFlagSheet</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
+<customClass></customClass>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1357027200000</creationDate>
+<date>1357027200000</date>
+<contentUpdateDate>1357027200000</contentUpdateDate>
+<version>1.1</version>
+<title>$msg.get("conversations.flag.dialog.header") </title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/2.1</syntaxId>
+<hidden>false</hidden>
+<content>{{velocity}}
+= $msg.get("conversations.flag.dialog.header")  =
+
+#set($flagDocName = $xwiki.getUniquePageName("Flags", "Flag"))
+#set($flagDoc = $xwiki.getDocument("Flags.${flagDocName}"))
+#set($ok = $flagDoc.setContent($xwiki.getDocument("ConversationCode.FlagTemplate").content))
+#set($ok = $flagDoc.setParent("Flags.WebHome"))
+#if(!$flagDoc.getObject("ConversationCode.FlagClass"))
+ #set($ok = $flagDoc.newObject("ConversationCode.FlagClass"))
+#end
+#set($ok = $flagDoc.use("ConversationCode.FlagClass"))
+#if($request.get("ConversationCode.FlagClass_0_message") &amp;&amp; $request.get("ConversationCode.FlagClass_0_message").trim()!="" &amp;&amp; $request.get("ConversationCode.FlagClass_0_reason")!="")
+ #set($ok = $flagDoc.updateObjectFromRequest("ConversationCode.FlagClass"))
+ #set($ok = $flagDoc.set("status", "open"))
+ #set($ok = $flagDoc.saveWithProgrammingRights())
+## sending email
+#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
+#set($mailTo = $xwiki.getXWikiPreference("admin_email"))
+#set($moderator = $flagDoc.getValue("moderator"))
+#if($moderator &amp;&amp; $moderator!="")
+#set($moderatorDoc = $xwiki.getDocument($moderator))
+#set($moderatorEmail = $moderatorDoc.getValue("email"))
+#if($moderatorEmail &amp;&amp; $moderatorEmail!="")
+ #set($mailTo = "${mailTo},${moderatorEmail}")
+#end
+#end
+#set($url = $flagDoc.getExternalURL())
+#set($res = $xwiki.mailsender.sendMessageFromTemplate($mailFrom, $mailTo, "", "", "en", "ConversationCode.MailTemplateFlag", $context.vcontext))
+## sending notification email
+
+== $msg.get("conversations.flag.success.dialog.header") ==
+
+$msg.get("conversations.flag.success.dialog.message") 
+
+(% class="button button-grey" %)
+[[$msg.get("conversations.flag.success.dialog.goback") &gt;&gt;$request.targetDocName]]
+#else
+#set($ok = $flagDoc.set("user", $context.user))
+#if($request.target)
+ #set($target = $request.target)
+ #set($ok = $flagDoc.set("target", $target))
+ #if($target.indexOf(":")!=-1)
+  #set($targetDocName = $target.substring(0, $target.indexOf(":")))
+ #else
+  #set($targetDocName = $target)
+ #end
+ #set($targetDoc = $xwiki.getDocument($targetDocName))
+ #set($ok = $flagDoc.set("moderator", $targetDoc.creator))
+#else
+ #set($targetDocName = $request.targetDocName)
+#end
+{{html clean=false wiki=true}}
+&lt;form action="" method="post"&gt;
+&lt;input type="hidden" name="targetDocName" value="${escapetool.xml($targetDocName)}" /&gt;
+$flagDoc.display("target", "hidden")
+$flagDoc.display("user", "hidden")
+$flagDoc.display("moderator", "hidden")
+== $msg.get("conversations.flag.dialog.guidingquestion1.txt") ==
+&lt;br /&gt;
+$msg.get("conversations.flag.dialog.instruction1.txt")
+&lt;br /&gt;&lt;br /&gt;
+== $msg.get("conversations.flag.dialog.guidingquestion2.txt") ==
+&lt;br /&gt;
+$msg.get("conversations.flag.dialog.instruction2.txt")
+&lt;br /&gt;
+#if($request.get("ConversationCode.FlagClass_0_reason") &amp;&amp; $request.get("ConversationCode.FlagClass_0_reason")=="")
+(% color="red" %)
+$msg.get("conversations.flag.dialog.mandatory.reason")
+&lt;br /&gt;
+#end
+$flagDoc.display("reason", "edit")
+&lt;br /&gt;&lt;br /&gt;
+$msg.get("conversations.flag.dialog.instruction3.txt")
+&lt;br /&gt;
+#if($request.get("ConversationCode.FlagClass_0_message") &amp;&amp; $request.get("ConversationCode.FlagClass_0_message").trim()=="")
+(% color="red" %)
+$msg.get("conversations.flag.dialog.mandatory.message")
+&lt;br /&gt;
+#end
+$flagDoc.display("message", "edit")
+&lt;br /&gt;&lt;br /&gt;
+&lt;input class="button button-grey" type="button" value="$msg.get("conversations.flag.dialog.cancel.btt")" onclick="history.go(-1);" /&gt;
+&lt;input class="button button-orange" type="submit" value="$msg.get("conversations.flag.dialog.submit.btt")" /&gt;
+&lt;/form&gt;
+
+## conversations.flag.dialog.required.field.icon=&lt;em class="required-indicator"&gt;* &lt;/em&gt;
+{{/html}}
+#end
+{{/velocity}}</content></xwikidoc>
