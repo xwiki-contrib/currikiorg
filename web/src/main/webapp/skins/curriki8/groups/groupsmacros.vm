@@ -45,13 +45,13 @@
 ## page: all pages in the groups space
 ## Groups tab macro
 #macro(groupstabs $curtab) ## {
-#set($tabs = ["home","messages", "curriculum", "members", "documentation"])
+#set($tabs = ["home","discussions", "messages", "curriculum", "members", "documentation"])
 <ul id="groups-tabs" class="tabs">
 #foreach($tab in $tabs) ## {
 	<li#if($curtab==$tab) class="current"#end>
 #set($tabpage = $msg.get("groups_${tab}_page"))
 #set($url=$xwiki.getURL("${spaceName}.${tabpage}", "view"))
-#if(!$hasGlobalAdmin && !$isGroupMember && ($s.policy=="closed") && ($tab=="messages" || $tab=="members" || $tab=="documentation"))
+#if(!$hasGlobalAdmin && !$isGroupMember && ($s.policy=="closed") && ($tab=="discussions" || $tab=="messages" || $tab=="members" || $tab=="documentation"))
 		<a href="javascript:void()" onclick="alert('$msg.get("groups_onlyaccessibletomembers")'); return false;">$msg.get("groups_${tab}_tabname")</a>
 #else
 		<a href="$url">$msg.get("groups_${tab}_tabname")</a>
@@ -66,7 +66,11 @@
 ## Groups header
 ##
 #macro(groupsheader $curtab) ## {
+#if($request.viewer)
+<h1 class="groupsTitle">$s.getDisplayTitle()</h1>
+#else
 <h1 class="groupsTitle">#verbatim($s.getDisplayTitle())</h1>
+#end
 <div id="groups-$curtab" class="groups groups-$curtab">
 #groupstabs($curtab)
 <div id="groups-${curtab}-main" class="form-wrp tab-container">

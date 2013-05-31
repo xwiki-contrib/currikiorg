@@ -1,0 +1,100 @@
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+#* @vtlvariable name="attachdoc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+
+#**
+ * This macro is called from the contentview.vm template when a page is a discussions page
+ * It adds the header and footer of the groups section to the pages
+ *#
+#macro(groups_discussions)
+ #groupinit()
+ #groupsheader("discussions")
+ #if(!$isGroupMember && ($s.policy=="closed") && !$hasadmin)
+   $msg.get("groups_discussions_onlyaccessibletomembers")
+ #else
+  #set( $discussionsSpaceName = "Discussions_"+$doc.space )
+  #if( $request.action == "editabout")
+   #if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
+    #groups_discussions_editabout()
+   #else
+    #curriki_noaccess()
+   #end
+  #end
+  #if( $stopRender )
+   ##do nothing
+  #else
+   #groups_discussions_home_about()
+   #begingroupsection("${msg.groups_discussions_discussions_title}" "" "" "blue" true)
+   #template("conversationsforum.vm")
+   #endgroupsection()
+  #end ## end if sheets allow to continue render
+ #end ## end if has right
+ #groupsfooter()
+#end
+
+#**
+  * Show Discussions Home page About zone
+  *#
+#macro(groups_discussions_home_about)
+ ## if the sheets allow the page to continue render
+ #set( $editLink = "" )
+ #set( $editTitle = "" )
+ #if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
+  #set( $editLink = $doc.getURL() + "?action=editabout" )
+  #set( $editTitle = "Edit" )
+ #end
+ #begingroupsection("${msg.groups_discussions_about_title}" "${editTitle}" "${editLink}" "blue" true)
+  #set( $customDocName = $docsSpaceName + ".AboutDiscussions" )
+  #if( $xwiki.exists( $customDocName ) )
+    #set( $aboutCreateDoc = $xwiki.getDocument( $customDocName ) )
+  #else
+    #set( $aboutCreateDoc = $xwiki.getDocument("Groups.DiscussionsWelcome"))
+  #end
+  ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
+  $aboutCreateDoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+ #endgroupsection()
+#end
+
+#**
+  *  Discussions New Wiki Page edit about form and handling
+  *#
+#macro(groups_discussions_editabout)
+ #set( $docName = $docsSpaceName + ".AboutDiscussions" )
+ #set( $editDoc = $xwiki.getDocument( $docName ) )
+ #if("$!request.xwiki2" == "true")
+  $editDoc.setSyntaxId("xwiki/2.1")
+ #end
+ #if( $request.method == "POST" )
+     $editDoc.setContent( $request.doctext )
+     $editDoc.save()
+ #else
+   #set($stopRender = "ok")
+   #begingroupsection("Edit about discussions" "" "" "blue" true)
+    <form action="#" method="post">
+    ## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
+    <input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
+    <label for="doctext" class="doctext">${msg.groups_discussions_enter_content}</label>
+    <textarea name="doctext" id="doctext" rows="20">$editDoc.content</textarea>
+    <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+    #verbatim_start
+    #wysiwyg_editProperty($editDoc 'doctext' true)
+    #verbatim_end
+        <div class="right mgn-vrt-15">
+          <input type="button" onclick="if(confirm('${msg.groups_discussions_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_discussions_edit_wiki_cancel}"  class="button button-cancel mgn-rt" />
+          <input type="submit" value="${msg.groups_home_editwelcome_submit_btt}"  class="button button-confirm" />
+        </div>
+    </form>
+   #endgroupsection()
+ #end
+#end
