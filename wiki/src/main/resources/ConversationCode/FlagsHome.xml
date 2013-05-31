@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>ConversationCode</web>
+<name>FlagsHome</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
+<customClass></customClass>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1357027200000</creationDate>
+<date>1357027200000</date>
+<contentUpdateDate>1357027200000</contentUpdateDate>
+<version>1.1</version>
+<title>$msg.get("conversations.flag.list.title")</title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/2.1</syntaxId>
+<hidden>false</hidden>
+<content>{{velocity}}
+= $msg.get("conversations.flag.list.title") =
+
+$msg.get("conversations.flag.list.instructions")
+
+  #set($columns = ['reason', 'user', 'doc.creationDate', 'moderator', 'status'])
+  #set($columnsProperties = {
+     "reason" : { "type" : "list", "link" : "view"},
+     "user" : { "type" : "text", "link" : "none"},
+     "doc.creationDate" : { "type" : "text", "link" : "none"},
+     "message" : { "type" : "text", "link" : "none", "html" : "true"},
+     "moderator" : { "type" : "text", "link" : "none"},
+     "status" : { "type" : "list", "link" : "none"}
+  })
+  #set($options = { 
+    'className' : 'ConversationCode.FlagClass',
+    'translationPrefix' : 'conversations.flag.',
+    'rowCount' : 10,
+    'selectedColumn' : 'doc.creationDate',
+    'defaultOrder' : 'desc'
+  })
+  #livetable('flags' $columns $columnsProperties $options)
+{{/velocity}}
+</content></xwikidoc>

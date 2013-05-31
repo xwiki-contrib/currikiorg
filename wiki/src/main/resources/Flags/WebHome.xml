@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xwikidoc>
-<web>ConversationCode</web>
-<name>ForumSheet</name>
+<web>Flags</web>
+<name>WebHome</name>
 <language></language>
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
@@ -14,7 +14,7 @@
 <date>1357027200000</date>
 <contentUpdateDate>1357027200000</contentUpdateDate>
 <version>1.1</version>
-<title></title>
+<title>$msg.get("conversations.flag.list.title")</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -22,12 +22,4 @@
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/2.1</syntaxId>
 <hidden>false</hidden>
-<content>{{velocity}}
-  #if($context.action != 'view')
-    {{edittitle errorkey="conversations.forum.titleError" /}}
-    : $msg.get('conversations.forum.description')
-    ; $doc.display('description')
-  #elseif($context.action == 'view' &amp;&amp; $request.viewer != 'conversationsforum')
-    $response.sendRedirect($doc.getURL('view', 'viewer=conversationsforum'))
-  #end
-{{/velocity}}</content></xwikidoc>
+<content>{{include document="ConversationCode.FlagsHome" /}}</content></xwikidoc>

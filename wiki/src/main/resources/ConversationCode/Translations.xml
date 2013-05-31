@@ -10,16 +10,16 @@
 <author>XWiki.Admin</author>
 <customClass></customClass>
 <contentAuthor>XWiki.Admin</contentAuthor>
-<creationDate>1369828140000</creationDate>
-<date>1369898064000</date>
-<contentUpdateDate>1369898064000</contentUpdateDate>
-<version>1.31</version>
+<creationDate>1357027200000</creationDate>
+<date>1357027200000</date>
+<contentUpdateDate>1357027200000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
 <comment></comment>
-<minorEdit>true</minorEdit>
+<minorEdit>false</minorEdit>
 <syntaxId>xwiki/2.1</syntaxId>
 <hidden>false</hidden>
 <content>ConversationCode.TopicClass_title=Title
@@ -33,7 +33,7 @@ ConversationCode.TopicClass_status_inprogress=In progress
 ConversationCode.TopicClass_status_closed=Closed
 ConversationCode.TopicClass_status_integrated=Integrated
 conversations.title=Conversation
-conversation.add.activator=Create new conversation
+conversation.add.activator=Answer
 conversation.delete.confirm=Delete conversation ?
 conversation.delete.confirm.withReplies=Delete this conversation and its comments ?
 conversation.delete.done=Conversation deleted
@@ -65,13 +65,19 @@ rating.voteoutofbounds=The vote is not valid.
 conversations.forum.create=New forum
 conversations.forum.create.alreadyexists=The forum already exists : [[{0}&gt;&gt;{1}]]
 conversations.forum.create.submit=Create
+conversations.forum.sorttopicsby=Sort topics by
+conversations.forum.sorttopicsby.date=Date
+conversations.forum.sorttopicsby.votes=Votes
+conversations.forum.sorttopicsby.comments=Comments
 conversations.forum.titleError=The title should not be longer than 250 characters
 conversations.forum.title=Title
 conversations.forum.description=Description
-conversations.forum.edit=Edit forum metadata
+conversations.forum.edit=Edit Topic
+conversations.forum.delete=Delete Topic
+conversations.forum.more=Show {0} more
 conversations.topic.create=New topic
 conversations.topic.create.submit=Create
-conversations.topic.add.activator=Add new topic
+conversations.topic.add.activator=New topic
 conversations.create.error.topic.norights=You don't have the rights to create a new topic.
 conversations.create.error.answer.norights=You don't have the rights to create a new answer.
 conversations.create.error.missingmetadata=The creation could not be performed because of missing metadata.
@@ -88,4 +94,43 @@ conversations.deleteconversation.error.norights=You don't have the rights to del
 conversations.deleteconversation.error.notfound=Answer not found.
 core.viewers.comments.delete.failed=The comment could not be deleted.
 ConversationCode.AnswerClass_answer=Answer
-ConversationCode.TopicClass_description=Description</content></xwikidoc>
+ConversationCode.TopicClass_description=Description
+
+## FLAG DIALOG
+conversations.flag.edit=Edit
+conversations.flag.button=Flag
+conversations.flag.viewsource=View Flag Source
+conversations.flag.dialog.header=Flag this Comment
+conversations.flag.dialog.guidingquestion1.txt=What happens when you flag a comment ?
+conversations.flag.dialog.instruction1.txt=You submit the comment thread for immediate evaluation by GPS Network.
+conversations.flag.dialog.guidingquestion2.txt=Why are you flagging this discussion?
+conversations.flag.dialog.required.field.icon=&lt;em class="required-indicator"&gt;* &lt;/em&gt;
+conversations.flag.dialog.instruction2.txt=I am flagging this comment because it
+conversations.flag.dialog.instruction3.txt=Enter a note (no more than 300 characters) describing what makes this comment objectionable:
+conversations.flag.dialog.cancel.btt=Cancel
+conversations.flag.dialog.submit.btt=Submit
+## REASONS FOR FLAGGING - USE IN FLAG DIALOG
+ConversationCode.FlagClass_reason_=Select
+ConversationCode.FlagClass_reason_1=promotes hate or violence
+ConversationCode.FlagClass_reason_2=displays pornography
+ConversationCode.FlagClass_reason_3=is empty or blank
+ConversationCode.FlagClass_reason_4=is obviously commercial in nature, without clear educational relevance
+ConversationCode.FlagClass_reason_5=is broken or has a virus
+ConversationCode.FlagClass_reason_6=appears to be nonsensical
+ConversationCode.FlagClass_reason_7=is objectionable for another reason
+## FLAG SUCCESS MESSAGE
+conversations.flag.success.dialog.header=Discussion Flagged
+conversations.flag.success.dialog.message=You have successfully flagged this comment.
+conversations.flag.success.dialog.button=Close
+## FLAG livetable
+conversations.flag.reason=Reason
+conversations.flag.user=User
+conversations.flag.doc.creationDate=Date
+conversations.flag.message=Message
+conversations.flag.moderator=Moderator
+conversations.flag.status=Status
+conversations.flag.target=Target
+conversations.flag.emptyvalue=-
+conversations.flag.list.title=Flag List
+conversations.flag.list.instructions=This is the list of flagged items
+conversations.flag.success.dialog.goback=Return to discussion</content></xwikidoc>
