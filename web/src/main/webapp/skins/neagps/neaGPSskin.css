@@ -245,12 +245,12 @@ Topic Metadata
 .topic-date {
   background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -700px 0px !important;
   padding: 0 0 0 20px;
-  margin-left: 10px;
+  margin-left: 20px !important;
 }
 .topic-answers {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -600px 0px !important;
+  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -600px -50px !important;
   padding: 0 0 0 20px;
-  margin-left: 10px;
+  margin-left: 20px !important;
 }
 
 .topic-metas a {color: white !important;}
@@ -288,7 +288,7 @@ Topic Actions
 */
 .topic-actions {
   clear: both;
-  background: #F0F0F0;
+  background: none;
   overflow: hidden;
   margin-top: 20px !important;
 }
@@ -300,15 +300,34 @@ Topic Actions
 .topic-actions-permalink {
   float: left; display: inline;
 }
+
+
+.topic-actions-flag a {
+  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -600px -50px !important;
+  font-size: 0;
+  padding: 10px;
+}
+.topic-actions-flag a:hover {
+  background: orange url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -600px -50px !important;
+}
+
 .topic-actions .center {
-  float: left; clear: left; display: inline-block;
-  margin-left: 45%;
+  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -400px 0px !important;
+  display: inline-block;
+  font-size: 0;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
 }
 .topic-actions .right {
   float: right; display: inline-block;
   width: 40% !important;
   text-align: right;
 }
+.topic-addthis {
+  color : #C0C0C0;
+}
+
 #forum-more {}
 #forum-more a {
   color: white !important;
@@ -331,7 +350,16 @@ Topic Actions
   background: orange;
 
 }
-
+/*
+New Topic
+------------------------------------------------
+*/
+.addconversation-activator {
+  background: #F2D42E url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat 10px -140px !important;
+}
+.addconversation-activator:hover {
+  background: orange url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat 10px -140px !important;
+}
 /*
 Moderator / Admin 
 ------------------------------------------------
@@ -346,9 +374,9 @@ Moderator / Admin
 }
 .topic-edit,
 .topic-delete {
-  background: green;
+  background: green url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat 40px -93px !important;
   color: white !important;
-  padding: 10px 100px;
+  padding: 15px 30px !important;
   display: block;
   font-size: 0;
   -webkit-border-radius: 50px;
@@ -360,7 +388,7 @@ Moderator / Admin
   right: 0;
 }
 .topic-delete {
-  background: red;
+  background: red url('http://dev.gpsnetwork.org/xwiki/skins/neagps/images/forums.png') no-repeat -60px -93px !important;
   margin-top: 10px;
   top: 20px; 
   right: 0;
