@@ -310,7 +310,9 @@ $editDoc.setSyntaxId("xwiki/2.1")
 ## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
 <input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
 <label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
-<textarea name="doctext" id="doctext" rows="20">$editDoc.content</textarea>
+{{html clean=false}}
+<textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
+{{/html}}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
     #verbatim_start
     #wysiwyg_editProperty($editDoc 'doctext' true)
@@ -422,8 +424,8 @@ $editDoc.setSyntaxId("xwiki/2.1")
       <label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
       <input type="text" name="doctitle" class="doctitle" value="$titleField" />
       <label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
-      <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
       #verbatim_start
+      <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
       #wysiwyg_editProperty($editDoc 'doctext' true)
       #verbatim_end
       <div class="button-right">
