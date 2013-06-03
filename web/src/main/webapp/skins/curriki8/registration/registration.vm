@@ -398,9 +398,10 @@ $errMsg
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
-    $$("#register select[name=XWiki.XWikiUsers_0_member_type]").each(function(inputElt){
-        inputElt.observe("change",toggleNEAFieldsVisible);
-        toggleNEAFieldsVisible();
+    console.log("Setting events for neamember fields");
+    $$("#register input[name=XWiki.XWikiUsers_0_neamember]").each(function(inputElt){
+        console.log("Setting event for neamember field");
+        inputElt.observe("click",toggleNEAFieldsVisible);
     });
     $$("#register input[name=XWiki.XWikiUsers_0_neamember]").each(function(inputElt){
         inputElt.observe("change",toggleNEAFieldsVisible);
