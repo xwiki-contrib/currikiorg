@@ -170,6 +170,9 @@
 #end
 ##
 #macro(groupsdisplaywelcomeblock $wdoc)
+  ## activate fullscreen libraries
+  #set($ok = $xwiki.jsfx.use('uicomponents/widgets/fullScreen.js', {'forceSkinAction' : true, 'defer' : false}))
+  #set($ok = $xwiki.ssfx.use('uicomponents/widgets/fullScreen.css', true))
   #set($wobj = $wdoc.getObject("XWiki.CurrikiWelcomeBlockClass"))
   ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
   #set($welcomeContent = $!wobj.display("content", "view").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))

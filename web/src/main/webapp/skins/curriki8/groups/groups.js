@@ -52,6 +52,9 @@ function editWelcomeBlockCallback(ajaxreq) {
   //createWysiwygEditor('welcomeWysiwyg', welcomeWysiwygConfig);
   //}
   //new WysiwygEditor({hookId:'XWiki.CurrikiWelcomeBlockClass_0_content'});
+
+  // activate full screen
+  new XWiki.widgets.FullScreen(); 
 }
 function cancelEditWelcomeBlock(spaceName,pageName,divid) {
  if (confirm(i18nDict['groups_welcomeblock_confirmcancel'])) {

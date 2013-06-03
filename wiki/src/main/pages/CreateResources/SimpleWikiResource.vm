@@ -1,4 +1,5 @@
 {{velocity}}
+#activatefullscreen()
 ## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/SimpleWikiResource
 ## originally from http://next.dev.curriki.org/xwiki/bin/view/Groups/CreateNewGroup?viewer=code&showlinenumbers=0&language=en
 ## NPM attempting to emulate first form in http://www.curriki.org/xwiki/bin/view/Project/Form+Templates?xpage=print&language=en
@@ -161,8 +162,10 @@ $msg.get("form.scratch.title.description") <a href="$msg.get('form.title.descrip
 {{html clean=false}}
 <input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" />
 {{/html}}
+(((
 #curriki20_formprompt($msg.get("sri.description_title"), $msg.get("form.scratch.description_tooltip"), $msg.get("form.scratch.description_txt"), true, "medium")
 $newAsset.display("description","edit")
+)))
 {{html clean=false}}
 <table class='subject-educational'>
 <tbody>
