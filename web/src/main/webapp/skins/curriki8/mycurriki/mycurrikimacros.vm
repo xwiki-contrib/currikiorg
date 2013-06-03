@@ -865,6 +865,8 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 #set($affiliation = $!userobj.getProperty("affiliation").getValue())
 #set($city = "")
 #set($city = $!userobj.getProperty("city").getValue())
+#set($postalCode = "")
+#set($postalCode = $!userobj.getProperty("postalCode").getValue())
 #set($state = "")
 #set($state = $!userobj.getProperty("state").getValue())
 #set($country = "")
@@ -958,6 +960,12 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 	<li>
 		**$msg.get("view_profile.interests.city.title")**
 		#mycurriki_dashifempty($userdoc.display("city", $userobj))
+	</li>
+#end ##}
+#if("$!postalCode" != "") ##{
+	<li>
+		**$msg.get("view_profile.interests.postalCode.title")**
+		#mycurriki_dashifempty($userdoc.display("postalCode", $userobj))
 	</li>
 #end ##}
 #if("$!state" != "") ##{
