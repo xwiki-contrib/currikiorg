@@ -645,67 +645,7 @@ viewers.Comments = Class.create({
 
       // if we have an active like button, add a listener to it
       conversationLike.observe('click', function(event) {
-        event.stop();
-        var conversationLikeBlock = event.findElement('.conversation-like');
-        if (conversationLikeBlock.votingInProgress) {
-          // there is already a voting in progress, don't start again
-          return;
-        }
-        // find the conversation document name to vote for
-        var conversationDocName;
-        if (conversationLikeBlock) {
-          var conversationNameInput = conversationLikeBlock.down('input[name=documenttolike]');
-          if (conversationNameInput) {
-            conversationDocName = conversationNameInput.value;
-          }
-        }
-        if (!conversationDocName || typeof(conversationDocName) == "undefined") {
-          // we don't have the name of the document to like, return
-          return;
-        }
-
-        var likeUrl = '$escapetool.javascript($xwiki.getURL("XWiki.Ratings"))';
-        conversationLikeBlock.votingInProgress = false;
-
-        new Ajax.Request(likeUrl, {
-          method : 'post',
-          parameters : {'xpage' : 'plain', 'doc' : conversationDocName, 'vote' : '1'},
-          onCreate : function () {
-            conversationLikeBlock.votingInProgress = true;
-            conversationLikeBlock._x_notification = new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.loading'))", "inprogress");
-          }.bind(this),
-          onSuccess : function (response) {
-            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.done'))", "done"));
-            // get the conversation score which is the sibling of the like block
-            var scoreDisplayer = conversationLikeBlock.next('.conversation-score');
-            if (scoreDisplayer) {
-              scoreDisplayer.update(response.responseJSON.totalvotes);
-            }
-            // and now remove this listener from the like button, since the current user shouldn't be able to vote again ...
-            var conversationLikeButton = conversationLikeBlock.down('img');
-            if (conversationLikeButton) {
-              conversationLikeButton.stopObserving('click');
-              // ... and put inactive class to change the style
-              conversationLikeButton.removeClassName('canVote');
-            }
-          }.bind(this),
-          onFailure : function (response) {
-            var failureReason = response.responseText;
-            if (!response.responseText || response.responseText == '' ) {
-              failureReason = response.statusText;
-            }
-            if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
-              failureReason = 'Server not responding';
-            }
-            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.failed'))" + failureReason, "error"));
-          }.bind(this),
-          on0 : function (response) {
-            response.request.options.onFailure(response);
-          },
-          onComplete : function (response) {
-            conversationLikeBlock.votingInProgress = false;
-          }.bind(this)
-        });
+           conversationLikeHandler(event);
       }.bindAsEventListener(this));
     },
 
@@ -736,46 +676,9 @@ viewers.Comments = Class.create({
     }
   });
 
-function init() {
-  $$('.conversation').each(function(conv) {
-    new XWiki.viewers.Comments(conv);
-  });
+function conversationLikeHandler(event) {
+        console.log("In click");
 
-  $$('.AddComment').each(function(el) {
-    // el.hide();
-  });
-
-  // also make the conversation add activator to show the add form when clicked
-  $$(".addconversation-activator").each(function(item) {
-    item.observe('click', function(event) {
-      // get the button that was clicked
-      var activator = event.findElement();
-      // get its form, which is the sibling form .addconversation
-      var form = activator.next('form.addconversation');
-      // if we have a form, do all sorts of stuff, otherwise just let the link go
-      if (form) {
-        event.stop();
-        form.removeClassName('hidden');
-        activator.addClassName('hidden');
-
-        // find the cancel button of this form and make it display the button back and hide the form
-        var cancelButton = form.down('a.cancel');
-        cancelButton.observe('click', function(event){
-          event.stop();
-          activator.removeClassName('hidden');
-          form.addClassName('hidden');
-        });
-      }
-    });
-    
-    // add vote click handler for the topic
-    var topicDiv = $('conversation-topic');
-    var topicLike = topicDiv.down('.conversation-like img.canVote');
-      
-    // if there is no clickable button, return, don't do anything
-    if (topicLike) {
-      // if we have an active like button, add a listener to it
-      topicLike.observe('click', function(event) {
         event.stop();
         var topicLikeBlock = event.findElement('.conversation-like');
         if (topicLikeBlock.votingInProgress) {
@@ -838,13 +741,76 @@ function init() {
             topicLikeBlock.votingInProgress = false;
           }.bind(this)
         });
+}
+
+
+function init() {
+ 
+  $$('.conversation').each(function(conv) {
+    new XWiki.viewers.Comments(conv);
+  });
+
+  $$('.AddComment').each(function(el) {
+    // el.hide();
+  });
+
+  // add vote handler for topics in forum
+  $$(".topic-vote").each(function(topicDiv) {
+    // add vote click handler for each topic
+      console.log("Adding vote click handler to div " + topicDiv);
+      // if we have an active like button, add a listener to it
+      topicDiv.observe('click', function(event) {
+         conversationLikeHandler(event);
+      }.bindAsEventListener(this));
+  });  
+  // add vote handler for topics in forum
+  $$(".topic-vote2").each(function(topicDiv) {
+    // add vote click handler for each topic
+      console.log("Adding vote click handler to div " + topicDiv);
+      // if we have an active like button, add a listener to it
+      topicDiv.observe('click', function(event) {
+         conversationLikeHandler(event);
+      }.bindAsEventListener(this));
+  });  
+   
+  // also make the conversation add activator to show the add form when clicked
+  $$(".addconversation-activator").each(function(item) {
+    item.observe('click', function(event) {
+      // get the button that was clicked
+      var activator = event.findElement();
+      // get its form, which is the sibling form .addconversation
+      var form = activator.next('form.addconversation');
+      // if we have a form, do all sorts of stuff, otherwise just let the link go
+      if (form) {
+        event.stop();
+        form.removeClassName('hidden');
+        activator.addClassName('hidden');
+
+        // find the cancel button of this form and make it display the button back and hide the form
+        var cancelButton = form.down('a.cancel');
+        cancelButton.observe('click', function(event){
+          event.stop();
+          activator.removeClassName('hidden');
+          form.addClassName('hidden');
+        });
+      }
+    });
+    
+    // add vote click handler for the topic
+    var topicDiv = $('conversation-topic');
+    var topicLike = topicDiv.down('.conversation-like img.canVote');
+      
+    // if there is no clickable button, return, don't do anything
+    if (topicLike) {
+      // if we have an active like button, add a listener to it
+      topicLike.observe('click', function(event) {
+         console("in click1");
+         conversatonLikeHandler(event);
       }.bindAsEventListener(this));
     }
     // end topicLike listener
 
-    
-    
-  });
+  }); 
 
   // Activate full screen:
   if (!XWiki.widgets.fs)
