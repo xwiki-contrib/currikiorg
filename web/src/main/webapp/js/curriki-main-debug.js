@@ -1901,7 +1901,7 @@ Curriki.logView = function(page){
 	// <a onClick="javascript:Curriki.logView('/Download/attachment/${space}/${name}/${attach.filename}');"> .. </a>
 	if (window.pageTracker) {
 		pageTracker._trackPageview(page);
-    } else if (window._gaq) {
+    } else if (_gaq) {
         _gaq.push(["_trackPageview", page]);
     } else {
 

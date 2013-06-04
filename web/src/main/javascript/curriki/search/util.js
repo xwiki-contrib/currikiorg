@@ -13,7 +13,8 @@ module.init = function(){
 	console.log('search util: init');
 
 	module.logFilterList = {
-		'resource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir']
+        'outerResource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir'],
+        'resource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir']
 		,'group':['subject', 'level', 'language', 'policy', 'other', 'sort', 'dir']
 		,'member':['subject', 'member_type', 'country', 'other', 'sort', 'dir']
 		,'blog':['other', 'sort', 'dir']
@@ -138,7 +139,9 @@ module.init = function(){
 				Ext.apply(filters, filterForm.getValues(false));
 			}
 		}
-		Ext.apply(filters, {module: modName});
+        var modName2 = modName;
+        if(modName2='otherResource') modName2='resource';
+		Ext.apply(filters, {module: modName2});
 
 		// Module panel
 		filterPanel = Ext.getCmp('search-filterPanel-'+modName);
@@ -305,7 +308,7 @@ module.init = function(){
 					typeof Curriki.module.search.embeddingPartnerUrl === "undefined");
 	};
 
-	module.sendResizeMessageToEmbeddingWindow = function() {
+    module.sendResizeMessageToEmbeddingWindow = function() {
 		var height = document.body.scrollHeight + 25;
 		console.log("search: sending resource view height to embedding window (" + height + "px)");
 		var data = "resize:height:"+ height + "px;"
