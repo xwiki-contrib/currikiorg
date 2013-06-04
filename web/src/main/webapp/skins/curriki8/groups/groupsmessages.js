@@ -189,6 +189,8 @@ function editMessageCallback(ajaxreq) {
   //tinyMCE.addMCEControl(document.getElementById("XWiki.ArticleClass_0_content"), "XWiki.ArticleClass_0_content");
   $(ajaxreq.options.divid).update(ajaxreq.transport.responseText);
   setViewMode(false);
+  // activate wysiwyg
+  new XWiki.widgets.FullScreen(); 
 }
 //
 function cancelEditMessage(spaceName,pageName,divid) {
