@@ -13,6 +13,8 @@
     #set($comments = $comments + $answerDoc.getComments().size())
   #end
   ## Display topic header
+  #displayForumTopic($doc.fullName)
+  #*
   <div id="conversation-topic" class="conversation-main">
     <div class="conversation-titlebar">
       <div class="conversation-inlineactions">                
@@ -44,6 +46,7 @@
   ## Display topic title and description
   <div id="document-title" class="conversation-title"><h1>$doc.displayTitle</h1></div>
   <div class="forum-description">$doc.display('description')</div>
+  *#
   ## Display answer (conversation) add form
   #displayConversationAddForm()
   #displayAnswers()
