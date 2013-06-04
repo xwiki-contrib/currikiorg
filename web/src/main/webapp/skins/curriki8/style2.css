@@ -804,10 +804,10 @@ border-top:1px solid #e5e5e5;
 z-index:0;
 overflow:hidden;
 }
-#search-filterPanel-resource, #search-filterPanel-group, #search-filterPanel-member, #search-filterPanel-blog, #search-filterPanel-curriki {
+#search-filterPanel-resource, #search-filterPanel-outerResource, #search-filterPanel-group, #search-filterPanel-member, #search-filterPanel-blog, #search-filterPanel-curriki {
 border-top:none;
 }
-#search-filterPanel-resource, #search-filterPanel-group, #search-filterPanel-member, #search-filterPanel-blog, #search-filterPanel-curriki {
+#search-filterPanel-resource, #search-filterPanel-outerResource, #search-filterPanel-group, #search-filterPanel-member, #search-filterPanel-blog, #search-filterPanel-curriki {
 	padding:10px;
 	background:#f2f2f2;
 	border:1px solid #e5e5e5;
@@ -926,12 +926,12 @@ td.x-grid3-hd-over .x-grid3-hd-contributions .x-grid3-hd-btn {
 	font-size:12px;
 	background:none;
 }
-#search-pager-resource, #search-pager-blog, #search-pager-member, #search-pager-curriki, #search-pager-group {
+#search-pager-resource, #search-pager-outerResource, #search-pager-blog, #search-pager-member, #search-pager-curriki, #search-pager-group {
 	border:none;
 	overflow:hidden;
 	padding:2px;
 }
-#search-pager-resource, #search-pager-blog, #search-pager-member, #search-pager-curriki, #search-pager-group {
+#search-pager-resource, #search-pager-outerResource, #search-pager-blog, #search-pager-member, #search-pager-curriki, #search-pager-group {
 	background:none;
 	border:none;
 	display:block;
@@ -939,11 +939,11 @@ td.x-grid3-hd-over .x-grid3-hd-contributions .x-grid3-hd-btn {
 	position:relative;
 	text-align:center;
 }
-#search-pager-resource table, #search-pager-blog table, #search-pager-member table, #search-pager-curriki table, #search-pager-group table {
+#search-pager-resource table, #search-pager-outerResource table, #search-pager-blog table, #search-pager-member table, #search-pager-curriki table, #search-pager-group table {
 	margin:35px auto 0 auto;
 	text-align:center;
 }
-#search-pager-resource table button, #search-pager-blog table button, #search-pager-member table button, #search-pager-curriki table button, #search-pager-group table button {
+#search-pager-resource table button, #search-pager-outerResource table button, #search-pager-blog table button, #search-pager-member table button, #search-pager-curriki table button, #search-pager-group table button {
 	background:transparent;
 	border:none;
 	height:auto;
@@ -951,13 +951,13 @@ td.x-grid3-hd-over .x-grid3-hd-contributions .x-grid3-hd-btn {
     font-size:10px;
     padding:10px 0;
 }
-#search-pager-resource table td table, #search-pager-blog table td table, #search-pager-member table td table, #search-pager-curriki table td table, #search-pager-group table td table {
+#search-pager-resource table td table, #search-pager-outerResource table td table, #search-pager-blog table td table, #search-pager-member table td table, #search-pager-curriki table td table, #search-pager-group table td table {
 	margin:0;
 }
-#search-pager-resource table td span#ext-gen119, #search-pager-blog table td span#ext-gen119, #search-pager-member table td span#ext-gen119, #search-pager-curriki table td span#ext-gen119, #search-pager-group table td span#ext-gen119 {
+#search-pager-resource table td span#ext-gen119, #search-pager-outerResource table td span#ext-gen119, #search-pager-blog table td span#ext-gen119, #search-pager-member table td span#ext-gen119, #search-pager-curriki table td span#ext-gen119, #search-pager-group table td span#ext-gen119 {
 	margin:0 10px;
 }
-#search-pager-resource INPUT {
+#search-pager-resource INPUT, #search-pager-outerResource INPUT {
 	width:24px;
 	height:14px;
 }
@@ -1011,14 +1011,14 @@ td.x-grid3-hd-over .x-grid3-hd-contributions .x-grid3-hd-btn {
 	white-space:normal;
 }
 
-#search-termPanel-resource, #search-termPanel-group, #search-termPanel-member, #search-termPanel-blog, #search-termPanel-curriki {
+#search-termPanel-resource, #search-termPanel-outerResource, #search-termPanel-group, #search-termPanel-member, #search-termPanel-blog, #search-termPanel-curriki {
         background:#5051a3;
         padding:10px;
 }
-#search-termPanel-resource a, #search-termPanel-group a, #search-termPanel-member a, #search-termPanel-blog a, #search-termPanel-curriki a {
+#search-termPanel-resource a, #search-termPanel-outerResource a, #search-termPanel-group a, #search-termPanel-member a, #search-termPanel-blog a, #search-termPanel-curriki a {
         color:#fff;
 }
-fieldset#search-advanced-group, fieldset#search-advanced-resource, fieldset#search-advanced-member, fieldset#search-advanced-blog, fieldset#search-advanced-curriki {
+fieldset#search-advanced-group, fieldset#search-advanced-resource, fieldset#search-advance-outerResource, fieldset#search-advanced-member, fieldset#search-advanced-blog, fieldset#search-advanced-curriki {
         border:none;
         background:#5051a3;
         margin:-10px 0 0 0;
@@ -1033,17 +1033,19 @@ form .x-fieldset legend {
 	display:block;
     margin:5px 0 0 -2px;
 }
-fieldset#search-advanced-group .x-panel-bwrap, fieldset#search-advanced-group .x-panel-bwrap .x-panel-body, fieldset#search-advanced-group .x-column-inner .x-panel, fieldset#search-advanced-resource .x-panel-bwrap, fieldset#search-advanced-resource .x-panel-bwrap .x-panel-body, fieldset#search-advanced-resource .x-column-inner .x-panel, fieldset#search-advanced-member .x-panel-bwrap, fieldset#search-advanced-member .x-panel-bwrap .x-panel-body, fieldset#search-advanced-member .x-column-inner .x-panel, fieldset#search-advanced-blog .x-panel-bwrap, fieldset#search-advanced-blog .x-panel-bwrap .x-panel-body, fieldset#search-advanced-blog .x-column-inner .x-panel, fieldset#search-advanced-curriki .x-panel-bwrap, fieldset#search-advanced-curriki .x-panel-bwrap .x-panel-body, fieldset#search-advanced-curriki .x-column-inner .x-panel {
+fieldset#search-advanced-group .x-panel-bwrap, fieldset#search-advanced-group .x-panel-bwrap .x-panel-body, fieldset#search-advanced-group .x-column-inner .x-panel, fieldset#search-advanced-resource .x-panel-bwrap, fieldset#search-advanced-outerResource .x-panel-bwrap, fieldset#search-advanced-resource .x-panel-bwrap .x-panel-body, fieldset#search-advanced-resource .x-column-inner .x-panel, fieldset#search-advanced-outerResource .x-column-inner .x-panel, fieldset#search-advanced-member .x-panel-bwrap, fieldset#search-advanced-member .x-panel-bwrap .x-panel-body, fieldset#search-advanced-member .x-column-inner .x-panel, fieldset#search-advanced-blog .x-panel-bwrap, fieldset#search-advanced-blog .x-panel-bwrap .x-panel-body, fieldset#search-advanced-blog .x-column-inner .x-panel, fieldset#search-advanced-curriki .x-panel-bwrap, fieldset#search-advanced-curriki .x-panel-bwrap .x-panel-body, fieldset#search-advanced-curriki .x-column-inner .x-panel {
 overflow:hidden;
 }
 
-#search-advanced-resource input.x-form-text {width:130px !important;}
-#search-advanced-resource input#combo-subICT-resource, #search-advanced-resource input#combo-subsubject-resource {width: 127px !important;}
+#search-advanced-resource #search-advanced-outerResource input.x-form-text {width:130px !important;}
+#search-advanced-resource input#combo-subICT-resource, #search-advanced-resource input#combo-subsubject-resource #search-advanced-outerResource input#combo-subICT-outerResource, #search-advanced-outerResource input#combo-subsubject-outerResource {width: 127px !important;}
 
 
-#search-advanced-resource input#combo-subject-resource, #search-advanced-resource input#combo-level-resource,  #search-advanced-resource input#combo-language-resource, #search-advanced-resource input#combo-review-resource, #search-advanced-resource input#combo-special-resource  {width: 127px !important}
+#search-advanced-resource input#combo-subject-resource, #search-advanced-resource input#combo-level-resource,  #search-advanced-resource input#combo-language-resource, #search-advanced-resource input#combo-review-resource, #search-advanced-resource input#combo-special-resource \
+  #search-advanced-outerResource input#combo-subject-outerResource, #search-advanced-outerResource input#combo-level-outerResource,  #search-advanced-outerResource input#combo-language-outerResource, #search-advanced-outerResource input#combo-review-outerResource, #search-advanced-outerResource input#combo-special-outerResource \
+    {width: 127px !important}
 
-#search-results-resource, #search-results-member, #search-results-blog, #search-results-curriki, #search-results-group {
+#search-results-resource, #search-results-outerResource, #search-results-member, #search-results-blog, #search-results-curriki, #search-results-group {
 	padding:0;
 	background:#f2f2f2;
 	border:none;
@@ -1068,7 +1070,7 @@ overflow:hidden;
     display:block;
     padding-left:35px;
 }
-input#search-termPanel-resource-terms, input#search-termPanel-group-terms, input#search-termPanel-member-terms, input#search-termPanel-blog-terms, input#search-termPanel-curriki-terms {
+input#search-termPanel-resource-terms, input#search-termPanel-outerResource-terms, input#search-termPanel-group-terms, input#search-termPanel-member-terms, input#search-termPanel-blog-terms, input#search-termPanel-curriki-terms {
         width:280px;
 }
 .x-combo-list-item {
@@ -1166,7 +1168,7 @@ input#search-termPanel-resource-terms, input#search-termPanel-group-terms, input
 	font-size:12px;
 	padding:0;
 }
-#groups-curriculum-main #search-filterPanel-resource {
+#groups-curriculum-main #search-filterPanel-resource #search-filterPanel-outerResource {
 	padding:0;
 	margin:10px 0;
 }

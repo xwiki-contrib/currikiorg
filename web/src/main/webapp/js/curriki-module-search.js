@@ -1,8 +1,8 @@
 (function(){Ext.ns("Curriki.module.search");var a=Curriki.module.search;a.settings={gridWidth:(Ext.isIE6?620:"auto")};
 a.stateProvider=new Ext.state.CookieProvider({});Ext.state.Manager.setProvider(a.stateProvider);
-a.sessionProvider=new Ext.state.CookieProvider({expires:null})})();(function(){Ext.ns("Curriki.module.search.util");
-var a=Curriki.module.search;var b=a.util;b.init=function(){console.log("search util: init");
-b.logFilterList={resource:["subject","level","language","ict","review","special","other","sort","dir"],group:["subject","level","language","policy","other","sort","dir"],member:["subject","member_type","country","other","sort","dir"],blog:["other","sort","dir"],curriki:["other","sort","dir"]};
+a.sessionProvider=new Ext.state.CookieProvider({expires:null});Curriki.module.search.outerResources={prefix:"http://www.curriki.org/xwiki/bin/view/",suffix:"?viewer=embed",target:"currikiResources",ratingsPrefix:"http://www.curriki.org/xwki/bin/view/",ratingsSuffix:"?viewer=comments"}
+})();(function(){Ext.ns("Curriki.module.search.util");var a=Curriki.module.search;
+var b=a.util;b.init=function(){console.log("search util: init");b.logFilterList={outerResource:["subject","level","language","ict","review","special","other","sort","dir"],resource:["subject","level","language","ict","review","special","other","sort","dir"],group:["subject","level","language","policy","other","sort","dir"],member:["subject","member_type","country","other","sort","dir"],blog:["other","sort","dir"],curriki:["other","sort","dir"]};
 b.registerTabTitleListener=function(c){Ext.StoreMgr.lookup("search-store-"+c).addListener("datachanged",function(i){var h=false;
 var k=0;var j=i.getTotalCount();if(!Ext.isEmpty(i.reader.jsonData)&&!Ext.isEmpty(i.reader.jsonData.totalResults)){k=parseInt(i.reader.jsonData.totalResults)
 }if(k>j){h=true}var e=Ext.getCmp("search-"+c+"-tab");if(!Ext.isEmpty(e)){var g=_("search.tab.title.results");
@@ -18,13 +18,14 @@ var i="";if(f.start){if(f.start!=="0"){i="/start/"+f.start}}var d="";Ext.each(b.
 }});if(Curriki.module.search.util.isInEmbeddedMode()){Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
 Curriki.logView("/features/embeddedsearch/"+e+"/"+h+"/"+l+d+i)}else{Curriki.logView("/features/search/"+e+"/"+h+"/"+l+d+i)
 }});Ext.StoreMgr.lookup("search-store-"+c).addListener("exception",Curriki.notifyException)
-};b.doSearch=function(g,h){console.log("Doing search",g,h);var e={};var d=Ext.getCmp("search-termPanel");
-if(!Ext.isEmpty(d)){var f=d.getForm();if(!Ext.isEmpty(f)){Ext.apply(e,f.getValues(false))
-}}Ext.apply(e,{module:g});d=Ext.getCmp("search-filterPanel-"+g);if(!Ext.isEmpty(d)){var f=d.getForm();
-if(!Ext.isEmpty(f)){Ext.apply(e,f.getValues(false))}}if(e.terms&&e.terms===_("search.text.entry.label")){e.terms=""
-}console.log("Applying search filters",e);Ext.apply(Ext.StoreMgr.lookup("search-store-"+g).baseParams||{},e);
-var c=Ext.getCmp("search-pager-"+g);if(!Ext.isEmpty(c)){console.log("Searching",e);
-c.doLoad(Ext.num(h,0))}console.log("Done util.doSearch",e)};b.createTermPanel=function(d,c){return{xtype:"panel",labelAlign:"left",id:"search-termPanel-"+d,cls:"term-panel",border:false,items:[{layout:"column",border:false,defaults:{border:false},items:[{layout:"form",id:"search-termPanel-"+d+"-form",cls:"search-termPanel-form",items:[{xtype:"textfield",id:"search-termPanel-"+d+"-terms",cls:"search-termPanel-terms",fieldLabel:_("search.text.entry.label"),name:"terms",hideLabel:true,emptyText:_("search.text.entry.label"),listeners:{specialkey:{fn:function(g,f){if(f.getKey()===Ext.EventObject.ENTER){f.stopEvent();
+};b.doSearch=function(h,i){console.log("Doing search",h,i);var f={};var e=Ext.getCmp("search-termPanel");
+if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
+}}var c=h;if(c="otherResource"){c="resource"}Ext.apply(f,{module:c});e=Ext.getCmp("search-filterPanel-"+h);
+if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
+}}if(f.terms&&f.terms===_("search.text.entry.label")){f.terms=""}console.log("Applying search filters",f);
+Ext.apply(Ext.StoreMgr.lookup("search-store-"+h).baseParams||{},f);var d=Ext.getCmp("search-pager-"+h);
+if(!Ext.isEmpty(d)){console.log("Searching",f);d.doLoad(Ext.num(i,0))}console.log("Done util.doSearch",f)
+};b.createTermPanel=function(d,c){return{xtype:"panel",labelAlign:"left",id:"search-termPanel-"+d,cls:"term-panel",border:false,items:[{layout:"column",border:false,defaults:{border:false},items:[{layout:"form",id:"search-termPanel-"+d+"-form",cls:"search-termPanel-form",items:[{xtype:"textfield",id:"search-termPanel-"+d+"-terms",cls:"search-termPanel-terms",fieldLabel:_("search.text.entry.label"),name:"terms",hideLabel:true,emptyText:_("search.text.entry.label"),listeners:{specialkey:{fn:function(g,f){if(f.getKey()===Ext.EventObject.ENTER){f.stopEvent();
 if("resource"==d&&Ext.StoreMgr.lookup("search-store-resource").sortInfo){Ext.StoreMgr.lookup("search-store-resource").sortInfo.field="score";
 Ext.StoreMgr.lookup("search-store-resource").sortInfo.direction="DESC"}a.doSearch(d,true)
 }}}}}]},{layout:"form",id:"search-termPanel-buttonColumn-"+d,cls:"search-termPanel-buttonColumn",items:[{xtype:"button",id:"search-termPanel-button-"+d,cls:"search-termPanel-button",text:_("search.text.entry.button"),listeners:{click:{fn:function(){if("resource"==d&&Ext.StoreMgr.lookup("search-store-resource").sortInfo){Ext.StoreMgr.lookup("search-store-resource").sortInfo.field="score";
@@ -38,106 +39,114 @@ Ext.StoreMgr.lookup("search-store-resource").sortInfo.direction="DESC"}a.doSearc
 console.log("search: sending resource view height to embedding window ("+c+"px)");
 var d="resize:height:"+c+"px;";window.parent.postMessage(d,"*")};b.sendResourceUrlToEmbeddingWindow=function(c){console.log("search: sending resource url to embedding window ("+c+")");
 var d="resourceurl:"+c;window.parent.postMessage(d,"*")};b.registerSearchLogging=function(c){}
-};Ext.onReady(function(){b.init()})})();(function(){var b="resource";Ext.ns("Curriki.module.search.data."+b);
-var a=Curriki.module.search.data.resource;a.init=function(){console.log("data."+b+": init");
-a.filter={};var c=a.filter;c.data={};c.data.subject={mapping:Curriki.data.fw_item.fwMap["FW_masterFramework.WebHome"],list:[],data:[["",_("CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED")]]};
-c.data.subject.mapping.each(function(d){c.data.subject.list.push(d.id)});c.data.subject.list.push("UNCATEGORIZED");
-c.data.subject.list.each(function(d){c.data.subject.data.push([d,_("CurrikiCode.AssetClass_fw_items_"+d)])
-});c.data.subsubject={mapping:Curriki.data.fw_item.fwMap,data:[]};c.data.subject.mapping.each(function(d){c.data.subsubject.data.push([d.id,_("CurrikiCode.AssetClass_fw_items_"+d.id+".UNSPECIFIED"),d.id]);
-c.data.subsubject.mapping[d.id].each(function(e){c.data.subsubject.data.push([e.id,_("CurrikiCode.AssetClass_fw_items_"+e.id),d.id])
-})});c.data.level={list:Curriki.data.el.list,data:[["",_("CurrikiCode.AssetClass_educational_level_UNSPECIFIED")]]};
-c.data.level.list.each(function(d){c.data.level.data.push([d,_("CurrikiCode.AssetClass_educational_level_"+d)])
-});c.data.ict={fullList:Curriki.data.ict.list,parentList:{},list:[],data:[["",_("CurrikiCode.AssetClass_instructional_component_UNSPECIFIED","   ")]]};
-c.data.ict.fullList.each(function(e){var d=e.replace(/_.*/,"");c.data.ict.parentList[d]=d
-});Object.keys(c.data.ict.parentList).each(function(e){var d=_("CurrikiCode.AssetClass_instructional_component_"+e);
-if(e==="other"){d="zzz"}c.data.ict.data.push([e,_("CurrikiCode.AssetClass_instructional_component_"+e),d])
-});c.data.subict={list:Curriki.data.ict.list,parents:{},data:[]};c.data.subict.list.each(function(f){var d=f.replace(/_.*/,"");
-if(d!==f){if(Ext.isEmpty(c.data.subict.parents[d])){c.data.subict.data.push([d+"*",_("CurrikiCode.AssetClass_instructional_component_"+d+"_UNSPECIFIED"),d,"   "]);
-c.data.subict.parents[d]=d}var e=_("CurrikiCode.AssetClass_instructional_component_"+f);
-if(f==="other"){e="zzz"}c.data.subict.data.push([f,_("CurrikiCode.AssetClass_instructional_component_"+f),d,e])
-}});c.data.language={list:Curriki.data.language.list,data:[["",_("CurrikiCode.AssetClass_language_UNSPECIFIED")]]};
-c.data.language.list.each(function(d){c.data.language.data.push([d,_("CurrikiCode.AssetClass_language_"+d)])
-});c.data.category={list:Curriki.data.category.list,data:[["",_("CurrikiCode.AssetClass_category_UNSPECIFIED"),"   "]]};
-c.data.category.list.each(function(e){var d=_("CurrikiCode.AssetClass_category_"+e);
-if(e==="unknown"){d="zzz"}if(e!=="collection"){c.data.category.data.push([e,_("CurrikiCode.AssetClass_category_"+e),d])
-}});c.data.review={list:["partners","highest_rated","members.highest_rated"],data:[["",_("search.resource.review.selector.UNSPECIFIED")]]};
-c.data.review.list.each(function(d){c.data.review.data.push([d,_("search.resource.review.selector."+d)])
-});c.data.special={list:["contributions","collections","updated","info-only"],data:[["",_("search.resource.special.selector.UNSPECIFIED")]]};
-c.data.special.list.each(function(d){c.data.special.data.push([d,_("search.resource.special.selector."+d)])
-});c.store={subject:new Ext.data.SimpleStore({fields:["id","subject"],data:c.data.subject.data,id:0}),subsubject:new Ext.data.SimpleStore({fields:["id","subject","parentItem"],data:c.data.subsubject.data,id:0}),level:new Ext.data.SimpleStore({fields:["id","level"],data:c.data.level.data,id:0}),ict:new Ext.data.SimpleStore({fields:["id","ict","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:c.data.ict.data,id:0}),subict:new Ext.data.SimpleStore({fields:["id","ict","parentICT","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:c.data.subict.data,id:0}),language:new Ext.data.SimpleStore({fields:["id","language"],data:c.data.language.data,id:0}),category:new Ext.data.SimpleStore({fields:["id","category","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:c.data.category.data,id:0}),review:new Ext.data.SimpleStore({fields:["id","review"],data:c.data.review.data,id:0}),special:new Ext.data.SimpleStore({fields:["id","special"],data:c.data.special.data,id:0})};
-a.store={};a.store.record=new Ext.data.Record.create([{name:"title"},{name:"assetType"},{name:"category"},{name:"subcategory"},{name:"ict"},{name:"ictText"},{name:"ictIcon"},{name:"contributor"},{name:"contributorName"},{name:"rating",mapping:"review"},{name:"memberRating",mapping:"rating"},{name:"ratingCount"},{name:"description"},{name:"fwItems"},{name:"levels"},{name:"parents"},{name:"lastUpdated"},{name:"updated"},{name:"score"}]);
-a.store.results=new Ext.data.Store({storeId:"search-store-"+b,proxy:new Ext.data.HttpProxy({url:document.location.pathname.endsWith("Old")?"/xwiki/bin/view/Search/Resources":"/currikiExtjs",method:"GET"}),baseParams:{xpage:"plain"},reader:new Ext.data.JsonReader({root:"rows",totalProperty:"resultCount",id:"page"},a.store.record),remoteSort:true});
-if(Curriki.userinfo.userGroups){a.store.results.baseParams.groupsId=Curriki.userinfo.userGroups
-}if(Curriki.userinfo.userName){a.store.results.baseParams.userId=Curriki.userinfo.userName
-}if(Curriki.userinfo.isAdmin){a.store.results.baseParams.isAdmin=true}if(Curriki.isISO8601DateParsing()){a.store.results.baseParams.dateFormat="ISO8601"
-}a.store.results.setDefaultSort("score","desc");a.renderer={title:function(p,o,g,n,r,q){console.log("render title "+p);
-if(typeof(p)!="string"){title=""}var l=g.id.replace(/\./,"/");var h=Ext.util.Format.stripTags(g.data.description);
-h=Ext.util.Format.ellipsis(h,256);h=Ext.util.Format.htmlEncode(h);var f=Curriki.data.fw_item.getRolloverDisplay(g.data.fwItems||[]);
-var m=Curriki.data.el.getRolloverDisplay(g.data.levels||[]);var k=g.data.lastUpdated||"";
-var j="{1}<br />{0}<br /><br />";if(k!==""){j=j+"{7}<br />{6}<br /><br />"}j=j+"{3}<br />{2}<br />{5}<br />{4}";
-h=String.format(j,h,_("global.title.popup.description"),f,_("global.title.popup.subject"),m,_("global.title.popup.educationlevel"),k,_("global.title.popup.last_updated"));
-var i=g.data.assetType;var d=g.data.category;var e=g.data.subcategory;o.css=String.format("resource-{0} category-{1} subcategory-{1}_{2}",i,d,e);
-var s=_(d+"."+e);if(s===d+"."+e){s=_("unknown.unknown")}if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="'+Curriki.module.search.resourceDisplay+'?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>',escape(l+"?"+Curriki.module.search.embedViewMode),Ext.util.Format.ellipsis(p,80),h,Ext.BLANK_IMAGE_URL,s)
-}else{return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>',l,Ext.util.Format.ellipsis(p,80),h,Ext.BLANK_IMAGE_URL,s)
-}},ict:function(k,j,g,i,m,l){var h;var e;var f=g.data.ict;console.log("render ict "+k);
-if(!Ext.isEmpty(f)){var d=f.replace(/_.*/,"");h="ict-"+d;if(d!==f){h=h+" ict-"+f}e=f.replace(/_/,".")
-}else{h="ict-unknown";e="unknown"}j.css=h;return String.format('<img class="ict-icon" src="{1}" /><span class="ict-title">{0}</span>',_("search.resource.ict."+e),Ext.BLANK_IMAGE_URL)
-},contributor:function(i,g,d,j,f,e){var h=i.replace(/\./,"/");console.log("render contributor "+i);
-if(typeof("value")!="string"){i=""}if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<a href="/xwiki/bin/view/{0}" target="_blank">{1}</a>',h,d.data.contributorName)
-}else{return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>',h,d.data.contributorName)
-}},rating:function(i,g,d,j,f,e){console.log("render rating "+i);if(typeof(i)=="string"&&i!=""){var h=d.id.replace(/\./,"/");
-g.css=String.format("crs-{0}",i);if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" target="_blank"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>',i,_("search.resource.review."+i),Ext.BLANK_IMAGE_URL,h)
-}else{return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>',i,_("search.resource.review."+i),Ext.BLANK_IMAGE_URL,h)
-}}else{return String.format("")}},memberRating:function(j,h,e,k,g,f){console.log("render memberRating "+j);
-if(typeof(j)=="string"&&j!=""&&j!="0"&&j!=0){var i=e.id.replace(/\./,"/");var d=e.data.ratingCount;
-if(d!=""&&d!="0"&&d!=0){h.css=String.format("rating-{0}",j);if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" target="_blank"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}" target="_blank"> ({1})</a>',j,d,i,_("search.resource.rating."+j),Ext.BLANK_IMAGE_URL)
-}else{return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>',j,d,i,_("search.resource.rating."+j),Ext.BLANK_IMAGE_URL)
-}}else{return String.format("")}}else{return String.format("")}},updated:function(i,g,d,j,f,e){console.log("render updated "+i);
-if(typeof("value")!="string"){return""}var h=Ext.util.Format.date(i,"M-d-Y");if(typeof(h)!="string"){return""
-}return String.format("{0}",h)},score:function(h,g,d,i,f,e){if(typeof(h)!="number"){h=0
-}return h}}};Ext.onReady(function(){a.init()})})();(function(){var d="resource";Ext.ns("Curriki.module.search.form."+d);
-var a=Curriki.module.search;var b=a.form[d];var c=a.data[d];b.init=function(){console.log("form."+d+": init");
-var h=140;var e=250;b.ictCombo=function(i){Ext.apply(this,i)};var g=$("curriki-searchbox");
-if(!Ext.isEmpty(g)){g.setValue("...");g.setAttribute("curriki:deftxt","...");g.disable()
-}var f=$("searchbtn");if(!Ext.isEmpty(f)){f.innerHTML=""}Ext.extend(b.ictCombo,Ext.util.Observable,{init:function(i){Ext.apply(i,{tpl:'<tpl for="."><div class="x-combo-list-item ict-icon-combo-item ict-{'+i.valueField+'}"><img class="ict-icon" src="'+Ext.BLANK_IMAGE_URL+'"/><span class="ict-title">{'+i.displayField+"}</span></div></tpl>",onRender:i.onRender.createSequence(function(k,j){this.wrap.applyStyles({position:"relative"});
+};Ext.onReady(function(){b.init()})})();(function(){var a=["outerResource","resource"];
+for(var b=0;b<2;b++){var c=a[b];Ext.ns("Curriki.module.search.data."+c);Curriki.module.search.data[c].init=function(g){var e=Curriki.module.search.data[g];
+console.log("data."+g+": init");e.filter={};var d=e.filter;d.data={};d.data.subject={mapping:Curriki.data.fw_item.fwMap["FW_masterFramework.WebHome"],list:[],data:[["",_("CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED")]]};
+d.data.subject.mapping.each(function(f){d.data.subject.list.push(f.id)});d.data.subject.list.push("UNCATEGORIZED");
+d.data.subject.list.each(function(f){d.data.subject.data.push([f,_("CurrikiCode.AssetClass_fw_items_"+f)])
+});d.data.subsubject={mapping:Curriki.data.fw_item.fwMap,data:[]};d.data.subject.mapping.each(function(f){d.data.subsubject.data.push([f.id,_("CurrikiCode.AssetClass_fw_items_"+f.id+".UNSPECIFIED"),f.id]);
+d.data.subsubject.mapping[f.id].each(function(h){d.data.subsubject.data.push([h.id,_("CurrikiCode.AssetClass_fw_items_"+h.id),f.id])
+})});d.data.level={list:Curriki.data.el.list,data:[["",_("CurrikiCode.AssetClass_educational_level_UNSPECIFIED")]]};
+d.data.level.list.each(function(f){d.data.level.data.push([f,_("CurrikiCode.AssetClass_educational_level_"+f)])
+});d.data.ict={fullList:Curriki.data.ict.list,parentList:{},list:[],data:[["",_("CurrikiCode.AssetClass_instructional_component_UNSPECIFIED","   ")]]};
+d.data.ict.fullList.each(function(h){var f=h.replace(/_.*/,"");d.data.ict.parentList[f]=f
+});Object.keys(d.data.ict.parentList).each(function(h){var f=_("CurrikiCode.AssetClass_instructional_component_"+h);
+if(h==="other"){f="zzz"}d.data.ict.data.push([h,_("CurrikiCode.AssetClass_instructional_component_"+h),f])
+});d.data.subict={list:Curriki.data.ict.list,parents:{},data:[]};d.data.subict.list.each(function(i){var f=i.replace(/_.*/,"");
+if(f!==i){if(Ext.isEmpty(d.data.subict.parents[f])){d.data.subict.data.push([f+"*",_("CurrikiCode.AssetClass_instructional_component_"+f+"_UNSPECIFIED"),f,"   "]);
+d.data.subict.parents[f]=f}var h=_("CurrikiCode.AssetClass_instructional_component_"+i);
+if(i==="other"){h="zzz"}d.data.subict.data.push([i,_("CurrikiCode.AssetClass_instructional_component_"+i),f,h])
+}});d.data.language={list:Curriki.data.language.list,data:[["",_("CurrikiCode.AssetClass_language_UNSPECIFIED")]]};
+d.data.language.list.each(function(f){d.data.language.data.push([f,_("CurrikiCode.AssetClass_language_"+f)])
+});d.data.category={list:Curriki.data.category.list,data:[["",_("CurrikiCode.AssetClass_category_UNSPECIFIED"),"   "]]};
+d.data.category.list.each(function(h){var f=_("CurrikiCode.AssetClass_category_"+h);
+if(h==="unknown"){f="zzz"}if(h!=="collection"){d.data.category.data.push([h,_("CurrikiCode.AssetClass_category_"+h),f])
+}});d.data.review={list:["partners","highest_rated","members.highest_rated"],data:[["",_("search.resource.review.selector.UNSPECIFIED")]]};
+d.data.review.list.each(function(f){d.data.review.data.push([f,_("search.resource.review.selector."+f)])
+});d.data.special={list:["contributions","collections","updated","info-only"],data:[["",_("search.resource.special.selector.UNSPECIFIED")]]};
+d.data.special.list.each(function(f){d.data.special.data.push([f,_("search.resource.special.selector."+f)])
+});d.store={subject:new Ext.data.SimpleStore({fields:["id","subject"],data:d.data.subject.data,id:0}),subsubject:new Ext.data.SimpleStore({fields:["id","subject","parentItem"],data:d.data.subsubject.data,id:0}),level:new Ext.data.SimpleStore({fields:["id","level"],data:d.data.level.data,id:0}),ict:new Ext.data.SimpleStore({fields:["id","ict","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:d.data.ict.data,id:0}),subict:new Ext.data.SimpleStore({fields:["id","ict","parentICT","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:d.data.subict.data,id:0}),language:new Ext.data.SimpleStore({fields:["id","language"],data:d.data.language.data,id:0}),category:new Ext.data.SimpleStore({fields:["id","category","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:d.data.category.data,id:0}),review:new Ext.data.SimpleStore({fields:["id","review"],data:d.data.review.data,id:0}),special:new Ext.data.SimpleStore({fields:["id","special"],data:d.data.special.data,id:0})};
+e.store={};e.store.record=new Ext.data.Record.create([{name:"title"},{name:"assetType"},{name:"category"},{name:"subcategory"},{name:"ict"},{name:"ictText"},{name:"ictIcon"},{name:"contributor"},{name:"contributorName"},{name:"rating",mapping:"review"},{name:"memberRating",mapping:"rating"},{name:"ratingCount"},{name:"description"},{name:"fwItems"},{name:"levels"},{name:"parents"},{name:"lastUpdated"},{name:"updated"},{name:"score"}]);
+e.store.results=new Ext.data.Store({storeId:"search-store-"+g,proxy:new Ext.data.HttpProxy({url:document.location.pathname.endsWith("Old")?"/xwiki/bin/view/Search/Resources":"/currikiExtjs",method:"GET"}),baseParams:{xpage:"plain"},reader:new Ext.data.JsonReader({root:"rows",totalProperty:"resultCount",id:"page"},e.store.record),remoteSort:true});
+if(Curriki.userinfo.userGroups){e.store.results.baseParams.groupsId=Curriki.userinfo.userGroups
+}if(Curriki.userinfo.userName){e.store.results.baseParams.userId=Curriki.userinfo.userName
+}if(Curriki.userinfo.isAdmin){e.store.results.baseParams.isAdmin=true}if(Curriki.isISO8601DateParsing()){e.store.results.baseParams.dateFormat="ISO8601"
+}e.store.results.setDefaultSort("score","desc");e.renderer={title:function(s,r,j,q,u,t){console.log("render title "+s);
+if(typeof(s)!="string"){title=""}var o=j.id.replace(/\./,"/");var k=Ext.util.Format.stripTags(j.data.description);
+k=Ext.util.Format.ellipsis(k,256);k=Ext.util.Format.htmlEncode(k);var i=Curriki.data.fw_item.getRolloverDisplay(j.data.fwItems||[]);
+var p=Curriki.data.el.getRolloverDisplay(j.data.levels||[]);var n=j.data.lastUpdated||"";
+var m="{1}<br />{0}<br /><br />";if(n!==""){m=m+"{7}<br />{6}<br /><br />"}m=m+"{3}<br />{2}<br />{5}<br />{4}";
+k=String.format(m,k,_("global.title.popup.description"),i,_("global.title.popup.subject"),p,_("global.title.popup.educationlevel"),n,_("global.title.popup.last_updated"));
+var l=j.data.assetType;var f=j.data.category;var h=j.data.subcategory;r.css=String.format("resource-{0} category-{1} subcategory-{1}_{2}",l,f,h);
+var w=_(f+"."+h);if(w===f+"."+h){w=_("unknown.unknown")}if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="'+Curriki.module.search.resourceDisplay+'?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>',escape(o+"?"+Curriki.module.search.embedViewMode),Ext.util.Format.ellipsis(s,80),k,Ext.BLANK_IMAGE_URL,w)
+}else{if(g=="outerResource"){var v=Curriki.module.search.outerResources;return String.format('<img class="x-tree-node-icon assettype-icon" src="{0}" ext:qtip="{1}" /><a href="{2}{3}{4}" target="{5}" class="asset-title" ext:qtip="{1}">{6}</a>',Ext.BLANK_IMAGE_URL,k,v.prefix,o,v.suffix,v.target,s)
+}else{return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>',o,Ext.util.Format.ellipsis(s,80),k,Ext.BLANK_IMAGE_URL,w)
+}}},ict:function(n,m,j,l,p,o){var k;var h;var i=j.data.ict;console.log("render ict "+n);
+if(!Ext.isEmpty(i)){var f=i.replace(/_.*/,"");k="ict-"+f;if(f!==i){k=k+" ict-"+i}h=i.replace(/_/,".")
+}else{k="ict-unknown";h="unknown"}m.css=k;return String.format('<img class="ict-icon" src="{1}" /><span class="ict-title">{0}</span>',_("search.resource.ict."+h),Ext.BLANK_IMAGE_URL)
+},contributor:function(m,k,f,n,i,h){var l=m.replace(/\./,"/");console.log("render contributor "+m);
+if(typeof("value")!="string"){m=""}if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<a href="/xwiki/bin/view/{0}" target="_blank">{1}</a>',l,f.data.contributorName)
+}else{if(g=="outerResource"){var j=Curriki.module.search.outerResources;return String.format('<a href="{0}{1}{2}" target="{3}">{4}</a>',j.prefix,l,j.suffix,j.target,f.data.contributorName)
+}else{return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>',l,f.data.contributorName)
+}}},rating:function(m,k,f,n,i,h){console.log("render rating "+m);if(typeof(m)=="string"&&m!=""){var l=f.id.replace(/\./,"/");
+k.css=String.format("crs-{0}",m);if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" target="_blank"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>',m,_("search.resource.review."+m),Ext.BLANK_IMAGE_URL,l)
+}else{if(g=="outerResource"){var j=Curriki.module.search.outerResources;return String.format('<a "{0}{1}{2}" target="{3}"><img class="crs-icon" alt="" src="{4}" /><span class="crs-text">{5}</span></a>',j.ratingsPrefix,l,j.ratingsSuffix,j.target,Ext.BLANK_IMAGE_URL,_("search.resource.review."+m))
+}else{return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>',m,_("search.resource.review."+m),Ext.BLANK_IMAGE_URL,l)
+}}}else{return String.format("")}},memberRating:function(l,k,h,j,n,m){console.log("render memberRating "+l);
+if(typeof(l)=="string"&&l!=""&&l!="0"&&l!=0){var i=h.id.replace(/\./,"/");var f=h.data.ratingCount;
+if(f!=""&&f!="0"&&f!=0){k.css=String.format("rating-{0}",l);if(Curriki.module.search.util.isInEmbeddedMode()){return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" target="_blank"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}" target="_blank"> ({1})</a>',l,f,i,_("search.resource.rating."+l),Ext.BLANK_IMAGE_URL)
+}else{if(g=="outerResource"){var o=Curriki.module.search.outerResources;return String.format('<a href="{0}{1}{2}"><img class="rating-icon" src="{3}" ext:qtip="{4}" /></a><a href="{0}{1}{2}" ext:qtip="{4}"> ({5})</a>',o.ratingsPrefix,i,o.ratingsSuffix,Ext.BLANK_IMAGE_URL,_("search.resource.rating."+l),f)
+}else{return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>',l,f,i,_("search.resource.rating."+l),Ext.BLANK_IMAGE_URL)
+}}}else{return String.format("")}}else{return String.format("")}},updated:function(l,j,f,m,i,h){console.log("render updated "+l);
+if(typeof("value")!="string"){return""}var k=Ext.util.Format.date(l,"M-d-Y");if(typeof(k)!="string"){return""
+}return String.format("{0}",k)},score:function(k,j,f,l,i,h){if(typeof(k)!="number"){k=0
+}return k}};console.log("Finished initting data for "+g+".")}}})();Ext.onReady(function(){Curriki.module.search.data.outerResource.init("outerResource");
+Curriki.module.search.data.resource.init("resource")});Ext.ns("Curriki.module.search");
+var Search=Curriki.module.search;(function(){var a=["outerResource","resource"];for(var b=0;
+b<2;b++){var c=a[b];Ext.ns("Curriki.module.search.form."+c);Search.form[c].init=function(h){var e=Search.form[h];
+var g=Search.data[h];console.log("form."+h+": init");var j=140;var d=250;e.ictCombo=function(k){Ext.apply(this,k)
+};var i=$("curriki-searchbox");if(!Ext.isEmpty(i)){i.setValue("...");i.setAttribute("curriki:deftxt","...");
+i.disable()}var f=$("searchbtn");if(!Ext.isEmpty(f)){f.innerHTML=""}Ext.extend(e.ictCombo,Ext.util.Observable,{init:function(k){Ext.apply(k,{tpl:'<tpl for="."><div class="x-combo-list-item ict-icon-combo-item ict-{'+k.valueField+'}"><img class="ict-icon" src="'+Ext.BLANK_IMAGE_URL+'"/><span class="ict-title">{'+k.displayField+"}</span></div></tpl>",onRender:k.onRender.createSequence(function(m,l){this.wrap.applyStyles({position:"relative"});
 this.el.addClass("ict-icon-combo-input");this.icon=Ext.DomHelper.append(this.el.up("div.x-form-field-wrap"),{tag:"div",style:"position:absolute",children:{tag:"div",cls:"ict-icon"}})
-}),setIconCls:function(){var j=this.store.query(this.valueField,this.getValue()).itemAt(0);
-if(j){this.icon.className="ict-icon-combo-icon ict-"+j.get(this.valueField)}},setValue:i.setValue.createSequence(function(j){this.setIconCls()
-})})}});b.categoryCombo=function(i){Ext.apply(this,i)};Ext.extend(b.categoryCombo,Ext.util.Observable,{init:function(i){Ext.apply(i,{tpl:'<tpl for="."><div class="x-combo-list-item category-icon-combo-item category-{'+i.valueField+'}"><img class="category-icon" src="'+Ext.BLANK_IMAGE_URL+'"/><span class="category-title">{'+i.displayField+"}</span></div></tpl>",onRender:i.onRender.createSequence(function(k,j){this.wrap.applyStyles({position:"relative"});
+}),setIconCls:function(){var l=this.store.query(this.valueField,this.getValue()).itemAt(0);
+if(l){this.icon.className="ict-icon-combo-icon ict-"+l.get(this.valueField)}},setValue:k.setValue.createSequence(function(l){this.setIconCls()
+})})}});e.categoryCombo=function(k){Ext.apply(this,k)};Ext.extend(e.categoryCombo,Ext.util.Observable,{init:function(k){Ext.apply(k,{tpl:'<tpl for="."><div class="x-combo-list-item category-icon-combo-item category-{'+k.valueField+'}"><img class="category-icon" src="'+Ext.BLANK_IMAGE_URL+'"/><span class="category-title">{'+k.displayField+"}</span></div></tpl>",onRender:k.onRender.createSequence(function(m,l){this.wrap.applyStyles({position:"relative"});
 this.el.addClass("category-icon-combo-input");this.icon=Ext.DomHelper.append(this.el.up("div.x-form-field-wrap"),{tag:"div",style:"position:absolute",children:{tag:"div",cls:"category-icon"}})
-}),setIconCls:function(){var j=this.store.query(this.valueField,this.getValue()).itemAt(0);
-if(j){this.icon.className="category-icon-combo-icon category-"+j.get(this.valueField)
-}},setValue:i.setValue.createSequence(function(j){this.setIconCls()})})}});b.termPanel=a.util.createTermPanel(d,b);
-b.filterPanel={xtype:"form",labelAlign:"left",id:"search-filterPanel-"+d,formId:"search-filterForm-"+d,border:false,items:[b.termPanel,{xtype:"fieldset",title:"",id:"search-advanced-"+d,autoHeight:true,collapsible:false,collapsed:false,animCollapse:false,border:true,stateful:true,stateEvents:["expand","collapse"],listeners:{statesave:{fn:a.util.fieldsetPanelSave},staterestore:{fn:a.util.fieldsetPanelRestore},expand:{fn:function(i){Ext.getCmp("search-results-"+d).getView().refresh();
-Ext.select(".x-form-field-wrap",false,"search-advanced-"+d).setWidth(h);Ext.getCmp("search-termPanel-"+d).el.repaint()
-}},collapse:{fn:function(i){Ext.getCmp("search-results-"+d).getView().refresh();Ext.getCmp("search-termPanel-"+d).el.repaint()
-}}},items:[{layout:"column",border:false,defaults:{border:false,hideLabel:true},items:[{columnWidth:0.33,layout:"form",defaults:{hideLabel:true},items:[{xtype:"combo",id:"combo-subject-"+d,fieldLabel:"Subject",hiddenName:"subjectparent",width:h,listWidth:e,mode:"local",store:c.filter.store.subject,displayField:"subject",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED"),selectOnFocus:true,forceSelection:true,listeners:{select:{fn:function(k,j){var i=Ext.getCmp("combo-subsubject-"+d);
-if(k.getValue()===""){i.clearValue();i.hide()}else{if(k.getValue()==="UNCATEGORIZED"){i.show();
-i.clearValue();i.store.filter("parentItem",k.getValue());i.setValue(k.getValue());
-i.hide()}else{i.show();i.clearValue();i.store.filter("parentItem",k.getValue());i.setValue(k.getValue())
-}}}}}},{xtype:"combo",fieldLabel:"Sub Subject",id:"combo-subsubject-"+d,hiddenName:"subject",width:h,listWidth:e,mode:"local",store:c.filter.store.subsubject,displayField:"subject",valueField:"id",typeAhead:true,triggerAction:"all",selectOnFocus:true,forceSelection:true,lastQuery:"",hidden:true,hideMode:"visibility"},{xtype:"combo",id:"combo-category-"+d,fieldLabel:"Category",hiddenName:"category",width:h,listWidth:e,mode:"local",store:c.filter.store.category,displayField:"category",valueField:"id",plugins:new b.categoryCombo(),typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_category_UNSPECIFIED"),selectOnFocus:true,forceSelection:true}]},{columnWidth:0.33,layout:"form",defaults:{hideLabel:true},items:[{xtype:"combo",id:"combo-level-"+d,fieldLabel:"Level",mode:"local",width:h,listWidth:e,store:c.filter.store.level,hiddenName:"level",displayField:"level",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_educational_level_UNSPECIFIED"),selectOnFocus:true,forceSelection:true},{xtype:"combo",id:"combo-language-"+d,fieldLabel:"Language",hiddenName:"language",width:h,listWidth:e,mode:"local",store:c.filter.store.language,displayField:"language",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_language_UNSPECIFIED"),selectOnFocus:true,forceSelection:true},{xtype:"combo",id:"combo-review-"+d,fieldLabel:"Review",hiddenName:"review",width:h,listWidth:e,mode:"local",store:c.filter.store.review,displayField:"review",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("search.resource.review.selector.UNSPECIFIED"),selectOnFocus:true,forceSelection:true}]},{columnWidth:0.34,layout:"form",defaults:{hideLabel:true},items:[{xtype:"combo",id:"combo-ictprfx-"+d,fieldLabel:"Instructional Type",hiddenName:"ictprfx",width:h,listWidth:e,mode:"local",store:c.filter.store.ict,displayField:"ict",valueField:"id",plugins:new b.ictCombo(),typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_instructional_component_UNSPECIFIED"),selectOnFocus:true,forceSelection:true,listeners:{select:{fn:function(l,i){var k=Ext.getCmp("combo-subICT-"+d);
-if(l.getValue()===""){k.clearValue();k.hide()}else{k.clearValue();k.store.filter("parentICT",l.getValue());
-var j=k.store.getById(l.getValue()+"*");if(Ext.isEmpty(j)){k.setValue(l.getValue());
-k.hide()}else{k.setValue(l.getValue()+"*");k.show()}}}}}},{xtype:"combo",fieldLabel:"Sub ICT",hiddenName:"ict",width:h,listWidth:e,id:"combo-subICT-"+d,mode:"local",store:c.filter.store.subict,displayField:"ict",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:"Select a Sub ICT...",selectOnFocus:true,forceSelection:true,lastQuery:"",hidden:true,hideMode:"visibility"},{xtype:"combo",id:"combo-special-"+d,fieldLabel:"Special Filters",hiddenName:"special",width:h,listWidth:e,mode:"local",store:c.filter.store.special,displayField:"special",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("search.resource.special.selector.UNSPECIFIED"),selectOnFocus:true,forceSelection:true}]}]}]}]};
-b.rowExpander=new Ext.grid.RowExpander({tpl:new Ext.XTemplate(_("search.resource.resource.expanded.title"),"<ul>",'<tpl for="parents">','<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">','<a target="{[this.getLinkTarget(values)]}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',"{title}","</a>","</li>","</tpl>","</ul>",{getParentURL:function(i){var j=i.page||false;
-if(j){if(Curriki.module.search.util.isInEmbeddedMode()){return Curriki.module.search.resourceDisplay+"?resourceurl=/xwiki/bin/view/"+escape(j.replace(/\./,"/")+"?"+Curriki.module.search.embedViewMode)
-}else{return"/xwiki/bin/view/"+j.replace(/\./,"/")}}else{return""}},getQtip:function(i){var l=Curriki.module.search.data.resource.filter;
-var m=Ext.util.Format.stripTags(i.description||"");m=Ext.util.Format.ellipsis(m,256);
-m=Ext.util.Format.htmlEncode(m);var k=Curriki.data.fw_item.getRolloverDisplay(i.fwItems||[]);
-var j=Curriki.data.el.getRolloverDisplay(i.levels||[]);return String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}",m,_("global.title.popup.description"),k,_("global.title.popup.subject"),j,_("global.title.popup.educationlevel"))
-},getLinkTarget:function(i){if(Curriki.module.search.util.isInEmbeddedMode()){return"_blank"
-}else{return"_self"}}})});b.rowExpander.renderer=function(k,l,j){var i;if(j.data.parents&&j.data.parents.size()>0){l.cellAttr='rowspan="2"';
-i="x-grid3-row-expander";return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />',i,Ext.BLANK_IMAGE_URL,_("search.resource.icon.plus.rollover"))
-}else{i="x-grid3-row-expander-empty";return String.format('<img class="{0}" src="{1}" />',i,Ext.BLANK_IMAGE_URL)
-}};b.rowExpander.on("expand",function(n,k,j,i){var m=n.grid.view.getRow(i);var l=Ext.DomQuery.selectNode("img[class*=x-grid3-row-expander]",m);
-Ext.fly(l).set({"ext:qtip":_("search.resource.icon.minus.rollover")});if(Curriki.module.search.util.isInEmbeddedMode()){Curriki.module.search.util.sendResizeMessageToEmbeddingWindow()
-}});b.rowExpander.on("collapse",function(n,k,j,i){var m=n.grid.view.getRow(i);var l=Ext.DomQuery.selectNode("img[class*=x-grid3-row-expander]",m);
-Ext.fly(l).set({"ext:qtip":_("search.resource.icon.plus.rollover")});if(Curriki.module.search.util.isInEmbeddedMode()){Curriki.module.search.util.sendResizeMessageToEmbeddingWindow()
-}});b.columnModel=new Ext.grid.ColumnModel([Ext.apply(b.rowExpander,{id:"score",tooltip:_("search.resource.column.header.score.tooltip"),header:" ",dataIndex:"score",width:30,sortable:true}),{id:"title",header:_("search.resource.column.header.title"),width:164,dataIndex:"title",sortable:true,hideable:false,renderer:c.renderer.title},{id:"ict",width:108,header:_("search.resource.column.header.ict"),dataIndex:"ictText",sortable:true,renderer:c.renderer.ict},{id:"contributor",width:110,header:_("search.resource.column.header.contributor"),dataIndex:"contributor",sortable:true,renderer:c.renderer.contributor},{id:"rating",width:88,header:_("search.resource.column.header.rating"),dataIndex:"rating",sortable:true,renderer:c.renderer.rating},{id:"memberRating",width:105,header:_("search.resource.column.header.member.rating"),dataIndex:"memberRating",sortable:true,renderer:c.renderer.memberRating},{id:"updated",width:80,header:_("search.resource.column.header.updated"),dataIndex:"updated",hidden:true,sortable:true,renderer:c.renderer.updated}]);
-b.resultsPanel={xtype:"grid",id:"search-results-"+d,border:false,autoHeight:true,width:a.settings.gridWidth,autoExpandColumn:"title",stateful:true,frame:false,stripeRows:true,viewConfig:{forceFit:true,enableRowBody:true,showPreview:true,scrollOffset:0},columnsText:_("search.columns.menu.columns"),sortAscText:_("search.columns.menu.sort_ascending"),sortDescText:_("search.columns.menu.sort_descending"),store:c.store.results,sm:new Ext.grid.RowSelectionModel({selectRow:Ext.emptyFn}),cm:b.columnModel,loadMask:false,plugins:b.rowExpander,bbar:new Ext.PagingToolbar({id:"search-pager-"+d,plugins:new Ext.ux.Andrie.pPageSize({variations:[10,25,50],beforeText:_("search.pagination.pagesize.before"),afterText:_("search.pagination.pagesize.after"),addBefore:_("search.pagination.pagesize.addbefore"),addAfter:_("search.pagination.pagesize.addafter")}),pageSize:25,store:c.store.results,displayInfo:true,displayMsg:_("search.pagination.displaying."+d),emptyMsg:_("search.find.no.results"),beforePageText:_("search.pagination.beforepage"),afterPageText:_("search.pagination.afterpage"),firstText:_("search.pagination.first"),prevText:_("search.pagination.prev"),nextText:_("search.pagination.next"),lastText:_("search.pagination.last"),refreshText:_("search.pagination.refresh")})};
-b.mainPanel={xtype:"panel",id:"search-panel-"+d,autoHeight:true,items:[b.filterPanel,b.resultsPanel]};
-b.doSearch=function(){a.util.doSearch(d)};a.util.registerTabTitleListener(d)};Ext.onReady(function(){b.init()
-})})();(function(){var b="group";Ext.ns("Curriki.module.search.data."+b);var a=Curriki.module.search.data.group;
+}),setIconCls:function(){var l=this.store.query(this.valueField,this.getValue()).itemAt(0);
+if(l){this.icon.className="category-icon-combo-icon category-"+l.get(this.valueField)
+}},setValue:k.setValue.createSequence(function(l){this.setIconCls()})})}});e.termPanel=Search.util.createTermPanel(h,e);
+e.filterPanel={xtype:"form",labelAlign:"left",id:"search-filterPanel-"+h,formId:"search-filterForm-"+h,border:false,items:[e.termPanel,{xtype:"fieldset",title:"",id:"search-advanced-"+h,autoHeight:true,collapsible:false,collapsed:false,animCollapse:false,border:true,stateful:true,stateEvents:["expand","collapse"],listeners:{statesave:{fn:Search.util.fieldsetPanelSave},staterestore:{fn:Search.util.fieldsetPanelRestore},expand:{fn:function(k){Ext.getCmp("search-results-"+h).getView().refresh();
+Ext.select(".x-form-field-wrap",false,"search-advanced-"+h).setWidth(j);Ext.getCmp("search-termPanel-"+h).el.repaint()
+}},collapse:{fn:function(k){Ext.getCmp("search-results-"+h).getView().refresh();Ext.getCmp("search-termPanel-"+h).el.repaint()
+}}},items:[{layout:"column",border:false,defaults:{border:false,hideLabel:true},items:[{columnWidth:0.33,layout:"form",defaults:{hideLabel:true},items:[{xtype:"combo",id:"combo-subject-"+h,fieldLabel:"Subject",hiddenName:"subjectparent",width:j,listWidth:d,mode:"local",store:g.filter.store.subject,displayField:"subject",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_fw_items_FW_masterFramework.UNSPECIFIED"),selectOnFocus:true,forceSelection:true,listeners:{select:{fn:function(m,l){var k=Ext.getCmp("combo-subsubject-"+h);
+if(m.getValue()===""){k.clearValue();k.hide()}else{if(m.getValue()==="UNCATEGORIZED"){k.show();
+k.clearValue();k.store.filter("parentItem",m.getValue());k.setValue(m.getValue());
+k.hide()}else{k.show();k.clearValue();k.store.filter("parentItem",m.getValue());k.setValue(m.getValue())
+}}}}}},{xtype:"combo",fieldLabel:"Sub Subject",id:"combo-subsubject-"+h,hiddenName:"subject",width:j,listWidth:d,mode:"local",store:g.filter.store.subsubject,displayField:"subject",valueField:"id",typeAhead:true,triggerAction:"all",selectOnFocus:true,forceSelection:true,lastQuery:"",hidden:true,hideMode:"visibility"},{xtype:"combo",id:"combo-category-"+h,fieldLabel:"Category",hiddenName:"category",width:j,listWidth:d,mode:"local",store:g.filter.store.category,displayField:"category",valueField:"id",plugins:new e.categoryCombo(),typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_category_UNSPECIFIED"),selectOnFocus:true,forceSelection:true}]},{columnWidth:0.33,layout:"form",defaults:{hideLabel:true},items:[{xtype:"combo",id:"combo-level-"+h,fieldLabel:"Level",mode:"local",width:j,listWidth:d,store:g.filter.store.level,hiddenName:"level",displayField:"level",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_educational_level_UNSPECIFIED"),selectOnFocus:true,forceSelection:true},{xtype:"combo",id:"combo-language-"+h,fieldLabel:"Language",hiddenName:"language",width:j,listWidth:d,mode:"local",store:g.filter.store.language,displayField:"language",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_language_UNSPECIFIED"),selectOnFocus:true,forceSelection:true},{xtype:"combo",id:"combo-review-"+h,fieldLabel:"Review",hiddenName:"review",width:j,listWidth:d,mode:"local",store:g.filter.store.review,displayField:"review",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("search.resource.review.selector.UNSPECIFIED"),selectOnFocus:true,forceSelection:true}]},{columnWidth:0.34,layout:"form",defaults:{hideLabel:true},items:[{xtype:"combo",id:"combo-ictprfx-"+h,fieldLabel:"Instructional Type",hiddenName:"ictprfx",width:j,listWidth:d,mode:"local",store:g.filter.store.ict,displayField:"ict",valueField:"id",plugins:new e.ictCombo(),typeAhead:true,triggerAction:"all",emptyText:_("CurrikiCode.AssetClass_instructional_component_UNSPECIFIED"),selectOnFocus:true,forceSelection:true,listeners:{select:{fn:function(n,k){var m=Ext.getCmp("combo-subICT-"+h);
+if(n.getValue()===""){m.clearValue();m.hide()}else{m.clearValue();m.store.filter("parentICT",n.getValue());
+var l=m.store.getById(n.getValue()+"*");if(Ext.isEmpty(l)){m.setValue(n.getValue());
+m.hide()}else{m.setValue(n.getValue()+"*");m.show()}}}}}},{xtype:"combo",fieldLabel:"Sub ICT",hiddenName:"ict",width:j,listWidth:d,id:"combo-subICT-"+h,mode:"local",store:g.filter.store.subict,displayField:"ict",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:"Select a Sub ICT...",selectOnFocus:true,forceSelection:true,lastQuery:"",hidden:true,hideMode:"visibility"},{xtype:"combo",id:"combo-special-"+h,fieldLabel:"Special Filters",hiddenName:"special",width:j,listWidth:d,mode:"local",store:g.filter.store.special,displayField:"special",valueField:"id",typeAhead:true,triggerAction:"all",emptyText:_("search.resource.special.selector.UNSPECIFIED"),selectOnFocus:true,forceSelection:true}]}]}]}]};
+e.rowExpander=new Ext.grid.RowExpander({tpl:new Ext.XTemplate(_("search.resource.resource.expanded.title"),"<ul>",'<tpl for="parents">','<li class="resource-{assetType} category-{category} subcategory-{category}_{subcategory}">','<a target="{[this.getLinkTarget(values)]}" href="{[this.getParentURL(values)]}" ext:qtip="{[this.getQtip(values)]}">',"{title}","</a>","</li>","</tpl>","</ul>",{getParentURL:function(k){var l=k.page||false;
+if(l){if(Curriki.module.search.util.isInEmbeddedMode()){return Curriki.module.search.resourceDisplay+"?resourceurl=/xwiki/bin/view/"+escape(l.replace(/\./,"/")+"?"+Curriki.module.search.embedViewMode)
+}else{return"/xwiki/bin/view/"+l.replace(/\./,"/")}}else{return""}},getQtip:function(k){var n=Curriki.module.search.data[h].filter;
+var o=Ext.util.Format.stripTags(k.description||"");o=Ext.util.Format.ellipsis(o,256);
+o=Ext.util.Format.htmlEncode(o);var m=Curriki.data.fw_item.getRolloverDisplay(k.fwItems||[]);
+var l=Curriki.data.el.getRolloverDisplay(k.levels||[]);return String.format("{1}<br />{0}<br /><br />{3}<br />{2}<br />{5}<br />{4}",o,_("global.title.popup.description"),m,_("global.title.popup.subject"),l,_("global.title.popup.educationlevel"))
+},getLinkTarget:function(k){if(Curriki.module.search.util.isInEmbeddedMode()){return"_blank"
+}else{return"_self"}}})});e.rowExpander.renderer=function(m,n,l){var k;if(l.data.parents&&l.data.parents.size()>0){n.cellAttr='rowspan="2"';
+k="x-grid3-row-expander";return String.format('<img class="{0}" src="{1}" ext:qtip="{2}" />',k,Ext.BLANK_IMAGE_URL,_("search.resource.icon.plus.rollover"))
+}else{k="x-grid3-row-expander-empty";return String.format('<img class="{0}" src="{1}" />',k,Ext.BLANK_IMAGE_URL)
+}};e.rowExpander.on("expand",function(p,m,l,k){var o=p.grid.view.getRow(k);var n=Ext.DomQuery.selectNode("img[class*=x-grid3-row-expander]",o);
+Ext.fly(n).set({"ext:qtip":_("search.resource.icon.minus.rollover")});if(Curriki.module.search.util.isInEmbeddedMode()){Curriki.module.search.util.sendResizeMessageToEmbeddingWindow()
+}});e.rowExpander.on("collapse",function(p,m,l,k){var o=p.grid.view.getRow(k);var n=Ext.DomQuery.selectNode("img[class*=x-grid3-row-expander]",o);
+Ext.fly(n).set({"ext:qtip":_("search.resource.icon.plus.rollover")});if(Curriki.module.search.util.isInEmbeddedMode()){Curriki.module.search.util.sendResizeMessageToEmbeddingWindow()
+}});e.columnModel=new Ext.grid.ColumnModel([Ext.apply(e.rowExpander,{id:"score",tooltip:_("search.resource.column.header.score.tooltip"),header:" ",dataIndex:"score",width:30,sortable:true}),{id:"title",header:_("search.resource.column.header.title"),width:164,dataIndex:"title",sortable:true,hideable:false,renderer:g.renderer.title},{id:"ict",width:108,header:_("search.resource.column.header.ict"),dataIndex:"ictText",sortable:true,renderer:g.renderer.ict},{id:"contributor",width:110,header:_("search.resource.column.header.contributor"),dataIndex:"contributor",sortable:true,renderer:g.renderer.contributor},{id:"rating",width:88,header:_("search.resource.column.header.rating"),dataIndex:"rating",sortable:true,renderer:g.renderer.rating},{id:"memberRating",width:105,header:_("search.resource.column.header.member.rating"),dataIndex:"memberRating",sortable:true,renderer:g.renderer.memberRating},{id:"updated",width:80,header:_("search.resource.column.header.updated"),dataIndex:"updated",hidden:true,sortable:true,renderer:g.renderer.updated}]);
+e.resultsPanel={xtype:"grid",id:"search-results-"+h,border:false,autoHeight:true,width:Search.settings.gridWidth,autoExpandColumn:"title",stateful:true,frame:false,stripeRows:true,viewConfig:{forceFit:true,enableRowBody:true,showPreview:true,scrollOffset:0},columnsText:_("search.columns.menu.columns"),sortAscText:_("search.columns.menu.sort_ascending"),sortDescText:_("search.columns.menu.sort_descending"),store:g.store.results,sm:new Ext.grid.RowSelectionModel({selectRow:Ext.emptyFn}),cm:e.columnModel,loadMask:false,plugins:e.rowExpander,bbar:new Ext.PagingToolbar({id:"search-pager-"+h,plugins:new Ext.ux.Andrie.pPageSize({variations:[10,25,50],beforeText:_("search.pagination.pagesize.before"),afterText:_("search.pagination.pagesize.after"),addBefore:_("search.pagination.pagesize.addbefore"),addAfter:_("search.pagination.pagesize.addafter")}),pageSize:25,store:g.store.results,displayInfo:true,displayMsg:_("search.pagination.displaying."+h),emptyMsg:_("search.find.no.results"),beforePageText:_("search.pagination.beforepage"),afterPageText:_("search.pagination.afterpage"),firstText:_("search.pagination.first"),prevText:_("search.pagination.prev"),nextText:_("search.pagination.next"),lastText:_("search.pagination.last"),refreshText:_("search.pagination.refresh")})};
+e.mainPanel={xtype:"panel",id:"search-panel-"+h,autoHeight:true,items:[e.filterPanel,e.resultsPanel]};
+e.doSearch=function(){Search.util.doSearch(h)};Search.util.registerTabTitleListener(h);
+console.log("Finished initting form for "+h+".");console.log("Now get: Curriki.module.search.form['otherResource']: "+Curriki.module.search.form.otherResource)
+}}Ext.onReady(function(){for(var d=0;d<2;d++){var e=a[d];Search.form[e].init(e)}})
+})();(function(){var b="group";Ext.ns("Curriki.module.search.data."+b);var a=Curriki.module.search.data.group;
 a.init=function(){console.log("data."+b+": init");a.filter={};var c=a.filter;c.data={};
 c.data.subject={mapping:Curriki.data.fw_item.fwMap["FW_masterFramework.WebHome"],list:[],data:[["",_("XWiki.CurrikiSpaceClass_topic_FW_masterFramework.WebHome.UNSPECIFIED")]]};
 c.data.subject.mapping.each(function(d){c.data.subject.list.push(d.id)});c.data.subject.list.each(function(d){c.data.subject.data.push([d,_("XWiki.CurrikiSpaceClass_topic_"+d)])
@@ -237,7 +246,7 @@ b.mainPanel={xtype:"panel",id:"search-panel-"+d,autoHeight:true,items:[b.filterP
 b.doSearch=function(){a.util.doSearch(d)};a.util.registerTabTitleListener(d)};Ext.onReady(function(){b.init()
 })})();(function(){Ext.ns("Curriki.module.search.form");var b=Curriki.module.search;
 var a=b.form;var c="No concurrent searches on same tab.";b.init=function(){console.log("search: init");
-if(Ext.isEmpty(b.initialized)){if(Ext.isEmpty(b.tabList)){b.tabList=["resource","group","member","curriki"]
+if(Ext.isEmpty(b.initialized)){if(Ext.isEmpty(b.tabList)){b.tabList=["resource","outerResource","group","member","curriki"]
 }var e=140;b.doSearch=function(m,i,j){var g={};if(Ext.getCmp("search-termPanel")&&Ext.getCmp("search-termPanel").getForm){g.all=Ext.getCmp("search-termPanel").getForm().getValues(false)
 }var q=$("search-termPanel-"+m+"-terms").getValue();if(q==_("search.text.entry.label")){q=""
 }if(document.savedTitle&&q!=""){document.title=document.savedTitle}else{if(typeof(document.savedTitle)=="undefined"){document.savedTitle=document.title
@@ -266,7 +275,8 @@ var h=Ext.History.add(p,true);if(h){console.log("-- created a new history frame.
 Curriki.logView("/features/search/"+g);var f=Ext.getCmp("search-advanced-"+g);if(!Ext.isEmpty(f)){if(!f.collapsed){Ext.select(".x-form-field-wrap",false,"search-advanced-"+g).setWidth(e)
 }}}},items:[]};Ext.each(b.tabList,function(f){panel={title:_("search."+f+".tab.title"),id:"search-"+f+"-tab",cls:"search-"+f,autoHeight:true};
 module=a[f];if(!Ext.isEmpty(module)&&!Ext.isEmpty(module.mainPanel)){panel.items=[module.mainPanel];
-b.tabPanel.items.push(panel)}});b.mainPanel={el:"search-div",border:false,height:"600px",defaults:{border:false},cls:"search-module",items:[b.tabPanel]};
+b.tabPanel.items.push(panel)}else{console.log("Dropping "+f+" (module Curriki.module.search.form["+f+"] is empty).")
+}});b.mainPanel={el:"search-div",border:false,height:"600px",defaults:{border:false},cls:"search-module",items:[b.tabPanel]};
 Ext.ns("Curriki.module.search.history");var d=b.history;d.lastHistoryToken=false;
 d.historyChange=function(f){if(f){if(f==d.lastHistoryToken){}else{d.updateFromHistory(f)
 }}else{}};d.setLastToken=function(f){d.lastHistoryToken=f};d.updateFromHistory=function(g){var k=new Ext.state.Provider();

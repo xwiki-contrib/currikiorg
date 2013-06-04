@@ -14,7 +14,7 @@ Search.init = function(){
 	console.log('search: init');
 	if (Ext.isEmpty(Search.initialized)) {
 		if (Ext.isEmpty(Search.tabList)) {
-			Search.tabList = ['resource', 'group', 'member', 'curriki'];
+			Search.tabList = ['resource','outerResource', 'group', 'member', 'curriki']; //
 		}
 
 		var comboWidth = 140;
@@ -183,7 +183,9 @@ Curriki.numSearches = 0;
 				if (!Ext.isEmpty(module) && !Ext.isEmpty(module.mainPanel)) {
 					panel.items = [module.mainPanel];
 					Search.tabPanel.items.push(panel);
-				}
+				} else {
+                    console.log("Dropping " + tab + " (module Curriki.module.search.form[" + tab + "] is empty).")
+                }
 			}
 		);
 
