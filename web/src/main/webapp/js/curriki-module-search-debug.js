@@ -645,7 +645,7 @@ Curriki.module.search.data[modName].init = function(modName){
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
 			url: document.location.pathname.endsWith("Old") ?
-                    '/xwiki/bin/view/Search/Resources' : (modName==''? '/outerCurrikiExtjs' : '/currikiExtjs')
+                    '/xwiki/bin/view/Search/Resources' : (modName=='outerResource'? '/outerCurrikiExtjs' : '/currikiExtjs')
 			,method:'GET'
 		})
 		,baseParams: {	xpage: "plain"
