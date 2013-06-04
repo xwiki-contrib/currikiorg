@@ -371,6 +371,7 @@
 #end
 ##
 #macro(displayForumAddThis $topicDoc, $topicTitle) 
+{{html clean=false}}
 #set($addThisTitle = $msg.get("conversations.addthis.title", [$topicTitle, $topicDoc.getExternalURL()]))
 #set($addThisDesc = $msg.get("conversations.addthis.desc", [$topicTitle, $topicDoc.getExternalURL()]))
 <div class="topic-addthis">
@@ -394,6 +395,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51acd2cb7dc9d536"></script>
 <!-- AddThis Button END -->
 </div>
+{{/html}}
 #end
 ##
 #macro(displayForumActions $topicDoc) 
