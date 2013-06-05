@@ -637,3 +637,103 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     //]]>
   </script>
 #end
+
+#**
+ * Summary of active discussions
+ *#
+#macro(displayTopicsSummary $forumDocName $topicsPage)
+  ## add js for ajax reload of most viewed topic
+  #set($nb = 10)
+  #set($start = 0)
+  #set($currentorder = "desc")
+  #set($datesorder = "")
+  #set($commentsorder = "")
+  #set($votesorder = "")
+  #set($nextdatesorder = "desc")
+  #set($nextcommentsorder = "desc")
+  #set($nextvotesorder = "desc")
+  #if($request.sortfield=="votes")
+   #if($request.sortorder=="asc")
+    #set($currentorder = "asc")    
+   #else
+    #set($votesorder = "desc") 
+    #set($nextvotesorder = "asc") 
+   #end
+   ## sort by votes - requires programming rights
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, BaseObject as votesobj, IntegerProperty as nbvotes where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and votesobj.name=doc.fullName and votesobj.className='XWiki.AverageRatingsClass' and votesobj.id=nbvotes.id.id and nbvotes.id.name='nbvotes' order by nbvotes.value $!{currentorder}", $nb, $start, [ $forumDocName ]))
+  #elseif($request.sortfield=="comments")
+    #if($request.sortorder=="asc")
+    #set($currentorder = "asc")    
+   #else
+    #set($commentsorder = "desc") 
+    #set($nextcommentsorder = "asc")
+   #end
+   ## sort by comments - requires programming rights
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, XWikiDocument as answerdoc, BaseObject as cobj where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and answerdoc.parent=doc.fullName and answerdoc.fullName=cobj.name and cobj.className='XWiki.XWikiComments' group by 1 order by count(distinct cobj.number)+count(distinct answerdoc.fullName) $!{currentorder}", $nb, $start, [ $forumDocName ]))
+  #else
+    #if($request.sortorder=="asc")
+    #set($currentorder = "asc")    
+   #else
+    #set($datesorder = "desc")   
+    #set($nextdatesorder = "asc")
+   #end
+   ## sort by last update date
+   #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$forumDocName, 'ConversationCode.TopicClass']))
+  #end
+  #set($commentsurl = $xwiki.getDocument($topicsPage).getURL("get", "xpage=plain&sortfield=comments&sortorder=${nextcommentsorder}"))
+  #set($votesurl = $xwiki.getDocument($topicsPage).getURL("get", "xpage=plain&sortfield=votes&sortorder=${nextvotesorder}"))
+  #set($datesurl = $xwiki.getDocument($topicsPage).getURL("get", "xpage=plain&sortfield=dates&sortorder=${nextdatesorder}"))
+  <!-- Discussions Sidebar Block -->
+  #if(!$request.xpart)
+  <div id="discussionTopics">
+  #end
+	<h3>$msg.get("discussion.panel.title")</h3>
+	$msg.get("discussion.panel.sortby") <a class="date ${datesorder}" href="javascript:void(0)" onclick="new Ajax.Updater('discussionTopics','${datesurl}');">$msg.get("discussion.panel.dates")</a> 
+	         <a class="votes ${votesorder}" href="javascript:void(0)" onclick="new Ajax.Updater('discussionTopics','${votesurl}');">$msg.get("discussion.panel.votes")</a>
+	         <a class="comments ${commentsorder}" href="javascript:void(0)" onclick="new Ajax.Updater('discussionTopics','${commentsurl}');">$msg.get("discussion.panel.comments")</a>
+	<div class="tableScroll">
+		<table id="discussionTopicsTable" cellspacing="0" cellpadding="0" border="0">
+			<caption>$msg.get("discussion.panel.title")</caption>
+			<colgroup>
+				<col class="date" />
+				<col class="votes" />
+				<col class="comments" />
+			</colgroup>
+			<tr>
+				<th class="topics">$msg.get("discussion.panel.topics")</th>
+				<th class="votes">$msg.get("discussion.panel.votes")</th>
+				<th class="comments">$msg.get("discussion.panel.comments")</th>
+			</tr>
+  #foreach($topic in $topics)
+    #set($topicDoc = $xwiki.getDocument($topic))  
+    #set($topicTitle = $topicDoc.displayTitle)
+    #set($rating = $xwiki.ratings.getAverageRating($topicDoc).nbVotes)
+    #set($topicComments = 0)
+    #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName <> ? order by doc.date desc', 0, 0, [$topicDoc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
+    #if($topicAnswers)
+     #foreach($topicAnswer in $topicAnswers)
+      #set($answerDoc = $xwiki.getDocument($topicAnswer))
+      #set($topicComments = $topicComments + $answerDoc.getComments().size())
+     #end
+     #set($nbCommentsAnswers = $topicAnswers.size() + $topicComments)
+    #else
+     #set($nbCommentsAnswers = 0)  
+    #end
+    #if(!$topicodd || $topicodd=="even")
+     #set($topicodd = "odd")
+    #else
+     #set($topicodd = "even")
+    #end
+  		    <tr class="${topicodd}">
+				<td class="topic">$topicTitle</td>
+				<td class="votes">${rating}</td>
+				<td class="comments">${nbCommentsAnswers}</td>
+			</tr>
+  #end
+  		</table>
+	</div>
+  #if(!$request.xpart)
+   </div>
+  #end 
+#end
+
