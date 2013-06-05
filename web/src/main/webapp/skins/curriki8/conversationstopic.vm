@@ -14,39 +14,6 @@
   #end
   ## Display topic header
   #displayForumTopic($doc.fullName)
-  #*
-  <div id="conversation-topic" class="conversation-main">
-    <div class="conversation-titlebar">
-      <div class="conversation-inlineactions">                
-        #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
-          <span class="separator">|</span>
-          <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.topic.edit')">$msg.get('conversations.topic.edit')</a></span>
-        #end
-        #if("$!viewer" == 'conversationstopic')
-          <span class="separator">|</span>
-          <span class="conversation-flag">
-           <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}")">$msg.get("conversations.flag.button")</a>
-          </span>
-          <span class="separator">|</span>
-          <span class="conversation-ratings">
-            <span class="conversation-like">
-              <input type="hidden" name="documenttolike" value="$doc.fullName" />
-              <img src="$escapetool.xml($xwiki.getDocument('ConversationCode.Styles').getAttachmentURL('conversation-like.png'))" alt="$escapetool.xml($msg.get('conversation.like.button'))"
-                 #if($xwiki.ratings.getRating($doc, $xcontext.user) == $util.null)class="canVote" title="$msg.get('conversation.like.button.tooltip')"#else title="$msg.get('conversation.like.button.alreadyliked.tooltip')"#end />
-            </span>
-            #set($rating = $xwiki.ratings.getAverageRating($doc).nbVotes)
-            <span class="conversation-score" title="$msg.get('conversation.like.score.tooltip', [$rating])">$!rating</span>
-          </span>
-        #end
-        <span class="separator">|</span>
-        <span class="conversation-count">$comments</span>
-      </span>
-    </div>
-  </div>
-  ## Display topic title and description
-  <div id="document-title" class="conversation-title"><h1>$doc.displayTitle</h1></div>
-  <div class="forum-description">$doc.display('description')</div>
-  *#
   ## Display answer (conversation) add form
   #displayConversationAddForm()
   #displayAnswers()
