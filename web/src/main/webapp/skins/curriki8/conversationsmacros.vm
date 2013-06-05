@@ -169,8 +169,8 @@
           #displayCaptcha()
         #end
         <div>
-          <span class="buttonwrapper"><input type="submit" value="$msg.get('core.viewers.comments.add.submit')" class="button"/></span>
-          <span class="buttonwrapper"><a class="cancel secondary button" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a></span>
+          <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')" class="button"/></span>
+          <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a></span>
         </div>
      #end   
    #end
@@ -307,19 +307,25 @@
         <dd><input type="text" name="title" /></dd>
         ## Create a fake topic object to be able to display the status and the type selectors
         #set($fakeTopic = $doc.newObject('ConversationCode.TopicClass'))
-        <dt>$msg.get('ConversationCode.TopicClass_type')</dt>
-        <dd>$doc.display('type', 'edit', $fakeTopic)</dd>       
+        ##<dt>$msg.get('ConversationCode.TopicClass_type')</dt>
+        ##<dd>$doc.display('type', 'edit', $fakeTopic)</dd>       
         <dt>$msg.get('ConversationCode.TopicClass_description')</dt>
-        <dd>$doc.display('description', 'edit', $fakeTopic)</dd>        
+        <dd>$doc.display('description', 'edit', $fakeTopic)</dd>
+        ## adding wysiwyg
+        #if($editors=="")
+            #set($editors = "ConversationCode.TopicClass_0_description")
+        #else
+            #set($editors = "${editors},ConversationCode.TopicClass_0_description")
+        #end
       </dl>
       <div>
         ## Cannot choose status, will always create as in progress
         <input type="hidden" name="ConversationCode.TopicClass_${fakeTopic.number}_status" value="inprogress" />      
       </div>
       
-      <div class="buttonwrapper">
-        <input type="submit" class="button" value="$msg.get('save')" />
-        <a href="$doc.getURL('view', 'viewer=conversationsforum')" class="cancel">$msg.get('cancel')</a>
+      <div class="buttons">
+        <input class="button-orange" type="submit" class="button" value="$msg.get('save')" />
+        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationsforum')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
   </div>
@@ -341,12 +347,19 @@
         ## Create a fake conversation object to be able to display the status and the type selectors
         #set($fakeConversation = $doc.newObject('ConversationCode.AnswerClass'))
         <dt>$msg.get('ConversationCode.AnswerClass_answer')</dt>
-        <dd>$doc.display('answer', 'edit', $fakeConversation)</dd>          
+        <dd>$doc.display('answer', 'edit', $fakeConversation)</dd>  
+        ## adding wysiwyg
+        #if($editors=="")
+            #set($editors = "ConversationCode.AnswerClass_0_answer")
+        #else
+            #set($editors = "${editors},ConversationCode_AnswerClass_answer")
+        #end
+        
       </dl>
       
-      <div class="buttonwrapper">
-        <input type="submit" class="button" value="$msg.get('save')" />
-        <a href="$doc.getURL('view', 'viewer=conversations')" class="cancel">$msg.get('cancel')</a>
+      <div class="buttons">
+        <input class="button-orange" type="submit" class="button" value="$msg.get('save')" />
+        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversations')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
   </div>
@@ -382,6 +395,7 @@
   <a href="$doc.getURL("view", "viewer=conversationsforum&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
   </div>
 #end
+
 ##
 #macro(displayForumAddThis $topicDoc, $topicTitle) 
 #if(!$request.viewer)

@@ -27,8 +27,8 @@
 ##
 ## These are used when this page is accessed directly but are useless when the page is pulled in with ajax using 
 ## bin/view/Space/Page?xpage=xpart&vm=commentsinline.vm
-$xwiki.jsfx.use('uicomponents/viewers/comments.js', {'forceSkinAction': true, 'language': ${xcontext.language}})
-$xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
+## $xwiki.jsfx.use('uicomponents/viewers/comments.js', {'forceSkinAction': true, 'language': ${xcontext.language}})
+## $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
 ##
 ##---------------------------------------------------------------------
 ## Set some 'global' variables
@@ -236,7 +236,7 @@ $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
   #if (${comment.author} == ${xcontext.user})
   <form action="$doc.getURL('save')" method="post" class="edit-xcomment reply">
     <div id="xwikicomment_${comment.number}" class="xwikicomment#if($comment.getProperty('author').value == $doc.creator) commentByCreator#end">
-    <div class="commentavatar">#if("$!comment.replyto" == '')#mediumUserAvatar($comment.author)#{else}#smallUserAvatar($comment.author)#end</div>
+    <div class="commentavatar">#if("$!comment.replyto" == '')#mediumUserAvatar2($comment.author)#{else}#smallUserAvater2($comment.author)#end</div>
     <div class="commentheader">
       <div>
       <span class="commentauthor">$!xwiki.getUserName($doc.display('author', 'view', $comment))</span>##
@@ -245,7 +245,10 @@ $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
 #if($date), <span class="commentdate">$!xwiki.formatDate($date)</span>#end
       </div>
     </div>## commentheader
-    <div class="commentcontent">$doc.display('comment', 'edit', $comment)</div>
+    <div class="commentcontent">
+        $doc.display('comment', 'edit', $comment)
+        <input class="hidden" type="text" id="${doc.fullName}_${commentNumber}"/>
+    </div>
     <div class="hidden">
       ## CSRF prevention
       <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
@@ -254,8 +257,8 @@ $xwiki.ssfx.use('uicomponents/viewers/comments.css', true)
       <input type="hidden" name="xredirect" value="$xredirect">
     </div>
     <div>
-      <span class="buttonwrapper"><input type="submit" name="action_save" class="button" value="$msg.get('core.viewers.comments.edit.save')"/></span>
-      <span class="buttonwrapper"><a class="cancel secondary button" href="$doc.getURL('view', 'viewer=comments')">$msg.get('core.viewers.comments.edit.cancel')</a></span>
+      <input class="button-orange" type="submit" name="action_save" class="button" value="$msg.get('core.viewers.comments.edit.save')"/>
+      <a class="button-grey cancel secondary" href="$doc.getURL('view', 'viewer=comments')">$msg.get('core.viewers.comments.edit.cancel')</a>
     </div>
 
     </div>## xwikicomment
