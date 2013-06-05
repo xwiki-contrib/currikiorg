@@ -532,15 +532,16 @@ addthis:description="${escapetool.xml($addThisDesc)}"
                      </span>
 					</span>
 				</div>
-				<div class="answer-moderation">
+			</div><!-- / .answer-reply -->
+      
+        <div class="answer-moderation">
             #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
             #if($xwiki.hasAccessLevel('delete', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))        
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($conversationDoc.documentReference, 'compactwiki'))}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
-				</div>
-			</div><!-- / .answer-reply -->
+        </div>
 		</div><!-- / .answer-layout -->
         <div class="comments">
           #if($comments.size() > 0)
