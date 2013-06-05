@@ -527,13 +527,12 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 					 <span class="conversation-permalink">
                           <a class="permalink" href="$escapetool.xml($doc.getURL('view', 'viewer=conversations'))#${conversationId}" title="$msg.get('conversation.permalink.tooltip')">
                           ## We need to put image here since we cannot do background + indented text + fixed width as we do for comment tools, because overflow: hidden is messing up the display of the other icons.
-                           <img src="$escapetool.xml($xwiki.getSkinFile('icons/silk/link.png'))" alt="$escapetool.xml($msg.get('conversation.permalink'))" />
                           </a>
                      </span>
 					</span>
 				</div>
 			</div><!-- / .answer-reply -->
-      
+
         <div class="answer-moderation">
             #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
