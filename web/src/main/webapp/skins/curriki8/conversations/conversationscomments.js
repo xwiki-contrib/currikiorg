@@ -5,7 +5,7 @@ var viewers = XWiki.viewers = XWiki.viewers || {};
  * Javascript enhancements for the comments viewer.
  */
 viewers.Comments = Class.create({
-  xcommentSelector : ".xwikicomment",
+  xcommentSelector : ".comment",
   /** Constructor. Adds all the JS improvements of the Comments area. */
   initialize: function(convContainer) {
     if (!convContainer || typeof(convContainer) == "undefined") {
@@ -18,7 +18,7 @@ viewers.Comments = Class.create({
       this.xcommentSelector = "#" + conversationId + " " + this.xcommentSelector;
     }
 
-    if (this.conversation.down(".commentscontent")) {
+    if (this.conversation.down(".answer")) {
       // If the comments area is already visible, enhance it.
       this.startup();
       this.addConversationHandlers();
@@ -32,7 +32,7 @@ viewers.Comments = Class.create({
     }
 
     // don't know yet what is the container used for
-    this.container = this.conversation.down('.commentscontent');
+    this.container = this.conversation.down('.answer');
     this.generatorTemplate = 'conversations.vm';
 
     // We wait for a notification for the AJAX loading of the Comments metadata tab.
@@ -40,8 +40,8 @@ viewers.Comments = Class.create({
   },
   /** Enhance the Comments UI with JS behaviors. */
   startup : function() {
-    if (this.conversation.down(".commentform")) {
-      this.form = this.conversation.down(".commentform").up('form');
+    if (this.conversation.down(".AddComment")) {
+      this.form = this.conversation.down(".AddComment").up('form');
     } else {
       this.form = undefined;
     }
@@ -57,7 +57,7 @@ viewers.Comments = Class.create({
   addConversationHandlers : function() {
     this.addConversationDeleteListener();
     this.addConversationEditListener();
-    this.addConversationHideListener();
+    // this.addConversationHideListener();
     this.addConversationLikeListener();
     this.addConversationPermalinkListener();
   },
@@ -103,7 +103,7 @@ viewers.Comments = Class.create({
                 // Remove the corresponding HTML element from the UI and update the comment count
                 var comment = item.up(this.xcommentSelector);
                 // If the form is inside this comment's reply thread, move it back to the bottom.
-                if (this.form && this.form.descendantOf(comment.next('.commentthread'))) {
+                if (this.form && this.form.descendantOf(comment.next('.commentreplies'))) {
                   this.resetForm();
                 }
                 // Replace the comment with a "deleted comment" placeholder
@@ -163,21 +163,37 @@ viewers.Comments = Class.create({
                 item._x_notification = new XWiki.widgets.Notification("$msg.get('core.viewers.comments.editForm.fetch.inProgress')", "inprogress");
               },
               onSuccess : function(response) {
-                // Hide other comment editing forms (allow only one comment to be edited at a time)
+                try {
+                 // Hide other comment editing forms (allow only one comment to be edited at a time)
                 if (this.editing) {
                   this.cancelEdit(false, this.editing);
                 }
                 // Replace the comment text with a form for editing it
                 var comment = item.up(this.xcommentSelector);
-                comment.insert({before: response.responseText});
-                item._x_editForm = comment.previous();
+                comment.insert({after: response.responseText});
+                item._x_editForm = comment.next();
                 this.addSubmitListener(item._x_editForm);
                 this.addPreview(item._x_editForm);
                 item._x_editForm.down('a.cancel').observe('click', this.cancelEdit.bindAsEventListener(this, item));
                 comment.hide();
-                item._x_notification.hide();
                 // Currently editing: this comment
                 this.editing = item;
+                } catch (e) {
+                  console.log("Failed to activate editing: " + e);
+                }   
+ 
+                // activate wysiwyg. We will use the configuration from the other textarea
+                try {
+                var convTextArea = this.container.down("form")["XWiki.XWikiComments_comment"];
+                var wConfig = WysiwygConfig[convTextArea.id];
+                wConfig.hookId = item._x_editForm.down("textarea").id;
+                wConfig.cacheId = item._x_editForm.down("input").id;
+                item._x_editForm.wysiwyg = new WysiwygEditor(wConfig);
+                // XWiki.widgets.fs.addBehavior(item._x_editForm.down(".xRichTextEditor")); 
+                } catch (e) {
+                  console.log("Failed to activate wysiwyg: " + e);
+                }   
+                item._x_notification.hide();
               }.bind(this),
               onFailure : function (response) {
                 var failureReason = response.statusText;
@@ -228,8 +244,8 @@ viewers.Comments = Class.create({
           item.blur();
           event.stop();
           // If the form was already displayed as a reply, re-enable the Reply button for the old location
-          if (this.form.up('.commentthread')) {
-            this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
+          if (this.form.up('.commentreplies')) {
+            this.form.up(".commentreplies").previous(this.xcommentSelector).down('a.commentreply').show();
           }
 
          // Before moving the editor we need to unload the wysiwyg editor
@@ -356,7 +372,7 @@ viewers.Comments = Class.create({
     if (this.form) {
       // I have no idea what this initial location is used for, but we leave it here and correct it to use .commentscontent instead of #_comments
       this.initialLocation = new Element("span", {className : "hidden"});
-      this.conversation.down('.commentscontent').insert(this.initialLocation);
+      this.conversation.down('.answer').insert(this.initialLocation);
       // If the form is inside a thread, as a reply form, move it back to the bottom.
       var that = this;
       this.form.down('a.cancel').observe('click', this.resetForm.bindAsEventListener(this));
@@ -374,7 +390,7 @@ viewers.Comments = Class.create({
     var buttons = form.down('input[type=submit]').up('div');
     form.previewButton = new Element('span', {'class' : 'buttonwrapper'}).update(new Element('input', {'type' : 'button', 'class' : 'button', 'value' : "$msg.get('core.viewers.comments.preview.button.preview')"}));
     form.previewButton._x_modePreview = false;
-    form.previewContent = new Element('div', {'class' : 'commentcontent commentPreview'});
+    form.previewContent = new Element('div', {'class' : 'answer commentPreview'});
     form.commentElt.insert({'before' : form.previewContent});
     form.previewContent.hide();
     buttons.insert({'top' : form.previewButton});
@@ -433,19 +449,21 @@ viewers.Comments = Class.create({
    * @param form the form for which the preview is canceled
    */
   cancelPreview : function(form) {
+    if (form.previewButton != undefined) {
     form.previewButton._x_modePreview = false;
     form.previewContent.hide();
     form.previewContent.update('');
     form.commentElt.show();
     form.previewButton.down('input').value = "$msg.get('core.viewers.comments.preview.button.preview')";
+    }
   },
   resetForm : function (event) {
     if (event) {
       event.stop();
     }
-    if (this.form.up('.commentthread')) {
+    if (this.form.up('.commentreplies')) {
       // Show the comment's reply button
-      this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
+      this.form.up(".commentreplies").previous(this.xcommentSelector).down('a.commentreply').show();
 
       // Before moving the editor we need to unload the wysiwyg editor
       var tarea = this.form["XWiki.XWikiComments_comment"];
@@ -467,8 +485,8 @@ viewers.Comments = Class.create({
    * Customized to take into account the new display of the conversation count.
    */
   updateCount : function() {
-    if (this.conversation.down('.conversation-count')) {
-      this.conversation.down('.conversation-count').update($$(this.xcommentSelector).size());
+    if (this.conversation.down('.topic-comments')) {
+      this.conversation.down('.topic-comments').update($$(this.xcommentSelector).size());
     }
   },
   /**
@@ -520,7 +538,7 @@ viewers.Comments = Class.create({
             },
             onSuccess : function() {
               // Remove the corresponding HTML element from the UI
-              var conversation = conversationDelete.up('.conversation');
+              var conversation = conversationDelete.up('.answer');
               // Replace the comment with a "deleted conversation" placeholder
               conversation.replace(this.createNotification("$msg.get('conversation.delete.success')"));
             }.bind(this),
@@ -562,8 +580,8 @@ viewers.Comments = Class.create({
       var editForm = new Element('form', {'method' : 'post', 'action' : saveUrl})
       conversationEditFormContainer.insert(editForm);
       // create the buttons for the future form, but don't insert them just yet
-      var saveButton = new Element('input', {'type' : 'submit', 'value' : '$escapetool.javascript($msg.get("save"))', 'class' : 'button'});
-      var cancelButton = new Element('a', {'href' : window.location.href, 'class' : 'button'}).insert('$msg.get("cancel")');
+      var saveButton = new Element('input', {'type' : 'submit', 'value' : '$escapetool.javascript($msg.get("save"))', 'class' : 'button-orange'});
+      var cancelButton = new Element('a', {'href' : window.location.href, 'class' : 'button-grey'}).insert('$msg.get("cancel")');
       cancelButton.observe('click', function(event) {
         var conversationFormContainer = event.findElement('.conversation-editformcontainer');
         if (conversationFormContainer) {
@@ -581,6 +599,11 @@ viewers.Comments = Class.create({
           // put the redirect in the form and wait for the prey...
           editForm.insert(new Element('input', {'type' : 'hidden', 'name' : 'xredirect', 'value' : window.location.href}));
           editForm.insert(buttonsContainer);
+
+          // activate wysiwyg. We will use the configuration from the other textarea
+          var convTextArea = this.form["XWiki.XWikiComments_comment"];
+          editForm.wysiwyg = new WysiwygEditor(WysiwygConfig[convTextArea.id]);
+          XWiki.widgets.fs.addBehavior(editForm.down(".xRichTextEditor"));    
         }.bind(this),
         onFailure : function (response) {
           var failureReason = response.statusText;
@@ -600,7 +623,7 @@ viewers.Comments = Class.create({
     }.bindAsEventListener(this));
   },
   toggleConversationContent : function() {
-    var commentsContent = this.conversation.down('.commentscontent');
+    var commentsContent = this.conversation.down('.answer');
     if (commentsContent) {
       commentsContent.toggleClassName('hidden');
     }
@@ -613,7 +636,7 @@ viewers.Comments = Class.create({
       * Hide the conversation if it's not focused and add a handler to toggle it.
       *
       */
-    addConversationHideListener : function() {
+    addConveanswerrsationHideListener : function() {
       var isVisible = false;
       // we cannot use .xwikicomment:target here since we're not sure it;s already loaded (e.g. on chrome) so we read the anchor manually
       var anchor = window.location.hash;
@@ -746,7 +769,7 @@ function conversationLikeHandler(event) {
 
 function init() {
  
-  $$('.conversation').each(function(conv) {
+  $$('.answer').each(function(conv) {
     new XWiki.viewers.Comments(conv);
   });
 
@@ -797,8 +820,9 @@ function init() {
     });
     
     // add vote click handler for the topic
-    var topicDiv = $('conversation-topic');
-    var topicLike = topicDiv.down('.conversation-like img.canVote');
+    /*
+     var topicDiv = $('conversation-topic');
+     var topicLike = topicDiv.down('.conversation-like img.canVote');
       
     // if there is no clickable button, return, don't do anything
     if (topicLike) {
@@ -808,6 +832,7 @@ function init() {
          conversatonLikeHandler(event);
       }.bindAsEventListener(this));
     }
+    */
     // end topicLike listener
 
   }); 
