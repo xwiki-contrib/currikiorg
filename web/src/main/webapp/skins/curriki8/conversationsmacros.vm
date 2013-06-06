@@ -141,7 +141,7 @@
        #mediumUserAvatar2($context.user)
        </span>
        <div class="answer-reply">
-				<span class="answer-meta">
+		<span class="answer-meta">
         #if($xcontext.user != 'XWiki.XWikiGuest')
           $msg.get('core.viewers.comments.add.guestName.prompt') $xwiki.getUserName($xcontext.user)
           <input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>
@@ -149,13 +149,13 @@
           $msg.get('core.viewers.comments.add.guestName.prompt') <input type="text" id="${xCommentClass}_author" name="${xCommentClass}_author" value="$author"/>
           <a href='$escapetool.xml($xwiki.getURL('XWiki.XWikiLogin', 'login', "xredirect=$escapetool.url($xwiki.getRequestURL())"))'>$msg.get('login')</a>
         #end
-        		</span>
-				<div class="answer-content">
-		## CSRF prevention
-        <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
-        <input type="hidden" name="${xCommentClass}_date" value=""/>
-        <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
-        <div class="commentcontainer">
+        </span>
+		<div class="answer-content">
+		 ## CSRF prevention
+         <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
+         <input type="hidden" name="${xCommentClass}_date" value=""/>
+         <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
+         <div class="commentcontainer">
            <label for="${xCommentClass}_comment_${conversationId}">$msg.get('core.viewers.comments.add.comment.label')</label>
            <textarea id='${xCommentClass}_comment_${conversationId}' rows='5' cols="80" name='${xCommentClass}_comment' class="maximizable">$!comment</textarea>
            ## adding to wysiwyg editors
@@ -164,15 +164,16 @@
            #else
             #set($editors = "${editors},${xCommentClass}_comment_${conversationId}")
            #end
-        </div>
-        #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
+         </div>
+         #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
           #displayCaptcha()
-        #end
-        <div>
-          <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')" class="button"/></span>
-          <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a></span>
-        </div>
-       </div> 
+         #end
+         <div>
+          <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')"/>
+          <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a>
+         </div>
+        </div> 
+       </div>
       </form>
      </div>  
     #end   
@@ -548,17 +549,16 @@ addthis:description="${escapetool.xml($addThisDesc)}"
                      </span>
 					</span>
 				</div>
-			</div><!-- / .answer-reply -->
-
-        <div class="answer-moderation">
+		 </div><!-- / .answer-reply -->
+         <div class="answer-moderation">
             #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
             #if($xwiki.hasAccessLevel('delete', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))        
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($conversationDoc.documentReference, 'compactwiki'))}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
-        </div>
-		</div><!-- / .answer-layout -->
+         </div><!-- / .answer-moderation -->
+	    </div><!-- / .answer-layout -->
         <div class="comments">
           #if($comments.size() > 0)
             #set($rootKey = "-1")
@@ -581,10 +581,10 @@ addthis:description="${escapetool.xml($addThisDesc)}"
           #if(!$replied)
             #displayCommentForm($conversationDoc)
           #end
-        </div>
-      </div>
+        </div><!-- / .comments -->
+      </div><!-- / .answer -->
     #end
-  </div>
+  </div><!-- / .answers -->
 #end
 ##
 ##
