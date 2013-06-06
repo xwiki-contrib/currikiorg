@@ -134,14 +134,14 @@
       #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#${conversationId}")
     #end
    #if($xcontext.user != 'XWiki.XWikiGuest')
-    <div class="answer user">
+    <div class="comment user">
      <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
       <div class="answer-layout">
        <span class="user-avatar">
        #mediumUserAvatar2($context.user)
        </span>
-       <div class="answer-reply">
-		<span class="answer-meta">
+       <div class="comment-reply">
+		<span class="comment-meta">
         #if($xcontext.user != 'XWiki.XWikiGuest')
           $msg.get('core.viewers.comments.add.guestName.prompt') $xwiki.getUserName($xcontext.user)
           <input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>
@@ -150,7 +150,7 @@
           <a href='$escapetool.xml($xwiki.getURL('XWiki.XWikiLogin', 'login', "xredirect=$escapetool.url($xwiki.getRequestURL())"))'>$msg.get('login')</a>
         #end
         </span>
-		<div class="answer-content">
+		<div class="comment-content">
 		 ## CSRF prevention
          <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
          <input type="hidden" name="${xCommentClass}_date" value=""/>
