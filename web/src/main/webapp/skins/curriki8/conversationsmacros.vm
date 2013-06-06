@@ -125,7 +125,7 @@
  #if ("$!conversationId" == "")
     #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
  #end
- #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
+ #if($xwiki.hasAccessLevel('edit', $xcontext.user, $commentDoc.prefixedFullName))
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
     ## for the new comment form, redirect to the conversation itself
     #if ("$!replyTo" != "")
@@ -177,6 +177,14 @@
       </form>
      </div>  
     #end   
+  #else
+   <div class="answer user">
+   #if($s)
+    <p class="norights">$msg.get('conversation.groups.norights')</p>
+   #else
+    <p class="norights">$msg.get('conversation.norights')</p>   
+   #end
+   </div>
   #end
 #end
 ##
