@@ -304,7 +304,7 @@
 ###
 ###
 #macro(displayTopicAddForm $space)
-    <div class="addconversation-container">
+    <div class="addconversation-container addtopic-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
     <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
@@ -345,7 +345,7 @@
 ##
 ##
 #macro(displayConversationAddForm)
-  <div class="addconversation-container">
+  <div class="addconversation-container addanswer-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
     <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
