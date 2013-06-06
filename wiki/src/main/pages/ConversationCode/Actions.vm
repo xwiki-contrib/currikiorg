@@ -9,7 +9,7 @@
         #set($newTopicName = "$!request.space." + $xwiki.getUniquePageName("$!request.space", 'Topic'))
         #set($topicTitle = "$!request.title.trim()")
         #set($topicDoc = $xwiki.getDocument($newTopicName))
-        #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($topicDoc.documentReference, $context.database)))
+        #if($xwiki.hasAccessLevel('edit', $xcontext.user, $newTopicName))
           ## Add the TopicClass object
           #set($discard = $topicDoc.updateObjectFromRequest('ConversationCode.TopicClass'))
           $topicDoc.setTitle($topicTitle)
@@ -40,7 +40,7 @@
       #end
       #set($newAnswerDocName = "${spaceName}.${newAnswerName}")
       #set($newAnswerDoc = $xwiki.getDocument($newAnswerDocName))
-      #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($topicDoc.documentReference, $context.database))) 
+      #if($xwiki.hasAccessLevel('edit', $xcontext.user, $newAnswerDocName)) 
         #if($newAnswerDoc.isNew())     
           $newAnswerDoc.setParent("${spaceName}.${topicName}")
           #set($discard = $newAnswerDoc.updateObjectFromRequest('ConversationCode.AnswerClass'))
@@ -53,7 +53,9 @@
         #end 
       #else
         $response.setStatus(403)
-        {{warning}}$msg.get('conversations.create.error.answer.norights'){{/warning}}
+        {{warning}}$msg.get('conversations.create.error.answer.norights')
+${spaceName}.${newAnswerName}
+{{/warning}}
       #end    
     #else
       {{warning}}Not enough parameters.{{/warning}}
@@ -72,7 +74,7 @@
       #if (!$isDeleteComment)
         #set($requiredRight = 'delete')
       #end
-      #if($xwiki.hasAccessLevel($requiredRight, $xcontext.user, $services.model.serialize($conversationDoc.documentReference, $context.database)))
+      #if($xwiki.hasAccessLevel($requiredRight, $xcontext.user, $conversationDoc.fullName))
         ## do the action then send a mail
         ## 0. collect some data we need after
         ## get a representation of the deleted item
@@ -134,3 +136,4 @@
   #end##action switch
 #end##csrf token verification
 {{/velocity}}
+
