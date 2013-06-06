@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1288828634000</creationDate>
-<date>1289421677000</date>
-<contentUpdateDate>1291852824000</contentUpdateDate>
-<version>23.1</version>
+<date>1369944299000</date>
+<contentUpdateDate>1369944299000</contentUpdateDate>
+<version>9.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,91 +52,63 @@
 <name>Search.SearchWidget</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>816472f4-b381-423f-86d3-cd52c679dd93</guid>
 <property>
 <tags/>
 </property>
 </object>
-<content>&lt;div class="adv_search"&gt;
-
-  &lt;h2  class="special"&gt;advanced search&lt;/h2&gt;
-  &lt;ul&gt;
-    &lt;li&gt;Click on a subject or grade level to view all lessons for the subject or grade level.&lt;/li&gt;
-    &lt;li&gt;To narrow your search, select a subject and grade level.&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/div&gt;
-
-  &lt;!--begin search form fields--&gt;
-      &lt;form id="chpAdvSearchForm" name="chpAdvSearchForm" method="GET" action="/xwiki/bin/view/Search/SearchWidgetJump"&gt;
-        &lt;table&gt;
-          &lt;tr&gt;
-            &lt;td&gt;&lt;h3&gt;Teacher resources by grade + subject&lt;/h3&gt;&lt;/td&gt;
-          &lt;/tr&gt;
-          &lt;tr&gt;&lt;td&gt;&lt;!-- WARNING: after each input is a non-break-space, the equivalent of &amp;nbsp;, as a real character --&gt;
+<content>&lt;!--begin search form fields--&gt;
+&lt;form id="chpAdvSearchForm" name="chpAdvSearchForm" method="GET" action="/xwiki/bin/view/Search/SearchWidgetJump"&gt;
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;td colspan="2"&gt;&lt;h3&gt;Teacher resources by grade + subject&lt;/h3&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;!-- WARNING: after each input is a non-break-space, the equivalent of &amp;nbsp;, as a real character --&gt;
             &lt;h4&gt;grade range/age range: &lt;/h4&gt;
-              &lt;label&gt;&lt;input name="level" type="radio" value="" checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="level" type="radio" value="gr-k-2" /&gt; K-2&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="level" type="radio" value="gr-3-5" /&gt; 3-5&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="level" type="radio" value="gr-6-8" /&gt; 6-8&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="level" type="radio" value="gr-9-10" /&gt; 9-10&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="level" type="radio" value="gr-11-12"/&gt; 11-12&lt;/label&gt;&lt;br/&gt;
-           &lt;/td&gt;&lt;td&gt;
+            &lt;label&gt;&lt;input name="level" type="radio" value="" checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="level" type="radio" value="gr-k-2" /&gt; K-2&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="level" type="radio" value="gr-3-5" /&gt; 3-5&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="level" type="radio" value="gr-6-8" /&gt; 6-8&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="level" type="radio" value="gr-9-10" /&gt; 9-10&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="level" type="radio" value="gr-11-12"/&gt; 11-12&lt;/label&gt;&lt;br/&gt;
+        &lt;/td&gt;&lt;td&gt;
             &lt;h4&gt;subject:&lt;/h4&gt;
-              &lt;label&gt;&lt;input name="subject" type="radio" value="" checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.LanguageArts" /&gt; language arts&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.Mathematics" /&gt; mathematics&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.Science" /&gt; science&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.SocialStudies" /&gt; social studies&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.ForeignLanguages"/&gt; world languages&lt;/label&gt;&lt;br/&gt;
-            &lt;/td&gt;
-          &lt;/tr&gt;
-          &lt;tr&gt;
+            &lt;label&gt;&lt;input name="subject" type="radio" value="" checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.LanguageArts" /&gt; language arts&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.Mathematics" /&gt; mathematics&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.Science" /&gt; science&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.SocialStudies" /&gt; social studies&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="subject" type="radio" value="FW_masterFramework.ForeignLanguages"/&gt; world languages&lt;/label&gt;&lt;br/&gt;
+        &lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
             &lt;td colspan="2"&gt;&lt;h3&gt;Teacher resources by type&lt;/h3&gt;&lt;/td&gt;
-          &lt;/tr&gt;
-          &lt;tr&gt;&lt;td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;
             &lt;h4&gt;type of resource: &lt;/h4&gt;
-              &lt;label&gt;&lt;input name="mediatype" type="radio" value=""  checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="mediatype" type="radio" value="interactive" /&gt; interactive&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="mediatype" type="radio" value="video" /&gt; video&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="mediatype" type="radio" value="audio" /&gt; podcast&lt;/label&gt;&lt;br/&gt;
-          &lt;/td&gt;&lt;td&gt;
-              &lt;h4&gt;type of usage:&lt;/h4&gt;
-              &lt;label&gt;&lt;input name="ict" type="radio" value="" checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="ict" type="radio" value="activity_exercise" /&gt; exercise&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="ict" type="radio" value="curriculum_unit" /&gt; unit&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="ict" type="radio" value="curriculum_lp" /&gt; lesson plan&lt;/label&gt;&lt;br/&gt;
-              &lt;label&gt;&lt;input name="ict" type="radio" value="activity_game"/&gt; games&lt;/label&gt;&lt;br/&gt;
-          &lt;/td&gt;&lt;/tr&gt;
-          &lt;tr&gt;
-            &lt;td colspan="2" align="right"&gt;
-                &lt;input type="submit" value="go"&gt;
+            &lt;label&gt;&lt;input name="mediatype" type="radio" value=""  checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="mediatype" type="radio" value="interactive" /&gt; interactive&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="mediatype" type="radio" value="video" /&gt; video&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="mediatype" type="radio" value="audio" /&gt; podcast&lt;/label&gt;&lt;br/&gt;
+            &lt;!-- &lt;input name="text" type="text" id="curriki-searchbox" size="20"&gt;&lt;br&gt; --&gt;
+        &lt;/td&gt;&lt;td&gt;
+            &lt;h4&gt;type of usage:&lt;/h4&gt;
+            &lt;label&gt;&lt;input name="ict" type="radio" value="" checked="checked"/&gt; any&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="ict" type="radio" value="activity_exercise" /&gt; exercise&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="ict" type="radio" value="curriculum_unit" /&gt; unit&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="ict" type="radio" value="curriculum_lp" /&gt; lesson plan&lt;/label&gt;&lt;br/&gt;
+            &lt;label&gt;&lt;input name="ict" type="radio" value="activity_game"/&gt; games&lt;/label&gt;&lt;br/&gt;
+        &lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;
+        &lt;/td&gt;
+            &lt;td class="adv_search_go_align" &gt;
+              &lt;a href="javascript:document.getElementById('chpAdvSearchForm').submit();"&gt;go&amp;raquo;&lt;/a&gt;
             &lt;/td&gt;
-          &lt;/tr&gt;
-        &lt;/table&gt;
-      &lt;/form&gt;
-      &lt;!--end search form fields--&gt;
-      &lt;!--begin google search + bullets--&gt;
-
-        &lt;div style="background-color:#CCCCCC"&gt;
-          &lt;p style="background-color:#0066CC; color:#fff"&gt; google search&lt;/p&gt;
-          &lt;ul&gt;
-            &lt;li&gt;search for resources by subject, grade, or keywords.&lt;/li&gt;
-          &lt;/ul&gt;
-          &lt;form name="chpGoogleForm" action="/xwiki/bin/view/Main/GoogleSearchResults" id="cse-search-box"&gt;
-          &lt;label&gt;
-          &lt;input type="text" name="q" /&gt;
-&lt;input type="hidden" name="cx" value="009445585974142445861:5jwom-vlw5i"&gt;
-    &lt;input type="hidden" name="cof" value="FORID:11"&gt;
-    &lt;input type="hidden" name="ie" value="UTF-8"&gt;
-          &lt;/label&gt;
-          &lt;a href='javaScript:document.chpGoogleForm.submit()'&gt;go&gt;&gt;&lt;/a&gt;
-
-           &lt;/form&gt;
-        &lt;/div&gt;
-    &lt;!--end google search + bullets--&gt;
-
-
-## &lt;a href="http://current.dev.curriki.org/xwiki/bin/view/Search/#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ecategory%25253Ds%2525253Avideo%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%25255Especial%25253Ds%2525253A%255Egroup%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Asubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Ecurriki%253Do%25253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1"&gt;monster URL... does it not jump?&lt;/a&gt;
-
-{/pre}
+        &lt;/tr&gt;
+   &lt;tr&gt;&lt;td colspan="2" style="height:3ex"&gt;
+     &lt;!-- &lt;a onclick="this.href='/xwiki/bin/view/Search/#o%3Aa%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'; return true;" href="/xwiki/bin/view/Search/"&gt;Advanced Search&lt;/a&gt; --&gt;
+    &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/form&gt;
+&lt;!--end search form fields--&gt;
 </content></xwikidoc>

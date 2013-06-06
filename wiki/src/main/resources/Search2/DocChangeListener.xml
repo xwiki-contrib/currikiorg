@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1298699901000</creationDate>
-<date>1348084400000</date>
-<contentUpdateDate>1348084400000</contentUpdateDate>
-<version>56.1</version>
+<date>1369944295000</date>
+<contentUpdateDate>1369944295000</contentUpdateDate>
+<version>9.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Search2.DocChangeListener</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>d04a49ef-0d48-44d8-8c9b-ce125f7ac35b</guid>
+<guid>958c1c24-3773-45ba-a697-e360e70beb4e</guid>
 <property>
 <tags/>
 </property>
@@ -70,6 +70,7 @@ import org.apache.commons.logging.Log;
 import org.curriki.xwiki.plugin.curriki.CurrikiPlugin
 import java.lang.management.ManagementFactory
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.ServletContext
 
 
 public class DocChangeListener implements XWikiDocChangeNotificationInterface, XWikiActionNotificationInterface
@@ -106,7 +107,7 @@ public class DocChangeListener implements XWikiDocChangeNotificationInterface, X
         System.err.println( "DocChangeListener (" + this + ") starting.");
         def servletContext = context.getContext().getEngineContext().getServletContext();
         def previousDocChangeListener =  servletContext.getAttribute("DocChangeListener");
-if(previousDocChangeListener!=null) {
+        if(previousDocChangeListener!=null) {
             LOG.warn("A previous DocChangeListener was already there, not attaching this one.", new Exception());
         } else {
             this.xwiki = xwiki;
@@ -116,10 +117,11 @@ if(previousDocChangeListener!=null) {
             LOG.warn("DocChangeListener ("+ this+") started.");
         }
     }
-    public void stop()
+    public void stop(Context context)
     {
         xwiki.getNotificationManager().removeGeneralRule(this.rule);
-        previousDocChangeListener = null;
+        def servletContext = context.getContext().getEngineContext().getServletContext();
+        servletContext.removeAttribute("DocChangeListener");
         System.err.println("DocChangeListener ("+ this + ") stopped.");
     }
 
@@ -141,7 +143,7 @@ if(previousDocChangeListener!=null) {
                        int event, XWikiContext context) {
         LOG.warn("notify from XWikiDocChangeNotificationInterface, event=" + event
                 + ", newDoc=" + toStringAndClass(newdoc) + " oldDoc=" + toStringAndClass(olddoc));
-        if(newdoc == null &amp;&amp; olddoc == null) return;
+        if(newdoc == null &amp;&amp; olddoc == null || newdoc instanceof LazyXWikiDocument || olddoc instanceof LazyXWikiDocument) return;
         try {
             URL u = null;
             XWikiDocument doc = null;
