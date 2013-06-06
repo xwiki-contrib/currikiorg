@@ -129,9 +129,9 @@
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
     ## for the new comment form, redirect to the conversation itself
     #if ("$!replyTo" != "")
-      #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#xwikicomment_${conversationId}_${replyTo}")
+      #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#xwikicomment_${conversationId}_${replyTo}")
     #else
-      #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#${conversationId}")
+      #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#${conversationId}")
     #end
    #if($xcontext.user != 'XWiki.XWikiGuest')
     <div class="answer user">
@@ -363,7 +363,7 @@
       
       <div class="buttons">
         <input class="button-orange" type="submit" class="button" value="$msg.get('save')" />
-        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversations')" class="cancel">$msg.get('cancel')</a>
+        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
   </div>

@@ -55,12 +55,12 @@
 #if($doc.space.startsWith("Group_") && ($doc.name=="Discussions" && $request.viewer))
  $response.sendRedirect($doc.getURL())
 #end
-#if($doc.space.startsWith("Group_") && ($doc.name!="Discussions"))
- #curriki_breadcrumb()
+#curriki_breadcrumb()
+#if(($doc.space.startsWith("Group_")||$doc.space.startsWith("Discussions_Group_")) && ($doc.name!="Discussions"))
  <div id="content">
  #groupinit()
  #groupsheader("discussions")
- #set($space = "${doc.space}_Discussions")
+ #set($space = "Discussions_${doc.space}")
 #else
  #set($space = $doc.space)
 #end
