@@ -77,7 +77,7 @@
   <div id="xwikicomment_${conversationId}_${comment.number}" class="comment $commentodd #if($comment.getProperty('author').value == $commentDoc.creator) commentByCreator#end">
     <span class="user-avatar">
      #if("$!comment.replyto" == '')#smallUserAvater2($comment.author)#{else}#smallUserAvater2($comment.author)#end
-    <span> 
+    </span> 
     <span class="answer-meta">
 		<span class="user">$!xwiki.getUserName($doc.display('author', 'view', $comment))</span>
 		#set($date = $comment.getProperty('date').value)
