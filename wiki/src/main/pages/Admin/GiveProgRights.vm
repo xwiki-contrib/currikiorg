@@ -42,6 +42,11 @@ This script automatically set the owner of the pages in Groups, MyCurriki spaces
 
 #end
 ##
+#foreach($item in $xwiki.searchDocuments("where doc.web='ConversationCode'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
 #foreach($item in $xwiki.searchDocuments("where (doc.fullName in ('Members.MyBlog', 'XWiki.MyBlogGroovy',
  'CreateResources.AssetDone', 'CreateResources.StyledMacros','Affiliate.RegistrationTemplate','Affiliate.AffiliateManagement','Affiliate.PartnerEncryptGroovy',
 'AdWordsJump.LandingPageLogWriter','AdWordsJump.LandingPageLog',
