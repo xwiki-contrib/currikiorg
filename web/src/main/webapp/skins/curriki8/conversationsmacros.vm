@@ -121,11 +121,11 @@
 ##
 ##
 #macro(displayCommentForm $commentDoc)
-  ## compute the conversation id to make proper permalinks for comments
-  #if ("$!conversationId" == "")
+ ## compute the conversation id to make proper permalinks for comments
+ #if ("$!conversationId" == "")
     #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
-  #end
-  #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
+ #end
+ #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
     ## for the new comment form, redirect to the conversation itself
     #if ("$!replyTo" != "")
@@ -134,8 +134,8 @@
       #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#${conversationId}")
     #end
    #if($xcontext.user != 'XWiki.XWikiGuest')
-  <div class="answer user">
-   <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
+    <div class="answer user">
+     <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
       <div class="answer-layout">
        <span class="user-avatar">
        #mediumUserAvatar2($context.user)
@@ -172,8 +172,11 @@
           <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')" class="button"/></span>
           <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a></span>
         </div>
-     #end   
-   #end
+       </div> 
+      </form>
+     </div>  
+    #end   
+  #end
 #end
 ##
 ##
