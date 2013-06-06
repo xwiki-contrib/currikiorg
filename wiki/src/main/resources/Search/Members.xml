@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1218241313000</creationDate>
-<date>1240858551000</date>
-<contentUpdateDate>1266877071000</contentUpdateDate>
-<version>21.1</version>
+<date>1369944299000</date>
+<contentUpdateDate>1369944299000</contentUpdateDate>
+<version>9.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,7 +52,7 @@
 <name>Search.Members</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>df70e874-07fd-4f0f-ad09-01a47bcc63d9</guid>
 <property>
 <tags/>
 </property>
@@ -65,167 +65,167 @@
 ##   pagename, title, ict, contributor, contributorName, review
 #set($lucene = $xwiki.getPlugin("lucene"))
 #if(!$lucene) ##{
-	{'resultCount':'0', 'rows':[]}
+{'resultCount':'0', 'rows':[]}
 #else ## }{
-	##
-	## Set start and limit for result list
-	##
-	#set($Integer = 0)
-	#set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
-	#set($start = 0)
-	#if("$!request.start" != "") ##{
-		#set($start = $Integer.parseInt($request.start))
-	#end ##}
-	#set($start = 1 + $start)
-	#set($start = "$start")
-	#set($limit = "25")
-	#if("$!request.limit" != "") ##{
-		#set($limit = $request.limit)
-	#end ##}
-	##
-	## Set sort field
-	##
-	#set($sortField1 = 'XWiki.XWikiUsers.first_name.untokenized')
-	#set($sortField2 = 'XWiki.XWikiUsers.last_name.untokenized')
-	#if($!request.sort != "") ##{
-		#if($request.sort == "name1") ##{
-			#set($sortField1 = 'XWiki.XWikiUsers.first_name.untokenized')
-			#set($sortField2 = 'XWiki.XWikiUsers.last_name.untokenized')
-		#end ##}
-		#if($request.sort == "name2") ##{
-			#set($sortField1 = 'XWiki.XWikiUsers.last_name.untokenized')
-			#set($sortField2 = 'XWiki.XWikiUsers.first_name.untokenized')
-		#end ##}
-	#end ##}
-	#if($!request.dir == "DESC") ##{
-		#set($sortField1 = "-${sortField1}")
-	#end ##}
-	#set($sortFields = "${sortField1},${sortField2}")
-	#set($sortFields = $sortFields.split(","))
-	##
-	## Create query
-	##
-	#set($q = $xwiki.arrayList)
-	##
-	## Terms
-	#if($!request.terms != "") ##{
-		#foreach($term in $request.terms.split(" ")) ##{
-			#set($value = $term.trim())
-			#if($value != "") ##{
-				#set($junk = $q.add("(XWiki.XWikiUsers.first_name:${value} OR XWiki.XWikiUsers.last_name:${value} OR name:${value})"))
-			#end ##}
-		#end ##}
-	#end ##}
-	##
-	## Subject
-	#if($!request.subject != "") ##{
-		#set($junk = $q.add("XWiki.XWikiUsers.topics:${request.subject}"))
-	#end ##}
-	##
-	## usertype
-	#if($!request.member_type != "") ##{
-		#set($junk = $q.add("XWiki.XWikiUsers.member_type:${request.member_type}"))
-	#end ##}
-	##
-	## Language
-	#if($!request.language != "") ##{
-		#set($junk = $q.add("XWiki.XWikiUsers.default_language:${request.language}"))
-	#end ##}
-	##
-	## Country
-	#if($!request.country != "") ##{
-		#set($junk = $q.add("XWiki.XWikiUsers.country:${request.country}"))
-	#end ##}
-	##
-	##
-	##
-	## Put together query conditions
-	#set($conditions = "")
-	#foreach($condition in $q) ##{
-		#set($conditions = "$conditions AND $condition")
-	#end ##}
-	##
-	## General query information
-	#set($wikinames = "xwiki")
-	#set($languages = "default,en")
+##
+## Set start and limit for result list
+##
+    #set($Integer = 0)
+    #set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
+    #set($start = 0)
+    #if("$!request.start" != "") ##{
+        #set($start = $Integer.parseInt($request.start))
+    #end ##}
+    #set($start = 1 + $start)
+    #set($start = "$start")
+    #set($limit = "25")
+    #if("$!request.limit" != "") ##{
+        #set($limit = $request.limit)
+    #end ##}
+##
+## Set sort field
+##
+    #set($sortField1 = 'XWiki.XWikiUsers.first_name.untokenized')
+    #set($sortField2 = 'XWiki.XWikiUsers.last_name.untokenized')
+    #if($!request.sort != "") ##{
+        #if($request.sort == "name1") ##{
+            #set($sortField1 = 'XWiki.XWikiUsers.first_name.untokenized')
+            #set($sortField2 = 'XWiki.XWikiUsers.last_name.untokenized')
+        #end ##}
+        #if($request.sort == "name2") ##{
+            #set($sortField1 = 'XWiki.XWikiUsers.last_name.untokenized')
+            #set($sortField2 = 'XWiki.XWikiUsers.first_name.untokenized')
+        #end ##}
+    #end ##}
+    #if($!request.dir == "DESC") ##{
+        #set($sortField1 = "-${sortField1}")
+    #end ##}
+    #set($sortFields = "${sortField1},${sortField2}")
+    #set($sortFields = $sortFields.split(","))
+##
+## Create query
+##
+    #set($q = $xwiki.arrayList)
+##
+## Terms
+    #if($!request.terms != "") ##{
+        #foreach($term in $request.terms.split(" ")) ##{
+            #set($value = $term.trim())
+            #if($value != "") ##{
+                #set($junk = $q.add("(XWiki.XWikiUsers.first_name:${value} OR XWiki.XWikiUsers.last_name:${value} OR name:${value})"))
+            #end ##}
+        #end ##}
+    #end ##}
+##
+## Subject
+    #if($!request.subject != "") ##{
+        #set($junk = $q.add("XWiki.XWikiUsers.topics:${request.subject}"))
+    #end ##}
+##
+## usertype
+    #if($!request.member_type != "") ##{
+        #set($junk = $q.add("XWiki.XWikiUsers.member_type:${request.member_type}"))
+    #end ##}
+##
+## Language
+    #if($!request.language != "") ##{
+        #set($junk = $q.add("XWiki.XWikiUsers.default_language:${request.language}"))
+    #end ##}
+##
+## Country
+    #if($!request.country != "") ##{
+        #set($junk = $q.add("XWiki.XWikiUsers.country:${request.country}"))
+    #end ##}
+##
+##
+##
+## Put together query conditions
+    #set($conditions = "")
+    #foreach($condition in $q) ##{
+        #set($conditions = "$conditions AND $condition")
+    #end ##}
+##
+## General query information
+    #set($wikinames = "xwiki")
+    #set($languages = "default,en")
 ## Search XWiki.*
 ## Has a XWiki.XWikiUsers object
-	#set($include = "XWiki.XWikiUsers.active:1 AND web:XWiki")
-	#set($exclude = "")
-	#set($luceneQuery = "$include $conditions $exclude")
-	##
-	## Do query
-	##
-	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
-	#set($results = $searchResults.getResults($start, $limit))
-	#set($resultCount = $searchResults.totalHitcount)
-	#set($modifiedCount = $resultCount)
-	#if($modifiedCount &gt; $maxResults) ##{
-	#set($modifiedCount = $maxResults)
-	#end ##}
+    #set($include = "XWiki.XWikiUsers.active:1 AND web:XWiki")
+    #set($exclude = "")
+    #set($luceneQuery = "$include $conditions $exclude")
+##
+## Do query
+##
+    #set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
+    #set($results = $searchResults.getResults($start, $limit))
+    #set($resultCount = $searchResults.totalHitcount)
+    #set($modifiedCount = $resultCount)
+    #if($modifiedCount &gt; $maxResults) ##{
+        #set($modifiedCount = $maxResults)
+    #end ##}
 
-	##
-	## List out results
-	##
-	#if("$!resultCount" == "") ##{
-		#set($resultCount = 0)
-	#end ##}
-	{
-	'rows':[
-	#set($first = true)
-	#foreach($result in $results) ##{
-		##
-		## Get each result
-		#set($d = $xwiki.getDocument("${result.web}.${result.name}"))
-		##
-		## Get Picture
-		#set($picture = "")
-		#if($d.attachmentList.size()==0)  ##{
-			#set($picture = $xwiki.getSkinFile("noavatar.png"))
-		#else ##} {
-			#set($attach = $d.attachmentList.get(0))
-			#set($picture = $d.getAttachmentURL($attach.filename, "download"))
-		#end ##}
-		##
-		## Get Name1
-		#set($name1 = $!d.getObject("XWiki.XWikiUsers").getProperty("first_name").getValue())
-		#set($name1 = $name1.replace("'", "&amp;#39;"))
-		##
-		## Get Name2
-		#set($name2 = $!d.getObject("XWiki.XWikiUsers").getProperty("last_name").getValue())
-		#set($name2 = $name2.replace("'", "&amp;#39;"))
-		##
-		## Get URL
-		#set($url = $xwiki.getURL($d.fullName))
-		##
-		## Get Bio
-		#set($bio = "")
-		#set($bio = $!d.getObject("XWiki.XWikiUsers").getProperty("comment").getValue())
-		#set($bio = $bio.replace("'", "&amp;#39;"))
-		#set($bio = $bio.replaceAll("[\n|\r]+", "&lt;br /&gt;"))
-		##
-		## Get Contributions
-		#set($shortname = $d.fullName.substring(6))
-		#set($sql = ", BaseObject as obj where doc.fullName=obj.name and doc.creator='XWiki.${shortname}' and doc.web='Coll_${shortname}' and doc.name != 'Favorites' and doc.name != 'WebHome' and doc.name != 'WebPreferences'")
-		#set($assetList = $xwiki.searchDocuments($sql))
-		#set($contributions = $assetList.size())
-		##
-		##
-		#if($first) ##{
-			#set($first = false)
-		#else ##} {
-			,
-		#end ##}
-		{
-		 'page':'${d.fullName}'
-		,'name1':'${name1}'
-		,'name2':'${name2}'
-		,'url':'${url}'
-		,'bio':'${bio}'
-		,'picture':'${picture}'
-		,'contributions':'${contributions}'
-		}
-	#end ##}
+##
+## List out results
+##
+    #if("$!resultCount" == "") ##{
+        #set($resultCount = 0)
+    #end ##}
+{
+'rows':[
+    #set($first = true)
+    #foreach($result in $results) ##{
+    ##
+    ## Get each result
+        #set($d = $xwiki.getDocument("${result.web}.${result.name}"))
+    ##
+    ## Get Picture
+        #set($picture = "")
+        #if($d.attachmentList.size()==0)  ##{
+            #set($picture = $xwiki.getSkinFile("noavatar.png"))
+        #else ##} {
+            #set($attach = $d.attachmentList.get(0))
+            #set($picture = $d.getAttachmentURL($attach.filename, "download"))
+        #end ##}
+    ##
+    ## Get Name1
+        #set($name1 = $!d.getObject("XWiki.XWikiUsers").getProperty("first_name").getValue())
+        #set($name1 = $name1.replace("'", "&amp;#39;"))
+    ##
+    ## Get Name2
+        #set($name2 = $!d.getObject("XWiki.XWikiUsers").getProperty("last_name").getValue())
+        #set($name2 = $name2.replace("'", "&amp;#39;"))
+    ##
+    ## Get URL
+        #set($url = $xwiki.getURL($d.fullName))
+    ##
+    ## Get Bio
+        #set($bio = "")
+        #set($bio = $!d.getObject("XWiki.XWikiUsers").getProperty("comment").getValue())
+        #set($bio = $bio.replace("'", "&amp;#39;"))
+        #set($bio = $bio.replaceAll("[\n|\r]+", "&lt;br /&gt;"))
+    ##
+    ## Get Contributions
+        #set($shortname = $d.fullName.substring(6))
+        #set($sql = ", BaseObject as obj where doc.fullName=obj.name and doc.creator='XWiki.${shortname}' and doc.web='Coll_${shortname}' and doc.name != 'Favorites' and doc.name != 'WebHome' and doc.name != 'WebPreferences'")
+        #set($assetList = $xwiki.searchDocuments($sql))
+        #set($contributions = $assetList.size())
+    ##
+    ##
+        #if($first) ##{
+            #set($first = false)
+        #else ##} {
+        ,
+        #end ##}
+    {
+    'page':'${d.fullName}'
+    ,'name1':'${name1}'
+    ,'name2':'${name2}'
+    ,'url':'${url}'
+    ,'bio':'${bio}'
+    ,'picture':'${picture}'
+    ,'contributions':'${contributions}'
+    }
+    #end ##}
 ]
 ,'resultCount':'${modifiedCount}'
 ,'totalResults':'${resultCount}'

@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent>Main.AboutContributing</parent>
 <creator>XWiki.panjl</creator>
-<author>XWiki.Admin</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.Admin</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1231834708000</creationDate>
-<date>1368620722000</date>
-<contentUpdateDate>1368620722000</contentUpdateDate>
-<version>35.1</version>
+<date>1370263398000</date>
+<contentUpdateDate>1370263398000</contentUpdateDate>
+<version>8.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -58,6 +58,7 @@
 </property>
 </object>
 <content>{{velocity}}
+#activatefullscreen()
 ## http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/SimpleHTMLResource
 ## originally from http://next.dev.curriki.org/xwiki/bin/edit/CreateResources/SimpleWikiResource?language=en
 ## NPM attempting to emulate first form in http://www.curriki.org/xwiki/bin/view/Project/Form+Templates?xpage=print&amp;language=en
@@ -217,8 +218,10 @@ function setUnloadDialog() {
 {{html clean=false}}
 &lt;input type="text" id="CurrikiCode.AssetClass_0_title" name="CurrikiCode.AssetClass_0_title" maxlength="$msg.get("resource.title.maxlength")" /&gt;
 {{/html}}
+(((
 #curriki20_formprompt($msg.get("form.html.scratch.description_title"), $msg.get("form.html.scratch.description_tooltip"), $msg.get("form.html.scratch.description_txt"), true, "medium")
 $newAsset.display("description","edit")
+)))
 {{html clean=false}}
 &lt;table class="subject-educational"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
 {{/html}}
