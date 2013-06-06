@@ -78,7 +78,7 @@
     <span class="user-avatar">
      #if("$!comment.replyto" == '')#smallUserAvater2($comment.author)#{else}#smallUserAvater2($comment.author)#end
     </span> 
-    <span class="answer-meta">
+    <span class="comment-meta">
 		<span class="user">$!xwiki.getUserName($doc.display('author', 'view', $comment))</span>
 		#set($date = $comment.getProperty('date').value)
 		<span class="time">$!xwiki.formatDate($date)</span>
