@@ -1995,11 +1995,15 @@ Wysiwyg.onModuleLoad(function() {
 #macro (activatefullscreen) 
 $xwiki.jsfx.use('uicomponents/widgets/fullScreen.js', {'forceSkinAction' : true, 'defer' : false})
 $xwiki.ssfx.use('uicomponents/widgets/fullScreen.css', true)
+#if(!$request.viewer)
 #verbatim_start()
+#end
 <script language="javascript" type="text/javascript">
 /* <![CDATA[ */
 document.observe("dom:loaded", function() { new XWiki.widgets.FullScreen(); });
 /* ]]> */
 </script>
+#if(!$request.viewer)
 #verbatim_end()
+#end
 #end
