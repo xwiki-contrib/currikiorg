@@ -18,21 +18,11 @@ viewers.Comments = Class.create({
       this.xcommentSelector = "#" + conversationId + " " + this.xcommentSelector;
     }
 
-    if (this.conversation.down(".answer")) {
-      // If the comments area is already visible, enhance it.
-      this.startup();
-      this.addConversationHandlers();
-    }
-    if ($("Commentstab")) {
-      this.container = $("Commentspane");
-      this.generatorTemplate = "conversationscommentsinline.vm";
-    } else if ($$(".main.layoutsubsection").size() > 0 && $$(".main.layoutsubsection").first().down("#commentscontent")) {
-      this.container = $$(".main.layoutsubsection").first();
-      this.generatorTemplate = "conversationscomments.vm";
-    }
-
+    this.startup();
+    this.addConversationHandlers();
+    
     // don't know yet what is the container used for
-    this.container = this.conversation.down('.answer');
+    this.container = this.conversation;
     this.generatorTemplate = 'conversations.vm';
 
     // We wait for a notification for the AJAX loading of the Comments metadata tab.
@@ -184,8 +174,8 @@ viewers.Comments = Class.create({
  
                 // activate wysiwyg. We will use the configuration from the other textarea
                 try {
-                var convTextArea = this.container.down("form")["XWiki.XWikiComments_comment"];
-                var wConfig = WysiwygConfig[convTextArea.id];
+                var commentAddTextareaId = this.conversation.down(".commentcontainer").down("textarea").id;
+                var wConfig = WysiwygConfig[commentAddTextareaId];
                 wConfig.hookId = item._x_editForm.down("textarea").id;
                 wConfig.cacheId = item._x_editForm.down("input").id;
                 item._x_editForm.wysiwyg = new WysiwygEditor(wConfig);
