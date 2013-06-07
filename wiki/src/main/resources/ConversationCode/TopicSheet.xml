@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
-<creationDate>1369846385000</creationDate>
-<date>1370510783000</date>
-<contentUpdateDate>1370510783000</contentUpdateDate>
-<version>9.1</version>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1357027200000</creationDate>
+<date>1357027200000</date>
+<contentUpdateDate>1357027200000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -24,9 +24,16 @@
 <hidden>false</hidden>
 <content>{{velocity}}
   #if($context.action != 'view')
-    {{edittitle errorkey="conversations.totpic.titleError" /}}
+    {{edittitle errorkey="conversations.topic.titleError" /}}
     : $msg.get('conversations.forum.description')
     ; $doc.display('description')
+
+## control our buttons
+#set($showactions=0)
+{{html clean=false}}
+  &lt;input class="button-grey" type="button" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.${formname}.action='$doc.getURL("cancel")'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit(); this.form.submit();"/&gt;
+  &lt;input class="button-orange" type="submit" name="formactionsave" value="$msg.get("saveandview")" onclick="document.forms.${formname}.action='$doc.getURL("${saveaction}", $param)'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit();if (checkDocumentContent()) document.forms.${formname}.submit(); return false;"/&gt;
+{{/html}}
   #elseif($context.action == 'view' &amp;&amp; $request.viewer != 'conversationstopic')
     $response.sendRedirect($doc.getURL('view', 'viewer=conversationstopic'))
   #end
