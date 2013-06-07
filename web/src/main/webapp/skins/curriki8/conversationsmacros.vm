@@ -533,10 +533,8 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 					<span class="user">$xwiki.getUserName($conversationDoc.creator)</span>
 					<span class="time">$msg.get('conversation.updatedate', [$xwiki.formatDate($conversationDoc.date)])</span>
 					<span class="votes conversation-ratings">
-                     <span class="conversation-like">
+                     <span class="conversation-like" #if($xwiki.ratings.getRating($conversationDoc, $xcontext.user) == $util.null)class="canVote" title="$msg.get('conversation.like.button.tooltip')"#else title="$msg.get('conversation.like.button.alreadyliked.tooltip')"#end >
                       <input type="hidden" name="documenttolike" value="$conversationDoc.fullName" />
-                      <img src="$escapetool.xml($xwiki.getDocument('ConversationCode.Styles').getAttachmentURL('conversation-like.png'))" alt="$escapetool.xml($msg.get('conversation.like.button'))"
-                      #if($xwiki.ratings.getRating($conversationDoc, $xcontext.user) == $util.null)class="canVote" title="$msg.get('conversation.like.button.tooltip')"#else title="$msg.get('conversation.like.button.alreadyliked.tooltip')"#end />
                      </span>
                      #set($rating = $xwiki.ratings.getAverageRating($conversationDoc).nbVotes)
                      <span class="conversation-score" title="$msg.get('conversation.like.score.tooltip', [$rating])">$rating</span>
