@@ -1,4 +1,7 @@
-#if($doc.space.startsWith("Group_") && ($doc.name!="Discussions" || $request.viewer))
- #groupsfooter()
- </div>
+#if($doc.space.startsWith("Group_")||$doc.space.startsWith("Discussions_Group_"))
+ #if($doc.name!="Discussions")
+  #endgroupsection()
+  #groupsfooter()
+  </div>
+ #end 
 #end

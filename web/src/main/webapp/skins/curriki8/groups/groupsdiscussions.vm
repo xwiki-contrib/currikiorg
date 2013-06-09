@@ -34,8 +34,13 @@
   #if( $stopRender )
    ##do nothing
   #else
-   #groups_discussions_home_about()
-   #begingroupsection("${msg.groups_discussions_discussions_title}" "" "" "blue" true)
+   #set( $editLink = "" )
+   #set( $editTitle = "" )
+   #if( $sm.isAdmin( $s.spaceName, $context.user ) || $hasadmin )
+    #set( $editLink = $doc.getURL("edit"))
+    #set( $editTitle = "Edit" )
+   #end
+   #begingroupsection("${msg.groups_discussions_discussions_title}" "${editTitle}" "${editLink}" "blue" true)
    #template("conversationsforum.vm")
    #endgroupsection()
   #end ## end if sheets allow to continue render
