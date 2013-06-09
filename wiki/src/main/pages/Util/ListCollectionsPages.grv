@@ -1,0 +1,45 @@
+
+// <%
+import com.xpn.xwiki.api.*
+import javax.servlet.http.HttpServletRequest;
+
+// XWiki xwiki;
+//Context context;
+//HttpServletRequest request;
+
+println("");
+println("<h1>List Collections' Pages</h1>");
+println("");
+
+
+
+public void printPage(Document d, int depth) {
+    for(i in 0..depth) print("*");
+    println(" " + d.fullName);
+}
+
+public void printPageList(Document d, int depth, XWiki xwiki) {
+    printPage(d, depth);
+    depth++;
+    for(Object obj in d.getObjects("CurrikiCode.SubAssetClass")) {
+        try {
+            Document child = xwiki.getDocument((String) obj.get("assetpage"));
+            if(child!=null) printPageList(child, depth, xwiki);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+}
+
+
+if(request.asset==null) {
+    println("<form action='${doc.name}' method='GET'>");
+    println("<input type='text' name='asset' value='Coll_xx.yyy'>")
+    println("<input type='submit'>")
+} else {
+    printPageList(xwiki.getDocument(request.asset), 0, xwiki);
+}
+
+
+// %>
