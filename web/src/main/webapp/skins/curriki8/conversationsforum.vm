@@ -16,15 +16,21 @@
   #end
 
   ## Display forum title and helpers
-  <div id="forum-header">
-   <span id="forum-title" class="forum-title">
-   <h1>$doc.displayTitle</h1>
-   </span>
-   #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
-   <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.forum.edit')">$msg.get('conversations.forum.edit')</a></span>
-   #end
-   <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
-  </div>
+   #if($doc.space.startsWith("Group_")||$doc.space.startsWith("Discussions_Group_"))
+    <div id="forum-header" class="forum-header-groups">
+     <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
+    </div>
+   #else
+    <div id="forum-header" class="forum-header-nongroups">
+    <span id="forum-title" class="forum-title">
+     <h1>$doc.displayTitle</h1>
+    </span>
+    #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
+     <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.forum.edit')">$msg.get('conversations.forum.edit')</a></span>
+    #end
+    <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
+    </div>
+   #end 
   <div id="forum-description">$doc.display('description')</div>
   <div id="forum-buttons">
   <label>$msg.get("conversations.forum.sorttopicsby")</label>
