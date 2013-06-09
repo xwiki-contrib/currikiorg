@@ -626,7 +626,7 @@ viewers.Comments = Class.create({
       * Hide the conversation if it's not focused and add a handler to toggle it.
       *
       */
-    addConveanswerrsationHideListener : function() {
+    addConversationHideListener : function() {
       var isVisible = false;
       // we cannot use .xwikicomment:target here since we're not sure it;s already loaded (e.g. on chrome) so we read the anchor manually
       var anchor = window.location.hash;
@@ -785,6 +785,31 @@ function init() {
          conversationLikeHandler(event);
       }.bindAsEventListener(this));
   });  
+   
+  // add permalink for topic
+  $$(".topic-actions-permalink a").each(function(topicPermalink) {
+   if (topicPermalink) {
+       topicPermalink.observe('click', function(event) {
+        topicPermalink.blur();
+        event.stop();
+        var permalinkBox = new XWiki.widgets.ConfirmationBox(
+          {
+            onYes : function () {
+              window.location = topicPermalink.href;
+            }
+          },
+          /* Interaction parameters */
+          {
+            confirmationText: "$msg.get('core.viewers.comments.permalink'): <input type='text' class='full' value='" + topicPermalink.href + "'/>",
+            yesButtonText: "$msg.get('core.viewers.comments.permalink.goto')",
+            noButtonText : "$msg.get('core.viewers.comments.permalink.hide')"
+          }
+        );
+        permalinkBox.dialog.addClassName('permalinkBox')
+        permalinkBox.dialog.down('input[type="text"]').select();
+      });
+   }
+ });
    
   // also make the conversation add activator to show the add form when clicked
   $$(".addconversation-activator").each(function(item) {
