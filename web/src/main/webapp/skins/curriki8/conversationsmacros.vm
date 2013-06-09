@@ -402,7 +402,7 @@
    #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
   #end
   #foreach($topic in $topics)
-    #displayForumTopic($topic)
+    #displayForumTopic($topic false)
   #end
   <div id="forum-more">
   <a href="$doc.getURL("view", "viewer=conversationsforum&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
@@ -454,7 +454,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 
 
 ## TO DO : display all metadata, as specified in requirements
-#macro(displayForumTopic $topic)
+#macro(displayForumTopic $topic $withdetails)
   #set($topicDoc = $xwiki.getDocument($topic))  
   #set($topicTitle = $topicDoc.displayTitle)
   #set($topicDescription = $topicDoc.display('description'))
@@ -474,7 +474,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     <h3 class="topic-title"><a href="$topicDoc.getURL()" title="$escapetool.xml($topicTitle)">$topicTitle</a></h3>
     <span class="topic-comments">$nbCommentsAnswers</span>
     <div class="topic-metadata">      
-      <span class="topic-authortype">$!xwiki.getDocument($topicDoc.creator).display("neaoccupation")</span>
+      ## <span class="topic-authortype">$!xwiki.getDocument($topicDoc.creator).display("neaoccupation")</span>
       <span class="topic-metas">
         <span class="topic-author">$!xwiki.getUserName($topicDoc.creator)</span>
         <span class="topic-date">$datetool.format('dd/MM/yyyy', $topicDoc.date)</span> ## Maybe it should be creation date ?
@@ -486,6 +486,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
         </div>
       </span>
     </div>
+  #if($withdetails)
   <div class="topic-description">
     $!topicDescription
     <div class="topic-actions">
@@ -503,6 +504,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
     <a class="topic-delete" href="$topicDoc.getURL("delete")" title="$msg.get("conversations.forum.delete")">$msg.get("conversations.forum.delete")</a>
   </div>
+  #end
   #end
 </div>
 #end
