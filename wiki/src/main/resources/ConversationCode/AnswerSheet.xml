@@ -33,7 +33,7 @@
   &lt;input class="button-grey" type="button" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.${formname}.action='$doc.getURL("cancel")'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit(); this.form.submit();"/&gt;
   &lt;input class="button-orange" type="submit" name="formactionsave" value="$msg.get("saveandview")" onclick="document.forms.${formname}.action='$doc.getURL("${saveaction}", $param)'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit();if (checkDocumentContent()) document.forms.${formname}.submit(); return false;"/&gt;
 {{/html}}
-
+   #activatefullscreen()
   #elseif($context.action == 'view')
     $response.sendRedirect($xwiki.getDocument($doc.parent).getURL('view', 'viewer=conversationstopic'))
   #end
