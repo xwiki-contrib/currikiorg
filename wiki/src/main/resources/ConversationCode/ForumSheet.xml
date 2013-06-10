@@ -35,7 +35,11 @@
   &lt;input class="button-orange" type="submit" name="formactionsave" value="$msg.get("saveandview")" onclick="document.forms.${formname}.action='$doc.getURL("${saveaction}", $param)'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit();if (checkDocumentContent()) document.forms.${formname}.submit(); return false;"/&gt;
 {{/html}}
    #activatefullscreen()
-  #elseif($context.action == 'view' &amp;&amp; $request.viewer != 'conversationsforum')
+  #elseif($context.action == 'view' &amp;&amp; !$doc.space.startsWith("Group_") &amp;&amp; $request.viewer != 'conversationsforum')
     $response.sendRedirect($doc.getURL('view', 'viewer=conversationsforum'))
+  #elseif($context.action == 'view')
+{{html clean=false wiki=true}}
+#groups_discussions()
+{{/html}}
   #end
 {{/velocity}}</content></xwikidoc>
