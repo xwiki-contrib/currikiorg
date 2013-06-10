@@ -1,6 +1,6 @@
 (function(){Ext.ns("Curriki.module.search");var a=Curriki.module.search;a.settings={gridWidth:(Ext.isIE6?620:"auto")};
 a.stateProvider=new Ext.state.CookieProvider({});Ext.state.Manager.setProvider(a.stateProvider);
-a.sessionProvider=new Ext.state.CookieProvider({expires:null});Curriki.module.search.outerResources={prefix:"http://www.curriki.org/xwiki/bin/view/",suffix:"?viewer=embed",target:"currikiResources",ratingsPrefix:"http://www.curriki.org/xwki/bin/view/",ratingsSuffix:"?viewer=comments"}
+a.sessionProvider=new Ext.state.CookieProvider({expires:null});Curriki.module.search.outerResources={prefix:"http://www.curriki.org/xwiki/bin/view/",suffix:"?comingFrom="+location.host,target:"currikiResources",ratingsPrefix:"http://www.curriki.org/xwiki/bin/view/",ratingsSuffix:"?viewer=comments"}
 })();(function(){Ext.ns("Curriki.module.search.util");var a=Curriki.module.search;
 var b=a.util;b.init=function(){console.log("search util: init");b.logFilterList={outerResource:["subject","level","language","ict","review","special","other","sort","dir"],resource:["subject","level","language","ict","review","special","other","sort","dir"],group:["subject","level","language","policy","other","sort","dir"],member:["subject","member_type","country","other","sort","dir"],blog:["other","sort","dir"],curriki:["other","sort","dir"]};
 b.registerTabTitleListener=function(c){Ext.StoreMgr.lookup("search-store-"+c).addListener("datachanged",function(i){var h=false;
@@ -20,7 +20,7 @@ Curriki.logView("/features/embeddedsearch/"+e+"/"+h+"/"+l+d+i)}else{Curriki.logV
 }});Ext.StoreMgr.lookup("search-store-"+c).addListener("exception",Curriki.notifyException)
 };b.doSearch=function(h,i){console.log("Doing search",h,i);var f={};var e=Ext.getCmp("search-termPanel");
 if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
-}}var c=h;if(c="otherResource"){c="resource"}Ext.apply(f,{module:c});e=Ext.getCmp("search-filterPanel-"+h);
+}}var c=h;if(c=="otherResource"){c="resource"}Ext.apply(f,{module:c});e=Ext.getCmp("search-filterPanel-"+h);
 if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
 }}if(f.terms&&f.terms===_("search.text.entry.label")){f.terms=""}console.log("Applying search filters",f);
 Ext.apply(Ext.StoreMgr.lookup("search-store-"+h).baseParams||{},f);var d=Ext.getCmp("search-pager-"+h);
