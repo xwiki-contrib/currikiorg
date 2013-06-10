@@ -897,12 +897,22 @@ function init() {
   // Activate full screen:
   if (!XWiki.widgets.fs)
      XWiki.widgets.fs = new XWiki.widgets.FullScreen();
-
 }
 
 // When the document is loaded, trigger the Comments form enhancements.
 // Modification to work with curriki. This means js needs to be loaded non defered
 document.observe("dom:loaded", init);
+
+/* <![CDATA[ */
+// this is necessary to force focus on start fields
+// this could cause issue with edit comment
+document.observe('xwiki:wysiwyg:loaded', function(){
+    window.scrollTo(0,0);
+    // it is not clear why but we need to add a delay to take focus back
+    window.setTimeout(function() {
+     window.scrollTo(0,0);
+    }, 1000);
+});
 
 // End XWiki augmentation.
 return XWiki;
