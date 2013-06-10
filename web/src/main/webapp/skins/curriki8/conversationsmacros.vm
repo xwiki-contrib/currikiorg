@@ -159,11 +159,7 @@
            <label for="${xCommentClass}_comment_${conversationId}">$msg.get('core.viewers.comments.add.comment.label')</label>
            <textarea id='${xCommentClass}_comment_${conversationId}' rows='5' cols="80" name='${xCommentClass}_comment' class="maximizable">$!comment</textarea>
            ## adding to wysiwyg editors
-           #if($editors=="")
-            #set($editors = "${xCommentClass}_comment_${conversationId}")
-           #else
-            #set($editors = "${editors},${xCommentClass}_comment_${conversationId}")
-           #end
+           #addEditor("${xCommentClass}_comment_${conversationId}", $commentDoc)
          </div>
          #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
           #displayCaptcha()
@@ -310,9 +306,13 @@
       <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
      </div>
      <div class="addconversation-container-form addtopic-container-form">
+     ## Create a fake topic object to be able to display the status and the type selectors
+     #set($newTopicName = $doc.space + "." + $xwiki.getUniquePageName($doc.space, 'Topic'))
+     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
      <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addtopic" />
+        <input type="hidden" name="page" value="$escapetool.xml($newTopicName)" />
         <input type="hidden" name="space" value="$escapetool.xml($space)" />
         <input type="hidden" name="parent" value="$escapetool.xml($doc.fullName)" />
         <input type="hidden" name="form_token" value="$services.csrf.token" />
@@ -321,18 +321,13 @@
       <dl>
         <dt>$msg.get('ConversationCode.TopicClass_title')</dt>
         <dd><input type="text" name="title" /></dd>
-        ## Create a fake topic object to be able to display the status and the type selectors
-        #set($fakeTopic = $doc.newObject('ConversationCode.TopicClass'))
+        #set($fakeTopic = $newTopicDoc.newObject('ConversationCode.TopicClass'))
         ##<dt>$msg.get('ConversationCode.TopicClass_type')</dt>
-        ##<dd>$doc.display('type', 'edit', $fakeTopic)</dd>       
+        ##<dd>$newTopicDoc.display('type', 'edit', $fakeTopic)</dd>       
         <dt>$msg.get('ConversationCode.TopicClass_description')</dt>
-        <dd>$doc.display('description', 'edit', $fakeTopic)</dd>
+        <dd>$newTopicDoc.display('description', 'edit', $fakeTopic)</dd>
         ## adding wysiwyg
-        #if($editors=="")
-            #set($editors = "ConversationCode.TopicClass_0_description")
-        #else
-            #set($editors = "${editors},ConversationCode.TopicClass_0_description")
-        #end
+        #addEditor("ConversationCode.TopicClass_0_description", $newTopicDoc)
       </dl>
       <div>
         ## Cannot choose status, will always create as in progress
@@ -355,26 +350,24 @@
      <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
     </div>
     <div class="addconversation-container-form addanswer-container-form">
+      ## Create a fake conversation object to be able to display the status and the type selectors
+      #set($newAnswerName = $doc.space + "." + $xwiki.getUniquePageName($doc.space, "${doc.name}Answer"))
+      #set($newAnswerDoc = $xwiki.getDocument($newAnswerName))
      <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addconversation" />
-        <input type="hidden" name="page" value="$doc.name" />
-        <input type="hidden" name="space" value="$doc.space" />
+        <input type="hidden" name="parent" value="$escapetool.xml($doc.fullName)" />
+        <input type="hidden" name="page" value="$escapetool.xml($newAnswerName)" />
+        <input type="hidden" name="space" value="$escapetool.xml($doc.space)" />
         <input type="hidden" name="form_token" value="$services.csrf.token" />
         <input type="hidden" name="xredirect" value="$escapetool.xml($doc.getURL('view', 'viewer=conversationstopic'))" />
       </div>
       <dl>
-        ## Create a fake conversation object to be able to display the status and the type selectors
-        #set($fakeConversation = $doc.newObject('ConversationCode.AnswerClass'))
+        #set($fakeConversation = $newAnswerDoc.newObject('ConversationCode.AnswerClass'))
         <dt>$msg.get('ConversationCode.AnswerClass_answer')</dt>
-        <dd>$doc.display('answer', 'edit', $fakeConversation)</dd>  
+        <dd>$newAnswerDoc.display('answer', 'edit', $fakeConversation)</dd>  
         ## adding wysiwyg
-        #if($editors=="")
-            #set($editors = "ConversationCode.AnswerClass_0_answer")
-        #else
-            #set($editors = "${editors},ConversationCode_AnswerClass_answer")
-        #end
-        
+        #addEditor("ConversationCode.AnswerClass_0_answer", $newAnswerDoc)
       </dl>
       
       <div class="buttons">
@@ -607,34 +600,30 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 #end
 ##
 ##
+#macro(addEditor $fieldname $editorDoc)
+ #if(!$myeditors)
+  #set($myeditors = $util.hashMap)
+  #end
+ #set($config = $myeditors.get($editorDoc.fullName))
+ #if(!$config)
+  #set($config = $util.hashMap)
+  #set($ok = $config.put("doc", $editorDoc))
+  #set($ok = $config.put("editors", $fieldname))
+  #set($ok = $myeditors.put($editorDoc.fullName, $config))
+ #else
+  #set($ok = $config.put("editors", "${config.get('editors')},$fieldname"))
+ #end
+#end
+
 #macro(displayEditors)
   #if(!$request.viewer)
    #verbatim_start()
   #end 
-  #if($editors)
-    #if($doc.syntax.toIdString() == "xwiki/1.0")
-      <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
-      <script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
-      <script type="text/javascript">
-      //<![CDATA[
-          wikiEditor.init({
-              elements : "$!{escapetool.javascript($editors)}",
-              language: "en",
-              mode: "exact",
-              content_css: "$xwiki.getSkinFile("style.css")",
-              debug : false,
-              remove_linebreaks : false,
-              plugins: 'table, contextmenu, paste, searchreplace',
-              wiki_use_style: '$xwiki.useWysiwygStyleToolbar()',
-              wiki_images_path : '${doc.getURL('download')}/',
-              wiki_attach_path : '${doc.URL}',
-              wiki_macro_path : '${doc.URL}',
-              wiki_plugins: 'core, attachments, macros'
-          });
-      //]]>
-      </script>
-    #elseif($services.wysiwyg.isSyntaxSupported($doc.syntax.toIdString()))
-      #wysiwyg_editProperties($doc $editors false)
+  #if($myeditors)
+    #if($services.wysiwyg.isSyntaxSupported($doc.syntax.toIdString()))
+      #foreach($editor in $myeditors.values())
+       #wysiwyg_editProperties($editor.get("doc") $editor.get("editors") false)
+      #end
     #else
       #warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$doc.syntax.toIdString()</em>.")
     #end
