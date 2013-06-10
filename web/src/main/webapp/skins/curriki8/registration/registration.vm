@@ -56,60 +56,70 @@ $userdoc.use("XWiki.XWikiUsers")
 #end ##}
 
 #macro(tryprofileupdate) ##{
-	#if($request.method=="POST") ##{
-		#if($context.user == $userdoc.fullName) ##{
-			#set($userarg = "")
-		#else ## user == owner ##}{
-			#set($userarg = "user=${userdoc.fullName}")
-			#if(!$xwiki.hasAdminRights()) ##{
-				$response.sendRedirect($xwiki.getURL('MyCurriki.Profile', "$userarg"))
-			#end ## not admin ##}
-		#end ## user == owner ##}
-		#set($xredirect = $xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
-		#set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
-		#set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
+  #if($request.method=="POST") ##{
+    #if($context.user == $userdoc.fullName) ##{
+      #set($userarg = "")
+    #else ## user == owner ##}{
+      #set($userarg = "user=${userdoc.fullName}")
+      #if(!$xwiki.hasAdminRights()) ##{
+        $response.sendRedirect($xwiki.getURL('MyCurriki.Profile', "$userarg"))
+      #end ## not admin ##}
+    #end ## user == owner ##}
+    #set($xredirect = $xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
+    #set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
+    #set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
 
-		## Avatar Upload
+  ## Avatar Upload
     #set($fileupload = $xwiki.fileupload)
     #set($filename = $fileupload.getFileName("filepath"))
     #set($filedata = $fileupload.getFileItemData("filepath"))
-		#if($!filename != "" && $filedata) ##{
-			#set($attlist = $userdoc.attachmentList)
-			#foreach ($att in $attlist) ##{
-				#set($junk = $userdoc.document.deleteAttachment($att.attachment, $context.context))
-			#end ##}
+    #if($!filename != "" && $filedata) ##{
+      #set($attlist = $userdoc.attachmentList)
+      #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+
+      #set($current_avatar = $userobj.get('avatar'))
+      #if($current_avatar && "${current_avatar}" != "")
+        #set($current_profile_picture_attachement = $userdoc.getAttachment("${current_avatar}").attachment)
+        #if($current_profile_picture_attachement && "${current_profile_picture_attachement}" != "")
+          #set($junk = $userdoc.document.deleteAttachment($current_profile_picture_attachement, $context.context))
+        #end
+      #end
+
       #set($attach = $userdoc.addAttachment($filename, $filedata))
+
       #if($attach)
+        #set($junk = $userobj.set('avatar', "${filename}"))
         #set ($junk = $userdoc.save())
       #end
-        #else
-            ## Info change
-            #set($oPass = '********')
-            #set($nPass = $request.getParameter("XWiki.XWikiUsers_0_password"))
-            #set($oEmail = "${userobj.getProperty('email').getValue()}")
-            #set($nEmail = $request.getParameter("XWiki.XWikiUsers_0_email"))
+    #else
+    ## Info change
+      #set($oPass = '********')
+      #set($nPass = $request.getParameter("XWiki.XWikiUsers_0_password"))
+      #set($oEmail = "${userobj.getProperty('email').getValue()}")
+      #set($nEmail = $request.getParameter("XWiki.XWikiUsers_0_email"))
 
-            #set($junk = $userdoc.updateObjectFromRequest("XWiki.XWikiUsers"))
-            #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+      #set($junk = $userdoc.updateObjectFromRequest("XWiki.XWikiUsers"))
+      #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 
 
-            #if($oEmail != $nEmail) ##{
-                #if($oPass != $nPass) ##{
-                    #set($junk = $userobj.set("active", 0))
-                    #set($junk = $userobj.set("email_undeliverable", 1))
-                    #set($junk = $userdoc.saveWithProgrammingRights())
-                    $response.sendRedirect($xredirectemail2)
-                #else ##}{
-                    #set($junk = $userdoc.saveWithProgrammingRights())
-                    $response.sendRedirect($xredirectemail)
-                #end ##}
-            #end ##}
-
+      #if($oEmail != $nEmail) ##{
+        #if($oPass != $nPass) ##{
+          #set($junk = $userobj.set("active", 0))
+          #set($junk = $userobj.set("email_undeliverable", 1))
+          #set($junk = $userdoc.saveWithProgrammingRights())
+          $response.sendRedirect($xredirectemail2)
+        #else ##}{
+          #set($junk = $userdoc.saveWithProgrammingRights())
+          $response.sendRedirect($xredirectemail)
         #end ##}
-        #set($junk = $userdoc.saveWithProgrammingRights())
-        $response.sendRedirect($userdoc.getURL("view"))
+      #end ##}
+
     #end ##}
+    #set($junk = $userdoc.saveWithProgrammingRights())
+    $response.sendRedirect($userdoc.getURL("view"))
+  #end ##}
 #end ##}
+
 
 #**
   * Macro to display the registration info module
