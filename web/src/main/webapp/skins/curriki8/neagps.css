@@ -1,5 +1,14 @@
 /*
-Colors Index
+**************************************************
+                NEA GPS NETWORK
+  ----------------------------------------------
+  Author: Ionut Maxim | ionut.maxim@xwiki.com
+  Last Update: 2013
+**************************************************
+*/
+
+/*
+  Colors Index
 =================================================
   Red -------- #CE1126
   Yellow ----- #FCD116
@@ -11,161 +20,112 @@ Colors Index
   Light Blue - #777DBB
 =================================================
 */
+/*
+  CONTENT MAP - use Ctrl+F to reach your destination ;)
+==================================================================================================
+  0100 | Reset
+  0200 | General styles
+  0300 | Layout
+  0400 | Navigation
+
+  0500 | Discussion Forums
+  0510 | Forums View
+  0520 | Topic View
+
+  1000 | Panels
+  1100 | Discussion Topics
+ 
+  8000 | Custom JIRAs
+ 
+  9000 | Quick Fixes
+==================================================================================================
+*/
+/*
+==================================================================================================
+  9999 | DEMO
+================================================================================================== 
+*/
+/*
+--------------------------------------------------------------------------------------------------
+  9999 | DEMO SUBLEVEL 1
+--------------------------------------------------------------------------------------------------
+*/
+/*
+  DEMO SUBLEVEL 2
+--------------------------------------------------------------------------------------------------
+*/
+
+/*
+==================================================================================================
+  0200 | GENERAL STYLES
+================================================================================================== 
+*/
+/* Use Open Sans font family from Google Fonts */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300,400italic,700italic);
 /*
-==================================================
-WORDPRESS STYLES
-==================================================
-*/
-/*
-Header
---------------------------------------------------
-*/
-
-/* top bar */
-body {
-    border-top: 5px solid #8CD600 !important;
-}
-/* stats */
-#members p span,
-#members p span a {
-    color: #8CD600 !important;
-}
-/* donate button */
-#donate {display: none !important;}
-/* hero area tabs */
-#slider-nav ul li a {
-    background: #FEEEA0 !important;
-    color: #777 !important;
-}
-#slider-nav ul li a.ls-nav-active {
-    background: #FCD116 !important;
-    color: #333 !important;
-}
-/*section titles*/
-#main .pod-title {
-    background: #164891 !important;
-    color: white !important;
-}
-/* sidebar TOC title */
-#resource-toc .x-panel-header {
-    background: #164891 !important;
-}
-/*
-==================================================
 XWIKI STYLES          (notice the .curriki prefix)
-==================================================
+--------------------------------------------------------------------------------------------------
 */
-body.curriki#body {
-    background: #EEE !important;
-}
+body.curriki#body { background: #DDDDDD !important; }
 /* logo */
-.curriki #header #header-logo img {
-    max-height: 65px !important;
-}
+.curriki #header #header-logo img { max-height: 65px !important; }
 /* search box */
-.curriki #header-search .search-box {
-    background-color: #164891 !important;
-    border: none !important;
-}
+.curriki #header-search .search-box { background-color: #164891 !important; border: none !important; }
 /* left nav */
-.curriki #navigation-inner a {
-    color: white !important;
-}
-.curriki #navigation-inner .titles {
-    background-color: #164891 !important;
-}
-.curriki #navigation-inner ul {
-    background-color: #777DBB !important;
-    background-color: #BCBFDE !important;
-    background-color: #DDE9FB !important;
-}
-.curriki #navigation-inner ul a {
-    color: #164891 !important;
-}
+.curriki #navigation-inner a { color: white !important; }
+.curriki #navigation-inner .titles { background-color: #164891 !important; }
+.curriki #navigation-inner ul { background-color: #DDE9FB !important; }
+.curriki #navigation-inner ul a { color: #164891 !important; }
 /* buttons */
-.curriki .button-orange {
-    background-color: #FCD116 !important;
-    border: 1px solid #F1C803 !important;
-    color: black !important;
-}
-.curriki .button-orange:hover {
-    background-color: #F96302 !important;
-    border: 1px solid #F1C803 !important;
-    color: white !important;
-}
+.curriki .button-orange { background-color: #FCD116 !important; border: 1px solid #F1C803 !important; color: black !important; }
+.curriki .button-orange:hover { background-color: #F96302 !important; border: 1px solid #F1C803 !important; color: white !important; }
 /* tables */
-.table-header {
-    background-color: #0038A8 !important;
-}
-.table-results {
-    border-top: 2px solid #0038A8 !important;
-}
-.titleheader-red {
-    background-color: #0038A8 !important;
-}
-.titleheader-red .titleheader-right {
-    background-color: #777DBB !important;
-}
+.table-header { background-color: #0038A8 !important; }
+.table-results { border-top: 2px solid #0038A8 !important; }
+.titleheader-red { background-color: #0038A8 !important; }
+.titleheader-red .titleheader-right { background-color: #777DBB !important; }
 /* profile sections */
-.blue, .members .headerbar,
-.groups .headerbar, .form-wrp fieldset h3 {
-    background: #164891 !important;
-}
+.blue, .members .headerbar, .groups .headerbar, .form-wrp fieldset h3 { background: #164891 !important; }
 
+.odd, .even {background-color: transparent !important;}
 /*
-==========================================
-JIRAs
-==========================================
+==================================================================================================
+  500 | DISCUSSION FORUMS
+================================================================================================== 
 */
-/* CURRIKI-6110 */
-.titleheader.titleheader-red {
-  background-color: #006699 !important ;  
-}
-
-
 /*
-============================================
-FORUM VIEW
-============================================
+--------------------------------------------------------------------------------------------------
+  510 | DISCUSSION FORUMS | FORUMS VIEW
+--------------------------------------------------------------------------------------------------
 */
-#forum-header {
-  position: relative;
+#forum-header { 
+  position: relative; 
+  margin: 20px 0 0 0; 
+  display: block; 
+  overflow: hidden; 
+  height: auto;
+  min-height: 50px
 }
-#forum-header h1 {
-  font-size: 32px !important;
-  font-weight: normal;
-}
+#forum-header h1 { font-size: 32px !important; font-weight: normal; display: inline; }
+#forum-description { height: auto; display: block; padding: 10px; margin: 0; }
 #forum-topic-nb {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat 0px 0px !important;
-  position: absolute;
-  top: 0;
-  right: 0;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat 0px 0px !important;
+  position: absolute; top: 0; right: 0;
   color: white;
-  width: 30px !important; 
-  height: 20px !important;
+  width: 30px !important; height: 20px !important;
   text-align: center !important;
-  padding: 12px 22px 18px 18px;
+  padding: 12px 2px 18px 18px;
   font-weight: bold;
 }
 #forum-buttons {
   clear: both; overflow: hidden;
   text-transform: uppercase;
-  border-bottom: 1px solid #F0F0F0;
+  border-bottom: 1px solid #DDDDDD;
   padding: 0 !important;
 }
-#forum-buttons label {
-  color: #C0C0C0;
-}
-.forum-sort-button-inactive {
-  padding: 10px 20px !important;
-  display: inline-block;
-}
-.addconversation-container {
-  overflow: hidden;
-  display: inline-block;
-  float: right;
-}
+#forum-buttons label { color: #AAAAAA; }
+.forum-sort-button-inactive { padding: 10px 20px !important; display: inline-block; }
+.addconversation-container { overflow: hidden; display: inline-block; float: right; }
 .addconversation-activator {
   padding: 10px 20px 10px 40px !important;
   background: #FFD801;
@@ -174,21 +134,23 @@ FORUM VIEW
 }
 
 .topic {
-  margin: 50px 0 40px 0 !important;
+  margin: 50px 0 20px 0 !important;
   position: relative;
   font-family: 'Open Sans', sans-serif;
   clear:both !important; /* temp setting, remove once markup is fixed: topic inside topic atm */
   z-index: 100;
+  min-width: 630px;
 }
-.topic .user-avatar .photo {  
+.topic .user-avatar img.photo {  
   float: left; display: inline-block;
   width: 80px !important;
   height: 80px !important;
-  border: 1px solid #F0F0F0;  
   margin-right: 10px;
-  -moz-box-shadow: inset 0px 0px 5px #EEE;
-  -webkit-box-shadow: inset 0px 0px 5px #EEE;
-  box-shadow: inset 0px 0px 5px #EEE; 
+
+  -moz-box-shadow: inset 0px 0px 5px #DDDDDD;
+  -webkit-box-shadow: inset 0px 0px 5px #DDDDDD;
+  box-shadow: inset 0px 0px 5px #DDDDDD; 
+
   -webkit-border-radius: 48px;
   -moz-border-radius: 48px;
   border-radius: 48px;
@@ -197,126 +159,206 @@ h3.topic-title {
   float: right; clear: right; display: inline-block !important;
   padding: 10px !important;
   margin: 10px 65px 10px 10px !important;  
-  border: 1px solid #F0F0F0 !important;
+  border: 1px solid #DDDDDD !important;
+  width: 70%;
+
+  behavior: url(/xwiki/skins/curriki8/ie/PIE.htc);
+
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-  width: 70%;
 }
 .topic-comments {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -100px 5px !important;
-  position:absolute;
-  top: -40px;
-  right: 25px;
-  padding: 10px 5px 0 0;
-  width: 45px !important;
-  height: 50px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
+  background: url("/xwiki/skins/curriki8/img/forums.png") no-repeat scroll -100px 5px transparent !important;
   color: white;
+  font-size: 16px; font-weight: bold;
+  height: 50px; width: 52px !important;
+  padding: 14px 0 0;
+  position: absolute; right: 30px; top: -30px;
+  text-align: center;
 }
 /*
 Topic Metadata
-------------------------------------------------
+--------------------------------------------------------------------------------------------------
 */
-.topic-metadata {
-  clear: both;
-  padding: 20px 0 !important;
-  width: 100% !important;
-  display: block !important;
-}
+.topic-metadata { clear: both; padding: 20px 0 !important; width: 100% !important; display: block !important; }
 .topic-authortype,
 .topic-metas {
-  background: #C9C9C9;
+  background: #F7F7F7;
   padding: 5px 10px 4px;
+  color: #AAA;
+  font-size: 10px; font-weight: bold !important;
   text-transform: uppercase;
-  color: white;
+  display: inline-block;
+  position: relative;
+  width: 90%;
+
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  font-size: 10px;
-  font-weight: bold !important;
-  display: inline-block;
-  position: relative;
-  width: 74%;
 }
+.topic-metas:hover {background: #FFF;}
 .topic-authortype {
   width: 60px;
   margin-right: 20px;
+  overflow: hidden;
+  padding: 5px 10px;
   text-align: center;
+  width: 60px;
+  float: left;
+  text-overflow: ellipsis;
+  white-space: nowrap; 
 }
 .topic-date {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -700px 0px !important;
-  padding: 0 0 0 20px;
-  margin-left: 20px !important;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px 0px !important;
+  padding: 0 0 0 20px; margin-left: 20px !important;
 }
 .topic-answers {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -600px -50px !important;
-  padding: 0 0 0 20px;
-  margin-left: 20px !important;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -600px -50px !important;
+  padding: 0 0 0 20px; margin-left: 20px !important;
 }
-
-.topic-metas a {color: white !important;}
+.topic-metas a { color: #AAA !important; }
 .topic-vote {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -200px 0px !important;
-  position: absolute;
-  top: -20px !important; right: -25px !important;
-  background: #F0F0F0;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -200px 0px !important;
+  position: absolute; top: -20px !important; right: -25px !important;
+  background: #DDDDDD;
   color:#C9C9C9;
-  font-size: 14px !important;
-  font-weight: bold;
+  font-size: 14px !important; font-weight: bold;
   padding: 21px 0 0 0;
-  width: 50px;
-  height: 29px;
+  width: 50px; height: 29px;
   text-align: center;
 }
 /*
 Topic Content / Description
-------------------------------------------------
+--------------------------------------------------------------------------------------------------
 */
 .topic-description {
   padding: 20px !important;
-  border: 1px solid #F0F0F0;  
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  border: 1px solid #DDDDDD;
   margin-right: 65px !important;
   position: relative;
   z-index: 102;
   background: white;
+
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 /*
 Topic Actions
-------------------------------------------------
+--------------------------------------------------------------------------------------------------
 */
 .topic-actions {
+  background: none repeat scroll 0 0 transparent;
   clear: both;
-  background: none;
-  overflow: hidden;
+  font-size: 33px;
+  height: 1em;
   margin-top: 20px !important;
+  overflow: hidden;
 }
 .topic-actions .left {
   float: left; display: inline-block;
   width: 50% !important;
+  overflow: hidden;
 }
 .topic-actions-flag,
 .topic-actions-permalink {
-  float: left; display: inline;
+  float: left; 
+  display: inline-block;    
+  height: 1em;
+  line-height: 1em;
+  margin-right: 10px;
 }
-
-
 .topic-actions-flag a {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -300px -50px !important;
-  font-size: 0;
-  padding: 10px;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -300px 0px !important;
+  font-size: 0;  padding: 10px;
 }
 .topic-actions-flag a:hover {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -300px -100px !important;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -300px -100px !important;
+}
+.topic-actions-permalink a {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px -100px !important;
+  font-size: 0;  padding: 10px;
+}
+.topic-actions-permalink a:hover {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px -150px !important;
+}
+/*
+Permalink modal box
+*/
+.permalinkBox .xdialog-box {
+  overflow: hidden;
+  background-color: #DDDDDD;
+  padding: 20px;
+  filter: alpha(opacity=90); /* internet explorer */
+  -khtml-opacity: 0.9;      /* khtml, old safari */
+  -moz-opacity: 0.9;       /* mozilla, netscape */
+  opacity: 0.9;           /* fx, safari, opera */ 
+
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px; 
+}
+.permalinkBox .xdialog-box input.full {
+  border: 1px solid #CCC;
+  padding: 4px;
+  width: 390px;
+}
+.permalinkBox .xdialog-box .buttons input.button {
+  background: none !important;
+  background-color: #FCD116 !important;
+  border: 1px solid #F1C803 !important;
+  color: black !important;
+  display: inline !important;
+}
+.permalinkBox .xdialog-box .buttons input.button:hover {
+  background: none !important;
+  background-color: #F96302 !important;
+  border: 1px solid #F1C803 !important;
+  color: white !important;
+  display: inline !important;
+}
+/*
+Delete modal box
+*/
+.xdialog-modal-container .xdialog-box {
+  overflow: hidden;
+  background-color: #DDDDDD;
+  padding: 20px;
+  filter: alpha(opacity=90); /* internet explorer */
+  -khtml-opacity: 0.9;      /* khtml, old safari */
+  -moz-opacity: 0.9;       /* mozilla, netscape */
+  opacity: 0.9;           /* fx, safari, opera */ 
+
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px; 
+}
+.xdialog-modal-container .xdialog-box input.full {
+  border: 1px solid #CCC;
+  padding: 4px;
+  width: 390px;
+}
+.xdialog-modal-container .xdialog-box .buttons input.button {
+  background: none !important;
+  background-color: #FCD116 !important;
+  border: 1px solid #F1C803 !important;
+  color: black !important;
+  display: inline !important;
+}
+.xdialog-modal-container .xdialog-box .buttons input.button:hover {
+  background: none !important;
+  background-color: #F96302 !important;
+  border: 1px solid #F1C803 !important;
+  color: white !important;
+  display: inline !important;
 }
 
+
+
+
 .topic-actions .center {
-  background: transparent url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -400px 0px !important;
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -400px 0px !important;
   display: inline-block;
   font-size: 0;
   margin: 0 auto;
@@ -329,7 +371,9 @@ Topic Actions
   text-align: right;
 }
 .topic-addthis {
-  color : #C0C0C0;
+  color : #CCCCCC;
+  float: right;
+  margin-top: 15px !important;
 }
 
 #forum-more {}
@@ -343,10 +387,11 @@ Topic Actions
   background: #737373;
   text-transform: uppercase;
   font-size: 10px;
+  margin-right: 65px !important;
+
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  margin-right: 65px !important;
 }
 
 #forum-more a:hover {
@@ -356,66 +401,596 @@ Topic Actions
 }
 /*
 New Topic
-------------------------------------------------
+--------------------------------------------------------------------------------------------------
 */
 .addconversation-activator {
-  background: #F2D42E url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat 10px -140px !important;
+  background: #F2D42E url('/xwiki/skins/curriki8/img/forums.png') no-repeat 10px -140px !important;
 }
 .addconversation-activator:hover {
-  background: orange url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat 10px -140px !important;
+  background: orange url('/xwiki/skins/curriki8/img/forums.png') no-repeat 10px -140px !important;
 }
 /*
 Moderator / Admin 
-------------------------------------------------
+--------------------------------------------------------------------------------------------------
 */
 .topic-moderation {
   float: right;
   clear: right;
-  position: absolute;
-  top: 175px;
-  right: 40px;
-  z-index: 101;
+  position: absolute; top: 175px; right: 40px; z-index: 101; 
 }
 .topic-edit,
 .topic-delete {
-  background: green url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat 40px -93px !important;
+  background: green url('/xwiki/skins/curriki8/img/forums.png') no-repeat 40px -93px !important;
   color: white !important;
   padding: 15px 30px !important;
   display: block;
   font-size: 0;
+  width: 100%;
+  position: absolute; top: 0; right: 0;
+
   -webkit-border-radius: 50px;
   -moz-border-radius: 50px;
   border-radius: 50px;
-  width: 100%;
-  position: absolute;
-  top: 0; 
-  right: 0;
 }
 .topic-delete {
-  background: red url('http://dev.gpsnetwork.org/xwiki/skins/curriki8/img/forums.png') no-repeat -60px -93px !important;
+  background: red url('/xwiki/skins/curriki8/img/forums.png') no-repeat -60px -93px !important;
   margin-top: 10px;
-  top: 20px; 
-  right: 0;
+  top: 20px; right: 0;
 }
-.topic-edit:hover {
-  position: absolute;
-  right: -20px;
-}
-.topic-delete:hover {
-  position: absolute;
-  right: -20px;
+.topic-edit:hover { position: absolute; right: -20px; }
+.topic-delete:hover { position: absolute; right: -20px; }
+
+/*
+Topic View
+--------------------------------------------------------------------------------------------------
+*/
+#conversation-topic {}
+#document-title {
+  margin-left: 0 !important;
 }
 
 
 /*
+Comment Level
+--------------------------------------------------------------------------------------------------
+*/
+.reply { padding: 0 !important; }
+.reply .comments {display: none !important; }
+.xwikicomment {
+  background: #F8F8F8 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid white !important;
+  margin-left: 60px;
+}
+.commentavatar {
+  margin: 0 !important; 
+  padding: 10px !important;
+}
+.commentavatar img.photo {
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px; 
+  width: 30px;
+  height: 30px;
+}
+.commentheader {
+  padding: 10px !important;
+  text-transform: uppercase;
+  color: #9A9A9A !important;
+  border-bottom: none !important;
+}
+.commentheader a {
+  color: #9A9A9A !important;
+}
+.commentcontent {}
+
+/*
+New Comment
+--------------------------------------------------------------------------------------------------
+*/
+form.AddComment {
+  border: none !important;
+}
+.commentform {
+  border: none !important;
+  padding: 10px !important;
+  margin: 0;
+}
+/* 
+Answers and Comments for a Topic
+-------------------------------------------------------------------------------------------------- 
+*/
+.answer { margin-bottom: 20px !important; display: block; }
+.answer-layout { 
+  position: relative;
+  z-index: 200;
+  display: block !important;
+  overflow: hidden;
+  clear: both !important;
+}
+.answer-layout .user-avatar,
+.comment .user-avatar { overflow: hidden; width: 50px; height: 50px; float: left; clear: left; }
+.user-avatar img { 
+  border-radius: 50px; 
+  margin-right: 20px; 
+  width: 48px; 
+  height: 48px; 
+  behavior: url(/xwiki/skins/curriki8/ie/PIE.htc);
+}
+.answer-reply { 
+  border: 1px solid #DDDDDD; 
+  border-radius: 8px; 
+  margin: 0 65px 0 70px !important; 
+  min-width: 490px; 
+  position: relative; z-index: 202;
+  background: white;
+}
+.answer-meta {
+  background: #F7F7F7;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px;
+  display: block;
+  color: #C9C9C9 !important;
+
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-topright: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.answer-meta:hover {background: #FFF;}
+
+.answer-meta a {color: #868686 !important ;}
+
+.answer-meta .time {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px 0px !important;
+  padding: 0 0 0 20px; margin-left: 20px !important;
+}
+.answer-meta .comments {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -600px -50px !important;
+  padding: 0 0 0 20px !important; margin-left: 20px !important;
+}
+
+
+.answer-content { 
+  padding: 10px 10px 20px 10px !important; 
+  overflow: hidden !important;
+  font-family: Open Sans, sans-serif;
+}
+
+/* 
+Limit content / make it responsive
+--------------------------------------------------------------------------------------------------
+*/
+.answer-content img,
+.answer-content object,
+.answer-content p {
+  max-width: 100% !important;
+}
+.answer-content p {
+  line-height: 1.6em !important;
+
+}
+
+.answer-content .actions {
+  float: left; display: inline-block;
+  width: 50% !important;
+  overflow: hidden;
+}
+.answer-content .actions .flag,
+.answer-content .actions .conversation-permalink {
+  float: left; 
+  display: inline-block;    
+  height: 1em;
+  line-height: 1em;
+  margin-right: 10px;
+}
+.answer-content .actions .flag a {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -300px 0px !important;
+  font-size: 0;
+  padding: 10px;
+}
+.answer-content .actions .flag a:hover {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -300px -100px !important;
+}
+.answer-content .actions .conversation-permalink a {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px -100px !important;
+  font-size: 0;
+  padding: 10px;
+}
+.answer-content .actions .conversation-permalink a:hover {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px -150px !important;
+}
+
+.answer-moderation { 
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 201;
+  float: right; clear: right; 
+}
+
+/*
+Moderator / Admin 
+--------------------------------------------------------------------------------------------------
+*/
+
+.answer-moderation { float: right; clear: right; position: relative; margin: -70px 35px 0 0;}
+.answer-moderation .edit,
+.answer-moderation .delete {
+  background: green url('/xwiki/skins/curriki8/img/forums.png') no-repeat 40px -93px !important;
+  color: white !important;
+  display: block;
+  font-size: 0;
+  width: 100%;
+  padding: 15px 30px !important;
+  position: absolute; top: 0; right: 0;
+
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+}
+.answer-moderation .delete {
+  background: red url('/xwiki/skins/curriki8/img/forums.png') no-repeat -60px -93px !important;
+  margin-top: 10px;
+  top: 20px; 
+  right: 0;
+}
+.answer-moderation .edit:hover { position: absolute; right: -20px; }
+.answer-moderation .delete:hover { position: absolute; right: -20px; }
+
+.comments { border-bottom: none !important; }
+.answer > .comments {
+  margin: 7px 0 0 60px !important;
+  padding: 0 2px 2px 2px !important;
+  border: none !important;
+  margin-top: 7px !important;
+  clear: both !important;
+  display: block;
+  overflow: hidden;
+}
+.comment,
+.comment.user .answer-layout {
+  overflow: hidden;
+  border-top: 1px solid white;
+  position: relative;
+  z-index: 100;
+  
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.comment.odd .comment-layout {background: #F7F7F7;}
+.comment.even .comment-layout {background: #DDDDDD;}
+
+.comments p.noitems {
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  background: #CCC;
+  margin-left: 10px;
+  margin-right: 60px;
+
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px; 
+}
+
+.comment.user {background: #C9C9C9; margin: 0 60px 0 10px;}
+.comment.user .comment-layout {
+   margin-right: 0;
+
+}
+.comment-layout,
+.comment.user .answer-layout {
+  border-top: none !important; 
+  position: relative; 
+  z-index: 102;
+
+}
+.comment .user-avatar {width: 30px; height: 30px;}
+.comment .user-avatar img {width: 28px; height: 28px;}
+.comment-reply {}
+.comment-meta {padding: 7px 10px; display: inline-block; text-transform: uppercase; color: #777; font-size: 10px; margin-left:10px;}
+.comment-meta:hover {background: #FFF;}
+.comment-layout {
+  clear: both; 
+  padding-left: 40px;
+  margin: 0 60px 0 0;
+  position: relative;
+  z-index: 102;
+  padding: 10px !important;
+  overflow: hidden;
+  
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.comment.user .comment-content { padding: 0  !important; }
+.comment-content .actions {
+  float: left; display: block;
+  width: auto !important;
+  overflow: hidden;
+}
+.comment-content .actions .flag,
+.comment-content .actions .commentreply,
+.comment-content .actions .permalink {
+  float: left; 
+  display: inline-block;    
+  height: 1.5em;
+  line-height: 1.5em;
+  margin-right: 10px;
+}
+.comment-content .actions .flag a {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -300px 0px !important;
+  font-size: 0;
+  padding: 10px;
+}
+.comment-content .actions .flag a:hover {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -300px -100px !important;
+}
+.comment-content .actions .commentreply {display: none;}
+/*
+.comment-content .actions .commentreply a {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -800px -100px !important;
+  font-size: 0;
+  padding: 10px;
+}
+.comment-content .actions .commentreply a:hover {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -800px -150px !important;
+}
+*/
+.comment-content .actions .permalink a {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px -100px !important;
+  font-size: 0;
+  padding: 10px;
+}
+.comment-content .actions .permalink a:hover {
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -700px -150px !important;
+}
+
+/*
+Moderator / Admin 
+--------------------------------------------------------------------------------------------------
+*/
+.comment-moderation {
+  float: right;
+  clear: right;
+  position: absolute; top: 0px; right: 33px; z-index: 101; 
+}
+.comment-moderation .edit,
+.comment-moderation .delete {
+  background: green url('/xwiki/skins/curriki8/img/forums.png') no-repeat 40px -93px !important;
+  color: white !important;
+  padding: 7px 30px !important;
+  display: block;
+  font-size: 0;
+  width: 100%;
+  position: absolute; top: 0; right: 0;
+
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+}
+.comment-moderation .delete {
+  background: red url('/xwiki/skins/curriki8/img/forums.png') no-repeat -60px -93px !important;
+  margin-top: 10px;
+  top: 20px; right: 0;
+}
+.comment-moderation .edit:hover { position: absolute; right: -20px; }
+.comment-moderation .delete:hover { position: absolute; right: -20px; }
+
+
+
+
+/*
+Panels
+--------------------------------------------------------------------------------------------------
+*/
+/* 
+Discussion Topics
+--------------------------------------------------------------------------------------------------
+*/
+#discussionTopics {
+  text-align: center;
+  color: #AAA;
+  font-size: 10px;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  font-weight: bold;
+}
+#discussionTopics h3 {
+  background: #DDDDDD;
+  line-height: 2em;
+  margin-bottom: 5px !important;
+  color: #333;
+  text-transform: uppercase;
+
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+#discussionTopics > a { padding: 10px 4px !important; }
+.tableScroll {}
+#discussionTopicsTable {
+  text-transform: none;
+  font-size: 10px;
+  width: 100%;
+  font-weight: normal;
+}
+#discussionTopicsTable caption { font-size: 0; }
+#discussionTopicsTable tr { border: 1px solid white; border-top: none; }
+#discussionTopicsTable tr.odd { background: #FCFCFC ;}
+#discussionTopicsTable tr.even { background: #FAFAFA; }
+#discussionTopicsTable tr:hover { background: #FFFFD3 !important; }
+#discussionTopicsTable tr:last-child {
+  -webkit-border-bottom-right-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+#discussionTopicsTable th,
+#discussionTopicsTable td { padding: 5px !important; font-size: 10px; text-shadow: 0 0 1px white; }
+#discussionTopicsTable th { text-align: center !important; background: white; }
+#discussionTopicsTable th.topics { 
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -895px -46px !important;
+  width: 70%; 
+  text-align: left !important;
+  padding-left: 30px !important;
+  text-transform: uppercase;
+}
+#discussionTopicsTable th.votes { 
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -592px 4px !important;
+  width: 15%; 
+  font-size: 0;
+}
+#discussionTopicsTable th.comments { 
+  background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -893px -98px !important;
+  width: 15%; 
+  font-size: 0;
+}
+
+#discussionTopicsTable td { text-align: left; }
+#discussionTopicsTable td.topic { min-width: 0 !important; }
+#discussionTopicsTable td.votes { min-width: 0 !important; text-align: center; }
+#discussionTopicsTable td.comments { min-width: 0 !important; text-align: center; }
+#discussionTopicsTable td a { display: block; }
+/* Custom Sorting */
+#discussionTopics > a.desc {
+  background: url("icons/black-arrow-ab.png") no-repeat scroll right center transparent;
+  padding: 10px 20px 10px 10px !important;
+}
+/*
+New Topic
+--------------------------------------------------------------
+*/
+.addconversation-container { }
+.addconversation-container dt { line-height: 1.5em; margin: 10px 0 5px 0; }
+.addconversation-container .buttons { text-align: right; }
+.addconversation-container input[type="text"],
+.addconversation-container textarea {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+  box-shadow: inset 0 0 10px #DDDDDD;
+  border: 1px solid white;
+  width: 96%;
+}
+.addtopic-container-form form.addconversation {
+  padding: 20px;
+  border: 1px solid #DDDDDD;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px; 
+  margin-bottom: 20px;
+}
+/*
+New Answer
+*/
+.addanswer-container {
+  display: block;
+  border-bottom: 1px solid #DDDDDD;
+  margin: 20px 65px 40px 0;
+  width: 90%;
+  overflow: hidden;
+}
+.addanswer-container dl dt {
+  font-size: 2em;
+  line-height: 2em;
+}
+.addanswer-container-form form.addconversation {
+  padding: 0px 20px 20px;
+  border: 1px solid #DDDDDD;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px; 
+  margin-bottom: 20px;
+}
+
+/*
+==================================================================================================
+  8000 | CUSTOM JIRAS
+================================================================================================== 
+*/
+/* CURRIKI-6110 */
+.titleheader.titleheader-red {background-color: #006699 !important ;}
+/* CURRIKI-6207 */
+.expanded #right-panel {overflow: hidden;}
+/* CURRIKI-6156 */
+.groups-home .head .frame-inset-logo img { max-width: 121px; }
+
+/*
+==================================================================================================
+  9000 | QUICK FIXES 
+         
+         If you are in a hurry drop your fix here but please document it with a short comment
+================================================================================================== 
+*/
+/*
 Various Fixes
 ---------------------------------------------
 */
-
 #navigation-inner .titles:hover span.collapsed, 
 #navigation-inner span.collapsed, 
 #navigation-inner span.expanded, 
 #navigation-inner .titles:hover span.expanded, 
 #navigation-inner .selected span.collapsed {
-    background-image: url("http://dev.gpsnetwork.org//xwiki/skins/curriki8/img/sprite_general.png") !important;
+    background-image: url("/xwiki/skins/curriki8/img/sprite_general.png") !important;
 }
+.commentedit {
+  display: inline-block;
+  width: auto;  
+}
+/*
+Fix discussion display on groups tabs
+--------------------------------------------------------------------------------------------------
+*/
+#section_2 { border: none !important; }
+#section2content { padding: 0 !important; }
+#groups-discussions-main { background: none !important; }
+#groups-discussions-main  #section_1 { border:none !important; }
+#groups-discussions-main  #section1content { padding: 10px 0 !important; }
+
+#groups-discussions-main .addconversation-container {
+  margin-right: 0 !important;
+}
+#groups-discussions-main .answer-moderation {
+  margin: -70px 19px 0 0;  
+}
+/* Fix panel floating on Forum View
+#panels {
+  overflow: hidden;
+
+}
+#panels #left-panel,
+.expanded#left-panel {
+    display: inline-block !important;
+    float: left !important;
+    font-size: 12px;
+    height: 100%;
+    margin: 0;
+    padding: 0.5em 0 0 0.3em;
+    width: 205px;
+}
+#panels #right-panel,
+.expanded#right-panel {
+    display: inline-block !important;
+    float: left !important;
+    margin-left: 0 !important;
+    padding-left: 10px;
+}
+ */ 
