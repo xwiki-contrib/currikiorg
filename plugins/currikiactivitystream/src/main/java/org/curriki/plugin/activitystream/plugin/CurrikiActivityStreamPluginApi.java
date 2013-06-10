@@ -62,6 +62,8 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
                 wrappedEvent = new ResourceActivityEvent(event, getXWikiContext());
             } else if (event.getSpace().startsWith("Documentation_Group_")) {
                 wrappedEvent = new DocumentationActivityEvent(event, getXWikiContext());
+            } else if (event.getSpace().startsWith("Discussions_Group_")) {
+                wrappedEvent = new DiscussionActivityEvent(event, getXWikiContext());
             } else {
                 wrappedEvent =
                         new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
