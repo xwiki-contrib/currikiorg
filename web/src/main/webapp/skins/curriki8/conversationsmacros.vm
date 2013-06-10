@@ -488,10 +488,10 @@ addthis:description="${escapetool.xml($addThisDesc)}"
         </div>
       </span>
     </div>
-  #if($withdetails)
-  <div class="topic-description">
+    #if($withdetails)
+    <div class="topic-description">
     $!topicDescription
-    <div class="topic-actions">
+     <div class="topic-actions">
       <span class="left">
         #displayForumActions($topicDoc)
       </span>
@@ -499,9 +499,9 @@ addthis:description="${escapetool.xml($addThisDesc)}"
       <span class="right">
        #displayForumAddThis($topicDoc, $topicTitle)             
       </span>
+     </div>
     </div>
-  </div>
-  <div class="topic-moderation">
+    <div class="topic-moderation">
     #if($topicDoc.hasAccessLevel("edit"))
     <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
     #end
@@ -509,8 +509,9 @@ addthis:description="${escapetool.xml($addThisDesc)}"
      #set($actionParams =  "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($topicDoc.fullName)}&amp;xredirect=${escapetool.url($xredirect)}")
      <a class="topic-delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', $actionParams)" title="$msg.get('conversation.forum.delete.title')">$msg.get('conversation.forum.delete')</a>
     #end
+    </div>  
   #end
-</div>
+  </div>
 #end
 ##
 ##
