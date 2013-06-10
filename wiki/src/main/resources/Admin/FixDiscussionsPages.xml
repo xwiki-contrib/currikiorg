@@ -25,12 +25,20 @@
 <content>{{velocity}}
 #foreach($item in $xwiki.searchDocuments("where doc.space like 'Group_%' and doc.name = 'Discussions'"))
 #set($itemdoc = $xwiki.getDocument($item))
+#set($updated = false)
 #if(!$itemdoc.getObject("ConversationCode.ForumClass"))
- #if($request.confirm)
 $itemdoc.newObject("ConversationCode.ForumClass")
+ #set($updated = true)
+#end
+#if($itemdoc.getContent()!="")
+ #set($ok = $itemdoc.setContent(""))
+ #set($updated = true)
+#end
+#if($updated)
+* $item
+ #if($request.confirm)
 $itemdoc.save()
  #end
-* $item
 #end
 #end
 
