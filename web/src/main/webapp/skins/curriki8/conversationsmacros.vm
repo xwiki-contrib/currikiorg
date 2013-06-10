@@ -75,6 +75,7 @@
    #set($commentodd = "even")
   #end 
   <div id="xwikicomment_${conversationId}_${comment.number}" class="comment $commentodd #if($comment.getProperty('author').value == $commentDoc.creator) commentByCreator#end">
+    <div class="comment-layout">
     <span class="user-avatar">
      #if("$!comment.replyto" == '')#smallUserAvater2($comment.author)#{else}#smallUserAvater2($comment.author)#end
     </span> 
@@ -101,9 +102,9 @@
            <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}:xwikicomment_${conversationId}_${comment.number}")">$msg.get("conversations.flag.button")</a>
           </span>
         #end
-       </span>
-	   
+       </span>	   
     </div><!-- /.comment-content -->
+  </div> <!-- /.comment-layout -->
     <div class="comment-moderation">
         #if($commentDoc.hasAccessLevel('comment'))
          #if($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
