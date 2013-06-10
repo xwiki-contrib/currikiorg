@@ -107,14 +107,16 @@
   </div> <!-- /.comment-layout -->
     <div class="comment-moderation">
         #if($commentDoc.hasAccessLevel('comment'))
-         #if($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
+         #if(($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
+             ||$xwiki.hasAdminRights())
           ## Although this will fail if the javascript is not working, we assume it's always working
           ## so edit comment will redirect to the conversations view of the article for which we edited comment, so that we have a correct reloading after save
           #set($commentEditRedirect = $commentDoc.getURL('get', 'xpage=xpart&vm=conversations.vm'))
           <span class="commenttool commentedit"><a class="edit" href="$commentDoc.getURL('view', "viewer=conversationscomments&amp;number=${comment.number}&amp;xredirect=$escapetool.url($commentEditRedirect)")" title="$msg.get('core.viewers.comments.edit')">$msg.get('core.viewers.comments.edit')</a></span>
          #end
         #end
-        #if ($commentDoc.hasAccessLevel('edit'))
+         #if(($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
+             ||$xwiki.hasAdminRights())
           <span class="commenttool commentdelete"><a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deletecomment&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($commentDoc.fullName)}&amp;commentnumber=${comment.number}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('core.viewers.comments.delete')">$msg.get('core.viewers.comments.delete')</a></span>
         #end
      </div>
@@ -127,7 +129,7 @@
  #if ("$!conversationId" == "")
     #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
  #end
- #if($xwiki.hasAccessLevel('edit', $xcontext.user, $commentDoc.prefixedFullName))
+ #if($commentDoc.hasAccessLevel('edit'))
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
     ## for the new comment form, redirect to the conversation itself
     #if ("$!replyTo" != "")
@@ -178,7 +180,7 @@
    #end   
   #else
    <div class="answer user">
-   #if($s)
+   #if($doc.space.startsWith("Group_")||$doc.space.startsWith("Discussions_Group_"))
     <p class="norights">$msg.get('conversation.groups.norights')</p>
    #else
     <p class="norights">$msg.get('conversation.norights')</p>   
@@ -303,14 +305,15 @@
 ###
 ###
 #macro(displayTopicAddForm $space)
+    #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
+    #set($newTopicDoc = $xwiki.getDocument($newTopicName))
+    #if($newTopicDoc.hasAccessLevel("edit"))
     <div class="addconversation-container addtopic-container">
      <div class="addconversation-container-button addtopic-container-button">
       <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
      </div>
      <div class="addconversation-container-form addtopic-container-form">
      ## Create a fake topic object to be able to display the status and the type selectors
-     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
-     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
      <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addtopic" />
@@ -343,18 +346,20 @@
     </form>
    </div>
   </div>
+  #end
 #end
 ##
 ##
 #macro(displayConversationAddForm)
+  #set($newAnswerName = $doc.space + "." + $xwiki.getUniquePageName($doc.space, "${doc.name}Answer"))
+  #set($newAnswerDoc = $xwiki.getDocument($newAnswerName))
+  #if($newAnswerDoc.hasAccessLevel("edit"))
   <div class="addconversation-container addanswer-container">
     <div class="addconversation-container-button addanswer-container-button">
      <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
     </div>
     <div class="addconversation-container-form addanswer-container-form">
       ## Create a fake conversation object to be able to display the status and the type selectors
-      #set($newAnswerName = $doc.space + "." + $xwiki.getUniquePageName($doc.space, "${doc.name}Answer"))
-      #set($newAnswerDoc = $xwiki.getDocument($newAnswerName))
      <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addconversation" />
@@ -379,6 +384,7 @@
     </form>
    </div>
   </div>
+  #end
   <div class="clearfloats"></div>
 #end
 ##
@@ -503,10 +509,12 @@ addthis:description="${escapetool.xml($addThisDesc)}"
      </div>
     </div>
     <div class="topic-moderation">
-    #if($topicDoc.hasAccessLevel("edit"))
+    #if(($topicDoc.creator==$context.user && $topicDoc.hasAccessLevel("edit"))
+        ||$xwiki.hasAdminRights())
     <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
     #end
-    #if($topicDoc.hasAccessLevel("delete"))        
+    #if(($topicDoc.creator==$context.user && $topicDoc.hasAccessLevel("delete"))
+        ||$xwiki.hasAdminRights())
      #set($actionParams =  "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($topicDoc.fullName)}&amp;xredirect=${escapetool.url($xredirect)}")
      <a class="topic-delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', $actionParams)" title="$msg.get('conversation.forum.delete.title')">$msg.get('conversation.forum.delete')</a>
     #end
@@ -566,10 +574,12 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 				</div>
 		 </div><!-- / .answer-reply -->
          <div class="answer-moderation">
-            #if($conversationDoc.hasAccessLevel('edit'))
+            #if(($conversationDoc.creator==$context.user && $topicDoc.hasAccessLevel("edit"))
+                 ||$xwiki.hasAdminRights())
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
-            #if($conversationDoc.hasAccessLevel('delete'))        
+            #if(($conversationDoc.creator==$context.user && $topicDoc.hasAccessLevel("delete"))
+                 ||$xwiki.hasAdminRights())
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($conversationDoc.fullName)}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
          </div><!-- / .answer-moderation -->
