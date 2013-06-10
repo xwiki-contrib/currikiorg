@@ -25,7 +25,7 @@
     <span id="forum-title" class="forum-title">
      <h1>$doc.displayTitle</h1>
     </span>
-    #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
+    #if($doc.hasAccessLevel('edit') && $doc.creator==$context.user)
      <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.forum.edit')">$msg.get('conversations.forum.edit')</a></span>
     #end
     <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
