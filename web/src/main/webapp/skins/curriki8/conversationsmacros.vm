@@ -93,7 +93,7 @@
         #set($commentPermalinkInConversation = $xwiki.getURL($doc.parent, 'view', 'viewer=conversations'))
        #end
         <span class="permalink"><a class="permalink" href="$escapetool.xml($commentPermalinkInConversation)#xwikicomment_${conversationId}_${comment.number}" title="$msg.get('core.viewers.comments.permalink')">$msg.get('core.viewers.comments.permalink')</a></span>
-        #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
+        #if($commentDoc.hasAccessLevel('comment'))
         <span class="commenttool commentreply"><a class="commentreply" href="$escapetool.xml($xredirect.replaceAll('&?replyto=\d++', ''))&amp;replyto=${comment.number}&amp;replytoconversation=${escapetool.url($commentDoc.fullName)}#xwikicomment_${conversationId}_${comment.number}" title="$msg.get('core.viewers.comments.reply')"#if("$!replyTo" == "${comment.number}" && "$!replyToConversation" == "$!commentDoc.fullName") style="display: none;"#end>$msg.get('core.viewers.comments.reply')</a></span>
         #end
         #if ($context.user!="XWiki.XWikiGuest")
@@ -103,16 +103,16 @@
         #end
        </span>
 	   <div class="coment-moderation">
-        #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
-         #if($comment.author == $xcontext.user && $xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($commentDoc.documentReference, 'compactwiki')))
+        #if($commentDoc.hasAccessLevel('comment'))
+         #if($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
           ## Although this will fail if the javascript is not working, we assume it's always working
           ## so edit comment will redirect to the conversations view of the article for which we edited comment, so that we have a correct reloading after save
           #set($commentEditRedirect = $commentDoc.getURL('get', 'xpage=xpart&vm=conversations.vm'))
           <span class="commenttool commentedit"><a class="edit" href="$commentDoc.getURL('view', "viewer=conversationscomments&amp;number=${comment.number}&amp;xredirect=$escapetool.url($commentEditRedirect)")" title="$msg.get('core.viewers.comments.edit')">$msg.get('core.viewers.comments.edit')</a></span>
          #end
         #end
-        #if ($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($commentDoc.documentReference, 'compactwiki')))
-          <span class="commenttool commentdelete"><a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deletecomment&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($commentDoc.documentReference, 'compactwiki'))}&amp;commentnumber=${comment.number}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('core.viewers.comments.delete')">$msg.get('core.viewers.comments.delete')</a></span>
+        #if ($commentDoc.hasAccessLevel('edit'))
+          <span class="commenttool commentdelete"><a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deletecomment&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($commentDoc.fullName)}&amp;commentnumber=${comment.number}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('core.viewers.comments.delete')">$msg.get('core.viewers.comments.delete')</a></span>
         #end
 	   </div>
     </div><!-- /.comment -->
@@ -507,12 +507,14 @@ addthis:description="${escapetool.xml($addThisDesc)}"
       </span>
     </div>
   </div>
-  #if($topicDoc.hasAccessLevel("edit"))
   <div class="topic-moderation">
+    #if($topicDoc.hasAccessLevel("edit"))
     <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
-    <a class="topic-delete" href="$topicDoc.getURL("delete")" title="$msg.get("conversations.forum.delete")">$msg.get("conversations.forum.delete")</a>
-  </div>
-  #end
+    #end
+    #if($topicDoc.hasAccessLevel("delete"))        
+     #set($actionParams =  "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($topicDoc.fullName)}&amp;xredirect=${escapetool.url($xredirect)}")
+     <a class="topic-delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', $actionParams)" title="$msg.get('conversation.forum.delete.title')">$msg.get('conversation.forum.delete')</a>
+    #end
   #end
 </div>
 #end
@@ -568,11 +570,11 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 				</div>
 		 </div><!-- / .answer-reply -->
          <div class="answer-moderation">
-            #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))
+            #if($conversationDoc.hasAccessLevel('edit'))
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
-            #if($xwiki.hasAccessLevel('delete', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))        
-              <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($conversationDoc.documentReference, 'compactwiki'))}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
+            #if($conversationDoc.hasAccessLevel('delete'))        
+              <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($conversationDoc.fullName)}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
          </div><!-- / .answer-moderation -->
 	    </div><!-- / .answer-layout -->

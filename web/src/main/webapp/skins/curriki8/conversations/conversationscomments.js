@@ -505,7 +505,7 @@ viewers.Comments = Class.create({
    * Ajax conversation deletion.
    */
   addConversationDeleteListener : function() {
-    var conversationDelete = this.conversation.down('.conversation-delete a');
+    var conversationDelete = this.conversation.down('.answer-moderation a.delete');
     if (!conversationDelete) {
       return;
     }
@@ -550,7 +550,7 @@ viewers.Comments = Class.create({
   },
 
   addConversationEditListener : function() {
-    var conversationEdit = this.conversation.down('.conversation-edit a');
+    var conversationEdit = this.conversation.down('.answer-moderation a.edit');
     if (!conversationEdit) {
       return;
     }
@@ -832,6 +832,48 @@ function init() {
           form.addClassName('hidden');
         });
       }
+    });
+    
+   // add delete for topic
+   $$(".topic-moderation a.topic-delete").each(function(topicDeletelink) {
+    if (topicDeletelink) {
+     topicDeletelink.observe('click', function(event) {
+      var commentsCount = $$(this.xcommentSelector).size();
+      topicDeletelink.blur();
+      event.stop();
+      if (topicDeletelink.disabled) {
+        // Do nothing if the button was already clicked and it's waiting for a response from the server.
+        return;
+      } else {
+        new XWiki.widgets.ConfirmedAjaxRequest(
+          /* Ajax request URL */
+          topicDeletelink.readAttribute('href') + (Prototype.Browser.Opera ? "" : "&ajax=1"),
+          /* Ajax request parameters */
+          {
+            onCreate : function() {
+              // Disable the button, to avoid a cascade of clicks from impatient users
+              topicDeletelink.disabled = true;
+            },
+            onSuccess : function() {
+              // notify the delete
+              alert("$msg.get('conversation.delete.success')");
+            }.bind(this),
+            onComplete : function() {
+              // In the end: re-enable the button
+              topicDeletelink.disabled = false;
+            }
+          },
+          /* Interaction parameters */
+          {
+             confirmationText: commentsCount > 0 ? "$escapetool.javascript($msg.get('conversation.delete.confirm.withReplies', ['__number__']))".replace('__number__', commentsCount) : "$escapetool.javascript($msg.get('conversation.delete.confirm'))",
+             progressMessageText : "$msg.get('conversation.delete.inProgress')",
+             successMessageText : "$msg.get('conversation.delete.done')",
+             failureMessageText : "$msg.get('conversation.delete.failed')"
+          }
+        );
+      }
+     }.bindAsEventListener(this));
+    }
     });
     
     // add vote click handler for the topic
