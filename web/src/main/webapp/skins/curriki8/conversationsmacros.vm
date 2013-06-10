@@ -309,7 +309,7 @@
      </div>
      <div class="addconversation-container-form addtopic-container-form">
      ## Create a fake topic object to be able to display the status and the type selectors
-     #set($newTopicName = $doc.space + "." + $xwiki.getUniquePageName($doc.space, 'Topic'))
+     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
      #set($newTopicDoc = $xwiki.getDocument($newTopicName))
      <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
