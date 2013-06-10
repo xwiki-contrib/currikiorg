@@ -23,9 +23,9 @@
 
     Curriki.module.search.outerResources = {
         prefix: "http://www.curriki.org/xwiki/bin/view/",
-        suffix: "?viewer=embed",
+        suffix: "?comingFrom=" + location.host,
         target: "currikiResources",
-        ratingsPrefix: "http://www.curriki.org/xwki/bin/view/",
+        ratingsPrefix: "http://www.curriki.org/xwiki/bin/view/",
         ratingsSuffix : "?viewer=comments"
         };
 })();
@@ -171,7 +171,7 @@ module.init = function(){
 			}
 		}
         var modName2 = modName;
-        if(modName2='otherResource') modName2='resource';
+        if(modName2=='otherResource') modName2='resource';
 		Ext.apply(filters, {module: modName2});
 
 		// Module panel
