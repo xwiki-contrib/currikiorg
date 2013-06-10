@@ -31,9 +31,14 @@
 ## control our buttons
 #set($showactions=0)
 {{html clean=false}}
+##&lt;div class="bottombuttons"&gt;
+##&lt;div class="buttons"&gt;
   &lt;input class="button-grey" type="button" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.${formname}.action='$doc.getURL("cancel")'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit(); this.form.submit();"/&gt;
   &lt;input class="button-orange" type="submit" name="formactionsave" value="$msg.get("saveandview")" onclick="document.forms.${formname}.action='$doc.getURL("${saveaction}", $param)'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit();if (checkDocumentContent()) document.forms.${formname}.submit(); return false;"/&gt;
+##&lt;/div&gt;
+##&lt;/div&gt;
 {{/html}}
+   #activatefullscreen()
   #elseif($context.action == 'view' &amp;&amp; $request.viewer != 'conversationstopic')
     $response.sendRedirect($doc.getURL('view', 'viewer=conversationstopic'))
   #end
