@@ -59,6 +59,10 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
 
     public static final String DOCUMENTATION_WIKI = "documentation-wiki";
 
+    public static final String DISCUSSION_TOPIC = "discussion-topic";
+
+    public static final String DISCUSSION_ANSWER = "discussion-answer";
+
     public CurrikiActivityStream()
     {
         super();
@@ -76,12 +80,16 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
+    System.out.println("DISCUSSION STREAM: in notify");
+            
         if(Utils.getComponent(RemoteObservationManagerContext.class).isRemoteState()) {
             System.out.println("Ignoring remote DocumentUpdatedEvent for " + newdoc);
             return;
         }
         try {
             String spaceName = newdoc.getSpace();
+            System.out.println("DISCUSSION STREAM: in space" + spaceName);
+            
             if (spaceName == null) {
                 return;
             }
@@ -89,6 +97,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                 handleMessageEvent(newdoc, olddoc, event, context);
             } else if (spaceName.startsWith("Documentation_Group_")) {
                 handleDocumentationEvent(newdoc, olddoc, event, context);
+            } else if (spaceName.startsWith("Discussions_Group_")) {
+                handleDiscussionsEvent(newdoc, olddoc, event, context);
             } else if (spaceName.startsWith("Coll_Group_")) {
                 handleResourceEvent(newdoc, olddoc, event, context);
             } else if (spaceName.startsWith("UserProfiles_Group_")) {
@@ -240,6 +250,80 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         }
     }
 
+    protected void handleDiscussionsEvent(XWikiDocument newdoc, XWikiDocument olddoc,
+        int event, XWikiContext context)
+    {
+        String streamName = getStreamName(newdoc.getSpace(), context);
+        if (streamName == null) {
+            return;
+        }
+
+        try {
+            List params = new ArrayList();
+        	String docTitle = newdoc.getTitle();
+        	BaseObject answerClass = newdoc.getObject("ConversationCode.AnswerClass");
+        	BaseObject topicClass = newdoc.getObject("ConversationCode.TopicClass");
+        	BaseObject oldAnswerClass = olddoc.getObject("ConversationCode.AnswerClass");
+        	BaseObject oldTopicClass = olddoc.getObject("ConversationCode.TopicClass");
+        
+        	if ((answerClass!=null)||(oldAnswerClass!=null)) {
+        	 
+        	    XWikiDocument topicDoc = context.getWiki().getDocument(newdoc.getParent(), context);
+           		params.add(topicDoc.getTitle());
+           		params.add(getUserName(context.getUser(), context));
+           		params.add(DISCUSSION_ANSWER);
+           		if (answerClass==null) {
+            
+           		  // this means an answer has been deleted
+           		  addDocumentActivityEvent(streamName, topicDoc, ActivityEventType.DELETE,
+           		                       		ActivityEventPriority.NOTIFICATION, "", params, context);                  		           		
+           		} else if (oldAnswerClass==null) {
+            
+           		  // this means an answer has been created
+           		  addDocumentActivityEvent(streamName, topicDoc, ActivityEventType.CREATE,
+                         					ActivityEventPriority.NOTIFICATION, "", params, context);                  		
+           		} else {
+            
+           		  // this means an answer has been updated (or comment published)
+           		  addDocumentActivityEvent(streamName, topicDoc, ActivityEventType.UPDATE,
+                         					ActivityEventPriority.NOTIFICATION, "", params, context);       
+                }
+        	} else if ((topicClass!=null)||(oldTopicClass!=null)) {
+            
+           		if (topicClass==null) {
+            
+            			// this means a topic has been deleted
+            			params.add(olddoc.getTitle());
+            			params.add(getUserName(context.getUser(), context));
+            			params.add(DISCUSSION_TOPIC);
+
+                        addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
+                        					     ActivityEventPriority.NOTIFICATION, "", params, context);      
+           		} else if (oldTopicClass==null) {
+            
+           		        // this means a topic has been created
+            			params.add(newdoc.getTitle());
+           				params.add(getUserName(context.getUser(), context));
+            			params.add(DISCUSSION_TOPIC);
+            			addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
+                        						ActivityEventPriority.NOTIFICATION, "", params, context);       
+           		
+           		} else {   
+             
+           		        // this means a topic has been updated    
+            			params.add(newdoc.getTitle());
+           				params.add(getUserName(context.getUser(), context));
+            			params.add(DISCUSSION_TOPIC);
+            			addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
+                        						ActivityEventPriority.NOTIFICATION, "", params, context);       
+           		}
+         	}
+         } catch (Throwable e) {
+            // Error in activity stream notify should be ignored but logged in the log file
+            e.printStackTrace();
+        }
+           
+    }
     protected void handleResourceEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
         XWikiContext context)
     {
