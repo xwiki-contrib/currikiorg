@@ -57,7 +57,9 @@ $xwiki.ssfx.use('js/xwiki/editors/fullScreenEdit.css', true)##
 ## ----------------------------
 $renderedContent
 #set($editactions = "bottom")
+#if((!$showactions)||($showactions==1))
 <div class="bottombuttons">#template("editactions.vm")</div>
+#end
 </div> ## form
 </form>
 #template("textarea_wysiwyg.vm")
