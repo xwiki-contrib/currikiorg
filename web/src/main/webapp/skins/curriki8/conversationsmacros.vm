@@ -306,8 +306,11 @@
 ###
 #macro(displayTopicAddForm $space)
     <div class="addconversation-container addtopic-container">
-    <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
-    <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
+     <div class="addconversation-container-button addtopic-container-button">
+      <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
+     </div>
+     <div class="addconversation-container-form addtopic-container-form">
+     <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addtopic" />
         <input type="hidden" name="space" value="$escapetool.xml($space)" />
@@ -341,14 +344,18 @@
         <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationsforum')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
+   </div>
   </div>
 #end
 ##
 ##
 #macro(displayConversationAddForm)
   <div class="addconversation-container addanswer-container">
-    <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
-    <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
+    <div class="addconversation-container-button addanswer-container-button">
+     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
+    </div>
+    <div class="addconversation-container-form addanswer-container-form">
+     <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addconversation" />
         <input type="hidden" name="page" value="$doc.name" />
@@ -375,6 +382,7 @@
         <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
+   </div>
   </div>
   <div class="clearfloats"></div>
 #end

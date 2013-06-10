@@ -817,7 +817,7 @@ function init() {
       // get the button that was clicked
       var activator = event.findElement();
       // get its form, which is the sibling form .addconversation
-      var form = activator.next('form.addconversation');
+      var form = activator.up('div.addconversation-container').down('form.addconversation');
       // if we have a form, do all sorts of stuff, otherwise just let the link go
       if (form) {
         event.stop();
