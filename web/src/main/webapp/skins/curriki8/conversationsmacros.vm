@@ -287,6 +287,7 @@
   #end  
   #set($nextorder = "desc")   
   #if($currentfield==$field)
+   #set($sortclass = "forum-sort-button-active")
    #if($currentorder=="desc")
     #set($style = "forum-sort-button-desc")
     #set($nextorder = "asc")   
@@ -300,7 +301,7 @@
   #else
    #set($viewer = "viewer=conversationsforum&")
   #end
-  <span class="${sortclass}"><a href="$doc.getURL("view", "${viewer}sortfield=${field}&sortorder=${nextorder}")" onclick="">$msg.get("conversations.forum.sorttopicsby.${field}")</a></span>   
+  <span class="forum-sort-button-${sortclass} ${style}"><a href="$doc.getURL("view", "${viewer}sortfield=${field}&sortorder=${nextorder}")" onclick="">$msg.get("conversations.forum.sorttopicsby.${field}")</a></span>   
 #end
 ###
 ###
@@ -685,8 +686,9 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   #if($request.sortfield=="votes")
    #if($request.sortorder=="asc")
     #set($currentorder = "asc")    
+    #set($votesorder = "asc")
    #else
-    #set($votesorder = "desc") 
+    #set($votesorder = "desc")
     #set($nextvotesorder = "asc") 
    #end
    ## sort by votes - requires programming rights
@@ -694,6 +696,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   #elseif($request.sortfield=="comments")
     #if($request.sortorder=="asc")
     #set($currentorder = "asc")    
+    #set($commentsorder = "asc")
    #else
     #set($commentsorder = "desc") 
     #set($nextcommentsorder = "asc")
@@ -703,6 +706,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   #else
     #if($request.sortorder=="asc")
     #set($currentorder = "asc")    
+    #set($datesorder = "asc")
    #else
     #set($datesorder = "desc")   
     #set($nextdatesorder = "asc")
