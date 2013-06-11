@@ -88,6 +88,7 @@ body.curriki#body { background: #DDDDDD !important; }
 .blue, .members .headerbar, .groups .headerbar, .form-wrp fieldset h3 { background: #164891 !important; }
 
 .odd, .even {background-color: transparent !important;}
+.none, .hidden { display: none !important; }
 /*
 ==================================================================================================
   500 | DISCUSSION FORUMS
@@ -108,6 +109,28 @@ body.curriki#body { background: #DDDDDD !important; }
 }
 #forum-header h1 { font-size: 32px !important; font-weight: normal; display: inline; }
 #forum-description { height: auto; display: block; padding: 10px; margin: 0; }
+
+/* Sorting of topics
+--------------------------------------------------------------------------------------------------
+ */
+ .forum-buttons {}
+ .forum-buttons label {margin-right: 20px;}
+.forum-sort-button-active,
+.forum-sort-button-inactive {
+  padding: 0 20px 0 10px;
+}
+.forum-sort-button-desc { background: url("icons/black-arrow-ab.png") no-repeat scroll right center transparent; }
+.forum-sort-button-asc { background: url("/xwiki/skins/curriki8/img/black-arrow-ba.png") no-repeat scroll right center transparent; }
+.forum-sort-button-inactive.forum-sort-button-desc {background: none;}
+
+
+
+
+
+
+
+
+
 #forum-topic-nb {
   background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat 0px 0px !important;
   position: absolute; top: 0; right: 0;
@@ -125,7 +148,6 @@ body.curriki#body { background: #DDDDDD !important; }
 }
 #forum-buttons label { color: #AAAAAA; }
 .forum-sort-button-inactive { padding: 10px 20px !important; display: inline-block; }
-.addconversation-container { overflow: hidden; display: inline-block; float: right; }
 .addconversation-activator {
   padding: 10px 20px 10px 40px !important;
   background: #FFD801;
@@ -353,9 +375,6 @@ Delete modal box
   color: white !important;
   display: inline !important;
 }
-
-
-
 
 .topic-actions .center {
   background: transparent url('/xwiki/skins/curriki8/img/forums.png') no-repeat -400px 0px !important;
@@ -888,7 +907,11 @@ Discussion Topics
 New Topic
 --------------------------------------------------------------
 */
-.addconversation-container { }
+/*
+.addconversation-container { overflow: hidden; display: inline-block; float: right; }
+*/
+.addconversation-container-button { overflow: hidden; display: inline-block; float: right; }
+.addconversation-container { display: inline !important;}
 .addconversation-container dt { line-height: 1.5em; margin: 10px 0 5px 0; }
 .addconversation-container .buttons { text-align: right; }
 .addconversation-container input[type="text"],
@@ -900,6 +923,11 @@ New Topic
   border: 1px solid white;
   width: 96%;
 }
+.addtopic-container-form {
+  display: block;
+  width: 100%;
+  clear: both;
+}
 .addtopic-container-form form.addconversation {
   padding: 20px;
   border: 1px solid #DDDDDD;
@@ -907,6 +935,11 @@ New Topic
   -moz-border-radius: 8px;
   border-radius: 8px; 
   margin-bottom: 20px;
+  display: block;
+  clear: both;
+}
+form.addconversation input[type="text"] {
+  width: 97%;
 }
 /*
 New Answer
@@ -977,6 +1010,8 @@ Fix discussion display on groups tabs
 
 #groups-discussions-main .addconversation-container {
   margin-right: 0 !important;
+  display: block;
+  float: none;
 }
 #groups-discussions-main .answer-moderation {
   margin: -70px 19px 0 0;  
