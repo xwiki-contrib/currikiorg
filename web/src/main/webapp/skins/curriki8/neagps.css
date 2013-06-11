@@ -158,6 +158,7 @@ body.curriki#body { background: #DDDDDD !important; }
   min-width: 630px;
 }
 .topic .user-avatar img.photo {  
+  background: #FFFFFF;
   float: left; display: inline-block;
   width: 80px !important;
   height: 80px !important;
@@ -188,10 +189,13 @@ h3.topic-title {
   background: url("img/forums.png") no-repeat scroll -100px 5px transparent !important;
   color: white;
   font-size: 16px; font-weight: bold;
-  height: 50px; width: 52px !important;
+  height: 40px; width: 52px !important;
   padding: 14px 0 0;
   position: absolute; right: 30px; top: -30px;
   text-align: center;
+}
+.topic-comments:hover {
+  background: url("img/forums.png") no-repeat scroll -100px -45px transparent !important;
 }
 /*
 Topic Metadata
@@ -244,6 +248,11 @@ Topic Metadata
   width: 50px; height: 29px;
   text-align: center;
 }
+.topic-vote:hover {
+  background: transparent url('img/forums.png') no-repeat -200px -50px !important;
+  font-size: 0 !important;
+}
+
 /*
 Topic Content / Description
 --------------------------------------------------------------------------------------------------
@@ -377,6 +386,9 @@ Delete modal box
   margin: 0 auto;
   padding: 20px;
   text-align: center;
+}
+.topic-actions .center:hover {
+  background: transparent url('img/forums.png') no-repeat -400px -50px !important;  
 }
 .topic-actions .right {
   float: right; display: inline-block;
@@ -540,11 +552,14 @@ Answers and Comments for a Topic
   height: 48px; 
   behavior: url(ie/PIE.htc);
 }
+.answer-layout .user-avatar {
+  margin-left: 17px;
+}
 .answer-reply { 
   border: 1px solid #DDDDDD; 
   border-radius: 8px; 
-  margin: 0 65px 0 70px !important; 
-  min-width: 490px; 
+  margin: 0 65px 0 102px !important; 
+  min-width: 460px; 
   position: relative; z-index: 202;
   background: white;
 }
@@ -601,7 +616,6 @@ Limit content / make it responsive
 .answer-content .actions {
   float: left; display: inline-block;
   width: 50% !important;
-  overflow: hidden;
 }
 .answer-content .actions .flag,
 .answer-content .actions .conversation-permalink {
@@ -641,7 +655,7 @@ Moderator / Admin
 --------------------------------------------------------------------------------------------------
 */
 
-.answer-moderation { float: right; clear: right; position: relative; margin: -70px 35px 0 0;}
+.answer-moderation { float: right; clear: right; position: relative; margin: -70px 39px 0 0;}
 .answer-moderation .edit,
 .answer-moderation .delete {
   background: green url('img/forums.png') no-repeat 40px -93px !important;
@@ -667,7 +681,7 @@ Moderator / Admin
 
 .comments { border-bottom: none !important; }
 .answer > .comments {
-  margin: 7px 0 0 60px !important;
+  margin: 7px 4px 0 90px !important;
   padding: 0 2px 2px 2px !important;
   border: none !important;
   margin-top: 7px !important;
