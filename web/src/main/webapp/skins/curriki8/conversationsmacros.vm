@@ -394,7 +394,8 @@
 ##
 #macro(displayTopics)
   #set($step = 10)
-  #set($nb = $step)
+  #set($count = 0)
+  #set($nb = $step + 1)
   #set($start = 0)
   #set($nextstart = $step)
   #if($request.start)
@@ -412,11 +413,16 @@
    #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
   #end
   #foreach($topic in $topics)
-    #displayForumTopic($topic false)
+    #if($count!=$step)
+     #displayForumTopic($topic false)
+     #set($count = $count + 1)
+    #end 
   #end
+  #if($topics.size()==$nb)
   <div id="forum-more">
   <a href="$doc.getURL("view", "viewer=conversationsforum&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
   </div>
+  #end
 #end
 
 ##
