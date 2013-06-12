@@ -24,8 +24,9 @@
         <meta name="description" content="$escapetool.xml($description.replaceAll('<[^>]+>','').replaceAll('\n',' '))" />
         <meta name="author" content="$xwiki.getUserName($doc.creator,false).toString()" />
     #else
-        <meta name="description" content="Curriki, the online education community, is building the first website to offer free, open-source instructional materials for K-12. We have thousands of free worksheets, lesson plans, exams, project ideas and activities for English language arts, math, science, social studies, technology integration and other subjects. All of our educational material is contributed by teachers and partners and is free and open source." />
-        <meta name="author" content="The Curriki team and community" />
+        $xwiki.parseContent($!xwiki.getSpacePreference("meta"))
+        ##<meta name="description" content="Curriki, the online education community, is building the first website to offer free, open-source instructional materials for K-12. We have thousands of free worksheets, lesson plans, exams, project ideas and activities for English language arts, math, science, social studies, technology integration and other subjects. All of our educational material is contributed by teachers and partners and is free and open source." />
+        ##<meta name="author" content="The Curriki team and community" />
     #end
     <meta name="language" content="$context.language" />
 
