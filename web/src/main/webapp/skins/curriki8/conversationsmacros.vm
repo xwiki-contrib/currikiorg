@@ -88,10 +88,10 @@
       $commentDoc.getRenderedContent($comment.getProperty('comment').getValue(), $doc.getSyntax().toIdString())
 	  <span class="actions">
 	   ## compose the comment permalink in conversation carefully, taking care of making it point to the article's conversation view and not to the conversation itself
-       #set($commentPermalinkInConversation = $doc.getURL('view', 'viewer=conversations'))
+       #set($commentPermalinkInConversation = $doc.getURL('view', 'viewer=conversationstopic'))
        #set($parentArticle = $doc.parent)
        #if (!$isTopic && $parentArticle != "")
-        #set($commentPermalinkInConversation = $xwiki.getURL($doc.parent, 'view', 'viewer=conversations'))
+        #set($commentPermalinkInConversation = $xwiki.getURL($doc.parent, 'view', 'viewer=conversationstopic'))
        #end
         <span class="permalink"><a class="permalink" href="$escapetool.xml($commentPermalinkInConversation)#xwikicomment_${conversationId}_${comment.number}" title="$msg.get('core.viewers.comments.permalink')">$msg.get('core.viewers.comments.permalink')</a></span>
         #if($commentDoc.hasAccessLevel('comment'))
@@ -567,7 +567,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
                      </span>
                      #end
 					 <span class="conversation-permalink">
-                          <a class="permalink" href="$escapetool.xml($doc.getURL('view', 'viewer=conversations'))#${conversationId}" title="$msg.get('conversation.permalink.tooltip')">
+                          <a class="permalink" href="$escapetool.xml($doc.getURL('view', 'viewer=conversationstopic'))#${conversationId}" title="$msg.get('conversation.permalink.tooltip')">
                           ## We need to put image here since we cannot do background + indented text + fixed width as we do for comment tools, because overflow: hidden is messing up the display of the other icons.
                           </a>
                      </span>
