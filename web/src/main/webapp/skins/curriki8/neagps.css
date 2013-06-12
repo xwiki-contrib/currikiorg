@@ -736,17 +736,22 @@ Moderator / Admin
   border-radius: 4px; 
 }
 
-.comment.user {background: #C9C9C9; margin: 0 60px 0 10px;}
-.comment.user .comment-layout {
-   margin-right: 0;
+.comment.user {
+  background: #C9C9C9; margin: 0 60px 0 10px;
+  position: inherit !important;
+  z-index: none !important;}
 
-}
 .comment-layout,
 .comment.user .answer-layout {
   border-top: none !important; 
   position: relative; 
   z-index: 102;
 
+}
+.comment.user .comment-layout {
+  margin-right: 0;
+  position: inherit !important;
+  z-index: none !important;
 }
 .comment .user-avatar {width: 30px; height: 30px;}
 .comment .user-avatar img {width: 28px; height: 28px;}
