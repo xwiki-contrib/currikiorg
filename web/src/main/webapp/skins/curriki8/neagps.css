@@ -706,7 +706,20 @@ Moderator / Admin
   display: block;
   overflow: hidden;
 }
-.comment,
+.commentreplies .comment {
+  overflow: hidden;
+  border-top: 1px solid white;
+  position: relative;
+  z-index: 100;
+  
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
 .comment.user .answer-layout {
   overflow: hidden;
   border-top: 1px solid white;
@@ -737,33 +750,52 @@ Moderator / Admin
 }
 
 .comment.user {
-  background: #C9C9C9; margin: 0 60px 0 10px;
-  position: inherit !important;
-  z-index: none !important;}
+  background: #C9C9C9; 
+  margin: 0 60px 0 10px;
+  overflow: hidden;
+  border-top: 1px solid white;
+  
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
 
-.comment-layout,
 .comment.user .answer-layout {
   border-top: none !important; 
   position: relative; 
   z-index: 102;
+}
 
-}
-.comment.user .comment-layout {
-  margin-right: 0;
-  position: inherit !important;
-  z-index: none !important;
-}
 .comment .user-avatar {width: 30px; height: 30px;}
 .comment .user-avatar img {width: 28px; height: 28px;}
 .comment-reply {}
 .comment-meta {padding: 7px 10px; display: inline-block; text-transform: uppercase; color: #777; font-size: 10px; margin-left:10px;}
 .comment-meta:hover {background: #FFF;}
-.comment-layout {
+.commentreplies .comment-layout {
+  border-top: none !important; 
   clear: both; 
   padding-left: 40px;
   margin: 0 60px 0 0;
   position: relative;
   z-index: 102;
+  padding: 10px !important;
+  overflow: hidden;
+  
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.comment.user .comment-layout {
+  border-top: none !important; 
+  clear: both; 
+  padding-left: 40px;
+  margin: 0;
   padding: 10px !important;
   overflow: hidden;
   
