@@ -36,7 +36,7 @@
 #if($request.get("ConversationCode.FlagClass_0_message") &amp;&amp; $request.get("ConversationCode.FlagClass_0_message").trim()!="" &amp;&amp; $request.get("ConversationCode.FlagClass_0_reason")!="")
  #set($ok = $flagDoc.updateObjectFromRequest("ConversationCode.FlagClass"))
  #set($ok = $flagDoc.set("status", "open"))
- #set($ok = $flagDoc.setSpace("Flags"))
+ #set($ok = $flagDoc.document.setSpace("Flags"))
  #set($ok = $flagDoc.saveWithProgrammingRights())
 ## sending email
 #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
