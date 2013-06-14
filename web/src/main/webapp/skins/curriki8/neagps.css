@@ -126,13 +126,12 @@ a:visited {color: #777DBB;}
  .forum-buttons label {margin-right: 20px;}
 .forum-sort-button-active,
 .forum-sort-button-inactive {
-  padding: 0 20px 0 10px;
+  padding: 10px 20px 10px 10px; display: inline-block;
 }
 .forum-sort-button-desc { background: url("icons/black-arrow-ab.png") no-repeat scroll right center transparent; }
 .forum-sort-button-asc { background: url("img/black-arrow-ba.png") no-repeat scroll right center transparent; }
 .forum-sort-button-inactive.forum-sort-button-desc,
 .forum-sort-button-inactive.forum-sort-button-asc {background: none;}
-
 
 #forum-topic-nb {
   background: transparent url('img/forums.png') no-repeat 0px 0px !important;
@@ -150,7 +149,6 @@ a:visited {color: #777DBB;}
   padding: 0 !important;
 }
 #forum-buttons label { color: #AAAAAA; }
-.forum-sort-button-inactive { padding: 10px 20px !important; display: inline-block; }
 .addconversation-activator {
   padding: 10px 20px 10px 40px !important;
   background: #FFD801;
@@ -180,11 +178,6 @@ a:visited {color: #777DBB;}
   -webkit-border-radius: 48px;
   -moz-border-radius: 48px;
   border-radius: 48px;
-
-  filter: grayscale(100%);
-  -webkit-filter: grayscale(1);
-  -moz-filter: grayscale(100%);
-  filter: grayscale(100%);
 }
 h3.topic-title {
   float: right; clear: right; display: inline-block !important;
@@ -1094,16 +1087,13 @@ Fix discussion display on groups tabs
 #section2content { padding: 0 !important; }
 #groups-discussions-main { background: none !important; }
 #groups-discussions-main  #section_1 { border:none !important; }
-#groups-discussions-main  #section1content { padding: 10px 0 !important; }
+#groups-discussions-main  #section1content { padding: 0 !important; }
 
-#groups-discussions-main .addconversation-container {
-  margin-right: 0 !important;
-  display: block;
-  float: none;
-}
+
 #groups-discussions-main .answer-moderation {
   margin: -70px 19px 0 0;  
 }
+
 #groups-discussions-main #forum-header {
   position: inherit;
   float: none;
@@ -1111,6 +1101,7 @@ Fix discussion display on groups tabs
   margin: 0;
   min-height: 0;
   overflow: visible;
+
 }
 #groups-discussions-main #forum-topic-nb {
   background: url("img/forums.png") no-repeat scroll 0 0 transparent !important;
@@ -1122,30 +1113,13 @@ Fix discussion display on groups tabs
   text-align: center !important;
   position: relative;
   width: 21px !important;
+  margin-top: -7px;
 }
 #groups-discussions-main #forum-description {display: none;}
-#groups-discussions-main #forum-buttons {clear: none; margin: 7px 60px 0 0 ;}
+#groups-discussions-main #forum-buttons {
+  clear: none; 
+  margin: 20px 60px 0 0 ;
+}
 
-/* Fix panel floating on Forum View
-#panels {
-  overflow: hidden;
+#groups-discussions-main .addconversation-container {margin-right: 0 !important;}
 
-}
-#panels #left-panel,
-.expanded#left-panel {
-    display: inline-block !important;
-    float: left !important;
-    font-size: 12px;
-    height: 100%;
-    margin: 0;
-    padding: 0.5em 0 0 0.3em;
-    width: 205px;
-}
-#panels #right-panel,
-.expanded#right-panel {
-    display: inline-block !important;
-    float: left !important;
-    margin-left: 0 !important;
-    padding-left: 10px;
-}
- */ 
