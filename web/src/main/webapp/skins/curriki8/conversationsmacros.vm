@@ -67,7 +67,7 @@
 #macro(displayComment $comment, $commentDoc)
   ## compute the conversation id to make proper permalinks for comments
   #if ("$!conversationId" == "")
-    #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
+    #set($conversationId = $commentDoc.name)
   #end
   #if(!$commentodd || $commentodd=="even")
    #set($commentodd = "odd")
@@ -107,16 +107,18 @@
   </div> <!-- /.comment-layout -->
     <div class="comment-moderation">
         #if($commentDoc.hasAccessLevel('comment'))
-         #if(($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
-             ||$xwiki.hasAdminRights())
+         #if(($comment.author == $xcontext.user)
+             ||$doc.creator == $xcontext.user
+             ||$isGroupAdmin)
           ## Although this will fail if the javascript is not working, we assume it's always working
           ## so edit comment will redirect to the conversations view of the article for which we edited comment, so that we have a correct reloading after save
           #set($commentEditRedirect = $commentDoc.getURL('get', 'xpage=xpart&vm=conversations.vm'))
           <span class="commenttool commentedit"><a class="edit" href="$commentDoc.getURL('view', "viewer=conversationscomments&amp;number=${comment.number}&amp;xredirect=$escapetool.url($commentEditRedirect)")" title="$msg.get('core.viewers.comments.edit')">$msg.get('core.viewers.comments.edit')</a></span>
          #end
         #end
-         #if(($comment.author == $xcontext.user && $commentDoc.hasAccessLevel('edit'))
-             ||$xwiki.hasAdminRights())
+         #if(($comment.author == $xcontext.user)
+             ||$doc.creator == $xcontext.user
+             ||$isGroupAdmin)
           <span class="commenttool commentdelete"><a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deletecomment&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($commentDoc.fullName)}&amp;commentnumber=${comment.number}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('core.viewers.comments.delete')">$msg.get('core.viewers.comments.delete')</a></span>
         #end
      </div>
@@ -127,7 +129,7 @@
 #macro(displayCommentForm $commentDoc)
  ## compute the conversation id to make proper permalinks for comments
  #if ("$!conversationId" == "")
-    #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
+    #set($conversationId = $commentDoc.name)
  #end
  #if($commentDoc.hasAccessLevel('edit'))
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
@@ -516,12 +518,14 @@ addthis:description="${escapetool.xml($addThisDesc)}"
      </div>
     </div>
     <div class="topic-moderation">
-    #if(($topicDoc.creator==$context.user && $topicDoc.hasAccessLevel("edit"))
-        ||$xwiki.hasAdminRights())
+    #if(($topicDoc.creator==$context.user)
+         ||$doc.creator == $xcontext.user
+         ||$isGroupAdmin)
     <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
     #end
-    #if(($topicDoc.creator==$context.user && $topicDoc.hasAccessLevel("delete"))
-        ||$xwiki.hasAdminRights())
+    #if(($topicDoc.creator==$context.user)
+         ||$doc.creator == $xcontext.user
+         ||$isGroupAdmin)
      #set($actionParams =  "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($topicDoc.fullName)}&amp;xredirect=${escapetool.url($xredirect)}")
      <a class="topic-delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', $actionParams)" title="$msg.get('conversation.forum.delete.title')">$msg.get('conversation.forum.delete')</a>
     #end
@@ -544,9 +548,9 @@ addthis:description="${escapetool.xml($addThisDesc)}"
       #set($conversationDoc = $xwiki.getDocument($conversationDocName))
       #set($conversationObject = $conversationDoc.getObject('ConversationCode.AnswerClass'))
       #set($comments = $conversationDoc.getComments())
-      ## Compose a conversation id for the conversation from the document name and the creation date, to make sure it gets unique 
-      ## Otherwise two conversations that differ only by a space or so will get the same id 
-      #set($conversationId = $util.clearName("${conversationDoc.name}$xwiki.formatDate($conversationDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))
+      ## Compose a conversation id for the conversation from the document name only.
+      ## We don't need clearname anymore and neither the date as we control the topic name
+      #set($conversationId = $conversationDoc.name)
       <div class="answer" id="$conversationId">
         <div class="answer-layout">
           <span class="user-avatar">
@@ -582,12 +586,12 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 				</div>
 		 </div><!-- / .answer-reply -->
          <div class="answer-moderation">
-            #if(($conversationDoc.creator==$context.user && $topicDoc.hasAccessLevel("edit"))
-                 ||$xwiki.hasAdminRights())
+            #if(($conversationDoc.creator==$context.user)
+                 ||$isGroupAdmin)
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
-            #if(($conversationDoc.creator==$context.user && $topicDoc.hasAccessLevel("delete"))
-                 ||$xwiki.hasAdminRights())
+            #if(($conversationDoc.creator==$context.user)
+                 ||$isGroupAdmin)
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($conversationDoc.fullName)}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
          </div><!-- / .answer-moderation -->
