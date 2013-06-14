@@ -779,6 +779,8 @@ $msg.get("groups_home_firsttimewelcome_title")
       $s.set("logo", $attach.filename)
       #set($filename = $attach.filename)
     #end
+      ## CURRIKI-6203 avoid loosing programming rights on home page
+      $spaceHome.document.setContentDirty(false)
       $spaceHome.save()
       $s.save()
       $response.sendRedirect($s.getHomeURL())
