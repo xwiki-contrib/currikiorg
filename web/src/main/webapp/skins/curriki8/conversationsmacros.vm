@@ -382,7 +382,7 @@
       
       <div class="buttons">
         <input class="button-orange" type="submit" class="button" value="$msg.get('save')" />
-        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')" class="cancel">$msg.get('cancel')</a>
+        <a class="button-grey cancel" href="$doc.getURL('view', 'viewer=conversationstopic')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
    </div>
@@ -646,8 +646,15 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   #end 
   #if($myeditors)
     #if($services.wysiwyg.isSyntaxSupported($doc.syntax.toIdString()))
-      #foreach($editor in $myeditors.values())
-       #wysiwyg_editProperties($editor.get("doc") $editor.get("editors") false)
+      #wysiwyg_import(true)
+      #foreach($myeditor in $myeditors.values())
+       ## only prepare the editor but do not activate it
+       #foreach($myeditor2 in $myeditor.get("editors").split(","))
+        #set($parameters = $util.hashMap)
+        #wysiwyg_storeConfig($parameters $myeditor.get("doc") $myeditor2 false)
+        #wysiwyg_prepareEditor($parameters)
+       #end
+       ##wysiwyg_editProperties($myeditor.get("doc") $myeditor.get("editors") false)
       #end
     #else
       #warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$doc.syntax.toIdString()</em>.")
@@ -665,7 +672,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   *
   * @param $parameters WYSIWYG editor configuration parameters
   *#
-#macro(wysiwyg_createEditor $parameters)
+#macro(wysiwyg_prepareEditor $parameters)
   #set($jsVarName = "wysiwygConfig${util.generateRandomString(4)}")
   #wysiwyg_writeConfig($jsVarName $parameters)
   <script type="text/javascript">
@@ -673,8 +680,13 @@ addthis:description="${escapetool.xml($addThisDesc)}"
       var WysiwygConfig = WysiwygConfig || {};
       Wysiwyg.onModuleLoad(function() {
         WysiwygConfig['${parameters.hookId}'] = $jsVarName; 
-        $('${parameters.hookId}').wysiwyg = new WysiwygEditor($jsVarName);
+        ## $('${parameters.hookId}').wysiwyg = new WysiwygEditor($jsVarName);
         $jsVarName = undefined;
+        $('${parameters.hookId}').observe('focus', function(event){
+            if ($('${parameters.hookId}').wysiwyg == undefined) {
+             $('${parameters.hookId}').wysiwyg = new WysiwygEditor(WysiwygConfig['${parameters.hookId}']);
+            }
+        });
       });
     //]]>
   </script>
