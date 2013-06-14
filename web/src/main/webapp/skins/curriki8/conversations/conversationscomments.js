@@ -46,7 +46,7 @@ viewers.Comments = Class.create({
   },
   addConversationHandlers : function() {
     this.addConversationDeleteListener();
-    this.addConversationEditListener();
+    // this.addConversationEditListener();
     // this.addConversationHideListener();
     this.addConversationLikeListener();
     this.addConversationPermalinkListener();
