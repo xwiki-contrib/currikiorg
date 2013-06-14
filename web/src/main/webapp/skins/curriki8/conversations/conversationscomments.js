@@ -906,6 +906,8 @@ document.observe("dom:loaded", init);
 /* <![CDATA[ */
 // this is necessary to force focus on start fields
 // this could cause issue with edit comment
+/*
+we don't need that code anymore since we do lazy loading now
 document.observe('xwiki:wysiwyg:loaded', function(){
     window.scrollTo(0,0);
     // it is not clear why but we need to add a delay to take focus back
@@ -913,7 +915,7 @@ document.observe('xwiki:wysiwyg:loaded', function(){
      window.scrollTo(0,0);
     }, 1000);
 });
-
+*/
 // End XWiki augmentation.
 return XWiki;
 }(XWiki || {}));
