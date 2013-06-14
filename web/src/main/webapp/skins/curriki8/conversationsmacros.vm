@@ -488,7 +488,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   <div class="topic">
     <span class="user-avatar">#smallUserAvater2($topicDoc.creator)</span>
     <h3 class="topic-title"><a href="$topicDoc.getURL()" title="$escapetool.xml($topicTitle)">$topicTitle</a></h3>
-    <span class="topic-comments">$nbCommentsAnswers</span>
+    <span class="topic-comments"><a href="#answers" title="Click to read the answers and comments">$nbCommentsAnswers</a></span>
     <div class="topic-metadata">      
       ## <span class="topic-authortype">$!xwiki.getDocument($topicDoc.creator).display("neaoccupation")</span>
       <span class="topic-metas">
@@ -538,6 +538,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
   #set($conversationsSql = ', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc')
   #set($conversationsSqlParams = [$doc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate'])
   #set($conversationDocs = $xwiki.searchDocuments($conversationsSql, $conversationsSqlParams))
+  <a name="answers"></a>
   <div class="answers">
     #foreach($conversationDocName in $conversationDocs)
       #set($conversationDoc = $xwiki.getDocument($conversationDocName))
