@@ -587,10 +587,12 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 		 </div><!-- / .answer-reply -->
          <div class="answer-moderation">
             #if(($conversationDoc.creator==$context.user)
+                 ||$doc.creator==$context.user)
                  ||$isGroupAdmin)
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
             #if(($conversationDoc.creator==$context.user)
+                 ||$doc.creator==$context.user)
                  ||$isGroupAdmin)
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($conversationDoc.fullName)}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
