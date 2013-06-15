@@ -233,7 +233,15 @@
 ##
 ##
 #macro(displayEditCommentForm $comment)
-  #if (${comment.author} == ${xcontext.user})
+  #if($doc.space.startsWith("Group_")||$doc.space.startsWith("Discussions_Group_"))
+   #groupsinit()
+  #else
+   #set($isGroupAdmin = $hasGlobalAdmin)
+  #end 
+  #set($topicDoc = $xwiki.getDocument($doc.parent))
+  #if ($comment.author == $xcontext.user
+       ||$topicDoc.creator == $xcontext.user
+       ||$isGroupAdmin)
   <form action="$doc.getURL('save')" method="post" class="edit-xcomment reply">
     <div id="xwikicomment_${comment.number}" class="xwikicomment#if($comment.getProperty('author').value == $doc.creator) commentByCreator#end">
     <div class="commentavatar">#if("$!comment.replyto" == '')#mediumUserAvatar2($comment.author)#{else}#smallUserAvater2($comment.author)#end</div>
