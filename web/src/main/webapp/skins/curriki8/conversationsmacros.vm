@@ -399,19 +399,22 @@
   #set($count = 0)
   #set($nb = $step + 1)
   #set($start = 0)
-  #set($nextstart = $nb)
+  #set($nextstart = $step)
   #if($request.start)
    #set($start = $util.parseInt($request.start))
    #set($nextstart = $start + $step)
   #end
   #if($request.sortfield=="votes")
    ## sort by votes - requires programming rights
-   ##set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, BaseObject as votesobj, IntegerProperty as nbvotes where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and votesobj.name=doc.fullName and votesobj.className='XWiki.AverageRatingsClass' and votesobj.id=nbvotes.id.id and nbvotes.id.name='nbvotes'  order by nbvotes.value $!{currentorder}", $nb, $start, [ $page ]))
+   #set($sortfield = "votes")
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, BaseObject as votesobj, IntegerProperty as nbvotes where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and votesobj.name=doc.fullName and votesobj.className='XWiki.AverageRatingsClass' and votesobj.id=nbvotes.id.id and nbvotes.id.name='nbvotes'  order by nbvotes.value $!{currentorder}", $nb, $start, [ $page ]))
   #elseif($request.sortfield=="comments")
    ## sort by comments - requires programming rights
+   #set($sortfield = "comments")
    #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, XWikiDocument as answerdoc, BaseObject as cobj where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and answerdoc.parent=doc.fullName and answerdoc.fullName=cobj.name and cobj.className='XWiki.XWikiComments' group by 1 order by count(distinct cobj.number)+count(distinct answerdoc.fullName) $!{currentorder}", $nb, $start, [ $page ]))
   #else
    ## sort by last update date
+   #set($sortfield = "date")
    #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$page, 'ConversationCode.TopicClass']))
   #end
 #end
@@ -428,7 +431,7 @@
   #end
   #if($topics.size()==$nb)
   <div id="forum-more">
-  <a href="$doc.getURL("view", "viewer=conversationsforum&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
+  <a href="$doc.getURL("view", "viewer=conversationsforum&sortfield=${sortfield}&sortorder=${currentorder}&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
   </div>
   #end
 #end
