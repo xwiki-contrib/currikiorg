@@ -119,7 +119,7 @@ ${spaceName}.${newAnswerName}
           #set($discard = $conversationDoc.removeObject($commentObj))
           #set($discard = $conversationDoc.save($msg.get("conversations.${request.action}.changecomment")))
         #else
-          #set($discard = $conversationDoc.delete())
+          #set($discard = $conversationDoc.deleteWithProgrammingRights())
           ## if we are a topic delete the answers
           #if($topicObj)
            #foreach($item in $xwiki.searchDocuments(", BaseObject as obj where doc.fullName=obj.name and obj.className='ConversationCode.AnswerClass' and doc.parent='${conversationDoc.fullName}'"))
