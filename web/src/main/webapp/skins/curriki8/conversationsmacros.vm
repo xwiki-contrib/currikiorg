@@ -530,7 +530,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     #if(($topicDoc.creator==$context.user)
          ||$doc.creator == $xcontext.user
          ||$isGroupAdmin)
-    <a class="topic-edit" href="$topicDoc.getURL("edit")" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
+    <a class="topic-edit" href="$topicDoc.getURL('edit', 'force=1')" title="$msg.get("conversations.forum.edit")">$msg.get("conversations.forum.edit")</a>
     #end
     #if(($topicDoc.creator==$context.user)
          ||$doc.creator == $xcontext.user
@@ -596,12 +596,12 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 		 </div><!-- / .answer-reply -->
          <div class="answer-moderation">
             #if(($conversationDoc.creator==$context.user)
-                 ||$doc.creator==$context.user)
+                 ||$doc.creator==$context.user
                  ||$isGroupAdmin)
-              <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
+              <a class="edit" href="$conversationDoc.getURL('edit', 'force=1')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
             #if(($conversationDoc.creator==$context.user)
-                 ||$doc.creator==$context.user)
+                 ||$doc.creator==$context.user
                  ||$isGroupAdmin)
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($conversationDoc.fullName)}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
