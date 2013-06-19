@@ -1,9 +1,0 @@
-{{velocity}}
-  #if($context.action != 'view')
-    {{edittitle errorkey="conversations.forum.titleError" /}}
-    : $msg.get('conversations.forum.description')
-    ; $doc.display('description')
-  #elseif($context.action == 'view' && $request.viewer != 'conversationsforum')
-    $response.sendRedirect($doc.getURL('view', 'viewer=conversationsforum'))
-  #end
-{{/velocity}}
