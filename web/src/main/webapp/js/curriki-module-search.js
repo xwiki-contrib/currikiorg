@@ -20,8 +20,8 @@ Curriki.logView("/features/embeddedsearch/"+e+"/"+h+"/"+l+d+i)}else{Curriki.logV
 }});Ext.StoreMgr.lookup("search-store-"+c).addListener("exception",Curriki.notifyException)
 };b.doSearch=function(h,i){console.log("Doing search",h,i);var f={};var e=Ext.getCmp("search-termPanel");
 if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
-}}var c=h;if(c=="outerResource"){c="resource"}Ext.apply(f,{module:c});e=Ext.getCmp("search-filterPanel-"+h);
-if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
+}}var c=h;if(c=="outerResource"){c="resource"}if(c=="curriki"){c="discussions"}Ext.apply(f,{module:c});
+e=Ext.getCmp("search-filterPanel-"+h);if(!Ext.isEmpty(e)){var g=e.getForm();if(!Ext.isEmpty(g)){Ext.apply(f,g.getValues(false))
 }}if(f.terms&&f.terms===_("search.text.entry.label")){f.terms=""}console.log("Applying search filters",f);
 Ext.apply(Ext.StoreMgr.lookup("search-store-"+h).baseParams||{},f);var d=Ext.getCmp("search-pager-"+h);
 if(!Ext.isEmpty(d)){console.log("Searching",f);d.doLoad(Ext.num(i,0))}console.log("Done util.doSearch",f)

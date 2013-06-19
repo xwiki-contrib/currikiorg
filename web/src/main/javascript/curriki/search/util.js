@@ -141,6 +141,7 @@ module.init = function(){
 		}
         var modName2 = modName;
         if(modName2=='outerResource') modName2='resource';
+        if(modName2=='curriki') modName2='discussions';
 		Ext.apply(filters, {module: modName2});
 
 		// Module panel
