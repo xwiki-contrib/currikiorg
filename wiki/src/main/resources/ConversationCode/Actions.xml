@@ -96,7 +96,8 @@ ${spaceName}.${newAnswerName}
       #if (!$isDeleteComment)
         #set($requiredRight = 'delete')
       #end
-      #if($conversationDoc.hasAccessLevel($requiredRight))
+      #set($topicDoc = $xwiki.getDocument($conversationDoc.parent))
+      #if($conversationDoc.hasAccessLevel($requiredRight)||$topicDoc.hasAccessLevel($requiredRight))
         ## do the action then send a mail
         ## 0. collect some data we need after
         ## get a representation of the deleted item
