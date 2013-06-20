@@ -231,14 +231,16 @@ b.resultsPanel={xtype:"grid",id:"search-results-"+d,border:false,autoHeight:true
 b.mainPanel={xtype:"panel",id:"search-panel-"+d,autoHeight:true,items:[b.filterPanel,b.resultsPanel]};
 b.doSearch=function(){a.util.doSearch(d)};a.util.registerTabTitleListener(d)};Ext.onReady(function(){b.init()
 })})();(function(){var b="curriki";Ext.ns("Curriki.module.search.data."+b);var a=Curriki.module.search.data.curriki;
-a.init=function(){console.log("data."+b+": init");a.store={};a.store.record=new Ext.data.Record.create([{name:"name"},{name:"updated"},{name:"url"}]);
+a.init=function(){console.log("data."+b+": init");a.store={};a.store.record=new Ext.data.Record.create([{name:"name"},{name:"updated"},{name:"url"},{name:"score"}]);
 a.store.results=new Ext.data.Store({storeId:"search-store-"+b,proxy:new Ext.data.HttpProxy({url:document.location.pathname.endsWith("Old")?"/xwiki/bin/view/Search/Curriki":"/currikiExtjs",method:"GET"}),baseParams:{xpage:"plain",_dc:(new Date().getTime())},reader:new Ext.data.JsonReader({root:"rows",totalProperty:"resultCount"},a.store.record),remoteSort:true});
-if(Curriki.isISO8601DateParsing()){a.store.results.baseParams.dateFormat="ISO8601"
-}a.store.results.setDefaultSort("name","asc");a.renderer={name:function(g,f,c,h,e,d){return String.format('<a href="{1}">{0}</a>',g,c.data.url)
+if(Curriki.userinfo.userGroups){a.store.results.baseParams.groupsId=Curriki.userinfo.userGroups
+}if(Curriki.userinfo.userName){a.store.results.baseParams.userId=Curriki.userinfo.userName
+}if(Curriki.userinfo.isAdmin){a.store.results.baseParams.isAdmin=true}if(Curriki.isISO8601DateParsing()){a.store.results.baseParams.dateFormat="ISO8601"
+}a.store.results.setDefaultSort("score","desc");a.renderer={name:function(g,f,c,h,e,d){return String.format('<a href="{1}">{0}</a>',g,c.data.url)
 },updated:function(h,f,c,i,e,d){if(typeof("value")!="string"){return""}var g=Ext.util.Format.date(h,"M-d-Y");
-if(typeof(g)!="string"){return""}return String.format("{0}",g)}}};Ext.onReady(function(){a.init()
-})})();(function(){var d="curriki";Ext.ns("Curriki.module.search.form."+d);var a=Curriki.module.search;
-var b=a.form[d];var c=a.data[d];b.init=function(){console.log("form."+d+": init");
+if(typeof(g)!="string"){return""}return String.format("{0}",g)},score:function(g,f,c,h,e,d){if(typeof(g)!="number"){g=0
+}return g}}};Ext.onReady(function(){a.init()})})();(function(){var d="curriki";Ext.ns("Curriki.module.search.form."+d);
+var a=Curriki.module.search;var b=a.form[d];var c=a.data[d];b.init=function(){console.log("form."+d+": init");
 b.termPanel=a.util.createTermPanel(d,b);b.filterPanel={xtype:"form",labelAlign:"left",id:"search-filterPanel-"+d,formId:"search-filterForm-"+d,border:false,items:[b.termPanel]};
 b.columnModel=new Ext.grid.ColumnModel([{id:"name",header:_("search.curriki.column.header.name"),width:500,dataIndex:"name",sortable:true,renderer:c.renderer.name},{id:"updated",width:96,header:_("search.curriki.column.header.updated"),dataIndex:"updated",sortable:true,renderer:c.renderer.updated}]);
 b.resultsPanel={xtype:"grid",id:"search-results-"+d,border:false,autoHeight:true,width:a.settings.gridWidth,autoExpandColumn:"name",stateful:true,frame:false,stripeRows:true,viewConfig:{forceFit:true,enableRowBody:true,showPreview:true,scrollOffset:0},columnsText:_("search.columns.menu.columns"),sortAscText:_("search.columns.menu.sort_ascending"),sortDescText:_("search.columns.menu.sort_descending"),store:c.store.results,sm:new Ext.grid.RowSelectionModel({selectRow:Ext.emptyFn}),cm:b.columnModel,loadMask:false,bbar:new Ext.PagingToolbar({id:"search-pager-"+d,plugins:new Ext.ux.Andrie.pPageSize({variations:[10,25,50],beforeText:_("search.pagination.pagesize.before"),afterText:_("search.pagination.pagesize.after"),addBefore:_("search.pagination.pagesize.addbefore"),addAfter:_("search.pagination.pagesize.addafter")}),pageSize:25,store:c.store.results,displayInfo:true,displayMsg:_("search.pagination.displaying."+d),emptyMsg:_("search.find.no.results"),beforePageText:_("search.pagination.beforepage"),afterPageText:_("search.pagination.afterpage"),firstText:_("search.pagination.first"),prevText:_("search.pagination.prev"),nextText:_("search.pagination.next"),lastText:_("search.pagination.last"),refreshText:_("search.pagination.refresh")})};
