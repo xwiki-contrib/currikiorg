@@ -2740,6 +2740,7 @@ data.init = function(){
 //		,{ name: 'text' }
 		,{ name: 'updated' }
 		,{ name: 'url' }
+        ,{ name: 'score'}
 	]);
 
 	data.store.results = new Ext.data.Store({
@@ -2760,8 +2761,11 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
+    if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
+    if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
+    if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
     if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
-	data.store.results.setDefaultSort('name', 'asc');
+    data.store.results.setDefaultSort('score', 'desc');
 
 
 
@@ -2786,8 +2790,12 @@ data.init = function(){
             var dt = Ext.util.Format.date(value, 'M-d-Y');
             if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
-		}
-	};
+		}, score: function(value, metadata, record, rowIndex, colIndex, store){
+            if(typeof(value)!="number") value=0;
+            return value;
+        }
+
+    };
 };
 
 Ext.onReady(function(){
