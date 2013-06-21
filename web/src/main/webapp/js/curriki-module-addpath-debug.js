@@ -351,11 +351,12 @@ Curriki.module.addpath.init = function(){
 							}
 
 		// Create with Template
-						},{
+						/*},{
 							 xtype:'radio'
 							,value:'template'
 							,inputValue:'template'
 							,boxLabel:_('add.contributemenu.option.template')
+							*/
 
 		// Create "from scratch"
 						},{
