@@ -73,9 +73,10 @@ $userdoc.use("XWiki.XWikiUsers")
     #set($fileupload = $xwiki.fileupload)
     #set($filename = $fileupload.getFileName("filepath"))
     #set($filedata = $fileupload.getFileItemData("filepath"))
+    #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+
     #if($!filename != "" && $filedata) ##{
       #set($attlist = $userdoc.attachmentList)
-      #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 
       #set($current_avatar = $userobj.get('avatar'))
       #if($current_avatar && "${current_avatar}" != "")
@@ -92,6 +93,11 @@ $userdoc.use("XWiki.XWikiUsers")
         #set ($junk = $userdoc.save())
       #end
     #else
+
+    ## Avatar file empty
+	#set($junk = $userobj.set('avatar', ""))
+    #set ($junk = $userdoc.save()) 
+
     ## Info change
       #set($oPass = '********')
       #set($nPass = $request.getParameter("XWiki.XWikiUsers_0_password"))
@@ -114,6 +120,7 @@ $userdoc.use("XWiki.XWikiUsers")
         #end ##}
       #end ##}
 
+     	
     #end ##}
     #set($junk = $userdoc.saveWithProgrammingRights())
     $response.sendRedirect($userdoc.getURL("view"))
@@ -804,6 +811,7 @@ document.observe('dom:loaded', function(){
 /* <![CDATA[ */
 $('profile-removephoto').observe('click', function(){
 	if (confirm('$msg.get('edit_profile.change_photo.remove_confirmation')')) {
+		$('photo-upload').submit;
 		window.location="${dellink}";
 	}
 });
