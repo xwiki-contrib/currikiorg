@@ -642,7 +642,7 @@ $!desc
 <div class="userpic">
   #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
   #set($current_avatar = $userobj.get('avatar'))
-  #if($current_avatar && "${current_avatar} " != "") ##{
+  #if($current_avatar && "${current_avatar} " != "" && $userdoc.getAttachment("${current_avatar}").attachment) ##{
     #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
     <a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")"><img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=176&height=176&keepAspectRatio=true"/></a>
     #if ($context.action=="inline") ##{
