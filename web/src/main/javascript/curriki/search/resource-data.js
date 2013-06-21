@@ -178,7 +178,10 @@ Curriki.module.search.data[modName].init = function(modName){
 	});
 
 	f.data.special = {
-		list: [ 'contributions', 'collections', 'updated', 'info-only' ]
+		list:     // not logged-in? no "own contributions" filter
+        typeof(Curriki.userinfo.userName)=='undefined' ||  Curriki.userinfo.userName=="XWiki.XWikiGuest" || modName=='outerResource' ?
+            [ 'collections', 'updated', 'info-only' ]
+            : [ 'contributions', 'collections', 'updated', 'info-only' ]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
 		]
@@ -305,7 +308,7 @@ Curriki.module.search.data[modName].init = function(modName){
 
 
 
-	// Set up renderers
+    // Set up renderers
 	data.renderer = {
 		title: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render title " + value);
