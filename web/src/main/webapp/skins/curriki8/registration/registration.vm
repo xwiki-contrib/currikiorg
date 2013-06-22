@@ -73,13 +73,13 @@ $userdoc.use("XWiki.XWikiUsers")
     #set($fileupload = $xwiki.fileupload)
     #set($filename = $fileupload.getFileName("filepath"))
     #set($filedata = $fileupload.getFileItemData("filepath"))
-    #set($delete_avatar = "${request.getParameter('delete_avatar')}"))
+    #set($update_avatar = "${request.getParameter('update_avatar')}"))
     #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 
 
-    ## If the "delete_avatar" field was set in the request we
+    ## If the "update_avatar" field was set in the request we
     ## remove the avatar from the attachments and reset the avatar field
-    #if($delete_avatar != "") ##{
+    #if($update_avatar != "") ##{
 
       ## Try to delete the current avatar if there is one
       #set($current_avatar = $userobj.get('avatar'))
@@ -90,19 +90,15 @@ $userdoc.use("XWiki.XWikiUsers")
         #end
       #end
 
-      #set($junk = $userobj.set('avatar', ""))
-      #set ($junk = $userdoc.save())
-    #end
-
-    ## If the filename is set, this is an avatar upload
-    #if($!filename != "" && $filedata)
-      ## Put the new avatar in place as attachment and
-      ## set the avatar field to the filenameof the uploaded image
-      #set($attach = $userdoc.addAttachment($filename, $filedata))
-      #if($attach)
-        #set($junk = $userobj.set('avatar', "${filename}"))
-        #set ($junk = $userdoc.save())
+      ## If the filename is set, this is an avatar upload
+      #if($!filename != "" && $filedata)
+        ## Put the new avatar in place as attachment
+        #set($attach = $userdoc.addAttachment($filename, $filedata))
       #end
+
+      ## set or reset the avatar field
+      #set($junk = $userobj.set('avatar', "${filename}"))
+      #set ($junk = $userdoc.save())
 
     #else
       ## Info change
@@ -796,7 +792,7 @@ document.observe('dom:loaded', function(){
 			<li id='block-avatar'>
 				<span><label for="xwikiuploadfile">$msg.get("edit_profile.change_photo.choose_file.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("edit_profile.change_photo.choose_file.tooltip")"/></span>
 				<p class="instructions">$msg.get("edit_profile.change_photo.choose_file.description")</p>
-				<input id="delete_avatar" type="hidden" name="delete_avatar" value="true" />
+				<input id="update_avatar" type="hidden" name="update_avatar" value="true" />
 				<input id="xwikiuploadname" type="hidden" name="filename" value="" />
 				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40" style="width:400px"/>
                 &nbsp;&nbsp;
