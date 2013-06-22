@@ -69,14 +69,19 @@ $userdoc.use("XWiki.XWikiUsers")
     #set($xredirectemail = $xwiki.getURL("MyCurriki.EditProfileEmail", "view", "$userarg"))
     #set($xredirectemail2 = $xwiki.getURL("Registration.EmailVerification", "view", "username=${userdoc.name}"))
 
-  ## Avatar Upload
+    ## Avatar upload and deletion
     #set($fileupload = $xwiki.fileupload)
     #set($filename = $fileupload.getFileName("filepath"))
     #set($filedata = $fileupload.getFileItemData("filepath"))
-    #if($!filename != "" && $filedata) ##{
-      #set($attlist = $userdoc.attachmentList)
-      #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+    #set($delete_avatar = "${request.getParameter('delete_avatar')}"))
+    #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 
+
+    ## If the "delete_avatar" field was set in the request we
+    ## remove the avatar from the attachments and reset the avatar field
+    #if($delete_avatar != "") ##{
+
+      ## Try to delete the current avatar if there is one
       #set($current_avatar = $userobj.get('avatar'))
       #if($current_avatar && "${current_avatar}" != "")
         #set($current_profile_picture_attachement = $userdoc.getAttachment("${current_avatar}").attachment)
@@ -85,15 +90,23 @@ $userdoc.use("XWiki.XWikiUsers")
         #end
       #end
 
-      #set($attach = $userdoc.addAttachment($filename, $filedata))
+      #set($junk = $userobj.set('avatar', ""))
+      #set ($junk = $userdoc.save())
+    #end
 
+    ## If the filename is set, this is an avatar upload
+    #if($!filename != "" && $filedata)
+      ## Put the new avatar in place as attachment and
+      ## set the avatar field to the filenameof the uploaded image
+      #set($attach = $userdoc.addAttachment($filename, $filedata))
       #if($attach)
         #set($junk = $userobj.set('avatar', "${filename}"))
         #set ($junk = $userdoc.save())
       #end
+
     #else
-    ## Info change
-      #set($oPass = '********')
+      ## Info change
+      #set($oPass = '********')}
       #set($nPass = $request.getParameter("XWiki.XWikiUsers_0_password"))
       #set($oEmail = "${userobj.getProperty('email').getValue()}")
       #set($nEmail = $request.getParameter("XWiki.XWikiUsers_0_email"))
@@ -158,7 +171,7 @@ function checkEmailResponse(response){
 		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.email_not_unique')");
 		CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_email", $('register')['XWiki.XWikiUsers_0_email']);
 		CurrikiApp.errHighlight("block-2XWiki-XWikiUsers_0_email");
-	}  
+	}
 	if (CurrikiApp.errMsg) {
 		CurrikiApp.msgOff();
 		CurrikiApp.errMsgShow();
@@ -371,7 +384,7 @@ $errMsg
 </div>
 </div>
 #end ##}
-#if($g_RegType != 'edit_profile') ##{ 
+#if($g_RegType != 'edit_profile') ##{
 <div class="form-wrp">
 #end ##}
 <form id="register" name="register" action="" accept-charset="utf-8" method="POST" onsubmit="return validateRegisterForm();">
@@ -453,12 +466,12 @@ function toggleNEAFieldsVisible() {
     } else {
       console.log("nea member is not checked");
       var i = $('nea-affiliate-section');
-      if(i) i.hide();      
+      if(i) i.hide();
     }
-    
-    // only show profession title if the member type is education
-    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
-    memberType = memberType.options[memberType.selectedIndex].value;
+
+    // only show profession title if the occ type is education
+    var occType = $('register')['XWiki.XWikiUsers_0_neaoccupation'][0];
+    occType = occType.options[occType.selectedIndex].value;
     var i;
     if(memberType=="support") {
         i = $('nea-professiontitle-section');
@@ -533,13 +546,14 @@ function toggleNEAFieldsVisible() {
 			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
 			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
+            ##set($i = $pfx+'.member_type')#registrationformtextfield($i 'member_type')
             #set($i = $pfx+'.neamember')#registrationformtextfield($i 'neamember')
-            <div id="nea-affiliate-section" style="display: none;">       
-            #set($i = $pfx+'.neaaffiliate')#registrationformtextfield($i 'neaaffiliate')   
-            #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
-            <div id="nea-professiontitle-section" style="display: none;">       
-            #set($i = $pfx+'.neaprofessiontitle')#registrationformtextfield($i 'neaprofessiontitle')          
+            <div id="nea-affiliate-section" style="display: none;">
+            #set($i = $pfx+'.neaaffiliate')#registrationformtextfield($i 'neaaffiliate')
             </div>
+            #set($i = $pfx+'.neaoccupation')#registrationformtextfield($i 'neaoccupation')
+            <div id="nea-profession-section" style="display: none;">
+            #set($i = $pfx+'.neaprofession')#registrationformtextfield($i 'neaprofession')
             </div>
 		</ul>
         <p id="memberTypeNotice">&nbsp;</p>
@@ -556,7 +570,7 @@ function toggleNEAFieldsVisible() {
 #macro(registrationprivacysettings) ##{
 #set($pfx = $g_RegType+'.privacy')
 <fieldset class="optional">
-	<h3>$msg.get("${pfx}.header")</h3> 
+	<h3>$msg.get("${pfx}.header")</h3>
 #if($g_RegType != 'edit_profile') ##{
 	<a href="" id="privacyToggler" class="toggler collapsed" name="privacyToggle" onclick="return privacyToggle();">$msg.get('register.module.collapsed')</a>
 #end ##}
@@ -583,7 +597,7 @@ function toggleNEAFieldsVisible() {
 #set($show_email = "0")
 #end ##}
 				<span><label>$msg.get("${pfx}.show_email.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.show_email.tooltip")"/></span>
-				<ul class="radioBtns">	
+				<ul class="radioBtns">
 					<li><input type="radio" class="input-radio" id="field-show-email-everyone" name="XWiki.XWikiUsers_0_show_email" value="1" #if($show_email == "1")CHECKED#end /><label for="field-show-email-everyone">$msg.get("${pfx}.show_email.everyone")</label></li>
 					<li><input type="radio" class="input-radio" id="field-show-email-members" name="XWiki.XWikiUsers_0_show_email" value="2" #if($show_email == "2")CHECKED#end /><label for="field-show-email-members">$msg.get("${pfx}.show_email.members")</label></li>
 					<li><input type="radio" class="input-radio" id="field-show-email-noone" name="XWiki.XWikiUsers_0_show_email" value="0" #if($show_email == "0")CHECKED#end /><label for="field-show-email-noone">$msg.get("${pfx}.show_email.noone")</label></li>
@@ -649,7 +663,7 @@ document.observe('dom:loaded', function(){
 #macro(registrationinterests) ##{
 #set($pfx = $g_RegType+'.interests')
 <fieldset class="optional">
-	<h3>$msg.get("${pfx}.header")</h3> 
+	<h3>$msg.get("${pfx}.header")</h3>
 #if($g_RegType != 'edit_profile') ##{
 	<a href="" id="interestToggler" class="toggler expanded" name="interestToggle" onclick="return interestToggle();">$msg.get('register.module.expanded')</a>
 #end ##}
@@ -782,6 +796,7 @@ document.observe('dom:loaded', function(){
 			<li id='block-avatar'>
 				<span><label for="xwikiuploadfile">$msg.get("edit_profile.change_photo.choose_file.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("edit_profile.change_photo.choose_file.tooltip")"/></span>
 				<p class="instructions">$msg.get("edit_profile.change_photo.choose_file.description")</p>
+				<input id="delete_avatar" type="hidden" name="delete_avatar" value="true" />
 				<input id="xwikiuploadname" type="hidden" name="filename" value="" />
 				<input id="xwikiuploadfile" type="file" name="filepath" class="input-text" value="" size="40" style="width:400px"/>
                 &nbsp;&nbsp;
@@ -804,7 +819,8 @@ document.observe('dom:loaded', function(){
 /* <![CDATA[ */
 $('profile-removephoto').observe('click', function(){
 	if (confirm('$msg.get('edit_profile.change_photo.remove_confirmation')')) {
-		window.location="${dellink}";
+		$('photo-upload').submit();
+		//window.location="${dellink}";
 	}
 });
 /* ]]> */
