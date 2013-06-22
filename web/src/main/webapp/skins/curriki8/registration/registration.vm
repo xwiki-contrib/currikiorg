@@ -73,13 +73,13 @@ $userdoc.use("XWiki.XWikiUsers")
     #set($fileupload = $xwiki.fileupload)
     #set($filename = $fileupload.getFileName("filepath"))
     #set($filedata = $fileupload.getFileItemData("filepath"))
-    #set($update_avatar = $request.getParameter('update_avatar'))
+    #set($update_avatar = "${request.getParameter('update_avatar')}"))
     #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 
 
     ## If the "update_avatar" field was set in the request we
     ## remove the avatar from the attachments and reset the avatar field
-    #if($!update_avatar != "") ##{
+    #if($update_avatar == "true") ##{
 
       ## Try to delete the current avatar if there is one
       #set($current_avatar = $userobj.get('avatar'))
