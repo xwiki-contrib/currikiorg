@@ -79,19 +79,11 @@
   <div class="frame-inset-logo">
     #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
     #if($withpre)
-      #if($viewer == "embed-teachhub")
         #verbatim_start
-        <a target="_blank" href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-          <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" />
+        <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}" target="${target}">
+            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}"/>
         </a>
         #verbatim_end
-      #else
-        #verbatim_start
-        <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-          <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}"/>
-        </a>
-        #verbatim_end
-      #end  
     #else
         #if($viewer == "embed-teachhub")
           <a target="_blank" href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
