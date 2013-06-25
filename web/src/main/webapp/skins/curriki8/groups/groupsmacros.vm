@@ -781,7 +781,7 @@ $msg.get("groups_home_firsttimewelcome_title")
     #end
       ## CURRIKI-6203 avoid loosing programming rights on home page
       $spaceHome.document.setContentDirty(false)
-      $spaceHome.save()
+      $spaceHome.saveWithProgrammingRights()
       $s.save()
       $response.sendRedirect($s.getHomeURL())
   ##end
@@ -864,7 +864,7 @@ ${groupURL}#end
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
-  $s.save($xwiki.getContext())
+  $s.saveWithProgrammingRights($xwiki.getContext())
   #if($oldPolicy!=$s.getValue("policy"))
     ## we need to update the rights
     $sm.updateSpaceRights($s, $oldPolicy, $s.getValue("policy"))
