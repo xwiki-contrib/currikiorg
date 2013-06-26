@@ -58,7 +58,7 @@
     ## ---------------------- curriki.org -----------------------------------------------
     #elseif($url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_"))<!-- curriki embed -->
         #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
-        #set($width=640)#set($height=600)##
+        #set($width=590)#set($height=200)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed")#else#set($embedURL="${url}?viewer=embed")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
         <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
@@ -66,7 +66,7 @@
     ## ---------------------- current.dev.curriki.org -----------------------------------------------
     #elseif($url.startsWith("http://dev.current.curriki.org/xwiki/bin/view/Coll_"))<!-- curriki embed -->
         #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
-        #set($width=640)#set($height=600)##
+        #set($width=590)#set($height=200)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
         <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
@@ -74,27 +74,49 @@
     ## ---------------------- paul's dev -----------------------------------------------
     #elseif($url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_"))<!-- curriki embed -->
         #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
-        #set($width=640)#set($height=600)##
+        #set($width=590)#set($height=200)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
+        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="1" id="currikiIFrame_$currikiEmbedCounter"></iframe>
     </div>
     #else
         #warning('The Video URL you entered does not match any of the video websites supported by this macro. <br />
 Please check the address you entered or improve the macro to make it support this website :-\)')
     #end
 #end
-#asset_displaycontentheader("")
+
 #set($objExt = $asset.getObject("CurrikiCode.ExternalAssetClass", true))
 #set($url = $asset.display("link", "view", $asset.getObject("CurrikiCode.ExternalAssetClass")))
 <!-- url is $url of class $url.getClass() -->
 #set($linktext = $asset.display("linktext", "view", $asset.getObject("CurrikiCode.ExternalAssetClass")))
+#if($url.startsWith("http://www.youtube.com/watch") || $url.startsWith("https://www.youtube.com/watch") ||
+    $url.startsWith("https://www.dailymotion.com/video/") || $url.startsWith("http://www.dailymotion.com/video/") ||
+    $url.startsWith("http://video.google.com/googleplayer.swf?")  || $url.startsWith("https://video.google.com/googleplayer.swf?")  ||
+    $url.startsWith("http://youtu.be/") || $url.startsWith("https://youtu.be/") ||
+    $url.startsWith("http://vimeo.com/") || $url.startsWith("https://vimeo.com/") ||
+    $url.startsWith("http://dev.current.curriki.org/xwiki/bin/view/Coll_") ||
+    $url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_") ||
+    $url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_")
+)##
+#set($withEmbed=true)<!-- withEmbed -->##
+  #else#set($withEmbed=false)<!-- withEmbed false -->##
+#end
+<!-- before header -->
+    #asset_displaycontentheader("")
+<!-- after header -->
 ##if($url.endsWith("jpg") || $url.endsWith("gif"))
 ##
 ##
 ##<div align="center"><a href="$url" onclick="window.open('$url'); return false;"><img src="$url" align="middle" width="200" /></a></div>
+#* <style type="text/css">
+    #subasset-wrapper{background:0}
+    #sub-asset-wrapper-inner{padding:0}
+    #asset-display-text{margin:0}
+</style>*#
+#if(!$withEmbed)
 <div class="asset-display-text">
-    <div class="asset-display-text-inner">
+<div class="asset-display-text-inner">
+#end
         #set($caption = "")
         #set($ok = $asset.use("CurrikiCode.ExternalAssetClass"))
         #set($caption = $!asset.caption_text)
@@ -102,23 +124,18 @@ Please check the address you entered or improve the macro to make it support thi
         #if($!caption == "")
             #set($caption = $!asset.display("description"))
         #end
-        #if($url.startsWith("http://www.youtube.com/watch") || $url.startsWith("https://www.youtube.com/watch") ||
-                $url.startsWith("https://www.dailymotion.com/video/") || $url.startsWith("http://www.dailymotion.com/video/") ||
-                $url.startsWith("http://video.google.com/googleplayer.swf?")  || $url.startsWith("https://video.google.com/googleplayer.swf?")  ||
-                $url.startsWith("http://youtu.be/") || $url.startsWith("https://youtu.be/") ||
-                $url.startsWith("http://vimeo.com/") || $url.startsWith("https://vimeo.com/") ||
-                $url.startsWith("http://dev.current.curriki.org/xwiki/bin/view/Coll_") ||
-                $url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_") ||
-                $url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_")
-        )##
+        #if($withEmbed==true)
             #video($url)
+        #else
+            <!-- no embed here -->
         #end
         <p>&nbsp;</p>
         <p>$!caption</p>
-    </div>
+#if(!$withEmbed)
 </div>
+</div>#end
 <div class="asset-display-download">
-    <div class="asset-display-download-inner">
+<div class="asset-display-download-inner">
         <p>
             <strong>$msg.get("rve.content.view.link.instruction_title")</strong>
             <img class="tooltip" width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" ext:qtip="$msg.get("rve.content.view.link.instruction_tooltip")"/>
@@ -130,6 +147,8 @@ Please check the address you entered or improve the macro to make it support thi
             <a href="$url" onclick="Curriki.logView('/Download/link/$url');" target="_blank" >#breakLinkText($linktext, 90)</a>
         </p>
         <button class="button-link button-link-download" onclick="Curriki.logView('/Download/link/$url'); window.open('${url}');" title="$msg.get("rve.content.view.go_button")">$msg.get("rve.content.view.go_button")</button>
-    </div>
 </div>
+</div>
+<!-- before footer -->
 #asset_displaycontentfooter()
+<!-- after footer -->
