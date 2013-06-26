@@ -581,11 +581,12 @@ if(b){}else{return}var c=new Date().getTime();if(d.startedPollingTime&&d.started
 }var e=b.dom.value;if(typeof(e)!="undefined"){if(typeof(d.lastValue)!="undefined"){if(!(e==d.lastValue)){d.lastChanged=c;
 d.lastValue=e}else{if(d.lastChanged&&c-d.lastChanged>200&&(d.lastChanged>d.lastChecked||d.lastChecked===undefined)&&(typeof(d.queriedValue)=="undefined"||d.queriedValue!=e)){d.lastChecked=c;
 d.queueQueryNow(b)}}}else{d.lastValue=e;d.lastChanged=c}}else{Curriki.console.log("Giving up value undefined.")
-}}}}();function postMessageHandler(c){var b=c.data;var a=b.substr(0,b.indexOf(":"));
-var g=b.indexOf(":"),e=b.indexOf(":",g+1);var f=b.substr(g,e-g);var d=b.substr(e);
-switch(a){case"resize":console.log("received resize event");resizeThatCurrikiIframe(f,d);
-break}}function resizeThatCurrikiIframe(b,a){document.getElementById("currikiIFrame_"+b).setAttribute("style",a)
-}if(typeof window.attachEvent==="function"||typeof window.attachEvent==="object"){console.log("attached Listener to event via window.attachEvent");
+}}}}();function postMessageHandler(c){console.log("postMessage: ",c);var b=c.data;
+var a=b.substring(0,b.indexOf(":"));var g=b.indexOf(":");var e=b.indexOf(":",g+1);
+var f=b.substring(g+1,e);var d=b.substring(e+1);switch(a){case"resize":console.log("received resize event (resize "+f+" to "+d+")");
+window.resizeThatCurrikiIframe(f,d);break}}function resizeThatCurrikiIframe(c,b){var a="currikiIFrame_"+c;
+if(c.startsWith("currikiIFrame")){a=c}var d=document.getElementById(a);if(d){d.setAttribute("style",b);
+d.parentNode.setAttribute("style",b)}else{console.log("No frame found for "+a)}}if(typeof window.attachEvent==="function"||typeof window.attachEvent==="object"){console.log("attached Listener to event via window.attachEvent");
 window.attachEvent("onmessage",postMessageHandler)}else{if(typeof window.addEventListener==="function"){console.log("attached Listener to event via window.addEvenListener");
 window.addEventListener("message",postMessageHandler,false)}else{if(typeof document.attachEvent==="function"){console.log("cors iframe communication is not possible");
 document.attachEvent("onmessage",postMessageHandler)}else{console.log("Frame communication not possible")
