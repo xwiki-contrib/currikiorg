@@ -40,15 +40,9 @@
 <!--<img src="images/collectionmedium.gif">-->
     #set($mediaType="")
 	#set($assetTitle = $asset.getDisplayTitle(125))
-	#if($viewer == "embed-teachhub")
-		<h2><img src="$xwiki.getSkinFile("images/px.gif")" /><a target="_blank" href="$asset.getURL("view", "bc=$!{request.bc}")" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
-			#asset_info_rollover($asset 0)
-		</div>
-	#else
-		<h2 itemprop="name"><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" itemprop="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
-			#asset_info_rollover($asset 0)
-		</div>
-	#end
+    <h2 itemprop="name"><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+    #asset_info_rollover($asset 0)
+    </div>
 #end
 
 
@@ -75,23 +69,19 @@
 	#curriki_avatar_width_height($assetAuthorDoc 200 80)
 #end
 	</li>
-#if($assetIsFromGroup)
-	#if($assetGroup.getDisplayTitle())
-		#set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
-	#else
-		#set($assetGroupDisplayName = "")
-	#end
-	#if($viewer == "embed-teachhub")
-		<li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
-	#else
-		<li id="asset-group">$msg.get("rve.title.attribution.group") <a href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
-	#end
-#end
-	#if($viewer == "embed-teachhub")
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" target="_blank" href="$assetAuthorLink" rel="autor" class="fn url"  title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
-	#else
-		<li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
-	#end
+    #if($assetIsFromGroup)
+        #if($assetGroup.getDisplayTitle())
+            #set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
+        #else
+            #set($assetGroupDisplayName = "")
+        #end
+        #if($viewer == "embed-teachhub")
+            <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+        #else
+            <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+        #end
+    #end
+    <li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" target="${target}" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 </ul>
 #end
 
@@ -330,12 +320,8 @@ function checkEditOrCopy() {
 	#if($isEmbed)
 		#asset_icontitle($asset)
 		#asset_attribution($asset)
-		#if($viewer == "embed-teachhub")
-			<a id="powered-by-curriki" href="http://www.curriki.org/" target="_blank" >$msg.get("mode.embed.powered_txt")</a>
-		#else
-			<a id="powered-by-curriki" >$msg.get("mode.embed.powered_txt")</a>
-		#end
-	#end
+        <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
+    #end
 	#if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
 		#asset_links($asset)
 	#end
@@ -410,19 +396,10 @@ $xwiki.addTooltipJS()
 		        <img class="collapser" src="$defaultGif"/>
 		      </span>
 		#end
-
-		#if($viewer == "embed-teachhub")
-	      <a class="icon-mini" target="_blank" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$msg.get("rvw.content.section.icon.${category}")</a>
-		#else
-	      <a class="icon-mini" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$msg.get("rvw.content.section.icon.${category}")</a>
-		#end
+        <a class="icon-mini" target="${target}" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$msg.get("rvw.content.section.icon.${category}")</a>
     </div>
     <h3>
-		#if($viewer == "embed-teachhub")
-        	<a target="_blank" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
-		#else
-        	<a href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
-		#end
+        <a target="${target}" href="$assetLink" onmouseover="$('mycurriki-description-${seccounter}').show();" onmouseout="$('mycurriki-description-${seccounter}').hide();">$assetTitle</a>
     </h3>
     #asset_info_rollover($assetDoc $seccounter)
  </div>

@@ -1,0 +1,34 @@
+#**
+ * Embed entry point. It is called from view.vm
+ * It displays assets in embed mode. Links stay in the same windows
+ *#
+#if($doc.getObject("XWiki.XWikiUsers"))
+    $response.sendRedirect($doc.getURL())
+#else
+    #asset_findtitle($doc)
+    #template("xwikivars.vm")
+    #template("layoutvars.vm")
+    #template("htmlheader.vm")
+    <style type="text/css">
+        #asset-wrapper-inner { border: 0}
+        #asset-wrapper {border: 0; width:100%}
+        #asset-wrapper-inner{padding:0; background: white}
+        #asset-display-text {margin:0}
+        body {background:none; min-width: 0; margin-top:1pt}
+    </style>
+    #set($target="curriki")##
+<!-- this embed-teachhub.vm -->
+#** $context.setLinksQueryString("viewer=embed-teachhub") *#
+    #asset_display($doc "view")
+    $context.unsetLinksQueryString()
+<script type="text/javascript">
+    Ext.onReady(function(){
+        var height = document.body.scrollHeight;
+        var name = window.name
+        console.log("embedded resource: sending resource view  of window "+name+"'s height to embedding window (" + height + "px)");
+        var data = "resize:" + window.name + ":height:"+ height + "px;"
+        window.parent.postMessage(data,'*');
+    });
+</script>
+    #template("htmlfooter.vm")
+#end

@@ -9,7 +9,8 @@
     #template("xwikivars.vm")
     #template("layoutvars.vm")
     #template("htmlheader.vm")
-    <!-- this embed-teachhub.vm -->
+    #set($target="_blank")##
+<!-- this embed-teachhub.vm -->
 #** $context.setLinksQueryString("viewer=embed-teachhub") *#
     #asset_display($doc "view")
     $context.unsetLinksQueryString()
