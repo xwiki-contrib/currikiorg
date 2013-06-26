@@ -581,7 +581,15 @@ if(b){}else{return}var c=new Date().getTime();if(d.startedPollingTime&&d.started
 }var e=b.dom.value;if(typeof(e)!="undefined"){if(typeof(d.lastValue)!="undefined"){if(!(e==d.lastValue)){d.lastChanged=c;
 d.lastValue=e}else{if(d.lastChanged&&c-d.lastChanged>200&&(d.lastChanged>d.lastChecked||d.lastChecked===undefined)&&(typeof(d.queriedValue)=="undefined"||d.queriedValue!=e)){d.lastChecked=c;
 d.queueQueryNow(b)}}}else{d.lastValue=e;d.lastChanged=c}}else{Curriki.console.log("Giving up value undefined.")
-}}}}();(function(){Ext.ns("Curriki.ui.Rating");var b=[];for(var a=0;a<5;a++){b.push(_("CurrikiCode.AssetClass_member_rating_"+(a+1)))
+}}}}();function postMessageHandler(c){var b=c.data;var a=b.substr(0,b.indexOf(":"));
+var g=b.indexOf(":"),e=b.indexOf(":",g+1);var f=b.substr(g,e-g);var d=b.substr(e);
+switch(a){case"resize":console.log("received resize event");resizeThatCurrikiIframe(f,d);
+break}}function resizeThatCurrikiIframe(b,a){document.getElementById("currikiIFrame_"+b).setAttribute("style",a)
+}if(typeof window.attachEvent==="function"||typeof window.attachEvent==="object"){console.log("attached Listener to event via window.attachEvent");
+window.attachEvent("onmessage",postMessageHandler)}else{if(typeof window.addEventListener==="function"){console.log("attached Listener to event via window.addEvenListener");
+window.addEventListener("message",postMessageHandler,false)}else{if(typeof document.attachEvent==="function"){console.log("cors iframe communication is not possible");
+document.attachEvent("onmessage",postMessageHandler)}else{console.log("Frame communication not possible")
+}}}(function(){Ext.ns("Curriki.ui.Rating");var b=[];for(var a=0;a<5;a++){b.push(_("CurrikiCode.AssetClass_member_rating_"+(a+1)))
 }Curriki.ui.Rating=Ext.extend(Ext.form.NumberField,{fieldClass:"x-form-field x-form-rating-field",allowDecimals:false,allowNegative:false,minValue:0,maxValue:5,unit:17,wrapClass:"ux-form-rater-wrap",starsClass:"ux-form-rater-stars",hoverClass:"ux-form-rater-hover",voteClass:"ux-form-rater-vote",votedClass:"ux-form-rater-voted",textRightClass:"ux-form-rater-text-right",hoverText:b,displayValue:undefined,ratedValue:undefined,hoverValue:undefined,rated:false,initComponent:function(){Curriki.ui.Rating.superclass.initComponent.call(this);
 this.addEvents("beforerating","rate")},onRender:function(d,c){Curriki.ui.Rating.superclass.onRender.apply(this,arguments);
 this.wrap=this.el.wrap({cls:this.wrapClass});if(Ext.isIE){this.wrap.setHeight(this.unit)
