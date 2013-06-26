@@ -238,7 +238,7 @@
 #set($pageName = $request.page)
 #set($wdoc = $xwiki.getDocument("${spaceName}.${pageName}"))
 #set($ok = $wdoc.updateObjectFromRequest("XWiki.CurrikiWelcomeBlockClass"))
-#set($ok = $wdoc.save())
+#set($ok = $wdoc.saveWithProgrammingRights())
 #groupsdisplaywelcomeblock($wdoc)
 #end
 
