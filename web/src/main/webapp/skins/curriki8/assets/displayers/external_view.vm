@@ -57,24 +57,27 @@
     ## .... to https://docs.google.com/a/curriki.org/document/d/1osoShZ4wkCru_fAGPVmBIYHjcAvuCZiZmVYgLMfuy3Q/view
     ## ---------------------- curriki.org -----------------------------------------------
     #elseif($url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_"))<!-- curriki embed -->
+        #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
         #set($width=640)#set($height=600)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed")#else#set($embedURL="${url}?viewer=embed")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0"></iframe>
+        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
     </div>
     ## ---------------------- current.dev.curriki.org -----------------------------------------------
     #elseif($url.startsWith("http://dev.current.curriki.org/xwiki/bin/view/Coll_"))<!-- curriki embed -->
+        #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
         #set($width=640)#set($height=600)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0"></iframe>
+        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
     </div>
     ## ---------------------- paul's dev -----------------------------------------------
     #elseif($url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_"))<!-- curriki embed -->
+        #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
         #set($width=640)#set($height=600)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0"></iframe>
+        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
     </div>
     #else
         #warning('The Video URL you entered does not match any of the video websites supported by this macro. <br />
@@ -104,7 +107,10 @@ Please check the address you entered or improve the macro to make it support thi
                 $url.startsWith("http://video.google.com/googleplayer.swf?")  || $url.startsWith("https://video.google.com/googleplayer.swf?")  ||
                 $url.startsWith("http://youtu.be/") || $url.startsWith("https://youtu.be/") ||
                 $url.startsWith("http://vimeo.com/") || $url.startsWith("https://vimeo.com/") ||
-                $url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_"))##
+                $url.startsWith("http://dev.current.curriki.org/xwiki/bin/view/Coll_") ||
+                $url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_") ||
+                $url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_")
+        )##
             #video($url)
         #end
         <p>&nbsp;</p>
