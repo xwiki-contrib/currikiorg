@@ -298,7 +298,7 @@ $wdoc.display("content", "edit")
 #set($pageName = $request.page)
 #set($wdoc = $xwiki.getDocument("${spaceName}.${pageName}"))
 #set($ok = $wdoc.updateObjectFromRequest("XWiki.CurrikiWelcomeBlockClass"))
-#set($ok = $wdoc.saveWithProgrammingRights())
+#set($ok = $wdoc.save())
 #groupsdisplaywelcomeblock($wdoc)
 #end
 
@@ -641,7 +641,7 @@ $msg.get("groups_creategroup_needaccount", [$url])
       #set($wdoc = $xwiki.getDocument("${newspace.space}.WebHome"))
       $wdoc.setSyntaxId("xwiki/2.0")
       $wdoc.setContent("{{velocity}}{{html}}${wdoc.content}{{/html}}{{/velocity}}")
-      $wdoc.saveWithProgrammingRights("Force xwiki/2.0 syntax to be able to use the new WYSIWYG editor.")
+      $wdoc.save("Force xwiki/2.0 syntax to be able to use the new WYSIWYG editor.")
     #end
     ##$response.sendRedirect($xwiki.getURL("${newspace.space}.WebHome", "view", "firsttime=1"))
     #includeInContext("Groups.CreateNewGroupDone")
