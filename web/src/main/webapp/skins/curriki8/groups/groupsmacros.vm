@@ -781,7 +781,7 @@ $msg.get("groups_home_firsttimewelcome_title")
     #end
       ## CURRIKI-6203 avoid loosing programming rights on home page
       $spaceHome.document.setContentDirty(false)
-      $spaceHome.saveWithProgrammingRights()
+      $spaceHome.saveAsAuthor()
       $s.save()
       $response.sendRedirect($s.getHomeURL())
   ##end
