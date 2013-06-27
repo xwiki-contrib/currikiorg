@@ -319,7 +319,7 @@
             #set($mailSubject = $doc.getRenderedContent($mailDoc.title,"xwiki/1.0"))
             #set($mailContent = $doc.getRenderedContent($mailDoc.content,"xwiki/1.0"))
             #set($mailsender = $xwiki.mailsender)##
-            #set($ok = $mailsender.sendHtmlMessage($mailFrom, "", "", $mailTo, $mailSubject, $mailContent, $mailContent.replaceAll("<[^>]*>",""),[]))
+            #set($ok = $mailsender.sendHtmlMessage($mailFrom, $util.null, $util.null, $mailTo, $mailSubject, $mailContent, $mailContent.replaceAll("<[^>]*>",""),[]))
         #end
     #end
 #end##
