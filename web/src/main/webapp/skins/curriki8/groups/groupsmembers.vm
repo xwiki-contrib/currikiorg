@@ -841,7 +841,7 @@ $msg.get("groups_members_join_alreadymember")
     #foreach($role in $wantedRoles) ## {
       #addUserToRole($role $context.user)
     #end ## }
-      #set($userdoc=$xwiki.getDocument($context.user))<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group.", true) -->
+      #set($userdoc=$xwiki.getDocument($context.user)){{html}}<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group.", true) -->{{/html}}
       $msg.get("groups_members_join_success")
   #else
    $msg.get("groups_members_join_failure")
@@ -863,7 +863,7 @@ $msg.get("groups_members_join_alreadymember")
     #foreach($role in $wantedRoles) ## {
       #addUserToRole($role $context.user)
     #end ## }
-      #set($userdoc=$xwiki.getDocument($context.user))<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group: ${spaceTitle}.", true) -->
+      #set($userdoc=$xwiki.getDocument($context.user)){{html}}<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group: ${spaceTitle}.", true) -->{{/html}}
       $msg.get("groups_members_join_success")
    #else
     $msg.get("groups_members_join_failure")
