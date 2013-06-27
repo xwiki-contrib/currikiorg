@@ -2,6 +2,20 @@
  * Groups Messages Macros
  *
  *#
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+#* @vtlvariable name="mailsender" type="com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi" *# ##
 
 
 #**
@@ -304,7 +318,8 @@
             $msgdoc.use("XWiki.ArticleClass")
             #set($mailSubject = $doc.getRenderedContent($mailDoc.title,"xwiki/1.0"))
             #set($mailContent = $doc.getRenderedContent($mailDoc.content,"xwiki/1.0"))
-            #set($ok = $xwiki.mailsender.sendTextMessage($mailFrom, null, null, $mailTo, $mailSubject, $mailContent, null))
+            #set($mailsender = $xwiki.mailsender)##
+            #set($ok = $mailsender.sendHtmlMessage($mailFrom, "", "", $mailTo, $mailSubject, $mailContent, $mailContent.replaceAll("<[^>]*>",""),[]))
         #end
     #end
 #end##
