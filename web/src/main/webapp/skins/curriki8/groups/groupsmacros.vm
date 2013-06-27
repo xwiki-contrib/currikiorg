@@ -238,7 +238,7 @@
 #set($pageName = $request.page)
 #set($wdoc = $xwiki.getDocument("${spaceName}.${pageName}"))
 #set($ok = $wdoc.updateObjectFromRequest("XWiki.CurrikiWelcomeBlockClass"))
-#set($ok = $wdoc.saveWithProgrammingRights())
+#set($ok = $wdoc.saveAsAuthor())
 #groupsdisplaywelcomeblock($wdoc)
 #end
 
@@ -864,7 +864,7 @@ ${groupURL}#end
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
-  $s.saveWithProgrammingRights($xwiki.getContext())
+  $s.saveAsAuthor($xwiki.getContext())
   #if($oldPolicy!=$s.getValue("policy"))
     ## we need to update the rights
     $sm.updateSpaceRights($s, $oldPolicy, $s.getValue("policy"))
