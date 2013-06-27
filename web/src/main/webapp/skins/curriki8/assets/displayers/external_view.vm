@@ -1,4 +1,4 @@
-#macro(video $url)<!-- VIDEO -->
+#macro(video $url)<!-- EXTERNAL EMBED -->
     #set($width=510)#set($height=390)##
     #if("$!request.viewer"!="" && $!request.viewer.startsWith("embed"))#set($width=460)#set($height=352)<!-- smaller width, we are embedded -->#end##
     ##
@@ -77,7 +77,7 @@
         #set($width=590)#set($height=200)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
     <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="1" id="currikiIFrame_$currikiEmbedCounter"></iframe>
+        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="1" id="currikiIFrame_$currikiEmbedCounter" name="currikiIFrame_$currikiEmbedCounter"></iframe>
     </div>
     #else
         #warning('The Video URL you entered does not match any of the video websites supported by this macro. <br />
