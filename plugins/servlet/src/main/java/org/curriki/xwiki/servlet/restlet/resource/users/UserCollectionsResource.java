@@ -44,8 +44,10 @@ public class UserCollectionsResource extends BaseResource {
             rep.init(xwikiContext);
             return rep;
         } catch (IOException e) {
+            new ResourceException(Status.CONNECTOR_ERROR_COMMUNICATION, e).printStackTrace();
             throw error(Status.CONNECTOR_ERROR_COMMUNICATION, e.getMessage());
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
@@ -68,6 +70,7 @@ public class UserCollectionsResource extends BaseResource {
         try {
             asset = plugin.fetchRootCollection(forUser);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -78,9 +81,11 @@ public class UserCollectionsResource extends BaseResource {
         try {
             orig = json.getJSONArray("original");
             if (orig.isEmpty()){
+                new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.").printStackTrace();
                 throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.");
             }
         } catch (JSONException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.");
         }
 
@@ -88,9 +93,11 @@ public class UserCollectionsResource extends BaseResource {
         try {
             want = json.getJSONArray("wanted");
             if (want.isEmpty()){
+                new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.").printStackTrace();
                 throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
             }
         } catch (JSONException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
         }
 
@@ -100,9 +107,11 @@ public class UserCollectionsResource extends BaseResource {
                 fAsset.reorder(orig, want);
                 fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.reordered"));
             } catch (XWikiException e) {
+                new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, e).printStackTrace();
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         } else {
+            new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a root collection.").printStackTrace();
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a root collection.");
         }
 

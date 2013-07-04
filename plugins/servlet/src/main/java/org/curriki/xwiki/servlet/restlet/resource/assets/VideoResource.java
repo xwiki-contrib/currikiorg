@@ -35,9 +35,11 @@ public class VideoResource extends BaseResource {
         try {
             asset = (VideoAsset) plugin.fetchAssetAs(assetName, VideoAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
         }
 
@@ -45,6 +47,7 @@ public class VideoResource extends BaseResource {
         try {
             link = asset.getVideoId();
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "No movies found for "+assetName).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No movies found for "+assetName);
         }
 

@@ -34,6 +34,7 @@ public class NominateResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
@@ -54,6 +55,7 @@ public class NominateResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
@@ -62,6 +64,7 @@ public class NominateResource extends BaseResource {
         	asset.nominate(comments);
 
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_BAD_REQUEST, e.getFullMessage());
         }
 

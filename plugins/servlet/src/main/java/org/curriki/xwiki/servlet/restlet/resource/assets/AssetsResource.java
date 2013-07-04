@@ -64,6 +64,7 @@ public class AssetsResource extends BaseResource {
                 createdPage = plugin.createAsset(parent, publishSpace);
             }
         } catch (XWikiException e) {
+            e.printStackTrace();
             if (e instanceof AssetException) {
                 if (e.getCode() == AssetException.ERROR_ASSET_NOT_FOUND) {
                     throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());

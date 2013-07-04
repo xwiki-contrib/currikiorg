@@ -38,6 +38,7 @@ public class MetadataResource extends BaseResource {
         try {
             results = plugin.fetchAssetMetadata(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
@@ -61,6 +62,7 @@ public class MetadataResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 
@@ -146,6 +148,7 @@ public class MetadataResource extends BaseResource {
             try {
                 asset.applyRightsPolicy(json.getString("rights"));
             } catch (XWikiException e) {
+                new ResourceException(Status.SERVER_ERROR_INTERNAL, e).printStackTrace();
                 throw error(Status.SERVER_ERROR_INTERNAL, e.getMessage());
             }
         }
@@ -153,6 +156,7 @@ public class MetadataResource extends BaseResource {
         try {
             asset.save("Set Metadata", true);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
         }
 
@@ -160,6 +164,7 @@ public class MetadataResource extends BaseResource {
         try {
             metadata = plugin.fetchAssetMetadata(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 

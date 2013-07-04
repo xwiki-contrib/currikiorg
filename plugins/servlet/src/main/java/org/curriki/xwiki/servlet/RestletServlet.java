@@ -52,6 +52,7 @@ public class RestletServlet extends BaseServlet {
                 cleanupComponents();
             }
         } catch (XWikiException e) {
+            log("Exception at serving Restlet.",e);
             throw new ServletException(e);
         }
     }

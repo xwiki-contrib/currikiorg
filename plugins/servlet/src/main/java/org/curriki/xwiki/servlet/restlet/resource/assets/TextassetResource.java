@@ -35,9 +35,11 @@ public class TextassetResource extends BaseResource {
         try {
             asset = (TextAsset) plugin.fetchAssetAs(assetName, TextAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Asset " + assetName + " not found.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset " + assetName + " not found.");
         }
 
@@ -47,6 +49,7 @@ public class TextassetResource extends BaseResource {
             content = asset.getText();
             syntax = asset.getTextSyntax();
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "No texts found for "+assetName);
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No texts found for "+assetName);
         }
 

@@ -34,6 +34,7 @@ public class AssetResource extends BaseResource {
         try {
             results = plugin.fetchAssetMetadata(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 

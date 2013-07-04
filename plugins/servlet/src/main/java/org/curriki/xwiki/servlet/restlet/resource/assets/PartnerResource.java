@@ -38,6 +38,7 @@ public class PartnerResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         
@@ -59,6 +60,7 @@ public class PartnerResource extends BaseResource {
 		        asset.save();
 	        }
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 

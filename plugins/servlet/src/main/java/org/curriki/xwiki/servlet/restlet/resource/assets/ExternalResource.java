@@ -35,9 +35,11 @@ public class ExternalResource extends BaseResource {
         try {
             asset = (ExternalAsset) plugin.fetchAssetAs(assetName, ExternalAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "External Asset "+assetName+" not found.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "External Asset "+assetName+" not found.");
         }
 
@@ -45,6 +47,7 @@ public class ExternalResource extends BaseResource {
         try {
             link = asset.getLink();
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName);
         }
         String linktext;

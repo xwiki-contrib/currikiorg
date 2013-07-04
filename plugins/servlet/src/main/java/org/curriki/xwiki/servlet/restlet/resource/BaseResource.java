@@ -164,9 +164,11 @@ System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
         try {
             posted = representation.getText();
         } catch (IOException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "IOException on input.", e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "IOException on input.");
         }
         if (!JSONUtils.mayBeJSON(posted)) {
+            new Exception(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE +  " Please PUT in JSON format.").printStackTrace();
             throw error(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, "Please PUT in JSON format.");
         }
 
@@ -176,9 +178,11 @@ System.out.println("ERROR THROWN: "+message+" Stacktrace: "+st);
             if (!input.isArray()){
                 json = (JSONObject) input;
             } else {
+                new Exception(Status.CLIENT_ERROR_NOT_ACCEPTABLE + " Please send a proper JSON object.").printStackTrace();
                 throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "Please send a proper JSON object.");
             }
         } catch (JSONException e){
+            new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, "JSON format required.").printStackTrace();
             throw error(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE, "JSON format required.");
         }
 

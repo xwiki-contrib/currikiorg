@@ -38,6 +38,7 @@ public class VideosResource extends BaseResource {
         try {
             asset = (VideoAsset) plugin.fetchAssetAs(assetName, VideoAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -48,6 +49,7 @@ public class VideosResource extends BaseResource {
         try {
             link = asset.getVideoId();
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName);
         }
 
@@ -82,6 +84,7 @@ public class VideosResource extends BaseResource {
         try {
             videoId = json.getString("videoId");
         } catch (JSONException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a video id.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a video id.");
         }
 
@@ -96,6 +99,7 @@ public class VideosResource extends BaseResource {
         try {
             asset = plugin.fetchAssetSubclassAs(assetName, VideoAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -109,6 +113,7 @@ public class VideosResource extends BaseResource {
                 assetManager.makeVideoAsset(asset, videoId, partner);
             }
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add video").printStackTrace();
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add video");
         }
 

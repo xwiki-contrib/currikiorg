@@ -53,6 +53,7 @@ public class SubassetsResource extends BaseResource {
             rep = new CTVRepresentation(assetName, CTVRepresentation.Type.COLLECTION_CONTENT, xwikiContext);
             rep.init(xwikiContext);
         } catch (Exception e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, e).printStackTrace();
             error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, e.getMessage(), e);
         }
         return rep;
@@ -97,6 +98,7 @@ public class SubassetsResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -113,6 +115,7 @@ public class SubassetsResource extends BaseResource {
                 order = fAsset.insertSubassetAt(page, order);
                 fAsset.save(xwikiContext.getMessageTool().get("curriki.comment.addsubasset"));
             } catch (XWikiException e) {
+                new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, e).printStackTrace();
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         } else {
@@ -125,6 +128,7 @@ public class SubassetsResource extends BaseResource {
                     order = (long) 0;
                 }
             } catch (XWikiException e) {
+                new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, e);
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, e.getMessage());
             }
         }
@@ -148,6 +152,7 @@ public class SubassetsResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -159,9 +164,11 @@ public class SubassetsResource extends BaseResource {
             try {
                 orig = json.getJSONArray("original");
                 if (orig.isEmpty()){
+                    new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.").printStackTrace();
                     throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the orignal order.");
                 }
             } catch (JSONException e) {
+                new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.").printStackTrace();
                 throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the original order.");
             }
         }
@@ -171,9 +178,11 @@ public class SubassetsResource extends BaseResource {
             try {
                 rev = json.getString("previousRevision");
                 if (rev.length() == 0){
+                    new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.").printStackTrace();
                     throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.");
                 }
             } catch (JSONException e) {
+                new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.").printStackTrace();
                 throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the previous revision number.");
             }
         }
@@ -189,6 +198,7 @@ public class SubassetsResource extends BaseResource {
         try {
             want = json.getJSONArray("wanted");
         } catch (JSONException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a new order.");
         }
 
@@ -202,13 +212,16 @@ public class SubassetsResource extends BaseResource {
                 } else if (json.containsKey("ignorePreviousRevision")) {
                     fAsset.setSubassets(want);
                 } else {
+                    new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "You must provide previous revision information.").printStackTrace();
                     throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "You must provide previous revision information.");
                 }
                 fAsset.save(logMsg);
             } catch (XWikiException e) {
+                new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Save failed: "+e.getMessage(), e).printStackTrace();
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Save failed: "+e.getMessage(), e);
             }
         } else {
+            new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a folder.").printStackTrace();
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Asset is not a folder.");
         }
 

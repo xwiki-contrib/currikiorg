@@ -32,7 +32,8 @@ public class FieldsResource extends BaseResource {
         try {
             fields = xwikiContext.getWiki().getDocument(className, xwikiContext).getxWikiClass().getPropertyNames();
         } catch (XWikiException e) {
-            throw error(Status.CLIENT_ERROR_NOT_FOUND, "Class Not Found.");
+            ResourceException ex = error(Status.CLIENT_ERROR_NOT_FOUND, "Class Not Found.");
+            ex.printStackTrace(); throw ex;
         }
 
         JSONObject json = new JSONObject();
@@ -50,7 +51,8 @@ public class FieldsResource extends BaseResource {
                 }
             }
         } else {
-            throw error(Status.CLIENT_ERROR_NOT_FOUND, "Class Not Found.");
+            ResourceException rex = error(Status.CLIENT_ERROR_NOT_FOUND, "Class Not Found.");
+            rex.printStackTrace(); throw rex;
         }
 
         return formatJSON(json, variant);

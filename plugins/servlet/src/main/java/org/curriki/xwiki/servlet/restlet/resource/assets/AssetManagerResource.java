@@ -67,6 +67,7 @@ public class AssetManagerResource extends BaseResource {
         try {
             asset = plugin.fetchAsset(assetName);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         
@@ -78,6 +79,7 @@ public class AssetManagerResource extends BaseResource {
             crsvalue.add(xwikiContext.getMessageTool().get("curriki.crs.review.setas"+asterixReviewValue));
             asset.save(xwikiContext.getMessageTool().get("curriki.comment.crsvalueremoved", crsvalue));
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
 

@@ -35,6 +35,7 @@ public class TextassetsResource extends BaseResource {
         try {
             asset = (TextAsset) plugin.fetchAssetAs(assetName, TextAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e);
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
@@ -47,6 +48,7 @@ public class TextassetsResource extends BaseResource {
             content = asset.getText();
             syntax = asset.getTextSyntax();
         } catch (AssetException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" does not contain any texts.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" does not contain any texts.");
         }
 
@@ -79,6 +81,7 @@ public class TextassetsResource extends BaseResource {
         try {
             syntax = json.getString("syntax");
         } catch (NumberFormatException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the text type.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide the text type.");
         }
        
@@ -86,9 +89,11 @@ public class TextassetsResource extends BaseResource {
         try {
             asset = plugin.fetchAssetSubclassAs(assetName, TextAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage()).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "Asset "+assetName+" not found.");
         }
 
@@ -99,6 +104,7 @@ public class TextassetsResource extends BaseResource {
                 assetManager.makeTextAsset(asset, syntax, content);
             }
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add text").printStackTrace();
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add text");
         }
 

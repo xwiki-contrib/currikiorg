@@ -38,9 +38,11 @@ public class ExternalsResource extends BaseResource {
         try {
             asset = (ExternalAsset) plugin.fetchAssetAs(assetName, ExternalAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "External Asset "+assetName+" not found.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "External Asset "+assetName+" not found.");
         }
 
@@ -48,6 +50,7 @@ public class ExternalsResource extends BaseResource {
         try {
             link = asset.getLink();
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName);
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "No links found for "+assetName);
         }
 
@@ -81,6 +84,7 @@ public class ExternalsResource extends BaseResource {
         try {
             link = json.getString("link");
         } catch (JSONException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a link.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_ACCEPTABLE, "You must provide a link.");
         }
 
@@ -95,9 +99,11 @@ public class ExternalsResource extends BaseResource {
         try {
             asset = plugin.fetchAssetSubclassAs(assetName, ExternalAsset.class);
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         if (asset == null) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "External Asset "+assetName+" not found.").printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, "External Asset "+assetName+" not found.");
         }
 
@@ -107,9 +113,11 @@ public class ExternalsResource extends BaseResource {
             if (assetManager!=null) {
                 assetManager.makeExternalAsset(asset, link, (linktext==null) ? "" : linktext);
             } else {
+                new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add external link").printStackTrace();
                 throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add external link");
             }
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add external link").printStackTrace();
             throw error(Status.CLIENT_ERROR_PRECONDITION_FAILED, "Could not add external link");
         }
 

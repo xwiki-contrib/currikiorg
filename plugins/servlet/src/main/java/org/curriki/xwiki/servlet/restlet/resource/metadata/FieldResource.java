@@ -80,7 +80,8 @@ public class FieldResource extends BaseResource {
                 // No extra info
             }
         } catch (XWikiException e) {
-            throw error(Status.CLIENT_ERROR_NOT_FOUND, "Class Information Not Found.");
+            ResourceException ex = error(Status.CLIENT_ERROR_NOT_FOUND, "Class Information Not Found.");
+            ex.printStackTrace(); throw ex;
         }
 
         return formatJSON(json, variant);

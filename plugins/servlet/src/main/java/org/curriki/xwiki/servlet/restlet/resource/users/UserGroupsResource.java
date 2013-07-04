@@ -36,8 +36,10 @@ public class UserGroupsResource extends BaseResource {
             rep.init(xwikiContext);
             return rep;
         } catch (IOException e) {
+            new ResourceException(Status.CONNECTOR_ERROR_COMMUNICATION, e).printStackTrace();
             throw error(Status.CONNECTOR_ERROR_COMMUNICATION, e.getMessage());
         } catch (XWikiException e) {
+            new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, e).printStackTrace();
             throw error(Status.CLIENT_ERROR_NOT_FOUND, e.getMessage());
         }
         /* Map<String,Object> results = plugin.fetchUserGroups(forUser);

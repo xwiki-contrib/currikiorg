@@ -279,7 +279,9 @@ public class CTVRepresentation extends StreamRepresentation {
                                     out.write(ghostSubAssetInfoJson);
                                 }
                             } catch (Exception e) {
-                                throw new IllegalStateException(e);
+                                IllegalStateException ex = new IllegalStateException(e);
+                                ex.printStackTrace();
+                                throw ex;
                             }
                         }
                     };
@@ -299,8 +301,9 @@ public class CTVRepresentation extends StreamRepresentation {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
+            IllegalStateException ilEx = new IllegalStateException(e);
+            ilEx.printStackTrace();
+            throw ilEx;
         }
     }
 
