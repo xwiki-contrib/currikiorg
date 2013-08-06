@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.curriki</groupId>
     <artifactId>curriki-parent</artifactId>
-      <version>1.14</version>
+      <version>1.15-SNAPSHOT</version>
   </parent>
   <artifactId>curriki-web</artifactId>
   <name>XWiki Products - Curriki - Web</name>
@@ -495,7 +495,7 @@ practice to put them here since they are real dependencies -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-activitystream</artifactId>
-      <version>3.5-SNAPSHOT</version>
+      <version>${platform.version}</version>
       <scope>runtime</scope>
     </dependency>
     <!-- Event & Message Stream Modules -->
@@ -539,13 +539,6 @@ practice to put them here since they are real dependencies -->
       <version>${platform.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <!-- Search -->
-    <!-- <dependency>
-      <groupId>org.xwiki.platform</groupId>
-      <artifactId>xwiki-platform-search-lucene</artifactId>
-      <version>${platform.version}</version>
-      <scope>runtime</scope>
-    </dependency> -->
     <!-- JODA Time -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
@@ -598,12 +591,7 @@ practice to put them here since they are real dependencies -->
 	    <artifactId>xwiki-plugin-invitationmanager</artifactId>
   	  <version>${platform.plugins.invitationmanager.version}</version>
     </dependency> 
-    <dependency>
-      <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugin-lucene</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-      <dependency>
+     <dependency>
           <groupId>org.curriki</groupId>
           <artifactId>curriki-plugin-googlecheckout</artifactId>
           <version>${project.version}</version>
@@ -660,6 +648,28 @@ practice to put them here since they are real dependencies -->
       <artifactId>socialauth</artifactId>
       <version>2.3</version>
   </dependency>
+      <!-- GitHubApp dependencies -->
+      <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.0</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpmime</artifactId>
+          <version>4.1.2</version>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.mylyn.github</groupId>
+          <artifactId>org.eclipse.egit.github.core</artifactId>
+          <version>1.1.2</version>
+      </dependency>
+      <dependency>
+          <groupId>org.xwiki.contrib</groupId>
+          <artifactId>xwiki-plugin-ratings</artifactId>
+          <version>1.2</version>
+      </dependency>
+
 
   </dependencies>
   <build>
@@ -713,7 +723,6 @@ practice to put them here since they are real dependencies -->
                     com.xpn.xwiki.plugin.usertools.XWikiUserManagementToolsImpl,\
                     com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin,\
                     com.xpn.xwiki.plugin.autotag.AutoTagPlugin,\
-                    com.xpn.xwiki.plugin.lucene.LucenePlugin,\
                     com.xpn.xwiki.plugin.diff.DiffPlugin,\
                     com.xpn.xwiki.plugin.rightsmanager.RightsManagerPlugin,\
                     com.xpn.xwiki.plugin.jodatime.JodaTimePlugin,\
@@ -727,11 +736,14 @@ practice to put them here since they are real dependencies -->
                     org.curriki.xwiki.plugin.mimetype.MimeTypePlugin,\
                     org.curriki.xwiki.plugin.curriki.CurrikiPlugin,\
                     org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
-                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
+                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin,\
+                    com.xpn.xwiki.plugin.ratings.RatingsPlugin
                 </xwikiCfgPlugins>
                 <xwikiCfgDefaultSkin>curriki20</xwikiCfgDefaultSkin>
                 <xwikiCfgDefaultBaseSkin>colibri</xwikiCfgDefaultBaseSkin>
                 <xwikiCfgAdditionalProperties>
+
+
 xwiki.work.dir=work
 
 ## Spacemanager settings
@@ -788,6 +800,8 @@ xwiki.authentication.group.allgroupimplicit=1
 
 curriki.system.hostname=next.dev.curriki.org
 
+xwiki.ratings.ratingsmanager=com.xpn.xwiki.plugin.ratings.internal.DefaultRatingsManager
+xwiki.ratings.averagerating.stored=1
 
                 </xwikiCfgAdditionalProperties>
                 <xwikiCfgVirtual>0</xwikiCfgVirtual>
