@@ -40,7 +40,6 @@
     <meta name="revisit-after" content="7 days" />
 
     <link rel="alternate" type="application/rss+xml" title="Wiki RSS Feed" href="/xwiki/bin/view/Main/WebRss?xpage=rdf" />
-    <link rel="image_src" href="/xwiki/skins/curriki8/img/nea-gps-logo.jpg"/>
     <link rel="icon" type="image/ico" href="/xwiki/skins/curriki8/img/favicon.ico"/>
     #set($headerfile="html")
 #template("javascripts.vm")
@@ -48,7 +47,7 @@
 #template("onloadunloadjs.vm")
 #set($clsPageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
 </head>
-<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName'>
+<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName' itemscope itemtype="http://schema.org/CreativeWork">
 #if(!($viewer.startsWith("embed")))
 <div id="main">
 	<div id="shadow-right">
