@@ -223,14 +223,6 @@ public class SocialLoginToolGroovy {
                 authenticateUser(userDoc)
             }
 
-            System.out.println("this: " + this)
-            System.out.println("autoCreateUser: " + this.autoCreateUser)
-            System.out.println("userDocs==null: " + (userDocs==null) )
-            System.out.println("userDocs.isEmpty(): " + userDocs.isEmpty() )
-            System.out.println("(userDocs==null || userDocs.isEmpty(): " + (userDocs==null || userDocs.isEmpty() ) )
-            System.out.println("no autoCreateUser and no UserDocs: " + (!autoCreateUser && (userDocs==null || userDocs.isEmpty())) )
-            System.out.println("do autoCreateUser and no UserDocs: " +  (autoCreateUser && (userDocs==null || userDocs.isEmpty())) )
-
             if(!autoCreateUser && (userDocs==null || userDocs.isEmpty())) {
                 // Not authenticated/redirected yet ? -> You must be new here
                 // You will have to pick-up a username and dad will create an account for you
