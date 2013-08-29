@@ -1,0 +1,38 @@
+
+
+<!-- Modal -->
+<div class="modal fade" id="currikiLoginModal" tabindex="-1" role="dialog" aria-labelledby="currikiLoginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Login with an existing Curriki account</h4>
+      </div>
+      <div class="modal-body">
+
+        <form id="currikiLoginForm" action="/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&xpage=popup" method="post">
+
+          <input type="hidden" name="xredirect" value="/xwiki/bin/view/MembershipDrive/LandingPage?xpage=plain"/>
+          <input type="hidden" name="xredirectFailedLogin" value="/xwiki/bin/view/MembershipDrive/LandingPage?xpage=plain&invalidCredentials=true"/>
+
+          <label for="j_username">$msg.get('join.login.username')</label>
+          <input type="text" id="j_username" name="j_username" autocomplete="off" value="$escapetool.html("$!userName")"/>
+
+          <label for="j_password">$msg.get('join.login.password')</label>
+          <input type="password" id="j_password" name="j_password" autocomplete="off" value=""/>
+
+          <input type="submit" class="button" value="$msg.get('join.login.button')"/>
+
+        </form>
+
+        <!-- <iframe id="curriki-login-frame" src="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=/xwiki/bin/download/Coll_flixt/MembershipDriveLandingPage/membership_drive.zip/membership_drive/index.html&framed=true"></iframe> -->
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
