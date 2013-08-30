@@ -152,19 +152,22 @@ public class Validation {
         }
         if(country=="US") {
             if(!(postalCode) || postalCode.length()>5 || postalCode.length()<2 || !isDigitsOnly(postalCode)) {
-                if(echoErrors) addWarning("postalCode");
-                addError("join.error.requireZipCode");
+                if(echoErrors)
+                    addError("join.error.requireZipCode");
+                addWarning("postalCode");
                 return false;
             }
             if(!city || !state) {
-                if(echoErrors) addWarning("postalCode");
-                addError("join.error.requireValidZipCode");
+                if(echoErrors)
+                    addError("join.error.requireValidZipCode");
+                addWarning("postalCode");
                 return false;
             }
         } else {
             if(state==null || state.length()<=1) {
-                addError("join.error.region_missing");
-                addWarning("state")
+                if(echoErrors)
+                    addError("join.error.region_missing");
+                addWarning("state");
                 return false;
             };
         }
