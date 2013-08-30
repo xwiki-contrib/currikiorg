@@ -8,21 +8,38 @@
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+
+
+## !!! this file is only included in case there's an error in logging in !!!
+## It it normally checks for invalid credentials and sets error messages.
+## But you can define a xredirectFailedLogin request parameter and this page will redirect you to the given parameter
+
 #if("$!request.method"=="POST")##
-## this file is only included in case there's an error in logging in
-#if($request.j_username && "$!context.message"=="invalidcredentials")
-    #set($udoc=$xwiki.getDocument("XWiki.${request.j_username}"))##
-    #if($udoc.isNew())##
-        #set($loginmsg="register.account_info_error.login_invalid")##
-    #else##
-        #set($loginmsg="redirect.error.invalid_password")##
-    #end##
-#end##
-$request.session.setAttribute("messagesForNextLoginRequest",$loginmsg)##
-$request.session.setAttribute("lastUserName","$!request.j_username")##
-#if($response.isCommitted())
+
+  #set($loginHadInvalidCredentials=($request.j_username && "$!context.message"=="invalidcredentials") )
+
+  #if($loginHadInvalidCredentials)
+      #set($udoc=$xwiki.getDocument("XWiki.${request.j_username}"))##
+      #if($udoc.isNew())##
+          #set($loginmsg="register.account_info_error.login_invalid")##
+      #else##
+          #set($loginmsg="redirect.error.invalid_password")##
+      #end##
+  #end##
+
+  $request.session.setAttribute("messagesForNextLoginRequest",$loginmsg)##
+  $request.session.setAttribute("lastUserName","$!request.j_username")##
+
+  #if($response.isCommitted())
+    ## Do nothing because the response is already committed!
+  #else
+      #if($loginHadInvalidCredentials && $request.xredirectFailedLogin)
+        $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}$!request.xredirectFailedLogin&$!request.getQueryString()")##
+      #else
+        $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
+      #end
+  #end
+
 #else
-    $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
-#end
-#else$response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
+  $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
 #end
