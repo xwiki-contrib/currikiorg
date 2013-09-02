@@ -42,17 +42,21 @@
   <div id="globallinks" class="col-md-3 col-md-offset-3 col-xs-6 text-right">
     <form class="form-inline" role="form" action="#if($xwiki.exists('Main.Search'))$xwiki.getURL('Main.Search')#else$xwiki.getURL('Main.WebSearch')#end">
       <div class="row">
-        <div class="col-xs-9">
-            <input placeholder="$msg.get('panels.search.inputText')" type="text" name="text" value="" size="15" class="form-control"/>
-        </div>
-        <div class="col-xs-3">
-            <p class="text-left">
-            <input class="button" type="image" value="$msg.get('panels.search.submit')" alt="$msg.get('panels.search.submit')" src="$xwiki.getSkinFile('icons/xwiki/search.png')"/>
-            </p>
-        </div>
+      
+        <div class="col-md-12">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="$msg.get('panels.search.inputText')" name="text" value="" size="15" />
+              <span class="input-group-btn">
+                <input id="btn-search" class="btn btn-default" type="image" value="$msg.get('panels.search.submit')" alt="$msg.get('panels.search.submit')" src="$xwiki.getSkinFile('icons/xwiki/search.png')"/>
+              </span>
+            </div><!-- /input-group -->
+          </div>
+          
       </div>
     </form>
 #if($xwiki.isMultiLingual())
+<p>
+    <br />
   <span class="glink" id="headerlanguages">
   #set($defaultLanguage = "$!{doc.getDefaultLanguage()}")
   #if($defaultLanguage == '')
@@ -70,6 +74,7 @@
     #end
   #end
   </span>
+</p>
 #end
   </div> ## globallinks
   ##<div class="clearfloats"></div>
