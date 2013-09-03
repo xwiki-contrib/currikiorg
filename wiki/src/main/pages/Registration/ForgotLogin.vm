@@ -88,7 +88,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 		}
 
 		var url= "/xwiki/bin/view/XWiki/CheckAccountCreation";
-		var pars = 'xpage=plain&email=' + $F("email");
+		var pars = 'xpage=plain&email=' + encodeURIComponent($F("email"));
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
 	}
 
