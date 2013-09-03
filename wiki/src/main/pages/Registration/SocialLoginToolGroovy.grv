@@ -338,12 +338,13 @@ public class SocialLoginToolGroovy {
         if(isNew) LOG.info("Trying to create new profile from provider " + provider);
         else LOG.warn("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
 
-        if(username==null || username=='') {
-            if(isNew) {
+
+        if(isNew) {
+            if(username==null || username=='') {
                 username = request.username;
-            } else {
-                username = preExistingUserDoc.getName();
             }
+        } else {
+            username = preExistingUserDoc.getName();
         }
 
         firstName = profile.firstName;
@@ -352,7 +353,7 @@ public class SocialLoginToolGroovy {
         city = profile.location;
         country = profile.country;
 
-        if(autoCreateUser){
+        if(isNew && autoCreateUser) {
             password = RandomStringUtils.randomAlphanumeric(8)
         } else {
             password = request.password;
@@ -412,17 +413,8 @@ public class SocialLoginToolGroovy {
 
             System.out.println("New profile created and saved: " + userDoc);
 
-            //Only if we don't merge a profile with an existing one we'll send the confirmation email.
-            if(!isMerging && !autoCreateUser){
-                sendConfirmationEmail();
-                System.out.println("Confirmation email sent.");
-            }else if(!isMerging && autoCreateUser) {
-                sendAutoCreatedUserConfirmationEmail();
-                System.out.println("Confirmation email for automatic created user sent.");
-            }
-            else{
-                System.out.println("No Confirmation email sent.");
-            }
+            // Send the correct confirmation email
+            sendCorrectConfirmationEmail(isMerging, autoCreateUser);
 
             String view = authenticateUser(userDoc);
             if(view=="redirectOnTop" && !autoCreateUser) return "pleaseDonate";
@@ -700,13 +692,30 @@ public class SocialLoginToolGroovy {
         return nowTarget;
     }
 
+    public void sendCorrectConfirmationEmail(isMerging, autoCreateUser) {
+        // The mail without password for users taking the normal registration
+        if(!isMerging && !autoCreateUser) {
+            sendConfirmationEmail();
+            System.out.println("Confirmation email sent.");
+        }
+        // The mail with password for auto registered users (coming from campaign pages)
+        else if( (!isMerging && autoCreateUser) ) {
+            sendAutoCreatedUserConfirmationEmail();
+            System.out.println("Confirmation email for automatic created user sent.");
+        }
+        // No mail to users using social login and filling in
+        // their username and password in the registration form
+        else{
+            System.out.println("No Confirmation email sent.");
+        }
+    }
 
     public void sendConfirmationEmail() {
         sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
     }
 
     public sendAutoCreatedUserConfirmationEmail() {
-        //
+        sendRegistrationMail("MemberAutoRegCompleteEmail", "CorporateRegCompleteEmail");
     }
 
 
