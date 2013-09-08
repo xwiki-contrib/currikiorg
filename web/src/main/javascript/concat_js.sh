@@ -29,6 +29,7 @@ CURRIKI="\
 	ext/ExtJsOverride.js \
 	\
 	curriki/curriki-base.js \
+	curriki/curriki-analytics.js \
 	curriki/data/curriki-data-user.js \
 	curriki/data/curriki-data-metadata.js \
 	curriki/assets/curriki-assets.js \
@@ -176,5 +177,4 @@ VIDITALK="\
 MERGED="$I18N $VIDITALK $CURRIKI $ADDPATH $ORGANIZE $NOMINATE $REVIEW $UNNOMINATE $PARTNER $ASTERIXREVIEW $FLAG"
 cat $MERGED | $COMPRESS_JS > ../webapp/js/curriki-merged.js
 
-
-
+cat curriki/curriki-analytics.js | $UNCOMPRESS_JS > ../webapp/js/curriki-analytics.js

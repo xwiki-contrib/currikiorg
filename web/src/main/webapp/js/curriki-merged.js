@@ -276,22 +276,22 @@ Curriki.loadingMask.msg=_(b);Curriki.loadingMask.enable();Curriki.loadingMask.sh
 console.log("Set ISO8601 parsing to "+Curriki.ISO8601DateParsing);return Curriki.ISO8601DateParsing
 };Curriki.hideLoading=function(a){if(a===true){Curriki.loadingCount--}if(Curriki.loadingCount==0&&!Ext.isEmpty(Curriki.loadingMask)){Curriki.loadingMask.hide();
 Curriki.loadingMask.disable()}else{if(Curriki.loadingCount<0){Curriki.loadingCount=0
-}}};Curriki.logEvent=function(c,b){var d=c.reverse();d.push("_trackEvent");d=d.reverse();
-if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)}}else{try{if(b){window.top._gaq.push(d).push(b)
-}else{window.top._gaq.push(d)}if(console){console.info("Would track: ",page)}}catch(a){try{if(console){console.info("Failed to track: ",page)
-}}catch(a){}}}};Curriki.logView=function(a){if(window.pageTracker){pageTracker._trackPageview(a)
-}else{if(_gaq){_gaq.push(["_trackPageview",a])}else{try{if(window.top._gaq){window.top._gaq.push(["_trackPageview",a])
-}else{window.top.pageTrackerQueue=window.top.pageTrackerQueue||new Array();window.top.pageTrackerQueue.push(a)
-}if(console){console.info("Would track: ",a)}}catch(b){try{window.pageTrackerQueue=window.pageTrackerQueue||new Array();
-window.pageTrackerQueue.push(a);if(console){console.info("Would track: ",a)}}catch(b){}}}}};
-Curriki.start=function(callback){console.log("Start Callback: ",callback);var args={};
+}}};Curriki.start=function(callback){console.log("Start Callback: ",callback);var args={};
 if("object"===typeof callback){if(callback.args){args=callback.args}if(callback.callback){callback=callback.callback
 }else{if(callback.module){callback=callback.module}}}if("string"===typeof callback){var module=eval("(Curriki.module."+callback.toLowerCase()+")");
 if(module&&"function"===typeof module.init){module.init(args);if("function"===typeof module.start){callback=module.start
 }else{callback=Ext.emptyFn}}else{switch(callback){default:callback=Ext.emptyFn;break
 }}}if("function"===typeof callback){callback(args)}};Curriki.init=function(a){console.log("Curriki.init: ",a);
 if(Ext.isEmpty(Curriki.initialized)){Curriki.data.user.GetUserinfo(function(){Curriki.start(a)
-});Curriki.initialized=true}else{Curriki.start(a)}};Ext.ns("Curriki.data.user");Curriki.data.user={me:{username:"XWiki.XWikiGuest",fullname:"Guest"},collections:[],groups:[],collectionChildren:[],groupChildren:[],gotCollections:false,json_prefix:"/xwiki/curriki/users/",user_try:0,GetUserinfo:function(a){if(!Ext.isEmpty(Curriki.global)&&!Ext.isEmpty(Curriki.global.username)&&!Ext.isEmpty(Curriki.global.fullname)){this.me={username:Curriki.global.username,fullname:Curriki.global.fullname};
+});Curriki.initialized=true}else{Curriki.start(a)}};Curriki.logEvent=function(c,b){var d=c.reverse();
+d.push("_trackEvent");d=d.reverse();if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)
+}}else{try{if(b){window.top._gaq.push(d).push(b)}else{window.top._gaq.push(d)}if(console){console.info("Would track: ",page)
+}}catch(a){try{if(console){console.info("Failed to track: ",page)}}catch(a){}}}};
+Curriki.logView=function(a){if(window.pageTracker){pageTracker._trackPageview(a)}else{if(_gaq){_gaq.push(["_trackPageview",a])
+}else{try{if(window.top._gaq){window.top._gaq.push(["_trackPageview",a])}else{window.top.pageTrackerQueue=window.top.pageTrackerQueue||new Array();
+window.top.pageTrackerQueue.push(a)}if(console){console.info("Would track: ",a)}}catch(b){try{window.pageTrackerQueue=window.pageTrackerQueue||new Array();
+window.pageTrackerQueue.push(a);if(console){console.info("Would track: ",a)}}catch(b){}}}}};
+Ext.ns("Curriki.data.user");Curriki.data.user={me:{username:"XWiki.XWikiGuest",fullname:"Guest"},collections:[],groups:[],collectionChildren:[],groupChildren:[],gotCollections:false,json_prefix:"/xwiki/curriki/users/",user_try:0,GetUserinfo:function(a){if(!Ext.isEmpty(Curriki.global)&&!Ext.isEmpty(Curriki.global.username)&&!Ext.isEmpty(Curriki.global.fullname)){this.me={username:Curriki.global.username,fullname:Curriki.global.fullname};
 if(Curriki.settings&&Curriki.settings.localCollectionFetch){a()}else{this.GetCollections(a)
 }}else{this.user_try++;Ext.Ajax.request({url:this.json_prefix+"me",method:"GET",disableCaching:true,headers:{Accept:"application/json"},scope:this,success:function(b,c){var d=b.responseText;
 var e=d.evalJSON(true);if(!e){console.warn("Cannot get user information");if(this.user_try<5){this.GetUserinfo(a)
