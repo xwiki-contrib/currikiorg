@@ -277,13 +277,14 @@ if(module&&"function"===typeof module.init){module.init(args);if("function"===ty
 }else{callback=Ext.emptyFn}}else{switch(callback){default:callback=Ext.emptyFn;break
 }}}if("function"===typeof callback){callback(args)}};Curriki.init=function(a){console.log("Curriki.init: ",a);
 if(Ext.isEmpty(Curriki.initialized)){Curriki.data.user.GetUserinfo(function(){Curriki.start(a)
-});Curriki.initialized=true}else{Curriki.start(a)}};Curriki.logEvent=function(c,b){var d=c.reverse();
-d.push("_trackEvent");d=d.reverse();if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)
-}}else{try{if(b){window.top._gaq.push(d).push(b)}else{window.top._gaq.push(d)}if(console){console.info("Would track: ",page)
-}}catch(a){try{if(console){console.info("Failed to track: ",page)}}catch(a){}}}};
-Curriki.logView=function(a){if(window.pageTracker){pageTracker._trackPageview(a)}else{if(_gaq){_gaq.push(["_trackPageview",a])
-}else{try{if(window.top._gaq){window.top._gaq.push(["_trackPageview",a])}else{window.top.pageTrackerQueue=window.top.pageTrackerQueue||new Array();
-window.top.pageTrackerQueue.push(a)}if(console){console.info("Would track: ",a)}}catch(b){try{window.pageTrackerQueue=window.pageTrackerQueue||new Array();
+});Curriki.initialized=true}else{Curriki.start(a)}};if(typeof Curriki=="undefined"){Curriki={}
+}Curriki.logEvent=function(c,b){var d=c.reverse();d.push("_trackEvent");d=d.reverse();
+if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)}}else{try{if(b){window.top._gaq.push(d).push(b)
+}else{window.top._gaq.push(d)}if(console){console.info("Would track: ",page)}}catch(a){try{if(console){console.info("Failed to track: ",page)
+}}catch(a){}}}};Curriki.logView=function(a){if(window.pageTracker){pageTracker._trackPageview(a)
+}else{if(_gaq){_gaq.push(["_trackPageview",a])}else{try{if(window.top._gaq){window.top._gaq.push(["_trackPageview",a])
+}else{window.top.pageTrackerQueue=window.top.pageTrackerQueue||new Array();window.top.pageTrackerQueue.push(a)
+}if(console){console.info("Would track: ",a)}}catch(b){try{window.pageTrackerQueue=window.pageTrackerQueue||new Array();
 window.pageTrackerQueue.push(a);if(console){console.info("Would track: ",a)}}catch(b){}}}}};
 Ext.ns("Curriki.data.user");Curriki.data.user={me:{username:"XWiki.XWikiGuest",fullname:"Guest"},collections:[],groups:[],collectionChildren:[],groupChildren:[],gotCollections:false,json_prefix:"/xwiki/curriki/users/",user_try:0,GetUserinfo:function(a){if(!Ext.isEmpty(Curriki.global)&&!Ext.isEmpty(Curriki.global.username)&&!Ext.isEmpty(Curriki.global.fullname)){this.me={username:Curriki.global.username,fullname:Curriki.global.fullname};
 if(Curriki.settings&&Curriki.settings.localCollectionFetch){a()}else{this.GetCollections(a)
