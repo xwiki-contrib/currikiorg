@@ -168,13 +168,12 @@ Organize.init = function(){
 
 								Data.changedFolders.each(function(n){
 									var pCF = checkFolders;
-                                    //console.log("organize: checking: " + n.attributes.assetpage + "(" + n.attributes.pageName + ") to match revision " + n.attributes.revision + ".", n);
-                                    checkFolders = function() {
-										Curriki.assets.GetMetadata(n.attributes.assetpage, function(o){
+									checkFolders = function() {
+										Curriki.assets.GetMetadata(n.attributes.pageName, function(o){
 											if (o.revision != n.attributes.revision) {
 												// Doesn't match
 												Curriki.hideLoading(true);
-												alert(_('organize.error.concurrency_text',[o.title, '/xwiki/bin/view/'+ o.assetpage.replace('.','/')]));
+												alert(_('organize.error.concurrency_text'));
 												this.close();
 												Ext.getCmp('OrganizeDialogueWindow').close();
 												Organize.start(Data.startInfo);

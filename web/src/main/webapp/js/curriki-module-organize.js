@@ -18,11 +18,10 @@ Curriki.hideLoading(true);Ext.getCmp("OrganizeDialogueWindow").close();window.lo
 }else{m.remove(o)}})}if("undefined"!=typeof k.attributes.addedNodes){m.each(function(o){n+=_("organize.history.inserted_note",o.attributes.pageName,l.indexOf(o.attributes.pageName)+1)+" "
 })}console.log("logging",n);Curriki.assets.SetSubassets(k.attributes.pageName,null,l,n,function(p){if("function"==typeof j){j()
 }})}else{if("function"==typeof j){j()}}}});e()};b.changedFolders.each(function(j){var e=f;
-f=function(){Curriki.assets.GetMetadata(j.attributes.assetpage,function(k){if(k.revision!=j.attributes.revision){Curriki.hideLoading(true);
-alert(_("organize.error.concurrency_text",[k.title,"/xwiki/bin/view/"+k.assetpage.replace(".","/")]));
-this.close();Ext.getCmp("OrganizeDialogueWindow").close();a.start(b.startInfo)}else{if("function"==typeof e){e()
-}}})}});var d=f;f=function(){Curriki.showLoading(null,true);d()};b.confirmedCallback=f;
-b.confirmMsg="";b.removed.each(function(e){b.confirmMsg+="<br />"+_("organize.confirmation.dialog_removed_listing",e.text,e.attributes.origLocation.parentNode.text)
+f=function(){Curriki.assets.GetMetadata(j.attributes.pageName,function(k){if(k.revision!=j.attributes.revision){Curriki.hideLoading(true);
+alert(_("organize.error.concurrency_text"));this.close();Ext.getCmp("OrganizeDialogueWindow").close();
+a.start(b.startInfo)}else{if("function"==typeof e){e()}}})}});var d=f;f=function(){Curriki.showLoading(null,true);
+d()};b.confirmedCallback=f;b.confirmMsg="";b.removed.each(function(e){b.confirmMsg+="<br />"+_("organize.confirmation.dialog_removed_listing",e.text,e.attributes.origLocation.parentNode.text)
 });b.moved.uniq().each(function(e){if(b.removed.indexOf(e)==-1){b.confirmMsg+="<br />"+_("organize.confirmation.dialog_moved_listing",e.text,e.attributes.origLocation.index,e.attributes.origLocation.parentNode.text,e.parentNode.indexOf(e)+1,e.parentNode.text)
 }});c.show("confirmOrganizeDlg")},scope:this}}}],items:[{xtype:"panel",id:"guidingquestion-container",cls:"guidingquestion-container",items:[{xtype:"box",autoEl:{tag:"div",html:_("organize.dialog.guidingquestion_text"),cls:"guidingquestion"}},{xtype:"box",autoEl:{tag:"div",html:_("organize.dialog.instruction_text"),cls:"instruction"}}]},{xtype:"panel",id:"organize-panel",cls:"organize-panel",items:[{xtype:"treepanel",loader:new c.treeLoader.Organize(),id:"organize-tree-cmp",autoScroll:true,maxHeight:390,useArrows:true,border:false,hlColor:"93C53C",hlDrop:false,cls:"organize-tree",animate:true,enableDD:true,ddScroll:true,containerScroll:true,rootVisible:true,listeners:{render:function(d){console.log("set up selectionchange",d);
 d.getSelectionModel().on("selectionchange",function(e,f){console.log("selection change",f,e);
